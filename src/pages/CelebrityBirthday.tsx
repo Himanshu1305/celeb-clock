@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
@@ -10,10 +10,25 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { ArrowRight, Star, Users, Calendar as CalendarIcon, Sparkles } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { useBirthDate } from '@/context/BirthDateContext';
 
 const CelebrityBirthday = () => {
-  const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const { birthDate: sharedBirthDate, setBirthDate: setSharedBirthDate } = useBirthDate();
+  const [birthDate, setBirthDate] = useState<Date | null>(sharedBirthDate);
   const [celebrities, setCelebrities] = useState<any[]>([]);
+
+  // Sync with shared context
+  useEffect(() => {
+    if (sharedBirthDate && !birthDate) {
+      setBirthDate(sharedBirthDate);
+    }
+  }, [sharedBirthDate]);
+
+  const handleDateSelect = (date: Date | undefined) => {
+    const newDate = date || null;
+    setBirthDate(newDate);
+    setSharedBirthDate(newDate);
+  };
 
   const handleCelebritiesChange = (newCelebrities: any[]) => {
     setCelebrities(newCelebrities);
