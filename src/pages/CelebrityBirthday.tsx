@@ -78,7 +78,7 @@ const CelebrityBirthday = () => {
                 <Calendar
                   mode="single"
                   selected={birthDate || undefined}
-                  onSelect={(date) => setBirthDate(date || null)}
+                  onSelect={handleDateSelect}
                   className="rounded-md border"
                   disabled={(date) => date > new Date()}
                 />
