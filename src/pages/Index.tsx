@@ -5,6 +5,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { useAuth } from '@/hooks/useAuth';
+import { useBirthDate } from '@/context/BirthDateContext';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Crown, ArrowRight, Clock, Gift, Sparkles, Gem } from 'lucide-react';
@@ -12,7 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
 
 const Index = () => {
-  const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const { birthDate, setBirthDate } = useBirthDate();
   const { isPremium, user, profile } = useAuth();
   const navigate = useNavigate();
 
