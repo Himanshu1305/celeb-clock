@@ -69,6 +69,7 @@ export const AgeCalculator = ({ onBirthDateChange, initialDate }: AgeCalculatorP
           <Input
             id="birthdate"
             type="date"
+            value={inputValue}
             onChange={handleDateChange}
             max={new Date().toISOString().split('T')[0]}
             className="text-lg"
