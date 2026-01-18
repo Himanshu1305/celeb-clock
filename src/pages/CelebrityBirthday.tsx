@@ -14,12 +14,12 @@ import { useBirthDate } from '@/context/BirthDateContext';
 
 const CelebrityBirthday = () => {
   const { birthDate: sharedBirthDate, setBirthDate: setSharedBirthDate } = useBirthDate();
-  const [birthDate, setBirthDate] = useState<Date | null>(sharedBirthDate);
+  const [birthDate, setBirthDate] = useState<Date | null>(null);
   const [celebrities, setCelebrities] = useState<any[]>([]);
 
-  // Sync with shared context
+  // Sync with shared context on mount and when context changes
   useEffect(() => {
-    if (sharedBirthDate && !birthDate) {
+    if (sharedBirthDate) {
       setBirthDate(sharedBirthDate);
     }
   }, [sharedBirthDate]);
