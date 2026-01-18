@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -7,6 +7,7 @@ import { CalendarIcon, ClockIcon } from 'lucide-react';
 
 interface AgeCalculatorProps {
   onBirthDateChange?: (date: Date | null) => void;
+  initialDate?: Date | null;
 }
 
 const CounterCard = ({ value, label, unit }: { value: number; label: string; unit?: string }) => (
@@ -18,12 +19,24 @@ const CounterCard = ({ value, label, unit }: { value: number; label: string; uni
   </div>
 );
 
-export const AgeCalculator = ({ onBirthDateChange }: AgeCalculatorProps) => {
-  const [birthDate, setBirthDate] = useState<Date | null>(null);
+export const AgeCalculator = ({ onBirthDateChange, initialDate }: AgeCalculatorProps) => {
+  const [birthDate, setBirthDate] = useState<Date | null>(initialDate || null);
+  const [inputValue, setInputValue] = useState<string>('');
   const ageData = useAgeCalculator(birthDate);
+
+  // Set initial date value for input field
+  useEffect(() => {
+    if (initialDate) {
+      setBirthDate(initialDate);
+      // Format date as YYYY-MM-DD for input
+      const formatted = initialDate.toISOString().split('T')[0];
+      setInputValue(formatted);
+    }
+  }, [initialDate]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    setInputValue(value);
     const newDate = value ? new Date(value) : null;
     console.log('AgeCalculator - date changed:', { value, newDate });
     setBirthDate(newDate);
