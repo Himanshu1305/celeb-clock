@@ -1,15 +1,28 @@
-import { useState } from 'react';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { LifeExpectancyCalculator } from '@/components/LifeExpectancyCalculator';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowRight, Heart, TrendingUp, Shield, Activity } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ArrowRight, Heart, TrendingUp, Shield, Activity, CalendarIcon } from 'lucide-react';
 import { useBirthDate } from '@/context/BirthDateContext';
 
 const LifeExpectancy = () => {
-  const { birthDate } = useBirthDate();
+  const { birthDate, setBirthDate } = useBirthDate();
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const newDate = value ? new Date(value) : null;
+    setBirthDate(newDate);
+  };
+
+  // Format date for input field
+  const getInputValue = () => {
+    if (!birthDate) return '';
+    return birthDate.toISOString().split('T')[0];
+  };
 
   return (
     <div className="min-h-screen bg-gradient-cosmic">
