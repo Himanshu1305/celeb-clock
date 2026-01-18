@@ -6,9 +6,10 @@ import { LifeExpectancyCalculator } from '@/components/LifeExpectancyCalculator'
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowRight, Heart, TrendingUp, Shield, Activity } from 'lucide-react';
+import { useBirthDate } from '@/context/BirthDateContext';
 
 const LifeExpectancy = () => {
-  const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const { birthDate } = useBirthDate();
 
   return (
     <div className="min-h-screen bg-gradient-cosmic">
