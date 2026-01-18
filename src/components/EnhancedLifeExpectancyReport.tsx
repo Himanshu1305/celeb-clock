@@ -280,7 +280,7 @@ export const EnhancedLifeExpectancyReport = ({
   const difference = whatIfLifeExpectancy - lifeExpectancy;
 
   const resetWhatIf = () => {
-    setWhatIfFactors(initialWhatIfFactors);
+    setWhatIfFactors(userSelections || getInitialWhatIfFactors());
   };
 
   const lifeExpectancyPercentage = Math.min(100, (lifeExpectancy / 100) * 100);
