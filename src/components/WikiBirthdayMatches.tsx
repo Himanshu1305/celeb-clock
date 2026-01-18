@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { WikimediaService, WikiPerson, WikiEvent } from '@/services/WikimediaService';
+import { WikiPerson, WikiEvent } from '@/services/WikimediaService';
+import { searchBirthdayMatches, BirthdaySearchResult } from '@/services/BirthdaySearchService';
 import { CelebrityProfileDialog } from '@/components/CelebrityProfileDialog';
 import { calculateAgeInTimezone, detectUserTimezone } from '@/utils/timezoneDetection';
-import { StarIcon, CakeIcon, FlaskConical, Briefcase, Trophy, Calendar, ExternalLink, Loader2, UsersIcon, Music, Palette } from 'lucide-react';
+import { StarIcon, CakeIcon, FlaskConical, Briefcase, Trophy, Calendar, ExternalLink, Loader2, UsersIcon, Music, Palette, AlertCircle, Clock } from 'lucide-react';
 
 interface WikiBirthdayMatchesProps {
   birthDate: Date | null;
@@ -134,50 +135,54 @@ const EventCard = ({ event }: { event: WikiEvent }) => (
 );
 
 export const WikiBirthdayMatches = ({ birthDate, onCelebritiesChange }: WikiBirthdayMatchesProps) => {
-  const [people, setPeople] = useState<WikiPerson[]>([]);
-  const [events, setEvents] = useState<WikiEvent[]>([]);
+  const [result, setResult] = useState<BirthdaySearchResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [searchStatus, setSearchStatus] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [selectedPerson, setSelectedPerson] = useState<WikiPerson | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [searchTime, setSearchTime] = useState(0);
   const timezoneInfo = detectUserTimezone();
 
-  useEffect(() => {
-    if (!birthDate) return;
+  const handleSearch = useCallback(async (date: Date) => {
+    setLoading(true);
+    setError(null);
+    setSearchTime(0);
+    
+    const startTime = Date.now();
+    const timer = setInterval(() => {
+      setSearchTime(Math.floor((Date.now() - startTime) / 1000));
+    }, 1000);
 
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const [peopleData, eventsData] = await Promise.all([
-          WikimediaService.getPeopleByBirthDate(birthDate),
-          WikimediaService.getHistoricalEvents(birthDate)
-        ]);
-        
-        // Use setTimeout to prevent flickering by batching state updates
-        setTimeout(() => {
-          setPeople(peopleData);
-          setEvents(eventsData);
-          
-          // Call the callback with the people data
-          if (onCelebritiesChange) {
-            onCelebritiesChange(peopleData);
-          }
-          setLoading(false);
-        }, 0);
-      } catch (err) {
-        setError('Failed to fetch birthday matches. Please try again.');
-        console.error('Error fetching birthday data:', err);
-        setLoading(false);
+    try {
+      const searchResult = await searchBirthdayMatches(date, setSearchStatus);
+      setResult(searchResult);
+      
+      // Notify parent component
+      if (onCelebritiesChange) {
+        onCelebritiesChange(searchResult.people);
       }
-    };
+    } catch (err) {
+      setError('Failed to fetch birthday matches. Please try again.');
+      console.error('Error fetching birthday data:', err);
+    } finally {
+      clearInterval(timer);
+      setLoading(false);
+      setSearchStatus('');
+    }
+  }, [onCelebritiesChange]);
 
-    fetchData();
-  }, [birthDate, onCelebritiesChange]);
+  useEffect(() => {
+    if (!birthDate) {
+      setResult(null);
+      return;
+    }
+    handleSearch(birthDate);
+  }, [birthDate, handleSearch]);
 
   if (!birthDate) return null;
 
-  const groupedPeople = people.reduce((acc, person) => {
+  const groupedPeople = (result?.people || []).reduce((acc, person) => {
     if (!acc[person.category]) acc[person.category] = [];
     acc[person.category].push(person);
     return acc;
@@ -201,7 +206,15 @@ export const WikiBirthdayMatches = ({ birthDate, onCelebritiesChange }: WikiBirt
         <Card className="glass-card p-8 text-center">
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <p className="text-muted-foreground">Searching through history...</p>
+            <div className="space-y-2">
+              <p className="text-muted-foreground font-medium">{searchStatus || 'Searching...'}</p>
+              {searchTime > 0 && (
+                <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                  <Clock className="h-4 w-4" />
+                  <span>{searchTime}s elapsed</span>
+                </div>
+              )}
+            </div>
           </div>
         </Card>
       </div>
@@ -212,15 +225,18 @@ export const WikiBirthdayMatches = ({ birthDate, onCelebritiesChange }: WikiBirt
     return (
       <Card className="glass-card p-8 text-center">
         <div className="space-y-4">
-          <div className="text-6xl mb-4">⚠️</div>
+          <AlertCircle className="h-12 w-12 mx-auto text-destructive" />
           <h3 className="text-xl font-semibold">Error Loading Data</h3>
           <p className="text-muted-foreground">{error}</p>
+          <Button onClick={() => birthDate && handleSearch(birthDate)}>
+            Try Again
+          </Button>
         </div>
       </Card>
     );
   }
 
-  const totalMatches = people.length + events.length;
+  const totalMatches = (result?.people?.length || 0) + (result?.events?.length || 0);
 
   return (
     <>
@@ -246,23 +262,45 @@ export const WikiBirthdayMatches = ({ birthDate, onCelebritiesChange }: WikiBirt
           </p>
         </div>
 
+        {/* Show fallback notice if searching nearby dates */}
+        {result?.source === 'fallback' && result.nearbyDates && result.nearbyDates.length > 0 && (
+          <Card className="glass-card p-4 bg-amber-500/10 border-amber-500/30">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-amber-700 dark:text-amber-300">
+                  No exact matches found for {birthDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Showing matches from nearby dates: {result.nearbyDates.map(d => 
+                    d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                  ).join(', ')}
+                </p>
+              </div>
+            </div>
+          </Card>
+        )}
+
       {totalMatches > 0 ? (
         <>
           <div className="text-center">
             <div className="inline-flex items-center gap-2 bg-gradient-secondary text-secondary-foreground px-6 py-3 rounded-full text-lg font-semibold glow-secondary">
               🎉 {totalMatches} Match{totalMatches > 1 ? 'es' : ''} Found!
             </div>
+            {result?.source === 'api' && (
+              <p className="text-xs text-muted-foreground mt-2">Data from Wikipedia</p>
+            )}
           </div>
 
           <Tabs defaultValue="people" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="people" className="flex items-center gap-2">
                 <StarIcon className="h-4 w-4" />
-                Famous People ({people.length})
+                Famous People ({result?.people?.length || 0})
               </TabsTrigger>
               <TabsTrigger value="events" className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                Historical Events ({events.length})
+                Historical Events ({result?.events?.length || 0})
               </TabsTrigger>
             </TabsList>
 
@@ -279,7 +317,7 @@ export const WikiBirthdayMatches = ({ birthDate, onCelebritiesChange }: WikiBirt
                     case 'entrepreneur': return { icon: <Briefcase className="h-5 w-5 text-green-500" />, label: 'Entrepreneurs' };
                     case 'sports':
                     case 'athlete': return { icon: <Trophy className="h-5 w-5 text-orange-500" />, label: 'Sports Persons' };
-                    default: return { icon: <StarIcon className="h-5 w-5" />, label: category };
+                    default: return { icon: <StarIcon className="h-5 w-5" />, label: 'Notable People' };
                   }
                 };
                 
@@ -309,11 +347,20 @@ export const WikiBirthdayMatches = ({ birthDate, onCelebritiesChange }: WikiBirt
             </TabsContent>
 
             <TabsContent value="events" className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {events.map((event, index) => (
-                  <EventCard key={`${event.title}-${index}`} event={event} />
-                ))}
-              </div>
+              {result?.events && result.events.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {result.events.map((event, index) => (
+                    <EventCard key={`${event.title}-${index}`} event={event} />
+                  ))}
+                </div>
+              ) : (
+                <Card className="glass-card p-8 text-center">
+                  <div className="space-y-4">
+                    <Calendar className="h-12 w-12 mx-auto text-muted-foreground opacity-50" />
+                    <p className="text-muted-foreground">No historical events found for this date.</p>
+                  </div>
+                </Card>
+              )}
             </TabsContent>
           </Tabs>
         </>
@@ -323,8 +370,11 @@ export const WikiBirthdayMatches = ({ birthDate, onCelebritiesChange }: WikiBirt
             <div className="text-6xl mb-4">🎂</div>
             <h3 className="text-xl font-semibold">No Matches Found</h3>
             <p className="text-muted-foreground">
-              We couldn't find any famous people or historical events that share your birthday. 
-              Your special day is truly unique!
+              We couldn't find any famous people or historical events that share your birthday 
+              ({birthDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}). 
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Your special day is truly unique! Try searching in our celebrity database above.
             </p>
           </div>
         </Card>
