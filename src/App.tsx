@@ -29,26 +29,26 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-          <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/upgrade" element={<Upgrade />} />
-          <Route path="/zodiac" element={<Zodiac />} />
-          <Route path="/birthstone" element={<Birthstone />} />
-          <Route path="/life-expectancy" element={<LifeExpectancy />} />
-          <Route path="/celebrity-birthday" element={<CelebrityBirthday />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/contact" element={<Contact />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-      </TooltipProvider>
-    </BirthDateProvider>
-  </QueryClientProvider>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/upgrade" element={<Upgrade />} />
+              <Route path="/zodiac" element={<Zodiac />} />
+              <Route path="/birthstone" element={<Birthstone />} />
+              <Route path="/life-expectancy" element={<LifeExpectancy />} />
+              <Route path="/celebrity-birthday" element={<CelebrityBirthday />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/contact" element={<Contact />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </BirthDateProvider>
+    </QueryClientProvider>
   </HelmetProvider>
 );
 
