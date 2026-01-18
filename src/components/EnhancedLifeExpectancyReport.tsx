@@ -185,8 +185,7 @@ export const EnhancedLifeExpectancyReport = ({
   onFactorChange 
 }: Props) => {
   // Initialize what-if with user's actual selections (indices)
-  // Use useMemo to ensure userSelections are properly initialized only once
-  const initialWhatIfFactors = userSelections || {
+  const getInitialWhatIfFactors = () => userSelections || {
     smoking: 0,
     drinking: 0,
     exercise: 0,
@@ -194,10 +193,17 @@ export const EnhancedLifeExpectancyReport = ({
     stress: 1
   };
   
-  const [whatIfFactors, setWhatIfFactors] = useState(initialWhatIfFactors);
+  const [whatIfFactors, setWhatIfFactors] = useState(getInitialWhatIfFactors);
   const [showWhatIf, setShowWhatIf] = useState(true);
   const reportRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
+
+  // Sync whatIfFactors when userSelections prop changes
+  useEffect(() => {
+    if (userSelections) {
+      setWhatIfFactors(userSelections);
+    }
+  }, [userSelections]);
 
   // Calculate zodiac and birthstone
   const getZodiacSign = (month: number, day: number): string => {
