@@ -57,6 +57,53 @@ const LifeExpectancy = () => {
 
         {/* Life Expectancy Calculator Section */}
         <section id="calculator" className="max-w-6xl mx-auto mb-16">
+          {/* Birth Date Input */}
+          {!birthDate && (
+            <Card className="glass-card mb-8 max-w-md mx-auto">
+              <CardContent className="p-6">
+                <div className="space-y-2">
+                  <Label htmlFor="birthdate-life" className="text-base font-semibold flex items-center gap-2">
+                    <CalendarIcon className="h-4 w-4" />
+                    Enter Your Birth Date
+                  </Label>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Required to calculate your life expectancy
+                  </p>
+                  <Input
+                    id="birthdate-life"
+                    type="date"
+                    value={getInputValue()}
+                    onChange={handleDateChange}
+                    max={new Date().toISOString().split('T')[0]}
+                    className="text-lg"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
+          {birthDate && (
+            <Card className="glass-card mb-8 max-w-md mx-auto">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <CalendarIcon className="h-4 w-4 text-primary" />
+                    <span className="text-sm">
+                      Birth Date: <strong>{birthDate.toLocaleDateString()}</strong>
+                    </span>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setBirthDate(null)}
+                  >
+                    Change
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
           <LifeExpectancyCalculator birthDate={birthDate} celebrities={[]} />
         </section>
 
