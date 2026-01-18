@@ -70,7 +70,7 @@ const Index = () => {
 
         {/* Age Calculator Section */}
         <section id="calculator" className="max-w-4xl mx-auto mb-16">
-          <AgeCalculator onBirthDateChange={setBirthDate} />
+          <AgeCalculator onBirthDateChange={setBirthDate} initialDate={birthDate} />
         </section>
 
         {/* Quick Links to Other Tools */}
