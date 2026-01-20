@@ -323,14 +323,14 @@ const BlogPostPage = () => {
           <Card className="glass-card mb-12">
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-2xl font-bold text-white">
-                  {post.author.split(' ').map(n => n[0]).join('')}
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-2xl">
+                  ⏰
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg">{post.author}</h3>
-                  <p className="text-muted-foreground text-sm mb-2">Content Writer</p>
+                  <h3 className="font-bold text-lg">Team Celeb Clock</h3>
+                  <p className="text-muted-foreground text-sm mb-2">Content Team</p>
                   <p className="text-sm text-muted-foreground">
-                    {post.authorBio || 'Passionate about making complex topics accessible and engaging. When not writing, you can find them exploring new coffee shops and reading about astronomy.'}
+                    The Celeb Clock team is passionate about helping you discover fascinating insights about age, birthdays, and longevity. We research and create content to make your special day even more meaningful.
                   </p>
                 </div>
               </div>
