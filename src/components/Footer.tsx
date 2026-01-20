@@ -24,6 +24,11 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/blog" className="text-muted-foreground hover:text-accent transition-colors">
+                  Blog
+                </Link>
+              </li>
+              <li>
                 <Link to="/zodiac" className="text-muted-foreground hover:text-accent transition-colors">
                   Zodiac Signs
                 </Link>
