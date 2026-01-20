@@ -83,11 +83,20 @@ const BlogPostPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-cosmic">
-      <SEO 
-        title={post.title}
-        description={post.excerpt}
-        keywords={post.tags.join(', ')}
+      <ArticleSEO 
+        title={post.metaTitle || post.title}
+        description={post.metaDescription || post.excerpt}
+        slug={post.slug}
+        author={post.author}
+        publishedDate={post.publishedDate}
+        modifiedDate={post.updatedDate}
+        category={categoryLabels[post.category]}
+        tags={post.tags}
+        featuredImage={post.ogImage}
       />
+      {post.faqs && post.faqs.length > 0 && (
+        <FAQSchema items={post.faqs} />
+      )}
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <header className="flex justify-between items-center mb-12">
