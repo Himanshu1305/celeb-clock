@@ -269,7 +269,7 @@ const BlogPostPage = () => {
               prose-img:shadow-lg
               prose-img:my-6
             ">
-              <ReactMarkdown>{post.content}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
             </div>
           </div>
 
