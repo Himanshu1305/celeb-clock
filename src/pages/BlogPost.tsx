@@ -184,6 +184,29 @@ const BlogPostPage = () => {
             ))}
           </div>
 
+          {/* FAQ Section */}
+          {post.faqs && post.faqs.length > 0 && (
+            <Card className="glass-card mb-8">
+              <CardHeader>
+                <CardTitle className="text-xl gradient-text-primary flex items-center gap-2">
+                  ❓ Frequently Asked Questions
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {post.faqs.map((faq, index) => (
+                  <div key={index} className="border-b border-border/50 last:border-0 pb-4 last:pb-0">
+                    <h4 className="font-semibold text-foreground mb-2">
+                      Q: {faq.question}
+                    </h4>
+                    <p className="text-muted-foreground text-sm">
+                      A: {faq.answer}
+                    </p>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+
           {/* Share */}
           <div className="flex items-center justify-between mb-12">
             <Button variant="outline" onClick={() => navigate('/blog')}>
@@ -207,8 +230,7 @@ const BlogPostPage = () => {
                   <h3 className="font-bold text-lg">{post.author}</h3>
                   <p className="text-muted-foreground text-sm mb-2">Content Writer</p>
                   <p className="text-sm text-muted-foreground">
-                    Passionate about making complex topics accessible and engaging. 
-                    When not writing, you can find them exploring new coffee shops and reading about astronomy.
+                    {post.authorBio || 'Passionate about making complex topics accessible and engaging. When not writing, you can find them exploring new coffee shops and reading about astronomy.'}
                   </p>
                 </div>
               </div>
