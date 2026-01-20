@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Gem, Home, Clock, Gift } from 'lucide-react';
+import { Sparkles, Gem, Home, Clock, Gift, BookOpen } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -83,6 +83,16 @@ export const Navigation = () => {
         >
           <Gem className="w-4 h-4" />
           <span className="hidden sm:inline">Birthstone</span>
+        </Button>
+      </Link>
+      <Link to="/blog">
+        <Button 
+          variant={isActive('/blog') ? 'default' : 'ghost'} 
+          size="sm" 
+          className="gap-2 transition-all"
+        >
+          <BookOpen className="w-4 h-4" />
+          <span className="hidden sm:inline">Blog</span>
         </Button>
       </Link>
     </nav>
