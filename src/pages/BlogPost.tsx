@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { getPostBySlug, getRelatedPosts, BlogPost } from '@/data/blogPosts';
 import { Calendar, Clock, User, ArrowLeft, ArrowRight, Share2, BookOpen, Tag } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const categoryLabels: Record<BlogPost['category'], string> = {
   'age-calculator': 'Age Calculator',
