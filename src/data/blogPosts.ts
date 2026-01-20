@@ -1288,7 +1288,7 @@ Get your age in years, months, days, hours, minutes, and seconds — updated in 
       { question: 'Is sleep quality or quantity more important?', answer: 'Both matter! 7 hours of deep, restorative sleep is better than 9 hours of fragmented, poor-quality sleep.' },
       { question: 'Can I catch up on sleep on weekends?', answer: 'Partially. While weekend catch-up helps, it can\'t fully reverse the damage of chronic weekday sleep deprivation. Consistent sleep is best.' }
     ],
-    content: \`
+    content: `
 # How Sleep Affects Your Life Expectancy: The Complete Guide
 
 Sleep isn't just rest — it's when your body repairs, regenerates, and resets. Skimp on sleep, and you're not just tired. You're potentially shortening your life.
@@ -1481,7 +1481,7 @@ A: Melatonin can help with timing/jet lag. But no supplement replaces good sleep
 ---
 
 *How many hours do YOU sleep? Share your sleep habits and how you feel in the comments!*
-    \`
+    `
   },
   {
     id: '9',
@@ -1504,7 +1504,7 @@ A: Melatonin can help with timing/jet lag. But no supplement replaces good sleep
       { question: 'Can changing my diet really help me live longer?', answer: 'Yes! Studies show dietary changes can add 4-10 years to your life expectancy. The Mediterranean diet alone is associated with 4-7 extra years.' },
       { question: 'What foods should I avoid for longevity?', answer: 'Limit processed meats, sugary drinks, refined carbs, trans fats, and ultra-processed foods. These are consistently linked to shorter lifespans.' }
     ],
-    content: \`
+    content: `
 # The Longevity Diet: 15 Best Foods to Eat to Live Longer
 
 What you eat profoundly impacts how long you live. Studies consistently show that dietary choices can add — or subtract — years from your life.
@@ -1791,7 +1791,7 @@ Get personalized insights based on your diet and lifestyle!
 ---
 
 *What longevity foods do you eat regularly? Share your favorites in the comments!*
-    \`
+    `
   },
   {
     id: '10',
@@ -1814,7 +1814,7 @@ Get personalized insights based on your diet and lifestyle!
       { question: 'Can too much exercise be harmful?', answer: 'Extreme endurance exercise may increase heart risks. Moderate, consistent exercise is optimal for longevity.' },
       { question: 'Is walking enough for longevity?', answer: 'Yes! Walking 30 minutes daily reduces mortality risk by 20%. It\'s one of the best exercises for longevity.' }
     ],
-    content: \`
+    content: `
 # How Exercise Affects Life Expectancy: Complete Guide
 
 Exercise is one of the most powerful tools for extending your life. The science is clear: physically active people live longer, healthier lives.
@@ -2079,7 +2079,7 @@ Enter your exercise habits and get personalized projections!
 ---
 
 *What's your favorite form of exercise? Share how you stay active in the comments!*
-    \`
+    `
   },
   {
     id: '11',
@@ -2102,7 +2102,7 @@ Enter your exercise habits and get personalized projections!
       { question: 'How does stress affect the body?', answer: 'Chronic stress raises cortisol levels, increases inflammation, suppresses immunity, raises blood pressure, and disrupts sleep — all of which damage health over time.' },
       { question: 'Can you reverse the damage from chronic stress?', answer: 'Yes! The body can recover when stress is reduced. Implementing stress management practices can lower cortisol, reduce inflammation, and improve health markers within weeks.' }
     ],
-    content: \`
+    content: `
 # How Stress Affects Your Health & Life Expectancy
 
 Stress isn't just a feeling — it's a physiological response that, when chronic, can literally take years off your life.
@@ -2351,7 +2351,7 @@ If answers are concerning, start with ONE stress-reduction technique today.
 ---
 
 *What's your go-to stress relief technique? Share in the comments!*
-    \`
+    `
   },
   {
     id: '12',
@@ -2374,7 +2374,7 @@ If answers are concerning, start with ONE stress-reduction technique today.
       { question: 'Is BMI an accurate health measure?', answer: 'BMI is a useful screening tool but has limitations. It doesn\'t account for muscle mass, body fat distribution, or metabolic health. Waist circumference is an important additional measure.' },
       { question: 'Can you be "fat but fit"?', answer: 'Fitness does provide benefits regardless of weight. However, research shows that maintaining a healthy weight PLUS being fit provides the most longevity benefits.' }
     ],
-    content: \`
+    content: `
 # BMI, Weight & Life Expectancy: Complete Guide
 
 Your weight significantly impacts how long you live. But the relationship is more nuanced than "thinner = healthier."
@@ -2597,7 +2597,7 @@ Enter your BMI, lifestyle factors, and get personalized projections!
 ---
 
 *What's your biggest challenge with maintaining a healthy weight? Share in the comments!*
-    \`
+    `
   },
   {
     id: '13',
@@ -2620,7 +2620,7 @@ Enter your BMI, lifestyle factors, and get personalized projections!
       { question: 'How long after quitting does health improve?', answer: 'Benefits start within 20 minutes! Within 1 year, heart disease risk drops 50%. Within 5-15 years, stroke risk equals non-smoker. Within 10 years, lung cancer risk drops 50%.' },
       { question: 'What is the most effective way to quit smoking?', answer: 'Combination of nicotine replacement therapy (patches, gum) with behavioral support has the highest success rates. Some people benefit from medications like Chantix or Wellbutrin.' }
     ],
-    content: \`
+    content: `
 # Smoking & Life Expectancy: The Complete Guide to Quitting
 
 Smoking is the single most destructive habit for your lifespan. The good news? Quitting reverses much of the damage at any age.
@@ -2883,7 +2883,7 @@ Enter your smoking status and see how quitting could add years!
 ---
 
 *Are you a former smoker? Share what helped you quit in the comments — your experience could help someone else!*
-    \`
+    `
   },
   {
     id: '14',
@@ -2906,7 +2906,7 @@ Enter your smoking status and see how quitting could add years!
       { question: 'Is living to 100 mostly genetics?', answer: 'Genetics account for only about 25% of longevity. Lifestyle choices (diet, exercise, social connections, stress management) account for 75% — most of which is in your control.' },
       { question: 'What are Blue Zones?', answer: 'Blue Zones are 5 regions with the highest concentration of centenarians: Okinawa (Japan), Sardinia (Italy), Nicoya (Costa Rica), Ikaria (Greece), and Loma Linda (California).' }
     ],
-    content: \`
+    content: `
 # 10 Secrets of People Who Live to 100
 
 What do centenarians know that the rest of us don't? Researchers have spent decades studying the world's longest-lived people — and they've found remarkable patterns.
@@ -3171,7 +3171,7 @@ Small changes, done consistently, add up to extra years.
 ---
 
 *Which centenarian habit will YOU adopt first? Share in the comments!*
-    \`
+    `
   }
 ];
 
