@@ -157,16 +157,116 @@ const BlogPostPage = () => {
 
           {/* Article Content */}
           <div className="glass-card p-8 md:p-12 mb-8">
-            <div className="prose prose-lg max-w-none dark:prose-invert
-              prose-headings:gradient-text-primary prose-headings:font-bold
-              prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl
-              prose-p:text-foreground prose-p:leading-relaxed
-              prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+            <div className="
+              prose prose-lg max-w-none
+              dark:prose-invert
+              
+              prose-headings:font-heading
+              prose-headings:font-bold
+              prose-headings:text-foreground
+              prose-headings:mt-8
+              prose-headings:mb-4
+              
+              prose-h1:text-4xl
+              prose-h1:bg-gradient-to-r
+              prose-h1:from-primary
+              prose-h1:to-accent
+              prose-h1:bg-clip-text
+              prose-h1:text-transparent
+              prose-h1:mb-6
+              
+              prose-h2:text-2xl
+              prose-h2:text-primary
+              prose-h2:border-b
+              prose-h2:border-primary/20
+              prose-h2:pb-2
+              
+              prose-h3:text-xl
+              prose-h3:text-foreground
+              
+              prose-h4:text-lg
+              prose-h4:text-foreground
+              prose-h4:font-semibold
+              
+              prose-p:text-foreground/90
+              prose-p:leading-relaxed
+              prose-p:mb-4
+              
+              prose-a:text-primary
+              prose-a:font-medium
+              prose-a:underline
+              prose-a:underline-offset-2
+              hover:prose-a:text-accent
+              
               prose-strong:text-foreground
-              prose-ul:text-foreground prose-ol:text-foreground
-              prose-li:text-foreground
-              prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground
-              prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1 prose-code:rounded
+              prose-strong:font-bold
+              
+              prose-em:text-foreground/80
+              prose-em:italic
+              
+              prose-ul:text-foreground/90
+              prose-ul:my-4
+              prose-ul:list-disc
+              prose-ul:pl-6
+              
+              prose-ol:text-foreground/90
+              prose-ol:my-4
+              prose-ol:list-decimal
+              prose-ol:pl-6
+              
+              prose-li:text-foreground/90
+              prose-li:my-1
+              prose-li:marker:text-primary
+              
+              prose-blockquote:border-l-4
+              prose-blockquote:border-primary
+              prose-blockquote:bg-primary/5
+              prose-blockquote:py-2
+              prose-blockquote:px-4
+              prose-blockquote:my-6
+              prose-blockquote:italic
+              prose-blockquote:text-foreground/80
+              
+              prose-code:text-primary
+              prose-code:bg-primary/10
+              prose-code:px-1.5
+              prose-code:py-0.5
+              prose-code:rounded
+              prose-code:text-sm
+              prose-code:font-mono
+              prose-code:before:content-none
+              prose-code:after:content-none
+              
+              prose-pre:bg-muted
+              prose-pre:rounded-lg
+              prose-pre:p-4
+              prose-pre:overflow-x-auto
+              
+              prose-table:w-full
+              prose-table:my-6
+              prose-table:border-collapse
+              
+              prose-th:bg-primary/10
+              prose-th:text-foreground
+              prose-th:font-bold
+              prose-th:p-3
+              prose-th:text-left
+              prose-th:border
+              prose-th:border-border
+              
+              prose-td:p-3
+              prose-td:border
+              prose-td:border-border
+              prose-td:text-foreground/90
+              
+              prose-tr:even:bg-muted/30
+              
+              prose-hr:border-border
+              prose-hr:my-8
+              
+              prose-img:rounded-lg
+              prose-img:shadow-lg
+              prose-img:my-6
             ">
               <ReactMarkdown>{post.content}</ReactMarkdown>
             </div>
