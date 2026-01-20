@@ -6,47 +6,47 @@
   <!-- Main Pages -->
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2025-01-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/celebrity-birthday</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2025-01-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/zodiac</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2025-01-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/birthstone</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2025-01-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/life-expectancy</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2025-01-20</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/blog</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2025-01-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
-  <!-- Blog Articles -->
+  <!-- Original Blog Articles -->
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/blog/calculate-exact-age-seconds-minutes-hours</loc>
     <lastmod>2025-01-18</lastmod>
@@ -96,38 +96,88 @@
     <priority>0.7</priority>
   </url>
   
+  <!-- NEW Health & Life Expectancy Articles -->
+  <url>
+    <loc>https://celeb-clock.preview.emergentagent.com/blog/how-sleep-affects-life-expectancy-complete-guide</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://celeb-clock.preview.emergentagent.com/blog/best-foods-to-eat-to-live-longer-longevity-diet</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://celeb-clock.preview.emergentagent.com/blog/how-exercise-affects-life-expectancy-workout-guide</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://celeb-clock.preview.emergentagent.com/blog/how-stress-affects-health-life-expectancy-management-tips</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://celeb-clock.preview.emergentagent.com/blog/bmi-weight-life-expectancy-healthy-weight-guide</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://celeb-clock.preview.emergentagent.com/blog/smoking-life-expectancy-how-to-quit-complete-guide</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://celeb-clock.preview.emergentagent.com/blog/secrets-of-people-who-live-to-100-centenarian-habits</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
   <!-- Info Pages -->
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/about</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2025-01-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/faq</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2025-01-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/contact</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2025-01-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/privacy</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2025-01-20</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
     <loc>https://celeb-clock.preview.emergentagent.com/terms</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2025-01-20</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
