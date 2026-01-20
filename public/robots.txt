@@ -1,14 +1,33 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
+# Robots.txt for Celeb Clock
+# https://celeb-clock.preview.emergentagent.com
 
 User-agent: *
 Allow: /
+
+# Sitemap location
+Sitemap: https://celeb-clock.preview.emergentagent.com/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Disallow admin/auth pages from indexing
+Disallow: /auth
+Disallow: /upgrade
+
+# Allow all blog content
+Allow: /blog/
+Allow: /blog/*
+
+# Allow all main features
+Allow: /celebrity-birthday
+Allow: /zodiac
+Allow: /birthstone
+Allow: /life-expectancy
+
+# Allow static assets
+Allow: /assets/
+Allow: /*.js
+Allow: /*.css
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.svg
