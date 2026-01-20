@@ -12,6 +12,8 @@ import Zodiac from "./pages/Zodiac";
 import Birthstone from "./pages/Birthstone";
 import LifeExpectancy from "./pages/LifeExpectancy";
 import CelebrityBirthday from "./pages/CelebrityBirthday";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
@@ -37,6 +39,8 @@ const App = () => (
               <Route path="/birthstone" element={<Birthstone />} />
               <Route path="/life-expectancy" element={<LifeExpectancy />} />
               <Route path="/celebrity-birthday" element={<CelebrityBirthday />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/about" element={<About />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
