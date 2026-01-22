@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
-import { Crown, LogOut, User } from 'lucide-react';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
+import { Crown, LogOut, User, Shield } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +16,7 @@ import {
 
 export const AuthNav = () => {
   const { user, profile, signOut, isPremium } = useAuth();
+  const { isAdmin } = useIsAdmin(user?.id);
 
   if (!user) {
     return (
@@ -61,6 +63,12 @@ export const AuthNav = () => {
                   Free
                 </Badge>
               )}
+              {isAdmin && (
+                <Badge variant="destructive" className="text-xs">
+                  <Shield className="w-3 h-3 mr-1" />
+                  Admin
+                </Badge>
+              )}
             </div>
           </div>
         </DropdownMenuLabel>
@@ -71,6 +79,14 @@ export const AuthNav = () => {
             <span>Profile</span>
           </Link>
         </DropdownMenuItem>
+        {isAdmin && (
+          <DropdownMenuItem asChild>
+            <Link to="/admin" className="cursor-pointer">
+              <Shield className="mr-2 h-4 w-4" />
+              <span>Admin Dashboard</span>
+            </Link>
+          </DropdownMenuItem>
+        )}
         {!isPremium && (
           <DropdownMenuItem asChild>
             <Link to="/upgrade" className="cursor-pointer">

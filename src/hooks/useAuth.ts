@@ -7,9 +7,13 @@ interface Profile {
   id: string;
   user_id: string;
   name: string;
+  first_name?: string;
+  last_name?: string;
   email: string;
+  country?: string;
   premium_status: boolean;
   email_notifications: boolean;
+  blog_subscription?: boolean;
 }
 
 export const useAuth = () => {
@@ -71,7 +75,13 @@ export const useAuth = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const signUp = async (
+    email: string, 
+    password: string, 
+    firstName: string, 
+    lastName: string, 
+    country: string
+  ) => {
     const redirectUrl = `${window.location.origin}/`;
     
     const { error } = await supabase.auth.signUp({
@@ -80,7 +90,10 @@ export const useAuth = () => {
       options: {
         emailRedirectTo: redirectUrl,
         data: {
-          name: name
+          first_name: firstName,
+          last_name: lastName,
+          name: `${firstName} ${lastName}`.trim(),
+          country: country
         }
       }
     });

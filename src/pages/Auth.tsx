@@ -1,18 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/hooks/useAuth';
 import { Sparkles, ArrowLeft } from 'lucide-react';
+import { countries } from '@/data/countries';
 
 export default function Auth() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [country, setCountry] = useState('');
+  const [blogSubscription, setBlogSubscription] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { user, signUp, signIn } = useAuth();
 
@@ -27,7 +33,7 @@ export default function Auth() {
 
     try {
       if (isSignUp) {
-        await signUp(email, password, name);
+        await signUp(email, password, firstName, lastName, country);
       } else {
         await signIn(email, password);
       }
@@ -82,17 +88,48 @@ export default function Auth() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {isSignUp && (
-              <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Enter your name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required={isSignUp}
-                />
-              </div>
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                      id="firstName"
+                      type="text"
+                      placeholder="First name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      required={isSignUp}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      type="text"
+                      placeholder="Last name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      required={isSignUp}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="country">Country</Label>
+                  <Select value={country} onValueChange={setCountry} required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your country" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-60">
+                      {countries.map((c) => (
+                        <SelectItem key={c} value={c}>
+                          {c}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </>
             )}
             
             <div className="space-y-2">
@@ -119,6 +156,19 @@ export default function Auth() {
                 minLength={6}
               />
             </div>
+
+            {isSignUp && (
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="blogSubscription"
+                  checked={blogSubscription}
+                  onCheckedChange={(checked) => setBlogSubscription(checked === true)}
+                />
+                <Label htmlFor="blogSubscription" className="text-sm font-normal cursor-pointer">
+                  Subscribe to our newsletter for updates and tips
+                </Label>
+              </div>
+            )}
 
             <Button 
               type="submit" 

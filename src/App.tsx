@@ -7,6 +7,8 @@ import { HelmetProvider } from "react-helmet-async";
 import { BirthDateProvider } from "@/context/BirthDateContext";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import Profile from "./pages/Profile";
+import Admin from "./pages/Admin";
 import Upgrade from "./pages/Upgrade";
 import Zodiac from "./pages/Zodiac";
 import Birthstone from "./pages/Birthstone";
@@ -20,6 +22,7 @@ import Terms from "./pages/Terms";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import { AdminRoute } from "@/components/AdminRoute";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +37,8 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
               <Route path="/upgrade" element={<Upgrade />} />
               <Route path="/zodiac" element={<Zodiac />} />
               <Route path="/birthstone" element={<Birthstone />} />
