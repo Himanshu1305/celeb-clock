@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DashboardOverview } from '@/components/admin/DashboardOverview';
-import { UserAnalytics } from '@/components/admin/UserAnalytics';
+import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
 import { BlogSubscribers } from '@/components/admin/BlogSubscribers';
+import { UserManagement } from '@/components/admin/UserManagement';
 import { AdminSettings } from '@/components/admin/AdminSettings';
 import { 
   LayoutDashboard, 
@@ -12,7 +13,8 @@ import {
   Mail, 
   Settings, 
   ArrowLeft,
-  Shield
+  Shield,
+  Users
 } from 'lucide-react';
 
 export default function Admin() {
@@ -43,7 +45,7 @@ export default function Admin() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+          <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
             <TabsTrigger value="dashboard" className="gap-2">
               <LayoutDashboard className="h-4 w-4" />
               <span className="hidden sm:inline">Dashboard</span>
@@ -51,6 +53,10 @@ export default function Admin() {
             <TabsTrigger value="analytics" className="gap-2">
               <BarChart3 className="h-4 w-4" />
               <span className="hidden sm:inline">Analytics</span>
+            </TabsTrigger>
+            <TabsTrigger value="users" className="gap-2">
+              <Users className="h-4 w-4" />
+              <span className="hidden sm:inline">Users</span>
             </TabsTrigger>
             <TabsTrigger value="subscribers" className="gap-2">
               <Mail className="h-4 w-4" />
@@ -67,7 +73,11 @@ export default function Admin() {
           </TabsContent>
 
           <TabsContent value="analytics">
-            <UserAnalytics />
+            <AnalyticsDashboard />
+          </TabsContent>
+
+          <TabsContent value="users">
+            <UserManagement />
           </TabsContent>
 
           <TabsContent value="subscribers">
