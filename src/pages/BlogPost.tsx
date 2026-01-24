@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
@@ -8,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getPostBySlug, getRelatedPosts, BlogPost } from '@/data/blogPosts';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import { Calendar, Clock, User, ArrowLeft, ArrowRight, Share2, BookOpen, Tag } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -33,9 +35,24 @@ const categoryColors: Record<BlogPost['category'], string> = {
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const { trackBlogRead } = useAnalytics();
+  const hasTrackedRead = useRef(false);
   
   const post = slug ? getPostBySlug(slug) : undefined;
   const relatedPosts = slug ? getRelatedPosts(slug, 3) : [];
+
+  // Track blog read
+  useEffect(() => {
+    if (post && !hasTrackedRead.current) {
+      hasTrackedRead.current = true;
+      trackBlogRead(post.slug, {
+        title: post.title,
+        category: post.category,
+        read_time: post.readTime,
+        author: post.author
+      });
+    }
+  }, [post, trackBlogRead]);
 
   if (!post) {
     return (

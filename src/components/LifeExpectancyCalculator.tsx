@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/useAuth';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import { Crown, Heart, Activity, Coffee, Brain, Dumbbell, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { EnhancedLifeExpectancyReport } from './EnhancedLifeExpectancyReport';
@@ -38,6 +39,7 @@ interface Props {
 export const LifeExpectancyCalculator = ({ birthDate, celebrities = [] }: Props) => {
   console.log('LifeExpectancyCalculator rendered with birthDate:', birthDate);
   const { isPremium, profile } = useAuth();
+  const { trackFeatureUse } = useAnalytics();
   const [step, setStep] = useState(1);
   const [data, setData] = useState<LifeExpectancyData>({
     name: '',
@@ -55,6 +57,7 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [] }: Props)
   });
   const [lifeExpectancy, setLifeExpectancy] = useState<number | null>(null);
   const [factorBreakdown, setFactorBreakdown] = useState<any>(null);
+  const hasTrackedCalculation = useRef(false);
 
   // Auto-populate name from profile
   useEffect(() => {
@@ -177,6 +180,16 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [] }: Props)
     const result = calculateLifeExpectancy();
     console.log('Calculated life expectancy:', result);
     setLifeExpectancy(result);
+    
+    // Track feature usage when calculation completes
+    if (result !== null && !hasTrackedCalculation.current) {
+      hasTrackedCalculation.current = true;
+      trackFeatureUse('life_expectancy_calculator', {
+        action: 'calculate',
+        has_result: true,
+        step: step
+      });
+    }
   }, [data, birthDate]);
 
   if (!isPremium) {
