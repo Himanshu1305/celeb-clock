@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
 import { Info, Scale } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import {
   Collapsible,
   CollapsibleContent,
@@ -24,6 +25,8 @@ export const BmiCalculator = ({ value, onChange }: Props) => {
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [showInfo, setShowInfo] = useState(false);
+  const { trackFeatureUse } = useAnalytics();
+  const hasTrackedCalculation = useRef(false);
 
   useEffect(() => {
     if (knowsBmi === 'no' && height && weight) {
@@ -40,10 +43,21 @@ export const BmiCalculator = ({ value, onChange }: Props) => {
           // BMI = (weight (lbs) / (height (in))²) * 703
           bmi = (w / (h * h)) * 703;
         }
-        onChange(Math.round(bmi * 10) / 10);
+        const calculatedBmi = Math.round(bmi * 10) / 10;
+        onChange(calculatedBmi);
+        
+        // Track BMI calculation
+        if (!hasTrackedCalculation.current) {
+          hasTrackedCalculation.current = true;
+          trackFeatureUse('bmi_calculator', {
+            action: 'calculate',
+            unit: unit,
+            bmi_category: getBmiCategory(calculatedBmi).label
+          });
+        }
       }
     }
-  }, [height, weight, unit, knowsBmi, onChange]);
+  }, [height, weight, unit, knowsBmi, onChange, trackFeatureUse]);
 
   const getBmiCategory = (bmi: number) => {
     if (bmi < 18.5) return { label: 'Underweight', color: 'text-blue-600' };

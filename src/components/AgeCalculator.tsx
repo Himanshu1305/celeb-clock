@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAgeCalculator } from '@/hooks/useAgeCalculator';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import { CalendarIcon, ClockIcon } from 'lucide-react';
 
 interface AgeCalculatorProps {
@@ -23,6 +24,8 @@ export const AgeCalculator = ({ onBirthDateChange, initialDate }: AgeCalculatorP
   const [birthDate, setBirthDate] = useState<Date | null>(initialDate || null);
   const [inputValue, setInputValue] = useState<string>('');
   const ageData = useAgeCalculator(birthDate);
+  const { trackFeatureUse } = useAnalytics();
+  const hasTrackedCalculation = useRef(false);
 
   // Set initial date value for input field
   useEffect(() => {
@@ -42,6 +45,15 @@ export const AgeCalculator = ({ onBirthDateChange, initialDate }: AgeCalculatorP
     setBirthDate(newDate);
     onBirthDateChange?.(newDate);
     console.log('AgeCalculator - called onBirthDateChange with:', newDate);
+    
+    // Track feature usage when user calculates age
+    if (newDate && !hasTrackedCalculation.current) {
+      hasTrackedCalculation.current = true;
+      trackFeatureUse('age_calculator', {
+        action: 'calculate',
+        has_result: true
+      });
+    }
   };
 
   return (

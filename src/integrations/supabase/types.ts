@@ -44,6 +44,90 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_posts: {
+        Row: {
+          author: string | null
+          author_bio: string | null
+          category: string
+          content: string
+          created_at: string | null
+          excerpt: string
+          faqs: Json | null
+          featured_image: string | null
+          generation_prompt: string | null
+          id: string
+          is_auto_generated: boolean | null
+          keywords: string[] | null
+          meta_description: string | null
+          meta_title: string | null
+          og_image: string | null
+          published_at: string | null
+          read_time: number | null
+          review_notes: string | null
+          reviewed_by: string | null
+          scheduled_for: string | null
+          slug: string
+          status: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author?: string | null
+          author_bio?: string | null
+          category: string
+          content: string
+          created_at?: string | null
+          excerpt: string
+          faqs?: Json | null
+          featured_image?: string | null
+          generation_prompt?: string | null
+          id?: string
+          is_auto_generated?: boolean | null
+          keywords?: string[] | null
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image?: string | null
+          published_at?: string | null
+          read_time?: number | null
+          review_notes?: string | null
+          reviewed_by?: string | null
+          scheduled_for?: string | null
+          slug: string
+          status?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string | null
+          author_bio?: string | null
+          category?: string
+          content?: string
+          created_at?: string | null
+          excerpt?: string
+          faqs?: Json | null
+          featured_image?: string | null
+          generation_prompt?: string | null
+          id?: string
+          is_auto_generated?: boolean | null
+          keywords?: string[] | null
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image?: string | null
+          published_at?: string | null
+          read_time?: number | null
+          review_notes?: string | null
+          reviewed_by?: string | null
+          scheduled_for?: string | null
+          slug?: string
+          status?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           blog_subscription: boolean
