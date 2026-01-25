@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { hasAnalyticsConsent } from '@/components/CookieConsent';
 
 // Generate a session ID for anonymous tracking
 const getSessionId = (): string => {
@@ -25,6 +26,12 @@ export const useAnalytics = () => {
     eventName: string,
     metadata?: AnalyticsMetadata
   ) => {
+    // Check for analytics consent before tracking
+    if (!hasAnalyticsConsent()) {
+      console.debug('Analytics tracking skipped: no consent');
+      return;
+    }
+    
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
