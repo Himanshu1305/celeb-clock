@@ -4,6 +4,8 @@ import { AgeCalculator } from '@/components/AgeCalculator';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
+import { TestimonialsSection } from '@/components/TestimonialsSection';
+import { ReviewForm } from '@/components/ReviewForm';
 import { useAuth } from '@/hooks/useAuth';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { Badge } from '@/components/ui/badge';
@@ -113,6 +115,9 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Testimonials Section */}
+        <TestimonialsSection />
+
         {/* About Section */}
         <section className="max-w-4xl mx-auto mb-16">
           <Card className="glass-card">
@@ -167,6 +172,11 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
+        </section>
+
+        {/* Write a Review Section */}
+        <section className="max-w-xl mx-auto mb-16">
+          <ReviewForm />
         </section>
 
       </div>

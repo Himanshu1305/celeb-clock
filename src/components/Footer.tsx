@@ -1,7 +1,24 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
+import { CookiePreferencesModal } from '@/components/CookiePreferencesModal';
+import { getStoredConsent } from '@/components/CookieConsent';
 
 export const Footer = () => {
+  const [showCookiePrefs, setShowCookiePrefs] = useState(false);
+  
+  const handleSaveCookiePrefs = (prefs: { analytics: boolean; marketing: boolean }) => {
+    const consent = {
+      essential: true as const,
+      analytics: prefs.analytics,
+      marketing: prefs.marketing,
+      timestamp: new Date().toISOString(),
+      version: '1.0',
+    };
+    localStorage.setItem('cookie_consent', JSON.stringify(consent));
+    setShowCookiePrefs(false);
+    window.location.reload();
+  };
   return (
     <footer className="mt-16 border-t border-border/50 bg-card/30 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-8">
@@ -82,6 +99,14 @@ export const Footer = () => {
                   Terms of Service
                 </Link>
               </li>
+              <li>
+                <button 
+                  onClick={() => setShowCookiePrefs(true)}
+                  className="text-muted-foreground hover:text-accent transition-colors text-left"
+                >
+                  Cookie Settings
+                </button>
+              </li>
             </ul>
           </div>
         </div>
@@ -98,6 +123,12 @@ export const Footer = () => {
           </p>
         </div>
       </div>
+      
+      <CookiePreferencesModal 
+        open={showCookiePrefs} 
+        onOpenChange={setShowCookiePrefs}
+        onSave={handleSaveCookiePrefs}
+      />
     </footer>
   );
 };
