@@ -10,7 +10,41 @@ export interface BirthdaySearchResult {
   nearbyDates?: Date[];
 }
 
-// Convert Celebrity from celebrities.ts to WikiPerson format
+export type SearchPhase = 'local' | 'wikipedia' | 'nearby' | 'done';
+
+// --- localStorage cache helpers (24-hour TTL) ---
+const CACHE_PREFIX = 'birthday_search_';
+const CACHE_TTL = 24 * 60 * 60 * 1000;
+
+const getCacheKey = (date: Date): string => {
+  return `${CACHE_PREFIX}${formatDateKey(date)}`;
+};
+
+const getCachedResult = (date: Date): BirthdaySearchResult | null => {
+  try {
+    const key = getCacheKey(date);
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const cached = JSON.parse(raw);
+    if (Date.now() - cached.timestamp > CACHE_TTL) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return { ...cached.data, searchedDate: new Date(cached.data.searchedDate) };
+  } catch {
+    return null;
+  }
+};
+
+const setCachedResult = (date: Date, result: BirthdaySearchResult): void => {
+  try {
+    const key = getCacheKey(date);
+    localStorage.setItem(key, JSON.stringify({ timestamp: Date.now(), data: result }));
+  } catch { /* quota exceeded – ignore */ }
+};
+
+// --- helpers ---
+
 const convertCelebrityToWikiPerson = (celebrity: any): WikiPerson => ({
   name: celebrity.name,
   birthDate: celebrity.birthDate,
@@ -32,14 +66,12 @@ const categorizeByProfession = (profession: string): WikiPerson['category'] => {
   return 'celebrity';
 };
 
-// Format date as MM-DD for database lookup
 const formatDateKey = (date: Date): string => {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${month}-${day}`;
 };
 
-// Get nearby dates (±3 days)
 const getNearbyDates = (date: Date): Date[] => {
   const nearby: Date[] = [];
   for (let i = -3; i <= 3; i++) {
@@ -51,26 +83,20 @@ const getNearbyDates = (date: Date): Date[] => {
   return nearby;
 };
 
-// Search local database first
+// --- search functions ---
+
 export const searchLocalDatabase = (date: Date): { people: WikiPerson[], events: WikiEvent[] } => {
   const dateKey = formatDateKey(date);
-  const results: { people: WikiPerson[], events: WikiEvent[] } = {
-    people: [],
-    events: []
-  };
+  const results: { people: WikiPerson[], events: WikiEvent[] } = { people: [], events: [] };
 
-  // 1. Check birthdayDatabase (comprehensive static data)
   const birthdayData = birthdayDatabase[dateKey];
   if (birthdayData) {
     results.people.push(...birthdayData.people);
     results.events.push(...birthdayData.events);
   }
 
-  // 2. Check celebrities.ts (featured celebrities)
   const matchedCelebrities = findCelebrityByBirthday(date);
   const convertedCelebrities = matchedCelebrities.map(convertCelebrityToWikiPerson);
-  
-  // Add unique celebrities (avoid duplicates by name)
   convertedCelebrities.forEach(celeb => {
     if (!results.people.some(p => p.name.toLowerCase() === celeb.name.toLowerCase())) {
       results.people.push(celeb);
@@ -80,14 +106,9 @@ export const searchLocalDatabase = (date: Date): { people: WikiPerson[], events:
   return results;
 };
 
-// Search nearby dates in local database
 export const searchNearbyDates = (date: Date): { people: WikiPerson[], events: WikiEvent[], dates: Date[] } => {
   const nearbyDates = getNearbyDates(date);
-  const results: { people: WikiPerson[], events: WikiEvent[], dates: Date[] } = {
-    people: [],
-    events: [],
-    dates: []
-  };
+  const results: { people: WikiPerson[], events: WikiEvent[], dates: Date[] } = { people: [], events: [], dates: [] };
 
   for (const nearbyDate of nearbyDates) {
     const localResults = searchLocalDatabase(nearbyDate);
@@ -103,11 +124,14 @@ export const searchNearbyDates = (date: Date): { people: WikiPerson[], events: W
   return results;
 };
 
-// Wikidata SPARQL query with shorter timeout
-export const queryWikidata = async (date: Date, timeout: number = 3000): Promise<{ people: WikiPerson[], events: WikiEvent[] }> => {
+// Single-attempt Wikidata query with 8s timeout
+export const queryWikidata = async (
+  date: Date,
+  timeout: number = 8000,
+  signal?: AbortSignal
+): Promise<{ people: WikiPerson[], events: WikiEvent[] }> => {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
-  const monthDay = `--${month}-${day}`;
 
   const query = `
     SELECT DISTINCT ?person ?personLabel ?birthDate ?occupationLabel ?image ?article WHERE {
@@ -129,6 +153,16 @@ export const queryWikidata = async (date: Date, timeout: number = 3000): Promise
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  // If an external signal is already aborted, bail immediately
+  if (signal?.aborted) {
+    clearTimeout(timeoutId);
+    return { people: [], events: [] };
+  }
+
+  // Abort our internal controller if external signal fires
+  const onExternalAbort = () => controller.abort();
+  signal?.addEventListener('abort', onExternalAbort);
 
   try {
     const response = await fetch(
@@ -158,67 +192,86 @@ export const queryWikidata = async (date: Date, timeout: number = 3000): Promise
     return { people, events: [] };
   } catch (error) {
     clearTimeout(timeoutId);
-    console.log('Wikidata query failed or timed out:', error);
+    console.log('Wikidata query failed or timed out (single attempt):', error);
     return { people: [], events: [] };
+  } finally {
+    signal?.removeEventListener('abort', onExternalAbort);
   }
 };
 
-// Main search function with optimized flow
+// Main search – single attempt per phase, with abort support
 export const searchBirthdayMatches = async (
   date: Date,
-  onProgress?: (status: string) => void
+  onProgress?: (status: string, phase: SearchPhase) => void,
+  signal?: AbortSignal
 ): Promise<BirthdaySearchResult> => {
   const searchedDate = date;
-  
-  // Step 1: Search local database FIRST (instant)
-  onProgress?.('Searching local database...');
+
+  // Check cache first
+  const cached = getCachedResult(date);
+  if (cached) {
+    onProgress?.('Found cached results!', 'done');
+    return cached;
+  }
+
+  // Phase 1: Local database (instant)
+  onProgress?.('Searching our celebrity database...', 'local');
   const localResults = searchLocalDatabase(date);
-  
+
   if (localResults.people.length > 0) {
-    onProgress?.('Found matches in local database!');
-    return {
+    onProgress?.('Found matches in our database!', 'done');
+    const result: BirthdaySearchResult = {
       people: localResults.people,
       events: localResults.events,
       source: 'local',
       searchedDate
     };
+    setCachedResult(date, result);
+    return result;
   }
 
-  // Step 2: Try Wikidata API with short timeout (3 seconds)
-  onProgress?.('Searching Wikipedia...');
-  const apiResults = await queryWikidata(date, 3000);
-  
+  // Bail if aborted
+  if (signal?.aborted) {
+    return { people: [], events: [], source: 'local', searchedDate };
+  }
+
+  // Phase 2: Wikidata – single attempt, 8s timeout
+  onProgress?.('No local matches found. Searching Wikipedia...', 'wikipedia');
+  const apiResults = await queryWikidata(date, 8000, signal);
+
   if (apiResults.people.length > 0) {
-    onProgress?.('Found matches from Wikipedia!');
-    return {
+    onProgress?.('Found matches from Wikipedia!', 'done');
+    const result: BirthdaySearchResult = {
       people: apiResults.people,
       events: apiResults.events,
       source: 'api',
       searchedDate
     };
+    setCachedResult(date, result);
+    return result;
   }
 
-  // Step 3: Search nearby dates as fallback
-  onProgress?.('Searching nearby dates...');
+  if (signal?.aborted) {
+    return { people: [], events: [], source: 'local', searchedDate };
+  }
+
+  // Phase 3: Nearby dates fallback
+  onProgress?.('Searching nearby dates...', 'nearby');
   const nearbyResults = searchNearbyDates(date);
-  
+
   if (nearbyResults.people.length > 0) {
-    onProgress?.(`Found matches from nearby dates!`);
-    return {
+    onProgress?.('Found matches from nearby dates!', 'done');
+    const result: BirthdaySearchResult = {
       people: nearbyResults.people,
       events: nearbyResults.events,
       source: 'fallback',
       searchedDate,
       nearbyDates: nearbyResults.dates
     };
+    setCachedResult(date, result);
+    return result;
   }
 
-  // Step 4: No matches found
-  onProgress?.('No matches found');
-  return {
-    people: [],
-    events: [],
-    source: 'local',
-    searchedDate
-  };
+  onProgress?.('No matches found', 'done');
+  return { people: [], events: [], source: 'local', searchedDate };
 };
