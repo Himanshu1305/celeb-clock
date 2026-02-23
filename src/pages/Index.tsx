@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AgeCalculator } from '@/components/AgeCalculator';
 import { AuthNav } from '@/components/AuthNav';
@@ -6,11 +5,13 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { TestimonialsSection } from '@/components/TestimonialsSection';
 import { ReviewForm } from '@/components/ReviewForm';
+import { CelebrityMatch } from '@/components/CelebrityMatch';
+import { ZodiacAndFacts } from '@/components/ZodiacAndFacts';
 import { useAuth } from '@/hooks/useAuth';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Crown, ArrowRight, Clock, Gift, Sparkles, Gem } from 'lucide-react';
+import { Crown, ArrowRight, Clock, Gift, Sparkles, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
 
@@ -75,6 +76,44 @@ const Index = () => {
           <AgeCalculator onBirthDateChange={setBirthDate} initialDate={birthDate} />
         </section>
 
+        {/* Celebrity Match Section - shows after birth date is entered */}
+        {birthDate && (
+          <section className="max-w-6xl mx-auto mb-16 animate-fade-in-up">
+            <CelebrityMatch birthDate={birthDate} />
+          </section>
+        )}
+
+        {/* Zodiac and Facts Section - shows after birth date is entered */}
+        {birthDate && (
+          <section className="max-w-4xl mx-auto mb-16 animate-fade-in-up">
+            <ZodiacAndFacts birthDate={birthDate} />
+          </section>
+        )}
+
+        {/* CTA to search more celebrities */}
+        {birthDate && (
+          <section className="max-w-2xl mx-auto mb-16 text-center animate-fade-in-up">
+            <Card className="glass-card">
+              <CardContent className="p-8 space-y-4">
+                <Search className="w-10 h-10 mx-auto text-primary" />
+                <h3 className="text-2xl font-bold">Want More Celebrity Matches?</h3>
+                <p className="text-muted-foreground">
+                  Search Wikipedia for even more famous people who share your birthday
+                </p>
+                <Button 
+                  size="lg" 
+                  className="gap-2"
+                  onClick={() => navigate('/celebrity-birthday')}
+                >
+                  <Gift className="w-5 h-5" />
+                  Search Celebrity Birthdays
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
+          </section>
+        )}
+
         {/* Quick Links to Other Tools */}
         <section className="max-w-6xl mx-auto mb-16">
           <h2 className="text-3xl font-bold text-center mb-8 gradient-text-primary">
@@ -118,20 +157,7 @@ const Index = () => {
         {/* Testimonials Section */}
         <TestimonialsSection />
 
-        {/* About Section */}
-        <section className="max-w-4xl mx-auto mb-16">
-          <Card className="glass-card">
-            <CardHeader>
-              <CardTitle className="text-3xl text-center">Know Yourself Better — Experience Time with Precision</CardTitle>
-            </CardHeader>
-            <CardContent className="prose prose-lg max-w-none space-y-4">
-              <p>Your age is more than a number — it's your journey through moments, experiences, and milestones. Our Age Calculator helps you discover your precise age, whether you want to know it for documentation, curiosity, or celebration.</p>
-              <p>Simply enter your date of birth, and the calculator instantly shows your exact age across multiple time units — years, months, days, hours, minutes, and even seconds.</p>
-            </CardContent>
-          </Card>
-        </section>
-
-        {/* Quick Links */}
+        {/* About Section (single copy) */}
         <section className="max-w-4xl mx-auto mb-16">
           <Card className="glass-card">
             <CardContent className="p-8 space-y-6">
