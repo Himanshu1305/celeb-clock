@@ -1,43 +1,51 @@
 
-## Wire Up the Expanded Birthday Database
 
-The 12 monthly data files (january.ts through december.ts) have been created with 1,000+ celebrity entries covering all 365 days, but they are not yet connected to the app. Here's what needs to happen:
+## Redesign Home Page: Show Celebrity Matches Immediately After Date Entry
 
-### Step 1: Create `src/data/birthdays/index.ts` (barrel file)
+### Problem
 
-Create a new file that imports all 12 monthly databases and merges them into a single `BirthdayDatabase` object using the spread operator:
+Currently, when a user enters their birth date on the home page, they only see the age breakdown (years, months, days, etc.). To see celebrity matches, they must click "Celebrity Match" in the quick links section and navigate to a completely separate page (`/celebrity-birthday`). This is confusing because:
 
-```typescript
-import { januaryBirthdays } from './january';
-import { februaryBirthdays } from './february';
-// ... all 12 months
-export const allBirthdays = {
-  ...januaryBirthdays, ...februaryBirthdays, ... // etc
-};
-```
+1. The celebrity match is a free feature but feels hidden behind an extra navigation step
+2. After entering a birth date, the page shows only numbers — no engaging content
+3. The "Explore More" quick links section competes with the actual results area
+4. There's duplicated "About" content on the home page (two nearly identical sections)
 
-### Step 2: Rewrite `src/data/birthdayData.ts`
+### Solution
 
-Replace all the inline data (the old 25-date `birthdayDatabase` object) with a simple import from the new barrel file. Keep the helper functions (`getBirthdayData`, `getCategoryIcon`, `searchCelebrities`) intact but have them read from the merged database.
+Restructure the Index page so that after a user enters their birth date, the page immediately shows:
+1. Age breakdown (existing)
+2. Celebrity birthday matches (from internal database — instant, no Wikipedia delay)
+3. Zodiac sign and fun facts
+4. A link/button to explore more on the dedicated Celebrity Birthday page for Wikipedia-powered deeper search
 
-- Remove the ~200 lines of inline data
-- Add `import { allBirthdays } from './birthdays'`
-- Set `export const birthdayDatabase = allBirthdays`
+### Changes
 
-### Step 3: Update `src/data/celebrities.ts`
+#### File: `src/pages/Index.tsx`
 
-Update `findCelebrityByBirthday` to pull from the main `birthdayDatabase` instead of maintaining a separate list. Keep the `Celebrity` interface and `celebrities` array (used by `CelebrityMatch.tsx`) but fix the incorrect dates:
+- Import `CelebrityMatch` component (uses local database, instant results)
+- Import `ZodiacAndFacts` component
+- After the AgeCalculator section, add a `CelebrityMatch` section that renders when `birthDate` is set
+- Add a `ZodiacAndFacts` section below that
+- Add a "Want more? Search Wikipedia for celebrity matches" CTA button linking to `/celebrity-birthday`
+- Remove the duplicate "About" section (lines 122-175 — there are two nearly identical blocks)
+- Keep the quick links section but move it below the results
 
-- Steve Jobs: keep only in `02-24` (already correct in february.ts)
-- Mark Zuckerberg: keep only in `05-14` (already correct in may.ts)
-- George Clooney: keep only in `05-06` (already correct in may.ts)
+#### File: `src/components/Navigation.tsx`
 
-### Step 4: No other files need changes
+- Move "Celebrity Match" out of the Calculators dropdown and into the top-level nav bar so it's more visible and accessible (same level as Zodiac, Birthstone, Blog)
 
-`BirthdaySearchService.ts` already imports from `birthdayData.ts` and `celebrities.ts`, so it will automatically pick up the expanded data. `CelebritySearch.tsx` and `CelebrityMatch.tsx` also import from these files and will work without changes.
+### What stays the same
+
+- The `/celebrity-birthday` page remains as-is for deeper Wikipedia-powered search
+- The AgeCalculator component is unchanged
+- The BirthDateContext sharing between pages continues working
+- The CelebritySearch component on the celebrity-birthday page stays
 
 ### Result
 
-- Every day of the year will have 3-5 instant local matches
-- Wikipedia API calls will rarely be needed
-- Search will feel near-instant for most dates
+- Users see celebrity matches immediately after entering their birth date — no extra clicks
+- The home page becomes more engaging with rich content (age + celebrities + zodiac)
+- The dedicated celebrity page serves as an advanced search for power users
+- Celebrity Match is visible in the main nav for easy access
+
