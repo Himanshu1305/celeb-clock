@@ -1,64 +1,43 @@
 
+## Wire Up the Expanded Birthday Database
 
-## Expand Internal Celebrity Database
+The 12 monthly data files (january.ts through december.ts) have been created with 1,000+ celebrity entries covering all 365 days, but they are not yet connected to the app. Here's what needs to happen:
 
-### Current State
+### Step 1: Create `src/data/birthdays/index.ts` (barrel file)
 
-The app has two data sources that need expansion:
+Create a new file that imports all 12 monthly databases and merges them into a single `BirthdayDatabase` object using the spread operator:
 
-1. **`birthdayData.ts`** - Only **25 dates** covered with ~50 people and ~8 events. That means 340 out of 365 days have NO local data, forcing a Wikipedia lookup every time.
+```typescript
+import { januaryBirthdays } from './january';
+import { februaryBirthdays } from './february';
+// ... all 12 months
+export const allBirthdays = {
+  ...januaryBirthdays, ...februaryBirthdays, ... // etc
+};
+```
 
-2. **`celebrities.ts`** - Only **20 celebrities**, and uses generic Unsplash stock photos (not actual celebrity images). Several entries also have incorrect date placements (e.g., Steve Jobs listed under Oct 5 but his actual birthday is Feb 24).
+### Step 2: Rewrite `src/data/birthdayData.ts`
 
-### Issues to Fix
+Replace all the inline data (the old 25-date `birthdayDatabase` object) with a simple import from the new barrel file. Keep the helper functions (`getBirthdayData`, `getCategoryIcon`, `searchCelebrities`) intact but have them read from the merged database.
 
-- **Data errors**: Steve Jobs (birth: Feb 24) is filed under `10-05`. Mark Zuckerberg (birth: May 14) is filed under `05-21`. George Clooney (birth: May 6) is filed under `05-04`.
-- **Low coverage**: Most days of the year have zero entries, meaning every search triggers a slow Wikipedia API call.
-- **Duplicate data**: Some people exist in both files (e.g., Elon Musk, Emma Watson) with slightly different data.
+- Remove the ~200 lines of inline data
+- Add `import { allBirthdays } from './birthdays'`
+- Set `export const birthdayDatabase = allBirthdays`
 
-### Plan
+### Step 3: Update `src/data/celebrities.ts`
 
-#### 1. Massively expand `birthdayData.ts`
+Update `findCelebrityByBirthday` to pull from the main `birthdayDatabase` instead of maintaining a separate list. Keep the `Celebrity` interface and `celebrities` array (used by `CelebrityMatch.tsx`) but fix the incorrect dates:
 
-Add entries to cover **all 365 days** of the year with at least 3-5 notable people per day across these categories:
+- Steve Jobs: keep only in `02-24` (already correct in february.ts)
+- Mark Zuckerberg: keep only in `05-14` (already correct in may.ts)
+- George Clooney: keep only in `05-06` (already correct in may.ts)
 
-- **Politicians/Leaders**: Presidents, Prime Ministers, world leaders
-- **Scientists**: Nobel laureates, inventors, mathematicians
-- **Actors/Actresses**: Oscar winners, Hollywood icons, international stars
-- **Musicians/Singers**: Grammy winners, legendary performers
-- **Sports Stars**: Olympic champions, football/cricket/basketball legends
-- **Entrepreneurs**: Tech founders, business moguls
-- **Artists/Writers**: Painters, authors, poets
+### Step 4: No other files need changes
 
-Each entry will include: name, accurate birthDate, profession, category, description, and Wikipedia URL.
+`BirthdaySearchService.ts` already imports from `birthdayData.ts` and `celebrities.ts`, so it will automatically pick up the expanded data. `CelebritySearch.tsx` and `CelebrityMatch.tsx` also import from these files and will work without changes.
 
-Also add more historical events per date where notable ones exist.
+### Result
 
-#### 2. Fix data errors in existing entries
-
-- Move Steve Jobs to `02-24`
-- Move Mark Zuckerberg to `05-14`
-- Move George Clooney to `05-06`
-
-#### 3. Consolidate `celebrities.ts` into `birthdayData.ts`
-
-Merge the 20 celebrities from `celebrities.ts` into `birthdayData.ts` (adding their funFacts as descriptions). Keep the `celebrities.ts` file functional but have it reference the main database, avoiding duplicate maintenance.
-
-#### 4. Target coverage
-
-Aim for approximately **1,500-2,000 notable people** across all 365 days, ensuring:
-- Every day has at least 3 entries
-- Popular dates (holidays, famous birthdays) have 5-8 entries
-- Good category diversity (not just actors)
-- Global representation (not just American celebrities)
-
-### Technical Details
-
-**Files to modify:**
-- `src/data/birthdayData.ts` - Major expansion with 365-day coverage
-- `src/data/celebrities.ts` - Fix errors, remove duplicates already in birthdayData
-
-**No database or API changes needed** - this is purely static data expansion.
-
-Due to the massive size of this change, the implementation will be done in batches (e.g., Jan-Mar, Apr-Jun, Jul-Sep, Oct-Dec) to keep edits manageable.
-
+- Every day of the year will have 3-5 instant local matches
+- Wikipedia API calls will rarely be needed
+- Search will feel near-instant for most dates
