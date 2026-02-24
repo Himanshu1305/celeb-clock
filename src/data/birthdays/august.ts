@@ -18,10 +18,12 @@ export const augustBirthdays: BirthdayDatabase = {
     { name: 'Barack Obama', birthDate: '1961-08-04', profession: '44th US President', category: 'other', description: 'First African American President of the United States', wikipediaUrl: 'https://en.wikipedia.org/wiki/Barack_Obama' },
     { name: 'Louis Armstrong', birthDate: '1901-08-04', profession: 'Musician', category: 'celebrity', description: 'Jazz legend and cultural ambassador', wikipediaUrl: 'https://en.wikipedia.org/wiki/Louis_Armstrong' },
     { name: 'Meghan Markle', birthDate: '1981-08-04', profession: 'Duchess of Sussex', category: 'other', description: 'Actress turned member of British Royal Family', wikipediaUrl: 'https://en.wikipedia.org/wiki/Meghan,_Duchess_of_Sussex' },
+    { name: 'Kishore Kumar', birthDate: '1929-08-04', profession: 'Singer & Actor', category: 'celebrity', description: 'Legendary Indian playback singer and versatile entertainer', wikipediaUrl: 'https://en.wikipedia.org/wiki/Kishore_Kumar' },
   ], events: [] },
   '08-05': { people: [
     { name: 'Neil Armstrong', birthDate: '1930-08-05', profession: 'Astronaut', category: 'scientist', description: 'First person to walk on the Moon', wikipediaUrl: 'https://en.wikipedia.org/wiki/Neil_Armstrong' },
     { name: 'Mark Strong', birthDate: '1963-08-05', profession: 'Actor', category: 'celebrity', description: 'Star of Kick-Ass and Tinker Tailor Soldier Spy', wikipediaUrl: 'https://en.wikipedia.org/wiki/Mark_Strong' },
+    { name: 'Kajol', birthDate: '1974-08-05', profession: 'Actress', category: 'celebrity', description: 'Bollywood queen, iconic star of DDLJ and My Name is Khan', wikipediaUrl: 'https://en.wikipedia.org/wiki/Kajol' },
   ], events: [] },
   '08-06': { people: [
     { name: 'Andy Warhol', birthDate: '1928-08-06', profession: 'Artist', category: 'other', description: 'Pop art pioneer', wikipediaUrl: 'https://en.wikipedia.org/wiki/Andy_Warhol' },
@@ -98,6 +100,8 @@ export const augustBirthdays: BirthdayDatabase = {
   '08-22': { people: [
     { name: 'Claude Debussy', birthDate: '1862-08-22', profession: 'Composer', category: 'celebrity', description: 'French Impressionist composer of Clair de Lune', wikipediaUrl: 'https://en.wikipedia.org/wiki/Claude_Debussy' },
     { name: 'James Corden', birthDate: '1978-08-22', profession: 'TV Host', category: 'celebrity', description: 'Host of The Late Late Show', wikipediaUrl: 'https://en.wikipedia.org/wiki/James_Corden' },
+    { name: 'Deng Xiaoping', birthDate: '1904-08-22', profession: 'Political Leader', category: 'other', description: 'Paramount leader who modernized China\'s economy', wikipediaUrl: 'https://en.wikipedia.org/wiki/Deng_Xiaoping' },
+    { name: 'Dua Lipa', birthDate: '1995-08-22', profession: 'Singer', category: 'celebrity', description: 'Grammy-winning British-Albanian pop superstar', wikipediaUrl: 'https://en.wikipedia.org/wiki/Dua_Lipa' },
   ], events: [] },
   '08-23': { people: [
     { name: 'Kobe Bryant', birthDate: '1978-08-23', profession: 'Basketball Player', category: 'athlete', description: 'Five-time NBA champion and Mamba Mentality icon', wikipediaUrl: 'https://en.wikipedia.org/wiki/Kobe_Bryant' },
@@ -121,6 +125,7 @@ export const augustBirthdays: BirthdayDatabase = {
   '08-27': { people: [
     { name: 'Confucius', birthDate: '-0551-08-27', profession: 'Philosopher', category: 'other', description: 'Chinese philosopher whose teachings shaped East Asian civilization', wikipediaUrl: 'https://en.wikipedia.org/wiki/Confucius' },
     { name: 'Lyndon B. Johnson', birthDate: '1908-08-27', profession: '36th US President', category: 'other', description: '36th President, signed Civil Rights Act', wikipediaUrl: 'https://en.wikipedia.org/wiki/Lyndon_B._Johnson' },
+    { name: 'Don Bradman', birthDate: '1908-08-27', profession: 'Cricketer', category: 'athlete', description: 'Greatest batsman in cricket history, 99.94 Test average', wikipediaUrl: 'https://en.wikipedia.org/wiki/Don_Bradman' },
   ], events: [] },
   '08-28': { people: [
     { name: 'Leo Tolstoy', birthDate: '1828-08-28', profession: 'Author', category: 'other', description: 'Russian author of War and Peace and Anna Karenina', wikipediaUrl: 'https://en.wikipedia.org/wiki/Leo_Tolstoy' },

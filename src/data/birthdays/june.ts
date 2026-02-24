@@ -205,6 +205,7 @@ export const juneBirthdays: BirthdayDatabase = {
       { name: 'George Orwell', birthDate: '1903-06-25', profession: 'Author', category: 'other', description: 'Author of 1984 and Animal Farm', wikipediaUrl: 'https://en.wikipedia.org/wiki/George_Orwell' },
       { name: 'Ricky Gervais', birthDate: '1961-06-25', profession: 'Comedian', category: 'celebrity', description: 'Creator of The Office and Golden Globes host', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ricky_Gervais' },
       { name: 'Anthony Bourdain', birthDate: '1956-06-25', profession: 'Chef & Author', category: 'celebrity', description: 'Celebrity chef and travel documentarian', wikipediaUrl: 'https://en.wikipedia.org/wiki/Anthony_Bourdain' },
+      { name: 'George Michael', birthDate: '1963-06-25', profession: 'Singer', category: 'celebrity', description: 'British pop icon, former Wham! member', wikipediaUrl: 'https://en.wikipedia.org/wiki/George_Michael' },
     ],
     events: []
   },

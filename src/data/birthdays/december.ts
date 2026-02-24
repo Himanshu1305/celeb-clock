@@ -5,6 +5,7 @@ export const decemberBirthdays: BirthdayDatabase = {
     { name: 'Woody Allen', birthDate: '1935-12-01', profession: 'Director', category: 'celebrity', description: 'Four-time Oscar-winning filmmaker', wikipediaUrl: 'https://en.wikipedia.org/wiki/Woody_Allen' },
     { name: 'Bette Midler', birthDate: '1945-12-01', profession: 'Singer & Actress', category: 'celebrity', description: 'The Divine Miss M, Grammy and Emmy winner', wikipediaUrl: 'https://en.wikipedia.org/wiki/Bette_Midler' },
     { name: 'Sarah Silverman', birthDate: '1970-12-01', profession: 'Comedian', category: 'celebrity', description: 'Emmy-winning comedian and actress', wikipediaUrl: 'https://en.wikipedia.org/wiki/Sarah_Silverman' },
+    { name: 'Udit Narayan', birthDate: '1955-12-01', profession: 'Playback Singer', category: 'celebrity', description: 'Legendary Indian playback singer, voice of Bollywood romance', wikipediaUrl: 'https://en.wikipedia.org/wiki/Udit_Narayan' },
   ], events: [] },
   '12-02': { people: [
     { name: 'Britney Spears', birthDate: '1981-12-02', profession: 'Singer', category: 'celebrity', description: 'Princess of Pop, one of best-selling music artists', wikipediaUrl: 'https://en.wikipedia.org/wiki/Britney_Spears' },
@@ -29,6 +30,7 @@ export const decemberBirthdays: BirthdayDatabase = {
   '12-06': { people: [
     { name: 'Nick Park', birthDate: '1958-12-06', profession: 'Animator', category: 'celebrity', description: 'Creator of Wallace and Gromit', wikipediaUrl: 'https://en.wikipedia.org/wiki/Nick_Park' },
     { name: 'Agnes Moorehead', birthDate: '1900-12-06', profession: 'Actress', category: 'celebrity', description: 'Star of Bewitched', wikipediaUrl: 'https://en.wikipedia.org/wiki/Agnes_Moorehead' },
+    { name: 'Jasprit Bumrah', birthDate: '1993-12-06', profession: 'Cricketer', category: 'athlete', description: 'India\'s pace spearhead, world\'s top fast bowler', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jasprit_Bumrah' },
   ], events: [] },
   '12-07': { people: [
     { name: 'Noam Chomsky', birthDate: '1928-12-07', profession: 'Linguist & Philosopher', category: 'scientist', description: 'Father of modern linguistics', wikipediaUrl: 'https://en.wikipedia.org/wiki/Noam_Chomsky' },
@@ -41,6 +43,7 @@ export const decemberBirthdays: BirthdayDatabase = {
     { name: 'Nicki Minaj', birthDate: '1982-12-08', profession: 'Rapper', category: 'celebrity', description: 'Best-selling female rapper of all time', wikipediaUrl: 'https://en.wikipedia.org/wiki/Nicki_Minaj' },
     { name: 'Teri Hatcher', birthDate: '1964-12-08', profession: 'Actress', category: 'celebrity', description: 'Star of Desperate Housewives', wikipediaUrl: 'https://en.wikipedia.org/wiki/Teri_Hatcher' },
     { name: 'Jim Morrison', birthDate: '1943-12-08', profession: 'Musician', category: 'celebrity', description: 'Lead singer of The Doors', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jim_Morrison' },
+    { name: 'Dharmendra', birthDate: '1935-12-08', profession: 'Actor', category: 'celebrity', description: 'Bollywood\'s He-Man, legendary Hindi film actor', wikipediaUrl: 'https://en.wikipedia.org/wiki/Dharmendra' },
   ], events: [] },
   '12-09': { people: [
     { name: 'Judi Dench', birthDate: '1934-12-09', profession: 'Actress', category: 'celebrity', description: 'Oscar-winning British acting legend', wikipediaUrl: 'https://en.wikipedia.org/wiki/Judi_Dench' },
@@ -50,6 +53,7 @@ export const decemberBirthdays: BirthdayDatabase = {
     { name: 'Emily Dickinson', birthDate: '1830-12-10', profession: 'Poet', category: 'other', description: 'One of America\'s greatest poets', wikipediaUrl: 'https://en.wikipedia.org/wiki/Emily_Dickinson' },
     { name: 'Ada Lovelace', birthDate: '1815-12-10', profession: 'Mathematician', category: 'scientist', description: 'First computer programmer, pioneer of computing', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ada_Lovelace' },
     { name: 'Raven-Symoné', birthDate: '1985-12-10', profession: 'Actress', category: 'celebrity', description: 'Star of That\'s So Raven', wikipediaUrl: 'https://en.wikipedia.org/wiki/Raven-Symon%C3%A9' },
+    { name: 'Rajesh Khanna', birthDate: '1942-12-10', profession: 'Actor', category: 'celebrity', description: 'Bollywood\'s first superstar, won 7 consecutive Filmfare Awards', wikipediaUrl: 'https://en.wikipedia.org/wiki/Rajesh_Khanna' },
   ], events: [
     { title: 'Nobel Prize Ceremony', date: '1901-12-10', year: 1901, description: 'First Nobel Prizes awarded in Stockholm', category: 'Cultural', wikipediaUrl: 'https://en.wikipedia.org/wiki/Nobel_Prize' },
   ] },
@@ -62,6 +66,8 @@ export const decemberBirthdays: BirthdayDatabase = {
     { name: 'Frank Sinatra', birthDate: '1915-12-12', profession: 'Singer & Actor', category: 'celebrity', description: 'Ol\' Blue Eyes, chairman of the board', wikipediaUrl: 'https://en.wikipedia.org/wiki/Frank_Sinatra' },
     { name: 'Gustave Flaubert', birthDate: '1821-12-12', profession: 'Author', category: 'other', description: 'French novelist, author of Madame Bovary', wikipediaUrl: 'https://en.wikipedia.org/wiki/Gustave_Flaubert' },
     { name: 'Bob Barker', birthDate: '1923-12-12', profession: 'TV Host', category: 'celebrity', description: 'Legendary host of The Price Is Right', wikipediaUrl: 'https://en.wikipedia.org/wiki/Bob_Barker' },
+    { name: 'Rajinikanth', birthDate: '1950-12-12', profession: 'Actor', category: 'celebrity', description: 'Indian superstar, Thalaivar of Tamil cinema', wikipediaUrl: 'https://en.wikipedia.org/wiki/Rajinikanth' },
+    { name: 'Yuvraj Singh', birthDate: '1981-12-12', profession: 'Cricketer', category: 'athlete', description: 'Indian cricket hero, hit six 6s in an over in T20 World Cup', wikipediaUrl: 'https://en.wikipedia.org/wiki/Yuvraj_Singh' },
   ], events: [] },
   '12-13': { people: [
     { name: 'Taylor Swift', birthDate: '1989-12-13', profession: 'Singer & Songwriter', category: 'celebrity', description: '14-time Grammy winner, Eras Tour phenomenon', wikipediaUrl: 'https://en.wikipedia.org/wiki/Taylor_Swift' },
@@ -93,11 +99,13 @@ export const decemberBirthdays: BirthdayDatabase = {
     { name: 'Brad Pitt', birthDate: '1963-12-18', profession: 'Actor & Producer', category: 'celebrity', description: 'Oscar-winning actor and producer', wikipediaUrl: 'https://en.wikipedia.org/wiki/Brad_Pitt' },
     { name: 'Steven Spielberg', birthDate: '1946-12-18', profession: 'Director', category: 'celebrity', description: 'Most commercially successful director in history', wikipediaUrl: 'https://en.wikipedia.org/wiki/Steven_Spielberg' },
     { name: 'Keith Richards', birthDate: '1943-12-18', profession: 'Musician', category: 'celebrity', description: 'Guitarist of The Rolling Stones', wikipediaUrl: 'https://en.wikipedia.org/wiki/Keith_Richards' },
+    { name: 'Sia', birthDate: '1975-12-18', profession: 'Singer & Songwriter', category: 'celebrity', description: 'Australian pop artist known for Chandelier and Cheap Thrills', wikipediaUrl: 'https://en.wikipedia.org/wiki/Sia' },
   ], events: [] },
   '12-19': { people: [
     { name: 'Jake Gyllenhaal', birthDate: '1980-12-19', profession: 'Actor', category: 'celebrity', description: 'Star of Brokeback Mountain and Nightcrawler', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jake_Gyllenhaal' },
     { name: 'Alyssa Milano', birthDate: '1972-12-19', profession: 'Actress', category: 'celebrity', description: 'Star of Charmed, activist', wikipediaUrl: 'https://en.wikipedia.org/wiki/Alyssa_Milano' },
     { name: 'Édith Piaf', birthDate: '1915-12-19', profession: 'Singer', category: 'celebrity', description: 'Legendary French singer of La Vie en Rose', wikipediaUrl: 'https://en.wikipedia.org/wiki/%C3%89dith_Piaf' },
+    { name: 'Ricky Ponting', birthDate: '1974-12-19', profession: 'Cricketer', category: 'athlete', description: 'Australian cricket captain, most successful in Test history', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ricky_Ponting' },
   ], events: [] },
   '12-20': { people: [
     { name: 'Jonah Hill', birthDate: '1983-12-20', profession: 'Actor', category: 'celebrity', description: 'Oscar-nominated star of The Wolf of Wall Street', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jonah_Hill' },
@@ -110,7 +118,7 @@ export const decemberBirthdays: BirthdayDatabase = {
   ], events: [] },
   '12-22': { people: [
     { name: 'Ralph Fiennes', birthDate: '1962-12-22', profession: 'Actor', category: 'celebrity', description: 'Star of Schindler\'s List and Harry Potter', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ralph_Fiennes' },
-    { name: 'Srinivasa Ramanujan', birthDate: '1887-12-22', profession: 'Mathematician', category: 'scientist', description: 'Indian mathematical genius', wikipediaUrl: 'https://en.wikipedia.org/wiki/Srinivasa_Ramanujan' },
+    { name: 'Srinivasa Ramanujan', birthDate: '1887-12-22', profession: 'Mathematician', category: 'scientist', description: 'Indian mathematical genius who made extraordinary contributions', wikipediaUrl: 'https://en.wikipedia.org/wiki/Srinivasa_Ramanujan' },
   ], events: [] },
   '12-23': { people: [
     { name: 'Emperor Akihito', birthDate: '1933-12-23', profession: 'Emperor of Japan', category: 'other', description: 'Emperor Emeritus of Japan', wikipediaUrl: 'https://en.wikipedia.org/wiki/Akihito' },
@@ -126,6 +134,7 @@ export const decemberBirthdays: BirthdayDatabase = {
     { name: 'Isaac Newton', birthDate: '1642-12-25', profession: 'Physicist & Mathematician', category: 'scientist', description: 'Discovered laws of motion and universal gravitation', wikipediaUrl: 'https://en.wikipedia.org/wiki/Isaac_Newton' },
     { name: 'Justin Trudeau', birthDate: '1971-12-25', profession: 'Prime Minister of Canada', category: 'other', description: 'Prime Minister of Canada', wikipediaUrl: 'https://en.wikipedia.org/wiki/Justin_Trudeau' },
     { name: 'Humphrey Bogart', birthDate: '1899-12-25', profession: 'Actor', category: 'celebrity', description: 'Classic Hollywood icon of Casablanca', wikipediaUrl: 'https://en.wikipedia.org/wiki/Humphrey_Bogart' },
+    { name: 'Atal Bihari Vajpayee', birthDate: '1924-12-25', profession: 'Prime Minister of India', category: 'other', description: 'Three-time Prime Minister of India, Bharat Ratna awardee', wikipediaUrl: 'https://en.wikipedia.org/wiki/Atal_Bihari_Vajpayee' },
   ], events: [
     { title: 'Christmas Day', date: '0001-12-25', year: 1, description: 'Celebration of the birth of Jesus Christ', category: 'Religious', wikipediaUrl: 'https://en.wikipedia.org/wiki/Christmas' },
   ] },
@@ -138,11 +147,13 @@ export const decemberBirthdays: BirthdayDatabase = {
     { name: 'Louis Pasteur', birthDate: '1822-12-27', profession: 'Chemist', category: 'scientist', description: 'Father of microbiology and pasteurization', wikipediaUrl: 'https://en.wikipedia.org/wiki/Louis_Pasteur' },
     { name: 'Marlene Dietrich', birthDate: '1901-12-27', profession: 'Actress', category: 'celebrity', description: 'German-American actress and singer', wikipediaUrl: 'https://en.wikipedia.org/wiki/Marlene_Dietrich' },
     { name: 'Timothée Chalamet', birthDate: '1995-12-27', profession: 'Actor', category: 'celebrity', description: 'Oscar-nominated star of Call Me by Your Name and Dune', wikipediaUrl: 'https://en.wikipedia.org/wiki/Timoth%C3%A9e_Chalamet' },
+    { name: 'Salman Khan', birthDate: '1965-12-27', profession: 'Actor', category: 'celebrity', description: 'Bollywood superstar and box office king of Hindi cinema', wikipediaUrl: 'https://en.wikipedia.org/wiki/Salman_Khan' },
   ], events: [] },
   '12-28': { people: [
     { name: 'Denzel Washington', birthDate: '1954-12-28', profession: 'Actor', category: 'celebrity', description: 'Two-time Oscar-winning acting legend', wikipediaUrl: 'https://en.wikipedia.org/wiki/Denzel_Washington' },
     { name: 'Stan Lee', birthDate: '1922-12-28', profession: 'Comic Book Writer', category: 'other', description: 'Creator of Spider-Man, X-Men, and the Marvel Universe', wikipediaUrl: 'https://en.wikipedia.org/wiki/Stan_Lee' },
     { name: 'John Legend', birthDate: '1978-12-28', profession: 'Singer', category: 'celebrity', description: 'EGOT-winning musician', wikipediaUrl: 'https://en.wikipedia.org/wiki/John_Legend' },
+    { name: 'Ratan Tata', birthDate: '1937-12-28', profession: 'Industrialist', category: 'entrepreneur', description: 'Chairman Emeritus of Tata Group, India\'s most respected businessman', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ratan_Tata' },
   ], events: [] },
   '12-29': { people: [
     { name: 'Jude Law', birthDate: '1972-12-29', profession: 'Actor', category: 'celebrity', description: 'Oscar-nominated British actor', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jude_Law' },
@@ -158,5 +169,6 @@ export const decemberBirthdays: BirthdayDatabase = {
     { name: 'Henri Matisse', birthDate: '1869-12-31', profession: 'Artist', category: 'other', description: 'French Fauvist painter and sculptor', wikipediaUrl: 'https://en.wikipedia.org/wiki/Henri_Matisse' },
     { name: 'Anthony Hopkins', birthDate: '1937-12-31', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning star of The Silence of the Lambs', wikipediaUrl: 'https://en.wikipedia.org/wiki/Anthony_Hopkins' },
     { name: 'Val Kilmer', birthDate: '1959-12-31', profession: 'Actor', category: 'celebrity', description: 'Star of Top Gun and Tombstone', wikipediaUrl: 'https://en.wikipedia.org/wiki/Val_Kilmer' },
+    { name: 'Gong Li', birthDate: '1965-12-31', profession: 'Actress', category: 'celebrity', description: 'Chinese film icon, star of Raise the Red Lantern and Memoirs of a Geisha', wikipediaUrl: 'https://en.wikipedia.org/wiki/Gong_Li' },
   ], events: [] },
 };

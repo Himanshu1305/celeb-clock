@@ -212,6 +212,7 @@ export const aprilBirthdays: BirthdayDatabase = {
       { name: 'Al Pacino', birthDate: '1940-04-25', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning star of The Godfather and Scent of a Woman', wikipediaUrl: 'https://en.wikipedia.org/wiki/Al_Pacino' },
       { name: 'Renée Zellweger', birthDate: '1969-04-25', profession: 'Actress', category: 'celebrity', description: 'Oscar-winning actress for Judy', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ren%C3%A9e_Zellweger' },
       { name: 'Ella Fitzgerald', birthDate: '1917-04-25', profession: 'Singer', category: 'celebrity', description: 'First Lady of Song, 13-time Grammy winner', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ella_Fitzgerald' },
+      { name: 'Arijit Singh', birthDate: '1987-04-25', profession: 'Singer', category: 'celebrity', description: 'India\'s most popular playback singer of the modern era', wikipediaUrl: 'https://en.wikipedia.org/wiki/Arijit_Singh' },
     ],
     events: []
   },
@@ -220,6 +221,7 @@ export const aprilBirthdays: BirthdayDatabase = {
       { name: 'Marcus Aurelius', birthDate: '0121-04-26', profession: 'Roman Emperor', category: 'other', description: 'Stoic philosopher and Roman Emperor', wikipediaUrl: 'https://en.wikipedia.org/wiki/Marcus_Aurelius' },
       { name: 'Channing Tatum', birthDate: '1980-04-26', profession: 'Actor', category: 'celebrity', description: 'Star of Magic Mike and 21 Jump Street', wikipediaUrl: 'https://en.wikipedia.org/wiki/Channing_Tatum' },
       { name: 'Melania Trump', birthDate: '1970-04-26', profession: 'Former First Lady', category: 'other', description: 'Former First Lady of the United States', wikipediaUrl: 'https://en.wikipedia.org/wiki/Melania_Trump' },
+      { name: 'Jet Li', birthDate: '1963-04-26', profession: 'Actor & Martial Artist', category: 'celebrity', description: 'Chinese martial arts film star of Hero and Fearless', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jet_Li' },
     ],
     events: [
       { title: 'Chernobyl Disaster', date: '1986-04-26', year: 1986, description: 'Worst nuclear power plant accident in history', category: 'Historical', wikipediaUrl: 'https://en.wikipedia.org/wiki/Chernobyl_disaster' },

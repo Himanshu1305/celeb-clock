@@ -4,6 +4,7 @@ export const novemberBirthdays: BirthdayDatabase = {
   '11-01': { people: [
     { name: 'Tim Cook', birthDate: '1960-11-01', profession: 'CEO of Apple', category: 'entrepreneur', description: 'CEO of Apple Inc. since 2011', wikipediaUrl: 'https://en.wikipedia.org/wiki/Tim_Cook' },
     { name: 'Aishwarya Rai', birthDate: '1973-11-01', profession: 'Actress', category: 'celebrity', description: 'Bollywood star and former Miss World', wikipediaUrl: 'https://en.wikipedia.org/wiki/Aishwarya_Rai' },
+    { name: 'VVS Laxman', birthDate: '1974-11-01', profession: 'Cricketer', category: 'athlete', description: 'Indian batting great, famous for 281 vs Australia', wikipediaUrl: 'https://en.wikipedia.org/wiki/VVS_Laxman' },
   ], events: [] },
   '11-02': { people: [
     { name: 'Marie Antoinette', birthDate: '1755-11-02', profession: 'Queen of France', category: 'other', description: 'Last Queen of France before the Revolution', wikipediaUrl: 'https://en.wikipedia.org/wiki/Marie_Antoinette' },
@@ -17,6 +18,7 @@ export const novemberBirthdays: BirthdayDatabase = {
   '11-04': { people: [
     { name: 'Matthew McConaughey', birthDate: '1969-11-04', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning star of Dallas Buyers Club', wikipediaUrl: 'https://en.wikipedia.org/wiki/Matthew_McConaughey' },
     { name: 'P. Diddy', birthDate: '1969-11-04', profession: 'Rapper & Entrepreneur', category: 'celebrity', description: 'Hip-hop mogul and Bad Boy Records founder', wikipediaUrl: 'https://en.wikipedia.org/wiki/Sean_Combs' },
+    { name: 'Tabu', birthDate: '1971-11-04', profession: 'Actress', category: 'celebrity', description: 'Acclaimed Indian actress of Andhadhun and Life of Pi', wikipediaUrl: 'https://en.wikipedia.org/wiki/Tabu_(actress)' },
   ], events: [] },
   '11-05': { people: [
     { name: 'Vivien Leigh', birthDate: '1913-11-05', profession: 'Actress', category: 'celebrity', description: 'Two-time Oscar winner, star of Gone with the Wind', wikipediaUrl: 'https://en.wikipedia.org/wiki/Vivien_Leigh' },
@@ -26,10 +28,13 @@ export const novemberBirthdays: BirthdayDatabase = {
   '11-06': { people: [
     { name: 'Emma Stone', birthDate: '1988-11-06', profession: 'Actress', category: 'celebrity', description: 'Two-time Oscar winner for La La Land and Poor Things', wikipediaUrl: 'https://en.wikipedia.org/wiki/Emma_Stone' },
     { name: 'Ethan Hawke', birthDate: '1970-11-06', profession: 'Actor', category: 'celebrity', description: 'Four-time Oscar-nominated actor and author', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ethan_Hawke' },
+    { name: 'Thandiwe Newton', birthDate: '1972-11-06', profession: 'Actress', category: 'celebrity', description: 'Emmy-winning British star of Westworld', wikipediaUrl: 'https://en.wikipedia.org/wiki/Thandiwe_Newton' },
   ], events: [] },
   '11-07': { people: [
     { name: 'Marie Curie', birthDate: '1867-11-07', profession: 'Physicist & Chemist', category: 'scientist', description: 'First woman to win a Nobel Prize, won two', wikipediaUrl: 'https://en.wikipedia.org/wiki/Marie_Curie' },
     { name: 'Albert Camus', birthDate: '1913-11-07', profession: 'Author', category: 'other', description: 'Nobel Prize-winning author of The Stranger', wikipediaUrl: 'https://en.wikipedia.org/wiki/Albert_Camus' },
+    { name: 'Kamal Haasan', birthDate: '1954-11-07', profession: 'Actor & Filmmaker', category: 'celebrity', description: 'Indian cinema legend with 60+ year career, Padma Bhushan awardee', wikipediaUrl: 'https://en.wikipedia.org/wiki/Kamal_Haasan' },
+    { name: 'C.V. Raman', birthDate: '1888-11-07', profession: 'Physicist', category: 'scientist', description: 'Nobel Prize-winning Indian physicist, discovered Raman Effect', wikipediaUrl: 'https://en.wikipedia.org/wiki/C._V._Raman' },
   ], events: [] },
   '11-08': { people: [
     { name: 'Gordon Ramsay', birthDate: '1966-11-08', profession: 'Chef', category: 'celebrity', description: 'Celebrity chef and TV personality of Hell\'s Kitchen', wikipediaUrl: 'https://en.wikipedia.org/wiki/Gordon_Ramsay' },
@@ -56,6 +61,7 @@ export const novemberBirthdays: BirthdayDatabase = {
   '11-12': { people: [
     { name: 'Ryan Gosling', birthDate: '1980-11-12', profession: 'Actor', category: 'celebrity', description: 'Oscar-nominated star of La La Land and The Notebook', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ryan_Gosling' },
     { name: 'Anne Hathaway', birthDate: '1982-11-12', profession: 'Actress', category: 'celebrity', description: 'Oscar-winning star of Les Misérables', wikipediaUrl: 'https://en.wikipedia.org/wiki/Anne_Hathaway' },
+    { name: 'Sun Yat-sen', birthDate: '1866-11-12', profession: 'Revolutionary Leader', category: 'other', description: 'Father of the Nation in China and Taiwan', wikipediaUrl: 'https://en.wikipedia.org/wiki/Sun_Yat-sen' },
   ], events: [] },
   '11-13': { people: [
     { name: 'Robert Louis Stevenson', birthDate: '1850-11-13', profession: 'Author', category: 'other', description: 'Author of Treasure Island and Dr. Jekyll and Mr. Hyde', wikipediaUrl: 'https://en.wikipedia.org/wiki/Robert_Louis_Stevenson' },
@@ -66,6 +72,8 @@ export const novemberBirthdays: BirthdayDatabase = {
     { name: 'Claude Monet', birthDate: '1840-11-14', profession: 'Artist', category: 'other', description: 'Father of Impressionism', wikipediaUrl: 'https://en.wikipedia.org/wiki/Claude_Monet' },
     { name: 'Prince Charles', birthDate: '1948-11-14', profession: 'King of the UK', category: 'other', description: 'King Charles III of the United Kingdom', wikipediaUrl: 'https://en.wikipedia.org/wiki/Charles_III' },
     { name: 'Jawaharlal Nehru', birthDate: '1889-11-14', profession: 'Prime Minister of India', category: 'other', description: 'First Prime Minister of independent India', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jawaharlal_Nehru' },
+    { name: 'Zhang Yimou', birthDate: '1950-11-14', profession: 'Director', category: 'celebrity', description: 'Chinese master filmmaker of Hero and Raise the Red Lantern', wikipediaUrl: 'https://en.wikipedia.org/wiki/Zhang_Yimou' },
+    { name: 'Adam Gilchrist', birthDate: '1971-11-14', profession: 'Cricketer', category: 'athlete', description: 'Australian wicketkeeper-batsman, changed Test cricket', wikipediaUrl: 'https://en.wikipedia.org/wiki/Adam_Gilchrist' },
   ], events: [] },
   '11-15': { people: [
     { name: 'Georgia O\'Keeffe', birthDate: '1887-11-15', profession: 'Artist', category: 'other', description: 'Mother of American Modernism', wikipediaUrl: 'https://en.wikipedia.org/wiki/Georgia_O%27Keeffe' },
@@ -83,6 +91,7 @@ export const novemberBirthdays: BirthdayDatabase = {
   '11-18': { people: [
     { name: 'Mickey Mouse', birthDate: '1928-11-18', profession: 'Fictional Character', category: 'other', description: 'Disney\'s iconic character debuted in Steamboat Willie', wikipediaUrl: 'https://en.wikipedia.org/wiki/Mickey_Mouse' },
     { name: 'Owen Wilson', birthDate: '1968-11-18', profession: 'Actor', category: 'celebrity', description: 'Star of Wedding Crashers and Loki', wikipediaUrl: 'https://en.wikipedia.org/wiki/Owen_Wilson' },
+    { name: 'Viswanathan Anand', birthDate: '1969-11-18', profession: 'Chess Grandmaster', category: 'athlete', description: 'Indian chess legend, five-time World Chess Champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Viswanathan_Anand' },
   ], events: [] },
   '11-19': { people: [
     { name: 'Jodie Foster', birthDate: '1962-11-19', profession: 'Actress & Director', category: 'celebrity', description: 'Two-time Oscar winner for The Silence of the Lambs', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jodie_Foster' },

@@ -124,6 +124,7 @@ export const mayBirthdays: BirthdayDatabase = {
       { name: 'Madeleine Albright', birthDate: '1937-05-15', profession: 'Diplomat', category: 'other', description: 'First female US Secretary of State', wikipediaUrl: 'https://en.wikipedia.org/wiki/Madeleine_Albright' },
       { name: 'Andy Murray', birthDate: '1987-05-15', profession: 'Tennis Player', category: 'athlete', description: 'Three-time Grand Slam champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Andy_Murray' },
       { name: 'Emmitt Smith', birthDate: '1969-05-15', profession: 'Football Player', category: 'athlete', description: 'NFL all-time leading rusher', wikipediaUrl: 'https://en.wikipedia.org/wiki/Emmitt_Smith' },
+      { name: 'Madhuri Dixit', birthDate: '1967-05-15', profession: 'Actress', category: 'celebrity', description: 'Dhak Dhak girl of Bollywood, iconic Hindi film actress', wikipediaUrl: 'https://en.wikipedia.org/wiki/Madhuri_Dixit' },
     ],
     events: []
   },
