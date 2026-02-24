@@ -49,10 +49,12 @@ export const octoberBirthdays: BirthdayDatabase = {
     { name: 'Fridtjof Nansen', birthDate: '1861-10-10', profession: 'Explorer & Diplomat', category: 'other', description: 'Norwegian explorer and Nobel Peace Prize winner', wikipediaUrl: 'https://en.wikipedia.org/wiki/Fridtjof_Nansen' },
     { name: 'David Lee Roth', birthDate: '1954-10-10', profession: 'Musician', category: 'celebrity', description: 'Lead singer of Van Halen', wikipediaUrl: 'https://en.wikipedia.org/wiki/David_Lee_Roth' },
     { name: 'Dan Stevens', birthDate: '1982-10-10', profession: 'Actor', category: 'celebrity', description: 'Star of Downton Abbey and Legion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Dan_Stevens' },
+    { name: 'Rekha', birthDate: '1954-10-10', profession: 'Actress', category: 'celebrity', description: 'Legendary Bollywood actress with five-decade career', wikipediaUrl: 'https://en.wikipedia.org/wiki/Rekha_(actress)' },
   ], events: [] },
   '10-11': { people: [
     { name: 'Eleanor Roosevelt', birthDate: '1884-10-11', profession: 'First Lady & Activist', category: 'other', description: 'Longest-serving First Lady, human rights champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Eleanor_Roosevelt' },
     { name: 'Michelle Trachtenberg', birthDate: '1985-10-11', profession: 'Actress', category: 'celebrity', description: 'Star of Buffy and Gossip Girl', wikipediaUrl: 'https://en.wikipedia.org/wiki/Michelle_Trachtenberg' },
+    { name: 'Amitabh Bachchan', birthDate: '1942-10-11', profession: 'Actor', category: 'celebrity', description: 'Bollywood megastar, Shahenshah of Indian cinema', wikipediaUrl: 'https://en.wikipedia.org/wiki/Amitabh_Bachchan' },
   ], events: [] },
   '10-12': { people: [
     { name: 'Hugh Jackman', birthDate: '1968-10-12', profession: 'Actor', category: 'celebrity', description: 'Star of X-Men as Wolverine and The Greatest Showman', wikipediaUrl: 'https://en.wikipedia.org/wiki/Hugh_Jackman' },
@@ -70,6 +72,7 @@ export const octoberBirthdays: BirthdayDatabase = {
   '10-15': { people: [
     { name: 'Friedrich Nietzsche', birthDate: '1844-10-15', profession: 'Philosopher', category: 'other', description: 'German philosopher who profoundly influenced modern thought', wikipediaUrl: 'https://en.wikipedia.org/wiki/Friedrich_Nietzsche' },
     { name: 'P.G. Wodehouse', birthDate: '1881-10-15', profession: 'Author', category: 'other', description: 'English humorous writer, creator of Jeeves', wikipediaUrl: 'https://en.wikipedia.org/wiki/P._G._Wodehouse' },
+    { name: 'APJ Abdul Kalam', birthDate: '1931-10-15', profession: 'President & Scientist', category: 'scientist', description: 'Missile Man of India, 11th President and beloved leader', wikipediaUrl: 'https://en.wikipedia.org/wiki/A._P._J._Abdul_Kalam' },
   ], events: [] },
   '10-16': { people: [
     { name: 'Oscar Wilde', birthDate: '1854-10-16', profession: 'Author & Playwright', category: 'other', description: 'Irish wit and author of The Picture of Dorian Gray', wikipediaUrl: 'https://en.wikipedia.org/wiki/Oscar_Wilde' },
@@ -88,6 +91,7 @@ export const octoberBirthdays: BirthdayDatabase = {
   '10-19': { people: [
     { name: 'John Adams', birthDate: '1735-10-19', profession: '2nd US President', category: 'other', description: 'Second President and Founding Father', wikipediaUrl: 'https://en.wikipedia.org/wiki/John_Adams' },
     { name: 'John le Carré', birthDate: '1931-10-19', profession: 'Author', category: 'other', description: 'Master spy novelist of The Spy Who Came in from the Cold', wikipediaUrl: 'https://en.wikipedia.org/wiki/John_le_Carr%C3%A9' },
+    { name: 'Sunny Deol', birthDate: '1956-10-19', profession: 'Actor', category: 'celebrity', description: 'Bollywood action star and politician', wikipediaUrl: 'https://en.wikipedia.org/wiki/Sunny_Deol' },
   ], events: [] },
   '10-20': { people: [
     { name: 'Snoop Dogg', birthDate: '1971-10-20', profession: 'Rapper', category: 'celebrity', description: 'West Coast hip-hop icon', wikipediaUrl: 'https://en.wikipedia.org/wiki/Snoop_Dogg' },
@@ -106,6 +110,8 @@ export const octoberBirthdays: BirthdayDatabase = {
     { name: 'Ryan Reynolds', birthDate: '1976-10-23', profession: 'Actor & Producer', category: 'celebrity', description: 'Star of Deadpool, known for witty social media', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ryan_Reynolds' },
     { name: 'Pelé', birthDate: '1940-10-23', profession: 'Footballer', category: 'athlete', description: 'Brazilian football king, three-time World Cup winner', wikipediaUrl: 'https://en.wikipedia.org/wiki/Pel%C3%A9' },
     { name: 'Weird Al Yankovic', birthDate: '1959-10-23', profession: 'Musician & Comedian', category: 'celebrity', description: 'King of parody songs', wikipediaUrl: 'https://en.wikipedia.org/wiki/%22Weird_Al%22_Yankovic' },
+    { name: 'Ang Lee', birthDate: '1954-10-23', profession: 'Director', category: 'celebrity', description: 'Oscar-winning Taiwanese director of Brokeback Mountain and Life of Pi', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ang_Lee' },
+    { name: 'Emilia Clarke', birthDate: '1986-10-23', profession: 'Actress', category: 'celebrity', description: 'British star of Game of Thrones as Daenerys Targaryen', wikipediaUrl: 'https://en.wikipedia.org/wiki/Emilia_Clarke' },
   ], events: [] },
   '10-24': { people: [
     { name: 'Drake', birthDate: '1986-10-24', profession: 'Rapper & Singer', category: 'celebrity', description: 'Most-streamed artist in Spotify history', wikipediaUrl: 'https://en.wikipedia.org/wiki/Drake_(musician)' },
@@ -121,6 +127,7 @@ export const octoberBirthdays: BirthdayDatabase = {
   '10-26': { people: [
     { name: 'Hillary Clinton', birthDate: '1947-10-26', profession: 'Politician', category: 'other', description: 'Former US Secretary of State and presidential candidate', wikipediaUrl: 'https://en.wikipedia.org/wiki/Hillary_Clinton' },
     { name: 'Seth MacFarlane', birthDate: '1973-10-26', profession: 'Creator & Voice Actor', category: 'celebrity', description: 'Creator of Family Guy', wikipediaUrl: 'https://en.wikipedia.org/wiki/Seth_MacFarlane' },
+    { name: 'Keith Urban', birthDate: '1967-10-26', profession: 'Singer', category: 'celebrity', description: 'New Zealand-Australian country music star and guitarist', wikipediaUrl: 'https://en.wikipedia.org/wiki/Keith_Urban' },
   ], events: [] },
   '10-27': { people: [
     { name: 'Theodore Roosevelt', birthDate: '1858-10-27', profession: '26th US President', category: 'other', description: 'Youngest US President, conservationist and Rough Rider', wikipediaUrl: 'https://en.wikipedia.org/wiki/Theodore_Roosevelt' },
@@ -138,10 +145,12 @@ export const octoberBirthdays: BirthdayDatabase = {
   '10-30': { people: [
     { name: 'Diego Maradona', birthDate: '1960-10-30', profession: 'Footballer', category: 'athlete', description: 'Argentine football legend, Hand of God', wikipediaUrl: 'https://en.wikipedia.org/wiki/Diego_Maradona' },
     { name: 'Henry Winkler', birthDate: '1945-10-30', profession: 'Actor', category: 'celebrity', description: 'The Fonz from Happy Days', wikipediaUrl: 'https://en.wikipedia.org/wiki/Henry_Winkler' },
+    { name: 'Homi J. Bhabha', birthDate: '1909-10-30', profession: 'Nuclear Physicist', category: 'scientist', description: 'Father of Indian nuclear programme', wikipediaUrl: 'https://en.wikipedia.org/wiki/Homi_J._Bhabha' },
   ], events: [] },
   '10-31': { people: [
     { name: 'Vanilla Ice', birthDate: '1967-10-31', profession: 'Rapper', category: 'celebrity', description: 'Rapper of Ice Ice Baby', wikipediaUrl: 'https://en.wikipedia.org/wiki/Vanilla_Ice' },
     { name: 'Peter Jackson', birthDate: '1961-10-31', profession: 'Director', category: 'celebrity', description: 'Oscar-winning director of Lord of the Rings', wikipediaUrl: 'https://en.wikipedia.org/wiki/Peter_Jackson' },
+    { name: 'Sardar Vallabhbhai Patel', birthDate: '1875-10-31', profession: 'Freedom Fighter', category: 'other', description: 'Iron Man of India, united 562 princely states', wikipediaUrl: 'https://en.wikipedia.org/wiki/Vallabhbhai_Patel' },
   ], events: [
     { title: 'Halloween', date: '0001-10-31', year: 1, description: 'Annual holiday celebrated with costumes and trick-or-treating', category: 'Cultural', wikipediaUrl: 'https://en.wikipedia.org/wiki/Halloween' },
   ] },

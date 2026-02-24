@@ -26,6 +26,7 @@ export const septemberBirthdays: BirthdayDatabase = {
   '09-06': { people: [
     { name: 'Idris Elba', birthDate: '1972-09-06', profession: 'Actor', category: 'celebrity', description: 'Star of Luther and The Wire', wikipediaUrl: 'https://en.wikipedia.org/wiki/Idris_Elba' },
     { name: 'Jeff Foxworthy', birthDate: '1958-09-06', profession: 'Comedian', category: 'celebrity', description: 'Best-selling comedy recording artist', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jeff_Foxworthy' },
+    { name: 'Naomie Harris', birthDate: '1976-09-06', profession: 'Actress', category: 'celebrity', description: 'Oscar-nominated British actress, Moneypenny in Bond', wikipediaUrl: 'https://en.wikipedia.org/wiki/Naomie_Harris' },
   ], events: [] },
   '09-07': { people: [
     { name: 'Queen Elizabeth I', birthDate: '1533-09-07', profession: 'Monarch', category: 'other', description: 'Queen of England during the Elizabethan era', wikipediaUrl: 'https://en.wikipedia.org/wiki/Elizabeth_I' },
@@ -34,15 +35,19 @@ export const septemberBirthdays: BirthdayDatabase = {
   '09-08': { people: [
     { name: 'Pink', birthDate: '1979-09-08', profession: 'Singer', category: 'celebrity', description: 'Grammy-winning pop-rock artist', wikipediaUrl: 'https://en.wikipedia.org/wiki/Pink_(singer)' },
     { name: 'Bernie Sanders', birthDate: '1941-09-08', profession: 'Senator', category: 'other', description: 'US Senator and progressive political leader', wikipediaUrl: 'https://en.wikipedia.org/wiki/Bernie_Sanders' },
+    { name: 'Asha Bhosle', birthDate: '1933-09-08', profession: 'Playback Singer', category: 'celebrity', description: 'Legendary Indian playback singer with over 12,000 songs', wikipediaUrl: 'https://en.wikipedia.org/wiki/Asha_Bhosle' },
   ], events: [] },
   '09-09': { people: [
     { name: 'Adam Sandler', birthDate: '1966-09-09', profession: 'Actor & Comedian', category: 'celebrity', description: 'Comedy star and Netflix\'s most-watched actor', wikipediaUrl: 'https://en.wikipedia.org/wiki/Adam_Sandler' },
     { name: 'Leo Tolstoy', birthDate: '1828-09-09', profession: 'Author', category: 'other', description: 'Russian literary giant (Old Style calendar)', wikipediaUrl: 'https://en.wikipedia.org/wiki/Leo_Tolstoy' },
     { name: 'Hugh Grant', birthDate: '1960-09-09', profession: 'Actor', category: 'celebrity', description: 'British romantic comedy star', wikipediaUrl: 'https://en.wikipedia.org/wiki/Hugh_Grant' },
+    { name: 'Akshay Kumar', birthDate: '1967-09-09', profession: 'Actor', category: 'celebrity', description: 'Bollywood action star and one of highest-paid Indian actors', wikipediaUrl: 'https://en.wikipedia.org/wiki/Akshay_Kumar' },
   ], events: [] },
   '09-10': { people: [
     { name: 'Arnold Palmer', birthDate: '1929-09-10', profession: 'Golfer', category: 'athlete', description: 'The King, one of golf\'s greatest players', wikipediaUrl: 'https://en.wikipedia.org/wiki/Arnold_Palmer' },
     { name: 'Guy Ritchie', birthDate: '1968-09-10', profession: 'Director', category: 'celebrity', description: 'Director of Snatch and Lock, Stock and Two Smoking Barrels', wikipediaUrl: 'https://en.wikipedia.org/wiki/Guy_Ritchie' },
+    { name: 'Jack Ma', birthDate: '1964-09-10', profession: 'Entrepreneur', category: 'entrepreneur', description: 'Co-founder of Alibaba Group, Chinese tech billionaire', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jack_Ma' },
+    { name: 'Colin Firth', birthDate: '1960-09-10', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning British star of The King\'s Speech', wikipediaUrl: 'https://en.wikipedia.org/wiki/Colin_Firth' },
   ], events: [] },
   '09-11': { people: [
     { name: 'O. Henry', birthDate: '1862-09-11', profession: 'Author', category: 'other', description: 'Master of short stories with twist endings', wikipediaUrl: 'https://en.wikipedia.org/wiki/O._Henry' },
@@ -58,6 +63,7 @@ export const septemberBirthdays: BirthdayDatabase = {
     { name: 'Roald Dahl', birthDate: '1916-09-13', profession: 'Author', category: 'other', description: 'Author of Charlie and the Chocolate Factory and Matilda', wikipediaUrl: 'https://en.wikipedia.org/wiki/Roald_Dahl' },
     { name: 'Tyler Perry', birthDate: '1969-09-13', profession: 'Actor & Director', category: 'celebrity', description: 'Media mogul and creator of Madea', wikipediaUrl: 'https://en.wikipedia.org/wiki/Tyler_Perry' },
     { name: 'Niall Horan', birthDate: '1993-09-13', profession: 'Singer', category: 'celebrity', description: 'Former One Direction member', wikipediaUrl: 'https://en.wikipedia.org/wiki/Niall_Horan' },
+    { name: 'Shane Warne', birthDate: '1969-09-13', profession: 'Cricketer', category: 'athlete', description: 'Legendary Australian leg-spin bowler, greatest spinner ever', wikipediaUrl: 'https://en.wikipedia.org/wiki/Shane_Warne' },
   ], events: [] },
   '09-14': { people: [
     { name: 'Amy Winehouse', birthDate: '1983-09-14', profession: 'Singer', category: 'celebrity', description: 'Grammy-winning British soul and jazz singer', wikipediaUrl: 'https://en.wikipedia.org/wiki/Amy_Winehouse' },
@@ -72,10 +78,12 @@ export const septemberBirthdays: BirthdayDatabase = {
     { name: 'B.B. King', birthDate: '1925-09-16', profession: 'Musician', category: 'celebrity', description: 'King of the Blues', wikipediaUrl: 'https://en.wikipedia.org/wiki/B.B._King' },
     { name: 'Amy Poehler', birthDate: '1971-09-16', profession: 'Actress & Comedian', category: 'celebrity', description: 'Star of Parks and Recreation and SNL', wikipediaUrl: 'https://en.wikipedia.org/wiki/Amy_Poehler' },
     { name: 'Nick Jonas', birthDate: '1992-09-16', profession: 'Singer & Actor', category: 'celebrity', description: 'Member of the Jonas Brothers', wikipediaUrl: 'https://en.wikipedia.org/wiki/Nick_Jonas' },
+    { name: 'Fan Bingbing', birthDate: '1981-09-16', profession: 'Actress', category: 'celebrity', description: 'One of China\'s highest-paid and most famous actresses', wikipediaUrl: 'https://en.wikipedia.org/wiki/Fan_Bingbing' },
   ], events: [] },
   '09-17': { people: [
     { name: 'Narendra Modi', birthDate: '1950-09-17', profession: 'Prime Minister of India', category: 'other', description: 'Current Prime Minister of India', wikipediaUrl: 'https://en.wikipedia.org/wiki/Narendra_Modi' },
     { name: 'Baz Luhrmann', birthDate: '1962-09-17', profession: 'Director', category: 'celebrity', description: 'Director of Moulin Rouge! and The Great Gatsby', wikipediaUrl: 'https://en.wikipedia.org/wiki/Baz_Luhrmann' },
+    { name: 'Ravichandran Ashwin', birthDate: '1986-09-17', profession: 'Cricketer', category: 'athlete', description: 'Indian cricket legend, one of greatest spin bowlers', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ravichandran_Ashwin' },
   ], events: [] },
   '09-18': { people: [
     { name: 'Greta Garbo', birthDate: '1905-09-18', profession: 'Actress', category: 'celebrity', description: 'Legendary Swedish-American film star', wikipediaUrl: 'https://en.wikipedia.org/wiki/Greta_Garbo' },
@@ -89,10 +97,12 @@ export const septemberBirthdays: BirthdayDatabase = {
   '09-20': { people: [
     { name: 'Sophia Loren', birthDate: '1934-09-20', profession: 'Actress', category: 'celebrity', description: 'Italian film legend, first Oscar for a non-English role', wikipediaUrl: 'https://en.wikipedia.org/wiki/Sophia_Loren' },
     { name: 'George R. R. Martin', birthDate: '1948-09-20', profession: 'Author', category: 'other', description: 'Author of A Song of Ice and Fire (Game of Thrones)', wikipediaUrl: 'https://en.wikipedia.org/wiki/George_R._R._Martin' },
+    { name: 'Maggie Cheung', birthDate: '1964-09-20', profession: 'Actress', category: 'celebrity', description: 'Hong Kong film icon, star of In the Mood for Love', wikipediaUrl: 'https://en.wikipedia.org/wiki/Maggie_Cheung' },
   ], events: [] },
   '09-21': { people: [
     { name: 'Stephen King', birthDate: '1947-09-21', profession: 'Author', category: 'other', description: 'Master of horror fiction, wrote It and The Shining', wikipediaUrl: 'https://en.wikipedia.org/wiki/Stephen_King' },
     { name: 'Bill Murray', birthDate: '1950-09-21', profession: 'Actor', category: 'celebrity', description: 'Comedy legend of Ghostbusters and Lost in Translation', wikipediaUrl: 'https://en.wikipedia.org/wiki/Bill_Murray' },
+    { name: 'Kareena Kapoor', birthDate: '1980-09-21', profession: 'Actress', category: 'celebrity', description: 'Bollywood superstar known as Bebo, Filmfare Award winner', wikipediaUrl: 'https://en.wikipedia.org/wiki/Kareena_Kapoor' },
   ], events: [] },
   '09-22': { people: [
     { name: 'Michael Faraday', birthDate: '1791-09-22', profession: 'Scientist', category: 'scientist', description: 'Pioneer of electromagnetism and electrochemistry', wikipediaUrl: 'https://en.wikipedia.org/wiki/Michael_Faraday' },
@@ -120,11 +130,15 @@ export const septemberBirthdays: BirthdayDatabase = {
   '09-27': { people: [
     { name: 'Lil Wayne', birthDate: '1982-09-27', profession: 'Rapper', category: 'celebrity', description: 'Five-time Grammy-winning rapper', wikipediaUrl: 'https://en.wikipedia.org/wiki/Lil_Wayne' },
     { name: 'Gwyneth Paltrow', birthDate: '1972-09-27', profession: 'Actress', category: 'celebrity', description: 'Oscar-winning actress and Goop founder', wikipediaUrl: 'https://en.wikipedia.org/wiki/Gwyneth_Paltrow' },
+    { name: 'Andy Lau', birthDate: '1961-09-27', profession: 'Actor & Singer', category: 'celebrity', description: 'Hong Kong superstar, one of the Four Heavenly Kings of Cantopop', wikipediaUrl: 'https://en.wikipedia.org/wiki/Andy_Lau' },
   ], events: [] },
   '09-28': { people: [
     { name: 'Confucius', birthDate: '-0551-09-28', profession: 'Philosopher', category: 'other', description: 'Chinese philosopher (traditional birthday)', wikipediaUrl: 'https://en.wikipedia.org/wiki/Confucius' },
     { name: 'Hilary Duff', birthDate: '1987-09-28', profession: 'Actress & Singer', category: 'celebrity', description: 'Star of Lizzie McGuire and Younger', wikipediaUrl: 'https://en.wikipedia.org/wiki/Hilary_Duff' },
     { name: 'Brigitte Bardot', birthDate: '1934-09-28', profession: 'Actress', category: 'celebrity', description: 'French film icon and animal rights activist', wikipediaUrl: 'https://en.wikipedia.org/wiki/Brigitte_Bardot' },
+    { name: 'Lata Mangeshkar', birthDate: '1929-09-28', profession: 'Playback Singer', category: 'celebrity', description: 'Nightingale of India, recorded songs in over 36 languages', wikipediaUrl: 'https://en.wikipedia.org/wiki/Lata_Mangeshkar' },
+    { name: 'Naomi Watts', birthDate: '1968-09-28', profession: 'Actress', category: 'celebrity', description: 'Oscar-nominated Australian-British actress', wikipediaUrl: 'https://en.wikipedia.org/wiki/Naomi_Watts' },
+    { name: 'Ranbir Kapoor', birthDate: '1982-09-28', profession: 'Actor', category: 'celebrity', description: 'Leading Bollywood actor, star of Barfi! and Animal', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ranbir_Kapoor' },
   ], events: [] },
   '09-29': { people: [
     { name: 'Enrico Fermi', birthDate: '1901-09-29', profession: 'Physicist', category: 'scientist', description: 'Father of the nuclear age, Nobel Prize winner', wikipediaUrl: 'https://en.wikipedia.org/wiki/Enrico_Fermi' },

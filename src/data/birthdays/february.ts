@@ -207,6 +207,7 @@ export const februaryBirthdays: BirthdayDatabase = {
       { name: 'Pierre-Auguste Renoir', birthDate: '1841-02-25', profession: 'Artist', category: 'other', description: 'Leading French Impressionist painter', wikipediaUrl: 'https://en.wikipedia.org/wiki/Pierre-Auguste_Renoir' },
       { name: 'George Harrison', birthDate: '1943-02-25', profession: 'Musician', category: 'celebrity', description: 'Lead guitarist of The Beatles', wikipediaUrl: 'https://en.wikipedia.org/wiki/George_Harrison' },
       { name: 'Rashida Jones', birthDate: '1976-02-25', profession: 'Actress', category: 'celebrity', description: 'Star of Parks and Recreation and The Office', wikipediaUrl: 'https://en.wikipedia.org/wiki/Rashida_Jones' },
+      { name: 'Shahid Kapoor', birthDate: '1981-02-25', profession: 'Actor', category: 'celebrity', description: 'Bollywood star of Kabir Singh and Haider', wikipediaUrl: 'https://en.wikipedia.org/wiki/Shahid_Kapoor' },
     ],
     events: []
   },

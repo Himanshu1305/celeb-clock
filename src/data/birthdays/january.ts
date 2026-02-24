@@ -56,6 +56,8 @@ export const januaryBirthdays: BirthdayDatabase = {
       { name: 'Joan of Arc', birthDate: '1412-01-06', profession: 'Military Leader', category: 'other', description: 'French heroine who led armies during the Hundred Years War', wikipediaUrl: 'https://en.wikipedia.org/wiki/Joan_of_Arc' },
       { name: 'Rowan Atkinson', birthDate: '1955-01-06', profession: 'Actor & Comedian', category: 'celebrity', description: 'Creator of Mr. Bean and Blackadder', wikipediaUrl: 'https://en.wikipedia.org/wiki/Rowan_Atkinson' },
       { name: 'Eddie Redmayne', birthDate: '1982-01-06', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning actor for The Theory of Everything', wikipediaUrl: 'https://en.wikipedia.org/wiki/Eddie_Redmayne' },
+      { name: 'A.R. Rahman', birthDate: '1967-01-06', profession: 'Music Composer', category: 'celebrity', description: 'Oscar-winning Indian composer of Slumdog Millionaire', wikipediaUrl: 'https://en.wikipedia.org/wiki/A._R._Rahman' },
+      { name: 'Kapil Dev', birthDate: '1959-01-06', profession: 'Cricketer', category: 'athlete', description: 'Led India to 1983 Cricket World Cup victory', wikipediaUrl: 'https://en.wikipedia.org/wiki/Kapil_Dev' },
     ],
     events: []
   },
@@ -93,6 +95,7 @@ export const januaryBirthdays: BirthdayDatabase = {
       { name: 'Rod Stewart', birthDate: '1945-01-10', profession: 'Singer', category: 'celebrity', description: 'British rock and pop singer, one of best-selling artists', wikipediaUrl: 'https://en.wikipedia.org/wiki/Rod_Stewart' },
       { name: 'George Foreman', birthDate: '1949-01-10', profession: 'Boxer', category: 'athlete', description: 'Two-time world heavyweight boxing champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/George_Foreman' },
       { name: 'Pat Benatar', birthDate: '1953-01-10', profession: 'Singer', category: 'celebrity', description: 'Four-time Grammy Award-winning rock singer', wikipediaUrl: 'https://en.wikipedia.org/wiki/Pat_Benatar' },
+      { name: 'Hrithik Roshan', birthDate: '1974-01-10', profession: 'Actor', category: 'celebrity', description: 'Bollywood superstar known as the Greek God of Indian cinema', wikipediaUrl: 'https://en.wikipedia.org/wiki/Hrithik_Roshan' },
     ],
     events: []
   },

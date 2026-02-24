@@ -31,6 +31,8 @@ export const julyBirthdays: BirthdayDatabase = {
     { name: 'Frida Kahlo', birthDate: '1907-07-06', profession: 'Artist', category: 'other', description: 'Iconic Mexican painter known for self-portraits', wikipediaUrl: 'https://en.wikipedia.org/wiki/Frida_Kahlo' },
     { name: 'Sylvester Stallone', birthDate: '1946-07-06', profession: 'Actor', category: 'celebrity', description: 'Star of Rocky and Rambo franchises', wikipediaUrl: 'https://en.wikipedia.org/wiki/Sylvester_Stallone' },
     { name: 'Kevin Hart', birthDate: '1979-07-06', profession: 'Comedian & Actor', category: 'celebrity', description: 'One of highest-paid comedians in the world', wikipediaUrl: 'https://en.wikipedia.org/wiki/Kevin_Hart' },
+    { name: 'Ranveer Singh', birthDate: '1985-07-06', profession: 'Actor', category: 'celebrity', description: 'Bollywood superstar known for energetic performances', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ranveer_Singh' },
+    { name: 'Geoffrey Rush', birthDate: '1951-07-06', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning Australian star of Shine and Pirates of the Caribbean', wikipediaUrl: 'https://en.wikipedia.org/wiki/Geoffrey_Rush' },
   ], events: [] },
   '07-07': { people: [
     { name: 'Ringo Starr', birthDate: '1940-07-07', profession: 'Musician', category: 'celebrity', description: 'Drummer of The Beatles', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ringo_Starr' },

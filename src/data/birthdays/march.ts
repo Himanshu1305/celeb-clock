@@ -113,6 +113,8 @@ export const marchBirthdays: BirthdayDatabase = {
       { name: 'Billy Crystal', birthDate: '1948-03-14', profession: 'Actor & Comedian', category: 'celebrity', description: 'Legendary comedian and nine-time Oscar host', wikipediaUrl: 'https://en.wikipedia.org/wiki/Billy_Crystal' },
       { name: 'Simone Biles', birthDate: '1997-03-14', profession: 'Gymnast', category: 'athlete', description: 'Most decorated gymnast in history', wikipediaUrl: 'https://en.wikipedia.org/wiki/Simone_Biles' },
       { name: 'Stephen Curry', birthDate: '1988-03-14', profession: 'Basketball Player', category: 'athlete', description: 'Greatest shooter in NBA history, four-time champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Stephen_Curry' },
+      { name: 'Aamir Khan', birthDate: '1965-03-14', profession: 'Actor & Filmmaker', category: 'celebrity', description: 'Bollywood perfectionist, star of Dangal and 3 Idiots', wikipediaUrl: 'https://en.wikipedia.org/wiki/Aamir_Khan' },
+      { name: 'Michael Caine', birthDate: '1933-03-14', profession: 'Actor', category: 'celebrity', description: 'Two-time Oscar-winning British acting legend', wikipediaUrl: 'https://en.wikipedia.org/wiki/Michael_Caine' },
     ],
     events: [
       { title: 'Pi Day', date: '2000-03-14', year: 2000, description: 'Celebration of the mathematical constant π (3.14)', category: 'Cultural', wikipediaUrl: 'https://en.wikipedia.org/wiki/Pi_Day' },
@@ -124,6 +126,7 @@ export const marchBirthdays: BirthdayDatabase = {
       { name: 'Ruth Bader Ginsburg', birthDate: '1933-03-15', profession: 'Supreme Court Justice', category: 'other', description: 'Pioneering Supreme Court Justice and women\'s rights champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ruth_Bader_Ginsburg' },
       { name: 'will.i.am', birthDate: '1975-03-15', profession: 'Musician & Entrepreneur', category: 'celebrity', description: 'Frontman of Black Eyed Peas', wikipediaUrl: 'https://en.wikipedia.org/wiki/Will.i.am' },
       { name: 'Eva Longoria', birthDate: '1975-03-15', profession: 'Actress', category: 'celebrity', description: 'Star of Desperate Housewives', wikipediaUrl: 'https://en.wikipedia.org/wiki/Eva_Longoria' },
+      { name: 'Alia Bhatt', birthDate: '1993-03-15', profession: 'Actress', category: 'celebrity', description: 'Bollywood star of Gangubai Kathiawadi and RRR', wikipediaUrl: 'https://en.wikipedia.org/wiki/Alia_Bhatt' },
     ],
     events: []
   },
