@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Gem, Home, Clock, Gift, BookOpen } from 'lucide-react';
+import { Sparkles, Gem, Home, Clock, Gift, BookOpen, Crown } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 export const Navigation = () => {
   const location = useLocation();
@@ -23,6 +24,10 @@ export const Navigation = () => {
         <Button variant={isActive('/life-expectancy') ? 'default' : 'ghost'} size="sm" className="gap-2 transition-all">
           <Clock className="w-4 h-4" />
           <span className="hidden sm:inline">Life Expectancy</span>
+          <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/20 hover:bg-amber-500/15 text-[10px] px-1.5 py-0 h-4 hidden sm:inline-flex">
+            <Crown className="w-2.5 h-2.5 mr-0.5" />
+            PRO
+          </Badge>
         </Button>
       </Link>
 
