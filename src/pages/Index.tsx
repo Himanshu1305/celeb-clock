@@ -7,12 +7,14 @@ import { TestimonialsSection } from '@/components/TestimonialsSection';
 import { ReviewForm } from '@/components/ReviewForm';
 import { CelebrityMatch } from '@/components/CelebrityMatch';
 import { ZodiacAndFacts } from '@/components/ZodiacAndFacts';
+import { LifeExpectancyCTA } from '@/components/LifeExpectancyCTA';
+import { FeaturePillars } from '@/components/FeaturePillars';
 import { useAuth } from '@/hooks/useAuth';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Crown, ArrowRight, Clock, Gift, Sparkles, Search } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Crown, ArrowRight, Search } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
 
 const Index = () => {
@@ -90,6 +92,11 @@ const Index = () => {
           </section>
         )}
 
+        {/* Life Expectancy Premium CTA - shows after birth date */}
+        {birthDate && (
+          <LifeExpectancyCTA />
+        )}
+
         {/* CTA to search more celebrities */}
         {birthDate && (
           <section className="max-w-2xl mx-auto mb-16 text-center animate-fade-in-up">
@@ -105,7 +112,6 @@ const Index = () => {
                   className="gap-2"
                   onClick={() => navigate('/celebrity-birthday')}
                 >
-                  <Gift className="w-5 h-5" />
                   Search Celebrity Birthdays
                   <ArrowRight className="w-4 h-4" />
                 </Button>
@@ -114,46 +120,8 @@ const Index = () => {
           </section>
         )}
 
-        {/* Quick Links to Other Tools */}
-        <section className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-3xl font-bold text-center mb-8 gradient-text-primary">
-            Explore More About Your Time
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="glass-card hover:scale-105 transition-all cursor-pointer" onClick={() => navigate('/life-expectancy')}>
-              <CardContent className="p-6 text-center space-y-3">
-                <Clock className="w-12 h-12 mx-auto text-primary" />
-                <h3 className="font-bold text-lg">Life Expectancy</h3>
-                <p className="text-sm text-muted-foreground">Calculate your estimated lifespan</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass-card hover:scale-105 transition-all cursor-pointer" onClick={() => navigate('/zodiac')}>
-              <CardContent className="p-6 text-center space-y-3">
-                <span className="text-5xl">♈</span>
-                <h3 className="font-bold text-lg">Zodiac Sign</h3>
-                <p className="text-sm text-muted-foreground">Find your astrological sign</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass-card hover:scale-105 transition-all cursor-pointer" onClick={() => navigate('/birthstone')}>
-              <CardContent className="p-6 text-center space-y-3">
-                <span className="text-5xl">💎</span>
-                <h3 className="font-bold text-lg">Birthstone</h3>
-                <p className="text-sm text-muted-foreground">Discover your birth month gem</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass-card hover:scale-105 transition-all cursor-pointer" onClick={() => navigate('/celebrity-birthday')}>
-              <CardContent className="p-6 text-center space-y-3">
-                <Gift className="w-12 h-12 mx-auto text-primary" />
-                <h3 className="font-bold text-lg">Celebrity Match</h3>
-                <p className="text-sm text-muted-foreground">Find your birthday twins</p>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
+        {/* 3 Feature Pillars + Also Explore */}
+        <FeaturePillars />
         {/* Testimonials Section */}
         <TestimonialsSection />
 
