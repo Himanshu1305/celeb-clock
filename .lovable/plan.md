@@ -1,59 +1,30 @@
 
 
-## Create 4 Marketing Email Templates
+## Send Email Templates for Review
 
-These are standalone React components (not auth emails) that render HTML email templates. They'll be ready to plug into any email-sending API later.
+To send emails, we need a transactional email service. The project doesn't have one configured yet.
 
-### Brand Colors (from app CSS)
-- Primary (Deep Blue): `hsl(214, 84%, 36%)` → `#0f4c91`
-- Accent (Teal): `hsl(174, 44%, 47%)` → `#44b0a1`
-- Foreground: `hsl(220, 13%, 18%)` → `#282d33`
-- Muted: `hsl(215, 13%, 45%)` → `#646b78`
-- Background: `hsl(210, 20%, 98%)` → `#f7f8fa`
-- Premium Gold: `#d4a017` (matches existing premium CTA)
+### Options
 
-### Templates to Create
+We need an email-sending service connected to the project. The simplest option is **Resend** — it has a generous free tier (100 emails/day) and a simple API.
 
-**1. Welcome Email** (`src/emails/WelcomeEmail.tsx`)
-- Warm greeting with user's first name
-- Brief intro to Cosmic Age's 3 core features (Age Calculator, Celebrity Match, Zodiac/Birthstone)
-- Link to blog articles
-- Subtle mention of premium Life Expectancy feature
-- CTA: "Start Exploring"
+### What I'll Build
 
-**2. Premium Thank You Email** (`src/emails/PremiumThankYouEmail.tsx`)
-- Gold/amber premium branding
-- Thank the user for upgrading
-- List all unlocked premium features: Life Expectancy Calculator, Premium Celebrity Database, Export Reports, Birthday Twin Notifications, Priority Support
-- CTA: "Explore Your Life Report"
+1. **Connect Resend** — You'll need to provide a Resend API key (free at [resend.com](https://resend.com))
+2. **Create an edge function** `send-email` that accepts a template name, recipient, and first name, renders the appropriate template, and sends it via Resend
+3. **Trigger it** to send all 4 templates to `himanshu1305@gmail.com`
 
-**3. Premium Upsell Email** (`src/emails/PremiumUpsellEmail.tsx`)
-- Sent to free users after some time
-- Highlight what they're missing (Life Expectancy preview, premium celebrity matches)
-- Social proof: "Join thousands of premium members"
-- One-time $29.99 pricing emphasis
-- CTA: "Unlock Premium for $29.99"
+### Prerequisites from You
 
-**4. Re-engagement Email** (`src/emails/ReEngagementEmail.tsx`)
-- "We miss you!" tone
-- Highlight recent blog articles and new features
-- Remind them of Celebrity Match, Zodiac, Birthstone features
-- Personalized: "Your next birthday is coming up!" hook
-- CTA: "Come Back and Explore"
+Before I can implement this, I need:
+- A **Resend API key** (sign up free at resend.com → API Keys → Create)
+- Note: On Resend's free tier, you can only send to your own verified email or from `onboarding@resend.dev` domain. To send from a custom domain you'd need to verify it in Resend.
 
-### Technical Approach
+### Files
 
-Each template is a **plain React component** that returns an HTML email string via a `render()` export function. They use inline styles (email-safe) matching the app's color palette. No external dependencies needed — just TSX files that export a function returning an HTML string.
+| File | Change |
+|------|--------|
+| `supabase/functions/send-email/index.ts` | New edge function that renders + sends email via Resend |
 
-A barrel export file (`src/emails/index.ts`) will re-export all templates for easy importing when the email API is integrated later.
-
-### Files Created
-
-| File | Purpose |
-|------|---------|
-| `src/emails/WelcomeEmail.tsx` | New user welcome |
-| `src/emails/PremiumThankYouEmail.tsx` | Premium purchase confirmation |
-| `src/emails/PremiumUpsellEmail.tsx` | Free-to-premium conversion |
-| `src/emails/ReEngagementEmail.tsx` | Inactive user re-engagement |
-| `src/emails/index.ts` | Barrel exports |
+Once you provide the Resend API key, I'll create the function, deploy it, and send all 4 templates immediately.
 
