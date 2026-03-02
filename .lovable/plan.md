@@ -1,69 +1,59 @@
 
 
-## Restructure Homepage: 3 Clear Feature Pillars with Premium Life Expectancy CTA
+## Create 4 Marketing Email Templates
 
-### Problem
-The homepage has a flat "Explore More" grid with 4 equal cards (Life Expectancy, Zodiac, Birthstone, Celebrity Match). Life Expectancy -- the premium feature -- looks identical to the free Zodiac/Birthstone pages. There's no visual hierarchy communicating the app's 3 core features, and no premium upsell moment.
+These are standalone React components (not auth emails) that render HTML email templates. They'll be ready to plug into any email-sending API later.
 
-### New Homepage Structure
+### Brand Colors (from app CSS)
+- Primary (Deep Blue): `hsl(214, 84%, 36%)` → `#0f4c91`
+- Accent (Teal): `hsl(174, 44%, 47%)` → `#44b0a1`
+- Foreground: `hsl(220, 13%, 18%)` → `#282d33`
+- Muted: `hsl(215, 13%, 45%)` → `#646b78`
+- Background: `hsl(210, 20%, 98%)` → `#f7f8fa`
+- Premium Gold: `#d4a017` (matches existing premium CTA)
 
-Replace the current 4-card grid with a **3 Feature Pillars** section that clearly communicates the app's value hierarchy:
+### Templates to Create
 
-```text
-┌──────────────────────────────────────────────────┐
-│  Hero + Age Calculator (unchanged)               │
-├──────────────────────────────────────────────────┤
-│  Celebrity Match results (unchanged, after DOB)  │
-├──────────────────────────────────────────────────┤
-│  Zodiac & Facts (unchanged, after DOB)           │
-├──────────────────────────────────────────────────┤
-│  ★ LIFE EXPECTANCY PREMIUM CTA (NEW)            │
-│  Full-width standout card with gradient border,  │
-│  Crown icon, preview stats teaser, and           │
-│  "Unlock Your Life Report" CTA button            │
-│  Shows after birthDate is entered                │
-├──────────────────────────────────────────────────┤
-│  "Our 3 Core Features" section (NEW)             │
-│  3-column layout (not 4), each feature gets      │
-│  a distinct visual identity:                     │
-│  1. Age Calculator - primary color, free badge   │
-│  2. Celebrity Match - accent color, free badge   │
-│  3. Life Expectancy - gold/amber, premium badge  │
-│     with Crown icon + "Premium" tag              │
-├──────────────────────────────────────────────────┤
-│  Zodiac & Birthstone moved to a smaller          │
-│  "Also Explore" row (2-col, secondary)           │
-├──────────────────────────────────────────────────┤
-│  Testimonials, About, Review (unchanged)         │
-└──────────────────────────────────────────────────┘
-```
+**1. Welcome Email** (`src/emails/WelcomeEmail.tsx`)
+- Warm greeting with user's first name
+- Brief intro to Cosmic Age's 3 core features (Age Calculator, Celebrity Match, Zodiac/Birthstone)
+- Link to blog articles
+- Subtle mention of premium Life Expectancy feature
+- CTA: "Start Exploring"
 
-### Key Changes
+**2. Premium Thank You Email** (`src/emails/PremiumThankYouEmail.tsx`)
+- Gold/amber premium branding
+- Thank the user for upgrading
+- List all unlocked premium features: Life Expectancy Calculator, Premium Celebrity Database, Export Reports, Birthday Twin Notifications, Priority Support
+- CTA: "Explore Your Life Report"
 
-**1. Premium Life Expectancy CTA Card** (after Zodiac/Facts, only when birthDate exists)
-- Full-width card with a gold/amber gradient border and subtle glow
-- Teaser copy: "How long will you live? Based on your habits, health, and lifestyle -- discover your projected lifespan."
-- Preview stats: "Covers 15+ health factors", "Personalized What-If scenarios", "Actionable recommendations"
-- CTA button: "Unlock Your Life Report" with Crown icon
-- If user is premium, button says "View My Life Report" instead
+**3. Premium Upsell Email** (`src/emails/PremiumUpsellEmail.tsx`)
+- Sent to free users after some time
+- Highlight what they're missing (Life Expectancy preview, premium celebrity matches)
+- Social proof: "Join thousands of premium members"
+- One-time $29.99 pricing emphasis
+- CTA: "Unlock Premium for $29.99"
 
-**2. Replace 4-card grid with 3 Feature Pillars**
-- 3-column grid (`lg:grid-cols-3`) instead of 4
-- Each card is taller with more description and a clear action button
-- Life Expectancy card gets a distinct gold/amber theme with "Premium" badge and Crown icon
-- Age Calculator and Celebrity Match cards get "Free" badges
+**4. Re-engagement Email** (`src/emails/ReEngagementEmail.tsx`)
+- "We miss you!" tone
+- Highlight recent blog articles and new features
+- Remind them of Celebrity Match, Zodiac, Birthstone features
+- Personalized: "Your next birthday is coming up!" hook
+- CTA: "Come Back and Explore"
 
-**3. Zodiac & Birthstone become secondary**
-- Moved to a smaller "Also Explore" 2-column row below the 3 pillars
-- Smaller cards, less visual weight -- they're supplementary features, not core
+### Technical Approach
 
-**4. Navigation update**
-- Add a Crown icon or "Premium" text next to "Life Expectancy" in the nav bar
+Each template is a **plain React component** that returns an HTML email string via a `render()` export function. They use inline styles (email-safe) matching the app's color palette. No external dependencies needed — just TSX files that export a function returning an HTML string.
 
-### Files Changed
+A barrel export file (`src/emails/index.ts`) will re-export all templates for easy importing when the email API is integrated later.
 
-| File | Change |
-|------|--------|
-| `src/pages/Index.tsx` | Replace 4-card grid with 3 Feature Pillars + secondary row; add premium CTA card after zodiac section |
-| `src/components/Navigation.tsx` | Add Crown/Premium indicator next to Life Expectancy nav link |
+### Files Created
+
+| File | Purpose |
+|------|---------|
+| `src/emails/WelcomeEmail.tsx` | New user welcome |
+| `src/emails/PremiumThankYouEmail.tsx` | Premium purchase confirmation |
+| `src/emails/PremiumUpsellEmail.tsx` | Free-to-premium conversion |
+| `src/emails/ReEngagementEmail.tsx` | Inactive user re-engagement |
+| `src/emails/index.ts` | Barrel exports |
 
