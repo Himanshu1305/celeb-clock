@@ -1,30 +1,32 @@
 
 
-## Send Email Templates for Review
+## Add Disclaimers to Life Expectancy Calculator
 
-To send emails, we need a transactional email service. The project doesn't have one configured yet.
+### What Changes
 
-### Options
+**1. Privacy & Data Disclaimer** — Add an `Alert` component at the top of the calculator (visible on Step 1) and on the Life Expectancy page, clearly stating:
+- All health data is processed entirely in your browser and never stored on servers
+- Only name and email are stored for login purposes
+- No personal or sensitive health information is transmitted or saved
 
-We need an email-sending service connected to the project. The simplest option is **Resend** — it has a generous free tier (100 emails/day) and a simple API.
+**2. Entertainment/Medical Disclaimer** — Add a prominent disclaimer at the bottom of the calculator (all steps) and before the results, stating:
+- This tool is for informational and entertainment purposes only
+- Results are based on simplified statistical models and should not be taken as medical advice
+- Users should consult a qualified healthcare professional for actual health assessments and medical decisions
 
-### What I'll Build
+**3. Page-level Disclaimer** — Add a disclaimer section on the `LifeExpectancy.tsx` page in the hero/about area reinforcing both points.
 
-1. **Connect Resend** — You'll need to provide a Resend API key (free at [resend.com](https://resend.com))
-2. **Create an edge function** `send-email` that accepts a template name, recipient, and first name, renders the appropriate template, and sends it via Resend
-3. **Trigger it** to send all 4 templates to `himanshu1305@gmail.com`
-
-### Prerequisites from You
-
-Before I can implement this, I need:
-- A **Resend API key** (sign up free at resend.com → API Keys → Create)
-- Note: On Resend's free tier, you can only send to your own verified email or from `onboarding@resend.dev` domain. To send from a custom domain you'd need to verify it in Resend.
-
-### Files
+### Files Modified
 
 | File | Change |
 |------|--------|
-| `supabase/functions/send-email/index.ts` | New edge function that renders + sends email via Resend |
+| `src/components/LifeExpectancyCalculator.tsx` | Add privacy disclaimer on Step 1, medical disclaimer on all steps (bottom), and before results on Step 5 |
+| `src/pages/LifeExpectancy.tsx` | Add a disclaimer notice in the hero section below the CTA button |
 
-Once you provide the Resend API key, I'll create the function, deploy it, and send all 4 templates immediately.
+### Implementation Details
+
+- Use the existing `Alert` component (`src/components/ui/alert.tsx`) with `ShieldCheck` and `AlertTriangle` icons from lucide-react
+- Privacy disclaimer: teal/info styling, placed above Step 1 form fields
+- Medical disclaimer: subtle muted styling, placed as a persistent footer inside the card across all steps
+- Both disclaimers use concise, reassuring language
 
