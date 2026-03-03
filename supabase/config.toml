@@ -2,3 +2,6 @@ project_id = "jwrpqiypvystivtqyhro"
 
 [functions.generate-weekly-blog]
 verify_jwt = false
+
+[functions.delete-account]
+verify_jwt = false
