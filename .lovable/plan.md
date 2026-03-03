@@ -1,32 +1,39 @@
 
 
-## Add Disclaimers to Life Expectancy Calculator
+## GDPR Compliance: Subscription Management & Account Deletion
 
-### What Changes
+### Current State
+- Profile page has blog subscription and email notification toggles — but they save silently without clear GDPR framing
+- Privacy page mentions account deletion only via email to support — no self-service option
+- No "Download My Data" or "Delete Account" functionality exists
+- No explicit consent management section on the Profile page
 
-**1. Privacy & Data Disclaimer** — Add an `Alert` component at the top of the calculator (visible on Step 1) and on the Life Expectancy page, clearly stating:
-- All health data is processed entirely in your browser and never stored on servers
-- Only name and email are stored for login purposes
-- No personal or sensitive health information is transmitted or saved
+### Changes
 
-**2. Entertainment/Medical Disclaimer** — Add a prominent disclaimer at the bottom of the calculator (all steps) and before the results, stating:
-- This tool is for informational and entertainment purposes only
-- Results are based on simplified statistical models and should not be taken as medical advice
-- Users should consult a qualified healthcare professional for actual health assessments and medical decisions
+**1. Add "Privacy & Data" section to Profile page** (`src/pages/Profile.tsx`)
+- New card titled "Privacy & Data Management" with:
+  - **Subscription Controls** (already exist, but reframed with GDPR language): Blog subscription toggle with clear description ("You can opt out at any time"), Email notifications toggle with clear description
+  - **Download My Data** button — exports user's profile data as JSON (name, email, country, subscription preferences, account creation date). No health data is stored so this covers everything.
+  - **Delete My Account** button (destructive) — opens a confirmation dialog explaining what will be deleted, requires typing "DELETE" to confirm, calls a Supabase Edge Function that deletes the user's profile row and then deletes the auth user via admin API
 
-**3. Page-level Disclaimer** — Add a disclaimer section on the `LifeExpectancy.tsx` page in the hero/about area reinforcing both points.
+**2. Create Edge Function `delete-account`** (`supabase/functions/delete-account/index.ts`)
+- Authenticates the requesting user via JWT
+- Deletes their profile from `profiles` table
+- Deletes their reviews from `user_reviews` table  
+- Deletes their analytics events from `analytics_events` table
+- Deletes the auth user via `supabase.auth.admin.deleteUser()`
+- Returns success, frontend then signs out and redirects to home
 
-### Files Modified
+**3. Update Privacy Policy** (`src/pages/Privacy.tsx`)
+- Update the "User Rights" section to mention self-service account deletion from the Profile page, data export capability, and subscription opt-out controls
+
+### Files
 
 | File | Change |
 |------|--------|
-| `src/components/LifeExpectancyCalculator.tsx` | Add privacy disclaimer on Step 1, medical disclaimer on all steps (bottom), and before results on Step 5 |
-| `src/pages/LifeExpectancy.tsx` | Add a disclaimer notice in the hero section below the CTA button |
-
-### Implementation Details
-
-- Use the existing `Alert` component (`src/components/ui/alert.tsx`) with `ShieldCheck` and `AlertTriangle` icons from lucide-react
-- Privacy disclaimer: teal/info styling, placed above Step 1 form fields
-- Medical disclaimer: subtle muted styling, placed as a persistent footer inside the card across all steps
-- Both disclaimers use concise, reassuring language
+| `src/pages/Profile.tsx` | Add Privacy & Data Management card with download data, delete account |
+| `src/hooks/useAuth.ts` | Add `deleteAccount` function that calls the edge function |
+| `supabase/functions/delete-account/index.ts` | New edge function for server-side account deletion |
+| `supabase/config.toml` | Add `[functions.delete-account]` with `verify_jwt = false` |
+| `src/pages/Privacy.tsx` | Update User Rights section with self-service options |
 
