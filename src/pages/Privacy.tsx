@@ -122,16 +122,19 @@ export default function Privacy() {
           <CardHeader>
             <CardTitle className="font-heading text-2xl flex items-center gap-2">
               <UserX className="w-6 h-6 text-accent" />
-              User Rights
+              Your Rights (GDPR)
             </CardTitle>
           </CardHeader>
-          <CardContent className="text-muted-foreground leading-relaxed">
-            <p>
-              You may request account deletion by contacting{' '}
-              <a href="mailto:support@ageceleblife.com" className="text-accent hover:underline">
-                support@ageceleblife.com
-              </a>
-            </p>
+          <CardContent className="space-y-3 text-muted-foreground leading-relaxed">
+            <p>You have full control over your personal data:</p>
+            <ul className="list-disc list-inside space-y-2 ml-4">
+              <li><strong className="text-foreground">Access & Export:</strong> Download all data we store about you from your <Link to="/profile" className="text-accent hover:underline">Profile page</Link> at any time.</li>
+              <li><strong className="text-foreground">Opt Out:</strong> Manage your email notification and blog subscription preferences directly from your <Link to="/profile" className="text-accent hover:underline">Profile page</Link>. You can opt out at any time.</li>
+              <li><strong className="text-foreground">Delete:</strong> Permanently delete your account and all associated data directly from your <Link to="/profile" className="text-accent hover:underline">Profile page</Link> — no need to contact support.</li>
+              <li><strong className="text-foreground">Contact:</strong> For any other data requests, reach us at{' '}
+                <a href="mailto:support@ageceleblife.com" className="text-accent hover:underline">support@ageceleblife.com</a>
+              </li>
+            </ul>
           </CardContent>
         </Card>
 

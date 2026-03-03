@@ -145,6 +145,32 @@ export const useAuth = () => {
     return { error };
   };
 
+  const deleteAccount = async () => {
+    if (!session?.access_token) return { error: { message: 'No active session' } };
+
+    const { data, error } = await supabase.functions.invoke('delete-account', {
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+      },
+    });
+
+    if (error) {
+      toast({
+        title: "Error deleting account",
+        description: error.message || 'Failed to delete account',
+        variant: "destructive"
+      });
+      return { error };
+    }
+
+    await supabase.auth.signOut();
+    toast({
+      title: "Account deleted",
+      description: "Your account and all associated data have been permanently deleted."
+    });
+    return { error: null };
+  };
+
   const updateProfile = async (updates: Partial<Profile>) => {
     if (!user) return { error: { message: 'No user logged in' } };
 
@@ -189,6 +215,7 @@ export const useAuth = () => {
     signIn,
     signOut,
     updateProfile,
+    deleteAccount,
     isPremium: profile?.premium_status || false
   };
 };
