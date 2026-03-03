@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowRight, Heart, TrendingUp, Shield, Activity, CalendarIcon } from 'lucide-react';
+import { ArrowRight, Heart, TrendingUp, Shield, Activity, CalendarIcon, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
 
 const LifeExpectancy = () => {
@@ -51,6 +52,22 @@ const LifeExpectancy = () => {
                 🧬 Calculate My Life Expectancy
                 <ArrowRight className="w-5 h-5" />
               </Button>
+            </div>
+
+            {/* Page-level Disclaimers */}
+            <div className="max-w-2xl mx-auto space-y-3 pt-4">
+              <Alert className="border-accent/30 bg-accent/5 text-left">
+                <ShieldCheck className="h-4 w-4 text-accent" />
+                <AlertDescription className="text-sm text-muted-foreground">
+                  <strong className="text-foreground">Your privacy matters.</strong> All health data is processed in your browser only — we never store or transmit any personal or sensitive health information. Only your name and email are stored for login purposes.
+                </AlertDescription>
+              </Alert>
+              <Alert className="border-muted bg-muted/30 text-left">
+                <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+                <AlertDescription className="text-xs text-muted-foreground">
+                  This calculator is for <strong>informational and entertainment purposes only</strong>. Results are based on simplified statistical models and are not medical advice. Always consult a qualified healthcare professional for health assessments and medical decisions.
+                </AlertDescription>
+              </Alert>
             </div>
           </div>
         </section>

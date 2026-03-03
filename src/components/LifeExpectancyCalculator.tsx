@@ -11,7 +11,8 @@ import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalytics } from '@/hooks/useAnalytics';
-import { Crown, Heart, Activity, Coffee, Brain, Dumbbell, User } from 'lucide-react';
+import { Crown, Heart, Activity, Coffee, Brain, Dumbbell, User, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from 'react-router-dom';
 import { EnhancedLifeExpectancyReport } from './EnhancedLifeExpectancyReport';
 import { BmiCalculator } from './BmiCalculator';
@@ -285,6 +286,14 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [] }: Props)
       <CardContent className="space-y-6">
         {step === 1 && (
           <div className="space-y-6">
+            {/* Privacy Disclaimer */}
+            <Alert className="border-accent/30 bg-accent/5">
+              <ShieldCheck className="h-4 w-4 text-accent" />
+              <AlertDescription className="text-sm text-muted-foreground">
+                <strong className="text-foreground">Your privacy is protected.</strong> All health data is processed entirely in your browser and is never stored on our servers. We only store your name and email for login purposes — no personal or sensitive health information is transmitted or saved.
+              </AlertDescription>
+            </Alert>
+
             <h3 className="text-lg font-semibold">Basic Information</h3>
             
             <div className="space-y-3">
@@ -584,6 +593,14 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [] }: Props)
             )}
           </div>
         )}
+
+        {/* Medical/Entertainment Disclaimer */}
+        <Alert className="border-muted bg-muted/30">
+          <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+          <AlertDescription className="text-xs text-muted-foreground">
+            <strong>Disclaimer:</strong> This tool is for informational and entertainment purposes only. Results are based on simplified statistical models and should <strong>not</strong> be considered medical advice. Please consult a qualified healthcare professional for actual health assessments and medical decisions.
+          </AlertDescription>
+        </Alert>
 
         <Separator />
 
