@@ -1,39 +1,41 @@
 
 
-## GDPR Compliance: Subscription Management & Account Deletion
+## Add Sign Up / Join Now CTAs Across Pages
 
-### Current State
-- Profile page has blog subscription and email notification toggles — but they save silently without clear GDPR framing
-- Privacy page mentions account deletion only via email to support — no self-service option
-- No "Download My Data" or "Delete Account" functionality exists
-- No explicit consent management section on the Profile page
+### Problem
+1. The only way to sign up is the small "Sign In" button in the AuthNav dropdown — no prominent "Sign Up" or "Join Now" CTA exists anywhere
+2. The sign-up form already captures first name, last name, and country (verified in Auth.tsx) — this requirement is already met
 
 ### Changes
 
-**1. Add "Privacy & Data" section to Profile page** (`src/pages/Profile.tsx`)
-- New card titled "Privacy & Data Management" with:
-  - **Subscription Controls** (already exist, but reframed with GDPR language): Blog subscription toggle with clear description ("You can opt out at any time"), Email notifications toggle with clear description
-  - **Download My Data** button — exports user's profile data as JSON (name, email, country, subscription preferences, account creation date). No health data is stored so this covers everything.
-  - **Delete My Account** button (destructive) — opens a confirmation dialog explaining what will be deleted, requires typing "DELETE" to confirm, calls a Supabase Edge Function that deletes the user's profile row and then deletes the auth user via admin API
+**1. Update AuthNav** (`src/components/AuthNav.tsx`)
+- When user is not logged in, show **two** buttons: "Sign In" (outline) and "Join Free" (primary/accent CTA) — both link to `/auth` but "Join Free" links with `?signup=true` query param
 
-**2. Create Edge Function `delete-account`** (`supabase/functions/delete-account/index.ts`)
-- Authenticates the requesting user via JWT
-- Deletes their profile from `profiles` table
-- Deletes their reviews from `user_reviews` table  
-- Deletes their analytics events from `analytics_events` table
-- Deletes the auth user via `supabase.auth.admin.deleteUser()`
-- Returns success, frontend then signs out and redirects to home
+**2. Update Auth page** (`src/pages/Auth.tsx`)
+- Read `?signup=true` from URL search params to default to sign-up mode when arriving from a CTA
 
-**3. Update Privacy Policy** (`src/pages/Privacy.tsx`)
-- Update the "User Rights" section to mention self-service account deletion from the Profile page, data export capability, and subscription opt-out controls
+**3. Add Sign Up CTA to Blog listing page** (`src/pages/Blog.tsx`)
+- Add a CTA banner between blog posts (after the first few cards): "Join free to get weekly health insights delivered to your inbox" with a "Sign Up Free" button
 
-### Files
+**4. Add Sign Up CTA to BlogPost page** (`src/pages/BlogPost.tsx`)
+- Add an inline CTA card at the end of each article (before related posts): "Enjoyed this article? Sign up for free to get personalized birthday insights and weekly health tips"
+
+**5. Add Sign Up CTA to Homepage** (`src/pages/Index.tsx`)
+- Below the hero section (when user is NOT logged in), add a small banner: "Create a free account to save your results and unlock celebrity matches" with "Join Free" button
+
+**6. Add Sign Up CTA to Footer** (`src/components/Footer.tsx`)
+- Add a "Join the Community" section with email teaser and "Sign Up Free" link
+
+### Files Modified
 
 | File | Change |
 |------|--------|
-| `src/pages/Profile.tsx` | Add Privacy & Data Management card with download data, delete account |
-| `src/hooks/useAuth.ts` | Add `deleteAccount` function that calls the edge function |
-| `supabase/functions/delete-account/index.ts` | New edge function for server-side account deletion |
-| `supabase/config.toml` | Add `[functions.delete-account]` with `verify_jwt = false` |
-| `src/pages/Privacy.tsx` | Update User Rights section with self-service options |
+| `src/components/AuthNav.tsx` | Add "Join Free" CTA button for unauthenticated users |
+| `src/pages/Auth.tsx` | Read `?signup=true` query param to default to sign-up mode |
+| `src/pages/Blog.tsx` | Add inline sign-up CTA banner between blog cards |
+| `src/pages/BlogPost.tsx` | Add sign-up CTA card at end of article |
+| `src/pages/Index.tsx` | Add sign-up banner below hero for non-authenticated users |
+| `src/components/Footer.tsx` | Add "Join the Community" section with sign-up link |
+
+All CTAs will only render when the user is **not** logged in (using `useAuth` hook). They link to `/auth?signup=true` so users land directly on the sign-up form.
 
