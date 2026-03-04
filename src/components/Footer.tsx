@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 import { CookiePreferencesModal } from '@/components/CookiePreferencesModal';
 import { getStoredConsent } from '@/components/CookieConsent';
+import { useAuth } from '@/hooks/useAuth';
+import { ArrowRight } from 'lucide-react';
 
 export const Footer = () => {
+  const { user } = useAuth();
   const [showCookiePrefs, setShowCookiePrefs] = useState(false);
   
   const handleSaveCookiePrefs = (prefs: { analytics: boolean; marketing: boolean }) => {
@@ -110,6 +114,22 @@ export const Footer = () => {
             </ul>
           </div>
         </div>
+
+        {/* Join the Community CTA */}
+        {!user && (
+          <div className="mb-8 p-6 rounded-lg bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 border border-primary/20 text-center">
+            <h3 className="font-heading font-semibold text-foreground text-lg mb-2">Join the Community</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Create a free account to save your results, get celebrity birthday matches & weekly insights.
+            </p>
+            <Button asChild size="sm" className="gap-1">
+              <Link to="/auth?signup=true">
+                Sign Up Free
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </Button>
+          </div>
+        )}
 
         <Separator className="mb-6" />
 
