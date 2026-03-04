@@ -1,41 +1,53 @@
 
 
-## Add Sign Up / Join Now CTAs Across Pages
+## Four Growth Features: Planetary Age, Numerology, Today's Birthdays, Shareable Card
 
-### Problem
-1. The only way to sign up is the small "Sign In" button in the AuthNav dropdown — no prominent "Sign Up" or "Join Now" CTA exists anywhere
-2. The sign-up form already captures first name, last name, and country (verified in Auth.tsx) — this requirement is already met
+### 1. Age on Other Planets (Fun/Virality)
 
-### Changes
+**New component**: `src/components/PlanetaryAge.tsx`
+- Shows user's age on Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune using orbital period ratios (e.g., Mercury year = 87.97 Earth days)
+- Visual cards with planet emojis/icons, each showing the calculated age rounded to 2 decimals
+- Fun taglines per planet (e.g., "On Jupiter, you're basically a toddler!")
+- Renders below the age breakdown on the homepage when `birthDate` is set
 
-**1. Update AuthNav** (`src/components/AuthNav.tsx`)
-- When user is not logged in, show **two** buttons: "Sign In" (outline) and "Join Free" (primary/accent CTA) — both link to `/auth` but "Join Free" links with `?signup=true` query param
+**Edit**: `src/pages/Index.tsx` — add `<PlanetaryAge birthDate={birthDate} />` section after the age calculator
 
-**2. Update Auth page** (`src/pages/Auth.tsx`)
-- Read `?signup=true` from URL search params to default to sign-up mode when arriving from a CTA
+### 2. Numerology / Life Path Number (Audience Expansion)
 
-**3. Add Sign Up CTA to Blog listing page** (`src/pages/Blog.tsx`)
-- Add a CTA banner between blog posts (after the first few cards): "Join free to get weekly health insights delivered to your inbox" with a "Sign Up Free" button
+**New component**: `src/components/NumerologyLifePath.tsx`
+- Calculates Life Path Number by reducing birth date digits (e.g., 1990-03-15 → 1+9+9+0+0+3+1+5 = 28 → 2+8 = 10 → 1+0 = 1), preserving master numbers 11, 22, 33
+- Displays the number prominently with its meaning, personality traits, and famous people with the same number
+- Data for all 9 numbers + 3 master numbers stored inline in the component
 
-**4. Add Sign Up CTA to BlogPost page** (`src/pages/BlogPost.tsx`)
-- Add an inline CTA card at the end of each article (before related posts): "Enjoyed this article? Sign up for free to get personalized birthday insights and weekly health tips"
+**Edit**: `src/pages/Index.tsx` — add section after ZodiacAndFacts when `birthDate` is set
 
-**5. Add Sign Up CTA to Homepage** (`src/pages/Index.tsx`)
-- Below the hero section (when user is NOT logged in), add a small banner: "Create a free account to save your results and unlock celebrity matches" with "Join Free" button
+### 3. Today's Birthdays Section (Retention)
 
-**6. Add Sign Up CTA to Footer** (`src/components/Footer.tsx`)
-- Add a "Join the Community" section with email teaser and "Sign Up Free" link
+**New component**: `src/components/TodaysBirthdays.tsx`
+- Uses existing `getBirthdayData()` from `src/data/birthdayData.ts` to fetch today's date celebrities
+- Shows a card with "Born Today" header, lists 5-8 notable people with name, profession, and category icon
+- Always visible on homepage (no birth date required) — gives users a reason to return daily
+- Links to `/celebrity-birthday` for more
 
-### Files Modified
+**Edit**: `src/pages/Index.tsx` — add section before FeaturePillars (always visible)
 
-| File | Change |
+### 4. Visual Shareable Card (Growth)
+
+**New component**: `src/components/ShareableCard.tsx`
+- Generates a styled card (fixed 1200x630 dimensions for social media) containing: user's age, total days lived, zodiac sign, life path number, and top celebrity match
+- Uses `html2canvas` (already installed) to render the card to an image
+- "Download as Image" button saves as PNG; "Share" button uses Web Share API with the image file
+- Gradient background, bold typography — designed to look good on Instagram/Twitter
+
+**Edit**: `src/pages/Index.tsx` — replace or augment the existing ShareAndExport section with this visual card option when birth date is entered
+
+### Files
+
+| File | Action |
 |------|--------|
-| `src/components/AuthNav.tsx` | Add "Join Free" CTA button for unauthenticated users |
-| `src/pages/Auth.tsx` | Read `?signup=true` query param to default to sign-up mode |
-| `src/pages/Blog.tsx` | Add inline sign-up CTA banner between blog cards |
-| `src/pages/BlogPost.tsx` | Add sign-up CTA card at end of article |
-| `src/pages/Index.tsx` | Add sign-up banner below hero for non-authenticated users |
-| `src/components/Footer.tsx` | Add "Join the Community" section with sign-up link |
-
-All CTAs will only render when the user is **not** logged in (using `useAuth` hook). They link to `/auth?signup=true` so users land directly on the sign-up form.
+| `src/components/PlanetaryAge.tsx` | Create — planet age calculator UI |
+| `src/components/NumerologyLifePath.tsx` | Create — life path number calculator |
+| `src/components/TodaysBirthdays.tsx` | Create — daily celebrity birthdays |
+| `src/components/ShareableCard.tsx` | Create — visual shareable image card |
+| `src/pages/Index.tsx` | Edit — integrate all four new sections |
 
