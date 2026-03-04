@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
-import { Crown, LogOut, User, Shield } from 'lucide-react';
+import { Crown, LogOut, User, Shield, ArrowRight } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,11 +20,19 @@ export const AuthNav = () => {
 
   if (!user) {
     return (
-      <Link to="/auth">
-        <Button variant="outline" size="sm">
-          Sign In
-        </Button>
-      </Link>
+      <div className="flex items-center gap-2">
+        <Link to="/auth">
+          <Button variant="outline" size="sm">
+            Sign In
+          </Button>
+        </Link>
+        <Link to="/auth?signup=true">
+          <Button size="sm" className="gap-1">
+            Join Free
+            <ArrowRight className="w-3 h-3" />
+          </Button>
+        </Link>
+      </div>
     );
   }
 

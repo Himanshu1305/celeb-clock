@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AgeCalculator } from '@/components/AgeCalculator';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
@@ -72,6 +72,26 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        {/* Sign Up Banner for non-authenticated users */}
+        {!user && (
+          <section className="max-w-3xl mx-auto mb-12 animate-fade-in-up">
+            <Card className="glass-card bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 border-primary/30">
+              <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                  <h3 className="font-semibold text-lg">Create a free account</h3>
+                  <p className="text-sm text-muted-foreground">Save your results, unlock celebrity matches & get weekly insights</p>
+                </div>
+                <Button asChild className="gap-1 whitespace-nowrap">
+                  <Link to="/auth?signup=true">
+                    Join Free
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </section>
+        )}
 
         {/* Age Calculator Section */}
         <section id="calculator" className="max-w-4xl mx-auto mb-16">

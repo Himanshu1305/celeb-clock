@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Link } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
@@ -79,6 +80,7 @@ const BlogCard = ({ post }: { post: BlogPost }) => (
 );
 
 const Blog = () => {
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<BlogPost['category'] | 'all'>('all');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -258,7 +260,31 @@ const Blog = () => {
 
           {filteredPosts.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPosts.map((post) => (
+              {filteredPosts.slice(0, 3).map((post) => (
+                <BlogCard key={post.id} post={post} />
+              ))}
+
+              {/* Sign Up CTA between blog cards */}
+              {!user && filteredPosts.length > 3 && (
+                <div className="md:col-span-2 lg:col-span-3">
+                  <Card className="glass-card bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 border-primary/30">
+                    <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <div>
+                        <h3 className="font-semibold text-lg">Join free to get weekly health insights</h3>
+                        <p className="text-sm text-muted-foreground">Delivered to your inbox — personalized birthday facts, zodiac tips & more</p>
+                      </div>
+                      <Button asChild className="gap-1 whitespace-nowrap">
+                        <Link to="/auth?signup=true">
+                          Sign Up Free
+                          <ArrowRight className="w-4 h-4" />
+                        </Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+
+              {filteredPosts.slice(3).map((post) => (
                 <BlogCard key={post.id} post={post} />
               ))}
             </div>
