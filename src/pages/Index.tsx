@@ -9,6 +9,10 @@ import { CelebrityMatch } from '@/components/CelebrityMatch';
 import { ZodiacAndFacts } from '@/components/ZodiacAndFacts';
 import { LifeExpectancyCTA } from '@/components/LifeExpectancyCTA';
 import { FeaturePillars } from '@/components/FeaturePillars';
+import { PlanetaryAge } from '@/components/PlanetaryAge';
+import { NumerologyLifePath } from '@/components/NumerologyLifePath';
+import { TodaysBirthdays } from '@/components/TodaysBirthdays';
+import { ShareableCard } from '@/components/ShareableCard';
 import { useAuth } from '@/hooks/useAuth';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { Badge } from '@/components/ui/badge';
@@ -98,21 +102,42 @@ const Index = () => {
           <AgeCalculator onBirthDateChange={setBirthDate} initialDate={birthDate} />
         </section>
 
-        {/* Celebrity Match Section - shows after birth date is entered */}
+        {/* Planetary Age - shows after birth date */}
+        {birthDate && (
+          <section className="max-w-4xl mx-auto mb-16 animate-fade-in-up">
+            <PlanetaryAge birthDate={birthDate} />
+          </section>
+        )}
+
+        {/* Celebrity Match Section */}
         {birthDate && (
           <section className="max-w-6xl mx-auto mb-16 animate-fade-in-up">
             <CelebrityMatch birthDate={birthDate} />
           </section>
         )}
 
-        {/* Zodiac and Facts Section - shows after birth date is entered */}
+        {/* Zodiac and Facts Section */}
         {birthDate && (
           <section className="max-w-4xl mx-auto mb-16 animate-fade-in-up">
             <ZodiacAndFacts birthDate={birthDate} />
           </section>
         )}
 
-        {/* Life Expectancy Premium CTA - shows after birth date */}
+        {/* Numerology Life Path - shows after birth date */}
+        {birthDate && (
+          <section className="max-w-4xl mx-auto mb-16 animate-fade-in-up">
+            <NumerologyLifePath birthDate={birthDate} />
+          </section>
+        )}
+
+        {/* Shareable Card - shows after birth date */}
+        {birthDate && (
+          <section className="max-w-4xl mx-auto mb-16 animate-fade-in-up">
+            <ShareableCard birthDate={birthDate} />
+          </section>
+        )}
+
+        {/* Life Expectancy Premium CTA */}
         {birthDate && (
           <LifeExpectancyCTA />
         )}
@@ -140,12 +165,17 @@ const Index = () => {
           </section>
         )}
 
+        {/* Today's Birthdays - always visible */}
+        <section className="max-w-4xl mx-auto mb-16">
+          <TodaysBirthdays />
+        </section>
+
         {/* 3 Feature Pillars + Also Explore */}
         <FeaturePillars />
         {/* Testimonials Section */}
         <TestimonialsSection />
 
-        {/* About Section (single copy) */}
+        {/* About Section */}
         <section className="max-w-4xl mx-auto mb-16">
           <Card className="glass-card">
             <CardContent className="p-8 space-y-6">
@@ -157,15 +187,12 @@ const Index = () => {
                 <p>
                   Your age is more than a number — it's your journey through moments, experiences, and milestones. Our Age Calculator helps you discover your precise age, whether you want to know it for documentation, curiosity, or celebration.
                 </p>
-                
                 <p>
                   Simply enter your date of birth, and the calculator instantly shows your exact age across multiple time units — years, months, days, hours, minutes, and even seconds. You'll also see your upcoming birthday, day of birth, and how long until your next big milestone.
                 </p>
-                
                 <p>
                   Built with verified algorithms and tested for accuracy, our Age Calculator follows the principles of EEAT (Experience, Expertise, Authoritativeness, and Trustworthiness). It ensures that every calculation is precise and transparent, giving you results you can rely on.
                 </p>
-                
                 <div className="bg-primary/5 rounded-lg p-6 my-6">
                   <h3 className="text-xl font-bold mb-4">You can use our Age Calculator for:</h3>
                   <ul className="space-y-2">
@@ -175,11 +202,9 @@ const Index = () => {
                     <li>Quick online verifications and forms</li>
                   </ul>
                 </div>
-                
                 <p>
                   Whether you're looking for a simple age calculator near me, or want to share your results online, our platform is fast, secure, and designed for a seamless experience.
                 </p>
-                
                 <p className="text-center pt-4 text-muted-foreground">
                   📧 Have feedback or questions? Reach us anytime at <a href="/contact" className="text-primary hover:underline">support@yourdomain.com</a>
                 </p>
