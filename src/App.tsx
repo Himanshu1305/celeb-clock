@@ -24,6 +24,10 @@ import Terms from "./pages/Terms";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import AgeCalculatorPage from "./pages/AgeCalculatorPage";
+import TodaysBirthdaysPage from "./pages/TodaysBirthdaysPage";
+import NumerologyPage from "./pages/NumerologyPage";
+import PlanetaryAgePage from "./pages/PlanetaryAgePage";
 import { AdminRoute } from "@/components/AdminRoute";
 
 const queryClient = new QueryClient();
@@ -40,6 +44,10 @@ const App = () => (
             <AnalyticsProvider>
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/age-calculator" element={<AgeCalculatorPage />} />
+                <Route path="/todays-birthdays" element={<TodaysBirthdaysPage />} />
+                <Route path="/numerology" element={<NumerologyPage />} />
+                <Route path="/planetary-age" element={<PlanetaryAgePage />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
