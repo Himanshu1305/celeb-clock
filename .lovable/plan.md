@@ -1,53 +1,58 @@
 
 
-## Four Growth Features: Planetary Age, Numerology, Today's Birthdays, Shareable Card
+## Redesign Homepage as a Hub + Add New Dedicated Pages
 
-### 1. Age on Other Planets (Fun/Virality)
+### Problem
+The current homepage is a long, linear scroll that dumps everything (calculator, planetary age, celebrity match, zodiac, numerology, shareable card, testimonials, about section) onto one page. It feels cluttered and doesn't communicate what the app is about at a glance. Features like Numerology, Planetary Age, and Today's Birthdays are buried in the scroll rather than being discoverable as standalone tools.
 
-**New component**: `src/components/PlanetaryAge.tsx`
-- Shows user's age on Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune using orbital period ratios (e.g., Mercury year = 87.97 Earth days)
-- Visual cards with planet emojis/icons, each showing the calculated age rounded to 2 decimals
-- Fun taglines per planet (e.g., "On Jupiter, you're basically a toddler!")
-- Renders below the age breakdown on the homepage when `birthDate` is set
+### Recommendation: Today's Birthdays on Homepage
+Keep a compact "Today's Birthdays" highlight on the homepage (top 4-5 people) as a retention hook -- it gives returning visitors something new every day. But also give it a dedicated page (`/todays-birthdays`) for users who want the full list. This is the best of both worlds: daily freshness on the homepage + a full experience on its own page.
 
-**Edit**: `src/pages/Index.tsx` — add `<PlanetaryAge birthDate={birthDate} />` section after the age calculator
+### New Homepage Structure
 
-### 2. Numerology / Life Path Number (Audience Expansion)
+The homepage becomes a **landing hub** that explains the app and links to features, rather than embedding every tool inline.
 
-**New component**: `src/components/NumerologyLifePath.tsx`
-- Calculates Life Path Number by reducing birth date digits (e.g., 1990-03-15 → 1+9+9+0+0+3+1+5 = 28 → 2+8 = 10 → 1+0 = 1), preserving master numbers 11, 22, 33
-- Displays the number prominently with its meaning, personality traits, and famous people with the same number
-- Data for all 9 numbers + 3 master numbers stored inline in the component
+**Layout (top to bottom):**
+1. **Header** (Navigation + AuthNav) -- updated nav with new routes
+2. **Welcome message** (logged-in users only, unchanged)
+3. **Hero Section** -- concise value proposition: "Your Birthday, Decoded" with a short description of what the app offers, plus a primary CTA to the Age Calculator
+4. **Feature Grid** -- 6 feature cards in a responsive grid (2x3 on desktop, 1 column on mobile), each navigating to its dedicated page:
+   - Calculate Your Age (`/age-calculator`) 
+   - Today's Birthdays (`/todays-birthdays`)
+   - Celebrity Match (`/celebrity-birthday`)
+   - Numerology (`/numerology`)
+   - Planetary Age (`/planetary-age`)
+   - Life Expectancy (`/life-expectancy`) -- Premium badge
+5. **Today's Birthdays Preview** -- compact card showing top 4-5 famous people born today with "See All" link (retention hook)
+6. **Also Explore** -- Zodiac, Birthstone as smaller cards (existing pattern)
+7. **Sign Up CTA** (non-authenticated only)
+8. **Testimonials**
+9. **About / EEAT Section** (trimmed down)
+10. **Footer**
 
-**Edit**: `src/pages/Index.tsx` — add section after ZodiacAndFacts when `birthDate` is set
+### New Dedicated Pages
+- `/age-calculator` -- Move the AgeCalculator component + ShareableCard here. The birth date context persists across pages.
+- `/todays-birthdays` -- Full-page TodaysBirthdays with expanded list, historical events, etc.
+- `/numerology` -- NumerologyLifePath as a standalone page with its own SEO
+- `/planetary-age` -- PlanetaryAge as a standalone page with its own SEO
 
-### 3. Today's Birthdays Section (Retention)
-
-**New component**: `src/components/TodaysBirthdays.tsx`
-- Uses existing `getBirthdayData()` from `src/data/birthdayData.ts` to fetch today's date celebrities
-- Shows a card with "Born Today" header, lists 5-8 notable people with name, profession, and category icon
-- Always visible on homepage (no birth date required) — gives users a reason to return daily
-- Links to `/celebrity-birthday` for more
-
-**Edit**: `src/pages/Index.tsx` — add section before FeaturePillars (always visible)
-
-### 4. Visual Shareable Card (Growth)
-
-**New component**: `src/components/ShareableCard.tsx`
-- Generates a styled card (fixed 1200x630 dimensions for social media) containing: user's age, total days lived, zodiac sign, life path number, and top celebrity match
-- Uses `html2canvas` (already installed) to render the card to an image
-- "Download as Image" button saves as PNG; "Share" button uses Web Share API with the image file
-- Gradient background, bold typography — designed to look good on Instagram/Twitter
-
-**Edit**: `src/pages/Index.tsx` — replace or augment the existing ShareAndExport section with this visual card option when birth date is entered
+Each new page will follow the existing page pattern: Navigation + AuthNav header, SEO component, main content, Footer.
 
 ### Files
 
 | File | Action |
 |------|--------|
-| `src/components/PlanetaryAge.tsx` | Create — planet age calculator UI |
-| `src/components/NumerologyLifePath.tsx` | Create — life path number calculator |
-| `src/components/TodaysBirthdays.tsx` | Create — daily celebrity birthdays |
-| `src/components/ShareableCard.tsx` | Create — visual shareable image card |
-| `src/pages/Index.tsx` | Edit — integrate all four new sections |
+| `src/pages/Index.tsx` | Rewrite as a hub landing page with feature grid |
+| `src/pages/AgeCalculatorPage.tsx` | Create -- dedicated page for age calculator + shareable card |
+| `src/pages/TodaysBirthdaysPage.tsx` | Create -- full today's birthdays page |
+| `src/pages/NumerologyPage.tsx` | Create -- standalone numerology page |
+| `src/pages/PlanetaryAgePage.tsx` | Create -- standalone planetary age page |
+| `src/components/Navigation.tsx` | Update -- add new nav items (Age Calculator, Today's Birthdays, Numerology, Planetary Age) |
+| `src/components/FeaturePillars.tsx` | Rewrite as 6-card feature grid for the homepage |
+| `src/App.tsx` | Add routes for `/age-calculator`, `/todays-birthdays`, `/numerology`, `/planetary-age` |
+
+### Technical Notes
+- `BirthDateContext` already persists the birth date in localStorage, so users who enter their date on one page will see results on all other pages automatically
+- Existing components (`AgeCalculator`, `PlanetaryAge`, `NumerologyLifePath`, `TodaysBirthdays`, `ShareableCard`) are already self-contained and just need a `birthDate` prop -- no refactoring needed, just wrapping in page layouts
+- The homepage will no longer embed calculators directly -- it becomes a clean landing page that routes users to the right tool
 
