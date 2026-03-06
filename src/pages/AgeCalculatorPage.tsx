@@ -6,6 +6,7 @@ import { ShareableCard } from '@/components/ShareableCard';
 import { CelebrityMatch } from '@/components/CelebrityMatch';
 import { ZodiacAndFacts } from '@/components/ZodiacAndFacts';
 import { LifeExpectancyCTA } from '@/components/LifeExpectancyCTA';
+import { GenerationLabel } from '@/components/GenerationLabel';
 import { ReviewForm } from '@/components/ReviewForm';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO } from '@/components/SEO';
@@ -38,6 +39,12 @@ const AgeCalculatorPage = () => {
         <section id="calculator" className="max-w-4xl mx-auto mb-16">
           <AgeCalculator onBirthDateChange={setBirthDate} initialDate={birthDate} />
         </section>
+
+        {birthDate && (
+          <section className="max-w-md mx-auto mb-16 animate-fade-in-up">
+            <GenerationLabel birthYear={birthDate.getFullYear()} />
+          </section>
+        )}
 
         {birthDate && (
           <section className="max-w-6xl mx-auto mb-16 animate-fade-in-up">
