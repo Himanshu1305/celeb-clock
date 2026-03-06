@@ -1,58 +1,52 @@
 
 
-## Redesign Homepage as a Hub + Add New Dedicated Pages
+## 1. Generation Label for Age Calculator (New Component)
 
-### Problem
-The current homepage is a long, linear scroll that dumps everything (calculator, planetary age, celebrity match, zodiac, numerology, shareable card, testimonials, about section) onto one page. It feels cluttered and doesn't communicate what the app is about at a glance. Features like Numerology, Planetary Age, and Today's Birthdays are buried in the scroll rather than being discoverable as standalone tools.
+**New file**: `src/components/GenerationLabel.tsx`
 
-### Recommendation: Today's Birthdays on Homepage
-Keep a compact "Today's Birthdays" highlight on the homepage (top 4-5 people) as a retention hook -- it gives returning visitors something new every day. But also give it a dedicated page (`/todays-birthdays`) for users who want the full list. This is the best of both worlds: daily freshness on the homepage + a full experience on its own page.
+A component that takes a birth year and determines the user's generation with traits:
+- **Gen Alpha** (2013–present): "Digital natives, tech-fluent, socially aware"
+- **Gen Z** (1997–2012): "Entrepreneurial, diverse, digitally savvy"
+- **Millennial** (1981–1996): "Adaptable, purpose-driven, tech-comfortable"
+- **Gen X** (1965–1980): "Independent, resourceful, work-life balanced"
+- **Baby Boomer** (1946–1964): "Optimistic, competitive, team-oriented"
+- **Silent Generation** (1928–1945): "Disciplined, loyal, traditional"
 
-### New Homepage Structure
+Displays as a shareable badge card with generation name, year range, emoji, and 3-4 personality traits. Includes a "Share your generation" button using Web Share API.
 
-The homepage becomes a **landing hub** that explains the app and links to features, rather than embedding every tool inline.
+**Edit**: `src/pages/AgeCalculatorPage.tsx` — add `<GenerationLabel birthYear={birthDate.getFullYear()} />` after the age breakdown section.
 
-**Layout (top to bottom):**
-1. **Header** (Navigation + AuthNav) -- updated nav with new routes
-2. **Welcome message** (logged-in users only, unchanged)
-3. **Hero Section** -- concise value proposition: "Your Birthday, Decoded" with a short description of what the app offers, plus a primary CTA to the Age Calculator
-4. **Feature Grid** -- 6 feature cards in a responsive grid (2x3 on desktop, 1 column on mobile), each navigating to its dedicated page:
-   - Calculate Your Age (`/age-calculator`) 
-   - Today's Birthdays (`/todays-birthdays`)
-   - Celebrity Match (`/celebrity-birthday`)
-   - Numerology (`/numerology`)
-   - Planetary Age (`/planetary-age`)
-   - Life Expectancy (`/life-expectancy`) -- Premium badge
-5. **Today's Birthdays Preview** -- compact card showing top 4-5 famous people born today with "See All" link (retention hook)
-6. **Also Explore** -- Zodiac, Birthstone as smaller cards (existing pattern)
+## 2. Homepage Content Rewrite
+
+**Rewrite**: `src/pages/Index.tsx`
+
+Replace the current generic hero + card grid with a content-rich landing page that explains each feature with descriptions and CTAs. Structure:
+
+1. **Header** (Nav + AuthNav — unchanged)
+2. **Welcome message** (logged-in users only — unchanged)
+3. **Hero** — "Your Birthday, Decoded" with a 2-line value prop and primary CTA
+4. **"What Can You Do?" section** — 6 content blocks, each with an icon, heading, 2-3 sentence description of the feature, and a CTA button:
+   - **Age Calculator**: "Calculate your exact age in days, hours, minutes, and seconds — updated live in real-time. Find out your generation (Boomer, Millennial, Gen Z…) and share your results." → CTA: "Calculate My Age"
+   - **Celebrity Birthday Match**: "Enter your date of birth and discover which celebrities, scientists, athletes, and world leaders share your birthday. We match your DOB against thousands of verified famous birthdays." → CTA: "Find My Celebrity Twins"
+   - **Zodiac & Birthstone**: "Discover your zodiac sign with detailed personality traits, compatibility insights, and your birth month's gemstone with its meaning and history." → CTA: "Explore My Zodiac"
+   - **Celebrity Birthday Search**: "Search for any celebrity's birthday. Find out when your favorite stars were born — results open via our comprehensive celebrity database." → CTA: "Search Celebrity Birthdays"
+   - **Life Expectancy Report**: "Get a personalized life expectancy estimate based on 15+ factors including smoking, drinking, diabetes, cardiac health, exercise habits, and stress levels. See how many years you could gain by changing habits." → CTA: "Get My Report" (Premium badge)
+   - **What-If Scenarios**: "Already have your report? See the real-time impact of lifestyle changes — quit smoking, exercise more, reduce stress — and watch your projected lifespan increase instantly." → CTA: "Try What-If Scenarios" (Premium badge)
+5. **Secondary tools row** — compact cards for Numerology, Planetary Age, Today's Birthdays (same pattern as current "Also Explore")
+6. **Today's Birthdays Preview** — compact daily retention hook (unchanged)
 7. **Sign Up CTA** (non-authenticated only)
-8. **Testimonials**
-9. **About / EEAT Section** (trimmed down)
+8. **EEAT Trust Section** — brief paragraph about verified algorithms, scientific backing, and content standards
+9. **Testimonials**
 10. **Footer**
 
-### New Dedicated Pages
-- `/age-calculator` -- Move the AgeCalculator component + ShareableCard here. The birth date context persists across pages.
-- `/todays-birthdays` -- Full-page TodaysBirthdays with expanded list, historical events, etc.
-- `/numerology` -- NumerologyLifePath as a standalone page with its own SEO
-- `/planetary-age` -- PlanetaryAge as a standalone page with its own SEO
+**Edit**: `src/components/FeaturePillars.tsx` — rewrite to render the 6 detailed content blocks described above instead of the current icon-only card grid. Each block will be a horizontal card (icon left, content right) on desktop, stacking vertically on mobile.
 
-Each new page will follow the existing page pattern: Navigation + AuthNav header, SEO component, main content, Footer.
-
-### Files
+### Files Changed
 
 | File | Action |
 |------|--------|
-| `src/pages/Index.tsx` | Rewrite as a hub landing page with feature grid |
-| `src/pages/AgeCalculatorPage.tsx` | Create -- dedicated page for age calculator + shareable card |
-| `src/pages/TodaysBirthdaysPage.tsx` | Create -- full today's birthdays page |
-| `src/pages/NumerologyPage.tsx` | Create -- standalone numerology page |
-| `src/pages/PlanetaryAgePage.tsx` | Create -- standalone planetary age page |
-| `src/components/Navigation.tsx` | Update -- add new nav items (Age Calculator, Today's Birthdays, Numerology, Planetary Age) |
-| `src/components/FeaturePillars.tsx` | Rewrite as 6-card feature grid for the homepage |
-| `src/App.tsx` | Add routes for `/age-calculator`, `/todays-birthdays`, `/numerology`, `/planetary-age` |
-
-### Technical Notes
-- `BirthDateContext` already persists the birth date in localStorage, so users who enter their date on one page will see results on all other pages automatically
-- Existing components (`AgeCalculator`, `PlanetaryAge`, `NumerologyLifePath`, `TodaysBirthdays`, `ShareableCard`) are already self-contained and just need a `birthDate` prop -- no refactoring needed, just wrapping in page layouts
-- The homepage will no longer embed calculators directly -- it becomes a clean landing page that routes users to the right tool
+| `src/components/GenerationLabel.tsx` | Create — generation badge with traits and share button |
+| `src/pages/AgeCalculatorPage.tsx` | Edit — add GenerationLabel after age results |
+| `src/pages/Index.tsx` | Rewrite — content-rich landing with feature descriptions and CTAs |
+| `src/components/FeaturePillars.tsx` | Rewrite — detailed feature blocks with descriptions instead of icon-only cards |
 
