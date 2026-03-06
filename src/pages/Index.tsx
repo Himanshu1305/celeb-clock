@@ -12,6 +12,17 @@ import { Crown, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
 
+const floatingEmojis = [
+  { emoji: '🎂', delay: '0s', duration: '4s', left: '5%', size: 'text-3xl' },
+  { emoji: '🎉', delay: '0.5s', duration: '3.5s', left: '15%', size: 'text-2xl' },
+  { emoji: '✨', delay: '1s', duration: '3s', left: '25%', size: 'text-xl' },
+  { emoji: '🥳', delay: '1.5s', duration: '4.5s', left: '40%', size: 'text-3xl' },
+  { emoji: '🎊', delay: '0.8s', duration: '3.8s', left: '55%', size: 'text-2xl' },
+  { emoji: '🎁', delay: '2s', duration: '4.2s', left: '68%', size: 'text-xl' },
+  { emoji: '🌟', delay: '0.3s', duration: '3.2s', left: '78%', size: 'text-2xl' },
+  { emoji: '🎈', delay: '1.2s', duration: '3.6s', left: '88%', size: 'text-3xl' },
+];
+
 const Index = () => {
   const { user, profile, isPremium } = useAuth();
 
@@ -44,39 +55,64 @@ const Index = () => {
           </div>
         )}
 
-        {/* Hero Section */}
-        <section className="text-center space-y-6 pt-8 pb-16 max-w-4xl mx-auto">
-          <div className="space-y-4 animate-fade-in-up">
-            <h1 className="text-5xl md:text-7xl font-bold gradient-text-primary leading-tight">
-              Your Birthday, Decoded
+        {/* Party Hero Section */}
+        <section className="relative text-center pt-8 pb-20 max-w-5xl mx-auto overflow-hidden">
+          {/* Floating emojis */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+            {floatingEmojis.map((item, i) => (
+              <span
+                key={i}
+                className={`absolute top-0 ${item.size} animate-float opacity-60`}
+                style={{
+                  left: item.left,
+                  animationDelay: item.delay,
+                  animationDuration: item.duration,
+                }}
+              >
+                {item.emoji}
+              </span>
+            ))}
+          </div>
+
+          <div className="relative z-10 space-y-6 animate-fade-in-up">
+            <div className="inline-block mb-4">
+              <span className="text-6xl animate-wiggle inline-block">🎉</span>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
+              <span className="party-gradient bg-clip-text text-transparent">
+                Every Day is Someone's Birthday!
+              </span>
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Your age is more than a number. Calculate it to the second, find your celebrity birthday twins, explore your zodiac, and get a personalized life expectancy report — all in one place.
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Your one-stop birthday playground — calculate your exact age to the second, discover which celebrities share your birthday, explore your zodiac, and unlock personalized health insights. Let's celebrate!
             </p>
             <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
-              <Button size="lg" className="gap-2 text-lg px-8 py-6 animate-glow" asChild>
+              <Button size="lg" className="gap-2 text-lg px-8 py-6 animate-shimmer" asChild>
                 <Link to="/age-calculator">
                   🎂 Calculate My Age
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="gap-2 text-lg px-8 py-6" asChild>
+              <Button size="lg" variant="outline" className="gap-2 text-lg px-8 py-6 hover-scale" asChild>
                 <Link to="/todays-birthdays">
-                  🎉 Today's Birthdays
+                  🥳 Today's Birthdays
                 </Link>
               </Button>
             </div>
           </div>
         </section>
 
-        {/* Sign Up Banner for non-authenticated users */}
+        {/* Sign Up Banner */}
         {!user && (
-          <section className="max-w-3xl mx-auto mb-12 animate-fade-in-up">
-            <Card className="glass-card bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 border-primary/30">
+          <section className="max-w-3xl mx-auto mb-12 animate-bounce-in" style={{ animationDelay: '0.2s' }}>
+            <Card className="glass-card card-party-border bg-gradient-to-r from-primary/5 via-accent/5 to-secondary/5">
               <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div>
-                  <h3 className="font-semibold text-lg">Create a free account</h3>
-                  <p className="text-sm text-muted-foreground">Save your results, unlock celebrity matches & get weekly insights</p>
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl">🎁</span>
+                  <div>
+                    <h3 className="font-semibold text-lg text-foreground">Join the Party — It's Free!</h3>
+                    <p className="text-sm text-muted-foreground">Save results, unlock celebrity matches & get weekly birthday insights</p>
+                  </div>
                 </div>
                 <Button asChild className="gap-1 whitespace-nowrap">
                   <Link to="/auth?signup=true">
@@ -95,18 +131,11 @@ const Index = () => {
         {/* Today's Birthdays Preview */}
         <section className="max-w-4xl mx-auto mb-16">
           <TodaysBirthdays />
-          <div className="text-center mt-4">
-            <Button variant="outline" asChild className="gap-2">
-              <Link to="/todays-birthdays">
-                See All Today's Birthdays <ArrowRight className="w-4 h-4" />
-              </Link>
-            </Button>
-          </div>
         </section>
 
         {/* EEAT Trust Section */}
         <section className="max-w-4xl mx-auto mb-16">
-          <Card className="glass-card">
+          <Card className="glass-card card-party-border">
             <CardContent className="p-8 space-y-6">
               <div className="flex items-center justify-center gap-3 mb-2">
                 <ShieldCheck className="w-7 h-7 text-primary" />
