@@ -8,7 +8,7 @@ import { TodaysBirthdays } from '@/components/TodaysBirthdays';
 import { useAuth } from '@/hooks/useAuth';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Crown, ArrowRight } from 'lucide-react';
+import { Crown, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
 
@@ -51,25 +51,16 @@ const Index = () => {
               Your Birthday, Decoded
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Calculate your exact age, discover celebrity birthday twins, explore your numerology, see your age on other planets, and unlock a personalized life expectancy report.
+              Your age is more than a number. Calculate it to the second, find your celebrity birthday twins, explore your zodiac, and get a personalized life expectancy report — all in one place.
             </p>
             <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
-              <Button
-                size="lg"
-                className="gap-2 text-lg px-8 py-6 animate-glow"
-                asChild
-              >
+              <Button size="lg" className="gap-2 text-lg px-8 py-6 animate-glow" asChild>
                 <Link to="/age-calculator">
                   🎂 Calculate My Age
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="gap-2 text-lg px-8 py-6"
-                asChild
-              >
+              <Button size="lg" variant="outline" className="gap-2 text-lg px-8 py-6" asChild>
                 <Link to="/todays-birthdays">
                   🎉 Today's Birthdays
                 </Link>
@@ -98,7 +89,7 @@ const Index = () => {
           </section>
         )}
 
-        {/* Feature Grid */}
+        {/* Feature Content Blocks */}
         <FeaturePillars />
 
         {/* Today's Birthdays Preview */}
@@ -113,22 +104,22 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Testimonials */}
-        <TestimonialsSection />
-
-        {/* About Section */}
+        {/* EEAT Trust Section */}
         <section className="max-w-4xl mx-auto mb-16">
           <Card className="glass-card">
             <CardContent className="p-8 space-y-6">
-              <h2 className="text-3xl font-bold gradient-text-primary text-center mb-6">
-                Know Yourself Better
-              </h2>
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <ShieldCheck className="w-7 h-7 text-primary" />
+                <h2 className="text-3xl font-bold gradient-text-primary">
+                  Built on Trust & Accuracy
+                </h2>
+              </div>
               <div className="prose prose-lg max-w-none text-foreground space-y-4">
                 <p>
-                  Your age is more than a number — it's your journey through moments, experiences, and milestones. Our suite of free tools helps you explore your birthday from every angle: precise age calculations, celebrity matches, numerology insights, and even your age on other planets.
+                  Every calculator and report on this platform is built with verified algorithms, cross-referenced data sources, and scientific methodology. Our life expectancy model draws from peer-reviewed health research covering smoking, alcohol, diabetes, cardiac health, BMI, exercise, and stress factors.
                 </p>
                 <p>
-                  Built with verified algorithms and tested for accuracy, our calculators follow the principles of EEAT (Experience, Expertise, Authoritativeness, and Trustworthiness) to ensure every result you see is precise and trustworthy.
+                  Celebrity birthday data is sourced from verified public records and continuously updated. Our content follows <strong>E-E-A-T principles</strong> (Experience, Expertise, Authoritativeness, and Trustworthiness) to ensure every result you see is precise, transparent, and trustworthy.
                 </p>
                 <p className="text-center pt-4 text-muted-foreground">
                   📧 Have feedback? Reach us at <a href="/contact" className="text-primary hover:underline">our contact page</a>
@@ -137,6 +128,9 @@ const Index = () => {
             </CardContent>
           </Card>
         </section>
+
+        {/* Testimonials */}
+        <TestimonialsSection />
       </div>
       <Footer />
     </div>
