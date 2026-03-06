@@ -1,52 +1,62 @@
 
 
-## 1. Generation Label for Age Calculator (New Component)
+## Plan: Fun Homepage Redesign + Celebrity Images in Today's Birthdays
 
-**New file**: `src/components/GenerationLabel.tsx`
+### 1. Homepage Overhaul — Make It Fun & Engaging
 
-A component that takes a birth year and determines the user's generation with traits:
-- **Gen Alpha** (2013–present): "Digital natives, tech-fluent, socially aware"
-- **Gen Z** (1997–2012): "Entrepreneurial, diverse, digitally savvy"
-- **Millennial** (1981–1996): "Adaptable, purpose-driven, tech-comfortable"
-- **Gen X** (1965–1980): "Independent, resourceful, work-life balanced"
-- **Baby Boomer** (1946–1964): "Optimistic, competitive, team-oriented"
-- **Silent Generation** (1928–1945): "Disciplined, loyal, traditional"
+**File: `src/pages/Index.tsx`** — Full rewrite
 
-Displays as a shareable badge card with generation name, year range, emoji, and 3-4 personality traits. Includes a "Share your generation" button using Web Share API.
+Remove the "Your Birthday, Decoded" hero section entirely. Replace with a vibrant, party-themed landing page:
 
-**Edit**: `src/pages/AgeCalculatorPage.tsx` — add `<GenerationLabel birthYear={birthDate.getFullYear()} />` after the age breakdown section.
+- **Animated hero** with floating emoji decorations (🎂🎉🎊✨🥳) using CSS `animate-float` with staggered delays, plus a gradient-animated headline like "Welcome to the Birthday Party!" or "Every Day is Someone's Birthday"
+- **Confetti/sparkle CSS keyframes** added to `src/index.css` — floating particles and a shimmer effect on key elements
+- **6 Feature showcase cards** in a 2x3 grid (mobile: 1 col), each with:
+  - A large fun emoji or icon
+  - Bold title + 2-3 sentence description of the feature
+  - Hover animation (scale + glow)
+  - CTA button linking to the tool page
+  - The 6 features: Age Calculator (real-time seconds), Celebrity Match, Zodiac & Birthstone, Celebrity Search, Life Expectancy, What-If Scenarios
+- **Secondary tools row** — Numerology, Planetary Age, Today's Birthdays as smaller animated cards
+- **Today's Birthdays Preview** with celebrity images (see below)
+- Sign-up CTA, EEAT section, Testimonials remain but get subtle party-themed styling
 
-## 2. Homepage Content Rewrite
+**File: `src/components/FeaturePillars.tsx`** — Rewrite with fun card design: gradient borders, hover glow effects, larger icons, playful descriptions
 
-**Rewrite**: `src/pages/Index.tsx`
+**File: `src/index.css`** — Add new keyframes:
+- `sparkle` — rotating twinkle effect
+- `confetti-fall` — particles drifting down
+- `gradient-shift` — animated gradient background for hero
+- `bounce-in` — bouncy entrance for cards with staggered delays
 
-Replace the current generic hero + card grid with a content-rich landing page that explains each feature with descriptions and CTAs. Structure:
+### 2. Celebrity Images in TodaysBirthdays
 
-1. **Header** (Nav + AuthNav — unchanged)
-2. **Welcome message** (logged-in users only — unchanged)
-3. **Hero** — "Your Birthday, Decoded" with a 2-line value prop and primary CTA
-4. **"What Can You Do?" section** — 6 content blocks, each with an icon, heading, 2-3 sentence description of the feature, and a CTA button:
-   - **Age Calculator**: "Calculate your exact age in days, hours, minutes, and seconds — updated live in real-time. Find out your generation (Boomer, Millennial, Gen Z…) and share your results." → CTA: "Calculate My Age"
-   - **Celebrity Birthday Match**: "Enter your date of birth and discover which celebrities, scientists, athletes, and world leaders share your birthday. We match your DOB against thousands of verified famous birthdays." → CTA: "Find My Celebrity Twins"
-   - **Zodiac & Birthstone**: "Discover your zodiac sign with detailed personality traits, compatibility insights, and your birth month's gemstone with its meaning and history." → CTA: "Explore My Zodiac"
-   - **Celebrity Birthday Search**: "Search for any celebrity's birthday. Find out when your favorite stars were born — results open via our comprehensive celebrity database." → CTA: "Search Celebrity Birthdays"
-   - **Life Expectancy Report**: "Get a personalized life expectancy estimate based on 15+ factors including smoking, drinking, diabetes, cardiac health, exercise habits, and stress levels. See how many years you could gain by changing habits." → CTA: "Get My Report" (Premium badge)
-   - **What-If Scenarios**: "Already have your report? See the real-time impact of lifestyle changes — quit smoking, exercise more, reduce stress — and watch your projected lifespan increase instantly." → CTA: "Try What-If Scenarios" (Premium badge)
-5. **Secondary tools row** — compact cards for Numerology, Planetary Age, Today's Birthdays (same pattern as current "Also Explore")
-6. **Today's Birthdays Preview** — compact daily retention hook (unchanged)
-7. **Sign Up CTA** (non-authenticated only)
-8. **EEAT Trust Section** — brief paragraph about verified algorithms, scientific backing, and content standards
-9. **Testimonials**
-10. **Footer**
+**File: `src/components/TodaysBirthdays.tsx`** — Major update
 
-**Edit**: `src/components/FeaturePillars.tsx` — rewrite to render the 6 detailed content blocks described above instead of the current icon-only card grid. Each block will be a horizontal card (icon left, content right) on desktop, stacking vertically on mobile.
+The birthday data has `wikipediaUrl` but no `image` field. Solution: Use the **Wikipedia API** to fetch thumbnail images dynamically.
+
+- Extract the Wikipedia page title from the `wikipediaUrl` field (e.g., `Justin_Bieber` from `https://en.wikipedia.org/wiki/Justin_Bieber`)
+- Call `https://en.wikipedia.org/w/api.php?action=query&titles=TITLE&prop=pageimages&pithumbsize=100&format=json&origin=*` to get thumbnails
+- Cache results in component state (one batch request for all people)
+- Display circular avatar images next to each person's name using the existing `Avatar` component
+- Fallback to the category icon initials if no image is found
+- Make each person card clickable — opens the `CelebrityProfileDialog` or navigates to their Wikipedia page
+
+**Changes:**
+- Add a `useEffect` that fetches Wikipedia thumbnails for all displayed people on mount
+- Replace the plain icon circle with `<Avatar>` showing the fetched image
+- Wrap each person card in a link/button that opens the celebrity detail or Wikipedia URL
+- Show profession, birth year under the name
+
+### 3. Today's Birthdays on Homepage — Enhanced Preview
+
+The `TodaysBirthdays` component used on the homepage will automatically get the image treatment since we're updating the shared component.
 
 ### Files Changed
 
 | File | Action |
 |------|--------|
-| `src/components/GenerationLabel.tsx` | Create — generation badge with traits and share button |
-| `src/pages/AgeCalculatorPage.tsx` | Edit — add GenerationLabel after age results |
-| `src/pages/Index.tsx` | Rewrite — content-rich landing with feature descriptions and CTAs |
-| `src/components/FeaturePillars.tsx` | Rewrite — detailed feature blocks with descriptions instead of icon-only cards |
+| `src/pages/Index.tsx` | Rewrite — fun party-themed landing with floating emojis, animated cards |
+| `src/components/FeaturePillars.tsx` | Rewrite — playful feature cards with hover effects and gradient borders |
+| `src/components/TodaysBirthdays.tsx` | Update — fetch & display Wikipedia celebrity images, clickable cards |
+| `src/index.css` | Add — sparkle, confetti, gradient-shift, bounce-in keyframes |
 
