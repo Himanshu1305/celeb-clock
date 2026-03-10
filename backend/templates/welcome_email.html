@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Celeb Clock!</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      color: #1e40af;
+      margin: 0;
+      font-size: 28px;
+    }
+    .subtitle {
+      color: #6b7280;
+      font-size: 16px;
+    }
+    .content {
+      margin: 30px 0;
+    }
+    .feature-list {
+      background: #f0f9ff;
+      border-radius: 12px;
+      padding: 20px 30px;
+      margin: 20px 0;
+    }
+    .feature-list li {
+      margin: 10px 0;
+      color: #1e40af;
+    }
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #1e40af 0%, #0891b2 100%);
+      color: white;
+      text-decoration: none;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 18px;
+      margin: 20px 0;
+    }
+    .cta-container {
+      text-align: center;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    .social-links {
+      margin: 15px 0;
+    }
+    .social-links a {
+      margin: 0 10px;
+      color: #1e40af;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🎂</div>
+      <h1>Welcome to Celeb Clock!</h1>
+      <p class="subtitle">Your birthday has never been more interesting</p>
+    </div>
+    
+    <div class="content">
+      <p>Hi {{name}},</p>
+      
+      <p>Welcome to the Celeb Clock community! We're thrilled to have you on board. Get ready to discover fascinating things about your birthday that you've never known before.</p>
+      
+      <div class="feature-list">
+        <strong>Here's what you can explore:</strong>
+        <ul>
+          <li>Find your celebrity birthday twin from 50,000+ famous people</li>
+          <li>See your exact age in years, days, hours, and seconds</li>
+          <li>Discover your zodiac sign, numerology, and birthstone</li>
+          <li>Calculate your age on other planets</li>
+          <li>Read expert articles about your birth month</li>
+        </ul>
+      </div>
+      
+      <div class="cta-container">
+        <a href="{{site_url}}" class="cta-button">Explore Your Birthday Now →</a>
+      </div>
+      
+      <p>Have questions? Just reply to this email – we love hearing from our users!</p>
+      
+      <p>Happy birthday exploring! 🎉</p>
+      
+      <p>— The Celeb Clock Team</p>
+    </div>
+    
+    <div class="footer">
+      <div class="social-links">
+        <a href="#">Twitter</a> |
+        <a href="#">Facebook</a> |
+        <a href="#">Instagram</a>
+      </div>
+      <p>© 2024 Celeb Clock. All rights reserved.</p>
+      <p>
+        <a href="{{unsubscribe_url}}" style="color: #9ca3af;">Unsubscribe</a> |
+        <a href="{{privacy_url}}" style="color: #9ca3af;">Privacy Policy</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

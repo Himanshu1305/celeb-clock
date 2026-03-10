@@ -8,6 +8,7 @@ import { BirthDateProvider } from "@/context/BirthDateContext";
 import { AnalyticsProvider } from "@/hooks/useAnalytics";
 import { CookieConsent } from "@/components/CookieConsent";
 import Index from "./pages/Index";
+import BirthdayResults from "./pages/BirthdayResults";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
@@ -44,6 +45,7 @@ const App = () => (
             <AnalyticsProvider>
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/results" element={<BirthdayResults />} />
                 <Route path="/age-calculator" element={<AgeCalculatorPage />} />
                 <Route path="/todays-birthdays" element={<TodaysBirthdaysPage />} />
                 <Route path="/numerology" element={<NumerologyPage />} />

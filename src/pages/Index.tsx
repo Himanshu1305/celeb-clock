@@ -40,7 +40,7 @@ const Index = () => {
       const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
       if (!isNaN(date.getTime())) {
         setBirthDate(date);
-        navigate('/celebrity-birthday');
+        navigate('/results');
       }
     }
   };
@@ -101,18 +101,18 @@ const Index = () => {
             {/* Main Headline */}
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
-                <span className="text-foreground">You share a birthday with</span>
+                <span className="text-foreground">You're </span>
+                <span className="party-gradient bg-clip-text text-transparent">897 million seconds</span>
+                <span className="text-foreground"> old.</span>
                 <br />
-                <span className="party-gradient bg-clip-text text-transparent">
-                  someone famous.
-                </span>
+                <span className="text-muted-foreground text-3xl md:text-4xl lg:text-5xl">And someone famous shares your birthday.</span>
               </h1>
               
               {/* Subheadline with value stacking */}
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                Discover your <strong className="text-foreground">celebrity twin</strong>, your exact age in{' '}
-                <strong className="text-foreground">897 million seconds</strong>, your life path number, and{' '}
-                <strong className="text-primary">42 other things</strong> you've never been told about your birthday.
+                Enter your birthday to see your <strong className="text-foreground">exact age</strong> updating live,
+                find your <strong className="text-foreground">celebrity twin</strong>, and unlock{' '}
+                <strong className="text-primary">42 other things</strong> you've never been told.
               </p>
             </div>
 
@@ -175,8 +175,8 @@ const Index = () => {
                       disabled={!isFormValid}
                       data-testid="hero-cta-button"
                     >
-                      <Star className="w-5 h-5" />
-                      Find My Celebrity Twin
+                      <Sparkles className="w-5 h-5" />
+                      Reveal Everything
                       <ArrowRight className="w-5 h-5" />
                     </Button>
                   </div>

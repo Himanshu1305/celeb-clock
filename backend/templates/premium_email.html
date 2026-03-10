@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Celeb Clock Premium!</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #1a1a2e;
+    }
+    .container {
+      background: linear-gradient(145deg, #16213e 0%, #1a1a2e 100%);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      border: 1px solid #fbbf24;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+    .crown {
+      font-size: 32px;
+    }
+    h1 {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0;
+      font-size: 32px;
+    }
+    .subtitle {
+      color: #9ca3af;
+      font-size: 16px;
+    }
+    .content {
+      margin: 30px 0;
+      color: #e5e7eb;
+    }
+    .content p {
+      color: #e5e7eb;
+    }
+    .premium-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #1a1a2e;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 25px 0;
+    }
+    .feature-card {
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .feature-title {
+      color: #fbbf24;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .feature-desc {
+      color: #9ca3af;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #1a1a2e;
+      text-decoration: none;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 18px;
+      margin: 20px 0;
+    }
+    .cta-container {
+      text-align: center;
+    }
+    .receipt-box {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 25px 0;
+    }
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      color: #e5e7eb;
+    }
+    .receipt-row:last-child {
+      border-bottom: none;
+      font-weight: bold;
+      color: #fbbf24;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: #6b7280;
+      font-size: 14px;
+    }
+    .footer a {
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🎂</div>
+      <span class="crown">👑</span>
+      <h1>Welcome to Premium!</h1>
+      <p class="subtitle">You've unlocked the full Celeb Clock experience</p>
+    </div>
+    
+    <div class="content">
+      <p>Hi {{name}},</p>
+      
+      <p>Thank you for upgrading to <span class="premium-badge">👑 Premium</span>! You now have access to our most powerful features.</p>
+      
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">❤️</div>
+          <div class="feature-title">Life Expectancy</div>
+          <div class="feature-desc">Personalized health predictions</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔮</div>
+          <div class="feature-title">What-If Scenarios</div>
+          <div class="feature-desc">See how choices affect your life</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Advanced Reports</div>
+          <div class="feature-desc">Detailed birthday analysis</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Priority Support</div>
+          <div class="feature-desc">Get help when you need it</div>
+        </div>
+      </div>
+      
+      <div class="receipt-box">
+        <div style="font-weight: bold; color: #fbbf24; margin-bottom: 15px;">Your Receipt</div>
+        <div class="receipt-row">
+          <span>Plan</span>
+          <span>Premium Monthly</span>
+        </div>
+        <div class="receipt-row">
+          <span>Date</span>
+          <span>{{purchase_date}}</span>
+        </div>
+        <div class="receipt-row">
+          <span>Amount</span>
+          <span>{{amount}}</span>
+        </div>
+      </div>
+      
+      <div class="cta-container">
+        <a href="{{site_url}}/life-expectancy" class="cta-button">Try Life Expectancy Now →</a>
+      </div>
+      
+      <p>Questions about your premium membership? Reply to this email anytime.</p>
+      
+      <p>Enjoy your premium experience! ✨</p>
+      
+      <p>— The Celeb Clock Team</p>
+    </div>
+    
+    <div class="footer">
+      <p>© 2024 Celeb Clock Premium. All rights reserved.</p>
+      <p>
+        <a href="{{manage_subscription_url}}">Manage Subscription</a> |
+        <a href="{{privacy_url}}">Privacy Policy</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
