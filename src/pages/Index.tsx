@@ -4,8 +4,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { TestimonialsSection } from '@/components/TestimonialsSection';
-import { FeaturePillars } from '@/components/FeaturePillars';
-import { TodaysBirthdays } from '@/components/TodaysBirthdays';
+import { BentoGrid } from '@/components/BentoGrid';
 import { useAuth } from '@/hooks/useAuth';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { Badge } from '@/components/ui/badge';
@@ -235,13 +234,8 @@ const Index = () => {
           </section>
         )}
 
-        {/* Feature Content Blocks */}
-        <FeaturePillars />
-
-        {/* Today's Birthdays Preview */}
-        <section className="max-w-4xl mx-auto mb-16">
-          <TodaysBirthdays />
-        </section>
+        {/* Bento Grid Features */}
+        <BentoGrid />
 
         {/* EEAT Trust Section */}
         <section className="max-w-4xl mx-auto mb-16">
