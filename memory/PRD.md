@@ -23,17 +23,26 @@ Celeb Clock is a birthday-focused web application that helps users discover insi
 - **Primary CTA:** "Reveal Everything →" navigates to /results
 - **Trust Indicators:** 50,000+ celebrities, 42+ insights, 100% free
 
-#### 2. Combined Results Page (/results) (NEW)
+#### 2. Combined Results Page (/results) (NEW - ENHANCED)
 - **Live Age Counter:** Years, Months, Days, Hours updating every second
 - **Total Seconds Alive:** Large counter updating in real-time
 - **Additional Stats:** Total Days, Total Hours, Total Minutes, Heartbeats
-- **Quick Facts:** Generation (Millennial/Gen Z/etc), Zodiac Sign, Life Path Number
-- **Celebrity Matches:** Integrated WikiBirthdayMatches component
+- **Quick Facts Row (5 items):** Generation, Zodiac, Life Path Number, Birthstone, Mars Age
+- **Celebrity Matches (6+ cards):** Enhanced card design with:
+  - Profile photos with gradient avatar fallback
+  - Top Match badge for #1 celebrity
+  - Category badges (Actor, Musician, Athlete, etc.)
+  - Age and birth year display
+  - Wikipedia link for each celebrity
+- **Planetary Ages Section:** Full solar system breakdown (Mercury to Saturn)
 - **Zodiac Details:** Integrated ZodiacAndFacts component
-- **Shareable Card:** Spotify Wrapped-style birthday card with:
-  - Preview card with gradient design
-  - Twitter/Facebook share buttons
-  - Copy link functionality
+- **Enhanced Shareable Card (Spotify Wrapped style):**
+  - Dark gradient design
+  - Age in years and days
+  - 4 quick facts (Zodiac, Generation, Life Path, Birthstone)
+  - Planetary ages (Earth, Mars, Jupiter)
+  - Celebrity birthday twin name
+  - Twitter/Facebook/Copy Link share buttons
   - Download as PNG (using html2canvas)
 
 #### 3. Animated Bento Grid (NEW)
