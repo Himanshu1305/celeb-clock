@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles, Star, Calendar } from 'lucide-react';
+import { Sparkles, Star, Calendar, Hash } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface Props {
@@ -151,6 +151,32 @@ const getZodiacSign = (month: number, day: number): string => {
   return 'Pisces';
 };
 
+// Calculate Life Path Number for numerology
+const calculateLifePath = (date: Date): { number: number; name: string; meaning: string } => {
+  const dateStr = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
+  let sum = dateStr.split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
+    sum = sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+  }
+  
+  const lifePathMeanings: Record<number, { name: string; meaning: string }> = {
+    1: { name: 'The Leader', meaning: 'Independent, ambitious, and pioneering spirit' },
+    2: { name: 'The Diplomat', meaning: 'Cooperative, sensitive, and harmonious' },
+    3: { name: 'The Communicator', meaning: 'Creative, expressive, and joyful' },
+    4: { name: 'The Builder', meaning: 'Practical, hardworking, and trustworthy' },
+    5: { name: 'The Freedom Seeker', meaning: 'Adventurous, dynamic, and versatile' },
+    6: { name: 'The Nurturer', meaning: 'Caring, responsible, and family-oriented' },
+    7: { name: 'The Seeker', meaning: 'Analytical, spiritual, and introspective' },
+    8: { name: 'The Achiever', meaning: 'Ambitious, authoritative, and successful' },
+    9: { name: 'The Humanitarian', meaning: 'Compassionate, generous, and idealistic' },
+    11: { name: 'The Intuitive', meaning: 'Visionary, intuitive, and spiritually aware' },
+    22: { name: 'The Master Builder', meaning: 'Powerful, capable of great achievements' },
+    33: { name: 'The Master Teacher', meaning: 'Selfless, spiritually uplifting, inspiring' },
+  };
+  
+  return { number: sum, ...lifePathMeanings[sum] || lifePathMeanings[sum % 9 || 9] };
+};
+
 export const ZodiacAndFacts = ({ birthDate }: Props) => {
   if (!birthDate) return null;
 
@@ -160,6 +186,7 @@ export const ZodiacAndFacts = ({ birthDate }: Props) => {
   
   const zodiacSign = getZodiacSign(month, day);
   const birthstone = birthstones[month as keyof typeof birthstones];
+  const lifePath = calculateLifePath(birthDate);
   
   // Get historical events for birth month
   const monthEvents = historicalEventsByMonth[month as keyof typeof historicalEventsByMonth] || [];
@@ -170,56 +197,78 @@ export const ZodiacAndFacts = ({ birthDate }: Props) => {
   ];
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      {/* Zodiac Sign - Clickable Link */}
-      <Link to="/zodiac" className="block group">
-        <Card className="backdrop-blur-sm bg-background/80 border-accent/30 hover:border-accent/50 hover:shadow-lg transition-all h-full">
-          <CardHeader className="text-center">
-            <div className="text-4xl mb-2">{zodiacSigns[zodiacSign as keyof typeof zodiacSigns].emoji}</div>
-            <CardTitle className="flex items-center justify-center gap-2 group-hover:text-accent transition-colors">
-              <Star className="w-5 h-5 text-accent" />
-              You're a {zodiacSign}!
-            </CardTitle>
-            <CardDescription>
-              {zodiacSigns[zodiacSign as keyof typeof zodiacSigns].dates}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center space-y-3">
-            <Badge variant="secondary" className="bg-accent/20 text-accent">
-              {zodiacSigns[zodiacSign as keyof typeof zodiacSigns].traits}
-            </Badge>
-            <p className="text-xs text-muted-foreground mt-2">Click to learn more about your zodiac sign →</p>
-          </CardContent>
-        </Card>
-      </Link>
+    <div className="space-y-6">
+      {/* Three Cards Row: Zodiac, Birthstone, Numerology */}
+      <div className="grid gap-4 md:grid-cols-3">
+        {/* Zodiac Sign - Clickable Link */}
+        <Link to="/zodiac" className="block group">
+          <Card className="backdrop-blur-sm bg-background/80 border-accent/30 hover:border-accent/50 hover:shadow-lg transition-all h-full">
+            <CardHeader className="text-center pb-2">
+              <div className="text-4xl mb-2">{zodiacSigns[zodiacSign as keyof typeof zodiacSigns].emoji}</div>
+              <CardTitle className="flex items-center justify-center gap-2 group-hover:text-accent transition-colors text-lg">
+                <Star className="w-4 h-4 text-accent" />
+                {zodiacSign}
+              </CardTitle>
+              <CardDescription className="text-xs">
+                {zodiacSigns[zodiacSign as keyof typeof zodiacSigns].dates}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-center space-y-2 pt-0">
+              <Badge variant="secondary" className="bg-accent/20 text-accent text-xs">
+                {zodiacSigns[zodiacSign as keyof typeof zodiacSigns].traits}
+              </Badge>
+              <p className="text-xs text-muted-foreground">Click to learn more →</p>
+            </CardContent>
+          </Card>
+        </Link>
 
-      {/* Birthstone - Clickable Link */}
-      <Link to="/birthstone" className="block group">
-        <Card className="backdrop-blur-sm bg-background/80 border-primary/30 hover:border-primary/50 hover:shadow-lg transition-all h-full">
-          <CardHeader className="text-center">
-            <div className="text-4xl mb-2">💎</div>
-            <CardTitle className="flex items-center justify-center gap-2 group-hover:text-primary transition-colors">
-              <Sparkles className="w-5 h-5 text-primary" />
-              Your Birthstone
-            </CardTitle>
-            <CardDescription>
-              {birthstone.name}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center space-y-3">
-            <div className="text-sm text-muted-foreground">
-              Color: {birthstone.color}
-            </div>
-            <Badge variant="secondary" className="bg-primary/20 text-primary">
-              {birthstone.meaning}
-            </Badge>
-            <p className="text-xs text-muted-foreground mt-2">Click to discover more about your birthstone →</p>
-          </CardContent>
-        </Card>
-      </Link>
+        {/* Birthstone - Clickable Link */}
+        <Link to="/birthstone" className="block group">
+          <Card className="backdrop-blur-sm bg-background/80 border-primary/30 hover:border-primary/50 hover:shadow-lg transition-all h-full">
+            <CardHeader className="text-center pb-2">
+              <div className="text-4xl mb-2">💎</div>
+              <CardTitle className="flex items-center justify-center gap-2 group-hover:text-primary transition-colors text-lg">
+                <Sparkles className="w-4 h-4 text-primary" />
+                {birthstone.name}
+              </CardTitle>
+              <CardDescription className="text-xs">
+                {birthstone.color}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-center space-y-2 pt-0">
+              <Badge variant="secondary" className="bg-primary/20 text-primary text-xs">
+                {birthstone.meaning}
+              </Badge>
+              <p className="text-xs text-muted-foreground">Click to learn more →</p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        {/* Numerology - Clickable Link */}
+        <Link to="/numerology" className="block group">
+          <Card className="backdrop-blur-sm bg-background/80 border-violet-500/30 hover:border-violet-500/50 hover:shadow-lg transition-all h-full">
+            <CardHeader className="text-center pb-2">
+              <div className="text-4xl mb-2 font-bold text-violet-500">{lifePath.number}</div>
+              <CardTitle className="flex items-center justify-center gap-2 group-hover:text-violet-500 transition-colors text-lg">
+                <Hash className="w-4 h-4 text-violet-500" />
+                Life Path {lifePath.number}
+              </CardTitle>
+              <CardDescription className="text-xs">
+                {lifePath.name}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-center space-y-2 pt-0">
+              <Badge variant="secondary" className="bg-violet-500/20 text-violet-600 text-xs">
+                {lifePath.meaning}
+              </Badge>
+              <p className="text-xs text-muted-foreground">Click to learn more →</p>
+            </CardContent>
+          </Card>
+        </Link>
+      </div>
 
       {/* Fun Facts for Birth Month - With Wikipedia Links */}
-      <Card className="backdrop-blur-sm bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/30 md:col-span-2 shadow-lg">
+      <Card className="backdrop-blur-sm bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/30 shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="flex items-center justify-center gap-2 text-lg">
             <Calendar className="w-6 h-6 text-secondary" />

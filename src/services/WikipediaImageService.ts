@@ -54,8 +54,8 @@ export const fetchWikipediaImage = async (name: string): Promise<string | null> 
       return null;
     }
 
-    // Fetch the page image (thumbnail)
-    const imageUrl = `${WIKIPEDIA_API}?action=query&format=json&origin=*&titles=${encodeURIComponent(pageTitle)}&prop=pageimages&pithumbsize=200&pilicense=any`;
+    // Fetch the page image (thumbnail) - using 500px for higher resolution
+    const imageUrl = `${WIKIPEDIA_API}?action=query&format=json&origin=*&titles=${encodeURIComponent(pageTitle)}&prop=pageimages&pithumbsize=500&pilicense=any`;
     const imageResponse = await fetch(imageUrl);
     const imageData = await imageResponse.json();
     

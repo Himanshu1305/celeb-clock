@@ -90,6 +90,11 @@ export const juneBirthdays: BirthdayDatabase = {
       { name: 'Jacques Cousteau', birthDate: '1910-06-11', profession: 'Explorer & Filmmaker', category: 'scientist', description: 'Pioneer of marine conservation and underwater exploration', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jacques_Cousteau' },
       { name: 'Shia LaBeouf', birthDate: '1986-06-11', profession: 'Actor', category: 'celebrity', description: 'Star of Transformers and Honey Boy', wikipediaUrl: 'https://en.wikipedia.org/wiki/Shia_LaBeouf' },
       { name: 'Peter Dinklage', birthDate: '1969-06-11', profession: 'Actor', category: 'celebrity', description: 'Emmy-winning star of Game of Thrones', wikipediaUrl: 'https://en.wikipedia.org/wiki/Peter_Dinklage' },
+      { name: 'Joe Montana', birthDate: '1956-06-11', profession: 'Football Player', category: 'athlete', description: 'Hall of Fame NFL quarterback, 4-time Super Bowl champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Joe_Montana' },
+      { name: 'Hugh Laurie', birthDate: '1959-06-11', profession: 'Actor & Musician', category: 'celebrity', description: 'Star of House M.D. and Blackadder', wikipediaUrl: 'https://en.wikipedia.org/wiki/Hugh_Laurie' },
+      { name: 'Adrienne Bailon', birthDate: '1983-06-11', profession: 'Singer & TV Host', category: 'celebrity', description: 'Former Cheetah Girls member and The Real co-host', wikipediaUrl: 'https://en.wikipedia.org/wiki/Adrienne_Bailon' },
+      { name: 'Joshua Jackson', birthDate: '1978-06-11', profession: 'Actor', category: 'celebrity', description: 'Star of Dawsons Creek and Fringe', wikipediaUrl: 'https://en.wikipedia.org/wiki/Joshua_Jackson' },
+      { name: 'Gene Wilder', birthDate: '1933-06-11', profession: 'Actor & Filmmaker', category: 'celebrity', description: 'Star of Willy Wonka and Young Frankenstein', wikipediaUrl: 'https://en.wikipedia.org/wiki/Gene_Wilder' },
     ],
     events: []
   },

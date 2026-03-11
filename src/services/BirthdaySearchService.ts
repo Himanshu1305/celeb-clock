@@ -148,7 +148,7 @@ export const queryWikidata = async (
       SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . }
     }
     ORDER BY DESC(?birthDate)
-    LIMIT 30
+    LIMIT 50
   `;
 
   const controller = new AbortController();
@@ -200,16 +200,18 @@ export const queryWikidata = async (
 };
 
 // Main search – single attempt per phase, with abort support
+// Now always tries to get at least 6 celebrities
 export const searchBirthdayMatches = async (
   date: Date,
   onProgress?: (status: string, phase: SearchPhase) => void,
   signal?: AbortSignal
 ): Promise<BirthdaySearchResult> => {
   const searchedDate = date;
+  const MIN_CELEBRITIES = 6;
 
   // Check cache first
   const cached = getCachedResult(date);
-  if (cached) {
+  if (cached && cached.people.length >= MIN_CELEBRITIES) {
     onProgress?.('Found cached results!', 'done');
     return cached;
   }
@@ -218,7 +220,8 @@ export const searchBirthdayMatches = async (
   onProgress?.('Searching our celebrity database...', 'local');
   const localResults = searchLocalDatabase(date);
 
-  if (localResults.people.length > 0) {
+  // If we have enough local results, return them
+  if (localResults.people.length >= MIN_CELEBRITIES) {
     onProgress?.('Found matches in our database!', 'done');
     const result: BirthdaySearchResult = {
       people: localResults.people,
@@ -232,19 +235,30 @@ export const searchBirthdayMatches = async (
 
   // Bail if aborted
   if (signal?.aborted) {
-    return { people: [], events: [], source: 'local', searchedDate };
+    return { people: localResults.people, events: localResults.events, source: 'local', searchedDate };
   }
 
-  // Phase 2: Wikidata – single attempt, 8s timeout
-  onProgress?.('No local matches found. Searching Wikipedia...', 'wikipedia');
-  const apiResults = await queryWikidata(date, 8000, signal);
+  // Phase 2: Wikidata – try to supplement local results (increased timeout to 15s)
+  onProgress?.('Searching Wikipedia for more matches...', 'wikipedia');
+  const apiResults = await queryWikidata(date, 15000, signal);
 
-  if (apiResults.people.length > 0) {
-    onProgress?.('Found matches from Wikipedia!', 'done');
+  // Combine local and API results, removing duplicates
+  const combinedPeople = [...localResults.people];
+  const existingNames = new Set(combinedPeople.map(p => p.name.toLowerCase()));
+  
+  for (const person of apiResults.people) {
+    if (!existingNames.has(person.name.toLowerCase())) {
+      combinedPeople.push(person);
+      existingNames.add(person.name.toLowerCase());
+    }
+  }
+
+  if (combinedPeople.length > 0) {
+    onProgress?.('Found matches!', 'done');
     const result: BirthdaySearchResult = {
-      people: apiResults.people,
-      events: apiResults.events,
-      source: 'api',
+      people: combinedPeople,
+      events: [...localResults.events, ...apiResults.events],
+      source: combinedPeople.length === localResults.people.length ? 'local' : 'api',
       searchedDate
     };
     setCachedResult(date, result);
