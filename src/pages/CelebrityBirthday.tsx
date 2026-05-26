@@ -41,8 +41,6 @@ const CelebrityBirthday = () => {
 
   return (
     <div className="min-h-screen bg-gradient-cosmic">
-      <div className="container mx-auto px-4 py-8">
-    <div className="min-h-screen bg-gradient-cosmic">
       <SEO
         title="Best Celebrity Birthday Match — Who Shares Your Birthday?"
         description="The best free celebrity birthday match tool. Discover which famous celebrities, actors, athletes, scientists, and world leaders share your exact birth date."
