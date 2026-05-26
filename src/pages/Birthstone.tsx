@@ -246,6 +246,10 @@ export default function Birthstone() {
             </CardContent>
           </Card>
         </div>
+
+        <PageFAQ slug="birthstone" title="Birthstone FAQs" />
+        <RelatedTools currentSlug="birthstone" />
+        <AuthorBio />
       </div>
       <Footer />
     </div>
