@@ -39,31 +39,15 @@ export const Footer = () => {
           <div>
             <h3 className="font-heading font-semibold text-foreground mb-3">Quick Links</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link to="/about" className="text-muted-foreground hover:text-accent transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/blog" className="text-muted-foreground hover:text-accent transition-colors">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link to="/zodiac" className="text-muted-foreground hover:text-accent transition-colors">
-                  Zodiac Signs
-                </Link>
-              </li>
-              <li>
-                <Link to="/birthstone" className="text-muted-foreground hover:text-accent transition-colors">
-                  Birthstones
-                </Link>
-              </li>
-              <li>
-                <Link to="/upgrade" className="text-muted-foreground hover:text-accent transition-colors">
-                  Upgrade to Premium
-                </Link>
-              </li>
+              <li><Link to="/age-calculator" className="text-muted-foreground hover:text-accent transition-colors">Best Age Calculator</Link></li>
+              <li><Link to="/life-expectancy" className="text-muted-foreground hover:text-accent transition-colors">Best Life Expectancy Calculator</Link></li>
+              <li><Link to="/celebrity-birthday" className="text-muted-foreground hover:text-accent transition-colors">Best Celebrity Birthday Match</Link></li>
+              <li><Link to="/numerology" className="text-muted-foreground hover:text-accent transition-colors">Best Numerology Calculator</Link></li>
+              <li><Link to="/zodiac" className="text-muted-foreground hover:text-accent transition-colors">Best Zodiac Sign Calculator</Link></li>
+              <li><Link to="/birthstone" className="text-muted-foreground hover:text-accent transition-colors">Best Birthstone Finder</Link></li>
+              <li><Link to="/planetary-age" className="text-muted-foreground hover:text-accent transition-colors">Best Planetary Age Calculator</Link></li>
+              <li><Link to="/about" className="text-muted-foreground hover:text-accent transition-colors">About Us</Link></li>
+              <li><Link to="/blog" className="text-muted-foreground hover:text-accent transition-colors">Blog</Link></li>
             </ul>
           </div>
 
@@ -89,10 +73,20 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Legal & Trust */}
           <div>
-            <h3 className="font-heading font-semibold text-foreground mb-3">Legal</h3>
+            <h3 className="font-heading font-semibold text-foreground mb-3">Legal & Trust</h3>
             <ul className="space-y-2 text-sm">
+              <li>
+                <Link to="/methodology" className="text-muted-foreground hover:text-accent transition-colors">
+                  Methodology
+                </Link>
+              </li>
+              <li>
+                <Link to="/editorial-policy" className="text-muted-foreground hover:text-accent transition-colors">
+                  Editorial Policy
+                </Link>
+              </li>
               <li>
                 <Link to="/privacy" className="text-muted-foreground hover:text-accent transition-colors">
                   Privacy Policy
