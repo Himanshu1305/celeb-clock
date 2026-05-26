@@ -138,6 +138,12 @@ const zodiacSigns = [
 export default function Zodiac() {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
+      <SEO
+        title="Best Zodiac Sign Calculator — All 12 Signs & Traits"
+        description="The best free zodiac sign calculator. Find your accurate zodiac sign by birth date, with personality traits, element, ruling planet and compatibility for all 12 signs."
+        keywords="best zodiac sign calculator, zodiac signs, zodiac sign by birth date, astrology, horoscope signs"
+        canonicalUrl="/zodiac"
+      />
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <header className="flex justify-between items-center mb-8">
@@ -146,14 +152,14 @@ export default function Zodiac() {
         </header>
 
         {/* Hero Section */}
-        <div className="text-center mb-12 animate-fade-in-up">
+        <div className="text-center mb-8 animate-fade-in-up">
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-foreground">
-            Zodiac Signs Guide
+            Best Zodiac Sign Calculator — All 12 Signs Explained
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover the characteristics, traits, and elements associated with each zodiac sign. 
-            Find your astrological identity and learn what makes each sign unique.
+            Find your accurate zodiac sign by birth date, with detailed personality traits, ruling planet, element and compatibility for every sign.
           </p>
+          <div className="pt-4"><EEATBadges sources={['Tropical zodiac standard']} /></div>
         </div>
 
         <Separator className="mb-12" />
@@ -230,6 +236,10 @@ export default function Zodiac() {
             </CardContent>
           </Card>
         </div>
+
+        <PageFAQ slug="zodiac" title="Zodiac Sign FAQs" />
+        <RelatedTools currentSlug="zodiac" />
+        <AuthorBio />
       </div>
       <Footer />
     </div>
