@@ -6,6 +6,10 @@ import { SEO } from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { EEATBadges } from '@/components/EEATBadges';
+import { PageFAQ } from '@/components/PageFAQ';
+import { RelatedTools } from '@/components/RelatedTools';
+import { AuthorBio } from '@/components/AuthorBio';
 
 const TodaysBirthdaysPage = () => {
   const today = new Date();
@@ -14,9 +18,10 @@ const TodaysBirthdaysPage = () => {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
-        title={`Famous Birthdays Today – ${formattedDate}`}
-        description={`Discover famous people born on ${formattedDate}. See which celebrities, scientists, athletes, and historical figures share today's birthday.`}
-        keywords="today's birthdays, famous birthdays today, celebrity birthdays, born today"
+        title={`Famous Birthdays Today — ${formattedDate} | Celeb Clock`}
+        description={`Best list of famous people born on ${formattedDate}. See which celebrities, scientists, athletes, and historical figures share today's birthday — sourced live from Wikipedia.`}
+        keywords="famous birthdays today, celebrity birthdays today, born today, who was born today"
+        canonicalUrl="/todays-birthdays"
       />
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-12">
@@ -24,13 +29,14 @@ const TodaysBirthdaysPage = () => {
           <AuthNav />
         </header>
 
-        <section className="text-center space-y-4 mb-12 max-w-3xl mx-auto">
+        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Famous Birthdays Today
+            Famous Birthdays Today — {formattedDate}
           </h1>
           <p className="text-lg text-muted-foreground">
-            Notable people born on {formattedDate} — from celebrities and scientists to world leaders.
+            The best daily list of notable people born on {formattedDate} — celebrities, scientists, athletes and world leaders, refreshed live from Wikipedia.
           </p>
+          <EEATBadges sources={['Wikipedia']} />
         </section>
 
         <section className="max-w-4xl mx-auto mb-16">
@@ -45,6 +51,10 @@ const TodaysBirthdaysPage = () => {
             </Link>
           </Button>
         </section>
+
+        <PageFAQ slug="todays-birthdays" title="Today's Birthdays FAQs" />
+        <RelatedTools currentSlug="today" />
+        <AuthorBio />
       </div>
       <Footer />
     </div>
