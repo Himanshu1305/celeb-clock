@@ -5,6 +5,10 @@ import { NumerologyLifePath } from '@/components/NumerologyLifePath';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO } from '@/components/SEO';
 import { AgeCalculator } from '@/components/AgeCalculator';
+import { EEATBadges } from '@/components/EEATBadges';
+import { PageFAQ } from '@/components/PageFAQ';
+import { RelatedTools } from '@/components/RelatedTools';
+import { AuthorBio } from '@/components/AuthorBio';
 
 const NumerologyPage = () => {
   const { birthDate, setBirthDate } = useBirthDate();
@@ -12,9 +16,10 @@ const NumerologyPage = () => {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
-        title="Life Path Number Calculator – Numerology"
-        description="Discover your Life Path Number based on your date of birth. Learn about your personality traits, strengths, and destiny through the ancient art of numerology."
-        keywords="life path number, numerology, numerology calculator, life path, birth number"
+        title="Best Free Numerology Calculator — Life Path Number"
+        description="The best free numerology calculator. Discover your Life Path Number from your date of birth, with traits, strengths, and life-purpose meaning — instant and accurate."
+        keywords="best numerology calculator, free numerology calculator, life path number, numerology, birth number"
+        canonicalUrl="/numerology"
       />
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-12">
@@ -22,13 +27,14 @@ const NumerologyPage = () => {
           <AuthNav />
         </header>
 
-        <section className="text-center space-y-4 mb-12 max-w-3xl mx-auto">
+        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Numerology & Life Path Number
+            Best Free Numerology Calculator — Find Your Life Path Number
           </h1>
           <p className="text-lg text-muted-foreground">
-            Your Life Path Number reveals your core personality, strengths, and life purpose. Enter your birthday to discover yours.
+            Discover your Life Path Number using the classical Pythagorean method. Enter your date of birth to reveal your core personality, strengths and life purpose.
           </p>
+          <EEATBadges sources={['Pythagorean numerology']} />
         </section>
 
         {!birthDate && (
@@ -42,6 +48,10 @@ const NumerologyPage = () => {
             <NumerologyLifePath birthDate={birthDate} />
           </section>
         )}
+
+        <PageFAQ slug="numerology" title="Numerology Calculator FAQs" />
+        <RelatedTools currentSlug="numerology" />
+        <AuthorBio />
       </div>
       <Footer />
     </div>

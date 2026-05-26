@@ -5,6 +5,10 @@ import { PlanetaryAge } from '@/components/PlanetaryAge';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO } from '@/components/SEO';
 import { AgeCalculator } from '@/components/AgeCalculator';
+import { EEATBadges } from '@/components/EEATBadges';
+import { PageFAQ } from '@/components/PageFAQ';
+import { RelatedTools } from '@/components/RelatedTools';
+import { AuthorBio } from '@/components/AuthorBio';
 
 const PlanetaryAgePage = () => {
   const { birthDate, setBirthDate } = useBirthDate();
@@ -12,9 +16,10 @@ const PlanetaryAgePage = () => {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
-        title="Age on Other Planets – How Old Are You on Mars?"
-        description="Discover your age on Mercury, Venus, Mars, Jupiter, Saturn, Uranus, and Neptune. A fun way to see how time passes differently across our solar system."
-        keywords="age on other planets, planetary age, age on mars, age on jupiter, solar system age"
+        title="Best Planetary Age Calculator — Your Age on Mars, Jupiter & More"
+        description="The best free planetary age calculator. Find out how old you'd be on Mercury, Venus, Mars, Jupiter, Saturn, Uranus and Neptune — based on NASA orbital data."
+        keywords="best planetary age calculator, age on mars, age on jupiter, age on other planets, solar system age"
+        canonicalUrl="/planetary-age"
       />
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-12">
@@ -22,13 +27,14 @@ const PlanetaryAgePage = () => {
           <AuthNav />
         </header>
 
-        <section className="text-center space-y-4 mb-12 max-w-3xl mx-auto">
+        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Your Age on Other Planets
+            Best Planetary Age Calculator — Your Age on Mars, Jupiter & More
           </h1>
           <p className="text-lg text-muted-foreground">
-            Ever wondered how old you'd be on Mars or Jupiter? Enter your birthday and find out!
+            Ever wondered how old you'd be on Mars or Jupiter? Enter your birthday and we'll calculate your age on every planet using NASA orbital data.
           </p>
+          <EEATBadges sources={['NASA']} />
         </section>
 
         {!birthDate && (
@@ -42,6 +48,10 @@ const PlanetaryAgePage = () => {
             <PlanetaryAge birthDate={birthDate} />
           </section>
         )}
+
+        <PageFAQ slug="planetary-age" title="Planetary Age Calculator FAQs" />
+        <RelatedTools currentSlug="planet" />
+        <AuthorBio />
       </div>
       <Footer />
     </div>

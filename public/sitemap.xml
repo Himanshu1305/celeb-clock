@@ -1,185 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  
-  <!-- Main Pages -->
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/celebrity-birthday</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/zodiac</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/birthstone</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/life-expectancy</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <!-- Original Blog Articles -->
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/calculate-exact-age-seconds-minutes-hours</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/celebrities-born-on-my-birthday-famous-birthday-twins</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/zodiac-signs-complete-guide-personality-traits-compatibility</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/birthstones-by-month-complete-guide-meaning-history</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/how-to-increase-life-expectancy-science-backed-tips</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/birthday-traditions-around-the-world-unique-celebrations</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/why-knowing-exact-age-matters-practical-uses</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <!-- NEW Health & Life Expectancy Articles -->
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/how-sleep-affects-life-expectancy-complete-guide</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/best-foods-to-eat-to-live-longer-longevity-diet</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/how-exercise-affects-life-expectancy-workout-guide</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/how-stress-affects-health-life-expectancy-management-tips</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/bmi-weight-life-expectancy-healthy-weight-guide</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/smoking-life-expectancy-how-to-quit-complete-guide</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/blog/secrets-of-people-who-live-to-100-centenarian-habits</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <!-- Info Pages -->
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/about</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/faq</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/contact</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/privacy</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  
-  <url>
-    <loc>https://celeb-clock.preview.emergentagent.com/terms</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://celeb-clock.lovable.app/</loc><lastmod>2026-05-26</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/age-calculator</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/life-expectancy</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/celebrity-birthday</loc><lastmod>2026-05-26</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/todays-birthdays</loc><lastmod>2026-05-26</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/numerology</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/zodiac</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/birthstone</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/planetary-age</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/blog</loc><lastmod>2026-05-26</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/about</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/methodology</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/editorial-policy</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/faq</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/contact</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/privacy</loc><lastmod>2026-05-26</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://celeb-clock.lovable.app/terms</loc><lastmod>2026-05-26</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>

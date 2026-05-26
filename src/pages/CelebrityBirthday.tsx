@@ -11,6 +11,11 @@ import { Calendar } from '@/components/ui/calendar';
 import { ArrowRight, Star, Users, Calendar as CalendarIcon, Sparkles } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useBirthDate } from '@/context/BirthDateContext';
+import { SEO } from '@/components/SEO';
+import { EEATBadges } from '@/components/EEATBadges';
+import { PageFAQ } from '@/components/PageFAQ';
+import { RelatedTools } from '@/components/RelatedTools';
+import { AuthorBio } from '@/components/AuthorBio';
 
 const CelebrityBirthday = () => {
   const { birthDate: sharedBirthDate, setBirthDate: setSharedBirthDate } = useBirthDate();
@@ -36,6 +41,12 @@ const CelebrityBirthday = () => {
 
   return (
     <div className="min-h-screen bg-gradient-cosmic">
+      <SEO
+        title="Best Celebrity Birthday Match — Who Shares Your Birthday?"
+        description="The best free celebrity birthday match tool. Discover which famous celebrities, actors, athletes, scientists, and world leaders share your exact birth date."
+        keywords="best celebrity birthday match, celebrities born on my birthday, birthday twin, famous birthdays, who shares my birthday"
+        canonicalUrl="/celebrity-birthday"
+      />
       <div className="container mx-auto px-4 py-8">
         {/* Header with Navigation */}
         <header className="flex justify-between items-center mb-12">
@@ -47,8 +58,9 @@ const CelebrityBirthday = () => {
         <section className="text-center space-y-6 pt-8 pb-12 max-w-4xl mx-auto">
           <div className="space-y-4 animate-fade-in-up">
             <h1 className="text-5xl md:text-7xl font-bold gradient-text-primary leading-tight">
-              Find Out Which Celebrities Share Your Birthday — Celebrate Like the Stars!
+              Best Celebrity Birthday Match — Who Shares Your Birthday?
             </h1>
+            <EEATBadges sources={['Wikipedia', 'Verified public records']} />
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Enter your birth date and instantly discover which celebrities were born on the same day as you. Our Celebrity Birthday Match connects your special day with the stars who share it — complete with photos, bios, and fun facts.
             </p>
@@ -197,6 +209,10 @@ const CelebrityBirthday = () => {
             </CardContent>
           </Card>
         </section>
+
+        <PageFAQ slug="celebrity-birthday" title="Celebrity Birthday Match FAQs" />
+        <RelatedTools currentSlug="celeb" />
+        <AuthorBio />
       </div>
       
       {/* Footer */}

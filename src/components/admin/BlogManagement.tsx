@@ -128,7 +128,7 @@ export const BlogManagement = () => {
 
   const updatePostStatus = async (postId: string, newStatus: string, notes?: string) => {
     try {
-      const updateData: Record<string, unknown> = { 
+      const updateData: any = { 
         status: newStatus,
         review_notes: notes || null
       };

@@ -29,6 +29,8 @@ import AgeCalculatorPage from "./pages/AgeCalculatorPage";
 import TodaysBirthdaysPage from "./pages/TodaysBirthdaysPage";
 import NumerologyPage from "./pages/NumerologyPage";
 import PlanetaryAgePage from "./pages/PlanetaryAgePage";
+import Methodology from "./pages/Methodology";
+import EditorialPolicy from "./pages/EditorialPolicy";
 import { AdminRoute } from "@/components/AdminRoute";
 
 const queryClient = new QueryClient();
@@ -65,6 +67,8 @@ const App = () => (
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/methodology" element={<Methodology />} />
+                <Route path="/editorial-policy" element={<EditorialPolicy />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

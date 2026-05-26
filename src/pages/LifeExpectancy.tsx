@@ -9,6 +9,11 @@ import { Label } from '@/components/ui/label';
 import { ArrowRight, Heart, TrendingUp, Shield, Activity, CalendarIcon, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
+import { SEO } from '@/components/SEO';
+import { EEATBadges } from '@/components/EEATBadges';
+import { PageFAQ } from '@/components/PageFAQ';
+import { RelatedTools } from '@/components/RelatedTools';
+import { AuthorBio } from '@/components/AuthorBio';
 
 const LifeExpectancy = () => {
   const { birthDate, setBirthDate } = useBirthDate();
@@ -27,6 +32,12 @@ const LifeExpectancy = () => {
 
   return (
     <div className="min-h-screen bg-gradient-cosmic">
+      <SEO
+        title="Best Life Expectancy Calculator — How Long Will I Live? (Free)"
+        description="The best free life expectancy calculator. Estimate your lifespan based on 15+ health and lifestyle factors using WHO and CDC actuarial data. See what years you can gain."
+        keywords="best life expectancy calculator, how long will I live, lifespan calculator, life expectancy, longevity calculator"
+        canonicalUrl="/life-expectancy"
+      />
       <div className="container mx-auto px-4 py-8">
         {/* Header with Navigation */}
         <header className="flex justify-between items-center mb-12">
@@ -38,8 +49,9 @@ const LifeExpectancy = () => {
         <section className="text-center space-y-6 pt-8 pb-12 max-w-4xl mx-auto">
           <div className="space-y-4 animate-fade-in-up">
             <h1 className="text-5xl md:text-7xl font-bold gradient-text-primary leading-tight">
-              Discover How Long You're Likely to Live with Our Free Life Expectancy Calculator
+              Best Life Expectancy Calculator — How Long Will You Live?
             </h1>
+            <EEATBadges sources={['WHO', 'CDC', 'NIH', 'The Lancet']} />
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Wondering how your daily habits and health choices impact your future? Our data-driven Life Expectancy Calculator estimates your lifespan using verified public-health data — giving you personalized insights to help you live longer, healthier, and happier.
             </p>
@@ -190,6 +202,10 @@ const LifeExpectancy = () => {
             </CardContent>
           </Card>
         </section>
+
+        <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
+        <RelatedTools currentSlug="life" />
+        <AuthorBio />
       </div>
       
       {/* Footer */}

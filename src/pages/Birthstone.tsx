@@ -6,6 +6,11 @@ import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Gem } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { SEO } from '@/components/SEO';
+import { EEATBadges } from '@/components/EEATBadges';
+import { PageFAQ } from '@/components/PageFAQ';
+import { RelatedTools } from '@/components/RelatedTools';
+import { AuthorBio } from '@/components/AuthorBio';
 
 const birthstones = [
   {
@@ -133,6 +138,12 @@ const birthstones = [
 export default function Birthstone() {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
+      <SEO
+        title="Best Birthstone Finder by Month — Meaning, Color & History"
+        description="The best birthstone finder by month. See modern and traditional birthstones for every month with meaning, color, healing properties and rich history."
+        keywords="best birthstone finder, birthstone by month, birthstones, modern birthstones, traditional birthstones"
+        canonicalUrl="/birthstone"
+      />
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <header className="flex justify-between items-center mb-8">
@@ -141,17 +152,17 @@ export default function Birthstone() {
         </header>
 
         {/* Hero Section */}
-        <div className="text-center mb-12 animate-fade-in-up">
+        <div className="text-center mb-8 animate-fade-in-up">
           <div className="flex justify-center mb-4">
             <Gem className="w-16 h-16 text-accent" />
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-foreground">
-            Birthstone Guide
+            Best Birthstone Finder by Month — Meaning & History
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explore the precious gemstones associated with each month. Discover their meanings, 
-            properties, and the unique symbolism behind your birth month's stone.
+            Explore the modern and traditional birthstones for every month, with meaning, color, healing properties and rich symbolism for your birth month's stone.
           </p>
+          <div className="pt-4"><EEATBadges sources={['Jewelers of America 1912 (updated)']} /></div>
         </div>
 
         <Separator className="mb-12" />
@@ -235,6 +246,10 @@ export default function Birthstone() {
             </CardContent>
           </Card>
         </div>
+
+        <PageFAQ slug="birthstone" title="Birthstone FAQs" />
+        <RelatedTools currentSlug="birthstone" />
+        <AuthorBio />
       </div>
       <Footer />
     </div>
