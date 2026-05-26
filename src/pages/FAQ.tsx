@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { HelpCircle, Heart, Users, DollarSign, FileDown, UserPlus, Lock, AlertCircle, Bell, Crown } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { SEO, FAQSchema } from '@/components/SEO';
 import {
   Accordion,
   AccordionContent,
@@ -69,7 +70,13 @@ const faqs = [
 export default function FAQ() {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <SEO
+        title="FAQ — Age, Celebrity Birthday & Life Expectancy Questions"
+        description="Answers to common questions about our age calculator, celebrity birthday match, life expectancy estimates, premium features, accounts, and data privacy."
+        keywords="age calculator FAQ, life expectancy FAQ, celebrity birthday FAQ"
+        canonicalUrl="/faq"
+      />
+      <FAQSchema items={faqs.map(f => ({ question: f.question, answer: f.answer }))} />
         {/* Header */}
         <header className="flex justify-between items-center mb-8">
           <Navigation />
