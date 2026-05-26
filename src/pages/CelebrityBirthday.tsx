@@ -42,6 +42,14 @@ const CelebrityBirthday = () => {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-cosmic">
+      <SEO
+        title="Best Celebrity Birthday Match — Who Shares Your Birthday?"
+        description="The best free celebrity birthday match tool. Discover which famous celebrities, actors, athletes, scientists, and world leaders share your exact birth date."
+        keywords="best celebrity birthday match, celebrities born on my birthday, birthday twin, famous birthdays, who shares my birthday"
+        canonicalUrl="/celebrity-birthday"
+      />
+      <div className="container mx-auto px-4 py-8">
         {/* Header with Navigation */}
         <header className="flex justify-between items-center mb-12">
           <Navigation />
@@ -52,8 +60,9 @@ const CelebrityBirthday = () => {
         <section className="text-center space-y-6 pt-8 pb-12 max-w-4xl mx-auto">
           <div className="space-y-4 animate-fade-in-up">
             <h1 className="text-5xl md:text-7xl font-bold gradient-text-primary leading-tight">
-              Find Out Which Celebrities Share Your Birthday — Celebrate Like the Stars!
+              Best Celebrity Birthday Match — Who Shares Your Birthday?
             </h1>
+            <EEATBadges sources={['Wikipedia', 'Verified public records']} />
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Enter your birth date and instantly discover which celebrities were born on the same day as you. Our Celebrity Birthday Match connects your special day with the stars who share it — complete with photos, bios, and fun facts.
             </p>
