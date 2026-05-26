@@ -77,6 +77,7 @@ export default function FAQ() {
         canonicalUrl="/faq"
       />
       <FAQSchema items={faqs.map(f => ({ question: f.question, answer: f.answer }))} />
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <header className="flex justify-between items-center mb-8">
           <Navigation />
