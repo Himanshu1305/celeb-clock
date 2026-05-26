@@ -49,8 +49,9 @@ const LifeExpectancy = () => {
         <section className="text-center space-y-6 pt-8 pb-12 max-w-4xl mx-auto">
           <div className="space-y-4 animate-fade-in-up">
             <h1 className="text-5xl md:text-7xl font-bold gradient-text-primary leading-tight">
-              Discover How Long You're Likely to Live with Our Free Life Expectancy Calculator
+              Best Life Expectancy Calculator — How Long Will You Live?
             </h1>
+            <EEATBadges sources={['WHO', 'CDC', 'NIH', 'The Lancet']} />
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Wondering how your daily habits and health choices impact your future? Our data-driven Life Expectancy Calculator estimates your lifespan using verified public-health data — giving you personalized insights to help you live longer, healthier, and happier.
             </p>
@@ -201,6 +202,10 @@ const LifeExpectancy = () => {
             </CardContent>
           </Card>
         </section>
+
+        <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
+        <RelatedTools currentSlug="life" />
+        <AuthorBio />
       </div>
       
       {/* Footer */}

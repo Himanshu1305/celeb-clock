@@ -11,6 +11,11 @@ import { Calendar } from '@/components/ui/calendar';
 import { ArrowRight, Star, Users, Calendar as CalendarIcon, Sparkles } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useBirthDate } from '@/context/BirthDateContext';
+import { SEO } from '@/components/SEO';
+import { EEATBadges } from '@/components/EEATBadges';
+import { PageFAQ } from '@/components/PageFAQ';
+import { RelatedTools } from '@/components/RelatedTools';
+import { AuthorBio } from '@/components/AuthorBio';
 
 const CelebrityBirthday = () => {
   const { birthDate: sharedBirthDate, setBirthDate: setSharedBirthDate } = useBirthDate();
