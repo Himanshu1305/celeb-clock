@@ -267,6 +267,9 @@ const Index = () => {
 
         {/* Testimonials */}
         <TestimonialsSection />
+
+        <PageFAQ slug="home" title="Frequently Asked Questions" />
+        <AuthorBio />
       </div>
       <Footer />
     </div>
