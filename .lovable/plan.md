@@ -1,62 +1,105 @@
+## Plan: SEO Keyword Targeting + EEAT + FAQ Schema
 
+Goal: Rank for high-intent "best …" keywords, strengthen EEAT signals (Experience, Expertise, Authoritativeness, Trust), and add FAQ schema to every major tool page for rich-result eligibility.
 
-## Plan: Fun Homepage Redesign + Celebrity Images in Today's Birthdays
+---
 
-### 1. Homepage Overhaul — Make It Fun & Engaging
+### 1. Keyword targeting (titles, H1s, meta, intro copy)
 
-**File: `src/pages/Index.tsx`** — Full rewrite
+Update SEO + headings on these pages to target "best" modifiers and long-tail intent:
 
-Remove the "Your Birthday, Decoded" hero section entirely. Replace with a vibrant, party-themed landing page:
+| Page | Primary keyword | Secondary |
+|---|---|---|
+| `src/pages/Index.tsx` | best age & birthday calculator | free, online, accurate |
+| `src/pages/AgeCalculatorPage.tsx` | best age calculator online | exact age, age in days/hours/seconds |
+| `src/pages/LifeExpectancy.tsx` | best life expectancy calculator | how long will I live, lifespan calculator |
+| `src/pages/CelebrityBirthday.tsx` + `TodaysBirthdaysPage.tsx` | best celebrity birthday match | celebrities born on my birthday, birthday twin |
+| `src/pages/NumerologyPage.tsx` | best free numerology calculator | life path number |
+| `src/pages/Zodiac.tsx` | best zodiac sign calculator | accurate zodiac by birth date |
+| `src/pages/Birthstone.tsx` | best birthstone finder by month | birthstone meaning |
+| `src/pages/PlanetaryAgePage.tsx` | best planetary age calculator | your age on Mars/Jupiter |
 
-- **Animated hero** with floating emoji decorations (🎂🎉🎊✨🥳) using CSS `animate-float` with staggered delays, plus a gradient-animated headline like "Welcome to the Birthday Party!" or "Every Day is Someone's Birthday"
-- **Confetti/sparkle CSS keyframes** added to `src/index.css` — floating particles and a shimmer effect on key elements
-- **6 Feature showcase cards** in a 2x3 grid (mobile: 1 col), each with:
-  - A large fun emoji or icon
-  - Bold title + 2-3 sentence description of the feature
-  - Hover animation (scale + glow)
-  - CTA button linking to the tool page
-  - The 6 features: Age Calculator (real-time seconds), Celebrity Match, Zodiac & Birthstone, Celebrity Search, Life Expectancy, What-If Scenarios
-- **Secondary tools row** — Numerology, Planetary Age, Today's Birthdays as smaller animated cards
-- **Today's Birthdays Preview** with celebrity images (see below)
-- Sign-up CTA, EEAT section, Testimonials remain but get subtle party-themed styling
+For each: rewrite `<SEO title/description/keywords>`, the single H1, and the intro paragraph to naturally include the primary keyword once + 2–3 related terms. Keep titles <60 chars, descriptions <160 chars.
 
-**File: `src/components/FeaturePillars.tsx`** — Rewrite with fun card design: gradient borders, hover glow effects, larger icons, playful descriptions
+### 2. EEAT signals (sitewide + per-page)
 
-**File: `src/index.css`** — Add new keyframes:
-- `sparkle` — rotating twinkle effect
-- `confetti-fall` — particles drifting down
-- `gradient-shift` — animated gradient background for hero
-- `bounce-in` — bouncy entrance for cards with staggered delays
+Create `src/components/EEATBadges.tsx` — a compact strip used under each tool's H1 showing:
+- "Last updated: <date>" (auto from build date)
+- "Reviewed for accuracy" 
+- "Used by 50k+ people" (only if true — otherwise drop)
+- "Sources: WHO, CDC, NASA, Wikipedia" with links
 
-### 2. Celebrity Images in TodaysBirthdays
+Create `src/components/AuthorBio.tsx` — small card at the bottom of each tool/article page with author name, credentials, and link to `/about`. Already have `About.tsx` — extend it with team bios, methodology, editorial policy, and contact.
 
-**File: `src/components/TodaysBirthdays.tsx`** — Major update
+Add sitewide trust:
+- `src/components/Footer.tsx` — add "Editorial policy", "Methodology", "Medical disclaimer" links
+- New page `src/pages/Methodology.tsx` — explains data sources (actuarial tables, Wikipedia, NASA, etc.), update cadence, limitations
+- New page `src/pages/EditorialPolicy.tsx` — review process, correction policy
+- JSON-LD `Organization` schema in `index.html` (logo, sameAs social links, contactPoint)
+- Per-tool JSON-LD: add `author` (Person/Organization) and `dateModified` to existing WebPage schema in `SEO.tsx`
 
-The birthday data has `wikipediaUrl` but no `image` field. Solution: Use the **Wikipedia API** to fetch thumbnail images dynamically.
+### 3. FAQ schema on every tool page
 
-- Extract the Wikipedia page title from the `wikipediaUrl` field (e.g., `Justin_Bieber` from `https://en.wikipedia.org/wiki/Justin_Bieber`)
-- Call `https://en.wikipedia.org/w/api.php?action=query&titles=TITLE&prop=pageimages&pithumbsize=100&format=json&origin=*` to get thumbnails
-- Cache results in component state (one batch request for all people)
-- Display circular avatar images next to each person's name using the existing `Avatar` component
-- Fallback to the category icon initials if no image is found
-- Make each person card clickable — opens the `CelebrityProfileDialog` or navigates to their Wikipedia page
+Create `src/components/PageFAQ.tsx` — renders a visible accordion AND emits `FAQPage` JSON-LD via the existing `FAQSchema` helper in `src/components/SEO.tsx`. Visible + structured = rich result eligibility.
 
-**Changes:**
-- Add a `useEffect` that fetches Wikipedia thumbnails for all displayed people on mount
-- Replace the plain icon circle with `<Avatar>` showing the fetched image
-- Wrap each person card in a link/button that opens the celebrity detail or Wikipedia URL
-- Show profession, birth year under the name
+Create `src/data/pageFaqs.ts` — 5–7 Q&As per tool, each Q including the target keyword naturally:
 
-### 3. Today's Birthdays on Homepage — Enhanced Preview
+- **Age calculator**: "What is the best age calculator?", "How accurate is this age calculator?", "Can I calculate age in days/hours/seconds?", "Is it free?", "Does it work for any birth year?"
+- **Life expectancy**: "What is the best life expectancy calculator?", "How is life expectancy calculated?", "Is this medical advice?", "What factors affect lifespan?", "How accurate is the estimate?"
+- **Celebrity birthday**: "Who is the best celebrity birthday match tool?", "Which celebrities share my birthday?", "How many celebrities are in the database?", "Is the celebrity data accurate?"
+- **Numerology**: "What is the best free numerology calculator?", "How is life path number calculated?", "What does my life path number mean?"
+- **Zodiac**: "What is the best zodiac sign calculator?", "How is my zodiac sign determined?", "What about cusp dates?"
+- **Birthstone**: "What is the best birthstone finder?", "What is my birthstone by month?", "Modern vs traditional birthstones?"
+- **Planetary age**: "What is the best planetary age calculator?", "How old would I be on Mars/Jupiter?"
 
-The `TodaysBirthdays` component used on the homepage will automatically get the image treatment since we're updating the shared component.
+Mount `<PageFAQ slug="age-calculator" />` near the bottom of each tool page.
+
+### 4. Existing FAQ page upgrade
+
+`src/pages/FAQ.tsx` already exists but lacks `FAQPage` JSON-LD — wire it through `FAQSchema` from `SEO.tsx`.
+
+### 5. Internal linking for keyword strength
+
+- Add a "Related tools" strip component under each tool's FAQ that links to 3–4 sibling tools with anchor text containing the target keyword (e.g., "Best life expectancy calculator →").
+- Update `Footer.tsx` tool list anchor text to include "Best …" where natural.
+
+### 6. Sitemap + robots refresh
+
+- `public/sitemap.xml` — confirm all updated routes present with current `<lastmod>`.
+- `public/robots.txt` — verify Sitemap directive points to `https://celeb-clock.lovable.app/sitemap.xml`.
+
+---
 
 ### Files Changed
 
 | File | Action |
-|------|--------|
-| `src/pages/Index.tsx` | Rewrite — fun party-themed landing with floating emojis, animated cards |
-| `src/components/FeaturePillars.tsx` | Rewrite — playful feature cards with hover effects and gradient borders |
-| `src/components/TodaysBirthdays.tsx` | Update — fetch & display Wikipedia celebrity images, clickable cards |
-| `src/index.css` | Add — sparkle, confetti, gradient-shift, bounce-in keyframes |
+|---|---|
+| `src/components/SEO.tsx` | Extend — add author + dateModified to default WebPage schema |
+| `src/components/EEATBadges.tsx` | Create |
+| `src/components/AuthorBio.tsx` | Create |
+| `src/components/PageFAQ.tsx` | Create (visible accordion + FAQPage JSON-LD) |
+| `src/components/RelatedTools.tsx` | Create |
+| `src/data/pageFaqs.ts` | Create — keyworded Q&As per tool |
+| `src/pages/Index.tsx` | Update — title/H1/meta + EEAT strip + FAQ + RelatedTools |
+| `src/pages/AgeCalculatorPage.tsx` | Same |
+| `src/pages/LifeExpectancy.tsx` | Same |
+| `src/pages/CelebrityBirthday.tsx` | Same |
+| `src/pages/TodaysBirthdaysPage.tsx` | Same |
+| `src/pages/NumerologyPage.tsx` | Same |
+| `src/pages/Zodiac.tsx` | Same |
+| `src/pages/Birthstone.tsx` | Same |
+| `src/pages/PlanetaryAgePage.tsx` | Same |
+| `src/pages/FAQ.tsx` | Add FAQPage JSON-LD |
+| `src/pages/About.tsx` | Expand — team, methodology, editorial policy, credentials |
+| `src/pages/Methodology.tsx` | Create |
+| `src/pages/EditorialPolicy.tsx` | Create |
+| `src/components/Footer.tsx` | Add EEAT links + keyworded anchor text |
+| `src/App.tsx` | Register new routes |
+| `index.html` | Add Organization JSON-LD |
+| `public/sitemap.xml` | Add new routes, refresh lastmod |
 
+Quick clarifier before I build:
+
+1. **Author/team name** for EEAT bylines — should I use "Celeb Clock Editorial Team" as a generic byline, or do you have a real person's name + credentials to attribute (preferred for true EEAT)?
+2. **"Used by Nk+ people" badge** — skip unless you have a real number?
+3. **Social profiles** for `Organization.sameAs` JSON-LD (Twitter/X, Instagram, LinkedIn URLs)?
