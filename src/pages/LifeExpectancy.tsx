@@ -9,6 +9,11 @@ import { Label } from '@/components/ui/label';
 import { ArrowRight, Heart, TrendingUp, Shield, Activity, CalendarIcon, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
+import { SEO } from '@/components/SEO';
+import { EEATBadges } from '@/components/EEATBadges';
+import { PageFAQ } from '@/components/PageFAQ';
+import { RelatedTools } from '@/components/RelatedTools';
+import { AuthorBio } from '@/components/AuthorBio';
 
 const LifeExpectancy = () => {
   const { birthDate, setBirthDate } = useBirthDate();
@@ -27,6 +32,12 @@ const LifeExpectancy = () => {
 
   return (
     <div className="min-h-screen bg-gradient-cosmic">
+      <SEO
+        title="Best Life Expectancy Calculator — How Long Will I Live? (Free)"
+        description="The best free life expectancy calculator. Estimate your lifespan based on 15+ health and lifestyle factors using WHO and CDC actuarial data. See what years you can gain."
+        keywords="best life expectancy calculator, how long will I live, lifespan calculator, life expectancy, longevity calculator"
+        canonicalUrl="/life-expectancy"
+      />
       <div className="container mx-auto px-4 py-8">
         {/* Header with Navigation */}
         <header className="flex justify-between items-center mb-12">

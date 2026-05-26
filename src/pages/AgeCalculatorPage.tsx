@@ -10,6 +10,10 @@ import { GenerationLabel } from '@/components/GenerationLabel';
 import { ReviewForm } from '@/components/ReviewForm';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO } from '@/components/SEO';
+import { EEATBadges } from '@/components/EEATBadges';
+import { PageFAQ } from '@/components/PageFAQ';
+import { RelatedTools } from '@/components/RelatedTools';
+import { AuthorBio } from '@/components/AuthorBio';
 
 const AgeCalculatorPage = () => {
   const { birthDate, setBirthDate } = useBirthDate();
@@ -17,9 +21,10 @@ const AgeCalculatorPage = () => {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
-        title="Age Calculator – Know Your Exact Age Instantly"
-        description="Calculate your exact age in years, months, days, hours, minutes, and seconds. Free, fast, and accurate age calculator."
-        keywords="age calculator, exact age, calculate age, age in days, birthday calculator"
+        title="Best Age Calculator Online — Exact Age in Seconds (Free)"
+        description="The best free age calculator online. Get your exact age in years, months, days, hours, minutes & seconds — updated live. Accurate, private, no sign-up."
+        keywords="best age calculator, age calculator online, exact age, age in days, age in seconds, free age calculator, birthday calculator"
+        canonicalUrl="/age-calculator"
       />
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-12">
@@ -27,13 +32,14 @@ const AgeCalculatorPage = () => {
           <AuthNav />
         </header>
 
-        <section className="text-center space-y-4 mb-12 max-w-3xl mx-auto">
+        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Calculate Your Exact Age
+            Best Age Calculator — Your Exact Age, Live to the Second
           </h1>
           <p className="text-lg text-muted-foreground">
-            Enter your date of birth and discover your precise age down to the second — updated live.
+            Enter your date of birth and instantly see your precise age in years, months, days, hours, minutes and seconds — calculated live in your browser and never stored.
           </p>
+          <EEATBadges sources={['ISO 8601', 'JavaScript Date Spec']} />
         </section>
 
         <section id="calculator" className="max-w-4xl mx-auto mb-16">
@@ -69,6 +75,10 @@ const AgeCalculatorPage = () => {
         <section className="max-w-xl mx-auto mb-16">
           <ReviewForm />
         </section>
+
+        <PageFAQ slug="age-calculator" title="Age Calculator FAQs" />
+        <RelatedTools currentSlug="age" />
+        <AuthorBio />
       </div>
       <Footer />
     </div>
