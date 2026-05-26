@@ -12,6 +12,8 @@ import { Button } from '@/components/ui/button';
 import { Crown, ArrowRight, ShieldCheck, Sparkles, Star, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
+import { PageFAQ } from '@/components/PageFAQ';
+import { AuthorBio } from '@/components/AuthorBio';
 
 const Index = () => {
   const { user, profile, isPremium } = useAuth();
@@ -54,9 +56,10 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
-        title="Find Your Celebrity Birthday Twin | Age Calculator & More"
-        description="Discover which celebrities share your birthday, calculate your exact age in seconds, find your life path number, and unlock 42+ personalized birthday insights."
-        keywords="celebrity birthday match, age calculator, birthday twin, numerology, planetary age, life expectancy, zodiac"
+        title="Best Age Calculator, Celebrity Birthday Match & Life Expectancy"
+        description="The best free age calculator, celebrity birthday match, zodiac, birthstone, numerology, planetary age and life expectancy tools — accurate, live, sourced from WHO, CDC, NASA and Wikipedia."
+        keywords="best age calculator, best celebrity birthday match, best life expectancy calculator, best numerology calculator, best zodiac sign calculator, best birthstone finder, best planetary age calculator"
+        canonicalUrl="/"
       />
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
