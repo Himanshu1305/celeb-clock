@@ -209,6 +209,10 @@ const CelebrityBirthday = () => {
             </CardContent>
           </Card>
         </section>
+
+        <PageFAQ slug="celebrity-birthday" title="Celebrity Birthday Match FAQs" />
+        <RelatedTools currentSlug="celeb" />
+        <AuthorBio />
       </div>
       
       {/* Footer */}
