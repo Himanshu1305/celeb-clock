@@ -44,6 +44,27 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_drafts: {
+        Row: {
+          created_at: string | null
+          data: Json
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          data?: Json
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string | null
@@ -128,6 +149,27 @@ export type Database = {
         }
         Relationships: []
       }
+      email_templates: {
+        Row: {
+          created_at: string | null
+          data: Json
+          template_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          data?: Json
+          template_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json
+          template_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           blog_subscription: boolean
@@ -170,6 +212,24 @@ export type Database = {
           premium_status?: boolean
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      status_checks: {
+        Row: {
+          client_name: string
+          id: string
+          timestamp: string | null
+        }
+        Insert: {
+          client_name: string
+          id?: string
+          timestamp?: string | null
+        }
+        Update: {
+          client_name?: string
+          id?: string
+          timestamp?: string | null
         }
         Relationships: []
       }
