@@ -4,9 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { BirthDateProvider } from "@/context/BirthDateContext";
-import { AnalyticsProvider } from "@/hooks/useAnalytics";
-import { CookieConsent } from "@/components/CookieConsent";
+
+// Core Page Imports
 import Index from "./pages/Index";
 import BirthdayResults from "./pages/BirthdayResults";
 import Auth from "./pages/Auth";
@@ -32,50 +31,47 @@ import PlanetaryAgePage from "./pages/PlanetaryAgePage";
 import Methodology from "./pages/Methodology";
 import EditorialPolicy from "./pages/EditorialPolicy";
 import { AdminRoute } from "@/components/AdminRoute";
+import { BirthDateProvider } from "./context/BirthDateContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
-      <BirthDateProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BirthDateProvider>
           <BrowserRouter>
-            <CookieConsent />
-            <AnalyticsProvider>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/results" element={<BirthdayResults />} />
-                <Route path="/age-calculator" element={<AgeCalculatorPage />} />
-                <Route path="/todays-birthdays" element={<TodaysBirthdaysPage />} />
-                <Route path="/numerology" element={<NumerologyPage />} />
-                <Route path="/planetary-age" element={<PlanetaryAgePage />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
-                <Route path="/upgrade" element={<Upgrade />} />
-                <Route path="/zodiac" element={<Zodiac />} />
-                <Route path="/birthstone" element={<Birthstone />} />
-                <Route path="/life-expectancy" element={<LifeExpectancy />} />
-                <Route path="/celebrity-birthday" element={<CelebrityBirthday />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/methodology" element={<Methodology />} />
-                <Route path="/editorial-policy" element={<EditorialPolicy />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </AnalyticsProvider>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/results" element={<BirthdayResults />} />
+              <Route path="/age-calculator" element={<AgeCalculatorPage />} />
+              <Route path="/todays-birthdays" element={<TodaysBirthdaysPage />} />
+              <Route path="/numerology" element={<NumerologyPage />} />
+              <Route path="/planetary-age" element={<PlanetaryAgePage />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
+              <Route path="/upgrade" element={<Upgrade />} />
+              <Route path="/zodiac" element={<Zodiac />} />
+              <Route path="/birthstone" element={<Birthstone />} />
+              <Route path="/life-expectancy" element={<LifeExpectancy />} />
+              <Route path="/celebrity-birthday" element={<CelebrityBirthday />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/methodology" element={<Methodology />} />
+              <Route path="/editorial-policy" element={<EditorialPolicy />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </BrowserRouter>
-        </TooltipProvider>
-      </BirthDateProvider>
+        </BirthDateProvider>
+      </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>
 );

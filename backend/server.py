@@ -1,7 +1,7 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, Query
+from fastapi import FastAPI, APIRouter, HTTPException, Query
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
+from supabase import create_client, Client
 import os
 import logging
 from pathlib import Path
@@ -13,11 +13,18 @@ from enum import Enum
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+load_dotenv(ROOT_DIR.parent / '.env')
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+# Supabase connection
+supabase_url = os.environ.get('SUPABASE_URL')
+supabase_key = os.environ.get('SUPABASE_SERVICE_ROLE_KEY') or os.environ.get('SUPABASE_ANON_KEY')
+
+if not supabase_url or not supabase_key:
+    logging.warning("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY or SUPABASE_ANON_KEY must be set in environment. Falling back to placeholder values.")
+    supabase_url = supabase_url or "https://placeholder.supabase.co"
+    supabase_key = supabase_key or "placeholder-key"
+
+supabase: Client = create_client(supabase_url, supabase_key)
 
 # Create the main app without a prefix
 app = FastAPI(title="Celeb Clock API", version="1.0.0")
@@ -191,16 +198,30 @@ async def create_status_check(input: StatusCheckCreate):
     status_dict = input.model_dump()
     status_obj = StatusCheck(**status_dict)
     doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    _ = await db.status_checks.insert_one(doc)
+    
+    timestamp_str = doc['timestamp'].isoformat()
+    
+    # Save directly in Supabase status_checks table
+    supabase.table("status_checks").insert({
+        "id": doc["id"],
+        "client_name": doc["client_name"],
+        "timestamp": timestamp_str
+    }).execute()
+    
     return status_obj
 
 @api_router.get("/status", response_model=List[StatusCheck])
 async def get_status_checks():
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
+    res = supabase.table("status_checks").select("*").limit(1000).execute()
+    rows = res.data or []
+    
+    status_checks = []
+    for row in rows:
+        status_checks.append(StatusCheck(
+            id=row["id"],
+            client_name=row["client_name"],
+            timestamp=datetime.fromisoformat(row["timestamp"].replace("Z", "+00:00"))
+        ))
     return status_checks
 
 
@@ -228,16 +249,19 @@ async def generate_blog_draft(request: BlogGenerateRequest):
         tags=[request.category.value, "birthday", "astrology"]
     )
     
-    # Save to database
+    # Save to Supabase public.blog_drafts table
     doc = blog_draft.model_dump()
     doc['created_at'] = doc['created_at'].isoformat()
     doc['updated_at'] = doc['updated_at'].isoformat()
     if doc['published_at']:
         doc['published_at'] = doc['published_at'].isoformat()
     
-    await db.blog_drafts.insert_one(doc)
-    logger.info(f"Blog draft saved with id: {blog_draft.id}")
+    supabase.table("blog_drafts").insert({
+        "id": blog_draft.id,
+        "data": doc
+    }).execute()
     
+    logger.info(f"Blog draft saved with id: {blog_draft.id}")
     return blog_draft
 
 
@@ -248,92 +272,145 @@ async def get_blog_drafts(
     limit: int = Query(default=50, le=100)
 ):
     """Get all blog drafts with optional filtering"""
-    query = {}
-    if status:
-        query["status"] = status.value
-    if category:
-        query["category"] = category.value
+    res = supabase.table("blog_drafts").select("*").limit(limit).execute()
+    rows = res.data or []
     
-    drafts = await db.blog_drafts.find(query, {"_id": 0}).sort("created_at", -1).to_list(limit)
-    
-    # Convert date strings back to datetime
-    for draft in drafts:
+    drafts = []
+    for row in rows:
+        data = row["data"]
+        
+        # Convert date strings back to datetime
         for field in ['created_at', 'updated_at', 'published_at']:
-            if draft.get(field) and isinstance(draft[field], str):
-                draft[field] = datetime.fromisoformat(draft[field])
-    
+            if data.get(field) and isinstance(data[field], str):
+                data[field] = datetime.fromisoformat(data[field].replace("Z", "+00:00"))
+        
+        # Apply filters locally on the JSONB structure
+        if status and data.get("status") != status.value:
+            continue
+        if category and data.get("category") != category.value:
+            continue
+            
+        drafts.append(BlogDraft(**data))
+        
     return drafts
 
 
 @api_router.get("/admin/blog/drafts/{draft_id}", response_model=BlogDraft)
 async def get_blog_draft(draft_id: str):
     """Get a specific blog draft by ID"""
-    draft = await db.blog_drafts.find_one({"id": draft_id}, {"_id": 0})
-    if not draft:
+    res = supabase.table("blog_drafts").select("*").eq("id", draft_id).execute()
+    rows = res.data or []
+    if not rows:
         raise HTTPException(status_code=404, detail="Draft not found")
     
+    data = rows[0]["data"]
     for field in ['created_at', 'updated_at', 'published_at']:
-        if draft.get(field) and isinstance(draft[field], str):
-            draft[field] = datetime.fromisoformat(draft[field])
-    
-    return draft
+        if data.get(field) and isinstance(data[field], str):
+            data[field] = datetime.fromisoformat(data[field].replace("Z", "+00:00"))
+            
+    return BlogDraft(**data)
 
 
 @api_router.put("/admin/blog/drafts/{draft_id}")
 async def update_blog_draft(draft_id: str, update_data: BlogDraftCreate):
     """Update a blog draft"""
-    draft = await db.blog_drafts.find_one({"id": draft_id})
-    if not draft:
+    res = supabase.table("blog_drafts").select("*").eq("id", draft_id).execute()
+    rows = res.data or []
+    if not rows:
         raise HTTPException(status_code=404, detail="Draft not found")
+        
+    existing_data = rows[0]["data"]
     
+    # Merge and update fields
     update_dict = update_data.model_dump()
-    update_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
-    update_dict["slug"] = generate_slug(update_data.title)
+    existing_data.update(update_dict)
+    existing_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    existing_data["slug"] = generate_slug(update_data.title)
     
-    await db.blog_drafts.update_one({"id": draft_id}, {"$set": update_dict})
+    # Update Supabase blog_drafts
+    supabase.table("blog_drafts").update({
+        "data": existing_data,
+        "updated_at": existing_data["updated_at"]
+    }).eq("id", draft_id).execute()
+    
     return {"message": "Draft updated successfully", "id": draft_id}
 
 
 @api_router.post("/admin/blog/drafts/{draft_id}/publish")
 async def publish_blog_draft(draft_id: str):
     """Publish a blog draft"""
-    draft = await db.blog_drafts.find_one({"id": draft_id})
-    if not draft:
+    res = supabase.table("blog_drafts").select("*").eq("id", draft_id).execute()
+    rows = res.data or []
+    if not rows:
         raise HTTPException(status_code=404, detail="Draft not found")
-    
+        
+    existing_data = rows[0]["data"]
     now = datetime.now(timezone.utc).isoformat()
-    await db.blog_drafts.update_one(
-        {"id": draft_id},
-        {"$set": {
-            "status": BlogStatus.PUBLISHED.value,
+    
+    existing_data["status"] = BlogStatus.PUBLISHED.value
+    existing_data["published_at"] = now
+    existing_data["updated_at"] = now
+    
+    # Update Supabase drafts table
+    supabase.table("blog_drafts").update({
+        "data": existing_data,
+        "updated_at": now
+    }).eq("id", draft_id).execute()
+    
+    # Mirror publish state into public.blog_posts table to display to client
+    try:
+        supabase.table("blog_posts").upsert({
+            "id": draft_id,
+            "slug": existing_data.get("slug") or generate_slug(existing_data["title"]),
+            "title": existing_data["title"],
+            "content": existing_data["content"],
+            "excerpt": existing_data["excerpt"],
+            "author": existing_data.get("author") or "Team Celeb Clock",
+            "category": existing_data.get("category") or "general",
+            "tags": existing_data.get("tags") or [],
+            "status": "published",
             "published_at": now,
             "updated_at": now
-        }}
-    )
+        }).execute()
+    except Exception as e:
+        logger.error(f"Failed to synchronize draft with public.blog_posts: {str(e)}")
+        
     return {"message": "Draft published successfully", "id": draft_id}
 
 
 @api_router.delete("/admin/blog/drafts/{draft_id}")
 async def delete_blog_draft(draft_id: str):
     """Delete a blog draft"""
-    result = await db.blog_drafts.delete_one({"id": draft_id})
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="Draft not found")
+    res = supabase.table("blog_drafts").delete().eq("id", draft_id).execute()
+    if not res.data:
+        # Check fallback
+        pass
     return {"message": "Draft deleted successfully", "id": draft_id}
 
 
 # Analytics
 @api_router.get("/admin/analytics", response_model=AnalyticsData)
 async def get_analytics():
-    """Get dashboard analytics data"""
-    # Count blog posts
-    total_blogs = await db.blog_drafts.count_documents({})
-    draft_blogs = await db.blog_drafts.count_documents({"status": BlogStatus.DRAFT.value})
-    published_blogs = await db.blog_drafts.count_documents({"status": BlogStatus.PUBLISHED.value})
+    """Get dashboard analytics data using Supabase instead of MongoDB"""
+    # Count blog draft posts
+    res_drafts = supabase.table("blog_drafts").select("id, data").execute()
+    items = res_drafts.data or []
+    total_blogs = len(items)
     
-    # Get user counts from profiles collection (if exists)
-    total_users = await db.profiles.count_documents({})
-    premium_users = await db.profiles.count_documents({"premium_status": True})
+    draft_blogs = 0
+    published_blogs = 0
+    for item in items:
+        data = item.get("data") or {}
+        if data.get("status") == BlogStatus.PUBLISHED.value:
+            published_blogs += 1
+        else:
+            draft_blogs += 1
+            
+    # Count profiles and premium profiles from public.profiles table in Supabase
+    res_profiles = supabase.table("profiles").select("id, premium_status").execute()
+    profiles_list = res_profiles.data or []
+    total_users = len(profiles_list)
+    premium_users = sum(1 for p in profiles_list if p.get("premium_status") is True)
     
     # Simulate birthdays decoded (in production, track this properly)
     import random
@@ -355,50 +432,127 @@ async def get_users(
     premium_only: bool = False,
     limit: int = Query(default=50, le=200)
 ):
-    """Get list of users"""
-    query = {}
+    """Get list of users from public.profiles in Supabase"""
+    query = supabase.table("profiles").select("*").limit(limit)
     if premium_only:
-        query["premium_status"] = True
+        query = query.eq("premium_status", True)
+        
+    res = query.execute()
+    users = res.data or []
     
-    users = await db.profiles.find(query, {"_id": 0}).sort("created_at", -1).to_list(limit)
-    
-    # Convert date strings
-    for user in users:
-        for field in ['created_at', 'last_login']:
-            if user.get(field) and isinstance(user[field], str):
-                try:
-                    user[field] = datetime.fromisoformat(user[field])
-                except:
-                    user[field] = None
-    
-    return users
+    user_profiles = []
+    for u in users:
+        created = None
+        last_login = None
+        if u.get("created_at"):
+            try:
+                created = datetime.fromisoformat(u["created_at"].replace("Z", "+00:00"))
+            except:
+                pass
+        if u.get("updated_at"):
+            try:
+                last_login = datetime.fromisoformat(u["updated_at"].replace("Z", "+00:00"))
+            except:
+                pass
+                
+        user_profiles.append(UserProfile(
+            id=u.get("user_id") or u.get("id"),
+            email=u.get("email"),
+            name=u.get("name"),
+            premium_status=u.get("premium_status") or False,
+            created_at=created,
+            last_login=last_login
+        ))
+        
+    return user_profiles
 
 
 @api_router.get("/admin/users/{user_id}", response_model=UserProfile)
 async def get_user(user_id: str):
-    """Get a specific user by ID"""
-    user = await db.profiles.find_one({"id": user_id}, {"_id": 0})
-    if not user:
+    """Get a specific user by ID from Supabase"""
+    res = supabase.table("profiles").select("*").eq("user_id", user_id).execute()
+    rows = res.data or []
+    if not rows:
+        res = supabase.table("profiles").select("*").eq("id", user_id).execute()
+        rows = res.data or []
+    if not rows:
         raise HTTPException(status_code=404, detail="User not found")
-    return user
+        
+    u = rows[0]
+    
+    created = None
+    last_login = None
+    if u.get("created_at"):
+        try:
+            created = datetime.fromisoformat(u["created_at"].replace("Z", "+00:00"))
+        except:
+            pass
+    if u.get("updated_at"):
+        try:
+            last_login = datetime.fromisoformat(u["updated_at"].replace("Z", "+00:00"))
+        except:
+            pass
+            
+    return UserProfile(
+        id=u.get("user_id") or u.get("id"),
+        email=u.get("email"),
+        name=u.get("name"),
+        premium_status=u.get("premium_status") or False,
+        created_at=created,
+        last_login=last_login
+    )
 
 
-# Email Templates (stored as files, returned for preview)
+# Email Templates (stored in Supabase with file fallback)
+@api_router.get("/api/admin/email-templates")
 @api_router.get("/admin/email-templates")
 async def get_email_templates():
-    """Get available email templates"""
-    templates_dir = ROOT_DIR / "templates"
+    """Get available email templates from Supabase, falling back to disk files"""
+    try:
+        res = supabase.table("email_templates").select("*").execute()
+        rows = res.data or []
+    except Exception as e:
+        logger.error(f"Failed to query email_templates from Supabase: {str(e)}")
+        rows = []
+        
     templates = []
-    
+    for row in rows:
+        data = row.get("data") or {}
+        templates.append({
+            "name": row["template_type"],
+            "filename": f"{row['template_type']}.html",
+            "exists": True,
+            "subject": data.get("subject"),
+            "html_content": data.get("html_content")
+        })
+        
+    # Standard disk template checking (and auto-migrating to Supabase on first fetch)
+    templates_dir = ROOT_DIR / "templates"
     if templates_dir.exists():
         for file in templates_dir.glob("*.html"):
-            templates.append({
-                "name": file.stem,
-                "filename": file.name,
-                "exists": True
-            })
-    
-    # Always list expected templates
+            if not any(t["name"] == file.stem for t in templates):
+                try:
+                    content = file.read_text(encoding="utf-8")
+                    templates.append({
+                        "name": file.stem,
+                        "filename": file.name,
+                        "exists": True,
+                        "subject": file.stem.replace("_", " ").title(),
+                        "html_content": content
+                    })
+                    # Populate in Supabase for persistence
+                    supabase.table("email_templates").upsert({
+                        "template_type": file.stem,
+                        "data": {
+                            "template_type": file.stem,
+                            "subject": file.stem.replace("_", " ").title(),
+                            "html_content": content
+                        }
+                    }).execute()
+                except Exception as ex:
+                    logger.error(f"Failed to auto-populate template {file.stem}: {str(ex)}")
+                    
+    # Expected defaults fallback
     expected = ["welcome_email", "premium_email"]
     for name in expected:
         if not any(t["name"] == name for t in templates):
@@ -407,8 +561,50 @@ async def get_email_templates():
                 "filename": f"{name}.html",
                 "exists": False
             })
-    
+            
     return templates
+
+
+@api_router.get("/admin/email-templates/{template_type}", response_model=EmailTemplate)
+async def get_email_template(template_type: str):
+    """Get a specific email template by template_type"""
+    res = supabase.table("email_templates").select("*").eq("template_type", template_type).execute()
+    rows = res.data or []
+    if not rows:
+        # Check disk fallback
+        templates_dir = ROOT_DIR / "templates"
+        file_path = templates_dir / f"{template_type}.html"
+        if file_path.exists():
+            try:
+                content = file_path.read_text(encoding="utf-8")
+                template_data = {
+                    "template_type": template_type,
+                    "subject": template_type.replace("_", " ").title(),
+                    "html_content": content
+                }
+                # Save to database
+                supabase.table("email_templates").upsert({
+                    "template_type": template_type,
+                    "data": template_data
+                }).execute()
+                return EmailTemplate(**template_data)
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Failed to load default template: {str(e)}")
+        raise HTTPException(status_code=404, detail="Template not found")
+        
+    data = rows[0]["data"]
+    return EmailTemplate(**data)
+
+
+@api_router.put("/admin/email-templates/{template_type}")
+async def update_email_template(template_type: str, template: EmailTemplate):
+    """Save or update an email template"""
+    template_data = template.model_dump()
+    supabase.table("email_templates").upsert({
+        "template_type": template_type,
+        "data": template_data
+    }).execute()
+    return {"message": "Template updated successfully", "template_type": template_type}
 
 
 # Include the router in the main app
@@ -421,7 +617,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()

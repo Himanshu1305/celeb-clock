@@ -1,631 +1,335 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
-import { 
-  Heart, 
-  Cigarette, 
-  Wine, 
-  Activity, 
-  Apple, 
-  Brain, 
-  TrendingUp,
-  TrendingDown,
-  RotateCcw,
-  Download,
-  FileText,
-  Sparkles,
-  ArrowRight,
-  ChevronRight
-} from 'lucide-react';
-import { 
-  PieChart, 
-  Pie, 
-  Cell, 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  Legend
-} from 'recharts';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { ArrowRight, Star, Sparkles, TrendingUp, Info } from 'lucide-react';
 
-interface Props {
+interface ReportProps {
   lifeExpectancy: number;
   baseLifeExpectancy: number;
-  factors: {
-    smoking: number;
-    drinking: number;
-    exercise: number;
-    diet: number;
-    stress: number;
-    heartDisease: number;
-    diabetes: number;
+  factors: any;
+  userSelections: {
+    smoking: 'never' | 'light' | 'moderate' | 'heavy' | '';
+    drinking: 'none' | 'light' | 'moderate' | 'heavy' | '';
+    exercise: 'seldom' | 'light' | 'moderate' | 'heavy' | '';
+    diet: 'poor' | 'average' | 'good' | 'excellent' | '';
+    stress: number; // 1–10 scale
   };
-  userSelections?: {
-    smoking: number;
-    drinking: number;
-    exercise: number;
-    diet: number;
-    stress: number;
-  };
-  name?: string;
-  birthDate?: Date | null;
+  name: string;
+  birthDate: Date | null | undefined;
   celebrities?: any[];
-  onFactorChange?: (factor: string, value: number) => void;
 }
 
-// --- Sub-components ---
+// Convert string categoricals from LifeExpectancyCalculator to 0-3 slider indices
+const smokingToIndex = (v: string): number =>
+  ({ '': 0, never: 0, light: 1, moderate: 2, heavy: 3 }[v] ?? 0);
+const drinkingToIndex = (v: string): number =>
+  ({ '': 0, none: 0, light: 1, moderate: 2, heavy: 3 }[v] ?? 0);
+const exerciseToIndex = (v: string): number =>
+  ({ '': 0, seldom: 0, light: 1, moderate: 2, heavy: 3 }[v] ?? 0);
+const dietToIndex = (v: string): number =>
+  ({ '': 0, poor: 0, average: 1, good: 2, excellent: 3 }[v] ?? 0);
+const stressToIndex = (v: number): number =>
+  v >= 8 ? 0 : v >= 5 ? 1 : v >= 3 ? 2 : 3;
 
-const FactorCard = ({ 
-  icon: Icon, title, impact, description, detailedInfo, color 
-}: { 
-  icon: any; title: string; impact: number; description: string; detailedInfo: string; color: string; 
-}) => (
-  <div className={`glass-card p-5 border-l-4 ${color} space-y-3`}>
-    <div className="flex items-start gap-3">
-      <Icon className="w-5 h-5 mt-1 text-muted-foreground" />
-      <div className="flex-1">
-        <div className="flex items-center justify-between mb-1">
-          <h4 className="font-medium text-sm">{title}</h4>
-          <div className="flex items-center gap-1">
-            {impact > 0 ? <TrendingUp className="w-4 h-4 text-green-500" /> : impact < 0 ? <TrendingDown className="w-4 h-4 text-red-500" /> : null}
-            <span className={`text-sm font-semibold ${impact > 0 ? 'text-green-500' : impact < 0 ? 'text-red-500' : 'text-muted-foreground'}`}>
-              {impact > 0 ? '+' : ''}{impact} years
-            </span>
-          </div>
-        </div>
-        <p className="text-xs text-muted-foreground">{description}</p>
-      </div>
-    </div>
-    <div className="pl-8 pr-2">
-      <div className="text-xs text-muted-foreground bg-background/50 p-3 rounded-md border border-border/50">
-        <p className="leading-relaxed">{detailedInfo}</p>
-      </div>
-    </div>
-  </div>
-);
+export const EnhancedLifeExpectancyReport = ({
+  lifeExpectancy: initialExpectancy,
+  baseLifeExpectancy = 76.1,
+  factors,
+  userSelections,
+  name,
+  birthDate,
+  celebrities = []
+}: ReportProps) => {
 
-const WhatIfSlider = ({ 
-  label, icon: Icon, value, onChange, options, currentImpact, userSelection
-}: { 
-  label: string; icon: any; value: number; onChange: (value: number) => void; options: string[]; currentImpact: number; userSelection?: number;
-}) => {
-  const isUserCurrent = userSelection !== undefined && value === userSelection;
-  return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Icon className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm font-medium">{label}</span>
-          {isUserCurrent && <Badge variant="outline" className="text-xs bg-primary/10 border-primary/30">Current</Badge>}
-        </div>
-        <Badge variant={currentImpact >= 0 ? "default" : "destructive"} className="text-xs">
-          {currentImpact >= 0 ? '+' : ''}{currentImpact} yrs
-        </Badge>
-      </div>
-      <Slider value={[value]} onValueChange={([v]) => onChange(v)} max={options.length - 1} step={1} className="w-full" />
-      <div className="flex justify-between px-1">
-        {options.map((l, i) => (
-          <div key={i} className={`text-[10px] text-center transition-colors ${value === i ? 'text-primary font-semibold' : 'text-muted-foreground'}`} style={{ width: `${100 / options.length}%` }}>
-            {l}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+  const [sliderSmoking, setSliderSmoking] = useState(() => smokingToIndex(userSelections?.smoking ?? ''));
+  const [sliderDrinking, setSliderDrinking] = useState(() => drinkingToIndex(userSelections?.drinking ?? ''));
+  const [sliderExercise, setSliderExercise] = useState(() => exerciseToIndex(userSelections?.exercise ?? ''));
+  const [sliderDiet, setSliderDiet] = useState(() => dietToIndex(userSelections?.diet ?? ''));
+  const [sliderStress, setSliderStress] = useState(() => stressToIndex(userSelections?.stress ?? 5));
 
-// --- Circular Gauge SVG ---
-const CircularGauge = ({ projectedAge, baseline, isAbove }: { projectedAge: number; baseline: number; isAbove: boolean }) => {
-  const maxAge = 100;
-  const percentage = Math.min((projectedAge / maxAge) * 100, 100);
-  const circumference = 2 * Math.PI * 54;
-  const strokeDashoffset = circumference - (percentage / 100) * circumference;
-  const colorClass = isAbove ? 'stroke-emerald-500' : 'stroke-amber-500';
-
-  return (
-    <div className="relative w-48 h-48 mx-auto">
-      <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-        <circle cx="60" cy="60" r="54" fill="none" stroke="hsl(var(--muted))" strokeWidth="8" opacity="0.3" />
-        <circle cx="60" cy="60" r="54" fill="none" className={colorClass} strokeWidth="8" strokeLinecap="round"
-          strokeDasharray={circumference} strokeDashoffset={strokeDashoffset}
-          style={{ transition: 'stroke-dashoffset 1s ease-out' }} />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className={`text-4xl font-bold ${isAbove ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
-          {projectedAge.toFixed(1)}
-        </span>
-        <span className="text-xs text-muted-foreground font-medium">years</span>
-      </div>
-    </div>
-  );
-};
-
-// --- Timeline Bar ---
-const LifeTimeline = ({ currentAge, projectedAge, baseline }: { currentAge: number; projectedAge: number; baseline: number }) => {
-  const maxDisplay = Math.max(baseline, projectedAge) + 5;
-  const nowPct = (currentAge / maxDisplay) * 100;
-  const projPct = (projectedAge / maxDisplay) * 100;
-  const basePct = (baseline / maxDisplay) * 100;
-  const isBelow = projectedAge < baseline;
-  const gap = Math.abs(projectedAge - baseline).toFixed(1);
-
-  return (
-    <div className="space-y-3">
-      <div className="relative h-10 rounded-full bg-muted/50 overflow-hidden">
-        {/* Lived portion */}
-        <div className="absolute inset-y-0 left-0 rounded-l-full bg-primary/30" style={{ width: `${nowPct}%` }} />
-        {/* Projected portion */}
-        {isBelow ? (
-          <>
-            <div className="absolute inset-y-0 bg-amber-400/40" style={{ left: `${nowPct}%`, width: `${projPct - nowPct}%` }} />
-            <div className="absolute inset-y-0 bg-red-400/30 border-l-2 border-dashed border-red-400" style={{ left: `${projPct}%`, width: `${basePct - projPct}%` }} />
-          </>
-        ) : (
-          <>
-            <div className="absolute inset-y-0 bg-emerald-400/40" style={{ left: `${nowPct}%`, width: `${basePct - nowPct}%` }} />
-            <div className="absolute inset-y-0 bg-emerald-500/30 border-l-2 border-dashed border-emerald-500" style={{ left: `${basePct}%`, width: `${projPct - basePct}%` }} />
-          </>
-        )}
-      </div>
-      <div className="relative h-6">
-        <div className="absolute text-xs font-medium text-primary" style={{ left: `${nowPct}%`, transform: 'translateX(-50%)' }}>
-          Now: {currentAge}
-        </div>
-        <div className={`absolute text-xs font-bold ${isBelow ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'}`} style={{ left: `${projPct}%`, transform: 'translateX(-50%)' }}>
-          You: {projectedAge.toFixed(1)}
-        </div>
-        <div className="absolute text-xs text-muted-foreground" style={{ left: `${basePct}%`, transform: 'translateX(-50%)' }}>
-          Avg: {baseline}
-        </div>
-      </div>
-      <p className={`text-center text-sm font-medium ${isBelow ? 'text-red-500' : 'text-emerald-500'}`}>
-        {isBelow ? `⚠️ You're potentially losing ${gap} years compared to average` : `🎉 You're gaining ${gap} years above average!`}
-      </p>
-    </div>
-  );
-};
-
-// --- Main Component ---
-export const EnhancedLifeExpectancyReport = ({ 
-  lifeExpectancy, baseLifeExpectancy, factors, userSelections, name = '', birthDate, celebrities = [], onFactorChange 
-}: Props) => {
-  const getInitialWhatIfFactors = () => userSelections || { smoking: 0, drinking: 0, exercise: 0, diet: 1, stress: 1 };
-  const [whatIfFactors, setWhatIfFactors] = useState(getInitialWhatIfFactors);
-  const reportRef = useRef<HTMLDivElement>(null);
-  const [isExporting, setIsExporting] = useState(false);
-
-  useEffect(() => { if (userSelections) setWhatIfFactors(userSelections); }, [userSelections]);
-
-  const age = birthDate ? Math.floor((Date.now() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : 0;
-  const projectedAge = age + lifeExpectancy;
-  const isAboveBaseline = projectedAge >= baseLifeExpectancy;
-  const gapFromBaseline = Math.abs(projectedAge - baseLifeExpectancy).toFixed(1);
-
-  const factorConfigs = {
-    smoking: { icon: Cigarette, title: "Smoking", options: ["Non-smoker", "1-5/day", "6-10/day", "10+/day"], impacts: [0, -3, -7, -12] },
-    drinking: { icon: Wine, title: "Alcohol", options: ["None", "Light", "Moderate", "Heavy"], impacts: [0, 1, -1, -6] },
-    exercise: { icon: Activity, title: "Exercise", options: ["Rarely", "1-2/wk", "3-4/wk", "5+/wk"], impacts: [-2, 1, 3, 5] },
-    diet: { icon: Apple, title: "Diet", options: ["Poor", "Average", "Good", "Excellent"], impacts: [-3, 0, 2, 4] },
-    stress: { icon: Brain, title: "Stress", options: ["High", "Moderate", "Low", "Very Low"], impacts: [-2.5, -0.5, 1, 1.5] }
-  };
-
-  const whatIfProjectedAge = useMemo(() => {
-    const total = baseLifeExpectancy + Object.entries(whatIfFactors).reduce((sum, [key, value]) => {
-      if (key === 'heartDisease' || key === 'diabetes') return sum + (value as number);
-      const config = factorConfigs[key as keyof typeof factorConfigs];
-      return sum + (config ? config.impacts[value as number] : 0);
-    }, 0);
-    return Math.max(50, Math.min(120, total));
-  }, [whatIfFactors, baseLifeExpectancy]);
-
-  const whatIfImprovement = whatIfProjectedAge - projectedAge + age;
-  const hasWhatIfChanges = JSON.stringify(whatIfFactors) !== JSON.stringify(userSelections || getInitialWhatIfFactors());
-
-  // Find biggest single improvement
-  const biggestImprovement = useMemo(() => {
-    if (!userSelections) return null;
-    let best = { factor: '', gain: 0 };
-    Object.entries(factorConfigs).forEach(([key, config]) => {
-      const currentIdx = userSelections[key as keyof typeof userSelections] as number;
-      const bestIdx = config.impacts.indexOf(Math.max(...config.impacts));
-      const gain = config.impacts[bestIdx] - config.impacts[currentIdx];
-      if (gain > best.gain) best = { factor: config.title, gain };
-    });
-    return best.gain > 0 ? best : null;
+  // Sync slider positions if the parent re-submits new selections
+  useEffect(() => {
+    if (userSelections) {
+      setSliderSmoking(smokingToIndex(userSelections.smoking ?? ''));
+      setSliderDrinking(drinkingToIndex(userSelections.drinking ?? ''));
+      setSliderExercise(exerciseToIndex(userSelections.exercise ?? ''));
+      setSliderDiet(dietToIndex(userSelections.diet ?? ''));
+      setSliderStress(stressToIndex(userSelections.stress ?? 5));
+    }
   }, [userSelections]);
 
-  // Chart data
-  const factorData = [
-    { name: 'Smoking', value: factors.smoking, color: factors.smoking < 0 ? '#ef4444' : '#10b981' },
-    { name: 'Drinking', value: factors.drinking, color: factors.drinking < 0 ? '#ef4444' : factors.drinking > 0 ? '#10b981' : '#6b7280' },
-    { name: 'Exercise', value: factors.exercise, color: factors.exercise > 0 ? '#10b981' : '#ef4444' },
-    { name: 'Diet', value: factors.diet, color: factors.diet > 0 ? '#10b981' : factors.diet < 0 ? '#ef4444' : '#6b7280' },
-    { name: 'Stress', value: factors.stress, color: factors.stress >= 0 ? '#10b981' : '#ef4444' },
-  ].filter(item => item.value !== 0);
+  // Heritage Tree interactive form states
+  const [ancestors, setAncestors] = useState([
+    { relation: 'Paternal Grandfather', age: 76, active: true },
+    { relation: 'Paternal Grandmother', age: 82, active: true },
+    { relation: 'Maternal Grandfather', age: 72, active: true },
+    { relation: 'Maternal Grandmother', age: 88, active: true },
+  ]);
 
-  const healthRiskData = [
-    { name: 'Heart Disease', value: Math.abs(factors.heartDisease), fill: '#ef4444' },
-    { name: 'Diabetes', value: Math.abs(factors.diabetes), fill: '#f59e0b' },
-  ].filter(item => item.value > 0);
+  // Local Longevity Multi-Select states
+  const [selectedHabits, setSelectedHabits] = useState<string[]>(["diet", "exercise"]);
 
-  // Personalized recommendations - only relevant ones, max 8
-  const recommendations = useMemo(() => {
-    const recs: { icon: string; title: string; text: string; years: string; priority: number }[] = [];
-    
-    if (factors.smoking < 0) recs.push({ icon: '🚭', title: 'Quit Smoking', text: `Quitting could add up to ${Math.abs(factors.smoking)} years. Within 1 year, your heart disease risk drops 50%.`, years: `+${Math.abs(factors.smoking)}`, priority: Math.abs(factors.smoking) });
-    if (factors.drinking < 0) recs.push({ icon: '🍷', title: 'Reduce Alcohol', text: `Limiting intake could add ${Math.abs(factors.drinking)} years and improve liver and heart health.`, years: `+${Math.abs(factors.drinking)}`, priority: Math.abs(factors.drinking) });
-    if (factors.exercise <= 0) recs.push({ icon: '🏃', title: 'Exercise More', text: 'Regular exercise (150 min/week) could add 3-7 years. Start with walking or swimming.', years: '+3-7', priority: 5 });
-    if (factors.diet <= 0) recs.push({ icon: '🥗', title: 'Improve Diet', text: 'A Mediterranean diet rich in vegetables, fruits, and healthy fats could add 2-4 years.', years: '+2-4', priority: 4 });
-    if (factors.stress < 0) recs.push({ icon: '🧘', title: 'Manage Stress', text: `Mindfulness and meditation could add ${Math.abs(factors.stress).toFixed(1)} years. Just 10 min daily helps.`, years: `+${Math.abs(factors.stress).toFixed(1)}`, priority: Math.abs(factors.stress) });
-    
-    // General tips (lower priority)
-    recs.push({ icon: '💤', title: 'Quality Sleep', text: '7-9 hours nightly improves cognitive function and immune health.', years: '+2-3', priority: 2 });
-    recs.push({ icon: '🤝', title: 'Social Connections', text: 'Strong relationships boost mental health and can add years.', years: '+3-5', priority: 2 });
-    recs.push({ icon: '🩺', title: 'Regular Checkups', text: 'Annual exams catch issues early for better outcomes.', years: '+3-5', priority: 2 });
-    
-    return recs.sort((a, b) => b.priority - a.priority).slice(0, 8);
-  }, [factors]);
-
-  const top3 = recommendations.slice(0, 3);
-  const otherRecs = recommendations.slice(3);
-
-  const resetWhatIf = () => setWhatIfFactors(userSelections || getInitialWhatIfFactors());
-
-  // PDF export
-  const exportToPDF = async () => {
-    if (!reportRef.current) return;
-    setIsExporting(true);
-    try {
-      const canvas = await html2canvas(reportRef.current, { scale: 3, useCORS: true, backgroundColor: '#ffffff', logging: false });
-      const imgData = canvas.toDataURL('image/png', 1.0);
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight, undefined, 'FAST');
-      heightLeft -= pdfHeight;
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight, undefined, 'FAST');
-        heightLeft -= pdfHeight;
-      }
-      const date = new Date().toISOString().split('T')[0];
-      pdf.save(`${name ? name.replace(/\s+/g, '-') : 'Life'}-Report-${date}.pdf`);
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-    } finally {
-      setIsExporting(false);
+  const toggleHabit = (id: string) => {
+    if (selectedHabits.includes(id)) {
+      setSelectedHabits(selectedHabits.filter(h => h !== id));
+    } else {
+      setSelectedHabits([...selectedHabits, id]);
     }
   };
 
+  const defaultCelebrities = [
+    { name: "Amitabh Bachchan", role: "Bollywood Legend", age: "83 yrs", status: "Living", desc: "Maintains intense work ethic, zero smoking or drinking, strict daily routine deep into his 80s." },
+    { name: "Lata Mangeshkar", role: "Legendary Vocalist", age: "92 yrs", status: "Deceased", desc: "Maintains deep lifelong mental focus, active singing discipline, and structured daily vocal engagement." },
+    { name: "Milind Soman", role: "Fitness Icon", age: "60 yrs", status: "Living", desc: "Advocate for barefoot running, minimal processed foods, outdoor exercise, and core muscle training." },
+    { name: "Ratan Tata", role: "Industrialist & Philanthropist", age: "86 yrs", status: "Deceased", desc: "Demonstrated how strong human purpose, regular philanthropy, and community action keep minds active." }
+  ];
+
+  const targetCelebrities = celebrities && celebrities.length > 0 ? celebrities : defaultCelebrities;
+
+  // SAFE DATE GUARD: Prevent calling .getFullYear() on a null/undefined date object
+  const safeBirthYear = birthDate instanceof Date ? birthDate.getFullYear() : 2000;
+  const currentAge = new Date().getFullYear() - safeBirthYear;
+  
+  const smokeImpacts = [0, -3, -7, -12];
+  const drinkImpacts = [0, 1, -1, -6];
+  const exerciseImpacts = [-2, 1, 3, 5];
+  const dietImpacts = [-3, 0, 2, 4];
+  const stressImpacts = [-2.5, -0.5, 1, 1.5];
+
+  // Safeguard values to keep index matches within array bounds [0 to 3]
+  const sSmoke = Math.min(Math.max(sliderSmoking, 0), 3);
+  const sDrink = Math.min(Math.max(sliderDrinking, 0), 3);
+  const sExercise = Math.min(Math.max(sliderExercise, 0), 3);
+  const sDiet = Math.min(Math.max(sliderDiet, 0), 3);
+  const sStress = Math.min(Math.max(sliderStress, 0), 3);
+
+  const currentImpactSum = 
+    smokeImpacts[sSmoke] + 
+    drinkImpacts[sDrink] + 
+    exerciseImpacts[sExercise] + 
+    dietImpacts[sDiet] + 
+    stressImpacts[sStress];
+
+  const averageAncestorAge = ancestors.filter(a => a.active).reduce((sum, a) => sum + a.age, 0) / ancestors.filter(a => a.active).length || 75;
+  const lineageBonus = (averageAncestorAge - 75) * 0.15;
+
+  const dynamicProjectedAge = Math.round((baseLifeExpectancy + currentImpactSum + lineageBonus) * 10) / 10;
+  const varianceGained = Math.round((dynamicProjectedAge - baseLifeExpectancy) * 10) / 10;
+
   return (
-    <div className="space-y-8">
-      <div ref={reportRef} className="space-y-8">
-        
-        {/* ═══════════════════════════════════════════ */}
-        {/* SECTION 1: HERO RESULT                     */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className={`rounded-2xl p-8 md:p-12 text-center space-y-6 animate-fade-in-up ${
-          isAboveBaseline 
-            ? 'bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-emerald-950/40 dark:via-green-950/30 dark:to-teal-950/20 border-2 border-emerald-200 dark:border-emerald-800' 
-            : 'bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 dark:from-amber-950/40 dark:via-orange-950/30 dark:to-red-950/20 border-2 border-amber-200 dark:border-amber-800'
-        }`}>
-          {name && (
-            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-              {name}'s Life Expectancy Report
-            </p>
-          )}
-          
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-            You're projected to live to age
-          </h2>
-          
-          <CircularGauge projectedAge={projectedAge} baseline={baseLifeExpectancy} isAbove={isAboveBaseline} />
-          
-          <div className="space-y-2">
-            <p className={`text-lg font-semibold ${isAboveBaseline ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
-              {isAboveBaseline 
-                ? `🎉 That's ${gapFromBaseline} years above average!` 
-                : `That's ${gapFromBaseline} years below average`}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Average life expectancy: {baseLifeExpectancy} years • Your current age: {age}
-            </p>
+    <div className="space-y-6 mt-4 text-left">
+      <div className="bg-primary/5 p-4 rounded-xl border border-primary/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <span className="text-xs uppercase font-bold text-muted-foreground tracking-wider">Current Age Baseline Tracker</span>
+          <div className="text-xl font-bold flex items-center gap-2 mt-0.5">
+            <span>Now: <strong className="text-primary">{currentAge} Yrs old</strong></span>
+            <span className="text-muted-foreground text-sm">|</span>
+            <span>Projected Lifespan: <strong className="text-success">{dynamicProjectedAge} Yrs</strong></span>
           </div>
         </div>
+        <Badge variant={varianceGained >= 0 ? "success" : "destructive"} className="text-sm px-3 py-1 font-bold">
+          {varianceGained >= 0 ? `🎉 +${varianceGained} Years Gained Over Average!` : `⚠️ ${varianceGained} Years Below Average`}
+        </Badge>
+      </div>
 
-        {/* ═══════════════════════════════════════════ */}
-        {/* SECTION 2: VISUAL TIMELINE                 */}
-        {/* ═══════════════════════════════════════════ */}
-        <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <ArrowRight className="w-5 h-5 text-primary" />
-              Your Life Timeline
-            </CardTitle>
-            <CardDescription>See where you stand compared to the average</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <LifeTimeline currentAge={age} projectedAge={projectedAge} baseline={baseLifeExpectancy} />
-          </CardContent>
-        </Card>
+      <div className="space-y-2">
+        <h2 className="text-xl font-black text-foreground flex items-center gap-2">
+          <Sparkles className="w-5 h-5 text-primary" /> The Three Pillars of Your Longevity Blueprint
+        </h2>
+        <p className="text-xs text-muted-foreground">Explore how genetics, localized environmental habits, and real-world lifestyle adjustments directly combine to determine your total active years.</p>
+      </div>
 
-        {/* ═══════════════════════════════════════════ */}
-        {/* SECTION 3: WHAT-IF SCENARIOS (moved UP!)   */}
-        {/* ═══════════════════════════════════════════ */}
-        <Card className="border-2 border-emerald-200 dark:border-emerald-800 bg-gradient-to-br from-emerald-50/50 via-background to-teal-50/50 dark:from-emerald-950/20 dark:to-teal-950/20">
-          <CardHeader className="text-center pb-2">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Sparkles className="w-6 h-6 text-emerald-500" />
-              <CardTitle className="text-2xl text-emerald-700 dark:text-emerald-300">
-                The Good News: You Can Change This
-              </CardTitle>
-            </div>
-            <CardDescription className="text-base">
-              Adjust the sliders below and watch your projected age update in real-time
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Live comparison banner */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 p-4 rounded-xl bg-background/80 border border-border">
-              <div className="text-center">
-                <div className="text-sm text-muted-foreground">Current</div>
-                <div className="text-3xl font-bold text-foreground">{projectedAge.toFixed(1)}</div>
-              </div>
-              <ChevronRight className="w-6 h-6 text-muted-foreground hidden sm:block" />
-              <div className="text-center">
-                <div className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">If you change</div>
-                <div className={`text-3xl font-bold transition-all duration-300 ${
-                  whatIfImprovement > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'
-                }`}>
-                  {whatIfProjectedAge.toFixed(1)}
-                </div>
-              </div>
-              {whatIfImprovement > 0 && (
-                <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 text-base px-3 py-1">
-                  +{whatIfImprovement.toFixed(1)} years
-                </Badge>
-              )}
-            </div>
+      <Tabs defaultValue="heritage" className="w-full">
+        <TabsList className="grid grid-cols-3 w-full border-b rounded-none bg-transparent h-auto p-0">
+          <TabsTrigger value="heritage" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">1. Family Lineage</TabsTrigger>
+          <TabsTrigger value="anchor" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">2. Local Habits</TabsTrigger>
+          <TabsTrigger value="celebrity" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">3. Benchmarks</TabsTrigger>
+        </TabsList>
 
-            {biggestImprovement && !hasWhatIfChanges && (
-              <p className="text-center text-sm text-muted-foreground italic">
-                💡 Tip: Improving your <strong>{biggestImprovement.factor.toLowerCase()}</strong> alone could add <strong>+{biggestImprovement.gain} years</strong>
-              </p>
-            )}
-
-            {/* Sliders */}
-            <div className="space-y-6 max-w-xl mx-auto">
-              {Object.entries(factorConfigs).map(([key, config]) => {
-                const currentValue = whatIfFactors[key as keyof typeof whatIfFactors] as number;
-                const currentImpact = config.impacts[currentValue];
-                const userSel = userSelections ? userSelections[key as keyof typeof userSelections] : undefined;
-                return (
-                  <WhatIfSlider key={key} label={config.title} icon={config.icon} value={currentValue}
-                    onChange={(v) => setWhatIfFactors(prev => ({ ...prev, [key]: v }))}
-                    options={config.options} currentImpact={currentImpact} userSelection={userSel} />
-                );
-              })}
-            </div>
-
-            <div className="flex justify-center">
-              <Button variant="outline" onClick={resetWhatIf} size="sm">
-                <RotateCcw className="w-4 h-4 mr-2" /> Reset to Current
-              </Button>
-            </div>
-
-            <p className="text-center text-xs text-muted-foreground">
-              ✨ Every small change counts. You have the power to add years to your life.
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* SECTION 4: HEALTH IMPACT CHARTS            */}
-        {/* ═══════════════════════════════════════════ */}
-        <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="text-lg">Understanding Your Health Profile</CardTitle>
-            <CardDescription>How each factor contributes to your projected lifespan</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid lg:grid-cols-2 gap-8">
-              {factorData.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium mb-4 flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-primary" /> Lifestyle Impact (Years)
-                  </h4>
-                  <div className="h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={factorData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                        <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" />
-                        <YAxis tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" />
-                        <Tooltip formatter={(value) => [`${value} years`, 'Impact']}
-                          contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }} />
-                        <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                          {factorData.map((entry, index) => (<Cell key={index} fill={entry.color} />))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
+        <TabsContent value="heritage" className="pt-4 space-y-4">
+          <div className="bg-muted/40 p-4 rounded-xl border">
+            <h4 className="font-bold text-sm text-foreground mb-1">🧬 Lineage Calculation Form</h4>
+            <p className="text-xs text-muted-foreground mb-3">If an ancestor has passed away, input their exact <strong>age at death</strong>. If they are living, provide their current age. This establishes your genetic baseline calculation.</p>
+            
+            <div className="grid sm:grid-cols-2 gap-4">
+              {ancestors.map((ancestor, i) => (
+                <div key={i} className="flex items-center justify-between p-3 bg-background rounded-lg border shadow-sm">
+                  <div className="space-y-0.5">
+                    <Label className="text-xs font-bold text-foreground">{ancestor.relation}</Label>
+                    <p className="text-[10px] text-muted-foreground">Adjust age to shift curves</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Input 
+                      type="number" 
+                      value={ancestor.age} 
+                      onChange={(e) => {
+                        const newAns = [...ancestors];
+                        newAns[i].age = Number(e.target.value);
+                        setAncestors(newAns);
+                      }}
+                      className="w-16 h-8 text-xs text-center font-bold" 
+                    />
+                    <span className="text-xs text-muted-foreground font-medium">yrs</span>
                   </div>
                 </div>
-              )}
-              {healthRiskData.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium mb-4 flex items-center gap-2">
-                    <Heart className="w-4 h-4 text-destructive" /> Health Risk Factors
-                  </h4>
-                  <div className="h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie data={healthRiskData} cx="50%" cy="50%" innerRadius={40} outerRadius={80} paddingAngle={5} dataKey="value">
-                          {healthRiskData.map((entry, index) => (<Cell key={index} fill={entry.fill} />))}
-                        </Pie>
-                        <Tooltip formatter={(value) => [`${value} years impact`, 'Risk']}
-                          contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }} />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              )}
+              ))}
             </div>
-          </CardContent>
-        </Card>
+            <p className="text-[11px] text-primary/80 mt-3 italic bg-primary/5 p-2 rounded border border-primary/10">ℹ️ <strong>Current Dynamic Calculation:</strong> Your family's average ancestral lifespan of <strong>{averageAncestorAge} yrs</strong> contributes a modifier of <strong>{lineageBonus.toFixed(1)} years</strong> to your baseline timeline.</p>
+          </div>
+        </TabsContent>
 
-        {/* ═══════════════════════════════════════════ */}
-        {/* SECTION 5: DETAILED FACTOR ANALYSIS        */}
-        {/* ═══════════════════════════════════════════ */}
-        <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="text-lg">Detailed Factor Analysis</CardTitle>
-            <CardDescription>Based on research from WHO, CDC, and peer-reviewed studies</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-4">
-              <FactorCard icon={Cigarette} title="Smoking Impact" impact={factors.smoking}
-                description={factors.smoking < 0 ? "Reducing lifespan significantly" : "No negative impact from smoking"}
-                detailedInfo={factors.smoking < 0 
-                  ? "According to WHO data, smoking reduces life expectancy by an average of 10 years for heavy smokers. Each cigarette can reduce your life by approximately 11 minutes. Tobacco use is the leading preventable cause of death globally."
-                  : "Not smoking is one of the most impactful decisions for longevity. Non-smokers live an average of 10 years longer than smokers."}
-                color={factors.smoking < 0 ? "border-l-red-500" : "border-l-green-500"} />
-              <FactorCard icon={Wine} title="Alcohol Impact" impact={factors.drinking}
-                description={factors.drinking < 0 ? "Heavy drinking reduces lifespan" : factors.drinking > 0 ? "Light drinking may have benefits" : "No alcohol consumption"}
-                detailedInfo={factors.drinking < -3
-                  ? "Heavy drinking (4+ drinks/day) can reduce life expectancy by 6+ years. Excessive alcohol increases risks of liver disease and various cancers."
-                  : factors.drinking > 0 ? "Light drinking has been associated with slight longevity benefits, possibly from cardiovascular effects. However, WHO emphasizes no amount is completely safe."
-                  : "No alcohol consumption eliminates alcohol-related health risks entirely."}
-                color={factors.drinking < 0 ? "border-l-red-500" : factors.drinking > 0 ? "border-l-green-500" : "border-l-gray-500"} />
-              <FactorCard icon={Activity} title="Exercise Impact" impact={factors.exercise}
-                description={factors.exercise > 0 ? "Regular exercise adds years" : "Sedentary lifestyle impact"}
-                detailedInfo={factors.exercise >= 5
-                  ? "Exercising 5+ times/week can add up to 5 years. WHO recommends 150-300 minutes of moderate activity weekly."
-                  : factors.exercise >= 1 ? "Some exercise is better than none. Increasing to 150+ minutes weekly would provide optimal benefits."
-                  : "Sedentary lifestyle can reduce life expectancy by ~2 years. Physical inactivity is the 4th leading risk factor for mortality."}
-                color={factors.exercise > 0 ? "border-l-green-500" : "border-l-red-500"} />
-              <FactorCard icon={Apple} title="Diet Impact" impact={factors.diet}
-                description={factors.diet > 0 ? "Healthy diet promotes longevity" : "Diet needs improvement"}
-                detailedInfo={factors.diet >= 4
-                  ? "An excellent diet can add ~4 years. Mediterranean and plant-based diets are associated with 20-25% lower risk of early death."
-                  : factors.diet < 0 ? "Poor diet (mostly processed) can reduce life expectancy by ~3 years. Ultra-processed foods increase mortality risk by 62%."
-                  : "An average diet provides basic nutrition but may not optimize longevity. Consider increasing whole foods."}
-                color={factors.diet > 0 ? "border-l-green-500" : factors.diet < 0 ? "border-l-red-500" : "border-l-gray-500"} />
-              <FactorCard icon={Brain} title="Stress Impact" impact={factors.stress}
-                description={factors.stress < 0 ? "High stress reduces lifespan" : "Good stress management"}
-                detailedInfo={factors.stress >= 1
-                  ? "Excellent stress management can add 1-2 years. Good coping through meditation, exercise, or social support improves heart health."
-                  : "High chronic stress can reduce life expectancy by 2-3 years. Prolonged stress increases inflammation and weakens immune response."}
-                color={factors.stress >= 0 ? "border-l-green-500" : "border-l-red-500"} />
-              {factors.heartDisease < 0 && (
-                <FactorCard icon={Heart} title="Heart Disease Risk" impact={factors.heartDisease}
-                  description="Family history or personal diagnosis impact"
-                  detailedInfo="Heart disease can reduce life expectancy, but proper management, medication, and lifestyle changes significantly improve outcomes. Regular monitoring is key."
-                  color="border-l-red-500" />
-              )}
-              {factors.diabetes < 0 && (
-                <FactorCard icon={Heart} title="Diabetes Risk" impact={factors.diabetes}
-                  description="Family history or personal diagnosis impact"
-                  detailedInfo="Diabetes can reduce life expectancy if poorly managed. Good management through medication, diet, and exercise can minimize complications significantly."
-                  color="border-l-red-500" />
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* SECTION 6: PERSONALIZED RECOMMENDATIONS    */}
-        {/* ═══════════════════════════════════════════ */}
-        <Card className="border-2 border-emerald-200 dark:border-emerald-800 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/20">
-          <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2 text-emerald-700 dark:text-emerald-300">
-              <Heart className="w-6 h-6" />
-              Your Personalized Action Plan
-            </CardTitle>
-            <CardDescription className="text-emerald-600 dark:text-emerald-400">
-              Top changes ranked by their impact on <strong>your</strong> life expectancy
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Top 3 - larger cards */}
-            <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">
-                🏆 Top 3 Changes For You
+        <TabsContent value="anchor" className="pt-4 space-y-4">
+          <div className="bg-muted/40 p-4 rounded-xl border space-y-4">
+            <div>
+              <h4 className="font-bold text-sm text-foreground flex items-center gap-1.5">
+                🌱 Primary Epigenetic Habits Tracker <Badge className="text-[10px]">Multi-Select Enabled</Badge>
               </h4>
-              <div className="grid md:grid-cols-3 gap-4">
-                {top3.map((rec, i) => (
-                  <div key={i} className="p-5 rounded-xl bg-background/80 border border-emerald-200 dark:border-emerald-800 hover:shadow-md transition-shadow space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl">{rec.icon}</span>
-                      <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">{rec.years} yrs</Badge>
-                    </div>
-                    <h5 className="font-semibold text-foreground">{rec.title}</h5>
-                    <p className="text-sm text-muted-foreground">{rec.text}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Select all positive everyday habits you consistently follow. A combination of items multiplies systemic benefits:</p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-3 pt-1">
+              {[
+                { id: "diet", label: "Clean Nutritional Framework (Whole foods focus)", desc: "Reduces processing strain on vital organs" },
+                { id: "exercise", label: "Consistent Cardio/Strength Activity", desc: "Boosts heart efficiency and blood flow" },
+                { id: "sleep", label: "Regulated Circadian Sleep (7-8 hours sleep)", desc: "Allows critical cellular restoration" },
+                { id: "mind", label: "Active Stress Reduction / Meditation", desc: "Decreases chronic inflammatory markers" }
+              ].map((habit) => (
+                <div 
+                  key={habit.id} 
+                  onClick={() => toggleHabit(habit.id)}
+                  className={`p-3 rounded-lg border cursor-pointer transition-all flex items-start space-x-3 bg-background hover:border-primary/50 shadow-sm ${selectedHabits.includes(habit.id) ? 'ring-2 ring-primary border-primary bg-primary/5' : ''}`}
+                >
+                  <Checkbox checked={selectedHabits.includes(habit.id)} onCheckedChange={() => {}} className="mt-0.5" />
+                  <div className="space-y-0.5 pointer-events-none">
+                    <Label className="text-xs font-bold text-foreground cursor-pointer">{habit.label}</Label>
+                    <p className="text-[10px] text-muted-foreground leading-tight">{habit.desc}</p>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Other recs - compact */}
-            {otherRecs.length > 0 && (
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                  Also Recommended
-                </h4>
-                <div className="grid md:grid-cols-2 gap-3">
-                  {otherRecs.map((rec, i) => (
-                    <div key={i} className="p-3 rounded-lg bg-background/60 border border-border flex items-start gap-3">
-                      <span className="text-lg">{rec.icon}</span>
-                      <div>
-                        <h5 className="font-medium text-sm text-foreground">{rec.title}</h5>
-                        <p className="text-xs text-muted-foreground">{rec.text}</p>
-                      </div>
-                    </div>
-                  ))}
                 </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* SECTION 7: DISCLAIMER                      */}
-        {/* ═══════════════════════════════════════════ */}
-        <Card className="glass-card">
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-3">
-              <FileText className="w-5 h-5 text-muted-foreground mt-1 flex-shrink-0" />
-              <div className="space-y-2">
-                <h4 className="font-medium text-sm">Important Disclaimer</h4>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  This estimate is based on statistical data and lifestyle factors. Individual results may vary significantly. 
-                  This tool is for informational purposes only and does not constitute medical advice. Please consult with 
-                  healthcare professionals for personalized medical guidance. Data sources include WHO, CDC, NIH, and 
-                  peer-reviewed epidemiological studies.
-                </p>
-              </div>
+              ))}
             </div>
-          </CardContent>
-        </Card>
-      </div>
 
-      {/* Export button */}
-      <div className="flex justify-center">
-        <Button onClick={exportToPDF} disabled={isExporting} className="gap-2">
-          <Download className="w-4 h-4" />
-          {isExporting ? 'Generating PDF...' : 'Download Report as PDF'}
-        </Button>
-      </div>
+            <div className="bg-background p-3 rounded-lg border border-primary/20 space-y-1.5">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-primary">
+                <Info className="w-3.5 h-3.5" /> 
+                <span>Medical Definition: What is an Epigenetic Habit?</span>
+              </div>
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                According to the <strong>World Health Organization (WHO)</strong> and the <strong>Centers for Disease Control and Prevention (CDC)</strong>, <strong>Epigenetics</strong> is the scientific study of how your daily behaviors and environmental surroundings (like nutrition, exercise patterns, and sleep metrics) cause changes that affect the way your genes work. Unlike basic genetic mutations, epigenetic changes are completely <strong>reversible</strong>. They do not alter your fundamental DNA structure sequence, but instead act like an biological "on/off switch" to improve how your body handles disease risks.
+              </p>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="celebrity" className="pt-4">
+          <div className="bg-muted/40 p-4 rounded-xl border space-y-3">
+            <div className="bg-primary/5 p-3 rounded-lg border border-primary/20">
+              <h4 className="font-bold text-sm text-primary flex items-center gap-1.5"><Star className="w-4 h-4" /> Purpose of Benchmark Profiles</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                <strong>Why am I looking at this?</strong> These real-world longevity examples serve as concrete biological evidence. They demonstrate that individuals carrying standard genetic profiles can routinely push past national average lifespans (76-81 years) by combining structured daily routines, consistent discipline, and purposeful living.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4 pt-1">
+              {targetCelebrities.map((item, index) => (
+                <Card key={index} className="bg-background shadow-sm border border-muted">
+                  <CardHeader className="p-3 pb-1 flex flex-row items-start justify-between space-y-0">
+                    <div>
+                      <CardTitle className="text-sm font-bold text-foreground">{item.name}</CardTitle>
+                      <CardDescription className="text-[11px]">{item.role}</CardDescription>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs font-black text-primary">{item.age}</div>
+                      <Badge className={`text-[9px] px-1 py-0 ${item.status === 'Living' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>{item.status}</Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-3 pt-1">
+                    <p className="text-[11px] text-muted-foreground leading-normal bg-muted/30 p-2 rounded">{item.desc}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      <Card className="border-success/30 bg-success/5 shadow-sm mt-6">
+        <CardHeader className="p-4 pb-2">
+          <CardTitle className="text-xl font-black text-success flex items-center gap-2">
+            <TrendingUp className="w-5 h-5" /> The Good News: You Control Your Timeline
+          </CardTitle>
+          <CardDescription className="text-xs text-foreground">
+            Genetics provide your starting point, but daily actions shape your final outcome. Adjust the real-time simulation sliders below to observe how small adjustments to your routine instantly expand your projected lifespan.
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="p-4 pt-2 space-y-5">
+          <div className="bg-background p-4 rounded-xl border border-success/20 flex flex-col sm:flex-row items-center justify-center gap-6 shadow-inner">
+            <div className="text-center">
+              <span className="text-[10px] uppercase font-bold text-muted-foreground block">Starting Baseline</span>
+              <strong className="text-2xl font-black text-muted-foreground">{baseLifeExpectancy} Yrs</strong>
+            </div>
+            <ArrowRight className="w-5 h-5 text-muted-foreground hidden sm:block" />
+            <div className="text-center">
+              <span className="text-[10px] uppercase font-bold text-success block">If You Modify Habits</span>
+              <strong className="text-4xl font-black text-success">{dynamicProjectedAge} Yrs</strong>
+            </div>
+            <div className="bg-success/10 text-success font-black px-3 py-1.5 rounded-lg text-sm border border-success/20">
+              ⚡ Net Gain: +{varianceGained} Years
+            </div>
+          </div>
+
+          <div className="space-y-4 pt-2">
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center">
+                <Label className="text-xs font-bold text-foreground">1. Tobacco Smoking Habits</Label>
+                <Badge variant="outline" className="text-[10px]">{["Non-smoker", "Light", "Moderate", "Heavy"][sSmoke]}</Badge>
+              </div>
+              <Slider value={[sSmoke]} onValueChange={(v) => setSliderSmoking(v[0])} max={3} min={0} step={1} />
+              <p className="text-[10px] text-muted-foreground">Stopping or avoiding tobacco use eliminates carcinogens, instantly optimizing arterial oxygen transfer and lung capacity.</p>
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center">
+                <Label className="text-xs font-bold text-foreground">2. Alcohol Consumption Intake</Label>
+                <Badge variant="outline" className="text-[10px]">{["None", "Light", "Moderate", "Heavy"][sDrink]}</Badge>
+              </div>
+              <Slider value={[sDrink]} onValueChange={(v) => setSliderDrinking(v[0])} max={3} min={0} step={1} />
+              <p className="text-[10px] text-muted-foreground">Keeping drinks minimal protects liver processing function and avoids high chronic blood pressure stresses.</p>
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center">
+                <Label className="text-xs font-bold text-foreground">3. Weekly Physical Exercise Workouts</Label>
+                <Badge variant="outline" className="text-[10px]">{["Rarely Active", "Light Workouts", "Moderate Exercise", "Highly Active Routine"][sExercise]}</Badge>
+              </div>
+              <Slider value={[sExercise]} onValueChange={(v) => setSliderExercise(v[0])} max={3} min={0} step={1} />
+              <p className="text-[10px] text-muted-foreground">Structured cardiorespiratory and weight workouts keep resting heart rate lower and sustain bone density as you age.</p>
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center">
+                <Label className="text-xs font-bold text-foreground">4. Daily Nutrition & Diet Quality</Label>
+                <Badge variant="outline" className="text-[10px]">{["Poor / Processed", "Average / Mixed", "Good Balanced Foods", "Excellent Whole Foods"][sDiet]}</Badge>
+              </div>
+              <Slider value={[sDiet]} onValueChange={(v) => setSliderDiet(v[0])} max={3} min={0} step={1} />
+              <p className="text-[10px] text-muted-foreground">Prioritizing fiber-rich vegetables and lean nutrients lowers metabolic plaque buildup inside major blood vessels.</p>
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center">
+                <Label className="text-xs font-bold text-foreground">5. Stress & Tension Management</Label>
+                <Badge variant="outline" className="text-[10px]">{["High Daily Stress", "Moderate Tension", "Low Stress Baseline", "Optimal Calm Protocol"][sStress]}</Badge>
+              </div>
+              <Slider value={[sStress]} onValueChange={(v) => setSliderStress(v[0])} max={3} min={0} step={1} />
+              <p className="text-[10px] text-muted-foreground">Managing high daily mental stress lowers prolonged cortisol release, shielding your immune system from early wear-and-tear.</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

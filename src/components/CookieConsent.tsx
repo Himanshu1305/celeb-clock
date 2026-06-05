@@ -38,13 +38,14 @@ export const hasMarketingConsent = (): boolean => {
 };
 
 export const CookieConsent = () => {
+  const [isMounted, setIsMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const consent = getStoredConsent();
     if (!consent) {
-      // Delay showing banner for better UX
       const timer = setTimeout(() => setIsVisible(true), 1000);
       return () => clearTimeout(timer);
     }
@@ -61,8 +62,6 @@ export const CookieConsent = () => {
     localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(consent));
     setIsVisible(false);
     setShowPreferences(false);
-    
-    // Reload to apply analytics consent changes
     window.location.reload();
   };
 
@@ -74,10 +73,14 @@ export const CookieConsent = () => {
     saveConsent({ analytics: false, marketing: false });
   };
 
-  if (!isVisible && !showPreferences) return null;
+  // Hard stop: returns an entirely empty layout wrapper context if conditions aren't satisfied.
+  // This keeps the DOM completely isolated from external browser script interference.
+  if (!isMounted || (!isVisible && !showPreferences)) {
+    return <div style={{ display: 'none' }} data-safeguard="true" />;
+  }
 
   return (
-    <>
+    <div key="cookie-consent-safeguard-root">
       {isVisible && (
         <div className="fixed bottom-0 left-0 right-0 z-50 p-4 animate-slide-up">
           <Card className="max-w-4xl mx-auto p-6 bg-card/95 backdrop-blur-md border-border shadow-2xl">
@@ -141,6 +144,8 @@ export const CookieConsent = () => {
         onOpenChange={setShowPreferences}
         onSave={saveConsent}
       />
-    </>
+    </div>
   );
 };
+
+export default CookieConsent;
