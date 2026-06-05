@@ -1,12 +1,14 @@
+import { useState, useRef } from 'react';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { LifeExpectancyCalculator } from '@/components/LifeExpectancyCalculator';
+import { EnhancedLifeExpectancyReport } from '@/components/EnhancedLifeExpectancyReport';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowRight, Heart, TrendingUp, Shield, Activity, CalendarIcon, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { ArrowRight, Heart, TrendingUp, Shield, Activity, CalendarIcon, ShieldCheck, AlertTriangle, Download, FileText } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO } from '@/components/SEO';
@@ -17,11 +19,28 @@ import { AuthorBio } from '@/components/AuthorBio';
 
 const LifeExpectancy = () => {
   const { birthDate, setBirthDate } = useBirthDate();
+  const [calculationResult, setCalculationResult] = useState<{
+    lifeExpectancy: number;
+    userSelections: any;
+  } | null>(null);
+  const [showReport, setShowReport] = useState(false);
+  const reportRef = useRef<HTMLDivElement>(null);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const newDate = value ? new Date(value) : null;
     setBirthDate(newDate);
+    // Reset report if birth date changes
+    setShowReport(false);
+    setCalculationResult(null);
+  };
+
+  const handleComplete = (result: { lifeExpectancy: number; userSelections: any }) => {
+    setCalculationResult(result);
+    setShowReport(true);
+    setTimeout(() => {
+      reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
   };
 
   // Format date for input field
@@ -133,8 +152,48 @@ const LifeExpectancy = () => {
             </Card>
           )}
           
-          <LifeExpectancyCalculator birthDate={birthDate} celebrities={[]} />
+          <LifeExpectancyCalculator birthDate={birthDate} celebrities={[]} onComplete={handleComplete} />
         </section>
+
+        {/* Longevity Report — appears after calculator completion */}
+        {showReport && calculationResult && (
+          <section id="life-expectancy-report" className="max-w-6xl mx-auto mb-16" ref={reportRef}>
+            <div className="flex items-center justify-between mb-6 no-print">
+              <div>
+                <h2 className="text-2xl font-bold flex items-center gap-2">
+                  <FileText className="w-6 h-6 text-primary" />
+                  Your Full Longevity Report
+                </h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Estimated lifespan: <strong className="text-primary text-lg">{calculationResult.lifeExpectancy} years</strong>
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => window.print()}
+                className="gap-2 no-print"
+              >
+                <Download className="w-4 h-4" />
+                Export PDF
+              </Button>
+            </div>
+
+            <EnhancedLifeExpectancyReport
+              lifeExpectancy={calculationResult.lifeExpectancy}
+              baseLifeExpectancy={calculationResult.userSelections.gender === 'female' ? 81.1 : 76.1}
+              factors={calculationResult.userSelections}
+              userSelections={{
+                smoking: calculationResult.userSelections.smoking,
+                drinking: calculationResult.userSelections.drinking,
+                exercise: calculationResult.userSelections.exercise,
+                diet: calculationResult.userSelections.diet,
+                stress: calculationResult.userSelections.stress,
+              }}
+              name={calculationResult.userSelections.name}
+              birthDate={birthDate}
+            />
+          </section>
+        )}
 
         {/* About Section */}
         <section className="max-w-4xl mx-auto mb-16">

@@ -277,3 +277,11 @@
   pointer-events: none;
 }
 }
+
+@media print {
+  body * { visibility: hidden !important; }
+  #life-expectancy-report, #life-expectancy-report * { visibility: visible !important; }
+  #life-expectancy-report { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .no-print { display: none !important; }
+}

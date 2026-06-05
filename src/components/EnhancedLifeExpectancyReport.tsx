@@ -70,8 +70,8 @@ export const EnhancedLifeExpectancyReport = ({
     { relation: 'Maternal Grandmother', age: 88, active: true },
   ]);
 
-  // Local Longevity Multi-Select states
-  const [selectedHabits, setSelectedHabits] = useState<string[]>(["diet", "exercise"]);
+  // Local Longevity Multi-Select states (start empty so habits are clearly additive)
+  const [selectedHabits, setSelectedHabits] = useState<string[]>([]);
 
   const toggleHabit = (id: string) => {
     if (selectedHabits.includes(id)) {
@@ -99,42 +99,125 @@ export const EnhancedLifeExpectancyReport = ({
   const exerciseImpacts = [-2, 1, 3, 5];
   const dietImpacts = [-3, 0, 2, 4];
   const stressImpacts = [-2.5, -0.5, 1, 1.5];
+  const HABIT_IMPACTS: Record<string, number> = { diet: 0.8, exercise: 1.2, sleep: 0.5, mind: 0.3 };
 
-  // Safeguard values to keep index matches within array bounds [0 to 3]
+  // Safeguard slider values to [0, 3]
   const sSmoke = Math.min(Math.max(sliderSmoking, 0), 3);
   const sDrink = Math.min(Math.max(sliderDrinking, 0), 3);
   const sExercise = Math.min(Math.max(sliderExercise, 0), 3);
   const sDiet = Math.min(Math.max(sliderDiet, 0), 3);
   const sStress = Math.min(Math.max(sliderStress, 0), 3);
 
-  const currentImpactSum = 
-    smokeImpacts[sSmoke] + 
-    drinkImpacts[sDrink] + 
-    exerciseImpacts[sExercise] + 
-    dietImpacts[sDiet] + 
-    stressImpacts[sStress];
+  // User's actual calculator selections (starting point for delta calculation)
+  const iSmoke = Math.min(Math.max(smokingToIndex(userSelections?.smoking ?? ''), 0), 3);
+  const iDrink = Math.min(Math.max(drinkingToIndex(userSelections?.drinking ?? ''), 0), 3);
+  const iExercise = Math.min(Math.max(exerciseToIndex(userSelections?.exercise ?? ''), 0), 3);
+  const iDiet = Math.min(Math.max(dietToIndex(userSelections?.diet ?? ''), 0), 3);
+  const iStress = Math.min(Math.max(stressToIndex(userSelections?.stress ?? 5), 0), 3);
+
+  const initialImpactSum =
+    smokeImpacts[iSmoke] + drinkImpacts[iDrink] + exerciseImpacts[iExercise] +
+    dietImpacts[iDiet] + stressImpacts[iStress];
+
+  const currentImpactSum =
+    smokeImpacts[sSmoke] + drinkImpacts[sDrink] + exerciseImpacts[sExercise] +
+    dietImpacts[sDiet] + stressImpacts[sStress];
+
+  const sliderDelta = currentImpactSum - initialImpactSum;
+  const currentHabitBonus = selectedHabits.reduce((s, id) => s + (HABIT_IMPACTS[id] ?? 0), 0);
 
   const averageAncestorAge = ancestors.filter(a => a.active).reduce((sum, a) => sum + a.age, 0) / ancestors.filter(a => a.active).length || 75;
   const lineageBonus = (averageAncestorAge - 75) * 0.15;
 
-  const dynamicProjectedAge = Math.round((baseLifeExpectancy + currentImpactSum + lineageBonus) * 10) / 10;
-  const varianceGained = Math.round((dynamicProjectedAge - baseLifeExpectancy) * 10) / 10;
+  // Start from the actual calculated result, apply what-if deltas
+  const dynamicProjectedAge = Math.round((initialExpectancy + sliderDelta + currentHabitBonus + lineageBonus) * 10) / 10;
+  const varianceGained = Math.round((dynamicProjectedAge - initialExpectancy) * 10) / 10;
+
+  // Maximum potential: all 5 slider factors optimal + all habits
+  const optimalImpactSum = smokeImpacts[0] + drinkImpacts[0] + exerciseImpacts[3] + dietImpacts[3] + stressImpacts[3];
+  const maxHabitBonus = Object.values(HABIT_IMPACTS).reduce((s, v) => s + v, 0);
+  const maximumPotential = Math.round((initialExpectancy + (optimalImpactSum - initialImpactSum) + maxHabitBonus + lineageBonus) * 10) / 10;
+  const gapToMaximum = Math.max(0, Math.round((maximumPotential - dynamicProjectedAge) * 10) / 10);
+
+  // Itemized factor breakdown sorted by impact (highest first)
+  const f = factors as any;
+  const factorBreakdown: { label: string; years: number; icon: string }[] = [];
+  const addFactor = (label: string, years: number, icon: string) => {
+    if (years !== 0) factorBreakdown.push({ label, years, icon });
+  };
+  addFactor('Tobacco Smoking', smokeImpacts[iSmoke], '🚬');
+  addFactor('Alcohol Consumption', drinkImpacts[iDrink], '🍷');
+  addFactor('Physical Exercise', exerciseImpacts[iExercise], '🏋️');
+  addFactor('Diet Quality', dietImpacts[iDiet], '🥗');
+  addFactor('Stress Level', stressImpacts[iStress], '🧠');
+  if (f) {
+    const bmi = f.bmi ?? 24.5;
+    addFactor('BMI / Body Weight', bmi < 18.5 ? -2 : bmi > 30 ? -3 : bmi > 25 ? -1 : 0, '⚖️');
+    const bpMap: Record<string, number> = { optimal: 1.5, normal: 0, elevated: -1, high1: -2.5, high2: -5 };
+    addFactor('Blood Pressure', bpMap[f.bloodPressure ?? ''] ?? 0, '❤️');
+    const sleepMap: Record<string, number> = { under6: -2, '6to7': -0.5, '7to9': 0, over9: -1 };
+    addFactor('Sleep Duration', sleepMap[f.sleepDuration ?? ''] ?? 0, '😴');
+    const socialMap: Record<string, number> = { strong: 2, moderate: 0, limited: -1.5, isolated: -3 };
+    addFactor('Social Connections', socialMap[f.socialConnections ?? ''] ?? 0, '👥');
+    if (f.heartDisease) addFactor('Heart Disease', Math.round((-5 + (f.heartDiseaseControlled ? 1.25 : 0)) * 10) / 10, '🫀');
+    if (f.heartDiseaseFamily) addFactor('Family Heart Disease', -2, '🧬');
+    if (f.diabetes) addFactor('Diabetes', Math.round((-4 + (f.diabetesControlled ? 1.6 : 0)) * 10) / 10, '💉');
+    if (f.diabetesFamily) addFactor('Family Diabetes History', -1, '🧬');
+    if (f.hypertension) addFactor('Hypertension', Math.round((-3 + (f.hypertensionControlled ? 1.05 : 0)) * 10) / 10, '🩺');
+  }
+  factorBreakdown.sort((a, b) => b.years - a.years);
 
   return (
     <div className="space-y-6 mt-4 text-left">
+      {/* Header: actual result vs current simulation */}
       <div className="bg-primary/5 p-4 rounded-xl border border-primary/10 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <span className="text-xs uppercase font-bold text-muted-foreground tracking-wider">Current Age Baseline Tracker</span>
+          <span className="text-xs uppercase font-bold text-muted-foreground tracking-wider">Longevity Projection</span>
           <div className="text-xl font-bold flex items-center gap-2 mt-0.5">
-            <span>Now: <strong className="text-primary">{currentAge} Yrs old</strong></span>
-            <span className="text-muted-foreground text-sm">|</span>
-            <span>Projected Lifespan: <strong className="text-success">{dynamicProjectedAge} Yrs</strong></span>
+            <span>Your Result: <strong className="text-primary">{initialExpectancy} Yrs</strong></span>
+            <span className="text-muted-foreground text-sm">→</span>
+            <span>Simulated: <strong className="text-success">{dynamicProjectedAge} Yrs</strong></span>
           </div>
+          <p className="text-[10px] text-muted-foreground mt-0.5">Age now: {currentAge} yrs · Max potential: {maximumPotential} yrs</p>
         </div>
         <Badge variant={varianceGained >= 0 ? "success" : "destructive"} className="text-sm px-3 py-1 font-bold">
-          {varianceGained >= 0 ? `🎉 +${varianceGained} Years Gained Over Average!` : `⚠️ ${varianceGained} Years Below Average`}
+          {varianceGained >= 0 ? `🎉 +${varianceGained} Yrs Simulation Gain` : `⚠️ ${varianceGained} Yrs vs Your Result`}
         </Badge>
       </div>
+
+      {/* Factor Breakdown */}
+      {factorBreakdown.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 text-primary" /> What's Impacting Your Lifespan
+          </h3>
+          <div className="grid sm:grid-cols-2 gap-2">
+            {factorBreakdown.map((item, i) => (
+              <div
+                key={i}
+                className={`flex items-center justify-between px-3 py-2 rounded-lg border text-xs ${
+                  item.years > 0
+                    ? 'bg-green-50/50 border-green-200 dark:bg-green-950/20 dark:border-green-900'
+                    : 'bg-red-50/50 border-red-200 dark:bg-red-950/20 dark:border-red-900'
+                }`}
+              >
+                <span className="flex items-center gap-1.5 font-medium">
+                  <span>{item.icon}</span>
+                  <span>{item.label}</span>
+                </span>
+                <Badge
+                  variant="outline"
+                  className={`text-[10px] font-bold tabular-nums ${
+                    item.years > 0 ? 'text-green-600 border-green-400' : 'text-red-500 border-red-400'
+                  }`}
+                >
+                  {item.years > 0 ? '+' : ''}{item.years}yr
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="space-y-2">
         <h2 className="text-xl font-black text-foreground flex items-center gap-2">
@@ -193,10 +276,10 @@ export const EnhancedLifeExpectancyReport = ({
 
             <div className="grid sm:grid-cols-2 gap-3 pt-1">
               {[
-                { id: "diet", label: "Clean Nutritional Framework (Whole foods focus)", desc: "Reduces processing strain on vital organs" },
-                { id: "exercise", label: "Consistent Cardio/Strength Activity", desc: "Boosts heart efficiency and blood flow" },
-                { id: "sleep", label: "Regulated Circadian Sleep (7-8 hours sleep)", desc: "Allows critical cellular restoration" },
-                { id: "mind", label: "Active Stress Reduction / Meditation", desc: "Decreases chronic inflammatory markers" }
+                { id: "diet", label: "Mediterranean / Clean Diet", desc: "Reduces processing strain on vital organs", gain: "+0.8yr" },
+                { id: "exercise", label: "Consistent Cardio/Strength Activity", desc: "Boosts heart efficiency and blood flow", gain: "+1.2yr" },
+                { id: "sleep", label: "Regulated Circadian Sleep (7–9 hrs)", desc: "Allows critical cellular restoration", gain: "+0.5yr" },
+                { id: "mind", label: "Active Stress Reduction / Meditation", desc: "Decreases chronic inflammatory markers", gain: "+0.3yr" }
               ].map((habit) => (
                 <div 
                   key={habit.id} 
@@ -204,8 +287,11 @@ export const EnhancedLifeExpectancyReport = ({
                   className={`p-3 rounded-lg border cursor-pointer transition-all flex items-start space-x-3 bg-background hover:border-primary/50 shadow-sm ${selectedHabits.includes(habit.id) ? 'ring-2 ring-primary border-primary bg-primary/5' : ''}`}
                 >
                   <Checkbox checked={selectedHabits.includes(habit.id)} onCheckedChange={() => {}} className="mt-0.5" />
-                  <div className="space-y-0.5 pointer-events-none">
-                    <Label className="text-xs font-bold text-foreground cursor-pointer">{habit.label}</Label>
+                  <div className="space-y-0.5 pointer-events-none flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <Label className="text-xs font-bold text-foreground cursor-pointer">{habit.label}</Label>
+                      <Badge variant="outline" className="text-[9px] font-bold text-green-600 border-green-400 flex-shrink-0">{habit.gain}</Badge>
+                    </div>
                     <p className="text-[10px] text-muted-foreground leading-tight">{habit.desc}</p>
                   </div>
                 </div>
@@ -269,16 +355,16 @@ export const EnhancedLifeExpectancyReport = ({
         <CardContent className="p-4 pt-2 space-y-5">
           <div className="bg-background p-4 rounded-xl border border-success/20 flex flex-col sm:flex-row items-center justify-center gap-6 shadow-inner">
             <div className="text-center">
-              <span className="text-[10px] uppercase font-bold text-muted-foreground block">Starting Baseline</span>
-              <strong className="text-2xl font-black text-muted-foreground">{baseLifeExpectancy} Yrs</strong>
+              <span className="text-[10px] uppercase font-bold text-muted-foreground block">Your Calculated Result</span>
+              <strong className="text-2xl font-black text-muted-foreground">{initialExpectancy} Yrs</strong>
             </div>
             <ArrowRight className="w-5 h-5 text-muted-foreground hidden sm:block" />
             <div className="text-center">
               <span className="text-[10px] uppercase font-bold text-success block">If You Modify Habits</span>
               <strong className="text-4xl font-black text-success">{dynamicProjectedAge} Yrs</strong>
             </div>
-            <div className="bg-success/10 text-success font-black px-3 py-1.5 rounded-lg text-sm border border-success/20">
-              ⚡ Net Gain: +{varianceGained} Years
+            <div className={`font-black px-3 py-1.5 rounded-lg text-sm border ${varianceGained >= 0 ? 'bg-success/10 text-success border-success/20' : 'bg-destructive/10 text-destructive border-destructive/20'}`}>
+              {varianceGained >= 0 ? '⚡' : '⚠️'} Net: {varianceGained >= 0 ? '+' : ''}{varianceGained} Yrs
             </div>
           </div>
 
@@ -326,6 +412,34 @@ export const EnhancedLifeExpectancyReport = ({
               </div>
               <Slider value={[sStress]} onValueChange={(v) => setSliderStress(v[0])} max={3} min={0} step={1} />
               <p className="text-[10px] text-muted-foreground">Managing high daily mental stress lowers prolonged cortisol release, shielding your immune system from early wear-and-tear.</p>
+            </div>
+          </div>
+
+          {/* Maximum Potential */}
+          <div className="bg-primary/5 p-4 rounded-xl border border-primary/20 space-y-3 mt-2">
+            <div className="flex items-center justify-between">
+              <h4 className="font-bold text-sm text-primary flex items-center gap-2">
+                <Sparkles className="w-4 h-4" /> Your Maximum Potential Lifespan
+              </h4>
+              <strong className="text-xl font-black text-primary">{maximumPotential} Yrs</strong>
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              If you optimized all 5 lifestyle sliders (no smoking, no drinking, heavy exercise, excellent diet, lowest stress) plus all 4 epigenetic habits.
+            </p>
+            <div className="space-y-1">
+              <div className="flex justify-between text-[10px] text-muted-foreground">
+                <span>Current simulation</span>
+                <span className="font-bold">{dynamicProjectedAge} yrs · {gapToMaximum > 0 ? `${gapToMaximum} yrs still available` : 'At maximum'}</span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(100, Math.round((dynamicProjectedAge / maximumPotential) * 100))}%` }}
+                />
+              </div>
+              <p className="text-[10px] text-muted-foreground text-right">
+                {Math.min(100, Math.round((dynamicProjectedAge / maximumPotential) * 100))}% of maximum potential
+              </p>
             </div>
           </div>
         </CardContent>

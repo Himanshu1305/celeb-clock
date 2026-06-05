@@ -40,6 +40,7 @@ interface LifeExpectancyData {
 interface Props {
   birthDate?: Date | null;
   celebrities?: any[];
+  onComplete?: (result: { lifeExpectancy: number; userSelections: LifeExpectancyData }) => void;
 }
 
 const InfoTooltip = ({ content }: { content: string }) => (
@@ -64,7 +65,7 @@ const getBMICategory = (bmi: number) => {
   return { label: 'Obese', color: 'text-red-500 border-red-400' };
 };
 
-export const LifeExpectancyCalculator = ({ birthDate, celebrities = [] }: Props) => {
+export const LifeExpectancyCalculator = ({ birthDate, celebrities = [], onComplete }: Props) => {
   const { isPremium, profile } = useAuth();
   const { trackFeatureUse } = useAnalytics();
   const [step, setStep] = useState(1);
@@ -697,7 +698,16 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [] }: Props)
               Next Step
             </Button>
           ) : (
-            <Button variant="secondary" disabled>Calculation Complete</Button>
+            <Button
+              onClick={() => {
+                if (onComplete && lifeExpectancy !== null) {
+                  onComplete({ lifeExpectancy, userSelections: data });
+                }
+              }}
+              disabled={!data.exercise || lifeExpectancy === null}
+            >
+              View Full Longevity Report
+            </Button>
           )}
         </div>
       </CardContent>
