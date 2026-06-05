@@ -56,6 +56,37 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // --- Shared-secret auth check ---
+  // verify_jwt is false in config.toml because this function is called
+  // from the admin panel with a service-role context, not a user JWT.
+  // We enforce our own secret instead.
+  const BLOG_GENERATION_SECRET = Deno.env.get("BLOG_GENERATION_SECRET");
+  if (!BLOG_GENERATION_SECRET) {
+    console.error("BLOG_GENERATION_SECRET env var is not set");
+    return new Response(
+      JSON.stringify({ error: "Function is not configured for authenticated access." }),
+      { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  const incomingSecret = req.headers.get("X-Blog-Secret") ?? "";
+  // Constant-time comparison to prevent timing-attack leakage of secret length
+  const encoder = new TextEncoder();
+  const secretBytes = encoder.encode(BLOG_GENERATION_SECRET);
+  const incomingBytes = encoder.encode(incomingSecret);
+  let mismatch = secretBytes.length !== incomingBytes.length ? 1 : 0;
+  const cmpLen = Math.min(secretBytes.length, incomingBytes.length);
+  for (let i = 0; i < cmpLen; i++) {
+    mismatch |= secretBytes[i] ^ incomingBytes[i];
+  }
+  if (mismatch !== 0) {
+    return new Response(
+      JSON.stringify({ error: "Unauthorized: missing or invalid X-Blog-Secret header." }),
+      { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+  // --- End auth check ---
+
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");

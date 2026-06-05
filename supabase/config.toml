@@ -1,7 +1,12 @@
 project_id = "jwrpqiypvystivtqyhro"
 
 [functions.generate-weekly-blog]
+# verify_jwt = false because callers (admin panel, cron) don't have a user JWT.
+# Authentication is enforced inside the function via the X-Blog-Secret header
+# checked against the BLOG_GENERATION_SECRET environment variable.
 verify_jwt = false
 
 [functions.delete-account]
+# verify_jwt = false because the function performs its own Bearer token validation
+# using supabase.auth.getClaims() before touching any user data.
 verify_jwt = false
