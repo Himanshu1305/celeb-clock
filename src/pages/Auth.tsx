@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/hooks/useAuth';
-import { Sparkles, ArrowLeft } from 'lucide-react';
+import { Sparkles, ArrowLeft, MapPin } from 'lucide-react';
 import { countries } from '@/data/countries';
 
 export default function Auth() {
@@ -19,9 +19,29 @@ export default function Auth() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [country, setCountry] = useState('');
+  const [detectedCountry, setDetectedCountry] = useState('');
   const [blogSubscription, setBlogSubscription] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { user, signUp, signIn } = useAuth();
+
+  // Auto-detect country on signup page load
+  useEffect(() => {
+    if (!isSignUp) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const json = await res.json();
+        if (!cancelled && json.country_name && countries.includes(json.country_name)) {
+          setDetectedCountry(json.country_name);
+          setCountry(prev => prev || json.country_name);
+        }
+      } catch {
+        // silently fail — geolocation is best-effort
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isSignUp]);
 
   // Redirect if already authenticated
   if (user) {
@@ -129,6 +149,12 @@ export default function Auth() {
                       ))}
                     </SelectContent>
                   </Select>
+                  {detectedCountry && (
+                    <p className="text-xs text-muted-foreground flex items-start gap-1.5 bg-muted/50 px-3 py-2 rounded-md">
+                      <MapPin className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-primary" />
+                      We detected your location as <strong className="text-foreground">{detectedCountry}</strong>. This helps us provide region-relevant health data. You can update this in your profile settings.
+                    </p>
+                  )}
                 </div>
               </>
             )}
