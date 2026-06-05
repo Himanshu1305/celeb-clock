@@ -107,7 +107,8 @@ export const BlogManagement = () => {
     setGenerating(true);
     try {
       const { data, error } = await supabase.functions.invoke('generate-weekly-blog', {
-        body: { forceGenerate: true }
+        body: { forceGenerate: true },
+        headers: { 'X-Blog-Secret': import.meta.env.VITE_BLOG_GENERATION_SECRET ?? '' },
       });
 
       if (error) throw error;
