@@ -224,9 +224,6 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [], onComple
             </CardTitle>
             <CardDescription>Step {step} of {totalSteps} • Personalized Health Check</CardDescription>
           </div>
-          <Badge variant="secondary" className="bg-primary/20 text-primary">
-            Standard Mode
-          </Badge>
         </div>
         <Progress value={progressValue} className="mt-4" />
       </CardHeader>

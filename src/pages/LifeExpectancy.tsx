@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, Component } from 'react';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowRight, Heart, TrendingUp, Shield, Activity, CalendarIcon, ShieldCheck, AlertTriangle, Download, FileText } from 'lucide-react';
+import { ArrowRight, Heart, TrendingUp, Shield, Activity, CalendarIcon, ShieldCheck, AlertTriangle, Download, FileText, RefreshCw } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO } from '@/components/SEO';
@@ -16,6 +16,38 @@ import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
 import { RelatedTools } from '@/components/RelatedTools';
 import { AuthorBio } from '@/components/AuthorBio';
+
+class ReportErrorBoundary extends Component<
+  { children: React.ReactNode; onReset: () => void },
+  { error: Error | null }
+> {
+  state = { error: null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error('[ReportErrorBoundary] caught:', error, info);
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <Card className="border-destructive/30 bg-destructive/5 p-6 text-center space-y-3">
+          <p className="font-semibold text-destructive">Report failed to render.</p>
+          <p className="text-xs text-muted-foreground font-mono">
+            {(this.state.error as Error).message}
+          </p>
+          <Button size="sm" variant="outline" className="gap-2" onClick={() => { this.setState({ error: null }); this.props.onReset(); }}>
+            <RefreshCw className="w-3 h-3" /> Reset &amp; Try Again
+          </Button>
+        </Card>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const LifeExpectancy = () => {
   const { birthDate, setBirthDate } = useBirthDate();
@@ -36,6 +68,7 @@ const LifeExpectancy = () => {
   };
 
   const handleComplete = (result: { lifeExpectancy: number; userSelections: any }) => {
+    console.log('[LifeExpectancy] onComplete received:', result);
     setCalculationResult(result);
     setShowReport(true);
     setTimeout(() => {
@@ -178,20 +211,22 @@ const LifeExpectancy = () => {
               </Button>
             </div>
 
-            <EnhancedLifeExpectancyReport
-              lifeExpectancy={calculationResult.lifeExpectancy}
-              baseLifeExpectancy={calculationResult.userSelections.gender === 'female' ? 81.1 : 76.1}
-              factors={calculationResult.userSelections}
-              userSelections={{
-                smoking: calculationResult.userSelections.smoking,
-                drinking: calculationResult.userSelections.drinking,
-                exercise: calculationResult.userSelections.exercise,
-                diet: calculationResult.userSelections.diet,
-                stress: calculationResult.userSelections.stress,
-              }}
-              name={calculationResult.userSelections.name}
-              birthDate={birthDate}
-            />
+            <ReportErrorBoundary onReset={() => { setShowReport(false); setCalculationResult(null); }}>
+              <EnhancedLifeExpectancyReport
+                lifeExpectancy={calculationResult.lifeExpectancy}
+                baseLifeExpectancy={calculationResult.userSelections.gender === 'female' ? 81.1 : 76.1}
+                factors={calculationResult.userSelections}
+                userSelections={{
+                  smoking: calculationResult.userSelections.smoking,
+                  drinking: calculationResult.userSelections.drinking,
+                  exercise: calculationResult.userSelections.exercise,
+                  diet: calculationResult.userSelections.diet,
+                  stress: calculationResult.userSelections.stress,
+                }}
+                name={calculationResult.userSelections.name}
+                birthDate={birthDate}
+              />
+            </ReportErrorBoundary>
           </section>
         )}
 
