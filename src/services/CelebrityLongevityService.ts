@@ -58,9 +58,9 @@ async function fetchDeathYear(name: string): Promise<number | null> {
 function makeAchievement(name: string, age: number, isLiving: boolean, profession: string): string {
   const prof = profession.toLowerCase();
   if (isLiving) {
-    return `Pacing toward the enduring vitality of ${name} (${age} and still active as a ${prof})`;
+    return `${name} (${age}) remains actively engaged as a ${prof}`;
   }
-  return `Matching the remarkable ${age}-year journey of ${name}, celebrated ${prof}`;
+  return `${name} achieved remarkable milestones across ${age} inspiring years as a ${prof}`;
 }
 
 // Synchronous: returns matches based purely on birth year (all assumed living).

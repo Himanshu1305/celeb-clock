@@ -77,41 +77,59 @@ const FamilyMemberRow = ({
   onChange: (m: FamilyMemberData) => void;
   optional?: boolean;
 }) => (
-  <div className="flex items-center gap-3 p-3 bg-background rounded-lg border shadow-sm">
-    <div className="flex-1 min-w-0">
-      <Label className="text-xs font-bold text-foreground block truncate">{label}</Label>
-      {optional && <span className="text-[10px] text-muted-foreground">Optional</span>}
+  <div className="p-3 bg-background rounded-lg border shadow-sm space-y-2">
+    <div className="flex items-center justify-between gap-2">
+      <div>
+        <Label className="text-xs font-bold text-foreground">{label}</Label>
+        {optional && <span className="text-[10px] text-muted-foreground ml-2">Optional</span>}
+      </div>
+      <div className="flex gap-1 shrink-0">
+        <Button
+          type="button" size="sm"
+          variant={member.unknown ? 'default' : 'outline'}
+          className="h-6 text-[10px] px-2"
+          onClick={() => onChange({ ...member, unknown: true })}
+        >Unknown</Button>
+        <Button
+          type="button" size="sm"
+          variant={!member.unknown ? 'default' : 'outline'}
+          className="h-6 text-[10px] px-2"
+          onClick={() => onChange({ ...member, unknown: false })}
+        >Known</Button>
+      </div>
     </div>
-    <div className="flex items-center gap-2 shrink-0">
-      <label className="flex items-center gap-1 cursor-pointer text-[10px] text-muted-foreground select-none">
-        <Checkbox
-          checked={member.unknown}
-          onCheckedChange={(v) => onChange({ ...member, unknown: Boolean(v) })}
-          className="w-3 h-3"
-        />
-        Don't know
-      </label>
-      {!member.unknown && (
-        <>
+    {!member.unknown && (
+      <div className="flex items-end gap-4 ml-1 pt-1">
+        <div className="space-y-1">
+          <Label className="text-[10px] text-muted-foreground">Age (years)</Label>
           <Input
             type="number"
             value={member.age || ''}
             onChange={(e) => onChange({ ...member, age: Number(e.target.value) })}
-            placeholder="Age"
-            className="w-16 h-7 text-xs text-center font-bold"
+            placeholder="e.g. 78"
+            className="w-20 h-7 text-xs text-center font-bold"
             min={1} max={120}
           />
-          <label className="flex items-center gap-1 cursor-pointer text-[10px] text-muted-foreground select-none">
-            <Checkbox
-              checked={member.isLiving}
-              onCheckedChange={(v) => onChange({ ...member, isLiving: Boolean(v) })}
-              className="w-3 h-3"
-            />
-            Still living
-          </label>
-        </>
-      )}
-    </div>
+        </div>
+        <div className="space-y-1">
+          <Label className="text-[10px] text-muted-foreground">Status</Label>
+          <div className="flex gap-1">
+            <Button
+              type="button" size="sm"
+              variant={member.isLiving ? 'default' : 'outline'}
+              className="h-7 text-[10px] px-2"
+              onClick={() => onChange({ ...member, isLiving: true })}
+            >Still Living</Button>
+            <Button
+              type="button" size="sm"
+              variant={!member.isLiving ? 'default' : 'outline'}
+              className="h-7 text-[10px] px-2"
+              onClick={() => onChange({ ...member, isLiving: false })}
+            >Passed Away</Button>
+          </div>
+        </div>
+      </div>
+    )}
   </div>
 );
 
@@ -211,7 +229,13 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [], onComple
             <CardTitle className="text-2xl flex items-center gap-2">
               <Heart className="w-6 h-6 text-primary" /> Life Expectancy Calculator
             </CardTitle>
-            <CardDescription>Step {step} of {totalSteps} • Personalized Health Check</CardDescription>
+            <CardDescription>
+            {step === 7
+              ? `Step ${step} of ${totalSteps} · Step 2 of our 3-Pillar Analysis`
+              : step === 8
+              ? `Step ${step} of ${totalSteps} · Step 3 of our 3-Pillar Analysis`
+              : `Step ${step} of ${totalSteps} · Personalized Health Check`}
+          </CardDescription>
           </div>
         </div>
         <Progress value={(step / totalSteps) * 100} className="mt-4" />
@@ -242,18 +266,28 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [], onComple
                 <div className="flex items-center space-x-2"><RadioGroupItem value="female" id="female" /><Label htmlFor="female">Female</Label></div>
               </RadioGroup>
             </div>
-            <div className="space-y-3">
-              <Label className="text-base flex items-center">
-                Country of Residence
-                <InfoTooltip content="Life expectancy baselines vary significantly by country due to healthcare quality, diet culture, and environmental factors. We use WHO 2023 country-specific data." />
-              </Label>
-              <Select value={data.country} onValueChange={(v) => setData({ ...data, country: v })}>
-                <SelectTrigger><SelectValue placeholder="Select your country" /></SelectTrigger>
-                <SelectContent className="max-h-60">
-                  {countries.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
+            {profile?.country ? (
+              <div className="flex items-center gap-2 bg-blue-50/60 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-900 px-3 py-2.5">
+                <span className="text-base">🌍</span>
+                <p className="text-xs text-muted-foreground">
+                  Using your profile location: <strong className="text-foreground">{profile.country}</strong>
+                  <span className="ml-1 text-[10px] opacity-70">(for WHO baseline calculation)</span>
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <Label className="text-base flex items-center">
+                  Country of Residence
+                  <InfoTooltip content="Life expectancy baselines vary significantly by country due to healthcare quality, diet culture, and environmental factors. We use WHO 2023 country-specific data." />
+                </Label>
+                <Select value={data.country} onValueChange={(v) => setData({ ...data, country: v })}>
+                  <SelectTrigger><SelectValue placeholder="Select your country" /></SelectTrigger>
+                  <SelectContent className="max-h-60">
+                    {countries.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </div>
         )}
 
@@ -434,11 +468,11 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [], onComple
                 <InfoTooltip content="Optimal BP below 120/80 mmHg significantly reduces stroke and heart attack risk (JNC8/AHA Guidelines, 2023)." />
               </Label>
               <RadioGroup value={data.bloodPressure} onValueChange={(v) => setData({ ...data, bloodPressure: v as any })}>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="optimal" id="bp-opt" /><Label htmlFor="bp-opt">Optimal (&lt;120/80 mmHg) · +1.5 yrs</Label></div>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="normal" id="bp-norm" /><Label htmlFor="bp-norm">Normal (120–129/80 mmHg) · no change</Label></div>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="elevated" id="bp-elev" /><Label htmlFor="bp-elev">Elevated (130–139 / 80–89 mmHg) · −1 yr</Label></div>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="high1" id="bp-h1" /><Label htmlFor="bp-h1">High Stage 1 (140–159 / 90–99) · −2.5 yrs</Label></div>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="high2" id="bp-h2" /><Label htmlFor="bp-h2">High Stage 2 (≥160 / ≥100 mmHg) · −5 yrs</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="optimal" id="bp-opt" /><Label htmlFor="bp-opt">Optimal (&lt;120/80 mmHg)</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="normal" id="bp-norm" /><Label htmlFor="bp-norm">Normal (120–129/80 mmHg)</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="elevated" id="bp-elev" /><Label htmlFor="bp-elev">Elevated (130–139 / 80–89 mmHg)</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="high1" id="bp-h1" /><Label htmlFor="bp-h1">High Stage 1 (140–159 / 90–99)</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="high2" id="bp-h2" /><Label htmlFor="bp-h2">High Stage 2 (≥160 / ≥100 mmHg)</Label></div>
               </RadioGroup>
             </div>
             <div className="space-y-3">
@@ -447,10 +481,10 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [], onComple
                 <InfoTooltip content="Adults sleeping fewer than 6 hours per night have a 12% higher all-cause mortality risk (NHS/National Sleep Foundation, 2023)." />
               </Label>
               <RadioGroup value={data.sleepDuration} onValueChange={(v) => setData({ ...data, sleepDuration: v as any })}>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="under6" id="sleep-u6" /><Label htmlFor="sleep-u6">Less than 6 hours · −2 yrs</Label></div>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="6to7" id="sleep-67" /><Label htmlFor="sleep-67">6–7 hours · −0.5 yr</Label></div>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="7to9" id="sleep-79" /><Label htmlFor="sleep-79">7–9 hours (optimal) · no change</Label></div>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="over9" id="sleep-o9" /><Label htmlFor="sleep-o9">More than 9 hours · −1 yr</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="under6" id="sleep-u6" /><Label htmlFor="sleep-u6">Less than 6 hours</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="6to7" id="sleep-67" /><Label htmlFor="sleep-67">6–7 hours</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="7to9" id="sleep-79" /><Label htmlFor="sleep-79">7–9 hours (optimal)</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="over9" id="sleep-o9" /><Label htmlFor="sleep-o9">More than 9 hours</Label></div>
               </RadioGroup>
             </div>
             <div className="space-y-3">
@@ -459,10 +493,10 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [], onComple
                 <InfoTooltip content="Strong social relationships are among the strongest predictors of longevity — comparable to quitting smoking (Harvard Study of Adult Development, 80+ years)." />
               </Label>
               <RadioGroup value={data.socialConnections} onValueChange={(v) => setData({ ...data, socialConnections: v as any })}>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="strong" id="soc-str" /><Label htmlFor="soc-str">Strong (close relationships, regular meaningful contact) · +2 yrs</Label></div>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="moderate" id="soc-mod" /><Label htmlFor="soc-mod">Moderate (some connections, occasional interaction) · no change</Label></div>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="limited" id="soc-lim" /><Label htmlFor="soc-lim">Limited (few meaningful relationships) · −1.5 yrs</Label></div>
-                <div className="flex items-center space-x-2"><RadioGroupItem value="isolated" id="soc-iso" /><Label htmlFor="soc-iso">Isolated (little to no meaningful social contact) · −3 yrs</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="strong" id="soc-str" /><Label htmlFor="soc-str">Strong (close relationships, regular meaningful contact)</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="moderate" id="soc-mod" /><Label htmlFor="soc-mod">Moderate (some connections, occasional interaction)</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="limited" id="soc-lim" /><Label htmlFor="soc-lim">Limited (few meaningful relationships)</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="isolated" id="soc-iso" /><Label htmlFor="soc-iso">Isolated (little to no meaningful social contact)</Label></div>
               </RadioGroup>
             </div>
           </div>
@@ -526,16 +560,17 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [], onComple
           <div className="space-y-6">
             <div>
               <h3 className="text-xl font-bold flex items-center gap-2"><Dna className="w-5 h-5 text-primary" /> 🧬 Your Biological Blueprint</h3>
-              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                Your family's longevity history is the single strongest predictor of your genetic ceiling.{' '}
+              <p className="text-sm text-muted-foreground mt-1">Step 2 of our 3-Pillar Analysis</p>
+              <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                Your family's longevity history is the single strongest predictor of your <strong>Family Longevity Baseline</strong>.{' '}
                 <strong>Karolinska Institute, 2017</strong> — heritability of longevity estimated at 25–30%.
-                Enter ages you know. Toggle "Still living" if the person is alive. Leave "Don't know" checked if unknown.
+                Toggle <em>Known</em> for any relative whose age you know, then set their status.
               </p>
             </div>
 
-            {/* Genetic Score badge (live) */}
-            {(Object.values(pillar1).some(m => !m.unknown && m.age > 0)) && (
-              <div className="flex items-center gap-2">
+            {/* Genetic Score badge (live — shown when ≥2 entries known) */}
+            {Object.values(pillar1).filter(m => !m.unknown && m.age > 0).length >= 2 && (
+              <div className="flex items-center gap-2 animate-fade-in-up">
                 <span className="text-xs text-muted-foreground">Genetic Vitality Score:</span>
                 <TooltipProvider>
                   <Tooltip>
@@ -548,19 +583,18 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [], onComple
               </div>
             )}
 
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Paternal Side */}
-              <div className="space-y-3">
-                <h4 className="text-sm font-bold text-foreground flex items-center gap-2"><TreePine className="w-4 h-4 text-blue-500" /> Paternal Side</h4>
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-foreground flex items-center gap-2"><TreePine className="w-4 h-4 text-blue-500" /> Paternal Side</h4>
+              <div className="space-y-2">
                 <FamilyMemberRow label="Paternal Grandfather" member={pillar1.paternalGrandfather} onChange={(m) => updateP1Member('paternalGrandfather', m)} />
                 <FamilyMemberRow label="Paternal Grandmother" member={pillar1.paternalGrandmother} onChange={(m) => updateP1Member('paternalGrandmother', m)} />
                 <FamilyMemberRow label="Father" member={pillar1.father} onChange={(m) => updateP1Member('father', m)} />
                 <FamilyMemberRow label="Paternal Uncles (avg age)" member={pillar1.paternalUncles} onChange={(m) => updateP1Member('paternalUncles', m)} optional />
                 <FamilyMemberRow label="Paternal Aunts (avg age)" member={pillar1.paternalAunts} onChange={(m) => updateP1Member('paternalAunts', m)} optional />
               </div>
-              {/* Maternal Side */}
-              <div className="space-y-3">
-                <h4 className="text-sm font-bold text-foreground flex items-center gap-2"><TreePine className="w-4 h-4 text-emerald-500" /> Maternal Side</h4>
+
+              <h4 className="text-sm font-bold text-foreground flex items-center gap-2 pt-2"><TreePine className="w-4 h-4 text-emerald-500" /> Maternal Side</h4>
+              <div className="space-y-2">
                 <FamilyMemberRow label="Maternal Grandfather" member={pillar1.maternalGrandfather} onChange={(m) => updateP1Member('maternalGrandfather', m)} />
                 <FamilyMemberRow label="Maternal Grandmother" member={pillar1.maternalGrandmother} onChange={(m) => updateP1Member('maternalGrandmother', m)} />
                 <FamilyMemberRow label="Mother" member={pillar1.mother} onChange={(m) => updateP1Member('mother', m)} />
@@ -579,107 +613,138 @@ export const LifeExpectancyCalculator = ({ birthDate, celebrities = [], onComple
         )}
 
         {/* ── STEP 8: Pillar 2 — Community & Epigenetic Anchor ── */}
-        {step === 8 && (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-xl font-bold flex items-center gap-2">🏘️ Your Environmental Blueprint</h3>
-              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                Epigenetics proves that your daily habits and community environment can override genetic predispositions.{' '}
-                <span className="font-medium text-foreground">WHO, 2023</span>: "Lifestyle factors account for up to 70% of longevity outcomes."
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="underline decoration-dotted cursor-help ml-1 text-primary">"What is Epigenetic?"</span>
-                    </TooltipTrigger>
-                    <TooltipContent className="max-w-xs text-xs p-3">
-                      Epigenetics refers to changes in gene expression caused by lifestyle and environment — not changes to DNA itself. Your habits literally switch genes on or off. (National Institutes of Health)
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </p>
-            </div>
-
-            {/* Section A: Community Longevity Mentor */}
-            <div className="bg-muted/30 rounded-xl border p-4 space-y-4">
-              <h4 className="text-sm font-bold text-foreground">Section A — Community Longevity Mentor (Optional)</h4>
-              <p className="text-xs text-muted-foreground">Do you know someone in your community who has lived or is living exceptionally long?</p>
-              <div className="flex items-center gap-3">
-                <Label className="text-sm">Do you have a longevity mentor?</Label>
-                <div className="flex gap-2">
-                  <Button type="button" size="sm" variant={pillar2.hasMentor ? 'default' : 'outline'} className="h-7 text-xs" onClick={() => setPillar2(p => ({ ...p, hasMentor: true }))}>Yes</Button>
-                  <Button type="button" size="sm" variant={!pillar2.hasMentor ? 'default' : 'outline'} className="h-7 text-xs" onClick={() => setPillar2(p => ({ ...p, hasMentor: false }))}>No</Button>
-                </div>
-              </div>
-              {pillar2.hasMentor && (
-                <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1.5">
-                      <Label className="text-xs">Their name (optional)</Label>
-                      <Input type="text" placeholder="e.g. Uncle Ratan" value={pillar2.mentorName} onChange={(e) => setPillar2(p => ({ ...p, mentorName: e.target.value }))} className="h-8 text-xs" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label className="text-xs">Their age / age at passing</Label>
-                      <Input type="number" placeholder="e.g. 94" value={pillar2.mentorAge || ''} onChange={(e) => setPillar2(p => ({ ...p, mentorAge: Number(e.target.value) }))} className="h-8 text-xs" min={60} max={130} />
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs">Relationship</Label>
-                    <Select value={pillar2.mentorRelationship} onValueChange={(v) => setPillar2(p => ({ ...p, mentorRelationship: v }))}>
-                      <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        {['Neighbor', 'Community elder', 'Relative', 'Teacher', 'Religious leader', 'Other'].map(r => <SelectItem key={r} value={r.toLowerCase()}>{r}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  {pillar2.mentorAge > 85 && (
-                    <p className="text-xs text-green-700 bg-green-50 dark:bg-green-950/20 p-2 rounded border border-green-200">
-                      ✅ +0.5 yr community bonus: Your community environment supports exceptional longevity.
-                    </p>
-                  )}
-                  <p className="text-[11px] text-muted-foreground italic">People in similar environments share air quality, food culture, noise levels, and social norms. A long-lived neighbor is powerful evidence that YOUR environment supports longevity.</p>
-                </div>
-              )}
-            </div>
-
-            {/* Section B: Epigenetic Habits */}
-            <div className="space-y-3">
+        {step === 8 && (() => {
+          const BLUE_ZONES_IDS = new Set(['walking', 'purpose', 'meditation', 'fasting', 'wholefood', 'spiritual', 'community', 'volunteer']);
+          const blueZonesCount = pillar2.selectedHabits.filter(id => BLUE_ZONES_IDS.has(id)).length;
+          return (
+            <div className="space-y-6">
               <div>
-                <h4 className="text-sm font-bold text-foreground">Section B — Your Epigenetic Habits</h4>
-                <p className="text-xs text-muted-foreground mt-0.5">Select all positive everyday habits you consistently follow. Each adds real years to your forecast.</p>
+                <h3 className="text-xl font-bold flex items-center gap-2">🏘️ Your Community Anchor</h3>
+                <p className="text-sm text-muted-foreground mt-1">Step 3 of our 3-Pillar Analysis</p>
+                <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                  Epigenetics proves that your daily habits and community environment can override genetic predispositions.{' '}
+                  <span className="font-medium text-foreground">WHO, 2023</span>: "Lifestyle factors account for up to 70% of longevity outcomes."
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="underline decoration-dotted cursor-help ml-1 text-primary">"What is Epigenetic?"</span>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs text-xs p-3">
+                        Epigenetics refers to changes in gene expression caused by lifestyle and environment — not changes to DNA itself. Your habits literally switch genes on or off. (National Institutes of Health)
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </p>
               </div>
-              <div className="grid sm:grid-cols-2 gap-2">
-                {EPIGENETIC_HABITS.map((habit) => (
-                  <div
-                    key={habit.id}
-                    onClick={() => toggleHabit(habit.id)}
-                    className={`p-3 rounded-lg border cursor-pointer transition-all flex items-start space-x-3 bg-background hover:border-primary/50 shadow-sm ${pillar2.selectedHabits.includes(habit.id) ? 'ring-2 ring-primary border-primary bg-primary/5' : ''}`}
-                  >
-                    <Checkbox checked={pillar2.selectedHabits.includes(habit.id)} onCheckedChange={() => {}} className="mt-0.5" />
-                    <div className="pointer-events-none flex-1 space-y-0.5">
-                      <div className="flex items-center justify-between gap-2">
-                        <Label className="text-xs font-bold cursor-pointer">{habit.emoji} {habit.label}</Label>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Badge variant="outline" className="text-[9px] font-bold text-green-600 border-green-400 flex-shrink-0 cursor-help">+{habit.gain}yr</Badge>
-                            </TooltipTrigger>
-                            <TooltipContent className="max-w-xs text-xs p-2">{habit.source}</TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+
+              {/* Section A: Community Longevity Mentor (Optional) */}
+              <div className="bg-muted/30 rounded-xl border p-4 space-y-4">
+                <h4 className="text-sm font-bold text-foreground">Section A — Community Longevity Mentor <span className="text-muted-foreground font-normal">(Optional)</span></h4>
+                <p className="text-xs text-muted-foreground">Do you know someone in your community who has lived or is living exceptionally long?</p>
+                <div className="flex items-center gap-3">
+                  <Label className="text-sm">Do you have a longevity mentor?</Label>
+                  <div className="flex gap-2">
+                    <Button type="button" size="sm" variant={pillar2.hasMentor ? 'default' : 'outline'} className="h-7 text-xs" onClick={() => setPillar2(p => ({ ...p, hasMentor: true }))}>Yes</Button>
+                    <Button type="button" size="sm" variant={!pillar2.hasMentor ? 'default' : 'outline'} className="h-7 text-xs" onClick={() => setPillar2(p => ({ ...p, hasMentor: false }))}>No</Button>
+                  </div>
+                </div>
+                {pillar2.hasMentor && (
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <Label className="text-xs">Their name (optional)</Label>
+                        <Input type="text" placeholder="e.g. Uncle Ratan" value={pillar2.mentorName} onChange={(e) => setPillar2(p => ({ ...p, mentorName: e.target.value }))} className="h-8 text-xs" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label className="text-xs">Their age / age at passing</Label>
+                        <Input type="number" placeholder="e.g. 94" value={pillar2.mentorAge || ''} onChange={(e) => setPillar2(p => ({ ...p, mentorAge: Number(e.target.value) }))} className="h-8 text-xs" min={60} max={130} />
                       </div>
                     </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-xs">Relationship</Label>
+                      <Select value={pillar2.mentorRelationship} onValueChange={(v) => setPillar2(p => ({ ...p, mentorRelationship: v }))}>
+                        <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {['Neighbor', 'Community Elder', 'Relative', 'Religious Leader', 'Teacher', 'Yoga/Fitness Instructor', 'Other'].map(r => (
+                            <SelectItem key={r} value={r.toLowerCase()}>{r}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    {pillar2.mentorAge > 85 && (
+                      <p className="text-xs text-green-700 bg-green-50 dark:bg-green-950/20 p-2 rounded border border-green-200">
+                        ✅ +0.5 yr community bonus: Your community environment supports exceptional longevity.
+                      </p>
+                    )}
+                    <p className="text-[11px] text-muted-foreground italic">People in similar environments share air quality, food culture, noise levels, and social norms. A long-lived neighbor is powerful evidence that YOUR environment supports longevity.</p>
                   </div>
-                ))}
+                )}
               </div>
-              {pillar2.selectedHabits.length > 0 && (
-                <div className="flex items-center justify-between bg-primary/5 rounded-lg border border-primary/20 px-4 py-2">
-                  <span className="text-xs font-medium text-foreground">{pillar2.selectedHabits.length} habit{pillar2.selectedHabits.length !== 1 ? 's' : ''} selected</span>
-                  <Badge className="text-xs font-bold bg-primary text-primary-foreground">+{habitBonus.toFixed(1)} yrs (cap: +6)</Badge>
+
+              {/* Section B: Epigenetic Habits */}
+              <div className="space-y-3">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h4 className="text-sm font-bold text-foreground">Section B — Your Epigenetic Habits</h4>
+                    <p className="text-xs text-muted-foreground mt-0.5">Select all positive everyday habits you consistently follow. Each adds real years to your forecast.</p>
+                  </div>
+                  {blueZonesCount > 0 && (
+                    <Badge variant="outline" className="shrink-0 text-[10px] border-blue-400 text-blue-600">
+                      🌍 {blueZonesCount}/8 Blue Zones
+                    </Badge>
+                  )}
                 </div>
-              )}
+                <div className="grid sm:grid-cols-2 gap-2">
+                  {EPIGENETIC_HABITS.map((habit) => {
+                    const selected = pillar2.selectedHabits.includes(habit.id);
+                    return (
+                      <div
+                        key={habit.id}
+                        onClick={() => toggleHabit(habit.id)}
+                        className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 flex items-start space-x-3 bg-background shadow-sm ${
+                          selected
+                            ? 'ring-2 ring-green-500 border-green-500 bg-green-50/50 dark:bg-green-950/20 scale-[1.02]'
+                            : 'hover:border-primary/50'
+                        }`}
+                      >
+                        <Checkbox checked={selected} onCheckedChange={() => {}} className="mt-0.5" />
+                        <div className="pointer-events-none flex-1 space-y-0.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <Label className="text-xs font-bold cursor-pointer">{habit.emoji} {habit.label}</Label>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Badge
+                                    variant="outline"
+                                    className={`text-[9px] font-bold flex-shrink-0 cursor-help transition-all ${
+                                      selected
+                                        ? 'text-green-700 border-green-500 bg-green-100'
+                                        : 'text-green-600 border-green-400'
+                                    }`}
+                                  >+{habit.gain}yr</Badge>
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-xs text-xs p-2">{habit.source}</TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                {pillar2.selectedHabits.length > 0 && (
+                  <div className="flex items-center justify-between bg-primary/5 rounded-lg border border-primary/20 px-4 py-2">
+                    <span className="text-xs font-medium text-foreground">
+                      {pillar2.selectedHabits.length} habit{pillar2.selectedHabits.length !== 1 ? 's' : ''} selected
+                      {blueZonesCount > 0 && <span className="text-blue-600 ml-2">· {blueZonesCount}/8 Blue Zones principles</span>}
+                    </span>
+                    <Badge className="text-xs font-bold bg-primary text-primary-foreground">+{habitBonus.toFixed(1)} yrs (cap: +6)</Badge>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         <Separator />
         <div className="flex justify-between">

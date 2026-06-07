@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, Component } from 'react';
+import { useState, useRef, Component } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   ArrowRight, Heart, TrendingUp, Shield, Activity,
-  CalendarIcon, ShieldCheck, AlertTriangle, RefreshCw,
+  CalendarIcon, ShieldCheck, AlertTriangle, RefreshCw, Sparkles,
 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
@@ -56,27 +56,34 @@ class ReportErrorBoundary extends Component<
   }
 }
 
+type Phase = 'quiz' | 'result' | 'simulator' | 'report';
+
+interface CelebrityState {
+  current: CelebrityLongevityProfile[];
+  potential: CelebrityLongevityProfile[];
+}
+
 // ── Page component ────────────────────────────────────────────────────────────
 const LifeExpectancy = () => {
   const { birthDate, setBirthDate } = useBirthDate();
   const { isPremium, profile } = useAuth();
   const navigate = useNavigate();
 
+  const [phase, setPhase] = useState<Phase>('quiz');
   const [longevityResult, setLongevityResult] = useState<LongevityResult | null>(null);
-  const [showSimulator, setShowSimulator] = useState(false);
-  const [showReport, setShowReport] = useState(false);
 
-  const [celebrityMatches, setCelebrityMatches] = useState<CelebrityLongevityProfile[]>([]);
-  const [isLoadingCelebrities, setIsLoadingCelebrities] = useState(false);
+  const [celebrities, setCelebrities] = useState<CelebrityState>({ current: [], potential: [] });
+  const [isLoadingCurrent, setIsLoadingCurrent] = useState(false);
+  const [isLoadingPotential, setIsLoadingPotential] = useState(false);
 
+  const resultRef    = useRef<HTMLDivElement>(null);
   const simulatorRef = useRef<HTMLDivElement>(null);
   const reportRef    = useRef<HTMLDivElement>(null);
 
   const resetAll = () => {
     setLongevityResult(null);
-    setShowSimulator(false);
-    setShowReport(false);
-    setCelebrityMatches([]);
+    setPhase('quiz');
+    setCelebrities({ current: [], potential: [] });
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,27 +93,40 @@ const LifeExpectancy = () => {
   };
 
   const handleQuizComplete = (data: { quiz: HealthQuizData; pillar1: Pillar1Data; pillar2: Pillar2Data }) => {
-    console.log('[LifeExpectancy] quiz complete:', data);
-    const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2);
+    const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate);
     setLongevityResult(result);
-    setShowSimulator(true);
-    setShowReport(false);
+    setPhase('result');
 
-    // Start celebrity fetch async without blocking UI
-    setIsLoadingCelebrities(true);
-    const initial = findInitialMatches(result.totalForecast);
-    setCelebrityMatches(initial);
-    enhanceCelebrityMatches(initial, result.totalForecast)
-      .then(enhanced => setCelebrityMatches(enhanced))
-      .finally(() => setIsLoadingCelebrities(false));
+    // Async celebrity fetch for current trajectory
+    setIsLoadingCurrent(true);
+    const initialCurrent = findInitialMatches(result.totalForecast);
+    setCelebrities(prev => ({ ...prev, current: initialCurrent }));
+    enhanceCelebrityMatches(initialCurrent, result.totalForecast)
+      .then(enhanced => setCelebrities(prev => ({ ...prev, current: enhanced })))
+      .finally(() => setIsLoadingCurrent(false));
 
+    // Async celebrity fetch for maximum potential
+    setIsLoadingPotential(true);
+    const initialPotential = findInitialMatches(result.maximumPotential);
+    setCelebrities(prev => ({ ...prev, potential: initialPotential }));
+    enhanceCelebrityMatches(initialPotential, result.maximumPotential)
+      .then(enhanced => setCelebrities(prev => ({ ...prev, potential: enhanced })))
+      .finally(() => setIsLoadingPotential(false));
+
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+  };
+
+  const handleGoToSimulator = () => {
+    setPhase('simulator');
     setTimeout(() => {
       simulatorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 150);
   };
 
   const handleGenerateReport = () => {
-    setShowReport(true);
+    setPhase('report');
     setTimeout(() => {
       reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 150);
@@ -138,16 +158,18 @@ const LifeExpectancy = () => {
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Wondering how your daily habits and health choices impact your future? Our data-driven calculator estimates your lifespan across all three pillars: health, genetics, and epigenetics.
             </p>
-            <div className="pt-4">
-              <Button
-                size="lg"
-                className="gap-2 text-lg px-8 py-6 animate-glow"
-                onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                🧬 Calculate My Life Expectancy
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-            </div>
+            {phase === 'quiz' && (
+              <div className="pt-4">
+                <Button
+                  size="lg"
+                  className="gap-2 text-lg px-8 py-6 animate-glow"
+                  onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  🧬 Calculate My Life Expectancy
+                  <ArrowRight className="w-5 h-5" />
+                </Button>
+              </div>
+            )}
             <div className="max-w-2xl mx-auto space-y-3 pt-4">
               <Alert className="border-accent/30 bg-accent/5 text-left">
                 <ShieldCheck className="h-4 w-4 text-accent" />
@@ -166,58 +188,138 @@ const LifeExpectancy = () => {
         </section>
 
         {/* ── Phase 1: Health Quiz ── */}
-        <section id="calculator" className="max-w-4xl mx-auto mb-16">
-          {/* Birth date input/display */}
-          {!birthDate ? (
-            <Card className="glass-card mb-8 max-w-md mx-auto">
-              <CardContent className="p-6">
-                <div className="space-y-2">
-                  <Label htmlFor="birthdate-life" className="text-base font-semibold flex items-center gap-2">
-                    <CalendarIcon className="h-4 w-4" /> Enter Your Birth Date
-                  </Label>
-                  <p className="text-sm text-muted-foreground mb-3">Required to calculate your life expectancy</p>
-                  <Input
-                    id="birthdate-life"
-                    type="date"
-                    value={getInputValue()}
-                    onChange={handleDateChange}
-                    max={new Date().toISOString().split('T')[0]}
-                    className="text-lg"
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <Card className="glass-card mb-8 max-w-md mx-auto">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <CalendarIcon className="h-4 w-4 text-primary" />
-                    <span className="text-sm">Birth Date: <strong>{birthDate.toLocaleDateString()}</strong></span>
+        {phase === 'quiz' && (
+          <section id="calculator" className="max-w-4xl mx-auto mb-16">
+            {/* Birth date input/display */}
+            {!birthDate ? (
+              <Card className="glass-card mb-8 max-w-md mx-auto">
+                <CardContent className="p-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="birthdate-life" className="text-base font-semibold flex items-center gap-2">
+                      <CalendarIcon className="h-4 w-4" /> Enter Your Birth Date
+                    </Label>
+                    <p className="text-sm text-muted-foreground mb-3">Required to calculate your life expectancy</p>
+                    <Input
+                      id="birthdate-life"
+                      type="date"
+                      value={getInputValue()}
+                      onChange={handleDateChange}
+                      max={new Date().toISOString().split('T')[0]}
+                      className="text-lg"
+                    />
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => { setBirthDate(null); resetAll(); }}>Change</Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="glass-card mb-8 max-w-md mx-auto">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <CalendarIcon className="h-4 w-4 text-primary" />
+                      <span className="text-sm">Birth Date: <strong>{birthDate.toLocaleDateString()}</strong></span>
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={() => { setBirthDate(null); resetAll(); }}>Change</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
-          <LifeExpectancyCalculator
-            birthDate={birthDate}
-            celebrities={[]}
-            onComplete={handleQuizComplete}
-          />
-        </section>
+            <LifeExpectancyCalculator
+              birthDate={birthDate}
+              celebrities={[]}
+              onComplete={handleQuizComplete}
+            />
+          </section>
+        )}
+
+        {/* ── Phase 2: Result Reveal ── */}
+        {phase === 'result' && longevityResult && (
+          <section className="max-w-4xl mx-auto mb-16" ref={resultRef}>
+            <div className="text-center space-y-8 animate-fade-in-up">
+              <div className="space-y-2">
+                <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">🎯 Your Longevity Forecast</p>
+                <div className="text-9xl font-black text-primary leading-none">{longevityResult.totalForecast}</div>
+                <p className="text-2xl font-semibold text-muted-foreground">years</p>
+                <p className="text-sm text-muted-foreground">
+                  You are {longevityResult.currentAge} today · {longevityResult.yearsRemaining} years of life ahead
+                </p>
+              </div>
+
+              {/* How we built your number */}
+              <Card className="glass-card text-left max-w-2xl mx-auto">
+                <CardContent className="p-6 space-y-4">
+                  <h3 className="font-bold text-base text-foreground">How we built your number</h3>
+                  <div className="space-y-2.5 text-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">
+                        WHO baseline ({longevityResult.quizSnapshot.gender || 'male'},{' '}
+                        {longevityResult.quizSnapshot.country || 'Global average'})
+                      </span>
+                      <strong className="text-foreground tabular-nums">{longevityResult.baselineLifeExpectancy} yrs</strong>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">Health &amp; lifestyle adjustment</span>
+                      <strong className={`tabular-nums ${longevityResult.healthAdjustment >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+                        {longevityResult.healthAdjustment >= 0 ? '+' : ''}{longevityResult.healthAdjustment} yrs
+                      </strong>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">🧬 Genetic adjustment <span className="text-[10px] opacity-60">({longevityResult.geneticVitalityScore})</span></span>
+                      <strong className={`tabular-nums ${longevityResult.geneticAdjustment >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+                        {longevityResult.geneticAdjustment >= 0 ? '+' : ''}{longevityResult.geneticAdjustment} yrs
+                      </strong>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">🌱 Epigenetic habits bonus <span className="text-[10px] opacity-60">({longevityResult.blueZonesCount}/8 Blue Zones)</span></span>
+                      <strong className="text-green-600 tabular-nums">+{longevityResult.epigeneticAdjustment} yrs</strong>
+                    </div>
+                    {longevityResult.communityBonus > 0 && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">🏘️ Community bonus</span>
+                        <strong className="text-green-600 tabular-nums">+{longevityResult.communityBonus} yr</strong>
+                      </div>
+                    )}
+                    <div className="border-t pt-2.5 flex justify-between items-center font-bold">
+                      <span className="text-foreground">Total Forecast</span>
+                      <strong className="text-primary text-lg tabular-nums">{longevityResult.totalForecast} yrs</strong>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground border-t pt-2">
+                    Baseline source: {longevityResult.baselineCitation}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <div className="flex flex-col items-center gap-3 pt-2">
+                <Button
+                  size="lg"
+                  className="gap-2 text-base px-10 py-6 animate-glow"
+                  onClick={handleGoToSimulator}
+                >
+                  Now let's explore what's possible
+                  <ArrowRight className="w-5 h-5" />
+                </Button>
+                <p className="text-xs text-muted-foreground">Simulate lifestyle changes · See your full longevity blueprint</p>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ── Phase 3: What-If Simulator ── */}
-        {showSimulator && longevityResult && (
+        {(phase === 'simulator' || phase === 'report') && longevityResult && (
           <section className="max-w-6xl mx-auto mb-16" ref={simulatorRef}>
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold flex items-center gap-2">
-                <TrendingUp className="w-6 h-6 text-primary" /> What-If Simulator
-              </h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                Your forecast: <strong className="text-primary text-lg">{longevityResult.totalForecast} years</strong> · Adjust sliders to simulate lifestyle changes
-              </p>
+            {/* Compact result summary bar */}
+            <div className="mb-6 flex items-center gap-4 flex-wrap">
+              <div>
+                <h2 className="text-2xl font-bold flex items-center gap-2">
+                  <TrendingUp className="w-6 h-6 text-primary" /> What-If Simulator
+                </h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Your forecast: <strong className="text-primary text-lg">{longevityResult.totalForecast} years</strong>
+                  {' · '}Maximum potential: <strong className="text-accent">{longevityResult.maximumPotential} years</strong>
+                  {' · '}Gap to close: <strong className="text-foreground">{longevityResult.yearsGapToClose} years</strong>
+                </p>
+              </div>
             </div>
             <ReportErrorBoundary onReset={resetAll}>
               <WhatIfSimulator
@@ -231,25 +333,27 @@ const LifeExpectancy = () => {
         )}
 
         {/* ── Phase 4: Full Three Pillar Report ── */}
-        {showReport && longevityResult && (
+        {phase === 'report' && longevityResult && (
           <section id="life-expectancy-report" className="max-w-6xl mx-auto mb-16" ref={reportRef}>
             <div className="mb-6">
               <h2 className="text-2xl font-bold flex items-center gap-2">
-                ✨ Your Full Longevity Blueprint
+                <Sparkles className="w-6 h-6 text-accent" /> Your Full Longevity Blueprint
               </h2>
               <p className="text-sm text-muted-foreground mt-1">
                 Complete analysis across all three pillars of longevity
               </p>
             </div>
-            <ReportErrorBoundary onReset={() => setShowReport(false)}>
+            <ReportErrorBoundary onReset={() => setPhase('simulator')}>
               <EnhancedLifeExpectancyReport
                 result={longevityResult}
                 userName={longevityResult.quizSnapshot.name}
                 birthDate={birthDate}
                 isPremium={isPremium}
                 onUpgradeClick={() => navigate('/upgrade')}
-                celebrityMatches={celebrityMatches}
-                isLoadingCelebrities={isLoadingCelebrities}
+                celebrityMatches={celebrities.current}
+                isLoadingCelebrities={isLoadingCurrent}
+                potentialCelebrityMatches={celebrities.potential}
+                isLoadingPotentialCelebrities={isLoadingPotential}
               />
             </ReportErrorBoundary>
           </section>

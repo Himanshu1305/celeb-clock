@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, CSSProperties } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
@@ -57,7 +57,7 @@ export const WhatIfSimulator = ({ result, isPremium, onUpgradeClick, onGenerateR
   const [iBP,       setBP]      = useState(() => catIdx(BP_OPTS,    q.bloodPressure  || 'normal'));
   const [stress,    setStress]  = useState(q.stress);
   const [bmi,       setBmi]     = useState(q.bmi);
-  const [habits,    setHabits]  = useState<string[]>(result.selectedHabits);
+  const [habits,    setHabits]  = useState<string[]>(result.epigeneticHabitsSelected);
 
   const toggleHabit = (id: string) =>
     setHabits(prev => prev.includes(id) ? prev.filter(h => h !== id) : [...prev, id]);
@@ -75,7 +75,9 @@ export const WhatIfSimulator = ({ result, isPremium, onUpgradeClick, onGenerateR
   const delta = Math.round((simForecast - result.totalForecast) * 10) / 10;
   const habitBonus = Math.min(6, habits.reduce((s, id) => s + (EPIGENETIC_HABITS.find(h => h.id === id)?.gain ?? 0), 0));
 
-  const blurCls = isPremium ? '' : 'blur-[8px] select-none pointer-events-none';
+  const blurStyle: CSSProperties = !isPremium
+    ? { filter: 'blur(8px)', userSelect: 'none', cursor: 'default' }
+    : {};
 
   // Max potential is all sliders optimal
   const maxSim = useMemo(() => recalcWithOverrides(result, {
@@ -93,22 +95,23 @@ export const WhatIfSimulator = ({ result, isPremium, onUpgradeClick, onGenerateR
         <CardContent className="p-5">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">What-If Simulator</p>
+              <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">🔬 Your Longevity Laboratory</p>
               <p className="text-sm text-muted-foreground mt-0.5">Adjust sliders to see how lifestyle changes impact your forecast in real time</p>
             </div>
             <div className="flex items-center gap-6 shrink-0">
               <div className="text-center">
                 <span className="text-[10px] uppercase font-bold text-muted-foreground block">Your Forecast</span>
-                <strong className={`text-2xl font-black text-muted-foreground ${blurCls}`}>{result.totalForecast} yrs</strong>
+                {/* Never blurred — this is the user's own result */}
+                <strong className="text-2xl font-black text-muted-foreground">{result.totalForecast} yrs</strong>
               </div>
               <TrendingUp className="w-5 h-5 text-primary hidden sm:block" />
               <div className="text-center">
                 <span className="text-[10px] uppercase font-bold text-primary block">Simulated</span>
                 <div className="relative">
-                  <strong className={`text-3xl font-black text-primary ${blurCls}`}>{simForecast} yrs</strong>
+                  <strong className="text-3xl font-black text-primary" style={blurStyle}>{simForecast} yrs</strong>
                   {!isPremium && (
                     <div className="absolute inset-0 flex items-center justify-center gap-1 text-xs text-muted-foreground">
-                      <Lock className="w-3 h-3" /> Unlock to read
+                      <Lock className="w-3 h-3" /> Unlock
                     </div>
                   )}
                 </div>
@@ -220,7 +223,7 @@ export const WhatIfSimulator = ({ result, isPremium, onUpgradeClick, onGenerateR
             <h4 className="font-bold text-sm text-primary flex items-center gap-2">
               <Sparkles className="w-4 h-4" /> Your Maximum Potential Lifespan
             </h4>
-            <strong className={`text-xl font-black text-primary ${blurCls}`}>{maxSim} yrs</strong>
+            <strong className="text-xl font-black text-primary" style={blurStyle}>{maxSim} yrs</strong>
           </div>
           <div className="space-y-1">
             <div className="flex justify-between text-[10px] text-muted-foreground">
@@ -244,14 +247,16 @@ export const WhatIfSimulator = ({ result, isPremium, onUpgradeClick, onGenerateR
             {result.factorBreakdown.slice(0, 10).map((f, i) => (
               <div key={i} className={`flex items-center justify-between px-3 py-2 rounded-lg border text-xs ${f.currentImpact >= 0 ? 'bg-green-50/50 border-green-200 dark:bg-green-950/20 dark:border-green-900' : 'bg-red-50/50 border-red-200 dark:bg-red-950/20 dark:border-red-900'}`}>
                 <TooltipProvider><Tooltip><TooltipTrigger asChild>
+                  {/* Factor name always visible */}
                   <span className="flex items-center gap-1.5 font-medium cursor-help">
                     <span>{f.emoji}</span><span>{f.factor}</span>
                   </span>
                 </TooltipTrigger><TooltipContent className="max-w-xs text-xs p-2">{f.source}</TooltipContent></Tooltip></TooltipProvider>
                 <div className="flex items-center gap-2 shrink-0">
-                  <DeltaBadge delta={f.currentImpact} />
+                  {/* Numbers blurred for free users */}
+                  <span style={blurStyle}><DeltaBadge delta={f.currentImpact} /></span>
                   {f.potentialGain > 0 && (
-                    <span className={`text-[9px] text-green-600 ${blurCls}`}>+{f.potentialGain}yr possible</span>
+                    <span className="text-[9px] text-green-600" style={blurStyle}>+{f.potentialGain}yr possible</span>
                   )}
                 </div>
               </div>
@@ -273,7 +278,7 @@ export const WhatIfSimulator = ({ result, isPremium, onUpgradeClick, onGenerateR
             </p>
             <Link to="/upgrade">
               <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold px-6">
-                Unlock Full Report — $6.99
+                Unlock Full Report — ₹499 · $6.99
               </Button>
             </Link>
           </CardContent>
@@ -286,12 +291,10 @@ export const WhatIfSimulator = ({ result, isPremium, onUpgradeClick, onGenerateR
           size="lg"
           className="px-10 py-6 text-base font-bold gap-2"
           onClick={onGenerateReport}
-          disabled={!isPremium}
         >
           <Sparkles className="w-5 h-5" />
-          {isPremium ? 'Generate Full Longevity Blueprint' : '🔒 Premium: Generate Full Blueprint'}
+          Generate Full Longevity Blueprint ✨
         </Button>
-        {!isPremium && <p className="text-xs text-muted-foreground mt-2">Upgrade to generate your full personalized Longevity Report</p>}
       </div>
     </div>
   );

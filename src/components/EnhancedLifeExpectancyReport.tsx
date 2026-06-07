@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Download, Share2, Copy, ExternalLink, Loader2, Crown } from 'lucide-react';
+import { Download, Share2, Copy, ExternalLink, Loader2, Crown, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { LongevityResult, EPIGENETIC_HABITS } from '@/services/LongevityCalculationService';
 import { CelebrityLongevityProfile } from '@/services/CelebrityLongevityService';
@@ -18,7 +18,15 @@ interface Props {
   onUpgradeClick?: () => void;
   celebrityMatches: CelebrityLongevityProfile[];
   isLoadingCelebrities: boolean;
+  potentialCelebrityMatches?: CelebrityLongevityProfile[];
+  isLoadingPotentialCelebrities?: boolean;
 }
+
+const BlurredNumber = ({ value, isPremium, suffix = '' }: { value: number | string; isPremium: boolean; suffix?: string }) => (
+  <span style={!isPremium ? { filter: 'blur(8px)', userSelect: 'none', cursor: 'default' } : {}}>
+    {value}{suffix}
+  </span>
+);
 
 const VITALITY_COLORS: Record<string, string> = {
   Exceptional: 'bg-emerald-100 text-emerald-800 border-emerald-300',
@@ -32,6 +40,67 @@ function ageColor(age: number): string {
   if (age >= 70) return 'bg-yellow-100 border-yellow-300 text-yellow-800';
   if (age >= 60) return 'bg-orange-100 border-orange-300 text-orange-800';
   return 'bg-red-100 border-red-300 text-red-800';
+}
+
+function CelebRow({
+  celebs, celebImages, imgErrors, setImgErrors, isPremium, blurNum,
+}: {
+  celebs: CelebrityLongevityProfile[];
+  celebImages: Record<string, string | null>;
+  imgErrors: Set<string>;
+  setImgErrors: React.Dispatch<React.SetStateAction<Set<string>>>;
+  isPremium: boolean;
+  blurNum: (n: number | string, suffix?: string) => React.ReactNode;
+}) {
+  return (
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {celebs.map((celeb) => {
+        const initials = celeb.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        const hasImg = !imgErrors.has(celeb.name) && !!celebImages[celeb.name];
+        return (
+          <Card key={celeb.name} className="overflow-hidden border-muted">
+            {/* Photo — fixed 180px container */}
+            <div className="overflow-hidden bg-muted" style={{ height: 180 }}>
+              {hasImg ? (
+                <img
+                  src={celebImages[celeb.name]!}
+                  alt={celeb.name}
+                  width="100%"
+                  height={180}
+                  className="w-full h-full object-cover object-top"
+                  onError={() => setImgErrors(prev => new Set([...prev, celeb.name]))}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">
+                  <span className="text-4xl font-black text-primary/60">{initials}</span>
+                </div>
+              )}
+            </div>
+            <CardContent className="p-3 space-y-2">
+              <div className="flex items-start justify-between gap-1">
+                <div>
+                  <h5 className="text-sm font-bold text-foreground">{celeb.name}</h5>
+                  <p className="text-[11px] text-muted-foreground">{celeb.profession}</p>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="text-xs font-black text-primary">{blurNum(celeb.longevityAge, ' yrs')}</div>
+                  <Badge className={`text-[9px] px-1 py-0 ${celeb.isLiving ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700'}`}>
+                    {celeb.isLiving ? 'Living' : 'Legacy'}
+                  </Badge>
+                </div>
+              </div>
+              <p className="text-[10px] text-muted-foreground leading-snug bg-muted/40 p-2 rounded">{celeb.achievement}</p>
+              {celeb.wikiUrl && (
+                <a href={celeb.wikiUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline">
+                  <ExternalLink className="w-2.5 h-2.5" /> Wikipedia
+                </a>
+              )}
+            </CardContent>
+          </Card>
+        );
+      })}
+    </div>
+  );
 }
 
 const PremiumBlur = ({ children, tab }: { children: React.ReactNode; tab: string }) => (
@@ -48,23 +117,26 @@ const PremiumBlur = ({ children, tab }: { children: React.ReactNode; tab: string
 export const EnhancedLifeExpectancyReport = ({
   result, userName, birthDate, isPremium, onUpgradeClick,
   celebrityMatches, isLoadingCelebrities,
+  potentialCelebrityMatches = [], isLoadingPotentialCelebrities = false,
 }: Props) => {
   const [celebImages, setCelebImages] = useState<Record<string, string | null>>({});
+  const [imgErrors, setImgErrors] = useState<Set<string>>(new Set());
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (!celebrityMatches.length) return;
+    const allCelebs = [...celebrityMatches, ...potentialCelebrityMatches];
+    if (!allCelebs.length) return;
     const loadImages = async () => {
       const entries = await Promise.all(
-        celebrityMatches.map(async (c) => {
+        allCelebs.map(async (c) => {
           const url = await fetchWikipediaImage(c.name);
           return [c.name, url] as [string, string | null];
         })
       );
-      setCelebImages(Object.fromEntries(entries));
+      setCelebImages(prev => ({ ...prev, ...Object.fromEntries(entries) }));
     };
     loadImages();
-  }, [celebrityMatches]);
+  }, [celebrityMatches, potentialCelebrityMatches]);
 
   const p1 = result.pillar1Snapshot;
   const p2 = result.pillar2Snapshot;
@@ -103,7 +175,9 @@ export const EnhancedLifeExpectancyReport = ({
     navigator.clipboard.writeText(shareText).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
   };
 
-  const blurCls = (section: string) => isPremium ? '' : 'premium-blur';
+  const blurNum = (n: number | string, suffix = '') => (
+    <BlurredNumber value={n} isPremium={isPremium} suffix={suffix} />
+  );
 
   return (
     <div className="space-y-6">
@@ -172,7 +246,7 @@ export const EnhancedLifeExpectancyReport = ({
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs text-xs p-3">
-                  Research shows genetics account for 25-30% of longevity. Your family average of ~{result.weightedFamilyAge} years
+                  Research shows genetics account for 25-30% of longevity. Your family average of ~{result.familyBaselineAge} years
                   {result.geneticVitalityScore === 'Exceptional' ? ' shows exceptional hereditary longevity.' :
                    result.geneticVitalityScore === 'Strong' ? ' indicates solid genetic inheritance.' :
                    result.geneticVitalityScore === 'Average' ? ' is close to global population norms.' :
@@ -180,7 +254,7 @@ export const EnhancedLifeExpectancyReport = ({
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <span className="text-sm text-muted-foreground">Family weighted average: ~{result.weightedFamilyAge} yrs → Genetic adjustment: {result.geneticAdjustment >= 0 ? '+' : ''}{result.geneticAdjustment} yrs</span>
+            <span className="text-sm text-muted-foreground">Family weighted average: ~{result.familyBaselineAge} yrs → Genetic adjustment: {result.geneticAdjustment >= 0 ? '+' : ''}{result.geneticAdjustment} yrs</span>
           </div>
 
           {/* Family tree — blurred for free users */}
@@ -229,7 +303,7 @@ export const EnhancedLifeExpectancyReport = ({
           <div className="bg-muted/30 rounded-xl border p-4 space-y-2">
             <div className="flex items-center justify-between">
               <h4 className="text-sm font-bold text-foreground">Your Genetic Ceiling</h4>
-              <strong className="text-lg font-black text-primary">~{Math.round(result.weightedFamilyAge + 5)} yrs</strong>
+              <strong className="text-lg font-black text-primary">~{Math.round(result.familyBaselineAge + 5)} yrs</strong>
             </div>
             <p className="text-xs text-muted-foreground">Estimated from your family average with a +5yr optimistic modifier based on modern medicine and lifestyle potential.</p>
           </div>
@@ -321,59 +395,43 @@ export const EnhancedLifeExpectancyReport = ({
         </TabsContent>
 
         {/* ── TAB 3: Cultural Horizon ── */}
-        <TabsContent value="cultural" className="pt-5 space-y-5">
-          <div className="space-y-2">
-            <h4 className="text-sm font-bold text-foreground">🌟 Your Trajectory Puts You in the Company of These Icons</h4>
-            <p className="text-xs text-muted-foreground">Celebrities and personalities with a similar longevity trajectory to your {result.totalForecast}-year forecast.</p>
+        <TabsContent value="cultural" className="pt-5 space-y-6">
+
+          {/* Row 1: Current trajectory matches */}
+          <div className="space-y-3">
+            <div>
+              <h4 className="text-sm font-bold text-foreground">🌟 Your Current Trajectory — {result.totalForecast} Years</h4>
+              <p className="text-xs text-muted-foreground mt-0.5">Personalities who walked a similar longevity path to your current forecast.</p>
+            </div>
+            {isLoadingCelebrities ? (
+              <div className="flex items-center justify-center gap-2 py-8 text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span className="text-sm">Finding your matches...</span>
+              </div>
+            ) : celebrityMatches.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-4">No close matches found for your forecast age.</p>
+            ) : (
+              <CelebRow celebs={celebrityMatches} celebImages={celebImages} imgErrors={imgErrors} setImgErrors={setImgErrors} isPremium={isPremium} blurNum={blurNum} />
+            )}
           </div>
 
-          {isLoadingCelebrities ? (
-            <div className="flex items-center justify-center gap-2 py-12 text-muted-foreground">
-              <Loader2 className="w-5 h-5 animate-spin" />
-              <span className="text-sm">Finding your celebrity matches...</span>
+          {/* Row 2: Maximum potential matches */}
+          <div className="space-y-3">
+            <div>
+              <h4 className="text-sm font-bold text-foreground">✨ Your Maximum Potential — {result.maximumPotential} Years</h4>
+              <p className="text-xs text-muted-foreground mt-0.5">These icons show what becomes possible when you optimise every pillar.</p>
             </div>
-          ) : celebrityMatches.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground text-sm">
-              No close celebrity matches found for your forecast age.
-            </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {celebrityMatches.map((celeb) => (
-                <Card key={celeb.name} className="overflow-hidden border-muted">
-                  {/* Photo */}
-                  <div className="h-32 bg-muted flex items-center justify-center overflow-hidden">
-                    {celebImages[celeb.name] ? (
-                      <img src={celebImages[celeb.name]!} alt={celeb.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="text-4xl">🎭</span>
-                    )}
-                  </div>
-                  <CardContent className="p-3 space-y-2">
-                    <div className="flex items-start justify-between gap-1">
-                      <div>
-                        <h5 className="text-sm font-bold text-foreground">{celeb.name}</h5>
-                        <p className="text-[11px] text-muted-foreground">{celeb.profession}</p>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <div className={`text-xs font-black ${isPremium ? 'text-primary' : 'blur-sm select-none'}`}>
-                          {celeb.longevityAge} yrs
-                        </div>
-                        <Badge className={`text-[9px] px-1 py-0 ${celeb.isLiving ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700'}`}>
-                          {celeb.isLiving ? 'Living' : 'Legacy'}
-                        </Badge>
-                      </div>
-                    </div>
-                    <p className="text-[10px] text-muted-foreground leading-snug bg-muted/40 p-2 rounded">{celeb.achievement}</p>
-                    {celeb.wikiUrl && (
-                      <a href={celeb.wikiUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline">
-                        <ExternalLink className="w-2.5 h-2.5" /> Wikipedia
-                      </a>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+            {isLoadingPotentialCelebrities ? (
+              <div className="flex items-center justify-center gap-2 py-8 text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span className="text-sm">Finding potential matches...</span>
+              </div>
+            ) : potentialCelebrityMatches.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-4">No close matches found for your maximum potential.</p>
+            ) : (
+              <CelebRow celebs={potentialCelebrityMatches} celebImages={celebImages} imgErrors={imgErrors} setImgErrors={setImgErrors} isPremium={isPremium} blurNum={blurNum} />
+            )}
+          </div>
 
           {/* Social share */}
           {isPremium && (
@@ -399,7 +457,7 @@ export const EnhancedLifeExpectancyReport = ({
               <CardContent className="p-4 text-center space-y-2">
                 <Crown className="w-5 h-5 text-accent mx-auto" />
                 <p className="text-xs text-muted-foreground">Upgrade to see exact longevity age comparisons and share your result</p>
-                <Link to="/upgrade"><Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">Unlock Cultural Horizon</Button></Link>
+                <Link to="/upgrade"><Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">Unlock Cultural Horizon — ₹499 · $6.99</Button></Link>
               </CardContent>
             </Card>
           )}
