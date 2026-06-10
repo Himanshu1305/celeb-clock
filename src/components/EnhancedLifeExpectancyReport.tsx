@@ -16,6 +16,7 @@ interface Props {
   birthDate: Date | null | undefined;
   isPremium: boolean;
   onUpgradeClick?: () => void;
+  optimizedForecast?: number;
   celebrityMatches: CelebrityLongevityProfile[];
   isLoadingCelebrities: boolean;
   potentialCelebrityMatches?: CelebrityLongevityProfile[];
@@ -116,6 +117,7 @@ const PremiumBlur = ({ children, tab }: { children: React.ReactNode; tab: string
 
 export const EnhancedLifeExpectancyReport = ({
   result, userName, birthDate, isPremium, onUpgradeClick,
+  optimizedForecast,
   celebrityMatches, isLoadingCelebrities,
   potentialCelebrityMatches = [], isLoadingPotentialCelebrities = false,
 }: Props) => {
@@ -186,16 +188,30 @@ export const EnhancedLifeExpectancyReport = ({
         <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Full Longevity Blueprint</p>
         {userName && <p className="text-lg font-semibold text-foreground">Prepared for {userName}</p>}
         <div className="flex items-center justify-center gap-6 flex-wrap">
-          <div>
-            <span className="text-[10px] uppercase font-bold text-muted-foreground block">Total Forecast</span>
-            <strong className="text-4xl font-black text-primary">{result.totalForecast} yrs</strong>
+          <div className="text-center">
+            <span className="text-[10px] uppercase font-bold text-muted-foreground block">Current Lifestyle</span>
+            <strong className="text-4xl font-black text-muted-foreground">{result.totalForecast} yrs</strong>
           </div>
-          <div>
+          {optimizedForecast != null && (
+            <>
+              <div className="text-2xl font-black text-primary">→</div>
+              <div className="text-center">
+                <span className="text-[10px] uppercase font-bold text-primary block">With Optimized Lifestyle</span>
+                <strong className="text-4xl font-black text-primary">{optimizedForecast} yrs</strong>
+                {optimizedForecast > result.totalForecast && (
+                  <span className="text-xs font-bold text-green-600 block mt-0.5">
+                    +{Math.round((optimizedForecast - result.totalForecast) * 10) / 10} years gained
+                  </span>
+                )}
+              </div>
+            </>
+          )}
+          <div className="text-center">
             <span className="text-[10px] uppercase font-bold text-muted-foreground block">Maximum Potential</span>
             <strong className="text-2xl font-bold text-accent">{result.maximumPotential} yrs</strong>
           </div>
           {currentAge && (
-            <div>
+            <div className="text-center">
               <span className="text-[10px] uppercase font-bold text-muted-foreground block">Current Age</span>
               <strong className="text-2xl font-bold text-foreground">{currentAge} yrs</strong>
             </div>

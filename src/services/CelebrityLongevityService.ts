@@ -1,6 +1,4 @@
 // src/services/CelebrityLongevityService.ts
-// Finds celebrities whose longevity age matches the user's forecast.
-// Death dates fetched from Wikidata, cached 30 days in localStorage.
 
 import { birthdayDatabase } from '@/data/birthdayData';
 
@@ -16,12 +14,24 @@ export interface CelebrityLongevityProfile {
   imageUrl?: string;
 }
 
-// Celebrities excluded because their deaths were non-longevity events (accident, violence, suicide)
-const EXCLUSION_LIST = new Set([
-  'Princess Diana', 'Marilyn Monroe', 'Heath Ledger', 'XXXTentacion', 'Avicii',
-  'Amy Winehouse', 'Kurt Cobain', 'Chester Bennington', 'Chris Cornell',
-  'Janis Joplin', 'Jimi Hendrix', 'Jim Morrison', 'Brian Jones',
-]);
+// Celebrities excluded because their end was non-longevity: violence, accident, suicide, overdose.
+const EXCLUSION_NAMES = [
+  'Martin Luther King Jr.', 'John F. Kennedy', 'Princess Diana', 'Marilyn Monroe',
+  'Heath Ledger', 'Avicii', 'XXXTentacion', 'Juice WRLD', 'Mac Miller',
+  'Chester Bennington', 'Chris Cornell', 'Kurt Cobain', 'Amy Winehouse',
+  'Janis Joplin', 'Jim Morrison', 'Jimi Hendrix', 'Malcolm X',
+  'Abraham Lincoln', 'Mahatma Gandhi', 'Indira Gandhi', 'Rajiv Gandhi',
+  'John Lennon', 'Bob Marley', 'Tupac Shakur', 'Biggie Smalls', 'Bruce Lee',
+  'River Phoenix', 'Philip Seymour Hoffman', 'Robin Williams', 'Anthony Bourdain',
+  'Kate Spade', 'Alexander McQueen', "L'Wren Scott", 'Brian Jones',
+];
+const EXCLUSION_SET = new Set(EXCLUSION_NAMES.map(n => n.toLowerCase()));
+
+function isExcluded(name: string): boolean {
+  const lower = name.toLowerCase();
+  return EXCLUSION_SET.has(lower) ||
+    EXCLUSION_NAMES.some(e => lower.includes(e.toLowerCase()) || e.toLowerCase().includes(lower));
+}
 
 const DEATH_CACHE_TTL = 30 * 24 * 60 * 60 * 1000;
 
@@ -58,25 +68,30 @@ async function fetchDeathYear(name: string): Promise<number | null> {
 function makeAchievement(name: string, age: number, isLiving: boolean, profession: string): string {
   const prof = profession.toLowerCase();
   if (isLiving) {
-    return `${name} (${age}) remains actively engaged as a ${prof}`;
+    return `${name} (${age}) continues to inspire as a ${prof}, a testament to sustained vitality and purpose.`;
   }
-  return `${name} achieved remarkable milestones across ${age} inspiring years as a ${prof}`;
+  return `${name} spent ${age} extraordinary years as a ${prof}. Their legacy continues to inspire generations.`;
 }
 
-// Synchronous: returns matches based purely on birth year (all assumed living).
-// Call enhanceCelebrityMatches() afterwards to enrich with death dates.
-export function findInitialMatches(forecastAge: number, windowYears = 5): CelebrityLongevityProfile[] {
+export function findInitialMatches(
+  forecastAge: number,
+  windowYears = 4,
+  userCountry = '',
+): CelebrityLongevityProfile[] {
   const currentYear = new Date().getFullYear();
   const seen = new Set<string>();
   const results: CelebrityLongevityProfile[] = [];
 
   for (const key of Object.keys(birthdayDatabase)) {
     for (const person of birthdayDatabase[key].people) {
-      if (!person.birthDate || EXCLUSION_LIST.has(person.name) || seen.has(person.name)) continue;
+      if (!person.birthDate || isExcluded(person.name) || seen.has(person.name)) continue;
       seen.add(person.name);
 
       const birthYear = new Date(person.birthDate).getFullYear();
       const currentAge = currentYear - birthYear;
+
+      // Exclude very young / short-lived
+      if (currentAge < 45) continue;
 
       if (Math.abs(currentAge - forecastAge) <= windowYears) {
         results.push({
@@ -93,17 +108,13 @@ export function findInitialMatches(forecastAge: number, windowYears = 5): Celebr
     }
   }
 
-  // Widen window if too few results
   if (results.length < 3 && windowYears < 10) {
-    return findInitialMatches(forecastAge, windowYears + 3);
+    return findInitialMatches(forecastAge, windowYears + 2, userCountry);
   }
 
-  // Shuffle slightly and cap at 6 candidates for async enrichment
   return results.slice(0, 6);
 }
 
-// Async: fetches death years for the initial candidates, recalculates longevity ages,
-// re-filters to ±3 years, returns top 3.
 export async function enhanceCelebrityMatches(
   candidates: CelebrityLongevityProfile[],
   forecastAge: number,
@@ -113,9 +124,13 @@ export async function enhanceCelebrityMatches(
   const enhanced = await Promise.all(
     candidates.map(async (c) => {
       const deathYear = await fetchDeathYear(c.name);
-      if (deathYear === null) return c; // assume still living
+      if (deathYear === null) return c;
 
-      const ageAtDeath = deathYear - (currentYear - c.longevityAge);
+      const birthYear = currentYear - c.longevityAge;
+      const ageAtDeath = deathYear - birthYear;
+
+      if (ageAtDeath < 45 || isExcluded(c.name)) return null;
+
       return {
         ...c,
         longevityAge: ageAtDeath,
@@ -125,7 +140,7 @@ export async function enhanceCelebrityMatches(
     })
   );
 
-  // Re-filter to ±3 years of forecast
-  const matched = enhanced.filter(c => Math.abs(c.longevityAge - forecastAge) <= 3);
-  return (matched.length >= 3 ? matched : enhanced).slice(0, 3);
+  const valid = enhanced.filter(Boolean) as CelebrityLongevityProfile[];
+  const matched = valid.filter(c => Math.abs(c.longevityAge - forecastAge) <= 4);
+  return (matched.length >= 3 ? matched : valid).slice(0, 3);
 }

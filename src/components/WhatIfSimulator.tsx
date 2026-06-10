@@ -14,7 +14,7 @@ interface Props {
   result: LongevityResult;
   isPremium: boolean;
   onUpgradeClick?: () => void;
-  onGenerateReport: () => void;
+  onGenerateReport: (optimizedAge: number) => void;
 }
 
 // Map categorical values to slider index and back
@@ -100,13 +100,12 @@ export const WhatIfSimulator = ({ result, isPremium, onUpgradeClick, onGenerateR
             </div>
             <div className="flex items-center gap-6 shrink-0">
               <div className="text-center">
-                <span className="text-[10px] uppercase font-bold text-muted-foreground block">Your Forecast</span>
-                {/* Never blurred — this is the user's own result */}
+                <span className="text-[10px] uppercase font-bold text-muted-foreground block">Current Lifestyle</span>
                 <strong className="text-2xl font-black text-muted-foreground">{result.totalForecast} yrs</strong>
               </div>
               <TrendingUp className="w-5 h-5 text-primary hidden sm:block" />
               <div className="text-center">
-                <span className="text-[10px] uppercase font-bold text-primary block">Simulated</span>
+                <span className="text-[10px] uppercase font-bold text-primary block">With Optimized Lifestyle</span>
                 <div className="relative">
                   <strong className="text-3xl font-black text-primary" style={blurStyle}>{simForecast} yrs</strong>
                   {!isPremium && (
@@ -285,17 +284,47 @@ export const WhatIfSimulator = ({ result, isPremium, onUpgradeClick, onGenerateR
         </Card>
       )}
 
-      {/* Generate Report Button */}
-      <div className="text-center pt-2">
-        <Button
-          size="lg"
-          className="px-10 py-6 text-base font-bold gap-2"
-          onClick={onGenerateReport}
-        >
-          <Sparkles className="w-5 h-5" />
-          Generate Full Longevity Blueprint ✨
-        </Button>
-      </div>
+      {/* Optimized Age Summary */}
+      <Card className="border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5">
+        <CardContent className="p-5">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-center sm:text-left space-y-1">
+              <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Your Longevity Summary</p>
+              <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-start">
+                <div>
+                  <span className="text-xs text-muted-foreground block">Current lifestyle</span>
+                  <strong className="text-2xl font-black text-muted-foreground">{result.totalForecast} years</strong>
+                </div>
+                <TrendingUp className="w-5 h-5 text-primary" />
+                <div>
+                  <span className="text-xs text-primary font-semibold block">With optimized lifestyle</span>
+                  <div className="relative inline-block">
+                    <strong className="text-3xl font-black text-primary" style={blurStyle}>{simForecast} years</strong>
+                    {!isPremium && (
+                      <div className="absolute inset-0 flex items-center gap-1 text-xs text-muted-foreground justify-center">
+                        <Lock className="w-3 h-3" /> Unlock
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {delta > 0 && (
+                <p className="text-sm font-medium text-green-600">
+                  ⚡ You could gain <span className="font-black">{delta} years</span> with these lifestyle changes
+                </p>
+              )}
+            </div>
+            <Button
+              size="lg"
+              className="px-8 py-5 text-base font-bold gap-2 shrink-0"
+              onClick={() => onGenerateReport(simForecast)}
+            >
+              <Sparkles className="w-5 h-5" />
+              Generate Full Longevity Blueprint ✨
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

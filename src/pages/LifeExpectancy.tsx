@@ -71,6 +71,7 @@ const LifeExpectancy = () => {
 
   const [phase, setPhase] = useState<Phase>('quiz');
   const [longevityResult, setLongevityResult] = useState<LongevityResult | null>(null);
+  const [optimizedForecast, setOptimizedForecast] = useState<number | null>(null);
 
   const [celebrities, setCelebrities] = useState<CelebrityState>({ current: [], potential: [] });
   const [isLoadingCurrent, setIsLoadingCurrent] = useState(false);
@@ -82,6 +83,7 @@ const LifeExpectancy = () => {
 
   const resetAll = () => {
     setLongevityResult(null);
+    setOptimizedForecast(null);
     setPhase('quiz');
     setCelebrities({ current: [], potential: [] });
   };
@@ -125,7 +127,8 @@ const LifeExpectancy = () => {
     }, 150);
   };
 
-  const handleGenerateReport = () => {
+  const handleGenerateReport = (simAge: number) => {
+    setOptimizedForecast(simAge);
     setPhase('report');
     setTimeout(() => {
       reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -237,7 +240,7 @@ const LifeExpectancy = () => {
           <section className="max-w-4xl mx-auto mb-16" ref={resultRef}>
             <div className="text-center space-y-8 animate-fade-in-up">
               <div className="space-y-2">
-                <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">🎯 Your Longevity Forecast</p>
+                <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">🎯 Your Forecasted Age — Current Lifestyle</p>
                 <div className="text-9xl font-black text-primary leading-none">{longevityResult.totalForecast}</div>
                 <p className="text-2xl font-semibold text-muted-foreground">years</p>
                 <p className="text-sm text-muted-foreground">
@@ -350,6 +353,7 @@ const LifeExpectancy = () => {
                 birthDate={birthDate}
                 isPremium={isPremium}
                 onUpgradeClick={() => navigate('/upgrade')}
+                optimizedForecast={optimizedForecast ?? undefined}
                 celebrityMatches={celebrities.current}
                 isLoadingCelebrities={isLoadingCurrent}
                 potentialCelebrityMatches={celebrities.potential}

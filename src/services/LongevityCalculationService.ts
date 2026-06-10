@@ -2,9 +2,9 @@
 // All calculation is client-side only — no health data is transmitted.
 
 export interface FamilyMemberData {
-  age: number;
-  isLiving: boolean;
-  unknown: boolean;
+  age: number;              // 0 = not entered
+  isLiving: boolean | null; // null = status not yet selected
+  dontKnow: boolean;        // explicitly marked as unknown
 }
 
 export interface Pillar1Data {
@@ -25,14 +25,14 @@ export interface Pillar2Data {
   mentorName: string;
   mentorAge: number;
   mentorRelationship: string;
-  selectedHabits: string[];
+  mentorHabits: string[]; // habits believed to contribute to mentor's longevity
 }
 
 export interface HealthQuizData {
   name: string;
   gender: 'male' | 'female' | '';
   country: string;
-  smoking: 'never' | 'light' | 'moderate' | 'heavy' | '';
+  smoking: 'never' | 'quit_over5' | 'quit_under5' | 'light' | 'moderate' | 'heavy' | '';
   drinking: 'none' | 'light' | 'moderate' | 'heavy' | '';
   heartDisease: boolean;
   heartDiseaseFamily: boolean;
@@ -49,6 +49,35 @@ export interface HealthQuizData {
   bloodPressure: 'optimal' | 'normal' | 'elevated' | 'high1' | 'high2' | '';
   sleepDuration: 'under6' | '6to7' | '7to9' | 'over9' | '';
   socialConnections: 'strong' | 'moderate' | 'limited' | 'isolated' | '';
+}
+
+export interface SimulatorOverrides {
+  smoking?: HealthQuizData['smoking'];
+  drinking?: HealthQuizData['drinking'];
+  diet?: HealthQuizData['diet'];
+  exercise?: HealthQuizData['exercise'];
+  stress?: number;
+  bmi?: number;
+  bloodPressure?: HealthQuizData['bloodPressure'];
+  sleepDuration?: HealthQuizData['sleepDuration'];
+  socialConnections?: HealthQuizData['socialConnections'];
+  selectedHabits?: string[];
+  // Panel 1 extras
+  hydration?: 'high' | 'moderate' | 'low' | 'poor';
+  screenTime?: 'low' | 'moderate' | 'high' | 'very_high';
+  workLifeBalance?: 'excellent' | 'good' | 'fair' | 'poor';
+  // Panel 3 extras
+  diabetesManagement?: 'none' | 'controlled' | 'uncontrolled';
+  healthCheckups?: 'annual' | 'occasional' | 'rarely' | 'never';
+  dentalCare?: 'regular' | 'occasional' | 'rarely';
+  mentalHealth?: 'active' | 'managing' | 'struggling';
+  // Panel 4
+  relationship?: 'married' | 'stable' | 'single' | 'divorced';
+  petOwnership?: 'yes' | 'no';
+  mentoring?: 'active' | 'occasional' | 'none';
+  cancerScreening?: 'up_to_date' | 'partial' | 'never';
+  airQuality?: 'clean' | 'moderate' | 'polluted';
+  commuteStress?: 'none' | 'low' | 'moderate' | 'high';
 }
 
 export interface FactorImpact {
@@ -77,6 +106,8 @@ export interface LongevityResult {
   geneticVitalityScore: 'Exceptional' | 'Strong' | 'Average' | 'Below Average';
   geneticVitalityLabel: string;
   familyBaselineAge: number;
+  userEpigeneticHabits: string[];
+  /** @deprecated use userEpigeneticHabits */
   epigeneticHabitsSelected: string[];
   blueZonesCount: number;
   baselineCitation: string;
@@ -87,39 +118,31 @@ export interface LongevityResult {
 
 // WHO 2023 base life expectancy by country and sex
 const BASE_TABLE: Record<string, { male: number; female: number }> = {
-  'India':         { male: 68, female: 71 },
-  'United States': { male: 74, female: 80 },
-  'United Kingdom':{ male: 79, female: 83 },
-  'Australia':     { male: 81, female: 85 },
-  'Canada':        { male: 79, female: 84 },
-  'Germany':       { male: 78, female: 83 },
-  'France':        { male: 79, female: 85 },
-  'Japan':         { male: 81, female: 87 },
-  'China':         { male: 75, female: 79 },
-  'Brazil':        { male: 72, female: 79 },
-  'South Africa':  { male: 62, female: 68 },
-  'Nigeria':       { male: 54, female: 57 },
-  'Mexico':        { male: 73, female: 78 },
+  'India':          { male: 68, female: 71 },
+  'United States':  { male: 74, female: 80 },
+  'United Kingdom': { male: 79, female: 83 },
+  'Australia':      { male: 81, female: 85 },
+  'Canada':         { male: 79, female: 84 },
+  'Germany':        { male: 78, female: 83 },
+  'France':         { male: 79, female: 85 },
+  'Japan':          { male: 81, female: 87 },
+  'China':          { male: 75, female: 79 },
+  'Brazil':         { male: 72, female: 79 },
+  'South Africa':   { male: 62, female: 68 },
+  'Nigeria':        { male: 54, female: 57 },
+  'Mexico':         { male: 73, female: 78 },
 };
 const DEFAULT_BASE = { male: 72, female: 76 };
 
-// Blue Zones habits mapped from Buettner's 9 principles
 const BLUE_ZONES_HABIT_IDS = new Set([
-  'walking',    // Move naturally
-  'purpose',    // Purpose
-  'meditation', // Downshift
-  'fasting',    // 80% rule
-  'wholefood',  // Plant slant
-  'spiritual',  // Belong
-  'community',  // Loved ones first
-  'volunteer',  // Right tribe
+  'walking', 'purpose', 'meditation', 'fasting', 'wholefood', 'spiritual', 'community', 'volunteer',
 ]);
 
 const VITALITY_LABELS: Record<LongevityResult['geneticVitalityScore'], string> = {
-  Exceptional:      'Your family history shows exceptional longevity — strong hereditary tailwinds',
-  Strong:           'Solid genetic inheritance — your family history supports above-average longevity',
-  Average:          'Close to global population norms — lifestyle choices have outsized impact',
-  'Below Average':  'Lifestyle habits are especially important for you — every habit compounds',
+  Exceptional:     'Your family tree shows remarkable inherited longevity across multiple generations. This gives you a strong biological foundation — your genetic starting point is already working in your favor.',
+  Strong:          'Your family history suggests solid inherited longevity. With supportive lifestyle choices, you have excellent potential to reach or exceed your family baseline.',
+  Average:         "Your family longevity history is close to global averages — this is the norm for most people. Remember: research shows 70–75% of your outcome is controlled by lifestyle, not genetics. (Karolinska Institute, 2017)",
+  'Below Average': 'Some branches of your family tree show shorter lifespans. However, research shows lifestyle interventions can completely override genetic predispositions in many cases. Your habits matter more than your genes. (NIH Epigenetics Research, 2022)',
 };
 
 export const EPIGENETIC_HABITS: {
@@ -127,7 +150,7 @@ export const EPIGENETIC_HABITS: {
 }[] = [
   { id: 'walking',    label: 'Daily Walking (30+ min)',                    emoji: '🚶', gain: 1.5, source: 'Blue Zones research: daily walkers live 1.5 years longer on average (Buettner, 2012)' },
   { id: 'community',  label: 'Strong Community Bonds',                      emoji: '👥', gain: 2.0, source: 'Harvard Study of Adult Development (80 years): quality of relationships is the strongest predictor of healthy aging' },
-  { id: 'laughter',   label: 'Laughter & Joy Practices',                    emoji: '😂', gain: 0.8, source: 'International Journal of Yoga, 2020: documented cortisol reduction and immune function improvement from regular laughter therapy' },
+  { id: 'laughter',   label: 'Laughter & Joy Practices',                    emoji: '😂', gain: 0.8, source: 'International Journal of Yoga, 2020: regular laughter therapy reduces cortisol and improves immune function' },
   { id: 'meditation', label: 'Meditation / Mindfulness',                    emoji: '🧘', gain: 0.5, source: 'NHS-backed evidence: regular meditation reduces chronic stress markers associated with cellular aging' },
   { id: 'wholefood',  label: 'Mediterranean / Traditional Whole Food Diet', emoji: '🥗', gain: 0.8, source: 'PREDIMED Study, NEJM 2013: Mediterranean diet reduced cardiovascular events by 30%' },
   { id: 'fasting',    label: 'Intermittent Fasting / Mindful Eating',       emoji: '⏰', gain: 0.6, source: 'Cell Metabolism, 2019: time-restricted eating improves metabolic markers associated with longevity' },
@@ -139,17 +162,19 @@ export const EPIGENETIC_HABITS: {
   { id: 'volunteer',  label: 'Volunteering / Giving Back',                   emoji: '🤝', gain: 0.5, source: 'Health Psychology journal: regular volunteering reduces mortality risk by 22%' },
 ];
 
+const BLANK_MEMBER: FamilyMemberData = { age: 0, isLiving: null, dontKnow: false };
+
 export const DEFAULT_PILLAR1: Pillar1Data = {
-  paternalGrandfather: { age: 0, isLiving: false, unknown: true },
-  paternalGrandmother: { age: 0, isLiving: false, unknown: true },
-  father:              { age: 0, isLiving: false, unknown: true },
-  paternalUncles:      { age: 0, isLiving: false, unknown: true },
-  paternalAunts:       { age: 0, isLiving: false, unknown: true },
-  maternalGrandfather: { age: 0, isLiving: false, unknown: true },
-  maternalGrandmother: { age: 0, isLiving: false, unknown: true },
-  mother:              { age: 0, isLiving: false, unknown: true },
-  maternalUncles:      { age: 0, isLiving: false, unknown: true },
-  maternalAunts:       { age: 0, isLiving: false, unknown: true },
+  paternalGrandfather: { ...BLANK_MEMBER },
+  paternalGrandmother: { ...BLANK_MEMBER },
+  father:              { ...BLANK_MEMBER },
+  paternalUncles:      { ...BLANK_MEMBER },
+  paternalAunts:       { ...BLANK_MEMBER },
+  maternalGrandfather: { ...BLANK_MEMBER },
+  maternalGrandmother: { ...BLANK_MEMBER },
+  mother:              { ...BLANK_MEMBER },
+  maternalUncles:      { ...BLANK_MEMBER },
+  maternalAunts:       { ...BLANK_MEMBER },
 };
 
 export const DEFAULT_PILLAR2: Pillar2Data = {
@@ -157,7 +182,7 @@ export const DEFAULT_PILLAR2: Pillar2Data = {
   mentorName: '',
   mentorAge: 0,
   mentorRelationship: 'neighbor',
-  selectedHabits: [],
+  mentorHabits: [],
 };
 
 function getBase(country: string, gender: 'male' | 'female' | ''): number {
@@ -165,32 +190,90 @@ function getBase(country: string, gender: 'male' | 'female' | ''): number {
   return (BASE_TABLE[country] ?? DEFAULT_BASE)[g];
 }
 
+function isEntered(m: FamilyMemberData): boolean {
+  return !m.dontKnow && m.age > 0 && m.isLiving !== null;
+}
+
+function livingAdjustment(age: number): number {
+  if (age >= 80) return 7;
+  if (age >= 70) return 4;
+  if (age >= 60) return 2;
+  return 0;
+}
+
+function longevityContribution(m: FamilyMemberData): number {
+  if (m.isLiving) return m.age + livingAdjustment(m.age);
+  return m.age;
+}
+
+// Living contribution label shown in UI
+export function livingContributionLabel(m: FamilyMemberData): string | null {
+  if (!isEntered(m) || !m.isLiving) return null;
+  const adj = livingAdjustment(m.age);
+  if (adj === 0) return null;
+  return `Still living at ${m.age} → contribution: ~${m.age + adj} yrs`;
+}
+
+type P1Key = keyof Pillar1Data;
+
+const PAT_MEMBERS: { key: P1Key; weight: number }[] = [
+  { key: 'paternalGrandfather', weight: 25 },
+  { key: 'paternalGrandmother', weight: 25 },
+  { key: 'father',              weight: 30 },
+  { key: 'paternalUncles',      weight: 10 },
+  { key: 'paternalAunts',       weight: 10 },
+];
+const MAT_MEMBERS: { key: P1Key; weight: number }[] = [
+  { key: 'maternalGrandfather', weight: 25 },
+  { key: 'maternalGrandmother', weight: 25 },
+  { key: 'mother',              weight: 30 },
+  { key: 'maternalUncles',      weight: 10 },
+  { key: 'maternalAunts',       weight: 10 },
+];
+
+function calcSideAvg(members: { key: P1Key; weight: number }[], p1: Pillar1Data): number | null {
+  const entered = members.filter(({ key }) => isEntered(p1[key]));
+  if (entered.length === 0) return null;
+  const totalWeight = entered.reduce((s, { weight }) => s + weight, 0);
+  const weightedSum = entered.reduce((s, { key, weight }) => s + longevityContribution(p1[key]) * weight, 0);
+  return weightedSum / totalWeight;
+}
+
 function geneticCalc(p1: Pillar1Data): {
   adjustment: number;
   familyBaselineAge: number;
   score: LongevityResult['geneticVitalityScore'];
 } {
-  const pat = [p1.paternalGrandfather, p1.paternalGrandmother, p1.father, p1.paternalUncles, p1.paternalAunts]
-    .filter(m => !m.unknown && m.age > 0);
-  const mat = [p1.maternalGrandfather, p1.maternalGrandmother, p1.mother, p1.maternalUncles, p1.maternalAunts]
-    .filter(m => !m.unknown && m.age > 0);
+  const patAvg = calcSideAvg(PAT_MEMBERS, p1);
+  const matAvg = calcSideAvg(MAT_MEMBERS, p1);
 
-  if (pat.length === 0 && mat.length === 0) {
+  if (patAvg === null && matAvg === null) {
     return { adjustment: 0, familyBaselineAge: 78, score: 'Average' };
   }
 
-  const patAvg = pat.length > 0 ? pat.reduce((s, m) => s + m.age, 0) / pat.length : 78;
-  const matAvg = mat.length > 0 ? mat.reduce((s, m) => s + m.age, 0) / mat.length : 78;
-
   const wfa =
-    pat.length > 0 && mat.length > 0 ? patAvg * 0.5 + matAvg * 0.5 :
-    pat.length > 0 ? patAvg : matAvg;
+    patAvg !== null && matAvg !== null ? patAvg * 0.5 + matAvg * 0.5 :
+    patAvg ?? matAvg!;
 
   const adj = Math.max(-8, Math.min(8, (wfa - 78) * 0.25));
-  const score: LongevityResult['geneticVitalityScore'] =
-    wfa > 85 ? 'Exceptional' : wfa >= 80 ? 'Strong' : wfa >= 75 ? 'Average' : 'Below Average';
 
-  return { adjustment: adj, familyBaselineAge: wfa, score };
+  const score: LongevityResult['geneticVitalityScore'] =
+    wfa > 87  ? 'Exceptional' :
+    wfa >= 82 ? 'Strong' :
+    wfa >= 75 ? 'Average' :
+                'Below Average';
+
+  return { adjustment: Math.round(adj * 10) / 10, familyBaselineAge: Math.round(wfa * 10) / 10, score };
+}
+
+// Inline preview (no living adjustment — used in calculator step 7 badge only)
+export function computeGeneticPreview(p1: Pillar1Data): { wfa: number; score: string } {
+  const patAvg = calcSideAvg(PAT_MEMBERS, p1);
+  const matAvg = calcSideAvg(MAT_MEMBERS, p1);
+  if (patAvg === null && matAvg === null) return { wfa: 78, score: 'Average' };
+  const wfa = patAvg !== null && matAvg !== null ? patAvg * 0.5 + matAvg * 0.5 : patAvg ?? matAvg!;
+  const score = wfa > 87 ? 'Exceptional' : wfa >= 82 ? 'Strong' : wfa >= 75 ? 'Average' : 'Below Average';
+  return { wfa: Math.round(wfa * 10) / 10, score };
 }
 
 export function calculateLongevity(
@@ -198,17 +281,20 @@ export function calculateLongevity(
   pillar1: Pillar1Data,
   pillar2: Pillar2Data,
   birthDate?: Date | null,
+  userHabits: string[] = [],
 ): LongevityResult {
   const base = getBase(quiz.country, quiz.gender);
 
-  // ── Steps 1-6 health adjustment ──
+  // ── Health adjustment (Steps 1-6) ──
   let health = 0;
 
-  const smokeVal = { never: 0, light: -3, moderate: -7, heavy: -12, '': 0 }[quiz.smoking] ?? 0;
-  health += smokeVal;
+  const smokeVal: Record<string, number> = {
+    never: 0, quit_over5: -1, quit_under5: -2, light: -3, moderate: -7, heavy: -12, '': 0,
+  };
+  health += smokeVal[quiz.smoking] ?? 0;
 
-  const drinkVal = { none: 0, light: 1, moderate: -1, heavy: -6, '': 0 }[quiz.drinking] ?? 0;
-  health += drinkVal;
+  const drinkVal: Record<string, number> = { none: 0, light: 1, moderate: -1, heavy: -6, '': 0 };
+  health += drinkVal[quiz.drinking] ?? 0;
 
   if (quiz.heartDisease)       { health -= 5; if (quiz.heartDiseaseControlled)  health += 1.25; }
   if (quiz.heartDiseaseFamily) health -= 2;
@@ -216,56 +302,54 @@ export function calculateLongevity(
   if (quiz.diabetesFamily)     health -= 1;
   if (quiz.hypertension)       { health -= 3; if (quiz.hypertensionControlled)   health += 1.05; }
 
-  const dietVal = { poor: -3, average: 0, good: 2, excellent: 4, '': 0 }[quiz.diet] ?? 0;
-  health += dietVal;
+  const dietVal: Record<string, number> = { poor: -3, average: 0, good: 2, excellent: 4, '': 0 };
+  health += dietVal[quiz.diet] ?? 0;
 
-  const exVal = { seldom: -2, light: 1, moderate: 3, heavy: 5, '': 0 }[quiz.exercise] ?? 0;
-  health += exVal;
+  const exVal: Record<string, number> = { seldom: -2, light: 1, moderate: 3, heavy: 5, '': 0 };
+  health += exVal[quiz.exercise] ?? 0;
 
-  const stressVal = quiz.stress >= 8 ? -2.5 : quiz.stress >= 5 ? -0.5 : quiz.stress >= 3 ? 1 : 1.5;
-  health += stressVal;
+  health += quiz.stress >= 8 ? -2.5 : quiz.stress >= 5 ? -0.5 : quiz.stress >= 3 ? 1 : 1.5;
 
-  const bmiVal = quiz.bmi < 18.5 ? -2 : quiz.bmi > 30 ? -3 : quiz.bmi > 25 ? -1 : 0;
-  health += bmiVal;
+  health += quiz.bmi < 18.5 ? -2 : quiz.bmi > 30 ? -3 : quiz.bmi > 25 ? -1 : 0;
 
-  const bpVal = { optimal: 1.5, normal: 0, elevated: -1, high1: -2.5, high2: -5, '': 0 }[quiz.bloodPressure] ?? 0;
-  health += bpVal;
+  const bpVal: Record<string, number> = { optimal: 1.5, normal: 0, elevated: -1, high1: -2.5, high2: -5, '': 0 };
+  health += bpVal[quiz.bloodPressure] ?? 0;
 
-  const sleepVal = { under6: -2, '6to7': -0.5, '7to9': 0, over9: -1, '': 0 }[quiz.sleepDuration] ?? 0;
-  health += sleepVal;
+  const sleepVal: Record<string, number> = { under6: -2, '6to7': -0.5, '7to9': 0, over9: -1, '': 0 };
+  health += sleepVal[quiz.sleepDuration] ?? 0;
 
-  const socVal = { strong: 2, moderate: 0, limited: -1.5, isolated: -3, '': 0 }[quiz.socialConnections] ?? 0;
-  health += socVal;
+  const socVal: Record<string, number> = { strong: 2, moderate: 0, limited: -1.5, isolated: -3, '': 0 };
+  health += socVal[quiz.socialConnections] ?? 0;
 
   // ── Pillar 1: Genetics ──
   const { adjustment: genetic, familyBaselineAge, score } = geneticCalc(pillar1);
 
-  // ── Pillar 2: Epigenetics ──
-  const habitSum = pillar2.selectedHabits.reduce((s, id) => {
+  // ── Pillar 2 (user habits passed separately) ──
+  const habitSum = userHabits.reduce((s, id) => {
     const h = EPIGENETIC_HABITS.find(x => x.id === id);
     return s + (h?.gain ?? 0);
   }, 0);
   const epigenetic = Math.min(6, habitSum);
+
+  // ── Community bonus ──
   const communityBonus = pillar2.hasMentor && pillar2.mentorAge > 85 ? 0.5 : 0;
 
   const totalForecast = Math.round((base + health + genetic + epigenetic + communityBonus) * 10) / 10;
 
-  const maxHealth = 4 + 5 + 1.5 + 1.5 + 0 + 2; // excellent diet + heavy ex + low stress + optimal BP + good sleep + strong social
+  // Maximum potential: best health + max genetic + max epigenetic + community bonus
+  const maxHealth = 4 + 5 + 1.5 + 1.5 + 0 + 2;
   const maximumPotential = Math.round((base + maxHealth + 8 + 6 + 0.5) * 10) / 10;
 
-  // Age calculation
   const now = new Date();
   const currentAge = birthDate instanceof Date
     ? Math.floor((now.getTime() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000))
     : 35;
   const yearsRemaining = Math.max(0, Math.round((totalForecast - currentAge) * 10) / 10);
 
-  // Blue Zones alignment
-  const blueZonesCount = pillar2.selectedHabits.filter(id => BLUE_ZONES_HABIT_IDS.has(id)).length;
+  const blueZonesCount = userHabits.filter(id => BLUE_ZONES_HABIT_IDS.has(id)).length;
 
   // ── Factor breakdown ──
   const factors: FactorImpact[] = [];
-
   const add = (
     factor: string, emoji: string,
     currentValueLabel: string, optimalValueLabel: string,
@@ -273,81 +357,54 @@ export function calculateLongevity(
     source: string, category: FactorImpact['category'],
   ) => factors.push({ factor, emoji, currentValueLabel, optimalValueLabel, currentImpact, potentialGain, source, category });
 
-  add('Tobacco Smoking', '🚬',
-    quiz.smoking || 'Not answered', 'Non-smoker',
-    smokeVal, smokeVal < 0 ? Math.abs(smokeVal) : 0,
-    'WHO, 2023: Smoking is the leading preventable cause of death worldwide', 'lifestyle');
+  const sv = smokeVal[quiz.smoking] ?? 0;
+  add('Tobacco Smoking', '🚬', quiz.smoking || 'Not answered', 'Non-smoker', sv, sv < 0 ? Math.abs(sv) : 0, 'WHO, 2023: Smoking is the leading preventable cause of death worldwide', 'lifestyle');
 
-  add('Alcohol Consumption', '🍷',
-    quiz.drinking || 'Not answered', 'None',
-    drinkVal, drinkVal < 0 ? Math.abs(drinkVal) : 0,
-    'CDC, 2023: No level of alcohol is safe for cancer risk', 'lifestyle');
+  const dv = drinkVal[quiz.drinking] ?? 0;
+  add('Alcohol Consumption', '🍷', quiz.drinking || 'Not answered', 'None', dv, dv < 0 ? Math.abs(dv) : 0, 'CDC, 2023: No level of alcohol is safe for cancer risk', 'lifestyle');
 
-  add('Physical Exercise', '🏋️',
-    quiz.exercise || 'Not answered', 'Heavy (5+ sessions/week)',
-    exVal, Math.max(0, 5 - exVal),
-    'WHO, 2022: Moderate exercise reduces all-cause mortality by 31%', 'lifestyle');
+  const ev = exVal[quiz.exercise] ?? 0;
+  add('Physical Exercise', '🏋️', quiz.exercise || 'Not answered', 'Heavy (5+ sessions/week)', ev, Math.max(0, 5 - ev), 'WHO, 2022: Moderate exercise reduces all-cause mortality by 31%', 'lifestyle');
 
-  add('Diet Quality', '🥗',
-    quiz.diet || 'Not answered', 'Excellent (whole foods)',
-    dietVal, Math.max(0, 4 - dietVal),
-    'Harvard School of Public Health: nutrient-dense diet adds 4+ years of healthy life', 'lifestyle');
+  const dtv = dietVal[quiz.diet] ?? 0;
+  add('Diet Quality', '🥗', quiz.diet || 'Not answered', 'Excellent (whole foods)', dtv, Math.max(0, 4 - dtv), 'Harvard School of Public Health: nutrient-dense diet adds 4+ years of healthy life', 'lifestyle');
 
-  add('Stress Level', '🧠',
-    `${quiz.stress}/10`, 'Low (1–2/10)',
-    stressVal, Math.max(0, 1.5 - stressVal),
-    'AHA, 2021: High daily stress increases cardiovascular disease risk by 40%', 'health');
+  const stv = quiz.stress >= 8 ? -2.5 : quiz.stress >= 5 ? -0.5 : quiz.stress >= 3 ? 1 : 1.5;
+  add('Stress Level', '🧠', `${quiz.stress}/10`, 'Low (1–2/10)', stv, Math.max(0, 1.5 - stv), 'AHA, 2021: High daily stress increases cardiovascular disease risk by 40%', 'health');
 
-  add('BMI / Body Weight', '⚖️',
-    `${quiz.bmi}`, '18.5–24.9 (Normal)',
-    bmiVal, Math.abs(Math.min(0, bmiVal)),
-    'WHO, 2023: BMI 18.5–24.9 associated with lowest all-cause mortality', 'health');
+  const bmiv = quiz.bmi < 18.5 ? -2 : quiz.bmi > 30 ? -3 : quiz.bmi > 25 ? -1 : 0;
+  add('BMI / Body Weight', '⚖️', `${quiz.bmi}`, '18.5–24.9 (Normal)', bmiv, Math.abs(Math.min(0, bmiv)), 'WHO, 2023: BMI 18.5–24.9 associated with lowest all-cause mortality', 'health');
 
-  add('Blood Pressure', '❤️',
-    quiz.bloodPressure || 'Not answered', 'Optimal (<120/80)',
-    bpVal, Math.max(0, 1.5 - bpVal),
-    'JNC8/AHA Guidelines, 2023: Optimal BP significantly reduces stroke and heart attack risk', 'health');
+  const bpv = bpVal[quiz.bloodPressure] ?? 0;
+  add('Blood Pressure', '❤️', quiz.bloodPressure || 'Not answered', 'Optimal (<120/80)', bpv, Math.max(0, 1.5 - bpv), 'JNC8/AHA Guidelines, 2023: Optimal BP significantly reduces stroke and heart attack risk', 'health');
 
-  add('Sleep Duration', '😴',
-    quiz.sleepDuration || 'Not answered', '7–9 hours (optimal)',
-    sleepVal, Math.max(0, -sleepVal),
-    'NHS/National Sleep Foundation, 2023: <6 hrs/night has 12% higher all-cause mortality risk', 'health');
+  const slv = sleepVal[quiz.sleepDuration] ?? 0;
+  add('Sleep Duration', '😴', quiz.sleepDuration || 'Not answered', '7–9 hours (optimal)', slv, Math.max(0, -slv), 'NHS/National Sleep Foundation, 2023: <6 hrs/night has 12% higher all-cause mortality risk', 'health');
 
-  add('Social Connections', '👥',
-    quiz.socialConnections || 'Not answered', 'Strong',
-    socVal, Math.max(0, 2 - socVal),
-    'Harvard Study of Adult Development: strong relationships comparable to quitting smoking', 'lifestyle');
+  const socv = socVal[quiz.socialConnections] ?? 0;
+  add('Social Connections', '👥', quiz.socialConnections || 'Not answered', 'Strong', socv, Math.max(0, 2 - socv), 'Harvard Study of Adult Development: strong relationships comparable to quitting smoking', 'lifestyle');
 
   add('Family Genetics', '🧬',
-    `Family avg: ~${Math.round(familyBaselineAge)} yrs`, 'Family avg >85 yrs',
+    `Family avg: ~${Math.round(familyBaselineAge)} yrs`, 'Family avg >87 yrs',
     Math.round(genetic * 10) / 10, Math.max(0, Math.round((8 - genetic) * 10) / 10),
     'Karolinska Institute, 2017: Genetics account for 25–30% of longevity outcomes', 'genetic');
 
   add('Epigenetic Habits', '🌱',
-    `${pillar2.selectedHabits.length} habits active`, 'All 12 habits active',
+    `${userHabits.length} habits active`, 'All 12 habits active',
     Math.round(epigenetic * 10) / 10, Math.max(0, Math.round((6 - epigenetic) * 10) / 10),
     'WHO, 2023: Lifestyle factors account for up to 70% of longevity outcomes', 'epigenetic');
 
   if (quiz.heartDisease) {
     const v = -5 + (quiz.heartDiseaseControlled ? 1.25 : 0);
-    add('Heart Disease', '🫀',
-      quiz.heartDiseaseControlled ? 'Managed' : 'Unmanaged', 'Managed',
-      Math.round(v * 10) / 10, quiz.heartDiseaseControlled ? 0 : 1.25,
-      'ESC Guidelines 2023: Regular cardiac monitoring reduces adverse events by 20–30%', 'health');
+    add('Heart Disease', '🫀', quiz.heartDiseaseControlled ? 'Managed' : 'Unmanaged', 'Managed', Math.round(v * 10) / 10, quiz.heartDiseaseControlled ? 0 : 1.25, 'ESC Guidelines 2023: Regular cardiac monitoring reduces adverse events by 20–30%', 'health');
   }
   if (quiz.diabetes) {
     const v = -4 + (quiz.diabetesControlled ? 1.6 : 0);
-    add('Diabetes', '💉',
-      quiz.diabetesControlled ? 'Controlled' : 'Uncontrolled', 'Controlled',
-      Math.round(v * 10) / 10, quiz.diabetesControlled ? 0 : 1.6,
-      'ADA 2023: Well-controlled blood sugar reduces CV complications by 50%', 'health');
+    add('Diabetes', '💉', quiz.diabetesControlled ? 'Controlled' : 'Uncontrolled', 'Controlled', Math.round(v * 10) / 10, quiz.diabetesControlled ? 0 : 1.6, 'ADA 2023: Well-controlled blood sugar reduces CV complications by 50%', 'health');
   }
   if (quiz.hypertension) {
     const v = -3 + (quiz.hypertensionControlled ? 1.05 : 0);
-    add('Hypertension', '🩺',
-      quiz.hypertensionControlled ? 'Managed' : 'Unmanaged', 'Managed',
-      Math.round(v * 10) / 10, quiz.hypertensionControlled ? 0 : 1.05,
-      'AHA/ACC 2023: Treatment reduces stroke risk by 35–40%', 'health');
+    add('Hypertension', '🩺', quiz.hypertensionControlled ? 'Managed' : 'Unmanaged', 'Managed', Math.round(v * 10) / 10, quiz.hypertensionControlled ? 0 : 1.05, 'AHA/ACC 2023: Treatment reduces stroke risk by 35–40%', 'health');
   }
 
   factors.sort((a, b) => b.potentialGain - a.potentialGain);
@@ -366,8 +423,9 @@ export function calculateLongevity(
     factorBreakdown:        factors,
     geneticVitalityScore:   score,
     geneticVitalityLabel:   VITALITY_LABELS[score],
-    familyBaselineAge:      Math.round(familyBaselineAge * 10) / 10,
-    epigeneticHabitsSelected: pillar2.selectedHabits,
+    familyBaselineAge,
+    userEpigeneticHabits:   userHabits,
+    epigeneticHabitsSelected: userHabits,
     blueZonesCount,
     baselineCitation:       'WHO Global Health Statistics, 2023',
     quizSnapshot:           quiz,
@@ -376,25 +434,57 @@ export function calculateLongevity(
   };
 }
 
+function extraAdjustment(overrides: SimulatorOverrides): number {
+  let extra = 0;
+  const hyd = ({ high: 0.5, moderate: 0, low: -0.3, poor: -0.8 } as Record<string, number>)[overrides.hydration ?? ''];
+  if (hyd !== undefined) extra += hyd;
+
+  const scr = ({ low: 0, moderate: -0.3, high: -0.7, very_high: -1.2 } as Record<string, number>)[overrides.screenTime ?? ''];
+  if (scr !== undefined) extra += scr;
+
+  const wlb = ({ excellent: 0.8, good: 0.3, fair: 0, poor: -1.0 } as Record<string, number>)[overrides.workLifeBalance ?? ''];
+  if (wlb !== undefined) extra += wlb;
+
+  const dm = ({ none: 0, controlled: -1.5, uncontrolled: -4.0 } as Record<string, number>)[overrides.diabetesManagement ?? ''];
+  if (dm !== undefined) extra += dm;
+
+  const hc = ({ annual: 0.8, occasional: 0.3, rarely: -0.5, never: -1.2 } as Record<string, number>)[overrides.healthCheckups ?? ''];
+  if (hc !== undefined) extra += hc;
+
+  const dc = ({ regular: 0.4, occasional: 0, rarely: -0.6 } as Record<string, number>)[overrides.dentalCare ?? ''];
+  if (dc !== undefined) extra += dc;
+
+  const mh = ({ active: 0.5, managing: 0, struggling: -1.5 } as Record<string, number>)[overrides.mentalHealth ?? ''];
+  if (mh !== undefined) extra += mh;
+
+  const rel = ({ married: 1.5, stable: 0.5, single: 0, divorced: -0.8 } as Record<string, number>)[overrides.relationship ?? ''];
+  if (rel !== undefined) extra += rel;
+
+  const pet = ({ yes: 0.4, no: 0 } as Record<string, number>)[overrides.petOwnership ?? ''];
+  if (pet !== undefined) extra += pet;
+
+  const ment = ({ active: 0.6, occasional: 0.2, none: 0 } as Record<string, number>)[overrides.mentoring ?? ''];
+  if (ment !== undefined) extra += ment;
+
+  const cs = ({ up_to_date: 0.5, partial: 0, never: -0.8 } as Record<string, number>)[overrides.cancerScreening ?? ''];
+  if (cs !== undefined) extra += cs;
+
+  const aq = ({ clean: 0.3, moderate: 0, polluted: -1.5 } as Record<string, number>)[overrides.airQuality ?? ''];
+  if (aq !== undefined) extra += aq;
+
+  const com = ({ none: 0.2, low: 0, moderate: -0.3, high: -0.8 } as Record<string, number>)[overrides.commuteStress ?? ''];
+  if (com !== undefined) extra += com;
+
+  return extra;
+}
+
 export function recalcWithOverrides(
   result: LongevityResult,
-  overrides: {
-    smoking?: HealthQuizData['smoking'];
-    drinking?: HealthQuizData['drinking'];
-    diet?: HealthQuizData['diet'];
-    exercise?: HealthQuizData['exercise'];
-    stress?: number;
-    bmi?: number;
-    bloodPressure?: HealthQuizData['bloodPressure'];
-    sleepDuration?: HealthQuizData['sleepDuration'];
-    socialConnections?: HealthQuizData['socialConnections'];
-    selectedHabits?: string[];
-  }
+  overrides: SimulatorOverrides,
 ): number {
   const quiz = { ...result.quizSnapshot, ...overrides };
-  const pillar2 = overrides.selectedHabits
-    ? { ...result.pillar2Snapshot, selectedHabits: overrides.selectedHabits }
-    : result.pillar2Snapshot;
-  const r = calculateLongevity(quiz, result.pillar1Snapshot, pillar2);
-  return r.totalForecast;
+  const userHabits = overrides.selectedHabits ?? result.userEpigeneticHabits;
+  const r = calculateLongevity(quiz, result.pillar1Snapshot, result.pillar2Snapshot, undefined, userHabits);
+  const extra = extraAdjustment(overrides);
+  return Math.round((r.totalForecast + extra) * 10) / 10;
 }
