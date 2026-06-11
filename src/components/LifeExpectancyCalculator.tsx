@@ -25,12 +25,15 @@ import {
   EPIGENETIC_HABITS,
   computeGeneticPreview,
   livingContributionLabel,
+  calculateLongevity,
+  LongevityResult,
 } from '@/services/LongevityCalculationService';
 
 interface Props {
   birthDate?: Date | null;
   celebrities?: any[];
   onComplete?: (data: { quiz: HealthQuizData; pillar1: Pillar1Data; pillar2: Pillar2Data }) => void;
+  onCompleteSkip?: (data: { quiz: HealthQuizData; pillar1: Pillar1Data; pillar2: Pillar2Data }) => void;
 }
 
 const InfoTooltip = ({ content }: { content: string }) => (
@@ -61,19 +64,11 @@ function ageDotColor(age: number, entered: boolean): string {
   return 'bg-red-500';
 }
 
-// Compact single-line family member row
 const CompactFamilyRow = ({
-  fieldKey,
-  label,
-  member,
-  onChange,
-  optional = false,
+  fieldKey, label, member, onChange, optional = false,
 }: {
-  fieldKey: string;
-  label: string;
-  member: FamilyMemberData;
-  onChange: (m: FamilyMemberData) => void;
-  optional?: boolean;
+  fieldKey: string; label: string; member: FamilyMemberData;
+  onChange: (m: FamilyMemberData) => void; optional?: boolean;
 }) => {
   const entered = !member.dontKnow && member.age > 0 && member.isLiving !== null;
   const contribLabel = livingContributionLabel(member);
@@ -81,16 +76,11 @@ const CompactFamilyRow = ({
   return (
     <div className={`space-y-0.5 ${member.dontKnow ? 'opacity-50' : ''}`}>
       <div className="flex items-center gap-1.5 py-1 text-xs flex-wrap sm:flex-nowrap">
-        {/* Status dot */}
         <span className={`w-2 h-2 rounded-full shrink-0 transition-colors ${ageDotColor(member.age, entered)}`} />
-
-        {/* Label */}
         <span className={`w-28 sm:w-32 shrink-0 font-medium leading-tight ${optional ? 'text-muted-foreground' : 'text-foreground'}`}>
           {label}
           {optional && <span className="text-[9px] ml-1 opacity-60">(Opt)</span>}
         </span>
-
-        {/* Age input */}
         <input
           type="number"
           value={member.age || ''}
@@ -100,51 +90,23 @@ const CompactFamilyRow = ({
           className="w-14 h-6 text-xs text-center border rounded px-1 bg-background disabled:bg-muted disabled:opacity-50 focus:outline-none focus:ring-1 focus:ring-primary"
           min={1} max={120}
         />
-
-        {/* Still Living radio */}
         <label className={`flex items-center gap-1 cursor-pointer select-none ${member.dontKnow ? 'pointer-events-none' : ''}`}>
-          <input
-            type="radio"
-            name={`family-${fieldKey}`}
-            checked={member.isLiving === true}
-            onChange={() => onChange({ ...member, isLiving: true })}
-            disabled={member.dontKnow}
-            className="w-3 h-3 accent-primary"
-          />
+          <input type="radio" name={`family-${fieldKey}`} checked={member.isLiving === true}
+            onChange={() => onChange({ ...member, isLiving: true })} disabled={member.dontKnow} className="w-3 h-3 accent-primary" />
           <span className="text-[10px] text-foreground">Still Living</span>
         </label>
-
-        {/* At time of passing radio */}
         <label className={`flex items-center gap-1 cursor-pointer select-none ${member.dontKnow ? 'pointer-events-none' : ''}`}>
-          <input
-            type="radio"
-            name={`family-${fieldKey}`}
-            checked={member.isLiving === false}
-            onChange={() => onChange({ ...member, isLiving: false })}
-            disabled={member.dontKnow}
-            className="w-3 h-3 accent-primary"
-          />
+          <input type="radio" name={`family-${fieldKey}`} checked={member.isLiving === false}
+            onChange={() => onChange({ ...member, isLiving: false })} disabled={member.dontKnow} className="w-3 h-3 accent-primary" />
           <span className="text-[10px] text-foreground">At time of passing</span>
         </label>
-
-        {/* Don't know checkbox */}
         <label className="flex items-center gap-1 cursor-pointer select-none ml-auto">
-          <input
-            type="checkbox"
-            checked={member.dontKnow}
-            onChange={(e) => onChange({
-              ...member,
-              dontKnow: e.target.checked,
-              age: e.target.checked ? 0 : member.age,
-              isLiving: e.target.checked ? null : member.isLiving,
-            })}
-            className="w-3 h-3 accent-primary"
-          />
+          <input type="checkbox" checked={member.dontKnow}
+            onChange={(e) => onChange({ ...member, dontKnow: e.target.checked, age: e.target.checked ? 0 : member.age, isLiving: e.target.checked ? null : member.isLiving })}
+            className="w-3 h-3 accent-primary" />
           <span className="text-[10px] text-muted-foreground">Don't know</span>
         </label>
       </div>
-
-      {/* Living contribution hint */}
       {contribLabel && !member.dontKnow && (
         <p className="text-[10px] text-green-600 pl-4">{contribLabel}</p>
       )}
@@ -159,17 +121,14 @@ const SCORE_COLORS: Record<string, string> = {
   'Below Average':'bg-orange-100 text-orange-800 border-orange-300',
 };
 
-export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
+export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip }: Props) => {
   const { isPremium, profile } = useAuth();
   const { trackFeatureUse } = useAnalytics();
   const [step, setStep] = useState(1);
 
   const [data, setData] = useState<HealthQuizData>({
-    name: '',
-    gender: '',
-    country: '',
-    smoking: '',
-    drinking: '',
+    name: '', gender: '', country: '',
+    smoking: '', drinking: '',
     heartDisease: false, heartDiseaseFamily: false, heartDiseaseControlled: null,
     diabetes: false, diabetesFamily: false, diabetesControlled: null,
     hypertension: false, hypertensionControlled: null,
@@ -179,7 +138,6 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
 
   const [pillar1, setPillar1] = useState<Pillar1Data>(DEFAULT_PILLAR1);
   const [pillar2, setPillar2] = useState<Pillar2Data>(DEFAULT_PILLAR2);
-  const [lifeExpectancy, setLifeExpectancy] = useState<number | null>(null);
   const hasTracked = useRef(false);
 
   // BMI calculator local state
@@ -189,6 +147,12 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
   const [heightIn, setHeightIn] = useState('');
   const [weightKg, setWeightKg] = useState('');
   const [weightLbs, setWeightLbs] = useState('');
+
+  // Live preview state
+  const [liveResult, setLiveResult] = useState<LongevityResult | null>(null);
+  const [flashDir, setFlashDir] = useState<'up' | 'down' | null>(null);
+  const [deltaLabel, setDeltaLabel] = useState('');
+  const prevForecastRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (profile?.name && !data.name) setData(prev => ({ ...prev, name: profile.name }));
@@ -205,48 +169,47 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
     }
   }, [bmiUnit, heightCm, heightFt, heightIn, weightKg, weightLbs]);
 
-  const calculatePreview = () => {
-    const effectiveBirth = birthDate || new Date(1990, 0, 1);
-    let base = data.gender === 'female' ? 81.1 : 76.1;
-    const curAge = new Date().getFullYear() - effectiveBirth.getFullYear();
-    if (data.smoking === 'light') base -= 3; else if (data.smoking === 'moderate') base -= 7; else if (data.smoking === 'heavy') base -= 12;
-    if (data.drinking === 'light') base += 1; else if (data.drinking === 'moderate') base -= 1; else if (data.drinking === 'heavy') base -= 6;
-    if (data.heartDisease) { base -= 5; if (data.heartDiseaseControlled) base += 1.25; }
-    if (data.heartDiseaseFamily) base -= 2;
-    if (data.diabetes) { base -= 4; if (data.diabetesControlled) base += 1.6; }
-    if (data.diabetesFamily) base -= 1;
-    if (data.hypertension) { base -= 3; if (data.hypertensionControlled) base += 1.05; }
-    if (data.diet === 'poor') base -= 3; else if (data.diet === 'good') base += 2; else if (data.diet === 'excellent') base += 4;
-    if (data.exercise === 'seldom') base -= 2; else if (data.exercise === 'light') base += 1; else if (data.exercise === 'moderate') base += 3; else if (data.exercise === 'heavy') base += 5;
-    if (data.stress >= 8) base -= 2.5; else if (data.stress >= 5) base -= 0.5; else if (data.stress >= 3) base += 1; else base += 1.5;
-    if (data.bmi < 18.5) base -= 2; else if (data.bmi > 30) base -= 3; else if (data.bmi > 25) base -= 1;
-    if (data.bloodPressure === 'optimal') base += 1.5; else if (data.bloodPressure === 'elevated') base -= 1; else if (data.bloodPressure === 'high1') base -= 2.5; else if (data.bloodPressure === 'high2') base -= 5;
-    if (data.sleepDuration === 'under6') base -= 2; else if (data.sleepDuration === '6to7') base -= 0.5; else if (data.sleepDuration === 'over9') base -= 1;
-    if (data.socialConnections === 'strong') base += 2; else if (data.socialConnections === 'limited') base -= 1.5; else if (data.socialConnections === 'isolated') base -= 3;
-    return Math.round((curAge + Math.max(0, base - curAge)) * 10) / 10;
-  };
-
+  // Live preview effect — recalculates on every input change
   useEffect(() => {
-    if (step === 6) {
-      const r = calculatePreview();
-      setLifeExpectancy(r);
-      if (!hasTracked.current) { hasTracked.current = true; trackFeatureUse('life_expectancy_calculator', { action: 'calculate' }); }
+    const r = calculateLongevity(data, pillar1, pillar2, birthDate ?? undefined);
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    if (prevForecastRef.current !== null && Math.abs(r.totalForecast - prevForecastRef.current) >= 0.1) {
+      const diff = Math.round((r.totalForecast - prevForecastRef.current) * 10) / 10;
+      setFlashDir(diff > 0 ? 'up' : 'down');
+      setDeltaLabel(diff > 0 ? `+${diff} yrs` : `${diff} yrs`);
+      timer = setTimeout(() => { setFlashDir(null); setDeltaLabel(''); }, 2000);
     }
-  }, [step, data, birthDate]);
+
+    prevForecastRef.current = r.totalForecast;
+    setLiveResult(r);
+
+    if (!hasTracked.current && step >= 6) {
+      hasTracked.current = true;
+      trackFeatureUse('life_expectancy_calculator', { action: 'calculate' });
+    }
+
+    return () => { if (timer) clearTimeout(timer); };
+  }, [data, pillar1, pillar2, birthDate]);
 
   const totalSteps = 8;
   const bmiCategory = getBMICategory(data.bmi);
   const updateP1Member = (field: keyof Pillar1Data, val: FamilyMemberData) => setPillar1(p => ({ ...p, [field]: val }));
 
-  // Mentor habits (Section B of Step 8)
   const toggleMentorHabit = (id: string) => setPillar2(p => ({
     ...p,
     mentorHabits: p.mentorHabits.includes(id) ? p.mentorHabits.filter(h => h !== id) : [...p.mentorHabits, id],
   }));
 
-  // Live genetic preview
   const enteredMemberCount = Object.values(pillar1).filter(m => !m.dontKnow && m.age > 0 && m.isLiving !== null).length;
   const { wfa: previewWfa, score: previewScore } = computeGeneticPreview(pillar1);
+
+  const geneticAdj = Math.round(Math.max(-8, Math.min(8, (previewWfa - 78) * 0.25)) * 10) / 10;
+  const adjSign = geneticAdj >= 0 ? '+' : '';
+
+  const currentAge = birthDate
+    ? Math.floor((new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000))
+    : null;
 
   return (
     <Card className="backdrop-blur-sm bg-background/80 border-primary/20">
@@ -267,6 +230,59 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
       </CardHeader>
 
       <CardContent className="space-y-6 text-left">
+
+        {/* ── Persistent live age card — shown on ALL steps ── */}
+        {liveResult && (
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-2">
+            <div className="flex items-start justify-between gap-3 flex-wrap">
+              <div>
+                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Current Projected Age</p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <strong className={`text-4xl font-black transition-colors duration-300 ${
+                    flashDir === 'up' ? 'text-green-600' : flashDir === 'down' ? 'text-red-500' : 'text-primary'
+                  }`}>
+                    {liveResult.totalForecast}
+                  </strong>
+                  <span className="text-lg font-bold text-primary">yrs</span>
+                  {deltaLabel && (
+                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full animate-fade-in-up ${
+                      deltaLabel.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'
+                    }`}>
+                      {deltaLabel}
+                    </span>
+                  )}
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-0.5">Updates in real time as you answer each step</p>
+              </div>
+
+              {/* Three-marker progress bar */}
+              {currentAge !== null && (() => {
+                const forecast = liveResult.totalForecast;
+                const maxPot = liveResult.maximumPotential;
+                const rangeStart = Math.max(0, currentAge - 5);
+                const rangeEnd = maxPot + 5;
+                const range = rangeEnd - rangeStart;
+                const projPct = Math.round(((forecast - rangeStart) / range) * 100);
+                const maxPct = Math.round(((maxPot - rangeStart) / range) * 100);
+                return (
+                  <div className="flex-1 min-w-[160px] space-y-1 pt-1">
+                    <div className="relative h-3 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary/40 to-primary rounded-full transition-all duration-500"
+                        style={{ width: `${Math.min(100, Math.max(0, projPct))}%` }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-[9px] text-muted-foreground">
+                      <span className="font-medium">Age {currentAge}</span>
+                      <span className="font-bold text-primary">{forecast} yrs</span>
+                      <span className="text-accent">Max {maxPot}</span>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        )}
 
         {/* ── STEP 1: Personal Info ── */}
         {step === 1 && (
@@ -551,12 +567,12 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
               </div>
             </div>
 
-            {lifeExpectancy !== null && (
+            {liveResult && (
               <div className="relative mt-6 border p-6 rounded-xl bg-muted/20">
                 <div className={!isPremium ? 'blur-sm pointer-events-none select-none' : ''}>
                   <div className="text-center py-4">
-                    <span className="text-xs uppercase font-bold text-muted-foreground tracking-wider">Estimated Baseline (Steps 1–6 only)</span>
-                    <h2 className="text-5xl font-black text-primary mt-1">{lifeExpectancy} Years</h2>
+                    <span className="text-xs uppercase font-bold text-muted-foreground tracking-wider">Forecast (Health & Lifestyle Only)</span>
+                    <h2 className="text-5xl font-black text-primary mt-1">{liveResult.totalForecast} Years</h2>
                     <p className="text-xs text-muted-foreground mt-2">Complete steps 7–8 to include genetics & epigenetics for your full forecast.</p>
                   </div>
                 </div>
@@ -585,7 +601,6 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
               <p className="text-sm text-muted-foreground mt-1">Pillar 2 of 3 · Enter ages for family members you know. Leave blank or check "Don't know" for unknown.</p>
             </div>
 
-            {/* Color legend */}
             <div className="flex items-center gap-3 flex-wrap text-[10px] text-muted-foreground">
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500 inline-block" /> &gt;80 yrs</span>
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500 inline-block" /> 70–80</span>
@@ -594,9 +609,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-muted-foreground/30 inline-block" /> Not entered</span>
             </div>
 
-            {/* Side-by-side columns */}
             <div className="grid md:grid-cols-2 gap-x-8 gap-y-2">
-              {/* Paternal Side */}
               <div className="space-y-1">
                 <h4 className="text-xs font-bold text-foreground flex items-center gap-1.5 mb-2">
                   <TreePine className="w-3.5 h-3.5 text-blue-500" /> Paternal Side
@@ -607,8 +620,6 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
                 <CompactFamilyRow fieldKey="paternalUncles" label="Paternal Uncles (avg)" member={pillar1.paternalUncles} onChange={(m) => updateP1Member('paternalUncles', m)} optional />
                 <CompactFamilyRow fieldKey="paternalAunts" label="Paternal Aunts (avg)" member={pillar1.paternalAunts} onChange={(m) => updateP1Member('paternalAunts', m)} optional />
               </div>
-
-              {/* Maternal Side */}
               <div className="space-y-1">
                 <h4 className="text-xs font-bold text-foreground flex items-center gap-1.5 mb-2">
                   <TreePine className="w-3.5 h-3.5 text-emerald-500" /> Maternal Side
@@ -621,7 +632,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
               </div>
             </div>
 
-            {/* Live Genetic Vitality Score (shown when ≥2 entered) */}
+            {/* Live Genetic Vitality Score */}
             {enteredMemberCount >= 2 && (
               <div className="bg-muted/30 rounded-xl border p-4 space-y-2 animate-fade-in-up">
                 <div className="flex items-center gap-3 flex-wrap">
@@ -633,6 +644,21 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
                 <p className="text-[11px] text-muted-foreground leading-relaxed">
                   Genetics account for approximately 25–30% of your longevity ceiling. <strong className="text-foreground">(Karolinska Institute, 2017)</strong>
                 </p>
+                {/* Genetic forecast adjustment line */}
+                <div className="border-t pt-2 mt-1">
+                  <p className="text-[11px] text-foreground font-medium">
+                    Your family genetics are adjusting your forecast by{' '}
+                    <span className={geneticAdj >= 0 ? 'text-green-600 font-bold' : 'text-red-500 font-bold'}>
+                      {adjSign}{geneticAdj} years
+                    </span>
+                  </p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">
+                    Family Longevity Baseline: ~{previewWfa} yrs → Genetic adjustment:{' '}
+                    <span className={geneticAdj >= 0 ? 'text-green-600 font-semibold' : 'text-red-500 font-semibold'}>
+                      {adjSign}{geneticAdj} yrs
+                    </span>{' '}applied to your forecast
+                  </p>
+                </div>
               </div>
             )}
 
@@ -653,7 +679,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
 
           return (
             <div className="space-y-6">
-              {/* Genetic summary card from Step 7 */}
+              {/* Genetic summary from Step 7 */}
               {enteredMemberCount >= 2 ? (
                 <div className="flex items-start gap-3 bg-primary/5 rounded-xl border border-primary/20 p-4">
                   <span className="text-xl">🧬</span>
@@ -665,6 +691,13 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
                     </div>
                     <p className="text-[11px] text-muted-foreground leading-relaxed">
                       Your genetics account for ~25-30% of your longevity ceiling. This step covers the remaining 70-75% — your lifestyle and environment. <strong className="text-foreground">(WHO, 2023)</strong>
+                    </p>
+                    {/* "Translates to" line */}
+                    <p className="text-[11px] font-medium text-foreground pt-0.5">
+                      This translates to{' '}
+                      <span className={geneticAdj >= 0 ? 'text-green-600 font-bold' : 'text-red-500 font-bold'}>
+                        {adjSign}{geneticAdj} years
+                      </span>{' '}on your longevity forecast.
                     </p>
                   </div>
                 </div>
@@ -738,7 +771,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
                 )}
               </div>
 
-              {/* Section B: Community Anchor's Longevity Habits — only shown if mentor is set */}
+              {/* Section B: Community Anchor's Longevity Habits */}
               {pillar2.hasMentor ? (
                 <div className="space-y-3">
                   <div className="flex items-start justify-between">
@@ -747,7 +780,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
                       <p className="text-xs text-muted-foreground mt-0.5">
                         What habits do you believe contribute to{' '}
                         <strong>{pillar2.mentorName || 'your mentor'}</strong>'s long life?
-                        Select all that apply. These habits explain why your community anchor has thrived — and give you a roadmap to follow.
+                        Select all that apply.
                       </p>
                     </div>
                     {blueZonesCount > 0 && (
@@ -791,7 +824,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
                     <div className="flex items-center justify-between bg-primary/5 rounded-lg border border-primary/20 px-4 py-2">
                       <span className="text-xs font-medium text-foreground">
                         {pillar2.mentorHabits.length} habit{pillar2.mentorHabits.length !== 1 ? 's' : ''} attributed to mentor
-                        {blueZonesCount > 0 && <span className="text-blue-600 ml-2">· {blueZonesCount}/8 Blue Zones principles</span>}
+                        {blueZonesCount > 0 && <span className="text-blue-600 ml-2">· {blueZonesCount}/8 Blue Zones</span>}
                       </span>
                       <Badge className="text-xs font-bold bg-primary text-primary-foreground">+{mentorHabitBonus.toFixed(1)} yrs potential (cap: +6)</Badge>
                     </div>
@@ -799,12 +832,76 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
                 </div>
               ) : (
                 <div className="bg-muted/20 rounded-xl border border-dashed p-5 text-center space-y-1">
-                  <p className="text-xs text-muted-foreground">
-                    Add a community mentor in Section A above to unlock this section —
+                  <p className="text-xs text-muted-foreground">Add a community mentor in Section A above to unlock this section —</p>
+                  <p className="text-xs text-muted-foreground">their lifestyle habits become your environmental blueprint.</p>
+                </div>
+              )}
+
+              {/* ── Result Preview Card (replaces final nav button) ── */}
+              {liveResult && (
+                <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl border border-primary/30 p-5 space-y-4 animate-fade-in-up">
+                  <h3 className="text-sm font-bold text-foreground text-center">
+                    🎯 Based on your complete health profile, family genetics, and community environment:
+                  </h3>
+
+                  <div className="text-center">
+                    <strong className="text-5xl font-black text-primary">{liveResult.totalForecast}</strong>
+                    <span className="text-xl font-bold text-primary ml-1">yrs</span>
+                  </div>
+
+                  <p className="text-xs text-muted-foreground text-center leading-relaxed">
+                    This reflects your current trajectory — accounting for your health, the genetic heritage you've inherited, and your environmental context.
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    their lifestyle habits become your environmental blueprint.
+
+                  {/* Breakdown table */}
+                  <div className="bg-background/80 rounded-lg border p-3 space-y-1.5 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Starting point (WHO baseline)</span>
+                      <strong>{liveResult.baselineLifeExpectancy} yrs</strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Health & lifestyle</span>
+                      <strong className={liveResult.healthAdjustment >= 0 ? 'text-green-600' : 'text-red-500'}>
+                        {liveResult.healthAdjustment >= 0 ? '+' : ''}{liveResult.healthAdjustment} yrs
+                      </strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Family genetics</span>
+                      <strong className={liveResult.geneticAdjustment >= 0 ? 'text-green-600' : 'text-red-500'}>
+                        {liveResult.geneticAdjustment >= 0 ? '+' : ''}{liveResult.geneticAdjustment} yrs
+                      </strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Community bonus</span>
+                      <strong className="text-green-600">+{liveResult.communityBonus} yrs</strong>
+                    </div>
+                    <div className="border-t pt-1.5 flex justify-between font-bold">
+                      <span>Your forecast</span>
+                      <strong className="text-primary">{liveResult.totalForecast} yrs</strong>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-center text-muted-foreground leading-relaxed">
+                    Science has given you a number. But this is just your starting point — not your destiny.{' '}
+                    <strong className="text-foreground">Research shows lifestyle controls 70–75% of outcomes (WHO, 2023).</strong>
                   </p>
+
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      onClick={() => onComplete?.({ quiz: data, pillar1, pillar2 })}
+                      className="w-full bg-primary text-primary-foreground font-bold py-5 text-sm"
+                    >
+                      Yes — Show Me My Longevity Potential →
+                    </Button>
+                    {onCompleteSkip && (
+                      <button
+                        onClick={() => onCompleteSkip({ quiz: data, pillar1, pillar2 })}
+                        className="text-xs text-muted-foreground hover:text-primary underline text-center transition-colors py-1"
+                      >
+                        Skip to Full Report
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -814,15 +911,8 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete }: Props) => {
         <Separator />
         <div className="flex justify-between">
           <Button variant="outline" onClick={() => { if (step > 1) setStep(step - 1); }} disabled={step === 1}>Previous</Button>
-          {step < totalSteps ? (
+          {step < totalSteps && (
             <Button onClick={() => setStep(step + 1)} disabled={step === 1 && !data.gender}>Next Step →</Button>
-          ) : (
-            <Button
-              onClick={() => onComplete?.({ quiz: data, pillar1, pillar2 })}
-              className="bg-primary text-primary-foreground font-bold px-6"
-            >
-              Calculate My Longevity →
-            </Button>
           )}
         </div>
       </CardContent>

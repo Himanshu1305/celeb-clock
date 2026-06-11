@@ -115,6 +115,33 @@ const LifeExpectancy = () => {
     }, 150);
   };
 
+  const handleQuizCompleteAndSkip = (data: { quiz: HealthQuizData; pillar1: Pillar1Data; pillar2: Pillar2Data }) => {
+    const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate);
+    setLongevityResult(result);
+    const simAge = result.totalForecast;
+    setOptimizedForecast(simAge);
+    setCurrentSimForecast(simAge);
+    setPhase('report');
+
+    setIsLoadingCurrent(true);
+    const initialCurrent = findInitialMatches(result.totalForecast);
+    setCelebrities(prev => ({ ...prev, current: initialCurrent }));
+    enhanceCelebrityMatches(initialCurrent, result.totalForecast)
+      .then(enhanced => setCelebrities(prev => ({ ...prev, current: enhanced })))
+      .finally(() => setIsLoadingCurrent(false));
+
+    setIsLoadingPotential(true);
+    const initialPotential = findInitialMatches(simAge);
+    setCelebrities(prev => ({ ...prev, potential: initialPotential }));
+    enhanceCelebrityMatches(initialPotential, simAge)
+      .then(enhanced => setCelebrities(prev => ({ ...prev, potential: enhanced })))
+      .finally(() => setIsLoadingPotential(false));
+
+    setTimeout(() => {
+      reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+  };
+
   const handleGenerateReport = () => {
     const simAge = currentSimForecast ?? longevityResult?.totalForecast ?? 0;
     setOptimizedForecast(simAge);
@@ -229,6 +256,7 @@ const LifeExpectancy = () => {
               birthDate={birthDate}
               celebrities={[]}
               onComplete={handleQuizComplete}
+              onCompleteSkip={handleQuizCompleteAndSkip}
             />
           </section>
         )}
