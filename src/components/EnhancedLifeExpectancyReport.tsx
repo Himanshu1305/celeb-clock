@@ -9,6 +9,10 @@ import { Link } from 'react-router-dom';
 import { LongevityResult, EPIGENETIC_HABITS } from '@/services/LongevityCalculationService';
 import { CelebrityLongevityProfile } from '@/services/CelebrityLongevityService';
 import { fetchWikipediaImage } from '@/services/WikipediaImageService';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  Tooltip as RechartsTooltip, ResponsiveContainer, Cell,
+} from 'recharts';
 
 interface Props {
   result: LongevityResult;
@@ -23,6 +27,67 @@ interface Props {
   potentialCelebrityMatches?: CelebrityLongevityProfile[];
   isLoadingPotentialCelebrities?: boolean;
 }
+
+interface HealthGuideItem {
+  emoji: string;
+  title: string;
+  impact?: number;
+  detail: string;
+  source: string;
+}
+
+const HEALTH_GUIDE_FOODS: HealthGuideItem[] = [
+  { emoji: '🥬', title: 'Spinach & Kale', impact: 1.2, detail: 'Nitrate-rich leafy greens reduce blood pressure and improve arterial health. Rich in folate, iron, and vitamins K and C.', source: 'PREDIMED Study, NEJM 2013' },
+  { emoji: '🥕', title: 'Carrots', impact: 0.8, detail: 'Beta-carotene and polyacetylenes support immune function and may reduce cancer risk by up to 14%.', source: 'IARC / WHO Dietary Guidelines 2023' },
+  { emoji: '🫐', title: 'Blueberries', impact: 0.9, detail: 'Anthocyanins slow cognitive decline. Harvard study linked 3+ servings/week to 2.5 years younger biological age.', source: 'Harvard School of Public Health, 2012' },
+  { emoji: '🍇', title: 'Grapes & Resveratrol', impact: 0.6, detail: 'Resveratrol activates longevity sirtuins. Red/purple grapes support cardiovascular and metabolic health.', source: 'Cell Metabolism, 2013' },
+  { emoji: '🍌', title: 'Bananas', detail: 'High potassium supports healthy blood pressure. Prebiotic fiber feeds beneficial gut bacteria linked to reduced inflammation.', source: 'NHS Dietary Guidelines 2023' },
+  { emoji: '🍅', title: 'Tomatoes', impact: 0.7, detail: 'Lycopene reduces prostate and breast cancer risk by up to 40% and supports cardiovascular health.', source: 'JNCI, 2019' },
+  { emoji: '🥑', title: 'Avocados', impact: 1.0, detail: 'Monounsaturated fats improve lipid profiles. Eating one avocado per day reduces LDL by 13.5 mg/dL.', source: 'Journal of the American Heart Association, 2022' },
+  { emoji: '🍊', title: 'Citrus Fruits', impact: 0.8, detail: 'Vitamin C, flavonoids, and fiber reduce stroke risk. Daily citrus linked to 19% lower all-cause mortality.', source: 'JAHA, 2019' },
+  { emoji: '🥦', title: 'Cruciferous Vegetables', impact: 1.1, detail: 'Sulforaphane triggers cellular detoxification pathways. Reduces cancer risk by 15–20% across multiple types.', source: 'Cancer Research, 2021' },
+  { emoji: '🫘', title: 'Legumes & Beans', impact: 1.3, detail: 'For every 20g/day of legumes, all-cause mortality risk drops 7–8%. Blue Zones communities eat legumes daily.', source: 'British Journal of Nutrition, 2014' },
+];
+
+const HEALTH_GUIDE_SLEEP: HealthGuideItem[] = [
+  { emoji: '⏰', title: 'Consistent Sleep Schedule', impact: 1.5, detail: 'Going to bed and waking at the same time daily synchronizes circadian rhythm, reducing mortality risk by 24%.', source: 'Sleep Medicine Reviews, 2022' },
+  { emoji: '🌡️', title: 'Cool Bedroom (65–68°F / 18–20°C)', impact: 0.7, detail: 'Core body temperature must drop 2°F to initiate sleep. Cool environments improve deep sleep stage duration by up to 30%.', source: 'National Sleep Foundation, 2023' },
+  { emoji: '📵', title: 'Screen-Free 90 Min Before Bed', impact: 0.8, detail: 'Blue light suppresses melatonin for up to 3 hours. Screen-free wind-down rituals improve sleep quality by 35%.', source: 'Harvard Medical School, 2020' },
+  { emoji: '😴', title: 'Strategic Napping (20 min max)', detail: '10–20 min power naps reduce cortisol, improve cognitive performance by 34%, and support heart health.', source: 'NASA Sleep Study, 1995; ESC, 2018' },
+  { emoji: '📊', title: 'Sleep Tracking & Optimization', detail: 'Monitoring sleep stages (REM, deep) and optimizing sleep hygiene based on data leads to measurable health improvements.', source: 'Journal of Clinical Sleep Medicine, 2022' },
+];
+
+const HEALTH_GUIDE_HYDRATION: HealthGuideItem[] = [
+  { emoji: '💧', title: 'Optimal Water Intake (2–3L/day)', impact: 0.5, detail: 'Adequate hydration supports kidney function, metabolism, and cellular repair. Each 1% dehydration drops cognitive performance by 2%.', source: 'European Journal of Nutrition, 2019' },
+  { emoji: '🍵', title: 'Green Tea (2–3 cups/day)', impact: 0.9, detail: 'EGCG catechins reduce all-cause mortality by 10–15%. Daily green tea drinkers live 1–3 years longer in Japanese cohort studies.', source: 'BMJ, 2015; Annals of Internal Medicine' },
+  { emoji: '🚫', title: 'Reduce Sugar-Sweetened Beverages', impact: 0.6, detail: 'Replacing one daily sugary drink with water reduces type 2 diabetes risk by 7% and reduces metabolic aging markers.', source: 'Circulation, 2019' },
+];
+
+const HEALTH_GUIDE_MOVEMENT: HealthGuideItem[] = [
+  { emoji: '🏃', title: 'Zone 2 Cardio (150 min/week)', impact: 2.0, detail: 'Moderate aerobic exercise at 60–70% max heart rate reduces all-cause mortality by 31% and extends healthspan by 7 years.', source: 'WHO Physical Activity Guidelines, 2020; NEJM 2022' },
+  { emoji: '💪', title: 'Strength Training (2–3×/week)', impact: 1.5, detail: 'Muscle mass is a longevity biomarker. Resistance training reduces all-cause mortality by 23% and preserves metabolic health.', source: 'British Journal of Sports Medicine, 2022' },
+  { emoji: '🧘', title: 'Flexibility & Mobility Work', impact: 0.8, detail: 'Regular yoga, stretching, or mobility work reduces injury risk, improves balance (preventing fatal falls), and reduces inflammation.', source: 'International Journal of Yoga, 2021' },
+  { emoji: '🚶', title: 'NEAT Movement (7,000+ daily steps)', impact: 1.0, detail: 'Non-exercise activity thermogenesis through daily movement reduces cardiovascular risk by 21% vs sedentary lifestyle.', source: 'JAMA Internal Medicine, 2021' },
+];
+
+const HEALTH_GUIDE_PREVENTIVE: HealthGuideItem[] = [
+  { emoji: '🏥', title: 'Annual Health Checkups', impact: 0.8, detail: 'Regular preventive screenings catch disease 5–10 years earlier. Annual checkups reduce premature mortality by 16% in adults over 40.', source: 'USPSTF, 2023; Preventive Medicine, 2022' },
+  { emoji: '🦷', title: 'Dental & Oral Health', impact: 0.4, detail: 'Periodontal bacteria linked to 30% higher heart disease risk. Regular brushing, flossing, and dental visits reduce systemic inflammation.', source: 'Journal of Periodontology, 2021' },
+  { emoji: '🔬', title: 'Cancer Screenings (up to date)', impact: 0.5, detail: 'Colorectal cancer screening alone reduces cancer mortality by 60–70%. Breast and prostate screening further reduce disease burden.', source: 'USPSTF Cancer Screening Guidelines, 2023' },
+  { emoji: '🧠', title: 'Mental Health Support', impact: 0.5, detail: 'Active mental health management (therapy, support groups) reduces all-cause mortality by 18% and extends healthspan significantly.', source: 'Lancet Psychiatry, 2021' },
+];
+
+const BLUE_ZONE_PRINCIPLES = [
+  { id: 'walking',    name: 'Move Naturally',   emoji: '🚶' },
+  { id: 'purpose',    name: 'Purpose (Ikigai)', emoji: '🎯' },
+  { id: 'meditation', name: 'Downshift',        emoji: '🧘' },
+  { id: 'fasting',    name: '80% Rule',         emoji: '⏰' },
+  { id: 'wholefood',  name: 'Plant Slant',      emoji: '🥗' },
+  { id: 'community',  name: 'Right Tribe',      emoji: '👥' },
+  { id: 'spiritual',  name: 'Faith Community',  emoji: '🙏' },
+  { id: 'volunteer',  name: 'Loved Ones First', emoji: '🤝' },
+  { id: 'gardening',  name: 'Nature & Green',   emoji: '🌿' },
+];
 
 const BlurredNumber = ({ value, isPremium, suffix = '' }: { value: number | string; isPremium: boolean; suffix?: string }) => (
   <span style={!isPremium ? { filter: 'blur(8px)', userSelect: 'none', cursor: 'default' } : {}}>
@@ -83,7 +148,6 @@ function CelebRow({
         const grad = categoryGradient(celeb.category);
         return (
           <Card key={celeb.name} className="overflow-hidden border-muted">
-            {/* Photo — fixed 200px, face area framing */}
             <div className="overflow-hidden bg-muted" style={{ height: 200 }}>
               {hasImg ? (
                 <img
@@ -137,6 +201,33 @@ const PremiumBlur = ({ children, tab }: { children: React.ReactNode; tab: string
     </div>
   </div>
 );
+
+function HealthGuideSection({ title, items }: { title: string; items: HealthGuideItem[] }) {
+  return (
+    <div className="space-y-3">
+      <h4 className="text-sm font-bold text-foreground">{title}</h4>
+      <div className="grid sm:grid-cols-2 gap-2">
+        {items.map(item => (
+          <div key={item.title} className="flex gap-3 bg-muted/30 border rounded-lg p-3">
+            <span style={{ fontSize: 32, lineHeight: 1, flexShrink: 0 }}>{item.emoji}</span>
+            <div className="flex-1 min-w-0 space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="text-xs font-bold text-foreground">{item.title}</p>
+                {item.impact !== undefined && (
+                  <span className="text-[10px] font-bold text-green-700 bg-green-100 border border-green-300 px-1.5 py-0.5 rounded-full">
+                    +{item.impact} yrs
+                  </span>
+                )}
+              </div>
+              <p className="text-[10px] text-muted-foreground leading-snug">{item.detail}</p>
+              <p className="text-[10px] text-muted-foreground/60 italic">{item.source}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 // ── Life Milestones ─────────────────────────────────────────────────────────
 function LifeMilestones({
@@ -205,14 +296,12 @@ function LifeMilestones({
         </p>
       </div>
 
-      {/* Legend */}
       <div className="flex items-center gap-4 flex-wrap text-[10px] text-muted-foreground">
         <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500 inline-block" /> Will witness</span>
         <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-blue-500 inline-block" /> Possible with optimization</span>
         <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-muted-foreground/30 inline-block" /> Beyond projections</span>
       </div>
 
-      {/* Timeline */}
       <div className="space-y-1.5 max-h-[480px] overflow-y-auto pr-1">
         {sorted.map((m, i) => {
           const s = status(m.year);
@@ -304,7 +393,6 @@ export const EnhancedLifeExpectancyReport = ({
 
   const knownMembers = FAMILY_MEMBERS.filter(fm => !p1[fm.key].dontKnow && p1[fm.key].age > 0);
 
-  // Community anchor habits (mentor's attributed habits from Step 8 Section B)
   const mentorHabitData   = EPIGENETIC_HABITS.filter(h => p2.mentorHabits.includes(h.id));
   const unmentorHabitData = EPIGENETIC_HABITS.filter(h => !p2.mentorHabits.includes(h.id));
 
@@ -327,15 +415,46 @@ export const EnhancedLifeExpectancyReport = ({
     <BlurredNumber value={n} isPremium={isPremium} suffix={suffix} />
   );
 
-  // For milestones: use optimizedForecast (sim value at report generation) if available
   const displayedOptimized = optimizedForecast ?? simulatedForecast ?? result.totalForecast;
 
+  // Chart 1: comparison bar data
+  const comparisonData = [
+    { name: 'WHO Baseline',      value: result.baselineLifeExpectancy, fill: '#94a3b8' },
+    { name: 'Current Lifestyle', value: result.totalForecast,          fill: '#f97316' },
+    { name: 'Optimized',         value: displayedOptimized,            fill: '#22c55e' },
+    { name: 'Max Potential',     value: result.maximumPotential,       fill: '#3b82f6' },
+  ];
+
+  // Chart 2: factor impact data (top 10 by absolute impact)
+  const factorImpactData = [...result.factorBreakdown]
+    .filter(f => f.currentImpact !== 0)
+    .sort((a, b) => Math.abs(b.currentImpact) - Math.abs(a.currentImpact))
+    .slice(0, 10)
+    .map(f => ({ name: `${f.emoji} ${f.factor}`, impact: f.currentImpact }));
+
+  // "What This Means" paragraph
+  const top3factors = result.factorBreakdown.slice(0, 3);
+  const yearsGained = Math.round((displayedOptimized - result.totalForecast) * 10) / 10;
+
   return (
-    <div className="space-y-6">
+    <div id="longevity-blueprint-print" className="space-y-6">
+      {/* Print-only header */}
+      <div className="hidden print:block border-b pb-4 mb-4">
+        <h1 className="text-lg font-bold">Longevity Blueprint — {userName}</h1>
+        <p className="text-xs text-gray-500">
+          Generated: {new Date().toLocaleDateString()} · Sources: WHO, CDC, NIH, Harvard Medical School, Karolinska Institute
+        </p>
+        <p className="text-[10px] text-gray-400 italic mt-1">
+          For informational purposes only. This is not medical advice. Consult a qualified healthcare professional.
+        </p>
+      </div>
+
       {/* ── Report Header ── */}
-      <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl border border-primary/20 p-6 text-center space-y-2">
+      <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl border border-primary/20 p-6 text-center space-y-4">
         <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Full Longevity Blueprint</p>
         {userName && <p className="text-lg font-semibold text-foreground">Prepared for {userName}</p>}
+
+        {/* Row 1: Current → Optimized */}
         <div className="flex items-center justify-center gap-6 flex-wrap">
           <div className="text-center">
             <span className="text-[10px] uppercase font-bold text-muted-foreground block">Current Lifestyle</span>
@@ -347,24 +466,34 @@ export const EnhancedLifeExpectancyReport = ({
               <div className="text-center">
                 <span className="text-[10px] uppercase font-bold text-primary block">With Optimized Lifestyle</span>
                 <strong className="text-4xl font-black text-primary">{displayedOptimized} yrs</strong>
-                {displayedOptimized > result.totalForecast && (
-                  <span className="text-xs font-bold text-green-600 block mt-0.5">
-                    +{Math.round((displayedOptimized - result.totalForecast) * 10) / 10} years gained
-                  </span>
+                {yearsGained > 0 && (
+                  <span className="text-xs font-bold text-green-600 block mt-0.5">+{yearsGained} years gained</span>
                 )}
               </div>
             </>
           )}
-          <div className="text-center">
-            <span className="text-[10px] uppercase font-bold text-muted-foreground block">Maximum Potential</span>
-            <strong className="text-2xl font-bold text-accent">{result.maximumPotential} yrs</strong>
-          </div>
+        </div>
+
+        {/* Row 2: Current Age / Max Potential / Years Remaining */}
+        <div className="flex items-center justify-center gap-6 flex-wrap">
           <div className="text-center">
             <span className="text-[10px] uppercase font-bold text-muted-foreground block">Current Age</span>
             <strong className="text-2xl font-bold text-foreground">{currentAge} yrs</strong>
           </div>
+          <div className="w-px h-8 bg-border hidden sm:block" />
+          <div className="text-center">
+            <span className="text-[10px] uppercase font-bold text-muted-foreground block">Maximum Potential</span>
+            <strong className="text-2xl font-bold text-accent">{result.maximumPotential} yrs</strong>
+          </div>
+          <div className="w-px h-8 bg-border hidden sm:block" />
+          <div className="text-center">
+            <span className="text-[10px] uppercase font-bold text-muted-foreground block">Years Remaining</span>
+            <strong className="text-2xl font-bold text-foreground">{result.yearsRemaining} yrs</strong>
+          </div>
         </div>
-        <div className="flex items-center justify-center gap-3 pt-2 flex-wrap">
+
+        {/* Row 3: Three pillar badges */}
+        <div className="flex items-center justify-center gap-3 flex-wrap">
           <Badge className={`border ${VITALITY_COLORS[result.geneticVitalityScore]}`}>
             🧬 Genetic Score: {result.geneticVitalityScore}
           </Badge>
@@ -377,9 +506,54 @@ export const EnhancedLifeExpectancyReport = ({
             </Badge>
           )}
         </div>
+
+        {/* Chart 1: Longevity Comparison BarChart */}
+        <div className="w-full" style={{ height: 220 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              layout="vertical"
+              data={comparisonData}
+              margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <XAxis
+                type="number"
+                domain={[0, Math.ceil(result.maximumPotential / 10) * 10]}
+                tick={{ fontSize: 10 }}
+              />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={120} />
+              <RechartsTooltip formatter={(value: number) => [`${value} years`, 'Life Expectancy']} />
+              <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+                {comparisonData.map((entry, index) => (
+                  <Cell key={index} fill={entry.fill} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* "What This Means" interpretive paragraph */}
+        {top3factors.length > 0 && (
+          <div className="bg-background/50 rounded-xl border p-4 text-left">
+            <p className="text-xs font-bold text-foreground mb-1">💡 What This Means For You</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              With your current lifestyle, you have approximately{' '}
+              <strong className="text-foreground">{result.yearsRemaining} years</strong> ahead.
+              {yearsGained > 0 && (
+                <> By optimizing your habits, you could gain{' '}
+                <strong className="text-foreground">{yearsGained} extra years</strong>.</>
+              )}
+              {' '}Your top 3 opportunities:{' '}
+              <strong className="text-foreground">
+                {top3factors.map(f => `${f.emoji} ${f.factor} (+${f.potentialGain}yr)`).join(', ')}
+              </strong>.
+            </p>
+          </div>
+        )}
+
         {isPremium && (
-          <div className="flex items-center justify-center gap-2 pt-3">
-            <Button size="sm" variant="outline" className="gap-2" onClick={() => window.print()}>
+          <div className="flex items-center justify-center gap-2">
+            <Button size="sm" variant="outline" className="gap-2 print-show" onClick={() => window.print()}>
               <Download className="w-3.5 h-3.5" /> Export PDF
             </Button>
             <Button size="sm" variant="outline" className="gap-2" onClick={copyShare}>
@@ -391,14 +565,15 @@ export const EnhancedLifeExpectancyReport = ({
 
       {/* ── Tabs ── */}
       <Tabs defaultValue="genetics" className="w-full">
-        <TabsList className="grid grid-cols-3 w-full border-b rounded-none bg-transparent h-auto p-0">
+        <TabsList className="grid grid-cols-4 w-full border-b rounded-none bg-transparent h-auto p-0">
           <TabsTrigger value="genetics"  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">🧬 Biological Blueprint</TabsTrigger>
           <TabsTrigger value="community" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">🏘️ Community Anchor</TabsTrigger>
           <TabsTrigger value="cultural"  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">🌟 Cultural Horizon</TabsTrigger>
+          <TabsTrigger value="health"    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">💊 Health Guide</TabsTrigger>
         </TabsList>
 
         {/* ── TAB 1: Biological Blueprint ── */}
-        <TabsContent value="genetics" className="pt-5 space-y-5">
+        <TabsContent value="genetics" className="print-page-break pt-5 space-y-5">
           <div className="flex items-center gap-3 flex-wrap">
             <TooltipProvider>
               <Tooltip>
@@ -470,6 +645,41 @@ export const EnhancedLifeExpectancyReport = ({
             <p className="text-xs text-muted-foreground">Estimated from your family average with a +5yr optimistic modifier based on modern medicine and lifestyle potential.</p>
           </div>
 
+          {/* Chart 2: Factor Impact Analysis */}
+          {factorImpactData.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="text-sm font-bold text-foreground">Factor Impact Analysis</h4>
+              <p className="text-xs text-muted-foreground">How each factor currently affects your forecast — green = positive, red = negative.</p>
+              <div style={{ height: 320 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    layout="vertical"
+                    data={factorImpactData}
+                    margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                    <XAxis type="number" domain={[-8, 8]} tick={{ fontSize: 10 }} />
+                    <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={160} />
+                    <RechartsTooltip
+                      formatter={(value: number) => [
+                        `${value > 0 ? '+' : ''}${value} years`,
+                        'Current Impact',
+                      ]}
+                    />
+                    <Bar dataKey="impact" radius={[0, 4, 4, 0]}>
+                      {factorImpactData.map((entry, index) => (
+                        <Cell
+                          key={index}
+                          fill={entry.impact > 0 ? '#22c55e' : entry.impact < 0 ? '#ef4444' : '#94a3b8'}
+                        />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+
           <div className="bg-primary/5 rounded-xl border border-primary/20 p-4 space-y-2">
             <p className="text-xs font-bold text-primary">📖 Scientific Context</p>
             <p className="text-xs text-muted-foreground leading-relaxed">
@@ -479,7 +689,7 @@ export const EnhancedLifeExpectancyReport = ({
         </TabsContent>
 
         {/* ── TAB 2: Community Anchor ── */}
-        <TabsContent value="community" className="pt-5 space-y-5">
+        <TabsContent value="community" className="print-page-break pt-5 space-y-5">
           {mentorHabitData.length > 0 ? (
             <div className="space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
@@ -526,16 +736,36 @@ export const EnhancedLifeExpectancyReport = ({
             </div>
           )}
 
-          <div className="bg-muted/30 rounded-xl border p-4 space-y-2">
+          {/* Chart 3: Blue Zones 3×3 grid */}
+          <div className="bg-muted/30 rounded-xl border p-4 space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-sm font-bold text-foreground">Blue Zones Alignment</h4>
               <Badge variant="outline">{blueZoneCount}/9 principles</Badge>
             </div>
             <p className="text-xs text-muted-foreground">
-              Your mentor's habit profile aligns with <strong className="text-foreground">{blueZoneCount}</strong> of the 9 Blue Zone longevity principles identified by researcher Dan Buettner across the world's longest-lived communities.
+              Identified by researcher Dan Buettner across the world's longest-lived communities. Your mentor's profile aligns with{' '}
+              <strong className="text-foreground">{blueZoneCount}</strong> of 9 principles.
             </p>
-            <div className="w-full bg-muted rounded-full h-2">
-              <div className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all" style={{ width: `${Math.round((blueZoneCount / 9) * 100)}%` }} />
+            <div className="grid grid-cols-3 gap-2">
+              {BLUE_ZONE_PRINCIPLES.map(principle => {
+                const aligned = p2.mentorHabits.includes(principle.id);
+                return (
+                  <div
+                    key={principle.id}
+                    className={`rounded-lg border p-2 text-center space-y-1 ${
+                      aligned
+                        ? 'bg-green-50 border-green-200 dark:bg-green-950/30 dark:border-green-900'
+                        : 'bg-muted/30 border-muted/60'
+                    }`}
+                  >
+                    <div className="text-lg">{principle.emoji}</div>
+                    <div className={`font-semibold leading-tight text-[10px] ${aligned ? 'text-green-800 dark:text-green-300' : 'text-muted-foreground'}`}>
+                      {principle.name}
+                    </div>
+                    <div className="text-sm">{aligned ? '✅' : '○'}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -563,9 +793,8 @@ export const EnhancedLifeExpectancyReport = ({
         </TabsContent>
 
         {/* ── TAB 3: Cultural Horizon ── */}
-        <TabsContent value="cultural" className="pt-5 space-y-6">
+        <TabsContent value="cultural" className="print-page-break pt-5 space-y-6">
 
-          {/* Row 1: Current trajectory */}
           <div className="space-y-3">
             <div>
               <h4 className="text-sm font-bold text-foreground">🌟 Your Current Trajectory — {result.totalForecast} Years</h4>
@@ -583,7 +812,6 @@ export const EnhancedLifeExpectancyReport = ({
             )}
           </div>
 
-          {/* Row 2: Optimized potential */}
           <div className="space-y-3">
             <div>
               <h4 className="text-sm font-bold text-foreground">✨ Your Optimized Potential — {displayedOptimized} Years</h4>
@@ -601,14 +829,12 @@ export const EnhancedLifeExpectancyReport = ({
             )}
           </div>
 
-          {/* Life Milestones */}
           <LifeMilestones
             currentForecast={result.totalForecast}
             simulatedForecast={displayedOptimized}
             currentAge={currentAge}
           />
 
-          {/* Social share */}
           {isPremium && (
             <Card className="border-primary/20 bg-primary/5 p-4">
               <h4 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2"><Share2 className="w-4 h-4" /> Share Your Result</h4>
@@ -636,6 +862,29 @@ export const EnhancedLifeExpectancyReport = ({
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        {/* ── TAB 4: Health Guide ── */}
+        <TabsContent value="health" className="print-page-break pt-5 space-y-6">
+          <div>
+            <h3 className="text-base font-bold text-foreground">💊 Your Personalized Health Guide</h3>
+            <p className="text-xs text-muted-foreground mt-1">
+              Science-backed recommendations to extend your healthspan. All citations from peer-reviewed sources.
+            </p>
+          </div>
+
+          <HealthGuideSection title="🥗 Longevity Superfoods" items={HEALTH_GUIDE_FOODS} />
+          <HealthGuideSection title="😴 Sleep Optimization" items={HEALTH_GUIDE_SLEEP} />
+          <HealthGuideSection title="💧 Hydration & Beverages" items={HEALTH_GUIDE_HYDRATION} />
+          <HealthGuideSection title="🏃 Movement & Exercise" items={HEALTH_GUIDE_MOVEMENT} />
+          <HealthGuideSection title="🏥 Preventive Care" items={HEALTH_GUIDE_PREVENTIVE} />
+
+          <div className="bg-primary/5 rounded-xl border border-primary/20 p-4 space-y-2">
+            <p className="text-xs font-bold text-primary">📖 Disclaimer</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              The recommendations above are for informational purposes only and are not a substitute for professional medical advice. Consult your healthcare provider before making significant changes to your diet, exercise, or health routine. Impact values are averages from population studies and may vary significantly between individuals.
+            </p>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

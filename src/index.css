@@ -279,9 +279,13 @@
 }
 
 @media print {
-  body * { visibility: hidden !important; }
-  #life-expectancy-report, #life-expectancy-report * { visibility: visible !important; }
-  #life-expectancy-report { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
+  body > * { display: none !important; }
+  #longevity-blueprint-print { display: block !important; position: static !important; width: 100% !important; margin: 0 !important; padding: 20px !important; font-size: 12px !important; }
+  #longevity-blueprint-print [role="tabpanel"] { display: block !important; visibility: visible !important; opacity: 1 !important; page-break-inside: avoid; }
+  #longevity-blueprint-print .print-page-break { page-break-before: always; }
+  #longevity-blueprint-print button:not(.print-show), #longevity-blueprint-print [role="tablist"] { display: none !important; }
+  #longevity-blueprint-print svg { max-width: 100% !important; }
+  #longevity-blueprint-print * { filter: none !important; }
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   .no-print { display: none !important; }
 }
