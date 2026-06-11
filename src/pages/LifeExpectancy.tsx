@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   ArrowRight, Heart, TrendingUp, Shield, Activity,
-  CalendarIcon, ShieldCheck, AlertTriangle, RefreshCw, Sparkles,
+  CalendarIcon, ShieldCheck, AlertTriangle, RefreshCw, Sparkles, FileText,
 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
@@ -56,7 +56,7 @@ class ReportErrorBoundary extends Component<
   }
 }
 
-type Phase = 'quiz' | 'result' | 'simulator' | 'report';
+type Phase = 'quiz' | 'result' | 'report';
 
 interface CelebrityState {
   current: CelebrityLongevityProfile[];
@@ -72,6 +72,7 @@ const LifeExpectancy = () => {
   const [phase, setPhase] = useState<Phase>('quiz');
   const [longevityResult, setLongevityResult] = useState<LongevityResult | null>(null);
   const [optimizedForecast, setOptimizedForecast] = useState<number | null>(null);
+  const [currentSimForecast, setCurrentSimForecast] = useState<number | null>(null);
 
   const [celebrities, setCelebrities] = useState<CelebrityState>({ current: [], potential: [] });
   const [isLoadingCurrent, setIsLoadingCurrent] = useState(false);
@@ -84,6 +85,7 @@ const LifeExpectancy = () => {
   const resetAll = () => {
     setLongevityResult(null);
     setOptimizedForecast(null);
+    setCurrentSimForecast(null);
     setPhase('quiz');
     setCelebrities({ current: [], potential: [] });
   };
@@ -97,6 +99,7 @@ const LifeExpectancy = () => {
   const handleQuizComplete = (data: { quiz: HealthQuizData; pillar1: Pillar1Data; pillar2: Pillar2Data }) => {
     const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate);
     setLongevityResult(result);
+    setCurrentSimForecast(result.totalForecast);
     setPhase('result');
 
     // Async celebrity fetch for current trajectory
@@ -120,15 +123,8 @@ const LifeExpectancy = () => {
     }, 150);
   };
 
-  const handleGoToSimulator = () => {
-    setPhase('simulator');
-    setTimeout(() => {
-      simulatorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 150);
-  };
-
-  const handleGenerateReport = (simAge: number) => {
-    setOptimizedForecast(simAge);
+  const handleGenerateReport = () => {
+    setOptimizedForecast(currentSimForecast);
     setPhase('report');
     setTimeout(() => {
       reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -235,9 +231,9 @@ const LifeExpectancy = () => {
           </section>
         )}
 
-        {/* ── Phase 2: Result Reveal ── */}
-        {phase === 'result' && longevityResult && (
-          <section className="max-w-4xl mx-auto mb-16" ref={resultRef}>
+        {/* ── Phase 2: Result Reveal + Simulator (auto-shows below) ── */}
+        {(phase === 'result' || phase === 'report') && longevityResult && (
+          <section className="max-w-4xl mx-auto mb-10" ref={resultRef}>
             <div className="text-center space-y-8 animate-fade-in-up">
               <div className="space-y-2">
                 <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">🎯 Your Forecasted Age — Current Lifestyle</p>
@@ -292,26 +288,13 @@ const LifeExpectancy = () => {
                   </p>
                 </CardContent>
               </Card>
-
-              <div className="flex flex-col items-center gap-3 pt-2">
-                <Button
-                  size="lg"
-                  className="gap-2 text-base px-10 py-6 animate-glow"
-                  onClick={handleGoToSimulator}
-                >
-                  Now let's explore what's possible
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-                <p className="text-xs text-muted-foreground">Simulate lifestyle changes · See your full longevity blueprint</p>
-              </div>
             </div>
           </section>
         )}
 
-        {/* ── Phase 3: What-If Simulator ── */}
-        {(phase === 'simulator' || phase === 'report') && longevityResult && (
-          <section className="max-w-6xl mx-auto mb-16" ref={simulatorRef}>
-            {/* Compact result summary bar */}
+        {/* ── Phase 3: What-If Simulator (auto-appears after result) ── */}
+        {(phase === 'result' || phase === 'report') && longevityResult && (
+          <section className="max-w-6xl mx-auto mb-10" ref={simulatorRef}>
             <div className="mb-6 flex items-center gap-4 flex-wrap">
               <div>
                 <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -329,9 +312,48 @@ const LifeExpectancy = () => {
                 result={longevityResult}
                 isPremium={isPremium}
                 onUpgradeClick={() => navigate('/upgrade')}
-                onGenerateReport={handleGenerateReport}
+                onSimChange={setCurrentSimForecast}
               />
             </ReportErrorBoundary>
+
+            {/* Generate Full Longevity Blueprint button — lives here, not inside WhatIfSimulator */}
+            {phase === 'result' && (
+              <div className="mt-8 flex flex-col items-center gap-3">
+                <Card className="w-full max-w-2xl border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5">
+                  <CardContent className="p-5">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <div className="text-center sm:text-left space-y-1">
+                        <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Your Longevity Summary</p>
+                        <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-start">
+                          <div>
+                            <span className="text-xs text-muted-foreground block">Current lifestyle</span>
+                            <strong className="text-2xl font-black text-muted-foreground">{longevityResult.totalForecast} yrs</strong>
+                          </div>
+                          <TrendingUp className="w-5 h-5 text-primary" />
+                          <div>
+                            <span className="text-xs text-primary font-semibold block">With optimized lifestyle</span>
+                            <strong className="text-3xl font-black text-primary">{currentSimForecast ?? longevityResult.totalForecast} yrs</strong>
+                          </div>
+                        </div>
+                        {currentSimForecast !== null && currentSimForecast > longevityResult.totalForecast && (
+                          <p className="text-sm font-medium text-green-600">
+                            ⚡ You could gain <span className="font-black">{Math.round((currentSimForecast - longevityResult.totalForecast) * 10) / 10} years</span> with these changes
+                          </p>
+                        )}
+                      </div>
+                      <Button
+                        size="lg"
+                        className="px-8 py-5 text-base font-bold gap-2 shrink-0 animate-glow"
+                        onClick={handleGenerateReport}
+                      >
+                        <FileText className="w-5 h-5" />
+                        Generate Full Longevity Blueprint ✨
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </section>
         )}
 
@@ -346,7 +368,7 @@ const LifeExpectancy = () => {
                 Complete analysis across all three pillars of longevity
               </p>
             </div>
-            <ReportErrorBoundary onReset={() => setPhase('simulator')}>
+            <ReportErrorBoundary onReset={() => setPhase('result')}>
               <EnhancedLifeExpectancyReport
                 result={longevityResult}
                 userName={longevityResult.quizSnapshot.name}
