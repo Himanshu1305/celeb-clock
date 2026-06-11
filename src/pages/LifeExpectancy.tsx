@@ -102,7 +102,7 @@ const LifeExpectancy = () => {
     setCurrentSimForecast(result.totalForecast);
     setPhase('result');
 
-    // Async celebrity fetch for current trajectory
+    // Async celebrity fetch for current trajectory only
     setIsLoadingCurrent(true);
     const initialCurrent = findInitialMatches(result.totalForecast);
     setCelebrities(prev => ({ ...prev, current: initialCurrent }));
@@ -110,22 +110,24 @@ const LifeExpectancy = () => {
       .then(enhanced => setCelebrities(prev => ({ ...prev, current: enhanced })))
       .finally(() => setIsLoadingCurrent(false));
 
-    // Async celebrity fetch for maximum potential
-    setIsLoadingPotential(true);
-    const initialPotential = findInitialMatches(result.maximumPotential);
-    setCelebrities(prev => ({ ...prev, potential: initialPotential }));
-    enhanceCelebrityMatches(initialPotential, result.maximumPotential)
-      .then(enhanced => setCelebrities(prev => ({ ...prev, potential: enhanced })))
-      .finally(() => setIsLoadingPotential(false));
-
     setTimeout(() => {
       resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 150);
   };
 
   const handleGenerateReport = () => {
-    setOptimizedForecast(currentSimForecast);
+    const simAge = currentSimForecast ?? longevityResult?.totalForecast ?? 0;
+    setOptimizedForecast(simAge);
     setPhase('report');
+
+    // Fetch celebrities based on the actual simulated age
+    setIsLoadingPotential(true);
+    const initialPotential = findInitialMatches(simAge);
+    setCelebrities(prev => ({ ...prev, potential: initialPotential }));
+    enhanceCelebrityMatches(initialPotential, simAge)
+      .then(enhanced => setCelebrities(prev => ({ ...prev, potential: enhanced })))
+      .finally(() => setIsLoadingPotential(false));
+
     setTimeout(() => {
       reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 150);
@@ -376,6 +378,7 @@ const LifeExpectancy = () => {
                 isPremium={isPremium}
                 onUpgradeClick={() => navigate('/upgrade')}
                 optimizedForecast={optimizedForecast ?? undefined}
+                simulatedForecast={optimizedForecast ?? longevityResult.totalForecast}
                 celebrityMatches={celebrities.current}
                 isLoadingCelebrities={isLoadingCurrent}
                 potentialCelebrityMatches={celebrities.potential}

@@ -17,6 +17,7 @@ interface Props {
   isPremium: boolean;
   onUpgradeClick?: () => void;
   optimizedForecast?: number;
+  simulatedForecast?: number;
   celebrityMatches: CelebrityLongevityProfile[];
   isLoadingCelebrities: boolean;
   potentialCelebrityMatches?: CelebrityLongevityProfile[];
@@ -30,17 +31,38 @@ const BlurredNumber = ({ value, isPremium, suffix = '' }: { value: number | stri
 );
 
 const VITALITY_COLORS: Record<string, string> = {
-  Exceptional: 'bg-emerald-100 text-emerald-800 border-emerald-300',
-  Strong:      'bg-green-100 text-green-800 border-green-300',
-  Average:     'bg-yellow-100 text-yellow-800 border-yellow-300',
+  Exceptional:     'bg-emerald-100 text-emerald-800 border-emerald-300',
+  Strong:          'bg-green-100 text-green-800 border-green-300',
+  Average:         'bg-yellow-100 text-yellow-800 border-yellow-300',
   'Below Average': 'bg-orange-100 text-orange-800 border-orange-300',
 };
 
 function ageColor(age: number): string {
-  if (age > 80) return 'bg-emerald-100 border-emerald-300 text-emerald-800';
+  if (age > 80)  return 'bg-emerald-100 border-emerald-300 text-emerald-800';
   if (age >= 70) return 'bg-yellow-100 border-yellow-300 text-yellow-800';
   if (age >= 60) return 'bg-orange-100 border-orange-300 text-orange-800';
   return 'bg-red-100 border-red-300 text-red-800';
+}
+
+const CATEGORY_EMOJI: Record<string, string> = {
+  actor: '🎭', musician: '🎵', athlete: '⚽', scientist: '🔬',
+  business: '💼', politician: '🏛️', director: '🎬',
+};
+function getCategoryEmoji(category: string): string {
+  return CATEGORY_EMOJI[category?.toLowerCase()] ?? '⭐';
+}
+
+function categoryGradient(category: string): string {
+  const map: Record<string, string> = {
+    actor:     'from-purple-300 to-pink-400',
+    musician:  'from-blue-300 to-cyan-400',
+    athlete:   'from-green-300 to-emerald-400',
+    scientist: 'from-teal-300 to-blue-400',
+    business:  'from-amber-300 to-orange-400',
+    politician:'from-red-300 to-rose-400',
+    director:  'from-violet-300 to-purple-400',
+  };
+  return map[category?.toLowerCase()] ?? 'from-primary/30 to-accent/30';
 }
 
 function CelebRow({
@@ -58,22 +80,23 @@ function CelebRow({
       {celebs.map((celeb) => {
         const initials = celeb.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
         const hasImg = !imgErrors.has(celeb.name) && !!celebImages[celeb.name];
+        const grad = categoryGradient(celeb.category);
         return (
           <Card key={celeb.name} className="overflow-hidden border-muted">
-            {/* Photo — fixed 180px container */}
-            <div className="overflow-hidden bg-muted" style={{ height: 180 }}>
+            {/* Photo — fixed 200px, face area framing */}
+            <div className="overflow-hidden bg-muted" style={{ height: 200 }}>
               {hasImg ? (
                 <img
                   src={celebImages[celeb.name]!}
                   alt={celeb.name}
-                  width="100%"
-                  height={180}
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: 'center 20%' }}
                   onError={() => setImgErrors(prev => new Set([...prev, celeb.name]))}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">
-                  <span className="text-4xl font-black text-primary/60">{initials}</span>
+                <div className={`w-full h-full flex flex-col items-center justify-center bg-gradient-to-br ${grad} gap-2`}>
+                  <span className="font-black text-white" style={{ fontSize: 40, lineHeight: 1 }}>{initials}</span>
+                  <span className="text-xs text-white/80 font-semibold">{getCategoryEmoji(celeb.category)}</span>
                 </div>
               )}
             </div>
@@ -85,8 +108,8 @@ function CelebRow({
                 </div>
                 <div className="text-right shrink-0">
                   <div className="text-xs font-black text-primary">{blurNum(celeb.longevityAge, ' yrs')}</div>
-                  <Badge className={`text-[9px] px-1 py-0 ${celeb.isLiving ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700'}`}>
-                    {celeb.isLiving ? 'Living' : 'Legacy'}
+                  <Badge className="text-[9px] px-1 py-0 mt-0.5 bg-muted text-muted-foreground">
+                    {getCategoryEmoji(celeb.category)} {celeb.category || 'Celebrity'}
                   </Badge>
                 </div>
               </div>
@@ -115,15 +138,138 @@ const PremiumBlur = ({ children, tab }: { children: React.ReactNode; tab: string
   </div>
 );
 
+// ── Life Milestones ─────────────────────────────────────────────────────────
+function LifeMilestones({
+  currentForecast,
+  simulatedForecast,
+  currentAge,
+}: {
+  currentForecast: number;
+  simulatedForecast: number;
+  currentAge: number;
+}) {
+  const currentYear = new Date().getFullYear();
+  const currentForecastYear    = currentYear + Math.floor(currentForecast   - currentAge);
+  const optimizedForecastYear  = currentYear + Math.floor(simulatedForecast - currentAge);
+
+  type M = { year: number; event: string; emoji: string; category: string };
+
+  const milestones: M[] = [
+    // Sports
+    { year: 2026, event: "FIFA World Cup 2026 (USA / Canada / Mexico)", emoji: "⚽", category: "Sports" },
+    { year: 2027, event: "Cricket World Cup 2027", emoji: "🏏", category: "Sports" },
+    { year: 2028, event: "Los Angeles Olympics 2028", emoji: "🏅", category: "Sports" },
+    { year: 2030, event: "FIFA World Cup 2030 (Centenary Edition)", emoji: "⚽", category: "Sports" },
+    { year: 2032, event: "Brisbane Olympics 2032", emoji: "🏅", category: "Sports" },
+    { year: 2034, event: "FIFA World Cup 2034", emoji: "⚽", category: "Sports" },
+    { year: 2036, event: "Olympics 2036", emoji: "🏅", category: "Sports" },
+    // Technology
+    { year: 2028, event: "Quantum computing reaches commercial viability (IBM / Google projections)", emoji: "💻", category: "Technology" },
+    { year: 2030, event: "First commercial lunar landing — NASA Artemis program", emoji: "🌙", category: "Technology" },
+    { year: 2035, event: "AI systems projected to match human-level reasoning across most domains", emoji: "🤖", category: "Technology" },
+    { year: 2040, event: "Mars human mission — NASA / SpaceX target", emoji: "🚀", category: "Technology" },
+    // Health
+    { year: 2030, event: "WHO Global Health targets — universal health coverage milestone", emoji: "🏥", category: "Health" },
+    { year: 2032, event: "Alzheimer's cure or major treatment breakthrough projected", emoji: "🧠", category: "Health" },
+    { year: 2040, event: "Cancer mortality projected to halve from 2020 levels (WHO)", emoji: "🎗️", category: "Health" },
+    { year: 2045, event: "Longevity treatments potentially extending healthy life by 20+ years", emoji: "💊", category: "Health" },
+    // Cultural
+    { year: 2026, event: "USA 250th Anniversary — Semiquincentennial celebrations", emoji: "🇺🇸", category: "Cultural" },
+    { year: 2027, event: "India 80th Independence Day", emoji: "🇮🇳", category: "Cultural" },
+    { year: 2030, event: "United Nations Sustainable Development Goals deadline", emoji: "🌍", category: "Cultural" },
+    { year: 2047, event: "India's 100th Independence Day — Centenary", emoji: "🇮🇳", category: "Cultural" },
+    { year: 2076, event: "USA 300th Anniversary", emoji: "🇺🇸", category: "Cultural" },
+    // Personal
+    { year: currentYear + 5, event: "5-year health check — celebrate your progress", emoji: "✅", category: "Personal" },
+    ...(currentAge >= 35 && currentAge <= 45 ? [{ year: currentYear + 15, event: "Watch your children graduate university", emoji: "🎓", category: "Personal" }] : []),
+    ...(currentAge >= 35 && currentAge <= 50 ? [{ year: currentYear + 20, event: "Become a grandparent", emoji: "👶", category: "Personal" }] : []),
+    ...(currentAge >= 40 && currentAge <= 55 ? [{ year: currentYear + 10, event: "Celebrate a major career milestone", emoji: "🏆", category: "Personal" }] : []),
+  ];
+
+  const sorted = [...milestones].sort((a, b) => a.year - b.year);
+
+  const status = (year: number): 'green' | 'blue' | 'grey' => {
+    if (year <= currentForecastYear)   return 'green';
+    if (year <= optimizedForecastYear) return 'blue';
+    return 'grey';
+  };
+
+  const gainYears = Math.round((simulatedForecast - currentForecast) * 10) / 10;
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <h4 className="text-sm font-bold text-foreground">🗓️ Milestones You're on Track to Witness</h4>
+        <p className="text-xs text-muted-foreground mt-0.5">
+          Based on your current trajectory ({currentForecast} yrs) vs your optimized potential ({simulatedForecast} yrs)
+        </p>
+      </div>
+
+      {/* Legend */}
+      <div className="flex items-center gap-4 flex-wrap text-[10px] text-muted-foreground">
+        <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500 inline-block" /> Will witness</span>
+        <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-blue-500 inline-block" /> Possible with optimization</span>
+        <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-muted-foreground/30 inline-block" /> Beyond projections</span>
+      </div>
+
+      {/* Timeline */}
+      <div className="space-y-1.5 max-h-[480px] overflow-y-auto pr-1">
+        {sorted.map((m, i) => {
+          const s = status(m.year);
+          return (
+            <div
+              key={i}
+              className={`flex items-start gap-3 p-2.5 rounded-lg border text-xs transition-colors ${
+                s === 'green' ? 'bg-green-50/60 border-green-200 dark:bg-green-950/20 dark:border-green-900' :
+                s === 'blue'  ? 'bg-blue-50/60 border-blue-200 dark:bg-blue-950/20 dark:border-blue-900' :
+                'bg-muted/20 border-muted/60 opacity-55'
+              }`}
+            >
+              <span className={`font-black tabular-nums shrink-0 w-10 text-right leading-tight mt-0.5 ${
+                s === 'green' ? 'text-green-700' : s === 'blue' ? 'text-blue-700' : 'text-muted-foreground'
+              }`}>{m.year}</span>
+              <span className={`w-2 h-2 rounded-full mt-1 shrink-0 ${
+                s === 'green' ? 'bg-green-500' : s === 'blue' ? 'bg-blue-500' : 'bg-muted-foreground/30'
+              }`} />
+              <div className="flex-1 min-w-0">
+                <span className={`font-medium ${s === 'grey' ? 'text-muted-foreground' : 'text-foreground'}`}>
+                  {m.emoji} {m.event}
+                </span>
+                <Badge
+                  variant="outline"
+                  className={`ml-1.5 text-[9px] px-1 py-0 ${
+                    s === 'green' ? 'text-green-600 border-green-400' :
+                    s === 'blue'  ? 'text-blue-600 border-blue-400' :
+                    'text-muted-foreground border-muted'
+                  }`}
+                >{m.category}</Badge>
+                {s === 'blue' && gainYears > 0 && (
+                  <p className="text-[10px] text-blue-600 mt-0.5">
+                    Unlock {gainYears} more {gainYears === 1 ? 'year' : 'years'} to witness this →
+                  </p>
+                )}
+                {s === 'grey' && (
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Beyond current projections</p>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Main Report ──────────────────────────────────────────────────────────────
 export const EnhancedLifeExpectancyReport = ({
   result, userName, birthDate, isPremium, onUpgradeClick,
-  optimizedForecast,
+  optimizedForecast, simulatedForecast,
   celebrityMatches, isLoadingCelebrities,
   potentialCelebrityMatches = [], isLoadingPotentialCelebrities = false,
 }: Props) => {
   const [celebImages, setCelebImages] = useState<Record<string, string | null>>({});
-  const [imgErrors, setImgErrors] = useState<Set<string>>(new Set());
-  const [copied, setCopied] = useState(false);
+  const [imgErrors,   setImgErrors]   = useState<Set<string>>(new Set());
+  const [copied,      setCopied]      = useState(false);
 
   useEffect(() => {
     const allCelebs = [...celebrityMatches, ...potentialCelebrityMatches];
@@ -143,31 +289,31 @@ export const EnhancedLifeExpectancyReport = ({
   const p1 = result.pillar1Snapshot;
   const p2 = result.pillar2Snapshot;
 
-  // Build family tree display data
   const FAMILY_MEMBERS = [
     { key: 'paternalGrandfather' as const, label: 'Paternal Grandfather', side: 'paternal' },
     { key: 'paternalGrandmother' as const, label: 'Paternal Grandmother', side: 'paternal' },
-    { key: 'father' as const, label: 'Father', side: 'paternal' },
-    { key: 'paternalUncles' as const, label: 'Paternal Uncles (avg)', side: 'paternal' },
-    { key: 'paternalAunts' as const, label: 'Paternal Aunts (avg)', side: 'paternal' },
+    { key: 'father'              as const, label: 'Father',               side: 'paternal' },
+    { key: 'paternalUncles'      as const, label: 'Paternal Uncles (avg)',side: 'paternal' },
+    { key: 'paternalAunts'       as const, label: 'Paternal Aunts (avg)', side: 'paternal' },
     { key: 'maternalGrandfather' as const, label: 'Maternal Grandfather', side: 'maternal' },
     { key: 'maternalGrandmother' as const, label: 'Maternal Grandmother', side: 'maternal' },
-    { key: 'mother' as const, label: 'Mother', side: 'maternal' },
-    { key: 'maternalUncles' as const, label: 'Maternal Uncles (avg)', side: 'maternal' },
-    { key: 'maternalAunts' as const, label: 'Maternal Aunts (avg)', side: 'maternal' },
+    { key: 'mother'              as const, label: 'Mother',               side: 'maternal' },
+    { key: 'maternalUncles'      as const, label: 'Maternal Uncles (avg)',side: 'maternal' },
+    { key: 'maternalAunts'       as const, label: 'Maternal Aunts (avg)', side: 'maternal' },
   ];
 
-  const knownMembers = FAMILY_MEMBERS.filter(fm => !p1[fm.key].unknown && p1[fm.key].age > 0);
+  const knownMembers = FAMILY_MEMBERS.filter(fm => !p1[fm.key].dontKnow && p1[fm.key].age > 0);
 
-  // Epigenetic habits analysis
-  const selectedHabitData = EPIGENETIC_HABITS.filter(h => p2.selectedHabits.includes(h.id));
-  const unselectedHabitData = EPIGENETIC_HABITS.filter(h => !p2.selectedHabits.includes(h.id));
+  // Community anchor habits (mentor's attributed habits from Step 8 Section B)
+  const mentorHabitData   = EPIGENETIC_HABITS.filter(h => p2.mentorHabits.includes(h.id));
+  const unmentorHabitData = EPIGENETIC_HABITS.filter(h => !p2.mentorHabits.includes(h.id));
 
-  // Blue Zones principles alignment (simplified mapping)
   const BLUE_ZONE_HABITS = new Set(['walking', 'community', 'wholefood', 'purpose', 'spiritual', 'gardening', 'fasting', 'laughter', 'meditation']);
-  const blueZoneCount = p2.selectedHabits.filter(id => BLUE_ZONE_HABITS.has(id)).length;
+  const blueZoneCount = p2.mentorHabits.filter(id => BLUE_ZONE_HABITS.has(id)).length;
 
-  const currentAge = birthDate instanceof Date ? new Date().getFullYear() - birthDate.getFullYear() : null;
+  const currentAge = birthDate instanceof Date
+    ? new Date().getFullYear() - birthDate.getFullYear()
+    : result.currentAge;
 
   const shareText = celebrityMatches[0]
     ? `I just discovered my longevity trajectory matches ${celebrityMatches[0].name}! Calculate yours at ${window.location.origin}/life-expectancy #LongevityBlueprint`
@@ -181,9 +327,12 @@ export const EnhancedLifeExpectancyReport = ({
     <BlurredNumber value={n} isPremium={isPremium} suffix={suffix} />
   );
 
+  // For milestones: use optimizedForecast (sim value at report generation) if available
+  const displayedOptimized = optimizedForecast ?? simulatedForecast ?? result.totalForecast;
+
   return (
     <div className="space-y-6">
-      {/* Report Header */}
+      {/* ── Report Header ── */}
       <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl border border-primary/20 p-6 text-center space-y-2">
         <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Full Longevity Blueprint</p>
         {userName && <p className="text-lg font-semibold text-foreground">Prepared for {userName}</p>}
@@ -192,15 +341,15 @@ export const EnhancedLifeExpectancyReport = ({
             <span className="text-[10px] uppercase font-bold text-muted-foreground block">Current Lifestyle</span>
             <strong className="text-4xl font-black text-muted-foreground">{result.totalForecast} yrs</strong>
           </div>
-          {optimizedForecast != null && (
+          {displayedOptimized !== result.totalForecast && (
             <>
               <div className="text-2xl font-black text-primary">→</div>
               <div className="text-center">
                 <span className="text-[10px] uppercase font-bold text-primary block">With Optimized Lifestyle</span>
-                <strong className="text-4xl font-black text-primary">{optimizedForecast} yrs</strong>
-                {optimizedForecast > result.totalForecast && (
+                <strong className="text-4xl font-black text-primary">{displayedOptimized} yrs</strong>
+                {displayedOptimized > result.totalForecast && (
                   <span className="text-xs font-bold text-green-600 block mt-0.5">
-                    +{Math.round((optimizedForecast - result.totalForecast) * 10) / 10} years gained
+                    +{Math.round((displayedOptimized - result.totalForecast) * 10) / 10} years gained
                   </span>
                 )}
               </div>
@@ -210,12 +359,10 @@ export const EnhancedLifeExpectancyReport = ({
             <span className="text-[10px] uppercase font-bold text-muted-foreground block">Maximum Potential</span>
             <strong className="text-2xl font-bold text-accent">{result.maximumPotential} yrs</strong>
           </div>
-          {currentAge && (
-            <div className="text-center">
-              <span className="text-[10px] uppercase font-bold text-muted-foreground block">Current Age</span>
-              <strong className="text-2xl font-bold text-foreground">{currentAge} yrs</strong>
-            </div>
-          )}
+          <div className="text-center">
+            <span className="text-[10px] uppercase font-bold text-muted-foreground block">Current Age</span>
+            <strong className="text-2xl font-bold text-foreground">{currentAge} yrs</strong>
+          </div>
         </div>
         <div className="flex items-center justify-center gap-3 pt-2 flex-wrap">
           <Badge className={`border ${VITALITY_COLORS[result.geneticVitalityScore]}`}>
@@ -242,17 +389,16 @@ export const EnhancedLifeExpectancyReport = ({
         )}
       </div>
 
-      {/* Three Tabs */}
+      {/* ── Tabs ── */}
       <Tabs defaultValue="genetics" className="w-full">
         <TabsList className="grid grid-cols-3 w-full border-b rounded-none bg-transparent h-auto p-0">
-          <TabsTrigger value="genetics" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">🧬 Biological Blueprint</TabsTrigger>
+          <TabsTrigger value="genetics"  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">🧬 Biological Blueprint</TabsTrigger>
           <TabsTrigger value="community" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">🏘️ Community Anchor</TabsTrigger>
-          <TabsTrigger value="cultural" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">🌟 Cultural Horizon</TabsTrigger>
+          <TabsTrigger value="cultural"  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">🌟 Cultural Horizon</TabsTrigger>
         </TabsList>
 
         {/* ── TAB 1: Biological Blueprint ── */}
         <TabsContent value="genetics" className="pt-5 space-y-5">
-          {/* Score badge always visible */}
           <div className="flex items-center gap-3 flex-wrap">
             <TooltipProvider>
               <Tooltip>
@@ -262,18 +408,19 @@ export const EnhancedLifeExpectancyReport = ({
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs text-xs p-3">
-                  Research shows genetics account for 25-30% of longevity. Your family average of ~{result.familyBaselineAge} years
-                  {result.geneticVitalityScore === 'Exceptional' ? ' shows exceptional hereditary longevity.' :
-                   result.geneticVitalityScore === 'Strong' ? ' indicates solid genetic inheritance.' :
-                   result.geneticVitalityScore === 'Average' ? ' is close to global population norms.' :
-                   ' suggests focusing on lifestyle habits is especially important.'}
+                  Research shows genetics account for 25–30% of longevity. Your family average of ~{result.familyBaselineAge} years{' '}
+                  {result.geneticVitalityScore === 'Exceptional' ? 'shows exceptional hereditary longevity.' :
+                   result.geneticVitalityScore === 'Strong'      ? 'indicates solid genetic inheritance.' :
+                   result.geneticVitalityScore === 'Average'     ? 'is close to global population norms.' :
+                   'suggests focusing on lifestyle habits is especially important.'}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <span className="text-sm text-muted-foreground">Family weighted average: ~{result.familyBaselineAge} yrs → Genetic adjustment: {result.geneticAdjustment >= 0 ? '+' : ''}{result.geneticAdjustment} yrs</span>
+            <span className="text-sm text-muted-foreground">
+              Family weighted average: ~{result.familyBaselineAge} yrs → Genetic adjustment: {result.geneticAdjustment >= 0 ? '+' : ''}{result.geneticAdjustment} yrs
+            </span>
           </div>
 
-          {/* Family tree — blurred for free users */}
           {knownMembers.length === 0 ? (
             <div className="bg-muted/30 rounded-xl border p-6 text-center text-muted-foreground text-sm">
               No family data entered. Complete Step 7 in the calculator to see your genetic family tree.
@@ -315,7 +462,6 @@ export const EnhancedLifeExpectancyReport = ({
             </PremiumBlur>
           )}
 
-          {/* Genetic ceiling */}
           <div className="bg-muted/30 rounded-xl border p-4 space-y-2">
             <div className="flex items-center justify-between">
               <h4 className="text-sm font-bold text-foreground">Your Genetic Ceiling</h4>
@@ -324,7 +470,6 @@ export const EnhancedLifeExpectancyReport = ({
             <p className="text-xs text-muted-foreground">Estimated from your family average with a +5yr optimistic modifier based on modern medicine and lifestyle potential.</p>
           </div>
 
-          {/* Scientific context */}
           <div className="bg-primary/5 rounded-xl border border-primary/20 p-4 space-y-2">
             <p className="text-xs font-bold text-primary">📖 Scientific Context</p>
             <p className="text-xs text-muted-foreground leading-relaxed">
@@ -335,15 +480,21 @@ export const EnhancedLifeExpectancyReport = ({
 
         {/* ── TAB 2: Community Anchor ── */}
         <TabsContent value="community" className="pt-5 space-y-5">
-          {/* Habit badges */}
-          {selectedHabitData.length > 0 ? (
+          {mentorHabitData.length > 0 ? (
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-bold text-foreground">Your Active Epigenetic Habits</h4>
-                <Badge className="bg-primary text-primary-foreground">+{Math.min(6, selectedHabitData.reduce((s, h) => s + h.gain, 0)).toFixed(1)} total years</Badge>
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div>
+                  <h4 className="text-sm font-bold text-foreground">Your Community Anchor's Longevity Habits</h4>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Habits attributed to {p2.mentorName ? `"${p2.mentorName}"` : 'your mentor'} — your environmental blueprint
+                  </p>
+                </div>
+                <Badge className="bg-primary text-primary-foreground">
+                  +{Math.min(6, mentorHabitData.reduce((s, h) => s + h.gain, 0)).toFixed(1)} community years
+                </Badge>
               </div>
               <div className="grid sm:grid-cols-2 gap-2">
-                {selectedHabitData.map(h => (
+                {mentorHabitData.map(h => (
                   <div key={h.id} className="flex items-center gap-2 bg-green-50/50 border border-green-200 dark:bg-green-950/20 dark:border-green-900 rounded-lg px-3 py-2">
                     <span className="text-base">{h.emoji}</span>
                     <div className="flex-1 min-w-0">
@@ -360,10 +511,11 @@ export const EnhancedLifeExpectancyReport = ({
               </div>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground text-center py-4">No epigenetic habits selected in Step 8. You can still gain up to +6 years by adding habits.</p>
+            <p className="text-sm text-muted-foreground text-center py-4">
+              No community anchor habits recorded in Step 8. Add a mentor's habits to see their influence on your blueprint.
+            </p>
           )}
 
-          {/* Community mentor */}
           {p2.hasMentor && p2.mentorAge > 0 && (
             <div className="bg-blue-50/50 dark:bg-blue-950/20 rounded-xl border border-blue-200 dark:border-blue-900 p-4 space-y-2">
               <h4 className="text-sm font-bold text-blue-800 dark:text-blue-300">🏘️ Your Community Longevity Anchor</h4>
@@ -374,25 +526,25 @@ export const EnhancedLifeExpectancyReport = ({
             </div>
           )}
 
-          {/* Blue Zones alignment */}
           <div className="bg-muted/30 rounded-xl border p-4 space-y-2">
             <div className="flex items-center justify-between">
               <h4 className="text-sm font-bold text-foreground">Blue Zones Alignment</h4>
               <Badge variant="outline">{blueZoneCount}/9 principles</Badge>
             </div>
-            <p className="text-xs text-muted-foreground">Your habit profile aligns with <strong className="text-foreground">{blueZoneCount}</strong> of the 9 Blue Zone longevity principles identified by researcher Dan Buettner across the world's longest-lived communities.</p>
+            <p className="text-xs text-muted-foreground">
+              Your mentor's habit profile aligns with <strong className="text-foreground">{blueZoneCount}</strong> of the 9 Blue Zone longevity principles identified by researcher Dan Buettner across the world's longest-lived communities.
+            </p>
             <div className="w-full bg-muted rounded-full h-2">
               <div className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all" style={{ width: `${Math.round((blueZoneCount / 9) * 100)}%` }} />
             </div>
           </div>
 
-          {/* Habits not yet adopted (opportunities) */}
-          {unselectedHabitData.length > 0 && (
+          {unmentorHabitData.length > 0 && (
             <div className="space-y-3">
               <h4 className="text-sm font-bold text-foreground">Untapped Longevity Opportunities</h4>
-              <p className="text-xs text-muted-foreground">These habits haven't been adopted yet — each represents real years available to you:</p>
+              <p className="text-xs text-muted-foreground">Habits not yet attributed to your mentor — or consider adopting them yourself via the simulator:</p>
               <div className="grid sm:grid-cols-2 gap-2">
-                {unselectedHabitData.map(h => (
+                {unmentorHabitData.map(h => (
                   <div key={h.id} className="flex items-center gap-2 bg-muted/40 border border-muted rounded-lg px-3 py-2">
                     <span>{h.emoji}</span>
                     <div className="flex-1 min-w-0">
@@ -413,7 +565,7 @@ export const EnhancedLifeExpectancyReport = ({
         {/* ── TAB 3: Cultural Horizon ── */}
         <TabsContent value="cultural" className="pt-5 space-y-6">
 
-          {/* Row 1: Current trajectory matches */}
+          {/* Row 1: Current trajectory */}
           <div className="space-y-3">
             <div>
               <h4 className="text-sm font-bold text-foreground">🌟 Your Current Trajectory — {result.totalForecast} Years</h4>
@@ -431,10 +583,10 @@ export const EnhancedLifeExpectancyReport = ({
             )}
           </div>
 
-          {/* Row 2: Maximum potential matches */}
+          {/* Row 2: Optimized potential */}
           <div className="space-y-3">
             <div>
-              <h4 className="text-sm font-bold text-foreground">✨ Your Maximum Potential — {result.maximumPotential} Years</h4>
+              <h4 className="text-sm font-bold text-foreground">✨ Your Optimized Potential — {displayedOptimized} Years</h4>
               <p className="text-xs text-muted-foreground mt-0.5">These icons show what becomes possible when you optimise every pillar.</p>
             </div>
             {isLoadingPotentialCelebrities ? (
@@ -443,11 +595,18 @@ export const EnhancedLifeExpectancyReport = ({
                 <span className="text-sm">Finding potential matches...</span>
               </div>
             ) : potentialCelebrityMatches.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-4">No close matches found for your maximum potential.</p>
+              <p className="text-sm text-muted-foreground text-center py-4">No close matches found for your optimized potential.</p>
             ) : (
               <CelebRow celebs={potentialCelebrityMatches} celebImages={celebImages} imgErrors={imgErrors} setImgErrors={setImgErrors} isPremium={isPremium} blurNum={blurNum} />
             )}
           </div>
+
+          {/* Life Milestones */}
+          <LifeMilestones
+            currentForecast={result.totalForecast}
+            simulatedForecast={displayedOptimized}
+            currentAge={currentAge}
+          />
 
           {/* Social share */}
           {isPremium && (
