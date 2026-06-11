@@ -853,6 +853,36 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                     This reflects your current trajectory — accounting for your health, the genetic heritage you've inherited, and your environmental context.
                   </p>
 
+                  {/* Science stat cards */}
+                  <div className="space-y-2">
+                    <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
+                      🔬 Science has given you a starting point. But here's what the research also shows:
+                    </p>
+                    <div className="grid grid-cols-3 gap-2">
+                      <div className="text-center bg-green-50 border border-green-200 rounded-lg p-2 space-y-0.5">
+                        <div className="text-base font-black text-green-700">70–75%</div>
+                        <div className="text-[9px] text-green-800 font-semibold leading-tight">of longevity is controlled by lifestyle</div>
+                        <div className="text-[9px] text-muted-foreground">(WHO, 2023)</div>
+                      </div>
+                      <div className="text-center bg-blue-50 border border-blue-200 rounded-lg p-2 space-y-0.5">
+                        <div className="text-base font-black text-blue-700">10–20 yrs</div>
+                        <div className="text-[9px] text-blue-800 font-semibold leading-tight">can be added through evidence-based changes</div>
+                        <div className="text-[9px] text-muted-foreground">(Blue Zones Research)</div>
+                      </div>
+                      <div className="text-center bg-purple-50 border border-purple-200 rounded-lg p-2 space-y-0.5">
+                        <div className="text-base font-black text-purple-700">25+</div>
+                        <div className="text-[9px] text-purple-800 font-semibold leading-tight">factors influence your lifespan — most within your control</div>
+                        <div className="text-[9px] text-muted-foreground">(Harvard Health)</div>
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-center font-semibold text-foreground">
+                      The question is: how much of those extra years do you want to unlock?
+                    </p>
+                    <p className="text-[10px] text-muted-foreground text-center leading-relaxed">
+                      The Longevity Simulator lets you explore what's possible — adjust each factor to see your optimized potential in real time.
+                    </p>
+                  </div>
+
                   {/* Breakdown table */}
                   <div className="bg-background/80 rounded-lg border p-3 space-y-1.5 text-xs">
                     <div className="flex justify-between">

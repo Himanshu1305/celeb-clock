@@ -100,6 +100,7 @@ export interface LongevityResult {
   communityBonus: number;
   totalForecast: number;
   maximumPotential: number;
+  controllablePotential: number;
   yearsGapToClose: number;
   currentAge: number;
   yearsRemaining: number;
@@ -352,9 +353,10 @@ export function calculateLongevity(
 
   const totalForecast = Math.round((base + health + genetic + epigenetic + communityBonus) * 10) / 10;
 
-  // Maximum potential: best health + max genetic + max epigenetic + community bonus
+  // controllablePotential = best health + actual genetics + max epigenetic + community bonus
   const maxHealth = 4 + 5 + 1.5 + 1.5 + 0 + 2;
-  const maximumPotential = Math.round((base + maxHealth + 8 + 6 + 0.5) * 10) / 10;
+  const controllablePotential = Math.round((base + maxHealth + genetic + 6 + 0.5) * 10) / 10;
+  const maximumPotential = controllablePotential; // backward compat alias
 
   const now = new Date();
   const currentAge = birthDate instanceof Date
@@ -433,7 +435,8 @@ export function calculateLongevity(
     communityBonus:         Math.round(communityBonus * 10) / 10,
     totalForecast,
     maximumPotential,
-    yearsGapToClose:        Math.round((maximumPotential - totalForecast) * 10) / 10,
+    controllablePotential,
+    yearsGapToClose:        Math.round((controllablePotential - totalForecast) * 10) / 10,
     currentAge,
     yearsRemaining,
     factorBreakdown:        factors,

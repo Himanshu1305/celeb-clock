@@ -26,6 +26,8 @@ interface Props {
   isLoadingCelebrities: boolean;
   potentialCelebrityMatches?: CelebrityLongevityProfile[];
   isLoadingPotentialCelebrities?: boolean;
+  userSelectedHabits?: string[];
+  simulatorHabitFrequencies?: Record<string, string>;
 }
 
 interface HealthGuideItem {
@@ -355,6 +357,7 @@ export const EnhancedLifeExpectancyReport = ({
   optimizedForecast, simulatedForecast,
   celebrityMatches, isLoadingCelebrities,
   potentialCelebrityMatches = [], isLoadingPotentialCelebrities = false,
+  userSelectedHabits, simulatorHabitFrequencies,
 }: Props) => {
   const [celebImages, setCelebImages] = useState<Record<string, string | null>>({});
   const [imgErrors,   setImgErrors]   = useState<Set<string>>(new Set());
@@ -397,7 +400,18 @@ export const EnhancedLifeExpectancyReport = ({
   const unmentorHabitData = EPIGENETIC_HABITS.filter(h => !p2.mentorHabits.includes(h.id));
 
   const BLUE_ZONE_HABITS = new Set(['walking', 'community', 'wholefood', 'purpose', 'spiritual', 'gardening', 'fasting', 'laughter', 'meditation']);
-  const blueZoneCount = p2.mentorHabits.filter(id => BLUE_ZONE_HABITS.has(id)).length;
+
+  const epigeneticBonus = userSelectedHabits && userSelectedHabits.length > 0
+    ? Math.round(Math.min(6, userSelectedHabits.reduce((sum, id) => {
+        const habit = EPIGENETIC_HABITS.find(h => h.id === id);
+        const freq = simulatorHabitFrequencies?.[id] ?? 'daily';
+        const mult: Record<string, number> = { never: 0, occasionally: 0.3, regularly: 0.65, daily: 1.0 };
+        return sum + (habit?.gain ?? 0) * (mult[freq] ?? 1.0);
+      }, 0)) * 10) / 10
+    : result.epigeneticAdjustment;
+
+  const habitsForBlueZone = userSelectedHabits?.length ? userSelectedHabits : p2.mentorHabits;
+  const blueZoneCount = habitsForBlueZone.filter(id => BLUE_ZONE_HABITS.has(id)).length;
 
   const currentAge = birthDate instanceof Date
     ? new Date().getFullYear() - birthDate.getFullYear()
@@ -417,12 +431,15 @@ export const EnhancedLifeExpectancyReport = ({
 
   const displayedOptimized = optimizedForecast ?? simulatedForecast ?? result.totalForecast;
 
-  // Chart 1: comparison bar data
-  const comparisonData = [
-    { name: 'WHO Baseline',      value: result.baselineLifeExpectancy, fill: '#94a3b8' },
-    { name: 'Current Lifestyle', value: result.totalForecast,          fill: '#f97316' },
-    { name: 'Optimized',         value: displayedOptimized,            fill: '#22c55e' },
-    { name: 'Max Potential',     value: result.maximumPotential,       fill: '#3b82f6' },
+  // Chart 1: waterfall data showing how the longevity score is built
+  const waterfallData = [
+    { name: 'WHO Baseline',     value: result.baselineLifeExpectancy,                                    fill: '#94a3b8' },
+    { name: 'Health & Lifestyle', value: result.healthAdjustment,                                        fill: result.healthAdjustment >= 0 ? '#22c55e' : '#ef4444' },
+    { name: 'Family Genetics',  value: result.geneticAdjustment,                                         fill: result.geneticAdjustment >= 0 ? '#22c55e' : '#ef4444' },
+    { name: 'Epigenetic Habits', value: epigeneticBonus,                                                 fill: epigeneticBonus > 0 ? '#22c55e' : '#94a3b8' },
+    { name: 'Community Bonus',  value: result.communityBonus,                                            fill: '#22c55e' },
+    { name: 'Your Forecast',    value: result.totalForecast,                                             fill: '#f97316' },
+    { name: 'Best Achievable',  value: result.controllablePotential,                                     fill: '#3b82f6' },
   ];
 
   // Chart 2: factor impact data (top 10 by absolute impact)
@@ -482,8 +499,8 @@ export const EnhancedLifeExpectancyReport = ({
           </div>
           <div className="w-px h-8 bg-border hidden sm:block" />
           <div className="text-center">
-            <span className="text-[10px] uppercase font-bold text-muted-foreground block">Maximum Potential</span>
-            <strong className="text-2xl font-bold text-accent">{result.maximumPotential} yrs</strong>
+            <span className="text-[10px] uppercase font-bold text-muted-foreground block">Best Achievable</span>
+            <strong className="text-2xl font-bold text-accent">{result.controllablePotential} yrs</strong>
           </div>
           <div className="w-px h-8 bg-border hidden sm:block" />
           <div className="text-center">
@@ -498,7 +515,7 @@ export const EnhancedLifeExpectancyReport = ({
             🧬 Genetic Score: {result.geneticVitalityScore}
           </Badge>
           <Badge variant="outline" className="text-green-600 border-green-400">
-            🌱 +{result.epigeneticAdjustment}yr epigenetic bonus
+            🌱 +{epigeneticBonus}yr epigenetic bonus
           </Badge>
           {result.communityBonus > 0 && (
             <Badge variant="outline" className="text-blue-600 border-blue-400">
@@ -507,24 +524,29 @@ export const EnhancedLifeExpectancyReport = ({
           )}
         </div>
 
-        {/* Chart 1: Longevity Comparison BarChart */}
-        <div className="w-full" style={{ height: 220 }}>
+        {/* Chart 1: Waterfall — How Your Longevity Score Is Built */}
+        <div className="space-y-1">
+          <p className="text-xs font-bold text-foreground text-center">📊 How Your Longevity Score Is Built</p>
+          <p className="text-[10px] text-muted-foreground text-center">From WHO baseline to your personal forecast — each factor's contribution</p>
+        </div>
+        <div className="w-full" style={{ height: 280 }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              layout="vertical"
-              data={comparisonData}
-              margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
+              data={waterfallData}
+              margin={{ top: 10, right: 10, left: -10, bottom: 50 }}
             >
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-              <XAxis
-                type="number"
-                domain={[0, Math.ceil(result.maximumPotential / 10) * 10]}
-                tick={{ fontSize: 10 }}
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="name" tick={{ fontSize: 9 }} angle={-30} textAnchor="end" interval={0} />
+              <YAxis tick={{ fontSize: 10 }} />
+              <RechartsTooltip
+                formatter={(value: number, name: string, props: { payload?: { name: string } }) => {
+                  const label = props?.payload?.name ?? '';
+                  const isAdjustment = label === 'Health & Lifestyle' || label === 'Family Genetics' || label === 'Epigenetic Habits' || label === 'Community Bonus';
+                  return [`${isAdjustment && value > 0 ? '+' : ''}${value} years`, label];
+                }}
               />
-              <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={120} />
-              <RechartsTooltip formatter={(value: number) => [`${value} years`, 'Life Expectancy']} />
-              <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-                {comparisonData.map((entry, index) => (
+              <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                {waterfallData.map((entry, index) => (
                   <Cell key={index} fill={entry.fill} />
                 ))}
               </Bar>
@@ -743,12 +765,15 @@ export const EnhancedLifeExpectancyReport = ({
               <Badge variant="outline">{blueZoneCount}/9 principles</Badge>
             </div>
             <p className="text-xs text-muted-foreground">
-              Identified by researcher Dan Buettner across the world's longest-lived communities. Your mentor's profile aligns with{' '}
+              Identified by researcher Dan Buettner across the world's longest-lived communities.{' '}
+              {userSelectedHabits?.length
+                ? 'Your simulator habits align with '
+                : "Your mentor's profile aligns with "}
               <strong className="text-foreground">{blueZoneCount}</strong> of 9 principles.
             </p>
             <div className="grid grid-cols-3 gap-2">
               {BLUE_ZONE_PRINCIPLES.map(principle => {
-                const aligned = p2.mentorHabits.includes(principle.id);
+                const aligned = habitsForBlueZone.includes(principle.id);
                 return (
                   <div
                     key={principle.id}

@@ -16,6 +16,7 @@ interface Props {
   isPremium: boolean;
   onUpgradeClick?: () => void;
   onSimChange?: (simulatedAge: number) => void;
+  onHabitsChange?: (habits: string[], frequencies: Record<string, string>) => void;
   userHabits?: string[];
 }
 
@@ -74,6 +75,11 @@ type MHVal = 'active' | 'managing' | 'struggling';
 const MH_OPTS: MHVal[] = ['active', 'managing', 'struggling'];
 const MH_LABELS = ['Active support / therapy', 'Managing independently', 'Struggling without support'];
 const MH_IMPACT: Record<MHVal, number> = { active: 0.5, managing: 0, struggling: -1.5 };
+
+// Panel 3 social connections
+const SOC_OPTS: HealthQuizData['socialConnections'][] = ['isolated', 'limited', 'moderate', 'strong'];
+const SOC_LABELS = ['Isolated', 'Limited', 'Moderate', 'Strong'];
+const SOC_IMPACT: Record<string, number> = { isolated: -3, limited: -1.5, moderate: 0, strong: 2 };
 
 // Panel 4
 type RelVal = 'married' | 'stable' | 'single' | 'divorced';
@@ -182,7 +188,7 @@ function SliderRow({
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
-export const WhatIfSimulator = ({ result, isPremium, onSimChange }: Props) => {
+export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange }: Props) => {
   const q = result.quizSnapshot;
 
   // Panel 1 — pre-loaded from quiz; extras default to population averages
@@ -203,6 +209,13 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange }: Props) => {
   // Panel 3 — pre-loaded from quiz; extras default to population averages
   const [iSleep,  setSleep]  = useState(() => catIdx(SLEEP_OPTS, q.sleepDuration || '7to9'));
   const [iBP,     setBP]     = useState(() => catIdx(BP_OPTS,    q.bloodPressure || 'normal'));
+  const [iSoc,    setSoc]    = useState(() => {
+    const v = q.socialConnections;
+    if (v === 'strong')   return 3;
+    if (v === 'limited')  return 1;
+    if (v === 'isolated') return 0;
+    return 2; // moderate or empty
+  });
   const [stress,  setStress] = useState(q.stress);
   const [bmi,     setBmi]    = useState(q.bmi);
   const [iDiab,   setDiab]   = useState(() => {
@@ -233,6 +246,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange }: Props) => {
       exercise:           EX_OPTS[iEx],
       sleepDuration:      SLEEP_OPTS[iSleep],
       bloodPressure:      BP_OPTS[iBP],
+      socialConnections:  SOC_OPTS[iSoc],
       stress, bmi,
       selectedHabits:     [],
       epigeneticBonusOverride: epigenBonus,
@@ -250,7 +264,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange }: Props) => {
       airQuality:         AQ_OPTS[iAQ],
       commuteStress:      COM_OPTS[iCom],
     });
-  }, [iSmoke, iDrink, iDiet, iEx, iSleep, iBP, stress, bmi, habitFreqs,
+  }, [iSmoke, iDrink, iDiet, iEx, iSleep, iBP, iSoc, stress, bmi, habitFreqs,
       iHyd, iScr, iWlb, iDiab, iHC, iDC, iMH, iRel, iPet, iMent, iCS, iAQ, iCom]);
 
   const delta = Math.round((simForecast - result.totalForecast) * 10) / 10;
@@ -289,6 +303,19 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange }: Props) => {
   const hale = HALE_TABLE[q.country] ?? 63.0;
 
   useEffect(() => { onSimChange?.(simForecast); }, [simForecast]);
+
+  useEffect(() => {
+    const activeHabits = EPIGENETIC_HABITS
+      .filter(h => (habitFreqs[h.id] ?? 'never') !== 'never')
+      .map(h => h.id);
+    onHabitsChange?.(activeHabits, habitFreqs);
+  }, [habitFreqs]);
+
+  const simEpigeneticYears = Math.round(Math.min(6, Object.entries(habitFreqs).reduce((sum, [id, freq]) => {
+    const habit = EPIGENETIC_HABITS.find(h => h.id === id);
+    const mult: Record<string, number> = { never: 0, occasionally: 0.3, regularly: 0.65, daily: 1.0 };
+    return sum + (habit?.gain ?? 0) * (mult[freq] ?? 0);
+  }, 0)) * 10) / 10;
 
   const blurStyle: CSSProperties = !isPremium
     ? { filter: 'blur(8px)', userSelect: 'none', cursor: 'default' }
@@ -472,8 +499,24 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange }: Props) => {
 
             {/* Running totals */}
             <div className="pt-2 space-y-1.5 border-t">
-              <p className="text-xs font-bold text-primary">
-                Your habit changes are adding +{habitBonusTotal} years to your forecast (cap: +6 years)
+              <p className="text-xs font-bold text-primary flex items-center gap-1 flex-wrap">
+                Your habit changes are adding +{habitBonusTotal} years to your forecast
+                <span className="flex items-center gap-0.5">
+                  (cap: +6 years
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span tabIndex={0} className="inline-flex cursor-help">
+                          <Info className="w-3 h-3 text-muted-foreground" />
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs text-xs p-2">
+                        The +6 year cap reflects Blue Zones population studies (Buettner, 2023) showing biological ceiling effects. While individual habits each provide incremental gains, the combined epigenetic impact plateaus due to overlapping biological mechanisms and diminishing returns. WHO Global Action Plan on Physical Activity (2023) supports this ceiling in comprehensive lifestyle interventions.
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  )
+                </span>
               </p>
               <p className="text-[10px] text-muted-foreground">
                 You have aligned with <strong className="text-foreground">{blueZoneCount} of 9</strong> Blue Zone Power 9® principles
@@ -497,6 +540,11 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange }: Props) => {
             <p className="text-[10px] text-muted-foreground italic border-l-2 border-primary/30 pl-2 -mt-1">
               ✓ Pre-loaded from your quiz answers. Move any slider to explore 'what if I changed this?'
             </p>
+            <SliderRow label="Social Connections" opts={SOC_OPTS} labels={SOC_LABELS} val={iSoc} set={setSoc}
+              impact={SOC_IMPACT[SOC_OPTS[iSoc] ?? 'moderate'] ?? 0}
+              optimalIdx={3}
+              tooltip="Harvard Study of Adult Development (85 years, 2,000+ participants): strong social connections are the single strongest predictor of healthy aging — comparable in effect to quitting smoking. Isolated individuals have a mortality risk equivalent to smoking 15 cigarettes/day."
+            />
             <SliderRow label="Sleep Duration" opts={SLEEP_OPTS} labels={SLEEP_LABELS} val={iSleep} set={setSleep}
               impact={[-2, -0.5, 0, -1][iSleep] ?? 0} optimalIdx={2}
               tooltip="NHS/National Sleep Foundation, 2023: <6 hrs/night carries a 12% higher all-cause mortality risk."
@@ -712,26 +760,33 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange }: Props) => {
         </CardHeader>
         <CardContent className="px-5 pb-4">
           <div className="grid sm:grid-cols-2 gap-2">
-            {result.factorBreakdown.slice(0, 10).map((f, i) => (
-              <div key={i} className={`flex items-center justify-between px-3 py-2 rounded-lg border text-xs ${f.currentImpact >= 0 ? 'bg-green-50/50 border-green-200 dark:bg-green-950/20 dark:border-green-900' : 'bg-red-50/50 border-red-200 dark:bg-red-950/20 dark:border-red-900'}`}>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="flex items-center gap-1.5 font-medium cursor-help">
-                        <span>{f.emoji}</span><span>{f.factor}</span>
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent className="max-w-xs text-xs p-2">{f.source}</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span style={blurStyle}><ImpactBadge impact={f.currentImpact} /></span>
-                  {f.potentialGain > 0 && (
-                    <span className="text-[9px] text-green-600" style={blurStyle}>+{f.potentialGain}yr possible</span>
-                  )}
+            {result.factorBreakdown.slice(0, 10).map((f, i) => {
+              const displayImpact = f.factor === 'Epigenetic Habits' ? simEpigeneticYears : f.currentImpact;
+              const isPositive = displayImpact >= 0;
+              return (
+                <div key={i} className={`flex items-center justify-between px-3 py-2 rounded-lg border text-xs ${isPositive ? 'bg-green-50/50 border-green-200 dark:bg-green-950/20 dark:border-green-900' : 'bg-red-50/50 border-red-200 dark:bg-red-950/20 dark:border-red-900'}`}>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="flex items-center gap-1.5 font-medium cursor-help">
+                          <span>{f.emoji}</span><span>{f.factor}</span>
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs text-xs p-2">{f.source}</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span style={blurStyle}><ImpactBadge impact={displayImpact} /></span>
+                    {f.potentialGain > 0 && f.factor !== 'Epigenetic Habits' && (
+                      <span className="text-[9px] text-green-600" style={blurStyle}>+{f.potentialGain}yr possible</span>
+                    )}
+                    {f.factor === 'Epigenetic Habits' && simEpigeneticYears < 6 && (
+                      <span className="text-[9px] text-green-600" style={blurStyle}>+{Math.round((6 - simEpigeneticYears) * 10) / 10}yr possible</span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </CardContent>
       </Card>

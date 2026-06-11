@@ -73,6 +73,8 @@ const LifeExpectancy = () => {
   const [longevityResult, setLongevityResult] = useState<LongevityResult | null>(null);
   const [optimizedForecast, setOptimizedForecast] = useState<number | null>(null);
   const [currentSimForecast, setCurrentSimForecast] = useState<number | null>(null);
+  const [userSelectedHabits, setUserSelectedHabits] = useState<string[]>([]);
+  const [userHabitFrequencies, setUserHabitFrequencies] = useState<Record<string, string>>({});
 
   const [celebrities, setCelebrities] = useState<CelebrityState>({ current: [], potential: [] });
   const [isLoadingCurrent, setIsLoadingCurrent] = useState(false);
@@ -332,7 +334,7 @@ const LifeExpectancy = () => {
                 </h2>
                 <p className="text-sm text-muted-foreground mt-1">
                   Your forecast: <strong className="text-primary text-lg">{longevityResult.totalForecast} years</strong>
-                  {' · '}Maximum potential: <strong className="text-accent">{longevityResult.maximumPotential} years</strong>
+                  {' · '}Best achievable: <strong className="text-accent">{longevityResult.controllablePotential} years</strong>
                   {' · '}Gap to close: <strong className="text-foreground">{longevityResult.yearsGapToClose} years</strong>
                 </p>
               </div>
@@ -343,6 +345,7 @@ const LifeExpectancy = () => {
                 isPremium={isPremium}
                 onUpgradeClick={() => navigate('/upgrade')}
                 onSimChange={setCurrentSimForecast}
+                onHabitsChange={(habits, freqs) => { setUserSelectedHabits(habits); setUserHabitFrequencies(freqs); }}
               />
             </ReportErrorBoundary>
 
@@ -411,6 +414,8 @@ const LifeExpectancy = () => {
                 isLoadingCelebrities={isLoadingCurrent}
                 potentialCelebrityMatches={celebrities.potential}
                 isLoadingPotentialCelebrities={isLoadingPotential}
+                userSelectedHabits={userSelectedHabits}
+                simulatorHabitFrequencies={userHabitFrequencies}
               />
             </ReportErrorBoundary>
           </section>
