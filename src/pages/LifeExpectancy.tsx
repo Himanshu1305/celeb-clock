@@ -256,7 +256,6 @@ const LifeExpectancy = () => {
 
             <LifeExpectancyCalculator
               birthDate={birthDate}
-              celebrities={[]}
               onComplete={handleQuizComplete}
               onCompleteSkip={handleQuizCompleteAndSkip}
             />
@@ -343,7 +342,7 @@ const LifeExpectancy = () => {
 
         {/* ── Phase 3: What-If Simulator (auto-appears after result) ── */}
         {(phase === 'result' || phase === 'report') && longevityResult && (
-          <section className="max-w-6xl mx-auto mb-10" ref={simulatorRef}>
+          <section className="max-w-6xl mx-auto mb-10" ref={simulatorRef} data-sim="true">
             <div className="mb-6 flex items-center gap-4 flex-wrap">
               <div>
                 <h2 className="text-2xl font-bold flex items-center gap-2">

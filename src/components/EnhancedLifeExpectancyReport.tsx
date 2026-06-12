@@ -19,6 +19,7 @@ interface Props {
   userName: string;
   birthDate: Date | null | undefined;
   isPremium: boolean;
+  // Navigation handled inline via <Link>, this prop is retained for future payment flow integration
   onUpgradeClick?: () => void;
   optimizedForecast?: number;
   simulatedForecast?: number;
@@ -80,15 +81,15 @@ const HEALTH_GUIDE_PREVENTIVE: HealthGuideItem[] = [
 ];
 
 const BLUE_ZONE_PRINCIPLES = [
-  { id: 'walking',    name: 'Move Naturally',   emoji: '🚶' },
-  { id: 'purpose',    name: 'Purpose (Ikigai)', emoji: '🎯' },
-  { id: 'meditation', name: 'Downshift',        emoji: '🧘' },
-  { id: 'fasting',    name: '80% Rule',         emoji: '⏰' },
-  { id: 'wholefood',  name: 'Plant Slant',      emoji: '🥗' },
-  { id: 'community',  name: 'Right Tribe',      emoji: '👥' },
-  { id: 'spiritual',  name: 'Faith Community',  emoji: '🙏' },
-  { id: 'volunteer',  name: 'Loved Ones First', emoji: '🤝' },
-  { id: 'gardening',  name: 'Nature & Green',   emoji: '🌿' },
+  { id: 'walking',    name: 'Move Naturally',   emoji: '🚶', origin: 'Okinawa, Sardinia',      science: 'Natural movement throughout the day — walking, gardening, manual tasks — reduces all-cause mortality by 21% vs sedentary lifestyles.' },
+  { id: 'purpose',    name: 'Purpose (Ikigai)', emoji: '🎯', origin: 'Okinawa',                science: 'Having a clear sense of purpose adds up to 7 years of life expectancy and reduces dementia risk by 2.4× (Rush University, 2012).' },
+  { id: 'meditation', name: 'Downshift',        emoji: '🧘', origin: 'All 5 Blue Zones',       science: 'Daily stress-relief rituals — prayer, naps, ancestor remembrance — lower chronic inflammation and cortisol, slowing biological aging.' },
+  { id: 'fasting',    name: '80% Rule',         emoji: '⏰', origin: 'Okinawa',                science: 'Stopping eating at 80% full reduces caloric intake by 20%. Linked to a 31% lower cardiovascular mortality in Okinawan cohort studies.' },
+  { id: 'wholefood',  name: 'Plant Slant',      emoji: '🥗', origin: 'All 5 Blue Zones',       science: 'Bean-heavy, plant-forward diets reduce all-cause mortality by 7–8% per 20g/day of legume consumption (British Journal of Nutrition).' },
+  { id: 'community',  name: 'Right Tribe',      emoji: '👥', origin: 'Okinawa (Moai)',         science: 'Social contagion is real: health behaviors spread through social networks. Your closest 5 contacts shape your longevity habits significantly.' },
+  { id: 'spiritual',  name: 'Faith Community',  emoji: '🙏', origin: 'Loma Linda, Nicoya',     science: 'Attending a faith community 4× per month adds 4–14 years of life expectancy across 5 independent studies (Hummer et al., 1999).' },
+  { id: 'volunteer',  name: 'Loved Ones First', emoji: '🤝', origin: 'All 5 Blue Zones',       science: 'Multigenerational households and keeping aging parents nearby reduces mortality rates in offspring by up to 25% (Framingham Heart Study).' },
+  { id: 'gardening',  name: 'Nature & Green',   emoji: '🌿', origin: 'Okinawa, Sardinia',      science: 'Regular exposure to nature and green spaces lowers cortisol by 21% and reduces risk of depression by 30% (University of Exeter, 2019).' },
 ];
 
 const BlurredNumber = ({ value, isPremium, suffix = '' }: { value: number | string; isPremium: boolean; suffix?: string }) => (
@@ -380,6 +381,7 @@ export const EnhancedLifeExpectancyReport = ({
 
   const p1 = result.pillar1Snapshot;
   const p2 = result.pillar2Snapshot;
+  const displayName = userName?.trim() || 'You';
 
   const FAMILY_MEMBERS = [
     { key: 'paternalGrandfather' as const, label: 'Paternal Grandfather', side: 'paternal' },
@@ -398,6 +400,7 @@ export const EnhancedLifeExpectancyReport = ({
 
   const mentorHabitData   = EPIGENETIC_HABITS.filter(h => p2.mentorHabits.includes(h.id));
   const unmentorHabitData = EPIGENETIC_HABITS.filter(h => !p2.mentorHabits.includes(h.id));
+  const communityHabitsBonus = Math.round(Math.min(1.0, mentorHabitData.reduce((s, h) => s + h.gain * 0.15, 0)) * 10) / 10;
 
   const BLUE_ZONE_HABITS = new Set(['walking', 'community', 'wholefood', 'purpose', 'spiritual', 'gardening', 'fasting', 'laughter', 'meditation']);
 
@@ -456,7 +459,7 @@ export const EnhancedLifeExpectancyReport = ({
     <div id="longevity-blueprint-print" className="space-y-6">
       {/* Print-only header */}
       <div className="hidden print:block border-b pb-4 mb-4">
-        <h1 className="text-lg font-bold">Longevity Blueprint — {userName}</h1>
+        <h1 className="text-lg font-bold">Longevity Blueprint — {displayName}</h1>
         <p className="text-xs text-gray-500">
           Generated: {new Date().toLocaleDateString()} · Sources: WHO, CDC, NIH, Harvard Medical School, Karolinska Institute
         </p>
@@ -468,7 +471,7 @@ export const EnhancedLifeExpectancyReport = ({
       {/* ── Report Header ── */}
       <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl border border-primary/20 p-6 text-center space-y-4">
         <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Full Longevity Blueprint</p>
-        {userName && <p className="text-lg font-semibold text-foreground">Prepared for {userName}</p>}
+        <p className="text-lg font-semibold text-foreground">Prepared for {displayName}</p>
 
         {/* Row 1: Current → Optimized */}
         <div className="flex items-center justify-center gap-6 flex-wrap">
@@ -611,6 +614,9 @@ export const EnhancedLifeExpectancyReport = ({
               Family weighted average: ~{result.familyBaselineAge} yrs → Genetic adjustment: {result.geneticAdjustment >= 0 ? '+' : ''}{result.geneticAdjustment} yrs
             </span>
           </div>
+          {result.geneticVitalityLabel && (
+            <p className="text-xs text-muted-foreground leading-relaxed">{result.geneticVitalityLabel}</p>
+          )}
 
           {knownMembers.length === 0 ? (
             <div className="bg-muted/30 rounded-xl border p-6 text-center text-muted-foreground text-sm">
@@ -716,7 +722,7 @@ export const EnhancedLifeExpectancyReport = ({
                   </p>
                 </div>
                 <Badge className="bg-primary text-primary-foreground">
-                  +{Math.min(6, mentorHabitData.reduce((s, h) => s + h.gain, 0)).toFixed(1)} community years
+                  +{communityHabitsBonus.toFixed(1)}yr community habits bonus
                 </Badge>
               </div>
               <div className="grid sm:grid-cols-2 gap-2">
@@ -728,13 +734,16 @@ export const EnhancedLifeExpectancyReport = ({
                       <p className="text-[10px] text-muted-foreground truncate">{h.source.split(':')[0]}</p>
                     </div>
                     {isPremium ? (
-                      <Badge variant="outline" className="text-green-600 border-green-400 text-[10px] shrink-0">+{h.gain}yr</Badge>
+                      <Badge variant="outline" className="text-green-600 border-green-400 text-[10px] shrink-0">+{(h.gain * 0.15).toFixed(1)}yr influence</Badge>
                     ) : (
                       <Badge variant="outline" className="text-[10px] shrink-0"><Lock className="w-2.5 h-2.5 inline mr-0.5" />?yr</Badge>
                     )}
                   </div>
                 ))}
               </div>
+              <p className="text-[10px] text-muted-foreground leading-relaxed pt-1">
+                Each habit contributes 15% of its direct benefit as an environmental influence on your forecast. The full benefit comes when YOU adopt these habits directly — explore them in your Longevity Simulator.
+              </p>
             </div>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-4">
@@ -748,43 +757,83 @@ export const EnhancedLifeExpectancyReport = ({
               <p className="text-xs text-muted-foreground leading-relaxed">
                 {p2.mentorName ? `"${p2.mentorName}"` : 'Your longevity mentor'} ({p2.mentorRelationship}, {p2.mentorAge} yrs) represents living proof that your environment supports longevity. People in similar environments share air quality, food culture, noise levels, and social norms.
               </p>
-              {p2.mentorAge > 85 && <p className="text-xs font-bold text-green-700">✅ Community bonus: +0.5 years added to your forecast</p>}
+              {p2.mentorAge >= 75 && (() => {
+                const reportBaseBonus = p2.mentorAge >= 95 ? 0.8 : p2.mentorAge >= 85 ? 0.5 : 0.3;
+                return <p className="text-xs font-bold text-green-700">✅ Community bonus: +{reportBaseBonus} yr environmental bonus applied</p>;
+              })()}
             </div>
           )}
 
-          {/* Chart 3: Blue Zones 3×3 grid */}
-          <div className="bg-muted/30 rounded-xl border p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <h4 className="text-sm font-bold text-foreground">Blue Zones Alignment</h4>
-              <Badge variant="outline">{blueZoneCount}/9 principles</Badge>
+          {/* Blue Zones Alignment — detailed grid */}
+          <div className="bg-muted/30 rounded-xl border p-4 space-y-4">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <h4 className="text-sm font-bold text-foreground">🌍 Blue Zones Power 9® Alignment</h4>
+              <Badge variant="outline" className="text-sm font-bold">{blueZoneCount}/9 principles</Badge>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Identified by researcher Dan Buettner across the world's longest-lived communities.{' '}
+
+            {/* Intro paragraph */}
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              In 2004, explorer <strong className="text-foreground">Dan Buettner</strong> partnered with demographers <strong className="text-foreground">Dr. Gianni Pes</strong> and <strong className="text-foreground">Dr. Michel Poulain</strong> to systematically study geographic pockets where people routinely lived past 100. They discovered the same 9 lifestyle patterns — the Power 9® — appeared independently across five cultures. The consistency across radically different diets, religions, and climates suggests these are not cultural accidents but universal biological truths about human longevity.{' '}
               {userSelectedHabits?.length
-                ? 'Your simulator habits align with '
-                : "Your mentor's profile aligns with "}
-              <strong className="text-foreground">{blueZoneCount}</strong> of 9 principles.
+                ? <><strong className="text-foreground">Your simulator habits</strong> align with </>
+                : <><strong className="text-foreground">Your mentor's profile</strong> aligns with </>}
+              <strong className="text-foreground">{blueZoneCount} of 9</strong> principles.
             </p>
-            <div className="grid grid-cols-3 gap-2">
+
+            {/* Detailed 9-habit grid */}
+            <div className="space-y-2">
               {BLUE_ZONE_PRINCIPLES.map(principle => {
                 const aligned = habitsForBlueZone.includes(principle.id);
                 return (
                   <div
                     key={principle.id}
-                    className={`rounded-lg border p-2 text-center space-y-1 ${
+                    className={`rounded-lg border p-3 flex items-start gap-3 ${
                       aligned
                         ? 'bg-green-50 border-green-200 dark:bg-green-950/30 dark:border-green-900'
                         : 'bg-muted/30 border-muted/60'
                     }`}
                   >
-                    <div className="text-lg">{principle.emoji}</div>
-                    <div className={`font-semibold leading-tight text-[10px] ${aligned ? 'text-green-800 dark:text-green-300' : 'text-muted-foreground'}`}>
-                      {principle.name}
+                    <div className="text-xl shrink-0 mt-0.5">{principle.emoji}</div>
+                    <div className="flex-1 min-w-0 space-y-0.5">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className={`text-xs font-bold ${aligned ? 'text-green-800 dark:text-green-300' : 'text-foreground'}`}>{principle.name}</span>
+                        <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-muted-foreground">{principle.origin}</Badge>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground leading-snug">{principle.science}</p>
                     </div>
-                    <div className="text-sm">{aligned ? '✅' : '○'}</div>
+                    <div className="text-base shrink-0">{aligned ? '✅' : '○'}</div>
                   </div>
                 );
               })}
+            </div>
+
+            {/* Score interpretation */}
+            <div className={`rounded-lg border p-3 space-y-1 ${
+              blueZoneCount >= 7 ? 'bg-emerald-50 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-900' :
+              blueZoneCount >= 5 ? 'bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-900' :
+              blueZoneCount >= 3 ? 'bg-yellow-50 border-yellow-200 dark:bg-yellow-950/20 dark:border-yellow-900' :
+              'bg-orange-50 border-orange-200 dark:bg-orange-950/20 dark:border-orange-900'
+            }`}>
+              <p className={`text-xs font-bold ${
+                blueZoneCount >= 7 ? 'text-emerald-800 dark:text-emerald-200' :
+                blueZoneCount >= 5 ? 'text-green-800 dark:text-green-200' :
+                blueZoneCount >= 3 ? 'text-yellow-800 dark:text-yellow-200' :
+                'text-orange-800 dark:text-orange-200'
+              }`}>
+                {blueZoneCount >= 7 ? '🏆 Blue Zone Lifestyle — Exceptional' :
+                 blueZoneCount >= 5 ? '✅ Strong Alignment — Above Average' :
+                 blueZoneCount >= 3 ? '🌱 Developing — Good Foundation' :
+                 '🔑 Early Stage — Significant Opportunity Ahead'}
+              </p>
+              <p className="text-[10px] text-muted-foreground leading-snug">
+                {blueZoneCount >= 7
+                  ? 'You or your mentor embody the same patterns seen in centenarian populations. Research suggests this alignment is associated with 10+ additional healthy years vs the average lifestyle.'
+                  : blueZoneCount >= 5
+                  ? 'Solid Blue Zones alignment. Adding 2–3 more principles — especially social/community habits — could add significant healthy years.'
+                  : blueZoneCount >= 3
+                  ? 'A meaningful start. Focus next on adding a community or purpose-based habit — these have the highest impact per principle adopted.'
+                  : 'The greatest longevity leverage is ahead of you. Begin with Move Naturally and Plant Slant — the two most accessible, highest-impact Power 9® principles.'}
+              </p>
             </div>
           </div>
 
@@ -800,7 +849,7 @@ export const EnhancedLifeExpectancyReport = ({
                       <p className="text-xs font-medium text-muted-foreground truncate">{h.label}</p>
                     </div>
                     {isPremium ? (
-                      <Badge variant="outline" className="text-[10px] text-orange-600 border-orange-400 shrink-0">+{h.gain}yr available</Badge>
+                      <Badge variant="outline" className="text-[10px] text-orange-600 border-orange-400 shrink-0">+{h.gain}yr direct gain</Badge>
                     ) : (
                       <Badge variant="outline" className="text-[10px] shrink-0"><Lock className="w-2.5 h-2.5 inline mr-0.5" /> locked</Badge>
                     )}
@@ -890,6 +939,73 @@ export const EnhancedLifeExpectancyReport = ({
             <p className="text-xs text-muted-foreground mt-1">
               Science-backed recommendations to extend your healthspan. All citations from peer-reviewed sources.
             </p>
+          </div>
+
+          {/* 🏆 World Longevity Records */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-bold text-foreground">🏆 World Longevity Records</h4>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Verified records from the world's longest-lived individuals and populations — and what their lives reveal about the science of longevity.
+            </p>
+            <div className="space-y-2">
+              {[
+                {
+                  emoji: '👩‍🦳', name: 'Jeanne Calment', stat: '122 years, 164 days',
+                  location: 'Arles, France', years: '1875–1997',
+                  detail: 'The longest verified human lifespan ever recorded. Calment walked and cycled regularly until her 100s, ate a Mediterranean diet rich in olive oil, drank port wine, and credited her stress-free temperament. She took up fencing at 85 and continued to live independently until age 110.',
+                  learn: 'Moderate activity, Mediterranean diet, low stress, and an optimistic temperament are associated with exceptional longevity.',
+                },
+                {
+                  emoji: '👴', name: 'Jiroemon Kimura', stat: '116 years, 54 days',
+                  location: 'Kyotango, Japan', years: '1897–2013',
+                  detail: 'The longest verified male lifespan. Kimura worked as a postal worker until 90, ate small portions (practising the Okinawan "hara hachi bu" 80% rule), read newspapers daily for mental engagement, and maintained a purposeful daily routine throughout his life.',
+                  learn: 'Caloric moderation, continued mental engagement, purposeful routine, and natural daily activity are key male longevity drivers.',
+                },
+                {
+                  emoji: '🇯🇵', name: 'Japan: 90,000+ Centenarians', stat: 'World-leading centenarian density',
+                  location: 'Japan (national)', years: '2023 census',
+                  detail: "Japan has the world's highest concentration of centenarians — over 90,000 people aged 100+, led by Okinawa. This is attributed to a national culture of plant-heavy diet (miso, seaweed, tofu), strong social structures, universal healthcare access, and a deep sense of ikigai (life purpose).",
+                  learn: "National diet culture, universal healthcare, and community purpose-structures create population-level longevity effects that transcend individual willpower.",
+                },
+                {
+                  emoji: '🏃', name: 'Fauja Singh', stat: 'Completed marathon at age 100',
+                  location: 'Toronto, Canada', years: 'Born 1911',
+                  detail: 'Singh began marathon running at age 89 after the death of his wife, completing the Toronto Waterfront Marathon at 100 years old. A lifelong vegetarian and tea drinker, he credits his longevity to simple food, regular walking, mental positivity, and his Sikh faith community.',
+                  learn: 'It is never too late to start exercising. Plant-based diet, faith community, and mental resilience can sustain extraordinary physical performance into the 10th decade.',
+                },
+                {
+                  emoji: '👵', name: 'Maria Branyas Morera', stat: '117 years (world\'s oldest living person as of 2024)',
+                  location: 'Catalonia, Spain', years: '1907–2024',
+                  detail: 'The world\'s oldest verified living person until her passing in 2024. Branyas attributed her longevity to "order, tranquility, and good connection with family and friends." She avoided toxic people, maintained a positive outlook, and spent decades in a care home with close family ties.',
+                  learn: 'Emotional environment and the intentional avoidance of chronic stress and negative relationships may be as important as physical health habits.',
+                },
+                {
+                  emoji: '🏝️', name: 'Sardinia Blue Zone', stat: 'Highest male centenarian rate globally',
+                  location: 'Nuoro Province, Sardinia', years: 'Ongoing',
+                  detail: "Sardinia's mountainous Nuoro province has the world's highest known concentration of male centenarians. The terrain requires daily steep walking, the diet is heavy in goat's milk, flat bread, and local vegetables, and multigenerational family households are the norm — with grandparents playing active roles into their 90s.",
+                  learn: 'Incidental physical activity built into geography, whole-food local diet, and intergenerational family bonds form a powerful longevity triangle.',
+                },
+                {
+                  emoji: '🎿', name: 'Oscar Swahn', stat: 'Oldest Olympic medalist — gold at age 60, silver at 72',
+                  location: 'Stockholm, Sweden', years: '1847–1927',
+                  detail: 'Swedish sport shooter Oscar Swahn remains the oldest Olympic gold medalist (1908, age 60) and oldest Olympic medalist overall (1920, age 72). He continued competitive athletic participation into his 70s and lived to age 80 — nearly double the male life expectancy of his era.',
+                  learn: 'Continued purposeful competition, physical engagement, and active community participation can dramatically extend healthy function well beyond typical population norms.',
+                },
+              ].map(({ emoji, name, stat, location, years, detail, learn }) => (
+                <div key={name} className="flex gap-3 bg-muted/30 border rounded-lg p-3">
+                  <span style={{ fontSize: 32, lineHeight: 1, flexShrink: 0 }}>{emoji}</span>
+                  <div className="flex-1 min-w-0 space-y-1">
+                    <div className="flex items-start gap-2 flex-wrap">
+                      <p className="text-xs font-bold text-foreground">{name}</p>
+                      <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded">{stat}</span>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground/70">{location} · {years}</p>
+                    <p className="text-[10px] text-muted-foreground leading-snug">{detail}</p>
+                    <p className="text-[10px] font-semibold text-foreground leading-snug">What we can learn: {learn}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <HealthGuideSection title="🥗 Longevity Superfoods" items={HEALTH_GUIDE_FOODS} />

@@ -138,7 +138,7 @@ const BASE_TABLE: Record<string, { male: number; female: number }> = {
 const DEFAULT_BASE = { male: 72, female: 76 };
 
 const BLUE_ZONES_HABIT_IDS = new Set([
-  'walking', 'purpose', 'meditation', 'fasting', 'wholefood', 'spiritual', 'community', 'volunteer',
+  'walking', 'purpose', 'meditation', 'fasting', 'wholefood', 'spiritual', 'community', 'volunteer', 'gardening', 'laughter',
 ]);
 
 const VITALITY_LABELS: Record<LongevityResult['geneticVitalityScore'], string> = {

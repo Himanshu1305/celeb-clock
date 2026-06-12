@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalytics } from '@/hooks/useAnalytics';
-import { Crown, Heart, Coffee, Brain, Dumbbell, User, ShieldCheck, Info, Activity, Moon, Users, Dna, TreePine, Lock } from 'lucide-react';
+import { Crown, Heart, Coffee, Brain, Dumbbell, User, ShieldCheck, Info, Activity, Moon, Users, Dna, TreePine, Lock, ChevronDown, ChevronUp } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from 'react-router-dom';
 import { countries } from '@/data/countries';
@@ -31,7 +31,6 @@ import {
 
 interface Props {
   birthDate?: Date | null;
-  celebrities?: any[];
   onComplete?: (data: { quiz: HealthQuizData; pillar1: Pillar1Data; pillar2: Pillar2Data }) => void;
   onCompleteSkip?: (data: { quiz: HealthQuizData; pillar1: Pillar1Data; pillar2: Pillar2Data }) => void;
 }
@@ -141,6 +140,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   const hasTracked = useRef(false);
   const countUpDoneRef = useRef(false);
   const [countUpAge, setCountUpAge] = useState<number | null>(null);
+  const [showGeneticScience, setShowGeneticScience] = useState(false);
 
   // BMI calculator local state
   const [bmiUnit, setBmiUnit] = useState<'metric' | 'imperial'>('metric');
@@ -216,6 +216,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
 
   const totalSteps = 8;
   const bmiCategory = getBMICategory(data.bmi);
+  const bmiUserSet = heightCm !== '' || weightKg !== '' || heightFt !== '' || weightLbs !== '';
   const updateP1Member = (field: keyof Pillar1Data, val: FamilyMemberData) => setPillar1(p => ({ ...p, [field]: val }));
 
   const toggleMentorHabit = (id: string) => setPillar2(p => ({
@@ -372,6 +373,8 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
               </Label>
               <RadioGroup value={data.smoking} onValueChange={(v) => setData({ ...data, smoking: v as any })}>
                 <div className="flex items-center space-x-2"><RadioGroupItem value="never" id="never-smoke" /><Label htmlFor="never-smoke">Non-smoker</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="quit_over5" id="quit-over5-smoke" /><Label htmlFor="quit-over5-smoke">Quit smoking (5+ years ago)</Label></div>
+                <div className="flex items-center space-x-2"><RadioGroupItem value="quit_under5" id="quit-under5-smoke" /><Label htmlFor="quit-under5-smoke">Quit smoking (less than 5 years ago)</Label></div>
                 <div className="flex items-center space-x-2"><RadioGroupItem value="light" id="light-smoke" /><Label htmlFor="light-smoke">Light (1–5 cigarettes per day)</Label></div>
                 <div className="flex items-center space-x-2"><RadioGroupItem value="moderate" id="moderate-smoke" /><Label htmlFor="moderate-smoke">Moderate (6–10 cigarettes per day)</Label></div>
                 <div className="flex items-center space-x-2"><RadioGroupItem value="heavy" id="heavy-smoke" /><Label htmlFor="heavy-smoke">Heavy (More than 10 cigarettes per day)</Label></div>
@@ -520,6 +523,11 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                 <div className="flex justify-between text-[10px] text-muted-foreground px-0.5">
                   <span>15 (Underweight)</span><span>18.5–24.9 (Normal)</span><span>30+ (Obese)</span>
                 </div>
+                {!bmiUserSet && data.bmi === 24.5 && (
+                  <p className="text-xs text-muted-foreground bg-muted/40 border rounded px-3 py-2">
+                    ℹ️ Using default BMI (24.5). Enter your height and weight above for a personalized calculation.
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -691,6 +699,85 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
               </div>
             )}
 
+            {/* 📚 The Science Behind Your Genetics */}
+            <div className="rounded-xl border overflow-hidden">
+              <button
+                onClick={() => setShowGeneticScience(!showGeneticScience)}
+                className="w-full flex items-center justify-between px-4 py-3 bg-muted/30 hover:bg-muted/50 transition-colors text-left"
+              >
+                <span className="text-xs font-bold text-foreground">📚 The Science Behind Your Genetics</span>
+                {showGeneticScience ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+              </button>
+              {showGeneticScience && (
+                <div className="p-4 space-y-5 bg-background border-t">
+                  {/* Subsection A: 5 Longevity Genes */}
+                  <div className="space-y-3">
+                    <h5 className="text-xs font-bold text-foreground">A — The 5 Key Longevity Genes</h5>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">
+                      Research has identified specific genes associated with longer, healthier lives. While you cannot change your DNA, your family history gives you a proxy window into your genetic expression.
+                    </p>
+                    <div className="space-y-2">
+                      {[
+                        { gene: 'FOXO3', effect: 'Master regulator of cellular stress response. Carriers live 10% longer on average. Found at higher frequency in Japanese, Ashkenazi Jewish, and Northern Italian centenarian populations.', citation: 'Willcox et al., PNAS, 2008' },
+                        { gene: 'APOE ε2', effect: 'Protective variant associated with lower Alzheimer\'s and heart disease risk. Reduces cardiovascular mortality by 20–40% compared to the APOE ε4 risk variant.', citation: 'Liu et al., Neuron, 2019' },
+                        { gene: 'CETP', effect: 'Regulates HDL ("good") cholesterol levels. The longevity variant (I405V) raises HDL significantly and is 2× more common in centenarians than the general population.', citation: 'Barzilai et al., JAMA, 2003' },
+                        { gene: 'SIRT1/3', effect: 'The "longevity sirtuins" activated by caloric restriction, fasting, and exercise. Control mitochondrial health, DNA repair, and inflammation — all key hallmarks of aging.', citation: 'Guarente, Cell, 2013' },
+                        { gene: 'TERT', effect: 'Governs telomere length — the biological clock of your cells. Longer telomeres correlate with up to 7–10 extra healthy years. Influenced by diet, exercise, and chronic stress.', citation: 'Blackburn & Epel, Cell, 2012' },
+                      ].map(({ gene, effect, citation }) => (
+                        <div key={gene} className="bg-muted/30 rounded-lg p-3 space-y-1 border">
+                          <span className="text-xs font-black text-primary bg-primary/10 px-2 py-0.5 rounded inline-block">{gene}</span>
+                          <p className="text-[11px] text-muted-foreground leading-relaxed">{effect}</p>
+                          <p className="text-[10px] text-muted-foreground/60 italic">{citation}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Subsection B: Calculation Method */}
+                  <div className="space-y-3 border-t pt-4">
+                    <h5 className="text-xs font-bold text-foreground">B — How We Calculate Your Genetic Adjustment</h5>
+                    <div className="space-y-2 text-[11px] text-muted-foreground">
+                      <p><strong className="text-foreground">Step 1 — Weighted family average:</strong> Paternal side (50%) + Maternal side (50%). Within each side, grandparents carry 40% weight each and parents 60%.</p>
+                      <p><strong className="text-foreground">Step 2 — Living adjustment:</strong> Still-living relatives receive a forward projection to estimate their probable lifespan:</p>
+                      <div className="bg-muted/40 rounded-lg p-3 space-y-1 font-mono text-[10px] border">
+                        <p className="font-bold text-foreground mb-1.5">Living Adjustment Table</p>
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-0.5">
+                          <span>Age 80+ years</span><span className="text-green-600">+7 years added</span>
+                          <span>Age 70–79 years</span><span className="text-green-600">+4 years added</span>
+                          <span>Age 60–69 years</span><span className="text-green-600">+2 years added</span>
+                          <span>Under 60 years</span><span className="text-muted-foreground">No adjustment (too early to draw longevity conclusions)</span>
+                        </div>
+                      </div>
+                      <p><strong className="text-foreground">Step 3 — Genetic bonus formula:</strong></p>
+                      <div className="bg-primary/5 rounded-lg p-3 font-mono text-[10px] border border-primary/20">
+                        <p>Genetic bonus = (family avg − 78) × 0.25</p>
+                        <p className="text-muted-foreground mt-1">Capped at ±8 years · Baseline 78 = WHO global average</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Subsection C: Stat grid */}
+                  <div className="space-y-2 border-t pt-4">
+                    <h5 className="text-xs font-bold text-foreground">C — Key Research Numbers</h5>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { stat: '25–30%', desc: 'of longevity determined by genetics', source: 'Karolinska, 2017' },
+                        { stat: '2.87M', desc: 'people studied to confirm this finding', source: 'Science, 2017' },
+                        { stat: 'FOXO3', desc: 'Most replicated longevity gene across 7 ethnic populations', source: 'PNAS, 2008' },
+                        { stat: '7–10 yrs', desc: 'potential lifespan gain from telomere preservation', source: 'Cell, 2012' },
+                      ].map(({ stat, desc, source }) => (
+                        <div key={stat} className="bg-primary/5 rounded-lg border border-primary/20 p-3 space-y-1 text-center">
+                          <div className="text-base font-black text-primary">{stat}</div>
+                          <p className="text-[10px] text-foreground font-medium leading-tight">{desc}</p>
+                          <p className="text-[9px] text-muted-foreground italic">{source}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <Alert className="border-primary/20 bg-primary/5">
               <Info className="h-4 w-4 text-primary" />
               <AlertDescription className="text-xs text-muted-foreground">
@@ -761,6 +848,20 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                 </p>
               </div>
 
+              {/* Area A — Roseto Effect */}
+              <div className="bg-amber-50/50 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-900 p-4 space-y-2">
+                <h4 className="text-xs font-bold text-amber-900 dark:text-amber-200">🏙️ The Roseto Effect — Why Your Community Shapes Your Longevity</h4>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  In the 1960s, epidemiologist Stewart Wolf noticed something extraordinary: residents of Roseto, Pennsylvania — a tight-knit Italian-American community — had a heart attack rate <strong className="text-foreground">nearly half</strong> the US national average, despite eating a high-fat diet and having no better individual health habits than neighboring towns.
+                </p>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  The reason? Community structure. Multigenerational households, civic engagement, a culture of mutual support, and shared meals created an invisible protective shield. When younger generations assimilated into American individualism in the 1970s, the heart attack rate rose to match the national average within one generation.
+                </p>
+                <p className="text-[11px] font-semibold text-amber-800 dark:text-amber-300">
+                  Your community anchor — a long-lived mentor or neighbor — is your Roseto Effect in action.
+                </p>
+              </div>
+
               {/* Section A: Community Longevity Mentor */}
               <div className="bg-muted/30 rounded-xl border p-4 space-y-4">
                 <h4 className="text-sm font-bold text-foreground">Section A — Community Longevity Mentor <span className="text-muted-foreground font-normal">(Optional)</span></h4>
@@ -806,6 +907,24 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                   </div>
                 )}
               </div>
+
+              {/* Area B — Mentor Habits Epigenetics Explanation */}
+              {pillar2.hasMentor && pillar2.mentorHabits.length > 0 && (
+                <div className="bg-blue-50/50 dark:bg-blue-950/20 rounded-xl border border-blue-200 dark:border-blue-900 p-4 space-y-2">
+                  <h4 className="text-xs font-bold text-blue-900 dark:text-blue-200">🔬 How Your Mentor's Habits Create an Epigenetic Multiplier</h4>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">
+                    Epigenetics research shows that living in close proximity to someone who practices longevity-promoting habits creates measurable changes in your own biology — through shared food culture, sleep norms, stress patterns, and social activity levels.
+                  </p>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">
+                    Each habit your mentor practices contributes <strong className="text-foreground">15% of its full scientific value</strong> to your forecast — reflecting the indirect environmental influence rather than your direct practice. This is based on the "social contagion" findings from the Framingham Heart Study (Christakis &amp; Fowler, NEJM 2007), which showed health behaviors spread through social networks across three degrees of separation.
+                  </p>
+                  <div className="bg-blue-100/60 dark:bg-blue-900/20 rounded-lg p-2.5 text-[10px] font-mono border border-blue-200 dark:border-blue-800">
+                    <p className="font-bold text-blue-900 dark:text-blue-200 mb-1">Environmental Multiplier Formula</p>
+                    <p className="text-muted-foreground">Each mentor habit: habit_gain × 0.15 = environmental bonus</p>
+                    <p className="text-muted-foreground">Total bonus = sum of all selected habits × 0.15, capped at +1.0 yr</p>
+                  </div>
+                </div>
+              )}
 
               {/* Section B: Community Anchor's Longevity Habits */}
               {pillar2.hasMentor ? (
@@ -864,6 +983,34 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                       </p>
                     </div>
                   )}
+
+                  {/* Area C — Blue Zones Explanation */}
+                  <div className="bg-green-50/50 dark:bg-green-950/20 rounded-xl border border-green-200 dark:border-green-900 p-4 space-y-3">
+                    <h4 className="text-xs font-bold text-green-900 dark:text-green-200">🌍 The 5 Blue Zones — Where Communities Make Longevity the Default</h4>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">
+                      Researchers Dan Buettner (National Geographic), Dr. Gianni Pes, and Dr. Michel Poulain identified five geographic areas where people consistently live past 100 — not through elite healthcare or supplements, but through community structure and shared daily habits.
+                    </p>
+                    <div className="grid sm:grid-cols-2 gap-2">
+                      {[
+                        { zone: 'Okinawa, Japan', emoji: '🇯🇵', habit: 'Moai (social support groups), ikigai (sense of purpose), plant-based diet, regular natural movement' },
+                        { zone: 'Sardinia, Italy', emoji: '🇮🇹', habit: "Mountainous terrain encourages daily walking, multigenerational family bonds, goat's milk, and red wine in moderation" },
+                        { zone: 'Nicoya, Costa Rica', emoji: '🇨🇷', habit: 'Strong faith community, sense of plan de vida (purpose), physical labor, beans and corn staples' },
+                        { zone: 'Ikaria, Greece', emoji: '🇬🇷', habit: 'Afternoon naps, mountain herb teas, goat cheese, strong social ties, and near-zero Alzheimer\'s rates' },
+                        { zone: 'Loma Linda, California', emoji: '🇺🇸', habit: 'Seventh-day Adventist community: weekly Sabbath rest, vegetarian diet, tight-knit social network, no alcohol or tobacco' },
+                      ].map(({ zone, emoji, habit }) => (
+                        <div key={zone} className="bg-background rounded-lg border p-3 space-y-1">
+                          <p className="text-xs font-bold text-foreground">{emoji} {zone}</p>
+                          <p className="text-[10px] text-muted-foreground leading-snug">{habit}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="bg-green-100/60 dark:bg-green-900/20 rounded-lg p-3 space-y-1 border border-green-200 dark:border-green-800">
+                      <p className="text-[11px] font-bold text-green-900 dark:text-green-200">🌿 The Power 9® Principles (Buettner, Blue Zones, 2023)</p>
+                      <p className="text-[10px] text-muted-foreground leading-relaxed">
+                        Move Naturally · Sense of Purpose (Ikigai) · Downshift (stress reduction) · 80% Rule (eat until 80% full) · Plant Slant · Wine at 5 (moderate with friends) · Right Tribe · Loved Ones First · Belong (faith community)
+                      </p>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="bg-muted/20 rounded-xl border border-dashed p-5 text-center space-y-1">
