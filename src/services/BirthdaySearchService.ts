@@ -1,6 +1,7 @@
 import { WikiPerson, WikiEvent } from '@/services/WikimediaService';
 import { birthdayDatabase, searchCelebrities } from '@/data/birthdayData';
 import { celebrities, findCelebrityByBirthday } from '@/data/celebrities';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface BirthdaySearchResult {
   people: WikiPerson[];
@@ -289,3 +290,64 @@ export const searchBirthdayMatches = async (
   onProgress?.('No matches found', 'done');
   return { people: [], events: [], source: 'local', searchedDate };
 };
+
+export interface CelebrityBirthdayResult {
+  name: string;
+  birthDate: string | null;
+  deathDate: string | null;
+  sitelinks: number;
+  nationality: string | null;
+  nationalityCode: string | null;
+  occupation: string | null;
+  wikipediaUrl: string | null;
+  wikidataId: string | null;
+  isLiving: boolean;
+}
+
+// Query Supabase celebrity_sitelinks for ranked birthday results.
+// Returns celebrities sorted by sitelinks (global fame) with an optional country boost.
+// Falls back to empty array on any error so callers can fall back to local DB.
+export async function getRankedBirthdayCelebrities(
+  monthDay: string,       // "MM-DD" format
+  userCountry: string | null,
+  limit: number = 12
+): Promise<CelebrityBirthdayResult[]> {
+  try {
+    const { data, error } = await supabase
+      .from('celebrity_sitelinks')
+      .select('name, birth_date, death_date, sitelinks, nationality, nationality_code, occupation, wikipedia_url, wikidata_id')
+      .eq('birth_month_day', monthDay)
+      .order('sitelinks', { ascending: false })
+      .limit(50);
+
+    if (error || !data || data.length === 0) {
+      return [];
+    }
+
+    // Apply country boost: celebrities from user's country get +500 to their score
+    const scored = data.map(celeb => ({
+      ...celeb,
+      score: (celeb.sitelinks ?? 0) + (
+        userCountry && celeb.nationality_code === userCountry ? 500 : 0
+      )
+    }));
+
+    scored.sort((a, b) => b.score - a.score);
+
+    return scored.slice(0, limit).map(c => ({
+      name: c.name,
+      birthDate: c.birth_date,
+      deathDate: c.death_date,
+      sitelinks: c.sitelinks ?? 0,
+      nationality: c.nationality,
+      nationalityCode: c.nationality_code,
+      occupation: c.occupation,
+      wikipediaUrl: c.wikipedia_url,
+      wikidataId: c.wikidata_id,
+      isLiving: !c.death_date,
+    }));
+  } catch (err) {
+    console.warn('Supabase celebrity query failed, falling back to local DB:', err);
+    return [];
+  }
+}

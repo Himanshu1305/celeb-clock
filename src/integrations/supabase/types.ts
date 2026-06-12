@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      celebrity_sitelinks: {
+        Row: {
+          id: number
+          name: string
+          birth_date: string | null
+          birth_month_day: string | null
+          death_date: string | null
+          sitelinks: number | null
+          nationality: string | null
+          nationality_code: string | null
+          occupation: string | null
+          wikidata_id: string | null
+          wikipedia_url: string | null
+          created_at: string | null
+        }
+        Insert: {
+          id?: number
+          name: string
+          birth_date?: string | null
+          birth_month_day?: string | null
+          death_date?: string | null
+          sitelinks?: number | null
+          nationality?: string | null
+          nationality_code?: string | null
+          occupation?: string | null
+          wikidata_id?: string | null
+          wikipedia_url?: string | null
+          created_at?: string | null
+        }
+        Update: {
+          id?: number
+          name?: string
+          birth_date?: string | null
+          birth_month_day?: string | null
+          death_date?: string | null
+          sitelinks?: number | null
+          nationality?: string | null
+          nationality_code?: string | null
+          occupation?: string | null
+          wikidata_id?: string | null
+          wikipedia_url?: string | null
+          created_at?: string | null
+        }
+        Relationships: []
+      }
       analytics_events: {
         Row: {
           created_at: string | null
