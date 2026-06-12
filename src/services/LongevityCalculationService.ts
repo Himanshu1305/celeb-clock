@@ -100,6 +100,7 @@ export interface LongevityResult {
   communityBonus: number;
   totalForecast: number;
   maximumPotential: number;
+  /** @internal */
   controllablePotential: number;
   yearsGapToClose: number;
   currentAge: number;
@@ -349,13 +350,22 @@ export function calculateLongevity(
   const epigenetic = Math.min(6, habitSum);
 
   // ── Community bonus ──
-  const communityBonus = pillar2.hasMentor && pillar2.mentorAge > 85 ? 0.5 : 0;
+  let communityBonus = 0;
+  if (pillar2.hasMentor && pillar2.mentorAge > 0) {
+    const age = pillar2.mentorAge;
+    const baseBonus = age >= 95 ? 0.8 : age >= 85 ? 0.5 : age >= 75 ? 0.3 : 0;
+    const habitsBonus = Math.min(1.0, pillar2.mentorHabits.reduce((s, id) => {
+      const h = EPIGENETIC_HABITS.find(x => x.id === id);
+      return s + (h?.gain ?? 0) * 0.15;
+    }, 0));
+    communityBonus = Math.round(Math.min(1.5, baseBonus + habitsBonus) * 10) / 10;
+  }
 
   const totalForecast = Math.round((base + health + genetic + epigenetic + communityBonus) * 10) / 10;
 
   // controllablePotential = best health + actual genetics + max epigenetic + community bonus
   const maxHealth = 4 + 5 + 1.5 + 1.5 + 0 + 2;
-  const controllablePotential = Math.round((base + maxHealth + genetic + 6 + 0.5) * 10) / 10;
+  const controllablePotential = Math.round((base + maxHealth + genetic + 6 + 1.5) * 10) / 10;
   const maximumPotential = controllablePotential; // backward compat alias
 
   const now = new Date();

@@ -137,12 +137,19 @@ function catIdx<T extends string>(opts: T[], val: T): number {
   return i >= 0 ? i : 0;
 }
 
-function gainAnchor(yearGain: number): string {
-  if (yearGain >= 1.5) return '3 more FIFA World Cups to watch';
-  if (yearGain >= 1.0) return 'watching one more Olympic Games';
-  if (yearGain >= 0.5) return '730 more weekends with family';
-  if (yearGain > 0)   return 'seeing your family reach their next milestone';
-  return '';
+function getComparisonAnchor(gainYears: number): string {
+  if (gainYears <= 0) return '';
+  const gainDays = Math.round(gainYears * 365.25);
+  const gainWeekends = Math.round(gainYears * 52);
+  const gainMonths = Math.round(gainYears * 12);
+  const worldCups = Math.floor(gainYears / 4);
+  const olympics = Math.floor(gainYears / 4);
+  if (worldCups >= 2) return `${worldCups} more FIFA World Cups to watch`;
+  if (worldCups >= 1) return '1 more FIFA World Cup to watch';
+  if (olympics >= 1)  return '1 more Olympic Games to witness';
+  if (gainWeekends >= 52) return `${gainWeekends} more weekends with family`;
+  if (gainMonths >= 3) return `${gainMonths} more months of life`;
+  return `${gainDays} more days`;
 }
 
 function ImpactBadge({ impact }: { impact: number }) {
@@ -197,7 +204,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
   const [iDiet,  setDiet]  = useState(() => catIdx(DIET_OPTS,  q.diet    || 'average'));
   const [iEx,    setEx]    = useState(() => catIdx(EX_OPTS,    q.exercise || 'moderate'));
   const [iHyd,   setHyd]   = useState(1);  // moderate (population average)
-  const [iScr,   setScr]   = useState(1);  // moderate (population average)
+  const [iScr,   setScr]   = useState(0);  // low (0yr — neutral default)
   const [iWlb,   setWlb]   = useState(2);  // fair (population average)
 
   // Panel 2 — habit frequencies
@@ -232,9 +239,9 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
   const [iMent, setMent] = useState(2);  // none (default)
   const [iCS,   setCS]   = useState(1);  // partial (population average)
   const [iAQ,   setAQ]   = useState(1);  // moderate (population average)
-  const [iCom,  setCom]  = useState(2);  // moderate (population average)
+  const [iCom,  setCom]  = useState(1);  // low-stress commute (neutral default)
 
-  const simForecast = useMemo(() => {
+  const rawSimForecast = useMemo(() => {
     const epigenBonus = Math.min(6, EPIGENETIC_HABITS.reduce((s, h) => {
       const freq = habitFreqs[h.id] ?? 'never';
       return s + h.gain * FREQ_MULT[freq];
@@ -266,6 +273,8 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
     });
   }, [iSmoke, iDrink, iDiet, iEx, iSleep, iBP, iSoc, stress, bmi, habitFreqs,
       iHyd, iScr, iWlb, iDiab, iHC, iDC, iMH, iRel, iPet, iMent, iCS, iAQ, iCom]);
+
+  const simForecast = Math.max(result.totalForecast, rawSimForecast);
 
   const delta = Math.round((simForecast - result.totalForecast) * 10) / 10;
 
@@ -428,7 +437,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                   if (!habit) return null;
                   const freq = habitFreqs[id] ?? 'never';
                   const gainAmt = Math.round(habit.gain * FREQ_MULT[freq] * 10) / 10;
-                  const anchor = gainAnchor(gainAmt);
+                  const anchor = getComparisonAnchor(gainAmt);
                   const isExpanded = expandedHabit === id;
                   const freqLevels: FreqLevel[] = ['never', 'occasionally', 'regularly', 'daily'];
 
@@ -629,25 +638,58 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
         </Card>
       </div>
 
+      {/* ── 🌍 World Longevity Facts ── */}
+      <Card>
+        <CardHeader className="pb-3 pt-4 px-5">
+          <CardTitle className="text-sm font-bold flex items-center gap-2">
+            🌍 World Longevity Facts
+          </CardTitle>
+          <p className="text-xs text-muted-foreground mt-0.5">Fascinating benchmarks from the world's longest-lived populations</p>
+        </CardHeader>
+        <CardContent className="px-5 pb-4">
+          <div className="grid sm:grid-cols-2 gap-2 overflow-x-auto">
+            {[
+              { emoji: '🇯🇵', fact: "Japan has the world's highest life expectancy — 87 years for women", source: 'WHO 2023' },
+              { emoji: '🌿', fact: 'Blue Zone residents (Okinawa, Sardinia, Nicoya) live 10+ years longer than average', source: 'Buettner, 2023' },
+              { emoji: '🫀', fact: 'Heart disease is preventable in 80% of cases with diet, exercise, and not smoking', source: 'AHA 2023' },
+              { emoji: '🧬', fact: 'Identical twin studies show only 25–30% of lifespan is determined by genetics', source: 'Karolinska Institute, 2017' },
+              { emoji: '👥', fact: 'Loneliness has the same mortality impact as smoking 15 cigarettes per day', source: 'Harvard Study of Adult Development' },
+              { emoji: '🏃', fact: '150 minutes of moderate exercise per week reduces all-cause mortality by 31%', source: 'WHO Physical Activity Guidelines, 2020' },
+              { emoji: '😴', fact: 'Consistently sleeping 7–9 hours is associated with the lowest mortality risk across all age groups', source: 'National Sleep Foundation, 2023' },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3 bg-muted/30 border rounded-lg p-3">
+                <span className="text-2xl shrink-0">{item.emoji}</span>
+                <div>
+                  <p className="text-xs text-foreground font-medium leading-snug">{item.fact}</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5 italic">{item.source}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* ── Summary & Motivating Comparisons ── */}
       <Card className="border-primary/20 bg-primary/5">
         <CardContent className="p-5 space-y-5">
-          {/* Simplified 3-number display */}
-          <div className="grid grid-cols-3 gap-3 text-center">
-            <div>
-              <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Current Lifestyle</p>
-              <strong className="text-3xl font-black text-muted-foreground">{result.totalForecast} yrs</strong>
+          {/* 2-number + gain badge */}
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-6 flex-wrap">
+              <div className="text-center">
+                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Current Lifestyle</p>
+                <strong className="text-3xl font-black text-muted-foreground">{result.totalForecast} yrs</strong>
+              </div>
+              <TrendingUp className="w-5 h-5 text-primary hidden sm:block" />
+              <div className="text-center">
+                <p className="text-[10px] uppercase font-bold text-primary tracking-widest">With Optimized Habits</p>
+                <strong className="text-3xl font-black text-primary" style={blurStyle}>{simForecast} yrs</strong>
+              </div>
             </div>
-            <div>
-              <p className="text-[10px] uppercase font-bold text-primary tracking-widest">Optimized Lifestyle</p>
-              <strong className="text-3xl font-black text-primary" style={blurStyle}>{simForecast} yrs</strong>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase font-bold text-green-600 tracking-widest">Potential Gain</p>
-              <strong className={`text-3xl font-black ${delta > 0 ? 'text-green-600' : 'text-muted-foreground'}`}>
-                {delta > 0 ? '+' : ''}{delta} yrs
-              </strong>
-            </div>
+            {delta > 0 && (
+              <div className="bg-green-100 text-green-800 border border-green-200 rounded-lg px-4 py-2 text-sm font-black">
+                ⚡ +{delta} yrs
+              </div>
+            )}
           </div>
 
           {/* Gain celebration */}
@@ -678,9 +720,18 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
             <div className="space-y-2">
               {/* WHO baseline */}
               <div className="flex items-center justify-between text-xs bg-background rounded-lg border px-3 py-2">
-                <span className="text-muted-foreground">
-                  WHO baseline ({q.gender || 'global'}, {q.country || 'average'})
-                </span>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="text-muted-foreground cursor-help underline decoration-dotted">
+                        WHO baseline ({q.gender || 'global'}, {q.country || 'average'})
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs text-xs p-2">
+                      The WHO 2023 average life expectancy for your sex and country of residence. This is the statistical baseline before any personal health, genetic, or lifestyle adjustments are applied.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <div className="flex items-center gap-2 shrink-0">
                   <strong className="font-bold">{result.baselineLifeExpectancy} yrs</strong>
                   {simForecast > result.baselineLifeExpectancy
@@ -693,7 +744,16 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
               {/* Family genetic baseline */}
               {hasFamilyData && (
                 <div className="flex items-center justify-between text-xs bg-background rounded-lg border px-3 py-2">
-                  <span className="text-muted-foreground">Your family's genetic baseline</span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="text-muted-foreground cursor-help underline decoration-dotted">Your family's genetic baseline</span>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs text-xs p-2">
+                        Weighted average of the ages of your entered family members (paternal 50% / maternal 50%). Still-living relatives receive a statistical longevity adjustment. Research shows genetics account for 25–30% of lifespan (Karolinska Institute, 2017).
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                   <div className="flex items-center gap-2 shrink-0">
                     <strong className="font-bold">~{Math.round(result.familyBaselineAge)} yrs</strong>
                     <span className="text-[10px] text-muted-foreground">
@@ -707,9 +767,18 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
 
               {/* HALE */}
               <div className="flex items-center justify-between text-xs bg-background rounded-lg border px-3 py-2">
-                <span className="text-muted-foreground">
-                  Healthy Life Expectancy (HALE, {q.country || 'global'})
-                </span>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="text-muted-foreground cursor-help underline decoration-dotted">
+                        Healthy Life Expectancy (HALE, {q.country || 'global'})
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs text-xs p-2">
+                      HALE (Healthy Life Expectancy) measures the expected years lived in good health — free from serious disease or disability. It is lower than total life expectancy because it excludes years spent in poor health. Source: WHO Global Health Observatory, 2023.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <div className="flex items-center gap-2 shrink-0">
                   <strong className="font-bold">{hale} yrs</strong>
                   {simForecast > hale

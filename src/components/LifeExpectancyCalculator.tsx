@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalytics } from '@/hooks/useAnalytics';
-import { Crown, Heart, Coffee, Brain, Dumbbell, User, ShieldCheck, Info, Activity, Moon, Users, Dna, TreePine } from 'lucide-react';
+import { Crown, Heart, Coffee, Brain, Dumbbell, User, ShieldCheck, Info, Activity, Moon, Users, Dna, TreePine, Lock } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from 'react-router-dom';
 import { countries } from '@/data/countries';
@@ -139,6 +139,8 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   const [pillar1, setPillar1] = useState<Pillar1Data>(DEFAULT_PILLAR1);
   const [pillar2, setPillar2] = useState<Pillar2Data>(DEFAULT_PILLAR2);
   const hasTracked = useRef(false);
+  const countUpDoneRef = useRef(false);
+  const [countUpAge, setCountUpAge] = useState<number | null>(null);
 
   // BMI calculator local state
   const [bmiUnit, setBmiUnit] = useState<'metric' | 'imperial'>('metric');
@@ -169,8 +171,9 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
     }
   }, [bmiUnit, heightCm, heightFt, heightIn, weightKg, weightLbs]);
 
-  // Live preview effect — recalculates on every input change
+  // Live preview effect — only calculates from step 6 onwards
   useEffect(() => {
+    if (step < 6) return;
     const r = calculateLongevity(data, pillar1, pillar2, birthDate ?? undefined);
     let timer: ReturnType<typeof setTimeout> | null = null;
 
@@ -184,13 +187,32 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
     prevForecastRef.current = r.totalForecast;
     setLiveResult(r);
 
-    if (!hasTracked.current && step >= 6) {
+    if (!hasTracked.current) {
       hasTracked.current = true;
       trackFeatureUse('life_expectancy_calculator', { action: 'calculate' });
     }
 
     return () => { if (timer) clearTimeout(timer); };
-  }, [data, pillar1, pillar2, birthDate]);
+  }, [data, pillar1, pillar2, birthDate, step]);
+
+  // Count-up animation when age first reveals on step 6
+  useEffect(() => {
+    if (step === 6 && liveResult && !countUpDoneRef.current) {
+      countUpDoneRef.current = true;
+      const target = liveResult.totalForecast;
+      const intervalMs = 25;
+      const totalSteps = 60; // 1.5s
+      let tick = 0;
+      const timer = setInterval(() => {
+        tick += 1;
+        const progress = tick / totalSteps;
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setCountUpAge(Math.round(target * eased * 10) / 10);
+        if (tick >= totalSteps) { clearInterval(timer); setCountUpAge(target); }
+      }, intervalMs);
+      return () => clearInterval(timer);
+    }
+  }, [step, liveResult]);
 
   const totalSteps = 8;
   const bmiCategory = getBMICategory(data.bmi);
@@ -231,8 +253,16 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
 
       <CardContent className="space-y-6 text-left">
 
-        {/* ── Persistent live age card — shown on ALL steps ── */}
-        {liveResult && (
+        {/* ── Age card: locked on steps 1-5, revealed on 6+ ── */}
+        {step < 6 ? (
+          <div className="rounded-xl border border-muted bg-muted/30 p-4 flex items-center gap-3">
+            <Lock className="w-5 h-5 text-muted-foreground/50 shrink-0" />
+            <div>
+              <p className="text-xs font-bold text-muted-foreground">Your projected lifespan will reveal here</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">Complete Steps 1–5 first — your number unlocks at Step 6</p>
+            </div>
+          </div>
+        ) : liveResult ? (
           <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-2">
             <div className="flex items-start justify-between gap-3 flex-wrap">
               <div>
@@ -241,10 +271,10 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                   <strong className={`text-4xl font-black transition-colors duration-300 ${
                     flashDir === 'up' ? 'text-green-600' : flashDir === 'down' ? 'text-red-500' : 'text-primary'
                   }`}>
-                    {liveResult.totalForecast}
+                    {step === 6 && countUpAge !== null ? countUpAge : liveResult.totalForecast}
                   </strong>
                   <span className="text-lg font-bold text-primary">yrs</span>
-                  {deltaLabel && (
+                  {deltaLabel && step > 6 && (
                     <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full animate-fade-in-up ${
                       deltaLabel.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'
                     }`}>
@@ -255,15 +285,14 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                 <p className="text-[10px] text-muted-foreground mt-0.5">Updates in real time as you answer each step</p>
               </div>
 
-              {/* Three-marker progress bar */}
-              {currentAge !== null && (() => {
+              {/* Progress bar */}
+              {currentAge !== null && step > 6 && (() => {
                 const forecast = liveResult.totalForecast;
                 const maxPot = liveResult.maximumPotential;
                 const rangeStart = Math.max(0, currentAge - 5);
                 const rangeEnd = maxPot + 5;
                 const range = rangeEnd - rangeStart;
                 const projPct = Math.round(((forecast - rangeStart) / range) * 100);
-                const maxPct = Math.round(((maxPot - rangeStart) / range) * 100);
                 return (
                   <div className="flex-1 min-w-[160px] space-y-1 pt-1">
                     <div className="relative h-3 rounded-full bg-muted overflow-hidden">
@@ -282,7 +311,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
               })()}
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* ── STEP 1: Personal Info ── */}
         {step === 1 && (
@@ -673,9 +702,14 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
 
         {/* ── STEP 8: Pillar 3 — Community Anchor ── */}
         {step === 8 && (() => {
-          const BLUE_ZONES_IDS = new Set(['walking', 'purpose', 'meditation', 'fasting', 'wholefood', 'spiritual', 'community', 'volunteer']);
-          const blueZonesCount = pillar2.mentorHabits.filter(id => BLUE_ZONES_IDS.has(id)).length;
-          const mentorHabitBonus = Math.min(6, pillar2.mentorHabits.reduce((s, id) => s + (EPIGENETIC_HABITS.find(h => h.id === id)?.gain ?? 0), 0));
+          const envInfluence = Math.round(Math.min(1.0, pillar2.mentorHabits.reduce((s, id) => {
+            const h = EPIGENETIC_HABITS.find(x => x.id === id);
+            return s + (h?.gain ?? 0) * 0.15;
+          }, 0)) * 100) / 100;
+          const mentorAge = pillar2.mentorAge;
+          const baseBonus = mentorAge >= 95 ? 0.8 : mentorAge >= 85 ? 0.5 : mentorAge >= 75 ? 0.3 : 0;
+          const habitsBonus = envInfluence;
+          const totalCommunityBonus = Math.min(1.5, baseBonus + habitsBonus);
 
           return (
             <div className="space-y-6">
@@ -761,9 +795,11 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                         </SelectContent>
                       </Select>
                     </div>
-                    {pillar2.mentorAge > 85 && (
+                    {pillar2.mentorAge >= 75 && (
                       <p className="text-xs text-green-700 bg-green-50 dark:bg-green-950/20 p-2 rounded border border-green-200">
-                        ✅ +0.5 yr community bonus: Your community environment supports exceptional longevity.
+                        ✅ +{baseBonus} yr community base bonus
+                        {pillar2.mentorAge >= 95 ? ' (age 95+: exceptional environment)' : pillar2.mentorAge >= 85 ? ' (age 85+: strong longevity signal)' : ' (age 75+: healthy environment)'}
+                        {totalCommunityBonus > baseBonus && <span> · +{Math.round((totalCommunityBonus - baseBonus) * 100) / 100} yr from mentor habits = <strong>+{Math.round(totalCommunityBonus * 10) / 10} yr total</strong></span>}
                       </p>
                     )}
                     <p className="text-[11px] text-muted-foreground italic">People in similar environments share air quality, food culture, noise levels, and social norms. A long-lived neighbor is powerful evidence that YOUR environment supports longevity.</p>
@@ -774,20 +810,13 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
               {/* Section B: Community Anchor's Longevity Habits */}
               {pillar2.hasMentor ? (
                 <div className="space-y-3">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h4 className="text-sm font-bold text-foreground">Section B — Your Community Anchor's Longevity Habits</h4>
-                      <p className="text-xs text-muted-foreground mt-0.5">
-                        What habits do you believe contribute to{' '}
-                        <strong>{pillar2.mentorName || 'your mentor'}</strong>'s long life?
-                        Select all that apply.
-                      </p>
-                    </div>
-                    {blueZonesCount > 0 && (
-                      <Badge variant="outline" className="shrink-0 text-[10px] border-blue-400 text-blue-600">
-                        🌍 {blueZonesCount}/8 Blue Zones
-                      </Badge>
-                    )}
+                  <div>
+                    <h4 className="text-sm font-bold text-foreground">Section B — Your Community Anchor's Longevity Habits</h4>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      What habits do you believe contribute to{' '}
+                      <strong>{pillar2.mentorName || 'your mentor'}</strong>'s long life?
+                      Select all that apply.
+                    </p>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-2">
                     {EPIGENETIC_HABITS.map((habit) => {
@@ -821,12 +850,18 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                     })}
                   </div>
                   {pillar2.mentorHabits.length > 0 && (
-                    <div className="flex items-center justify-between bg-primary/5 rounded-lg border border-primary/20 px-4 py-2">
-                      <span className="text-xs font-medium text-foreground">
-                        {pillar2.mentorHabits.length} habit{pillar2.mentorHabits.length !== 1 ? 's' : ''} attributed to mentor
-                        {blueZonesCount > 0 && <span className="text-blue-600 ml-2">· {blueZonesCount}/8 Blue Zones</span>}
-                      </span>
-                      <Badge className="text-xs font-bold bg-primary text-primary-foreground">+{mentorHabitBonus.toFixed(1)} yrs potential (cap: +6)</Badge>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between bg-primary/5 rounded-lg border border-primary/20 px-4 py-2">
+                        <span className="text-xs font-medium text-foreground">
+                          {pillar2.mentorHabits.length} habit{pillar2.mentorHabits.length !== 1 ? 's' : ''} attributed to mentor
+                        </span>
+                        <Badge variant="outline" className="text-xs font-bold text-green-700 border-green-500">
+                          Environmental influence: +{envInfluence.toFixed(2)} yr
+                        </Badge>
+                      </div>
+                      <p className="text-[11px] text-muted-foreground leading-relaxed px-1">
+                        Living near someone who practices these habits creates an environmental influence on your own behaviour — through shared food culture, social norms, and motivation. Each habit contributes 15% of its full scientific value as an indirect environmental effect.
+                      </p>
                     </div>
                   )}
                 </div>

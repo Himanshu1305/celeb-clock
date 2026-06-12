@@ -414,7 +414,7 @@ export const EnhancedLifeExpectancyReport = ({
   const blueZoneCount = habitsForBlueZone.filter(id => BLUE_ZONE_HABITS.has(id)).length;
 
   const currentAge = birthDate instanceof Date
-    ? new Date().getFullYear() - birthDate.getFullYear()
+    ? Math.floor((new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000))
     : result.currentAge;
 
   const shareText = celebrityMatches[0]
@@ -439,7 +439,6 @@ export const EnhancedLifeExpectancyReport = ({
     { name: 'Epigenetic Habits', value: epigeneticBonus,                                                 fill: epigeneticBonus > 0 ? '#22c55e' : '#94a3b8' },
     { name: 'Community Bonus',  value: result.communityBonus,                                            fill: '#22c55e' },
     { name: 'Your Forecast',    value: result.totalForecast,                                             fill: '#f97316' },
-    { name: 'Best Achievable',  value: result.controllablePotential,                                     fill: '#3b82f6' },
   ];
 
   // Chart 2: factor impact data (top 10 by absolute impact)
@@ -496,11 +495,6 @@ export const EnhancedLifeExpectancyReport = ({
           <div className="text-center">
             <span className="text-[10px] uppercase font-bold text-muted-foreground block">Current Age</span>
             <strong className="text-2xl font-bold text-foreground">{currentAge} yrs</strong>
-          </div>
-          <div className="w-px h-8 bg-border hidden sm:block" />
-          <div className="text-center">
-            <span className="text-[10px] uppercase font-bold text-muted-foreground block">Best Achievable</span>
-            <strong className="text-2xl font-bold text-accent">{result.controllablePotential} yrs</strong>
           </div>
           <div className="w-px h-8 bg-border hidden sm:block" />
           <div className="text-center">

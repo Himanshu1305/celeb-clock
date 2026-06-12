@@ -274,6 +274,13 @@ const LifeExpectancy = () => {
                 <p className="text-sm text-muted-foreground">
                   You are {longevityResult.currentAge} today · {longevityResult.yearsRemaining} years of life ahead
                 </p>
+                <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
+                  Built from <strong className="text-foreground">{longevityResult.factorBreakdown.length} personal factors</strong>
+                  {Object.values(longevityResult.pillar1Snapshot).filter(m => !m.dontKnow && m.age > 0 && m.isLiving !== null).length > 0 && (
+                    <> including <strong className="text-foreground">{Object.values(longevityResult.pillar1Snapshot).filter(m => !m.dontKnow && m.age > 0 && m.isLiving !== null).length} family members</strong></>
+                  )} — using WHO 2023 baselines and peer-reviewed health research.
+                  The simulator below shows you what's possible.
+                </p>
               </div>
 
               {/* How we built your number */}
@@ -301,8 +308,18 @@ const LifeExpectancy = () => {
                       </strong>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">🌱 Epigenetic habits bonus <span className="text-[10px] opacity-60">({longevityResult.blueZonesCount}/8 Blue Zones)</span></span>
-                      <strong className="text-green-600 tabular-nums">+{longevityResult.epigeneticAdjustment} yrs</strong>
+                      <span className="text-muted-foreground">🌱 Epigenetic habits bonus</span>
+                      {userSelectedHabits.length > 0 ? (
+                        <strong className="text-green-600 tabular-nums">+{longevityResult.epigeneticAdjustment} yrs</strong>
+                      ) : (
+                        <a
+                          href="#simulator"
+                          className="text-primary text-xs font-semibold hover:underline"
+                          onClick={(e) => { e.preventDefault(); document.querySelector('[data-sim]')?.scrollIntoView({ behavior: 'smooth' }); }}
+                        >
+                          Explore in Simulator →
+                        </a>
+                      )}
                     </div>
                     {longevityResult.communityBonus > 0 && (
                       <div className="flex justify-between items-center">
@@ -334,7 +351,6 @@ const LifeExpectancy = () => {
                 </h2>
                 <p className="text-sm text-muted-foreground mt-1">
                   Your forecast: <strong className="text-primary text-lg">{longevityResult.totalForecast} years</strong>
-                  {' · '}Best achievable: <strong className="text-accent">{longevityResult.controllablePotential} years</strong>
                   {' · '}Gap to close: <strong className="text-foreground">{longevityResult.yearsGapToClose} years</strong>
                 </p>
               </div>
