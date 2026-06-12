@@ -118,9 +118,12 @@ function transformRecord(raw) {
 async function insertBatch(records, batchNum, total) {
   const { error } = await supabase
     .from('celebrity_sitelinks')
-    .insert(records);
+    .upsert(records, {
+      onConflict: 'name,birth_date',
+      ignoreDuplicates: true
+    });
 
-  if (error) {
+  if (error && error.code !== '23505') {
     console.error(`Batch ${batchNum} error:`, JSON.stringify(error, null, 2));
     console.error('First record in batch:', JSON.stringify(records[0], null, 2));
     return false;
