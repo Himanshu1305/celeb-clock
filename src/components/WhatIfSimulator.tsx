@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, CSSProperties } from 'react';
+import { useState, useMemo, useEffect, useRef, CSSProperties } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -121,18 +121,6 @@ const FREQ_LABELS_DISPLAY: Record<FreqLevel, string> = {
   never: 'Never', occasionally: 'Occasionally', regularly: 'Regularly', daily: 'Daily',
 };
 
-const FACTOR_BLOG_SLUG: Record<string, string> = {
-  'Physical Exercise':  '/blog/exercise-longevity-guide',
-  'Diet Quality':       '/blog/longevity-diet-guide',
-  'Sleep Duration':     '/blog/sleep-longevity-science',
-  'Stress Level':       '/blog/stress-mental-health-longevity',
-  'Blood Pressure':     '/blog/preventive-health-screening-guide',
-  'BMI / Body Weight':  '/blog/longevity-diet-guide',
-  'Social Connections': '/blog/community-social-longevity',
-  'Epigenetic Habits':  '/blog/exercise-longevity-guide',
-  'Diabetes':           '/blog/preventive-health-screening-guide',
-};
-
 const HABIT_GROUPS = [
   { label: '🏃 Physical Habits', ids: ['walking', 'gardening', 'cold'] },
   { label: '🧠 Mental & Social Habits', ids: ['community', 'laughter', 'meditation', 'purpose', 'volunteer', 'spiritual'] },
@@ -253,6 +241,8 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
   const [iAQ,   setAQ]   = useState(1);  // moderate (population average)
   const [iCom,  setCom]  = useState(1);  // low-stress commute (neutral default)
 
+  const initialSimForecastRef = useRef<number | null>(null);
+
   const rawSimForecast = useMemo(() => {
     const epigenBonus = Math.min(6, EPIGENETIC_HABITS.reduce((s, h) => {
       const freq = habitFreqs[h.id] ?? 'never';
@@ -288,7 +278,10 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
 
   const simForecast = rawSimForecast;
 
-  const delta = Math.round((simForecast - result.totalForecast) * 10) / 10;
+  if (initialSimForecastRef.current === null) {
+    initialSimForecastRef.current = simForecast;
+  }
+  const delta = Math.round((simForecast - (initialSimForecastRef.current ?? result.totalForecast)) * 10) / 10;
 
   const habitBonusTotal = Math.round(Math.min(6, EPIGENETIC_HABITS.reduce((s, h) => {
     const freq = habitFreqs[h.id] ?? 'never';
@@ -331,12 +324,6 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
       .map(h => h.id);
     onHabitsChange?.(activeHabits, habitFreqs);
   }, [habitFreqs]);
-
-  const simEpigeneticYears = Math.round(Math.min(6, Object.entries(habitFreqs).reduce((sum, [id, freq]) => {
-    const habit = EPIGENETIC_HABITS.find(h => h.id === id);
-    const mult: Record<string, number> = { never: 0, occasionally: 0.3, regularly: 0.65, daily: 1.0 };
-    return sum + (habit?.gain ?? 0) * (mult[freq] ?? 0);
-  }, 0)) * 10) / 10;
 
   const blurStyle: CSSProperties = !isPremium
     ? { filter: 'blur(8px)', userSelect: 'none', cursor: 'default' }
