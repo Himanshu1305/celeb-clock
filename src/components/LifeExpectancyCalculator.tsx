@@ -48,6 +48,20 @@ const InfoTooltip = ({ content }: { content: string }) => (
   </TooltipProvider>
 );
 
+const POWER9_IDS = ['walking', 'purpose', 'meditation', 'fasting', 'wholefood', 'spiritual', 'volunteer', 'community', 'gardening'];
+
+const POWER9_HABITS = [
+  { id: 'walking',    emoji: '🚶', name: 'Move Naturally',   region: 'All 5 Zones',       science: 'Blue Zone centenarians walk 5+ miles/day as part of daily life — never as "exercise"' },
+  { id: 'purpose',    emoji: '🎯', name: 'Purpose (Ikigai)', region: '🇯🇵 Okinawa',        science: '"Why I wake up" adds up to 7 years of life expectancy — Harvard confirms strong purpose effect' },
+  { id: 'meditation', emoji: '🧘', name: 'Downshift',        region: '🇮🇹 Sardinia',       science: 'Routine stress relief lowers chronic inflammation — Adventists use prayer, Okinawans ancestral rituals' },
+  { id: 'fasting',    emoji: '🍽️', name: '80% Rule',         region: '🇯🇵 Okinawa',        science: '"Hara hachi bu" — stop eating at 80% full; caloric restriction linked to longer telomeres' },
+  { id: 'wholefood',  emoji: '🥗', name: 'Plant Slant',      region: 'All 5 Zones',       science: 'Beans are the cornerstone of every Blue Zone diet — each daily cup adds ~4 years of life expectancy' },
+  { id: 'gardening',  emoji: '🍷', name: 'Wine at 5',        region: '🇮🇹 Sardinia · 🇬🇷 Ikaria', science: '1–2 glasses of Cannonau wine daily with friends — social rituals around food matter as much as nutrients' },
+  { id: 'spiritual',  emoji: '🙏', name: 'Belong',           region: '🇺🇸 Loma Linda',     science: 'Faith community attendance adds 4–14 years — weekly gathering, accountability, and shared purpose' },
+  { id: 'volunteer',  emoji: '❤️', name: 'Loved Ones First', region: '🇨🇷 Nicoya',         science: 'Keeping aging parents nearby adds 4–6 years to children\'s life expectancy too (Costa Rican studies)' },
+  { id: 'community',  emoji: '👥', name: 'Right Tribe',      region: 'All 5 Zones',       science: 'Social norms drive 70% of long-term habits — smoking cessation is 3× more likely within non-smoking networks' },
+];
+
 const getBMICategory = (bmi: number) => {
   if (bmi < 18.5) return { label: 'Underweight', color: 'text-blue-500 border-blue-400' };
   if (bmi < 25)   return { label: 'Normal Weight', color: 'text-green-600 border-green-400' };
@@ -970,32 +984,53 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                     </div>
                   )}
 
-                  {/* Area C — Blue Zones Explanation */}
-                  <div className="bg-green-50/50 dark:bg-green-950/20 rounded-xl border border-green-200 dark:border-green-900 p-4 space-y-3">
-                    <h4 className="text-xs font-bold text-green-900 dark:text-green-200">🌍 The 5 Blue Zones — Where Communities Make Longevity the Default</h4>
-                    <p className="text-[11px] text-muted-foreground leading-relaxed">
-                      Researchers Dan Buettner (National Geographic), Dr. Gianni Pes, and Dr. Michel Poulain identified five geographic areas where people consistently live past 100 — not through elite healthcare or supplements, but through community structure and shared daily habits.
-                    </p>
-                    <div className="grid sm:grid-cols-2 gap-2">
-                      {[
-                        { zone: 'Okinawa, Japan', emoji: '🇯🇵', habit: 'Moai (social support groups), ikigai (sense of purpose), plant-based diet, regular natural movement' },
-                        { zone: 'Sardinia, Italy', emoji: '🇮🇹', habit: "Mountainous terrain encourages daily walking, multigenerational family bonds, goat's milk, and red wine in moderation" },
-                        { zone: 'Nicoya, Costa Rica', emoji: '🇨🇷', habit: 'Strong faith community, sense of plan de vida (purpose), physical labor, beans and corn staples' },
-                        { zone: 'Ikaria, Greece', emoji: '🇬🇷', habit: 'Afternoon naps, mountain herb teas, goat cheese, strong social ties, and near-zero Alzheimer\'s rates' },
-                        { zone: 'Loma Linda, California', emoji: '🇺🇸', habit: 'Seventh-day Adventist community: weekly Sabbath rest, vegetarian diet, tight-knit social network, no alcohol or tobacco' },
-                      ].map(({ zone, emoji, habit }) => (
-                        <div key={zone} className="bg-background rounded-lg border p-3 space-y-1">
-                          <p className="text-xs font-bold text-foreground">{emoji} {zone}</p>
-                          <p className="text-[10px] text-muted-foreground leading-snug">{habit}</p>
+                  {/* Area C — Blue Zones Power 9 */}
+                  <div className="bg-green-50/50 dark:bg-green-950/20 rounded-xl border border-green-200 dark:border-green-900 p-4 space-y-4">
+                    <div className="space-y-1">
+                      <h4 className="text-xs font-bold text-green-900 dark:text-green-200">🌍 The Power 9® — Habits of the World's Longest-Lived People</h4>
+                      <p className="text-[10px] text-muted-foreground leading-relaxed">
+                        Validated across 5 Blue Zone regions spanning 4 continents — not supplements or healthcare, but daily community habits that make longevity the default.
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {['🇮🇹 Sardinia', '🇯🇵 Okinawa', '🇺🇸 Loma Linda', '🇨🇷 Nicoya', '🇬🇷 Ikaria'].map(zone => (
+                          <span key={zone} className="text-[10px] bg-green-100/80 dark:bg-green-900/40 text-green-800 dark:text-green-200 px-2 py-0.5 rounded-full border border-green-200 dark:border-green-700 font-medium">
+                            {zone}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {POWER9_HABITS.map(({ id, emoji, name, region, science }) => (
+                        <div
+                          key={id}
+                          className={`rounded-lg border p-2.5 space-y-1 transition-all ${
+                            pillar2.mentorHabits.includes(id)
+                              ? 'bg-green-100/70 dark:bg-green-900/30 border-green-300 dark:border-green-700'
+                              : 'bg-background border-border/60'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-base">{emoji}</span>
+                            {pillar2.mentorHabits.includes(id) && (
+                              <span className="text-[8px] text-green-600 font-bold">✓</span>
+                            )}
+                          </div>
+                          <p className="text-[10px] font-bold text-foreground leading-snug">{name}</p>
+                          <p className="text-[8px] text-primary/80 font-medium">{region}</p>
+                          <p className="text-[9px] text-muted-foreground leading-snug italic">{science}</p>
                         </div>
                       ))}
                     </div>
-                    <div className="bg-green-100/60 dark:bg-green-900/20 rounded-lg p-3 space-y-1 border border-green-200 dark:border-green-800">
-                      <p className="text-[11px] font-bold text-green-900 dark:text-green-200">🌿 The Power 9® Principles (Buettner, Blue Zones, 2023)</p>
-                      <p className="text-[10px] text-muted-foreground leading-relaxed">
-                        Move Naturally · Sense of Purpose (Ikigai) · Downshift (stress reduction) · 80% Rule (eat until 80% full) · Plant Slant · Wine at 5 (moderate with friends) · Right Tribe · Loved Ones First · Belong (faith community)
-                      </p>
-                    </div>
+                    {(() => {
+                      const count = pillar2.mentorHabits.filter(id => POWER9_IDS.includes(id)).length;
+                      return (
+                        <div className="bg-green-100/60 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800">
+                          <p className="text-[11px] text-green-900 dark:text-green-200 leading-relaxed">
+                            Your community anchor practices <strong>{count}</strong> of these 9 principles — providing environmental evidence that these habits are sustainable in YOUR community.
+                          </p>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
               ) : (

@@ -121,6 +121,18 @@ const FREQ_LABELS_DISPLAY: Record<FreqLevel, string> = {
   never: 'Never', occasionally: 'Occasionally', regularly: 'Regularly', daily: 'Daily',
 };
 
+const FACTOR_BLOG_SLUG: Record<string, string> = {
+  'Physical Exercise':  '/blog/exercise-longevity-guide',
+  'Diet Quality':       '/blog/longevity-diet-guide',
+  'Sleep Duration':     '/blog/sleep-longevity-science',
+  'Stress Level':       '/blog/stress-mental-health-longevity',
+  'Blood Pressure':     '/blog/preventive-health-screening-guide',
+  'BMI / Body Weight':  '/blog/longevity-diet-guide',
+  'Social Connections': '/blog/community-social-longevity',
+  'Epigenetic Habits':  '/blog/exercise-longevity-guide',
+  'Diabetes':           '/blog/preventive-health-screening-guide',
+};
+
 const HABIT_GROUPS = [
   { label: '🏃 Physical Habits', ids: ['walking', 'gardening', 'cold'] },
   { label: '🧠 Mental & Social Habits', ids: ['community', 'laughter', 'meditation', 'purpose', 'volunteer', 'spiritual'] },
@@ -707,26 +719,37 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
           </div>
 
           {/* Gain celebration */}
-          <div className={`rounded-lg px-4 py-2.5 text-xs font-medium ${
-            delta > 15 ? 'bg-green-100 text-green-800 border border-green-200' :
-            delta > 10 ? 'bg-green-50 text-green-700 border border-green-100' :
-            delta > 5  ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
-            delta > 0  ? 'bg-muted/60 text-muted-foreground border border-muted' :
-            delta === 0 ? 'bg-muted/40 text-muted-foreground' :
-                         'bg-red-50 text-red-700 border border-red-100'
-          }`}>
-            {delta > 15
-              ? "🎉 Outstanding! You've unlocked 15+ additional years — that's an entire extra chapter of life waiting for you."
-              : delta > 10
-              ? "🎊 Impressive! A decade of extra healthy life is within reach through these evidence-based changes."
-              : delta > 5
-              ? "👏 Great potential! Every year counts — these changes could give you 5–10 more healthy years."
-              : delta > 0
-              ? "✅ You're already doing well! These changes would add meaningful quality years to your life."
-              : delta === 0
-              ? "Fine-tune your settings above to discover your full longevity potential."
-              : "⚠️ Some of your current choices are reducing your potential. Review the harmful factors above and consider making changes — lifestyle controls 70–75% of outcomes."}
-          </div>
+          {(() => {
+            const gain = delta;
+            const gainText = gain >= 25
+              ? `${Math.round(gain)} years — nearly a quarter century of additional life`
+              : gain >= 20
+              ? `over ${Math.floor(gain / 5) * 5} years — two full decades of additional life`
+              : gain >= 15
+              ? `${Math.round(gain)} years — more than a decade and a half of additional life`
+              : gain >= 10
+              ? `${Math.round(gain)} years — over a decade of additional healthy life`
+              : gain >= 5
+              ? `${gain.toFixed(1)} years of additional healthy life`
+              : `${gain.toFixed(1)} meaningful years added to your life`;
+
+            const msgData =
+              gain >= 20
+                ? { cls: 'bg-green-100 text-green-800 border border-green-200', msg: `🎉 Extraordinary! You've unlocked ${gainText}. These changes could give you an entire new chapter — enough time to see grandchildren grow up, travel the world, and leave a lasting legacy.` }
+              : gain >= 15
+                ? { cls: 'bg-green-100 text-green-800 border border-green-200', msg: `🎊 Outstanding! You've unlocked ${gainText}. That's enough time to learn 3 new skills, build a meaningful project, and witness major world milestones you'd otherwise miss.` }
+              : gain >= 10
+                ? { cls: 'bg-green-50 text-green-700 border border-green-100', msg: `🌟 Impressive! You've unlocked ${gainText}. A full decade of extra healthy life — time to reinvent yourself, deepen relationships, and experience the world more fully.` }
+              : gain >= 5
+                ? { cls: 'bg-emerald-50 text-emerald-700 border border-emerald-100', msg: `👏 Great work! You've unlocked ${gainText}. Every additional year compounds — more experiences, more memories, more time with the people who matter most.` }
+              : gain >= 1
+                ? { cls: 'bg-muted/60 text-muted-foreground border border-muted', msg: `✅ A meaningful start! You've unlocked ${gainText}. Small consistent changes compound powerfully over time.` }
+              : gain <= 0
+                ? { cls: 'bg-muted/40 text-muted-foreground', msg: '💡 Your current lifestyle is already solid. Try adjusting the Epigenetic Habits panel to discover your untapped potential.' }
+              : { cls: 'bg-red-50 text-red-700 border border-red-100', msg: '⚠️ Some current choices are reducing your potential. Review the factors above — lifestyle controls 70–75% of outcomes.' };
+
+            return <div className={`rounded-lg px-4 py-2.5 text-xs font-medium ${msgData.cls}`}>{msgData.msg}</div>;
+          })()}
 
           {/* 📊 Comparisons */}
           <div className="space-y-2">
@@ -843,7 +866,8 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
           <CardTitle className="text-sm font-bold flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-primary" /> Factor Breakdown — Sorted by Potential Gain
           </CardTitle>
-          <p className="text-xs text-muted-foreground mt-0.5">Click any factor for personalised guidance</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Based on your original quiz answers — showing what's currently helping and hurting your longevity</p>
+          <p className="text-xs text-muted-foreground/70 mt-0.5">Move the sliders above to see how changes would affect your forecast in real time.</p>
         </CardHeader>
         <CardContent className="px-5 pb-4">
           <div className="space-y-1.5">
@@ -997,6 +1021,11 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                             </div>
                           ))}
                         </div>
+                      )}
+                      {FACTOR_BLOG_SLUG[f.factor] && (
+                        <Link to={FACTOR_BLOG_SLUG[f.factor]} className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline mt-1">
+                          📖 Read: How to improve {f.factor} →
+                        </Link>
                       )}
                     </div>
                   )}

@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer';
 import { LifeExpectancyCalculator } from '@/components/LifeExpectancyCalculator';
 import { WhatIfSimulator } from '@/components/WhatIfSimulator';
 import { EnhancedLifeExpectancyReport } from '@/components/EnhancedLifeExpectancyReport';
+import { HealthGuideSection } from '@/components/HealthGuideSection';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -360,6 +361,15 @@ const LifeExpectancy = () => {
             </ReportErrorBoundary>
           </section>
         )}
+
+        {/* Health Guide — free educational section, always visible */}
+        <section className="max-w-5xl mx-auto mb-10 px-4">
+          <div className="mb-4">
+            <h2 className="text-2xl font-bold text-foreground">🧬 Science-Backed Longevity Guide</h2>
+            <p className="text-sm text-muted-foreground mt-1">Evidence-based recommendations to help you live longer, healthier — free for everyone.</p>
+          </div>
+          <HealthGuideSection result={longevityResult} />
+        </section>
 
         {/* About Section */}
         <section className="max-w-4xl mx-auto mb-16">
