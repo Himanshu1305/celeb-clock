@@ -23,6 +23,15 @@ import html2canvas from 'html2canvas';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
+const GENERATION_WIKI_URLS: Record<string, string> = {
+  'Gen Alpha':         'https://en.wikipedia.org/wiki/Generation_Alpha',
+  'Gen Z':             'https://en.wikipedia.org/wiki/Generation_Z',
+  'Millennial':        'https://en.wikipedia.org/wiki/Millennials',
+  'Gen X':             'https://en.wikipedia.org/wiki/Generation_X',
+  'Baby Boomer':       'https://en.wikipedia.org/wiki/Baby_boomers',
+  'Silent Generation': 'https://en.wikipedia.org/wiki/Silent_Generation',
+};
+
 function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
   const birthYear = r.birthDate ? parseInt(r.birthDate.substring(0, 4)) : null;
   const deathYear = r.deathDate ? parseInt(r.deathDate.substring(0, 4)) : null;
@@ -315,14 +324,6 @@ const BirthdayResults = () => {
                 </div>
               )}
 
-              <div className="text-center mt-5">
-                <Link
-                  to="/todays-birthdays"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                >
-                  See all celebrities born on {monthDayLabel} →
-                </Link>
-              </div>
             </CardContent>
           </Card>
         </section>
@@ -364,6 +365,14 @@ const BirthdayResults = () => {
                 <h3 className="font-bold text-foreground text-sm">{generation.name}</h3>
                 <p className="text-xs text-muted-foreground">Generation</p>
                 <p className="text-[10px] text-muted-foreground/70 mt-0.5">{generation.range}</p>
+                <a
+                  href={GENERATION_WIKI_URLS[generation.name]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5"
+                >
+                  ↗ Learn more →
+                </a>
               </CardContent>
             </Card>
             <Card className="glass-card hover:scale-[1.02] transition-transform">
@@ -371,6 +380,14 @@ const BirthdayResults = () => {
                 <span className="text-3xl mb-1 block">{zodiac.symbol}</span>
                 <h3 className="font-bold text-foreground text-sm">{zodiac.sign}</h3>
                 <p className="text-xs text-muted-foreground">Zodiac Sign</p>
+                <a
+                  href={`https://en.wikipedia.org/wiki/${zodiac.sign}_(astrology)`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5"
+                >
+                  ↗ Learn more →
+                </a>
               </CardContent>
             </Card>
             <Card className="glass-card hover:scale-[1.02] transition-transform">
@@ -378,6 +395,14 @@ const BirthdayResults = () => {
                 <span className="text-3xl mb-1 block font-bold text-primary">{lifePath}</span>
                 <h3 className="font-bold text-foreground text-sm">Life Path {lifePath}</h3>
                 <p className="text-xs text-muted-foreground">Numerology</p>
+                <a
+                  href="https://en.wikipedia.org/wiki/Numerology"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5"
+                >
+                  ↗ Learn more →
+                </a>
               </CardContent>
             </Card>
             <Card className="glass-card hover:scale-[1.02] transition-transform">
@@ -385,6 +410,14 @@ const BirthdayResults = () => {
                 <span className="text-3xl mb-1 block">{birthstone.emoji}</span>
                 <h3 className="font-bold text-foreground text-sm">{birthstone.name}</h3>
                 <p className="text-xs text-muted-foreground">Birthstone</p>
+                <a
+                  href={`https://en.wikipedia.org/wiki/${birthstone.name}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5"
+                >
+                  ↗ Learn more →
+                </a>
               </CardContent>
             </Card>
           </div>

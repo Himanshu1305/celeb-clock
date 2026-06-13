@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { fetchCelebrityImage } from '@/services/WikipediaImageService';
-import { ExternalLink, Crown } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 
 export interface DisplayCelebrity {
   name: string;
@@ -34,15 +34,6 @@ export function classifyOccupation(occ: string | null | undefined): Exclude<Occu
   return 'Other';
 }
 
-const RANK_STYLES = [
-  { bar: 'from-amber-400 to-yellow-500',    badge: 'bg-amber-500' },
-  { bar: 'from-slate-300 to-slate-400',     badge: 'bg-slate-400' },
-  { bar: 'from-amber-600 to-amber-700',     badge: 'bg-amber-700' },
-  { bar: 'from-blue-400 to-indigo-500',     badge: 'bg-blue-500' },
-  { bar: 'from-violet-400 to-purple-500',   badge: 'bg-violet-500' },
-  { bar: 'from-rose-400 to-pink-500',       badge: 'bg-rose-500' },
-];
-
 interface CelebrityCardProps {
   celebrity: DisplayCelebrity;
   index: number;
@@ -69,7 +60,6 @@ export const CelebrityCard = ({ celebrity, index }: CelebrityCardProps) => {
     return () => { cancelled = true; };
   }, [celebrity.name, celebrity.imageUrl]);
 
-  const style = RANK_STYLES[index % RANK_STYLES.length];
   const initials = celebrity.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
   const wikiUrl = celebrity.wikipediaUrl ?? `https://en.wikipedia.org/wiki/${celebrity.name.replace(/ /g, '_')}`;
 
@@ -91,9 +81,6 @@ export const CelebrityCard = ({ celebrity, index }: CelebrityCardProps) => {
       style={{ animationDelay: `${Math.min(index, 5) * 80}ms` }}
       onClick={() => window.open(wikiUrl, '_blank', 'noopener,noreferrer')}
     >
-      {/* Rank-coloured accent bar */}
-      <div className={`h-[3px] bg-gradient-to-r ${style.bar}`} />
-
       <CardContent className="p-4">
         <div className="flex gap-3 items-start">
           {/* Avatar */}
@@ -112,17 +99,6 @@ export const CelebrityCard = ({ celebrity, index }: CelebrityCardProps) => {
                 </>
               )}
             </Avatar>
-
-            {index === 0 && (
-              <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center shadow-sm">
-                <Crown className="w-3 h-3 text-white" />
-              </div>
-            )}
-            {index > 0 && index < 3 && (
-              <div className={`absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm ${style.badge}`}>
-                {index + 1}
-              </div>
-            )}
           </div>
 
           {/* Text content */}

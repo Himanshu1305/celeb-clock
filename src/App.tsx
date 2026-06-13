@@ -31,6 +31,7 @@ import PlanetaryAgePage from "./pages/PlanetaryAgePage";
 import Methodology from "./pages/Methodology";
 import EditorialPolicy from "./pages/EditorialPolicy";
 import { AdminRoute } from "@/components/AdminRoute";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthDateProvider } from "./context/BirthDateContext";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,7 @@ const App = () => (
         <Sonner />
         <BirthDateProvider>
           <BrowserRouter>
+            <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/results" element={<BirthdayResults />} />

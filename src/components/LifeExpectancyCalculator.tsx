@@ -354,7 +354,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                     </div>
                     <div className="flex justify-between text-[9px] text-muted-foreground">
                       <span className="font-medium">Age {currentAge}</span>
-                      <span className="font-bold text-primary">{forecast} yrs</span>
+                      <span className="text-muted-foreground/60">↑ Optimizing...</span>
                     </div>
                   </div>
                 );
