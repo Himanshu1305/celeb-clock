@@ -293,6 +293,33 @@ const LifeExpectancy = () => {
                   </p>
                 </CardContent>
               </Card>
+
+              {longevityResult.totalForecast > 100 && (
+                <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-6 text-left space-y-3 max-w-2xl mx-auto">
+                  <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">🌟 Your projection exceeds 100 years</p>
+                  <p className="text-sm text-emerald-900 dark:text-emerald-200 leading-relaxed">
+                    This places you in the company of the world's centenarians — only approximately <strong>0.02%</strong> of the global population reaches this age today. This projection reflects your exceptional genetic heritage and lifestyle inputs. Achieving it would require maintaining these factors consistently throughout your life.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Life is dynamic and unpredictable — environmental factors, diseases, and events outside any model's scope all play a role. This is a mathematical projection based on WHO data and peer-reviewed research, designed to motivate you toward your maximum healthy potential.
+                  </p>
+                  <a href="#longevity-records" className="inline-flex items-center text-sm text-emerald-700 dark:text-emerald-400 font-semibold hover:underline">
+                    → Meet people who reached 100+ in our Longevity Records
+                  </a>
+                </div>
+              )}
+
+              {longevityResult.totalForecast < 50 && (
+                <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-2xl p-6 text-left space-y-3 max-w-2xl mx-auto">
+                  <p className="text-sm font-bold text-amber-800 dark:text-amber-300">⚠️ Your projection is below average</p>
+                  <p className="text-sm text-amber-900 dark:text-amber-200 leading-relaxed">
+                    This may reflect extreme or combined health risk factors in your inputs. Please review your answers to ensure they are accurate.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    If accurate, this calculator strongly encourages prioritizing medical consultation. The What-If Simulator below shows exactly which lifestyle changes would have the highest impact on improving your outlook — even small, consistent changes compound significantly over time.
+                  </p>
+                </div>
+              )}
             </div>
           </section>
         )}
@@ -372,7 +399,7 @@ const LifeExpectancy = () => {
               </div>
               <HealthGuideSection result={longevityResult} />
             </section>
-            <section className="max-w-5xl mx-auto mb-10 px-4">
+            <section id="longevity-records" className="max-w-5xl mx-auto mb-10 px-4">
               <WorldLongevityRecords />
             </section>
           </>
