@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { ZodiacAndFacts } from '@/components/ZodiacAndFacts';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -16,7 +15,7 @@ import {
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import {
   Calendar, Clock, Users, Star, Share2, Download,
-  ArrowRight, Sparkles, Crown, Twitter, Facebook, Link as LinkIcon,
+  Sparkles, Twitter, Facebook, Link as LinkIcon,
   Globe
 } from 'lucide-react';
 import { SEO } from '@/components/SEO';
@@ -43,11 +42,9 @@ function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
   };
 }
 
-// Age calculation helper
 const calculateAge = (birthDate: Date) => {
   const now = new Date();
   const diff = now.getTime() - birthDate.getTime();
-  
   const seconds = Math.floor(diff / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
@@ -55,22 +52,13 @@ const calculateAge = (birthDate: Date) => {
   const years = Math.floor(days / 365.25);
   const months = Math.floor((days % 365.25) / 30.44);
   const remainingDays = Math.floor((days % 365.25) % 30.44);
-  
   return {
-    years,
-    months,
-    days: remainingDays,
-    totalDays: days,
-    hours: hours % 24,
-    minutes: minutes % 60,
-    seconds: seconds % 60,
-    totalSeconds: seconds,
-    totalMinutes: minutes,
-    totalHours: hours,
+    years, months, days: remainingDays, totalDays: days,
+    hours: hours % 24, minutes: minutes % 60, seconds: seconds % 60,
+    totalSeconds: seconds, totalMinutes: minutes, totalHours: hours,
   };
 };
 
-// Get generation based on birth year
 const getGeneration = (year: number) => {
   if (year >= 2013) return { name: 'Gen Alpha', emoji: '👶', range: '2013–present' };
   if (year >= 1997) return { name: 'Gen Z', emoji: '📱', range: '1997–2012' };
@@ -80,7 +68,6 @@ const getGeneration = (year: number) => {
   return { name: 'Silent Generation', emoji: '📰', range: '1928–1945' };
 };
 
-// Get zodiac sign
 const getZodiacSign = (month: number, day: number) => {
   const signs = [
     { sign: 'Capricorn', symbol: '♑', start: [12, 22], end: [1, 19] },
@@ -96,18 +83,14 @@ const getZodiacSign = (month: number, day: number) => {
     { sign: 'Scorpio', symbol: '♏', start: [10, 23], end: [11, 21] },
     { sign: 'Sagittarius', symbol: '♐', start: [11, 22], end: [12, 21] },
   ];
-  
   for (const z of signs) {
     const [sm, sd] = z.start;
     const [em, ed] = z.end;
-    if ((month === sm && day >= sd) || (month === em && day <= ed)) {
-      return z;
-    }
+    if ((month === sm && day >= sd) || (month === em && day <= ed)) return z;
   }
   return signs[0];
 };
 
-// Life Path Number
 const calculateLifePath = (date: Date) => {
   const dateStr = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
   let sum = dateStr.split('').reduce((acc, digit) => acc + parseInt(digit), 0);
@@ -117,7 +100,6 @@ const calculateLifePath = (date: Date) => {
   return sum;
 };
 
-// Get birthstone
 const getBirthstone = (month: number) => {
   const birthstones = [
     { name: 'Garnet', emoji: '🔴', color: 'text-red-500' },
@@ -136,29 +118,24 @@ const getBirthstone = (month: number) => {
   return birthstones[month - 1] || birthstones[0];
 };
 
-// Calculate planetary ages
-const calculatePlanetaryAges = (earthYears: number) => {
-  return [
-    { name: 'Mercury', years: (earthYears / 0.24).toFixed(1), emoji: '🪨', color: 'text-gray-500' },
-    { name: 'Venus', years: (earthYears / 0.62).toFixed(1), emoji: '🟡', color: 'text-yellow-500' },
-    { name: 'Earth', years: earthYears.toFixed(1), emoji: '🌍', color: 'text-blue-500' },
-    { name: 'Mars', years: (earthYears / 1.88).toFixed(1), emoji: '🔴', color: 'text-red-500' },
-    { name: 'Jupiter', years: (earthYears / 11.86).toFixed(1), emoji: '🟠', color: 'text-orange-500' },
-    { name: 'Saturn', years: (earthYears / 29.46).toFixed(1), emoji: '🪐', color: 'text-amber-600' },
-  ];
-};
-
+const calculatePlanetaryAges = (earthYears: number) => [
+  { name: 'Mercury', years: (earthYears / 0.24).toFixed(1), emoji: '🪨', color: 'text-gray-500' },
+  { name: 'Venus', years: (earthYears / 0.62).toFixed(1), emoji: '🟡', color: 'text-yellow-500' },
+  { name: 'Earth', years: earthYears.toFixed(1), emoji: '🌍', color: 'text-blue-500' },
+  { name: 'Mars', years: (earthYears / 1.88).toFixed(1), emoji: '🔴', color: 'text-red-500' },
+  { name: 'Jupiter', years: (earthYears / 11.86).toFixed(1), emoji: '🟠', color: 'text-orange-500' },
+  { name: 'Saturn', years: (earthYears / 29.46).toFixed(1), emoji: '🪐', color: 'text-amber-600' },
+];
 
 const BirthdayResults = () => {
   const { birthDate } = useBirthDate();
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
   const [age, setAge] = useState<ReturnType<typeof calculateAge> | null>(null);
   const [celebrities, setCelebrities] = useState<DisplayCelebrity[]>([]);
   const [loadingCelebs, setLoadingCelebs] = useState(true);
   const [showShareCard, setShowShareCard] = useState(false);
   const shareCardRef = useRef<HTMLDivElement>(null);
 
-  // Update age every second
   useEffect(() => {
     if (!birthDate) return;
     const updateAge = () => setAge(calculateAge(birthDate));
@@ -167,10 +144,8 @@ const BirthdayResults = () => {
     return () => clearInterval(interval);
   }, [birthDate]);
 
-  // Fetch celebrities — Supabase ranked results with local fallback
   useEffect(() => {
     if (!birthDate) return;
-
     const fetchCelebrities = async () => {
       setLoadingCelebs(true);
       try {
@@ -178,8 +153,7 @@ const BirthdayResults = () => {
         const day = String(birthDate.getDate()).padStart(2, '0');
         const monthDay = `${month}-${day}`;
         const userCountry = profile?.country ?? null;
-
-        const supabaseResults = await getRankedBirthdayCelebrities(monthDay, userCountry, 12);
+        const supabaseResults = await getRankedBirthdayCelebrities(monthDay, userCountry, 6);
         setCelebrities(supabaseResults.map(mapSupabase));
       } catch (err) {
         console.error('Failed to fetch celebrities:', err);
@@ -187,11 +161,9 @@ const BirthdayResults = () => {
         setLoadingCelebs(false);
       }
     };
-
     fetchCelebrities();
   }, [birthDate, profile?.country]);
 
-  // Handle no birth date
   if (!birthDate) {
     return (
       <div className="min-h-screen bg-gradient-cosmic flex items-center justify-center">
@@ -200,9 +172,7 @@ const BirthdayResults = () => {
             <Calendar className="w-16 h-16 mx-auto text-primary" />
             <h1 className="text-2xl font-bold">No Birthday Selected</h1>
             <p className="text-muted-foreground">Enter your birthday to see your personalized results.</p>
-            <Button asChild>
-              <Link to="/">Go to Homepage</Link>
-            </Button>
+            <Button asChild><Link to="/">Go to Homepage</Link></Button>
           </CardContent>
         </Card>
       </div>
@@ -214,19 +184,20 @@ const BirthdayResults = () => {
   const lifePath = calculateLifePath(birthDate);
   const birthstone = getBirthstone(birthDate.getMonth() + 1);
   const planetaryAges = calculatePlanetaryAges(age?.years || 0);
+  const monthDayLabel = birthDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+
+  const topCelebName = celebrities[0]?.name || 'famous people';
+  const shareUrl = window.location.origin;
 
   const handleShare = async (platform: string) => {
-    const celebName = celebrities[0]?.name || 'famous people';
-    const text = `I'm ${age?.years} years old (${age?.totalDays.toLocaleString()} days)! I share my birthday with ${celebName}. Find your birthday twin at`;
-    const url = window.location.origin;
-    
+    const text = `I just discovered I share my birthday with ${topCelebName}! Find your celebrity birthday twin at ${shareUrl} #BirthdayTwin #CelebClock`;
     if (platform === 'twitter') {
-      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
     } else if (platform === 'facebook') {
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`, '_blank');
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(text)}`, '_blank');
     } else if (platform === 'copy') {
-      await navigator.clipboard.writeText(`${text} ${url}`);
-      alert('Link copied to clipboard!');
+      await navigator.clipboard.writeText(text);
+      alert('Copied to clipboard!');
     }
   };
 
@@ -249,7 +220,6 @@ const BirthdayResults = () => {
         title={`Your Birthday Decoded - ${age?.years} Years Old`}
         description={`Discover your exact age, celebrity birthday twins, zodiac sign, and more personalized birthday insights.`}
       />
-      
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-8">
           <Navigation />
@@ -278,8 +248,6 @@ const BirthdayResults = () => {
                 <h2 className="text-xl font-bold">Your Exact Age (Live)</h2>
                 <Badge variant="secondary" className="animate-pulse">LIVE</Badge>
               </div>
-              
-              {/* Main Age Display */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 {[
                   { value: age?.years || 0, label: 'Years', color: 'text-primary' },
@@ -288,15 +256,11 @@ const BirthdayResults = () => {
                   { value: age?.hours || 0, label: 'Hours', color: 'text-primary' },
                 ].map((item) => (
                   <div key={item.label} className="text-center p-4 bg-background/50 rounded-xl">
-                    <div className={`text-4xl md:text-5xl font-bold tabular-nums ${item.color}`}>
-                      {item.value}
-                    </div>
+                    <div className={`text-4xl md:text-5xl font-bold tabular-nums ${item.color}`}>{item.value}</div>
                     <div className="text-sm text-muted-foreground mt-1">{item.label}</div>
                   </div>
                 ))}
               </div>
-
-              {/* Seconds Counter */}
               <div className="text-center p-4 bg-primary/5 rounded-xl mb-6">
                 <div className="text-sm text-muted-foreground mb-1">Total Seconds Alive</div>
                 <div className="text-3xl md:text-4xl font-bold text-primary tabular-nums">
@@ -304,8 +268,6 @@ const BirthdayResults = () => {
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">updating every second...</div>
               </div>
-
-              {/* Additional Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
                 {[
                   { label: 'Total Days', value: age?.totalDays.toLocaleString() || '0' },
@@ -323,49 +285,7 @@ const BirthdayResults = () => {
           </Card>
         </section>
 
-        {/* Quick Facts Row */}
-        <section className="max-w-5xl mx-auto mb-12">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Generation */}
-            <Card className="glass-card hover:scale-[1.02] transition-transform">
-              <CardContent className="p-4 text-center">
-                <span className="text-3xl mb-1 block">👥</span>
-                <h3 className="font-bold text-foreground text-sm">{generation.name}</h3>
-                <p className="text-xs text-muted-foreground">Generation</p>
-                <p className="text-[10px] text-muted-foreground/70 mt-0.5">{generation.range}</p>
-              </CardContent>
-            </Card>
-
-            {/* Zodiac */}
-            <Card className="glass-card hover:scale-[1.02] transition-transform">
-              <CardContent className="p-4 text-center">
-                <span className="text-3xl mb-1 block">{zodiac.symbol}</span>
-                <h3 className="font-bold text-foreground text-sm">{zodiac.sign}</h3>
-                <p className="text-xs text-muted-foreground">Zodiac</p>
-              </CardContent>
-            </Card>
-
-            {/* Life Path */}
-            <Card className="glass-card hover:scale-[1.02] transition-transform">
-              <CardContent className="p-4 text-center">
-                <span className="text-3xl mb-1 block font-bold text-primary">{lifePath}</span>
-                <h3 className="font-bold text-foreground text-sm">Life Path {lifePath}</h3>
-                <p className="text-xs text-muted-foreground">Numerology</p>
-              </CardContent>
-            </Card>
-
-            {/* Birthstone */}
-            <Card className="glass-card hover:scale-[1.02] transition-transform">
-              <CardContent className="p-4 text-center">
-                <span className="text-3xl mb-1 block">{birthstone.emoji}</span>
-                <h3 className="font-bold text-foreground text-sm">{birthstone.name}</h3>
-                <p className="text-xs text-muted-foreground">Birthstone</p>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
-        {/* Celebrity Matches - Enhanced Section */}
+        {/* Celebrity Matches — 3×2 grid, capped at 6 */}
         <section className="max-w-5xl mx-auto mb-12">
           <Card className="glass-card card-party-border">
             <CardContent className="p-6 md:p-8">
@@ -374,7 +294,7 @@ const BirthdayResults = () => {
                   <Users className="w-5 h-5 text-primary" />
                   <h2 className="text-xl font-bold">Your Celebrity Birthday Twins</h2>
                 </div>
-                <Badge variant="secondary">{celebrities.length} Matches</Badge>
+                <Badge variant="secondary">6 Celebrity Matches</Badge>
               </div>
 
               {loadingCelebs ? (
@@ -384,7 +304,7 @@ const BirthdayResults = () => {
                 </div>
               ) : celebrities.length > 0 ? (
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                  {celebrities.slice(0, 6).map((celeb, index) => (
+                  {celebrities.map((celeb, index) => (
                     <CelebrityCard key={celeb.name} celebrity={celeb} index={index} />
                   ))}
                 </div>
@@ -395,16 +315,14 @@ const BirthdayResults = () => {
                 </div>
               )}
 
-              {celebrities.length > 6 && (
-                <div className="text-center mt-6">
-                  <Button variant="outline" asChild>
-                    <Link to="/celebrity-birthday">
-                      View All {celebrities.length} Matches
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Link>
-                  </Button>
-                </div>
-              )}
+              <div className="text-center mt-5">
+                <Link
+                  to="/todays-birthdays"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  See all celebrities born on {monthDayLabel} →
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </section>
@@ -417,10 +335,9 @@ const BirthdayResults = () => {
                 <Globe className="w-5 h-5 text-primary" />
                 <h2 className="text-xl font-bold">Your Age Across the Solar System</h2>
               </div>
-
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {planetaryAges.map((planet, index) => (
-                  <div 
+                  <div
                     key={planet.name}
                     className={`p-4 rounded-xl text-center transition-all duration-300 hover:scale-105 ${
                       planet.name === 'Earth' ? 'bg-blue-500/10 border border-blue-500/20' : 'bg-muted/30'
@@ -437,58 +354,137 @@ const BirthdayResults = () => {
           </Card>
         </section>
 
-        {/* Zodiac Details */}
-        <section className="max-w-4xl mx-auto mb-12">
-          <ZodiacAndFacts birthDate={birthDate} />
+        {/* Birthday Signs — 4-card grid (Generation | Zodiac | Life Path | Birthstone) */}
+        <section className="max-w-5xl mx-auto mb-12">
+          <h2 className="text-xl font-bold text-foreground mb-4">Your Birthday Signs</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card className="glass-card hover:scale-[1.02] transition-transform">
+              <CardContent className="p-4 text-center">
+                <span className="text-3xl mb-1 block">👥</span>
+                <h3 className="font-bold text-foreground text-sm">{generation.name}</h3>
+                <p className="text-xs text-muted-foreground">Generation</p>
+                <p className="text-[10px] text-muted-foreground/70 mt-0.5">{generation.range}</p>
+              </CardContent>
+            </Card>
+            <Card className="glass-card hover:scale-[1.02] transition-transform">
+              <CardContent className="p-4 text-center">
+                <span className="text-3xl mb-1 block">{zodiac.symbol}</span>
+                <h3 className="font-bold text-foreground text-sm">{zodiac.sign}</h3>
+                <p className="text-xs text-muted-foreground">Zodiac Sign</p>
+              </CardContent>
+            </Card>
+            <Card className="glass-card hover:scale-[1.02] transition-transform">
+              <CardContent className="p-4 text-center">
+                <span className="text-3xl mb-1 block font-bold text-primary">{lifePath}</span>
+                <h3 className="font-bold text-foreground text-sm">Life Path {lifePath}</h3>
+                <p className="text-xs text-muted-foreground">Numerology</p>
+              </CardContent>
+            </Card>
+            <Card className="glass-card hover:scale-[1.02] transition-transform">
+              <CardContent className="p-4 text-center">
+                <span className="text-3xl mb-1 block">{birthstone.emoji}</span>
+                <h3 className="font-bold text-foreground text-sm">{birthstone.name}</h3>
+                <p className="text-xs text-muted-foreground">Birthstone</p>
+              </CardContent>
+            </Card>
+          </div>
         </section>
 
-        {/* Share Card Section - Enhanced with Planetary Ages */}
+        {/* Discover More — 3 feature cards */}
+        <section className="max-w-5xl mx-auto mb-12">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-foreground">✨ Discover More About Your Birthday</h2>
+            <p className="text-muted-foreground mt-1">Your birth date holds more secrets than you think</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Card 1 — Life Expectancy */}
+            <Card className="glass-card border-blue-200/50 dark:border-blue-900/50 bg-gradient-to-br from-blue-500/5 to-blue-500/10 hover:scale-105 transition-all duration-300 flex flex-col">
+              <CardContent className="p-6 flex flex-col flex-1">
+                <span className="text-4xl mb-3 block">🔬</span>
+                <h3 className="text-lg font-bold text-foreground mb-2">How Long Will You Live?</h3>
+                <p className="text-sm text-muted-foreground mb-2 flex-1">
+                  Science predicts your lifespan from 25+ factors — genetics, lifestyle, and more
+                </p>
+                <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-4">
+                  Most people discover they differ from the national average by ±8 years
+                </p>
+                <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  <Link to="/life-expectancy">Calculate My Longevity →</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Card 2 — Planetary Ages */}
+            <Card className="glass-card border-purple-200/50 dark:border-purple-900/50 bg-gradient-to-br from-purple-500/5 to-purple-500/10 hover:scale-105 transition-all duration-300 flex flex-col">
+              <CardContent className="p-6 flex flex-col flex-1">
+                <span className="text-4xl mb-3 block">🪐</span>
+                <h3 className="text-lg font-bold text-foreground mb-2">Your Age Across the Universe</h3>
+                <p className="text-sm text-muted-foreground mb-2 flex-1">
+                  You're only {((age?.years || 0) / 11.86).toFixed(1)} Jupiter years old — discover your cosmic age on every planet
+                </p>
+                <p className="text-xs font-semibold text-purple-600 dark:text-purple-400 mb-4">
+                  On Mercury you'd be celebrating your {Math.round((age?.years || 0) / 0.24)}th birthday
+                </p>
+                <Button asChild className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+                  <Link to="/planetary-age">Explore Cosmic Ages →</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Card 3 — Celebrity Birthday Search */}
+            <Card className="glass-card border-amber-200/50 dark:border-amber-900/50 bg-gradient-to-br from-amber-500/5 to-amber-500/10 hover:scale-105 transition-all duration-300 flex flex-col">
+              <CardContent className="p-6 flex flex-col flex-1">
+                <span className="text-4xl mb-3 block">⭐</span>
+                <h3 className="text-lg font-bold text-foreground mb-2">Explore All Birthday Celebrities</h3>
+                <p className="text-sm text-muted-foreground mb-2 flex-1">
+                  Browse 25,000+ ranked celebrities born on any date in history
+                </p>
+                <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 mb-4">
+                  Celebrities ranked by global fame — see who tops your birthday list
+                </p>
+                <Button asChild className="w-full bg-amber-500 hover:bg-amber-600 text-white">
+                  <Link to="/todays-birthdays">Browse All Birthdays →</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Share Your Birthday Discovery — last section */}
         <section className="max-w-4xl mx-auto mb-12">
           <Card className="glass-card card-party-border">
             <CardContent className="p-6 md:p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
                   <Share2 className="w-5 h-5 text-primary" />
-                  <h2 className="text-xl font-bold">Share Your Results</h2>
+                  <h2 className="text-xl font-bold">Share Your Birthday Discovery 🎂</h2>
                 </div>
                 <Button variant="outline" size="sm" onClick={() => setShowShareCard(!showShareCard)}>
                   {showShareCard ? 'Hide Card' : 'Preview Card'}
                 </Button>
               </div>
 
-              {/* Enhanced Shareable Card Preview */}
               {showShareCard && (
                 <div className="mb-6 flex justify-center">
-                  <div 
+                  <div
                     ref={shareCardRef}
                     className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 rounded-2xl text-white w-full max-w-sm shadow-2xl"
                   >
                     <div className="text-center space-y-4">
-                      {/* Header */}
                       <div className="flex items-center justify-center gap-2">
                         <span className="text-2xl">🎂</span>
                         <span className="text-sm font-medium tracking-widest opacity-80">BIRTHDAY DECODED</span>
                       </div>
-                      
-                      {/* Date */}
                       <div className="text-lg opacity-80">
                         {birthDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                       </div>
-                      
-                      {/* Age */}
                       <div>
                         <div className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                           {age?.years} Years
                         </div>
-                        <div className="text-lg opacity-70 mt-1">
-                          {age?.totalDays.toLocaleString()} Days Old
-                        </div>
+                        <div className="text-lg opacity-70 mt-1">{age?.totalDays.toLocaleString()} Days Old</div>
                       </div>
-
-                      {/* Divider */}
                       <div className="h-px bg-white/20" />
-
-                      {/* Quick Facts */}
                       <div className="grid grid-cols-4 gap-2">
                         <div className="text-center">
                           <div className="text-2xl">{zodiac.symbol}</div>
@@ -507,11 +503,7 @@ const BirthdayResults = () => {
                           <div className="text-xs opacity-70">{birthstone.name}</div>
                         </div>
                       </div>
-
-                      {/* Divider */}
                       <div className="h-px bg-white/20" />
-
-                      {/* Planetary Ages */}
                       <div>
                         <div className="text-xs opacity-60 mb-2">AGE ON OTHER PLANETS</div>
                         <div className="flex justify-center gap-4">
@@ -532,8 +524,6 @@ const BirthdayResults = () => {
                           </div>
                         </div>
                       </div>
-
-                      {/* Celebrity Twin */}
                       {celebrities.length > 0 && (
                         <>
                           <div className="h-px bg-white/20" />
@@ -543,55 +533,31 @@ const BirthdayResults = () => {
                           </div>
                         </>
                       )}
-
-                      {/* Footer */}
                       <div className="text-xs opacity-40 pt-2">celebclock.com</div>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Share Buttons */}
+              <p className="text-sm text-muted-foreground text-center mb-4">
+                Pre-written: "I just discovered I share my birthday with {topCelebName}! Find your celebrity birthday twin at {shareUrl} #BirthdayTwin #CelebClock"
+              </p>
+
               <div className="flex flex-wrap justify-center gap-3">
                 <Button variant="outline" onClick={() => handleShare('twitter')} className="gap-2">
-                  <Twitter className="w-4 h-4" />
-                  Twitter
+                  <Twitter className="w-4 h-4" /> Twitter
                 </Button>
                 <Button variant="outline" onClick={() => handleShare('facebook')} className="gap-2">
-                  <Facebook className="w-4 h-4" />
-                  Facebook
+                  <Facebook className="w-4 h-4" /> Facebook
                 </Button>
                 <Button variant="outline" onClick={() => handleShare('copy')} className="gap-2">
-                  <LinkIcon className="w-4 h-4" />
-                  Copy Link
+                  <LinkIcon className="w-4 h-4" /> Copy Link
                 </Button>
                 {showShareCard && (
                   <Button onClick={downloadCard} className="gap-2">
-                    <Download className="w-4 h-4" />
-                    Download Card
+                    <Download className="w-4 h-4" /> Download Card
                   </Button>
                 )}
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
-        {/* CTA Section */}
-        <section className="max-w-2xl mx-auto text-center mb-12">
-          <Card className="glass-card bg-gradient-to-r from-primary/5 via-accent/5 to-secondary/5">
-            <CardContent className="p-8">
-              <h3 className="text-xl font-bold mb-2">Want to Explore More?</h3>
-              <p className="text-muted-foreground mb-4">Discover your life expectancy, detailed numerology, and more insights.</p>
-              <div className="flex flex-wrap justify-center gap-3">
-                <Button asChild variant="outline">
-                  <Link to="/life-expectancy">Life Expectancy</Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <Link to="/planetary-age">All Planets</Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <Link to="/numerology">Numerology</Link>
-                </Button>
               </div>
             </CardContent>
           </Card>

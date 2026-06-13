@@ -2,41 +2,84 @@ import { useState, useEffect } from 'react';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { WikiBirthdayMatches } from '@/components/WikiBirthdayMatches';
 import { ZodiacAndFacts } from '@/components/ZodiacAndFacts';
 import { CelebritySearch } from '@/components/CelebritySearch';
+import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { ArrowRight, Star, Users, Calendar as CalendarIcon, Sparkles } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useBirthDate } from '@/context/BirthDateContext';
+import { useAuth } from '@/hooks/useAuth';
 import { SEO } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
 import { RelatedTools } from '@/components/RelatedTools';
 import { AuthorBio } from '@/components/AuthorBio';
+import {
+  getRankedBirthdayCelebrities,
+  CelebrityBirthdayResult,
+} from '@/services/BirthdaySearchService';
+
+const CURRENT_YEAR = new Date().getFullYear();
+
+function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
+  const birthYear = r.birthDate ? parseInt(r.birthDate.substring(0, 4)) : null;
+  const deathYear = r.deathDate ? parseInt(r.deathDate.substring(0, 4)) : null;
+  const age = r.isLiving
+    ? (birthYear ? CURRENT_YEAR - birthYear : null)
+    : (birthYear && deathYear ? deathYear - birthYear : null);
+  return {
+    name: r.name,
+    birthYear,
+    deathYear,
+    age,
+    isLiving: r.isLiving,
+    occupation: r.occupation || 'Celebrity',
+    imageUrl: null,
+    wikipediaUrl: r.wikipediaUrl,
+    sitelinks: r.sitelinks,
+  };
+}
 
 const CelebrityBirthday = () => {
   const { birthDate: sharedBirthDate, setBirthDate: setSharedBirthDate } = useBirthDate();
+  const { profile } = useAuth();
   const [birthDate, setBirthDate] = useState<Date | null>(null);
-  const [celebrities, setCelebrities] = useState<any[]>([]);
+  const [rankedCelebs, setRankedCelebs] = useState<DisplayCelebrity[]>([]);
+  const [loadingRanked, setLoadingRanked] = useState(false);
 
-  // Sync with shared context on mount and when context changes
   useEffect(() => {
     if (sharedBirthDate) {
       setBirthDate(sharedBirthDate);
     }
   }, [sharedBirthDate]);
 
+  useEffect(() => {
+    if (!birthDate) return;
+    const fetchRanked = async () => {
+      setLoadingRanked(true);
+      try {
+        const month = String(birthDate.getMonth() + 1).padStart(2, '0');
+        const day = String(birthDate.getDate()).padStart(2, '0');
+        const monthDay = `${month}-${day}`;
+        const userCountry = profile?.country ?? null;
+        const results = await getRankedBirthdayCelebrities(monthDay, userCountry, 20);
+        setRankedCelebs(results.map(mapSupabase));
+      } catch (err) {
+        console.error('Failed to fetch ranked celebrities:', err);
+      } finally {
+        setLoadingRanked(false);
+      }
+    };
+    fetchRanked();
+  }, [birthDate, profile?.country]);
+
   const handleDateSelect = (date: Date | undefined) => {
     const newDate = date || null;
     setBirthDate(newDate);
     setSharedBirthDate(newDate);
-  };
-
-  const handleCelebritiesChange = (newCelebrities: any[]) => {
-    setCelebrities(newCelebrities);
   };
 
   return (
@@ -107,7 +150,33 @@ const CelebrityBirthday = () => {
             </div>
             
             <section className="mb-16">
-              <WikiBirthdayMatches birthDate={birthDate} onCelebritiesChange={handleCelebritiesChange} />
+              <Card className="glass-card">
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-center gap-2 mb-6">
+                    <Users className="w-5 h-5 text-primary" />
+                    <h2 className="text-xl font-bold">
+                      Celebrities Born on {birthDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+                    </h2>
+                  </div>
+                  {loadingRanked ? (
+                    <div className="text-center py-12">
+                      <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+                      <p className="text-muted-foreground">Finding ranked celebrities...</p>
+                    </div>
+                  ) : rankedCelebs.length > 0 ? (
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                      {rankedCelebs.map((celeb, index) => (
+                        <CelebrityCard key={celeb.name} celebrity={celeb} index={index} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <Star className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />
+                      <p className="text-muted-foreground">No celebrities found for this date.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </section>
 
             {/* Zodiac and Fun Facts Section */}
