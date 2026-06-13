@@ -170,7 +170,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   const [flashDir, setFlashDir] = useState<'up' | 'down' | null>(null);
   const [deltaLabel, setDeltaLabel] = useState('');
   const prevForecastRef = useRef<number | null>(null);
-  const [hasInteractedStress, setHasInteractedStress] = useState(false);
+  const [hasSelectedExercise, setHasSelectedExercise] = useState(false);
 
   useEffect(() => {
     if (profile?.name && !data.name) setData(prev => ({ ...prev, name: profile.name }));
@@ -190,7 +190,8 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   // Live preview effect — only calculates from step 6 onwards
   useEffect(() => {
     if (step < 6) return;
-    const r = calculateLongevity(data, pillar1, pillar2, birthDate ?? undefined, []);
+    const pillar2ForPreview = { ...pillar2, mentorHabits: [] };
+    const r = calculateLongevity(data, pillar1, pillar2ForPreview, birthDate ?? undefined, []);
     let timer: ReturnType<typeof setTimeout> | null = null;
 
     if (prevForecastRef.current !== null && Math.abs(r.totalForecast - prevForecastRef.current) >= 0.1) {
@@ -211,10 +212,9 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
     return () => { if (timer) clearTimeout(timer); };
   }, [data, pillar1, pillar2, birthDate, step]);
 
-  // Count-up animation when age first reveals on step 6 (after both inputs set)
+  // Count-up animation when age first reveals on step 6 (after exercise selected)
   useEffect(() => {
-    const step6Revealed = hasInteractedStress && data.exercise !== '';
-    if (step === 6 && liveResult && !countUpDoneRef.current && step6Revealed) {
+    if (step === 6 && liveResult && !countUpDoneRef.current && hasSelectedExercise) {
       countUpDoneRef.current = true;
       const target = liveResult.totalForecast;
       const intervalMs = 25;
@@ -229,7 +229,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
       }, intervalMs);
       return () => clearInterval(timer);
     }
-  }, [step, liveResult, hasInteractedStress, data.exercise]);
+  }, [step, liveResult, hasSelectedExercise]);
 
   const totalSteps = 8;
   const bmiCategory = getBMICategory(data.bmi);
@@ -305,12 +305,11 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
               </div>
             )}
           </div>
-        ) : step === 6 && (!hasInteractedStress || !data.exercise) ? (
+        ) : step === 6 && !hasSelectedExercise ? (
           <div className="rounded-xl border border-muted bg-muted/30 p-4 flex items-center gap-3">
             <Lock className="w-5 h-5 text-muted-foreground/50 shrink-0" />
             <div>
-              <p className="text-xs font-bold text-muted-foreground">Complete all inputs on this step to see your updated forecast</p>
-              <p className="text-[10px] text-muted-foreground mt-0.5">Adjust the stress slider and select an exercise frequency to unlock</p>
+              <p className="text-xs font-bold text-muted-foreground">Select your physical exercise frequency above to unlock your personalized longevity forecast</p>
             </div>
           </div>
         ) : liveResult ? (
@@ -369,7 +368,8 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
             <Alert className="border-accent/30 bg-accent/5">
               <ShieldCheck className="h-4 w-4 text-accent" />
               <AlertDescription className="text-sm text-muted-foreground">
-                All health data is processed locally inside your browser and stays completely private.
+                🔒 Your health data is used only to calculate your personalized forecast. We do not store your health inputs on our servers.
+                <Link to="/privacy" className="text-blue-500 underline ml-1">Privacy Policy →</Link>
               </AlertDescription>
             </Alert>
             <div className="space-y-3">
@@ -640,7 +640,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                   <Brain className="w-4 h-4" /> Mental Stress Load: {data.stress}/10
                   <InfoTooltip content="Chronic psychological stress triggers sustained cortisol release, damaging the cardiovascular system and accelerating cellular aging (AHA, 2021)." />
                 </Label>
-                <Slider value={[data.stress]} onValueChange={(v) => { setData({ ...data, stress: v[0] }); setHasInteractedStress(true); }} max={10} min={1} step={1} />
+                <Slider value={[data.stress]} onValueChange={(v) => setData({ ...data, stress: v[0] })} max={10} min={1} step={1} />
                 <div className="flex justify-between text-[10px] text-muted-foreground mt-1 px-0.5"><span>1 (Very low)</span><span>10 (Extreme stress)</span></div>
               </div>
               <div>
@@ -648,7 +648,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                   <Dumbbell className="w-4 h-4" /> Physical Exercise Patterns
                   <InfoTooltip content="Moderate exercise (150 min/week) reduces all-cause mortality by 31% and can add 3–5 years to lifespan (WHO, 2022)." />
                 </Label>
-                <RadioGroup value={data.exercise} onValueChange={(v) => setData({ ...data, exercise: v as any })}>
+                <RadioGroup value={data.exercise} onValueChange={(v) => { setData({ ...data, exercise: v as any }); setHasSelectedExercise(true); }}>
                   <div className="flex items-center space-x-2"><RadioGroupItem value="seldom" id="seldom-ex" /><Label htmlFor="seldom-ex">Seldom (Rare physical activity, sedentary lifestyle)</Label></div>
                   <div className="flex items-center space-x-2"><RadioGroupItem value="light" id="light-ex" /><Label htmlFor="light-ex">Light (1–2 walks/brief workouts weekly)</Label></div>
                   <div className="flex items-center space-x-2"><RadioGroupItem value="moderate" id="moderate-ex" /><Label htmlFor="moderate-ex">Moderate (3–4 structured sessions weekly)</Label></div>

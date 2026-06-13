@@ -590,6 +590,7 @@ export function calculateLongevity(
     }
   }
 
+  minimumForecast = Math.max(minimumForecast, currentAge + 0.5);
   const finalForecast = Math.round(minimumForecast * 10) / 10;
 
   // controllablePotential = best health + actual genetics + max epigenetic + community bonus
@@ -749,9 +750,14 @@ export function recalcWithOverrides(
     : undefined;
   const r = calculateLongevity(quiz, result.pillar1Snapshot, result.pillar2Snapshot, representativeBirthDate, userHabits);
   const extra = extraAdjustment(overrides);
+  const simCurrentAge = r.currentAge || 35;
+  let simForecast: number;
   if (overrides.epigeneticBonusOverride !== undefined) {
     const epigenDiff = overrides.epigeneticBonusOverride - r.epigeneticAdjustment;
-    return Math.round((r.totalForecast + extra + epigenDiff) * 10) / 10;
+    simForecast = Math.round((r.totalForecast + extra + epigenDiff) * 10) / 10;
+  } else {
+    simForecast = Math.round((r.totalForecast + extra) * 10) / 10;
   }
-  return Math.round((r.totalForecast + extra) * 10) / 10;
+  simForecast = Math.max(simForecast, simCurrentAge + 0.5);
+  return simForecast;
 }

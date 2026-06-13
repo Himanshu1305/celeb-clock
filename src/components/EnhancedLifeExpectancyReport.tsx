@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -78,6 +80,28 @@ export const EnhancedLifeExpectancyReport = ({
   userSelectedHabits, simulatorHabitFrequencies,
 }: Props) => {
   const [copied, setCopied] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  const handleExportPDF = async () => {
+    setExporting(true);
+    try {
+      const element = document.getElementById('longevity-blueprint-card');
+      if (!element) return;
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+      });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('longevity-blueprint.pdf');
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const p1 = result.pillar1Snapshot;
   const p2 = result.pillar2Snapshot;
@@ -131,6 +155,9 @@ export const EnhancedLifeExpectancyReport = ({
   );
 
   const displayedOptimized = optimizedForecast ?? result.totalForecast;
+  const optimizedRemaining = Math.max(0,
+    Math.round((result.controllablePotential - result.currentAge) * 10) / 10
+  );
 
   // Chart 1: waterfall data showing how the longevity score is built
   const waterfallData = [
@@ -154,7 +181,7 @@ export const EnhancedLifeExpectancyReport = ({
   const yearsGained = Math.round((displayedOptimized - result.totalForecast) * 10) / 10;
 
   return (
-    <div id="longevity-blueprint-print" className="space-y-6">
+    <div id="longevity-blueprint-card" className="space-y-6">
       {/* Print-only header */}
       <div className="hidden print:block border-b pb-4 mb-4">
         <h1 className="text-lg font-bold">Longevity Blueprint — {displayName}</h1>
@@ -187,7 +214,7 @@ export const EnhancedLifeExpectancyReport = ({
                 <span className="text-[10px] uppercase font-bold text-primary block">With Optimized Lifestyle</span>
                 <strong className="text-4xl font-black text-primary">{displayedOptimized} yrs</strong>
                 <span className="text-xs text-primary block mt-0.5">
-                  ({Math.max(0, Math.round((displayedOptimized - result.currentAge) * 10) / 10)} yrs remaining)
+                  ({optimizedRemaining} yrs remaining)
                 </span>
                 {yearsGained > 0 && (
                   <span className="text-xs font-bold text-green-600 block mt-0.5">+{yearsGained} years you could gain</span>
@@ -276,8 +303,8 @@ export const EnhancedLifeExpectancyReport = ({
 
         {isPremium && (
           <div className="flex items-center justify-center gap-2">
-            <Button size="sm" variant="outline" className="gap-2 print-show" onClick={() => window.print()}>
-              <Download className="w-3.5 h-3.5" /> Export PDF
+            <Button size="sm" variant="outline" className="gap-2" onClick={handleExportPDF} disabled={exporting}>
+              <Download className="w-3.5 h-3.5" /> {exporting ? 'Exporting…' : 'Export PDF'}
             </Button>
             <Button size="sm" variant="outline" className="gap-2" onClick={copyShare}>
               {copied ? '✅ Copied!' : <><Copy className="w-3.5 h-3.5" /> Copy share text</>}

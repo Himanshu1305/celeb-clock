@@ -29,6 +29,7 @@ import {
   HealthQuizData, Pillar1Data, Pillar2Data,
 } from '@/services/LongevityCalculationService';
 import { CulturalHorizonTeaser } from '@/components/CulturalHorizonTeaser';
+import { LongevityHeroCard } from '@/components/LongevityHeroCard';
 
 // ── ErrorBoundary ────────────────────────────────────────────────────────────
 class ReportErrorBoundary extends Component<
@@ -270,17 +271,7 @@ const LifeExpectancy = () => {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-muted-foreground">🌱 Epigenetic habits bonus</span>
-                      {userSelectedHabits.length > 0 ? (
-                        <strong className="text-green-600 tabular-nums">+{longevityResult.epigeneticAdjustment} yrs</strong>
-                      ) : (
-                        <a
-                          href="#simulator"
-                          className="text-primary text-xs font-semibold hover:underline"
-                          onClick={(e) => { e.preventDefault(); document.querySelector('[data-sim]')?.scrollIntoView({ behavior: 'smooth' }); }}
-                        >
-                          Explore in Simulator →
-                        </a>
-                      )}
+                      <strong className="text-green-600 tabular-nums">+{longevityResult.epigeneticAdjustment} yrs</strong>
                     </div>
                     {longevityResult.communityBonus > 0 && (
                       <div className="flex justify-between items-center">
@@ -400,6 +391,11 @@ const LifeExpectancy = () => {
                 Complete analysis across all three pillars of longevity
               </p>
             </div>
+            <LongevityHeroCard
+              result={longevityResult}
+              optimizedForecast={optimizedForecast}
+              userName={longevityResult.quizSnapshot.name}
+            />
             <ReportErrorBoundary onReset={() => setPhase('result')}>
               <EnhancedLifeExpectancyReport
                 result={longevityResult}
@@ -470,6 +466,11 @@ const LifeExpectancy = () => {
         <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
         <RelatedTools currentSlug="life" />
         <AuthorBio />
+        <div className="max-w-2xl mx-auto px-4 py-8 text-center">
+          <p className="text-xs text-gray-400 leading-relaxed">
+            ⚠️ This calculator provides statistical projections based on WHO life tables and peer-reviewed research (UN World Population Prospects 2024). Results are for informational and motivational purposes only — not medical advice. Actual lifespan is influenced by many factors beyond any model's scope including disease, accidents, genetics, and environmental conditions. Consult a qualified healthcare professional for personalized medical guidance.
+          </p>
+        </div>
       </div>
       <Footer />
     </div>
