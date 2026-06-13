@@ -115,28 +115,190 @@ export interface LongevityResult {
   epigeneticHabitsSelected: string[];
   blueZonesCount: number;
   baselineCitation: string;
+  baselineSource: string;
+  isConditionalBaseline: boolean;
+  minimumApplied: boolean;
+  minimumThreshold: number;
+  survivalBuffer: number;
   quizSnapshot: HealthQuizData;
   pillar1Snapshot: Pillar1Data;
   pillar2Snapshot: Pillar2Data;
 }
 
-// WHO 2023 base life expectancy by country and sex
-const BASE_TABLE: Record<string, { male: number; female: number }> = {
-  'India':          { male: 68, female: 71 },
-  'United States':  { male: 74, female: 80 },
-  'United Kingdom': { male: 79, female: 83 },
-  'Australia':      { male: 81, female: 85 },
-  'Canada':         { male: 79, female: 84 },
-  'Germany':        { male: 78, female: 83 },
-  'France':         { male: 79, female: 85 },
-  'Japan':          { male: 81, female: 87 },
-  'China':          { male: 75, female: 79 },
-  'Brazil':         { male: 72, female: 79 },
-  'South Africa':   { male: 62, female: 68 },
-  'Nigeria':        { male: 54, female: 57 },
-  'Mexico':         { male: 73, female: 78 },
+// ── STRUCTURE A: Birth life expectancy baselines ──────────────────────────────
+// Source: UN World Population Prospects 2024/2026
+const BIRTH_BASELINES: Record<string, { male: number; female: number }> = {
+  // South Asia
+  'India':              { male: 71.2, female: 74.4 },
+  'Pakistan':           { male: 67.2, female: 69.2 },
+  'Bangladesh':         { male: 73.5, female: 76.5 },
+  'Nepal':              { male: 71.0, female: 73.5 },
+  'Sri Lanka':          { male: 73.0, female: 79.5 },
+
+  // East Asia
+  'China':              { male: 76.0, female: 80.5 },
+  'Japan':              { male: 81.5, female: 87.5 },
+  'South Korea':        { male: 80.5, female: 86.5 },
+  'Taiwan':             { male: 78.5, female: 84.5 },
+
+  // Southeast Asia
+  'Indonesia':          { male: 69.5, female: 73.5 },
+  'Philippines':        { male: 69.0, female: 75.5 },
+  'Vietnam':            { male: 72.0, female: 78.0 },
+  'Thailand':           { male: 73.0, female: 79.5 },
+  'Malaysia':           { male: 73.5, female: 78.0 },
+  'Myanmar':            { male: 65.0, female: 69.5 },
+
+  // Middle East
+  'Iran':               { male: 75.0, female: 78.5 },
+  'Iraq':               { male: 71.0, female: 75.0 },
+  'Saudi Arabia':       { male: 76.0, female: 79.5 },
+  'Turkey':             { male: 74.5, female: 80.5 },
+  'Egypt':              { male: 70.0, female: 74.5 },
+
+  // Africa
+  'Nigeria':            { male: 53.5, female: 56.5 },
+  'Ethiopia':           { male: 65.5, female: 69.0 },
+  'DR Congo':           { male: 59.5, female: 63.5 },
+  'Tanzania':           { male: 65.5, female: 69.5 },
+  'Kenya':              { male: 64.5, female: 69.5 },
+  'Uganda':             { male: 63.0, female: 67.5 },
+  'Ghana':              { male: 63.5, female: 67.5 },
+  'Angola':             { male: 62.0, female: 67.5 },
+  'Mozambique':         { male: 58.5, female: 63.5 },
+  'South Africa':       { male: 62.0, female: 68.5 },
+  'Algeria':            { male: 77.0, female: 79.5 },
+  'Morocco':            { male: 75.5, female: 78.5 },
+  'Sudan':              { male: 65.0, female: 68.0 },
+
+  // Americas
+  'United States':      { male: 74.5, female: 80.5 },
+  'Brazil':             { male: 72.5, female: 79.5 },
+  'Mexico':             { male: 72.0, female: 78.0 },
+  'Colombia':           { male: 73.5, female: 79.5 },
+  'Argentina':          { male: 73.0, female: 79.5 },
+  'Venezuela':          { male: 70.5, female: 77.5 },
+  'Peru':               { male: 73.5, female: 78.5 },
+  'Canada':             { male: 79.5, female: 84.5 },
+
+  // Europe
+  'United Kingdom':     { male: 79.5, female: 83.5 },
+  'Germany':            { male: 78.5, female: 83.5 },
+  'France':             { male: 79.5, female: 85.5 },
+  'Italy':              { male: 81.5, female: 85.5 },
+  'Spain':              { male: 81.0, female: 86.0 },
+  'Ukraine':            { male: 68.0, female: 77.5 },
+  'Poland':             { male: 74.5, female: 82.0 },
+  'Uzbekistan':         { male: 71.5, female: 75.5 },
+  'Russia':             { male: 67.5, female: 77.5 },
+
+  // Oceania
+  'Australia':          { male: 81.5, female: 85.5 },
+
+  // Other
+  "Côte d'Ivoire":      { male: 58.5, female: 62.5 },
+  'Cameroon':           { male: 59.5, female: 63.0 },
+  'Yemen':              { male: 65.5, female: 69.0 },
 };
-const DEFAULT_BASE = { male: 72, female: 76 };
+
+// ── STRUCTURE B: WHO Regional fallbacks ──────────────────────────────────────
+// Source: WHO Global Health Observatory 2023
+const WHO_REGIONAL_BASELINES: Record<string, { male: number; female: number }> = {
+  'AFRO':  { male: 62.0, female: 65.5 }, // WHO Africa Region
+  'AMRO':  { male: 74.0, female: 79.5 }, // WHO Americas Region
+  'SEARO': { male: 70.5, female: 73.5 }, // WHO SE Asia Region
+  'EURO':  { male: 74.5, female: 80.5 }, // WHO Europe Region
+  'EMRO':  { male: 69.5, female: 73.5 }, // WHO Eastern Med Region
+  'WPRO':  { male: 75.0, female: 80.5 }, // WHO Western Pacific Region
+};
+
+const COUNTRY_TO_WHO_REGION: Record<string, string> = {
+  // Africa
+  'Senegal': 'AFRO', 'Mali': 'AFRO', 'Niger': 'AFRO', 'Chad': 'AFRO',
+  'Somalia': 'AFRO', 'Zambia': 'AFRO', 'Zimbabwe': 'AFRO',
+  'Rwanda': 'AFRO', 'Malawi': 'AFRO', 'Burkina Faso': 'AFRO',
+  'Guinea': 'AFRO', 'Benin': 'AFRO', 'Sierra Leone': 'AFRO',
+  'Togo': 'AFRO', 'Libya': 'AFRO', 'Madagascar': 'AFRO',
+
+  // Americas
+  'Bolivia': 'AMRO', 'Paraguay': 'AMRO', 'Ecuador': 'AMRO',
+  'Guatemala': 'AMRO', 'Honduras': 'AMRO', 'El Salvador': 'AMRO',
+  'Nicaragua': 'AMRO', 'Cuba': 'AMRO', 'Haiti': 'AMRO',
+  'Chile': 'AMRO', 'Uruguay': 'AMRO', 'Costa Rica': 'AMRO',
+  'Panama': 'AMRO', 'Dominican Republic': 'AMRO',
+
+  // SE Asia
+  'Cambodia': 'SEARO', 'Laos': 'SEARO', 'Timor-Leste': 'SEARO',
+  'Bhutan': 'SEARO', 'Maldives': 'SEARO',
+
+  // Europe
+  'Netherlands': 'EURO', 'Belgium': 'EURO', 'Sweden': 'EURO',
+  'Norway': 'EURO', 'Denmark': 'EURO', 'Finland': 'EURO',
+  'Switzerland': 'EURO', 'Austria': 'EURO', 'Portugal': 'EURO',
+  'Greece': 'EURO', 'Czech Republic': 'EURO', 'Romania': 'EURO',
+  'Hungary': 'EURO', 'Belarus': 'EURO', 'Serbia': 'EURO',
+  'Croatia': 'EURO', 'Slovakia': 'EURO', 'Bulgaria': 'EURO',
+  'Ireland': 'EURO', 'Israel': 'EURO',
+
+  // Eastern Med
+  'Syria': 'EMRO', 'Jordan': 'EMRO', 'Lebanon': 'EMRO',
+  'UAE': 'EMRO', 'Qatar': 'EMRO', 'Kuwait': 'EMRO',
+  'Oman': 'EMRO', 'Bahrain': 'EMRO', 'Afghanistan': 'EMRO',
+
+  // Western Pacific
+  'New Zealand': 'WPRO', 'Singapore': 'WPRO', 'Papua New Guinea': 'WPRO',
+  'Mongolia': 'WPRO',
+};
+
+// ── STRUCTURE C: Global default ───────────────────────────────────────────────
+// Source: UN WPP 2024 global average
+const GLOBAL_DEFAULT = { male: 73.3, female: 76.0 };
+
+// ── STRUCTURE D: Conditional multipliers ──────────────────────────────────────
+// Converts birth baseline to conditional (age-adjusted) baseline.
+// HIGH = birth baseline > 70; LOW = birth baseline ≤ 70 (stronger survivor selection).
+// Derived from UN WPP 2024 life table data.
+const CONDITIONAL_MULTIPLIERS: { HIGH: Record<number, number>; LOW: Record<number, number> } = {
+  HIGH: { 0: 1.000, 40: 1.040, 50: 1.070, 60: 1.113, 70: 1.163, 80: 1.218 },
+  LOW:  { 0: 1.000, 40: 1.060, 50: 1.120, 60: 1.200, 70: 1.350, 80: 1.550 },
+};
+
+// ── Comprehensive country list for the quiz dropdown ──────────────────────────
+export const QUIZ_COUNTRIES: string[] = Array.from(new Set([
+  ...Object.keys(BIRTH_BASELINES),
+  ...Object.keys(COUNTRY_TO_WHO_REGION),
+])).sort();
+
+// Flag emoji lookup for major countries
+export const COUNTRY_FLAG_EMOJI: Record<string, string> = {
+  'Afghanistan': '🇦🇫', 'Algeria': '🇩🇿', 'Angola': '🇦🇴', 'Argentina': '🇦🇷',
+  'Australia': '🇦🇺', 'Austria': '🇦🇹', 'Azerbaijan': '🇦🇿', 'Bahrain': '🇧🇭',
+  'Bangladesh': '🇧🇩', 'Belarus': '🇧🇾', 'Belgium': '🇧🇪', 'Bolivia': '🇧🇴',
+  'Brazil': '🇧🇷', 'Bulgaria': '🇧🇬', 'Cambodia': '🇰🇭', 'Cameroon': '🇨🇲',
+  'Canada': '🇨🇦', 'Chile': '🇨🇱', 'China': '🇨🇳', 'Colombia': '🇨🇴',
+  'Costa Rica': '🇨🇷', 'Croatia': '🇭🇷', 'Cuba': '🇨🇺', 'Czech Republic': '🇨🇿',
+  'Denmark': '🇩🇰', 'Dominican Republic': '🇩🇴', 'DR Congo': '🇨🇩', 'Ecuador': '🇪🇨',
+  'Egypt': '🇪🇬', 'El Salvador': '🇸🇻', 'Ethiopia': '🇪🇹', 'Finland': '🇫🇮',
+  'France': '🇫🇷', 'Germany': '🇩🇪', 'Ghana': '🇬🇭', 'Greece': '🇬🇷',
+  'Guatemala': '🇬🇹', 'Haiti': '🇭🇹', 'Honduras': '🇭🇳', 'Hungary': '🇭🇺',
+  'India': '🇮🇳', 'Indonesia': '🇮🇩', 'Iran': '🇮🇷', 'Iraq': '🇮🇶',
+  'Ireland': '🇮🇪', 'Israel': '🇮🇱', 'Italy': '🇮🇹', 'Japan': '🇯🇵',
+  'Jordan': '🇯🇴', 'Kenya': '🇰🇪', 'Kuwait': '🇰🇼', 'Laos': '🇱🇦',
+  'Lebanon': '🇱🇧', 'Libya': '🇱🇾', 'Malaysia': '🇲🇾', 'Mexico': '🇲🇽',
+  'Mongolia': '🇲🇳', 'Morocco': '🇲🇦', 'Mozambique': '🇲🇿', 'Myanmar': '🇲🇲',
+  'Nepal': '🇳🇵', 'Netherlands': '🇳🇱', 'New Zealand': '🇳🇿', 'Nicaragua': '🇳🇮',
+  'Nigeria': '🇳🇬', 'Norway': '🇳🇴', 'Oman': '🇴🇲', 'Pakistan': '🇵🇰',
+  'Panama': '🇵🇦', 'Papua New Guinea': '🇵🇬', 'Paraguay': '🇵🇾', 'Peru': '🇵🇪',
+  'Philippines': '🇵🇭', 'Poland': '🇵🇱', 'Portugal': '🇵🇹', 'Qatar': '🇶🇦',
+  'Romania': '🇷🇴', 'Russia': '🇷🇺', 'Rwanda': '🇷🇼', 'Saudi Arabia': '🇸🇦',
+  'Serbia': '🇷🇸', 'Singapore': '🇸🇬', 'Slovakia': '🇸🇰', 'Somalia': '🇸🇴',
+  'South Africa': '🇿🇦', 'South Korea': '🇰🇷', 'Spain': '🇪🇸', 'Sri Lanka': '🇱🇰',
+  'Sudan': '🇸🇩', 'Sweden': '🇸🇪', 'Switzerland': '🇨🇭', 'Syria': '🇸🇾',
+  'Taiwan': '🇹🇼', 'Tanzania': '🇹🇿', 'Thailand': '🇹🇭', 'Turkey': '🇹🇷',
+  'UAE': '🇦🇪', 'Uganda': '🇺🇬', 'Ukraine': '🇺🇦', 'United Kingdom': '🇬🇧',
+  'United States': '🇺🇸', 'Uruguay': '🇺🇾', 'Uzbekistan': '🇺🇿', 'Venezuela': '🇻🇪',
+  'Vietnam': '🇻🇳', 'Yemen': '🇾🇪', 'Zambia': '🇿🇲', 'Zimbabwe': '🇿🇼',
+};
 
 const BLUE_ZONES_HABIT_IDS = new Set([
   'walking', 'purpose', 'meditation', 'fasting', 'wholefood', 'spiritual', 'community', 'volunteer', 'gardening', 'laughter',
@@ -205,9 +367,48 @@ export const DEFAULT_PILLAR2: Pillar2Data = {
   mentorIsLiving: true,
 };
 
-function getBase(country: string, gender: 'male' | 'female' | ''): number {
+function getConditionalBase(
+  country: string,
+  gender: 'male' | 'female' | '',
+  currentAge: number
+): { base: number; source: string; isConditional: boolean } {
   const g = gender === 'female' ? 'female' : 'male';
-  return (BASE_TABLE[country] ?? DEFAULT_BASE)[g];
+
+  // Step 1: Get birth baseline
+  let birthBaseline: number;
+  let source: string;
+
+  if (BIRTH_BASELINES[country]) {
+    birthBaseline = BIRTH_BASELINES[country][g];
+    source = `UN World Population Prospects 2024, ${country}`;
+  } else if (COUNTRY_TO_WHO_REGION[country]) {
+    const region = COUNTRY_TO_WHO_REGION[country];
+    birthBaseline = WHO_REGIONAL_BASELINES[region][g];
+    source = `WHO Regional Average (${region}), 2023`;
+  } else {
+    birthBaseline = GLOBAL_DEFAULT[g];
+    source = 'UN World Population Prospects 2024, Global Average';
+  }
+
+  // Step 2: Apply conditional multiplier if age >= 40
+  if (currentAge < 40) {
+    return { base: birthBaseline, source, isConditional: false };
+  }
+
+  const multiplierSet = (birthBaseline > 70
+    ? CONDITIONAL_MULTIPLIERS.HIGH
+    : CONDITIONAL_MULTIPLIERS.LOW) as Record<number, number>;
+
+  const bracket = currentAge >= 80 ? 80
+                : currentAge >= 70 ? 70
+                : currentAge >= 60 ? 60
+                : currentAge >= 50 ? 50
+                : 40;
+
+  const multiplier = multiplierSet[bracket];
+  const conditionalBase = Math.round(birthBaseline * multiplier * 10) / 10;
+
+  return { base: conditionalBase, source, isConditional: true };
 }
 
 function isEntered(m: FamilyMemberData): boolean {
@@ -303,7 +504,14 @@ export function calculateLongevity(
   birthDate?: Date | null,
   userHabits: string[] = [],
 ): LongevityResult {
-  const base = getBase(quiz.country, quiz.gender);
+  // currentAge must be computed before getConditionalBase (used for multiplier selection)
+  const now = new Date();
+  const currentAge = birthDate instanceof Date
+    ? Math.floor((now.getTime() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000))
+    : 35;
+
+  const { base, source: baselineSource, isConditional } =
+    getConditionalBase(quiz.country, quiz.gender, currentAge);
 
   // ── Health adjustment (Steps 1-6) ──
   let health = 0;
@@ -365,16 +573,31 @@ export function calculateLongevity(
 
   const totalForecast = Math.round((base + health + genetic + epigenetic + communityBonus) * 10) / 10;
 
+  // ── Survival minimum guard ────────────────────────────────────────────────
+  // Any person alive at age X has demonstrated survival advantage.
+  // Minimum = currentAge + floor(currentAge × 0.08). Applied for age 50+ only.
+  let minimumForecast = totalForecast;
+  let minimumApplied = false;
+  let minimumThreshold = 0;
+  let survivalBuffer = 0;
+
+  if (currentAge >= 50) {
+    survivalBuffer = Math.floor(currentAge * 0.08);
+    minimumThreshold = currentAge + survivalBuffer;
+    if (totalForecast < minimumThreshold) {
+      minimumForecast = minimumThreshold;
+      minimumApplied = true;
+    }
+  }
+
+  const finalForecast = Math.round(minimumForecast * 10) / 10;
+
   // controllablePotential = best health + actual genetics + max epigenetic + community bonus
   const maxHealth = 4 + 5 + 1.5 + 1.5 + 0 + 2;
   const controllablePotential = Math.round((base + maxHealth + genetic + 6 + 1.5) * 10) / 10;
   const maximumPotential = controllablePotential; // backward compat alias
 
-  const now = new Date();
-  const currentAge = birthDate instanceof Date
-    ? Math.floor((now.getTime() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000))
-    : 35;
-  const yearsRemaining = Math.max(0, Math.round((totalForecast - currentAge) * 10) / 10);
+  const yearsRemaining = Math.max(0, Math.round((finalForecast - currentAge) * 10) / 10);
 
   const blueZonesCount = userHabits.filter(id => BLUE_ZONES_HABIT_IDS.has(id)).length;
 
@@ -445,10 +668,10 @@ export function calculateLongevity(
     geneticAdjustment:      Math.round(genetic * 10) / 10,
     epigeneticAdjustment:   Math.round(epigenetic * 10) / 10,
     communityBonus:         Math.round(communityBonus * 10) / 10,
-    totalForecast,
+    totalForecast:          finalForecast,
     maximumPotential,
     controllablePotential,
-    yearsGapToClose:        Math.round((controllablePotential - totalForecast) * 10) / 10,
+    yearsGapToClose:        Math.round((controllablePotential - finalForecast) * 10) / 10,
     currentAge,
     yearsRemaining,
     factorBreakdown:        factors,
@@ -458,7 +681,12 @@ export function calculateLongevity(
     userEpigeneticHabits:   userHabits,
     epigeneticHabitsSelected: userHabits,
     blueZonesCount,
-    baselineCitation:       'WHO Global Health Statistics, 2023',
+    baselineCitation:       baselineSource,
+    baselineSource,
+    isConditionalBaseline:  isConditional,
+    minimumApplied,
+    minimumThreshold,
+    survivalBuffer,
     quizSnapshot:           quiz,
     pillar1Snapshot:        pillar1,
     pillar2Snapshot:        pillar2,
@@ -515,7 +743,11 @@ export function recalcWithOverrides(
 ): number {
   const quiz = { ...result.quizSnapshot, ...overrides };
   const userHabits = overrides.selectedHabits ?? result.userEpigeneticHabits;
-  const r = calculateLongevity(quiz, result.pillar1Snapshot, result.pillar2Snapshot, undefined, userHabits);
+  // Pass representative birthDate so getConditionalBase uses the same age bracket as the quiz result
+  const representativeBirthDate = result.currentAge > 0
+    ? new Date(Date.now() - result.currentAge * 365.25 * 24 * 3600 * 1000)
+    : undefined;
+  const r = calculateLongevity(quiz, result.pillar1Snapshot, result.pillar2Snapshot, representativeBirthDate, userHabits);
   const extra = extraAdjustment(overrides);
   if (overrides.epigeneticBonusOverride !== undefined) {
     const epigenDiff = overrides.epigeneticBonusOverride - r.epigeneticAdjustment;

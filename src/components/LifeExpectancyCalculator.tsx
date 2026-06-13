@@ -16,13 +16,14 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import { Heart, Coffee, Brain, Dumbbell, User, ShieldCheck, Info, Activity, Moon, Users, Dna, TreePine, Lock, ChevronDown, ChevronUp } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from 'react-router-dom';
-import { countries } from '@/data/countries';
 import {
   HealthQuizData,
   Pillar1Data, FamilyMemberData,
   Pillar2Data,
   DEFAULT_PILLAR1, DEFAULT_PILLAR2,
   EPIGENETIC_HABITS,
+  QUIZ_COUNTRIES,
+  COUNTRY_FLAG_EMOJI,
   computeGeneticPreview,
   livingContributionLabel,
   calculateLongevity,
@@ -385,28 +386,32 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                 <div className="flex items-center space-x-2"><RadioGroupItem value="female" id="female" /><Label htmlFor="female">Female</Label></div>
               </RadioGroup>
             </div>
-            {profile?.country ? (
-              <div className="flex items-center gap-2 bg-blue-50/60 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-900 px-3 py-2.5">
-                <span className="text-base">🌍</span>
-                <p className="text-xs text-muted-foreground">
-                  Using your profile location: <strong className="text-foreground">{profile.country}</strong>
-                  <span className="ml-1 text-[10px] opacity-70">(for WHO baseline calculation)</span>
+            <div className="space-y-3">
+              <Label className="text-base flex items-center">
+                Country of Residence
+                <InfoTooltip content="Used to determine your life expectancy baseline from UN World Population Prospects 2024 data. For users aged 40+, an age-adjusted conditional baseline is applied — people who have already survived to their current age have a statistically higher remaining life expectancy." />
+              </Label>
+              <Select value={data.country} onValueChange={(v) => setData({ ...data, country: v })}>
+                <SelectTrigger><SelectValue placeholder="Select your country" /></SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {QUIZ_COUNTRIES.map((c) => (
+                    <SelectItem key={c} value={c}>
+                      {COUNTRY_FLAG_EMOJI[c] ? `${COUNTRY_FLAG_EMOJI[c]} ${c}` : c}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {profile?.country && data.country === profile.country && (
+                <p className="text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                  🌍 Pre-filled from your profile — you can change this
                 </p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <Label className="text-base flex items-center">
-                  Country of Residence
-                  <InfoTooltip content="Life expectancy baselines vary significantly by country due to healthcare quality, diet culture, and environmental factors. We use WHO 2023 country-specific data." />
-                </Label>
-                <Select value={data.country} onValueChange={(v) => setData({ ...data, country: v })}>
-                  <SelectTrigger><SelectValue placeholder="Select your country" /></SelectTrigger>
-                  <SelectContent className="max-h-60">
-                    {countries.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
+              )}
+              {!data.country && (
+                <p className="text-xs text-amber-600 dark:text-amber-400">
+                  Country selection personalises your baseline life expectancy
+                </p>
+              )}
+            </div>
           </div>
         )}
 

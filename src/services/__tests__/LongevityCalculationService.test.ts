@@ -65,35 +65,36 @@ const ALL_HABIT_IDS = [
 // ─────────────────────────────────────────────────────────────────────────────
 // GROUP 1 — WHO Baseline
 // ─────────────────────────────────────────────────────────────────────────────
-describe('Group 1 — WHO Baseline', () => {
-  it('male India → 68', () => {
+// Baselines now from UN WPP 2024 (BIRTH_BASELINES); no conditional multiplier since default age=35 < 40
+describe('Group 1 — UN WPP 2024 Baseline', () => {
+  it('male India → 71.2 (UN WPP 2024)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'male', country: 'India' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(68);
+    expect(r.baselineLifeExpectancy).toBe(71.2);
   });
 
-  it('female India → 71', () => {
+  it('female India → 74.4 (UN WPP 2024)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'female', country: 'India' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(71);
+    expect(r.baselineLifeExpectancy).toBe(74.4);
   });
 
-  it('male United States → 74', () => {
+  it('male United States → 74.5 (UN WPP 2024)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'male', country: 'United States' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(74);
+    expect(r.baselineLifeExpectancy).toBe(74.5);
   });
 
-  it('female United States → 80', () => {
+  it('female United States → 80.5 (UN WPP 2024)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'female', country: 'United States' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(80);
+    expect(r.baselineLifeExpectancy).toBe(80.5);
   });
 
-  it('male United Kingdom → 79', () => {
+  it('male United Kingdom → 79.5 (UN WPP 2024)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'male', country: 'United Kingdom' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(79);
+    expect(r.baselineLifeExpectancy).toBe(79.5);
   });
 
-  it('unknown country male → 72 (DEFAULT_BASE)', () => {
+  it('unknown country male → 73.3 (UN WPP 2024 GLOBAL_DEFAULT)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'male', country: 'UnknownCountry' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(72);
+    expect(r.baselineLifeExpectancy).toBe(73.3);
   });
 });
 
@@ -355,6 +356,119 @@ describe('Group 6 — Epigenetic Habits', () => {
   it('only walking → epigeneticAdjustment = 1.5', () => {
     const r = calculateLongevity(makeQuiz(), DEFAULT_PILLAR1, DEFAULT_PILLAR2, undefined, ['walking']);
     expect(r.epigeneticAdjustment).toBe(1.5);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// GROUP 8 — Conditional Baseline & Survival Minimum Guard
+// Tests the getConditionalBase() multiplier logic and the survival minimum
+// guard by varying only country and age, isolating the baseline effect.
+// All "neutral" calls use makeQuiz() defaults:
+//   exercise:moderate(+3) + stress:5(-0.5) = healthAdj +2.5, no genetic/epigenetic
+// ─────────────────────────────────────────────────────────────────────────────
+describe('Group 8 — Conditional Baseline & Survival Minimum Guard', () => {
+  // Helper: birthDate for a user of the given age
+  function birthdateForAge(years: number): Date {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - years);
+    return d;
+  }
+
+  // Worst-case quiz for survival guard trigger tests
+  const worstQuiz = makeQuiz({
+    smoking: 'heavy', drinking: 'heavy',
+    diet: 'poor', exercise: 'seldom',
+    bloodPressure: 'high2', sleepDuration: 'under6',
+    socialConnections: 'isolated', stress: 9, bmi: 35,
+    heartDisease: true, heartDiseaseControlled: false, heartDiseaseFamily: true,
+    diabetes: true, diabetesControlled: false, diabetesFamily: true,
+    hypertension: true, hypertensionControlled: false,
+  });
+
+  it('Test A — India male age 30: no conditional multiplier (age < 40)', () => {
+    const r = calculateLongevity(
+      makeQuiz({ gender: 'male', country: 'India' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAge(30),
+    );
+    // base = 71.2 (birth baseline, no multiplier), health = +2.5 → ~73.7
+    expect(r.isConditionalBaseline).toBe(false);
+    expect(r.totalForecast).toBeGreaterThan(70);
+    expect(r.totalForecast).toBeLessThan(79);
+  });
+
+  it('Test B — India male age 79: conditional multiplier applied (HIGH set, bracket 70)', () => {
+    const r = calculateLongevity(
+      makeQuiz({ gender: 'male', country: 'India' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAge(79),
+    );
+    // HIGH[70]=1.163 → conditionalBase=71.2*1.163≈82.8, health=2.5 → totalForecast≈85.3
+    expect(r.totalForecast).toBeGreaterThan(79);           // CRITICAL
+    expect(r.totalForecast).toBeGreaterThan(80);
+    expect(r.totalForecast).toBeLessThan(92);
+    expect(r.isConditionalBaseline).toBe(true);
+    expect(r.baselineSource).toContain('India');
+  });
+
+  it('Test C — Nigeria male age 79: conditional multiplier applied (LOW set, bracket 70)', () => {
+    const r = calculateLongevity(
+      makeQuiz({ gender: 'male', country: 'Nigeria' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAge(79),
+    );
+    // LOW[70]=1.350 → 53.5*1.35≈72.2, health=2.5 → 74.7; survival guard raises to 85
+    expect(r.totalForecast).toBeGreaterThan(79);           // CRITICAL
+    expect(r.isConditionalBaseline).toBe(true);
+  });
+
+  it('Test D — Unknown country male age 79: falls back to GLOBAL_DEFAULT (HIGH set)', () => {
+    const r = calculateLongevity(
+      makeQuiz({ gender: 'male', country: 'Unknownistan' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAge(79),
+    );
+    // GLOBAL_DEFAULT.male=73.3 > 70 → HIGH[70]=1.163 → 85.2, health=2.5 → 87.7
+    expect(r.totalForecast).toBeGreaterThan(79);           // CRITICAL
+    expect(r.baselineSource).toContain('Global Average');
+  });
+
+  it('Test E — Survival minimum guard triggers for India male age 79 with worst inputs', () => {
+    const r = calculateLongevity(
+      makeQuiz({ ...worstQuiz, gender: 'male', country: 'India' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAge(79),
+    );
+    // survivalBuffer = floor(79*0.08) = 6; minimumThreshold = 85
+    expect(r.minimumApplied).toBe(true);
+    expect(r.survivalBuffer).toBe(6);
+    expect(r.totalForecast).toBeGreaterThanOrEqual(85);
+  });
+
+  it('Test F — Survival minimum does NOT trigger for young user (age 35)', () => {
+    // No birthDate → currentAge defaults to 35 < 50, guard never fires
+    const r = calculateLongevity(makeQuiz(), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+    expect(r.minimumApplied).toBe(false);
+  });
+
+  it('Test G — Remaining years always positive for India male age 79 worst inputs', () => {
+    const r = calculateLongevity(
+      makeQuiz({ ...worstQuiz, gender: 'male', country: 'India' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAge(79),
+    );
+    expect(r.totalForecast - 79).toBeGreaterThan(0);       // CRITICAL regression test
+  });
+
+  it('Test H — Remaining years sanity range for India male age 79 neutral inputs', () => {
+    const r = calculateLongevity(
+      makeQuiz({ gender: 'male', country: 'India' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAge(79),
+    );
+    const remaining = r.totalForecast - 79;
+    expect(remaining).toBeGreaterThanOrEqual(3);
+    expect(remaining).toBeLessThanOrEqual(15);
   });
 });
 

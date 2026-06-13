@@ -176,6 +176,9 @@ export const EnhancedLifeExpectancyReport = ({
           <div className="text-center">
             <span className="text-[10px] uppercase font-bold text-muted-foreground block">Current Lifestyle</span>
             <strong className="text-4xl font-black text-muted-foreground">{result.totalForecast} yrs</strong>
+            <span className="text-xs text-muted-foreground block mt-0.5">
+              ({Math.max(0, Math.round((result.totalForecast - result.currentAge) * 10) / 10)} yrs remaining)
+            </span>
           </div>
           {displayedOptimized !== result.totalForecast && (
             <>
@@ -183,8 +186,11 @@ export const EnhancedLifeExpectancyReport = ({
               <div className="text-center">
                 <span className="text-[10px] uppercase font-bold text-primary block">With Optimized Lifestyle</span>
                 <strong className="text-4xl font-black text-primary">{displayedOptimized} yrs</strong>
+                <span className="text-xs text-primary block mt-0.5">
+                  ({Math.max(0, Math.round((displayedOptimized - result.currentAge) * 10) / 10)} yrs remaining)
+                </span>
                 {yearsGained > 0 && (
-                  <span className="text-xs font-bold text-green-600 block mt-0.5">+{yearsGained} years gained</span>
+                  <span className="text-xs font-bold text-green-600 block mt-0.5">+{yearsGained} years you could gain</span>
                 )}
               </div>
             </>

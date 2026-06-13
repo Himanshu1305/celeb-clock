@@ -230,6 +230,11 @@ const LifeExpectancy = () => {
                 <p className="text-sm text-muted-foreground">
                   You are {longevityResult.currentAge} today · {longevityResult.yearsRemaining} years of life ahead
                 </p>
+                {longevityResult.isConditionalBaseline && (
+                  <p className="text-xs text-muted-foreground">
+                    ℹ️ Age-adjusted baseline — your survival to age {longevityResult.currentAge} is factored into this forecast
+                  </p>
+                )}
                 <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
                   Built from <strong className="text-foreground">{longevityResult.factorBreakdown.length} personal factors</strong>
                   {Object.values(longevityResult.pillar1Snapshot).filter(m => !m.dontKnow && m.age > 0 && m.isLiving !== null).length > 0 && (
@@ -288,11 +293,29 @@ const LifeExpectancy = () => {
                       <strong className="text-primary text-lg tabular-nums">{longevityResult.totalForecast} yrs</strong>
                     </div>
                   </div>
-                  <p className="text-[10px] text-muted-foreground border-t pt-2">
-                    Baseline source: {longevityResult.baselineCitation}
+                  <p className="text-[10px] text-muted-foreground italic border-t pt-2">
+                    📊 Baseline: {longevityResult.baselineSource}
                   </p>
                 </CardContent>
               </Card>
+
+              {longevityResult.minimumApplied && (
+                <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-4 text-left space-y-3 max-w-2xl mx-auto">
+                  <p className="text-sm font-medium text-amber-800 dark:text-amber-300">📋 About Your Forecast</p>
+                  <p className="text-sm text-amber-900 dark:text-amber-200 leading-relaxed">
+                    Your health inputs reflect significant challenges. However, actuarial science recognises that having survived to age {longevityResult.currentAge} is itself evidence of biological resilience — what actuaries call the <em>survivor selection effect</em>.
+                  </p>
+                  <p className="text-sm text-amber-900 dark:text-amber-200 leading-relaxed">
+                    Your forecast has been adjusted to <strong>{longevityResult.totalForecast}</strong> years, applying a <strong>{longevityResult.survivalBuffer}-year</strong> survival credit based on UN life table data for your age group. This is consistent with how the WHO, insurance actuaries, and the Social Security Administration calculate remaining life expectancy.
+                  </p>
+                  <p className="text-sm text-amber-900 dark:text-amber-200 leading-relaxed">
+                    The What-If Simulator below shows exactly which lifestyle changes would have the highest impact from here.
+                  </p>
+                  <a href="/blog/conditional-life-expectancy" className="inline-flex items-center text-sm text-amber-700 dark:text-amber-400 font-semibold hover:underline">
+                    Learn about survivor selection effect →
+                  </a>
+                </div>
+              )}
 
               {longevityResult.totalForecast > 100 && (
                 <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-6 text-left space-y-3 max-w-2xl mx-auto">
@@ -333,7 +356,10 @@ const LifeExpectancy = () => {
                   <TrendingUp className="w-6 h-6 text-primary" /> What-If Simulator
                 </h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Your forecast: <strong className="text-primary text-lg">{longevityResult.totalForecast} years</strong>
+                  Your forecast:{' '}
+                  <strong className="text-primary text-lg">{longevityResult.totalForecast} years</strong>
+                  {' · '}{longevityResult.currentAge} yrs old{' · '}
+                  {longevityResult.yearsRemaining} years remaining
                 </p>
               </div>
             </div>
