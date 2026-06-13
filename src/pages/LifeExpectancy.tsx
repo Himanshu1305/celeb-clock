@@ -307,7 +307,6 @@ const LifeExpectancy = () => {
                 </h2>
                 <p className="text-sm text-muted-foreground mt-1">
                   Your forecast: <strong className="text-primary text-lg">{longevityResult.totalForecast} years</strong>
-                  {' · '}Gap to close: <strong className="text-foreground">{longevityResult.yearsGapToClose} years</strong>
                 </p>
               </div>
             </div>
@@ -363,19 +362,21 @@ const LifeExpectancy = () => {
           </section>
         )}
 
-        {/* Health Guide — free educational section, always visible */}
-        <section className="max-w-5xl mx-auto mb-10 px-4">
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold text-foreground">🧬 Science-Backed Longevity Guide</h2>
-            <p className="text-sm text-muted-foreground mt-1">Evidence-based recommendations to help you live longer, healthier — free for everyone.</p>
-          </div>
-          <HealthGuideSection result={longevityResult} />
-        </section>
-
-        {/* World Longevity Records — always visible, no quiz required */}
-        <section className="max-w-5xl mx-auto mb-10 px-4">
-          <WorldLongevityRecords />
-        </section>
+        {/* Health Guide & World Records — only shown after quiz complete */}
+        {longevityResult && (
+          <>
+            <section className="max-w-5xl mx-auto mb-10 px-4">
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold text-foreground">🧬 Science-Backed Longevity Guide</h2>
+                <p className="text-sm text-muted-foreground mt-1">Evidence-based recommendations tailored to your results.</p>
+              </div>
+              <HealthGuideSection result={longevityResult} />
+            </section>
+            <section className="max-w-5xl mx-auto mb-10 px-4">
+              <WorldLongevityRecords />
+            </section>
+          </>
+        )}
 
         {/* About Section */}
         <section className="max-w-4xl mx-auto mb-16">

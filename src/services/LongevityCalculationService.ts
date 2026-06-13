@@ -26,6 +26,7 @@ export interface Pillar2Data {
   mentorAge: number;
   mentorRelationship: string;
   mentorHabits: string[]; // habits believed to contribute to mentor's longevity
+  mentorIsLiving?: boolean;
 }
 
 export interface HealthQuizData {
@@ -201,6 +202,7 @@ export const DEFAULT_PILLAR2: Pillar2Data = {
   mentorAge: 0,
   mentorRelationship: 'neighbor',
   mentorHabits: [],
+  mentorIsLiving: true,
 };
 
 function getBase(country: string, gender: 'male' | 'female' | ''): number {

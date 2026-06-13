@@ -229,12 +229,6 @@ export const CulturalHorizonTeaser = ({
             </div>
           </div>
 
-          {/* Motivational text — below Row 2 */}
-          {optimizedMatches[0] && (
-            <p className="text-sm text-muted-foreground text-center max-w-xl mx-auto">
-              <strong className="text-foreground">{optimizedMatches[0].name}</strong> — {optimizedMatches[0].achievement}. With the changes you've explored today, you're on a trajectory to live a life of equal impact and longevity.
-            </p>
-          )}
         </>
       )}
 

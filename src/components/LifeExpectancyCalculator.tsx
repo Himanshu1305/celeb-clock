@@ -272,12 +272,37 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
 
         {/* ── Age card: locked on steps 1-5, gated on step 6 until both inputs set ── */}
         {step < 6 ? (
-          <div className="rounded-xl border border-muted bg-muted/30 p-4 flex items-center gap-3">
-            <Lock className="w-5 h-5 text-muted-foreground/50 shrink-0" />
-            <div>
-              <p className="text-xs font-bold text-muted-foreground">Your projected lifespan will reveal here</p>
-              <p className="text-[10px] text-muted-foreground mt-0.5">Complete Steps 1–5 first — your number unlocks at Step 6</p>
+          <div className="rounded-xl border border-muted bg-muted/30 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Lock className="w-4 h-4 text-muted-foreground/50 shrink-0" />
+              <p className="text-xs font-bold text-muted-foreground">🔒 Your Longevity Forecast</p>
             </div>
+            {currentAge !== null ? (
+              <div className="space-y-1.5">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-3xl font-black text-blue-600">{currentAge}</span>
+                  <span className="text-sm font-semibold text-muted-foreground">years old</span>
+                </div>
+                <p className="text-xs text-muted-foreground">Complete each step to reveal your personalized longevity forecast</p>
+                <p className="text-[10px] text-muted-foreground/70">Your data is saved as you progress — you will not lose your answers</p>
+                <div className="pt-1">
+                  <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
+                    <span>Step {step} of {totalSteps}</span>
+                  </div>
+                  <Progress value={(step / totalSteps) * 100} className="h-1.5" />
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                <p className="text-xs text-muted-foreground">Enter your date of birth above to begin</p>
+                <div className="pt-1">
+                  <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
+                    <span>Step {step} of {totalSteps}</span>
+                  </div>
+                  <Progress value={(step / totalSteps) * 100} className="h-1.5" />
+                </div>
+              </div>
+            )}
           </div>
         ) : step === 6 && (!hasInteractedStress || !data.exercise) ? (
           <div className="rounded-xl border border-muted bg-muted/30 p-4 flex items-center gap-3">
@@ -881,7 +906,25 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                         <Input type="text" placeholder="e.g. Uncle Ratan" value={pillar2.mentorName} onChange={(e) => setPillar2(p => ({ ...p, mentorName: e.target.value }))} className="h-8 text-xs" />
                       </div>
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Their age / age at time of passing</Label>
+                        <div className="flex items-center justify-between">
+                          <Label className="text-xs">
+                            {pillar2.mentorIsLiving !== false ? 'Their current age' : 'Their age at time of passing'}
+                          </Label>
+                          <div className="flex gap-1">
+                            <Button
+                              type="button" size="sm"
+                              variant={pillar2.mentorIsLiving !== false ? 'default' : 'outline'}
+                              className="h-5 px-1.5 text-[9px]"
+                              onClick={() => setPillar2(p => ({ ...p, mentorIsLiving: true }))}
+                            >Still Living</Button>
+                            <Button
+                              type="button" size="sm"
+                              variant={pillar2.mentorIsLiving === false ? 'default' : 'outline'}
+                              className="h-5 px-1.5 text-[9px]"
+                              onClick={() => setPillar2(p => ({ ...p, mentorIsLiving: false }))}
+                            >Passed Away</Button>
+                          </div>
+                        </div>
                         <Input type="number" placeholder="e.g. 94" value={pillar2.mentorAge || ''} onChange={(e) => setPillar2(p => ({ ...p, mentorAge: Number(e.target.value) }))} className="h-8 text-xs" min={60} max={130} />
                       </div>
                     </div>
@@ -898,8 +941,11 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                     </div>
                     {pillar2.mentorAge >= 75 && (
                       <p className="text-xs text-green-700 bg-green-50 dark:bg-green-950/20 p-2 rounded border border-green-200">
-                        ✅ +{baseBonus} yr community base bonus
-                        {pillar2.mentorAge >= 95 ? ' (age 95+: exceptional environment)' : pillar2.mentorAge >= 85 ? ' (age 85+: strong longevity signal)' : ' (age 75+: healthy environment)'}
+                        {pillar2.mentorIsLiving !== false
+                          ? `✅ +${baseBonus} yr environmental bonus: ${pillar2.mentorName || 'your mentor'} is living proof that your environment supports longevity`
+                          : `✅ +${baseBonus} yr environmental bonus: ${pillar2.mentorName || 'your mentor'}'s remarkable lifespan shows your community environment supported long life`
+                        }
+                        {pillar2.mentorAge >= 95 ? ' (age 95+: exceptional)' : pillar2.mentorAge >= 85 ? ' (age 85+: strong signal)' : ' (age 75+: healthy)'}
                         {totalCommunityBonus > baseBonus && <span> · +{Math.round((totalCommunityBonus - baseBonus) * 100) / 100} yr from mentor habits = <strong>+{Math.round(totalCommunityBonus * 10) / 10} yr total</strong></span>}
                       </p>
                     )}

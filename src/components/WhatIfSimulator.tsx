@@ -5,7 +5,7 @@ import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Lock, Sparkles, TrendingUp, Crown, Info, ChevronDown, ChevronUp } from 'lucide-react';
+import { Lock, TrendingUp, Crown, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
   LongevityResult, recalcWithOverrides, EPIGENETIC_HABITS, HABIT_DETAILS, HealthQuizData,
@@ -224,7 +224,6 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
     Object.fromEntries(EPIGENETIC_HABITS.map(h => [h.id, 'never' as FreqLevel]))
   );
   const [expandedHabit, setExpandedHabit] = useState<string | null>(null);
-  const [expandedFactor, setExpandedFactor] = useState<string | null>(null);
 
   // Panel 3 — pre-loaded from quiz; extras default to population averages
   const [iSleep,  setSleep]  = useState(() => catIdx(SLEEP_OPTS, q.sleepDuration || '7to9'));
@@ -744,9 +743,11 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                 ? { cls: 'bg-emerald-50 text-emerald-700 border border-emerald-100', msg: `👏 Great work! You've unlocked ${gainText}. Every additional year compounds — more experiences, more memories, more time with the people who matter most.` }
               : gain >= 1
                 ? { cls: 'bg-muted/60 text-muted-foreground border border-muted', msg: `✅ A meaningful start! You've unlocked ${gainText}. Small consistent changes compound powerfully over time.` }
-              : gain <= 0
-                ? { cls: 'bg-muted/40 text-muted-foreground', msg: '💡 Your current lifestyle is already solid. Try adjusting the Epigenetic Habits panel to discover your untapped potential.' }
-              : { cls: 'bg-red-50 text-red-700 border border-red-100', msg: '⚠️ Some current choices are reducing your potential. Review the factors above — lifestyle controls 70–75% of outcomes.' };
+              : gain === 0
+                ? { cls: 'bg-muted/40 text-muted-foreground', msg: '💡 No change yet — adjust the sliders above to explore your longevity potential.' }
+              : gain < 0
+                ? { cls: 'bg-red-50 text-red-700 border border-red-100', msg: '⚠️ Some current choices are reducing your potential. Review the factors above — lifestyle controls 70–75% of outcomes.' }
+              : { cls: 'bg-muted/40 text-muted-foreground', msg: '💡 Your current lifestyle is already solid. Try adjusting the Epigenetic Habits panel to discover your untapped potential.' };
 
             return <div className={`rounded-lg px-4 py-2.5 text-xs font-medium ${msgData.cls}`}>{msgData.msg}</div>;
           })()}
@@ -857,182 +858,6 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                 : `🧬 Your family lived to ~${Math.round(result.familyBaselineAge)} years on average. These changes put you within reach of your genetic potential.`}
             </p>
           )}
-        </CardContent>
-      </Card>
-
-      {/* ── Factor Breakdown ── */}
-      <Card>
-        <CardHeader className="pb-3 pt-4 px-5">
-          <CardTitle className="text-sm font-bold flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-primary" /> Factor Breakdown — Sorted by Potential Gain
-          </CardTitle>
-          <p className="text-xs text-muted-foreground mt-0.5">Based on your original quiz answers — showing what's currently helping and hurting your longevity</p>
-          <p className="text-xs text-muted-foreground/70 mt-0.5">Move the sliders above to see how changes would affect your forecast in real time.</p>
-        </CardHeader>
-        <CardContent className="px-5 pb-4">
-          <div className="space-y-1.5">
-            {result.factorBreakdown.slice(0, 10).map((f, i) => {
-              const displayImpact = f.factor === 'Epigenetic Habits' ? simEpigeneticYears : f.currentImpact;
-              const isPositive = displayImpact > 0;
-              const isZero = displayImpact === 0;
-              const isExpanded = expandedFactor === f.factor;
-
-              const FACTOR_GUIDANCE: Record<string, { positive: string; negative: string; zero: string; actions?: { label: string; items: string[] }[] }> = {
-                'Family Genetics': {
-                  positive: 'Your family history is a strong hereditary asset. Genetics contribute 25–30% of your longevity outcome — you are starting ahead of the curve.',
-                  negative: 'Your family history suggests some hereditary risk. Focus on epigenetic habits — research shows lifestyle can override 70–75% of genetic predisposition.',
-                  zero: 'Your family genetics are at the population average. Your habits and environment will determine the rest.',
-                  actions: [
-                    { label: 'Quick', items: ['Ensure all family data is entered accurately in Step 7'] },
-                    { label: 'Medium', items: ['Consider genetic counseling for targeted risk awareness'] },
-                    { label: 'Long-term', items: ['Adopt epigenetic habits (see Panel 2 above) to offset genetic risk'] },
-                  ],
-                },
-                'Physical Exercise': {
-                  positive: 'You are doing well — regular exercise is your most powerful longevity lever. Keep intensity consistent.',
-                  negative: 'Physical inactivity is one of the most reversible longevity risks. Even small increases in movement have a large effect.',
-                  zero: 'You are at the average for your age group. Moderate exercise unlocks significant gains.',
-                  actions: [
-                    { label: 'Quick', items: ['Add a 10-minute walk after each meal'] },
-                    { label: 'Medium', items: ['Build structured Zone 2 cardio: 3× 30-min sessions per week'] },
-                    { label: 'Long-term', items: ['Add strength training 2× per week to preserve muscle mass (key longevity biomarker)'] },
-                  ],
-                },
-                'Diet Quality': {
-                  positive: 'Excellent eating patterns — maintain 80% adherence to whole, nutrient-dense foods.',
-                  negative: 'Diet quality has an outsized impact on longevity. Every incremental improvement compounds over time.',
-                  zero: 'Your diet is at population average. Shifting toward more plants and less processed food has immediate measurable benefits.',
-                  actions: [
-                    { label: 'Quick', items: ['Add one extra serving of vegetables or legumes daily'] },
-                    { label: 'Medium', items: ['Adopt a Mediterranean-style eating pattern (associated with 4+ extra years)'] },
-                    { label: 'Long-term', items: ['Eliminate ultra-processed foods — linked to a 26% higher all-cause mortality risk'] },
-                  ],
-                },
-                'Sleep Duration': {
-                  positive: '7–9 hours is the sweet spot — you are hitting optimal sleep duration. Maintain consistency.',
-                  negative: 'Chronic sleep deficit accelerates biological aging and raises all-cause mortality risk by 12% per night under 6 hours.',
-                  zero: 'Your sleep duration is near the average. Small improvements to schedule consistency can add measurable years.',
-                  actions: [
-                    { label: 'Quick', items: ['Set a consistent sleep and wake time — same every day including weekends'] },
-                    { label: 'Medium', items: ['Implement a screen-free 90-minute wind-down ritual before bed'] },
-                    { label: 'Long-term', items: ['Address underlying conditions (sleep apnea, anxiety) if waking unrested'] },
-                  ],
-                },
-                'BMI / Body Weight': {
-                  positive: 'Healthy weight range — balanced nutrient intake and activity are the key maintainers.',
-                  negative: 'Body composition has a direct relationship with cardiovascular risk, inflammation, and biological aging speed.',
-                  zero: 'Your BMI is near the normal range. Maintaining or improving it protects against metabolic disease.',
-                  actions: [
-                    { label: 'Quick', items: ['Reduce portion sizes and eliminate liquid calories (sodas, juices)'] },
-                    { label: 'Medium', items: ['150 minutes of moderate exercise per week — confirmed to reduce obesity risk'] },
-                    { label: 'Long-term', items: ['Structured weight management with dietary tracking over 12+ weeks'] },
-                  ],
-                },
-                'Stress Level': {
-                  positive: 'Low stress is an exceptional longevity asset. Cortisol suppression preserves telomere length and immune function.',
-                  negative: 'Chronic high stress accelerates cellular aging — elevated cortisol shortens telomeres and raises inflammation markers.',
-                  zero: 'Moderate stress is manageable but optimizable. Stress reduction practices have measurable biological benefits within weeks.',
-                  actions: [
-                    { label: 'Quick', items: ['10-minute daily mindfulness or box-breathing session'] },
-                    { label: 'Medium', items: ['Journaling + cognitive behavioural therapy techniques'] },
-                    { label: 'Long-term', items: ['Lifestyle simplification — reduce commitments that create chronic load'] },
-                  ],
-                },
-                'Blood Pressure': {
-                  positive: 'Optimal blood pressure is an excellent cardiovascular foundation — associated with 1.5+ extra healthy years.',
-                  negative: 'Elevated blood pressure silently damages arteries, kidneys, and the brain. It is one of the most treatable longevity risks.',
-                  zero: 'Normal blood pressure is good, but optimal (< 120/80) is the longevity target.',
-                  actions: [
-                    { label: 'Quick', items: ['Reduce sodium intake below 2,300mg/day (the single fastest dietary BP intervention)'] },
-                    { label: 'Medium', items: ['Regular aerobic exercise — lowers systolic BP by 5–8 mmHg on average'] },
-                    { label: 'Long-term', items: ['Medical evaluation if consistently above 130/80 — treatment reduces stroke risk by 40%'] },
-                  ],
-                },
-                'Social Connections': {
-                  positive: 'A strong social network is one of the most protective longevity factors known to science — comparable to quitting smoking.',
-                  negative: 'Loneliness and social isolation carry the same mortality risk as smoking 15 cigarettes per day (Harvard Study of Adult Development).',
-                  zero: 'Moderate social connection is the average. Even small increases in social engagement have measurable health benefits.',
-                  actions: [
-                    { label: 'Quick', items: ['Schedule one intentional social activity per week'] },
-                    { label: 'Medium', items: ['Join a community group aligned with your interests (sport, faith, volunteering)'] },
-                    { label: 'Long-term', items: ['Prioritise relationship investment over productivity — quality relationships predict healthy aging most strongly'] },
-                  ],
-                },
-                'Epigenetic Habits': {
-                  positive: 'Your habits are actively unlocking your biological potential — epigenetic expression is shifting in your favor.',
-                  negative: 'Epigenetic habits are one of the highest-leverage areas — each habit you add creates compounding biological benefit.',
-                  zero: 'No epigenetic habits selected yet. Even starting with one habit practiced consistently begins shifting gene expression.',
-                  actions: [
-                    { label: 'Quick', items: ['Start with one habit from Panel 2 and set it to "Daily" frequency'] },
-                    { label: 'Medium', items: ['Build a "habit stack" — link new habits to existing routines'] },
-                    { label: 'Long-term', items: ['Target Blue Zone lifestyle alignment: 7+ of 9 Power 9® principles'] },
-                  ],
-                },
-                'Diabetes': {
-                  positive: 'No diabetes is a significant metabolic advantage — your insulin sensitivity and cardiovascular baseline are protected.',
-                  negative: 'Diabetes management is critical: poorly controlled blood sugar accelerates cardiovascular aging at 2–4× the normal rate.',
-                  zero: 'No current diabetes risk. Maintaining metabolic health through diet and exercise is protective.',
-                  actions: [
-                    { label: 'Quick', items: ['Reduce refined carbohydrates and added sugars in daily diet'] },
-                    { label: 'Medium', items: ['Regular blood glucose monitoring if at risk — catch pre-diabetes early'] },
-                    { label: 'Long-term', items: ['Structured diabetes prevention or management program with HbA1c targets'] },
-                  ],
-                },
-              };
-
-              const guidance = FACTOR_GUIDANCE[f.factor];
-              const guidanceText = guidance
-                ? isPositive ? guidance.positive : isZero ? guidance.zero : guidance.negative
-                : f.source;
-              const actions = guidance?.actions;
-
-              return (
-                <div key={i} className={`rounded-lg border text-xs overflow-hidden ${isPositive ? 'bg-green-50/50 border-green-200 dark:bg-green-950/20 dark:border-green-900' : isZero ? 'bg-muted/30 border-muted/60' : 'bg-red-50/50 border-red-200 dark:bg-red-950/20 dark:border-red-900'}`}>
-                  <button
-                    onClick={() => setExpandedFactor(isExpanded ? null : f.factor)}
-                    className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                  >
-                    <span className="flex items-center gap-1.5 font-medium">
-                      <span>{f.emoji}</span><span>{f.factor}</span>
-                      {!isPositive && displayImpact !== 0 && (
-                        <span className="text-[9px] text-red-500 font-semibold">⚠️ reducing forecast by {Math.abs(displayImpact).toFixed(1)}yr</span>
-                      )}
-                    </span>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span style={blurStyle}><ImpactBadge impact={displayImpact} /></span>
-                      {f.potentialGain > 0 && f.factor !== 'Epigenetic Habits' && (
-                        <span className="text-[9px] text-green-600" style={blurStyle}>+{f.potentialGain}yr possible</span>
-                      )}
-                      {f.factor === 'Epigenetic Habits' && simEpigeneticYears < 6 && (
-                        <span className="text-[9px] text-green-600" style={blurStyle}>+{Math.round((6 - simEpigeneticYears) * 10) / 10}yr possible</span>
-                      )}
-                      {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-muted-foreground ml-1" /> : <ChevronDown className="w-3.5 h-3.5 text-muted-foreground ml-1" />}
-                    </div>
-                  </button>
-                  {isExpanded && (
-                    <div className="px-3 pb-3 pt-1 border-t bg-background/70 space-y-2">
-                      <p className="text-[11px] text-muted-foreground leading-relaxed">{guidanceText}</p>
-                      {actions && (
-                        <div className="space-y-1">
-                          {actions.map(({ label, items }) => (
-                            <div key={label} className="flex gap-2">
-                              <span className={`text-[9px] font-bold shrink-0 px-1.5 py-0.5 rounded mt-0.5 ${label === 'Quick' ? 'bg-green-100 text-green-700' : label === 'Medium' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'}`}>{label}</span>
-                              <span className="text-[10px] text-foreground leading-snug">{items[0]}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      {FACTOR_BLOG_SLUG[f.factor] && (
-                        <Link to={FACTOR_BLOG_SLUG[f.factor]} className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline mt-1">
-                          📖 Read: How to improve {f.factor} →
-                        </Link>
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
         </CardContent>
       </Card>
 
