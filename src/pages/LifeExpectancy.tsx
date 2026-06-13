@@ -7,6 +7,7 @@ import { LifeExpectancyCalculator } from '@/components/LifeExpectancyCalculator'
 import { WhatIfSimulator } from '@/components/WhatIfSimulator';
 import { EnhancedLifeExpectancyReport } from '@/components/EnhancedLifeExpectancyReport';
 import { HealthGuideSection } from '@/components/HealthGuideSection';
+import { WorldLongevityRecords } from '@/components/WorldLongevityRecords';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -369,6 +370,11 @@ const LifeExpectancy = () => {
             <p className="text-sm text-muted-foreground mt-1">Evidence-based recommendations to help you live longer, healthier — free for everyone.</p>
           </div>
           <HealthGuideSection result={longevityResult} />
+        </section>
+
+        {/* World Longevity Records — always visible, no quiz required */}
+        <section className="max-w-5xl mx-auto mb-10 px-4">
+          <WorldLongevityRecords />
         </section>
 
         {/* About Section */}
