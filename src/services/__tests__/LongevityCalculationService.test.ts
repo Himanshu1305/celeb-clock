@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   calculateLongevity,
+  recalcWithOverrides,
   DEFAULT_PILLAR1,
   DEFAULT_PILLAR2,
   HealthQuizData,
@@ -912,5 +913,167 @@ describe('Test Group G — controllablePotential sanity', () => {
     );
     // base(82.8) + 14 + 0 + 6 + 1.5 = 104.3 < 115
     expect(r.controllablePotential).toBeLessThan(115);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NEG1–NEG10 — Negative scenario tests
+// Verify floors, caps, and adverse-input guards hold under worst-case inputs.
+// ─────────────────────────────────────────────────────────────────────────────
+describe('NEG — Negative scenario tests', () => {
+  it('NEG1: India male no birthDate (age 35), all-worst inputs → totalForecast floored to 35.5 by hard minimum', () => {
+    // base=71.2 (age<40, no conditional) + health≈-53.5 → naive 17.7
+    // hard min: max(17.7, 35+0.5) = 35.5; survival guard not applied (age < 50)
+    const r = calculateLongevity(
+      makeQuiz({ ...WORST_QUIZ_OVERRIDES, gender: 'male', country: 'India' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+    );
+    expect(r.totalForecast).toBeGreaterThanOrEqual(35.5);
+    expect(r.minimumApplied).toBe(false); // survival guard only fires for age ≥ 50
+  });
+
+  it('NEG2: recalcWithOverrides India male age 79, all-worst overrides + extra negatives → result ≥ 79.5', () => {
+    // survival guard raises r.totalForecast to 85; extra=-6.8 → 78.2; hard min=max(78.2, 79.5)=79.5
+    const base = calculateLongevity(
+      makeQuiz({ gender: 'male', country: 'India' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAgeG(79),
+    );
+    const result = recalcWithOverrides(base, {
+      smoking: 'heavy', drinking: 'heavy', diet: 'poor', exercise: 'seldom',
+      bloodPressure: 'high2', sleepDuration: 'under6', socialConnections: 'isolated',
+      stress: 9, bmi: 35,
+      hydration: 'poor', screenTime: 'very_high', workLifeBalance: 'poor',
+      mentalHealth: 'struggling', airQuality: 'polluted', relationship: 'divorced',
+    });
+    expect(result).toBeGreaterThanOrEqual(79.5);
+  });
+
+  it('NEG3: recalcWithOverrides with empty overrides returns same as original totalForecast', () => {
+    const base = calculateLongevity(makeQuiz(), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+    const result = recalcWithOverrides(base, {});
+    expect(result).toBe(base.totalForecast);
+  });
+
+  it('NEG4: all family deceased age 200 → geneticAdjustment capped at +8.0', () => {
+    // wfa=200; (200-78)×0.25=30.5 → capped at min(8, 30.5) = 8.0
+    const r = calculateLongevity(makeQuiz(), makeAllFamilyAt(200, false), DEFAULT_PILLAR2);
+    expect(r.geneticAdjustment).toBe(8.0);
+  });
+
+  it('NEG5: all family deceased age 10 → geneticAdjustment capped at -8.0', () => {
+    // wfa=10; (10-78)×0.25=-17 → capped at max(-8, -17) = -8.0
+    const r = calculateLongevity(makeQuiz(), makeAllFamilyAt(10, false), DEFAULT_PILLAR2);
+    expect(r.geneticAdjustment).toBe(-8.0);
+  });
+
+  it('NEG6: stress=5 vs stress=4 → exactly 1.5 year difference in totalForecast', () => {
+    // stress≥5→-0.5; stress≥3(but<5)→+1.0; diff = 1.5
+    const stress5 = calculateLongevity(makeQuiz({ stress: 5 }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+    const stress4 = calculateLongevity(makeQuiz({ stress: 4 }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+    expect(Math.round((stress4.totalForecast - stress5.totalForecast) * 10) / 10).toBe(1.5);
+  });
+
+  it('NEG7: mentor age 96 + all 12 habits → communityBonus = 1.5 (habits push past base; capped at 1.5)', () => {
+    // baseBonus=0.8 (age≥95); habitsBonus=min(1.0, 10.4×0.15)=1.0; total=min(1.5, 1.8)=1.5
+    const pillar2Full: Pillar2Data = {
+      hasMentor: true, mentorAge: 96,
+      mentorName: '', mentorRelationship: 'neighbor',
+      mentorHabits: ALL_HABIT_IDS,
+    };
+    const r = calculateLongevity(makeQuiz(), DEFAULT_PILLAR1, pillar2Full);
+    expect(r.communityBonus).toBe(1.5);
+  });
+
+  it('NEG8: drinking light (+1) vs none (0) → exactly 1.0 year difference in totalForecast', () => {
+    const drinkNone = calculateLongevity(makeQuiz({ drinking: 'none' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+    const drinkLight = calculateLongevity(makeQuiz({ drinking: 'light' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+    expect(Math.round((drinkLight.totalForecast - drinkNone.totalForecast) * 10) / 10).toBe(1.0);
+  });
+
+  it('NEG9: exercise heavy (+5) vs seldom (-2) → exactly 7.0 year difference in totalForecast', () => {
+    const heavy = calculateLongevity(makeQuiz({ exercise: 'heavy' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+    const seldom = calculateLongevity(makeQuiz({ exercise: 'seldom' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+    expect(Math.round((heavy.totalForecast - seldom.totalForecast) * 10) / 10).toBe(7.0);
+  });
+
+  it('NEG10: recalcWithOverrides epigeneticBonusOverride=6 adds +6 to forecast when base has 0 habits', () => {
+    const base = calculateLongevity(makeQuiz(), DEFAULT_PILLAR1, DEFAULT_PILLAR2, undefined, []);
+    expect(base.epigeneticAdjustment).toBe(0);
+    const result = recalcWithOverrides(base, { epigeneticBonusOverride: 6 });
+    // epigenDiff=6-0=6; simForecast=base.totalForecast+6 (no extra overrides; hard min doesn't bite)
+    expect(result).toBe(Math.round((base.totalForecast + 6) * 10) / 10);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EDGE1–EDGE7 — Edge case tests
+// Boundary conditions: exact age thresholds, gender parity, fallback chains.
+// ─────────────────────────────────────────────────────────────────────────────
+describe('EDGE — Edge case tests', () => {
+  it('EDGE1: age 51 with worst inputs → survival guard triggers (buffer=4, threshold=55)', () => {
+    // birthdateForAgeG(51) → currentAge=51; floor(51×0.08)=4; threshold=55
+    // naive forecast ≈ 22.7 < 55 → guard applied
+    const r = calculateLongevity(
+      makeQuiz({ ...WORST_QUIZ_OVERRIDES, gender: 'male', country: 'India' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAgeG(51),
+    );
+    expect(r.minimumApplied).toBe(true);
+    expect(r.survivalBuffer).toBe(4);
+    expect(r.minimumThreshold).toBe(55);
+    expect(r.totalForecast).toBeGreaterThanOrEqual(55);
+  });
+
+  it('EDGE2: age exactly 49 with worst inputs → survival guard does NOT trigger (age < 50)', () => {
+    const r = calculateLongevity(
+      makeQuiz({ ...WORST_QUIZ_OVERRIDES, gender: 'male', country: 'India' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAgeG(49),
+    );
+    expect(r.minimumApplied).toBe(false);
+    expect(r.survivalBuffer).toBe(0);
+  });
+
+  it('EDGE3: India male age exactly 40 → conditional multiplier HIGH[40]=1.040 applied, base ≈ 74.0', () => {
+    // 71.2 × 1.040 = 74.048 → 74.0
+    const r = calculateLongevity(
+      makeQuiz({ gender: 'male', country: 'India' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAgeG(40),
+    );
+    expect(r.isConditionalBaseline).toBe(true);
+    expect(r.baselineLifeExpectancy).toBeCloseTo(74.0, 0);
+  });
+
+  it('EDGE4: India male age exactly 39 → no conditional multiplier, birth baseline returned', () => {
+    const r = calculateLongevity(
+      makeQuiz({ gender: 'male', country: 'India' }),
+      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
+      birthdateForAgeG(39),
+    );
+    expect(r.isConditionalBaseline).toBe(false);
+    expect(r.baselineLifeExpectancy).toBe(71.2); // raw birth baseline, no multiplier
+  });
+
+  it('EDGE5: Japan female has higher baseline and totalForecast than Japan male (same age, same inputs)', () => {
+    // Japan male birth=81.5, female birth=87.5; no conditional (age 35 < 40)
+    const male   = calculateLongevity(makeQuiz({ gender: 'male',   country: 'Japan' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+    const female = calculateLongevity(makeQuiz({ gender: 'female', country: 'Japan' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+    expect(female.baselineLifeExpectancy).toBeGreaterThan(male.baselineLifeExpectancy);
+    expect(female.totalForecast).toBeGreaterThan(male.totalForecast);
+  });
+
+  it('EDGE6: all 12 habits → blueZonesCount = 10 (cold & learning are not Blue Zones habits)', () => {
+    const r = calculateLongevity(makeQuiz(), DEFAULT_PILLAR1, DEFAULT_PILLAR2, undefined, ALL_HABIT_IDS);
+    expect(r.blueZonesCount).toBe(10);
+  });
+
+  it('EDGE7: recalcWithOverrides hydration=high adds exactly +0.5 vs no hydration override', () => {
+    // extraAdjustment: hydration high → +0.5
+    const base = calculateLongevity(makeQuiz(), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+    const withHydration    = recalcWithOverrides(base, { hydration: 'high' });
+    const withoutHydration = recalcWithOverrides(base, {});
+    expect(Math.round((withHydration - withoutHydration) * 10) / 10).toBe(0.5);
   });
 });
