@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   ArrowRight, Heart, TrendingUp, Shield, Activity,
-  CalendarIcon, ShieldCheck, AlertTriangle, RefreshCw, Sparkles, FileText,
+  CalendarIcon, ShieldCheck, AlertTriangle, RefreshCw, Sparkles,
 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
@@ -26,9 +26,7 @@ import {
   calculateLongevity, LongevityResult,
   HealthQuizData, Pillar1Data, Pillar2Data,
 } from '@/services/LongevityCalculationService';
-import {
-  findInitialMatches, enhanceCelebrityMatches, CelebrityLongevityProfile,
-} from '@/services/CelebrityLongevityService';
+import { CulturalHorizonTeaser } from '@/components/CulturalHorizonTeaser';
 
 // ── ErrorBoundary ────────────────────────────────────────────────────────────
 class ReportErrorBoundary extends Component<
@@ -58,11 +56,6 @@ class ReportErrorBoundary extends Component<
 
 type Phase = 'quiz' | 'result' | 'report';
 
-interface CelebrityState {
-  current: CelebrityLongevityProfile[];
-  potential: CelebrityLongevityProfile[];
-}
-
 // ── Page component ────────────────────────────────────────────────────────────
 const LifeExpectancy = () => {
   const { birthDate, setBirthDate } = useBirthDate();
@@ -76,10 +69,6 @@ const LifeExpectancy = () => {
   const [userSelectedHabits, setUserSelectedHabits] = useState<string[]>([]);
   const [userHabitFrequencies, setUserHabitFrequencies] = useState<Record<string, string>>({});
 
-  const [celebrities, setCelebrities] = useState<CelebrityState>({ current: [], potential: [] });
-  const [isLoadingCurrent, setIsLoadingCurrent] = useState(false);
-  const [isLoadingPotential, setIsLoadingPotential] = useState(false);
-
   const resultRef    = useRef<HTMLDivElement>(null);
   const simulatorRef = useRef<HTMLDivElement>(null);
   const reportRef    = useRef<HTMLDivElement>(null);
@@ -89,7 +78,6 @@ const LifeExpectancy = () => {
     setOptimizedForecast(null);
     setCurrentSimForecast(null);
     setPhase('quiz');
-    setCelebrities({ current: [], potential: [] });
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,15 +91,6 @@ const LifeExpectancy = () => {
     setLongevityResult(result);
     setCurrentSimForecast(result.totalForecast);
     setPhase('result');
-
-    // Async celebrity fetch for current trajectory only
-    setIsLoadingCurrent(true);
-    const initialCurrent = findInitialMatches(result.totalForecast);
-    setCelebrities(prev => ({ ...prev, current: initialCurrent }));
-    enhanceCelebrityMatches(initialCurrent, result.totalForecast)
-      .then(enhanced => setCelebrities(prev => ({ ...prev, current: enhanced })))
-      .finally(() => setIsLoadingCurrent(false));
-
     setTimeout(() => {
       resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 150);
@@ -124,21 +103,6 @@ const LifeExpectancy = () => {
     setOptimizedForecast(simAge);
     setCurrentSimForecast(simAge);
     setPhase('report');
-
-    setIsLoadingCurrent(true);
-    const initialCurrent = findInitialMatches(result.totalForecast);
-    setCelebrities(prev => ({ ...prev, current: initialCurrent }));
-    enhanceCelebrityMatches(initialCurrent, result.totalForecast)
-      .then(enhanced => setCelebrities(prev => ({ ...prev, current: enhanced })))
-      .finally(() => setIsLoadingCurrent(false));
-
-    setIsLoadingPotential(true);
-    const initialPotential = findInitialMatches(simAge);
-    setCelebrities(prev => ({ ...prev, potential: initialPotential }));
-    enhanceCelebrityMatches(initialPotential, simAge)
-      .then(enhanced => setCelebrities(prev => ({ ...prev, potential: enhanced })))
-      .finally(() => setIsLoadingPotential(false));
-
     setTimeout(() => {
       reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 150);
@@ -148,15 +112,6 @@ const LifeExpectancy = () => {
     const simAge = currentSimForecast ?? longevityResult?.totalForecast ?? 0;
     setOptimizedForecast(simAge);
     setPhase('report');
-
-    // Fetch celebrities based on the actual simulated age
-    setIsLoadingPotential(true);
-    const initialPotential = findInitialMatches(simAge);
-    setCelebrities(prev => ({ ...prev, potential: initialPotential }));
-    enhanceCelebrityMatches(initialPotential, simAge)
-      .then(enhanced => setCelebrities(prev => ({ ...prev, potential: enhanced })))
-      .finally(() => setIsLoadingPotential(false));
-
     setTimeout(() => {
       reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 150);
@@ -364,44 +319,19 @@ const LifeExpectancy = () => {
               />
             </ReportErrorBoundary>
 
-            {/* Generate Full Longevity Blueprint button — lives here, not inside WhatIfSimulator */}
-            {phase === 'result' && (
-              <div className="mt-8 flex flex-col items-center gap-3">
-                <Card className="w-full max-w-2xl border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5">
-                  <CardContent className="p-5">
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                      <div className="text-center sm:text-left space-y-1">
-                        <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Your Longevity Summary</p>
-                        <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-start">
-                          <div>
-                            <span className="text-xs text-muted-foreground block">Current lifestyle</span>
-                            <strong className="text-2xl font-black text-muted-foreground">{longevityResult.totalForecast} yrs</strong>
-                          </div>
-                          <TrendingUp className="w-5 h-5 text-primary" />
-                          <div>
-                            <span className="text-xs text-primary font-semibold block">With optimized lifestyle</span>
-                            <strong className="text-3xl font-black text-primary">{currentSimForecast ?? longevityResult.totalForecast} yrs</strong>
-                          </div>
-                        </div>
-                        {currentSimForecast !== null && currentSimForecast > longevityResult.totalForecast && (
-                          <p className="text-sm font-medium text-green-600">
-                            ⚡ You could gain <span className="font-black">{Math.round((currentSimForecast - longevityResult.totalForecast) * 10) / 10} years</span> with these changes
-                          </p>
-                        )}
-                      </div>
-                      <Button
-                        size="lg"
-                        className="px-8 py-5 text-base font-bold gap-2 shrink-0 animate-glow"
-                        onClick={handleGenerateReport}
-                      >
-                        <FileText className="w-5 h-5" />
-                        Generate Full Longevity Blueprint ✨
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
+          </section>
+        )}
+
+        {/* ── Cultural Horizon Teaser (phase result only) ── */}
+        {phase === 'result' && longevityResult && (
+          <section className="max-w-6xl mx-auto mb-10">
+            <CulturalHorizonTeaser
+              currentForecast={longevityResult.totalForecast}
+              optimizedForecast={currentSimForecast ?? longevityResult.totalForecast}
+              currentAge={longevityResult.currentAge}
+              userCountry={profile?.country ?? null}
+              onGenerateReport={handleGenerateReport}
+            />
           </section>
         )}
 
@@ -424,11 +354,6 @@ const LifeExpectancy = () => {
                 isPremium={isPremium}
                 onUpgradeClick={() => navigate('/upgrade')}
                 optimizedForecast={optimizedForecast ?? undefined}
-                simulatedForecast={optimizedForecast ?? longevityResult.totalForecast}
-                celebrityMatches={celebrities.current}
-                isLoadingCelebrities={isLoadingCurrent}
-                potentialCelebrityMatches={celebrities.potential}
-                isLoadingPotentialCelebrities={isLoadingPotential}
                 userSelectedHabits={userSelectedHabits}
                 simulatorHabitFrequencies={userHabitFrequencies}
               />
