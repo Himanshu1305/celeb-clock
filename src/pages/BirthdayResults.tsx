@@ -7,18 +7,63 @@ import { ZodiacAndFacts } from '@/components/ZodiacAndFacts';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { useAuth } from '@/hooks/useAuth';
-import { searchBirthdayMatches } from '@/services/BirthdaySearchService';
-import { fetchCelebrityImage } from '@/services/WikipediaImageService';
-import { 
-  Calendar, Clock, Users, Star, Share2, Download, 
-  ArrowRight, Sparkles, Heart, Crown, Twitter, Facebook, Link as LinkIcon,
-  ExternalLink, Trophy, Briefcase, Music, Palette, FlaskConical, Globe, ImageIcon
+import {
+  getRankedBirthdayCelebrities,
+  CelebrityBirthdayResult,
+  searchLocalDatabase,
+} from '@/services/BirthdaySearchService';
+import { WikiPerson } from '@/services/WikimediaService';
+import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
+import {
+  Calendar, Clock, Users, Star, Share2, Download,
+  ArrowRight, Sparkles, Crown, Twitter, Facebook, Link as LinkIcon,
+  Globe
 } from 'lucide-react';
 import { SEO } from '@/components/SEO';
 import html2canvas from 'html2canvas';
+
+const CURRENT_YEAR = new Date().getFullYear();
+
+function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
+  const birthYear = r.birthDate ? parseInt(r.birthDate.substring(0, 4)) : null;
+  const deathYear = r.deathDate ? parseInt(r.deathDate.substring(0, 4)) : null;
+  const age = r.isLiving
+    ? (birthYear ? CURRENT_YEAR - birthYear : null)
+    : (birthYear && deathYear ? deathYear - birthYear : null);
+  return {
+    name: r.name,
+    birthYear,
+    deathYear,
+    age,
+    isLiving: r.isLiving,
+    occupation: r.occupation || 'Celebrity',
+    imageUrl: null,
+    wikipediaUrl: r.wikipediaUrl,
+    sitelinks: r.sitelinks,
+  };
+}
+
+function mapLocal(p: WikiPerson): DisplayCelebrity {
+  const birthYear = p.birthDate ? new Date(p.birthDate).getFullYear() : null;
+  const deathYear = p.deathDate ? new Date(p.deathDate).getFullYear() : null;
+  const isLiving = !p.deathDate;
+  const age = isLiving
+    ? (birthYear ? CURRENT_YEAR - birthYear : null)
+    : (birthYear && deathYear ? deathYear - birthYear : null);
+  return {
+    name: p.name,
+    birthYear,
+    deathYear,
+    age,
+    isLiving,
+    occupation: p.profession || 'Celebrity',
+    imageUrl: p.image || null,
+    wikipediaUrl: p.wikipediaUrl || null,
+    sitelinks: 0,
+  };
+}
 
 // Age calculation helper
 const calculateAge = (birthDate: Date) => {
@@ -125,177 +170,12 @@ const calculatePlanetaryAges = (earthYears: number) => {
   ];
 };
 
-// Celebrity Card Component with auto image fetching
-const CelebrityCard = ({ person, index }: { person: any; index: number }) => {
-  const [imageUrl, setImageUrl] = useState<string | null>(person.image || null);
-  const [imageLoading, setImageLoading] = useState(!person.image);
-  const [imageError, setImageError] = useState(false);
-
-  // Fetch image from Wikipedia if not already available
-  useEffect(() => {
-    if (person.image) {
-      setImageUrl(person.image);
-      setImageLoading(false);
-      return;
-    }
-
-    const fetchImage = async () => {
-      setImageLoading(true);
-      try {
-        const url = await fetchCelebrityImage(person.name, person.image);
-        if (url) {
-          setImageUrl(url);
-        }
-      } catch (err) {
-        console.error(`Failed to fetch image for ${person.name}:`, err);
-      } finally {
-        setImageLoading(false);
-      }
-    };
-
-    fetchImage();
-  }, [person.name, person.image]);
-
-  const getCategoryIcon = () => {
-    switch (person.category) {
-      case 'actor': return <Star className="w-4 h-4" />;
-      case 'dancer': case 'musician': case 'celebrity': return <Music className="w-4 h-4" />;
-      case 'artist': return <Palette className="w-4 h-4" />;
-      case 'scientist': return <FlaskConical className="w-4 h-4" />;
-      case 'entrepreneur': return <Briefcase className="w-4 h-4" />;
-      case 'sports': case 'athlete': return <Trophy className="w-4 h-4" />;
-      default: return <Star className="w-4 h-4" />;
-    }
-  };
-
-  const getCategoryColor = () => {
-    switch (person.category) {
-      case 'actor': return 'bg-amber-500/10 text-amber-600 border-amber-500/20';
-      case 'dancer': case 'musician': case 'celebrity': return 'bg-purple-500/10 text-purple-600 border-purple-500/20';
-      case 'artist': return 'bg-pink-500/10 text-pink-600 border-pink-500/20';
-      case 'scientist': return 'bg-blue-500/10 text-blue-600 border-blue-500/20';
-      case 'entrepreneur': return 'bg-green-500/10 text-green-600 border-green-500/20';
-      case 'sports': case 'athlete': return 'bg-orange-500/10 text-orange-600 border-orange-500/20';
-      default: return 'bg-primary/10 text-primary border-primary/20';
-    }
-  };
-
-  const getGradientForIndex = (idx: number) => {
-    const gradients = [
-      'from-amber-400 via-yellow-500 to-amber-600', // Gold - #1
-      'from-gray-300 via-gray-400 to-gray-500', // Silver - #2
-      'from-amber-600 via-amber-700 to-amber-800', // Bronze - #3
-      'from-blue-400 via-blue-500 to-blue-600',
-      'from-purple-400 via-purple-500 to-purple-600',
-      'from-pink-400 via-pink-500 to-pink-600',
-    ];
-    return gradients[idx] || gradients[idx % gradients.length];
-  };
-
-  const birthYear = new Date(person.birthDate).getFullYear();
-  const currentAge = person.deathDate ? null : new Date().getFullYear() - birthYear;
-
-  return (
-    <Card 
-      className="glass-card overflow-hidden hover:scale-[1.02] transition-all duration-300 group animate-fade-in-up"
-      style={{ animationDelay: `${index * 100}ms` }}
-    >
-      <CardContent className="p-0">
-        {/* Header with gradient */}
-        <div className={`h-2 bg-gradient-to-r ${getGradientForIndex(index)}`} />
-        
-        <div className="p-4">
-          <div className="flex gap-4">
-            {/* Avatar with loading state */}
-            <div className="relative">
-              <Avatar className="w-16 h-16 border-2 border-primary/20 shadow-lg">
-                {imageLoading ? (
-                  <AvatarFallback className="bg-gradient-to-br from-gray-200 to-gray-300">
-                    <div className="animate-pulse w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 rounded-full" />
-                  </AvatarFallback>
-                ) : (
-                  <>
-                    <AvatarImage 
-                      src={imageUrl || undefined} 
-                      alt={person.name} 
-                      className="object-cover"
-                      onError={() => setImageError(true)}
-                    />
-                    <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white font-bold text-lg">
-                      {person.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}
-                    </AvatarFallback>
-                  </>
-                )}
-              </Avatar>
-              {/* Rank badge for top 3 */}
-              {index < 3 && (
-                <div className={`absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white ${
-                  index === 0 ? 'bg-amber-500' :
-                  index === 1 ? 'bg-gray-400' :
-                  'bg-amber-700'
-                }`}>
-                  {index + 1}
-                </div>
-              )}
-            </div>
-
-            {/* Info */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <h3 className="font-bold text-foreground text-base leading-tight group-hover:text-primary transition-colors">
-                    {person.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">{person.profession}</p>
-                </div>
-                {index === 0 && (
-                  <Badge className="bg-amber-500/20 text-amber-700 border-amber-500/30 shrink-0">
-                    <Crown className="w-3 h-3 mr-1" />
-                    Top Match
-                  </Badge>
-                )}
-              </div>
-
-              {/* Meta info */}
-              <div className="flex items-center gap-2 mt-2 flex-wrap">
-                <Badge variant="outline" className={`text-xs ${getCategoryColor()}`}>
-                  {getCategoryIcon()}
-                  <span className="ml-1 capitalize">{person.category || 'Celebrity'}</span>
-                </Badge>
-                {currentAge && (
-                  <span className="text-xs text-muted-foreground">Age {currentAge}</span>
-                )}
-                <span className="text-xs text-muted-foreground">Born {birthYear}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Wikipedia link */}
-          {person.wikipediaUrl && (
-            <div className="mt-3 pt-3 border-t border-border/50">
-              <a 
-                href={person.wikipediaUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                View on Wikipedia
-              </a>
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
 
 const BirthdayResults = () => {
   const { birthDate } = useBirthDate();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [age, setAge] = useState<ReturnType<typeof calculateAge> | null>(null);
-  const [celebrities, setCelebrities] = useState<any[]>([]);
+  const [celebrities, setCelebrities] = useState<DisplayCelebrity[]>([]);
   const [loadingCelebs, setLoadingCelebs] = useState(true);
   const [showShareCard, setShowShareCard] = useState(false);
   const shareCardRef = useRef<HTMLDivElement>(null);
@@ -309,15 +189,33 @@ const BirthdayResults = () => {
     return () => clearInterval(interval);
   }, [birthDate]);
 
-  // Fetch celebrities
+  // Fetch celebrities — Supabase ranked results with local fallback
   useEffect(() => {
     if (!birthDate) return;
-    
+
     const fetchCelebrities = async () => {
       setLoadingCelebs(true);
       try {
-        const result = await searchBirthdayMatches(birthDate);
-        setCelebrities(result.people.slice(0, 9)); // Get up to 9 celebrities
+        const month = String(birthDate.getMonth() + 1).padStart(2, '0');
+        const day = String(birthDate.getDate()).padStart(2, '0');
+        const monthDay = `${month}-${day}`;
+        const userCountry = profile?.country ?? null;
+
+        const supabaseResults = await getRankedBirthdayCelebrities(monthDay, userCountry, 12);
+
+        let celebs: DisplayCelebrity[];
+        if (supabaseResults.length >= 6) {
+          celebs = supabaseResults.slice(0, 12).map(mapSupabase);
+        } else {
+          const localResults = searchLocalDatabase(birthDate);
+          const seenNames = new Set(supabaseResults.map(r => r.name.toLowerCase()));
+          const localExtras = localResults.people
+            .filter(p => !seenNames.has(p.name.toLowerCase()))
+            .map(mapLocal);
+          celebs = [...supabaseResults.map(mapSupabase), ...localExtras].slice(0, 12);
+        }
+
+        setCelebrities(celebs);
       } catch (err) {
         console.error('Failed to fetch celebrities:', err);
       } finally {
@@ -326,7 +224,7 @@ const BirthdayResults = () => {
     };
 
     fetchCelebrities();
-  }, [birthDate]);
+  }, [birthDate, profile?.country]);
 
   // Handle no birth date
   if (!birthDate) {
@@ -528,9 +426,9 @@ const BirthdayResults = () => {
                   <p className="text-muted-foreground">Finding your celebrity twins...</p>
                 </div>
               ) : celebrities.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {celebrities.slice(0, 6).map((person, index) => (
-                    <CelebrityCard key={person.name} person={person} index={index} />
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                  {celebrities.slice(0, 6).map((celeb, index) => (
+                    <CelebrityCard key={celeb.name} celebrity={celeb} index={index} />
                   ))}
                 </div>
               ) : (

@@ -1,117 +1,178 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { ArrowRight, Cake } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { getBirthdayData, getCategoryIcon } from '@/data/birthdayData';
+import { Badge } from '@/components/ui/badge';
+import { Users, Cake, ChevronDown } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import {
+  getRankedBirthdayCelebrities,
+  CelebrityBirthdayResult,
+  searchLocalDatabase,
+} from '@/services/BirthdaySearchService';
+import { WikiPerson } from '@/services/WikimediaService';
+import { CelebrityCard, DisplayCelebrity, OccupationCategory, classifyOccupation } from '@/components/CelebrityCard';
 
-const fetchWikipediaImages = async (people: { name: string; wikipediaUrl?: string }[]) => {
-  const titlesMap: Record<string, string> = {};
-  
-  for (const person of people) {
-    if (person.wikipediaUrl) {
-      const match = person.wikipediaUrl.match(/\/wiki\/(.+)$/);
-      if (match) titlesMap[person.name] = decodeURIComponent(match[1]);
-    } else {
-      titlesMap[person.name] = person.name.replace(/ /g, '_');
-    }
-  }
+const CURRENT_YEAR = new Date().getFullYear();
+const PAGE_SIZE = 20;
 
-  const titles = Object.values(titlesMap).join('|');
-  if (!titles) return {};
+function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
+  const birthYear = r.birthDate ? parseInt(r.birthDate.substring(0, 4)) : null;
+  const deathYear = r.deathDate ? parseInt(r.deathDate.substring(0, 4)) : null;
+  const age = r.isLiving
+    ? (birthYear ? CURRENT_YEAR - birthYear : null)
+    : (birthYear && deathYear ? deathYear - birthYear : null);
+  return {
+    name: r.name,
+    birthYear,
+    deathYear,
+    age,
+    isLiving: r.isLiving,
+    occupation: r.occupation || 'Celebrity',
+    imageUrl: null,
+    wikipediaUrl: r.wikipediaUrl,
+    sitelinks: r.sitelinks,
+  };
+}
 
-  try {
-    const response = await fetch(
-      `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(titles)}&prop=pageimages&pithumbsize=100&format=json&origin=*`
-    );
-    const data = await response.json();
-    const pages = data?.query?.pages || {};
-    
-    const imageMap: Record<string, string> = {};
-    for (const [name, title] of Object.entries(titlesMap)) {
-      for (const page of Object.values(pages) as any[]) {
-        if (page.title === title.replace(/_/g, ' ') && page.thumbnail?.source) {
-          imageMap[name] = page.thumbnail.source;
-          break;
-        }
-      }
-    }
-    return imageMap;
-  } catch {
-    return {};
-  }
-};
+function mapLocal(p: WikiPerson): DisplayCelebrity {
+  const birthYear = p.birthDate ? new Date(p.birthDate).getFullYear() : null;
+  const deathYear = p.deathDate ? new Date(p.deathDate).getFullYear() : null;
+  const isLiving = !p.deathDate;
+  const age = isLiving
+    ? (birthYear ? CURRENT_YEAR - birthYear : null)
+    : (birthYear && deathYear ? deathYear - birthYear : null);
+  return {
+    name: p.name,
+    birthYear,
+    deathYear,
+    age,
+    isLiving,
+    occupation: p.profession || 'Celebrity',
+    imageUrl: p.image || null,
+    wikipediaUrl: p.wikipediaUrl || null,
+    sitelinks: 0,
+  };
+}
+
+const FILTERS: OccupationCategory[] = ['All', 'Actors', 'Musicians', 'Athletes', 'Politicians', 'Other'];
 
 export const TodaysBirthdays = () => {
-  const navigate = useNavigate();
+  const { profile } = useAuth();
+  const [allCelebrities, setAllCelebrities] = useState<DisplayCelebrity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [activeFilter, setActiveFilter] = useState<OccupationCategory>('All');
+
   const today = new Date();
-  const data = getBirthdayData(today.getMonth() + 1, today.getDate());
-  const people = data.people.slice(0, 8);
-  const [images, setImages] = useState<Record<string, string>>({});
+  const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 
   useEffect(() => {
-    if (people.length > 0) {
-      fetchWikipediaImages(people).then(setImages);
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const monthDay = `${month}-${day}`;
+    const userCountry = profile?.country ?? null;
 
-  if (people.length === 0) return null;
+    const load = async () => {
+      setLoading(true);
+      try {
+        const supabaseResults = await getRankedBirthdayCelebrities(monthDay, userCountry, 50);
+        let celebs = supabaseResults.map(mapSupabase);
+
+        if (celebs.length < 20) {
+          const localResults = searchLocalDatabase(today);
+          const seenNames = new Set(celebs.map(c => c.name.toLowerCase()));
+          const localExtras = localResults.people
+            .filter(p => !seenNames.has(p.name.toLowerCase()))
+            .map(mapLocal);
+          celebs = [...celebs, ...localExtras];
+        }
+
+        setAllCelebrities(celebs);
+      } catch (err) {
+        console.error("Failed to load today's birthdays:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile?.country]);
+
+  const filtered = useMemo(() => {
+    if (activeFilter === 'All') return allCelebrities;
+    return allCelebrities.filter(c => classifyOccupation(c.occupation) === activeFilter);
+  }, [allCelebrities, activeFilter]);
+
+  const visible = filtered.slice(0, visibleCount);
+  const remaining = filtered.length - visibleCount;
+
+  const handleFilterChange = (f: OccupationCategory) => {
+    setActiveFilter(f);
+    setVisibleCount(PAGE_SIZE);
+  };
 
   return (
-    <Card className="glass-card card-party-border">
-      <CardContent className="p-8 space-y-6">
-        <div className="text-center space-y-2">
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-3xl animate-wiggle inline-block">🎂</span>
-            <h2 className="text-3xl font-bold gradient-text-primary">
-              Born Today
-            </h2>
-          </div>
-          <p className="text-muted-foreground">
-            Famous people celebrating their birthday on {today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
-          </p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <Cake className="w-5 h-5 text-primary" />
+          <h2 className="text-xl font-bold">Famous Birthdays — {formattedDate}</h2>
         </div>
+        {!loading && allCelebrities.length > 0 && (
+          <Badge variant="secondary" className="gap-1.5">
+            <Users className="w-3 h-3" />
+            {allCelebrities.length} celebrities born today
+          </Badge>
+        )}
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {people.map((person) => {
-            const Icon = getCategoryIcon(person.category);
-            const imageUrl = images[person.name];
-            const wikiUrl = person.wikipediaUrl;
-            
-            return (
-              <a
-                key={person.name}
-                href={wikiUrl || '#'}
-                target={wikiUrl ? '_blank' : undefined}
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-lg border border-border bg-card p-3 hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer group"
-              >
-                <Avatar className="w-10 h-10 shrink-0 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
-                  {imageUrl ? (
-                    <AvatarImage src={imageUrl} alt={person.name} />
-                  ) : null}
-                  <AvatarFallback className="bg-primary/10">
-                    <Icon className="w-4 h-4 text-primary" />
-                  </AvatarFallback>
-                </Avatar>
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium text-foreground truncate group-hover:text-primary transition-colors">{person.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{person.profession}</p>
-                </div>
-                <ArrowRight className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0" />
-              </a>
-            );
-          })}
-        </div>
-
-        <div className="text-center">
-          <Button variant="outline" className="gap-2 hover-scale" onClick={() => navigate('/todays-birthdays')}>
-            See More Celebrity Birthdays
-            <ArrowRight className="w-4 h-4" />
+      {/* Filters */}
+      <div className="flex flex-wrap gap-2">
+        {FILTERS.map(f => (
+          <Button
+            key={f}
+            variant={activeFilter === f ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => handleFilterChange(f)}
+          >
+            {f}
           </Button>
+        ))}
+      </div>
+
+      {/* Grid */}
+      {loading ? (
+        <div className="text-center py-16">
+          <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading today's birthdays...</p>
         </div>
-      </CardContent>
-    </Card>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-12 text-muted-foreground">
+          No results for this category.
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {visible.map((celeb, index) => (
+              <CelebrityCard key={celeb.name} celebrity={celeb} index={index} />
+            ))}
+          </div>
+
+          {remaining > 0 && (
+            <div className="text-center pt-2">
+              <Button
+                variant="outline"
+                className="gap-2"
+                onClick={() => setVisibleCount(v => v + PAGE_SIZE)}
+              >
+                <ChevronDown className="w-4 h-4" />
+                Load more ({remaining} remaining)
+              </Button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
   );
 };
