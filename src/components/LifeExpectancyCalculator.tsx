@@ -172,10 +172,26 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   const prevForecastRef = useRef<number | null>(null);
   const [hasSelectedExercise, setHasSelectedExercise] = useState(false);
 
+  // Country combobox state
+  const [countrySearch, setCountrySearch] = useState('');
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+  const countryInputRef = useRef<HTMLInputElement>(null);
+  const countryDropdownRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (profile?.name && !data.name) setData(prev => ({ ...prev, name: profile.name }));
     if (profile?.country && !data.country) setData(prev => ({ ...prev, country: profile.country || '' }));
   }, [profile]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(e.target as Node)) {
+        setShowCountryDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (bmiUnit === 'metric') {
@@ -250,6 +266,14 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   const currentAge = birthDate
     ? Math.floor((new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000))
     : null;
+
+  const filteredCountries = QUIZ_COUNTRIES.filter(c =>
+    c.toLowerCase().includes(countrySearch.toLowerCase())
+  );
+
+  const countryDisplayValue = showCountryDropdown
+    ? countrySearch
+    : (data.country ? `${COUNTRY_FLAG_EMOJI[data.country] || '🌍'} ${data.country}` : '');
 
   return (
     <Card className="backdrop-blur-sm bg-background/80 border-primary/20">
@@ -391,16 +415,60 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                 Country of Residence
                 <InfoTooltip content="Used to determine your life expectancy baseline from UN World Population Prospects 2024 data. For users aged 40+, an age-adjusted conditional baseline is applied — people who have already survived to their current age have a statistically higher remaining life expectancy." />
               </Label>
-              <Select value={data.country} onValueChange={(v) => setData({ ...data, country: v })}>
-                <SelectTrigger><SelectValue placeholder="Select your country" /></SelectTrigger>
-                <SelectContent className="max-h-60">
-                  {QUIZ_COUNTRIES.map((c) => (
-                    <SelectItem key={c} value={c}>
-                      {COUNTRY_FLAG_EMOJI[c] ? `${COUNTRY_FLAG_EMOJI[c]} ${c}` : c}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="relative" ref={countryDropdownRef}>
+                <div className="relative">
+                  <input
+                    ref={countryInputRef}
+                    type="text"
+                    placeholder="Search your country..."
+                    value={countryDisplayValue}
+                    onChange={(e) => {
+                      setCountrySearch(e.target.value);
+                      setShowCountryDropdown(true);
+                    }}
+                    onFocus={() => { setCountrySearch(''); setShowCountryDropdown(true); }}
+                    className="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <ChevronDown className="absolute right-3 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                </div>
+
+                {showCountryDropdown && (
+                  <div className="absolute z-50 w-full mt-1 bg-white border rounded-md shadow-lg max-h-48 overflow-y-auto">
+                    {filteredCountries.length > 0 ? (
+                      filteredCountries.map(country => (
+                        <div
+                          key={country}
+                          className="px-3 py-2 text-sm cursor-pointer hover:bg-blue-50 flex items-center gap-2"
+                          onClick={() => {
+                            setData({ ...data, country });
+                            setCountrySearch('');
+                            setShowCountryDropdown(false);
+                          }}
+                        >
+                          <span>{COUNTRY_FLAG_EMOJI[country] || '🌍'}</span>
+                          <span>{country}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="px-3 py-2 text-sm text-gray-500">
+                        <div>"{countrySearch}" not in list</div>
+                        <div className="text-xs text-gray-400 mt-1">
+                          Will use WHO global average data (UN WPP 2024)
+                        </div>
+                        <div
+                          className="mt-1 text-blue-500 cursor-pointer hover:underline"
+                          onClick={() => {
+                            setData({ ...data, country: countrySearch });
+                            setShowCountryDropdown(false);
+                          }}
+                        >
+                          Use "{countrySearch}" anyway →
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
               {profile?.country && data.country === profile.country && (
                 <p className="text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
                   🌍 Pre-filled from your profile — you can change this
