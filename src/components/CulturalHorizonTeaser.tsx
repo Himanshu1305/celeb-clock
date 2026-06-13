@@ -15,23 +15,58 @@ interface Props {
   onGenerateReport: () => void;
 }
 
+const COUNTRY_NAME_TO_CODE: Record<string, string> = {
+  'Afghanistan': 'AF', 'Albania': 'AL', 'Algeria': 'DZ', 'Argentina': 'AR',
+  'Australia': 'AU', 'Austria': 'AT', 'Bangladesh': 'BD', 'Belgium': 'BE',
+  'Brazil': 'BR', 'Canada': 'CA', 'Chile': 'CL', 'China': 'CN',
+  'Colombia': 'CO', 'Croatia': 'HR', 'Czech Republic': 'CZ', 'Denmark': 'DK',
+  'Egypt': 'EG', 'Ethiopia': 'ET', 'Finland': 'FI', 'France': 'FR',
+  'Germany': 'DE', 'Ghana': 'GH', 'Greece': 'GR', 'Hungary': 'HU',
+  'India': 'IN', 'Indonesia': 'ID', 'Iran': 'IR', 'Iraq': 'IQ',
+  'Ireland': 'IE', 'Israel': 'IL', 'Italy': 'IT', 'Jamaica': 'JM',
+  'Japan': 'JP', 'Jordan': 'JO', 'Kenya': 'KE', 'Malaysia': 'MY',
+  'Mexico': 'MX', 'Morocco': 'MA', 'Myanmar': 'MM', 'Nepal': 'NP',
+  'Netherlands': 'NL', 'New Zealand': 'NZ', 'Nigeria': 'NG', 'Norway': 'NO',
+  'Pakistan': 'PK', 'Peru': 'PE', 'Philippines': 'PH', 'Poland': 'PL',
+  'Portugal': 'PT', 'Romania': 'RO', 'Russia': 'RU', 'Saudi Arabia': 'SA',
+  'Singapore': 'SG', 'South Africa': 'ZA', 'South Korea': 'KR', 'Spain': 'ES',
+  'Sri Lanka': 'LK', 'Sudan': 'SD', 'Sweden': 'SE', 'Switzerland': 'CH',
+  'Syria': 'SY', 'Taiwan': 'TW', 'Tanzania': 'TZ', 'Thailand': 'TH',
+  'Turkey': 'TR', 'Uganda': 'UG', 'Ukraine': 'UA', 'United Arab Emirates': 'AE',
+  'United Kingdom': 'GB', 'United States': 'US', 'Venezuela': 'VE',
+  'Vietnam': 'VN', 'Zambia': 'ZM', 'Zimbabwe': 'ZW',
+};
+
+function normalizeCountry(country?: string | null): string | null {
+  if (!country) return null;
+  if (country.length === 2) return country.toUpperCase();
+  return COUNTRY_NAME_TO_CODE[country] ?? null;
+}
+
 function pickMatches(forecast: number, exclude: Set<string>, userCountry?: string | null): LongevityIcon[] {
+  const countryCode = normalizeCountry(userCountry);
+  console.log('[CulturalHorizon] pickMatches', { forecast, countryCode, rawCountry: userCountry, totalIcons: longevityIcons.length });
+
   for (const window of [5, 8, 12]) {
     const candidates = longevityIcons.filter(
       i => !exclude.has(i.name) && Math.abs(i.longevityAge - forecast) <= window
     );
+    console.log(`[CulturalHorizon] window ±${window}: ${candidates.length} candidates`, candidates.map(c => `${c.name} (${c.longevityAge}, ${c.countryCode})`));
     if (candidates.length >= 3) {
       const countryFirst = [
-        ...candidates.filter(c => c.countryCode === userCountry),
-        ...candidates.filter(c => c.countryCode !== userCountry),
+        ...candidates.filter(c => countryCode && c.countryCode === countryCode),
+        ...candidates.filter(c => !countryCode || c.countryCode !== countryCode),
       ];
+      console.log('[CulturalHorizon] selected', countryFirst.slice(0, 3).map(c => c.name));
       return countryFirst.slice(0, 3);
     }
   }
-  return [...longevityIcons]
+  const fallback = [...longevityIcons]
     .filter(i => !exclude.has(i.name))
     .sort((a, b) => Math.abs(a.longevityAge - forecast) - Math.abs(b.longevityAge - forecast))
     .slice(0, 3);
+  console.log('[CulturalHorizon] fallback (closest match)', fallback.map(c => c.name));
+  return fallback;
 }
 
 const BAR_GRADIENTS = [
@@ -145,6 +180,11 @@ export const CulturalHorizonTeaser = ({
         </p>
       </div>
 
+      {/* Motivational text — above Row 1 */}
+      <p className="text-sm text-muted-foreground text-center max-w-xl mx-auto">
+        Your longevity forecast puts you in remarkable company — these icons reached <strong className="text-foreground">{currentForecast} years</strong> and left legacies that outlasted them.
+      </p>
+
       {/* Current trajectory */}
       <div className="space-y-3">
         <div className="flex items-center gap-3">
@@ -163,20 +203,39 @@ export const CulturalHorizonTeaser = ({
 
       {/* Optimized potential */}
       {showOptimized && optimizedMatches.length > 0 && (
-        <div className="space-y-3">
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-primary/30" />
-            <p className="text-xs font-bold text-primary uppercase tracking-wide shrink-0">
-              ✨ Your optimized potential — {optimizedForecast} years (+{gainYears} yrs)
+        <>
+          {/* Motivational text — between Row 1 and Row 2 */}
+          <div className="text-center py-2">
+            <p className="text-sm font-semibold text-primary">
+              But here's what makes YOUR story even more powerful:
             </p>
-            <div className="h-px flex-1 bg-primary/30" />
+            <p className="text-sm text-muted-foreground mt-1">
+              You have access to insights and science these icons never had. Your choices can write a different ending.
+            </p>
           </div>
-          <div className="grid sm:grid-cols-3 gap-4">
-            {optimizedMatches.map((icon, i) => (
-              <IconCard key={icon.name} icon={icon} index={i} />
-            ))}
+
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-primary/30" />
+              <p className="text-xs font-bold text-primary uppercase tracking-wide shrink-0">
+                ✨ Your optimized potential — {optimizedForecast} years (+{gainYears} yrs)
+              </p>
+              <div className="h-px flex-1 bg-primary/30" />
+            </div>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {optimizedMatches.map((icon, i) => (
+                <IconCard key={icon.name} icon={icon} index={i} />
+              ))}
+            </div>
           </div>
-        </div>
+
+          {/* Motivational text — below Row 2 */}
+          {optimizedMatches[0] && (
+            <p className="text-sm text-muted-foreground text-center max-w-xl mx-auto">
+              <strong className="text-foreground">{optimizedMatches[0].name}</strong> — {optimizedMatches[0].achievement}. With the changes you've explored today, you're on a trajectory to live a life of equal impact and longevity.
+            </p>
+          )}
+        </>
       )}
 
       {/* CTA */}
@@ -206,14 +265,17 @@ export const CulturalHorizonTeaser = ({
                 </p>
               )}
             </div>
-            <Button
-              size="lg"
-              className="px-8 py-5 text-base font-bold gap-2 shrink-0 animate-glow"
-              onClick={onGenerateReport}
-            >
-              <FileText className="w-5 h-5" />
-              Generate My Full Longevity Blueprint ✨
-            </Button>
+            <div className="flex flex-col items-center gap-1 shrink-0">
+              <Button
+                size="lg"
+                className="px-8 py-5 text-base font-bold gap-2 animate-glow"
+                onClick={onGenerateReport}
+              >
+                <FileText className="w-5 h-5" />
+                Unlock My Complete Longevity Blueprint →
+              </Button>
+              <p className="text-[10px] text-muted-foreground">Get your personalized longevity PDF report</p>
+            </div>
           </div>
         </CardContent>
       </Card>

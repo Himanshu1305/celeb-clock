@@ -71,6 +71,7 @@ export const CelebrityCard = ({ celebrity, index }: CelebrityCardProps) => {
 
   const style = RANK_STYLES[index % RANK_STYLES.length];
   const initials = celebrity.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+  const wikiUrl = celebrity.wikipediaUrl ?? `https://en.wikipedia.org/wiki/${celebrity.name.replace(/ /g, '_')}`;
 
   const lifespan = celebrity.isLiving
     ? [
@@ -86,8 +87,9 @@ export const CelebrityCard = ({ celebrity, index }: CelebrityCardProps) => {
 
   return (
     <Card
-      className="glass-card overflow-hidden hover:scale-[1.02] hover:shadow-md transition-all duration-300 group animate-fade-in-up"
+      className="glass-card overflow-hidden hover:scale-[1.02] hover:shadow-md transition-all duration-300 group animate-fade-in-up cursor-pointer"
       style={{ animationDelay: `${Math.min(index, 5) * 80}ms` }}
+      onClick={() => window.open(wikiUrl, '_blank', 'noopener,noreferrer')}
     >
       {/* Rank-coloured accent bar */}
       <div className={`h-[3px] bg-gradient-to-r ${style.bar}`} />
@@ -103,7 +105,7 @@ export const CelebrityCard = ({ celebrity, index }: CelebrityCardProps) => {
                 </AvatarFallback>
               ) : (
                 <>
-                  <AvatarImage src={imageUrl ?? undefined} alt={celebrity.name} className="object-cover" />
+                  <AvatarImage src={imageUrl ?? undefined} alt={celebrity.name} className="object-cover" style={{ objectPosition: 'top center' }} />
                   <AvatarFallback className="bg-gradient-to-br from-primary/20 to-accent/20 text-foreground font-bold text-lg">
                     {initials}
                   </AvatarFallback>
@@ -149,20 +151,18 @@ export const CelebrityCard = ({ celebrity, index }: CelebrityCardProps) => {
         </div>
 
         {/* Wikipedia link */}
-        {celebrity.wikipediaUrl && (
-          <div className="mt-3 pt-2.5 border-t border-border/40">
-            <a
-              href={celebrity.wikipediaUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-primary/80 hover:text-primary hover:underline transition-colors"
-              onClick={e => e.stopPropagation()}
-            >
-              <ExternalLink className="w-3 h-3" />
-              View on Wikipedia
-            </a>
-          </div>
-        )}
+        <div className="mt-3 pt-2.5 border-t border-border/40">
+          <a
+            href={wikiUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-xs text-primary/80 hover:text-primary hover:underline transition-colors"
+            onClick={e => e.stopPropagation()}
+          >
+            <ExternalLink className="w-3 h-3" />
+            ↗ Wikipedia
+          </a>
+        </div>
       </CardContent>
     </Card>
   );

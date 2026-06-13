@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalytics } from '@/hooks/useAnalytics';
-import { Crown, Heart, Coffee, Brain, Dumbbell, User, ShieldCheck, Info, Activity, Moon, Users, Dna, TreePine, Lock, ChevronDown, ChevronUp } from 'lucide-react';
+import { Heart, Coffee, Brain, Dumbbell, User, ShieldCheck, Info, Activity, Moon, Users, Dna, TreePine, Lock, ChevronDown, ChevronUp } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from 'react-router-dom';
 import { countries } from '@/data/countries';
@@ -155,6 +155,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   const [flashDir, setFlashDir] = useState<'up' | 'down' | null>(null);
   const [deltaLabel, setDeltaLabel] = useState('');
   const prevForecastRef = useRef<number | null>(null);
+  const [hasInteractedStress, setHasInteractedStress] = useState(false);
 
   useEffect(() => {
     if (profile?.name && !data.name) setData(prev => ({ ...prev, name: profile.name }));
@@ -174,7 +175,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   // Live preview effect — only calculates from step 6 onwards
   useEffect(() => {
     if (step < 6) return;
-    const r = calculateLongevity(data, pillar1, pillar2, birthDate ?? undefined);
+    const r = calculateLongevity(data, pillar1, pillar2, birthDate ?? undefined, []);
     let timer: ReturnType<typeof setTimeout> | null = null;
 
     if (prevForecastRef.current !== null && Math.abs(r.totalForecast - prevForecastRef.current) >= 0.1) {
@@ -195,9 +196,10 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
     return () => { if (timer) clearTimeout(timer); };
   }, [data, pillar1, pillar2, birthDate, step]);
 
-  // Count-up animation when age first reveals on step 6
+  // Count-up animation when age first reveals on step 6 (after both inputs set)
   useEffect(() => {
-    if (step === 6 && liveResult && !countUpDoneRef.current) {
+    const step6Revealed = hasInteractedStress && data.exercise !== '';
+    if (step === 6 && liveResult && !countUpDoneRef.current && step6Revealed) {
       countUpDoneRef.current = true;
       const target = liveResult.totalForecast;
       const intervalMs = 25;
@@ -212,7 +214,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
       }, intervalMs);
       return () => clearInterval(timer);
     }
-  }, [step, liveResult]);
+  }, [step, liveResult, hasInteractedStress, data.exercise]);
 
   const totalSteps = 8;
   const bmiCategory = getBMICategory(data.bmi);
@@ -254,13 +256,21 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
 
       <CardContent className="space-y-6 text-left">
 
-        {/* ── Age card: locked on steps 1-5, revealed on 6+ ── */}
+        {/* ── Age card: locked on steps 1-5, gated on step 6 until both inputs set ── */}
         {step < 6 ? (
           <div className="rounded-xl border border-muted bg-muted/30 p-4 flex items-center gap-3">
             <Lock className="w-5 h-5 text-muted-foreground/50 shrink-0" />
             <div>
               <p className="text-xs font-bold text-muted-foreground">Your projected lifespan will reveal here</p>
               <p className="text-[10px] text-muted-foreground mt-0.5">Complete Steps 1–5 first — your number unlocks at Step 6</p>
+            </div>
+          </div>
+        ) : step === 6 && (!hasInteractedStress || !data.exercise) ? (
+          <div className="rounded-xl border border-muted bg-muted/30 p-4 flex items-center gap-3">
+            <Lock className="w-5 h-5 text-muted-foreground/50 shrink-0" />
+            <div>
+              <p className="text-xs font-bold text-muted-foreground">Complete all inputs on this step to see your updated forecast</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">Adjust the stress slider and select an exercise frequency to unlock</p>
             </div>
           </div>
         ) : liveResult ? (
@@ -305,7 +315,6 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                     <div className="flex justify-between text-[9px] text-muted-foreground">
                       <span className="font-medium">Age {currentAge}</span>
                       <span className="font-bold text-primary">{forecast} yrs</span>
-                      <span className="text-accent">Max {maxPot}</span>
                     </div>
                   </div>
                 );
@@ -587,7 +596,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                   <Brain className="w-4 h-4" /> Mental Stress Load: {data.stress}/10
                   <InfoTooltip content="Chronic psychological stress triggers sustained cortisol release, damaging the cardiovascular system and accelerating cellular aging (AHA, 2021)." />
                 </Label>
-                <Slider value={[data.stress]} onValueChange={(v) => setData({ ...data, stress: v[0] })} max={10} min={1} step={1} />
+                <Slider value={[data.stress]} onValueChange={(v) => { setData({ ...data, stress: v[0] }); setHasInteractedStress(true); }} max={10} min={1} step={1} />
                 <div className="flex justify-between text-[10px] text-muted-foreground mt-1 px-0.5"><span>1 (Very low)</span><span>10 (Extreme stress)</span></div>
               </div>
               <div>
@@ -604,29 +613,6 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
               </div>
             </div>
 
-            {liveResult && (
-              <div className="relative mt-6 border p-6 rounded-xl bg-muted/20">
-                <div className={!isPremium ? 'blur-sm pointer-events-none select-none' : ''}>
-                  <div className="text-center py-4">
-                    <span className="text-xs uppercase font-bold text-muted-foreground tracking-wider">Forecast (Health & Lifestyle Only)</span>
-                    <h2 className="text-5xl font-black text-primary mt-1">{liveResult.totalForecast} Years</h2>
-                    <p className="text-xs text-muted-foreground mt-2">Complete steps 7–8 to include genetics & epigenetics for your full forecast.</p>
-                  </div>
-                </div>
-                {!isPremium && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/60 backdrop-blur-sm p-4 z-10 rounded-xl">
-                    <div className="max-w-sm bg-background p-6 rounded-xl border shadow-xl space-y-3 text-center">
-                      <Crown className="w-6 h-6 text-accent mx-auto animate-pulse" />
-                      <h4 className="text-lg font-bold">Unlock Full Longevity Report</h4>
-                      <p className="text-xs text-muted-foreground">Unlock simulation sliders, genetics analysis, and your complete Longevity Blueprint.</p>
-                      <Link to="/upgrade" className="block pt-1">
-                        <Button size="sm" className="w-full bg-accent text-accent-foreground font-semibold hover:bg-accent/90">Upgrade to Premium</Button>
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
           </div>
         )}
 

@@ -12,9 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import {
   getRankedBirthdayCelebrities,
   CelebrityBirthdayResult,
-  searchLocalDatabase,
 } from '@/services/BirthdaySearchService';
-import { WikiPerson } from '@/services/WikimediaService';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import {
   Calendar, Clock, Users, Star, Share2, Download,
@@ -42,26 +40,6 @@ function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
     imageUrl: null,
     wikipediaUrl: r.wikipediaUrl,
     sitelinks: r.sitelinks,
-  };
-}
-
-function mapLocal(p: WikiPerson): DisplayCelebrity {
-  const birthYear = p.birthDate ? new Date(p.birthDate).getFullYear() : null;
-  const deathYear = p.deathDate ? new Date(p.deathDate).getFullYear() : null;
-  const isLiving = !p.deathDate;
-  const age = isLiving
-    ? (birthYear ? CURRENT_YEAR - birthYear : null)
-    : (birthYear && deathYear ? deathYear - birthYear : null);
-  return {
-    name: p.name,
-    birthYear,
-    deathYear,
-    age,
-    isLiving,
-    occupation: p.profession || 'Celebrity',
-    imageUrl: p.image || null,
-    wikipediaUrl: p.wikipediaUrl || null,
-    sitelinks: 0,
   };
 }
 
@@ -94,12 +72,12 @@ const calculateAge = (birthDate: Date) => {
 
 // Get generation based on birth year
 const getGeneration = (year: number) => {
-  if (year >= 2013) return { name: 'Gen Alpha', emoji: '👶' };
-  if (year >= 1997) return { name: 'Gen Z', emoji: '📱' };
-  if (year >= 1981) return { name: 'Millennial', emoji: '🎮' };
-  if (year >= 1965) return { name: 'Gen X', emoji: '📻' };
-  if (year >= 1946) return { name: 'Baby Boomer', emoji: '📺' };
-  return { name: 'Silent Gen', emoji: '📰' };
+  if (year >= 2013) return { name: 'Gen Alpha', emoji: '👶', range: '2013–present' };
+  if (year >= 1997) return { name: 'Gen Z', emoji: '📱', range: '1997–2012' };
+  if (year >= 1981) return { name: 'Millennial', emoji: '🎮', range: '1981–1996' };
+  if (year >= 1965) return { name: 'Gen X', emoji: '📻', range: '1965–1980' };
+  if (year >= 1946) return { name: 'Baby Boomer', emoji: '📺', range: '1946–1964' };
+  return { name: 'Silent Generation', emoji: '📰', range: '1928–1945' };
 };
 
 // Get zodiac sign
@@ -202,20 +180,7 @@ const BirthdayResults = () => {
         const userCountry = profile?.country ?? null;
 
         const supabaseResults = await getRankedBirthdayCelebrities(monthDay, userCountry, 12);
-
-        let celebs: DisplayCelebrity[];
-        if (supabaseResults.length >= 6) {
-          celebs = supabaseResults.slice(0, 12).map(mapSupabase);
-        } else {
-          const localResults = searchLocalDatabase(birthDate);
-          const seenNames = new Set(supabaseResults.map(r => r.name.toLowerCase()));
-          const localExtras = localResults.people
-            .filter(p => !seenNames.has(p.name.toLowerCase()))
-            .map(mapLocal);
-          celebs = [...supabaseResults.map(mapSupabase), ...localExtras].slice(0, 12);
-        }
-
-        setCelebrities(celebs);
+        setCelebrities(supabaseResults.map(mapSupabase));
       } catch (err) {
         console.error('Failed to fetch celebrities:', err);
       } finally {
@@ -358,15 +323,16 @@ const BirthdayResults = () => {
           </Card>
         </section>
 
-        {/* Quick Facts Row - Now with 5 items */}
+        {/* Quick Facts Row */}
         <section className="max-w-5xl mx-auto mb-12">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Generation */}
             <Card className="glass-card hover:scale-[1.02] transition-transform">
               <CardContent className="p-4 text-center">
-                <span className="text-3xl mb-1 block">{generation.emoji}</span>
+                <span className="text-3xl mb-1 block">👥</span>
                 <h3 className="font-bold text-foreground text-sm">{generation.name}</h3>
                 <p className="text-xs text-muted-foreground">Generation</p>
+                <p className="text-[10px] text-muted-foreground/70 mt-0.5">{generation.range}</p>
               </CardContent>
             </Card>
 
@@ -394,15 +360,6 @@ const BirthdayResults = () => {
                 <span className="text-3xl mb-1 block">{birthstone.emoji}</span>
                 <h3 className="font-bold text-foreground text-sm">{birthstone.name}</h3>
                 <p className="text-xs text-muted-foreground">Birthstone</p>
-              </CardContent>
-            </Card>
-
-            {/* Mars Age */}
-            <Card className="glass-card hover:scale-[1.02] transition-transform bg-gradient-to-br from-red-500/5 to-orange-500/5">
-              <CardContent className="p-4 text-center">
-                <span className="text-3xl mb-1 block">🔴</span>
-                <h3 className="font-bold text-foreground text-sm">{planetaryAges[3].years} yrs</h3>
-                <p className="text-xs text-muted-foreground">Age on Mars</p>
               </CardContent>
             </Card>
           </div>
