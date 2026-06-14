@@ -20,7 +20,7 @@ const navItems = [
   { path: '/zodiac', label: 'Zodiac', icon: Sparkles },
   { path: '/birthstone', label: 'Birthstone', icon: Gem },
   { path: '/leaderboard', label: 'Leaderboard', icon: Trophy },
-  { path: '/gift', label: 'Gift', icon: Gift },
+  { path: '/birthday-report', label: 'Gift Report', icon: Gift },
   { path: '/family', label: 'Family', icon: Users },
   { path: '/blog', label: 'Blog', icon: BookOpen },
   { path: '/biological-age', label: 'Biological Age', icon: Activity },

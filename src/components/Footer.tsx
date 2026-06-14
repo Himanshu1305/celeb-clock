@@ -73,7 +73,7 @@ export const Footer = () => {
               <li><Link to="/age-calculator" className="text-muted-foreground hover:text-accent transition-colors">Age Calculator</Link></li>
               <li><Link to="/leaderboard" className="text-muted-foreground hover:text-accent transition-colors">Longevity Leaderboard</Link></li>
               <li><Link to="/family" className="text-muted-foreground hover:text-accent transition-colors">Family Dashboard</Link></li>
-              <li><Link to="/gift" className="text-muted-foreground hover:text-accent transition-colors">Gift a Report</Link></li>
+              <li><Link to="/birthday-report" className="text-muted-foreground hover:text-accent transition-colors">Gift a Report</Link></li>
               <li><Link to="/biological-age" className="text-muted-foreground hover:text-accent transition-colors">Biological Age Test</Link></li>
               <li><Link to="/country-comparison" className="text-muted-foreground hover:text-accent transition-colors">Country Comparison</Link></li>
               <li><Link to="/birthday-report" className="text-muted-foreground hover:text-accent transition-colors">Birthday Report</Link></li>
