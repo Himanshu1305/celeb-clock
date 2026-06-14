@@ -1,15 +1,4 @@
-import { WikiPerson, WikiEvent } from '@/services/WikimediaService';
-import { 
-  Star, 
-  Clapperboard, 
-  Music, 
-  Palette, 
-  Wifi, 
-  Beaker, 
-  Briefcase, 
-  Trophy, 
-  Users 
-} from 'lucide-react';
+import { WikiPerson } from '@/services/WikimediaService';
 import { allBirthdays, BirthdayData } from './birthdays';
 
 // Use the expanded modular birthday database
@@ -19,23 +8,6 @@ export const birthdayDatabase = allBirthdays;
 export const getBirthdayData = (month: number, day: number): BirthdayData => {
   const key = `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   return birthdayDatabase[key] || { people: [], events: [] };
-};
-
-// Function to get icon component for each category
-export const getCategoryIcon = (category: WikiPerson['category']) => {
-  const icons = {
-    celebrity: Star,
-    actor: Clapperboard,
-    dancer: Music,
-    artist: Palette,
-    internet_celebrity: Wifi,
-    scientist: Beaker,
-    entrepreneur: Briefcase,
-    sports: Trophy,
-    athlete: Trophy,
-    other: Users
-  };
-  return icons[category] || Users;
 };
 
 // Function to search celebrities by name or profession
