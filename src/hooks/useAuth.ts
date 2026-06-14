@@ -216,6 +216,6 @@ export const useAuth = () => {
     signOut,
     updateProfile,
     deleteAccount,
-    isPremium: true
+    isPremium: profile?.premium_status || false
   };
 };

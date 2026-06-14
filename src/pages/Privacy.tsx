@@ -1,182 +1,281 @@
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from 'react';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { Shield, Lock, Eye, UserX } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
+import { SEO } from '@/components/SEO';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+
+const TOC_ITEMS = [
+  { id: 'what-we-collect', label: 'What We Collect' },
+  { id: 'what-we-dont-store', label: 'What We Do NOT Store' },
+  { id: 'how-we-use', label: 'How We Use Your Data' },
+  { id: 'storage-security', label: 'Data Storage and Security' },
+  { id: 'third-parties', label: 'Third-Party Services' },
+  { id: 'your-rights', label: 'Your Rights' },
+  { id: 'cookies', label: 'Cookies' },
+  { id: 'childrens-privacy', label: "Children's Privacy" },
+  { id: 'changes', label: 'Changes to This Policy' },
+  { id: 'contact', label: 'Contact Us' },
+];
+
+function scrollToSection(id: string) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function TOCSidebar() {
+  return (
+    <nav className="space-y-1">
+      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">On This Page</p>
+      {TOC_ITEMS.map(item => (
+        <button
+          key={item.id}
+          onClick={() => scrollToSection(item.id)}
+          className="block w-full text-left text-sm text-muted-foreground hover:text-blue-500 py-1 px-2 rounded transition-colors"
+        >
+          {item.label}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+function TOCDropdown() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border border-border rounded-lg mb-8">
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center justify-between w-full px-4 py-3 text-sm font-medium text-foreground"
+      >
+        <span>On This Page</span>
+        {open ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+      </button>
+      {open && (
+        <div className="px-4 pb-4 space-y-1 border-t border-border pt-3">
+          {TOC_ITEMS.map(item => (
+            <button
+              key={item.id}
+              onClick={() => { setOpen(false); scrollToSection(item.id); }}
+              className="block w-full text-left text-sm text-muted-foreground hover:text-blue-500 py-1"
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Privacy() {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header */}
-        <header className="flex justify-between items-center mb-8">
+    <div className="min-h-screen bg-background">
+      <SEO
+        title="Privacy Policy | BornClock"
+        description="BornClock's privacy policy written in plain English. We explain exactly what data we collect, what we never store, and how we protect your information."
+        keywords="BornClock privacy policy, data privacy, what data bornclock collects"
+        canonicalUrl="/privacy"
+      />
+
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <header className="flex justify-between items-center mb-12">
           <Navigation />
           <AuthNav />
         </header>
 
-        {/* Hero Section */}
-        <div className="text-center mb-12 animate-fade-in-up">
-          <Shield className="w-16 h-16 text-accent mx-auto mb-4" />
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-foreground">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
             Privacy Policy
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Your privacy is our highest priority
-          </p>
+          <p className="text-sm text-muted-foreground mb-8">Last updated: June 2026</p>
+
+          {/* Blue info box */}
+          <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl p-5 mb-10 text-blue-900 dark:text-blue-200 text-sm leading-relaxed">
+            <strong>Plain English first.</strong> We have tried to write this in plain English — no legalese, no hidden clauses. If something is unclear, email us at{' '}
+            <a href="mailto:privacy@bornclock.com" className="underline hover:opacity-80">privacy@bornclock.com</a>{' '}
+            and we will clarify it.
+          </div>
+
+          {/* Mobile TOC */}
+          <div className="lg:hidden">
+            <TOCDropdown />
+          </div>
+
+          <div className="flex gap-12">
+            {/* Desktop sticky TOC */}
+            <aside className="hidden lg:block w-56 shrink-0">
+              <div className="sticky top-8 bg-card border border-border rounded-xl p-4">
+                <TOCSidebar />
+              </div>
+            </aside>
+
+            {/* Main content */}
+            <div className="flex-1 min-w-0">
+
+              <section id="what-we-collect" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">What We Collect</h2>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  When you create a BornClock account, we collect the following information:
+                </p>
+                <ul className="space-y-3 text-muted-foreground leading-relaxed">
+                  <li><strong className="text-foreground">Name</strong> — used to personalise your dashboard and reports.</li>
+                  <li><strong className="text-foreground">Email address</strong> — used for account access, transactional emails, and optional notifications. Never sold.</li>
+                  <li><strong className="text-foreground">Date of birth</strong> — used to calculate your real-time age and power all date-based features. Stored only if you explicitly save your profile.</li>
+                  <li><strong className="text-foreground">Country</strong> — used to select the correct WHO/UN life-expectancy baseline for your region.</li>
+                  <li><strong className="text-foreground">Health inputs</strong> (smoking, alcohol, BMI, exercise, sleep, stress, medical history) — entered into the Life Expectancy Calculator. These are processed entirely in your browser and are <em>never transmitted to our servers</em>.</li>
+                  <li><strong className="text-foreground">Premium status</strong> — whether your account has an active premium subscription, stored so we can grant access to premium features.</li>
+                  <li><strong className="text-foreground">Payment metadata</strong> — we use Razorpay for payment processing. BornClock receives only a transaction ID and confirmation status; your card details are handled entirely by Razorpay and never touch our servers.</li>
+                  <li><strong className="text-foreground">Anonymous analytics</strong> — page views and feature usage via privacy-focused analytics (no cross-site tracking, no fingerprinting). This helps us understand which features to improve.</li>
+                </ul>
+              </section>
+
+              <section id="what-we-dont-store" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">What We Do NOT Store</h2>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  We believe in data minimalism. Here is what we deliberately do <strong className="text-foreground">not</strong> collect or store:
+                </p>
+                <ul className="space-y-3 text-muted-foreground leading-relaxed">
+                  <li><strong className="text-foreground">Health inputs and life expectancy forecasts</strong> — all calculations happen client-side. No health data leaves your device.</li>
+                  <li><strong className="text-foreground">Saved forecasts or reports</strong> — we do not store the output of your life expectancy calculation on our servers.</li>
+                  <li><strong className="text-foreground">Card numbers, CVVs, or bank details</strong> — payments go directly through Razorpay's PCI-DSS compliant infrastructure.</li>
+                  <li><strong className="text-foreground">Data sold to third parties</strong> — we do not sell, rent, or trade your personal information. Ever.</li>
+                  <li><strong className="text-foreground">Ad network profiles</strong> — we do not use Google AdSense, Facebook Pixel, or any advertising network that builds profiles based on your browsing.</li>
+                  <li><strong className="text-foreground">Precise location data</strong> — we ask for country only (via a dropdown you select), never GPS or IP-derived geolocation.</li>
+                </ul>
+              </section>
+
+              <section id="how-we-use" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">How We Use Your Data</h2>
+                <ul className="space-y-3 text-muted-foreground leading-relaxed">
+                  <li><strong className="text-foreground">Account management</strong> — your name and email let you log in, recover your account, and manage your subscription.</li>
+                  <li><strong className="text-foreground">Personalisation</strong> — your date of birth and country personalise your dashboard and choose the right life-expectancy baseline.</li>
+                  <li><strong className="text-foreground">Transactional emails</strong> — account confirmation, password reset, and payment receipts. We do not send marketing emails without your explicit opt-in.</li>
+                  <li><strong className="text-foreground">Optional notifications</strong> — with your consent, we may send birthday-related nudges or product updates. You can unsubscribe at any time from your profile page.</li>
+                  <li><strong className="text-foreground">Product improvement</strong> — anonymised, aggregated usage data helps us decide what to build next. No individual is identifiable in this data.</li>
+                </ul>
+              </section>
+
+              <section id="storage-security" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Data Storage and Security</h2>
+                <ul className="space-y-3 text-muted-foreground leading-relaxed">
+                  <li>Account data is stored on <strong className="text-foreground">Supabase</strong> (PostgreSQL), hosted in AWS data centres with encryption at rest and in transit.</li>
+                  <li>All connections to BornClock are <strong className="text-foreground">HTTPS encrypted</strong> using TLS 1.2 or higher.</li>
+                  <li>We use <strong className="text-foreground">row-level security (RLS)</strong> policies to ensure your data is only accessible to you and never to other users.</li>
+                  <li>Passwords are hashed using industry-standard bcrypt via Supabase Auth — we never see or store plaintext passwords.</li>
+                  <li>We retain your account data for as long as your account is active. If you delete your account, all personal data is permanently deleted within 30 days.</li>
+                </ul>
+              </section>
+
+              <section id="third-parties" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Third-Party Services</h2>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  We use a small number of third-party services. Here is each one and what data they receive:
+                </p>
+                <div className="overflow-x-auto rounded-lg border border-border">
+                  <table className="w-full text-sm text-muted-foreground">
+                    <thead className="bg-muted">
+                      <tr>
+                        <th className="text-left px-4 py-3 font-semibold text-foreground">Service</th>
+                        <th className="text-left px-4 py-3 font-semibold text-foreground">Purpose</th>
+                        <th className="text-left px-4 py-3 font-semibold text-foreground">Data Shared</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      <tr>
+                        <td className="px-4 py-3 font-medium text-foreground">Supabase</td>
+                        <td className="px-4 py-3">Database &amp; auth</td>
+                        <td className="px-4 py-3">Name, email, DOB, country, premium status</td>
+                      </tr>
+                      <tr className="bg-muted/30">
+                        <td className="px-4 py-3 font-medium text-foreground">Razorpay</td>
+                        <td className="px-4 py-3">Payment processing</td>
+                        <td className="px-4 py-3">Email, payment amount (card details handled by Razorpay only)</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3 font-medium text-foreground">Vercel / Cloudflare</td>
+                        <td className="px-4 py-3">Hosting &amp; CDN</td>
+                        <td className="px-4 py-3">IP address (not stored by us), request logs (retained 7 days)</td>
+                      </tr>
+                      <tr className="bg-muted/30">
+                        <td className="px-4 py-3 font-medium text-foreground">Privacy-first analytics</td>
+                        <td className="px-4 py-3">Product analytics</td>
+                        <td className="px-4 py-3">Anonymous page views, no personal identifiers</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-muted-foreground text-sm mt-4">
+                  We do not integrate Facebook, Google Ads, TikTok Pixel, or any advertising networks.
+                </p>
+              </section>
+
+              <section id="your-rights" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Your Rights</h2>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  Regardless of where you are in the world, you have the following rights:
+                </p>
+                <ul className="space-y-3 text-muted-foreground leading-relaxed">
+                  <li><strong className="text-foreground">Access</strong> — see exactly what data we hold about you. Email <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>.</li>
+                  <li><strong className="text-foreground">Correction</strong> — update your name, email, or date of birth from your Profile page at any time.</li>
+                  <li><strong className="text-foreground">Deletion</strong> — permanently delete your account and all associated data from your Profile page. No need to contact support. Data is purged within 30 days.</li>
+                  <li><strong className="text-foreground">Export</strong> — request a copy of your data in a portable format by emailing <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>.</li>
+                  <li><strong className="text-foreground">Opt out</strong> — unsubscribe from all non-essential emails from your Profile page or via the unsubscribe link in any email we send.</li>
+                  <li><strong className="text-foreground">Withdraw consent</strong> — if you gave consent for any specific processing, you can withdraw it at any time without affecting past processing.</li>
+                </ul>
+                <p className="text-muted-foreground text-sm mt-4">
+                  EU/UK residents also have rights under GDPR/UK-GDPR. Indian residents have rights under DPDP Act 2023. We honour all requests within 30 days.
+                </p>
+              </section>
+
+              <section id="cookies" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Cookies</h2>
+                <p className="text-muted-foreground mb-4 leading-relaxed">We use a minimal set of cookies:</p>
+                <ul className="space-y-3 text-muted-foreground leading-relaxed">
+                  <li><strong className="text-foreground">Essential cookies</strong> — session tokens required for you to stay logged in. Cannot be disabled without breaking the app.</li>
+                  <li><strong className="text-foreground">Analytics cookies</strong> — anonymised, cookieless-mode analytics. Can be disabled via the Cookie Settings link in the footer.</li>
+                  <li><strong className="text-foreground">No third-party advertising cookies</strong> — we do not place or allow ad-targeting cookies.</li>
+                </ul>
+                <p className="text-muted-foreground text-sm mt-4">
+                  You can manage your cookie preferences at any time using the Cookie Settings option in the footer.
+                </p>
+              </section>
+
+              <section id="childrens-privacy" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Children's Privacy</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  BornClock is not directed at children under 13 (or under 16 in the EU). We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, please contact{' '}
+                  <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>{' '}
+                  and we will delete it promptly.
+                </p>
+              </section>
+
+              <section id="changes" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Changes to This Policy</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  If we make material changes to this policy, we will notify you via email (if you have an account) and update the "Last updated" date at the top of this page. Minor clarifications may be made without notice. The latest version is always available at bornclock.com/privacy.
+                </p>
+              </section>
+
+              <section id="contact" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Contact Us</h2>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  For any privacy-related questions, requests, or complaints:
+                </p>
+                <ul className="space-y-2 text-muted-foreground">
+                  <li>Privacy: <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a></li>
+                  <li>General enquiries: <a href="mailto:hello@bornclock.com" className="text-blue-500 hover:underline">hello@bornclock.com</a></li>
+                </ul>
+                <p className="text-muted-foreground text-sm mt-4">
+                  We aim to respond to all privacy requests within 30 days.
+                </p>
+              </section>
+
+            </div>
+          </div>
         </div>
-
-        <Separator className="mb-12" />
-
-        {/* Our Commitment */}
-        <Card className="mb-8 hover-scale transition-all">
-          <CardHeader>
-            <CardTitle className="font-heading text-2xl flex items-center gap-2">
-              <Shield className="w-6 h-6 text-accent" />
-              Our Commitment to Your Privacy
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-muted-foreground leading-relaxed">
-            <p>
-              Your privacy is our highest priority. This policy explains what information we collect, how we use it, and how we protect it.
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* What Data We Collect */}
-        <Card className="mb-8 hover-scale transition-all">
-          <CardHeader>
-            <CardTitle className="font-heading text-2xl flex items-center gap-2">
-              <Eye className="w-6 h-6 text-accent" />
-              What Data We Collect
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-muted-foreground leading-relaxed">
-            <p>When you create an account, we collect:</p>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>Name</li>
-              <li>Email Address</li>
-            </ul>
-            <p className="pt-4">
-              For functional purposes, when you use our tools, the following data is entered by you but is <strong className="text-foreground">never stored</strong>:
-            </p>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>Date of Birth</li>
-              <li>Gender</li>
-              <li>Smoking and Drinking Habits</li>
-              <li>Health History (Heart Disease, Diabetes)</li>
-              <li>Exercise, Diet, and Stress Habits</li>
-            </ul>
-          </CardContent>
-        </Card>
-
-        {/* How We Use Your Data */}
-        <Card className="mb-8 hover-scale transition-all">
-          <CardHeader>
-            <CardTitle className="font-heading text-2xl">How We Use Your Data</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-muted-foreground leading-relaxed">
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>Your Name and Email are stored securely to manage your account and track your premium access.</li>
-              <li>All calculations (age, life expectancy) are processed temporarily on your device (client-side) or through anonymized APIs.</li>
-              <li>Birthdate and health data are never stored on our servers.</li>
-              <li>We may send optional birthday twin notifications or other informational emails with your consent.</li>
-              <li>We use anonymized analytics for product improvements only.</li>
-              <li>We do not use your information for marketing or ad targeting.</li>
-            </ul>
-          </CardContent>
-        </Card>
-
-        {/* Payments */}
-        <Card className="mb-8 hover-scale transition-all">
-          <CardHeader>
-            <CardTitle className="font-heading text-2xl flex items-center gap-2">
-              <Lock className="w-6 h-6 text-accent" />
-              Payments
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-muted-foreground leading-relaxed">
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>Payments are securely processed via Stripe.</li>
-              <li>We do not store your card information.</li>
-            </ul>
-          </CardContent>
-        </Card>
-
-        {/* Data Sharing */}
-        <Card className="mb-8 hover-scale transition-all">
-          <CardHeader>
-            <CardTitle className="font-heading text-2xl">Data Sharing</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-muted-foreground leading-relaxed">
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>We do not sell or share your Name or Email with third parties.</li>
-              <li>Google AdSense may use cookies for ad personalization.</li>
-            </ul>
-          </CardContent>
-        </Card>
-
-        {/* User Rights */}
-        <Card className="mb-8 hover-scale transition-all">
-          <CardHeader>
-            <CardTitle className="font-heading text-2xl flex items-center gap-2">
-              <UserX className="w-6 h-6 text-accent" />
-              Your Rights (GDPR)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-muted-foreground leading-relaxed">
-            <p>You have full control over your personal data:</p>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li><strong className="text-foreground">Access & Export:</strong> Download all data we store about you from your <Link to="/profile" className="text-accent hover:underline">Profile page</Link> at any time.</li>
-              <li><strong className="text-foreground">Opt Out:</strong> Manage your email notification and blog subscription preferences directly from your <Link to="/profile" className="text-accent hover:underline">Profile page</Link>. You can opt out at any time.</li>
-              <li><strong className="text-foreground">Delete:</strong> Permanently delete your account and all associated data directly from your <Link to="/profile" className="text-accent hover:underline">Profile page</Link> — no need to contact support.</li>
-              <li><strong className="text-foreground">Contact:</strong> For any other data requests, reach us at{' '}
-                <a href="mailto:support@ageceleblife.com" className="text-accent hover:underline">support@ageceleblife.com</a>
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
-
-        {/* Security */}
-        <Card className="mb-8 hover-scale transition-all">
-          <CardHeader>
-            <CardTitle className="font-heading text-2xl">Security</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-muted-foreground leading-relaxed">
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>All pages are HTTPS encrypted.</li>
-              <li>Payment flows use Stripe's secure infrastructure.</li>
-            </ul>
-          </CardContent>
-        </Card>
-
-        {/* Updates and Disclaimer */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <Card className="hover-scale transition-all">
-            <CardHeader>
-              <CardTitle className="font-heading text-xl">Updates to This Policy</CardTitle>
-            </CardHeader>
-            <CardContent className="text-muted-foreground leading-relaxed">
-              <p>We may update this policy for clarity or compliance. The latest version will always be on this page.</p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover-scale transition-all">
-            <CardHeader>
-              <CardTitle className="font-heading text-xl">Disclaimer</CardTitle>
-            </CardHeader>
-            <CardContent className="text-muted-foreground leading-relaxed">
-              <p>Our tool is informational only and not medical advice.</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Footer Note */}
-        <p className="text-center text-sm text-muted-foreground">
-          Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-        </p>
       </div>
+
       <Footer />
     </div>
   );
