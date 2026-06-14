@@ -2,6 +2,7 @@ import { WikiPerson, WikiEvent } from '@/services/WikimediaService';
 import { birthdayDatabase, searchCelebrities } from '@/data/birthdayData';
 import { celebrities, findCelebrityByBirthday } from '@/data/celebrities';
 import { supabase } from '@/integrations/supabase/client';
+import { CELEBRITY_NATIONALITY } from '@/data/celebrityNationality';
 
 export interface BirthdaySearchResult {
   people: WikiPerson[];
@@ -324,13 +325,20 @@ export async function getRankedBirthdayCelebrities(
       return [];
     }
 
-    // Apply country boost: celebrities from user's country get +500 to their score
-    const scored = data.map(celeb => ({
-      ...celeb,
-      score: (celeb.sitelinks ?? 0) + (
-        userCountry && celeb.nationality_code === userCountry ? 500 : 0
-      )
-    }));
+    // Apply country boost: celebrities from user's country get +500 to their score.
+    // nationality_code is NULL for all Supabase rows; use local map as fallback.
+    const scored = data.map(celeb => {
+      const effectiveNationality =
+        celeb.nationality_code ||
+        CELEBRITY_NATIONALITY[celeb.name] ||
+        null;
+      return {
+        ...celeb,
+        score: (celeb.sitelinks ?? 0) + (
+          userCountry && effectiveNationality === userCountry ? 500 : 0
+        ),
+      };
+    });
 
     scored.sort((a, b) => b.score - a.score);
 

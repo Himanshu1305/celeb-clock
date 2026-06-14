@@ -113,10 +113,10 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-gradient-cosmic">
-      <SEO 
-        title="Blog - Age Calculator & Birthday Insights"
-        description="Explore articles about age calculation, celebrity birthdays, zodiac signs, birthstones, and life expectancy. Fun facts and practical guides for every birthday enthusiast."
-        keywords="age calculator blog, birthday facts, zodiac signs, birthstones, celebrity birthdays, life expectancy"
+      <SEO
+        title="Health & Longevity Blog — Science-Backed Articles | BornClock"
+        description="Evidence-based articles on sleep, exercise, nutrition, mental health, preventive care, and community wellbeing. Every article cites peer-reviewed research. Written for real people, not medical professionals."
+        keywords="longevity blog, health and longevity, sleep longevity, exercise lifespan, Mediterranean diet longevity, preventive health screenings, social connection longevity, age calculator blog"
       />
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
@@ -132,10 +132,10 @@ const Blog = () => {
               <BookOpen className="h-10 w-10 text-primary" />
             </div>
             <h1 className="text-5xl md:text-6xl font-bold gradient-text-primary leading-tight">
-              Our Blog
+              The BornClock Health &amp; Longevity Guide
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Discover fascinating insights about age, birthdays, zodiac signs, and what makes your special day unique.
+              Evidence-based articles on sleep, exercise, nutrition, mental health, preventive care, and community wellbeing. Every article cites peer-reviewed research and is written for curious non-specialists — not medical professionals.
             </p>
           </div>
         </section>
