@@ -34,8 +34,11 @@ import ZodiacSign from "./pages/ZodiacSign";
 import BirthstonePage from "./pages/BirthstonePage";
 import NumerologyNumber from "./pages/NumerologyNumber";
 import GenerationPage from "./pages/Generation";
+import BirthdayDate from "./pages/BirthdayDate";
+import BirthdayHub from "./pages/BirthdayHub";
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
 import { BirthDateProvider } from "./context/BirthDateContext";
 
 const queryClient = new QueryClient();
@@ -49,6 +52,7 @@ const App = () => (
         <BirthDateProvider>
           <BrowserRouter>
             <ScrollToTop />
+            <BirthdayDiscountBanner />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/results" element={<BirthdayResults />} />
@@ -68,6 +72,8 @@ const App = () => (
               <Route path="/birthstone/:month" element={<BirthstonePage />} />
               <Route path="/life-expectancy" element={<LifeExpectancy />} />
               <Route path="/celebrity-birthday" element={<CelebrityBirthday />} />
+              <Route path="/birthday" element={<BirthdayHub />} />
+              <Route path="/birthday/:date" element={<BirthdayDate />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/about" element={<About />} />

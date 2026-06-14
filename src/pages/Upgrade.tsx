@@ -1,32 +1,77 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Check, Star, Sparkles, Users, Calendar, Download } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/hooks/useAuth';
+import { SEO } from '@/components/SEO';
+import { Navigation } from '@/components/Navigation';
+import { AuthNav } from '@/components/AuthNav';
+import { Footer } from '@/components/Footer';
+import { PromoCodeInput } from '@/components/PromoCodeInput';
+import { useToast } from '@/hooks/use-toast';
+import { PromoCodeResult } from '@/services/PromoCodeService';
+import {
+  CheckCircle, FlaskConical, Dna, Star, ArrowLeft,
+  ShieldCheck, Sparkles, Quote
+} from 'lucide-react';
+
+const FEATURE_CARDS = [
+  {
+    emoji: '🔬',
+    icon: FlaskConical,
+    title: 'What-If Simulator',
+    description:
+      'Move 25+ lifestyle sliders and see your forecast change in real time. Discover which habits add the most years to your life.',
+  },
+  {
+    emoji: '🧬',
+    icon: Dna,
+    title: 'Full Biological Blueprint',
+    description:
+      'Your complete 3-tab report: health analysis, genetic baseline, community factors. Downloadable PDF included.',
+  },
+  {
+    emoji: '🌟',
+    icon: Star,
+    title: 'Cultural Horizon',
+    description:
+      'See which iconic figures share your longevity path — and who you could join with an optimised lifestyle.',
+  },
+];
+
+const TESTIMONIALS = [
+  { quote: 'Discovered I could add 12 years with simple lifestyle changes. The simulator was eye-opening.' },
+  { quote: 'The family genetics section was the most thoughtful health tool I\'ve used.' },
+  { quote: 'The What-If Simulator is incredibly motivating. I changed three habits the same week.' },
+];
 
 const Upgrade = () => {
   const { user, isPremium } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handlePaymentClick = () => {
+    toast({
+      title: 'Payment coming soon!',
+      description: 'Payment integration is live in a few days. Enter a promo code below for free access.',
+    });
+  };
+
+  const handlePromoSuccess = (_result: PromoCodeResult) => {
+    navigate('/life-expectancy');
+  };
 
   if (isPremium) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-cosmic flex items-center justify-center p-4">
         <Card className="w-full max-w-md text-center">
-          <CardHeader>
-            <div className="mx-auto w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-4">
-              <Star className="w-8 h-8 text-primary" />
-            </div>
-            <CardTitle className="text-2xl">You're Already Premium!</CardTitle>
-            <CardDescription>
-              Enjoy all the cosmic features unlocked
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link to="/">
-              <Button className="w-full">
-                Return to Calculator
-              </Button>
-            </Link>
+          <CardContent className="p-8 space-y-4">
+            <CheckCircle className="w-14 h-14 text-green-500 mx-auto" />
+            <h1 className="text-2xl font-bold">You're already Premium!</h1>
+            <p className="text-muted-foreground">All features are unlocked. Enjoy your longevity blueprint.</p>
+            <Button asChild className="w-full">
+              <Link to="/life-expectancy">Go to Life Expectancy →</Link>
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -34,146 +79,154 @@ const Upgrade = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 p-4">
-      {/* Navigation */}
-      <div className="max-w-4xl mx-auto mb-8">
-        <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors">
-          ← Back to Calculator
-        </Link>
-      </div>
+    <div className="min-h-screen bg-gradient-cosmic">
+      <SEO
+        title="Unlock Your Full Longevity Blueprint | BornClock Premium"
+        description="Upgrade to BornClock Premium and unlock your complete longevity analysis, What-If Simulator, Biological Blueprint, and Cultural Horizon."
+        noindex
+      />
 
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Unlock Your Cosmic Journey
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <header className="flex justify-between items-center mb-8">
+          <Navigation />
+          <AuthNav />
+        </header>
+
+        <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6">
+          <ArrowLeft className="h-4 w-4" /> Back
+        </Link>
+
+        {/* Hero */}
+        <section className="text-center mb-14">
+          <Badge variant="outline" className="mb-4 gap-1">
+            <Sparkles className="h-3 w-3" /> Premium Access
+          </Badge>
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
+            Unlock Your Complete Longevity Blueprint
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Get lifetime access to premium features and discover the universe of possibilities
+            You have seen your forecast. Now discover exactly why — and what you can do about it.
           </p>
-        </div>
+        </section>
 
-        {/* Pricing Card */}
-        <div className="max-w-lg mx-auto mb-12">
-          <Card className="relative border-2 border-primary/20 shadow-lg">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <Badge className="bg-primary text-primary-foreground px-4 py-1">
-                <Sparkles className="w-4 h-4 mr-1" />
-                Most Popular
-              </Badge>
-            </div>
-            
-            <CardHeader className="text-center pb-4">
-              <CardTitle className="text-3xl font-bold">Premium Lifetime</CardTitle>
-              <div className="text-4xl font-bold text-primary mt-2">
-                $29.99
-                <span className="text-lg text-muted-foreground font-normal ml-2">one-time</span>
+        {/* Feature Cards */}
+        <section className="grid md:grid-cols-3 gap-6 mb-14">
+          {FEATURE_CARDS.map((f) => (
+            <Card key={f.title} className="glass-card text-center p-6 space-y-3">
+              <span className="text-4xl">{f.emoji}</span>
+              <h3 className="font-bold text-lg text-foreground">{f.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{f.description}</p>
+            </Card>
+          ))}
+        </section>
+
+        {/* Pricing */}
+        <section className="mb-10">
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Monthly */}
+            <Card className="glass-card border-border p-6 space-y-4">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Monthly</p>
+                <div className="flex items-end gap-1 mt-1">
+                  <span className="text-4xl font-black text-foreground">₹499</span>
+                  <span className="text-muted-foreground mb-1">/ month</span>
+                </div>
+                <p className="text-xs text-muted-foreground">Cancel anytime</p>
               </div>
-              <CardDescription className="text-base mt-2">
-                Lifetime access to all premium features
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-primary" />
-                  <span>Premium Celebrity Database</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-primary" />
-                  <span>Advanced Life Expectancy Calculator</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-primary" />
-                  <span>Export Detailed Reports</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-primary" />
-                  <span>Birthday Twin Notifications</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-primary" />
-                  <span>Priority Support</span>
-                </div>
-              </div>
-
-              <Button className="w-full mt-6" size="lg" disabled>
-                <Star className="w-4 h-4 mr-2" />
-                Coming Soon - Stripe Integration
+              <ul className="space-y-2 text-sm">
+                {['What-If Simulator', 'Biological Blueprint PDF', 'Cultural Horizon'].map(f => (
+                  <li key={f} className="flex items-center gap-2 text-muted-foreground">
+                    <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />{f}
+                  </li>
+                ))}
+              </ul>
+              <Button className="w-full" disabled onClick={handlePaymentClick}>
+                Start 7-Day Free Trial
               </Button>
-
-              {!user && (
-                <p className="text-sm text-muted-foreground text-center mt-4">
-                  <Link to="/auth" className="text-primary hover:underline">
-                    Sign in or create an account
-                  </Link> to purchase premium
-                </p>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <Card>
-            <CardHeader>
-              <Users className="w-8 h-8 text-primary mb-2" />
-              <CardTitle>Celebrity Database</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Access our extensive database of celebrities with detailed profiles, achievements, and fun facts.
+              <p className="text-xs text-muted-foreground text-center">
+                Payment coming soon — enter promo code below for free access
               </p>
-            </CardContent>
-          </Card>
+            </Card>
 
-          <Card>
-            <CardHeader>
-              <Calendar className="w-8 h-8 text-primary mb-2" />
-              <CardTitle>Life Expectancy</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Get personalized life expectancy calculations based on lifestyle factors and health data.
-              </p>
-            </CardContent>
-          </Card>
+            {/* Annual */}
+            <Card className="glass-card border-primary/40 p-6 space-y-4 relative">
+              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
+                Best Value
+              </Badge>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Annual</p>
+                <div className="flex items-end gap-1 mt-1">
+                  <span className="text-4xl font-black text-foreground">₹3,999</span>
+                  <span className="text-muted-foreground mb-1">/ year</span>
+                </div>
+                <p className="text-xs text-green-600 font-medium">Save ₹2,000 vs monthly</p>
+              </div>
+              <ul className="space-y-2 text-sm">
+                {['Everything in Monthly', 'Priority support', 'Early access to new features'].map(f => (
+                  <li key={f} className="flex items-center gap-2 text-muted-foreground">
+                    <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />{f}
+                  </li>
+                ))}
+              </ul>
+              <Button className="w-full" variant="outline" disabled onClick={handlePaymentClick}>
+                Start 7-Day Free Trial
+              </Button>
+              <div className="text-center">
+                <Badge variant="secondary" className="text-xs">Coming soon</Badge>
+              </div>
+            </Card>
+          </div>
+        </section>
 
-          <Card>
-            <CardHeader>
-              <Download className="w-8 h-8 text-primary mb-2" />
-              <CardTitle>Export Reports</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Download detailed PDF reports of your age calculations and celebrity matches.
-              </p>
-            </CardContent>
+        {/* Promo Code */}
+        <section className="mb-14">
+          <Card className="glass-card p-6">
+            <h2 className="font-semibold text-foreground mb-1">Have a promo code?</h2>
+            <p className="text-sm text-muted-foreground mb-4">
+              Enter it here for free access:
+            </p>
+            {user ? (
+              <PromoCodeInput
+                userId={user.id}
+                onSuccess={handlePromoSuccess}
+              />
+            ) : (
+              <div className="text-sm text-muted-foreground space-y-2">
+                <p>You need to be signed in to redeem a promo code.</p>
+                <Button asChild size="sm" variant="outline">
+                  <Link to="/auth">Sign in / Create account →</Link>
+                </Button>
+              </div>
+            )}
           </Card>
-        </div>
+        </section>
 
-        {/* FAQ */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Frequently Asked Questions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <h4 className="font-semibold mb-2">Is this a one-time payment?</h4>
-              <p className="text-muted-foreground">Yes! Pay once and get lifetime access to all premium features.</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Can I use this on multiple devices?</h4>
-              <p className="text-muted-foreground">Absolutely! Your premium access is tied to your account and works on any device.</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Do you offer refunds?</h4>
-              <p className="text-muted-foreground">We offer a 30-day money-back guarantee if you're not satisfied.</p>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Social Proof */}
+        <section className="mb-14">
+          <h2 className="text-2xl font-bold text-center text-foreground mb-8">
+            Join users who discovered their longevity forecast
+          </h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            {TESTIMONIALS.map((t, i) => (
+              <Card key={i} className="glass-card p-5">
+                <Quote className="h-5 w-5 text-primary/40 mb-3" />
+                <p className="text-sm text-muted-foreground italic leading-relaxed">"{t.quote}"</p>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* Guarantee */}
+        <section className="text-center mb-8">
+          <Card className="glass-card p-6 max-w-xl mx-auto">
+            <ShieldCheck className="h-10 w-10 text-green-500 mx-auto mb-3" />
+            <h3 className="font-bold text-foreground mb-2">7-day free trial — experience everything before paying.</h3>
+            <p className="text-sm text-muted-foreground">No credit card required to start. Cancel or keep — your choice after 7 days.</p>
+          </Card>
+        </section>
       </div>
+
+      <Footer />
     </div>
   );
 };

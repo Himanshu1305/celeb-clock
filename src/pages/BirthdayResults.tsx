@@ -22,6 +22,7 @@ import { SEO } from '@/components/SEO';
 import html2canvas from 'html2canvas';
 
 const CURRENT_YEAR = new Date().getFullYear();
+const MONTH_SLUGS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 
 
 function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
@@ -186,6 +187,7 @@ const BirthdayResults = () => {
   const birthstone = getBirthstone(birthDate.getMonth() + 1);
   const planetaryAges = calculatePlanetaryAges(age?.years || 0);
   const monthDayLabel = birthDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+  const birthdaySlug = `${MONTH_SLUGS[birthDate.getMonth() + 1]}-${birthDate.getDate()}`;
 
   const topCelebName = celebrities[0]?.name || 'famous people';
   const shareUrl = window.location.origin;
@@ -295,7 +297,12 @@ const BirthdayResults = () => {
                   <Users className="w-5 h-5 text-primary" />
                   <h2 className="text-xl font-bold">Your Celebrity Birthday Twins</h2>
                 </div>
-                <Badge variant="secondary">6 Celebrity Matches</Badge>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">6 Celebrity Matches</Badge>
+                  <Link to={`/birthday/${birthdaySlug}`} className="text-xs text-primary hover:underline hidden sm:inline">
+                    See all celebrities born on {monthDayLabel} →
+                  </Link>
+                </div>
               </div>
 
               {loadingCelebs ? (

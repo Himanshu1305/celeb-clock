@@ -11,9 +11,12 @@ import { PageFAQ } from '@/components/PageFAQ';
 import { RelatedTools } from '@/components/RelatedTools';
 import { AuthorBio } from '@/components/AuthorBio';
 
+const MONTH_SLUGS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+
 const TodaysBirthdaysPage = () => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+  const todaySlug = `${MONTH_SLUGS[today.getMonth() + 1]}-${today.getDate()}`;
 
   return (
     <div className="min-h-screen bg-gradient-cosmic">
@@ -30,6 +33,12 @@ const TodaysBirthdaysPage = () => {
         </header>
 
         <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
+          <div className="text-sm text-muted-foreground mb-2">
+            Viewing all celebrities born on {formattedDate} ·{' '}
+            <Link to={`/birthday/${todaySlug}`} className="text-primary hover:underline">
+              See dedicated page →
+            </Link>
+          </div>
           <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
             Famous Birthdays Today — {formattedDate}
           </h1>

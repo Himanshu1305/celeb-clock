@@ -21,7 +21,8 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useAuth } from '@/hooks/useAuth';
-import { ArrowLeft, Crown, Download, Loader2, Save, Shield, Trash2, User } from 'lucide-react';
+import { ArrowLeft, Crown, Download, Loader2, Save, Shield, Tag, Trash2, User } from 'lucide-react';
+import { PromoCodeInput } from '@/components/PromoCodeInput';
 import { countries } from '@/data/countries';
 
 export default function Profile() {
@@ -246,7 +247,23 @@ export default function Profile() {
               </CardContent>
             </Card>
 
-            {/* Privacy & Data Management */}
+            {/* Promo Code */}
+            {!isPremium && (
+              <Card className="backdrop-blur-sm bg-background/80 border-primary/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Tag className="h-5 w-5 text-accent" />
+                    Have a promo code?
+                  </CardTitle>
+                  <CardDescription>Enter your promo code to activate free premium access.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <PromoCodeInput userId={user.id} />
+                </CardContent>
+              </Card>
+            )}
+
+          {/* Privacy & Data Management */}
             <Card className="backdrop-blur-sm bg-background/80 border-primary/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

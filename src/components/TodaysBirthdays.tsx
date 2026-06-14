@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Users, Cake, ChevronDown } from 'lucide-react';
+import { Users, Cake, ChevronDown, Rocket } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { FEATURES } from '@/config/features';
+import { getTodayTopBoosted, BoostLeaderEntry } from '@/services/CelebrityBoostService';
 import {
   getRankedBirthdayCelebrities,
   CelebrityBirthdayResult,
@@ -61,6 +63,7 @@ export const TodaysBirthdays = () => {
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [activeFilter, setActiveFilter] = useState<OccupationCategory>('All');
+  const [topBoosted, setTopBoosted] = useState<BoostLeaderEntry[]>([]);
 
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
@@ -95,6 +98,10 @@ export const TodaysBirthdays = () => {
     };
 
     load();
+
+    if (FEATURES.CELEBRITY_BOOST) {
+      getTodayTopBoosted(3).then(setTopBoosted);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile?.country]);
 
@@ -113,6 +120,23 @@ export const TodaysBirthdays = () => {
 
   return (
     <div className="space-y-6">
+      {/* Most Boosted Today — FEATURES.CELEBRITY_BOOST gated */}
+      {FEATURES.CELEBRITY_BOOST && topBoosted.length > 0 && (
+        <div className="bg-muted/40 rounded-xl px-4 py-3 flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-1.5 text-sm font-medium text-foreground shrink-0">
+            <Rocket className="w-4 h-4 text-primary" />
+            Most Boosted Today:
+          </div>
+          {topBoosted.map((entry, i) => (
+            <div key={entry.celebrity_name} className="flex items-center gap-1 text-sm">
+              <span className="text-muted-foreground">#{i + 1}</span>
+              <span className="font-medium">{entry.celebrity_name}</span>
+              <Badge variant="secondary" className="text-xs px-1.5">{entry.boost_count}</Badge>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">

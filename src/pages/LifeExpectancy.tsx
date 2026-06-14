@@ -1,4 +1,4 @@
-import { useState, useRef, Component } from 'react';
+import { useState, useRef, Component, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
@@ -30,6 +30,7 @@ import {
 } from '@/services/LongevityCalculationService';
 import { CulturalHorizonTeaser } from '@/components/CulturalHorizonTeaser';
 import { LongevityHeroCard } from '@/components/LongevityHeroCard';
+import { supabase } from '@/integrations/supabase/client';
 
 // ── ErrorBoundary ────────────────────────────────────────────────────────────
 class ReportErrorBoundary extends Component<
@@ -67,6 +68,19 @@ const LifeExpectancy = () => {
 
   const [phase, setPhase] = useState<Phase>('quiz');
   const [longevityResult, setLongevityResult] = useState<LongevityResult | null>(null);
+  const [userCount, setUserCount] = useState('2,400+');
+
+  useEffect(() => {
+    supabase
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .then(({ count }) => {
+        if (count && count > 100) {
+          const rounded = Math.floor(count / 100) * 100;
+          setUserCount(`${rounded.toLocaleString()}+`);
+        }
+      });
+  }, []);
   const [optimizedForecast, setOptimizedForecast] = useState<number | null>(null);
   const [currentSimForecast, setCurrentSimForecast] = useState<number | null>(null);
   const [userSelectedHabits, setUserSelectedHabits] = useState<string[]>([]);
@@ -230,6 +244,9 @@ const LifeExpectancy = () => {
                 <p className="text-2xl font-semibold text-muted-foreground">years</p>
                 <p className="text-sm text-muted-foreground">
                   You are {longevityResult.currentAge} today · {longevityResult.yearsRemaining} years of life ahead
+                </p>
+                <p className="text-sm text-gray-500 text-center mt-2">
+                  Calculated by {userCount} people worldwide
                 </p>
                 {longevityResult.isConditionalBaseline && (
                   <p className="text-xs text-muted-foreground">
