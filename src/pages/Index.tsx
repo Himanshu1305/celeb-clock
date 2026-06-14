@@ -9,23 +9,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Crown, ArrowRight, ShieldCheck, Sparkles, Star, Users, Calendar } from 'lucide-react';
+import { Crown, ArrowRight, ShieldCheck, Sparkles, Star, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { AuthorBio } from '@/components/AuthorBio';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getRankedBirthdayCelebrities, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
-import { fetchCelebrityImage } from '@/services/WikipediaImageService';
-
-const CY = new Date().getFullYear();
-function mapForToday(r: CelebrityBirthdayResult) {
-  const birthYear = r.birthDate ? parseInt(r.birthDate.substring(0, 4)) : null;
-  const age = r.isLiving && birthYear ? CY - birthYear : null;
-  const initials = r.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
-  return { ...r, age, initials };
-}
-const MONTH_SLUGS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 
 const Index = () => {
   const { user, profile, isPremium } = useAuth();
@@ -40,30 +28,6 @@ const Index = () => {
   // Live counter for social proof
   const [decodedCount, setDecodedCount] = useState(12847);
 
-  // On This Day: top 3 celebrities born today
-  const [todayCelebs, setTodayCelebs] = useState<ReturnType<typeof mapForToday>[]>([]);
-  const [todayCelebImages, setTodayCelebImages] = useState<Record<string, string | null>>({});
-  const [todayCelebsLoading, setTodayCelebsLoading] = useState(true);
-
-  useEffect(() => {
-    const today = new Date();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    const monthDay = `${mm}-${dd}`;
-    getRankedBirthdayCelebrities(monthDay, null, 3)
-      .then(res => {
-        const mapped = res.map(mapForToday);
-        setTodayCelebs(mapped);
-        mapped.forEach(c => {
-          fetchCelebrityImage(c.name).then(url => {
-            setTodayCelebImages(prev => ({ ...prev, [c.name]: url }));
-          });
-        });
-      })
-      .catch(() => {})
-      .finally(() => setTodayCelebsLoading(false));
-  }, []);
-  
   // Animate the counter
   useEffect(() => {
     const interval = setInterval(() => {
@@ -249,84 +213,6 @@ const Index = () => {
             </div>
           </div>
         </section>
-
-        {/* On This Day */}
-        {(todayCelebsLoading || todayCelebs.length > 0) && (() => {
-          const now = new Date();
-          const todayLabel = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-          const mm = now.getMonth() + 1;
-          const dd = now.getDate();
-          const todaySlug = `${MONTH_SLUGS[mm]}-${dd}`;
-          return (
-            <section className="max-w-4xl mx-auto mb-10 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-              <Card className="glass-card border-primary/20">
-                <CardContent className="p-5">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Calendar className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="font-bold text-foreground text-sm">🗓️ Today in Celebrity Birthdays</p>
-                      <p className="text-xs text-muted-foreground">{todayLabel}</p>
-                    </div>
-                  </div>
-                  {todayCelebsLoading ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {[0, 1, 2].map(i => (
-                        <div key={i} className="flex items-center gap-3 bg-background/50 rounded-xl p-3 border border-border/30">
-                          <div className="w-12 h-12 shrink-0 rounded-full bg-muted animate-pulse" />
-                          <div className="min-w-0 space-y-2 flex-1">
-                            <div className="h-4 w-24 bg-muted animate-pulse rounded" />
-                            <div className="h-3 w-16 bg-muted animate-pulse rounded" />
-                            <div className="h-3 w-20 bg-muted animate-pulse rounded" />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {todayCelebs.map(celeb => {
-                        const wikiUrl = celeb.wikipediaUrl ?? `https://en.wikipedia.org/wiki/${celeb.name.replace(/ /g, '_')}`;
-                        const img = todayCelebImages[celeb.name];
-                        return (
-                          <a
-                            key={celeb.name}
-                            href={wikiUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-3 bg-background/50 hover:bg-background/80 rounded-xl p-3 transition-all hover:scale-[1.02] border border-border/30 group"
-                          >
-                            <Avatar className="w-12 h-12 shrink-0 border border-border/40">
-                              {img ? (
-                                <AvatarImage src={img} alt={celeb.name} className="object-cover" style={{ objectPosition: 'top center' }} />
-                              ) : null}
-                              <AvatarFallback className="text-sm font-bold bg-primary/10 text-foreground">
-                                {celeb.initials}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className="min-w-0">
-                              <p className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors truncate">{celeb.name}</p>
-                              <p className="text-xs text-muted-foreground truncate">{celeb.occupation || 'Celebrity'}</p>
-                              <p className="text-xs text-muted-foreground">
-                                {celeb.isLiving && celeb.age ? `Turns ${celeb.age} today` : 'Legacy'}
-                              </p>
-                            </div>
-                          </a>
-                        );
-                      })}
-                    </div>
-                  )}
-                  <div className="mt-4 flex items-center justify-between">
-                    <Link to="/todays-birthdays" className="text-xs text-primary hover:underline">
-                      See all celebrities born today →
-                    </Link>
-                    <Link to={`/birthday/${todaySlug}`} className="text-xs text-muted-foreground hover:text-foreground">
-                      Dedicated page →
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-          );
-        })()}
 
         {/* Sign Up Banner */}
         {!user && (
