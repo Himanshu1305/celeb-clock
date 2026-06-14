@@ -1196,12 +1196,12 @@ describe('FM1–FM5 — calculateBaseForecast', () => {
     expect(fc).toBe(76.0);
   });
 
-  it('FM4: female Japan age~50 → conditional multiplier applied (HIGH bracket)', () => {
+  it('FM4: female Japan age~45 → conditional multiplier applied (HIGH bracket)', () => {
     // birth baseline Japan female = 87.5 (> 70, HIGH set)
-    // dobForAge(50) → Math.floor gives age=49 with 365.25-day divisor
+    // dobForAge(45) → age=44 or 45, both in bracket=40 (avoids age-50 boundary)
     // bracket=40, HIGH[40]=1.040 → conditional = round(87.5*1.040*10)/10 = 91.0
     // forecast = 91.0 + 1.5 = 92.5 (conditional multiplier is applied — higher than birth baseline 87.5)
-    const fc = calculateBaseForecastPure(dobForAge(50), 'female', 'Japan');
+    const fc = calculateBaseForecastPure(dobForAge(45), 'female', 'Japan');
     expect(fc).toBe(92.5);
     // Verify the multiplier actually lifted the base above the birth baseline
     expect(fc).toBeGreaterThan(87.5 + 1.5);

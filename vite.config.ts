@@ -29,17 +29,32 @@ export default defineConfig(({ mode }) => ({
             '@radix-ui/react-accordion',
             '@radix-ui/react-label',
             '@radix-ui/react-slot',
+            '@radix-ui/react-avatar',
+            '@radix-ui/react-slider',
+            '@radix-ui/react-checkbox',
+            '@radix-ui/react-radio-group',
+            '@radix-ui/react-progress',
+            '@radix-ui/react-separator',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-switch',
+            '@radix-ui/react-collapsible',
           ],
           'vendor-charts': ['recharts'],
           'vendor-supabase': ['@supabase/supabase-js'],
           'vendor-lucide': ['lucide-react'],
+          'chunk-shared': [
+            './src/hooks/useAuth',
+            './src/utils/trialUtils',
+            './src/services/WikipediaImageService',
+          ],
           // birthdayData removed from here — it's now dynamically imported
           // so Vite lazy-loads it as its own separate chunk
+          // BirthdayDate removed: it imports birthstoneData (chunk-content), which caused
+          // a chunk-birthday <-> chunk-content circular dep. Let it land in the index chunk.
           'chunk-birthday': [
             './src/pages/BirthdayResults',
             './src/pages/TodaysBirthdaysPage',
             './src/pages/CelebrityBirthday',
-            './src/pages/BirthdayDate',
             './src/services/BirthdaySearchService',
             './src/data/celebrityNationality',
           ],
