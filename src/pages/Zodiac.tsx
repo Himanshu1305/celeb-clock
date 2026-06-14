@@ -1,246 +1,244 @@
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Helmet } from 'react-helmet-async';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
 import { SEO } from '@/components/SEO';
-import { EEATBadges } from '@/components/EEATBadges';
-import { PageFAQ } from '@/components/PageFAQ';
-import { RelatedTools } from '@/components/RelatedTools';
-import { AuthorBio } from '@/components/AuthorBio';
+import { ZODIAC_DATA } from '@/data/zodiacData';
 
-const zodiacSigns = [
-  {
-    name: "Aries",
-    emoji: "♈",
-    dates: "March 21 - April 19",
-    element: "Fire",
-    traits: ["Courageous", "Determined", "Confident", "Enthusiastic", "Passionate", "Impulsive"],
-    description: "Aries are natural leaders, full of energy and passion. They are adventurous and always ready to take on new challenges. As the first sign of the zodiac, Aries embodies the spirit of beginnings and pioneering endeavors. Their dynamic personality makes them excellent at initiating projects and inspiring others.",
-    strengths: "Aries individuals excel at taking initiative, leading teams, and making quick decisions. Their enthusiasm is contagious and they have an incredible ability to bounce back from setbacks.",
-    challenges: "Their impulsive nature can sometimes lead to hasty decisions. Learning patience and considering consequences before acting can help Aries achieve even greater success."
-  },
-  {
-    name: "Taurus",
-    emoji: "♉",
-    dates: "April 20 - May 20",
-    element: "Earth",
-    traits: ["Reliable", "Patient", "Practical", "Devoted", "Stable", "Sensual"],
-    description: "Taurus individuals are grounded and stable. They appreciate beauty, comfort, and the finer things in life. Known for their reliability and determination, Taureans are the builders of the zodiac. They have an eye for aesthetics and a deep appreciation for art, music, and nature.",
-    strengths: "Taurus excels at maintaining stability, building lasting foundations, and creating beauty. Their patience and persistence ensure they complete what they start with excellence.",
-    challenges: "Their stubbornness can sometimes prevent growth. Learning flexibility and being open to change can help Taurus expand their horizons."
-  },
-  {
-    name: "Gemini",
-    emoji: "♊",
-    dates: "May 21 - June 20",
-    element: "Air",
-    traits: ["Adaptable", "Outgoing", "Intelligent", "Curious", "Witty", "Versatile"],
-    description: "Geminis are social butterflies with quick wit and excellent communication skills. They thrive on variety and mental stimulation. Represented by the Twins, Geminis have the ability to see multiple perspectives and adapt to any situation. Their curiosity drives them to constantly learn and explore.",
-    strengths: "Gemini shines in communication, networking, and learning. Their versatility allows them to excel in multiple fields and connect diverse people and ideas.",
-    challenges: "Their scattered energy can lead to inconsistency. Focusing on depth rather than breadth and following through on commitments will enhance their success."
-  },
-  {
-    name: "Cancer",
-    emoji: "♋",
-    dates: "June 21 - July 22",
-    element: "Water",
-    traits: ["Intuitive", "Emotional", "Protective", "Sympathetic", "Nurturing", "Loyal"],
-    description: "Cancer individuals are deeply caring and nurturing. They value home, family, and emotional connections. Ruled by the Moon, Cancers are highly intuitive and emotionally intelligent. They create safe spaces where others can feel comfortable and loved.",
-    strengths: "Cancer excels at emotional support, creating home environments, and building deep relationships. Their empathy and intuition make them natural healers and counselors.",
-    challenges: "Overprotectiveness and mood swings can create challenges. Learning to set healthy boundaries and managing emotions constructively will support their wellbeing."
-  },
-  {
-    name: "Leo",
-    emoji: "♌",
-    dates: "July 23 - August 22",
-    element: "Fire",
-    traits: ["Creative", "Passionate", "Generous", "Cheerful", "Confident", "Dramatic"],
-    description: "Leos are natural performers who love being in the spotlight. They are warm-hearted and have a magnetic personality. Ruled by the Sun, Leos radiate confidence and creativity. Their generous spirit and natural leadership inspire and uplift those around them.",
-    strengths: "Leo excels at creative expression, leadership, and inspiring others. Their confidence and warmth make them natural entertainers and motivators.",
-    challenges: "Their need for attention can overshadow others. Balancing self-expression with humility and recognizing others' contributions will enhance their relationships."
-  },
-  {
-    name: "Virgo",
-    emoji: "♍",
-    dates: "August 23 - September 22",
-    element: "Earth",
-    traits: ["Analytical", "Practical", "Kind", "Hardworking", "Meticulous", "Helpful"],
-    description: "Virgos are detail-oriented perfectionists with a strong sense of duty. They excel at organization and problem-solving. Ruled by Mercury, Virgos combine analytical thinking with practical application. Their dedication to service and improvement makes them invaluable in any team.",
-    strengths: "Virgo excels at analysis, organization, and helping others improve. Their attention to detail and work ethic ensure excellence in everything they do.",
-    challenges: "Perfectionism can lead to self-criticism and worry. Learning to accept imperfection and practice self-compassion will enhance their inner peace."
-  },
-  {
-    name: "Libra",
-    emoji: "♎",
-    dates: "September 23 - October 22",
-    element: "Air",
-    traits: ["Diplomatic", "Gracious", "Fair-minded", "Social", "Romantic", "Harmonious"],
-    description: "Libras seek balance and harmony in all aspects of life. They are charming, romantic, and natural peacemakers. Represented by the Scales, Libras have an innate sense of justice and aesthetics. They excel at creating beauty and bringing people together.",
-    strengths: "Libra excels at diplomacy, creating harmony, and appreciating beauty. Their fair-mindedness and social grace make them excellent mediators and partners.",
-    challenges: "Indecisiveness and people-pleasing can be challenging. Learning to make decisions confidently and prioritize their own needs will empower them."
-  },
-  {
-    name: "Scorpio",
-    emoji: "♏",
-    dates: "October 23 - November 21",
-    element: "Water",
-    traits: ["Resourceful", "Passionate", "Brave", "Determined", "Intense", "Transformative"],
-    description: "Scorpios are intense and mysterious with deep emotional intelligence. They are fiercely loyal and transformative. Ruled by Pluto and Mars, Scorpios possess incredible depth and power. Their ability to transform and regenerate makes them resilient and magnetic.",
-    strengths: "Scorpio excels at depth, transformation, and uncovering truth. Their intensity and dedication make them powerful agents of change and loyal friends.",
-    challenges: "Jealousy and controlling tendencies can arise. Learning trust and letting go will deepen their relationships and inner peace."
-  },
-  {
-    name: "Sagittarius",
-    emoji: "♐",
-    dates: "November 22 - December 21",
-    element: "Fire",
-    traits: ["Generous", "Idealistic", "Great sense of humor", "Adventurous", "Philosophical", "Optimistic"],
-    description: "Sagittarius individuals are free-spirited philosophers who love exploration and seeking truth. They are optimistic and adventurous. Ruled by Jupiter, Sagittarians have an expansive worldview and love of learning. Their enthusiasm for life and adventure is contagious.",
-    strengths: "Sagittarius excels at inspiring others, exploring new horizons, and finding meaning. Their optimism and philosophical nature uplift everyone around them.",
-    challenges: "Tactlessness and restlessness can create issues. Learning diplomacy and commitment will help them build deeper connections."
-  },
-  {
-    name: "Capricorn",
-    emoji: "♑",
-    dates: "December 22 - January 19",
-    element: "Earth",
-    traits: ["Responsible", "Disciplined", "Self-controlled", "Ambitious", "Strategic", "Traditional"],
-    description: "Capricorns are ambitious achievers with strong work ethic. They are practical, wise, and excellent at long-term planning. Ruled by Saturn, Capricorns understand the value of patience and perseverance. Their determination to reach the summit makes them natural leaders in business and life.",
-    strengths: "Capricorn excels at planning, achieving goals, and building lasting structures. Their discipline and wisdom ensure long-term success.",
-    challenges: "Workaholism and pessimism can limit joy. Learning to balance work with play and appreciate the journey will enhance their happiness."
-  },
-  {
-    name: "Aquarius",
-    emoji: "♒",
-    dates: "January 20 - February 18",
-    element: "Air",
-    traits: ["Progressive", "Original", "Independent", "Humanitarian", "Innovative", "Intellectual"],
-    description: "Aquarius individuals are innovative visionaries who think outside the box. They are intellectual, friendly, and value independence. Ruled by Uranus, Aquarians are the revolutionaries and reformers of the zodiac. Their unique perspective and humanitarian spirit drive social progress.",
-    strengths: "Aquarius excels at innovation, humanitarian efforts, and intellectual pursuits. Their originality and vision create positive change in the world.",
-    challenges: "Detachment and stubbornness about their views can distance others. Learning emotional expression and flexibility will deepen their connections."
-  },
-  {
-    name: "Pisces",
-    emoji: "♓",
-    dates: "February 19 - March 20",
-    element: "Water",
-    traits: ["Compassionate", "Artistic", "Intuitive", "Gentle", "Wise", "Musical"],
-    description: "Pisces are dreamers with deep emotional sensitivity and artistic talents. They are empathetic, spiritual, and imaginative. Ruled by Neptune, Pisceans have access to the collective unconscious and mystical realms. Their creativity and compassion make them natural artists and healers.",
-    strengths: "Pisces excels at artistic expression, empathy, and spiritual understanding. Their imagination and compassion bring beauty and healing to the world.",
-    challenges: "Escapism and boundary issues can be problematic. Learning to ground themselves and set healthy limits will enhance their wellbeing."
-  }
+const ELEMENT_BORDER: Record<string, string> = {
+  Fire: 'border-red-300 dark:border-red-700',
+  Earth: 'border-green-300 dark:border-green-700',
+  Air: 'border-sky-300 dark:border-sky-700',
+  Water: 'border-blue-300 dark:border-blue-700',
+};
+
+const ELEMENT_BADGE: Record<string, string> = {
+  Fire: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+  Earth: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
+  Air: 'bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300',
+  Water: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
+};
+
+const COMPATIBILITY: Record<string, string[]> = {
+  Fire: ['Aries', 'Leo', 'Sagittarius'],
+  Earth: ['Taurus', 'Virgo', 'Capricorn'],
+  Air: ['Gemini', 'Libra', 'Aquarius'],
+  Water: ['Cancer', 'Scorpio', 'Pisces'],
+};
+
+const ELEMENT_DESCRIPTIONS: Record<string, string> = {
+  Fire: 'Aries, Leo, and Sagittarius share the fire element — they are driven, enthusiastic, and oriented toward action and self-expression. Fire signs tend to lead and inspire. Their energy is contagious but can burn hot when unchecked.',
+  Earth: 'Taurus, Virgo, and Capricorn share the earth element — grounded, practical, and oriented toward building lasting things. Earth signs create stability and excel at the work of steady progress over time.',
+  Air: 'Gemini, Libra, and Aquarius share the air element — intellectual, communicative, and socially oriented. Air signs are the connectors and thinkers of the zodiac, at their best when ideas and conversation are in free circulation.',
+  Water: 'Cancer, Scorpio, and Pisces share the water element — deeply emotional, intuitive, and oriented toward the invisible realm of feeling and connection. Water signs carry extraordinary depth and are among the most perceptive of all signs.',
+};
+
+const FAQ_ITEMS = [
+  { q: 'What is the Western zodiac?', a: 'The Western zodiac is a system of twelve equal 30° divisions of the ecliptic, fixed to the vernal equinox. It originated with Babylonian astronomers and was refined by Greek astronomers including Hipparchus and Ptolemy. The twelve signs — Aries through Pisces — correspond to different periods of the calendar year, not to the constellations they share names with [Campion, N., 2009. A History of Western Astrology].' },
+  { q: 'What is the difference between tropical and sidereal zodiac?', a: 'The tropical zodiac (used on BornClock) is fixed to the vernal equinox — the point where the Sun crosses the celestial equator northward each spring. The sidereal zodiac used in Vedic/Jyotish astrology is fixed to the background stars. Due to axial precession, these two systems are currently about 23° apart — meaning your sidereal sign may be different from your tropical sign.' },
+  { q: 'Is astrology scientific?', a: 'The scientific consensus is that astrology lacks predictive validity beyond chance. The Barnum/Forer effect (the tendency to accept generic personality descriptions as accurate) explains much of astrology\'s perceived accuracy [Forer, B.R., 1949. Journal of Abnormal and Social Psychology]. BornClock presents zodiac content for cultural enrichment and tradition — not as predictive science.' },
+  { q: 'What are the four elements in astrology?', a: 'The four classical elements — Fire, Earth, Air, and Water — each contain three zodiac signs. Fire signs (Aries, Leo, Sagittarius) are energetic and action-oriented. Earth signs (Taurus, Virgo, Capricorn) are grounded and practical. Air signs (Gemini, Libra, Aquarius) are intellectual and communicative. Water signs (Cancer, Scorpio, Pisces) are emotional and intuitive.' },
+  { q: 'What are the three modalities?', a: 'Cardinal signs (Aries, Cancer, Libra, Capricorn) initiate each season and are associated with leadership and action. Fixed signs (Taurus, Leo, Scorpio, Aquarius) fall in the middle of each season and are associated with persistence. Mutable signs (Gemini, Virgo, Sagittarius, Pisces) close each season and are associated with adaptability.' },
+  { q: 'What is a cusp sign?', a: 'A "cusp" sign refers to birthdays near the transition between two zodiac signs. In the tropical zodiac, each sign has a precise boundary date. Since the Sun moves about 1° per day, birthdays within 1–2 days of the boundary may be genuinely on the cusp. BornClock uses fixed date boundaries — if you were born close to a boundary and know your birth time, an astrology program using your precise Sun position will give a more specific answer.' },
+  { q: 'Which zodiac signs are most compatible?', a: 'Traditional compatibility analysis considers element harmony (fire and air go well together; earth and water go well together), modality, and ruling planet relationships. However, compatibility in astrology is a complex system that considers entire birth charts, not just Sun signs. Sun sign compatibility is an oversimplification — meaningful only as a starting point.' },
+  { q: 'How many people share my zodiac sign?', a: 'Roughly one-twelfth of the world\'s population shares your Sun sign — approximately 640 million people as of 2024. Within a given country, the distribution can vary based on birth rate seasonality patterns.' },
 ];
 
 export default function Zodiac() {
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'The 12 Zodiac Signs',
+    itemListElement: ZODIAC_DATA.map((z, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: z.name,
+      url: `https://bornclock.com/zodiac/${z.slug}`,
+      description: `${z.name}: ${z.dateRange} — ${z.element} sign, ruled by ${z.rulingPlanet}`,
+    })),
+  };
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ_ITEMS.map(item => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
+    <div className="min-h-screen bg-background">
       <SEO
-        title="Best Zodiac Sign Calculator — All 12 Signs & Traits"
-        description="The best free zodiac sign calculator. Find your accurate zodiac sign by birth date, with personality traits, element, ruling planet and compatibility for all 12 signs."
-        keywords="best zodiac sign calculator, zodiac signs, zodiac sign by birth date, astrology, horoscope signs"
+        title="Zodiac Signs — Dates, Traits, Science & History | BornClock"
+        description="Complete guide to all 12 zodiac signs — dates, personality traits, elements, mythology, and what science says about astrology. Sourced from Campion (2009) and Sachs (1952)."
+        keywords="zodiac signs, all 12 zodiac signs, zodiac dates, zodiac traits, western astrology, zodiac compatibility, zodiac elements"
         canonicalUrl="/zodiac"
       />
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+      </Helmet>
+
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
         <header className="flex justify-between items-center mb-8">
           <Navigation />
           <AuthNav />
         </header>
 
-        {/* Hero Section */}
-        <div className="text-center mb-8 animate-fade-in-up">
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-foreground">
-            Best Zodiac Sign Calculator — All 12 Signs Explained
+        {/* Hero */}
+        <div className="mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            The 12 Zodiac Signs — Dates, Traits, History and Science
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Find your accurate zodiac sign by birth date, with detailed personality traits, ruling planet, element and compatibility for every sign.
+          <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
+            The Western zodiac has been used to interpret human personality and fate for over 2,500 years. This is the complete reference — what each sign means, where it came from, and what the research actually says about the system itself.
           </p>
-          <div className="pt-4"><EEATBadges sources={['Tropical zodiac standard']} /></div>
         </div>
 
-        <Separator className="mb-12" />
+        {/* What Is the Zodiac */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">What Is the Zodiac?</h2>
+          <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <p>
+              The word "zodiac" comes from the Greek zodiakos kyklos — "circle of animals." It refers to the band of sky through which the Sun appears to travel over the course of a year, as seen from Earth. Babylonian astronomers identified this band in the second millennium BCE and divided it into twelve roughly equal segments, each associated with the constellation it contained at that time. The Babylonians used this system for tracking astronomical events and eventually for interpreting terrestrial events — the beginning of astrology as we know it. [Sachs, A., 1952. Babylonian Horoscopes. Journal of Cuneiform Studies.]
+            </p>
+            <p>
+              Greek astronomers inherited the Babylonian system and formalized the twelve-sign structure. Hipparchus (c. 190–120 BCE) discovered axial precession — the slow wobble of Earth's rotational axis that causes the vernal equinox to shift westward through the zodiac over a ~25,776-year cycle. This discovery created the distinction between the <strong className="text-foreground">tropical zodiac</strong> (fixed to the equinox, used in Western astrology) and the <strong className="text-foreground">sidereal zodiac</strong> (fixed to the background stars, used in Vedic/Jyotish astrology). The two systems are now about 23° apart. [Campion, N., 2009. A History of Western Astrology. Continuum.]
+            </p>
+            <p>
+              The zodiac signs we use today — with their specific personality associations — were largely codified by the astronomer-astrologer Claudius Ptolemy in his Tetrabiblos (c. 150 CE), which remained the foundational text of Western astrology for over a thousand years. BornClock uses the tropical zodiac, which is the standard for Western astrology and popular culture worldwide.
+            </p>
+          </div>
+        </section>
 
-        {/* Zodiac Signs Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {zodiacSigns.map((sign, index) => (
-            <Card 
-              key={sign.name} 
-              className="hover-scale transition-all hover:shadow-lg"
-              style={{ animationDelay: `${index * 50}ms` }}
-            >
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-5xl">{sign.emoji}</span>
-                  <div>
-                    <CardTitle className="font-heading text-xl">{sign.name}</CardTitle>
-                    <CardDescription className="text-sm">{sign.dates}</CardDescription>
-                  </div>
-                </div>
-                <div className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium">
-                  {sign.element}
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {sign.description}
-                </p>
-                {sign.strengths && (
-                  <div>
-                    <h4 className="font-heading font-semibold text-sm mb-1 text-green-600 dark:text-green-400">Strengths:</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{sign.strengths}</p>
-                  </div>
-                )}
-                {sign.challenges && (
-                  <div>
-                    <h4 className="font-heading font-semibold text-sm mb-1 text-orange-600 dark:text-orange-400">Growth Areas:</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{sign.challenges}</p>
-                  </div>
-                )}
-                <div>
-                  <h4 className="font-heading font-semibold text-sm mb-2">Key Traits:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {sign.traits.map((trait) => (
-                      <span
-                        key={trait}
-                        className="px-2 py-1 bg-muted rounded-md text-xs text-muted-foreground"
-                      >
-                        {trait}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {/* Science Perspective */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">The Science Perspective</h2>
+          <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <p>
+              The scientific consensus is clear: no peer-reviewed study has demonstrated that zodiac sign reliably predicts personality traits, relationship outcomes, or life events at a level better than chance. The most relevant line of research here involves the <strong className="text-foreground">Barnum/Forer effect</strong> — the well-documented psychological tendency to accept generic, flattering personality descriptions as accurate self-descriptions. In Bertram Forer's original 1949 experiment, subjects gave an average accuracy rating of 4.26 out of 5 to a personality description that was identical for all of them — drawn from a newspaper astrology column [Forer, B.R., 1949. The Fallacy of Personal Validation. Journal of Abnormal and Social Psychology].
+            </p>
+            <p>
+              Carl Jung approached astrology differently — not as a predictive system but as a psychological one, finding that the symbolism of astrological signs resonated with patterns he observed in his patients [Jung, C.G., 1952. Synchronicity: An Acausal Connecting Principle]. This psychological interpretation remains influential in some therapeutic contexts, even as the predictive claims remain scientifically unsupported.
+            </p>
+            <p>
+              There is one scientifically validated phenomenon that touches on astrology: <strong className="text-foreground">relative age effects and seasonal birth effects</strong>. Research suggests that birth month can predict school performance (older children in an academic year consistently outperform younger ones) and correlate modestly with certain health outcomes, likely through mechanisms involving vitamin D exposure, viral exposure in utero, and early childhood social dynamics [Chotai, J. et al., 2003. Birth month variations in the temperament and character inventory of personality in a general population]. These effects have nothing to do with the planets — but they are real.
+            </p>
+          </div>
+        </section>
 
-        {/* Call to Action */}
-        <div className="mt-16 text-center">
-          <Card className="max-w-2xl mx-auto bg-gradient-primary text-primary-foreground">
-            <CardHeader>
-              <CardTitle className="font-heading text-2xl">Want to know your zodiac sign?</CardTitle>
-              <CardDescription className="text-primary-foreground/80">
-                Enter your birth date on our age calculator to discover your zodiac sign and much more!
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link to="/">
-                <Button variant="secondary" size="lg" className="font-heading">
-                  Calculate My Age
-                </Button>
+        {/* Sign Grid */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-6 pb-2 border-b border-border">All 12 Zodiac Signs at a Glance</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {ZODIAC_DATA.map(sign => (
+              <Link key={sign.slug} to={`/zodiac/${sign.slug}`}
+                className={`block rounded-xl border-2 ${ELEMENT_BORDER[sign.element]} bg-card hover:shadow-md transition-all p-5 hover:scale-[1.01]`}>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-4xl">{sign.unicode}</span>
+                  <div>
+                    <p className="font-bold text-foreground text-lg">{sign.name}</p>
+                    <p className="text-xs text-muted-foreground">{sign.dateRange}</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${ELEMENT_BADGE[sign.element]}`}>{sign.element}</span>
+                  <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">{sign.rulingPlanet}</span>
+                  <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">{sign.modality}</span>
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {sign.coreTraits.slice(0, 3).map(t => (
+                    <span key={t} className="text-xs text-muted-foreground">{t}</span>
+                  ))}
+                  {sign.coreTraits.length > 3 && <span className="text-xs text-muted-foreground">…</span>}
+                </div>
               </Link>
-            </CardContent>
-          </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* Four Elements */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-6 pb-2 border-b border-border">The Four Elements</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {(['Fire', 'Earth', 'Air', 'Water'] as const).map(element => (
+              <div key={element} className={`rounded-xl border-2 ${ELEMENT_BORDER[element]} bg-card p-5`}>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xl">{element === 'Fire' ? '🔥' : element === 'Earth' ? '🌍' : element === 'Air' ? '💨' : '💧'}</span>
+                  <h3 className="font-bold text-foreground">{element}</h3>
+                </div>
+                <div className="flex gap-2 mb-3">
+                  {COMPATIBILITY[element].map(sign => {
+                    const z = ZODIAC_DATA.find(d => d.name === sign);
+                    return (
+                      <Link key={sign} to={`/zodiac/${z?.slug || sign.toLowerCase()}`}
+                        className={`px-2 py-1 rounded-lg text-xs font-medium ${ELEMENT_BADGE[element]} hover:opacity-80 transition-opacity`}>
+                        {z?.unicode} {sign}
+                      </Link>
+                    );
+                  })}
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">{ELEMENT_DESCRIPTIONS[element]}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Compatibility Overview */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Compatibility Overview</h2>
+          <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <p>
+              Zodiac compatibility in its simplest form is based on element harmony: fire and air signs tend to be compatible because both are energetic and outward-oriented; earth and water signs tend to be compatible because both are more inward-focused and oriented toward depth. Signs with the same element are often comfortable together but can also amplify each other's weaknesses.
+            </p>
+            <p>
+              Traditional astrology considers twelve signs in six pairs of opposites, placed 180° apart on the zodiac wheel: Aries–Libra, Taurus–Scorpio, Gemini–Sagittarius, Cancer–Capricorn, Leo–Aquarius, Virgo–Pisces. Opposite signs are said to be attracted and fascinated by each other — they represent complementary rather than similar energies. Some of the most enduring compatibility stories in traditional astrology involve these opposite pairs.
+            </p>
+            <p>
+              The most important caveat: sun-sign compatibility is a simplification. A complete astrological compatibility analysis (synastry) compares every element of both birth charts. For entertainment purposes, element compatibility is a reasonable starting point; for genuine relationship insight, the sun sign alone is too limited a picture.
+            </p>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-6 pb-2 border-b border-border">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            {FAQ_ITEMS.map(({ q, a }) => (
+              <div key={q} className="bg-card border border-border rounded-xl p-5">
+                <p className="font-semibold text-foreground text-sm mb-2">{q}</p>
+                <p className="text-muted-foreground text-sm leading-relaxed">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Bottom Links */}
+        <div className="bg-muted/50 rounded-xl p-6 text-center mb-8">
+          <p className="text-muted-foreground text-sm mb-4">Explore more BornClock tools</p>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link to="/" className="inline-block bg-primary text-primary-foreground rounded-lg px-5 py-2 text-sm font-medium hover:opacity-90 transition-opacity">
+              Find My Zodiac Sign
+            </Link>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3 justify-center text-sm">
+            <Link to="/birthstone" className="text-primary hover:underline">Birthstone Finder</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/numerology" className="text-primary hover:underline">Numerology</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/generation" className="text-primary hover:underline">Which Generation Are You?</Link>
+          </div>
         </div>
 
-        <PageFAQ slug="zodiac" title="Zodiac Sign FAQs" />
-        <RelatedTools currentSlug="zodiac" />
-        <AuthorBio />
+        {/* About This Content */}
+        <div className="p-4 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl text-sm text-blue-700 dark:text-blue-300">
+          <strong>About This Content:</strong> Zodiac history draws on Campion, N. (2009), <em>A History of Western Astrology</em>, Continuum; and Sachs, A. (1952), Babylonian Horoscopes, <em>Journal of Cuneiform Studies</em>. Mythology sources: Grimal, P. (1951), <em>The Dictionary of Classical Mythology</em>. Science section sources: Forer (1949), Jung (1952), Chotai et al. (2003). Zodiac signs are a cultural and entertainment system — BornClock does not endorse predictive claims.
+        </div>
       </div>
+
       <Footer />
     </div>
   );

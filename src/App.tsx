@@ -30,6 +30,10 @@ import NumerologyPage from "./pages/NumerologyPage";
 import PlanetaryAgePage from "./pages/PlanetaryAgePage";
 import Methodology from "./pages/Methodology";
 import EditorialPolicy from "./pages/EditorialPolicy";
+import ZodiacSign from "./pages/ZodiacSign";
+import BirthstonePage from "./pages/BirthstonePage";
+import NumerologyNumber from "./pages/NumerologyNumber";
+import GenerationPage from "./pages/Generation";
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthDateProvider } from "./context/BirthDateContext";
@@ -51,13 +55,17 @@ const App = () => (
               <Route path="/age-calculator" element={<AgeCalculatorPage />} />
               <Route path="/todays-birthdays" element={<TodaysBirthdaysPage />} />
               <Route path="/numerology" element={<NumerologyPage />} />
+              <Route path="/numerology/:number" element={<NumerologyNumber />} />
+              <Route path="/generation" element={<GenerationPage />} />
               <Route path="/planetary-age" element={<PlanetaryAgePage />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
               <Route path="/upgrade" element={<Upgrade />} />
               <Route path="/zodiac" element={<Zodiac />} />
+              <Route path="/zodiac/:sign" element={<ZodiacSign />} />
               <Route path="/birthstone" element={<Birthstone />} />
+              <Route path="/birthstone/:month" element={<BirthstonePage />} />
               <Route path="/life-expectancy" element={<LifeExpectancy />} />
               <Route path="/celebrity-birthday" element={<CelebrityBirthday />} />
               <Route path="/blog" element={<Blog />} />

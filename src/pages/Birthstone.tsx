@@ -1,256 +1,222 @@
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Helmet } from 'react-helmet-async';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Gem } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
 import { SEO } from '@/components/SEO';
-import { EEATBadges } from '@/components/EEATBadges';
-import { PageFAQ } from '@/components/PageFAQ';
-import { RelatedTools } from '@/components/RelatedTools';
-import { AuthorBio } from '@/components/AuthorBio';
+import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
 
-const birthstones = [
-  {
-    month: "January",
-    stone: "Garnet",
-    color: "#9C1F2F",
-    meaning: "Protection, Friendship, Trust",
-    description: "Garnet symbolizes protection and strength. This deep red gemstone is believed to bring peace, prosperity, and good health to the wearer. Garnets have been treasured throughout history by ancient civilizations including the Egyptians, Greeks, and Romans.",
-    properties: ["Boosts energy", "Enhances confidence", "Promotes success"],
-    history: "Garnets were worn as protective talismans by warriors and travelers. Ancient cultures believed they could light up the night and protect against nightmares.",
-    healing: "Known to revitalize feelings, enhance libido, and bring serenity or passion as appropriate. Garnet balances the sex drive and alleviates emotional disharmony."
-  },
-  {
-    month: "February",
-    stone: "Amethyst",
-    color: "#9966CC",
-    meaning: "Wisdom, Peace, Courage",
-    description: "Amethyst represents wisdom and spiritual growth. This purple gemstone is known for its calming properties and ability to enhance intuition. Ancient Greeks believed it protected against intoxication, and it has been prized by royalty throughout history.",
-    properties: ["Relieves stress", "Enhances intuition", "Promotes clarity"],
-    history: "Amethyst has been used in royal crowns and religious jewelry for centuries. It was believed to keep the mind clear and help in battle.",
-    healing: "Promotes inner peace and spiritual wisdom. Amethyst helps overcome addictions, blocks negative environmental energies, and enhances higher states of consciousness."
-  },
-  {
-    month: "March",
-    stone: "Aquamarine",
-    color: "#7FFFD4",
-    meaning: "Serenity, Harmony, Youth",
-    description: "Aquamarine embodies the tranquility of the sea. This blue-green gemstone is associated with calming energy and clear communication. Sailors traditionally carried aquamarine for protection and safe passage across the ocean.",
-    properties: ["Promotes calmness", "Encourages honesty", "Enhances courage"],
-    history: "Ancient Romans believed aquamarine protected sailors and guaranteed a safe voyage. It was also thought to rekindle love in married couples.",
-    healing: "Calms the mind, reduces stress, and sharpens intellect. Aquamarine is useful for closure on all levels and helps overcome fear of speaking."
-  },
-  {
-    month: "April",
-    stone: "Diamond",
-    color: "#E8E8E8",
-    meaning: "Purity, Strength, Love",
-    description: "Diamond represents eternal love and invincibility. This precious gemstone symbolizes clarity, strength, and everlasting bonds. Diamonds are the hardest natural substance on Earth, making them a perfect symbol of endurance.",
-    properties: ["Amplifies energy", "Brings clarity", "Symbolizes commitment"],
-    history: "Ancient Hindus believed diamonds were created when bolts of lightning struck rocks. Romans thought they were splinters of fallen stars.",
-    healing: "Amplifies energy and intention. Diamonds bring clarity of mind, inspire creativity, and help manifest abundance and prosperity."
-  },
-  {
-    month: "May",
-    stone: "Emerald",
-    color: "#50C878",
-    meaning: "Rebirth, Love, Fertility",
-    description: "Emerald signifies renewal and growth. This vibrant green gemstone is associated with fertility, rebirth, and unconditional love. Cleopatra famously adored emeralds and claimed ownership of all emerald mines in Egypt.",
-    properties: ["Enhances memory", "Promotes growth", "Attracts abundance"],
-    history: "Ancient Egyptians mined emeralds as early as 1500 BC. They were associated with fertility and rebirth, symbolizing eternal spring.",
-    healing: "Known as the stone of successful love, emerald brings domestic bliss and loyalty. It enhances unity, unconditional love, and promotes friendship."
-  },
-  {
-    month: "June",
-    stone: "Pearl",
-    color: "#F0EAD6",
-    meaning: "Purity, Innocence, Faith",
-    description: "Pearl represents purity and wisdom. This organic gemstone is associated with integrity, loyalty, and emotional balance. Unlike other gemstones, pearls are created by living organisms, making them truly unique.",
-    properties: ["Promotes calmness", "Enhances integrity", "Brings wisdom"],
-    history: "In ancient Rome, pearls were considered the ultimate symbol of wealth and status. Chinese royalty believed pearls guaranteed protection from fire and dragons.",
-    healing: "Calms and centers, promotes faith and loyalty. Pearls help one see oneself clearly and attune to the ebb and flow of life."
-  },
-  {
-    month: "July",
-    stone: "Ruby",
-    color: "#E0115F",
-    meaning: "Passion, Protection, Prosperity",
-    description: "Ruby symbolizes passion and vitality. This rich red gemstone is believed to bring good fortune and protect against negative energy. Rubies have been treasured by royalty and nobility throughout history for their beauty and power.",
-    properties: ["Boosts vitality", "Enhances passion", "Promotes courage"],
-    history: "Ancient Hindus believed rubies contained the spark of life. Burmese warriors implanted rubies under their skin for protection in battle.",
-    healing: "Stimulates the heart chakra, encourages passion for life. Ruby overcomes exhaustion and lethargy, imparting potency and vigor."
-  },
-  {
-    month: "August",
-    stone: "Peridot",
-    color: "#9EDD3A",
-    meaning: "Strength, Power, Growth",
-    description: "Peridot represents strength and renewal. This lime-green gemstone is known for its positive energy and healing properties. Ancient Egyptians called peridot the 'gem of the sun' and believed it protected against nightmares.",
-    properties: ["Relieves stress", "Promotes healing", "Enhances confidence"],
-    history: "Cleopatra's famous emerald collection may have actually been peridot. Ancient Egyptians harvested it from the volcanic island of Zabargad.",
-    healing: "Powerful cleanser, releasing toxins on all levels. Peridot alleviates jealousy and resentment, enhancing confidence and assertion without aggression."
-  },
-  {
-    month: "September",
-    stone: "Sapphire",
-    color: "#0F52BA",
-    meaning: "Wisdom, Loyalty, Nobility",
-    description: "Sapphire symbolizes wisdom and royalty. This deep blue gemstone is associated with truth, loyalty, and spiritual enlightenment. Sapphires have been worn by royalty and clergy for centuries as symbols of wisdom and purity.",
-    properties: ["Enhances focus", "Promotes wisdom", "Brings inner peace"],
-    history: "Medieval clergy wore sapphires to symbolize Heaven. Ancient Persians believed the earth rested on a giant sapphire, which made the sky blue.",
-    healing: "Releases mental tension and unwanted thoughts. Sapphire brings prosperity and attracts gifts of all kinds, opening the mind to beauty and intuition."
-  },
-  {
-    month: "October",
-    stone: "Opal",
-    color: "#FFFFFF",
-    meaning: "Hope, Creativity, Innocence",
-    description: "Opal represents hope and creativity. This iridescent gemstone is known for its ability to enhance imagination and emotional expression. Opal's play of color has fascinated humans for thousands of years, with each stone being completely unique.",
-    properties: ["Stimulates creativity", "Enhances originality", "Promotes spontaneity"],
-    history: "Romans considered opal a symbol of hope and purity. Arabs believed opals fell from heaven in flashes of lightning.",
-    healing: "Amplifies traits and brings characteristics to the surface for transformation. Opal enhances cosmic consciousness and induces psychic and mystical visions."
-  },
-  {
-    month: "November",
-    stone: "Topaz",
-    color: "#FFB347",
-    meaning: "Love, Affection, Joy",
-    description: "Topaz symbolizes love and affection. This golden gemstone is believed to bring joy, generosity, and abundance to the wearer. The ancient Greeks believed topaz gave them strength, and it was used to increase strength and make its wearer invisible.",
-    properties: ["Promotes joy", "Enhances generosity", "Brings abundance"],
-    history: "Ancient Egyptians believed the golden glow of topaz came from the sun god Ra. It was thought to protect against harm and bring wisdom.",
-    healing: "Soothes, heals, stimulates, recharges, and aligns the meridians. Topaz promotes truth and forgiveness, bringing joy and generosity."
-  },
-  {
-    month: "December",
-    stone: "Turquoise",
-    color: "#40E0D0",
-    meaning: "Success, Good Fortune, Protection",
-    description: "Turquoise represents protection and good fortune. This blue-green gemstone is known for its healing properties and positive energy. Native Americans considered turquoise a sacred stone, using it in ceremonies and as a symbol of the unity of earth and sky.",
-    properties: ["Promotes healing", "Enhances communication", "Brings good luck"],
-    history: "Ancient Egyptians adorned themselves with turquoise jewelry. Native American tribes considered it a bridge between heaven and earth.",
-    healing: "Purification stone, dispelling negative energy. Turquoise stabilizes mood swings, promotes self-realization, and aids creative problem-solving."
-  }
+const FAQ_ITEMS = [
+  { q: 'What is a birthstone?', a: 'A birthstone is a gemstone traditionally associated with the month of one\'s birth. The modern birthstone list was standardized by the American National Association of Jewelers in 1912 and updated by the American Gem Trade Association in 2002 and 2016 to add tanzanite (December), spinel (August), and blue zircon (December).' },
+  { q: 'Where does the birthstone tradition come from?', a: 'The tradition is ancient — the Hebrew High Priest\'s breastplate described in Exodus contained twelve gems, one for each tribe of Israel. The connection between these twelve stones and the twelve months of the year (or the twelve signs of the zodiac) developed gradually, with Josephus (1st century CE) and St. Jerome (5th century CE) making early associations. The practice of individuals wearing the stone of their birth month became popular in 18th-century Poland and spread throughout Europe. [Kunz, G.F., 1913. The Curious Lore of Precious Stones].' },
+  { q: 'Who decides the official birthstone list?', a: 'In the United States, the list is maintained by the Jewelers of America (formerly American National Association of Jewelers), in collaboration with the American Gem Trade Association (AGTA). BornClock uses the current American Gem Society / Jewelers of America modern list.' },
+  { q: 'What is the Mohs hardness scale?', a: 'The Mohs scale (1–10) measures a mineral\'s resistance to scratching, devised by Friedrich Mohs in 1812. Diamond (10) is the hardest natural substance; talc (1) is the softest. Most jewelry-quality gemstones rate 7 or above. Gems below 7 require more careful handling. [Source: GIA, gia.edu]' },
+  { q: 'Are birthstone properties (healing, luck) scientifically supported?', a: 'No. Attributed properties — healing, luck, emotional benefits — are traditional and cultural, not scientifically validated. BornClock presents these as cultural tradition. The geology, chemistry, and history of each stone are factually documented.' },
+  { q: 'What months have multiple birthstones?', a: 'Several months have multiple birthstones: June (pearl, alexandrite, moonstone), August (peridot, spinel, sardonyx), October (opal, pink tourmaline), November (topaz, citrine), December (tanzanite, zircon, turquoise). Multiple options often arose from historical availability or affordability concerns.' },
+  { q: 'What is the rarest birthstone?', a: 'Alexandrite (June alternate) is among the rarest — it is prized for its dramatic color change (green in daylight, red under incandescent light) and fine specimens are extremely scarce. Red diamonds (April) are technically rarer, but alexandrite\'s rarity is more relevant to the jewelry market. Tanzanite (December), found only in a 4km zone near Kilimanjaro, is also extraordinarily rare.' },
+  { q: 'Can I wear any birthstone regardless of my birth month?', a: 'Absolutely. While birthstones are traditionally associated with one\'s birth month, there is no rule against wearing any gemstone you are drawn to. The association is cultural and personal — gemstones are worn for their beauty, meaning, and significance to the individual.' },
 ];
 
 export default function Birthstone() {
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Birthstones by Month',
+    itemListElement: BIRTHSTONE_DATA.map((b, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: `${b.month} — ${b.primaryStone}`,
+      url: `https://bornclock.com/birthstone/${b.slug}`,
+      description: `${b.month} birthstone: ${b.primaryStone}. ${b.meaning}.`,
+    })),
+  };
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ_ITEMS.map(item => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
+    <div className="min-h-screen bg-background">
       <SEO
-        title="Best Birthstone Finder by Month — Meaning, Color & History"
-        description="The best birthstone finder by month. See modern and traditional birthstones for every month with meaning, color, healing properties and rich history."
-        keywords="best birthstone finder, birthstone by month, birthstones, modern birthstones, traditional birthstones"
+        title="Birthstone by Month — History, Meaning & Geology | BornClock"
+        description="Complete guide to birthstones for all 12 months — history, geology, mythology, and what makes each stone unique. Sources: GIA, Kunz (1913), American Gem Society."
+        keywords="birthstone by month, birthstones, January birthstone garnet, birthstone meaning, birthstone history, gemstone guide"
         canonicalUrl="/birthstone"
       />
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+      </Helmet>
+
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
         <header className="flex justify-between items-center mb-8">
           <Navigation />
           <AuthNav />
         </header>
 
-        {/* Hero Section */}
-        <div className="text-center mb-8 animate-fade-in-up">
-          <div className="flex justify-center mb-4">
-            <Gem className="w-16 h-16 text-accent" />
-          </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-foreground">
-            Best Birthstone Finder by Month — Meaning & History
+        {/* Hero */}
+        <div className="mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            Birthstone by Month — History, Meaning & Geology
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explore the modern and traditional birthstones for every month, with meaning, color, healing properties and rich symbolism for your birth month's stone.
+          <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
+            Each of the twelve calendar months has a gemstone associated with it — a tradition with roots in ancient religious texts, royal courts, and centuries of human devotion to the mineral world. This is the complete guide: not just the names, but the stories.
           </p>
-          <div className="pt-4"><EEATBadges sources={['Jewelers of America 1912 (updated)']} /></div>
         </div>
 
-        <Separator className="mb-12" />
+        {/* History Section */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">The History of Birthstones</h2>
+          <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <p>
+              The birthstone tradition has ancient roots. The twelve gems set in the Breastplate of Aaron — described in the Book of Exodus — were the original twelve-stone system, though these were associated with the twelve tribes of Israel rather than calendar months. The connection to months and zodiac signs developed gradually through the work of early theologians: Josephus (1st century CE) and St. Jerome (5th century CE) each drew parallels between the breastplate gems, the months, and the zodiac [Kunz, G.F., 1913. The Curious Lore of Precious Stones. J.B. Lippincott].
+            </p>
+            <p>
+              The modern practice of wearing a single gem corresponding to one's birth month became popular in 18th-century Poland and spread throughout Europe over the following century. In 1912, the American National Association of Jewelers (now Jewelers of America) standardized the first modern birthstone list — the most widely used version today. The list was updated in 2002 to add tanzanite as a December birthstone and in 2016 to add spinel as an August stone [American Gem Society, ags.org].
+            </p>
+            <p>
+              Every stone on the list has a story that predates the 1912 standardization by centuries or millennia. Garnet has been worn as a talisman for 5,000 years. Diamond adorned the sword hilts of medieval warriors. Pearl was found in the tombs of Egyptian pharaohs. The standardization organized an already-ancient human habit.
+            </p>
+          </div>
+        </section>
 
-        {/* Birthstones Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {birthstones.map((item, index) => (
-            <Card 
-              key={item.month} 
-              className="hover-scale transition-all hover:shadow-lg overflow-hidden"
-              style={{ animationDelay: `${index * 50}ms` }}
-            >
-              <div 
-                className="h-3 w-full" 
-                style={{ backgroundColor: item.color }}
-              />
-              <CardHeader>
-                <CardTitle className="font-heading text-xl flex items-center gap-2">
-                  <Gem className="w-5 h-5" style={{ color: item.color }} />
-                  {item.month}
-                </CardTitle>
-                <CardDescription className="text-base font-medium text-foreground">
-                  {item.stone}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-heading font-semibold text-sm mb-1 text-accent">Meaning</h4>
-                  <p className="text-sm text-muted-foreground">{item.meaning}</p>
-                </div>
-                
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {item.description}
-                </p>
-
-                {item.history && (
-                  <div>
-                    <h4 className="font-heading font-semibold text-sm mb-1 text-primary">Historical Significance</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{item.history}</p>
+        {/* Birthstone Grid */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-6 pb-2 border-b border-border">All 12 Birthstones by Month</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {BIRTHSTONE_DATA.map(stone => (
+              <Link key={stone.slug} to={`/birthstone/${stone.slug}`}
+                className="block rounded-xl border border-border bg-card hover:shadow-md transition-all hover:scale-[1.01] overflow-hidden">
+                <div className="h-2 w-full" style={{ backgroundColor: stone.hexColor }} />
+                <div className="p-5">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full shrink-0" style={{ backgroundColor: `${stone.hexColor}44`, border: `2px solid ${stone.hexColor}` }} />
+                    <div>
+                      <p className="font-bold text-foreground">{stone.month}</p>
+                      <p className="text-sm text-muted-foreground">{stone.primaryStone}</p>
+                    </div>
                   </div>
-                )}
-
-                {item.healing && (
-                  <div>
-                    <h4 className="font-heading font-semibold text-sm mb-1 text-secondary">Healing Properties</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{item.healing}</p>
-                  </div>
-                )}
-
-                <div>
-                  <h4 className="font-heading font-semibold text-sm mb-2">Properties:</h4>
-                  <div className="space-y-1">
-                    {item.properties.map((prop) => (
-                      <div key={prop} className="flex items-start gap-2">
-                        <span className="text-accent mt-0.5">•</span>
-                        <span className="text-xs text-muted-foreground">{prop}</span>
-                      </div>
-                    ))}
+                  {stone.alternateStones.length > 0 && (
+                    <p className="text-xs text-muted-foreground mb-2">Also: {stone.alternateStones.join(', ')}</p>
+                  )}
+                  <p className="text-xs text-muted-foreground italic mb-2">{stone.meaning}</p>
+                  <div className="flex flex-wrap gap-1">
+                    <span className="text-xs text-muted-foreground">{stone.color}</span>
+                    <span className="text-xs text-muted-foreground">· Mohs {stone.hardness.split(' ')[0]}</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Call to Action */}
-        <div className="mt-16 text-center">
-          <Card className="max-w-2xl mx-auto bg-gradient-accent text-accent-foreground">
-            <CardHeader>
-              <CardTitle className="font-heading text-2xl">Discover your birthstone</CardTitle>
-              <CardDescription className="text-accent-foreground/80">
-                Enter your birth date on our age calculator to find out your birthstone and unlock more personalized insights!
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link to="/">
-                <Button variant="secondary" size="lg" className="font-heading">
-                  Calculate My Age
-                </Button>
               </Link>
-            </CardContent>
-          </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* Science of Gemstones */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">The Science of Gemstones</h2>
+          <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <p>
+              A gemstone is any mineral (or organic material, in the case of pearl, amber, and coral) with sufficient beauty, durability, and rarity to be used in jewelry. The Gemological Institute of America (GIA) — the world's leading authority on gemological standards — evaluates gems using four criteria: cut, clarity, color, and carat weight, known as the "4 Cs."
+            </p>
+            <p>
+              The chemistry behind gem color is fascinating. Rubies and sapphires are the same mineral (corundum, aluminum oxide) — the difference is trace elements. Chromium gives ruby its red; iron and titanium give sapphire its blue. Emerald and aquamarine are both beryl — chromium creates emerald's green, iron creates aquamarine's blue-green. The connection between the same mineral and such different visual experiences illustrates how dramatically trace elements can transform a stone's appearance.
+            </p>
+            <p>
+              Gem hardness (measured by the Mohs scale) affects how a stone should be worn and cared for. Diamond at Mohs 10 is the hardest natural substance on Earth. Topaz (Mohs 8) is hard but cleaves easily. Pearl (Mohs 2.5–4.5) is soft and requires gentle handling. Knowing the hardness of your birthstone tells you a great deal about how to treat it. [Source: GIA Gem Encyclopedia, gia.edu]
+            </p>
+          </div>
+        </section>
+
+        {/* Hardness Table */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Birthstone Hardness Reference</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="text-left py-3 pr-4 font-semibold text-foreground">Month</th>
+                  <th className="text-left py-3 pr-4 font-semibold text-foreground">Stone</th>
+                  <th className="text-left py-3 pr-4 font-semibold text-foreground">Hardness (Mohs)</th>
+                  <th className="text-left py-3 font-semibold text-foreground">Wearability</th>
+                </tr>
+              </thead>
+              <tbody>
+                {BIRTHSTONE_DATA.map((stone, i) => {
+                  const h = parseFloat(stone.hardness.split('–')[0].replace(/[^0-9.]/g, ''));
+                  const wear = h >= 8 ? 'Excellent' : h >= 7 ? 'Good' : h >= 6 ? 'Fair' : 'Delicate';
+                  const wearColor = h >= 8 ? 'text-green-600 dark:text-green-400' : h >= 7 ? 'text-blue-600 dark:text-blue-400' : h >= 6 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400';
+                  return (
+                    <tr key={stone.slug} className={`border-b border-border/50 ${i % 2 === 0 ? 'bg-muted/20' : ''}`}>
+                      <td className="py-2 pr-4">
+                        <Link to={`/birthstone/${stone.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">
+                          {stone.month}
+                        </Link>
+                      </td>
+                      <td className="py-2 pr-4 text-muted-foreground">{stone.primaryStone}</td>
+                      <td className="py-2 pr-4 text-muted-foreground">{stone.hardness.split(' on')[0]}</td>
+                      <td className={`py-2 font-medium ${wearColor}`}>{wear}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* Culture and History */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Birthstones in Culture & History</h2>
+          <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <p>
+              Every major human civilization has assigned meaning to gemstones. Ancient Egyptians buried their royalty with garnet necklaces and emerald amulets. The Romans ranked pearls above all other gems and passed laws restricting who could wear them. Medieval European clergy wore sapphires to represent Heaven. Mughal emperors commissioned emeralds engraved with prayers from the Quran. Hawaiian tradition holds that the green olivine crystals on certain beaches are the tears of Pele, the volcano goddess.
+            </p>
+            <p>
+              These meanings — accumulated across millennia of human attention and attribution — are what makes gemstones more than beautiful rocks. They carry cultural weight that has compounded through time. Whether or not a ruby literally confers courage or a pearl genuinely promotes wisdom, the accumulated human belief in those properties is itself a historical fact worth knowing.
+            </p>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-6 pb-2 border-b border-border">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            {FAQ_ITEMS.map(({ q, a }) => (
+              <div key={q} className="bg-card border border-border rounded-xl p-5">
+                <p className="font-semibold text-foreground text-sm mb-2">{q}</p>
+                <p className="text-muted-foreground text-sm leading-relaxed">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Bottom Links */}
+        <div className="bg-muted/50 rounded-xl p-6 text-center mb-8">
+          <p className="text-muted-foreground text-sm mb-4">Explore more BornClock tools</p>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link to="/" className="inline-block bg-primary text-primary-foreground rounded-lg px-5 py-2 text-sm font-medium hover:opacity-90 transition-opacity">
+              Find My Birthstone
+            </Link>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3 justify-center text-sm">
+            <Link to="/zodiac" className="text-primary hover:underline">Zodiac Signs</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/numerology" className="text-primary hover:underline">Numerology</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/generation" className="text-primary hover:underline">Which Generation Are You?</Link>
+          </div>
         </div>
 
-        <PageFAQ slug="birthstone" title="Birthstone FAQs" />
-        <RelatedTools currentSlug="birthstone" />
-        <AuthorBio />
+        {/* About This Content */}
+        <div className="p-4 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl text-sm text-blue-700 dark:text-blue-300">
+          <strong>About This Content:</strong> Gemological data sourced from GIA (gia.edu) and Mindat.org mineralogy database. Historical and cultural content draws on Kunz, G.F. (1913), <em>The Curious Lore of Precious Stones</em>. Birthstone list: American Gem Society / Jewelers of America (modern list, updated 2016). Attributed properties are traditional and cultural, not medical claims.
+        </div>
       </div>
+
       <Footer />
     </div>
   );
