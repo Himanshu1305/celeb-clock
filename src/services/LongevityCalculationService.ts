@@ -127,7 +127,7 @@ export interface LongevityResult {
 
 // ── STRUCTURE A: Birth life expectancy baselines ──────────────────────────────
 // Source: UN World Population Prospects 2024/2026
-const BIRTH_BASELINES: Record<string, { male: number; female: number }> = {
+export const BIRTH_BASELINES: Record<string, { male: number; female: number }> = {
   // South Asia
   'India':              { male: 71.2, female: 74.4 },
   'Pakistan':           { male: 67.2, female: 69.2 },
@@ -409,6 +409,20 @@ export function getConditionalBase(
   const conditionalBase = Math.round(birthBaseline * multiplier * 10) / 10;
 
   return { base: conditionalBase, source, isConditional: true };
+}
+
+export function getForecastForCountry(
+  country: string,
+  gender: 'male' | 'female' | '',
+  age: number,
+  healthAdj: number,
+  geneticAdj: number,
+  epigenAdj: number,
+  communityAdj: number,
+): number {
+  const { base } = getConditionalBase(country, gender, age);
+  const raw = base + healthAdj + geneticAdj + epigenAdj + communityAdj;
+  return Math.max(age + 1, Math.round(raw * 10) / 10);
 }
 
 function isEntered(m: FamilyMemberData): boolean {

@@ -17,6 +17,9 @@ Run these in Supabase SQL Editor in order:
 5. supabase/migrations/20260614160000_family_members.sql
    NEW — Family longevity dashboard table
 
+6. supabase/migrations/20260614170000_pdf_reports_log.sql
+   NEW (Wave 3) — Birthday PDF generation quota tracking table
+
 To apply: go to supabase.com → your project → SQL Editor → paste content of each file → Run
 
 ---

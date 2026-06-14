@@ -30,6 +30,7 @@ import {
 } from '@/services/LongevityCalculationService';
 import { CulturalHorizonTeaser } from '@/components/CulturalHorizonTeaser';
 import { LongevityHeroCard } from '@/components/LongevityHeroCard';
+import { LongevityCountdown } from '@/components/LongevityCountdown';
 import { LongevityCoachChat } from '@/components/LongevityCoachChat';
 import { LongevityScoreCard } from '@/components/LongevityScoreCard';
 import { PaywallModal } from '@/components/PaywallModal';
@@ -123,6 +124,18 @@ const LifeExpectancy = () => {
     const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate);
     setLongevityResult(result);
     setCurrentSimForecast(result.totalForecast);
+    try {
+      localStorage.setItem('bornclock_result_snapshot', JSON.stringify({
+        healthAdjustment: result.healthAdjustment,
+        geneticAdjustment: result.geneticAdjustment,
+        epigeneticAdjustment: result.epigeneticAdjustment,
+        communityBonus: result.communityBonus,
+        currentAge: result.currentAge,
+        gender: result.quizSnapshot.gender,
+        country: result.quizSnapshot.country,
+        totalForecast: result.totalForecast,
+      }));
+    } catch { /* storage unavailable */ }
     setPhase('result');
     setTimeout(() => {
       resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -277,6 +290,12 @@ const LifeExpectancy = () => {
                   The simulator below shows you what's possible.
                 </p>
               </div>
+
+              <LongevityCountdown
+                forecast={longevityResult.totalForecast}
+                currentAge={longevityResult.currentAge}
+                birthDate={birthDate ?? undefined}
+              />
 
               {/* How we built your number */}
               <Card className="glass-card text-left max-w-2xl mx-auto">
@@ -463,6 +482,36 @@ const LifeExpectancy = () => {
               userName={profile?.full_name}
               isPremium={isPremium}
             />
+          </section>
+        )}
+
+        {/* Explore More Tools */}
+        {longevityResult && (
+          <section className="max-w-4xl mx-auto mb-10 px-4">
+            <h2 className="text-xl font-bold mb-4">Explore More BornClock Tools</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="glass-card hover:border-primary/50 transition-all cursor-pointer" onClick={() => navigate('/country-comparison')}>
+                <CardContent className="p-5 space-y-2">
+                  <div className="text-2xl">🌍</div>
+                  <h3 className="font-bold text-sm">Country Comparison</h3>
+                  <p className="text-xs text-muted-foreground">See how your forecast compares across 57 countries</p>
+                </CardContent>
+              </Card>
+              <Card className="glass-card hover:border-primary/50 transition-all cursor-pointer" onClick={() => navigate('/biological-age')}>
+                <CardContent className="p-5 space-y-2">
+                  <div className="text-2xl">🔬</div>
+                  <h3 className="font-bold text-sm">Biological Age Test</h3>
+                  <p className="text-xs text-muted-foreground">Discover if your body is younger than your years</p>
+                </CardContent>
+              </Card>
+              <Card className="glass-card hover:border-primary/50 transition-all cursor-pointer" onClick={() => navigate('/birthday-report')}>
+                <CardContent className="p-5 space-y-2">
+                  <div className="text-2xl">📄</div>
+                  <h3 className="font-bold text-sm">Birthday PDF Report</h3>
+                  <p className="text-xs text-muted-foreground">Download your personalised 8-page birthday report</p>
+                </CardContent>
+              </Card>
+            </div>
           </section>
         )}
 

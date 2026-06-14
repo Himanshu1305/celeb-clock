@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Crown, ArrowRight, ShieldCheck, Sparkles, Star, Users } from 'lucide-react';
+import { Crown, ArrowRight, ShieldCheck, Sparkles, Star, Users, Activity, Globe, FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -263,6 +263,49 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
+        </section>
+
+        {/* More Ways to Know Yourself */}
+        <section className="max-w-4xl mx-auto mb-16">
+          <h2 className="text-2xl font-bold text-center mb-6 gradient-text-primary">More Ways to Know Yourself</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <Link to="/biological-age">
+              <Card className="glass-card h-full hover:border-primary/50 transition-all cursor-pointer group">
+                <CardContent className="p-6 space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <Activity className="w-5 h-5 text-primary" />
+                  </div>
+                  <h3 className="font-bold text-foreground">Biological Age Test</h3>
+                  <p className="text-sm text-muted-foreground">Take our 10-question quiz to discover if your body is younger or older than your calendar age.</p>
+                  <span className="text-xs text-primary font-medium">Start quiz →</span>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/country-comparison">
+              <Card className="glass-card h-full hover:border-primary/50 transition-all cursor-pointer group">
+                <CardContent className="p-6 space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                    <Globe className="w-5 h-5 text-accent" />
+                  </div>
+                  <h3 className="font-bold text-foreground">Country Longevity Comparison</h3>
+                  <p className="text-sm text-muted-foreground">Compare life expectancy across 57 countries with UN WPP 2024 data.</p>
+                  <span className="text-xs text-accent font-medium">Explore countries →</span>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/birthday-report">
+              <Card className="glass-card h-full hover:border-primary/50 transition-all cursor-pointer group">
+                <CardContent className="p-6 space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
+                    <FileText className="w-5 h-5 text-secondary-foreground" />
+                  </div>
+                  <h3 className="font-bold text-foreground">Birthday PDF Report</h3>
+                  <p className="text-sm text-muted-foreground">Download a free 8-page personalised report with zodiac, numerology, birthstone, and more.</p>
+                  <span className="text-xs text-foreground font-medium">Get your report →</span>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
         </section>
 
         {/* Testimonials */}

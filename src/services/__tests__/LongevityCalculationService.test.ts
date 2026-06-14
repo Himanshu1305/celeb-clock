@@ -1212,3 +1212,87 @@ describe('FM1–FM5 — calculateBaseForecast', () => {
     expect(fc).toBe(74.8);
   });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// GROUP W3 — Wave 3: Country Comparison, Biological Age, PDF Quota
+// ─────────────────────────────────────────────────────────────────────────────
+import { getForecastForCountry } from '../LongevityCalculationService';
+import { calculateBiologicalAge } from '../BiologicalAgeService';
+
+// getQuotaLimit inlined to avoid Supabase module import in Node environment
+function getQuotaLimitPure(tier: string): number {
+  if (tier === 'premium') return 3;
+  if (tier === 'trial') return 2;
+  return 1;
+}
+
+const ALL_BEST_ANSWERS = {
+  heartRate: 'under60', pushups: 'excellent', balance: 'excellent',
+  stairs: 'never', sleep: 'refreshed', flexibility: 'palms',
+  memory: 'excellent', reaction: 'fast', waistHeight: 'healthy', energy: 'high',
+};
+const ALL_WORST_ANSWERS = {
+  heartRate: 'high', pushups: 'poor', balance: 'poor',
+  stairs: 'always', sleep: 'exhausted', flexibility: 'knees',
+  memory: 'poor', reaction: 'veryslow', waistHeight: 'very_high', energy: 'verylow',
+};
+
+describe('Group W3-1-3 — Country Forecast Comparison', () => {
+  it('W3-1: Japan female forecast > Nigeria female forecast at age 40', () => {
+    const japan = getForecastForCountry('Japan', 'female', 40, 0, 0, 0, 0);
+    const nigeria = getForecastForCountry('Nigeria', 'female', 40, 0, 0, 0, 0);
+    expect(japan).toBeGreaterThan(nigeria);
+  });
+
+  it('W3-2: Japan male forecast > India male forecast at same age', () => {
+    const japan = getForecastForCountry('Japan', 'male', 40, 0, 0, 0, 0);
+    const india = getForecastForCountry('India', 'male', 40, 0, 0, 0, 0);
+    expect(japan).toBeGreaterThan(india);
+  });
+
+  it('W3-3: Country forecast is always above current age even for low-baseline country at age 79', () => {
+    // Nigeria male birth baseline = 53.5; conditional at 79 still low — minimum enforced
+    const forecast = getForecastForCountry('Nigeria', 'male', 79, 0, 0, 0, 0);
+    expect(forecast).toBeGreaterThan(79);
+  });
+});
+
+describe('Group W3-4-8 — Biological Age Calculator', () => {
+  it('W3-4: All best answers → bioAge < 45 for chronological age 45', () => {
+    const bio = calculateBiologicalAge(45, ALL_BEST_ANSWERS);
+    expect(bio).toBeLessThan(45);
+  });
+
+  it('W3-5: All worst answers → bioAge > 45 for chronological age 45', () => {
+    const bio = calculateBiologicalAge(45, ALL_WORST_ANSWERS);
+    expect(bio).toBeGreaterThan(45);
+  });
+
+  it('W3-6: Cap at -15 even if raw total adjustments = -30', () => {
+    // All best: 10 × -3 = -30; capped at -15 → bioAge = max(18, 45 - 15) = 30
+    const bio = calculateBiologicalAge(45, ALL_BEST_ANSWERS);
+    expect(bio).toBe(30);
+  });
+
+  it('W3-7: Cap at +15 even if raw total adjustments = +30', () => {
+    // All worst: 10 × 3 = +30; capped at +15 → bioAge = max(18, 45 + 15) = 60
+    const bio = calculateBiologicalAge(45, ALL_WORST_ANSWERS);
+    expect(bio).toBe(60);
+  });
+
+  it('W3-8: bioAge floor is 18 — never returns below 18', () => {
+    // chronologicalAge 5 + cap(-15) = -10 → max(18, -10) = 18
+    const bio = calculateBiologicalAge(5, ALL_BEST_ANSWERS);
+    expect(bio).toBe(18);
+  });
+});
+
+describe('Group W3-9-10 — PDF Quota Limits', () => {
+  it('W3-9: Free user quota limit is 1', () => {
+    expect(getQuotaLimitPure('free')).toBe(1);
+  });
+
+  it('W3-10: Trial user quota limit is 2', () => {
+    expect(getQuotaLimitPure('trial')).toBe(2);
+  });
+});

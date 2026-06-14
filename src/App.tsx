@@ -39,6 +39,9 @@ import BirthdayHub from "./pages/BirthdayHub";
 import Leaderboard from "./pages/Leaderboard";
 import FamilyDashboard from "./pages/FamilyDashboard";
 import GiftReport from "./pages/GiftReport";
+import BiologicalAge from "./pages/BiologicalAge";
+import CountryComparison from "./pages/CountryComparison";
+import BirthdayReport from "./pages/BirthdayReport";
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
@@ -89,6 +92,9 @@ const App = () => (
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/family" element={<FamilyDashboard />} />
               <Route path="/gift" element={<GiftReport />} />
+              <Route path="/biological-age" element={<BiologicalAge />} />
+              <Route path="/country-comparison" element={<CountryComparison />} />
+              <Route path="/birthday-report" element={<BirthdayReport />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
