@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { calculateTrialStatus } from '@/utils/trialUtils';
 
 interface Profile {
   id: string;
@@ -14,6 +15,8 @@ interface Profile {
   premium_status: boolean;
   email_notifications: boolean;
   blog_subscription?: boolean;
+  created_at?: string;
+  promo_premium_until?: string | null;
 }
 
 export const useAuth = () => {
@@ -206,6 +209,24 @@ export const useAuth = () => {
     return { error };
   };
 
+  const accountCreatedAt = profile?.created_at
+    ? new Date(profile.created_at)
+    : null;
+
+  const { isInTrial, trialDaysRemaining } = accountCreatedAt
+    ? calculateTrialStatus(accountCreatedAt)
+    : { isInTrial: false, trialDaysRemaining: 0 };
+
+  const promoPremiumUntil = profile?.promo_premium_until
+    ? new Date(profile.promo_premium_until)
+    : null;
+
+  const isPromoActive = promoPremiumUntil
+    ? promoPremiumUntil > new Date()
+    : false;
+
+  const isPremium = profile?.premium_status || isInTrial || isPromoActive || false;
+
   return {
     user,
     session,
@@ -216,6 +237,9 @@ export const useAuth = () => {
     signOut,
     updateProfile,
     deleteAccount,
-    isPremium: profile?.premium_status || false
+    isPremium,
+    isInTrial,
+    trialDaysRemaining,
+    isPromoActive,
   };
 };

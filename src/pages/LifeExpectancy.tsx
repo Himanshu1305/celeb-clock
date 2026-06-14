@@ -32,6 +32,7 @@ import { CulturalHorizonTeaser } from '@/components/CulturalHorizonTeaser';
 import { LongevityHeroCard } from '@/components/LongevityHeroCard';
 import { LongevityCoachChat } from '@/components/LongevityCoachChat';
 import { LongevityScoreCard } from '@/components/LongevityScoreCard';
+import { PaywallModal } from '@/components/PaywallModal';
 import { supabase } from '@/integrations/supabase/client';
 
 // ── ErrorBoundary ────────────────────────────────────────────────────────────
@@ -70,6 +71,7 @@ const LifeExpectancy = () => {
 
   const [phase, setPhase] = useState<Phase>('quiz');
   const [longevityResult, setLongevityResult] = useState<LongevityResult | null>(null);
+  const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [userCount, setUserCount] = useState('2,400+');
 
   useEffect(() => {
@@ -83,6 +85,18 @@ const LifeExpectancy = () => {
         }
       });
   }, []);
+  useEffect(() => {
+    if (phase === 'result' && !isPremium && longevityResult) {
+      const seen = localStorage.getItem('bornclock_paywall_seen');
+      if (!seen) {
+        const timer = setTimeout(() => {
+          setShowPaywallModal(true);
+        }, 1500);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [phase, isPremium, longevityResult]);
+
   const [optimizedForecast, setOptimizedForecast] = useState<number | null>(null);
   const [currentSimForecast, setCurrentSimForecast] = useState<number | null>(null);
   const [userSelectedHabits, setUserSelectedHabits] = useState<string[]>([]);
@@ -514,6 +528,19 @@ const LifeExpectancy = () => {
         </div>
       </div>
       <Footer />
+
+      {showPaywallModal && longevityResult && (
+        <PaywallModal
+          forecast={longevityResult.totalForecast}
+          remainingYears={Math.max(0,
+            Math.round((longevityResult.totalForecast - longevityResult.currentAge) * 10) / 10
+          )}
+          onClose={() => {
+            setShowPaywallModal(false);
+            localStorage.setItem('bornclock_paywall_seen', 'true');
+          }}
+        />
+      )}
     </div>
   );
 };

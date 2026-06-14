@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/hooks/useAuth';
 
 const navItems = [
   { path: '/age-calculator', label: 'Age Calculator', icon: Clock },
@@ -26,6 +27,7 @@ const navItems = [
 
 export const Navigation = () => {
   const location = useLocation();
+  const { isInTrial, trialDaysRemaining, profile } = useAuth();
   const isActive = (path: string) => location.pathname === path;
   const isHomePage = location.pathname === '/';
 
@@ -33,7 +35,10 @@ export const Navigation = () => {
   const visibleItems = navItems.slice(0, 4);
   const moreItems = navItems.slice(4);
 
+  const showTrialBanner = isInTrial && !profile?.premium_status;
+
   return (
+    <div>
     <nav className="flex items-center gap-1 flex-wrap">
       {!isHomePage && (
         <Link to="/">
@@ -86,5 +91,14 @@ export const Navigation = () => {
         </DropdownMenuContent>
       </DropdownMenu>
     </nav>
+    {showTrialBanner && (
+      <div className="bg-amber-50 border-b border-amber-200 py-1.5 px-4 text-center text-sm text-amber-800 rounded-lg mt-1">
+        🎁 Free trial — {trialDaysRemaining} day{trialDaysRemaining !== 1 ? 's' : ''} remaining ·{' '}
+        <Link to="/upgrade" className="font-medium underline ml-1">
+          Upgrade to keep access →
+        </Link>
+      </div>
+    )}
+    </div>
   );
 };
