@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Crown, ArrowRight } from 'lucide-react';
+import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
 
 // Live Age Ticker Component with animations
 const LiveAgeTicker = () => {
@@ -216,38 +217,52 @@ const PlanetAges = () => {
   );
 };
 
-// Today's Birthday List with slide animation
+// Today's Birthday List — fetches real data from Supabase
 const TodaysList = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const celebs = [
-    { name: 'Oscar Isaac', age: 45 },
-    { name: 'Bow Wow', age: 37 },
-    { name: 'Common', age: 52 },
-    { name: 'Eva Longoria', age: 49 },
-    { name: 'will.i.am', age: 49 },
-  ];
+  const [celebs, setCelebs] = useState<{ name: string; age: number | null }[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex(prev => (prev + 1) % (celebs.length - 2));
-    }, 3000);
-    return () => clearInterval(interval);
+    const today = new Date();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const CY = today.getFullYear();
+    getRankedBirthdayCelebrities(`${mm}-${dd}`, null, 3)
+      .then(results => {
+        setCelebs(results.map(r => ({
+          name: r.name,
+          age: r.isLiving && r.birthDate ? CY - parseInt(r.birthDate.substring(0, 4)) : null,
+        })));
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
-  
-  const visibleCelebs = celebs.slice(currentIndex, currentIndex + 3);
-  
+
   return (
     <div className="mt-4 space-y-2 overflow-hidden">
-      {visibleCelebs.map((celeb, i) => (
-        <div 
-          key={`${celeb.name}-${currentIndex}`}
-          className="flex items-center justify-between text-sm animate-fade-in-up"
-          style={{ animationDelay: `${i * 100}ms` }}
-        >
-          <span className="text-foreground">{celeb.name}</span>
-          <Badge variant="secondary" className="text-xs">{celeb.age} today</Badge>
-        </div>
-      ))}
+      {loading ? (
+        [0, 1, 2].map(i => (
+          <div key={i} className="flex items-center justify-between text-sm">
+            <div className="h-4 w-32 bg-muted animate-pulse rounded" />
+            <div className="h-5 w-16 bg-muted animate-pulse rounded-full" />
+          </div>
+        ))
+      ) : celebs.length === 0 ? (
+        <p className="text-xs text-muted-foreground">No birthdays found for today.</p>
+      ) : (
+        celebs.map((celeb, i) => (
+          <div
+            key={celeb.name}
+            className="flex items-center justify-between text-sm animate-fade-in-up"
+            style={{ animationDelay: `${i * 100}ms` }}
+          >
+            <span className="text-foreground">{celeb.name}</span>
+            {celeb.age !== null && (
+              <Badge variant="secondary" className="text-xs">{celeb.age} today</Badge>
+            )}
+          </div>
+        ))
+      )}
     </div>
   );
 };

@@ -43,13 +43,17 @@ const Index = () => {
   // On This Day: top 3 celebrities born today
   const [todayCelebs, setTodayCelebs] = useState<ReturnType<typeof mapForToday>[]>([]);
   const [todayCelebImages, setTodayCelebImages] = useState<Record<string, string | null>>({});
+  const [todayCelebsLoading, setTodayCelebsLoading] = useState(true);
 
   useEffect(() => {
     const today = new Date();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
-    getRankedBirthdayCelebrities(`${mm}-${dd}`, null, 3)
+    const monthDay = `${mm}-${dd}`;
+    console.log('TODAY DATE:', monthDay);
+    getRankedBirthdayCelebrities(monthDay, null, 3)
       .then(res => {
+        console.log('TODAY BIRTHDAYS SOURCE:', res);
         const mapped = res.map(mapForToday);
         setTodayCelebs(mapped);
         mapped.forEach(c => {
@@ -58,7 +62,10 @@ const Index = () => {
           });
         });
       })
-      .catch(() => {});
+      .catch(() => {
+        console.log('FALLING BACK TO LOCAL DATA');
+      })
+      .finally(() => setTodayCelebsLoading(false));
   }, []);
   
   // Animate the counter
@@ -248,7 +255,7 @@ const Index = () => {
         </section>
 
         {/* On This Day */}
-        {todayCelebs.length > 0 && (() => {
+        {(todayCelebsLoading || todayCelebs.length > 0) && (() => {
           const now = new Date();
           const todayLabel = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
           const mm = now.getMonth() + 1;
@@ -265,37 +272,52 @@ const Index = () => {
                       <p className="text-xs text-muted-foreground">{todayLabel}</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {todayCelebs.map(celeb => {
-                      const wikiUrl = celeb.wikipediaUrl ?? `https://en.wikipedia.org/wiki/${celeb.name.replace(/ /g, '_')}`;
-                      const img = todayCelebImages[celeb.name];
-                      return (
-                        <a
-                          key={celeb.name}
-                          href={wikiUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-3 bg-background/50 hover:bg-background/80 rounded-xl p-3 transition-all hover:scale-[1.02] border border-border/30 group"
-                        >
-                          <Avatar className="w-12 h-12 shrink-0 border border-border/40">
-                            {img ? (
-                              <AvatarImage src={img} alt={celeb.name} className="object-cover" style={{ objectPosition: 'top center' }} />
-                            ) : null}
-                            <AvatarFallback className="text-sm font-bold bg-primary/10 text-foreground">
-                              {celeb.initials}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="min-w-0">
-                            <p className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors truncate">{celeb.name}</p>
-                            <p className="text-xs text-muted-foreground truncate">{celeb.occupation || 'Celebrity'}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {celeb.isLiving && celeb.age ? `Turns ${celeb.age} today` : 'Legacy'}
-                            </p>
+                  {todayCelebsLoading ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {[0, 1, 2].map(i => (
+                        <div key={i} className="flex items-center gap-3 bg-background/50 rounded-xl p-3 border border-border/30">
+                          <div className="w-12 h-12 shrink-0 rounded-full bg-muted animate-pulse" />
+                          <div className="min-w-0 space-y-2 flex-1">
+                            <div className="h-4 w-24 bg-muted animate-pulse rounded" />
+                            <div className="h-3 w-16 bg-muted animate-pulse rounded" />
+                            <div className="h-3 w-20 bg-muted animate-pulse rounded" />
                           </div>
-                        </a>
-                      );
-                    })}
-                  </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {todayCelebs.map(celeb => {
+                        const wikiUrl = celeb.wikipediaUrl ?? `https://en.wikipedia.org/wiki/${celeb.name.replace(/ /g, '_')}`;
+                        const img = todayCelebImages[celeb.name];
+                        return (
+                          <a
+                            key={celeb.name}
+                            href={wikiUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 bg-background/50 hover:bg-background/80 rounded-xl p-3 transition-all hover:scale-[1.02] border border-border/30 group"
+                          >
+                            <Avatar className="w-12 h-12 shrink-0 border border-border/40">
+                              {img ? (
+                                <AvatarImage src={img} alt={celeb.name} className="object-cover" style={{ objectPosition: 'top center' }} />
+                              ) : null}
+                              <AvatarFallback className="text-sm font-bold bg-primary/10 text-foreground">
+                                {celeb.initials}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="min-w-0">
+                              <p className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors truncate">{celeb.name}</p>
+                              <p className="text-xs text-muted-foreground truncate">{celeb.occupation || 'Celebrity'}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {celeb.isLiving && celeb.age ? `Turns ${celeb.age} today` : 'Legacy'}
+                              </p>
+                            </div>
+                          </a>
+                        );
+                      })}
+                    </div>
+                  )}
                   <div className="mt-4 flex items-center justify-between">
                     <Link to="/todays-birthdays" className="text-xs text-primary hover:underline">
                       See all celebrities born today →
