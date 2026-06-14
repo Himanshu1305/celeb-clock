@@ -17,7 +17,7 @@ interface SEOProps {
 }
 
 const SITE_NAME = 'BornClock - Age & Birthday Calculator';
-const SITE_URL = 'https://celeb-clock.preview.emergentagent.com';
+const SITE_URL = 'https://bornclock.com';
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 const TWITTER_HANDLE = '@bornclock';
 

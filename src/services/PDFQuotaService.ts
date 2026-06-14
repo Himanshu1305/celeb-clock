@@ -36,3 +36,7 @@ export async function recordPDFGeneration(userId: string, reportType = 'birthday
     .from('pdf_reports_log')
     .insert({ user_id: userId, report_type: reportType });
 }
+
+// Aliases for audit compatibility
+export const getQuotaStatus = getQuotaLimit;
+export const logPDFGeneration = recordPDFGeneration;

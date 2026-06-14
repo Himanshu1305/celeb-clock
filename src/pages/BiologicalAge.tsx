@@ -8,8 +8,61 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { SEO } from '@/components/SEO';
-import { Activity, ArrowRight, RefreshCw } from 'lucide-react';
+import { Activity, ArrowRight, RefreshCw, Share2, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { BIO_QUESTIONS, calculateBiologicalAge } from '@/services/BiologicalAgeService';
+
+const FAQ_ITEMS = [
+  {
+    q: 'How is biological age calculated?',
+    a: 'Biological age is estimated by comparing your performance on validated physical and cognitive markers — resting heart rate, muscular endurance, balance, flexibility, sleep quality, mental sharpness, reaction time, body composition, and energy levels — against population norms for your chronological age. Each marker has a known adjustment factor derived from longitudinal aging research.',
+  },
+  {
+    q: 'Is this scientifically accurate?',
+    a: 'This quiz uses validated biomarkers from peer-reviewed research to produce a statistical estimate. It is not a clinical test. Results should be treated as directional, not diagnostic. For clinical biological age assessments, consult a healthcare professional.',
+  },
+  {
+    q: 'Can biological age be reversed?',
+    a: 'Yes — biological age is highly responsive to lifestyle changes. Regular exercise, quality sleep, a whole-food diet, and strong social connections are the most evidence-backed interventions. Studies show biological age can decrease by 1–3 years within 8–12 weeks of consistent positive lifestyle changes.',
+  },
+  {
+    q: 'Why is there a floor of 18?',
+    a: 'The adjustment factors are calibrated for adults. The floor of 18 prevents the model from producing a physiologically meaningless biological age below adulthood, since the markers used are designed for adult populations.',
+  },
+  {
+    q: 'What is the most impactful factor?',
+    a: 'Sleep quality and resting heart rate are among the most impactful single markers. Resting heart rate is strongly predictive of all-cause mortality (Filipiak et al., 2012). Sleep below 6 hours is consistently associated with 12–25% higher mortality risk (Walker, 2017). Waist-to-height ratio is the single strongest metabolic marker.',
+  },
+  {
+    q: 'How often should I retake this quiz?',
+    a: 'Every 4–8 weeks gives meaningful data on change. Biological age is not fixed — significant lifestyle interventions (starting exercise, improving sleep, losing visceral fat) typically produce measurable changes within 8–12 weeks.',
+  },
+];
+
+function FAQSection() {
+  const [open, setOpen] = useState<number | null>(null);
+  return (
+    <section className="max-w-2xl mx-auto mb-16">
+      <h2 className="text-xl font-bold mb-5 text-foreground">Frequently Asked Questions</h2>
+      <div className="space-y-2">
+        {FAQ_ITEMS.map((item, i) => (
+          <Card key={i} className="glass-card">
+            <button
+              className="w-full flex items-center justify-between px-5 py-4 text-left"
+              onClick={() => setOpen(open === i ? null : i)}
+              aria-expanded={open === i}
+            >
+              <span className="font-medium text-sm text-foreground">{item.q}</span>
+              {open === i ? <ChevronUp className="w-4 h-4 text-muted-foreground flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />}
+            </button>
+            {open === i && (
+              <div className="px-5 pb-4 text-sm text-muted-foreground leading-relaxed">{item.a}</div>
+            )}
+          </Card>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export { calculateBiologicalAge } from '@/services/BiologicalAgeService';
 
@@ -23,6 +76,7 @@ const BiologicalAge = () => {
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [bioAge, setBioAge] = useState<number | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const handleStart = () => {
     if (!chronoAge || parseInt(chronoAge) < 18 || parseInt(chronoAge) > 120) return;
@@ -47,6 +101,17 @@ const BiologicalAge = () => {
     setAnswers({});
     setBioAge(null);
     setChronoAge('');
+    setCopied(false);
+  };
+
+  const handleShare = async () => {
+    if (bioAge === null) return;
+    const text = `My biological age is ${bioAge} (chronological: ${age}). Find yours at bornclock.com/biological-age`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch { /* clipboard unavailable */ }
   };
 
   const age = parseInt(chronoAge) || 0;
@@ -198,13 +263,21 @@ const BiologicalAge = () => {
                 </CardContent>
               </Card>
 
-              <Button variant="outline" className="w-full gap-2" onClick={reset}>
-                <RefreshCw className="w-4 h-4" />
-                Retake Quiz
-              </Button>
+              <div className="flex gap-3">
+                <Button variant="outline" className="flex-1 gap-2" onClick={reset}>
+                  <RefreshCw className="w-4 h-4" />
+                  Retake Quiz
+                </Button>
+                <Button variant="outline" className="flex-1 gap-2" onClick={handleShare}>
+                  {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+                  {copied ? 'Copied!' : 'Share Result'}
+                </Button>
+              </div>
             </div>
           )}
         </div>
+
+        <FAQSection />
       </div>
       <Footer />
     </div>

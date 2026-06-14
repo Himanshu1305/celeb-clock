@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { SEO } from '@/components/SEO';
-import { Globe, Search, ArrowUpDown } from 'lucide-react';
+import { Globe, Search, ArrowUpDown, ChevronDown, ChevronUp } from 'lucide-react';
 import {
   BIRTH_BASELINES,
   COUNTRY_FLAG_EMOJI,
@@ -14,6 +14,27 @@ import {
 } from '@/services/LongevityCalculationService';
 
 export { getForecastForCountry } from '@/services/LongevityCalculationService';
+
+// ── FAQ item component ────────────────────────────────────────────────────────
+
+function CountryFAQItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Card className="glass-card">
+      <button
+        className="w-full flex items-center justify-between px-5 py-4 text-left"
+        onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
+      >
+        <span className="font-medium text-sm text-foreground">{q}</span>
+        {open ? <ChevronUp className="w-4 h-4 text-muted-foreground flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />}
+      </button>
+      {open && (
+        <div className="px-5 pb-4 text-sm text-muted-foreground leading-relaxed">{a}</div>
+      )}
+    </Card>
+  );
+}
 
 // ── Saved result shape from LifeExpectancy page ───────────────────────────────
 
@@ -30,7 +51,7 @@ interface SavedResult {
 
 // ── Page component ────────────────────────────────────────────────────────────
 
-type SortKey = 'country' | 'forecast';
+type SortKey = 'country' | 'forecast' | 'difference';
 
 const CountryComparison = () => {
   const [savedResult, setSavedResult] = useState<SavedResult | null>(null);
@@ -62,18 +83,26 @@ const CountryComparison = () => {
 
   const rows = countries
     .filter(c => c.toLowerCase().includes(search.toLowerCase()))
-    .map(c => ({
-      country: c,
-      flag: COUNTRY_FLAG_EMOJI[c] ?? '🌐',
-      baseline: BIRTH_BASELINES[c][gender],
-      forecast: getForecastForCountry(
+    .map(c => {
+      const forecast = getForecastForCountry(
         c, gender, age,
         getHealthAdj(), getGeneticAdj(), getEpigenAdj(), getCommunityAdj(),
-      ),
-    }))
+      );
+      const difference = savedResult ? Math.round((forecast - savedResult.totalForecast) * 10) / 10 : 0;
+      return {
+        country: c,
+        flag: COUNTRY_FLAG_EMOJI[c] ?? '🌐',
+        baseline: BIRTH_BASELINES[c][gender],
+        forecast,
+        difference,
+      };
+    })
     .sort((a, b) => {
-      const valA = sortKey === 'forecast' ? a.forecast : a.country;
-      const valB = sortKey === 'forecast' ? b.forecast : b.country;
+      let valA: number | string;
+      let valB: number | string;
+      if (sortKey === 'forecast') { valA = a.forecast; valB = b.forecast; }
+      else if (sortKey === 'difference') { valA = a.difference; valB = b.difference; }
+      else { valA = a.country; valB = b.country; }
       if (valA < valB) return sortAsc ? -1 : 1;
       if (valA > valB) return sortAsc ? 1 : -1;
       return 0;
@@ -278,6 +307,13 @@ const CountryComparison = () => {
                       Forecast <ArrowUpDown className="w-3 h-3" />
                     </button>
                   </th>
+                  {savedResult && (
+                    <th className="text-right px-4 py-3">
+                      <button className="flex items-center gap-1 ml-auto font-semibold text-muted-foreground hover:text-foreground" onClick={() => toggleSort('difference')}>
+                        vs. You <ArrowUpDown className="w-3 h-3" />
+                      </button>
+                    </th>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -298,6 +334,11 @@ const CountryComparison = () => {
                       </td>
                       <td className="px-4 py-3 text-right text-muted-foreground">{row.baseline}</td>
                       <td className="px-4 py-3 text-right font-bold text-primary">{row.forecast}</td>
+                      {savedResult && (
+                        <td className={`px-4 py-3 text-right font-semibold text-sm ${row.difference > 0 ? 'text-green-600' : row.difference < 0 ? 'text-red-500' : 'text-muted-foreground'}`}>
+                          {row.difference > 0 ? '+' : ''}{row.difference !== 0 ? row.difference.toFixed(1) : '—'}
+                        </td>
+                      )}
                     </tr>
                   );
                 })}
@@ -308,6 +349,41 @@ const CountryComparison = () => {
           <p className="text-xs text-muted-foreground mt-3">
             Source: UN World Population Prospects 2024. Conditional (age-adjusted) baseline applied for ages 40+. Forecast includes personal health adjustments where available.
           </p>
+        </div>
+
+        {/* FAQ Section */}
+        <div className="max-w-5xl mx-auto mb-16">
+          <h2 className="text-xl font-bold mb-5 text-foreground">Frequently Asked Questions</h2>
+          <div className="space-y-2">
+            {[
+              {
+                q: 'Where does the life expectancy data come from?',
+                a: 'All baseline figures are from the UN World Population Prospects 2024 edition, the gold standard for global demographic data. Birth baselines represent period life expectancy at birth, disaggregated by sex. Conditional (age-adjusted) baselines are applied for users aged 40 and above.',
+              },
+              {
+                q: 'Why does the forecast differ from the baseline?',
+                a: 'The birth baseline is a population average. Your forecast adds health adjustments derived from your Life Expectancy Calculator results — reflecting your specific smoking status, exercise habits, diet, sleep, and other lifestyle factors. Without a saved quiz result, your forecast matches the birth baseline.',
+              },
+              {
+                q: 'Why might I live longer in Japan than in my home country?',
+                a: "Japan consistently ranks among the world's highest for life expectancy due to a combination of diet (high fish, low saturated fat), strong social cohesion, universal healthcare, and low obesity rates. The famous \"Japanese paradox\" shows that even heavy smokers historically lived longer than global averages due to protective dietary and social factors.",
+              },
+              {
+                q: 'Does this account for emigration effects?',
+                a: 'No — baselines are for residents of each country. The \"healthy migrant effect\" is a well-documented phenomenon: people who emigrate tend to be healthier than average, and first-generation immigrants often have better health outcomes than both the destination population and non-migrants in their origin country. This tool uses country-of-residence baselines only.',
+              },
+              {
+                q: 'How accurate are these forecasts?',
+                a: 'These are statistical estimates, not individual predictions. Life expectancy data captures population averages; individual outcomes depend on genetics, access to healthcare, socioeconomic factors, and lifestyle choices not fully captured here. The tool is educational — it helps illustrate how geography intersects with longevity, not to predict your individual outcome.',
+              },
+              {
+                q: 'What is the "vs. You" column?',
+                a: 'This column shows how each country\'s personalised forecast compares to your home country forecast. A positive number means you would statistically be expected to live longer if you had been born in that country with the same health profile. This requires a saved Life Expectancy quiz result.',
+              },
+            ].map((item, i) => (
+              <CountryFAQItem key={i} q={item.q} a={item.a} />
+            ))}
+          </div>
         </div>
       </div>
       <Footer />

@@ -106,7 +106,7 @@ export const ShareableCard = ({ birthDate }: ShareableCardProps) => {
             }}
           >
             <div>
-              <p className="text-sm font-medium opacity-80">celeb-clock.lovable.app</p>
+              <p className="text-sm font-medium opacity-80">bornclock.com</p>
             </div>
             <div className="text-center space-y-3">
               <p className="text-5xl font-extrabold">{years} Years Old</p>

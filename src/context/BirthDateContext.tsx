@@ -7,7 +7,7 @@ interface BirthDateContextType {
 
 const BirthDateContext = createContext<BirthDateContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'celeb-clock-birthdate';
+const STORAGE_KEY = 'bornclock-birthdate';
 
 export const BirthDateProvider = ({ children }: { children: ReactNode }) => {
   const [birthDate, setBirthDateState] = useState<Date | null>(() => {

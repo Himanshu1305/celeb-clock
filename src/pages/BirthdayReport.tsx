@@ -7,8 +7,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SEO } from '@/components/SEO';
-import { FileText, Download, Lock, Loader2 } from 'lucide-react';
+import { FileText, Download, Lock, Loader2, CheckCircle, Crown } from 'lucide-react';
 import { jsPDF } from 'jspdf';
+import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { getZodiacByDate } from '@/data/zodiacData';
@@ -466,10 +467,12 @@ function generateBirthdayPDF(data: PDFData): void {
 const BirthdayReport = () => {
   const { user, isPremium, isInTrial } = useAuth();
   const { birthDate, setBirthDate } = useBirthDate();
+  const { toast } = useToast();
 
   const [manualDate, setManualDate] = useState('');
   const [name, setName] = useState('');
   const [generating, setGenerating] = useState(false);
+  const [generated, setGenerated] = useState(false);
   const [error, setError] = useState('');
   const [quotaInfo, setQuotaInfo] = useState<{ limit: number; used: number } | null>(null);
 
@@ -491,7 +494,16 @@ const BirthdayReport = () => {
     try {
       if (user && quotaInfo) {
         if (quotaInfo.used >= quotaInfo.limit) {
-          setError(`You've used all ${quotaInfo.limit} PDF report${quotaInfo.limit === 1 ? '' : 's'} for this tier. Upgrade for more.`);
+          setError(`You've used all ${quotaInfo.limit} PDF report${quotaInfo.limit === 1 ? '' : 's'} for this tier.`);
+          toast({
+            title: 'Report limit reached',
+            description: 'Upgrade to Premium for up to 3 reports per month.',
+            action: (
+              <Button size="sm" asChild>
+                <Link to="/upgrade"><Crown className="w-3.5 h-3.5 mr-1" /> Upgrade</Link>
+              </Button>
+            ) as any,
+          });
           return;
         }
       }
@@ -502,7 +514,7 @@ const BirthdayReport = () => {
       const dd = String(day).padStart(2, '0');
 
       const rawCelebs = await getRankedBirthdayCelebrities(`${mm}-${dd}`, null, 6);
-      const celebs = rawCelebs.map(c => ({ name: c.name, profession: c.displayName ?? undefined }));
+      const celebs = rawCelebs.map(c => ({ name: c.name, profession: c.occupation ?? undefined }));
 
       generateBirthdayPDF({ date: effectiveBirthDate, name, celebs });
 
@@ -510,6 +522,7 @@ const BirthdayReport = () => {
         await recordPDFGeneration(user.id, 'birthday');
         setQuotaInfo(prev => prev ? { ...prev, used: prev.used + 1 } : prev);
       }
+      setGenerated(true);
     } catch (e) {
       setError('Failed to generate PDF. Please try again.');
       console.error(e);
@@ -641,6 +654,23 @@ const BirthdayReport = () => {
               <p className="text-center text-xs text-muted-foreground">
                 Free for everyone · PDF downloads to your device instantly
               </p>
+
+              {generated && (
+                <div className="flex items-center gap-3 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-green-700 dark:text-green-400">
+                  <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                  <div className="text-sm">
+                    <strong>Report downloaded!</strong> Check your downloads folder.
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="ml-2 h-auto py-0 text-green-700 dark:text-green-400 hover:text-green-900"
+                      onClick={() => { setGenerated(false); }}
+                    >
+                      Generate another →
+                    </Button>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
