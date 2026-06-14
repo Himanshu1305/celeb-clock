@@ -50,10 +50,8 @@ const Index = () => {
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
     const monthDay = `${mm}-${dd}`;
-    console.log('TODAY DATE:', monthDay);
     getRankedBirthdayCelebrities(monthDay, null, 3)
       .then(res => {
-        console.log('TODAY BIRTHDAYS SOURCE:', res);
         const mapped = res.map(mapForToday);
         setTodayCelebs(mapped);
         mapped.forEach(c => {
@@ -62,9 +60,7 @@ const Index = () => {
           });
         });
       })
-      .catch(() => {
-        console.log('FALLING BACK TO LOCAL DATA');
-      })
+      .catch(() => {})
       .finally(() => setTodayCelebsLoading(false));
   }, []);
   
