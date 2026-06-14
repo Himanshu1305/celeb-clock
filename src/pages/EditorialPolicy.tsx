@@ -8,7 +8,7 @@ const EditorialPolicy = () => (
   <div className="min-h-screen bg-gradient-cosmic">
     <SEO
       title="Editorial Policy — Accuracy, Sources & Corrections"
-      description="Celeb Clock's editorial policy: how we source data, review content for accuracy, disclose limitations, and handle corrections — built on Google E-E-A-T principles."
+      description="BornClock's editorial policy: how we source data, review content for accuracy, disclose limitations, and handle corrections — built on Google E-E-A-T principles."
       keywords="editorial policy, EEAT, fact checking, corrections"
       canonicalUrl="/editorial-policy"
     />
@@ -22,7 +22,7 @@ const EditorialPolicy = () => (
         <CardContent className="p-6 space-y-6 text-muted-foreground leading-relaxed">
           <section>
             <h2 className="text-xl font-semibold text-foreground mb-2">Our standard</h2>
-            <p>Celeb Clock follows Google’s E-E-A-T framework — Experience, Expertise, Authoritativeness, Trustworthiness. Every calculator and article is built on verifiable public data and reviewed by the Celeb Clock Editorial Team before publishing.</p>
+            <p>BornClock follows Google’s E-E-A-T framework — Experience, Expertise, Authoritativeness, Trustworthiness. Every calculator and article is built on verifiable public data and reviewed by the BornClock Editorial Team before publishing.</p>
           </section>
           <section>
             <h2 className="text-xl font-semibold text-foreground mb-2">Sources we trust</h2>

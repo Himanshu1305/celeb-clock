@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Gem, Home, Clock, Gift, BookOpen, Crown, Hash, Globe, Cake, Menu } from 'lucide-react';
+import { Sparkles, Gem, Home, Clock, Gift, BookOpen, Crown, Hash, Globe, Cake, Menu, Trophy, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
@@ -18,6 +18,9 @@ const navItems = [
   { path: '/life-expectancy', label: 'Life Expectancy', icon: Crown, premium: true },
   { path: '/zodiac', label: 'Zodiac', icon: Sparkles },
   { path: '/birthstone', label: 'Birthstone', icon: Gem },
+  { path: '/leaderboard', label: 'Leaderboard', icon: Trophy },
+  { path: '/gift', label: 'Gift', icon: Gift },
+  { path: '/family', label: 'Family', icon: Users },
   { path: '/blog', label: 'Blog', icon: BookOpen },
 ];
 

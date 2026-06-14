@@ -367,7 +367,7 @@ export const DEFAULT_PILLAR2: Pillar2Data = {
   mentorIsLiving: true,
 };
 
-function getConditionalBase(
+export function getConditionalBase(
   country: string,
   gender: 'male' | 'female' | '',
   currentAge: number
@@ -760,4 +760,25 @@ export function recalcWithOverrides(
   }
   simForecast = Math.max(simForecast, simCurrentAge + 0.5);
   return simForecast;
+}
+
+export function calculateLongevityScore(result: LongevityResult): number {
+  let score = 50;
+
+  // Health adjustment contribution (max ±20 points)
+  const healthRange = 30;
+  const healthNormalized = (result.healthAdjustment + 15) / healthRange;
+  score += Math.round(healthNormalized * 20);
+
+  // Genetic contribution (max +15 points)
+  const geneticNormalized = (result.geneticAdjustment + 4) / 10;
+  score += Math.round(Math.min(geneticNormalized * 15, 15));
+
+  // Epigenetic habits (max +10 points, capped at 6yr)
+  score += Math.round((result.epigeneticAdjustment / 6) * 10);
+
+  // Community bonus (max +5 points)
+  score += Math.round((result.communityBonus / 1.5) * 5);
+
+  return Math.max(0, Math.min(100, score));
 }

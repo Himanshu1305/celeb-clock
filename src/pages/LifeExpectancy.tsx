@@ -30,6 +30,8 @@ import {
 } from '@/services/LongevityCalculationService';
 import { CulturalHorizonTeaser } from '@/components/CulturalHorizonTeaser';
 import { LongevityHeroCard } from '@/components/LongevityHeroCard';
+import { LongevityCoachChat } from '@/components/LongevityCoachChat';
+import { LongevityScoreCard } from '@/components/LongevityScoreCard';
 import { supabase } from '@/integrations/supabase/client';
 
 // ── ErrorBoundary ────────────────────────────────────────────────────────────
@@ -63,7 +65,7 @@ type Phase = 'quiz' | 'result' | 'report';
 // ── Page component ────────────────────────────────────────────────────────────
 const LifeExpectancy = () => {
   const { birthDate, setBirthDate } = useBirthDate();
-  const { isPremium, profile } = useAuth();
+  const { isPremium, profile, user } = useAuth();
   const navigate = useNavigate();
 
   const [phase, setPhase] = useState<Phase>('quiz');
@@ -355,6 +357,17 @@ const LifeExpectancy = () => {
           </section>
         )}
 
+        {/* ── Longevity Score Card ── */}
+        {(phase === 'result' || phase === 'report') && longevityResult && (
+          <section className="max-w-3xl mx-auto mb-8">
+            <LongevityScoreCard
+              result={longevityResult}
+              userId={user?.id}
+              isPremium={isPremium}
+            />
+          </section>
+        )}
+
         {/* ── Phase 3: What-If Simulator (auto-appears after result) ── */}
         {(phase === 'result' || phase === 'report') && longevityResult && (
           <section className="max-w-6xl mx-auto mb-10" ref={simulatorRef} data-sim="true">
@@ -425,6 +438,17 @@ const LifeExpectancy = () => {
                 simulatorHabitFrequencies={userHabitFrequencies}
               />
             </ReportErrorBoundary>
+          </section>
+        )}
+
+        {/* AI Longevity Coach */}
+        {longevityResult && (
+          <section className="max-w-3xl mx-auto mb-10 mt-8">
+            <LongevityCoachChat
+              result={longevityResult}
+              userName={profile?.full_name}
+              isPremium={isPremium}
+            />
           </section>
         )}
 

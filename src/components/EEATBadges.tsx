@@ -20,7 +20,7 @@ export const EEATBadges = ({
       </div>
       <div className="flex items-center gap-1.5">
         <BookOpenCheck className="w-4 h-4 text-accent" />
-        <span>Reviewed by Celeb Clock Editorial Team</span>
+        <span>Reviewed by BornClock Editorial Team</span>
       </div>
       <div className="flex items-center gap-1.5">
         <ShieldCheck className="w-4 h-4 text-green-600" />

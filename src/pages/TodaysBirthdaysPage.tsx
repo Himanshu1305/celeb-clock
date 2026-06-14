@@ -21,7 +21,7 @@ const TodaysBirthdaysPage = () => {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
-        title={`Famous Birthdays Today — ${formattedDate} | Celeb Clock`}
+        title={`Famous Birthdays Today — ${formattedDate} | BornClock`}
         description={`Best list of famous people born on ${formattedDate}. See which celebrities, scientists, athletes, and historical figures share today's birthday — sourced live from Wikipedia.`}
         keywords="famous birthdays today, celebrity birthdays today, born today, who was born today"
         canonicalUrl="/todays-birthdays"

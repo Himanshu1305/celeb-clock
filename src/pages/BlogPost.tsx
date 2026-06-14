@@ -347,10 +347,10 @@ const BlogPostPage = () => {
                   ⏰
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg">Team Celeb Clock</h3>
+                  <h3 className="font-bold text-lg">BornClock Team</h3>
                   <p className="text-muted-foreground text-sm mb-2">Content Team</p>
                   <p className="text-sm text-muted-foreground">
-                    The Celeb Clock team is passionate about helping you discover fascinating insights about age, birthdays, and longevity. We research and create content to make your special day even more meaningful.
+                    The BornClock team is passionate about helping you discover fascinating insights about age, birthdays, and longevity. We research and create content to make your special day even more meaningful.
                   </p>
                 </div>
               </div>

@@ -46,7 +46,7 @@ export function LongevityHeroCard({ result, optimizedForecast, userName }: Longe
 
   const handleCopySummary = () => {
     const lines: string[] = [
-      'My Longevity Forecast (via Celeb Clock):',
+      'My Longevity Forecast (via BornClock):',
       `- Current Lifestyle: ${result.totalForecast} years (${currentRemaining} yrs remaining)`,
       `- With Optimized Habits: ${displayedOptimized} years (${optimizedRemaining} yrs remaining)`,
       ...(gain > 0 ? [`- Potential Gain: +${gain} years`] : []),

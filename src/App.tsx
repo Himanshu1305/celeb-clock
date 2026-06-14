@@ -36,6 +36,9 @@ import NumerologyNumber from "./pages/NumerologyNumber";
 import GenerationPage from "./pages/Generation";
 import BirthdayDate from "./pages/BirthdayDate";
 import BirthdayHub from "./pages/BirthdayHub";
+import Leaderboard from "./pages/Leaderboard";
+import FamilyDashboard from "./pages/FamilyDashboard";
+import GiftReport from "./pages/GiftReport";
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
@@ -83,6 +86,9 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/methodology" element={<Methodology />} />
               <Route path="/editorial-policy" element={<EditorialPolicy />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/family" element={<FamilyDashboard />} />
+              <Route path="/gift" element={<GiftReport />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

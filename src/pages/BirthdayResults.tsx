@@ -193,7 +193,7 @@ const BirthdayResults = () => {
   const shareUrl = window.location.origin;
 
   const handleShare = async (platform: string) => {
-    const text = `I just discovered I share my birthday with ${topCelebName}! Find your celebrity birthday twin at ${shareUrl} #BirthdayTwin #CelebClock`;
+    const text = `I just discovered I share my birthday with ${topCelebName}! Find your celebrity birthday twin at ${shareUrl} #BirthdayTwin #BornClock`;
     if (platform === 'twitter') {
       window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
     } else if (platform === 'facebook') {
@@ -549,14 +549,14 @@ const BirthdayResults = () => {
                           </div>
                         </>
                       )}
-                      <div className="text-xs opacity-40 pt-2">celebclock.com</div>
+                      <div className="text-xs opacity-40 pt-2">bornclock.com</div>
                     </div>
                   </div>
                 </div>
               )}
 
               <p className="text-sm text-muted-foreground text-center mb-4">
-                Pre-written: "I just discovered I share my birthday with {topCelebName}! Find your celebrity birthday twin at {shareUrl} #BirthdayTwin #CelebClock"
+                Pre-written: "I just discovered I share my birthday with {topCelebName}! Find your celebrity birthday twin at {shareUrl} #BirthdayTwin #BornClock"
               </p>
 
               <div className="flex flex-wrap justify-center gap-3">

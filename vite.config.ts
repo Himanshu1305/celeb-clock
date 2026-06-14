@@ -16,4 +16,61 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-tooltip',
+            '@radix-ui/react-select',
+            '@radix-ui/react-accordion',
+            '@radix-ui/react-label',
+            '@radix-ui/react-slot',
+          ],
+          'vendor-charts': ['recharts'],
+          'vendor-supabase': ['@supabase/supabase-js'],
+          'vendor-lucide': ['lucide-react'],
+          'chunk-birthday': [
+            './src/pages/BirthdayResults',
+            './src/pages/TodaysBirthdaysPage',
+            './src/pages/CelebrityBirthday',
+            './src/pages/BirthdayDate',
+            './src/services/BirthdaySearchService',
+            './src/data/birthdayData',
+            './src/data/celebrityNationality',
+          ],
+          'chunk-longevity': [
+            './src/services/LongevityCalculationService',
+            './src/services/CelebrityLongevityService',
+            './src/components/LifeExpectancyCalculator',
+            './src/components/WhatIfSimulator',
+            './src/components/EnhancedLifeExpectancyReport',
+            './src/components/CulturalHorizonTeaser',
+            './src/components/HealthGuideSection',
+            './src/components/WorldLongevityRecords',
+            './src/data/longevityIcons',
+          ],
+          'chunk-zodiac': [
+            './src/data/zodiacData',
+            './src/pages/ZodiacSign',
+          ],
+          'chunk-content': [
+            './src/data/birthstoneData',
+            './src/data/numerologyData',
+            './src/data/blogPosts',
+            './src/pages/BirthstonePage',
+            './src/pages/NumerologyNumber',
+            './src/pages/BlogPost',
+          ],
+          'chunk-planets': [
+            './src/pages/PlanetaryAgePage',
+          ],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600,
+  },
 }));

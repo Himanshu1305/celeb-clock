@@ -71,6 +71,9 @@ export const Footer = () => {
               <li><Link to="/planetary-age" className="text-muted-foreground hover:text-accent transition-colors">Planetary Age Calculator</Link></li>
               <li><Link to="/life-expectancy#simulator" className="text-muted-foreground hover:text-accent transition-colors">What-If Simulator</Link></li>
               <li><Link to="/age-calculator" className="text-muted-foreground hover:text-accent transition-colors">Age Calculator</Link></li>
+              <li><Link to="/leaderboard" className="text-muted-foreground hover:text-accent transition-colors">Longevity Leaderboard</Link></li>
+              <li><Link to="/family" className="text-muted-foreground hover:text-accent transition-colors">Family Dashboard</Link></li>
+              <li><Link to="/gift" className="text-muted-foreground hover:text-accent transition-colors">Gift a Report</Link></li>
             </ul>
           </div>
 

@@ -8,7 +8,7 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'What is the best age calculator online?',
       answer:
-        'The best age calculator is one that shows your exact age live — down to the second — and works for any birth year. Celeb Clock calculates your age in years, months, days, hours, minutes, and seconds in real time, runs entirely in your browser, and never stores your date of birth.',
+        'The best age calculator is one that shows your exact age live — down to the second — and works for any birth year. BornClock calculates your age in years, months, days, hours, minutes, and seconds in real time, runs entirely in your browser, and never stores your date of birth.',
     },
     {
       question: 'How accurate is this age calculator?',
@@ -35,7 +35,7 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'What is the best free life expectancy calculator?',
       answer:
-        'The best life expectancy calculator uses peer-reviewed actuarial data and lets you see how lifestyle changes affect your projected lifespan. Celeb Clock combines WHO and CDC mortality tables with 15+ lifestyle factors (smoking, alcohol, BMI, exercise, sleep, stress, cardiac and diabetes history) to produce a personalized estimate.',
+        'The best life expectancy calculator uses peer-reviewed actuarial data and lets you see how lifestyle changes affect your projected lifespan. BornClock combines WHO and CDC mortality tables with 15+ lifestyle factors (smoking, alcohol, BMI, exercise, sleep, stress, cardiac and diabetes history) to produce a personalized estimate.',
     },
     {
       question: 'How is life expectancy calculated?',
@@ -62,7 +62,7 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'What is the best celebrity birthday match tool?',
       answer:
-        'The best celebrity birthday match shows verified famous people who share your exact day and month, with photos, professions, and short bios. Celeb Clock cross-references Wikipedia and public birthday databases so every match is sourced and current.',
+        'The best celebrity birthday match shows verified famous people who share your exact day and month, with photos, professions, and short bios. BornClock cross-references Wikipedia and public birthday databases so every match is sourced and current.',
     },
     {
       question: 'Which celebrities share my birthday?',
@@ -106,7 +106,7 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'What is the best free numerology calculator?',
       answer:
-        'The best free numerology calculator uses the classical Pythagorean reduction method and explains what each number means for your personality and life path. Celeb Clock calculates your Life Path Number from your date of birth instantly and explains the meaning with traits, strengths, and challenges.',
+        'The best free numerology calculator uses the classical Pythagorean reduction method and explains what each number means for your personality and life path. BornClock calculates your Life Path Number from your date of birth instantly and explains the meaning with traits, strengths, and challenges.',
     },
     {
       question: 'How is the Life Path Number calculated?',
@@ -128,7 +128,7 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'What is the best zodiac sign calculator?',
       answer:
-        'The best zodiac calculator returns your accurate Western zodiac sign based on the standard tropical date ranges and explains the personality traits, ruling planet, element, and compatibility. Celeb Clock does this instantly from your date of birth.',
+        'The best zodiac calculator returns your accurate Western zodiac sign based on the standard tropical date ranges and explains the personality traits, ruling planet, element, and compatibility. BornClock does this instantly from your date of birth.',
     },
     {
       question: 'How is my zodiac sign determined?',
@@ -145,7 +145,7 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'What is the best birthstone finder by month?',
       answer:
-        'The best birthstone finder lists both the modern (American Gem Society) and traditional birthstones for your birth month with meaning, history, and color. Celeb Clock returns yours instantly.',
+        'The best birthstone finder lists both the modern (American Gem Society) and traditional birthstones for your birth month with meaning, history, and color. BornClock returns yours instantly.',
     },
     {
       question: 'What is my birthstone by month?',
@@ -162,7 +162,7 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'What is the best planetary age calculator?',
       answer:
-        'The best planetary age calculator uses NASA orbital data to convert your Earth age into the equivalent age on Mercury, Venus, Mars, Jupiter, Saturn, Uranus, and Neptune. Celeb Clock does this with sub-second precision.',
+        'The best planetary age calculator uses NASA orbital data to convert your Earth age into the equivalent age on Mercury, Venus, Mars, Jupiter, Saturn, Uranus, and Neptune. BornClock does this with sub-second precision.',
     },
     {
       question: 'How old would I be on Mars or Jupiter?',
@@ -179,10 +179,10 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'What is the best age and birthday calculator online?',
       answer:
-        'The best age and birthday calculator combines real-time exact age, celebrity birthday matching, zodiac, birthstone, numerology, planetary age, and a life expectancy report in one free tool — which is exactly what Celeb Clock does.',
+        'The best age and birthday calculator combines real-time exact age, celebrity birthday matching, zodiac, birthstone, numerology, planetary age, and a life expectancy report in one free tool — which is exactly what BornClock does.',
     },
     {
-      question: 'Is Celeb Clock free?',
+      question: 'Is BornClock free?',
       answer:
         'Yes. Every calculator is free. An optional one-time Premium unlocks shareable infographics, exportable PDF reports, and the full What-If life-expectancy simulator.',
     },

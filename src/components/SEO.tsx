@@ -16,10 +16,10 @@ interface SEOProps {
   noindex?: boolean;
 }
 
-const SITE_NAME = 'Celeb Clock - Age & Birthday Calculator';
+const SITE_NAME = 'BornClock - Age & Birthday Calculator';
 const SITE_URL = 'https://celeb-clock.preview.emergentagent.com';
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
-const TWITTER_HANDLE = '@celebclock';
+const TWITTER_HANDLE = '@bornclock';
 
 export const SEO = ({ 
   title, 
@@ -65,7 +65,7 @@ export const SEO = ({
     if (ogType === 'article') {
       baseData.author = {
         '@type': 'Person',
-        name: author || 'Celeb Clock Team'
+        name: author || 'BornClock Team'
       };
       if (publishedTime) {
         baseData.datePublished = publishedTime;

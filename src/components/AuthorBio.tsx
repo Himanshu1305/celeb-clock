@@ -12,7 +12,7 @@ export const AuthorBio = () => {
           </div>
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-foreground">Celeb Clock Editorial Team</h3>
+              <h3 className="font-semibold text-foreground">BornClock Editorial Team</h3>
               <BadgeCheck className="w-4 h-4 text-primary" />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
