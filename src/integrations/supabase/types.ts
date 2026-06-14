@@ -341,6 +341,27 @@ export type Database = {
         }
         Relationships: []
       }
+      pdf_reports_log: {
+        Row: {
+          created_at: string
+          id: string
+          report_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          report_type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          report_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           blog_subscription: boolean
