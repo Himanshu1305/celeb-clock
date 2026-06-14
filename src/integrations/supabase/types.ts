@@ -14,51 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      celebrity_sitelinks: {
-        Row: {
-          id: number
-          name: string
-          birth_date: string | null
-          birth_month_day: string | null
-          death_date: string | null
-          sitelinks: number | null
-          nationality: string | null
-          nationality_code: string | null
-          occupation: string | null
-          wikidata_id: string | null
-          wikipedia_url: string | null
-          created_at: string | null
-        }
-        Insert: {
-          id?: number
-          name: string
-          birth_date?: string | null
-          birth_month_day?: string | null
-          death_date?: string | null
-          sitelinks?: number | null
-          nationality?: string | null
-          nationality_code?: string | null
-          occupation?: string | null
-          wikidata_id?: string | null
-          wikipedia_url?: string | null
-          created_at?: string | null
-        }
-        Update: {
-          id?: number
-          name?: string
-          birth_date?: string | null
-          birth_month_day?: string | null
-          death_date?: string | null
-          sitelinks?: number | null
-          nationality?: string | null
-          nationality_code?: string | null
-          occupation?: string | null
-          wikidata_id?: string | null
-          wikipedia_url?: string | null
-          created_at?: string | null
-        }
-        Relationships: []
-      }
       analytics_events: {
         Row: {
           created_at: string | null
@@ -194,6 +149,75 @@ export type Database = {
         }
         Relationships: []
       }
+      celebrity_boosts: {
+        Row: {
+          boosted_at: string | null
+          celebrity_name: string
+          id: number
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          boosted_at?: string | null
+          celebrity_name: string
+          id?: number
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          boosted_at?: string | null
+          celebrity_name?: string
+          id?: number
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      celebrity_sitelinks: {
+        Row: {
+          birth_date: string | null
+          birth_month_day: string | null
+          created_at: string | null
+          death_date: string | null
+          id: number
+          name: string
+          nationality: string | null
+          nationality_code: string | null
+          occupation: string | null
+          sitelinks: number | null
+          wikidata_id: string | null
+          wikipedia_url: string | null
+        }
+        Insert: {
+          birth_date?: string | null
+          birth_month_day?: string | null
+          created_at?: string | null
+          death_date?: string | null
+          id?: number
+          name: string
+          nationality?: string | null
+          nationality_code?: string | null
+          occupation?: string | null
+          sitelinks?: number | null
+          wikidata_id?: string | null
+          wikipedia_url?: string | null
+        }
+        Update: {
+          birth_date?: string | null
+          birth_month_day?: string | null
+          created_at?: string | null
+          death_date?: string | null
+          id?: number
+          name?: string
+          nationality?: string | null
+          nationality_code?: string | null
+          occupation?: string | null
+          sitelinks?: number | null
+          wikidata_id?: string | null
+          wikipedia_url?: string | null
+        }
+        Relationships: []
+      }
       email_templates: {
         Row: {
           created_at: string | null
@@ -212,6 +236,108 @@ export type Database = {
           data?: Json
           template_type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      family_members: {
+        Row: {
+          country: string | null
+          created_at: string | null
+          date_of_birth: string
+          forecast_cache: number | null
+          gender: string | null
+          id: string
+          last_calculated: string | null
+          name: string
+          score_cache: number | null
+          user_id: string
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string | null
+          date_of_birth: string
+          forecast_cache?: number | null
+          gender?: string | null
+          id?: string
+          last_calculated?: string | null
+          name: string
+          score_cache?: number | null
+          user_id: string
+        }
+        Update: {
+          country?: string | null
+          created_at?: string | null
+          date_of_birth?: string
+          forecast_cache?: number | null
+          gender?: string | null
+          id?: string
+          last_calculated?: string | null
+          name?: string
+          score_cache?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      leaderboard_entries: {
+        Row: {
+          age_group: string
+          country: string | null
+          display_name: string
+          forecast: number
+          id: number
+          opted_in_at: string | null
+          score: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          age_group: string
+          country?: string | null
+          display_name?: string
+          forecast: number
+          id?: number
+          opted_in_at?: string | null
+          score?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          age_group?: string
+          country?: string | null
+          display_name?: string
+          forecast?: number
+          id?: number
+          opted_in_at?: string | null
+          score?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      longevity_scores: {
+        Row: {
+          forecast: number | null
+          id: number
+          recorded_at: string | null
+          score: number
+          user_id: string
+          week_start: string
+        }
+        Insert: {
+          forecast?: number | null
+          id?: number
+          recorded_at?: string | null
+          score: number
+          user_id: string
+          week_start?: string
+        }
+        Update: {
+          forecast?: number | null
+          id?: number
+          recorded_at?: string | null
+          score?: number
+          user_id?: string
+          week_start?: string
         }
         Relationships: []
       }
@@ -257,6 +383,60 @@ export type Database = {
           premium_status?: boolean
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      promo_code_redemptions: {
+        Row: {
+          code: string
+          id: number
+          redeemed_at: string | null
+          user_id: string
+        }
+        Insert: {
+          code: string
+          id?: number
+          redeemed_at?: string | null
+          user_id: string
+        }
+        Update: {
+          code?: string
+          id?: number
+          redeemed_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      promo_codes: {
+        Row: {
+          code: string
+          created_at: string | null
+          current_uses: number | null
+          description: string | null
+          expires_at: string | null
+          grants_premium: boolean | null
+          id: number
+          max_uses: number | null
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          current_uses?: number | null
+          description?: string | null
+          expires_at?: string | null
+          grants_premium?: boolean | null
+          id?: number
+          max_uses?: number | null
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          current_uses?: number | null
+          description?: string | null
+          expires_at?: string | null
+          grants_premium?: boolean | null
+          id?: number
+          max_uses?: number | null
         }
         Relationships: []
       }
