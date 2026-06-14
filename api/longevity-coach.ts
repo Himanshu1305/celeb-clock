@@ -35,7 +35,7 @@ Longevity forecast:
 
 Health factor breakdown (current impact on forecast):
 ${userContext.factorBreakdown?.map((f: any) =>
-  `- ${f.factor}: ${f.adjustment > 0 ? '+' : ''}${f.adjustment} years`
+  `- ${f.factor}: ${f.currentImpact > 0 ? '+' : ''}${f.currentImpact} years`
 ).join('\n') || 'Not available'}
 
 Genetic profile:

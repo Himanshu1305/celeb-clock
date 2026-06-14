@@ -69,8 +69,8 @@ export function LongevityScoreCard({ result, userId, isPremium }: LongevityScore
   }, [userId, score, result.totalForecast, isPremium]);
 
   const improvable = result.factorBreakdown
-    .filter(f => f.adjustment < 0)
-    .sort((a, b) => a.adjustment - b.adjustment)
+    .filter(f => f.currentImpact < 0)
+    .sort((a, b) => a.currentImpact - b.currentImpact)
     .slice(0, 3);
 
   const chartData = history.map(h => ({

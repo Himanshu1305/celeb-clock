@@ -1077,3 +1077,138 @@ describe('EDGE — Edge case tests', () => {
     expect(Math.round((withHydration - withoutHydration) * 10) / 10).toBe(0.5);
   });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// S1–S6 — calculateLongevityScore
+// Formula: base=50, healthContrib (max±20), geneticContrib (max+15),
+//          epigeneticContrib (max+10 at 6yr), communityContrib (max+5 at 1.5yr)
+// Clamped [0, 100].
+// ─────────────────────────────────────────────────────────────────────────────
+import { calculateLongevityScore } from '../LongevityCalculationService';
+
+function makeResult(overrides: Partial<{
+  healthAdjustment: number;
+  geneticAdjustment: number;
+  epigeneticAdjustment: number;
+  communityBonus: number;
+  factorBreakdown: any[];
+}> = {}) {
+  const base = calculateLongevity(makeQuiz(), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
+  return {
+    ...base,
+    healthAdjustment: 0,
+    geneticAdjustment: 0,
+    epigeneticAdjustment: 0,
+    communityBonus: 0,
+    factorBreakdown: [],
+    ...overrides,
+  };
+}
+
+describe('S1–S6 — calculateLongevityScore', () => {
+  it('S1: all zeros → base 50 + healthMid(10) + geneticMid(6) = 66', () => {
+    // health=0 → healthNorm=(0+15)/30=0.5 → round(0.5*20)=10
+    // genetic=0 → geneticNorm=(0+4)/10=0.4 → round(min(0.4*15,15))=round(6)=6
+    // epi=0 → 0; community=0 → 0; total=66
+    const score = calculateLongevityScore(makeResult());
+    expect(score).toBe(66);
+  });
+
+  it('S2: max health (+15) → health contrib = 20 (full)', () => {
+    // health=15 → norm=(15+15)/30=1 → round(1*20)=20; genetic=0→6; total=50+20+6=76
+    const score = calculateLongevityScore(makeResult({ healthAdjustment: 15 }));
+    expect(score).toBe(76);
+  });
+
+  it('S3: worst health (-15) → health contrib = 0', () => {
+    // health=-15 → norm=0 → contrib=0; genetic=0→6; total=56
+    const score = calculateLongevityScore(makeResult({ healthAdjustment: -15 }));
+    expect(score).toBe(56);
+  });
+
+  it('S4: max epigenetic (6yr) → epi contrib = 10', () => {
+    // epi=6 → round(6/6*10)=10; health=0→10; genetic=0→6; total=76
+    const score = calculateLongevityScore(makeResult({ epigeneticAdjustment: 6 }));
+    expect(score).toBe(76);
+  });
+
+  it('S5: max community (1.5yr) → community contrib = 5', () => {
+    // community=1.5 → round(1.5/1.5*5)=5; total=50+10+6+5=71
+    const score = calculateLongevityScore(makeResult({ communityBonus: 1.5 }));
+    expect(score).toBe(71);
+  });
+
+  it('S6: extreme values are clamped to [0, 100]', () => {
+    const high = calculateLongevityScore(makeResult({
+      healthAdjustment: 100,
+      geneticAdjustment: 100,
+      epigeneticAdjustment: 100,
+      communityBonus: 100,
+    }));
+    expect(high).toBe(100);
+
+    const low = calculateLongevityScore(makeResult({
+      healthAdjustment: -100,
+      geneticAdjustment: -100,
+    }));
+    expect(low).toBe(0);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FM1–FM5 — calculateBaseForecast (FamilyService pure logic)
+// Inlined here to avoid Supabase module (which uses localStorage) failing in Node.
+// Logic is identical to FamilyService.calculateBaseForecast.
+// Returns getConditionalBase(country, gender, age).base + 1.5, rounded to 1dp.
+// ─────────────────────────────────────────────────────────────────────────────
+import { getConditionalBase } from '../LongevityCalculationService';
+
+function calculateBaseForecastPure(dob: string, gender: string, country: string): number {
+  const birthDate = new Date(dob);
+  const currentAge = Math.floor(
+    (new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000)
+  );
+  const g = gender === 'female' ? 'female' : 'male';
+  const { base } = getConditionalBase(country || 'Unknown', g, currentAge);
+  return Math.round((base + 1.5) * 10) / 10;
+}
+
+function dobForAge(yearsAgo: number): string {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - yearsAgo);
+  return d.toISOString().split('T')[0];
+}
+
+describe('FM1–FM5 — calculateBaseForecast', () => {
+  it('FM1: male India age~30 → 71.2 + 1.5 = 72.7', () => {
+    // age=30 < 40 → no conditional multiplier; base = 71.2
+    const fc = calculateBaseForecastPure(dobForAge(30), 'male', 'India');
+    expect(fc).toBe(72.7);
+  });
+
+  it('FM2: female India age~30 → 74.4 + 1.5 = 75.9', () => {
+    const fc = calculateBaseForecastPure(dobForAge(30), 'female', 'India');
+    expect(fc).toBe(75.9);
+  });
+
+  it('FM3: male United States age~30 → 74.5 + 1.5 = 76.0', () => {
+    const fc = calculateBaseForecastPure(dobForAge(30), 'male', 'United States');
+    expect(fc).toBe(76.0);
+  });
+
+  it('FM4: female Japan age~50 → conditional multiplier applied (HIGH bracket)', () => {
+    // birth baseline Japan female = 87.5 (> 70, HIGH set)
+    // dobForAge(50) → Math.floor gives age=49 with 365.25-day divisor
+    // bracket=40, HIGH[40]=1.040 → conditional = round(87.5*1.040*10)/10 = 91.0
+    // forecast = 91.0 + 1.5 = 92.5 (conditional multiplier is applied — higher than birth baseline 87.5)
+    const fc = calculateBaseForecastPure(dobForAge(50), 'female', 'Japan');
+    expect(fc).toBe(92.5);
+    // Verify the multiplier actually lifted the base above the birth baseline
+    expect(fc).toBeGreaterThan(87.5 + 1.5);
+  });
+
+  it('FM5: unknown country → global default 73.3 + 1.5 = 74.8', () => {
+    const fc = calculateBaseForecastPure(dobForAge(30), 'male', 'Atlantis');
+    expect(fc).toBe(74.8);
+  });
+});
