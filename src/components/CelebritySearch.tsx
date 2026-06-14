@@ -3,13 +3,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Search, ExternalLink, Calendar } from 'lucide-react';
+import { Search, ExternalLink, Calendar, Star, Clapperboard, Music, Palette, Wifi, Beaker, Briefcase, Trophy, Users } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { getCategoryIcon } from '@/data/birthdayData';
 import { calculateAgeInTimezone } from '@/utils/timezoneDetection';
 import { CelebrityProfileDialog } from './CelebrityProfileDialog';
 import type { WikiPerson } from '@/services/WikimediaService';
+
+const CATEGORY_ICONS: Record<string, React.ElementType> = {
+  celebrity: Star,
+  actor: Clapperboard,
+  dancer: Music,
+  artist: Palette,
+  internet_celebrity: Wifi,
+  scientist: Beaker,
+  entrepreneur: Briefcase,
+  sports: Trophy,
+  athlete: Trophy,
+  other: Users,
+};
+const getCategoryIcon = (cat: WikiPerson['category']): React.ElementType => CATEGORY_ICONS[cat] ?? Users;
 
 export const CelebritySearch = () => {
   const [searchQuery, setSearchQuery] = useState('');

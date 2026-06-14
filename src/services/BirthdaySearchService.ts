@@ -1,6 +1,5 @@
 import { WikiPerson, WikiEvent } from '@/services/WikimediaService';
-import { birthdayDatabase, searchCelebrities } from '@/data/birthdayData';
-import { celebrities, findCelebrityByBirthday } from '@/data/celebrities';
+import { findCelebrityByBirthday } from '@/data/celebrities';
 import { supabase } from '@/integrations/supabase/client';
 import { CELEBRITY_NATIONALITY } from '@/data/celebrityNationality';
 
@@ -87,17 +86,18 @@ const getNearbyDates = (date: Date): Date[] => {
 
 // --- search functions ---
 
-export const searchLocalDatabase = (date: Date): { people: WikiPerson[], events: WikiEvent[] } => {
+export const searchLocalDatabase = async (date: Date): Promise<{ people: WikiPerson[], events: WikiEvent[] }> => {
   const dateKey = formatDateKey(date);
   const results: { people: WikiPerson[], events: WikiEvent[] } = { people: [], events: [] };
 
+  const { birthdayDatabase } = await import('@/data/birthdayData');
   const birthdayData = birthdayDatabase[dateKey];
   if (birthdayData) {
     results.people.push(...birthdayData.people);
     results.events.push(...birthdayData.events);
   }
 
-  const matchedCelebrities = findCelebrityByBirthday(date);
+  const matchedCelebrities = await findCelebrityByBirthday(date);
   const convertedCelebrities = matchedCelebrities.map(convertCelebrityToWikiPerson);
   convertedCelebrities.forEach(celeb => {
     if (!results.people.some(p => p.name.toLowerCase() === celeb.name.toLowerCase())) {
@@ -108,12 +108,12 @@ export const searchLocalDatabase = (date: Date): { people: WikiPerson[], events:
   return results;
 };
 
-export const searchNearbyDates = (date: Date): { people: WikiPerson[], events: WikiEvent[], dates: Date[] } => {
+export const searchNearbyDates = async (date: Date): Promise<{ people: WikiPerson[], events: WikiEvent[], dates: Date[] }> => {
   const nearbyDates = getNearbyDates(date);
   const results: { people: WikiPerson[], events: WikiEvent[], dates: Date[] } = { people: [], events: [], dates: [] };
 
   for (const nearbyDate of nearbyDates) {
-    const localResults = searchLocalDatabase(nearbyDate);
+    const localResults = await searchLocalDatabase(nearbyDate);
     if (localResults.people.length > 0 || localResults.events.length > 0) {
       results.people.push(...localResults.people);
       results.events.push(...localResults.events);
@@ -220,7 +220,7 @@ export const searchBirthdayMatches = async (
 
   // Phase 1: Local database (instant)
   onProgress?.('Searching our celebrity database...', 'local');
-  const localResults = searchLocalDatabase(date);
+  const localResults = await searchLocalDatabase(date);
 
   // If we have enough local results, return them
   if (localResults.people.length >= MIN_CELEBRITIES) {
@@ -273,7 +273,7 @@ export const searchBirthdayMatches = async (
 
   // Phase 3: Nearby dates fallback
   onProgress?.('Searching nearby dates...', 'nearby');
-  const nearbyResults = searchNearbyDates(date);
+  const nearbyResults = await searchNearbyDates(date);
 
   if (nearbyResults.people.length > 0) {
     onProgress?.('Found matches from nearby dates!', 'done');

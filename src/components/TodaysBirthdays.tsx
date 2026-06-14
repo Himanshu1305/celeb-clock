@@ -81,7 +81,7 @@ export const TodaysBirthdays = () => {
         let celebs = supabaseResults.map(mapSupabase);
 
         if (celebs.length < 20) {
-          const localResults = searchLocalDatabase(today);
+          const localResults = await searchLocalDatabase(today);
           const seenNames = new Set(celebs.map(c => c.name.toLowerCase()));
           const localExtras = localResults.people
             .filter(p => !seenNames.has(p.name.toLowerCase()))

@@ -1,5 +1,3 @@
-import { getBirthdayData } from './birthdayData';
-
 export interface Celebrity {
   name: string;
   birthDate: string; // YYYY-MM-DD format
@@ -32,11 +30,12 @@ export const celebrities: Celebrity[] = [
   { name: "Rihanna", birthDate: "1988-02-20", profession: "Singer & Entrepreneur", funFact: "Billionaire businesswoman with Fenty Beauty empire" },
 ];
 
-export const findCelebrityByBirthday = (birthDate: Date): Celebrity[] => {
+export const findCelebrityByBirthday = async (birthDate: Date): Promise<Celebrity[]> => {
   const month = birthDate.getMonth() + 1;
   const day = birthDate.getDate();
-  
-  // First check the main birthday database for richer data
+
+  // Dynamically import to avoid pulling birthdayData into the main bundle
+  const { getBirthdayData } = await import('./birthdayData');
   const bdData = getBirthdayData(month, day);
   if (bdData.people.length > 0) {
     return bdData.people.map(p => ({
@@ -46,7 +45,7 @@ export const findCelebrityByBirthday = (birthDate: Date): Celebrity[] => {
       funFact: p.description,
     }));
   }
-  
+
   // Fallback to legacy list
   return celebrities.filter(celebrity => {
     const celeBirthDate = new Date(celebrity.birthDate);

@@ -1,7 +1,5 @@
 // src/services/CelebrityLongevityService.ts
 
-import { birthdayDatabase } from '@/data/birthdayData';
-
 export interface CelebrityLongevityProfile {
   name: string;
   longevityAge: number;
@@ -73,11 +71,12 @@ function makeAchievement(name: string, age: number, isLiving: boolean, professio
   return `${name} spent ${age} extraordinary years as a ${prof}. Their legacy continues to inspire generations.`;
 }
 
-export function findInitialMatches(
+export async function findInitialMatches(
   forecastAge: number,
   windowYears = 4,
   userCountry = '',
-): CelebrityLongevityProfile[] {
+): Promise<CelebrityLongevityProfile[]> {
+  const { birthdayDatabase } = await import('@/data/birthdayData');
   const currentYear = new Date().getFullYear();
   const seen = new Set<string>();
   const results: CelebrityLongevityProfile[] = [];

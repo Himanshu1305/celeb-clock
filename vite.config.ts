@@ -33,13 +33,14 @@ export default defineConfig(({ mode }) => ({
           'vendor-charts': ['recharts'],
           'vendor-supabase': ['@supabase/supabase-js'],
           'vendor-lucide': ['lucide-react'],
+          // birthdayData removed from here — it's now dynamically imported
+          // so Vite lazy-loads it as its own separate chunk
           'chunk-birthday': [
             './src/pages/BirthdayResults',
             './src/pages/TodaysBirthdaysPage',
             './src/pages/CelebrityBirthday',
             './src/pages/BirthdayDate',
             './src/services/BirthdaySearchService',
-            './src/data/birthdayData',
             './src/data/celebrityNationality',
           ],
           'chunk-longevity': [
@@ -50,8 +51,10 @@ export default defineConfig(({ mode }) => ({
             './src/components/EnhancedLifeExpectancyReport',
             './src/components/CulturalHorizonTeaser',
             './src/components/HealthGuideSection',
-            './src/components/WorldLongevityRecords',
             './src/data/longevityIcons',
+          ],
+          'chunk-longevity-extra': [
+            './src/components/WorldLongevityRecords',
           ],
           'chunk-zodiac': [
             './src/data/zodiacData',

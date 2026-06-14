@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { findCelebrityByBirthday, Celebrity } from '@/data/celebrities';
+import { Celebrity } from '@/data/celebrities';
 import { StarIcon, CakeIcon } from 'lucide-react';
 
 interface CelebrityMatchProps {
@@ -51,16 +51,19 @@ const CelebrityCard = ({ celebrity }: { celebrity: Celebrity }) => (
 );
 
 export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatchProps) => {
-  if (!birthDate) return null;
+  const [matchingCelebrities, setMatchingCelebrities] = useState<Celebrity[]>([]);
 
-  const matchingCelebrities = findCelebrityByBirthday(birthDate);
-  
-  // Notify parent component of celebrity matches
-  React.useEffect(() => {
-    if (onCelebritiesChange) {
-      onCelebritiesChange(matchingCelebrities);
-    }
-  }, [matchingCelebrities, onCelebritiesChange]);
+  useEffect(() => {
+    if (!birthDate) return;
+    import('@/data/celebrities').then(({ findCelebrityByBirthday }) =>
+      findCelebrityByBirthday(birthDate).then(matches => {
+        setMatchingCelebrities(matches);
+        onCelebritiesChange?.(matches);
+      })
+    );
+  }, [birthDate, onCelebritiesChange]);
+
+  if (!birthDate) return null;
 
   return (
     <div className="space-y-6">
