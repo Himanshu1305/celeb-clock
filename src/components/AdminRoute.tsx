@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
 const ADMIN_EMAILS = [
-  'admin@bornclock.com', // placeholder — owner must update
+  'hello@bornclock.com', // placeholder — owner must update
 ];
 
 export function AdminRoute({ children }: { children: React.ReactNode }) {
