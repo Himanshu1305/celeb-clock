@@ -20,6 +20,8 @@ Run these in Supabase SQL Editor in order:
 6. supabase/migrations/20260614170000_pdf_reports_log.sql
    NEW (Wave 3) — Birthday PDF generation quota tracking table
 
+7. 20260615180000_subscription_fields.sql
+
 To apply: go to supabase.com → your project → SQL Editor → paste content of each file → Run
 
 ---
