@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 interface PaywallModalProps {
   forecast: number;
@@ -13,6 +14,9 @@ export function PaywallModal({
   onClose,
 }: PaywallModalProps) {
   const navigate = useNavigate();
+  const { isInTrial } = useAuth();
+  const trialUsed = localStorage.getItem('bornclock_trial_used');
+  const hasExpiredTrial = !isInTrial && !!trialUsed;
 
   const handleUpgrade = () => {
     onClose();
@@ -72,11 +76,13 @@ export function PaywallModal({
           onClick={handleUpgrade}
           className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl hover:bg-indigo-700 transition-colors mb-3"
         >
-          Start My Free 7-Day Trial →
+          {hasExpiredTrial ? 'Upgrade to Premium →' : 'Keep My Premium Access →'}
         </button>
 
         <p className="text-xs text-gray-400 text-center mb-3">
-          Then ₹499/month · Cancel anytime · No card required for trial
+          {hasExpiredTrial
+            ? '₹299/month · Cancel anytime'
+            : 'Trial ends soon · then ₹299/month'}
         </p>
 
         <button

@@ -31,7 +31,7 @@ const navItems = [
 
 export const Navigation = () => {
   const location = useLocation();
-  const { user, isInTrial, trialDaysRemaining, profile } = useAuth();
+  const { user, isPremium, isInTrial, trialDaysRemaining, profile } = useAuth();
   const isActive = (path: string) => location.pathname === path;
   const isHomePage = location.pathname === '/';
 
@@ -99,6 +99,24 @@ export const Navigation = () => {
       {isAdminEmail(user?.email) && (
         <Link to="/admin" className="text-xs text-gray-400 hover:text-gray-600 px-2 py-1 rounded transition-colors">
           Admin
+        </Link>
+      )}
+
+      {!isPremium && !isInTrial && (
+        <Link
+          to="/upgrade"
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+        >
+          Upgrade
+        </Link>
+      )}
+
+      {isInTrial && (
+        <Link
+          to="/upgrade"
+          className="bg-amber-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-600 transition-colors"
+        >
+          Trial: {trialDaysRemaining}d left
         </Link>
       )}
     </nav>
