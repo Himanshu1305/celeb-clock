@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
@@ -11,10 +11,31 @@ import { SEO } from '@/components/SEO';
 import { Activity, ArrowRight, RefreshCw, Share2, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { BIO_QUESTIONS, calculateBiologicalAge } from '@/services/BiologicalAgeService';
 
-const FAQ_ITEMS = [
+function MedTerm({ term, plain }: { term: string; plain: string }) {
+  return (
+    <span>
+      <span className="group relative inline-block">
+        <span className="underline decoration-dotted decoration-primary/60 cursor-help font-semibold">
+          {term}
+        </span>
+        <span
+          className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+            hidden lg:group-hover:block bg-slate-800 text-white text-xs leading-relaxed
+            rounded-lg px-3 py-2 w-52 text-center z-20 shadow-xl"
+        >
+          {plain}
+        </span>
+      </span>
+      {' '}
+      <span className="text-muted-foreground">({plain})</span>
+    </span>
+  );
+}
+
+const FAQ_ITEMS: { q: string; a: ReactNode }[] = [
   {
     q: 'How is biological age calculated?',
-    a: 'Biological age is estimated by comparing your performance on validated physical and cognitive markers — resting heart rate, muscular endurance, balance, flexibility, sleep quality, mental sharpness, reaction time, body composition, and energy levels — against population norms for your chronological age. Each marker has a known adjustment factor derived from longitudinal aging research.',
+    a: <>Biological age is estimated by comparing your performance on validated physical and cognitive markers — <MedTerm term="resting heart rate" plain="cardiovascular fitness proxy" />, <MedTerm term="muscular endurance" plain="how long your muscles work without fatiguing" />, <MedTerm term="proprioception" plain="your body's self-positioning sense" />, <MedTerm term="arterial stiffness proxy" plain="flexibility as a measure of vascular health" />, <MedTerm term="glymphatic function" plain="your brain's overnight waste-clearance" />, <MedTerm term="psychomotor reaction time" plain="how fast your brain triggers physical response" />, body composition, and energy levels — against population norms for your chronological age. Each marker has a known adjustment factor derived from longitudinal aging research.</>,
   },
   {
     q: 'Is this scientifically accurate?',
@@ -22,7 +43,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Can biological age be reversed?',
-    a: 'Yes — biological age is highly responsive to lifestyle changes. Regular exercise, quality sleep, a whole-food diet, and strong social connections are the most evidence-backed interventions. Studies show biological age can decrease by 1–3 years within 8–12 weeks of consistent positive lifestyle changes.',
+    a: <>Yes — biological age is highly responsive to lifestyle changes. Regular exercise, quality sleep, a whole-food diet, and strong social connections are the most evidence-backed interventions. Studies show <MedTerm term="epigenetic age" plain="how old your DNA methylation patterns suggest your cells are" /> can decrease by 1–3 years within 8–12 weeks of consistent positive lifestyle changes.</>,
   },
   {
     q: 'Why is there a floor of 18?',
@@ -30,11 +51,11 @@ const FAQ_ITEMS = [
   },
   {
     q: 'What is the most impactful factor?',
-    a: 'Sleep quality and resting heart rate are among the most impactful single markers. Resting heart rate is strongly predictive of all-cause mortality (Filipiak et al., 2012). Sleep below 6 hours is consistently associated with 12–25% higher mortality risk (Walker, 2017). Waist-to-height ratio is the single strongest metabolic marker.',
+    a: <>Sleep quality and resting heart rate are among the most impactful single markers. Resting heart rate is strongly predictive of all-cause mortality (Filipiak et al., 2012). Sleep below 6 hours is consistently associated with 12–25% higher mortality risk (Walker, 2017) — partly because poor sleep impairs your <MedTerm term="glymphatic system" plain="your brain's overnight waste-clearance system" />. <MedTerm term="Waist-to-height ratio" plain="central adiposity and visceral fat proxy" /> is the single strongest metabolic marker.</>,
   },
   {
     q: 'How often should I retake this quiz?',
-    a: 'Every 4–8 weeks gives meaningful data on change. Biological age is not fixed — significant lifestyle interventions (starting exercise, improving sleep, losing visceral fat) typically produce measurable changes within 8–12 weeks.',
+    a: <>Every 4–8 weeks gives meaningful data on change. Biological age is not fixed — significant lifestyle interventions (starting exercise, improving sleep, losing <MedTerm term="visceral fat" plain="deep organ fat, not the fat under your skin" />) typically produce measurable changes within 8–12 weeks, reducing <MedTerm term="allostatic load" plain="cumulative stress burden on the body" /> and lowering biological age markers.</>,
   },
 ];
 
@@ -166,7 +187,16 @@ const BiologicalAge = () => {
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3 text-sm text-muted-foreground">
-                  {['Resting heart rate', 'Push-up capacity', 'Balance & reflexes', 'Sleep quality', 'Flexibility', 'Mental sharpness', 'Energy levels', 'Waist-to-height ratio'].map(t => (
+                  {[
+                    'Resting heart rate (cardiovascular fitness proxy)',
+                    'Push-up capacity (muscular endurance)',
+                    'Balance (proprioceptive control)',
+                    'Sleep quality (glymphatic function)',
+                    'Flexibility (arterial stiffness proxy)',
+                    'Mental sharpness (cognitive aging marker)',
+                    'Energy levels (allostatic load indicator)',
+                    'Waist-to-height ratio (central adiposity proxy)',
+                  ].map(t => (
                     <div key={t} className="flex items-center gap-2">
                       <span className="text-primary">✓</span>
                       <span>{t}</span>
@@ -199,17 +229,32 @@ const BiologicalAge = () => {
                 <h2 className="text-xl font-bold text-foreground leading-snug">
                   {BIO_QUESTIONS[current].question}
                 </h2>
+                {BIO_QUESTIONS[current].instruction && (
+                  <p className="text-sm text-muted-foreground bg-muted/30 rounded-lg px-4 py-3 italic leading-relaxed">
+                    {BIO_QUESTIONS[current].instruction}
+                  </p>
+                )}
                 <div className="space-y-3">
                   {BIO_QUESTIONS[current].options.map(opt => (
                     <button
                       key={opt.id}
                       onClick={() => handleAnswer(BIO_QUESTIONS[current].id, opt.id)}
-                      className="w-full text-left px-5 py-4 rounded-xl border border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium"
+                      className="w-full text-left px-5 py-4 rounded-xl border border-border hover:border-primary hover:bg-primary/5 transition-all"
                     >
-                      {opt.label}
+                      <span className="block text-sm font-medium">{opt.label}</span>
+                      {opt.sublabel && (
+                        <span className="block text-xs text-muted-foreground font-normal mt-1 leading-relaxed">
+                          {opt.sublabel}
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>
+                {BIO_QUESTIONS[current].source && (
+                  <p className="text-xs text-muted-foreground/60 border-t pt-3 italic">
+                    Source: {BIO_QUESTIONS[current].source}
+                  </p>
+                )}
               </CardContent>
             </Card>
           )}
@@ -239,22 +284,22 @@ const BiologicalAge = () => {
                   <h3 className="font-bold text-base">What this means</h3>
                   {diff <= -5 && (
                     <p className="text-sm text-muted-foreground">
-                      <strong className="text-green-600">Exceptional biological fitness.</strong> Your body functions significantly younger than your calendar age — reflecting excellent health habits and recovery capacity.
+                      <strong className="text-green-600">Your body is genuinely firing younger on every marker.</strong> Your cardiovascular fitness, muscle endurance, and energy efficiency all point well below your calendar age. In scientific terms: your markers reflect low allostatic load (cumulative stress burden on the body), strong VO₂ max proxy (aerobic efficiency), and epigenetic age (how old your DNA methylation patterns suggest your cells are) well below your chronological age.
                     </p>
                   )}
                   {diff > -5 && diff <= 0 && (
                     <p className="text-sm text-muted-foreground">
-                      <strong className="text-green-600">Biologically younger than your age.</strong> Your fitness markers show your body is aging well. Small improvements could push this further.
+                      <strong className="text-green-600">Your body is aging well.</strong> Your fitness markers show you're ahead of your calendar age. To push this further: keep allostatic load (cumulative stress burden on the body) low through consistent sleep, and maintain VO₂ max proxy (aerobic efficiency) with regular movement — the two highest-leverage levers.
                     </p>
                   )}
                   {diff > 0 && diff <= 5 && (
                     <p className="text-sm text-muted-foreground">
-                      <strong className="text-amber-600">Slightly above your calendar age.</strong> This is common and correctable. Focus on improving sleep, exercise, and nutrition.
+                      <strong className="text-amber-600">You have clear room to improve — and biology is on your side.</strong> Focus on sleep first (your glymphatic system (your brain's overnight waste-clearance) needs consistent deep sleep), then movement to counter sarcopenia (age-related muscle loss), then reducing central adiposity (belly fat around your organs). Small, consistent changes compound quickly.
                     </p>
                   )}
                   {diff > 5 && (
                     <p className="text-sm text-muted-foreground">
-                      <strong className="text-red-500">Noticeably above your calendar age.</strong> Biological age is highly responsive to lifestyle changes. Prioritise sleep, regular movement, and nutrition.
+                      <strong className="text-red-500">The good news: biological age is highly plastic.</strong> Reducing visceral fat (deep organ fat), improving sleep quality, and regular exercise have been shown to lower biological age by 1–3 years within 8–12 weeks — measurably reducing allostatic load (cumulative stress burden on the body) and improving epigenetic age (how old your DNA methylation patterns suggest your cells are).
                     </p>
                   )}
                   <p className="text-xs text-muted-foreground border-t pt-3">
