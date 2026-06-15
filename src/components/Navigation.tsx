@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/useAuth';
+import { isAdminEmail } from '@/components/AdminRoute';
 
 const navItems = [
   { path: '/age-calculator', label: 'Age Calculator', icon: Clock },
@@ -30,7 +31,7 @@ const navItems = [
 
 export const Navigation = () => {
   const location = useLocation();
-  const { isInTrial, trialDaysRemaining, profile } = useAuth();
+  const { user, isInTrial, trialDaysRemaining, profile } = useAuth();
   const isActive = (path: string) => location.pathname === path;
   const isHomePage = location.pathname === '/';
 
@@ -94,6 +95,12 @@ export const Navigation = () => {
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {isAdminEmail(user?.email) && (
+        <Link to="/admin" className="text-xs text-gray-400 hover:text-gray-600 px-2 py-1 rounded transition-colors">
+          Admin
+        </Link>
+      )}
     </nav>
     <span className="text-xs text-gray-400 hidden lg:block italic">
       Know your time. Live it well.

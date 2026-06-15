@@ -1,66 +1,32 @@
-import { useState, useEffect, ReactNode } from 'react';
+// OWNER ACTION REQUIRED:
+// Replace 'admin@bornclock.com' in ADMIN_EMAILS
+// with your actual login email address.
+// This controls who can access /admin.
+
 import { Navigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { Loader2 } from 'lucide-react';
 
-interface AdminRouteProps {
-  children: ReactNode;
-}
+const ADMIN_EMAILS = [
+  'admin@bornclock.com', // placeholder — owner must update
+];
 
-export const AdminRoute = ({ children }: AdminRouteProps) => {
-  const { user, loading: authLoading } = useAuth();
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [checking, setChecking] = useState(true);
+export function AdminRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const checkAdminStatus = async () => {
-      if (!user) {
-        setIsAdmin(false);
-        setChecking(false);
-        return;
-      }
-
-      try {
-        const { data, error } = await supabase.rpc('has_role' as never, {
-          _user_id: user.id,
-          _role: 'admin'
-        } as never);
-
-        if (error) {
-          console.error('Error checking admin status:', error);
-          setIsAdmin(false);
-        } else {
-          setIsAdmin(data === true);
-        }
-      } catch (err) {
-        console.error('Error checking admin status:', err);
-        setIsAdmin(false);
-      } finally {
-        setChecking(false);
-      }
-    };
-
-    if (!authLoading) {
-      checkAdminStatus();
-    }
-  }, [user, authLoading]);
-
-  if (authLoading || checking) {
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
       </div>
     );
   }
 
-  if (!user) {
-    return <Navigate to="/auth" replace />;
-  }
-
-  if (!isAdmin) {
+  if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
     return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
-};
+}
+
+export const isAdminEmail = (email: string | undefined) =>
+  ADMIN_EMAILS.includes(email || '');
