@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { calculateBMI, getWHOBMICategory, getWHOWaistRisk } from '../BiologicalAgeService';
 
 // BIO1-BIO10: calculateBiologicalAge unit tests
 // CC1-CC3: getForecastForCountry unit tests (inline to avoid Supabase import)
@@ -184,6 +185,60 @@ describe('calculateBiologicalAge', () => {
   // BIO10: 10-question count matches BIO_QUESTIONS array length
   it('BIO10: QUESTIONS array has exactly 10 items', () => {
     expect(QUESTIONS.length).toBe(10);
+  });
+});
+
+// ── BMI1-BMI5: calculateBMI + getWHOBMICategory ──────────────────────────────
+
+describe('calculateBMI', () => {
+  it('BMI1: calculateBMI(70, 170) returns 24.2', () => {
+    expect(calculateBMI(70, 170)).toBe(24.2);
+  });
+
+  it('BMI2: calculateBMI(90, 175) returns 29.4', () => {
+    expect(calculateBMI(90, 175)).toBe(29.4);
+  });
+});
+
+describe('getWHOBMICategory', () => {
+  it('BMI3: getWHOBMICategory(24, true) returns Overweight (Asian threshold ≥23)', () => {
+    expect(getWHOBMICategory(24, true)).toBe('Overweight');
+  });
+
+  it('BMI4: getWHOBMICategory(24, false) returns Healthy weight (standard threshold ≥25)', () => {
+    expect(getWHOBMICategory(24, false)).toBe('Healthy weight');
+  });
+
+  it('BMI5: getWHOBMICategory(22, true) returns Optimal', () => {
+    expect(getWHOBMICategory(22, true)).toBe('Optimal');
+  });
+});
+
+// ── WAIST1-WAIST6: getWHOWaistRisk ───────────────────────────────────────────
+
+describe('getWHOWaistRisk', () => {
+  it('WAIST1: getWHOWaistRisk(80, male) returns low (<94 cm)', () => {
+    expect(getWHOWaistRisk(80, 'male')).toBe('low');
+  });
+
+  it('WAIST2: getWHOWaistRisk(95, male) returns increased (94–101 cm)', () => {
+    expect(getWHOWaistRisk(95, 'male')).toBe('increased');
+  });
+
+  it('WAIST3: getWHOWaistRisk(103, male) returns high (≥102 cm)', () => {
+    expect(getWHOWaistRisk(103, 'male')).toBe('high');
+  });
+
+  it('WAIST4: getWHOWaistRisk(75, female) returns low (<80 cm)', () => {
+    expect(getWHOWaistRisk(75, 'female')).toBe('low');
+  });
+
+  it('WAIST5: getWHOWaistRisk(82, female) returns increased (80–87 cm)', () => {
+    expect(getWHOWaistRisk(82, 'female')).toBe('increased');
+  });
+
+  it('WAIST6: getWHOWaistRisk(90, female) returns high (≥88 cm)', () => {
+    expect(getWHOWaistRisk(90, 'female')).toBe('high');
   });
 });
 

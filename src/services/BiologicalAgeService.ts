@@ -3,10 +3,15 @@ export interface BioQuestion {
   question: string;
   instruction?: string;
   source?: string;
+  motivationalContext?: string;
+  sourceLabel?: string;
+  hasCalculator?: boolean;
+  calculatorType?: 'bmi' | 'waist';
   options: { id: string; label: string; sublabel?: string; adjustment: number }[];
 }
 
 export const BIO_QUESTIONS: BioQuestion[] = [
+  // Q1
   {
     id: 'heartRate',
     question: 'What is your typical resting heart rate (cardiovascular fitness proxy)?',
@@ -40,6 +45,7 @@ export const BIO_QUESTIONS: BioQuestion[] = [
       },
     ],
   },
+  // Q2
   {
     id: 'pushups',
     question: 'How many push-ups can you do without stopping? (muscular endurance test)',
@@ -74,6 +80,7 @@ export const BIO_QUESTIONS: BioQuestion[] = [
       },
     ],
   },
+  // Q3
   {
     id: 'balance',
     question: 'How long can you balance on one leg with eyes closed? (proprioceptive control test)',
@@ -108,6 +115,7 @@ export const BIO_QUESTIONS: BioQuestion[] = [
       },
     ],
   },
+  // Q4
   {
     id: 'stairs',
     question: 'Do you get out of breath climbing a single flight of stairs? (cardiorespiratory fitness proxy)',
@@ -142,6 +150,7 @@ export const BIO_QUESTIONS: BioQuestion[] = [
       },
     ],
   },
+  // Q5
   {
     id: 'sleep',
     question: 'How do you typically feel when you wake up? (glymphatic function and sleep quality)',
@@ -176,6 +185,7 @@ export const BIO_QUESTIONS: BioQuestion[] = [
       },
     ],
   },
+  // Q6
   {
     id: 'flexibility',
     question: 'Standing and bending forward, how far can you reach? (arterial stiffness proxy)',
@@ -210,6 +220,7 @@ export const BIO_QUESTIONS: BioQuestion[] = [
       },
     ],
   },
+  // Q7
   {
     id: 'memory',
     question: 'How is your memory and mental sharpness? (cognitive aging assessment)',
@@ -243,6 +254,7 @@ export const BIO_QUESTIONS: BioQuestion[] = [
       },
     ],
   },
+  // Q8
   {
     id: 'reaction',
     question: 'How would you rate your psychomotor reaction time (how fast your brain triggers physical response)?',
@@ -277,40 +289,66 @@ export const BIO_QUESTIONS: BioQuestion[] = [
       },
     ],
   },
+  // Q9 — BMI Calculator
   {
-    id: 'waistHeight',
-    question: 'What is your waist-to-height ratio? (central adiposity and visceral fat proxy — waist ÷ height, same units)',
+    id: 'bmi',
+    question: 'Calculate your Body Mass Index (BMI) — a WHO-validated surrogate marker of adiposity (body fat levels):',
     instruction:
-      'Measure waist at the narrowest point. Divide waist circumference by height using the same unit. Waist-to-height ratio is the single strongest metabolic marker for central adiposity (belly fat around your organs) and visceral fat (deep organ fat, not the fat under your skin) — both drive inflammation and insulin resistance independently of overall body weight.',
-    source:
-      'Browning et al., Waist-to-height ratio and cardiovascular risk. Obesity Reviews, 2010.',
+      'BMI = weight ÷ height². Use the calculator below. Note: WHO recommends lower BMI thresholds for South Asian populations due to differences in body composition at equivalent BMI values.',
+    motivationalContext:
+      'BMI is included in virtually every validated biological age model. At population level, it predicts all-cause mortality, cardiovascular disease, and type 2 diabetes risk. It is imperfect — it cannot distinguish muscle from fat — but it remains the most widely used body composition biomarker globally.',
+    sourceLabel:
+      'WHO Global Health Observatory — BMI Classification; WHO Expert Consultation (2004) — Appropriate BMI for Asian Populations, Lancet 363',
+    hasCalculator: true,
+    calculatorType: 'bmi',
     options: [
-      {
-        id: 'healthy',
-        label: 'Under 0.5 — healthy',
-        sublabel: 'Keep your waist to less than half your height — optimal central adiposity (belly fat around your organs) range. Visceral fat (deep organ fat) is minimal.',
-        adjustment: -3,
-      },
-      {
-        id: 'moderate',
-        label: '0.5–0.6 — moderate risk',
-        sublabel: 'Increased central adiposity (belly fat around your organs); elevated metabolic and cardiovascular risk from rising visceral fat (deep organ fat).',
-        adjustment: 0,
-      },
-      {
-        id: 'high',
-        label: '0.6–0.7 — high risk',
-        sublabel: 'High visceral fat (deep organ fat, not the fat under your skin) — strongly linked to type 2 diabetes, heart disease, and accelerated epigenetic aging.',
-        adjustment: 2,
-      },
-      {
-        id: 'very_high',
-        label: 'Over 0.7 — very high risk',
-        sublabel: 'Central adiposity (belly fat around your organs) in the severe range — highest metabolic risk category. Consult a healthcare provider and prioritise visceral fat (deep organ fat) reduction.',
-        adjustment: 3,
-      },
+      { id: 'bmi_underweight', label: 'Under 18.5', sublabel: 'Underweight', adjustment: 1.0 },
+      { id: 'bmi_optimal', label: '18.5–22.9', sublabel: 'Optimal (Asian threshold)', adjustment: -1.5 },
+      { id: 'bmi_healthy', label: '23.0–24.9', sublabel: 'Healthy, upper range', adjustment: 0 },
+      { id: 'bmi_ow_mild', label: '25.0–27.4', sublabel: 'Overweight, mild', adjustment: 0.5 },
+      { id: 'bmi_ow', label: '27.5–29.9', sublabel: 'Overweight', adjustment: 1.5 },
+      { id: 'bmi_obese1', label: '30.0–34.9', sublabel: 'Obese Class I', adjustment: 3.0 },
+      { id: 'bmi_obese2', label: '35+', sublabel: 'Obese Class II+', adjustment: 5.0 },
     ],
   },
+  // Q10 — Waist Calculator
+  {
+    id: 'waist',
+    question: 'Measure your waist circumference — the most direct accessible marker of central adiposity (belly fat around your organs):',
+    instruction:
+      'Measure at the narrowest point between your lowest rib and the top of your hip bone — roughly at belly button level. Exhale normally before measuring. Do not hold your breath or pull in your stomach. Use a soft tape measure directly on skin.',
+    motivationalContext:
+      'Unlike subcutaneous fat (fat under the skin), visceral fat (deep organ fat) actively secretes inflammatory cytokines (chemical messengers that accelerate cellular aging). Waist circumference is a stronger predictor of cardiovascular mortality than BMI alone in most population studies. A 1 cm reduction in waist circumference produces measurable improvements in metabolic biomarkers within weeks.',
+    sourceLabel:
+      'WHO (2011) Waist Circumference and Waist-Hip Ratio Report; Frontiers in Public Health (2024) — Waist Circumference and Premature Death, n=49,217',
+    hasCalculator: true,
+    calculatorType: 'waist',
+    options: [
+      { id: 'waist_low', label: 'Low risk', sublabel: 'Male <94 cm / Female <80 cm', adjustment: -1.5 },
+      { id: 'waist_increased', label: 'Increased risk', sublabel: 'Male 94–101 cm / Female 80–87 cm', adjustment: 0.5 },
+      { id: 'waist_high', label: 'High risk', sublabel: 'Male ≥102 cm / Female ≥88 cm', adjustment: 2.5 },
+    ],
+  },
+  // Q11 — Blood Pressure
+  {
+    id: 'bloodPressure',
+    question: 'What is your blood pressure — systolic (cardiovascular system load)?',
+    instruction:
+      'Use a home monitor after sitting quietly for 5 minutes, or use your most recent reading from a clinic or pharmacy. If using a pharmacy monitor, take the average of two readings. Report the systolic (top) number only.',
+    motivationalContext:
+      'Hypertension (high blood pressure) is called the "silent killer" because it produces zero symptoms while silently damaging blood vessels, kidneys, heart, and brain over years. The WHO estimates 1.28 billion adults globally have hypertension — and 46% are unaware. Controlling blood pressure from age 40–50 is equivalent to approximately 5–7 additional years of healthy life expectancy.',
+    sourceLabel:
+      'WHO Global Report on Hypertension (2023); AHA/ACC Hypertension Guidelines (2017); Journal of Gerontology Expert Consensus Biomarkers (2025)',
+    options: [
+      { id: 'bp_optimal', label: 'Under 120 mmHg', sublabel: 'Optimal — textbook perfect', adjustment: -2.0 },
+      { id: 'bp_elevated', label: '120–129 mmHg', sublabel: 'Elevated — monitor closely', adjustment: -0.5 },
+      { id: 'bp_stage1', label: '130–139 mmHg', sublabel: 'Stage 1 hypertension (high blood pressure)', adjustment: 1.5 },
+      { id: 'bp_stage2', label: '140–159 mmHg', sublabel: 'Stage 2 hypertension — medical attention advised', adjustment: 3.0 },
+      { id: 'bp_severe', label: '160+ mmHg', sublabel: 'Severe hypertension — seek medical review', adjustment: 5.0 },
+      { id: 'bp_unknown', label: "I don't know my blood pressure", sublabel: 'This is your reminder to check it', adjustment: 0 },
+    ],
+  },
+  // Q12 — Energy
   {
     id: 'energy',
     question: 'How would you rate your daily energy level? (allostatic load and metabolic vitality)',
@@ -361,4 +399,36 @@ export function calculateBiologicalAge(
   }
   const capped = Math.max(-15, Math.min(15, total));
   return Math.max(18, Math.round((chronologicalAge + capped) * 10) / 10);
+}
+
+export function calculateBMI(weightKg: number, heightCm: number): number {
+  const heightM = heightCm / 100;
+  return Math.round((weightKg / (heightM * heightM)) * 10) / 10;
+}
+
+export function getWHOBMICategory(bmi: number, isAsian: boolean = true): string {
+  if (isAsian) {
+    if (bmi < 18.5) return 'Underweight';
+    if (bmi < 23.0) return 'Optimal';
+    if (bmi < 27.5) return 'Overweight';
+    return 'Obese';
+  }
+  if (bmi < 18.5) return 'Underweight';
+  if (bmi < 25.0) return 'Healthy weight';
+  if (bmi < 30.0) return 'Overweight';
+  return 'Obese';
+}
+
+export function getWHOWaistRisk(
+  waistCm: number,
+  gender: 'male' | 'female',
+): 'low' | 'increased' | 'high' {
+  if (gender === 'male') {
+    if (waistCm < 94) return 'low';
+    if (waistCm < 102) return 'increased';
+    return 'high';
+  }
+  if (waistCm < 80) return 'low';
+  if (waistCm < 88) return 'increased';
+  return 'high';
 }
