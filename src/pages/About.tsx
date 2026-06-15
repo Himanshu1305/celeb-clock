@@ -28,6 +28,14 @@ export default function About() {
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
             We believe everyone deserves to understand their own timeline — not just in years, months, and days, but in the full cosmic and biological richness of what a human life actually is.
           </p>
+          <div className="mt-8 pl-6 border-l-4 border-primary">
+            <h2 className="text-2xl font-bold text-foreground mb-2">
+              "Know your time. Live it well."
+            </h2>
+            <p className="text-muted-foreground leading-relaxed">
+              This is what BornClock is built around. Life expectancy, birthday insights, and the science of a longer life — all from your date of birth.
+            </p>
+          </div>
         </div>
 
         {/* What We Do */}

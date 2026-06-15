@@ -103,19 +103,16 @@ const Index = () => {
 
             {/* Main Headline */}
             <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
-                <span className="text-foreground">You're </span>
-                <span className="party-gradient bg-clip-text text-transparent">897 million seconds</span>
-                <span className="text-foreground"> old.</span>
-                <br />
-                <span className="text-muted-foreground text-3xl md:text-4xl lg:text-5xl">And someone famous shares your birthday.</span>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight gradient-text-primary">
+                Know your time. Live it well.
               </h1>
-              
-              {/* Subheadline with value stacking */}
+
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                Enter your birthday to see your <strong className="text-foreground">exact age</strong> updating live,
-                find your <strong className="text-foreground">celebrity twin</strong>, and unlock{' '}
-                <strong className="text-primary">42 other things</strong> you've never been told.
+                Life expectancy, birthday insights, and the science of a longer life — all from your date of birth.
+              </p>
+
+              <p className="text-sm text-muted-foreground">
+                Enter your date of birth to get started →
               </p>
             </div>
 

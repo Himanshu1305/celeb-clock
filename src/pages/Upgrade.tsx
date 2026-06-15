@@ -104,7 +104,10 @@ const Upgrade = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
             Unlock Your Complete Longevity Blueprint
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-gray-500 italic text-center mt-2">
+            "Know your time. Live it well."
+          </p>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mt-4">
             You have seen your forecast. Now discover exactly why — and what you can do about it.
           </p>
         </section>

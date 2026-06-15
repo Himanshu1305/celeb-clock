@@ -43,6 +43,7 @@ export const Navigation = () => {
   return (
     <div>
     <nav className="flex items-center gap-1 flex-wrap">
+
       {!isHomePage && (
         <Link to="/">
           <Button variant="ghost" size="sm" className="gap-2 transition-all">
@@ -94,6 +95,9 @@ export const Navigation = () => {
         </DropdownMenuContent>
       </DropdownMenu>
     </nav>
+    <span className="text-xs text-gray-400 hidden lg:block italic">
+      Know your time. Live it well.
+    </span>
     {showTrialBanner && (
       <div className="bg-amber-50 border-b border-amber-200 py-1.5 px-4 text-center text-sm text-amber-800 rounded-lg mt-1">
         🎁 Free trial — {trialDaysRemaining} day{trialDaysRemaining !== 1 ? 's' : ''} remaining ·{' '}
