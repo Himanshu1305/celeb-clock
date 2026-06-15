@@ -33,7 +33,7 @@ export default function Terms() {
         <Card className="mb-8 hover-scale transition-all">
           <CardContent className="pt-6 text-muted-foreground leading-relaxed">
             <p>
-              Welcome to <strong className="text-foreground">Age & Celeb Life</strong>.
+              Welcome to <strong className="text-foreground">BornClock</strong>.
             </p>
             <p className="mt-3">
               By using our app, you agree to the following terms. If you do not agree, please do not use the app.
@@ -84,9 +84,16 @@ export default function Terms() {
           </CardHeader>
           <CardContent className="space-y-3 text-muted-foreground leading-relaxed">
             <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>Premium access is a one-time $9.99 non-recurring fee.</li>
-              <li>"Lifetime access" refers to the app's lifetime, including future updates.</li>
-              <li>No refunds unless legally mandated.</li>
+              <li>
+                BornClock Premium is available as a recurring subscription:
+                <ul className="list-disc list-inside ml-4 mt-1 space-y-1">
+                  <li>Monthly plan: ₹299/month (India) | $4.99/month (International)</li>
+                  <li>Annual plan: ₹2,499/year (India) | $39.99/year (International)</li>
+                </ul>
+              </li>
+              <li>Pricing is determined by your location at time of purchase.</li>
+              <li>Subscriptions auto-renew until cancelled.</li>
+              <li>7-day money-back guarantee on first payment. Email hello@bornclock.com for refunds.</li>
             </ul>
           </CardContent>
         </Card>
@@ -101,7 +108,7 @@ export default function Terms() {
           </CardHeader>
           <CardContent className="space-y-3 text-muted-foreground leading-relaxed">
             <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>All content (design, code, infographics) belongs to Age & Celeb Life.</li>
+              <li>All content (design, code, infographics) belongs to BornClock.</li>
               <li>You may not reproduce or distribute it without permission.</li>
             </ul>
           </CardContent>

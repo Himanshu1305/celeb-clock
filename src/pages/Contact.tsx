@@ -119,7 +119,7 @@ export default function Contact() {
 
               <div className="pt-4 border-t border-border">
                 <p className="text-sm text-muted-foreground">
-                  Thank you for using <strong className="text-foreground">Age & Celeb Life</strong>!
+                  Thank you for using <strong className="text-foreground">BornClock</strong>!
                 </p>
               </div>
             </CardContent>

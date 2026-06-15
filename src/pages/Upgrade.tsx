@@ -17,11 +17,11 @@ import { Footer } from '@/components/Footer';
 export default function Upgrade() {
   const { user, isPremium, isInTrial, trialDaysRemaining } = useAuth();
   const navigate = useNavigate();
-  const [billing, setBilling] = useState<'monthly' | 'annual'>('annual');
   const [countryInfo, setCountryInfo] = useState<CountryInfo | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loadingBilling, setLoadingBilling] = useState<'monthly' | 'annual' | null>(null);
   const [error, setError] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [lastBilling, setLastBilling] = useState<'monthly' | 'annual'>('annual');
   const [detecting, setDetecting] = useState(true);
 
   useEffect(() => {
@@ -31,32 +31,49 @@ export default function Upgrade() {
     });
   }, []);
 
-  const handleSubscribe = async () => {
+  const handleSubscribe = async (billingType: 'monthly' | 'annual') => {
     if (!user || !countryInfo) return;
-    setLoading(true);
+    setLoadingBilling(billingType);
+    setLastBilling(billingType);
     setError('');
 
     await initiateSubscription({
-      billing,
+      billing: billingType,
       countryInfo,
       userEmail: user.email || '',
       userName: user.user_metadata?.full_name,
       userId: user.id,
       onSuccess: () => {
-        setLoading(false);
+        setLoadingBilling(null);
         setShowSuccess(true);
       },
       onError: err => {
-        setLoading(false);
+        setLoadingBilling(null);
         setError(err);
       },
       onDismiss: () => {
-        setLoading(false);
+        setLoadingBilling(null);
       },
     });
   };
 
   const isPaidPremium = isPremium && !isInTrial;
+
+  const monthlyPrice = countryInfo ? formatPrice(countryInfo, 'monthly') : null;
+  const annualPrice = countryInfo ? formatPrice(countryInfo, 'annual') : null;
+
+  const premiumFeatures = [
+    'Full 8-step longevity calculator',
+    'What-If Simulator (25+ factors)',
+    'AI Longevity Coach chat',
+    'Biological Blueprint report',
+    'Cultural Horizon',
+    'Family dashboard (10 members)',
+    'Birthday reports (3/month)',
+    'Longevity leaderboard',
+    'Country comparison (57 countries)',
+    'Downloadable PDF reports',
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -75,7 +92,7 @@ export default function Upgrade() {
 
       {showSuccess && (
         <PaymentSuccessModal
-          billing={billing}
+          billing={lastBilling}
           onClose={() => {
             setShowSuccess(false);
             window.location.reload();
@@ -100,7 +117,7 @@ export default function Upgrade() {
           </div>
         </div>
       ) : (
-        <div className="max-w-4xl mx-auto px-4 py-8 pb-16">
+        <div className="max-w-5xl mx-auto px-4 py-8 pb-16">
           {/* Hero */}
           <div className="text-center mb-10">
             <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">
@@ -122,41 +139,25 @@ export default function Upgrade() {
             </div>
           )}
 
-          {/* Billing toggle */}
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <button
-              onClick={() => setBilling('monthly')}
-              className={`px-5 py-2.5 rounded-xl font-medium transition-all ${
-                billing === 'monthly'
-                  ? 'bg-indigo-600 text-white shadow'
-                  : 'bg-white border text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              Monthly
-            </button>
-            <button
-              onClick={() => setBilling('annual')}
-              className={`px-5 py-2.5 rounded-xl font-medium transition-all relative ${
-                billing === 'annual'
-                  ? 'bg-indigo-600 text-white shadow'
-                  : 'bg-white border text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              Annual
-              <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold">
-                -30%
-              </span>
-            </button>
-          </div>
+          {/* Error display */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-800 flex items-center justify-between">
+              <span>{error}</span>
+              <button onClick={() => setError('')} className="underline text-red-600 text-xs ml-4">
+                Dismiss
+              </button>
+            </div>
+          )}
 
-          {/* Pricing cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {/* 3-card pricing grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+
             {/* Free card */}
-            <div className="bg-white rounded-2xl border-2 border-gray-200 p-6">
+            <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 flex flex-col">
               <div className="text-lg font-bold text-gray-700 mb-1">Free</div>
               <div className="text-4xl font-black text-gray-900 mb-1">₹0</div>
               <div className="text-gray-400 text-sm mb-5">forever</div>
-              <ul className="space-y-2.5 mb-6">
+              <ul className="space-y-2.5 mb-6 flex-1">
                 {[
                   'Celebrity birthday twin (1/day)',
                   'Zodiac sign & birthstone',
@@ -178,48 +179,72 @@ export default function Upgrade() {
               </button>
             </div>
 
-            {/* Premium card */}
-            <div className="bg-indigo-600 rounded-2xl border-2 border-indigo-600 p-6 text-white relative">
+            {/* Monthly Premium card */}
+            <div className="bg-white rounded-2xl border-2 border-indigo-200 p-6 flex flex-col">
+              <div className="text-lg font-bold text-indigo-600 mb-1">Premium Monthly</div>
+              {detecting ? (
+                <div className="text-4xl font-black text-gray-300 mb-1">...</div>
+              ) : (
+                <>
+                  <div className="text-4xl font-black text-gray-900 mb-1">
+                    {monthlyPrice?.amount}
+                  </div>
+                  <div className="text-gray-400 text-sm mb-5">{monthlyPrice?.period}</div>
+                </>
+              )}
+              <ul className="space-y-2 mb-6 flex-1">
+                {premiumFeatures.map(f => (
+                  <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
+                    <Check size={14} className="text-indigo-500 flex-shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => handleSubscribe('monthly')}
+                disabled={loadingBilling !== null || detecting || !user}
+                className="w-full py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loadingBilling === 'monthly' ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Opening checkout...
+                  </span>
+                ) : !user ? (
+                  'Sign in to Subscribe'
+                ) : detecting ? (
+                  'Loading...'
+                ) : (
+                  'Subscribe Monthly'
+                )}
+              </button>
+              <p className="text-gray-400 text-xs text-center mt-2">Cancel anytime</p>
+            </div>
+
+            {/* Annual Premium card */}
+            <div className="bg-indigo-600 rounded-2xl border-2 border-indigo-600 p-6 text-white flex flex-col relative">
               <div className="absolute top-4 right-4 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
                 <Star size={10} />
                 BEST VALUE
               </div>
 
-              <div className="text-lg font-bold text-indigo-200 mb-1">Premium</div>
-
+              <div className="text-lg font-bold text-indigo-200 mb-1">Premium Annual</div>
               {detecting ? (
-                <div className="text-4xl font-black mb-4 text-white/50">...</div>
+                <div className="text-4xl font-black text-white/50 mb-1">...</div>
               ) : (
-                countryInfo && (
-                  <>
-                    <div className="text-4xl font-black mb-1">
-                      {formatPrice(countryInfo, billing).amount}
+                <>
+                  <div className="text-4xl font-black mb-1">{annualPrice?.amount}</div>
+                  <div className="text-indigo-200 text-sm mb-1">{annualPrice?.period}</div>
+                  {annualPrice?.saving && (
+                    <div className="text-green-300 text-sm font-semibold mb-4">
+                      {annualPrice.saving}
                     </div>
-                    <div className="text-indigo-200 text-sm mb-1">
-                      {formatPrice(countryInfo, billing).period}
-                    </div>
-                    {billing === 'annual' && (
-                      <div className="text-green-300 text-sm font-semibold mb-4">
-                        {formatPrice(countryInfo, billing).saving}
-                      </div>
-                    )}
-                  </>
-                )
+                  )}
+                </>
               )}
 
-              <ul className="space-y-2 mb-6 mt-2">
-                {[
-                  'Full 8-step longevity calculator',
-                  'What-If Simulator (25+ factors)',
-                  'AI Longevity Coach chat',
-                  'Biological Blueprint report',
-                  'Cultural Horizon',
-                  'Family dashboard (10 members)',
-                  'Birthday reports (3/month)',
-                  'Longevity leaderboard',
-                  'Country comparison (57 countries)',
-                  'Downloadable PDF reports',
-                ].map(f => (
+              <ul className="space-y-2 mb-6 flex-1 mt-2">
+                {premiumFeatures.map(f => (
                   <li key={f} className="flex items-center gap-2 text-sm text-indigo-100">
                     <Check size={14} className="text-green-300 flex-shrink-0" />
                     {f}
@@ -227,25 +252,12 @@ export default function Upgrade() {
                 ))}
               </ul>
 
-              {/* Error display */}
-              {error && (
-                <div className="bg-red-500/20 border border-red-300 rounded-lg p-3 mb-4 text-sm text-red-100">
-                  <p>{error}</p>
-                  <button
-                    onClick={() => setError('')}
-                    className="mt-1 underline text-red-200 text-xs"
-                  >
-                    Try again
-                  </button>
-                </div>
-              )}
-
               <button
-                onClick={handleSubscribe}
-                disabled={loading || detecting || !user}
+                onClick={() => handleSubscribe('annual')}
+                disabled={loadingBilling !== null || detecting || !user}
                 className="w-full py-3 bg-white text-indigo-600 rounded-xl font-bold hover:bg-indigo-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? (
+                {loadingBilling === 'annual' ? (
                   <span className="flex items-center justify-center gap-2">
                     <div className="w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
                     Opening checkout...
@@ -255,9 +267,7 @@ export default function Upgrade() {
                 ) : detecting ? (
                   'Loading...'
                 ) : (
-                  `Subscribe — ${formatPrice(countryInfo!, billing).amount}${
-                    billing === 'monthly' ? '/mo' : '/yr'
-                  }`
+                  'Subscribe Annual'
                 )}
               </button>
 
