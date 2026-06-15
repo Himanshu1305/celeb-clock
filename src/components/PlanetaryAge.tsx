@@ -1,8 +1,12 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 import { format } from 'date-fns';
+import html2canvas from 'html2canvas';
+import { PlanetaryAgeCard } from '@/components/PlanetaryAgeCard';
 
 // ── NASA JPL orbital periods (mean sidereal, Earth days) ─────────────────────
 // Source: NASA JPL Planetary Fact Sheet (Williams, D.R., 2024)
@@ -185,6 +189,15 @@ interface PlanetaryAgeProps {
 
 export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  // Card generation state
+  const [userName, setUserName] = useState('');
+  const [generating, setGenerating] = useState(false);
+  const [cardGenerated, setCardGenerated] = useState(false);
+  const [cardDataUrl, setCardDataUrl] = useState('');
+  const [copied, setCopied] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   // Generate 60 stars once — stable across re-renders
   const starsRef = useRef<
@@ -252,6 +265,75 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
       '_blank',
       'noopener,noreferrer',
     );
+  };
+
+  // Derived data for card
+  const earthAge = Math.floor(
+    (new Date().getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25),
+  );
+
+  const planetAgesMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    results.forEach(r => { map[r.name] = r.age; });
+    return map;
+  }, [results]);
+
+  const nextBirthdaysMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    results.forEach(r => { map[r.name] = r.daysToNext; });
+    return map;
+  }, [results]);
+
+  const generateShareText = (): string => {
+    const name = userName ? `${userName}'s` : 'My';
+    const mercuryNextBirthday = nextBirthdaysMap['Mercury'] ?? '?';
+    const marsAge = planetAgesMap['Mars']?.toFixed(1);
+    const jupiterAge = planetAgesMap['Jupiter']?.toFixed(1);
+    const neptuneAge = planetAgesMap['Neptune']?.toFixed(2);
+    const mercuryAge = planetAgesMap['Mercury']?.toFixed(1);
+
+    return `🚀 ${name} Cosmic Age Report:
+
+🌍 Earth: ${earthAge} years
+☿ Mercury: ${mercuryAge} yrs (${mercuryNextBirthday} days to next birthday!)
+♂ Mars: ${marsAge} yrs
+♃ Jupiter: ${jupiterAge} yrs (practically a baby!)
+♆ Neptune: ${neptuneAge} yrs (barely born!)
+
+In Neptune time, I've barely started! 🪐
+NASA data · bornclock.com/planetary-age
+#CosmicAge #BornClock #Planetary`;
+  };
+
+  const handleGenerateCard = async () => {
+    setGenerating(true);
+    // Wait for the off-screen card to render
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    if (!cardRef.current) {
+      setGenerating(false);
+      return;
+    }
+
+    try {
+      const canvas = await html2canvas(cardRef.current, {
+        width: 1080,
+        height: 1080,
+        scale: 1,
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: null,
+        logging: false,
+      });
+      const dataUrl = canvas.toDataURL('image/png', 0.95);
+      setCardDataUrl(dataUrl);
+      setCardGenerated(true);
+    } catch (error) {
+      console.error('Card generation failed:', error);
+      setCardGenerated(false);
+    } finally {
+      setGenerating(false);
+    }
   };
 
   return (
@@ -338,6 +420,156 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
           </svg>
           Twitter / X
         </Button>
+      </div>
+
+      {/* ── Cosmic Card CTA ────────────────────────────────────────────── */}
+      {!cardGenerated && !generating && (
+        <div className="mt-2 mb-10 p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950 text-white text-center">
+          <div className="text-2xl mb-2">🚀</div>
+          <h3 className="text-lg font-semibold mb-1">Create Your Cosmic Age Card</h3>
+          <p className="text-slate-300 text-sm mb-4">
+            Generate a shareable 1080×1080 card with your ages across the solar system
+          </p>
+          <input
+            type="text"
+            placeholder="Your name (optional)"
+            value={userName}
+            onChange={e => setUserName(e.target.value)}
+            maxLength={30}
+            className="w-full max-w-xs mx-auto block px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 text-center focus:outline-none focus:border-indigo-400 mb-4"
+          />
+          <button
+            onClick={handleGenerateCard}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors"
+          >
+            Generate My Cosmic Card ✨
+          </button>
+          <p className="text-slate-500 text-xs mt-3">Free · No signup required · Share anywhere</p>
+        </div>
+      )}
+
+      {/* ── Generating loading state ────────────────────────────────────── */}
+      {generating && (
+        <div className="mb-10 text-center py-8 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950">
+          <div className="inline-block">
+            <div className="text-4xl mb-3 animate-spin">🪐</div>
+            <p className="text-white font-semibold">Mapping your cosmic profile...</p>
+            <p className="text-slate-400 text-sm mt-1">Calculating ages across 4.5 billion km</p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Generated card preview + share options ─────────────────────── */}
+      {cardGenerated && cardDataUrl && (
+        <div className="mb-10">
+          {/* Card preview */}
+          <div className="relative max-w-xs sm:max-w-sm md:max-w-md mx-auto mb-6">
+            <img
+              src={cardDataUrl}
+              alt="Your Cosmic Age Card"
+              className="w-full rounded-2xl shadow-2xl"
+            />
+            <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+              ✓ Ready to share
+            </div>
+          </div>
+
+          {/* Share buttons */}
+          <div className="flex flex-wrap gap-3 justify-center mb-4">
+            <button
+              onClick={() => {
+                const link = document.createElement('a');
+                link.download = `${userName || 'my'}-cosmic-age-bornclock.png`;
+                link.href = cardDataUrl;
+                link.click();
+              }}
+              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+            >
+              ⬇️ Download PNG
+            </button>
+
+            <button
+              onClick={() => {
+                const encoded = encodeURIComponent(generateShareText());
+                window.open(`https://wa.me/?text=${encoded}`, '_blank', 'noopener,noreferrer');
+              }}
+              className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+            >
+              💬 Share on WhatsApp
+            </button>
+
+            <button
+              onClick={() => {
+                const encoded = encodeURIComponent(generateShareText());
+                window.open(
+                  `https://twitter.com/intent/tweet?text=${encoded}`,
+                  '_blank',
+                  'noopener,noreferrer',
+                );
+              }}
+              className="flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+            >
+              𝕏 Share on X
+            </button>
+
+            <button
+              onClick={async () => {
+                await navigator.clipboard.writeText(generateShareText());
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              }}
+              className="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+            >
+              {copied ? '✓ Copied!' : '📋 Copy Text'}
+            </button>
+          </div>
+
+          <p className="text-center text-sm text-gray-500 mb-6">
+            📸 For Instagram: Download the PNG then share to your Story or Feed
+          </p>
+
+          {/* Sign-in CTA */}
+          {!user && (
+            <div className="border border-indigo-200 rounded-xl p-4 bg-indigo-50 text-center max-w-sm mx-auto mb-4">
+              <div className="text-2xl mb-2">✨</div>
+              <p className="font-semibold text-indigo-900 mb-1">Save your Cosmic Profile</p>
+              <p className="text-sm text-indigo-700 mb-3">
+                Sign in to save your planetary ages, get birthday reminders, and calculate your longevity forecast
+              </p>
+              <Link
+                to="/auth?redirect=/planetary-age"
+                className="inline-block bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm"
+              >
+                Sign In to Save →
+              </Link>
+            </div>
+          )}
+
+          {/* Regenerate */}
+          <div className="text-center">
+            <button
+              onClick={() => {
+                setCardGenerated(false);
+                setCardDataUrl('');
+              }}
+              className="text-sm text-gray-400 hover:text-gray-600 underline"
+            >
+              Change name or regenerate
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Off-screen card for html2canvas capture */}
+      <div style={{ position: 'absolute', left: '-9999px', top: '0', zIndex: -1 }}>
+        <PlanetaryAgeCard
+          ref={cardRef}
+          userName={userName}
+          birthDate={birthDate}
+          planetAges={planetAgesMap}
+          nextBirthdays={nextBirthdaysMap}
+          earthAge={earthAge}
+        />
       </div>
 
       {/* ── Solar system animation ──────────────────────────────────────── */}
