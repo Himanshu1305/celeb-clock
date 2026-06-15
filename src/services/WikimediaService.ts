@@ -142,7 +142,6 @@ export class WikimediaService {
     const cacheKey = this.getCacheKey('people', date);
     const cached = this.getFromCache<WikiPerson[]>(cacheKey);
     if (cached) {
-      console.log('Using cached people data');
       return cached;
     }
 
@@ -191,14 +190,12 @@ export class WikimediaService {
       }
 
       if (people.length > 0) {
-        console.log('Fetched people from Wikidata API');
         this.setCache(cacheKey, people);
         return people;
       }
 
       throw new Error('No results from API');
-    } catch (error) {
-      console.log('API failed, falling back to static data:', error);
+    } catch {
       // Fallback to static data
       const { getBirthdayData } = await import('@/data/birthdayData');
       const data = getBirthdayData(date.getMonth() + 1, date.getDate());
@@ -211,7 +208,6 @@ export class WikimediaService {
     const cacheKey = this.getCacheKey('events', date);
     const cached = this.getFromCache<WikiEvent[]>(cacheKey);
     if (cached) {
-      console.log('Using cached events data');
       return cached;
     }
 
@@ -260,14 +256,12 @@ export class WikimediaService {
       }
 
       if (events.length > 0) {
-        console.log('Fetched events from Wikidata API');
         this.setCache(cacheKey, events);
         return events;
       }
 
       throw new Error('No results from API');
-    } catch (error) {
-      console.log('API failed, falling back to static data:', error);
+    } catch {
       // Fallback to static data
       const { getBirthdayData } = await import('@/data/birthdayData');
       const data = getBirthdayData(date.getMonth() + 1, date.getDate());

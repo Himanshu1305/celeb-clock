@@ -20,6 +20,8 @@ import {
 } from 'lucide-react';
 import { SEO } from '@/components/SEO';
 import html2canvas from 'html2canvas';
+import { getChineseZodiac } from '@/services/ChineseZodiacService';
+import { getVedicRashi } from '@/services/VedicZodiacService';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const MONTH_SLUGS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -186,6 +188,8 @@ const BirthdayResults = () => {
   const lifePath = calculateLifePath(birthDate);
   const birthstone = getBirthstone(birthDate.getMonth() + 1);
   const planetaryAges = calculatePlanetaryAges(age?.years || 0);
+  const chineseZodiac = getChineseZodiac(birthDate);
+  const vedicRashi = getVedicRashi(birthDate);
   const monthDayLabel = birthDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
   const birthdaySlug = `${MONTH_SLUGS[birthDate.getMonth() + 1]}-${birthDate.getDate()}`;
 
@@ -354,10 +358,10 @@ const BirthdayResults = () => {
           </Card>
         </section>
 
-        {/* Birthday Signs — 4-card grid (Generation | Zodiac | Life Path | Birthstone) */}
+        {/* Birthday Signs — 6-card grid */}
         <section className="max-w-5xl mx-auto mb-12">
           <h2 className="text-xl font-bold text-foreground mb-4">Your Birthday Signs</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
             <Card className="glass-card hover:scale-[1.02] transition-transform">
               <CardContent className="p-4 text-center">
                 <span className="text-3xl mb-1 block">👥</span>
@@ -400,6 +404,30 @@ const BirthdayResults = () => {
                 <Link to={`/birthstone?stone=${encodeURIComponent(birthstone.name)}`}
                   className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5">
                   Explore your Birthstone →
+                </Link>
+              </CardContent>
+            </Card>
+            <Card className="glass-card hover:scale-[1.02] transition-transform">
+              <CardContent className="p-4 text-center">
+                <span className="text-3xl mb-1 block">{chineseZodiac.emoji}</span>
+                <h3 className="font-bold text-foreground text-sm">{chineseZodiac.animal}</h3>
+                <p className="text-xs text-muted-foreground">Chinese Zodiac</p>
+                <p className="text-[10px] text-muted-foreground/70 mt-0.5">{chineseZodiac.element} · {chineseZodiac.yin_yang}</p>
+                <Link to="/chinese-zodiac"
+                  className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5">
+                  Explore Chinese Zodiac →
+                </Link>
+              </CardContent>
+            </Card>
+            <Card className="glass-card hover:scale-[1.02] transition-transform">
+              <CardContent className="p-4 text-center">
+                <span className="text-3xl mb-1 block">{vedicRashi.emoji}</span>
+                <h3 className="font-bold text-foreground text-sm">{vedicRashi.name}</h3>
+                <p className="text-xs text-muted-foreground">Vedic Rashi</p>
+                <p className="text-[10px] text-muted-foreground/70 mt-0.5">{vedicRashi.english} · {vedicRashi.ruling_planet}</p>
+                <Link to="/vedic-zodiac"
+                  className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5">
+                  Explore Vedic Zodiac →
                 </Link>
               </CardContent>
             </Card>

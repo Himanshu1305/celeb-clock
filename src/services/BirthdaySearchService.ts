@@ -194,7 +194,7 @@ export const queryWikidata = async (
     return { people, events: [] };
   } catch (error) {
     clearTimeout(timeoutId);
-    console.log('Wikidata query failed or timed out (single attempt):', error);
+    console.error('Wikidata query failed or timed out (single attempt):', error);
     return { people: [], events: [] };
   } finally {
     signal?.removeEventListener('abort', onExternalAbort);

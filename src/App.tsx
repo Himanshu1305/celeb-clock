@@ -42,9 +42,13 @@ import GiftReport from "./pages/GiftReport";
 import BiologicalAge from "./pages/BiologicalAge";
 import CountryComparison from "./pages/CountryComparison";
 import BirthdayReport from "./pages/BirthdayReport";
+import ChineseZodiac from "./pages/ChineseZodiac";
+import VedicZodiac from "./pages/VedicZodiac";
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
+import { CookieConsent } from "@/components/CookieConsent";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { BirthDateProvider } from "./context/BirthDateContext";
 
 const queryClient = new QueryClient();
@@ -55,6 +59,8 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <CookieConsent />
+        <WhatsAppButton />
         <BirthDateProvider>
           <BrowserRouter>
             <ScrollToTop />
@@ -95,6 +101,8 @@ const App = () => (
               <Route path="/biological-age" element={<BiologicalAge />} />
               <Route path="/country-comparison" element={<CountryComparison />} />
               <Route path="/birthday-report" element={<BirthdayReport />} />
+              <Route path="/chinese-zodiac" element={<ChineseZodiac />} />
+              <Route path="/vedic-zodiac" element={<VedicZodiac />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

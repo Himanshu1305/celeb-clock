@@ -41,10 +41,8 @@ export const AgeCalculator = ({ onBirthDateChange, initialDate }: AgeCalculatorP
     const value = e.target.value;
     setInputValue(value);
     const newDate = value ? new Date(value) : null;
-    console.log('AgeCalculator - date changed:', { value, newDate });
     setBirthDate(newDate);
     onBirthDateChange?.(newDate);
-    console.log('AgeCalculator - called onBirthDateChange with:', newDate);
     
     // Track feature usage when user calculates age
     if (newDate && !hasTrackedCalculation.current) {

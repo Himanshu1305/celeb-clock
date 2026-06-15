@@ -92,7 +92,7 @@ const BlogPostPage = () => {
           url: shareUrl,
         });
       } catch (err) {
-        console.log('Share cancelled');
+        // share cancelled
       }
     } else {
       // Fallback: copy to clipboard

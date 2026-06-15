@@ -55,7 +55,7 @@ export const ShareAndExport = ({ birthDate, ageData, celebrities, lifeExpectancy
         return;
       } catch (error) {
         // User cancelled or error occurred
-        console.log('Share cancelled or failed:', error);
+        // share cancelled or failed
       }
     }
 

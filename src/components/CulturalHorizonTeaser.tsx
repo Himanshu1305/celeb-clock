@@ -45,19 +45,15 @@ function normalizeCountry(country?: string | null): string | null {
 
 function pickMatches(forecast: number, exclude: Set<string>, userCountry?: string | null): LongevityIcon[] {
   const countryCode = normalizeCountry(userCountry);
-  console.log('[CulturalHorizon] pickMatches', { forecast, countryCode, rawCountry: userCountry, totalIcons: longevityIcons.length });
-
   for (const window of [5, 8, 12]) {
     const candidates = longevityIcons.filter(
       i => !exclude.has(i.name) && Math.abs(i.longevityAge - forecast) <= window
     );
-    console.log(`[CulturalHorizon] window ±${window}: ${candidates.length} candidates`, candidates.map(c => `${c.name} (${c.longevityAge}, ${c.countryCode})`));
     if (candidates.length >= 3) {
       const countryFirst = [
         ...candidates.filter(c => countryCode && c.countryCode === countryCode),
         ...candidates.filter(c => !countryCode || c.countryCode !== countryCode),
       ];
-      console.log('[CulturalHorizon] selected', countryFirst.slice(0, 3).map(c => c.name));
       return countryFirst.slice(0, 3);
     }
   }
@@ -65,7 +61,6 @@ function pickMatches(forecast: number, exclude: Set<string>, userCountry?: strin
     .filter(i => !exclude.has(i.name))
     .sort((a, b) => Math.abs(a.longevityAge - forecast) - Math.abs(b.longevityAge - forecast))
     .slice(0, 3);
-  console.log('[CulturalHorizon] fallback (closest match)', fallback.map(c => c.name));
   return fallback;
 }
 
