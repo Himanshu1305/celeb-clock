@@ -95,25 +95,40 @@ export default function Contact() {
             <CardContent className="space-y-6">
               <div>
                 <h3 className="font-heading font-semibold text-foreground mb-2">Email Us</h3>
-                <a 
-                  href="mailto:support@ageceleblife.com" 
+                <a
+                  href="mailto:hello@bornclock.com"
                   className="text-accent hover:underline transition-colors"
                 >
-                  support@ageceleblife.com
+                  hello@bornclock.com
                 </a>
                 <p className="text-sm text-muted-foreground mt-1">
-                  We aim to respond within 48 hours.
+                  We typically respond within 24 hours.
                 </p>
               </div>
 
               <div>
                 <h3 className="font-heading font-semibold text-foreground mb-2">Privacy Requests</h3>
                 <p className="text-sm text-muted-foreground">
-                  For data access or deletion requests, email us with your details. See our{' '}
+                  For data access or deletion requests, email{' '}
+                  <a href="mailto:privacy@bornclock.com" className="text-accent hover:underline">
+                    privacy@bornclock.com
+                  </a>
+                  . See our{' '}
                   <Link to="/privacy" className="text-accent hover:underline">
                     Privacy Policy
                   </Link>
                   {' '}for more.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-heading font-semibold text-foreground mb-2">Press Enquiries</h3>
+                <p className="text-sm text-muted-foreground">
+                  For media and press queries, email{' '}
+                  <a href="mailto:press@bornclock.com" className="text-accent hover:underline">
+                    press@bornclock.com
+                  </a>
+                  .
                 </p>
               </div>
 

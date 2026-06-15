@@ -29,6 +29,7 @@ function WhatsAppIcon() {
 export const Footer = () => {
   const { user } = useAuth();
   const [showCookiePrefs, setShowCookiePrefs] = useState(false);
+  const [instaCopied, setInstaCopied] = useState(false);
 
   const handleSaveCookiePrefs = (prefs: { analytics: boolean; marketing: boolean }) => {
     const consent = {
@@ -45,6 +46,7 @@ export const Footer = () => {
 
   const waUrl = `https://wa.me/?text=${encodeURIComponent(`${SHARE_TEXT} ${SHARE_URL}`)}`;
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(SHARE_TEXT)}&url=${encodeURIComponent(SHARE_URL)}`;
+  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`;
 
   return (
     <footer className="mt-16 border-t border-border/50 bg-card/30 backdrop-blur-sm">
@@ -131,6 +133,26 @@ export const Footer = () => {
                 <WhatsAppIcon />
                 Share on WhatsApp
               </a>
+              <a
+                href={fbUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-medium hover:bg-blue-700 transition-colors w-fit"
+              >
+                📘 Share on Facebook
+              </a>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    'Check out BornClock — find your celebrity birthday twin and calculate your longevity forecast! bornclock.com #BornClock'
+                  );
+                  setInstaCopied(true);
+                  setTimeout(() => setInstaCopied(false), 2000);
+                }}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-medium hover:opacity-90 transition-opacity w-fit"
+              >
+                📸 {instaCopied ? 'Copied!' : 'Copy for Instagram'}
+              </button>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
@@ -136,7 +137,9 @@ export default function Methodology() {
                 <div className="mb-10">
                   <h3 className="text-xl font-semibold text-foreground mb-3">The Three-Pillar Framework</h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
-                    BornClock's life expectancy estimate is built on three pillars that are calculated sequentially and then combined:
+                    BornClock's{' '}
+                    <Link to="/life-expectancy" className="text-indigo-600 hover:underline font-medium">life expectancy</Link>{' '}
+                    estimate is built on three pillars that are calculated sequentially and then combined:
                   </p>
                   <div className="grid md:grid-cols-3 gap-4 mb-4">
                     {[
@@ -326,17 +329,32 @@ export default function Methodology() {
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">Ranking Methodology</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Celebrity Ranking Algorithm</h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
-                    When multiple celebrities share a birthday, results are ranked by a composite score combining:
+                    BornClock ranks celebrities by their <strong className="text-foreground">Wikipedia sitelinks count</strong> — the number of Wikipedia language editions that have an article about that person. This serves as a proxy for global cultural significance.
                   </p>
-                  <ul className="space-y-2 text-muted-foreground leading-relaxed">
-                    <li><strong className="text-foreground">Global search volume</strong> — proxied by Wikipedia monthly page-view data</li>
-                    <li><strong className="text-foreground">Cross-domain recognition</strong> — presence in multiple major encyclopaedic sources</li>
-                    <li><strong className="text-foreground">Historical significance</strong> — documented long-term cultural or scientific impact</li>
-                  </ul>
+                  <div className="bg-muted/40 rounded-lg p-4 mb-4">
+                    <p className="font-semibold text-foreground text-sm mb-2">How it works:</p>
+                    <ul className="space-y-2 text-muted-foreground text-sm leading-relaxed">
+                      <li>• Each celebrity in our database has a sitelinks score from Wikidata</li>
+                      <li>• Higher sitelinks = more globally recognized</li>
+                      <li>• <strong className="text-foreground">Country boost:</strong> celebrities matching the user's country get a +500 point boost to surface locally relevant names</li>
+                      <li>• <em>Example:</em> An Indian user searching June 13 birthdays will see Virat Kohli ranked higher than a lesser-known international celebrity with more global sitelinks</li>
+                    </ul>
+                  </div>
+                  <div className="bg-muted/40 rounded-lg p-4 mb-4">
+                    <p className="font-semibold text-foreground text-sm mb-2">Why sitelinks?</p>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      Wikipedia sitelinks correlate strongly with global name recognition. A celebrity with articles in 50 language editions is genuinely more globally recognized than one with 5. This avoids subjective "fame" rankings and uses objective, verifiable data.
+                    </p>
+                  </div>
+                  <p className="text-muted-foreground text-xs">
+                    Source: <a href="https://www.wikidata.org" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80">Wikidata (wikidata.org)</a> — CC BY 4.0 License
+                  </p>
                   <p className="text-muted-foreground leading-relaxed mt-4">
-                    Only the day and month of your birth date are used for matching. The year is never transmitted.
+                    Only the day and month of your birth date are used for matching. The year is never transmitted. Visit the{' '}
+                    <Link to="/celebrity-birthday" className="text-indigo-600 hover:underline font-medium">Celebrity Birthday Match</Link>{' '}
+                    tool to see this in action.
                   </p>
                 </div>
               </section>
@@ -348,7 +366,9 @@ export default function Methodology() {
                   <span className="ml-2"><CitationBadge>NASA JPL 2024</CitationBadge></span>
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Your age on another planet is the number of complete orbits that planet has made around the Sun since your birth. BornClock uses mean sidereal orbital periods from the NASA JPL Planetary Fact Sheet (Williams, D.R., NASA GSFC, 2024).
+                  Your age on another planet is the number of complete orbits that planet has made around the Sun since your birth. BornClock's{' '}
+                  <Link to="/planetary-age" className="text-indigo-600 hover:underline font-medium">Planetary Age Calculator</Link>{' '}
+                  uses mean sidereal orbital periods from the NASA JPL Planetary Fact Sheet (Williams, D.R., NASA GSFC, 2024).
                 </p>
                 <FormulaBlock>
                   {`daysSinceBirth = (today − birthDate) in Earth days\nplanetAge     = daysSinceBirth / orbitalPeriod[planet]`}
@@ -392,7 +412,9 @@ export default function Methodology() {
                   Zodiac Signs
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  BornClock uses the <strong className="text-foreground">Western tropical zodiac</strong> — the twelve equal 30° divisions of the ecliptic, fixed to the vernal equinox. Date ranges follow the standard astronomical calendar boundaries that have been used since classical antiquity.
+                  BornClock's{' '}
+                  <Link to="/zodiac" className="text-indigo-600 hover:underline font-medium">Zodiac Analysis</Link>{' '}
+                  uses the <strong className="text-foreground">Western tropical zodiac</strong> — the twelve equal 30° divisions of the ecliptic, fixed to the vernal equinox. Date ranges follow the standard astronomical calendar boundaries that have been used since classical antiquity.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                   The calculator handles cusp dates using conventional fixed-date cutoffs rather than the precise Sun-position at the hour of birth, since most users do not know their exact birth time.
@@ -405,7 +427,9 @@ export default function Methodology() {
                   Numerology — Life Path Number
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  BornClock calculates the <strong className="text-foreground">Pythagorean Life Path Number</strong>: reduce the full birth date (day + month + year) to a single digit by repeatedly summing its digits. Master numbers 11, 22, and 33 are preserved without further reduction.
+                  BornClock's{' '}
+                  <Link to="/numerology" className="text-indigo-600 hover:underline font-medium">Numerology Calculator</Link>{' '}
+                  computes the <strong className="text-foreground">Pythagorean Life Path Number</strong>: reduce the full birth date (day + month + year) to a single digit by repeatedly summing its digits. Master numbers 11, 22, and 33 are preserved without further reduction.
                 </p>
                 <p className="text-muted-foreground font-medium mb-2">Example — 15 June 1990:</p>
                 <FormulaBlock>
@@ -422,7 +446,9 @@ export default function Methodology() {
                   Birthstone
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  BornClock uses the <strong className="text-foreground">American Gem Society / Jewelers of America official birthstone list</strong>, updated in 2002 (Tanzanite added for December) and 2016 (Spinel added for August). Where a month has multiple modern stones, all alternatives are displayed with their historical provenance.
+                  BornClock's{' '}
+                  <Link to="/birthstone" className="text-indigo-600 hover:underline font-medium">Birthstone</Link>{' '}
+                  tool uses the <strong className="text-foreground">American Gem Society / Jewelers of America official birthstone list</strong>, updated in 2002 (Tanzanite added for December) and 2016 (Spinel added for August). Where a month has multiple modern stones, all alternatives are displayed with their historical provenance.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                   Traditional and Ayurvedic alternative stones are shown as supplementary information, clearly labelled to distinguish them from the modern standardised list.
@@ -436,7 +462,9 @@ export default function Methodology() {
                   <span className="ml-2"><CitationBadge>Pew Research 2019</CitationBadge></span>
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  BornClock classifies birth years into generational cohorts using Pew Research Center (2019) definitions:
+                  BornClock's{' '}
+                  <Link to="/generation" className="text-indigo-600 hover:underline font-medium">Generation Classification</Link>{' '}
+                  tool classifies birth years into generational cohorts using Pew Research Center (2019) definitions:
                 </p>
                 <div className="overflow-x-auto rounded-lg border border-border">
                   <table className="w-full text-sm text-muted-foreground">
@@ -489,6 +517,36 @@ export default function Methodology() {
 
             </div>
           </div>
+
+          {/* ── RELATED TOOLS ── */}
+          <section className="mt-12 mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-2 text-center">
+              Explore Our Methodology in Action
+            </h2>
+            <p className="text-muted-foreground text-center text-sm mb-6">
+              Try the tools described above
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {[
+                { icon: '🔬', label: 'Life Expectancy Calculator', to: '/life-expectancy' },
+                { icon: '🧬', label: 'Biological Age Test', to: '/biological-age' },
+                { icon: '♓', label: 'Zodiac Analysis', to: '/zodiac' },
+                { icon: '🔢', label: 'Numerology Calculator', to: '/numerology' },
+                { icon: '🪐', label: 'Planetary Age', to: '/planetary-age' },
+                { icon: '🌍', label: 'Country Comparison', to: '/country-comparison' },
+              ].map(tool => (
+                <Link
+                  key={tool.to}
+                  to={tool.to}
+                  className="flex items-center gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/40 hover:bg-primary/5 transition-all"
+                >
+                  <span className="text-2xl">{tool.icon}</span>
+                  <span className="text-sm font-medium text-foreground">{tool.label}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+
         </div>
       </div>
 
