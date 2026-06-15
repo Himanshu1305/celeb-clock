@@ -1,33 +1,12 @@
-# Robots.txt for Celeb Clock
-# https://celeb-clock.preview.emergentagent.com
-
+# BornClock — https://bornclock.com
 User-agent: *
 Allow: /
 
-# Sitemap location
-Sitemap: https://celeb-clock.preview.emergentagent.com/sitemap.xml
-
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
-
-# Disallow admin/auth pages from indexing
+# Keep auth, admin and payment pages out of index
 Disallow: /auth
+Disallow: /admin
 Disallow: /upgrade
+Disallow: /profile
 
-# Allow all blog content
-Allow: /blog/
-Allow: /blog/*
-
-# Allow all main features
-Allow: /celebrity-birthday
-Allow: /zodiac
-Allow: /birthstone
-Allow: /life-expectancy
-
-# Allow static assets
-Allow: /assets/
-Allow: /*.js
-Allow: /*.css
-Allow: /*.png
-Allow: /*.jpg
-Allow: /*.svg
+# Sitemap
+Sitemap: https://bornclock.com/sitemap.xml

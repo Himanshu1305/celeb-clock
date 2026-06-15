@@ -168,9 +168,9 @@ const LifeExpectancy = () => {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
-        title="Best Life Expectancy Calculator — How Long Will I Live? (Free)"
-        description="The best free life expectancy calculator. Estimate your lifespan based on 15+ health and lifestyle factors using WHO and CDC actuarial data. See what years you can gain."
-        keywords="best life expectancy calculator, how long will I live, lifespan calculator, life expectancy, longevity calculator"
+        title="Life Expectancy Calculator — How Long Will I Live? Death Clock & Lifespan Test"
+        description="How long will I live? Our free life expectancy calculator uses WHO and CDC actuarial data across 15+ health factors to estimate your lifespan. More accurate than any death clock — see the years you can gain."
+        keywords="how long will I live, life expectancy calculator, death clock, when will I die, lifespan calculator, longevity calculator, how many years do I have left, life expectancy test"
         canonicalUrl="/life-expectancy"
       />
       <div className="container mx-auto px-4 py-8">

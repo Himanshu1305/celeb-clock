@@ -58,7 +58,7 @@ const Index = () => {
       <SEO
         title="Best Age Calculator, Celebrity Birthday Match & Life Expectancy"
         description="The best free age calculator, celebrity birthday match, zodiac, birthstone, numerology, planetary age and life expectancy tools — accurate, live, sourced from WHO, CDC, NASA and Wikipedia."
-        keywords="best age calculator, best celebrity birthday match, best life expectancy calculator, best numerology calculator, best zodiac sign calculator, best birthstone finder, best planetary age calculator"
+        keywords="age calculator, how old am I, born in 1990 how old, born in 1985 how old, born in 1995 how old, celebrity birthday match, famous birthdays today, life expectancy calculator, how long will I live, death clock, zodiac sign calculator, birthstone finder, planetary age calculator"
         canonicalUrl="/"
       />
       <div className="container mx-auto px-4 py-8">

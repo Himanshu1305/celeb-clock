@@ -1,20 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://celeb-clock.lovable.app/</loc><lastmod>2026-05-26</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/age-calculator</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/life-expectancy</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/celebrity-birthday</loc><lastmod>2026-05-26</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/todays-birthdays</loc><lastmod>2026-05-26</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/numerology</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/zodiac</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/birthstone</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/planetary-age</loc><lastmod>2026-05-26</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/blog</loc><lastmod>2026-05-26</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/about</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/methodology</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/editorial-policy</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/faq</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/contact</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/privacy</loc><lastmod>2026-05-26</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://celeb-clock.lovable.app/terms</loc><lastmod>2026-05-26</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+
+  <!-- Core pages -->
+  <url><loc>https://bornclock.com/</loc><lastmod>2026-06-15</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://bornclock.com/age-calculator</loc><lastmod>2026-06-15</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://bornclock.com/life-expectancy</loc><lastmod>2026-06-15</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://bornclock.com/celebrity-birthday</loc><lastmod>2026-06-15</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://bornclock.com/todays-birthdays</loc><lastmod>2026-06-15</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://bornclock.com/birthday</loc><lastmod>2026-06-15</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bornclock.com/birthday-report</loc><lastmod>2026-06-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bornclock.com/biological-age</loc><lastmod>2026-06-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bornclock.com/country-comparison</loc><lastmod>2026-06-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bornclock.com/planetary-age</loc><lastmod>2026-06-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bornclock.com/numerology</loc><lastmod>2026-06-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bornclock.com/zodiac</loc><lastmod>2026-06-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bornclock.com/birthstone</loc><lastmod>2026-06-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bornclock.com/generation</loc><lastmod>2026-06-15</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/leaderboard</loc><lastmod>2026-06-15</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/family</loc><lastmod>2026-06-15</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+
+  <!-- Blog index -->
+  <url><loc>https://bornclock.com/blog</loc><lastmod>2026-06-15</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+
+  <!-- Blog posts -->
+  <url><loc>https://bornclock.com/blog/calculate-exact-age-seconds-minutes-hours</loc><lastmod>2025-01-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/celebrities-born-on-my-birthday-famous-birthday-twins</loc><lastmod>2025-01-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/zodiac-signs-complete-guide-personality-traits-compatibility</loc><lastmod>2025-01-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/birthstones-by-month-complete-guide-meaning-history</loc><lastmod>2025-01-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/how-to-increase-life-expectancy-science-backed-tips</loc><lastmod>2025-02-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/birthday-traditions-around-the-world-unique-celebrations</loc><lastmod>2025-02-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/why-knowing-exact-age-matters-practical-uses</loc><lastmod>2025-02-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/how-sleep-affects-life-expectancy-complete-guide</loc><lastmod>2025-02-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/best-foods-to-eat-to-live-longer-longevity-diet</loc><lastmod>2025-02-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/how-exercise-affects-life-expectancy-workout-guide</loc><lastmod>2025-02-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/how-stress-affects-health-life-expectancy-management-tips</loc><lastmod>2025-03-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/bmi-weight-life-expectancy-healthy-weight-guide</loc><lastmod>2025-03-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/smoking-life-expectancy-how-to-quit-complete-guide</loc><lastmod>2025-03-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/secrets-of-people-who-live-to-100-centenarian-habits</loc><lastmod>2025-03-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/hidden-cost-chronic-stress-rewires-brain-body</loc><lastmod>2025-04-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/loneliness-deadly-as-smoking-social-connection-longevity</loc><lastmod>2025-04-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/5-minute-morning-routine-add-years-to-life</loc><lastmod>2025-04-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/ultra-processed-foods-shortening-lifespan</loc><lastmod>2025-04-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/walking-vs-running-which-exercise-live-longer</loc><lastmod>2025-05-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/sleep-longevity-science</loc><lastmod>2025-05-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/exercise-longevity-guide</loc><lastmod>2025-05-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/longevity-diet-guide</loc><lastmod>2025-05-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/stress-mental-health-longevity</loc><lastmod>2025-06-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/preventive-health-screening-guide</loc><lastmod>2025-06-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/blog/community-social-longevity</loc><lastmod>2025-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Company / static pages -->
+  <url><loc>https://bornclock.com/about</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://bornclock.com/methodology</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bornclock.com/editorial-policy</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://bornclock.com/faq</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bornclock.com/contact</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://bornclock.com/privacy</loc><lastmod>2026-06-15</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://bornclock.com/terms</loc><lastmod>2026-06-15</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+
 </urlset>
