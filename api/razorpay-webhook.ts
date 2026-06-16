@@ -80,6 +80,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               updated_at: new Date().toISOString(),
             })
             .eq('id', profile.id);
+
+          if (eventType === 'subscription.cancelled') {
+            const { data: userData } = await supabaseAdmin.auth.admin.getUserById(profile.id);
+            if (userData?.user?.email) {
+              const accessUntil = subscription.current_end
+                ? new Date(subscription.current_end * 1000).toLocaleDateString('en-IN', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })
+                : 'end of billing period';
+              const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+                ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+                : `https://${process.env.VERCEL_URL || 'bornclock.com'}`;
+              await fetch(`${baseUrl}/api/send-email`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  type: 'cancellation',
+                  to: userData.user.email,
+                  name: userData.user.user_metadata?.first_name || 'there',
+                  accessUntil,
+                }),
+              });
+            }
+          }
         }
         break;
       }

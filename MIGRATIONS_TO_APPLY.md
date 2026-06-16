@@ -39,3 +39,30 @@ ANTHROPIC_API_KEY=your_key_here
 Required for AI Longevity Coach feature (`/api/longevity-coach`).
 
 Get your key from: console.anthropic.com
+
+---
+
+## Email System (Resend) — Added June 2026
+
+Add these to Vercel project settings:
+
+```
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
+```
+
+Required for all transactional emails via `/api/send-email`:
+- Welcome email on signup
+- Trial day 6 expiry warning
+- Payment confirmation after Razorpay success
+- Subscription cancellation confirmation
+- Weekly re-engagement nudges (free + premium)
+
+Get your key from: resend.com/api-keys
+Sender domain: bornclock.com (already verified)
+From address: hello@bornclock.com
+
+**VERCEL_URL note:** The Razorpay webhook (`/api/razorpay-webhook`) calls
+`/api/send-email` internally to send cancellation emails. Vercel automatically
+sets `VERCEL_URL` (preview) and `VERCEL_PROJECT_PRODUCTION_URL` (production) —
+no manual configuration required. If emails are not sending from the webhook,
+verify both env vars are present in your Vercel project settings.

@@ -1,5 +1,6 @@
 import { CountryInfo, getPlanId } from './CountryDetectionService';
 import { supabase } from '@/integrations/supabase/client';
+import { EmailService } from '@/services/EmailService';
 
 declare global {
   interface Window {
@@ -91,6 +92,22 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
             updated_at: new Date().toISOString(),
           })
           .eq('id', userId);
+
+        const nextBillingDate = new Date();
+        nextBillingDate.setMonth(
+          nextBillingDate.getMonth() + (billing === 'annual' ? 12 : 1)
+        );
+        EmailService.sendPaymentConfirmation(
+          userEmail,
+          userName || 'there',
+          billing === 'annual' ? 'Premium Annual' : 'Premium Monthly',
+          billing === 'annual' ? '₹2,499/year' : '₹299/month',
+          nextBillingDate.toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          })
+        );
       } catch {}
       onSuccess();
     },

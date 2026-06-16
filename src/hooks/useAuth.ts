@@ -3,6 +3,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { calculateTrialStatus } from '@/utils/trialUtils';
+import { EmailService } from '@/services/EmailService';
 
 interface Profile {
   id: string;
@@ -87,7 +88,7 @@ export const useAuth = () => {
   ) => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -100,7 +101,7 @@ export const useAuth = () => {
         }
       }
     });
-    
+
     if (error) {
       toast({
         title: "Sign Up Error",
@@ -112,8 +113,16 @@ export const useAuth = () => {
         title: "Check your email",
         description: "We've sent you a confirmation link to complete your signup."
       });
+      const userName =
+        data.user?.user_metadata?.first_name ||
+        data.user?.user_metadata?.name ||
+        data.user?.email?.split('@')[0] ||
+        'there';
+      if (data.user?.email) {
+        EmailService.sendWelcome(data.user.email, userName, 7);
+      }
     }
-    
+
     return { error };
   };
 
