@@ -45,7 +45,7 @@ const FAQ_ITEMS = [
   },
   {
     question: 'How old am I on Jupiter?',
-    answer: 'Your age on Jupiter = Earth age × 365.25 ÷ 4,331. A 30-year-old on Earth is approximately 2.53 years old on Jupiter. Most people haven\'t even reached their third Jupiter birthday in a full human lifetime. [NASA JPL Planetary Fact Sheet, Williams, 2024]',
+    answer: "Your age on Jupiter = Earth age × 365.25 ÷ 4,331. A 30-year-old on Earth is approximately 2.53 years old on Jupiter. Most people haven't even reached their third Jupiter birthday in a full human lifetime. [NASA JPL Planetary Fact Sheet, Williams, 2024]",
   },
   {
     question: 'Would I have had my first birthday on Neptune?',
@@ -53,11 +53,11 @@ const FAQ_ITEMS = [
   },
   {
     question: 'Why is a year different on each planet?',
-    answer: 'A year is simply the time a planet takes to orbit the Sun once. This is governed by Kepler\'s Third Law of Planetary Motion (1619): planets further from the Sun travel slower and have longer years. Mercury\'s year is 88 Earth days; Neptune\'s year is 164.8 Earth years.',
+    answer: "A year is simply the time a planet takes to orbit the Sun once. This is governed by Kepler's Third Law of Planetary Motion (1619): planets further from the Sun travel slower and have longer years. Mercury's year is 88 Earth days; Neptune's year is 164.8 Earth years.",
   },
   {
     question: 'Can it really rain diamonds on Neptune?',
-    answer: 'Yes — according to research published in the journal Science (2017), the extreme pressure and heat in Neptune\'s interior causes carbon atoms to form diamond crystals that sink toward the core. Scientists estimate millions of tonnes of diamonds precipitate through Neptune\'s interior annually.',
+    answer: "Yes — according to research published in the journal Science (2017), the extreme pressure and heat in Neptune's interior causes carbon atoms to form diamond crystals that sink toward the core. Scientists estimate millions of tonnes of diamonds precipitate through Neptune's interior annually.",
   },
   {
     question: 'Why is the sunset on Mars blue?',
@@ -120,7 +120,8 @@ const PlanetaryAgePage = () => {
   const neptuneLastYear = new Date().getFullYear() - 165;
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
+    // Dark slate-950 base for the entire page
+    <div className="min-h-screen bg-slate-950">
       <SEO
         title="Planetary Age Calculator — How Old Are You on Mars, Jupiter & Every Planet? | BornClock"
         description="How old are you on other planets? On Mercury you have hundreds of birthdays. On Neptune you've barely been born. It rains diamonds on Neptune. The sunset on Mars is blue. Calculate your cosmic age across all 8 planets using real NASA data. Mind-blowing and shareable."
@@ -147,9 +148,18 @@ const PlanetaryAgePage = () => {
         `}</style>
       </Helmet>
 
-      {/* ── PHASE 1 — Space landing hero ─────────────────────────────────── */}
+      {/* ── WHITE NAVBAR — always light, always readable ─────────────────── */}
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <Navigation />
+          <AuthNav />
+        </div>
+      </div>
+
+      {/* ── PHASE 1 — Space landing hero (before DOB) ────────────────────── */}
       {!showResults && (
         <>
+          {/* Hero section — dark gradient overlay on the dark base */}
           <div
             className="relative overflow-hidden"
             style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #0d1a2e 100%)' }}
@@ -174,12 +184,7 @@ const PlanetaryAgePage = () => {
               />
             ))}
 
-            <div className="container mx-auto px-4 py-8 relative z-10">
-              <header className="flex justify-between items-center mb-12">
-                <Navigation />
-                <AuthNav />
-              </header>
-
+            <div className="container mx-auto px-4 py-16 relative z-10">
               <div className="max-w-3xl mx-auto text-center pb-16">
                 {/* Animated planet emoji row */}
                 <div
@@ -204,7 +209,7 @@ const PlanetaryAgePage = () => {
                   calculated using real NASA orbital data.
                 </p>
 
-                {/* DOB input card */}
+                {/* DOB input card — white on dark */}
                 <div className="bg-white rounded-2xl p-6 max-w-sm mx-auto mb-6 shadow-2xl">
                   <label className="block text-sm font-semibold text-gray-700 text-left mb-2">
                     Your date of birth
@@ -240,17 +245,17 @@ const PlanetaryAgePage = () => {
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="text-orange-400 text-sm shrink-0 mt-0.5">♃</span>
+                      <span className="text-indigo-400 text-sm shrink-0 mt-0.5">♃</span>
                       <p className="text-sm text-slate-300 leading-relaxed">
                         Your age on Jupiter is probably a single digit.{' '}
                         <span className="text-slate-500 italic">Enter your birthday above to find out.</span>
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="text-blue-400 text-sm shrink-0 mt-0.5">♆</span>
+                      <span className="text-indigo-300 text-sm shrink-0 mt-0.5">♆</span>
                       <p className="text-sm text-slate-300 leading-relaxed">
                         The last time Neptune completed a full orbit, it was{' '}
-                        <span className="text-blue-400 font-bold">{neptuneLastYear}</span>
+                        <span className="text-indigo-300 font-bold">{neptuneLastYear}</span>
                         {' '}— the year the American Civil War began.
                       </p>
                     </div>
@@ -259,7 +264,7 @@ const PlanetaryAgePage = () => {
 
                 {/* Scroll nudge */}
                 <div
-                  className="text-slate-400 text-sm"
+                  className="text-slate-500 text-sm"
                   style={{ animation: 'bounce-down 1.5s ease-in-out infinite' }}
                 >
                   Discover the facts ↓
@@ -268,69 +273,41 @@ const PlanetaryAgePage = () => {
             </div>
           </div>
 
-          {/* ── Below hero — "Why Your Age Depends" narrative ─────────────── */}
+          {/* ── "Why Your Age Depends" narrative — on dark bg ──────────────── */}
           <div className="container mx-auto px-4 py-14 max-w-2xl text-center">
-            <h2 className="text-2xl font-bold text-foreground mb-6">
+            <h2 className="text-2xl font-bold text-white mb-6">
               Why Your Age Depends on Where You Stand
             </h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">
+            <p className="text-slate-300 leading-relaxed mb-4">
               A year isn't a universal measure. It's just how long it takes your specific planet to orbit the Sun.
               Earth takes 365.25 days. Mercury takes 88 days. Neptune takes 60,190 days — nearly 165 Earth years.
               Same Sun. Completely different experience of time.
             </p>
-            <p className="text-muted-foreground leading-relaxed mb-4">
+            <p className="text-slate-300 leading-relaxed mb-4">
               This isn't just a fun trick. It's a genuine consequence of Kepler's Third Law of Planetary Motion,
               published in 1619 — the relationship between a planet's orbital period and its distance from the Sun.
               The further you are from the Sun, the slower you orbit, and the longer your year.
             </p>
-            <p className="text-muted-foreground leading-relaxed mb-4">
+            <p className="text-slate-300 leading-relaxed mb-4">
               The implications are mind-bending. A 30-year-old on Earth is simultaneously 124.5 years old on Mercury,
               48.9 on Venus, 15.9 on Mars, 2.5 on Jupiter, 1.0 on Saturn, 0.35 on Uranus, and barely 0.16 on Neptune.
               Same person. Eight completely different ages. Enter your birthday to find yours.
             </p>
-            <p className="text-xs text-muted-foreground mt-4 italic">
+            <p className="text-xs text-slate-500 mt-4 italic">
               [NASA JPL Planetary Fact Sheets, 2024; Kepler, J., Harmonices Mundi, 1619]
             </p>
           </div>
         </>
       )}
 
-      {/* ── PHASE 2 — Results ────────────────────────────────────────────── */}
+      {/* ── PHASE 2 — Results (after DOB) ────────────────────────────────── */}
       {showResults && birthDate && (
         <>
-          <div
-            className="relative overflow-hidden"
-            style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #0d1a2e 100%)' }}
-          >
-            {HERO_STARS.slice(0, 40).map((s, i) => (
-              <div
-                key={i}
-                style={{
-                  position: 'absolute',
-                  top: s.top,
-                  left: s.left,
-                  width: `${s.size}px`,
-                  height: `${s.size}px`,
-                  borderRadius: '50%',
-                  background: 'white',
-                  opacity: s.opacity,
-                  pointerEvents: 'none',
-                }}
-              />
-            ))}
-            <div className="container mx-auto px-4 py-8 relative z-10">
-              <header className="flex justify-between items-center">
-                <Navigation />
-                <AuthNav />
-              </header>
-            </div>
-          </div>
-
-          <div className="container mx-auto px-4 pb-8">
+          <div className="container mx-auto px-4 pb-8 pt-4">
             <div className="text-center py-4">
               <button
                 onClick={handleReset}
-                className="text-sm text-muted-foreground hover:text-foreground underline transition-colors"
+                className="text-sm text-slate-400 hover:text-slate-200 underline transition-colors"
               >
                 ← Calculate for a different birthday
               </button>
@@ -339,7 +316,7 @@ const PlanetaryAgePage = () => {
           </div>
 
           <div className="max-w-2xl mx-auto px-4 py-8 text-center">
-            <p className="text-xs text-slate-500 leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed">
               Sources: NASA JPL Planetary Fact Sheet (Williams, D.R., 2024) — nssdc.gsfc.nasa.gov/planetary/factsheet/ |
               NASA JPL Solar System Dynamics — ssd.jpl.nasa.gov | Kepler, J. (1619). Harmonices Mundi |
               Newton, I. (1687). Principia Mathematica | Science, 2017 (diamond precipitation on Neptune) |
