@@ -59,7 +59,9 @@ export const Footer = () => {
             <ul className="space-y-2 text-sm">
               <li><Link to="/celebrity-birthday" className="text-muted-foreground hover:text-accent transition-colors">Celebrity Birthdays</Link></li>
               <li><Link to="/age-calculator" className="text-muted-foreground hover:text-accent transition-colors">Today's Birthdays</Link></li>
-              <li><Link to="/zodiac" className="text-muted-foreground hover:text-accent transition-colors">Zodiac Signs</Link></li>
+              <li><Link to="/zodiac" className="text-muted-foreground hover:text-accent transition-colors">Western Zodiac</Link></li>
+              <li><Link to="/chinese-zodiac" className="text-muted-foreground hover:text-accent transition-colors">Chinese Zodiac</Link></li>
+              <li><Link to="/vedic-zodiac" className="text-muted-foreground hover:text-accent transition-colors">Indian Zodiac (Vedic)</Link></li>
               <li><Link to="/birthstone" className="text-muted-foreground hover:text-accent transition-colors">Birthstone Finder</Link></li>
               <li><Link to="/numerology" className="text-muted-foreground hover:text-accent transition-colors">Numerology</Link></li>
             </ul>

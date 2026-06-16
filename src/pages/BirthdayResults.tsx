@@ -22,6 +22,7 @@ import { SEO } from '@/components/SEO';
 import html2canvas from 'html2canvas';
 import { getChineseZodiac } from '@/services/ChineseZodiacService';
 import { getVedicRashi } from '@/services/VedicZodiacService';
+import { RASHI_NAME_TO_SLUG } from '@/services/VedicZodiacExtended';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const MONTH_SLUGS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -130,6 +131,21 @@ const calculatePlanetaryAges = (earthYears: number) => [
   { name: 'Jupiter', years: (earthYears / 11.86).toFixed(1), emoji: '🟠', color: 'text-orange-500' },
   { name: 'Saturn', years: (earthYears / 29.46).toFixed(1), emoji: '🪐', color: 'text-amber-600' },
 ];
+
+const WESTERN_SIGN_INFO: Record<string, { element: string; planet: string; dateRange: string }> = {
+  Aries:       { element: 'Fire',  planet: 'Mars',    dateRange: 'Mar 21 – Apr 19' },
+  Taurus:      { element: 'Earth', planet: 'Venus',   dateRange: 'Apr 20 – May 20' },
+  Gemini:      { element: 'Air',   planet: 'Mercury', dateRange: 'May 21 – Jun 20' },
+  Cancer:      { element: 'Water', planet: 'Moon',    dateRange: 'Jun 21 – Jul 22' },
+  Leo:         { element: 'Fire',  planet: 'Sun',     dateRange: 'Jul 23 – Aug 22' },
+  Virgo:       { element: 'Earth', planet: 'Mercury', dateRange: 'Aug 23 – Sep 22' },
+  Libra:       { element: 'Air',   planet: 'Venus',   dateRange: 'Sep 23 – Oct 22' },
+  Scorpio:     { element: 'Water', planet: 'Pluto',   dateRange: 'Oct 23 – Nov 21' },
+  Sagittarius: { element: 'Fire',  planet: 'Jupiter', dateRange: 'Nov 22 – Dec 21' },
+  Capricorn:   { element: 'Earth', planet: 'Saturn',  dateRange: 'Dec 22 – Jan 19' },
+  Aquarius:    { element: 'Air',   planet: 'Uranus',  dateRange: 'Jan 20 – Feb 18' },
+  Pisces:      { element: 'Water', planet: 'Neptune', dateRange: 'Feb 19 – Mar 20' },
+};
 
 const BirthdayResults = () => {
   const { birthDate } = useBirthDate();
@@ -358,10 +374,10 @@ const BirthdayResults = () => {
           </Card>
         </section>
 
-        {/* Birthday Signs — 6-card grid */}
-        <section className="max-w-5xl mx-auto mb-12">
+        {/* Birthday Signs — 3-card grid */}
+        <section className="max-w-5xl mx-auto mb-8">
           <h2 className="text-xl font-bold text-foreground mb-4">Your Birthday Signs</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Card className="glass-card hover:scale-[1.02] transition-transform">
               <CardContent className="p-4 text-center">
                 <span className="text-3xl mb-1 block">👥</span>
@@ -371,17 +387,6 @@ const BirthdayResults = () => {
                 <Link to={`/generation?name=${encodeURIComponent(generation.name)}`}
                   className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5">
                   Explore Generation →
-                </Link>
-              </CardContent>
-            </Card>
-            <Card className="glass-card hover:scale-[1.02] transition-transform">
-              <CardContent className="p-4 text-center">
-                <span className="text-3xl mb-1 block">{zodiac.symbol}</span>
-                <h3 className="font-bold text-foreground text-sm">{zodiac.sign}</h3>
-                <p className="text-xs text-muted-foreground">Zodiac Sign</p>
-                <Link to={`/zodiac?sign=${encodeURIComponent(zodiac.sign)}`}
-                  className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5">
-                  Explore your Zodiac →
                 </Link>
               </CardContent>
             </Card>
@@ -407,31 +412,111 @@ const BirthdayResults = () => {
                 </Link>
               </CardContent>
             </Card>
-            <Card className="glass-card hover:scale-[1.02] transition-transform">
-              <CardContent className="p-4 text-center">
-                <span className="text-3xl mb-1 block">{chineseZodiac.emoji}</span>
-                <h3 className="font-bold text-foreground text-sm">{chineseZodiac.animal}</h3>
-                <p className="text-xs text-muted-foreground">Chinese Zodiac</p>
-                <p className="text-[10px] text-muted-foreground/70 mt-0.5">{chineseZodiac.element} · {chineseZodiac.yin_yang}</p>
-                <Link to="/chinese-zodiac"
-                  className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5">
-                  Explore Chinese Zodiac →
+          </div>
+        </section>
+
+        {/* Your Complete Zodiac Profile — 3-column unified section */}
+        <section className="max-w-5xl mx-auto mb-12">
+          <h2 className="text-xl font-bold text-foreground mb-2">Your Complete Zodiac Profile</h2>
+          <p className="text-sm text-muted-foreground mb-4">Three different astrological traditions. One birth date. Your cosmic fingerprint.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Western Zodiac */}
+            <Card className="glass-card border-blue-200/60 bg-gradient-to-br from-blue-50/30 to-indigo-50/30 hover:scale-[1.02] transition-transform">
+              <CardContent className="p-5">
+                <div className="text-center mb-3">
+                  <span className="text-4xl block mb-1">{zodiac.symbol}</span>
+                  <h3 className="font-bold text-foreground text-base">{zodiac.sign}</h3>
+                  <p className="text-xs text-blue-600 font-medium">Western Zodiac (Tropical)</p>
+                </div>
+                <div className="space-y-1.5 text-xs text-muted-foreground">
+                  <div className="flex justify-between">
+                    <span>Element</span>
+                    <span className="font-medium text-foreground">{WESTERN_SIGN_INFO[zodiac.sign]?.element ?? '—'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Ruling Planet</span>
+                    <span className="font-medium text-foreground">{WESTERN_SIGN_INFO[zodiac.sign]?.planet ?? '—'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Dates</span>
+                    <span className="font-medium text-foreground">{WESTERN_SIGN_INFO[zodiac.sign]?.dateRange ?? '—'}</span>
+                  </div>
+                </div>
+                <Link to={`/zodiac/${zodiac.sign.toLowerCase()}`}
+                  className="mt-3 text-xs text-blue-600 hover:underline flex items-center justify-center gap-0.5 font-medium">
+                  Full {zodiac.sign} Guide →
                 </Link>
               </CardContent>
             </Card>
-            <Card className="glass-card hover:scale-[1.02] transition-transform">
-              <CardContent className="p-4 text-center">
-                <span className="text-3xl mb-1 block">{vedicRashi.emoji}</span>
-                <h3 className="font-bold text-foreground text-sm">{vedicRashi.name}</h3>
-                <p className="text-xs text-muted-foreground">Vedic Rashi</p>
-                <p className="text-[10px] text-muted-foreground/70 mt-0.5">{vedicRashi.english} · {vedicRashi.ruling_planet}</p>
-                <Link to="/vedic-zodiac"
-                  className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5">
-                  Explore Vedic Zodiac →
+
+            {/* Chinese Zodiac */}
+            <Card className="glass-card border-red-200/60 bg-gradient-to-br from-red-50/30 to-orange-50/30 hover:scale-[1.02] transition-transform">
+              <CardContent className="p-5">
+                <div className="text-center mb-3">
+                  <span className="text-4xl block mb-1">{chineseZodiac.emoji}</span>
+                  <h3 className="font-bold text-foreground text-base">Year of the {chineseZodiac.animal}</h3>
+                  <p className="text-xs text-red-600 font-medium">Chinese Zodiac (Lunar)</p>
+                </div>
+                <div className="space-y-1.5 text-xs text-muted-foreground mb-2">
+                  <div className="flex justify-between">
+                    <span>Chinese Year</span>
+                    <span className="font-medium text-foreground">{chineseZodiac.year}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Element</span>
+                    <span className="font-medium text-foreground">{chineseZodiac.element} · {chineseZodiac.yin_yang}</span>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-1 justify-center mb-2">
+                  {chineseZodiac.traits.slice(0, 3).map((t: string) => (
+                    <span key={t} className="px-1.5 py-0.5 bg-red-100 text-red-700 rounded text-[10px]">{t}</span>
+                  ))}
+                </div>
+                <Link to={`/chinese-zodiac/${chineseZodiac.animal.toLowerCase()}`}
+                  className="mt-1 text-xs text-red-600 hover:underline flex items-center justify-center gap-0.5 font-medium">
+                  Full {chineseZodiac.animal} Guide →
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* Indian (Vedic) Zodiac */}
+            <Card className="glass-card border-orange-200/60 bg-gradient-to-br from-orange-50/30 to-amber-50/30 hover:scale-[1.02] transition-transform">
+              <CardContent className="p-5">
+                <div className="text-center mb-3">
+                  <span className="text-4xl block mb-1">{vedicRashi.emoji}</span>
+                  <h3 className="font-bold text-foreground text-base">{vedicRashi.name} Rashi</h3>
+                  <p className="text-xs text-orange-600 font-medium">Indian Zodiac (Vedic/Jyotish)</p>
+                </div>
+                <div className="space-y-1.5 text-xs text-muted-foreground">
+                  <div className="flex justify-between">
+                    <span>Western equivalent</span>
+                    <span className="font-medium text-foreground">{vedicRashi.english}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Ruling Planet</span>
+                    <span className="font-medium text-foreground">{vedicRashi.ruling_planet}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Element</span>
+                    <span className="font-medium text-foreground">{vedicRashi.element}</span>
+                  </div>
+                </div>
+                <Link to={`/vedic-zodiac/${RASHI_NAME_TO_SLUG[vedicRashi.name] ?? vedicRashi.name.toLowerCase()}`}
+                  className="mt-3 text-xs text-orange-600 hover:underline flex items-center justify-center gap-0.5 font-medium">
+                  Full {vedicRashi.name} Rashi Guide →
                 </Link>
               </CardContent>
             </Card>
           </div>
+          {zodiac.sign === vedicRashi.english ? (
+            <p className="text-xs text-center text-green-600 mt-3 font-medium">
+              ✅ Your Western and Vedic signs are the same — {zodiac.sign}. You were born in the sweet spot of the zodiac calendar.
+            </p>
+          ) : (
+            <p className="text-xs text-center text-muted-foreground mt-3">
+              🔄 Your Western sign ({zodiac.sign}) and Vedic rashi ({vedicRashi.name}/{vedicRashi.english}) differ due to the ~24° ayanamsa precession offset in Jyotish.
+            </p>
+          )}
         </section>
 
         {/* Discover More — 3 feature cards */}

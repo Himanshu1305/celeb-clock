@@ -103,16 +103,17 @@ const Index = () => {
 
             {/* Main Headline */}
             <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight gradient-text-primary">
-                Know your time. Live it well.
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 text-center leading-tight">
+                Know your time.{' '}
+                <span className="text-indigo-600">Live it well.</span>
               </h1>
 
-              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-600 text-center max-w-2xl mx-auto mt-4">
                 Life expectancy, birthday insights, and the science of a longer life — all from your date of birth.
               </p>
 
-              <p className="text-sm text-muted-foreground">
-                Enter your date of birth to get started →
+              <p className="text-sm text-indigo-600 font-medium text-center mb-3 italic">
+                Enter your date of birth to discover your celebrity birthday twin, zodiac signs, longevity forecast, and more →
               </p>
             </div>
 

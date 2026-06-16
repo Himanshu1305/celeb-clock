@@ -18,7 +18,6 @@ const navItems = [
   { path: '/numerology', label: 'Numerology', icon: Hash },
   { path: '/planetary-age', label: 'Planetary Age', icon: Globe },
   { path: '/life-expectancy', label: 'Life Expectancy', icon: Crown, premium: true },
-  { path: '/zodiac', label: 'Zodiac', icon: Sparkles },
   { path: '/birthstone', label: 'Birthstone', icon: Gem },
   { path: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { path: '/birthday-report', label: 'Gift Report', icon: Gift },
@@ -27,6 +26,12 @@ const navItems = [
   { path: '/biological-age', label: 'Biological Age', icon: Activity },
   { path: '/country-comparison', label: 'Country Comparison', icon: Map },
   { path: '/birthday-report', label: 'Birthday Report', icon: FileText },
+];
+
+const astrologyItems = [
+  { path: '/zodiac', label: 'Western Zodiac', emoji: '♈' },
+  { path: '/chinese-zodiac', label: 'Chinese Zodiac', emoji: '🐉' },
+  { path: '/vedic-zodiac', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
 ];
 
 export const Navigation = () => {
@@ -69,6 +74,26 @@ export const Navigation = () => {
           </Button>
         </Link>
       ))}
+
+      {/* Astrology dropdown */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={astrologyItems.some(i => isActive(i.path)) ? 'default' : 'ghost'} size="sm" className="gap-1.5">
+            <Sparkles className="w-4 h-4" />
+            <span className="hidden md:inline">Astrology</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {astrologyItems.map((item) => (
+            <Link key={item.path} to={item.path}>
+              <DropdownMenuItem className={`gap-2 cursor-pointer ${isActive(item.path) ? 'bg-accent' : ''}`}>
+                <span className="text-base leading-none">{item.emoji}</span>
+                {item.label}
+              </DropdownMenuItem>
+            </Link>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       {/* More dropdown */}
       <DropdownMenu>

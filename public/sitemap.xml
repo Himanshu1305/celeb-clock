@@ -60,4 +60,32 @@
   <url><loc>https://bornclock.com/privacy</loc><lastmod>2026-06-15</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://bornclock.com/terms</loc><lastmod>2026-06-15</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
 
+  <!-- Chinese Zodiac individual sign pages -->
+  <url><loc>https://bornclock.com/chinese-zodiac/rat</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/chinese-zodiac/ox</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/chinese-zodiac/tiger</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/chinese-zodiac/rabbit</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/chinese-zodiac/dragon</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/chinese-zodiac/snake</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/chinese-zodiac/horse</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/chinese-zodiac/goat</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/chinese-zodiac/monkey</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/chinese-zodiac/rooster</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/chinese-zodiac/dog</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/chinese-zodiac/pig</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Vedic Zodiac individual rashi pages -->
+  <url><loc>https://bornclock.com/vedic-zodiac/mesh</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/vedic-zodiac/vrishabh</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/vedic-zodiac/mithun</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/vedic-zodiac/kark</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/vedic-zodiac/simha</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/vedic-zodiac/kanya</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/vedic-zodiac/tula</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/vedic-zodiac/vrishchik</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/vedic-zodiac/dhanu</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/vedic-zodiac/makar</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/vedic-zodiac/kumbh</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bornclock.com/vedic-zodiac/meen</loc><lastmod>2026-06-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
 </urlset>

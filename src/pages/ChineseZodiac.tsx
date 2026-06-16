@@ -137,7 +137,7 @@ export default function ChineseZodiac() {
                 </div>
               </div>
 
-              <div>
+              <div className="mb-6">
                 <h3 className="font-semibold text-foreground mb-3">Famous {result.animal}s</h3>
                 <div className="flex flex-wrap justify-center gap-2">
                   {result.famous.map(name => (
@@ -147,6 +147,12 @@ export default function ChineseZodiac() {
                   ))}
                 </div>
               </div>
+              <Link
+                to={`/chinese-zodiac/${result.animal.toLowerCase()}`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-xl font-medium hover:opacity-90 transition-opacity text-sm"
+              >
+                Full {result.animal} Guide →
+              </Link>
             </CardContent>
           </Card>
         )}
@@ -160,19 +166,20 @@ export default function ChineseZodiac() {
             {ALL_ANIMALS.map(animal => {
               const isUserAnimal = result?.animal === animal.name;
               return (
-                <Card
-                  key={animal.name}
-                  className={`glass-card text-center p-4 transition-all ${
-                    isUserAnimal ? 'ring-2 ring-primary shadow-lg shadow-primary/20' : ''
-                  }`}
-                >
-                  <div className="text-4xl mb-2">{animal.emoji}</div>
-                  <div className="font-bold text-foreground">{animal.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1 leading-relaxed">{animal.years}</div>
-                  {isUserAnimal && (
-                    <Badge className="mt-2 text-xs">Your Sign</Badge>
-                  )}
-                </Card>
+                <Link key={animal.name} to={`/chinese-zodiac/${animal.name.toLowerCase()}`}>
+                  <Card
+                    className={`glass-card text-center p-4 transition-all hover:border-primary/50 cursor-pointer ${
+                      isUserAnimal ? 'ring-2 ring-primary shadow-lg shadow-primary/20' : ''
+                    }`}
+                  >
+                    <div className="text-4xl mb-2">{animal.emoji}</div>
+                    <div className="font-bold text-foreground">{animal.name}</div>
+                    <div className="text-xs text-muted-foreground mt-1 leading-relaxed">{animal.years}</div>
+                    {isUserAnimal && (
+                      <Badge className="mt-2 text-xs">Your Sign</Badge>
+                    )}
+                  </Card>
+                </Link>
               );
             })}
           </div>

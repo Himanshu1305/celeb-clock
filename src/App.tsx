@@ -43,7 +43,9 @@ import BiologicalAge from "./pages/BiologicalAge";
 import CountryComparison from "./pages/CountryComparison";
 import BirthdayReport from "./pages/BirthdayReport";
 import ChineseZodiac from "./pages/ChineseZodiac";
+import ChineseZodiacSign from "./pages/ChineseZodiacSign";
 import VedicZodiac from "./pages/VedicZodiac";
+import VedicZodiacSign from "./pages/VedicZodiacSign";
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
@@ -102,7 +104,9 @@ const App = () => (
               <Route path="/country-comparison" element={<CountryComparison />} />
               <Route path="/birthday-report" element={<BirthdayReport />} />
               <Route path="/chinese-zodiac" element={<ChineseZodiac />} />
+              <Route path="/chinese-zodiac/:animal" element={<ChineseZodiacSign />} />
               <Route path="/vedic-zodiac" element={<VedicZodiac />} />
+              <Route path="/vedic-zodiac/:rashi" element={<VedicZodiacSign />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

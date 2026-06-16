@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { VEDIC_SIGNS, getVedicRashi, compareZodiacs } from '@/services/VedicZodiacService';
+import { RASHI_NAME_TO_SLUG } from '@/services/VedicZodiacExtended';
 
 const FAQ_ITEMS = [
   {
@@ -44,10 +45,10 @@ export default function VedicZodiac() {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
-        title="Vedic Zodiac — Find Your Rashi (Indian Zodiac Sign)"
-        description="Calculate your Vedic Rashi (Indian zodiac sign) using the sidereal system. Compare your Western and Vedic signs, and understand the difference between tropical and sidereal astrology."
+        title="Indian Zodiac (Vedic Rashi) Calculator — Find Your Jyotish Sign | BornClock"
+        description="Calculate your Vedic Rashi (Indian zodiac sign) using the sidereal Jyotish system. Compare your Western and Vedic signs and explore all 12 rashis with their ruling planets, gemstones, and Ayurveda connections."
         canonicalUrl="/vedic-zodiac"
-        keywords="vedic zodiac, rashi calculator, vedic astrology, jyotish, sidereal zodiac, indian astrology, ayanamsa"
+        keywords="vedic zodiac, rashi calculator, vedic astrology, jyotish, sidereal zodiac, indian astrology, ayanamsa, indian zodiac sign"
       />
       <FAQSchema items={FAQ_ITEMS} />
 
@@ -58,16 +59,33 @@ export default function VedicZodiac() {
         </header>
 
         {/* Hero */}
-        <section className="text-center mb-10 animate-fade-in-up">
+        <section className="text-center mb-8 animate-fade-in-up">
           <div className="text-5xl mb-4">🕉️</div>
-          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-3">
-            Vedic Zodiac — Your Rashi
+          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-2">
+            Indian Zodiac Calculator
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-lg text-orange-700 font-semibold mb-3">Vedic Rashi — Jyotish Astrology</p>
+          <p className="text-muted-foreground text-base max-w-2xl mx-auto">
             Calculate your Indian zodiac sign (Rashi) using the ancient Jyotish sidereal system.
             Compare it with your Western sign — many people discover they are different.
           </p>
         </section>
+
+        {/* Jyotish Authority Box */}
+        <div className="bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50 border border-orange-200 rounded-xl p-5 mb-8 max-w-3xl mx-auto">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">📿</span>
+            <div>
+              <p className="text-sm font-bold text-orange-900 mb-1">About Jyotish — Ancient Indian Astrology</p>
+              <p className="text-xs text-orange-800 leading-relaxed">
+                Jyotish (ज्योतिष) is one of the Vedangas — the six auxiliary disciplines of the Vedas.
+                It uses the <strong>sidereal zodiac</strong> corrected for the precession of equinoxes
+                (ayanamsa ≈ 23.85°), making it more astronomically precise than the Western tropical zodiac.
+                Your Vedic rashi is typically one sign earlier than your Western sun sign.
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Calculator */}
         <Card className="glass-card max-w-md mx-auto mb-10">
@@ -174,21 +192,23 @@ export default function VedicZodiac() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {VEDIC_SIGNS.map(sign => {
               const isUserSign = result?.vedicRashi.name === sign.name;
+              const slug = RASHI_NAME_TO_SLUG[sign.name] ?? sign.name.toLowerCase();
               return (
-                <Card
-                  key={sign.name}
-                  className={`glass-card text-center p-4 transition-all ${
-                    isUserSign ? 'ring-2 ring-primary shadow-lg shadow-primary/20' : ''
-                  }`}
-                >
-                  <div className="text-3xl mb-1">{sign.emoji}</div>
-                  <div className="font-bold text-foreground text-sm">{sign.name}</div>
-                  <div className="text-xs text-muted-foreground">{sign.english}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{sign.ruling_planet}</div>
-                  {isUserSign && (
-                    <Badge className="mt-2 text-xs">Your Rashi</Badge>
-                  )}
-                </Card>
+                <Link key={sign.name} to={`/vedic-zodiac/${slug}`}>
+                  <Card
+                    className={`glass-card text-center p-4 transition-all hover:border-primary/50 cursor-pointer ${
+                      isUserSign ? 'ring-2 ring-primary shadow-lg shadow-primary/20' : ''
+                    }`}
+                  >
+                    <div className="text-3xl mb-1">{sign.emoji}</div>
+                    <div className="font-bold text-foreground text-sm">{sign.name}</div>
+                    <div className="text-xs text-muted-foreground">{sign.english}</div>
+                    <div className="text-xs text-muted-foreground mt-1">{sign.ruling_planet}</div>
+                    {isUserSign && (
+                      <Badge className="mt-2 text-xs">Your Rashi</Badge>
+                    )}
+                  </Card>
+                </Link>
               );
             })}
           </div>
