@@ -22,6 +22,8 @@ Run these in Supabase SQL Editor in order:
 
 7. 20260615180000_subscription_fields.sql
 
+8. 20260616120000_birthday_reports.sql — NEW · Birthday report storage with expiry (RLS)
+
 To apply: go to supabase.com → your project → SQL Editor → paste content of each file → Run
 
 ---

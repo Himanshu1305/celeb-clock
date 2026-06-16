@@ -42,6 +42,7 @@ import GiftReport from "./pages/GiftReport";
 import BiologicalAge from "./pages/BiologicalAge";
 import CountryComparison from "./pages/CountryComparison";
 import BirthdayReport from "./pages/BirthdayReport";
+import ReportView from "./pages/ReportView";
 import ChineseZodiac from "./pages/ChineseZodiac";
 import ChineseZodiacSign from "./pages/ChineseZodiacSign";
 import VedicZodiac from "./pages/VedicZodiac";
@@ -103,6 +104,7 @@ const App = () => (
               <Route path="/biological-age" element={<BiologicalAge />} />
               <Route path="/country-comparison" element={<CountryComparison />} />
               <Route path="/birthday-report" element={<BirthdayReport />} />
+              <Route path="/report/:slug" element={<ReportView />} />
               <Route path="/chinese-zodiac" element={<ChineseZodiac />} />
               <Route path="/chinese-zodiac/:animal" element={<ChineseZodiacSign />} />
               <Route path="/vedic-zodiac" element={<VedicZodiac />} />

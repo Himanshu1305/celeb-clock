@@ -1,484 +1,74 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { SEO } from '@/components/SEO';
-import { FileText, Download, Lock, Loader2, CheckCircle, Crown } from 'lucide-react';
-import { jsPDF } from 'jspdf';
-import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
-import { useBirthDate } from '@/context/BirthDateContext';
-import { getZodiacByDate } from '@/data/zodiacData';
-import { getBirthstoneByMonth } from '@/data/birthstoneData';
-import { getNumerologyByNumber } from '@/data/numerologyData';
-import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
+import { useToast } from '@/hooks/use-toast';
 import {
   getQuotaLimit,
   getUsageCount,
   recordPDFGeneration,
   type QuotaTier,
 } from '@/services/PDFQuotaService';
-import { Link } from 'react-router-dom';
+import { generateReportData, saveReport } from '@/services/BirthdayReportService';
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// ── Constants ──────────────────────────────────────────────────────────────────
 
-const PLANETS = [
-  { name: 'Mercury', symbol: '☿', period: 87.97 },
-  { name: 'Venus',   symbol: '♀', period: 224.70 },
-  { name: 'Mars',    symbol: '♂', period: 686.97 },
-  { name: 'Jupiter', symbol: '♃', period: 4332.59 },
-  { name: 'Saturn',  symbol: '♄', period: 10759.22 },
-  { name: 'Uranus',  symbol: '♅', period: 30688.50 },
-  { name: 'Neptune', symbol: '♆', period: 60182.0 },
+const LOADING_MESSAGES = [
+  'Finding celebrity birthday twins...',
+  'Calculating three zodiac profiles...',
+  'Building numerology blueprint...',
+  'Mapping cosmic planetary ages...',
+  'Crafting your personalised report...',
 ];
 
-function calcLifePathNumber(date: Date): number {
-  const s = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}`;
-  let sum = s.split('').reduce((a, c) => a + parseInt(c), 0);
-  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
-    sum = String(sum).split('').reduce((a, c) => a + parseInt(c), 0);
-  }
-  return sum;
-}
+const COUNTRIES = [
+  'India', 'United States', 'United Kingdom', 'Canada', 'Australia',
+  'Germany', 'France', 'UAE', 'Singapore', 'New Zealand',
+  'South Africa', 'Pakistan', 'Bangladesh', 'Sri Lanka', 'Nepal',
+  'Malaysia', 'Philippines', 'Indonesia', 'Japan', 'South Korea',
+  'Brazil', 'Mexico', 'Argentina', 'Nigeria', 'Kenya', 'Other',
+];
 
-function ageOnPlanet(ageYears: number, orbitalDays: number): string {
-  return (ageYears * 365.25 / orbitalDays).toFixed(1);
-}
-
-function getGeneration(birthYear: number): { name: string; range: string; desc: string } {
-  if (birthYear >= 2012) return { name: 'Generation Alpha', range: '2012–present', desc: 'Digital natives born into a world of AI and smartphones.' };
-  if (birthYear >= 1997) return { name: 'Generation Z', range: '1997–2012', desc: 'The first true digital generation — pragmatic, inclusive, and entrepreneurial.' };
-  if (birthYear >= 1981) return { name: 'Millennial', range: '1981–1996', desc: 'Shaped by the internet revolution and economic uncertainty.' };
-  if (birthYear >= 1965) return { name: 'Generation X', range: '1965–1980', desc: 'Independent, self-reliant, and the first latchkey generation.' };
-  if (birthYear >= 1946) return { name: 'Baby Boomer', range: '1946–1964', desc: 'Grew up in post-war prosperity; redefined culture and commerce.' };
-  return { name: 'Silent Generation', range: 'Before 1946', desc: 'Shaped by the Great Depression and World War II — disciplined and resilient.' };
-}
-
-// ── PDF Generator ─────────────────────────────────────────────────────────────
-
-interface PDFData {
-  date: Date;
-  name: string;
-  celebs: { name: string; profession?: string }[];
-}
-
-function generateBirthdayPDF(data: PDFData): void {
-  const { date, name, celebs } = data;
-  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const W = 210;
-  const pageH = 297;
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const year = date.getFullYear();
-  const ageYears = new Date().getFullYear() - year;
-  const monthName = date.toLocaleString('default', { month: 'long' });
-  const dateStr = `${monthName} ${day}, ${year}`;
-
-  const zodiac = getZodiacByDate(month, day);
-  const birthstone = getBirthstoneByMonth(month);
-  const lifePathNum = calcLifePathNumber(date);
-  const numerology = getNumerologyByNumber(lifePathNum);
-  const generation = getGeneration(year);
-
-  const purple = [88, 28, 135] as [number, number, number];
-  const pink   = [236, 72, 153] as [number, number, number];
-  const gold   = [217, 119, 6] as [number, number, number];
-  const white  = [255, 255, 255] as [number, number, number];
-  const dark   = [15, 10, 40] as [number, number, number];
-  const light  = [245, 240, 255] as [number, number, number];
-
-  const addPage = (bg: [number, number, number] = dark) => {
-    pdf.setFillColor(...bg);
-    pdf.rect(0, 0, W, pageH, 'F');
-  };
-
-  // ── PAGE 1: COVER ──────────────────────────────────────────────────────────
-  addPage(dark);
-  pdf.setFillColor(...purple);
-  pdf.rect(0, 0, W, 80, 'F');
-  pdf.setFillColor(...pink);
-  pdf.circle(W - 30, 20, 40, 'F');
-  pdf.setFillColor(...dark);
-  pdf.circle(W - 30, 20, 38, 'F');
-
-  pdf.setTextColor(...white);
-  pdf.setFontSize(28);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text('Birthday', 20, 35);
-  pdf.text('Personality Report', 20, 50);
-
-  pdf.setFontSize(11);
-  pdf.setFont('helvetica', 'normal');
-  pdf.setTextColor(200, 180, 255);
-  pdf.text(`For: ${name || 'You'}`, 20, 68);
-  pdf.text(`Born: ${dateStr}`, 20, 76);
-
-  pdf.setTextColor(...white);
-  pdf.setFontSize(13);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text('What\'s inside:', 20, 110);
-
-  const sections = [
-    '🌟 Famous people who share your birthday',
-    `${zodiac?.unicode ?? '♈'} Your zodiac sign & personality`,
-    `🔢 Life path number ${lifePathNum} — what it means`,
-    `💎 Your birthstone: ${birthstone?.primaryStone ?? monthName}`,
-    '🪐 Your age on every planet',
-    `👥 Your generation: ${generation.name}`,
-  ];
-  pdf.setFont('helvetica', 'normal');
-  pdf.setFontSize(10);
-  sections.forEach((s, i) => {
-    pdf.setTextColor(200, 180, 255);
-    pdf.text(s, 25, 122 + i * 12);
-  });
-
-  pdf.setFillColor(...purple);
-  pdf.roundedRect(15, 255, W - 30, 20, 3, 3, 'F');
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(11);
-  pdf.text('BornClock.com — Your Birthday Intelligence Platform', W / 2, 267, { align: 'center' });
-
-  pdf.setTextColor(150, 130, 200);
-  pdf.setFont('helvetica', 'normal');
-  pdf.setFontSize(8);
-  pdf.text(`Generated ${new Date().toLocaleDateString()}`, W / 2, 285, { align: 'center' });
-
-  // ── PAGE 2: CELEBRITY TWINS ────────────────────────────────────────────────
-  pdf.addPage();
-  addPage(dark);
-  pdf.setFillColor(...purple);
-  pdf.rect(0, 0, W, 35, 'F');
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(18);
-  pdf.text(`Famous Birthdays — ${monthName} ${day}`, W / 2, 22, { align: 'center' });
-
-  pdf.setTextColor(200, 180, 255);
-  pdf.setFont('helvetica', 'normal');
-  pdf.setFontSize(10);
-  pdf.text('You share your birthday with these remarkable people:', W / 2, 32, { align: 'center' });
-
-  if (celebs.length === 0) {
-    pdf.setTextColor(180, 160, 220);
-    pdf.setFontSize(11);
-    pdf.text('No celebrity data available for this date.', W / 2, 80, { align: 'center' });
-  } else {
-    celebs.slice(0, 6).forEach((c, i) => {
-      const y = 50 + i * 28;
-      pdf.setFillColor(...purple);
-      pdf.setDrawColor(...pink);
-      pdf.roundedRect(15, y, W - 30, 22, 2, 2, 'FD');
-      pdf.setTextColor(...white);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setFontSize(12);
-      pdf.text(c.name, 25, y + 9);
-      pdf.setFont('helvetica', 'normal');
-      pdf.setFontSize(9);
-      pdf.setTextColor(200, 180, 255);
-      if (c.profession) pdf.text(c.profession, 25, y + 17);
-    });
-  }
-
-  pdf.setFillColor(...purple);
-  pdf.roundedRect(15, 255, W - 30, 16, 2, 2, 'F');
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'italic');
-  pdf.setFontSize(9);
-  pdf.text(`Being born on ${monthName} ${day} puts you in remarkable company.`, W / 2, 265, { align: 'center' });
-
-  // ── PAGE 3: ZODIAC ─────────────────────────────────────────────────────────
-  pdf.addPage();
-  addPage(dark);
-  pdf.setFillColor(...purple);
-  pdf.rect(0, 0, W, 35, 'F');
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(18);
-  pdf.text('Your Zodiac Sign', W / 2, 22, { align: 'center' });
-
-  if (zodiac) {
-    pdf.setFillColor(40, 20, 80);
-    pdf.roundedRect(15, 42, W - 30, 50, 3, 3, 'F');
-    pdf.setTextColor(...gold);
-    pdf.setFontSize(36);
-    pdf.text(zodiac.unicode, 35, 75);
-    pdf.setTextColor(...white);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(22);
-    pdf.text(zodiac.name, 65, 62);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(10);
-    pdf.setTextColor(200, 180, 255);
-    pdf.text(zodiac.dateRange, 65, 72);
-    pdf.text(`Element: ${zodiac.element}  ·  Planet: ${zodiac.rulingPlanet}`, 65, 82);
-
-    pdf.setTextColor(...white);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(12);
-    pdf.text('Core Traits', 20, 108);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(10);
-    pdf.setTextColor(200, 180, 255);
-    const traitText = zodiac.coreTraits.slice(0, 5).join('  ·  ');
-    pdf.text(traitText, 20, 118, { maxWidth: W - 40 });
-
-    pdf.setTextColor(...white);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(12);
-    pdf.text('Personality Overview', 20, 135);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(10);
-    pdf.setTextColor(200, 180, 255);
-    const desc = zodiac.fullDescription.substring(0, 600);
-    const lines = pdf.splitTextToSize(desc, W - 40);
-    pdf.text(lines.slice(0, 8), 20, 145);
-  } else {
-    pdf.setTextColor(180, 160, 220);
-    pdf.text('Zodiac data unavailable.', W / 2, 80, { align: 'center' });
-  }
-
-  // ── PAGE 4: NUMEROLOGY ─────────────────────────────────────────────────────
-  pdf.addPage();
-  addPage(dark);
-  pdf.setFillColor(...purple);
-  pdf.rect(0, 0, W, 35, 'F');
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(18);
-  pdf.text('Life Path Number', W / 2, 22, { align: 'center' });
-
-  pdf.setFillColor(40, 20, 80);
-  pdf.roundedRect(15, 42, W - 30, 60, 3, 3, 'F');
-  pdf.setTextColor(...gold);
-  pdf.setFontSize(48);
-  pdf.text(String(lifePathNum), W / 2, 82, { align: 'center' });
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(14);
-  pdf.text(numerology?.name ?? `Life Path ${lifePathNum}`, W / 2, 96, { align: 'center' });
-
-  if (numerology) {
-    pdf.setTextColor(...white);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(12);
-    pdf.text('Personality', 20, 118);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(10);
-    pdf.setTextColor(200, 180, 255);
-    pdf.text(pdf.splitTextToSize(numerology.personality, W - 40).slice(0, 5), 20, 128);
-
-    pdf.setTextColor(...white);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(12);
-    pdf.text('Key Strengths', 20, 162);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(10);
-    pdf.setTextColor(200, 180, 255);
-    numerology.strengths.slice(0, 4).forEach((s, i) => pdf.text(`• ${s}`, 22, 172 + i * 9));
-  }
-
-  // ── PAGE 5: BIRTHSTONE ─────────────────────────────────────────────────────
-  pdf.addPage();
-  addPage(dark);
-  pdf.setFillColor(...purple);
-  pdf.rect(0, 0, W, 35, 'F');
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(18);
-  pdf.text('Your Birthstone', W / 2, 22, { align: 'center' });
-
-  if (birthstone) {
-    pdf.setFillColor(40, 20, 80);
-    pdf.roundedRect(15, 42, W - 30, 40, 3, 3, 'F');
-    pdf.setTextColor(...gold);
-    pdf.setFontSize(22);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text(`💎 ${birthstone.primaryStone}`, W / 2, 57, { align: 'center' });
-    pdf.setTextColor(200, 180, 255);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(10);
-    pdf.text(`${monthName} Birthstone  ·  Color: ${birthstone.color}`, W / 2, 68, { align: 'center' });
-    if (birthstone.alternateStones.length > 0) {
-      pdf.text(`Alternates: ${birthstone.alternateStones.join(', ')}`, W / 2, 77, { align: 'center' });
-    }
-
-    pdf.setTextColor(...white);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(12);
-    pdf.text('Meaning & Symbolism', 20, 100);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(10);
-    pdf.setTextColor(200, 180, 255);
-    pdf.text(pdf.splitTextToSize(birthstone.meaning, W - 40).slice(0, 4), 20, 110);
-
-    pdf.setTextColor(...white);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(12);
-    pdf.text('Properties', 20, 140);
-    birthstone.properties.slice(0, 5).forEach((p, i) => {
-      pdf.setFont('helvetica', 'normal');
-      pdf.setFontSize(10);
-      pdf.setTextColor(200, 180, 255);
-      pdf.text(`• ${p}`, 22, 150 + i * 9);
-    });
-  }
-
-  // ── PAGE 6: PLANETARY AGES ────────────────────────────────────────────────
-  pdf.addPage();
-  addPage(dark);
-  pdf.setFillColor(...purple);
-  pdf.rect(0, 0, W, 35, 'F');
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(18);
-  pdf.text('Your Age Across the Solar System', W / 2, 22, { align: 'center' });
-
-  pdf.setTextColor(200, 180, 255);
-  pdf.setFont('helvetica', 'normal');
-  pdf.setFontSize(10);
-  pdf.text(`On Earth you are ${ageYears} years old. Here's your age on every planet:`, W / 2, 32, { align: 'center' });
-
-  PLANETS.forEach((p, i) => {
-    const y = 50 + i * 28;
-    const pa = ageOnPlanet(ageYears, p.period);
-    pdf.setFillColor(40, 20, 80);
-    pdf.roundedRect(15, y, W - 30, 22, 2, 2, 'F');
-    pdf.setTextColor(...gold);
-    pdf.setFontSize(16);
-    pdf.text(p.symbol, 28, y + 14);
-    pdf.setTextColor(...white);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(12);
-    pdf.text(p.name, 42, y + 10);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(9);
-    pdf.setTextColor(180, 160, 220);
-    pdf.text(`${p.period.toFixed(0)} Earth days / orbit`, 42, y + 18);
-    pdf.setTextColor(...gold);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(14);
-    pdf.text(`${pa} years`, W - 20, y + 14, { align: 'right' });
-  });
-
-  // ── PAGE 7: GENERATION + LONGEVITY ────────────────────────────────────────
-  pdf.addPage();
-  addPage(dark);
-  pdf.setFillColor(...purple);
-  pdf.rect(0, 0, W, 35, 'F');
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(18);
-  pdf.text('Your Generation & Longevity', W / 2, 22, { align: 'center' });
-
-  pdf.setFillColor(40, 20, 80);
-  pdf.roundedRect(15, 42, W - 30, 50, 3, 3, 'F');
-  pdf.setTextColor(...gold);
-  pdf.setFontSize(20);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text(generation.name, W / 2, 62, { align: 'center' });
-  pdf.setTextColor(200, 180, 255);
-  pdf.setFontSize(11);
-  pdf.text(generation.range, W / 2, 74, { align: 'center' });
-  pdf.setFont('helvetica', 'normal');
-  pdf.setFontSize(10);
-  pdf.text(pdf.splitTextToSize(generation.desc, W - 50), W / 2, 84, { align: 'center' });
-
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(13);
-  pdf.text('Longevity Insights', 20, 108);
-  const insights = [
-    'Lifestyle factors control 70–75% of your lifespan (Karolinska Institute, 2017).',
-    'Daily walking for 30+ minutes adds ~1.5 years on average (JAMA Internal Medicine).',
-    'Strong social connections are the #1 predictor of healthy aging (Harvard, 80-year study).',
-    'Mediterranean diet reduces cardiovascular events by 30% (PREDIMED, NEJM 2013).',
-    'A sense of purpose (ikigai) is associated with 7 additional healthy years.',
-  ];
-  pdf.setFont('helvetica', 'normal');
-  pdf.setFontSize(10);
-  pdf.setTextColor(200, 180, 255);
-  insights.forEach((ins, i) => {
-    pdf.text(pdf.splitTextToSize(`• ${ins}`, W - 40), 20, 118 + i * 16);
-  });
-
-  pdf.setFillColor(40, 100, 40);
-  pdf.roundedRect(15, 218, W - 30, 22, 2, 2, 'F');
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(10);
-  pdf.text('Calculate your personalised life expectancy at bornclock.com/life-expectancy', W / 2, 231, { align: 'center' });
-
-  // ── PAGE 8: BACK COVER ─────────────────────────────────────────────────────
-  pdf.addPage();
-  addPage(dark);
-  pdf.setFillColor(...purple);
-  pdf.rect(0, 0, W, pageH, 'F');
-  pdf.setFillColor(...dark);
-  pdf.circle(30, 30, 60, 'F');
-  pdf.circle(W - 20, pageH - 30, 80, 'F');
-
-  pdf.setTextColor(...white);
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(32);
-  pdf.text('BornClock', W / 2, 100, { align: 'center' });
-  pdf.setFontSize(14);
-  pdf.setFont('helvetica', 'normal');
-  pdf.setTextColor(200, 180, 255);
-  pdf.text('Your Birthday Intelligence Platform', W / 2, 115, { align: 'center' });
-
-  const tools = [
-    '🧬 Life Expectancy Calculator',
-    '🌍 Country Longevity Comparison',
-    '🔬 Biological Age Test',
-    '🪐 Planetary Age Calculator',
-    '♈ Zodiac & Birthstone Finder',
-    '🔢 Numerology Calculator',
-  ];
-  pdf.setFontSize(11);
-  tools.forEach((t, i) => {
-    pdf.setTextColor(220, 200, 255);
-    pdf.text(t, W / 2, 140 + i * 13, { align: 'center' });
-  });
-
-  pdf.setFontSize(14);
-  pdf.setTextColor(...gold);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text('bornclock.com', W / 2, 240, { align: 'center' });
-
-  pdf.setFontSize(7);
-  pdf.setFont('helvetica', 'normal');
-  pdf.setTextColor(150, 130, 180);
-  const disclaimer = 'This report is for entertainment and educational purposes only. Celebrity data sourced from public records. Astrological and numerological content is based on traditional systems and does not constitute medical or scientific advice.';
-  pdf.text(pdf.splitTextToSize(disclaimer, W - 40), W / 2, 268, { align: 'center' });
-
-  // Save
-  const fname = name ? `${name.replace(/\s+/g, '_')}_Birthday_Report.pdf` : 'Birthday_Report.pdf';
-  pdf.save(fname);
-}
+const CHECKLIST_ITEMS = [
+  'Celebrity birthday twins',
+  'Historical events on this date',
+  'Western zodiac deep-dive',
+  'Chinese zodiac analysis',
+  'Vedic rashi profile',
+  'Zodiac compatibility guide',
+  'Life path number + meaning',
+  'Personal Year 2026 forecast',
+  'Birthstone history & lore',
+  'Age on all 7 planets',
+  'Generation portrait',
+  'Personalised gift message',
+];
 
 // ── Page component ────────────────────────────────────────────────────────────
 
 const BirthdayReport = () => {
   const { user, isPremium, isInTrial } = useAuth();
-  const { birthDate, setBirthDate } = useBirthDate();
   const { toast } = useToast();
+  const formRef = useRef<HTMLDivElement>(null);
 
-  const [manualDate, setManualDate] = useState('');
-  const [name, setName] = useState('');
-  const [generating, setGenerating] = useState(false);
-  const [generated, setGenerated] = useState(false);
+  const [recipientName, setRecipientName] = useState('');
+  const [dob, setDob] = useState('');
+  const [gender, setGender] = useState('');
+  const [country, setCountry] = useState('India');
+  const [gifterName, setGifterName] = useState('');
+  const [personalMessage, setPersonalMessage] = useState('');
+  const [phase, setPhase] = useState<'form' | 'loading' | 'success'>('form');
+  const [progress, setProgress] = useState(0);
+  const [msgIndex, setMsgIndex] = useState(0);
+  const [reportSlug, setReportSlug] = useState('');
   const [error, setError] = useState('');
+  const [copied, setCopied] = useState(false);
   const [quotaInfo, setQuotaInfo] = useState<{ limit: number; used: number } | null>(null);
 
   const tier: QuotaTier = isPremium ? 'premium' : isInTrial ? 'trial' : 'free';
-
-  const effectiveBirthDate = birthDate ?? (manualDate ? new Date(manualDate) : null);
 
   useEffect(() => {
     if (!user) return;
@@ -487,194 +77,443 @@ const BirthdayReport = () => {
     });
   }, [user, tier]);
 
-  const handleGenerate = async () => {
-    if (!effectiveBirthDate) { setError('Please enter your birth date.'); return; }
+  // Progress animation
+  useEffect(() => {
+    if (phase !== 'loading') return;
+    const startTime = Date.now();
+    const duration = 4500;
+    const id = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      setProgress(Math.min(88, (elapsed / duration) * 88));
+      setMsgIndex(Math.floor(elapsed / 900) % LOADING_MESSAGES.length);
+    }, 80);
+    return () => clearInterval(id);
+  }, [phase]);
+
+  const reportUrl = reportSlug ? `${window.location.origin}/report/${reportSlug}` : '';
+
+  const handleSubmit = async () => {
+    if (!recipientName.trim()) { setError('Please enter the recipient\'s name.'); return; }
+    if (!dob) { setError('Please enter the recipient\'s date of birth.'); return; }
     setError('');
-    setGenerating(true);
+
+    if (user && quotaInfo && quotaInfo.used >= quotaInfo.limit) {
+      toast({
+        title: 'Report limit reached',
+        description: `You've used all ${quotaInfo.limit} reports for this tier. Upgrade for more.`,
+      });
+      return;
+    }
+
+    setPhase('loading');
+    setProgress(0);
+    setMsgIndex(0);
+
     try {
-      if (user && quotaInfo) {
-        if (quotaInfo.used >= quotaInfo.limit) {
-          setError(`You've used all ${quotaInfo.limit} PDF report${quotaInfo.limit === 1 ? '' : 's'} for this tier.`);
-          toast({
-            title: 'Report limit reached',
-            description: 'Upgrade to Premium for up to 3 reports per month.',
-            action: (
-              <Button size="sm" asChild>
-                <Link to="/upgrade"><Crown className="w-3.5 h-3.5 mr-1" /> Upgrade</Link>
-              </Button>
-            ) as any,
-          });
-          return;
-        }
-      }
+      const data = await generateReportData(
+        recipientName.trim(),
+        dob,
+        gifterName.trim(),
+        personalMessage.trim(),
+        country
+      );
 
-      const month = effectiveBirthDate.getMonth() + 1;
-      const day = effectiveBirthDate.getDate();
-      const mm = String(month).padStart(2, '0');
-      const dd = String(day).padStart(2, '0');
-
-      const rawCelebs = await getRankedBirthdayCelebrities(`${mm}-${dd}`, null, 6);
-      const celebs = rawCelebs.map(c => ({ name: c.name, profession: c.occupation ?? undefined }));
-
-      generateBirthdayPDF({ date: effectiveBirthDate, name, celebs });
+      const slug = await saveReport(user?.id ?? null, data, isPremium, gender);
 
       if (user) {
         await recordPDFGeneration(user.id, 'birthday');
         setQuotaInfo(prev => prev ? { ...prev, used: prev.used + 1 } : prev);
       }
-      setGenerated(true);
+
+      setProgress(100);
+      setReportSlug(slug ?? '');
+      setTimeout(() => setPhase('success'), 400);
     } catch (e) {
-      setError('Failed to generate PDF. Please try again.');
       console.error(e);
-    } finally {
-      setGenerating(false);
+      setError('Something went wrong. Please try again.');
+      setPhase('form');
     }
   };
 
-  const canGenerate = !user || !quotaInfo || quotaInfo.used < quotaInfo.limit;
-  const quotaLabel = quotaInfo
-    ? `${quotaInfo.used}/${quotaInfo.limit} ${tier === 'premium' ? 'this month' : 'lifetime'} used`
-    : null;
+  const handleCopy = () => {
+    navigator.clipboard.writeText(reportUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  const handleReset = () => {
+    setPhase('form');
+    setReportSlug('');
+    setProgress(0);
+    setMsgIndex(0);
+    setError('');
+    setRecipientName('');
+    setDob('');
+    setGender('');
+    setCountry('India');
+    setGifterName('');
+    setPersonalMessage('');
+  };
+
+  const scrollToForm = () => {
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
+    <div className="min-h-screen bg-white">
       <SEO
-        title="Birthday Personality PDF Report — Download Your Birthday Report"
-        description="Download a personalised 8-page PDF birthday report: celebrity twins, zodiac, numerology, birthstone, planetary ages, generation, and longevity insights."
-        keywords="birthday report PDF, birthday personality report, zodiac PDF, numerology PDF, birthstone report"
+        title="Birthday Intelligence Report — The Ultimate Birthday Gift | BornClock"
+        description="Create a personalised birthday report: celebrity twins, zodiac profiles, numerology, birthstone, planetary ages, and a personalised message. The birthday gift they'll never forget."
+        keywords="birthday report gift, personalised birthday gift, birthday intelligence report, zodiac birthday gift, celebrity birthday twins, numerology birthday"
         canonicalUrl="/birthday-report"
       />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-12">
+
+      {/* ── Nav ──────────────────────────────────────────────────────────── */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 pt-6 pb-10 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm text-muted-foreground">
-            <FileText className="w-4 h-4 text-primary" />
-            <span>8-page personalised PDF · Free to generate</span>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-black gradient-text-primary leading-tight">
-            Birthday Personality Report
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Download a beautifully designed PDF packed with your zodiac traits, life path number, birthstone meaning, celebrity twins, planetary ages, and more.
-          </p>
-        </section>
-
-        <div className="max-w-xl mx-auto mb-16 space-y-6">
-
-          {/* What's included */}
-          <Card className="glass-card">
-            <CardContent className="p-6 space-y-3">
-              <h2 className="font-bold text-base">What's in your report</h2>
-              <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-sm text-muted-foreground">
-                {[
-                  '🌟 Celebrity twins',
-                  `♈ Zodiac personality`,
-                  '🔢 Life path number',
-                  '💎 Birthstone meaning',
-                  '🪐 Planetary ages',
-                  '👥 Your generation',
-                  '🧬 Longevity insights',
-                  '📄 8 full pages',
-                ].map(item => (
-                  <div key={item} className="flex items-center gap-2">
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Form */}
-          <Card className="glass-card card-party-border">
-            <CardContent className="p-6 space-y-5">
-              {!birthDate && (
-                <div className="space-y-2">
-                  <Label htmlFor="bday">Your Birth Date</Label>
-                  <Input
-                    id="bday"
-                    type="date"
-                    value={manualDate}
-                    onChange={e => setManualDate(e.target.value)}
-                    max={new Date().toISOString().split('T')[0]}
-                  />
-                </div>
-              )}
-              {birthDate && (
-                <div className="text-sm text-muted-foreground bg-primary/5 px-4 py-2 rounded-lg border border-primary/20">
-                  Birth date: <strong>{birthDate.toLocaleDateString()}</strong>
-                </div>
-              )}
-              <div className="space-y-2">
-                <Label htmlFor="pname">Your Name (optional)</Label>
-                <Input
-                  id="pname"
-                  placeholder="e.g. Alex"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                />
-              </div>
-
-              {/* Quota info */}
-              {user && quotaLabel && (
-                <div className="flex items-center justify-between text-xs text-muted-foreground bg-muted/30 px-3 py-2 rounded-lg">
-                  <span>PDF reports: {quotaLabel}</span>
-                  {!canGenerate && (
-                    <Link to="/upgrade" className="text-primary font-medium hover:underline">Upgrade →</Link>
-                  )}
-                </div>
-              )}
-              {!user && (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/30 px-3 py-2 rounded-lg">
-                  <Lock className="w-3.5 h-3.5" />
-                  <span>Sign in to track quota and get more reports.</span>
-                  <Link to="/auth?signup=true" className="text-primary font-medium hover:underline ml-auto">Sign in →</Link>
-                </div>
-              )}
-
-              {error && (
-                <div className="text-sm text-red-500 bg-red-500/10 px-3 py-2 rounded-lg">{error}</div>
-              )}
-
-              <Button
-                size="lg"
-                className="w-full gap-2"
-                onClick={handleGenerate}
-                disabled={generating || !effectiveBirthDate || (!canGenerate && !!user)}
-              >
-                {generating ? (
-                  <><Loader2 className="w-4 h-4 animate-spin" /> Generating…</>
-                ) : (
-                  <><Download className="w-4 h-4" /> Download PDF Report</>
-                )}
-              </Button>
-              <p className="text-center text-xs text-muted-foreground">
-                Free for everyone · PDF downloads to your device instantly
-              </p>
-
-              {generated && (
-                <div className="flex items-center gap-3 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-green-700 dark:text-green-400">
-                  <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                  <div className="text-sm">
-                    <strong>Report downloaded!</strong> Check your downloads folder.
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="ml-2 h-auto py-0 text-green-700 dark:text-green-400 hover:text-green-900"
-                      onClick={() => { setGenerated(false); }}
-                    >
-                      Generate another →
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
         </div>
       </div>
+
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <div className="bg-gradient-to-br from-amber-50 via-rose-50 to-purple-50 py-16 px-4 text-center">
+        <div className="max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-rose-100 text-rose-700 rounded-full text-sm font-medium mb-6">
+            🎁 The Birthday Gift They'll Actually Remember
+          </div>
+          <h1 className="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-5">
+            The Birthday Gift<br />
+            <span className="text-rose-500">They'll Never Forget</span>
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
+            A beautifully crafted web report revealing their celebrity birthday twins, three zodiac profiles,
+            life path number, birthstone, planetary ages, and a personalised message — all in one link.
+          </p>
+          <button
+            onClick={scrollToForm}
+            className="inline-flex items-center gap-2 px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl text-lg transition-colors shadow-lg"
+          >
+            Create Their Report 🎂
+          </button>
+        </div>
+      </div>
+
+      {/* ── 3 Why Cards ──────────────────────────────────────────────────── */}
+      <div className="py-14 px-4 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold text-center text-gray-900 mb-10">Why it makes the perfect gift</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-rose-50 rounded-2xl p-6 text-center">
+              <div className="text-4xl mb-3">🌟</div>
+              <h3 className="font-bold text-gray-900 mb-2">Celebrity Birthday Twins</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">Discover which world-famous people share their exact birthday — ranked by global fame with descriptions.</p>
+            </div>
+            <div className="bg-amber-50 rounded-2xl p-6 text-center">
+              <div className="text-4xl mb-3">♈</div>
+              <h3 className="font-bold text-gray-900 mb-2">Three Zodiac Profiles</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">Deep-dive into their Western, Chinese, and Vedic zodiac signs — compatibility, elements, and 2026 forecast.</p>
+            </div>
+            <div className="bg-purple-50 rounded-2xl p-6 text-center">
+              <div className="text-4xl mb-3">🔢</div>
+              <h3 className="font-bold text-gray-900 mb-2">Numerology Blueprint</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">Their life path number, what it means, and their personal year forecast for 2026 — calculated from their birthdate.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Pricing Card ─────────────────────────────────────────────────── */}
+      <div className="py-12 px-4 bg-gray-50">
+        <div className="max-w-sm mx-auto bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+          <div className="text-center mb-6">
+            <div className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">Birthday Report</div>
+            <div className="flex items-baseline justify-center gap-3">
+              <span className="text-4xl font-black text-rose-500">₹199</span>
+              <span className="text-gray-400">/</span>
+              <span className="text-2xl font-bold text-gray-700">$2.99</span>
+            </div>
+            <div className="text-xs text-gray-400 mt-1">India / Global</div>
+          </div>
+          <ul className="space-y-2 mb-6">
+            {CHECKLIST_ITEMS.map(item => (
+              <li key={item} className="flex items-center gap-2 text-sm text-gray-700">
+                <span className="text-rose-400 font-bold flex-shrink-0">✓</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          <button
+            onClick={scrollToForm}
+            className="w-full py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition-colors"
+          >
+            Create Now →
+          </button>
+          <p className="text-xs text-center text-gray-400 mt-3">Instant web link · Shareable · 30-day access</p>
+        </div>
+      </div>
+
+      {/* ── Sample Preview (blurred teaser) ──────────────────────────────── */}
+      <div className="py-14 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold text-center text-gray-900 mb-3">A peek inside</h2>
+          <p className="text-center text-gray-500 mb-8 text-sm">Every section is personalised to their exact birthdate</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { icon: '🌟', title: 'Celebrity Twins', color: 'bg-rose-50' },
+              { icon: '♈', title: 'Zodiac Profiles', color: 'bg-amber-50' },
+              { icon: '🔢', title: 'Numerology', color: 'bg-purple-50' },
+              { icon: '🪐', title: 'Planetary Ages', color: 'bg-blue-50' },
+            ].map(card => (
+              <div
+                key={card.title}
+                className={`${card.color} rounded-2xl p-5 relative overflow-hidden`}
+                style={{ filter: 'blur(3px)', userSelect: 'none' }}
+              >
+                <div className="text-3xl mb-2">{card.icon}</div>
+                <div className="h-3 bg-gray-200 rounded mb-2 w-3/4" />
+                <div className="h-2 bg-gray-200 rounded mb-1 w-full" />
+                <div className="h-2 bg-gray-200 rounded mb-1 w-5/6" />
+                <div className="h-2 bg-gray-200 rounded w-4/6" />
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-6">
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-500">
+              🔒 Generate a report to unlock the full view
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Gifting Ideas ────────────────────────────────────────────────── */}
+      <div className="py-12 px-4 bg-amber-50">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Perfect for every occasion</h2>
+          <div className="flex flex-wrap justify-center gap-3">
+            {['🎂 Birthdays', '💑 Anniversaries', '🎓 Graduation', '👶 New Baby', '🏆 Retirement', '💌 Just Because'].map(tag => (
+              <span key={tag} className="px-4 py-2 bg-white rounded-full text-sm text-gray-700 shadow-sm border border-amber-200">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Form / Loading / Success ──────────────────────────────────────── */}
+      <div ref={formRef} className="py-16 px-4 bg-white" id="create-report">
+        <div className="max-w-lg mx-auto">
+
+          {/* ── FORM ── */}
+          {phase === 'form' && (
+            <>
+              <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">Create Their Birthday Report</h2>
+              <p className="text-center text-gray-500 text-sm mb-8">Takes about 10 seconds to generate</p>
+
+              <div className="space-y-5 bg-white rounded-3xl shadow-lg border border-gray-100 p-8">
+                {/* Recipient Name */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                    Recipient's Name <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Priya, James, Mum..."
+                    value={recipientName}
+                    onChange={e => setRecipientName(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                  />
+                </div>
+
+                {/* DOB */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                    Date of Birth <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    value={dob}
+                    onChange={e => setDob(e.target.value)}
+                    max={new Date().toISOString().split('T')[0]}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                  />
+                </div>
+
+                {/* Gender */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Gender (optional)</label>
+                  <div className="flex flex-wrap gap-2">
+                    {['Male', 'Female', 'Non-binary', 'Prefer not to say'].map(g => (
+                      <button
+                        key={g}
+                        type="button"
+                        onClick={() => setGender(gender === g ? '' : g)}
+                        className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
+                          gender === g
+                            ? 'bg-rose-500 text-white border-rose-500'
+                            : 'bg-white text-gray-600 border-gray-200 hover:border-rose-300'
+                        }`}
+                      >
+                        {g}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Country */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Country</label>
+                  <select
+                    value={country}
+                    onChange={e => setCountry(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-300 bg-white"
+                  >
+                    {COUNTRIES.map(c => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Gifter Name */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Your Name (optional)</label>
+                  <input
+                    type="text"
+                    placeholder="So we can credit the gift to you"
+                    value={gifterName}
+                    onChange={e => setGifterName(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                  />
+                </div>
+
+                {/* Personal Message */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                    Personal Message (optional)
+                    <span className="text-gray-400 font-normal ml-2 text-xs">{personalMessage.length}/200</span>
+                  </label>
+                  <textarea
+                    placeholder="Write a birthday message that will appear at the top of their report..."
+                    value={personalMessage}
+                    onChange={e => setPersonalMessage(e.target.value.slice(0, 200))}
+                    rows={3}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-300 resize-none"
+                  />
+                </div>
+
+                {/* Quota info */}
+                {user && quotaInfo && (
+                  <div className="flex items-center justify-between text-xs text-gray-500 bg-gray-50 px-3 py-2 rounded-lg">
+                    <span>Reports used: {quotaInfo.used}/{quotaInfo.limit}</span>
+                    {quotaInfo.used >= quotaInfo.limit && (
+                      <Link to="/upgrade" className="text-rose-500 font-semibold hover:underline">Upgrade →</Link>
+                    )}
+                  </div>
+                )}
+
+                {error && (
+                  <div className="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-xl border border-red-100">
+                    {error}
+                  </div>
+                )}
+
+                <button
+                  onClick={handleSubmit}
+                  disabled={!recipientName.trim() || !dob || (!!user && !!quotaInfo && quotaInfo.used >= quotaInfo.limit)}
+                  className="w-full py-4 bg-rose-500 hover:bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-lg transition-colors shadow-md"
+                >
+                  Create Birthday Report 🎂
+                </button>
+
+                <p className="text-center text-xs text-gray-400">
+                  Report link is shareable · Expires after 7 days (30 days for premium)
+                </p>
+              </div>
+            </>
+          )}
+
+          {/* ── LOADING ── */}
+          {phase === 'loading' && (
+            <div className="text-center py-8">
+              <div className="text-5xl mb-6 animate-bounce">🎂</div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Building the report...</h2>
+              <p className="text-gray-500 text-sm mb-8 h-5">{LOADING_MESSAGES[msgIndex]}</p>
+              <div className="max-w-sm mx-auto mb-4">
+                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-rose-400 to-purple-500 rounded-full transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">{Math.round(progress)}% complete</p>
+            </div>
+          )}
+
+          {/* ── SUCCESS ── */}
+          {phase === 'success' && (
+            <div className="text-center py-4">
+              <div className="text-5xl mb-4">🎉</div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Report Ready!</h2>
+              <p className="text-gray-500 mb-8">
+                {recipientName}'s birthday report is live. Share the link below!
+              </p>
+
+              {/* Report URL */}
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-6">
+                <p className="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide">Report Link</p>
+                <p className="text-sm text-gray-700 font-mono break-all bg-white px-3 py-2 rounded-lg border border-gray-100">
+                  {reportUrl}
+                </p>
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex flex-col gap-3 mb-6">
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleCopy}
+                    className="flex-1 py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-xl transition-colors text-sm"
+                  >
+                    {copied ? '✓ Copied!' : '📋 Copy Link'}
+                  </button>
+                  <Link
+                    to={`/report/${reportSlug}`}
+                    target="_blank"
+                    className="flex-1 py-3 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-xl transition-colors text-sm text-center"
+                  >
+                    🎂 Open Report
+                  </Link>
+                </div>
+                <div className="flex gap-3">
+                  <a
+                    href={`https://wa.me/?text=${encodeURIComponent(`I made this Birthday Report for you! 🎂\n${reportUrl}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors text-sm text-center"
+                  >
+                    💬 WhatsApp
+                  </a>
+                  <a
+                    href={`mailto:?subject=Your Birthday Intelligence Report&body=${encodeURIComponent(`I made this Birthday Report for you! 🎂\n\n${reportUrl}`)}`}
+                    className="flex-1 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl transition-colors text-sm text-center"
+                  >
+                    ✉️ Email
+                  </a>
+                </div>
+              </div>
+
+              <button
+                onClick={handleReset}
+                className="text-sm text-gray-500 hover:text-gray-700 underline"
+              >
+                Generate another report →
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
       <Footer />
     </div>
   );
