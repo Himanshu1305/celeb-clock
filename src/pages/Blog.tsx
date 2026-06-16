@@ -60,11 +60,10 @@ const BlogCard = ({ post }: { post: BlogPost }) => (
           </span>
           <span className="flex items-center gap-1">
             <Calendar className="h-3 w-3" />
-            {new Date(post.publishedDate).toLocaleDateString('en-US', { 
-              month: 'short', 
-              day: 'numeric', 
-              year: 'numeric' 
-            })}
+            {new Date(post.publishedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            {post.updatedDate && (
+              <span className="text-muted-foreground/70"> · Updated {new Date(post.updatedDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+            )}
           </span>
         </div>
         <Link 
@@ -216,11 +215,10 @@ const Blog = () => {
                     </span>
                     <span className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      {new Date(featuredPost.publishedDate).toLocaleDateString('en-US', { 
-                        month: 'long', 
-                        day: 'numeric', 
-                        year: 'numeric' 
-                      })}
+                      {new Date(featuredPost.publishedDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                      {featuredPost.updatedDate && (
+                        <span className="text-muted-foreground/70"> · Updated {new Date(featuredPost.updatedDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                      )}
                     </span>
                     <span className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />

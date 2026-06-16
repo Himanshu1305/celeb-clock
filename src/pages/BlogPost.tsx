@@ -157,18 +157,17 @@ const BlogPostPage = () => {
               {post.excerpt}
             </p>
             
-            <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+            <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground flex-wrap">
               <span className="flex items-center gap-2">
                 <User className="h-4 w-4" />
                 {post.author}
               </span>
               <span className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                {new Date(post.publishedDate).toLocaleDateString('en-US', { 
-                  month: 'long', 
-                  day: 'numeric', 
-                  year: 'numeric' 
-                })}
+                Published {new Date(post.publishedDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                {post.updatedDate && (
+                  <span className="text-muted-foreground/70"> · Updated {new Date(post.updatedDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                )}
               </span>
             </div>
           </header>
