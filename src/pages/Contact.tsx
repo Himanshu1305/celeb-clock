@@ -70,9 +70,10 @@ export default function Contact() {
         {/* Hero Section */}
         <div className="text-center mb-12 animate-fade-in-up">
           <MessageCircle className="w-16 h-16 text-accent mx-auto mb-4" />
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-foreground">
+          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-2 text-foreground">
             Contact Us
           </h1>
+          <p className="text-sm text-muted-foreground mb-3">Your Birthday Intelligence Platform</p>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             We'd love to hear from you
           </p>

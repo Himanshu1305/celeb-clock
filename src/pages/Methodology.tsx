@@ -103,6 +103,7 @@ export default function Methodology() {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
             How BornClock Works
           </h1>
+          <p className="text-sm text-muted-foreground mb-1">Your Birthday Intelligence Platform</p>
           <p className="text-sm text-muted-foreground mb-8">Methodology &amp; Data Sources</p>
 
           {/* Blue intro box */}
