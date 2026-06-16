@@ -51,7 +51,6 @@ import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
 import { CookieConsent } from "@/components/CookieConsent";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { BirthDateProvider } from "./context/BirthDateContext";
 
 const queryClient = new QueryClient();
@@ -63,7 +62,6 @@ const App = () => (
         <Toaster />
         <Sonner />
         <CookieConsent />
-        <WhatsAppButton />
         <BirthDateProvider>
           <BrowserRouter>
             <ScrollToTop />
