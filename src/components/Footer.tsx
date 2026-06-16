@@ -51,6 +51,16 @@ export const Footer = () => {
   return (
     <footer className="mt-16 border-t border-gray-200 bg-white">
       <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <Link to="/" className="flex items-center mb-3">
+            <img
+              src="/bornclock-logo.png"
+              alt="BornClock"
+              className="h-12 w-auto"
+              style={{ maxHeight: '48px' }}
+            />
+          </Link>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
 
           {/* Column 1 — Explore */}

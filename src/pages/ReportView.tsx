@@ -173,6 +173,13 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       <div className="bg-gradient-to-br from-rose-100 via-amber-50 to-purple-100 py-16 px-4 text-center">
         <div className="max-w-3xl mx-auto">
+          <div className="flex justify-center mb-4">
+            <img
+              src="/bornclock-logo.png"
+              alt="BornClock"
+              className="h-12 w-auto opacity-90"
+            />
+          </div>
           <div className="text-6xl mb-4">🎂</div>
           <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-3 leading-tight">
             {recipientName}'s Birthday<br />Intelligence Report
@@ -589,6 +596,13 @@ const ReportView = () => {
 
       {/* ── Footer CTA ───────────────────────────────────────────────────── */}
       <div className="py-12 px-4 bg-white text-center no-print">
+        <div className="flex justify-center mt-6 mb-2">
+          <img
+            src="/bornclock-logo.png"
+            alt="BornClock"
+            className="h-10 w-auto opacity-70"
+          />
+        </div>
         <p className="text-gray-500 text-sm mb-4">
           Made with BornClock · <Link to="/birthday-report" className="text-rose-500 hover:underline">Create another report</Link>
         </p>

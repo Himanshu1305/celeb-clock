@@ -48,6 +48,15 @@ export const Navigation = () => {
 
   return (
     <div>
+    <div className="flex items-center gap-2">
+    <Link to="/" className="flex items-center flex-shrink-0">
+      <img
+        src="/bornclock-logo.png"
+        alt="BornClock — Know your time. Live it well."
+        className="h-8 md:h-10 w-auto"
+        style={{ maxHeight: '40px' }}
+      />
+    </Link>
     <nav className="flex items-center gap-1 flex-wrap">
 
       {!isHomePage && (
@@ -145,9 +154,7 @@ export const Navigation = () => {
         </Link>
       )}
     </nav>
-    <span className="text-xs text-gray-400 hidden lg:block italic">
-      Know your time. Live it well.
-    </span>
+    </div>
     {showTrialBanner && (
       <div className="bg-amber-50 border-b border-amber-200 py-1.5 px-4 text-center text-sm text-amber-800 rounded-lg mt-1">
         🎁 Free trial — {trialDaysRemaining} day{trialDaysRemaining !== 1 ? 's' : ''} remaining ·{' '}

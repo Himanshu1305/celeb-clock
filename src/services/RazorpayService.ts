@@ -64,7 +64,7 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
     quantity: 1,
     name: 'BornClock',
     description: `BornClock Premium — ${billing === 'monthly' ? 'Monthly' : 'Annual'} Plan`,
-    image: 'https://bornclock.com/favicon.svg',
+    image: 'https://bornclock.com/favicon.png',
     prefill: {
       email: userEmail,
       name: userName || '',
