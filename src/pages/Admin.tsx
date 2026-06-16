@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Users, Globe, BarChart3, Gift, Shield, ExternalLink,
   RefreshCw, Crown, Clock, CheckCircle, Plus,
-  LayoutDashboard, ArrowLeft, AlertTriangle, UserCheck,
+  LayoutDashboard, ArrowLeft, AlertTriangle, UserCheck, Mail,
 } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -54,7 +54,7 @@ interface ConfirmState {
   onConfirm: () => Promise<void>;
 }
 
-type Section = 'overview' | 'users' | 'countries' | 'usage' | 'promo' | 'system';
+type Section = 'overview' | 'users' | 'countries' | 'usage' | 'promo' | 'system' | 'emails';
 
 // cast for tables that may not yet be in generated Database types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -132,6 +132,13 @@ export default function Admin() {
     message: '',
     onConfirm: async () => {},
   });
+
+  const [cronRunning, setCronRunning] = useState(false);
+  const [cronResult, setCronResult] = useState<null | {
+    weekVariant: number;
+    results: Record<string, { sent: number; failed: number; users: number }>;
+    timestamp: string;
+  }>(null);
 
   // ── Fetchers ──────────────────────────────────────────────────────────────
 
@@ -261,6 +268,33 @@ export default function Admin() {
     setConfirm({ show: true, message, onConfirm: fn });
   };
 
+  const triggerCron = async () => {
+    setCronRunning(true);
+    setCronResult(null);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({ title: 'Not authenticated', variant: 'destructive' });
+        return;
+      }
+      const res = await fetch('/api/daily-email-cron', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast({ title: 'Cron failed', description: data.error, variant: 'destructive' });
+        return;
+      }
+      setCronResult(data);
+      toast({ title: 'Cron triggered', description: `Week ${data.weekVariant} — emails dispatched.` });
+    } catch (e) {
+      toast({ title: 'Error', description: (e as Error).message, variant: 'destructive' });
+    } finally {
+      setCronRunning(false);
+    }
+  };
+
   // ── Promo code create ─────────────────────────────────────────────────────
 
   const createPromoCode = async () => {
@@ -304,6 +338,7 @@ export default function Admin() {
     { id: 'countries',label: 'Countries',Icon: Globe },
     { id: 'usage',    label: 'Usage',    Icon: BarChart3 },
     { id: 'promo',    label: 'Promo Codes', Icon: Gift },
+    { id: 'emails',   label: 'Emails',   Icon: Mail },
     { id: 'system',   label: 'System',   Icon: Shield },
   ];
 
@@ -665,12 +700,108 @@ export default function Admin() {
     </div>
   );
 
+  const renderEmails = () => {
+    const currentWeek = (Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000)) % 4) + 1;
+    return (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold">Email System</h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Card>
+            <CardContent className="p-6">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Cron Schedule</p>
+              <p className="font-medium">Daily at 6:00 AM UTC</p>
+              <p className="text-xs text-muted-foreground mt-1 font-mono">0 6 * * *</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Current Week Variant</p>
+              <p className="text-3xl font-bold text-indigo-600">Week {currentWeek}</p>
+              <p className="text-xs text-muted-foreground mt-1">Rotates 1 → 4 every 4 weeks</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Email Provider</p>
+              <p className="font-medium">Resend ✅</p>
+              <p className="text-xs text-muted-foreground mt-1">hello@bornclock.com</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card>
+          <CardHeader><CardTitle className="text-lg">Email Types</CardTitle></CardHeader>
+          <CardContent>
+            {[
+              { name: 'Welcome',              trigger: 'On signup',                 type: 'welcome' },
+              { name: 'Trial Expiry Warning', trigger: 'Day 6 of trial (cron)',     type: 'trial_expiry' },
+              { name: 'Payment Confirmation', trigger: 'After Razorpay success',    type: 'payment_confirmation' },
+              { name: 'Cancellation',         trigger: 'Razorpay webhook',          type: 'cancellation' },
+              { name: 'Free User Nudge',      trigger: 'Day 7 inactive (cron)',     type: 'nudge_free' },
+              { name: 'Premium User Nudge',   trigger: 'Day 7 inactive (cron)',     type: 'nudge_premium' },
+            ].map(({ name, trigger, type }) => (
+              <div key={type} className="flex items-center justify-between py-2.5 border-b last:border-0">
+                <div>
+                  <p className="text-sm font-medium">{name}</p>
+                  <p className="text-xs text-muted-foreground">{trigger}</p>
+                </div>
+                <Badge variant="outline" className="font-mono text-xs">{type}</Badge>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle className="text-lg">Manual Trigger</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Run the cron job immediately. Sends trial expiry warnings (users on day 6),
+              free nudges (day 7 inactive), and premium nudges (day 7 inactive) — all using week variant {currentWeek}.
+            </p>
+            <Button onClick={triggerCron} disabled={cronRunning} className="gap-2">
+              <RefreshCw className={`w-4 h-4 ${cronRunning ? 'animate-spin' : ''}`} />
+              {cronRunning ? 'Running…' : 'Trigger Cron Now'}
+            </Button>
+
+            {cronResult && (
+              <div className="mt-2 p-4 bg-green-50 rounded-lg border border-green-200">
+                <p className="text-sm font-semibold text-green-800 mb-3">
+                  Completed — Week {cronResult.weekVariant} · {new Date(cronResult.timestamp).toLocaleString()}
+                </p>
+                <div className="grid grid-cols-3 gap-3">
+                  {Object.entries(cronResult.results).map(([key, val]) => (
+                    <div key={key} className="bg-white rounded p-3 border border-green-100">
+                      <p className="text-xs text-muted-foreground mb-1">
+                        {key === 'trialExpiry' ? 'Trial Expiry'
+                          : key === 'freeNudge' ? 'Free Nudge'
+                          : 'Premium Nudge'}
+                      </p>
+                      <p className="text-xs">
+                        <span className="font-bold text-green-700">{val.sent}</span> sent ·{' '}
+                        <span className={val.failed > 0 ? 'text-red-600 font-bold' : 'text-muted-foreground'}>
+                          {val.failed}
+                        </span> failed
+                      </p>
+                      <p className="text-xs text-muted-foreground">{val.users} users matched</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
   const sectionContent: Record<Section, () => React.JSX.Element> = {
     overview:  renderOverview,
     users:     renderUsers,
     countries: renderCountries,
     usage:     renderUsage,
     promo:     renderPromo,
+    emails:    renderEmails,
     system:    renderSystem,
   };
 
