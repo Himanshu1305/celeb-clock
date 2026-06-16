@@ -1,16 +1,15 @@
-import { useRef, useMemo, useState } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
 import { PlanetaryAgeCard } from '@/components/PlanetaryAgeCard';
+import { Copy } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 // ── NASA JPL orbital periods (mean sidereal, Earth days) ─────────────────────
 // Source: NASA JPL Planetary Fact Sheet (Williams, D.R., 2024)
-// https://nssdc.gsfc.nasa.gov/planetary/factsheet/
 export const ORBITAL_PERIODS_DAYS: Record<string, number> = {
   Mercury:   87.969,
   Venus:    224.701,
@@ -21,166 +20,337 @@ export const ORBITAL_PERIODS_DAYS: Record<string, number> = {
   Neptune: 60182.0,
 };
 
-// ── Core calculation functions (spec-defined) ─────────────────────────────────
+// ── Rich planet display data ──────────────────────────────────────────────────
+interface PlanetUIData {
+  name: string;
+  emoji: string;
+  gradient: string;
+  accentColor: string;
+  gravityRatio: number;
+  tempDisplay: string;
+  moons: number;
+  funFact: string;
+  shockingFact: string;
+  nasaFact: string;
+}
+
+const PLANET_UI: PlanetUIData[] = [
+  {
+    name: 'Mercury',
+    emoji: '☿',
+    gradient: 'from-gray-600 to-gray-900',
+    accentColor: '#b5b5b5',
+    gravityRatio: 0.38,
+    tempDisplay: '430°C / -180°C',
+    moons: 0,
+    funFact: "A day on Mercury lasts 59 Earth days. The Sun sometimes appears to move BACKWARD in Mercury's sky due to its elliptical orbit.",
+    shockingFact: 'Despite being closest to the Sun, Mercury is NOT the hottest planet — it has no atmosphere to retain heat.',
+    nasaFact: "NASA's MESSENGER orbited Mercury for 4 years, mapping its entire surface.",
+  },
+  {
+    name: 'Venus',
+    emoji: '♀',
+    gradient: 'from-yellow-700 to-orange-900',
+    accentColor: '#e8c44d',
+    gravityRatio: 0.91,
+    tempDisplay: '464°C always ☠️',
+    moons: 0,
+    funFact: "A day on Venus (243 Earth days) is LONGER than a year on Venus (225 Earth days). The Sun rises in the WEST on Venus.",
+    shockingFact: 'Venus is hotter than Mercury despite being further from the Sun — its thick CO₂ atmosphere traps heat like a runaway greenhouse.',
+    nasaFact: "NASA's Magellan spacecraft mapped 98% of Venus's surface using radar through its thick cloud cover.",
+  },
+  {
+    name: 'Mars',
+    emoji: '♂',
+    gradient: 'from-red-700 to-red-900',
+    accentColor: '#e27b50',
+    gravityRatio: 0.38,
+    tempDisplay: '20°C / -73°C',
+    moons: 2,
+    funFact: 'The sunset on Mars is BLUE — the opposite of Earth. Martian dust scatters red light, allowing blue light to reach your eyes at sunset.',
+    shockingFact: 'Mars has the largest volcano in the solar system — Olympus Mons is 3× taller than Mount Everest.',
+    nasaFact: "NASA's Perseverance rover has been exploring Mars since February 2021, collecting rock samples.",
+  },
+  {
+    name: 'Jupiter',
+    emoji: '♃',
+    gradient: 'from-amber-700 to-orange-900',
+    accentColor: '#c88b3a',
+    gravityRatio: 2.53,
+    tempDisplay: '-108°C average',
+    moons: 95,
+    funFact: "Jupiter's Great Red Spot is a storm that has been raging for over 400 years — longer than the USA has existed.",
+    shockingFact: 'You would weigh 2.53× your Earth weight on Jupiter. A 70kg person weighs 177kg there.',
+    nasaFact: 'Jupiter has 95 known moons. Four large ones were discovered by Galileo in 1610.',
+  },
+  {
+    name: 'Saturn',
+    emoji: '♄',
+    gradient: 'from-yellow-800 to-amber-900',
+    accentColor: '#e4c76b',
+    gravityRatio: 1.07,
+    tempDisplay: '-139°C average',
+    moons: 146,
+    funFact: 'Saturn is so light it would FLOAT on water — the only planet less dense than water.',
+    shockingFact: "Saturn has 146 known moons (record as of 2023). Its moon Titan has liquid methane lakes.",
+    nasaFact: "NASA's Cassini spacecraft spent 13 years orbiting Saturn, discovering a global ocean on moon Enceladus.",
+  },
+  {
+    name: 'Uranus',
+    emoji: '⛢',
+    gradient: 'from-cyan-700 to-teal-900',
+    accentColor: '#7de8e8',
+    gravityRatio: 0.89,
+    tempDisplay: '-195°C coldest planet',
+    moons: 28,
+    funFact: "Uranus rotates on its SIDE — tilted 98° on its axis. Its north pole points almost directly at the Sun during part of its orbit.",
+    shockingFact: 'Uranus is the coldest planet in the solar system — colder than Neptune, despite being closer to the Sun.',
+    nasaFact: "Only one spacecraft has ever visited Uranus — NASA's Voyager 2, in 1986.",
+  },
+  {
+    name: 'Neptune',
+    emoji: '♆',
+    gradient: 'from-blue-800 to-indigo-900',
+    accentColor: '#4b70dd',
+    gravityRatio: 1.14,
+    tempDisplay: '-201°C 🥶',
+    moons: 16,
+    funFact: 'It can RAIN DIAMONDS on Neptune — intense pressure and heat converts carbon into diamond crystals that sink into the core.',
+    shockingFact: "Neptune has never completed a full orbit since it was discovered in 1846. Its first full orbit since discovery was in 2011.",
+    nasaFact: 'Wind speeds on Neptune reach 2,100 km/h — the fastest in the solar system.',
+  },
+];
+
+// ── Shocking space facts for the carousel ────────────────────────────────────
+interface SpaceFact {
+  icon: string;
+  title: string;
+  body: string;
+  source: string;
+  gradient: string;
+}
+
+const SPACE_FACTS: SpaceFact[] = [
+  {
+    icon: '💎',
+    title: 'It Rains Diamonds on Neptune',
+    body: "The intense pressure and heat in Neptune's interior converts carbon into diamond crystals. Scientists estimate millions of tonnes of diamonds rain down toward Neptune's core every year.",
+    source: 'NASA/Caltech, Science Journal, 2017',
+    gradient: 'from-blue-800 to-indigo-900',
+  },
+  {
+    icon: '🌅',
+    title: 'The Sun Rises in the West on Venus',
+    body: 'Venus rotates in the opposite direction to most planets. On Venus, the Sun rises in the west and sets in the east — the complete opposite of Earth.',
+    source: 'NASA Planetary Fact Sheet',
+    gradient: 'from-yellow-700 to-orange-900',
+  },
+  {
+    icon: '🛁',
+    title: 'Saturn Would Float in a Bathtub',
+    body: 'Saturn is the least dense planet in the solar system — less dense than water. If you had a bathtub large enough, Saturn would float in it.',
+    source: 'NASA Solar System Exploration',
+    gradient: 'from-yellow-800 to-amber-900',
+  },
+  {
+    icon: '🌀',
+    title: "Jupiter's Storm Is Older Than the USA",
+    body: "The Great Red Spot — a storm in Jupiter's atmosphere — has been raging continuously for at least 400 years. It was first observed in 1665. The USA declared independence in 1776.",
+    source: 'NASA Hubble Space Telescope Observations',
+    gradient: 'from-amber-700 to-orange-900',
+  },
+  {
+    icon: '🌡️',
+    title: "Mercury Has Wild Temperature Swings",
+    body: 'Without an atmosphere to retain heat, Mercury swings from 430°C during the day to -180°C at night — a temperature range of 610°C. No planet has more extreme daily temperature variation.',
+    source: 'NASA MESSENGER Mission Data',
+    gradient: 'from-gray-600 to-gray-900',
+  },
+  {
+    icon: '🔄',
+    title: "Uranus Rolls Around the Sun",
+    body: "Uranus is tilted 98° on its axis — it essentially rotates on its side. During part of its 84-year orbit, one pole points almost directly at the Sun for 42 consecutive years.",
+    source: "NASA Voyager 2 Mission, 1986",
+    gradient: 'from-cyan-700 to-teal-900',
+  },
+  {
+    icon: '🌬️',
+    title: "Neptune Has Solar System's Fastest Winds",
+    body: "Wind speeds on Neptune reach 2,100 km/h — faster than the speed of sound on Earth. That's 8× the force of the most powerful hurricane ever recorded on Earth.",
+    source: "NASA Voyager 2 Mission, 1989",
+    gradient: 'from-blue-700 to-indigo-900',
+  },
+  {
+    icon: '🌅',
+    title: "Sunsets on Mars Are Blue",
+    body: "On Mars, the sunset sky glows blue around the Sun — the exact opposite of Earth. Martian dust scatters red light, allowing blue light to reach your eyes at sunset.",
+    source: "NASA Mars Curiosity Rover, 2015",
+    gradient: 'from-red-700 to-red-900',
+  },
+  {
+    icon: '🕐',
+    title: "Neptune's Orbit: Longer Than Recorded History",
+    body: "Neptune takes 164.8 Earth years to complete one orbit. When it was discovered in 1846, it had never been observed completing a full orbit. Its first full orbit since discovery was completed on July 12, 2011.",
+    source: "Neptune Discovery — Le Verrier, 1846",
+    gradient: 'from-blue-900 to-slate-900',
+  },
+  {
+    icon: '📏',
+    title: "The Scale Is Impossible to Comprehend",
+    body: "If Earth were a marble, Jupiter would be the size of a basketball — and the distance between them would be 300 meters. The solar system is 99.86% empty space.",
+    source: "NASA Solar System Size Scale",
+    gradient: 'from-slate-700 to-slate-900',
+  },
+];
+
+// ── Neptune historical context ────────────────────────────────────────────────
+const NEPTUNE_HISTORY: [number, string][] = [
+  [1856, 'the Crimean War was ending'],
+  [1861, 'the American Civil War began'],
+  [1870, 'the Franco-Prussian War'],
+  [1880, 'Thomas Edison demonstrated the lightbulb'],
+  [1900, 'the turn of the 20th century'],
+  [1912, 'the Titanic sank'],
+  [1914, 'World War I began'],
+  [1929, 'the Great Depression began'],
+  [1939, 'World War II began'],
+  [1945, 'World War II ended'],
+  [1953, 'the Korean War ended'],
+  [1961, 'Yuri Gagarin flew to space'],
+  [1969, 'the first Moon landing'],
+  [1985, 'Back to the Future was released'],
+  [1991, 'the Soviet Union dissolved'],
+];
+
+function getNeptuneContext(year: number): string {
+  let best = NEPTUNE_HISTORY[0];
+  for (const entry of NEPTUNE_HISTORY) {
+    if (Math.abs(entry[0] - year) < Math.abs(best[0] - year)) best = entry;
+  }
+  return best[1];
+}
+
+// ── Gravity ratios for weight calc ────────────────────────────────────────────
+const GRAVITY_RATIOS: Record<string, number> = {
+  Mercury: 0.38,
+  Venus: 0.91,
+  Earth: 1.0,
+  Mars: 0.38,
+  Jupiter: 2.53,
+  Saturn: 1.07,
+  Uranus: 0.89,
+  Neptune: 1.14,
+};
+
+// ── Core calculation functions ────────────────────────────────────────────────
 function getPlanetAge(birthDate: Date, planet: string): number {
-  const now = new Date();
-  const daysSinceBirth =
-    (now.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24);
+  const daysSinceBirth = (Date.now() - birthDate.getTime()) / 86400000;
   return daysSinceBirth / ORBITAL_PERIODS_DAYS[planet];
 }
 
 function getDaysToNextBirthday(birthDate: Date, planet: string): number {
-  const planetAge = getPlanetAge(birthDate, planet);
-  const nextBirthday = Math.ceil(planetAge);
-  const daysUntil =
-    (nextBirthday - planetAge) * ORBITAL_PERIODS_DAYS[planet];
-  return Math.round(daysUntil);
+  const age = getPlanetAge(birthDate, planet);
+  return Math.round((Math.ceil(age) - age) * ORBITAL_PERIODS_DAYS[planet]);
 }
 
 function getNextBirthdayDate(birthDate: Date, planet: string): Date {
-  const daysUntil = getDaysToNextBirthday(birthDate, planet);
-  const result = new Date();
-  result.setDate(result.getDate() + daysUntil);
-  return result;
+  const d = new Date();
+  d.setDate(d.getDate() + getDaysToNextBirthday(birthDate, planet));
+  return d;
 }
 
-// ── Planet configuration ──────────────────────────────────────────────────────
-interface PlanetConfig {
+// ── Planet card component ─────────────────────────────────────────────────────
+interface PlanetResult {
   name: string;
   emoji: string;
-  svgColor: string;
-  svgOrbitR: number;
-  svgPlanetR: number;
-  svgAnimDuration: string;
-  periodLabel: string;
-  tagline: (age: number) => string;
-  fact: string;
-}
-
-const PLANETS: PlanetConfig[] = [
-  {
-    name: 'Mercury',
-    emoji: '🔘',
-    svgColor: '#9ca3af',
-    svgOrbitR: 40,
-    svgPlanetR: 3,
-    svgAnimDuration: '3s',
-    periodLabel: '87.969 Earth days',
-    tagline: (a) =>
-      a > 200 ? 'Practically ancient here!' : a > 100 ? 'A Mercury veteran' : 'Fast-aging on the inner lane',
-    fact:
-      'Mercury completes one full orbit every 87.969 Earth days — the fastest of any planet. On Mercury you age approximately 4.15 times faster than on Earth. Despite being closest to the Sun, Mercury is not the hottest planet; its near-vacuum atmosphere means daytime temperatures reach +430 °C while nights plunge to −180 °C, creating the most extreme thermal swings in the solar system.',
-  },
-  {
-    name: 'Venus',
-    emoji: '🟡',
-    svgColor: '#f59e0b',
-    svgOrbitR: 65,
-    svgPlanetR: 5,
-    svgAnimDuration: '5s',
-    periodLabel: '224.701 Earth days',
-    tagline: (a) =>
-      a > 60 ? 'Quite the elder on Venus' : 'Still relatively youthful',
-    fact:
-      'Venus orbits the Sun once every 224.701 Earth days, but its rotation is so slow that a Venusian solar day (243 Earth days) is longer than its year. Venus also rotates retrograde — the Sun rises in the west and sets in the east. A runaway greenhouse effect locks surface temperatures near 465 °C, making Venus the hottest planet despite being second, not first, from the Sun.',
-  },
-  {
-    name: 'Mars',
-    emoji: '🔴',
-    svgColor: '#ef4444',
-    svgOrbitR: 90,
-    svgPlanetR: 4,
-    svgAnimDuration: '8s',
-    periodLabel: '686.971 Earth days (~1.88 yrs)',
-    tagline: (a) =>
-      `A Martian ${a < 10 ? 'child' : a < 18 ? 'youngster' : a < 40 ? 'adult' : 'elder'}`,
-    fact:
-      "A Martian year lasts 686.971 Earth days — nearly two Earth years. Mars has four seasons similar to Earth's owing to its axial tilt of 25.2°. ISRO's Mars Orbiter Mission (Mangalyaan, 2014) became the first Asian spacecraft to reach Martian orbit, succeeding on its very first attempt. NASA's Perseverance rover is currently exploring Jezero Crater in search of signs of ancient microbial life.",
-  },
-  {
-    name: 'Jupiter',
-    emoji: '🟠',
-    svgColor: '#fb923c',
-    svgOrbitR: 118,
-    svgPlanetR: 9,
-    svgAnimDuration: '15s',
-    periodLabel: '4,332.589 Earth days (~11.9 yrs)',
-    tagline: () => 'Basically a toddler on Jupiter!',
-    fact:
-      'Jupiter takes 4,332.589 Earth days — nearly 12 Earth years — to orbit the Sun. Its Great Red Spot, a storm larger than Earth itself, has persisted for over 350 years. Jupiter hosts 95 confirmed moons, including Europa (believed to harbour a liquid-water ocean beneath its icy crust), Io (the most volcanically active body in the solar system), and Ganymede (the largest moon in the solar system).',
-  },
-  {
-    name: 'Saturn',
-    emoji: '🪐',
-    svgColor: '#fbbf24',
-    svgOrbitR: 142,
-    svgPlanetR: 7,
-    svgAnimDuration: '25s',
-    periodLabel: '10,759.22 Earth days (~29.5 yrs)',
-    tagline: () => 'Just a Saturn newborn!',
-    fact:
-      'Saturn completes an orbit every 10,759.22 Earth days — roughly 29.5 Earth years. Its iconic ring system extends up to 282,000 km from the planet yet is often less than 100 metres thick. Saturn is the least dense planet — light enough to float on water. Its moon Titan, larger than the planet Mercury, is the only moon with a dense nitrogen atmosphere and has liquid methane lakes on its surface.',
-  },
-  {
-    name: 'Uranus',
-    emoji: '🔵',
-    svgColor: '#7dd3fc',
-    svgOrbitR: 163,
-    svgPlanetR: 6,
-    svgAnimDuration: '40s',
-    periodLabel: '30,688.5 Earth days (~84 yrs)',
-    tagline: () => 'Not even born yet on Uranus!',
-    fact:
-      'Uranus takes 30,688.5 Earth days — approximately 84 Earth years — to orbit the Sun. Most people born today will not see Uranus complete a full orbit in their lifetime. Uranus rotates on its side with an axial tilt of 97.77°, creating extreme polar seasons of 42-year-long days followed by 42-year-long polar nights. It is an ice giant composed largely of water, methane, and ammonia ices.',
-  },
-  {
-    name: 'Neptune',
-    emoji: '💙',
-    svgColor: '#6366f1',
-    svgOrbitR: 185,
-    svgPlanetR: 6,
-    svgAnimDuration: '60s',
-    periodLabel: '60,182.0 Earth days (~165 yrs)',
-    tagline: () => 'A mere blink of cosmic time!',
-    fact:
-      'Neptune takes 60,182.0 Earth days — approximately 165 Earth years — to complete one full orbit. Discovered in 1846, it completed only its first orbit since discovery in 2011. Neptune has the strongest sustained winds of any planet, reaching 2,100 km/h. Its largest moon Triton orbits in the opposite direction to Neptune\'s rotation — strongly suggesting it was a captured Kuiper Belt object rather than an in-place formation.',
-  },
-];
-
-// ── PlanetCard ────────────────────────────────────────────────────────────────
-interface PlanetResult extends PlanetConfig {
+  gradient: string;
+  accentColor: string;
+  gravityRatio: number;
+  tempDisplay: string;
+  moons: number;
+  funFact: string;
+  shockingFact: string;
+  nasaFact: string;
   age: number;
   daysToNext: number;
   nextDate: Date;
   nextBirthdayNum: number;
 }
 
-const PlanetCard = ({ p }: { p: PlanetResult }) => (
-  <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-center space-y-1.5 hover:bg-white/[0.08] transition-colors">
-    <div className="text-3xl">{p.emoji}</div>
-    <div className="font-bold text-white text-sm">{p.name}</div>
-    <div className="text-2xl font-bold text-purple-300 tabular-nums">
-      {p.age.toFixed(2)}
-    </div>
-    <div className="text-[11px] text-gray-400">{p.name} years old</div>
-    <div className="text-[10px] text-gray-500 leading-snug mt-1 space-y-0.5">
-      <div>🎂 Birthday #{p.nextBirthdayNum}</div>
-      <div>
-        {p.daysToNext === 0
-          ? 'is today!'
-          : `in ${p.daysToNext.toLocaleString()} Earth days`}
-      </div>
-      {p.daysToNext > 0 && (
-        <div className="text-purple-400/70">
-          {format(p.nextDate, 'MMM d, yyyy')}
+const PlanetCard = ({ p, weightKg }: { p: PlanetResult; weightKg: number | null }) => {
+  const [expanded, setExpanded] = useState(false);
+  const isUrgent = p.daysToNext > 0 && p.daysToNext < 30;
+  const isVeryLong = p.daysToNext > 365;
+
+  return (
+    <div
+      className={`bg-gradient-to-br ${p.gradient} rounded-2xl p-5 text-white cursor-pointer transition-transform hover:scale-[1.02]`}
+      onClick={() => setExpanded(e => !e)}
+    >
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-4xl">{p.emoji}</span>
+        <div className="text-right">
+          <span className="text-xs opacity-60 uppercase tracking-widest">{p.name}</span>
+          <div className="text-xs opacity-40">{p.moons > 0 ? `${p.moons} moons` : 'no moons'}</div>
         </div>
-      )}
+      </div>
+
+      <div className="text-4xl font-black mb-0.5 tabular-nums leading-none">
+        {p.age < 1 ? p.age.toFixed(3) : p.age.toFixed(2)}
+      </div>
+      <div className="text-sm opacity-70 mb-3">{p.name} years old</div>
+
+      <div
+        className={`text-xs mb-3 font-medium ${isUrgent ? 'text-amber-400' : 'text-slate-300'}`}
+      >
+        {p.daysToNext === 0
+          ? '🎂 Birthday today!'
+          : isVeryLong
+          ? `Next birthday in ${(p.daysToNext / 365.25).toFixed(1)} Earth years`
+          : `Next birthday in ${p.daysToNext.toLocaleString()} days`}
+        {!isVeryLong && p.daysToNext > 0 && (
+          <span className="opacity-60 ml-1">({format(p.nextDate, 'MMM d, yyyy')})</span>
+        )}
+      </div>
+
+      <hr className="border-white/15 mb-3" />
+
+      <p className="text-xs text-slate-300 italic leading-relaxed mb-3">
+        {expanded ? p.shockingFact : p.funFact}
+      </p>
+
+      <div className="flex flex-wrap gap-1.5 mt-auto">
+        <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full">
+          {weightKg ? `${(weightKg * p.gravityRatio).toFixed(1)}kg here` : `${p.gravityRatio}× gravity`}
+        </span>
+        <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full">{p.tempDisplay}</span>
+      </div>
+
+      <div className="text-[9px] text-white/30 mt-2 text-right">
+        {expanded ? 'tap for fun fact' : 'tap for shocking fact'}
+      </div>
     </div>
-    <div className="text-[10px] text-amber-400/60 italic leading-snug">
-      {p.tagline(p.age)}
-    </div>
-  </div>
-);
+  );
+};
+
+// ── Stars (stable, seeded) ───────────────────────────────────────────────────
+const STARS = Array.from({ length: 60 }, (_, i) => ({
+  top: `${(i * 37 + 13) % 100}%`,
+  left: `${(i * 61 + 7) % 100}%`,
+  delay: `${(i * 0.1) % 3}s`,
+  size: `${(i % 2) + 1}px`,
+}));
+
+// ── SVG planet configs (for animation) ───────────────────────────────────────
+const SVG_PLANETS = [
+  { name: 'Mercury', color: '#9ca3af', orbitR: 40, planetR: 3, dur: '3s' },
+  { name: 'Venus',   color: '#f59e0b', orbitR: 65, planetR: 5, dur: '5s' },
+  { name: 'Mars',    color: '#ef4444', orbitR: 90, planetR: 4, dur: '8s' },
+  { name: 'Jupiter', color: '#fb923c', orbitR: 118, planetR: 9, dur: '15s' },
+  { name: 'Saturn',  color: '#fbbf24', orbitR: 142, planetR: 7, dur: '25s' },
+  { name: 'Uranus',  color: '#7dd3fc', orbitR: 163, planetR: 6, dur: '40s' },
+  { name: 'Neptune', color: '#6366f1', orbitR: 185, planetR: 6, dur: '60s' },
+];
 
 // ── Main component ────────────────────────────────────────────────────────────
 interface PlanetaryAgeProps {
@@ -191,7 +361,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
   const { toast } = useToast();
   const { user } = useAuth();
 
-  // Card generation state
+  // Card generation
   const [userName, setUserName] = useState('');
   const [generating, setGenerating] = useState(false);
   const [cardGenerated, setCardGenerated] = useState(false);
@@ -199,138 +369,116 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
   const [copied, setCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Generate 60 stars once — stable across re-renders
-  const starsRef = useRef<
-    Array<{ top: string; left: string; delay: string; size: string }>
-  >([]);
-  if (starsRef.current.length === 0) {
-    starsRef.current = Array.from({ length: 60 }, () => ({
-      top: `${(Math.random() * 100).toFixed(1)}%`,
-      left: `${(Math.random() * 100).toFixed(1)}%`,
-      delay: `${(Math.random() * 3).toFixed(1)}s`,
-      size: `${(Math.random() * 2 + 1).toFixed(1)}px`,
-    }));
-  }
+  // Weight calculator
+  const [weight, setWeight] = useState('');
+  const [weightUnit, setWeightUnit] = useState<'kg' | 'lbs'>('kg');
+  const weightKg = weight
+    ? weightUnit === 'kg'
+      ? parseFloat(weight)
+      : parseFloat(weight) * 0.453592
+    : null;
+
+  // Facts carousel
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const isPausedRef = useRef(false);
+  const scrollIdxRef = useRef(0);
+
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const cardW = 304 + 16; // min-w-72 (288px) + gap-4 (16px)
+    const interval = setInterval(() => {
+      if (isPausedRef.current) return;
+      scrollIdxRef.current = (scrollIdxRef.current + 1) % SPACE_FACTS.length;
+      el.scrollTo({ left: scrollIdxRef.current * cardW, behavior: 'smooth' });
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   const results = useMemo<PlanetResult[]>(() => {
-    return PLANETS.map((planet) => {
+    return PLANET_UI.map(planet => {
       const age = getPlanetAge(birthDate, planet.name);
       const daysToNext = getDaysToNextBirthday(birthDate, planet.name);
       const nextDate = getNextBirthdayDate(birthDate, planet.name);
-      const nextBirthdayNum = Math.ceil(age);
-      return { ...planet, age, daysToNext, nextDate, nextBirthdayNum };
+      return { ...planet, age, daysToNext, nextDate, nextBirthdayNum: Math.ceil(age) };
     });
   }, [birthDate]);
 
-  const mars = results.find((p) => p.name === 'Mars')!;
-  const mercury = results.find((p) => p.name === 'Mercury')!;
+  const daysSinceBirth = (Date.now() - birthDate.getTime()) / 86400000;
+  const earthAgeYears = daysSinceBirth / 365.25;
+  const earthAge = Math.floor(earthAgeYears);
 
-  const fullShareText = useMemo(() => {
-    const lines = results
-      .map((p) => `  • ${p.name}: ${p.age.toFixed(2)} yrs`)
-      .join('\n');
-    return (
-      `🪐 My age on every planet (born ${format(birthDate, 'MMM d, yyyy')}):\n` +
-      `${lines}\n\n` +
-      `Calculate yours → https://bornclock.com/planetary-age`
-    );
-  }, [results, birthDate]);
+  const mercury = results.find(p => p.name === 'Mercury')!;
+  const venus = results.find(p => p.name === 'Venus')!;
+  const mars = results.find(p => p.name === 'Mars')!;
+  const jupiter = results.find(p => p.name === 'Jupiter')!;
+  const saturn = results.find(p => p.name === 'Saturn')!;
+  const uranus = results.find(p => p.name === 'Uranus')!;
+  const neptune = results.find(p => p.name === 'Neptune')!;
 
-  const tweetText = useMemo(
-    () =>
-      `🪐 I'm ${mars.age.toFixed(1)} years old on Mars and ${mercury.age.toFixed(0)} in Mercury years! What's your planetary age?`,
-    [mars.age, mercury.age],
-  );
+  // Most dramatic age for hero display
+  const primaryIsNeptune = neptune.age < 1;
+  const primaryPlanet = primaryIsNeptune ? neptune : jupiter;
+  const primaryAgeStr = primaryIsNeptune
+    ? neptune.age.toFixed(3)
+    : jupiter.age.toFixed(2);
+  const primaryLabel = primaryIsNeptune
+    ? 'years old on Neptune'
+    : 'years old on Jupiter';
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(fullShareText).then(() => {
-      toast({
-        title: 'Copied to clipboard!',
-        description: 'Share your planetary ages with anyone.',
-      });
-    });
-  };
+  // Cosmic profile stats
+  const mercuryPerYear = (365.25 / ORBITAL_PERIODS_DAYS.Mercury).toFixed(1);
+  const neptuneLastYear = new Date().getFullYear() - 165;
+  const neptuneContext = getNeptuneContext(neptuneLastYear);
+  const totalBirthdays = results.reduce((s, p) => s + Math.floor(p.age), 0) + earthAge;
+  const earthPct = totalBirthdays > 0 ? Math.round((earthAge / totalBirthdays) * 100) : 0;
+  const firstJupiterDate = new Date(birthDate.getTime() + ORBITAL_PERIODS_DAYS.Jupiter * 86400000);
 
-  const handleWhatsApp = () => {
-    window.open(
-      `https://wa.me/?text=${encodeURIComponent(fullShareText)}`,
-      '_blank',
-      'noopener,noreferrer',
-    );
-  };
-
-  const handleTwitter = () => {
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent('https://bornclock.com/planetary-age')}`,
-      '_blank',
-      'noopener,noreferrer',
-    );
-  };
-
-  // Derived data for card
-  const earthAge = Math.floor(
-    (new Date().getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25),
-  );
-
+  // Share helpers
   const planetAgesMap = useMemo(() => {
-    const map: Record<string, number> = {};
-    results.forEach(r => { map[r.name] = r.age; });
-    return map;
+    const m: Record<string, number> = {};
+    results.forEach(r => { m[r.name] = r.age; });
+    return m;
   }, [results]);
 
   const nextBirthdaysMap = useMemo(() => {
-    const map: Record<string, number> = {};
-    results.forEach(r => { map[r.name] = r.daysToNext; });
-    return map;
+    const m: Record<string, number> = {};
+    results.forEach(r => { m[r.name] = r.daysToNext; });
+    return m;
   }, [results]);
 
-  const generateShareText = (): string => {
+  const getMostDramaticShareText = (): string => {
     const name = userName ? `${userName}'s` : 'My';
-    const mercuryNextBirthday = nextBirthdaysMap['Mercury'] ?? '?';
-    const marsAge = planetAgesMap['Mars']?.toFixed(1);
-    const jupiterAge = planetAgesMap['Jupiter']?.toFixed(1);
-    const neptuneAge = planetAgesMap['Neptune']?.toFixed(2);
-    const mercuryAge = planetAgesMap['Mercury']?.toFixed(1);
+    if (neptune.age < 1) {
+      return `🪐 ${name} Cosmic Age: only ${neptune.age.toFixed(3)} years old on Neptune — but ${Math.floor(mercury.age)} birthdays on Mercury! Calculate yours: https://bornclock.com/planetary-age #CosmicAge #NASA`;
+    }
+    return `🪐 ${name} Cosmic Age: ${jupiter.age.toFixed(1)} yrs on Jupiter but ${Math.floor(mercury.age)} on Mercury! Calculate yours: https://bornclock.com/planetary-age #CosmicAge`;
+  };
 
-    return `🚀 ${name} Cosmic Age Report:
+  const fullShareText = useMemo(() => {
+    const lines = results.map(p => `  • ${p.name}: ${p.age.toFixed(2)} yrs`).join('\n');
+    return `🪐 My age on every planet (born ${format(birthDate, 'MMM d, yyyy')}):\n${lines}\n\nCalculate yours → https://bornclock.com/planetary-age`;
+  }, [results, birthDate]);
 
-🌍 Earth: ${earthAge} years
-☿ Mercury: ${mercuryAge} yrs (${mercuryNextBirthday} days to next birthday!)
-♂ Mars: ${marsAge} yrs
-♃ Jupiter: ${jupiterAge} yrs (practically a baby!)
-♆ Neptune: ${neptuneAge} yrs (barely born!)
-
-In Neptune time, I've barely started! 🪐
-NASA data · bornclock.com/planetary-age
-#CosmicAge #BornClock #Planetary`;
+  const handleCopy = () => {
+    navigator.clipboard.writeText(fullShareText).then(() => {
+      toast({ title: 'Copied!', description: 'Share your planetary ages with anyone.' });
+    });
   };
 
   const handleGenerateCard = async () => {
     setGenerating(true);
-    // Wait for the off-screen card to render
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    if (!cardRef.current) {
-      setGenerating(false);
-      return;
-    }
-
+    await new Promise(r => setTimeout(r, 500));
+    if (!cardRef.current) { setGenerating(false); return; }
     try {
       const canvas = await html2canvas(cardRef.current, {
-        width: 1080,
-        height: 1080,
-        scale: 1,
-        useCORS: true,
-        allowTaint: false,
-        backgroundColor: null,
-        logging: false,
+        width: 1080, height: 1080, scale: 1, useCORS: true,
+        allowTaint: false, backgroundColor: null, logging: false,
       });
-      const dataUrl = canvas.toDataURL('image/png', 0.95);
-      setCardDataUrl(dataUrl);
+      setCardDataUrl(canvas.toDataURL('image/png', 0.95));
       setCardGenerated(true);
-    } catch (error) {
-      console.error('Card generation failed:', error);
-      setCardGenerated(false);
+    } catch (e) {
+      console.error('Card generation failed:', e);
     } finally {
       setGenerating(false);
     }
@@ -338,7 +486,6 @@ NASA data · bornclock.com/planetary-age
 
   return (
     <>
-      {/* Animation keyframes */}
       <style>{`
         @keyframes pa-orbit {
           from { transform: rotate(0deg); }
@@ -349,86 +496,237 @@ NASA data · bornclock.com/planetary-age
           50%       { opacity: 0.85; }
         }
         @media (prefers-reduced-motion: reduce) {
-          .planet-orbit  { animation: none !important; }
-          .star-twinkle  { animation: none !important; }
+          .planet-orbit { animation: none !important; }
+          .star-twinkle { animation: none !important; }
         }
       `}</style>
 
-      {/* ── Planet cards with star field ────────────────────────────────── */}
-      <div className="relative rounded-2xl overflow-hidden bg-[#07071a] p-6 mb-6 min-h-[260px]">
-        {/* Star field */}
-        {starsRef.current.map((s, i) => (
+      {/* ── DRAMATIC HERO RESULT ─────────────────────────────────────────── */}
+      <div className="relative rounded-2xl overflow-hidden bg-[#07071a] p-8 mb-8 text-center">
+        {STARS.map((s, i) => (
           <div
             key={i}
             className="star-twinkle absolute rounded-full bg-white pointer-events-none"
             style={{
-              top: s.top,
-              left: s.left,
-              width: s.size,
-              height: s.size,
-              animation: `pa-twinkle ${(2.5 + parseFloat(s.delay)).toFixed(1)}s ease-in-out infinite`,
+              top: s.top, left: s.left, width: s.size, height: s.size,
+              animation: `pa-twinkle 3s ease-in-out infinite`,
               animationDelay: s.delay,
             }}
           />
         ))}
-
         <div className="relative z-10">
-          <h2 className="text-2xl font-bold text-white text-center mb-5">
-            🪐 Your Age Across the Solar System
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            {results.map((p) => (
-              <PlanetCard key={p.name} p={p} />
-            ))}
+          <p className="text-slate-400 text-sm uppercase tracking-widest mb-3">Your Cosmic Age Profile</p>
+          <div className="text-6xl font-black text-indigo-400 leading-none mb-1">{primaryAgeStr}</div>
+          <p className="text-2xl text-slate-300 mb-2">{primaryLabel}</p>
+          <p className="text-slate-400 text-lg mb-6">
+            But you've had{' '}
+            <span className="text-amber-400 font-bold">{Math.floor(mercury.age)}</span>
+            {' '}birthdays on Mercury
+          </p>
+          <p className="text-slate-500 text-xs max-w-sm mx-auto">
+            {primaryIsNeptune
+              ? "Neptune takes 165 Earth years per orbit. No human has ever celebrated their first Neptune birthday."
+              : "Jupiter takes 11.9 Earth years per orbit. Most people have only 3–6 Jupiter birthdays in a full lifetime."}
+          </p>
+        </div>
+      </div>
+
+      {/* ── PLANET CARDS — all 8 ─────────────────────────────────────────── */}
+      <h2 className="text-xl font-bold text-foreground mb-4">🪐 Your Age Across All 8 Planets</h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        {/* Earth reference card */}
+        <div className="bg-gradient-to-br from-blue-600 to-green-800 rounded-2xl p-5 text-white border-2 border-blue-400/40">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-4xl">🌍</span>
+            <div className="text-right">
+              <span className="text-xs opacity-60 uppercase tracking-widest">Earth</span>
+              <div className="text-[10px] opacity-40 bg-blue-400/20 px-1 rounded">reference</div>
+            </div>
+          </div>
+          <div className="text-4xl font-black mb-0.5 leading-none">{earthAge}</div>
+          <div className="text-sm opacity-70 mb-3">Earth years old</div>
+          <hr className="border-white/15 mb-3" />
+          <p className="text-xs text-slate-300 italic leading-relaxed mb-3">
+            Earth travels at 107,000 km/h around the Sun — right now, while you sit still.
+          </p>
+          <div className="flex flex-wrap gap-1.5 mt-auto">
+            <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full">1.0× gravity</span>
+            <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full">1 moon</span>
+          </div>
+        </div>
+
+        {/* All other planets */}
+        {results.map(p => (
+          <PlanetCard key={p.name} p={p} weightKg={weightKg} />
+        ))}
+      </div>
+
+      {/* ── SHOCKING FACTS CAROUSEL ──────────────────────────────────────── */}
+      <div className="mb-12">
+        <h2 className="text-xl font-bold text-foreground mb-2">🤯 Facts That Will Break Your Brain</h2>
+        <p className="text-sm text-muted-foreground mb-5">
+          Click the cards. Hover to pause auto-scroll.
+        </p>
+        <div
+          ref={carouselRef}
+          className="overflow-x-auto pb-4 flex gap-4 scrollbar-thin"
+          style={{ scrollBehavior: 'smooth' }}
+          onMouseEnter={() => { isPausedRef.current = true; }}
+          onMouseLeave={() => { isPausedRef.current = false; }}
+        >
+          {SPACE_FACTS.map((fact, i) => (
+            <div
+              key={i}
+              className={`bg-gradient-to-br ${fact.gradient} rounded-2xl p-5 text-white flex-shrink-0`}
+              style={{ minWidth: '288px', maxWidth: '288px' }}
+            >
+              <div className="text-3xl mb-3">{fact.icon}</div>
+              <h3 className="font-black text-sm mb-2 leading-tight">{fact.title}</h3>
+              <p className="text-xs text-slate-300 leading-relaxed mb-3">{fact.body}</p>
+              <p className="text-[10px] text-white/40 italic">[{fact.source}]</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── PERSONAL COSMIC PROFILE ──────────────────────────────────────── */}
+      <div className="rounded-2xl bg-[#07071a] border border-indigo-900/40 p-6 mb-12">
+        <h2 className="text-xl font-bold text-white mb-6">🌌 Your Personal Cosmic Profile</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Mercury Birthday Streak */}
+          <div className="bg-white/5 rounded-xl p-5">
+            <div className="text-2xl mb-2">☿</div>
+            <h3 className="font-semibold text-white mb-1">Mercury Birthday Streak</h3>
+            <p className="text-slate-300 text-sm leading-relaxed">
+              You've celebrated{' '}
+              <span className="text-amber-400 font-bold">{Math.floor(mercury.age)}</span>
+              {' '}birthdays on Mercury — one every 88 Earth days.
+            </p>
+            <p className="text-slate-400 text-xs mt-2">
+              That's <span className="text-amber-400">{mercuryPerYear}</span> Mercury birthdays for every Earth birthday.
+            </p>
+          </div>
+
+          {/* Jupiter Milestone */}
+          <div className="bg-white/5 rounded-xl p-5">
+            <div className="text-2xl mb-2">♃</div>
+            <h3 className="font-semibold text-white mb-1">Jupiter Milestone</h3>
+            {jupiter.age < 1 ? (
+              <p className="text-slate-300 text-sm leading-relaxed">
+                You haven't reached your first Jupiter birthday yet. You'll celebrate on{' '}
+                <span className="text-orange-400 font-bold">{format(firstJupiterDate, 'MMMM d, yyyy')}</span>.
+              </p>
+            ) : (
+              <p className="text-slate-300 text-sm leading-relaxed">
+                You are{' '}
+                <span className="text-orange-400 font-bold">{jupiter.age.toFixed(2)}</span>
+                {' '}years old on Jupiter — a number most humans never reach even in a full lifetime.
+              </p>
+            )}
+          </div>
+
+          {/* Neptune Status */}
+          <div className="bg-white/5 rounded-xl p-5">
+            <div className="text-2xl mb-2">♆</div>
+            <h3 className="font-semibold text-white mb-1">Neptune Status</h3>
+            <p className="text-slate-300 text-sm leading-relaxed">
+              On Neptune, you are{' '}
+              <span className="text-blue-400 font-bold">{neptune.age.toFixed(3)}</span>
+              {' '}years old. The last time Neptune completed a full orbit, it was{' '}
+              <span className="text-blue-400 font-bold">{neptuneLastYear}</span>
+              {' '}— {neptuneContext}.
+            </p>
+          </div>
+
+          {/* Total Birthday Count */}
+          <div className="bg-white/5 rounded-xl p-5">
+            <div className="text-2xl mb-2">🎂</div>
+            <h3 className="font-semibold text-white mb-1">Your Cosmic Birthday Count</h3>
+            <p className="text-slate-300 text-sm leading-relaxed">
+              Across all 8 planets, you have had approximately{' '}
+              <span className="text-indigo-400 font-bold">{totalBirthdays.toLocaleString()}</span>
+              {' '}birthdays. Earth accounts for only{' '}
+              <span className="text-indigo-400 font-bold">{earthPct}%</span>
+              {' '}of your cosmic birthday celebrations.
+            </p>
           </div>
         </div>
       </div>
 
-      {/* ── Share buttons ──────────────────────────────────────────────── */}
-      <div className="flex flex-wrap gap-3 justify-center mb-10">
-        <Button variant="outline" onClick={handleCopy} className="gap-2">
-          <Copy className="w-4 h-4" />
-          Copy Text
-        </Button>
+      {/* ── INTERACTIVE WEIGHT CALCULATOR ────────────────────────────────── */}
+      <div className="rounded-2xl border border-border bg-muted/20 p-6 mb-12">
+        <h2 className="text-xl font-bold text-foreground mb-1">⚖️ How Heavy Are You on Other Planets?</h2>
+        <p className="text-sm text-muted-foreground mb-5">Enter your weight to see it across the solar system.</p>
 
-        <Button
-          onClick={handleWhatsApp}
-          className="gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white border-0"
-        >
-          <svg
-            className="w-4 h-4 shrink-0"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.878-1.426A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" />
-          </svg>
-          WhatsApp
-        </Button>
+        <div className="flex items-center gap-3 mb-6 max-w-xs">
+          <input
+            type="number"
+            min={1}
+            max={500}
+            value={weight}
+            onChange={e => setWeight(e.target.value)}
+            placeholder={weightUnit === 'kg' ? 'e.g. 70' : 'e.g. 154'}
+            className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <div className="flex rounded-xl overflow-hidden border border-border">
+            <button
+              onClick={() => setWeightUnit('kg')}
+              className={`px-3 py-2.5 text-sm font-medium transition-colors ${weightUnit === 'kg' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted'}`}
+            >
+              kg
+            </button>
+            <button
+              onClick={() => setWeightUnit('lbs')}
+              className={`px-3 py-2.5 text-sm font-medium transition-colors ${weightUnit === 'lbs' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted'}`}
+            >
+              lbs
+            </button>
+          </div>
+        </div>
 
-        <Button
-          onClick={handleTwitter}
-          className="gap-2 bg-black hover:bg-gray-900 text-white border-0"
-        >
-          <svg
-            className="w-4 h-4 shrink-0"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.741l7.732-8.84L2.25 2.25H8.08l4.254 5.622 5.91-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-          </svg>
-          Twitter / X
-        </Button>
+        {weightKg && !isNaN(weightKg) && weightKg > 0 && (
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+              {Object.entries(GRAVITY_RATIOS).map(([planet, ratio]) => {
+                const w = weightKg * ratio;
+                const emoji = { Mercury: '☿', Venus: '♀', Earth: '🌍', Mars: '♂', Jupiter: '♃', Saturn: '♄', Uranus: '⛢', Neptune: '♆' }[planet] ?? '🪐';
+                const isExtreme = ratio > 2;
+                const isLight = ratio < 0.5;
+                return (
+                  <div
+                    key={planet}
+                    className={`rounded-xl p-3 text-center ${planet === 'Earth' ? 'border-2 border-primary/50 bg-primary/5' : 'border border-border bg-background'}`}
+                  >
+                    <div className="text-xl mb-1">{emoji}</div>
+                    <div className="text-xs text-muted-foreground mb-1">{planet}</div>
+                    <div className={`text-base font-bold ${isExtreme ? 'text-red-500' : isLight ? 'text-green-600' : 'text-foreground'}`}>
+                      {w.toFixed(1)} {weightUnit === 'kg' ? 'kg' : 'lbs'}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Fun notes */}
+            {weightKg * 2.53 > 200 && (
+              <p className="text-sm text-amber-600 bg-amber-50 dark:bg-amber-950/30 px-4 py-2 rounded-lg mb-2">
+                ⚠️ On Jupiter, you'd weigh {(weightKg * 2.53).toFixed(1)}kg — you'd need extraordinary structural support just to stand up.
+              </p>
+            )}
+            <p className="text-sm text-green-700 bg-green-50 dark:bg-green-950/30 px-4 py-2 rounded-lg">
+              🔴 On Mars, you'd weigh only {(weightKg * 0.38).toFixed(1)}{weightUnit} — you could jump 3× higher than on Earth.
+            </p>
+          </>
+        )}
       </div>
 
-      {/* ── Cosmic Card CTA ────────────────────────────────────────────── */}
+      {/* ── SHAREABLE CARD CTA ───────────────────────────────────────────── */}
       {!cardGenerated && !generating && (
-        <div className="mt-2 mb-10 p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950 text-white text-center">
+        <div className="mb-10 p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950 text-white text-center">
           <div className="text-2xl mb-2">🚀</div>
           <h3 className="text-lg font-semibold mb-1">Create Your Cosmic Age Card</h3>
           <p className="text-slate-300 text-sm mb-4">
-            Generate a shareable 1080×1080 card with your ages across the solar system
+            Generate a shareable 1080×1080 card with your ages across the solar system.
           </p>
           <input
             type="text"
@@ -448,33 +746,20 @@ NASA data · bornclock.com/planetary-age
         </div>
       )}
 
-      {/* ── Generating loading state ────────────────────────────────────── */}
       {generating && (
         <div className="mb-10 text-center py-8 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950">
-          <div className="inline-block">
-            <div className="text-4xl mb-3 animate-spin">🪐</div>
-            <p className="text-white font-semibold">Mapping your cosmic profile...</p>
-            <p className="text-slate-400 text-sm mt-1">Calculating ages across 4.5 billion km</p>
-          </div>
+          <div className="text-4xl mb-3 animate-spin">🪐</div>
+          <p className="text-white font-semibold">Mapping your cosmic profile...</p>
+          <p className="text-slate-400 text-sm mt-1">Calculating ages across 4.5 billion km</p>
         </div>
       )}
 
-      {/* ── Generated card preview + share options ─────────────────────── */}
       {cardGenerated && cardDataUrl && (
         <div className="mb-10">
-          {/* Card preview */}
           <div className="relative max-w-xs sm:max-w-sm md:max-w-md mx-auto mb-6">
-            <img
-              src={cardDataUrl}
-              alt="Your Cosmic Age Card"
-              className="w-full rounded-2xl shadow-2xl"
-            />
-            <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-              ✓ Ready to share
-            </div>
+            <img src={cardDataUrl} alt="Your Cosmic Age Card" className="w-full rounded-2xl shadow-2xl" />
+            <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">✓ Ready to share</div>
           </div>
-
-          {/* Share buttons */}
           <div className="flex flex-wrap gap-3 justify-center mb-4">
             <button
               onClick={() => {
@@ -487,34 +772,21 @@ NASA data · bornclock.com/planetary-age
             >
               ⬇️ Download PNG
             </button>
-
             <button
-              onClick={() => {
-                const encoded = encodeURIComponent(generateShareText());
-                window.open(`https://wa.me/?text=${encoded}`, '_blank', 'noopener,noreferrer');
-              }}
+              onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(getMostDramaticShareText())}`, '_blank', 'noopener,noreferrer')}
               className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
             >
               💬 Share on WhatsApp
             </button>
-
             <button
-              onClick={() => {
-                const encoded = encodeURIComponent(generateShareText());
-                window.open(
-                  `https://twitter.com/intent/tweet?text=${encoded}`,
-                  '_blank',
-                  'noopener,noreferrer',
-                );
-              }}
+              onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(getMostDramaticShareText())}`, '_blank', 'noopener,noreferrer')}
               className="flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
             >
               𝕏 Share on X
             </button>
-
             <button
               onClick={async () => {
-                await navigator.clipboard.writeText(generateShareText());
+                await navigator.clipboard.writeText(getMostDramaticShareText());
                 setCopied(true);
                 setTimeout(() => setCopied(false), 2000);
               }}
@@ -523,18 +795,14 @@ NASA data · bornclock.com/planetary-age
               {copied ? '✓ Copied!' : '📋 Copy Text'}
             </button>
           </div>
-
           <p className="text-center text-sm text-gray-500 mb-6">
             📸 For Instagram: Download the PNG then share to your Story or Feed
           </p>
-
-          {/* Sign-in CTA */}
           {!user && (
             <div className="border border-indigo-200 rounded-xl p-4 bg-indigo-50 text-center max-w-sm mx-auto mb-4">
-              <div className="text-2xl mb-2">✨</div>
               <p className="font-semibold text-indigo-900 mb-1">Save your Cosmic Profile</p>
               <p className="text-sm text-indigo-700 mb-3">
-                Sign in to save your planetary ages, get birthday reminders, and calculate your longevity forecast
+                Sign in to save your planetary ages and get birthday reminders
               </p>
               <Link
                 to="/auth?redirect=/planetary-age"
@@ -544,14 +812,9 @@ NASA data · bornclock.com/planetary-age
               </Link>
             </div>
           )}
-
-          {/* Regenerate */}
           <div className="text-center">
             <button
-              onClick={() => {
-                setCardGenerated(false);
-                setCardDataUrl('');
-              }}
+              onClick={() => { setCardGenerated(false); setCardDataUrl(''); }}
               className="text-sm text-gray-400 hover:text-gray-600 underline"
             >
               Change name or regenerate
@@ -560,7 +823,29 @@ NASA data · bornclock.com/planetary-age
         </div>
       )}
 
-      {/* Off-screen card for html2canvas capture */}
+      {/* Quick share buttons (before card is generated) */}
+      {!cardGenerated && !generating && (
+        <div className="flex flex-wrap gap-3 justify-center mb-10">
+          <Button variant="outline" onClick={handleCopy} className="gap-2">
+            <Copy className="w-4 h-4" />
+            Copy All Planets
+          </Button>
+          <Button
+            onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(getMostDramaticShareText())}`, '_blank', 'noopener,noreferrer')}
+            className="gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white border-0"
+          >
+            📱 WhatsApp
+          </Button>
+          <Button
+            onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(getMostDramaticShareText())}`, '_blank', 'noopener,noreferrer')}
+            className="gap-2 bg-black hover:bg-gray-900 text-white border-0"
+          >
+            𝕏 Twitter / X
+          </Button>
+        </div>
+      )}
+
+      {/* Off-screen card for html2canvas */}
       <div style={{ position: 'absolute', left: '-9999px', top: '0', zIndex: -1 }}>
         <PlanetaryAgeCard
           ref={cardRef}
@@ -572,82 +857,31 @@ NASA data · bornclock.com/planetary-age
         />
       </div>
 
-      {/* ── Solar system animation ──────────────────────────────────────── */}
+      {/* ── SOLAR SYSTEM ANIMATION ───────────────────────────────────────── */}
       <section className="mb-12">
         <h2 className="text-xl font-bold text-center text-foreground mb-2">
           ☀️ Solar System — Orbital Animation
         </h2>
         <p className="text-sm text-center text-muted-foreground mb-6 max-w-md mx-auto">
-          Planets closer to the Sun move faster along smaller orbits. Animation
-          speeds are artistic — not proportional to real orbital periods.
+          Planets closer to the Sun move faster. Animation speeds are artistic — not proportional to real periods.
         </p>
-
         <div className="flex justify-center">
           <svg
-            viewBox="0 0 400 400"
-            width="360"
-            height="360"
-            className="rounded-2xl"
-            aria-label="Animated diagram of the solar system showing seven planets orbiting the Sun"
-            role="img"
+            viewBox="0 0 400 400" width="360" height="360" className="rounded-2xl"
+            aria-label="Animated solar system diagram" role="img"
           >
             <rect width="400" height="400" fill="#07071a" rx="16" />
-
             <g transform="translate(200,200)">
-              {/* Orbit rings */}
-              {PLANETS.map((p) => (
-                <circle
-                  key={`ring-${p.name}`}
-                  cx="0"
-                  cy="0"
-                  r={p.svgOrbitR}
-                  fill="none"
-                  stroke="white"
-                  strokeOpacity="0.07"
-                  strokeWidth="0.5"
-                />
+              {SVG_PLANETS.map(p => (
+                <circle key={`ring-${p.name}`} cx="0" cy="0" r={p.orbitR} fill="none" stroke="white" strokeOpacity="0.07" strokeWidth="0.5" />
               ))}
-
-              {/* Sun */}
               <circle cx="0" cy="0" r="14" fill="#FDB813" />
-              <circle
-                cx="0"
-                cy="0"
-                r="20"
-                fill="none"
-                stroke="#FDB813"
-                strokeOpacity="0.18"
-                strokeWidth="5"
-              />
-
-              {/* Animated planets */}
-              {PLANETS.map((p) => (
-                <g
-                  key={`planet-${p.name}`}
-                  className="planet-orbit"
-                  style={{
-                    animation: `pa-orbit ${p.svgAnimDuration} linear infinite`,
-                    transformOrigin: '0 0',
-                  }}
-                >
-                  <circle
-                    cx={p.svgOrbitR}
-                    cy="0"
-                    r={p.svgPlanetR}
-                    fill={p.svgColor}
-                  />
-                  {/* Saturn ring */}
+              <circle cx="0" cy="0" r="20" fill="none" stroke="#FDB813" strokeOpacity="0.18" strokeWidth="5" />
+              {SVG_PLANETS.map(p => (
+                <g key={`planet-${p.name}`} className="planet-orbit" style={{ animation: `pa-orbit ${p.dur} linear infinite`, transformOrigin: '0 0' }}>
+                  <circle cx={p.orbitR} cy="0" r={p.planetR} fill={p.color} />
                   {p.name === 'Saturn' && (
-                    <ellipse
-                      cx={p.svgOrbitR}
-                      cy="0"
-                      rx={p.svgPlanetR + 5}
-                      ry={p.svgPlanetR - 2}
-                      fill="none"
-                      stroke={p.svgColor}
-                      strokeOpacity="0.55"
-                      strokeWidth="1.5"
-                    />
+                    <ellipse cx={p.orbitR} cy="0" rx={p.planetR + 5} ry={p.planetR - 2} fill="none" stroke={p.color} strokeOpacity="0.55" strokeWidth="1.5" />
                   )}
                 </g>
               ))}
@@ -656,109 +890,40 @@ NASA data · bornclock.com/planetary-age
         </div>
       </section>
 
-      {/* ── Educational content ─────────────────────────────────────────── */}
-      <section className="space-y-10 max-w-3xl mx-auto">
-
-        {/* How it works */}
-        <div>
-          <h2 className="text-2xl font-bold text-foreground mb-3">
-            How the Planetary Age Calculator Works
-          </h2>
-          <p className="text-muted-foreground leading-relaxed">
-            Your "age" on any planet is the number of full orbits that planet
-            has completed around the Sun since you were born. We calculate this
-            by dividing the total Earth days elapsed since your birth date by
-            each planet's{' '}
-            <strong>mean sidereal orbital period</strong> — the time it takes to
-            complete one orbit relative to the stars — using verified constants
-            from NASA JPL's Planetary Fact Sheet (Williams, D.R., 2024). All
-            calculations run entirely in your browser; your date of birth never
-            leaves your device.
-          </p>
-          <p className="text-muted-foreground leading-relaxed mt-3">
-            Your next "planetary birthday" is the moment a planet completes its
-            next full orbit since your birth. We find this by taking the ceiling
-            of your current planetary age, then converting the fractional
-            remainder back to Earth days and projecting forward from today.
-            Dates are for educational enjoyment — actual planetary positions are
-            not used in birthday calculations!
-          </p>
-        </div>
-
-        {/* Per-planet explanations */}
-        <div>
-          <h2 className="text-2xl font-bold text-foreground mb-5">
-            Your Age on Each Planet — Explained
-          </h2>
-          <div className="space-y-6">
-            {results.map((p) => (
-              <div
-                key={p.name}
-                className="border-l-2 border-purple-500/30 pl-5"
-              >
-                <h3 className="text-lg font-semibold text-foreground mb-1.5">
-                  {p.emoji}&nbsp; {p.name} — {p.periodLabel}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {p.fact}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ISRO section */}
-        <div>
-          <h2 className="text-2xl font-bold text-foreground mb-3">
-            🇮🇳 ISRO's Planetary Missions
-          </h2>
-          <p className="text-muted-foreground leading-relaxed">
-            India's space agency ISRO has made remarkable strides in planetary
-            exploration. The Mars Orbiter Mission (Mangalyaan), launched in
-            November 2013 and achieving Mars orbit insertion in September 2014,
-            made India the first Asian nation and the fourth space agency in the
-            world to successfully reach Mars orbit — and the only one to do so
-            on a first attempt. The spacecraft operated for over seven years,
-            far exceeding its six-month design life.
-          </p>
-          <p className="text-muted-foreground leading-relaxed mt-3">
-            ISRO's Chandrayaan-3 mission (2023) achieved a historic soft
-            landing near the Moon's south pole — a first for any nation. The
-            Pragyan rover confirmed the presence of sulphur and several other
-            elements in the lunar south polar soil. ISRO continues to advance
-            its deep-space programme with Aditya-L1 (solar observation,
-            launched 2023), the forthcoming Chandrayaan-4, and a proposed Venus
-            Orbiter Mission (Shukrayaan-1).
-          </p>
-        </div>
-
-        {/* Kepler section */}
+      {/* ── KEPLER'S THIRD LAW ───────────────────────────────────────────── */}
+      <section className="space-y-6 max-w-3xl mx-auto mb-12">
         <div>
           <h2 className="text-2xl font-bold text-foreground mb-3">
             ⚙️ Kepler's Third Law — The Science Behind Planetary Ages
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            The vast differences in planetary year lengths follow directly from
-            Johannes Kepler's Third Law of Planetary Motion, published in{' '}
-            <em>Harmonices Mundi</em> (1619): the <strong>square</strong> of a
-            planet's orbital period is proportional to the{' '}
-            <strong>cube</strong> of its semi-major axis (mean distance from the
-            Sun). Written as T² ∝ a³, this means a planet twice as far from the
-            Sun takes not twice, but 2^(3/2) ≈ 2.83 times as long to orbit.
-            Neptune — roughly 30 times farther from the Sun than Earth — takes
-            30^(3/2) ≈ 164 times longer to complete one orbit.
+            The vast differences in planetary year lengths follow directly from Johannes Kepler's Third Law of
+            Planetary Motion, published in <em>Harmonices Mundi</em> (1619): the <strong>square</strong> of a
+            planet's orbital period is proportional to the <strong>cube</strong> of its semi-major axis.
+            Written as T² ∝ a³, this means a planet twice as far from the Sun takes not twice, but 2^(3/2) ≈ 2.83
+            times as long to orbit. Neptune — roughly 30× farther from the Sun than Earth — takes 30^(3/2) ≈
+            164 times longer to complete one orbit.
           </p>
           <p className="text-muted-foreground leading-relaxed mt-3">
-            Newton's law of universal gravitation (
-            <em>Principia Mathematica</em>, 1687) later provided the physical
-            explanation: gravitational force weakens with the square of
-            distance, so distant planets experience weaker pulls and move more
-            slowly along larger paths — compounding both effects. All orbital
-            periods in this calculator are mean sidereal values sourced from
-            NASA JPL Solar System Dynamics (ssd.jpl.nasa.gov).
+            Newton's law of universal gravitation (<em>Principia Mathematica</em>, 1687) later provided the
+            physical explanation: gravitational force weakens with the square of distance, so distant planets
+            experience weaker pulls and move more slowly along larger paths — compounding both effects.
+            All orbital periods in this calculator are mean sidereal values sourced from NASA JPL Solar System
+            Dynamics (ssd.jpl.nasa.gov).
           </p>
         </div>
 
+        <div>
+          <h2 className="text-xl font-bold text-foreground mb-3">
+            How the Calculator Works
+          </h2>
+          <p className="text-muted-foreground leading-relaxed">
+            Your "age" on any planet is the number of full orbits that planet has completed around the Sun since
+            you were born. We calculate this by dividing the total Earth days elapsed since your birth date by
+            each planet's mean sidereal orbital period from NASA JPL (Williams, D.R., 2024). All calculations
+            run entirely in your browser — your date of birth never leaves your device.
+          </p>
+        </div>
       </section>
     </>
   );
