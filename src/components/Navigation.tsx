@@ -49,13 +49,15 @@ export const Navigation = () => {
   return (
     <div>
     <div className="flex items-center gap-2">
-    <Link to="/" className="flex items-center flex-shrink-0">
+    <Link to="/" className="flex items-center gap-2.5">
       <img
-        src="/bornclock-logo.png"
-        alt="BornClock — Know your time. Live it well."
-        className="h-8 md:h-10 w-auto"
-        style={{ maxHeight: '40px' }}
+        src="/favicon.png"
+        alt="BornClock"
+        className="h-9 w-9 flex-shrink-0"
       />
+      <span className="hidden sm:block font-bold text-xl text-indigo-600 tracking-tight">
+        BornClock
+      </span>
     </Link>
     <nav className="flex items-center gap-1 flex-wrap">
 

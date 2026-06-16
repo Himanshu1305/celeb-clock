@@ -52,12 +52,12 @@ export const Footer = () => {
     <footer className="mt-16 border-t border-gray-200 bg-white">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <Link to="/" className="flex items-center mb-3">
+          <Link to="/" className="flex items-center mb-4">
             <img
               src="/bornclock-logo.png"
-              alt="BornClock"
-              className="h-12 w-auto"
-              style={{ maxHeight: '48px' }}
+              alt="BornClock — Know your time. Live it well."
+              className="h-20 w-auto"
+              style={{ maxHeight: '80px' }}
             />
           </Link>
         </div>
