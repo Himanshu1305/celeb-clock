@@ -49,7 +49,7 @@ export const Footer = () => {
   const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`;
 
   return (
-    <footer className="mt-16 border-t border-border/50 bg-card/30 backdrop-blur-sm">
+    <footer className="mt-16 border-t border-gray-200 bg-white">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
 

@@ -120,7 +120,7 @@ const PlanetaryAgePage = () => {
   const neptuneLastYear = new Date().getFullYear() - 165;
 
   return (
-    // Dark slate-950 base for the entire page
+    <>
     <div className="min-h-screen bg-slate-950">
       <SEO
         title="Planetary Age Calculator — How Old Are You on Mars, Jupiter & Every Planet? | BornClock"
@@ -326,8 +326,11 @@ const PlanetaryAgePage = () => {
         </>
       )}
 
+    </div>
+    <div className="bg-white">
       <Footer />
     </div>
+    </>
   );
 };
 
