@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 
 /**
  * Age Calculator Hook
- * 
+ *
  * IMPORTANT: All calculations run CLIENT-SIDE in the user's browser using JavaScript.
  * No data is sent to any server for age calculations.
- * 
+ *
  * This hook automatically detects the user's timezone from their browser
  * and calculates age accordingly using the browser's Date API.
  */
@@ -33,31 +33,29 @@ export const useAgeCalculator = (birthDate: Date | null) => {
     }
 
     const calculateAge = () => {
-      // Using browser's Date API - automatically uses user's local timezone
       const now = new Date();
       const birth = new Date(birthDate);
-      
-      // Calculate exact age
-      let years = now.getFullYear() - birth.getFullYear();
-      let months = now.getMonth() - birth.getMonth();
-      let days = now.getDate() - birth.getDate();
-      let hours = now.getHours() - birth.getHours();
-      let minutes = now.getMinutes() - birth.getMinutes();
-      let seconds = now.getSeconds() - birth.getSeconds();
 
-      // Adjust for negative values
-      if (seconds < 0) {
-        seconds += 60;
-        minutes -= 1;
-      }
-      if (minutes < 0) {
-        minutes += 60;
-        hours -= 1;
-      }
-      if (hours < 0) {
-        hours += 24;
-        days -= 1;
-      }
+      // Total elapsed milliseconds — source of truth for all "total" counters
+      const diffMs = now.getTime() - birth.getTime();
+
+      const totalSeconds = Math.floor(diffMs / 1000);
+      const totalMinutes = Math.floor(diffMs / 60000);
+      const totalHours   = Math.floor(diffMs / 3600000);
+      const totalDays    = Math.floor(diffMs / 86400000);
+
+      // Breakdown: years / months / days / hours / minutes / seconds
+      // Computed from calendar date/time components so they reflect the
+      // human-readable "age since birthday" rather than raw elapsed ms.
+      let years   = now.getFullYear() - birth.getFullYear();
+      let months  = now.getMonth()    - birth.getMonth();
+      let days    = now.getDate()     - birth.getDate();
+      // Use elapsed-ms seconds/minutes/hours for the sub-day breakdown so
+      // these always stay in sync with totalSeconds and advance every second.
+      const seconds = totalSeconds % 60;
+      const minutes = totalMinutes % 60;
+      const hours   = totalHours   % 24;
+
       if (days < 0) {
         const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
         days += lastMonth.getDate();
@@ -65,15 +63,8 @@ export const useAgeCalculator = (birthDate: Date | null) => {
       }
       if (months < 0) {
         months += 12;
-        years -= 1;
+        years  -= 1;
       }
-
-      // Calculate totals
-      const timeDiff = now.getTime() - birth.getTime();
-      const totalDays = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-      const totalHours = Math.floor(timeDiff / (1000 * 60 * 60));
-      const totalMinutes = Math.floor(timeDiff / (1000 * 60));
-      const totalSeconds = Math.floor(timeDiff / 1000);
 
       setAgeData({
         years,
@@ -85,13 +76,12 @@ export const useAgeCalculator = (birthDate: Date | null) => {
         totalDays,
         totalHours,
         totalMinutes,
-        totalSeconds
+        totalSeconds,
       });
     };
 
-    calculateAge();
+    calculateAge(); // run immediately on mount
     const interval = setInterval(calculateAge, 1000);
-
     return () => clearInterval(interval);
   }, [birthDate]);
 
