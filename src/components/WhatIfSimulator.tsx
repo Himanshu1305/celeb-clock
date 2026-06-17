@@ -241,8 +241,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
   const [iAQ,   setAQ]   = useState(1);  // moderate (population average)
   const [iCom,  setCom]  = useState(1);  // low-stress commute (neutral default)
 
-  const initialSimForecastRef = useRef<number | null>(null);
-
+  const [hasInteracted, setHasInteracted] = useState(false);
   const rawSimForecast = useMemo(() => {
     const epigenBonus = Math.min(6, EPIGENETIC_HABITS.reduce((s, h) => {
       const freq = habitFreqs[h.id] ?? 'never';
@@ -278,10 +277,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
 
   const simForecast = rawSimForecast;
 
-  if (initialSimForecastRef.current === null) {
-    initialSimForecastRef.current = simForecast;
-  }
-  const delta = Math.round((simForecast - (initialSimForecastRef.current ?? result.totalForecast)) * 10) / 10;
+  const delta = Math.round((simForecast - result.totalForecast) * 10) / 10;
 
   const habitBonusTotal = Math.round(Math.min(6, EPIGENETIC_HABITS.reduce((s, h) => {
     const freq = habitFreqs[h.id] ?? 'never';
@@ -329,8 +325,12 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
     ? { filter: 'blur(8px)', userSelect: 'none', cursor: 'default' }
     : {};
 
-  const setHabitFreq = (id: string, freq: FreqLevel) =>
+  const interact = () => { if (!hasInteracted) setHasInteracted(true); };
+
+  const setHabitFreq = (id: string, freq: FreqLevel) => {
+    interact();
     setHabitFreqs(prev => ({ ...prev, [id]: freq }));
+  };
 
   return (
     <div className="space-y-6">
@@ -347,20 +347,27 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                 <span className="text-[10px] uppercase font-bold text-muted-foreground block">Current Lifestyle</span>
                 <strong className="text-2xl font-black text-muted-foreground">{result.totalForecast} yrs</strong>
               </div>
-              <TrendingUp className="w-5 h-5 text-primary hidden sm:block" />
-              <div className="text-center">
-                <span className={`text-[10px] uppercase font-bold block ${delta < 0 ? 'text-red-600' : 'text-primary'}`}>
-                  {delta < 0 ? 'With Your Changes' : 'Optimized Lifestyle'}
-                </span>
-                <div className="relative">
-                  <strong className={`text-3xl font-black ${delta < 0 ? 'text-red-600' : 'text-primary'}`} style={blurStyle}>{simForecast} yrs</strong>
-                  {!isPremium && (
-                    <div className="absolute inset-0 flex items-center justify-center gap-1 text-xs text-muted-foreground">
-                      <Lock className="w-3 h-3" /> Unlock
-                    </div>
-                  )}
+              {hasInteracted && <TrendingUp className="w-5 h-5 text-primary hidden sm:block" />}
+              {hasInteracted ? (
+                <div className="text-center">
+                  <span className={`text-[10px] uppercase font-bold block ${delta < 0 ? 'text-red-600' : 'text-primary'}`}>
+                    {delta < 0 ? 'With Your Changes' : 'With Your Changes'}
+                  </span>
+                  <div className="relative">
+                    <strong className={`text-3xl font-black ${delta < 0 ? 'text-red-600' : 'text-primary'}`} style={blurStyle}>{simForecast} yrs</strong>
+                    {!isPremium && (
+                      <div className="absolute inset-0 flex items-center justify-center gap-1 text-xs text-muted-foreground">
+                        <Lock className="w-3 h-3" /> Unlock
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="text-center text-muted-foreground">
+                  <span className="text-[10px] uppercase font-bold block">Your Optimized Age</span>
+                  <span className="text-sm mt-1 block">Move a slider →</span>
+                </div>
+              )}
               {delta !== 0 && (
                 <div className={`font-black px-3 py-1.5 rounded-lg text-sm border ${delta > 0 ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-600 border-red-200'}`}>
                   {delta > 0
@@ -375,7 +382,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
       </Card>
 
       {/* ── 4 Panels ── */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-6" onPointerDown={interact}>
 
         {/* Panel 1 — Lifestyle Habits */}
         <Card>
