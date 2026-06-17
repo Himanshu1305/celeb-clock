@@ -47,6 +47,18 @@ import ChineseZodiac from "./pages/ChineseZodiac";
 import ChineseZodiacSign from "./pages/ChineseZodiacSign";
 import VedicZodiac from "./pages/VedicZodiac";
 import VedicZodiacSign from "./pages/VedicZodiacSign";
+import HowLongWillILive from '@/pages/answers/HowLongWillILive';
+import WhatIsMyBiologicalAge from '@/pages/answers/WhatIsMyBiologicalAge';
+import WhoSharesMyBirthday from '@/pages/answers/WhoSharesMyBirthday';
+import HowOldAmIOnMars from '@/pages/answers/HowOldAmIOnMars';
+import WhatIsMyZodiacSign from '@/pages/answers/WhatIsMyZodiacSign';
+import WhatIsMyLifePathNumber from '@/pages/answers/WhatIsMyLifePathNumber';
+import HowToCalculateAge from '@/pages/answers/HowToCalculateAge';
+import WhatGenerationAmI from '@/pages/answers/WhatGenerationAmI';
+import HowToLiveLonger from '@/pages/answers/HowToLiveLonger';
+import WhatIsBMI from '@/pages/answers/WhatIsBMI';
+import WhatIsLifeExpectancy from '@/pages/answers/WhatIsLifeExpectancy';
+import HowDoesStressAffectLifeExpectancy from '@/pages/answers/HowDoesStressAffectLifeExpectancy';
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
@@ -107,6 +119,18 @@ const App = () => (
               <Route path="/chinese-zodiac/:animal" element={<ChineseZodiacSign />} />
               <Route path="/vedic-zodiac" element={<VedicZodiac />} />
               <Route path="/vedic-zodiac/:rashi" element={<VedicZodiacSign />} />
+              <Route path="/answers/how-long-will-i-live" element={<HowLongWillILive />} />
+              <Route path="/answers/what-is-my-biological-age" element={<WhatIsMyBiologicalAge />} />
+              <Route path="/answers/who-shares-my-birthday" element={<WhoSharesMyBirthday />} />
+              <Route path="/answers/how-old-am-i-on-mars" element={<HowOldAmIOnMars />} />
+              <Route path="/answers/what-is-my-zodiac-sign" element={<WhatIsMyZodiacSign />} />
+              <Route path="/answers/what-is-my-life-path-number" element={<WhatIsMyLifePathNumber />} />
+              <Route path="/answers/how-to-calculate-age" element={<HowToCalculateAge />} />
+              <Route path="/answers/what-generation-am-i" element={<WhatGenerationAmI />} />
+              <Route path="/answers/how-to-live-longer" element={<HowToLiveLonger />} />
+              <Route path="/answers/what-is-bmi" element={<WhatIsBMI />} />
+              <Route path="/answers/what-is-life-expectancy" element={<WhatIsLifeExpectancy />} />
+              <Route path="/answers/how-does-stress-affect-life-expectancy" element={<HowDoesStressAffectLifeExpectancy />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
