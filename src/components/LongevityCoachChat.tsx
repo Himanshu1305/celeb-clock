@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Send, Lock, Bot } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { LongevityResult } from '@/services/LongevityCalculationService';
@@ -147,7 +148,19 @@ export function LongevityCoachChat({ result, userName, isPremium }: LongevityCoa
                   : 'bg-gray-100 dark:bg-muted text-foreground rounded-bl-sm'
               }`}
             >
-              {msg.text}
+              {msg.role === 'coach' ? (
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
+                    strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                    ul: ({ children }) => <ul className="list-disc pl-4 mb-1 space-y-0.5">{children}</ul>,
+                    ol: ({ children }) => <ol className="list-decimal pl-4 mb-1 space-y-0.5">{children}</ol>,
+                    li: ({ children }) => <li>{children}</li>,
+                  }}
+                >
+                  {msg.text}
+                </ReactMarkdown>
+              ) : msg.text}
             </div>
           </div>
         ))}
