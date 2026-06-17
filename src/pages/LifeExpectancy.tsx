@@ -397,6 +397,7 @@ const LifeExpectancy = () => {
               result={longevityResult}
               userId={user?.id}
               isPremium={isPremium}
+              onRetake={() => { resetAll(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             />
           </section>
         )}

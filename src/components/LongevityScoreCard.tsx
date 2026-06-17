@@ -11,6 +11,7 @@ interface LongevityScoreCardProps {
   result: LongevityResult;
   userId?: string;
   isPremium: boolean;
+  onRetake?: () => void;
 }
 
 function getScoreColor(score: number) {
@@ -55,7 +56,16 @@ function ScoreRing({ score }: { score: number }) {
   );
 }
 
-export function LongevityScoreCard({ result, userId, isPremium }: LongevityScoreCardProps) {
+function getPercentileLabel(score: number): string {
+  if (score >= 90) return 'Top 5% of users your age';
+  if (score >= 80) return 'Top 15% of users your age';
+  if (score >= 70) return 'Top 35% of users your age';
+  if (score >= 55) return 'Top 50% of users your age';
+  if (score >= 40) return 'Bottom 40% — significant room to improve';
+  return 'Bottom 20% — take action now';
+}
+
+export function LongevityScoreCard({ result, userId, isPremium, onRetake }: LongevityScoreCardProps) {
   const [history, setHistory] = useState<ScoreEntry[]>([]);
   const score = calculateLongevityScore(result);
 
@@ -102,13 +112,23 @@ export function LongevityScoreCard({ result, userId, isPremium }: LongevityScore
             <div className={`text-xl font-bold ${getScoreColor(score)}`}>
               {getScoreLabel(score)}
             </div>
-            <p className="text-sm text-muted-foreground">Based on your quiz from today</p>
-            <Link
-              to="/life-expectancy"
-              className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:underline"
-            >
-              <RefreshCw className="w-3 h-3" /> Retake quiz to update →
-            </Link>
+            <p className="text-xs text-muted-foreground">{getPercentileLabel(score)}</p>
+            <p className="text-xs text-muted-foreground">Based on your quiz from today</p>
+            {onRetake ? (
+              <button
+                onClick={onRetake}
+                className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:underline"
+              >
+                <RefreshCw className="w-3 h-3" /> Retake quiz to update →
+              </button>
+            ) : (
+              <Link
+                to="/life-expectancy"
+                className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:underline"
+              >
+                <RefreshCw className="w-3 h-3" /> Retake quiz to update →
+              </Link>
+            )}
           </div>
         </div>
 
