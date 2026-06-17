@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function WhatIsLifeExpectancy() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": "Life expectancy is a statistical measure of the average number of years a person is expected to live, based on current mortality rates for their age, sex, and country. The global average is 72.8 years (WHO 2023)." } },
+      { "@type": "Question", "name": "What is the life expectancy in India?", "acceptedAnswer": { "@type": "Answer", "text": "India's average life expectancy is 70.4 years (WHO 2023), with significant variation by state: Kerala 77.3 years, Uttar Pradesh 65.8 years. Women live approximately 2.5 years longer than men on average." } },
+      { "@type": "Question", "name": "How is life expectancy calculated?", "acceptedAnswer": { "@type": "Answer", "text": "Life expectancy is calculated using life tables, which track what proportion of a birth cohort survives to each age based on current mortality rates. The most common type is the period life table, which uses current (not projected) mortality rates." } },
+      { "@type": "Question", "name": "Which country has the highest life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": "Japan has the highest life expectancy at 84.3 years (WHO 2023), followed by Switzerland (83.8) and South Korea (83.7). These countries share features of strong public health systems, traditional plant-rich diets, and active lifestyles." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +21,7 @@ export default function WhatIsLifeExpectancy() {
         canonicalUrl="/answers/what-is-life-expectancy"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">

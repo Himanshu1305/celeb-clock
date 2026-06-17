@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function WhatGenerationAmI() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What generation am I?", "acceptedAnswer": { "@type": "Answer", "text": "Gen Alpha: 2013+. Gen Z: 1997–2012. Millennials: 1981–1996. Gen X: 1965–1980. Baby Boomers: 1946–1964. Silent Generation: 1928–1945. Your generation is determined by your birth year." } },
+      { "@type": "Question", "name": "Am I a Millennial or Gen Z?", "acceptedAnswer": { "@type": "Answer", "text": "If you were born between 1981–1996, you're a Millennial. If born 1997–2012, you're Gen Z. People born 1995–1998 are sometimes called 'Zillennials' — the micro-generation at the cusp of both." } },
+      { "@type": "Question", "name": "What are the Gen Z birth years?", "acceptedAnswer": { "@type": "Answer", "text": "Gen Z birth years are 1997–2012 (Pew Research definition). Gen Z came of age with smartphones, social media, and the climate crisis as defining features of their formative years." } },
+      { "@type": "Question", "name": "What is Gen Alpha?", "acceptedAnswer": { "@type": "Answer", "text": "Gen Alpha (2013–present) are the first generation born entirely in the 21st century. They are true digital natives who have grown up with tablets, AI assistants, and social media from birth." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +21,7 @@ export default function WhatGenerationAmI() {
         canonicalUrl="/answers/what-generation-am-i"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">

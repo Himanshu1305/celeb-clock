@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function HowLongWillILive() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How long will I live?", "acceptedAnswer": { "@type": "Answer", "text": "The average global life expectancy is 72.8 years (WHO 2023), but your personal forecast depends far more on lifestyle than genetics. Research shows genetics accounts for only 25–30% of longevity — your habits, environment, and choices control the remaining 70–75%." } },
+      { "@type": "Question", "name": "What is the average life expectancy in the world?", "acceptedAnswer": { "@type": "Answer", "text": "The global average life expectancy is 72.8 years (WHO 2023). Japan leads with 84.3 years. India's average is 70.4 years. The US average is 77.5 years." } },
+      { "@type": "Question", "name": "What factors affect how long I will live?", "acceptedAnswer": { "@type": "Answer", "text": "The biggest factors are: smoking (removes 10–12 years for heavy smokers), physical activity, diet quality, social connections, stress levels, sleep, BMI, blood pressure, and family history. Lifestyle factors account for 70–75% of longevity variation." } },
+      { "@type": "Question", "name": "Can I calculate my personal life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. BornClock's Life Expectancy Calculator uses a 5-pillar model covering lifestyle, health metrics, genetics, country baseline, and community environment to give you a personalised forecast that reflects your specific profile." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +21,7 @@ export default function HowLongWillILive() {
         canonicalUrl="/answers/how-long-will-i-live"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">

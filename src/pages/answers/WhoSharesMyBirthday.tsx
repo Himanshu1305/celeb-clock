@@ -2,6 +2,16 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function WhoSharesMyBirthday() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Which famous people share my birthday?", "acceptedAnswer": { "@type": "Answer", "text": "Thousands of notable people share every birthday. BornClock's database of 50,000+ celebrities lets you find your famous birthday twins instantly by entering your date of birth." } },
+      { "@type": "Question", "name": "How many celebrities share my birthday?", "acceptedAnswer": { "@type": "Answer", "text": "Every calendar date has hundreds of notable people born on it. BornClock's database covers actors, athletes, politicians, scientists, and cultural icons, sorted by fame score." } },
+      { "@type": "Question", "name": "What does sharing a birthday with a celebrity mean?", "acceptedAnswer": { "@type": "Answer", "text": "Celebrity birthday twins share your sun sign, numerological birth energy, and — according to astrology — the same planetary positions on your shared birth date. Many people find meaningful personality resonances with their birthday twins." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +20,7 @@ export default function WhoSharesMyBirthday() {
         canonicalUrl="/answers/who-shares-my-birthday"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">

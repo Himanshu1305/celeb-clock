@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function WhatIsBMI() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is BMI?", "acceptedAnswer": { "@type": "Answer", "text": "BMI (Body Mass Index) is calculated by dividing your weight in kilograms by your height in metres squared. A BMI of 18.5–24.9 is healthy, 25–29.9 is overweight, and 30+ is obese." } },
+      { "@type": "Question", "name": "How do I calculate my BMI?", "acceptedAnswer": { "@type": "Answer", "text": "BMI = weight (kg) ÷ height (m)². Example: 75 kg ÷ (1.75 m × 1.75 m) = 24.5, which is healthy weight." } },
+      { "@type": "Question", "name": "Is BMI accurate?", "acceptedAnswer": { "@type": "Answer", "text": "BMI has significant limitations — it doesn't distinguish muscle from fat, doesn't account for fat distribution, and has different risk thresholds for different ethnicities (South Asians develop metabolic risk at lower BMIs). Waist-to-height ratio is a better predictor of cardiovascular risk." } },
+      { "@type": "Question", "name": "How does BMI affect life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": "A BMI of 30–35 is associated with a 2–4 year reduction in life expectancy. Severe obesity (BMI 40+) can reduce life expectancy by 8–10 years. However, fitness level significantly modifies these risk estimates." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +21,7 @@ export default function WhatIsBMI() {
         canonicalUrl="/answers/what-is-bmi"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">

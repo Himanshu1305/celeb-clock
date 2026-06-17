@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function HowDoesStressAffectLifeExpectancy() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How does stress affect life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": "Chronic stress reduces life expectancy by 2–3 years on average through multiple pathways: shortening telomeres (cellular aging), elevating cortisol (cardiovascular damage), suppressing immunity, and increasing inflammation." } },
+      { "@type": "Question", "name": "How does stress shorten telomeres?", "acceptedAnswer": { "@type": "Answer", "text": "Chronic psychological stress activates oxidative pathways that damage telomeres — the protective caps on chromosomes. Nobel Prize-winning research showed chronically stressed individuals have measurably shorter telomeres, equivalent to 10+ years of additional biological aging." } },
+      { "@type": "Question", "name": "What is the best way to reduce stress for longevity?", "acceptedAnswer": { "@type": "Answer", "text": "The 5 highest-evidence stress reduction techniques are: mindfulness meditation (reduces cortisol measurably), regular exercise, strong social connections, quality sleep (when cortisol naturally drops), and having a sense of purpose." } },
+      { "@type": "Question", "name": "Does loneliness affect life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Loneliness carries the same mortality risk as smoking 15 cigarettes per day — a 29% higher risk of premature death. The WHO has classified loneliness as a global public health crisis." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +21,7 @@ export default function HowDoesStressAffectLifeExpectancy() {
         canonicalUrl="/answers/how-does-stress-affect-life-expectancy"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">

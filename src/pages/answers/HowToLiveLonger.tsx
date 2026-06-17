@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function HowToLiveLonger() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How can I live longer?", "acceptedAnswer": { "@type": "Answer", "text": "The 7 highest-impact habits are: don't smoke, move naturally every day, eat mostly plants, sleep 7–9 hours, manage stress, invest in social connections, and find purpose. These can add 10–14 years vs having none of these habits (Harvard, 2018)." } },
+      { "@type": "Question", "name": "What is the most effective way to increase life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": "Not smoking is the single highest-impact modifiable factor. Heavy smokers lose 10–12 years on average. Beyond that, the combination of regular exercise, plant-rich diet, quality sleep, and strong social connections adds the most years." } },
+      { "@type": "Question", "name": "What are Blue Zones?", "acceptedAnswer": { "@type": "Answer", "text": "Blue Zones are 5 regions where people live measurably longer than anywhere else: Okinawa (Japan), Sardinia (Italy), Nicoya (Costa Rica), Ikaria (Greece), and Loma Linda (California). Their shared habits — the Power 9 — include beans, community, purpose, natural movement, and plant-rich diets." } },
+      { "@type": "Question", "name": "Do supplements help you live longer?", "acceptedAnswer": { "@type": "Answer", "text": "Most longevity supplements lack clinical evidence. Resveratrol failed to extend life in clinical trials. The evidence overwhelmingly favours behaviour change — exercise, diet, sleep, and social connection — over supplements for longevity." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +21,7 @@ export default function HowToLiveLonger() {
         canonicalUrl="/answers/how-to-live-longer"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">

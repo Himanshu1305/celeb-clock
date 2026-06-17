@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function HowOldAmIOnMars() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How old am I on Mars?", "acceptedAnswer": { "@type": "Answer", "text": "Your age on Mars is calculated by dividing your Earth age in days by Mars's orbital period of 687 Earth days. A 30-year-old on Earth is 15.9 years old on Mars." } },
+      { "@type": "Question", "name": "How do you calculate your age on other planets?", "acceptedAnswer": { "@type": "Answer", "text": "Planetary Age = (Earth age in days) ÷ (Planet's orbital period in Earth days). For example, Jupiter takes 4,333 Earth days per orbit, so a 30-year-old on Earth is only 2.5 Jovian years old." } },
+      { "@type": "Question", "name": "How old would I be on Neptune?", "acceptedAnswer": { "@type": "Answer", "text": "Neptune takes 60,190 Earth days (164.8 years) to orbit the Sun. A 30-year-old on Earth would be just 0.18 Neptunian years old. No human has ever had even a first birthday on Neptune." } },
+      { "@type": "Question", "name": "How old am I on Mercury?", "acceptedAnswer": { "@type": "Answer", "text": "Mercury orbits the Sun in just 88 Earth days. A 30-year-old on Earth has lived 124.5 Mercurian years. You'd have celebrated over 120 birthdays on Mercury by age 30." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +21,7 @@ export default function HowOldAmIOnMars() {
         canonicalUrl="/answers/how-old-am-i-on-mars"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">

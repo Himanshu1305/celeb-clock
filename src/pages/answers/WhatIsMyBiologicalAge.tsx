@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function WhatIsMyBiologicalAge() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is biological age?", "acceptedAnswer": { "@type": "Answer", "text": "Biological age measures how old your body actually is at a cellular and physiological level, as opposed to your chronological age. It can differ by 10 years or more depending on lifestyle, stress, sleep, and diet." } },
+      { "@type": "Question", "name": "How is biological age different from chronological age?", "acceptedAnswer": { "@type": "Answer", "text": "Chronological age is simply how many years have passed since your birth. Biological age measures how efficiently your cells, organs, and systems actually function — and is a better predictor of health outcomes and longevity than calendar age." } },
+      { "@type": "Question", "name": "Can you reduce your biological age?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. A 2023 study in Aging Cell found that an 8-week lifestyle intervention reduced biological age by 2.5 years on average. Stopping smoking, improving sleep, exercising regularly, and eating more plants are the highest-impact interventions." } },
+      { "@type": "Question", "name": "What biomarkers measure biological age?", "acceptedAnswer": { "@type": "Answer", "text": "Key biomarkers include BMI, waist-to-height ratio, blood pressure, resting heart rate, exercise frequency, sleep quality, diet quality, smoking status, alcohol consumption, stress level, social connection quality, and diabetes status." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +21,7 @@ export default function WhatIsMyBiologicalAge() {
         canonicalUrl="/answers/what-is-my-biological-age"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">

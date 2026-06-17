@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function WhatIsMyZodiacSign() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is my zodiac sign?", "acceptedAnswer": { "@type": "Answer", "text": "In Western astrology, your sign is determined by the Sun's position on your birthday. In Vedic astrology, the system is shifted by ~24 degrees so most people have a different Rashi. Your Chinese zodiac is determined by your birth year." } },
+      { "@type": "Question", "name": "What is the difference between Western and Vedic zodiac?", "acceptedAnswer": { "@type": "Answer", "text": "Western astrology uses the tropical zodiac anchored to seasons. Vedic astrology uses the sidereal zodiac tracking actual star positions. Due to Earth's axial precession, they are offset by ~23–24 degrees, causing most people to have different signs in each system." } },
+      { "@type": "Question", "name": "What is my Chinese zodiac animal?", "acceptedAnswer": { "@type": "Answer", "text": "Your Chinese zodiac is determined by your birth year in a 12-year cycle: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig. Recent years: 2024 Dragon, 2025 Snake, 2026 Horse." } },
+      { "@type": "Question", "name": "Do most people have a different Vedic sign than Western?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — approximately 80% of people have a different sun sign in Vedic astrology compared to Western. Only those born in the middle third of each Western sign tend to share the same sign in both systems." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +21,7 @@ export default function WhatIsMyZodiacSign() {
         canonicalUrl="/answers/what-is-my-zodiac-sign"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">

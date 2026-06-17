@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function HowToCalculateAge() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How do I calculate my exact age?", "acceptedAnswer": { "@type": "Answer", "text": "Your exact age is the difference between your date of birth and now, expressed in years, months, days, hours, minutes, and seconds. BornClock calculates this live, updating every second, using your browser's local time." } },
+      { "@type": "Question", "name": "How many seconds old am I?", "acceptedAnswer": { "@type": "Answer", "text": "Multiply your age in years by 31,557,600 (seconds per year) for an estimate. For example, a 30-year-old has lived approximately 946,728,000 seconds. BornClock calculates this precisely from your exact birth date and time." } },
+      { "@type": "Question", "name": "When will I be 1 billion seconds old?", "acceptedAnswer": { "@type": "Answer", "text": "1 billion seconds equals approximately 31 years and 251 days. So if you were born on January 1, 1993, you reached 1 billion seconds on September 9, 2024." } },
+      { "@type": "Question", "name": "How many days have I been alive?", "acceptedAnswer": { "@type": "Answer", "text": "A 30-year-old has lived approximately 10,957 days. A 50-year-old has lived approximately 18,263 days. BornClock calculates your exact total days lived from your birth date." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +21,7 @@ export default function HowToCalculateAge() {
         canonicalUrl="/answers/how-to-calculate-age"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">

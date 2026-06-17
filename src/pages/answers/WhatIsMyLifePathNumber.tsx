@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function WhatIsMyLifePathNumber() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is my Life Path number?", "acceptedAnswer": { "@type": "Answer", "text": "Your Life Path number is calculated by reducing your full date of birth to a single digit (or master number 11, 22, 33). Add all digits of your birth month, day, and year together, then reduce to a single digit." } },
+      { "@type": "Question", "name": "How do I calculate my Life Path number?", "acceptedAnswer": { "@type": "Answer", "text": "Example: July 14, 1990. Month: 7. Day: 1+4=5. Year: 1+9+9+0=19→1+9=10→1. Total: 7+5+1=13→1+3=4. Life Path 4." } },
+      { "@type": "Question", "name": "What do the Life Path numbers mean?", "acceptedAnswer": { "@type": "Answer", "text": "Life Path 1=Leader, 2=Diplomat, 3=Creator, 4=Builder, 5=Explorer, 6=Nurturer, 7=Seeker, 8=Achiever, 9=Humanitarian. Master numbers 11=Intuitive Visionary, 22=Master Builder, 33=Master Teacher." } },
+      { "@type": "Question", "name": "What are master numbers in numerology?", "acceptedAnswer": { "@type": "Answer", "text": "Master numbers (11, 22, 33) are not reduced further. They carry amplified energy: 11 is the Intuitive Visionary, 22 is the Master Builder with capacity to manifest grand visions, and 33 is the rare Master Teacher associated with unconditional service." } }
+    ]
+  };
+
   return (
     <>
       <SEO
@@ -10,6 +21,7 @@ export default function WhatIsMyLifePathNumber() {
         canonicalUrl="/answers/what-is-my-life-path-number"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">
