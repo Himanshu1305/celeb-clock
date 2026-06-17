@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Share2, Check } from 'lucide-react';
+import { Share2, Check, Gift } from 'lucide-react';
 
 interface Props {
   forecast: number;
@@ -48,6 +48,12 @@ export const LongevityCountdown = ({ forecast, currentAge, birthDate }: Props) =
   const [timeLeft, setTimeLeft] = useState(() => calcTimeLeft(forecastTs));
   const [msgIndex, setMsgIndex] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [isSharedView, setIsSharedView] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('shared') === '1') setIsSharedView(true);
+  }, []);
 
   useEffect(() => {
     const id = setInterval(() => setTimeLeft(calcTimeLeft(forecastTs)), 1000);
@@ -62,18 +68,30 @@ export const LongevityCountdown = ({ forecast, currentAge, birthDate }: Props) =
   const progress = Math.min(100, Math.round((currentAge / forecast) * 1000) / 10);
 
   const handleShare = async () => {
-    const msg = `My life expectancy forecast is ${forecast} years — ${timeLeft.years}y ${timeLeft.days}d remaining. Calculate yours at bornclock.com/life-expectancy`;
+    const params = new URLSearchParams({ shared: '1', forecast: String(forecast), age: String(currentAge) });
+    const url = `${window.location.origin}/life-expectancy?${params.toString()}`;
+    const text = `My life expectancy forecast is ${forecast} years — ${timeLeft.years}y ${timeLeft.days}d remaining.\n\nSee my countdown: ${url}`;
     try {
-      await navigator.clipboard.writeText(msg);
+      if (navigator.share) {
+        await navigator.share({ title: 'My BornClock Countdown', text, url });
+      } else {
+        await navigator.clipboard.writeText(text);
+      }
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
-    } catch { /* clipboard unavailable */ }
+    } catch { /* clipboard/share unavailable */ }
   };
 
   const pad = (n: number) => String(n).padStart(2, '0');
 
   return (
     <div className="bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 rounded-2xl p-6 md:p-8 my-6 border border-purple-800/30 shadow-xl space-y-6">
+      {isSharedView && (
+        <div className="flex items-center gap-2 bg-purple-900/60 border border-purple-500/40 rounded-xl px-4 py-3 text-sm text-purple-200">
+          <Gift className="w-4 h-4 text-purple-400 shrink-0" />
+          <span>Someone shared their BornClock countdown with you. <a href="/life-expectancy" className="underline text-purple-300 hover:text-white">Calculate yours →</a></span>
+        </div>
+      )}
       <div className="text-center space-y-1">
         <p className="text-xs font-bold uppercase tracking-widest text-purple-300">⏳ Your Life Countdown</p>
         <p className="text-sm text-slate-400">Estimated time remaining until age {forecast}</p>
@@ -126,7 +144,7 @@ export const LongevityCountdown = ({ forecast, currentAge, birthDate }: Props) =
         </Button>
       </div>
 
-      <p className="text-center text-[10px] text-slate-500 leading-relaxed">
+      <p className="text-center text-[10px] text-white/70 leading-relaxed">
         ⚠️ Statistical estimate only. Actual lifespan varies based on factors outside any model's scope.
       </p>
     </div>
