@@ -12,6 +12,98 @@ import type { BirthdayReportData } from '@/services/BirthdayReportService';
 
 const fmt = (n: number) => n.toLocaleString('en-IN');
 
+// ── Birthstone gem colors + birth flowers ──────────────────────────────────────
+
+const BIRTHSTONE_META: Record<number, { color: string; hex: string; flower: string; lore: string }> = {
+  1:  { color: 'Deep Red',        hex: '#b91c1c', flower: 'Carnation & Snowdrop',    lore: 'Garnet has been exchanged as a talisman between travellers since the Middle Ages — it was believed to light up the night and protect against accident.' },
+  2:  { color: 'Violet Purple',   hex: '#7c3aed', flower: 'Violet & Primrose',       lore: 'Ancient Greeks believed amethyst prevented intoxication. Goblets were carved from it and wine mixed with water to mimic its colour at feasts.' },
+  3:  { color: 'Pale Blue',       hex: '#0369a1', flower: 'Daffodil & Jonquil',      lore: 'Aquamarine was carried by sailors as a lucky charm and protection against seasickness — its name comes from the Latin for "seawater".' },
+  4:  { color: 'Brilliant White', hex: '#6b7280', flower: 'Daisy & Sweet Pea',       lore: 'Diamond is the hardest natural substance on Earth. Ancient Indians believed it could only be formed by lightning striking rocks.' },
+  5:  { color: 'Forest Green',    hex: '#15803d', flower: 'Lily of the Valley',      lore: 'Emeralds were mined in Ancient Egypt as early as 330 BC. Cleopatra was famously obsessed with them and claimed emerald mines as royal property.' },
+  6:  { color: 'Rose Pink',       hex: '#be185d', flower: 'Rose & Honeysuckle',      lore: 'Pearl is the only gem created by a living organism. In ancient Rome, pearls were considered the ultimate symbol of wealth and social standing.' },
+  7:  { color: 'Blood Red',       hex: '#dc2626', flower: 'Larkspur & Water Lily',   lore: 'Ruby was called the "king of gems" in ancient Sanskrit texts. Warriors in Burma implanted rubies beneath their skin for invincibility in battle.' },
+  8:  { color: 'Olive Green',     hex: '#65a30d', flower: 'Poppy & Gladiolus',       lore: 'Ancient Egyptians called peridot the "gem of the sun." Some peridot on Earth arrived via meteorite — it has been found in pallasite meteorites.' },
+  9:  { color: 'Deep Blue',       hex: '#1d4ed8', flower: 'Aster & Morning Glory',   lore: 'Sapphires were prized by medieval clergy as symbols of heaven. The British Crown Jewels contain multiple historic sapphires including the Stuart Sapphire.' },
+  10: { color: 'Multi-colour',    hex: '#d97706', flower: 'Marigold & Cosmos',       lore: 'Opal\'s shifting colours were described by the Romans as "the fire of the carbuncle, the purple of the amethyst, and the sea-green of the emerald." Each opal is unique.' },
+  11: { color: 'Golden Yellow',   hex: '#b45309', flower: 'Chrysanthemum',           lore: 'Topaz was believed to cool boiling water and calm sudden passions. The ancient Egyptians said it was coloured by the golden glow of the sun god Ra.' },
+  12: { color: 'Sky Blue',        hex: '#0e7490', flower: 'Holly & Narcissus',       lore: 'Turquoise is one of the oldest gemstones worn by humans — found in 5,000-year-old Egyptian tombs. The Aztecs used it to decorate ceremonial masks of their gods.' },
+};
+
+// ── Inline gem SVG ─────────────────────────────────────────────────────────────
+
+function GemSVG({ month, size = 64 }: { month: number; size?: number }) {
+  const meta = BIRTHSTONE_META[month] ?? BIRTHSTONE_META[1];
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="32,4 56,22 48,60 16,60 8,22" fill={meta.hex} fillOpacity="0.85" />
+      <polygon points="32,4 56,22 32,28" fill="white" fillOpacity="0.35" />
+      <polygon points="32,28 56,22 48,60 16,60 8,22" fill={meta.hex} fillOpacity="0.6" />
+      <polygon points="32,4 8,22 32,28" fill="white" fillOpacity="0.15" />
+      <polygon points="32,4 56,22 48,60 16,60 8,22" fill="none" stroke="white" strokeWidth="1.5" strokeOpacity="0.4" />
+    </svg>
+  );
+}
+
+// ── Generation rich content ────────────────────────────────────────────────────
+
+const GENERATION_CONTENT: Record<string, {
+  emoji: string;
+  worldEvents: string[];
+  technology: string;
+  culture: string;
+  work: string;
+  superpower: string;
+}> = {
+  'Silent Generation': {
+    emoji: '🎖️',
+    worldEvents: ['World War II', 'The Great Depression aftermath', 'Korean War', 'Birth of television', 'Cold War begins'],
+    technology: 'Grew up as radio ruled the home. Witnessed the arrival of television, and later adapted to computers in the workplace — each new device felt like science fiction made real.',
+    culture: 'Defined by deference to authority, hard work, and community sacrifice. The phrase "waste not, want not" was lived, not quoted. Swing music, bebop jazz, and the first Hollywood golden age shaped this generation\'s emotional landscape.',
+    work: 'Loyalty defined the career. A 40-year tenure with one company was the aspiration and often the reality. Institutional trust was high — you followed the rules and the system rewarded you.',
+    superpower: 'Resilience. Having survived economic collapse and world war, this generation\'s default mode is quiet perseverance. They do not panic; they endure.'
+  },
+  'Baby Boomer': {
+    emoji: '📺',
+    worldEvents: ['Moon landing (1969)', 'Vietnam War', 'Civil Rights Movement', 'Assassination of JFK and MLK', 'Woodstock and counterculture'],
+    technology: 'Witnessed the dawn of the personal computer, the birth of the internet, and the explosion of cable television. Many became early adopters of email and mobile phones in middle age.',
+    culture: 'Rock and roll, civil rights, and radical optimism. Boomers came of age believing they could change the world — many did. They invented youth culture as a force and never entirely grew out of it.',
+    work: 'Hard work and long hours were the path to success. Boomers largely built the 9-to-5 work culture, the corner office aspiration, and the company loyalty model — even as they began questioning it.',
+    superpower: 'Drive. Boomers are among the most competitive and achievement-oriented cohorts in history. Their ambition rebuilt post-war economies and produced some of the most impactful careers of the 20th century.'
+  },
+  'Generation X': {
+    emoji: '📼',
+    worldEvents: ['Fall of the Berlin Wall', 'AIDS epidemic', 'Gulf War', 'End of the Cold War', 'Rise of MTV'],
+    technology: 'The original digital immigrants. Grew up with Atari and VCRs, graduated into the internet age, and built or shaped many of the tech companies that define the modern world.',
+    culture: 'Grunge, hip-hop, and cynicism as an art form. Gen X was the first generation to be called "slackers" — a label they wore as a badge of independence. They distrusted institutions before it was fashionable.',
+    work: 'Gen X bridged the loyalty era and the gig economy. They were the first to job-hop strategically, and the first to balance work-life boundaries as a conscious choice rather than a luxury.',
+    superpower: 'Adaptability. Gen X has reinvented themselves multiple times — analogue to digital, corporate to entrepreneurial, employee to founder. No generation has navigated more paradigm shifts with less fanfare.'
+  },
+  'Millennial': {
+    emoji: '💻',
+    worldEvents: ['9/11', 'The 2008 Financial Crisis', 'Rise of social media', 'Global War on Terror', 'Obama presidency'],
+    technology: 'The first digital natives. Millennials built the social internet, invented the app economy, and normalised smartphones as extensions of the self. They were the first to experience always-on connectivity.',
+    culture: 'Harry Potter, Y2K anxiety, reality TV, and the permanent connectivity of social media. Millennials grew up expecting the world to be more equal and more connected — and spent much of adulthood reckoning with the gap.',
+    work: 'Purpose over paycheck. Millennials drove the rise of remote work, side hustles, and the demand for meaningful employment. They were also the first generation to enter the workforce during a global financial collapse.',
+    superpower: 'Collaboration. Millennials are the most educated and networked generation in history. Their instinct to share, connect, and co-create has driven some of the most significant cultural and technological shifts of the last two decades.'
+  },
+  'Generation Z': {
+    emoji: '📱',
+    worldEvents: ['COVID-19 pandemic', 'Climate crisis awareness', 'Black Lives Matter movement', 'Rise of AI', 'Social media as politics'],
+    technology: 'True digital natives — born into smartphones, social algorithms, and streaming. Gen Z treats technology as invisible infrastructure rather than a novelty. They are the first generation where the internet was always already there.',
+    culture: 'TikTok, mental health awareness, fluid identity, and radical pragmatism. Gen Z has the most nuanced and intersectional understanding of identity of any prior generation — and the least patience for inauthenticity.',
+    work: 'Entrepreneurial and non-linear. Gen Z entered a post-pandemic labour market and chose agency over security. Creator economy, freelancing, and multiple income streams are the default, not the exception.',
+    superpower: 'Authenticity. Gen Z has a finely tuned radar for what is genuine versus performative — and they reward the former with loyalty while dismissing the latter instantly. In a world of noise, they cut through it.'
+  },
+  'Generation Alpha': {
+    emoji: '🤖',
+    worldEvents: ['COVID-19 childhood', 'Rise of generative AI', 'Climate crisis as lived reality', 'Remote learning', 'Mars exploration era begins'],
+    technology: 'Born into AI, voice assistants, and augmented reality. For Generation Alpha, ChatGPT is not a revolution — it is just another tool, like a calculator or a search engine. They will be the first to grow up with AI tutors from childhood.',
+    culture: 'Roblox, YouTube Shorts, and a world where digital and physical reality are indistinguishable. Gen Alpha\'s play, friendships, and identity formation happen as much in virtual worlds as in physical ones.',
+    work: 'The jobs Gen Alpha will do largely do not exist yet. They are being raised for a world of accelerating automation, climate adaptation, and human-AI collaboration. Creativity and emotional intelligence will be their most valuable skills.',
+    superpower: 'Imagination. Growing up when the boundary between what is possible and impossible is dissolving daily, Generation Alpha approaches the world with an openness to entirely new realities that no prior generation has had from birth.'
+  },
+};
+
 // ── Expiry page ─────────────────────────────────────────────────────────────────
 
 const ExpiryPage = () => (
@@ -101,7 +193,9 @@ const ReportView = () => {
   const monthName = dob.toLocaleString('default', { month: 'long' });
   const reportUrl = `${window.location.origin}/report/${slug}`;
 
-  const handlePrint = () => window.print();
+  const handlePrint = () => {
+    setTimeout(() => window.print(), 500);
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(reportUrl).then(() => {
@@ -109,6 +203,84 @@ const ReportView = () => {
       setTimeout(() => setCopied(false), 2000);
     });
   };
+
+  function getPersonalYearContent(num: number) {
+    const content: Record<number, { theme: string; love: string; career: string; health: string; keyMonths: string[]; closing: string }> = {
+      1: {
+        theme: "Personal Year 1 is the year of new beginnings. The 9-year cycle resets here — old chapters close and fresh ones open. This is your year to plant seeds, launch projects, and step into a new version of yourself. The energy favours bold, independent action over waiting for permission.",
+        love: "In relationships, this year rewards authenticity. If you're single, your magnetism increases — new connections made this year often carry long-term significance. In partnerships, fresh energy enters; it's an ideal time to redefine the relationship's direction or create new shared goals.",
+        career: "Career-wise, this is your launch year. New jobs, businesses, or projects started in a Personal Year 1 tend to gain strong momentum. Trust your instincts over consensus — your independent judgment is unusually sharp this year.",
+        health: "Physically, prioritize building new habits rather than maintaining old ones. Your body responds well to new exercise routines this year. Watch for a tendency to overdo it in the excitement of fresh starts.",
+        keyMonths: ["January (double 1 energy)", "May (transition point)", "October (harvest early seeds)"],
+        closing: "The seeds you plant in a Personal Year 1 grow for the next 9 years. Choose them wisely and plant with intention."
+      },
+      2: {
+        theme: "Personal Year 2 is the year of patience, partnership, and inner development. After the bold launches of Year 1, Year 2 asks you to slow down, nurture what you've started, and build deep connections. Progress feels slower than you'd like — trust the process.",
+        love: "This is one of the most powerful years for love and relationships. Existing partnerships deepen significantly; new relationships formed this year tend toward long-term commitment. Your emotional sensitivity is heightened — use it to truly listen and connect.",
+        career: "Collaboration trumps solo effort this year. Partnerships, joint ventures, and teamwork yield better results than independent action. This is a year for gathering information, building alliances, and preparing — not for major launches.",
+        health: "Your nervous system needs care this year. Prioritize rest, meditation, and gentle exercise over intense workouts. Emotional health is the foundation of physical health in a Personal Year 2.",
+        keyMonths: ["February (peak relationship energy)", "June (midpoint reassessment)", "November (partnership decisions)"],
+        closing: "What you build in Year 2 — in relationships, skills, and inner foundations — becomes your greatest asset in the years ahead."
+      },
+      3: {
+        theme: "Personal Year 3 is your year to express, create, and celebrate. After the patience of Year 2, life opens up with creative energy, social opportunities, and joyful expansion. This is a year to say yes — to invitations, creative projects, and experiences that light you up.",
+        love: "Your social magnetism peaks in a Personal Year 3. Romance flourishes; existing relationships become more playful and joyful. Single? This is your year — connections come easily when you're in environments you love.",
+        career: "Creative work, communication, writing, speaking, and artistic projects shine this year. If your career involves expression of any kind, lean in hard. Visibility and recognition come naturally. Avoid scattering energy across too many exciting opportunities.",
+        health: "Joy is medicine in a Personal Year 3. Activities that make you laugh and feel alive — dancing, playing, social sports — are exactly what your body needs. Watch for overindulgence.",
+        keyMonths: ["March (peak creative energy)", "July (social peak)", "December (joyful celebration and reflection)"],
+        closing: "In a world that often asks you to be serious, a Personal Year 3 gives you permission to play. Take it."
+      },
+      4: {
+        theme: "Personal Year 4 is the year of building, structure, and foundations. This is the year to do the unglamorous, essential work — the planning, organizing, and consistent daily effort that creates lasting results. Hard work put in now pays dividends for years.",
+        love: "Relationships in a Personal Year 4 become more serious and grounded. This is a year for building stability, having honest conversations about the future, and making commitments. Less spontaneity, more depth.",
+        career: "This is the year to establish systems, routines, and structures that will support your work long-term. Start that habit, build that process, take that course. Promotions and stability come to those who show up consistently.",
+        health: "Your body rewards routine this year. Consistent sleep schedules, regular exercise, and structured nutrition work especially well in a Personal Year 4. Bone and skeletal health deserve attention.",
+        keyMonths: ["April (major building phase)", "August (test of commitment)", "January of next year (harvest of effort)"],
+        closing: "No glamour, no shortcuts — just building. The discipline of a Personal Year 4 creates foundations that all future success rests on."
+      },
+      5: {
+        theme: "Personal Year 5 is the year of change, freedom, and expansion. After the disciplined building of Year 4, life accelerates. Unexpected opportunities appear, plans shift, and the universe moves faster than you planned. Embrace adaptability as your greatest skill.",
+        love: "Relationships either evolve significantly or end in a Personal Year 5. The status quo rarely survives this year's energy. This can be exhilarating (new love, deepened passion) or challenging (outgrown connections surfacing). Change here is necessary.",
+        career: "Career changes, new opportunities, and unexpected pivots characterize this year. You may receive an offer you didn't expect, change industries, or discover a completely new direction. Say yes to exploration — the risk is lower than it appears.",
+        health: "Your body craves variety in a Personal Year 5. Switch up your exercise, try new foods, explore new wellness modalities. Avoid overextending — the excitement of change can lead to burnout.",
+        keyMonths: ["May (peak change energy)", "September (major pivot point)", "March (unexpected opening)"],
+        closing: "In a Personal Year 5, the only mistake is holding on to what no longer fits. Let change be your compass."
+      },
+      6: {
+        theme: "Personal Year 6 is the year of home, family, love, and responsibility. After the wild ride of Year 5, life asks you to settle, nurture, and give back. This is a year of beautiful obligations — the kind that fill rather than drain you.",
+        love: "This is among the most romantic years in the 9-year cycle. Relationships are warm, deep, and committed. Marriage, proposals, and significant relationship milestones often cluster in Personal Year 6. Family bonds strengthen.",
+        career: "Work that involves service, healing, teaching, and helping others thrives this year. Your leadership takes a nurturing quality that others respond to deeply. Business built around service or community flourishes.",
+        health: "Take care of your physical home — your body. This is an excellent year for health investments: medical check-ups, nutrition improvements, and stress management. The well-being of those you love also directly affects your own energy.",
+        keyMonths: ["June (family and relationship peak)", "February (love energy strong)", "October (responsibilities clarify)"],
+        closing: "A Personal Year 6 teaches you that giving — of time, love, and care — returns to you multiplied. Service is your superpower this year."
+      },
+      7: {
+        theme: "Personal Year 7 is the year of inner growth, wisdom, and spiritual deepening. Life slows down externally so it can speed up internally. This is a year for solitude, study, reflection, and understanding yourself at a deeper level. External results come later — trust the inner work.",
+        love: "Relationships this year ask for depth over surface. Superficial connections naturally fall away; deep ones intensify. If single, you may feel content with solitude — this is healthy, not concerning. Relationships that begin in a Personal Year 7 tend to be profoundly spiritual connections.",
+        career: "Analytical, research, and specialist work shines this year. This is the year to develop expertise, pursue mastery, and deepen your knowledge. Avoid major career launches — this year is for preparation and internal development.",
+        health: "Mind and body connection is central to health in a Personal Year 7. Meditation, yoga, sleep quality, and mental wellness need attention. Unexplained physical symptoms may have emotional or spiritual roots.",
+        keyMonths: ["July (peak introspection)", "November (spiritual insights)", "April (important realizations)"],
+        closing: "The wisdom gained in a Personal Year 7 quietly transforms everything. What looks like stillness from the outside is the most significant growth of the 9-year cycle."
+      },
+      8: {
+        theme: "Personal Year 8 is the year of abundance, achievement, and power. The inner work of Year 7 now manifests in the physical world — as career success, financial gain, recognition, and tangible results. This is a year to step into leadership and claim what you've built.",
+        love: "Relationships take on a more serious, ambitious quality in a Personal Year 8. Power dynamics surface — look for partnerships of equals. This is a year for elevating partnerships, not starting casual ones.",
+        career: "This is your power year. Career milestones, promotions, business success, and financial abundance concentrate in Year 8. Ask for what you want, negotiate boldly, and step visibly into leadership roles you've been preparing for.",
+        health: "Physical energy is high, but ambition can push it beyond its limits. Structured, high-intensity exercise suits this year well. Don't sacrifice sleep for achievement — rest is what allows you to sustain your peak performance.",
+        keyMonths: ["August (peak success energy)", "April (financial opportunities)", "December (year-end achievement)"],
+        closing: "A Personal Year 8 is your harvest. Everything you've built, learned, and become across the previous seven years is ready to bear fruit. Step forward."
+      },
+      9: {
+        theme: "Personal Year 9 is the year of completion, release, and preparation for new beginnings. The 9-year cycle closes here — what no longer serves you falls away to make space for the entirely new cycle beginning next year. Endings are rarely losses; they're makeovers.",
+        love: "Relationships reach natural completion points in a Personal Year 9. Some end gracefully; others transform into something entirely new. Forgiveness — of yourself and others — is the most powerful relationship act of this year.",
+        career: "Wrap up projects, tie loose ends, and let go of roles or directions that have run their course. Don't start major new projects — this is a year to complete and clear. Career wisdom gained this year becomes the foundation of next year's entirely new chapter.",
+        health: "Release is the health theme of Year 9 — release of tension, old patterns, held emotions, and excess weight in all its forms. Detox practices, letting go of unhealthy habits, and processing old emotional material all resonate with this year's energy.",
+        keyMonths: ["September (major releases)", "March (clearing phase)", "December (completion and reflection)"],
+        closing: "Everything that ends in a Personal Year 9 is clearing the way for something more aligned to your truest self. Trust the completion."
+      }
+    };
+    return content[num] || content[1];
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -119,8 +291,8 @@ const ReportView = () => {
         <style>{`
           @media print {
             .no-print { display: none !important; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .print-expand { max-height: none !important; overflow: visible !important; }
-            body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .dark-section { background: #0f172a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           }
         `}</style>
@@ -225,26 +397,49 @@ const ReportView = () => {
             Famous people born on {monthName} {dob.getDate()}, ranked by global recognition
           </p>
 
-          {celebrities.length > 0 ? (
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
-              {celebrities.slice(0, 6).map((c: any, i: number) => (
-                <div key={i} className="border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full flex items-center justify-center text-xl font-black text-rose-500 mb-3">
-                    {(c.name || '?')[0]}
-                  </div>
-                  <div className="font-bold text-gray-900 text-sm">{c.name}</div>
-                  <div className="text-xs text-gray-400 mt-0.5">{c.occupation || 'Notable person'}</div>
-                  {c.birthDate && (
-                    <div className="text-xs text-rose-400 mt-1">
-                      b. {new Date(c.birthDate + 'T12:00:00').getFullYear()}
-                      {c.isLiving === false && ' †'}
+          {celebrities.length > 0 ? (() => {
+            const sortedCelebrities = [...celebrities].sort((a: any, b: any) => {
+              const yearA = a.birthDate ? new Date(a.birthDate + 'T12:00:00').getFullYear() : 0;
+              const yearB = b.birthDate ? new Date(b.birthDate + 'T12:00:00').getFullYear() : 0;
+              if (yearA >= 1940 && yearB < 1940) return -1;
+              if (yearB >= 1940 && yearA < 1940) return 1;
+              if (yearA >= 1900 && yearB < 1900) return -1;
+              if (yearB >= 1900 && yearA < 1900) return 1;
+              return yearB - yearA;
+            });
+            return (
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+              {sortedCelebrities.slice(0, 6).map((c: any, i: number) => {
+                const year = c.birthDate ? new Date(c.birthDate + 'T12:00:00').getFullYear() : null;
+                const occ = (c.occupation || '').toLowerCase();
+                const catIcon = occ.includes('actor') || occ.includes('actress') || occ.includes('film') ? '🎬' :
+                  occ.includes('music') || occ.includes('singer') || occ.includes('band') || occ.includes('rapper') ? '🎵' :
+                  occ.includes('athlete') || occ.includes('player') || occ.includes('sport') || occ.includes('tennis') || occ.includes('cricket') || occ.includes('football') || occ.includes('basketball') ? '⚽' :
+                  occ.includes('politic') || occ.includes('president') || occ.includes('minister') ? '🏛️' :
+                  occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') ? '🔬' : '⭐';
+                const catLabel = occ.includes('actor') || occ.includes('actress') || occ.includes('film') ? 'Actor/Director' :
+                  occ.includes('music') || occ.includes('singer') || occ.includes('band') || occ.includes('rapper') ? 'Musician' :
+                  occ.includes('athlete') || occ.includes('player') || occ.includes('sport') || occ.includes('tennis') || occ.includes('cricket') || occ.includes('football') || occ.includes('basketball') ? 'Athlete' :
+                  occ.includes('politic') || occ.includes('president') || occ.includes('minister') ? 'Politician' :
+                  occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') ? 'Scientist' : 'Notable Person';
+                return (
+                  <div key={i} className="border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-shadow bg-white">
+                    <div className="flex items-start gap-3 mb-3">
+                      <span className="text-3xl">{catIcon}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-bold text-gray-900 text-sm leading-tight">{c.name}</div>
+                        {year && <div className="text-xs text-rose-400 mt-0.5">b. {year}{c.isLiving === false ? ' †' : ''}</div>}
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))}
+                    <div className="text-xs text-gray-500 mb-2 line-clamp-2">{c.occupation || 'Notable person'}</div>
+                    <span className="inline-block px-2 py-0.5 bg-rose-50 text-rose-600 rounded-full text-xs font-medium">{catLabel}</span>
+                  </div>
+                );
+              })}
             </div>
-          ) : (
-            <div className="text-center py-10 bg-gray-50 rounded-2xl mb-12">
+            );
+          })() : (
+            <div className="text-center py-10 bg-gray-50 rounded-2xl mb-6">
               <p className="text-gray-400 text-sm">No celebrity data found for this date</p>
             </div>
           )}
@@ -305,22 +500,45 @@ const ReportView = () => {
             <TabsContent value="western" className="space-y-4 print-expand">
               {westernZodiac ? (
                 <>
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-4xl">{westernZodiac.unicode}</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-5xl">{westernZodiac.unicode}</span>
                     <div>
-                      <h3 className="font-black text-xl text-gray-900">{westernZodiac.name}</h3>
-                      <p className="text-sm text-gray-400">{westernZodiac.dateRange} · {westernZodiac.element} · {westernZodiac.rulingPlanet}</p>
+                      <h3 className="font-black text-2xl text-gray-900">{westernZodiac.name}</h3>
+                      <p className="text-sm text-gray-400">{westernZodiac.dateRange}</p>
                     </div>
                   </div>
-                  <p className="text-gray-700 text-sm leading-relaxed">{westernZodiac.fullDescription?.slice(0, 600)}</p>
-                  <div>
-                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Core Traits</div>
-                    <div className="flex flex-wrap gap-2">
-                      {(westernZodiac.coreTraits ?? []).slice(0, 6).map((t: string) => (
-                        <span key={t} className="px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">{t}</span>
-                      ))}
-                    </div>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {westernZodiac.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">🔥 {westernZodiac.element}</span>}
+                    {westernZodiac.modality && <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">⚡ {westernZodiac.modality}</span>}
+                    {westernZodiac.rulingPlanet && <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">🪐 {westernZodiac.rulingPlanet}</span>}
                   </div>
+                  <p className="text-gray-700 text-sm leading-relaxed">{westernZodiac.fullDescription}</p>
+                  {(westernZodiac.coreTraits ?? []).length > 0 && (
+                    <div>
+                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Strengths</div>
+                      <div className="flex flex-wrap gap-2">
+                        {(westernZodiac.coreTraits ?? []).map((t: string) => (
+                          <span key={t} className="px-3 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-xs font-medium">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {((westernZodiac as any).challenges ?? []).length > 0 && (
+                    <div>
+                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Growth Areas</div>
+                      <div className="flex flex-wrap gap-2">
+                        {((westernZodiac as any).challenges ?? []).map((t: string) => (
+                          <span key={t} className="px-3 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-full text-xs font-medium">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {((westernZodiac as any).famousPeople ?? []).length > 0 && (
+                    <div className="bg-gray-50 rounded-xl p-4">
+                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Famous {westernZodiac.name}s</div>
+                      <p className="text-sm text-gray-600">{((westernZodiac as any).famousPeople ?? []).join(' · ')}</p>
+                    </div>
+                  )}
                 </>
               ) : <p className="text-gray-400 text-sm">Data unavailable</p>}
             </TabsContent>
@@ -328,22 +546,40 @@ const ReportView = () => {
             <TabsContent value="chinese" className="space-y-4 print-expand">
               {chineseZodiac ? (
                 <>
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-4xl">{chineseZodiac.emoji}</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-5xl">{chineseZodiac.emoji}</span>
                     <div>
-                      <h3 className="font-black text-xl text-gray-900">{chineseZodiac.animal}</h3>
-                      <p className="text-sm text-gray-400">{chineseZodiac.element} {chineseZodiac.yin_yang} · {chineseZodiac.year}</p>
+                      <h3 className="font-black text-2xl text-gray-900">{chineseZodiac.animal}</h3>
+                      <p className="text-sm text-gray-400">Year {chineseZodiac.year} · Cycle repeats every 12 years</p>
                     </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {chineseZodiac.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">五行 {chineseZodiac.element}</span>}
+                    {chineseZodiac.yin_yang && <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">{chineseZodiac.yin_yang}</span>}
                   </div>
                   <p className="text-gray-700 text-sm leading-relaxed">{chineseZodiac.description}</p>
-                  <div>
-                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Traits</div>
-                    <div className="flex flex-wrap gap-2">
-                      {(chineseZodiac.traits ?? []).map((t: string) => (
-                        <span key={t} className="px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">{t}</span>
-                      ))}
+                  {(chineseZodiac.traits ?? []).length > 0 && (
+                    <div>
+                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Core Traits</div>
+                      <div className="flex flex-wrap gap-2">
+                        {(chineseZodiac.traits ?? []).map((t: string) => (
+                          <span key={t} className="px-3 py-1 bg-rose-50 text-rose-600 border border-rose-200 rounded-full text-xs font-medium">{t}</span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
+                  {((chineseZodiac as any).compatibility ?? []).length > 0 && (
+                    <div className="bg-green-50 rounded-xl p-4">
+                      <div className="text-xs font-semibold text-green-700 uppercase tracking-wide mb-1">Compatible Signs</div>
+                      <p className="text-sm text-green-700">{((chineseZodiac as any).compatibility ?? []).join(' · ')}</p>
+                    </div>
+                  )}
+                  {((chineseZodiac as any).famousPeople ?? []).length > 0 && (
+                    <div className="bg-gray-50 rounded-xl p-4">
+                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Famous {chineseZodiac.animal}s</div>
+                      <p className="text-sm text-gray-600">{((chineseZodiac as any).famousPeople ?? []).join(' · ')}</p>
+                    </div>
+                  )}
                 </>
               ) : <p className="text-gray-400 text-sm">Data unavailable</p>}
             </TabsContent>
@@ -351,12 +587,16 @@ const ReportView = () => {
             <TabsContent value="vedic" className="space-y-4 print-expand">
               {vedicRashi ? (
                 <>
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-4xl">{vedicRashi.symbol}</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-5xl">{vedicRashi.symbol}</span>
                     <div>
-                      <h3 className="font-black text-xl text-gray-900">{vedicRashi.name}</h3>
-                      <p className="text-sm text-gray-400">{vedicRashi.english} · {vedicRashi.element} · Ruled by {vedicRashi.ruling_planet}</p>
+                      <h3 className="font-black text-2xl text-gray-900">{vedicRashi.name}</h3>
+                      <p className="text-sm text-gray-400">{vedicRashi.english} · Ruled by {vedicRashi.ruling_planet}</p>
                     </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {vedicRashi.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">🔥 {vedicRashi.element}</span>}
+                    {vedicRashi.ruling_planet && <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">🪐 {vedicRashi.ruling_planet}</span>}
                   </div>
                   <p className="text-gray-700 text-sm leading-relaxed">{vedicRashi.description}</p>
                   {zodiacComparison && (
@@ -364,14 +604,16 @@ const ReportView = () => {
                       <strong>Western vs Vedic: </strong>{zodiacComparison.note}
                     </div>
                   )}
-                  <div>
-                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Traits</div>
-                    <div className="flex flex-wrap gap-2">
-                      {(vedicRashi.traits ?? []).map((t: string) => (
-                        <span key={t} className="px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">{t}</span>
-                      ))}
+                  {(vedicRashi.traits ?? []).length > 0 && (
+                    <div>
+                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Core Traits</div>
+                      <div className="flex flex-wrap gap-2">
+                        {(vedicRashi.traits ?? []).map((t: string) => (
+                          <span key={t} className="px-3 py-1 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded-full text-xs font-medium">{t}</span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </>
               ) : <p className="text-gray-400 text-sm">Data unavailable</p>}
             </TabsContent>
@@ -444,19 +686,48 @@ const ReportView = () => {
           )}
 
           {/* Personal Year 2026 */}
-          {personalYearMeaning && (
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-2xl font-black text-amber-600">{personalYear2026}</span>
-                <div>
-                  <div className="font-bold text-amber-900 text-sm">Personal Year in 2026</div>
-                  <div className="text-xs text-amber-700">{personalYearMeaning.title}</div>
+          {personalYear2026 && (() => {
+            const pyc = getPersonalYearContent(personalYear2026);
+            return (
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 space-y-4">
+                <div className="flex items-center gap-4 pb-2 border-b border-amber-200">
+                  <div className="w-14 h-14 rounded-2xl bg-amber-500 flex items-center justify-center text-3xl font-black text-white flex-shrink-0">
+                    {personalYear2026}
+                  </div>
+                  <div>
+                    <div className="font-black text-amber-900 text-lg">Personal Year {personalYear2026} in 2026</div>
+                    {personalYearMeaning?.title && <div className="text-sm text-amber-700 font-medium">{personalYearMeaning.title}</div>}
+                  </div>
+                </div>
+                <p className="text-sm text-amber-900 leading-relaxed">{pyc.theme}</p>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div className="bg-white rounded-xl p-4">
+                    <div className="text-xs font-bold text-rose-500 uppercase tracking-wide mb-1">❤️ Love &amp; Relationships</div>
+                    <p className="text-xs text-gray-700 leading-relaxed">{pyc.love}</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-4">
+                    <div className="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1">💼 Career &amp; Money</div>
+                    <p className="text-xs text-gray-700 leading-relaxed">{pyc.career}</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-4">
+                    <div className="text-xs font-bold text-green-500 uppercase tracking-wide mb-1">🌿 Health &amp; Energy</div>
+                    <p className="text-xs text-gray-700 leading-relaxed">{pyc.health}</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-4">
+                    <div className="text-xs font-bold text-purple-500 uppercase tracking-wide mb-1">📅 Key Months</div>
+                    <ul className="space-y-0.5">
+                      {pyc.keyMonths.map((m, i) => (
+                        <li key={i} className="text-xs text-gray-700">· {m}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <div className="bg-amber-100 rounded-xl px-4 py-3 text-sm font-medium text-amber-900 italic">
+                  "{pyc.closing}"
                 </div>
               </div>
-              <p className="text-sm text-amber-800 leading-relaxed mb-2">{personalYearMeaning.meaning}</p>
-              <div className="text-xs text-amber-600 font-medium">Focus: {personalYearMeaning.focus}</div>
-            </div>
-          )}
+            );
+          })()}
         </div>
       </div>
 
@@ -468,47 +739,71 @@ const ReportView = () => {
           <h2 className="text-2xl font-black text-gray-900 mb-2 text-center">💎 Cosmic Connections</h2>
           <p className="text-center text-gray-500 text-sm mb-10">Birthstone of {monthName}</p>
 
-          {birthstone ? (
-            <div className="bg-white rounded-3xl shadow-sm p-8">
-              <div className="text-center mb-6">
-                <div className="text-5xl mb-3">💎</div>
-                <h3 className="text-2xl font-black text-gray-900">{birthstone.primaryStone}</h3>
-                <p className="text-sm text-gray-500 mt-1">{birthstone.color}</p>
-                {birthstone.alternateStones?.length > 0 && (
-                  <p className="text-xs text-purple-500 mt-1">Also: {birthstone.alternateStones.join(', ')}</p>
-                )}
+          {birthstone ? (() => {
+            const bsMeta = BIRTHSTONE_META[dob.getMonth() + 1] ?? BIRTHSTONE_META[1];
+            return (
+            <div className="bg-white rounded-3xl shadow-sm p-8 space-y-6">
+              {/* Header */}
+              <div className="flex flex-col items-center gap-3">
+                <GemSVG month={dob.getMonth() + 1} size={80} />
+                <div className="text-center">
+                  <h3 className="text-3xl font-black text-gray-900">{birthstone.primaryStone}</h3>
+                  <p className="text-sm font-medium mt-1" style={{ color: bsMeta.hex }}>{bsMeta.color}</p>
+                  {birthstone.alternateStones?.length > 0 && (
+                    <p className="text-xs text-purple-500 mt-1">Alternate: {birthstone.alternateStones.join(', ')}</p>
+                  )}
+                </div>
               </div>
 
+              {/* Birth flower */}
+              <div className="flex items-center gap-3 bg-pink-50 rounded-xl p-4">
+                <span className="text-2xl">🌸</span>
+                <div>
+                  <div className="text-xs font-bold text-pink-700 uppercase tracking-wide mb-0.5">Birth Flower</div>
+                  <div className="text-sm font-semibold text-pink-900">{bsMeta.flower}</div>
+                </div>
+              </div>
+
+              {/* Lore */}
+              <div className="bg-purple-50 rounded-xl p-4">
+                <div className="text-xs font-bold text-purple-700 uppercase tracking-wide mb-2">💡 Did You Know?</div>
+                <p className="text-sm text-purple-900 leading-relaxed">{bsMeta.lore}</p>
+              </div>
+
+              {/* Meaning & Properties */}
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-bold text-gray-900 text-sm mb-2">Meaning & Symbolism</h4>
+                  <h4 className="font-bold text-gray-900 text-sm mb-2">Meaning &amp; Symbolism</h4>
                   <p className="text-sm text-gray-600 leading-relaxed">{birthstone.meaning}</p>
                 </div>
                 <div>
                   <h4 className="font-bold text-gray-900 text-sm mb-2">Properties</h4>
                   <ul className="space-y-1">
                     {(birthstone.properties ?? []).slice(0, 5).map((p: string) => (
-                      <li key={p} className="text-xs text-gray-600">· {p}</li>
+                      <li key={p} className="text-xs text-gray-600 flex items-start gap-1">
+                        <span style={{ color: bsMeta.hex }}>●</span>{p}
+                      </li>
                     ))}
                   </ul>
                 </div>
               </div>
 
               {birthstone.history && (
-                <div className="mt-6 bg-purple-50 rounded-xl p-4">
-                  <h4 className="font-bold text-purple-900 text-sm mb-2">History</h4>
-                  <p className="text-xs text-purple-800 leading-relaxed">{birthstone.history.slice(0, 400)}</p>
+                <div className="bg-gray-50 rounded-xl p-4">
+                  <h4 className="font-bold text-gray-700 text-xs uppercase tracking-wide mb-1">History</h4>
+                  <p className="text-xs text-gray-600 leading-relaxed">{birthstone.history.slice(0, 500)}</p>
                 </div>
               )}
 
               {birthstone.careInstructions && (
-                <div className="mt-4 bg-gray-50 rounded-xl p-4">
+                <div className="border border-gray-200 rounded-xl p-4">
                   <h4 className="font-bold text-gray-700 text-xs uppercase tracking-wide mb-1">Care Instructions</h4>
                   <p className="text-xs text-gray-600 leading-relaxed">{birthstone.careInstructions}</p>
                 </div>
               )}
             </div>
-          ) : (
+            );
+          })() : (
             <div className="text-center text-gray-400 text-sm">Birthstone data unavailable</div>
           )}
         </div>
@@ -566,20 +861,58 @@ const ReportView = () => {
           <h2 className="text-2xl font-black text-gray-900 mb-2">👥 Generation Portrait</h2>
           <p className="text-gray-500 text-sm mb-8">Where {recipientName} fits in history</p>
 
-          {generation && (
-            <div className="bg-white rounded-3xl shadow-sm p-8 mb-8">
-              <div className="text-5xl mb-4">
-                {generation.name === 'Generation Alpha' ? '🤖' :
-                 generation.name === 'Generation Z' ? '📱' :
-                 generation.name === 'Millennial' ? '💻' :
-                 generation.name === 'Generation X' ? '📼' :
-                 generation.name === 'Baby Boomer' ? '📺' : '🎖️'}
+          {generation && (() => {
+            const gc = GENERATION_CONTENT[generation.name];
+            return (
+              <div className="bg-white rounded-3xl shadow-sm p-8 mb-8 space-y-6 text-left">
+                {/* Header */}
+                <div className="text-center pb-4 border-b border-gray-100">
+                  <div className="text-5xl mb-3">{gc?.emoji ?? '🎖️'}</div>
+                  <h3 className="text-3xl font-black text-gray-900">{generation.name}</h3>
+                  <div className="text-rose-500 font-semibold text-sm mt-1">{generation.range}</div>
+                </div>
+
+                {/* Summary */}
+                <p className="text-gray-600 leading-relaxed text-center max-w-lg mx-auto">{generation.desc}</p>
+
+                {gc && (
+                  <>
+                    {/* Defining world events */}
+                    <div className="bg-slate-50 rounded-2xl p-5">
+                      <div className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">🌍 Defining World Events</div>
+                      <div className="flex flex-wrap gap-2">
+                        {gc.worldEvents.map(e => (
+                          <span key={e} className="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-full text-xs font-medium">{e}</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Tech, Culture, Work */}
+                    <div className="grid sm:grid-cols-3 gap-4">
+                      <div className="bg-blue-50 rounded-2xl p-4">
+                        <div className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-2">💻 Technology</div>
+                        <p className="text-xs text-blue-900 leading-relaxed">{gc.technology}</p>
+                      </div>
+                      <div className="bg-rose-50 rounded-2xl p-4">
+                        <div className="text-xs font-bold text-rose-700 uppercase tracking-wide mb-2">🎨 Culture</div>
+                        <p className="text-xs text-rose-900 leading-relaxed">{gc.culture}</p>
+                      </div>
+                      <div className="bg-green-50 rounded-2xl p-4">
+                        <div className="text-xs font-bold text-green-700 uppercase tracking-wide mb-2">💼 Work Style</div>
+                        <p className="text-xs text-green-900 leading-relaxed">{gc.work}</p>
+                      </div>
+                    </div>
+
+                    {/* Superpower */}
+                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+                      <div className="text-xs font-bold text-amber-700 uppercase tracking-wide mb-2">⚡ Generational Superpower</div>
+                      <p className="text-sm text-amber-900 leading-relaxed font-medium">{gc.superpower}</p>
+                    </div>
+                  </>
+                )}
               </div>
-              <h3 className="text-3xl font-black text-gray-900 mb-1">{generation.name}</h3>
-              <div className="text-rose-500 font-semibold text-sm mb-4">{generation.range}</div>
-              <p className="text-gray-600 leading-relaxed max-w-lg mx-auto">{generation.desc}</p>
-            </div>
-          )}
+            );
+          })()}
 
           {/* Longevity CTA */}
           <div className="bg-green-50 border border-green-100 rounded-2xl p-6">

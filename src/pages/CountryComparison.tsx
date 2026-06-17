@@ -259,13 +259,17 @@ const CountryComparison = () => {
         canonicalUrl="/country-comparison"
       />
 
+      {/* ── STICKY NAV ────────────────────────────────────────────────────── */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm mb-8">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <Navigation />
+          <AuthNav />
+        </div>
+      </div>
+
       {/* ── SHOCKING HERO (dark section) ──────────────────────────────────── */}
       <div className="bg-slate-900 text-white py-16">
         <div className="container mx-auto px-4">
-          <header className="flex justify-between items-center mb-12">
-            <Navigation />
-            <AuthNav />
-          </header>
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-2xl md:text-4xl font-black leading-tight">
               In 1800, no country on Earth had a life expectancy above 40 years.

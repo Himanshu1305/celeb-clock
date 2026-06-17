@@ -44,8 +44,10 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
   const [weightLbs, setWeightLbs] = useState('');
   const [heightFt, setHeightFt] = useState('');
   const [heightIn, setHeightIn] = useState('');
+  const [bmiSlider, setBmiSlider] = useState(22.0);
+  const [bmiSliderActive, setBmiSliderActive] = useState(false);
 
-  let bmi: number | null = null;
+  let calculatedBmi: number | null = null;
   let heightCmValue = 0;
 
   if (unit === 'metric') {
@@ -53,7 +55,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
     const hCm = parseFloat(heightCm);
     if (w > 0 && hCm > 0) {
       const hM = hCm / 100;
-      bmi = Math.round((w / (hM * hM)) * 10) / 10;
+      calculatedBmi = Math.round((w / (hM * hM)) * 10) / 10;
       heightCmValue = hCm;
     }
   } else {
@@ -61,10 +63,12 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
     const totalInches = parseFloat(heightFt) * 12 + parseFloat(heightIn || '0');
     const hM = totalInches * 0.0254;
     if (w > 0 && hM > 0) {
-      bmi = Math.round((w / (hM * hM)) * 10) / 10;
+      calculatedBmi = Math.round((w / (hM * hM)) * 10) / 10;
       heightCmValue = totalInches * 2.54;
     }
   }
+
+  const bmi: number | null = bmiSliderActive ? bmiSlider : calculatedBmi;
 
   let category = '';
   let bmiColor = '#6366f1';
@@ -122,7 +126,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   type="number"
                   placeholder="70"
                   value={weightKg}
-                  onChange={e => setWeightKg(e.target.value)}
+                  onChange={e => { setWeightKg(e.target.value); setBmiSliderActive(false); }}
                   className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <span className="absolute right-3 top-2.5 text-gray-400 text-sm">kg</span>
@@ -135,11 +139,12 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   type="number"
                   placeholder="170"
                   value={heightCm}
-                  onChange={e => setHeightCm(e.target.value)}
+                  onChange={e => { setHeightCm(e.target.value); setBmiSliderActive(false); }}
                   className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <span className="absolute right-3 top-2.5 text-gray-400 text-sm">cm</span>
               </div>
+              <p className="text-xs text-gray-400 mt-1">5'8" ≈ 173 cm · 6'0" ≈ 183 cm</p>
             </div>
           </>
         ) : (
@@ -151,7 +156,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   type="number"
                   placeholder="154"
                   value={weightLbs}
-                  onChange={e => setWeightLbs(e.target.value)}
+                  onChange={e => { setWeightLbs(e.target.value); setBmiSliderActive(false); }}
                   className="w-full border rounded-lg px-3 py-2 pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <span className="absolute right-3 top-2.5 text-gray-400 text-sm">lbs</span>
@@ -165,7 +170,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                     type="number"
                     placeholder="5"
                     value={heightFt}
-                    onChange={e => setHeightFt(e.target.value)}
+                    onChange={e => { setHeightFt(e.target.value); setBmiSliderActive(false); }}
                     className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                   <span className="absolute right-2 top-2.5 text-gray-400 text-sm">ft</span>
@@ -175,7 +180,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                     type="number"
                     placeholder="8"
                     value={heightIn}
-                    onChange={e => setHeightIn(e.target.value)}
+                    onChange={e => { setHeightIn(e.target.value); setBmiSliderActive(false); }}
                     className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                   <span className="absolute right-2 top-2.5 text-gray-400 text-sm">in</span>
@@ -183,6 +188,26 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
               </div>
             </div>
           </>
+        )}
+      </div>
+
+      {/* BMI direct input alternative */}
+      <div className="border-t border-gray-200 pt-4 mt-2 mb-6">
+        <p className="text-xs text-gray-500 mb-2 text-center">— or enter your BMI directly —</p>
+        <div className="flex items-center gap-3">
+          <input
+            type="range"
+            min={15}
+            max={45}
+            step={0.1}
+            value={bmiSlider}
+            onChange={e => { setBmiSlider(parseFloat(e.target.value)); setBmiSliderActive(true); }}
+            className="flex-1 accent-indigo-600"
+          />
+          <span className="text-sm font-bold text-gray-700 w-10 text-right">{bmiSlider.toFixed(1)}</span>
+        </div>
+        {bmiSliderActive && (
+          <p className="text-xs text-center text-indigo-600 mt-1">Using slider BMI value</p>
         )}
       </div>
 
@@ -390,6 +415,23 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
                 Healthy: under 0.5 · Caution: 0.5–0.6 · High risk: above 0.6
                 &nbsp;[Ashwell et al., Nutrition Research Reviews, 2010]
               </div>
+            </div>
+          )}
+          {risk && waistCmNum > 0 && (
+            <div className={`rounded-xl p-4 mb-4 text-sm leading-relaxed ${
+              whoRiskKey === 'high' ? 'bg-red-50 border border-red-200 text-red-800' :
+              whoRiskKey === 'increased' ? 'bg-amber-50 border border-amber-200 text-amber-800' :
+              'bg-green-50 border border-green-200 text-green-800'
+            }`}>
+              {whoRiskKey === 'high' && (
+                <p>⚠️ <strong>High cardiovascular risk.</strong> A waist circumference above {gender === 'male' ? '94cm (men)' : '80cm (women)'} significantly increases risk of type 2 diabetes, heart disease, and metabolic syndrome — even in people with a healthy BMI. {whtRatio !== null && `Your WHtR of ${whtRatio} means your waist is ${Math.round(whtRatio * 100)}% of your height.`} Research shows WHtR above 0.5 is a stronger predictor of cardiovascular disease than BMI alone. <span className="text-xs opacity-70">[Ashwell et al., Nutrition Research Reviews, 2010]</span></p>
+              )}
+              {whoRiskKey === 'increased' && (
+                <p>⚡ <strong>Moderate cardiovascular risk.</strong> Your waist measurement is approaching the high-risk threshold. Visceral fat (fat around organs) is metabolically active and produces inflammatory proteins linked to insulin resistance and cardiovascular disease. {whtRatio !== null && `Your WHtR of ${whtRatio} is approaching the 0.5 caution threshold.`} <span className="text-xs opacity-70">[WHO Waist Circumference and Waist-Hip Ratio Report, 2011]</span></p>
+              )}
+              {whoRiskKey === 'low' && (
+                <p>✅ <strong>Healthy waist measurement.</strong> Your waist circumference is within the low-risk range. Maintaining central body fat at this level is associated with significantly reduced risk of metabolic syndrome, type 2 diabetes, and cardiovascular disease. {whtRatio !== null && `Your WHtR of ${whtRatio} is in the healthy range (under 0.5).`}</p>
+              )}
             </div>
           )}
           <button
@@ -912,11 +954,14 @@ const BiologicalAge = () => {
         <script type="application/ld+json">{JSON.stringify(webAppSchema)}</script>
       </Helmet>
 
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-8">
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm mb-8">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
-        </header>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-8">
 
         {/* ── INTRO ── */}
         {step === 'intro' && (

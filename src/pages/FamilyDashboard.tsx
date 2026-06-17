@@ -1,6 +1,44 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Component, type ReactNode, type ErrorInfo } from 'react';
 import { Link } from 'react-router-dom';
 import { Users, Plus, Trash2, Lock, ArrowRight } from 'lucide-react';
+
+// ── Error Boundary ────────────────────────────────────────────────────────────
+
+class FamilyErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('FamilyDashboard error:', error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-gradient-cosmic flex items-center justify-center">
+          <div className="text-center p-8">
+            <div className="text-4xl mb-4">⚠️</div>
+            <h2 className="text-xl font-bold text-foreground mb-2">Something went wrong</h2>
+            <p className="text-muted-foreground mb-4">Unable to load the Family Dashboard. Please refresh the page.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium"
+            >
+              Refresh
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine,
 } from 'recharts';
@@ -45,8 +83,8 @@ function barColor(f: number) {
   return '#f59e0b';
 }
 
-export default function FamilyDashboard() {
-  const { user, isPremium, profile } = useAuth();
+function FamilyDashboardInner() {
+  const { user, isPremium, isInTrial, profile } = useAuth();
 
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [showAdd, setShowAdd] = useState(false);
@@ -62,10 +100,15 @@ export default function FamilyDashboard() {
 
   useEffect(() => {
     if (user) {
-      getFamilyMembers(user.id).then(data => {
-        setMembers(data);
-        setLoading(false);
-      });
+      getFamilyMembers(user.id)
+        .then(data => {
+          setMembers(data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('getFamilyMembers error:', err);
+          setLoading(false);
+        });
     } else {
       setLoading(false);
     }
@@ -127,7 +170,7 @@ export default function FamilyDashboard() {
     );
   }
 
-  if (!isPremium) {
+  if (!isPremium && !isInTrial) {
     return (
       <div className="min-h-screen bg-gradient-cosmic">
         <SEO title="Family Longevity Dashboard | BornClock Premium" description="Compare longevity forecasts for your family." noindex={true} />
@@ -357,5 +400,13 @@ export default function FamilyDashboard() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function FamilyDashboard() {
+  return (
+    <FamilyErrorBoundary>
+      <FamilyDashboardInner />
+    </FamilyErrorBoundary>
   );
 }

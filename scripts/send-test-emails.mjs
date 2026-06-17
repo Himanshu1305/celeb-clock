@@ -1,6 +1,15 @@
 // ES module — run with:
 // RESEND_API_KEY=your_key node scripts/send-test-emails.mjs
 
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+try {
+  const dotenv = require('dotenv');
+  dotenv.config({ path: '.env.local' });
+} catch (e) {
+  // dotenv not available, rely on env vars being set externally
+}
+
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const TEST_EMAIL = 'himanshu1305@gmail.com';
 const TEST_NAME = 'Himanshu';
