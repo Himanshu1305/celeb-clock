@@ -4,6 +4,7 @@ import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import PageTagline from '@/components/PageTagline';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -195,6 +196,7 @@ const BirthdayReport = () => {
             The Birthday Gift<br />
             <span className="text-rose-500">They'll Never Forget</span>
           </h1>
+          <PageTagline />
           <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
             A beautifully crafted web report revealing their celebrity birthday twins, three zodiac profiles,
             life path number, birthstone, planetary ages, and a personalised message — all in one link.

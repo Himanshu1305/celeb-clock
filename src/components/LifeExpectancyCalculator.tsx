@@ -63,6 +63,29 @@ const POWER9_HABITS = [
   { id: 'community',  emoji: '👥', name: 'Right Tribe',      region: 'All 5 Zones',       science: 'Social norms drive 70% of long-term habits — smoking cessation is 3× more likely within non-smoking networks' },
 ];
 
+const POWER9_DETAILS: Record<string, { description: string; science: string; link?: string }> = {
+  walking:    { description: 'Blue Zone centenarians build low-intensity movement into everyday life — tending gardens, walking to friends, doing household chores.', science: 'Studies show 5+ miles of incidental daily movement reduces all-cause mortality by 30% vs sedentary lifestyles.' },
+  purpose:    { description: 'Okinawans call it "Ikigai" — a reason to get up in the morning. Sardinians call it "Plan de vida." Every Blue Zone has a name for it.', science: 'Mayo Clinic & Harvard research links strong life purpose to a 7-year increase in life expectancy and lower dementia risk.' },
+  meditation: { description: 'Each Blue Zone community has daily stress-relief rituals: Adventists pray, Okinawans honor ancestors, Ikarians nap, Sardinians do happy hour.', science: 'Chronic stress shortens telomeres and raises cortisol. Daily downshift routines reduce inflammatory markers by up to 23%.' },
+  fasting:    { description: 'Okinawans practice "Hara hachi bu" — a 2,500-year-old Confucian teaching to eat until 80% full, avoiding the insulin spike from overeating.', science: 'Caloric restriction of 10–20% is linked to longer telomeres and reduced IGF-1 levels; associated with 2–3 extra healthy years.' },
+  wholefood:  { description: 'Beans — black, fava, soy, lentils — are the cornerstone of every Blue Zone diet. Meat is eaten on average only 5 times per month.', science: 'Each daily cup of beans is associated with a 4-year life expectancy increase. Plant-based protein reduces cardiovascular risk by 19%.' },
+  gardening:  { description: 'Sardinian Cannonau wine has 2–3× the flavonoids of other wines. But the key is the ritual: always with friends, never alone.', science: 'Moderate alcohol within a social ritual is linked to reduced stress markers. The community context drives most of the benefit, not the wine itself.' },
+  spiritual:  { description: 'All but 5 of the 263 centenarians interviewed by Dan Buettner belonged to a faith-based community. Denomination didn\'t matter.', science: 'Attending faith services 4×/month adds 4–14 years of life expectancy, per a 2016 JAMA Internal Medicine study of 75,000 women.' },
+  volunteer:  { description: 'Blue Zone families keep aging parents and grandparents nearby or in the home. Moais — groups of 5 committed friends — form for life.', science: 'Costa Rican research shows grandparents living with families have 600% lower mortality than age-matched isolated peers.' },
+  community:  { description: 'The world\'s longest-lived people were born into, or chose to create, social circles that supported healthy behaviors effortlessly.', science: 'A Framingham Heart Study follow-up found smoking cessation is 3× more likely within non-smoking social networks. Happiness is also contagious.' },
+};
+
+const STEP_CONTEXT: Record<number, { heading: string; body: string; stat: string }> = {
+  1: { heading: 'Why gender matters for longevity', body: 'Biological sex influences hormonal profiles, cardiovascular risk timelines, and immune function. Women outlive men by an average of 5 years globally — partly due to estrogen\'s protective cardiovascular effects and lower rates of risk-taking behaviour.', stat: '♀ Women live 5 years longer on average (WHO, 2023)' },
+  2: { heading: 'Your country shapes your baseline', body: 'Where you live determines your access to healthcare, environmental quality, and average population health norms. Japan\'s baseline life expectancy is 84.3 years vs the global average of 73.4 — a gap driven by diet, community structure, and healthcare investment.', stat: '🌍 Up to 15-year gap between top and bottom countries (UN WPP 2024)' },
+  3: { heading: 'Lifestyle is 50% of your longevity equation', body: 'Smoking, diet, and exercise are the three highest-impact modifiable factors in your lifespan. A non-smoker who eats well and exercises regularly can expect to live 10–14 more years than a heavy-smoking, sedentary peer.', stat: '🚬 Heavy smoking alone removes 10–12 years (WHO, 2023)' },
+  4: { heading: 'Your genes set a ceiling — your habits fill the room', body: 'Family history accounts for roughly 25–30% of longevity variation. But the good news: epigenetics shows that lifestyle choices can influence whether inherited risk genes are activated or suppressed. You are not your family history.', stat: '🧬 Genetics explains ~25% of longevity variance (Nature, 2019)' },
+  5: { heading: 'Health metrics are early warning signals', body: 'Blood pressure, sleep, and social connection are three of the most evidence-backed predictors of long-term health. Optimal BP alone reduces stroke risk by 40%. Seven to nine hours of sleep reduces all-cause mortality risk by 12% compared to under-6.', stat: '💤 7–9 hrs sleep is the optimal range (National Sleep Foundation)' },
+  6: { heading: 'Stress is a silent killer — and it\'s measurable', body: 'Chronic stress elevates cortisol, shortens telomeres, and accelerates cellular aging. High stress is associated with a 2.5-year reduction in life expectancy. Regular exercise is one of the most effective evidence-backed interventions for stress reduction.', stat: '🧠 Chronic stress shortens telomeres at a measurable rate (UCSF, 2022)' },
+  7: { heading: 'The genetics of longevity are inherited — but not destiny', body: 'Centenarian parents dramatically increase your odds of living past 90. But even with average family genetics, lifestyle interventions can add 10+ years beyond your genetic baseline. APOE genotype is a risk factor, not a sentence.', stat: '👴 Centenarian parents give you 4× the odds of reaching 90 (NIA, 2020)' },
+  8: { heading: 'Your community is your longevity infrastructure', body: 'In every Blue Zone, centenarians live within tight community structures — moais in Okinawa, faith communities in Loma Linda, family-centered villages in Sardinia. The social environment reinforces healthy habits without willpower. You absorb the habits of your 5 closest people.', stat: '👥 Social norms drive 70% of long-term habit formation (Framingham Study)' },
+};
+
 const getBMICategory = (bmi: number) => {
   if (bmi < 18.5) return { label: 'Underweight', color: 'text-blue-500 border-blue-400' };
   if (bmi < 25)   return { label: 'Normal Weight', color: 'text-green-600 border-green-400' };
@@ -175,6 +198,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   // Country combobox state
   const [countrySearch, setCountrySearch] = useState('');
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+  const [expandedPower9, setExpandedPower9] = useState<string | null>(null);
   const countryInputRef = useRef<HTMLInputElement>(null);
   const countryDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -1146,27 +1170,44 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                         ))}
                       </div>
                     </div>
-                    <div className="grid grid-cols-3 gap-2">
-                      {POWER9_HABITS.map(({ id, emoji, name, region, science }) => (
-                        <div
-                          key={id}
-                          className={`rounded-lg border p-2.5 space-y-1 transition-all ${
-                            pillar2.mentorHabits.includes(id)
-                              ? 'bg-green-100/70 dark:bg-green-900/30 border-green-300 dark:border-green-700'
-                              : 'bg-background border-border/60'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="text-base">{emoji}</span>
-                            {pillar2.mentorHabits.includes(id) && (
-                              <span className="text-[8px] text-green-600 font-bold">✓</span>
+                    <div className="space-y-1.5">
+                      {POWER9_HABITS.map(({ id, emoji, name, region }) => {
+                        const isActive = pillar2.mentorHabits.includes(id);
+                        const isOpen = expandedPower9 === id;
+                        const details = POWER9_DETAILS[id];
+                        return (
+                          <div
+                            key={id}
+                            className={`rounded-lg border transition-all ${
+                              isActive
+                                ? 'bg-green-100/70 dark:bg-green-900/30 border-green-300 dark:border-green-700'
+                                : 'bg-background border-border/60'
+                            }`}
+                          >
+                            <button
+                              type="button"
+                              onClick={() => setExpandedPower9(isOpen ? null : id)}
+                              className="w-full flex items-center gap-2 px-3 py-2 text-left"
+                            >
+                              <span className="text-sm shrink-0">{emoji}</span>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[10px] font-bold text-foreground leading-snug">{name}</p>
+                                <p className="text-[8px] text-primary/80 font-medium">{region}</p>
+                              </div>
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                {isActive && <span className="text-[8px] text-green-600 font-bold">✓</span>}
+                                <span className="text-[9px] text-muted-foreground">{isOpen ? '▲' : '▼'}</span>
+                              </div>
+                            </button>
+                            {isOpen && details && (
+                              <div className="px-3 pb-3 space-y-1.5 border-t border-border/40 pt-2">
+                                <p className="text-[10px] text-foreground leading-relaxed">{details.description}</p>
+                                <p className="text-[9px] text-muted-foreground italic leading-relaxed">📖 {details.science}</p>
+                              </div>
                             )}
                           </div>
-                          <p className="text-[10px] font-bold text-foreground leading-snug">{name}</p>
-                          <p className="text-[8px] text-primary/80 font-medium">{region}</p>
-                          <p className="text-[9px] text-muted-foreground leading-snug italic">{science}</p>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                     {(() => {
                       const count = pillar2.mentorHabits.filter(id => POWER9_IDS.includes(id)).length;
@@ -1287,6 +1328,14 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
             </div>
           );
         })()}
+
+        {STEP_CONTEXT[step] && (
+          <div className="bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 space-y-1.5">
+            <p className="text-xs font-bold text-blue-900 dark:text-blue-200">💡 {STEP_CONTEXT[step].heading}</p>
+            <p className="text-[11px] text-blue-800 dark:text-blue-300 leading-relaxed">{STEP_CONTEXT[step].body}</p>
+            <p className="text-[10px] text-blue-600 dark:text-blue-400 font-medium italic">{STEP_CONTEXT[step].stat}</p>
+          </div>
+        )}
 
         <Separator />
         <div className="flex justify-between">

@@ -3,6 +3,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { Globe, FlaskConical, HeartHandshake } from 'lucide-react';
+import PageTagline from '@/components/PageTagline';
 
 export default function About() {
   return (
@@ -25,6 +26,7 @@ export default function About() {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             About BornClock
           </h1>
+          <PageTagline />
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
             We believe everyone deserves to understand their own timeline — not just in years, months, and days, but in the full cosmic and biological richness of what a human life actually is.
           </p>

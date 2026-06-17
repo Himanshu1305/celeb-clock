@@ -5,6 +5,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import PageTagline from '@/components/PageTagline';
 import { ChevronDown, ChevronUp, Search } from 'lucide-react';
 
 // ── Data ─────────────────────────────────────────────────────────────────────
@@ -293,6 +294,7 @@ export default function FAQ() {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             Frequently Asked Questions
           </h1>
+          <PageTagline />
           <p className="text-muted-foreground text-lg">
             Everything you need to know about BornClock. Can't find an answer?{' '}
             <a href="mailto:hello@bornclock.com" className="text-blue-500 hover:underline">

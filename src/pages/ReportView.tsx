@@ -956,6 +956,8 @@ const ReportView = () => {
         </div>
       </div>
 
+      <div className="report-print-footer no-screen">BornClock · Know your time. Live it well. · bornclock.com</div>
+
       <Footer />
     </div>
   );

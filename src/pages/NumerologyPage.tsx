@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer';
 import { NumerologyLifePath } from '@/components/NumerologyLifePath';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO } from '@/components/SEO';
+import PageTagline from '@/components/PageTagline';
 import { AgeCalculator } from '@/components/AgeCalculator';
 import { NUMEROLOGY_DATA, ALL_LIFE_PATH_NUMBERS } from '@/data/numerologyData';
 
@@ -56,6 +57,7 @@ export default function NumerologyPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             Numerology Calculator — Your Life Path Number
           </h1>
+          <PageTagline />
           <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
             Enter your date of birth to calculate your Life Path Number using the classical Pythagorean method — then explore what it means, which famous people share it, and how the system works.
           </p>

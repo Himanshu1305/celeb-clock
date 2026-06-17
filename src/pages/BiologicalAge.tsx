@@ -7,6 +7,7 @@ import { Footer } from '@/components/Footer';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { ArrowRight, RefreshCw, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { BIO_QUESTIONS, calculateBiologicalAge, getWHOWaistRisk } from '@/services/BiologicalAgeService';
+import PageTagline from '@/components/PageTagline';
 
 // ── MedTerm tooltip ───────────────────────────────────────────────────────────
 
@@ -971,6 +972,7 @@ const BiologicalAge = () => {
               <h1 className="text-4xl md:text-6xl font-black text-white text-center leading-tight mb-4">
                 What Is Your True Biological Age?
               </h1>
+              <PageTagline />
               <p className="text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
                 Chronological age counts years since birth. Biological age (
                 <span className="font-semibold text-indigo-300">epigenetic age</span> — how old your

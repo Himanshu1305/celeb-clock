@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { SEO } from '@/components/SEO';
+import PageTagline from '@/components/PageTagline';
 import {
   detectCountry,
   formatPrice,
@@ -123,6 +124,7 @@ export default function Upgrade() {
             <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">
               Unlock Your Complete Longevity Blueprint
             </h1>
+            <PageTagline />
             <p className="text-gray-600 text-lg max-w-xl mx-auto">
               Science-backed tools to understand and extend your healthspan
             </p>

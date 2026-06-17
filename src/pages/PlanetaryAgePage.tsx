@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer';
 import { PlanetaryAge } from '@/components/PlanetaryAge';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, FAQSchema } from '@/components/SEO';
+import PageTagline from '@/components/PageTagline';
 
 // ── Seeded star field (consistent, no layout thrash) ─────────────────────────
 const HERO_STARS = Array.from({ length: 80 }, (_, i) => ({
@@ -198,6 +199,7 @@ const PlanetaryAgePage = () => {
                   How Old Are You<br />
                   <span className="text-indigo-400">in the Universe?</span>
                 </h1>
+                <PageTagline />
 
                 <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-4 leading-relaxed">
                   On Mercury you have hundreds of birthdays. On Neptune you haven't had your first yet.

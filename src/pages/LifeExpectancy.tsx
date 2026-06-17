@@ -390,6 +390,17 @@ const LifeExpectancy = () => {
           </section>
         )}
 
+        {/* ── Visual connector ── */}
+        {(phase === 'result' || phase === 'report') && longevityResult && (
+          <div className="flex flex-col items-center py-4">
+            <div className="w-0.5 h-8 bg-gradient-to-b from-gray-200 to-indigo-300"/>
+            <p className="text-xs text-gray-400 italic text-center mt-2 px-4">
+              Based on your {longevityResult.totalForecast}-year forecast, here's how your habits score
+            </p>
+            <div className="w-0.5 h-8 bg-gradient-to-b from-indigo-300 to-gray-200 mt-2"/>
+          </div>
+        )}
+
         {/* ── Longevity Score Card ── */}
         {(phase === 'result' || phase === 'report') && longevityResult && (
           <section className="max-w-3xl mx-auto mb-8">

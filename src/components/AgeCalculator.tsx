@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { useAgeCalculator } from '@/hooks/useAgeCalculator';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { CalendarIcon, ClockIcon } from 'lucide-react';
+import PageTagline from '@/components/PageTagline';
 
 interface AgeCalculatorProps {
   onBirthDateChange?: (date: Date | null) => void;
@@ -64,6 +65,7 @@ export const AgeCalculator = ({ onBirthDateChange, initialDate }: AgeCalculatorP
         <h1 className="text-4xl md:text-6xl font-bold gradient-text-primary">
           Age Calculator
         </h1>
+        <PageTagline />
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Discover your precise age and see the time ticking by in real-time
         </p>

@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Globe, Search, ArrowUpDown, ChevronDown, ChevronUp, Share2 } from 'lucide-react';
+import PageTagline from '@/components/PageTagline';
 import {
   BIRTH_BASELINES,
   COUNTRY_FLAG_EMOJI,
@@ -298,6 +299,7 @@ const CountryComparison = () => {
           <h1 className="text-3xl md:text-5xl font-black gradient-text-primary leading-tight">
             Your Personal Forecast Across 57 Countries
           </h1>
+          <PageTagline />
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {savedResult
               ? `Personalised to your health profile — see exactly how where you live changes your numbers.`

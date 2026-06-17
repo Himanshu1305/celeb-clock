@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef, CSSProperties } from 'react';
+import { useState, useMemo, useEffect, useRef, CSSProperties, type ReactNode } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -242,6 +242,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
   const [iCom,  setCom]  = useState(1);  // low-stress commute (neutral default)
 
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [openSimulatorSection, setOpenSimulatorSection] = useState<string>('lifestyle');
   const rawSimForecast = useMemo(() => {
     const epigenBonus = Math.min(6, EPIGENETIC_HABITS.reduce((s, h) => {
       const freq = habitFreqs[h.id] ?? 'never';
@@ -283,6 +284,60 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
     const freq = habitFreqs[h.id] ?? 'never';
     return s + h.gain * FREQ_MULT[freq];
   }, 0)) * 10) / 10;
+
+  const lifestyleImpact = Math.round(((
+    (iSmoke === 0 ? 0 : iSmoke === 1 ? -1 : iSmoke === 2 ? -2 : iSmoke === 3 ? -3 : iSmoke === 4 ? -7 : -12) +
+    ([0, 1, -1, -6][iDrink] ?? 0) +
+    ([-3, 0, 2, 4][iDiet] ?? 0) +
+    ([-2, 1, 3, 5][iEx] ?? 0) +
+    (HYD_IMPACT[HYD_OPTS[iHyd]] ?? 0) +
+    (SCR_IMPACT[SCR_OPTS[iScr]] ?? 0) +
+    (WLB_IMPACT[WLB_OPTS[iWlb]] ?? 0)
+  ) * 10) / 10);
+  const healthImpact = Math.round(((
+    (SOC_IMPACT[SOC_OPTS[iSoc]] ?? 0) +
+    ([-2, -0.5, 0, -1][iSleep] ?? 0) +
+    ([-5, -2.5, -1, 0, 1.5][iBP] ?? 0) +
+    (bmi < 18.5 ? -2 : bmi > 30 ? -3 : bmi > 25 ? -1 : 0) +
+    (stress >= 8 ? -2.5 : stress >= 5 ? -0.5 : stress >= 3 ? 1 : 1.5) +
+    (DIAB_IMPACT[DIAB_OPTS[iDiab]] ?? 0) +
+    (HC_IMPACT[HC_OPTS[iHC]] ?? 0) +
+    (DC_IMPACT[DC_OPTS[iDC]] ?? 0) +
+    (MH_IMPACT[MH_OPTS[iMH]] ?? 0)
+  ) * 10) / 10);
+  const socialImpact = Math.round(((
+    (REL_IMPACT[REL_OPTS[iRel]] ?? 0) +
+    (PET_IMPACT[PET_OPTS[iPet]] ?? 0) +
+    (MENT_IMPACT[MENT_OPTS[iMent]] ?? 0) +
+    (CS_IMPACT[CS_OPTS[iCS]] ?? 0) +
+    (AQ_IMPACT[AQ_OPTS[iAQ]] ?? 0) +
+    (COM_IMPACT[COM_OPTS[iCom]] ?? 0)
+  ) * 10) / 10);
+
+  const SimulatorSection = ({ id, title, emoji, totalImpact, children }: {
+    id: string; title: string; emoji: string; totalImpact: number; children: ReactNode;
+  }) => {
+    const isOpen = openSimulatorSection === id;
+    return (
+      <div className="rounded-xl border overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setOpenSimulatorSection(isOpen ? '' : id)}
+          className="w-full flex items-center justify-between px-4 py-3 bg-card hover:bg-muted/30 transition-colors"
+        >
+          <span className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <span>{emoji}</span>
+            <span>{title}</span>
+          </span>
+          <div className="flex items-center gap-2">
+            {totalImpact !== 0 && <ImpactBadge impact={totalImpact} />}
+            {isOpen ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+          </div>
+        </button>
+        {isOpen && children}
+      </div>
+    );
+  };
 
   const habitsActive = EPIGENETIC_HABITS.filter(h => (habitFreqs[h.id] ?? 'never') !== 'never').length;
   const habitsRegularPlus = EPIGENETIC_HABITS.filter(h => {
@@ -382,10 +437,11 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
       </Card>
 
       {/* ── 4 Panels ── */}
-      <div className="grid md:grid-cols-2 gap-6" onPointerDown={interact}>
+      <div className="space-y-3" onPointerDown={interact}>
 
         {/* Panel 1 — Lifestyle Habits */}
-        <Card>
+        <SimulatorSection id="lifestyle" title="Lifestyle Habits" emoji="🏃" totalImpact={lifestyleImpact}>
+        <Card className="rounded-t-none border-t-0">
           <CardHeader className="pb-3 pt-4 px-4">
             <CardTitle className="text-sm font-bold text-foreground">🏃 Lifestyle Habits</CardTitle>
           </CardHeader>
@@ -430,9 +486,11 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
             />
           </CardContent>
         </Card>
+        </SimulatorSection>
 
         {/* Panel 2 — Epigenetic Habits (frequency-based) */}
-        <Card>
+        <SimulatorSection id="habits" title="Habits You Could Adopt" emoji="🌿" totalImpact={habitBonusTotal}>
+        <Card className="rounded-t-none border-t-0">
           <CardHeader className="pb-3 pt-4 px-4">
             <CardTitle className="text-sm font-bold text-foreground">🌿 Habits You Could Adopt</CardTitle>
             <p className="text-xs text-muted-foreground mt-0.5 leading-snug">
@@ -550,9 +608,11 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
             </div>
           </CardContent>
         </Card>
+        </SimulatorSection>
 
         {/* Panel 3 — Health Metrics */}
-        <Card>
+        <SimulatorSection id="health" title="Health Metrics" emoji="❤️" totalImpact={healthImpact}>
+        <Card className="rounded-t-none border-t-0">
           <CardHeader className="pb-3 pt-4 px-4">
             <CardTitle className="text-sm font-bold text-foreground">❤️ Health Metrics</CardTitle>
           </CardHeader>
@@ -614,9 +674,11 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
             />
           </CardContent>
         </Card>
+        </SimulatorSection>
 
         {/* Panel 4 — Social & Preventive Factors */}
-        <Card>
+        <SimulatorSection id="social" title="Social & Preventive Factors" emoji="👥" totalImpact={socialImpact}>
+        <Card className="rounded-t-none border-t-0">
           <CardHeader className="pb-3 pt-4 px-4">
             <CardTitle className="text-sm font-bold text-foreground">👥 Social &amp; Preventive Factors</CardTitle>
           </CardHeader>
@@ -647,6 +709,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
             />
           </CardContent>
         </Card>
+        </SimulatorSection>
       </div>
 
       {/* ── 🌍 World Longevity Facts ── */}

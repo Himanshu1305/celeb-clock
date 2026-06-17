@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Mail, Send, MessageCircle } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
+import PageTagline from '@/components/PageTagline';
 
 export default function Contact() {
   const [name, setName] = useState('');
@@ -73,6 +74,7 @@ export default function Contact() {
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-2 text-foreground">
             Contact Us
           </h1>
+          <PageTagline />
           <p className="text-sm text-muted-foreground mb-3">Your Birthday Intelligence Platform</p>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             We'd love to hear from you

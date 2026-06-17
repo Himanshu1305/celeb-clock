@@ -4,6 +4,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import PageTagline from '@/components/PageTagline';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const TOC_ITEMS = [
@@ -103,6 +104,7 @@ export default function Methodology() {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
             How BornClock Works
           </h1>
+          <PageTagline />
           <p className="text-sm text-muted-foreground mb-1">Your Birthday Intelligence Platform</p>
           <p className="text-sm text-muted-foreground mb-8">Methodology &amp; Data Sources</p>
 

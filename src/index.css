@@ -288,4 +288,8 @@
   #longevity-blueprint-print * { filter: none !important; }
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   .no-print { display: none !important; }
+  .report-print-footer { display: block !important; position: fixed; bottom: 0; left: 0; right: 0; text-align: center; font-size: 11px; color: #9ca3af; padding: 8px; border-top: 1px solid #e5e7eb; }
+  .no-screen { display: block !important; }
 }
+
+.no-screen { display: none; }

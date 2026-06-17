@@ -3,6 +3,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { TodaysBirthdays } from '@/components/TodaysBirthdays';
 import { SEO } from '@/components/SEO';
+import PageTagline from '@/components/PageTagline';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -42,6 +43,7 @@ const TodaysBirthdaysPage = () => {
           <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
             Famous Birthdays Today — {formattedDate}
           </h1>
+          <PageTagline />
           <p className="text-lg text-muted-foreground">
             The best daily list of notable people born on {formattedDate} — celebrities, scientists, athletes and world leaders, refreshed live from Wikipedia.
           </p>
