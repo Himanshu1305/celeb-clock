@@ -339,24 +339,42 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
         ) : liveResult ? (
           <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-2">
             <div className="flex items-start justify-between gap-3 flex-wrap">
-              <div>
-                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Current Projected Age</p>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <strong className={`text-4xl font-black transition-colors duration-300 ${
-                    flashDir === 'up' ? 'text-green-600' : flashDir === 'down' ? 'text-red-500' : 'text-primary'
-                  }`}>
-                    {step === 6 && countUpAge !== null ? countUpAge : liveResult.totalForecast}
-                  </strong>
-                  <span className="text-lg font-bold text-primary">yrs</span>
-                  {deltaLabel && step > 6 && (
-                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full animate-fade-in-up ${
-                      deltaLabel.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'
+              <div className={step === 6 ? 'grid grid-cols-2 gap-4 w-full' : undefined}>
+                {/* Current age column — only at step 6 */}
+                {step === 6 && currentAge !== null && (
+                  <div>
+                    <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Your Age Now</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <strong className="text-4xl font-black text-blue-500">{currentAge}</strong>
+                      <span className="text-lg font-bold text-blue-400">yrs</span>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">Today</p>
+                  </div>
+                )}
+                {/* Projected age */}
+                <div>
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">
+                    {step === 6 ? 'Projected Age' : 'Current Projected Age'}
+                  </p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <strong className={`text-4xl font-black transition-colors duration-300 ${
+                      flashDir === 'up' ? 'text-green-600' : flashDir === 'down' ? 'text-red-500' : 'text-primary'
                     }`}>
-                      {deltaLabel}
-                    </span>
-                  )}
+                      {step === 6 && countUpAge !== null ? countUpAge : liveResult.totalForecast}
+                    </strong>
+                    <span className="text-lg font-bold text-primary">yrs</span>
+                    {deltaLabel && step > 6 && (
+                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full animate-fade-in-up ${
+                        deltaLabel.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'
+                      }`}>
+                        {deltaLabel}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">
+                    {step === 6 ? 'Based on your answers so far' : 'Updates in real time as you answer each step'}
+                  </p>
                 </div>
-                <p className="text-[10px] text-muted-foreground mt-0.5">Updates in real time as you answer each step</p>
               </div>
 
               {/* Progress bar */}
@@ -367,6 +385,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                 const rangeEnd = maxPot + 5;
                 const range = rangeEnd - rangeStart;
                 const projPct = Math.round(((forecast - rangeStart) / range) * 100);
+                const nowPct = Math.round(((currentAge - rangeStart) / range) * 100);
                 return (
                   <div className="flex-1 min-w-[160px] space-y-1 pt-1">
                     <div className="relative h-3 rounded-full bg-muted overflow-hidden">
@@ -374,6 +393,15 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                         className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary/40 to-primary rounded-full transition-all duration-500"
                         style={{ width: `${Math.min(100, Math.max(0, projPct))}%` }}
                       />
+                    </div>
+                    {/* Age now marker */}
+                    <div className="relative h-4">
+                      <div
+                        className="absolute top-0 flex flex-col items-center"
+                        style={{ left: `${Math.min(95, Math.max(0, nowPct))}%`, transform: 'translateX(-50%)' }}
+                      >
+                        <span className="text-[9px] text-blue-500 font-semibold whitespace-nowrap">↑ Your age now</span>
+                      </div>
                     </div>
                     <div className="flex justify-between text-[9px] text-muted-foreground">
                       <span className="font-medium">Age {currentAge}</span>

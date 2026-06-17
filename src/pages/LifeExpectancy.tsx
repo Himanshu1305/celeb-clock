@@ -121,7 +121,7 @@ const LifeExpectancy = () => {
   };
 
   const handleQuizComplete = (data: { quiz: HealthQuizData; pillar1: Pillar1Data; pillar2: Pillar2Data }) => {
-    const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate);
+    const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate, data.pillar2.mentorHabits);
     setLongevityResult(result);
     setCurrentSimForecast(result.totalForecast);
     try {
@@ -143,7 +143,7 @@ const LifeExpectancy = () => {
   };
 
   const handleQuizCompleteAndSkip = (data: { quiz: HealthQuizData; pillar1: Pillar1Data; pillar2: Pillar2Data }) => {
-    const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate);
+    const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate, data.pillar2.mentorHabits);
     setLongevityResult(result);
     const simAge = result.totalForecast;
     setOptimizedForecast(simAge);
@@ -279,7 +279,7 @@ const LifeExpectancy = () => {
                 </p>
                 {longevityResult.isConditionalBaseline && (
                   <p className="text-xs text-muted-foreground">
-                    ℹ️ Age-adjusted baseline — your survival to age {longevityResult.currentAge} is factored into this forecast
+                    ℹ️ Age-adjusted baseline — your survival to age {longevityResult.totalForecast} is factored into this forecast
                   </p>
                 )}
                 <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
