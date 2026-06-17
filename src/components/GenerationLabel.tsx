@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Share2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { getGenerationBasic } from '@/services/GenerationService';
 
 interface GenerationInfo {
   name: string;
@@ -12,18 +13,21 @@ interface GenerationInfo {
   color: string;
 }
 
-const generations: { min: number; max: number; info: GenerationInfo }[] = [
-  { min: 2013, max: 2099, info: { name: 'Gen Alpha', range: '2013–present', emoji: '🤖', traits: ['Digital natives', 'Tech-fluent', 'Socially aware', 'AI-era kids'], color: 'from-violet-500/20 to-fuchsia-500/20' } },
-  { min: 1997, max: 2012, info: { name: 'Gen Z', range: '1997–2012', emoji: '⚡', traits: ['Entrepreneurial', 'Diverse', 'Digitally savvy', 'Socially conscious'], color: 'from-blue-500/20 to-cyan-500/20' } },
-  { min: 1981, max: 1996, info: { name: 'Millennial', range: '1981–1996', emoji: '🌐', traits: ['Adaptable', 'Purpose-driven', 'Tech-comfortable', 'Experience-seeking'], color: 'from-emerald-500/20 to-teal-500/20' } },
-  { min: 1965, max: 1980, info: { name: 'Gen X', range: '1965–1980', emoji: '🎸', traits: ['Independent', 'Resourceful', 'Work-life balanced', 'Self-reliant'], color: 'from-amber-500/20 to-orange-500/20' } },
-  { min: 1946, max: 1964, info: { name: 'Baby Boomer', range: '1946–1964', emoji: '✌️', traits: ['Optimistic', 'Competitive', 'Team-oriented', 'Goal-driven'], color: 'from-red-500/20 to-rose-500/20' } },
-  { min: 1928, max: 1945, info: { name: 'Silent Generation', range: '1928–1945', emoji: '📻', traits: ['Disciplined', 'Loyal', 'Traditional', 'Hardworking'], color: 'from-slate-500/20 to-gray-500/20' } },
-];
+const GENERATION_EXTRAS: Record<string, { traits: string[]; color: string }> = {
+  'Gen Alpha':        { traits: ['Digital natives', 'Tech-fluent', 'Socially aware', 'AI-era kids'],            color: 'from-violet-500/20 to-fuchsia-500/20' },
+  'Gen Z':            { traits: ['Entrepreneurial', 'Diverse', 'Digitally savvy', 'Socially conscious'],         color: 'from-blue-500/20 to-cyan-500/20' },
+  'Millennial':       { traits: ['Adaptable', 'Purpose-driven', 'Tech-comfortable', 'Experience-seeking'],       color: 'from-emerald-500/20 to-teal-500/20' },
+  'Gen X':            { traits: ['Independent', 'Resourceful', 'Work-life balanced', 'Self-reliant'],            color: 'from-amber-500/20 to-orange-500/20' },
+  'Baby Boomer':      { traits: ['Optimistic', 'Competitive', 'Team-oriented', 'Goal-driven'],                   color: 'from-red-500/20 to-rose-500/20' },
+  'Silent Generation':{ traits: ['Disciplined', 'Loyal', 'Traditional', 'Hardworking'],                          color: 'from-slate-500/20 to-gray-500/20' },
+};
 
 function getGeneration(year: number): GenerationInfo | null {
-  const match = generations.find(g => year >= g.min && year <= g.max);
-  return match?.info ?? null;
+  const basic = getGenerationBasic(year);
+  if (!basic) return null;
+  const extras = GENERATION_EXTRAS[basic.name];
+  if (!extras) return null;
+  return { ...basic, ...extras };
 }
 
 interface GenerationLabelProps {

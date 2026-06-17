@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { getGenerationBasic } from '@/services/GenerationService';
 import { Link } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
@@ -64,14 +65,7 @@ const calculateAge = (birthDate: Date) => {
   };
 };
 
-const getGeneration = (year: number) => {
-  if (year >= 2013) return { name: 'Gen Alpha', emoji: '👶', range: '2013–present' };
-  if (year >= 1997) return { name: 'Gen Z', emoji: '📱', range: '1997–2012' };
-  if (year >= 1981) return { name: 'Millennial', emoji: '🎮', range: '1981–1996' };
-  if (year >= 1965) return { name: 'Gen X', emoji: '📻', range: '1965–1980' };
-  if (year >= 1946) return { name: 'Baby Boomer', emoji: '📺', range: '1946–1964' };
-  return { name: 'Silent Generation', emoji: '📰', range: '1928–1945' };
-};
+const getGeneration = (year: number) => getGenerationBasic(year) ?? { name: 'Silent Generation', emoji: '📻', range: '1928–1945' };
 
 const getZodiacSign = (month: number, day: number) => {
   const signs = [

@@ -5,6 +5,7 @@ import { getVedicRashi, compareZodiacs } from '@/services/VedicZodiacService';
 import { getZodiacByDate } from '@/data/zodiacData';
 import { getBirthstoneByMonth } from '@/data/birthstoneData';
 import { getNumerologyByNumber } from '@/data/numerologyData';
+import { getGenerationBasic } from '@/services/GenerationService';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -154,13 +155,18 @@ function getPersonalYear2026(dob: Date): number {
   return sum;
 }
 
-function getGeneration(year: number): { name: string; range: string; desc: string } {
-  if (year >= 2012) return { name: 'Generation Alpha', range: '2012–present', desc: 'Digital natives born into a world of AI and smartphones — they will likely live to see the 22nd century.' };
-  if (year >= 1997) return { name: 'Generation Z', range: '1997–2011', desc: 'The first true digital generation — pragmatic, inclusive, entrepreneurial, and fluent in social media from birth.' };
-  if (year >= 1981) return { name: 'Millennial', range: '1981–1996', desc: 'Shaped by the internet revolution, the 2008 financial crisis, and a reinvention of work, relationships, and values.' };
-  if (year >= 1965) return { name: 'Generation X', range: '1965–1980', desc: 'Independent, self-reliant, and the first latchkey generation — raised to figure things out for themselves.' };
-  if (year >= 1946) return { name: 'Baby Boomer', range: '1946–1964', desc: 'Grew up in post-war prosperity and redefined culture, commerce, and the meaning of adulthood.' };
-  return { name: 'Silent Generation', range: 'Before 1946', desc: 'Shaped by the Great Depression and World War II — disciplined, resilient, and defined by duty over self.' };
+const GENERATION_DESCS: Record<string, string> = {
+  'Gen Alpha':        'Digital natives born into a world of AI and smartphones — they will likely live to see the 22nd century.',
+  'Gen Z':            'The first true digital generation — pragmatic, inclusive, entrepreneurial, and fluent in social media from birth.',
+  'Millennial':       'Shaped by the internet revolution, the 2008 financial crisis, and a reinvention of work, relationships, and values.',
+  'Gen X':            'Independent, self-reliant, and the first latchkey generation — raised to figure things out for themselves.',
+  'Baby Boomer':      'Grew up in post-war prosperity and redefined culture, commerce, and the meaning of adulthood.',
+  'Silent Generation':'Shaped by the Great Depression and World War II — disciplined, resilient, and defined by duty over self.',
+};
+
+function getGeneration(year: number): { name: string; range: string; emoji: string; desc: string } {
+  const g = getGenerationBasic(year) ?? { name: 'Silent Generation', range: '1928–1945', emoji: '📻' };
+  return { ...g, desc: GENERATION_DESCS[g.name] ?? '' };
 }
 
 function getHistoricalEvents(dob: Date): Array<{ year: number; event: string }> {
