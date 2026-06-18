@@ -64,6 +64,7 @@ import MoonSignPage from '@/pages/MoonSignPage';
 import NameNumerologyPage from '@/pages/NameNumerologyPage';
 import BiorhythmPage from '@/pages/BiorhythmPage';
 import CompatibilityPage from '@/pages/CompatibilityPage';
+import RashiRatnaPage from '@/pages/RashiRatnaPage';
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
@@ -142,6 +143,7 @@ const App = () => (
               <Route path="/biorhythm" element={<BiorhythmPage />} />
               <Route path="/compatibility" element={<CompatibilityPage />} />
               <Route path="/compatibility/:sign1/:sign2" element={<CompatibilityPage />} />
+              <Route path="/rashi-ratna" element={<RashiRatnaPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

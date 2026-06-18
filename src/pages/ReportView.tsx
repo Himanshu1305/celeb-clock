@@ -350,13 +350,17 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       <div className="bg-gradient-to-br from-rose-100 via-amber-50 to-purple-100 py-16 px-4 text-center">
         <div className="max-w-3xl mx-auto">
-          <div className="flex flex-col items-center mb-4">
+          <div className="flex flex-col items-center mb-8 text-center">
             <img
               src="/bornclock-logo.png"
               alt="BornClock"
-              className="h-12 w-auto opacity-90 mb-1"
+              className="h-12 w-auto mb-2"
+              style={{ height: '48px', width: 'auto' }}
             />
-            <p className="text-xs text-gray-400">Your Birthday Intelligence Platform</p>
+            <p className="text-sm text-indigo-500 italic font-medium">
+              Know your time. Live it well.
+            </p>
+            <p className="text-xs text-gray-400 mt-1">bornclock.com</p>
           </div>
           <div className="text-6xl mb-4">🎂</div>
           <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-3 leading-tight">

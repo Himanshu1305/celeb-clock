@@ -233,8 +233,16 @@ export const PlanetaryAgeCard = forwardRef<HTMLDivElement, PlanetaryAgeCardProps
           <div style={{ fontSize: '14px', color: '#475569' }}>
             NASA JPL data · Kepler's Third Law (1619)
           </div>
-          <div style={{ fontSize: '18px', fontWeight: '600', color: 'white' }}>
-            🎂 bornclock.com
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '18px', fontWeight: '700', color: 'white' }}>
+              BornClock
+            </div>
+            <div style={{ fontSize: '13px', fontStyle: 'italic', color: 'rgba(255,255,255,0.5)' }}>
+              Know your time. Live it well.
+            </div>
+            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>
+              bornclock.com/planetary-age
+            </div>
           </div>
         </div>
       </div>

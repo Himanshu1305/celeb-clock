@@ -4,6 +4,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import PageTagline from '@/components/PageTagline';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -64,10 +65,11 @@ export default function BirthdayHub() {
 
         {/* Hero */}
         <div className="mb-10 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
             Celebrity Birthdays — Every Day of the Year
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <PageTagline />
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mt-3">
             Browse famous birthdays for any date. Select a month and day to see who shares it with you.
           </p>
         </div>

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { AuthNav } from '@/components/AuthNav';
@@ -5,6 +6,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
+import { RASHI_RATNA_DATA, NAVRATNA_INFO } from '@/data/rashiRatnaData';
 
 const FAQ_ITEMS = [
   { q: 'What is a birthstone?', a: 'A birthstone is a gemstone traditionally associated with the month of one\'s birth. The modern birthstone list was standardized by the American National Association of Jewelers in 1912 and updated by the American Gem Trade Association in 2002 and 2016 to add tanzanite (December), spinel (August), and blue zircon (December).' },
@@ -18,6 +20,7 @@ const FAQ_ITEMS = [
 ];
 
 export default function Birthstone() {
+  const [activeTab, setActiveTab] = useState<'western' | 'indian'>('western');
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -61,14 +64,90 @@ export default function Birthstone() {
         </header>
 
         {/* Hero */}
-        <div className="mb-12">
+        <div className="mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Birthstone by Month — History, Meaning & Geology
+            Birthstone Guide — Western & Indian Traditions
           </h1>
-          <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
-            Each of the twelve calendar months has a gemstone associated with it — a tradition with roots in ancient religious texts, royal courts, and centuries of human devotion to the mineral world. This is the complete guide: not just the names, but the stories.
+          <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mb-6">
+            Two great traditions. Western birthstones are assigned by birth month; Indian Rashi Ratna are assigned by Vedic zodiac sign and ruling planet. This guide covers both.
           </p>
+
+          {/* Tab toggle */}
+          <div className="flex gap-1 bg-gray-100 rounded-xl p-1 max-w-sm">
+            <button
+              onClick={() => setActiveTab('western')}
+              className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all ${
+                activeTab === 'western'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              💎 Western Birthstone
+            </button>
+            <button
+              onClick={() => setActiveTab('indian')}
+              className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all ${
+                activeTab === 'indian'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              🪬 Indian Rashi Ratna
+            </button>
+          </div>
         </div>
+
+        {/* Indian Rashi Ratna tab */}
+        {activeTab === 'indian' && (
+          <div className="mb-12">
+            <div className="bg-orange-50 border-l-4 border-orange-500 rounded-r-xl p-5 mb-8">
+              <p className="text-base font-semibold text-orange-900 leading-relaxed">
+                In the Indian Vedic tradition, your birthstone is determined by your Rashi (zodiac sign) and its ruling planet — not by birth month. These Rashi Ratna gemstones have been used for 2,000+ years to strengthen planetary energies and bring prosperity, health, and clarity.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
+              {RASHI_RATNA_DATA.map(rr => (
+                <Link key={rr.rashi} to="/rashi-ratna"
+                  className="border border-gray-200 rounded-2xl p-4 hover:border-orange-300 hover:bg-orange-50/50 transition-all">
+                  <div className="text-2xl mb-1">{rr.symbol}</div>
+                  <div className="font-bold text-gray-900 text-sm">{rr.rashi} ({rr.rashiEnglish})</div>
+                  <div className="flex items-center gap-1.5 mt-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: rr.hex }} />
+                    <div className="text-xs font-medium text-gray-700">{rr.primaryStone}</div>
+                  </div>
+                  <div className="text-xs text-gray-400 mt-0.5">({rr.primaryStoneHindi})</div>
+                  <div className="text-xs text-gray-500 mt-1">{rr.rulingPlanet}</div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-8">
+              <h3 className="text-lg font-bold text-amber-900 mb-2">{NAVRATNA_INFO.title}</h3>
+              <p className="text-sm text-amber-800 leading-relaxed mb-4">{NAVRATNA_INFO.description}</p>
+              <div className="grid sm:grid-cols-2 gap-2">
+                {NAVRATNA_INFO.gems.map(({ gem, planet, rashi }) => (
+                  <div key={gem} className="flex items-center gap-2 text-sm">
+                    <span className="text-amber-500">•</span>
+                    <span className="font-medium text-amber-900">{gem}</span>
+                    <span className="text-amber-600">— {planet}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="text-center">
+              <Link to="/rashi-ratna"
+                className="inline-block bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-orange-700 transition-colors">
+                Explore Full Rashi Ratna Guide →
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* Western Birthstone tab */}
+        {activeTab === 'western' && (
+          <>
 
         {/* History Section */}
         <section className="mb-12">
@@ -215,6 +294,8 @@ export default function Birthstone() {
         <div className="p-4 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl text-sm text-blue-700 dark:text-blue-300">
           <strong>About This Content:</strong> Gemological data sourced from GIA (gia.edu) and Mindat.org mineralogy database. Historical and cultural content draws on Kunz, G.F. (1913), <em>The Curious Lore of Precious Stones</em>. Birthstone list: American Gem Society / Jewelers of America (modern list, updated 2016). Attributed properties are traditional and cultural, not medical claims.
         </div>
+        </>
+        )}
       </div>
 
       <Footer />
