@@ -349,9 +349,10 @@ describe('Group 6 — Epigenetic Habits', () => {
     expect(r.epigeneticAdjustment).toBeLessThanOrEqual(6);
   });
 
-  it('0 habits → epigeneticAdjustment = 0', () => {
+  it('0 explicit habits → epigeneticAdjustment derived from quiz (0.9 for makeQuiz defaults)', () => {
     const r = calculateLongevity(makeQuiz(), DEFAULT_PILLAR1, DEFAULT_PILLAR2, undefined, []);
-    expect(r.epigeneticAdjustment).toBe(0);
+    // Auto-derived: exercise:moderate(+0.4) + sleep:7to9(+0.3) + smoking:never(+0.2) = 0.9
+    expect(r.epigeneticAdjustment).toBe(0.9);
   });
 
   it('only walking → epigeneticAdjustment = 1.5', () => {
@@ -767,9 +768,10 @@ describe('Test Group D — Epigenetic habits cap', () => {
     expect(r.epigeneticAdjustment).toBe(6);
   });
 
-  it('D2: Zero habits → epigeneticAdjustment = 0', () => {
+  it('D2: Zero habits → epigeneticAdjustment derived from quiz (moderate exercise + good sleep + non-smoker = 0.9)', () => {
     const r = calculateLongevity(makeQuiz(), DEFAULT_PILLAR1, DEFAULT_PILLAR2, undefined, []);
-    expect(r.epigeneticAdjustment).toBe(0);
+    // makeQuiz: exercise:moderate(+0.4), sleep:7to9(+0.3), smoking:never(+0.2) = 0.9 derived
+    expect(r.epigeneticAdjustment).toBe(0.9);
   });
 
   it('D3: Only walking → epigeneticAdjustment = 1.5', () => {
@@ -991,18 +993,20 @@ describe('NEG — Negative scenario tests', () => {
     expect(Math.round((drinkLight.totalForecast - drinkNone.totalForecast) * 10) / 10).toBe(1.0);
   });
 
-  it('NEG9: exercise heavy (+5) vs seldom (-2) → exactly 7.0 year difference in totalForecast', () => {
+  it('NEG9: exercise heavy vs seldom → 7.7 year difference (7.0 health + 0.7 epigenetic derived diff)', () => {
     const heavy = calculateLongevity(makeQuiz({ exercise: 'heavy' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
     const seldom = calculateLongevity(makeQuiz({ exercise: 'seldom' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(Math.round((heavy.totalForecast - seldom.totalForecast) * 10) / 10).toBe(7.0);
+    // Health diff: heavy(+5) - seldom(-2) = 7.0; epigenetic derived diff: heavy(0.7) - seldom(0.0) = 0.7; total = 7.7
+    expect(Math.round((heavy.totalForecast - seldom.totalForecast) * 10) / 10).toBe(7.7);
   });
 
-  it('NEG10: recalcWithOverrides epigeneticBonusOverride=6 adds +6 to forecast when base has 0 habits', () => {
+  it('NEG10: recalcWithOverrides epigeneticBonusOverride=6 sets total epigenetic to 6 from derived base of 0.9', () => {
     const base = calculateLongevity(makeQuiz(), DEFAULT_PILLAR1, DEFAULT_PILLAR2, undefined, []);
-    expect(base.epigeneticAdjustment).toBe(0);
+    // Auto-derived from makeQuiz defaults: 0.9
+    expect(base.epigeneticAdjustment).toBe(0.9);
     const result = recalcWithOverrides(base, { epigeneticBonusOverride: 6 });
-    // epigenDiff=6-0=6; simForecast=base.totalForecast+6 (no extra overrides; hard min doesn't bite)
-    expect(result).toBe(Math.round((base.totalForecast + 6) * 10) / 10);
+    // epigenDiff = 6 - 0.9 = 5.1; simForecast = base.totalForecast + 5.1
+    expect(result).toBe(Math.round((base.totalForecast + 5.1) * 10) / 10);
   });
 });
 
