@@ -595,6 +595,200 @@ export const EnhancedLifeExpectancyReport = ({
           <HealthGuideSection result={result} />
         </TabsContent>
       </Tabs>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          PRINT-ONLY: 7-Section Longevity Blueprint (hidden on screen)
+          Shown via @media print in index.css
+      ═══════════════════════════════════════════════════════════════════════ */}
+      <div className="hidden print:block space-y-6 mt-8 font-sans text-gray-900">
+
+        {/* Section 1 — Cover */}
+        <div className="text-center border-b-4 border-indigo-600 pb-6">
+          <p className="text-xs uppercase tracking-widest text-indigo-500 font-bold mb-2">BornClock · Longevity Science Platform</p>
+          <h1 className="text-4xl font-black text-gray-900 leading-tight">Longevity Blueprint</h1>
+          <p className="text-2xl font-semibold text-indigo-700 mt-1">{displayName}</p>
+          <div className="flex justify-center gap-8 mt-4 text-sm text-gray-500">
+            <span>Generated: {new Date().toLocaleDateString()}</span>
+            <span>Forecast: {result.totalForecast} years</span>
+            <span>Age: {currentAge} years old</span>
+          </div>
+          <p className="text-xs text-gray-400 mt-2 italic">
+            For informational purposes only. This is not medical advice. Consult a qualified healthcare professional.
+          </p>
+        </div>
+
+        {/* Section 2 — Forecast Summary */}
+        <div className="border border-gray-200 rounded-lg p-5">
+          <h2 className="text-base font-bold text-indigo-700 mb-3 flex items-center gap-2">
+            <span className="bg-indigo-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-black">1</span>
+            Forecast Summary
+          </h2>
+          <div className="grid grid-cols-4 gap-3 text-center">
+            <div className="bg-gray-50 rounded-lg p-3">
+              <p className="text-[10px] text-gray-500 uppercase font-bold">Current Forecast</p>
+              <p className="text-2xl font-black text-gray-900">{result.totalForecast}</p>
+              <p className="text-[10px] text-gray-400">years</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-3">
+              <p className="text-[10px] text-gray-500 uppercase font-bold">Current Age</p>
+              <p className="text-2xl font-black text-gray-900">{currentAge}</p>
+              <p className="text-[10px] text-gray-400">years old</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-3">
+              <p className="text-[10px] text-gray-500 uppercase font-bold">Years Remaining</p>
+              <p className="text-2xl font-black text-gray-900">{result.yearsRemaining}</p>
+              <p className="text-[10px] text-gray-400">projected</p>
+            </div>
+            <div className="bg-indigo-50 rounded-lg p-3">
+              <p className="text-[10px] text-indigo-600 uppercase font-bold">Optimized Potential</p>
+              <p className="text-2xl font-black text-indigo-700">{result.controllablePotential}</p>
+              <p className="text-[10px] text-indigo-400">years (max)</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3 — How We Built Your Number */}
+        <div className="border border-gray-200 rounded-lg p-5">
+          <h2 className="text-base font-bold text-indigo-700 mb-3 flex items-center gap-2">
+            <span className="bg-indigo-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-black">2</span>
+            How We Built Your Number
+          </h2>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="text-left py-1 text-gray-500 font-normal text-xs">Factor</th>
+                <th className="text-right py-1 text-gray-500 font-normal text-xs">Adjustment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-gray-100">
+                <td className="py-1.5 text-gray-700">WHO Baseline ({result.quizSnapshot.gender || 'male'}, {result.quizSnapshot.country || 'Global'})</td>
+                <td className="text-right font-bold text-gray-900">{result.baselineLifeExpectancy} yrs</td>
+              </tr>
+              <tr className="border-b border-gray-100">
+                <td className="py-1.5 text-gray-700">Health &amp; Lifestyle Adjustment</td>
+                <td className={`text-right font-bold ${result.healthAdjustment >= 0 ? 'text-green-700' : 'text-red-600'}`}>
+                  {result.healthAdjustment >= 0 ? '+' : ''}{result.healthAdjustment} yrs
+                </td>
+              </tr>
+              <tr className="border-b border-gray-100">
+                <td className="py-1.5 text-gray-700">Genetic Adjustment <span className="text-gray-400 text-xs">({result.geneticVitalityScore})</span></td>
+                <td className={`text-right font-bold ${result.geneticAdjustment >= 0 ? 'text-green-700' : 'text-red-600'}`}>
+                  {result.geneticAdjustment >= 0 ? '+' : ''}{result.geneticAdjustment} yrs
+                </td>
+              </tr>
+              <tr className="border-b border-gray-100">
+                <td className="py-1.5 text-gray-700">Epigenetic Habits Bonus</td>
+                <td className="text-right font-bold text-green-700">+{epigeneticBonus} yrs</td>
+              </tr>
+              {result.communityBonus > 0 && (
+                <tr className="border-b border-gray-100">
+                  <td className="py-1.5 text-gray-700">Community / Mentor Bonus</td>
+                  <td className="text-right font-bold text-green-700">+{result.communityBonus} yrs</td>
+                </tr>
+              )}
+              <tr className="bg-indigo-50">
+                <td className="py-2 font-bold text-gray-900 pl-2 rounded-l">Total Forecast</td>
+                <td className="text-right font-black text-indigo-700 text-lg pr-2 rounded-r">{result.totalForecast} yrs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Section 4 — Top 3 Improvement Opportunities */}
+        <div className="border border-gray-200 rounded-lg p-5">
+          <h2 className="text-base font-bold text-indigo-700 mb-3 flex items-center gap-2">
+            <span className="bg-indigo-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-black">3</span>
+            Top 3 Improvement Opportunities
+          </h2>
+          <div className="space-y-3">
+            {result.factorBreakdown
+              .filter(f => f.potentialGain > 0)
+              .sort((a, b) => b.potentialGain - a.potentialGain)
+              .slice(0, 3)
+              .map((factor, i) => (
+                <div key={factor.factor} className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-lg p-3">
+                  <span className="text-lg">{factor.emoji}</span>
+                  <div className="flex-1">
+                    <p className="text-sm font-bold text-gray-900">{factor.factor}</p>
+                    <p className="text-xs text-gray-600 mt-0.5">Currently: {factor.currentValue} · Target: {factor.targetValue}</p>
+                    <p className="text-[10px] text-gray-500 mt-0.5 italic">{factor.source}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-sm font-black text-amber-700">+{factor.potentialGain} yrs</p>
+                    <p className="text-[10px] text-amber-500">potential gain</p>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+
+        {/* Section 5 — 90-Day Action Plan */}
+        <div className="border border-gray-200 rounded-lg p-5">
+          <h2 className="text-base font-bold text-indigo-700 mb-3 flex items-center gap-2">
+            <span className="bg-indigo-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-black">4</span>
+            90-Day Action Plan
+          </h2>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <p className="text-xs font-bold text-green-800 mb-2">Month 1 — Foundation</p>
+              <ul className="text-xs text-green-700 space-y-1">
+                <li>• Walk 30 min daily (builds habit base)</li>
+                <li>• Add 1 serving of vegetables per meal</li>
+                <li>• Set a consistent sleep schedule</li>
+                <li>• Identify one close social connection to nurture</li>
+              </ul>
+            </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <p className="text-xs font-bold text-blue-800 mb-2">Month 2 — Momentum</p>
+              <ul className="text-xs text-blue-700 space-y-1">
+                <li>• Extend walks to 45 min, add strength training</li>
+                <li>• Try 16:8 intermittent fasting 3× per week</li>
+                <li>• Practice 10 min daily meditation</li>
+                <li>• Schedule weekly social activity</li>
+              </ul>
+            </div>
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+              <p className="text-xs font-bold text-purple-800 mb-2">Month 3 — Mastery</p>
+              <ul className="text-xs text-purple-700 space-y-1">
+                <li>• Join a community group or class</li>
+                <li>• Adopt a purpose practice (volunteering, mentoring)</li>
+                <li>• Review and adjust all habits</li>
+                <li>• Retake BornClock quiz to measure progress</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 6 — Scientific Context */}
+        <div className="border border-gray-200 rounded-lg p-5">
+          <h2 className="text-base font-bold text-indigo-700 mb-3 flex items-center gap-2">
+            <span className="bg-indigo-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-black">5</span>
+            Scientific Context
+          </h2>
+          <div className="space-y-2 text-xs text-gray-600">
+            <p><strong className="text-gray-800">WHO Life Tables (2023):</strong> Country- and gender-specific baselines from World Health Organization Global Health Observatory data.</p>
+            <p><strong className="text-gray-800">Physical Activity (WHO, 2022):</strong> 150–300 min/week of moderate exercise reduces all-cause mortality by 31%. Each additional 15 min/day adds 3 years of life expectancy.</p>
+            <p><strong className="text-gray-800">Harvard Study of Adult Development (85 yrs):</strong> Quality social relationships are the strongest single predictor of healthy aging — stronger than cholesterol, income, or IQ.</p>
+            <p><strong className="text-gray-800">Blue Zones Research (Buettner, 2008–2023):</strong> The Power 9 lifestyle principles shared by centenarian populations globally, associated with 10+ additional healthy years versus average.</p>
+            <p><strong className="text-gray-800">Epigenetic Research (NIH, Horvath 2013):</strong> Lifestyle behaviors directly alter DNA methylation patterns. Diet, exercise, and stress management can reverse epigenetic aging by 3–5 years.</p>
+            <p><strong className="text-gray-800">Genetic Heritability (Karolinska Institute, 2018):</strong> Family history contributes approximately 25–30% of longevity variance. Environmental and lifestyle factors account for the remaining 70–75%.</p>
+          </div>
+        </div>
+
+        {/* Section 7 — Footer */}
+        <div className="border-t-2 border-gray-200 pt-4 text-center">
+          <p className="text-sm font-bold text-indigo-700">BornClock · Longevity Science Platform</p>
+          <p className="text-xs text-gray-500 mt-1">bornclock.com · Evidence-based longevity analysis powered by WHO, NIH, Harvard Medical School data</p>
+          <p className="text-[10px] text-gray-400 mt-2 italic max-w-2xl mx-auto">
+            This report is generated for informational and motivational purposes only. It is not a medical diagnosis, prognosis, or substitute for professional medical advice.
+            Life expectancy projections are statistical estimates based on population data and individual inputs — actual outcomes vary significantly based on genetics, environment, and unforeseen health events.
+            Always consult a qualified healthcare professional for medical advice.
+          </p>
+          <p className="text-[10px] text-gray-300 mt-2">© {new Date().getFullYear()} BornClock · Generated {new Date().toLocaleString()}</p>
+        </div>
+
+      </div>
     </div>
   );
 };
