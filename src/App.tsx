@@ -59,6 +59,11 @@ import HowToLiveLonger from '@/pages/answers/HowToLiveLonger';
 import WhatIsBMI from '@/pages/answers/WhatIsBMI';
 import WhatIsLifeExpectancy from '@/pages/answers/WhatIsLifeExpectancy';
 import HowDoesStressAffectLifeExpectancy from '@/pages/answers/HowDoesStressAffectLifeExpectancy';
+import TarotByBirthday from '@/pages/TarotByBirthday';
+import MoonSignPage from '@/pages/MoonSignPage';
+import NameNumerologyPage from '@/pages/NameNumerologyPage';
+import BiorhythmPage from '@/pages/BiorhythmPage';
+import CompatibilityPage from '@/pages/CompatibilityPage';
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
@@ -131,6 +136,12 @@ const App = () => (
               <Route path="/answers/what-is-bmi" element={<WhatIsBMI />} />
               <Route path="/answers/what-is-life-expectancy" element={<WhatIsLifeExpectancy />} />
               <Route path="/answers/how-does-stress-affect-life-expectancy" element={<HowDoesStressAffectLifeExpectancy />} />
+              <Route path="/tarot-card-by-birthday" element={<TarotByBirthday />} />
+              <Route path="/moon-sign" element={<MoonSignPage />} />
+              <Route path="/name-numerology" element={<NameNumerologyPage />} />
+              <Route path="/biorhythm" element={<BiorhythmPage />} />
+              <Route path="/compatibility" element={<CompatibilityPage />} />
+              <Route path="/compatibility/:sign1/:sign2" element={<CompatibilityPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

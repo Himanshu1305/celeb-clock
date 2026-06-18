@@ -25,12 +25,17 @@ const navItems = [
   { path: '/blog', label: 'Blog', icon: BookOpen },
   { path: '/biological-age', label: 'Biological Age', icon: Activity },
   { path: '/country-comparison', label: 'Country Comparison', icon: Map },
+  { path: '/name-numerology', label: 'Name Numerology', icon: Hash },
+  { path: '/biorhythm', label: 'Biorhythm Calculator', icon: Activity },
 ];
 
 const astrologyItems = [
   { path: '/zodiac', label: 'Western Zodiac', emoji: '♈' },
   { path: '/chinese-zodiac', label: 'Chinese Zodiac', emoji: '🐉' },
   { path: '/vedic-zodiac', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
+  { path: '/moon-sign', label: 'Moon Sign Calculator', emoji: '🌙' },
+  { path: '/tarot-card-by-birthday', label: 'Tarot by Birthday', emoji: '🃏' },
+  { path: '/compatibility', label: 'Compatibility Calculator', emoji: '💕' },
 ];
 
 export const Navigation = () => {

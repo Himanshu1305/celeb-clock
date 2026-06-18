@@ -7,6 +7,11 @@ import { Footer } from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getReport } from '@/services/BirthdayReportService';
 import type { BirthdayReportData } from '@/services/BirthdayReportService';
+import { getTarotCardByLifePath } from '@/data/tarotData';
+import { calculateMoonSignAndNakshatra } from '@/data/moonSignData';
+import { calculateAllNameNumbers, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
+import { calculateBiorhythm, getBiorhythmStatus } from '@/data/biorhythmData';
+import { getTopCompatibleSigns } from '@/data/compatibilityData';
 
 // ── Helper ─────────────────────────────────────────────────────────────────────
 
@@ -927,6 +932,192 @@ const ReportView = () => {
           </div>
         </div>
       </div>
+
+      {/* ── Tarot Card ────────────────────────────────────────────────────── */}
+      {(() => {
+        const lp = Number(lifePathNumber || 1);
+        const card = getTarotCardByLifePath(lp);
+        return (
+          <div className="py-12 px-4 bg-gradient-to-br from-indigo-950 to-purple-950">
+            <div className="max-w-2xl mx-auto">
+              <div className="text-center mb-6">
+                <div className="text-5xl mb-2">{card.emoji}</div>
+                <div className="text-xs text-indigo-400 uppercase tracking-widest mb-1">Your Birthday Tarot Card</div>
+                <h3 className="text-2xl font-black text-white mb-1">{card.name}</h3>
+                <p className="text-xs text-indigo-300">Life Path {lp} · Card {card.number}</p>
+              </div>
+              <div className="flex flex-wrap justify-center gap-2 mb-5">
+                {card.keywords.slice(0, 4).map((kw: string) => (
+                  <span key={kw} className="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full">{kw}</span>
+                ))}
+              </div>
+              <p className="text-indigo-100 text-sm leading-relaxed text-center mb-4">{card.upright.slice(0, 200)}...</p>
+              <div className="bg-white/10 rounded-2xl p-4 text-center mb-4">
+                <p className="text-xs font-semibold text-indigo-300 mb-1">Your Affirmation</p>
+                <p className="text-white italic text-sm">"{card.affirmation}"</p>
+              </div>
+              <div className="text-center">
+                <Link to="/tarot-card-by-birthday" className="text-xs text-indigo-400 hover:text-indigo-300 underline">
+                  Explore your full tarot reading →
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── Moon Sign ─────────────────────────────────────────────────────── */}
+      {(() => {
+        const moonResult = calculateMoonSignAndNakshatra(dob);
+        return (
+          <div className="py-10 px-4 bg-gradient-to-br from-blue-950 to-slate-900">
+            <div className="max-w-2xl mx-auto">
+              <div className="text-center mb-4">
+                <div className="text-xs text-blue-400 uppercase tracking-widest mb-2">Moon Sign & Nakshatra</div>
+                <div className="flex justify-center gap-6 mb-3">
+                  <div className="text-center">
+                    <div className="text-4xl mb-1">{moonResult.moonSignData.symbol}</div>
+                    <p className="font-black text-white text-lg">{moonResult.moonSign} Moon</p>
+                    <p className="text-xs text-blue-300">{moonResult.moonSignData.element} · {moonResult.moonSignData.rulingPlanet}</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl mb-1">{moonResult.nakshatraData.symbol}</div>
+                    <p className="font-black text-white text-lg">{moonResult.nakshatraData.name}</p>
+                    <p className="text-xs text-purple-300">Nakshatra #{moonResult.nakshatraNumber}</p>
+                  </div>
+                </div>
+              </div>
+              <p className="text-blue-100 text-sm leading-relaxed text-center mb-4">{moonResult.moonSignData.personality.slice(0, 200)}...</p>
+              <div className="text-center">
+                <Link to="/moon-sign" className="text-xs text-blue-400 hover:text-blue-300 underline">
+                  Full moon sign interpretation →
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── Name Numerology ───────────────────────────────────────────────── */}
+      {(() => {
+        const nums = calculateAllNameNumbers(recipientName || '');
+        const exprMeaning = NAME_NUMBER_MEANINGS[nums.expression];
+        return (
+          <div className="py-10 px-4 bg-white border-t border-gray-100">
+            <div className="max-w-2xl mx-auto">
+              <div className="text-center mb-5">
+                <div className="text-xs text-gray-400 uppercase tracking-widest mb-1">Name Numerology</div>
+                <h3 className="text-xl font-black text-gray-900">The Numbers in Your Name</h3>
+              </div>
+              <div className="grid grid-cols-3 gap-3 mb-5">
+                {[
+                  { label: 'Expression', value: nums.expression, color: 'bg-indigo-50 text-indigo-700', desc: 'Who you are destined to be' },
+                  { label: 'Soul Urge', value: nums.soulUrge, color: 'bg-rose-50 text-rose-700', desc: "What your heart desires" },
+                  { label: 'Personality', value: nums.personality, color: 'bg-emerald-50 text-emerald-700', desc: 'How others perceive you' },
+                ].map(({ label, value, color, desc }) => (
+                  <div key={label} className={`rounded-2xl p-4 text-center ${color}`}>
+                    <div className="text-3xl font-black mb-1">{value}</div>
+                    <div className="text-xs font-semibold">{label}</div>
+                    <div className="text-xs opacity-70 mt-0.5">{desc}</div>
+                  </div>
+                ))}
+              </div>
+              {exprMeaning && (
+                <div className="bg-indigo-50 rounded-2xl p-4 mb-4">
+                  <p className="text-xs font-bold text-indigo-700 mb-1">Expression {nums.expression} — {exprMeaning.title}</p>
+                  <p className="text-sm text-gray-700">{exprMeaning.expression.slice(0, 180)}...</p>
+                </div>
+              )}
+              <div className="text-center">
+                <Link to="/name-numerology" className="text-xs text-indigo-500 hover:text-indigo-700 underline">
+                  Calculate with full birth name →
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── Biorhythm ──────────────────────────────────────────────────────── */}
+      {(() => {
+        const today = new Date();
+        today.setHours(12, 0, 0, 0);
+        const bio = calculateBiorhythm(dob, today);
+        const physStatus = getBiorhythmStatus(bio.physical);
+        const emoStatus = getBiorhythmStatus(bio.emotional);
+        const intStatus = getBiorhythmStatus(bio.intellectual);
+        return (
+          <div className="py-10 px-4 bg-gray-50 border-t border-gray-100">
+            <div className="max-w-2xl mx-auto">
+              <div className="text-center mb-5">
+                <div className="text-xs text-gray-400 uppercase tracking-widest mb-1">Today's Biorhythm</div>
+                <h3 className="text-xl font-black text-gray-900">Physical · Emotional · Intellectual Cycles</h3>
+                <p className="text-xs text-gray-500 mt-1">Based on {bio.daysSinceBirth.toLocaleString()} days since birth</p>
+              </div>
+              <div className="space-y-3 mb-5">
+                {[
+                  { label: '🏃 Physical', value: bio.physical, status: physStatus, color: 'bg-rose-400' },
+                  { label: '💙 Emotional', value: bio.emotional, status: emoStatus, color: 'bg-blue-400' },
+                  { label: '🧠 Intellectual', value: bio.intellectual, status: intStatus, color: 'bg-amber-400' },
+                ].map(({ label, value, status, color }) => (
+                  <div key={label}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-medium text-gray-700">{label}</span>
+                      <span className="flex items-center gap-2">
+                        <span className={`text-xs font-semibold ${status.color}`}>{status.label}</span>
+                        <span className="font-bold text-gray-900">{value > 0 ? '+' : ''}{value}%</span>
+                      </span>
+                    </div>
+                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className={`h-full rounded-full ${color}`} style={{ width: `${50 + value / 2}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="text-center">
+                <Link to="/biorhythm" className="text-xs text-teal-500 hover:text-teal-700 underline">
+                  See 30-day biorhythm chart →
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── Compatibility ──────────────────────────────────────────────────── */}
+      {(() => {
+        const signName = westernZodiac?.name || '';
+        if (!signName) return null;
+        const topMatches = getTopCompatibleSigns(signName);
+        return (
+          <div className="py-10 px-4 bg-white border-t border-gray-100">
+            <div className="max-w-2xl mx-auto">
+              <div className="text-center mb-5">
+                <div className="text-xs text-gray-400 uppercase tracking-widest mb-1">Zodiac Compatibility</div>
+                <h3 className="text-xl font-black text-gray-900">Top Matches for {signName}</h3>
+              </div>
+              <div className="grid grid-cols-3 gap-3 mb-4">
+                {topMatches.slice(0, 3).map(({ sign, score, reason }) => (
+                  <Link key={sign} to={`/compatibility/${signName.toLowerCase()}/${sign.toLowerCase()}`}
+                    className="border border-gray-200 hover:border-rose-300 hover:bg-rose-50 rounded-2xl p-3 text-center transition-colors">
+                    <div className="text-2xl mb-1">
+                      {{'Aries':'♈','Taurus':'♉','Gemini':'♊','Cancer':'♋','Leo':'♌','Virgo':'♍','Libra':'♎','Scorpio':'♏','Sagittarius':'♐','Capricorn':'♑','Aquarius':'♒','Pisces':'♓'}[sign] || '⭐'}
+                    </div>
+                    <div className="font-bold text-gray-900 text-sm">{sign}</div>
+                    <div className="text-xs font-semibold text-rose-600">{score}%</div>
+                    <div className="text-xs text-gray-500 mt-1 leading-tight">{reason.slice(0, 50)}</div>
+                  </Link>
+                ))}
+              </div>
+              <div className="text-center">
+                <Link to={`/compatibility`} className="text-xs text-rose-500 hover:text-rose-700 underline">
+                  Check compatibility with any sign →
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ── Footer CTA ───────────────────────────────────────────────────── */}
       <div className="py-12 px-4 bg-white text-center no-print">
