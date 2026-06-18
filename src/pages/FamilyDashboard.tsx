@@ -89,6 +89,8 @@ function FamilyDashboardInner() {
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [showAdd, setShowAdd] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [addError, setAddError] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
 
   // Form state
   const [form, setForm] = useState({
@@ -112,8 +114,17 @@ function FamilyDashboardInner() {
   }, [user?.id]);
 
   async function handleAdd() {
-    if (!user || !form.name || !form.date_of_birth) return;
-    const member = await addFamilyMember(user.id, form);
+    if (!user) return;
+    if (!form.name.trim()) { setAddError('Please enter a name.'); return; }
+    if (!form.date_of_birth) { setAddError('Please enter a date of birth.'); return; }
+    setAddError(null);
+    setAdding(true);
+    const { data: member, error } = await addFamilyMember(user.id, form);
+    setAdding(false);
+    if (error) {
+      setAddError(error);
+      return;
+    }
     if (member) {
       setMembers(prev => [...prev, member]);
       setForm({ name: '', date_of_birth: '', gender: 'male', country: '' });
@@ -386,11 +397,16 @@ function FamilyDashboardInner() {
                 </SelectContent>
               </Select>
             </div>
+            {addError && (
+              <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                ⚠️ {addError}
+              </div>
+            )}
             <div className="flex gap-3 pt-2">
-              <Button onClick={handleAdd} disabled={!form.name || !form.date_of_birth} className="flex-1">
-                Add Member
+              <Button onClick={handleAdd} disabled={adding || !form.name || !form.date_of_birth} className="flex-1">
+                {adding ? 'Adding...' : 'Add Member'}
               </Button>
-              <Button variant="outline" onClick={() => setShowAdd(false)} className="flex-1">
+              <Button variant="outline" onClick={() => { setShowAdd(false); setAddError(null); }} className="flex-1">
                 Cancel
               </Button>
             </div>

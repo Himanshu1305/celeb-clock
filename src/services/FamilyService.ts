@@ -23,14 +23,21 @@ export async function getFamilyMembers(userId: string): Promise<FamilyMember[]> 
 export async function addFamilyMember(
   userId: string,
   member: Omit<FamilyMember, 'id' | 'forecast_cache' | 'score_cache'>
-): Promise<FamilyMember | null> {
+): Promise<{ data: FamilyMember | null; error: string | null }> {
   const forecast = calculateBaseForecast(member.date_of_birth, member.gender, member.country);
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('family_members')
     .insert({ ...member, user_id: userId, forecast_cache: forecast })
     .select()
     .single();
-  return data as FamilyMember | null;
+  if (error) {
+    const isRls = error.code === '42501' || error.message?.toLowerCase().includes('policy');
+    const msg = isRls
+      ? 'Permission denied. Your account may not have access to add family members. Try signing out and back in.'
+      : `Failed to add member: ${error.message}`;
+    return { data: null, error: msg };
+  }
+  return { data: data as FamilyMember, error: null };
 }
 
 export async function updateFamilyMember(
