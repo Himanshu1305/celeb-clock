@@ -74,6 +74,7 @@ const LifeExpectancy = () => {
   const [longevityResult, setLongevityResult] = useState<LongevityResult | null>(null);
   const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [userCount, setUserCount] = useState('2,400+');
+  const [sharedResult, setSharedResult] = useState<{ forecast: number; age: number; remaining: number } | null>(null);
 
   useEffect(() => {
     supabase
@@ -97,6 +98,19 @@ const LifeExpectancy = () => {
       }
     }
   }, [phase, isPremium, longevityResult]);
+
+  // Parse ?shared=1&forecast=X&age=Y&remaining=Z URL params to show shared result banner
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('shared') === '1') {
+      const forecast = parseFloat(params.get('forecast') || '');
+      const age = parseFloat(params.get('age') || '');
+      const remaining = parseFloat(params.get('remaining') || '');
+      if (!isNaN(forecast) && forecast > 0) {
+        setSharedResult({ forecast, age: isNaN(age) ? 0 : age, remaining: isNaN(remaining) ? 0 : remaining });
+      }
+    }
+  }, []);
 
   const [optimizedForecast, setOptimizedForecast] = useState<number | null>(null);
   const [currentSimForecast, setCurrentSimForecast] = useState<number | null>(null);
@@ -188,6 +202,18 @@ const LifeExpectancy = () => {
         keywords="how long will I live, life expectancy calculator, death clock, when will I die, lifespan calculator, longevity calculator, how many years do I have left, life expectancy test"
         canonicalUrl="/life-expectancy"
       />
+      {/* Shared result banner — shown when page opened via shared countdown URL */}
+      {sharedResult && (
+        <div className="bg-indigo-600 text-white text-center py-3 px-4">
+          <p className="text-sm font-semibold">
+            Someone shared their BornClock forecast with you!
+            {sharedResult.age > 0 && ` They are ${sharedResult.age} years old`}
+            {sharedResult.forecast > 0 && ` with a ${sharedResult.forecast}-year life expectancy forecast.`}
+            {' '}
+            <a href="/life-expectancy" className="underline font-bold ml-1">Calculate yours →</a>
+          </p>
+        </div>
+      )}
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-12">
           <Navigation />
