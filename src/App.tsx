@@ -36,6 +36,8 @@ import NumerologyNumber from "./pages/NumerologyNumber";
 import GenerationPage from "./pages/Generation";
 import BirthdayDate from "./pages/BirthdayDate";
 import BirthdayHub from "./pages/BirthdayHub";
+import BirthdayMonthPage from "./pages/BirthdayMonthPage";
+import BirthdayDatePage from "./pages/BirthdayDatePage";
 import Leaderboard from "./pages/Leaderboard";
 import FamilyDashboard from "./pages/FamilyDashboard";
 import GiftReport from "./pages/GiftReport";
@@ -104,6 +106,8 @@ const App = () => (
               <Route path="/life-expectancy" element={<LifeExpectancy />} />
               <Route path="/celebrity-birthday" element={<CelebrityBirthday />} />
               <Route path="/birthday" element={<BirthdayHub />} />
+              <Route path="/birthday/:month/:day" element={<BirthdayDatePage />} />
+              <Route path="/birthday/:month" element={<BirthdayMonthPage />} />
               <Route path="/birthday/:date" element={<BirthdayDate />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
