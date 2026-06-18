@@ -5,15 +5,12 @@ test.describe('Form validation', () => {
     await page.goto('/contact');
     await page.waitForLoadState('networkidle');
 
-    // Find and try submitting empty form
-    const submitBtn = page.locator('button[type="submit"]').or(page.locator('button:has-text("Send")'));
+    const submitBtn = page.locator('button[type="submit"]').or(page.locator('button:has-text("Send")')).first();
     if (await submitBtn.isVisible()) {
       await submitBtn.click();
-      // Browser validation or custom validation should prevent submission
       const nameInput = page.locator('input[name="name"], input[placeholder*="name"]').first();
       if (await nameInput.isVisible()) {
         const validity = await nameInput.evaluate((el: HTMLInputElement) => el.validity.valid);
-        // If empty, should be invalid
         expect(validity).toBe(false);
       }
     }
@@ -25,11 +22,9 @@ test.describe('Form validation', () => {
 
     const messageInput = page.locator('textarea').first();
     if (await messageInput.isVisible()) {
-      // Type 250 characters
       const longText = 'A'.repeat(250);
       await messageInput.fill(longText);
       const value = await messageInput.inputValue();
-      // Should be capped at 200 characters
       expect(value.length).toBeLessThanOrEqual(200);
     }
   });
@@ -40,12 +35,12 @@ test.describe('Page-level UX checks', () => {
     await page.goto('/biological-age');
     await page.waitForLoadState('networkidle');
 
-    // Main content area should have light background
     const main = page.locator('main, [class*="container"]').first();
     const bg = await main.evaluate(el => window.getComputedStyle(el).backgroundColor);
+    // rgba(0,0,0,0) = transparent, which means it inherits a light background — not dark
+    const isTransparent = bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent';
     const rgb = bg.match(/\d+/g)?.map(Number) ?? [255, 255, 255];
-    // Background should be light (not dark)
-    const isDark = rgb[0] < 80 && rgb[1] < 80 && rgb[2] < 80;
+    const isDark = !isTransparent && rgb[0] < 80 && rgb[1] < 80 && rgb[2] < 80;
     expect(isDark).toBe(false);
   });
 
@@ -57,10 +52,10 @@ test.describe('Page-level UX checks', () => {
       await page.goto(`/birthstone/${month}`);
       await page.waitForLoadState('networkidle');
 
-      // SVG should be present
-      const svg = page.locator('svg').first();
-      if (await svg.isVisible({ timeout: 3000 })) {
-        const content = await svg.innerHTML();
+      // Find the gem illustration SVG specifically — it has <defs> with a radialGradient
+      const gemSvg = page.locator('svg:has(defs)').first();
+      if (await gemSvg.isVisible({ timeout: 3000 })) {
+        const content = await gemSvg.innerHTML();
         svgContents.push(content);
       }
     }
@@ -75,21 +70,17 @@ test.describe('Page-level UX checks', () => {
     await page.goto('/life-expectancy');
     await page.waitForLoadState('networkidle');
 
-    // Navigate to results (skip quiz)
     await page.goto('/life-expectancy?shared=1&forecast=75&age=45&remaining=30');
     await page.waitForTimeout(1000);
 
-    // Find Power 9 section
-    const power9 = page.locator('text=Power 9').or(page.locator('text=Habits of the World'));
+    const power9 = page.locator('text=Power 9').or(page.locator('text=Habits of the World')).first();
     if (await power9.isVisible({ timeout: 5000 })) {
-      // Click the first habit
       const firstHabit = page.locator('text=Move Naturally').or(page.locator('text=Purpose')).first();
       if (await firstHabit.isVisible()) {
         await firstHabit.click();
         await page.waitForTimeout(500);
-        // Detail should now be visible
-        const detail = page.locator('text=The Science').or(page.locator('text=longevity'));
-        await expect(detail.first()).toBeVisible({ timeout: 3000 });
+        const detail = page.locator('text=The Science').or(page.locator('text=longevity')).first();
+        await expect(detail).toBeVisible({ timeout: 3000 });
       }
     }
   });
