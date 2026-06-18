@@ -177,6 +177,8 @@ const CountryComparison = () => {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [selectedShareIdx, setSelectedShareIdx] = useState(0);
   const [shareCopied, setShareCopied] = useState(false);
+  const [expandedWhatif, setExpandedWhatif] = useState<'japan' | 'usa' | 'best' | null>(null);
+  const [factCopied, setFactCopied] = useState<number | null>(null);
 
   useEffect(() => {
     try {
@@ -245,6 +247,12 @@ const CountryComparison = () => {
     await navigator.clipboard.writeText(SHARE_OPTIONS[selectedShareIdx].text);
     setShareCopied(true);
     setTimeout(() => setShareCopied(false), 2000);
+  };
+
+  const handleCopyFact = async (idx: number, text: string) => {
+    await navigator.clipboard.writeText(`${text} — bornclock.com/country-comparison`);
+    setFactCopied(idx);
+    setTimeout(() => setFactCopied(null), 2000);
   };
 
   const shareUrl = 'https://bornclock.com/country-comparison';
@@ -398,27 +406,34 @@ const CountryComparison = () => {
                     💡 {COUNTRY_INSIGHTS[selectedRow.country]}
                   </p>
                 )}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                  <div>
-                    <p className="text-xs text-muted-foreground">Male birth baseline</p>
-                    <p className="text-xl font-bold text-foreground">{selectedBaseline.male}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Female birth baseline</p>
-                    <p className="text-xl font-bold text-foreground">{selectedBaseline.female}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Your forecast here</p>
-                    <p className="text-xl font-bold text-primary">{selectedRow.forecast}</p>
-                  </div>
-                  {savedResult && (
-                    <div>
-                      <p className="text-xs text-muted-foreground">vs. {savedResult.country}</p>
-                      <p className={`text-xl font-bold ${selectedRow.forecast >= savedResult.totalForecast ? 'text-green-600' : 'text-red-500'}`}>
-                        {selectedRow.forecast >= savedResult.totalForecast ? '+' : ''}{(selectedRow.forecast - savedResult.totalForecast).toFixed(1)}
-                      </p>
-                    </div>
-                  )}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-border">
+                        <th className="text-left py-2 text-xs text-muted-foreground font-semibold">Metric</th>
+                        <th className="text-center py-2 text-xs text-muted-foreground font-semibold">♂ Male</th>
+                        <th className="text-center py-2 text-xs text-muted-foreground font-semibold">♀ Female</th>
+                        <th className="text-center py-2 text-xs text-muted-foreground font-semibold">Gap</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-border/50">
+                        <td className="py-2 text-muted-foreground">Birth baseline</td>
+                        <td className="py-2 text-center font-bold text-foreground">{selectedBaseline.male}</td>
+                        <td className="py-2 text-center font-bold text-foreground">{selectedBaseline.female}</td>
+                        <td className="py-2 text-center text-xs text-indigo-600 font-medium">+{(selectedBaseline.female - selectedBaseline.male).toFixed(1)} F</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 text-muted-foreground">Your forecast here</td>
+                        <td colSpan={2} className="py-2 text-center font-bold text-primary">{selectedRow.forecast}</td>
+                        {savedResult ? (
+                          <td className={`py-2 text-center text-xs font-bold ${selectedRow.forecast >= savedResult.totalForecast ? 'text-green-600' : 'text-red-500'}`}>
+                            {selectedRow.forecast >= savedResult.totalForecast ? '+' : ''}{(selectedRow.forecast - savedResult.totalForecast).toFixed(1)} vs. you
+                          </td>
+                        ) : <td />}
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </CardContent>
             </Card>
@@ -523,61 +538,29 @@ const CountryComparison = () => {
           <div className="overflow-x-auto pb-4">
             <div className="flex gap-4" style={{ minWidth: 'max-content' }}>
 
-              <div className="min-w-64 max-w-64 bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-xl p-4 text-white flex-shrink-0">
-                <div className="text-2xl mb-2">🎯</div>
-                <h3 className="font-bold text-sm mb-2">The Monaco Effect</h3>
-                <p className="text-xs leading-relaxed opacity-90 mb-2">Monaco has the world's highest life expectancy at 89.8 years. Tiny, wealthy, universal healthcare, Mediterranean climate. But wealth alone doesn't explain it — neighboring France still reaches 83+ years with far more people.</p>
-                <p className="text-[10px] opacity-60">[CIA World Factbook, 2024]</p>
-              </div>
-
-              <div className="min-w-64 max-w-64 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl p-4 text-white flex-shrink-0">
-                <div className="text-2xl mb-2">🍵</div>
-                <h3 className="font-bold text-sm mb-2">The Green Tea Effect</h3>
-                <p className="text-xs leading-relaxed opacity-90 mb-2">Japan's per-capita green tea consumption: ~700g per person per year. Green tea contains EGCG — a polyphenol that reduces inflammation. Japanese adults who drink 5+ cups per day show 26% lower risk of heart disease mortality.</p>
-                <p className="text-[10px] opacity-60">[Japan Public Health Center Study, 2006]</p>
-              </div>
-
-              <div className="min-w-64 max-w-64 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-4 text-white flex-shrink-0">
-                <div className="text-2xl mb-2">🏥</div>
-                <h3 className="font-bold text-sm mb-2">The Healthcare Gap</h3>
-                <p className="text-xs leading-relaxed opacity-90 mb-2">The US spends $12,000+ per person on healthcare annually — nearly double comparable countries. Yet Americans live shorter lives than citizens in 50+ countries who spend far less. Healthcare spending and life expectancy are surprisingly weakly correlated.</p>
-                <p className="text-[10px] opacity-60">[OECD Health Statistics, 2024]</p>
-              </div>
-
-              <div className="min-w-64 max-w-64 bg-gradient-to-br from-violet-600 to-violet-800 rounded-xl p-4 text-white flex-shrink-0">
-                <div className="text-2xl mb-2">🌍</div>
-                <h3 className="font-bold text-sm mb-2">The 200-Year Miracle</h3>
-                <p className="text-xs leading-relaxed opacity-90 mb-2">In 1800, the global average life expectancy was around 30 years. By 2024 it exceeded 73 years. Humanity effectively gained 43 years of average lifespan in 200 years — primarily through sanitation, vaccines, and antibiotics.</p>
-                <p className="text-[10px] opacity-60">[Our World in Data, 2024]</p>
-              </div>
-
-              <div className="min-w-64 max-w-64 bg-gradient-to-br from-rose-600 to-rose-800 rounded-xl p-4 text-white flex-shrink-0">
-                <div className="text-2xl mb-2">💃</div>
-                <h3 className="font-bold text-sm mb-2">The Dancing Sardinians</h3>
-                <p className="text-xs leading-relaxed opacity-90 mb-2">Sardinia, Italy is a Blue Zone with the world's highest concentration of centenarians. Sardinian men specifically outlive men from all other Blue Zones — daily walking, red wine, pecorino cheese (high omega-3s), and tight-knit multigenerational families.</p>
-                <p className="text-[10px] opacity-60">[Buettner, D. — Blue Zones, 2023]</p>
-              </div>
-
-              <div className="min-w-64 max-w-64 bg-gradient-to-br from-amber-600 to-amber-800 rounded-xl p-4 text-white flex-shrink-0">
-                <div className="text-2xl mb-2">🏃</div>
-                <h3 className="font-bold text-sm mb-2">The Exercise Equation</h3>
-                <p className="text-xs leading-relaxed opacity-90 mb-2">A landmark study of 650,000 adults found that 75 minutes of vigorous exercise per week added 3.4 years to life expectancy — regardless of country of birth. 150 minutes/week added 3.5 years. Marginal return decreases quickly after 150 minutes.</p>
-                <p className="text-[10px] opacity-60">[Moore et al., PLOS Medicine, 2012]</p>
-              </div>
-
-              <div className="min-w-64 max-w-64 bg-gradient-to-br from-teal-600 to-teal-800 rounded-xl p-4 text-white flex-shrink-0">
-                <div className="text-2xl mb-2">👥</div>
-                <h3 className="font-bold text-sm mb-2">The Loneliness Penalty</h3>
-                <p className="text-xs leading-relaxed opacity-90 mb-2">Social isolation reduces life expectancy by 26% — comparable to smoking 15 cigarettes per day. Countries with stronger social bonds consistently rank higher in longevity. Japan's "moai" (lifelong friend groups) and Sardinia's village culture are key factors.</p>
-                <p className="text-[10px] opacity-60">[Holt-Lunstad et al., PLOS Medicine, 2010]</p>
-              </div>
-
-              <div className="min-w-64 max-w-64 bg-gradient-to-br from-slate-600 to-slate-800 rounded-xl p-4 text-white flex-shrink-0">
-                <div className="text-2xl mb-2">🇮🇳</div>
-                <h3 className="font-bold text-sm mb-2">India's 30-Year Miracle</h3>
-                <p className="text-xs leading-relaxed opacity-90 mb-2">India's life expectancy rose from 32 years at independence (1947) to 72 years today — an increase of 40 years in less than 80 years. One of the fastest sustained improvements in human history, driven by vaccination, sanitation, maternal care, and economic development.</p>
-                <p className="text-[10px] opacity-60">[UN WPP 2024; India NHFS 2021]</p>
-              </div>
+              {[
+                { idx: 0, gradient: 'from-indigo-600 to-indigo-800', icon: '🎯', title: 'The Monaco Effect', body: 'Monaco has the world\'s highest life expectancy at 89.8 years. Tiny, wealthy, universal healthcare, Mediterranean climate. But wealth alone doesn\'t explain it — neighboring France still reaches 83+ years with far more people.', cite: '[CIA World Factbook, 2024]' },
+                { idx: 1, gradient: 'from-emerald-600 to-emerald-800', icon: '🍵', title: 'The Green Tea Effect', body: 'Japan\'s per-capita green tea consumption: ~700g per person per year. Green tea contains EGCG — a polyphenol that reduces inflammation. Japanese adults who drink 5+ cups per day show 26% lower risk of heart disease mortality.', cite: '[Japan Public Health Center Study, 2006]' },
+                { idx: 2, gradient: 'from-blue-600 to-blue-800', icon: '🏥', title: 'The Healthcare Gap', body: 'The US spends $12,000+ per person on healthcare annually — nearly double comparable countries. Yet Americans live shorter lives than citizens in 50+ countries who spend far less. Healthcare spending and life expectancy are surprisingly weakly correlated.', cite: '[OECD Health Statistics, 2024]' },
+                { idx: 3, gradient: 'from-violet-600 to-violet-800', icon: '🌍', title: 'The 200-Year Miracle', body: 'In 1800, the global average life expectancy was around 30 years. By 2024 it exceeded 73 years. Humanity effectively gained 43 years of average lifespan in 200 years — primarily through sanitation, vaccines, and antibiotics.', cite: '[Our World in Data, 2024]' },
+                { idx: 4, gradient: 'from-rose-600 to-rose-800', icon: '💃', title: 'The Dancing Sardinians', body: 'Sardinia, Italy is a Blue Zone with the world\'s highest concentration of centenarians. Sardinian men specifically outlive men from all other Blue Zones — daily walking, red wine, pecorino cheese (high omega-3s), and tight-knit multigenerational families.', cite: '[Buettner, D. — Blue Zones, 2023]' },
+                { idx: 5, gradient: 'from-amber-600 to-amber-800', icon: '🏃', title: 'The Exercise Equation', body: 'A landmark study of 650,000 adults found that 75 minutes of vigorous exercise per week added 3.4 years to life expectancy — regardless of country of birth. 150 minutes/week added 3.5 years. Marginal return decreases quickly after 150 minutes.', cite: '[Moore et al., PLOS Medicine, 2012]' },
+                { idx: 6, gradient: 'from-teal-600 to-teal-800', icon: '👥', title: 'The Loneliness Penalty', body: 'Social isolation reduces life expectancy by 26% — comparable to smoking 15 cigarettes per day. Countries with stronger social bonds consistently rank higher in longevity. Japan\'s "moai" (lifelong friend groups) and Sardinia\'s village culture are key factors.', cite: '[Holt-Lunstad et al., PLOS Medicine, 2010]' },
+                { idx: 7, gradient: 'from-slate-600 to-slate-800', icon: '🇮🇳', title: 'India\'s 30-Year Miracle', body: 'India\'s life expectancy rose from 32 years at independence (1947) to 72 years today — an increase of 40 years in less than 80 years. One of the fastest sustained improvements in human history, driven by vaccination, sanitation, maternal care, and economic development.', cite: '[UN WPP 2024; India NHFS 2021]' },
+              ].map(fact => (
+                <div key={fact.idx} className={`min-w-64 max-w-64 bg-gradient-to-br ${fact.gradient} rounded-xl p-4 text-white flex-shrink-0`}>
+                  <div className="text-2xl mb-2">{fact.icon}</div>
+                  <h3 className="font-bold text-sm mb-2">{fact.title}</h3>
+                  <p className="text-xs leading-relaxed opacity-90 mb-2">{fact.body}</p>
+                  <p className="text-[10px] opacity-60 mb-3">{fact.cite}</p>
+                  <button
+                    onClick={() => handleCopyFact(fact.idx, `${fact.title}: ${fact.body} ${fact.cite}`)}
+                    className="text-[10px] px-2 py-1 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+                  >
+                    {factCopied === fact.idx ? '✓ Copied!' : '📋 Share fact'}
+                  </button>
+                </div>
+              ))}
 
             </div>
           </div>
@@ -594,7 +577,12 @@ const CountryComparison = () => {
             {/* Japan Switch */}
             <Card className="glass-card border-indigo-200 bg-gradient-to-br from-indigo-50/40 to-white">
               <CardContent className="p-6">
-                <div className="text-3xl mb-2">🇯🇵</div>
+                <div className="flex items-start justify-between mb-2">
+                  <div className="text-3xl">🇯🇵</div>
+                  <button onClick={() => setExpandedWhatif(expandedWhatif === 'japan' ? null : 'japan')} className="text-indigo-600 hover:text-indigo-800 text-xs flex items-center gap-1 mt-1">
+                    {expandedWhatif === 'japan' ? <><ChevronUp className="w-3 h-3" />Less</> : <><ChevronDown className="w-3 h-3" />Details</>}
+                  </button>
+                </div>
                 <h3 className="font-bold text-indigo-900 mb-1">The Japan Switch</h3>
                 <p className="text-xs text-muted-foreground mb-4">If you maintained your exact current lifestyle in Japan:</p>
                 {japanRow ? (
@@ -634,6 +622,18 @@ const CountryComparison = () => {
                         </div>
                       </div>
                     </div>
+                    {expandedWhatif === 'japan' && (
+                      <div className="bg-indigo-50 rounded-lg p-3 mb-3 text-xs text-indigo-900 leading-relaxed">
+                        <p className="font-semibold mb-1">Why Japan leads:</p>
+                        <ul className="space-y-1 text-indigo-800">
+                          <li>• Obesity rate 3.6% (vs 36% in USA)</li>
+                          <li>• Traditional fish, fermented foods, vegetables diet</li>
+                          <li>• Universal healthcare since 1961</li>
+                          <li>• "Hara hachi bu" — eating to 80% full</li>
+                          <li>• Strong social ties ("moai" friend groups)</li>
+                        </ul>
+                      </div>
+                    )}
                   </>
                 ) : (
                   <p className="text-sm text-muted-foreground">Set your age and gender above to see this forecast.</p>
@@ -645,7 +645,12 @@ const CountryComparison = () => {
             {/* USA Switch */}
             <Card className="glass-card border-red-200 bg-gradient-to-br from-red-50/40 to-white">
               <CardContent className="p-6">
-                <div className="text-3xl mb-2">🇺🇸</div>
+                <div className="flex items-start justify-between mb-2">
+                  <div className="text-3xl">🇺🇸</div>
+                  <button onClick={() => setExpandedWhatif(expandedWhatif === 'usa' ? null : 'usa')} className="text-red-600 hover:text-red-800 text-xs flex items-center gap-1 mt-1">
+                    {expandedWhatif === 'usa' ? <><ChevronUp className="w-3 h-3" />Less</> : <><ChevronDown className="w-3 h-3" />Details</>}
+                  </button>
+                </div>
                 <h3 className="font-bold text-red-900 mb-1">The USA Switch</h3>
                 <p className="text-xs text-muted-foreground mb-4">If you maintained your exact current lifestyle in the USA:</p>
                 {usaRow ? (
@@ -684,6 +689,18 @@ const CountryComparison = () => {
                         </div>
                       </div>
                     </div>
+                    {expandedWhatif === 'usa' && (
+                      <div className="bg-red-50 rounded-lg p-3 mb-3 text-xs text-red-900 leading-relaxed">
+                        <p className="font-semibold mb-1">Why the USA lags despite spending:</p>
+                        <ul className="space-y-1 text-red-800">
+                          <li>• 36% adult obesity rate (highest among OECD)</li>
+                          <li>• Ultra-processed food: 57% of calorie intake</li>
+                          <li>• 48,000 gun deaths annually</li>
+                          <li>• Drug overdose crisis (110,000+ deaths/yr)</li>
+                          <li>• Healthcare access inequality by income</li>
+                        </ul>
+                      </div>
+                    )}
                   </>
                 ) : (
                   <p className="text-sm text-muted-foreground">Set your age and gender above to see this forecast.</p>
@@ -695,7 +712,12 @@ const CountryComparison = () => {
             {/* Best Case */}
             <Card className="glass-card border-green-200 bg-gradient-to-br from-green-50/40 to-white">
               <CardContent className="p-6">
-                <div className="text-3xl mb-2">{bestRow?.flag ?? '🌍'}</div>
+                <div className="flex items-start justify-between mb-2">
+                  <div className="text-3xl">{bestRow?.flag ?? '🌍'}</div>
+                  <button onClick={() => setExpandedWhatif(expandedWhatif === 'best' ? null : 'best')} className="text-green-600 hover:text-green-800 text-xs flex items-center gap-1 mt-1">
+                    {expandedWhatif === 'best' ? <><ChevronUp className="w-3 h-3" />Less</> : <><ChevronDown className="w-3 h-3" />Details</>}
+                  </button>
+                </div>
                 <h3 className="font-bold text-green-900 mb-1">Best Case Scenario</h3>
                 <p className="text-xs text-muted-foreground mb-4">In the highest-forecast country for you:</p>
                 {bestRow ? (
@@ -734,6 +756,17 @@ const CountryComparison = () => {
                         </div>
                       </div>
                     </div>
+                    {expandedWhatif === 'best' && bestRow && (
+                      <div className="bg-green-50 rounded-lg p-3 mb-3 text-xs text-green-900 leading-relaxed">
+                        <p className="font-semibold mb-1">What drives {bestRow.country}'s advantage:</p>
+                        <ul className="space-y-1 text-green-800">
+                          <li>• Top-tier UN WPP 2024 baseline for your age/gender</li>
+                          <li>• Strong healthcare system + low lifestyle disease burden</li>
+                          <li>• Your existing health profile performs best here</li>
+                          <li>• Moving countries alone won't transfer these gains — lifestyle matters equally</li>
+                        </ul>
+                      </div>
+                    )}
                   </>
                 ) : null}
                 <p className="text-xs text-gray-500 leading-relaxed">This represents the maximum longevity advantage that country selection alone could provide — with your same habits.</p>
@@ -945,6 +978,23 @@ const CountryComparison = () => {
                 📘 Facebook
               </a>
             </div>
+          </div>
+        </section>
+
+        {/* ── CITATIONS SECTION ─────────────────────────────────────────────── */}
+        <section className="max-w-5xl mx-auto mb-12">
+          <h2 className="text-lg font-bold text-foreground mb-3">📚 Data Sources & Citations</h2>
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 text-xs text-gray-600 space-y-2 leading-relaxed">
+            <p><strong>Primary Dataset:</strong> United Nations World Population Prospects 2024 (UN WPP 2024). Life expectancy at birth by country and sex. United Nations Department of Economic and Social Affairs, Population Division.</p>
+            <p><strong>Japan Green Tea:</strong> Kuriyama, S. et al. (2006). Green tea consumption and mortality due to cardiovascular disease, cancer, and all causes in Japan. <em>JAMA</em>, 296(10), 1255–1265.</p>
+            <p><strong>Exercise & Longevity:</strong> Moore, S.C. et al. (2012). Leisure time physical activity of moderate to vigorous intensity and mortality. <em>PLOS Medicine</em>, 9(11).</p>
+            <p><strong>Social Isolation:</strong> Holt-Lunstad, J. et al. (2010). Social relationships and mortality risk: a meta-analytic review. <em>PLOS Medicine</em>, 7(7).</p>
+            <p><strong>US Healthcare Paradox:</strong> Peterson-KFF Health System Tracker. US Health Spending vs. Other Countries, 2026 Edition.</p>
+            <p><strong>Japan Paradox:</strong> Willcox, D.C. et al. (2021). The Okinawan diet: health implications of a low-calorie, nutrient-dense, antioxidant-rich dietary pattern. <em>Journal of the American College of Nutrition</em>.</p>
+            <p><strong>Blue Zones:</strong> Buettner, D. (2023). <em>The Blue Zones: Lessons for Living Longer From the People Who've Lived the Longest</em>. National Geographic Society.</p>
+            <p><strong>India Data:</strong> National Family Health Survey NFHS-5 (2019–21). Ministry of Health and Family Welfare, India.</p>
+            <p><strong>CIA World Factbook:</strong> Central Intelligence Agency. Country Comparisons — Life Expectancy at Birth (2024 edition).</p>
+            <p className="text-gray-400 italic">All baselines are population-level statistical estimates. Individual outcomes vary based on genetics, lifestyle, healthcare access, and factors not captured here. BornClock data is for educational purposes only.</p>
           </div>
         </section>
 
