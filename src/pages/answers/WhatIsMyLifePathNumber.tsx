@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function WhatIsMyLifePathNumber() {
+  const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "What is my life path number?", "item": "https://bornclock.com/answers/what-is-my-life-path-number" } ] };
+  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "What Is My Life Path Number and What Does It Mean?", "description": "Your Life Path number is calculated from your full date of birth and reveals your core purpose. Calculate yours free and get your 2026 Personal Year forecast.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/answers/what-is-my-life-path-number" };
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -21,6 +23,8 @@ export default function WhatIsMyLifePathNumber() {
         canonicalUrl="/answers/what-is-my-life-path-number"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">

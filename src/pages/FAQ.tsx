@@ -361,6 +361,37 @@ export default function FAQ() {
           ))}
         </div>
 
+        {/* Detailed Answer Pages */}
+        <div className="mt-14 mb-10">
+          <h2 className="text-xl font-bold text-foreground mb-2">Detailed Answers</h2>
+          <p className="text-muted-foreground text-sm mb-6">In-depth science-backed answers to the questions we hear most</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              { to: '/answers/how-long-will-i-live', label: 'How long will I live?' },
+              { to: '/answers/what-is-my-biological-age', label: 'What is my biological age?' },
+              { to: '/answers/how-to-live-longer', label: 'How to live longer' },
+              { to: '/answers/what-is-life-expectancy', label: 'What is life expectancy?' },
+              { to: '/answers/how-does-stress-affect-life-expectancy', label: 'How does stress affect life expectancy?' },
+              { to: '/answers/what-is-bmi', label: 'What is BMI?' },
+              { to: '/answers/what-is-my-zodiac-sign', label: 'What is my zodiac sign?' },
+              { to: '/answers/how-old-am-i-in-days', label: 'How old am I in days?' },
+              { to: '/answers/what-generation-am-i', label: 'What generation am I?' },
+              { to: '/answers/what-is-my-birthstone', label: 'What is my birthstone?' },
+              { to: '/answers/what-is-my-numerology-life-path-number', label: 'What is my numerology life path number?' },
+              { to: '/answers/how-many-days-until-my-birthday', label: 'How many days until my birthday?' },
+            ].map(({ to, label }) => (
+              <Link
+                key={to}
+                to={to}
+                className="flex items-center gap-2 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 transition-colors text-sm text-foreground"
+              >
+                <span className="text-primary">→</span>
+                <span>{label}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* CTA */}
         <div className="mt-16 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 border border-primary/20 rounded-xl p-8 text-center">
           <h3 className="text-xl font-bold text-foreground mb-2">Still have a question?</h3>

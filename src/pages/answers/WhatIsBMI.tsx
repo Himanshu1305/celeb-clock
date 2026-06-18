@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function WhatIsBMI() {
+  const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "What is BMI?", "item": "https://bornclock.com/answers/what-is-bmi" } ] };
+  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "What Is BMI and What Does Your Number Actually Mean?", "description": "BMI (Body Mass Index) explained: how to calculate it, what the ranges mean, and why waist-to-height ratio is actually a better predictor of health. Calculate yours free.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/answers/what-is-bmi" };
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -21,6 +23,8 @@ export default function WhatIsBMI() {
         canonicalUrl="/answers/what-is-bmi"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">

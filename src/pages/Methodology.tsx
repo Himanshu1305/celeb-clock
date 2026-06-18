@@ -521,6 +521,35 @@ export default function Methodology() {
             </div>
           </div>
 
+          {/* ── ANSWER PAGES ── */}
+          <section className="mt-12 mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-2 text-center">
+              Deep-Dive Answers
+            </h2>
+            <p className="text-muted-foreground text-center text-sm mb-6">
+              Science-backed answers to the questions behind our calculators
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { to: '/answers/how-long-will-i-live', label: 'How long will I live?' },
+                { to: '/answers/what-is-life-expectancy', label: 'What is life expectancy and how is it calculated?' },
+                { to: '/answers/what-is-my-biological-age', label: 'What is my biological age?' },
+                { to: '/answers/how-to-live-longer', label: 'How to live longer — what science says' },
+                { to: '/answers/how-does-stress-affect-life-expectancy', label: 'How does stress affect life expectancy?' },
+                { to: '/answers/what-is-bmi', label: 'What is BMI and what does it mean for health?' },
+              ].map(({ to, label }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  className="flex items-center gap-2 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 transition-colors text-sm text-foreground"
+                >
+                  <span className="text-primary">→</span>
+                  <span>{label}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+
           {/* ── RELATED TOOLS ── */}
           <section className="mt-12 mb-8">
             <h2 className="text-2xl font-bold text-foreground mb-2 text-center">

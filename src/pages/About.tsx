@@ -110,6 +110,33 @@ export default function About() {
           </div>
         </section>
 
+        {/* Explore Our Tools */}
+        <section className="mb-14">
+          <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Explore Our Tools</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {[
+              { icon: '⏱️', label: 'Age Calculator', to: '/age-calculator' },
+              { icon: '🔬', label: 'Life Expectancy', to: '/life-expectancy' },
+              { icon: '🧬', label: 'Biological Age', to: '/biological-age' },
+              { icon: '🪐', label: 'Planetary Age', to: '/planetary-age' },
+              { icon: '⭐', label: 'Zodiac Signs', to: '/zodiac' },
+              { icon: '🔢', label: 'Numerology', to: '/numerology' },
+              { icon: '💎', label: 'Birthstone', to: '/birthstone' },
+              { icon: '🌍', label: 'Country Comparison', to: '/country-comparison' },
+              { icon: '🎂', label: 'Celebrity Birthdays', to: '/celebrity-birthday' },
+            ].map(tool => (
+              <Link
+                key={tool.to}
+                to={tool.to}
+                className="flex items-center gap-2 p-3 bg-card border border-border rounded-xl hover:border-primary/40 hover:bg-primary/5 transition-all text-sm font-medium text-foreground"
+              >
+                <span className="text-lg">{tool.icon}</span>
+                <span>{tool.label}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* Get in Touch */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Get in Touch</h2>

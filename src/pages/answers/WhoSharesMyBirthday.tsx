@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function WhoSharesMyBirthday() {
+  const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "Who shares my birthday?", "item": "https://bornclock.com/answers/who-shares-my-birthday" } ] };
+  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "Which Famous People Share My Birthday?", "description": "Discover which celebrities, athletes, scientists and world leaders share your exact birthday. BornClock searches 50,000+ celebrities by date of birth.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/answers/who-shares-my-birthday" };
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -20,6 +22,8 @@ export default function WhoSharesMyBirthday() {
         canonicalUrl="/answers/who-shares-my-birthday"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">

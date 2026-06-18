@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function HowDoesStressAffectLifeExpectancy() {
+  const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How stress affects life expectancy", "item": "https://bornclock.com/answers/how-does-stress-affect-life-expectancy" } ] };
+  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "How Does Stress Affect Life Expectancy? The Science Explained", "description": "Chronic stress can reduce life expectancy by up to 2.8 years. Here's how stress damages the body at a cellular level — and 5 science-backed ways to reverse it.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/answers/how-does-stress-affect-life-expectancy" };
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -21,6 +23,8 @@ export default function HowDoesStressAffectLifeExpectancy() {
         canonicalUrl="/answers/how-does-stress-affect-life-expectancy"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">

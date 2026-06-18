@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 
 export default function HowOldAmIOnMars() {
+  const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How old am I on other planets?", "item": "https://bornclock.com/answers/how-old-am-i-on-mars" } ] };
+  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "How Old Am I on Mars and Other Planets?", "description": "Calculate your age on Mars, Jupiter, Saturn and all 8 planets using real NASA orbital data. A 30-year-old on Earth is only 15.9 on Mars.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/answers/how-old-am-i-on-mars" };
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -21,6 +23,8 @@ export default function HowOldAmIOnMars() {
         canonicalUrl="/answers/how-old-am-i-on-mars"
         ogType="article"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
