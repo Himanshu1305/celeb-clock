@@ -84,7 +84,7 @@ function barColor(f: number) {
 }
 
 function FamilyDashboardInner() {
-  const { user, isPremium, isInTrial, profile } = useAuth();
+  const { user, isPremium, isInTrial, profile, loading: authLoading } = useAuth();
 
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [showAdd, setShowAdd] = useState(false);
@@ -99,20 +99,17 @@ function FamilyDashboardInner() {
   });
 
   useEffect(() => {
-    if (user) {
-      getFamilyMembers(user.id)
-        .then(data => {
-          setMembers(data);
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error('getFamilyMembers error:', err);
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
-    }
-  }, [user]);
+    if (!user?.id) return;
+    getFamilyMembers(user.id)
+      .then(data => {
+        setMembers(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('getFamilyMembers error:', err);
+        setLoading(false);
+      });
+  }, [user?.id]);
 
   async function handleAdd() {
     if (!user || !form.name || !form.date_of_birth) return;
@@ -149,9 +146,20 @@ function FamilyDashboardInner() {
       : null,
   ].filter(Boolean) as string[] : [];
 
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full mx-auto mb-3" />
+          <p className="text-gray-500 text-sm">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-cosmic">
+      <div className="min-h-screen bg-background">
         <SEO title="Family Longevity Dashboard | BornClock Premium" description="Compare longevity forecasts for your family." noindex={true} />
         <div className="container mx-auto px-4 py-8">
           <header className="flex justify-between items-center mb-8">
@@ -172,25 +180,17 @@ function FamilyDashboardInner() {
 
   if (!isPremium && !isInTrial) {
     return (
-      <div className="min-h-screen bg-gradient-cosmic">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <SEO title="Family Longevity Dashboard | BornClock Premium" description="Compare longevity forecasts for your family." noindex={true} />
-        <div className="container mx-auto px-4 py-8">
-          <header className="flex justify-between items-center mb-8">
-            <Navigation />
-            <AuthNav />
-          </header>
-          <div className="max-w-md mx-auto text-center py-20">
-            <Lock className="w-12 h-12 text-primary mx-auto mb-4" />
-            <h1 className="text-2xl font-bold mb-3">Premium Feature</h1>
-            <p className="text-muted-foreground mb-2">
-              Family Longevity Dashboard is a premium feature. Add up to 10 family members and compare forecasts.
-            </p>
-            <Button asChild className="mt-4">
-              <Link to="/upgrade">Upgrade to Premium →</Link>
-            </Button>
-          </div>
+        <div className="max-w-md text-center bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
+          <div className="text-4xl mb-4">👨‍👩‍👧</div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Family Dashboard</h1>
+          <p className="text-gray-500 mb-6">Track longevity forecasts for up to 10 family members. Compare results side by side. Start important conversations about health.</p>
+          <Link to="/upgrade" className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+            Unlock Family Dashboard →
+          </Link>
+          <p className="text-xs text-gray-400 mt-3">Included in all premium plans from ₹299/month</p>
         </div>
-        <Footer />
       </div>
     );
   }
