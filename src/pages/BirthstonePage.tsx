@@ -5,6 +5,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { BIRTHSTONE_DATA, getBirthstoneBySlug } from '@/data/birthstoneData';
+import { GemIllustration } from '@/components/GemIllustration';
 
 export default function BirthstonePage() {
   const { month } = useParams<{ month: string }>();
@@ -90,9 +91,8 @@ export default function BirthstonePage() {
           <div className="h-3 w-full" style={{ backgroundColor: data.hexColor }} />
           <div className="p-8">
             <div className="flex flex-col md:flex-row items-start gap-6">
-              <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shrink-0"
-                style={{ backgroundColor: `${data.hexColor}22` }}>
-                💎
+              <div className="shrink-0">
+                <GemIllustration month={data.monthNumber} size={96} />
               </div>
               <div className="flex-1">
                 <p className="text-sm font-medium text-muted-foreground mb-1">{data.month} Birthstone</p>
