@@ -754,13 +754,20 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                 <strong className="text-3xl font-black text-muted-foreground">{result.totalForecast} yrs</strong>
               </div>
               <TrendingUp className="w-5 h-5 text-primary hidden sm:block" />
-              <div className="text-center">
-                <p className={`text-[10px] uppercase font-bold tracking-widest ${delta < 0 ? 'text-red-600' : delta === 0 ? 'text-muted-foreground' : 'text-primary'}`}>
-                  {delta < 0 ? 'With Your Changes' : delta === 0 ? 'No Change' : 'With Optimized Habits'}
-                </p>
-                <strong className={`text-3xl font-black ${delta < 0 ? 'text-red-600' : delta === 0 ? 'text-muted-foreground' : 'text-primary'}`} style={blurStyle}>{simForecast} yrs</strong>
-                {delta < 0 && <p className="text-[10px] font-bold text-red-500 mt-0.5">⚠️ {delta} yrs from harmful choices</p>}
-              </div>
+              {hasInteracted ? (
+                <div className="text-center">
+                  <p className={`text-[10px] uppercase font-bold tracking-widest ${delta < 0 ? 'text-red-600' : delta === 0 ? 'text-muted-foreground' : 'text-primary'}`}>
+                    {delta < 0 ? 'With Your Changes' : delta === 0 ? 'No Change' : 'Optimized Lifestyle'}
+                  </p>
+                  <strong className={`text-3xl font-black ${delta < 0 ? 'text-red-600' : delta === 0 ? 'text-muted-foreground' : 'text-primary'}`} style={blurStyle}>{simForecast} yrs</strong>
+                  {delta < 0 && <p className="text-[10px] font-bold text-red-500 mt-0.5">⚠️ {delta} yrs from harmful choices</p>}
+                </div>
+              ) : (
+                <div className="text-center">
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Optimized Lifestyle</p>
+                  <p className="text-sm text-muted-foreground italic mt-2 leading-relaxed">Move a slider to<br />see your potential</p>
+                </div>
+              )}
             </div>
             {delta > 0 && (
               <div className="bg-green-100 text-green-800 border border-green-200 rounded-lg px-4 py-2 text-sm font-black">
