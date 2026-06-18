@@ -207,6 +207,20 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
     if (profile?.country && !data.country) setData(prev => ({ ...prev, country: profile.country || '' }));
   }, [profile]);
 
+  // Pre-fill previous answers when user clicks "Retake Quiz"
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('bornclock_quiz_prefill');
+      if (!saved) return;
+      const parsed = JSON.parse(saved);
+      if (Date.now() - (parsed.timestamp || 0) > 3_600_000) return; // expire after 1 hour
+      if (parsed.quiz) setData(parsed.quiz);
+      if (parsed.pillar1) setPillar1(parsed.pillar1);
+      if (parsed.pillar2) setPillar2(parsed.pillar2);
+      localStorage.removeItem('bornclock_quiz_prefill');
+    } catch { /* storage unavailable */ }
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (countryDropdownRef.current && !countryDropdownRef.current.contains(e.target as Node)) {

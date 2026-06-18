@@ -114,6 +114,21 @@ const LifeExpectancy = () => {
     setPhase('quiz');
   };
 
+  const handleRetakeQuiz = () => {
+    if (longevityResult) {
+      try {
+        localStorage.setItem('bornclock_quiz_prefill', JSON.stringify({
+          quiz: longevityResult.quizSnapshot,
+          pillar1: longevityResult.pillar1Snapshot,
+          pillar2: longevityResult.pillar2Snapshot,
+          timestamp: Date.now(),
+        }));
+      } catch { /* storage unavailable */ }
+    }
+    resetAll();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDate = e.target.value ? new Date(e.target.value) : null;
     setBirthDate(newDate);
@@ -408,7 +423,7 @@ const LifeExpectancy = () => {
               result={longevityResult}
               userId={user?.id}
               isPremium={isPremium}
-              onRetake={() => { resetAll(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              onRetake={handleRetakeQuiz}
             />
           </section>
         )}
