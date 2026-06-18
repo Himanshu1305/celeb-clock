@@ -937,13 +937,7 @@ const BiologicalAge = () => {
   };
 
   return (
-    <div
-      className={`min-h-screen ${
-        step === 'intro'
-          ? 'bg-gradient-to-b from-indigo-950 via-slate-900 to-slate-900'
-          : 'bg-gradient-cosmic'
-      }`}
-    >
+    <div className="min-h-screen bg-white">
       <SEO
         title="Biological Age Calculator — 12 WHO-Validated Biomarkers"
         description="Find out your true biological age with 12 peer-reviewed biomarkers including BMI (WHO Asian thresholds), waist circumference, blood pressure, balance, and cardiovascular fitness. Based on Journal of Gerontology Expert Consensus (2025). Free, no blood test."
@@ -969,13 +963,13 @@ const BiologicalAge = () => {
           <div className="max-w-2xl mx-auto pb-16">
             {/* Hero */}
             <div className="text-center mb-8 pt-4">
-              <h1 className="text-4xl md:text-6xl font-black text-white text-center leading-tight mb-4">
+              <h1 className="text-4xl md:text-6xl font-black text-gray-900 text-center leading-tight mb-4">
                 What Is Your True Biological Age?
               </h1>
               <PageTagline />
-              <p className="text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
                 Chronological age counts years since birth. Biological age (
-                <span className="font-semibold text-indigo-300">epigenetic age</span> — how old your
+                <span className="font-semibold text-indigo-600">epigenetic age</span> — how old your
                 DNA methylation patterns suggest your cells are) measures something far more
                 important: how efficiently your cells, organs, and physiological systems are actually
                 functioning right now.
@@ -983,8 +977,8 @@ const BiologicalAge = () => {
             </div>
 
             {/* Research credibility box */}
-            <div className="bg-white/10 border border-white/20 rounded-2xl p-6 mb-6">
-              <h2 className="text-white font-bold text-base mb-4">
+            <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-6 mb-6">
+              <h2 className="text-indigo-900 font-bold text-base mb-4">
                 📊 Peer-Reviewed Scientific Basis
               </h2>
               <div className="space-y-4">
@@ -1006,10 +1000,10 @@ const BiologicalAge = () => {
                   },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-3">
-                    <span className="text-emerald-400 mt-0.5 flex-shrink-0">✓</span>
+                    <span className="text-emerald-600 mt-0.5 flex-shrink-0">✓</span>
                     <div>
-                      <p className="text-slate-200 text-sm leading-relaxed">{item.text}</p>
-                      <p className="text-indigo-300 text-xs mt-1 italic">[{item.source}]</p>
+                      <p className="text-indigo-800 text-sm leading-relaxed">{item.text}</p>
+                      <p className="text-indigo-600 text-xs mt-1 italic">[{item.source}]</p>
                     </div>
                   </div>
                 ))}
@@ -1017,11 +1011,11 @@ const BiologicalAge = () => {
             </div>
 
             {/* What we measure */}
-            <div className="bg-slate-800 rounded-xl p-5 mb-4">
-              <p className="text-white font-semibold text-sm mb-3">
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-4">
+              <p className="text-gray-900 font-semibold text-sm mb-3">
                 This assessment evaluates 12 validated proxy biomarkers:
               </p>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm text-slate-300">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm text-gray-700">
                 {[
                   'Resting heart rate (cardiovascular load)',
                   'Muscular endurance (sarcopenia risk)',
@@ -1037,7 +1031,7 @@ const BiologicalAge = () => {
                   'Subjective vitality (allostatic load)',
                 ].map(item => (
                   <div key={item} className="flex items-start gap-2">
-                    <span className="text-indigo-400 mt-0.5 flex-shrink-0 text-xs">●</span>
+                    <span className="text-indigo-600 mt-0.5 flex-shrink-0 text-xs">●</span>
                     <span className="text-xs leading-snug">{item}</span>
                   </div>
                 ))}
@@ -1045,7 +1039,7 @@ const BiologicalAge = () => {
             </div>
 
             {/* Gold standard note */}
-            <p className="text-xs italic text-slate-400 text-center max-w-2xl mx-auto mb-4">
+            <p className="text-xs italic text-gray-400 text-center max-w-2xl mx-auto mb-4">
               ⚕️ The clinical gold standard for biological age — DNA methylation analysis (Horvath
               Epigenetic Clock, Genome Biology, 2013) — requires a laboratory blood sample. This
               assessment uses validated self-report proxy biomarkers that correlate strongly with
@@ -1053,7 +1047,7 @@ const BiologicalAge = () => {
             </p>
 
             {/* Motivational paragraph */}
-            <p className="text-slate-200 max-w-xl mx-auto text-center text-sm leading-relaxed mb-8">
+            <p className="text-gray-700 max-w-xl mx-auto text-center text-sm leading-relaxed mb-8">
               The extraordinary finding from longevity science is this: biological age moves. It
               responds to what you eat, how you sleep, how you move, and how you manage stress. Every
               biomarker you measure today is a data point you can improve. This is not a verdict — it
@@ -1089,9 +1083,9 @@ const BiologicalAge = () => {
             <MedicalDisclaimer />
 
             {/* EEAT editorial standards */}
-            <div className="bg-white/5 border border-white/10 rounded-xl p-4 max-w-2xl mx-auto mt-6">
-              <p className="text-slate-300 text-xs leading-relaxed">
-                <span className="font-semibold text-white">📋 Editorial Standards</span>
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 max-w-2xl mx-auto mt-6">
+              <p className="text-gray-600 text-xs leading-relaxed">
+                <span className="font-semibold text-gray-900">📋 Editorial Standards</span>
                 {' '}BornClock's health content is reviewed against peer-reviewed literature from
                 PubMed, the WHO Global Health Observatory, and expert consensus statements. We cite
                 primary sources directly. We do not accept advertising that influences our health
