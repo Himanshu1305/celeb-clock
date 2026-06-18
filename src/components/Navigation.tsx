@@ -35,7 +35,7 @@ const astrologyItems = [
 
 export const Navigation = () => {
   const location = useLocation();
-  const { user, isPremium, isInTrial, trialDaysRemaining, profile } = useAuth();
+  const { user, isPremium, isInTrial, trialDaysRemaining, profile, loading } = useAuth();
   const isActive = (path: string) => location.pathname === path;
   const isHomePage = location.pathname === '/';
 
@@ -135,7 +135,7 @@ export const Navigation = () => {
         </Link>
       )}
 
-      {!isPremium && !isInTrial && (
+      {!loading && !isPremium && !isInTrial && (
         <Link
           to="/upgrade"
           className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
@@ -144,7 +144,7 @@ export const Navigation = () => {
         </Link>
       )}
 
-      {isInTrial && (
+      {!loading && isInTrial && (
         <Link
           to="/upgrade"
           className="bg-amber-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-600 transition-colors"
