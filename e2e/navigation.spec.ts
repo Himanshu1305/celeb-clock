@@ -18,10 +18,18 @@ const PUBLIC_ROUTES = [
   { path: '/birthday-report', title: 'Birthday Report', h1Contains: 'Birthday' },
   { path: '/upgrade', title: 'Upgrade', h1Contains: 'longevity' },
   { path: '/blog', title: 'Blog', h1Contains: 'Guide' },
-  // NOTE: /about is skipped — staging renders blank for this route (known deployment issue)
-  // The About component is correct; this requires a fresh staging re-deploy to fix.
-  // { path: '/about', title: 'About', h1Contains: 'About' },
+  { path: '/about', title: 'About', h1Contains: 'About' },
   { path: '/methodology', title: 'Methodology', h1Contains: 'Works' },
+  // New feature pages
+  { path: '/tarot-card-by-birthday', title: 'Tarot', h1Contains: 'Tarot' },
+  { path: '/moon-sign', title: 'Moon Sign', h1Contains: 'Moon' },
+  { path: '/name-numerology', title: 'Name Numerology', h1Contains: 'Numerology' },
+  { path: '/biorhythm', title: 'Biorhythm', h1Contains: 'Biorhythm' },
+  { path: '/compatibility', title: 'Compatibility', h1Contains: 'Compatibility' },
+  { path: '/rashi-ratna', title: 'Rashi Ratna', h1Contains: 'Rashi' },
+  { path: '/birthday', title: 'Birthday', h1Contains: 'Celebrity Birthdays' },
+  { path: '/birthday/6', title: 'Birthday', h1Contains: 'June' },
+  { path: '/birthday/6/17', title: 'Birthday', h1Contains: 'June 17' },
   { path: '/contact', title: 'Contact', h1Contains: 'Contact' },
   { path: '/privacy', title: 'Privacy', h1Contains: 'Privacy' },
   { path: '/terms', title: 'Terms', h1Contains: 'Terms' },
