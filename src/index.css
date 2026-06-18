@@ -280,16 +280,23 @@
 
 @media print {
   body > * { display: none !important; }
+  /* Longevity Blueprint PDF */
   #longevity-blueprint-print { display: block !important; position: static !important; width: 100% !important; margin: 0 !important; padding: 20px !important; font-size: 12px !important; }
   #longevity-blueprint-print [role="tabpanel"] { display: block !important; visibility: visible !important; opacity: 1 !important; page-break-inside: avoid; }
   #longevity-blueprint-print .print-page-break { page-break-before: always; }
   #longevity-blueprint-print button:not(.print-show), #longevity-blueprint-print [role="tablist"] { display: none !important; }
   #longevity-blueprint-print svg { max-width: 100% !important; }
   #longevity-blueprint-print * { filter: none !important; }
+  /* Birthday Report PDF */
+  #birthday-report-print { display: block !important; position: static !important; width: 100% !important; margin: 0 !important; background: #ffffff !important; }
+  #birthday-report-print .no-print { display: none !important; }
+  #birthday-report-print * { color-adjust: exact !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  /* Global print rules */
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   .no-print { display: none !important; }
-  .report-print-footer { display: block !important; position: fixed; bottom: 0; left: 0; right: 0; text-align: center; font-size: 11px; color: #9ca3af; padding: 8px; border-top: 1px solid #e5e7eb; }
   .no-screen { display: block !important; }
+  .report-print-footer { display: block !important; position: fixed; bottom: 0; left: 0; right: 0; text-align: center; font-size: 11px; color: #9ca3af; padding: 8px; border-top: 1px solid #e5e7eb; }
+  @page { margin: 1cm; }
 }
 
 .no-screen { display: none; }

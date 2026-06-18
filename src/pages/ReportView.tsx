@@ -199,7 +199,7 @@ const ReportView = () => {
   const reportUrl = `${window.location.origin}/report/${slug}`;
 
   const handlePrint = () => {
-    setTimeout(() => window.print(), 500);
+    setTimeout(() => window.print(), 800);
   };
 
   const handleCopy = () => {
@@ -288,7 +288,7 @@ const ReportView = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div id="birthday-report-print" className="min-h-screen bg-white">
       <Helmet>
         <title>{recipientName}'s Birthday Report | BornClock</title>
         <meta name="description" content={`A personalised birthday intelligence report for ${recipientName} — celebrity twins, zodiac, numerology, birthstone and more.`} />
@@ -299,6 +299,9 @@ const ReportView = () => {
             body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .print-expand { max-height: none !important; overflow: visible !important; }
             .dark-section { background: #0f172a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            @page { margin: 1cm; }
+            .report-section { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; }
           }
         `}</style>
       </Helmet>
