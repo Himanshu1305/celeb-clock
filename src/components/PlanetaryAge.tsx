@@ -340,7 +340,23 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
   const [cardGenerated, setCardGenerated] = useState(false);
   const [cardDataUrl, setCardDataUrl] = useState('');
   const [copied, setCopied] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleShare = async () => {
+    const text = getMostDramaticShareText();
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'My Cosmic Ages — BornClock', text, url: 'https://bornclock.com/planetary-age' });
+        return;
+      } catch {
+        // fallback to clipboard
+      }
+    }
+    await navigator.clipboard.writeText(text);
+    setShareCopied(true);
+    setTimeout(() => setShareCopied(false), 2500);
+  };
 
   // Weight calculator
   const [weight, setWeight] = useState('');
@@ -529,6 +545,17 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
         ))}
       </div>
 
+      {/* Share button below planet cards */}
+      <div className="text-center mt-6 mb-12">
+        <button
+          onClick={handleShare}
+          className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors shadow-lg"
+        >
+          {shareCopied ? '✓ Link Copied!' : '🚀 Share My Cosmic Ages'}
+        </button>
+        <p className="text-slate-500 text-xs mt-2">Share your ages across the solar system</p>
+      </div>
+
       {/* ── SHOCKING FACTS CAROUSEL ──────────────────────────────────────── */}
       <div className="mb-12">
         <h2 className="text-xl font-bold text-white mb-2">🤯 Facts That Will Break Your Brain</h2>
@@ -626,7 +653,12 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
       {/* ── INTERACTIVE WEIGHT CALCULATOR ────────────────────────────────── */}
       <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6 mb-12">
         <h2 className="text-xl font-bold text-white mb-1">⚖️ How Heavy Are You on Other Planets?</h2>
-        <p className="text-sm text-slate-400 mb-5">Enter your weight to see it across the solar system.</p>
+        <p className="text-sm text-slate-300 mb-3">
+          Your weight changes dramatically across the solar system — because gravity depends on a planet's mass and size, not its distance from the Sun.
+        </p>
+        <div className="bg-indigo-950/50 border border-indigo-800/40 rounded-xl px-4 py-3 mb-5 text-sm text-indigo-200">
+          <span className="font-bold text-indigo-400">Fun fact:</span> On Jupiter, the most massive planet, you'd weigh 2.5× more than on Earth. On Mars, you'd weigh less than half — and could jump over a two-storey building.
+        </div>
 
         <div className="flex items-center gap-3 mb-6 max-w-xs">
           <input
