@@ -571,7 +571,29 @@ export function calculateLongevity(
     const h = EPIGENETIC_HABITS.find(x => x.id === id);
     return s + (h?.gain ?? 0);
   }, 0);
-  const epigenetic = Math.min(6, habitSum);
+
+  // When no explicit habits are provided, derive a base epigenetic bonus from quiz answers.
+  // Represents the epigenetic gene-expression component of healthy lifestyle behaviors
+  // (separate from the primary health adjustment). Conservative scale to avoid double-counting.
+  let derivedEpigenetic = 0;
+  if (userHabits.length === 0) {
+    if (quiz.exercise === 'moderate') derivedEpigenetic += 0.4;
+    else if (quiz.exercise === 'heavy') derivedEpigenetic += 0.7;
+    if (quiz.diet === 'good') derivedEpigenetic += 0.3;
+    else if (quiz.diet === 'excellent') derivedEpigenetic += 0.5;
+    if (quiz.sleepDuration === '7to9') derivedEpigenetic += 0.3;
+    if (quiz.smoking === 'never') derivedEpigenetic += 0.2;
+    derivedEpigenetic = Math.min(2.0, Math.round(derivedEpigenetic * 10) / 10);
+  }
+
+  const effectiveHabitSum = userHabits.length > 0 ? habitSum : derivedEpigenetic;
+  const epigenetic = Math.min(6, effectiveHabitSum);
+
+  const hasPositiveBehaviors = (quiz.exercise === 'moderate' || quiz.exercise === 'heavy') &&
+    (quiz.diet === 'good' || quiz.diet === 'excellent');
+  if (epigenetic === 0 && hasPositiveBehaviors) {
+    console.error('[LongevityCalc] Epigenetic bonus is 0 despite positive lifestyle — check habit derivation');
+  }
 
   // ── Community bonus ──
   let communityBonus = 0;

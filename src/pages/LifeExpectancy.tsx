@@ -121,7 +121,7 @@ const LifeExpectancy = () => {
   };
 
   const handleQuizComplete = (data: { quiz: HealthQuizData; pillar1: Pillar1Data; pillar2: Pillar2Data }) => {
-    const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate, data.pillar2.mentorHabits);
+    const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate, []);
     setLongevityResult(result);
     setCurrentSimForecast(result.totalForecast);
     try {
@@ -143,7 +143,7 @@ const LifeExpectancy = () => {
   };
 
   const handleQuizCompleteAndSkip = (data: { quiz: HealthQuizData; pillar1: Pillar1Data; pillar2: Pillar2Data }) => {
-    const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate, data.pillar2.mentorHabits);
+    const result = calculateLongevity(data.quiz, data.pillar1, data.pillar2, birthDate, []);
     setLongevityResult(result);
     const simAge = result.totalForecast;
     setOptimizedForecast(simAge);
