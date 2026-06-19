@@ -13,9 +13,33 @@ import {
 import { WikiPerson } from '@/services/WikimediaService';
 import { CelebrityCard, DisplayCelebrity, OccupationCategory } from '@/components/CelebrityCard';
 import { classifyDisplayTier, TIER_LABELS, DisplayTier } from '@/data/celebrityCategories';
+import { mergeWithIndianCelebrities, isIndianUser, hasIndianCelebritiesForDate, MergedCelebrity } from '@/services/IndianCelebrityService';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const PAGE_SIZE = 20;
+
+function mapMergedToDisplay(m: MergedCelebrity): DisplayCelebrity {
+  if (m.isIndian) {
+    const birthYear = (m.birth_year as number) ?? null;
+    const deathYear = (m.death_year as number | null) ?? null;
+    const isLiving = !deathYear;
+    const age = isLiving
+      ? (birthYear ? CURRENT_YEAR - birthYear : null)
+      : birthYear && deathYear ? deathYear - birthYear : null;
+    return {
+      name: m.name,
+      birthYear,
+      deathYear,
+      age,
+      isLiving,
+      occupation: m.known_for ? String(m.known_for).substring(0, 80) : String(m.category ?? 'Celebrity'),
+      imageUrl: null,
+      wikipediaUrl: null,
+      sitelinks: 0,
+    };
+  }
+  return m as unknown as DisplayCelebrity;
+}
 
 function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
   const birthYear = r.birthDate ? parseInt(r.birthDate.substring(0, 4)) : null;
@@ -105,10 +129,14 @@ export const TodaysBirthdays = () => {
 
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+  const todayMonth = today.getMonth() + 1;
+  const todayDay = today.getDate();
+  const showIndianFirst = isIndianUser();
+  const hasIndianToday = hasIndianCelebritiesForDate(todayMonth, todayDay);
 
   useEffect(() => {
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(todayMonth).padStart(2, '0');
+    const day = String(todayDay).padStart(2, '0');
     const monthDay = `${month}-${day}`;
     const userCountry = profile?.country ?? null;
 
@@ -127,7 +155,8 @@ export const TodaysBirthdays = () => {
           celebs = [...celebs, ...localExtras];
         }
 
-        setAllCelebrities(celebs);
+        const merged = mergeWithIndianCelebrities(celebs, todayMonth, todayDay, showIndianFirst);
+        setAllCelebrities(merged.map(mapMergedToDisplay));
       } catch (err) {
         console.error("Failed to load today's birthdays:", err);
       } finally {
@@ -141,7 +170,7 @@ export const TodaysBirthdays = () => {
       getTodayTopBoosted(3).then(setTopBoosted);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile?.country]);
+  }, [profile?.country, todayMonth, todayDay]);
 
   // Split by tier
   const entertainmentCelebs = useMemo(() =>
@@ -227,6 +256,15 @@ export const TodaysBirthdays = () => {
           </Badge>
         )}
       </div>
+
+      {/* Indian user note */}
+      {showIndianFirst && !hasIndianToday && allCelebrities.length > 0 && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-2 text-center">
+          <p className="text-xs text-amber-700">
+            🌍 Showing global celebrities — no prominent Indian birthdays found for today
+          </p>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
