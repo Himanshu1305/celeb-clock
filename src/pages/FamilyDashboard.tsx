@@ -59,10 +59,20 @@ import {
 } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
 import {
-  getFamilyMembers, addFamilyMember, deleteFamilyMember,
+  getFamilyMembers, deleteFamilyMember,
   FamilyMember,
 } from '@/services/FamilyService';
 import { QUIZ_COUNTRIES } from '@/services/LongevityCalculationService';
+
+type FamilyMemberExt = FamilyMember & { relationship?: string | null };
+
+function buildLifeExpectancyUrl(member: FamilyMemberExt): string {
+  const params = new URLSearchParams();
+  if (member.date_of_birth) params.set('dob', member.date_of_birth);
+  if (member.gender && member.gender !== 'not_specified') params.set('sex', member.gender);
+  if (member.name) params.set('name', member.name);
+  return `/life-expectancy?${params.toString()}`;
+}
 
 const MAX_MEMBERS = 10;
 
@@ -87,7 +97,7 @@ function barColor(f: number) {
 function FamilyDashboardInner() {
   const { user, isPremium, isInTrial, profile, loading: authLoading } = useAuth();
 
-  const [members, setMembers] = useState<FamilyMember[]>([]);
+  const [members, setMembers] = useState<FamilyMemberExt[]>([]);
   const [showAdd, setShowAdd] = useState(false);
   const [loading, setLoading] = useState(true);
   const [addError, setAddError] = useState<string | null>(null);
@@ -99,6 +109,7 @@ function FamilyDashboardInner() {
     date_of_birth: '',
     gender: 'male' as string,
     country: 'none',
+    relationship: 'none',
   });
 
   const loadFamilyMembers = async (uid: string) => {
@@ -133,6 +144,7 @@ function FamilyDashboardInner() {
           date_of_birth: form.date_of_birth,
           gender: form.gender === 'not_specified' ? null : (form.gender || null),
           country: form.country === 'none' ? null : (form.country || null),
+          relationship: form.relationship === 'none' ? null : (form.relationship || null),
         })
         .select()
         .single();
@@ -152,8 +164,8 @@ function FamilyDashboardInner() {
       }
 
       if (data) {
-        setMembers(prev => [...prev, data as FamilyMember]);
-        setForm({ name: '', date_of_birth: '', gender: 'male', country: 'none' });
+        setMembers(prev => [...prev, data as FamilyMemberExt]);
+        setForm({ name: '', date_of_birth: '', gender: 'male', country: 'none', relationship: 'none' });
         setShowAdd(false);
       }
     } catch (err) {
@@ -305,7 +317,12 @@ function FamilyDashboardInner() {
                       <Trash2 className="w-4 h-4" />
                     </button>
                     <CardContent className="p-5">
-                      <div className="text-lg font-bold text-foreground mb-1">{m.name}</div>
+                      <div className="text-lg font-bold text-foreground mb-0.5">{m.name}</div>
+                      {m.relationship && (
+                        <p className="text-xs text-indigo-500 capitalize font-medium mb-1">
+                          {m.relationship}
+                        </p>
+                      )}
                       <div className="text-sm text-muted-foreground mb-3">
                         Age {age} · {m.gender || 'Not specified'} · {m.country || 'Unknown'}
                       </div>
@@ -316,10 +333,10 @@ function FamilyDashboardInner() {
                         years forecast · {remaining} years remaining
                       </div>
                       <Link
-                        to="/life-expectancy"
+                        to={buildLifeExpectancyUrl(m)}
                         className="text-xs text-indigo-600 hover:underline flex items-center gap-1"
                       >
-                        Full quiz for personalized forecast <ArrowRight className="w-3 h-3" />
+                        Full quiz for {m.name}'s personalized forecast <ArrowRight className="w-3 h-3" />
                       </Link>
                     </CardContent>
                   </Card>
@@ -387,6 +404,32 @@ function FamilyDashboardInner() {
                 placeholder="e.g. Mom"
                 className="mt-1"
               />
+            </div>
+            <div className="space-y-1">
+              <Label>Relationship</Label>
+              <Select
+                value={form.relationship}
+                onValueChange={val => setForm(f => ({ ...f, relationship: val }))}
+              >
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Select relationship" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Select relationship</SelectItem>
+                  <SelectItem value="mother">Mother</SelectItem>
+                  <SelectItem value="father">Father</SelectItem>
+                  <SelectItem value="wife">Wife</SelectItem>
+                  <SelectItem value="husband">Husband</SelectItem>
+                  <SelectItem value="sister">Sister</SelectItem>
+                  <SelectItem value="brother">Brother</SelectItem>
+                  <SelectItem value="daughter">Daughter</SelectItem>
+                  <SelectItem value="son">Son</SelectItem>
+                  <SelectItem value="grandmother">Grandmother</SelectItem>
+                  <SelectItem value="grandfather">Grandfather</SelectItem>
+                  <SelectItem value="friend">Friend</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label>Date of Birth</Label>
