@@ -11,7 +11,7 @@ import {
   searchLocalDatabase,
 } from '@/services/BirthdaySearchService';
 import { WikiPerson } from '@/services/WikimediaService';
-import { CelebrityCard, DisplayCelebrity, OccupationCategory, classifyOccupation } from '@/components/CelebrityCard';
+import { CelebrityCard, DisplayCelebrity, OccupationCategory } from '@/components/CelebrityCard';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const PAGE_SIZE = 20;
@@ -56,6 +56,19 @@ function mapLocal(p: WikiPerson): DisplayCelebrity {
 }
 
 const FILTERS: OccupationCategory[] = ['All', 'Actors', 'Musicians', 'Athletes', 'Politicians', 'Other'];
+
+function matchesCategory(celeb: DisplayCelebrity, activeTab: OccupationCategory): boolean {
+  if (activeTab === 'All') return true;
+  const cat = [celeb.occupation].filter(Boolean).join(' ').toLowerCase();
+  switch (activeTab) {
+    case 'Actors': return /actor|actress|film|cinema|television|tv|model|performer/.test(cat);
+    case 'Musicians': return /music|singer|rapper|composer|songwriter|band|producer|vocalist/.test(cat);
+    case 'Athletes': return /athlete|sport|player|cricket|football|tennis|swimmer|boxer|runner|olympic|footballer|basketball|baseball|golfer|soccer|rugby/.test(cat);
+    case 'Politicians': return /politic|president|minister|senator|governor|parliament|government|leader|diplomat|chancellor/.test(cat);
+    case 'Other': return !/actor|actress|film|cinema|music|singer|rapper|sport|athlete|player|politic|president|minister|football|basketball|tennis|cricket/.test(cat);
+    default: return true;
+  }
+}
 
 export const TodaysBirthdays = () => {
   const { profile } = useAuth();
@@ -106,9 +119,18 @@ export const TodaysBirthdays = () => {
   }, [profile?.country]);
 
   const filtered = useMemo(() => {
-    if (activeFilter === 'All') return allCelebrities;
-    return allCelebrities.filter(c => classifyOccupation(c.occupation) === activeFilter);
+    return allCelebrities.filter(c => matchesCategory(c, activeFilter));
   }, [allCelebrities, activeFilter]);
+
+  const categoryCounts = useMemo(() => {
+    const counts: Record<OccupationCategory, number> = { All: allCelebrities.length, Actors: 0, Musicians: 0, Athletes: 0, Politicians: 0, Other: 0 };
+    for (const c of allCelebrities) {
+      for (const f of FILTERS.slice(1) as Exclude<OccupationCategory, 'All'>[]) {
+        if (matchesCategory(c, f)) { counts[f]++; break; }
+      }
+    }
+    return counts;
+  }, [allCelebrities]);
 
   const visible = filtered.slice(0, visibleCount);
   const remaining = filtered.length - visibleCount;
@@ -159,8 +181,16 @@ export const TodaysBirthdays = () => {
             variant={activeFilter === f ? 'default' : 'outline'}
             size="sm"
             onClick={() => handleFilterChange(f)}
+            className="gap-1.5"
           >
             {f}
+            {!loading && categoryCounts[f] > 0 && (
+              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none ${
+                activeFilter === f ? 'bg-white/20 text-white' : 'bg-muted text-muted-foreground'
+              }`}>
+                {categoryCounts[f]}
+              </span>
+            )}
           </Button>
         ))}
       </div>
