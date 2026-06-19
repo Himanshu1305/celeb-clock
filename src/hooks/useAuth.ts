@@ -234,11 +234,7 @@ export const useAuth = () => {
     ? promoPremiumUntil > new Date()
     : false;
 
-  // ?simulate_expired=true in the URL forces isPremium=false so paywall UI can be tested without a new account
-  const forceExpireTrial = typeof window !== 'undefined' &&
-    new URLSearchParams(window.location.search).get('simulate_expired') === 'true';
-
-  const isPremium = !forceExpireTrial && (profile?.premium_status || isInTrial || isPromoActive || false);
+  const isPremium = profile?.premium_status || isInTrial || isPromoActive || false;
 
   return {
     user,
