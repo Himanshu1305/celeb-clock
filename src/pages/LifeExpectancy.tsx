@@ -127,9 +127,10 @@ const LifeExpectancy = () => {
   });
   console.log('Prefill values on render:', { prefilledFor, prefillDob, prefillSex });
 
-  // Apply DOB prefill to context state (requires useEffect since setBirthDate is from context)
+  // Apply DOB prefill to context state — always overwrite when URL param is present so navigating
+  // from one family member to another gets the correct DOB (BirthDateContext persists across routes)
   useEffect(() => {
-    if (prefillDob && !birthDate) {
+    if (prefillDob) {
       const parsed = new Date(`${prefillDob}T12:00:00`);
       if (!isNaN(parsed.getTime())) setBirthDate(parsed);
     }
