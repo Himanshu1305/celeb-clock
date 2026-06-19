@@ -11,6 +11,9 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, ArrowRight, Check, TrendingUp, Calendar } from 'lucide-react';
 import {
   getBirthdayPersonality, MONTH_NAMES, MONTH_DAYS,
+  getPersonalityParagraph, getSecondPersonalityParagraph,
+  getNumerologyDescription, getNumerologyDetailParagraph,
+  getZodiacContextParagraph, getLifePathParagraph, getLifePathChallengeParagraph,
 } from '@/data/birthdayPersonality';
 
 const ELEMENT_COLORS: Record<string, string> = {
@@ -248,6 +251,57 @@ export default function BirthdayDatePage() {
                 <p className="text-sm text-gray-600 leading-relaxed">{faq.answer}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Personality Deep Dive */}
+        <section className="mb-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
+            {monthName} {day} Personality Deep Dive
+          </h2>
+          <div className="prose prose-sm max-w-none text-gray-700 space-y-4">
+            <p className="leading-relaxed">{getPersonalityParagraph(p.zodiacSign, p.lifePathNumber)}</p>
+            <p className="leading-relaxed">{getSecondPersonalityParagraph(p.element)}</p>
+          </div>
+        </section>
+
+        {/* Numerology Context */}
+        <section className="mb-8 bg-indigo-50 border border-indigo-100 rounded-xl p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-1">
+            {getNumerologyDescription(p.lifePathNumber)}
+          </h2>
+          <p className="text-xs text-indigo-600 font-semibold mb-3 uppercase tracking-wide">
+            Your numerological foundation
+          </p>
+          <p className="text-sm text-gray-700 leading-relaxed">
+            {getNumerologyDetailParagraph(p.lifePathNumber)}
+          </p>
+        </section>
+
+        {/* Zodiac Sign Context */}
+        <section className="mb-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
+            {p.zodiacSign} {p.zodiacSymbol} — Your Zodiac Sign
+          </h2>
+          <p className="text-sm text-gray-700 leading-relaxed">
+            {getZodiacContextParagraph(p.zodiacSign)}
+          </p>
+        </section>
+
+        {/* Life Path Purpose */}
+        <section className="mb-8 bg-gray-50 border border-gray-200 rounded-xl p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
+            Your Life Path {p.lifePathNumber} Purpose &amp; Growth Edge
+          </h2>
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-sm font-bold text-gray-800 mb-2">Core Purpose</h3>
+              <p className="text-sm text-gray-700 leading-relaxed">{getLifePathParagraph(p.lifePathNumber)}</p>
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-gray-800 mb-2">Growth Edge</h3>
+              <p className="text-sm text-gray-700 leading-relaxed">{getLifePathChallengeParagraph(p.lifePathNumber)}</p>
+            </div>
           </div>
         </section>
 
