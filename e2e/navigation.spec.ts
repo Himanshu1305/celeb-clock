@@ -28,7 +28,7 @@ const PUBLIC_ROUTES = [
   { path: '/compatibility', title: 'Compatibility', h1Contains: 'Compatibility' },
   { path: '/rashi-ratna', title: 'Rashi Ratna', h1Contains: 'Rashi' },
   { path: '/birthday', title: 'Birthday', h1Contains: 'Birthday' },
-  { path: '/birthday/june-17', title: 'Birthday', h1Contains: 'June 17' },
+  { path: '/birthday/6/17', title: 'Birthday', h1Contains: 'June 17' },
   { path: '/contact', title: 'Contact', h1Contains: 'Contact' },
   { path: '/privacy', title: 'Privacy', h1Contains: 'Privacy' },
   { path: '/terms', title: 'Terms', h1Contains: 'Terms' },

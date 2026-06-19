@@ -331,6 +331,7 @@ const BirthdayReport = () => {
                     type="text"
                     placeholder="e.g. Priya, James, Mum..."
                     value={recipientName}
+                    maxLength={200}
                     onChange={e => setRecipientName(e.target.value)}
                     className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-300"
                   />

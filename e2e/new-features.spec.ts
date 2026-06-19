@@ -190,8 +190,8 @@ test.describe('Birthday Hub — /birthday', () => {
     await expect(januaryLink).toBeVisible({ timeout: 5000 });
   });
 
-  test('/birthday/june-17 shows June 17 day page', async ({ page }) => {
-    await page.goto('/birthday/june-17');
+  test('/birthday/6/17 shows June 17 day page', async ({ page }) => {
+    await page.goto('/birthday/6/17');
     await page.waitForLoadState('networkidle');
     await expect(page.locator('h1').first()).toBeVisible();
     const h1Text = await page.locator('h1').first().innerText();
