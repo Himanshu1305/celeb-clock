@@ -112,36 +112,42 @@ const LifeExpectancy = () => {
     }
   }, []);
 
-  // Pre-fill quiz from family dashboard ?dob=YYYY-MM-DD&sex=male&name=Mom
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const dobParam = params.get('dob');
-    const sexParam = params.get('sex');
-    const nameParam = params.get('name');
-    if (!dobParam && !sexParam) return;
+  // Read URL params synchronously in useState initializers — avoids timing bug where useEffect fires after first render
+  const [prefilledFor, setPrefilledFor] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return new URLSearchParams(window.location.search).get('name') || null;
+  });
+  const [prefillDob] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return new URLSearchParams(window.location.search).get('dob') || null;
+  });
+  const [prefillSex] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return new URLSearchParams(window.location.search).get('sex') || null;
+  });
+  console.log('Prefill values on render:', { prefilledFor, prefillDob, prefillSex });
 
-    if (dobParam) {
-      // Parse as noon UTC to avoid timezone-shift date changes
-      const parsed = new Date(`${dobParam}T12:00:00`);
+  // Apply DOB prefill to context state (requires useEffect since setBirthDate is from context)
+  useEffect(() => {
+    if (prefillDob && !birthDate) {
+      const parsed = new Date(`${prefillDob}T12:00:00`);
       if (!isNaN(parsed.getTime())) setBirthDate(parsed);
     }
-
-    if (sexParam) {
-      // Inject gender into the quiz prefill slot so LifeExpectancyCalculator picks it up
-      try {
-        const existing = localStorage.getItem('bornclock_quiz_prefill');
-        const prefill = existing ? JSON.parse(existing) : {};
-        prefill.quiz = { ...(prefill.quiz ?? {}), gender: sexParam };
-        prefill.timestamp = Date.now();
-        localStorage.setItem('bornclock_quiz_prefill', JSON.stringify(prefill));
-      } catch { /* storage unavailable */ }
-    }
-
-    if (nameParam) setPrefilledFor(nameParam);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [prefilledFor, setPrefilledFor] = useState<string | null>(null);
+  // Apply sex prefill to localStorage quiz slot so LifeExpectancyCalculator picks it up
+  useEffect(() => {
+    if (!prefillSex) return;
+    try {
+      const existing = localStorage.getItem('bornclock_quiz_prefill');
+      const prefill = existing ? JSON.parse(existing) : {};
+      prefill.quiz = { ...(prefill.quiz ?? {}), gender: prefillSex };
+      prefill.timestamp = Date.now();
+      localStorage.setItem('bornclock_quiz_prefill', JSON.stringify(prefill));
+    } catch { /* storage unavailable */ }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [optimizedForecast, setOptimizedForecast] = useState<number | null>(null);
   const [currentSimForecast, setCurrentSimForecast] = useState<number | null>(null);
   const [userSelectedHabits, setUserSelectedHabits] = useState<string[]>([]);
