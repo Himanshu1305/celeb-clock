@@ -4,7 +4,7 @@ import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
-import { calculateMoonSignAndNakshatra, MOON_SIGN_DATA, NAKSHATRAS } from '@/data/moonSignData';
+import { calculateMoonSignAndNakshatra, MOON_SIGN_DATA, NAKSHATRAS, getNakshatraLifeApplication } from '@/data/moonSignData';
 
 type TabKey = 'personality' | 'love' | 'shadow' | 'compatible';
 
@@ -241,9 +241,19 @@ export default function MoonSignPage() {
                     <span className="text-gray-400 text-sm">{expandedNak === Number(num) ? '▲' : '▼'}</span>
                   </button>
                   {expandedNak === Number(num) && (
-                    <div className="px-4 pb-4 border-t border-gray-100">
-                      <p className="text-xs text-gray-500 mt-2 mb-1">Meaning: {nak.meaning} · Deity: {nak.deity}</p>
+                    <div className="px-4 pb-4 border-t border-gray-100 space-y-3">
+                      <div className="flex flex-wrap gap-3 mt-3 text-xs text-gray-500">
+                        <span><strong>Meaning:</strong> {nak.meaning}</span>
+                        <span>·</span>
+                        <span><strong>Deity:</strong> {nak.deity}</span>
+                        <span>·</span>
+                        <span><strong>Quality:</strong> {nak.quality}</span>
+                      </div>
                       <p className="text-sm text-gray-700 leading-relaxed">{nak.description}</p>
+                      <div className="bg-purple-50 border border-purple-100 rounded-lg p-3">
+                        <p className="text-xs font-bold text-purple-700 mb-2">🌙 In Your Daily Life</p>
+                        <p className="text-xs text-gray-700 leading-relaxed">{getNakshatraLifeApplication(nak.name)}</p>
+                      </div>
                     </div>
                   )}
                 </div>
