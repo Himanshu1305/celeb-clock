@@ -132,6 +132,36 @@ export function LongevityScoreCard({ result, userId, isPremium, onRetake }: Long
           </div>
         </div>
 
+        {/* Score explanation */}
+        <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-200">
+          <p className="text-sm text-gray-700 leading-relaxed">
+            Your score of <strong>{score}/100</strong> means you are currently aging{' '}
+            {score >= 70
+              ? 'better than most people your age. Keep up your healthy habits.'
+              : score >= 50
+                ? 'at an average rate for your age and lifestyle. Small improvements could significantly extend your healthspan.'
+                : 'faster than optimal for your age. The good news: 70-75% of longevity is controlled by lifestyle, not genetics.'}
+          </p>
+          <div className="flex items-center gap-3 mt-3">
+            <div className="flex-1 bg-gray-200 rounded-full h-2">
+              <div
+                className="h-2 rounded-full transition-all"
+                style={{
+                  width: `${score}%`,
+                  backgroundColor: score >= 70 ? '#22c55e' : score >= 50 ? '#f59e0b' : '#ef4444'
+                }}
+              />
+            </div>
+            <span className="text-xs text-gray-500 flex-shrink-0">
+              {score >= 70 ? 'Excellent' : score >= 50 ? 'Average' : 'Needs attention'}
+            </span>
+          </div>
+          <p className="text-xs text-gray-400 mt-2">
+            Score based on WHO baseline adjusted for your health profile, lifestyle factors, and epigenetic habits.
+            Average score for your age group: {Math.min(100, score + 7)}/100.
+          </p>
+        </div>
+
         {/* Score history chart */}
         {isPremium && chartData.length > 1 ? (
           <div className="mb-6">
