@@ -38,7 +38,7 @@ export async function detectCountry(): Promise<CountryInfo> {
 
     localStorage.setItem(
       'bornclock_country',
-      JSON.stringify({ data: result, timestamp: Date.now() }),
+      JSON.stringify({ country: countryCode, data: result, timestamp: Date.now(), detectedAt: Date.now() }),
     );
     cachedCountry = result;
     return result;

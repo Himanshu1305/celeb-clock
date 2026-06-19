@@ -5,8 +5,11 @@ export function isIndianUser(): boolean {
   try {
     const cached = localStorage.getItem('bornclock_country');
     if (cached) {
-      const { country } = JSON.parse(cached);
-      return country === 'IN' || country === 'India';
+      const parsed = JSON.parse(cached);
+      // Simple format: { country: 'IN' } (written by CountryDetectionService >= v2)
+      if (typeof parsed.country === 'string') return parsed.country === 'IN' || parsed.country === 'India';
+      // Legacy format: { data: { countryCode }, timestamp }
+      if (parsed.data?.countryCode) return parsed.data.countryCode === 'IN';
     }
     return true;
   } catch {
