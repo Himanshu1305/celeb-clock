@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { SEO, FAQSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { Navigation } from '@/components/Navigation';
@@ -30,6 +31,8 @@ const ZODIAC_PAIRS: Record<number, string> = {
 const MONTH_SAMPLE_DAY = [0, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15];
 
 export default function BirthdayHub() {
+  const navigate = useNavigate();
+  const [pickedDate, setPickedDate] = useState('');
   const today = new Date();
   const currentMonth = today.getMonth() + 1;
   const currentDay   = today.getDate();
@@ -112,6 +115,38 @@ export default function BirthdayHub() {
             </span>
           ))}
         </div>
+
+        {/* Date picker */}
+        <section className="mb-10 bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100 rounded-2xl p-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-1 text-center">
+            Jump to Any Birthday
+          </h2>
+          <p className="text-sm text-gray-500 text-center mb-4">
+            Enter any date to see the full personality profile
+          </p>
+          <div className="flex gap-3 justify-center flex-wrap">
+            <input
+              type="date"
+              value={pickedDate}
+              onChange={e => setPickedDate(e.target.value)}
+              className="border-2 border-indigo-200 rounded-xl px-4 py-2.5 text-gray-800 text-sm focus:outline-none focus:border-indigo-500 bg-white"
+              max="2099-12-31"
+              min="1900-01-01"
+            />
+            <Button
+              onClick={() => {
+                if (!pickedDate) return;
+                const [, m, d] = pickedDate.split('-').map(Number);
+                navigate(`/birthday/${m}/${d}`);
+              }}
+              disabled={!pickedDate}
+              className="gap-2"
+            >
+              <Calendar className="w-4 h-4" />
+              View Profile
+            </Button>
+          </div>
+        </section>
 
         {/* 12-month grid */}
         <section className="mb-12">
