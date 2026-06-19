@@ -9,6 +9,8 @@ import { getReport } from '@/services/BirthdayReportService';
 import type { BirthdayReportData } from '@/services/BirthdayReportService';
 import { getTarotCardByLifePath } from '@/data/tarotData';
 import { getChineseZodiacDescription } from '@/data/chineseZodiacDescriptions';
+import { getVedicContext } from '@/data/birthdayPersonality';
+import { RASHI_RATNA_DATA } from '@/data/rashiRatnaData';
 import { calculateMoonSignAndNakshatra } from '@/data/moonSignData';
 import { calculateAllNameNumbers, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 import { calculateBiorhythm, getBiorhythmStatus } from '@/data/biorhythmData';
@@ -643,7 +645,10 @@ const ReportView = () => {
             </TabsContent>
 
             <TabsContent value="vedic" className="space-y-4 print-expand">
-              {vedicRashi ? (
+              {vedicRashi ? (() => {
+                const vedicCtx = getVedicContext(dob.getMonth() + 1, dob.getDate(), westernZodiac?.name ?? vedicRashi.name);
+                const rashiRatna = RASHI_RATNA_DATA.find(r => r.rashiEnglish === vedicRashi.name);
+                return (
                 <>
                   <div className="flex items-center gap-3 mb-2">
                     <span className="text-5xl">{vedicRashi.symbol}</span>
@@ -655,6 +660,7 @@ const ReportView = () => {
                   <div className="flex flex-wrap gap-2 mb-3">
                     {vedicRashi.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">🔥 {vedicRashi.element}</span>}
                     {vedicRashi.ruling_planet && <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">🪐 {vedicRashi.ruling_planet}</span>}
+                    {vedicCtx.rashiSanskrit && <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">🕉 {vedicCtx.rashiSanskrit} — {vedicCtx.rashiMeaning}</span>}
                   </div>
                   <p className="text-gray-700 text-sm leading-relaxed">{vedicRashi.description}</p>
                   {zodiacComparison && (
@@ -672,8 +678,45 @@ const ReportView = () => {
                       </div>
                     </div>
                   )}
+
+                  {/* Nakshatra subsection */}
+                  <div className="bg-orange-50 border border-orange-100 rounded-2xl p-5 space-y-2">
+                    <div className="text-xs font-bold text-orange-700 uppercase tracking-wide mb-1">🌙 Birth Nakshatra</div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">⭐</span>
+                      <div>
+                        <div className="font-black text-orange-900 text-lg">{vedicCtx.nakshatra}</div>
+                        <div className="text-xs text-orange-600">Meaning: {vedicCtx.nakshatraMeaning} · Deity: {vedicCtx.nakshatraDeity}</div>
+                      </div>
+                    </div>
+                    <p className="text-sm text-orange-800 leading-relaxed">
+                      The Nakshatra of <strong>{vedicCtx.nakshatra}</strong> brings the quality of <em>{vedicCtx.nakshatraQuality}</em>. In Vedic astrology, your Nakshatra is considered more precise than your Rashi — it reveals the exact lunar mansion your Sun occupied at birth, carrying specific energetic signatures that shape your intuitive nature, karmic path, and deepest motivations.
+                    </p>
+                  </div>
+
+                  {/* Rashi Ratna (Vedic gemstone) */}
+                  {rashiRatna && (
+                    <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 space-y-3">
+                      <div className="text-xs font-bold text-indigo-700 uppercase tracking-wide">💎 Rashi Ratna — Vedic Birthstone</div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl flex-shrink-0" style={{ backgroundColor: rashiRatna.hex }} />
+                        <div>
+                          <div className="font-black text-indigo-900">{rashiRatna.primaryStone} ({rashiRatna.primaryStoneHindi})</div>
+                          <div className="text-xs text-indigo-600">Alt: {rashiRatna.secondaryStone} · Metal: {rashiRatna.metalToUse}</div>
+                        </div>
+                      </div>
+                      <p className="text-sm text-indigo-800 leading-relaxed">{rashiRatna.description.slice(0, 300)}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {rashiRatna.benefits.slice(0, 4).map(b => (
+                          <span key={b} className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs">{b}</span>
+                        ))}
+                      </div>
+                      <div className="text-xs text-indigo-500 italic">Wear on {rashiRatna.wearingDay} · {rashiRatna.fingerToWear}</div>
+                    </div>
+                  )}
                 </>
-              ) : <p className="text-gray-400 text-sm">Data unavailable</p>}
+                );
+              })() : <p className="text-gray-400 text-sm">Data unavailable</p>}
             </TabsContent>
           </Tabs>
 
