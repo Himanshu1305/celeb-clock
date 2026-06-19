@@ -558,6 +558,13 @@ const LifeExpectancy = () => {
           </section>
         )}
 
+        {/* ── World Longevity Facts — shown after simulator ── */}
+        {(phase === 'result' || phase === 'report') && longevityResult && (
+          <section id="longevity-records" className="max-w-5xl mx-auto mb-10 px-4">
+            <WorldLongevityRecords />
+          </section>
+        )}
+
         {/* ── Cultural Horizon Teaser (phase result only) ── */}
         {phase === 'result' && longevityResult && (
           <section className="max-w-6xl mx-auto mb-10">
@@ -643,20 +650,15 @@ const LifeExpectancy = () => {
           </section>
         )}
 
-        {/* Health Guide & World Records — only shown after quiz complete */}
+        {/* Health Guide — only shown after quiz complete */}
         {longevityResult && (
-          <>
-            <section className="max-w-5xl mx-auto mb-10 px-4">
-              <div className="mb-4">
-                <h2 className="text-2xl font-bold text-foreground">🧬 Science-Backed Longevity Guide</h2>
-                <p className="text-sm text-muted-foreground mt-1">Evidence-based recommendations tailored to your results.</p>
-              </div>
-              <HealthGuideSection result={longevityResult} />
-            </section>
-            <section id="longevity-records" className="max-w-5xl mx-auto mb-10 px-4">
-              <WorldLongevityRecords />
-            </section>
-          </>
+          <section className="max-w-5xl mx-auto mb-10 px-4">
+            <div className="mb-4">
+              <h2 className="text-2xl font-bold text-foreground">🧬 Science-Backed Longevity Guide</h2>
+              <p className="text-sm text-muted-foreground mt-1">Evidence-based recommendations tailored to your results.</p>
+            </div>
+            <HealthGuideSection result={longevityResult} />
+          </section>
         )}
 
         {/* About Section */}
