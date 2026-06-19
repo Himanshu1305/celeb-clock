@@ -84,13 +84,23 @@ export const EnhancedLifeExpectancyReport = ({
 
   const handleExportPDF = async () => {
     setExporting(true);
+    const element = document.getElementById('longevity-blueprint-card');
+    if (!element) { setExporting(false); return; }
+
+    // Temporarily show all hidden tab panels so html2canvas captures all content
+    const hiddenPanels = element.querySelectorAll<HTMLElement>('[role="tabpanel"][data-state="inactive"]');
+    hiddenPanels.forEach(p => {
+      p.style.display = 'block';
+      p.style.visibility = 'visible';
+    });
+
     try {
-      const element = document.getElementById('longevity-blueprint-card');
-      if (!element) return;
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff',
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight,
       });
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -99,6 +109,11 @@ export const EnhancedLifeExpectancyReport = ({
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save('longevity-blueprint.pdf');
     } finally {
+      // Restore hidden panels
+      hiddenPanels.forEach(p => {
+        p.style.display = '';
+        p.style.visibility = '';
+      });
       setExporting(false);
     }
   };
@@ -302,7 +317,7 @@ export const EnhancedLifeExpectancyReport = ({
         )}
 
         {isPremium && (
-          <div className="flex items-center justify-center gap-2">
+          <div className="screen-only flex items-center justify-center gap-2">
             <Button size="sm" variant="outline" className="gap-2" onClick={handleExportPDF} disabled={exporting}>
               <Download className="w-3.5 h-3.5" /> {exporting ? 'Exporting…' : 'Export PDF'}
             </Button>
@@ -315,7 +330,7 @@ export const EnhancedLifeExpectancyReport = ({
 
       {/* ── Tabs ── */}
       <Tabs defaultValue="genetics" className="w-full">
-        <TabsList className="grid grid-cols-3 w-full border-b rounded-none bg-transparent h-auto p-0">
+        <TabsList className="screen-only grid grid-cols-3 w-full border-b rounded-none bg-transparent h-auto p-0">
           <TabsTrigger value="genetics"  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">🧬 Biological Blueprint</TabsTrigger>
           <TabsTrigger value="community" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">🏘️ Community Anchor</TabsTrigger>
           <TabsTrigger value="health"    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 font-semibold text-xs sm:text-sm">💊 Health Guide</TabsTrigger>

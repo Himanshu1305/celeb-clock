@@ -377,3 +377,13 @@
 }
 
 .no-screen { display: none; }
+.print-only { display: none; }
+@media print {
+  .print-only { display: block !important; }
+  .screen-only { display: none !important; }
+  /* Force all tab panels visible in print */
+  #longevity-blueprint-card [role="tabpanel"][data-state="inactive"] {
+    display: block !important;
+    visibility: visible !important;
+  }
+}
