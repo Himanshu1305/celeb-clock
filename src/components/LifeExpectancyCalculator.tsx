@@ -391,18 +391,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
         ) : liveResult ? (
           <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-2">
             <div className="flex items-start justify-between gap-3 flex-wrap">
-              <div className={step === 6 ? 'grid grid-cols-2 gap-4 w-full' : undefined}>
-                {/* Current age column — only at step 6 */}
-                {step === 6 && currentAge !== null && (
-                  <div>
-                    <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Your Age Now</p>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <strong className="text-4xl font-black text-blue-500">{currentAge}</strong>
-                      <span className="text-lg font-bold text-blue-400">yrs</span>
-                    </div>
-                    <p className="text-[10px] text-muted-foreground mt-0.5">Today</p>
-                  </div>
-                )}
+              <div>
                 {/* Projected age */}
                 <div>
                   <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">
