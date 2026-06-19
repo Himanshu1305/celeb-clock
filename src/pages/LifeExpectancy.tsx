@@ -35,6 +35,7 @@ import { LongevityCoachChat } from '@/components/LongevityCoachChat';
 import { LongevityScoreCard } from '@/components/LongevityScoreCard';
 import { PaywallModal } from '@/components/PaywallModal';
 import { supabase } from '@/integrations/supabase/client';
+import PageTagline from '@/components/PageTagline';
 
 // ── ErrorBoundary ────────────────────────────────────────────────────────────
 class ReportErrorBoundary extends Component<
@@ -266,6 +267,7 @@ const LifeExpectancy = () => {
             <h1 className="text-5xl md:text-7xl font-bold gradient-text-primary leading-tight">
               Best Life Expectancy Calculator — How Long Will You Live?
             </h1>
+            <PageTagline />
             <EEATBadges sources={['WHO', 'CDC', 'NIH', 'The Lancet']} />
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Wondering how your daily habits and health choices impact your future? Our data-driven calculator estimates your lifespan across all three pillars: health, genetics, and epigenetics.
