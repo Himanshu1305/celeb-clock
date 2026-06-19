@@ -179,6 +179,7 @@ const CountryComparison = () => {
   const [shareCopied, setShareCopied] = useState(false);
   const [expandedWhatif, setExpandedWhatif] = useState<'japan' | 'usa' | 'best' | null>(null);
   const [factCopied, setFactCopied] = useState<number | null>(null);
+  const [copiedFactId, setCopiedFactId] = useState<number | null>(null);
 
   useEffect(() => {
     try {
@@ -252,7 +253,18 @@ const CountryComparison = () => {
   const handleCopyFact = async (idx: number, text: string) => {
     await navigator.clipboard.writeText(`${text} — bornclock.com/country-comparison`);
     setFactCopied(idx);
-    setTimeout(() => setFactCopied(null), 2000);
+    setCopiedFactId(idx);
+    setTimeout(() => { setFactCopied(null); setCopiedFactId(null); }, 2000);
+  };
+
+  const handleShareWhatsApp = (text: string) => {
+    const msg = encodeURIComponent(`${text} — bornclock.com/country-comparison`);
+    window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleShareTwitter = (text: string) => {
+    const tweet = encodeURIComponent(`${text} bornclock.com/country-comparison`);
+    window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank', 'noopener,noreferrer');
   };
 
   const shareUrl = 'https://bornclock.com/country-comparison';
@@ -553,12 +565,26 @@ const CountryComparison = () => {
                   <h3 className="font-bold text-sm mb-2">{fact.title}</h3>
                   <p className="text-xs leading-relaxed opacity-90 mb-2">{fact.body}</p>
                   <p className="text-[10px] opacity-60 mb-3">{fact.cite}</p>
-                  <button
-                    onClick={() => handleCopyFact(fact.idx, `${fact.title}: ${fact.body} ${fact.cite}`)}
-                    className="text-[10px] px-2 py-1 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
-                  >
-                    {factCopied === fact.idx ? '✓ Copied!' : '📋 Share fact'}
-                  </button>
+                  <div className="flex gap-1.5 flex-wrap">
+                    <button
+                      onClick={() => handleCopyFact(fact.idx, `${fact.title}: ${fact.body} ${fact.cite}`)}
+                      className="text-[10px] px-2 py-1 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+                    >
+                      {copiedFactId === fact.idx ? '✓ Copied!' : '📋 Copy'}
+                    </button>
+                    <button
+                      onClick={() => handleShareWhatsApp(`${fact.title}: ${fact.body} ${fact.cite}`)}
+                      className="text-[10px] px-2 py-1 rounded-lg bg-green-500/80 hover:bg-green-500 transition-colors"
+                    >
+                      📱 WA
+                    </button>
+                    <button
+                      onClick={() => handleShareTwitter(`${fact.title}: ${fact.body} ${fact.cite}`)}
+                      className="text-[10px] px-2 py-1 rounded-lg bg-black/40 hover:bg-black/60 transition-colors"
+                    >
+                      𝕏
+                    </button>
+                  </div>
                 </div>
               ))}
 

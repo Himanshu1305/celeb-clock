@@ -14,6 +14,7 @@ import {
   getPersonalityParagraph, getSecondPersonalityParagraph,
   getNumerologyDescription, getNumerologyDetailParagraph,
   getZodiacContextParagraph, getLifePathParagraph, getLifePathChallengeParagraph,
+  getVedicContext,
 } from '@/data/birthdayPersonality';
 
 const ELEMENT_COLORS: Record<string, string> = {
@@ -46,6 +47,7 @@ export default function BirthdayDatePage() {
 
   const p = getBirthdayPersonality(month, day);
   const monthName = MONTH_NAMES[month];
+  const vedic = getVedicContext(month, day, p.zodiacSign);
 
   // Adjacent date navigation
   let prevMonth = month, prevDay = day - 1;
@@ -241,19 +243,6 @@ export default function BirthdayDatePage() {
           </Button>
         </div>
 
-        {/* FAQ */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            {faqs.map((faq, i) => (
-              <div key={i} className="border border-gray-200 rounded-lg p-4">
-                <h3 className="text-sm font-bold text-gray-900 mb-1.5">{faq.question}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{faq.answer}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* Personality Deep Dive */}
         <section className="mb-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4">
@@ -285,6 +274,41 @@ export default function BirthdayDatePage() {
           </h2>
           <p className="text-sm text-gray-700 leading-relaxed">
             {getZodiacContextParagraph(p.zodiacSign)}
+          </p>
+        </section>
+
+        {/* Indian Astrology — Rashi & Nakshatra */}
+        <section className="mb-8 bg-orange-50 border border-orange-200 rounded-xl p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-1">
+            🕉️ Indian Astrology — Rashi &amp; Nakshatra
+          </h2>
+          <p className="text-xs text-orange-700 font-semibold uppercase tracking-wide mb-4">
+            Vedic perspective for {monthName} {day} birthdays
+          </p>
+          <div className="grid sm:grid-cols-2 gap-5">
+            <div className="bg-white rounded-lg p-4 border border-orange-100">
+              <p className="text-xs font-bold text-orange-600 uppercase tracking-wide mb-2">Rashi (Vedic Sun Sign)</p>
+              <p className="text-lg font-black text-gray-900">{vedic.rashiSanskrit}</p>
+              <p className="text-sm text-gray-500 mb-2">{vedic.rashi} · {vedic.rashiMeaning}</p>
+              <p className="text-xs text-gray-600">
+                <span className="font-semibold">Ruling Planet:</span> {vedic.rashiLord}
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-4 border border-orange-100">
+              <p className="text-xs font-bold text-orange-600 uppercase tracking-wide mb-2">Nakshatra (Lunar Mansion)</p>
+              <p className="text-lg font-black text-gray-900">{vedic.nakshatra}</p>
+              <p className="text-sm text-gray-500 mb-2">{vedic.nakshatraMeaning}</p>
+              <p className="text-xs text-gray-600">
+                <span className="font-semibold">Deity:</span> {vedic.nakshatraDeity}
+              </p>
+            </div>
+          </div>
+          <p className="text-sm text-gray-700 leading-relaxed mt-4">
+            Those born under <strong>{vedic.nakshatra}</strong> nakshatra embody{' '}
+            <strong>{vedic.nakshatraQuality}</strong>. In Vedic tradition, the nakshatra
+            at birth shapes the inner emotional landscape, while the Rashi ({vedic.rashiSanskrit})
+            reflects the outer personality and life approach. Together, they offer a deeper
+            layer of self-understanding beyond the Western zodiac.
           </p>
         </section>
 
@@ -328,6 +352,19 @@ export default function BirthdayDatePage() {
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
+
+        {/* FAQ — kept last for SEO structured data */}
+        <section className="mt-10 mb-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            {faqs.map((faq, i) => (
+              <div key={i} className="border border-gray-200 rounded-lg p-4">
+                <h3 className="text-sm font-bold text-gray-900 mb-1.5">{faq.question}</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
 
       <Footer />

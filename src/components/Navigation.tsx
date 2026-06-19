@@ -15,7 +15,6 @@ const navItems = [
   { path: '/age-calculator', label: 'Age Calculator', icon: Clock },
   { path: '/todays-birthdays', label: "Today's Birthdays", icon: Cake },
   { path: '/celebrity-birthday', label: 'Celebrity Match', icon: Gift },
-  { path: '/numerology', label: 'Numerology', icon: Hash },
   { path: '/planetary-age', label: 'Planetary Age', icon: Globe },
   { path: '/life-expectancy', label: 'Life Expectancy', icon: Crown, premium: true },
   { path: '/birthstone', label: 'Birthstone', icon: Gem },
@@ -25,8 +24,12 @@ const navItems = [
   { path: '/blog', label: 'Blog', icon: BookOpen },
   { path: '/biological-age', label: 'Biological Age', icon: Activity },
   { path: '/country-comparison', label: 'Country Comparison', icon: Map },
-  { path: '/name-numerology', label: 'Name Numerology', icon: Hash },
   { path: '/biorhythm', label: 'Biorhythm Calculator', icon: Activity },
+];
+
+const numerologyItems = [
+  { path: '/numerology', label: 'Numerology by Birthday', emoji: '🔢' },
+  { path: '/name-numerology', label: 'Name Numerology', emoji: '✍️' },
 ];
 
 const astrologyItems = [
@@ -89,6 +92,26 @@ export const Navigation = () => {
           </Button>
         </Link>
       ))}
+
+      {/* Numerology dropdown */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={numerologyItems.some(i => isActive(i.path)) ? 'default' : 'ghost'} size="sm" className="gap-1.5">
+            <Hash className="w-4 h-4" />
+            <span className="hidden md:inline">Numerology</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {numerologyItems.map((item) => (
+            <Link key={item.path} to={item.path}>
+              <DropdownMenuItem className={`gap-2 cursor-pointer ${isActive(item.path) ? 'bg-accent' : ''}`}>
+                <span className="text-base leading-none">{item.emoji}</span>
+                {item.label}
+              </DropdownMenuItem>
+            </Link>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       {/* Astrology dropdown */}
       <DropdownMenu>

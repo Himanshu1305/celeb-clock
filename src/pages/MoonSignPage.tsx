@@ -216,7 +216,7 @@ export default function MoonSignPage() {
                   {expandedSign === sign.sign && (
                     <div className="px-4 pb-4 border-t border-gray-100">
                       <p className="text-sm text-gray-600 mt-3 leading-relaxed italic mb-2">{sign.emotionalNature}</p>
-                      <p className="text-sm text-gray-700 leading-relaxed">{sign.personality.slice(0, 300)}...</p>
+                      <p className="text-sm text-gray-700 leading-relaxed">{sign.personality}</p>
                     </div>
                   )}
                 </div>

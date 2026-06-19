@@ -42,6 +42,7 @@ class FamilyErrorBoundary extends Component<{ children: ReactNode }, { hasError:
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine,
 } from 'recharts';
+import { supabase } from '@/integrations/supabase/client';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
@@ -100,17 +101,21 @@ function FamilyDashboardInner() {
     country: '',
   });
 
+  const loadFamilyMembers = async (uid: string) => {
+    try {
+      const data = await getFamilyMembers(uid);
+      setMembers(data);
+    } catch (err) {
+      console.error('getFamilyMembers error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!user?.id) return;
-    getFamilyMembers(user.id)
-      .then(data => {
-        setMembers(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('getFamilyMembers error:', err);
-        setLoading(false);
-      });
+    loadFamilyMembers(user.id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
   async function handleAdd() {
@@ -119,16 +124,43 @@ function FamilyDashboardInner() {
     if (!form.date_of_birth) { setAddError('Please enter a date of birth.'); return; }
     setAddError(null);
     setAdding(true);
-    const { data: member, error } = await addFamilyMember(user.id, form);
-    setAdding(false);
-    if (error) {
-      setAddError(error);
-      return;
-    }
-    if (member) {
-      setMembers(prev => [...prev, member]);
-      setForm({ name: '', date_of_birth: '', gender: 'male', country: '' });
-      setShowAdd(false);
+    try {
+      const { data, error } = await supabase
+        .from('family_members')
+        .insert({
+          user_id: user.id,
+          name: form.name.trim(),
+          date_of_birth: form.date_of_birth,
+          gender: form.gender || null,
+          country: form.country || null,
+        })
+        .select()
+        .single();
+
+      if (error) {
+        const code = (error as { code?: string }).code;
+        if (code === '42501') {
+          setAddError('Permission error — please sign out and sign in again.');
+        } else if (code === '23502') {
+          setAddError(`Missing required field: ${(error as { details?: string; message?: string }).details || error.message}`);
+        } else if (code === '23503') {
+          setAddError('Invalid data — please check the fields and try again.');
+        } else {
+          setAddError(error.message || 'Failed to add family member. Please try again.');
+        }
+        return;
+      }
+
+      if (data) {
+        setMembers(prev => [...prev, data as FamilyMember]);
+        setForm({ name: '', date_of_birth: '', gender: 'male', country: '' });
+        setShowAdd(false);
+      }
+    } catch (err) {
+      console.error('handleAdd unexpected error:', err);
+      setAddError('An unexpected error occurred. Please try again.');
+    } finally {
+      setAdding(false);
     }
   }
 

@@ -603,6 +603,93 @@ export function getLifePathChallengeParagraph(lifePathNum: number): string {
     `The growth edge for Life Path ${lifePathNum} involves learning to integrate the shadow side of your natural strengths into a more complete and effective expression of your full potential.`;
 }
 
+// ── Vedic Astrology (Rashi + Nakshatra) ──────────────────────────────────────
+
+export interface VedicContext {
+  rashi: string;
+  rashiSanskrit: string;
+  rashiMeaning: string;
+  rashiLord: string;
+  nakshatra: string;
+  nakshatraMeaning: string;
+  nakshatraDeity: string;
+  nakshatraQuality: string;
+}
+
+const RASHI_MAP: Record<string, { sanskrit: string; meaning: string; lord: string }> = {
+  Aries:       { sanskrit: 'Mesha',      meaning: 'The Ram',        lord: 'Mars (Mangal)' },
+  Taurus:      { sanskrit: 'Vrishabha',  meaning: 'The Bull',       lord: 'Venus (Shukra)' },
+  Gemini:      { sanskrit: 'Mithuna',    meaning: 'The Twins',      lord: 'Mercury (Budha)' },
+  Cancer:      { sanskrit: 'Karka',      meaning: 'The Crab',       lord: 'Moon (Chandra)' },
+  Leo:         { sanskrit: 'Simha',      meaning: 'The Lion',       lord: 'Sun (Surya)' },
+  Virgo:       { sanskrit: 'Kanya',      meaning: 'The Maiden',     lord: 'Mercury (Budha)' },
+  Libra:       { sanskrit: 'Tula',       meaning: 'The Scales',     lord: 'Venus (Shukra)' },
+  Scorpio:     { sanskrit: 'Vrishchika', meaning: 'The Scorpion',   lord: 'Mars (Mangal)' },
+  Sagittarius: { sanskrit: 'Dhanu',      meaning: 'The Archer',     lord: 'Jupiter (Guru)' },
+  Capricorn:   { sanskrit: 'Makara',     meaning: 'The Sea-Goat',   lord: 'Saturn (Shani)' },
+  Aquarius:    { sanskrit: 'Kumbha',     meaning: 'The Water Jar',  lord: 'Saturn (Shani)' },
+  Pisces:      { sanskrit: 'Meena',      meaning: 'The Fish',       lord: 'Jupiter (Guru)' },
+};
+
+interface NakshatraInfo {
+  name: string;
+  meaning: string;
+  deity: string;
+  quality: string;
+}
+
+const NAKSHATRAS: NakshatraInfo[] = [
+  { name: 'Ashwini',           meaning: 'Horse head',           deity: 'Ashwini Kumaras', quality: 'swift healing energy and new beginnings' },
+  { name: 'Bharani',           meaning: 'She who bears',        deity: 'Yama',             quality: 'transformative power and deep endurance' },
+  { name: 'Krittika',          meaning: 'The cutters',          deity: 'Agni',             quality: 'purification and sharp discernment' },
+  { name: 'Rohini',            meaning: 'The red one',          deity: 'Brahma',           quality: 'fertility, beauty and creative abundance' },
+  { name: 'Mrigashira',        meaning: 'Deer\'s head',         deity: 'Chandra',          quality: 'searching curiosity and gentle sensitivity' },
+  { name: 'Ardra',             meaning: 'The moist one',        deity: 'Rudra',            quality: 'stormy breakthroughs and fierce renewal' },
+  { name: 'Punarvasu',         meaning: 'Return of the light',  deity: 'Aditi',            quality: 'restoration, optimism and boundless potential' },
+  { name: 'Pushya',            meaning: 'The nourisher',        deity: 'Brihaspati',       quality: 'spiritual nourishment and deep wisdom' },
+  { name: 'Ashlesha',          meaning: 'The embracer',         deity: 'Nagas',            quality: 'serpent wisdom and transformative insight' },
+  { name: 'Magha',             meaning: 'The mighty one',       deity: 'Pitrs',            quality: 'ancestral power and noble authority' },
+  { name: 'Purva Phalguni',    meaning: 'First reddish one',    deity: 'Bhaga',            quality: 'abundance, love and joyful creativity' },
+  { name: 'Uttara Phalguni',   meaning: 'Second reddish one',   deity: 'Aryaman',          quality: 'lasting partnerships and charitable heart' },
+  { name: 'Hasta',             meaning: 'The hand',             deity: 'Savitar',          quality: 'skilled craftsmanship and practical manifestation' },
+  { name: 'Chitra',            meaning: 'The bright jewel',     deity: 'Tvastra',          quality: 'brilliant creativity and architectural vision' },
+  { name: 'Swati',             meaning: 'The sword / the star', deity: 'Vayu',             quality: 'independent spirit and flexible strength' },
+  { name: 'Vishakha',          meaning: 'The forked branch',    deity: 'Indra & Agni',     quality: 'determined focus and purposeful ambition' },
+  { name: 'Anuradha',          meaning: 'Following Radha',      deity: 'Mitra',            quality: 'devoted friendship and heart-centred leadership' },
+  { name: 'Jyeshtha',          meaning: 'The eldest',           deity: 'Indra',            quality: 'protective authority and courageous action' },
+  { name: 'Mula',              meaning: 'The root',             deity: 'Nirrti',           quality: 'deep investigation and uprooting to rebuild' },
+  { name: 'Purva Ashadha',     meaning: 'First of Ashadha',     deity: 'Apas',             quality: 'invincible energy and purifying vitality' },
+  { name: 'Uttara Ashadha',    meaning: 'Second Ashadha',       deity: 'Vishvadevas',      quality: 'universal victory and lasting righteousness' },
+  { name: 'Shravana',          meaning: 'The hearing',          deity: 'Vishnu',           quality: 'attentive listening and connecting wisdom' },
+  { name: 'Dhanishtha',        meaning: 'The wealthy',          deity: 'Eight Vasus',      quality: 'material prosperity and musical harmony' },
+  { name: 'Shatabhisha',       meaning: 'A hundred healers',    deity: 'Varuna',           quality: 'mystical healing and cosmic awareness' },
+  { name: 'Purva Bhadrapada',  meaning: 'First blessed feet',   deity: 'Aja Ekapada',      quality: 'fierce spiritual purification and inner fire' },
+  { name: 'Uttara Bhadrapada', meaning: 'Second blessed feet',  deity: 'Ahirbudhnya',      quality: 'deep wisdom, patience and serpentine kundalini' },
+  { name: 'Revati',            meaning: 'The wealthy / the star',deity: 'Pushan',          quality: 'safe passage, nurturing and journeys of the soul' },
+];
+
+function getDayOfYear(month: number, day: number): number {
+  const MONTH_STARTS = [0, 1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
+  return MONTH_STARTS[month] + day - 1;
+}
+
+export function getVedicContext(month: number, day: number, zodiacSign: string): VedicContext {
+  const rashi = RASHI_MAP[zodiacSign] ?? RASHI_MAP['Aries'];
+  const dayOfYear = getDayOfYear(month, day);
+  const nakshatraIndex = Math.floor(((dayOfYear - 1) / 365) * 27) % 27;
+  const nakshatra = NAKSHATRAS[nakshatraIndex];
+  return {
+    rashi: zodiacSign,
+    rashiSanskrit: rashi.sanskrit,
+    rashiMeaning: rashi.meaning,
+    rashiLord: rashi.lord,
+    nakshatra: nakshatra.name,
+    nakshatraMeaning: nakshatra.meaning,
+    nakshatraDeity: nakshatra.deity,
+    nakshatraQuality: nakshatra.quality,
+  };
+}
+
 // ── Main export ────────────────────────────────────────────────────────────────
 
 export function getBirthdayPersonality(month: number, day: number): BirthdayPersonality {

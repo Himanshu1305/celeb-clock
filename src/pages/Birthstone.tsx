@@ -5,6 +5,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import PageTagline from '@/components/PageTagline';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
 import { RASHI_RATNA_DATA, NAVRATNA_INFO } from '@/data/rashiRatnaData';
 
@@ -63,11 +64,19 @@ export default function Birthstone() {
           <AuthNav />
         </header>
 
+        {/* Breadcrumb */}
+        <nav className="text-xs text-gray-400 mb-6 flex items-center gap-1.5 flex-wrap">
+          <Link to="/" className="hover:text-indigo-600 transition-colors">Home</Link>
+          <span>/</span>
+          <span className="text-gray-600 font-medium">Birthstone Guide</span>
+        </nav>
+
         {/* Hero */}
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
             Birthstone Guide — Western & Indian Traditions
           </h1>
+          <PageTagline />
           <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mb-6">
             Two great traditions. Western birthstones are assigned by birth month; Indian Rashi Ratna are assigned by Vedic zodiac sign and ruling planet. This guide covers both.
           </p>
