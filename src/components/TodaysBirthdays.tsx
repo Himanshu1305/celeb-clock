@@ -12,6 +12,7 @@ import {
 } from '@/services/BirthdaySearchService';
 import { WikiPerson } from '@/services/WikimediaService';
 import { CelebrityCard, DisplayCelebrity, OccupationCategory } from '@/components/CelebrityCard';
+import { classifyDisplayTier, TIER_LABELS, DisplayTier } from '@/data/celebrityCategories';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const PAGE_SIZE = 20;
@@ -57,18 +58,42 @@ function mapLocal(p: WikiPerson): DisplayCelebrity {
 
 const FILTERS: OccupationCategory[] = ['All', 'Actors', 'Musicians', 'Athletes', 'Politicians', 'Other'];
 
-function matchesCategory(celeb: DisplayCelebrity, activeTab: OccupationCategory): boolean {
-  if (activeTab === 'All') return true;
-  const cat = [celeb.occupation].filter(Boolean).join(' ').toLowerCase();
-  switch (activeTab) {
-    case 'Actors': return /actor|actress|film|cinema|television|tv|model|performer/.test(cat);
-    case 'Musicians': return /music|singer|rapper|composer|songwriter|band|producer|vocalist/.test(cat);
-    case 'Athletes': return /athlete|sport|player|cricket|football|tennis|swimmer|boxer|runner|olympic|footballer|basketball|baseball|golfer|soccer|rugby/.test(cat);
-    case 'Politicians': return /politic|president|minister|senator|governor|parliament|government|leader|diplomat|chancellor/.test(cat);
-    case 'Other': return !/actor|actress|film|cinema|music|singer|rapper|sport|athlete|player|politic|president|minister|football|basketball|tennis|cricket/.test(cat);
-    default: return true;
-  }
+function getTier(celeb: DisplayCelebrity): DisplayTier {
+  return classifyDisplayTier({
+    category: celeb.occupation,
+    profession: celeb.occupation,
+    birth_year: celeb.birthYear ?? undefined,
+    death_year: celeb.deathYear,
+  });
 }
+
+const getCategory = (celeb: unknown): string => {
+  const c = celeb as Record<string, unknown>;
+  return [c.category, c.type, c.profession, c.occupation, c.known_for, c.field, c.role]
+    .filter(Boolean)
+    .map(v => (Array.isArray(v) ? v.join(' ') : String(v)))
+    .join(' ')
+    .toLowerCase();
+};
+
+const matchesTab = (celeb: unknown, tab: string): boolean => {
+  if (tab === 'All') return true;
+  const cat = getCategory(celeb);
+  switch (tab) {
+    case 'Actors':
+      return /actor|actress|film|cinema|television|tv|model|performer|bollywood|tollywood|kollywood/.test(cat);
+    case 'Musicians':
+      return /music|singer|song|rapper|composer|band|record|vocalist|playback/.test(cat);
+    case 'Athletes':
+      return /sport|athlete|player|cricket|football|soccer|tennis|badminton|swimmer|boxer|runner|olympic|hockey/.test(cat);
+    case 'Politicians':
+      return /politi|president|prime minister|minister|mp |parliament|government|congress|senator|governor/.test(cat);
+    case 'Other':
+      return !/actor|actress|film|cinema|music|singer|song|sport|athlete|player|cricket|football|politi|president|minister/.test(cat);
+    default:
+      return true;
+  }
+};
 
 export const TodaysBirthdays = () => {
   const { profile } = useAuth();
@@ -118,22 +143,52 @@ export const TodaysBirthdays = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile?.country]);
 
-  const filtered = useMemo(() => {
-    return allCelebrities.filter(c => matchesCategory(c, activeFilter));
-  }, [allCelebrities, activeFilter]);
+  // Split by tier
+  const entertainmentCelebs = useMemo(() =>
+    allCelebrities.filter(c => getTier(c) === 'entertainment'),
+    [allCelebrities]
+  );
+  const publicFigures = useMemo(() =>
+    allCelebrities.filter(c => getTier(c) === 'public_figure'),
+    [allCelebrities]
+  );
+  const historicalFigures = useMemo(() =>
+    allCelebrities.filter(c => getTier(c) === 'historical'),
+    [allCelebrities]
+  );
+
+  // Non-historical for tab counts
+  const nonHistorical = useMemo(
+    () => [...entertainmentCelebs, ...publicFigures],
+    [entertainmentCelebs, publicFigures]
+  );
 
   const categoryCounts = useMemo(() => {
-    const counts: Record<OccupationCategory, number> = { All: allCelebrities.length, Actors: 0, Musicians: 0, Athletes: 0, Politicians: 0, Other: 0 };
-    for (const c of allCelebrities) {
+    const counts: Record<OccupationCategory, number> = { All: nonHistorical.length, Actors: 0, Musicians: 0, Athletes: 0, Politicians: 0, Other: 0 };
+    for (const c of nonHistorical) {
       for (const f of FILTERS.slice(1) as Exclude<OccupationCategory, 'All'>[]) {
-        if (matchesCategory(c, f)) { counts[f]++; break; }
+        if (matchesTab(c, f)) { counts[f]++; break; }
       }
     }
     return counts;
-  }, [allCelebrities]);
+  }, [nonHistorical]);
 
-  const visible = filtered.slice(0, visibleCount);
-  const remaining = filtered.length - visibleCount;
+  const filteredEntertainment = useMemo(
+    () => entertainmentCelebs.filter(c => matchesTab(c, activeFilter)),
+    [entertainmentCelebs, activeFilter]
+  );
+  const filteredPublic = useMemo(
+    () => publicFigures.filter(c => matchesTab(c, activeFilter)),
+    [publicFigures, activeFilter]
+  );
+
+  const allFiltered = useMemo(
+    () => [...filteredEntertainment, ...filteredPublic],
+    [filteredEntertainment, filteredPublic]
+  );
+
+  const visible = allFiltered.slice(0, visibleCount);
+  const remaining = allFiltered.length - visibleCount;
 
   const handleFilterChange = (f: OccupationCategory) => {
     setActiveFilter(f);
@@ -142,7 +197,7 @@ export const TodaysBirthdays = () => {
 
   return (
     <div className="space-y-6">
-      {/* Most Boosted Today — FEATURES.CELEBRITY_BOOST gated */}
+      {/* Most Boosted Today */}
       {FEATURES.CELEBRITY_BOOST && topBoosted.length > 0 && (
         <div className="bg-muted/40 rounded-xl px-4 py-3 flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1.5 text-sm font-medium text-foreground shrink-0">
@@ -195,35 +250,92 @@ export const TodaysBirthdays = () => {
         ))}
       </div>
 
-      {/* Grid */}
       {loading ? (
         <div className="text-center py-16">
           <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4" />
           <p className="text-muted-foreground">Loading today's birthdays...</p>
         </div>
-      ) : filtered.length === 0 ? (
-        <div className="text-center py-12 text-muted-foreground">
-          No results for this category.
-        </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {visible.map((celeb, index) => (
-              <CelebrityCard key={celeb.name} celebrity={celeb} index={index} />
-            ))}
-          </div>
-
-          {remaining > 0 && (
-            <div className="text-center pt-2">
-              <Button
-                variant="outline"
-                className="gap-2"
-                onClick={() => setVisibleCount(v => v + PAGE_SIZE)}
-              >
-                <ChevronDown className="w-4 h-4" />
-                Load more ({remaining} remaining)
-              </Button>
+          {/* Entertainment + Public Figures */}
+          {allFiltered.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground">
+              No results for this category.
             </div>
+          ) : (
+            <>
+              {filteredEntertainment.length > 0 && (
+                <section>
+                  <h3 className="text-sm font-bold text-muted-foreground mb-3">{TIER_LABELS.entertainment.heading}</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {visible
+                      .filter(c => getTier(c) === 'entertainment')
+                      .map((celeb, index) => (
+                        <CelebrityCard key={celeb.name} celebrity={celeb} index={index} />
+                      ))}
+                  </div>
+                </section>
+              )}
+
+              {filteredPublic.length > 0 && (
+                <section className="mt-6">
+                  <h3 className="text-sm font-bold text-muted-foreground mb-3">{TIER_LABELS.public_figure.heading}</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {visible
+                      .filter(c => getTier(c) === 'public_figure')
+                      .map((celeb, index) => (
+                        <CelebrityCard key={celeb.name} celebrity={celeb} index={index} />
+                      ))}
+                  </div>
+                </section>
+              )}
+
+              {remaining > 0 && (
+                <div className="text-center pt-2">
+                  <Button
+                    variant="outline"
+                    className="gap-2"
+                    onClick={() => setVisibleCount(v => v + PAGE_SIZE)}
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                    Load more ({remaining} remaining)
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Historical Figures — always shown, not filtered by tabs */}
+          {historicalFigures.length > 0 && (
+            <section className="mt-8">
+              <div className="flex items-center gap-3 mb-2">
+                <h3 className="text-sm font-bold text-gray-600">{TIER_LABELS.historical.heading}</h3>
+              </div>
+              <p className="text-xs text-gray-400 italic mb-3">{TIER_LABELS.historical.subtext}</p>
+              <div className="space-y-2">
+                {historicalFigures.map(celeb => (
+                  <div key={celeb.name} className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 font-bold text-sm flex-shrink-0">
+                        {(celeb.name || '?').charAt(0)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                          <p className="font-semibold text-gray-800 text-sm">{celeb.name}</p>
+                          <span className="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">Historical Figure</span>
+                        </div>
+                        <p className="text-xs text-gray-500">
+                          {celeb.birthYear}{celeb.deathYear ? ` – ${celeb.deathYear}` : ''}
+                        </p>
+                        <p className="text-xs text-gray-600 mt-1 leading-relaxed line-clamp-2">
+                          {celeb.occupation}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
           )}
         </>
       )}

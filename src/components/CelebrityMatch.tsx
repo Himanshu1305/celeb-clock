@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Celebrity } from '@/data/celebrities';
 import { StarIcon, CakeIcon } from 'lucide-react';
+import { classifyDisplayTier, DisplayTier } from '@/data/celebrityCategories';
 
 interface CelebrityMatchProps {
   birthDate: Date | null;
@@ -65,6 +66,18 @@ export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatc
 
   if (!birthDate) return null;
 
+  const getTierForCeleb = (c: Celebrity): DisplayTier => {
+    const birthYear = c.birthDate ? new Date(c.birthDate).getFullYear() : undefined;
+    return classifyDisplayTier({ profession: c.profession, birth_year: birthYear });
+  };
+
+  const TIER_ORDER: DisplayTier[] = ['entertainment', 'public_figure', 'historical'];
+  const sorted = [...matchingCelebrities].sort((a, b) =>
+    TIER_ORDER.indexOf(getTierForCeleb(a)) - TIER_ORDER.indexOf(getTierForCeleb(b))
+  );
+  const mainCelebs = sorted.filter(c => getTierForCeleb(c) !== 'historical');
+  const historicalCelebs = sorted.filter(c => getTierForCeleb(c) === 'historical');
+
   return (
     <div className="space-y-6">
       <div className="text-center space-y-4">
@@ -86,12 +99,35 @@ export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatc
               🎉 {matchingCelebrities.length} Celebrity Match{matchingCelebrities.length > 1 ? 'es' : ''}!
             </div>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {matchingCelebrities.map((celebrity, index) => (
-              <CelebrityCard key={index} celebrity={celebrity} />
-            ))}
-          </div>
+
+          {mainCelebs.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {mainCelebs.map((celebrity, index) => (
+                <CelebrityCard key={index} celebrity={celebrity} />
+              ))}
+            </div>
+          )}
+
+          {historicalCelebs.length > 0 && (
+            <div className="mt-4">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">📚 Historical figures who share your birthday</p>
+              <div className="space-y-2">
+                {historicalCelebs.map((celebrity, index) => (
+                  <div key={index} className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-center gap-3">
+                    <div className="w-9 h-9 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 font-bold text-sm flex-shrink-0">
+                      {celebrity.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-800 text-sm">{celebrity.name}</p>
+                      <p className="text-xs text-gray-500">{celebrity.profession}</p>
+                      {celebrity.funFact && <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">{celebrity.funFact}</p>}
+                    </div>
+                    <span className="ml-auto text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full whitespace-nowrap">Historical</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </>
       ) : (
         <Card className="glass-card p-8 text-center">
@@ -99,7 +135,7 @@ export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatc
             <div className="text-6xl mb-4">🎂</div>
             <h3 className="text-xl font-semibold">No Celebrity Matches Found</h3>
             <p className="text-muted-foreground">
-              Your birthday is unique! No celebrities in our database share your special day, 
+              Your birthday is unique! No celebrities in our database share your special day,
               making you one of a kind.
             </p>
           </div>
