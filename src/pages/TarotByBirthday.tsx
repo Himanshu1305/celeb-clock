@@ -216,6 +216,7 @@ export default function TarotByBirthday() {
     card: TarotCard;
   } | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>('meaning');
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
   const handleCalculate = () => {
     if (!dob) return;
@@ -467,33 +468,65 @@ export default function TarotByBirthday() {
               Each card represents a universal archetype. Your birthday determines which one is your
               soul's signature.
             </p>
-            <div className="space-y-3">
-              {Object.entries(MAJOR_ARCANA).map(([num, card]) => (
-                <div
-                  key={num}
-                  className="border border-gray-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{card.emoji}</span>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-400 font-medium">Card {card.number}</span>
-                        <span className="font-bold text-gray-900">{card.name}</span>
+            <div className="space-y-2">
+              {Object.entries(MAJOR_ARCANA).map(([num, card]) => {
+                const isOpen = expandedCard === card.name;
+                return (
+                  <div
+                    key={num}
+                    className={`border rounded-xl transition-colors ${isOpen ? 'border-indigo-400 bg-indigo-50/40' : 'border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/20'}`}
+                  >
+                    <button
+                      className="w-full text-left p-4 flex items-center gap-3"
+                      onClick={() => setExpandedCard(isOpen ? null : card.name)}
+                      aria-expanded={isOpen}
+                    >
+                      <span className="text-2xl shrink-0">{card.emoji}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs text-gray-400 font-medium">Card {card.number}</span>
+                          <span className="font-bold text-gray-900">{card.name}</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {card.keywords.slice(0, 3).map(kw => (
+                            <span key={kw} className="text-xs text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded-full">{kw}</span>
+                          ))}
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {card.keywords.slice(0, 3).map(kw => (
-                          <span
-                            key={kw}
-                            className="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full"
-                          >
-                            {kw}
-                          </span>
-                        ))}
+                      <span className={`text-gray-400 text-sm transition-transform shrink-0 ${isOpen ? 'rotate-180' : ''}`}>▾</span>
+                    </button>
+
+                    {isOpen && (
+                      <div className="px-4 pb-4 space-y-4 border-t border-indigo-100 pt-4">
+                        <p className="text-sm text-gray-700 leading-relaxed">{card.deepMeaning}</p>
+                        <div className="grid sm:grid-cols-2 gap-3">
+                          <div className="bg-rose-50 border border-rose-100 rounded-lg p-3">
+                            <p className="text-xs font-bold text-rose-700 mb-1">❤️ Love</p>
+                            <p className="text-xs text-gray-700 leading-relaxed">{card.love}</p>
+                          </div>
+                          <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
+                            <p className="text-xs font-bold text-blue-700 mb-1">💼 Career</p>
+                            <p className="text-xs text-gray-700 leading-relaxed">{card.career}</p>
+                          </div>
+                          <div className="bg-green-50 border border-green-100 rounded-lg p-3">
+                            <p className="text-xs font-bold text-green-700 mb-1">🌿 Health</p>
+                            <p className="text-xs text-gray-700 leading-relaxed">{card.health}</p>
+                          </div>
+                          <div className="bg-purple-50 border border-purple-100 rounded-lg p-3">
+                            <p className="text-xs font-bold text-purple-700 mb-1">🕯️ Spirituality</p>
+                            <p className="text-xs text-gray-700 leading-relaxed">{card.spirituality}</p>
+                          </div>
+                        </div>
+                        {card.affirmation && (
+                          <div className="bg-indigo-900 text-indigo-100 rounded-lg p-3 text-center">
+                            <p className="text-xs font-medium italic">"{card.affirmation}"</p>
+                          </div>
+                        )}
                       </div>
-                    </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
