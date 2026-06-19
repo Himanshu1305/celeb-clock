@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Navigation } from '@/components/Navigation';
+import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { calculateAllNameNumbers, getLetterBreakdown, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
@@ -52,6 +54,12 @@ export default function NameNumerologyPage() {
       <FAQSchema items={faqItems} />
 
       <div className="min-h-screen bg-white">
+        <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
+          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+            <Navigation />
+            <AuthNav />
+          </div>
+        </div>
         <div className="max-w-2xl mx-auto px-4 py-10">
 
           <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">

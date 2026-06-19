@@ -36,6 +36,8 @@ const astrologyItems = [
   { path: '/moon-sign', label: 'Moon Sign Calculator', emoji: '🌙' },
   { path: '/tarot-card-by-birthday', label: 'Tarot by Birthday', emoji: '🃏' },
   { path: '/compatibility', label: 'Compatibility Calculator', emoji: '💕' },
+  { path: '/birthday', label: 'Birthday Personalities', emoji: '🎂' },
+  { path: '/rashi-ratna', label: 'Rashi Ratna', emoji: '💎' },
 ];
 
 export const Navigation = () => {
