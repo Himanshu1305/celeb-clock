@@ -15,6 +15,7 @@ import { calculateMoonSignAndNakshatra } from '@/data/moonSignData';
 import { calculateAllNameNumbers, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 import { calculateBiorhythm, getBiorhythmStatus } from '@/data/biorhythmData';
 import { getTopCompatibleSigns } from '@/data/compatibilityData';
+import { mergeWithIndianCelebrities, isIndianUser, hasIndianCelebritiesForDate } from '@/services/IndianCelebrityService';
 
 // ── Helper ─────────────────────────────────────────────────────────────────────
 
@@ -207,6 +208,17 @@ const ReportView = () => {
 
   const dob = new Date(rd.recipientDob + 'T12:00:00');
   const monthName = dob.toLocaleString('default', { month: 'long' });
+
+  const reportMonth = dob.getMonth() + 1;
+  const reportDay = dob.getDate();
+  const showIndianFirst = isIndianUser();
+  const hasIndianOnDate = hasIndianCelebritiesForDate(reportMonth, reportDay);
+  const mergedCelebrities = mergeWithIndianCelebrities(
+    celebrities ?? [],
+    reportMonth,
+    reportDay,
+    showIndianFirst
+  );
   const reportUrl = `${window.location.origin}/report/${slug}`;
 
   const handlePrint = () => {
@@ -429,10 +441,20 @@ const ReportView = () => {
             Famous people born on {monthName} {dob.getDate()}, ranked by global recognition
           </p>
 
-          {celebrities.length > 0 ? (() => {
-            const sortedCelebrities = [...celebrities].sort((a: any, b: any) => {
-              const yearA = a.birthDate ? new Date(a.birthDate + 'T12:00:00').getFullYear() : 0;
-              const yearB = b.birthDate ? new Date(b.birthDate + 'T12:00:00').getFullYear() : 0;
+          {showIndianFirst && !hasIndianOnDate && (
+            <p className="text-xs text-gray-400 italic mb-3 text-center">
+              🌍 Showing global celebrities — no prominent Indian birthdays found for this date
+            </p>
+          )}
+
+          {mergedCelebrities.length > 0 ? (() => {
+            const getCelebYear = (c: any): number =>
+              c.birth_year ?? (c.birthDate ? new Date(c.birthDate + 'T12:00:00').getFullYear() : 0);
+            const sortedCelebrities = [...mergedCelebrities].sort((a: any, b: any) => {
+              if (a.isIndian && !b.isIndian) return showIndianFirst ? -1 : 1;
+              if (!a.isIndian && b.isIndian) return showIndianFirst ? 1 : -1;
+              const yearA = getCelebYear(a);
+              const yearB = getCelebYear(b);
               if (yearA >= 1940 && yearB < 1940) return -1;
               if (yearB >= 1940 && yearA < 1940) return 1;
               if (yearA >= 1900 && yearB < 1900) return -1;
@@ -442,28 +464,31 @@ const ReportView = () => {
             return (
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               {sortedCelebrities.slice(0, 6).map((c: any, i: number) => {
-                const year = c.birthDate ? new Date(c.birthDate + 'T12:00:00').getFullYear() : null;
-                const occ = (c.occupation || '').toLowerCase();
-                const catIcon = occ.includes('actor') || occ.includes('actress') || occ.includes('film') ? '🎬' :
-                  occ.includes('music') || occ.includes('singer') || occ.includes('band') || occ.includes('rapper') ? '🎵' :
+                const year = getCelebYear(c) || null;
+                const desc = (c.known_for || c.occupation || '').toLowerCase();
+                const occ = (c.occupation || c.known_for || '').toLowerCase();
+                const catIcon = occ.includes('actor') || occ.includes('actress') || occ.includes('film') || occ.includes('bollywood') ? '🎬' :
+                  occ.includes('music') || occ.includes('singer') || occ.includes('song') || occ.includes('band') || occ.includes('rapper') ? '🎵' :
                   occ.includes('athlete') || occ.includes('player') || occ.includes('sport') || occ.includes('tennis') || occ.includes('cricket') || occ.includes('football') || occ.includes('basketball') ? '⚽' :
-                  occ.includes('politic') || occ.includes('president') || occ.includes('minister') ? '🏛️' :
-                  occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') ? '🔬' : '⭐';
-                const catLabel = occ.includes('actor') || occ.includes('actress') || occ.includes('film') ? 'Actor/Director' :
-                  occ.includes('music') || occ.includes('singer') || occ.includes('band') || occ.includes('rapper') ? 'Musician' :
+                  occ.includes('politic') || occ.includes('president') || occ.includes('minister') || occ.includes('freedom') ? '🏛️' :
+                  occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') || occ.includes('mathematician') ? '🔬' : '⭐';
+                const catLabel = occ.includes('actor') || occ.includes('actress') || occ.includes('film') || occ.includes('bollywood') ? 'Actor/Director' :
+                  occ.includes('music') || occ.includes('singer') || occ.includes('song') || occ.includes('band') || occ.includes('rapper') ? 'Musician' :
                   occ.includes('athlete') || occ.includes('player') || occ.includes('sport') || occ.includes('tennis') || occ.includes('cricket') || occ.includes('football') || occ.includes('basketball') ? 'Athlete' :
-                  occ.includes('politic') || occ.includes('president') || occ.includes('minister') ? 'Politician' :
-                  occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') ? 'Scientist' : 'Notable Person';
+                  occ.includes('politic') || occ.includes('president') || occ.includes('minister') || occ.includes('freedom') ? 'Politician' :
+                  occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') || occ.includes('mathematician') ? 'Scientist' : 'Notable Person';
+                const isDeceased = c.death_year != null || c.isLiving === false;
                 return (
-                  <div key={i} className="border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-shadow bg-white">
+                  <div key={i} className={`border rounded-2xl p-5 hover:shadow-md transition-shadow bg-white ${c.isIndian ? 'border-orange-200 ring-1 ring-orange-100' : 'border-gray-100'}`}>
                     <div className="flex items-start gap-3 mb-3">
                       <span className="text-3xl">{catIcon}</span>
                       <div className="flex-1 min-w-0">
                         <div className="font-bold text-gray-900 text-sm leading-tight">{c.name}</div>
-                        {year && <div className="text-xs text-rose-400 mt-0.5">b. {year}{c.isLiving === false ? ' †' : ''}</div>}
+                        {year ? <div className="text-xs text-rose-400 mt-0.5">b. {year}{isDeceased ? ' †' : ''}</div> : null}
+                        {c.isIndian && <span className="text-[10px] text-orange-500 font-medium">🇮🇳 Indian</span>}
                       </div>
                     </div>
-                    <div className="text-xs text-gray-500 mb-2 line-clamp-2">{c.occupation || 'Notable person'}</div>
+                    <div className="text-xs text-gray-500 mb-2 line-clamp-2">{c.known_for || c.occupation || 'Notable person'}</div>
                     <span className="inline-block px-2 py-0.5 bg-rose-50 text-rose-600 rounded-full text-xs font-medium">{catLabel}</span>
                   </div>
                 );
