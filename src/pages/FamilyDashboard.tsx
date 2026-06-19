@@ -98,7 +98,7 @@ function FamilyDashboardInner() {
     name: '',
     date_of_birth: '',
     gender: 'male' as string,
-    country: '',
+    country: 'none',
   });
 
   const loadFamilyMembers = async (uid: string) => {
@@ -131,8 +131,8 @@ function FamilyDashboardInner() {
           user_id: user.id,
           name: form.name.trim(),
           date_of_birth: form.date_of_birth,
-          gender: form.gender || null,
-          country: form.country || null,
+          gender: form.gender === 'not_specified' ? null : (form.gender || null),
+          country: form.country === 'none' ? null : (form.country || null),
         })
         .select()
         .single();
@@ -153,7 +153,7 @@ function FamilyDashboardInner() {
 
       if (data) {
         setMembers(prev => [...prev, data as FamilyMember]);
-        setForm({ name: '', date_of_birth: '', gender: 'male', country: '' });
+        setForm({ name: '', date_of_birth: '', gender: 'male', country: 'none' });
         setShowAdd(false);
       }
     } catch (err) {
@@ -409,7 +409,7 @@ function FamilyDashboardInner() {
                 <SelectContent>
                   <SelectItem value="male">Male</SelectItem>
                   <SelectItem value="female">Female</SelectItem>
-                  <SelectItem value="">Prefer not to say</SelectItem>
+                  <SelectItem value="not_specified">Prefer not to say</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -423,6 +423,7 @@ function FamilyDashboardInner() {
                   <SelectValue placeholder="Select country…" />
                 </SelectTrigger>
                 <SelectContent className="max-h-56">
+                  <SelectItem value="none">Select country…</SelectItem>
                   {QUIZ_COUNTRIES.map(c => (
                     <SelectItem key={c} value={c}>{c}</SelectItem>
                   ))}
