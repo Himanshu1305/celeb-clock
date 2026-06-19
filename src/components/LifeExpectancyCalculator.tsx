@@ -376,10 +376,16 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
             )}
           </div>
         ) : step === 6 && !hasSelectedExercise ? (
-          <div className="rounded-xl border border-muted bg-muted/30 p-4 flex items-center gap-3">
-            <Lock className="w-5 h-5 text-muted-foreground/50 shrink-0" />
-            <div>
-              <p className="text-xs font-bold text-muted-foreground">Select your physical exercise frequency above to unlock your personalized longevity forecast</p>
+          <div className="rounded-xl border border-muted bg-muted/30 p-4">
+            {currentAge !== null && (
+              <div className="flex items-baseline gap-1.5 mb-2">
+                <span className="text-3xl font-black text-blue-600">{currentAge}</span>
+                <span className="text-sm font-semibold text-muted-foreground">years old</span>
+              </div>
+            )}
+            <div className="flex items-center gap-3">
+              <Lock className="w-4 h-4 text-muted-foreground/50 shrink-0" />
+              <p className="text-xs font-bold text-muted-foreground">Select your physical exercise frequency below to unlock your personalized longevity forecast</p>
             </div>
           </div>
         ) : liveResult ? (
