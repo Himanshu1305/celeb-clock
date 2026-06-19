@@ -95,6 +95,10 @@ export const LongevityCountdown = ({ forecast, currentAge, birthDate }: Props) =
       <div className="text-center space-y-1">
         <p className="text-xs font-bold uppercase tracking-widest text-purple-300">⏳ Your Life Countdown</p>
         <p className="text-sm text-slate-400">Estimated time remaining until age {forecast}</p>
+        <p className="text-xs text-white/50 italic">
+          ⓘ Countdown to your statistical life expectancy date, calculated from your date of birth.
+          This is a motivational estimate — not a medical prediction.
+        </p>
       </div>
 
       <div className="grid grid-cols-5 gap-2 text-center">
