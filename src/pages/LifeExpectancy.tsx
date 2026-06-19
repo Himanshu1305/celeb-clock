@@ -112,6 +112,36 @@ const LifeExpectancy = () => {
     }
   }, []);
 
+  // Pre-fill quiz from family dashboard ?dob=YYYY-MM-DD&sex=male&name=Mom
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const dobParam = params.get('dob');
+    const sexParam = params.get('sex');
+    const nameParam = params.get('name');
+    if (!dobParam && !sexParam) return;
+
+    if (dobParam) {
+      // Parse as noon UTC to avoid timezone-shift date changes
+      const parsed = new Date(`${dobParam}T12:00:00`);
+      if (!isNaN(parsed.getTime())) setBirthDate(parsed);
+    }
+
+    if (sexParam) {
+      // Inject gender into the quiz prefill slot so LifeExpectancyCalculator picks it up
+      try {
+        const existing = localStorage.getItem('bornclock_quiz_prefill');
+        const prefill = existing ? JSON.parse(existing) : {};
+        prefill.quiz = { ...(prefill.quiz ?? {}), gender: sexParam };
+        prefill.timestamp = Date.now();
+        localStorage.setItem('bornclock_quiz_prefill', JSON.stringify(prefill));
+      } catch { /* storage unavailable */ }
+    }
+
+    if (nameParam) setPrefilledFor(nameParam);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const [prefilledFor, setPrefilledFor] = useState<string | null>(null);
   const [optimizedForecast, setOptimizedForecast] = useState<number | null>(null);
   const [currentSimForecast, setCurrentSimForecast] = useState<number | null>(null);
   const [userSelectedHabits, setUserSelectedHabits] = useState<string[]>([]);
@@ -262,6 +292,29 @@ const LifeExpectancy = () => {
         {/* ── Phase 1: Health Quiz ── */}
         {phase === 'quiz' && (
           <section id="calculator" className="max-w-4xl mx-auto mb-16">
+            {/* Pre-filled from family dashboard banner */}
+            {prefilledFor && (
+              <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-6 flex items-center gap-3">
+                <span className="text-xl">👨‍👩‍👧</span>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-indigo-800">
+                    Calculating forecast for {prefilledFor}
+                  </p>
+                  <p className="text-xs text-indigo-500 mt-0.5">
+                    Date of birth and other details have been pre-filled from your Family Dashboard.
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setPrefilledFor(null);
+                    window.history.replaceState({}, '', '/life-expectancy');
+                  }}
+                  className="text-xs text-indigo-400 hover:text-indigo-600 underline flex-shrink-0"
+                >
+                  Clear
+                </button>
+              </div>
+            )}
             {/* Birth date input/display */}
             {!birthDate ? (
               <Card className="glass-card mb-8 max-w-md mx-auto">
