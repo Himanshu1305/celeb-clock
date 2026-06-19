@@ -170,7 +170,7 @@ export default function Privacy() {
                   <li><strong className="text-foreground">Saved forecasts or reports</strong> — we do not store the output of your life expectancy calculation on our servers.</li>
                   <li><strong className="text-foreground">Card numbers, CVVs, or bank details</strong> — payments go directly through Razorpay's PCI-DSS compliant infrastructure.</li>
                   <li><strong className="text-foreground">Data sold to third parties</strong> — we do not sell, rent, or trade your personal information. Ever.</li>
-                  <li><strong className="text-foreground">Ad network profiles</strong> — we do not use Google AdSense, Facebook Pixel, or any advertising network that builds profiles based on your browsing.</li>
+                  <li><strong className="text-foreground">Advertising</strong> — BornClock may display advertising to support the free tier of the platform. We do not sell your personal health data — including your life expectancy inputs, biological age results, or any health-related information — to advertisers or any third parties. Your health data is used solely to provide BornClock's features to you.</li>
                   <li><strong className="text-foreground">Precise location data</strong> — we ask for country only (via a dropdown you select), never GPS or IP-derived geolocation.</li>
                 </ul>
               </section>
@@ -236,7 +236,7 @@ export default function Privacy() {
                   </table>
                 </div>
                 <p className="text-muted-foreground text-sm mt-4">
-                  We do not integrate Facebook, Google Ads, TikTok Pixel, or any advertising networks.
+                  We do not sell your personal data to any third party. If we add advertising partners in the future, this table will be updated and you will be notified if you have an account.
                 </p>
               </section>
 
@@ -301,7 +301,7 @@ export default function Privacy() {
                 <ul className="space-y-3 text-muted-foreground leading-relaxed">
                   <li><strong className="text-foreground">Essential cookies</strong> — session tokens required for you to stay logged in. Cannot be disabled without breaking the app.</li>
                   <li><strong className="text-foreground">Analytics cookies</strong> — anonymised, cookieless-mode analytics. Can be disabled via the Cookie Settings link in the footer.</li>
-                  <li><strong className="text-foreground">No third-party advertising cookies</strong> — we do not place or allow ad-targeting cookies.</li>
+                  <li><strong className="text-foreground">Advertising cookies</strong> — we do not currently use ad-targeting or cross-site tracking cookies. If advertising is introduced, cookie preferences will be updated and your consent obtained where required by law.</li>
                 </ul>
                 <p className="text-muted-foreground text-sm mt-4">
                   You can manage your cookie preferences at any time using the Cookie Settings option in the footer.
