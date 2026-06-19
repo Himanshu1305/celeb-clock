@@ -6,6 +6,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getZodiacSign, MONTH_NAMES, MONTH_DAYS } from '@/data/birthdayPersonality';
+import { MONTH_CONTENT } from '@/data/birthdayMonthContent';
 
 // Which zodiac signs are active in each month
 const MONTH_ZODIAC: Record<number, string> = {
@@ -160,6 +161,42 @@ export default function BirthdayMonthPage() {
             often display traits from both signs, making them uniquely adaptable and multi-faceted.
           </p>
         </section>
+
+        {/* Rich month content sections */}
+        {MONTH_CONTENT[month] && (() => {
+          const mc = MONTH_CONTENT[month];
+          return (
+            <>
+              <section className="mb-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-3">
+                  About {monthName} Birthdays
+                </h2>
+                <p className="text-sm text-gray-700 leading-relaxed">{mc.intro}</p>
+              </section>
+
+              <section className="mb-8 bg-indigo-50 border border-indigo-100 rounded-xl p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-3">
+                  {monthName} Personality Traits
+                </h2>
+                <p className="text-sm text-gray-700 leading-relaxed">{mc.signatureTraits}</p>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-3">
+                  {monthName} Famous Birthdays — Themes &amp; Patterns
+                </h2>
+                <p className="text-sm text-gray-700 leading-relaxed">{mc.famousTheme}</p>
+              </section>
+
+              <section className="mb-8 bg-gray-50 border border-gray-200 rounded-xl p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-3">
+                  The Season of {monthName}
+                </h2>
+                <p className="text-sm text-gray-700 leading-relaxed">{mc.seasonContext}</p>
+              </section>
+            </>
+          );
+        })()}
 
         {/* FAQ */}
         <section className="mb-8">
