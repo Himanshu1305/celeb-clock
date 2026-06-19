@@ -1074,26 +1074,69 @@ const ReportView = () => {
         const card = getTarotCardByLifePath(lp);
         return (
           <div className="py-12 px-4 bg-gradient-to-br from-indigo-950 to-purple-950">
-            <div className="max-w-2xl mx-auto">
-              <div className="text-center mb-6">
-                <div className="text-5xl mb-2">{card.emoji}</div>
-                <div className="text-xs text-indigo-400 uppercase tracking-widest mb-1">Your Birthday Tarot Card</div>
-                <h3 className="text-2xl font-black text-white mb-1">{card.name}</h3>
+            <div className="max-w-2xl mx-auto space-y-6">
+              {/* Header */}
+              <div className="text-center">
+                <div className="text-6xl mb-3">{card.emoji}</div>
+                <div className="text-xs text-indigo-400 uppercase tracking-widest mb-1">Birthday Tarot Card</div>
+                <h3 className="text-3xl font-black text-white mb-1">{card.name}</h3>
                 <p className="text-xs text-indigo-300">Life Path {lp} · Card {card.number}</p>
+                <div className="flex flex-wrap justify-center gap-2 mt-3">
+                  {card.keywords.map((kw: string) => (
+                    <span key={kw} className="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full">{kw}</span>
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-wrap justify-center gap-2 mb-5">
-                {card.keywords.slice(0, 4).map((kw: string) => (
-                  <span key={kw} className="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full">{kw}</span>
-                ))}
+
+              {/* Full upright meaning */}
+              <div className="bg-white/10 rounded-2xl p-5">
+                <div className="text-xs font-bold text-indigo-300 uppercase tracking-wide mb-2">✨ Upright Meaning</div>
+                <p className="text-white/90 text-sm leading-relaxed">{card.upright}</p>
               </div>
-              <p className="text-indigo-100 text-sm leading-relaxed text-center mb-4">{card.upright.slice(0, 200)}...</p>
-              <div className="bg-white/10 rounded-2xl p-4 text-center mb-4">
-                <p className="text-xs font-semibold text-indigo-300 mb-1">Your Affirmation</p>
-                <p className="text-white italic text-sm">"{card.affirmation}"</p>
+
+              {/* Deep meaning */}
+              <div className="bg-white/10 rounded-2xl p-5">
+                <div className="text-xs font-bold text-purple-300 uppercase tracking-wide mb-2">🔮 Deep Meaning for Life Path {lp}</div>
+                <p className="text-white/90 text-sm leading-relaxed">{card.deepMeaning}</p>
               </div>
+
+              {/* 4-quadrant life areas */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-rose-900/40 border border-rose-700/30 rounded-2xl p-4">
+                  <div className="text-xs font-bold text-rose-300 uppercase tracking-wide mb-1">❤️ Love</div>
+                  <p className="text-xs text-white/80 leading-relaxed">{card.love}</p>
+                </div>
+                <div className="bg-blue-900/40 border border-blue-700/30 rounded-2xl p-4">
+                  <div className="text-xs font-bold text-blue-300 uppercase tracking-wide mb-1">💼 Career</div>
+                  <p className="text-xs text-white/80 leading-relaxed">{card.career}</p>
+                </div>
+                <div className="bg-green-900/40 border border-green-700/30 rounded-2xl p-4">
+                  <div className="text-xs font-bold text-green-300 uppercase tracking-wide mb-1">🌿 Health</div>
+                  <p className="text-xs text-white/80 leading-relaxed">{card.health}</p>
+                </div>
+                <div className="bg-purple-900/40 border border-purple-700/30 rounded-2xl p-4">
+                  <div className="text-xs font-bold text-purple-300 uppercase tracking-wide mb-1">🔮 Spirituality</div>
+                  <p className="text-xs text-white/80 leading-relaxed">{card.spirituality}</p>
+                </div>
+              </div>
+
+              {/* Affirmation */}
+              <div className="bg-amber-900/40 border border-amber-600/30 rounded-2xl p-5 text-center">
+                <div className="text-xs font-semibold text-amber-300 uppercase tracking-wide mb-2">Your Daily Affirmation</div>
+                <p className="text-white font-medium text-base italic">"{card.affirmation}"</p>
+              </div>
+
+              {/* Famous people with this card */}
+              {card.famousPeople && card.famousPeople.length > 0 && (
+                <div className="bg-white/5 rounded-2xl p-4 text-center">
+                  <div className="text-xs font-semibold text-indigo-300 mb-2">Famous {card.name} Personalities</div>
+                  <p className="text-white/70 text-sm">{card.famousPeople.join(' · ')}</p>
+                </div>
+              )}
+
               <div className="text-center">
                 <Link to="/tarot-card-by-birthday" className="text-xs text-indigo-400 hover:text-indigo-300 underline">
-                  Explore your full tarot reading →
+                  Explore more tarot interpretations →
                 </Link>
               </div>
             </div>
