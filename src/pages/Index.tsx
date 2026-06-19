@@ -238,6 +238,59 @@ const Index = () => {
         {/* Bento Grid Features */}
         <BentoGrid />
 
+        {/* Planetary Weight Teaser — links to /planetary-age */}
+        <section className="max-w-4xl mx-auto mb-12 px-4">
+          <div className="bg-gradient-to-br from-slate-900 to-indigo-950 rounded-2xl p-6 text-white">
+            <h3 className="text-base font-bold mb-1 flex items-center gap-2">
+              ⚖️ How Heavy Are You on Other Planets?
+            </h3>
+            <p className="text-sm text-slate-300 mb-4 leading-relaxed">
+              Your weight isn't fixed — it changes dramatically across the solar system.
+              Gravity on Jupiter is 2.5× Earth's. On Mars, you'd weigh less than half.
+            </p>
+
+            {/* Sample weight cards — based on 70kg default */}
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {[
+                { planet: 'Mars',    emoji: '🔴', multiplier: 0.38, color: 'bg-red-900/40' },
+                { planet: 'Jupiter', emoji: '🟠', multiplier: 2.53, color: 'bg-orange-900/40' },
+                { planet: 'Moon',    emoji: '🌕', multiplier: 0.17, color: 'bg-slate-700/40' },
+                { planet: 'Saturn',  emoji: '🪐', multiplier: 1.07, color: 'bg-yellow-900/40' },
+              ].map(({ planet, emoji, multiplier, color }) => (
+                <div key={planet} className={`${color} rounded-xl p-3 text-center border border-white/10`}>
+                  <div className="text-xl mb-1">{emoji}</div>
+                  <p className="text-xs text-slate-400 mb-0.5">{planet}</p>
+                  <p className="text-base font-bold text-white">{Math.round(70 * multiplier)} kg</p>
+                  <p className="text-xs text-slate-400">{multiplier}× Earth</p>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-xs text-slate-400 italic mb-3 text-center">
+              Sample based on 70 kg. Calculate your exact weight →
+            </p>
+
+            <div className="bg-blue-900/30 rounded-xl p-3 border border-blue-500/20 mb-4">
+              <p className="text-xs font-semibold text-blue-300 mb-1">🔬 The Science</p>
+              <p className="text-xs text-blue-200 leading-relaxed">
+                Weight is determined by surface gravitational acceleration (g).
+                Jupiter's g = 24.8 m/s² vs Earth's 9.8 m/s², making you 2.53× heavier.
+                This is why Mars (g = 3.7 m/s²) is a leading colonisation candidate —
+                the human body can adapt to 38% Earth gravity far more easily than to
+                Jupiter's crushing 2.5× gravity.
+              </p>
+              <p className="text-xs text-blue-400 mt-1">Source: NASA Planetary Fact Sheet, 2023</p>
+            </div>
+
+            <a
+              href="/planetary-age"
+              className="block w-full text-center bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-semibold text-sm transition-colors"
+            >
+              Calculate My Planetary Weight &amp; Age →
+            </a>
+          </div>
+        </section>
+
         {/* EEAT Trust Section */}
         <section className="max-w-4xl mx-auto mb-16">
           <Card className="glass-card card-party-border">
