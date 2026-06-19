@@ -661,42 +661,6 @@ const LifeExpectancy = () => {
           </section>
         )}
 
-        {/* About Section */}
-        <section className="max-w-4xl mx-auto mb-16">
-          <Card className="glass-card">
-            <CardContent className="p-8 space-y-6">
-              <h2 className="text-3xl font-bold gradient-text-primary text-center mb-6">
-                Understand Your Future — Backed by Science, Designed with Care
-              </h2>
-              <div className="prose prose-lg max-w-none text-foreground space-y-4">
-                <p>
-                  Your future isn't just fate — it's shaped by your lifestyle, health, and choices. Our Life Expectancy Calculator empowers you to understand how your everyday habits may affect your longevity, using scientifically supported data across three evidence-based pillars.
-                </p>
-                <div className="bg-primary/5 rounded-lg p-6 my-6">
-                  <h3 className="text-xl font-bold mb-4">Three Pillars of Longevity:</h3>
-                  <ul className="space-y-3 list-none">
-                    <li className="flex items-start gap-3">
-                      <span className="text-xl">🧬</span>
-                      <span><strong>Biological Blueprint</strong> — Family genetics and hereditary factors (25–30% of lifespan)</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-xl">🏘️</span>
-                      <span><strong>Community Anchor</strong> — Epigenetic habits and environmental factors (accounts for up to 70%)</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-xl">🌟</span>
-                      <span><strong>Cultural Horizon</strong> — Real-world longevity benchmarks from inspiring figures</span>
-                    </li>
-                  </ul>
-                </div>
-                <p>
-                  Following the EEAT principles (Experience, Expertise, Authoritativeness, and Trustworthiness), our methodology combines credible health data from WHO, CDC, NIH, and The Lancet with simplified actuarial modeling.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
         <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
         <RelatedTools currentSlug="life" />
         <AuthorBio />
