@@ -61,6 +61,7 @@ const GENERATION_CONTENT: Record<string, {
   culture: string;
   work: string;
   superpower: string;
+  famousMembers: string[];
 }> = {
   'Silent Generation': {
     emoji: '🎖️',
@@ -68,7 +69,8 @@ const GENERATION_CONTENT: Record<string, {
     technology: 'Grew up as radio ruled the home. Witnessed the arrival of television, and later adapted to computers in the workplace — each new device felt like science fiction made real.',
     culture: 'Defined by deference to authority, hard work, and community sacrifice. The phrase "waste not, want not" was lived, not quoted. Swing music, bebop jazz, and the first Hollywood golden age shaped this generation\'s emotional landscape.',
     work: 'Loyalty defined the career. A 40-year tenure with one company was the aspiration and often the reality. Institutional trust was high — you followed the rules and the system rewarded you.',
-    superpower: 'Resilience. Having survived economic collapse and world war, this generation\'s default mode is quiet perseverance. They do not panic; they endure.'
+    superpower: 'Resilience. Having survived economic collapse and world war, this generation\'s default mode is quiet perseverance. They do not panic; they endure.',
+    famousMembers: ['Audrey Hepburn', 'Martin Luther King Jr.', 'Marilyn Monroe', 'Neil Armstrong', 'Clint Eastwood', 'Sidney Poitier'],
   },
   'Baby Boomer': {
     emoji: '📺',
@@ -76,7 +78,8 @@ const GENERATION_CONTENT: Record<string, {
     technology: 'Witnessed the dawn of the personal computer, the birth of the internet, and the explosion of cable television. Many became early adopters of email and mobile phones in middle age.',
     culture: 'Rock and roll, civil rights, and radical optimism. Boomers came of age believing they could change the world — many did. They invented youth culture as a force and never entirely grew out of it.',
     work: 'Hard work and long hours were the path to success. Boomers largely built the 9-to-5 work culture, the corner office aspiration, and the company loyalty model — even as they began questioning it.',
-    superpower: 'Drive. Boomers are among the most competitive and achievement-oriented cohorts in history. Their ambition rebuilt post-war economies and produced some of the most impactful careers of the 20th century.'
+    superpower: 'Drive. Boomers are among the most competitive and achievement-oriented cohorts in history. Their ambition rebuilt post-war economies and produced some of the most impactful careers of the 20th century.',
+    famousMembers: ['Steve Jobs', 'Bill Gates', 'Barack Obama', 'Oprah Winfrey', 'Meryl Streep', 'Bruce Springsteen'],
   },
   'Generation X': {
     emoji: '📼',
@@ -84,7 +87,8 @@ const GENERATION_CONTENT: Record<string, {
     technology: 'The original digital immigrants. Grew up with Atari and VCRs, graduated into the internet age, and built or shaped many of the tech companies that define the modern world.',
     culture: 'Grunge, hip-hop, and cynicism as an art form. Gen X was the first generation to be called "slackers" — a label they wore as a badge of independence. They distrusted institutions before it was fashionable.',
     work: 'Gen X bridged the loyalty era and the gig economy. They were the first to job-hop strategically, and the first to balance work-life boundaries as a conscious choice rather than a luxury.',
-    superpower: 'Adaptability. Gen X has reinvented themselves multiple times — analogue to digital, corporate to entrepreneurial, employee to founder. No generation has navigated more paradigm shifts with less fanfare.'
+    superpower: 'Adaptability. Gen X has reinvented themselves multiple times — analogue to digital, corporate to entrepreneurial, employee to founder. No generation has navigated more paradigm shifts with less fanfare.',
+    famousMembers: ['Elon Musk', 'Jeff Bezos', 'Jay-Z', 'Sheryl Sandberg', 'Tiger Woods', 'Keanu Reeves'],
   },
   'Millennial': {
     emoji: '💻',
@@ -92,7 +96,8 @@ const GENERATION_CONTENT: Record<string, {
     technology: 'The first digital natives. Millennials built the social internet, invented the app economy, and normalised smartphones as extensions of the self. They were the first to experience always-on connectivity.',
     culture: 'Harry Potter, Y2K anxiety, reality TV, and the permanent connectivity of social media. Millennials grew up expecting the world to be more equal and more connected — and spent much of adulthood reckoning with the gap.',
     work: 'Purpose over paycheck. Millennials drove the rise of remote work, side hustles, and the demand for meaningful employment. They were also the first generation to enter the workforce during a global financial collapse.',
-    superpower: 'Collaboration. Millennials are the most educated and networked generation in history. Their instinct to share, connect, and co-create has driven some of the most significant cultural and technological shifts of the last two decades.'
+    superpower: 'Collaboration. Millennials are the most educated and networked generation in history. Their instinct to share, connect, and co-create has driven some of the most significant cultural and technological shifts of the last two decades.',
+    famousMembers: ['Mark Zuckerberg', 'Malala Yousafzai', 'Adele', 'LeBron James', 'Emma Watson', 'Lin-Manuel Miranda'],
   },
   'Generation Z': {
     emoji: '📱',
@@ -100,7 +105,8 @@ const GENERATION_CONTENT: Record<string, {
     technology: 'True digital natives — born into smartphones, social algorithms, and streaming. Gen Z treats technology as invisible infrastructure rather than a novelty. They are the first generation where the internet was always already there.',
     culture: 'TikTok, mental health awareness, fluid identity, and radical pragmatism. Gen Z has the most nuanced and intersectional understanding of identity of any prior generation — and the least patience for inauthenticity.',
     work: 'Entrepreneurial and non-linear. Gen Z entered a post-pandemic labour market and chose agency over security. Creator economy, freelancing, and multiple income streams are the default, not the exception.',
-    superpower: 'Authenticity. Gen Z has a finely tuned radar for what is genuine versus performative — and they reward the former with loyalty while dismissing the latter instantly. In a world of noise, they cut through it.'
+    superpower: 'Authenticity. Gen Z has a finely tuned radar for what is genuine versus performative — and they reward the former with loyalty while dismissing the latter instantly. In a world of noise, they cut through it.',
+    famousMembers: ['Billie Eilish', 'Greta Thunberg', 'Timothée Chalamet', 'Olivia Rodrigo', 'Simone Biles', 'Zendaya'],
   },
   'Generation Alpha': {
     emoji: '🤖',
@@ -108,7 +114,8 @@ const GENERATION_CONTENT: Record<string, {
     technology: 'Born into AI, voice assistants, and augmented reality. For Generation Alpha, ChatGPT is not a revolution — it is just another tool, like a calculator or a search engine. They will be the first to grow up with AI tutors from childhood.',
     culture: 'Roblox, YouTube Shorts, and a world where digital and physical reality are indistinguishable. Gen Alpha\'s play, friendships, and identity formation happen as much in virtual worlds as in physical ones.',
     work: 'The jobs Gen Alpha will do largely do not exist yet. They are being raised for a world of accelerating automation, climate adaptation, and human-AI collaboration. Creativity and emotional intelligence will be their most valuable skills.',
-    superpower: 'Imagination. Growing up when the boundary between what is possible and impossible is dissolving daily, Generation Alpha approaches the world with an openness to entirely new realities that no prior generation has had from birth.'
+    superpower: 'Imagination. Growing up when the boundary between what is possible and impossible is dissolving daily, Generation Alpha approaches the world with an openness to entirely new realities that no prior generation has had from birth.',
+    famousMembers: ['Blue Ivy Carter', 'North West', 'Ryan Kaji (Ryan\'s World)', 'Archie Harrison Mountbatten-Windsor'],
   },
 };
 
@@ -1029,6 +1036,18 @@ const ReportView = () => {
                       <div className="text-xs font-bold text-amber-700 uppercase tracking-wide mb-2">⚡ Generational Superpower</div>
                       <p className="text-sm text-amber-900 leading-relaxed font-medium">{gc.superpower}</p>
                     </div>
+
+                    {/* Famous members */}
+                    {gc.famousMembers.length > 0 && (
+                      <div className="bg-gray-50 rounded-2xl p-5">
+                        <div className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">⭐ Famous Members of {generation.name}</div>
+                        <div className="flex flex-wrap gap-2">
+                          {gc.famousMembers.map(name => (
+                            <span key={name} className="px-3 py-1.5 bg-white border border-gray-200 text-gray-700 rounded-full text-xs font-medium shadow-sm">{name}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </>
                 )}
               </div>
