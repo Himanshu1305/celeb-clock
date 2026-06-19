@@ -105,7 +105,7 @@ const PLANET_UI: PlanetUIData[] = [
 ];
 
 // ── Space facts — indigo/amber accent only ───────────────────────────────────
-interface SpaceFact {
+export interface SpaceFact {
   icon: string;
   title: string;
   body: string;
@@ -113,7 +113,7 @@ interface SpaceFact {
   useAmber: boolean; // true = amber accent, false = indigo accent
 }
 
-const SPACE_FACTS: SpaceFact[] = [
+export const SPACE_FACTS: SpaceFact[] = [
   {
     icon: '💎',
     title: 'It Rains Diamonds on Neptune',
@@ -209,7 +209,7 @@ function getNeptuneContext(year: number): string {
 }
 
 // ── Gravity ratios for weight calc ────────────────────────────────────────────
-const GRAVITY_DATA: { name: string; emoji: string; ratio: number }[] = [
+export const GRAVITY_DATA: { name: string; emoji: string; ratio: number }[] = [
   { name: 'Mercury', emoji: '☿', ratio: 0.38 },
   { name: 'Venus',   emoji: '♀', ratio: 0.91 },
   { name: 'Earth',   emoji: '🌍', ratio: 1.00 },
@@ -357,32 +357,6 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
     setShareCopied(true);
     setTimeout(() => setShareCopied(false), 2500);
   };
-
-  // Weight calculator
-  const [weight, setWeight] = useState('');
-  const [weightUnit, setWeightUnit] = useState<'kg' | 'lbs'>('kg');
-  const weightKg = weight
-    ? weightUnit === 'kg'
-      ? parseFloat(weight)
-      : parseFloat(weight) * 0.453592
-    : null;
-
-  // Facts carousel auto-scroll
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const isPausedRef = useRef(false);
-  const scrollIdxRef = useRef(0);
-
-  useEffect(() => {
-    const el = carouselRef.current;
-    if (!el) return;
-    const cardW = 304; // 288px card + 16px gap
-    const interval = setInterval(() => {
-      if (isPausedRef.current) return;
-      scrollIdxRef.current = (scrollIdxRef.current + 1) % SPACE_FACTS.length;
-      el.scrollTo({ left: scrollIdxRef.current * cardW, behavior: 'smooth' });
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
 
   const results = useMemo<PlanetResult[]>(() => {
     return PLANET_UI.map(planet => {
@@ -541,7 +515,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
 
         {/* All other planets */}
         {results.map(p => (
-          <PlanetCard key={p.name} p={p} weightKg={weightKg} />
+          <PlanetCard key={p.name} p={p} weightKg={null} />
         ))}
       </div>
 
@@ -556,35 +530,6 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
         <p className="text-slate-500 text-xs mt-2">Share your ages across the solar system</p>
       </div>
 
-      {/* ── SHOCKING FACTS CAROUSEL ──────────────────────────────────────── */}
-      <div className="mb-12">
-        <h2 className="text-xl font-bold text-white mb-2">🤯 Facts That Will Break Your Brain</h2>
-        <p className="text-sm text-slate-400 mb-5">Auto-scrolling · hover to pause</p>
-        <div
-          ref={carouselRef}
-          className="overflow-x-auto pb-4 flex gap-4"
-          style={{ scrollBehavior: 'smooth' }}
-          onMouseEnter={() => { isPausedRef.current = true; }}
-          onMouseLeave={() => { isPausedRef.current = false; }}
-        >
-          {SPACE_FACTS.map((fact, i) => (
-            <div
-              key={i}
-              className="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-white flex-shrink-0"
-              style={{
-                minWidth: '288px',
-                maxWidth: '288px',
-                borderLeft: `4px solid ${fact.useAmber ? '#f59e0b' : '#6366f1'}`,
-              }}
-            >
-              <div className="text-3xl mb-3">{fact.icon}</div>
-              <h3 className="font-black text-sm mb-2 leading-tight text-white">{fact.title}</h3>
-              <p className="text-xs text-slate-300 leading-relaxed mb-3">{fact.body}</p>
-              <p className="text-[10px] text-slate-600 italic">[{fact.source}]</p>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* ── PERSONAL COSMIC PROFILE ──────────────────────────────────────── */}
       <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6 mb-12">
@@ -648,77 +593,6 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             </p>
           </div>
         </div>
-      </div>
-
-      {/* ── INTERACTIVE WEIGHT CALCULATOR ────────────────────────────────── */}
-      <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6 mb-12">
-        <h2 className="text-xl font-bold text-white mb-1">⚖️ How Heavy Are You on Other Planets?</h2>
-        <p className="text-sm text-slate-300 mb-3">
-          Your weight changes dramatically across the solar system — because gravity depends on a planet's mass and size, not its distance from the Sun.
-        </p>
-        <div className="bg-indigo-950/50 border border-indigo-800/40 rounded-xl px-4 py-3 mb-5 text-sm text-indigo-200">
-          <span className="font-bold text-indigo-400">Fun fact:</span> On Jupiter, the most massive planet, you'd weigh 2.5× more than on Earth. On Mars, you'd weigh less than half — and could jump over a two-storey building.
-        </div>
-
-        <div className="flex items-center gap-3 mb-6 max-w-xs">
-          <input
-            type="number"
-            min={1}
-            max={500}
-            value={weight}
-            onChange={e => setWeight(e.target.value)}
-            placeholder={weightUnit === 'kg' ? 'e.g. 70' : 'e.g. 154'}
-            className="flex-1 px-4 py-2.5 rounded-xl border border-slate-600 bg-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500"
-          />
-          <div className="flex rounded-xl overflow-hidden border border-slate-600">
-            <button
-              onClick={() => setWeightUnit('kg')}
-              className={`px-3 py-2.5 text-sm font-medium transition-colors ${weightUnit === 'kg' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
-            >
-              kg
-            </button>
-            <button
-              onClick={() => setWeightUnit('lbs')}
-              className={`px-3 py-2.5 text-sm font-medium transition-colors ${weightUnit === 'lbs' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
-            >
-              lbs
-            </button>
-          </div>
-        </div>
-
-        {weightKg && !isNaN(weightKg) && weightKg > 0 && (
-          <>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-              {GRAVITY_DATA.map(({ name, emoji, ratio }) => {
-                const w = weightKg * ratio;
-                const isRef = name === 'Earth';
-                const isHigh = ratio >= 2;
-                const isLow = ratio <= 0.45;
-                return (
-                  <div
-                    key={name}
-                    className={`rounded-xl p-3 text-center border ${isRef ? 'border-indigo-500/50 bg-indigo-950/30' : 'border-slate-700 bg-slate-800'}`}
-                  >
-                    <div className="text-xl mb-1">{emoji}</div>
-                    <div className="text-xs text-slate-400 mb-1">{name}</div>
-                    <div className={`text-base font-bold ${isHigh ? 'text-red-400' : isLow ? 'text-green-400' : isRef ? 'text-indigo-300' : 'text-white'}`}>
-                      {w.toFixed(1)} {weightUnit}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {weightKg * 2.53 > 200 && (
-              <p className="text-sm text-amber-300 bg-amber-950/40 border border-amber-800/40 px-4 py-2 rounded-lg mb-2">
-                ⚠️ On Jupiter, you'd weigh {(weightKg * 2.53).toFixed(1)}{weightUnit} — you'd need extraordinary structural support just to stand up.
-              </p>
-            )}
-            <p className="text-sm text-green-300 bg-green-950/40 border border-green-800/40 px-4 py-2 rounded-lg">
-              🔴 On Mars, you'd weigh only {(weightKg * 0.38).toFixed(1)}{weightUnit} — you could jump 3× higher than on Earth.
-            </p>
-          </>
-        )}
       </div>
 
       {/* ── SHAREABLE CARD CTA ───────────────────────────────────────────── */}

@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { PlanetaryAge } from '@/components/PlanetaryAge';
+import { PlanetaryAge, SPACE_FACTS, GRAVITY_DATA } from '@/components/PlanetaryAge';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, FAQSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
@@ -77,6 +77,30 @@ const PlanetaryAgePage = () => {
   const [showResults, setShowResults] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const pageOpenTime = useRef(Date.now());
+
+  // Weight calculator (always-visible section)
+  const [pageWeight, setPageWeight] = useState('70');
+  const [pageWeightUnit, setPageWeightUnit] = useState<'kg' | 'lbs'>('kg');
+  const pageWeightKg = pageWeight
+    ? pageWeightUnit === 'kg' ? parseFloat(pageWeight) : parseFloat(pageWeight) * 0.453592
+    : 70;
+
+  // Facts carousel (always-visible section)
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const isPausedRef = useRef(false);
+  const scrollIdxRef = useRef(0);
+
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const cardW = 304;
+    const interval = setInterval(() => {
+      if (isPausedRef.current) return;
+      scrollIdxRef.current = (scrollIdxRef.current + 1) % SPACE_FACTS.length;
+      el.scrollTo({ left: scrollIdxRef.current * cardW, behavior: 'smooth' });
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Pre-populate from ?dob= URL parameter on mount
   useEffect(() => {
@@ -327,6 +351,107 @@ const PlanetaryAgePage = () => {
           </div>
         </>
       )}
+
+      {/* ── SHOCKING FACTS CAROUSEL — always visible ─────────────────────── */}
+      <div className="container mx-auto px-4 py-10 max-w-5xl">
+        <h2 className="text-xl font-bold text-white mb-2">🤯 Facts That Will Break Your Brain</h2>
+        <p className="text-sm text-slate-400 mb-5">Auto-scrolling · hover to pause</p>
+        <div
+          ref={carouselRef}
+          className="overflow-x-auto pb-4 flex gap-4"
+          style={{ scrollBehavior: 'smooth' }}
+          onMouseEnter={() => { isPausedRef.current = true; }}
+          onMouseLeave={() => { isPausedRef.current = false; }}
+        >
+          {SPACE_FACTS.map((fact, i) => (
+            <div
+              key={i}
+              className="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-white flex-shrink-0"
+              style={{ minWidth: '288px', maxWidth: '288px', borderLeft: `4px solid ${fact.useAmber ? '#f59e0b' : '#6366f1'}` }}
+            >
+              <div className="text-3xl mb-3">{fact.icon}</div>
+              <h3 className="font-black text-sm mb-2 leading-tight text-white">{fact.title}</h3>
+              <p className="text-xs text-slate-300 leading-relaxed mb-3">{fact.body}</p>
+              <p className="text-[10px] text-slate-600 italic">[{fact.source}]</p>
+            </div>
+          ))}
+        </div>
+        <div className="bg-indigo-950/50 border border-indigo-800/40 rounded-xl px-4 py-3 mt-4 text-sm text-indigo-200">
+          <span className="font-bold text-indigo-400">The science:</span> Each planet's year is governed by Kepler's Third Law (1619) — the further a planet is from the Sun, the slower it orbits. Neptune's year lasts 164.8 Earth years because it travels 30× further from the Sun than Earth, at 5.4 km/s vs Earth's 29.8 km/s.
+        </div>
+      </div>
+
+      {/* ── INTERACTIVE WEIGHT CALCULATOR — always visible ───────────────── */}
+      <div className="container mx-auto px-4 pb-12 max-w-5xl">
+        <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6">
+          <h2 className="text-xl font-bold text-white mb-1">⚖️ How Heavy Are You on Other Planets?</h2>
+          <p className="text-sm text-slate-300 mb-3">
+            Your weight changes dramatically across the solar system — because gravity depends on a planet's mass and size, not its distance from the Sun.
+          </p>
+          {showResults ? null : (
+            <p className="text-xs text-slate-500 italic mb-3">Showing weights for a 70 kg person. Enter your details above for personalised results.</p>
+          )}
+          <div className="bg-green-950/40 border border-green-800/40 rounded-xl px-4 py-3 mb-5 text-sm text-green-200">
+            <span className="font-bold text-green-400">The science:</span> Weight = mass × gravitational acceleration (g). Jupiter's gravity is 24.8 m/s² vs Earth's 9.8 m/s² — 2.53× stronger — because it's 318× more massive. Mars has only 38% of Earth's gravity despite being a rocky planet, because its mass is just 10.7% of Earth's.
+          </div>
+
+          <div className="flex items-center gap-3 mb-6 max-w-xs">
+            <input
+              type="number"
+              min={1}
+              max={500}
+              value={pageWeight}
+              onChange={e => setPageWeight(e.target.value)}
+              placeholder={pageWeightUnit === 'kg' ? 'e.g. 70' : 'e.g. 154'}
+              className="flex-1 px-4 py-2.5 rounded-xl border border-slate-600 bg-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500"
+            />
+            <div className="flex rounded-xl overflow-hidden border border-slate-600">
+              <button
+                onClick={() => setPageWeightUnit('kg')}
+                className={`px-3 py-2.5 text-sm font-medium transition-colors ${pageWeightUnit === 'kg' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+              >
+                kg
+              </button>
+              <button
+                onClick={() => setPageWeightUnit('lbs')}
+                className={`px-3 py-2.5 text-sm font-medium transition-colors ${pageWeightUnit === 'lbs' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+              >
+                lbs
+              </button>
+            </div>
+          </div>
+
+          {pageWeightKg > 0 && !isNaN(pageWeightKg) && (
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                {GRAVITY_DATA.map(({ name, emoji, ratio }) => {
+                  const w = pageWeightKg * ratio;
+                  const isRef = name === 'Earth';
+                  const isHigh = ratio >= 2;
+                  const isLow = ratio <= 0.45;
+                  return (
+                    <div key={name} className={`rounded-xl p-3 text-center border ${isRef ? 'border-indigo-500/50 bg-indigo-950/30' : 'border-slate-700 bg-slate-800'}`}>
+                      <div className="text-xl mb-1">{emoji}</div>
+                      <div className="text-xs text-slate-400 mb-1">{name}</div>
+                      <div className={`text-base font-bold ${isHigh ? 'text-red-400' : isLow ? 'text-green-400' : isRef ? 'text-indigo-300' : 'text-white'}`}>
+                        {w.toFixed(1)} {pageWeightUnit}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {pageWeightKg * 2.53 > 200 && (
+                <p className="text-sm text-amber-300 bg-amber-950/40 border border-amber-800/40 px-4 py-2 rounded-lg mb-2">
+                  ⚠️ On Jupiter, you'd weigh {(pageWeightKg * 2.53).toFixed(1)} {pageWeightUnit} — you'd need extraordinary structural support just to stand up.
+                </p>
+              )}
+              <p className="text-sm text-green-300 bg-green-950/40 border border-green-800/40 px-4 py-2 rounded-lg">
+                🔴 On Mars, you'd weigh only {(pageWeightKg * 0.38).toFixed(1)} {pageWeightUnit} — you could jump 3× higher than on Earth.
+              </p>
+            </>
+          )}
+        </div>
+      </div>
 
     </div>
     <div className="bg-white">
