@@ -163,14 +163,19 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   const { trackFeatureUse } = useAnalytics();
   const [step, setStep] = useState(1);
 
-  const [data, setData] = useState<HealthQuizData>({
-    name: '', gender: '', country: '',
-    smoking: '', drinking: '',
-    heartDisease: false, heartDiseaseFamily: false, heartDiseaseControlled: null,
-    diabetes: false, diabetesFamily: false, diabetesControlled: null,
-    hypertension: false, hypertensionControlled: null,
-    diet: '', exercise: '', stress: 5, bmi: 24.5,
-    bloodPressure: '', sleepDuration: '', socialConnections: '',
+  const [data, setData] = useState<HealthQuizData>(() => {
+    const nameFromUrl = typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('name') || ''
+      : '';
+    return {
+      name: nameFromUrl, gender: '', country: '',
+      smoking: '', drinking: '',
+      heartDisease: false, heartDiseaseFamily: false, heartDiseaseControlled: null,
+      diabetes: false, diabetesFamily: false, diabetesControlled: null,
+      hypertension: false, hypertensionControlled: null,
+      diet: '', exercise: '', stress: 5, bmi: 24.5,
+      bloodPressure: '', sleepDuration: '', socialConnections: '',
+    };
   });
 
   const [pillar1, setPillar1] = useState<Pillar1Data>(DEFAULT_PILLAR1);
@@ -203,7 +208,10 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   const countryDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (profile?.name && !data.name) setData(prev => ({ ...prev, name: profile.name }));
+    const urlName = typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('name') || ''
+      : '';
+    if (profile?.name && !data.name && !urlName) setData(prev => ({ ...prev, name: profile.name }));
     if (profile?.country && !data.country) setData(prev => ({ ...prev, country: profile.country || '' }));
   }, [profile]);
 
@@ -214,7 +222,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
       if (!saved) return;
       const parsed = JSON.parse(saved);
       if (Date.now() - (parsed.timestamp || 0) > 3_600_000) return; // expire after 1 hour
-      if (parsed.quiz) setData(parsed.quiz);
+      if (parsed.quiz) setData(prev => ({ ...prev, ...parsed.quiz }));
       if (parsed.pillar1) setPillar1(parsed.pillar1);
       if (parsed.pillar2) setPillar2(parsed.pillar2);
       localStorage.removeItem('bornclock_quiz_prefill');
