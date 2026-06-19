@@ -135,32 +135,60 @@ function FamilyDashboardInner() {
     if (!form.date_of_birth) { setAddError('Please enter a date of birth.'); return; }
     setAddError(null);
     setAdding(true);
+
+    const basePayload: Record<string, unknown> = {
+      user_id: user.id,
+      name: form.name.trim(),
+      date_of_birth: form.date_of_birth,
+      gender: form.gender === 'not_specified' ? null : (form.gender || null),
+      country: form.country === 'none' ? null : (form.country || null),
+    };
+
+    // Include relationship only when user selected one
+    if (form.relationship && form.relationship !== 'none') {
+      basePayload.relationship = form.relationship;
+    }
+
+    const doInsert = async (payload: Record<string, unknown>) => {
+      return supabase.from('family_members').insert(payload).select().single();
+    };
+
     try {
-      const { data, error } = await supabase
-        .from('family_members')
-        .insert({
-          user_id: user.id,
-          name: form.name.trim(),
-          date_of_birth: form.date_of_birth,
-          gender: form.gender === 'not_specified' ? null : (form.gender || null),
-          country: form.country === 'none' ? null : (form.country || null),
-          relationship: form.relationship === 'none' ? null : (form.relationship || null),
-        })
-        .select()
-        .single();
+      let { data, error } = await doInsert(basePayload);
 
       if (error) {
         const code = (error as { code?: string }).code;
-        if (code === '42501') {
-          setAddError('Permission error — please sign out and sign in again.');
-        } else if (code === '23502') {
-          setAddError(`Missing required field: ${(error as { details?: string; message?: string }).details || error.message}`);
-        } else if (code === '23503') {
-          setAddError('Invalid data — please check the fields and try again.');
-        } else {
-          setAddError(error.message || 'Failed to add family member. Please try again.');
+        // If relationship column doesn't exist yet (schema cache miss or undefined column),
+        // retry without it so the member is still saved
+        const isRelationshipSchemaError =
+          basePayload.relationship !== undefined &&
+          (code === '42703' ||
+           error.message?.toLowerCase().includes('relationship') ||
+           error.message?.toLowerCase().includes('schema cache'));
+
+        if (isRelationshipSchemaError) {
+          const { relationship: _dropped, ...payloadWithoutRel } = basePayload;
+          const retry = await doInsert(payloadWithoutRel);
+          data = retry.data;
+          error = retry.error;
+          if (!retry.error) {
+            setAddError('Member added. Relationship column is pending a database migration — run it in Supabase SQL Editor to enable this field.');
+          }
         }
-        return;
+
+        if (error) {
+          const retryCode = (error as { code?: string }).code;
+          if (retryCode === '42501') {
+            setAddError('Permission error — please sign out and sign in again.');
+          } else if (retryCode === '23502') {
+            setAddError(`Missing required field: ${(error as { details?: string; message?: string }).details || error.message}`);
+          } else if (retryCode === '23503') {
+            setAddError('Invalid data — please check the fields and try again.');
+          } else {
+            setAddError(error.message || 'Failed to add family member. Please try again.');
+          }
+          return;
+        }
       }
 
       if (data) {

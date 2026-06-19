@@ -224,6 +224,9 @@ const LifeExpectancy = () => {
 
   const getInputValue = () => birthDate ? birthDate.toISOString().split('T')[0] : '';
 
+  // When launched from Family Dashboard, use the family member's name everywhere a name appears
+  const displayName = prefilledFor || longevityResult?.quizSnapshot?.name || profile?.full_name || undefined;
+
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
@@ -301,7 +304,7 @@ const LifeExpectancy = () => {
                     Calculating forecast for {prefilledFor}
                   </p>
                   <p className="text-xs text-indigo-500 mt-0.5">
-                    Date of birth and other details have been pre-filled from your Family Dashboard.
+                    Date of birth and sex pre-filled from Family Dashboard. You can edit any field.
                   </p>
                 </div>
                 <button
@@ -563,12 +566,12 @@ const LifeExpectancy = () => {
             <LongevityHeroCard
               result={longevityResult}
               optimizedForecast={optimizedForecast}
-              userName={longevityResult.quizSnapshot.name}
+              userName={displayName}
             />
             <ReportErrorBoundary onReset={() => setPhase('result')}>
               <EnhancedLifeExpectancyReport
                 result={longevityResult}
-                userName={longevityResult.quizSnapshot.name}
+                userName={displayName}
                 birthDate={birthDate}
                 isPremium={isPremium}
                 onUpgradeClick={() => navigate('/upgrade')}
@@ -585,7 +588,7 @@ const LifeExpectancy = () => {
           <section className="max-w-3xl mx-auto mb-10 mt-8">
             <LongevityCoachChat
               result={longevityResult}
-              userName={profile?.full_name}
+              userName={displayName}
               isPremium={isPremium}
             />
           </section>
