@@ -518,6 +518,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     week,
     zodiacSign,
     lifePathNumber,
+    userEmail,
+    userId,
+    requestedAt,
   } = req.body;
 
   if (!type || !to || !name) {
@@ -525,6 +528,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   let emailContent: { subject: string; html: string } | null = null;
+  let sendTo = to;
 
   switch (type) {
     case 'welcome':
@@ -545,6 +549,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     case 'nudge_premium':
       emailContent = premiumUserNudgeEmail(name, week || 1);
       break;
+    case 'data_deletion_request':
+      sendTo = 'privacy@bornclock.com';
+      emailContent = {
+        subject: `DATA DELETION REQUEST — ${userEmail}`,
+        html: `
+          <h2>Data Deletion Request Received</h2>
+          <p><strong>User:</strong> ${userEmail}</p>
+          <p><strong>User ID:</strong> ${userId}</p>
+          <p><strong>Requested at:</strong> ${requestedAt}</p>
+          <hr>
+          <p><strong>Action required — complete within 30 days:</strong></p>
+          <ol>
+            <li>Cancel any active Razorpay subscription</li>
+            <li>Delete from family_members table where user_id = ${userId}</li>
+            <li>Delete from profiles table where user_id = ${userId}</li>
+            <li>Delete auth user from Supabase Auth</li>
+            <li>Send confirmation email to ${userEmail}</li>
+          </ol>
+          <p style="color:#6b7280;font-size:13px;">This request was submitted via the BornClock Profile page in compliance with DPDPA 2023 and GDPR Art. 17.</p>
+        `,
+      };
+      break;
     default:
       return res.status(400).json({ error: `Unknown email type: ${type}` });
   }
@@ -558,7 +584,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
       body: JSON.stringify({
         from: FROM_EMAIL,
-        to: [to],
+        to: [sendTo],
         subject: emailContent.subject,
         html: emailContent.html,
       }),
