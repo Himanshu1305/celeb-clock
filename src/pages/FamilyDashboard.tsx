@@ -66,6 +66,8 @@ import { QUIZ_COUNTRIES } from '@/services/LongevityCalculationService';
 
 type FamilyMemberExt = FamilyMember & { relationship?: string | null };
 
+// TEMPORARILY DISABLED with Family Dashboard
+/*
 function buildLifeExpectancyUrl(member: FamilyMemberExt): string {
   const params = new URLSearchParams();
   if (member.date_of_birth) params.set('dob', member.date_of_birth);
@@ -73,6 +75,7 @@ function buildLifeExpectancyUrl(member: FamilyMemberExt): string {
   if (member.name) params.set('name', member.name);
   return `/life-expectancy?${params.toString()}`;
 }
+*/
 
 const MAX_MEMBERS = 10;
 
@@ -95,6 +98,28 @@ function barColor(f: number) {
 }
 
 function FamilyDashboardInner() {
+  // FEATURE FLAG — disabled for launch, re-enable Month 2
+  // To re-enable: change false to true and uncomment nav item in Navigation.tsx
+  const FAMILY_DASHBOARD_ENABLED = false;
+
+  if (!FAMILY_DASHBOARD_ENABLED) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="text-center bg-white rounded-2xl p-8 shadow-sm border border-gray-200 max-w-sm">
+          <div className="text-4xl mb-4">👨‍👩‍👧</div>
+          <h1 className="text-xl font-bold text-gray-900 mb-2">Family Dashboard</h1>
+          <p className="text-gray-500 mb-2 text-sm">
+            Track longevity forecasts for your whole family — coming soon.
+          </p>
+          <p className="text-xs text-gray-400 mb-4">Available in the next update.</p>
+          <a href="/" className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors">
+            ← Back to BornClock
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   const { user, isPremium, isInTrial, profile, loading: authLoading } = useAuth();
 
   const [members, setMembers] = useState<FamilyMemberExt[]>([]);
@@ -360,12 +385,14 @@ function FamilyDashboardInner() {
                       <div className="text-xs text-muted-foreground mb-3">
                         years forecast · {remaining} years remaining
                       </div>
+                      {/* TEMPORARILY DISABLED
                       <Link
                         to={buildLifeExpectancyUrl(m)}
                         className="text-xs text-indigo-600 hover:underline flex items-center gap-1"
                       >
                         Full quiz for {m.name}'s personalized forecast <ArrowRight className="w-3 h-3" />
                       </Link>
+                      */}
                     </CardContent>
                   </Card>
                 );

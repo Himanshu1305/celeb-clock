@@ -20,7 +20,8 @@ const navItems = [
   { path: '/birthstone', label: 'Birthstone', icon: Gem },
   { path: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { path: '/birthday-report', label: 'Birthday Report', icon: Gift },
-  { path: '/family', label: 'Family', icon: Users },
+  // TEMPORARILY DISABLED — re-enable Month 2
+  // { path: '/family', label: 'Family', icon: Users },
   { path: '/blog', label: 'Blog', icon: BookOpen },
   { path: '/biological-age', label: 'Biological Age', icon: Activity },
   { path: '/country-comparison', label: 'Country Comparison', icon: Map },
