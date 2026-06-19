@@ -522,7 +522,7 @@ const LifeExpectancy = () => {
         {/* ── Phase 3: What-If Simulator (auto-appears after result) ── */}
         {(phase === 'result' || phase === 'report') && longevityResult && (
           <section className="max-w-6xl mx-auto mb-10" ref={simulatorRef} data-sim="true">
-            <div className="mb-6 flex items-center gap-4 flex-wrap">
+            <div className="mb-4 flex items-center gap-4 flex-wrap">
               <div>
                 <h2 className="text-2xl font-bold flex items-center gap-2">
                   <TrendingUp className="w-6 h-6 text-primary" /> What-If Simulator
@@ -534,6 +534,16 @@ const LifeExpectancy = () => {
                   {longevityResult.yearsRemaining} years remaining
                 </p>
               </div>
+            </div>
+            <div className="bg-indigo-50 rounded-xl p-4 mb-6 border border-indigo-100">
+              <p className="text-sm text-indigo-800 leading-relaxed">
+                <strong>See what's possible.</strong> Research shows 70-75% of your longevity outcome is
+                controlled by lifestyle — not genetics. Move any slider below to see exactly how specific
+                habit changes could add years to your life.
+              </p>
+              <p className="text-xs text-indigo-500 mt-1">
+                Source: Karolinska Institute twin study, Science journal, 2017
+              </p>
             </div>
             <ReportErrorBoundary onReset={resetAll}>
               <WhatIfSimulator
