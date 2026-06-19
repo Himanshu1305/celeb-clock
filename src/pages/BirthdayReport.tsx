@@ -51,7 +51,7 @@ const CHECKLIST_ITEMS = [
 // ── Page component ────────────────────────────────────────────────────────────
 
 const BirthdayReport = () => {
-  const { user, isPremium, isInTrial } = useAuth();
+  const { user, isPremium, isInTrial, trialDaysRemaining } = useAuth();
   const { toast } = useToast();
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -179,7 +179,7 @@ const BirthdayReport = () => {
       </div>
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <div className="bg-gradient-to-br from-amber-50 via-rose-50 to-purple-50 py-16 px-4 text-center">
+      <div className="bg-gradient-to-br from-amber-50 via-rose-50 to-purple-50 py-8 px-4 text-center">
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col items-center mb-6">
             <img
@@ -187,7 +187,7 @@ const BirthdayReport = () => {
               alt="BornClock"
               className="h-16 w-auto mb-2"
             />
-            <p className="text-sm text-gray-400">Your Birthday Intelligence Platform</p>
+            <p className="text-sm text-indigo-500 italic font-medium mt-1">Know your time. Live it well.</p>
           </div>
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-rose-100 text-rose-700 rounded-full text-sm font-medium mb-6">
             🎁 The Birthday Gift They'll Actually Remember
@@ -205,7 +205,7 @@ const BirthdayReport = () => {
             onClick={scrollToForm}
             className="inline-flex items-center gap-2 px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl text-lg transition-colors shadow-lg"
           >
-            Create Their Report 🎂
+            Create Their Birthday Report 🎂
           </button>
         </div>
       </div>
@@ -235,16 +235,29 @@ const BirthdayReport = () => {
       </div>
 
       {/* ── Pricing Card ─────────────────────────────────────────────────── */}
-      <div className="py-12 px-4 bg-gray-50">
+      <div className="py-6 px-4 bg-gray-50">
         <div className="max-w-sm mx-auto bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
           <div className="text-center mb-6">
             <div className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">Birthday Report</div>
-            <div className="flex items-baseline justify-center gap-3">
-              <span className="text-4xl font-black text-rose-500">₹199</span>
-              <span className="text-gray-400">/</span>
-              <span className="text-2xl font-bold text-gray-700">$2.99</span>
-            </div>
-            <div className="text-xs text-gray-400 mt-1">India / Global</div>
+            {(isPremium || isInTrial) ? (
+              <>
+                <div className="text-4xl font-black text-green-500">FREE</div>
+                <div className="text-xs text-green-600 font-medium mt-1">
+                  {isInTrial && trialDaysRemaining > 0
+                    ? `Included in your trial · ${trialDaysRemaining} day${trialDaysRemaining !== 1 ? 's' : ''} remaining`
+                    : 'Included in your Premium plan'}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-baseline justify-center gap-3">
+                  <span className="text-4xl font-black text-rose-500">₹199</span>
+                  <span className="text-gray-400">/</span>
+                  <span className="text-2xl font-bold text-gray-700">$2.99</span>
+                </div>
+                <div className="text-xs text-gray-400 mt-1">India / Global</div>
+              </>
+            )}
           </div>
           <ul className="space-y-2 mb-6">
             {CHECKLIST_ITEMS.map(item => (
@@ -298,7 +311,7 @@ const BirthdayReport = () => {
       </div>
 
       {/* ── Gifting Ideas ────────────────────────────────────────────────── */}
-      <div className="py-12 px-4 bg-amber-50">
+      <div className="py-6 px-4 bg-amber-50">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Perfect for every occasion</h2>
           <div className="flex flex-wrap justify-center gap-3">
@@ -312,7 +325,7 @@ const BirthdayReport = () => {
       </div>
 
       {/* ── Form / Loading / Success ──────────────────────────────────────── */}
-      <div ref={formRef} className="py-16 px-4 bg-white" id="create-report">
+      <div ref={formRef} className="py-8 px-4 bg-white" id="create-report">
         <div className="max-w-lg mx-auto">
 
           {/* ── FORM ── */}
