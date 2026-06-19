@@ -710,11 +710,31 @@ const ReportView = () => {
           <p className="text-center text-gray-500 text-sm mb-10">Calculated from their exact date of birth</p>
 
           {/* Life path number */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-8">
             <div className="text-9xl font-black text-rose-500 leading-none mb-2">{lifePathNumber}</div>
             <div className="text-xl font-bold text-gray-900">{lifePathData?.name ?? `Life Path ${lifePathNumber}`}</div>
             <div className="text-gray-500 text-sm mt-1">{lifePathData?.keywords?.slice(0, 3).join(' · ')}</div>
           </div>
+
+          {/* 3-number summary grid */}
+          {(() => {
+            const nameNums = calculateAllNameNumbers(recipientName || '');
+            return (
+              <div className="grid grid-cols-3 gap-3 mb-10">
+                {[
+                  { label: 'Life Path', value: lifePathNumber, color: 'bg-rose-50 text-rose-700', desc: 'Your core life purpose' },
+                  { label: 'Soul Urge', value: nameNums.soulUrge, color: 'bg-indigo-50 text-indigo-700', desc: "Your heart's desire" },
+                  { label: 'Personal Year', value: personalYear2026 ?? '—', color: 'bg-amber-50 text-amber-700', desc: 'Your 2026 energy' },
+                ].map(({ label, value, color, desc }) => (
+                  <div key={label} className={`rounded-2xl p-4 text-center ${color}`}>
+                    <div className="text-3xl font-black mb-1">{value}</div>
+                    <div className="text-xs font-semibold">{label}</div>
+                    <div className="text-xs opacity-70 mt-0.5">{desc}</div>
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
 
           {lifePathData && (
             <div className="space-y-6 mb-10">
