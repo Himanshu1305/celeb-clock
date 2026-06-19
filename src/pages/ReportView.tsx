@@ -172,6 +172,7 @@ const ReportView = () => {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [activeZodiacTab, setActiveZodiacTab] = useState('western');
 
   useEffect(() => {
     if (!slug) { setNotFound(true); setLoading(false); return; }
@@ -485,25 +486,29 @@ const ReportView = () => {
           <h2 className="text-2xl font-black text-gray-900 mb-2 text-center">♈ Zodiac Profile</h2>
           <p className="text-center text-gray-500 text-sm mb-8">Three tradition systems, one person</p>
 
-          {/* 3-card overview */}
+          {/* 3-card overview — click to switch tab */}
           <div className="grid md:grid-cols-3 gap-4 mb-8">
             {[
-              { label: 'Western Zodiac', value: westernZodiac?.name ?? '—', sub: westernZodiac?.element ?? '', icon: westernZodiac?.unicode ?? '♈', bg: 'bg-white' },
-              { label: 'Chinese Zodiac', value: `${chineseZodiac?.animal ?? '—'} ${chineseZodiac?.emoji ?? ''}`, sub: `${chineseZodiac?.element ?? ''} ${chineseZodiac?.yin_yang ?? ''}`, icon: '', bg: 'bg-white' },
-              { label: 'Vedic Rashi', value: vedicRashi?.name ?? '—', sub: vedicRashi?.english ?? '', icon: vedicRashi?.symbol ?? '', bg: 'bg-white' },
+              { label: 'Western Zodiac', value: westernZodiac?.name ?? '—', sub: westernZodiac?.element ?? '', icon: westernZodiac?.unicode ?? '♈', tab: 'western' },
+              { label: 'Chinese Zodiac', value: `${chineseZodiac?.animal ?? '—'} ${chineseZodiac?.emoji ?? ''}`, sub: `${chineseZodiac?.element ?? ''} ${chineseZodiac?.yin_yang ?? ''}`, icon: '', tab: 'chinese' },
+              { label: 'Vedic Rashi', value: vedicRashi?.name ?? '—', sub: vedicRashi?.english ?? '', icon: vedicRashi?.symbol ?? '', tab: 'vedic' },
             ].map(card => (
-              <div key={card.label} className={`${card.bg} rounded-2xl p-5 shadow-sm text-center`}>
+              <button
+                key={card.label}
+                onClick={() => setActiveZodiacTab(card.tab)}
+                className={`bg-white rounded-2xl p-5 shadow-sm text-center w-full transition-all ${activeZodiacTab === card.tab ? 'ring-2 ring-rose-400 shadow-md' : 'hover:shadow-md'}`}
+              >
                 <div className="text-3xl mb-2">{card.icon}</div>
                 <div className="text-xs text-gray-400 mb-1 font-medium uppercase tracking-wide">{card.label}</div>
                 <div className="font-black text-gray-900 text-lg">{card.value}</div>
                 <div className="text-xs text-gray-500 mt-0.5">{card.sub}</div>
-              </div>
+              </button>
             ))}
           </div>
 
           {/* Tabs deep dive */}
-          <Tabs defaultValue="western" className="bg-white rounded-3xl shadow-sm p-6">
-            <TabsList className="grid grid-cols-3 mb-6">
+          <Tabs value={activeZodiacTab} onValueChange={setActiveZodiacTab} className="bg-white rounded-3xl shadow-sm p-6">
+            <TabsList className="sr-only">
               <TabsTrigger value="western">Western</TabsTrigger>
               <TabsTrigger value="chinese">Chinese</TabsTrigger>
               <TabsTrigger value="vedic">Vedic</TabsTrigger>
