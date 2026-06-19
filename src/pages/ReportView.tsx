@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getReport } from '@/services/BirthdayReportService';
 import type { BirthdayReportData } from '@/services/BirthdayReportService';
 import { getTarotCardByLifePath } from '@/data/tarotData';
+import { getChineseZodiacDescription } from '@/data/chineseZodiacDescriptions';
 import { calculateMoonSignAndNakshatra } from '@/data/moonSignData';
 import { calculateAllNameNumbers, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 import { calculateBiorhythm, getBiorhythmStatus } from '@/data/biorhythmData';
@@ -561,7 +562,9 @@ const ReportView = () => {
             </TabsContent>
 
             <TabsContent value="chinese" className="space-y-4 print-expand">
-              {chineseZodiac ? (
+              {chineseZodiac ? (() => {
+                const czd = getChineseZodiacDescription(chineseZodiac.animal);
+                return (
                 <>
                   <div className="flex items-center gap-3 mb-2">
                     <span className="text-5xl">{chineseZodiac.emoji}</span>
@@ -573,32 +576,70 @@ const ReportView = () => {
                   <div className="flex flex-wrap gap-2 mb-3">
                     {chineseZodiac.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">五行 {chineseZodiac.element}</span>}
                     {chineseZodiac.yin_yang && <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">{chineseZodiac.yin_yang}</span>}
+                    {czd && <span className="px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs font-semibold">🗓 {czd.years}</span>}
                   </div>
-                  <p className="text-gray-700 text-sm leading-relaxed">{chineseZodiac.description}</p>
-                  {(chineseZodiac.traits ?? []).length > 0 && (
+                  <p className="text-gray-700 text-sm leading-relaxed">{czd?.fullDescription ?? chineseZodiac.description}</p>
+                  {czd?.personalityDepth && (
+                    <p className="text-gray-600 text-sm leading-relaxed">{czd.personalityDepth}</p>
+                  )}
+                  {(czd?.strengths ?? chineseZodiac.traits ?? []).length > 0 && (
                     <div>
-                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Core Traits</div>
+                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Strengths</div>
                       <div className="flex flex-wrap gap-2">
-                        {(chineseZodiac.traits ?? []).map((t: string) => (
-                          <span key={t} className="px-3 py-1 bg-rose-50 text-rose-600 border border-rose-200 rounded-full text-xs font-medium">{t}</span>
+                        {(czd?.strengths ?? chineseZodiac.traits ?? []).map((t: string) => (
+                          <span key={t} className="px-3 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-xs font-medium">{t}</span>
                         ))}
                       </div>
                     </div>
                   )}
-                  {((chineseZodiac as any).compatibility ?? []).length > 0 && (
-                    <div className="bg-green-50 rounded-xl p-4">
-                      <div className="text-xs font-semibold text-green-700 uppercase tracking-wide mb-1">Compatible Signs</div>
-                      <p className="text-sm text-green-700">{((chineseZodiac as any).compatibility ?? []).join(' · ')}</p>
+                  {czd?.challenges && czd.challenges.length > 0 && (
+                    <div>
+                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Growth Areas</div>
+                      <div className="flex flex-wrap gap-2">
+                        {czd.challenges.map(c => (
+                          <span key={c} className="px-3 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-full text-xs font-medium">{c}</span>
+                        ))}
+                      </div>
                     </div>
                   )}
-                  {((chineseZodiac as any).famousPeople ?? []).length > 0 && (
+                  {czd?.loveStyle && (
+                    <div className="bg-rose-50 rounded-xl p-4">
+                      <div className="text-xs font-bold text-rose-700 uppercase tracking-wide mb-1">❤️ Love &amp; Relationships</div>
+                      <p className="text-sm text-rose-900 leading-relaxed">{czd.loveStyle}</p>
+                    </div>
+                  )}
+                  {czd?.compatibility && (
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      <div className="bg-green-50 rounded-xl p-4">
+                        <div className="text-xs font-bold text-green-700 uppercase tracking-wide mb-1">💚 Most Compatible</div>
+                        <p className="text-sm text-green-700">{czd.compatibility.best.join(' · ')}</p>
+                      </div>
+                      <div className="bg-red-50 rounded-xl p-4">
+                        <div className="text-xs font-bold text-red-700 uppercase tracking-wide mb-1">⚡ Challenging Match</div>
+                        <p className="text-sm text-red-700">{czd.compatibility.avoid.join(' · ')}</p>
+                      </div>
+                    </div>
+                  )}
+                  {czd?.careerPaths && (
+                    <div className="bg-blue-50 rounded-xl p-4">
+                      <div className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-1">💼 Career Paths</div>
+                      <p className="text-sm text-blue-900">{czd.careerPaths.join(' · ')}</p>
+                    </div>
+                  )}
+                  {(czd?.famousPeople ?? chineseZodiac.famous ?? []).length > 0 && (
                     <div className="bg-gray-50 rounded-xl p-4">
                       <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Famous {chineseZodiac.animal}s</div>
-                      <p className="text-sm text-gray-600">{((chineseZodiac as any).famousPeople ?? []).join(' · ')}</p>
+                      <p className="text-sm text-gray-600">{(czd?.famousPeople ?? chineseZodiac.famous ?? []).join(' · ')}</p>
+                    </div>
+                  )}
+                  {czd?.lifeAdvice && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+                      <p className="text-sm font-medium text-amber-900 italic">"{czd.lifeAdvice}"</p>
                     </div>
                   )}
                 </>
-              ) : <p className="text-gray-400 text-sm">Data unavailable</p>}
+                );
+              })() : <p className="text-gray-400 text-sm">Data unavailable</p>}
             </TabsContent>
 
             <TabsContent value="vedic" className="space-y-4 print-expand">
