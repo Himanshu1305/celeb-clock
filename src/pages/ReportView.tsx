@@ -359,10 +359,19 @@ const ReportView = () => {
         </div>
       </div>
 
+      {/* ── Print-only header ──────────────────────────────────────────────── */}
+      <div className="print-only bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3 mb-4">
+        <img src="/bornclock-logo.png" alt="BornClock" style={{ height: '32px', width: 'auto' }} />
+        <div>
+          <div className="font-black text-gray-900 text-sm">BornClock Birthday Intelligence Report</div>
+          <div className="text-xs text-gray-400">bornclock.com · Know your time. Live it well.</div>
+        </div>
+      </div>
+
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 1 — COVER HERO                                            */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="bg-gradient-to-br from-rose-100 via-amber-50 to-purple-100 py-16 px-4 text-center">
+      <div className="report-section bg-gradient-to-br from-rose-100 via-amber-50 to-purple-100 py-16 px-4 text-center">
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col items-center mb-8 text-center">
             <img
@@ -413,7 +422,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 2 — CELEBRITY TWINS + HISTORICAL EVENTS                    */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="py-14 px-4 bg-white">
+      <div className="report-section py-14 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-black text-gray-900 mb-2 text-center">🌟 Celebrity Birthday Twins</h2>
           <p className="text-center text-gray-500 text-sm mb-8">
@@ -491,7 +500,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 3 — ZODIAC PROFILE                                         */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="py-14 px-4 bg-amber-50">
+      <div className="report-section py-14 px-4 bg-amber-50">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-black text-gray-900 mb-2 text-center">♈ Zodiac Profile</h2>
           <p className="text-center text-gray-500 text-sm mb-8">Three tradition systems, one person</p>
@@ -754,7 +763,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 4 — NUMEROLOGY BLUEPRINT                                   */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="py-14 px-4 bg-white">
+      <div className="report-section py-14 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-black text-gray-900 mb-2 text-center">🔢 Numerology Blueprint</h2>
           <p className="text-center text-gray-500 text-sm mb-10">Calculated from their exact date of birth</p>
@@ -862,7 +871,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 5 — COSMIC CONNECTIONS (BIRTHSTONE)                        */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="py-14 px-4 bg-purple-50">
+      <div className="report-section py-14 px-4 bg-purple-50">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-black text-gray-900 mb-2 text-center">💎 Cosmic Connections</h2>
           <p className="text-center text-gray-500 text-sm mb-10">Birthstone of {monthName}</p>
@@ -984,7 +993,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 7 — GENERATION                                             */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="py-14 px-4 bg-amber-50">
+      <div className="report-section py-14 px-4 bg-amber-50">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-black text-gray-900 mb-2">👥 Generation Portrait</h2>
           <p className="text-gray-500 text-sm mb-8">Where {recipientName} fits in history</p>

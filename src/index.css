@@ -381,8 +381,14 @@
 @media print {
   .print-only { display: block !important; }
   .screen-only { display: none !important; }
+  .report-section { page-break-inside: avoid; }
   /* Force all tab panels visible in print */
   #longevity-blueprint-card [role="tabpanel"][data-state="inactive"] {
+    display: block !important;
+    visibility: visible !important;
+  }
+  /* Birthday report: show all zodiac tabs */
+  #birthday-report-print [role="tabpanel"][data-state="inactive"] {
     display: block !important;
     visibility: visible !important;
   }
