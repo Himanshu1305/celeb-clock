@@ -6,12 +6,15 @@ import { SEO } from '@/components/SEO';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const TOC_ITEMS = [
+  { id: 'data-model', label: 'Data Model by User Type' },
   { id: 'what-we-collect', label: 'What We Collect' },
   { id: 'what-we-dont-store', label: 'What We Do NOT Store' },
   { id: 'how-we-use', label: 'How We Use Your Data' },
   { id: 'storage-security', label: 'Data Storage and Security' },
   { id: 'third-parties', label: 'Third-Party Services' },
   { id: 'your-rights', label: 'Your Rights' },
+  { id: 'dpdpa-rights', label: 'Indian Law (DPDPA 2023)' },
+  { id: 'gdpr-rights', label: 'EU/UK Rights (GDPR)' },
   { id: 'cookies', label: 'Cookies' },
   { id: 'childrens-privacy', label: "Children's Privacy" },
   { id: 'changes', label: 'Changes to This Policy' },
@@ -112,6 +115,33 @@ export default function Privacy() {
 
             {/* Main content */}
             <div className="flex-1 min-w-0">
+
+              <section id="data-model" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Data Model by User Type</h2>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  BornClock operates on a tiered model. What we collect and store depends on how you use the product:
+                </p>
+                <div className="space-y-4">
+                  <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-xl p-4">
+                    <h3 className="font-semibold text-green-800 dark:text-green-300 mb-2">👤 Anonymous users (no account)</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      All calculations — life expectancy, biological age, planetary age, birthday personality — happen entirely in your browser. We do not store your health inputs, date of birth, or calculation results on our servers. No account is required to use our calculators.
+                    </p>
+                  </div>
+                  <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                    <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">✉️ Registered users (free account)</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      We store your name, email address, country, and account preferences to enable your login and personalise your experience. Your login data is encrypted and stored securely with Supabase (US-based, SOC 2 compliant). Health calculation data remains browser-only and is never transmitted to our servers.
+                    </p>
+                  </div>
+                  <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 rounded-xl p-4">
+                    <h3 className="font-semibold text-purple-800 dark:text-purple-300 mb-2">👑 Premium users</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      When you use premium features, we additionally store your subscription status and any profile preferences you explicitly save. This data is used solely to provide the service and is never sold or shared with third parties for advertising. Payment is handled entirely by Razorpay — BornClock never sees your card details.
+                    </p>
+                  </div>
+                </div>
+              </section>
 
               <section id="what-we-collect" className="mb-12 scroll-mt-8">
                 <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">What We Collect</h2>
@@ -224,7 +254,44 @@ export default function Privacy() {
                   <li><strong className="text-foreground">Withdraw consent</strong> — if you gave consent for any specific processing, you can withdraw it at any time without affecting past processing.</li>
                 </ul>
                 <p className="text-muted-foreground text-sm mt-4">
-                  EU/UK residents also have rights under GDPR/UK-GDPR. Indian residents have rights under DPDP Act 2023. We honour all requests within 30 days.
+                  EU/UK residents have rights under GDPR/UK-GDPR (see <button onClick={() => scrollToSection('gdpr-rights')} className="text-blue-500 hover:underline">EU/UK Rights</button> below). Indian residents have rights under DPDPA 2023 (see <button onClick={() => scrollToSection('dpdpa-rights')} className="text-blue-500 hover:underline">Indian Law Rights</button> below). We honour all requests within 30 days.
+                </p>
+              </section>
+
+              <section id="dpdpa-rights" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Your Rights Under Indian Law (DPDPA 2023)</h2>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  Under the <strong className="text-foreground">Digital Personal Data Protection Act 2023 (DPDPA)</strong>, Indian residents have the following rights:
+                </p>
+                <ul className="space-y-3 text-muted-foreground leading-relaxed mb-4">
+                  <li><strong className="text-foreground">Right to Access</strong> — request a copy of all personal data we hold about you. Email <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>.</li>
+                  <li><strong className="text-foreground">Right to Correction</strong> — update inaccurate or incomplete data from your Profile page or by emailing us.</li>
+                  <li><strong className="text-foreground">Right to Erasure</strong> — request permanent deletion of all your personal data. We will process your request and confirm deletion within <strong className="text-foreground">30 days</strong>.</li>
+                  <li><strong className="text-foreground">Right to Withdraw Consent</strong> — withdraw consent for any data processing at any time. This does not affect processing already completed.</li>
+                  <li><strong className="text-foreground">Right to Grievance Redressal</strong> — contact our data protection contact at <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a> for any concerns.</li>
+                </ul>
+                <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    <strong className="text-foreground">Data breach notification:</strong> In the event of a personal data breach that is likely to result in harm to you, we will notify the Data Protection Board of India and affected users as required by DPDPA 2023. We target notification within <strong className="text-foreground">72 hours</strong> of becoming aware of the breach.
+                  </p>
+                </div>
+              </section>
+
+              <section id="gdpr-rights" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">EU/UK Rights (GDPR &amp; UK-GDPR)</h2>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  If you are located in the European Union, European Economic Area, or United Kingdom, you have rights under <strong className="text-foreground">GDPR / UK-GDPR</strong>:
+                </p>
+                <ul className="space-y-3 text-muted-foreground leading-relaxed mb-4">
+                  <li><strong className="text-foreground">Right of Access (Art. 15)</strong> — obtain confirmation of processing and a copy of your data.</li>
+                  <li><strong className="text-foreground">Right to Rectification (Art. 16)</strong> — correct inaccurate personal data without undue delay.</li>
+                  <li><strong className="text-foreground">Right to Erasure / Right to be Forgotten (Art. 17)</strong> — request deletion of your personal data where there is no compelling reason for its continued processing.</li>
+                  <li><strong className="text-foreground">Right to Restriction (Art. 18)</strong> — request that we restrict processing of your data in certain circumstances.</li>
+                  <li><strong className="text-foreground">Right to Data Portability (Art. 20)</strong> — receive your data in a structured, machine-readable format.</li>
+                  <li><strong className="text-foreground">Right to Object (Art. 21)</strong> — object to processing based on legitimate interests.</li>
+                </ul>
+                <p className="text-muted-foreground text-sm">
+                  To exercise any of these rights, email <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>. We will respond within 30 days. You also have the right to lodge a complaint with your national data protection authority.
                 </p>
               </section>
 
