@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet-async';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getReport } from '@/services/BirthdayReportService';
 import type { BirthdayReportData } from '@/services/BirthdayReportService';
 import { getTarotCardByLifePath } from '@/data/tarotData';
@@ -321,10 +320,12 @@ const ReportView = () => {
             .no-print { display: none !important; }
             body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .print-expand { max-height: none !important; overflow: visible !important; }
-            .dark-section { background: #0f172a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            @page { margin: 1cm; }
+            .dark-section { background: #0f172a !important; color-scheme: dark; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            @page { margin: 1.5cm 1cm; @bottom-center { content: "BornClock · bornclock.com"; font-size: 9px; color: #9ca3af; } @bottom-right { content: counter(page); font-size: 9px; color: #9ca3af; } }
             .report-section { page-break-inside: avoid; }
             h2, h3 { page-break-after: avoid; }
+            .dark-section { page-break-inside: avoid; }
+            #birthday-report-print > div { page-break-inside: avoid; }
           }
         `}</style>
       </Helmet>
@@ -466,7 +467,7 @@ const ReportView = () => {
               {sortedCelebrities.slice(0, 6).map((c: any, i: number) => {
                 const year = getCelebYear(c) || null;
                 const desc = (c.known_for || c.occupation || '').toLowerCase();
-                const occ = (c.occupation || c.known_for || '').toLowerCase();
+                const occ = (c.occupation || c.known_for || (c as any).profession || '').toLowerCase();
                 const catIcon = occ.includes('actor') || occ.includes('actress') || occ.includes('film') || occ.includes('bollywood') ? '🎬' :
                   occ.includes('music') || occ.includes('singer') || occ.includes('song') || occ.includes('band') || occ.includes('rapper') ? '🎵' :
                   occ.includes('athlete') || occ.includes('player') || occ.includes('sport') || occ.includes('tennis') || occ.includes('cricket') || occ.includes('football') || occ.includes('basketball') ? '⚽' :
@@ -488,7 +489,7 @@ const ReportView = () => {
                         {c.isIndian && <span className="text-[10px] text-orange-500 font-medium">🇮🇳 Indian</span>}
                       </div>
                     </div>
-                    <div className="text-xs text-gray-500 mb-2 line-clamp-2">{c.known_for || c.occupation || 'Notable person'}</div>
+                    <div className="text-xs text-gray-500 mb-2">{c.known_for || c.occupation || (c as any).profession || 'Notable figure'}</div>
                     <span className="inline-block px-2 py-0.5 bg-rose-50 text-rose-600 rounded-full text-xs font-medium">{catLabel}</span>
                   </div>
                 );
@@ -551,14 +552,11 @@ const ReportView = () => {
           </div>
 
           {/* Tabs deep dive */}
-          <Tabs value={activeZodiacTab} onValueChange={setActiveZodiacTab} className="bg-white rounded-3xl shadow-sm p-6">
-            <TabsList className="sr-only">
-              <TabsTrigger value="western">Western</TabsTrigger>
-              <TabsTrigger value="chinese">Chinese</TabsTrigger>
-              <TabsTrigger value="vedic">Vedic</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="western" className="space-y-4 print-expand">
+          <div className="bg-white rounded-3xl shadow-sm p-6">
+            <div className={`space-y-4 print-expand ${activeZodiacTab === 'western' ? '' : 'hidden'} print:block`}>
+              <div className="hidden print:block mb-3 pb-2 border-b border-gray-100">
+                <span className="text-xs font-bold uppercase tracking-wide text-rose-500">♈ Western Zodiac</span>
+              </div>
               {westernZodiac ? (
                 <>
                   <div className="flex items-center gap-3 mb-2">
@@ -602,9 +600,12 @@ const ReportView = () => {
                   )}
                 </>
               ) : <p className="text-gray-400 text-sm">Data unavailable</p>}
-            </TabsContent>
+            </div>
 
-            <TabsContent value="chinese" className="space-y-4 print-expand">
+            <div className={`space-y-4 print-expand ${activeZodiacTab === 'chinese' ? '' : 'hidden'} print:block print:mt-8 print:pt-6 print:border-t print:border-gray-200`}>
+              <div className="hidden print:block mb-3 pb-2 border-b border-gray-100">
+                <span className="text-xs font-bold uppercase tracking-wide text-rose-500">🐉 Chinese Zodiac</span>
+              </div>
               {chineseZodiac ? (() => {
                 const czd = getChineseZodiacDescription(chineseZodiac.animal);
                 return (
@@ -683,12 +684,16 @@ const ReportView = () => {
                 </>
                 );
               })() : <p className="text-gray-400 text-sm">Data unavailable</p>}
-            </TabsContent>
+            </div>
 
-            <TabsContent value="vedic" className="space-y-4 print-expand">
+            <div className={`space-y-4 print-expand ${activeZodiacTab === 'vedic' ? '' : 'hidden'} print:block print:mt-8 print:pt-6 print:border-t print:border-gray-200`}>
+              <div className="hidden print:block mb-3 pb-2 border-b border-gray-100">
+                <span className="text-xs font-bold uppercase tracking-wide text-rose-500">🕉 Vedic Rashi</span>
+              </div>
               {vedicRashi ? (() => {
                 const vedicCtx = getVedicContext(dob.getMonth() + 1, dob.getDate(), westernZodiac?.name ?? vedicRashi.name);
                 const rashiRatna = RASHI_RATNA_DATA.find(r => r.rashiEnglish === vedicRashi.name);
+                const nakshatraCalc = calculateMoonSignAndNakshatra(dob);
                 return (
                 <>
                   <div className="flex items-center gap-3 mb-2">
@@ -724,15 +729,14 @@ const ReportView = () => {
                   <div className="bg-orange-50 border border-orange-100 rounded-2xl p-5 space-y-2">
                     <div className="text-xs font-bold text-orange-700 uppercase tracking-wide mb-1">🌙 Birth Nakshatra</div>
                     <div className="flex items-center gap-3">
-                      <span className="text-3xl">⭐</span>
+                      <span className="text-3xl">{nakshatraCalc.nakshatraData.symbol}</span>
                       <div>
-                        <div className="font-black text-orange-900 text-lg">{vedicCtx.nakshatra}</div>
-                        <div className="text-xs text-orange-600">Meaning: {vedicCtx.nakshatraMeaning} · Deity: {vedicCtx.nakshatraDeity}</div>
+                        <div className="font-black text-orange-900 text-lg">{nakshatraCalc.nakshatraData.name}</div>
+                        <div className="text-xs text-orange-600">Meaning: {nakshatraCalc.nakshatraData.meaning} · Deity: {nakshatraCalc.nakshatraData.deity}</div>
                       </div>
                     </div>
-                    <p className="text-sm text-orange-800 leading-relaxed">
-                      The Nakshatra of <strong>{vedicCtx.nakshatra}</strong> brings the quality of <em>{vedicCtx.nakshatraQuality}</em>. In Vedic astrology, your Nakshatra is considered more precise than your Rashi — it reveals the exact lunar mansion your Sun occupied at birth, carrying specific energetic signatures that shape your intuitive nature, karmic path, and deepest motivations.
-                    </p>
+                    <p className="text-sm text-orange-800 leading-relaxed">{nakshatraCalc.nakshatraData.description}</p>
+                    <p className="text-xs text-orange-500 italic mt-1">Nakshatra calculated from lunar cycle position — approximate.</p>
                   </div>
 
                   {/* Rashi Ratna (Vedic gemstone) */}
@@ -746,7 +750,7 @@ const ReportView = () => {
                           <div className="text-xs text-indigo-600">Alt: {rashiRatna.secondaryStone} · Metal: {rashiRatna.metalToUse}</div>
                         </div>
                       </div>
-                      <p className="text-sm text-indigo-800 leading-relaxed">{rashiRatna.description.slice(0, 300)}</p>
+                      <p className="text-sm text-indigo-800 leading-relaxed">{rashiRatna.description}</p>
                       <div className="flex flex-wrap gap-2">
                         {rashiRatna.benefits.slice(0, 4).map(b => (
                           <span key={b} className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs">{b}</span>
@@ -758,8 +762,8 @@ const ReportView = () => {
                 </>
                 );
               })() : <p className="text-gray-400 text-sm">Data unavailable</p>}
-            </TabsContent>
-          </Tabs>
+            </div>
+          </div>
 
           {/* Compatibility */}
           {(compatibility.best.length > 0 || compatibility.challenging.length > 0) && (
@@ -824,7 +828,7 @@ const ReportView = () => {
             <div className="space-y-6 mb-10">
               <div className="bg-gray-50 rounded-2xl p-6">
                 <h3 className="font-bold text-gray-900 mb-2 text-sm uppercase tracking-wide">Personality</h3>
-                <p className="text-gray-700 text-sm leading-relaxed">{lifePathData.personality?.slice(0, 400)}</p>
+                <p className="text-gray-700 text-sm leading-relaxed">{lifePathData.personality}</p>
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="bg-green-50 rounded-2xl p-5">
@@ -953,7 +957,7 @@ const ReportView = () => {
               {birthstone.history && (
                 <div className="bg-gray-50 rounded-xl p-4">
                   <h4 className="font-bold text-gray-700 text-xs uppercase tracking-wide mb-1">History</h4>
-                  <p className="text-xs text-gray-600 leading-relaxed">{birthstone.history.slice(0, 500)}</p>
+                  <p className="text-xs text-gray-600 leading-relaxed">{birthstone.history}</p>
                 </div>
               )}
 
@@ -977,8 +981,11 @@ const ReportView = () => {
       <div className="dark-section py-14 px-4" style={{ background: '#0f172a' }}>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-black text-white mb-2 text-center">🪐 Solar System Ages</h2>
-          <p className="text-center text-slate-400 text-sm mb-10">
+          <p className="text-center text-slate-400 text-sm mb-4">
             {recipientName} is {age} years old on Earth — here's their age across the solar system
+          </p>
+          <p className="text-center text-slate-500 text-xs mb-8 max-w-lg mx-auto leading-relaxed">
+            Each planet orbits the Sun at a different speed. Mercury completes a year in just 88 Earth days; Neptune takes 165 Earth years. These numbers show how many full planetary years you would have lived if you had been born on that planet.
           </p>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
@@ -1089,7 +1096,7 @@ const ReportView = () => {
           })()}
 
           {/* Longevity CTA */}
-          <div className="bg-green-50 border border-green-100 rounded-2xl p-6">
+          <div className="bg-green-50 border border-green-100 rounded-2xl p-6 no-print">
             <h4 className="font-bold text-green-900 mb-2">Want to know how long they could live?</h4>
             <p className="text-sm text-green-700 mb-4">Calculate a personalised life expectancy based on lifestyle, country, and health factors.</p>
             <Link
@@ -1168,7 +1175,7 @@ const ReportView = () => {
                 </div>
               )}
 
-              <div className="text-center">
+              <div className="text-center no-print">
                 <Link to="/tarot-card-by-birthday" className="text-xs text-indigo-400 hover:text-indigo-300 underline">
                   Explore more tarot interpretations →
                 </Link>
@@ -1199,8 +1206,8 @@ const ReportView = () => {
                   </div>
                 </div>
               </div>
-              <p className="text-blue-100 text-sm leading-relaxed text-center mb-4">{moonResult.moonSignData.personality.slice(0, 200)}...</p>
-              <div className="text-center">
+              <p className="text-blue-100 text-sm leading-relaxed text-center mb-4">{moonResult.moonSignData.personality}</p>
+              <div className="text-center no-print">
                 <Link to="/moon-sign" className="text-xs text-blue-400 hover:text-blue-300 underline">
                   Full moon sign interpretation →
                 </Link>
@@ -1237,10 +1244,10 @@ const ReportView = () => {
               {exprMeaning && (
                 <div className="bg-indigo-50 rounded-2xl p-4 mb-4">
                   <p className="text-xs font-bold text-indigo-700 mb-1">Expression {nums.expression} — {exprMeaning.title}</p>
-                  <p className="text-sm text-gray-700">{exprMeaning.expression.slice(0, 180)}...</p>
+                  <p className="text-sm text-gray-700">{exprMeaning.expression}</p>
                 </div>
               )}
-              <div className="text-center">
+              <div className="text-center no-print">
                 <Link to="/name-numerology" className="text-xs text-indigo-500 hover:text-indigo-700 underline">
                   Calculate with full birth name →
                 </Link>
@@ -1261,12 +1268,15 @@ const ReportView = () => {
         return (
           <div className="py-10 px-4 bg-gray-50 border-t border-gray-100">
             <div className="max-w-2xl mx-auto">
-              <div className="text-center mb-5">
-                <div className="text-xs text-gray-400 uppercase tracking-widest mb-1">Today's Biorhythm</div>
+              <div className="text-center mb-4">
+                <div className="text-xs text-gray-400 uppercase tracking-wide mb-1">Today's Biorhythm</div>
                 <h3 className="text-xl font-black text-gray-900">Physical · Emotional · Intellectual Cycles</h3>
                 <p className="text-xs text-gray-500 mt-1">Based on {bio.daysSinceBirth.toLocaleString()} days since birth</p>
               </div>
-              <div className="space-y-3 mb-5">
+              <div className="bg-blue-50 rounded-xl p-4 text-xs text-blue-800 leading-relaxed mb-4">
+                <strong>What is Biorhythm?</strong> Biorhythm theory proposes that three internal cycles — Physical (23 days), Emotional (28 days), and Intellectual (33 days) — begin at birth and continue throughout life. Positive phases boost energy and capability; negative phases call for rest and caution; near-zero transitions ("critical days") bring heightened unpredictability. Many people find these cycles surprisingly resonant with their day-to-day experience.
+              </div>
+              <div className="space-y-3 mb-4">
                 {[
                   { label: '🏃 Physical', value: bio.physical, status: physStatus, color: 'bg-rose-400' },
                   { label: '💙 Emotional', value: bio.emotional, status: emoStatus, color: 'bg-blue-400' },
@@ -1286,7 +1296,28 @@ const ReportView = () => {
                   </div>
                 ))}
               </div>
-              <div className="text-center">
+              <div className="bg-gray-50 rounded-xl p-4 text-xs text-gray-700 leading-relaxed mb-3">
+                <strong>Today's reading:</strong>{' '}
+                {physStatus.label === 'Peak' || physStatus.label === 'Rising'
+                  ? '🏃 Physical energy is elevated — a good day for exercise, sport, and physical challenges.'
+                  : physStatus.label === 'Low' || physStatus.label === 'Falling'
+                  ? '🏃 Physical energy is in a low phase — prioritise rest and recovery over intense exertion.'
+                  : '🏃 Physical energy is at a critical transition — unexpected fluctuations are possible.'
+                }{' '}
+                {emoStatus.label === 'Peak' || emoStatus.label === 'Rising'
+                  ? '💙 Emotional well-being is flourishing — ideal for social connections and creative expression.'
+                  : emoStatus.label === 'Low' || emoStatus.label === 'Falling'
+                  ? '💙 Emotional energy is lower — practise self-compassion and avoid high-stakes emotional decisions.'
+                  : '💙 Emotional energy is at a critical point — moods may be unpredictable; ground yourself first.'
+                }{' '}
+                {intStatus.label === 'Peak' || intStatus.label === 'Rising'
+                  ? '🧠 Mental clarity is sharp — an excellent time for study, problem-solving, and strategic decisions.'
+                  : intStatus.label === 'Low' || intStatus.label === 'Falling'
+                  ? '🧠 Intellectual energy is lower — favour routine tasks over complex analytical work.'
+                  : '🧠 Intellectual energy is in transition — double-check important mental work today.'
+                }
+              </div>
+              <div className="text-center no-print">
                 <Link to="/biorhythm" className="text-xs text-teal-500 hover:text-teal-700 underline">
                   See 30-day biorhythm chart →
                 </Link>
@@ -1317,11 +1348,11 @@ const ReportView = () => {
                     </div>
                     <div className="font-bold text-gray-900 text-sm">{sign}</div>
                     <div className="text-xs font-semibold text-rose-600">{score}%</div>
-                    <div className="text-xs text-gray-500 mt-1 leading-tight">{reason.slice(0, 50)}</div>
+                    <div className="text-xs text-gray-500 mt-1 leading-tight">{reason}</div>
                   </Link>
                 ))}
               </div>
-              <div className="text-center">
+              <div className="text-center no-print">
                 <Link to={`/compatibility`} className="text-xs text-rose-500 hover:text-rose-700 underline">
                   Check compatibility with any sign →
                 </Link>
@@ -1359,9 +1390,11 @@ const ReportView = () => {
         </div>
       </div>
 
-      <div className="report-print-footer no-screen">BornClock · Know your time. Live it well. · bornclock.com</div>
+      <div className="report-print-footer no-screen">BornClock · Know your time. Live it well. · bornclock.com · {reportUrl}</div>
 
-      <Footer />
+      <div className="no-print">
+        <Footer />
+      </div>
     </div>
   );
 };
