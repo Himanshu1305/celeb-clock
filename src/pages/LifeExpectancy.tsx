@@ -166,9 +166,15 @@ const LifeExpectancy = () => {
     contentRef: blueprintRef,
     documentTitle: 'Longevity Blueprint — BornClock',
     pageStyle: `
-      @page { margin: 1.5cm; size: A4; }
-      @media print {
-        body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      @page {
+        margin: 0;
+        size: A4;
+      }
+      body {
+        margin: 1.5cm;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       }
     `,
   });
@@ -700,15 +706,7 @@ const LifeExpectancy = () => {
         return (
           <div
             ref={blueprintRef}
-            style={{
-              position: 'absolute',
-              left: '-9999px',
-              top: 0,
-              width: '794px',
-              backgroundColor: 'white',
-              padding: '48px',
-              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-            }}
+            className="blueprint-print-source"
           >
             {/* COVER */}
             <div style={{ textAlign: 'center', paddingBottom: '32px', marginBottom: '32px', borderBottom: '2px solid #e5e7eb' }}>

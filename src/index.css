@@ -394,4 +394,30 @@
     display: block !important;
     visibility: visible !important;
   }
+  /* Blueprint print source — visible only when react-to-print renders it */
+  .blueprint-print-source {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    background: white !important;
+  }
+  /* Page break helpers for birthday report */
+  .solar-section,
+  .neptune-fact-card,
+  .generation-section {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .neptune-fact-card {
+    break-before: avoid !important;
+    page-break-before: avoid !important;
+  }
+}
+
+/* Blueprint print source — hidden on screen, visible inside react-to-print iframe */
+.blueprint-print-source {
+  display: none !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
 }
