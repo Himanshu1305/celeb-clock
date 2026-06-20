@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -82,40 +80,23 @@ export const EnhancedLifeExpectancyReport = ({
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
 
-  const handleExportPDF = async () => {
-    setExporting(true);
+  const handleExportPDF = () => {
     const element = document.getElementById('longevity-blueprint-card');
-    if (!element) { setExporting(false); return; }
+    if (!element) return;
+    setExporting(true);
 
-    // Temporarily show all hidden tab panels so html2canvas captures all content
-    const hiddenPanels = element.querySelectorAll<HTMLElement>('[role="tabpanel"][data-state="inactive"]');
-    hiddenPanels.forEach(p => {
-      p.style.display = 'block';
-      p.style.visibility = 'visible';
-    });
+    // Expand all inactive tab panels so every section prints
+    const panels = element.querySelectorAll<HTMLElement>('[role="tabpanel"][data-state="inactive"]');
+    panels.forEach(p => { p.style.display = 'block'; p.style.visibility = 'visible'; });
 
-    try {
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        windowWidth: element.scrollWidth,
-        windowHeight: element.scrollHeight,
-      });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('longevity-blueprint.pdf');
-    } finally {
-      // Restore hidden panels
-      hiddenPanels.forEach(p => {
-        p.style.display = '';
-        p.style.visibility = '';
-      });
+    const restore = () => {
+      panels.forEach(p => { p.style.display = ''; p.style.visibility = ''; });
       setExporting(false);
-    }
+      window.removeEventListener('afterprint', restore);
+    };
+    window.addEventListener('afterprint', restore);
+
+    setTimeout(() => window.print(), 300);
   };
 
   const p1 = result.pillar1Snapshot;
@@ -319,7 +300,7 @@ export const EnhancedLifeExpectancyReport = ({
         {isPremium && (
           <div className="screen-only flex items-center justify-center gap-2">
             <Button size="sm" variant="outline" className="gap-2" onClick={handleExportPDF} disabled={exporting}>
-              <Download className="w-3.5 h-3.5" /> {exporting ? 'Exporting…' : 'Export PDF'}
+              <Download className="w-3.5 h-3.5" /> Export PDF
             </Button>
             <Button size="sm" variant="outline" className="gap-2" onClick={copyShare}>
               {copied ? '✅ Copied!' : <><Copy className="w-3.5 h-3.5" /> Copy share text</>}

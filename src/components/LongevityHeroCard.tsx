@@ -3,8 +3,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Download, Copy, ArrowRight } from 'lucide-react';
 import { LongevityResult } from '@/services/LongevityCalculationService';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
 
 interface LongevityHeroCardProps {
   result: LongevityResult;
@@ -23,25 +21,23 @@ export function LongevityHeroCard({ result, optimizedForecast, userName }: Longe
   const displayName = userName?.trim() || 'You';
   const country = result.quizSnapshot.country ?? 'Global';
 
-  const handleExportPDF = async () => {
+  const handleExportPDF = () => {
+    const element = document.getElementById('longevity-blueprint-card');
+    if (!element) return;
     setExporting(true);
-    try {
-      const element = document.getElementById('longevity-blueprint-card');
-      if (!element) return;
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-      });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`longevity-blueprint-${displayName}.pdf`);
-    } finally {
+
+    // Expand all inactive tab panels so every section prints
+    const panels = element.querySelectorAll<HTMLElement>('[role="tabpanel"][data-state="inactive"]');
+    panels.forEach(p => { p.style.display = 'block'; p.style.visibility = 'visible'; });
+
+    const restore = () => {
+      panels.forEach(p => { p.style.display = ''; p.style.visibility = ''; });
       setExporting(false);
-    }
+      window.removeEventListener('afterprint', restore);
+    };
+    window.addEventListener('afterprint', restore);
+
+    setTimeout(() => window.print(), 300);
   };
 
   const handleCopySummary = () => {
@@ -123,7 +119,7 @@ export function LongevityHeroCard({ result, optimizedForecast, userName }: Longe
           disabled={exporting}
         >
           <Download className="w-3.5 h-3.5" />
-          {exporting ? 'Exporting…' : 'Export PDF'}
+          Export PDF
         </Button>
         <Button
           size="sm"
