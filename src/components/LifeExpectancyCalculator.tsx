@@ -452,6 +452,23 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                 );
               })()}
             </div>
+            {/* Current age + projected age side by side — step 6 only, after exercise is selected */}
+            {currentAge !== null && step === 6 && (
+              <div className="grid grid-cols-2 gap-3 mt-1">
+                <div className="bg-gray-50 rounded-xl p-3 text-center border border-gray-200">
+                  <p className="text-xs text-gray-400 mb-1">Your Age Now</p>
+                  <p className="text-xl font-black text-gray-800">{currentAge}</p>
+                  <p className="text-xs text-gray-400">years</p>
+                </div>
+                <div className="bg-indigo-50 rounded-xl p-3 text-center border border-indigo-200">
+                  <p className="text-xs text-indigo-400 mb-1">Projected Age</p>
+                  <p className="text-xl font-black text-indigo-700">
+                    {countUpAge !== null ? countUpAge : liveResult.totalForecast}
+                  </p>
+                  <p className="text-xs text-indigo-400">years</p>
+                </div>
+              </div>
+            )}
           </div>
         ) : null}
 

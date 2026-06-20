@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Navigation } from '@/components/Navigation';
@@ -15,6 +15,7 @@ import { calculateAllNameNumbers, NAME_NUMBER_MEANINGS } from '@/data/nameNumero
 import { calculateBiorhythm, getBiorhythmStatus } from '@/data/biorhythmData';
 import { getTopCompatibleSigns } from '@/data/compatibilityData';
 import { mergeWithIndianCelebrities, isIndianUser, hasIndianCelebritiesForDate } from '@/services/IndianCelebrityService';
+import { useReactToPrint } from 'react-to-print';
 
 // ── Helper ─────────────────────────────────────────────────────────────────────
 
@@ -184,6 +185,19 @@ const ReportView = () => {
   const [copied, setCopied] = useState(false);
   const [activeZodiacTab, setActiveZodiacTab] = useState('western');
 
+  const reportPrintRef = useRef<HTMLDivElement>(null);
+  const handleDownloadReport = useReactToPrint({
+    contentRef: reportPrintRef,
+    documentTitle: `Birthday Report — BornClock`,
+    pageStyle: `
+      @page { margin: 1.5cm 1cm; size: A4; }
+      @media print {
+        body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; font-size: 12px; line-height: 1.5; }
+        .zodiac-tab-panel { display: block !important; height: auto !important; overflow: visible !important; }
+      }
+    `,
+  });
+
   useEffect(() => {
     if (!slug) { setNotFound(true); setLoading(false); return; }
     getReport(slug).then(data => {
@@ -220,9 +234,7 @@ const ReportView = () => {
   );
   const reportUrl = `${window.location.origin}/report/${slug}`;
 
-  const handlePrint = () => {
-    setTimeout(() => window.print(), 800);
-  };
+  const handlePrint = () => handleDownloadReport();
 
   const handleCopy = () => {
     navigator.clipboard.writeText(reportUrl).then(() => {
@@ -310,7 +322,18 @@ const ReportView = () => {
   }
 
   return (
-    <div id="birthday-report-print" className="min-h-screen bg-white">
+    <div ref={reportPrintRef} id="birthday-report-print" className="min-h-screen bg-white">
+      {/* Print-only BornClock header — invisible on screen, first item in print */}
+      <div className="hidden print:block" style={{ textAlign: 'center', paddingBottom: '20px', marginBottom: '20px', borderBottom: '2px solid #e5e7eb' }}>
+        <div style={{ fontSize: '22px', fontWeight: 900, color: '#1f2937', marginBottom: '4px' }}>BornClock</div>
+        <div style={{ fontSize: '13px', color: '#6366f1', fontStyle: 'italic', marginBottom: '8px' }}>Know your time. Live it well.</div>
+        <div style={{ fontSize: '16px', fontWeight: 700, color: '#1f2937', marginBottom: '4px' }}>
+          {recipientName}'s Birthday Intelligence Report
+        </div>
+        <div style={{ fontSize: '12px', color: '#9ca3af' }}>
+          Generated {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })} · bornclock.com
+        </div>
+      </div>
       <Helmet>
         <title>{recipientName}'s Birthday Report | BornClock</title>
         <meta name="description" content={`A personalised birthday intelligence report for ${recipientName} — celebrity twins, zodiac, numerology, birthstone and more.`} />
