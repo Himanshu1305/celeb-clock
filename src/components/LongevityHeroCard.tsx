@@ -8,11 +8,11 @@ interface LongevityHeroCardProps {
   result: LongevityResult;
   optimizedForecast: number | null;
   userName: string;
+  onExportPDF?: () => void;
 }
 
-export function LongevityHeroCard({ result, optimizedForecast, userName }: LongevityHeroCardProps) {
+export function LongevityHeroCard({ result, optimizedForecast, userName, onExportPDF }: LongevityHeroCardProps) {
   const [copied, setCopied] = useState(false);
-  const [exporting, setExporting] = useState(false);
 
   const displayedOptimized = optimizedForecast ?? result.totalForecast;
   const currentRemaining = Math.max(0, Math.round((result.totalForecast - result.currentAge) * 10) / 10);
@@ -20,53 +20,6 @@ export function LongevityHeroCard({ result, optimizedForecast, userName }: Longe
   const gain = Math.round((displayedOptimized - result.totalForecast) * 10) / 10;
   const displayName = userName?.trim() || 'You';
   const country = result.quizSnapshot.country ?? 'Global';
-
-  const handleExportPDF = () => {
-    const printSection = document.getElementById('longevity-blueprint-print-only');
-    if (!printSection) return;
-    setExporting(true);
-
-    // Clone the hidden 7-section print div and make it visible
-    const clone = printSection.cloneNode(true) as HTMLElement;
-    clone.style.display = 'block';
-    clone.classList.remove('hidden');
-
-    // Collect absolute stylesheet URLs from the current page
-    const styleLinks = Array.from(document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'))
-      .map(link => `<link rel="stylesheet" href="${link.href}">`)
-      .join('\n');
-
-    const printWindow = window.open('', '_blank', 'width=920,height=700');
-    if (!printWindow) {
-      setExporting(false);
-      alert('Please allow popups for this site to download your Blueprint.');
-      return;
-    }
-
-    printWindow.document.write(`<!DOCTYPE html><html><head>
-      <title>Longevity Blueprint — BornClock</title>
-      <meta charset="utf-8">
-      ${styleLinks}
-      <style>
-        body { background: white; padding: 24px; max-width: 820px; margin: 0 auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        @page { margin: 1.5cm; }
-        @media print { body { padding: 0; } }
-      </style>
-    </head><body>${clone.outerHTML}</body></html>`);
-    printWindow.document.close();
-
-    const doPrint = () => {
-      printWindow.print();
-      setTimeout(() => { printWindow.close(); setExporting(false); }, 1000);
-    };
-
-    if (printWindow.document.readyState === 'complete') {
-      setTimeout(doPrint, 800);
-    } else {
-      printWindow.onload = () => setTimeout(doPrint, 800);
-      setTimeout(() => { if (!printWindow.closed) doPrint(); }, 4000);
-    }
-  };
 
   const handleCopySummary = () => {
     const lines: string[] = [
@@ -143,8 +96,7 @@ export function LongevityHeroCard({ result, optimizedForecast, userName }: Longe
           size="sm"
           variant="outline"
           className="gap-2 bg-white/80 dark:bg-background/80"
-          onClick={handleExportPDF}
-          disabled={exporting}
+          onClick={() => onExportPDF?.()}
         >
           <Download className="w-3.5 h-3.5" />
           Export PDF
