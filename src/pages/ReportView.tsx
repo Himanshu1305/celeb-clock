@@ -190,10 +190,21 @@ const ReportView = () => {
     contentRef: reportPrintRef,
     documentTitle: `Birthday Report — BornClock`,
     pageStyle: `
-      @page { margin: 1.5cm 1cm; size: A4; }
-      @media print {
-        body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; font-size: 12px; line-height: 1.5; }
-        .zodiac-tab-panel { display: block !important; height: auto !important; overflow: visible !important; }
+      @page {
+        margin: 0;
+        size: A4;
+      }
+      body {
+        margin: 1.5cm;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .zodiac-tab-panel {
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
       }
     `,
   });
@@ -323,17 +334,6 @@ const ReportView = () => {
 
   return (
     <div ref={reportPrintRef} id="birthday-report-print" className="min-h-screen bg-white">
-      {/* Print-only BornClock header — invisible on screen, first item in print */}
-      <div className="hidden print:block" style={{ textAlign: 'center', paddingBottom: '20px', marginBottom: '20px', borderBottom: '2px solid #e5e7eb' }}>
-        <div style={{ fontSize: '22px', fontWeight: 900, color: '#1f2937', marginBottom: '4px' }}>BornClock</div>
-        <div style={{ fontSize: '13px', color: '#6366f1', fontStyle: 'italic', marginBottom: '8px' }}>Know your time. Live it well.</div>
-        <div style={{ fontSize: '16px', fontWeight: 700, color: '#1f2937', marginBottom: '4px' }}>
-          {recipientName}'s Birthday Intelligence Report
-        </div>
-        <div style={{ fontSize: '12px', color: '#9ca3af' }}>
-          Generated {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })} · bornclock.com
-        </div>
-      </div>
       <Helmet>
         <title>{recipientName}'s Birthday Report | BornClock</title>
         <meta name="description" content={`A personalised birthday intelligence report for ${recipientName} — celebrity twins, zodiac, numerology, birthstone and more.`} />
@@ -513,7 +513,7 @@ const ReportView = () => {
                       </div>
                     </div>
                     <div className="text-xs text-gray-500 mb-2">{c.known_for || c.occupation || (c as any).profession || 'Notable figure'}</div>
-                    <span className="inline-block px-2 py-0.5 bg-rose-50 text-rose-600 rounded-full text-xs font-medium">{catLabel}</span>
+                    {c.known_for && <span className="inline-block px-2 py-0.5 bg-rose-50 text-rose-600 rounded-full text-xs font-medium">{catLabel}</span>}
                   </div>
                 );
               })}
@@ -618,7 +618,7 @@ const ReportView = () => {
                   {((westernZodiac as any).famousPeople ?? []).length > 0 && (
                     <div className="bg-gray-50 rounded-xl p-4">
                       <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Famous {westernZodiac.name}s</div>
-                      <p className="text-sm text-gray-600">{((westernZodiac as any).famousPeople ?? []).join(' · ')}</p>
+                      <p className="text-sm text-gray-600">{((westernZodiac as any).famousPeople ?? []).map((p: any) => p.name || p).join(' · ')}</p>
                     </div>
                   )}
                 </>
@@ -696,7 +696,7 @@ const ReportView = () => {
                   {(czd?.famousPeople ?? chineseZodiac.famous ?? []).length > 0 && (
                     <div className="bg-gray-50 rounded-xl p-4">
                       <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Famous {chineseZodiac.animal}s</div>
-                      <p className="text-sm text-gray-600">{(czd?.famousPeople ?? chineseZodiac.famous ?? []).join(' · ')}</p>
+                      <p className="text-sm text-gray-600">{(czd?.famousPeople ?? chineseZodiac.famous ?? []).map((p: any) => p.name || p).join(' · ')}</p>
                     </div>
                   )}
                   {czd?.lifeAdvice && (
@@ -1001,7 +1001,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 6 — SOLAR SYSTEM AGES (dark)                               */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="dark-section py-14 px-4" style={{ background: '#0f172a' }}>
+      <div className="dark-section solar-section py-14 px-4" style={{ background: '#0f172a' }}>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-black text-white mb-2 text-center">🪐 Solar System Ages</h2>
           <p className="text-center text-slate-400 text-sm mb-4">
@@ -1034,7 +1034,7 @@ const ReportView = () => {
           </div>
 
           {/* Neptune special card */}
-          <div className="bg-indigo-950 border border-indigo-800 rounded-3xl p-6 text-center">
+          <div className="neptune-fact-card bg-indigo-950 border border-indigo-800 rounded-3xl p-6 text-center">
             <div className="text-3xl mb-3">♆</div>
             <h3 className="font-black text-white text-lg mb-2">The Neptune Number</h3>
             <p className="text-2xl font-black text-indigo-300 mb-2">{planetaryAges['Neptune']} years</p>
@@ -1048,7 +1048,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 7 — GENERATION                                             */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="report-section py-14 px-4 bg-amber-50">
+      <div className="report-section generation-section py-14 px-4 bg-amber-50">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-black text-gray-900 mb-2">👥 Generation Portrait</h2>
           <p className="text-gray-500 text-sm mb-8">Where {recipientName} fits in history</p>
@@ -1194,7 +1194,7 @@ const ReportView = () => {
               {card.famousPeople && card.famousPeople.length > 0 && (
                 <div className="bg-white/5 rounded-2xl p-4 text-center">
                   <div className="text-xs font-semibold text-indigo-300 mb-2">Famous {card.name} Personalities</div>
-                  <p className="text-white/70 text-sm">{card.famousPeople.join(' · ')}</p>
+                  <p className="text-white/70 text-sm">{card.famousPeople.map((p: any) => p.name || p).join(' · ')}</p>
                 </div>
               )}
 
