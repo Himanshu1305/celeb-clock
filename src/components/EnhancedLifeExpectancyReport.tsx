@@ -81,22 +81,51 @@ export const EnhancedLifeExpectancyReport = ({
   const [exporting, setExporting] = useState(false);
 
   const handleExportPDF = () => {
-    const element = document.getElementById('longevity-blueprint-card');
-    if (!element) return;
+    const printSection = document.getElementById('longevity-blueprint-print-only');
+    if (!printSection) return;
     setExporting(true);
 
-    // Expand all inactive tab panels so every section prints
-    const panels = element.querySelectorAll<HTMLElement>('[role="tabpanel"][data-state="inactive"]');
-    panels.forEach(p => { p.style.display = 'block'; p.style.visibility = 'visible'; });
+    // Clone the hidden 7-section print div and make it visible
+    const clone = printSection.cloneNode(true) as HTMLElement;
+    clone.style.display = 'block';
+    clone.classList.remove('hidden');
 
-    const restore = () => {
-      panels.forEach(p => { p.style.display = ''; p.style.visibility = ''; });
+    // Collect absolute stylesheet URLs from the current page
+    const styleLinks = Array.from(document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'))
+      .map(link => `<link rel="stylesheet" href="${link.href}">`)
+      .join('\n');
+
+    const printWindow = window.open('', '_blank', 'width=920,height=700');
+    if (!printWindow) {
       setExporting(false);
-      window.removeEventListener('afterprint', restore);
-    };
-    window.addEventListener('afterprint', restore);
+      alert('Please allow popups for this site to download your Blueprint.');
+      return;
+    }
 
-    setTimeout(() => window.print(), 300);
+    printWindow.document.write(`<!DOCTYPE html><html><head>
+      <title>Longevity Blueprint — BornClock</title>
+      <meta charset="utf-8">
+      ${styleLinks}
+      <style>
+        body { background: white; padding: 24px; max-width: 820px; margin: 0 auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        @page { margin: 1.5cm; }
+        @media print { body { padding: 0; } }
+      </style>
+    </head><body>${clone.outerHTML}</body></html>`);
+    printWindow.document.close();
+
+    const doPrint = () => {
+      printWindow.print();
+      setTimeout(() => { printWindow.close(); setExporting(false); }, 1000);
+    };
+
+    if (printWindow.document.readyState === 'complete') {
+      setTimeout(doPrint, 800);
+    } else {
+      printWindow.onload = () => setTimeout(doPrint, 800);
+      // Safety fallback if onload never fires
+      setTimeout(() => { if (!printWindow.closed) doPrint(); }, 4000);
+    }
   };
 
   const p1 = result.pillar1Snapshot;
@@ -596,7 +625,7 @@ export const EnhancedLifeExpectancyReport = ({
           PRINT-ONLY: 7-Section Longevity Blueprint (hidden on screen)
           Shown via @media print in index.css
       ═══════════════════════════════════════════════════════════════════════ */}
-      <div className="hidden print:block space-y-6 mt-8 font-sans text-gray-900">
+      <div id="longevity-blueprint-print-only" className="hidden print:block space-y-6 mt-8 font-sans text-gray-900">
 
         {/* Section 1 — Cover */}
         <div className="text-center border-b-4 border-indigo-600 pb-6">

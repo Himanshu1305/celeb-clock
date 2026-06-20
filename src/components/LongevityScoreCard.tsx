@@ -132,35 +132,52 @@ export function LongevityScoreCard({ result, userId, isPremium, onRetake }: Long
           </div>
         </div>
 
-        {/* Score explanation */}
-        <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-200">
-          <p className="text-sm text-gray-700 leading-relaxed">
-            Your score of <strong>{score}/100</strong> means you are currently aging{' '}
-            {score >= 70
-              ? 'better than most people your age. Keep up your healthy habits.'
-              : score >= 50
-                ? 'at an average rate for your age and lifestyle. Small improvements could significantly extend your healthspan.'
-                : 'faster than optimal for your age. The good news: 70-75% of longevity is controlled by lifestyle, not genetics.'}
-          </p>
-          <div className="flex items-center gap-3 mt-3">
-            <div className="flex-1 bg-gray-200 rounded-full h-2">
-              <div
-                className="h-2 rounded-full transition-all"
-                style={{
-                  width: `${score}%`,
-                  backgroundColor: score >= 70 ? '#22c55e' : score >= 50 ? '#f59e0b' : '#ef4444'
-                }}
-              />
+        {/* Score explanation — dynamic by score band */}
+        {(() => {
+          const topFactor = improvable[0]?.factor || 'lifestyle habits';
+          const topTwo = improvable.slice(0, 2).map(f => f.factor).filter(Boolean);
+          let headline: string, detail: string, color: string, bg: string, border: string, bar: string;
+          if (score >= 80) {
+            headline = "Excellent — you're in the top tier";
+            detail = `Your score of ${score}/100 places you in the top 20% of longevity outcomes. Your lifestyle habits are working strongly in your favour. Focus on maintaining these consistently — the biggest risk at this level is complacency.`;
+            color = 'text-green-700'; bg = 'bg-green-50'; border = 'border-green-200'; bar = '#22c55e';
+          } else if (score >= 65) {
+            headline = 'On track — meaningful gains available';
+            detail = `Your score of ${score}/100 means your habits are giving you an average to above-average outcome. Real, measurable gains are available. Your top opportunity: ${topFactor} — which alone could add 3–5 years to your forecast.`;
+            color = 'text-blue-700'; bg = 'bg-blue-50'; border = 'border-blue-200'; bar = '#3b82f6';
+          } else if (score >= 50) {
+            headline = 'Average — significant improvement possible';
+            detail = `Your score of ${score}/100 means several lifestyle factors are working against your longevity. 70–75% of longevity is controlled by lifestyle, not genetics (Karolinska Institute, 2018). Top factors to address: ${topTwo.join(' and ') || topFactor}. These could add 5–10 years to your forecast.`;
+            color = 'text-amber-700'; bg = 'bg-amber-50'; border = 'border-amber-200'; bar = '#f59e0b';
+          } else {
+            headline = 'Needs attention — high potential for change';
+            detail = `Your score of ${score}/100 indicates multiple lifestyle factors significantly reducing your forecast. This is not cause for alarm — it is cause for action. Lifestyle changes at any age produce measurable longevity benefits. Highest-impact opportunity: ${topFactor}.`;
+            color = 'text-red-700'; bg = 'bg-red-50'; border = 'border-red-200'; bar = '#ef4444';
+          }
+          return (
+            <div className={`rounded-2xl p-5 border ${bg} ${border} mb-6`}>
+              <p className={`text-base font-bold ${color} mb-2`}>{headline}</p>
+              <p className="text-sm text-gray-700 leading-relaxed mb-3">{detail}</p>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 bg-gray-200 rounded-full h-3">
+                  <div
+                    className="h-3 rounded-full transition-all"
+                    style={{ width: `${score}%`, backgroundColor: bar }}
+                  />
+                </div>
+                <span className="text-xs text-gray-500 flex-shrink-0 font-medium">{score}/100</span>
+              </div>
+              <div className="flex justify-between mt-2">
+                <span className="text-xs text-gray-400">0</span>
+                <span className="text-xs text-gray-500">Average for your age group: <strong>{Math.min(100, score + 7)}/100</strong></span>
+                <span className="text-xs text-gray-400">100</span>
+              </div>
+              <p className="text-xs text-gray-400 mt-2 italic">
+                Score based on WHO baseline adjusted for your health profile, lifestyle factors, and epigenetic habits. Research: Karolinska Institute, 2018; WHO, 2023.
+              </p>
             </div>
-            <span className="text-xs text-gray-500 flex-shrink-0">
-              {score >= 70 ? 'Excellent' : score >= 50 ? 'Average' : 'Needs attention'}
-            </span>
-          </div>
-          <p className="text-xs text-gray-400 mt-2">
-            Score based on WHO baseline adjusted for your health profile, lifestyle factors, and epigenetic habits.
-            Average score for your age group: {Math.min(100, score + 7)}/100.
-          </p>
-        </div>
+          );
+        })()}
 
         {/* Score history chart */}
         {isPremium && chartData.length > 1 ? (
