@@ -75,15 +75,55 @@ const POWER9_DETAILS: Record<string, { description: string; science: string; lin
   community:  { description: 'The world\'s longest-lived people were born into, or chose to create, social circles that supported healthy behaviors effortlessly.', science: 'A Framingham Heart Study follow-up found smoking cessation is 3× more likely within non-smoking social networks. Happiness is also contagious.' },
 };
 
-const STEP_CONTEXT: Record<number, { heading: string; body: string; stat: string }> = {
-  1: { heading: 'Why gender matters for longevity', body: 'Biological sex influences hormonal profiles, cardiovascular risk timelines, and immune function. Women outlive men by an average of 5 years globally — partly due to estrogen\'s protective cardiovascular effects and lower rates of risk-taking behaviour.', stat: '♀ Women live 5 years longer on average (WHO, 2023)' },
-  2: { heading: 'Your country shapes your baseline', body: 'Where you live determines your access to healthcare, environmental quality, and average population health norms. Japan\'s baseline life expectancy is 84.3 years vs the global average of 73.4 — a gap driven by diet, community structure, and healthcare investment.', stat: '🌍 Up to 15-year gap between top and bottom countries (UN WPP 2024)' },
-  3: { heading: 'Lifestyle is 50% of your longevity equation', body: 'Smoking, diet, and exercise are the three highest-impact modifiable factors in your lifespan. A non-smoker who eats well and exercises regularly can expect to live 10–14 more years than a heavy-smoking, sedentary peer.', stat: '🚬 Heavy smoking alone removes 10–12 years (WHO, 2023)' },
-  4: { heading: 'Your genes set a ceiling — your habits fill the room', body: 'Family history accounts for roughly 25–30% of longevity variation. But the good news: epigenetics shows that lifestyle choices can influence whether inherited risk genes are activated or suppressed. You are not your family history.', stat: '🧬 Genetics explains ~25% of longevity variance (Nature, 2019)' },
-  5: { heading: 'Health metrics are early warning signals', body: 'Blood pressure, sleep, and social connection are three of the most evidence-backed predictors of long-term health. Optimal BP alone reduces stroke risk by 40%. Seven to nine hours of sleep reduces all-cause mortality risk by 12% compared to under-6.', stat: '💤 7–9 hrs sleep is the optimal range (National Sleep Foundation)' },
-  6: { heading: 'Stress is a silent killer — and it\'s measurable', body: 'Chronic stress elevates cortisol, shortens telomeres, and accelerates cellular aging. High stress is associated with a 2.5-year reduction in life expectancy. Regular exercise is one of the most effective evidence-backed interventions for stress reduction.', stat: '🧠 Chronic stress shortens telomeres at a measurable rate (UCSF, 2022)' },
-  7: { heading: 'The genetics of longevity are inherited — but not destiny', body: 'Centenarian parents dramatically increase your odds of living past 90. But even with average family genetics, lifestyle interventions can add 10+ years beyond your genetic baseline. APOE genotype is a risk factor, not a sentence.', stat: '👴 Centenarian parents give you 4× the odds of reaching 90 (NIA, 2020)' },
-  8: { heading: 'Your community is your longevity infrastructure', body: 'In every Blue Zone, centenarians live within tight community structures — moais in Okinawa, faith communities in Loma Linda, family-centered villages in Sardinia. The social environment reinforces healthy habits without willpower. You absorb the habits of your 5 closest people.', stat: '👥 Social norms drive 70% of long-term habit formation (Framingham Study)' },
+const STEP_EDUCATION: Record<number, { icon: string; title: string; content: string; source: string }> = {
+  1: {
+    icon: '📅',
+    title: 'Why Your Birthday Matters',
+    content: 'Your date of birth determines your biological baseline — the WHO life expectancy table for your birth year, sex, and country. This forms the foundation of your personal forecast. Research shows that the decade you were born in significantly influences your longevity trajectory due to advances in medicine, nutrition, and sanitation available during your lifetime.',
+    source: 'WHO Global Health Observatory, 2023',
+  },
+  2: {
+    icon: '🚬',
+    title: 'The Single Biggest Modifiable Factor',
+    content: 'Tobacco smoking is the most powerful modifiable risk factor for longevity. Smokers lose an average of 10 years of life expectancy compared to non-smokers. The good news: quitting before age 40 reduces the risk of smoking-related death by about 90%. Even quitting at 60 adds 3+ years. If you have never smoked, you have already eliminated the single largest preventable longevity risk.',
+    source: 'Doll et al., BMJ, 2004; WHO Report on Global Tobacco Epidemic, 2023',
+  },
+  3: {
+    icon: '⚖️',
+    title: 'BMI, Chronic Conditions & Your Healthspan',
+    content: 'Body mass index and chronic health conditions affect longevity through multiple pathways — cardiovascular risk, inflammation, and metabolic function. A BMI between 21–23 is associated with optimal longevity. Managed chronic conditions have significantly less impact than unmanaged ones: hypertension controlled with medication reduces stroke risk by 35–40%. The key insight is that diagnosis with management is very different from diagnosis without management.',
+    source: 'Global BMI Mortality Collaboration, Lancet, 2016; GBD 2019 Collaborators, Lancet, 2020',
+  },
+  4: {
+    icon: '🥗',
+    title: 'Diet, Sleep & Stress — The Daily Trio',
+    content: 'These three daily factors compound over decades. Diet quality affects inflammation, cellular repair, and metabolic health. Sleep is when your body repairs cellular damage and regulates hormones — both short sleep (under 6 hrs) and long sleep (over 9 hrs) increase mortality risk, with the optimal range being 7–8 hours. Chronic high stress elevates cortisol, directly accelerating epigenetic ageing. Improving all three together produces exponential rather than additive longevity benefits.',
+    source: 'Liu et al., Sleep Health, 2021; PREDIMED Study, NEJM, 2013; NIH Stress Research Programme',
+  },
+  5: {
+    icon: '😴',
+    title: 'Sleep — The Longevity Multiplier',
+    content: 'Sleep is when your body repairs cellular damage, consolidates memories, and regulates hormones. Both short sleep (under 6 hours) and long sleep (over 9 hours) are associated with increased mortality. The optimal range is 7–8 hours. A 2021 meta-analysis of 3 million participants found short sleepers had 12% higher all-cause mortality. Sleep is also when epigenetic repair mechanisms are most active — poor sleep directly accelerates biological ageing.',
+    source: 'Liu et al., Sleep Health, 2021; Walker, M. — Why We Sleep, 2017',
+  },
+  6: {
+    icon: '🏃',
+    title: 'Exercise — The Closest Thing to a Longevity Drug',
+    content: 'Regular physical activity is the single most evidence-backed longevity intervention available. 150 minutes of moderate exercise per week reduces all-cause mortality by 31%. Even 15 minutes per day adds 3 years of life expectancy. Exercise simultaneously reduces risk of cardiovascular disease, cancer, diabetes, and cognitive decline — no pharmaceutical drug comes close to this breadth of benefit. Your current exercise level is one of the highest-impact factors you can change starting today.',
+    source: 'Wen et al., Lancet, 2011; WHO Physical Activity Guidelines, 2022',
+  },
+  7: {
+    icon: '🧬',
+    title: 'Genetics vs Lifestyle — The Real Split',
+    content: 'The landmark Karolinska twin study (Science, 2018) confirmed that genetics accounts for only 25–30% of longevity variance. The remaining 70–75% is determined by lifestyle, environment, and choices. This means that even if your family history is challenging, your daily decisions have far more impact on your lifespan than your DNA. Epigenetic research shows that lifestyle behaviours directly alter which genes are expressed — you can effectively turn longevity genes on and ageing genes off through your choices.',
+    source: 'Ruby et al., Science, 2018; Karolinska Institute Swedish Twin Registry; Horvath S., NIH, 2013',
+  },
+  8: {
+    icon: '🤝',
+    title: 'The Social Longevity Factor',
+    content: 'Social connection is a powerful longevity predictor that is consistently underestimated. A meta-analysis of 148 studies found that strong social relationships increase survival odds by 50%. Loneliness has a mortality impact comparable to smoking 15 cigarettes per day. The Harvard Study of Adult Development — the longest running study of adult life (85+ years) — found that the quality of your relationships at age 50 is a better predictor of healthy ageing than cholesterol levels. The Blue Zones research consistently identifies strong community bonds as a shared trait of centenarian populations globally.',
+    source: 'Holt-Lunstad et al., PLOS Medicine, 2010; Harvard Study of Adult Development; Buettner, Blue Zones, 2023',
+  },
 };
 
 const getBMICategory = (bmi: number) => {
@@ -1363,11 +1403,18 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
           );
         })()}
 
-        {STEP_CONTEXT[step] && (
-          <div className="bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 space-y-1.5">
-            <p className="text-xs font-bold text-blue-900 dark:text-blue-200">💡 {STEP_CONTEXT[step].heading}</p>
-            <p className="text-[11px] text-blue-800 dark:text-blue-300 leading-relaxed">{STEP_CONTEXT[step].body}</p>
-            <p className="text-[10px] text-blue-600 dark:text-blue-400 font-medium italic">{STEP_CONTEXT[step].stat}</p>
+        {STEP_EDUCATION[step] && (
+          <div className="mt-6 bg-blue-50 rounded-2xl p-5 border border-blue-100">
+            <h3 className="text-sm font-bold text-blue-800 mb-2 flex items-center gap-2">
+              <span>{STEP_EDUCATION[step].icon}</span>
+              {STEP_EDUCATION[step].title}
+            </h3>
+            <p className="text-sm text-blue-700 leading-relaxed mb-2">
+              {STEP_EDUCATION[step].content}
+            </p>
+            <p className="text-xs text-blue-400 italic">
+              📚 {STEP_EDUCATION[step].source}
+            </p>
           </div>
         )}
 
