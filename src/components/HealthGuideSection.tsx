@@ -211,8 +211,7 @@ export const HealthGuideSection = ({ result }: HealthGuideSectionProps) => {
 
       {/* 3-Tier Category Cards */}
       <div>
-        <h3 className="text-base font-bold text-foreground">💊 Your Personalized Health Guide</h3>
-        <p className="text-xs text-muted-foreground mt-1">
+        <p className="text-xs text-muted-foreground">
           Science-backed recommendations across 6 key longevity categories. Tap any card to expand.
         </p>
       </div>

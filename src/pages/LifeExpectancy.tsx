@@ -405,6 +405,9 @@ const LifeExpectancy = () => {
         <div style="font-size:12px;color:#374151;line-height:1.6;">${item.action}</div>
       </div>`).join('');
 
+    const top3GainRawPDF = topOpportunities.slice(0, 3).reduce((sum: number, f: any) => sum + Number(f.potentialGain || 0), 0);
+    const realisticGainPDF = Math.min(top3GainRawPDF * 0.5, 8).toFixed(1);
+
     const maxBar = Number(baseline) + Math.max(0, Number(healthAdj)) + Math.max(0, Number(geneticAdj)) + Math.max(0, Number(epiAdj)) + Math.max(0, Number(commBonus));
     const barScale = 100 / (maxBar || 80);
     const uniqueSources = [...new Set(allFactors.map((f: any) => f.source).filter(Boolean))];
@@ -597,6 +600,15 @@ const LifeExpectancy = () => {
     .bar-label { font-size: 11px; color: #4b5563; margin-bottom: 3px; display: flex; justify-content: space-between; }
     .bar-bg { background: #e5e7eb; border-radius: 4px; height: 10px; }
     .bar-fill { height: 10px; border-radius: 4px; }
+    /* Enhanced visual design */
+    .section-gray { border-left: 3px solid #9ca3af; }
+    .section-green { border-left: 3px solid #22c55e; }
+    .section-blue { border-left: 3px solid #3b82f6; }
+    .section-amber { border-left: 3px solid #f59e0b; }
+    .section-purple { border-left: 3px solid #8b5cf6; }
+    th { background: #f3f4f6; padding: 8px 6px; }
+    tr:nth-child(even) td { background: #fafafa; }
+    .page-footer { margin-top: 16px; padding-top: 10px; border-top: 1px solid #e5e7eb; font-size: 10px; color: #9ca3af; text-align: center; }
   </style>
 </head>
 <body>
@@ -965,18 +977,8 @@ const LifeExpectancy = () => {
     <p style="font-size:12px;color:#6b7280;line-height:1.6;">No community anchor data recorded. Complete Step 8 in the BornClock quiz to activate your community bonus. Research shows your social environment can add up to +0.8 years to your forecast independently of your personal habits.</p>
   </div>`}
 
-  <div class="section section-gray">
-    <h2>🌍 Blue Zones Power 9® Alignment — ${blueZoneCountPDF}/9 principles</h2>
-    <p style="font-size:11px;color:#4b5563;line-height:1.6;margin-bottom:12px;">
-      Dan Buettner's research identified 9 lifestyle principles found consistently in populations that routinely live past 100.
-      ${userSelectedHabits?.length ? 'Your simulator habits align with' : "Your mentor's profile aligns with"} <strong>${blueZoneCountPDF} of 9</strong> principles.
-    </p>
-    ${blueZonesHTMLPDF}
-    <div style="margin-top:10px;padding:8px 12px;background:${blueZoneCountPDF >= 7 ? '#d1fae5' : blueZoneCountPDF >= 5 ? '#dcfce7' : blueZoneCountPDF >= 3 ? '#fef9c3' : '#ffedd5'};border-radius:6px;border:1px solid ${blueZoneCountPDF >= 7 ? '#a7f3d0' : blueZoneCountPDF >= 5 ? '#bbf7d0' : blueZoneCountPDF >= 3 ? '#fde68a' : '#fed7aa'};">
-      <p style="font-size:11px;font-weight:700;color:${blueZoneCountPDF >= 5 ? '#166534' : blueZoneCountPDF >= 3 ? '#78350f' : '#9a3412'};margin:0;">
-        ${blueZoneCountPDF >= 7 ? '🏆 Blue Zone Lifestyle — Exceptional alignment' : blueZoneCountPDF >= 5 ? '✅ Strong Alignment — Above Average' : blueZoneCountPDF >= 3 ? '🌱 Developing — Good Foundation' : '🔑 Early Stage — Significant Opportunity Ahead'}
-      </p>
-    </div>
+  <div class="section section-gray" style="padding:12px 16px;">
+    <p style="font-size:11px;color:#6b7280;font-style:italic;">See Scientific Foundation (Page 11) for the full Blue Zones Power 9® framework and how your habits align with centenarian populations.</p>
   </div>
 </div>
 
@@ -1002,7 +1004,7 @@ const LifeExpectancy = () => {
   </div>
   <div style="padding:14px;background:#faf5ff;border-radius:8px;border:1px solid #e9d5ff;margin-bottom:20px;">
     <p style="font-size:12px;color:#6b7280;line-height:1.6;">
-      Your #1 opportunity is <strong>${topOpportunities[0]?.factor || 'lifestyle improvement'}</strong> (+${Number(topOpportunities[0]?.potentialGain || 0).toFixed(1)} years potential). Addressing your top 3 opportunities could add up to <strong>+${topOpportunities.slice(0,3).reduce((sum: number, f: any) => sum + Number(f.potentialGain || 0), 0).toFixed(1)} years</strong> to your forecast.
+      Your #1 opportunity is <strong>${topOpportunities[0]?.factor || 'lifestyle improvement'}</strong> (+${Number(topOpportunities[0]?.potentialGain || 0).toFixed(1)} years potential). Addressing your top 3 opportunities realistically adds <strong>+${realisticGainPDF} years</strong> to your forecast (50% achievability estimate).
     </p>
   </div>
   <div class="section section-green" style="margin-bottom:20px;">
@@ -1017,8 +1019,8 @@ const LifeExpectancy = () => {
         <div style="font-size:20px;font-weight:900;color:#4f46e5;">${forecast} yrs</div>
       </div>
       <div style="padding:10px;background:white;border-radius:6px;border:1px solid #e5e7eb;text-align:center;">
-        <div style="font-size:10px;color:#9ca3af;margin-bottom:4px;">POTENTIAL GAIN</div>
-        <div style="font-size:20px;font-weight:900;color:#059669;">+${topOpportunities.slice(0,3).reduce((sum: number, f: any) => sum + Number(f.potentialGain || 0), 0).toFixed(1)} yrs</div>
+        <div style="font-size:10px;color:#9ca3af;margin-bottom:4px;">REALISTIC GAIN</div>
+        <div style="font-size:20px;font-weight:900;color:#059669;">+${realisticGainPDF} yrs</div>
       </div>
       <div style="padding:10px;background:white;border-radius:6px;border:1px solid #e5e7eb;text-align:center;">
         <div style="font-size:10px;color:#9ca3af;margin-bottom:4px;">RETAKE IN</div>
@@ -1047,6 +1049,20 @@ const LifeExpectancy = () => {
       Epigenetic bonuses are calculated from Blue Zones research and NIH epigenetic aging studies. Genetic adjustment is based on family history of longevity-affecting conditions, calibrated against the Karolinska twin study's finding that genetics accounts for 25–30% of longevity variance.
     </p>
   </div>
+  <div class="section section-green" style="margin-bottom:16px;">
+    <h2>🌍 Blue Zones Power 9® Alignment — ${blueZoneCountPDF}/9 principles</h2>
+    <p style="font-size:11px;color:#4b5563;line-height:1.6;margin-bottom:12px;">
+      Dan Buettner's research identified 9 lifestyle principles found consistently in populations that routinely live past 100.
+      ${userSelectedHabits?.length ? 'Your simulator habits align with' : "Your mentor's profile aligns with"} <strong>${blueZoneCountPDF} of 9</strong> principles.
+    </p>
+    ${blueZonesHTMLPDF}
+    <div style="margin-top:10px;padding:8px 12px;background:${blueZoneCountPDF >= 7 ? '#d1fae5' : blueZoneCountPDF >= 5 ? '#dcfce7' : blueZoneCountPDF >= 3 ? '#fef9c3' : '#ffedd5'};border-radius:6px;border:1px solid ${blueZoneCountPDF >= 7 ? '#a7f3d0' : blueZoneCountPDF >= 5 ? '#bbf7d0' : blueZoneCountPDF >= 3 ? '#fde68a' : '#fed7aa'};">
+      <p style="font-size:11px;font-weight:700;color:${blueZoneCountPDF >= 5 ? '#166534' : blueZoneCountPDF >= 3 ? '#78350f' : '#9a3412'};margin:0;">
+        ${blueZoneCountPDF >= 7 ? '🏆 Blue Zone Lifestyle — Exceptional alignment' : blueZoneCountPDF >= 5 ? '✅ Strong Alignment — Above Average' : blueZoneCountPDF >= 3 ? '🌱 Developing — Good Foundation' : '🔑 Early Stage — Significant Opportunity Ahead'}
+      </p>
+    </div>
+  </div>
+
   <div class="section section-gray">
     <h2>Research Citations</h2>
     ${uniqueSources.map((s: any) => `
@@ -1448,7 +1464,7 @@ const LifeExpectancy = () => {
 
         {/* ── Visual connector ── */}
         {(phase === 'result' || phase === 'report') && longevityResult && (
-          <div className="flex flex-col items-center py-4">
+          <div className="flex flex-col items-center py-2 mb-3">
             <div className="w-0.5 h-8 bg-gradient-to-b from-gray-200 to-indigo-300"/>
             <p className="text-xs text-gray-400 italic text-center mt-2 px-4">
               Based on your {longevityResult.totalForecast}-year forecast, here's how your habits score
@@ -1466,107 +1482,6 @@ const LifeExpectancy = () => {
               isPremium={isPremium}
               onRetake={handleRetakeQuiz}
             />
-          </section>
-        )}
-
-        {/* ── 90-Day Action Plan ── */}
-        {(phase === 'result' || phase === 'report') && longevityResult && (
-          <section className="max-w-4xl mx-auto mb-10">
-            <div className="rounded-2xl border border-green-200 bg-green-50 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-2xl">📅</span>
-                <div>
-                  <h2 className="text-lg font-black text-gray-900">Your Personalised 90-Day Plan</h2>
-                  <p className="text-sm text-gray-500">Based on your quiz answers and top opportunities — not a generic plan</p>
-                </div>
-              </div>
-
-              {(() => {
-                const sortedFactors = [...(longevityResult.factorBreakdown || [])]
-                  .filter(f => f.potentialGain > 0)
-                  .sort((a, b) => b.potentialGain - a.potentialGain);
-                const topOpp = sortedFactors[0];
-                const top3Gain = sortedFactors.slice(0, 3).reduce((sum, f) => sum + f.potentialGain, 0);
-                const quiz = longevityResult.quizSnapshot;
-                const topFactor = (topOpp?.factor || '').toLowerCase();
-                const exerciseLabels: Record<string, string> = { seldom: 'Sedentary', light: 'Lightly active', moderate: 'Moderately active', heavy: 'Highly active', '': 'Not specified' };
-                const sleepLabels: Record<string, string> = { under6: 'under 6 hrs', '6to7': '6–7 hrs', '7to9': '7–9 hrs', over9: '9+ hrs', '': 'not specified' };
-
-                const week12Action = (() => {
-                  if (topFactor.includes('exercise') || topFactor.includes('physical'))
-                    return `Start with 20-minute daily walks — your exercise level (${exerciseLabels[quiz?.exercise || '']}) shows this is your highest-impact change. WHO 2022: each 15 min/day adds ~3 years.`;
-                  if (topFactor.includes('blood pressure') || topFactor.includes('bp'))
-                    return 'Schedule a blood pressure review with your doctor this week. Stage 2 hypertension is your highest-impact health factor — medication or lifestyle changes can recover significant years.';
-                  if (topFactor.includes('smoking') || topFactor.includes('tobacco'))
-                    return 'Set a quit date and speak to your doctor about cessation aids. Quitting before 40 reduces smoking-related death risk by 90%.';
-                  if (topFactor.includes('genetic') || topFactor.includes('family'))
-                    return 'Schedule a comprehensive family history health assessment. Early screening for conditions in your family history is the highest-ROI intervention.';
-                  if (topFactor.includes('bmi') || topFactor.includes('weight'))
-                    return 'Begin daily 30-minute walks — the most effective first step for sustainable weight management AND longevity.';
-                  return 'Begin daily 30-minute walks. WHO 2022: each additional 15 min/day of moderate exercise adds approximately 3 years.';
-                })();
-
-                const week34Action = (quiz?.sleepDuration === 'under6' || quiz?.sleepDuration === '6to7')
-                  ? `Set a consistent 7–8 hour sleep target. Your current sleep (${sleepLabels[quiz?.sleepDuration || '']}) is affecting your forecast. A wind-down routine — no screens 30 min before bed — is the most effective intervention.`
-                  : 'Add a consistent 7–8 hour sleep schedule. Short sleep under 6 hours is associated with 12% higher all-cause mortality (Liu et al., 2021).';
-
-                const month2Action = (quiz?.stress || 0) >= 6
-                  ? `Your stress level (${quiz?.stress}/10) is contributing to epigenetic ageing. Begin 10 minutes daily mindfulness — even 8 weeks shows measurable changes in stress biomarkers.`
-                  : 'Add 10 minutes daily mindfulness or breathing. Directly reduces cortisol-driven epigenetic ageing. Start with a free app like Headspace or simply 10 minutes of deep breathing.';
-
-                const month3Action = ((quiz as any)?.heartDisease || (quiz as any)?.diabetes || (quiz as any)?.hypertension || (quiz as any)?.heartDiseaseFamily || (quiz as any)?.diabetesFamily)
-                  ? 'Schedule a comprehensive preventive health check: blood pressure, HbA1c, lipid panel, and cardiovascular risk assessment. Controlled conditions have dramatically less longevity impact than uncontrolled ones. Retake BornClock quiz to measure your progress.'
-                  : 'Schedule a preventive health check: blood pressure, blood glucose, BMI review. Early detection is the highest-ROI longevity intervention. Retake this BornClock quiz to measure your progress.';
-
-                return (
-                  <>
-                    {topOpp && (
-                      <div className="bg-white rounded-xl p-4 border border-green-200 mb-4">
-                        <p className="text-sm text-gray-700 leading-relaxed">
-                          Your <strong>#1 opportunity</strong> is{' '}
-                          <strong className="text-indigo-600">
-                            {topOpp.factor} (+{topOpp.potentialGain?.toFixed(1)} years potential)
-                          </strong>.{' '}
-                          Addressing your top 3 opportunities could add up to{' '}
-                          <strong className="text-green-600">+{top3Gain.toFixed(1)} years</strong> to your forecast.
-                        </p>
-                      </div>
-                    )}
-
-                    <div className="space-y-3">
-                      {[
-                        { period: 'Week 1–2', action: week12Action, color: 'bg-indigo-600' },
-                        { period: 'Week 3–4', action: week34Action, color: 'bg-indigo-600' },
-                        { period: 'Month 2',  action: month2Action, color: 'bg-green-600' },
-                        { period: 'Month 3',  action: month3Action, color: 'bg-green-600' },
-                      ].map(({ period, action, color }) => (
-                        <div key={period} className="flex gap-3 items-start">
-                          <div className={`${color} text-white rounded-lg px-3 py-1.5 text-xs font-bold whitespace-nowrap flex-shrink-0 mt-0.5`}>
-                            {period}
-                          </div>
-                          <p className="text-sm text-gray-700 leading-relaxed">{action}</p>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mt-4 grid grid-cols-3 gap-3">
-                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
-                        <p className="text-xs text-gray-400 mb-1">Current Forecast</p>
-                        <p className="text-xl font-black text-indigo-600">{longevityResult.totalForecast?.toFixed(1)} yrs</p>
-                      </div>
-                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
-                        <p className="text-xs text-gray-400 mb-1">Potential Gain</p>
-                        <p className="text-xl font-black text-green-600">+{top3Gain.toFixed(1)} yrs</p>
-                      </div>
-                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
-                        <p className="text-xs text-gray-400 mb-1">Retake In</p>
-                        <p className="text-xl font-black text-purple-600">90 days</p>
-                      </div>
-                    </div>
-                  </>
-                );
-              })()}
-            </div>
           </section>
         )}
 
@@ -1670,6 +1585,244 @@ const LifeExpectancy = () => {
               userName={displayName}
               isPremium={isPremium}
             />
+          </section>
+        )}
+
+        {/* ── 90-Day Action Plan ── */}
+        {(phase === 'result' || phase === 'report') && longevityResult && (
+          <section className="max-w-4xl mx-auto mb-10">
+            <div className="rounded-2xl border border-green-200 bg-green-50 p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl">📅</span>
+                <div>
+                  <h2 className="text-lg font-black text-gray-900">Your Personalised 90-Day Plan</h2>
+                  <p className="text-sm text-gray-500">Based on your quiz answers and top opportunities — not a generic plan</p>
+                </div>
+              </div>
+
+              {(() => {
+                const sortedFactors = [...(longevityResult.factorBreakdown || [])]
+                  .filter(f => f.potentialGain > 0)
+                  .sort((a, b) => b.potentialGain - a.potentialGain);
+                const topOpp = sortedFactors[0];
+                const secondOpp = sortedFactors[1];
+                const thirdOpp = sortedFactors[2];
+                const top3GainRaw = sortedFactors.slice(0, 3).reduce((sum, f) => sum + f.potentialGain, 0);
+                const realisticGain = Math.min(top3GainRaw * 0.5, 8).toFixed(1);
+                const quiz = longevityResult.quizSnapshot;
+                const topFactor = (topOpp?.factor || '').toLowerCase();
+                const exMap: Record<string, string> = { seldom: 'sedentary', light: 'lightly active', moderate: 'moderately active', heavy: 'highly active', '': 'not specified' };
+                const slMap: Record<string, string> = { under6: 'under 6 hrs', '6to7': '6–7 hrs', '7to9': '7–9 hrs', over9: '9+ hrs', '': 'not specified' };
+                const stressLevel = quiz?.stress ?? 0;
+                const hasMedRisk = (quiz as any)?.heartDisease || (quiz as any)?.diabetes || (quiz as any)?.hypertension || (quiz as any)?.heartDiseaseFamily || (quiz as any)?.diabetesFamily;
+                const needsSleep = quiz?.sleepDuration === 'under6' || quiz?.sleepDuration === '6to7';
+                const isSmoker = quiz?.smoking === 'current' || quiz?.smoking === 'light' || quiz?.smoking === 'moderate' || quiz?.smoking === 'heavy';
+
+                const phase1Items = (() => {
+                  const items: string[] = [];
+                  if (topFactor.includes('smoking') || isSmoker) {
+                    items.push('Set a quit date this week and speak to your GP about cessation aids (patch, gum, or varenicline). Combined NRT + counselling doubles quit success rates.');
+                    items.push('Remove cigarettes, lighters, and ashtrays from your home and car the day before your quit date. Environmental cues drive 60% of cravings.');
+                    items.push('Tell three people your quit date — social accountability increases success rates by 65% (ASTD research).');
+                  } else if (topFactor.includes('blood pressure') || topFactor.includes('bp')) {
+                    items.push('Schedule a blood pressure review with your GP this week — uncontrolled hypertension is your highest-impact factor and most responsive to intervention.');
+                    items.push('Reduce sodium immediately: avoid adding salt, limit processed foods. DASH diet reduces systolic BP by ~11 mmHg in 2 weeks.');
+                    items.push('Add 20–30 minutes of brisk walking daily. Aerobic exercise alone reduces systolic BP by 4–8 mmHg (American Heart Association).');
+                  } else if (topFactor.includes('exercise') || topFactor.includes('physical') || quiz?.exercise === 'seldom' || quiz?.exercise === 'light') {
+                    items.push(`Start with 20-minute walks 5× per week. Your activity level (${exMap[quiz?.exercise || '']}) is your highest-impact change — each 15 min/day adds ~3 years (WHO 2022).`);
+                    items.push('Set a recurring calendar alarm for your walk — same time daily builds the habit 3× faster than ad-hoc scheduling.');
+                    items.push('Track steps with your phone. Aim for 7,000 steps/day as your first milestone — reduces all-cause mortality by 51% vs 2,000 steps/day (JAMA 2021).');
+                  } else if (topFactor.includes('bmi') || topFactor.includes('weight')) {
+                    items.push('Begin daily 30-minute walks — the most effective and sustainable first step for weight management AND cardiovascular longevity.');
+                    items.push('Track meals for 7 days using a free app (MyFitnessPal). Awareness alone reduces intake by 10–15% on average without calorie restriction.');
+                    items.push('Eat protein at every meal (eggs, legumes, fish, meat) — protein satiety reduces overeating and preserves muscle mass critical for longevity.');
+                  } else {
+                    items.push('Begin daily 20–30 minute moderate-intensity exercise. Each additional 15 min/day adds approximately 3 years (WHO 2022 Physical Activity Guidelines).');
+                    items.push('Set a consistent walk or gym schedule — same time daily. Habit stacking onto an existing routine improves adherence by 40%.');
+                    if (topOpp) items.push(`Your #1 opportunity is ${topOpp.factor} (+${topOpp.potentialGain?.toFixed(1)} yrs). Research one specific action you can take this week.`);
+                  }
+                  return items;
+                })();
+
+                const phase2Items = (() => {
+                  const items: string[] = [];
+                  if (needsSleep) {
+                    items.push(`Set a fixed bedtime targeting 7–8 hours. Your current sleep (${slMap[quiz?.sleepDuration || '']}) is impacting your forecast — short sleep raises all-cause mortality risk by 12% (Liu et al., 2021).`);
+                    items.push('Implement a 30-minute wind-down: no screens, dim lights, and 5 minutes of slow breathing. Reduces time-to-sleep by an average of 15 minutes.');
+                    items.push('Keep your bedroom cool (16–19°C). Temperature is the strongest non-light environmental cue for deep sleep onset.');
+                  } else {
+                    items.push('Lock in a consistent 7–8 hour sleep schedule, including weekends. Social jet lag (>1 hour weekend shift) independently raises cardiovascular risk.');
+                    items.push('Add a 10-minute wind-down routine before bed. Sleep quality improvement has outsized longevity impact through reduced inflammation markers.');
+                  }
+                  if (secondOpp) {
+                    items.push(`Begin addressing your #2 opportunity — ${secondOpp.factor} (+${secondOpp.potentialGain?.toFixed(1)} yrs potential). Choose one specific daily action for it.`);
+                  }
+                  items.push('Review your Phase 1 habit consistency. Aim for 5/7 days. If you fell short, identify the exact obstacle and adjust the when/where, not the goal itself.');
+                  return items;
+                })();
+
+                const phase3Items = (() => {
+                  const items: string[] = [];
+                  items.push(stressLevel >= 6
+                    ? `Your stress score (${stressLevel}/10) is accelerating epigenetic ageing. Begin 10 minutes of daily mindfulness — 8 weeks shows measurable changes in stress biomarkers and Horvath clock scores.`
+                    : 'Add 10 minutes of daily mindfulness or slow breathing. Reduces cortisol-driven epigenetic ageing — randomised trials show lower biological age markers in 8 weeks.');
+                  if (thirdOpp) {
+                    items.push(`Address your #3 opportunity — ${thirdOpp.factor} (+${thirdOpp.potentialGain?.toFixed(1)} yrs potential). Stack it onto your existing routine for automatic adherence.`);
+                  }
+                  items.push("Expand one social connection this month — a regular catch-up, a new class, or a community group. Harvard's 85-year study found social ties to be the strongest predictor of healthy ageing, ahead of diet, exercise, or genetics.");
+                  items.push('Add strength training 2× per week (bodyweight or gym). Muscle mass after age 40 predicts longevity more strongly than aerobic fitness alone (NHANES longitudinal data).');
+                  return items;
+                })();
+
+                const phase4Items = (() => {
+                  const items: string[] = [];
+                  items.push(hasMedRisk
+                    ? 'Schedule a comprehensive preventive check: blood pressure, HbA1c, lipid panel, and cardiovascular risk score. Controlled conditions have dramatically less longevity impact than uncontrolled ones.'
+                    : 'Schedule a routine preventive health check: blood pressure, fasting blood glucose, basic lipid panel, and BMI. Early detection is the highest-ROI longevity intervention after lifestyle.');
+                  items.push('Retake the BornClock Life Expectancy quiz. Measurable epigenetic improvements appear within 8–12 weeks of consistent lifestyle change — your updated score will reflect real progress.');
+                  items.push('Identify your one "anchor habit" from this plan — the change with the biggest personal impact. Commit to 12 more months. Long-term consolidation multiplies longevity benefit by 1.4–1.8× vs short-term change.');
+                  items.push('Tell someone your 90-day results. Verbalising progress reinforces identity-based habit formation and makes sustained behaviour change 2× more likely.');
+                  return items;
+                })();
+
+                const phases = [
+                  { period: 'Phase 1 · Week 1–2', emoji: '🚀', label: 'Launch', items: phase1Items, hdrColor: 'bg-indigo-600', borderColor: 'border-indigo-200', bgColor: 'bg-indigo-50' },
+                  { period: 'Phase 2 · Week 3–4', emoji: '🔧', label: 'Build', items: phase2Items, hdrColor: 'bg-blue-600', borderColor: 'border-blue-200', bgColor: 'bg-blue-50' },
+                  { period: 'Phase 3 · Month 2',  emoji: '⚡', label: 'Deepen', items: phase3Items, hdrColor: 'bg-teal-600', borderColor: 'border-teal-200', bgColor: 'bg-teal-50' },
+                  { period: 'Phase 4 · Month 3',  emoji: '🏆', label: 'Consolidate', items: phase4Items, hdrColor: 'bg-green-700', borderColor: 'border-green-200', bgColor: 'bg-green-50' },
+                ];
+
+                return (
+                  <>
+                    {topOpp && (
+                      <div className="bg-white rounded-xl p-4 border border-green-200 mb-5">
+                        <p className="text-sm text-gray-700 leading-relaxed">
+                          Your <strong>#1 opportunity</strong> is{' '}
+                          <strong className="text-indigo-600">
+                            {topOpp.factor} (+{topOpp.potentialGain?.toFixed(1)} yrs potential)
+                          </strong>.{' '}
+                          Addressing your top 3 opportunities realistically adds{' '}
+                          <strong className="text-green-600">+{realisticGain} yrs</strong>{' '}
+                          to your forecast (50% achievability discount applied).
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="space-y-4">
+                      {phases.map(({ period, emoji, label, items, hdrColor, borderColor, bgColor }) => (
+                        <div key={period} className={`rounded-xl border ${borderColor} overflow-hidden`}>
+                          <div className={`${hdrColor} text-white px-4 py-2 flex items-center gap-2`}>
+                            <span>{emoji}</span>
+                            <span className="font-bold text-sm">{period}</span>
+                            <span className="text-xs opacity-75 ml-1">— {label}</span>
+                          </div>
+                          <div className={`${bgColor} p-4`}>
+                            <ol className="space-y-2.5">
+                              {items.map((item, idx) => (
+                                <li key={idx} className="flex gap-3 text-sm text-gray-700 leading-relaxed">
+                                  <span className={`${hdrColor} text-white rounded-full w-5 h-5 flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5`}>
+                                    {idx + 1}
+                                  </span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ol>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-5 grid grid-cols-3 gap-3">
+                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
+                        <p className="text-xs text-gray-400 mb-1">Current Forecast</p>
+                        <p className="text-xl font-black text-indigo-600">{longevityResult.totalForecast?.toFixed(1)} yrs</p>
+                      </div>
+                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
+                        <p className="text-xs text-gray-400 mb-1">Realistic Gain Estimate</p>
+                        <p className="text-xl font-black text-green-600">+{realisticGain} yrs</p>
+                        <p className="text-[10px] text-gray-400">if top factors improved</p>
+                      </div>
+                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
+                        <p className="text-xs text-gray-400 mb-1">Retake In</p>
+                        <p className="text-xl font-black text-purple-600">90 days</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 rounded-xl bg-amber-50 border border-amber-200 p-4">
+                      <p className="text-xs text-amber-800 leading-relaxed">
+                        <strong>⚠️ Important:</strong> This plan is an evidence-based estimate derived from population-level research and your quiz responses. It is not a medical diagnosis or substitute for professional advice. Individual outcomes vary significantly. Consult a qualified healthcare professional before making significant changes to your health regimen, especially if you have existing medical conditions.
+                      </p>
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+          </section>
+        )}
+
+        {/* ── Scientific Foundation (collapsible) ── */}
+        {(phase === 'result' || phase === 'report') && longevityResult && (
+          <section className="max-w-4xl mx-auto mb-10">
+            <details className="rounded-2xl border border-indigo-200 bg-indigo-50 overflow-hidden">
+              <summary className="flex items-center gap-3 p-5 cursor-pointer list-none select-none">
+                <span className="text-xl">🔬</span>
+                <div className="flex-1">
+                  <h2 className="text-base font-black text-gray-900">Scientific Foundation</h2>
+                  <p className="text-xs text-gray-500 mt-0.5">The research behind your forecast — click to expand</p>
+                </div>
+                <span className="text-gray-400 text-sm">▼</span>
+              </summary>
+              <div className="px-5 pb-5 space-y-4">
+                <div className="bg-white rounded-xl p-4 border border-indigo-100">
+                  <h3 className="text-sm font-bold text-gray-800 mb-2">Methodology</h3>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    Your forecast starts from the WHO Global Health Observatory life expectancy baseline for your country and gender. Eight lifestyle and health factors are applied using established risk ratios from peer-reviewed research. Epigenetic bonuses are drawn from Blue Zones and NIH epigenetic ageing studies. Genetic adjustment is calibrated against the Karolinska twin study (2018): genetics accounts for 25–30% of longevity variance; 70–75% is lifestyle-controlled.
+                  </p>
+                </div>
+                <div className="bg-white rounded-xl p-4 border border-indigo-100">
+                  <h3 className="text-sm font-bold text-gray-800 mb-2">🌍 Blue Zones Power 9® — Principles of Centenarian Populations</h3>
+                  <p className="text-xs text-gray-500 mb-3">Dan Buettner's research across five world regions where people routinely live past 100</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {([
+                      { emoji: '🚶', name: 'Move Naturally', desc: 'Daily movement woven into life' },
+                      { emoji: '🎯', name: 'Purpose', desc: '"Ikigai" — reason to wake up' },
+                      { emoji: '😌', name: 'Down Shift', desc: 'Daily stress-shedding routine' },
+                      { emoji: '🌿', name: '80% Rule', desc: 'Stop eating at 80% full' },
+                      { emoji: '🥦', name: 'Plant Slant', desc: 'Plants as dietary foundation' },
+                      { emoji: '🍷', name: 'Wine @ 5', desc: 'Moderate alcohol with community' },
+                      { emoji: '🙏', name: 'Belong', desc: 'Faith-based community (any)' },
+                      { emoji: '👨‍👩‍👧', name: 'Loved Ones First', desc: 'Invest in family bonds' },
+                      { emoji: '👥', name: 'Right Tribe', desc: 'Social circles that support health' },
+                    ] as const).map(({ emoji, name, desc }) => (
+                      <div key={name} className="bg-indigo-50 rounded-lg p-2 text-center">
+                        <span className="text-lg block mb-1">{emoji}</span>
+                        <p className="text-[10px] font-bold text-gray-800">{name}</p>
+                        <p className="text-[10px] text-gray-500">{desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-white rounded-xl p-4 border border-indigo-100">
+                  <h3 className="text-sm font-bold text-gray-800 mb-2">Key Research Citations</h3>
+                  <ul className="space-y-1.5">
+                    {[
+                      'WHO Global Health Observatory (2024) — Country-level life expectancy baselines',
+                      'Karolinska Institute twin study (Science, 2018) — Genetics accounts for 25–30% of longevity variance',
+                      'Harvard Study of Adult Development (85 yrs) — Social relationships as strongest predictor of healthy ageing',
+                      'Horvath S., NIH (2013) — DNA methylation clock: lifestyle factors alter epigenetic ageing rate',
+                      'Buettner D., Blue Zones (2023) — Power 9 lifestyle principles from centenarian populations',
+                      'Liu Y. et al. (2021) — Short sleep (<6 hrs) associated with 12% higher all-cause mortality',
+                      'WHO Physical Activity Guidelines (2022) — 15 min/day moderate activity adds ~3 years',
+                    ].map(s => (
+                      <li key={s} className="flex gap-2 text-xs text-gray-600">
+                        <span className="text-indigo-400 flex-shrink-0">●</span>
+                        <span>{s}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </details>
           </section>
         )}
 
