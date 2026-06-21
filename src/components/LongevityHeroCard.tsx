@@ -110,6 +110,9 @@ export function LongevityHeroCard({ result, optimizedForecast, userName, onDownl
           {copied ? '✅ Copied!' : <><Copy className="w-3.5 h-3.5" /> Copy Summary</>}
         </Button>
       </div>
+      <p className="text-[10px] text-muted-foreground/60 text-center mt-1">
+        💡 In print dialog: set Headers &amp; Footers to OFF for a clean PDF without page URLs
+      </p>
     </div>
   );
 }

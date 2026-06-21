@@ -156,18 +156,20 @@ const LifeExpectancy = () => {
   const [currentSimForecast, setCurrentSimForecast] = useState<number | null>(null);
   const [userSelectedHabits, setUserSelectedHabits] = useState<string[]>([]);
   const [userHabitFrequencies, setUserHabitFrequencies] = useState<Record<string, string>>({});
+  const [blueprintName, setBlueprintName] = useState('');
+  const [showNamePrompt, setShowNamePrompt] = useState(false);
 
   const resultRef    = useRef<HTMLDivElement>(null);
   const simulatorRef = useRef<HTMLDivElement>(null);
   const reportRef    = useRef<HTMLDivElement>(null);
-  const handleDownloadBlueprint = () => {
+  const handleDownloadBlueprint = (personName?: string) => {
     if (!longevityResult) {
       alert('Please complete the quiz first to generate your blueprint.');
       return;
     }
 
     const quiz = longevityResult.quizSnapshot;
-    const name = quiz?.name || profile?.full_name || 'You';
+    const name = personName || quiz?.name || profile?.full_name || 'You';
     const forecast = Number(longevityResult.totalForecast || 0).toFixed(1);
     const currentAge = Number(longevityResult.currentAge || 0);
     const remaining = Number(longevityResult.yearsRemaining || 0).toFixed(1);
@@ -292,7 +294,11 @@ const LifeExpectancy = () => {
 
     // Factor breakdown
     const allFactors = longevityResult.factorBreakdown || [];
-    const topOpportunities = [...allFactors].filter((f: any) => f.potentialGain > 0).sort((a: any, b: any) => b.potentialGain - a.potentialGain).slice(0, 5);
+    const topOpportunities = [...allFactors].filter((f: any) => f.potentialGain > 0).sort((a: any, b: any) => b.potentialGain - a.potentialGain).slice(0, 4);
+    const negativeFactors = allFactors.filter((f: any) => f.currentImpact < 0).sort((a: any, b: any) => a.currentImpact - b.currentImpact);
+    const positiveFactors = allFactors.filter((f: any) => f.currentImpact >= 0).sort((a: any, b: any) => b.currentImpact - a.currentImpact);
+    const p1 = longevityResult.pillar1Snapshot;
+    const p2 = longevityResult.pillar2Snapshot;
 
     // Epigenetic habits
     const activeHabitIds: string[] = longevityResult.userEpigeneticHabits || (longevityResult as any).epigeneticHabitsSelected || [];
@@ -402,6 +408,148 @@ const LifeExpectancy = () => {
     const maxBar = Number(baseline) + Math.max(0, Number(healthAdj)) + Math.max(0, Number(geneticAdj)) + Math.max(0, Number(epiAdj)) + Math.max(0, Number(commBonus));
     const barScale = 100 / (maxBar || 80);
     const uniqueSources = [...new Set(allFactors.map((f: any) => f.source).filter(Boolean))];
+
+    // ── Variables for new PDF pages ──────────────────────────────────────────
+
+    // Page 7: Biological Blueprint — family tree + factor impact
+    const FAMILY_KEYS_PDF: [string, string][] = [
+      ['paternalGrandfather', 'Paternal Grandfather'],
+      ['paternalGrandmother', 'Paternal Grandmother'],
+      ['father', 'Father'],
+      ['paternalUncles', 'Paternal Uncles (avg)'],
+      ['paternalAunts', 'Paternal Aunts (avg)'],
+      ['maternalGrandfather', 'Maternal Grandfather'],
+      ['maternalGrandmother', 'Maternal Grandmother'],
+      ['mother', 'Mother'],
+      ['maternalUncles', 'Maternal Uncles (avg)'],
+      ['maternalAunts', 'Maternal Aunts (avg)'],
+    ];
+    const familyRowsHTML = FAMILY_KEYS_PDF.reduce((html, [key, label]) => {
+      const m = (p1 as any)[key];
+      if (!m || m.dontKnow || !m.age || m.age <= 0) return html;
+      const bg = m.age > 80 ? '#d1fae5' : m.age >= 70 ? '#fef3c7' : m.age >= 60 ? '#fed7aa' : '#fee2e2';
+      const bdr = m.age > 80 ? '#a7f3d0' : m.age >= 70 ? '#fde68a' : m.age >= 60 ? '#fdba74' : '#fecaca';
+      const tc = m.age > 80 ? '#065f46' : m.age >= 70 ? '#78350f' : m.age >= 60 ? '#9a3412' : '#991b1b';
+      return html + `<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 10px;background:${bg};border:1px solid ${bdr};border-radius:6px;margin-bottom:4px;">
+        <span style="font-size:11px;font-weight:600;color:${tc};">${label}</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:12px;font-weight:700;color:${tc};">${m.age} yrs</span>
+          ${m.isLiving ? '<span style="font-size:9px;background:#dcfce7;color:#166534;padding:1px 5px;border-radius:8px;">Living</span>' : ''}
+        </div>
+      </div>`;
+    }, '');
+    const hasFamilyData = familyRowsHTML.length > 0;
+
+    const negFactorsHTML = negativeFactors.slice(0, 7).map((f: any) => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #fee2e2;">
+        <span style="font-size:11px;">${f.emoji || ''} ${f.factor}</span>
+        <span style="font-size:11px;font-weight:700;color:#dc2626;">${Number(f.currentImpact).toFixed(1)} yrs</span>
+      </div>`).join('');
+    const posFactorsHTML = positiveFactors.slice(0, 7).map((f: any) => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #d1fae5;">
+        <span style="font-size:11px;">${f.emoji || ''} ${f.factor}</span>
+        <span style="font-size:11px;font-weight:700;color:#059669;">+${Number(f.currentImpact).toFixed(1)} yrs</span>
+      </div>`).join('');
+
+    // Page 8: Community Anchor — mentor habits + Blue Zones grid
+    const mentorHabitIds: string[] = p2?.mentorHabits || [];
+    const mentorHabitObjs = EPIGENETIC_HABITS.filter((h: any) => mentorHabitIds.includes(h.id));
+    const BLUE_ZONE_IDS_PDF = new Set(['walking', 'community', 'wholefood', 'purpose', 'spiritual', 'gardening', 'fasting', 'laughter', 'meditation']);
+    const habitsForBZPDF: string[] = userSelectedHabits?.length ? userSelectedHabits : mentorHabitIds;
+    const blueZoneCountPDF = habitsForBZPDF.filter((id: string) => BLUE_ZONE_IDS_PDF.has(id)).length;
+    const BLUE_ZONE_DATA_PDF = [
+      { id: 'walking',    name: 'Move Naturally',   emoji: '🚶', science: 'Natural movement throughout the day reduces all-cause mortality by 21% vs sedentary lifestyles.' },
+      { id: 'purpose',    name: 'Purpose (Ikigai)', emoji: '🎯', science: 'A clear sense of purpose adds up to 7 years of life expectancy and reduces dementia risk 2.4× (Rush University, 2012).' },
+      { id: 'meditation', name: 'Downshift',        emoji: '🧘', science: 'Daily stress-relief rituals lower chronic inflammation and cortisol, slowing biological aging.' },
+      { id: 'fasting',    name: '80% Rule',         emoji: '⏰', science: 'Stopping at 80% full is linked to 31% lower cardiovascular mortality in Okinawan cohort studies.' },
+      { id: 'wholefood',  name: 'Plant Slant',      emoji: '🥗', science: 'Bean-heavy diets reduce all-cause mortality by 7–8% per 20g/day (British Journal of Nutrition).' },
+      { id: 'community',  name: 'Right Tribe',      emoji: '👥', science: 'Your closest 5 contacts significantly shape your longevity habits and health behaviors daily.' },
+      { id: 'spiritual',  name: 'Faith Community',  emoji: '🙏', science: '4× monthly attendance adds 4–14 years of life expectancy across 5 independent studies (Hummer et al., 1999).' },
+      { id: 'volunteer',  name: 'Loved Ones First', emoji: '🤝', science: 'Multigenerational households reduce offspring mortality rates by up to 25% (Framingham Heart Study).' },
+      { id: 'gardening',  name: 'Nature & Green',   emoji: '🌿', science: 'Regular nature exposure lowers cortisol by 21% and reduces depression risk by 30% (Univ. of Exeter, 2019).' },
+    ];
+    const blueZonesHTMLPDF = BLUE_ZONE_DATA_PDF.map(bp => {
+      const aligned = habitsForBZPDF.includes(bp.id);
+      return `<div style="display:flex;align-items:flex-start;gap:8px;padding:6px 8px;background:${aligned ? '#f0fdf4' : '#f9fafb'};border:1px solid ${aligned ? '#bbf7d0' : '#e5e7eb'};border-radius:5px;margin-bottom:4px;">
+        <span style="font-size:15px;flex-shrink:0;">${bp.emoji}</span>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:1px;">
+            <span style="font-size:11px;font-weight:700;color:${aligned ? '#166534' : '#374151'};">${bp.name}</span>
+            <span style="font-size:10px;">${aligned ? '✅' : '○'}</span>
+          </div>
+          <p style="font-size:9px;color:#6b7280;line-height:1.35;margin:0;">${bp.science}</p>
+        </div>
+      </div>`;
+    }).join('');
+    const mentorHabitsListHTMLPDF = mentorHabitObjs.length > 0
+      ? mentorHabitObjs.map((h: any) => `
+        <div style="display:flex;align-items:center;gap:8px;padding:5px 8px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:5px;margin-bottom:3px;">
+          <span style="font-size:14px;">${h.emoji || '✓'}</span>
+          <span style="flex:1;font-size:11px;font-weight:600;color:#166534;">${h.label}</span>
+          <span style="font-size:10px;font-weight:700;color:#059669;white-space:nowrap;">+${(h.gain * 0.15).toFixed(1)}yr influence</span>
+        </div>`).join('')
+      : '<p style="font-size:11px;color:#6b7280;">No community anchor habits recorded in Step 8 of the quiz.</p>';
+
+    // Page 9: Health Guide — 6 categories with top 2 recs each
+    const HEALTH_GUIDE_PDF: Array<{
+      emoji: string; name: string; stat: string; color: string; border: string;
+      recs: Array<{ emoji: string; title: string; impact?: number; quickWin: string; source: string }>;
+    }> = [
+      { emoji: '😴', name: 'Sleep', stat: '7–9 hrs/night linked to +2.5 yrs life expectancy', color: '#6366f1', border: '#a5b4fc',
+        recs: [
+          { emoji: '⏰', title: 'Consistent Sleep Schedule', impact: 1.5, quickWin: 'Set both a bedtime alarm and wake alarm — keep them on weekends too.', source: 'Sleep Medicine Reviews, 2022' },
+          { emoji: '📵', title: 'Screen-Free 90 Min Before Bed', impact: 0.8, quickWin: 'Enable Night Mode on all devices and set a "screens off" reminder.', source: 'Harvard Medical School, 2020' },
+        ]},
+      { emoji: '🏃', name: 'Exercise', stat: '150 min/week aerobic exercise reduces mortality by 31%', color: '#22c55e', border: '#86efac',
+        recs: [
+          { emoji: '🚴', title: 'Zone 2 Cardio (150 min/week)', impact: 2.0, quickWin: 'Walk briskly, bike, or swim for 30 min today.', source: 'WHO Guidelines 2020; NEJM 2022' },
+          { emoji: '💪', title: 'Strength Training (2–3×/week)', impact: 1.5, quickWin: 'Do one bodyweight circuit: 3 sets of squats, pushups, and lunges.', source: 'British Journal of Sports Medicine, 2022' },
+        ]},
+      { emoji: '🥗', name: 'Nutrition', stat: 'Mediterranean diet cuts all-cause mortality by 25%', color: '#f97316', border: '#fed7aa',
+        recs: [
+          { emoji: '🐟', title: 'Mediterranean Diet Pattern', impact: 2.0, quickWin: 'Replace one red meat meal per week with fatty fish (salmon, mackerel, sardines).', source: 'PREDIMED Trial, NEJM 2018' },
+          { emoji: '🫘', title: 'Legumes Daily', impact: 1.3, quickWin: "Add a can of chickpeas or lentils to tonight's meal.", source: 'British Journal of Nutrition, 2014' },
+        ]},
+      { emoji: '🧠', name: 'Mental Health', stat: 'Strong social ties reduce premature mortality by 50%', color: '#8b5cf6', border: '#c4b5fd',
+        recs: [
+          { emoji: '🎯', title: 'Purpose & Meaning (Ikigai)', impact: 1.0, quickWin: "Write one sentence: 'My purpose today is...' and post it visibly.", source: 'Rush University Medical Center, 2012' },
+          { emoji: '🧘', title: 'Daily Stress Management', impact: 0.8, quickWin: 'Try box breathing: 4s inhale → 4s hold → 6s exhale, repeat 5 cycles.', source: 'Lancet Psychiatry, 2021' },
+        ]},
+      { emoji: '🏥', name: 'Preventive Care', stat: 'Screenings catch disease 5–10 yrs earlier; reduce mortality 16%', color: '#ef4444', border: '#fca5a5',
+        recs: [
+          { emoji: '🏥', title: 'Annual Health Checkups', impact: 0.8, quickWin: "Book your next annual physical today if you haven't had one this year.", source: 'USPSTF, 2023' },
+          { emoji: '📊', title: 'Know Your 4 Biomarkers', quickWin: 'Ask your doctor for: blood pressure, HbA1c, LDL cholesterol, and BMI.', source: 'American Heart Association, 2023' },
+        ]},
+      { emoji: '👥', name: 'Community', stat: 'Strong community ties add 4–14 years of life expectancy', color: '#14b8a6', border: '#99f6e4',
+        recs: [
+          { emoji: '🤝', title: 'Build Your Moai (5-person tribe)', impact: 1.5, quickWin: 'Identify your 5 key wellbeing supporters and reach out to one today.', source: 'Holt-Lunstad, 2015; Blue Zones' },
+          { emoji: '🙏', title: 'Community or Faith Group (4×/month)', impact: 1.0, quickWin: 'Find one local community class, club, or group to join this month.', source: 'Hummer et al., 1999' },
+        ]},
+    ];
+    const healthGuideHTMLPDF = HEALTH_GUIDE_PDF.map(cat => {
+      const recsHTML = cat.recs.map(rec => `
+        <div style="display:flex;gap:7px;margin-bottom:5px;padding:6px 8px;background:#f9fafb;border-radius:5px;border:1px solid #f3f4f6;">
+          <span style="font-size:14px;flex-shrink:0;">${rec.emoji}</span>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
+              <span style="font-size:11px;font-weight:700;color:#1f2937;">${rec.title}</span>
+              ${rec.impact !== undefined ? `<span style="font-size:9px;font-weight:700;color:#059669;background:#d1fae5;padding:1px 5px;border-radius:8px;">+${rec.impact}yr</span>` : ''}
+            </div>
+            <div style="font-size:9px;color:#4f46e5;font-weight:600;">⚡ ${rec.quickWin}</div>
+            <div style="font-size:9px;color:#9ca3af;margin-top:1px;font-style:italic;">${rec.source}</div>
+          </div>
+        </div>`).join('');
+      return `<div style="margin-bottom:8px;border:1px solid ${cat.border};border-radius:7px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;">
+        <div style="padding:7px 10px;background:${cat.color}22;border-bottom:1px solid ${cat.border};display:flex;align-items:center;gap:6px;">
+          <span style="font-size:15px;">${cat.emoji}</span>
+          <div>
+            <span style="font-size:12px;font-weight:700;color:#1f2937;">${cat.name}</span>
+            <span style="font-size:9px;color:#6b7280;margin-left:6px;">${cat.stat}</span>
+          </div>
+        </div>
+        <div style="padding:7px 10px;">${recsHTML}</div>
+      </div>`;
+    }).join('');
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -742,7 +890,110 @@ const LifeExpectancy = () => {
   </div>
 </div>
 
-<!-- PAGE 7: PERSONALISED ACTION PLAN -->
+<!-- PAGE 7: BIOLOGICAL BLUEPRINT -->
+<div class="page page-break">
+  <div style="margin-bottom:20px;">
+    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
+    <h1 style="margin-top:4px;">🧬 Biological Blueprint</h1>
+    <p style="font-size:12px;color:#6b7280;margin-top:4px;">Your genetic heritage and how each lifestyle factor currently affects your lifespan</p>
+  </div>
+
+  <div class="section section-purple" style="margin-bottom:16px;">
+    <h2>Genetic Vitality Score</h2>
+    <div style="display:flex;gap:16px;align-items:flex-start;">
+      <div style="padding:14px 20px;background:white;border-radius:8px;border:2px solid #e9d5ff;text-align:center;flex-shrink:0;">
+        <div style="font-size:10px;color:#7c3aed;font-weight:600;margin-bottom:2px;">GENETIC SCORE</div>
+        <div style="font-size:18px;font-weight:900;color:#7c3aed;">${geneticLabel}</div>
+        <div style="font-size:13px;font-weight:700;color:${Number(geneticAdj) >= 0 ? '#059669' : '#dc2626'};margin-top:4px;">${Number(geneticAdj) >= 0 ? '+' : ''}${geneticAdj} yrs</div>
+        <div style="font-size:10px;color:#9ca3af;margin-top:2px;">Family avg: ~${longevityResult.familyBaselineAge} yrs</div>
+      </div>
+      <div style="flex:1;">
+        <p style="font-size:12px;color:#4b5563;line-height:1.6;margin-bottom:8px;">${geneticDesc || 'Your genetic vitality contributes ' + geneticAdj + ' years to your forecast based on family history analysis.'}</p>
+        <div style="padding:8px 12px;background:#f5f3ff;border-radius:6px;border:1px solid #ede9fe;margin-bottom:8px;">
+          <p style="font-size:11px;color:#7c3aed;margin:0;">🧬 Genetic Ceiling: ~${Math.round(longevityResult.familyBaselineAge + 5)} years · Estimated from family average + modern medicine modifier</p>
+        </div>
+        <p style="font-size:10px;color:#9ca3af;font-style:italic;">Karolinska Institute (2018): Genetics accounts for only 25–30% of longevity. The other 70–75% is lifestyle.</p>
+      </div>
+    </div>
+  </div>
+
+  ${hasFamilyData ? `
+  <div class="section section-gray" style="margin-bottom:16px;">
+    <h2>Your Genetic Family Tree</h2>
+    <div class="grid-2">${familyRowsHTML}</div>
+    <div style="display:flex;gap:16px;font-size:10px;color:#6b7280;margin-top:8px;flex-wrap:wrap;">
+      <span><span style="display:inline-block;width:10px;height:10px;background:#d1fae5;border:1px solid #a7f3d0;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>&gt;80 yrs</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#fef3c7;border:1px solid #fde68a;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>70–80 yrs</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#fed7aa;border:1px solid #fdba74;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>60–70 yrs</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#fee2e2;border:1px solid #fecaca;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>&lt;60 yrs</span>
+    </div>
+  </div>` : ''}
+
+  <div class="grid-2">
+    <div class="section section-gray">
+      <h2 style="color:#dc2626;border-bottom-color:#fecaca;">⬇ Factors Reducing Lifespan</h2>
+      ${negFactorsHTML || '<p style="font-size:12px;color:#059669;">No significant negative factors — excellent work!</p>'}
+    </div>
+    <div class="section section-green">
+      <h2 style="color:#059669;">⬆ Factors Adding Years</h2>
+      ${posFactorsHTML || '<p style="font-size:12px;color:#6b7280;">Adopt positive lifestyle habits to see gains here.</p>'}
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 8: COMMUNITY ANCHOR -->
+<div class="page page-break">
+  <div style="margin-bottom:20px;">
+    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
+    <h1 style="margin-top:4px;">🏘️ Community Anchor</h1>
+    <p style="font-size:12px;color:#6b7280;margin-top:4px;">Your social environment's impact on longevity — and how it aligns with Blue Zones science</p>
+  </div>
+
+  ${p2?.hasMentor && p2?.mentorAge > 0 ? `
+  <div class="section section-blue" style="margin-bottom:16px;">
+    <h2>🏘️ Your Community Longevity Anchor</h2>
+    <p style="font-size:12px;color:#374151;line-height:1.6;margin-bottom:10px;">
+      ${p2.mentorName ? '"' + p2.mentorName + '"' : 'Your longevity mentor'} (${p2.mentorRelationship || 'mentor'}, ${p2.mentorAge} yrs) represents living proof that your environment supports longevity.
+      Community bonus applied: <strong style="color:#059669;">+${commBonus} yrs</strong>.
+    </p>
+    <h3 style="margin-bottom:8px;">Habits attributed to your community anchor:</h3>
+    ${mentorHabitsListHTMLPDF}
+    <p style="font-size:10px;color:#6b7280;margin-top:8px;font-style:italic;">Each habit contributes 15% of its direct benefit as an environmental influence on your forecast. Adopt these habits directly via the Longevity Simulator for the full benefit.</p>
+  </div>` : `
+  <div class="section section-gray" style="margin-bottom:16px;">
+    <h2>🏘️ Community Anchor</h2>
+    <p style="font-size:12px;color:#6b7280;line-height:1.6;">No community anchor data recorded. Complete Step 8 in the BornClock quiz to activate your community bonus. Research shows your social environment can add up to +0.8 years to your forecast independently of your personal habits.</p>
+  </div>`}
+
+  <div class="section section-gray">
+    <h2>🌍 Blue Zones Power 9® Alignment — ${blueZoneCountPDF}/9 principles</h2>
+    <p style="font-size:11px;color:#4b5563;line-height:1.6;margin-bottom:12px;">
+      Dan Buettner's research identified 9 lifestyle principles found consistently in populations that routinely live past 100.
+      ${userSelectedHabits?.length ? 'Your simulator habits align with' : "Your mentor's profile aligns with"} <strong>${blueZoneCountPDF} of 9</strong> principles.
+    </p>
+    ${blueZonesHTMLPDF}
+    <div style="margin-top:10px;padding:8px 12px;background:${blueZoneCountPDF >= 7 ? '#d1fae5' : blueZoneCountPDF >= 5 ? '#dcfce7' : blueZoneCountPDF >= 3 ? '#fef9c3' : '#ffedd5'};border-radius:6px;border:1px solid ${blueZoneCountPDF >= 7 ? '#a7f3d0' : blueZoneCountPDF >= 5 ? '#bbf7d0' : blueZoneCountPDF >= 3 ? '#fde68a' : '#fed7aa'};">
+      <p style="font-size:11px;font-weight:700;color:${blueZoneCountPDF >= 5 ? '#166534' : blueZoneCountPDF >= 3 ? '#78350f' : '#9a3412'};margin:0;">
+        ${blueZoneCountPDF >= 7 ? '🏆 Blue Zone Lifestyle — Exceptional alignment' : blueZoneCountPDF >= 5 ? '✅ Strong Alignment — Above Average' : blueZoneCountPDF >= 3 ? '🌱 Developing — Good Foundation' : '🔑 Early Stage — Significant Opportunity Ahead'}
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 9: HEALTH GUIDE -->
+<div class="page page-break">
+  <div style="margin-bottom:20px;">
+    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
+    <h1 style="margin-top:4px;">💊 Your Personal Health Guide</h1>
+    <p style="font-size:12px;color:#6b7280;margin-top:4px;">Science-backed recommendations across 6 key longevity categories</p>
+  </div>
+  ${healthGuideHTMLPDF}
+  <div style="padding:10px 14px;background:#eff6ff;border-radius:6px;border:1px solid #bfdbfe;margin-top:8px;">
+    <p style="font-size:10px;color:#1e40af;line-height:1.5;margin:0;"><strong>Disclaimer:</strong> Recommendations are for informational purposes only and are not a substitute for professional medical advice. Consult your healthcare provider before making significant changes to your health routine. Impact values are averages from population studies and may vary between individuals.</p>
+  </div>
+</div>
+
+<!-- PAGE 10: PERSONALISED ACTION PLAN -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
     <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
@@ -780,7 +1031,7 @@ const LifeExpectancy = () => {
   </div>
 </div>
 
-<!-- PAGE 8: SCIENTIFIC FOUNDATION -->
+<!-- PAGE 11: SCIENTIFIC FOUNDATION -->
 <div class="page">
   <div style="margin-bottom:20px;">
     <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
@@ -1393,7 +1644,7 @@ const LifeExpectancy = () => {
               result={longevityResult}
               optimizedForecast={optimizedForecast}
               userName={displayName}
-              onDownloadBlueprint={handleDownloadBlueprint}
+              onDownloadBlueprint={() => { setBlueprintName(''); setShowNamePrompt(true); }}
             />
             <ReportErrorBoundary onReset={() => setPhase('result')}>
               <EnhancedLifeExpectancyReport
@@ -1405,7 +1656,7 @@ const LifeExpectancy = () => {
                 optimizedForecast={optimizedForecast ?? undefined}
                 userSelectedHabits={userSelectedHabits}
                 simulatorHabitFrequencies={userHabitFrequencies}
-                onDownloadBlueprint={handleDownloadBlueprint}
+                onDownloadBlueprint={() => { setBlueprintName(''); setShowNamePrompt(true); }}
               />
             </ReportErrorBoundary>
           </section>
@@ -1464,6 +1715,38 @@ const LifeExpectancy = () => {
       </div>
 
       <Footer />
+
+      {showNamePrompt && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
+            <h3 className="text-lg font-black text-gray-900 mb-2">Who is this blueprint for?</h3>
+            <p className="text-sm text-gray-500 mb-4">This name will appear on the cover of your PDF report.</p>
+            <input
+              type="text"
+              value={blueprintName}
+              onChange={(e) => setBlueprintName(e.target.value)}
+              placeholder="Enter name (e.g. Himanshu)"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              onKeyDown={(e) => { if (e.key === 'Enter') { setShowNamePrompt(false); handleDownloadBlueprint(blueprintName.trim() || undefined); } }}
+              autoFocus
+            />
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowNamePrompt(false)}
+                className="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => { setShowNamePrompt(false); handleDownloadBlueprint(blueprintName.trim() || undefined); }}
+                className="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-500"
+              >
+                Generate PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showPaywallModal && longevityResult && (
         <PaywallModal
