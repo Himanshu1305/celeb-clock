@@ -279,16 +279,6 @@ export const EnhancedLifeExpectancyReport = ({
           </div>
         )}
 
-        {isPremium && (
-          <div className="screen-only flex items-center justify-center gap-2">
-            <Button size="sm" variant="outline" className="gap-2" onClick={() => onDownloadBlueprint?.()}>
-              <Download className="w-3.5 h-3.5" /> Export PDF
-            </Button>
-            <Button size="sm" variant="outline" className="gap-2" onClick={copyShare}>
-              {copied ? '✅ Copied!' : <><Copy className="w-3.5 h-3.5" /> Copy share text</>}
-            </Button>
-          </div>
-        )}
       </div>
 
       {/* ── Tabs ── */}
@@ -409,6 +399,31 @@ export const EnhancedLifeExpectancyReport = ({
               </div>
             </div>
           )}
+
+          {/* Export buttons — after Factor Impact Analysis */}
+          <div className="mt-6 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-5 border border-indigo-200 screen-only">
+            <h3 className="text-base font-bold text-gray-800 mb-1">📄 Save Your Blueprint</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Download your complete 8-page personal longevity report with all sections, analysis, and your 90-day plan.
+            </p>
+            <div className="flex gap-3 flex-wrap">
+              <button
+                onClick={() => onDownloadBlueprint?.()}
+                className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-xl transition-colors text-sm"
+              >
+                📄 Download Blueprint PDF
+              </button>
+              <button
+                onClick={copyShare}
+                className="flex-1 bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-700 font-bold py-3 px-4 rounded-xl transition-colors text-sm"
+              >
+                {copied ? '✅ Copied!' : '🔗 Copy Share Link'}
+              </button>
+            </div>
+            <p className="text-xs text-gray-400 mt-2 text-center">
+              💡 In print dialog: set Headers &amp; Footers to OFF for a clean PDF without URLs
+            </p>
+          </div>
 
           <div className="bg-primary/5 rounded-xl border border-primary/20 p-4 space-y-2">
             <p className="text-xs font-bold text-primary">📖 Scientific Context</p>

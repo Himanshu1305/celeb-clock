@@ -6,7 +6,6 @@ import { Footer } from '@/components/Footer';
 import { LifeExpectancyCalculator } from '@/components/LifeExpectancyCalculator';
 import { WhatIfSimulator } from '@/components/WhatIfSimulator';
 import { EnhancedLifeExpectancyReport } from '@/components/EnhancedLifeExpectancyReport';
-import { HealthGuideSection } from '@/components/HealthGuideSection';
 import { WorldLongevityRecords } from '@/components/WorldLongevityRecords';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -1219,6 +1218,107 @@ const LifeExpectancy = () => {
           </section>
         )}
 
+        {/* ── 90-Day Action Plan ── */}
+        {(phase === 'result' || phase === 'report') && longevityResult && (
+          <section className="max-w-4xl mx-auto mb-10">
+            <div className="rounded-2xl border border-green-200 bg-green-50 p-6">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl">📅</span>
+                <div>
+                  <h2 className="text-lg font-black text-gray-900">Your Personalised 90-Day Plan</h2>
+                  <p className="text-sm text-gray-500">Based on your quiz answers and top opportunities — not a generic plan</p>
+                </div>
+              </div>
+
+              {(() => {
+                const sortedFactors = [...(longevityResult.factorBreakdown || [])]
+                  .filter(f => f.potentialGain > 0)
+                  .sort((a, b) => b.potentialGain - a.potentialGain);
+                const topOpp = sortedFactors[0];
+                const top3Gain = sortedFactors.slice(0, 3).reduce((sum, f) => sum + f.potentialGain, 0);
+                const quiz = longevityResult.quizSnapshot;
+                const topFactor = (topOpp?.factor || '').toLowerCase();
+                const exerciseLabels: Record<string, string> = { seldom: 'Sedentary', light: 'Lightly active', moderate: 'Moderately active', heavy: 'Highly active', '': 'Not specified' };
+                const sleepLabels: Record<string, string> = { under6: 'under 6 hrs', '6to7': '6–7 hrs', '7to9': '7–9 hrs', over9: '9+ hrs', '': 'not specified' };
+
+                const week12Action = (() => {
+                  if (topFactor.includes('exercise') || topFactor.includes('physical'))
+                    return `Start with 20-minute daily walks — your exercise level (${exerciseLabels[quiz?.exercise || '']}) shows this is your highest-impact change. WHO 2022: each 15 min/day adds ~3 years.`;
+                  if (topFactor.includes('blood pressure') || topFactor.includes('bp'))
+                    return 'Schedule a blood pressure review with your doctor this week. Stage 2 hypertension is your highest-impact health factor — medication or lifestyle changes can recover significant years.';
+                  if (topFactor.includes('smoking') || topFactor.includes('tobacco'))
+                    return 'Set a quit date and speak to your doctor about cessation aids. Quitting before 40 reduces smoking-related death risk by 90%.';
+                  if (topFactor.includes('genetic') || topFactor.includes('family'))
+                    return 'Schedule a comprehensive family history health assessment. Early screening for conditions in your family history is the highest-ROI intervention.';
+                  if (topFactor.includes('bmi') || topFactor.includes('weight'))
+                    return 'Begin daily 30-minute walks — the most effective first step for sustainable weight management AND longevity.';
+                  return 'Begin daily 30-minute walks. WHO 2022: each additional 15 min/day of moderate exercise adds approximately 3 years.';
+                })();
+
+                const week34Action = (quiz?.sleepDuration === 'under6' || quiz?.sleepDuration === '6to7')
+                  ? `Set a consistent 7–8 hour sleep target. Your current sleep (${sleepLabels[quiz?.sleepDuration || '']}) is affecting your forecast. A wind-down routine — no screens 30 min before bed — is the most effective intervention.`
+                  : 'Add a consistent 7–8 hour sleep schedule. Short sleep under 6 hours is associated with 12% higher all-cause mortality (Liu et al., 2021).';
+
+                const month2Action = (quiz?.stress || 0) >= 6
+                  ? `Your stress level (${quiz?.stress}/10) is contributing to epigenetic ageing. Begin 10 minutes daily mindfulness — even 8 weeks shows measurable changes in stress biomarkers.`
+                  : 'Add 10 minutes daily mindfulness or breathing. Directly reduces cortisol-driven epigenetic ageing. Start with a free app like Headspace or simply 10 minutes of deep breathing.';
+
+                const month3Action = ((quiz as any)?.heartDisease || (quiz as any)?.diabetes || (quiz as any)?.hypertension || (quiz as any)?.heartDiseaseFamily || (quiz as any)?.diabetesFamily)
+                  ? 'Schedule a comprehensive preventive health check: blood pressure, HbA1c, lipid panel, and cardiovascular risk assessment. Controlled conditions have dramatically less longevity impact than uncontrolled ones. Retake BornClock quiz to measure your progress.'
+                  : 'Schedule a preventive health check: blood pressure, blood glucose, BMI review. Early detection is the highest-ROI longevity intervention. Retake this BornClock quiz to measure your progress.';
+
+                return (
+                  <>
+                    {topOpp && (
+                      <div className="bg-white rounded-xl p-4 border border-green-200 mb-4">
+                        <p className="text-sm text-gray-700 leading-relaxed">
+                          Your <strong>#1 opportunity</strong> is{' '}
+                          <strong className="text-indigo-600">
+                            {topOpp.factor} (+{topOpp.potentialGain?.toFixed(1)} years potential)
+                          </strong>.{' '}
+                          Addressing your top 3 opportunities could add up to{' '}
+                          <strong className="text-green-600">+{top3Gain.toFixed(1)} years</strong> to your forecast.
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="space-y-3">
+                      {[
+                        { period: 'Week 1–2', action: week12Action, color: 'bg-indigo-600' },
+                        { period: 'Week 3–4', action: week34Action, color: 'bg-indigo-600' },
+                        { period: 'Month 2',  action: month2Action, color: 'bg-green-600' },
+                        { period: 'Month 3',  action: month3Action, color: 'bg-green-600' },
+                      ].map(({ period, action, color }) => (
+                        <div key={period} className="flex gap-3 items-start">
+                          <div className={`${color} text-white rounded-lg px-3 py-1.5 text-xs font-bold whitespace-nowrap flex-shrink-0 mt-0.5`}>
+                            {period}
+                          </div>
+                          <p className="text-sm text-gray-700 leading-relaxed">{action}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-3 gap-3">
+                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
+                        <p className="text-xs text-gray-400 mb-1">Current Forecast</p>
+                        <p className="text-xl font-black text-indigo-600">{longevityResult.totalForecast?.toFixed(1)} yrs</p>
+                      </div>
+                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
+                        <p className="text-xs text-gray-400 mb-1">Potential Gain</p>
+                        <p className="text-xl font-black text-green-600">+{top3Gain.toFixed(1)} yrs</p>
+                      </div>
+                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
+                        <p className="text-xs text-gray-400 mb-1">Retake In</p>
+                        <p className="text-xl font-black text-purple-600">90 days</p>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+          </section>
+        )}
+
         {/* ── Phase 3: What-If Simulator (auto-appears after result) ── */}
         {(phase === 'result' || phase === 'report') && longevityResult && (
           <section className="max-w-6xl mx-auto mb-10" ref={simulatorRef} data-sim="true">
@@ -1352,16 +1452,6 @@ const LifeExpectancy = () => {
           </section>
         )}
 
-        {/* Health Guide — only shown after quiz complete */}
-        {longevityResult && (
-          <section className="max-w-5xl mx-auto mb-10 px-4">
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold text-foreground">🧬 Science-Backed Longevity Guide</h2>
-              <p className="text-sm text-muted-foreground mt-1">Evidence-based recommendations tailored to your results.</p>
-            </div>
-            <HealthGuideSection result={longevityResult} />
-          </section>
-        )}
 
         <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
         <RelatedTools currentSlug="life" />
