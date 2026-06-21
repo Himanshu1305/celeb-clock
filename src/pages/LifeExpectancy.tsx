@@ -29,7 +29,7 @@ import {
   HealthQuizData, Pillar1Data, Pillar2Data,
   calculateLongevityScore,
 } from '@/services/LongevityCalculationService';
-import { useReactToPrint } from 'react-to-print';
+
 import { CulturalHorizonTeaser } from '@/components/CulturalHorizonTeaser';
 import { LongevityHeroCard } from '@/components/LongevityHeroCard';
 import { LongevityCountdown } from '@/components/LongevityCountdown';
@@ -160,24 +160,206 @@ const LifeExpectancy = () => {
   const resultRef    = useRef<HTMLDivElement>(null);
   const simulatorRef = useRef<HTMLDivElement>(null);
   const reportRef    = useRef<HTMLDivElement>(null);
-  const blueprintRef = useRef<HTMLDivElement>(null);
+  const handleDownloadBlueprint = () => {
+    if (!longevityResult) {
+      alert('Please complete the quiz first to generate your blueprint.');
+      return;
+    }
 
-  const handleDownloadBlueprint = useReactToPrint({
-    contentRef: blueprintRef,
-    documentTitle: 'Longevity Blueprint — BornClock',
-    pageStyle: `
-      @page {
-        margin: 0;
-        size: A4;
+    const name = prefilledFor
+      || longevityResult?.quizSnapshot?.name
+      || profile?.full_name
+      || 'You';
+
+    const forecast = Number(longevityResult.totalForecast || 0).toFixed(1);
+    const currentAge = Number(longevityResult.currentAge || 0);
+    const remaining = Number(longevityResult.yearsRemaining || 0).toFixed(1);
+    const score = calculateLongevityScore(longevityResult);
+    const baseline = Number(longevityResult.baselineLifeExpectancy || 71).toFixed(1);
+    const healthAdj = Number(longevityResult.healthAdjustment || 0).toFixed(1);
+    const geneticAdj = Number(longevityResult.geneticAdjustment || 0).toFixed(1);
+    const epiBonus = Number(longevityResult.epigeneticAdjustment || 0).toFixed(1);
+    const commBonus = Number(longevityResult.communityBonus || 0).toFixed(1);
+    const sexLabel = longevityResult.quizSnapshot?.gender || 'male';
+    const countryLabel = longevityResult.quizSnapshot?.country || 'India';
+
+    const topOpportunities = [...(longevityResult.factorBreakdown || [])]
+      .filter(f => f.potentialGain > 0)
+      .sort((a, b) => b.potentialGain - a.potentialGain)
+      .slice(0, 3);
+
+    const generatedDate = new Date().toLocaleDateString('en-IN', {
+      day: 'numeric', month: 'long', year: 'numeric',
+    });
+
+    const oppsHTML = topOpportunities.length > 0
+      ? topOpportunities.map(f => `
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:12px;background:white;border-radius:6px;border:1px solid #e5e7eb;margin-bottom:8px;">
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:600;color:#1f2937;margin-bottom:2px;">
+                ${f.emoji || '📊'} ${f.factor || 'Factor'}
+              </div>
+              <div style="font-size:11px;color:#6b7280;margin-bottom:2px;">
+                Currently: ${f.currentValueLabel || '—'} → Target: ${f.optimalValueLabel || '—'}
+              </div>
+              <div style="font-size:11px;color:#9ca3af;">${f.source || ''}</div>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:#059669;margin-left:16px;white-space:nowrap;">
+              +${Number(f.potentialGain || 0).toFixed(1)} yrs
+            </div>
+          </div>
+        `).join('')
+      : '<p style="font-size:12px;color:#6b7280;margin:0;">No improvement opportunities calculated.</p>';
+
+    const healthAdjColor = Number(longevityResult.healthAdjustment || 0) >= 0 ? '#059669' : '#dc2626';
+    const geneticAdjColor = Number(longevityResult.geneticAdjustment || 0) >= 0 ? '#059669' : '#dc2626';
+    const healthAdjSign = Number(longevityResult.healthAdjustment || 0) >= 0 ? '+' : '';
+    const geneticAdjSign = Number(longevityResult.geneticAdjustment || 0) >= 0 ? '+' : '';
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Longevity Blueprint — BornClock</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #1f2937;
+      background: white;
+      padding: 40px;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    @page { margin: 1.2cm; size: A4; }
+    @media print { body { padding: 0; } }
+    .cover { text-align: center; padding-bottom: 28px; margin-bottom: 28px; border-bottom: 2px solid #e5e7eb; }
+    .section { margin-bottom: 20px; padding: 18px; border-radius: 8px; page-break-inside: avoid; break-inside: avoid; }
+    .section-gray { background: #f9fafb; border: 1px solid #e5e7eb; }
+    .section-green { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .section-blue { background: #eff6ff; border: 1px solid #bfdbfe; }
+    h2 { font-size: 15px; font-weight: 700; color: #374151; margin: 0 0 14px 0; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
+    .section-green h2 { border-bottom-color: #bbf7d0; }
+    .section-blue h2 { border-bottom-color: #bfdbfe; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+    .stat { text-align: center; background: white; border-radius: 6px; padding: 10px; border: 1px solid #e5e7eb; }
+    .stat-label { font-size: 10px; color: #9ca3af; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-value { font-size: 22px; font-weight: 900; }
+    table { width: 100%; border-collapse: collapse; }
+    tr { border-bottom: 1px solid #f3f4f6; }
+    tr.total-row { border-top: 2px solid #e5e7eb; border-bottom: none; }
+    td { padding: 7px 0; font-size: 12px; }
+    td.val { text-align: right; font-weight: 700; }
+    td.val-total { text-align: right; font-weight: 900; font-size: 15px; color: #4f46e5; }
+    .action { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+    .badge { background: #059669; color: white; border-radius: 4px; padding: 3px 8px; font-size: 10px; font-weight: 700; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+    .action-text { font-size: 12px; color: #374151; line-height: 1.6; }
+    .sci { margin-bottom: 9px; padding-bottom: 9px; border-bottom: 1px solid #dbeafe; }
+    .sci:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .sci-source { font-size: 12px; font-weight: 700; color: #1e40af; margin-bottom: 2px; }
+    .sci-text { font-size: 12px; color: #374151; line-height: 1.5; }
+    .footer { text-align: center; border-top: 1px solid #e5e7eb; padding-top: 18px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <div style="font-size:30px;font-weight:900;color:#1f2937;margin-bottom:4px;">BornClock</div>
+    <div style="font-size:15px;color:#6366f1;font-style:italic;margin-bottom:18px;">Know your time. Live it well.</div>
+    <div style="font-size:22px;font-weight:700;color:#1f2937;margin-bottom:6px;">Personal Longevity Blueprint</div>
+    <div style="font-size:17px;color:#4f46e5;font-weight:600;margin-bottom:6px;">Prepared for ${name}</div>
+    <div style="font-size:12px;color:#9ca3af;margin-bottom:3px;">Generated ${generatedDate} · bornclock.com</div>
+    <div style="font-size:11px;color:#9ca3af;font-style:italic;">Statistical estimate only · Not medical advice</div>
+  </div>
+  <div class="section section-gray">
+    <h2>1 · Forecast Summary</h2>
+    <div class="grid-4">
+      <div class="stat"><div class="stat-label">Life Expectancy</div><div class="stat-value" style="color:#4f46e5">${forecast}<span style="font-size:12px;font-weight:400;color:#9ca3af"> yrs</span></div></div>
+      <div class="stat"><div class="stat-label">Current Age</div><div class="stat-value" style="color:#374151">${currentAge}<span style="font-size:12px;font-weight:400;color:#9ca3af"> yrs</span></div></div>
+      <div class="stat"><div class="stat-label">Years Remaining</div><div class="stat-value" style="color:#059669">${remaining}<span style="font-size:12px;font-weight:400;color:#9ca3af"> yrs</span></div></div>
+      <div class="stat"><div class="stat-label">Longevity Score</div><div class="stat-value" style="color:#f59e0b">${score}<span style="font-size:12px;font-weight:400;color:#9ca3af">/100</span></div></div>
+    </div>
+  </div>
+  <div class="section section-gray">
+    <h2>2 · How We Built Your Number</h2>
+    <table>
+      <tr><td style="color:#4b5563;">WHO Baseline (${sexLabel}, ${countryLabel})</td><td class="val" style="color:#374151;">${baseline} yrs</td></tr>
+      <tr><td style="color:#4b5563;">Health &amp; Lifestyle Adjustment</td><td class="val" style="color:${healthAdjColor};">${healthAdjSign}${healthAdj} yrs</td></tr>
+      <tr><td style="color:#4b5563;">Genetic Adjustment (${longevityResult.geneticVitalityScore || 'Average'})</td><td class="val" style="color:${geneticAdjColor};">${geneticAdjSign}${geneticAdj} yrs</td></tr>
+      <tr><td style="color:#4b5563;">Epigenetic Habits Bonus</td><td class="val" style="color:#059669;">+${epiBonus} yrs</td></tr>
+      <tr><td style="color:#4b5563;">Community / Social Bonus</td><td class="val" style="color:#059669;">+${commBonus} yrs</td></tr>
+      <tr class="total-row"><td style="color:#1f2937;font-weight:700;padding-top:10px;">Total Forecast</td><td class="val-total" style="padding-top:10px;">${forecast} yrs</td></tr>
+    </table>
+  </div>
+  <div class="section section-gray">
+    <h2>3 · Top Improvement Opportunities</h2>
+    <p style="font-size:12px;color:#6b7280;margin-bottom:12px;">Lifestyle factors with the highest potential to add years to your forecast:</p>
+    ${oppsHTML}
+  </div>
+  <div class="section section-green">
+    <h2>4 · 90-Day Action Plan</h2>
+    <div class="action"><div class="badge">Week 1–2</div><div class="action-text">Begin daily 30-minute walks. WHO 2022: each additional 15 min/day of moderate exercise adds approximately 3 years of life expectancy.</div></div>
+    <div class="action"><div class="badge">Week 3–4</div><div class="action-text">Set a consistent 7–8 hour sleep schedule. Short sleep under 6 hours is associated with 12% higher all-cause mortality (Liu et al., 2021).</div></div>
+    <div class="action"><div class="badge">Month 2</div><div class="action-text">Add 10 minutes daily mindfulness or breathing. Reduces cortisol-driven epigenetic ageing directly.</div></div>
+    <div class="action" style="margin-bottom:0;"><div class="badge">Month 3</div><div class="action-text">Schedule preventive health check: blood pressure, blood glucose, BMI review. Early detection is the highest-ROI longevity intervention available.</div></div>
+  </div>
+  <div class="section section-blue">
+    <h2>5 · Scientific Context</h2>
+    <div class="sci"><div class="sci-source">WHO Life Tables (2023)</div><div class="sci-text">Country and gender specific life expectancy baselines used as the foundation of your forecast.</div></div>
+    <div class="sci"><div class="sci-source">Physical Activity Research (WHO, 2022)</div><div class="sci-text">150 to 300 min per week of moderate exercise reduces all-cause mortality by 31%. Each 15 min/day adds approximately 3 years.</div></div>
+    <div class="sci"><div class="sci-source">Harvard Study of Adult Development (85 years)</div><div class="sci-text">Quality social relationships are the strongest single predictor of healthy ageing — stronger than cholesterol, income, or IQ.</div></div>
+    <div class="sci"><div class="sci-source">Karolinska Institute Twin Study (2018)</div><div class="sci-text">Only 25 to 30 percent of longevity is genetic. 70 to 75 percent is determined by lifestyle and environment.</div></div>
+    <div class="sci"><div class="sci-source">Epigenetic Research (NIH / Horvath, 2013)</div><div class="sci-text">Diet, exercise, and stress management can reverse biological ageing markers by 3 to 5 years.</div></div>
+  </div>
+  <div class="footer">
+    <div style="font-size:17px;font-weight:900;color:#1f2937;margin-bottom:3px;">BornClock</div>
+    <div style="font-size:13px;color:#6366f1;font-style:italic;margin-bottom:6px;">Know your time. Live it well.</div>
+    <div style="font-size:11px;color:#9ca3af;margin-bottom:5px;">bornclock.com · Evidence-based longevity analysis · WHO, NIH, Harvard Medical School data</div>
+    <div style="font-size:10px;color:#9ca3af;font-style:italic;line-height:1.5;">Statistical estimate for informational purposes only. Not a medical diagnosis or substitute for professional medical advice. Always consult a qualified healthcare professional. © ${new Date().getFullYear()} BornClock</div>
+  </div>
+</body>
+</html>`;
+
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;border:none;pointer-events:none;';
+    document.body.appendChild(iframe);
+
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (!doc) {
+        console.error('BornClock: Could not access iframe document');
+        document.body.removeChild(iframe);
+        return;
       }
-      body {
-        margin: 1.5cm;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      }
-    `,
-  });
+
+      doc.open();
+      doc.write(html);
+      doc.close();
+
+      const printAndCleanup = () => {
+        try {
+          iframe.contentWindow?.print();
+        } catch (e) {
+          console.error('BornClock: Print failed:', e);
+        }
+        setTimeout(() => {
+          try {
+            if (document.body.contains(iframe)) document.body.removeChild(iframe);
+          } catch {}
+        }, 3000);
+      };
+
+      iframe.onload = () => setTimeout(printAndCleanup, 300);
+      setTimeout(() => {
+        if (document.body.contains(iframe)) printAndCleanup();
+      }, 1500);
+
+    } catch (e) {
+      console.error('BornClock: Blueprint error:', e);
+      try { document.body.removeChild(iframe); } catch {}
+    }
+  };
 
   const resetAll = () => {
     setLongevityResult(null);
@@ -613,7 +795,7 @@ const LifeExpectancy = () => {
               result={longevityResult}
               optimizedForecast={optimizedForecast}
               userName={displayName}
-              onExportPDF={handleDownloadBlueprint}
+              onDownloadBlueprint={handleDownloadBlueprint}
             />
             <ReportErrorBoundary onReset={() => setPhase('result')}>
               <EnhancedLifeExpectancyReport
@@ -625,7 +807,7 @@ const LifeExpectancy = () => {
                 optimizedForecast={optimizedForecast ?? undefined}
                 userSelectedHabits={userSelectedHabits}
                 simulatorHabitFrequencies={userHabitFrequencies}
-                onExportPDF={handleDownloadBlueprint}
+                onDownloadBlueprint={handleDownloadBlueprint}
               />
             </ReportErrorBoundary>
           </section>
@@ -692,156 +874,6 @@ const LifeExpectancy = () => {
           </p>
         </div>
       </div>
-
-      {/* ── Off-screen blueprint for react-to-print — always in DOM when result exists ── */}
-      {longevityResult && (() => {
-        const r = longevityResult;
-        const bpName = displayName || 'You';
-        const bpScore = calculateLongevityScore(r);
-        const topOpportunities = [...r.factorBreakdown]
-          .filter(f => f.potentialGain > 0)
-          .sort((a, b) => b.potentialGain - a.potentialGain)
-          .slice(0, 3);
-
-        return (
-          <div
-            ref={blueprintRef}
-            className="blueprint-print-source"
-          >
-            {/* COVER */}
-            <div style={{ textAlign: 'center', paddingBottom: '32px', marginBottom: '32px', borderBottom: '2px solid #e5e7eb' }}>
-              <div style={{ fontSize: '32px', fontWeight: 900, color: '#1f2937', marginBottom: '4px' }}>BornClock</div>
-              <div style={{ fontSize: '16px', color: '#6366f1', fontStyle: 'italic', marginBottom: '20px' }}>Know your time. Live it well.</div>
-              <div style={{ fontSize: '24px', fontWeight: 700, color: '#1f2937', marginBottom: '8px' }}>Personal Longevity Blueprint</div>
-              <div style={{ fontSize: '18px', color: '#4f46e5', fontWeight: 600, marginBottom: '8px' }}>Prepared for {bpName}</div>
-              <div style={{ fontSize: '13px', color: '#9ca3af' }}>
-                Generated {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })} · bornclock.com
-              </div>
-              <div style={{ fontSize: '12px', color: '#9ca3af', marginTop: '6px', fontStyle: 'italic' }}>
-                Statistical estimate for informational purposes only · Not medical advice
-              </div>
-            </div>
-
-            {/* SECTION 1: FORECAST SUMMARY */}
-            <div style={{ marginBottom: '24px', padding: '20px', background: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb', pageBreakInside: 'avoid' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#374151', margin: '0 0 16px 0', paddingBottom: '10px', borderBottom: '1px solid #e5e7eb' }}>
-                1 · Forecast Summary
-              </h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '12px' }}>
-                {([
-                  { label: 'Life Expectancy', value: `${r.totalForecast} yrs`, color: '#4f46e5' },
-                  { label: 'Current Age', value: `${r.currentAge} yrs`, color: '#374151' },
-                  { label: 'Years Remaining', value: `${r.yearsRemaining} yrs`, color: '#059669' },
-                  { label: 'Longevity Score', value: `${bpScore}/100`, color: '#f59e0b' },
-                ] as const).map(({ label, value, color }) => (
-                  <div key={label} style={{ textAlign: 'center', background: 'white', borderRadius: '6px', padding: '12px', border: '1px solid #e5e7eb' }}>
-                    <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '6px' }}>{label}</div>
-                    <div style={{ fontSize: '22px', fontWeight: 900, color }}>{value}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* SECTION 2: HOW WE BUILT YOUR NUMBER */}
-            <div style={{ marginBottom: '24px', padding: '20px', background: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb', pageBreakInside: 'avoid' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#374151', margin: '0 0 16px 0', paddingBottom: '10px', borderBottom: '1px solid #e5e7eb' }}>
-                2 · How We Built Your Number
-              </h2>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <tbody>
-                  {([
-                    { label: `WHO Baseline (${r.quizSnapshot.gender || 'male'}, ${r.quizSnapshot.country || 'Global'})`, value: r.baselineLifeExpectancy, prefix: false, color: '#374151', bold: false },
-                    { label: 'Health & Lifestyle Adjustment', value: r.healthAdjustment, prefix: true, color: r.healthAdjustment >= 0 ? '#059669' : '#dc2626', bold: false },
-                    { label: `Genetic Adjustment (${r.geneticVitalityScore})`, value: r.geneticAdjustment, prefix: true, color: r.geneticAdjustment >= 0 ? '#059669' : '#dc2626', bold: false },
-                    { label: 'Epigenetic Habits Bonus', value: r.epigeneticAdjustment, prefix: true, color: '#059669', bold: false },
-                    { label: 'Community / Social Bonus', value: r.communityBonus, prefix: true, color: '#059669', bold: false },
-                    { label: 'Total Forecast', value: r.totalForecast, prefix: false, color: '#4f46e5', bold: true },
-                  ] as const).map(({ label, value, prefix, color, bold }, i) => (
-                    <tr key={label} style={{ borderBottom: i < 5 ? '1px solid #f3f4f6' : 'none', borderTop: bold ? '2px solid #e5e7eb' : 'none' }}>
-                      <td style={{ padding: '8px 0', fontSize: '13px', color: bold ? '#1f2937' : '#4b5563', fontWeight: bold ? 700 : 400 }}>{label}</td>
-                      <td style={{ padding: '8px 0', fontSize: bold ? '16px' : '13px', fontWeight: 700, color, textAlign: 'right' }}>
-                        {prefix && value >= 0 ? '+' : ''}{value} yrs
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* SECTION 3: TOP IMPROVEMENT OPPORTUNITIES */}
-            <div style={{ marginBottom: '24px', padding: '20px', background: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb', pageBreakInside: 'avoid' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#374151', margin: '0 0 12px 0', paddingBottom: '10px', borderBottom: '1px solid #e5e7eb' }}>
-                3 · Top Improvement Opportunities
-              </h2>
-              {topOpportunities.map((f) => (
-                <div key={f.factor} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '12px', background: 'white', borderRadius: '6px', border: '1px solid #e5e7eb', marginBottom: '8px' }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '13px', fontWeight: 600, color: '#1f2937', marginBottom: '2px' }}>{f.emoji} {f.factor}</div>
-                    <div style={{ fontSize: '11px', color: '#6b7280' }}>
-                      Currently: {f.currentValueLabel} · Target: {f.optimalValueLabel}
-                    </div>
-                    <div style={{ fontSize: '11px', color: '#9ca3af', fontStyle: 'italic', marginTop: '2px' }}>{f.source}</div>
-                  </div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#059669', marginLeft: '16px', whiteSpace: 'nowrap' }}>
-                    +{f.potentialGain} yrs
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* SECTION 4: 90-DAY ACTION PLAN */}
-            <div style={{ marginBottom: '24px', padding: '20px', background: '#f0fdf4', borderRadius: '8px', border: '1px solid #bbf7d0', pageBreakInside: 'avoid' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#374151', margin: '0 0 16px 0', paddingBottom: '10px', borderBottom: '1px solid #bbf7d0' }}>
-                4 · 90-Day Action Plan
-              </h2>
-              {([
-                { period: 'Week 1–2', action: 'Begin daily 30-minute walks. Research: each additional 15 min/day of moderate exercise adds approximately 3 years of life expectancy (WHO, 2022).' },
-                { period: 'Week 3–4', action: 'Set a consistent 7–8 hour sleep schedule. Short sleep (under 6 hrs) is associated with 12% higher all-cause mortality (Liu et al., Sleep Health, 2021).' },
-                { period: 'Month 2', action: 'Add 10 minutes daily mindfulness or breathing practice. Stress management directly reduces cortisol-driven epigenetic aging.' },
-                { period: 'Month 3', action: 'Schedule a preventive health check: blood pressure, blood glucose, and BMI review. Early detection is the highest-ROI health intervention available.' },
-              ] as const).map(({ period, action }) => (
-                <div key={period} style={{ display: 'flex', gap: '12px', marginBottom: '12px', alignItems: 'flex-start' }}>
-                  <div style={{ background: '#059669', color: 'white', borderRadius: '4px', padding: '4px 10px', fontSize: '11px', fontWeight: 700, whiteSpace: 'nowrap', flexShrink: 0 }}>
-                    {period}
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#374151', lineHeight: 1.6 }}>{action}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* SECTION 5: SCIENTIFIC CONTEXT */}
-            <div style={{ marginBottom: '24px', padding: '20px', background: '#eff6ff', borderRadius: '8px', border: '1px solid #bfdbfe', pageBreakInside: 'avoid' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#374151', margin: '0 0 16px 0', paddingBottom: '10px', borderBottom: '1px solid #bfdbfe' }}>
-                5 · Scientific Context
-              </h2>
-              {([
-                { source: 'WHO Life Tables (2023)', text: 'Country- and gender-specific life expectancy baselines used as the foundation of your forecast.' },
-                { source: 'Physical Activity (WHO, 2022)', text: '150–300 min/week of moderate exercise reduces all-cause mortality by 31%. Each additional 15 min/day adds ~3 years.' },
-                { source: 'Harvard Study of Adult Development (85 yrs)', text: 'Quality social relationships are the strongest single predictor of healthy ageing — stronger than cholesterol, income, or IQ.' },
-                { source: 'Genetic Heritability (Karolinska Institute, 2018)', text: 'Family history contributes only 25–30% of longevity variance. 70–75% is determined by lifestyle and environment.' },
-                { source: 'Epigenetic Research (NIH, Horvath 2013)', text: 'Lifestyle behaviours directly alter DNA methylation patterns. Diet, exercise, and stress management can reverse biological ageing by 3–5 years.' },
-                { source: 'Blue Zones Research (Buettner, 2023)', text: 'The Power 9 lifestyle principles shared by centenarian populations are associated with 10+ additional healthy years versus global average.' },
-              ] as const).map(({ source, text }) => (
-                <div key={source} style={{ marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px solid #dbeafe' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#1e40af', marginBottom: '2px' }}>{source}</div>
-                  <div style={{ fontSize: '12px', color: '#374151', lineHeight: 1.5 }}>{text}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* FOOTER */}
-            <div style={{ textAlign: 'center', borderTop: '1px solid #e5e7eb', paddingTop: '20px' }}>
-              <div style={{ fontSize: '18px', fontWeight: 900, color: '#1f2937', marginBottom: '4px' }}>BornClock</div>
-              <div style={{ fontSize: '13px', color: '#6366f1', fontStyle: 'italic', marginBottom: '8px' }}>Know your time. Live it well.</div>
-              <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '8px' }}>bornclock.com · Evidence-based longevity analysis · WHO, NIH, Harvard Medical School data</div>
-              <div style={{ fontSize: '10px', color: '#9ca3af', fontStyle: 'italic', lineHeight: 1.5 }}>
-                This report is a statistical estimate for informational and motivational purposes only. Not a medical diagnosis or substitute for professional medical advice.
-                Always consult a qualified healthcare professional. © {new Date().getFullYear()} BornClock
-              </div>
-            </div>
-          </div>
-        );
-      })()}
 
       <Footer />
 

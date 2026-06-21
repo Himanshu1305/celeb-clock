@@ -8,10 +8,10 @@ interface LongevityHeroCardProps {
   result: LongevityResult;
   optimizedForecast: number | null;
   userName: string;
-  onExportPDF?: () => void;
+  onDownloadBlueprint?: () => void;
 }
 
-export function LongevityHeroCard({ result, optimizedForecast, userName, onExportPDF }: LongevityHeroCardProps) {
+export function LongevityHeroCard({ result, optimizedForecast, userName, onDownloadBlueprint }: LongevityHeroCardProps) {
   const [copied, setCopied] = useState(false);
 
   const displayedOptimized = optimizedForecast ?? result.totalForecast;
@@ -96,7 +96,7 @@ export function LongevityHeroCard({ result, optimizedForecast, userName, onExpor
           size="sm"
           variant="outline"
           className="gap-2 bg-white/80 dark:bg-background/80"
-          onClick={() => onExportPDF?.()}
+          onClick={() => onDownloadBlueprint?.()}
         >
           <Download className="w-3.5 h-3.5" />
           Export PDF

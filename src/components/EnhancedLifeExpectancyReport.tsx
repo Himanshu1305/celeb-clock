@@ -23,7 +23,7 @@ interface Props {
   optimizedForecast?: number;
   userSelectedHabits?: string[];
   simulatorHabitFrequencies?: Record<string, string>;
-  onExportPDF?: () => void;
+  onDownloadBlueprint?: () => void;
 }
 
 
@@ -77,7 +77,7 @@ export const EnhancedLifeExpectancyReport = ({
   result, userName, birthDate, isPremium, onUpgradeClick,
   optimizedForecast,
   userSelectedHabits, simulatorHabitFrequencies,
-  onExportPDF,
+  onDownloadBlueprint,
 }: Props) => {
   const [copied, setCopied] = useState(false);
 
@@ -281,7 +281,7 @@ export const EnhancedLifeExpectancyReport = ({
 
         {isPremium && (
           <div className="screen-only flex items-center justify-center gap-2">
-            <Button size="sm" variant="outline" className="gap-2" onClick={() => onExportPDF?.()}>
+            <Button size="sm" variant="outline" className="gap-2" onClick={() => onDownloadBlueprint?.()}>
               <Download className="w-3.5 h-3.5" /> Export PDF
             </Button>
             <Button size="sm" variant="outline" className="gap-2" onClick={copyShare}>
