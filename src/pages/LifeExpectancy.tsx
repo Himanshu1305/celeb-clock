@@ -1517,6 +1517,7 @@ const LifeExpectancy = () => {
               currentAge={longevityResult.currentAge}
               userCountry={profile?.country ?? null}
               onGenerateReport={handleGenerateReport}
+              isPremium={isPremium}
             />
           </section>
         )}
@@ -1577,8 +1578,12 @@ const LifeExpectancy = () => {
             .slice(0, 3)
             .reduce((sum, f) => sum + f.potentialGain, 0);
           const realisticGain = Math.min(top3GainRaw * 0.5, 8).toFixed(1);
+          const top1Factor = [...(longevityResult.factorBreakdown || [])]
+            .filter(f => f.potentialGain > 0)
+            .sort((a, b) => b.potentialGain - a.potentialGain)[0]?.factor || 'lifestyle improvement';
+
           return (
-            <section className="max-w-4xl mx-auto mb-10">
+            <section className="max-w-4xl mx-auto mb-10" data-testid="action-plan-section">
               <div className="mt-8 rounded-2xl border border-green-200 bg-green-50 p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-2xl">📅</span>
@@ -1586,60 +1591,128 @@ const LifeExpectancy = () => {
                     <h2 className="text-lg font-black text-gray-900">Your Personalised 90-Day Plan</h2>
                     <p className="text-sm text-gray-500">Based on your quiz answers — not a generic plan</p>
                   </div>
+                  {!isPremium && (
+                    <span className="ml-auto bg-amber-100 text-amber-800 text-xs font-bold px-2 py-1 rounded-full border border-amber-200">
+                      🔒 Premium
+                    </span>
+                  )}
                 </div>
+
+                {/* Top opportunity teaser — always visible */}
                 <div className="bg-white rounded-xl p-4 border border-green-200 mb-4">
                   <p className="text-sm text-gray-700 leading-relaxed">
                     Your <strong>#1 opportunity</strong> is{' '}
-                    <strong className="text-indigo-600">
-                      {[...(longevityResult.factorBreakdown || [])]
-                        .filter(f => f.potentialGain > 0)
-                        .sort((a, b) => b.potentialGain - a.potentialGain)[0]?.factor || 'lifestyle improvement'}
-                    </strong>.
+                    <strong className="text-indigo-600">{top1Factor}</strong>.
                     {' '}Addressing your top 3 factors could add up to{' '}
-                    <strong className="text-green-600">+{realisticGain} realistic years</strong> to your forecast.
+                    <strong
+                      className="text-green-600"
+                      style={!isPremium ? { filter: 'blur(5px)', userSelect: 'none' } : {}}
+                    >
+                      +{realisticGain} realistic years
+                    </strong>{' '}
+                    to your forecast.
+                    {!isPremium && (
+                      <span className="text-xs text-gray-400 ml-1">(unlock to see)</span>
+                    )}
                   </p>
                 </div>
-                <div className="space-y-4">
-                  {phases.map((planPhase, idx) => (
-                    <div key={idx} className="bg-white rounded-xl border border-green-100 overflow-hidden">
-                      <div className={`px-4 py-2.5 ${idx < 2 ? 'bg-indigo-600' : 'bg-green-600'}`}>
-                        <h4 className="text-sm font-bold text-white">
-                          {planPhase.period} — {planPhase.title}
-                        </h4>
-                      </div>
-                      <div className="p-4 space-y-2">
-                        {planPhase.items.map((item, i) => (
-                          <div key={i} className="flex gap-2.5 items-start">
-                            <div className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
-                              {i + 1}
-                            </div>
-                            <p className="text-sm text-gray-700 leading-relaxed">{item}</p>
+
+                {isPremium ? (
+                  /* ── PREMIUM: Full plan ── */
+                  <>
+                    <div className="space-y-4">
+                      {phases.map((planPhase, idx) => (
+                        <div key={idx} className="bg-white rounded-xl border border-green-100 overflow-hidden">
+                          <div className={`px-4 py-2.5 ${idx < 2 ? 'bg-indigo-600' : 'bg-green-600'}`}>
+                            <h4 className="text-sm font-bold text-white">
+                              {planPhase.period} — {planPhase.title}
+                            </h4>
                           </div>
-                        ))}
+                          <div className="p-4 space-y-2">
+                            {planPhase.items.map((item, i) => (
+                              <div key={i} className="flex gap-2.5 items-start">
+                                <div className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                                  {i + 1}
+                                </div>
+                                <p className="text-sm text-gray-700 leading-relaxed">{item}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 grid grid-cols-3 gap-3">
+                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
+                        <p className="text-xs text-gray-400 mb-1">Current Forecast</p>
+                        <p className="text-xl font-black text-indigo-600">{longevityResult.totalForecast?.toFixed(1)} yrs</p>
+                      </div>
+                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
+                        <p className="text-xs text-gray-400 mb-1">Realistic Gain</p>
+                        <p className="text-xl font-black text-green-600">+{realisticGain} yrs</p>
+                        <p className="text-xs text-gray-400">if top factors improved</p>
+                      </div>
+                      <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
+                        <p className="text-xs text-gray-400 mb-1">Retake In</p>
+                        <p className="text-xl font-black text-purple-600">90 days</p>
                       </div>
                     </div>
-                  ))}
-                </div>
-                <div className="mt-4 grid grid-cols-3 gap-3">
-                  <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
-                    <p className="text-xs text-gray-400 mb-1">Current Forecast</p>
-                    <p className="text-xl font-black text-indigo-600">{longevityResult.totalForecast?.toFixed(1)} yrs</p>
-                  </div>
-                  <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
-                    <p className="text-xs text-gray-400 mb-1">Realistic Gain</p>
-                    <p className="text-xl font-black text-green-600">+{realisticGain} yrs</p>
-                    <p className="text-xs text-gray-400">if top factors improved</p>
-                  </div>
-                  <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
-                    <p className="text-xs text-gray-400 mb-1">Retake In</p>
-                    <p className="text-xl font-black text-purple-600">90 days</p>
-                  </div>
-                </div>
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mt-4">
-                  <p className="text-xs text-amber-800 leading-relaxed">
-                    <strong>⚠️ Important:</strong> This plan is for informational and motivational purposes only, based on population-level research and your quiz responses. It is not a substitute for personalised medical advice. Consult a qualified healthcare professional before making significant changes to your diet, exercise, or medications.
-                  </p>
-                </div>
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mt-4">
+                      <p className="text-xs text-amber-800 leading-relaxed">
+                        <strong>⚠️ Important:</strong> This plan is for informational and motivational purposes only. It is not a substitute for personalised medical advice. Consult a qualified healthcare professional before making significant changes to your diet, exercise, or medications.
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  /* ── FREE: Phase headers only, content locked ── */
+                  <>
+                    <div className="space-y-3">
+                      {phases.map((planPhase, idx) => (
+                        <div key={idx} className="bg-white rounded-xl border border-green-100 overflow-hidden">
+                          {/* Phase header — always visible */}
+                          <div className={`px-4 py-2.5 ${idx < 2 ? 'bg-indigo-600' : 'bg-green-600'}`}>
+                            <h4 className="text-sm font-bold text-white">
+                              {planPhase.period} — {planPhase.title}
+                            </h4>
+                          </div>
+                          {/* Content — blurred and locked */}
+                          <div className="p-4 space-y-2 relative">
+                            <div className="space-y-2 blur-sm select-none pointer-events-none">
+                              {planPhase.items.slice(0, 2).map((item, i) => (
+                                <div key={i} className="flex gap-2.5 items-start">
+                                  <div className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    {i + 1}
+                                  </div>
+                                  <p className="text-sm text-gray-700 leading-relaxed">{item}</p>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="absolute inset-0 flex items-center justify-center bg-white/60 rounded-b-xl">
+                              <div className="flex items-center gap-1.5 text-xs text-gray-500 font-semibold">
+                                <span>🔒</span>
+                                <span>{planPhase.items.length} personalised actions — unlock to view</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Upgrade CTA */}
+                    <div className="mt-5 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-5 text-center text-white">
+                      <p className="text-base font-black mb-1">Unlock Your Full 90-Day Plan</p>
+                      <p className="text-xs opacity-80 mb-4">
+                        Get personalised weekly actions across all 4 phases — specific to your health profile, not a generic plan.
+                        Plus: AI Longevity Coach, Leaderboard, and Longevity Blueprint PDF.
+                      </p>
+                      <a
+                        href="/upgrade"
+                        className="inline-block bg-white text-indigo-700 font-black text-sm px-6 py-2.5 rounded-xl hover:bg-gray-100 transition-colors"
+                      >
+                        Upgrade to Premium →
+                      </a>
+                    </div>
+                  </>
+                )}
               </div>
             </section>
           );

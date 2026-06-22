@@ -13,6 +13,7 @@ interface Props {
   currentAge: number;
   userCountry?: string | null;
   onGenerateReport: () => void;
+  isPremium: boolean;
 }
 
 const COUNTRY_NAME_TO_CODE: Record<string, string> = {
@@ -149,6 +150,7 @@ export const CulturalHorizonTeaser = ({
   optimizedForecast,
   userCountry,
   onGenerateReport,
+  isPremium,
 }: Props) => {
   const showOptimized = optimizedForecast > currentForecast;
   const gainYears = Math.round((optimizedForecast - currentForecast) * 10) / 10;
@@ -213,7 +215,10 @@ export const CulturalHorizonTeaser = ({
             <div className="flex items-center gap-3">
               <div className="h-px flex-1 bg-primary/30" />
               <p className="text-xs font-bold text-primary uppercase tracking-wide shrink-0">
-                ✨ Your optimized potential — {optimizedForecast} years (+{gainYears} yrs)
+                ✨ Your optimized potential —{' '}
+                <span style={!isPremium ? { filter: 'blur(6px)', userSelect: 'none' } : {}}>
+                  {optimizedForecast} years (+{gainYears} yrs)
+                </span>
               </p>
               <div className="h-px flex-1 bg-primary/30" />
             </div>
@@ -243,14 +248,26 @@ export const CulturalHorizonTeaser = ({
                     <TrendingUp className="w-5 h-5 text-primary" />
                     <div>
                       <span className="text-xs text-primary font-semibold block">With optimized lifestyle</span>
-                      <strong className="text-3xl font-black text-primary">{optimizedForecast} yrs</strong>
+                      <strong
+                        className="text-3xl font-black text-primary"
+                        style={!isPremium ? { filter: 'blur(6px)', userSelect: 'none' } : {}}
+                      >
+                        {optimizedForecast} yrs
+                      </strong>
                     </div>
                   </>
                 )}
               </div>
               {showOptimized && gainYears > 0 && (
                 <p className="text-sm font-medium text-green-600">
-                  ⚡ You could gain <span className="font-black">{gainYears} years</span> with these changes
+                  ⚡ You could gain{' '}
+                  <span
+                    className="font-black"
+                    style={!isPremium ? { filter: 'blur(5px)', userSelect: 'none' } : {}}
+                  >
+                    {gainYears} years
+                  </span>{' '}
+                  with these changes
                 </p>
               )}
             </div>
