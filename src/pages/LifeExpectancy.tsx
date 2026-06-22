@@ -389,8 +389,16 @@ const LifeExpectancy = () => {
     const top3GainRawPDF = topOpportunities.slice(0, 3).reduce((sum: number, f: any) => sum + Number(f.potentialGain || 0), 0);
     const realisticGainPDF = Math.min(top3GainRawPDF * 0.5, 8).toFixed(1);
 
-    const maxBar = Number(baseline) + Math.max(0, Number(healthAdj)) + Math.max(0, Number(geneticAdj)) + Math.max(0, Number(epiAdj)) + Math.max(0, Number(commBonus));
-    const barScale = 100 / (maxBar || 80);
+    // Unified bar scale — all bars relative to the same maximum
+    const allBarValues = [
+      Math.abs(Number(baseline)),
+      Math.abs(Number(healthAdj)),
+      Math.abs(Number(geneticAdj)),
+      Math.abs(Number(epiAdj)),
+      Math.abs(Number(commBonus)),
+    ];
+    const maxAbsBar = Math.max(...allBarValues, 1);
+    const calcBarWidth = (val: number) => Math.max(3, Math.min(85, (Math.abs(val) / maxAbsBar) * 85));
     const uniqueSources = [...new Set(allFactors.map((f: any) => f.source).filter(Boolean))];
 
     // ── Variables for new PDF pages ──────────────────────────────────────────
@@ -547,8 +555,8 @@ const LifeExpectancy = () => {
       font-size: 12px; line-height: 1.5; color: #1f2937; background: white;
       -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
     }
-    @page { margin: 1.2cm; size: A4; }
-    .page { padding: 32px 40px; min-height: 100vh; }
+    @page { margin: 0; size: A4; }
+    .page { padding: 32px 40px; min-height: 100vh; margin: 1.2cm; }
     .page-break { page-break-after: always; break-after: page; }
     h1 { font-size: 20px; font-weight: 900; }
     h2 { font-size: 15px; font-weight: 700; color: #374151; margin: 0 0 14px 0; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
@@ -622,11 +630,7 @@ const LifeExpectancy = () => {
   <div style="text-align:center;padding:24px;background:linear-gradient(135deg,#f5f3ff,#eff6ff);border-radius:12px;border:1px solid #e9d5ff;margin-bottom:24px;">
     <div style="font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Your Statistical Life Expectancy</div>
     <div style="font-size:64px;font-weight:900;color:#4f46e5;line-height:1;">${forecast}</div>
-    <div style="font-size:16px;color:#6b7280;margin-bottom:16px;">years</div>
-    <div style="display:inline-block;background:${scoreBand.color};color:white;padding:4px 16px;border-radius:20px;font-size:13px;font-weight:700;margin-bottom:12px;">
-      Longevity Score: ${score}/100 — ${scoreBand.label}
-    </div>
-    <div style="font-size:12px;color:#4b5563;max-width:500px;margin:0 auto;line-height:1.6;">${scoreBand.desc}</div>
+    <div style="font-size:16px;color:#6b7280;margin-bottom:8px;">years</div>
   </div>
 
   <div class="grid-4" style="margin-bottom:24px;">
@@ -759,24 +763,24 @@ const LifeExpectancy = () => {
     <h2>Forecast Breakdown — Visual</h2>
     <div class="bar-row">
       <div class="bar-label"><span>📊 WHO Baseline (${quiz?.gender || 'male'}, ${quiz?.country || 'India'})</span><span style="font-weight:700;color:#4f46e5;">${baseline} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(100, Number(baseline) * barScale)}%;background:#4f46e5;"></div></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${calcBarWidth(Number(baseline))}%;background:#4f46e5;"></div></div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>${Number(healthAdj) >= 0 ? '✅' : '⚠️'} Health &amp; Lifestyle Adjustment</span><span style="font-weight:700;color:${Number(healthAdj) >= 0 ? '#059669' : '#dc2626'};">${Number(healthAdj) >= 0 ? '+' : ''}${healthAdj} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(100, Math.abs(Number(healthAdj)) * barScale * 3)}%;background:${Number(healthAdj) >= 0 ? '#059669' : '#dc2626'};"></div></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${calcBarWidth(Number(healthAdj))}%;background:${Number(healthAdj) >= 0 ? '#059669' : '#dc2626'};"></div></div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>🧬 Genetic Adjustment (${geneticLabel})</span><span style="font-weight:700;color:${Number(geneticAdj) >= 0 ? '#059669' : '#dc2626'};">${Number(geneticAdj) >= 0 ? '+' : ''}${geneticAdj} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(100, Math.abs(Number(geneticAdj)) * barScale * 5)}%;background:${Number(geneticAdj) >= 0 ? '#7c3aed' : '#dc2626'};"></div></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${calcBarWidth(Number(geneticAdj))}%;background:${Number(geneticAdj) >= 0 ? '#7c3aed' : '#dc2626'};"></div></div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>🌱 Epigenetic Habits Bonus</span><span style="font-weight:700;color:#059669;">+${epiAdj} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(100, Number(epiAdj) * barScale * 10)}%;background:#10b981;"></div></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${calcBarWidth(Number(epiAdj))}%;background:#10b981;"></div></div>
       <div style="font-size:11px;color:#6b7280;margin-top:2px;">${activeHabits.length} of ${ALL_HABITS.length} epigenetic habits active</div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>🤝 Community &amp; Social Bonus</span><span style="font-weight:700;color:#059669;">+${commBonus} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(100, Number(commBonus) * barScale * 30)}%;background:#06b6d4;"></div></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${calcBarWidth(Number(commBonus))}%;background:#06b6d4;"></div></div>
     </div>
     <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
     <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -949,7 +953,7 @@ const LifeExpectancy = () => {
   <div class="section section-blue" style="margin-bottom:16px;">
     <h2>🏘️ Your Community Longevity Anchor</h2>
     <p style="font-size:12px;color:#374151;line-height:1.6;margin-bottom:10px;">
-      ${p2.mentorName ? '"' + p2.mentorName + '"' : 'Your longevity mentor'} (${p2.mentorRelationship || 'mentor'}, ${p2.mentorAge} yrs) represents living proof that your environment supports longevity.
+      ${p2.mentorName ? '"' + p2.mentorName.replace(/\b\w/g, (c: string) => c.toUpperCase()) + '"' : 'Your longevity mentor'} (${p2.mentorRelationship || 'mentor'}, ${p2.mentorAge} yrs) represents living proof that your environment supports longevity.
       Community bonus applied: <strong style="color:#059669;">+${commBonus} yrs</strong>.
     </p>
     <h3 style="margin-bottom:8px;">Habits attributed to your community anchor:</h3>
@@ -986,7 +990,7 @@ const LifeExpectancy = () => {
     <div class="page-header-title">${name} · bornclock.com</div>
   </div>
 
-  <h1 style="font-size:20px;font-weight:900;margin:0 0 4px 0;">📅 Your Personalised 90-Day Plan</h1>
+  <h1 style="font-size:20px;font-weight:900;margin:0 0 4px 0;">Your Personalised 90-Day Plan</h1>
   <p style="font-size:12px;color:#6b7280;margin:0 0 16px 0;">Based on your quiz answers — specific to your health profile, not a generic plan</p>
 
   <div style="padding:12px 16px;background:#faf5ff;border-radius:8px;border:1px solid #e9d5ff;margin-bottom:16px;">
@@ -1136,14 +1140,10 @@ const LifeExpectancy = () => {
     setCurrentSimForecast(result.totalForecast);
     try {
       localStorage.setItem('bornclock_result_snapshot', JSON.stringify({
-        healthAdjustment: result.healthAdjustment,
-        geneticAdjustment: result.geneticAdjustment,
-        epigeneticAdjustment: result.epigeneticAdjustment,
-        communityBonus: result.communityBonus,
-        currentAge: result.currentAge,
-        gender: result.quizSnapshot.gender,
-        country: result.quizSnapshot.country,
         totalForecast: result.totalForecast,
+        currentAge: result.currentAge,
+        longevityScore: calculateLongevityScore(result),
+        timestamp: Date.now(),
       }));
     } catch { /* storage unavailable */ }
     setPhase('result');
@@ -1765,7 +1765,7 @@ const LifeExpectancy = () => {
               onChange={(e) => setBlueprintName(e.target.value)}
               placeholder="Enter name (e.g. Himanshu)"
               className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              onKeyDown={(e) => { if (e.key === 'Enter') { setShowNamePrompt(false); handleDownloadBlueprint(blueprintName.trim() || undefined); } }}
+              onKeyDown={(e) => { if (e.key === 'Enter') { setShowNamePrompt(false); handleDownloadBlueprint(blueprintName.trim().replace(/\b\w/g, c => c.toUpperCase()) || undefined); } }}
               autoFocus
             />
             <div className="flex gap-3">
@@ -1776,7 +1776,7 @@ const LifeExpectancy = () => {
                 Cancel
               </button>
               <button
-                onClick={() => { setShowNamePrompt(false); handleDownloadBlueprint(blueprintName.trim() || undefined); }}
+                onClick={() => { setShowNamePrompt(false); handleDownloadBlueprint(blueprintName.trim().replace(/\b\w/g, c => c.toUpperCase()) || undefined); }}
                 className="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-500"
               >
                 Generate PDF

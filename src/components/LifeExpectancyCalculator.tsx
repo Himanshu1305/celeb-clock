@@ -1340,12 +1340,6 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                         <div className="text-[9px] text-muted-foreground">(Harvard Health)</div>
                       </div>
                     </div>
-                    <p className="text-[11px] text-center font-semibold text-foreground">
-                      The question is: how much of those extra years do you want to unlock?
-                    </p>
-                    <p className="text-[10px] text-muted-foreground text-center leading-relaxed">
-                      The Longevity Simulator lets you explore what's possible — adjust each factor to see your optimized potential in real time.
-                    </p>
                   </div>
 
                   {/* Breakdown table */}
@@ -1379,6 +1373,13 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                   <p className="text-xs text-center text-muted-foreground leading-relaxed">
                     Science has given you a number. But this is just your starting point — not your destiny.{' '}
                     <strong className="text-foreground">Research shows lifestyle controls 70–75% of outcomes (WHO, 2023).</strong>
+                  </p>
+
+                  <p className="text-[11px] text-center font-semibold text-foreground">
+                    The question is: how much of those extra years do you want to unlock?
+                  </p>
+                  <p className="text-[10px] text-muted-foreground text-center leading-relaxed">
+                    The Longevity Simulator lets you explore what's possible — adjust each factor to see your optimized potential in real time.
                   </p>
 
                   <div className="flex flex-col gap-2">

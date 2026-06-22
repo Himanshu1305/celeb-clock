@@ -7,32 +7,16 @@ interface BirthDateContextType {
 
 const BirthDateContext = createContext<BirthDateContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'bornclock-birthdate';
-
 export const BirthDateProvider = ({ children }: { children: ReactNode }) => {
-  const [birthDate, setBirthDateState] = useState<Date | null>(() => {
-    // Initialize from localStorage
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = new Date(stored);
-        // Validate the date
-        if (!isNaN(parsed.getTime())) {
-          return parsed;
-        }
-      }
-    }
-    return null;
-  });
+  const [birthDate, setBirthDateState] = useState<Date | null>(null);
+
+  useEffect(() => {
+    // Clear any previously persisted DOB — we no longer store health data in localStorage
+    try { localStorage.removeItem('bornclock-birthdate'); } catch {}
+  }, []);
 
   const setBirthDate = (date: Date | null) => {
     setBirthDateState(date);
-    // Persist to localStorage
-    if (date) {
-      localStorage.setItem(STORAGE_KEY, date.toISOString());
-    } else {
-      localStorage.removeItem(STORAGE_KEY);
-    }
   };
 
   return (
