@@ -1423,7 +1423,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
         <div className="flex justify-between">
           <Button variant="outline" onClick={() => { if (step > 1) setStep(step - 1); }} disabled={step === 1}>Previous</Button>
           {step < totalSteps && (
-            <Button onClick={() => setStep(step + 1)} disabled={step === 1 && !data.gender}>Next Step →</Button>
+            <Button onClick={() => setStep(step + 1)} disabled={(step === 1 && !data.gender) || !birthDate}>Next Step →</Button>
           )}
         </div>
       </CardContent>

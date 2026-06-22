@@ -389,16 +389,15 @@ const LifeExpectancy = () => {
     const top3GainRawPDF = topOpportunities.slice(0, 3).reduce((sum: number, f: any) => sum + Number(f.potentialGain || 0), 0);
     const realisticGainPDF = Math.min(top3GainRawPDF * 0.5, 8).toFixed(1);
 
-    // Unified bar scale — all bars relative to the same maximum
-    const allBarValues = [
-      Math.abs(Number(baseline)),
+    // Two-scale bar chart: baseline always 85%, adjustments scaled to max adjustment
+    const maxAdjValue = Math.max(
       Math.abs(Number(healthAdj)),
       Math.abs(Number(geneticAdj)),
       Math.abs(Number(epiAdj)),
       Math.abs(Number(commBonus)),
-    ];
-    const maxAbsBar = Math.max(...allBarValues, 1);
-    const calcBarWidth = (val: number) => Math.max(3, Math.min(85, (Math.abs(val) / maxAbsBar) * 85));
+      1
+    );
+    const calcAdjBarWidth = (val: number) => Math.max(4, Math.min(85, (Math.abs(val) / maxAdjValue) * 85));
     const uniqueSources = [...new Set(allFactors.map((f: any) => f.source).filter(Boolean))];
 
     // ── Variables for new PDF pages ──────────────────────────────────────────
@@ -763,24 +762,24 @@ const LifeExpectancy = () => {
     <h2>Forecast Breakdown — Visual</h2>
     <div class="bar-row">
       <div class="bar-label"><span>📊 WHO Baseline (${quiz?.gender || 'male'}, ${quiz?.country || 'India'})</span><span style="font-weight:700;color:#4f46e5;">${baseline} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${calcBarWidth(Number(baseline))}%;background:#4f46e5;"></div></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:85%;background:#4f46e5;"></div></div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>${Number(healthAdj) >= 0 ? '✅' : '⚠️'} Health &amp; Lifestyle Adjustment</span><span style="font-weight:700;color:${Number(healthAdj) >= 0 ? '#059669' : '#dc2626'};">${Number(healthAdj) >= 0 ? '+' : ''}${healthAdj} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${calcBarWidth(Number(healthAdj))}%;background:${Number(healthAdj) >= 0 ? '#059669' : '#dc2626'};"></div></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(healthAdj))}%;background:${Number(healthAdj) >= 0 ? '#059669' : '#dc2626'};"></div></div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>🧬 Genetic Adjustment (${geneticLabel})</span><span style="font-weight:700;color:${Number(geneticAdj) >= 0 ? '#059669' : '#dc2626'};">${Number(geneticAdj) >= 0 ? '+' : ''}${geneticAdj} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${calcBarWidth(Number(geneticAdj))}%;background:${Number(geneticAdj) >= 0 ? '#7c3aed' : '#dc2626'};"></div></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(geneticAdj))}%;background:${Number(geneticAdj) >= 0 ? '#7c3aed' : '#dc2626'};"></div></div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>🌱 Epigenetic Habits Bonus</span><span style="font-weight:700;color:#059669;">+${epiAdj} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${calcBarWidth(Number(epiAdj))}%;background:#10b981;"></div></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(epiAdj))}%;background:#10b981;"></div></div>
       <div style="font-size:11px;color:#6b7280;margin-top:2px;">${activeHabits.length} of ${ALL_HABITS.length} epigenetic habits active</div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>🤝 Community &amp; Social Bonus</span><span style="font-weight:700;color:#059669;">+${commBonus} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${calcBarWidth(Number(commBonus))}%;background:#06b6d4;"></div></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(commBonus))}%;background:#06b6d4;"></div></div>
     </div>
     <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
     <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -1277,15 +1276,16 @@ const LifeExpectancy = () => {
                   <div className="space-y-2">
                     <Label htmlFor="birthdate-life" className="text-base font-semibold flex items-center gap-2">
                       <CalendarIcon className="h-4 w-4" /> Enter Your Birth Date
+                      <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-bold">Required</span>
                     </Label>
-                    <p className="text-sm text-muted-foreground mb-3">Required to calculate your life expectancy</p>
+                    <p className="text-sm text-muted-foreground mb-3">Your date of birth is required to calculate your personalised life expectancy forecast.</p>
                     <Input
                       id="birthdate-life"
                       type="date"
                       value={getInputValue()}
                       onChange={handleDateChange}
                       max={new Date().toISOString().split('T')[0]}
-                      className="text-lg"
+                      className={`text-lg ${!birthDate ? 'ring-2 ring-primary/40' : ''}`}
                     />
                   </div>
                 </CardContent>
@@ -1304,11 +1304,17 @@ const LifeExpectancy = () => {
               </Card>
             )}
 
-            <LifeExpectancyCalculator
-              birthDate={birthDate}
-              onComplete={handleQuizComplete}
-              onCompleteSkip={handleQuizCompleteAndSkip}
-            />
+            {birthDate ? (
+              <LifeExpectancyCalculator
+                birthDate={birthDate}
+                onComplete={handleQuizComplete}
+                onCompleteSkip={handleQuizCompleteAndSkip}
+              />
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <p className="text-sm font-medium">👆 Enter your date of birth above to begin</p>
+              </div>
+            )}
           </section>
         )}
 
