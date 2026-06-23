@@ -152,20 +152,24 @@ function getComparisonAnchor(gainYears: number): string {
   return `${gainDays} more days`;
 }
 
-function ImpactBadge({ impact }: { impact: number }) {
+function ImpactBadge({ impact, blurred = false }: { impact: number; blurred?: boolean }) {
   if (impact === 0) return <span className="text-[10px] text-muted-foreground tabular-nums">0 yr</span>;
   return (
-    <Badge variant="outline" className={`text-[10px] font-bold tabular-nums px-1.5 ${impact > 0 ? 'text-green-600 border-green-400' : 'text-red-500 border-red-400'}`}>
+    <Badge
+      variant="outline"
+      className={`text-[10px] font-bold tabular-nums px-1.5 ${impact > 0 ? 'text-green-600 border-green-400' : 'text-red-500 border-red-400'}`}
+      style={blurred ? { filter: 'blur(4px)', userSelect: 'none' } : {}}
+    >
       {impact > 0 ? '+' : ''}{impact.toFixed(1)} yr
     </Badge>
   );
 }
 
 function SliderRow({
-  label, opts, labels, val, set, impact, tooltip, optimalIdx,
+  label, opts, labels, val, set, impact, tooltip, optimalIdx, blurred = false,
 }: {
   label: string; opts: string[]; labels: string[]; val: number;
-  set: (v: number) => void; impact: number; tooltip?: string; optimalIdx?: number;
+  set: (v: number) => void; impact: number; tooltip?: string; optimalIdx?: number; blurred?: boolean;
 }) {
   const isOptimal = optimalIdx !== undefined && val === optimalIdx;
   const inner = (
@@ -176,7 +180,7 @@ function SliderRow({
           <Badge variant="outline" className="text-[10px]">{labels[val]}</Badge>
           {isOptimal
             ? <span className="text-[10px] text-green-600 font-bold">✅ Optimal!</span>
-            : <ImpactBadge impact={impact} />
+            : <ImpactBadge impact={impact} blurred={blurred} />
           }
         </div>
       </div>
@@ -330,7 +334,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
             <span>{title}</span>
           </span>
           <div className="flex items-center gap-2">
-            {totalImpact !== 0 && <ImpactBadge impact={totalImpact} />}
+            {totalImpact !== 0 && <ImpactBadge impact={totalImpact} blurred={!isPremium} />}
             {isOpen ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
           </div>
         </button>
@@ -424,11 +428,18 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                 </div>
               )}
               {delta !== 0 && (
-                <div className={`font-black px-3 py-1.5 rounded-lg text-sm border ${delta > 0 ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-600 border-red-200'}`}>
-                  {delta > 0
-                    ? `⚡ +${delta} yrs`
-                    : `⚠️ ${delta} yrs — these choices reduce your potential`
-                  }
+                <div className={`font-black px-3 py-1.5 rounded-lg text-sm border relative ${delta > 0 ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-600 border-red-200'}`}>
+                  <span style={!isPremium ? { filter: 'blur(5px)', userSelect: 'none' } : {}}>
+                    {delta > 0
+                      ? `⚡ +${delta} yrs`
+                      : `⚠️ ${delta} yrs — these choices reduce your potential`
+                    }
+                  </span>
+                  {!isPremium && (
+                    <span className="absolute inset-0 flex items-center justify-center text-xs font-bold pointer-events-none">
+                      🔒 Unlock
+                    </span>
+                  )}
                 </div>
               )}
             </div>
@@ -453,36 +464,43 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
               impact={iSmoke === 0 ? 0 : iSmoke === 1 ? -1 : iSmoke === 2 ? -2 : iSmoke === 3 ? -3 : iSmoke === 4 ? -7 : -12}
               optimalIdx={0}
               tooltip="WHO, 2023: Smoking is the leading preventable cause of death worldwide. Heavy smokers lose 10–12 years on average."
+              blurred={!isPremium}
             />
             <SliderRow label="Alcohol Consumption" opts={DRINK_OPTS} labels={DRINK_LABELS} val={iDrink} set={setDrink}
               impact={[0, 1, -1, -6][iDrink] ?? 0}
               optimalIdx={0}
               tooltip="CDC, 2023: No level of alcohol is safe for cancer risk."
+              blurred={!isPremium}
             />
             <SliderRow label="Diet Quality" opts={DIET_OPTS} labels={DIET_LABELS} val={iDiet} set={setDiet}
               impact={[-3, 0, 2, 4][iDiet] ?? 0}
               optimalIdx={3}
               tooltip="Harvard: nutrient-dense diet can add 4+ healthy years."
+              blurred={!isPremium}
             />
             <SliderRow label="Physical Exercise" opts={EX_OPTS} labels={EX_LABELS} val={iEx} set={setEx}
               impact={[-2, 1, 3, 5][iEx] ?? 0}
               optimalIdx={3}
               tooltip="WHO, 2022: Moderate exercise reduces all-cause mortality by 31%."
+              blurred={!isPremium}
             />
             <SliderRow label="Hydration" opts={HYD_OPTS} labels={HYD_LABELS} val={iHyd} set={setHyd}
               impact={HYD_IMPACT[HYD_OPTS[iHyd]]}
               optimalIdx={0}
               tooltip="EFSA 2010: Adequate hydration is linked to better cardiovascular and kidney function."
+              blurred={!isPremium}
             />
             <SliderRow label="Screen Time (non-work)" opts={SCR_OPTS} labels={SCR_LABELS} val={iScr} set={setScr}
               impact={SCR_IMPACT[SCR_OPTS[iScr]]}
               optimalIdx={0}
               tooltip="BMJ Open 2019: Excessive recreational screen time increases sedentary behaviour and cardiovascular risk."
+              blurred={!isPremium}
             />
             <SliderRow label="Work-Life Balance" opts={WLB_OPTS} labels={WLB_LABELS} val={iWlb} set={setWlb}
               impact={WLB_IMPACT[WLB_OPTS[iWlb]]}
               optimalIdx={0}
               tooltip="Lancet 2015: Working 55+ hours/week increases stroke risk by 33% and coronary heart disease by 13%."
+              blurred={!isPremium}
             />
           </CardContent>
         </Card>
@@ -624,14 +642,17 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
               impact={SOC_IMPACT[SOC_OPTS[iSoc] ?? 'moderate'] ?? 0}
               optimalIdx={3}
               tooltip="Harvard Study of Adult Development (85 years, 2,000+ participants): strong social connections are the single strongest predictor of healthy aging — comparable in effect to quitting smoking. Isolated individuals have a mortality risk equivalent to smoking 15 cigarettes/day."
+              blurred={!isPremium}
             />
             <SliderRow label="Sleep Duration" opts={SLEEP_OPTS} labels={SLEEP_LABELS} val={iSleep} set={setSleep}
               impact={[-2, -0.5, 0, -1][iSleep] ?? 0} optimalIdx={2}
               tooltip="NHS/National Sleep Foundation, 2023: <6 hrs/night carries a 12% higher all-cause mortality risk."
+              blurred={!isPremium}
             />
             <SliderRow label="Blood Pressure" opts={BP_OPTS} labels={BP_LABELS} val={iBP} set={setBP}
               impact={[-5, -2.5, -1, 0, 1.5][iBP] ?? 0} optimalIdx={4}
               tooltip="JNC8/AHA Guidelines, 2023: Optimal BP reduces stroke and heart attack risk significantly."
+              blurred={!isPremium}
             />
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
@@ -640,7 +661,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                   <Badge variant="outline" className="text-[10px]">{bmi < 18.5 ? 'Underweight' : bmi < 25 ? 'Normal' : bmi < 30 ? 'Overweight' : 'Obese'}</Badge>
                   {bmi >= 18.5 && bmi < 25
                     ? <span className="text-[10px] text-green-600 font-bold">✅ Optimal!</span>
-                    : <ImpactBadge impact={bmi < 18.5 ? -2 : bmi > 30 ? -3 : bmi > 25 ? -1 : 0} />
+                    : <ImpactBadge impact={bmi < 18.5 ? -2 : bmi > 30 ? -3 : bmi > 25 ? -1 : 0} blurred={!isPremium} />
                   }
                 </div>
               </div>
@@ -651,7 +672,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                 <Label className="text-xs font-bold">Stress Level: {stress}/10</Label>
                 {stress <= 2
                   ? <span className="text-[10px] text-green-600 font-bold">✅ Optimal!</span>
-                  : <ImpactBadge impact={stress >= 8 ? -2.5 : stress >= 5 ? -0.5 : stress >= 3 ? 1 : 1.5} />
+                  : <ImpactBadge impact={stress >= 8 ? -2.5 : stress >= 5 ? -0.5 : stress >= 3 ? 1 : 1.5} blurred={!isPremium} />
                 }
               </div>
               <Slider value={[stress]} onValueChange={(v) => setStress(v[0])} max={10} min={1} step={1} />
@@ -659,18 +680,22 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
             <SliderRow label="Diabetes Management" opts={DIAB_OPTS} labels={DIAB_LABELS} val={iDiab} set={setDiab}
               impact={DIAB_IMPACT[DIAB_OPTS[iDiab]]} optimalIdx={0}
               tooltip="ADA 2023: Well-controlled blood sugar reduces cardiovascular complications by up to 50%."
+              blurred={!isPremium}
             />
             <SliderRow label="Regular Health Checkups" opts={HC_OPTS} labels={HC_LABELS} val={iHC} set={setHC}
               impact={HC_IMPACT[HC_OPTS[iHC]]} optimalIdx={0}
               tooltip="CDC prevention statistics: early detection through regular checkups saves significant healthy life years."
+              blurred={!isPremium}
             />
             <SliderRow label="Dental Care" opts={DC_OPTS} labels={DC_LABELS} val={iDC} set={setDC}
               impact={DC_IMPACT[DC_OPTS[iDC]]} optimalIdx={0}
               tooltip="ADA/AHA joint statement: gum disease increases heart disease risk by up to 300%."
+              blurred={!isPremium}
             />
             <SliderRow label="Mental Health Support" opts={MH_OPTS} labels={MH_LABELS} val={iMH} set={setMH}
               impact={MH_IMPACT[MH_OPTS[iMH]]} optimalIdx={0}
               tooltip="Lancet Psychiatry 2019: untreated mental health conditions reduce life expectancy by 10–20 years."
+              blurred={!isPremium}
             />
           </CardContent>
         </Card>
@@ -686,26 +711,32 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
             <SliderRow label="Relationship Status" opts={REL_OPTS} labels={REL_LABELS} val={iRel} set={setRel}
               impact={REL_IMPACT[REL_OPTS[iRel]]} optimalIdx={0}
               tooltip="Harvard Study of Adult Development: long-term partnership adds 1.5 years on average (80-year study)."
+              blurred={!isPremium}
             />
             <SliderRow label="Pet Ownership" opts={PET_OPTS} labels={PET_LABELS} val={iPet} set={setPet}
               impact={PET_IMPACT[PET_OPTS[iPet]]} optimalIdx={0}
               tooltip="AHA 2022: pet ownership reduces cardiovascular risk by 31% and lowers blood pressure."
+              blurred={!isPremium}
             />
             <SliderRow label="Mentoring / Grandparenting" opts={MENT_OPTS} labels={MENT_LABELS} val={iMent} set={setMent}
               impact={MENT_IMPACT[MENT_OPTS[iMent]]} optimalIdx={0}
               tooltip="Journal of Aging: active mentoring and grandparenting reduces mortality risk by 37%."
+              blurred={!isPremium}
             />
             <SliderRow label="Cancer Screening" opts={CS_OPTS} labels={CS_LABELS} val={iCS} set={setCS}
               impact={CS_IMPACT[CS_OPTS[iCS]]} optimalIdx={0}
               tooltip="CDC: regular cancer screening reduces cancer mortality by 20–30% through early detection."
+              blurred={!isPremium}
             />
             <SliderRow label="Air Quality / Pollution" opts={AQ_OPTS} labels={AQ_LABELS} val={iAQ} set={setAQ}
               impact={AQ_IMPACT[AQ_OPTS[iAQ]]} optimalIdx={0}
               tooltip="WHO 2022: air pollution reduces life expectancy by up to 2 years in high-pollution areas."
+              blurred={!isPremium}
             />
             <SliderRow label="Commute Stress" opts={COM_OPTS} labels={COM_LABELS} val={iCom} set={setCom}
               impact={COM_IMPACT[COM_OPTS[iCom]]} optimalIdx={0}
               tooltip="British Medical Journal: high-stress commuting increases cardiovascular risk equivalent to −0.8 years."
+              blurred={!isPremium}
             />
           </CardContent>
         </Card>
@@ -760,7 +791,11 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                     {delta < 0 ? 'With Your Changes' : delta === 0 ? 'No Change' : 'Optimized Lifestyle'}
                   </p>
                   <strong className={`text-3xl font-black ${delta < 0 ? 'text-red-600' : delta === 0 ? 'text-muted-foreground' : 'text-primary'}`} style={blurStyle}>{simForecast} yrs</strong>
-                  {delta < 0 && <p className="text-[10px] font-bold text-red-500 mt-0.5">⚠️ {delta} yrs from harmful choices</p>}
+                  {delta < 0 && (
+                    <p className="text-[10px] font-bold text-red-500 mt-0.5" style={!isPremium ? { filter: 'blur(5px)', userSelect: 'none' } : {}}>
+                      ⚠️ {delta} yrs from harmful choices
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div className="text-center">
@@ -770,13 +805,22 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
               )}
             </div>
             {delta > 0 && (
-              <div className="bg-green-100 text-green-800 border border-green-200 rounded-lg px-4 py-2 text-sm font-black">
-                ⚡ +{delta} yrs
+              <div className="bg-green-100 text-green-800 border border-green-200 rounded-lg px-4 py-2 text-sm font-black relative">
+                <span style={!isPremium ? { filter: 'blur(5px)', userSelect: 'none' } : {}}>
+                  ⚡ +{delta} yrs
+                </span>
+                {!isPremium && (
+                  <span className="absolute inset-0 flex items-center justify-center text-xs font-bold pointer-events-none">
+                    🔒 Unlock
+                  </span>
+                )}
               </div>
             )}
             {delta < 0 && (
               <div className="bg-red-50 text-red-700 border border-red-200 rounded-lg px-4 py-2 text-sm font-bold">
-                ⚠️ {delta} yrs
+                <span style={!isPremium ? { filter: 'blur(5px)', userSelect: 'none' } : {}}>
+                  ⚠️ {delta} yrs
+                </span>
               </div>
             )}
           </div>
@@ -840,7 +884,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                 <div className="flex items-center gap-2 shrink-0">
                   <strong className="font-bold">{result.baselineLifeExpectancy} yrs</strong>
                   {simForecast > result.baselineLifeExpectancy
-                    ? <span className="text-[10px] text-green-600 font-bold">+{Math.round((simForecast - result.baselineLifeExpectancy) * 10) / 10} yrs above 🟢</span>
+                    ? <span className="text-[10px] text-green-600 font-bold" style={!isPremium ? { filter: 'blur(4px)', userSelect: 'none' } : {}}>+{Math.round((simForecast - result.baselineLifeExpectancy) * 10) / 10} yrs above 🟢</span>
                     : <span className="text-[10px] text-red-500">↓ below baseline</span>
                   }
                 </div>
@@ -887,7 +931,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                 <div className="flex items-center gap-2 shrink-0">
                   <strong className="font-bold">{hale} yrs</strong>
                   {simForecast > hale
-                    ? <span className="text-[10px] text-green-600 font-bold">+{Math.round((simForecast - hale) * 10) / 10} yrs above 🟢</span>
+                    ? <span className="text-[10px] text-green-600 font-bold" style={!isPremium ? { filter: 'blur(4px)', userSelect: 'none' } : {}}>+{Math.round((simForecast - hale) * 10) / 10} yrs above 🟢</span>
                     : <span className="text-[10px] text-orange-500">Improving toward healthy average</span>
                   }
                 </div>

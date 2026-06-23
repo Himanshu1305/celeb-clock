@@ -8,10 +8,11 @@ interface LongevityHeroCardProps {
   result: LongevityResult;
   optimizedForecast: number | null;
   userName: string;
+  isPremium?: boolean;
   onDownloadBlueprint?: () => void;
 }
 
-export function LongevityHeroCard({ result, optimizedForecast, userName, onDownloadBlueprint }: LongevityHeroCardProps) {
+export function LongevityHeroCard({ result, optimizedForecast, userName, isPremium = false, onDownloadBlueprint }: LongevityHeroCardProps) {
   const [copied, setCopied] = useState(false);
 
   const displayedOptimized = optimizedForecast ?? result.totalForecast;
@@ -90,29 +91,40 @@ export function LongevityHeroCard({ result, optimizedForecast, userName, onDownl
         )}
       </div>
 
-      {/* Buttons */}
-      <div className="flex items-center justify-center gap-3 pt-1 flex-wrap">
-        <Button
-          size="sm"
-          variant="outline"
-          className="gap-2 bg-white/80 dark:bg-background/80"
-          onClick={() => onDownloadBlueprint?.()}
-        >
-          <Download className="w-3.5 h-3.5" />
-          Export PDF
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          className="gap-2 bg-white/80 dark:bg-background/80"
-          onClick={handleCopySummary}
-        >
-          {copied ? '✅ Copied!' : <><Copy className="w-3.5 h-3.5" /> Copy Summary</>}
-        </Button>
-      </div>
-      <p className="text-[10px] text-muted-foreground/60 text-center mt-1">
-        💡 In print dialog: set Headers &amp; Footers to OFF for a clean PDF without page URLs
-      </p>
+      {/* Buttons — premium only */}
+      {isPremium ? (
+        <>
+          <div className="flex items-center justify-center gap-3 pt-1 flex-wrap">
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-2 bg-white/80 dark:bg-background/80"
+              onClick={() => onDownloadBlueprint?.()}
+            >
+              <Download className="w-3.5 h-3.5" />
+              Export PDF
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-2 bg-white/80 dark:bg-background/80"
+              onClick={handleCopySummary}
+            >
+              {copied ? '✅ Copied!' : <><Copy className="w-3.5 h-3.5" /> Copy Summary</>}
+            </Button>
+          </div>
+          <p className="text-[10px] text-muted-foreground/60 text-center mt-1">
+            💡 In print dialog: set Headers &amp; Footers to OFF for a clean PDF without page URLs
+          </p>
+        </>
+      ) : (
+        <div className="text-center pt-1">
+          <p className="text-xs text-muted-foreground/70">
+            🔒 Export PDF and Copy Summary are premium features.{' '}
+            <a href="/upgrade" className="text-primary underline font-semibold">Upgrade →</a>
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -164,6 +164,10 @@ const LifeExpectancy = () => {
   const simulatorRef = useRef<HTMLDivElement>(null);
   const reportRef    = useRef<HTMLDivElement>(null);
   const handleDownloadBlueprint = (personName?: string) => {
+    if (!isPremium) {
+      navigate('/upgrade');
+      return;
+    }
     if (!longevityResult) {
       alert('Please complete the quiz first to generate your blueprint.');
       return;
@@ -1164,6 +1168,10 @@ const LifeExpectancy = () => {
   };
 
   const handleGenerateReport = () => {
+    if (!isPremium) {
+      navigate('/upgrade');
+      return;
+    }
     const simAge = currentSimForecast ?? longevityResult?.totalForecast ?? 0;
     setOptimizedForecast(simAge);
     setPhase('report');
@@ -1529,7 +1537,7 @@ const LifeExpectancy = () => {
         )}
 
         {/* ── Phase 4: Full Three Pillar Report ── */}
-        {phase === 'report' && longevityResult && (
+        {phase === 'report' && longevityResult && isPremium && (
           <section id="life-expectancy-report" className="max-w-6xl mx-auto mb-16" ref={reportRef}>
             <div className="mb-6">
               <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -1543,6 +1551,7 @@ const LifeExpectancy = () => {
               result={longevityResult}
               optimizedForecast={optimizedForecast}
               userName={displayName}
+              isPremium={isPremium}
               onDownloadBlueprint={() => { setBlueprintName(''); setShowNamePrompt(true); }}
             />
             <ReportErrorBoundary onReset={() => setPhase('result')}>
