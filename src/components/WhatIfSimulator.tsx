@@ -436,9 +436,9 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                     }
                   </span>
                   {!isPremium && (
-                    <span className="absolute inset-0 flex items-center justify-center text-xs font-bold pointer-events-none">
+                    <a href="/upgrade" className="absolute inset-0 flex items-center justify-center text-xs font-bold">
                       🔒 Unlock
-                    </span>
+                    </a>
                   )}
                 </div>
               )}
@@ -810,9 +810,9 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                   ⚡ +{delta} yrs
                 </span>
                 {!isPremium && (
-                  <span className="absolute inset-0 flex items-center justify-center text-xs font-bold pointer-events-none">
+                  <a href="/upgrade" className="absolute inset-0 flex items-center justify-center text-xs font-bold">
                     🔒 Unlock
-                  </span>
+                  </a>
                 )}
               </div>
             )}
@@ -828,6 +828,39 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
           {/* Gain celebration */}
           {(() => {
             const gain = delta;
+
+            // Free users see a teaser message that builds desire without revealing the number
+            if (!isPremium) {
+              if (gain > 5) {
+                return (
+                  <div className="rounded-lg px-4 py-2.5 text-xs font-medium bg-green-50 text-green-800 border border-green-200">
+                    🔒 Your optimized potential is <strong>significant</strong>. Unlock your full blueprint to see exactly how many years these changes could add — and get your personalised 90-Day Action Plan.{' '}
+                    <a href="/upgrade" className="underline font-bold cursor-pointer">Upgrade →</a>
+                  </div>
+                );
+              } else if (gain > 0) {
+                return (
+                  <div className="rounded-lg px-4 py-2.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                    🔒 These changes could meaningfully extend your healthy years. Unlock your full blueprint to see the exact number and your 90-Day Action Plan.{' '}
+                    <a href="/upgrade" className="underline font-bold cursor-pointer">Upgrade →</a>
+                  </div>
+                );
+              } else if (gain === 0) {
+                return (
+                  <div className="rounded-lg px-4 py-2.5 text-xs font-medium bg-muted/40 text-muted-foreground">
+                    💡 No change yet — adjust the sliders above to explore your longevity potential.
+                  </div>
+                );
+              } else {
+                return (
+                  <div className="rounded-lg px-4 py-2.5 text-xs font-medium bg-red-50 text-red-700 border border-red-100">
+                    ⚠️ Some current choices are reducing your potential. Review the factors above — lifestyle controls 70–75% of outcomes.
+                  </div>
+                );
+              }
+            }
+
+            // Premium users see the full celebration message with exact numbers
             const gainText = gain >= 25
               ? `${Math.round(gain)} years — nearly a quarter century of additional life`
               : gain >= 20

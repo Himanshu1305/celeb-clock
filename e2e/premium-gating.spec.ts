@@ -196,10 +196,9 @@ test.describe('Free user — report phase gating', () => {
       await blueprintBtn.click();
       await page.waitForTimeout(1500);
 
-      // handleGenerateReport sets phase='report' — stays on /life-expectancy
-      // (free users see the report structure but premium content is gated within EnhancedLifeExpectancyReport)
+      // handleGenerateReport redirects free users to /upgrade
       const url = page.url();
-      expect(url).toContain('/life-expectancy');
+      expect(url).toContain('/upgrade');
     }
   });
 

@@ -56,10 +56,11 @@ export function PaywallModal({
           </p>
           <div className="space-y-3">
             {[
-              { icon: '🔬', title: 'What-If Simulator', desc: 'See how each lifestyle change adds years' },
-              { icon: '🧬', title: 'Biological Blueprint', desc: 'Full 3-pillar analysis with action plan' },
-              { icon: '🌟', title: 'Cultural Horizon', desc: 'Icons who share your longevity path' },
-              { icon: '🤖', title: 'AI Longevity Coach', desc: 'Chat with an AI that knows your data' },
+              { icon: '📅', title: 'Your Personalised 90-Day Plan', desc: 'Week-by-week actions specific to your health profile — not a generic plan' },
+              { icon: '🔬', title: 'What-If Simulator', desc: 'See the exact years each lifestyle change adds to your forecast' },
+              { icon: '🧬', title: 'Biological Blueprint', desc: 'Full 3-pillar breakdown: genetics, epigenetics & community' },
+              { icon: '🌟', title: 'Cultural Horizon', desc: 'Icons who share your longevity path and what you can learn from them' },
+              { icon: '🤖', title: 'AI Longevity Coach', desc: 'Chat with an AI that knows your exact health data' },
             ].map((item) => (
               <div key={item.title} className="flex items-start gap-3">
                 <span className="text-xl">{item.icon}</span>
