@@ -204,10 +204,12 @@ const LifeExpectancy = () => {
       : { label: 'Needs Attention', color: '#ef4444', desc: `Your score of ${score}/100 indicates multiple lifestyle factors are reducing your forecast significantly. Research shows lifestyle changes at any age produce measurable benefits.` };
 
     // SVG gauge arc — semicircle, score 0-100 maps to 0-180 degrees
+    // SVG viewBox is 0 0 140 90. Background arc: center(70,80) radius 55, from M15,80 to 125,80
+    // Score arc must use SAME center(70,80) and radius(55) to sit on the track correctly
     const gaugeAngle = (score / 100) * 180;
     const gaugeRad = (gaugeAngle - 90) * (Math.PI / 180);
-    const gaugeX = (60 + 50 * Math.cos(gaugeRad)).toFixed(1);
-    const gaugeY = (70 + 50 * Math.sin(gaugeRad)).toFixed(1);
+    const gaugeX = (70 + 55 * Math.cos(gaugeRad)).toFixed(1);
+    const gaugeY = (80 + 55 * Math.sin(gaugeRad)).toFixed(1);
 
     // Human-readable quiz answer labels
     const smokingMap: Record<string, string> = {
@@ -565,7 +567,7 @@ const LifeExpectancy = () => {
       -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
     }
     @page { margin: 0; size: A4; }
-    .page { padding: 32px 40px; min-height: 100vh; margin: 1.2cm; }
+    .page { padding: 32px 40px; margin: 1.2cm; }
     .page-break { page-break-after: always; break-after: page; }
     h1 { font-size: 20px; font-weight: 900; }
     h2 { font-size: 15px; font-weight: 700; color: #374151; margin: 0 0 14px 0; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
@@ -1103,11 +1105,15 @@ const LifeExpectancy = () => {
         try { iframe.contentWindow?.print(); } catch (e) { console.error('Print failed:', e); }
         setTimeout(() => {
           try { if (document.body.contains(iframe)) document.body.removeChild(iframe); } catch {}
-        }, 3000);
+        }, 5000);
       };
 
-      iframe.onload = () => setTimeout(printAndCleanup, 300);
-      setTimeout(() => { if (document.body.contains(iframe)) printAndCleanup(); }, 1800);
+      // Single trigger only — onload fires reliably once content is written
+      // No backup setTimeout to avoid triggering print dialog twice
+      iframe.onload = () => {
+        // Small delay to ensure fonts and styles are applied before printing
+        setTimeout(printAndCleanup, 800);
+      };
     } catch (e) {
       console.error('BornClock blueprint error:', e);
       try { document.body.removeChild(iframe); } catch {}
