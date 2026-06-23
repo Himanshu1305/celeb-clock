@@ -1,11 +1,6 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TrendingUp, RefreshCw } from 'lucide-react';
-import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
-} from 'recharts';
 import { LongevityResult, calculateLongevityScore } from '@/services/LongevityCalculationService';
-import { saveWeeklyScore, getScoreHistory, ScoreEntry } from '@/services/LongevityScoreService';
 
 interface LongevityScoreCardProps {
   result: LongevityResult;
@@ -66,27 +61,12 @@ function getPercentileLabel(score: number): string {
 }
 
 export function LongevityScoreCard({ result, userId, isPremium, onRetake }: LongevityScoreCardProps) {
-  const [history, setHistory] = useState<ScoreEntry[]>([]);
   const score = calculateLongevityScore(result);
-
-  useEffect(() => {
-    if (userId) {
-      saveWeeklyScore(userId, score, result.totalForecast);
-      if (isPremium) {
-        getScoreHistory(userId, 12).then(setHistory);
-      }
-    }
-  }, [userId, score, result.totalForecast, isPremium]);
 
   const improvable = result.factorBreakdown
     .filter(f => f.currentImpact < 0)
     .sort((a, b) => a.currentImpact - b.currentImpact)
     .slice(0, 3);
-
-  const chartData = history.map(h => ({
-    week: h.week_start.slice(5),
-    score: h.score,
-  }));
 
   return (
     <div className="rounded-2xl border border-indigo-200 dark:border-indigo-800 bg-white dark:bg-card shadow-sm overflow-hidden">
@@ -179,39 +159,7 @@ export function LongevityScoreCard({ result, userId, isPremium, onRetake }: Long
           );
         })()}
 
-        {/* Score history chart */}
-        {isPremium && chartData.length > 1 ? (
-          <div className="mb-6">
-            <p className="text-xs font-medium text-muted-foreground mb-2">Score over time</p>
-            <ResponsiveContainer width="100%" height={120}>
-              <LineChart data={chartData}>
-                <XAxis dataKey="week" tick={{ fontSize: 10 }} />
-                <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} width={28} />
-                <Tooltip
-                  contentStyle={{ fontSize: 12 }}
-                  formatter={(v: number) => [v, 'Score']}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="score"
-                  stroke="#6366f1"
-                  strokeWidth={2}
-                  dot={{ r: 3 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        ) : !isPremium ? (
-          <div className="mb-6 rounded-xl bg-muted/40 border border-border flex items-center justify-center h-28 text-center px-4">
-            <div>
-              <p className="text-sm text-muted-foreground">📈 Track your score over time</p>
-              <p className="text-xs text-muted-foreground mb-2">Premium feature</p>
-              <Link to="/upgrade" className="text-xs text-indigo-600 font-medium hover:underline">
-                Upgrade →
-              </Link>
-            </div>
-          </div>
-        ) : null}
+        {/* Score history chart removed — re-enable when Supabase quiz history is built */}
 
         {/* Improvement tips */}
         {improvable.length > 0 && (

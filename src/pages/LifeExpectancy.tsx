@@ -92,9 +92,15 @@ const LifeExpectancy = () => {
       });
   }, []);
   useEffect(() => {
-    if (phase === 'result' && !isPremium && longevityResult) {
+    if ((phase === 'result' || phase === 'report') && !isPremium && longevityResult) {
       const seen = localStorage.getItem('bornclock_paywall_seen');
-      if (!seen) {
+      const seenTime = seen ? parseInt(seen, 10) : 0;
+      const isValidTimestamp = seenTime > 1000000000000; // valid ms timestamp
+      const hoursSinceSeen = isValidTimestamp
+        ? (Date.now() - seenTime) / (1000 * 60 * 60)
+        : Infinity;
+      // Show if never seen OR if seen more than 24 hours ago
+      if (!seen || hoursSinceSeen > 24) {
         const timer = setTimeout(() => {
           setShowPaywallModal(true);
         }, 1500);
@@ -1132,7 +1138,19 @@ const LifeExpectancy = () => {
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newDate = e.target.value ? new Date(e.target.value) : null;
+    const val = e.target.value;
+    // Only accept a complete YYYY-MM-DD string (10 chars).
+    // The browser fires onChange mid-selection (after month+year but before day),
+    // producing partial values like "1990-06" which new Date() parses as June 1 1990.
+    // We guard against this by requiring the full format before acting.
+    if (!val || val.length < 10 || !/^\d{4}-\d{2}-\d{2}$/.test(val)) {
+      return;
+    }
+    // Add T12:00:00 to avoid timezone edge cases where midnight UTC parses as previous day
+    const newDate = new Date(val + 'T12:00:00');
+    if (isNaN(newDate.getTime()) || newDate > new Date()) {
+      return;
+    }
     setBirthDate(newDate);
     resetAll();
   };
@@ -1316,7 +1334,7 @@ const LifeExpectancy = () => {
               <LifeExpectancyCalculator
                 birthDate={birthDate}
                 onComplete={handleQuizComplete}
-                onCompleteSkip={handleQuizCompleteAndSkip}
+                onCompleteSkip={isPremium ? handleQuizCompleteAndSkip : undefined}
               />
             ) : (
               <div className="text-center py-8 text-muted-foreground">
@@ -1882,7 +1900,7 @@ const LifeExpectancy = () => {
           )}
           onClose={() => {
             setShowPaywallModal(false);
-            localStorage.setItem('bornclock_paywall_seen', 'true');
+            localStorage.setItem('bornclock_paywall_seen', String(Date.now()));
           }}
         />
       )}

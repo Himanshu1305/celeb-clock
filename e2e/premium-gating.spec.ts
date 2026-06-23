@@ -357,15 +357,18 @@ test.describe('Free user — CulturalHorizonTeaser number blurring', () => {
 // SCORE OVER TIME — must not appear for free users without history
 // ─────────────────────────────────────────────
 test.describe('Score Over Time section', () => {
-  test('Score Over Time chart is gated — premium teaser shown to unauthenticated users', async ({ page }) => {
+  test('Score Over Time section is removed entirely', async ({ page }) => {
     await completeQuizAsFreeUser(page);
     await page.waitForTimeout(1000);
 
-    // For free users, the LongevityScoreCard shows a premium gate teaser in place of the chart
-    // (the LineChart only renders when isPremium && chartData.length > 1)
+    // Score Over Time section (both chart and teaser) has been removed
     await expect(
       page.locator('text=📈 Track your score over time').first()
-    ).toBeVisible({ timeout: 5000 });
+    ).not.toBeVisible({ timeout: 3000 });
+
+    await expect(
+      page.locator('text=Score over time').first()
+    ).not.toBeVisible({ timeout: 3000 });
   });
 });
 
