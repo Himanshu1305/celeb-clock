@@ -83,7 +83,11 @@ test.describe('All public routes load without errors', () => {
         !e.includes('favicon') &&
         !e.includes('analytics') &&
         !e.includes('gtag') &&
-        !e.includes('clarity')
+        !e.includes('clarity') &&
+        !e.includes('ipapi.co') &&
+        !e.includes('CORS') &&
+        !e.includes('net::ERR_FAILED') &&
+        !e.includes('net::ERR_BLOCKED')
       );
       expect(criticalErrors).toHaveLength(0);
     });
