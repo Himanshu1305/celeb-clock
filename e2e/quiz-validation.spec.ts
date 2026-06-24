@@ -29,11 +29,13 @@ test.describe('DOB input — edge cases', () => {
     await expect(page.locator('text=Something went wrong')).not.toBeVisible();
   });
 
-  test('today\'s date (age 0) is rejected — quiz does not appear', async ({ page }) => {
+  test('tomorrow\'s date (future) is rejected — quiz does not appear', async ({ page }) => {
     const dobInput = page.locator('input[type="date"]').first();
     await dobInput.waitFor({ state: 'visible', timeout: 10000 });
-    const today = new Date().toISOString().split('T')[0];
-    await dobInput.fill(today);
+    // Use tomorrow — always in the future regardless of time of day
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    await dobInput.fill(tomorrow.toISOString().split('T')[0]);
     await page.waitForTimeout(600);
     await expect(page.locator('text=Step 1 of').first()).not.toBeVisible({ timeout: 2000 });
   });
