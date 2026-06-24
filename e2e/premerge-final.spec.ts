@@ -345,19 +345,21 @@ test.describe('Celebrity deduplication', () => {
 // FIX 7: Gautam Adani on June 24
 // ─────────────────────────────────────────────────────────────────────────────
 test.describe('Indian celebrity data — Gautam Adani', () => {
-  // POSITIVE: Adani appears on June 24 birthday page
-  test('POSITIVE: Gautam Adani visible on June 24 birthday page', async ({ page }) => {
-    await page.goto('/birthday/6/24');
+  // POSITIVE: Adani appears on today's birthdays page (indianCelebrities.ts data, not Supabase global)
+  // Note: /birthday/6/24 uses getRankedBirthdayCelebrities (Supabase global only).
+  // Indian celebrities from the static file appear on /todays-birthdays via mergeWithIndianCelebrities.
+  test('POSITIVE: Gautam Adani visible on todays-birthdays (June 24)', async ({ page }) => {
+    await page.goto('/todays-birthdays');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(2500);
     await expect(page.locator('text=Gautam Adani').first()).toBeVisible({ timeout: 5000 });
   });
 
   // POSITIVE: Adani shows with correct category
   test('POSITIVE: Adani shows as Businessman', async ({ page }) => {
-    await page.goto('/birthday/6/24');
+    await page.goto('/todays-birthdays');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(2500);
 
     const adaniCard = page.locator('text=Gautam Adani').locator('..').locator('..');
     if (await adaniCard.isVisible({ timeout: 3000 }).catch(() => false)) {
