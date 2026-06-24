@@ -50,9 +50,10 @@ export function mergeWithIndianCelebrities(
     isIndian: false,
   }));
 
-  const indianNames = new Set(indianMatches.map(c => c.name.toLowerCase()));
+  const normName = (n: string) => n.toLowerCase().trim().replace(/\s+/g, ' ');
+  const indianNames = new Set(indianMatches.map(c => normName(c.name)));
   const dedupedGlobal = globalMerged.filter(
-    c => !indianNames.has(String(c.name || '').toLowerCase())
+    c => !indianNames.has(normName(String(c.name || '')))
   );
 
   if (showIndianFirst) {

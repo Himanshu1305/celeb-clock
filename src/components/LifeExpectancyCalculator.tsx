@@ -126,6 +126,121 @@ const STEP_EDUCATION: Record<number, { icon: string; title: string; content: str
   },
 };
 
+const STEP_FAQS: Record<number, { q: string; a: string }[]> = {
+  1: [
+    {
+      q: 'Why does my exact date of birth matter, not just my age?',
+      a: 'Your precise birth date lets us use the exact WHO life expectancy table for your birth cohort. People born in different decades have different baseline risks due to medical advances, childhood nutrition, and environmental exposure during their formative years. A 45-year-old born in 1979 has a different baseline than one born in 1959.',
+    },
+    {
+      q: 'Does the decade I was born in affect my forecast?',
+      a: 'Yes, meaningfully. Each decade of birth reflects the healthcare technology, vaccination programmes, and public health conditions you grew up in. Our model adjusts for birth cohort effects drawn from WHO actuarial data.',
+    },
+    {
+      q: 'Is my date of birth stored anywhere?',
+      a: 'No. Your date of birth is held only in your browser\'s memory for the duration of this session. It is not sent to our servers, not stored in cookies, and is deleted when you close the tab. See our Privacy Policy for full details.',
+    },
+  ],
+  2: [
+    {
+      q: 'I quit smoking 3 years ago — do I still count as a smoker?',
+      a: 'No. Select "Former smoker (quit recently)" which reflects the reduced but not yet fully recovered risk profile. Research shows that quitting under 5 years ago still carries residual risk — it takes 10–15 years of abstinence to approach the risk level of a never-smoker. The good news: your risk drops substantially within the first year of quitting.',
+    },
+    {
+      q: 'Does vaping or e-cigarettes count as smoking?',
+      a: 'Vaping is not yet in the calculator due to limited long-term mortality data. Current evidence suggests vaping carries lower risk than cigarettes but significantly higher risk than non-smoking. If you vape regularly, selecting "light smoker" gives the closest approximation based on available research.',
+    },
+    {
+      q: 'How much does quitting smoking actually add to my forecast?',
+      a: 'Quitting before 40 reduces the excess mortality risk by approximately 90% (Doll et al., BMJ 2004). In practical terms, a pack-a-day smoker who quits at 40 can expect to recover 7–9 years of life expectancy versus continuing. Even quitting at 60 adds 3+ years on average.',
+    },
+  ],
+  3: [
+    {
+      q: 'Does a controlled chronic condition count the same as an uncontrolled one?',
+      a: 'No — this is one of the most important distinctions in the calculator. Controlled hypertension (on medication, blood pressure managed) reduces longevity impact from -4.5 years to -1.9 years versus unmanaged. Controlled diabetes similarly cuts the mortality impact roughly in half. Always mark conditions as controlled if you are actively managing them with medication or lifestyle.',
+    },
+    {
+      q: 'I don\'t know my exact BMI. How do I estimate it?',
+      a: 'BMI = weight (kg) ÷ height (m)². For example, 80kg at 1.75m = 80 ÷ 3.0625 = 26.1. Free BMI calculators are available at any health website. If unsure, use your best estimate — even approximate BMI gives a meaningful longevity signal.',
+    },
+    {
+      q: 'Should I include family history of a condition even if it only affected one relative?',
+      a: 'Yes, include it. Family history is used to calibrate your genetic risk baseline, and even a single first-degree relative (parent, sibling) with heart disease or diabetes meaningfully elevates your statistical risk. The model weights this appropriately — it does not assume certainty, only increased baseline probability.',
+    },
+  ],
+  4: [
+    {
+      q: 'What counts as a "Mediterranean" or "excellent" diet?',
+      a: 'An excellent diet in our model reflects the Mediterranean pattern: abundant vegetables, fruits, legumes, whole grains, olive oil, fish, and minimal red meat or ultra-processed food. The PREDIMED trial (NEJM, 2013) showed this pattern reduces cardiovascular events by 30%. If you eat this way 70%+ of the time, select excellent. Mixed diets with occasional fast food = average.',
+    },
+    {
+      q: 'My stress varies a lot — how do I choose a number?',
+      a: 'Rate your typical baseline stress over the past 3 months, not today\'s level. Consider: do you frequently feel overwhelmed, have trouble sleeping due to worry, or carry tension physically? Chronic stress (sustained 7+/10) is what damages longevity through cortisol elevation — acute stress spikes matter much less than your persistent baseline.',
+    },
+    {
+      q: 'Does alcohol consumption really add years for light drinkers?',
+      a: 'The model reflects the epidemiological data which has historically shown a small longevity benefit for light social drinkers. However, the CDC (2023) now states no level of alcohol is safe for cancer risk. The longevity data for light drinking is debated — some studies suggest the apparent benefit reflects healthier overall lifestyles among moderate drinkers rather than alcohol itself. Use this data point as directional, not definitive.',
+    },
+  ],
+  5: [
+    {
+      q: 'Is 6.5 hours of sleep really that different from 7 hours?',
+      a: 'Yes, at population scale. A meta-analysis of 3 million participants (Liu et al., Sleep Health, 2021) found that sleeping under 7 hours is associated with 12% higher all-cause mortality. The effect accumulates over decades. Getting consistent 7–8 hours isn\'t just about feeling rested — it\'s when your body performs DNA repair, hormone regulation, and cellular waste clearance (glymphatic system activation).',
+    },
+    {
+      q: 'What if I sleep 9+ hours — does that reduce my forecast too?',
+      a: 'Yes. Both short sleep (<6 hours) and long sleep (>9 hours) are associated with higher mortality in population studies. Long sleep may reflect underlying health conditions rather than cause harm directly. The optimal window is 7–8 hours. If you consistently need 9+ hours, it\'s worth discussing with your doctor.',
+    },
+    {
+      q: 'Does sleep quality matter or just duration?',
+      a: 'Both matter, but our calculator uses duration as a proxy because it\'s objectively measurable. Poor sleep quality (frequent waking, sleep apnoea, restless sleep) with normal duration still elevates health risks. If you sleep 7 hours but rarely feel rested, address quality — sleep apnoea treatment alone has shown significant cardiovascular mortality reductions in clinical trials.',
+    },
+  ],
+  6: [
+    {
+      q: 'What counts as "moderate" vs "vigorous" exercise?',
+      a: 'Moderate exercise raises your heart rate to 50–70% of maximum and includes brisk walking, cycling on flat terrain, swimming, and dancing. Vigorous exercise reaches 70–85% of max heart rate — running, HIIT, football, or fast cycling. WHO guidelines recommend 150 minutes of moderate OR 75 minutes of vigorous exercise per week. Both provide the 31% all-cause mortality reduction benefit.',
+    },
+    {
+      q: 'I have a physical job — does that count as exercise?',
+      a: 'Occupational physical activity has a more complex relationship with longevity than leisure exercise. Research suggests leisure-time exercise produces greater mortality benefits than equivalent work-related activity, possibly due to recovery time, stress context, and autonomy. If your job is physically demanding, count it as some contribution but don\'t equate it fully with structured leisure exercise.',
+    },
+    {
+      q: 'Can I offset other risk factors with more exercise?',
+      a: 'Partially. Exercise is one of the most powerful single interventions — it reduces cardiovascular risk, metabolic disease, and cancer risk simultaneously. Studies show fit individuals with higher BMI sometimes have better mortality outcomes than unfit individuals at normal weight. However, exercise does not eliminate the independent risks of smoking, uncontrolled blood pressure, or poor diet — it reduces but cannot fully offset them.',
+    },
+  ],
+  7: [
+    {
+      q: 'What if most family members died young due to accidents or violence, not disease?',
+      a: 'Focus on ages at natural death (disease-related). If a grandparent died at 55 in a car accident, their genetic longevity potential is unknown — use the "Don\'t know" option for that relative. The model uses natural cause mortality to assess your inherited biological trajectory, so accidental deaths should not be included in the longevity calculation.',
+    },
+    {
+      q: 'Does one very long-lived grandparent (e.g. 99 years) significantly change my score?',
+      a: 'Yes, meaningfully. The model weights paternal and maternal grandparents, parents, and siblings. A grandparent reaching 99 reflects exceptional genetic longevity potential. The Karolinska twin study found that genetics accounts for 25–30% of longevity variance — a 99-year-old grandparent pushes your genetic baseline noticeably upward. But remember: 70–75% of your outcome remains lifestyle-determined.',
+    },
+    {
+      q: 'If my parents are still living in their 80s, how does that affect my score?',
+      a: 'Very positively. Living parents in their 80s is strong genetic evidence. Enter their current age and mark them as "Still Living" — the model correctly interprets this as a positive genetic signal, since they are already exceeding the average life expectancy for their cohort.',
+    },
+  ],
+  8: [
+    {
+      q: 'What if I don\'t have a specific person to enter as a community anchor?',
+      a: 'The community anchor is optional. If you leave it blank, no community bonus is applied — your forecast reflects only your personal factors. If you know someone in your community who is exceptionally long-lived and whose lifestyle influences yours, entering them captures the documented environmental effect that Blue Zones research identifies as adding up to 0.8 years independently of personal habits.',
+    },
+    {
+      q: 'How does my social connection level actually affect longevity?',
+      a: 'The mechanism is multi-pathway: strong social ties reduce cortisol (stress hormone), increase immune function, improve adherence to healthy behaviours, and provide practical support during illness. A landmark meta-analysis of 148 studies (Holt-Lunstad et al., PLOS Medicine, 2010) found that adequate social connection increases survival odds by 50% — comparable to quitting smoking.',
+    },
+    {
+      q: 'Does living in a city vs rural area affect my longevity?',
+      a: 'Urban vs rural has a complex relationship with longevity that varies significantly by country. In India, urban areas currently show higher life expectancy due to healthcare access. However, Blue Zones research identifies rural communities with strong social bonds, traditional diets, and natural movement as producing exceptional longevity. The key variables our model captures — diet, exercise, stress, social connection — are what drive the urban/rural difference, not geography itself.',
+    },
+  ],
+};
+
 const getBMICategory = (bmi: number) => {
   if (bmi < 18.5) return { label: 'Underweight', color: 'text-blue-500 border-blue-400' };
   if (bmi < 25)   return { label: 'Normal Weight', color: 'text-green-600 border-green-400' };
@@ -1416,6 +1531,25 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
             <p className="text-xs text-blue-400 italic">
               📚 {STEP_EDUCATION[step].source}
             </p>
+          </div>
+        )}
+
+        {STEP_FAQS[step] && STEP_FAQS[step].length > 0 && (
+          <div className="mt-4 space-y-2">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-1">
+              Common Questions
+            </p>
+            {STEP_FAQS[step].map((faq, i) => (
+              <details key={i} className="group rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 transition-colors">
+                <summary className="flex items-center justify-between gap-2 px-4 py-3 cursor-pointer text-sm font-medium text-gray-700 list-none">
+                  <span>{faq.q}</span>
+                  <span className="text-gray-400 group-open:rotate-180 transition-transform text-xs flex-shrink-0">▼</span>
+                </summary>
+                <div className="px-4 pb-3 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-3">
+                  {faq.a}
+                </div>
+              </details>
+            ))}
           </div>
         )}
 

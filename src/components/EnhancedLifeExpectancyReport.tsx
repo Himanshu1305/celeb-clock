@@ -1,10 +1,9 @@
-import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Download, Copy, Crown, Lock } from 'lucide-react';
+import { Crown, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { LongevityResult, EPIGENETIC_HABITS } from '@/services/LongevityCalculationService';
 import { HealthGuideSection } from '@/components/HealthGuideSection';
@@ -23,7 +22,6 @@ interface Props {
   optimizedForecast?: number;
   userSelectedHabits?: string[];
   simulatorHabitFrequencies?: Record<string, string>;
-  onDownloadBlueprint?: () => void;
 }
 
 
@@ -77,9 +75,7 @@ export const EnhancedLifeExpectancyReport = ({
   result, userName, birthDate, isPremium, onUpgradeClick,
   optimizedForecast,
   userSelectedHabits, simulatorHabitFrequencies,
-  onDownloadBlueprint,
 }: Props) => {
-  const [copied, setCopied] = useState(false);
 
   const p1 = result.pillar1Snapshot;
   const p2 = result.pillar2Snapshot;
@@ -121,12 +117,6 @@ export const EnhancedLifeExpectancyReport = ({
   const currentAge = birthDate instanceof Date
     ? Math.floor((new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000))
     : result.currentAge;
-
-  const shareText = `My longevity forecast is ${result.totalForecast} years! Calculate yours at ${window.location.origin}/life-expectancy #LongevityBlueprint`;
-
-  const copyShare = () => {
-    navigator.clipboard.writeText(shareText).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
-  };
 
   const blurNum = (n: number | string, suffix = '') => (
     <BlurredNumber value={n} isPremium={isPremium} suffix={suffix} />
@@ -400,30 +390,7 @@ export const EnhancedLifeExpectancyReport = ({
             </div>
           )}
 
-          {/* Export buttons — after Factor Impact Analysis */}
-          <div className="mt-6 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-5 border border-indigo-200 screen-only">
-            <h3 className="text-base font-bold text-gray-800 mb-1">📄 Save Your Blueprint</h3>
-            <p className="text-sm text-gray-500 mb-4">
-              Download your complete 8-page personal longevity report with all sections, analysis, and your 90-day plan.
-            </p>
-            <div className="flex gap-3 flex-wrap">
-              <button
-                onClick={() => onDownloadBlueprint?.()}
-                className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-xl transition-colors text-sm"
-              >
-                📄 Download Blueprint PDF
-              </button>
-              <button
-                onClick={copyShare}
-                className="flex-1 bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-700 font-bold py-3 px-4 rounded-xl transition-colors text-sm"
-              >
-                {copied ? '✅ Copied!' : '🔗 Copy Share Link'}
-              </button>
-            </div>
-            <p className="text-xs text-gray-400 mt-2 text-center">
-              💡 In print dialog: set Headers &amp; Footers to OFF for a clean PDF without URLs
-            </p>
-          </div>
+          {/* Export buttons are in LongevityHeroCard above — no duplicate here */}
 
           <div className="bg-primary/5 rounded-xl border border-primary/20 p-4 space-y-2">
             <p className="text-xs font-bold text-primary">📖 Scientific Context</p>

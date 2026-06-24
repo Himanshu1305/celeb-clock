@@ -1015,7 +1015,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
             </p>
             <Link to="/upgrade">
               <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold px-6">
-                Unlock Full Report — ₹499 · $6.99
+                Unlock Premium →
               </Button>
             </Link>
           </CardContent>

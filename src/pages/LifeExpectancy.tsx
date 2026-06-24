@@ -556,55 +556,116 @@ const LifeExpectancy = () => {
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 12px; line-height: 1.5; color: #1f2937; background: white;
+      font-size: 12px; line-height: 1.6; color: #1f2937; background: white;
       -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
     }
     @page { margin: 0; size: A4; }
     .page { padding: 32px 40px; margin: 1.2cm; }
     .page-break { page-break-after: always; break-after: page; }
-    h1 { font-size: 20px; font-weight: 900; }
-    h2 { font-size: 15px; font-weight: 700; color: #374151; margin: 0 0 14px 0; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
-    h3 { font-size: 13px; font-weight: 700; color: #374151; margin: 0 0 10px 0; }
-    .section { margin-bottom: 20px; padding: 18px; border-radius: 8px; page-break-inside: avoid; break-inside: avoid; }
-    .section-gray { background: #f9fafb; border: 1px solid #e5e7eb; }
-    .section-green { background: #f0fdf4; border: 1px solid #bbf7d0; }
-    .section-blue { background: #eff6ff; border: 1px solid #bfdbfe; }
-    .section-amber { background: #fffbeb; border: 1px solid #fde68a; }
-    .section-purple { background: #faf5ff; border: 1px solid #e9d5ff; }
-    .section-green h2 { border-bottom-color: #bbf7d0; }
-    .section-blue h2 { border-bottom-color: #bfdbfe; }
-    .section-amber h2 { border-bottom-color: #fde68a; }
-    .section-purple h2 { border-bottom-color: #e9d5ff; }
+
+    /* Typography */
+    h1 { font-size: 22px; font-weight: 900; color: #111827; letter-spacing: -0.3px; }
+    h2 { font-size: 14px; font-weight: 800; color: #1f2937; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #e5e7eb; text-transform: uppercase; letter-spacing: 0.5px; }
+    h3 { font-size: 13px; font-weight: 700; color: #374151; margin: 0 0 8px 0; }
+
+    /* Section cards */
+    .section { margin-bottom: 18px; padding: 16px 20px; border-radius: 10px; page-break-inside: avoid; break-inside: avoid; border: 1px solid #e5e7eb; }
+    .section-gray  { background: #f9fafb; border-left: 4px solid #6b7280; }
+    .section-green { background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid #22c55e; }
+    .section-blue  { background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #3b82f6; }
+    .section-amber { background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #f59e0b; }
+    .section-purple{ background: #faf5ff; border: 1px solid #e9d5ff; border-left: 4px solid #8b5cf6; }
+    .section-indigo{ background: #eef2ff; border: 1px solid #c7d2fe; border-left: 4px solid #4f46e5; }
+    .section-teal  { background: #f0fdfa; border: 1px solid #99f6e4; border-left: 4px solid #14b8a6; }
+    .section-rose  { background: #fff1f2; border: 1px solid #fecdd3; border-left: 4px solid #f43f5e; }
+
+    /* Section headings match their colour */
+    .section-green  h2 { border-bottom-color: #bbf7d0; color: #166534; }
+    .section-blue   h2 { border-bottom-color: #bfdbfe; color: #1e40af; }
+    .section-amber  h2 { border-bottom-color: #fde68a; color: #92400e; }
+    .section-purple h2 { border-bottom-color: #e9d5ff; color: #6b21a8; }
+    .section-indigo h2 { border-bottom-color: #c7d2fe; color: #3730a3; }
+    .section-teal   h2 { border-bottom-color: #99f6e4; color: #0f766e; }
+    .section-rose   h2 { border-bottom-color: #fecdd3; color: #9f1239; }
+
+    /* Grid layouts */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
-    .stat { text-align: center; background: white; border-radius: 8px; padding: 14px 10px; border: 1px solid #e5e7eb; }
-    .stat-label { font-size: 10px; color: #9ca3af; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .stat-value { font-size: 24px; font-weight: 900; line-height: 1; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; }
+
+    /* Stat boxes */
+    .stat { text-align: center; background: white; border-radius: 10px; padding: 14px 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .stat-label { font-size: 9px; color: #9ca3af; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+    .stat-value { font-size: 22px; font-weight: 900; line-height: 1; }
     .stat-unit { font-size: 11px; color: #9ca3af; font-weight: 400; }
-    table { width: 100%; border-collapse: collapse; }
-    th { font-size: 10px; color: #9ca3af; text-transform: uppercase; padding: 6px 0; border-bottom: 2px solid #e5e7eb; text-align: left; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; border-radius: 8px; overflow: hidden; }
+    th { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; padding: 9px 8px; background: #f3f4f6; border-bottom: 2px solid #e5e7eb; text-align: left; font-weight: 700; }
     th:last-child, th:nth-last-child(2) { text-align: right; }
     tr { border-bottom: 1px solid #f3f4f6; }
-    td { padding: 7px 0; font-size: 12px; }
-    .profile-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f3f4f6; font-size: 12px; }
-    .profile-row:last-child { border-bottom: none; }
-    .bar-row { margin-bottom: 10px; }
-    .bar-label { font-size: 11px; color: #4b5563; margin-bottom: 3px; display: flex; justify-content: space-between; }
-    .bar-bg { background: #e5e7eb; border-radius: 4px; height: 10px; }
-    .bar-fill { height: 10px; border-radius: 4px; }
-    /* Enhanced visual design */
-    .section-gray { border-left: 3px solid #9ca3af; }
-    .section-green { border-left: 3px solid #22c55e; }
-    .section-blue { border-left: 3px solid #3b82f6; }
-    .section-amber { border-left: 3px solid #f59e0b; }
-    .section-purple { border-left: 3px solid #8b5cf6; }
-    th { background: #f3f4f6; padding: 8px 6px; }
     tr:nth-child(even) td { background: #fafafa; }
-    .page-footer { margin-top: 16px; padding-top: 10px; border-top: 1px solid #e5e7eb; font-size: 10px; color: #9ca3af; text-align: center; }
-    .page-header { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #4f46e5, #6366f1); padding: 10px 16px; margin: -32px -40px 20px; }
-    .page-header-name { font-size: 11px; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.5px; }
-    .page-header-title { font-size: 13px; font-weight: 700; color: white; }
+    td { padding: 8px; font-size: 12px; }
+
+    /* Profile rows */
+    .profile-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #f3f4f6; font-size: 12px; }
+    .profile-row:last-child { border-bottom: none; }
+
+    /* Bar chart */
+    .bar-row { margin-bottom: 12px; }
+    .bar-label { font-size: 11px; color: #4b5563; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
+    .bar-bg { background: #e5e7eb; border-radius: 6px; height: 12px; overflow: hidden; }
+    .bar-fill { height: 12px; border-radius: 6px; transition: width 0.3s ease; }
+
+    /* Page header — indigo gradient band */
+    .page-header {
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(135deg, #3730a3, #4f46e5, #6366f1);
+      padding: 11px 20px; margin: -32px -40px 24px;
+      border-bottom: 3px solid #3730a3;
+    }
+    .page-header-name { font-size: 10px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+    .page-header-right { font-size: 12px; font-weight: 700; color: white; }
+
+    /* Page footer */
+    .page-footer {
+      margin-top: 20px; padding-top: 10px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 9px; color: #9ca3af; text-align: center;
+      letter-spacing: 0.3px;
+    }
+
+    /* Opportunity cards */
+    .opp-card {
+      padding: 14px; background: white; border-radius: 10px;
+      border: 1px solid #e5e7eb; margin-bottom: 12px;
+      page-break-inside: avoid; break-inside: avoid;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .opp-number {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white; border-radius: 50%; width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 900; flex-shrink: 0;
+    }
+    .opp-gain {
+      font-size: 20px; font-weight: 900; color: #059669; line-height: 1;
+    }
+
+    /* 90-Day phase headers */
+    .phase-foundation { background: linear-gradient(135deg, #4f46e5, #6366f1); }
+    .phase-build      { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+    .phase-deepen     { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+    .phase-consolidate{ background: linear-gradient(135deg, #059669, #10b981); }
+
+    /* Citation style */
+    .citation { font-size: 10px; color: #6b7280; font-style: italic; margin-top: 6px; }
+    .tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+    .tag-green  { background: #dcfce7; color: #166534; }
+    .tag-blue   { background: #dbeafe; color: #1e40af; }
+    .tag-amber  { background: #fef3c7; color: #92400e; }
+    .tag-red    { background: #fef2f2; color: #991b1b; }
+    .tag-purple { background: #f3e8ff; color: #6b21a8; }
   </style>
 </head>
 <body>
@@ -753,6 +814,7 @@ const LifeExpectancy = () => {
       </div>
     </div>
   </div>
+  <div class="page-footer">BornClock Personal Longevity Blueprint &nbsp;·&nbsp; ${name} &nbsp;·&nbsp; bornclock.com &nbsp;·&nbsp; Confidential</div>
 </div>
 
 <!-- PAGE 3: HOW YOUR NUMBER WAS BUILT -->
@@ -807,6 +869,7 @@ const LifeExpectancy = () => {
     </table>
     <p style="font-size:10px;color:#9ca3af;margin-top:10px;font-style:italic;">Potential gain = years added if this factor was optimised to the target level.</p>
   </div>
+  <div class="page-footer">BornClock Personal Longevity Blueprint &nbsp;·&nbsp; ${name} &nbsp;·&nbsp; bornclock.com &nbsp;·&nbsp; Confidential</div>
 </div>
 
 <!-- PAGE 4: PERSONALISED ANALYSIS -->
@@ -859,6 +922,7 @@ const LifeExpectancy = () => {
       <p style="font-size:12px;color:#4b5563;line-height:1.6;">${socialNote[quiz?.socialConnections || ''] || ''}</p>
     </div>
   </div>
+  <div class="page-footer">BornClock Personal Longevity Blueprint &nbsp;·&nbsp; ${name} &nbsp;·&nbsp; bornclock.com &nbsp;·&nbsp; Confidential</div>
 </div>
 
 <!-- PAGE 5: TOP IMPROVEMENT OPPORTUNITIES -->
@@ -869,6 +933,7 @@ const LifeExpectancy = () => {
     <p style="font-size:12px;color:#6b7280;margin-top:4px;">Ranked by potential years gained — specific to your quiz results</p>
   </div>
   ${topOppsHTML}
+  <div class="page-footer">BornClock Personal Longevity Blueprint &nbsp;·&nbsp; ${name} &nbsp;·&nbsp; bornclock.com &nbsp;·&nbsp; Confidential</div>
 </div>
 
 <!-- PAGE 6: EPIGENETIC BLUEPRINT -->
@@ -892,6 +957,7 @@ const LifeExpectancy = () => {
     <p style="font-size:11px;color:#6b7280;margin-bottom:12px;">Adding even 2–3 of these can meaningfully increase your epigenetic bonus.</p>
     ${missingHabitsHTML}
   </div>
+  <div class="page-footer">BornClock Personal Longevity Blueprint &nbsp;·&nbsp; ${name} &nbsp;·&nbsp; bornclock.com &nbsp;·&nbsp; Confidential</div>
 </div>
 
 <!-- PAGE 7: BIOLOGICAL BLUEPRINT -->
@@ -943,6 +1009,7 @@ const LifeExpectancy = () => {
       ${posFactorsHTML || '<p style="font-size:12px;color:#6b7280;">Adopt positive lifestyle habits to see gains here.</p>'}
     </div>
   </div>
+  <div class="page-footer">BornClock Personal Longevity Blueprint &nbsp;·&nbsp; ${name} &nbsp;·&nbsp; bornclock.com &nbsp;·&nbsp; Confidential</div>
 </div>
 
 <!-- PAGE 8: COMMUNITY ANCHOR -->
@@ -972,6 +1039,7 @@ const LifeExpectancy = () => {
   <div class="section section-gray" style="padding:12px 16px;">
     <p style="font-size:11px;color:#6b7280;font-style:italic;">See Scientific Foundation (Page 11) for the full Blue Zones Power 9® framework and how your habits align with centenarian populations.</p>
   </div>
+  <div class="page-footer">BornClock Personal Longevity Blueprint &nbsp;·&nbsp; ${name} &nbsp;·&nbsp; bornclock.com &nbsp;·&nbsp; Confidential</div>
 </div>
 
 <!-- PAGE 9: HEALTH GUIDE -->
@@ -985,13 +1053,14 @@ const LifeExpectancy = () => {
   <div style="padding:10px 14px;background:#eff6ff;border-radius:6px;border:1px solid #bfdbfe;margin-top:8px;">
     <p style="font-size:10px;color:#1e40af;line-height:1.5;margin:0;"><strong>Disclaimer:</strong> Recommendations are for informational purposes only and are not a substitute for professional medical advice. Consult your healthcare provider before making significant changes to your health routine. Impact values are averages from population studies and may vary between individuals.</p>
   </div>
+  <div class="page-footer">BornClock Personal Longevity Blueprint &nbsp;·&nbsp; ${name} &nbsp;·&nbsp; bornclock.com &nbsp;·&nbsp; Confidential</div>
 </div>
 
 <!-- Page 10 — PERSONALISED ACTION PLAN -->
 <div class="page page-break">
   <div class="page-header">
     <div class="page-header-name">BornClock Personal Longevity Blueprint</div>
-    <div class="page-header-title">${name} · bornclock.com</div>
+    <div class="page-header-right">${name} · bornclock.com</div>
   </div>
 
   <h1 style="font-size:20px;font-weight:900;margin:0 0 4px 0;">Your Personalised 90-Day Plan</h1>
@@ -1307,7 +1376,6 @@ const LifeExpectancy = () => {
                       type="date"
                       value={rawDateInput}
                       onChange={handleDateChange}
-                      max={new Date().toISOString().split('T')[0]}
                       className={`text-lg ${!birthDate ? 'ring-2 ring-primary/40' : ''}`}
                     />
                   </div>
@@ -1321,7 +1389,7 @@ const LifeExpectancy = () => {
                       <CalendarIcon className="h-4 w-4 text-primary" />
                       <span className="text-sm">Birth Date: <strong>{birthDate.toLocaleDateString()}</strong></span>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={() => { setBirthDate(null); resetAll(); }}>Change</Button>
+                    <Button variant="ghost" size="sm" onClick={() => { setBirthDate(null); setRawDateInput(''); resetAll(); }}>Change</Button>
                   </div>
                 </CardContent>
               </Card>
@@ -1470,12 +1538,12 @@ const LifeExpectancy = () => {
 
         {/* ── Visual connector ── */}
         {(phase === 'result' || phase === 'report') && longevityResult && (
-          <div className="flex flex-col items-center py-2 mb-3">
-            <div className="w-0.5 h-8 bg-gradient-to-b from-gray-200 to-indigo-300"/>
-            <p className="text-xs text-gray-400 italic text-center mt-2 px-4">
-              Based on your {longevityResult.totalForecast}-year forecast, here's how your habits score
+          <div className="flex items-center gap-3 max-w-sm mx-auto py-4 mb-4 px-4">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-indigo-200"/>
+            <p className="text-xs text-indigo-400 font-semibold text-center whitespace-nowrap">
+              📊 Your habit score
             </p>
-            <div className="w-0.5 h-8 bg-gradient-to-b from-indigo-300 to-gray-200 mt-2"/>
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-indigo-200"/>
           </div>
         )}
 
@@ -1845,7 +1913,9 @@ const LifeExpectancy = () => {
         )}
 
 
-        <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
+        {(phase === 'result' || phase === 'report') && (
+          <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
+        )}
         <RelatedTools currentSlug="life" />
         <AuthorBio />
         <div className="max-w-2xl mx-auto px-4 py-8 text-center">

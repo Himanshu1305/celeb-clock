@@ -739,6 +739,7 @@ export const INDIAN_CELEBRITIES: IndianCelebrity[] = [
   { name: 'Farah Khan', birth_date: '1965-01-09', category: 'Director', known_for: 'Main Hoon Na, Om Shanti Om, Tees Maar Khan, choreographer turned director', nationality: 'Indian', birth_year: 1965, tier: 'entertainment' },
   { name: 'David Dhawan', birth_date: '1955-08-16', category: 'Director', known_for: 'Coolie No. 1, Hero No. 1, Judwaa, No Entry, comedy factory of 1990s, father of Varun', nationality: 'Indian', birth_year: 1955, tier: 'entertainment' },
   { name: 'N Chandra', birth_date: '1958-04-28', category: 'Director', known_for: 'Tezaab, Parinda, Narsimha, Nishchaiy — action thriller director of 1980s-90s', nationality: 'Indian', birth_year: 1958, tier: 'entertainment' },
+  { name: 'Gautam Adani', birth_date: '1962-06-24', category: 'Businessman', known_for: 'Chairman of Adani Group, one of India\'s largest conglomerates spanning ports, airports, energy, and infrastructure. Has been Asia\'s richest person.', nationality: 'Indian', birth_year: 1962, tier: 'achievement' },
 ];
 
 // Helper: get celebrities born on a specific month and day
