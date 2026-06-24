@@ -24,32 +24,73 @@ const fmt = (n: number) => n.toLocaleString('en-IN');
 // ── Birthstone gem colors + birth flowers ──────────────────────────────────────
 
 const BIRTHSTONE_META: Record<number, { color: string; hex: string; flower: string; lore: string }> = {
-  1:  { color: 'Deep Red',        hex: '#b91c1c', flower: 'Carnation & Snowdrop',    lore: 'Garnet has been exchanged as a talisman between travellers since the Middle Ages — it was believed to light up the night and protect against accident.' },
-  2:  { color: 'Violet Purple',   hex: '#7c3aed', flower: 'Violet & Primrose',       lore: 'Ancient Greeks believed amethyst prevented intoxication. Goblets were carved from it and wine mixed with water to mimic its colour at feasts.' },
-  3:  { color: 'Pale Blue',       hex: '#0369a1', flower: 'Daffodil & Jonquil',      lore: 'Aquamarine was carried by sailors as a lucky charm and protection against seasickness — its name comes from the Latin for "seawater".' },
-  4:  { color: 'Brilliant White', hex: '#6b7280', flower: 'Daisy & Sweet Pea',       lore: 'Diamond is the hardest natural substance on Earth. Ancient Indians believed it could only be formed by lightning striking rocks.' },
-  5:  { color: 'Forest Green',    hex: '#15803d', flower: 'Lily of the Valley',      lore: 'Emeralds were mined in Ancient Egypt as early as 330 BC. Cleopatra was famously obsessed with them and claimed emerald mines as royal property.' },
-  6:  { color: 'Rose Pink',       hex: '#be185d', flower: 'Rose & Honeysuckle',      lore: 'Pearl is the only gem created by a living organism. In ancient Rome, pearls were considered the ultimate symbol of wealth and social standing.' },
-  7:  { color: 'Blood Red',       hex: '#dc2626', flower: 'Larkspur & Water Lily',   lore: 'Ruby was called the "king of gems" in ancient Sanskrit texts. Warriors in Burma implanted rubies beneath their skin for invincibility in battle.' },
-  8:  { color: 'Olive Green',     hex: '#65a30d', flower: 'Poppy & Gladiolus',       lore: 'Ancient Egyptians called peridot the "gem of the sun." Some peridot on Earth arrived via meteorite — it has been found in pallasite meteorites.' },
-  9:  { color: 'Deep Blue',       hex: '#1d4ed8', flower: 'Aster & Morning Glory',   lore: 'Sapphires were prized by medieval clergy as symbols of heaven. The British Crown Jewels contain multiple historic sapphires including the Stuart Sapphire.' },
-  10: { color: 'Multi-colour',    hex: '#d97706', flower: 'Marigold & Cosmos',       lore: 'Opal\'s shifting colours were described by the Romans as "the fire of the carbuncle, the purple of the amethyst, and the sea-green of the emerald." Each opal is unique.' },
-  11: { color: 'Golden Yellow',   hex: '#b45309', flower: 'Chrysanthemum',           lore: 'Topaz was believed to cool boiling water and calm sudden passions. The ancient Egyptians said it was coloured by the golden glow of the sun god Ra.' },
-  12: { color: 'Sky Blue',        hex: '#0e7490', flower: 'Holly & Narcissus',       lore: 'Turquoise is one of the oldest gemstones worn by humans — found in 5,000-year-old Egyptian tombs. The Aztecs used it to decorate ceremonial masks of their gods.' },
+  1:  { color: 'Deep Red',        hex: '#b91c1c', flower: 'Carnation & Snowdrop',
+        lore: 'Garnet has been treasured for over 5,000 years. Ancient Egyptians used garnets as inlaid gemstones in pharaohs\' jewellery and buried them with their mummified dead for protection in the afterlife. The name comes from the Latin "granatum" (pomegranate seed) — early red garnets resembled the jewel-like seeds of the fruit. Medieval warriors wore garnets believing they lit the night and ensured a safe return home.' },
+  2:  { color: 'Violet Purple',   hex: '#7c3aed', flower: 'Violet & Primrose',
+        lore: 'Amethyst was once considered as precious as ruby and emerald — the ancient Greeks believed it prevented intoxication (amethystos means "not drunk"). Leonardo da Vinci wrote that amethyst could dissipate evil thoughts and quicken intelligence. Until the 18th century, only royalty could wear amethyst; the discovery of large deposits in Brazil made it widely available. It remains one of the most spiritually revered stones across virtually every culture.' },
+  3:  { color: 'Pale Blue',       hex: '#0369a1', flower: 'Daffodil & Jonquil',
+        lore: 'Aquamarine was once believed to be the treasure of mermaids — Roman sailors wore aquamarine amulets engraved with the god Neptune for protection at sea. Its name comes from the Latin "aqua marina" (sea water). Ancient seers used aquamarine as a fortune-telling medium, and it was thought to restore youth and happiness to married couples. The finest aquamarines come from Brazil\'s Minas Gerais state; the largest ever found, the "Dom Pedro," weighs 10,363 carats.' },
+  4:  { color: 'Brilliant White', hex: '#6b7280', flower: 'Daisy & Sweet Pea',
+        lore: 'Diamond is the hardest natural substance on Earth — the name comes from the Greek "adamas" (unconquerable). Ancient Hindus believed diamonds were created when lightning struck rocks, and used them as the eyes of devotional statues. The Golconda mines in India produced the world\'s most famous diamonds, including the Koh-i-Noor and the Hope Diamond. A diamond\'s carbon atoms were likely formed in supernova explosions billions of years before our solar system existed.' },
+  5:  { color: 'Forest Green',    hex: '#15803d', flower: 'Lily of the Valley',
+        lore: 'Emerald is among humanity\'s oldest known gemstones — Egyptian mines date to 330 BCE and Cleopatra was famous for her emerald collection. The Incas worshipped emeralds as sacred stones. The finest emeralds in the world come from Colombia\'s Muzo region, where they have been mined since pre-Columbian times. Spanish conquistadors who tried to shatter Colombian emeralds (believing them fake because the stones weren\'t diamonds) unknowingly destroyed some of history\'s most extraordinary gemological treasures.' },
+  6:  { color: 'Rose Pink',       hex: '#be185d', flower: 'Rose & Honeysuckle',
+        lore: 'Pearl is humanity\'s oldest gem — it is the only gem created by a living organism and requires no cutting or polishing. The earliest written record of pearl trading appears in Chinese literature from 2206 BCE. Julius Caesar passed a law restricting pearl jewelry to the ruling classes; Cleopatra famously dissolved a pearl in vinegar and drank it to win a bet with Mark Antony about who could host the most expensive banquet. The cultured pearl industry, pioneered by Mikimoto Kōkichi in Japan in 1893, made pearl accessible to the world.' },
+  7:  { color: 'Blood Red',       hex: '#dc2626', flower: 'Larkspur & Water Lily',
+        lore: 'Ruby is known as the "King of Gems" in Sanskrit ("ratnaraj"). Ancient Burmese warriors inserted rubies beneath their skin before battle, believing they made them invincible. The finest rubies come from the Mogok valley in Burma and glow with fluorescence under ultraviolet light — a quality that makes them appear to generate their own inner fire. Ruby is rarer than diamond; large rubies consistently sell for more per carat than any other gemstone at major auctions.' },
+  8:  { color: 'Olive Green',     hex: '#65a30d', flower: 'Poppy & Gladiolus',
+        lore: 'Peridot is one of the few gemstones that exists in only one colour — it owes its distinctive lime-green to iron. Ancient Egyptians called it "the gem of the sun" and mined it on the remote Red Sea island of Zabargad (also called Topazios) for over 3,500 years. Some peridot reaches Earth from space — it has been found in meteorites and in comet dust collected by NASA\'s Stardust mission. The "crusader\'s emeralds" adorning the shrine of the Three Kings in Cologne Cathedral are actually large peridots.' },
+  9:  { color: 'Deep Blue',       hex: '#1d4ed8', flower: 'Aster & Morning Glory',
+        lore: 'Sapphire has been associated with the heavens and divine favour across virtually every major civilization. Ancient Persians believed the earth rested on a giant sapphire that painted the sky blue. Medieval clergy wore sapphires because they symbolised heaven. The Star of India — the world\'s largest sapphire at 563 carats — was donated to the American Museum of Natural History by J.P. Morgan. The engagement ring that belonged to Princess Diana and is now worn by Catherine, Princess of Wales, features a 12-carat Ceylon sapphire.' },
+  10: { color: 'Multi-colour',    hex: '#d97706', flower: 'Marigold & Cosmos',
+        lore: 'Opal is the most optically complex gemstone — its play of colour (called opalescence) is caused by light diffracting through microscopic silica spheres. The Romans called it "opalus" (precious stone) and considered it the most powerful gem because it contained the colours of all other stones. Aboriginal Australians believe opals were created when the Creator came to Earth on a rainbow. Australia produces over 95% of the world\'s precious opal. A rare "black opal" from Lightning Ridge, Australia sold for $1 million per carat.' },
+  11: { color: 'Golden Yellow',   hex: '#b45309', flower: 'Chrysanthemum',
+        lore: 'Topaz in its most coveted "imperial" orange-pink form was once confused with ruby and sapphire, which is why many "famous rubies" in museum collections were later identified as topaz. The ancient Egyptians believed topaz was coloured by the golden glow of the sun god Ra. The word "topaz" possibly derives from Topazios — the ancient name for St. John\'s Island in the Red Sea. The Braganza Diamond in the Portuguese Crown Jewels, once thought to be the world\'s largest diamond, is now believed to be a colourless topaz.' },
+  12: { color: 'Sky Blue',        hex: '#0e7490', flower: 'Holly & Narcissus',
+        lore: 'Tanzanite was only discovered in 1967 — making it geologically unique as one of the youngest gemstones in the market. Found only in a small area near Mount Kilimanjaro in Tanzania, scientists estimate the conditions that created tanzanite were so unique they are unlikely to be replicated anywhere else on Earth in the next 585 million years. The stone was named by Tiffany & Co., who first commercialised it. Unlike traditional December stones, tanzanite is considered a thousand times rarer than diamond.' },
 };
 
-// ── Inline gem SVG ─────────────────────────────────────────────────────────────
+// ── Birthstone images — Wikimedia Commons public domain photographs ────────────
 
-function GemSVG({ month, size = 64 }: { month: number; size?: number }) {
+const BIRTHSTONE_IMAGES: Record<number, string> = {
+  1:  'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/GarnetUSGOV.jpg/320px-GarnetUSGOV.jpg',
+  2:  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Amethyst._Magaliesburg%2C_South_Africa.jpg/320px-Amethyst._Magaliesburg%2C_South_Africa.jpg',
+  3:  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Aquamarine_on_muscovite.jpg/320px-Aquamarine_on_muscovite.jpg',
+  4:  'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Rough_diamond.jpg/320px-Rough_diamond.jpg',
+  5:  'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Gachalaemerald.jpg/320px-Gachalaemerald.jpg',
+  6:  'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Pearl_and_shell.jpg/320px-Pearl_and_shell.jpg',
+  7:  'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Ruby_cristal.jpg/320px-Ruby_cristal.jpg',
+  8:  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Peridot_gem.JPG/320px-Peridot_gem.JPG',
+  9:  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Sapphire_gem.jpg/320px-Sapphire_gem.jpg',
+  10: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Opale_precious.JPG/320px-Opale_precious.JPG',
+  11: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Topaz_cut.jpg/320px-Topaz_cut.jpg',
+  12: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Tanzanite_gem.jpg/320px-Tanzanite_gem.jpg',
+};
+
+function GemImage({ month, size = 80 }: { month: number; size?: number }) {
   const meta = BIRTHSTONE_META[month] ?? BIRTHSTONE_META[1];
+  const src = BIRTHSTONE_IMAGES[month];
+  const [imgError, setImgError] = React.useState(false);
+
+  if (!src || imgError) {
+    return (
+      <div
+        style={{ width: size, height: size, borderRadius: '50%', backgroundColor: meta.hex, opacity: 0.85 }}
+        className="shadow-lg"
+      />
+    );
+  }
+
   return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="32,4 56,22 48,60 16,60 8,22" fill={meta.hex} fillOpacity="0.85" />
-      <polygon points="32,4 56,22 32,28" fill="white" fillOpacity="0.35" />
-      <polygon points="32,28 56,22 48,60 16,60 8,22" fill={meta.hex} fillOpacity="0.6" />
-      <polygon points="32,4 8,22 32,28" fill="white" fillOpacity="0.15" />
-      <polygon points="32,4 56,22 48,60 16,60 8,22" fill="none" stroke="white" strokeWidth="1.5" strokeOpacity="0.4" />
-    </svg>
+    <img
+      src={src}
+      alt={`${meta.color} birthstone`}
+      width={size}
+      height={size}
+      onError={() => setImgError(true)}
+      className="rounded-2xl shadow-lg object-cover"
+      style={{ width: size, height: size }}
+    />
   );
 }
 
@@ -594,7 +635,20 @@ const ReportView = () => {
                     {westernZodiac.modality && <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">⚡ {westernZodiac.modality}</span>}
                     {westernZodiac.rulingPlanet && <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">🪐 {westernZodiac.rulingPlanet}</span>}
                   </div>
-                  <p className="text-gray-700 text-sm leading-relaxed">{westernZodiac.fullDescription}</p>
+                  <div className="space-y-3">
+                    {westernZodiac.fullDescription
+                      .split(/(?<=\.)\s+(?=[A-Z])/)
+                      .reduce((acc: string[], sentence: string, i: number) => {
+                        const paraIdx = Math.floor(i / 3);
+                        if (!acc[paraIdx]) acc[paraIdx] = '';
+                        acc[paraIdx] += (acc[paraIdx] ? ' ' : '') + sentence;
+                        return acc;
+                      }, [])
+                      .map((para: string, i: number) => (
+                        <p key={i} className="text-gray-700 text-sm leading-relaxed">{para}</p>
+                      ))
+                    }
+                  </div>
                   {(westernZodiac.coreTraits ?? []).length > 0 && (
                     <div>
                       <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Strengths</div>
@@ -934,7 +988,7 @@ const ReportView = () => {
             <div className="bg-white rounded-3xl shadow-sm p-8 space-y-6">
               {/* Header */}
               <div className="flex flex-col items-center gap-3">
-                <GemSVG month={dob.getMonth() + 1} size={80} />
+                <GemImage month={dob.getMonth() + 1} size={100} />
                 <div className="text-center">
                   <h3 className="text-3xl font-black text-gray-900">{birthstone.primaryStone}</h3>
                   <p className="text-sm font-medium mt-1" style={{ color: bsMeta.hex }}>{bsMeta.color}</p>
@@ -1054,7 +1108,14 @@ const ReportView = () => {
           <p className="text-gray-500 text-sm mb-8">Where {recipientName} fits in history</p>
 
           {generation && (() => {
-            const gc = GENERATION_CONTENT[generation.name];
+            // Normalise generation name to match GENERATION_CONTENT keys
+            const genNameMap: Record<string, string> = {
+              'Gen X': 'Generation X',
+              'Gen Z': 'Generation Z',
+              'Gen Alpha': 'Generation Alpha',
+            };
+            const genKey = genNameMap[generation.name] ?? generation.name;
+            const gc = GENERATION_CONTENT[genKey];
             return (
               <div className="bg-white rounded-3xl shadow-sm p-8 mb-8 space-y-6 text-left">
                 {/* Header */}
@@ -1142,9 +1203,14 @@ const ReportView = () => {
               {/* Header */}
               <div className="text-center">
                 <div className="text-6xl mb-3">{card.emoji}</div>
-                <div className="text-xs text-indigo-400 uppercase tracking-widest mb-1">Birthday Tarot Card</div>
+                <div className="text-xs text-indigo-400 uppercase tracking-widest mb-1">✨ Birthday Tarot Card</div>
                 <h3 className="text-3xl font-black text-white mb-1">{card.name}</h3>
                 <p className="text-xs text-indigo-300">Life Path {lp} · Card {card.number}</p>
+                <p className="text-xs text-indigo-300/70 mt-2 max-w-xs mx-auto leading-relaxed">
+                  In traditional tarot, your birthday's Life Path number ({lp}) corresponds to a card
+                  of the Major Arcana — the 22 cards representing life's greatest themes and forces.
+                  This is your card.
+                </p>
                 <div className="flex flex-wrap justify-center gap-2 mt-3">
                   {card.keywords.map((kw: string) => (
                     <span key={kw} className="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full">{kw}</span>
