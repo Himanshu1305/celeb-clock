@@ -1,8 +1,20 @@
 import { supabase } from '@/integrations/supabase/client';
 
-export type QuotaTier = 'free' | 'trial' | 'premium';
+export type QuotaTier = 'free' | 'trial' | 'premium' | 'admin';
+
+// Admin emails — these users bypass all quota limits
+export const ADMIN_EMAILS: string[] = [
+  'himanshu1305@gmail.com',
+  'hello@bornclock.com',
+];
+
+export function isAdminEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(email.toLowerCase().trim());
+}
 
 export function getQuotaLimit(tier: QuotaTier): number {
+  if (tier === 'admin') return Infinity;
   if (tier === 'premium') return 3;
   if (tier === 'trial') return 2;
   return 1;

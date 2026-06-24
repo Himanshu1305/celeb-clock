@@ -51,7 +51,7 @@ const CHECKLIST_ITEMS = [
 // ── Page component ────────────────────────────────────────────────────────────
 
 const BirthdayReport = () => {
-  const { user, isPremium, isInTrial, trialDaysRemaining } = useAuth();
+  const { user, isPremium, isAdmin, isInTrial, trialDaysRemaining } = useAuth();
   const { toast } = useToast();
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +69,7 @@ const BirthdayReport = () => {
   const [copied, setCopied] = useState(false);
   const [quotaInfo, setQuotaInfo] = useState<{ limit: number; used: number } | null>(null);
 
-  const tier: QuotaTier = isPremium ? 'premium' : isInTrial ? 'trial' : 'free';
+  const tier: QuotaTier = isAdmin ? 'admin' : isPremium ? 'premium' : isInTrial ? 'trial' : 'free';
 
   useEffect(() => {
     if (!user) return;
@@ -98,7 +98,7 @@ const BirthdayReport = () => {
     if (!dob) { setError('Please enter the recipient\'s date of birth.'); return; }
     setError('');
 
-    if (user && quotaInfo && quotaInfo.used >= quotaInfo.limit) {
+    if (user && !isAdmin && quotaInfo && quotaInfo.used >= quotaInfo.limit) {
       toast({
         title: 'Report limit reached',
         description: `You've used all ${quotaInfo.limit} reports for this tier. Upgrade for more.`,
@@ -427,7 +427,12 @@ const BirthdayReport = () => {
                 </div>
 
                 {/* Quota info */}
-                {user && quotaInfo && (
+                {isAdmin && user && (
+                  <p className="text-xs text-center text-emerald-600 font-semibold">
+                    ∞ Admin — unlimited reports
+                  </p>
+                )}
+                {!isAdmin && user && quotaInfo && (
                   <div className="flex items-center justify-between text-xs text-gray-500 bg-gray-50 px-3 py-2 rounded-lg">
                     <span>Reports used: {quotaInfo.used}/{quotaInfo.limit}</span>
                     {quotaInfo.used >= quotaInfo.limit && (
@@ -444,7 +449,7 @@ const BirthdayReport = () => {
 
                 <button
                   onClick={handleSubmit}
-                  disabled={!recipientName.trim() || !dob || (!!user && !!quotaInfo && quotaInfo.used >= quotaInfo.limit)}
+                  disabled={!recipientName.trim() || !dob || (!isAdmin && !!user && !!quotaInfo && quotaInfo.used >= quotaInfo.limit)}
                   className="w-full py-4 bg-rose-500 hover:bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-lg transition-colors shadow-md"
                 >
                   Create Birthday Report 🎂

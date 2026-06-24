@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { ADMIN_EMAILS } from '@/services/PDFQuotaService';
 import { useToast } from '@/hooks/use-toast';
 import { calculateTrialStatus } from '@/utils/trialUtils';
 import { EmailService } from '@/services/EmailService';
@@ -235,6 +236,7 @@ export const useAuth = () => {
     : false;
 
   const isPremium = profile?.premium_status || isInTrial || isPromoActive || false;
+  const isAdmin = ADMIN_EMAILS.includes((user?.email ?? '').toLowerCase().trim());
 
   return {
     user,
@@ -247,6 +249,7 @@ export const useAuth = () => {
     updateProfile,
     deleteAccount,
     isPremium,
+    isAdmin,
     isInTrial,
     trialDaysRemaining,
     isPromoActive,
