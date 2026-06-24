@@ -77,6 +77,7 @@ const LifeExpectancy = () => {
   const [phase, setPhase] = useState<Phase>('quiz');
   const [longevityResult, setLongevityResult] = useState<LongevityResult | null>(null);
   const [showPaywallModal, setShowPaywallModal] = useState(false);
+  const [rawDateInput, setRawDateInput] = useState('');
   const [userCount, setUserCount] = useState('2,400+');
   const [sharedResult, setSharedResult] = useState<{ forecast: number; age: number; remaining: number } | null>(null);
 
@@ -93,19 +94,11 @@ const LifeExpectancy = () => {
   }, []);
   useEffect(() => {
     if ((phase === 'result' || phase === 'report') && !isPremium && longevityResult) {
-      const seen = localStorage.getItem('bornclock_paywall_seen');
-      const seenTime = seen ? parseInt(seen, 10) : 0;
-      const isValidTimestamp = seenTime > 1000000000000; // valid ms timestamp
-      const hoursSinceSeen = isValidTimestamp
-        ? (Date.now() - seenTime) / (1000 * 60 * 60)
-        : Infinity;
-      // Show if never seen OR if seen more than 24 hours ago
-      if (!seen || hoursSinceSeen > 24) {
-        const timer = setTimeout(() => {
-          setShowPaywallModal(true);
-        }, 1500);
-        return () => clearTimeout(timer);
-      }
+      // Show paywall modal every time a free user completes the quiz — no suppression
+      const timer = setTimeout(() => {
+        setShowPaywallModal(true);
+      }, 1500);
+      return () => clearTimeout(timer);
     }
   }, [phase, isPremium, longevityResult]);
 
@@ -1145,14 +1138,12 @@ const LifeExpectancy = () => {
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    // Only accept a complete YYYY-MM-DD string (10 chars).
-    // The browser fires onChange mid-selection (after month+year but before day),
-    // producing partial values like "1990-06" which new Date() parses as June 1 1990.
-    // We guard against this by requiring the full format before acting.
+    // Always update rawDateInput so the browser picker keeps the partial selection visible
+    setRawDateInput(val);
+    // Only call setBirthDate (which renders the quiz) when we have a complete valid date
     if (!val || val.length < 10 || !/^\d{4}-\d{2}-\d{2}$/.test(val)) {
       return;
     }
-    // Add T12:00:00 to avoid timezone edge cases where midnight UTC parses as previous day
     const newDate = new Date(val + 'T12:00:00');
     if (isNaN(newDate.getTime()) || newDate > new Date()) {
       return;
@@ -1314,7 +1305,7 @@ const LifeExpectancy = () => {
                     <Input
                       id="birthdate-life"
                       type="date"
-                      value={getInputValue()}
+                      value={rawDateInput}
                       onChange={handleDateChange}
                       max={new Date().toISOString().split('T')[0]}
                       className={`text-lg ${!birthDate ? 'ring-2 ring-primary/40' : ''}`}
@@ -1906,7 +1897,6 @@ const LifeExpectancy = () => {
           )}
           onClose={() => {
             setShowPaywallModal(false);
-            localStorage.setItem('bornclock_paywall_seen', String(Date.now()));
           }}
         />
       )}

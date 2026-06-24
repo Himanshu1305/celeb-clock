@@ -30,9 +30,6 @@ async function completeQuizAsFreeUser(page: Page) {
     }
   }
 
-  // Suppress the auto-paywall modal (fires 1.5s after result phase for free users)
-  await page.evaluate(() => localStorage.setItem('bornclock_paywall_seen', 'true'));
-
   // Click the final CTA on step 8 to complete the quiz and get results
   const ctaBtn = page.locator('button:has-text("Yes — Show Me My Longevity Potential")').first();
   await ctaBtn.waitFor({ state: 'visible', timeout: 10000 });
@@ -42,7 +39,15 @@ async function completeQuizAsFreeUser(page: Page) {
   await expect(
     page.locator('text=What-If Simulator').or(page.locator('text=YOUR FORECASTED AGE')).first()
   ).toBeVisible({ timeout: 20000 });
-  await page.waitForTimeout(1000);
+
+  // Paywall modal now shows every time — dismiss it so tests can interact with the page
+  await page.waitForTimeout(2000); // allow 1.5s modal delay to fire
+  const maybeBtn = page.locator('button:has-text("Maybe later")').first();
+  if (await maybeBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+    await maybeBtn.click();
+    await page.waitForTimeout(300);
+  }
+  await page.waitForTimeout(500);
 }
 
 // ─────────────────────────────────────────────

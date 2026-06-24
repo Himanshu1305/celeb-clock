@@ -77,13 +77,13 @@ export function PaywallModal({
           onClick={handleUpgrade}
           className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl hover:bg-indigo-700 transition-colors mb-3"
         >
-          {hasExpiredTrial ? 'Upgrade to Premium →' : 'Keep My Premium Access →'}
+          {isInTrial ? 'Keep My Premium Access →' : 'Get Full Access →'}
         </button>
 
         <p className="text-xs text-gray-400 text-center mb-3">
-          {hasExpiredTrial
-            ? '₹299/month · Cancel anytime'
-            : 'Trial ends soon · then ₹299/month'}
+          {isInTrial
+            ? 'Trial ends soon · then ₹299/month or ₹2,499/year'
+            : '₹299/month · or ₹2,499/year (save ₹1,089)'}
         </p>
 
         <button
