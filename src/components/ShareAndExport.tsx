@@ -176,7 +176,7 @@ export const ShareAndExport = ({ birthDate, ageData, celebrities, lifeExpectancy
               <h3 className="text-sm font-medium">Export Your Complete Report</h3>
             </div>
             <p className="text-xs text-muted-foreground">
-              Your detailed life capsule report with charts and analysis can be downloaded as PDF using the "Export PDF" button above the report.
+              Your detailed life capsule report with charts and analysis can be downloaded as PDF using the "Export Longevity Blueprint" button above the report.
             </p>
           </div>
         )}

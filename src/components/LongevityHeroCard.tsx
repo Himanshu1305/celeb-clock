@@ -102,7 +102,7 @@ export function LongevityHeroCard({ result, optimizedForecast, userName, isPremi
               onClick={() => onDownloadBlueprint?.()}
             >
               <Download className="w-3.5 h-3.5" />
-              Export PDF
+              Export Longevity Blueprint
             </Button>
             <Button
               size="sm"
@@ -120,7 +120,7 @@ export function LongevityHeroCard({ result, optimizedForecast, userName, isPremi
       ) : (
         <div className="text-center pt-1">
           <p className="text-xs text-muted-foreground/70">
-            🔒 Export PDF and Copy Summary are premium features.{' '}
+            🔒 Export Longevity Blueprint and Copy Summary are premium features.{' '}
             <a href="/upgrade" className="text-primary underline font-semibold">Upgrade →</a>
           </p>
         </div>

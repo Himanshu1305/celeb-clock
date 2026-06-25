@@ -15,99 +15,39 @@ async function reachResultsAndInterceptPDF(page: Page, name = 'Test User') {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// NAME MODAL TESTS
+// EXPORT BUTTON TESTS (name modal removed — PDF triggers directly)
 // ─────────────────────────────────────────────────────────────────────────────
-test.describe('PDF — Name modal', () => {
-  test('name modal shows "Who is this blueprint for?" heading', async ({ page }) => {
+test.describe('PDF — Export button', () => {
+  test('Export Longevity Blueprint button triggers PDF generation (no modal)', async ({ page }) => {
     await completeQuiz(page, { dob: '1985-06-15' });
-
-    // Trigger the modal by calling setShowNamePrompt via any visible button
-    // The Download Blueprint button in 90-day plan section is visible to all users
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     await page.waitForTimeout(500);
 
-    // Find any button that triggers the name modal
-    // LongevityHeroCard Download button is premium-only, but if visible click it
-    const downloadBtn = page.locator('button:has-text("Export PDF")')
-      .or(page.locator('button:has-text("Download Blueprint PDF")'))
+    // The name modal was removed — clicking Export Longevity Blueprint triggers PDF directly
+    const exportBtn = page.locator('button:has-text("Export Longevity Blueprint")')
       .or(page.locator('button:has-text("Unlock My Complete Longevity Blueprint")'))
       .first();
 
-    if (await downloadBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await downloadBtn.click();
+    if (await exportBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await exportBtn.click();
       await page.waitForTimeout(500);
 
-      // Modal heading
-      const heading = page.locator('text=Who is this blueprint for?').first();
-      if (await heading.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await expect(heading).toBeVisible();
-
-        // Subtitle
-        await expect(
-          page.locator('text=This name will appear on the cover').first()
-        ).toBeVisible();
-
-        // Name input
-        await expect(
-          page.locator('input[placeholder*="name"]').or(page.locator('input[placeholder*="Himanshu"]')).first()
-        ).toBeVisible();
-
-        // Both buttons
-        await expect(page.locator('button:has-text("Cancel")').first()).toBeVisible();
-        await expect(page.locator('button:has-text("Generate PDF")').first()).toBeVisible();
-      }
+      // The old name modal must NOT appear
+      await expect(
+        page.locator('text=Who is this blueprint for?').first()
+      ).not.toBeVisible({ timeout: 2000 });
     }
   });
 
-  test('name modal Cancel button closes the modal', async ({ page }) => {
+  test('no stale "Export PDF" button text remains on page', async ({ page }) => {
     await completeQuiz(page, { dob: '1985-06-15' });
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     await page.waitForTimeout(500);
 
-    const downloadBtn = page.locator('button:has-text("Export PDF")')
-      .or(page.locator('button:has-text("Download Blueprint PDF")'))
-      .first();
-
-    if (await downloadBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await downloadBtn.click();
-      await page.waitForTimeout(500);
-
-      const cancelBtn = page.locator('button:has-text("Cancel")').first();
-      if (await cancelBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await cancelBtn.click();
-        await page.waitForTimeout(300);
-        // Modal must be gone
-        await expect(
-          page.locator('text=Who is this blueprint for?').first()
-        ).not.toBeVisible({ timeout: 2000 });
-      }
-    }
-  });
-
-  test('name modal accepts Enter key to generate PDF', async ({ page }) => {
-    await completeQuiz(page, { dob: '1985-06-15' });
-
-    const downloadBtn = page.locator('button:has-text("Export PDF")')
-      .or(page.locator('button:has-text("Download Blueprint PDF")'))
-      .first();
-
-    if (await downloadBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await downloadBtn.click();
-      await page.waitForTimeout(500);
-
-      const nameInput = page.locator('input[placeholder*="name"]')
-        .or(page.locator('input[placeholder*="Himanshu"]')).first();
-
-      if (await nameInput.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await nameInput.fill('Himanshu');
-        await nameInput.press('Enter');
-        await page.waitForTimeout(500);
-        // Modal should close
-        await expect(
-          page.locator('text=Who is this blueprint for?').first()
-        ).not.toBeVisible({ timeout: 2000 });
-      }
-    }
+    // After rename, the old "Export PDF" exact label must be gone
+    await expect(
+      page.locator('button:has-text("Export PDF")').first()
+    ).not.toBeVisible({ timeout: 3000 });
   });
 });
 
@@ -227,12 +167,13 @@ test.describe('PDF — HTML structure (iframe inspection)', () => {
     }
   });
 
-  test('PDF HTML: name appears on cover page', async ({ page }) => {
-    const testName = 'Playwright Test';
-    const html = await reachResultsAndInterceptPDF(page, testName);
+  test('PDF HTML: cover page has name placeholder and branding', async ({ page }) => {
+    const html = await reachResultsAndInterceptPDF(page);
     if (html) {
-      // Name should appear in the PDF (title-cased)
-      expect(html).toContain('Playwright Test');
+      // Cover contains Personal Longevity Blueprint heading
+      expect(html).toContain('Personal Longevity Blueprint');
+      // Name defaults to 'You' when quiz Step-1 name field is empty
+      expect(html).toContain('>You<');
     }
   });
 

@@ -156,9 +156,6 @@ const LifeExpectancy = () => {
   const [currentSimForecast, setCurrentSimForecast] = useState<number | null>(null);
   const [userSelectedHabits, setUserSelectedHabits] = useState<string[]>([]);
   const [userHabitFrequencies, setUserHabitFrequencies] = useState<Record<string, string>>({});
-  const [blueprintName, setBlueprintName] = useState('');
-  const [showNamePrompt, setShowNamePrompt] = useState(false);
-
   const resultRef    = useRef<HTMLDivElement>(null);
   const simulatorRef = useRef<HTMLDivElement>(null);
   const reportRef    = useRef<HTMLDivElement>(null);
@@ -553,7 +550,7 @@ const LifeExpectancy = () => {
   <meta charset="UTF-8">
   <title>Longevity Blueprint — BornClock</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       font-size: 12px; line-height: 1.6; color: #1f2937; background: white;
@@ -615,7 +612,7 @@ const LifeExpectancy = () => {
     .bar-row { margin-bottom: 12px; }
     .bar-label { font-size: 11px; color: #4b5563; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
     .bar-bg { background: #e5e7eb; border-radius: 6px; height: 12px; overflow: hidden; }
-    .bar-fill { height: 12px; border-radius: 6px; transition: width 0.3s ease; }
+    .bar-fill { height: 12px; border-radius: 6px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
     /* Page header — indigo gradient band */
     .page-header {
@@ -666,6 +663,29 @@ const LifeExpectancy = () => {
     .tag-amber  { background: #fef3c7; color: #92400e; }
     .tag-red    { background: #fef2f2; color: #991b1b; }
     .tag-purple { background: #f3e8ff; color: #6b21a8; }
+    /* Intro stats */
+    .intro-stats{background:#f8faff;border-left:4px solid #6366f1;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0;font-size:13px;color:#374151;line-height:1.8;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    .intro-stats b{color:#1e40af;}
+    /* Life countdown */
+    .countdown{background:linear-gradient(135deg,#1e1b4b,#312e81 55%,#4338ca);color:#fff;padding:26px;border-radius:12px;margin:18px 0;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    .cd-head{font-size:11px;letter-spacing:2px;text-align:center;color:#c7d2fe;margin-bottom:4px;}
+    .cd-sub{text-align:center;color:#a5b4fc;font-size:12px;margin-bottom:18px;}
+    .cd-grid{display:flex;justify-content:center;gap:14px;margin-bottom:16px;}
+    .cd-cell{background:rgba(255,255,255,.12);border-radius:8px;padding:12px 16px;text-align:center;min-width:60px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    .cd-n{font-size:26px;font-weight:900;color:#fff;line-height:1;}
+    .cd-l{font-size:9px;letter-spacing:1.5px;color:#c7d2fe;margin-top:4px;}
+    .cd-bar{height:8px;background:rgba(255,255,255,.2);border-radius:4px;margin-bottom:6px;}
+    .cd-fill{height:100%;background:linear-gradient(90deg,#818cf8,#a78bfa);border-radius:4px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    .cd-row{display:flex;justify-content:space-between;font-size:10px;color:#c7d2fe;margin-bottom:14px;}
+    .cd-quote{text-align:center;font-style:italic;color:#e0e7ff;font-size:13px;border-top:1px solid rgba(255,255,255,.2);padding-top:14px;}
+    /* Genetic ceiling */
+    .ceiling{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 16px;margin:16px 0;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    .ceiling-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+    .ceiling-top span:first-child{font-size:14px;font-weight:700;color:#14532d;}
+    .ceiling-val{font-size:18px;font-weight:900;color:#16a34a;}
+    .ceiling-desc{font-size:11px;color:#374151;margin:0;}
+    /* Baseline source */
+    .baseline-src{font-size:11px;color:#6b7280;margin-top:8px;padding:6px 10px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
   </style>
 </head>
 <body>
@@ -715,6 +735,26 @@ const LifeExpectancy = () => {
       <div class="stat-label">Genetic Profile</div>
       <div class="stat-value" style="font-size:14px;color:#7c3aed;">${geneticLabel}</div>
     </div>
+  </div>
+
+  <div class="intro-stats">
+    <p>You are <strong>${currentAge}</strong> today &middot; <strong>${remaining} years</strong> of life ahead</p>
+    <p>&#9432; Age-adjusted baseline &mdash; survival to age ${forecast} is factored in</p>
+    <p>Built from <strong>14 personal factors</strong> including family history &mdash; WHO 2023 baselines and peer-reviewed research.</p>
+  </div>
+
+  <div class="countdown">
+    <div class="cd-head">&#9203; YOUR LIFE COUNTDOWN</div>
+    <div class="cd-sub">Estimated time remaining until age ${forecast}</div>
+    <div class="cd-grid">
+      <div class="cd-cell"><div class="cd-n">${Math.floor(Number(remaining))}</div><div class="cd-l">YEARS</div></div>
+      <div class="cd-cell"><div class="cd-n">${Math.floor((Number(remaining) % 1) * 365)}</div><div class="cd-l">DAYS</div></div>
+      <div class="cd-cell"><div class="cd-n">00</div><div class="cd-l">HOURS</div></div>
+      <div class="cd-cell"><div class="cd-n">00</div><div class="cd-l">MINS</div></div>
+    </div>
+    <div class="cd-bar"><div class="cd-fill" style="width:${Math.min(100,(currentAge/Number(forecast))*100).toFixed(1)}%;"></div></div>
+    <div class="cd-row"><span>Birth</span><span>${Math.min(100,(currentAge/Number(forecast))*100).toFixed(1)}% of forecast lived</span><span>Age ${Math.round(Number(forecast))}</span></div>
+    <div class="cd-quote">&ldquo;The people who live longest don&rsquo;t try to live forever &mdash; they live well.&rdquo;</div>
   </div>
 
   <div class="section section-gray" style="display:flex;align-items:center;gap:24px;">
@@ -979,9 +1019,11 @@ const LifeExpectancy = () => {
       </div>
       <div style="flex:1;">
         <p style="font-size:12px;color:#4b5563;line-height:1.6;margin-bottom:8px;">${geneticDesc || 'Your genetic vitality contributes ' + geneticAdj + ' years to your forecast based on family history analysis.'}</p>
-        <div style="padding:8px 12px;background:#f5f3ff;border-radius:6px;border:1px solid #ede9fe;margin-bottom:8px;">
-          <p style="font-size:11px;color:#7c3aed;margin:0;">🧬 Genetic Ceiling: ~${Math.round(longevityResult.familyBaselineAge + 5)} years · Estimated from family average + modern medicine modifier</p>
+        <div class="ceiling">
+          <div class="ceiling-top"><span>Your Genetic Ceiling</span><span class="ceiling-val">~${Math.round(longevityResult.familyBaselineAge + 5)} yrs</span></div>
+          <p class="ceiling-desc">Estimated from your family average with a +5yr modifier for modern medicine and lifestyle potential.</p>
         </div>
+        <p class="baseline-src">&#128202; Baseline: UN World Population Prospects 2024 &middot; ${quiz?.country || 'India'}</p>
         <p style="font-size:10px;color:#9ca3af;font-style:italic;">Karolinska Institute (2018): Genetics accounts for only 25–30% of longevity. The other 70–75% is lifestyle.</p>
       </div>
     </div>
@@ -1148,6 +1190,7 @@ const LifeExpectancy = () => {
 </body>
 </html>`;
 
+    (window as any).__LAST_PDF_HTML__ = html;
     const iframe = document.createElement('iframe');
     iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;border:none;pointer-events:none;';
     document.body.appendChild(iframe);
@@ -1635,7 +1678,7 @@ const LifeExpectancy = () => {
               optimizedForecast={optimizedForecast}
               userName={displayName}
               isPremium={isPremium}
-              onDownloadBlueprint={() => { setBlueprintName(''); setShowNamePrompt(true); }}
+              onDownloadBlueprint={() => handleDownloadBlueprint()}
             />
             <ReportErrorBoundary onReset={() => setPhase('result')}>
               <EnhancedLifeExpectancyReport
@@ -1647,7 +1690,7 @@ const LifeExpectancy = () => {
                 optimizedForecast={optimizedForecast ?? undefined}
                 userSelectedHabits={userSelectedHabits}
                 simulatorHabitFrequencies={userHabitFrequencies}
-                onDownloadBlueprint={() => { setBlueprintName(''); setShowNamePrompt(true); }}
+                onDownloadBlueprint={() => handleDownloadBlueprint()}
               />
             </ReportErrorBoundary>
           </section>
@@ -1926,38 +1969,6 @@ const LifeExpectancy = () => {
       </div>
 
       <Footer />
-
-      {showNamePrompt && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
-            <h3 className="text-lg font-black text-gray-900 mb-2">Who is this blueprint for?</h3>
-            <p className="text-sm text-gray-500 mb-4">This name will appear on the cover of your PDF report.</p>
-            <input
-              type="text"
-              value={blueprintName}
-              onChange={(e) => setBlueprintName(e.target.value)}
-              placeholder="Enter name (e.g. Himanshu)"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              onKeyDown={(e) => { if (e.key === 'Enter') { setShowNamePrompt(false); handleDownloadBlueprint(blueprintName.trim().replace(/\b\w/g, c => c.toUpperCase()) || undefined); } }}
-              autoFocus
-            />
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowNamePrompt(false)}
-                className="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => { setShowNamePrompt(false); handleDownloadBlueprint(blueprintName.trim().replace(/\b\w/g, c => c.toUpperCase()) || undefined); }}
-                className="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-500"
-              >
-                Generate PDF
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {showPaywallModal && longevityResult && (
         <PaywallModal

@@ -226,8 +226,8 @@ test.describe('Visual connector between sections', () => {
 // FIX 4: Duplicate buttons removed from EnhancedLifeExpectancyReport
 // ─────────────────────────────────────────────────────────────────────────────
 test.describe('No duplicate export buttons in report tabs', () => {
-  // POSITIVE: Export PDF visible in hero card (single location)
-  test('POSITIVE: Export PDF button exists in LongevityHeroCard', async ({ page }) => {
+  // POSITIVE: Export Longevity Blueprint visible in hero card (single location)
+  test('POSITIVE: Export Longevity Blueprint button exists in LongevityHeroCard', async ({ page }) => {
     await completeQuiz(page, { dob: '1985-06-15' });
     // Note: only visible to premium users — just check page structure doesn't crash
     await expect(page.locator('text=Something went wrong')).not.toBeVisible();

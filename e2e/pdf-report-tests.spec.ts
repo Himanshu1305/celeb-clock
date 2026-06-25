@@ -100,14 +100,14 @@ test.describe('Longevity Blueprint — PDF print readiness', () => {
     await expect(page.locator('#calculator').or(page.locator('text=Calculate My Life')).first()).toBeVisible();
   });
 
-  test('Export PDF button exists when report is generated', async ({ page }) => {
+  test('Export Longevity Blueprint button exists when report is generated', async ({ page }) => {
     await page.goto('/life-expectancy');
     await page.waitForLoadState('networkidle');
 
-    // The Export PDF button appears on the LongevityHeroCard after completing the quiz
+    // The Export Longevity Blueprint button appears on the LongevityHeroCard after completing the quiz
     // We check it exists somewhere on the page after full quiz completion
     // For this we just verify the button class/text pattern
-    const exportBtn = page.locator('button:has-text("Export PDF")');
+    const exportBtn = page.locator('button:has-text("Export Longevity Blueprint")');
     // Button only shows post-quiz; check it doesn't error on page load
     await expect(page.locator('body')).toBeVisible();
   });

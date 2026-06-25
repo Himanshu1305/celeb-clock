@@ -231,15 +231,15 @@ test.describe('Free user — report phase gating', () => {
 // ─────────────────────────────────────────────
 // FREE USER — EXPORT PDF AND COPY SUMMARY GATING
 // ─────────────────────────────────────────────
-test.describe('Free user — Export PDF and Copy Summary gating', () => {
-  test('Export PDF button is not visible to free users', async ({ page }) => {
+test.describe('Free user — Export Longevity Blueprint and Copy Summary gating', () => {
+  test('Export Longevity Blueprint button is not visible to free users', async ({ page }) => {
     await completeQuizAsFreeUser(page);
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     await page.waitForTimeout(1000);
 
-    // Export PDF button must not be visible anywhere on the page for free users
+    // Export Longevity Blueprint button must not be visible anywhere on the page for free users
     await expect(
-      page.locator('button:has-text("Export PDF")').first()
+      page.locator('button:has-text("Export Longevity Blueprint")').first()
     ).not.toBeVisible({ timeout: 3000 });
   });
 
@@ -261,8 +261,8 @@ test.describe('Free user — Export PDF and Copy Summary gating', () => {
 
     // The locked message with upgrade link must be visible in the hero card area
     // Note: LongevityHeroCard only renders in phase=report which is premium-only
-    // So we just confirm Export PDF is absent — the locked message is inside the gated section
-    const exportBtn = page.locator('button:has-text("Export PDF")').first();
+    // So we just confirm Export Longevity Blueprint is absent — the locked message is inside the gated section
+    const exportBtn = page.locator('button:has-text("Export Longevity Blueprint")').first();
     await expect(exportBtn).not.toBeVisible({ timeout: 3000 });
   });
 });
