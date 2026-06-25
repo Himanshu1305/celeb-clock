@@ -479,7 +479,7 @@ const LifeExpectancy = () => {
         <div style="display:flex;align-items:center;gap:8px;padding:5px 8px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:5px;margin-bottom:3px;">
           <span style="font-size:14px;">${h.emoji || '✓'}</span>
           <span style="flex:1;font-size:11px;font-weight:600;color:#166534;">${h.label}</span>
-          <span style="font-size:10px;font-weight:700;color:#059669;white-space:nowrap;">+${(h.gain * 0.15).toFixed(1)}yr influence</span>
+          <span style="font-size:10px;font-weight:700;color:#059669;white-space:nowrap;">+${(h.gain * 0.15).toFixed(1)} yr influence</span>
         </div>`).join('')
       : '<p style="font-size:11px;color:#6b7280;">No community anchor habits recorded in Step 8 of the quiz.</p>';
 
@@ -526,7 +526,7 @@ const LifeExpectancy = () => {
           <div style="flex:1;">
             <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
               <span style="font-size:11px;font-weight:700;color:#1f2937;">${rec.title}</span>
-              ${rec.impact !== undefined ? `<span style="font-size:9px;font-weight:700;color:#059669;background:#d1fae5;padding:1px 5px;border-radius:8px;">+${rec.impact}yr</span>` : ''}
+              ${rec.impact !== undefined ? `<span style="font-size:9px;font-weight:700;color:#059669;background:#d1fae5;padding:1px 5px;border-radius:8px;">+${rec.impact} yr</span>` : ''}
             </div>
             <div style="font-size:9px;color:#4f46e5;font-weight:600;">⚡ ${rec.quickWin}</div>
             <div style="font-size:9px;color:#9ca3af;margin-top:1px;font-style:italic;">${rec.source}</div>
@@ -707,7 +707,7 @@ const LifeExpectancy = () => {
     </div>
     <div style="font-size:28px;font-weight:900;color:#1f2937;margin-bottom:4px;">BornClock</div>
     <div style="font-size:15px;color:#6366f1;font-style:italic;margin-bottom:24px;">Know your time. Live it well.</div>
-    <div style="font-size:13px;color:#9ca3af;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">Personal Longevity Blueprint</div>
+    <div style="font-size:13px;color:#9ca3af;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;white-space:nowrap;">Personal Longevity Blueprint</div>
     <div style="font-size:32px;font-weight:900;color:#1f2937;margin-bottom:4px;">${name}</div>
     <div style="font-size:13px;color:#9ca3af;">Generated ${generatedDate} · bornclock.com</div>
   </div>
@@ -752,7 +752,7 @@ const LifeExpectancy = () => {
       <div class="cd-cell"><div class="cd-n">00</div><div class="cd-l">HOURS</div></div>
       <div class="cd-cell"><div class="cd-n">00</div><div class="cd-l">MINS</div></div>
     </div>
-    <div class="cd-bar"><div class="cd-fill" style="width:${Math.min(100,(currentAge/Number(forecast))*100).toFixed(1)}%;"></div></div>
+    <div class="cd-bar" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="cd-fill" style="width:${Math.min(100,(currentAge/Number(forecast))*100).toFixed(1)}%;-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
     <div class="cd-row"><span>Birth</span><span>${Math.min(100,(currentAge/Number(forecast))*100).toFixed(1)}% of forecast lived</span><span>Age ${Math.round(Number(forecast))}</span></div>
     <div class="cd-quote">&ldquo;The people who live longest don&rsquo;t try to live forever &mdash; they live well.&rdquo;</div>
   </div>
@@ -869,24 +869,24 @@ const LifeExpectancy = () => {
     <h2>Forecast Breakdown — Visual</h2>
     <div class="bar-row">
       <div class="bar-label"><span>📊 WHO Baseline (${quiz?.gender || 'male'}, ${quiz?.country || 'India'})</span><span style="font-weight:700;color:#4f46e5;">${baseline} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:85%;background:#4f46e5;"></div></div>
+      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:85%;background:#4f46e5;-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>${Number(healthAdj) >= 0 ? '✅' : '⚠️'} Health &amp; Lifestyle Adjustment</span><span style="font-weight:700;color:${Number(healthAdj) >= 0 ? '#059669' : '#dc2626'};">${Number(healthAdj) >= 0 ? '+' : ''}${healthAdj} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(healthAdj))}%;background:${Number(healthAdj) >= 0 ? '#059669' : '#dc2626'};"></div></div>
+      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(healthAdj))}%;background:${Number(healthAdj) >= 0 ? '#059669' : '#dc2626'};-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>🧬 Genetic Adjustment (${geneticLabel})</span><span style="font-weight:700;color:${Number(geneticAdj) >= 0 ? '#059669' : '#dc2626'};">${Number(geneticAdj) >= 0 ? '+' : ''}${geneticAdj} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(geneticAdj))}%;background:${Number(geneticAdj) >= 0 ? '#7c3aed' : '#dc2626'};"></div></div>
+      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(geneticAdj))}%;background:${Number(geneticAdj) >= 0 ? '#7c3aed' : '#dc2626'};-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>🌱 Epigenetic Habits Bonus</span><span style="font-weight:700;color:#059669;">+${epiAdj} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(epiAdj))}%;background:#10b981;"></div></div>
+      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(epiAdj))}%;background:#10b981;-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
       <div style="font-size:11px;color:#6b7280;margin-top:2px;">${activeHabits.length} of ${ALL_HABITS.length} epigenetic habits active</div>
     </div>
     <div class="bar-row">
       <div class="bar-label"><span>🤝 Community &amp; Social Bonus</span><span style="font-weight:700;color:#059669;">+${commBonus} yrs</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(commBonus))}%;background:#06b6d4;"></div></div>
+      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(commBonus))}%;background:#06b6d4;-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
     </div>
     <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
     <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -1149,7 +1149,7 @@ const LifeExpectancy = () => {
     <h2>🌍 Blue Zones Power 9® Alignment — ${blueZoneCountPDF}/9 principles</h2>
     <p style="font-size:11px;color:#4b5563;line-height:1.6;margin-bottom:12px;">
       Dan Buettner's research identified 9 lifestyle principles found consistently in populations that routinely live past 100.
-      ${userSelectedHabits?.length ? 'Your simulator habits align with' : "Your mentor's profile aligns with"} <strong>${blueZoneCountPDF} of 9</strong> principles.
+      Your profile aligns with <strong>${blueZoneCountPDF} of 9</strong> principles.
     </p>
     ${blueZonesHTMLPDF}
     <div style="margin-top:10px;padding:8px 12px;background:${blueZoneCountPDF >= 7 ? '#d1fae5' : blueZoneCountPDF >= 5 ? '#dcfce7' : blueZoneCountPDF >= 3 ? '#fef9c3' : '#ffedd5'};border-radius:6px;border:1px solid ${blueZoneCountPDF >= 7 ? '#a7f3d0' : blueZoneCountPDF >= 5 ? '#bbf7d0' : blueZoneCountPDF >= 3 ? '#fde68a' : '#fed7aa'};">

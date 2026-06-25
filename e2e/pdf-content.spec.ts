@@ -84,4 +84,28 @@ test.describe('PDF content — new sections', () => {
       expect(html).toContain('A55,55');
     }
   });
+
+  test('PDF HTML: bar-fill divs carry inline print-color-adjust', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      // Each .bar-fill now has -webkit-print-color-adjust inline
+      const inlineMatches = html.match(/class="bar-fill" style="[^"]*print-color-adjust/g) || [];
+      expect(inlineMatches.length).toBeGreaterThanOrEqual(5);
+    }
+  });
+
+  test('PDF HTML: no "mentor" voice leak in longevity PDF', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      // "Your mentor's profile aligns with" must not appear — replaced with "Your profile aligns with"
+      expect(html).not.toContain("mentor's profile aligns with");
+    }
+  });
+
+  test('PDF HTML: cover title has white-space:nowrap to prevent mid-word wrap', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      expect(html).toContain('white-space:nowrap');
+    }
+  });
 });
