@@ -179,4 +179,14 @@ test.describe('PDF content — new sections', () => {
       expect(html).not.toMatch(/Family Genetics \(\+6\.6/);
     }
   });
+
+  test('PDF HTML v5: no undefined or NaN values in output', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      expect(html).not.toContain('>undefined<');
+      expect(html).not.toContain('>NaN<');
+      expect(html).not.toMatch(/\bundefined\b.*yrs/);
+      expect(html).not.toMatch(/NaN yrs/);
+    }
+  });
 });

@@ -169,6 +169,7 @@ const LifeExpectancy = () => {
       return;
     }
 
+    try {
     const quiz = longevityResult.quizSnapshot;
     const name = personName || quiz?.name || profile?.full_name || 'You';
     const forecast = Number(longevityResult.totalForecast || 0).toFixed(1);
@@ -299,6 +300,18 @@ const LifeExpectancy = () => {
     // Factor breakdown
     const allFactors = longevityResult.factorBreakdown || [];
     const topOpportunities = [...allFactors].filter((f: any) => f.potentialGain > 0).sort((a: any, b: any) => b.potentialGain - a.potentialGain).slice(0, 4);
+
+    // Genetics detection — must be declared before topOppsHTML (map runs synchronously)
+    const isGeneticFactor = (f: any) =>
+      f.category === 'genetic' ||
+      (f.factor || '').toLowerCase().includes('genetic') ||
+      (f.factor || '').toLowerCase().includes('family');
+    const actionableOpps = topOpportunities.filter((f: any) => !isGeneticFactor(f));
+    const actionableGainPDF = Math.min(
+      actionableOpps.slice(0, 3).reduce((s: number, f: any) => s + Number(f.potentialGain || 0), 0) * 0.5,
+      8
+    ).toFixed(1);
+
     const negativeFactors = allFactors.filter((f: any) => f.currentImpact < 0).sort((a: any, b: any) => a.currentImpact - b.currentImpact);
     const positiveFactors = allFactors.filter((f: any) => f.currentImpact >= 0).sort((a: any, b: any) => b.currentImpact - a.currentImpact);
     const p1 = longevityResult.pillar1Snapshot;
@@ -420,17 +433,6 @@ const LifeExpectancy = () => {
 
     const top3GainRawPDF = topOpportunities.slice(0, 3).reduce((sum: number, f: any) => sum + Number(f.potentialGain || 0), 0);
     const realisticGainPDF = Math.min(top3GainRawPDF * 0.5, 8).toFixed(1);
-
-    // Genetics detection + actionable (non-genetic) total for 90-day plan
-    const isGeneticFactor = (f: any) =>
-      f.category === 'genetic' ||
-      (f.factor || '').toLowerCase().includes('genetic') ||
-      (f.factor || '').toLowerCase().includes('family');
-    const actionableOpps = topOpportunities.filter((f: any) => !isGeneticFactor(f));
-    const actionableGainPDF = Math.min(
-      actionableOpps.slice(0, 3).reduce((s: number, f: any) => s + Number(f.potentialGain || 0), 0) * 0.5,
-      8
-    ).toFixed(1);
 
     // Precise countdown from birth date so fractional years don't show "0 DAYS"
     const _dob = quiz?.dob ? new Date(quiz.dob) : null;
@@ -1370,6 +1372,10 @@ const LifeExpectancy = () => {
     } catch (e) {
       console.error('BornClock blueprint error:', e);
       try { document.body.removeChild(iframe); } catch {}
+    }
+    } catch (err) {
+      console.error('Blueprint export failed:', err);
+      alert('Export failed — please retry.');
     }
   };
 
