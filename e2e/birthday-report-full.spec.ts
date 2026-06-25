@@ -68,4 +68,31 @@ test.describe('/birthday-report — full flow', () => {
     await expect(page.locator('text=June 15').first()).toBeVisible({ timeout: 5000 });
     await expect(page.locator('text=Something went wrong')).not.toBeVisible();
   });
+
+  test('report view page: error boundary fallback not shown for valid slug', async ({ page }) => {
+    // Generate a report then follow the link to /report/<slug>
+    await page.goto('/birthday-report');
+    await page.waitForLoadState('networkidle');
+
+    const dobInput = page.locator('input[type="date"]').first();
+    if (!await dobInput.isVisible({ timeout: 5000 }).catch(() => false)) return;
+
+    await dobInput.fill('1990-06-15');
+    const submitBtn = page.locator('button[type="submit"]')
+      .or(page.locator('button:has-text("Generate")'))
+      .first();
+    if (!await submitBtn.isVisible({ timeout: 5000 }).catch(() => false)) return;
+
+    await submitBtn.click();
+    // Wait for redirect to /report/<slug> or a link to the report
+    await page.waitForURL(/\/report\//, { timeout: 15000 }).catch(() => null);
+
+    if (page.url().includes('/report/')) {
+      await page.waitForLoadState('networkidle');
+      // Error boundary fallback must not be visible
+      await expect(page.getByText('Something went wrong loading this report')).toHaveCount(0);
+      // Some birthday content must be visible
+      await expect(page.getByText(/Birthday/i).first()).toBeVisible({ timeout: 8000 });
+    }
+  });
 });

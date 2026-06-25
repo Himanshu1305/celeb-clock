@@ -71,7 +71,7 @@ const BIRTHSTONE_IMAGES: Record<number, string> = {
 function GemImage({ month, size = 80 }: { month: number; size?: number }) {
   const meta = BIRTHSTONE_META[month] ?? BIRTHSTONE_META[1];
   const src = BIRTHSTONE_IMAGES[month];
-  const [imgError, setImgError] = React.useState(false);
+  const [imgError, setImgError] = useState(false);
 
   if (!src || imgError) {
     return (
