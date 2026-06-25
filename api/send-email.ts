@@ -41,7 +41,7 @@ function baseTemplate(content: string): string {
       Know your time. Live it well.
     </p>
     <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.6;">
-      BornClock · Your Birthday Intelligence Platform<br>
+      BornClock · Birthday Blueprint<br>
       <a href="${BASE_URL}/privacy" style="color:#9ca3af;">Privacy Policy</a> ·
       <a href="${BASE_URL}/contact" style="color:#9ca3af;">Contact</a> ·
       <a href="{{unsubscribe_url}}" style="color:#9ca3af;">Unsubscribe</a>

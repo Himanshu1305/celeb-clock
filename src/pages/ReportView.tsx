@@ -377,7 +377,7 @@ const ReportView = () => {
     <div ref={reportPrintRef} id="birthday-report-print" className="min-h-screen bg-white">
       <Helmet>
         <title>{recipientName}'s Birthday Report | BornClock</title>
-        <meta name="description" content={`A personalised birthday intelligence report for ${recipientName} — celebrity twins, zodiac, numerology, birthstone and more.`} />
+        <meta name="description" content={`${recipientName}'s Birthday Blueprint — celebrity twins, zodiac, numerology, birthstone, tarot, and more. A personalised gift from BornClock.`} />
         <meta name="robots" content="noindex" />
         <style>{`
           @media print {
@@ -440,7 +440,7 @@ const ReportView = () => {
       <div className="print-only bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3 mb-4">
         <img src="/bornclock-logo.png" alt="BornClock" style={{ height: '32px', width: 'auto' }} />
         <div>
-          <div className="font-black text-gray-900 text-sm">BornClock Birthday Intelligence Report</div>
+          <div className="font-black text-gray-900 text-sm">BornClock Birthday Blueprint</div>
           <div className="text-xs text-gray-400">bornclock.com · Know your time. Live it well.</div>
         </div>
       </div>
@@ -464,7 +464,7 @@ const ReportView = () => {
           </div>
           <div className="text-6xl mb-4">🎂</div>
           <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-3 leading-tight">
-            {recipientName}'s Birthday<br />Intelligence Report
+            {recipientName}'s<br />Birthday Blueprint
           </h1>
           <p className="text-gray-500 text-sm mb-6">
             Born on a {dayOfWeekBorn} · {dob.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}

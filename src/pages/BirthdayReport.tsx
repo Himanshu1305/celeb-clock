@@ -164,7 +164,7 @@ const BirthdayReport = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title="Birthday Intelligence Report — The Ultimate Birthday Gift | BornClock"
+        title="Birthday Blueprint — The Ultimate Personalised Birthday Gift | BornClock"
         description="Create a personalised birthday report: celebrity twins, zodiac profiles, numerology, birthstone, planetary ages, and a personalised message. The birthday gift they'll never forget."
         keywords="birthday report gift, personalised birthday gift, birthday intelligence report, zodiac birthday gift, celebrity birthday twins, numerology birthday"
         canonicalUrl="/birthday-report"
@@ -524,7 +524,7 @@ const BirthdayReport = () => {
                     💬 WhatsApp
                   </a>
                   <a
-                    href={`mailto:?subject=Your Birthday Intelligence Report&body=${encodeURIComponent(`I made this Birthday Report for you! 🎂\n\n${reportUrl}`)}`}
+                    href={`mailto:?subject=Your Birthday Blueprint 🎂&body=${encodeURIComponent(`I made your Birthday Blueprint — it's pretty amazing! 🎂\n\nEverything about the day you were born: celebrity twins, zodiac, numerology, tarot, and more.\n\n${reportUrl}`)}`}
                     className="flex-1 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl transition-colors text-sm text-center"
                   >
                     ✉️ Email
