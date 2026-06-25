@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Component } from 'react';
+import type { ReactNode, ErrorInfo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Navigation } from '@/components/Navigation';
@@ -216,6 +217,33 @@ const LoadingScreen = () => (
   </div>
 );
 
+// ── Error boundary ─────────────────────────────────────────────────────────────
+
+class ReportBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('[BirthdayReport] render error:', error, info);
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4 text-center">
+          <div className="text-5xl mb-4">😕</div>
+          <h2 className="text-2xl font-black text-gray-900 mb-2">Something went wrong loading this report</h2>
+          <p className="text-gray-500 text-sm mb-6 max-w-sm">
+            {(this.state.error as Error).message}
+          </p>
+          <Link to="/birthday-report" className="px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl">
+            Create a New Report
+          </Link>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 // ── Main component ─────────────────────────────────────────────────────────────
 
 const ReportView = () => {
@@ -260,7 +288,7 @@ const ReportView = () => {
   }, [slug]);
 
   if (loading) return <LoadingScreen />;
-  if (notFound || !row) return <ExpiryPage />;
+  if (notFound || !row || !row.report_data) return <ExpiryPage />;
 
   const rd: BirthdayReportData = row.report_data;
   const {
@@ -484,7 +512,7 @@ const ReportView = () => {
               { label: 'Years Old', value: String(age), icon: '🎈' },
               { label: 'Days Lived', value: fmt(daysSinceBirth), icon: '📅' },
               { label: 'Days to Birthday', value: String(daysUntilNextBirthday), icon: '⏳' },
-              { label: 'Next Birthday', value: nextBirthdayDate.replace(/,.*/, ''), icon: '🎁' },
+              { label: 'Next Birthday', value: (nextBirthdayDate || '').replace(/,.*/, ''), icon: '🎁' },
             ].map(stat => (
               <div key={stat.label} className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-sm">
                 <div className="text-2xl mb-1">{stat.icon}</div>
@@ -1488,4 +1516,10 @@ const ReportView = () => {
   );
 };
 
-export default ReportView;
+const ReportViewWithBoundary = () => (
+  <ReportBoundary>
+    <ReportView />
+  </ReportBoundary>
+);
+
+export default ReportViewWithBoundary;

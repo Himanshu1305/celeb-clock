@@ -299,13 +299,24 @@ const LifeExpectancy = () => {
 
     // Factor breakdown
     const allFactors = longevityResult.factorBreakdown || [];
-    const topOpportunities = [...allFactors].filter((f: any) => f.potentialGain > 0).sort((a: any, b: any) => b.potentialGain - a.potentialGain).slice(0, 4);
 
-    // Genetics detection — must be declared before topOppsHTML (map runs synchronously)
+    // Must be declared before topOpportunities (used in dedup filter) and before topOppsHTML (map runs synchronously)
     const isGeneticFactor = (f: any) =>
       f.category === 'genetic' ||
       (f.factor || '').toLowerCase().includes('genetic') ||
       (f.factor || '').toLowerCase().includes('family');
+
+    // Dedupe: keep at most ONE genetic-category entry (the highest-gain one, which sorts first)
+    let _seenGenetic = false;
+    const topOpportunities = [...allFactors]
+      .filter((f: any) => f.potentialGain > 0)
+      .sort((a: any, b: any) => b.potentialGain - a.potentialGain)
+      .filter((f: any) => {
+        if (isGeneticFactor(f)) { if (_seenGenetic) return false; _seenGenetic = true; }
+        return true;
+      })
+      .slice(0, 4);
+
     const actionableOpps = topOpportunities.filter((f: any) => !isGeneticFactor(f));
     const actionableGainPDF = Math.min(
       actionableOpps.slice(0, 3).reduce((s: number, f: any) => s + Number(f.potentialGain || 0), 0) * 0.5,
@@ -701,7 +712,6 @@ const LifeExpectancy = () => {
       border-top: 1px solid var(--hairline);
       font-size: 9px; color: var(--muted); text-align: center;
       letter-spacing: 0.3px;
-      break-before: avoid; page-break-before: avoid;
     }
 
     /* Opportunity cards */
