@@ -336,14 +336,14 @@ const LifeExpectancy = () => {
         <td style="padding:7px 0;font-size:12px;">${f.emoji || ''} ${f.factor}</td>
         <td style="padding:7px 0;font-size:12px;color:#6b7280;">${f.currentValueLabel || '—'}</td>
         <td style="padding:7px 0;font-size:12px;font-weight:600;text-align:right;color:${Number(f.currentImpact) >= 0 ? '#059669' : '#dc2626'};">${Number(f.currentImpact) >= 0 ? '+' : ''}${Number(f.currentImpact || 0).toFixed(1)} yrs</td>
-        <td style="padding:7px 0;font-size:12px;font-weight:600;text-align:right;color:#4f46e5;">+${Number(f.potentialGain || 0).toFixed(1)} yrs</td>
+        <td style="padding:7px 0;font-size:12px;font-weight:600;text-align:right;color:var(--pos);">+${Number(f.potentialGain || 0).toFixed(1)} yrs</td>
       </tr>`).join('');
 
     const topOppsHTML = topOpportunities.map((f: any, i: number) => `
       <div style="padding:14px;background:white;border-radius:8px;border:1px solid #e5e7eb;margin-bottom:12px;page-break-inside:avoid;break-inside:avoid;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
           <div style="display:flex;align-items:center;gap:8px;">
-            <div style="background:#4f46e5;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">${i + 1}</div>
+            <div style="background:var(--navy);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">${i + 1}</div>
             <div>
               <div style="font-size:14px;font-weight:700;color:#1f2937;">${f.emoji || ''} ${f.factor}</div>
               <div style="font-size:11px;color:#6b7280;">Category: ${f.category || 'lifestyle'}</div>
@@ -375,15 +375,15 @@ const LifeExpectancy = () => {
       longevityResult.factorBreakdown || []
     );
     const pdfActionHTML = actionPlanPhases.map((planPhase, idx) => `
-  <div style="margin-bottom:14px;border-radius:8px;overflow:hidden;border:1px solid #e5e7eb;page-break-inside:avoid;break-inside:avoid;">
-    <div style="background:${idx < 2 ? '#4f46e5' : '#059669'};padding:9px 14px;">
-      <div style="font-size:12px;font-weight:700;color:white;">${planPhase.period} — ${planPhase.title}</div>
+  <div style="margin-bottom:14px;border-radius:8px;overflow:hidden;border:1px solid var(--hairline);border-left:3px solid ${idx < 2 ? 'var(--navy)' : 'var(--pos)'};page-break-inside:avoid;break-inside:avoid;">
+    <div style="background:${idx < 2 ? 'var(--panel)' : '#f0fdf4'};padding:9px 14px;border-bottom:1px solid var(--hairline);">
+      <div style="font-size:12px;font-weight:700;color:${idx < 2 ? 'var(--navy)' : 'var(--pos)'};">${planPhase.period} — ${planPhase.title}</div>
     </div>
-    <div style="padding:12px 14px;background:white;">
+    <div style="padding:12px 14px;background:var(--paper);">
       ${planPhase.items.map((item, i) => `
         <div style="display:flex;gap:10px;margin-bottom:${i < planPhase.items.length - 1 ? '8px' : '0'};align-items:flex-start;">
-          <div style="background:${idx < 2 ? '#4f46e5' : '#059669'};color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:2px;">${i + 1}</div>
-          <div style="font-size:12px;color:#374151;line-height:1.6;">${item}</div>
+          <div style="background:${idx < 2 ? 'var(--navy)' : 'var(--pos)'};color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:2px;">${i + 1}</div>
+          <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;">${item}</div>
         </div>`).join('')}
     </div>
   </div>`).join('');
@@ -528,7 +528,7 @@ const LifeExpectancy = () => {
               <span style="font-size:11px;font-weight:700;color:#1f2937;">${rec.title}</span>
               ${rec.impact !== undefined ? `<span style="font-size:9px;font-weight:700;color:#059669;background:#d1fae5;padding:1px 5px;border-radius:8px;">+${rec.impact} yr</span>` : ''}
             </div>
-            <div style="font-size:9px;color:#4f46e5;font-weight:600;">⚡ ${rec.quickWin}</div>
+            <div style="font-size:9px;color:var(--blue);font-weight:600;">⚡ ${rec.quickWin}</div>
             <div style="font-size:9px;color:#9ca3af;margin-top:1px;font-style:italic;">${rec.source}</div>
           </div>
         </div>`).join('');
@@ -550,76 +550,85 @@ const LifeExpectancy = () => {
   <meta charset="UTF-8">
   <title>Longevity Blueprint — BornClock</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 12px; line-height: 1.6; color: #1f2937; background: white;
-      -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+    :root{
+      --ink:#0C1A2B; --ink-soft:#3A4A5A; --muted:#6B7A89;
+      --hairline:#D7E1EA; --panel:#F1F6FA; --panel-2:#FAFCFE; --paper:#FFFFFF;
+      --navy:#103A5C; --blue:#1E6FB8; --blue-tint:#E4EFF8;
+      --pos:#1F8A5B; --pos-soft:#BFE3CF; --neg:#C2453D; --neg-soft:#F0CFCB; --slate:#8A9BA8;
     }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+           font-size: 12px; line-height: 1.6; color: var(--ink); background: var(--paper);
+           font-feature-settings: "tnum" 1, "lnum" 1; }
+    .num { font-feature-settings: "tnum" 1; letter-spacing: -.01em; }
     @page { margin: 0; size: A4; }
     .page { padding: 32px 40px; margin: 1.2cm; }
     .page-break { page-break-after: always; break-after: page; }
 
     /* Typography */
-    h1 { font-size: 22px; font-weight: 900; color: #111827; letter-spacing: -0.3px; }
-    h2 { font-size: 14px; font-weight: 800; color: #1f2937; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #e5e7eb; text-transform: uppercase; letter-spacing: 0.5px; }
-    h3 { font-size: 13px; font-weight: 700; color: #374151; margin: 0 0 8px 0; }
+    h1 { font-size: 22px; font-weight: 800; color: var(--navy); letter-spacing: -0.3px; }
+    h2 { font-size: 13px; font-weight: 700; color: var(--ink); margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 1.5px solid var(--navy); text-transform: uppercase; letter-spacing: 0.5px; }
+    h3 { font-size: 13px; font-weight: 700; color: var(--ink-soft); margin: 0 0 8px 0; }
 
     /* Section cards */
-    .section { margin-bottom: 18px; padding: 16px 20px; border-radius: 10px; page-break-inside: avoid; break-inside: avoid; border: 1px solid #e5e7eb; }
-    .section-gray  { background: #f9fafb; border-left: 4px solid #6b7280; }
-    .section-green { background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid #22c55e; }
-    .section-blue  { background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #3b82f6; }
-    .section-amber { background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #f59e0b; }
-    .section-purple{ background: #faf5ff; border: 1px solid #e9d5ff; border-left: 4px solid #8b5cf6; }
-    .section-indigo{ background: #eef2ff; border: 1px solid #c7d2fe; border-left: 4px solid #4f46e5; }
-    .section-teal  { background: #f0fdfa; border: 1px solid #99f6e4; border-left: 4px solid #14b8a6; }
-    .section-rose  { background: #fff1f2; border: 1px solid #fecdd3; border-left: 4px solid #f43f5e; }
-
-    /* Section headings match their colour */
-    .section-green  h2 { border-bottom-color: #bbf7d0; color: #166534; }
-    .section-blue   h2 { border-bottom-color: #bfdbfe; color: #1e40af; }
-    .section-amber  h2 { border-bottom-color: #fde68a; color: #92400e; }
-    .section-purple h2 { border-bottom-color: #e9d5ff; color: #6b21a8; }
-    .section-indigo h2 { border-bottom-color: #c7d2fe; color: #3730a3; }
-    .section-teal   h2 { border-bottom-color: #99f6e4; color: #0f766e; }
-    .section-rose   h2 { border-bottom-color: #fecdd3; color: #9f1239; }
+    .section { margin-bottom: 18px; padding: 16px 20px; border-radius: 8px; page-break-inside: avoid; break-inside: avoid; border: 1px solid var(--hairline); }
+    .section-gray  { background: var(--panel); border-left: 4px solid var(--slate); }
+    .section-green { background: #f0fdf4; border: 1px solid var(--pos-soft); border-left: 4px solid var(--pos); }
+    .section-blue  { background: var(--blue-tint); border: 1px solid #c3d9ef; border-left: 4px solid var(--blue); }
+    .section-amber { background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #d97706; }
+    .section-purple{ background: var(--panel); border: 1px solid var(--hairline); border-left: 4px solid var(--navy); }
+    .section-indigo{ background: var(--blue-tint); border: 1px solid #c3d9ef; border-left: 4px solid var(--blue); }
+    .section-teal  { background: #f0fdfa; border: 1px solid #99f6e4; border-left: 4px solid #0d9488; }
+    .section-rose  { background: #fff1f2; border: 1px solid var(--neg-soft); border-left: 4px solid var(--neg); }
+    .section h2 { border-bottom-color: var(--hairline); color: var(--ink); }
+    .section-green  h2 { color: var(--pos); }
+    .section-blue   h2 { color: var(--blue); }
+    .section-amber  h2 { color: #92400e; }
+    .section-purple h2 { color: var(--navy); }
+    .section-indigo h2 { color: var(--blue); }
+    .section-teal   h2 { color: #0f766e; }
+    .section-rose   h2 { color: var(--neg); }
 
     /* Grid layouts */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
     .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; }
 
-    /* Stat boxes */
-    .stat { text-align: center; background: white; border-radius: 10px; padding: 14px 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    .stat-label { font-size: 9px; color: #9ca3af; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
-    .stat-value { font-size: 22px; font-weight: 900; line-height: 1; }
-    .stat-unit { font-size: 11px; color: #9ca3af; font-weight: 400; }
+    /* Vitals strip cells */
+    .stat { text-align: left; background: var(--paper); padding: 16px 18px; }
+    .stat-label { font-size: 9.5px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .16em; font-weight: 600; }
+    .stat-value { font-size: 23px; font-weight: 700; line-height: 1; color: var(--navy); }
+    .stat-unit { font-size: 11px; color: var(--muted); font-weight: 400; }
 
     /* Tables */
-    table { width: 100%; border-collapse: collapse; border-radius: 8px; overflow: hidden; }
-    th { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; padding: 9px 8px; background: #f3f4f6; border-bottom: 2px solid #e5e7eb; text-align: left; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 9px 8px; background: var(--panel); border-bottom: 1.5px solid var(--navy); text-align: left; font-weight: 700; }
     th:last-child, th:nth-last-child(2) { text-align: right; }
-    tr { border-bottom: 1px solid #f3f4f6; }
-    tr:nth-child(even) td { background: #fafafa; }
-    td { padding: 8px; font-size: 12px; }
+    tr { border-bottom: 1px solid var(--hairline); }
+    tr:nth-child(even) td { background: var(--panel-2); }
+    td { padding: 8px; font-size: 12px; color: var(--ink-soft); }
+
+    /* Impact chips */
+    .chip { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+    .chip-pos { background: var(--pos-soft); color: var(--pos); }
+    .chip-neg { background: var(--neg-soft); color: var(--neg); }
+    .chip-zero { background: var(--panel); color: var(--muted); }
 
     /* Profile rows */
-    .profile-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #f3f4f6; font-size: 12px; }
+    .profile-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--hairline); font-size: 12px; }
     .profile-row:last-child { border-bottom: none; }
 
     /* Bar chart */
     .bar-row { margin-bottom: 12px; }
-    .bar-label { font-size: 11px; color: #4b5563; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
-    .bar-bg { background: #e5e7eb; border-radius: 6px; height: 12px; overflow: hidden; }
+    .bar-label { font-size: 11px; color: var(--ink-soft); margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
+    .bar-bg { background: var(--hairline); border-radius: 6px; height: 12px; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .bar-fill { height: 12px; border-radius: 6px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-    /* Page header — indigo gradient band */
+    /* Page header — flat navy band */
     .page-header {
       display: flex; justify-content: space-between; align-items: center;
-      background: linear-gradient(135deg, #3730a3, #4f46e5, #6366f1);
+      background: var(--navy);
       padding: 11px 20px; margin: -32px -40px 24px;
-      border-bottom: 3px solid #3730a3;
     }
     .page-header-name { font-size: 10px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
     .page-header-right { font-size: 12px; font-weight: 700; color: white; }
@@ -627,113 +636,104 @@ const LifeExpectancy = () => {
     /* Page footer */
     .page-footer {
       margin-top: 20px; padding-top: 10px;
-      border-top: 1px solid #e5e7eb;
-      font-size: 9px; color: #9ca3af; text-align: center;
+      border-top: 1px solid var(--hairline);
+      font-size: 9px; color: var(--muted); text-align: center;
       letter-spacing: 0.3px;
     }
 
     /* Opportunity cards */
-    .opp-card {
-      padding: 14px; background: white; border-radius: 10px;
-      border: 1px solid #e5e7eb; margin-bottom: 12px;
-      page-break-inside: avoid; break-inside: avoid;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-    .opp-number {
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      color: white; border-radius: 50%; width: 24px; height: 24px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 900; flex-shrink: 0;
-    }
-    .opp-gain {
-      font-size: 20px; font-weight: 900; color: #059669; line-height: 1;
-    }
+    .opp-card { padding: 14px; background: var(--paper); border-radius: 8px; border: 1px solid var(--hairline); margin-bottom: 12px; page-break-inside: avoid; break-inside: avoid; }
+    .opp-number { background: var(--navy); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; flex-shrink: 0; }
+    .opp-gain { font-size: 20px; font-weight: 900; color: var(--pos); line-height: 1; }
 
-    /* 90-Day phase headers */
-    .phase-foundation { background: linear-gradient(135deg, #4f46e5, #6366f1); }
-    .phase-build      { background: linear-gradient(135deg, #2563eb, #3b82f6); }
-    .phase-deepen     { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
-    .phase-consolidate{ background: linear-gradient(135deg, #059669, #10b981); }
+    /* 90-Day phase headers — flat, no gradient */
+    .phase-foundation { background: var(--navy); }
+    .phase-build      { background: var(--blue); }
+    .phase-deepen     { background: #0f5986; }
+    .phase-consolidate{ background: var(--pos); }
 
-    /* Citation style */
-    .citation { font-size: 10px; color: #6b7280; font-style: italic; margin-top: 6px; }
+    /* Citation + tags */
+    .citation { font-size: 10px; color: var(--muted); font-style: italic; margin-top: 6px; }
     .tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
-    .tag-green  { background: #dcfce7; color: #166534; }
-    .tag-blue   { background: #dbeafe; color: #1e40af; }
+    .tag-green  { background: var(--pos-soft); color: var(--pos); }
+    .tag-blue   { background: var(--blue-tint); color: var(--blue); }
     .tag-amber  { background: #fef3c7; color: #92400e; }
-    .tag-red    { background: #fef2f2; color: #991b1b; }
-    .tag-purple { background: #f3e8ff; color: #6b21a8; }
+    .tag-red    { background: var(--neg-soft); color: var(--neg); }
+    .tag-purple { background: var(--blue-tint); color: var(--navy); }
+
     /* Intro stats */
-    .intro-stats{background:#f8faff;border-left:4px solid #6366f1;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0;font-size:13px;color:#374151;line-height:1.8;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
-    .intro-stats b{color:#1e40af;}
-    /* Life countdown */
-    .countdown{background:linear-gradient(135deg,#1e1b4b,#312e81 55%,#4338ca);color:#fff;padding:26px;border-radius:12px;margin:18px 0;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
-    .cd-head{font-size:11px;letter-spacing:2px;text-align:center;color:#c7d2fe;margin-bottom:4px;}
-    .cd-sub{text-align:center;color:#a5b4fc;font-size:12px;margin-bottom:18px;}
+    .intro-stats{background:var(--blue-tint);border-left:4px solid var(--blue);padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0;font-size:13px;color:var(--ink-soft);line-height:1.8;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    .intro-stats b{color:var(--navy);}
+
+    /* Life countdown — navy family */
+    .countdown{background:linear-gradient(135deg,#0C1A2B,#103A5C 60%,#1E6FB8);color:#fff;padding:26px;border-radius:12px;margin:18px 0;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    .cd-head{font-size:11px;letter-spacing:2px;text-align:center;color:#93c5fd;margin-bottom:4px;}
+    .cd-sub{text-align:center;color:#bfdbfe;font-size:12px;margin-bottom:18px;}
     .cd-grid{display:flex;justify-content:center;gap:14px;margin-bottom:16px;}
     .cd-cell{background:rgba(255,255,255,.12);border-radius:8px;padding:12px 16px;text-align:center;min-width:60px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
     .cd-n{font-size:26px;font-weight:900;color:#fff;line-height:1;}
-    .cd-l{font-size:9px;letter-spacing:1.5px;color:#c7d2fe;margin-top:4px;}
+    .cd-l{font-size:9px;letter-spacing:1.5px;color:#bfdbfe;margin-top:4px;}
     .cd-bar{height:8px;background:rgba(255,255,255,.2);border-radius:4px;margin-bottom:6px;}
-    .cd-fill{height:100%;background:linear-gradient(90deg,#818cf8,#a78bfa);border-radius:4px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
-    .cd-row{display:flex;justify-content:space-between;font-size:10px;color:#c7d2fe;margin-bottom:14px;}
-    .cd-quote{text-align:center;font-style:italic;color:#e0e7ff;font-size:13px;border-top:1px solid rgba(255,255,255,.2);padding-top:14px;}
+    .cd-fill{height:100%;background:linear-gradient(90deg,#60a5fa,#93c5fd);border-radius:4px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    .cd-row{display:flex;justify-content:space-between;font-size:10px;color:#bfdbfe;margin-bottom:14px;}
+    .cd-quote{text-align:center;font-style:italic;color:#dbeafe;font-size:13px;border-top:1px solid rgba(255,255,255,.2);padding-top:14px;}
+
     /* Genetic ceiling */
-    .ceiling{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 16px;margin:16px 0;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    .ceiling{background:#f0fdf4;border:1px solid var(--pos-soft);border-radius:8px;padding:14px 16px;margin:16px 0;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
     .ceiling-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
     .ceiling-top span:first-child{font-size:14px;font-weight:700;color:#14532d;}
-    .ceiling-val{font-size:18px;font-weight:900;color:#16a34a;}
-    .ceiling-desc{font-size:11px;color:#374151;margin:0;}
+    .ceiling-val{font-size:18px;font-weight:900;color:var(--pos);}
+    .ceiling-desc{font-size:11px;color:var(--ink-soft);margin:0;}
+
     /* Baseline source */
-    .baseline-src{font-size:11px;color:#6b7280;margin-top:8px;padding:6px 10px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    .baseline-src{font-size:11px;color:var(--muted);margin-top:8px;padding:6px 10px;background:var(--panel);border:1px solid var(--hairline);border-radius:4px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
   </style>
 </head>
 <body>
 
 <!-- PAGE 1: COVER -->
 <div class="page">
-  <div style="text-align:center;padding:40px 20px 30px;border-bottom:2px solid #e5e7eb;margin-bottom:28px;">
-    <div style="margin-bottom:12px;">
-      <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="30" cy="30" r="28" stroke="#4f46e5" stroke-width="3" fill="white"/>
-        <circle cx="30" cy="30" r="2.5" fill="#4f46e5"/>
-        <line x1="30" y1="30" x2="30" y2="10" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="30" y1="30" x2="44" y2="30" stroke="#6366f1" stroke-width="2" stroke-linecap="round"/>
-        <line x1="30" y1="6" x2="30" y2="10" stroke="#4f46e5" stroke-width="2"/>
-        <line x1="30" y1="50" x2="30" y2="54" stroke="#4f46e5" stroke-width="2"/>
-        <line x1="6" y1="30" x2="10" y2="30" stroke="#4f46e5" stroke-width="2"/>
-        <line x1="50" y1="30" x2="54" y2="30" stroke="#4f46e5" stroke-width="2"/>
-      </svg>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:2px solid var(--navy);margin-bottom:28px;">
+    <div style="display:flex;align-items:center;gap:13px;">
+      <img src="/bornclock-logo.png" alt="BornClock" width="52" height="52"
+           style="display:block;object-fit:contain;"
+           onerror="this.style.display='none'" />
+      <div style="line-height:1.2;">
+        <div style="font-size:21px;font-weight:800;color:var(--navy);letter-spacing:-.01em;">BornClock</div>
+        <div style="font-size:9.5px;color:var(--muted);letter-spacing:.05em;margin-top:3px;">Know your time. Live it well.</div>
+      </div>
     </div>
-    <div style="font-size:28px;font-weight:900;color:#1f2937;margin-bottom:4px;">BornClock</div>
-    <div style="font-size:15px;color:#6366f1;font-style:italic;margin-bottom:24px;">Know your time. Live it well.</div>
-    <div style="font-size:13px;color:#9ca3af;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;white-space:nowrap;">Personal Longevity Blueprint</div>
-    <div style="font-size:32px;font-weight:900;color:#1f2937;margin-bottom:4px;">${name}</div>
-    <div style="font-size:13px;color:#9ca3af;">Generated ${generatedDate} · bornclock.com</div>
+    <div style="text-align:right;">
+      <div style="font-size:9px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;">Personal Longevity Blueprint</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px;">Generated ${generatedDate} · bornclock.com</div>
+    </div>
   </div>
 
-  <div style="text-align:center;padding:24px;background:linear-gradient(135deg,#f5f3ff,#eff6ff);border-radius:12px;border:1px solid #e9d5ff;margin-bottom:24px;">
-    <div style="font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Your Statistical Life Expectancy</div>
-    <div style="font-size:64px;font-weight:900;color:#4f46e5;line-height:1;">${forecast}</div>
-    <div style="font-size:16px;color:#6b7280;margin-bottom:8px;">years</div>
+  <div style="margin-bottom:28px;">
+    <div style="font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Your Statistical Life Expectancy</div>
+    <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px;">
+      <div class="num" style="font-size:110px;font-weight:800;color:var(--navy);letter-spacing:-.03em;line-height:.92;">${forecast}</div>
+      <div style="font-size:28px;font-weight:500;color:var(--ink-soft);">years</div>
+    </div>
+    <div style="font-size:15px;font-weight:600;color:var(--ink);margin-top:12px;">${name}</div>
   </div>
 
-  <div class="grid-4" style="margin-bottom:24px;">
-    <div class="stat">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--hairline);border-radius:8px;overflow:hidden;margin-bottom:24px;">
+    <div class="stat" style="border-right:1px solid var(--hairline);">
       <div class="stat-label">Current Age</div>
-      <div class="stat-value" style="color:#374151;">${currentAge} <span class="stat-unit">yrs</span></div>
+      <div class="stat-value">${currentAge} <span class="stat-unit">yrs</span></div>
     </div>
-    <div class="stat">
+    <div class="stat" style="border-right:1px solid var(--hairline);">
       <div class="stat-label">Years Remaining</div>
-      <div class="stat-value" style="color:#059669;">${remaining} <span class="stat-unit">yrs</span></div>
+      <div class="stat-value" style="color:var(--pos);">${remaining} <span class="stat-unit">yrs</span></div>
     </div>
-    <div class="stat">
+    <div class="stat" style="border-right:1px solid var(--hairline);">
       <div class="stat-label">Days Remaining</div>
-      <div class="stat-value" style="color:#4f46e5;font-size:16px;">${Math.round(Number(remaining) * 365).toLocaleString()} <span class="stat-unit">days</span></div>
+      <div class="stat-value" style="font-size:16px;">${Math.round(Number(remaining) * 365).toLocaleString()} <span class="stat-unit">days</span></div>
     </div>
     <div class="stat">
       <div class="stat-label">Genetic Profile</div>
-      <div class="stat-value" style="font-size:14px;color:#7c3aed;">${geneticLabel}</div>
+      <div class="stat-value" style="font-size:14px;">${geneticLabel}</div>
     </div>
   </div>
 
@@ -758,24 +758,22 @@ const LifeExpectancy = () => {
   </div>
 
   <div class="section section-gray" style="display:flex;align-items:center;gap:24px;">
-    <div style="flex-shrink:0;">
-      <svg width="140" height="90" viewBox="0 0 140 90" xmlns="http://www.w3.org/2000/svg">
-        <path d="M15,80 A55,55 0 0,1 125,80" stroke="#e5e7eb" stroke-width="12" fill="none" stroke-linecap="round"/>
-        <path d="M15,80 A55,55 0 0,1 ${gaugeX},${gaugeY}" stroke="${scoreBand.color}" stroke-width="12" fill="none" stroke-linecap="round"/>
-        <text x="70" y="72" text-anchor="middle" font-size="26" font-weight="900" fill="#1f2937">${score}</text>
-        <text x="70" y="84" text-anchor="middle" font-size="10" fill="#9ca3af">/100</text>
-        <text x="12" y="88" font-size="8" fill="#9ca3af">0</text>
-        <text x="128" y="88" font-size="8" fill="#9ca3af">100</text>
-      </svg>
+    <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:100px;height:100px;border-radius:50%;background:conic-gradient(${scoreBand.color} 0% ${score}%, var(--hairline) ${score}% 100%);display:flex;align-items:center;justify-content:center;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;">
+        <div style="width:74px;height:74px;border-radius:50%;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;">
+          <span class="num" style="font-size:26px;font-weight:800;color:var(--navy);line-height:1;">${score}</span>
+          <span style="font-size:9px;color:var(--muted);">/100</span>
+        </div>
+      </div>
     </div>
     <div style="flex:1;">
-      <h3 style="margin-bottom:6px;">Longevity Score: ${score}/100 — ${scoreBand.label}</h3>
-      <p style="font-size:12px;color:#4b5563;line-height:1.6;margin-bottom:8px;">${scoreBand.desc}</p>
+      <h3 style="margin-bottom:6px;color:var(--navy);">Longevity Score: ${score}/100 — ${scoreBand.label}</h3>
+      <p style="font-size:12px;color:var(--ink-soft);line-height:1.6;margin-bottom:8px;">${scoreBand.desc}</p>
       <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <span style="font-size:10px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:10px;">80–100: Excellent</span>
-        <span style="font-size:10px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:10px;">65–79: On Track</span>
-        <span style="font-size:10px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:10px;">50–64: Average</span>
-        <span style="font-size:10px;background:#fef2f2;color:#991b1b;padding:2px 8px;border-radius:10px;">0–49: Needs Attention</span>
+        <span style="font-size:10px;background:var(--pos-soft);color:var(--pos);padding:2px 8px;border-radius:10px;-webkit-print-color-adjust:exact;print-color-adjust:exact;">80–100: Excellent</span>
+        <span style="font-size:10px;background:var(--blue-tint);color:var(--blue);padding:2px 8px;border-radius:10px;-webkit-print-color-adjust:exact;print-color-adjust:exact;">65–79: On Track</span>
+        <span style="font-size:10px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:10px;-webkit-print-color-adjust:exact;print-color-adjust:exact;">50–64: Average</span>
+        <span style="font-size:10px;background:var(--neg-soft);color:var(--neg);padding:2px 8px;border-radius:10px;-webkit-print-color-adjust:exact;print-color-adjust:exact;">0–49: Needs Attention</span>
       </div>
     </div>
   </div>
@@ -788,9 +786,18 @@ const LifeExpectancy = () => {
 <!-- PAGE 2: HEALTH PROFILE -->
 <div class="page page-break">
   <div style="margin-bottom:24px;">
-    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
-    <h1 style="margin-top:4px;">Your Health Profile</h1>
-    <p style="font-size:12px;color:#6b7280;margin-top:4px;">Based on your quiz responses — this is what we used to calculate your forecast</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
+      </div>
+      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    </div>
+    <div style="border-left:3px solid var(--navy);padding-left:12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">INTAKE</div>
+      <h1 style="margin:0 0 4px;">Your Health Profile</h1>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0;">Based on your quiz responses — this is what we used to calculate your forecast</p>
+    </div>
   </div>
 
   <div class="section section-gray" style="margin-bottom:16px;">
@@ -843,14 +850,14 @@ const LifeExpectancy = () => {
   <div class="section section-purple">
     <h2>🧬 Genetic Vitality Profile</h2>
     <div style="display:flex;align-items:center;gap:16px;">
-      <div style="padding:12px 20px;background:white;border-radius:8px;border:2px solid #e9d5ff;text-align:center;flex-shrink:0;">
-        <div style="font-size:10px;color:#7c3aed;font-weight:600;margin-bottom:2px;">GENETIC SCORE</div>
-        <div style="font-size:18px;font-weight:900;color:#7c3aed;">${geneticLabel}</div>
+      <div style="padding:12px 20px;background:white;border-radius:8px;border:1px solid var(--hairline);text-align:center;flex-shrink:0;">
+        <div style="font-size:10px;color:var(--navy);font-weight:600;margin-bottom:2px;">GENETIC SCORE</div>
+        <div style="font-size:18px;font-weight:900;color:var(--navy);">${geneticLabel}</div>
         <div style="font-size:13px;font-weight:700;color:${Number(geneticAdj) >= 0 ? '#059669' : '#dc2626'};margin-top:2px;">${Number(geneticAdj) >= 0 ? '+' : ''}${geneticAdj} yrs</div>
       </div>
       <div style="flex:1;">
         <p style="font-size:12px;color:#4b5563;line-height:1.6;margin-bottom:6px;">${geneticDesc || 'Your genetic vitality contributes ' + geneticAdj + ' years to your forecast.'}</p>
-        <p style="font-size:11px;color:#7c3aed;font-style:italic;">Research (Karolinska Institute, 2018): Genetics account for only 25–30% of longevity variance. 70–75% is determined by lifestyle and environment.</p>
+        <p style="font-size:11px;color:var(--muted);font-style:italic;">Research (Karolinska Institute, 2018): Genetics account for only 25–30% of longevity variance. 70–75% is determined by lifestyle and environment.</p>
       </div>
     </div>
   </div>
@@ -860,38 +867,47 @@ const LifeExpectancy = () => {
 <!-- PAGE 3: HOW YOUR NUMBER WAS BUILT -->
 <div class="page page-break">
   <div style="margin-bottom:24px;">
-    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
-    <h1 style="margin-top:4px;">How Your Number Was Built</h1>
-    <p style="font-size:12px;color:#6b7280;margin-top:4px;">From WHO baseline to your personalised forecast — each factor explained</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
+      </div>
+      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    </div>
+    <div style="border-left:3px solid var(--navy);padding-left:12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">METHODOLOGY</div>
+      <h1 style="margin:0 0 4px;">How Your Number Was Built</h1>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0;">From WHO baseline to your personalised forecast — each factor explained</p>
+    </div>
   </div>
 
   <div class="section section-gray" style="margin-bottom:16px;">
     <h2>Forecast Breakdown — Visual</h2>
     <div class="bar-row">
-      <div class="bar-label"><span>📊 WHO Baseline (${quiz?.gender || 'male'}, ${quiz?.country || 'India'})</span><span style="font-weight:700;color:#4f46e5;">${baseline} yrs</span></div>
-      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:85%;background:#4f46e5;-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
+      <div class="bar-label"><span>📊 WHO Baseline (${quiz?.gender || 'male'}, ${quiz?.country || 'India'})</span><span style="font-weight:700;color:var(--navy);">${baseline} yrs</span></div>
+      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:85%;background:var(--navy);-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
     </div>
     <div class="bar-row">
-      <div class="bar-label"><span>${Number(healthAdj) >= 0 ? '✅' : '⚠️'} Health &amp; Lifestyle Adjustment</span><span style="font-weight:700;color:${Number(healthAdj) >= 0 ? '#059669' : '#dc2626'};">${Number(healthAdj) >= 0 ? '+' : ''}${healthAdj} yrs</span></div>
-      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(healthAdj))}%;background:${Number(healthAdj) >= 0 ? '#059669' : '#dc2626'};-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
+      <div class="bar-label"><span>${Number(healthAdj) >= 0 ? '✅' : '⚠️'} Health &amp; Lifestyle Adjustment</span><span style="font-weight:700;color:${Number(healthAdj) >= 0 ? 'var(--pos)' : 'var(--neg)'};">${Number(healthAdj) >= 0 ? '+' : ''}${healthAdj} yrs</span></div>
+      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(healthAdj))}%;background:${Number(healthAdj) >= 0 ? 'var(--pos)' : 'var(--neg)'};-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
     </div>
     <div class="bar-row">
-      <div class="bar-label"><span>🧬 Genetic Adjustment (${geneticLabel})</span><span style="font-weight:700;color:${Number(geneticAdj) >= 0 ? '#059669' : '#dc2626'};">${Number(geneticAdj) >= 0 ? '+' : ''}${geneticAdj} yrs</span></div>
-      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(geneticAdj))}%;background:${Number(geneticAdj) >= 0 ? '#7c3aed' : '#dc2626'};-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
+      <div class="bar-label"><span>🧬 Genetic Adjustment (${geneticLabel})</span><span style="font-weight:700;color:${Number(geneticAdj) >= 0 ? 'var(--pos)' : 'var(--neg)'};">${Number(geneticAdj) >= 0 ? '+' : ''}${geneticAdj} yrs</span></div>
+      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(geneticAdj))}%;background:${Number(geneticAdj) >= 0 ? 'var(--pos)' : 'var(--neg)'};-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
     </div>
     <div class="bar-row">
-      <div class="bar-label"><span>🌱 Epigenetic Habits Bonus</span><span style="font-weight:700;color:#059669;">+${epiAdj} yrs</span></div>
-      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(epiAdj))}%;background:#10b981;-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
-      <div style="font-size:11px;color:#6b7280;margin-top:2px;">${activeHabits.length} of ${ALL_HABITS.length} epigenetic habits active</div>
+      <div class="bar-label"><span>🌱 Epigenetic Habits Bonus</span><span style="font-weight:700;color:var(--pos);">+${epiAdj} yrs</span></div>
+      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(epiAdj))}%;background:var(--pos);-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px;">${activeHabits.length} of ${ALL_HABITS.length} epigenetic habits active</div>
     </div>
     <div class="bar-row">
-      <div class="bar-label"><span>🤝 Community &amp; Social Bonus</span><span style="font-weight:700;color:#059669;">+${commBonus} yrs</span></div>
-      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(commBonus))}%;background:#06b6d4;-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
+      <div class="bar-label"><span>🤝 Community &amp; Social Bonus</span><span style="font-weight:700;color:var(--pos);">+${commBonus} yrs</span></div>
+      <div class="bar-bg" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;"><div class="bar-fill" style="width:${calcAdjBarWidth(Number(commBonus))}%;background:var(--blue);-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div>
     </div>
-    <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
+    <hr style="border:none;border-top:1px solid var(--hairline);margin:16px 0;">
     <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-size:14px;font-weight:700;color:#1f2937;">Your Total Forecast</div>
-      <div style="font-size:24px;font-weight:900;color:#4f46e5;">${forecast} years</div>
+      <div style="font-size:14px;font-weight:700;color:var(--ink);">Your Total Forecast</div>
+      <div style="font-size:24px;font-weight:900;color:var(--navy);">${forecast} years</div>
     </div>
   </div>
 
@@ -915,9 +931,18 @@ const LifeExpectancy = () => {
 <!-- PAGE 4: PERSONALISED ANALYSIS -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
-    <h1 style="margin-top:4px;">Personalised Health Analysis</h1>
-    <p style="font-size:12px;color:#6b7280;margin-top:4px;">What your quiz answers mean for your longevity — explained specifically for you</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
+      </div>
+      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    </div>
+    <div style="border-left:3px solid var(--navy);padding-left:12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">ANALYSIS</div>
+      <h1 style="margin:0 0 4px;">Personalised Health Analysis</h1>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0;">What your quiz answers mean for your longevity — explained specifically for you</p>
+    </div>
   </div>
 
   <div class="section section-gray" style="margin-bottom:12px;">
@@ -968,9 +993,18 @@ const LifeExpectancy = () => {
 <!-- PAGE 5: TOP IMPROVEMENT OPPORTUNITIES -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
-    <h1 style="margin-top:4px;">Your Top Improvement Opportunities</h1>
-    <p style="font-size:12px;color:#6b7280;margin-top:4px;">Ranked by potential years gained — specific to your quiz results</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
+      </div>
+      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    </div>
+    <div style="border-left:3px solid var(--navy);padding-left:12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">PRIORITIES</div>
+      <h1 style="margin:0 0 4px;">Your Top Improvement Opportunities</h1>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0;">Ranked by potential years gained — specific to your quiz results</p>
+    </div>
   </div>
   ${topOppsHTML}
   <div class="page-footer">BornClock Personal Longevity Blueprint &nbsp;·&nbsp; ${name} &nbsp;·&nbsp; bornclock.com &nbsp;·&nbsp; Confidential</div>
@@ -979,9 +1013,18 @@ const LifeExpectancy = () => {
 <!-- PAGE 6: EPIGENETIC BLUEPRINT -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
-    <h1 style="margin-top:4px;">Your Epigenetic Blueprint</h1>
-    <p style="font-size:12px;color:#6b7280;margin-top:4px;">Lifestyle habits that directly alter your DNA methylation patterns and biological age</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
+      </div>
+      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    </div>
+    <div style="border-left:3px solid var(--navy);padding-left:12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">EPIGENETICS</div>
+      <h1 style="margin:0 0 4px;">Your Epigenetic Blueprint</h1>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0;">Lifestyle habits that directly alter your DNA methylation patterns and biological age</p>
+    </div>
   </div>
   <div style="padding:14px;background:#eff6ff;border-radius:8px;border:1px solid #bfdbfe;margin-bottom:20px;">
     <p style="font-size:12px;color:#1e40af;line-height:1.6;">
@@ -1003,17 +1046,26 @@ const LifeExpectancy = () => {
 <!-- PAGE 7: BIOLOGICAL BLUEPRINT -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
-    <h1 style="margin-top:4px;">🧬 Biological Blueprint</h1>
-    <p style="font-size:12px;color:#6b7280;margin-top:4px;">Your genetic heritage and how each lifestyle factor currently affects your lifespan</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
+      </div>
+      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    </div>
+    <div style="border-left:3px solid var(--navy);padding-left:12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">GENETICS</div>
+      <h1 style="margin:0 0 4px;">Biological Blueprint</h1>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0;">Your genetic heritage and how each lifestyle factor currently affects your lifespan</p>
+    </div>
   </div>
 
   <div class="section section-purple" style="margin-bottom:16px;">
     <h2>Genetic Vitality Score</h2>
     <div style="display:flex;gap:16px;align-items:flex-start;">
-      <div style="padding:14px 20px;background:white;border-radius:8px;border:2px solid #e9d5ff;text-align:center;flex-shrink:0;">
-        <div style="font-size:10px;color:#7c3aed;font-weight:600;margin-bottom:2px;">GENETIC SCORE</div>
-        <div style="font-size:18px;font-weight:900;color:#7c3aed;">${geneticLabel}</div>
+      <div style="padding:14px 20px;background:white;border-radius:8px;border:1px solid var(--hairline);text-align:center;flex-shrink:0;">
+        <div style="font-size:10px;color:var(--navy);font-weight:600;margin-bottom:2px;">GENETIC SCORE</div>
+        <div style="font-size:18px;font-weight:900;color:var(--navy);">${geneticLabel}</div>
         <div style="font-size:13px;font-weight:700;color:${Number(geneticAdj) >= 0 ? '#059669' : '#dc2626'};margin-top:4px;">${Number(geneticAdj) >= 0 ? '+' : ''}${geneticAdj} yrs</div>
         <div style="font-size:10px;color:#9ca3af;margin-top:2px;">Family avg: ~${longevityResult.familyBaselineAge} yrs</div>
       </div>
@@ -1057,9 +1109,18 @@ const LifeExpectancy = () => {
 <!-- PAGE 8: COMMUNITY ANCHOR -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
-    <h1 style="margin-top:4px;">🏘️ Community Anchor</h1>
-    <p style="font-size:12px;color:#6b7280;margin-top:4px;">Your social environment's impact on longevity — and how it aligns with Blue Zones science</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
+      </div>
+      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    </div>
+    <div style="border-left:3px solid var(--navy);padding-left:12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">ENVIRONMENT</div>
+      <h1 style="margin:0 0 4px;">Community Anchor</h1>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0;">Your social environment's impact on longevity — and how it aligns with Blue Zones science</p>
+    </div>
   </div>
 
   ${p2?.hasMentor && p2?.mentorAge > 0 ? `
@@ -1087,9 +1148,18 @@ const LifeExpectancy = () => {
 <!-- PAGE 9: HEALTH GUIDE -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
-    <h1 style="margin-top:4px;">💊 Your Personal Health Guide</h1>
-    <p style="font-size:12px;color:#6b7280;margin-top:4px;">Science-backed recommendations across 6 key longevity categories</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
+      </div>
+      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    </div>
+    <div style="border-left:3px solid var(--navy);padding-left:12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">PROTOCOL</div>
+      <h1 style="margin:0 0 4px;">Your Personal Health Guide</h1>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0;">Science-backed recommendations across 6 key longevity categories</p>
+    </div>
   </div>
   ${healthGuideHTMLPDF}
   <div style="padding:10px 14px;background:#eff6ff;border-radius:6px;border:1px solid #bfdbfe;margin-top:8px;">
@@ -1100,18 +1170,25 @@ const LifeExpectancy = () => {
 
 <!-- Page 10 — PERSONALISED ACTION PLAN -->
 <div class="page page-break">
-  <div class="page-header">
-    <div class="page-header-name">BornClock Personal Longevity Blueprint</div>
-    <div class="page-header-right">${name} · bornclock.com</div>
+  <div style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
+      </div>
+      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    </div>
+    <div style="border-left:3px solid var(--navy);padding-left:12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">PROGRAMME</div>
+      <h1 style="margin:0 0 4px;">Your Personalised 90-Day Plan</h1>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0;">Based on your quiz answers — specific to your health profile, not a generic plan</p>
+    </div>
   </div>
 
-  <h1 style="font-size:20px;font-weight:900;margin:0 0 4px 0;">Your Personalised 90-Day Plan</h1>
-  <p style="font-size:12px;color:#6b7280;margin:0 0 16px 0;">Based on your quiz answers — specific to your health profile, not a generic plan</p>
-
-  <div style="padding:12px 16px;background:#faf5ff;border-radius:8px;border:1px solid #e9d5ff;margin-bottom:16px;">
-    <p style="font-size:12px;color:#4b5563;line-height:1.6;margin:0;">
-      Your <strong>#1 opportunity</strong> is <strong style="color:#4f46e5;">${topOpportunities[0]?.factor || 'lifestyle improvement'} (+${Number(topOpportunities[0]?.potentialGain || 0).toFixed(1)} yrs)</strong>.
-      Addressing your top 3 opportunities could add up to <strong style="color:#059669;">+${realisticGainPDF} realistic years</strong> to your forecast.
+  <div style="padding:12px 16px;background:var(--blue-tint);border-radius:8px;border:1px solid #c3d9ef;margin-bottom:16px;">
+    <p style="font-size:12px;color:var(--ink-soft);line-height:1.6;margin:0;">
+      Your <strong>#1 opportunity</strong> is <strong style="color:var(--navy);">${topOpportunities[0]?.factor || 'lifestyle improvement'} (+${Number(topOpportunities[0]?.potentialGain || 0).toFixed(1)} yrs)</strong>.
+      Addressing your top 3 opportunities could add up to <strong style="color:var(--pos);">+${realisticGainPDF} realistic years</strong> to your forecast.
     </p>
   </div>
 
@@ -1132,9 +1209,18 @@ const LifeExpectancy = () => {
 <!-- PAGE 11: SCIENTIFIC FOUNDATION -->
 <div class="page">
   <div style="margin-bottom:20px;">
-    <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;">BornClock Personal Longevity Blueprint · ${name}</div>
-    <h1 style="margin-top:4px;">Scientific Foundation</h1>
-    <p style="font-size:12px;color:#6b7280;margin-top:4px;">The research behind your forecast</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
+        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
+      </div>
+      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    </div>
+    <div style="border-left:3px solid var(--navy);padding-left:12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">EVIDENCE</div>
+      <h1 style="margin:0 0 4px;">Scientific Foundation</h1>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0;">The research behind your forecast</p>
+    </div>
   </div>
   <div class="section section-blue" style="margin-bottom:16px;">
     <h2>Methodology</h2>
@@ -1163,24 +1249,23 @@ const LifeExpectancy = () => {
     <h2>Research Citations</h2>
     ${uniqueSources.map((s: any) => `
       <div style="padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:11px;color:#4b5563;">
-        <span style="color:#4f46e5;">●</span> ${s}
+        <span style="color:var(--navy);">●</span> ${s}
       </div>`).join('')}
-    <div style="padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:11px;color:#4b5563;"><span style="color:#4f46e5;">●</span> Ruby et al., Science (2018): Genetic heritability of longevity — 25–30% genetic, 70–75% lifestyle.</div>
-    <div style="padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:11px;color:#4b5563;"><span style="color:#4f46e5;">●</span> Harvard Study of Adult Development (85 years): Social relationships as strongest predictor of healthy ageing.</div>
-    <div style="padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:11px;color:#4b5563;"><span style="color:#4f46e5;">●</span> Horvath S., NIH (2013): DNA methylation age — lifestyle factors alter epigenetic clocks.</div>
-    <div style="padding:6px 0;font-size:11px;color:#4b5563;"><span style="color:#4f46e5;">●</span> Buettner D., Blue Zones (2023): Power 9 lifestyle principles from centenarian populations.</div>
+    <div style="padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:11px;color:#4b5563;"><span style="color:var(--navy);">●</span> Ruby et al., Science (2018): Genetic heritability of longevity — 25–30% genetic, 70–75% lifestyle.</div>
+    <div style="padding:6px 0;border-bottom:1px solid var(--hairline);font-size:11px;color:var(--ink-soft);"><span style="color:var(--navy);">●</span> Harvard Study of Adult Development (85 years): Social relationships as strongest predictor of healthy ageing.</div>
+    <div style="padding:6px 0;border-bottom:1px solid var(--hairline);font-size:11px;color:var(--ink-soft);"><span style="color:var(--navy);">●</span> Horvath S., NIH (2013): DNA methylation age — lifestyle factors alter epigenetic clocks.</div>
+    <div style="padding:6px 0;font-size:11px;color:var(--ink-soft);"><span style="color:var(--navy);">●</span> Buettner D., Blue Zones (2023): Power 9 lifestyle principles from centenarian populations.</div>
   </div>
 
-  <div style="text-align:center;padding:24px 0 0;margin-top:20px;border-top:2px solid #4f46e5;">
-    <svg width="36" height="36" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:6px;">
-      <circle cx="30" cy="30" r="28" stroke="#4f46e5" stroke-width="3" fill="white"/>
-      <circle cx="30" cy="30" r="2.5" fill="#4f46e5"/>
-      <line x1="30" y1="30" x2="30" y2="10" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="30" y1="30" x2="44" y2="30" stroke="#6366f1" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-    <div style="font-size:20px;font-weight:900;color:#1f2937;margin-bottom:2px;">BornClock</div>
-    <div style="font-size:13px;color:#6366f1;font-style:italic;margin-bottom:8px;">Know your time. Live it well.</div>
-    <div style="font-size:11px;color:#9ca3af;margin-bottom:10px;">bornclock.com · Evidence-based longevity analysis</div>
+  <div style="text-align:center;padding:24px 0 0;margin-top:20px;border-top:2px solid var(--navy);">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;">
+      <img src="/bornclock-logo.png" alt="BornClock" width="36" height="36"
+           style="display:block;object-fit:contain;"
+           onerror="this.style.display='none'" />
+      <div style="font-size:20px;font-weight:800;color:var(--navy);letter-spacing:-.01em;">BornClock</div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Know your time. Live it well.</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">bornclock.com · Evidence-based longevity analysis</div>
     <div style="font-size:10px;color:#b0b5bf;line-height:1.6;max-width:600px;margin:0 auto;">
       This report is a statistical estimate for informational and motivational purposes only. It is not a medical diagnosis, prognosis, or substitute for professional medical advice. Always consult a qualified healthcare professional before making changes to your health regimen. © 2026 BornClock · Generated ${generatedDate}
     </div>

@@ -77,11 +77,11 @@ test.describe('PDF content — new sections', () => {
     }
   });
 
-  test('PDF HTML: SVG gauge conic-gradient or arc path present', async ({ page }) => {
+  test('PDF HTML: gauge renders as conic-gradient ring (v4 clinical)', async ({ page }) => {
     const html = await triggerPDFAndGetHTML(page);
     if (html) {
-      // Gauge renders as inline SVG arc
-      expect(html).toContain('A55,55');
+      // Gauge replaced with CSS conic-gradient ring in v4
+      expect(html).toContain('conic-gradient');
     }
   });
 
@@ -106,6 +106,45 @@ test.describe('PDF content — new sections', () => {
     const html = await triggerPDFAndGetHTML(page);
     if (html) {
       expect(html).toContain('white-space:nowrap');
+    }
+  });
+
+  // ── v4 Clinical Overhaul tests ────────────────────────────────────────────
+
+  test('PDF HTML v4: real logo PNG referenced on cover', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      expect(html).toContain('/bornclock-logo.png');
+    }
+  });
+
+  test('PDF HTML v4: vitals strip uses CSS grid repeat(4)', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      expect(html).toMatch(/grid-template-columns:repeat\(4/);
+    }
+  });
+
+  test('PDF HTML v4: design tokens (--navy) injected into PDF style block', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      expect(html).toContain('--navy');
+    }
+  });
+
+  test('PDF HTML v4: no purple/violet hex codes (#6d28d9, #7c3aed, #4338ca)', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      expect(html).not.toMatch(/#6d28d9|#7c3aed|#4338ca/);
+    }
+  });
+
+  test('PDF HTML v4: section eyebrow labels present (INTAKE, METHODOLOGY, EVIDENCE)', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      expect(html).toContain('INTAKE');
+      expect(html).toContain('METHODOLOGY');
+      expect(html).toContain('EVIDENCE');
     }
   });
 });

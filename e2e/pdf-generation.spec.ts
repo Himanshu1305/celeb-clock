@@ -133,8 +133,9 @@ test.describe('PDF — HTML structure (iframe inspection)', () => {
   test('PDF HTML: baseline bar is 85% wide (fixed anchor)', async ({ page }) => {
     const html = await reachResultsAndInterceptPDF(page);
     if (html) {
-      // WHO Baseline bar should always be 85%
-      expect(html).toContain('width:85%;background:#4f46e5');
+      // WHO Baseline bar should always be 85% — color now uses CSS var(--navy)
+      expect(html).toContain('width:85%');
+      expect(html).not.toContain('width:85%;background:#4f46e5');
     }
   });
 
