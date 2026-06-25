@@ -182,6 +182,7 @@ const LifeExpectancy = () => {
     const commBonus = Number(longevityResult.communityBonus || 0).toFixed(1);
     const geneticLabel = longevityResult.geneticVitalityScore || 'Average';
     const geneticDesc = longevityResult.geneticVitalityLabel || '';
+    const geneticCeiling = Math.round(Number(longevityResult.familyBaselineAge || 0) + 5);
     const generatedDate = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 
     // Score band
@@ -331,33 +332,61 @@ const LifeExpectancy = () => {
         <div style="font-size:12px;font-weight:700;color:#9ca3af;white-space:nowrap;">+${h.gain || 0} yrs potential</div>
       </div>`).join('');
 
+    // Humanise raw quiz enum strings leaking from the factor engine
+    const ENUM_LABEL_MAP: Record<string, string> = {
+      '6to7': '6–7 hrs', '7to9': '7–9 hrs', 'under6': '<6 hrs', 'over9': '>9 hrs',
+      'quit_under5': 'Quit <5 yrs ago', 'quit_over5': 'Quit >5 yrs ago',
+      'seldom': 'Seldom', 'light': 'Light', 'moderate': 'Moderate',
+      'heavy': 'Heavy', 'never': 'Never',
+      'optimal': 'Optimal', 'normal': 'Normal', 'elevated': 'Elevated',
+      'high1': 'High Stage 1', 'high2': 'High Stage 2',
+      'strong': 'Strong', 'limited': 'Limited', 'isolated': 'Isolated', 'none': 'None',
+    };
+    const humanizeLabel = (label: string): string => {
+      if (!label || label === '—') return label || '—';
+      const mapped = ENUM_LABEL_MAP[label];
+      if (mapped) return mapped;
+      // Bare numeric string (e.g. raw BMI "40") → normalise to 1 dp
+      if (/^\d+(\.\d+)?$/.test(label)) return parseFloat(label).toFixed(1);
+      return label;
+    };
+
     const factorsTableHTML = allFactors.map((f: any) => `
       <tr style="border-bottom:1px solid #f3f4f6;">
         <td style="padding:7px 0;font-size:12px;">${f.emoji || ''} ${f.factor}</td>
-        <td style="padding:7px 0;font-size:12px;color:#6b7280;">${f.currentValueLabel || '—'}</td>
+        <td style="padding:7px 0;font-size:12px;color:#6b7280;">${humanizeLabel(f.currentValueLabel || '—')}</td>
         <td style="padding:7px 0;font-size:12px;font-weight:600;text-align:right;color:${Number(f.currentImpact) >= 0 ? '#059669' : '#dc2626'};">${Number(f.currentImpact) >= 0 ? '+' : ''}${Number(f.currentImpact || 0).toFixed(1)} yrs</td>
         <td style="padding:7px 0;font-size:12px;font-weight:600;text-align:right;color:var(--pos);">+${Number(f.potentialGain || 0).toFixed(1)} yrs</td>
       </tr>`).join('');
 
-    const topOppsHTML = topOpportunities.map((f: any, i: number) => `
-      <div style="padding:14px;background:white;border-radius:8px;border:1px solid #e5e7eb;margin-bottom:12px;page-break-inside:avoid;break-inside:avoid;">
+    const topOppsHTML = topOpportunities.map((f: any, i: number) => {
+      const isGen = isGeneticFactor(f);
+      const gapYrs = Math.max(0, geneticCeiling - Number(forecast)).toFixed(0);
+      return `
+      <div style="padding:14px;background:white;border-radius:8px;border:1px solid ${isGen ? 'var(--hairline)' : '#e5e7eb'};margin-bottom:12px;page-break-inside:avoid;break-inside:avoid;${isGen ? 'border-left:3px solid var(--slate);' : ''}">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
           <div style="display:flex;align-items:center;gap:8px;">
-            <div style="background:var(--navy);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">${i + 1}</div>
+            <div style="background:${isGen ? 'var(--slate)' : 'var(--navy)'};color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">${i + 1}</div>
             <div>
-              <div style="font-size:14px;font-weight:700;color:#1f2937;">${f.emoji || ''} ${f.factor}</div>
-              <div style="font-size:11px;color:#6b7280;">Category: ${f.category || 'lifestyle'}</div>
+              <div style="font-size:14px;font-weight:700;color:#1f2937;">${isGen ? '🧬 Reach Your Genetic Ceiling' : `${f.emoji || ''} ${f.factor}`}</div>
+              <div style="font-size:11px;color:#6b7280;">${isGen ? 'Genetic heritage — immutable; lever is lifestyle' : `Category: ${f.category || 'lifestyle'}`}</div>
             </div>
           </div>
           <div style="text-align:right;">
-            <div style="font-size:18px;font-weight:900;color:#059669;">+${Number(f.potentialGain || 0).toFixed(1)} yrs</div>
-            <div style="font-size:10px;color:#9ca3af;">potential gain</div>
+            <div style="font-size:18px;font-weight:900;color:${isGen ? 'var(--slate)' : '#059669'};">${isGen ? `~${gapYrs} yr gap` : `+${Number(f.potentialGain || 0).toFixed(1)} yrs`}</div>
+            <div style="font-size:10px;color:#9ca3af;">${isGen ? 'ceiling gap' : 'potential gain'}</div>
           </div>
         </div>
+        ${isGen ? `
+        <div style="padding:10px 12px;background:var(--panel);border-radius:6px;border:1px solid var(--hairline);margin-bottom:8px;font-size:12px;color:var(--ink-soft);line-height:1.6;">
+          Your genes allow an estimated ceiling of <strong>~${geneticCeiling} yrs</strong>.
+          Your current forecast is <strong>${forecast} yrs</strong> — a gap of <strong>${gapYrs} yrs</strong>.
+          You can't change your inheritance, but the habits in this plan determine how much of that potential you actually reach.
+        </div>` : `
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
           <div style="padding:8px;background:#fef2f2;border-radius:6px;border:1px solid #fecaca;">
             <div style="font-size:10px;color:#991b1b;font-weight:600;margin-bottom:2px;">YOUR CURRENT STATUS</div>
-            <div style="font-size:12px;color:#1f2937;">${f.currentValueLabel || '—'}</div>
+            <div style="font-size:12px;color:#1f2937;">${humanizeLabel(f.currentValueLabel || '—')}</div>
             <div style="font-size:11px;font-weight:600;color:#dc2626;margin-top:2px;">Impact: ${Number(f.currentImpact || 0).toFixed(1)} yrs</div>
           </div>
           <div style="padding:8px;background:#f0fdf4;border-radius:6px;border:1px solid #bbf7d0;">
@@ -365,9 +394,10 @@ const LifeExpectancy = () => {
             <div style="font-size:12px;color:#1f2937;">${f.optimalValueLabel || '—'}</div>
             <div style="font-size:11px;font-weight:600;color:#059669;margin-top:2px;">Potential: +${Number(f.potentialGain || 0).toFixed(1)} yrs</div>
           </div>
-        </div>
+        </div>`}
         <div style="font-size:11px;color:#6b7280;font-style:italic;">📚 ${f.source || ''}</div>
-      </div>`).join('');
+      </div>`;
+  }).join('');
 
     // Action plan — shared utility (same function as web)
     const actionPlanPhases = buildActionPlanPhases(
@@ -390,6 +420,34 @@ const LifeExpectancy = () => {
 
     const top3GainRawPDF = topOpportunities.slice(0, 3).reduce((sum: number, f: any) => sum + Number(f.potentialGain || 0), 0);
     const realisticGainPDF = Math.min(top3GainRawPDF * 0.5, 8).toFixed(1);
+
+    // Genetics detection + actionable (non-genetic) total for 90-day plan
+    const isGeneticFactor = (f: any) =>
+      f.category === 'genetic' ||
+      (f.factor || '').toLowerCase().includes('genetic') ||
+      (f.factor || '').toLowerCase().includes('family');
+    const actionableOpps = topOpportunities.filter((f: any) => !isGeneticFactor(f));
+    const actionableGainPDF = Math.min(
+      actionableOpps.slice(0, 3).reduce((s: number, f: any) => s + Number(f.potentialGain || 0), 0) * 0.5,
+      8
+    ).toFixed(1);
+
+    // Precise countdown from birth date so fractional years don't show "0 DAYS"
+    const _dob = quiz?.dob ? new Date(quiz.dob) : null;
+    let cdYearsCount = Math.floor(Number(remaining));
+    let cdDaysCount = Math.floor((Number(remaining) % 1) * 365.25);
+    if (_dob && isFinite(_dob.getTime())) {
+      const forecastYears = Number(forecast);
+      const deathDate = new Date(_dob);
+      deathDate.setFullYear(deathDate.getFullYear() + Math.floor(forecastYears));
+      deathDate.setDate(deathDate.getDate() + Math.round((forecastYears % 1) * 365.25));
+      const msLeft = deathDate.getTime() - Date.now();
+      if (msLeft > 0) {
+        const totalDaysLeft = msLeft / (24 * 60 * 60 * 1000);
+        cdYearsCount = Math.floor(totalDaysLeft / 365.25);
+        cdDaysCount = Math.floor(totalDaysLeft % 365.25);
+      }
+    }
 
     // Two-scale bar chart: baseline always 85%, adjustments scaled to max adjustment
     const maxAdjValue = Math.max(
@@ -427,7 +485,9 @@ const LifeExpectancy = () => {
         <span style="font-size:11px;font-weight:600;color:${tc};">${label}</span>
         <div style="display:flex;align-items:center;gap:6px;">
           <span style="font-size:12px;font-weight:700;color:${tc};">${m.age} yrs</span>
-          ${m.isLiving ? '<span style="font-size:9px;background:#dcfce7;color:#166534;padding:1px 5px;border-radius:8px;">Living</span>' : ''}
+          ${m.isLiving
+            ? '<span style="font-size:9px;background:#dcfce7;color:#166534;padding:1px 5px;border-radius:8px;">Living</span>'
+            : '<span style="font-size:9px;background:#fee2e2;color:#991b1b;padding:1px 5px;border-radius:8px;">Deceased</span>'}
         </div>
       </div>`;
     }, '');
@@ -547,7 +607,7 @@ const LifeExpectancy = () => {
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <title>Longevity Blueprint — BornClock</title>
   <style>
     :root{
@@ -639,6 +699,7 @@ const LifeExpectancy = () => {
       border-top: 1px solid var(--hairline);
       font-size: 9px; color: var(--muted); text-align: center;
       letter-spacing: 0.3px;
+      break-before: avoid; page-break-before: avoid;
     }
 
     /* Opportunity cards */
@@ -747,8 +808,8 @@ const LifeExpectancy = () => {
     <div class="cd-head">&#9203; YOUR LIFE COUNTDOWN</div>
     <div class="cd-sub">Estimated time remaining until age ${forecast}</div>
     <div class="cd-grid">
-      <div class="cd-cell"><div class="cd-n">${Math.floor(Number(remaining))}</div><div class="cd-l">YEARS</div></div>
-      <div class="cd-cell"><div class="cd-n">${Math.floor((Number(remaining) % 1) * 365)}</div><div class="cd-l">DAYS</div></div>
+      <div class="cd-cell"><div class="cd-n">${cdYearsCount}</div><div class="cd-l">YEARS</div></div>
+      <div class="cd-cell"><div class="cd-n">${cdDaysCount}</div><div class="cd-l">DAYS</div></div>
       <div class="cd-cell"><div class="cd-n">00</div><div class="cd-l">HOURS</div></div>
       <div class="cd-cell"><div class="cd-n">00</div><div class="cd-l">MINS</div></div>
     </div>
@@ -786,12 +847,12 @@ const LifeExpectancy = () => {
 <!-- PAGE 2: HEALTH PROFILE -->
 <div class="page page-break">
   <div style="margin-bottom:24px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
-        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
-      </div>
-      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        BornClock Personal Longevity Blueprint
+      </span>
+      <span>${name}</span>
     </div>
     <div style="border-left:3px solid var(--navy);padding-left:12px;">
       <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">INTAKE</div>
@@ -867,12 +928,12 @@ const LifeExpectancy = () => {
 <!-- PAGE 3: HOW YOUR NUMBER WAS BUILT -->
 <div class="page page-break">
   <div style="margin-bottom:24px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
-        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
-      </div>
-      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        BornClock Personal Longevity Blueprint
+      </span>
+      <span>${name}</span>
     </div>
     <div style="border-left:3px solid var(--navy);padding-left:12px;">
       <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">METHODOLOGY</div>
@@ -931,12 +992,12 @@ const LifeExpectancy = () => {
 <!-- PAGE 4: PERSONALISED ANALYSIS -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
-        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
-      </div>
-      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        BornClock Personal Longevity Blueprint
+      </span>
+      <span>${name}</span>
     </div>
     <div style="border-left:3px solid var(--navy);padding-left:12px;">
       <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">ANALYSIS</div>
@@ -993,12 +1054,12 @@ const LifeExpectancy = () => {
 <!-- PAGE 5: TOP IMPROVEMENT OPPORTUNITIES -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
-        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
-      </div>
-      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        BornClock Personal Longevity Blueprint
+      </span>
+      <span>${name}</span>
     </div>
     <div style="border-left:3px solid var(--navy);padding-left:12px;">
       <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">PRIORITIES</div>
@@ -1013,12 +1074,12 @@ const LifeExpectancy = () => {
 <!-- PAGE 6: EPIGENETIC BLUEPRINT -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
-        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
-      </div>
-      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        BornClock Personal Longevity Blueprint
+      </span>
+      <span>${name}</span>
     </div>
     <div style="border-left:3px solid var(--navy);padding-left:12px;">
       <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">EPIGENETICS</div>
@@ -1046,12 +1107,12 @@ const LifeExpectancy = () => {
 <!-- PAGE 7: BIOLOGICAL BLUEPRINT -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
-        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
-      </div>
-      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        BornClock Personal Longevity Blueprint
+      </span>
+      <span>${name}</span>
     </div>
     <div style="border-left:3px solid var(--navy);padding-left:12px;">
       <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">GENETICS</div>
@@ -1109,12 +1170,12 @@ const LifeExpectancy = () => {
 <!-- PAGE 8: COMMUNITY ANCHOR -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
-        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
-      </div>
-      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        BornClock Personal Longevity Blueprint
+      </span>
+      <span>${name}</span>
     </div>
     <div style="border-left:3px solid var(--navy);padding-left:12px;">
       <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">ENVIRONMENT</div>
@@ -1148,12 +1209,12 @@ const LifeExpectancy = () => {
 <!-- PAGE 9: HEALTH GUIDE -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
-        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
-      </div>
-      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        BornClock Personal Longevity Blueprint
+      </span>
+      <span>${name}</span>
     </div>
     <div style="border-left:3px solid var(--navy);padding-left:12px;">
       <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">PROTOCOL</div>
@@ -1171,12 +1232,12 @@ const LifeExpectancy = () => {
 <!-- Page 10 — PERSONALISED ACTION PLAN -->
 <div class="page page-break">
   <div style="margin-bottom:20px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
-        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
-      </div>
-      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        BornClock Personal Longevity Blueprint
+      </span>
+      <span>${name}</span>
     </div>
     <div style="border-left:3px solid var(--navy);padding-left:12px;">
       <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">PROGRAMME</div>
@@ -1187,8 +1248,10 @@ const LifeExpectancy = () => {
 
   <div style="padding:12px 16px;background:var(--blue-tint);border-radius:8px;border:1px solid #c3d9ef;margin-bottom:16px;">
     <p style="font-size:12px;color:var(--ink-soft);line-height:1.6;margin:0;">
-      Your <strong>#1 opportunity</strong> is <strong style="color:var(--navy);">${topOpportunities[0]?.factor || 'lifestyle improvement'} (+${Number(topOpportunities[0]?.potentialGain || 0).toFixed(1)} yrs)</strong>.
-      Addressing your top 3 opportunities could add up to <strong style="color:var(--pos);">+${realisticGainPDF} realistic years</strong> to your forecast.
+      ${isGeneticFactor(topOpportunities[0])
+        ? `Your genes allow a ceiling of <strong style="color:var(--navy);">~${geneticCeiling} yrs</strong> — you're currently <strong>${(Number(geneticCeiling) - Number(forecast)).toFixed(1)} yrs below that ceiling</strong>. The habits in this plan determine how much of your genetic potential you actually reach.`
+        : `Your <strong>#1 opportunity</strong> is <strong style="color:var(--navy);">${topOpportunities[0]?.factor || 'lifestyle improvement'} (+${Number(topOpportunities[0]?.potentialGain || 0).toFixed(1)} yrs)</strong>.`}
+      Addressing your top actionable opportunities could add up to <strong style="color:var(--pos);">+${actionableGainPDF} realistic years</strong> to your forecast.
     </p>
   </div>
 
@@ -1209,12 +1272,12 @@ const LifeExpectancy = () => {
 <!-- PAGE 11: SCIENTIFIC FOUNDATION -->
 <div class="page">
   <div style="margin-bottom:20px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--hairline);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <img src="/bornclock-logo.png" alt="" width="14" height="14" style="display:block;object-fit:contain;opacity:.7;" onerror="this.style.display='none'" />
-        <span style="font-size:9px;color:var(--muted);letter-spacing:.05em;">BornClock Personal Longevity Blueprint</span>
-      </div>
-      <span style="font-size:9px;color:var(--muted);">${name}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
+      <span style="display:flex;align-items:center;gap:7px;">
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        BornClock Personal Longevity Blueprint
+      </span>
+      <span>${name}</span>
     </div>
     <div style="border-left:3px solid var(--navy);padding-left:12px;">
       <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">EVIDENCE</div>
@@ -1287,7 +1350,7 @@ const LifeExpectancy = () => {
         document.body.removeChild(iframe);
         return;
       }
-      doc.open();
+      doc.open('text/html', 'replace');
       doc.write(html);
       doc.close();
 

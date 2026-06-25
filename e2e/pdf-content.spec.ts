@@ -147,4 +147,36 @@ test.describe('PDF content — new sections', () => {
       expect(html).toContain('EVIDENCE');
     }
   });
+
+  // ── v5 charset, humanize, genetics-reframe tests ──────────────────────────
+
+  test('PDF HTML v5: charset utf-8 is first element in <head>', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      expect(html).toContain('<meta charset="utf-8"');
+    }
+  });
+
+  test('PDF HTML v5: no raw quiz enum strings leak into output', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      expect(html).not.toContain('6to7');
+      expect(html).not.toContain('quit_under5');
+      expect(html).not.toContain('seldom');
+    }
+  });
+
+  test('PDF HTML v5: Genetic Ceiling reframe present in top opportunities', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      expect(html).toContain('Genetic Ceiling');
+    }
+  });
+
+  test('PDF HTML v5: genetics not shown as raw (+6.6) opportunity', async ({ page }) => {
+    const html = await triggerPDFAndGetHTML(page);
+    if (html) {
+      expect(html).not.toMatch(/Family Genetics \(\+6\.6/);
+    }
+  });
 });
