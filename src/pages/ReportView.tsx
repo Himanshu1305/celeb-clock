@@ -422,7 +422,7 @@ const ReportView = () => {
           .bb-code { float:right; font-size:10px; letter-spacing:.18em; color:#9DB0BF; font-weight:600; }
           .bb-chip { display:inline-block; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:600; border:1px solid var(--hairline); color:var(--ink-soft); background:var(--panel-2); }
           .bb-chip.gold { border-color:var(--gold-soft); color:var(--gold); background:var(--gold-tint); }
-          .bb-num { font-feature-settings:"tnum" 1; letter-spacing:-.01em; }
+          .bb-num { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-feature-settings:"tnum" 1, "liga" 0, "calt" 0; letter-spacing:-.01em; }
           @media print {
             .no-print { display: none !important; }
             body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -697,7 +697,7 @@ const ReportView = () => {
                   <div className="flex flex-wrap gap-2 mb-3">
                     {westernZodiac.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">🔥 {westernZodiac.element}</span>}
                     {westernZodiac.modality && <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">⚡ {westernZodiac.modality}</span>}
-                    {westernZodiac.rulingPlanet && <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">🪐 {westernZodiac.rulingPlanet}</span>}
+                    {westernZodiac.rulingPlanet && <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: '#F5EAD2', color: '#B8862F' }}>🪐 {westernZodiac.rulingPlanet}</span>}
                   </div>
                   <div className="space-y-3">
                     {westernZodiac.fullDescription
@@ -760,7 +760,7 @@ const ReportView = () => {
                   </div>
                   <div className="flex flex-wrap gap-2 mb-3">
                     {chineseZodiac.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">五行 {chineseZodiac.element}</span>}
-                    {chineseZodiac.yin_yang && <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">{chineseZodiac.yin_yang}</span>}
+                    {chineseZodiac.yin_yang && <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: '#F5EAD2', color: '#B8862F' }}>{chineseZodiac.yin_yang}</span>}
                     {czd && <span className="px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs font-semibold">🗓 {czd.years}</span>}
                   </div>
                   <p className="text-gray-700 text-sm leading-relaxed">{czd?.fullDescription ?? chineseZodiac.description}</p>
@@ -846,7 +846,7 @@ const ReportView = () => {
                   </div>
                   <div className="flex flex-wrap gap-2 mb-3">
                     {vedicRashi.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">🔥 {vedicRashi.element}</span>}
-                    {vedicRashi.ruling_planet && <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">🪐 {vedicRashi.ruling_planet}</span>}
+                    {vedicRashi.ruling_planet && <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: '#F5EAD2', color: '#B8862F' }}>🪐 {vedicRashi.ruling_planet}</span>}
                     {vedicCtx.rashiSanskrit && <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">🕉 {vedicCtx.rashiSanskrit} — {vedicCtx.rashiMeaning}</span>}
                   </div>
                   <p className="text-gray-700 text-sm leading-relaxed">{vedicRashi.description}</p>
@@ -860,7 +860,7 @@ const ReportView = () => {
                       <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Core Traits</div>
                       <div className="flex flex-wrap gap-2">
                         {(vedicRashi.traits ?? []).map((t: string) => (
-                          <span key={t} className="px-3 py-1 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded-full text-xs font-medium">{t}</span>
+                          <span key={t} className="bb-chip">{t}</span>
                         ))}
                       </div>
                     </div>
@@ -882,22 +882,22 @@ const ReportView = () => {
 
                   {/* Rashi Ratna (Vedic gemstone) */}
                   {rashiRatna && (
-                    <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 space-y-3">
-                      <div className="text-xs font-bold text-indigo-700 uppercase tracking-wide">💎 Rashi Ratna — Vedic Birthstone</div>
+                    <div className="rounded-2xl p-5 space-y-3" style={{ background: 'var(--gold-tint)', border: '1px solid var(--gold-soft)' }}>
+                      <div className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--gold)' }}>💎 Rashi Ratna — Vedic Birthstone</div>
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl flex-shrink-0" style={{ backgroundColor: rashiRatna.hex }} />
                         <div>
-                          <div className="font-black text-indigo-900">{rashiRatna.primaryStone} ({rashiRatna.primaryStoneHindi})</div>
-                          <div className="text-xs text-indigo-600">Alt: {rashiRatna.secondaryStone} · Metal: {rashiRatna.metalToUse}</div>
+                          <div className="font-black" style={{ color: 'var(--navy)' }}>{rashiRatna.primaryStone} ({rashiRatna.primaryStoneHindi})</div>
+                          <div className="text-xs" style={{ color: 'var(--ink-soft)' }}>Alt: {rashiRatna.secondaryStone} · Metal: {rashiRatna.metalToUse}</div>
                         </div>
                       </div>
-                      <p className="text-sm text-indigo-800 leading-relaxed">{rashiRatna.description}</p>
+                      <p className="text-sm leading-relaxed" style={{ color: 'var(--ink)' }}>{rashiRatna.description}</p>
                       <div className="flex flex-wrap gap-2">
                         {rashiRatna.benefits.slice(0, 4).map(b => (
-                          <span key={b} className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs">{b}</span>
+                          <span key={b} className="bb-chip">{b}</span>
                         ))}
                       </div>
-                      <div className="text-xs text-indigo-500 italic">Wear on {rashiRatna.wearingDay} · {rashiRatna.fingerToWear}</div>
+                      <div className="text-xs italic" style={{ color: 'var(--muted)' }}>Wear on {rashiRatna.wearingDay} · {rashiRatna.fingerToWear}</div>
                     </div>
                   )}
                 </>
@@ -940,6 +940,20 @@ const ReportView = () => {
             <div className="bb-eyebrow">Your Numerology Blueprint</div>
             <h2 className="bb-h2">Numbers &amp; Life Path</h2>
             <p className="bb-sub">Calculated from the exact date of birth</p>
+          </div>
+
+          {/* Numerology intro */}
+          <div className="mb-8 p-5 bg-[#F1F6FA] border border-[#D7E1EA] rounded-lg">
+            <p className="text-sm font-semibold tracking-widest text-[#B8862F] uppercase mb-2">What Is Numerology?</p>
+            <p className="text-[#3A4A5A] text-sm leading-relaxed mb-3">
+              Numerology is the ancient study of the relationship between numbers and life events. Its modern form — Pythagorean numerology — reduces names and birth dates to single digits (or the master numbers 11, 22, 33) and reads the vibrational meaning of each. Every number in your chart reveals a different dimension of who you are.
+            </p>
+            <div className="grid grid-cols-1 gap-3 mt-4 text-xs text-[#3A4A5A]">
+              <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Life Path</span><span>Your core life purpose. Reduce the full birth date to one digit — e.g. 25 Jun 1966 → 2+5+6+1+9+6+6 = 35 → 3+5 = <strong>8</strong>. Master numbers (11, 22, 33) are kept, not reduced.</span></div>
+              <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Soul Urge</span><span>Your heart's deepest desire. Built from the <em>vowels</em> of your full birth name (A=1, E=5, I=9, O=6, U=3).</span></div>
+              <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Personality</span><span>How others perceive you. Built from the <em>consonants</em> of your birth name on the same Pythagorean table.</span></div>
+              <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Personal Year</span><span>Your current annual cycle. Add birth month + birth day + this calendar year, reduce to a digit. Resets each birthday.</span></div>
+            </div>
           </div>
 
           {/* Life path number */}
@@ -1025,7 +1039,7 @@ const ReportView = () => {
                     <p className="text-xs text-gray-700 leading-relaxed">{pyc.health}</p>
                   </div>
                   <div className="bg-white rounded-xl p-4">
-                    <div className="text-xs font-bold text-purple-500 uppercase tracking-wide mb-1">📅 Key Months</div>
+                    <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--navy)' }}>📅 Key Months</div>
                     <ul className="space-y-0.5">
                       {pyc.keyMonths.map((m, i) => (
                         <li key={i} className="text-xs text-gray-700">· {m}</li>
@@ -1071,18 +1085,18 @@ const ReportView = () => {
               </div>
 
               {/* Birth flower */}
-              <div className="flex items-center gap-3 bg-pink-50 rounded-xl p-4">
+              <div className="flex items-center gap-3 rounded-xl p-4" style={{ background: '#FBF6EA', border: '1px solid var(--gold-soft)' }}>
                 <span className="text-2xl">🌸</span>
                 <div>
-                  <div className="text-xs font-bold text-pink-700 uppercase tracking-wide mb-0.5">Birth Flower</div>
-                  <div className="text-sm font-semibold text-pink-900">{bsMeta.flower}</div>
+                  <div className="text-xs font-bold uppercase tracking-wide mb-0.5" style={{ color: '#B8862F' }}>Birth Flower</div>
+                  <div className="text-sm font-semibold" style={{ color: 'var(--navy)' }}>{bsMeta.flower}</div>
                 </div>
               </div>
 
               {/* Lore */}
-              <div className="bg-purple-50 rounded-xl p-4">
-                <div className="text-xs font-bold text-purple-700 uppercase tracking-wide mb-2">💡 Did You Know?</div>
-                <p className="text-sm text-purple-900 leading-relaxed">{bsMeta.lore}</p>
+              <div className="rounded-xl p-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
+                <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--navy)' }}>💡 Did You Know?</div>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--ink-soft)' }}>{bsMeta.lore}</p>
               </div>
 
               {/* Meaning & Properties */}
@@ -1104,16 +1118,16 @@ const ReportView = () => {
               </div>
 
               {birthstone.history && (
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <h4 className="font-bold text-gray-700 text-xs uppercase tracking-wide mb-1">History</h4>
-                  <p className="text-xs text-gray-600 leading-relaxed">{birthstone.history}</p>
+                <div className="rounded-lg p-4 mt-4" style={{ background: '#F1F6FA', border: '1px solid #D7E1EA' }}>
+                  <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: '#6B7A89' }}>History</p>
+                  <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{birthstone.history}</p>
                 </div>
               )}
 
               {birthstone.careInstructions && (
-                <div className="border border-gray-200 rounded-xl p-4">
-                  <h4 className="font-bold text-gray-700 text-xs uppercase tracking-wide mb-1">Care Instructions</h4>
-                  <p className="text-xs text-gray-600 leading-relaxed">{birthstone.careInstructions}</p>
+                <div className="rounded-lg p-4 mt-4" style={{ background: '#FBF6EA', border: '1px solid rgba(184,134,47,0.2)' }}>
+                  <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: '#B8862F' }}>Care Instructions</p>
+                  <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{birthstone.careInstructions}</p>
                 </div>
               )}
             </div>
@@ -1244,7 +1258,7 @@ const ReportView = () => {
 
                     {/* Famous members */}
                     {gc.famousMembers.length > 0 && (
-                      <div className="rounded-xl p-5" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
+                      <div className="rounded-xl p-5 pb-10" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
                         <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--muted)' }}>Famous Members of {generation.name}</div>
                         <div className="flex flex-wrap gap-2">
                           {gc.famousMembers.map(name => (
@@ -1319,19 +1333,19 @@ const ReportView = () => {
 
               {/* 4-quadrant life areas */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,.07)', border: '1px solid rgba(255,255,255,.1)' }}>
+                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
                   <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Love</div>
                   <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.love}</p>
                 </div>
-                <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,.07)', border: '1px solid rgba(255,255,255,.1)' }}>
+                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
                   <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Career</div>
                   <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.career}</p>
                 </div>
-                <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,.07)', border: '1px solid rgba(255,255,255,.1)' }}>
+                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
                   <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Health</div>
                   <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.health}</p>
                 </div>
-                <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,.07)', border: '1px solid rgba(255,255,255,.1)' }}>
+                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
                   <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Spirituality</div>
                   <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.spirituality}</p>
                 </div>
@@ -1459,44 +1473,51 @@ const ReportView = () => {
               <div className="rounded-xl p-4 text-xs leading-relaxed mb-4" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)', color: 'var(--ink-soft)' }}>
                 <strong>What is Biorhythm?</strong> Biorhythm theory proposes that three internal cycles — Physical (23 days), Emotional (28 days), and Intellectual (33 days) — begin at birth and continue throughout life. Positive phases boost energy and capability; negative phases call for rest and caution; near-zero transitions ("critical days") bring heightened unpredictability. Many people find these cycles surprisingly resonant with their day-to-day experience.
               </div>
-              <div className="space-y-3 mb-4">
+              <div className="space-y-3 mb-1">
                 {[
-                  { label: '🏃 Physical', value: bio.physical, status: physStatus, color: 'bg-rose-400' },
-                  { label: '💙 Emotional', value: bio.emotional, status: emoStatus, color: 'bg-blue-400' },
-                  { label: '🧠 Intellectual', value: bio.intellectual, status: intStatus, color: 'bg-amber-400' },
-                ].map(({ label, value, status, color }) => (
-                  <div key={label}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="font-medium text-gray-700">{label}</span>
-                      <span className="flex items-center gap-2">
-                        <span className={`text-xs font-semibold ${status.color}`}>{status.label}</span>
-                        <span className="font-bold text-gray-900">{value > 0 ? '+' : ''}{value}%</span>
-                      </span>
+                  { label: '🏃 Physical',    value: bio.physical,    status: physStatus },
+                  { label: '💙 Emotional',   value: bio.emotional,   status: emoStatus  },
+                  { label: '🧠 Intellectual', value: bio.intellectual, status: intStatus },
+                ].map(({ label, value, status }) => (
+                  <div key={label} className="flex items-center gap-3">
+                    <span className="text-xs font-semibold min-w-[116px]" style={{ color: '#0C1A2B' }}>{label}</span>
+                    <div className="flex-1 relative h-4 rounded overflow-hidden" style={{ background: '#F1F6FA', border: '1px solid #D7E1EA' }}>
+                      {/* Center axis line */}
+                      <div className="absolute left-1/2 top-0 bottom-0 w-px z-10" style={{ background: '#9FB2C2' }} />
+                      {value >= 0 ? (
+                        <div className="absolute top-0 bottom-0" style={{ left: '50%', width: `${value / 2}%`, background: '#B8862F' }} />
+                      ) : (
+                        <div className="absolute top-0 bottom-0" style={{ right: '50%', width: `${Math.abs(value) / 2}%`, background: 'rgba(192,57,43,0.7)' }} />
+                      )}
                     </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className={`h-full rounded-full ${color}`} style={{ width: `${50 + value / 2}%` }} />
+                    <div className="min-w-[90px] text-right">
+                      <span className="text-xs font-bold font-mono bb-num" style={{ color: value >= 0 ? '#B8862F' : '#C0392B' }}>{value >= 0 ? '+' : ''}{value}%</span>
+                      <span className="text-xs ml-1" style={{ color: '#6B7A89' }}>{status.label}</span>
                     </div>
                   </div>
                 ))}
+              </div>
+              <div className="flex justify-between mb-4 px-[120px]" style={{ fontSize: '9px', color: '#6B7A89' }}>
+                <span>−100%</span><span>0</span><span>+100%</span>
               </div>
               <div className="rounded-xl p-4 text-xs leading-relaxed mb-3" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)', color: 'var(--ink-soft)' }}>
                 <strong>Today's reading:</strong>{' '}
                 {physStatus.label === 'Peak' || physStatus.label === 'Rising'
                   ? '🏃 Physical energy is elevated — a good day for exercise, sport, and physical challenges.'
-                  : physStatus.label === 'Low' || physStatus.label === 'Falling'
+                  : physStatus.label === 'Low' || physStatus.label === 'Recovery'
                   ? '🏃 Physical energy is in a low phase — prioritise rest and recovery over intense exertion.'
-                  : '🏃 Physical energy is at a critical transition — unexpected fluctuations are possible.'
+                  : '🏃 Physical energy is at a transitional point — unexpected fluctuations are possible.'
                 }{' '}
                 {emoStatus.label === 'Peak' || emoStatus.label === 'Rising'
                   ? '💙 Emotional well-being is flourishing — ideal for social connections and creative expression.'
-                  : emoStatus.label === 'Low' || emoStatus.label === 'Falling'
-                  ? '💙 Emotional energy is lower — practise self-compassion and avoid high-stakes emotional decisions.'
-                  : '💙 Emotional energy is at a critical point — moods may be unpredictable; ground yourself first.'
+                  : emoStatus.label === 'Low' || emoStatus.label === 'Recovery'
+                  ? '💙 Emotional energy is in a deep recovery phase — the body\'s reset cycle. Rest, don\'t push.'
+                  : '💙 Emotional energy is at a transitional point — practise self-compassion and avoid high-stakes decisions.'
                 }{' '}
                 {intStatus.label === 'Peak' || intStatus.label === 'Rising'
                   ? '🧠 Mental clarity is sharp — an excellent time for study, problem-solving, and strategic decisions.'
-                  : intStatus.label === 'Low' || intStatus.label === 'Falling'
-                  ? '🧠 Intellectual energy is lower — favour routine tasks over complex analytical work.'
+                  : intStatus.label === 'Low' || intStatus.label === 'Recovery'
+                  ? '🧠 Intellectual energy is in a low phase — favour routine tasks over complex analytical work.'
                   : '🧠 Intellectual energy is in transition — double-check important mental work today.'
                 }
               </div>
@@ -1577,7 +1598,7 @@ const ReportView = () => {
         </div>
       </div>
 
-      <div className="report-print-footer no-screen">BornClock · Know your time. Live it well. · bornclock.com · {reportUrl}</div>
+      <div className="report-print-footer no-screen">BornClock · Know your time. Live it well. · bornclock.com</div>
 
       <div className="no-print">
         <Footer />

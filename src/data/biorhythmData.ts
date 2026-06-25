@@ -19,10 +19,10 @@ export function calculateBiorhythm(birthDate: Date, targetDate: Date): Biorhythm
 
 export function getBiorhythmStatus(value: number): { label: string; color: string; bgColor: string; description: string } {
   if (value > 75) return { label: 'Peak', color: 'text-green-700', bgColor: 'bg-green-100', description: 'Operating at maximum capacity in this cycle' };
-  if (value > 25) return { label: 'High', color: 'text-green-600', bgColor: 'bg-green-50', description: 'Above average — a good day for this type of activity' };
-  if (value > -25) return { label: 'Critical', color: 'text-amber-600', bgColor: 'bg-amber-50', description: 'Transitional phase — proceed with extra care today' };
+  if (value > 25) return { label: 'Rising', color: 'text-green-600', bgColor: 'bg-green-50', description: 'Above average — a good day for this type of activity' };
+  if (value > -25) return { label: 'Transition', color: 'text-amber-600', bgColor: 'bg-amber-50', description: 'Transitional phase — proceed with extra care today' };
   if (value > -75) return { label: 'Low', color: 'text-orange-600', bgColor: 'bg-orange-50', description: 'Below average — conserve energy in this area' };
-  return { label: 'Recharge', color: 'text-red-600', bgColor: 'bg-red-50', description: 'Deep recharge phase — rest and recover in this dimension' };
+  return { label: 'Recovery', color: 'text-red-600', bgColor: 'bg-red-50', description: 'Deep recovery phase — rest and allow the cycle to reset' };
 }
 
 export function getBiorhythmInsight(physical: number, emotional: number, intellectual: number): string {
