@@ -264,11 +264,14 @@ const ReportView = () => {
         size: A4;
       }
       body {
-        margin: 1.5cm;
+        margin: 1.5cm 1.5cm 3cm 1.5cm;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         font-size: 12px;
         line-height: 1.5;
+        font-variant-ligatures: none;
+        font-feature-settings: "liga" 0, "clig" 0;
+        font-variant-emoji: text;
       }
       .zodiac-tab-panel {
         display: block !important;
@@ -425,7 +428,7 @@ const ReportView = () => {
           .bb-num { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-feature-settings:"tnum" 1, "liga" 0, "calt" 0; letter-spacing:-.01em; }
           @media print {
             .no-print { display: none !important; }
-            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-variant-emoji: text; font-variant-ligatures: none; }
             .print-expand { max-height: none !important; overflow: visible !important; }
             .dark-section { background: var(--dark) !important; color-scheme: dark; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             @page { margin: 1.5cm 1cm; @bottom-center { content: "BornClock · bornclock.com"; font-size: 9px; color: #9ca3af; } @bottom-right { content: counter(page); font-size: 9px; color: #9ca3af; } }
@@ -688,7 +691,7 @@ const ReportView = () => {
               {westernZodiac ? (
                 <>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-5xl">{westernZodiac.unicode}</span>
+                    <span className="text-5xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{westernZodiac.unicode}</span>
                     <div>
                       <h3 className="font-black text-2xl text-gray-900">{westernZodiac.name}</h3>
                       <p className="text-sm text-gray-400">{westernZodiac.dateRange}</p>
@@ -838,7 +841,7 @@ const ReportView = () => {
                 return (
                 <>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-5xl">{vedicRashi.symbol}</span>
+                    <span className="text-5xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{vedicRashi.symbol}</span>
                     <div>
                       <h3 className="font-black text-2xl text-gray-900">{vedicRashi.name}</h3>
                       <p className="text-sm text-gray-400">{vedicRashi.english} · Ruled by {vedicRashi.ruling_planet}</p>
@@ -870,7 +873,7 @@ const ReportView = () => {
                   <div className="bg-orange-50 border border-orange-100 rounded-2xl p-5 space-y-2">
                     <div className="text-xs font-bold text-orange-700 uppercase tracking-wide mb-1">🌙 Birth Nakshatra</div>
                     <div className="flex items-center gap-3">
-                      <span className="text-3xl">{nakshatraCalc.nakshatraData.symbol}</span>
+                      <span className="text-3xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{nakshatraCalc.nakshatraData.symbol}</span>
                       <div>
                         <div className="font-black text-orange-900 text-lg">{nakshatraCalc.nakshatraData.name}</div>
                         <div className="text-xs text-orange-600">Meaning: {nakshatraCalc.nakshatraData.meaning} · Deity: {nakshatraCalc.nakshatraData.deity}</div>
@@ -1258,7 +1261,7 @@ const ReportView = () => {
 
                     {/* Famous members */}
                     {gc.famousMembers.length > 0 && (
-                      <div className="rounded-xl p-5 pb-10" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
+                      <div className="rounded-xl p-5 pb-10" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
                         <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--muted)' }}>Famous Members of {generation.name}</div>
                         <div className="flex flex-wrap gap-2">
                           {gc.famousMembers.map(name => (
@@ -1390,12 +1393,12 @@ const ReportView = () => {
               </div>
               <div className="flex justify-center gap-6 mb-4">
                 <div className="text-center">
-                  <div className="text-4xl mb-1">{moonResult.moonSignData.symbol}</div>
+                  <div className="text-4xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{moonResult.moonSignData.symbol}</div>
                   <p className="font-black text-white text-lg">{moonResult.moonSign} Moon</p>
                   <p className="text-xs" style={{ color: 'rgba(255,255,255,.6)' }}>{moonResult.moonSignData.element} · {moonResult.moonSignData.rulingPlanet}</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl mb-1">{moonResult.nakshatraData.symbol}</div>
+                  <div className="text-4xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{moonResult.nakshatraData.symbol}</div>
                   <p className="font-black text-white text-lg">{moonResult.nakshatraData.name}</p>
                   <p className="text-xs" style={{ color: 'rgba(255,255,255,.6)' }}>Nakshatra #{moonResult.nakshatraNumber}</p>
                 </div>
@@ -1551,7 +1554,7 @@ const ReportView = () => {
                     className="rounded-xl p-3 text-center transition-colors" style={{ border: '1px solid var(--hairline)', background: 'var(--panel)' }}
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--gold-soft)'; (e.currentTarget as HTMLElement).style.background = 'var(--gold-tint)'; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'; (e.currentTarget as HTMLElement).style.background = 'var(--panel)'; }}>
-                    <div className="text-2xl mb-1">
+                    <div className="text-2xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>
                       {{'Aries':'♈','Taurus':'♉','Gemini':'♊','Cancer':'♋','Leo':'♌','Virgo':'♍','Libra':'♎','Scorpio':'♏','Sagittarius':'♐','Capricorn':'♑','Aquarius':'♒','Pisces':'♓'}[sign] || '⭐'}
                     </div>
                     <div className="font-bold text-sm" style={{ color: 'var(--navy)' }}>{sign}</div>
