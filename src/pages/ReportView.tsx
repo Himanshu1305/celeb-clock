@@ -617,7 +617,7 @@ const ReportView = () => {
                   occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') || occ.includes('mathematician') ? 'Scientist' : 'Notable Person';
                 const isDeceased = c.death_year != null || c.isLiving === false;
                 return (
-                  <div key={i} className={`border rounded-2xl p-5 hover:shadow-md transition-shadow bg-white ${c.isIndian ? 'border-orange-200 ring-1 ring-orange-100' : 'border-gray-100'}`}>
+                  <div key={i} className={`border rounded-2xl p-5 hover:shadow-md transition-shadow bg-white ${c.isIndian ? 'border-orange-200 ring-1 ring-orange-100' : 'border-gray-100'}`} style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
                     <div className="flex items-start gap-3 mb-3">
                       <span className="text-3xl">{catIcon}</span>
                       <div className="flex-1 min-w-0">
@@ -672,8 +672,8 @@ const ReportView = () => {
             <p className="bb-sub">Western, Chinese &amp; Vedic — one person, three lenses</p>
           </div>
 
-          {/* 3-card overview — click to switch tab */}
-          <div className="grid md:grid-cols-3 gap-4 mb-8">
+          {/* 3-card summary strip — click to switch tab */}
+          <div className="grid md:grid-cols-3 gap-3 mb-6">
             {[
               { label: 'Western Zodiac', value: westernZodiac?.name ?? '—', sub: westernZodiac?.element ?? '', icon: westernZodiac?.unicode ?? '♈︎', tab: 'western' },
               { label: 'Chinese Zodiac', value: `${chineseZodiac?.animal ?? '—'} ${chineseZodiac?.emoji ?? ''}`, sub: `${chineseZodiac?.element ?? ''} ${chineseZodiac?.yin_yang ?? ''}`, icon: '', tab: 'chinese' },
@@ -682,12 +682,12 @@ const ReportView = () => {
               <button
                 key={card.label}
                 onClick={() => setActiveZodiacTab(card.tab)}
-                className={`bg-white rounded-2xl p-5 shadow-sm text-center w-full transition-all ${activeZodiacTab === card.tab ? 'shadow-md' : 'hover:shadow-md'}`} style={activeZodiacTab === card.tab ? { outline: '2px solid #B8862F', outlineOffset: '0px' } : undefined}
+                className={`bg-white rounded-xl p-3 shadow-sm text-center w-full transition-all ${activeZodiacTab === card.tab ? 'shadow-md' : 'hover:shadow-md'}`} style={activeZodiacTab === card.tab ? { outline: '2px solid #B8862F', outlineOffset: '0px' } : undefined}
               >
-                <div className="text-3xl mb-2" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{card.icon}</div>
-                <div className="text-xs text-gray-400 mb-1 font-medium uppercase tracking-wide">{card.label}</div>
-                <div className="font-black text-gray-900 text-lg">{card.value}</div>
-                <div className="text-xs text-gray-500 mt-0.5">{card.sub}</div>
+                <div className="text-2xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{card.icon}</div>
+                <div className="text-xs text-gray-400 font-medium uppercase tracking-wide leading-tight">{card.label}</div>
+                <div className="font-black text-gray-900 text-base">{card.value}</div>
+                <div className="text-xs text-gray-500">{card.sub}</div>
               </button>
             ))}
           </div>
@@ -752,6 +752,31 @@ const ReportView = () => {
                       <p className="text-sm text-gray-600">{((westernZodiac as any).famousPeople ?? []).map((p: any) => p.name || p).join(' · ')}</p>
                     </div>
                   )}
+                  {/* Top compatible signs (rich, with score + reason) */}
+                  {(() => {
+                    const topMatches = getTopCompatibleSigns(westernZodiac.name);
+                    if (!topMatches.length) return null;
+                    return (
+                      <div style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Top Compatible Signs</div>
+                        <div className="grid grid-cols-3 gap-3">
+                          {topMatches.slice(0, 3).map(({ sign, score, reason }) => (
+                            <Link key={sign} to={`/compatibility/${westernZodiac.name.toLowerCase()}/${sign.toLowerCase()}`}
+                              className="rounded-xl p-3 text-center transition-colors no-print-link" style={{ border: '1px solid var(--hairline)', background: 'var(--panel)' }}
+                              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--gold-soft)'; (e.currentTarget as HTMLElement).style.background = 'var(--gold-tint)'; }}
+                              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'; (e.currentTarget as HTMLElement).style.background = 'var(--panel)'; }}>
+                              <div className="text-2xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>
+                                {{'Aries':'♈︎','Taurus':'♉︎','Gemini':'♊︎','Cancer':'♋︎','Leo':'♌︎','Virgo':'♍︎','Libra':'♎︎','Scorpio':'♏︎','Sagittarius':'♐︎','Capricorn':'♑︎','Aquarius':'♒︎','Pisces':'♓︎'}[sign] || '⭐'}
+                              </div>
+                              <div className="font-bold text-sm" style={{ color: 'var(--navy)' }}>{sign}</div>
+                              <div className="text-xs font-semibold bb-num" style={{ color: 'var(--gold)' }}>{score}%</div>
+                              <div className="text-xs mt-1 leading-tight" style={{ color: 'var(--muted)' }}>{reason}</div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </>
               ) : <p className="text-gray-400 text-sm">Data unavailable</p>}
             </div>
@@ -847,7 +872,6 @@ const ReportView = () => {
               {vedicRashi ? (() => {
                 const vedicCtx = getVedicContext(dob.getMonth() + 1, dob.getDate(), westernZodiac?.name ?? vedicRashi.name);
                 const rashiRatna = RASHI_RATNA_DATA.find(r => r.rashiEnglish === vedicRashi.name);
-                const nakshatraCalc = calculateMoonSignAndNakshatra(dob);
                 const rashiEntry = getRashi(vedicRashi.name) || getRashi(vedicRashi.english);
                 return (
                 <>
@@ -924,20 +948,6 @@ const ReportView = () => {
                     </div>
                   )}
 
-                  {/* Nakshatra subsection (compact — full depth in §8 Lunar) */}
-                  <div className="bg-orange-50 border border-orange-100 rounded-2xl p-5 space-y-2">
-                    <div className="text-xs font-bold text-orange-700 uppercase tracking-wide mb-1">Birth Nakshatra</div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-3xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{nakshatraCalc.nakshatraData.symbol}</span>
-                      <div>
-                        <div className="font-black text-orange-900 text-lg">{nakshatraCalc.nakshatraData.name}</div>
-                        <div className="text-xs text-orange-600">Meaning: {nakshatraCalc.nakshatraData.meaning} · Deity: {nakshatraCalc.nakshatraData.deity}</div>
-                      </div>
-                    </div>
-                    <p className="text-sm text-orange-800 leading-relaxed">{nakshatraCalc.nakshatraData.description}</p>
-                    <p className="text-xs text-orange-500 italic mt-1">Nakshatra calculated from lunar cycle position — approximate.</p>
-                  </div>
-
                   {/* Rashi Ratna (Vedic gemstone) */}
                   {rashiRatna && (
                     <div className="rounded-2xl p-5 space-y-3" style={{ background: 'var(--gold-tint)', border: '1px solid var(--gold-soft)' }}>
@@ -964,27 +974,77 @@ const ReportView = () => {
             </div>
           </div>
 
-          {/* Compatibility */}
-          {(compatibility.best.length > 0 || compatibility.challenging.length > 0) && (
-            <div className="mt-6 grid sm:grid-cols-2 gap-4">
-              <div className="bg-green-50 rounded-2xl p-5">
-                <div className="font-semibold text-green-800 mb-2 text-sm">💚 Most Compatible</div>
-                <div className="flex flex-wrap gap-2">
-                  {compatibility.best.map((s: string) => (
-                    <span key={s} className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">{s}</span>
+          {/* ── Moon Sign & Nakshatra (consolidated into §2 ASTROLOGY) ──────── */}
+          {(() => {
+            const moonResult = calculateMoonSignAndNakshatra(dob);
+            const richNakshatra = getNakshatra(moonResult.nakshatraNumber);
+            return (
+              <div className="mt-8 pt-8" style={{ borderTop: '1px solid var(--hairline)' }}>
+                <div className="mb-6">
+                  <div className="bb-rule"><span className="bb-code">08 · LUNAR</span></div>
+                  <div className="bb-eyebrow">Vedic Astrology</div>
+                  <h2 className="bb-h2">Moon Sign &amp; Nakshatra</h2>
+                  <p className="bb-sub">Where the Moon resided at the moment of birth</p>
+                </div>
+
+                {/* Moon sign identity */}
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="text-4xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{moonResult.moonSignData.symbol}</div>
+                    <div>
+                      <p className="font-black text-xl" style={{ color: 'var(--navy)' }}>{moonResult.moonSign} Moon</p>
+                      <p className="text-xs" style={{ color: 'var(--ink-soft)' }}>{moonResult.moonSignData.element} · Ruled by {moonResult.moonSignData.rulingPlanet}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--ink)' }}>{moonResult.moonSignData.personality}</p>
+                </div>
+
+                {/* Nakshatra identity */}
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'var(--gold-tint)', border: '1px solid var(--gold-soft)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                  <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--gold)' }}>Birth Nakshatra #{moonResult.nakshatraNumber}</div>
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="text-4xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{richNakshatra.symbol}</div>
+                    <div>
+                      <p className="font-black text-xl" style={{ color: 'var(--navy)' }}>{richNakshatra.name}</p>
+                      <p className="text-xs" style={{ color: 'var(--ink-soft)' }}>{richNakshatra.meaning} · {richNakshatra.deity}</p>
+                    </div>
+                  </div>
+                  {richNakshatra.essence.split('\n\n').map((para, i) => (
+                    <p key={i} className="text-sm leading-relaxed mb-2" style={{ color: 'var(--ink)' }}>{para}</p>
+                  ))}
+                  <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--gold-soft)' }}>
+                    <p className="text-xs" style={{ color: 'var(--ink-soft)' }}>
+                      <span className="font-semibold" style={{ color: 'var(--navy)' }}>Shakti:</span> {richNakshatra.shakti}
+                    </p>
+                    <p className="text-xs mt-1" style={{ color: 'var(--ink-soft)' }}>
+                      <span className="font-semibold" style={{ color: 'var(--navy)' }}>Ruler:</span> {richNakshatra.ruler} &nbsp;·&nbsp; <span className="font-semibold" style={{ color: 'var(--navy)' }}>Gemstone:</span> {richNakshatra.gemstone}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Nakshatra life domains */}
+                <div className="grid sm:grid-cols-3 gap-3 mb-4">
+                  {[
+                    { label: 'Career', text: richNakshatra.career },
+                    { label: 'Relationships', text: richNakshatra.relationships },
+                    { label: 'Spiritual', text: richNakshatra.spiritual },
+                  ].map(({ label, text }) => (
+                    <div key={label} className="rounded-xl p-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                      <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--navy)' }}>{label}</div>
+                      <p className="text-xs leading-relaxed" style={{ color: 'var(--ink-soft)' }}>{text}</p>
+                    </div>
                   ))}
                 </div>
-              </div>
-              <div className="bg-red-50 rounded-2xl p-5">
-                <div className="font-semibold text-red-800 mb-2 text-sm">⚠️ Challenging Match</div>
-                <div className="flex flex-wrap gap-2">
-                  {compatibility.challenging.map((s: string) => (
-                    <span key={s} className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">{s}</span>
-                  ))}
+
+                <p className="text-xs italic text-center mb-4" style={{ color: 'var(--muted)' }}>Nakshatra approximated from lunar cycle position at date of birth.</p>
+                <div className="text-center no-print">
+                  <Link to="/moon-sign" className="text-xs underline" style={{ color: 'var(--navy)' }}>
+                    Full moon sign interpretation →
+                  </Link>
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
       </div>
 
@@ -1021,25 +1081,19 @@ const ReportView = () => {
             <div className="text-gray-500 text-sm mt-1">{lpData.keywords.slice(0, 3).join(' · ')}</div>
           </div>
 
-          {/* 3-number summary grid */}
-          {(() => {
-            const nameNums = calculateAllNameNumbers(recipientName || '');
-            return (
-              <div className="grid grid-cols-3 gap-3 mb-10">
-                {[
-                  { label: 'Life Path', value: lifePathNumber, gold: true,  desc: 'Your core life purpose' },
-                  { label: 'Soul Urge', value: nameNums.soulUrge, gold: false, desc: "Your heart's desire" },
-                  { label: 'Personal Year', value: personalYear2026 ?? '—', gold: false, desc: 'Your 2026 energy' },
-                ].map(({ label, value, gold, desc }) => (
-                  <div key={label} className="rounded-xl p-4 text-center bb-num" style={{ background: gold ? 'var(--gold-tint)' : 'var(--panel)', border: `1px solid ${gold ? 'var(--gold-soft)' : 'var(--hairline)'}` }}>
-                    <div className="text-3xl font-black mb-1" style={{ color: gold ? 'var(--gold)' : 'var(--navy)' }}>{value}</div>
-                    <div className="text-xs font-semibold" style={{ color: 'var(--ink-soft)' }}>{label}</div>
-                    <div className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>{desc}</div>
-                  </div>
-                ))}
+          {/* 2-number summary grid (date-derived only; Soul Urge moved to §9 NAME) */}
+          <div className="grid grid-cols-2 gap-3 mb-10">
+            {[
+              { label: 'Life Path', value: lifePathNumber, gold: true,  desc: 'Your core life purpose' },
+              { label: 'Personal Year', value: personalYear2026 ?? '—', gold: false, desc: 'Your 2026 energy' },
+            ].map(({ label, value, gold, desc }) => (
+              <div key={label} className="rounded-xl p-4 text-center bb-num" style={{ background: gold ? 'var(--gold-tint)' : 'var(--panel)', border: `1px solid ${gold ? 'var(--gold-soft)' : 'var(--hairline)'}` }}>
+                <div className="text-3xl font-black mb-1" style={{ color: gold ? 'var(--gold)' : 'var(--navy)' }}>{value}</div>
+                <div className="text-xs font-semibold" style={{ color: 'var(--ink-soft)' }}>{label}</div>
+                <div className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>{desc}</div>
               </div>
-            );
-          })()}
+            ))}
+          </div>
 
           <div className="space-y-6 mb-10">
             <div className="bg-gray-50 rounded-2xl p-6">
@@ -1050,7 +1104,7 @@ const ReportView = () => {
                 ))}
               </div>
             </div>
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 gap-4" style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
               <div className="bg-green-50 rounded-2xl p-5">
                 <h3 className="font-bold text-green-800 mb-2 text-sm">Strengths</h3>
                 <ul className="space-y-1">
@@ -1074,7 +1128,7 @@ const ReportView = () => {
           {personalYear2026 && (() => {
             const pyc = getPersonalYearContent(personalYear2026);
             return (
-              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 space-y-4">
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 space-y-4" style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
                 <div className="flex items-center gap-4 pb-2 border-b border-amber-200">
                   <div className="w-14 h-14 rounded-2xl bg-amber-500 flex items-center justify-center text-3xl font-black text-white flex-shrink-0">
                     {personalYear2026}
@@ -1115,6 +1169,136 @@ const ReportView = () => {
           })()}
         </div>
       </div>
+
+      {/* ── Name Numerology ───────────────────────────────────────────────── */}
+      {(() => {
+        const nums = calculateAllNameNumbers(recipientName || '');
+        const exprMeaning = NAME_NUMBER_MEANINGS[nums.expression];
+        return (
+          <div className="py-10 px-4" style={{ background: 'var(--paper)', borderTop: '1px solid var(--hairline)' }}>
+            <div className="max-w-2xl mx-auto">
+              <div className="mb-6">
+                <div className="bb-rule"><span className="bb-code">09 · NAME</span></div>
+                <div className="bb-eyebrow">Gematria</div>
+                <h2 className="bb-h2">Name Numerology</h2>
+                <p className="bb-sub">The numbers encoded in {recipientName}'s name</p>
+              </div>
+              <div className="grid grid-cols-3 gap-3 mb-5">
+                {[
+                  { label: 'Expression', value: nums.expression, desc: 'Who you are destined to be', gold: true },
+                  { label: 'Soul Urge', value: nums.soulUrge, desc: "What your heart desires", gold: false },
+                  { label: 'Personality', value: nums.personality, desc: 'How others perceive you', gold: false },
+                ].map(({ label, value, desc, gold }) => (
+                  <div key={label} className="rounded-xl p-4 text-center" style={gold ? { background: 'var(--gold-tint)', border: '1px solid var(--gold-soft)' } : { background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
+                    <div className="text-3xl font-black mb-1 bb-num" style={{ color: gold ? 'var(--gold)' : 'var(--navy)' }}>{value}</div>
+                    <div className="text-xs font-semibold" style={{ color: 'var(--ink)' }}>{label}</div>
+                    <div className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>{desc}</div>
+                  </div>
+                ))}
+              </div>
+              {exprMeaning && (
+                <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
+                  <p className="text-xs font-bold mb-1" style={{ color: 'var(--navy)' }}>Expression {nums.expression} — {exprMeaning.title}</p>
+                  <p className="text-sm" style={{ color: 'var(--ink-soft)' }}>{exprMeaning.expression}</p>
+                </div>
+              )}
+              <div className="text-center no-print">
+                <Link to="/name-numerology" className="text-xs underline" style={{ color: 'var(--navy)' }}>
+                  Calculate with full birth name →
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── Tarot Card ────────────────────────────────────────────────────── */}
+      {(() => {
+        const lp = Number(lifePathNumber || 1);
+        const card = getTarotCardByLifePath(lp);
+        return (
+          <div className="py-12 px-4" style={{ background: 'var(--dark)' }}>
+            <div className="max-w-2xl mx-auto space-y-6">
+              {/* Clinical header */}
+              <div className="mb-6">
+                <div className="bb-rule" style={{ background: 'rgba(255,255,255,.12)' }}><span className="bb-code" style={{ color: '#9DB0BF' }}>07 · ARCANA</span></div>
+                <div className="bb-eyebrow" style={{ color: 'var(--gold)' }}>Major Arcana</div>
+                <h2 className="bb-h2" style={{ color: '#FFFFFF' }}>Birthday Tarot Card</h2>
+                <p style={{ fontSize: '12.5px', color: '#9DB0BF', marginTop: '5px' }}>Your Life Path {lp} maps to the {card.name} of the Major Arcana</p>
+              </div>
+
+              {/* Card identity */}
+              <div className="text-center">
+                <div className="text-6xl mb-3">{card.emoji}</div>
+                <h3 className="text-3xl font-black text-white mb-1">{card.name}</h3>
+                <p className="text-xs" style={{ color: '#9DB0BF' }}>Life Path {lp} · Card {card.number}</p>
+                <p className="text-xs mt-2 max-w-xs mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,.5)' }}>
+                  In traditional tarot, your birthday's Life Path number ({lp}) corresponds to a card
+                  of the Major Arcana — the 22 cards representing life's greatest themes and forces.
+                  This is your card.
+                </p>
+                <div className="flex flex-wrap justify-center gap-2 mt-3">
+                  {card.keywords.map((kw: string) => (
+                    <span key={kw} className="text-xs px-3 py-1 rounded-full" style={{ background: 'rgba(255,255,255,.1)', color: 'rgba(255,255,255,.8)' }}>{kw}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Full upright meaning */}
+              <div className="rounded-2xl p-5" style={{ background: 'rgba(255,255,255,.07)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--gold)' }}>Upright Meaning</div>
+                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,.9)' }}>{card.upright}</p>
+              </div>
+
+              {/* Deep meaning */}
+              <div className="rounded-2xl p-5" style={{ background: 'rgba(255,255,255,.07)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--gold)' }}>Deep Meaning for Life Path {lp}</div>
+                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,.9)' }}>{card.deepMeaning}</p>
+              </div>
+
+              {/* 4-quadrant life areas */}
+              <div className="grid grid-cols-2 gap-3" style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
+                  <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Love</div>
+                  <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.love}</p>
+                </div>
+                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
+                  <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Career</div>
+                  <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.career}</p>
+                </div>
+                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
+                  <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Health</div>
+                  <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.health}</p>
+                </div>
+                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
+                  <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Spirituality</div>
+                  <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.spirituality}</p>
+                </div>
+              </div>
+
+              {/* Affirmation */}
+              <div className="rounded-2xl p-5 text-center" style={{ background: 'rgba(184,134,47,.15)', border: '1px solid rgba(184,134,47,.3)' }}>
+                <div className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--gold)' }}>Your Daily Affirmation</div>
+                <p className="text-white font-medium text-base italic">"{card.affirmation}"</p>
+              </div>
+
+              {/* Famous people with this card */}
+              {card.famousPeople && card.famousPeople.length > 0 && (
+                <div className="rounded-2xl p-4 text-center" style={{ background: 'rgba(255,255,255,.05)' }}>
+                  <div className="text-xs font-semibold mb-2" style={{ color: '#9DB0BF' }}>Famous {card.name} Personalities</div>
+                  <p className="text-sm" style={{ color: 'rgba(255,255,255,.7)' }}>{card.famousPeople.map((p: any) => p.name || p).join(' · ')}</p>
+                </div>
+              )}
+
+              <div className="text-center no-print">
+                <Link to="/tarot-card-by-birthday" className="text-xs underline" style={{ color: 'var(--gold)' }}>
+                  Explore more tarot interpretations →
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 5 — COSMIC CONNECTIONS (BIRTHSTONE)                        */}
@@ -1347,211 +1531,6 @@ const ReportView = () => {
         </div>
       </div>
 
-      {/* ── Tarot Card ────────────────────────────────────────────────────── */}
-      {(() => {
-        const lp = Number(lifePathNumber || 1);
-        const card = getTarotCardByLifePath(lp);
-        return (
-          <div className="py-12 px-4" style={{ background: 'var(--dark)' }}>
-            <div className="max-w-2xl mx-auto space-y-6">
-              {/* Clinical header */}
-              <div className="mb-6">
-                <div className="bb-rule" style={{ background: 'rgba(255,255,255,.12)' }}><span className="bb-code" style={{ color: '#9DB0BF' }}>07 · ARCANA</span></div>
-                <div className="bb-eyebrow" style={{ color: 'var(--gold)' }}>Major Arcana</div>
-                <h2 className="bb-h2" style={{ color: '#FFFFFF' }}>Birthday Tarot Card</h2>
-                <p style={{ fontSize: '12.5px', color: '#9DB0BF', marginTop: '5px' }}>Your Life Path {lp} maps to the {card.name} of the Major Arcana</p>
-              </div>
-
-              {/* Card identity */}
-              <div className="text-center">
-                <div className="text-6xl mb-3">{card.emoji}</div>
-                <h3 className="text-3xl font-black text-white mb-1">{card.name}</h3>
-                <p className="text-xs" style={{ color: '#9DB0BF' }}>Life Path {lp} · Card {card.number}</p>
-                <p className="text-xs mt-2 max-w-xs mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,.5)' }}>
-                  In traditional tarot, your birthday's Life Path number ({lp}) corresponds to a card
-                  of the Major Arcana — the 22 cards representing life's greatest themes and forces.
-                  This is your card.
-                </p>
-                <div className="flex flex-wrap justify-center gap-2 mt-3">
-                  {card.keywords.map((kw: string) => (
-                    <span key={kw} className="text-xs px-3 py-1 rounded-full" style={{ background: 'rgba(255,255,255,.1)', color: 'rgba(255,255,255,.8)' }}>{kw}</span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Full upright meaning */}
-              <div className="rounded-2xl p-5" style={{ background: 'rgba(255,255,255,.07)' }}>
-                <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--gold)' }}>Upright Meaning</div>
-                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,.9)' }}>{card.upright}</p>
-              </div>
-
-              {/* Deep meaning */}
-              <div className="rounded-2xl p-5" style={{ background: 'rgba(255,255,255,.07)' }}>
-                <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--gold)' }}>Deep Meaning for Life Path {lp}</div>
-                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,.9)' }}>{card.deepMeaning}</p>
-              </div>
-
-              {/* 4-quadrant life areas */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
-                  <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Love</div>
-                  <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.love}</p>
-                </div>
-                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
-                  <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Career</div>
-                  <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.career}</p>
-                </div>
-                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
-                  <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Health</div>
-                  <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.health}</p>
-                </div>
-                <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
-                  <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Spirituality</div>
-                  <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.spirituality}</p>
-                </div>
-              </div>
-
-              {/* Affirmation */}
-              <div className="rounded-2xl p-5 text-center" style={{ background: 'rgba(184,134,47,.15)', border: '1px solid rgba(184,134,47,.3)' }}>
-                <div className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--gold)' }}>Your Daily Affirmation</div>
-                <p className="text-white font-medium text-base italic">"{card.affirmation}"</p>
-              </div>
-
-              {/* Famous people with this card */}
-              {card.famousPeople && card.famousPeople.length > 0 && (
-                <div className="rounded-2xl p-4 text-center" style={{ background: 'rgba(255,255,255,.05)' }}>
-                  <div className="text-xs font-semibold mb-2" style={{ color: '#9DB0BF' }}>Famous {card.name} Personalities</div>
-                  <p className="text-sm" style={{ color: 'rgba(255,255,255,.7)' }}>{card.famousPeople.map((p: any) => p.name || p).join(' · ')}</p>
-                </div>
-              )}
-
-              <div className="text-center no-print">
-                <Link to="/tarot-card-by-birthday" className="text-xs underline" style={{ color: 'var(--gold)' }}>
-                  Explore more tarot interpretations →
-                </Link>
-              </div>
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* ── Moon Sign ─────────────────────────────────────────────────────── */}
-      {(() => {
-        const moonResult = calculateMoonSignAndNakshatra(dob);
-        const richNakshatra = getNakshatra(moonResult.nakshatraNumber);
-        return (
-          <div className="py-10 px-4" style={{ background: 'var(--dark)', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
-            <div className="max-w-2xl mx-auto">
-              {/* Clinical header */}
-              <div className="mb-6">
-                <div className="bb-rule" style={{ background: 'rgba(255,255,255,.12)' }}><span className="bb-code" style={{ color: '#9DB0BF' }}>08 · LUNAR</span></div>
-                <div className="bb-eyebrow" style={{ color: 'var(--gold)' }}>Vedic Astrology</div>
-                <h2 className="bb-h2" style={{ color: '#FFFFFF' }}>Moon Sign & Nakshatra</h2>
-                <p style={{ fontSize: '12.5px', color: '#9DB0BF', marginTop: '5px' }}>Where the Moon resided at the moment of birth</p>
-              </div>
-
-              {/* Moon sign identity */}
-              <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,.07)', breakInside: 'avoid', pageBreakInside: 'avoid', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
-                <div className="flex items-center gap-4 mb-3">
-                  <div className="text-4xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{moonResult.moonSignData.symbol}</div>
-                  <div>
-                    <p className="font-black text-white text-xl">{moonResult.moonSign} Moon</p>
-                    <p className="text-xs" style={{ color: 'rgba(255,255,255,.6)' }}>{moonResult.moonSignData.element} · Ruled by {moonResult.moonSignData.rulingPlanet}</p>
-                  </div>
-                </div>
-                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,.85)' }}>{moonResult.moonSignData.personality}</p>
-              </div>
-
-              {/* Nakshatra identity */}
-              <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,.07)', breakInside: 'avoid', pageBreakInside: 'avoid', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
-                <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--gold)' }}>Birth Nakshatra #{moonResult.nakshatraNumber}</div>
-                <div className="flex items-center gap-4 mb-3">
-                  <div className="text-4xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{richNakshatra.symbol}</div>
-                  <div>
-                    <p className="font-black text-white text-xl">{richNakshatra.name}</p>
-                    <p className="text-xs" style={{ color: 'rgba(255,255,255,.6)' }}>{richNakshatra.meaning} · {richNakshatra.deity}</p>
-                  </div>
-                </div>
-                {richNakshatra.essence.split('\n\n').map((para, i) => (
-                  <p key={i} className="text-sm leading-relaxed mb-2" style={{ color: 'rgba(255,255,255,.85)' }}>{para}</p>
-                ))}
-                <div className="mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,.1)' }}>
-                  <p className="text-xs" style={{ color: 'rgba(255,255,255,.55)' }}>
-                    <span className="font-semibold" style={{ color: 'var(--gold)' }}>Shakti:</span> {richNakshatra.shakti}
-                  </p>
-                  <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,.55)' }}>
-                    <span className="font-semibold" style={{ color: 'var(--gold)' }}>Ruler:</span> {richNakshatra.ruler} &nbsp;·&nbsp; <span className="font-semibold" style={{ color: 'var(--gold)' }}>Gemstone:</span> {richNakshatra.gemstone}
-                  </p>
-                </div>
-              </div>
-
-              {/* Nakshatra life domains */}
-              <div className="grid sm:grid-cols-3 gap-3 mb-4">
-                {[
-                  { label: 'Career', text: richNakshatra.career },
-                  { label: 'Relationships', text: richNakshatra.relationships },
-                  { label: 'Spiritual', text: richNakshatra.spiritual },
-                ].map(({ label, text }) => (
-                  <div key={label} className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,.07)', breakInside: 'avoid', pageBreakInside: 'avoid', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
-                    <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--gold)' }}>{label}</div>
-                    <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{text}</p>
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-xs italic text-center mb-4" style={{ color: 'rgba(255,255,255,.35)' }}>Nakshatra approximated from lunar cycle position at date of birth.</p>
-              <div className="text-center no-print">
-                <Link to="/moon-sign" className="text-xs underline" style={{ color: 'var(--gold)' }}>
-                  Full moon sign interpretation →
-                </Link>
-              </div>
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* ── Name Numerology ───────────────────────────────────────────────── */}
-      {(() => {
-        const nums = calculateAllNameNumbers(recipientName || '');
-        const exprMeaning = NAME_NUMBER_MEANINGS[nums.expression];
-        return (
-          <div className="py-10 px-4" style={{ background: 'var(--paper)', borderTop: '1px solid var(--hairline)' }}>
-            <div className="max-w-2xl mx-auto">
-              <div className="mb-6">
-                <div className="bb-rule"><span className="bb-code">09 · NAME</span></div>
-                <div className="bb-eyebrow">Gematria</div>
-                <h2 className="bb-h2">Name Numerology</h2>
-                <p className="bb-sub">The numbers encoded in {recipientName}'s name</p>
-              </div>
-              <div className="grid grid-cols-3 gap-3 mb-5">
-                {[
-                  { label: 'Expression', value: nums.expression, desc: 'Who you are destined to be', gold: true },
-                  { label: 'Soul Urge', value: nums.soulUrge, desc: "What your heart desires", gold: false },
-                  { label: 'Personality', value: nums.personality, desc: 'How others perceive you', gold: false },
-                ].map(({ label, value, desc, gold }) => (
-                  <div key={label} className="rounded-xl p-4 text-center" style={gold ? { background: 'var(--gold-tint)', border: '1px solid var(--gold-soft)' } : { background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
-                    <div className="text-3xl font-black mb-1 bb-num" style={{ color: gold ? 'var(--gold)' : 'var(--navy)' }}>{value}</div>
-                    <div className="text-xs font-semibold" style={{ color: 'var(--ink)' }}>{label}</div>
-                    <div className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>{desc}</div>
-                  </div>
-                ))}
-              </div>
-              {exprMeaning && (
-                <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
-                  <p className="text-xs font-bold mb-1" style={{ color: 'var(--navy)' }}>Expression {nums.expression} — {exprMeaning.title}</p>
-                  <p className="text-sm" style={{ color: 'var(--ink-soft)' }}>{exprMeaning.expression}</p>
-                </div>
-              )}
-              <div className="text-center no-print">
-                <Link to="/name-numerology" className="text-xs underline" style={{ color: 'var(--navy)' }}>
-                  Calculate with full birth name →
-                </Link>
-              </div>
-            </div>
-          </div>
-        );
-      })()}
-
       {/* ── Biorhythm ──────────────────────────────────────────────────────── */}
       {(() => {
         const today = new Date();
@@ -1623,45 +1602,6 @@ const ReportView = () => {
               <div className="text-center no-print">
                 <Link to="/biorhythm" className="text-xs text-teal-500 hover:text-teal-700 underline">
                   See 30-day biorhythm chart →
-                </Link>
-              </div>
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* ── Compatibility ──────────────────────────────────────────────────── */}
-      {(() => {
-        const signName = westernZodiac?.name || '';
-        if (!signName) return null;
-        const topMatches = getTopCompatibleSigns(signName);
-        return (
-          <div className="py-10 px-4" style={{ background: 'var(--paper)', borderTop: '1px solid var(--hairline)' }}>
-            <div className="max-w-2xl mx-auto">
-              <div className="mb-6">
-                <div className="bb-rule"><span className="bb-code">11 · MATCHES</span></div>
-                <div className="bb-eyebrow">Zodiac Compatibility</div>
-                <h2 className="bb-h2">Top Matches for {signName}</h2>
-                <p className="bb-sub">Signs that resonate most strongly with {signName} energy</p>
-              </div>
-              <div className="grid grid-cols-3 gap-3 mb-4">
-                {topMatches.slice(0, 3).map(({ sign, score, reason }) => (
-                  <Link key={sign} to={`/compatibility/${signName.toLowerCase()}/${sign.toLowerCase()}`}
-                    className="rounded-xl p-3 text-center transition-colors" style={{ border: '1px solid var(--hairline)', background: 'var(--panel)' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--gold-soft)'; (e.currentTarget as HTMLElement).style.background = 'var(--gold-tint)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'; (e.currentTarget as HTMLElement).style.background = 'var(--panel)'; }}>
-                    <div className="text-2xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>
-                      {{'Aries':'♈︎','Taurus':'♉︎','Gemini':'♊︎','Cancer':'♋︎','Leo':'♌︎','Virgo':'♍︎','Libra':'♎︎','Scorpio':'♏︎','Sagittarius':'♐︎','Capricorn':'♑︎','Aquarius':'♒︎','Pisces':'♓︎'}[sign] || '⭐'}
-                    </div>
-                    <div className="font-bold text-sm" style={{ color: 'var(--navy)' }}>{sign}</div>
-                    <div className="text-xs font-semibold bb-num" style={{ color: 'var(--gold)' }}>{score}%</div>
-                    <div className="text-xs mt-1 leading-tight" style={{ color: 'var(--muted)' }}>{reason}</div>
-                  </Link>
-                ))}
-              </div>
-              <div className="text-center no-print">
-                <Link to={`/compatibility`} className="text-xs underline" style={{ color: 'var(--navy)' }}>
-                  Check compatibility with any sign →
                 </Link>
               </div>
             </div>

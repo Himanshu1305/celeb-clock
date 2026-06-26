@@ -5,8 +5,8 @@
 | Checkpoint | Hash |
 |---|---|
 | Phase 1 base | 88319ad966fb3c44c29898452c497c7b058dbbd1 |
-| Phase 1 commit | _pending_ |
-| Phase 2 base | _pending_ |
+| Phase 1 commit | 04c71971b7edc7c8e072b550e29ac05340156949 |
+| Phase 2 base | 04c71971b7edc7c8e072b550e29ac05340156949 |
 | Phase 2 commit | _pending_ |
 
 ---
@@ -27,7 +27,7 @@ Fields rendered from `getRashi(vedicRashi.name)`:
 Lookup: `getRashi(vedicRashi.name)` (Sanskrit key) with `|| getRashi(vedicRashi.english)` fallback.
 
 ### Phase 1 build/test result
-_pending_
+BUILD CLEAN (31.83s) · TypeScript clean · Playwright 341 passed (27.2m)
 
 ---
 
