@@ -1,0 +1,268 @@
+export interface LifePathEntry {
+  number: number;
+  archetype: string;
+  planet: string;
+  keywords: string[];
+  personality: string;
+  strengths: string[];
+  growthAreas: string[];
+}
+
+const LIFE_PATH_DATA: Record<number, LifePathEntry> = {
+  1: {
+    number: 1,
+    archetype: 'The Pioneer',
+    planet: 'Sun',
+    keywords: ['independence', 'leadership', 'originality', 'courage', 'self-reliance'],
+    personality: `Life Path 1 is the number of the original — the person who does not wait for permission, does not need consensus, and does not find comfort in the well-worn path. You came here to lead by example, not by committee. Your clearest moments are when you trust your instincts completely and act on what you know rather than what others think.\n\nThere is a quality of aloneness to Life Path 1 that is not loneliness but sovereignty — you are most yourself when the path ahead has not been walked before. This does not mean arrogance. The best 1s are quietly self-possessed rather than loudly self-promoting. They simply know what they know and proceed accordingly.\n\nYour challenge is that the same force that makes you an exceptional initiator — the refusal to defer, the impatience with delay, the preference for direct action — can isolate you when taken too far. The world needs your initiative. It also needs your willingness to let others contribute to what you've started.`,
+    strengths: [
+      'Natural leadership without needing authority',
+      'Original thinking and pioneering instinct',
+      'Exceptional self-sufficiency',
+      'Courage to act when others hesitate',
+      'Direct, decisive, and action-oriented',
+      'Capacity to inspire through example',
+    ],
+    growthAreas: [
+      'Impatience with slower processes and people',
+      'Difficulty accepting help or collaboration',
+      'Tendency toward stubbornness when challenged',
+      'Can overlook emotional nuance in pursuit of goals',
+    ],
+  },
+  2: {
+    number: 2,
+    archetype: 'The Mediator',
+    planet: 'Moon',
+    keywords: ['partnership', 'sensitivity', 'diplomacy', 'intuition', 'harmony'],
+    personality: `Life Path 2 is the number of the relational — the person who understands that almost nothing of lasting value is built alone. Where the 1 leads through individual strength, the 2 leads through connection, attunement, and the rare ability to truly hear what another person means beneath what they say. You are the diplomat, the bridge-builder, the one who holds the room together without anyone quite knowing how.\n\nYour sensitivity is not weakness. It is the instrument through which you perceive what others miss — the unspoken tension, the need that hasn't been named, the moment when one precisely-chosen word will change everything. The 2 is the most emotionally intelligent number in the system, and emotional intelligence, properly applied, moves mountains.\n\nYour challenge is that the same sensitivity that gives you such powerful perception can become painful when turned inward without boundaries. You are here to serve the relationship, not to disappear into it. Learning to advocate for your own needs with the same grace you show others is the central lesson of this path.`,
+    strengths: [
+      'Extraordinary empathy and emotional attunement',
+      'Natural gift for diplomacy and conflict resolution',
+      'Deep intuition about people and situations',
+      'Ability to find common ground where others see only division',
+      'Patient, cooperative, and genuinely collaborative',
+      'Creates harmony and belonging wherever you go',
+    ],
+    growthAreas: [
+      'Tendency to suppress own needs to keep peace',
+      'Hypersensitivity to criticism or conflict',
+      'Can be indecisive when decisions affect others',
+      'Over-dependence on validation from others',
+    ],
+  },
+  3: {
+    number: 3,
+    archetype: 'The Creator',
+    planet: 'Jupiter',
+    keywords: ['creativity', 'expression', 'joy', 'communication', 'optimism'],
+    personality: `Life Path 3 is the number of the expressive — the person through whom life's creative impulse finds its most joyful and communicative voice. Where others approach the world with caution, you approach it with delight, with curiosity, with the instinct that existence is fundamentally interesting and that the right way to meet it is with openness and generosity of spirit.\n\nYour gift is the capacity to take what is internal — emotion, insight, experience — and make it visible and beautiful for others. This is the essence of artistry, and it takes many forms: the writer who makes readers feel seen, the speaker who lights a room, the friend whose company turns an ordinary evening into something memorable. Whatever medium you choose, your purpose is the same — to remind the world of its own beauty.\n\nYour challenge is that the same creative abundance that gives you so much to offer can become scattered if you don't learn to focus. The 3 tends toward many interests, many projects, many relationships — and the deepest version of your gift requires going below the surface. The wide version of your life is available to everyone. The deep version requires discipline.`,
+    strengths: [
+      'Exceptional creative and artistic ability',
+      'Natural communicator — writer, speaker, performer',
+      'Infectious joy and optimism that lifts others',
+      'Ability to make the complex feel simple and beautiful',
+      'Social magnetism and genuine warmth',
+      'Inspires creativity in everyone around them',
+    ],
+    growthAreas: [
+      'Tendency to scatter energy across too many pursuits',
+      'Can avoid depth in favour of breadth',
+      'May use humour or brightness to avoid difficult emotions',
+      'Inconsistency when motivation dips',
+    ],
+  },
+  4: {
+    number: 4,
+    archetype: 'The Builder',
+    planet: 'Uranus',
+    keywords: ['structure', 'discipline', 'reliability', 'patience', 'foundation'],
+    personality: `Life Path 4 is the number of the architect — the person who understands, at a bone-deep level, that nothing of enduring value is built without solid foundations. You are the one who sees the gap between where things are and where they could be, and who has both the vision and the discipline to close that gap through sustained, patient effort. In a world that celebrates the flash of inspiration, the 4 celebrates the unglamorous genius of consistent work.\n\nThere is a quality of bedrock in the 4 personality. People sense that you can be relied upon — that what you say you will do, you will do; that what you build, you build to last. This reliability is rarer than talent and more valuable than most things the culture currently prizes. The 4 is the person still standing when the enthusiasts have moved on to the next thing.\n\nYour challenge is that the same love of structure that makes you such an extraordinary builder can become rigidity when circumstances change. Life is messier than any blueprint. Learning to adapt your methods without abandoning your values — to hold the structure lightly enough to let it evolve — is the central growth edge of this path.`,
+    strengths: [
+      'Exceptional follow-through and completion',
+      'Ability to create lasting systems and structures',
+      'Profound reliability — people can genuinely count on you',
+      'Detail-oriented precision without losing the larger vision',
+      'Patience to work toward long-term goals',
+      'Practical problem-solving that actually gets things done',
+    ],
+    growthAreas: [
+      'Resistance to change and new approaches',
+      'Can become rigid or inflexible under pressure',
+      'Difficulty delegating or trusting others\' methods',
+      'Tendency to overwork at the expense of wellbeing',
+    ],
+  },
+  5: {
+    number: 5,
+    archetype: 'The Explorer',
+    planet: 'Mercury',
+    keywords: ['freedom', 'adaptability', 'adventure', 'change', 'versatility'],
+    personality: `Life Path 5 is the number of the free — the person who understands, sometimes before they have the words for it, that experience itself is the teacher and that a life lived fully requires constant engagement with the new, the different, and the unexpected. You are the traveller, the adapter, the one who can walk into any situation and quickly understand how it works and where the opportunities lie.\n\nYour gift is versatility — not in the dilettante sense, but in the sense of genuine adaptability to circumstance. Where others freeze when conditions change, you find change clarifying. Where others are overwhelmed by complexity, you find it stimulating. The 5 has a natural intelligence that is not academic but experiential — learned from showing up, paying attention, and being willing to try.\n\nYour challenge is direction. The appetite for experience that gives you so much richness can, without intention, become a form of avoidance — a way of staying in motion so you never have to stop and examine what you are actually building. The deepest version of your path is not freedom from commitment, but freedom within it — choosing the adventures that compound into a life of meaningful consequence.`,
+    strengths: [
+      'Extraordinary adaptability in changing circumstances',
+      'Natural versatility across many domains',
+      'Ability to connect with all types of people',
+      'Quick to see opportunity where others see only chaos',
+      'Communicates complex ideas in engaging, accessible ways',
+      'Thrives when others would stagnate',
+    ],
+    growthAreas: [
+      'Difficulty committing for the long term',
+      'Restlessness that can prevent deep roots',
+      'May abandon projects or relationships prematurely',
+      'Tendency to over-stimulate rather than go deep',
+    ],
+  },
+  6: {
+    number: 6,
+    archetype: 'The Nurturer',
+    planet: 'Venus',
+    keywords: ['responsibility', 'love', 'service', 'harmony', 'healing'],
+    personality: `Life Path 6 is the number of the devoted — the person who finds their greatest fulfilment not in achievement for its own sake but in the wellbeing of those they love and serve. You are the one the family leans on, the one colleagues trust most, the one whose home feels like a refuge. There is a quality of warmth in the 6 that is not performance but genuine orientation toward the flourishing of others.\n\nYour gift is the capacity for responsibility without resentment — the understanding that caring for something or someone is not a diminishment of yourself but a form of greatness. The best 6s make extraordinary parents, healers, teachers, leaders, and friends — not because they have sacrificed themselves, but because they have found in giving something that mere taking could never provide.\n\nYour challenge is the shadow of your gift: the tendency to give beyond your own capacity, to accept responsibility that isn't yours, or to make your own peace contingent on others' wellbeing. You cannot pour from an empty vessel. The central lesson of your path is learning that caring for yourself is not selfish — it is the prerequisite for everything else you are here to do.`,
+    strengths: [
+      'Extraordinary capacity for love and devoted care',
+      'Natural healer — people feel better in your presence',
+      'Responsible, reliable, and genuinely trustworthy',
+      'Creates warmth, beauty, and harmony in any environment',
+      'Exceptional at mediation and conflict resolution in intimate contexts',
+      'Leadership that inspires through service rather than authority',
+    ],
+    growthAreas: [
+      'Tendency to over-give at personal cost',
+      'Can attract people who take rather than reciprocate',
+      'May become controlling through over-protectiveness',
+      'Difficulty setting firm limits with loved ones',
+    ],
+  },
+  7: {
+    number: 7,
+    archetype: 'The Seeker',
+    planet: 'Neptune',
+    keywords: ['wisdom', 'introspection', 'analysis', 'spirituality', 'truth'],
+    personality: `Life Path 7 is the number of the investigator — the person for whom surface appearances are simply not enough and for whom every phenomenon carries a deeper pattern waiting to be understood. You are the questioner, the researcher, the thinker who will sit with a problem until the truth reveals itself, regardless of how long that takes. The 7 is the most intellectually rigorous and spiritually penetrating number in the system.\n\nYour gift is depth. Where others accept the first available answer, you insist on going further — testing assumptions, questioning received wisdom, trusting your own capacity for discernment even when it puts you at odds with consensus. This is the source of genuine wisdom: not the accumulation of information, but the willingness to confront what the information actually means.\n\nYour challenge is that the same quality of interiority that makes you such a profound thinker can become isolation if you're not intentional. The 7 tends toward solitude, and solitude is genuinely necessary for your work — but human connection is also part of the path, not an obstacle to it. The deepest version of your wisdom is wisdom in relationship, not wisdom in retreat.`,
+    strengths: [
+      'Exceptional analytical and research ability',
+      'Access to deep intuition alongside sharp intellect',
+      'Capacity for genuine wisdom — not just knowledge',
+      'Ability to see through illusions and surface noise',
+      'Naturally drawn to truth regardless of consequence',
+      'Inner life of unusual richness and depth',
+    ],
+    growthAreas: [
+      'Tendency toward isolation and withdrawal',
+      'Can become critical or dismissive of those who don\'t match your depth',
+      'May be perceived as cold or aloof',
+      'Tendency to over-analyse and resist acting on feeling',
+    ],
+  },
+  8: {
+    number: 8,
+    archetype: 'The Powerhouse',
+    planet: 'Saturn',
+    keywords: ['ambition', 'authority', 'achievement', 'material mastery', 'executive ability'],
+    personality: `Life Path 8 is the number of the achiever — the person who understands the relationship between vision, sustained effort, and material result with a clarity that others rarely possess. You are not afraid of power. You are not afraid of money. You are not afraid of the responsibility that comes with leading people and organisations toward significant outcomes. Where others shy away from the scale of what is possible, the 8 moves toward it.\n\nYour gift is executive intelligence — the capacity to hold the large picture while managing the practical details, to inspire loyalty in people and marshal resources toward a common purpose. The best 8s are not merely successful — they are consequential. They build things that outlast them, change industries, or fundamentally improve conditions for others. This is what your path is calling you toward.\n\nYour challenge is the relationship between power and purpose. Power without clear values becomes either tyranny or emptiness — and the 8, more than any other number, must confront this. The path is not to avoid power but to exercise it with integrity — to use what you accumulate in service of something larger than personal gain. When the 8 aligns ambition with genuine purpose, there is almost nothing it cannot achieve.`,
+    strengths: [
+      'Natural authority and executive leadership',
+      'Exceptional capacity to manifest material goals',
+      'Strategic thinking at scale',
+      'Inspires loyalty and confidence in others',
+      'Combines vision with practical execution',
+      'Understands the mechanics of power, money, and influence',
+    ],
+    growthAreas: [
+      'Can prioritise achievement over relationships',
+      'Risk of becoming domineering or controlling',
+      'Difficulty accepting failure or appearing vulnerable',
+      'May define self-worth through external success',
+    ],
+  },
+  9: {
+    number: 9,
+    archetype: 'The Humanitarian',
+    planet: 'Mars',
+    keywords: ['compassion', 'completion', 'wisdom', 'universality', 'service'],
+    personality: `Life Path 9 is the number of completion — the person who has, across the arc of their development, touched all the other numbers and emerged with a perspective that is genuinely universal. You carry a breadth of understanding that is not theoretical but lived — you have been where others are, and this gives your compassion an authority that cannot be faked. The 9 is the wisest number because it has already been all the others.\n\nYour gift is the capacity to hold the full spectrum of human experience without being broken by it. Where others are overwhelmed by suffering, you can be present with it. Where others need categories and simple answers, you can hold complexity. The 9 does not simplify the world to make it more comfortable — it embraces the world as it is, and this acceptance is itself a profound service to everyone who encounters you.\n\nYour challenge is release. The 9 path is fundamentally about letting go — of outcomes, of recognition, of the specific forms through which your gifts express themselves. The 9 that clings to results or demands acknowledgment is working against its own nature. Your freedom, paradoxically, comes from giving everything away, from acting with complete generosity and then releasing what happens next entirely.`,
+    strengths: [
+      'Profound compassion that is earned, not performed',
+      'Capacity to hold suffering without being destroyed by it',
+      'Natural wisdom that transcends personal experience',
+      'Genuinely universal perspective — able to understand all types',
+      'Powerful healing presence',
+      'Ability to complete things that others cannot finish',
+    ],
+    growthAreas: [
+      'Difficulty receiving from others',
+      'May carry others\' pain as if it were their own',
+      'Tendency toward martyrdom or self-sacrifice beyond health',
+      'Struggle to let go of people and situations that have run their course',
+    ],
+  },
+  11: {
+    number: 11,
+    archetype: 'The Illuminator',
+    planet: 'Moon',
+    keywords: ['intuition', 'inspiration', 'vision', 'spiritual sensitivity', 'illumination'],
+    personality: `Life Path 11 is the first of the master numbers — a path of heightened sensitivity, spiritual vision, and the rare capacity to transmit insight in ways that genuinely change how others see. You did not come here simply to live well. You came here to illuminate something for others — to be a channel through which a higher frequency of awareness enters ordinary life.\n\nYour gift is intuition that operates at a level the rational mind cannot fully explain. You know things. You sense things. You perceive connections between events and meaning that others simply cannot see, and this perception, when trusted and expressed, has an effect on people that goes far beyond the words you use. The 11 is the teacher who changes students' lives not through the content of what they say but through the quality of consciousness they bring into the room.\n\nYour challenge is the tension between your exceptional sensitivity and the demands of ordinary life. The same receptivity that gives you such extraordinary insight makes ordinary friction genuinely painful. Learning to live in the world without either numbing yourself or being overwhelmed by it — finding the balance between your spiritual nature and your human needs — is the central work of this path. When the 11 achieves that balance, the light it carries becomes a genuine gift to the world.`,
+    strengths: [
+      'Exceptional intuition and psychic sensitivity',
+      'Natural capacity to inspire and elevate others',
+      'Visionary perception beyond ordinary awareness',
+      'Ability to transmit insight in ways that genuinely transform',
+      'Magnetic spiritual presence',
+      'Access to both the 1\'s leadership and the 2\'s empathy simultaneously',
+    ],
+    growthAreas: [
+      'Hypersensitivity that can be overwhelmed by the world\'s noise',
+      'Tendency toward anxiety or nervous tension',
+      'May doubt gifts that others clearly see',
+      'Risk of retreating from the world rather than engaging it',
+    ],
+  },
+  22: {
+    number: 22,
+    archetype: 'The Master Builder',
+    planet: 'Uranus',
+    keywords: ['practical idealism', 'large-scale achievement', 'mastery', 'vision with execution', 'transformation'],
+    personality: `Life Path 22 is the master of manifestation — the person who can hold an extraordinary vision and then, through disciplined, sustained effort, make it real in the world at a scale that changes things permanently. Where the 11 illuminates, the 22 builds. Where the visionary dreams, the 22 constructs the architecture that allows the dream to stand, to serve, and to endure.\n\nYour gift is the rare combination of inspired vision and practical intelligence. Most people can do one or the other — dream big or execute reliably. The 22 can do both simultaneously, and this combination is the foundation of truly transformative work. The institutions, systems, and structures the 22 creates tend to outlast their creators and continue serving humanity long after the original builder has moved on.\n\nYour challenge is the weight of your own potential. The 22 frequently experiences a gap between what it knows it is capable of and what it is actually doing — and this gap can be a source of either powerful motivation or debilitating pressure. Learning to engage your extraordinary capacity without being crushed by it — to take the next step toward what you are here to build without demanding perfection at every stage — is the central discipline of this path.`,
+    strengths: [
+      'Capacity to conceive and execute transformative large-scale projects',
+      'Combines visionary thinking with methodical implementation',
+      'Natural mastery that emerges through sustained effort',
+      'Ability to inspire large groups toward a shared purpose',
+      'Creates institutions and systems that genuinely serve humanity',
+      'Accesses both the 4\'s structural ability and the 11\'s inspired vision',
+    ],
+    growthAreas: [
+      'Can be overwhelmed by the scale of their own potential',
+      'Tendency to perfectionism that delays necessary action',
+      'May carry the weight of responsibility that should be shared',
+      'Risk of grandiosity or all-or-nothing thinking',
+    ],
+  },
+  33: {
+    number: 33,
+    archetype: 'The Master Teacher',
+    planet: 'Venus',
+    keywords: ['unconditional love', 'selfless service', 'spiritual teaching', 'compassion', 'healing'],
+    personality: `Life Path 33 is the master of love — not romantic love in the personal sense, but the unconditional, universal love that seeks nothing in return and transforms everything it touches. The 33 is the rarest of the master numbers: the person who has integrated the 11\'s vision and the 22\'s capacity to build into something that is simply, wholly, in service to the healing of humanity.\n\nYour gift is the capacity to love without agenda. Where most love has conditions — I will love you if, I will give you if — the 33 gives from a place of abundance that does not require reciprocation to be sustained. This quality is not passivity. It is perhaps the most powerful force in human experience, and when it moves through a person who has genuinely embodied it, the effect on those around them is unmistakable.\n\nYour challenge is discernment. The extraordinary capacity for love that defines this path can attract those who take without giving, who drain without acknowledging, who mistake your limitlessness for an invitation to exploit. The 33 must learn that love without wisdom is not yet fully itself. Knowing who and what to pour your gifts into — and when to redirect them — is the work that turns extraordinary capacity into truly extraordinary impact.`,
+    strengths: [
+      'Capacity for unconditional love that is genuinely transformative',
+      'Natural spiritual teacher and healer',
+      'Presence that brings healing to those who encounter it',
+      'Ability to hold the suffering of others without being diminished',
+      'Service that comes from abundance rather than obligation',
+      'Embodies the integration of vision, building, and love',
+    ],
+    growthAreas: [
+      'May attract people who exploit generosity',
+      'Can neglect own needs entirely in service of others',
+      'Difficulty with discernment about where to direct gifts',
+      'The weight of this path can produce profound loneliness',
+    ],
+  },
+};
+
+export function getLifePath(number: number): LifePathEntry {
+  return LIFE_PATH_DATA[number] ?? LIFE_PATH_DATA[1];
+}

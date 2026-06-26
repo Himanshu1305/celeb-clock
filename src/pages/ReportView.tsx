@@ -17,6 +17,7 @@ import { calculateBiorhythm, getBiorhythmStatus } from '@/data/biorhythmData';
 import { getTopCompatibleSigns } from '@/data/compatibilityData';
 import { mergeWithIndianCelebrities, isIndianUser, hasIndianCelebritiesForDate } from '@/services/IndianCelebrityService';
 import { useReactToPrint } from 'react-to-print';
+import { getLifePath } from '@/data/numerologyLifePathData';
 
 // ── Helper ─────────────────────────────────────────────────────────────────────
 
@@ -307,6 +308,8 @@ const ReportView = () => {
     birthstone, generation, planetaryAges, planetaryFacts,
     age, daysSinceBirth, daysUntilNextBirthday, nextBirthdayDate, dayOfWeekBorn,
   } = rd;
+
+  const lpData = getLifePath(Number(lifePathNumber || 1));
 
   const dob = new Date(rd.recipientDob + 'T12:00:00');
   const monthName = dob.toLocaleString('default', { month: 'long' });
@@ -969,8 +972,8 @@ const ReportView = () => {
           {/* Life path number */}
           <div className="text-center mb-8">
             <div className="bb-num font-black leading-none mb-2" style={{ fontSize: '96px', color: 'var(--gold)' }}>{lifePathNumber}</div>
-            <div className="text-xl font-bold text-gray-900">{lifePathData?.name ?? `Life Path ${lifePathNumber}`}</div>
-            <div className="text-gray-500 text-sm mt-1">{lifePathData?.keywords?.slice(0, 3).join(' · ')}</div>
+            <div className="text-xl font-bold text-gray-900">{lpData.archetype}</div>
+            <div className="text-gray-500 text-sm mt-1">{lpData.keywords.slice(0, 3).join(' · ')}</div>
           </div>
 
           {/* 3-number summary grid */}
@@ -993,32 +996,34 @@ const ReportView = () => {
             );
           })()}
 
-          {lifePathData && (
-            <div className="space-y-6 mb-10">
-              <div className="bg-gray-50 rounded-2xl p-6">
-                <h3 className="font-bold text-gray-900 mb-2 text-sm uppercase tracking-wide">Personality</h3>
-                <p className="text-gray-700 text-sm leading-relaxed">{lifePathData.personality}</p>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="bg-green-50 rounded-2xl p-5">
-                  <h3 className="font-bold text-green-800 mb-2 text-sm">Strengths</h3>
-                  <ul className="space-y-1">
-                    {(lifePathData.strengths ?? []).slice(0, 4).map((s: string) => (
-                      <li key={s} className="text-xs text-green-700">✓ {s}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="bg-amber-50 rounded-2xl p-5">
-                  <h3 className="font-bold text-amber-800 mb-2 text-sm">Growth Areas</h3>
-                  <ul className="space-y-1">
-                    {(lifePathData.challenges ?? []).slice(0, 4).map((s: string) => (
-                      <li key={s} className="text-xs text-amber-700">→ {s}</li>
-                    ))}
-                  </ul>
-                </div>
+          <div className="space-y-6 mb-10">
+            <div className="bg-gray-50 rounded-2xl p-6">
+              <h3 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">Personality</h3>
+              <div className="space-y-3">
+                {lpData.personality.split('\n\n').map((para, i) => (
+                  <p key={i} className="text-gray-700 text-sm leading-relaxed">{para}</p>
+                ))}
               </div>
             </div>
-          )}
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="bg-green-50 rounded-2xl p-5">
+                <h3 className="font-bold text-green-800 mb-2 text-sm">Strengths</h3>
+                <ul className="space-y-1">
+                  {lpData.strengths.slice(0, 4).map((s: string) => (
+                    <li key={s} className="text-xs text-green-700">✓ {s}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="bg-amber-50 rounded-2xl p-5">
+                <h3 className="font-bold text-amber-800 mb-2 text-sm">Growth Areas</h3>
+                <ul className="space-y-1">
+                  {lpData.growthAreas.slice(0, 4).map((s: string) => (
+                    <li key={s} className="text-xs text-amber-700">→ {s}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
 
           {/* Personal Year 2026 */}
           {personalYear2026 && (() => {
