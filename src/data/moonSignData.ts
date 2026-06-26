@@ -14,7 +14,7 @@ export interface MoonSignData {
 
 export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
   Aries: {
-    sign: 'Aries', symbol: '♈', element: 'Fire', rulingPlanet: 'Mars',
+    sign: 'Aries', symbol: '♈︎', element: 'Fire', rulingPlanet: 'Mars',
     emotionalNature: 'Immediate, passionate, quick to forgive and quick to anger',
     personality: "Your emotional world moves at the speed of fire. You feel things immediately and completely — joy, frustration, love, and excitement all arrive at full intensity before the rational mind has a chance to process them. This is not immaturity; it is the gift of emotional authenticity. You cannot pretend to feel what you don't feel, and you cannot suppress what you do. Your emotional recovery is as fast as your emotional ignition — you burn hot and clear quickly.",
     instincts: 'To act immediately on what you feel, to protect those you love, to lead from the front even emotionally',
@@ -24,7 +24,7 @@ export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
     celebrities: ['Lady Gaga', 'Angelina Jolie', 'Marlon Brando'],
   },
   Taurus: {
-    sign: 'Taurus', symbol: '♉', element: 'Earth', rulingPlanet: 'Venus',
+    sign: 'Taurus', symbol: '♉︎', element: 'Earth', rulingPlanet: 'Venus',
     emotionalNature: 'Steady, sensual, deeply loyal, slow to change once settled',
     personality: 'Your emotional world is built on security, beauty, and loyalty. You feel most alive when life is stable, beautiful, and deeply connected to the physical world — good food, comfortable environments, trusted relationships, the sensory pleasures that make existence feel worthwhile. You take time to open emotionally, but once you do, your devotion is one of the most reliable forces in anyone\'s life. You are the person others call when they need steadiness in a storm.',
     instincts: "To build security, to create beauty, to protect what you've invested in emotionally",
@@ -34,7 +34,7 @@ export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
     celebrities: ['Adele', 'Shah Rukh Khan', 'Michelle Obama'],
   },
   Gemini: {
-    sign: 'Gemini', symbol: '♊', element: 'Air', rulingPlanet: 'Mercury',
+    sign: 'Gemini', symbol: '♊︎', element: 'Air', rulingPlanet: 'Mercury',
     emotionalNature: 'Variable, curious, needs to verbalise feelings to understand them',
     personality: "Your emotional life is rich with variety and intellectual curiosity. You process feelings through conversation, writing, and mental exploration — you often don't know what you feel until you've talked or written about it. This is not emotional avoidance; it is your particular form of emotional intelligence. You are genuinely interested in how you feel and why, which makes you capable of remarkable emotional growth. You need mental stimulation to feel emotionally content.",
     instincts: 'To connect, to communicate, to keep options open, to understand your feelings rather than just experiencing them',
@@ -44,7 +44,7 @@ export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
     celebrities: ['Priyanka Chopra', 'Albert Einstein', 'Marilyn Monroe'],
   },
   Cancer: {
-    sign: 'Cancer', symbol: '♋', element: 'Water', rulingPlanet: 'Moon',
+    sign: 'Cancer', symbol: '♋︎', element: 'Water', rulingPlanet: 'Moon',
     emotionalNature: 'Deeply feeling, highly intuitive, protective of those they love',
     personality: "Cancer is the home of the Moon — this is the moon sign of deepest emotional resonance. You feel everything at a depth that others rarely access. Your emotional memory is extraordinary — you remember exactly how things felt, not just what happened. Home, family, and belonging are your deepest emotional needs, and your intuition about others' emotional states is almost psychic. You are the person others instinctively turn to when they need to feel understood.",
     instincts: 'To nurture, to protect, to create emotional safety for yourself and those you love',
@@ -54,7 +54,7 @@ export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
     celebrities: ['Amitabh Bachchan', 'Princess Diana', 'Meryl Streep'],
   },
   Leo: {
-    sign: 'Leo', symbol: '♌', element: 'Fire', rulingPlanet: 'Sun',
+    sign: 'Leo', symbol: '♌︎', element: 'Fire', rulingPlanet: 'Sun',
     emotionalNature: 'Warm, generous, needs appreciation, deeply loyal when loved well',
     personality: 'Your emotional world is radiant, generous, and pride-bearing. You feel most alive when you are loved, appreciated, and free to express your authentic self fully. Recognition matters to you — not from vanity, but because appreciation is how you experience love. When you feel unseen or taken for granted, your emotional world dims dramatically. When you feel celebrated, you give warmth and loyalty without limits. You are one of the most generous moon signs when your emotional needs are met.',
     instincts: 'To shine, to inspire, to protect your pride, to celebrate and be celebrated',
@@ -64,7 +64,7 @@ export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
     celebrities: ['Deepika Padukone', 'Will Smith', 'Celine Dion'],
   },
   Virgo: {
-    sign: 'Virgo', symbol: '♍', element: 'Earth', rulingPlanet: 'Mercury',
+    sign: 'Virgo', symbol: '♍︎', element: 'Earth', rulingPlanet: 'Mercury',
     emotionalNature: 'Analytical, quietly devoted, expresses love through service and practical care',
     personality: 'Your emotional world is precise, analytical, and expressed most naturally through acts of service rather than words. You process feelings through logic — you want to understand your emotions, not just experience them. This gives you remarkable emotional intelligence over time, even if your emotional expression appears restrained to others. Your care for people shows in the details: remembering preferences, anticipating needs, fixing problems without being asked. To know you emotionally is to be quietly taken care of in a hundred small ways.',
     instincts: 'To improve, to help, to organise chaos, to express love through practical devotion',
@@ -74,7 +74,7 @@ export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
     celebrities: ['Beyoncé', 'Keanu Reeves', 'Narendra Modi'],
   },
   Libra: {
-    sign: 'Libra', symbol: '♎', element: 'Air', rulingPlanet: 'Venus',
+    sign: 'Libra', symbol: '♎︎', element: 'Air', rulingPlanet: 'Venus',
     emotionalNature: 'Harmony-seeking, relationship-oriented, deeply uncomfortable with conflict',
     personality: 'Your emotional wellbeing is inextricably tied to the quality of your relationships and the level of harmony in your environment. You are genuinely made for connection — you feel most yourself when in meaningful partnership, whether romantic, creative, or professional. Conflict and disharmony disturb you at a core level, which sometimes leads you to avoid necessary confrontations. Your gift is seeing all sides; your challenge is deciding which side you actually stand on.',
     instincts: 'To balance, to harmonise, to create beauty, to ensure fairness in all relationships',
@@ -84,7 +84,7 @@ export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
     celebrities: ['Katrina Kaif', 'Kim Kardashian', 'Bill Clinton'],
   },
   Scorpio: {
-    sign: 'Scorpio', symbol: '♏', element: 'Water', rulingPlanet: 'Pluto',
+    sign: 'Scorpio', symbol: '♏︎', element: 'Water', rulingPlanet: 'Pluto',
     emotionalNature: 'Intensely deep, fiercely loyal, feels everything at full strength',
     personality: "Scorpio Moon is the most emotionally intense placement in the zodiac. You feel everything — joy, love, grief, betrayal, passion — at full depth, and you remember it all with crystalline clarity. Your emotional memory is your wisdom and sometimes your wound. You are extraordinarily perceptive about others' motivations and feelings, often seeing beneath surfaces that fool everyone else. You cannot do emotional shallow — you require depth, truth, and genuine vulnerability in your relationships.",
     instincts: "To penetrate beneath the surface, to protect your vulnerabilities ferociously, to transform what you encounter",
@@ -94,7 +94,7 @@ export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
     celebrities: ['Shahrukh Khan', 'Katy Perry', 'Pablo Picasso'],
   },
   Sagittarius: {
-    sign: 'Sagittarius', symbol: '♐', element: 'Fire', rulingPlanet: 'Jupiter',
+    sign: 'Sagittarius', symbol: '♐︎', element: 'Fire', rulingPlanet: 'Jupiter',
     emotionalNature: 'Optimistic, freedom-loving, philosophical about feelings',
     personality: 'Your emotional world is naturally optimistic, expansive, and philosophically oriented. You feel happiest when life is growing — new places, new ideas, new horizons, new experiences that expand your understanding of what existence can be. Emotional restriction or enforced routine makes you restless in ways that go bone-deep. You process difficult emotions by finding meaning in them — you need to understand why something happened before you can release it.',
     instincts: 'To expand, to find meaning, to maintain freedom, to see the bigger picture even in painful moments',
@@ -104,7 +104,7 @@ export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
     celebrities: ['Taylor Swift', 'Sachin Tendulkar', 'Miley Cyrus'],
   },
   Capricorn: {
-    sign: 'Capricorn', symbol: '♑', element: 'Earth', rulingPlanet: 'Saturn',
+    sign: 'Capricorn', symbol: '♑︎', element: 'Earth', rulingPlanet: 'Saturn',
     emotionalNature: 'Reserved, disciplined, deeply feeling beneath a controlled exterior',
     personality: "Your emotional life is private, disciplined, and far deeper than your exterior suggests. You feel things profoundly but express them carefully — emotional exposure feels like vulnerability that must be earned. Responsibility, achievement, and integrity are emotionally meaningful to you: you feel most secure when you've worked hard for what you have and when your word means something. Beneath your reserved exterior is a capacity for loyalty and devotion that few people are privileged to experience.",
     instincts: 'To achieve, to build lasting things, to earn emotional security rather than assume it',
@@ -114,7 +114,7 @@ export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
     celebrities: ['Ratan Tata', 'Indira Gandhi', 'David Bowie'],
   },
   Aquarius: {
-    sign: 'Aquarius', symbol: '♒', element: 'Air', rulingPlanet: 'Uranus',
+    sign: 'Aquarius', symbol: '♒︎', element: 'Air', rulingPlanet: 'Uranus',
     emotionalNature: 'Intellectual, humanitarian, emotionally independent',
     personality: "Your emotional world is intellectually oriented and collectively focused. You feel deeply about ideas, causes, and humanity — individual emotional demands can sometimes feel more difficult to navigate than global ones. You are genuinely progressive in your emotional expression: you've often worked out healthy emotional patterns that others are still discovering. Your independence is not a defence mechanism — it is a genuine aspect of your nature that must be respected, not fixed.",
     instincts: 'To innovate, to liberate, to connect with those who share your vision rather than your geography',
@@ -124,7 +124,7 @@ export const MOON_SIGN_DATA: Record<string, MoonSignData> = {
     celebrities: ['Amitabh Bachchan', 'Elon Musk', 'Oprah Winfrey'],
   },
   Pisces: {
-    sign: 'Pisces', symbol: '♓', element: 'Water', rulingPlanet: 'Neptune',
+    sign: 'Pisces', symbol: '♓︎', element: 'Water', rulingPlanet: 'Neptune',
     emotionalNature: "Fluid, deeply empathetic, absorbs others' feelings like a sponge",
     personality: "Pisces Moon is the most emotionally permeable of all moon signs. You feel not just your own emotions but everyone else's as well — which makes you an extraordinary empath and an occasionally exhausted one. Your emotional world is fluid, creative, spiritually attuned, and often more comfortable in imagined worlds than harsh realities. This is not weakness; it is a form of consciousness that accesses dimensions of experience that others cannot reach. Your compassion is your superpower and your greatest vulnerability.",
     instincts: 'To merge, to heal, to dissolve boundaries, to connect with something larger than the individual self',

@@ -36,7 +36,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
     name: 'Aries',
     slug: 'aries',
     symbol: 'Ram',
-    unicode: '♈',
+    unicode: '♈︎',
     dateRange: 'March 21 – April 19',
     startMonth: 3,
     startDay: 21,
@@ -74,7 +74,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
   {
     name: 'Taurus',
     slug: 'taurus',
-    unicode: '♉',
+    unicode: '♉︎',
     symbol: 'Bull',
     dateRange: 'April 20 – May 20',
     startMonth: 4,
@@ -113,7 +113,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
   {
     name: 'Gemini',
     slug: 'gemini',
-    unicode: '♊',
+    unicode: '♊︎',
     symbol: 'Twins',
     dateRange: 'May 21 – June 20',
     startMonth: 5,
@@ -152,7 +152,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
   {
     name: 'Cancer',
     slug: 'cancer',
-    unicode: '♋',
+    unicode: '♋︎',
     symbol: 'Crab',
     dateRange: 'June 21 – July 22',
     startMonth: 6,
@@ -191,7 +191,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
   {
     name: 'Leo',
     slug: 'leo',
-    unicode: '♌',
+    unicode: '♌︎',
     symbol: 'Lion',
     dateRange: 'July 23 – August 22',
     startMonth: 7,
@@ -230,7 +230,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
   {
     name: 'Virgo',
     slug: 'virgo',
-    unicode: '♍',
+    unicode: '♍︎',
     symbol: 'Virgin',
     dateRange: 'August 23 – September 22',
     startMonth: 8,
@@ -269,7 +269,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
   {
     name: 'Libra',
     slug: 'libra',
-    unicode: '♎',
+    unicode: '♎︎',
     symbol: 'Scales',
     dateRange: 'September 23 – October 22',
     startMonth: 9,
@@ -308,7 +308,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
   {
     name: 'Scorpio',
     slug: 'scorpio',
-    unicode: '♏',
+    unicode: '♏︎',
     symbol: 'Scorpion',
     dateRange: 'October 23 – November 21',
     startMonth: 10,
@@ -347,7 +347,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
   {
     name: 'Sagittarius',
     slug: 'sagittarius',
-    unicode: '♐',
+    unicode: '♐︎',
     symbol: 'Archer',
     dateRange: 'November 22 – December 21',
     startMonth: 11,
@@ -386,7 +386,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
   {
     name: 'Capricorn',
     slug: 'capricorn',
-    unicode: '♑',
+    unicode: '♑︎',
     symbol: 'Sea Goat',
     dateRange: 'December 22 – January 19',
     startMonth: 12,
@@ -425,7 +425,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
   {
     name: 'Aquarius',
     slug: 'aquarius',
-    unicode: '♒',
+    unicode: '♒︎',
     symbol: 'Water Bearer',
     dateRange: 'January 20 – February 18',
     startMonth: 1,
@@ -464,7 +464,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
   {
     name: 'Pisces',
     slug: 'pisces',
-    unicode: '♓',
+    unicode: '♓︎',
     symbol: 'Fish',
     dateRange: 'February 19 – March 20',
     startMonth: 2,

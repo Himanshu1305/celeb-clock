@@ -665,7 +665,7 @@ const ReportView = () => {
           {/* 3-card overview — click to switch tab */}
           <div className="grid md:grid-cols-3 gap-4 mb-8">
             {[
-              { label: 'Western Zodiac', value: westernZodiac?.name ?? '—', sub: westernZodiac?.element ?? '', icon: westernZodiac?.unicode ?? '♈', tab: 'western' },
+              { label: 'Western Zodiac', value: westernZodiac?.name ?? '—', sub: westernZodiac?.element ?? '', icon: westernZodiac?.unicode ?? '♈︎', tab: 'western' },
               { label: 'Chinese Zodiac', value: `${chineseZodiac?.animal ?? '—'} ${chineseZodiac?.emoji ?? ''}`, sub: `${chineseZodiac?.element ?? ''} ${chineseZodiac?.yin_yang ?? ''}`, icon: '', tab: 'chinese' },
               { label: 'Vedic Rashi', value: vedicRashi?.name ?? '—', sub: vedicRashi?.english ?? '', icon: vedicRashi?.symbol ?? '', tab: 'vedic' },
             ].map(card => (
@@ -674,7 +674,7 @@ const ReportView = () => {
                 onClick={() => setActiveZodiacTab(card.tab)}
                 className={`bg-white rounded-2xl p-5 shadow-sm text-center w-full transition-all ${activeZodiacTab === card.tab ? 'shadow-md' : 'hover:shadow-md'}`} style={activeZodiacTab === card.tab ? { outline: '2px solid #B8862F', outlineOffset: '0px' } : undefined}
               >
-                <div className="text-3xl mb-2">{card.icon}</div>
+                <div className="text-3xl mb-2" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{card.icon}</div>
                 <div className="text-xs text-gray-400 mb-1 font-medium uppercase tracking-wide">{card.label}</div>
                 <div className="font-black text-gray-900 text-lg">{card.value}</div>
                 <div className="text-xs text-gray-500 mt-0.5">{card.sub}</div>
@@ -686,7 +686,7 @@ const ReportView = () => {
           <div className="bg-white rounded-3xl shadow-sm p-6">
             <div className={`space-y-4 print-expand ${activeZodiacTab === 'western' ? '' : 'hidden'} print:block`}>
               <div className="hidden print:block mb-3 pb-2 border-b border-gray-100">
-                <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--navy)' }}>♈ Western Zodiac</span>
+                <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--navy)' }}>{'♈︎'} Western Zodiac</span>
               </div>
               {westernZodiac ? (
                 <>
@@ -832,7 +832,7 @@ const ReportView = () => {
 
             <div className={`space-y-4 print-expand ${activeZodiacTab === 'vedic' ? '' : 'hidden'} print:block print:mt-8 print:pt-6 print:border-t print:border-gray-200`}>
               <div className="hidden print:block mb-3 pb-2 border-b border-gray-100">
-                <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--navy)' }}>🕉 Vedic Rashi</span>
+                <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--navy)' }}>{'🕉︎'} Vedic Rashi</span>
               </div>
               {vedicRashi ? (() => {
                 const vedicCtx = getVedicContext(dob.getMonth() + 1, dob.getDate(), westernZodiac?.name ?? vedicRashi.name);
@@ -840,6 +840,7 @@ const ReportView = () => {
                 const nakshatraCalc = calculateMoonSignAndNakshatra(dob);
                 return (
                 <>
+                  <div style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
                   <div className="flex items-center gap-3 mb-2">
                     <span className="text-5xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{vedicRashi.symbol}</span>
                     <div>
@@ -850,7 +851,8 @@ const ReportView = () => {
                   <div className="flex flex-wrap gap-2 mb-3">
                     {vedicRashi.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">🔥 {vedicRashi.element}</span>}
                     {vedicRashi.ruling_planet && <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: '#F5EAD2', color: '#B8862F' }}>🪐 {vedicRashi.ruling_planet}</span>}
-                    {vedicCtx.rashiSanskrit && <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">🕉 {vedicCtx.rashiSanskrit} — {vedicCtx.rashiMeaning}</span>}
+                    {vedicCtx.rashiSanskrit && <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">{'🕉︎'} {vedicCtx.rashiSanskrit} — {vedicCtx.rashiMeaning}</span>}
+                  </div>
                   </div>
                   <p className="text-gray-700 text-sm leading-relaxed">{vedicRashi.description}</p>
                   {zodiacComparison && (
@@ -1555,7 +1557,7 @@ const ReportView = () => {
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--gold-soft)'; (e.currentTarget as HTMLElement).style.background = 'var(--gold-tint)'; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'; (e.currentTarget as HTMLElement).style.background = 'var(--panel)'; }}>
                     <div className="text-2xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>
-                      {{'Aries':'♈','Taurus':'♉','Gemini':'♊','Cancer':'♋','Leo':'♌','Virgo':'♍','Libra':'♎','Scorpio':'♏','Sagittarius':'♐','Capricorn':'♑','Aquarius':'♒','Pisces':'♓'}[sign] || '⭐'}
+                      {{'Aries':'♈︎','Taurus':'♉︎','Gemini':'♊︎','Cancer':'♋︎','Leo':'♌︎','Virgo':'♍︎','Libra':'♎︎','Scorpio':'♏︎','Sagittarius':'♐︎','Capricorn':'♑︎','Aquarius':'♒︎','Pisces':'♓︎'}[sign] || '⭐'}
                     </div>
                     <div className="font-bold text-sm" style={{ color: 'var(--navy)' }}>{sign}</div>
                     <div className="text-xs font-semibold bb-num" style={{ color: 'var(--gold)' }}>{score}%</div>

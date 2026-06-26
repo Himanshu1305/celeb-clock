@@ -5,7 +5,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Mesha',
     english: 'Aries',
-    symbol: '♈',
+    symbol: '♈︎',
     emoji: '🐏',
     ruling_planet: 'Mars',
     element: 'Fire',
@@ -17,7 +17,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Vrishabha',
     english: 'Taurus',
-    symbol: '♉',
+    symbol: '♉︎',
     emoji: '🐂',
     ruling_planet: 'Venus',
     element: 'Earth',
@@ -29,7 +29,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Mithuna',
     english: 'Gemini',
-    symbol: '♊',
+    symbol: '♊︎',
     emoji: '👯',
     ruling_planet: 'Mercury',
     element: 'Air',
@@ -41,7 +41,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Karka',
     english: 'Cancer',
-    symbol: '♋',
+    symbol: '♋︎',
     emoji: '🦀',
     ruling_planet: 'Moon',
     element: 'Water',
@@ -53,7 +53,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Simha',
     english: 'Leo',
-    symbol: '♌',
+    symbol: '♌︎',
     emoji: '🦁',
     ruling_planet: 'Sun',
     element: 'Fire',
@@ -65,7 +65,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Kanya',
     english: 'Virgo',
-    symbol: '♍',
+    symbol: '♍︎',
     emoji: '👩‍🌾',
     ruling_planet: 'Mercury',
     element: 'Earth',
@@ -77,7 +77,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Tula',
     english: 'Libra',
-    symbol: '♎',
+    symbol: '♎︎',
     emoji: '⚖️',
     ruling_planet: 'Venus',
     element: 'Air',
@@ -89,7 +89,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Vrishchika',
     english: 'Scorpio',
-    symbol: '♏',
+    symbol: '♏︎',
     emoji: '🦂',
     ruling_planet: 'Mars',
     element: 'Water',
@@ -101,7 +101,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Dhanu',
     english: 'Sagittarius',
-    symbol: '♐',
+    symbol: '♐︎',
     emoji: '🏹',
     ruling_planet: 'Jupiter',
     element: 'Fire',
@@ -113,7 +113,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Makara',
     english: 'Capricorn',
-    symbol: '♑',
+    symbol: '♑︎',
     emoji: '🐐',
     ruling_planet: 'Saturn',
     element: 'Earth',
@@ -125,7 +125,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Kumbha',
     english: 'Aquarius',
-    symbol: '♒',
+    symbol: '♒︎',
     emoji: '🏺',
     ruling_planet: 'Saturn',
     element: 'Air',
@@ -137,7 +137,7 @@ export const VEDIC_SIGNS = [
   {
     name: 'Meena',
     english: 'Pisces',
-    symbol: '♓',
+    symbol: '♓︎',
     emoji: '🐟',
     ruling_planet: 'Jupiter',
     element: 'Water',
