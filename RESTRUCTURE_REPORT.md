@@ -7,7 +7,7 @@
 | Phase 1 base | 88319ad966fb3c44c29898452c497c7b058dbbd1 |
 | Phase 1 commit | 04c71971b7edc7c8e072b550e29ac05340156949 |
 | Phase 2 base | 04c71971b7edc7c8e072b550e29ac05340156949 |
-| Phase 2 commit | _pending_ |
+| Phase 2 commit | f4e4f2542613e74a8c528fb6ebcc763eb1474bb1 |
 
 ---
 
@@ -34,38 +34,50 @@ BUILD CLEAN (31.83s) · TypeScript clean · Playwright 341 passed (27.2m)
 ## Phase 2 — Restructure
 
 ### 2A — De-duplicate Nakshatra (remove thin §2 copy)
-_pending_
+DONE — removed `nakshatraCalc` var + orange sub-block from §2 Vedic tab (lines ~927-939 pre-edit).
 
 ### 2B — Consolidate Vedic: move §8 Lunar adjacent to §2 Vedic Rashi
-_pending_
+DONE — dark IIFE deleted; light version inserted inside §2 ASTROLOGY section (below compatibility, above §2 close). Cards use var(--panel-2)/var(--gold-tint) backgrounds with standard ink colors.
 
 ### 2C — Reconcile compatibility (two renderings → one)
-_pending_
+DONE — getTopCompatibleSigns grid inlined into Western tab. Old server compatibility.best/challenging mini-grid deleted. §11 MATCHES IIFE deleted.
 
 ### 2D — Compact 3-up summary strip
-_pending_
+DONE — gap-4→gap-3, mb-8→mb-6, rounded-2xl→rounded-xl, p-5→p-3, text-3xl→text-2xl, text-lg→text-base.
 
 ### 2E — Reorder into four clusters
-_pending_
+DONE — 09·NAME + 07·ARCANA moved to immediately after §4/03·NUMBERS. New order: 01·KINDRED → 02·ASTROLOGY(+08·LUNAR) → 03·NUMBERS → 09·NAME → 07·ARCANA → 04·TALISMAN → SOLAR → 06·ERA → 10·CYCLES.
 
 ### 2F — Soul Urge de-dup
-_pending_
+DONE — Soul Urge removed from §3 numbers grid (was LifePath/SoulUrge/PersonalYear → now LifePath/PersonalYear, grid-cols-3→grid-cols-2). Soul Urge remains in §9 NAME.
 
 ### 2G — Break-inside polish
-_pending_
+DONE — breakInside: avoid added to: celebrity cards, LP strengths/growth grid, Personal Year 2026 block, Tarot upright/deep meaning cards, Tarot 4-quadrant life areas grid.
 
 ### Phase 2 build/test result
-_pending_
+BUILD CLEAN (5.49s) · TypeScript clean · pushed to develop f4e4f25
 
 ---
 
 ## Final Section Order — Dark/Light Alternation
-_pending_
+
+| Position | Code | Title | Background |
+|---|---|---|---|
+| 1 | COVER | Cover Hero | white |
+| 2 | 01·KINDRED | Celebrity Twins + History | white |
+| 3 | 02·ASTROLOGY | Zodiac Profile (Western/Chinese/Vedic + Lunar) | var(--panel) |
+| 4 | 03·NUMBERS | Numerology Blueprint | white |
+| 5 | 09·NAME | Name Numerology | var(--paper) |
+| 6 | 07·ARCANA | Tarot Card | var(--dark) |
+| 7 | 04·TALISMAN | Birthstone & Flower | var(--gold-tint) |
+| 8 | 05·SOLAR | Solar System Ages | var(--dark) |
+| 9 | 06·ERA | Generation | var(--panel) |
+| 10 | 10·CYCLES | Biorhythm | var(--panel) |
 
 ---
 
 ## Anchors That Did Not Match
-_pending_
+None — all edits matched cleanly. The only imprecision was a first-attempt botched deletion of the Lunar IIFE (using `{false && ...}` wrapper instead of direct delete); corrected immediately in same session before commit.
 
 ---
 
@@ -83,4 +95,5 @@ _pending_
 ---
 
 ## Test Results
-_pending_
+Phase 1: Playwright 341 passed (27.2m against staging.bornclock.com) · build 31.83s · TS clean
+Phase 2: build 5.49s · TS clean · pushed f4e4f25 to develop (Playwright runs against staging — not re-run locally as staging has not yet been redeployed with these changes)
