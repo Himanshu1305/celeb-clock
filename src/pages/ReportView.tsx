@@ -18,6 +18,8 @@ import { getTopCompatibleSigns } from '@/data/compatibilityData';
 import { mergeWithIndianCelebrities, isIndianUser, hasIndianCelebritiesForDate } from '@/services/IndianCelebrityService';
 import { useReactToPrint } from 'react-to-print';
 import { getLifePath } from '@/data/numerologyLifePathData';
+import { getNakshatra } from '@/data/nakshatraData';
+import { getRashi } from '@/data/rashiData';
 
 // ── Helper ─────────────────────────────────────────────────────────────────────
 
@@ -846,6 +848,7 @@ const ReportView = () => {
                 const vedicCtx = getVedicContext(dob.getMonth() + 1, dob.getDate(), westernZodiac?.name ?? vedicRashi.name);
                 const rashiRatna = RASHI_RATNA_DATA.find(r => r.rashiEnglish === vedicRashi.name);
                 const nakshatraCalc = calculateMoonSignAndNakshatra(dob);
+                const rashiEntry = getRashi(vedicRashi.name) || getRashi(vedicRashi.english);
                 return (
                 <>
                   <div style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
@@ -862,7 +865,16 @@ const ReportView = () => {
                     {vedicCtx.rashiSanskrit && <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">{'🕉︎'} {vedicCtx.rashiSanskrit} — {vedicCtx.rashiMeaning}</span>}
                   </div>
                   </div>
-                  <p className="text-gray-700 text-sm leading-relaxed">{vedicRashi.description}</p>
+                  {/* Rich essence (multi-paragraph) */}
+                  {rashiEntry ? (
+                    <div className="space-y-3 mb-3">
+                      {rashiEntry.essence.split('\n\n').map((para, i) => (
+                        <p key={i} className="text-gray-700 text-sm leading-relaxed">{para}</p>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-700 text-sm leading-relaxed mb-3">{vedicRashi.description}</p>
+                  )}
                   {zodiacComparison && (
                     <div className="bg-amber-50 rounded-xl px-4 py-3 text-xs text-amber-800">
                       <strong>Western vs Vedic: </strong>{zodiacComparison.note}
@@ -879,9 +891,42 @@ const ReportView = () => {
                     </div>
                   )}
 
-                  {/* Nakshatra subsection */}
+                  {/* Rich life domains from rashiData */}
+                  {rashiEntry && (
+                    <div className="grid sm:grid-cols-3 gap-3" style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                      {[
+                        { label: 'Career', text: rashiEntry.career },
+                        { label: 'Relationships', text: rashiEntry.relationships },
+                        { label: 'Spiritual', text: rashiEntry.spiritual },
+                      ].map(({ label, text }) => (
+                        <div key={label} className="rounded-xl p-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
+                          <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--navy)' }}>{label}</div>
+                          <p className="text-xs leading-relaxed" style={{ color: 'var(--ink-soft)' }}>{text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Favorable attributes */}
+                  {rashiEntry && (rashiEntry.favorableColors.length > 0 || rashiEntry.favorableNumbers.length > 0) && (
+                    <div className="rounded-xl px-4 py-3" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)' }}>
+                      <div className="flex flex-wrap gap-4 text-xs" style={{ color: 'var(--ink-soft)' }}>
+                        {rashiEntry.favorableColors.length > 0 && (
+                          <span><span className="font-semibold" style={{ color: 'var(--navy)' }}>Colors:</span> {rashiEntry.favorableColors.join(', ')}</span>
+                        )}
+                        {rashiEntry.favorableNumbers.length > 0 && (
+                          <span><span className="font-semibold" style={{ color: 'var(--navy)' }}>Numbers:</span> {rashiEntry.favorableNumbers.join(', ')}</span>
+                        )}
+                        {rashiEntry.gemstone && (
+                          <span><span className="font-semibold" style={{ color: 'var(--navy)' }}>Gemstone:</span> {rashiEntry.gemstone}</span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Nakshatra subsection (compact — full depth in §8 Lunar) */}
                   <div className="bg-orange-50 border border-orange-100 rounded-2xl p-5 space-y-2">
-                    <div className="text-xs font-bold text-orange-700 uppercase tracking-wide mb-1">🌙 Birth Nakshatra</div>
+                    <div className="text-xs font-bold text-orange-700 uppercase tracking-wide mb-1">Birth Nakshatra</div>
                     <div className="flex items-center gap-3">
                       <span className="text-3xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{nakshatraCalc.nakshatraData.symbol}</span>
                       <div>
@@ -896,7 +941,7 @@ const ReportView = () => {
                   {/* Rashi Ratna (Vedic gemstone) */}
                   {rashiRatna && (
                     <div className="rounded-2xl p-5 space-y-3" style={{ background: 'var(--gold-tint)', border: '1px solid var(--gold-soft)' }}>
-                      <div className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--gold)' }}>💎 Rashi Ratna — Vedic Birthstone</div>
+                      <div className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--gold)' }}>Rashi Ratna — Vedic Birthstone</div>
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl flex-shrink-0" style={{ backgroundColor: rashiRatna.hex }} />
                         <div>
@@ -1393,8 +1438,9 @@ const ReportView = () => {
       {/* ── Moon Sign ─────────────────────────────────────────────────────── */}
       {(() => {
         const moonResult = calculateMoonSignAndNakshatra(dob);
+        const richNakshatra = getNakshatra(moonResult.nakshatraNumber);
         return (
-          <div className="py-10 px-4" style={{ background: 'var(--dark)' }}>
+          <div className="py-10 px-4" style={{ background: 'var(--dark)', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
             <div className="max-w-2xl mx-auto">
               {/* Clinical header */}
               <div className="mb-6">
@@ -1403,19 +1449,57 @@ const ReportView = () => {
                 <h2 className="bb-h2" style={{ color: '#FFFFFF' }}>Moon Sign & Nakshatra</h2>
                 <p style={{ fontSize: '12.5px', color: '#9DB0BF', marginTop: '5px' }}>Where the Moon resided at the moment of birth</p>
               </div>
-              <div className="flex justify-center gap-6 mb-4">
-                <div className="text-center">
-                  <div className="text-4xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{moonResult.moonSignData.symbol}</div>
-                  <p className="font-black text-white text-lg">{moonResult.moonSign} Moon</p>
-                  <p className="text-xs" style={{ color: 'rgba(255,255,255,.6)' }}>{moonResult.moonSignData.element} · {moonResult.moonSignData.rulingPlanet}</p>
+
+              {/* Moon sign identity */}
+              <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,.07)', breakInside: 'avoid', pageBreakInside: 'avoid', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="text-4xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{moonResult.moonSignData.symbol}</div>
+                  <div>
+                    <p className="font-black text-white text-xl">{moonResult.moonSign} Moon</p>
+                    <p className="text-xs" style={{ color: 'rgba(255,255,255,.6)' }}>{moonResult.moonSignData.element} · Ruled by {moonResult.moonSignData.rulingPlanet}</p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <div className="text-4xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{moonResult.nakshatraData.symbol}</div>
-                  <p className="font-black text-white text-lg">{moonResult.nakshatraData.name}</p>
-                  <p className="text-xs" style={{ color: 'rgba(255,255,255,.6)' }}>Nakshatra #{moonResult.nakshatraNumber}</p>
+                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,.85)' }}>{moonResult.moonSignData.personality}</p>
+              </div>
+
+              {/* Nakshatra identity */}
+              <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,.07)', breakInside: 'avoid', pageBreakInside: 'avoid', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
+                <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--gold)' }}>Birth Nakshatra #{moonResult.nakshatraNumber}</div>
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="text-4xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{richNakshatra.symbol}</div>
+                  <div>
+                    <p className="font-black text-white text-xl">{richNakshatra.name}</p>
+                    <p className="text-xs" style={{ color: 'rgba(255,255,255,.6)' }}>{richNakshatra.meaning} · {richNakshatra.deity}</p>
+                  </div>
+                </div>
+                {richNakshatra.essence.split('\n\n').map((para, i) => (
+                  <p key={i} className="text-sm leading-relaxed mb-2" style={{ color: 'rgba(255,255,255,.85)' }}>{para}</p>
+                ))}
+                <div className="mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,.1)' }}>
+                  <p className="text-xs" style={{ color: 'rgba(255,255,255,.55)' }}>
+                    <span className="font-semibold" style={{ color: 'var(--gold)' }}>Shakti:</span> {richNakshatra.shakti}
+                  </p>
+                  <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,.55)' }}>
+                    <span className="font-semibold" style={{ color: 'var(--gold)' }}>Ruler:</span> {richNakshatra.ruler} &nbsp;·&nbsp; <span className="font-semibold" style={{ color: 'var(--gold)' }}>Gemstone:</span> {richNakshatra.gemstone}
+                  </p>
                 </div>
               </div>
-              <p className="text-sm leading-relaxed text-center mb-4" style={{ color: 'rgba(255,255,255,.8)' }}>{moonResult.moonSignData.personality}</p>
+
+              {/* Nakshatra life domains */}
+              <div className="grid sm:grid-cols-3 gap-3 mb-4">
+                {[
+                  { label: 'Career', text: richNakshatra.career },
+                  { label: 'Relationships', text: richNakshatra.relationships },
+                  { label: 'Spiritual', text: richNakshatra.spiritual },
+                ].map(({ label, text }) => (
+                  <div key={label} className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,.07)', breakInside: 'avoid', pageBreakInside: 'avoid', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
+                    <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--gold)' }}>{label}</div>
+                    <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{text}</p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-xs italic text-center mb-4" style={{ color: 'rgba(255,255,255,.35)' }}>Nakshatra approximated from lunar cycle position at date of birth.</p>
               <div className="text-center no-print">
                 <Link to="/moon-sign" className="text-xs underline" style={{ color: 'var(--gold)' }}>
                   Full moon sign interpretation →
