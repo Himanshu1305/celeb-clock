@@ -260,11 +260,17 @@ const ReportView = () => {
     documentTitle: `Birthday Report — BornClock`,
     pageStyle: `
       @page {
-        margin: 0;
+        margin: 1.5cm;
         size: A4;
+        @top-left    { content: ""; }
+        @top-center  { content: ""; }
+        @top-right   { content: ""; }
+        @bottom-left { content: ""; }
+        @bottom-center { content: "BornClock · bornclock.com"; font-size: 9px; color: #9ca3af; font-family: system-ui, sans-serif; }
+        @bottom-right  { content: counter(page); font-size: 9px; color: #9ca3af; font-family: system-ui, sans-serif; }
       }
       body {
-        margin: 1.5cm 1.5cm 3cm 1.5cm;
+        margin: 0;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         font-size: 12px;
@@ -431,7 +437,6 @@ const ReportView = () => {
             body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-variant-emoji: text; font-variant-ligatures: none; }
             .print-expand { max-height: none !important; overflow: visible !important; }
             .dark-section { background: var(--dark) !important; color-scheme: dark; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            @page { margin: 1.5cm 1cm; @bottom-center { content: "BornClock · bornclock.com"; font-size: 9px; color: #9ca3af; } @bottom-right { content: counter(page); font-size: 9px; color: #9ca3af; } }
             .report-section { page-break-inside: avoid; }
             h2, h3 { page-break-after: avoid; }
             .dark-section { page-break-inside: avoid; }
@@ -483,7 +488,7 @@ const ReportView = () => {
       </div>
 
       {/* ── Print running header — repeats on every printed page ─────────── */}
-      <div className="print-only px-6 py-2 flex items-center justify-between mb-0" style={{ borderBottom: '1px solid var(--hairline)', fontSize: '9px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+      <div className="print-only px-4 py-2 flex items-center justify-between mb-0" style={{ borderBottom: '1px solid var(--hairline)', fontSize: '9px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--muted)' }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
           <img src="/bornclock-logo.png" alt="" style={{ height: '13px', width: 'auto', objectFit: 'contain', display: 'inline-block', verticalAlign: 'middle' }}
             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
@@ -495,7 +500,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 1 — COVER HERO                                            */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="report-section bg-white px-6 pt-10 pb-8" style={{ borderBottom: '2px solid var(--navy)' }}>
+      <div className="report-section bg-white px-4 pt-10 pb-8" style={{ borderBottom: '2px solid var(--navy)' }}>
         <div className="max-w-3xl mx-auto">
           {/* Top lockup row */}
           <div className="flex items-center justify-between mb-5">
