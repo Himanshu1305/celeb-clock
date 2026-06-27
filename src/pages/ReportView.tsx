@@ -1441,8 +1441,8 @@ const ReportView = () => {
                     {vbs.mantra && (
                       <div className="rounded-xl p-5 text-center" style={{ background: 'var(--ink)', border: '1px solid rgba(184,134,47,0.3)' }}>
                         <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--gold)' }}>Chandra Beej Mantra</div>
-                        <div className="text-xl font-bold mb-2 leading-relaxed" style={{ color: 'var(--gold)', fontFamily: 'inherit' }}>{vbs.mantra.devanagari}</div>
-                        <div className="text-sm font-medium mb-1" style={{ color: '#E8D5A3' }}>{vbs.mantra.transliteration}</div>
+                        <div className="text-xl font-bold mb-2 leading-relaxed print:hidden" style={{ color: 'var(--gold)', fontFamily: 'inherit' }}>{vbs.mantra.devanagari}</div>
+                        <div className="text-sm font-medium mb-1 print:text-base print:font-semibold" style={{ color: '#E8D5A3' }}>{vbs.mantra.transliteration}</div>
                         <div className="text-xs italic" style={{ color: 'rgba(255,255,255,0.5)' }}>Pronunciation: {vbs.mantra.pronunciation}</div>
                         <div className="text-xs mt-3" style={{ color: 'rgba(255,255,255,0.6)' }}>Chant 108 times at the time of wearing · Repeat 11 times each Monday</div>
                       </div>
