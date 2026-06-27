@@ -409,9 +409,9 @@ const ReportView = () => {
           loveAndRelationships: czd?.loveStyle ?? '',
           mostCompatible: czd?.compatibility?.best?.join(' · ') ?? '',
           challengingMatch: czd?.compatibility?.avoid?.join(' · ') ?? '',
-          careerPaths: '',
+          careerPaths: (czd?.careerPaths ?? chineseZodiac?.careerPaths ?? []).join(' · '),
           famousList: (czd?.famousPeople ?? chineseZodiac?.famous ?? []).map((p: any) => p.name ?? p).join(' · '),
-          quote: '',
+          quote: czd?.lifeAdvice ?? '',
         },
 
         vedicRashi: {
