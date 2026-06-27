@@ -1417,6 +1417,85 @@ const ReportView = () => {
                 );
               })()}
 
+              {/* ── Jyotish Prescription ── */}
+              {(() => {
+                const vbs = getVedicBirthstone(dob.getMonth() + 1);
+                return (
+                  <>
+                    {vbs.jyotishRationale && (
+                      <div className="rounded-xl p-4" style={{ background: '#F1F6FA', border: '1px solid #D7E1EA' }}>
+                        <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--navy)' }}>Jyotish Prescription</div>
+                        <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{vbs.jyotishRationale}</p>
+                      </div>
+                    )}
+
+                    {/* ── Wearing Ritual ── */}
+                    {vbs.ritual && (
+                      <div className="rounded-xl p-4" style={{ background: '#FBF6EA', border: '1px solid rgba(184,134,47,0.2)' }}>
+                        <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: '#B8862F' }}>Wearing Ritual — Dharana Vidhi</div>
+                        <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{vbs.ritual}</p>
+                      </div>
+                    )}
+
+                    {/* ── Chandra Beej Mantra ── */}
+                    {vbs.mantra && (
+                      <div className="rounded-xl p-5 text-center" style={{ background: 'var(--ink)', border: '1px solid rgba(184,134,47,0.3)' }}>
+                        <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--gold)' }}>Chandra Beej Mantra</div>
+                        <div className="text-xl font-bold mb-2 leading-relaxed" style={{ color: 'var(--gold)', fontFamily: 'inherit' }}>{vbs.mantra.devanagari}</div>
+                        <div className="text-sm font-medium mb-1" style={{ color: '#E8D5A3' }}>{vbs.mantra.transliteration}</div>
+                        <div className="text-xs italic" style={{ color: 'rgba(255,255,255,0.5)' }}>Pronunciation: {vbs.mantra.pronunciation}</div>
+                        <div className="text-xs mt-3" style={{ color: 'rgba(255,255,255,0.6)' }}>Chant 108 times at the time of wearing · Repeat 11 times each Monday</div>
+                      </div>
+                    )}
+
+                    {/* ── Weight & Quality ── */}
+                    {vbs.weightAndQuality && (
+                      <div className="rounded-xl p-4" style={{ background: '#F1F6FA', border: '1px solid #D7E1EA' }}>
+                        <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--navy)' }}>Weight &amp; Quality — Maan aur Gunvatta</div>
+                        <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{vbs.weightAndQuality}</p>
+                      </div>
+                    )}
+
+                    {/* ── Jyotish Benefits ── */}
+                    {vbs.benefits && vbs.benefits.length > 0 && (
+                      <div>
+                        <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--navy)' }}>Jyotish Benefits — Chandra Balavardhan</div>
+                        <div className="grid sm:grid-cols-2 gap-2">
+                          {vbs.benefits.map((b: string, i: number) => (
+                            <div key={i} className="rounded-lg p-3 text-xs leading-relaxed" style={{ background: '#FBF6EA', color: '#3A4A5A', border: '1px solid rgba(184,134,47,0.15)' }}>
+                              <span style={{ color: '#B8862F' }}>● </span>{b}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ── Ayurvedic Properties ── */}
+                    {vbs.ayurveda && (
+                      <div className="rounded-xl p-4" style={{ background: '#F1F6FA', border: '1px solid #D7E1EA' }}>
+                        <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--navy)' }}>Ayurvedic Properties — Dravyaguna</div>
+                        <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{vbs.ayurveda}</p>
+                      </div>
+                    )}
+
+                    {/* ── Cautions ── */}
+                    {vbs.cautions && (
+                      <div className="rounded-xl p-4" style={{ background: '#FFF8E7', borderLeft: '3px solid var(--gold)', border: '1px solid rgba(184,134,47,0.35)' }}>
+                        <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: '#B8862F' }}>Cautions &amp; Contraindications</div>
+                        <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{vbs.cautions}</p>
+                      </div>
+                    )}
+
+                    {/* ── Stone note (gemstone duality bridge) ── */}
+                    {vbs.stoneNote && (
+                      <div className="rounded-lg p-3" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
+                        <p className="text-xs italic leading-relaxed" style={{ color: 'var(--ink-soft)' }}>{vbs.stoneNote}</p>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
+
               {/* Meaning & Properties */}
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>

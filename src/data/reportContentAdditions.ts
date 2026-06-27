@@ -9,6 +9,15 @@ interface VedicBirthstone {
   day: string;
   purpose: string;
   note: string;
+  // Optional Jyotish deep-content — populate per stone as warranted
+  jyotishRationale?: string;
+  ritual?: string;
+  mantra?: { devanagari: string; transliteration: string; pronunciation: string; };
+  weightAndQuality?: string;
+  benefits?: string[];
+  ayurveda?: string;
+  cautions?: string;
+  stoneNote?: string;
 }
 
 const VEDIC_BIRTHSTONES: Record<number, VedicBirthstone> = {
@@ -71,6 +80,34 @@ const VEDIC_BIRTHSTONES: Record<number, VedicBirthstone> = {
     day: 'Monday at moonrise',
     purpose: 'Nurtures the lunar qualities of emotional depth, intuition, and the healing power of receptivity.',
     note: 'June-born arrive at the cusp of summer\'s turning — the Moon\'s depth in the year\'s longest light.',
+
+    jyotishRationale: `Moti (Pearl) is the ratna of Chandra — the Moon — the graha that governs manas (mind), emotional body, memory, intuition, and the relationship with the mother figure. June-born receive Pearl as a rare dual prescription: it is both the Western birthstone of their birth month and the Vedic ratna of Chandra, two traditions converging on the same gem. Pearl is prescribed in Jyotish during Chandra Mahadasha and Chandra Antardasha, and for charts where the Moon is the Lagna lord, Atmakaraka, or placed in a sensitive house. It is one of the nine Navgraha ratnas and among the most universally benign, with few contraindications for most charts.`,
+
+    ritual: `Day: Monday (Somavar) — Chandra's own day. Time: Within the first hour after sunrise on a Monday in Shukla Paksha (the waxing fortnight, when the Moon is growing in light). Finger: Kanishtha (little finger) of the right hand. Some traditions prescribe the Anamika (ring finger); consult your Jyotishi if uncertain. Metal: Silver (Chandi) only — silver is Chandra's metal and amplifies the stone's lunar resonance. Gold is the Sun's metal and dilutes Chandra's energy; panchdhatu is acceptable if silver is unavailable. Purification (Shodhan): Place the set ring in a small bowl with raw cow's milk or Ganga jal to submerge it, a few drops of honey, and two or three tulsi leaves. Leave for 20–30 minutes, rinse gently, pat dry. Then recite the Chandra Beej Mantra 108 times while wearing the ring for the first time.`,
+
+    mantra: {
+      devanagari: 'ॐ श्रां श्रीं श्रौं सः चन्द्राय नमः',
+      transliteration: 'Om Shrāṃ Shrīṃ Shrauṃ Saḥ Chandrāya Namaḥ',
+      pronunciation: 'Om — SHRAAM — SHREEM — SHROWM — Sah — CHUN-dra-ya — NA-ma-ha',
+    },
+
+    weightAndQuality: `Minimum 2 Ratti for perceptible effect; 4–6 Ratti is ideal for most adults (1 Ratti ≈ 0.91 carats — the traditional Indian gem unit, based on the Abrus precatorius seed). Quality tiers: Basra (Persian Gulf) — finest for Jyotish prescription, dense nacre, increasingly rare. South Sea & Japanese Akoya — natural saltwater, high lustre, widely accepted. Freshwater (Chinese) — affordable and acceptable, considered less potent by most practitioners. Synthetic or composite pearls — not accepted for Jyotish; no natural nacre, no planetary resonance. Look for sharp lustre, unblemished nacre, natural colour (white, cream, or pinkish-silver), and a round or near-round shape. Request natural-origin certification from GIA, IGI, or the Gemmological Institute of India.`,
+
+    benefits: [
+      'Manas (mind): Calms mental restlessness, reduces anxiety and chronic overthinking',
+      'Memory & learning: Sharpens retention; traditionally prescribed for students and scholars',
+      'Emotional stability: Reduces mood swings, emotional reactivity, and absorption of others’ states',
+      'Sleep: Improves sleep quality; placing pearl near the pillow is a classical Jyotish recommendation',
+      'Maternal bonds: Chandra governs the mother figure — Pearl strengthens this relationship',
+      'Creativity & intuition: Enhances imaginative faculty and the quality of inner listening',
+      'For women: Supports hormonal balance and reproductive wellbeing in Ayurvedic tradition',
+    ],
+
+    ayurveda: `Sheetal (cooling) in potency — Pearl pacifies Pitta, the fire-water principle. Mukta Pishti (pearl powder) and Mukta Bhasma (purified pearl ash) are classical Ayurvedic formulations prescribed for pitta disorders: chronic fever, gastric acidity, burning sensations, palpitations, and nervous agitation. The gem's calming action on the mind mirrors its physical cooling — both governed by the Moon's watery, receptive nature.`,
+
+    cautions: `Pearl is among the safest Navgraha ratnas for most charts. However: those with Saturn (Shani) aspecting the Moon, or with Rahu or Ketu conjunct the Moon, should consult a qualified Jyotishi before wearing. Remove during solar or lunar eclipses (Grahan kaal) and cleanse with milk or Ganga jal before re-wearing. If you experience unusual emotional agitation or disturbed sleep within the first three days of wearing, remove the stone and consult a Jyotishi — individual chart factors vary and can override general prescription.`,
+
+    stoneNote: `On gemstone layering: in Jyotish, multiple ratnas can be worn simultaneously for different planetary purposes. Your Vedic Rashi has its own ruling planet and corresponding ratna (shown above in the Zodiac section). Pearl serves a separate function — strengthening Chandra for emotional depth, mental calm, and intuitive receptivity — and the two complement rather than conflict.`,
   },
   7: {
     stone: 'Ruby',
