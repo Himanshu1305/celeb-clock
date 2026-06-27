@@ -876,7 +876,7 @@ const ReportView = () => {
                 <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--navy)' }}>{'🕉︎'} Vedic Rashi</span>
               </div>
               {vedicRashi ? (() => {
-                const vedicCtx = getVedicContext(dob.getMonth() + 1, dob.getDate(), westernZodiac?.name ?? vedicRashi.name);
+                const vedicCtx = getVedicContext(dob.getMonth() + 1, dob.getDate(), vedicRashi.english ?? westernZodiac?.name ?? 'Aries');
                 const rashiRatna = RASHI_RATNA_DATA.find(r => r.rashiEnglish === vedicRashi.name);
                 const rashiEntry = getRashi(vedicRashi.name) || getRashi(vedicRashi.english);
                 const richRashiEssence = getRashiEssence(vedicRashi.name) || getRashiEssence(vedicRashi.english);
