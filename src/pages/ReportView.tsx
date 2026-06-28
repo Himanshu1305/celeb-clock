@@ -7,6 +7,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { getReport } from '@/services/BirthdayReportService';
 import type { BirthdayReportData } from '@/services/BirthdayReportService';
+import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
 import { getTarotCardByLifePath } from '@/data/tarotData';
 import { getChineseZodiacDescription } from '@/data/chineseZodiacDescriptions';
 import { getVedicContext } from '@/data/birthdayPersonality';
@@ -261,6 +262,7 @@ const ReportView = () => {
   const [notFound, setNotFound] = useState(false);
   const [copied, setCopied] = useState(false);
   const [activeZodiacTab, setActiveZodiacTab] = useState('western');
+  const [liveCelebrities, setLiveCelebrities] = useState<any[] | null>(null);
 
   const reportPrintRef = useRef<HTMLDivElement>(null);
   const handleDownloadReport = useReactToPrint({
@@ -298,6 +300,16 @@ const ReportView = () => {
     });
   }, [slug]);
 
+  useEffect(() => {
+    if (!row?.report_data?.recipientDob) return;
+    const dob = new Date((row.report_data as any).recipientDob + 'T12:00:00');
+    const mm = String(dob.getMonth() + 1).padStart(2, '0');
+    const dd = String(dob.getDate()).padStart(2, '0');
+    getRankedBirthdayCelebrities(`${mm}-${dd}`, null, 6)
+      .then(results => { if (results?.length) setLiveCelebrities(results); })
+      .catch(() => {});
+  }, [row]);
+
   if (loading) return <LoadingScreen />;
   if (notFound || !row || !row.report_data) return <ExpiryPage />;
 
@@ -321,7 +333,7 @@ const ReportView = () => {
   const showIndianFirst = isIndianUser();
   const hasIndianOnDate = hasIndianCelebritiesForDate(reportMonth, reportDay);
   const mergedCelebrities = mergeWithIndianCelebrities(
-    celebrities ?? [],
+    liveCelebrities ?? celebrities ?? [],
     reportMonth,
     reportDay,
     showIndianFirst
@@ -612,7 +624,7 @@ const ReportView = () => {
                   occ.includes('music') || occ.includes('singer') || occ.includes('song') || occ.includes('band') || occ.includes('rapper') ? 'Musician' :
                   occ.includes('athlete') || occ.includes('player') || occ.includes('sport') || occ.includes('tennis') || occ.includes('cricket') || occ.includes('football') || occ.includes('basketball') ? 'Athlete' :
                   occ.includes('politic') || occ.includes('president') || occ.includes('minister') || occ.includes('freedom') ? 'Politician' :
-                  occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') || occ.includes('mathematician') ? 'Scientist' : 'Notable Person';
+                  occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') || occ.includes('mathematician') ? 'Scientist' : null;
                 const isDeceased = c.death_year != null || c.isLiving === false;
                 return (
                   <div key={i} className={`border rounded-2xl p-5 hover:shadow-md transition-shadow bg-white ${c.isIndian ? 'border-orange-200 ring-1 ring-orange-100' : 'border-gray-100'}`} style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
@@ -624,7 +636,9 @@ const ReportView = () => {
                         {c.isIndian && <span className="text-[10px] text-orange-500 font-medium">Indian</span>}
                       </div>
                     </div>
-                    <div className="text-xs text-gray-500 mb-2">{c.known_for || c.occupation || (c as any).profession || 'Notable figure'}</div>
+                    {(c.known_for || c.occupation || (c as any).profession) && (
+                      <div className="text-xs text-gray-500 mb-2">{c.known_for || c.occupation || (c as any).profession}</div>
+                    )}
                     {c.known_for && <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'var(--panel)', color: 'var(--navy)', border: '1px solid var(--hairline)' }}>{catLabel}</span>}
                   </div>
                 );
