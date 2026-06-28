@@ -308,6 +308,13 @@ const ReportView = () => {
         background: #fff;
         z-index: 100;
       }
+      .report-cover-section {
+        margin-top: -36px;
+        padding-top: 36px;
+        position: relative;
+        z-index: 200;
+        background: white;
+      }
       .report-print-footer {
         position: fixed;
         bottom: 0;
@@ -552,7 +559,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 1 — COVER HERO                                            */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="report-section bg-white px-4 pt-10 pb-8" style={{ borderBottom: '2px solid var(--navy)' }}>
+      <div className="report-cover-section report-section bg-white px-4 pt-10 pb-8" style={{ borderBottom: '2px solid var(--navy)' }}>
         <div className="max-w-3xl mx-auto">
           {/* Top lockup row */}
           <div className="flex items-center justify-between mb-5">
@@ -679,7 +686,7 @@ const ReportView = () => {
                     {(c.known_for || c.occupation || (c as any).profession) && (
                       <div className="text-xs text-gray-500 mb-2">{c.known_for || c.occupation || (c as any).profession}</div>
                     )}
-                    {c.known_for && <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'var(--panel)', color: 'var(--navy)', border: '1px solid var(--hairline)' }}>{catLabel}</span>}
+                    {c.known_for && catLabel && <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'var(--panel)', color: 'var(--navy)', border: '1px solid var(--hairline)' }}>{catLabel}</span>}
                   </div>
                 );
               })}
