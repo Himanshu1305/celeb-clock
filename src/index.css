@@ -374,7 +374,6 @@
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   .no-print { visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
   .no-screen { visibility: visible !important; display: block !important; }
-  .report-print-footer { display: none !important; }
 }
 
 .no-screen { display: none; }

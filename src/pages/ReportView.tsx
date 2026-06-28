@@ -276,6 +276,8 @@ const ReportView = () => {
       body {
         margin: 0;
         padding: 1.5cm;
+        padding-top: calc(1.5cm + 36px);
+        padding-bottom: calc(1.5cm + 28px);
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         font-size: 12px;
@@ -287,6 +289,41 @@ const ReportView = () => {
         display: block !important;
         height: auto !important;
         overflow: visible !important;
+      }
+      .report-running-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 36px;
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.5cm;
+        border-bottom: 1px solid var(--hairline);
+        font-size: 9px;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        color: var(--muted);
+        background: #fff;
+        z-index: 100;
+      }
+      .report-print-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 28px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 0 1.5cm;
+        border-top: 1px solid var(--hairline);
+        font-size: 9px;
+        color: var(--muted);
+        letter-spacing: 0.3px;
+        background: #fff;
+        z-index: 100;
       }
     `,
   });
@@ -503,7 +540,7 @@ const ReportView = () => {
       </div>
 
       {/* ── Print running header — repeats on every printed page ─────────── */}
-      <div className="print-only px-4 py-2 flex items-center justify-between mb-0" style={{ borderBottom: '1px solid var(--hairline)', fontSize: '9px', letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+      <div className="print-only report-running-header">
         <span style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
           <img src="/bornclock-logo.png" alt="" style={{ height: '13px', width: 'auto', objectFit: 'contain', display: 'inline-block', verticalAlign: 'middle' }}
             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
@@ -527,6 +564,9 @@ const ReportView = () => {
               </div>
             </div>
             <div className="text-right">
+              <div style={{ fontSize: '9px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.05em', whiteSpace: 'nowrap' }}>
+                Birthday Blueprint
+              </div>
               <div className="text-xs" style={{ color: 'var(--muted)' }}>
                 {dob.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
               </div>
@@ -1783,13 +1823,22 @@ const ReportView = () => {
       })()}
 
       {/* ── Closing Section ──────────────────────────────────────────────── */}
-      <div className="py-10 px-4" style={{ background: 'var(--panel-2)', borderTop: '1px solid var(--hairline)' }}>
+      <div className="py-10 px-4" style={{ background: 'var(--panel-2)' }}>
         <div className="max-w-2xl mx-auto text-center">
+          <div style={{ borderTop: '2px solid var(--navy)', paddingTop: '24px', marginBottom: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '8px' }}>
+              <img src="/bornclock-logo.png" style={{ width: '36px', height: '36px', objectFit: 'contain' }} alt="BornClock" />
+              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--navy)' }}>BornClock</div>
+            </div>
+            <div style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '4px' }}>Know your time. Live it well.</div>
+            <div style={{ fontSize: '11px', color: 'var(--muted)' }}>bornclock.com · Your story, written in stars</div>
+          </div>
           <p className="text-xl font-black mb-2" style={{ color: 'var(--navy)' }}>{CLOSING_SECTION.tagline}</p>
           <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--ink-soft)' }}>{CLOSING_SECTION.signoff}</p>
           <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--ink-soft)' }}>{CLOSING_SECTION.recipientCta}</p>
           <p className="text-xs leading-relaxed mb-6" style={{ color: 'var(--ink-soft)' }}>{CLOSING_SECTION.dailyReadingNote}</p>
           <p className="text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>{CLOSING_SECTION.disclaimer}</p>
+          <p style={{ fontSize: '10px', color: '#b0b5bf', marginTop: '8px' }}>&copy; {new Date().getFullYear()} BornClock</p>
         </div>
       </div>
 
@@ -1821,7 +1870,7 @@ const ReportView = () => {
         </div>
       </div>
 
-      <div className="report-print-footer no-screen">BornClock · Know your time. Live it well. · bornclock.com</div>
+      <div className="report-print-footer no-screen">BornClock Birthday Blueprint &nbsp;&middot;&nbsp; {recipientName} &nbsp;&middot;&nbsp; bornclock.com</div>
 
       <div className="no-print">
         <Footer />
