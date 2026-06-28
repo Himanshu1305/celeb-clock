@@ -25,7 +25,6 @@ import { getNakshatraEssence } from '@/data/nakshatraEssence';
 import { getMoonSignEssence, MOON_SIGN_EXPLAINER } from '@/data/moonSignEssence';
 import { getSoulUrge, getPersonality } from '@/data/numerologyNameData';
 import { getVedicBirthstone, SECTION_EXPLAINERS, CLOSING_SECTION } from '@/data/reportContentAdditions';
-import { buildBirthdayBlueprintHtml } from './birthdayBlueprintHtml';
 
 // ── Helper ─────────────────────────────────────────────────────────────────────
 
@@ -335,190 +334,6 @@ const ReportView = () => {
   );
   const reportUrl = `${window.location.origin}/report/${slug}`;
 
-  const handlePrintLegacy = () => handleDownloadReport();
-
-  const ZODIAC_GLYPHS: Record<string, string> = {
-    Aries: '♈', Taurus: '♉', Gemini: '♊', Cancer: '♋', Leo: '♌', Virgo: '♍',
-    Libra: '♎', Scorpio: '♏', Sagittarius: '♐', Capricorn: '♑', Aquarius: '♒', Pisces: '♓',
-  };
-
-  const handlePrint = () => {
-    try {
-      // Assemble data not pre-computed at this scope
-      const moonResult = calculateMoonSignAndNakshatra(dob);
-      const richNakshatra = getNakshatra(moonResult.nakshatraNumber);
-      const richNakshatraEssence = getNakshatraEssence(moonResult.nakshatraNumber);
-      const richMoonEssence = getMoonSignEssence(moonResult.moonSign);
-      const rashiEntry = getRashi(vedicRashi?.name) || getRashi(vedicRashi?.english);
-      const richRashiEssence = getRashiEssence(vedicRashi?.name) || getRashiEssence(vedicRashi?.english);
-      const nums = calculateAllNameNumbers(recipientName || '');
-      const exprMeaning = NAME_NUMBER_MEANINGS[nums.expression];
-      const soulUrgeEntry = getSoulUrge(nums.soulUrge);
-      const personalityEntry = getPersonality(nums.personality);
-      const czd = getChineseZodiacDescription(chineseZodiac?.animal);
-      const topCompatibility = getTopCompatibleSigns(westernZodiac?.name ?? '');
-      const pyc = getPersonalYearContent(personalYear2026 ?? 1);
-
-      const htmlData = {
-        recipientName,
-        dob,
-        ageYears: age ?? 0,
-        daysLived: daysSinceBirth ?? 0,
-        birthDayOfWeek: dayOfWeekBorn ?? '',
-        nextBirthdayMonth: dob.toLocaleString('en-US', { month: 'long' }),
-        nextBirthdayDay: dob.getDate(),
-
-        celebrities: mergedCelebrities.slice(0, 12).map(c => ({
-          name: c.name ?? '',
-          birthYear: c.birthYear ?? c.born ?? '',
-          deceased: c.deceased ?? false,
-          nationality: c.nationality ?? '',
-          bio: c.bio ?? c.description ?? '',
-          tier: c.tier ?? '',
-        })),
-
-        westernZodiac: {
-          name: westernZodiac?.name ?? '',
-          glyph: westernZodiac?.unicode ?? ZODIAC_GLYPHS[westernZodiac?.name ?? ''] ?? '',
-          dateRange: westernZodiac?.dateRange ?? '',
-          element: westernZodiac?.element ?? '',
-          modality: westernZodiac?.modality ?? '',
-          rulingPlanet: westernZodiac?.rulingPlanet ?? '',
-          description: westernZodiac?.fullDescription ?? westernZodiac?.description ?? '',
-          strengths: westernZodiac?.strengths ?? [],
-          growthAreas: westernZodiac?.challenges ?? [],
-          famousList: (westernZodiac?.famousPeople ?? []).map((f: any) => f.name ?? f).join(' · '),
-          compatibility: topCompatibility.slice(0, 3).map(({ sign, score, reason }: { sign: string; score: number; reason: string }) => ({
-            sign,
-            glyph: ZODIAC_GLYPHS[sign] ?? '',
-            pct: score,
-            reason,
-          })),
-        },
-
-        chineseZodiac: {
-          animal: chineseZodiac?.animal ?? '',
-          emoji: chineseZodiac?.emoji ?? '',
-          year: chineseZodiac?.year ?? dob.getFullYear(),
-          element: chineseZodiac?.element ?? '',
-          polarity: chineseZodiac?.yin_yang ?? '',
-          cycleYears: czd?.years ?? '',
-          description: czd?.fullDescription ?? chineseZodiac?.description ?? '',
-          strengths: czd?.strengths ?? chineseZodiac?.traits ?? [],
-          growthAreas: czd?.challenges ?? [],
-          loveAndRelationships: czd?.loveStyle ?? '',
-          mostCompatible: czd?.compatibility?.best?.join(' · ') ?? '',
-          challengingMatch: czd?.compatibility?.avoid?.join(' · ') ?? '',
-          careerPaths: (czd?.careerPaths ?? chineseZodiac?.careerPaths ?? []).join(' · '),
-          famousList: (czd?.famousPeople ?? chineseZodiac?.famous ?? []).map((p: any) => p.name ?? p).join(' · '),
-          quote: czd?.lifeAdvice ?? '',
-        },
-
-        vedicRashi: {
-          name: vedicRashi?.name ?? '',
-          english: vedicRashi?.english ?? '',
-          glyph: vedicRashi?.symbol ?? '',
-          rulingPlanet: vedicRashi?.ruling_planet ?? '',
-          element: vedicRashi?.element ?? '',
-          symbol: vedicRashi?.symbol ?? '',
-          paragraphs: (richRashiEssence ?? '').split('\n\n').filter(Boolean),
-          westernVsVedicNote: '',
-          coreTraits: vedicRashi?.traits ?? [],
-          career: rashiEntry?.career ?? '',
-          relationships: rashiEntry?.relationships ?? '',
-          spiritual: rashiEntry?.spiritual ?? '',
-          colors: (rashiEntry?.favorableColors ?? []).join(', '),
-          numbers: (rashiEntry?.favorableNumbers ?? []).join(', '),
-          gemstone: rashiEntry?.gemstone ?? '',
-        },
-
-        moonSign: {
-          name: moonResult.moonSign ?? '',
-          glyph: ZODIAC_GLYPHS[moonResult.moonSign ?? ''] ?? '🌙',
-          element: '',
-          rulingPlanet: '',
-          explainer: MOON_SIGN_EXPLAINER.whatIsIt,
-          paragraphs: (richMoonEssence ?? '').split('\n\n').filter(Boolean),
-        },
-
-        nakshatra: {
-          number: moonResult.nakshatraNumber ?? 1,
-          name: richNakshatra?.name ?? moonResult.nakshatra ?? '',
-          meaning: richNakshatra?.meaning ?? '',
-          deity: richNakshatra?.deity ?? '',
-          paragraphs: (richNakshatraEssence ?? '').split('\n\n').filter(Boolean),
-          shakti: richNakshatra?.shakti ?? '',
-          ruler: richNakshatra?.ruler ?? '',
-          gemstone: richNakshatra?.gemstone ?? '',
-          career: richNakshatra?.career ?? '',
-          relationships: richNakshatra?.relationships ?? '',
-          spiritual: richNakshatra?.spiritual ?? '',
-        },
-
-        lifePath: {
-          number: Number(lifePathNumber ?? 1),
-          title: lpData?.archetype ?? '',
-          keywords: (lpData?.keywords ?? []).join(' · '),
-          personality: lpData?.personality ?? '',
-          strengths: lpData?.strengths ?? [],
-          growthAreas: lpData?.growthAreas ?? [],
-        },
-
-        personalYear: {
-          number: personalYear2026 ?? 1,
-          year: 2026,
-          title: personalYearMeaning?.title ?? '',
-          description: pyc.theme,
-          love: pyc.love,
-          career: pyc.career,
-          health: pyc.health,
-          keyMonths: pyc.keyMonths,
-          quote: pyc.closing,
-        },
-
-        nameNumerology: {
-          expression: {
-            number: nums.expression,
-            title: exprMeaning?.archetype ?? String(nums.expression),
-            description: exprMeaning?.personality ?? '',
-          },
-          soulUrge: {
-            number: nums.soulUrge,
-            title: soulUrgeEntry?.title ?? String(nums.soulUrge),
-            description: soulUrgeEntry?.text ?? '',
-          },
-          personality: {
-            number: nums.personality,
-            title: personalityEntry?.title ?? String(nums.personality),
-            description: personalityEntry?.text ?? '',
-          },
-          gematriaExplainer: SECTION_EXPLAINERS.gematria,
-        },
-      };
-
-      const html = buildBirthdayBlueprintHtml(htmlData);
-      const iframe = document.createElement('iframe');
-      iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:210mm;height:297mm;border:none;visibility:hidden;';
-      document.body.appendChild(iframe);
-      const doc = iframe.contentDocument;
-      if (!doc) { handlePrintLegacy(); return; }
-      doc.open();
-      doc.write(html);
-      doc.close();
-      setTimeout(() => {
-        try {
-          iframe.contentWindow?.focus();
-          iframe.contentWindow?.print();
-        } catch {
-          handlePrintLegacy();
-        }
-        setTimeout(() => document.body.removeChild(iframe), 3000);
-      }, 600);
-    } catch {
-      handlePrintLegacy();
-    }
-  };
-
   const handleCopy = () => {
     navigator.clipboard.writeText(reportUrl).then(() => {
       setCopied(true);
@@ -664,7 +479,7 @@ const ReportView = () => {
               {copied ? '✓ Copied' : '🔗 Copy Link'}
             </button>
             <button
-              onClick={handlePrint}
+              onClick={handleDownloadReport}
               className="px-3 py-1.5 text-sm bg-rose-500 hover:bg-rose-600 text-white rounded-lg font-medium transition-colors"
             >
               ⬇ Download PDF
@@ -1990,7 +1805,7 @@ const ReportView = () => {
             {copied ? '✓ Copied!' : '🔗 Copy Link'}
           </button>
           <button
-            onClick={handlePrint}
+            onClick={handleDownloadReport}
             className="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white font-medium rounded-xl text-sm transition-colors"
           >
             ⬇ Download PDF
