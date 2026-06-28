@@ -402,7 +402,7 @@ const ReportView = () => {
           year: chineseZodiac?.year ?? dob.getFullYear(),
           element: chineseZodiac?.element ?? '',
           polarity: chineseZodiac?.yin_yang ?? '',
-          cycleYears: czd?.years?.join(', ') ?? '',
+          cycleYears: czd?.years ?? '',
           description: czd?.fullDescription ?? chineseZodiac?.description ?? '',
           strengths: czd?.strengths ?? chineseZodiac?.traits ?? [],
           growthAreas: czd?.challenges ?? [],
