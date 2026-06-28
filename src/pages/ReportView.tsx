@@ -280,7 +280,6 @@ const ReportView = () => {
         line-height: 1.5;
         font-variant-ligatures: none;
         font-feature-settings: "liga" 0, "clig" 0;
-        font-variant-emoji: text;
       }
       .zodiac-tab-panel {
         display: block !important;
@@ -438,7 +437,7 @@ const ReportView = () => {
           .bb-num { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-feature-settings:"tnum" 1, "liga" 0, "calt" 0; letter-spacing:-.01em; }
           @media print {
             .no-print { display: none !important; }
-            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-variant-emoji: text; font-variant-ligatures: none; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-variant-ligatures: none; }
             .print-expand { max-height: none !important; overflow: visible !important; }
             .dark-section { background: var(--dark) !important; color-scheme: dark; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .report-section { page-break-inside: avoid; }
@@ -683,7 +682,7 @@ const ReportView = () => {
                 onClick={() => setActiveZodiacTab(card.tab)}
                 className={`bg-white rounded-xl p-3 shadow-sm text-center w-full transition-all ${activeZodiacTab === card.tab ? 'shadow-md' : 'hover:shadow-md'}`} style={activeZodiacTab === card.tab ? { outline: '2px solid #B8862F', outlineOffset: '0px' } : undefined}
               >
-                <div className="text-2xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{card.icon}</div>
+                <div className="text-2xl mb-1">{card.icon}</div>
                 <div className="text-xs text-gray-400 font-medium uppercase tracking-wide leading-tight">{card.label}</div>
                 <div className="font-black text-gray-900 text-base">{card.value}</div>
                 <div className="text-xs text-gray-500">{card.sub}</div>
@@ -700,7 +699,7 @@ const ReportView = () => {
               {westernZodiac ? (
                 <>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-5xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{westernZodiac.unicode}</span>
+                    <span className="text-5xl">{westernZodiac.unicode}</span>
                     <div>
                       <h3 className="font-black text-2xl text-gray-900">{westernZodiac.name}</h3>
                       <p className="text-sm text-gray-400">{westernZodiac.dateRange}</p>
@@ -764,7 +763,7 @@ const ReportView = () => {
                               className="rounded-xl p-3 text-center transition-colors no-print-link" style={{ border: '1px solid var(--hairline)', background: 'var(--panel)' }}
                               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--gold-soft)'; (e.currentTarget as HTMLElement).style.background = 'var(--gold-tint)'; }}
                               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'; (e.currentTarget as HTMLElement).style.background = 'var(--panel)'; }}>
-                              <div className="text-2xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>
+                              <div className="text-2xl mb-1">
                                 {{'Aries':'♈︎','Taurus':'♉︎','Gemini':'♊︎','Cancer':'♋︎','Leo':'♌︎','Virgo':'♍︎','Libra':'♎︎','Scorpio':'♏︎','Sagittarius':'♐︎','Capricorn':'♑︎','Aquarius':'♒︎','Pisces':'♓︎'}[sign] || '★'}
                               </div>
                               <div className="font-bold text-sm" style={{ color: 'var(--navy)' }}>{sign}</div>
@@ -877,7 +876,7 @@ const ReportView = () => {
                 <>
                   <div style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-5xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{vedicRashi.symbol}</span>
+                    <span className="text-5xl">{vedicRashi.symbol}</span>
                     <div>
                       <h3 className="font-black text-2xl text-gray-900">{vedicRashi.name}</h3>
                       <p className="text-sm text-gray-400">{vedicRashi.english} · Ruled by {vedicRashi.ruling_planet}</p>
@@ -1002,7 +1001,7 @@ const ReportView = () => {
                 {/* Moon sign identity */}
                 <div className="rounded-2xl p-5 mb-4" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
                   <div className="flex items-center gap-4 mb-3">
-                    <div className="text-4xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{moonResult.moonSignData.symbol}</div>
+                    <div className="text-4xl">{moonResult.moonSignData.symbol}</div>
                     <div>
                       <p className="font-black text-xl" style={{ color: 'var(--navy)' }}>{moonResult.moonSign} Moon</p>
                       <p className="text-xs" style={{ color: 'var(--ink-soft)' }}>{moonResult.moonSignData.element} · Ruled by {moonResult.moonSignData.rulingPlanet}</p>
@@ -1023,7 +1022,7 @@ const ReportView = () => {
                 <div className="rounded-2xl p-5 mb-4" style={{ background: 'var(--gold-tint)', border: '1px solid var(--gold-soft)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
                   <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--gold)' }}>Birth Nakshatra #{moonResult.nakshatraNumber}</div>
                   <div className="flex items-center gap-4 mb-3">
-                    <div className="text-4xl" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>{richNakshatra.symbol}</div>
+                    <div className="text-4xl">{richNakshatra.symbol}</div>
                     <div>
                       <p className="font-black text-xl" style={{ color: 'var(--navy)' }}>{richNakshatra.name}</p>
                       <p className="text-xs" style={{ color: 'var(--ink-soft)' }}>{richNakshatra.meaning} · {richNakshatra.deity}</p>
