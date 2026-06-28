@@ -268,17 +268,12 @@ const ReportView = () => {
     documentTitle: `Birthday Report — BornClock`,
     pageStyle: `
       @page {
-        margin: 1.5cm;
+        margin: 0;
         size: A4;
-        @top-left    { content: ""; }
-        @top-center  { content: ""; }
-        @top-right   { content: ""; }
-        @bottom-left { content: ""; }
-        @bottom-center { content: "BornClock · bornclock.com"; font-size: 9px; color: #9ca3af; font-family: system-ui, sans-serif; }
-        @bottom-right  { content: counter(page); font-size: 9px; color: #9ca3af; font-family: system-ui, sans-serif; }
       }
       body {
         margin: 0;
+        padding: 1.5cm;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         font-size: 12px;
