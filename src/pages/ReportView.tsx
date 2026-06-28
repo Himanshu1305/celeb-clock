@@ -276,8 +276,7 @@ const ReportView = () => {
       body {
         margin: 0;
         padding: 1.5cm;
-        padding-top: calc(1.5cm + 36px);
-        padding-bottom: calc(1.5cm + 28px);
+        padding-bottom: calc(1.5cm + 52px);
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         font-size: 12px;
@@ -291,28 +290,16 @@ const ReportView = () => {
         overflow: visible !important;
       }
       .report-running-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 36px;
         display: flex !important;
         align-items: center;
         justify-content: space-between;
-        padding: 0 1.5cm;
         border-bottom: 1px solid var(--hairline);
+        padding: 9px 0;
+        margin-bottom: 14px;
         font-size: 9px;
         letter-spacing: .16em;
         text-transform: uppercase;
         color: var(--muted);
-        background: #fff;
-        z-index: 100;
-      }
-      .report-cover-section {
-        margin-top: -36px;
-        padding-top: 36px;
-        position: relative;
-        z-index: 200;
         background: white;
       }
       .report-print-footer {
@@ -546,20 +533,10 @@ const ReportView = () => {
         </div>
       </div>
 
-      {/* ── Print running header — repeats on every printed page ─────────── */}
-      <div className="print-only report-running-header">
-        <span style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-          <img src="/bornclock-logo.png" alt="" style={{ height: '13px', width: 'auto', objectFit: 'contain', display: 'inline-block', verticalAlign: 'middle' }}
-            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-          BornClock Birthday Blueprint
-        </span>
-        <span style={{ fontWeight: 700 }}>{recipientName}</span>
-      </div>
-
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 1 — COVER HERO                                            */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="report-cover-section report-section bg-white px-4 pt-10 pb-8" style={{ borderBottom: '2px solid var(--navy)' }}>
+      <div className="report-section bg-white px-4 pt-10 pb-8" style={{ borderBottom: '2px solid var(--navy)' }}>
         <div className="max-w-3xl mx-auto">
           {/* Top lockup row */}
           <div className="flex items-center justify-between mb-5">
@@ -622,6 +599,16 @@ const ReportView = () => {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* ── Print running header — appears from page 2 onward ───────────── */}
+      <div className="print-only report-running-header">
+        <span style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+          <img src="/bornclock-logo.png" alt="" style={{ height: '13px', width: 'auto', objectFit: 'contain', display: 'inline-block', verticalAlign: 'middle' }}
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+          BornClock Birthday Blueprint
+        </span>
+        <span style={{ fontWeight: 700 }}>{recipientName}</span>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════════ */}
