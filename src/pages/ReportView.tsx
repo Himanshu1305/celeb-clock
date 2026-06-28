@@ -580,7 +580,7 @@ const ReportView = () => {
 
           {showIndianFirst && !hasIndianOnDate && (
             <p className="text-xs text-gray-400 italic mb-3 text-center">
-              🌍 Showing global celebrities — no prominent Indian birthdays found for this date
+              Showing global celebrities — no prominent Indian birthdays found for this date
             </p>
           )}
 
@@ -608,7 +608,7 @@ const ReportView = () => {
                   occ.includes('music') || occ.includes('singer') || occ.includes('song') || occ.includes('band') || occ.includes('rapper') ? '🎵' :
                   occ.includes('athlete') || occ.includes('player') || occ.includes('sport') || occ.includes('tennis') || occ.includes('cricket') || occ.includes('football') || occ.includes('basketball') ? '⚽' :
                   occ.includes('politic') || occ.includes('president') || occ.includes('minister') || occ.includes('freedom') ? '🏛️' :
-                  occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') || occ.includes('mathematician') ? '🔬' : '⭐';
+                  occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') || occ.includes('mathematician') ? '🔬' : '★';
                 const catLabel = occ.includes('actor') || occ.includes('actress') || occ.includes('film') || occ.includes('bollywood') ? 'Actor/Director' :
                   occ.includes('music') || occ.includes('singer') || occ.includes('song') || occ.includes('band') || occ.includes('rapper') ? 'Musician' :
                   occ.includes('athlete') || occ.includes('player') || occ.includes('sport') || occ.includes('tennis') || occ.includes('cricket') || occ.includes('football') || occ.includes('basketball') ? 'Athlete' :
@@ -622,7 +622,7 @@ const ReportView = () => {
                       <div className="flex-1 min-w-0">
                         <div className="font-bold text-gray-900 text-sm leading-tight">{c.name}</div>
                         {year ? <div className="text-xs mt-0.5 bb-num" style={{ color: 'var(--muted)' }}>b. {year}{isDeceased ? ' †' : ''}</div> : null}
-                        {c.isIndian && <span className="text-[10px] text-orange-500 font-medium">🇮🇳 Indian</span>}
+                        {c.isIndian && <span className="text-[10px] text-orange-500 font-medium">Indian</span>}
                       </div>
                     </div>
                     <div className="text-xs text-gray-500 mb-2">{c.known_for || c.occupation || (c as any).profession || 'Notable figure'}</div>
@@ -707,7 +707,7 @@ const ReportView = () => {
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-3">
-                    {westernZodiac.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">🔥 {westernZodiac.element}</span>}
+                    {westernZodiac.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">{westernZodiac.element}</span>}
                     {westernZodiac.modality && <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">⚡ {westernZodiac.modality}</span>}
                     {westernZodiac.rulingPlanet && <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: '#F5EAD2', color: '#B8862F' }}>🪐 {westernZodiac.rulingPlanet}</span>}
                   </div>
@@ -765,7 +765,7 @@ const ReportView = () => {
                               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--gold-soft)'; (e.currentTarget as HTMLElement).style.background = 'var(--gold-tint)'; }}
                               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'; (e.currentTarget as HTMLElement).style.background = 'var(--panel)'; }}>
                               <div className="text-2xl mb-1" style={{ fontVariantEmoji: 'text' } as React.CSSProperties}>
-                                {{'Aries':'♈︎','Taurus':'♉︎','Gemini':'♊︎','Cancer':'♋︎','Leo':'♌︎','Virgo':'♍︎','Libra':'♎︎','Scorpio':'♏︎','Sagittarius':'♐︎','Capricorn':'♑︎','Aquarius':'♒︎','Pisces':'♓︎'}[sign] || '⭐'}
+                                {{'Aries':'♈︎','Taurus':'♉︎','Gemini':'♊︎','Cancer':'♋︎','Leo':'♌︎','Virgo':'♍︎','Libra':'♎︎','Scorpio':'♏︎','Sagittarius':'♐︎','Capricorn':'♑︎','Aquarius':'♒︎','Pisces':'♓︎'}[sign] || '★'}
                               </div>
                               <div className="font-bold text-sm" style={{ color: 'var(--navy)' }}>{sign}</div>
                               <div className="text-xs font-semibold bb-num" style={{ color: 'var(--gold)' }}>{score}%</div>
@@ -798,7 +798,7 @@ const ReportView = () => {
                   <div className="flex flex-wrap gap-2 mb-3">
                     {chineseZodiac.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">五行 {chineseZodiac.element}</span>}
                     {chineseZodiac.yin_yang && <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: '#F5EAD2', color: '#B8862F' }}>{chineseZodiac.yin_yang}</span>}
-                    {czd && <span className="px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs font-semibold">🗓 {czd.years}</span>}
+                    {czd && <span className="px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs font-semibold">{czd.years}</span>}
                   </div>
                   <p className="text-gray-700 text-sm leading-relaxed">{czd?.fullDescription ?? chineseZodiac.description}</p>
                   {czd?.personalityDepth && (
@@ -844,7 +844,7 @@ const ReportView = () => {
                   )}
                   {czd?.careerPaths && (
                     <div className="bg-blue-50 rounded-xl p-4">
-                      <div className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-1">💼 Career Paths</div>
+                      <div className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-1">Career Paths</div>
                       <p className="text-sm text-blue-900">{czd.careerPaths.join(' · ')}</p>
                     </div>
                   )}
@@ -884,7 +884,7 @@ const ReportView = () => {
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-3">
-                    {vedicRashi.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">🔥 {vedicRashi.element}</span>}
+                    {vedicRashi.element && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">{vedicRashi.element}</span>}
                     {vedicRashi.ruling_planet && <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: '#F5EAD2', color: '#B8862F' }}>🪐 {vedicRashi.ruling_planet}</span>}
                     {vedicCtx.rashiSanskrit && <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">{'🕉︎'} {vedicCtx.rashiSanskrit} — {vedicCtx.rashiMeaning}</span>}
                   </div>
@@ -1169,7 +1169,7 @@ const ReportView = () => {
                     <p className="text-xs text-gray-700 leading-relaxed">{pyc.love}</p>
                   </div>
                   <div className="bg-white rounded-xl p-4">
-                    <div className="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1">💼 Career &amp; Money</div>
+                    <div className="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1">Career &amp; Money</div>
                     <p className="text-xs text-gray-700 leading-relaxed">{pyc.career}</p>
                   </div>
                   <div className="bg-white rounded-xl p-4">
@@ -1177,7 +1177,7 @@ const ReportView = () => {
                     <p className="text-xs text-gray-700 leading-relaxed">{pyc.health}</p>
                   </div>
                   <div className="bg-white rounded-xl p-4">
-                    <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--navy)' }}>📅 Key Months</div>
+                    <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--navy)' }}>Key Months</div>
                     <ul className="space-y-0.5">
                       {pyc.keyMonths.map((m, i) => (
                         <li key={i} className="text-xs text-gray-700">· {m}</li>
