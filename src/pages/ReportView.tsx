@@ -276,7 +276,8 @@ const ReportView = () => {
       body {
         margin: 0;
         padding: 1.5cm;
-        padding-bottom: calc(1.5cm + 52px);
+        padding-top: 44px;
+        padding-bottom: calc(1.5cm + 88px);
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         font-size: 12px;
@@ -290,17 +291,27 @@ const ReportView = () => {
         overflow: visible !important;
       }
       .report-running-header {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
         display: flex !important;
         align-items: center;
         justify-content: space-between;
         border-bottom: 1px solid var(--hairline);
-        padding: 9px 0;
-        margin-bottom: 14px;
+        padding: 9px 1.5cm;
         font-size: 9px;
         letter-spacing: .16em;
         text-transform: uppercase;
         color: var(--muted);
         background: white;
+      }
+      .report-cover-section {
+        position: relative;
+        z-index: 100;
+        background: white;
+        break-after: page;
       }
       .report-print-footer {
         position: fixed;
@@ -536,7 +547,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 1 — COVER HERO                                            */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="report-section bg-white px-4 pt-10 pb-8" style={{ borderBottom: '2px solid var(--navy)' }}>
+      <div className="report-cover-section report-section bg-white px-4 pt-10 pb-8" style={{ borderBottom: '2px solid var(--navy)' }}>
         <div className="max-w-3xl mx-auto">
           {/* Top lockup row */}
           <div className="flex items-center justify-between mb-5">
