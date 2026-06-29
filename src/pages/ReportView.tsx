@@ -270,12 +270,12 @@ const ReportView = () => {
     documentTitle: `Birthday Report — BornClock`,
     pageStyle: `
       @page {
-        margin: 0;
+        margin: 1.5cm;
         size: A4;
       }
       body {
         margin: 0;
-        padding: 1.5cm;
+        padding: 0;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         font-size: 12px;
