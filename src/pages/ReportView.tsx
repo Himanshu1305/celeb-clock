@@ -276,8 +276,6 @@ const ReportView = () => {
       body {
         margin: 0;
         padding: 1.5cm;
-        padding-top: 44px;
-        padding-bottom: calc(1.5cm + 88px);
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         font-size: 12px;
@@ -290,17 +288,14 @@ const ReportView = () => {
         height: auto !important;
         overflow: visible !important;
       }
+      .report-print-table { width: 100%; border-collapse: collapse; }
+      .report-print-cell  { padding: 0; }
       .report-running-header {
-        position: fixed !important;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 10;
         display: flex !important;
         align-items: center;
         justify-content: space-between;
         border-bottom: 1px solid var(--hairline);
-        padding: 9px 1.5cm;
+        padding: 9px 0;
         font-size: 9px;
         letter-spacing: .16em;
         text-transform: uppercase;
@@ -308,27 +303,18 @@ const ReportView = () => {
         background: white;
       }
       .report-cover-section {
-        position: relative;
-        z-index: 100;
-        background: white;
         break-after: page;
       }
       .report-print-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 28px;
         display: flex !important;
         align-items: center;
         justify-content: center;
-        padding: 0 1.5cm;
+        padding: 8px 0;
         border-top: 1px solid var(--hairline);
         font-size: 9px;
         color: var(--muted);
         letter-spacing: 0.3px;
         background: #fff;
-        z-index: 100;
       }
     `,
   });
@@ -612,6 +598,7 @@ const ReportView = () => {
         </div>
       </div>
 
+      <table className="report-print-table"><thead><tr><td className="report-print-cell">
       {/* ── Print running header — appears from page 2 onward ───────────── */}
       <div className="print-only report-running-header">
         <span style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
@@ -621,6 +608,7 @@ const ReportView = () => {
         </span>
         <span style={{ fontWeight: 700 }}>{recipientName}</span>
       </div>
+      </td></tr></thead><tbody><tr><td className="report-print-cell">
 
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 2 — CELEBRITY TWINS + HISTORICAL EVENTS                    */}
@@ -1875,7 +1863,9 @@ const ReportView = () => {
         </div>
       </div>
 
+      </td></tr></tbody><tfoot><tr><td className="report-print-cell">
       <div className="report-print-footer no-screen">BornClock Birthday Blueprint &nbsp;&middot;&nbsp; {recipientName} &nbsp;&middot;&nbsp; bornclock.com</div>
+      </td></tr></tfoot></table>
 
       <div className="no-print">
         <Footer />

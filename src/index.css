@@ -378,6 +378,18 @@
 
 .no-screen { display: none; }
 .print-only { display: none; }
+@media screen {
+  .report-print-table,
+  .report-print-table > thead,
+  .report-print-table > tbody,
+  .report-print-table > tfoot,
+  .report-print-table > thead > tr,
+  .report-print-table > tbody > tr,
+  .report-print-table > tfoot > tr,
+  .report-print-table > thead > tr > td,
+  .report-print-table > tbody > tr > td,
+  .report-print-table > tfoot > tr > td { display: block; }
+}
 @media print {
   .print-only { display: block !important; }
   .screen-only { display: none !important; }
