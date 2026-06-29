@@ -270,7 +270,7 @@ const ReportView = () => {
     documentTitle: `Birthday Report — BornClock`,
     pageStyle: `
       @page {
-        margin: 1.5cm;
+        margin: 0;
         size: A4;
       }
       body {
@@ -289,7 +289,9 @@ const ReportView = () => {
         overflow: visible !important;
       }
       .report-print-table { width: 100%; border-collapse: collapse; }
-      .report-print-cell  { padding: 0; }
+      .report-print-cell          { padding: 0 1.5cm; }
+      thead .report-print-cell    { padding-top: 1.5cm; }
+      tfoot .report-print-cell    { padding-bottom: 1.5cm; }
       .report-running-header {
         display: flex !important;
         align-items: center;
@@ -303,6 +305,7 @@ const ReportView = () => {
         background: white;
       }
       .report-cover-section {
+        padding: 1.5cm;
         break-after: page;
       }
       .report-print-footer {
