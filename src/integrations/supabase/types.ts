@@ -44,6 +44,57 @@ export type Database = {
         }
         Relationships: []
       }
+      birthday_reports: {
+        Row: {
+          country: string | null
+          created_at: string | null
+          expires_at: string
+          gender: string | null
+          gifter_name: string | null
+          id: string
+          is_premium_report: boolean | null
+          personal_message: string | null
+          recipient_dob: string
+          recipient_name: string
+          report_data: Json
+          slug: string
+          user_id: string | null
+          view_count: number | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string | null
+          expires_at: string
+          gender?: string | null
+          gifter_name?: string | null
+          id?: string
+          is_premium_report?: boolean | null
+          personal_message?: string | null
+          recipient_dob: string
+          recipient_name: string
+          report_data?: Json
+          slug: string
+          user_id?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string | null
+          expires_at?: string
+          gender?: string | null
+          gifter_name?: string | null
+          id?: string
+          is_premium_report?: boolean | null
+          personal_message?: string | null
+          recipient_dob?: string
+          recipient_name?: string
+          report_data?: Json
+          slug?: string
+          user_id?: string | null
+          view_count?: number | null
+        }
+        Relationships: []
+      }
       blog_drafts: {
         Row: {
           created_at: string | null
@@ -249,6 +300,7 @@ export type Database = {
           id: string
           last_calculated: string | null
           name: string
+          relationship: string | null
           score_cache: number | null
           user_id: string
         }
@@ -261,6 +313,7 @@ export type Database = {
           id?: string
           last_calculated?: string | null
           name: string
+          relationship?: string | null
           score_cache?: number | null
           user_id: string
         }
@@ -273,6 +326,7 @@ export type Database = {
           id?: string
           last_calculated?: string | null
           name?: string
+          relationship?: string | null
           score_cache?: number | null
           user_id?: string
         }
@@ -374,6 +428,10 @@ export type Database = {
           last_name: string | null
           name: string
           premium_status: boolean
+          premium_until: string | null
+          subscription_id: string | null
+          subscription_plan: string | null
+          subscription_status: string | null
           updated_at: string
           user_id: string
         }
@@ -388,6 +446,10 @@ export type Database = {
           last_name?: string | null
           name: string
           premium_status?: boolean
+          premium_until?: string | null
+          subscription_id?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
           updated_at?: string
           user_id: string
         }
@@ -402,6 +464,10 @@ export type Database = {
           last_name?: string | null
           name?: string
           premium_status?: boolean
+          premium_until?: string | null
+          subscription_id?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
           updated_at?: string
           user_id?: string
         }
