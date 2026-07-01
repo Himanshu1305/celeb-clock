@@ -157,6 +157,11 @@ export const Footer = () => {
           <p>© {new Date().getFullYear()} BornClock. All rights reserved.</p>
           <p>Made with care in India 🇮🇳</p>
         </div>
+        <div className="mt-4 text-center">
+          <p className="text-xs text-muted-foreground">
+            Designed and maintained by <span className="font-medium">USD VISION AI LLP</span>
+          </p>
+        </div>
       </div>
 
       <CookiePreferencesModal

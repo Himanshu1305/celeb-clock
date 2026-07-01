@@ -24,10 +24,6 @@ export async function redeemPromoCode(code: string, userId: string): Promise<Pro
     return { success: false, message: 'Invalid promo code. Please check and try again.' };
   }
 
-  if (!promoData.is_active) {
-    return { success: false, message: 'This promo code is no longer active.' };
-  }
-
   // Check expiry
   if (promoData.expires_at && new Date(promoData.expires_at) < new Date()) {
     return { success: false, message: 'This promo code has expired.' };

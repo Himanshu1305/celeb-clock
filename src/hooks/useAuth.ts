@@ -13,10 +13,10 @@ interface Profile {
   email: string;
   country?: string;
   premium_status: boolean;
+  premium_until?: string | null;
   email_notifications: boolean;
   blog_subscription?: boolean;
   created_at?: string;
-  promo_premium_until?: string | null;
 }
 
 export const useAuth = () => {
@@ -217,8 +217,8 @@ export const useAuth = () => {
     ? calculateTrialStatus(accountCreatedAt)
     : { isInTrial: false, trialDaysRemaining: 0 };
 
-  const promoPremiumUntil = profile?.promo_premium_until
-    ? new Date(profile.promo_premium_until)
+  const promoPremiumUntil = profile?.premium_until
+    ? new Date(profile.premium_until)
     : null;
 
   const isPromoActive = promoPremiumUntil
