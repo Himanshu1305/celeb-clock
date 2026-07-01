@@ -16,7 +16,6 @@ interface Profile {
   email_notifications: boolean;
   blog_subscription?: boolean;
   created_at?: string;
-  promo_premium_until?: string | null;
 }
 
 export const useAuth = () => {

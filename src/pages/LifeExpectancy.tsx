@@ -479,7 +479,7 @@ const LifeExpectancy = () => {
           <section className="max-w-3xl mx-auto mb-10 mt-8">
             <LongevityCoachChat
               result={longevityResult}
-              userName={profile?.full_name}
+              userName={profile?.first_name || profile?.name}
               isPremium={isPremium}
             />
           </section>
