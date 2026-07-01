@@ -13,6 +13,7 @@ interface Profile {
   email: string;
   country?: string;
   premium_status: boolean;
+  premium_until?: string | null;
   email_notifications: boolean;
   blog_subscription?: boolean;
   created_at?: string;
