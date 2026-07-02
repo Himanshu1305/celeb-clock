@@ -308,6 +308,10 @@ const ReportView = () => {
       .report-cover-section {
         padding: 1.5cm !important;
         break-after: page;
+        display: flex;
+        flex-direction: column;
+        min-height: 297mm;
+        box-sizing: border-box;
       }
       .report-print-footer {
         display: flex !important;
@@ -597,6 +601,32 @@ const ReportView = () => {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Decorative cover fill — gold rules + tagline in lower portion of A4 page */}
+        <div style={{
+          marginTop: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '18px',
+          width: '100%',
+          paddingBottom: '1cm',
+        }}>
+          <div style={{ width: '38%', height: '1px', backgroundColor: 'var(--gold)', opacity: 0.6 }} />
+          <p style={{
+            fontStyle: 'italic',
+            fontSize: '13px',
+            color: 'var(--muted)',
+            textAlign: 'center',
+            margin: 0,
+            lineHeight: 1.6,
+            maxWidth: '340px',
+            letterSpacing: '0.01em',
+          }}>
+            Every detail of the moment you arrived tells a story.
+          </p>
+          <div style={{ width: '38%', height: '1px', backgroundColor: 'var(--gold)', opacity: 0.6 }} />
         </div>
       </div>
 
