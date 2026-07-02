@@ -304,8 +304,9 @@ const ReportView = () => {
         color: var(--muted);
         background: white;
       }
+      thead .report-print-cell .report-running-header { display: flex !important; }
       .report-cover-section {
-        padding: 1.5cm;
+        padding: 1.5cm !important;
         break-after: page;
       }
       .report-print-footer {
