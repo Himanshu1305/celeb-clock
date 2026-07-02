@@ -91,3 +91,7 @@ android-sdk/
 .emergent/
 .antigravitycli/
 .claude/worktrees/
+
+# Headless PDF verify artifacts (scripts/verify-print.mjs)
+scripts/*.pdf
+.print-verify/
