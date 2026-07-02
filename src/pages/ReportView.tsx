@@ -324,6 +324,8 @@ const ReportView = () => {
         letter-spacing: 0.3px;
         background: #fff;
       }
+      .print-break-before { break-before: page; }
+      .report-section h2, .report-section h3 { break-after: avoid; }
     `,
   });
 
@@ -539,7 +541,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 1 — COVER HERO                                            */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="report-cover-section report-section bg-white px-4 pt-10 pb-8" style={{ borderBottom: '2px solid var(--navy)' }}>
+      <div className="report-cover-section report-section bg-white px-4 pt-10 pb-8">
         <div className="max-w-3xl mx-auto">
           {/* Top lockup row */}
           <div className="flex items-center justify-between mb-5">
@@ -648,7 +650,7 @@ const ReportView = () => {
       <div className="report-section py-12 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <div className="bb-rule"><span className="bb-code">01 · KINDRED</span></div>
+            <div className="bb-rule"><span className="bb-code">01 · TWINS</span></div>
             <div className="bb-eyebrow">Born the Same Day</div>
             <h2 className="bb-h2">Celebrity Birthday Twins</h2>
             <p className="bb-sub">Famous people born on {monthName} {dob.getDate()}, ranked by global recognition</p>
@@ -1153,7 +1155,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 4 — NUMEROLOGY BLUEPRINT                                   */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="report-section py-12 px-4 bg-white">
+      <div className="report-section print-break-before py-12 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
             <div className="bb-rule"><span className="bb-code">03 · NUMBERS</span></div>
@@ -1443,6 +1445,11 @@ const ReportView = () => {
             <div className="bb-eyebrow">Your Birthstone &amp; Flower</div>
             <h2 className="bb-h2">Cosmic Connections</h2>
             <p className="bb-sub">The gem and flower of {monthName}</p>
+          </div>
+
+          {/* Cosmic connections explainer */}
+          <div className="rounded-xl p-4 mb-6 text-xs leading-relaxed" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)', color: 'var(--ink-soft)' }}>
+            <strong style={{ color: 'var(--navy)' }}>What are Cosmic Connections?</strong>{' '}Every culture has associated the moment of birth with particular gems, flowers, and talismans — objects believed to carry the energy of the time you arrived. This section draws from two traditions: the Western birthstone tradition, which ties a gem to your birth month, and Jyotish Ratna Shastra, the Vedic science of planetary gemstones. Together they offer a material connection to the cosmic signature of your birth.
           </div>
 
           {birthstone ? (() => {
@@ -1772,6 +1779,10 @@ const ReportView = () => {
                 <h2 className="bb-h2">Biorhythm</h2>
                 <p className="bb-sub">Physical · Emotional · Intellectual cycles based on {fmt(daysSinceBirth)} days since birth</p>
               </div>
+              {/* Science note — shown before the cycle data */}
+              <div className="rounded-xl p-4 mb-4 text-xs leading-relaxed" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)', color: 'var(--ink-soft)' }}>
+                <strong style={{ color: 'var(--navy)' }}>A note on the science: </strong>the three-cycle biorhythm model dates from the early 20th century, and controlled research has not found it predictive at statistically significant levels. Treat what follows as a rhythm-awareness practice — a daily prompt to check in with your physical, emotional, and mental state — rather than a prediction. The question "what does my body actually need today?" is worth asking regardless of what the chart says.
+              </div>
               {/* Per-cycle definitions */}
               <div className="rounded-xl p-4 text-xs leading-relaxed mb-4" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)' }}>
                 <p className="font-bold mb-2" style={{ color: 'var(--navy)' }}>The Three Cycles</p>
@@ -1832,11 +1843,6 @@ const ReportView = () => {
                   : '🧠 Intellectual energy is in transition — double-check important mental work today.'
                 }
               </div>
-              {/* Honesty note */}
-              <div className="rounded-xl p-4 mb-4 text-xs leading-relaxed" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)', color: 'var(--ink-soft)' }}>
-                <strong style={{ color: 'var(--navy)' }}>A note on biorhythm science: </strong>{SECTION_EXPLAINERS.biorhythmHonesty}
-              </div>
-
               <div className="text-center no-print">
                 <Link to="/biorhythm" className="text-xs text-teal-500 hover:text-teal-700 underline">
                   See 30-day biorhythm chart →
