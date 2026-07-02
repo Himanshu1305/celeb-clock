@@ -93,7 +93,8 @@ const PAGE_STYLE = `
     border-bottom: 1px solid #D7E1EA; padding: 9px 0; font-size: 9px;
     letter-spacing: .16em; text-transform: uppercase; color: #8A9BA8; background: white;
   }
-  .report-cover-section { padding: 1.5cm; break-after: page; }
+  .report-cover-section { padding: 1.5cm !important; break-after: page; display: flex; flex-direction: column; min-height: 297mm; box-sizing: border-box; }
+  thead .report-print-cell .report-running-header { display: flex !important; }
   .report-print-footer {
     display: flex !important; align-items: center; justify-content: center;
     padding: 8px 0; border-top: 1px solid #D7E1EA; font-size: 9px;
