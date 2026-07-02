@@ -483,10 +483,8 @@ const ReportView = () => {
             body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-variant-ligatures: none; }
             .print-expand { max-height: none !important; overflow: visible !important; }
             .dark-section { background: var(--dark) !important; color-scheme: dark; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .report-section { page-break-inside: avoid; }
             h2, h3 { page-break-after: avoid; }
             .dark-section { page-break-inside: avoid; }
-            #birthday-report-print > div { page-break-inside: avoid; }
           }
         `}</style>
       </Helmet>
@@ -1049,7 +1047,7 @@ const ReportView = () => {
                 </div>
 
                 {/* Moon sign identity */}
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)' }}>
                   <div className="flex items-center gap-4 mb-3">
                     <div className="text-4xl">{moonResult.moonSignData.symbol}</div>
                     <div>
@@ -1069,7 +1067,7 @@ const ReportView = () => {
                 </div>
 
                 {/* Nakshatra identity */}
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'var(--gold-tint)', border: '1px solid var(--gold-soft)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'var(--gold-tint)', border: '1px solid var(--gold-soft)' }}>
                   <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--gold)' }}>Birth Nakshatra #{moonResult.nakshatraNumber}</div>
                   <div className="flex items-center gap-4 mb-3">
                     <div className="text-4xl">{richNakshatra.symbol}</div>
@@ -1201,7 +1199,7 @@ const ReportView = () => {
           {personalYear2026 && (() => {
             const pyc = getPersonalYearContent(personalYear2026);
             return (
-              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 space-y-4" style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 space-y-4">
                 <div className="flex items-center gap-4 pb-2 border-b border-amber-200">
                   <div className="w-14 h-14 rounded-2xl bg-amber-500 flex items-center justify-center text-3xl font-black text-white flex-shrink-0">
                     {personalYear2026}
@@ -1282,7 +1280,7 @@ const ReportView = () => {
 
               {/* Expression meaning */}
               {exprMeaning && (
-                <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
                   <p className="text-xs font-bold mb-1" style={{ color: 'var(--navy)' }}>Expression {nums.expression} — {exprMeaning.title}</p>
                   <p className="text-sm" style={{ color: 'var(--ink-soft)' }}>{exprMeaning.expression}</p>
                 </div>
@@ -1290,7 +1288,7 @@ const ReportView = () => {
 
               {/* Soul Urge meaning */}
               {soulUrgeEntry && (
-                <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
                   <p className="text-xs font-bold mb-2" style={{ color: 'var(--navy)' }}>Soul Urge {nums.soulUrge} — {soulUrgeEntry.title}</p>
                   {soulUrgeEntry.text.split('\n\n').map((para, i) => (
                     <p key={i} className="text-sm leading-relaxed mb-2" style={{ color: 'var(--ink-soft)' }}>{para}</p>
@@ -1300,7 +1298,7 @@ const ReportView = () => {
 
               {/* Personality meaning */}
               {personalityEntry && (
-                <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
                   <p className="text-xs font-bold mb-2" style={{ color: 'var(--navy)' }}>Personality {nums.personality} — {personalityEntry.title}</p>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--ink-soft)' }}>{personalityEntry.text}</p>
                 </div>
@@ -1697,7 +1695,7 @@ const ReportView = () => {
 
                     {/* Famous members */}
                     {gc.famousMembers.length > 0 && (
-                      <div className="rounded-xl p-5 pb-10" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                      <div className="rounded-xl p-5 pb-10" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
                         <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--muted)' }}>Famous Members of {generation.name}</div>
                         <div className="flex flex-wrap gap-2">
                           {gc.famousMembers.map(name => (
