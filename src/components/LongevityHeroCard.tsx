@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Download, Copy, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { LongevityResult } from '@/services/LongevityCalculationService';
 
 interface LongevityHeroCardProps {
@@ -9,33 +7,15 @@ interface LongevityHeroCardProps {
   optimizedForecast: number | null;
   userName: string;
   isPremium?: boolean;
-  onDownloadBlueprint?: () => void;
 }
 
-export function LongevityHeroCard({ result, optimizedForecast, userName, isPremium = false, onDownloadBlueprint }: LongevityHeroCardProps) {
-  const [copied, setCopied] = useState(false);
-
+export function LongevityHeroCard({ result, optimizedForecast, userName }: LongevityHeroCardProps) {
   const displayedOptimized = optimizedForecast ?? result.totalForecast;
   const currentRemaining = Math.max(0, Math.round((result.totalForecast - result.currentAge) * 10) / 10);
   const optimizedRemaining = Math.max(0, Math.round((result.controllablePotential - result.currentAge) * 10) / 10);
   const gain = Math.round((displayedOptimized - result.totalForecast) * 10) / 10;
   const displayName = userName?.trim() || 'You';
   const country = result.quizSnapshot.country ?? 'Global';
-
-  const handleCopySummary = () => {
-    const lines: string[] = [
-      'My Longevity Forecast (via BornClock):',
-      `- Current Lifestyle: ${result.totalForecast} years (${currentRemaining} yrs remaining)`,
-      `- With Optimized Habits: ${displayedOptimized} years (${optimizedRemaining} yrs remaining)`,
-      ...(gain > 0 ? [`- Potential Gain: +${gain} years`] : []),
-      `- Current Age: ${result.currentAge} | Country: ${country}`,
-      '- Powered by UN WHO life tables',
-    ];
-    navigator.clipboard.writeText(lines.join('\n')).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
 
   return (
     <div className="bg-gradient-to-r from-blue-50/70 to-teal-50/70 border border-blue-100 dark:border-blue-900/40 dark:from-blue-950/20 dark:to-teal-950/20 rounded-2xl p-6 space-y-5 mb-6">
@@ -91,40 +71,6 @@ export function LongevityHeroCard({ result, optimizedForecast, userName, isPremi
         )}
       </div>
 
-      {/* Buttons — premium only */}
-      {isPremium ? (
-        <>
-          <div className="flex items-center justify-center gap-3 pt-1 flex-wrap">
-            <Button
-              size="sm"
-              variant="outline"
-              className="gap-2 bg-white/80 dark:bg-background/80"
-              onClick={() => onDownloadBlueprint?.()}
-            >
-              <Download className="w-3.5 h-3.5" />
-              Export Longevity Blueprint
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              className="gap-2 bg-white/80 dark:bg-background/80"
-              onClick={handleCopySummary}
-            >
-              {copied ? '✅ Copied!' : <><Copy className="w-3.5 h-3.5" /> Copy Summary</>}
-            </Button>
-          </div>
-          <p className="text-[10px] text-muted-foreground/60 text-center mt-1">
-            💡 In print dialog: set Headers &amp; Footers to OFF for a clean PDF without page URLs
-          </p>
-        </>
-      ) : (
-        <div className="text-center pt-1">
-          <p className="text-xs text-muted-foreground/70">
-            🔒 Export Longevity Blueprint and Copy Summary are premium features.{' '}
-            <a href="/upgrade" className="text-primary underline font-semibold">Upgrade →</a>
-          </p>
-        </div>
-      )}
     </div>
   );
 }

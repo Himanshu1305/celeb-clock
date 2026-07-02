@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import {
   ArrowRight, Heart, TrendingUp, Shield, Activity,
   CalendarIcon, ShieldCheck, AlertTriangle, RefreshCw, Sparkles,
+  Download, Copy,
 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
@@ -80,6 +81,7 @@ const LifeExpectancy = () => {
   const [rawDateInput, setRawDateInput] = useState('');
   const [userCount, setUserCount] = useState('2,400+');
   const [sharedResult, setSharedResult] = useState<{ forecast: number; age: number; remaining: number } | null>(null);
+  const [summaryCopied, setSummaryCopied] = useState(false);
 
   useEffect(() => {
     supabase
@@ -159,6 +161,28 @@ const LifeExpectancy = () => {
   const resultRef    = useRef<HTMLDivElement>(null);
   const simulatorRef = useRef<HTMLDivElement>(null);
   const reportRef    = useRef<HTMLDivElement>(null);
+
+  const handleCopyLongevitySummary = () => {
+    if (!longevityResult) return;
+    const displayed = optimizedForecast ?? longevityResult.totalForecast;
+    const curRem = Math.max(0, Math.round((longevityResult.totalForecast - longevityResult.currentAge) * 10) / 10);
+    const optRem = Math.max(0, Math.round((longevityResult.controllablePotential - longevityResult.currentAge) * 10) / 10);
+    const gain = Math.round((displayed - longevityResult.totalForecast) * 10) / 10;
+    const country = longevityResult.quizSnapshot.country ?? 'Global';
+    const lines = [
+      'My Longevity Forecast (via BornClock):',
+      `- Current Lifestyle: ${longevityResult.totalForecast} years (${curRem} yrs remaining)`,
+      `- With Optimized Habits: ${displayed} years (${optRem} yrs remaining)`,
+      ...(gain > 0 ? [`- Potential Gain: +${gain} years`] : []),
+      `- Current Age: ${longevityResult.currentAge} | Country: ${country}`,
+      '- Powered by UN WHO life tables',
+    ];
+    navigator.clipboard.writeText(lines.join('\n')).then(() => {
+      setSummaryCopied(true);
+      setTimeout(() => setSummaryCopied(false), 2000);
+    });
+  };
+
   const handleDownloadBlueprint = (personName?: string) => {
     if (!isPremium) {
       navigate('/upgrade');
@@ -185,6 +209,7 @@ const LifeExpectancy = () => {
     const geneticDesc = longevityResult.geneticVitalityLabel || '';
     const geneticCeiling = Math.round(Number(longevityResult.familyBaselineAge || 0) + 5);
     const generatedDate = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+    const formattedDob = quiz?.dob ? new Date(quiz.dob + 'T12:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 
     // Score band
     const scoreBand = score >= 80
@@ -789,6 +814,7 @@ const LifeExpectancy = () => {
       <div style="font-size:28px;font-weight:500;color:var(--ink-soft);">years</div>
     </div>
     <div style="font-size:15px;font-weight:600;color:var(--ink);margin-top:12px;">${name}</div>
+    ${formattedDob ? `<div style="font-size:12px;color:var(--muted);margin-top:4px;">Date of Birth: ${formattedDob}</div>` : ''}
   </div>
 
   <div style="display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--hairline);border-radius:8px;overflow:hidden;margin-bottom:24px;">
@@ -1841,8 +1867,6 @@ const LifeExpectancy = () => {
               result={longevityResult}
               optimizedForecast={optimizedForecast}
               userName={displayName}
-              isPremium={isPremium}
-              onDownloadBlueprint={() => handleDownloadBlueprint()}
             />
             <ReportErrorBoundary onReset={() => setPhase('result')}>
               <EnhancedLifeExpectancyReport
@@ -1857,6 +1881,29 @@ const LifeExpectancy = () => {
                 onDownloadBlueprint={() => handleDownloadBlueprint()}
               />
             </ReportErrorBoundary>
+            <div className="no-print flex flex-col items-center gap-3 pt-6 pb-2">
+              {isPremium ? (
+                <>
+                  <div className="flex items-center justify-center gap-3 flex-wrap">
+                    <Button size="sm" variant="outline" className="gap-2" onClick={() => handleDownloadBlueprint()}>
+                      <Download className="w-3.5 h-3.5" />
+                      Export Longevity Blueprint
+                    </Button>
+                    <Button size="sm" variant="outline" className="gap-2" onClick={handleCopyLongevitySummary}>
+                      {summaryCopied ? '✅ Copied!' : <><Copy className="w-3.5 h-3.5" /> Copy Summary</>}
+                    </Button>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground/60 text-center">
+                    💡 In print dialog: set Headers &amp; Footers to OFF for a clean PDF without page URLs
+                  </p>
+                </>
+              ) : (
+                <p className="text-xs text-muted-foreground/70 text-center">
+                  🔒 Export Longevity Blueprint and Copy Summary are premium features.{' '}
+                  <a href="/upgrade" className="text-primary underline font-semibold">Upgrade →</a>
+                </p>
+              )}
+            </div>
           </section>
         )}
 
