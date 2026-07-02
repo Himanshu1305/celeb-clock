@@ -1,13 +1,4970 @@
 -- Indian celebrity migration for celebrity_sitelinks
--- Generated 2026-07-02T15:27:32.574Z from src/data/indianCelebrities.ts
+-- Generated 2026-07-02T15:48:26.063Z from src/data/indianCelebrities.ts
 -- 598 entries
+-- Strategy: UPDATE pre-existing Wikidata rows; INSERT fallback for name-spelling mismatches
+-- Diagnostic confirmed: all 598 TS entries pre-exist; expect ~598 UPDATEs, ~0 INSERTs
 
 -- Step 1: Add new columns (idempotent)
 ALTER TABLE celebrity_sitelinks
   ADD COLUMN IF NOT EXISTS known_for TEXT,
   ADD COLUMN IF NOT EXISTS tier TEXT;
 
--- Step 2: Insert Indian celebrities (skip existing by name + birth_month_day)
+-- Step 2: UPDATE existing rows — enrich nationality, occupation, known_for, tier
+-- occupation uses COALESCE to preserve any existing Wikidata value
+-- death_date uses COALESCE to preserve any existing Wikidata date
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'Father of the Nation, leader of Indian independence movement through nonviolent civil disobedience',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1948-01-01')
+WHERE lower(name) = lower('Mahatma Gandhi')
+  AND birth_month_day = '10-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'First Prime Minister of India, architect of modern India, Children''s Day celebrated on his birthday',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1964-01-01')
+WHERE lower(name) = lower('Jawaharlal Nehru')
+  AND birth_month_day = '11-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'Netaji — leader of Indian National Army, "Give me blood and I will give you freedom"',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1945-01-01')
+WHERE lower(name) = lower('Subhas Chandra Bose')
+  AND birth_month_day = '01-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Social Reformer'),
+  known_for        = 'Father of Indian Constitution, champion of Dalit rights, jurist and economist',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1956-01-01')
+WHERE lower(name) = lower('Bhimrao Ambedkar')
+  AND birth_month_day = '04-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Poet'),
+  known_for        = 'Nobel Prize in Literature 1913, wrote Jana Gana Mana, Gitanjali, Rabindra Sangeet',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1941-01-01')
+WHERE lower(name) = lower('Rabindranath Tagore')
+  AND birth_month_day = '05-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Philosopher'),
+  known_for        = 'Vedanta philosopher, introduced Hinduism to the West at Chicago Parliament of Religions 1893',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1902-01-01')
+WHERE lower(name) = lower('Swami Vivekananda')
+  AND birth_month_day = '01-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = '"Swaraj is my birthright" — first leader of Indian independence movement',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1920-01-01')
+WHERE lower(name) = lower('Bal Gangadhar Tilak')
+  AND birth_month_day = '07-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'Revolutionary freedom fighter, martyred at age 23, symbol of Indian resistance',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1931-01-01')
+WHERE lower(name) = lower('Bhagat Singh')
+  AND birth_month_day = '09-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Iron Man of India, unified 562 princely states into Indian Union, first Home Minister',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1950-01-01')
+WHERE lower(name) = lower('Sardar Vallabhbhai Patel')
+  AND birth_month_day = '10-31';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Mathematician'),
+  known_for        = 'Ancient mathematician and astronomer, discovered zero and decimal system, calculated pi',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '550-01-01')
+WHERE lower(name) = lower('Aryabhata')
+  AND birth_month_day = '04-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Philosopher'),
+  known_for        = 'Ancient Indian philosopher, economist, teacher of Chandragupta Maurya, wrote Arthashastra',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '283-01-01')
+WHERE lower(name) = lower('Chanakya')
+  AND birth_month_day = '01-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'Youngest President of Indian National Congress, first Education Minister of India',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1958-01-01')
+WHERE lower(name) = lower('Maulana Abul Kalam Azad')
+  AND birth_month_day = '11-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'Political mentor of Gandhi, social reformer, founder of Servants of India Society',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1915-01-01')
+WHERE lower(name) = lower('Gopal Krishna Gokhale')
+  AND birth_month_day = '05-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'Lion of Punjab, led protest against Simon Commission, died from police lathi charge',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1928-01-01')
+WHERE lower(name) = lower('Lala Lajpat Rai')
+  AND birth_month_day = '01-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'One of the Lal Bal Pal trio, champion of Swaraj and Swadeshi movements',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1932-01-01')
+WHERE lower(name) = lower('Bipin Chandra Pal')
+  AND birth_month_day = '11-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'First woman President of Indian National Congress, theosophist, Home Rule League founder',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1933-01-01')
+WHERE lower(name) = lower('Annie Besant')
+  AND birth_month_day = '10-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'Nightingale of India, poet, first woman President of Indian National Congress',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1949-01-01')
+WHERE lower(name) = lower('Sarojini Naidu')
+  AND birth_month_day = '02-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'Revolutionary freedom fighter, vowed never to be captured alive, died free',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1931-01-01')
+WHERE lower(name) = lower('Chandra Shekhar Azad')
+  AND birth_month_day = '07-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'Revolutionary poet and freedom fighter, Kakori conspiracy, "Sarfaroshi ki tamanna"',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1927-01-01')
+WHERE lower(name) = lower('Ram Prasad Bismil')
+  AND birth_month_day = '06-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'Revolutionary freedom fighter, Kakori conspiracy, close friend of Ram Prasad Bismil',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1927-01-01')
+WHERE lower(name) = lower('Ashfaqulla Khan')
+  AND birth_month_day = '10-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Social Reformer'),
+  known_for        = 'Bhoodan movement, Gandhi''s spiritual heir, first Individual Satyagrahi',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1982-01-01')
+WHERE lower(name) = lower('Vinoba Bhave')
+  AND birth_month_day = '09-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Poet'),
+  known_for        = 'Tamil poet and freedom fighter, Mahakavi Bharati, champion of women''s rights',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1921-01-01')
+WHERE lower(name) = lower('Subramania Bharati')
+  AND birth_month_day = '12-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'Wrote Vande Mataram, Anandamath, father of Bengali novel',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1894-01-01')
+WHERE lower(name) = lower('Bankim Chandra Chattopadhyay')
+  AND birth_month_day = '06-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Social Reformer'),
+  known_for        = 'Champion of widow remarriage, women''s education, Bengali Renaissance figure',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1891-01-01')
+WHERE lower(name) = lower('Ishwar Chandra Vidyasagar')
+  AND birth_month_day = '09-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Social Reformer'),
+  known_for        = 'Father of Bengal Renaissance, abolished sati, founded Brahmo Samaj',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1833-01-01')
+WHERE lower(name) = lower('Ram Mohan Roy')
+  AND birth_month_day = '05-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Philosopher'),
+  known_for        = 'Founded Arya Samaj, championed Vedic Hinduism, "Back to the Vedas"',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1883-01-01')
+WHERE lower(name) = lower('Dayananda Saraswati')
+  AND birth_month_day = '02-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'Founder of Sikhism, first of the ten Sikh Gurus, "Ik Onkar"',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1539-01-01')
+WHERE lower(name) = lower('Guru Nanak Dev')
+  AND birth_month_day = '04-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Poet'),
+  known_for        = 'Medieval poet-saint and devotee of Krishna, her bhajans remain central to Hindu devotion',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1547-01-01')
+WHERE lower(name) = lower('Mirabai')
+  AND birth_month_day = '01-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Poet'),
+  known_for        = 'Mystic poet and saint whose verses appear in Guru Granth Sahib and Adi Granth',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1518-01-01')
+WHERE lower(name) = lower('Kabir Das')
+  AND birth_month_day = '06-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Poet'),
+  known_for        = 'Author of Ramcharitmanas, Hanuman Chalisa — most widely read Hindi literature',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1623-01-01')
+WHERE lower(name) = lower('Tulsidas')
+  AND birth_month_day = '08-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'Founder of ISKCON (Hare Krishna movement), brought Bhagavad Gita and Vaishnavism to the West',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1977-01-01')
+WHERE lower(name) = lower('Srila Prabhupada')
+  AND birth_month_day = '09-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'Sage of Arunachala, self-enquiry ("Who am I?") meditation, one of the greatest modern sages',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1950-01-01')
+WHERE lower(name) = lower('Ramana Maharshi')
+  AND birth_month_day = '12-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Philosopher'),
+  known_for        = 'Freedom fighter turned philosopher and yogi, Integral Yoga, The Life Divine',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1950-01-01')
+WHERE lower(name) = lower('Sri Aurobindo')
+  AND birth_month_day = '08-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'Autobiography of a Yogi, introduced Kriya Yoga to the West, Self-Realization Fellowship',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1952-01-01')
+WHERE lower(name) = lower('Paramahansa Yogananda')
+  AND birth_month_day = '01-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Philosopher'),
+  known_for        = 'Controversial spiritual teacher, neo-sannyas movement, 650+ books, global following',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1990-01-01')
+WHERE lower(name) = lower('Osho Rajneesh')
+  AND birth_month_day = '12-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Philosopher'),
+  known_for        = 'Independent philosopher, rejected all organised religion and gurus, The First and Last Freedom',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1986-01-01')
+WHERE lower(name) = lower('J. Krishnamurti')
+  AND birth_month_day = '05-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'Mystic and yogi, guru of Swami Vivekananda, "All religions lead to the same God"',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1886-01-01')
+WHERE lower(name) = lower('Ramakrishna Paramahamsa')
+  AND birth_month_day = '02-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'Founded Divine Life Society, prolific author of 200+ books on yoga and Vedanta',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1963-01-01')
+WHERE lower(name) = lower('Swami Sivananda')
+  AND birth_month_day = '09-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'Revered saint worshipped by both Hindus and Muslims, "Sabka Malik Ek"',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1918-01-01')
+WHERE lower(name) = lower('Sai Baba of Shirdi')
+  AND birth_month_day = '09-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'Founder of Transcendental Meditation, taught The Beatles, global meditation movement',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2008-01-01')
+WHERE lower(name) = lower('Maharishi Mahesh Yogi')
+  AND birth_month_day = '01-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'Founder of Isha Foundation, yogi and author, Save Soil movement, global spiritual teacher',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Sadhguru Jaggi Vasudev')
+  AND birth_month_day = '09-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'Founder of Art of Living Foundation, Sudarshan Kriya, global peace ambassador',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Sri Sri Ravi Shankar')
+  AND birth_month_day = '05-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'Yoga guru, founder of Patanjali Ayurved, popularised pranayama across India',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Baba Ramdev')
+  AND birth_month_day = '12-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Spiritual Leader'),
+  known_for        = 'The Hugging Saint, Amma, humanitarian and spiritual leader, embraced over 37 million people',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Mata Amritanandamayi')
+  AND birth_month_day = '09-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Philosopher'),
+  known_for        = 'Second President of India, philosopher of Hindu religion, Teachers'' Day celebrated on his birthday',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1975-01-01')
+WHERE lower(name) = lower('Sarvepalli Radhakrishnan')
+  AND birth_month_day = '09-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Scientist'),
+  known_for        = 'Missile Man of India, 11th President of India, PSLV and Agni missile programs',
+  tier             = 'public_figure',
+  death_date       = COALESCE(death_date, '2015-01-01')
+WHERE lower(name) = lower('APJ Abdul Kalam')
+  AND birth_month_day = '10-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Scientist'),
+  known_for        = 'Nobel Prize in Physics 1930 for Raman Effect, National Science Day on his discovery date',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1970-01-01')
+WHERE lower(name) = lower('CV Raman')
+  AND birth_month_day = '11-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Mathematician'),
+  known_for        = 'Self-taught mathematical genius, infinite series, mock theta functions, Hardy-Ramanujan number 1729',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1920-01-01')
+WHERE lower(name) = lower('Srinivasa Ramanujan')
+  AND birth_month_day = '12-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Scientist'),
+  known_for        = 'Father of Indian nuclear programme, founded TIFR and BARC',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1966-01-01')
+WHERE lower(name) = lower('Homi Bhabha')
+  AND birth_month_day = '10-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Scientist'),
+  known_for        = 'Father of Indian space programme, founded ISRO, established IIM Ahmedabad',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1971-01-01')
+WHERE lower(name) = lower('Vikram Sarabhai')
+  AND birth_month_day = '08-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Scientist'),
+  known_for        = 'Bose-Einstein statistics, Bose-Einstein condensate, Bosons named after him',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1974-01-01')
+WHERE lower(name) = lower('Satyen Bose')
+  AND birth_month_day = '01-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Scientist'),
+  known_for        = 'Saha ionization equation, astrophysics pioneer, planned India''s river valley projects',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1956-01-01')
+WHERE lower(name) = lower('Meghnad Saha')
+  AND birth_month_day = '10-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Scientist'),
+  known_for        = 'Nobel Prize in Physics 1983, Chandrasekhar limit for white dwarf stars',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1995-01-01')
+WHERE lower(name) = lower('Subrahmanyan Chandrasekhar')
+  AND birth_month_day = '10-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Economist'),
+  known_for        = 'Nobel Prize in Economics 1998, welfare economics, capability approach, Development as Freedom',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Amartya Sen')
+  AND birth_month_day = '11-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Scientist'),
+  known_for        = 'Nobel Prize in Chemistry 2009 for ribosome structure, President of Royal Society',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Venkatraman Ramakrishnan')
+  AND birth_month_day = '04-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'First and only female Prime Minister of India, "Iron Lady of India", Green Revolution',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1984-01-01')
+WHERE lower(name) = lower('Indira Gandhi')
+  AND birth_month_day = '11-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Youngest Prime Minister of India, computer and telecom revolution in India',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1991-01-01')
+WHERE lower(name) = lower('Rajiv Gandhi')
+  AND birth_month_day = '08-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Prime Minister of India, Pokhran nuclear tests, Lahore bus diplomacy, poet-politician',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2018-01-01')
+WHERE lower(name) = lower('Atal Bihari Vajpayee')
+  AND birth_month_day = '12-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Current Prime Minister of India, Digital India, Make in India, Swachh Bharat',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Narendra Modi')
+  AND birth_month_day = '09-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Indian National Congress leader, Member of Parliament, Bharat Jodo Yatra',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Rahul Gandhi')
+  AND birth_month_day = '06-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Prime Minister of India 2004-2014, architect of 1991 economic liberalisation as Finance Minister',
+  tier             = 'public_figure',
+  death_date       = COALESCE(death_date, '2024-01-01')
+WHERE lower(name) = lower('Manmohan Singh')
+  AND birth_month_day = '09-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = '13th President of India, longest-serving Finance Minister, Bharat Ratna 2019',
+  tier             = 'public_figure',
+  death_date       = COALESCE(death_date, '2020-01-01')
+WHERE lower(name) = lower('Pranab Mukherjee')
+  AND birth_month_day = '12-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Second Prime Minister of India, "Jai Jawan Jai Kisan", led India in 1965 war with Pakistan',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1966-01-01')
+WHERE lower(name) = lower('Lal Bahadur Shastri')
+  AND birth_month_day = '10-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'President of Indian National Congress, longest-serving Congress President, Italian-born Indian leader',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Sonia Gandhi')
+  AND birth_month_day = '12-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Chief Minister of Delhi, founder of Aam Aadmi Party, anti-corruption movement',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Arvind Kejriwal')
+  AND birth_month_day = '08-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Chief Minister of West Bengal, founder of Trinamool Congress, Didi',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Mamata Banerjee')
+  AND birth_month_day = '01-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Four-time Chief Minister of Uttar Pradesh, Bahujan Samaj Party, Dalit rights champion',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Mayawati')
+  AND birth_month_day = '01-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Veteran politician, BCCI President, founder of Nationalist Congress Party',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Sharad Pawar')
+  AND birth_month_day = '12-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Shahenshah of Bollywood, over 200 films, Deewar, Sholay, KBC host, Padma Vibhushan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Amitabh Bachchan')
+  AND birth_month_day = '10-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'King of Bollywood, DDLJ, Dilwale, My Name is Khan, global Indian cinema ambassador',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shah Rukh Khan')
+  AND birth_month_day = '11-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Dabangg, Tiger franchise, Bajrangi Bhaijaan, Being Human, highest-paid Bollywood actor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Salman Khan')
+  AND birth_month_day = '12-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Mr. Perfectionist, Lagaan, 3 Idiots, Dangal, PK, Taare Zameen Par, Satyamev Jayate host',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Aamir Khan')
+  AND birth_month_day = '03-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Kaho Na Pyaar Hai, Koi Mil Gaya, Dhoom 2, Jodha Akbar, War, Greek God of Bollywood',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Hrithik Roshan')
+  AND birth_month_day = '01-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Rockstar, Barfi, Sanju, Brahmastra, Animal, one of Bollywood''s most versatile actors',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ranbir Kapoor')
+  AND birth_month_day = '09-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Goliyon Ki Raasleela Ram-Leela, Bajirao Mastani, Padmaavat, Gully Boy, 83',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ranveer Singh')
+  AND birth_month_day = '07-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Khiladi, Toilet Ek Prem Katha, Padman, Mission Mangal, most prolific Bollywood star',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Akshay Kumar')
+  AND birth_month_day = '09-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Phool Aur Kaante, Singham, Tanhaji, Drishyam, Gangajal, one of India''s top action stars',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ajay Devgn')
+  AND birth_month_day = '04-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Vivah, Kaminey, Haider, Udta Punjab, Kabir Singh, Jab We Met',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shahid Kapoor')
+  AND birth_month_day = '02-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'The Lunchbox, Piku, Hindi Medium, Slumdog Millionaire, Life of Pi, Jurassic World',
+  tier             = 'entertainment',
+  death_date       = COALESCE(death_date, '2020-01-01')
+WHERE lower(name) = lower('Irrfan Khan')
+  AND birth_month_day = '01-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Gangs of Wasseypur, The Lunchbox, Badlapur, Sacred Games, Serious Men',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Nawazuddin Siddiqui')
+  AND birth_month_day = '05-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Kai Po Che, Shahid, Bareilly Ki Barfi, Newton, Stree, The White Tiger',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rajkummar Rao')
+  AND birth_month_day = '08-31';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Mirzapur, Sacred Games, Stree, Fukrey, Gunjan Saxena, one of India''s finest character actors',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Pankaj Tripathi')
+  AND birth_month_day = '09-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'First superstar of Bollywood, Anand, Aradhana, Kati Patang, 15 consecutive solo hits',
+  tier             = 'entertainment',
+  death_date       = COALESCE(death_date, '2012-01-01')
+WHERE lower(name) = lower('Rajesh Khanna')
+  AND birth_month_day = '12-29';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Tragedy King of Bollywood, Devdas, Mughal-e-Azam, Naya Daur, Bharat Ratna 2015',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2021-01-01')
+WHERE lower(name) = lower('Dilip Kumar')
+  AND birth_month_day = '12-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Evergreen hero of Bollywood, Guide, Jewel Thief, Hare Rama Hare Krishna',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2011-01-01')
+WHERE lower(name) = lower('Dev Anand')
+  AND birth_month_day = '09-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Showman of Bollywood, Awaara, Shree 420, Bobby, directed and produced classics of Indian cinema',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1988-01-01')
+WHERE lower(name) = lower('Raj Kapoor')
+  AND birth_month_day = '12-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'He-Man of Bollywood, Sholay, Phool Aur Patthar, Seeta Aur Geeta, Chupke Chupke',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Dharmendra')
+  AND birth_month_day = '12-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Gadar, Border, Damini, Ghayal, Barsaat, action hero of 1980s-90s Bollywood',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sunny Deol')
+  AND birth_month_day = '10-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Om Shanti Om, Cocktail, Piku, Bajirao Mastani, Padmaavat, global brand ambassador',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Deepika Padukone')
+  AND birth_month_day = '01-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Miss World 2000, Barfi, Mary Kom, Quantico (ABC), global superstar',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Priyanka Chopra')
+  AND birth_month_day = '07-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Miss World 1994, Hum Dil De Chuke Sanam, Devdas, Jodhaa Akbar, Cannes regular',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Aishwarya Rai Bachchan')
+  AND birth_month_day = '11-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Kabhi Khushi Kabhie Gham, Jab We Met, 3 Idiots, Heroine, Laal Singh Chaddha',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kareena Kapoor Khan')
+  AND birth_month_day = '09-21';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Namastey London, Mere Brother Ki Dulhan, Tiger franchise, Zero, Phone Bhoot',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Katrina Kaif')
+  AND birth_month_day = '07-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Highway, Udta Punjab, Raazi, Gully Boy, Gangubai Kathiawadi, RRR, Heart of Stone',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Alia Bhatt')
+  AND birth_month_day = '03-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Dhak Dhak girl, Tezaab, Dil To Pagal Hai, Devdas, Hum Aapke Hain Koun, dancing queen',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Madhuri Dixit')
+  AND birth_month_day = '05-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'DDLJ, Kuch Kuch Hota Hai, Kabhi Khushi Kabhie Gham, My Name is Khan, Dilwale',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kajol')
+  AND birth_month_day = '08-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Umrao Jaan, Silsila, Khubsoorat, Khoon Bhari Maang, eternal beauty of Bollywood',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rekha')
+  AND birth_month_day = '10-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Sadma, Nagina, Mr. India, ChaalBaaz, English Vinglish, Mom, first female superstar of India',
+  tier             = 'entertainment',
+  death_date       = COALESCE(death_date, '2018-01-01')
+WHERE lower(name) = lower('Sridevi')
+  AND birth_month_day = '08-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Queen, Tanu Weds Manu, Manikarnika, Thalaivii, most decorated female actor at Filmfare',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kangana Ranaut')
+  AND birth_month_day = '03-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Pink, Badla, Thappad, Haseen Dillruba, Shabaash Mithu, Dunki',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Taapsee Pannu')
+  AND birth_month_day = '08-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Parineeta, The Dirty Picture, Kahaani, Tumhari Sulu, Mission Mangal, Shakuntala Devi',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vidya Balan')
+  AND birth_month_day = '01-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Superstar of Indian cinema, Baasha, Muthu, Sivaji, Enthiran, Kabali, global cult following',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rajinikanth')
+  AND birth_month_day = '12-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Nayakan, Pushpak, Indian, Anbe Sivam, Hey Ram, Vishwaroopam, India''s most versatile actor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kamal Haasan')
+  AND birth_month_day = '11-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Thalapathy, Mersal, Bigil, Master, Beast, Varisu, highest-grossing Tamil star',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vijay')
+  AND birth_month_day = '06-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Thala, Mankatha, Vedalam, Viswasam, Valimai, Tamil cinema superstar',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ajith Kumar')
+  AND birth_month_day = '05-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Stylish Star, Arya, Desamuduru, Pushpa franchise, first Telugu actor to win National Award',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Allu Arjun')
+  AND birth_month_day = '04-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Darling, Baahubali franchise, Saaho, Radhe Shyam, Adipurush, Kalki 2898-AD',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Prabhas')
+  AND birth_month_day = '10-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Young Tiger, RRR, Janatha Garage, Aravinda Sametha, Telugu cinema icon',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Jr NTR')
+  AND birth_month_day = '05-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Mega Power Star, Magadheera, Rangasthalam, RRR, RC 15, son of Chiranjeevi',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ram Charan')
+  AND birth_month_day = '03-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Complete Actor of Malayalam cinema, Kireedam, Bharatham, Drishyam, Lucifer',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mohanlal')
+  AND birth_month_day = '05-21';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Megastar of Malayalam cinema, Oru CBI Diary Kurippu, Mathilukal, The Great Father',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mammootty')
+  AND birth_month_day = '09-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Magadheera, Baadshah, Singham, Mr. Perfect, leading actress in Telugu and Tamil cinema',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kajal Aggarwal')
+  AND birth_month_day = '06-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = '96, Ghilli, Varsham, Nuvvostanante Nenoddantana, leading Tamil and Telugu actress',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Trisha Krishnan')
+  AND birth_month_day = '05-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Lady Superstar, Junglee Pictures, Chandramukhi, Ghajini, Atlee films, Jawan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Nayanthara')
+  AND birth_month_day = '11-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Baahubali franchise, RRR, Magadheera, India''s most successful director globally',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('SS Rajamouli')
+  AND birth_month_day = '10-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'God of Cricket, 100 international centuries, 34,357 international runs, Bharat Ratna 2014',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sachin Tendulkar')
+  AND birth_month_day = '04-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Captain Cool, won 2007 T20 WC, 2010 Asia Cup, 2011 ODI WC, 2013 Champions Trophy, CSK captain',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('MS Dhoni')
+  AND birth_month_day = '07-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Run machine, 80+ international centuries, fastest to 8000/9000/10000 ODI runs, King Kohli',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Virat Kohli')
+  AND birth_month_day = '11-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Hitman, three ODI double centuries, T20 World Cup 2024 winner and captain, Hitman',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rohit Sharma')
+  AND birth_month_day = '04-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Haryana Hurricane, led India to 1983 World Cup victory, 434 Test wickets, all-rounder',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kapil Dev')
+  AND birth_month_day = '01-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Little Master, first batsman to score 10,000 Test runs, 34 Test centuries, opening legend',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sunil Gavaskar')
+  AND birth_month_day = '07-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Dada, Prince of Kolkata, transformed Indian cricket culture, BCCI President',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sourav Ganguly')
+  AND birth_month_day = '07-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'The Wall, 13,288 Test runs, technical masterclass, Head Coach of Indian cricket team',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rahul Dravid')
+  AND birth_month_day = '01-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Jumbo, 619 Test wickets, took all 10 Pakistan wickets in one innings, leg-spinner great',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Anil Kumble')
+  AND birth_month_day = '10-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Very Very Special, 281 against Australia Kolkata 2001, one of cricket''s greatest innings',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('VVS Laxman')
+  AND birth_month_day = '11-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Six sixes in an over, Player of Tournament 2011 World Cup, cancer survivor comeback',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Yuvraj Singh')
+  AND birth_month_day = '12-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Turbanator, hat-trick in Test cricket vs Australia 2001, 417 Test wickets',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Harbhajan Singh')
+  AND birth_month_day = '07-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'World''s best fast bowler, unique action, death-over specialist, T20 World Cup 2024 winner',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Jasprit Bumrah')
+  AND birth_month_day = '12-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'New generation batting star, future captain material, elegant right-hand batsman',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shubman Gill')
+  AND birth_month_day = '09-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Sir Jadeja, world''s best fielder, left-arm spinner and lower-order batsman, Test all-rounder',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ravindra Jadeja')
+  AND birth_month_day = '12-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'ICC Women''s Cricketer of Year 2018, leading Indian women''s cricket batting star',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Smriti Mandhana')
+  AND birth_month_day = '07-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Greatest female cricketer India, 7,805 ODI runs, led India to World Cup final 2017',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mithali Raj')
+  AND birth_month_day = '12-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Nightingale of India, 30,000+ songs in 36 languages over 7 decades, Bharat Ratna 2001',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2022-01-01')
+WHERE lower(name) = lower('Lata Mangeshkar')
+  AND birth_month_day = '09-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Versatile playback singer, actor, filmmaker, most popular male voice of Hindi cinema',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1987-01-01')
+WHERE lower(name) = lower('Kishore Kumar')
+  AND birth_month_day = '08-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'One of greatest playback singers in history, versatile range, 26,000+ songs',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1980-01-01')
+WHERE lower(name) = lower('Mohammed Rafi')
+  AND birth_month_day = '12-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Soulful playback singer, voice of Raj Kapoor, Kabhi Kabhi, Mera Joota Hai Japani',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1976-01-01')
+WHERE lower(name) = lower('Mukesh')
+  AND birth_month_day = '07-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Sister of Lata Mangeshkar, widest vocal range, world record for most studio recordings',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Asha Bhosle')
+  AND birth_month_day = '09-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Mozart of Madras, Roja, Dil Se, Lagaan, Slumdog Millionaire Oscar winner, Grammy winner',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('AR Rahman')
+  AND birth_month_day = '01-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Musician'),
+  known_for        = 'Sitar maestro, collaborated with George Harrison, brought Indian classical music to the world',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2012-01-01')
+WHERE lower(name) = lower('Ravi Shankar')
+  AND birth_month_day = '04-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Musician'),
+  known_for        = 'Tabla maestro, Grammy winner, Shakti, global ambassador of Indian classical percussion',
+  tier             = 'entertainment',
+  death_date       = COALESCE(death_date, '2024-01-01')
+WHERE lower(name) = lower('Zakir Hussain')
+  AND birth_month_day = '03-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Most streamed Indian artist globally, Tum Hi Ho, Channa Mereya, Kesariya, Ae Dil Hai Mushkil',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Arijit Singh')
+  AND birth_month_day = '04-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Classic Bollywood playback singer, Kal Ho Naa Ho, Abhi Mujh Mein Kahin, Sandese Aate Hain',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sonu Nigam')
+  AND birth_month_day = '07-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'King of Sad Songs, 1990s Bollywood playback voice, Dil Deewana, Ek Ladki Ko Dekha',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kumar Sanu')
+  AND birth_month_day = '10-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'India''s rock and pop pioneer, Darling, Hare Rama Hare Krishna, six-decade career',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Usha Uthup')
+  AND birth_month_day = '11-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Chairman of Tata Group, Tata Nano, acquired Jaguar Land Rover, philanthropist, national icon',
+  tier             = 'public_figure',
+  death_date       = COALESCE(death_date, '2024-01-01')
+WHERE lower(name) = lower('Ratan Tata')
+  AND birth_month_day = '12-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Asia''s richest person, Reliance Industries, Jio telecom revolution, Antilia',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Mukesh Ambani')
+  AND birth_month_day = '04-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founded Reliance Industries, rags-to-riches story, democratised equity investment in India',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2002-01-01')
+WHERE lower(name) = lower('Dhirubhai Ambani')
+  AND birth_month_day = '12-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Co-founder of Infosys, pioneer of Indian IT industry, $250 initial investment to $100B company',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Narayana Murthy')
+  AND birth_month_day = '08-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Wipro Chairman, Czar of Indian IT, donated $21 billion to philanthropy',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Azim Premji')
+  AND birth_month_day = '07-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'CEO of Google and Alphabet, from Tamil Nadu to Silicon Valley, IIT Kharagpur alumnus',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Sundar Pichai')
+  AND birth_month_day = '07-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'CEO of Microsoft, transformed Microsoft into cloud-first company, Azure dominance',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Satya Nadella')
+  AND birth_month_day = '08-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Former CEO of PepsiCo, Fortune most powerful women, IIM Calcutta alumna',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Indra Nooyi')
+  AND birth_month_day = '10-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Chairman of Aditya Birla Group, one of India''s largest conglomerates',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Kumar Mangalam Birla')
+  AND birth_month_day = '06-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Olympic silver (Rio 2016) and bronze (Tokyo 2020) in badminton, World Champion 2019',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('PV Sindhu')
+  AND birth_month_day = '07-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'First Indian to reach world badminton No.1, Olympic bronze 2012 London, six World Superseries',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Saina Nehwal')
+  AND birth_month_day = '03-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Olympic gold Tokyo 2020 in javelin, first Indian to win Olympic gold in track and field',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Neeraj Chopra')
+  AND birth_month_day = '12-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Magnificent Mary, six-time World Boxing Champion, Olympic bronze 2012, Padma Vibhushan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mary Kom')
+  AND birth_month_day = '11-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Flying Sikh, Indian sprinting legend, national record holder, 1960 Rome Olympics finalist',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2021-01-01')
+WHERE lower(name) = lower('Milkha Singh')
+  AND birth_month_day = '11-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Payyoli Express, Queen of Indian track and field, missed 1984 Olympics medal by 1/100th second',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('PT Usha')
+  AND birth_month_day = '06-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'First Indian to win individual Olympic gold (Beijing 2008), 10m air rifle, Padma Bhushan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Abhinav Bindra')
+  AND birth_month_day = '09-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Five-time World Chess Champion, first Asian to win World Chess Championship 2000',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vishwanathan Anand')
+  AND birth_month_day = '12-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Olympic bronze 1996 Atlanta, 18 Grand Slam doubles titles, India''s greatest tennis player',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Leander Paes')
+  AND birth_month_day = '06-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'The God of Small Things (Booker Prize 1997), activist, The Ministry of Utmost Happiness',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Arundhati Roy')
+  AND birth_month_day = '11-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'Five Point Someone, 2 States, Half Girlfriend, 3 Mistakes of My Life, IIT IIM alumnus',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Chetan Bhagat')
+  AND birth_month_day = '04-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'A Suitable Boy, An Equal Music, The Golden Gate, one of India''s greatest living novelists',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Vikram Seth')
+  AND birth_month_day = '06-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'The Room on the Roof, A Flight of Pigeons, Vagrants in the Valley, beloved British-Indian author',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Ruskin Bond')
+  AND birth_month_day = '05-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'Malgudi Days, The Guide, Swami and Friends, Indian English literature pioneer',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2001-01-01')
+WHERE lower(name) = lower('RK Narayan')
+  AND birth_month_day = '10-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'Godaan, Nirmala, Gaban, Shatranj ke Khilari, greatest Hindi-Urdu fiction writer',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1936-01-01')
+WHERE lower(name) = lower('Munshi Premchand')
+  AND birth_month_day = '07-31';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Pather Panchali, Apu trilogy, Academy Honorary Award, greatest Indian filmmaker',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1992-01-01')
+WHERE lower(name) = lower('Satyajit Ray')
+  AND birth_month_day = '05-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Pyaasa, Kaagaz Ke Phool, Sahib Bibi Aur Ghulam, auteur of poetic Hindi cinema',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1964-01-01')
+WHERE lower(name) = lower('Guru Dutt')
+  AND birth_month_day = '07-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'King of Romance, Deewar, Silsila, Chandni, DDLJ producer, Filmfare Lifetime Achievement',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2012-01-01')
+WHERE lower(name) = lower('Yash Chopra')
+  AND birth_month_day = '09-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Kuch Kuch Hota Hai, Kabhi Khushi Kabhie Gham, My Name is Khan, Ae Dil Hai Mushkil',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Karan Johar')
+  AND birth_month_day = '05-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Hum Dil De Chuke Sanam, Devdas, Bajirao Mastani, Padmaavat, Gangubai Kathiawadi',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sanjay Leela Bhansali')
+  AND birth_month_day = '02-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Roja, Bombay, Dil Se, Guru, Raavan, Ponniyin Selvan, greatest Tamil filmmaker',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mani Ratnam')
+  AND birth_month_day = '06-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Mother India (1957), Barsaat, Awara, first Indian actress to win a national award internationally',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1981-01-01')
+WHERE lower(name) = lower('Nargis')
+  AND birth_month_day = '01-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Co-founder of Infosys, architect of Aadhaar biometric identity system, Imagining India',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Nandan Nilekani')
+  AND birth_month_day = '01-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Dabangg franchise, Rowdy Rathore, Lootera, Akira, daughter of Shatrughan Sinha',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sonakshi Sinha')
+  AND birth_month_day = '01-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Maestro of Tamil film music, 1000+ film scores, Ilaignan, How to Name It',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ilayaraja')
+  AND birth_month_day = '01-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Five-time Chief Minister of Tamil Nadu, founder of DMK, screenwriter-turned-politician',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2018-01-01')
+WHERE lower(name) = lower('M. Karunanidhi')
+  AND birth_month_day = '01-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'SPB, legendary South Indian playback singer, Guinness record holder, 40,000+ songs',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2020-01-01')
+WHERE lower(name) = lower('S.P. Balasubrahmanyam')
+  AND birth_month_day = '01-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Chairman of Reliance Group, younger brother of Mukesh Ambani',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Anil Ambani')
+  AND birth_month_day = '01-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Sujata, Seema, Bandini, Milan, Saraswatichandra, five-time Filmfare Best Actress winner',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1991-01-01')
+WHERE lower(name) = lower('Nutan')
+  AND birth_month_day = '01-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Mouna Ragam, Thevar Magan, Minsaara Kanavu, National Award winning Tamil actress-director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Revathi')
+  AND birth_month_day = '01-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Mother India, Mujhe Jeene Do, Padosan, politician, husband of Nargis, father of Sanjay Dutt',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2005-01-01')
+WHERE lower(name) = lower('Sunil Dutt')
+  AND birth_month_day = '01-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Raaz, Dhoom 2, Race, No Entry, Alone, fitness icon',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Bipasha Basu')
+  AND birth_month_day = '01-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Producer'),
+  known_for        = 'Balaji Telefilms, queen of Indian television, Kyunki Saas Bhi Kabhi Bahu Thi, Kasautii',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ekta Kapoor')
+  AND birth_month_day = '01-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Indian tennis doubles specialist, Grand Slam champion, Davis Cup hero',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mahesh Bhupathi')
+  AND birth_month_day = '01-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Bobby, Ram Lakhan, Dil Chahta Hai, Tenet, iconic Bollywood actress',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Dimple Kapadia')
+  AND birth_month_day = '01-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Baazigar, Dhadkan, Big Brother UK winner, Yoga ambassador, fitness icon',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shilpa Shetty')
+  AND birth_month_day = '01-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'KGF Chapter 1 and 2, Rocky Bhai, biggest Kannada cinema star globally',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Yash')
+  AND birth_month_day = '01-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Dhing Express, first Indian to win gold at World U20 Athletics Championship 2018',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Hima Das')
+  AND birth_month_day = '01-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Dil Chahta Hai director, Rock On, Bhaag Milkha Bhaag, Toofaan, Jee Le Zaraa',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Farhan Akhtar')
+  AND birth_month_day = '01-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'First woman IPS officer in India, social activist, Rajya Sabha member, tennis player',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Kiran Bedi')
+  AND birth_month_day = '01-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Saawariya, Neerja, Veere Di Wedding, fashion icon, daughter of Anil Kapoor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sonam Kapoor')
+  AND birth_month_day = '01-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Kaho Na Pyaar Hai, Gadar, Humraaz, Bhool Bhulaiyaa',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Amisha Patel')
+  AND birth_month_day = '01-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Nandamuri Balakrishna, Telugu superstar, son of NT Rama Rao, 100+ films',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Balakrishna')
+  AND birth_month_day = '01-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'First Indian to win All England Badminton Championship 1980, father of Deepika Padukone',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Prakash Padukone')
+  AND birth_month_day = '01-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Engineer'),
+  known_for        = 'Metro Man of India, built Delhi Metro, Konkan Railway, Padma Vibhushan',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('E. Sridharan')
+  AND birth_month_day = '01-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Musician'),
+  known_for        = 'Popularised santoor as classical instrument, Shiv-Hari duo with Hariprasad, Chandni songs',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2022-01-01')
+WHERE lower(name) = lower('Shivkumar Sharma')
+  AND birth_month_day = '01-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Student of the Year, Hasee Toh Phasee, Ek Villain, Kapoor & Sons, Shershaah',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sidharth Malhotra')
+  AND birth_month_day = '01-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of MakeMyTrip, pioneered online travel booking in India',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Deep Kalra')
+  AND birth_month_day = '01-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Lyricist'),
+  known_for        = 'Sholay screenplay, Deewaar, Zanjeer, iconic lyricist, husband of Shabana Azmi',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Javed Akhtar')
+  AND birth_month_day = '01-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Founder of Maharashtra Navnirman Sena, Marathi political leader',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Raj Thackeray')
+  AND birth_month_day = '01-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Devdas, Veer-Zaara, Dostana, Khoobsoorat, BJP MP from Chandigarh',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kirron Kher')
+  AND birth_month_day = '01-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Social Reformer'),
+  known_for        = 'Anti-corruption crusader, Lokpal movement, led India Against Corruption with Kejriwal',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Anna Hazare')
+  AND birth_month_day = '01-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Chairman of ArcelorMittal, world''s largest steel company, steel king',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Lakshmi Mittal')
+  AND birth_month_day = '01-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'Poet, journalist, filmmaker, The Illustrated Weekly of India editor',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Pritish Nandy')
+  AND birth_month_day = '01-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Historical'),
+  known_for        = '1857 uprising general, served Peshwa Nana Sahib, last resistance leader of First War',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1859-01-01')
+WHERE lower(name) = lower('Tantia Tope')
+  AND birth_month_day = '01-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Left-arm spinner all-rounder, Delhi Capitals, hero of home Test series 2021',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Axar Patel')
+  AND birth_month_day = '01-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Minnal Murali, Forensic, Trance, Lucifer, rising star of Malayalam cinema',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Tovino Thomas')
+  AND birth_month_day = '01-21';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Taare Zameen Par, Dil Dhadakne Do, Haider, director of Chutney and X',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Tisca Chopra')
+  AND birth_month_day = '01-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Wall of Indian cricket, 7195 Test runs, hero of Australia 2020-21 series',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Cheteshwar Pujara')
+  AND birth_month_day = '01-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Tezaab, Beta, Khalnayak, Mr. India, classical and film singer',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kavita Krishnamurthy')
+  AND birth_month_day = '01-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Gamanam, Salaar, Indian 2, singer and actress, daughter of Kamal Haasan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shruti Haasan')
+  AND birth_month_day = '01-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Dil Se, Kya Kehna, Kal Ho Naa Ho, Veer-Zaara, Salaam Namaste, KXIP co-owner',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Preity Zinta')
+  AND birth_month_day = '01-31';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Hero, Ram Lakhan, Parinda, Rangeela, father of Tiger Shroff',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Jackie Shroff')
+  AND birth_month_day = '02-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Dhoom, Bunty aur Babli, Guru, Kabhi Alvida Naa Kehna, son of Amitabh Bachchan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Abhishek Bachchan')
+  AND birth_month_day = '02-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Swing bowler, death-over specialist, led SRH to IPL success, reverse swing expert',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Bhuvneshwar Kumar')
+  AND birth_month_day = '02-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Betaab, Chameli Ki Shaadi, Ek Do Teen, Sarafarosh, ex-wife of Saif Ali Khan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Amrita Singh')
+  AND birth_month_day = '02-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Greatest villain of Hindi cinema, Upkar, Victoria No. 203, Zanjeer, 400+ films',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2013-01-01')
+WHERE lower(name) = lower('Pran')
+  AND birth_month_day = '02-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Philosopher'),
+  known_for        = 'Founded Arya Samaj, championed Vedic Hinduism, "Back to the Vedas"',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1883-01-01')
+WHERE lower(name) = lower('Dayananda Saraswati')
+  AND birth_month_day = '02-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'External Affairs Minister, most popular BJP leader, helped Indians abroad, eloquent orator',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2019-01-01')
+WHERE lower(name) = lower('Sushma Swaraj')
+  AND birth_month_day = '02-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'VIP, Kakki Sattai, Remo, Doctor, Don, Ayalaan, biggest Tamil star of new generation',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sivakarthikeyan')
+  AND birth_month_day = '02-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Pyaar Ka Punchnama, Sonu Ke Titu Ki Sweety, Chhorii, Janhit Mein Jaari',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Nushrratt Bharuccha')
+  AND birth_month_day = '02-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cultural Figure'),
+  known_for        = 'Revival of Bharatanatyam classical dance, Kalakshetra Foundation Chennai, Padma Bhushan',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1986-01-01')
+WHERE lower(name) = lower('Rukmini Devi Arundale')
+  AND birth_month_day = '02-29';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'World No.1 badminton ranking 2017, four Super Series titles in 2017',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kidambi Srikanth')
+  AND birth_month_day = '02-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Fiery Kerala pace bowler, 2007 T20 and 2011 ODI World Cup winner, emotional character',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('S Sreesanth')
+  AND birth_month_day = '02-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Olympic bronze Tokyo 2020, World Wrestling Championship medallist, 65kg freestyle',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Bajrang Punia')
+  AND birth_month_day = '02-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Dil Hai Ki Manta Nahin, Sadak, Junoon, producer, daughter of Mahesh Bhatt',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Pooja Bhatt')
+  AND birth_month_day = '02-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'India''s fastest woman sprinter, Asian Games silver, fought against hyperandrogenism rules',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Dutee Chand')
+  AND birth_month_day = '02-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Musician'),
+  known_for        = 'Kirana Gharana vocalist, Bharat Ratna 2008, celebrated classical Hindustani singer',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2011-01-01')
+WHERE lower(name) = lower('Bhimsen Joshi')
+  AND birth_month_day = '02-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Baaghi franchise, Heropanti, War, action star, son of Jackie Shroff, martial arts expert',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Tiger Shroff')
+  AND birth_month_day = '03-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Aashiqui 2, ABCD 2, Baaghi, Stree franchise, Tu Jhoothi Main Makkaar',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shraddha Kapoor')
+  AND birth_month_day = '03-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Ab Tumhare Hawale Watan Saathiyo, Sanam Re, director of Yaariyan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Divya Khosla Kumar')
+  AND birth_month_day = '03-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Saaransh, Dilwale Dulhania Le Jayenge, Khosla Ka Ghosla, Silver Linings Playbook',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Anupam Kher')
+  AND birth_month_day = '03-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Musician'),
+  known_for        = 'Kirana Gharana vocalist, Bharat Ratna 2002, sang till 92, inspiration for Sanjay Bhansali film',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2009-01-01')
+WHERE lower(name) = lower('Gangubai Hangal')
+  AND birth_month_day = '03-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Chief Minister of Bihar, JDU leader, Bihar development model, railway minister',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Nitish Kumar')
+  AND birth_month_day = '03-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Youngest Indian Test debutant wicketkeeper (age 17), Gujarat Lions, Gujarat captain',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Parthiv Patel')
+  AND birth_month_day = '03-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Pakistani-Indian singer, Woh Lamhe, Tere Sang Yaara, most streamed in India',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Atif Aslam')
+  AND birth_month_day = '03-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Devdas playback, Jab We Met, Bajirao Mastani, over 3000 songs, four National Awards',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shreya Ghoshal')
+  AND birth_month_day = '03-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'The Lunchbox, Airlift, Homeland (US series), Dasvi, major international breakthrough',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Nimrat Kaur')
+  AND birth_month_day = '03-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Musician'),
+  known_for        = 'Shehnai maestro, Bharat Ratna 2001, played at India''s first Independence Day, 80-year career',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2006-01-01')
+WHERE lower(name) = lower('Bismillah Khan')
+  AND birth_month_day = '03-21';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Kuch Kuch Hota Hai, Kabhi Khushi Kabhie Gham, Hichki, Mardaani, Black, Saathiya',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rani Mukerji')
+  AND birth_month_day = '03-21';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Kyunki Saas Bhi Kabhi Bahu Thi actress turned BJP minister, Education Minister',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Smriti Irani')
+  AND birth_month_day = '03-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Jannat, Raaz series, Awarapan, Mr. X, The Body, serial kisser image',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Emraan Hashmi')
+  AND birth_month_day = '03-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'World Rapid Chess Champion 2019, youngest grandmaster when achieved, chess prodigy',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Koneru Humpy')
+  AND birth_month_day = '03-31';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of Biocon, India''s first woman entrepreneur billionaire, Padma Bhushan',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Kiran Mazumdar Shaw')
+  AND birth_month_day = '03-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Breathless, Dil Chahta Hai, Lagaan, Rock On, Shankar-Ehsaan-Loy trio',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shankar Mahadevan')
+  AND birth_month_day = '03-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Vishal-Shekhar duo, Kaho Na Pyaar Hai, Don, Dhoom 3, Indian Idol judge',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shekhar Ravjiani')
+  AND birth_month_day = '03-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Most downloaded Indian female artist globally, Pardes, Dil To Pagal Hai, 30+ years',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Alka Yagnik')
+  AND birth_month_day = '03-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Waqt, Kabhi Kabhie, Deewar, Junoon, international films with Merchant Ivory',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2017-01-01')
+WHERE lower(name) = lower('Shashi Kapoor')
+  AND birth_month_day = '03-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Geetha Govindam, Pushpa franchise, Animal, Goodbye, Mission Majnu, national crush',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rashmika Mandanna')
+  AND birth_month_day = '04-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'South India''s most beloved playback singer, 50,000+ songs in 17 languages',
+  tier             = 'historical'
+WHERE lower(name) = lower('S Janaki')
+  AND birth_month_day = '04-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Satya, Gangs of Wasseypur, Aligarh, The Family Man, Bhonsle, one of India''s finest',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Manoj Bajpayee')
+  AND birth_month_day = '04-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Circuit in Munna Bhai MBBS, Golmaal series, Ishqiya, Jolly LLB, Dhamaal',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Arshad Warsi')
+  AND birth_month_day = '04-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Miss Universe 2000, Andaaz, Bhagam Bhag, Bell Bottom, Kaun Banega Crorepati host',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Lara Dutta')
+  AND birth_month_day = '04-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Pithamagan, Anniyan, Dhruva Natchathiram, Ponniyin Selvan, National Award winner',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vikram')
+  AND birth_month_day = '04-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Guddi, Abhimaan, Sholay, Kabhie Kabhie, Samajwadi Party MP, wife of Amitabh',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Jaya Bachchan')
+  AND birth_month_day = '04-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Tanu Weds Manu, Raanjhanaa, Nil Battey Sannata, Veere Di Wedding, activist',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Swara Bhasker')
+  AND birth_month_day = '04-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Social Reformer'),
+  known_for        = 'Revival of Indian handicrafts, theatre, first woman to contest election in India 1926',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1988-01-01')
+WHERE lower(name) = lower('Kamaladevi Chattopadhyay')
+  AND birth_month_day = '04-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Sargam, Shaan, Thodisi Bewafai, Sharaabi, top Telugu and Hindi actress-politician',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Jaya Prada')
+  AND birth_month_day = '04-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of Birla Group, supported Gandhi''s independence movement financially',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1983-01-01')
+WHERE lower(name) = lower('Ghanshyam Das Birla')
+  AND birth_month_day = '04-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Musician'),
+  known_for        = 'Jaipur Gharana vocalist, Padma Vibhushan, one of greatest vocalists of 20th century',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2017-01-01')
+WHERE lower(name) = lower('Kishori Amonkar')
+  AND birth_month_day = '04-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Colonial Cousins with Lesle Lewis, ghazal singer, Bombay, Roja, Guru',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Hariharan')
+  AND birth_month_day = '04-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Ye Maaya Chesave, Mahanati, The Family Man 2, Shakuntalam, Kushi',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Samantha Ruth Prabhu')
+  AND birth_month_day = '04-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Chief Minister of Andhra Pradesh, Hyderabad IT boom architect, Telugu Desam Party',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Chandrababu Naidu')
+  AND birth_month_day = '04-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'First Indian female gymnast to qualify for Olympics, Produnova vault specialist',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Deepa Karmakar')
+  AND birth_month_day = '04-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Elegant Indian opener, IPL powerhouse, wicketkeeper-batsman, KXIP captain',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('KL Rahul')
+  AND birth_month_day = '04-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Shankar-Ehsaan-Loy, Dil Chahta Hai, Don, Kabhi Alvida Naa Kehna, Kaal',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Loy Mendonsa')
+  AND birth_month_day = '04-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Jumping Jack, Nagin, Himmatwala, Tohfa, Farz, father of Ekta Kapoor and Tusshar Kapoor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Jeetendra')
+  AND birth_month_day = '04-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Rab Ne Bana Di Jodi, PK, NH10, Sultan, Ae Dil Hai Mushkil, Jab Harry Met Sejal',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Anushka Sharma')
+  AND birth_month_day = '05-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Thala, Mankatha, Vedalam, Viswasam, Valimai, Tamil cinema superstar',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ajith Kumar')
+  AND birth_month_day = '05-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Scientist'),
+  known_for        = 'Telecom revolution in India, C-DOT, PCO booths that democratised phones in India',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Sam Pitroda')
+  AND birth_month_day = '05-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Masaan, Raazi, Uri: The Surgical Strike, Sardar Udham, Govinda Naam Mera',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vicky Kaushal')
+  AND birth_month_day = '05-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'Tughlaq, Hayavadana, Naga-Mandala, Jnanpith Award, actor and playwright',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2019-01-01')
+WHERE lower(name) = lower('Girish Karnad')
+  AND birth_month_day = '05-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Historical'),
+  known_for        = 'Rajput warrior king of Mewar, Battle of Haldighati against Akbar, never surrendered',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1597-01-01')
+WHERE lower(name) = lower('Maharana Pratap')
+  AND birth_month_day = '05-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Dancer'),
+  known_for        = 'Greatest Bharatanatyam dancer of 20th century, took art to international stage',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1984-01-01')
+WHERE lower(name) = lower('Balasaraswati')
+  AND birth_month_day = '05-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Dancer'),
+  known_for        = 'Founder of Darpana Academy, classical dancer, wife of Vikram Sarabhai',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2016-01-01')
+WHERE lower(name) = lower('Mrinalini Sarabhai')
+  AND birth_month_day = '05-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Two Olympic medals in wrestling (Bronze 2008, Silver 2012), most decorated Indian wrestler',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sushil Kumar')
+  AND birth_month_day = '05-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Hera Pheri, Andaz Apna Apna, Tamanna, Oh My God, Welcome, comic genius',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Paresh Rawal')
+  AND birth_month_day = '05-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Musician'),
+  known_for        = 'Queen of Thumri, Banaras Gharana vocalist, revived thumri as serious classical form',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2017-01-01')
+WHERE lower(name) = lower('Girija Devi')
+  AND birth_month_day = '05-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'World Chess Champion 2024 at age 18, youngest world champion in chess history',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('D Gukesh')
+  AND birth_month_day = '05-29';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Prime Minister of India 1996-97, Janata Dal leader, Karnataka CM multiple times',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('HD Deve Gowda')
+  AND birth_month_day = '05-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Wicketkeeper-batsman, IPL star, 2022 T20 World Cup comeback, commentator',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Dinesh Karthik')
+  AND birth_month_day = '06-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Roja, Bombay, Dil Se, Guru, Raavan, Ponniyin Selvan, greatest Tamil filmmaker',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mani Ratnam')
+  AND birth_month_day = '06-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Best bowling figures in ODI history (6/4), all-rounder, son of Roger Binny',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Stuart Binny')
+  AND birth_month_day = '06-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Historical'),
+  known_for        = 'Last Hindu emperor of Delhi, Second Battle of Tarain, Rai Pithora, Rajput warrior king',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1192-01-01')
+WHERE lower(name) = lower('Prithviraj Chauhan')
+  AND birth_month_day = '06-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Chief Minister of Uttar Pradesh, Hindu monk-politician, BJP leader',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Yogi Adityanath')
+  AND birth_month_day = '06-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Ishaqzaade, 2 States, Gunday, Sandeep Aur Pinky Faraar, Bhoot Police',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Arjun Kapoor')
+  AND birth_month_day = '06-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Disco Dancer, Agneepath, Guru, Gunda, Prem Pratigya, national award winner',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mithun Chakraborty')
+  AND birth_month_day = '06-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Led India to famous Gabba victory 2021, elegant middle-order batsman, former vice-captain',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ajinkya Rahane')
+  AND birth_month_day = '06-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'O Humsafar, Dilbar, Coca Cola Tu, Garmi, most-followed Indian musician on Instagram',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Neha Kakkar')
+  AND birth_month_day = '06-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Shankar-Ehsaan-Loy trio, guitar legend, Dil Chahta Hai, Kal Ho Naa Ho',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ehsaan Noorani')
+  AND birth_month_day = '06-21';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Jab We Met, Love Aaj Kal, Cocktail, Ae Dil Hai Mushkil, Jagga Jasoos',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Pritam Chakraborty')
+  AND birth_month_day = '06-21';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Thalapathy, Mersal, Bigil, Master, Beast, Varisu, highest-grossing Tamil star',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vijay')
+  AND birth_month_day = '06-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Andaz Apna Apna, Dil To Pagal Hai, Raja Hindustani, Zubeida, elder sister of Kareena',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Karisma Kapoor')
+  AND birth_month_day = '06-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Vishal-Shekhar duo, Dostana, Dhoom 3, Bang Bang, Ra.One, Indian Idol judge',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vishal Dadlani')
+  AND birth_month_day = '06-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Leading Telugu playback singer, thousands of songs, most loved Telugu singer',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sunitha Upadrashta')
+  AND birth_month_day = '06-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Olympic bronze 1996 Atlanta, 18 Grand Slam doubles titles, India''s greatest tennis player',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Leander Paes')
+  AND birth_month_day = '06-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Classic Bollywood playback singer, Kal Ho Naa Ho, Abhi Mujh Mein Kahin, Sandese Aate Hain',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sonu Nigam')
+  AND birth_month_day = '07-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Dabangg, Simmba, Mard Ko Dard Nahi Hota, COVID-19 philanthropy, real-life hero',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sonu Sood')
+  AND birth_month_day = '07-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Aadukalam, 3 (Kolaveri Di), Raanjhanaa, The Gray Man, Atrangi Re, son-in-law of Rajinikanth',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Dhanush')
+  AND birth_month_day = '07-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Gangs of Wasseypur, Ek Thi Daayan, Badlapur, Army of the Dead, Maharani',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Huma Qureshi')
+  AND birth_month_day = '07-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'OK Kanmani, Karwaan, The Zoya Factor, Hey Sinamika, son of Mammootty',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Dulquer Salmaan')
+  AND birth_month_day = '07-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Ghajini Tamil original, Ayan, 7aum Arivu, Soorarai Pottru, Jai Bhim, National Award',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Suriya')
+  AND birth_month_day = '07-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Aashiq Banaya Aapne, Teraa Surroor, Radio, composer of dozens of hit Bollywood albums',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Himesh Reshammiya')
+  AND birth_month_day = '07-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Former Chairman of Tata Sons, Shapoorji Pallonji Group heir, controversial removal by Tatas',
+  tier             = 'public_figure',
+  death_date       = COALESCE(death_date, '2022-01-01')
+WHERE lower(name) = lower('Cyrus Mistry')
+  AND birth_month_day = '07-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Big Bull of Indian stock market, Warren Buffett of India, Akasa Air founder',
+  tier             = 'public_figure',
+  death_date       = COALESCE(death_date, '2022-01-01')
+WHERE lower(name) = lower('Rakesh Jhunjhunwala')
+  AND birth_month_day = '07-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of Paytm, digital payments revolution in India, demonetisation beneficiary',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Paytm Vijay Shekhar Sharma')
+  AND birth_month_day = '07-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'First Indian commercial pilot, Chairman Tata Group, Air India founder, Bharat Ratna',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1993-01-01')
+WHERE lower(name) = lower('JRD Tata')
+  AND birth_month_day = '07-29';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Heropanti, Dilwale, Bareilly Ki Barfi, Mimi, Adipurush, National Award winner',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kriti Sanon')
+  AND birth_month_day = '07-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Fashion, Aa Dekhen Zara, Mr. X, Time Out',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mugdha Godse')
+  AND birth_month_day = '07-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Main Hoon Hero Tera, Bol Do Na Zara, Wajah Tum Ho, youngest top Bollywood singer',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Armaan Malik')
+  AND birth_month_day = '07-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of HCL Technologies, Shiv Nadar University, philanthropy champion',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Shiv Nadar')
+  AND birth_month_day = '07-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Swing bowler, death-over specialist, led SRH to IPL success, reverse swing expert',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Bhuvneshwar Kumar')
+  AND birth_month_day = '02-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Social Reformer'),
+  known_for        = 'Social worker, founded Andhra Mahila Sabha, participated in Dandi March',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1981-01-01')
+WHERE lower(name) = lower('Durgabai Deshmukh')
+  AND birth_month_day = '07-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'South India''s nightingale, 25,000+ songs, multiple National Awards',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('KS Chithra')
+  AND birth_month_day = '07-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Musician'),
+  known_for        = 'Greatest living bansuri (flute) player, collaborated with John McLaughlin, Padma Vibhushan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Hariprasad Chaurasia')
+  AND birth_month_day = '07-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Rocky, Sadak, Khalnayak, Vaastav, Munna Bhai MBBS, KGF Chapter 2',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sanjay Dutt')
+  AND birth_month_day = '07-29';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Pancham Da, Sholay music, Amar Prem, Caravan, Hare Rama Hare Krishna, cult composer',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1994-01-01')
+WHERE lower(name) = lower('RD Burman')
+  AND birth_month_day = '06-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Jaane Tu Ya Jaane Na, Tujhe Meri Kasam, Force, wife of Riteish Deshmukh',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Genelia D''Souza')
+  AND birth_month_day = '08-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'First Indian woman gymnast to qualify Olympics, Produnova vault, inspiration for gymnasts',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Dipa Karmakar')
+  AND birth_month_day = '08-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Carbon, Kumbalangi Nights, Joji, Vikram, Pushpa 2, finest actor in Indian cinema today',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Fahadh Faasil')
+  AND birth_month_day = '08-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Olympic silver Tokyo 2020 in weightlifting, World Champion 2017, Padma Vibhushan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mirabai Chanu')
+  AND birth_month_day = '08-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Kedarnath, Simmba, Love Aaj Kal, Coolie No. 1, daughter of Saif Ali Khan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sara Ali Khan')
+  AND birth_month_day = '08-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Sheila Ki Jawani, Desi Girl, Beedi, Mehboob Mere, one of India''s top female playback singers',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sunidhi Chauhan')
+  AND birth_month_day = '08-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of Oberoi Hotels Group, built India''s finest luxury hotel chain',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2002-01-01')
+WHERE lower(name) = lower('MS Oberoi')
+  AND birth_month_day = '08-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'First full-time female Finance Minister of India, BJP leader, Defence Minister',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Nirmala Sitharaman')
+  AND birth_month_day = '08-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Journalist'),
+  known_for        = 'Founder and Chairman of India TV, Aap Ki Adalat host, most watched news show',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Rajat Sharma')
+  AND birth_month_day = '08-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Megastar of Telugu cinema, 150+ films, Khaidi, Indra, Union Minister, father of Ram Charan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Chiranjeevi')
+  AND birth_month_day = '08-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Highway, Sarabjit, Sarbjit, Sultan, Once Upon a Time in Mumbaai',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Randeep Hooda')
+  AND birth_month_day = '08-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Co-founder of Ola Cabs, Ola Electric, pioneer of Indian ride-hailing',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Bhavish Aggarwal')
+  AND birth_month_day = '08-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Commonwealth and Asian Games gold medallist, three-time World medallist, wrestling activist',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vinesh Phogat')
+  AND birth_month_day = '08-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Thomas Cup 2022 hero, consistent BWF tour performer, Kerala shuttler',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('HS Prannoy')
+  AND birth_month_day = '08-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Chess prodigy, FIDE World Cup 2023 finalist, second youngest grandmaster history',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('R Praggnanandhaa')
+  AND birth_month_day = '08-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Lyricist'),
+  known_for        = 'Greatest Hindi film lyricist, Jai Ho Oscar winning song, Aandhi, Maachis films',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Gulzar')
+  AND birth_month_day = '08-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Gabbar Singh in Sholay — most iconic villain in Indian cinema history',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1992-01-01')
+WHERE lower(name) = lower('Amjad Khan')
+  AND birth_month_day = '11-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'First Indian female wrestler to win Olympic medal (Bronze, Rio 2016)',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sakshi Malik')
+  AND birth_month_day = '09-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'India''s premier fast bowler, 2023 ODI World Cup 7 wickets in an innings, swing maestro',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mohammed Shami')
+  AND birth_month_day = '09-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of CRED, FreeCharge, serial entrepreneur, behavioural economist',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Kunal Shah')
+  AND birth_month_day = '09-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Vicky Donor, Andhadhun, Bala, Article 15, Shubh Mangal Saavdhan, Dream Girl',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ayushmann Khurrana')
+  AND birth_month_day = '09-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Badlapur, Parched, Lust Stories, Sacred Games, Andhadhun, The Wedding Guest',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Radhika Apte')
+  AND birth_month_day = '09-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'World''s best Test off-spinner, 500+ Test wickets, five-time ICC Cricketer of the Year',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ravichandran Ashwin')
+  AND birth_month_day = '09-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Left-arm spinner, 113 international wickets, crucial in 2011 World Cup squad',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Pragyan Ojha')
+  AND birth_month_day = '09-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Prem Naam Hai Mera — legendary Bollywood villain, Do Raaste, Bobby, Kati Patang',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Prem Chopra')
+  AND birth_month_day = '09-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Aankhen, Sajaan Chale Sasural, Bhool Bhulaiyaa 2, prolific Bollywood character actor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Chunky Pandey')
+  AND birth_month_day = '09-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Bhaag Milkha Bhaag, Rang De Basanti, Veer-Zaara, Delhi 6, Irada',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Divya Dutta')
+  AND birth_month_day = '09-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Musician'),
+  known_for        = 'Greatest Carnatic vocalist, Bharat Ratna 1998, first musician to receive it, global ambassador',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2004-01-01')
+WHERE lower(name) = lower('M.S. Subbulakshmi')
+  AND birth_month_day = '09-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Journalist'),
+  known_for        = 'NDTV journalist, Kargil War coverage, The Buck Stops Here, author',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Barkha Dutt')
+  AND birth_month_day = '12-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = '2022 T20 World Cup hero, best Indian all-rounder, MI and GT captain',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Hardik Pandya')
+  AND birth_month_day = '10-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Premam, Bangalore Days, Action Hero Biju, Kayamkulam Kochunni',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Nivin Pauly')
+  AND birth_month_day = '10-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Ala Vaikunthapurramuloo, Radhe Shyam, Cirkus, Kisi Ka Bhai Kisi Ki Jaan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Pooja Hegde')
+  AND birth_month_day = '10-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Historical'),
+  known_for        = 'Greatest Mughal Emperor, religious tolerance Din-i-Ilahi, Navratnas, unified India',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1605-01-01')
+WHERE lower(name) = lower('Akbar')
+  AND birth_month_day = '10-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of DMart, India''s richest retailer, legendary stock market investor',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Radhakishan Damani')
+  AND birth_month_day = '10-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Journalist'),
+  known_for        = 'Co-founder of NDTV, pioneer of Indian television news journalism',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Prannoy Roy')
+  AND birth_month_day = '10-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Delhi 6, Rockstar, Bhoomi, Padmaavat, Wazir, Heeramandi',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Aditi Rao Hydari')
+  AND birth_month_day = '10-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Ladies vs Ricky Bahl, Ishaqzaade, Daawat-e-Ishq, Saina, The Girl on the Train',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Parineeti Chopra')
+  AND birth_month_day = '10-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Memories, Aurangzeb, Lucifer, Jana Gana Mana, Gold, director of Bro Daddy',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Prithviraj Sukumaran')
+  AND birth_month_day = '10-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Musician'),
+  known_for        = 'Sarod maestro, son of Hafiz Ali Khan, Padma Vibhushan, Sangeet Natak Akademi award',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Amjad Ali Khan')
+  AND birth_month_day = '10-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Journalist'),
+  known_for        = 'Republic TV founder, Times Now anchor, most watched English news anchor in India',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Arnab Goswami')
+  AND birth_month_day = '10-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Left-arm swing bowler, hat-trick in Lahore Test 2006, 2007 T20 World Cup hero',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Irfan Pathan')
+  AND birth_month_day = '10-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Nagpur Express, fastest Indian bowler of his era, 195+ Test wickets',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Umesh Yadav')
+  AND birth_month_day = '10-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Most aggressive Indian wicketkeeper, match-winning 89 at Gabba 2021, DC captain',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rishabh Pant')
+  AND birth_month_day = '10-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Olympic bronze Tokyo 2020 in boxing, first Northeast Indian to win Olympic medal in boxing',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Lovlina Borgohain')
+  AND birth_month_day = '10-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Young off-spinning all-rounder, hero of Brisbane Test 2021, Tamil Nadu star',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Washington Sundar')
+  AND birth_month_day = '10-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'De De Pyaar De, Doctor G, Runway 34, Sardar Ka Grandson, bi-lingual actress',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rakul Preet Singh')
+  AND birth_month_day = '10-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Historical'),
+  known_for        = 'Tiger of Mysore, first use of rockets in warfare, fought British East India Company',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1799-01-01')
+WHERE lower(name) = lower('Tipu Sultan')
+  AND birth_month_day = '11-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Sachin Dev Burman, Pyaasa, Guide, Aradhana, Abhimaan, legendary Bollywood composer',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1975-01-01')
+WHERE lower(name) = lower('SD Burman')
+  AND birth_month_day = '10-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Shree 420, Awaara, Mera Naam Joker, composed for Raj Kapoor masterpieces',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1987-01-01')
+WHERE lower(name) = lower('Shankar Jaikishan')
+  AND birth_month_day = '10-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Maachis, Hum Saath Saath Hain, Chandni Bar, The Namesake, Haider, Andhadhun',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Tabu')
+  AND birth_month_day = '11-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Ironman triathlete, Made In India music video, Captain Vyom, fitness icon',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Milind Soman')
+  AND birth_month_day = '11-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'No Entry, Golmaal Returns, Jannat, LGBTQ rights activist',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Celina Jaitley')
+  AND birth_month_day = '11-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Run machine, 80+ international centuries, fastest to 8000/9000/10000 ODI runs, King Kohli',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Virat Kohli')
+  AND birth_month_day = '11-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Baahubali as Devasena, Arundhati, Rudramadevi, Size Zero, leading Telugu actress',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Anushka Shetty')
+  AND birth_month_day = '11-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'BJP co-founder, Ram Mandir movement, Deputy PM of India, Bharat Ratna 2024',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('LK Advani')
+  AND birth_month_day = '11-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'All England Badminton Champion 2001, national coach who produced Saina and Sindhu',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Pullela Gopichand')
+  AND birth_month_day = '11-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Orange Cap IPL 2014, IPL star for KKR and CSK, stylish right-hand batsman',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Robin Uthappa')
+  AND birth_month_day = '11-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Qayamat Se Qayamat Tak, Hum Hain Rahi Pyar Ke, Yes Boss, Darr, IPL co-owner',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Juhi Chawla')
+  AND birth_month_day = '11-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of OYO Rooms, youngest billionaire founder in India, Thiel Fellowship',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Ritesh Agarwal')
+  AND birth_month_day = '11-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Miss Universe 1994, Main Hoon Na, Aarya (Disney+ series), first Indian Miss Universe',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sushmita Sen')
+  AND birth_month_day = '11-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Historical'),
+  known_for        = 'Queen of Jhansi, 1857 uprising, died fighting British, symbol of Indian resistance',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1858-01-01')
+WHERE lower(name) = lower('Rani Lakshmibai')
+  AND birth_month_day = '11-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Hare Rama Hare Krishna, Satyam Shivam Sundaram, Don, Qurbani, sex symbol of 1970s',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Zeenat Aman')
+  AND birth_month_day = '11-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Father of White Revolution, founder of Amul, Operation Flood, Bharat Ratna',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2012-01-01')
+WHERE lower(name) = lower('Verghese Kurien')
+  AND birth_month_day = '11-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Disco King of India, Sharaabi, Thodi Si Bewafai, Jimmy Jimmy, gold jewellery icon',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2022-01-01')
+WHERE lower(name) = lower('Bappi Lahiri')
+  AND birth_month_day = '11-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'CSK captain, IPL''s most successful batsman, Mr. IPL, left-handed middle-order star',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Suresh Raina')
+  AND birth_month_day = '11-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Waqt Hamara Hai, Mohra, Dhadkan, Border, Main Hoon Na, Phir Hera Pheri',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Suniel Shetty')
+  AND birth_month_day = '08-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Vicky Donor, Kaabil, Uri: The Surgical Strike, Dasvi, Lost',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Yami Gautam')
+  AND birth_month_day = '11-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Pyaar Ka Punchnama, Sonu Ke Titu Ki Sweety, Luka Chuppi, Bhool Bhulaiyaa 2',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kartik Aaryan')
+  AND birth_month_day = '11-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Parinda, Krantiveer, Welcome, Ab Tak Chhappan, Natsamrat, intense character actor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Nana Patekar')
+  AND birth_month_day = '01-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Page 3, Mr. and Mrs. Iyer, Wake Up Sid, A Death in the Gunj, Lipstick Under My Burkha',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Konkona Sen Sharma')
+  AND birth_month_day = '12-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Munna Bhai MBBS, 3 Idiots, Don, Happy New Year, versatile Bollywood character actor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Boman Irani')
+  AND birth_month_day = '12-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Ijaazat, Ram Lakhan, Jalwa, father of Vivek Oberoi',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Suresh Oberoi')
+  AND birth_month_day = '12-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Papa Kehte Hain, Dilwale Dulhania Le Jayenge, Kuch Kuch Hota Hai, three National Awards',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Udit Narayan')
+  AND birth_month_day = '12-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'India''s top singles tennis player in 2000s, Davis Cup hero, Commonwealth gold 2010',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Somdev Devvarman')
+  AND birth_month_day = '12-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'First President of India, freedom fighter, Bihar Kesari, President 1950-1962',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1963-01-01')
+WHERE lower(name) = lower('Dr. Rajendra Prasad')
+  AND birth_month_day = '12-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Gabbar, stylish Indian opener, fastest century in Champions Trophy 2013',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shikhar Dhawan')
+  AND birth_month_day = '12-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Delhi and KKR captain, middle order batsman, leg before wicket specialist',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shreyas Iyer')
+  AND birth_month_day = '12-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Left-arm seamer, 2007 T20 World Cup hero, IPL Deccan Chargers',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('RP Singh')
+  AND birth_month_day = '12-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Masoom, Mr. India, Bandit Queen, Elizabeth (Hollywood), international director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shekhar Kapur')
+  AND birth_month_day = '12-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Apur Sansar, An Evening in Paris, Aradhana, Mausam, film personality',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sharmila Tagore')
+  AND birth_month_day = '12-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Dhadak, Gunjan Saxena: The Kargil Girl, Good Luck Jerry, daughter of Sridevi',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Janhvi Kapoor')
+  AND birth_month_day = '03-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Kalia, Dostana, Naseeb, Shotgun Sinha, politician, BJP then Congress MP',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shatrughan Sinha')
+  AND birth_month_day = '12-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Rehnaa Hai Terre Dil Mein, Dum, Lage Raho Munna Bhai, climate activist, UNEP Goodwill Ambassador',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Dia Mirza')
+  AND birth_month_day = '12-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'First superstar of Bollywood, Anand, Aradhana, Kati Patang, 15 consecutive solo hits',
+  tier             = 'entertainment',
+  death_date       = COALESCE(death_date, '2012-01-01')
+WHERE lower(name) = lower('Rajesh Khanna')
+  AND birth_month_day = '12-29';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Tragedy King of Bollywood, Devdas, Mughal-e-Azam, Naya Daur, Bharat Ratna 2015',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2021-01-01')
+WHERE lower(name) = lower('Dilip Kumar')
+  AND birth_month_day = '12-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Hero No. 1, Coolie No. 1, Haseena Maan Jaayegi, dance king, iconic 1990s star',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Govinda')
+  AND birth_month_day = '12-21';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Baahubali, Himmatwala, Devi, Odela Railway Station, Babli Bouncer',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Tamannaah Bhatia')
+  AND birth_month_day = '12-21';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'One of greatest playback singers in history, versatile range, 26,000+ songs',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1980-01-01')
+WHERE lower(name) = lower('Mohammed Rafi')
+  AND birth_month_day = '12-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Mughal-e-Azam music, Mother India, Baiju Bawra, greatest classical composer of Hindi cinema',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2006-01-01')
+WHERE lower(name) = lower('Naushad Ali')
+  AND birth_month_day = '12-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Mr. India, Tezaab, Ram Lakhan, Slumdog Millionaire, 24 (Fox), eternally young',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Anil Kapoor')
+  AND birth_month_day = '12-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'Olympic gold Tokyo 2020 in javelin, first Indian to win Olympic gold in track and field',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Neeraj Chopra')
+  AND birth_month_day = '12-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Gangs of Wasseypur, Fukrey, Masaan, Mirzapur, Inside Edge',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Richa Chadha')
+  AND birth_month_day = '12-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Masti, Grand Masti, Ek Villain, Humshakals, Baaghi 3, son of Vilasrao Deshmukh',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Riteish Deshmukh')
+  AND birth_month_day = '12-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Dhoom, Dostana, New York, Force, Vicky Donor, Satyameva Jayate, Pathan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('John Abraham')
+  AND birth_month_day = '12-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Race, Musafir, Johnny Gaddaar, De Dana Dan, body positivity advocate',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sameera Reddy')
+  AND birth_month_day = '12-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Chief Minister of Goa, Defence Minister of India, IIT Bombay alumnus, clean politician',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2019-01-01')
+WHERE lower(name) = lower('Manohar Parrikar')
+  AND birth_month_day = '12-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Superstar of Indian cinema, Baasha, Muthu, Sivaji, Enthiran, Kabali, global cult following',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rajinikanth')
+  AND birth_month_day = '12-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Six sixes in an over, Player of Tournament 2011 World Cup, cancer survivor comeback',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Yuvraj Singh')
+  AND birth_month_day = '12-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = '13th President of India, longest-serving Finance Minister, Bharat Ratna 2019',
+  tier             = 'public_figure',
+  death_date       = COALESCE(death_date, '2020-01-01')
+WHERE lower(name) = lower('Pranab Mukherjee')
+  AND birth_month_day = '12-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Philosopher'),
+  known_for        = 'Controversial spiritual teacher, neo-sannyas movement, 650+ books, global following',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1990-01-01')
+WHERE lower(name) = lower('Osho Rajneesh')
+  AND birth_month_day = '12-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Poet'),
+  known_for        = 'Tamil poet and freedom fighter, Mahakavi Bharati, champion of women''s rights',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1921-01-01')
+WHERE lower(name) = lower('Subramania Bharati')
+  AND birth_month_day = '12-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Journalist'),
+  known_for        = 'NDTV Prime Time anchor, Ramon Magsaysay Award 2019, champion of press freedom',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Ravish Kumar')
+  AND birth_month_day = '12-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Finance Minister of India, BJP leader, lawyer, GST architect',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2019-01-01')
+WHERE lower(name) = lower('Arun Jaitley')
+  AND birth_month_day = '12-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founded Reliance Industries, rags-to-riches story, democratised equity investment in India',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2002-01-01')
+WHERE lower(name) = lower('Dhirubhai Ambani')
+  AND birth_month_day = '12-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Chairman of Tata Group, Tata Nano, acquired Jaguar Land Rover, philanthropist, national icon',
+  tier             = 'public_figure',
+  death_date       = COALESCE(death_date, '2024-01-01')
+WHERE lower(name) = lower('Ratan Tata')
+  AND birth_month_day = '12-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Barsaat, Mela, Badshah, author Mrs Funnybones, interior designer, wife of Akshay Kumar',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Twinkle Khanna')
+  AND birth_month_day = '12-29';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Mogambo of Mr. India, Indiana Jones villain, greatest Bollywood villain ever',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2005-01-01')
+WHERE lower(name) = lower('Amrish Puri')
+  AND birth_month_day = '06-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Bobby, Amar Akbar Anthony, Chandni, Kapoor & Sons, Mulk, son of Raj Kapoor',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2020-01-01')
+WHERE lower(name) = lower('Rishi Kapoor')
+  AND birth_month_day = '09-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Saudagar, Bombay, 1942: A Love Story, Dil Se, Agni Sakshi, cancer survivor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Manisha Koirala')
+  AND birth_month_day = '08-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Dil Chahta Hai, Hum Tum, Omkaara, Love Aaj Kal, Sacred Games, Go Goa Gone',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Saif Ali Khan')
+  AND birth_month_day = '08-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Rangeela, Satya, Bhoot, Kaun, Pinjar, terrifying performances in 1990s',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Urmila Matondkar')
+  AND birth_month_day = '02-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Ankur, Arth, Sparsh, Paar, Fire, five National Award winner, activist',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shabana Azmi')
+  AND birth_month_day = '09-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Manthan, Chakra, Mirch Masala, Arth, Namak Halaal, most talented actress of her era',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1986-01-01')
+WHERE lower(name) = lower('Smita Patil')
+  AND birth_month_day = '10-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Sparsh, Mirch Masala, Masoom, A Wednesday, Iqbal, one of India''s finest actors',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Naseeruddin Shah')
+  AND birth_month_day = '07-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Ardh Satya, Jaane Bhi Do Yaaron, East is East, Gandhi, Charlie Wilson''s War',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2017-01-01')
+WHERE lower(name) = lower('Om Puri')
+  AND birth_month_day = '10-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Chhoti Si Baat, Baton Baton Mein, Gol Maal, Naram Garam, everyman of Indian cinema',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Amol Palekar')
+  AND birth_month_day = '11-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Lady Superstar, Chandramukhi, Ghajini, Atlee films, Jawan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Nayanthara')
+  AND birth_month_day = '11-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Company, Saathiya, Omkara, Prince, Zila Ghaziabad, PM Narendra Modi biopic',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vivek Oberoi')
+  AND birth_month_day = '09-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Raaz, Pyaar Ishq Aur Mohabbat, Calcutta Mail, The Empire (series)',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Dino Morea')
+  AND birth_month_day = '09-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Prem Aggan, No Entry, Jurm, Dev, Heyy Babyy, son of Feroze Khan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Fardeen Khan')
+  AND birth_month_day = '03-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Mohra, Dilwale, Andaz Apna Apna, Daman, Maatr, heroine of 1990s',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Raveena Tandon')
+  AND birth_month_day = '10-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Dream Girl of Bollywood, Sholay, Seeta Aur Geeta, Baghban, BJP MP Mathura',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Hema Malini')
+  AND birth_month_day = '10-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Arth, Saaransh, Aashiqui, Sadak, Raaz producer, one of Bollywood''s most prolific directors',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mahesh Bhatt')
+  AND birth_month_day = '09-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Student of the Year, Badlapur, Dilwale, Judwaa 2, Coolie No. 1, Bhediya',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Varun Dhawan')
+  AND birth_month_day = '04-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Kabir Singh, Good Newwz, Laxmii, Shershaah, Bhool Bhulaiyaa 2, JugJugg Jeeyo',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kiara Advani')
+  AND birth_month_day = '07-31';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Super 30, Jersey, Toofaan, Sita Ramam, Hi Nanna',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mrunal Thakur')
+  AND birth_month_day = '08-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Dum Laga Ke Haisha, Toilet: Ek Prem Katha, Bala, Badhaai Do, climate activist',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Bhumi Pednekar')
+  AND birth_month_day = '07-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Dev D, Zindagi Na Milegi Dobara, Yeh Jawaani Hai Deewani, Margarita with a Straw',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kalki Koechlin')
+  AND birth_month_day = '01-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Economist'),
+  known_for        = 'Former Governor of Reserve Bank of India, IMF Chief Economist, Fault Lines author',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Raghuram Rajan')
+  AND birth_month_day = '02-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'CSK pace bowler, hat-trick in T20I vs Bangladesh 2019, nagging line and length',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Deepak Chahar')
+  AND birth_month_day = '08-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Nawab of Najafgarh, two triple centuries in Tests, fastest scoring opener, 8586 Test runs',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Virender Sehwag')
+  AND birth_month_day = '10-20';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Man of Tournament 2007 T20 World Cup, hero of 2011 World Cup final, BJP MP Delhi',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Gautam Gambhir')
+  AND birth_month_day = '10-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'Best left-arm pace bowler India has produced, 2011 World Cup hero, 610 international wickets',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Zaheer Khan')
+  AND birth_month_day = '10-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Historical'),
+  known_for        = 'Founder of Maratha Empire, guerrilla warfare pioneer, Hindavi Swarajya, national hero',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1680-01-01')
+WHERE lower(name) = lower('Chhatrapati Shivaji Maharaj')
+  AND birth_month_day = '02-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of Tata Group, Jamshedpur steel city, father of Indian industry',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1904-01-01')
+WHERE lower(name) = lower('Jamsetji Tata')
+  AND birth_month_day = '03-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of BYJU''S edtech, largest Indian unicorn at peak, controversial rise and fall',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Byju Raveendran')
+  AND birth_month_day = '01-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Founder of Freshworks, first Indian SaaS company to IPO on Nasdaq 2021',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Girish Mathrubootham')
+  AND birth_month_day = '04-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Dev D, Dum Maaro Dum, Lootera, Queen, Udta Punjab, unconventional music',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Amit Trivedi')
+  AND birth_month_day = '03-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Controversial reality TV personality, item numbers, Bigg Boss multiple times',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rakhi Sawant')
+  AND birth_month_day = '11-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Muqaddar Ka Sikandar, Amar Akbar Anthony, Qurbani, Dayavan, Insaaf',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2017-01-01')
+WHERE lower(name) = lower('Vinod Khanna')
+  AND birth_month_day = '10-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Raja, Prem Qaidi, Sirf Tum, brother of Anil Kapoor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sanjay Kapoor')
+  AND birth_month_day = '10-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'BJP veteran, HRD Minister, introduced Sanskrit in schools, physicist',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Murli Manohar Joshi')
+  AND birth_month_day = '01-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'BJP founder member, Finance Minister, External Affairs Minister, Defence Minister',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2020-01-01')
+WHERE lower(name) = lower('Jaswant Singh')
+  AND birth_month_day = '01-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'NCP leader, Maharashtra Deputy Chief Minister, OBC champion',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Chhagan Bhujbal')
+  AND birth_month_day = '01-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Karz, Hero, Ram Lakhan, Taal, Pardes, Khalnayak — showman of Bollywood',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Subhash Ghai')
+  AND birth_month_day = '01-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Noorie, Teri Kasam, Sohni Mahiwal, BJP politician',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Poonam Dhillon')
+  AND birth_month_day = '04-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Dancer and actor, ABCD 2, Street Dancer 3D, Crockroaxz dance crew',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Raghav Juyal')
+  AND birth_month_day = '01-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Woh Subah Kabhi To Aayegi, Haqeeqat, Veer-Zaara posthumous, ghazal composer',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1975-01-01')
+WHERE lower(name) = lower('Madan Mohan')
+  AND birth_month_day = '06-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Ankur, Manthan, Bhumika, Susman, father of Indian parallel cinema',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2024-01-01')
+WHERE lower(name) = lower('Shyam Benegal')
+  AND birth_month_day = '12-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Freedom Fighter'),
+  known_for        = 'Hoisted flag at Quit India Movement 1942, first Delhi Chief Minister',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1996-01-01')
+WHERE lower(name) = lower('Aruna Asaf Ali')
+  AND birth_month_day = '07-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Scientist'),
+  known_for        = 'Astrophysicist, collaborated with Fred Hoyle, steady state cosmology, Padma Vibhushan',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Jayant Narlikar')
+  AND birth_month_day = '07-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Fashion Designer'),
+  known_for        = 'Gudda, leading Indian fashion designer, lotus motif, bridal couture',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rohit Bal')
+  AND birth_month_day = '01-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'ABCD, ABCD 2, Street Dancer 3D, choreographer, dance film pioneer',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Remo DSouza')
+  AND birth_month_day = '04-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Superstar of Bengali cinema, 300+ films, Chokher Bali, Autograph',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Prosenjit Chatterjee')
+  AND birth_month_day = '09-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Congress leader, diplomat, author, IFS officer, Rajiv Gandhi aide',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Mani Shankar Aiyar')
+  AND birth_month_day = '01-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Historical'),
+  known_for        = 'Founded Naxalite movement in India, Naxalbari uprising 1967, revolutionary leader',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1972-01-01')
+WHERE lower(name) = lower('Charu Majumdar')
+  AND birth_month_day = '01-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'India''s Defence Minister, UN representative, nationalist statesman, anti-colonialism',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1974-01-01')
+WHERE lower(name) = lower('VK Krishna Menon')
+  AND birth_month_day = '05-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Gujarati and Hindi film director, Vikramaditya, Shree 420 assistant director',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1995-01-01')
+WHERE lower(name) = lower('Ravindra Dave')
+  AND birth_month_day = '02-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Ek Duje Ke Liye, Hum Kisise Kum Naheen, Mera Daaman, popular 1980s actress',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rati Agnihotri')
+  AND birth_month_day = '02-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Tragedy Queen, Pakeezah, Sahib Bibi Aur Ghulam, Baiju Bawra, greatest Indian actress',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1972-01-01')
+WHERE lower(name) = lower('Meena Kumari')
+  AND birth_month_day = '08-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Listed Vogue most beautiful women 1954, Anuradha, The Householder',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2009-01-01')
+WHERE lower(name) = lower('Leela Naidu')
+  AND birth_month_day = '08-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Journalist'),
+  known_for        = 'ESPN-Star Sports cricket commentator and anchor, Face of the Game',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Charu Sharma')
+  AND birth_month_day = '02-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Business Leader'),
+  known_for        = 'Co-chairman of Hinduja Group, one of Britain''s richest Indians',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('SP Hinduja')
+  AND birth_month_day = '02-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Prem Rog, Vidhaata, Pyaar Jhukta Nahin, sister of Shivangi Kolhapure',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Padmini Kolhapure')
+  AND birth_month_day = '11-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Mahanayak of Bengali cinema, Nayak, Chowringhee, Antony Firingee',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1980-01-01')
+WHERE lower(name) = lower('Uttam Kumar')
+  AND birth_month_day = '09-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Historical'),
+  known_for        = 'Veer Savarkar, Hindu Mahasabha, Hindutva ideology, 1857 First War of Independence book',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1966-01-01')
+WHERE lower(name) = lower('Vinayak Damodar Savarkar')
+  AND birth_month_day = '05-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'Chief Minister of Tamil Nadu six times, Amma, AIADMK leader, actress turned politician',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2016-01-01')
+WHERE lower(name) = lower('Jayalalithaa')
+  AND birth_month_day = '02-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Historical'),
+  known_for        = 'Bengali journalist and freedom fighter, Desher Katha, nationalist literature',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1912-01-01')
+WHERE lower(name) = lower('Sakharam Ganesh Deuskar')
+  AND birth_month_day = '03-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Shatranj Ke Khilari, The Man Who Would Be King, My Beautiful Laundrette, Gandhi',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2015-01-01')
+WHERE lower(name) = lower('Saeed Jaffrey')
+  AND birth_month_day = '01-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Khwahish, Murder, Pyaar Ke Side Effects, Politics of Love, bold Bollywood actress',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mallika Sherawat')
+  AND birth_month_day = '10-24';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Fire, Earth, Bawandar, Manto director, human rights activist',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Nandita Das')
+  AND birth_month_day = '07-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'India''s greatest wicketkeeper-batsman of 1960s-70s, flamboyant opening batsman',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Farouk Engineer')
+  AND birth_month_day = '02-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Athlete'),
+  known_for        = 'India''s top doubles tennis player, ATP Masters champion, oldest world No.1 in history',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rohan Bopanna')
+  AND birth_month_day = '03-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Mr and Mrs Iyer, Chameli, Jhoom Barabar Jhoom, Angry Indian Goddesses, activist',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rahul Bose')
+  AND birth_month_day = '07-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Miss India 1999, Dor, Manorama Six Feet Under, Turning 30, social activist',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Gul Panag')
+  AND birth_month_day = '01-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Kaho Na Pyaar Hai, Koi Mil Gaya, Krrish franchise, father of Hrithik Roshan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rakesh Roshan')
+  AND birth_month_day = '09-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Alaipayuthey, Tanu Weds Manu, 3 Idiots, Rocketry director and actor, Shaitaan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Madhavan')
+  AND birth_month_day = '06-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Paruthiveeran, Paiyaa, Siruthai, Kaashmora, Viruman, brother of Suriya',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Karthi')
+  AND birth_month_day = '05-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Mera Naam Joker, Siddhartha, India''s Most Desirable TV show host',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Simi Garewal')
+  AND birth_month_day = '10-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Maqbool, Omkara, Haider, Kaminey, Matru Ki Bijlee Ka Mandola, Shakespeare trilogy',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vishal Bharadwaj')
+  AND birth_month_day = '08-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Khosla Ka Ghosla, Oye Lucky Lucky Oye, Love Sex aur Dhokha, Shanghai',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Dibakar Banerjee')
+  AND birth_month_day = '04-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Fandry, Sairat — biggest Marathi film ever made, National Award winner',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Nagraj Manjule')
+  AND birth_month_day = '04-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Cricketer'),
+  known_for        = 'First Indian to take hat-trick in ODI World Cup 1987, India selector',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Chetan Sharma')
+  AND birth_month_day = '01-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Soorarai Pottru, Irudhi Suttru, National Award winning director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sudha Kongara')
+  AND birth_month_day = '05-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Sethu, Thambi, Vinnaithaandi Varuvaayaa, Basha, Rajinikanth heroine',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Meena')
+  AND birth_month_day = '09-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Kaadhale Nimmadhi, Sillunu Oru Kaadhal, 36 Vayadhinile, Magalir Mattum, comeback queen',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Jothika')
+  AND birth_month_day = '10-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Anjathe, Yuddham Sei, Pisaasa, Thupparivaalan, unique Tamil noir director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Mysskin')
+  AND birth_month_day = '05-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Tamil family drama director, Mundhanai Mudichu, Samsaram Athu Minsaram',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2021-01-01')
+WHERE lower(name) = lower('Visu')
+  AND birth_month_day = '05-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Raj Koothrappali in The Big Bang Theory, Indian-British actor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kunal Nayyar')
+  AND birth_month_day = '05-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Nibunan, Sandakozhi 2, Monster, Cobra, daughter of Sarathkumar',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Varalaxmi Sarathkumar')
+  AND birth_month_day = '10-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Boys, Rang De Basanti, Bommarillu, Chashme Buddoor, multi-lingual actor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Siddharth')
+  AND birth_month_day = '04-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Indian-American chef and actor, Top Chef, represents India in US',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Nakul Dev Mahajan')
+  AND birth_month_day = '05-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'No Entry, Welcome, Singh Is Kinng, Ready, Bhool Bhulaiyaa 2 and 3',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Anees Bazmee')
+  AND birth_month_day = '06-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Kabul Express, New York, Ek Tha Tiger, Bajrangi Bhaijaan, 83',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Kabir Khan')
+  AND birth_month_day = '06-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Mahanati, Kalki 2898-AD — largest Indian sci-fi film ever made',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Nag Ashwin')
+  AND birth_month_day = '06-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Saamy, Remo, Thaana Serndha Koottam, Penguin, Miss India, National Award',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Keerti Suresh')
+  AND birth_month_day = '10-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Student of the Year 2, Gehraiyaan, Kho Gaye Hum Kahan, daughter of Chunky Pandey',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ananya Panday')
+  AND birth_month_day = '10-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Bedhadak debutante, daughter of Sanjay Kapoor, fashion icon',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shanaya Kapoor')
+  AND birth_month_day = '11-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Son of Saif Ali Khan and Amrita Singh, upcoming Bollywood debutant',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ibrahim Ali Khan')
+  AND birth_month_day = '12-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Gentleman, Mudhalvan, Enthiran, I, 2.0, Indian 2, Tamil blockbuster director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shankar')
+  AND birth_month_day = '08-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'Screenwriter of Baahubali, RRR, Bajrangi Bhaijaan, father of SS Rajamouli',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('KV Vijayendra Prasad')
+  AND birth_month_day = '06-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Raja Rani, Theri, Mersal, Bigil, Jawan — billion-dollar club Bollywood director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Atlee')
+  AND birth_month_day = '09-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Choreographer'),
+  known_for        = 'Masterji, choreographed Madhuri Dixit and Sridevi, Dola Re Dola, Ek Do Teen',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2020-01-01')
+WHERE lower(name) = lower('Saroj Khan')
+  AND birth_month_day = '11-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Golmaal series, Singham, Simmba, Sooryavanshi, Indian Police Universe creator',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rohit Shetty')
+  AND birth_month_day = '03-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Pokiri, Businessman, iSmart Shankar, Liger, Telugu powerhouse director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Puri Jagannadh')
+  AND birth_month_day = '07-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Top Telugu music composer, Ala Vaikunthapurramuloo, Pushpa, Sarkaru Vaari Paata',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Thaman S')
+  AND birth_month_day = '07-21';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Kolaveri Di, Kaththi, Kabali, Vikram, Vettaiyan, most-streamed Tamil composer',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Anirudh Ravichander')
+  AND birth_month_day = '10-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Arya, Race Gurram, Allu Arjun films, Pushpa composer of Oo Antava',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('DSP Devi Sri Prasad')
+  AND birth_month_day = '08-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Music Composer'),
+  known_for        = 'Baahubali soundtrack, RRR Naatu Naatu Oscar winner, cousin of SS Rajamouli',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('MM Keeravani')
+  AND birth_month_day = '07-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Popular Tamil and Telugu playback singer, Oru Maalai, Thillalangadi songs',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Chitraa')
+  AND birth_month_day = '07-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'King Nagarjuna, Shiva, Ninne Pelladatha, Manam, Oopiri, son of ANR',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Akkineni Nagarjuna')
+  AND birth_month_day = '08-29';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Vinnaithaandi Varuvaayaa, Vaalu, Eeswaran, Vendhu Thanindhadha Kaadu',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Simbu')
+  AND birth_month_day = '02-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Pizza, 96, Makkal Selvan, Vikram, Jawan, most versatile Tamil character actor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vijay Sethupathi')
+  AND birth_month_day = '01-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Mufti, Godhi Banna Sadharana Mykattu, KGF villain, National Award Kannada',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Dhananjay')
+  AND birth_month_day = '08-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Ulidavaru Kandanthe, Kirik Party, 777 Charlie — biggest Kannada film globally',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rakshit Shetty')
+  AND birth_month_day = '09-11';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Kichcha Sudeep, Huccha, Eega, Dabangg 3, most popular Kannada actor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sudeep')
+  AND birth_month_day = '09-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Appu, Raajakumara, James, Power Star of Kannada cinema, son of Rajkumar',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2021-01-01')
+WHERE lower(name) = lower('Puneeth Rajkumar')
+  AND birth_month_day = '03-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Challenging Star, Robert, Kranti, Roberrt — top Kannada action star',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Darshan Thoogudeepa')
+  AND birth_month_day = '02-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Annavru, Mast Mast, Jai Maruthi, Bhairathi Ranagal, son of Dr Rajkumar',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shiva Rajkumar')
+  AND birth_month_day = '07-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Crazy Star, Shruthi, Preethigagi, director and producer in Kannada cinema',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ravichandran')
+  AND birth_month_day = '04-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Lucky, Ullasamga Utsahamga, Arabic Kuthu, introduced by Salman Khan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sneha Ullal')
+  AND birth_month_day = '09-23';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actress'),
+  known_for        = 'Kaho Na Pyaar Hai, Gadar, Humraaz, Bhool Bhulaiyaa, Gadar 2',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ameesha Patel')
+  AND birth_month_day = '06-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Popular Punjabi singer, Mitran Di Chatri, Jatt Brothers, Punjabi music star',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ranjit Bawa')
+  AND birth_month_day = '09-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Soch, Hornn Blow, Naah, Bijlee Bijlee, Yaar Ni Milya — Punjabi pop star',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Hardy Sandhu')
+  AND birth_month_day = '09-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Legend of Punjabi music, Dil Darda, Ki Banu Duniya Da, Punjab cultural ambassador',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Gurdas Maan')
+  AND birth_month_day = '01-04';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Punjab Da Governor, Ikk Kudi, Do You Know, Udta Punjab actor, Coachella debut',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Diljit Dosanjh')
+  AND birth_month_day = '01-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Brown Munde, Excuses, With You, global Punjabi music sensation',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ap Dhillon')
+  AND birth_month_day = '07-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Kar Gayi Chull, DJ Waley Babu, Genda Phool, Jugnu, king of Indian rap',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Badshah')
+  AND birth_month_day = '11-19';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Suit Suit, High Rated Gabru, Ban Ja Rani, most streamed Punjabi artist 2017',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Guru Randhawa')
+  AND birth_month_day = '08-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Tera Zikr, Chogada, Leja Re, Dil Ko Karaar Aaya, romantic Hindi singer',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Darshan Raval')
+  AND birth_month_day = '09-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Tum Hi Aana, Lut Gaye, Raataan Lambiyan, Kehdi Ki Taang, romantic voice',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Jubin Nautiyal')
+  AND birth_month_day = '06-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Ik Vaari Aa, Lag Ja Gale, Teri Ban Jaungi, rising female Bollywood voice',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Asees Kaur')
+  AND birth_month_day = '09-15';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Filhall, Mann Bharrya, Ik Vaari Aa, Qismat, soulful Punjabi singer',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('B Praak')
+  AND birth_month_day = '09-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Singer'),
+  known_for        = 'Patt Lainge, So High, Backbone, Punjabi singer and Bollywood actor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Jassie Gill')
+  AND birth_month_day = '03-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Sanskaari Papa of Bollywood, DDLJ, Hum Saath Saath Hain, beta character',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Alok Nath')
+  AND birth_month_day = '07-10';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Gulaal, Gangs of Wasseypur, Raajneeti, actor-lyricist-playwright',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Piyush Mishra')
+  AND birth_month_day = '07-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Satya, Jolly LLB, Barfi, PK, character actor who steals every scene',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Saurabh Shukla')
+  AND birth_month_day = '10-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Chup Chup Ke, Bhagam Bhag, Hungama, Bhool Bhulaiyaa, comedy king',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Rajpal Yadav')
+  AND birth_month_day = '03-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Greatest comedian in Bollywood history, Baazigar, Kuch Kuch Hota Hai, 300+ films',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Johnny Lever')
+  AND birth_month_day = '08-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Iqbal, Dor, Om Shanti Om, Golmaal Returns, Welcome to the Jungle',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shreyas Talpade')
+  AND birth_month_day = '10-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Child actor turned leading man in Marathi and Hindi films, director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sachin Pilgaonkar')
+  AND birth_month_day = '08-17';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Bad Man of Bollywood, Ram Lakhan, Teri Meherbaniyan, Aitraaz, 400+ films',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Gulshan Grover')
+  AND birth_month_day = '09-21';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Crime Master Gogo in Andaz Apna Apna, Betaab, Himmatwala villain, 400+ films',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Shakti Kapoor')
+  AND birth_month_day = '09-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Most prolific villain in Bollywood, Khel Khel Mein, Ram Balram, 430+ films',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Ranjeet')
+  AND birth_month_day = '07-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Prolific dialogue writer and comedian, Muqaddar Ka Sikandar, Coolie, Amar Akbar Anthony',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2018-01-01')
+WHERE lower(name) = lower('Kader Khan')
+  AND birth_month_day = '10-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Sholay jailer, prolific Hindi film comedian and character actor',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Asrani')
+  AND birth_month_day = '01-01';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Mela, Ek Phool Do Mali, Tipu Sultan TV series producer, father of Zayed Khan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sanjay Khan')
+  AND birth_month_day = '01-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Main Hoon Na, Shabd, Dus, son of Sanjay Khan',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Zayed Khan')
+  AND birth_month_day = '07-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Taj Mahal An Eternal Love Story, Razia Sultan, historical epic director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Akbar Khan')
+  AND birth_month_day = '11-06';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Actor'),
+  known_for        = 'Multi-lingual actor, Singham villain, Wanted, Dabang — 5 National Awards',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Prakash Raj')
+  AND birth_month_day = '03-26';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Ek Hasina Thi, Johnny Gaddaar, Badlapur, Andhadhun, Merry Christmas',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Sriram Raghavan')
+  AND birth_month_day = '11-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'A Wednesday, Special 26, Baby, M.S. Dhoni biopic, Rustom',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Neeraj Pandey')
+  AND birth_month_day = '11-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Polladhavan, Aadukalam, Visaranai, Vada Chennai, Viduthalai — Tamil new wave icon',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Vetrimaaran')
+  AND birth_month_day = '11-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Sethu, Pithamagan, Naan Kadavul, Avan Ivan, Paradesi, unique Tamil auteur',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Bala')
+  AND birth_month_day = '11-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Politician'),
+  known_for        = 'IAS officer, Kerala cadre, Union Minister of Tourism, demolition man',
+  tier             = 'public_figure'
+WHERE lower(name) = lower('Alphons Kannanthanam')
+  AND birth_month_day = '11-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Historical'),
+  known_for        = 'Sufi poet, musician, Father of Qawwali, Khyal, Tarana, disciple of Nizamuddin Auliya',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1325-01-01')
+WHERE lower(name) = lower('Amir Khusrau')
+  AND birth_month_day = '06-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'Father of modern Odia literature, Chha Mana Atha Guntha, Odia novel pioneer',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1918-01-01')
+WHERE lower(name) = lower('Fakir Mohan Senapati')
+  AND birth_month_day = '01-13';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Author'),
+  known_for        = 'Shivshahir, Padma Vibhushan, greatest authority on Chhatrapati Shivaji Maharaj',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2021-01-01')
+WHERE lower(name) = lower('Babasaheb Purandare')
+  AND birth_month_day = '07-29';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Prabhat Film Company, Do Aankhen Barah Haath, Navrang, Jhanak Jhanak Payal Baje',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1990-01-01')
+WHERE lower(name) = lower('V. Shantaram')
+  AND birth_month_day = '11-18';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Mughal-e-Azam director, greatest Indian historical epic, 16 years to make',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1971-01-01')
+WHERE lower(name) = lower('K. Asif')
+  AND birth_month_day = '08-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Mother India director, Andaz, Aan, one of Bollywood''s greatest directors',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1964-01-01')
+WHERE lower(name) = lower('Mehboob Khan')
+  AND birth_month_day = '09-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Do Bigha Zamin, Devdas, Madhumati, Bandini, master of Indian social realism',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '1966-01-01')
+WHERE lower(name) = lower('Bimal Roy')
+  AND birth_month_day = '07-12';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Anand, Golmaal, Chupke Chupke, Gol Maal, Khubsoorat — greatest comedy director',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2006-01-01')
+WHERE lower(name) = lower('Hrishikesh Mukherjee')
+  AND birth_month_day = '09-30';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Naya Daur, Waqt, Mahabharat TV series, founder of BR Films',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2008-01-01')
+WHERE lower(name) = lower('BR Chopra')
+  AND birth_month_day = '04-22';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Silsila, Chandni, DDLJ producer, Dil To Pagal Hai, romantic filmmaking king',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2012-01-01')
+WHERE lower(name) = lower('Yash Raj Chopra')
+  AND birth_month_day = '09-27';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Bhuvan Shome, Chorus, Akaler Sandhane, Khandahar, parallel cinema pioneer',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2018-01-01')
+WHERE lower(name) = lower('Mrinal Sen')
+  AND birth_month_day = '05-14';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Swayamvaram, Elippathayam, Mukhamukham, Daisy, greatest Malayalam director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Adoor Gopalakrishnan')
+  AND birth_month_day = '07-03';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Ghatashraddha, Tabarana Kathe, Dweepa, Haseena, National Award winning Kannada director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Girish Kasaravalli')
+  AND birth_month_day = '01-05';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Hamsa Geethe, Adi Shankaracharya — first film entirely in Sanskrit',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2003-01-01')
+WHERE lower(name) = lower('GV Iyer')
+  AND birth_month_day = '09-25';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Halodhia Choraye Baodhan Khai, It Rained All Night, leading Assamese director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Jahnu Barua')
+  AND birth_month_day = '12-07';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Unishe April, Dahan, Utsab, Chokher Bali, Raincoat, greatest Bengali director of era',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2013-01-01')
+WHERE lower(name) = lower('Rituparno Ghosh')
+  AND birth_month_day = '08-31';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Hera Pheri, Hulchul, Hungama, Bhagam Bhag, Kanche, Malayalam-Bollywood director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Priyadarshan')
+  AND birth_month_day = '07-08';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Apoorva Raagangal, Aval Appadithan, Ninaithale Inikkum, mentor of Rajinikanth and Kamal',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2014-01-01')
+WHERE lower(name) = lower('K. Balachander')
+  AND birth_month_day = '07-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Aayee Milan Ki Bela, Aandhi, Aarti, Apnapan, produced Aap Ki Kasam',
+  tier             = 'historical',
+  death_date       = COALESCE(death_date, '2014-01-01')
+WHERE lower(name) = lower('J. Om Prakash')
+  AND birth_month_day = '02-02';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Main Hoon Na, Om Shanti Om, Tees Maar Khan, choreographer turned director',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('Farah Khan')
+  AND birth_month_day = '01-09';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Coolie No. 1, Hero No. 1, Judwaa, No Entry, comedy factory of 1990s, father of Varun',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('David Dhawan')
+  AND birth_month_day = '08-16';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Director'),
+  known_for        = 'Tezaab, Parinda, Narsimha, Nishchaiy — action thriller director of 1980s-90s',
+  tier             = 'entertainment'
+WHERE lower(name) = lower('N Chandra')
+  AND birth_month_day = '04-28';
+UPDATE celebrity_sitelinks SET
+  nationality      = 'Indian',
+  nationality_code = 'IN',
+  occupation       = COALESCE(NULLIF(occupation, ''), 'Businessman'),
+  known_for        = 'Chairman of Adani Group, one of India''s largest conglomerates spanning ports, airports, energy, and infrastructure. Has been Asia''s richest person.',
+  tier             = 'achievement'
+WHERE lower(name) = lower('Gautam Adani')
+  AND birth_month_day = '06-24';
+
+-- Step 3: INSERT fallback — only fires for TS entries whose name doesn't match the table
+-- (Expected: 0 rows inserted based on diagnostic)
 INSERT INTO celebrity_sitelinks (name, birth_date, birth_month_day, occupation, known_for, nationality, nationality_code, tier, death_date)
 SELECT 'Mahatma Gandhi', '1869-10-02', '10-02', 'Freedom Fighter', 'Father of the Nation, leader of Indian independence movement through nonviolent civil disobedience', 'Indian', 'IN', 'historical', '1948-01-01'
 WHERE NOT EXISTS (
@@ -3598,5 +8555,5 @@ WHERE NOT EXISTS (
 );
 
 -- Verification
--- SELECT count(*) FROM celebrity_sitelinks WHERE nationality_code = 'IN';
--- SELECT name, occupation, wikipedia_url FROM celebrity_sitelinks WHERE birth_month_day = '06-25';
+SELECT count(*) AS indian_rows FROM celebrity_sitelinks WHERE nationality_code = 'IN';
+SELECT name, occupation, known_for, wikipedia_url FROM celebrity_sitelinks WHERE birth_month_day = '06-25' AND nationality_code = 'IN';
