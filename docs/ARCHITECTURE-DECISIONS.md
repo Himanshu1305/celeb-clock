@@ -1,7 +1,7 @@
 # BornClock — Architecture Decisions & Maintenance Log
 
 > Purpose: capture WHAT was built, WHY it was built that way, what failed before it, and what remains open — so future sessions don't re-derive this from scratch. Update this file whenever a significant decision lands.
-> Last updated: 2026-07-04 (session 5-N — live-fetch guard, CelebrityMatch unification, January date corrections).
+> Last updated: 2026-07-04 (session 5-O — Stage 2 enrichment scripts, verify-print trim, Cancer plural content pass).
 
 ---
 
@@ -71,7 +71,7 @@ Everything after the cover is wrapped in a **native HTML `<table>`**: running he
 - **sparse-page report** — pages with fill < ~0.55 are LISTED FOR REVIEW, not asserted. Green assertions ≠ blank-space resolved; read the list.
 - **faithfulness self-check runs first** (header must repeat on pages 2 AND 3); if it fails, the print CSS wasn't applied and the run aborts rather than asserting against a bogus PDF.
 
-Notes: headless PDF generation never adds dialog furniture, so the no-furniture assertion validates content/CSS only. Known issue: a full run took ~28 min at one point — **runtime trim is an open task** (suspects: dev-server start, networkidle hang, PNG step).
+Notes: headless PDF generation never adds dialog furniture, so the no-furniture assertion validates content/CSS only. **Runtime trim RESOLVED (session 5-O, 79e31cd):** switched from `npm run dev` (cold compilation, 90s timeout) to `vite preview` (serves pre-built dist, ready in ~1s); replaced `waitUntil: 'networkidle'` with `waitForSelector('[data-celeb-source]')` (live-fetch guard selector). New total runtime: **~4s** (down from ~2-3 minutes). Pass `--rebuild` to force a fresh build before the preview run.
 
 Test reference person: **Neeraj, born June 25, 1966** — Cancer / Horse / Mithuna / Sagittarius Moon / Purva Ashadha / Life Path 8 / Strength tarot. Every before/after uses this report.
 
@@ -193,7 +193,7 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 ## 8. Open items & follow-ups (with context — the section that saves the next session)
 
 **Data**
-- **Stage 2 enrichment (highest-leverage task, redesigned):** for all 25,952 rows, pull the Wikidata short **description** and **wikipedia_url**, and populate `wikidata_id`. NOT an import — the seed already exists; this fills three fields. `wikidata_id` is empty table-wide (see §5) so it cannot be used as the lookup key — Stage 2 must match each row using the same A/A2/B/B2 pipeline documented in §5 (name + birth_date + citizenship). Key Stage 2 requirements from the January fix work: (1) log which stage/tolerance produced each match; (2) A2 and ±year matches go to a review queue — do not auto-apply to `birth_date`; (3) keep precision ≥ 11 gate. Reuse `migrate-indian-celebs.mjs` pattern (batch, per-row errors, summary). Rate-limit Wikidata (≤50 req/s). Do NOT write hooks in this pass.
+- **Stage 2 enrichment (highest-leverage task, SCRIPTS BUILT 2026-07-04 — session 5-O, commit 91c2cac):** scripts built and harness-verified; not yet executed against the DB. `scripts/enrich-celebrities.mjs` fills `wikidata_id`, `occupation` (Wikidata EN description), `wikipedia_url` for all 25,952 rows. Pipeline: A (SPARQL exact date + P27 if IN) → A2 (SPARQL year-only, **no P27 filter** — critical: A2 always drops the citizenship gate to catch Wikidata mismatches like Diljit Dosanjh P27=Q30) → B (name search, exact date) → B2 (name search, year ±1 + transliteration). `scripts/lib/wikidata-match.mjs` is the shared lib. Test harness `scripts/test-matcher.mjs` runs 8 live cases (8/8 pass). **Run commands:** `SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/enrich-celebrities.mjs --dry-run --sample=20` then full run without --dry-run. Resumable via wikidata_id IS NULL + `--start-after=<id>`.
 - **~~44-name January review list~~ RESOLVED (2026-07-04):** `scripts/fix-january-dates.mjs` resolved 18 fixes + 23 confirmed from 48 rows (Phase 3's 44 + 4 `01-01` entries). 7 exceptions remain for manual-when-convenient (see §5). Ilayaraja manually resolved in Studio (06-02). 38% of the January rows had wrong dates; non-January corruptions are inherited by Stage 2.
 - **Four non-Indian June-25 rows have confirmed NULL occupation** (George Michael, Bourdain, Abrikosov, Jensen) — DB is unenriched. Stage 2 covers them. Until then they render as single-descriptor cards with "Celebrity" as fallback.
 - **~~CelebrityMatch.tsx (/age-calculator) uses static file~~ RESOLVED (d83e1d7):** CelebrityMatch now calls `getRankedBirthdayCelebrities` (same Supabase path as /results, `userCountry='IN'`, limit=12). `/age-calculator` and `/results` now show the same ranked celebrity data. `@/data/celebrities` is deprecated — still imported by `BirthdaySearchService.searchLocalDatabase()` for the <20-results static fallback; do not delete until Stage 2 fills sitelinks for enough rows to retire that path.
@@ -202,9 +202,9 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 **Print/report**
 - **~~verify-print live-fetch guard missing~~ RESOLVED (f810fe5):** invisible 1px white span `·LIVE·`/`·FROZEN·` in the Twins section; assertion 5f in verify-print.mjs confirms live Supabase fetch on every run. See §4 for the mechanism.
 - **Print Indian tag confirmed in code as `🇮🇳 Indian` (ReportView.tsx:703).** Visual render in Chromium headless PDF still unverified — flag emoji are the least portable class; verify-print doesn't currently assert on Twins section content. Prior safe fallback was plain gold "Indian" text if emoji fails.
-- verify-print.mjs runtime trim (~28 min observed once).
+- **~~verify-print.mjs runtime trim~~ RESOLVED (79e31cd):** `vite preview` + `waitForSelector('[data-celeb-source]')` → ~4s total. See §4.
 - Sparse-page list review on next export; standing decision: continuous flow vs section-per-page.
-- Content pass: replace standalone plural "Cancers" with "Cancer natives"/"Cancerians" in zodiac prose (research: both are industry-standard; ours collides visually with the disease).
+- **~~Cancer plural content pass~~ RESOLVED (7d91742):** "Cancers" → "Cancer natives"/"Cancerians" in 5 files (zodiacData, birthdayMonthContent, birthdayPersonality, compatibilityData, blogPosts). Other 11 signs confirmed clean.
 - Optional parked: monochrome emoji brand restyle (⭐→★ model).
 
 **Phase 3 (pre-launch)**
