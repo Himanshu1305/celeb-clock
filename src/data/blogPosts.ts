@@ -420,7 +420,7 @@ Aquarians march to their own drum and don't care if anyone else hears the music.
 ### ♋ Cancer (June 21 - July 22)
 **The Nurturer**
 
-Cancers feel everything deeply. The friend who always checks in on you.
+Cancerians feel everything deeply. The friend who always checks in on you.
 
 | Strengths | Challenges |
 |-----------|------------|

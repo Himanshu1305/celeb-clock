@@ -231,7 +231,7 @@ const COMPATIBILITY_MATRIX: Partial<Record<string, CompatibilityResult>> = {
     advice: "Meet each other where you are rather than where you wish the other was." },
 
   'Cancer-Cancer': { overall: 82, love: 86, friendship: 80, work: 72,
-    description: "Two Cancers together create a home of extraordinary emotional depth and nurturing warmth. The risk is over-sensitivity — two deeply feeling people need clear communication to avoid mutual hurt.",
+    description: "Two Cancer natives together create a home of extraordinary emotional depth and nurturing warmth. The risk is over-sensitivity — two deeply feeling people need clear communication to avoid mutual hurt.",
     strengths: ['Total emotional understanding', 'Deep domestic harmony', 'Extraordinary loyalty and care'],
     challenges: ['Double the moodiness', 'Both can retreat into emotional shells simultaneously', 'Codependency risk'],
     advice: "Your emotional attunement is rare — protect it by communicating clearly rather than expecting to be understood intuitively." },
