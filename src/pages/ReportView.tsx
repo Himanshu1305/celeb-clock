@@ -16,7 +16,6 @@ import { calculateMoonSignAndNakshatra } from '@/data/moonSignData';
 import { calculateAllNameNumbers, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 import { calculateBiorhythm, getBiorhythmStatus } from '@/data/biorhythmData';
 import { getTopCompatibleSigns } from '@/data/compatibilityData';
-import { mergeWithIndianCelebrities, isIndianUser, hasIndianCelebritiesForDate } from '@/services/IndianCelebrityService';
 import { useReactToPrint } from 'react-to-print';
 import { getLifePath } from '@/data/numerologyLifePathData';
 import { getNakshatra } from '@/data/nakshatraData';
@@ -368,14 +367,7 @@ const ReportView = () => {
 
   const reportMonth = dob.getMonth() + 1;
   const reportDay = dob.getDate();
-  const showIndianFirst = isIndianUser();
-  const hasIndianOnDate = hasIndianCelebritiesForDate(reportMonth, reportDay);
-  const mergedCelebrities = mergeWithIndianCelebrities(
-    liveCelebrities ?? celebrities ?? [],
-    reportMonth,
-    reportDay,
-    showIndianFirst
-  );
+  const celebsSource = (liveCelebrities ?? celebrities ?? []) as any[];
   const reportUrl = `${window.location.origin}/report/${slug}`;
 
   const handleCopy = () => {
@@ -656,18 +648,12 @@ const ReportView = () => {
             <p className="bb-sub">Famous people born on {monthName} {dob.getDate()}, ranked by global recognition</p>
           </div>
 
-          {showIndianFirst && !hasIndianOnDate && (
-            <p className="text-xs text-gray-400 italic mb-3 text-center">
-              Showing global celebrities — no prominent Indian birthdays found for this date
-            </p>
-          )}
-
-          {mergedCelebrities.length > 0 ? (() => {
+          {celebsSource.length > 0 ? (() => {
             const getCelebYear = (c: any): number =>
               c.birth_year ?? (c.birthDate ? new Date(c.birthDate + 'T12:00:00').getFullYear() : 0);
-            const sortedCelebrities = [...mergedCelebrities].sort((a: any, b: any) => {
-              if (a.isIndian && !b.isIndian) return showIndianFirst ? -1 : 1;
-              if (!a.isIndian && b.isIndian) return showIndianFirst ? 1 : -1;
+            const sortedCelebrities = [...celebsSource].sort((a: any, b: any) => {
+              if (a.nationalityCode === 'IN' && b.nationalityCode !== 'IN') return -1;
+              if (b.nationalityCode === 'IN' && a.nationalityCode !== 'IN') return 1;
               const yearA = getCelebYear(a);
               const yearB = getCelebYear(b);
               if (yearA >= 1940 && yearB < 1940) return -1;
@@ -694,13 +680,12 @@ const ReportView = () => {
                   occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') || occ.includes('mathematician') ? 'Scientist' : null;
                 const isDeceased = c.death_year != null || c.isLiving === false;
                 return (
-                  <div key={i} className={`border rounded-2xl p-5 hover:shadow-md transition-shadow bg-white ${c.isIndian ? 'border-orange-200 ring-1 ring-orange-100' : 'border-gray-100'}`} style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                  <div key={i} className="border rounded-2xl p-5 hover:shadow-md transition-shadow bg-white border-gray-100" style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
                     <div className="flex items-start gap-3 mb-3">
                       <span className="text-3xl">{catIcon}</span>
                       <div className="flex-1 min-w-0">
                         <div className="font-bold text-gray-900 text-sm leading-tight">{c.name}</div>
                         {year ? <div className="text-xs mt-0.5 bb-num" style={{ color: 'var(--muted)' }}>b. {year}{isDeceased ? ' †' : ''}</div> : null}
-                        {c.isIndian && <span className="text-[10px] text-orange-500 font-medium">Indian</span>}
                       </div>
                     </div>
                     {(c.known_for || c.occupation || (c as any).profession) && (

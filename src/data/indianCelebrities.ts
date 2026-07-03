@@ -1,3 +1,7 @@
+// MIGRATED: all 598 entries have been enriched into celebrity_sitelinks via
+// scripts/migrations/2026-07-indian-celebrities.sql (nationality_code='IN').
+// This file is kept for reference only — no production code imports it.
+
 export interface IndianCelebrity {
   name: string;
   birth_date: string; // YYYY-MM-DD

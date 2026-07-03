@@ -5,8 +5,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Celebrity } from '@/data/celebrities';
 import { StarIcon, CakeIcon } from 'lucide-react';
 import { classifyDisplayTier, DisplayTier } from '@/data/celebrityCategories';
-import { isIndianUser } from '@/services/IndianCelebrityService';
-import { getIndianCelebritiesByDate } from '@/data/indianCelebrities';
 
 interface CelebrityMatchProps {
   birthDate: Date | null;
@@ -58,25 +56,11 @@ export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatc
 
   useEffect(() => {
     if (!birthDate) return;
-    const month = birthDate.getMonth() + 1;
-    const day = birthDate.getDate();
-    const showIndian = isIndianUser();
 
     import('@/data/celebrities').then(({ findCelebrityByBirthday }) =>
       findCelebrityByBirthday(birthDate).then(matches => {
-        const indianRaw = getIndianCelebritiesByDate(month, day);
-        const existingNames = new Set(matches.map(c => c.name.toLowerCase()));
-        const indianConverted: Celebrity[] = indianRaw
-          .filter(ic => !existingNames.has(ic.name.toLowerCase()))
-          .map(ic => ({
-            name: ic.name,
-            birthDate: ic.birth_date,
-            profession: ic.known_for.length > 70 ? ic.known_for.substring(0, 70) + '…' : ic.known_for,
-            funFact: ic.category,
-          }));
-        const merged = showIndian ? [...indianConverted, ...matches] : [...matches, ...indianConverted];
-        setMatchingCelebrities(merged);
-        onCelebritiesChange?.(merged);
+        setMatchingCelebrities(matches);
+        onCelebritiesChange?.(matches);
       })
     );
   }, [birthDate, onCelebritiesChange]);
