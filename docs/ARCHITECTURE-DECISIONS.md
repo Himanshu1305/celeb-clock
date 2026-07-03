@@ -1,7 +1,7 @@
 # BornClock — Architecture Decisions & Maintenance Log
 
 > Purpose: capture WHAT was built, WHY it was built that way, what failed before it, and what remains open — so future sessions don't re-derive this from scratch. Update this file whenever a significant decision lands.
-> Last updated: 2026-07-03 (session 5 — Indian celebrity migration + dedupe complete).
+> Last updated: 2026-07-04 (session 5-N — live-fetch guard, CelebrityMatch unification, January date corrections).
 
 ---
 
@@ -64,9 +64,10 @@ Everything after the cover is wrapped in a **native HTML `<table>`**: running he
 
 ## 4. Verification tooling
 
-`scripts/verify-print.mjs` (9c491dd, kept in sync at 84700c2) renders the real Neeraj report headlessly (Playwright + Chromium) and asserts on the printed PDF:
+`scripts/verify-print.mjs` (9c491dd, kept in sync at f810fe5) renders the real Neeraj report headlessly (Playwright + Chromium) and asserts on the printed PDF:
 - running header on every content page; footer on every page; cover bare
 - no dialog-furniture strings; page count; clipping check (content vs reserved bands)
+- **live-fetch guard (assertion 5f, f810fe5):** an invisible 1px white span `·LIVE·` / `·FROZEN·` is rendered in the Twins section of ReportView based on whether `liveCelebrities` is non-null (live Supabase fetch) or null (frozen-blob fallback). pdfjs reliably extracts 1px white text from Chromium's PDF content stream. The assertion fires — and the run fails — if the frozen blob was served instead of a live fetch, ensuring all layout assertions are against real data. Without this guard a silent Supabase failure returns `[]` → frozen blob → all 9 layout assertions pass, but celebrity data is untested.
 - **sparse-page report** — pages with fill < ~0.55 are LISTED FOR REVIEW, not asserted. Green assertions ≠ blank-space resolved; read the list.
 - **faithfulness self-check runs first** (header must repeat on pages 2 AND 3); if it fails, the print CSS wasn't applied and the run aborts rather than asserting against a bogus PDF.
 
@@ -84,6 +85,35 @@ Test reference person: **Neeraj, born June 25, 1966** — Cancer / Horse / Mithu
 **Table constraints:** `UNIQUE(name, birth_date)` is enforced at DB level (`celebrity_sitelinks_name_birth_date_key`). This surfaces during deduplication when an UPDATE would move a row onto an already-occupied `(name, birth_date)` slot — the constraint fires and blocks the write. Two safe orderings: (1) DELETE the occupant first, then UPDATE the survivor onto the freed slot; (2) invert — keep the colliding fresh row, copy `sitelinks` (and any other fields to preserve) from the original, DELETE the original. Use (2) when the fresh row is already enriched (has `nationality_code`, `known_for`, etc.) and you'd have to re-copy too many fields the other way.
 
 **Critical (confirmed 2026-07-03): `wikidata_id` is NULL for every row in the seed — the column was never populated at seed time.** This invalidates Stage 2's plan to key Wikidata API lookups on `wikidata_id`. Stage 2 will instead need `name + birth_date` matching against the Wikidata search API (see §8).
+
+### January date corrections (2026-07-04)
+
+`scripts/fix-january-dates.mjs` disambiguated 48 fresh IN inserts (44 non-`01-01` + 4 `01-01` entries that Phase 3 of the dedupe script had excluded). The script queries Wikidata using a four-stage pipeline:
+
+| Stage | Filter | Notes |
+|---|---|---|
+| **A** | exact `rdfs:label@en` + `P27=Q668` + exact birth year + precision ≥ 11 | Baseline: high confidence |
+| **A2** | exact `rdfs:label@en` + **no P27** + exact birth year + precision ≥ 11 | Covers Wikidata citizenship gaps — e.g. Diljit Dosanjh is listed as `P27=Q30` (US) not `Q668` (India); Stage A returns 0; A2 finds him via exact label + year |
+| **B** | `wbsearchentities` alias search + `P27=Q668` + **±2 year tolerance** | Handles: (1) alias spellings (Amisha/Ameesha Patel); (2) Wikidata year errors (Shilpa Shetty: Wikipedia=1975, Wikidata=1976 — ±1 year tolerated) |
+| **B2** | `wbsearchentities` with transliteration variant + `P27=Q668` + ±2 year | Handles name transliteration variants — "E. Sridharan" → search "E. Sreedharan" to find `Q1273577` |
+
+Precision < 11 (year-only) cannot confirm a month-day and always results in EXCEPTION regardless of stage.
+
+**Outcome (2026-07-04):** 18 fixes applied, 23 confirmed (genuine January birthdays), 7 exceptions left for manual-when-convenient review:
+- **Byju Raveendran** — Wikidata P569 precision = 9 (year-only); cannot confirm day
+- **Deep Kalra** — no P569 birth claim in Wikidata
+- **Chanakya** — ancient figure; precision < 11
+- **Mirabai** — medieval figure; precision < 11
+- **Tantia Tope** — 19th-century figure; precision < 11
+- **Raghav Juyal** — 0 Wikidata candidates found (name/label mismatch)
+- **Ilayaraja** — manually resolved in Studio (06-02; two-candidate conflict in Stage B)
+
+**Corruption stat:** 18 of 48 January dates (38%) were wrong. The month-corruption pattern extends beyond the documented June→January case — at least some were other months. This means non-January corruptions are likely present in the full 25,952-row seed; they are invisible until someone searches a specific date. Stage 2's Wikidata matcher will inherit the A/A2/B/B2 approach for all rows.
+
+**Stage 2 requirements inherited from this work:**
+1. Log which stage (A/A2/B/B2) and which tolerance (exact vs ±year) produced each match — A2 and ±year matches are lower-confidence and should be routed to a review queue at 25K scale.
+2. Do not auto-apply A2 or ±year matches to `birth_date` without a separate review pass; use them to populate `wikidata_id` and `wikipedia_url` only.
+3. Keep the precision ≥ 11 gate — year-only Wikidata records cannot correct month-day data.
 
 Before session 5: `occupation`, `wikipedia_url`, `nationality*` were NULL for essentially all rows. Rich display data came from client-side overlays, not the DB.
 
@@ -163,14 +193,14 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 ## 8. Open items & follow-ups (with context — the section that saves the next session)
 
 **Data**
-- **Stage 2 enrichment (highest-leverage task, redesigned):** for all 25,952 rows, pull the Wikidata short **description** and **wikipedia_url**. NOT an import — the seed already exists; this fills two fields. `wikidata_id` is empty table-wide (see §5) so it cannot be used as the lookup key — Stage 2 must match each row against the Wikidata search API by `name + birth_date`, accept the top result if it scores above a confidence threshold, and skip/log low-confidence matches for manual review. Reuse the `migrate-indian-celebs.mjs` pattern (batch, per-row errors, summary). Rate-limit Wikidata politely (≤50 req/s). Do NOT write hooks in this pass.
-- **44-name January review list (manual, user):** Phase 3 of `scripts/dedupe-indian-celebs.mjs` found 44 remaining fresh IN inserts with `birth_month_day LIKE '01-%'` (excluding the Wikidata `'01-01'` placeholder). Some are genuine January birthdays; others may be a June→January date-corruption artefact from the TS source file. Requires human review — run `--dry-run` to reprint the list, then verify each name's actual birthday. Not a script task.
+- **Stage 2 enrichment (highest-leverage task, redesigned):** for all 25,952 rows, pull the Wikidata short **description** and **wikipedia_url**, and populate `wikidata_id`. NOT an import — the seed already exists; this fills three fields. `wikidata_id` is empty table-wide (see §5) so it cannot be used as the lookup key — Stage 2 must match each row using the same A/A2/B/B2 pipeline documented in §5 (name + birth_date + citizenship). Key Stage 2 requirements from the January fix work: (1) log which stage/tolerance produced each match; (2) A2 and ±year matches go to a review queue — do not auto-apply to `birth_date`; (3) keep precision ≥ 11 gate. Reuse `migrate-indian-celebs.mjs` pattern (batch, per-row errors, summary). Rate-limit Wikidata (≤50 req/s). Do NOT write hooks in this pass.
+- **~~44-name January review list~~ RESOLVED (2026-07-04):** `scripts/fix-january-dates.mjs` resolved 18 fixes + 23 confirmed from 48 rows (Phase 3's 44 + 4 `01-01` entries). 7 exceptions remain for manual-when-convenient (see §5). Ilayaraja manually resolved in Studio (06-02). 38% of the January rows had wrong dates; non-January corruptions are inherited by Stage 2.
 - **Four non-Indian June-25 rows have confirmed NULL occupation** (George Michael, Bourdain, Abrikosov, Jensen) — DB is unenriched. Stage 2 covers them. Until then they render as single-descriptor cards with "Celebrity" as fallback.
-- **CelebrityMatch.tsx (/age-calculator) still uses the static `@/data/celebrities` file (~50 entries) — Supabase not connected.** People shown on /age-calculator can diverge from /results. The `birthdayData.ts` / month files are used by TodaysBirthdays as a <20-results fallback only — decide whether to retire them once Stage 2 fills occupation/sitelinks for more rows.
+- **~~CelebrityMatch.tsx (/age-calculator) uses static file~~ RESOLVED (d83e1d7):** CelebrityMatch now calls `getRankedBirthdayCelebrities` (same Supabase path as /results, `userCountry='IN'`, limit=12). `/age-calculator` and `/results` now show the same ranked celebrity data. `@/data/celebrities` is deprecated — still imported by `BirthdaySearchService.searchLocalDatabase()` for the <20-results static fallback; do not delete until Stage 2 fills sitelinks for enough rows to retire that path.
 - **TodaysBirthdays country-gate uses `profile?.country` (Supabase auth profile field, not real-time geo/locale).** Typically IP-detected at signup. NRIs who signed up outside India won't get the Indian-first boost; NRIs who signed up in India will. Likely correct for SEO; document product intent if NRI precision matters.
 
 **Print/report**
-- **verify-print live-fetch guard missing:** `verify-print.mjs` asserts layout and runs against live Supabase data now that the migration is complete, but it cannot prove the data came from a live fetch vs the frozen-blob fallback in ReportView. A source discriminator is needed — e.g., render a `data-source="live"` attribute on the Twins section when `liveCelebrities` (not `celebrities`) was used, and assert its presence in verify-print. Without this, a silent fetch failure (Supabase error → empty array → frozen blob) passes all 9 assertions.
+- **~~verify-print live-fetch guard missing~~ RESOLVED (f810fe5):** invisible 1px white span `·LIVE·`/`·FROZEN·` in the Twins section; assertion 5f in verify-print.mjs confirms live Supabase fetch on every run. See §4 for the mechanism.
 - **Print Indian tag confirmed in code as `🇮🇳 Indian` (ReportView.tsx:703).** Visual render in Chromium headless PDF still unverified — flag emoji are the least portable class; verify-print doesn't currently assert on Twins section content. Prior safe fallback was plain gold "Indian" text if emoji fails.
 - verify-print.mjs runtime trim (~28 min observed once).
 - Sparse-page list review on next export; standing decision: continuous flow vs section-per-page.
