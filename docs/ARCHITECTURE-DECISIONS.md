@@ -24,7 +24,11 @@ Stack: Vite + React + TS + Tailwind + shadcn + Supabase + Vercel + Razorpay + Re
 - SYSTEM FONTS only. Google Fonts caused glyph corruption in print (historical incident).
 - Design tokens: ink `#0C1A2B`, navy `#103A5C`, blue `#1E6FB8`, gold `#B8862F`, gold-soft `#F5EAD2`, gold-tint `#FBF6EA`. Birthday report = navy + gold.
 
-**Meta-lesson (earned twice, expensively):** when something works elsewhere in the codebase, DIFF AGAINST IT and replicate. Do not theorize new architecture. Validate print-CSS candidates in headless Chromium before committing. Prefer tools the repo already has (e.g. the Supabase JS client) over external tooling (psql, Studio mega-pastes).
+**Meta-lessons (earned expensively):**
+- When something works elsewhere in the codebase, DIFF AGAINST IT and replicate. Do not theorize new architecture.
+- Validate print-CSS candidates in headless Chromium before committing.
+- Prefer tools the repo already has (e.g. the Supabase JS client) over external tooling (psql, Studio mega-pastes).
+- **A stale deploy can make removed code look like working data — verify against the DB, not a rendered page.** (Staging showed rich Indian cards after Part C removed the client-side merge; this was misread as migration success. In reality the build was stale and the merge was still running. The DB was unenriched throughout.)
 
 ---
 
@@ -77,12 +81,22 @@ Test reference person: **Neeraj, born June 25, 1966** — Cancer / Horse / Mithu
 
 Before session 5: `occupation`, `wikipedia_url`, `nationality*` were NULL for essentially all rows. Rich display data came from client-side overlays, not the DB.
 
-### The Indian celebrity migration (e57b0e0 → ccfbf4f → executed via Node script)
-- `src/data/indianCelebrities.ts` (598 entries, hand-curated: occupation, known_for, tier) used to be injected client-side by `mergeWithIndianCelebrities()` on top of DB results. This was **enrichment of stub Wikidata rows**, not duplicate injection — the reason the merge existed.
-- Migration history: an INSERT-based SQL file was wrong (all 598 people already existed as Wikidata rows; the WHERE NOT EXISTS guard correctly rejected everything → count 0). Rewritten as UPDATEs matching `lower(name) + birth_month_day`. An 8,559-line paste into Supabase Studio **silently rolled back** (whole-file transaction; no error surfaced). Final, working approach: `scripts/migrate-indian-celebs.mjs` — Node script using the Supabase JS client with the service-role key; per-row errors, partial progress preserved. **Use this pattern for all future bulk data work. Never paste large SQL into Studio.**
-- Result: 598 rows enriched with `nationality='Indian'`, `nationality_code='IN'`, `occupation` (COALESCE-preserving), `known_for`, `tier`.
+### The Indian celebrity migration — full (corrected) history
+
+**What the data was:** `src/data/indianCelebrities.ts` (598 entries, hand-curated: occupation, known_for, tier) was injected client-side by `mergeWithIndianCelebrities()` on top of DB results. This was **enrichment of stub Wikidata rows**, not duplicate injection — the reason the merge existed.
+
+**Attempt 1 — INSERT SQL (e57b0e0):** all 598 people already existed as Wikidata rows; the `WHERE NOT EXISTS` guard correctly rejected everything → count 0.
+
+**Attempt 2 — UPDATE SQL (ccfbf4f):** an 8,559-line paste into Supabase Studio **silently rolled back** (whole-file transaction; Studio showed no error). Zero rows enriched.
+
+**False positive:** staging showed rich Indian cards after Part C (a75dff3) removed the client-side merge. This was misread as migration success. In reality, staging was running a **stale build** that still contained the old merge code. The DB was unenriched throughout. (See §2 meta-lesson.)
+
+**Compounding error:** commit 5d789f5 (Prompt 5-K) added `known_for` to the Supabase SELECT before the column existed. This caused `getRankedBirthdayCelebrities` to silently return `[]` (Supabase error → swallowed), so all verify-print runs from 5-K onwards were rendering the **frozen report blob**, not live-fetched data. Layout assertions still held; data assertions were not against live data.
+
+**Actual migration (2026-07-03):** user ran `ALTER TABLE celebrity_sitelinks ADD COLUMN IF NOT EXISTS known_for TEXT, ADD COLUMN IF NOT EXISTS tier TEXT` in Studio (verified). `scripts/migrate-indian-celebs.mjs` was written as the definitive approach — Node script using the Supabase JS client with the service-role key, sequential per-row UPDATEs, per-row error reporting, partial-progress-preserved. **This is the pattern for all future bulk data work. Never paste large SQL into Studio.**
+
 - Part C (a75dff3): merge removed from all call sites; `IndianCelebrityService.ts` deleted; `indianCelebrities.ts` kept on disk with a MIGRATED header as the curation backup — nothing imports it.
-- Indian-first ordering preserved in code: ReportView sorts `nationality_code === 'IN'` first unconditionally; TodaysBirthdays **country-gates** the boost. This divergence was introduced by Claude Code, judged sensible (global SEO page shouldn't boost Indian rows for non-Indian visitors), but the gate mechanism needs confirming — see open items.
+- Indian-first ordering in code: ReportView sorts `nationality_code === 'IN'` first unconditionally; TodaysBirthdays country-gates the boost (see §8).
 
 ### Images
 No image column. `WikipediaImageService.fetchCelebrityImage()` hits the Wikipedia pageimages API client-side at render, 7-day localStorage cache, initials-avatar fallback.
@@ -128,7 +142,7 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 
 **Data**
 - **Stage 2 enrichment (highest-leverage task):** for all 25,952 rows, pull the Wikidata short **description** and **wikipedia_url** using the existing `wikidata_id` column. NOT an import — the seed already exists; this fills two fields. Reuse the `migrate-indian-celebs.mjs` pattern (batch, per-row errors, summary). Rate-limit Wikidata politely. Do NOT write hooks in this pass.
-- Four non-Indian June-25 rows may still have NULL occupation (George Michael, Bourdain, Abrikosov, Jensen) unless the manual UPDATEs were run in Studio — verify; Stage 2 covers them regardless.
+- **Four non-Indian June-25 rows have confirmed NULL occupation** (George Michael, Bourdain, Abrikosov, Jensen) — the DB is unenriched; no manual UPDATEs were run. Stage 2 enrichment covers them. Until then they render as single-descriptor cards with "Celebrity" as fallback.
 - **CelebrityMatch.tsx (/age-calculator) still uses static `@/data/celebrities` (~50 entries) — Supabase not connected.** People shown on /age-calculator can diverge from /results; gap remains. The `birthdayData.ts` / month files are used by TodaysBirthdays as a <20-results fallback only — decide whether to retire them once Stage 2 enrichment fills occupation/sitelinks for more rows.
 - **TodaysBirthdays country-gate uses `profile?.country` (Supabase auth profile field, not real-time geo/locale).** Typically IP-detected at signup. NRIs who signed up outside India won't get the Indian-first boost; NRIs who signed up in India will. Likely correct for SEO; document product intent if NRI precision matters.
 
@@ -151,7 +165,7 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 ## 9. Maintenance runbook
 
 - **Verify print:** `node scripts/verify-print.mjs` — read the sparse list, not just the pass/fail.
-- **Add/edit a celebrity:** edit the row in Supabase `celebrity_sitelinks` (occupation = descriptor, known_for = hook, nationality_code for boosting). No deploy needed. For bulk work, copy the `migrate-indian-celebs.mjs` pattern; never paste large SQL into Studio.
+- **Add/edit a celebrity:** edit the row in Supabase `celebrity_sitelinks` (occupation = descriptor, known_for = hook, nationality_code for boosting). No deploy needed. For bulk work, use `scripts/migrate-indian-celebs.mjs` as the pattern template (Supabase JS client, sequential per-row updates, per-row error reporting); never paste large SQL into Studio.
 - **Add a curated hook to a global celebrity:** set `known_for` on their row; the card picks it up everywhere automatically.
 - **Print CSS changes:** validate in headless Chromium BEFORE writing the commit; keep print-only geometry inside the pageStyle string, never in screen CSS.
 - **New print sections:** must live inside the existing tbody cell; respect the break policy in §3.
