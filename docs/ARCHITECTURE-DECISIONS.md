@@ -1,7 +1,7 @@
 # BornClock — Architecture Decisions & Maintenance Log
 
 > Purpose: capture WHAT was built, WHY it was built that way, what failed before it, and what remains open — so future sessions don't re-derive this from scratch. Update this file whenever a significant decision lands.
-> Last updated: 2026-07-03 (session 5).
+> Last updated: 2026-07-03 (session 5 — Indian celebrity migration + dedupe complete).
 
 ---
 
@@ -29,6 +29,8 @@ Stack: Vite + React + TS + Tailwind + shadcn + Supabase + Vercel + Razorpay + Re
 - Validate print-CSS candidates in headless Chromium before committing.
 - Prefer tools the repo already has (e.g. the Supabase JS client) over external tooling (psql, Studio mega-pastes).
 - **A stale deploy can make removed code look like working data — verify against the DB, not a rendered page.** (Staging showed rich Indian cards after Part C removed the client-side merge; this was misread as migration success. In reality the build was stale and the merge was still running. The DB was unenriched throughout.)
+- **Supabase Studio silently rolls back large multi-statement pastes** — no error shown, zero rows changed, row count in Studio shows 0 affected. Use Node scripts for all bulk work; Studio SQL only for single-statement manual surgery.
+- **Multi-statement pastes in Studio abort on the first failing statement and surface only the last error message** — intermediate errors are hidden. If a paste has 500 statements and statement 3 fails, you see one message and nothing ran. Consequence: never diagnose a paste failure by reading the Studio error alone; the error may not point at the real problem. Single statements for surgical fixes; scripts for everything else.
 
 ---
 
@@ -79,6 +81,10 @@ Test reference person: **Neeraj, born June 25, 1966** — Cancer / Horse / Mithu
 ### The table (the big discovery of session 5)
 `celebrity_sitelinks` is a **pre-existing Wikidata bulk seed of 25,952 rows** — not a hand-curated table. Columns: `id, name, birth_date, birth_month_day (text, zero-padded 'MM-DD'), death_date, sitelinks (int — count of Wikipedia language editions; the notability/ranking proxy), nationality, nationality_code, occupation, wikidata_id, wikipedia_url, created_at`, plus `known_for` and `tier` (added 2026-07).
 
+**Table constraints:** `UNIQUE(name, birth_date)` is enforced at DB level (`celebrity_sitelinks_name_birth_date_key`). This surfaces during deduplication when an UPDATE would move a row onto an already-occupied `(name, birth_date)` slot — the constraint fires and blocks the write. Two safe orderings: (1) DELETE the occupant first, then UPDATE the survivor onto the freed slot; (2) invert — keep the colliding fresh row, copy `sitelinks` (and any other fields to preserve) from the original, DELETE the original. Use (2) when the fresh row is already enriched (has `nationality_code`, `known_for`, etc.) and you'd have to re-copy too many fields the other way.
+
+**Critical (confirmed 2026-07-03): `wikidata_id` is NULL for every row in the seed — the column was never populated at seed time.** This invalidates Stage 2's plan to key Wikidata API lookups on `wikidata_id`. Stage 2 will instead need `name + birth_date` matching against the Wikidata search API (see §8).
+
 Before session 5: `occupation`, `wikipedia_url`, `nationality*` were NULL for essentially all rows. Rich display data came from client-side overlays, not the DB.
 
 ### The Indian celebrity migration — full (corrected) history
@@ -97,6 +103,21 @@ Before session 5: `occupation`, `wikipedia_url`, `nationality*` were NULL for es
 
 - Part C (a75dff3): merge removed from all call sites; `IndianCelebrityService.ts` deleted; `indianCelebrities.ts` kept on disk with a MIGRATED header as the curation backup — nothing imports it.
 - Indian-first ordering in code: ReportView sorts `nationality_code === 'IN'` first unconditionally; TodaysBirthdays country-gates the boost (see §8).
+
+### Indian celebrity dedupe (2026-07-03)
+
+`scripts/migrate-indian-celebs.mjs` inserted 381 fresh rows for TS entries that had no `(name, birth_month_day)` match in the Wikidata seed. ~26 of those were date-conflict duplicates — the same person as an existing Wikidata row but on a different date, so the UPDATE missed them and INSERT created a twin instead.
+
+**Classifier used by `scripts/dedupe-indian-celebs.mjs`:**
+- Fresh row: `nationality_code = 'IN'` AND `created_at ∈ [2026-07-03T00:00:00Z, 2026-07-04T00:00:00Z)` (hardcoded migration date, not 'today')
+- Original row: any row with `created_at < 2026-07-03T00:00:00Z` that matches the fresh row's name via `ilike`
+- `wikidata_id` is NOT used — it is NULL for all rows table-wide
+
+**Standing date policy (user-approved):** Wikidata date wins, EXCEPT when the Wikidata `birth_month_day` is `'01-01'` (unknown-day placeholder) — then the curated TS date wins. If TS date wins, `birth_date` is also updated (original may hold a `YYYY-01-01` placeholder).
+
+**Results:**
+- 23 pairs resolved by the script: surviving original row updated with `nationality='Indian'`, `nationality_code='IN'`, `known_for`, `tier`, winning `birth_month_day`; fresh duplicate deleted.
+- 3 pairs (Aryabhata, Sai Baba of Shirdi, Sarvepalli Radhakrishnan) hit the `celebrity_sitelinks_name_birth_date_key` unique constraint — the UPDATE would have placed the original onto a `(name, birth_date)` slot already occupied by the fresh row. Resolution: inverted strategy in Studio — kept the fresh enriched row (already had `nationality_code`, `known_for`, `tier`), manually copied `sitelinks` from the bare original (83 / 95 / 42 respectively), then deleted the original. Verified: zero IN duplicates remain, all three on correct dates.
 
 ### Images
 No image column. `WikipediaImageService.fetchCelebrityImage()` hits the Wikipedia pageimages API client-side at render, 7-day localStorage cache, initials-avatar fallback.
@@ -132,6 +153,7 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 | KINDRED → TWINS; numerology break-before; Cosmic intro; biorhythm note moved above chart | Label clarity; orphan prevention; context before content; disclaimer before consumption | 778b365 |
 | Indian data: UPDATE-not-INSERT migration; Node script over SQL paste | Rows pre-existed in Wikidata seed; Studio silently rolls back big pastes | ccfbf4f + script |
 | Remove client-side merge | DB now holds the enriched data; one source of truth | a75dff3 |
+| Indian celebrity dedupe: script (23) + Studio inverse (3) | 26 date-conflict twins from migration; UNIQUE(name,birth_date) forced 3 manual inverts | dedupe script |
 | Unified two-line card | See §6 | 5d789f5 |
 | PDF: no photos, no raw URLs, single attribution line | Low-res inconsistent thumbnails; URLs are dead weight on paper | 5d789f5 |
 | Server-side PDF rendering | REJECTED — client-side proven sufficient, no backend cost | — |
@@ -141,12 +163,14 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 ## 8. Open items & follow-ups (with context — the section that saves the next session)
 
 **Data**
-- **Stage 2 enrichment (highest-leverage task):** for all 25,952 rows, pull the Wikidata short **description** and **wikipedia_url** using the existing `wikidata_id` column. NOT an import — the seed already exists; this fills two fields. Reuse the `migrate-indian-celebs.mjs` pattern (batch, per-row errors, summary). Rate-limit Wikidata politely. Do NOT write hooks in this pass.
-- **Four non-Indian June-25 rows have confirmed NULL occupation** (George Michael, Bourdain, Abrikosov, Jensen) — the DB is unenriched; no manual UPDATEs were run. Stage 2 enrichment covers them. Until then they render as single-descriptor cards with "Celebrity" as fallback.
-- **CelebrityMatch.tsx (/age-calculator) still uses static `@/data/celebrities` (~50 entries) — Supabase not connected.** People shown on /age-calculator can diverge from /results; gap remains. The `birthdayData.ts` / month files are used by TodaysBirthdays as a <20-results fallback only — decide whether to retire them once Stage 2 enrichment fills occupation/sitelinks for more rows.
+- **Stage 2 enrichment (highest-leverage task, redesigned):** for all 25,952 rows, pull the Wikidata short **description** and **wikipedia_url**. NOT an import — the seed already exists; this fills two fields. `wikidata_id` is empty table-wide (see §5) so it cannot be used as the lookup key — Stage 2 must match each row against the Wikidata search API by `name + birth_date`, accept the top result if it scores above a confidence threshold, and skip/log low-confidence matches for manual review. Reuse the `migrate-indian-celebs.mjs` pattern (batch, per-row errors, summary). Rate-limit Wikidata politely (≤50 req/s). Do NOT write hooks in this pass.
+- **44-name January review list (manual, user):** Phase 3 of `scripts/dedupe-indian-celebs.mjs` found 44 remaining fresh IN inserts with `birth_month_day LIKE '01-%'` (excluding the Wikidata `'01-01'` placeholder). Some are genuine January birthdays; others may be a June→January date-corruption artefact from the TS source file. Requires human review — run `--dry-run` to reprint the list, then verify each name's actual birthday. Not a script task.
+- **Four non-Indian June-25 rows have confirmed NULL occupation** (George Michael, Bourdain, Abrikosov, Jensen) — DB is unenriched. Stage 2 covers them. Until then they render as single-descriptor cards with "Celebrity" as fallback.
+- **CelebrityMatch.tsx (/age-calculator) still uses the static `@/data/celebrities` file (~50 entries) — Supabase not connected.** People shown on /age-calculator can diverge from /results. The `birthdayData.ts` / month files are used by TodaysBirthdays as a <20-results fallback only — decide whether to retire them once Stage 2 fills occupation/sitelinks for more rows.
 - **TodaysBirthdays country-gate uses `profile?.country` (Supabase auth profile field, not real-time geo/locale).** Typically IP-detected at signup. NRIs who signed up outside India won't get the Indian-first boost; NRIs who signed up in India will. Likely correct for SEO; document product intent if NRI precision matters.
 
 **Print/report**
+- **verify-print live-fetch guard missing:** `verify-print.mjs` asserts layout and runs against live Supabase data now that the migration is complete, but it cannot prove the data came from a live fetch vs the frozen-blob fallback in ReportView. A source discriminator is needed — e.g., render a `data-source="live"` attribute on the Twins section when `liveCelebrities` (not `celebrities`) was used, and assert its presence in verify-print. Without this, a silent fetch failure (Supabase error → empty array → frozen blob) passes all 9 assertions.
 - **Print Indian tag confirmed in code as `🇮🇳 Indian` (ReportView.tsx:703).** Visual render in Chromium headless PDF still unverified — flag emoji are the least portable class; verify-print doesn't currently assert on Twins section content. Prior safe fallback was plain gold "Indian" text if emoji fails.
 - verify-print.mjs runtime trim (~28 min observed once).
 - Sparse-page list review on next export; standing decision: continuous flow vs section-per-page.
