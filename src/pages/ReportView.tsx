@@ -368,6 +368,7 @@ const ReportView = () => {
   const reportMonth = dob.getMonth() + 1;
   const reportDay = dob.getDate();
   const celebsSource = (liveCelebrities ?? celebrities ?? []) as any[];
+  const celebSource = liveCelebrities != null ? 'live' : 'frozen';
   const reportUrl = `${window.location.origin}/report/${slug}`;
 
   const handleCopy = () => {
@@ -647,6 +648,9 @@ const ReportView = () => {
             <h2 className="bb-h2">Celebrity Birthday Twins</h2>
             <p className="bb-sub">Famous people born on {monthName} {dob.getDate()}, ranked by global recognition</p>
           </div>
+
+          {/* invisible source marker — extracted by pdfjs; asserted in verify-print */}
+          <span data-celeb-source={celebSource} aria-hidden="true" style={{ fontSize: '1px', color: 'white', lineHeight: 1, userSelect: 'none' }}>{celebSource === 'live' ? '·LIVE·' : '·FROZEN·'}</span>
 
           {celebsSource.length > 0 ? (() => {
             const getCelebYear = (c: any): number =>

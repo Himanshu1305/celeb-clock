@@ -320,6 +320,16 @@ async function main() {
       FAIL(`Furniture "${furn}" FOUND on page(s): ${hit.map((_, i) => i + 1).join(', ')}`);
   }
 
+  // 5f. Celebrity data source guard
+  // The Twins section renders an invisible 1px span: "·LIVE·" when data came from
+  // the live Supabase fetch, "·FROZEN·" when liveCelebrities was null (frozen blob).
+  // pdfjs extracts 1px white text reliably (verified: T1-a preflight 2026-07-03).
+  const hasCelebLive = pages.some(p => p.textLower.includes('·live·'));
+  if (hasCelebLive)
+    PASS('Celebrity data source: live Supabase fetch confirmed');
+  else
+    FAIL('Celebrity live-fetch fell back to frozen blob — celebrity content is NOT being tested. Check BirthdaySearchService errors.');
+
   // ── 6. Clipping check ─────────────────────────────────────────────────────
   // For each content page:
   //   Header zone (pdfY > HEADER_ZONE_Y_MIN ≈ 750): should contain ONLY running header text.

@@ -357,7 +357,7 @@ export async function getRankedBirthdayCelebrities(
       isLiving: !c.death_date,
     }));
   } catch (err) {
-    console.warn('Supabase celebrity query failed, falling back to local DB:', err);
+    console.error('BirthdaySearchService: Supabase celebrity query failed (returning []):', err);
     return [];
   }
 }
