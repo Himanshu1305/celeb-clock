@@ -678,20 +678,30 @@ const ReportView = () => {
                   occ.includes('athlete') || occ.includes('player') || occ.includes('sport') || occ.includes('tennis') || occ.includes('cricket') || occ.includes('football') || occ.includes('basketball') ? 'Athlete' :
                   occ.includes('politic') || occ.includes('president') || occ.includes('minister') || occ.includes('freedom') ? 'Politician' :
                   occ.includes('scientist') || occ.includes('physicist') || occ.includes('inventor') || occ.includes('mathematician') ? 'Scientist' : null;
-                const isDeceased = c.death_year != null || c.isLiving === false;
+                const isDeceased = c.death_year != null || c.deathDate != null || c.isLiving === false;
+                const hook = c.knownFor ?? c.known_for ?? null;
+                const descriptor = c.occupation ?? (c as any).profession ?? null;
                 return (
                   <div key={i} className="border rounded-2xl p-5 hover:shadow-md transition-shadow bg-white border-gray-100" style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
-                    <div className="flex items-start gap-3 mb-3">
+                    <div className="flex items-start gap-3 mb-2">
                       <span className="text-3xl">{catIcon}</span>
                       <div className="flex-1 min-w-0">
                         <div className="font-bold text-gray-900 text-sm leading-tight">{c.name}</div>
-                        {year ? <div className="text-xs mt-0.5 bb-num" style={{ color: 'var(--muted)' }}>b. {year}{isDeceased ? ' †' : ''}</div> : null}
+                        <div className="text-xs mt-0.5 bb-num" style={{ color: 'var(--muted)' }}>
+                          {year ? `b. ${year}${isDeceased ? ' †' : ''}` : ''}
+                          {descriptor ? <span style={{ color: 'var(--ink-soft)' }}>{year ? '  ·  ' : ''}{descriptor}</span> : null}
+                        </div>
                       </div>
                     </div>
-                    {(c.known_for || c.occupation || (c as any).profession) && (
-                      <div className="text-xs text-gray-500 mb-2">{c.known_for || c.occupation || (c as any).profession}</div>
+                    {hook && (
+                      <div className="text-xs text-gray-500 leading-snug mb-2"
+                        style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden' }}>
+                        {hook}
+                      </div>
                     )}
-                    {c.known_for && catLabel && <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'var(--panel)', color: 'var(--navy)', border: '1px solid var(--hairline)' }}>{catLabel}</span>}
+                    {(c.nationalityCode === 'IN' || (c as any).nationality_code === 'IN') && (
+                      <span className="text-[10px] text-orange-500 font-medium">🇮🇳 Indian</span>
+                    )}
                   </div>
                 );
               })}
@@ -702,6 +712,8 @@ const ReportView = () => {
               <p className="text-gray-400 text-sm">No celebrity data found for this date</p>
             </div>
           )}
+
+          <p className="text-[10px] text-gray-400 text-right mt-2 mb-6">Biographical details from Wikipedia.</p>
 
           {/* Historical Events */}
           {historicalEvents.length > 0 && (

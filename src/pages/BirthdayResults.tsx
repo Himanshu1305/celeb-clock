@@ -42,6 +42,7 @@ function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
     age,
     isLiving: r.isLiving,
     occupation: r.occupation || 'Celebrity',
+    knownFor: r.knownFor ?? null,
     imageUrl: null,
     wikipediaUrl: r.wikipediaUrl,
     sitelinks: r.sitelinks,

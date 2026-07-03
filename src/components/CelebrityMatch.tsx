@@ -1,55 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useState, useEffect } from 'react';
 import { Celebrity } from '@/data/celebrities';
-import { StarIcon, CakeIcon } from 'lucide-react';
 import { classifyDisplayTier, DisplayTier } from '@/data/celebrityCategories';
+import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
+
+const CURRENT_YEAR = new Date().getFullYear();
 
 interface CelebrityMatchProps {
   birthDate: Date | null;
   onCelebritiesChange?: (celebrities: Celebrity[]) => void;
 }
 
-const CelebrityCard = ({ celebrity }: { celebrity: Celebrity }) => (
-  <Card className="glass-card p-6 animate-fade-in-up hover:glow-primary transition-all duration-300 hover-scale">
-    <div className="space-y-4">
-      <div className="flex items-start gap-4">
-        <Avatar className="w-12 h-12 border-2 border-primary/30">
-          <AvatarImage 
-            src={celebrity.image} 
-            alt={celebrity.name}
-            className="object-cover"
-          />
-          <AvatarFallback className="bg-primary/20 text-primary font-semibold">
-            {celebrity.name.split(' ').map(n => n[0]).join('')}
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex-1">
-          <h3 className="text-xl font-bold text-foreground">{celebrity.name}</h3>
-          <Badge variant="secondary" className="mt-1">
-            {celebrity.profession}
-          </Badge>
-        </div>
-        <StarIcon className="h-6 w-6 text-primary animate-pulse-glow" />
-      </div>
-      
-      {celebrity.funFact && (
-        <p className="text-sm text-muted-foreground bg-muted/20 p-3 rounded-lg">
-          💡 {celebrity.funFact}
-        </p>
-      )}
-      
-      <div className="text-xs text-muted-foreground">
-        Born: {new Date(celebrity.birthDate).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        })}
-      </div>
-    </div>
-  </Card>
-);
+function celebToDisplay(c: Celebrity): DisplayCelebrity {
+  const birthYear = c.birthDate ? new Date(c.birthDate).getFullYear() : null;
+  return {
+    name: c.name,
+    birthYear,
+    deathYear: null,
+    age: birthYear ? CURRENT_YEAR - birthYear : null,
+    isLiving: true,
+    occupation: c.profession,
+    knownFor: c.funFact ?? null,
+    imageUrl: null,
+    wikipediaUrl: null,
+    sitelinks: 0,
+  };
+}
 
 export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatchProps) => {
   const [matchingCelebrities, setMatchingCelebrities] = useState<Celebrity[]>([]);
@@ -104,7 +79,7 @@ export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatc
           {mainCelebs.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {mainCelebs.map((celebrity, index) => (
-                <CelebrityCard key={index} celebrity={celebrity} />
+                <CelebrityCard key={index} celebrity={celebToDisplay(celebrity)} index={index} />
               ))}
             </div>
           )}
@@ -112,26 +87,16 @@ export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatc
           {historicalCelebs.length > 0 && (
             <div className="mt-4">
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">📚 Historical figures who share your birthday</p>
-              <div className="space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {historicalCelebs.map((celebrity, index) => (
-                  <div key={index} className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-center gap-3">
-                    <div className="w-9 h-9 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 font-bold text-sm flex-shrink-0">
-                      {celebrity.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm">{celebrity.name}</p>
-                      <p className="text-xs text-gray-500">{celebrity.profession}</p>
-                      {celebrity.funFact && <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">{celebrity.funFact}</p>}
-                    </div>
-                    <span className="ml-auto text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full whitespace-nowrap">Historical</span>
-                  </div>
+                  <CelebrityCard key={index} celebrity={celebToDisplay(celebrity)} index={mainCelebs.length + index} />
                 ))}
               </div>
             </div>
           )}
         </>
       ) : (
-        <Card className="glass-card p-8 text-center">
+        <div className="glass-card p-8 text-center rounded-xl border">
           <div className="space-y-4">
             <div className="text-6xl mb-4">🎂</div>
             <h3 className="text-xl font-semibold">No Celebrity Matches Found</h3>
@@ -140,7 +105,7 @@ export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatc
               making you one of a kind.
             </p>
           </div>
-        </Card>
+        </div>
       )}
     </div>
   );

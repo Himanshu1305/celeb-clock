@@ -300,6 +300,7 @@ export interface CelebrityBirthdayResult {
   nationality: string | null;
   nationalityCode: string | null;
   occupation: string | null;
+  knownFor: string | null;
   wikipediaUrl: string | null;
   wikidataId: string | null;
   isLiving: boolean;
@@ -316,7 +317,7 @@ export async function getRankedBirthdayCelebrities(
   try {
     const { data, error } = await supabase
       .from('celebrity_sitelinks')
-      .select('name, birth_date, death_date, sitelinks, nationality, nationality_code, occupation, wikipedia_url, wikidata_id')
+      .select('name, birth_date, death_date, sitelinks, nationality, nationality_code, occupation, known_for, wikipedia_url, wikidata_id')
       .eq('birth_month_day', monthDay)
       .order('sitelinks', { ascending: false })
       .limit(50);
@@ -350,6 +351,7 @@ export async function getRankedBirthdayCelebrities(
       nationality: c.nationality,
       nationalityCode: c.nationality_code,
       occupation: c.occupation,
+      knownFor: c.known_for ?? null,
       wikipediaUrl: c.wikipedia_url,
       wikidataId: c.wikidata_id,
       isLiving: !c.death_date,

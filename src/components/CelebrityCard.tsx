@@ -15,6 +15,7 @@ export interface DisplayCelebrity {
   age: number | null;
   isLiving: boolean;
   occupation: string;
+  knownFor?: string | null;
   imageUrl?: string | null;
   wikipediaUrl?: string | null;
   sitelinks?: number;
@@ -127,17 +128,19 @@ export const CelebrityCard = ({ celebrity, index }: CelebrityCardProps) => {
           </div>
 
           {/* Text content */}
-          <div className="flex-1 min-w-0 flex flex-col h-[68px] justify-between">
-            <div className="min-w-0">
-              <h3 className="font-semibold text-[15px] leading-snug text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                {celebrity.name}
-              </h3>
-              <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-wide truncate">
-                {celebrity.occupation}
+          <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5">
+            <h3 className="font-semibold text-[15px] leading-snug text-foreground group-hover:text-primary transition-colors line-clamp-1">
+              {celebrity.name}
+            </h3>
+            <p className="text-[11px] text-muted-foreground uppercase tracking-wide truncate">
+              {celebrity.occupation}
+            </p>
+            {celebrity.knownFor && (
+              <p className="text-[11px] text-muted-foreground/70 truncate" title={celebrity.knownFor}>
+                {celebrity.knownFor}
               </p>
-            </div>
-
-            <div className="flex items-center gap-1.5">
+            )}
+            <div className="flex items-center gap-1.5 mt-0.5">
               <span className="text-xs text-muted-foreground">{lifespan}</span>
               {!celebrity.isLiving && (
                 <Badge
