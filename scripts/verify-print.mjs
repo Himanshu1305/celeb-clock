@@ -16,7 +16,8 @@
  *   node scripts/verify-print.mjs
  *
  * Requires: playwright, pdfjs-dist (both in devDependencies).
- * Starts:   npm run dev (Vite, port 3000) — no build step required.
+ * Starts:   vite preview (serves existing dist/; builds first if dist/ absent).
+ *           Add --rebuild flag to force a fresh build regardless.
  * Report:   osenyz63 = Neeraj, DOB 1966-06-25 (live Supabase row).
  *
  * CSS injection note:
@@ -41,8 +42,8 @@
 
 import { chromium } from 'playwright';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist/legacy/build/pdf.mjs';
-import { spawn } from 'child_process';
-import { readFileSync } from 'fs';
+import { spawn, execSync } from 'child_process';
+import { readFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -53,7 +54,7 @@ const OUT_PDF    = resolve(__dirname, 'neeraj-birthday.pdf');
 // ── Config ────────────────────────────────────────────────────────────────────
 const SLUG             = 'osenyz63';   // Neeraj, DOB 1966-06-25 (production Supabase row)
 const DEV_PORT         = 3000;         // configured Vite port
-const SERVER_TIMEOUT   = 90_000;       // ms to wait for dev server
+const SERVER_TIMEOUT   = 15_000;       // ms to wait for vite preview (starts in <1s)
 const SPARSE_THRESHOLD = 0.55;         // pages where bottom content < 55% down flagged sparse
 
 // ── y-zone boundaries (A4 ≈ 841.89 pts) ─────────────────────────────────────
@@ -165,9 +166,20 @@ async function main() {
   console.log('  Birthday PDF Verification  —  Neeraj / slug:osenyz63');
   console.log('══════════════════════════════════════════════════════════\n');
 
-  // ── 1. Start dev server ───────────────────────────────────────────────────
-  console.log('▶  Starting dev server (npm run dev)…');
-  const server = spawn('npm', ['run', 'dev'], {
+  const t0 = Date.now();
+
+  // ── 1. Ensure dist is built, then start vite preview ─────────────────────
+  const distIndex = resolve(ROOT, 'dist/index.html');
+  const forceRebuild = process.argv.includes('--rebuild');
+  if (!existsSync(distIndex) || forceRebuild) {
+    console.log('▶  Building dist (vite build)…');
+    execSync('npm run build', { cwd: ROOT, stdio: 'inherit' });
+  } else {
+    console.log('▶  dist/ present — skipping build (pass --rebuild to force).');
+  }
+
+  console.log('▶  Starting preview server (vite preview)…');
+  const server = spawn('npx', ['vite', 'preview', '--port', String(DEV_PORT)], {
     cwd: ROOT,
     stdio: 'pipe',
     env: { ...process.env, FORCE_COLOR: '0' },
@@ -177,12 +189,13 @@ async function main() {
   const serverBase = `http://localhost:${DEV_PORT}`;
   try {
     await waitForServer(serverBase + '/');
-    INFO(`Dev server ready at ${serverBase}`);
+    INFO(`Preview server ready at ${serverBase} (${Date.now() - t0}ms)`);
   } catch (e) {
-    FAIL(`Dev server failed: ${e.message}`);
+    FAIL(`Preview server failed: ${e.message}`);
     server.kill();
     process.exit(1);
   }
+  const tServer = Date.now();
 
   // ── 2. Render report + generate PDF ──────────────────────────────────────
   const browser = await chromium.launch();
@@ -191,7 +204,11 @@ async function main() {
   try {
     const reportUrl = `${serverBase}/report/${SLUG}`;
     console.log(`\n▶  Navigating to ${reportUrl}…`);
-    await page.goto(reportUrl, { waitUntil: 'networkidle', timeout: 45_000 });
+    await page.goto(reportUrl, { waitUntil: 'commit' });
+    // Wait for the live-fetch guard span — signals Supabase data loaded (added f810fe5).
+    await page.waitForSelector('[data-celeb-source]', { timeout: 30_000 });
+    const tNav = Date.now();
+    INFO(`Page ready in ${tNav - tServer}ms`);
 
     const reportDom = await page.locator('#birthday-report-print').count();
     if (reportDom === 0) {
@@ -212,7 +229,8 @@ async function main() {
       printBackground: true,
       path: OUT_PDF,
     });
-    INFO(`PDF written → scripts/neeraj-birthday.pdf (${Math.round(pdfBuf.length / 1024)} KB)`);
+    const tPdf = Date.now();
+    INFO(`PDF written → scripts/neeraj-birthday.pdf (${Math.round(pdfBuf.length / 1024)} KB, ${tPdf - tNav}ms)`);
 
   } finally {
     await browser.close();
@@ -254,7 +272,7 @@ async function main() {
       `on page 2 (${p2ok}) or page 3 (${p3ok}). ` +
       `The thead is not repeating — CSS injection or print media setup is incomplete.`
     );
-    printSummary(results, pageCount, [], []);
+    printSummary(results, pageCount, [], [], 0);
     process.exit(1);
   }
   PASS(`Faithfulness: running header (letter-spaced) present on page 2 AND page 3.`);
@@ -400,10 +418,11 @@ async function main() {
   }
 
   // ── Summary ───────────────────────────────────────────────────────────────
-  printSummary(results, pageCount, sparsePages, clippingViolations);
+  const tTotal = Date.now() - t0;
+  printSummary(results, pageCount, sparsePages, clippingViolations, tTotal);
 }
 
-function printSummary(results, pageCount, sparsePages, clippingViolations) {
+function printSummary(results, pageCount, sparsePages, clippingViolations, totalMs = 0) {
   const passed = results.filter(r => r.ok).length;
   const failed = results.filter(r => !r.ok).length;
   console.log('\n══════════════════════════════════════════════════════════');
@@ -411,6 +430,7 @@ function printSummary(results, pageCount, sparsePages, clippingViolations) {
   console.log('══════════════════════════════════════════════════════════');
   console.log(`  Assertions  : ${passed} passed, ${failed} failed`);
   console.log(`  Total pages : ${pageCount}`);
+  if (totalMs) console.log(`  Total time  : ${(totalMs / 1000).toFixed(1)}s`);
   if (sparsePages.length === 0) {
     console.log('  Sparse pages: none (all non-last content pages fill ≥ 55%)');
   } else {
