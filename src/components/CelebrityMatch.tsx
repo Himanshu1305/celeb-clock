@@ -1,50 +1,55 @@
 import { useState, useEffect } from 'react';
-import { Celebrity } from '@/data/celebrities';
+import { CakeIcon } from 'lucide-react';
 import { classifyDisplayTier, DisplayTier } from '@/data/celebrityCategories';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
+import { getRankedBirthdayCelebrities, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
 interface CelebrityMatchProps {
   birthDate: Date | null;
-  onCelebritiesChange?: (celebrities: Celebrity[]) => void;
 }
 
-function celebToDisplay(c: Celebrity): DisplayCelebrity {
-  const birthYear = c.birthDate ? new Date(c.birthDate).getFullYear() : null;
+function supabaseToDisplay(c: CelebrityBirthdayResult): DisplayCelebrity {
+  const birthYear = c.birthDate ? new Date(c.birthDate + 'T12:00:00').getFullYear() : null;
+  const deathYear = c.deathDate ? new Date(c.deathDate + 'T12:00:00').getFullYear() : null;
   return {
     name: c.name,
     birthYear,
-    deathYear: null,
-    age: birthYear ? CURRENT_YEAR - birthYear : null,
-    isLiving: true,
-    occupation: c.profession,
-    knownFor: c.funFact ?? null,
+    deathYear,
+    age: birthYear && c.isLiving ? CURRENT_YEAR - birthYear : null,
+    isLiving: c.isLiving,
+    occupation: c.occupation ?? 'Celebrity',
+    knownFor: c.knownFor,
     imageUrl: null,
-    wikipediaUrl: null,
-    sitelinks: 0,
+    wikipediaUrl: c.wikipediaUrl,
+    sitelinks: c.sitelinks,
   };
 }
 
-export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatchProps) => {
-  const [matchingCelebrities, setMatchingCelebrities] = useState<Celebrity[]>([]);
+export const CelebrityMatch = ({ birthDate }: CelebrityMatchProps) => {
+  const [matchingCelebrities, setMatchingCelebrities] = useState<CelebrityBirthdayResult[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!birthDate) return;
-
-    import('@/data/celebrities').then(({ findCelebrityByBirthday }) =>
-      findCelebrityByBirthday(birthDate).then(matches => {
-        setMatchingCelebrities(matches);
-        onCelebritiesChange?.(matches);
+    setIsLoading(true);
+    const mm = String(birthDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(birthDate.getDate()).padStart(2, '0');
+    getRankedBirthdayCelebrities(`${mm}-${dd}`, 'IN', 12)
+      .then(results => {
+        setMatchingCelebrities(results);
+        setIsLoading(false);
       })
-    );
-  }, [birthDate, onCelebritiesChange]);
+      .catch(() => setIsLoading(false));
+  }, [birthDate]);
 
   if (!birthDate) return null;
 
-  const getTierForCeleb = (c: Celebrity): DisplayTier => {
-    const birthYear = c.birthDate ? new Date(c.birthDate).getFullYear() : undefined;
-    return classifyDisplayTier({ profession: c.profession, birth_year: birthYear });
+  const getTierForCeleb = (c: CelebrityBirthdayResult): DisplayTier => {
+    const birthYear = c.birthDate ? new Date(c.birthDate + 'T12:00:00').getFullYear() : undefined;
+    return classifyDisplayTier({ profession: c.occupation ?? '', birth_year: birthYear });
   };
 
   const TIER_ORDER: DisplayTier[] = ['entertainment', 'public_figure', 'historical'];
@@ -68,7 +73,13 @@ export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatc
         </p>
       </div>
 
-      {matchingCelebrities.length > 0 ? (
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-32 rounded-2xl" />
+          ))}
+        </div>
+      ) : matchingCelebrities.length > 0 ? (
         <>
           <div className="text-center">
             <div className="inline-flex items-center gap-2 bg-gradient-secondary text-secondary-foreground px-6 py-3 rounded-full text-lg font-semibold glow-secondary">
@@ -79,7 +90,7 @@ export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatc
           {mainCelebs.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {mainCelebs.map((celebrity, index) => (
-                <CelebrityCard key={index} celebrity={celebToDisplay(celebrity)} index={index} />
+                <CelebrityCard key={index} celebrity={supabaseToDisplay(celebrity)} index={index} />
               ))}
             </div>
           )}
@@ -89,7 +100,7 @@ export const CelebrityMatch = ({ birthDate, onCelebritiesChange }: CelebrityMatc
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">📚 Historical figures who share your birthday</p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {historicalCelebs.map((celebrity, index) => (
-                  <CelebrityCard key={index} celebrity={celebToDisplay(celebrity)} index={mainCelebs.length + index} />
+                  <CelebrityCard key={index} celebrity={supabaseToDisplay(celebrity)} index={mainCelebs.length + index} />
                 ))}
               </div>
             </div>

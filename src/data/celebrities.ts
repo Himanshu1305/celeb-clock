@@ -6,7 +6,11 @@ export interface Celebrity {
   funFact?: string;
 }
 
-// Legacy celebrity list - kept for backward compatibility with CelebrityMatch component
+// DEPRECATED (session 5-N): CelebrityMatch migrated to celebrity_sitelinks via
+// getRankedBirthdayCelebrities. This file is still imported by
+// BirthdaySearchService.ts searchLocalDatabase() for the <20-results static fallback
+// on /age-calculator. Do not delete until Stage 2 enrichment fills occupation/sitelinks
+// for all 25,952 rows and the static fallback is retired.
 export const celebrities: Celebrity[] = [
   { name: "Leonardo DiCaprio", birthDate: "1974-11-11", profession: "Actor & Environmental Activist", funFact: "Won his first Oscar at age 41 for 'The Revenant'" },
   { name: "Taylor Swift", birthDate: "1989-12-13", profession: "Singer & Songwriter", funFact: "Has won 12 Grammy Awards and counting" },
