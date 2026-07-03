@@ -223,3 +223,50 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 - **Add a curated hook to a global celebrity:** set `known_for` on their row; the card picks it up everywhere automatically.
 - **Print CSS changes:** validate in headless Chromium BEFORE writing the commit; keep print-only geometry inside the pageStyle string, never in screen CSS.
 - **New print sections:** must live inside the existing tbody cell; respect the break policy in §3.
+
+---
+
+## 10. Phase 4 — Post-launch growth roadmap (researched 2026-07-03, pre-launch)
+
+> Purpose: decisions and research made BEFORE launch about what comes AFTER launch, so the growth phase starts from conclusions, not from scratch. Priority order within this section is deliberate.
+
+### 10.1 The strategic frame (decided)
+
+- **1M monthly visitors target:** not achievable in 6 months (new-domain trust period; realistic month-6 ceiling ~50–100K even with good execution). Achievable in ~12 months ONLY via programmatic SEO at scale. Set expectations accordingly.
+- **Revenue model reality (researched, blunt):** Indian entertainment-niche display RPM is $0.50–$1.50; a US visitor is worth 5–10× an Indian one for ads. At every modeled traffic level, the PAID REPORT is 70–85% of revenue; ads are found money. Projections modeled 2026-07: month 6 realistic total ₹15K–70K/mo; month 12 good-execution ₹1.5–4.5L/mo; month 12 if 1M traffic with 20–30% tier-1 share ₹3.5–10L/mo. Conversion assumption 0.1–0.2% visitor→purchase on cold SEO traffic; gift-intent pages convert better than celebrity-page traffic.
+- **Geography strategy (decided):** one site, geo-adaptive, not geo-split. India = report revenue + volume base + content moat (Indian celebrity depth). Tier-1 (US/UK/CA/AU) = ad revenue + brand authority + eventual $-priced report. The traffic product and the revenue product have different geographies by design (FamousBirthdays pattern: US/UK/Brazil audience).
+- **Ads sequencing (decided):** do NOT enable display ads at launch. Enable when tier-1 share crosses ~20–25% of meaningful volume. Never on the paid report flow.
+- **Cultural content (decided):** do not strip Vedic depth for tier-1; use section EMPHASIS by audience — tier-1 marketing leads with Western zodiac/numerology/tarot, India leads with the full trio. Landing-page decision, not a product rebuild.
+
+### 10.2 Priority 1 — Programmatic SEO (the 1M engine)
+
+Competitive basis: FamousBirthdays = 9.5–22M visits/mo, ~70% organic, 4.2M ranking keywords via ~150K celebrity profile pages + date pages. The model is one page per entity at scale, each answering a query pattern ("[name] age/birthday/zodiac").
+
+Our asset: the enriched celebrity_sitelinks table (25,952 rows post-Stage-2) IS the programmatic dataset. Stage 2 is therefore a growth prerequisite, not just report polish.
+
+Build order:
+1. **Celebrity pages** `/celebrity/[slug]`: photo, LIVE age ticker (our differentiator vs static competitors), birthday, zodiac trio, Life Path, birthday twins, days-until-birthday, CTA into the paid report. Anti-thin-page requirement: every page must be a mini-product (computed live content), not a data stub — 60% of programmatic implementations fail on thinness; ours must not. Rollout in tiers: top ~2,000 by sitelinks first, watch Search Console, then expand.
+2. **366 date pages** `/born-on/[month-day]`: who was born, zodiac, the date's stats. Generalization of /todays-birthdays; all data exists.
+3. **Year/generation pages** `/born-in-[year]`: age now, generation portrait, Chinese zodiac year. ~100+ pages.
+4. **Calculator-variant landing pages**: "how old am I if born in [year]", half-birthday, birthday compatibility — separate pages per query pattern around the existing calculator.
+5. **Hindi versions** of top pages (FamousBirthdays got +15% traffic from Spanish alone; our Indian celebrity depth is the moat in Hindi queries).
+
+Programmatic pages are ALSO the tier-1 vehicle: global celebrity pages compete in US/UK search with the same template that owns Indian search for Indian celebrities.
+
+### 10.3 Priority 2 — Birth-framed population page + homepage ticker (user idea, validated 2026-07-03)
+
+Reference: worldometers.info/world-population. Design decisions made: (a) no live API exists or is needed — all population clocks are algorithmic (UN World Population Prospects baseline + rate × elapsed seconds, client-side); ship a static UN WPP JSON (world + top ~15 countries), refresh annually; (b) reuse the existing "Total Seconds Alive" ticker component from /results; (c) frame around BIRTHS to fit the brand ("N babies born since you opened this page", "~385,000 people share today as their birthday", "you were roughly the X-billionth person born"), top-countries table as supporting content; (d) SEO: do not chase head terms (owned by Worldometer/UN/Census); target long-tail question queries ("how many people are born every day", "how many people share my birthday") with H2-question structure + FAQ schema + cited-methodology line for AEO; every answer routes into the birthday product. Effort ~1 session.
+
+### 10.4 Priority 3 — International payments (the tier-1 revenue unlock)
+
+Razorpay alone cannot take most international cards. When tier-1 traffic shows purchase intent (watch for non-IN sessions reaching the paywall): add a second processor (Stripe/PayPal) + $-denominated pricing + geo-adaptive currency display. Until then, tier-1 monetization = ads + brand only. Related geo-adaptive items: date-format localization (June 25 vs 25 June), country-driven celebrity ordering (built — profile.country gate), IP-based geo for anonymous visitors (not built).
+
+### 10.5 Existing features that carry the growth phase
+
+/todays-birthdays (already SEO-structured: reviewed-by + sources markup), the age calculator (huge evergreen head-term volume), the zodiac/numerology content depth (unusually rich vs competitors — prime AEO material), the shareable 1080×1080 card (Phase 3 item — the only non-SEO acquisition channel), and above all the enriched celebrity DB. Framing to remember: **the report is the revenue product; the database is the traffic product.**
+
+### 10.6 Supporting research anchors (for future reference)
+
+- FamousBirthdays traffic/keyword figures: SimilarWeb/Semrush/Clicks.so estimates 2024–2026, Digiday & dot.LA profiles (programmatic-ads business model, editorial staff, +15% from Spanish version).
+- India AdSense RPM ranges: entertainment ₹40–₹165 RPM (upGrowth 2026 benchmarks); US 5–10× multiplier (multiple publisher sources).
+- Programmatic SEO failure modes: ~60% fail on thin/undifferentiated pages; mitigation = every page a mini-product with unique computed data.
