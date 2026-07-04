@@ -215,6 +215,27 @@ async function matchRow(row) {
 
   const { qid, wdDate } = candidates[0];
   const confidence = (stage === 'A' || stage === 'B') ? 'HIGH' : 'MEDIUM';
+
+  // Policy: relaxed-stage date conflict guard (A2 / B2 only).
+  // A2 and B2 use looser matching (year-only or year±1). If the resulting WD month-day
+  // differs from our stored month-day it is more likely a same-year namesake than the
+  // right person — e.g. Michael Jackson (Q2831, 1958-08-29) vs Q6831553 (1958-02-11).
+  // Exception: if our stored month-day is 01-01 (unknown-day placeholder) the mismatch
+  // is expected — enrich and write to date-review as a fix-candidate.
+  if (stage === 'A2' || stage === 'B2') {
+    const ourMonthDay = birth_date.slice(5, 10); // "MM-DD"
+    const wdMonthDay  = wdDate.slice(5, 10);
+    const isPlaceholder = ourMonthDay === '01-01';
+    if (wdMonthDay !== ourMonthDay && !isPlaceholder) {
+      logDecision({
+        id, name, birth_date, wdDate, qid, stage, confidence,
+        verdict: 'EXCEPTION',
+        reason: `relaxed-stage date conflict (possible wrong person): our ${ourMonthDay} ≠ WD ${wdMonthDay}`,
+      });
+      return null;
+    }
+  }
+
   logDecision({ id, name, birth_date, wdDate, qid, stage, confidence, verdict: 'MATCH' });
   return { qid, wdDate, stage, confidence };
 }
@@ -225,11 +246,14 @@ async function enrichRow(row, match) {
   const { id, name, birth_date, occupation, wikipedia_url, wikidata_id } = row;
   const { qid, wdDate, stage } = match;
 
-  // Date mismatch check
+  // Date mismatch check (only reachable here if A/B mismatch, or A2/B2 with 01-01 placeholder)
   if (wdDate !== birth_date) {
+    const isPlaceholder = birth_date.slice(5, 10) === '01-01';
+    const note = isPlaceholder
+      ? 'our date is 01-01 placeholder — enriching; fix-candidate in date-review.csv'
+      : 'enriching anyway (identity confirmed); see date-review.csv';
     logDateReview(name, birth_date, wdDate, stage, qid);
-    logDecision({ id, name, birth_date, wdDate, qid, verdict: 'DATE_MISMATCH', stage,
-      note: 'enriching anyway (identity confirmed); see date-review.csv' });
+    logDecision({ id, name, birth_date, wdDate, qid, verdict: 'DATE_MISMATCH', stage, note });
   }
 
   // Fetch enrichment data only if any field is still null
