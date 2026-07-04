@@ -137,6 +137,30 @@ function dedup(candidates) {
   });
 }
 
+// Filter relaxed-stage (A2/B2) candidates whose WD month-day conflicts with our stored
+// month-day. Each discarded candidate is logged as STAGE_CONFLICT_DISCARDED so the
+// decision trail is complete. The caller sees an empty (or trimmed) list and the
+// pipeline continues to the next stage rather than EXCEPTIONing immediately.
+// 01-01 rows are never filtered — any WD date is acceptable for a placeholder.
+function applyRelaxedConflictGuard(hits, birth_date, stage, id, name) {
+  const ourMonthDay = birth_date.slice(5, 10);
+  if (ourMonthDay === '01-01') return hits;
+  const clean = [];
+  for (const c of hits) {
+    const wdMonthDay = c.wdDate.slice(5, 10);
+    if (wdMonthDay !== ourMonthDay) {
+      logDecision({
+        id, name, birth_date, wdDate: c.wdDate, qid: c.qid, stage,
+        verdict: 'STAGE_CONFLICT_DISCARDED',
+        reason: `relaxed-stage date conflict (continuing to next stage): our ${ourMonthDay} ≠ WD ${wdMonthDay}`,
+      });
+    } else {
+      clean.push(c);
+    }
+  }
+  return clean;
+}
+
 // ── Core matcher ──────────────────────────────────────────────────────────────
 // Returns { qid, wdDate, stage, confidence: 'HIGH'|'MEDIUM' } or null (EXCEPTION).
 // Side-effect: logs the decision.
@@ -161,11 +185,14 @@ async function matchRow(row) {
   }
 
   // Stage A2: SPARQL year-only, NO P27 filter — handles wrong/missing citizenship
-  // (e.g. Diljit Dosanjh: our DB says IN, Wikidata has P27=Q30)
+  // (e.g. Diljit Dosanjh: our DB says IN, Wikidata has P27=Q30).
+  // Conflict guard: if a candidate's WD month-day ≠ our stored month-day it is
+  // discarded (logged as STAGE_CONFLICT_DISCARDED) and Stage B runs instead.
   if (candidates.length === 0) {
     stage = 'A2';
     try {
-      candidates = dedup(await runSparql(buildStageA2Sparql(name, birthYear, false)));
+      const raw = dedup(await runSparql(buildStageA2Sparql(name, birthYear, false)));
+      candidates = applyRelaxedConflictGuard(raw, birth_date, 'A2', id, name);
     } catch (err) {
       logDecision({ id, name, verdict: 'EXCEPTION', stage: 'A2', reason: `Stage A2 error: ${err.message}` });
       return null;
@@ -183,14 +210,17 @@ async function matchRow(row) {
     }
   }
 
-  // Stage B2: name search, year ±1 — also tries transliteration variants
+  // Stage B2: name search, year ±1 — also tries transliteration variants.
+  // Same conflict guard: discard candidates whose WD month-day conflicts.
+  // B2 is the last stage so a conflict here → 0 candidates → EXCEPTION below.
   if (candidates.length === 0) {
     stage = 'B2';
     const searchNames = [name, ...transliterationVariants(name)];
     for (const searchName of searchNames) {
       try {
-        const hits = dedup(await runStageB(searchName, birth_date, withIndia, 1));
-        if (hits.length > 0) { candidates = hits; break; }
+        const raw = dedup(await runStageB(searchName, birth_date, withIndia, 1));
+        const filtered = applyRelaxedConflictGuard(raw, birth_date, 'B2', id, name);
+        if (filtered.length > 0) { candidates = filtered; break; }
       } catch (err) {
         logDecision({ id, name, verdict: 'EXCEPTION', stage: 'B2', reason: `Stage B2 error (${searchName}): ${err.message}` });
         return null;
@@ -215,27 +245,6 @@ async function matchRow(row) {
 
   const { qid, wdDate } = candidates[0];
   const confidence = (stage === 'A' || stage === 'B') ? 'HIGH' : 'MEDIUM';
-
-  // Policy: relaxed-stage date conflict guard (A2 / B2 only).
-  // A2 and B2 use looser matching (year-only or year±1). If the resulting WD month-day
-  // differs from our stored month-day it is more likely a same-year namesake than the
-  // right person — e.g. Michael Jackson (Q2831, 1958-08-29) vs Q6831553 (1958-02-11).
-  // Exception: if our stored month-day is 01-01 (unknown-day placeholder) the mismatch
-  // is expected — enrich and write to date-review as a fix-candidate.
-  if (stage === 'A2' || stage === 'B2') {
-    const ourMonthDay = birth_date.slice(5, 10); // "MM-DD"
-    const wdMonthDay  = wdDate.slice(5, 10);
-    const isPlaceholder = ourMonthDay === '01-01';
-    if (wdMonthDay !== ourMonthDay && !isPlaceholder) {
-      logDecision({
-        id, name, birth_date, wdDate, qid, stage, confidence,
-        verdict: 'EXCEPTION',
-        reason: `relaxed-stage date conflict (possible wrong person): our ${ourMonthDay} ≠ WD ${wdMonthDay}`,
-      });
-      return null;
-    }
-  }
-
   logDecision({ id, name, birth_date, wdDate, qid, stage, confidence, verdict: 'MATCH' });
   return { qid, wdDate, stage, confidence };
 }
