@@ -1,7 +1,7 @@
 # BornClock — Architecture Decisions & Maintenance Log
 
 > Purpose: capture WHAT was built, WHY it was built that way, what failed before it, and what remains open — so future sessions don't re-derive this from scratch. Update this file whenever a significant decision lands.
-> Last updated: 2026-07-04 (session 5-O — Stage 2 enrichment scripts, verify-print trim, Cancer plural content pass).
+> Last updated: 2026-07-05 (session 5-Q — payment integrity, deletion compliance, lifecycle emails, privacy policy, dormancy runbook).
 
 ---
 
@@ -187,6 +187,7 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 | Unified two-line card | See §6 | 5d789f5 |
 | PDF: no photos, no raw URLs, single attribution line | Low-res inconsistent thumbnails; URLs are dead weight on paper | 5d789f5 |
 | Server-side PDF rendering | REJECTED — client-side proven sufficient, no backend cost | — |
+| Storage posture (2026-07-05) | **Longevity/health inputs = browser-only, never server-side, by design and policy.** Do not add server-side health storage; monthly-comparison features use browser localStorage; any future cross-device sync requires explicit opt-in. **Birthday Blueprint reports = stored for delivery** (recipient can't otherwise access), 12-month dormancy auto-deletion, recipient deletion rights via privacy@bornclock.com. Payments de-identified (user_id SET NULL) on account deletion — retained for tax/legal per GDPR Art. 17(3)(e). Rationale: GDPR minimisation + no sensitive data at rest. | 5Q session |
 
 ---
 
@@ -219,6 +220,7 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 ## 9. Maintenance runbook
 
 - **Verify print:** `node scripts/verify-print.mjs` — read the sparse list, not just the pass/fail.
+- **Dormancy sweep:** Run `scripts/sweep-dormant-reports.sql` manually in Studio (two statements — SELECT first to review, then DELETE). No scheduler exists by design. Run quarterly or before any GDPR audit. Policy: reports unviewed for 12 months are deleted (see §7 storage posture entry and Privacy Policy Amendment 5).
 - **Add/edit a celebrity:** edit the row in Supabase `celebrity_sitelinks` (occupation = descriptor, known_for = hook, nationality_code for boosting). No deploy needed. For bulk work, use `scripts/migrate-indian-celebs.mjs` as the pattern template (Supabase JS client, sequential per-row updates, per-row error reporting); never paste large SQL into Studio.
 - **Add a curated hook to a global celebrity:** set `known_for` on their row; the card picks it up everywhere automatically.
 - **Print CSS changes:** validate in headless Chromium BEFORE writing the commit; keep print-only geometry inside the pageStyle string, never in screen CSS.
