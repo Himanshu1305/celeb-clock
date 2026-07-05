@@ -6,6 +6,7 @@ import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { getReport } from '@/services/BirthdayReportService';
+import { supabase } from '@/integrations/supabase/client';
 import type { BirthdayReportData } from '@/services/BirthdayReportService';
 import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
 import { getTarotCardByLifePath } from '@/data/tarotData';
@@ -332,7 +333,12 @@ const ReportView = () => {
     if (!slug) { setNotFound(true); setLoading(false); return; }
     getReport(slug).then(data => {
       if (!data) setNotFound(true);
-      else setRow(data);
+      else {
+        setRow(data);
+        // Fire-and-forget: update last_viewed_at for dormancy tracking
+        // Uses SECURITY DEFINER RPC so no auth required
+        (supabase as any).rpc('touch_report_view', { p_slug: slug }).catch(() => {});
+      }
       setLoading(false);
     });
   }, [slug]);
@@ -370,6 +376,14 @@ const ReportView = () => {
   const celebsSource = (liveCelebrities ?? celebrities ?? []) as any[];
   const celebSource = liveCelebrities != null ? 'live' : 'frozen';
   const reportUrl = `${window.location.origin}/report/${slug}`;
+
+  const handleDownloadAndTrack = () => {
+    // Fire-and-forget download tracking (must never block or throw)
+    if (slug) {
+      (supabase as any).from('report_downloads').insert({ report_slug: slug }).catch(() => {});
+    }
+    handleDownloadReport();
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(reportUrl).then(() => {
@@ -514,7 +528,7 @@ const ReportView = () => {
               {copied ? '✓ Copied' : '🔗 Copy Link'}
             </button>
             <button
-              onClick={handleDownloadReport}
+              onClick={handleDownloadAndTrack}
               className="px-3 py-1.5 text-sm bg-rose-500 hover:bg-rose-600 text-white rounded-lg font-medium transition-colors"
             >
               ⬇ Download PDF
@@ -1894,7 +1908,7 @@ const ReportView = () => {
             {copied ? '✓ Copied!' : '🔗 Copy Link'}
           </button>
           <button
-            onClick={handleDownloadReport}
+            onClick={handleDownloadAndTrack}
             className="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white font-medium rounded-xl text-sm transition-colors"
           >
             ⬇ Download PDF
