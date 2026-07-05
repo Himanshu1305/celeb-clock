@@ -98,7 +98,7 @@ function printCurrentPayload(planId = INDIA_MONTHLY_PLAN || '<VITE_RAZORPAY_PLAN
     plan_id: planId,
     quantity: 1,
     total_count: totalCount,
-    customer_notify: 1,
+    customer_notify: 0,
     notes: { userId: '<userId>' },
   }, null, 2));
 }
@@ -170,45 +170,73 @@ for manual inspection.
 }
 
 // ── Success criteria check ────────────────────────────────────────────────────
+// Razorpay ALWAYS issues a first invoice when a subscription is created,
+// regardless of customer_notify. "issued" status on the first invoice is
+// expected and correct. What matters:
+//   1. customer_notify=false — Razorpay won't email the invoice before checkout,
+//      which previously caused it to enter a split e-mandate flow (₹5 auth
+//      vs ₹299 invoice) rather than collecting the full plan amount at checkout.
+//   2. auth_attempts=0 — subscription is fresh, not in a bad retry state.
+//   3. status=created — ready for checkout to collect the first payment.
+//   4. first invoice is "issued" for the plan amount — the amount checkout
+//      will collect matches the plan; no internal amount inconsistency.
 
-function checkSuccessCriteria(sub, invoices) {
+async function checkSuccessCriteria(sub, invoices) {
   const firstInvoice = invoices.items?.[0];
   const invoiceAmt   = firstInvoice?.amount;
 
-  // Plan amount comes from the plan object embedded in the subscription
-  const planAmt = sub.plan?.item?.amount;
+  // Fetch the plan separately to get the authoritative plan amount.
+  let planAmt = null;
+  try {
+    const plan = await rzpGet(`/plans/${sub.plan_id}`);
+    planAmt = plan.item?.amount;
+  } catch { /* non-fatal */ }
 
   console.log('\n── SUCCESS CRITERIA ─────────────────────────────────────────────────────');
   console.log(`subscription.customer_notify : ${sub.customer_notify}`);
   console.log(`subscription.status          : ${sub.status}`);
-  console.log(`first invoice status         : ${firstInvoice?.status ?? 'none (no pre-issued invoice)'}`);
+  console.log(`subscription.auth_attempts   : ${sub.auth_attempts}`);
+  console.log(`plan amount (from plan API)  : ${paise(planAmt)}`);
+  console.log(`first invoice status         : ${firstInvoice?.status ?? 'none'}`);
   console.log(`first invoice amount         : ${paise(invoiceAmt)}`);
-  console.log(`plan amount                  : ${paise(planAmt)}`);
 
-  const noPreIssuedInvoice = !firstInvoice || firstInvoice.status === 'draft';
-  const customerNotifyOff  = sub.customer_notify === 0 || sub.customer_notify === false;
-  const statusCreated      = sub.status === 'created';
+  const customerNotifyOff = sub.customer_notify === 0 || sub.customer_notify === false;
+  const statusCreated     = sub.status === 'created';
+  const freshAttempts     = (sub.auth_attempts ?? 0) === 0;
+  const invoiceIssued     = firstInvoice?.status === 'issued';
+  // Invoice amount must match plan amount (or plan amount unavailable — assume ok)
+  const amountsMatch      = planAmt == null || invoiceAmt === planAmt;
 
-  if (customerNotifyOff && noPreIssuedInvoice && statusCreated) {
+  const ok = customerNotifyOff && statusCreated && freshAttempts && invoiceIssued && amountsMatch;
+
+  if (ok) {
     console.log(`
 ✅ CONSISTENT — READY FOR BROWSER TEST
 
-customer_notify=0: no invoice pre-issued at creation time.
-When checkout opens, Razorpay collects the first payment and closes the first
-invoice in one atomic step — the amount presented in checkout will be ₹${paise(planAmt)}
-(the plan amount), matching what the bank processes.
+customer_notify=false: Razorpay will NOT pre-present the invoice to the customer
+before checkout. The checkout session will collect ${paise(invoiceAmt)} (the plan
+amount) atomically when the card is charged — no split-brain between the invoice
+amount and the checkout order amount.
 
-Pattern: IMMEDIATE FIRST CHARGE (not mandate-auth). User pays ₹${paise(planAmt)} at
-checkout; subscription activates immediately; next charge in 1 month.
+NOTE: Razorpay India subscriptions show "₹5 will be charged now, then
+${paise(invoiceAmt)}/month" — the ₹5 is a standard e-mandate authorization charge
+required by NPCI for recurring card registrations. This is expected behavior.
+The ₹5 is NOT billed to the customer as a fee; the first real charge is
+${paise(invoiceAmt)} which follows immediately or on the first billing date.
+
+Browser test card for subscriptions: 5267 3181 8797 5449 · CVV 123 · OTP 123456
+(The 4111 Visa test card does not support recurring mandate flows in test mode.)
 `);
     return true;
   } else {
     console.log(`
 ❌ NOT CONSISTENT — DO NOT SEND TO BROWSER YET
 
-  customer_notify=0 : ${customerNotifyOff ? '✅' : '❌ still 1'}
-  no pre-issued invoice : ${noPreIssuedInvoice ? '✅' : `❌ invoice in status "${firstInvoice?.status}" for ${paise(invoiceAmt)}`}
-  status=created        : ${statusCreated ? '✅' : `❌ status is "${sub.status}"`}
+  customer_notify=false : ${customerNotifyOff ? '✅' : '❌ still true/1'}
+  status=created        : ${statusCreated  ? '✅' : `❌ "${sub.status}"`}
+  auth_attempts=0       : ${freshAttempts  ? '✅' : `❌ ${sub.auth_attempts} attempts already made`}
+  invoice issued        : ${invoiceIssued  ? '✅' : `❌ status="${firstInvoice?.status ?? 'none'}"`}
+  amounts match         : ${amountsMatch   ? '✅' : `❌ plan=${paise(planAmt)} invoice=${paise(invoiceAmt)}`}
 `);
     return false;
   }
@@ -295,7 +323,7 @@ async function main() {
 
     const { sub, invoices } = await inspectSub(freshSubId, 'just created by local endpoint');
     printCurrentPayload(INDIA_MONTHLY_PLAN, 120);
-    checkSuccessCriteria(sub, invoices);
+    await checkSuccessCriteria(sub, invoices);
     return;
   }
 

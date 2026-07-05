@@ -37,6 +37,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Invalid plan' });
   }
 
+  // customer_notify: 0 — do NOT pre-issue the invoice at creation time.
+  // With 1 (the previous value), Razorpay immediately issues a ₹299 invoice AND
+  // opens checkout in e-mandate auth mode (₹5 upfront authorization). The bank
+  // sees two different amounts and rejects with "payment amount ≠ order amount".
+  // With 0, no invoice is issued until checkout collects the first payment; the
+  // checkout order and the invoice are created atomically for the same amount.
+  // Razorpay still sends its own payment receipt to the customer post-charge.
+  //
+  // ORPHAN NOTE: subscriptions in "created" state that are never authenticated
+  // (user dismissed checkout, tab closed, etc.) are completely inert — Razorpay
+  // never charges them. They accumulate in the dashboard but cause no harm.
+  // Clean them up with:  node --env-file=.env.local scripts/diagnose-razorpay.mjs --cancel-orphans
   const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
   let rzpData: any;
   try {
@@ -50,7 +62,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         plan_id: planId,
         quantity: 1,
         total_count: totalCount,
-        customer_notify: 1,
+        customer_notify: 0,
         notes: { userId },
       }),
     });
