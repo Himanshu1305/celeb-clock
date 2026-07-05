@@ -337,7 +337,7 @@ const ReportView = () => {
         setRow(data);
         // Fire-and-forget: update last_viewed_at for dormancy tracking
         // Uses SECURITY DEFINER RPC so no auth required
-        (supabase as any).rpc('touch_report_view', { p_slug: slug }).catch(() => {});
+        void Promise.resolve((supabase as any).rpc('touch_report_view', { p_slug: slug })).catch(() => {});
       }
       setLoading(false);
     });
@@ -380,7 +380,7 @@ const ReportView = () => {
   const handleDownloadAndTrack = () => {
     // Fire-and-forget download tracking (must never block or throw)
     if (slug) {
-      (supabase as any).from('report_downloads').insert({ report_slug: slug }).catch(() => {});
+      void Promise.resolve((supabase as any).from('report_downloads').insert({ report_slug: slug })).catch(() => {});
     }
     handleDownloadReport();
   };

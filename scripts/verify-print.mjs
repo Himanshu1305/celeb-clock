@@ -206,7 +206,8 @@ async function main() {
     console.log(`\n▶  Navigating to ${reportUrl}…`);
     await page.goto(reportUrl, { waitUntil: 'commit' });
     // Wait for the live-fetch guard span — signals Supabase data loaded (added f810fe5).
-    await page.waitForSelector('[data-celeb-source]', { timeout: 30_000 });
+    // Wait for live-fetch value specifically — ensures PDF captures live celebrity data, not frozen fallback
+    await page.waitForSelector('[data-celeb-source="live"]', { timeout: 30_000 });
     const tNav = Date.now();
     INFO(`Page ready in ${tNav - tServer}ms`);
 
