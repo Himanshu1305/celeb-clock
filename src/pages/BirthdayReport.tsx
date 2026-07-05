@@ -14,6 +14,7 @@ import {
   type QuotaTier,
 } from '@/services/PDFQuotaService';
 import { generateReportData, saveReport } from '@/services/BirthdayReportService';
+import { EmailService } from '@/services/EmailService';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -128,6 +129,13 @@ const BirthdayReport = () => {
 
       setProgress(100);
       setReportSlug(slug ?? '');
+
+      // Fire-and-forget: send report link to the gifter's email (if signed in)
+      if (user?.email && slug) {
+        const reportLink = `${window.location.origin}/report/${slug}`;
+        EmailService.sendReportCreated(user.email, gifterName.trim() || 'there', recipientName.trim(), reportLink);
+      }
+
       setTimeout(() => setPhase('success'), 400);
     } catch (e) {
       console.error(e);

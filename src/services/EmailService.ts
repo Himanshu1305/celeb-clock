@@ -43,4 +43,7 @@ export const EmailService = {
 
   sendPremiumNudge: (to: string, name: string, week: number) =>
     sendEmail({ type: 'nudge_premium', to, name, week }),
+
+  sendReportCreated: (to: string, name: string, recipientName: string, reportLink: string) =>
+    sendEmail({ type: 'report_created', to, name, recipientName, reportLink }),
 };

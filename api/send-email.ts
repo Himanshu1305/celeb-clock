@@ -494,6 +494,145 @@ ${divider()}
 }
 
 // ==========================================
+// EMAIL 7 — PREMIUM ACTIVATED (webhook)
+// ==========================================
+function premiumActivatedEmail(
+  name: string
+): { subject: string; html: string } {
+  return {
+    subject: `You're live, ${name}. BornClock Premium is active 🎉`,
+    html: baseTemplate(`
+<div style="text-align:center;margin-bottom:28px;">
+  <div style="font-size:52px;margin-bottom:12px;">🎉</div>
+  <h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:#111827;">
+    Welcome to Premium, ${name}.
+  </h1>
+  <p style="margin:0;font-size:15px;color:#6b7280;">
+    Your subscription is now active. Everything is unlocked.
+  </p>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+  ${featureItem('🔬', 'What-If Simulator — 25+ lifestyle levers, real-time forecast')}
+  ${featureItem('🤖', 'AI Longevity Coach — personalised to your exact numbers')}
+  ${featureItem('🧬', 'Biological Blueprint — downloadable PDF health report')}
+  ${featureItem('👨‍👩‍👧', 'Family Dashboard — track 10 family members')}
+  ${featureItem('📄', 'Birthday Reports — 3 per month, shareable links')}
+  ${featureItem('🌍', 'Country Comparison — 57 countries, UN WPP 2024 data')}
+</table>
+${divider()}
+<div style="text-align:center;">
+  ${primaryButton('Start Exploring →', `${BASE_URL}/life-expectancy`)}
+</div>
+`),
+  };
+}
+
+// ==========================================
+// EMAIL 8 — PAYMENT RECEIPT (verify-payment)
+// ==========================================
+function paymentReceiptEmail(params: {
+  name: string;
+  product: string;
+  amountFormatted: string;
+  date: string;
+  reportLink?: string;
+}): { subject: string; html: string } {
+  const { name, product, amountFormatted, date, reportLink } = params;
+  const isReport = product === 'birthday_report';
+  return {
+    subject: `Payment confirmed — ${isReport ? 'Birthday Blueprint' : 'BornClock Premium'}, ${name}`,
+    html: baseTemplate(`
+<h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#111827;">
+  Payment confirmed ✓
+</h1>
+<p style="margin:0 0 24px;font-size:15px;color:#6b7280;">
+  Here's your receipt, ${name}.
+</p>
+<div style="background:#f9fafb;border-radius:10px;padding:20px;margin-bottom:24px;">
+  <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td style="font-size:13px;color:#6b7280;padding:5px 0;">Product</td>
+      <td style="font-size:14px;color:#111827;font-weight:600;text-align:right;padding:5px 0;">
+        ${isReport ? 'Birthday Blueprint' : 'BornClock Premium Subscription'}
+      </td>
+    </tr>
+    <tr>
+      <td style="font-size:13px;color:#6b7280;padding:5px 0;">Amount</td>
+      <td style="font-size:14px;color:#111827;font-weight:600;text-align:right;padding:5px 0;">${amountFormatted}</td>
+    </tr>
+    <tr>
+      <td style="font-size:13px;color:#6b7280;padding:5px 0;">Date</td>
+      <td style="font-size:14px;color:#111827;font-weight:600;text-align:right;padding:5px 0;">${date}</td>
+    </tr>
+  </table>
+</div>
+${isReport && reportLink ? `
+<p style="font-size:14px;font-weight:600;color:#111827;margin:0 0 8px;">Your report link:</p>
+<div style="background:#f0f9ff;border-radius:10px;padding:16px 20px;margin-bottom:16px;word-break:break-all;">
+  <a href="${reportLink}" style="font-size:14px;color:#4F46E5;text-decoration:none;">${reportLink}</a>
+</div>
+<p style="font-size:12px;color:#9ca3af;margin:0 0 24px;">
+  This link is live for your recipient — reports unviewed for 12 months are removed.
+</p>
+` : ''}
+<div style="text-align:center;">
+  ${primaryButton(isReport ? 'Open Birthday Report →' : 'Explore Premium →', reportLink || `${BASE_URL}/life-expectancy`)}
+</div>
+${divider()}
+<p style="margin:0;font-size:12px;color:#9ca3af;text-align:center;">
+  Questions? Email <a href="mailto:hello@bornclock.com" style="color:#9ca3af;">hello@bornclock.com</a> · Transaction records are retained for accounting purposes.
+</p>
+`),
+  };
+}
+
+// ==========================================
+// EMAIL 9 — REPORT CREATED
+// ==========================================
+function reportCreatedEmail(params: {
+  name: string;
+  recipientName: string;
+  reportLink: string;
+}): { subject: string; html: string } {
+  const { name, recipientName, reportLink } = params;
+  return {
+    subject: `${recipientName}'s Birthday Blueprint is ready 🎂`,
+    html: baseTemplate(`
+<div style="text-align:center;margin-bottom:28px;">
+  <div style="font-size:52px;margin-bottom:12px;">🎂</div>
+  <h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:#111827;">
+    Report ready, ${name}!
+  </h1>
+  <p style="margin:0;font-size:15px;color:#6b7280;">
+    ${recipientName}'s Birthday Blueprint is live and ready to share.
+  </p>
+</div>
+<p style="font-size:14px;font-weight:600;color:#111827;margin:0 0 8px;">Your shareable link:</p>
+<div style="background:#f0f9ff;border-radius:10px;padding:16px 20px;margin-bottom:8px;word-break:break-all;">
+  <a href="${reportLink}" style="font-size:14px;color:#4F46E5;text-decoration:none;">${reportLink}</a>
+</div>
+<p style="font-size:12px;color:#9ca3af;margin:0 0 24px;">
+  This link is live for your recipient — reports unviewed for 12 months are removed.
+</p>
+<table width="100%" cellpadding="0" cellspacing="0">
+  ${featureItem('🌟', 'Celebrity birthday twins')}
+  ${featureItem('♈', 'Western, Chinese &amp; Vedic zodiac profiles')}
+  ${featureItem('🔢', 'Numerology Life Path &amp; Personal Year 2026')}
+  ${featureItem('🪐', 'Planetary ages across all 8 planets')}
+  ${featureItem('💎', 'Birthstone history &amp; lore')}
+</table>
+${divider()}
+<div style="text-align:center;">
+  ${primaryButton('Open Report →', reportLink)}
+</div>
+<p style="margin:12px 0 0;font-size:12px;color:#9ca3af;text-align:center;">
+  Copy the link and share it on WhatsApp, email, or any chat.
+</p>
+`),
+  };
+}
+
+// ==========================================
 // MAIN HANDLER
 // ==========================================
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -521,6 +660,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     userEmail,
     userId,
     requestedAt,
+    // payment_receipt
+    product,
+    amountFormatted,
+    date,
+    reportLink,
+    // report_created
+    recipientName,
   } = req.body;
 
   if (!type || !to || !name) {
@@ -548,6 +694,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       break;
     case 'nudge_premium':
       emailContent = premiumUserNudgeEmail(name, week || 1);
+      break;
+    case 'premium_activated':
+      emailContent = premiumActivatedEmail(name);
+      break;
+    case 'payment_receipt':
+      emailContent = paymentReceiptEmail({ name, product, amountFormatted, date, reportLink });
+      break;
+    case 'report_created':
+      emailContent = reportCreatedEmail({ name, recipientName, reportLink });
       break;
     case 'data_deletion_request':
       sendTo = 'privacy@bornclock.com';

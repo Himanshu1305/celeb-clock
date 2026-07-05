@@ -131,5 +131,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // For birthday_report: entitlement is the report slug itself (already saved
   // during report generation); no additional grant needed.
 
+  // Send payment receipt email (fire-and-forget; must not block the response)
+  try {
+    const { data: userData } = await serviceClient().auth.admin.getUserById(user_id);
+    const userEmail = userData?.user?.email;
+    const userName = userData?.user?.user_metadata?.full_name || userData?.user?.user_metadata?.first_name || 'there';
+    if (userEmail) {
+      const currencySymbol = (currency ?? 'INR') === 'INR' ? '₹' : '$';
+      const amountFormatted = `${currencySymbol}${((amount ?? 0) / 100).toLocaleString('en-IN')}`;
+      const date = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      const base = process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : `https://${process.env.VERCEL_URL || 'bornclock.com'}`;
+      await fetch(`${base}/api/send-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'payment_receipt',
+          to: userEmail,
+          name: userName,
+          product,
+          amountFormatted,
+          date,
+          reportLink: report_slug ? `${base}/report/${report_slug}` : undefined,
+        }),
+      });
+    }
+  } catch (e) {
+    console.error('[verify-payment] receipt email error (non-fatal)', e);
+  }
+
   return res.status(200).json({ success: true, product });
 }
