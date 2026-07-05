@@ -9,6 +9,7 @@ const TOC_ITEMS = [
   { id: 'data-model', label: 'Data Model by User Type' },
   { id: 'what-we-collect', label: 'What We Collect' },
   { id: 'what-we-dont-store', label: 'What We Do NOT Store' },
+  { id: 'gift-recipients', label: "Gift Recipients' Data" },
   { id: 'how-we-use', label: 'How We Use Your Data' },
   { id: 'storage-security', label: 'Data Storage and Security' },
   { id: 'third-parties', label: 'Third-Party Services' },
@@ -91,7 +92,7 @@ export default function Privacy() {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
             Privacy Policy
           </h1>
-          <p className="text-sm text-muted-foreground mb-8">Last updated: June 2026</p>
+          <p className="text-sm text-muted-foreground mb-8">Last updated: July 2026</p>
 
           {/* Blue info box */}
           <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl p-5 mb-10 text-blue-900 dark:text-blue-200 text-sm leading-relaxed">
@@ -118,8 +119,19 @@ export default function Privacy() {
 
               <section id="data-model" className="mb-12 scroll-mt-8">
                 <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Data Model by User Type</h2>
+
+                <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 rounded-xl p-5 mb-6">
+                  <h3 className="font-bold text-indigo-900 dark:text-indigo-200 mb-2">Two products, two promises.</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                    <strong className="text-foreground">Your health data (Life Expectancy / Longevity):</strong> never stored — every calculation happens in your browser and no health input or result ever reaches our servers.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    <strong className="text-foreground">Your Birthday Blueprint gift reports:</strong> stored only so your shareable link works — a gift report must exist on our servers for the recipient to open it. Deleted with your account, on request, or automatically after 12 months without a single view.
+                  </p>
+                </div>
+
                 <p className="text-muted-foreground mb-4 leading-relaxed">
-                  BornClock operates on a tiered model. What we collect and store depends on how you use the product:
+                  Beyond these two products, BornClock operates on a tiered model. What we collect and store depends on how you use the service:
                 </p>
                 <div className="space-y-4">
                   <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-xl p-4">
@@ -166,12 +178,26 @@ export default function Privacy() {
                   We believe in data minimalism. Here is what we deliberately do <strong className="text-foreground">not</strong> collect or store:
                 </p>
                 <ul className="space-y-3 text-muted-foreground leading-relaxed">
-                  <li><strong className="text-foreground">Health inputs and life expectancy forecasts</strong> — all calculations happen client-side. No health data leaves your device.</li>
-                  <li><strong className="text-foreground">Saved forecasts or reports</strong> — we do not store the output of your life expectancy calculation on our servers.</li>
+                  <li><strong className="text-foreground">Raw health inputs</strong> — your answers to the Life Expectancy Calculator (smoking, alcohol, BMI, sleep, stress, medical history, etc.) are processed entirely in your browser and never transmitted to our servers. They are never stored.</li>
+                  <li><strong className="text-foreground">Longevity forecasts and results</strong> — your life expectancy calculation result is never saved on our servers. If you add a family member or submit to the longevity leaderboard, only the numeric forecast summary (e.g. "78.5 years") is stored — not the health inputs that produced it.</li>
+                  <li><strong className="text-foreground">Birthday Blueprint reports are stored for delivery</strong> — this is the one exception to the above. When you create a Birthday Blueprint, we store the recipient's name, date of birth, and generated report content, because the shareable link must exist on our servers for the recipient to open it. These reports are deleted with your account, on request, or automatically after 12 months without a view.</li>
                   <li><strong className="text-foreground">Card numbers, CVVs, or bank details</strong> — payments go directly through Razorpay's PCI-DSS compliant infrastructure.</li>
                   <li><strong className="text-foreground">Data sold to third parties</strong> — we do not sell, rent, or trade your personal information. Ever.</li>
-                  <li><strong className="text-foreground">Advertising</strong> — BornClock may display advertising to support the free tier of the platform. We do not sell your personal health data — including your life expectancy inputs, biological age results, or any health-related information — to advertisers or any third parties. Your health data is used solely to provide BornClock's features to you.</li>
+                  <li><strong className="text-foreground">Advertising</strong> — BornClock may display advertising to support the free tier. We do not sell your health data — including your life expectancy inputs, biological age results, or any health-related information — to advertisers or any third parties.</li>
                   <li><strong className="text-foreground">Precise location data</strong> — we ask for country only (via a dropdown you select), never GPS or IP-derived geolocation.</li>
+                </ul>
+              </section>
+
+              <section id="gift-recipients" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Gift Recipients' Data</h2>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  When a BornClock user creates a Birthday Blueprint about another person, we store that person's name and date of birth solely to generate and deliver the report, on the purchaser's instruction. This data is not used for any other purpose, is not sold or shared, and is deleted when the report is deleted.
+                </p>
+                <ul className="space-y-3 text-muted-foreground leading-relaxed">
+                  <li><strong className="text-foreground">Retention:</strong> Gift reports that have not been viewed for 12 months are automatically and permanently deleted.</li>
+                  <li><strong className="text-foreground">Recipient deletion rights:</strong> Recipients themselves may request deletion of a report about them by emailing{' '}
+                    <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>. We will process such requests within 30 days.
+                  </li>
                 </ul>
               </section>
 
@@ -223,14 +249,19 @@ export default function Privacy() {
                         <td className="px-4 py-3">Email, payment amount (card details handled by Razorpay only)</td>
                       </tr>
                       <tr>
+                        <td className="px-4 py-3 font-medium text-foreground">Resend</td>
+                        <td className="px-4 py-3">Transactional email</td>
+                        <td className="px-4 py-3">Name, email address</td>
+                      </tr>
+                      <tr className="bg-muted/30">
                         <td className="px-4 py-3 font-medium text-foreground">Vercel / Cloudflare</td>
                         <td className="px-4 py-3">Hosting &amp; CDN</td>
                         <td className="px-4 py-3">IP address (not stored by us), request logs (retained 7 days)</td>
                       </tr>
-                      <tr className="bg-muted/30">
-                        <td className="px-4 py-3 font-medium text-foreground">Privacy-first analytics</td>
-                        <td className="px-4 py-3">Product analytics</td>
-                        <td className="px-4 py-3">Anonymous page views, no personal identifiers</td>
+                      <tr>
+                        <td className="px-4 py-3 font-medium text-foreground">Internal analytics</td>
+                        <td className="px-4 py-3">Product analytics (first-party)</td>
+                        <td className="px-4 py-3">Anonymous page view and feature usage events stored in our own database — no third-party SDK</td>
                       </tr>
                     </tbody>
                   </table>
@@ -248,7 +279,7 @@ export default function Privacy() {
                 <ul className="space-y-3 text-muted-foreground leading-relaxed">
                   <li><strong className="text-foreground">Access</strong> — see exactly what data we hold about you. Email <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>.</li>
                   <li><strong className="text-foreground">Correction</strong> — update your name, email, or date of birth from your Profile page at any time.</li>
-                  <li><strong className="text-foreground">Deletion</strong> — permanently delete your account and all associated data from your Profile page. No need to contact support. Data is purged within 30 days.</li>
+                  <li><strong className="text-foreground">Deletion</strong> — permanently delete your account and all associated data from your Profile page. No need to contact support. Data is purged within 30 days. Transaction records (payment IDs, amounts, dates) are retained in de-identified form as required by tax and accounting law, but are permanently unlinked from your profile and email on deletion.</li>
                   <li><strong className="text-foreground">Export</strong> — request a copy of your data in a portable format by emailing <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>.</li>
                   <li><strong className="text-foreground">Opt out</strong> — unsubscribe from all non-essential emails from your Profile page or via the unsubscribe link in any email we send.</li>
                   <li><strong className="text-foreground">Withdraw consent</strong> — if you gave consent for any specific processing, you can withdraw it at any time without affecting past processing.</li>
