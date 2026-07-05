@@ -57,10 +57,29 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
     return;
   }
 
+  // Create the subscription server-side; checkout SDK receives subscription_id, not plan_id.
+  let subscriptionId: string;
+  try {
+    const subRes = await fetch('/api/create-subscription', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ planId, userId }),
+    });
+    if (!subRes.ok) {
+      const err = await subRes.json().catch(() => ({}));
+      onError(err.error || 'Could not initialise checkout. Please try again.');
+      return;
+    }
+    const subData = await subRes.json();
+    subscriptionId = subData.subscription_id;
+  } catch {
+    onError('Could not reach payment server. Please check your connection and try again.');
+    return;
+  }
+
   const rzpOptions = {
     key: keyId,
-    plan_id: planId,
-    quantity: 1,
+    subscription_id: subscriptionId,
     name: 'BornClock',
     description: `BornClock Premium — ${billing === 'monthly' ? 'Monthly' : 'Annual'} Plan`,
     image: 'https://bornclock.com/favicon.png',
