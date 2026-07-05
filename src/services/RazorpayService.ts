@@ -1,6 +1,4 @@
 import { CountryInfo, getPlanId } from './CountryDetectionService';
-import { supabase } from '@/integrations/supabase/client';
-import { EmailService } from '@/services/EmailService';
 
 declare global {
   interface Window {
@@ -83,32 +81,28 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
     },
     handler: async (response: any) => {
       try {
-        await supabase
-          .from('profiles')
-          .update({
-            premium_status: true,
-            subscription_id: response.razorpay_subscription_id,
-            subscription_status: 'active',
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', userId);
-
-        const nextBillingDate = new Date();
-        nextBillingDate.setMonth(
-          nextBillingDate.getMonth() + (billing === 'annual' ? 12 : 1)
-        );
-        EmailService.sendPaymentConfirmation(
-          userEmail,
-          userName || 'there',
-          billing === 'annual' ? 'Premium Annual' : 'Premium Monthly',
-          billing === 'annual' ? '₹2,499/year' : '₹299/month',
-          nextBillingDate.toLocaleDateString('en-IN', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          })
-        );
-      } catch {}
+        const res = await fetch('/api/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_subscription_id: response.razorpay_subscription_id,
+            razorpay_signature: response.razorpay_signature,
+            user_id: userId,
+            product: 'subscription',
+            amount: 0,
+            currency: countryInfo.currency,
+          }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          onError(err.error || 'Payment verification failed. Please contact support.');
+          return;
+        }
+      } catch {
+        onError('Payment verification failed. Please try again or contact support.');
+        return;
+      }
       onSuccess();
     },
     subscription_card_change: true,
