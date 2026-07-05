@@ -2,128 +2,231 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 
+// Disable Vercel's body parser so we receive the raw bytes for HMAC verification.
+// Razorpay signs the raw body; JSON.stringify(parsed body) ≠ original bytes.
+export const config = { api: { bodyParser: false } };
+
+function serviceClient() {
+  return createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  );
+}
+
+async function readRawBody(req: VercelRequest): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    req.on('data', (chunk: Buffer) => chunks.push(chunk));
+    req.on('end', () => resolve(Buffer.concat(chunks)));
+    req.on('error', reject);
+  });
+}
+
+function baseUrl(): string {
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  return `https://${process.env.VERCEL_URL || 'bornclock.com'}`;
+}
+
+async function sendEmail(payload: Record<string, unknown>) {
+  try {
+    await fetch(`${baseUrl()}/api/send-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {
+    console.error('[webhook] send-email error', e);
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET!;
-  const signature = req.headers['x-razorpay-signature'] as string;
-  const body = JSON.stringify(req.body);
+  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    console.error('[webhook] RAZORPAY_WEBHOOK_SECRET not configured');
+    return res.status(500).json({ error: 'Webhook not configured' });
+  }
 
-  const expectedSignature = crypto
+  // ── Read raw body ───────────────────────────────────────────────────────────
+  const rawBody = await readRawBody(req);
+  const signature = req.headers['x-razorpay-signature'] as string;
+
+  const expected = crypto
     .createHmac('sha256', webhookSecret)
-    .update(body)
+    .update(rawBody)
     .digest('hex');
 
-  if (signature !== expectedSignature) {
+  if (!signature || !crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature))) {
+    console.error('[webhook] INVALID SIGNATURE — possible replay or misconfigured secret');
     return res.status(400).json({ error: 'Invalid signature' });
   }
 
-  const supabaseAdmin = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  );
+  let event: any;
+  try {
+    event = JSON.parse(rawBody.toString('utf8'));
+  } catch {
+    return res.status(400).json({ error: 'Malformed JSON body' });
+  }
 
-  const event = req.body;
-  const eventType = event.event;
+  const eventId: string = event.id;
+  const eventType: string = event.event;
+
+  if (!eventId) {
+    console.error('[webhook] event missing .id field');
+    return res.status(400).json({ error: 'Missing event id' });
+  }
+
+  const db = serviceClient();
+
+  // ── Idempotency: record this event; skip if already processed ───────────────
+  const { error: insertErr } = await db.from('webhook_events').insert({
+    event_id: eventId,
+    event_type: eventType,
+    payload: event,
+  });
+
+  if (insertErr) {
+    if (insertErr.code === '23505') {
+      // Already processed — return 200 so Razorpay stops retrying
+      console.log('[webhook] duplicate event ignored', eventId);
+      return res.status(200).json({ received: true, duplicate: true });
+    }
+    console.error('[webhook] failed to record event', insertErr);
+    // Proceed anyway — better to process twice than drop
+  }
 
   try {
     switch (eventType) {
       case 'subscription.activated':
       case 'subscription.charged': {
-        const subscription = event.payload.subscription.entity;
-        const payment = event.payload.payment?.entity;
-        const email = payment?.email || subscription?.notes?.email;
+        const subscription = event.payload?.subscription?.entity;
+        const payment = event.payload?.payment?.entity;
+        if (!subscription) break;
 
-        if (!email) break;
+        // Prefer userId from notes (set at checkout); fall back to email scan
+        const notesUserId: string | undefined = subscription.notes?.userId || payment?.notes?.userId;
+        let userId: string | undefined;
 
-        const { data: usersData } = await supabaseAdmin.auth.admin.listUsers();
-        const user = usersData?.users?.find((u: any) => u.email === email);
-        if (!user) break;
+        if (notesUserId) {
+          userId = notesUserId;
+        } else {
+          const email = payment?.email || subscription?.notes?.email;
+          if (email) {
+            const { data: usersData } = await db.auth.admin.listUsers();
+            userId = usersData?.users?.find((u: any) => u.email === email)?.id;
+          }
+        }
+
+        if (!userId) {
+          console.error('[webhook] could not resolve user for', eventType, subscription.id);
+          break;
+        }
 
         const endDate = subscription.current_end
           ? new Date(subscription.current_end * 1000)
           : null;
 
-        await supabaseAdmin
-          .from('profiles')
-          .update({
-            premium_status: true,
-            subscription_id: subscription.id,
-            subscription_plan: subscription.plan_id,
-            subscription_status: 'active',
-            premium_until: endDate?.toISOString() || null,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', user.id);
+        await db.from('profiles').update({
+          premium_status: true,
+          subscription_id: subscription.id,
+          subscription_plan: subscription.plan_id,
+          subscription_status: 'active',
+          premium_until: endDate?.toISOString() ?? null,
+          updated_at: new Date().toISOString(),
+        }).eq('id', userId);
+
+        // Record payment row (amount in paise → store as-is)
+        if (payment?.id) {
+          await db.from('payments').insert({
+            user_id: userId,
+            razorpay_payment_id: payment.id,
+            razorpay_subscription_id: subscription.id,
+            amount: payment.amount ?? 0,
+            currency: payment.currency ?? 'INR',
+            status: payment.status ?? 'captured',
+            product: 'subscription',
+          }).onConflict('razorpay_payment_id').ignore();
+        }
+
+        // Send premium-activated email on first activation
+        if (eventType === 'subscription.activated') {
+          const { data: userData } = await db.auth.admin.getUserById(userId);
+          const email = userData?.user?.email;
+          const name = userData?.user?.user_metadata?.full_name || 'there';
+          if (email) {
+            await sendEmail({ type: 'premium_activated', to: email, name });
+          }
+        }
         break;
       }
 
       case 'subscription.cancelled':
       case 'subscription.completed':
-      case 'subscription.expired': {
-        const subscription = event.payload.subscription.entity;
+      case 'subscription.expired':
+      case 'subscription.halted':
+      case 'subscription.paused': {
+        const subscription = event.payload?.subscription?.entity;
+        if (!subscription) break;
 
-        const { data: profile } = await supabaseAdmin
+        const isPremium = false;
+        const newStatus = eventType.split('.')[1]; // 'cancelled'|'completed'|'expired'|'halted'|'paused'
+
+        // Look up by subscription_id — no O(n) scan needed
+        const { data: profile } = await db
           .from('profiles')
           .select('id')
           .eq('subscription_id', subscription.id)
           .single();
 
-        if (profile) {
-          await supabaseAdmin
-            .from('profiles')
-            .update({
-              premium_status: false,
-              subscription_status: eventType.split('.')[1],
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', profile.id);
+        if (!profile) {
+          console.warn('[webhook] no profile for subscription_id', subscription.id);
+          break;
+        }
 
-          if (eventType === 'subscription.cancelled') {
-            const { data: userData } = await supabaseAdmin.auth.admin.getUserById(profile.id);
-            if (userData?.user?.email) {
-              const accessUntil = subscription.current_end
-                ? new Date(subscription.current_end * 1000).toLocaleDateString('en-IN', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })
-                : 'end of billing period';
-              const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-                ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-                : `https://${process.env.VERCEL_URL || 'bornclock.com'}`;
-              await fetch(`${baseUrl}/api/send-email`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  type: 'cancellation',
-                  to: userData.user.email,
-                  name: userData.user.user_metadata?.first_name || 'there',
-                  accessUntil,
-                }),
-              });
-            }
+        await db.from('profiles').update({
+          premium_status: isPremium,
+          subscription_status: newStatus,
+          updated_at: new Date().toISOString(),
+        }).eq('id', profile.id);
+
+        if (eventType === 'subscription.cancelled' || eventType === 'subscription.halted') {
+          const { data: userData } = await db.auth.admin.getUserById(profile.id);
+          const email = userData?.user?.email;
+          if (email) {
+            const accessUntil = subscription.current_end
+              ? new Date(subscription.current_end * 1000).toLocaleDateString('en-IN', {
+                  day: 'numeric', month: 'long', year: 'numeric',
+                })
+              : 'end of billing period';
+            const name = userData?.user?.user_metadata?.first_name || 'there';
+            await sendEmail({ type: 'cancellation', to: email, name, accessUntil });
           }
         }
         break;
       }
 
       case 'payment.failed': {
-        const payment = event.payload.payment.entity;
-        console.log('Payment failed:', {
-          email: payment.email,
-          amount: payment.amount,
-          error: payment.error_description,
+        const payment = event.payload?.payment?.entity;
+        console.log('[webhook] payment.failed', {
+          email: payment?.email,
+          amount: payment?.amount,
+          error: payment?.error_description,
         });
         break;
       }
+
+      default:
+        console.log('[webhook] unhandled event type', eventType);
     }
 
     return res.status(200).json({ received: true });
-  } catch (error) {
-    console.error('Webhook error:', error);
+  } catch (err) {
+    console.error('[webhook] processing error', err);
+    // Always 200 — Razorpay retries on non-2xx which could cause duplicate processing
     return res.status(200).json({ received: true });
   }
 }
