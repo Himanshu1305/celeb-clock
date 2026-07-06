@@ -139,6 +139,9 @@ export default function Privacy() {
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       All calculations — life expectancy, biological age, planetary age, birthday personality — happen entirely in your browser. We do not store your health inputs, date of birth, or calculation results on our servers. No account is required to use our calculators.
                     </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-2">
+                      <strong className="text-foreground">Exception — Birthday Blueprint gift reports:</strong> if you create a Birthday Blueprint as a guest (without an account), the recipient's name, date of birth, and generated report content are stored on our servers to make the shareable link work — exactly as they are for registered users. See <em>Gift Recipients' Data</em> below.
+                    </p>
                   </div>
                   <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
                     <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">✉️ Registered users (free account)</h3>
