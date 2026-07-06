@@ -876,13 +876,22 @@ const ReportView = () => {
                 Unlock — {isIndia ? '₹199' : '$2.99'}
               </button>
             ) : (
-              <a
-                href="/login"
-                className="block w-full py-3.5 rounded-xl font-bold text-white text-base text-center transition-colors mb-3"
-                style={{ background: 'var(--navy)' }}
-              >
-                Sign in to Unlock
-              </a>
+              <>
+                <a
+                  href={`/auth?returnTo=/report/${slug}`}
+                  className="block w-full py-3.5 rounded-xl font-bold text-white text-base text-center transition-colors mb-3"
+                  style={{ background: 'var(--navy)' }}
+                >
+                  Sign in to Unlock
+                </a>
+                <a
+                  href={`/auth?signup=true&returnTo=/report/${slug}`}
+                  className="block w-full py-2.5 rounded-xl font-semibold text-sm text-center transition-colors mb-3"
+                  style={{ border: '1.5px solid var(--navy)', color: 'var(--navy)' }}
+                >
+                  New here? Create a free account
+                </a>
+              </>
             )}
 
             {/* Subscriber credit option */}

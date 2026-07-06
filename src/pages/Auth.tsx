@@ -43,9 +43,9 @@ export default function Auth() {
     return () => { cancelled = true; };
   }, [isSignUp]);
 
-  // Redirect if already authenticated
+  // Redirect if already authenticated — honour returnTo so locked reports land correctly
   if (user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={searchParams.get('returnTo') ?? '/'} replace />;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
