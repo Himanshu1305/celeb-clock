@@ -26,6 +26,37 @@ import { getNakshatraEssence } from '@/data/nakshatraEssence';
 import { getMoonSignEssence, MOON_SIGN_EXPLAINER } from '@/data/moonSignEssence';
 import { getSoulUrge, getPersonality } from '@/data/numerologyNameData';
 import { getVedicBirthstone, SECTION_EXPLAINERS, CLOSING_SECTION } from '@/data/reportContentAdditions';
+import { useAuth } from '@/hooks/useAuth';
+import { detectCountry } from '@/services/CountryDetectionService';
+import { initiateOrderPayment } from '@/services/RazorpayService';
+import { useToast } from '@/hooks/use-toast';
+
+// ── Locked placeholder section (inspect-element-safe: no real data in DOM) ────
+function LockedSection({ code, eyebrow, title, desc, dark = false }: {
+  code: string; eyebrow: string; title: string; desc?: string; dark?: boolean;
+}) {
+  return (
+    <div className="report-section py-12 px-4 no-print" style={{ background: dark ? 'var(--dark)' : 'var(--panel)' }}>
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-8">
+          <div className="bb-rule" style={dark ? { background: 'rgba(215,225,234,.18)' } : {}}>
+            <span className="bb-code" style={dark ? { color: '#9DB0BF' } : {}}>{code}</span>
+          </div>
+          <div className="bb-eyebrow" style={dark ? { color: 'var(--gold)' } : {}}>{eyebrow}</div>
+          <h2 className="bb-h2" style={dark ? { color: '#FFFFFF' } : {}}>{title}</h2>
+          {desc && <p className="bb-sub" style={dark ? { color: '#9DB0BF' } : {}}>{desc}</p>}
+        </div>
+        <div className="flex items-center justify-center h-28 rounded-xl" style={{
+          background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
+          border: `1.5px dashed ${dark ? 'rgba(255,255,255,0.18)' : '#c7cfd8'}`,
+        }}>
+          <span className="text-2xl mr-3">🔒</span>
+          <span className="text-sm font-medium" style={{ color: dark ? '#9DB0BF' : '#9ca3af' }}>Unlock to reveal</span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ── Helper ─────────────────────────────────────────────────────────────────────
 
@@ -264,6 +295,12 @@ const ReportView = () => {
   const [activeZodiacTab, setActiveZodiacTab] = useState('western');
   const [liveCelebrities, setLiveCelebrities] = useState<any[] | null>(null);
 
+  const { user, isAdmin } = useAuth();
+  const { toast } = useToast();
+  const [isIndia, setIsIndia] = useState(true);
+  const [credits, setCredits] = useState(0);
+  const [redeemLoading, setRedeemLoading] = useState(false);
+
   const reportPrintRef = useRef<HTMLDivElement>(null);
   const handleDownloadReport = useReactToPrint({
     contentRef: reportPrintRef,
@@ -353,6 +390,20 @@ const ReportView = () => {
       .catch(() => {});
   }, [row]);
 
+  useEffect(() => {
+    detectCountry().then(info => setIsIndia(info.isIndia)).catch(() => {});
+  }, []);
+
+  // Fetch subscriber credits whenever the user or lock state might change.
+  // get-credits does lazy accrual server-side so this call is intentional.
+  useEffect(() => {
+    if (!user) return;
+    fetch(`/api/get-credits?userId=${encodeURIComponent(user.id)}`)
+      .then(r => r.json())
+      .then(d => { if (typeof d.credits === 'number') setCredits(d.credits); })
+      .catch(() => {});
+  }, [user]);
+
   if (loading) return <LoadingScreen />;
   if (notFound || !row || !row.report_data) return <ExpiryPage />;
 
@@ -376,6 +427,39 @@ const ReportView = () => {
   const celebsSource = (liveCelebrities ?? celebrities ?? []) as any[];
   const celebSource = liveCelebrities != null ? 'live' : 'frozen';
   const reportUrl = `${window.location.origin}/report/${slug}`;
+
+  // Report is locked unless paid for, or the viewer is an admin.
+  const isLocked = !isAdmin && !row.is_paid;
+
+  const handleUnlockWithCredit = async () => {
+    if (!user || !slug) return;
+    setRedeemLoading(true);
+    try {
+      const res = await fetch('/api/redeem-credit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, reportSlug: slug }),
+      });
+      const body = await res.json();
+      if (!res.ok) {
+        toast({ title: 'Redemption failed', description: body.error ?? 'Please try again.', variant: 'destructive' });
+        return;
+      }
+      setCredits(body.creditsRemaining ?? 0);
+      // Reload report data so isLocked flips to false
+      const fresh = await fetch(`/api/get-credits?userId=${encodeURIComponent(user.id)}`).catch(() => null);
+      if (fresh) {
+        const cd = await fresh.json().catch(() => null);
+        if (typeof cd?.credits === 'number') setCredits(cd.credits);
+      }
+      const refreshed = await import('@/services/BirthdayReportService').then(m => m.getReport(slug));
+      if (refreshed) setRow(refreshed);
+    } catch (e) {
+      toast({ title: 'Error', description: 'Could not redeem credit. Please try again.', variant: 'destructive' });
+    } finally {
+      setRedeemLoading(false);
+    }
+  };
 
   const handleDownloadAndTrack = () => {
     // Fire-and-forget download tracking (must never block or throw)
@@ -527,12 +611,14 @@ const ReportView = () => {
             >
               {copied ? '✓ Copied' : '🔗 Copy Link'}
             </button>
+            {!isLocked && (
             <button
               onClick={handleDownloadAndTrack}
               className="px-3 py-1.5 text-sm bg-rose-500 hover:bg-rose-600 text-white rounded-lg font-medium transition-colors"
             >
               ⬇ Download PDF
             </button>
+            )}
             <a
               href={`https://wa.me/?text=${encodeURIComponent(`Check out ${recipientName}'s Birthday Report! 🎂\n${reportUrl}`)}`}
               target="_blank"
@@ -754,9 +840,76 @@ const ReportView = () => {
         </div>
       </div>
 
+      {/* ── Unlock CTA — shown only when locked, no-print ─────────────────── */}
+      {isLocked && (
+        <div className="py-12 px-4 bg-white no-print" style={{ borderTop: '1px solid var(--hairline)' }}>
+          <div className="max-w-md mx-auto text-center">
+            <div className="text-4xl mb-4">🔒</div>
+            <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--navy)' }}>
+              Unlock {recipientName}'s Full Blueprint
+            </h2>
+            <p className="text-sm mb-6" style={{ color: 'var(--muted)' }}>
+              Zodiac Profile · Numerology · Cosmic Connections · Planetary Ages · Generation Portrait
+            </p>
+
+            {/* Buy one-time */}
+            {user ? (
+              <button
+                onClick={() => {
+                  if (!slug || !user) return;
+                  initiateOrderPayment({
+                    product: 'birthday_report',
+                    reportSlug: slug,
+                    currency: isIndia ? 'INR' : 'USD',
+                    userId: user.id,
+                    userEmail: user.email ?? '',
+                    onSuccess: () => {
+                      import('@/services/BirthdayReportService').then(m => m.getReport(slug)).then(fresh => { if (fresh) setRow(fresh); });
+                    },
+                    onError: (msg) => toast({ title: 'Payment failed', description: msg, variant: 'destructive' }),
+                    onDismiss: () => {},
+                  });
+                }}
+                className="w-full py-3.5 rounded-xl font-bold text-white text-base transition-colors mb-3"
+                style={{ background: 'var(--navy)' }}
+              >
+                Unlock — {isIndia ? '₹199' : '$2.99'}
+              </button>
+            ) : (
+              <a
+                href="/login"
+                className="block w-full py-3.5 rounded-xl font-bold text-white text-base text-center transition-colors mb-3"
+                style={{ background: 'var(--navy)' }}
+              >
+                Sign in to Unlock
+              </a>
+            )}
+
+            {/* Subscriber credit option */}
+            {user && credits > 0 && (
+              <button
+                onClick={handleUnlockWithCredit}
+                disabled={redeemLoading}
+                className="w-full py-3 rounded-xl font-semibold text-sm border transition-colors disabled:opacity-50"
+                style={{ borderColor: 'var(--gold)', color: 'var(--gold)' }}
+              >
+                {redeemLoading ? 'Unlocking…' : `Use a subscriber credit (${credits} remaining)`}
+              </button>
+            )}
+
+            <p className="text-xs mt-4" style={{ color: 'var(--muted)' }}>
+              One-time · 30-day access · Download included
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 3 — ZODIAC PROFILE                                         */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
+      {isLocked ? (
+        <LockedSection code="02 · ASTROLOGY" eyebrow="Three Traditions" title="Zodiac Profile" desc="Western, Chinese & Vedic — one person, three lenses" />
+      ) : (
       <div className="report-section py-12 px-4" style={{ background: 'var(--panel)' }}>
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
@@ -1166,10 +1319,14 @@ const ReportView = () => {
           })()}
         </div>
       </div>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 4 — NUMEROLOGY BLUEPRINT                                   */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
+      {isLocked ? (
+        <LockedSection code="03 · NUMBERS" eyebrow="Your Numerology Blueprint" title="Numbers &amp; Life Path" desc="Calculated from the exact date of birth" />
+      ) : (
       <div className="report-section print-break-before py-12 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
@@ -1288,9 +1445,10 @@ const ReportView = () => {
           })()}
         </div>
       </div>
+      )}
 
       {/* ── Name Numerology ───────────────────────────────────────────────── */}
-      {(() => {
+      {!isLocked && (() => {
         const nums = calculateAllNameNumbers(recipientName || '');
         const exprMeaning = NAME_NUMBER_MEANINGS[nums.expression];
         const soulUrgeEntry = getSoulUrge(nums.soulUrge);
@@ -1363,7 +1521,7 @@ const ReportView = () => {
       })()}
 
       {/* ── Tarot Card ────────────────────────────────────────────────────── */}
-      {(() => {
+      {!isLocked && (() => {
         const lp = Number(lifePathNumber || 1);
         const card = getTarotCardByLifePath(lp);
         return (
@@ -1451,8 +1609,11 @@ const ReportView = () => {
       })()}
 
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      {/* SECTION 5 — COSMIC CONNECTIONS (BIRTHSTONE)                        */}
+      {/* SECTION 5 ��� COSMIC CONNECTIONS (BIRTHSTONE)                        */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
+      {isLocked ? (
+        <LockedSection code="06 · TALISMAN" eyebrow="Your Birthstone & Flower" title="Cosmic Connections" desc={`The gem and flower of ${monthName}`} />
+      ) : (
       <div className="report-section py-12 px-4" style={{ background: 'var(--gold-tint)' }}>
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
@@ -1627,10 +1788,14 @@ const ReportView = () => {
           )}
         </div>
       </div>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 6 — SOLAR SYSTEM AGES (dark)                               */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
+      {isLocked ? (
+        <LockedSection code="07 · COSMOS" eyebrow="Your Age Across the Solar System" title="Solar System Ages" desc={`${recipientName} is ${age} years old on Earth — here is their age across each planet`} dark />
+      ) : (
       <div className="dark-section solar-section py-12 px-4" style={{ background: 'var(--dark)' }}>
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
@@ -1678,10 +1843,14 @@ const ReportView = () => {
           </div>
         </div>
       </div>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 7 — GENERATION                                             */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
+      {isLocked ? (
+        <LockedSection code="08 · ERA" eyebrow="Your Generation" title="Generation Portrait" desc={`Where ${recipientName} fits in history`} />
+      ) : (
       <div className="report-section generation-section py-14 px-4" style={{ background: 'var(--panel)' }}>
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
@@ -1776,9 +1945,10 @@ const ReportView = () => {
           </div>
         </div>
       </div>
+      )}
 
       {/* ── Biorhythm ──────────────────────────────────────────────────────── */}
-      {(() => {
+      {!isLocked && (() => {
         const today = new Date();
         today.setHours(12, 0, 0, 0);
         const bio = calculateBiorhythm(dob, today);
@@ -1907,12 +2077,14 @@ const ReportView = () => {
           >
             {copied ? '✓ Copied!' : '🔗 Copy Link'}
           </button>
+          {!isLocked && (
           <button
             onClick={handleDownloadAndTrack}
             className="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white font-medium rounded-xl text-sm transition-colors"
           >
             ⬇ Download PDF
           </button>
+          )}
         </div>
       </div>
 

@@ -7,14 +7,7 @@ import { SEO } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import {
-  getQuotaLimit,
-  getUsageCount,
-  recordPDFGeneration,
-  type QuotaTier,
-} from '@/services/PDFQuotaService';
 import { generateReportData, saveReport } from '@/services/BirthdayReportService';
-import { initiateOrderPayment } from '@/services/RazorpayService';
 import { EmailService } from '@/services/EmailService';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
@@ -53,7 +46,7 @@ const CHECKLIST_ITEMS = [
 // ── Page component ────────────────────────────────────────────────────────────
 
 const BirthdayReport = () => {
-  const { user, isPremium, isAdmin, isInTrial, trialDaysRemaining } = useAuth();
+  const { user, isPremium, isAdmin } = useAuth();
   const { toast } = useToast();
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -69,16 +62,6 @@ const BirthdayReport = () => {
   const [reportSlug, setReportSlug] = useState('');
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
-  const [quotaInfo, setQuotaInfo] = useState<{ limit: number; used: number } | null>(null);
-
-  const tier: QuotaTier = isAdmin ? 'admin' : isPremium ? 'premium' : isInTrial ? 'trial' : 'free';
-
-  useEffect(() => {
-    if (!user) return;
-    getUsageCount(user.id, tier).then(used => {
-      setQuotaInfo({ limit: getQuotaLimit(tier), used });
-    });
-  }, [user, tier]);
 
   // Progress animation
   useEffect(() => {
@@ -100,14 +83,6 @@ const BirthdayReport = () => {
     if (!dob) { setError('Please enter the recipient\'s date of birth.'); return; }
     setError('');
 
-    if (user && !isAdmin && quotaInfo && quotaInfo.used >= quotaInfo.limit) {
-      toast({
-        title: 'Report limit reached',
-        description: `You've used all ${quotaInfo.limit} reports for this tier. Upgrade for more.`,
-      });
-      return;
-    }
-
     setPhase('loading');
     setProgress(0);
     setMsgIndex(0);
@@ -122,11 +97,6 @@ const BirthdayReport = () => {
       );
 
       const slug = await saveReport(user?.id ?? null, data, isPremium, gender);
-
-      if (user) {
-        await recordPDFGeneration(user.id, 'birthday');
-        setQuotaInfo(prev => prev ? { ...prev, used: prev.used + 1 } : prev);
-      }
 
       setProgress(100);
       setReportSlug(slug ?? '');
@@ -143,71 +113,6 @@ const BirthdayReport = () => {
       setError('Something went wrong. Please try again.');
       setPhase('form');
     }
-  };
-
-  // Buy-and-create: generate report first (to get a slug), then open Razorpay order
-  // checkout. The slug is only revealed to the user after payment succeeds.
-  const handleBuyAndCreate = async () => {
-    if (!recipientName.trim()) { setError('Please enter the recipient\'s name.'); return; }
-    if (!dob) { setError('Please enter the recipient\'s date of birth.'); return; }
-    if (!user) {
-      toast({ title: 'Sign in required', description: 'Please sign in to purchase a report.' });
-      return;
-    }
-    setError('');
-    setPhase('loading');
-    setProgress(0);
-    setMsgIndex(0);
-
-    let slug: string | null = null;
-    try {
-      const data = await generateReportData(
-        recipientName.trim(),
-        dob,
-        gifterName.trim(),
-        personalMessage.trim(),
-        country
-      );
-      // Force premium-grade expiry (30 days) for paid reports
-      slug = await saveReport(user.id, data, true, gender);
-      if (!slug) throw new Error('Failed to save report');
-    } catch (e) {
-      console.error(e);
-      setError('Failed to prepare report. Please try again.');
-      setPhase('form');
-      return;
-    }
-
-    setPhase('form');
-
-    const savedSlug = slug;
-    const currency = country === 'India' ? 'INR' : 'USD';
-
-    await initiateOrderPayment({
-      product: 'birthday_report',
-      reportSlug: savedSlug,
-      currency,
-      userId: user.id,
-      userEmail: user.email ?? '',
-      userName: user.user_metadata?.full_name || user.user_metadata?.first_name || '',
-      onSuccess: () => {
-        setReportSlug(savedSlug);
-        if (user?.email) {
-          const reportLink = `${window.location.origin}/report/${savedSlug}`;
-          EmailService.sendReportCreated(user.email, gifterName.trim() || 'there', recipientName.trim(), reportLink);
-        }
-        setTimeout(() => setPhase('success'), 100);
-      },
-      onError: (msg) => {
-        setError(`Payment failed: ${msg}`);
-      },
-      onDismiss: () => {
-        toast({
-          title: 'Payment cancelled',
-          description: 'Your report was not created. You can try again anytime.',
-        });
-      },
-    });
   };
 
   const handleCopy = () => {
@@ -500,21 +405,6 @@ const BirthdayReport = () => {
                   />
                 </div>
 
-                {/* Quota info */}
-                {isAdmin && user && (
-                  <p className="text-xs text-center text-emerald-600 font-semibold">
-                    ∞ Admin — unlimited reports
-                  </p>
-                )}
-                {!isAdmin && user && quotaInfo && (
-                  <div className="flex items-center justify-between text-xs text-gray-500 bg-gray-50 px-3 py-2 rounded-lg">
-                    <span>Reports used: {quotaInfo.used}/{quotaInfo.limit}</span>
-                    {quotaInfo.used >= quotaInfo.limit && (
-                      <Link to="/upgrade" className="text-rose-500 font-semibold hover:underline">Upgrade →</Link>
-                    )}
-                  </div>
-                )}
-
                 {error && (
                   <div className="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-xl border border-red-100">
                     {error}
@@ -523,35 +413,15 @@ const BirthdayReport = () => {
 
                 <button
                   onClick={handleSubmit}
-                  disabled={!recipientName.trim() || !dob || (!isAdmin && !!user && !!quotaInfo && quotaInfo.used >= quotaInfo.limit)}
+                  disabled={!recipientName.trim() || !dob}
                   className="w-full py-4 bg-rose-500 hover:bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-lg transition-colors shadow-md"
                 >
                   Create Birthday Report 🎂
                 </button>
 
-                {!isAdmin && !!user && !!quotaInfo && quotaInfo.used >= quotaInfo.limit && (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1 border-t border-gray-200" />
-                      <span className="text-xs text-gray-400">or buy one-time</span>
-                      <div className="flex-1 border-t border-gray-200" />
-                    </div>
-                    <button
-                      onClick={handleBuyAndCreate}
-                      disabled={!recipientName.trim() || !dob}
-                      className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-lg transition-colors shadow-md"
-                    >
-                      Buy Report — {country === 'India' ? '₹199' : '$2.99'} →
-                    </button>
-                    <p className="text-center text-xs text-gray-400">One-time · 30-day access · No subscription needed</p>
-                  </div>
-                )}
-
-                {(!user || !quotaInfo || quotaInfo.used < quotaInfo.limit || isAdmin) && (
-                  <p className="text-center text-xs text-gray-400">
-                    Report link is shareable · Expires after 7 days (30 days for premium)
-                  </p>
-                )}
+                <p className="text-center text-xs text-gray-400">
+                  Report link is shareable · Unlock the full report with a one-time purchase
+                </p>
               </div>
             </>
           )}

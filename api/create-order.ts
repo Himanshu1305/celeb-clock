@@ -14,6 +14,11 @@ const PRODUCT_AMOUNTS: Record<string, Partial<Record<'INR' | 'USD', number>>> = 
   birthday_report: { INR: 19900, USD: 299 },
 };
 
+// Discounted amounts for active subscribers (member pricing).
+const MEMBER_AMOUNTS: Record<string, Partial<Record<'INR' | 'USD', number>>> = {
+  birthday_report: { INR: 14900, USD: 249 },
+};
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -36,8 +41,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing report_slug or userId' });
   }
 
-  const amount = PRODUCT_AMOUNTS[product][currency as 'INR' | 'USD']!;
-
   // Double-purchase guard: reject if this slug was already paid for
   const db = serviceClient();
   const { data: report, error: reportErr } = await db
@@ -51,6 +54,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   if (report.is_paid) {
     return res.status(409).json({ error: 'Report already purchased' });
+  }
+
+  // Member pricing: active subscribers pay less (server-side decision only)
+  let amount = PRODUCT_AMOUNTS[product][currency as 'INR' | 'USD']!;
+  const { data: profileData } = await db
+    .from('profiles')
+    .select('subscription_status')
+    .eq('id', userId)
+    .single();
+  if ((profileData as any)?.subscription_status === 'active') {
+    amount = MEMBER_AMOUNTS[product]?.[currency as 'INR' | 'USD'] ?? amount;
   }
 
   const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
