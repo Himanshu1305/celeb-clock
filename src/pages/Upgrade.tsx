@@ -70,7 +70,7 @@ export default function Upgrade() {
     'Biological Blueprint report',
     'Cultural Horizon',
     'Family dashboard (10 members)',
-    'Birthday reports (3/month)',
+    'Birthday report credits (1/month, up to 3)',
     'Longevity leaderboard',
     'Country comparison (57 countries)',
     'Downloadable PDF reports',
@@ -122,11 +122,14 @@ export default function Upgrade() {
           {/* Hero */}
           <div className="text-center mb-10">
             <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">
-              Unlock Your Complete Longevity Blueprint
+              Unlock BornClock Premium
             </h1>
             <PageTagline />
             <p className="text-gray-600 text-lg max-w-xl mx-auto">
               Science-backed tools to understand and extend your healthspan
+            </p>
+            <p className="text-indigo-700 font-medium mt-3">
+              Subscribers get one birthday report credit every month — unlock any report, gift it to anyone.
             </p>
           </div>
 
@@ -323,7 +326,7 @@ export default function Upgrade() {
                 {
                   icon: '📄',
                   title: 'Birthday Reports',
-                  desc: 'Generate complete 8-page birthday personality and longevity PDFs. 3 reports per month included.',
+                  desc: 'Generate complete 8-page birthday personality and longevity PDFs. One credit per month, rolls over up to 3.',
                 },
               ].map(feature => (
                 <div
