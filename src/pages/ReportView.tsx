@@ -864,6 +864,9 @@ const ReportView = () => {
                     userId: user.id,
                     userEmail: user.email ?? '',
                     onSuccess: () => {
+                      // Immediately flip is_paid so isLocked re-renders without waiting for the DB round-trip
+                      setRow((prev: any) => prev ? { ...prev, is_paid: true } : prev);
+                      // Sync full row in background (picks up expires_at etc.)
                       import('@/services/BirthdayReportService').then(m => m.getReport(slug)).then(fresh => { if (fresh) setRow(fresh); });
                     },
                     onError: (msg) => toast({ title: 'Payment failed', description: msg, variant: 'destructive' }),
@@ -909,7 +912,7 @@ const ReportView = () => {
             )}
 
             <p className="text-xs mt-4" style={{ color: 'var(--muted)' }}>
-              One-time · 30-day access · Download included
+              One-time purchase · Permanent access · Download included
             </p>
           </div>
         </div>
