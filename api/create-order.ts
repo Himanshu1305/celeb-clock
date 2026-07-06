@@ -61,7 +61,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { data: profileData } = await db
     .from('profiles')
     .select('subscription_status')
-    .eq('id', userId)
+    .eq('user_id', userId)
     .single();
   if ((profileData as any)?.subscription_status === 'active') {
     amount = MEMBER_AMOUNTS[product]?.[currency as 'INR' | 'USD'] ?? amount;

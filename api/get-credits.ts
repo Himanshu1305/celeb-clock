@@ -27,7 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { data: profile, error } = await db
     .from('profiles')
     .select('report_credits, credits_granted_month, subscription_status')
-    .eq('id', userId)
+    .eq('user_id', userId)
     .single();
 
   if (error || !profile) {
@@ -55,7 +55,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await db.from('profiles').update({
       report_credits: newCredits,
       credits_granted_month: currentMonth,
-    }).eq('id', userId);
+    }).eq('user_id', userId);
 
     return res.status(200).json({ credits: newCredits, subscriptionActive: true });
   }

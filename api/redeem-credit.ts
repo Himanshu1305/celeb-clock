@@ -22,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { data: profile, error: profileErr } = await db
     .from('profiles')
     .select('report_credits')
-    .eq('id', userId)
+    .eq('user_id', userId)
     .single();
 
   if (profileErr || !profile) {
@@ -38,7 +38,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { error: decrErr } = await db
     .from('profiles')
     .update({ report_credits: currentCredits - 1 })
-    .eq('id', userId);
+    .eq('user_id', userId);
 
   if (decrErr) {
     console.error('[redeem-credit] decrement error', decrErr);
@@ -57,7 +57,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (unlockErr) {
     // Compensating transaction: restore the credit
     console.error('[redeem-credit] unlock error', unlockErr);
-    await db.from('profiles').update({ report_credits: currentCredits }).eq('id', userId);
+    await db.from('profiles').update({ report_credits: currentCredits }).eq('user_id', userId);
     return res.status(500).json({ error: 'Failed to unlock report. Your credit has been restored.' });
   }
 
