@@ -149,6 +149,31 @@ Before session 5: `occupation`, `wikipedia_url`, `nationality*` were NULL for es
 - 23 pairs resolved by the script: surviving original row updated with `nationality='Indian'`, `nationality_code='IN'`, `known_for`, `tier`, winning `birth_month_day`; fresh duplicate deleted.
 - 3 pairs (Aryabhata, Sai Baba of Shirdi, Sarvepalli Radhakrishnan) hit the `celebrity_sitelinks_name_birth_date_key` unique constraint — the UPDATE would have placed the original onto a `(name, birth_date)` slot already occupied by the fresh row. Resolution: inverted strategy in Studio — kept the fresh enriched row (already had `nationality_code`, `known_for`, `tier`), manually copied `sitelinks` from the bare original (83 / 95 / 42 respectively), then deleted the original. Verified: zero IN duplicates remain, all three on correct dates.
 
+### Deletion-candidate heuristic — invalid for migration-inserted rows (2026-07-06)
+
+**Net finding: no celebrity deletions needed.** Sitelinks ranking already handles obscurity for seed rows — low-sitelinks entries simply appear lower in results and in reports.
+
+A deletion-candidate review flagged rows with `wikidata_id=NULL` + `sitelinks=0` as potentially droppable junk. This heuristic is **invalid for migration-inserted curated rows.** The 12 rows below have null wikidata_id and zero sitelinks because the Stage 2 precision-≥11 gate rejected them (Wikidata stores pre-1900 birth dates at decade/century precision), NOT because they are obscure:
+
+| ID    | Name                        | QID (post-enrichment) | Sitelinks |
+|-------|-----------------------------|-----------------------|-----------|
+| 27433 | Chanakya                    | Q9045                 | 125       |
+| 27441 | Bankim Chandra Chattopadhyay| Q377881               | 47        |
+| 27444 | Guru Nanak Dev              | Q83322                | 95        |
+| 27445 | Mirabai                     | Q466330               | 54        |
+| 27446 | Kabir Das                   | Q312551               | 66        |
+| 27447 | Tulsidas                    | Q312976               | 61        |
+| 27453 | Ramakrishna Paramahamsa     | Q183126               | 82        |
+| 27539 | Tantia Tope                 | Q983579               | 27        |
+| 27582 | Maharana Pratap             | Q2722956              | 41        |
+| 27590 | Prithviraj Chauhan          | Q558219               | 37        |
+| 27683 | Chhatrapati Shivaji Maharaj | Q239505               | 64        |
+| 27791 | Amir Khusrau                | Q207817               | 69        |
+
+These are some of the most culturally significant figures in Indian history. `scripts/enrich-priority-rows.mjs` was written to enrich them via name-only Wikidata matching (no date/precision gate). Write policy: `wikidata_id` + `wikipedia_url` + `sitelinks` set from Wikidata; curated `occupation` preserved unchanged. Run: `node --env-file=.env.local scripts/enrich-priority-rows.mjs --dry-run` then without `--dry-run`.
+
+**Lesson for future triage:** before flagging a row as a deletion candidate, check `created_at` and `known_for`. Migration-inserted rows (`created_at ∈ [2026-07-03, 2026-07-04)`) with a `known_for` value are hand-curated entries regardless of their Wikidata linkage state.
+
 ### Images
 No image column. `WikipediaImageService.fetchCelebrityImage()` hits the Wikipedia pageimages API client-side at render, 7-day localStorage cache, initials-avatar fallback.
 
