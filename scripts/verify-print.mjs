@@ -49,10 +49,11 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, '..');
-const OUT_PDF    = resolve(__dirname, 'neeraj-birthday.pdf');
 
 // ── Config ────────────────────────────────────────────────────────────────────
-const SLUG             = 'osenyz63';   // Neeraj, DOB 1966-06-25 (production Supabase row)
+const slugArg = process.argv.find(a => a.startsWith('--slug='));
+const SLUG    = slugArg ? slugArg.slice('--slug='.length) : 'osenyz63';   // Neeraj default
+const OUT_PDF = resolve(__dirname, `${SLUG}-birthday.pdf`);
 const DEV_PORT         = 3000;         // configured Vite port
 const SERVER_TIMEOUT   = 15_000;       // ms to wait for vite preview (starts in <1s)
 const SPARSE_THRESHOLD = 0.55;         // pages where bottom content < 55% down flagged sparse
@@ -143,13 +144,23 @@ async function waitForServer(url, timeout = SERVER_TIMEOUT) {
 }
 
 // Does a text item, identified by compact string, belong to expected header/footer content?
-function isKnownHeaderOrFooter(str) {
-  const compact = str.toLowerCase().replace(/\s+/g, '');
-  return compact.includes('bornclock') ||
-         compact.includes('birthday')  ||
-         compact.includes('blueprint') ||
-         compact.includes('neeraj')    ||
-         str === '·' || str === '·' || str === ' ';
+// Handles both cases for the recipient name:
+//   - header zone: letter-spacing splits "Leap Day Test" into separate items "L E A P"/"D AY"/"T E S T"
+//     -> matched word-by-word (compact === word)
+//   - footer zone: tfoot has no letter-spacing, so "Leap Day Test" is one item
+//     -> matched by compact.includes(fullCompactName)
+function makeIsKnownHeaderOrFooter(recipientName) {
+  const nameWords    = recipientName ? recipientName.toLowerCase().split(/\s+/).filter(Boolean) : [];
+  const nameCompact  = recipientName ? recipientName.toLowerCase().replace(/\s+/g, '') : '';
+  return function isKnownHeaderOrFooter(str) {
+    const compact = str.toLowerCase().replace(/\s+/g, '');
+    return compact.includes('bornclock') ||
+           compact.includes('birthday')  ||
+           compact.includes('blueprint') ||
+           nameWords.some(w => compact === w) ||
+           (nameCompact && compact.includes(nameCompact)) ||
+           str === '·' || str === '·' || str === ' ';
+  };
 }
 
 // Is there a tfoot footer item in the page's bottom zone?
@@ -162,8 +173,26 @@ function pageHasFooterZone(pgItems) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 async function main() {
+  // Look up recipient name for this slug so isKnownHeaderOrFooter can filter it
+  // from clipping-zone checks (the tfoot footer embeds the recipient name).
+  let recipientName = '';
+  try {
+    const sbUrl  = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
+    const sbAnon = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+    if (sbUrl && sbAnon) {
+      const r = await fetch(
+        `${sbUrl}/rest/v1/birthday_reports?select=recipient_name&slug=eq.${SLUG}&limit=1`,
+        { headers: { apikey: sbAnon, Authorization: `Bearer ${sbAnon}` } }
+      );
+      const rows = await r.json().catch(() => []);
+      recipientName = rows[0]?.recipient_name ?? '';
+    }
+  } catch { /* non-fatal */ }
+
+  const isKnownHeaderOrFooter = makeIsKnownHeaderOrFooter(recipientName);
+
   console.log('\n══════════════════════════════════════════════════════════');
-  console.log('  Birthday PDF Verification  —  Neeraj / slug:osenyz63');
+  console.log(`  Birthday PDF Verification  —  slug:${SLUG}${recipientName ? '  (' + recipientName + ')' : ''}`);
   console.log('══════════════════════════════════════════════════════════\n');
 
   const t0 = Date.now();
@@ -231,7 +260,7 @@ async function main() {
       path: OUT_PDF,
     });
     const tPdf = Date.now();
-    INFO(`PDF written → scripts/neeraj-birthday.pdf (${Math.round(pdfBuf.length / 1024)} KB, ${tPdf - tNav}ms)`);
+    INFO(`PDF written → scripts/${SLUG}-birthday.pdf (${Math.round(pdfBuf.length / 1024)} KB, ${tPdf - tNav}ms)`);
 
   } finally {
     await browser.close();

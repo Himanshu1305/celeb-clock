@@ -138,7 +138,7 @@ console.log('\n[6] create-order: member pricing shape check');
 
 console.log('\n[7] redeem-credit: full unlock flow  [manual — requires credits > 0]');
 console.log('    To test manually:');
-console.log(`    1. In Supabase Studio: UPDATE public.profiles SET report_credits=1 WHERE id='${TEST_USER_ID}';`);
+console.log(`    1. In Supabase Studio: UPDATE public.profiles SET report_credits=1 WHERE user_id='${TEST_USER_ID}';`);
 console.log(`    2. Also ensure is_paid=false: UPDATE public.birthday_reports SET is_paid=false WHERE slug='${TEST_SLUG}';`);
 console.log(`    3. Then call: POST /api/redeem-credit {userId, reportSlug}`);
 console.log('    Expected: { success: true, creditsRemaining: 0 }');
