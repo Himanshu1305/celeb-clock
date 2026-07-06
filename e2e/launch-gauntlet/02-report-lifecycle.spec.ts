@@ -59,8 +59,9 @@ test.describe('Birthday report creation and locked preview', () => {
     const lockPlaceholder = page.locator('text=Unlock to reveal').first();
     await expect(lockPlaceholder).toBeVisible();
 
-    // Real section content should NOT be present in the DOM
-    const zodiacContent = page.locator('text=Western, Chinese & Vedic');
+    // Real section body content should NOT be visible (LockedSection shows header/desc only)
+    // "Moon Sign & Nakshatra" heading only renders in the real unlocked zodiac body
+    const zodiacContent = page.locator('h2:has-text("Moon Sign")');
     await expect(zodiacContent).not.toBeVisible();
 
     const numerologyContent = page.locator('text=What Is Numerology');
