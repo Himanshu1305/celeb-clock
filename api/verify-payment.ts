@@ -32,7 +32,13 @@ function verifySignature(params: {
   }
 
   const expected = crypto.createHmac('sha256', keySecret).update(message).digest('hex');
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(razorpay_signature));
+  // timingSafeEqual throws if buffers differ in length (e.g. truncated/garbage sig).
+  // Treat any such input as an invalid signature rather than a 500.
+  try {
+    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(razorpay_signature));
+  } catch {
+    return false;
+  }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

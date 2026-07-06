@@ -146,11 +146,12 @@ if (orderId) {
 console.log('\n[7] verify-payment: correct HMAC  [requires a real payment_id from checkout]');
 console.log('    After completing a test-mode checkout, run:');
 if (orderId) {
-  console.log(`    PAYMENT_ID=pay_XXXX`);
-  console.log(`    SIG=$(node -e "const c=require('crypto'); console.log(c.createHmac('sha256','${KEY_SECRET}').update('${orderId}|'+process.env.PAYMENT_ID).digest('hex'))")`);
+  console.log(`    export PAYMENT_ID=pay_XXXX`);
+  console.log(`    export ORDER_ID=${orderId}`);
+  console.log(`    SIG=$(node -e "const c=require('crypto'); console.log(c.createHmac('sha256',process.env.RAZORPAY_KEY_SECRET).update(process.env.ORDER_ID+'|'+process.env.PAYMENT_ID).digest('hex'))")`);
   console.log(`    curl -s -X POST http://localhost:3001/api/verify-payment \\`);
   console.log(`      -H 'Content-Type: application/json' \\`);
-  console.log(`      -d '{"razorpay_payment_id":"'$PAYMENT_ID'","razorpay_order_id":"${orderId}","razorpay_signature":"'$SIG'","user_id":"${TEST_USER_ID}","product":"birthday_report","report_slug":"${TEST_SLUG}","amount":19900,"currency":"INR"}'`);
+  console.log(`      -d '{"razorpay_payment_id":"'$PAYMENT_ID'","razorpay_order_id":"'$ORDER_ID'","razorpay_signature":"'$SIG'","user_id":"${TEST_USER_ID}","product":"birthday_report","report_slug":"${TEST_SLUG}","amount":19900,"currency":"INR"}'`);
   console.log('    Expected: {"success":true,"product":"birthday_report"}');
   console.log(`    Then verify: SELECT is_paid, expires_at FROM birthday_reports WHERE slug = '${TEST_SLUG}';`);
 }
