@@ -20,6 +20,7 @@ interface Profile {
   blog_subscription?: boolean;
   created_at?: string;
   promo_premium_until?: string | null;
+  premium_until?: string | null;
 }
 
 export const useAuth = () => {
@@ -236,7 +237,14 @@ export const useAuth = () => {
     ? promoPremiumUntil > new Date()
     : false;
 
-  const isPremium = profile?.premium_status || isInTrial || isPromoActive || false;
+  // A cancelled subscription keeps premium_status=true in the DB until current_end
+  // (set by the webhook). Once premium_until has passed, treat as expired client-side.
+  const cancelledAndExpired =
+    profile?.subscription_status === 'cancelled' &&
+    !!profile?.premium_until &&
+    new Date(profile.premium_until) <= new Date();
+
+  const isPremium = !cancelledAndExpired && (profile?.premium_status || isInTrial || isPromoActive) || false;
   const isAdmin = ADMIN_EMAILS.includes((user?.email ?? '').toLowerCase().trim());
 
   return {

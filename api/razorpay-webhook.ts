@@ -164,7 +164,50 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         break;
       }
 
-      case 'subscription.cancelled':
+      case 'subscription.cancelled': {
+        // User cancelled voluntarily — they have paid through current_end.
+        // Keep premium_status=true so access continues; premium_until marks the expiry.
+        // The client derives isPremium=false once premium_until passes (useAuth.ts).
+        const subscription = event.payload?.subscription?.entity;
+        if (!subscription) break;
+
+        const { data: profile } = await db
+          .from('profiles')
+          .select('id')
+          .eq('subscription_id', subscription.id)
+          .single();
+
+        if (!profile) {
+          console.warn('[webhook] no profile for subscription_id', subscription.id);
+          break;
+        }
+
+        const endDate = subscription.current_end
+          ? new Date(subscription.current_end * 1000)
+          : null;
+
+        await db.from('profiles').update({
+          premium_status: true,
+          subscription_status: 'cancelled',
+          premium_until: endDate?.toISOString() ?? null,
+          updated_at: new Date().toISOString(),
+        }).eq('id', profile.id);
+
+        const { data: userData } = await db.auth.admin.getUserById(profile.id);
+        const email = userData?.user?.email;
+        if (email) {
+          const accessUntil = endDate
+            ? endDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+            : 'end of billing period';
+          const name = userData?.user?.user_metadata?.first_name || 'there';
+          await sendEmail({ type: 'cancellation', to: email, name, accessUntil });
+        }
+        break;
+      }
+
+      // subscription.halted: payment failed — revoke immediately, no grace period.
+      // No cancellation email: the template is for voluntary cancellation (shows an
+      // access-until date); halted users get Razorpay's own payment failure notification.
       case 'subscription.completed':
       case 'subscription.expired':
       case 'subscription.halted':
@@ -172,10 +215,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const subscription = event.payload?.subscription?.entity;
         if (!subscription) break;
 
-        const isPremium = false;
-        const newStatus = eventType.split('.')[1]; // 'cancelled'|'completed'|'expired'|'halted'|'paused'
+        const newStatus = eventType.split('.')[1]; // 'completed'|'expired'|'halted'|'paused'
 
-        // Look up by subscription_id — no O(n) scan needed
         const { data: profile } = await db
           .from('profiles')
           .select('id')
@@ -188,24 +229,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         }
 
         await db.from('profiles').update({
-          premium_status: isPremium,
+          premium_status: false,
           subscription_status: newStatus,
           updated_at: new Date().toISOString(),
         }).eq('id', profile.id);
-
-        if (eventType === 'subscription.cancelled' || eventType === 'subscription.halted') {
-          const { data: userData } = await db.auth.admin.getUserById(profile.id);
-          const email = userData?.user?.email;
-          if (email) {
-            const accessUntil = subscription.current_end
-              ? new Date(subscription.current_end * 1000).toLocaleDateString('en-IN', {
-                  day: 'numeric', month: 'long', year: 'numeric',
-                })
-              : 'end of billing period';
-            const name = userData?.user?.user_metadata?.first_name || 'there';
-            await sendEmail({ type: 'cancellation', to: email, name, accessUntil });
-          }
-        }
         break;
       }
 
