@@ -14,6 +14,7 @@ import {
   type QuotaTier,
 } from '@/services/PDFQuotaService';
 import { generateReportData, saveReport } from '@/services/BirthdayReportService';
+import { initiateOrderPayment } from '@/services/RazorpayService';
 import { EmailService } from '@/services/EmailService';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
@@ -142,6 +143,71 @@ const BirthdayReport = () => {
       setError('Something went wrong. Please try again.');
       setPhase('form');
     }
+  };
+
+  // Buy-and-create: generate report first (to get a slug), then open Razorpay order
+  // checkout. The slug is only revealed to the user after payment succeeds.
+  const handleBuyAndCreate = async () => {
+    if (!recipientName.trim()) { setError('Please enter the recipient\'s name.'); return; }
+    if (!dob) { setError('Please enter the recipient\'s date of birth.'); return; }
+    if (!user) {
+      toast({ title: 'Sign in required', description: 'Please sign in to purchase a report.' });
+      return;
+    }
+    setError('');
+    setPhase('loading');
+    setProgress(0);
+    setMsgIndex(0);
+
+    let slug: string | null = null;
+    try {
+      const data = await generateReportData(
+        recipientName.trim(),
+        dob,
+        gifterName.trim(),
+        personalMessage.trim(),
+        country
+      );
+      // Force premium-grade expiry (30 days) for paid reports
+      slug = await saveReport(user.id, data, true, gender);
+      if (!slug) throw new Error('Failed to save report');
+    } catch (e) {
+      console.error(e);
+      setError('Failed to prepare report. Please try again.');
+      setPhase('form');
+      return;
+    }
+
+    setPhase('form');
+
+    const savedSlug = slug;
+    const currency = country === 'India' ? 'INR' : 'USD';
+
+    await initiateOrderPayment({
+      product: 'birthday_report',
+      reportSlug: savedSlug,
+      currency,
+      userId: user.id,
+      userEmail: user.email ?? '',
+      userName: user.user_metadata?.full_name || user.user_metadata?.first_name || '',
+      onSuccess: () => {
+        setReportSlug(savedSlug);
+        if (user?.email) {
+          const reportLink = `${window.location.origin}/report/${savedSlug}`;
+          EmailService.sendReportCreated(user.email, gifterName.trim() || 'there', recipientName.trim(), reportLink);
+        }
+        setTimeout(() => setPhase('success'), 100);
+      },
+      onError: (msg) => {
+        setError(`Payment failed: ${msg}`);
+      },
+      onDismiss: () => {
+        toast({
+          title: 'Payment cancelled',
+          description: 'Your report was not created. You can try again anytime.',
+        });
+      },
+    });
   };
 
   const handleCopy = () => {
@@ -463,9 +529,29 @@ const BirthdayReport = () => {
                   Create Birthday Report 🎂
                 </button>
 
-                <p className="text-center text-xs text-gray-400">
-                  Report link is shareable · Expires after 7 days (30 days for premium)
-                </p>
+                {!isAdmin && !!user && !!quotaInfo && quotaInfo.used >= quotaInfo.limit && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1 border-t border-gray-200" />
+                      <span className="text-xs text-gray-400">or buy one-time</span>
+                      <div className="flex-1 border-t border-gray-200" />
+                    </div>
+                    <button
+                      onClick={handleBuyAndCreate}
+                      disabled={!recipientName.trim() || !dob}
+                      className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-lg transition-colors shadow-md"
+                    >
+                      Buy Report — {country === 'India' ? '₹199' : '$2.99'} →
+                    </button>
+                    <p className="text-center text-xs text-gray-400">One-time · 30-day access · No subscription needed</p>
+                  </div>
+                )}
+
+                {(!user || !quotaInfo || quotaInfo.used < quotaInfo.limit || isAdmin) && (
+                  <p className="text-center text-xs text-gray-400">
+                    Report link is shareable · Expires after 7 days (30 days for premium)
+                  </p>
+                )}
               </div>
             </>
           )}

@@ -136,3 +136,105 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
 
   rzp.open();
 }
+
+export interface OrderPaymentOptions {
+  product: 'birthday_report';
+  reportSlug: string;
+  currency: 'INR' | 'USD';
+  userId: string;
+  userEmail: string;
+  userName?: string;
+  onSuccess: () => void;
+  onError: (error: string) => void;
+  onDismiss: () => void;
+}
+
+export async function initiateOrderPayment(options: OrderPaymentOptions): Promise<void> {
+  const { product, reportSlug, currency, userId, userEmail, userName, onSuccess, onError, onDismiss } = options;
+
+  const loaded = await loadRazorpayScript();
+  if (!loaded) {
+    onError('Failed to load payment gateway. Please refresh and try again.');
+    return;
+  }
+
+  const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID;
+  if (!keyId) {
+    onError('Payment configuration error. Please contact hello@bornclock.com');
+    return;
+  }
+
+  let orderId: string;
+  let orderAmount: number;
+  let orderCurrency: string;
+  try {
+    const res = await fetch('/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ product, report_slug: reportSlug, userId, currency }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      if (res.status === 409) {
+        onError('This report has already been purchased.');
+        return;
+      }
+      onError(err.error || 'Could not initialise checkout. Please try again.');
+      return;
+    }
+    const data = await res.json();
+    orderId = data.order_id;
+    orderAmount = data.amount;
+    orderCurrency = data.currency;
+  } catch {
+    onError('Could not reach payment server. Please check your connection and try again.');
+    return;
+  }
+
+  const rzpOptions = {
+    key: keyId,
+    order_id: orderId,
+    amount: orderAmount,
+    currency: orderCurrency,
+    name: 'BornClock',
+    description: 'Birthday Report',
+    image: 'https://bornclock.com/favicon.png',
+    prefill: { email: userEmail, name: userName || '' },
+    notes: { email: userEmail, userId, product },
+    theme: { color: '#4F46E5' },
+    modal: { ondismiss: onDismiss, confirm_close: true, escape: false },
+    handler: async (response: any) => {
+      try {
+        const verifyRes = await fetch('/api/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature,
+            user_id: userId,
+            product,
+            report_slug: reportSlug,
+            amount: orderAmount,
+            currency: orderCurrency,
+          }),
+        });
+        if (!verifyRes.ok) {
+          const err = await verifyRes.json().catch(() => ({}));
+          onError(err.error || 'Payment verification failed. Please contact support.');
+          return;
+        }
+      } catch {
+        onError('Payment verification failed. Please try again or contact support.');
+        return;
+      }
+      onSuccess();
+    },
+  };
+
+  const rzp = new window.Razorpay(rzpOptions);
+  rzp.on('payment.failed', (response: any) => {
+    onError(response.error?.description || 'Payment failed. Please try again.');
+  });
+  rzp.open();
+}
