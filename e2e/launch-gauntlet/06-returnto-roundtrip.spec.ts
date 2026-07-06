@@ -23,22 +23,19 @@ test.describe('F-01 — returnTo links on locked report', () => {
     const ctx = await browser.newContext();
     const page = await ctx.newPage();
     await page.goto(`${BASE}/birthday-report`);
-    await page.waitForSelector('input[placeholder*="name" i], input[id*="name" i]', { timeout: 10000 });
+    await page.waitForSelector('input[placeholder*="Priya"]', { timeout: 10000 });
 
-    const nameInput = page.locator('input').first();
+    const nameInput = page.locator('input[placeholder*="Priya"]').first();
     await nameInput.fill('Test Person');
 
-    // Find the date input
-    const dateInput = page.locator('input[type="date"]');
-    await dateInput.fill('1990-05-15');
+    await page.locator('input[type="date"]').fill('1990-05-15');
+    await page.locator('button:has-text("Create Birthday Report")').click();
 
-    const submitBtn = page.locator('button[type="submit"]');
-    await submitBtn.click();
-
-    // Wait until we land on /report/…
-    await page.waitForURL(/\/report\//, { timeout: 30000 });
-    reportUrl = page.url();
-    slug = reportUrl.split('/report/')[1].split('?')[0];
+    // App stays on /birthday-report and shows success screen
+    await page.waitForSelector('text=Report Ready!', { timeout: 30000 });
+    const reportHref = await page.locator('a:has-text("Open Report")').getAttribute('href');
+    slug = reportHref!.split('/report/')[1].split('?')[0];
+    reportUrl = `${BASE}/report/${slug}`;
     await ctx.close();
   });
 

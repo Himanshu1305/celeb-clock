@@ -16,7 +16,7 @@ test.describe('Birthday report creation and locked preview', () => {
     await page.waitForLoadState('networkidle');
 
     // Fill recipient name
-    await page.locator('input[placeholder*="recipient"]').first().fill(FORM_NAME);
+    await page.locator('input[placeholder*="Priya"]').first().fill(FORM_NAME);
 
     // Fill DOB
     const dobInput = page.locator('input[type="date"]').first();
@@ -25,10 +25,15 @@ test.describe('Birthday report creation and locked preview', () => {
     // Submit
     await page.locator('button:has-text("Create Birthday Report")').click();
 
-    // Wait for redirect to /report/
-    await page.waitForURL(/\/report\/[a-z0-9-]+/, { timeout: 30000 });
+    // Wait for success screen (app stays on /birthday-report, shows "Report Ready!")
+    await page.waitForSelector('text=Report Ready!', { timeout: 30000 });
+
+    // Get the report href from the "Open Report" link and navigate to it
+    const reportHref = await page.locator('a:has-text("Open Report")').getAttribute('href');
+    expect(reportHref).toMatch(/\/report\/[a-z0-9-]+/);
+    await page.goto(reportHref!);
+    await page.waitForLoadState('networkidle');
     reportUrl = page.url();
-    expect(reportUrl).toContain('/report/');
   });
 
   test('locked report: cover and twins section visible', async ({ page }) => {

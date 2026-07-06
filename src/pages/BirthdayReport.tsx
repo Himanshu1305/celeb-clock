@@ -46,7 +46,7 @@ const CHECKLIST_ITEMS = [
 // ── Page component ────────────────────────────────────────────────────────────
 
 const BirthdayReport = () => {
-  const { user, isPremium, isAdmin } = useAuth();
+  const { user, isPremium, isAdmin, isInTrial, trialDaysRemaining } = useAuth();
   const { toast } = useToast();
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -98,8 +98,14 @@ const BirthdayReport = () => {
 
       const slug = await saveReport(user?.id ?? null, data, isPremium, gender);
 
+      if (!slug) {
+        setError('Could not save report — please sign in and try again.');
+        setPhase('form');
+        return;
+      }
+
       setProgress(100);
-      setReportSlug(slug ?? '');
+      setReportSlug(slug);
 
       // Fire-and-forget: send report link to the gifter's email (if signed in)
       if (user?.email && slug) {

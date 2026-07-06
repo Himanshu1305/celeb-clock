@@ -23,11 +23,18 @@ for (const tc of TEST_CASES) {
     await page.goto('/birthday-report');
     await page.waitForLoadState('networkidle');
 
-    await page.locator('input[placeholder*="recipient"]').first().fill(tc.name);
+    await page.locator('input[placeholder*="Priya"]').first().fill(tc.name);
     await page.locator('input[type="date"]').first().fill(tc.dob);
     await page.locator('button:has-text("Create Birthday Report")').click();
 
-    await page.waitForURL(/\/report\/[a-z0-9-]+/, { timeout: 35000 });
+    // App shows success screen on the same /birthday-report page
+    await page.waitForSelector('text=Report Ready!', { timeout: 35000 });
+
+    // Navigate to the locked report
+    const reportHref = await page.locator('a:has-text("Open Report")').getAttribute('href');
+    expect(reportHref).toMatch(/\/report\/[a-z0-9-]+/);
+    await page.goto(reportHref!);
+    await page.waitForLoadState('networkidle');
 
     // No error boundary
     await expect(page.locator('text=Something went wrong')).not.toBeVisible();
