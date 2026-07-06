@@ -295,7 +295,7 @@ const ReportView = () => {
   const [activeZodiacTab, setActiveZodiacTab] = useState('western');
   const [liveCelebrities, setLiveCelebrities] = useState<any[] | null>(null);
 
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, profile } = useAuth();
   const { toast } = useToast();
   const [isIndia, setIsIndia] = useState(true);
   const [credits, setCredits] = useState(0);
@@ -873,7 +873,9 @@ const ReportView = () => {
                 className="w-full py-3.5 rounded-xl font-bold text-white text-base transition-colors mb-3"
                 style={{ background: 'var(--navy)' }}
               >
-                Unlock — {isIndia ? '₹199' : '$2.99'}
+                {profile?.subscription_status === 'active'
+                  ? `Unlock — ${isIndia ? '₹149' : '$2.49'} (member price)`
+                  : `Unlock — ${isIndia ? '₹199' : '$2.99'}`}
               </button>
             ) : (
               <>

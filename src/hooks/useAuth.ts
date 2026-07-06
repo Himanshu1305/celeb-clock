@@ -15,6 +15,7 @@ interface Profile {
   email: string;
   country?: string;
   premium_status: boolean;
+  subscription_status?: string | null;
   email_notifications: boolean;
   blog_subscription?: boolean;
   created_at?: string;
