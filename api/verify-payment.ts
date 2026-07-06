@@ -58,6 +58,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     report_slug,
   } = req.body ?? {};
 
+  // For birthday_report orders: after HMAC passes we fetch the Razorpay order to
+  // get the server-baked report_slug and authoritative amount. This prevents a
+  // client from supplying a tampered slug to unlock a report they didn't pay for.
+  // These are populated below (before the payment insert) and used throughout.
+  let authoritativeSlug: string | null = report_slug ?? null;
+  let paymentAmount: number = amount ?? 0;
+  let paymentCurrency: string = currency ?? 'INR';
+
   if (!razorpay_payment_id || !razorpay_signature) {
     return res.status(400).json({ error: 'Missing required payment fields' });
   }
@@ -87,17 +95,56 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const db = serviceClient();
 
+  // For birthday_report: fetch the Razorpay order to get authoritative values
+  if (product === 'birthday_report') {
+    if (!razorpay_order_id) {
+      return res.status(400).json({ error: 'razorpay_order_id required for birthday_report' });
+    }
+    const keyId = process.env.VITE_RAZORPAY_KEY_ID;
+    if (!keyId) return res.status(500).json({ error: 'Payment configuration error' });
+
+    const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
+    let orderData: any;
+    try {
+      const orderRes = await fetch(`https://api.razorpay.com/v1/orders/${razorpay_order_id}`, {
+        headers: { Authorization: `Basic ${auth}` },
+      });
+      orderData = await orderRes.json();
+      if (!orderRes.ok) {
+        console.error('[verify-payment] order fetch error', orderData);
+        return res.status(502).json({ error: 'Could not fetch order' });
+      }
+    } catch (e) {
+      console.error('[verify-payment] order fetch network error', e);
+      return res.status(502).json({ error: 'Could not reach payment provider' });
+    }
+
+    authoritativeSlug = orderData.notes?.report_slug ?? null;
+    paymentAmount = orderData.amount;
+    paymentCurrency = orderData.currency;
+
+    if (!authoritativeSlug) {
+      console.error('[verify-payment] order missing report_slug in notes', razorpay_order_id);
+      return res.status(400).json({ error: 'Order missing report_slug' });
+    }
+    // Cross-check: if client supplied a slug it must match the server-baked one
+    if (report_slug && report_slug !== authoritativeSlug) {
+      console.error('[verify-payment] slug mismatch body=%s order=%s', report_slug, authoritativeSlug);
+      return res.status(403).json({ error: 'Report slug mismatch' });
+    }
+  }
+
   // Record payment — UNIQUE(razorpay_payment_id) prevents double-processing
   const { error: paymentErr } = await db.from('payments').insert({
     user_id,
     razorpay_payment_id,
     razorpay_order_id: razorpay_order_id ?? null,
     razorpay_subscription_id: razorpay_subscription_id ?? null,
-    amount: amount ?? 0,
-    currency: currency ?? 'INR',
+    amount: paymentAmount,
+    currency: paymentCurrency,
     status: 'captured',
     product,
-    report_slug: report_slug ?? null,
+    report_slug: authoritativeSlug,
   });
 
   if (paymentErr) {
@@ -128,8 +175,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
   }
 
-  // For birthday_report: entitlement is the report slug itself (already saved
-  // during report generation); no additional grant needed.
+  // For birthday_report: mark the report as paid (enables 30-day expiry extension
+  // and prevents double-purchase via create-order's is_paid check)
+  if (product === 'birthday_report' && authoritativeSlug) {
+    const { error: unlockErr } = await db
+      .from('birthday_reports')
+      .update({
+        is_paid: true,
+        expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      })
+      .eq('slug', authoritativeSlug);
+
+    if (unlockErr) {
+      console.error('[verify-payment] birthday_report unlock error', unlockErr);
+      return res.status(500).json({
+        error: 'Payment recorded but report unlock failed. Contact support at hello@bornclock.com with your payment ID.',
+      });
+    }
+  }
 
   // Send payment receipt email (fire-and-forget; must not block the response)
   try {
@@ -137,8 +200,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const userEmail = userData?.user?.email;
     const userName = userData?.user?.user_metadata?.full_name || userData?.user?.user_metadata?.first_name || 'there';
     if (userEmail) {
-      const currencySymbol = (currency ?? 'INR') === 'INR' ? '₹' : '$';
-      const amountFormatted = `${currencySymbol}${((amount ?? 0) / 100).toLocaleString('en-IN')}`;
+      const currencySymbol = paymentCurrency === 'INR' ? '₹' : '$';
+      const amountFormatted = `${currencySymbol}${(paymentAmount / 100).toLocaleString('en-IN')}`;
+
       const date = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
       const base = process.env.VERCEL_PROJECT_PRODUCTION_URL
         ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
@@ -153,7 +217,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           product,
           amountFormatted,
           date,
-          reportLink: report_slug ? `${base}/report/${report_slug}` : undefined,
+          reportLink: authoritativeSlug ? `${base}/report/${authoritativeSlug}` : undefined,
         }),
       });
     }
