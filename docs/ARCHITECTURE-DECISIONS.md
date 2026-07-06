@@ -1,7 +1,7 @@
 # BornClock — Architecture Decisions & Maintenance Log
 
 > Purpose: capture WHAT was built, WHY it was built that way, what failed before it, and what remains open — so future sessions don't re-derive this from scratch. Update this file whenever a significant decision lands.
-> Last updated: 2026-07-06 (session 5-U — preview-lock + subscriber credits, E2E gauntlet, flow audit).
+> Last updated: 2026-07-06 (session 5-V — F-01/F-02/F-03 fixed, gauntlet 43/43, DDL complete, anon rate-limit noted).
 
 ---
 
@@ -235,12 +235,13 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 - Optional parked: monochrome emoji brand restyle (⭐→★ model).
 
 **Monetisation (post-5U launch-blockers — see docs/FLOW-AUDIT-2026-07-06.md for full list)**
-- **F-01 LAUNCH-BLOCKER:** Sign-in loses report URL — add `?returnTo=/report/[slug]` to Auth redirect.
-- **F-02 LAUNCH-BLOCKER:** Upgrade.tsx heading + features list wrong for credits model.
-- **F-03 LAUNCH-BLOCKER:** Unlock CTA shows ₹199 for subscribers who pay ₹149 (member price).
-- **E2E gauntlet location:** `e2e/launch-gauntlet/` with `gauntlet.config.ts` targeting localhost:3000. Run: `npx playwright test --config e2e/launch-gauntlet/gauntlet.config.ts`. Requires `npm run dev` + `vercel dev --listen 3001` both running.
+- **~~F-01 LAUNCH-BLOCKER~~ FIXED (7a298bd):** `returnTo` threaded through Auth.tsx (login + signup); CTA links `/auth?returnTo=/report/[slug]`; E2E spec 06 added.
+- **~~F-02 LAUNCH-BLOCKER~~ FIXED (f780a90):** Upgrade.tsx heading → "Unlock BornClock Premium"; feature list → "Birthday report credits (1/month, up to 3)"; value sentence added.
+- **~~F-03 LAUNCH-BLOCKER~~ FIXED (5742edb):** `subscription_status` typed on Profile; unlock CTA shows ₹149/$2.49 for active subscribers.
+- **E2E gauntlet: 43/43 PASS (db5681d).** `e2e/launch-gauntlet/` targeting localhost:3000/:3001. Run: `npx playwright test --config e2e/launch-gauntlet/gauntlet.config.ts`. Requires `npm run dev` + `vercel dev --listen 3001`.
 - **view_count silent failure (open since session 5-R):** `BirthdayReportService.getReport()` tries to increment `view_count` via supabase UPDATE — fails silently (no UPDATE policy on `birthday_reports`). Fix: add a targeted UPDATE policy scoped to `view_count` column only, or use an RPC (SECURITY DEFINER). Analytics-only; not blocking.
-- **DDL required before launch:** `ALTER TABLE profiles ADD COLUMN report_credits INT DEFAULT 0; ADD COLUMN credits_granted_month TEXT;` + extend `guard_premium_columns` trigger. Code tolerates missing columns but credits flow will return 0 until DDL is applied.
+- **~~DDL required before launch~~ COMPLETE (2026-07-06):** All 4 blocks applied to the correct project. Block 1: `report_credits INT DEFAULT 0`. Block 2: `credits_granted_month TEXT`. Block 3: extend `guard_premium_columns` trigger. Block 4: `CREATE POLICY "Anon can insert reports with null user_id" ON birthday_reports FOR INSERT TO anon WITH CHECK (user_id IS NULL)` — required for guest (no-account) report creation. **Runbook note:** always confirm the project breadcrumb in Supabase Studio SQL editor before running any DDL; blocks 1–3 were initially run against the wrong project (kczenithians) because Studio was on that tab.
+- **RATE LIMIT — anon report creation (open):** Block 4 allows unauthenticated users to INSERT into `birthday_reports` with `user_id IS NULL`. Without rate limiting a script could flood the table with junk rows (storage waste; no direct cost). Recommended mitigations in priority order: (1) Vercel edge middleware rate limit on the Vite page `/birthday-report` by IP (simplest, no DB change); (2) Supabase RLS policy that counts anon INSERT attempts per hour via a counter table; (3) Cloudflare Turnstile (invisible CAPTCHA) on the form submit. Implement before sustained traffic; tolerable for soft launch.
 
 **Phase 3 (pre-launch)**
 1080×1080 shareable card (ShareableCard.tsx exists) · Supabase column for PDF download tracking · Razorpay webhook verification · Search Console DNS staging→prod · celebrity-surface architecture already unified (was a Phase 3 item; done early).
