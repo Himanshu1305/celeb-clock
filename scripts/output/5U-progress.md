@@ -59,7 +59,7 @@ $$;
 | 0 | Icon enrichment live run | ✅ DONE | 557f332 |
 | 1 | Preview-lock + subscriber credits | ✅ DONE | — |
 | 2 | E2E launch-gauntlet suite | ✅ DONE | — |
-| 3 | Flow/abruptness audit | ⏳ PENDING | — |
+| 3 | Flow/abruptness audit | ✅ DONE | — |
 | 4 | Doc + closeout | ⏳ PENDING | — |
 
 ---
