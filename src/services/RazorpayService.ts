@@ -124,7 +124,6 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
       }
       onSuccess();
     },
-    subscription_card_change: true,
   };
 
   const rzp = new window.Razorpay(rzpOptions);

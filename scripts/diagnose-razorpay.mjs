@@ -5,30 +5,76 @@
  * Read-only Razorpay subscription diagnostic + optional helpers.
  *
  * Run:
- *   node --env-file=.env.local scripts/diagnose-razorpay.mjs
  *   node --env-file=.env.local scripts/diagnose-razorpay.mjs --sub sub_XXXXXX
+ *   node --env-file=.env.local scripts/diagnose-razorpay.mjs --latest
  *   node --env-file=.env.local scripts/diagnose-razorpay.mjs --create-fresh
  *   node --env-file=.env.local scripts/diagnose-razorpay.mjs --cancel-orphans
  *
- * Flags:
- *   --sub <id>        Override the default subscription ID to inspect.
- *   --create-fresh    Call the LOCAL create-subscription endpoint, then inspect
- *                     the resulting sub + invoices and print SUCCESS CRITERIA.
- *                     Vercel dev must be running on localhost:3001.
- *   --cancel-orphans  Cancel all test-mode subscriptions in "created" state
- *                     created in the last 24 hours.
+ * Flags (exactly one required):
+ *   --sub <id>        Inspect a specific subscription ID.
+ *   --latest          Auto-pick the most-recently-created subscription.
+ *   --create-fresh    Call the LOCAL create-subscription endpoint (vercel dev on
+ *                     :3001), inspect the new sub, and print SUCCESS CRITERIA.
+ *   --cancel-orphans  Cancel all test-mode "created" subs from the last 24h.
+ *
+ * Running with no flags or unrecognised flags is an error — there is no
+ * hardcoded default subscription ID.  If you have a specific sub to inspect,
+ * pass --sub <id>; if you want the latest, pass --latest.
  */
 
-// ── CLI args ────────────────────────────────────────────────────────────────
+// ── CLI args — strict ────────────────────────────────────────────────────────
 
 const args = process.argv.slice(2);
-const flag = k => args.includes(k);
-const argVal = k => { const i = args.indexOf(k); return i !== -1 ? args[i + 1] : null; };
 
-const DEFAULT_SUB   = 'sub_T9uLwxIGcfJUUM';
-const targetSub     = argVal('--sub') || DEFAULT_SUB;
-const doCreateFresh = flag('--create-fresh');
-const doCancelOrphans = flag('--cancel-orphans');
+const KNOWN_FLAGS    = new Set(['--sub', '--latest', '--create-fresh', '--cancel-orphans']);
+const KNOWN_VALUEFUL = new Set(['--sub']); // flags that consume the next token
+
+// Collect flags and validate
+const seenFlags = new Set();
+let subIdArg = null;
+for (let i = 0; i < args.length; i++) {
+  const a = args[i];
+  if (!a.startsWith('--')) {
+    // positional argument — only valid as value after --sub
+    if (args[i - 1] === '--sub') continue;
+    console.error(`ERROR: unexpected argument "${a}". Use --sub <id>, --latest, --create-fresh, or --cancel-orphans.`);
+    process.exit(1);
+  }
+  if (!KNOWN_FLAGS.has(a)) {
+    console.error(`ERROR: unknown flag "${a}". Known flags: --sub <id>, --latest, --create-fresh, --cancel-orphans.`);
+    process.exit(1);
+  }
+  if (KNOWN_VALUEFUL.has(a)) {
+    subIdArg = args[i + 1];
+    if (!subIdArg || subIdArg.startsWith('--')) {
+      console.error(`ERROR: --sub requires a subscription ID argument.`);
+      process.exit(1);
+    }
+    i++; // skip value token
+  }
+  seenFlags.add(a);
+}
+
+if (seenFlags.size === 0) {
+  console.error('ERROR: no flag provided. You must specify one of:');
+  console.error('  --sub <id>       inspect a specific subscription');
+  console.error('  --latest         inspect the most recently created subscription');
+  console.error('  --create-fresh   create via local endpoint and inspect');
+  console.error('  --cancel-orphans cancel created-state subs from last 24h');
+  process.exit(1);
+}
+
+// Mutual exclusion: at most one mode flag
+const modeFlags = ['--sub', '--latest', '--create-fresh', '--cancel-orphans'].filter(f => seenFlags.has(f));
+if (modeFlags.length > 1) {
+  console.error(`ERROR: conflicting flags ${modeFlags.join(' ')} — specify only one.`);
+  process.exit(1);
+}
+
+const doLatest        = seenFlags.has('--latest');
+const doCreateFresh   = seenFlags.has('--create-fresh');
+const doCancelOrphans = seenFlags.has('--cancel-orphans');
+const explicitSubId   = subIdArg;
 
 // ── Credentials ─────────────────────────────────────────────────────────────
 
@@ -120,66 +166,54 @@ function diagnose(sub, invoices) {
   console.log(`first invoice amount         : ${paise(invoiceAmt)} (status: ${invoiceStatus ?? 'none'})`);
 
   const now = Math.floor(Date.now() / 1000);
-  const chargeInFuture = sub.charge_at && sub.charge_at > now + 300; // >5 min away = future
+  const chargeInFuture = sub.charge_at && sub.charge_at > now + 300;
 
-  console.log('\n── ROOT CAUSE ───────────────────────────────────────────────────────────');
+  console.log('\n── SERVER-SIDE FIELD ANALYSIS ───────────────────────────────────────────');
+
+  const serverIssues = [];
 
   if (sub.customer_notify === 1 || sub.customer_notify === true) {
-    console.log(`
-PROBLEM: customer_notify=1
-
-With customer_notify=1, Razorpay issues the first invoice immediately when the
-subscription is created (before checkout is opened). The invoice is ${paise(invoiceAmt)}.
-
-When checkout opens for a subscription with a pre-issued invoice, Razorpay uses
-its recurring e-mandate flow: it charges a small upfront AUTHORIZATION amount
-(₹5 in test mode) to register the card mandate, then schedules the real invoice
-separately. The invoice demands ${paise(invoiceAmt)} but the checkout order was
-constructed for ₹5 — the bank sees two different amounts for the same transaction
-and rejects with "payment amount is different from order amount".
-
-FIX: set customer_notify=0. With 0, no invoice is issued at creation time.
-When checkout collects the first payment it closes the first invoice atomically —
-amount and order are always consistent. Razorpay still sends its own payment
-receipt to the customer after the charge succeeds.
-`);
-  } else if (chargeInFuture) {
-    console.log(`
-PROBLEM: subscription.charge_at is in the future (${ts(sub.charge_at)})
-
-A future charge_at means the first real billing cycle hasn't started. Checkout
-treats this as an authorization-only mandate: it charges ₹5 now, schedules the
-first ₹${paise(invoiceAmt)} later. The pre-issued invoice (if any) conflicts.
-
-FIX: omit start_at entirely so charge_at defaults to now.
-`);
-  } else {
-    console.log(`
-No known root cause identified from these fields. Paste full sub object above
-for manual inspection.
-`);
+    serverIssues.push('customer_notify=1: Razorpay emails invoice before checkout opens (cosmetic; not the amount-mismatch cause)');
+  }
+  if (chargeInFuture) {
+    serverIssues.push(`charge_at in future (${ts(sub.charge_at)}): subscription not yet billing`);
+  }
+  if ((sub.auth_attempts ?? 0) > 0) {
+    serverIssues.push(`auth_attempts=${sub.auth_attempts}: subscription has prior failed attempts; may be in bad state — consider cancelling and creating fresh`);
   }
 
-  console.log('── PARAMETERS COMPARED ─────────────────────────────────────────────────');
-  console.log('  We sent        customer_notify : 1  ← THE INCONSISTENT PARAMETER');
-  console.log('  Should send    customer_notify : 0');
-  console.log('  We sent        start_at        : (omitted — defaulted by Razorpay)');
-  console.log('  Invoice issued                 : immediately on subscription creation');
-  console.log('  Checkout auth flow             : ₹5 mandate auth (not ₹299 full charge)');
-  console.log('  Result                         : amount split-brain → payment rejected');
+  if (serverIssues.length) {
+    serverIssues.forEach(p => console.log(`  ⚠  ${p}`));
+  } else {
+    console.log('  ✅ Server-side subscription fields look clean.');
+    console.log('  If payment still fails, the root cause is in the CHECKOUT OPTIONS (client-side).');
+  }
+
+  console.log('\n── FRONTEND CHECKOUT OPTIONS CHECKLIST ──────────────────────────────────');
+  console.log(`
+These fields are set client-side in RazorpayService.ts and are NOT visible via
+the Razorpay API — they can only be verified by reading the source file.
+
+  subscription_id   must be set (not plan_id, not order_id)
+  subscription_card_change  must be ABSENT or false
+      → When true, Razorpay enters the card-update flow: ₹5 auth charge instead
+        of the full plan amount. Checkout sends amount=500 but invoice is ₹29900
+        → "input_validation_failed, field: amount" on every card.
+  amount            must be ABSENT from rzpOptions entirely
+      → Any amount field in the checkout options overrides the plan amount.
+  handler           receives razorpay_payment_id, razorpay_subscription_id,
+                    razorpay_signature — verify none are undefined before POST.
+
+Run:  grep -n 'subscription_card_change\\|amount\\|plan_id\\|order_id' src/services/RazorpayService.ts
+`);
 }
 
-// ── Success criteria check ────────────────────────────────────────────────────
-// Razorpay ALWAYS issues a first invoice when a subscription is created,
-// regardless of customer_notify. "issued" status on the first invoice is
-// expected and correct. What matters:
-//   1. customer_notify=false — Razorpay won't email the invoice before checkout,
-//      which previously caused it to enter a split e-mandate flow (₹5 auth
-//      vs ₹299 invoice) rather than collecting the full plan amount at checkout.
-//   2. auth_attempts=0 — subscription is fresh, not in a bad retry state.
-//   3. status=created — ready for checkout to collect the first payment.
-//   4. first invoice is "issued" for the plan amount — the amount checkout
-//      will collect matches the plan; no internal amount inconsistency.
+// ── Success criteria check (used by --create-fresh) ──────────────────────────
+// Server-side criteria only — checkout SDK options are static and must be
+// verified by reading RazorpayService.ts directly (see FRONTEND CHECKLIST).
+// Key static requirement: subscription_card_change must be absent/false.
+// When true it switches Razorpay into card-update mode (₹5 auth, not ₹299)
+// causing input_validation_failed on every card regardless of server state.
 
 async function checkSuccessCriteria(sub, invoices) {
   const firstInvoice = invoices.items?.[0];
@@ -226,6 +260,12 @@ ${paise(invoiceAmt)} which follows immediately or on the first billing date.
 
 Browser test card for subscriptions: 5267 3181 8797 5449 · CVV 123 · OTP 123456
 (The 4111 Visa test card does not support recurring mandate flows in test mode.)
+
+STATIC FRONTEND CHECK (cannot be verified via API — read the source):
+  grep -n 'subscription_card_change' src/services/RazorpayService.ts
+  → must return NO results (field must be absent)
+  grep -n 'amount' src/services/RazorpayService.ts
+  → must NOT appear inside rzpOptions (only in verify-payment POST body is ok)
 `);
     return true;
   } else {
@@ -355,8 +395,24 @@ async function main() {
     return;
   }
 
-  // ── Default: inspect the target subscription ──────────────────────────────
-  const { sub, invoices } = await inspectSub(targetSub);
+  // ── --latest: fetch the most-recently-created subscription ──────────────────
+  let resolvedSubId = explicitSubId;
+  if (doLatest) {
+    console.log('\n── LATEST: fetching most-recently-created subscription ─────────────────');
+    const page = await rzpGet('/subscriptions?count=20&skip=0');
+    const items = page.items || [];
+    if (!items.length) {
+      console.error('No subscriptions found in this Razorpay account.');
+      process.exit(1);
+    }
+    // Sort descending by created_at in case the API doesn't guarantee order
+    items.sort((a, b) => b.created_at - a.created_at);
+    resolvedSubId = items[0].id;
+    console.log(`Latest: ${resolvedSubId}  (created ${ts(items[0].created_at)})`);
+  }
+
+  // ── --sub or --latest: inspect the resolved subscription ─────────────────
+  const { sub, invoices } = await inspectSub(resolvedSubId);
   printCurrentPayload();
   diagnose(sub, invoices);
 }
