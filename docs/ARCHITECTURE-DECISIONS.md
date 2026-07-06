@@ -1,7 +1,7 @@
 # BornClock — Architecture Decisions & Maintenance Log
 
 > Purpose: capture WHAT was built, WHY it was built that way, what failed before it, and what remains open — so future sessions don't re-derive this from scratch. Update this file whenever a significant decision lands.
-> Last updated: 2026-07-05 (session 5-Q — payment integrity, deletion compliance, lifecycle emails, privacy policy, dormancy runbook).
+> Last updated: 2026-07-06 (session 5-U — preview-lock + subscriber credits, E2E gauntlet, flow audit).
 
 ---
 
@@ -213,6 +213,7 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 | PDF: no photos, no raw URLs, single attribution line | Low-res inconsistent thumbnails; URLs are dead weight on paper | 5d789f5 |
 | Server-side PDF rendering | REJECTED — client-side proven sufficient, no backend cost | — |
 | Storage posture (2026-07-05) | **Longevity/health inputs = browser-only, never server-side, by design and policy.** Do not add server-side health storage; monthly-comparison features use browser localStorage; any future cross-device sync requires explicit opt-in. **Birthday Blueprint reports = stored for delivery** (recipient can't otherwise access), 12-month dormancy auto-deletion, recipient deletion rights via privacy@bornclock.com. Payments de-identified (user_id SET NULL) on account deletion — retained for tax/legal per GDPR Art. 17(3)(e). Rationale: GDPR minimisation + no sensitive data at rest. | 5Q session |
+| Monetisation: preview-lock model (2026-07-06) | Free quota system replaced: generating always succeeds, `is_paid=false` reports are locked previews (cover + celebrity twins visible; sections 3-7 placeholder). Unlock = one-time Razorpay order (₹199/₹149 member, $2.99/$2.49 member). Subscriber credits: 1/month, lazy-accrual, cap 3 rollover. `api/get-credits` (lazy grant on first check per month), `api/redeem-credit` (deduct + unlock with compensating restore on failure). Member pricing applied server-side in `create-order.ts` — `subscription_status=active` → discounted amount. DOM security: locked sections render placeholder JSX (no real data in DOM; inspect-element-safe). Download PDF hidden when locked. RLS for credits columns: extend `guard_premium_columns` trigger (DDL required in Studio — see progress log). | 60217f7 |
 
 ---
 
@@ -232,6 +233,14 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 - Sparse-page list review on next export; standing decision: continuous flow vs section-per-page.
 - **~~Cancer plural content pass~~ RESOLVED (7d91742):** "Cancers" → "Cancer natives"/"Cancerians" in 5 files (zodiacData, birthdayMonthContent, birthdayPersonality, compatibilityData, blogPosts). Other 11 signs confirmed clean.
 - Optional parked: monochrome emoji brand restyle (⭐→★ model).
+
+**Monetisation (post-5U launch-blockers — see docs/FLOW-AUDIT-2026-07-06.md for full list)**
+- **F-01 LAUNCH-BLOCKER:** Sign-in loses report URL — add `?returnTo=/report/[slug]` to Auth redirect.
+- **F-02 LAUNCH-BLOCKER:** Upgrade.tsx heading + features list wrong for credits model.
+- **F-03 LAUNCH-BLOCKER:** Unlock CTA shows ₹199 for subscribers who pay ₹149 (member price).
+- **E2E gauntlet location:** `e2e/launch-gauntlet/` with `gauntlet.config.ts` targeting localhost:3000. Run: `npx playwright test --config e2e/launch-gauntlet/gauntlet.config.ts`. Requires `npm run dev` + `vercel dev --listen 3001` both running.
+- **view_count silent failure (open since session 5-R):** `BirthdayReportService.getReport()` tries to increment `view_count` via supabase UPDATE — fails silently (no UPDATE policy on `birthday_reports`). Fix: add a targeted UPDATE policy scoped to `view_count` column only, or use an RPC (SECURITY DEFINER). Analytics-only; not blocking.
+- **DDL required before launch:** `ALTER TABLE profiles ADD COLUMN report_credits INT DEFAULT 0; ADD COLUMN credits_granted_month TEXT;` + extend `guard_premium_columns` trigger. Code tolerates missing columns but credits flow will return 0 until DDL is applied.
 
 **Phase 3 (pre-launch)**
 1080×1080 shareable card (ShareableCard.tsx exists) · Supabase column for PDF download tracking · Razorpay webhook verification · Search Console DNS staging→prod · celebrity-surface architecture already unified (was a Phase 3 item; done early).

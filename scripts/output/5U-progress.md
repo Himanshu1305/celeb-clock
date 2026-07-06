@@ -60,7 +60,7 @@ $$;
 | 1 | Preview-lock + subscriber credits | ✅ DONE | — |
 | 2 | E2E launch-gauntlet suite | ✅ DONE | — |
 | 3 | Flow/abruptness audit | ✅ DONE | — |
-| 4 | Doc + closeout | ⏳ PENDING | — |
+| 4 | Doc + closeout | ✅ DONE | — |
 
 ---
 
