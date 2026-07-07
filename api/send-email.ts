@@ -617,9 +617,10 @@ function reportCreatedEmail(params: {
 <table width="100%" cellpadding="0" cellspacing="0">
   ${featureItem('🌟', 'Celebrity birthday twins')}
   ${featureItem('♈', 'Western, Chinese &amp; Vedic zodiac profiles')}
-  ${featureItem('🔢', 'Numerology Life Path &amp; Personal Year 2026')}
+  ${featureItem('🔢', `Numerology Life Path &amp; Personal Year ${new Date().getFullYear()}`)}
   ${featureItem('🪐', 'Planetary ages across all 8 planets')}
   ${featureItem('💎', 'Birthstone history &amp; lore')}
+  ${featureItem('📄', 'Download as PDF')}
 </table>
 ${divider()}
 <div style="text-align:center;">
