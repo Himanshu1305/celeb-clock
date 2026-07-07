@@ -1,22 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
+import { sendEmailDirect } from './_email';
 
 const ADMIN_EMAILS = ['hello@bornclock.com', 'himanshu1305@gmail.com'];
 
-function getBaseUrl(): string {
-  return process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : `https://${process.env.VERCEL_URL || 'bornclock.com'}`;
-}
-
 async function dispatchEmail(payload: object): Promise<boolean> {
   try {
-    const res = await fetch(`${getBaseUrl()}/api/send-email`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    return res.ok;
+    return await sendEmailDirect(payload as Record<string, unknown>);
   } catch {
     return false;
   }

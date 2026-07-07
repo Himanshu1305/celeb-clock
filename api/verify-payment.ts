@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
+import { sendEmailDirect } from './_email';
 
 // Service-role client — NEVER use the anon key here
 function serviceClient() {
@@ -208,23 +209,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (userEmail) {
       const currencySymbol = paymentCurrency === 'INR' ? '₹' : '$';
       const amountFormatted = `${currencySymbol}${(paymentAmount / 100).toLocaleString('en-IN')}`;
-
       const date = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
       const base = process.env.VERCEL_PROJECT_PRODUCTION_URL
         ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
         : `https://${process.env.VERCEL_URL || 'bornclock.com'}`;
-      await fetch(`${base}/api/send-email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'payment_receipt',
-          to: userEmail,
-          name: userName,
-          product,
-          amountFormatted,
-          date,
-          reportLink: authoritativeSlug ? `${base}/report/${authoritativeSlug}` : undefined,
-        }),
+      await sendEmailDirect({
+        type: 'payment_receipt',
+        to: userEmail,
+        name: userName,
+        product,
+        amountFormatted,
+        date,
+        reportLink: authoritativeSlug ? `${base}/report/${authoritativeSlug}` : undefined,
       });
     }
   } catch (e) {

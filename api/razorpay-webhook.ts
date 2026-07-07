@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
+import { sendEmailDirect } from './_email';
 
 // Disable Vercel's body parser so we receive the raw bytes for HMAC verification.
 // Razorpay signs the raw body; JSON.stringify(parsed body) ≠ original bytes.
@@ -22,19 +23,9 @@ async function readRawBody(req: VercelRequest): Promise<Buffer> {
   });
 }
 
-function baseUrl(): string {
-  if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
-    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
-  return `https://${process.env.VERCEL_URL || 'bornclock.com'}`;
-}
-
 async function sendEmail(payload: Record<string, unknown>) {
   try {
-    await fetch(`${baseUrl()}/api/send-email`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+    await sendEmailDirect(payload);
   } catch (e) {
     console.error('[webhook] send-email error', e);
   }
