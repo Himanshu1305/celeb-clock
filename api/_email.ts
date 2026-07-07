@@ -110,7 +110,7 @@ function welcomeEmail(name: string, trialDays: number = 7): { subject: string; h
 <table width="100%" cellpadding="0" cellspacing="0">
   ${featureItem('🔬', '<strong>Life Expectancy Calculator</strong> — your personalized forecast in 8 steps')}
   ${featureItem('🧬', '<strong>Biological Age Test</strong> — are you aging faster or slower than your birthday says?')}
-  ${featureItem('🤖', '<strong>AI Longevity Coach</strong> — ask it anything. It knows your data.')}
+  ${featureItem('🤖', '<strong>AI Longevity Coach</strong> — ask it anything about your longevity results.')}
   ${featureItem('🪐', '<strong>Planetary Age</strong> — you\'re only 15 on Mars. Probably.')}
   ${featureItem('🌟', '<strong>Celebrity Birthday Twins</strong> — who shares your exact birthday?')}
 </table>

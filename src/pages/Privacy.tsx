@@ -147,7 +147,7 @@ export default function Privacy() {
                   <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
                     <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">✉️ Registered users (free account)</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      We store your name, email address, country, and account preferences to enable your login and personalise your experience. Your login data is encrypted and stored securely with Supabase (US-based, SOC 2 compliant). Health calculation data remains browser-only and is never transmitted to our servers.
+                      We store your name, email address, country, and account preferences to enable your login and personalise your experience. Your login data is encrypted and stored securely with Supabase (hosted on AWS Mumbai, ap-south-1; SOC 2 compliant). Health calculation data remains browser-only and is never transmitted to our servers.
                     </p>
                   </div>
                   <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 rounded-xl p-4">
@@ -195,7 +195,7 @@ export default function Privacy() {
                   <li><strong className="text-foreground">Card numbers, CVVs, or bank details</strong> — payments go directly through Razorpay's PCI-DSS compliant infrastructure.</li>
                   <li><strong className="text-foreground">Data sold to third parties</strong> — we do not sell, rent, or trade your personal information. Ever.</li>
                   <li><strong className="text-foreground">Advertising</strong> — BornClock may display advertising to support the free tier. We do not sell your health data — including your life expectancy inputs, biological age results, or any health-related information — to advertisers or any third parties.</li>
-                  <li><strong className="text-foreground">Precise location data</strong> — we ask for country only (via a dropdown you select), never GPS or IP-derived geolocation.</li>
+                  <li><strong className="text-foreground">Precise location data</strong> — we never collect GPS location. We detect your approximate country from your IP address (via ipapi.co) solely to display correct pricing and currency; this lookup is not stored and is never linked to your account.</li>
                 </ul>
               </section>
 
@@ -209,6 +209,7 @@ export default function Privacy() {
                   <li><strong className="text-foreground">Recipient deletion rights:</strong> Recipients themselves may request deletion of a report about them by emailing{' '}
                     <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>. We will process such requests within 30 days.
                   </li>
+                  <li><strong className="text-foreground">Reports about minors:</strong> by creating a report about a person under 18, you confirm you are their parent or guardian, or have a parent or guardian's consent.</li>
                 </ul>
               </section>
 
@@ -226,7 +227,7 @@ export default function Privacy() {
               <section id="storage-security" className="mb-12 scroll-mt-8">
                 <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Data Storage and Security</h2>
                 <ul className="space-y-3 text-muted-foreground leading-relaxed">
-                  <li>Account data is stored on <strong className="text-foreground">Supabase</strong> (PostgreSQL), hosted in AWS data centres with encryption at rest and in transit.</li>
+                  <li>Account data is stored on <strong className="text-foreground">Supabase</strong> (PostgreSQL), hosted on AWS Mumbai (ap-south-1) with encryption at rest and in transit.</li>
                   <li>All connections to BornClock are <strong className="text-foreground">HTTPS encrypted</strong> using TLS 1.2 or higher.</li>
                   <li>We use <strong className="text-foreground">row-level security (RLS)</strong> policies to ensure your data is only accessible to you and never to other users.</li>
                   <li>Passwords are hashed using industry-standard bcrypt via Supabase Auth — we never see or store plaintext passwords.</li>
@@ -257,7 +258,7 @@ export default function Privacy() {
                       <tr className="bg-muted/30">
                         <td className="px-4 py-3 font-medium text-foreground">Razorpay</td>
                         <td className="px-4 py-3">Payment processing</td>
-                        <td className="px-4 py-3">Email, payment amount (card details handled by Razorpay only)</td>
+                        <td className="px-4 py-3">Email, payment amount (card details handled by Razorpay only). Razorpay's checkout also loads its own error-monitoring scripts (e.g. Sentry) governed by Razorpay's privacy policy.</td>
                       </tr>
                       <tr>
                         <td className="px-4 py-3 font-medium text-foreground">Resend</td>
@@ -275,6 +276,11 @@ export default function Privacy() {
                         <td className="px-4 py-3">Your coach message + computed longevity summary (transient, never stored)</td>
                       </tr>
                       <tr className="bg-muted/30">
+                        <td className="px-4 py-3 font-medium text-foreground">ipapi.co</td>
+                        <td className="px-4 py-3">Country detection for pricing</td>
+                        <td className="px-4 py-3">IP address (transient lookup, not stored by us)</td>
+                      </tr>
+                      <tr>
                         <td className="px-4 py-3 font-medium text-foreground">Internal analytics</td>
                         <td className="px-4 py-3">Product analytics (first-party)</td>
                         <td className="px-4 py-3">Anonymous page view and feature usage events stored in our own database — no third-party SDK</td>
