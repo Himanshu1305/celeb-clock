@@ -8,7 +8,14 @@
  * This test does NOT attempt to download PDFs — it validates that the locked
  * preview renders cleanly for varied inputs.
  */
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+
+async function fillDob(page: Page, dob: string) {
+  const [y, m, d] = dob.split('-');
+  await page.locator('input[placeholder="DD"]').first().fill(String(parseInt(d)));
+  await page.locator('input[placeholder="MM"]').first().fill(String(parseInt(m)));
+  await page.locator('input[placeholder="YYYY"]').first().fill(y);
+}
 
 const TEST_CASES = [
   { dob: '1985-01-15', name: 'January Test' },
@@ -24,7 +31,7 @@ for (const tc of TEST_CASES) {
     await page.waitForLoadState('networkidle');
 
     await page.locator('input[placeholder*="Priya"]').first().fill(tc.name);
-    await page.locator('input[type="date"]').first().fill(tc.dob);
+    await fillDob(page, tc.dob);
     await page.locator('button:has-text("Create Birthday Report")').click();
 
     // App shows success screen on the same /birthday-report page

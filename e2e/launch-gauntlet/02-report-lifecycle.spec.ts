@@ -3,10 +3,17 @@
  * locked-preview state: cover + twins visible, sections 3-7 show lock placeholder,
  * unlock CTA present, download button hidden.
  */
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 const FORM_DOB = '1990-06-15';
 const FORM_NAME = 'Gauntlet Test';
+
+async function fillDob(page: Page, dob: string) {
+  const [y, m, d] = dob.split('-');
+  await page.locator('input[placeholder="DD"]').first().fill(String(parseInt(d)));
+  await page.locator('input[placeholder="MM"]').first().fill(String(parseInt(m)));
+  await page.locator('input[placeholder="YYYY"]').first().fill(y);
+}
 
 test.describe('Birthday report creation and locked preview', () => {
   let reportUrl = '';
@@ -19,8 +26,7 @@ test.describe('Birthday report creation and locked preview', () => {
     await page.locator('input[placeholder*="Priya"]').first().fill(FORM_NAME);
 
     // Fill DOB
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.fill(FORM_DOB);
+    await fillDob(page, FORM_DOB);
 
     // Submit
     await page.locator('button:has-text("Create Birthday Report")').click();

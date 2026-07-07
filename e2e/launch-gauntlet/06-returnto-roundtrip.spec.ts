@@ -10,7 +10,14 @@
  *
  * Requires: Vite dev server on localhost:3000.
  */
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+
+async function fillDob(page: Page, dob: string) {
+  const [y, m, d] = dob.split('-');
+  await page.locator('input[placeholder="DD"]').first().fill(String(parseInt(d)));
+  await page.locator('input[placeholder="MM"]').first().fill(String(parseInt(m)));
+  await page.locator('input[placeholder="YYYY"]').first().fill(y);
+}
 
 const BASE = 'http://localhost:3000';
 
@@ -28,7 +35,7 @@ test.describe('F-01 — returnTo links on locked report', () => {
     const nameInput = page.locator('input[placeholder*="Priya"]').first();
     await nameInput.fill('Test Person');
 
-    await page.locator('input[type="date"]').fill('1990-05-15');
+    await fillDob(page, '1990-05-15');
     await page.locator('button:has-text("Create Birthday Report")').click();
 
     // App stays on /birthday-report and shows success screen

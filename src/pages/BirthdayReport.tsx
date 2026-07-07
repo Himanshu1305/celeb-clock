@@ -51,7 +51,12 @@ const BirthdayReport = () => {
   const formRef = useRef<HTMLDivElement>(null);
 
   const [recipientName, setRecipientName] = useState('');
-  const [dob, setDob] = useState('');
+  const [day, setDay] = useState('');
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
+  const dob = year && month && day
+    ? `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    : '';
   const [gender, setGender] = useState('');
   const [country, setCountry] = useState('India');
   const [gifterName, setGifterName] = useState('');
@@ -81,6 +86,7 @@ const BirthdayReport = () => {
   const handleSubmit = async () => {
     if (!recipientName.trim()) { setError('Please enter the recipient\'s name.'); return; }
     if (!dob) { setError('Please enter the recipient\'s date of birth.'); return; }
+    if (isNaN(new Date(dob).getTime())) { setError('Please enter a valid date.'); return; }
     if (new Date(dob) > new Date()) { setError("Birth date can't be in the future."); return; }
     setError('');
 
@@ -349,13 +355,44 @@ const BirthdayReport = () => {
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Date of Birth <span className="text-rose-500">*</span>
                   </label>
-                  <input
-                    type="date"
-                    value={dob}
-                    onChange={e => setDob(e.target.value)}
-                    max={new Date().toISOString().split('T')[0]}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-300"
-                  />
+                  <div className="flex gap-3">
+                    <div className="flex-1">
+                      <input
+                        type="number"
+                        placeholder="DD"
+                        min="1"
+                        max="31"
+                        value={day}
+                        onChange={e => setDay(e.target.value)}
+                        className="w-full px-4 py-3 text-center border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                      />
+                      <span className="text-xs text-gray-400 mt-1 block text-center">Day</span>
+                    </div>
+                    <div className="flex-1">
+                      <input
+                        type="number"
+                        placeholder="MM"
+                        min="1"
+                        max="12"
+                        value={month}
+                        onChange={e => setMonth(e.target.value)}
+                        className="w-full px-4 py-3 text-center border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                      />
+                      <span className="text-xs text-gray-400 mt-1 block text-center">Month</span>
+                    </div>
+                    <div className="flex-1">
+                      <input
+                        type="number"
+                        placeholder="YYYY"
+                        min="1900"
+                        max={new Date().getFullYear()}
+                        value={year}
+                        onChange={e => setYear(e.target.value)}
+                        className="w-full px-4 py-3 text-center border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                      />
+                      <span className="text-xs text-gray-400 mt-1 block text-center">Year</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Gender */}

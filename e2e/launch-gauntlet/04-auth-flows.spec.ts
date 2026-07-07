@@ -3,7 +3,14 @@
  * Verifies that auth pages render, nav shows correct state for guests,
  * and report generation works for unauthenticated users.
  */
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+
+async function fillDob(page: Page, dob: string) {
+  const [y, m, d] = dob.split('-');
+  await page.locator('input[placeholder="DD"]').first().fill(String(parseInt(d)));
+  await page.locator('input[placeholder="MM"]').first().fill(String(parseInt(m)));
+  await page.locator('input[placeholder="YYYY"]').first().fill(y);
+}
 
 test('upgrade page renders pricing and CTA', async ({ page }) => {
   await page.goto('/upgrade');
@@ -23,7 +30,7 @@ test('guest can reach /birthday-report and see the form', async ({ page }) => {
 
   // Form fields visible (placeholder is "e.g. Priya, James, Mum...")
   await expect(page.locator('input[placeholder*="Priya"]').first()).toBeVisible();
-  await expect(page.locator('input[type="date"]').first()).toBeVisible();
+  await expect(page.locator('input[placeholder="DD"]').first()).toBeVisible();
 
   // No quota info shown for guests
   const quotaInfo = page.locator('text=Reports used:');
@@ -32,7 +39,7 @@ test('guest can reach /birthday-report and see the form', async ({ page }) => {
   // Button is disabled until name+dob filled (correct behaviour)
   const btn = page.locator('button:has-text("Create Birthday Report")');
   await page.locator('input[placeholder*="Priya"]').first().fill('Test');
-  await page.locator('input[type="date"]').first().fill('1990-01-01');
+  await fillDob(page, '1990-01-01');
   await expect(btn).not.toBeDisabled();
 });
 
@@ -44,7 +51,7 @@ test('guest can generate a report (no sign-in required)', async ({ page }) => {
   await page.waitForLoadState('networkidle');
 
   await page.locator('input[placeholder*="Priya"]').first().fill('Auth Flow Test');
-  await page.locator('input[type="date"]').first().fill('1988-03-20');
+  await fillDob(page, '1988-03-20');
   await page.locator('button:has-text("Create Birthday Report")').click();
 
   // App stays on /birthday-report and shows success screen
@@ -66,7 +73,7 @@ test('report page shows Sign in to Unlock CTA for unauthenticated users', async 
   await page.goto('/birthday-report');
   await page.waitForLoadState('networkidle');
   await page.locator('input[placeholder*="Priya"]').first().fill('Auth CTA Test');
-  await page.locator('input[type="date"]').first().fill('1992-09-10');
+  await fillDob(page, '1992-09-10');
   await page.locator('button:has-text("Create Birthday Report")').click();
 
   // Wait for success screen, then navigate to the report
