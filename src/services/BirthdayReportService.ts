@@ -110,11 +110,6 @@ export const PERSONAL_YEAR_MEANINGS: Record<number, { title: string; meaning: st
 
 // ── Helper functions ───────────────────────────────────────────────────────────
 
-function generateSlug(): string {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  return Array.from({ length: 8 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-}
-
 function getZodiacKey(dob: Date): string {
   const month = dob.getMonth() + 1;
   const day = dob.getDate();
@@ -303,37 +298,35 @@ export async function generateReportData(
 }
 
 export async function saveReport(
-  userId: string | null,
+  _userId: string | null,
   data: BirthdayReportData,
   isPremium: boolean,
   gender = ''
 ): Promise<string | null> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = supabase as any;
-  const expiryDays = isPremium ? 30 : 7;
-  const expiresAt = new Date(Date.now() + expiryDays * 24 * 60 * 60 * 1000).toISOString();
-
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const slug = generateSlug();
-    const { error } = await db.from('birthday_reports').insert({
-      user_id: userId,
-      slug,
-      recipient_name: data.recipientName,
-      recipient_dob: data.recipientDob,
-      gifter_name: data.gifterName || null,
-      personal_message: data.personalMessage || null,
-      country: data.country,
-      gender,
-      report_data: data,
-      is_premium_report: isPremium,
-      expires_at: expiresAt,
-    });
-
-    if (!error) return slug;
-    if (!String(error.message).includes('unique')) break;
+  let authToken: string | null = null;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    authToken = session?.access_token ?? null;
+  } catch {
+    // proceed without auth header
   }
 
-  return null;
+  try {
+    const res = await fetch('/api/save-report', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+      },
+      body: JSON.stringify({ reportData: data, isPremium, gender }),
+    });
+
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.slug ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export async function getReport(slug: string): Promise<any | null> {
