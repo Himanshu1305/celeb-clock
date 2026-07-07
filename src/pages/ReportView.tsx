@@ -944,6 +944,11 @@ const ReportView = () => {
                 {redeemLoading ? 'Unlocking…' : `Use a subscriber credit (${credits} remaining)`}
               </button>
             )}
+            {user && profile?.subscription_status === 'active' && credits === 0 && (
+              <p className="text-xs mt-2" style={{ color: 'var(--muted)' }}>
+                Your next credit arrives at the start of next calendar month.
+              </p>
+            )}
 
             <p className="text-xs mt-4" style={{ color: 'var(--muted)' }}>
               One-time purchase · Permanent access · Download included

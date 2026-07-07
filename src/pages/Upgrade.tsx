@@ -70,7 +70,7 @@ export default function Upgrade() {
     'Biological Blueprint report',
     'Cultural Horizon',
     'Family dashboard (10 members)',
-    'Birthday report credits (1/month, up to 3)',
+    'Birthday report credits (1/month · rollover · cap 3)',
     'Longevity leaderboard',
     'Country comparison (57 countries)',
     'Downloadable PDF reports',
