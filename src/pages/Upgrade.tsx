@@ -115,6 +115,18 @@ export default function Upgrade() {
             >
               Continue to Longevity Calculator →
             </button>
+            <div className="mt-4 p-4 rounded-xl border border-indigo-100 bg-indigo-50 text-left">
+              <p className="text-sm font-semibold text-indigo-900 mb-1">🎂 Create a Birthday Blueprint</p>
+              <p className="text-xs text-indigo-700 mb-3">
+                Gift a personalised 10-section report to anyone — zodiac, numerology, planetary ages, and more. Your subscription includes 1 credit per month.
+              </p>
+              <button
+                onClick={() => navigate('/birthday-report')}
+                className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+              >
+                Create a report →
+              </button>
+            </div>
           </div>
         </div>
       ) : (
