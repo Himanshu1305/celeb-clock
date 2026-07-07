@@ -305,7 +305,6 @@ function cancellationEmail(
   ${featureItem('🪐', 'Planetary age calculator')}
   ${featureItem('📅', "Today's birthdays")}
   ${featureItem('🔢', 'Numerology and birthstone finder')}
-  ${featureItem('📄', 'Download as PDF')}
 </table>
 
 ${divider()}
