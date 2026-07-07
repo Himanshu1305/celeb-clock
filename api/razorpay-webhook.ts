@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
-import { sendEmailDirect } from './_email';
+import { sendEmailDirect } from './_email.js';
 
 // Disable Vercel's body parser so we receive the raw bytes for HMAC verification.
 // Razorpay signs the raw body; JSON.stringify(parsed body) ≠ original bytes.

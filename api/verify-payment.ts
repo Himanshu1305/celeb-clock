@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
-import { sendEmailDirect } from './_email';
+import { sendEmailDirect } from './_email.js';
 
 // Service-role client — NEVER use the anon key here
 function serviceClient() {
