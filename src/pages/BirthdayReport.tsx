@@ -108,10 +108,16 @@ const BirthdayReport = () => {
       setProgress(100);
       setReportSlug(slug);
 
-      // Fire-and-forget: send report link to the gifter's email (if signed in)
+      // Fire-and-forget: send report link to the gifter's email (if signed in).
+      // Premium/admin users get an unlocked report; free users get a preview-lock nudge.
       if (user?.email && slug) {
         const reportLink = `${window.location.origin}/report/${slug}`;
-        EmailService.sendReportCreated(user.email, gifterName.trim() || user?.user_metadata?.first_name || 'there', recipientName.trim(), reportLink);
+        const gifterDisplayName = gifterName.trim() || user?.user_metadata?.first_name || 'there';
+        if (isPremium || isAdmin) {
+          EmailService.sendReportCreated(user.email, gifterDisplayName, recipientName.trim(), reportLink);
+        } else {
+          EmailService.sendReportLocked(user.email, gifterDisplayName, recipientName.trim(), reportLink);
+        }
       }
 
       setTimeout(() => setPhase('success'), 400);

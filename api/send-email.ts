@@ -587,7 +587,52 @@ ${divider()}
 }
 
 // ==========================================
-// EMAIL 9 — REPORT CREATED
+// EMAIL 9 — REPORT LOCKED (preview saved, nudge to unlock)
+// ==========================================
+function reportLockedEmail(params: {
+  name: string;
+  recipientName: string;
+  reportLink: string;
+}): { subject: string; html: string } {
+  const { name, recipientName, reportLink } = params;
+  return {
+    subject: `${recipientName}'s Birthday Blueprint preview is saved`,
+    html: baseTemplate(`
+<div style="text-align:center;margin-bottom:28px;">
+  <div style="font-size:52px;margin-bottom:12px;">🎁</div>
+  <h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:#111827;">
+    Your preview is saved, ${name}!
+  </h1>
+  <p style="margin:0;font-size:15px;color:#6b7280;">
+    ${recipientName}'s Birthday Blueprint is ready — one purchase unlocks the full report to share.
+  </p>
+</div>
+<div style="background:#f0f9ff;border-radius:10px;padding:16px 20px;margin-bottom:16px;word-break:break-all;">
+  <a href="${reportLink}" style="font-size:14px;color:#4F46E5;text-decoration:none;">${reportLink}</a>
+</div>
+<p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 20px;">
+  The preview shows the cover and celebrity birthday twins. Unlocking reveals the full 10-section Blueprint — permanently, with PDF download included.
+</p>
+<table width="100%" cellpadding="0" cellspacing="0">
+  ${featureItem('♈', 'Western, Chinese &amp; Vedic zodiac profiles')}
+  ${featureItem('🔢', `Numerology Life Path &amp; Personal Year ${new Date().getFullYear()}`)}
+  ${featureItem('🪐', 'Planetary ages across all 8 planets')}
+  ${featureItem('💎', 'Birthstone history &amp; lore')}
+  ${featureItem('📄', 'Download as PDF')}
+</table>
+${divider()}
+<div style="text-align:center;">
+  ${primaryButton('Unlock the full Blueprint →', reportLink)}
+</div>
+<p style="margin:12px 0 0;font-size:12px;color:#9ca3af;text-align:center;">
+  One-time purchase · Permanent access · Download included
+</p>
+`),
+  };
+}
+
+// ==========================================
+// EMAIL 10 — REPORT CREATED (already unlocked / premium)
 // ==========================================
 function reportCreatedEmail(params: {
   name: string;
@@ -701,6 +746,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       break;
     case 'payment_receipt':
       emailContent = paymentReceiptEmail({ name, product, amountFormatted, date, reportLink });
+      break;
+    case 'report_locked':
+      emailContent = reportLockedEmail({ name, recipientName, reportLink });
       break;
     case 'report_created':
       emailContent = reportCreatedEmail({ name, recipientName, reportLink });
