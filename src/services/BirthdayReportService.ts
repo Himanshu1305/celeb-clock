@@ -347,11 +347,9 @@ export async function getReport(slug: string): Promise<any | null> {
 
   if (error || !data) return null;
 
-  // Increment view count (fire and forget)
-  db.from('birthday_reports')
-    .update({ view_count: (data.view_count || 0) + 1 })
-    .eq('id', data.id)
-    .then(() => {});
+  // Increment view count via SECURITY DEFINER RPC — the anon/authed client
+  // has no UPDATE policy on birthday_reports, so a direct .update() silently fails.
+  supabase.rpc('increment_report_view_count', { report_id: data.id }).then(() => {});
 
   return data;
 }
