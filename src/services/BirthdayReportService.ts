@@ -220,6 +220,7 @@ export async function generateReportData(
   country: string
 ): Promise<BirthdayReportData> {
   const dob = new Date(dobString + 'T12:00:00');
+  if (dob > new Date()) throw new Error("Birth date cannot be in the future.");
   const today = new Date();
 
   const age =

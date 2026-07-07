@@ -81,6 +81,7 @@ const BirthdayReport = () => {
   const handleSubmit = async () => {
     if (!recipientName.trim()) { setError('Please enter the recipient\'s name.'); return; }
     if (!dob) { setError('Please enter the recipient\'s date of birth.'); return; }
+    if (new Date(dob) > new Date()) { setError("Birth date can't be in the future."); return; }
     setError('');
 
     setPhase('loading');
