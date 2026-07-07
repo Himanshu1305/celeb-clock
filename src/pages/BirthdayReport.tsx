@@ -110,7 +110,7 @@ const BirthdayReport = () => {
       // Fire-and-forget: send report link to the gifter's email (if signed in)
       if (user?.email && slug) {
         const reportLink = `${window.location.origin}/report/${slug}`;
-        EmailService.sendReportCreated(user.email, gifterName.trim() || user.user_metadata?.first_name || 'there', recipientName.trim(), reportLink);
+        EmailService.sendReportCreated(user.email, gifterName.trim() || user?.user_metadata?.first_name || 'there', recipientName.trim(), reportLink);
       }
 
       setTimeout(() => setPhase('success'), 400);

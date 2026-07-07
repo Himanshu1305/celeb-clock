@@ -305,6 +305,7 @@ function cancellationEmail(
   ${featureItem('🪐', 'Planetary age calculator')}
   ${featureItem('📅', "Today's birthdays")}
   ${featureItem('🔢', 'Numerology and birthstone finder')}
+  ${featureItem('📄', 'Download as PDF')}
 </table>
 
 ${divider()}
@@ -368,7 +369,7 @@ function freeUserNudgeEmail(
         ? `In numerology, your Life Path ${lifePathNumber} describes the core challenge you're here to master. But 2026 also has a Personal Year number specific to your birthday — and it changes what this year means for you in love, work, and decisions. Most people find it uncomfortably accurate.`
         : `In numerology, your Life Path number describes the core challenge you're here to master. And 2026 has a specific Personal Year number tied to your exact birthday — changing what this year means for your career, relationships, and big decisions.`,
       feature: 'Numerology Blueprint',
-      featureDesc: 'Your Life Path number, what it means for love and career, and your Personal Year 2026 forecast.',
+      featureDesc: `Your Life Path number, what it means for love and career, and your Personal Year ${new Date().getFullYear()} forecast.`,
       cta: 'Discover My Numerology →',
       ctaUrl: `${BASE_URL}/numerology`,
       fact: "🔢 Pythagoras believed numbers were the foundation of all reality — not just mathematics. <strong>Numerology has been practiced for over 2,500 years.</strong>",
