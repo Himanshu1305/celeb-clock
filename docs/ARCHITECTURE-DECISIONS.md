@@ -1,7 +1,7 @@
 # BornClock — Architecture Decisions & Maintenance Log
 
 > Purpose: capture WHAT was built, WHY it was built that way, what failed before it, and what remains open — so future sessions don't re-derive this from scratch. Update this file whenever a significant decision lands.
-> Last updated: 2026-07-06 (session 5-V — F-01/F-02/F-03 fixed, gauntlet 43/43, DDL complete, anon rate-limit noted).
+> Last updated: 2026-07-08 (staging day — ESM .js extension, env var wipe, self-fetch anti-pattern, smoke test protocol).
 
 ---
 
@@ -31,6 +31,18 @@ Stack: Vite + React + TS + Tailwind + shadcn + Supabase + Vercel + Razorpay + Re
 - **A stale deploy can make removed code look like working data — verify against the DB, not a rendered page.** (Staging showed rich Indian cards after Part C removed the client-side merge; this was misread as migration success. In reality the build was stale and the merge was still running. The DB was unenriched throughout.)
 - **Supabase Studio silently rolls back large multi-statement pastes** — no error shown, zero rows changed, row count in Studio shows 0 affected. Use Node scripts for all bulk work; Studio SQL only for single-statement manual surgery.
 - **Multi-statement pastes in Studio abort on the first failing statement and surface only the last error message** — intermediate errors are hidden. If a paste has 500 statements and statement 3 fails, you see one message and nothing ran. Consequence: never diagnose a paste failure by reading the Studio error alone; the error may not point at the real problem. Single statements for surgical fixes; scripts for everything else.
+
+**Platform & deployment lessons (earned 2026-07-08):**
+
+1. **Vercel env var UI wipe** — editing an existing variable's *scope* in the Vercel dashboard UI silently sets its value to empty string. Any time env vars are edited in the UI, immediately verify with: `npx vercel env pull .env.preview --environment=preview && awk -F'=' '/^SUPABASE_URL=/{print length($2)} /^SUPABASE_SERVICE_ROLE_KEY=/{print length($2)}' .env.preview`. Expected lengths: URL ~42, keys ~200+. A length of 0 or 2 means empty — re-add via CLI: `npx vercel env add VAR_NAME environment` (interactive prompt; never pipe values in).
+
+2. **Preview vs Production env var split** — `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` / `VITE_RAZORPAY_KEY_ID` must be split by environment: Preview gets TEST keys, Production gets LIVE keys. `VITE_RAZORPAY_KEY_ID` is baked into the JS bundle at build time — wrong key here means checkout opens in the wrong mode regardless of server-side keys. Verify after any key rotation: `npx vercel env pull .env.preview --environment=preview && grep RAZORPAY_KEY_ID .env.preview` (must show `rzp_test_...`).
+
+3. **ESM explicit `.js` extension** — Vercel's Node runtime uses ESM module resolution which requires explicit `.js` extensions on relative imports even in TypeScript files (`import from './_email.js'` not `'./_email'`). TypeScript build warning TS2835 is **NOT** type-check-only — it indicates a runtime `ERR_MODULE_NOT_FOUND` crash on the deployed platform. Local `vercel dev` and the Playwright gauntlet do **NOT** catch this. Any new shared API module must use `.js` extensions on all imports immediately.
+
+4. **Staging smoke test is mandatory** — local gauntlet 43/43 green does not validate Vercel platform module resolution or env var presence. After every deploy that touches API routes, run: `curl -s -X POST https://staging.bornclock.com/api/create-order -H "Content-Type: application/json" -d '{"product":"birthday_report","report_slug":"zzzzzzzz","userId":"test-user","currency":"INR"}'` — expected response: `{"error":"Report not found"}` (Supabase connected, input validated). Any other response means env vars or module resolution is broken. Run this before any real payment test.
+
+5. **Internal HTTP self-fetch anti-pattern** — Vercel serverless functions must not fetch their own `/api/*` endpoints. The URL construction fails on Preview (hits wrong deployment) and localhost (SSL mismatch). Solution: extract shared logic into `api/_lib/*.ts` with `.js` import extensions and import directly. The `_`-prefix keeps Vercel from treating the file as a route while still bundling it as a dependency.
 
 ---
 
@@ -262,6 +274,7 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 - **Dormancy sweep:** Run `scripts/sweep-dormant-reports.sql` manually in Studio (two statements — SELECT first to review, then DELETE). No scheduler exists by design. Run quarterly or before any GDPR audit. Policy: reports unviewed for 12 months are deleted (see §7 storage posture entry and Privacy Policy Amendment 5).
 - **Add/edit a celebrity:** edit the row in Supabase `celebrity_sitelinks` (occupation = descriptor, known_for = hook, nationality_code for boosting). No deploy needed. For bulk work, use `scripts/migrate-indian-celebs.mjs` as the pattern template (Supabase JS client, sequential per-row updates, per-row error reporting); never paste large SQL into Studio.
 - **Add a curated hook to a global celebrity:** set `known_for` on their row; the card picks it up everywhere automatically.
+- **Staging smoke test:** `curl -s -X POST https://staging.bornclock.com/api/create-order -H 'Content-Type: application/json' -d '{"product":"birthday_report","report_slug":"zzzzzzzz","userId":"test-user","currency":"INR"}'` → must return `{"error":"Report not found"}`. Run after every API-touching deploy. Any other response (network error, empty body, 500 with module path) means env vars or ESM module resolution is broken — do not proceed to payment testing.
 - **Print CSS changes:** validate in headless Chromium BEFORE writing the commit; keep print-only geometry inside the pageStyle string, never in screen CSS.
 - **New print sections:** must live inside the existing tbody cell; respect the break policy in §3.
 
