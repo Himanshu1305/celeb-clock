@@ -58,6 +58,37 @@ function LockedSection({ code, eyebrow, title, desc, dark = false }: {
   );
 }
 
+// ── Single collapsed locked-sections block — replaces 5 individual placeholders ─
+function LockedSectionsBlock() {
+  return (
+    <div className="py-10 px-4 no-print" style={{ background: 'var(--panel)', borderTop: '1px solid var(--hairline)' }}>
+      <div className="max-w-md mx-auto">
+        <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-center" style={{ color: 'var(--muted)' }}>
+          Locked sections
+        </p>
+        <div className="space-y-2">
+          {[
+            { code: '02', name: 'Zodiac Profile', sub: 'Western, Chinese & Vedic' },
+            { code: '03', name: 'Numerology & Life Path', sub: 'Life Path number, Personal Year forecast' },
+            { code: '06', name: 'Cosmic Connections', sub: 'Birthstone & birth flower' },
+            { code: '07', name: 'Solar System Ages', sub: 'Your age across all 8 planets' },
+            { code: '08', name: 'Generation Portrait', sub: 'Where you fit in history' },
+          ].map(s => (
+            <div key={s.code} className="flex items-center gap-3 px-4 py-3 rounded-xl"
+              style={{ background: 'rgba(0,0,0,0.04)', border: '1px dashed #c7cfd8' }}>
+              <span className="text-base">🔒</span>
+              <div>
+                <span className="text-sm font-semibold" style={{ color: 'var(--navy)' }}>{s.name}</span>
+                <span className="text-xs ml-2" style={{ color: 'var(--muted)' }}>{s.sub}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Helper ─────────────────────────────────────────────────────────────────────
 
 const fmt = (n: number) => n.toLocaleString('en-IN');
@@ -921,12 +952,12 @@ const ReportView = () => {
         </div>
       )}
 
+      {isLocked && <LockedSectionsBlock />}
+
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 3 — ZODIAC PROFILE                                         */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      {isLocked ? (
-        <LockedSection code="02 · ASTROLOGY" eyebrow="Three Traditions" title="Zodiac Profile" desc="Western, Chinese & Vedic — one person, three lenses" />
-      ) : (
+      {!isLocked && (
       <div className="report-section py-12 px-4" style={{ background: 'var(--panel)' }}>
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
@@ -1341,9 +1372,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 4 — NUMEROLOGY BLUEPRINT                                   */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      {isLocked ? (
-        <LockedSection code="03 · NUMBERS" eyebrow="Your Numerology Blueprint" title="Numbers &amp; Life Path" desc="Calculated from the exact date of birth" />
-      ) : (
+      {!isLocked && (
       <div className="report-section print-break-before py-12 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
@@ -1628,9 +1657,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 5 ��� COSMIC CONNECTIONS (BIRTHSTONE)                        */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      {isLocked ? (
-        <LockedSection code="06 · TALISMAN" eyebrow="Your Birthstone & Flower" title="Cosmic Connections" desc={`The gem and flower of ${monthName}`} />
-      ) : (
+      {!isLocked && (
       <div className="report-section py-12 px-4" style={{ background: 'var(--gold-tint)' }}>
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
@@ -1810,9 +1837,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 6 — SOLAR SYSTEM AGES (dark)                               */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      {isLocked ? (
-        <LockedSection code="07 · COSMOS" eyebrow="Your Age Across the Solar System" title="Solar System Ages" desc={`${recipientName} is ${age} years old on Earth — here is their age across each planet`} dark />
-      ) : (
+      {!isLocked && (
       <div className="dark-section solar-section py-12 px-4" style={{ background: 'var(--dark)' }}>
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
@@ -1865,9 +1890,7 @@ const ReportView = () => {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SECTION 7 — GENERATION                                             */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      {isLocked ? (
-        <LockedSection code="08 · ERA" eyebrow="Your Generation" title="Generation Portrait" desc={`Where ${recipientName} fits in history`} />
-      ) : (
+      {!isLocked && (
       <div className="report-section generation-section py-14 px-4" style={{ background: 'var(--panel)' }}>
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
