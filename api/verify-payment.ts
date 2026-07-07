@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { sendEmailDirect } from './_email.js';
 

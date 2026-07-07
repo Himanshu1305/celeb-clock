@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { sendEmailDirect } from './_email.js';
 
@@ -132,7 +132,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         // Record payment row (amount in paise → store as-is)
         if (payment?.id) {
-          await db.from('payments').insert({
+          await db.from('payments').upsert({
             user_id: userId,
             razorpay_payment_id: payment.id,
             razorpay_subscription_id: subscription.id,
@@ -140,7 +140,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             currency: payment.currency ?? 'INR',
             status: payment.status ?? 'captured',
             product: 'subscription',
-          }).onConflict('razorpay_payment_id').ignore();
+          }, { onConflict: 'razorpay_payment_id', ignoreDuplicates: true });
         }
 
         // Send premium-activated email on first activation
