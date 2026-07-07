@@ -61,8 +61,8 @@ test.describe('Birthday report creation and locked preview', () => {
     await page.goto(reportUrl);
     await page.waitForLoadState('networkidle');
 
-    // Lock placeholder is visible (at least one — all locked sections have "🔒 Unlock to reveal")
-    const lockPlaceholder = page.locator('text=Unlock to reveal').first();
+    // Lock placeholder is visible — LockedSectionsBlock shows "Locked sections" label
+    const lockPlaceholder = page.locator('text=Locked sections').first();
     await expect(lockPlaceholder).toBeVisible();
 
     // Real section body content should NOT be visible (LockedSection shows header/desc only)

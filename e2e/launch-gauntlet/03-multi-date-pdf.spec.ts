@@ -53,7 +53,7 @@ for (const tc of TEST_CASES) {
     // Twins section header exists
     await expect(page.locator('text=Celebrity Birthday Twins').first()).toBeVisible();
 
-    // Lock placeholder present (report is locked)
-    await expect(page.locator('text=Unlock to reveal').first()).toBeVisible();
+    // Lock placeholder present — LockedSectionsBlock shows "Locked sections" label
+    await expect(page.locator('text=Locked sections').first()).toBeVisible();
   });
 }
