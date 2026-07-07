@@ -113,7 +113,9 @@ const BirthdayReport = () => {
       if (user?.email && slug) {
         const reportLink = `${window.location.origin}/report/${slug}`;
         const gifterDisplayName = gifterName.trim() || user?.user_metadata?.first_name || 'there';
-        if (isPremium || isAdmin) {
+        // New rows always start with is_paid=false. isLocked = !isAdmin && !is_paid = !isAdmin.
+        // Admin bypasses the lock in ReportView; everyone else gets the nudge-to-unlock email.
+        if (isAdmin) {
           EmailService.sendReportCreated(user.email, gifterDisplayName, recipientName.trim(), reportLink);
         } else {
           EmailService.sendReportLocked(user.email, gifterDisplayName, recipientName.trim(), reportLink);
