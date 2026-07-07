@@ -472,7 +472,7 @@ const BirthdayReport = () => {
                 </button>
 
                 <p className="text-center text-xs text-gray-400">
-                  Report link is shareable · Unlock the full report with a one-time purchase
+                  Generates instantly · Celebrity Twins always free · unlock the full Blueprint for ₹199
                 </p>
               </div>
             </>
