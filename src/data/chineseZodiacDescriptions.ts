@@ -100,7 +100,7 @@ export const CHINESE_ZODIAC_DESCRIPTIONS: Record<string, ChineseZodiacDescriptio
     compatibility: { best: ['Tiger', 'Goat', 'Dog'], avoid: ['Rat', 'Ox'] },
     careerPaths: ['Travel writing and journalism', 'Sales and entrepreneurship', 'Athletics and adventure sports', 'Acting and performance', 'Politics and advocacy'],
     loveStyle: "In love, Horses are passionate and expressive but resist anything that feels like a cage. They fall quickly and dramatically but need a partner who understands that their freedom is non-negotiable. The partners who hold Horses most successfully are those who offer inspiring partnership — shared adventures rather than secure domesticity.",
-    famousPeople: ['Genghis Khan', 'Isaac Newton', 'Rembrandt', 'Leonel Messi', 'Kobe Bryant'],
+    famousPeople: ['Genghis Khan', 'Isaac Newton', 'Rembrandt', 'Lionel Messi', 'Kobe Bryant'],
     lifeAdvice: "The horizon is always calling — but your most significant achievements will require you to stay in one place long enough to complete what you started. Freedom and commitment are not opposites.",
     years: '1930, 1942, 1954, 1966, 1978, 1990, 2002, 2014, 2026',
   },

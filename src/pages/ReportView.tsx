@@ -1424,7 +1424,7 @@ const ReportView = () => {
                     {personalYear2026}
                   </div>
                   <div>
-                    <div className="font-black text-amber-900 text-lg">Personal Year {personalYear2026} in 2026</div>
+                    <div className="font-black text-amber-900 text-lg">{`Personal Year ${personalYear2026} in 2026`}</div>
                     {personalYearMeaning?.title && <div className="text-sm text-amber-700 font-medium">{personalYearMeaning.title}</div>}
                   </div>
                 </div>
