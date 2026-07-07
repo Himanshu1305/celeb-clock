@@ -844,6 +844,9 @@ const ReportView = () => {
       {isLocked && (
         <div className="py-12 px-4 bg-white no-print" style={{ borderTop: '1px solid var(--hairline)' }}>
           <div className="max-w-md mx-auto text-center">
+            <p className="text-xs mb-5" style={{ color: 'var(--muted)' }}>
+              Your free preview is ready — Celebrity Twins are visible above.
+            </p>
             <div className="text-4xl mb-4">🔒</div>
             <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--navy)' }}>
               Unlock {recipientName}'s Full Blueprint
