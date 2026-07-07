@@ -7,6 +7,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const TOC_ITEMS = [
   { id: 'data-model', label: 'Data Model by User Type' },
+  { id: 'ai-coach', label: 'AI Longevity Coach' },
   { id: 'what-we-collect', label: 'What We Collect' },
   { id: 'what-we-dont-store', label: 'What We Do NOT Store' },
   { id: 'gift-recipients', label: "Gift Recipients' Data" },
@@ -158,6 +159,13 @@ export default function Privacy() {
                 </div>
               </section>
 
+              <section id="ai-coach" className="mb-12 scroll-mt-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">AI Longevity Coach</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  When you send a message to the AI Longevity Coach, two things are transmitted through our servers to Anthropic (the AI provider) to generate a response: the text of your message, and a summary of your computed longevity results (your forecast, factor impacts, and scores — not your raw health inputs, which never leave your browser). This happens only when you send a coach message, is processed transiently, is never stored on our servers, and is never logged. Conversation history exists only in your browser session and is never sent to us. Anthropic processes this data to generate the response and does not use it to train models, per our API agreement.
+                </p>
+              </section>
+
               <section id="what-we-collect" className="mb-12 scroll-mt-8">
                 <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">What We Collect</h2>
                 <p className="text-muted-foreground mb-4 leading-relaxed">
@@ -262,6 +270,11 @@ export default function Privacy() {
                         <td className="px-4 py-3">IP address (not stored by us), request logs (retained 7 days)</td>
                       </tr>
                       <tr>
+                        <td className="px-4 py-3 font-medium text-foreground">Anthropic</td>
+                        <td className="px-4 py-3">AI coach responses</td>
+                        <td className="px-4 py-3">Your coach message + computed longevity summary (transient, never stored)</td>
+                      </tr>
+                      <tr className="bg-muted/30">
                         <td className="px-4 py-3 font-medium text-foreground">Internal analytics</td>
                         <td className="px-4 py-3">Product analytics (first-party)</td>
                         <td className="px-4 py-3">Anonymous page view and feature usage events stored in our own database — no third-party SDK</td>

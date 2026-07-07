@@ -1,3 +1,7 @@
+// ZERO-RETENTION GUARANTEE: This endpoint must never persist or log message
+// content or userContext. The privacy policy's "processed transiently, never
+// stored, never logged" claim depends on this file staying storage-free.
+// Do not add Supabase writes or content logging here.
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(
