@@ -1,11 +1,8 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import * as crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { sendEmailDirect } from './_email.js';
+import { verifyHmacSha256 } from './_crypto.js';
 
-// Disable Vercel's body parser so we receive the raw bytes for HMAC verification.
-// Razorpay signs the raw body; JSON.stringify(parsed body) ≠ original bytes.
-export const config = { api: { bodyParser: false } };
+// Web API handler — no Vercel bodyParser config needed; raw Request is passed as-is.
 
 function serviceClient() {
   return createClient(
@@ -14,12 +11,10 @@ function serviceClient() {
   );
 }
 
-async function readRawBody(req: VercelRequest): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    const chunks: Buffer[] = [];
-    req.on('data', (chunk: Buffer) => chunks.push(chunk));
-    req.on('end', () => resolve(Buffer.concat(chunks)));
-    req.on('error', reject);
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
   });
 }
 
@@ -31,36 +26,33 @@ async function sendEmail(payload: Record<string, unknown>) {
   }
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+async function handler(request: Request): Promise<Response> {
+  if (request.method !== 'POST') {
+    return json({ error: 'Method not allowed' }, 405);
   }
 
   const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
   if (!webhookSecret) {
     console.error('[webhook] RAZORPAY_WEBHOOK_SECRET not configured');
-    return res.status(500).json({ error: 'Webhook not configured' });
+    return json({ error: 'Webhook not configured' }, 500);
   }
 
-  // ── Read raw body ───────────────────────────────────────────────────────────
-  const rawBody = await readRawBody(req);
-  const signature = req.headers['x-razorpay-signature'] as string;
+  // Read raw body ONCE — ArrayBuffer is plain memory; safe to use for both
+  // HMAC verification and JSON parsing without consuming a stream twice.
+  const rawBody = await request.arrayBuffer();
+  const signature = request.headers.get('x-razorpay-signature') ?? '';
 
-  const expected = crypto
-    .createHmac('sha256', webhookSecret)
-    .update(rawBody)
-    .digest('hex');
-
-  if (!signature || !crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature))) {
+  const valid = await verifyHmacSha256(webhookSecret, rawBody, signature);
+  if (!valid) {
     console.error('[webhook] INVALID SIGNATURE — possible replay or misconfigured secret');
-    return res.status(400).json({ error: 'Invalid signature' });
+    return json({ error: 'Invalid signature' }, 403);
   }
 
   let event: any;
   try {
-    event = JSON.parse(rawBody.toString('utf8'));
+    event = JSON.parse(new TextDecoder().decode(rawBody));
   } catch {
-    return res.status(400).json({ error: 'Malformed JSON body' });
+    return json({ error: 'Malformed JSON body' }, 400);
   }
 
   const eventId: string = event.id;
@@ -68,7 +60,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!eventId) {
     console.error('[webhook] event missing .id field');
-    return res.status(400).json({ error: 'Missing event id' });
+    return json({ error: 'Missing event id' }, 400);
   }
 
   const db = serviceClient();
@@ -84,7 +76,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (insertErr.code === '23505') {
       // Already processed — return 200 so Razorpay stops retrying
       console.log('[webhook] duplicate event ignored', eventId);
-      return res.status(200).json({ received: true, duplicate: true });
+      return json({ received: true, duplicate: true });
     }
     console.error('[webhook] failed to record event', insertErr);
     // Proceed anyway — better to process twice than drop
@@ -241,10 +233,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.log('[webhook] unhandled event type', eventType);
     }
 
-    return res.status(200).json({ received: true });
+    return json({ received: true });
   } catch (err) {
     console.error('[webhook] processing error', err);
     // Always 200 — Razorpay retries on non-2xx which could cause duplicate processing
-    return res.status(200).json({ received: true });
+    return json({ received: true });
   }
 }
+
+// export const POST triggers @vercel/node's Web API handler path (raw Request/Response).
+export const POST = handler;
