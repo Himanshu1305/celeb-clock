@@ -7,6 +7,7 @@ workers_dev = true
 [assets]
 directory = "./dist"
 binding = "ASSETS"
+not_found_handling = "single-page-application"
 
 [triggers]
 crons = ["0 6 * * *"]
