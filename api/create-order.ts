@@ -28,13 +28,8 @@ const MEMBER_AMOUNTS: Record<string, Partial<Record<'INR' | 'USD', number>>> = {
 async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
 
-  const keyId = process.env.VITE_RAZORPAY_KEY_ID;
-  const keySecret = process.env.RAZORPAY_KEY_SECRET;
-  if (!keyId || !keySecret) {
-    console.error('[create-order] Razorpay credentials not configured');
-    return json({ error: 'Payment not configured' }, 500);
-  }
-
+  // Parse and validate inputs BEFORE checking payment credentials
+  // so validation errors return proper 400/404 codes even in local dev
   let body: any;
   try {
     body = await request.json();
@@ -67,6 +62,13 @@ async function handler(request: Request): Promise<Response> {
   }
   if (report.is_paid) {
     return json({ error: 'Report already purchased' }, 409);
+  }
+
+  const keyId = process.env.VITE_RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) {
+    console.error('[create-order] Razorpay credentials not configured');
+    return json({ error: 'Payment not configured' }, 500);
   }
 
   // Member pricing: active subscribers pay less (server-side decision only)

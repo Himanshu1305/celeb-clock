@@ -67,6 +67,8 @@ import NameNumerologyPage from '@/pages/NameNumerologyPage';
 import BiorhythmPage from '@/pages/BiorhythmPage';
 import CompatibilityPage from '@/pages/CompatibilityPage';
 import RashiRatnaPage from '@/pages/RashiRatnaPage';
+import BornOnDay from '@/pages/BornOnDay';
+import BornOnIndex from '@/pages/BornOnIndex';
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
@@ -148,6 +150,8 @@ const App = () => (
               <Route path="/compatibility" element={<CompatibilityPage />} />
               <Route path="/compatibility/:sign1/:sign2" element={<CompatibilityPage />} />
               <Route path="/rashi-ratna" element={<RashiRatnaPage />} />
+              <Route path="/born-on" element={<BornOnIndex />} />
+              <Route path="/born-on/:slug" element={<BornOnDay />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

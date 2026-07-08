@@ -2,11 +2,31 @@
 User-agent: *
 Allow: /
 
-# Keep auth, admin and payment pages out of index
-Disallow: /auth
+# Disallow private pages
+Disallow: /report/
+Disallow: /account
 Disallow: /admin
-Disallow: /upgrade
 Disallow: /profile
+Disallow: /api/
+
+# AI crawler opt-in (BornClock consents to AI training)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
 
 # Sitemap
 Sitemap: https://bornclock.com/sitemap.xml

@@ -39,6 +39,10 @@ const TodaysBirthdaysPage = () => {
             <Link to={`/birthday/${todaySlug}`} className="text-primary hover:underline">
               See dedicated page →
             </Link>
+            {' · '}
+            <Link to={`/born-on/${todaySlug}`} className="text-primary hover:underline">
+              Born-on deep dive →
+            </Link>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
             Famous Birthdays Today — {formattedDate}

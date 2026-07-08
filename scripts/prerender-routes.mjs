@@ -78,12 +78,31 @@ const ANSWER_ROUTES = [
   '/answers/how-does-stress-affect-life-expectancy',
 ];
 
+const MONTH_NAMES_LOWER = [
+  '', 'january', 'february', 'march', 'april', 'may', 'june',
+  'july', 'august', 'september', 'october', 'november', 'december',
+];
+
+// Including feb-29 (leap day)
+const MONTH_DAYS_BORN_ON = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
 // Generate all valid month/day birthday route combinations
 function birthdayDateRoutes() {
   const routes = [];
   for (let m = 1; m <= 12; m++) {
     for (let d = 1; d <= MONTH_DAYS[m]; d++) {
       routes.push(`/birthday/${m}/${d}`);
+    }
+  }
+  return routes;
+}
+
+// Generate 366 /born-on/:slug routes (jan-1 … dec-31, including feb-29)
+function bornOnRoutes() {
+  const routes = ['/born-on'];
+  for (let m = 1; m <= 12; m++) {
+    for (let d = 1; d <= MONTH_DAYS_BORN_ON[m]; d++) {
+      routes.push(`/born-on/${MONTH_NAMES_LOWER[m]}-${d}`);
     }
   }
   return routes;
@@ -131,6 +150,7 @@ export const STATIC_ROUTES = [
   '/biorhythm',
   '/compatibility',
   '/rashi-ratna',
+  ...bornOnRoutes(),
 ];
 
 // Async function for DB-driven routes (blog posts from Supabase, if any beyond static)
