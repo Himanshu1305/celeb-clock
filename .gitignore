@@ -95,3 +95,4 @@ android-sdk/
 # Headless PDF verify artifacts (scripts/verify-print.mjs)
 scripts/*.pdf
 .print-verify/
+bun.lockb
