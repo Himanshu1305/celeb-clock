@@ -1,7 +1,6 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import * as crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { sendEmailDirect } from './_email.js';
+import { verifyHmacSha256 } from './_crypto.js';
 
 // Service-role client — NEVER use the anon key here
 function serviceClient() {
@@ -11,16 +10,23 @@ function serviceClient() {
   );
 }
 
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
 // Razorpay signature formats differ by product type:
 //   subscription: HMAC-SHA256(payment_id + "|" + subscription_id, key_secret)
 //   order (one-time): HMAC-SHA256(order_id + "|" + payment_id, key_secret)
-function verifySignature(params: {
+async function verifySignature(params: {
   razorpay_payment_id: string;
   razorpay_subscription_id?: string;
   razorpay_order_id?: string;
   razorpay_signature: string;
   keySecret: string;
-}): boolean {
+}): Promise<boolean> {
   const { razorpay_payment_id, razorpay_subscription_id, razorpay_order_id, razorpay_signature, keySecret } = params;
 
   let message: string;
@@ -32,25 +38,27 @@ function verifySignature(params: {
     return false;
   }
 
-  const expected = crypto.createHmac('sha256', keySecret).update(message).digest('hex');
-  // timingSafeEqual throws if buffers differ in length (e.g. truncated/garbage sig).
-  // Treat any such input as an invalid signature rather than a 500.
-  try {
-    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(razorpay_signature));
-  } catch {
-    return false;
-  }
+  // verifyHmacSha256 accepts ArrayBuffer | Uint8Array; pass encoded message string.
+  // sigHex length mismatch and malformed hex both return false (never throw).
+  return verifyHmacSha256(keySecret, new TextEncoder().encode(message), razorpay_signature);
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+async function handler(request: Request): Promise<Response> {
+  if (request.method !== 'POST') {
+    return json({ error: 'Method not allowed' }, 405);
   }
 
   const keySecret = process.env.RAZORPAY_KEY_SECRET;
   if (!keySecret) {
     console.error('[verify-payment] RAZORPAY_KEY_SECRET not configured');
-    return res.status(500).json({ error: 'Payment verification not configured' });
+    return json({ error: 'Payment verification not configured' }, 500);
+  }
+
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body' }, 400);
   }
 
   const {
@@ -63,7 +71,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     amount,
     currency,
     report_slug,
-  } = req.body ?? {};
+  } = body ?? {};
 
   // For birthday_report orders: after HMAC passes we fetch the Razorpay order to
   // get the server-baked report_slug and authoritative amount. This prevents a
@@ -74,16 +82,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   let paymentCurrency: string = currency ?? 'INR';
 
   if (!razorpay_payment_id || !razorpay_signature) {
-    return res.status(400).json({ error: 'Missing required payment fields' });
+    return json({ error: 'Missing required payment fields' }, 400);
   }
   if (!user_id) {
-    return res.status(400).json({ error: 'Missing user_id' });
+    return json({ error: 'Missing user_id' }, 400);
   }
   if (!product || !['subscription', 'birthday_report'].includes(product)) {
-    return res.status(400).json({ error: 'Invalid product type' });
+    return json({ error: 'Invalid product type' }, 400);
   }
 
-  const valid = verifySignature({
+  const valid = await verifySignature({
     razorpay_payment_id,
     razorpay_subscription_id,
     razorpay_order_id,
@@ -97,7 +105,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       user_id,
       product,
     });
-    return res.status(403).json({ error: 'Invalid payment signature' });
+    return json({ error: 'Invalid payment signature' }, 403);
   }
 
   const db = serviceClient();
@@ -105,12 +113,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // For birthday_report: fetch the Razorpay order to get authoritative values
   if (product === 'birthday_report') {
     if (!razorpay_order_id) {
-      return res.status(400).json({ error: 'razorpay_order_id required for birthday_report' });
+      return json({ error: 'razorpay_order_id required for birthday_report' }, 400);
     }
     const keyId = process.env.VITE_RAZORPAY_KEY_ID;
-    if (!keyId) return res.status(500).json({ error: 'Payment configuration error' });
+    if (!keyId) return json({ error: 'Payment configuration error' }, 500);
 
-    const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
+    // btoa() is safe here — Razorpay key IDs and secrets are ASCII-only
+    const auth = btoa(`${keyId}:${keySecret}`);
     let orderData: any;
     try {
       const orderRes = await fetch(`https://api.razorpay.com/v1/orders/${razorpay_order_id}`, {
@@ -119,11 +128,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       orderData = await orderRes.json();
       if (!orderRes.ok) {
         console.error('[verify-payment] order fetch error', orderData);
-        return res.status(502).json({ error: 'Could not fetch order' });
+        return json({ error: 'Could not fetch order' }, 502);
       }
     } catch (e) {
       console.error('[verify-payment] order fetch network error', e);
-      return res.status(502).json({ error: 'Could not reach payment provider' });
+      return json({ error: 'Could not reach payment provider' }, 502);
     }
 
     authoritativeSlug = orderData.notes?.report_slug ?? null;
@@ -132,12 +141,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!authoritativeSlug) {
       console.error('[verify-payment] order missing report_slug in notes', razorpay_order_id);
-      return res.status(400).json({ error: 'Order missing report_slug' });
+      return json({ error: 'Order missing report_slug' }, 400);
     }
     // Cross-check: if client supplied a slug it must match the server-baked one
     if (report_slug && report_slug !== authoritativeSlug) {
       console.error('[verify-payment] slug mismatch body=%s order=%s', report_slug, authoritativeSlug);
-      return res.status(403).json({ error: 'Report slug mismatch' });
+      return json({ error: 'Report slug mismatch' }, 403);
     }
   }
 
@@ -160,7 +169,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.warn('[verify-payment] duplicate payment_id, returning cached success', razorpay_payment_id);
     } else {
       console.error('[verify-payment] payment insert error', paymentErr);
-      return res.status(500).json({ error: 'Failed to record payment' });
+      return json({ error: 'Failed to record payment' }, 500);
     }
   }
 
@@ -178,7 +187,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (profileErr) {
       console.error('[verify-payment] profile update error', profileErr);
-      return res.status(500).json({ error: 'Failed to grant premium access' });
+      return json({ error: 'Failed to grant premium access' }, 500);
     }
   }
 
@@ -195,9 +204,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (unlockErr) {
       console.error('[verify-payment] birthday_report unlock error', unlockErr);
-      return res.status(500).json({
+      return json({
         error: 'Payment recorded but report unlock failed. Contact support at hello@bornclock.com with your payment ID.',
-      });
+      }, 500);
     }
   }
 
@@ -210,9 +219,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const currencySymbol = paymentCurrency === 'INR' ? '₹' : '$';
       const amountFormatted = `${currencySymbol}${(paymentAmount / 100).toLocaleString('en-IN')}`;
       const date = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-      const base = process.env.VERCEL_PROJECT_PRODUCTION_URL
-        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-        : `https://${process.env.VERCEL_URL || 'bornclock.com'}`;
+      const base = process.env.PRODUCTION_URL ?? 'https://bornclock.com';
       await sendEmailDirect({
         type: 'payment_receipt',
         to: userEmail,
@@ -227,5 +234,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.error('[verify-payment] receipt email error (non-fatal)', e);
   }
 
-  return res.status(200).json({ success: true, product });
+  return json({ success: true, product });
 }
+
+// export const POST triggers @vercel/node's Web API handler path (raw Request/Response).
+export const POST = handler;
