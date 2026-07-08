@@ -14,7 +14,30 @@ import cronHandler                     from './_cron/daily-email.js';
 
 type Env = {
   ASSETS: { fetch: (request: Request) => Promise<Response> };
+  [key: string]: unknown;
 };
+
+// CF Worker env is a Proxy — Object.entries(env) returns [] even when secrets exist.
+// Must access known keys by name explicitly.
+const BRIDGE_KEYS = [
+  'VITE_RAZORPAY_KEY_ID', 'RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET', 'RAZORPAY_WEBHOOK_SECRET',
+  'SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY',
+  'CRON_SECRET', 'VITE_CRON_SECRET',
+  'RESEND_API_KEY', 'ANTHROPIC_API_KEY', 'ADMIN_SECRET_KEY',
+  'VITE_RAZORPAY_PLAN_INDIA_MONTHLY', 'VITE_RAZORPAY_PLAN_INDIA_ANNUAL',
+  'VITE_RAZORPAY_PLAN_GLOBAL_MONTHLY', 'VITE_RAZORPAY_PLAN_GLOBAL_ANNUAL',
+];
+
+function bridgeEnv(env: Env): void {
+  if (typeof process === 'undefined' || !process.env) return;
+  const e = env as Record<string, unknown>;
+  for (const key of BRIDGE_KEYS) {
+    const value = e[key];
+    if (typeof value === 'string' && value !== '' && !process.env[key]) {
+      process.env[key] = value;
+    }
+  }
+}
 
 const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/create-order':       createOrder,
@@ -30,31 +53,21 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
 
 export default {
   async fetch(request: Request, env: Env, ctx: any): Promise<Response> {
-    // Bridge CF bindings to process.env so shared handler code works unchanged
-    if (typeof process !== 'undefined' && process.env) {
-      for (const [key, value] of Object.entries(env)) {
-        if (typeof value === 'string' && process.env[key] === undefined) {
-          process.env[key] = value;
-        }
-      }
-    }
+    bridgeEnv(env);
 
     const { pathname } = new URL(request.url);
 
-    // Non-API requests → static assets; ASSETS binding handles SPA fallback
-    // via the /* /index.html 200 rule in public/_redirects copied into dist/.
     if (!pathname.startsWith('/api/')) {
-      return env.ASSETS.fetch(request);
+      return env.ASSETS.fetch(request as Parameters<typeof env.ASSETS.fetch>[0]);
     }
 
-    // daily-email-cron accepts both GET (cron/admin) and POST (admin trigger)
     if (pathname === '/api/daily-email-cron') {
       return request.method === 'GET' ? dailyCronGet(request) : dailyCronPost(request);
     }
 
     // Temporary debug endpoint — remove after diagnosing env issues
     if (pathname === '/api/debug-env') {
-      return debugEnv(request, env as unknown as Record<string, string>);
+      return debugEnv(request, env as Record<string, string>);
     }
 
     const handler = apiRoutes[pathname];
@@ -68,14 +81,7 @@ export default {
   },
 
   async scheduled(event: any, env: Env, ctx: any): Promise<void> {
-    // Bridge CF bindings to process.env so shared handler code works unchanged
-    if (typeof process !== 'undefined' && process.env) {
-      for (const [key, value] of Object.entries(env)) {
-        if (typeof value === 'string' && process.env[key] === undefined) {
-          process.env[key] = value;
-        }
-      }
-    }
+    bridgeEnv(env);
     return cronHandler.scheduled(event, env, ctx);
   },
 };
