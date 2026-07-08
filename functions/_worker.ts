@@ -29,6 +29,15 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
 
 export default {
   async fetch(request: Request, env: Env, ctx: any): Promise<Response> {
+    // Bridge CF bindings to process.env so shared handler code works unchanged
+    if (typeof process !== 'undefined' && process.env) {
+      for (const [key, value] of Object.entries(env)) {
+        if (typeof value === 'string' && process.env[key] === undefined) {
+          process.env[key] = value;
+        }
+      }
+    }
+
     const { pathname } = new URL(request.url);
 
     // Non-API requests → static assets; ASSETS binding handles SPA fallback
@@ -53,6 +62,14 @@ export default {
   },
 
   async scheduled(event: any, env: Env, ctx: any): Promise<void> {
+    // Bridge CF bindings to process.env so shared handler code works unchanged
+    if (typeof process !== 'undefined' && process.env) {
+      for (const [key, value] of Object.entries(env)) {
+        if (typeof value === 'string' && process.env[key] === undefined) {
+          process.env[key] = value;
+        }
+      }
+    }
     return cronHandler.scheduled(event, env, ctx);
   },
 };
