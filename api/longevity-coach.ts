@@ -2,25 +2,35 @@
 // content or userContext. The privacy policy's "processed transiently, never
 // stored, never logged" claim depends on this file staying storage-free.
 // Do not add Supabase writes or content logging here.
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+async function handler(request: Request): Promise<Response> {
+  if (request.method !== 'POST') {
+    return json({ error: 'Method not allowed' }, 405);
   }
 
-  const { message, userContext } = req.body;
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body' }, 400);
+  }
+
+  const { message, userContext } = body ?? {};
 
   if (!message || !userContext) {
-    return res.status(400).json({ error: 'Missing message or context' });
+    return json({ error: 'Missing message or context' }, 400);
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'API key not configured' });
+    return json({ error: 'API key not configured' }, 500);
   }
 
   try {
@@ -83,11 +93,11 @@ Always remind them at end: "For medical advice, please consult a healthcare prof
     const data = await response.json();
     const reply = data.content?.[0]?.text || 'I could not generate a response. Please try again.';
 
-    return res.status(200).json({ reply });
+    return json({ reply });
   } catch (error) {
     console.error('Longevity coach error:', error);
-    return res.status(500).json({
-      error: 'Failed to get response. Please try again.',
-    });
+    return json({ error: 'Failed to get response. Please try again.' }, 500);
   }
 }
+
+export const POST = handler;

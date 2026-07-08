@@ -1,4 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 
 function serviceClient() {
@@ -6,6 +5,13 @@ function serviceClient() {
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
   );
+}
+
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
 }
 
 // Server-decided amounts in smallest currency unit (paise / cents).
@@ -19,26 +25,33 @@ const MEMBER_AMOUNTS: Record<string, Partial<Record<'INR' | 'USD', number>>> = {
   birthday_report: { INR: 14900, USD: 249 },
 };
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+async function handler(request: Request): Promise<Response> {
+  if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
 
   const keyId = process.env.VITE_RAZORPAY_KEY_ID;
   const keySecret = process.env.RAZORPAY_KEY_SECRET;
   if (!keyId || !keySecret) {
     console.error('[create-order] Razorpay credentials not configured');
-    return res.status(500).json({ error: 'Payment not configured' });
+    return json({ error: 'Payment not configured' }, 500);
   }
 
-  const { product, report_slug, userId, currency = 'INR' } = req.body ?? {};
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body' }, 400);
+  }
+
+  const { product, report_slug, userId, currency = 'INR' } = body ?? {};
 
   if (!product || !PRODUCT_AMOUNTS[product]) {
-    return res.status(400).json({ error: 'Invalid product' });
+    return json({ error: 'Invalid product' }, 400);
   }
   if (currency !== 'INR' && currency !== 'USD') {
-    return res.status(400).json({ error: 'Invalid currency' });
+    return json({ error: 'Invalid currency' }, 400);
   }
   if (!report_slug || !userId) {
-    return res.status(400).json({ error: 'Missing report_slug or userId' });
+    return json({ error: 'Missing report_slug or userId' }, 400);
   }
 
   // Double-purchase guard: reject if this slug was already paid for
@@ -50,10 +63,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     .single();
 
   if (reportErr || !report) {
-    return res.status(404).json({ error: 'Report not found' });
+    return json({ error: 'Report not found' }, 404);
   }
   if (report.is_paid) {
-    return res.status(409).json({ error: 'Report already purchased' });
+    return json({ error: 'Report already purchased' }, 409);
   }
 
   // Member pricing: active subscribers pay less (server-side decision only)
@@ -67,7 +80,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     amount = MEMBER_AMOUNTS[product]?.[currency as 'INR' | 'USD'] ?? amount;
   }
 
-  const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
+  const auth = btoa(`${keyId}:${keySecret}`);
   let order: any;
   try {
     const rzpRes = await fetch('https://api.razorpay.com/v1/orders', {
@@ -83,17 +96,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     order = await rzpRes.json();
     if (!rzpRes.ok) {
       console.error('[create-order] Razorpay error', order);
-      return res.status(502).json({ error: 'Failed to create order' });
+      return json({ error: 'Failed to create order' }, 502);
     }
   } catch (e) {
     console.error('[create-order] network error', e);
-    return res.status(502).json({ error: 'Failed to reach payment provider' });
+    return json({ error: 'Failed to reach payment provider' }, 502);
   }
 
-  return res.status(200).json({
+  return json({
     order_id: order.id,
     amount: order.amount,
     currency: order.currency,
     report_slug,
   });
 }
+
+export const POST = handler;

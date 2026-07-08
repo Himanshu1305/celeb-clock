@@ -1,23 +1,37 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { sendEmailDirect } from './_email.js';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+async function handler(request: Request): Promise<Response> {
+  if (request.method !== 'POST') {
+    return json({ error: 'Method not allowed' }, 405);
   }
 
   if (!process.env.RESEND_API_KEY) {
-    return res.status(500).json({ error: 'Email service not configured' });
+    return json({ error: 'Email service not configured' }, 500);
   }
 
-  const body = req.body ?? {};
-  const { type, to, name } = body;
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body' }, 400);
+  }
+
+  const { type, to, name } = body ?? {};
   if (!type || !to || !name) {
-    return res.status(400).json({ error: 'Missing required fields: type, to, name' });
+    return json({ error: 'Missing required fields: type, to, name' }, 400);
   }
 
   const ok = await sendEmailDirect(body);
   return ok
-    ? res.status(200).json({ success: true })
-    : res.status(500).json({ error: 'Failed to send email' });
+    ? json({ success: true })
+    : json({ error: 'Failed to send email' }, 500);
 }
+
+export const POST = handler;

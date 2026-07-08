@@ -1,4 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 
 function serviceClient() {
@@ -8,28 +7,40 @@ function serviceClient() {
   );
 }
 
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
 function generateSlug(): string {
   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
   return Array.from({ length: 8 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+async function handler(request: Request): Promise<Response> {
+  if (request.method !== 'POST') {
+    return json({ error: 'Method not allowed' }, 405);
   }
 
-  const { reportData, isPremium, gender } = req.body ?? {};
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body' }, 400);
+  }
+
+  const { reportData, isPremium, gender } = body ?? {};
   if (!reportData) {
-    return res.status(400).json({ error: 'Missing reportData' });
+    return json({ error: 'Missing reportData' }, 400);
   }
 
   const db = serviceClient();
 
   let userId: string | null = null;
-  const authHeader = Array.isArray(req.headers['authorization'])
-    ? req.headers['authorization'][0]
-    : req.headers['authorization'];
-  if (authHeader && authHeader.startsWith('Bearer ')) {
+  const authHeader = request.headers.get('authorization') ?? '';
+  if (authHeader.startsWith('Bearer ')) {
     const token = authHeader.slice(7);
     const { data } = await db.auth.getUser(token);
     userId = data?.user?.id ?? null;
@@ -54,9 +65,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       expires_at: expiresAt,
     });
 
-    if (!error) return res.status(200).json({ slug });
+    if (!error) return json({ slug });
     if (!String(error.message).includes('unique')) break;
   }
 
-  return res.status(500).json({ error: 'Failed to save report' });
+  return json({ error: 'Failed to save report' }, 500);
 }
+
+export const POST = handler;

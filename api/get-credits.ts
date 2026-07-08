@@ -1,4 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 
 function serviceClient() {
@@ -8,6 +7,13 @@ function serviceClient() {
   );
 }
 
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
 // Returns the number of complete calendar months between two "YYYY-MM" strings.
 function monthsBetween(from: string, to: string): number {
   const [fy, fm] = from.split('-').map(Number);
@@ -15,12 +21,13 @@ function monthsBetween(from: string, to: string): number {
   return (ty - fy) * 12 + (tm - fm);
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
+async function handler(request: Request): Promise<Response> {
+  if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
 
-  const { userId } = req.query;
-  if (!userId || typeof userId !== 'string') {
-    return res.status(400).json({ error: 'Missing userId' });
+  const { searchParams } = new URL(request.url, 'http://localhost');
+  const userId = searchParams.get('userId');
+  if (!userId) {
+    return json({ error: 'Missing userId' }, 400);
   }
 
   const db = serviceClient();
@@ -32,7 +39,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (error || !profile) {
     // Tolerate: missing profile or columns not yet added via DDL
-    return res.status(200).json({ credits: 0, subscriptionActive: false });
+    return json({ credits: 0, subscriptionActive: false });
   }
 
   const isSubscriberActive = (profile as any).subscription_status === 'active';
@@ -57,8 +64,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       credits_granted_month: currentMonth,
     }).eq('user_id', userId);
 
-    return res.status(200).json({ credits: newCredits, subscriptionActive: true });
+    return json({ credits: newCredits, subscriptionActive: true });
   }
 
-  return res.status(200).json({ credits: currentCredits, subscriptionActive: isSubscriberActive });
+  return json({ credits: currentCredits, subscriptionActive: isSubscriberActive });
 }
+
+export const GET = handler;

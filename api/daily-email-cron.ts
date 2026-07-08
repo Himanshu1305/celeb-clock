@@ -1,8 +1,14 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 import { sendEmailDirect } from './_email.js';
 
 const ADMIN_EMAILS = ['hello@bornclock.com', 'himanshu1305@gmail.com'];
+
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
 
 async function dispatchEmail(payload: object): Promise<boolean> {
   try {
@@ -12,10 +18,10 @@ async function dispatchEmail(payload: object): Promise<boolean> {
   }
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+async function handler(request: Request): Promise<Response> {
   // Vercel cron fires GET; admin manual trigger uses POST
-  if (req.method !== 'GET' && req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (request.method !== 'GET' && request.method !== 'POST') {
+    return json({ error: 'Method not allowed' }, 405);
   }
 
   const supabaseAdmin = createClient(
@@ -25,7 +31,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // ── Auth: Vercel cron secret OR admin JWT ──────────────────────────────
   const cronSecret = process.env.CRON_SECRET;
-  const authHeader = (req.headers.authorization as string) || '';
+  const authHeader = request.headers.get('authorization') ?? '';
 
   const isVercelCron = Boolean(cronSecret && authHeader === `Bearer ${cronSecret}`);
 
@@ -39,7 +45,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   if (!isVercelCron && !isAdminRequest) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return json({ error: 'Unauthorized' }, 401);
   }
 
   const now = new Date();
@@ -125,10 +131,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
   }
 
-  return res.status(200).json({
+  return json({
     ok: true,
     weekVariant,
     results,
     timestamp: now.toISOString(),
   });
 }
+
+// Vercel cron fires GET; admin trigger uses POST; both go through this handler.
+export const GET = handler;
+export const POST = handler;

@@ -1,15 +1,20 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+async function handler(request: Request): Promise<Response> {
+  if (request.method !== 'POST') {
+    return json({ error: 'Method not allowed' }, 405);
   }
 
   const keyId = process.env.VITE_RAZORPAY_KEY_ID;
   const keySecret = process.env.RAZORPAY_KEY_SECRET;
   if (!keyId || !keySecret) {
     console.error('[create-subscription] Razorpay credentials not configured');
-    return res.status(500).json({ error: 'Payment not configured' });
+    return json({ error: 'Payment not configured' }, 500);
   }
 
   // Whitelist: plan ID → total_count.
@@ -25,16 +30,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (planGlobalMonthly) whitelist[planGlobalMonthly] = 120;
   if (planGlobalAnnual)  whitelist[planGlobalAnnual]  = 10;
 
-  const { planId, userId } = req.body ?? {};
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body' }, 400);
+  }
+
+  const { planId, userId } = body ?? {};
 
   if (!planId || !userId) {
-    return res.status(400).json({ error: 'Missing planId or userId' });
+    return json({ error: 'Missing planId or userId' }, 400);
   }
 
   const totalCount = whitelist[planId];
   if (totalCount === undefined) {
     console.warn('[create-subscription] rejected unknown planId', planId);
-    return res.status(400).json({ error: 'Invalid plan' });
+    return json({ error: 'Invalid plan' }, 400);
   }
 
   // customer_notify: 0 — do NOT pre-issue the invoice at creation time.
@@ -49,7 +61,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // (user dismissed checkout, tab closed, etc.) are completely inert — Razorpay
   // never charges them. They accumulate in the dashboard but cause no harm.
   // Clean them up with:  node --env-file=.env.local scripts/diagnose-razorpay.mjs --cancel-orphans
-  const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
+  const auth = btoa(`${keyId}:${keySecret}`);
   let rzpData: any;
   try {
     const rzpRes = await fetch('https://api.razorpay.com/v1/subscriptions', {
@@ -71,12 +83,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!rzpRes.ok) {
       console.error('[create-subscription] Razorpay API error', rzpData);
-      return res.status(502).json({ error: 'Failed to create subscription' });
+      return json({ error: 'Failed to create subscription' }, 502);
     }
   } catch (e) {
     console.error('[create-subscription] network error', e);
-    return res.status(502).json({ error: 'Failed to reach payment provider' });
+    return json({ error: 'Failed to reach payment provider' }, 502);
   }
 
-  return res.status(200).json({ subscription_id: rzpData.id });
+  return json({ subscription_id: rzpData.id });
 }
+
+export const POST = handler;

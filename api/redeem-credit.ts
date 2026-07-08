@@ -1,4 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 
 function serviceClient() {
@@ -8,12 +7,26 @@ function serviceClient() {
   );
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
 
-  const { userId, reportSlug } = req.body ?? {};
+async function handler(request: Request): Promise<Response> {
+  if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
+
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body' }, 400);
+  }
+
+  const { userId, reportSlug } = body ?? {};
   if (!userId || !reportSlug) {
-    return res.status(400).json({ error: 'Missing userId or reportSlug' });
+    return json({ error: 'Missing userId or reportSlug' }, 400);
   }
 
   const db = serviceClient();
@@ -26,12 +39,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     .single();
 
   if (profileErr || !profile) {
-    return res.status(404).json({ error: 'User not found' });
+    return json({ error: 'User not found' }, 404);
   }
 
   const currentCredits: number = (profile as any).report_credits ?? 0;
   if (currentCredits <= 0) {
-    return res.status(402).json({ error: 'No credits available' });
+    return json({ error: 'No credits available' }, 402);
   }
 
   // Decrement credit first
@@ -42,7 +55,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (decrErr) {
     console.error('[redeem-credit] decrement error', decrErr);
-    return res.status(500).json({ error: 'Failed to deduct credit' });
+    return json({ error: 'Failed to deduct credit' }, 500);
   }
 
   // Unlock the report
@@ -58,8 +71,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Compensating transaction: restore the credit
     console.error('[redeem-credit] unlock error', unlockErr);
     await db.from('profiles').update({ report_credits: currentCredits }).eq('user_id', userId);
-    return res.status(500).json({ error: 'Failed to unlock report. Your credit has been restored.' });
+    return json({ error: 'Failed to unlock report. Your credit has been restored.' }, 500);
   }
 
-  return res.status(200).json({ success: true, creditsRemaining: currentCredits - 1 });
+  return json({ success: true, creditsRemaining: currentCredits - 1 });
 }
+
+export const POST = handler;
