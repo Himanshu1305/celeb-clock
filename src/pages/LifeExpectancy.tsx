@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
-import { SEO } from '@/components/SEO';
+import { SEO, WebApplicationSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
 import { RelatedTools } from '@/components/RelatedTools';
@@ -1509,6 +1509,11 @@ const LifeExpectancy = () => {
         description="How long will I live? Our free life expectancy calculator uses WHO and CDC actuarial data across 15+ health factors to estimate your lifespan. More accurate than any death clock — see the years you can gain."
         keywords="how long will I live, life expectancy calculator, death clock, when will I die, lifespan calculator, longevity calculator, how many years do I have left, life expectancy test"
         canonicalUrl="/life-expectancy"
+      />
+      <WebApplicationSchema
+        name="Life Expectancy Calculator"
+        description="Free life expectancy calculator using WHO and CDC data across 15+ health factors to estimate your lifespan and the years you can gain."
+        url="/life-expectancy"
       />
       {/* Shared result banner — shown when page opened via shared countdown URL */}
       {sharedResult && (

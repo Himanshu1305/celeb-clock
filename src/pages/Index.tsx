@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Crown, ArrowRight, ShieldCheck, Sparkles, Star, Users, Activity, Globe, FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { SEO } from '@/components/SEO';
+import { SEO, WebSiteSchema } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { AuthorBio } from '@/components/AuthorBio';
 
@@ -61,6 +61,7 @@ const Index = () => {
         keywords="age calculator, how old am I, born in 1990 how old, born in 1985 how old, born in 1995 how old, celebrity birthday match, famous birthdays today, life expectancy calculator, how long will I live, death clock, zodiac sign calculator, birthstone finder, planetary age calculator"
         canonicalUrl="/"
       />
+      <WebSiteSchema />
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <header className="flex justify-between items-center mb-8">

@@ -5,7 +5,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { NumerologyLifePath } from '@/components/NumerologyLifePath';
 import { useBirthDate } from '@/context/BirthDateContext';
-import { SEO } from '@/components/SEO';
+import { SEO, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { AgeCalculator } from '@/components/AgeCalculator';
 import { NUMEROLOGY_DATA, ALL_LIFE_PATH_NUMBERS } from '@/data/numerologyData';
@@ -41,6 +41,11 @@ export default function NumerologyPage() {
         description="Free numerology calculator using the Pythagorean method. Find your Life Path Number, explore all 12 numbers including Master Numbers 11, 22, 33 — with verified celebrity examples."
         keywords="numerology calculator, life path number, pythagorean numerology, master numbers 11 22 33, numerology calculator free"
         canonicalUrl="/numerology"
+      />
+      <WebApplicationSchema
+        name="Numerology Life Path Calculator"
+        description="Free numerology calculator — find your Life Path Number using the Pythagorean method with Master Numbers 11, 22, 33 and celebrity examples."
+        url="/numerology"
       />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>

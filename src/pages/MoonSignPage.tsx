@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { SEO, FAQSchema } from '@/components/SEO';
+import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { calculateMoonSignAndNakshatra, MOON_SIGN_DATA, NAKSHATRAS, getNakshatraLifeApplication } from '@/data/moonSignData';
 
@@ -47,6 +47,11 @@ export default function MoonSignPage() {
         description="Calculate your moon sign and nakshatra by date of birth. Free moon rashi calculator with full personality interpretations for all 12 moon signs and 27 nakshatras."
         keywords="moon sign calculator, what is my moon sign, nakshatra calculator, moon sign by date of birth India, moon rashi calculator"
         canonicalUrl="/moon-sign"
+      />
+      <WebApplicationSchema
+        name="Moon Sign Calculator"
+        description="Free moon sign and nakshatra calculator by date of birth with personality interpretations for all 12 moon signs and 27 nakshatras."
+        url="/moon-sign"
       />
       <FAQSchema items={faqItems} />
 

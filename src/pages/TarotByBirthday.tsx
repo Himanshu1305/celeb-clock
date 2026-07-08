@@ -2,7 +2,7 @@ import React, { useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { SEO, FAQSchema } from '@/components/SEO';
+import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { getTarotCardByLifePath, MAJOR_ARCANA, type TarotCard } from '@/data/tarotData';
 
@@ -270,6 +270,11 @@ export default function TarotByBirthday() {
         description="Draw your tarot card interactively — then discover your permanent Major Arcana card from your date of birth. Free animated tarot card reading with full interpretations."
         keywords="tarot card by birthday, birthday tarot card, major arcana calculator, life path tarot, tarot by date of birth"
         canonicalUrl="/tarot-card-by-birthday"
+      />
+      <WebApplicationSchema
+        name="Tarot Card by Birthday Calculator"
+        description="Free interactive tarot card reading by birthday — discover your permanent Major Arcana card from your date of birth with full interpretations."
+        url="/tarot-card-by-birthday"
       />
       <FAQSchema items={faqItems} />
 

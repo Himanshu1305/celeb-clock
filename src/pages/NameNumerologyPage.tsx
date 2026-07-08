@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { SEO, FAQSchema } from '@/components/SEO';
+import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { calculateAllNameNumbers, getLetterBreakdown, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 
@@ -50,6 +50,11 @@ export default function NameNumerologyPage() {
         description="Calculate your Expression Number, Soul Urge Number, and Personality Number from your name. Free Pythagorean name numerology calculator with full meanings."
         keywords="name numerology calculator, numerology by name, expression number calculator, soul urge number, name number meaning, personality number"
         canonicalUrl="/name-numerology"
+      />
+      <WebApplicationSchema
+        name="Name Numerology Calculator"
+        description="Free Pythagorean name numerology calculator — find your Expression Number, Soul Urge Number, and Personality Number with full meaning guides."
+        url="/name-numerology"
       />
       <FAQSchema items={faqItems} />
 

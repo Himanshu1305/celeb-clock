@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { SEO, FAQSchema } from '@/components/SEO';
+import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { getCompatibility, ZODIAC_SIGNS } from '@/data/compatibilityData';
 
@@ -95,6 +95,11 @@ export default function CompatibilityPage() {
         description="Calculate zodiac compatibility for any two signs. Free love, friendship, and work compatibility calculator for all 144 sign combinations."
         keywords="zodiac compatibility, are aries and leo compatible, horoscope compatibility, birthday compatibility calculator, love compatibility zodiac"
         canonicalUrl="/compatibility"
+      />
+      <WebApplicationSchema
+        name="Zodiac Compatibility Calculator"
+        description="Free zodiac compatibility calculator for all 144 sign combinations — love, friendship, and work compatibility across every pairing."
+        url="/compatibility"
       />
       <FAQSchema items={faqItems} />
 

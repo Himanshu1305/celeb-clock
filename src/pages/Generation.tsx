@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, WebApplicationSchema } from '@/components/SEO';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface Generation {
@@ -219,6 +219,11 @@ export default function GenerationPage() {
         description="Find out which generation you belong to — Silent Generation, Boomers, Gen X, Millennials, Gen Z, or Alpha. Dates, defining events, values, and research citations from Pew Research Center."
         keywords="what generation am I, generational guide, millennial gen z baby boomer gen x generation alpha, pew research generations"
         canonicalUrl="/generation"
+      />
+      <WebApplicationSchema
+        name="Generation Calculator"
+        description="Free generation calculator — find out if you're Gen Z, Millennial, Gen X, Boomer or another generation with Pew Research-based dates and defining events."
+        url="/generation"
       />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>

@@ -9,7 +9,7 @@ import { LifeExpectancyCTA } from '@/components/LifeExpectancyCTA';
 import { GenerationLabel } from '@/components/GenerationLabel';
 import { ReviewForm } from '@/components/ReviewForm';
 import { useBirthDate } from '@/context/BirthDateContext';
-import { SEO } from '@/components/SEO';
+import { SEO, WebApplicationSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
 import { RelatedTools } from '@/components/RelatedTools';
@@ -25,6 +25,11 @@ const AgeCalculatorPage = () => {
         description="The best free age calculator online. Get your exact age in years, months, days, hours, minutes & seconds — updated live. Accurate, private, no sign-up."
         keywords="best age calculator, age calculator online, exact age, age in days, age in seconds, free age calculator, birthday calculator"
         canonicalUrl="/age-calculator"
+      />
+      <WebApplicationSchema
+        name="Age Calculator"
+        description="Free online age calculator — find your exact age in years, months, days, hours, minutes and seconds. Live countdown, no sign-up required."
+        url="/age-calculator"
       />
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-12">

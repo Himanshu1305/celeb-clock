@@ -258,6 +258,61 @@ export const FAQSchema = ({ items }: { items: FAQItem[] }) => {
   );
 };
 
+// WebSite + Organization schema for homepage
+export const WebSiteSchema = () => {
+  const schema = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'BornClock',
+      url: SITE_URL,
+      description: DEFAULT_DESCRIPTION,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: { '@type': 'EntryPoint', urlTemplate: `${SITE_URL}/celebrity-birthday?q={search_term_string}` },
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'BornClock',
+      url: SITE_URL,
+      logo: `${SITE_URL}/bornclock-logo.png`,
+      sameAs: ['https://twitter.com/bornclock'],
+    },
+  ];
+
+  return (
+    <Helmet>
+      {schema.map((s, i) => (
+        <script key={i} type="application/ld+json">{JSON.stringify(s)}</script>
+      ))}
+    </Helmet>
+  );
+};
+
+// WebApplication schema for calculator/tool pages
+export const WebApplicationSchema = ({ name, description, url }: { name: string; description: string; url: string }) => {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name,
+    description,
+    url: `${SITE_URL}${url}`,
+    applicationCategory: 'LifestyleApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    provider: { '@type': 'Organization', name: 'BornClock', url: SITE_URL },
+  };
+
+  return (
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(schema)}</script>
+    </Helmet>
+  );
+};
+
 // HowTo Schema for calculator pages
 interface HowToStep {
   name: string;

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ReferenceLine, ResponsiveContainer } from 'recharts';
-import { SEO, FAQSchema } from '@/components/SEO';
+import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { calculateBiorhythm, getBiorhythmStatus, getBiorhythmInsight, getBiorhythmSeries } from '@/data/biorhythmData';
 
@@ -74,6 +74,11 @@ export default function BiorhythmPage() {
         description="Calculate your biorhythm chart by date of birth. Free biorhythm calculator showing your 30-day physical, emotional, and intellectual cycles with peak day predictions."
         keywords="biorhythm calculator, biorhythm chart, physical emotional intellectual cycle calculator, biorhythm today"
         canonicalUrl="/biorhythm"
+      />
+      <WebApplicationSchema
+        name="Biorhythm Calculator"
+        description="Free biorhythm chart calculator by date of birth — see your physical, emotional, and intellectual cycles with 30-day peak day predictions."
+        url="/biorhythm"
       />
       <FAQSchema items={faqItems} />
 

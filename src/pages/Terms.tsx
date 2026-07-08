@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SEO } from '@/components/SEO';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
@@ -8,6 +9,13 @@ import { Separator } from '@/components/ui/separator';
 
 export default function Terms() {
   return (
+    <>
+      <SEO
+        title="Terms of Service | BornClock"
+        description="Read BornClock's terms of service covering usage rights, subscriptions, privacy, and user responsibilities for our birthday and age calculator tools."
+        canonicalUrl="/terms"
+        ogType="website"
+      />
     <div className="min-h-screen bg-gradient-cosmic">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
@@ -156,5 +164,6 @@ export default function Terms() {
       </div>
       <Footer />
     </div>
+    </>
   );
 }

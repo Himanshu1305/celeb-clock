@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SEO } from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
@@ -60,6 +61,13 @@ export default function Contact() {
   };
 
   return (
+    <>
+      <SEO
+        title="Contact BornClock — Get in Touch"
+        description="Reach out to the BornClock team with questions, feedback, or partnership ideas. We're here to help with any birthday insights or calculator questions."
+        canonicalUrl="/contact"
+        ogType="website"
+      />
     <div className="min-h-screen bg-gradient-cosmic">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
@@ -212,5 +220,6 @@ export default function Contact() {
       </div>
       <Footer />
     </div>
+    </>
   );
 }

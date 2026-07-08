@@ -6,7 +6,7 @@ import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { SEO, FAQSchema } from '@/components/SEO';
+import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { Globe, Search, ArrowUpDown, ChevronDown, ChevronUp, Share2 } from 'lucide-react';
 import PageTagline from '@/components/PageTagline';
 import {
@@ -278,6 +278,11 @@ const CountryComparison = () => {
         description="Shocking interactive comparison: How does your country affect your lifespan? Japan reversed from G7's shortest to longest life expectancy in 60 years. The USA spends more on healthcare than any nation yet ranks 50th. See your personalized forecast across 57 countries. Free."
         keywords="life expectancy by country, country longevity comparison, why does japan have highest life expectancy, USA life expectancy vs other countries, how does country affect lifespan, longevity by country, country life expectancy calculator"
         canonicalUrl="/country-comparison"
+      />
+      <WebApplicationSchema
+        name="Country Life Expectancy Comparison"
+        description="Interactive life expectancy comparison tool across 57 countries — see how your country affects your lifespan with WHO and CDC data."
+        url="/country-comparison"
       />
 
       {/* ── STICKY NAV ────────────────────────────────────────────────────── */}
