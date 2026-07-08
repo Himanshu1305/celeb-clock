@@ -1,0 +1,19 @@
+name = "bornclock"
+compatibility_date = "2026-07-08"
+# nodejs_compat: provides process.env shim, Buffer, crypto globals.
+# All api/ handlers use process.env only for plain string reads (secrets/config) —
+# no process.env.NODE_ENV conditional logic — so this flag is sufficient.
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+# Secrets added via CF dashboard — do not add secret values here.
+# Required secrets: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, RAZORPAY_KEY_SECRET,
+# RAZORPAY_WEBHOOK_SECRET, VITE_RAZORPAY_KEY_ID, VITE_RAZORPAY_PLAN_INDIA_MONTHLY,
+# VITE_RAZORPAY_PLAN_INDIA_ANNUAL, VITE_RAZORPAY_PLAN_GLOBAL_MONTHLY,
+# VITE_RAZORPAY_PLAN_GLOBAL_ANNUAL, RESEND_API_KEY, ANTHROPIC_API_KEY,
+# CRON_SECRET, PRODUCTION_URL
+[vars]
+# placeholder — add non-secret overrides here if needed
+
+[triggers]
+crons = ["0 6 * * *"]

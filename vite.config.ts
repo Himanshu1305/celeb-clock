@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => ({
     host: "0.0.0.0",
     port: 3000,
     allowedHosts: true,
+    // For CF local dev: replace vercel dev with: wrangler pages dev dist --port 3001
     proxy: {
       "/api": "http://localhost:3001",
     },
