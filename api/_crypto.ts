@@ -12,6 +12,7 @@
 // subtle.verify returns false rather than throwing — the caller always gets
 // a clean false → 403, never a 500.
 export function hexToBytes(hex: string): Uint8Array {
+  if (hex && !/^[0-9a-f]+$/i.test(hex)) return new Uint8Array(0);
   if (!hex || hex.length % 2 !== 0) return new Uint8Array(0);
   const bytes = new Uint8Array(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
