@@ -4,6 +4,10 @@ compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 main = "functions/_worker.ts"
 workers_dev = true
 
+routes = [
+  { pattern = "staging.bornclock.com", custom_domain = true }
+]
+
 [assets]
 directory = "./dist"
 binding = "ASSETS"
