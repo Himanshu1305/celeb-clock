@@ -9,7 +9,6 @@ import { POST as sendEmail }           from '../api/send-email.js';
 import { POST as verifyPayment }       from '../api/verify-payment.js';
 import { GET  as dailyCronGet,
          POST as dailyCronPost }       from '../api/daily-email-cron.js';
-import { GET  as debugEnv }            from '../api/debug-env.js';
 import cronHandler                     from './_cron/daily-email.js';
 
 type Env = {
@@ -65,10 +64,6 @@ export default {
       return request.method === 'GET' ? dailyCronGet(request) : dailyCronPost(request);
     }
 
-    // Temporary debug endpoint — remove after diagnosing env issues
-    if (pathname === '/api/debug-env') {
-      return debugEnv(request, env as Record<string, string>);
-    }
 
     const handler = apiRoutes[pathname];
     if (!handler) {
