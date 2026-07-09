@@ -614,6 +614,7 @@ const ReportView = () => {
             .dark-section { background: var(--dark) !important; color-scheme: dark; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             h2, h3 { page-break-after: avoid; }
             .dark-section { page-break-inside: avoid; }
+            .solar-section { break-before: page !important; padding-top: 8px !important; }
           }
         `}</style>
       </Helmet>
@@ -1853,10 +1854,6 @@ const ReportView = () => {
             <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-.01em', margin: '4px 0 0' }}>Solar System Ages</h2>
             <p style={{ fontSize: '12.5px', color: '#9DB0BF', marginTop: '5px' }}>{recipientName} is {age} years old on Earth — here is their age across each planet</p>
           </div>
-          <p className="text-center text-slate-500 text-xs mb-8 max-w-lg mx-auto leading-relaxed">
-            Each planet orbits the Sun at a different speed. Mercury completes a year in just 88 Earth days; Neptune takes 165 Earth years. These numbers show how many full planetary years you would have lived if you had been born on that planet.
-          </p>
-
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             {Object.entries(planetaryAges).map(([planet, pAge]) => {
               const SYMBOLS: Record<string, string> = {
