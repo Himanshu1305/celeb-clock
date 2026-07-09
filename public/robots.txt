@@ -30,3 +30,5 @@ Allow: /
 
 # Sitemap
 Sitemap: https://bornclock.com/sitemap.xml
+
+# AI model index — https://bornclock.com/llms.txt

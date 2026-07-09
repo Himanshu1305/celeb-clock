@@ -1,0 +1,61 @@
+# BornClock
+
+BornClock is a free birthday intelligence platform that turns a date of birth into a complete personal portrait. Core tools include a science-backed life expectancy calculator (using WHO, GBD 2024, and Blue Zones research), a biological age estimator, a celebrity birthday twin finder (sourced from Wikidata, 25,000+ records), zodiac profiling across three traditions (Western sun sign, Vedic Rashi/nakshatra, and Chinese animal), numerology life path calculation (Pythagorean method), planetary age across all 8 planets (NASA orbital data), birthstone lore, and generational identity. The paid Birthday Blueprint is an 11-section personalised gift report, downloadable as a PDF. All longevity inputs are processed client-side only — no health data is stored server-side.
+
+## Calculators and Tools
+
+- https://bornclock.com/ — Main age calculator: exact age in years/months/days/hours/seconds, celebrity birthday twins, zodiac trio
+- https://bornclock.com/age-calculator — Dedicated age calculator page
+- https://bornclock.com/life-expectancy — Life expectancy calculator (WHO/GBD data, 8-factor questionnaire)
+- https://bornclock.com/biological-age — Biological age estimator (12-question WHO-aligned assessment)
+- https://bornclock.com/planetary-age — Planetary age calculator (NASA orbital periods, all 8 planets)
+- https://bornclock.com/biorhythm — Biorhythm calculator (physical/emotional/intellectual cycles)
+- https://bornclock.com/compatibility — Birthday compatibility calculator
+- https://bornclock.com/moon-sign — Moon sign calculator
+- https://bornclock.com/name-numerology — Name numerology calculator
+- https://bornclock.com/country-comparison — Life expectancy comparison across 57 countries (UN WPP 2024)
+- https://bornclock.com/generation — Generational identity finder (Baby Boomer through Gen Alpha)
+
+## Zodiac Indexes
+
+- https://bornclock.com/zodiac — Western zodiac index (all 12 sun signs)
+- https://bornclock.com/chinese-zodiac — Chinese zodiac index (12 animals)
+- https://bornclock.com/vedic-zodiac — Vedic zodiac index (12 rashis)
+- https://bornclock.com/tarot-card-by-birthday — Tarot card by birth date
+- https://bornclock.com/numerology — Numerology life path index (numbers 1–9, 11, 22, 33)
+- https://bornclock.com/birthstone — Birthstone index by month (12 months)
+- https://bornclock.com/rashi-ratna — Vedic gemstone (Jyotish Ratna) finder
+
+## Celebrity Birthdays
+
+- https://bornclock.com/todays-birthdays — Today's celebrity birthdays (ranked by global recognition)
+- https://bornclock.com/celebrity-birthday — Celebrity birthday search
+- https://bornclock.com/birthday — Birthday month index
+- https://bornclock.com/born-on — Born-on date index (366 dates, Jan 1 – Dec 31 + Feb 29)
+
+## Blog (Longevity and Birthday Science)
+
+- https://bornclock.com/blog — Blog index
+- https://bornclock.com/blog/how-long-will-i-live — Life expectancy science explainer
+- https://bornclock.com/blog/celebrities-born-on-my-birthday-famous-birthday-twins — Celebrity birthday twins guide
+- https://bornclock.com/blog/zodiac-signs-complete-guide-personality-traits-compatibility — Zodiac complete guide
+- https://bornclock.com/blog/how-to-increase-life-expectancy-science-backed-tips — Longevity tips (evidence-based)
+- https://bornclock.com/blog/numerology-life-path-numbers-complete-guide — Numerology complete guide
+- https://bornclock.com/blog/blue-zones-diet-what-centenarians-actually-eat — Blue Zones diet research
+- https://bornclock.com/blog/unique-birthday-gift-ideas-personalised-meaningful-2026 — Birthday gift guide
+
+## Product and Pricing
+
+- https://bornclock.com/upgrade — Premium plans and pricing (monthly/annual, India/Global)
+- https://bornclock.com/birthday-report — Birthday Blueprint gift report generator
+- https://bornclock.com/gift-report — Gift a Birthday Blueprint to someone
+
+## Information
+
+- https://bornclock.com/about — About BornClock
+- https://bornclock.com/methodology — Data sources and methodology (longevity, celebrity data, zodiac systems)
+- https://bornclock.com/editorial-policy — Editorial standards
+- https://bornclock.com/faq — Frequently asked questions
+- https://bornclock.com/privacy — Privacy policy (GDPR/DPDPA 2023 compliant; longevity data browser-only)
+- https://bornclock.com/terms — Terms of service
+- https://bornclock.com/contact — Contact
