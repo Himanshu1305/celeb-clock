@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { supabase } from '@/integrations/supabase/client';
 import { SEO } from '@/components/SEO';
 import { useToast } from '@/hooks/use-toast';
@@ -48,13 +49,38 @@ interface Stats {
   boostCount: number;
 }
 
+interface BusinessMetrics {
+  // Signups
+  signupsTotal: number;
+  signups7d: number;
+  signups30d: number;
+  signupsChart: { date: string; count: number }[];
+  // Subscriptions by status
+  subActive: number;
+  subCancelled: number;
+  subFree: number;
+  // Reports
+  reportsTotal: number;
+  reports7d: number;
+  reports30d: number;
+  reportsPaid: number;
+  reportsPaid30d: number;
+  conversion30d: number | null;
+  // Revenue
+  revenueTotal: number | null;
+  revenueCount: number | null;
+  revenue30d: number | null;
+  revenueCount30d: number | null;
+  revenueNote: string | null;
+}
+
 interface ConfirmState {
   show: boolean;
   message: string;
   onConfirm: () => Promise<void>;
 }
 
-type Section = 'overview' | 'users' | 'countries' | 'usage' | 'promo' | 'system' | 'emails';
+type Section = 'metrics' | 'overview' | 'users' | 'countries' | 'usage' | 'promo' | 'system' | 'emails';
 
 // cast for tables that may not yet be in generated Database types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -106,7 +132,10 @@ function planBadge(u: UserProfile) {
 export default function Admin() {
   const { toast } = useToast();
 
-  const [section, setSection] = useState<Section>('overview');
+  const [section, setSection] = useState<Section>('metrics');
+
+  const [metrics, setMetrics] = useState<BusinessMetrics | null>(null);
+  const [metricsLoading, setMetricsLoading] = useState(true);
 
   const [stats, setStats] = useState<Stats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
@@ -186,6 +215,114 @@ export default function Admin() {
     }
   };
 
+  const fetchMetrics = async () => {
+    setMetricsLoading(true);
+    try {
+      const now = new Date();
+      const ago7  = new Date(now.getTime() - 7  * 86_400_000).toISOString();
+      const ago30 = new Date(now.getTime() - 30 * 86_400_000).toISOString();
+
+      // --- Signups ---
+      const [
+        { count: signupsTotal },
+        { count: signups7d },
+        { count: signups30d },
+        { data: signups30dRows },
+      ] = await Promise.all([
+        supabase.from('profiles').select('*', { count: 'exact', head: true }),
+        supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', ago7),
+        supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', ago30),
+        supabase.from('profiles').select('created_at').gte('created_at', ago30),
+      ]);
+
+      // Build 30-day chart data
+      const dayCounts: Record<string, number> = {};
+      (signups30dRows ?? []).forEach((r: { created_at: string }) => {
+        const d = r.created_at.slice(0, 10);
+        dayCounts[d] = (dayCounts[d] ?? 0) + 1;
+      });
+      const signupsChart: { date: string; count: number }[] = [];
+      for (let i = 29; i >= 0; i--) {
+        const d = new Date(now.getTime() - i * 86_400_000).toISOString().slice(0, 10);
+        signupsChart.push({ date: d.slice(5), count: dayCounts[d] ?? 0 });
+      }
+
+      // --- Subscriptions ---
+      const { data: subRows } = await supabase.from('profiles').select('subscription_status');
+      const subCounts: Record<string, number> = {};
+      (subRows ?? []).forEach((r: { subscription_status: string | null }) => {
+        const s = r.subscription_status ?? 'free';
+        subCounts[s] = (subCounts[s] ?? 0) + 1;
+      });
+
+      // --- Reports ---
+      const [
+        { count: reportsTotal },
+        { count: reports7d },
+        { count: reports30d },
+        { count: reportsPaid },
+        { count: reportsPaid30d },
+      ] = await Promise.all([
+        db.from('birthday_reports').select('*', { count: 'exact', head: true }),
+        db.from('birthday_reports').select('*', { count: 'exact', head: true }).gte('created_at', ago7),
+        db.from('birthday_reports').select('*', { count: 'exact', head: true }).gte('created_at', ago30),
+        db.from('birthday_reports').select('*', { count: 'exact', head: true }).eq('is_paid', true),
+        db.from('birthday_reports').select('*', { count: 'exact', head: true }).eq('is_paid', true).gte('created_at', ago30),
+      ]);
+      const conversion30d = (reports30d && reportsPaid30d != null && reports30d > 0)
+        ? Math.round(((reportsPaid30d ?? 0) / reports30d) * 100)
+        : null;
+
+      // --- Revenue (payments table — graceful if missing/no policy) ---
+      let revenueTotal: number | null = null;
+      let revenueCount: number | null = null;
+      let revenue30d: number | null = null;
+      let revenueCount30d: number | null = null;
+      let revenueNote: string | null = null;
+      try {
+        const [{ data: allPayments }, { data: payments30dRows }] = await Promise.all([
+          db.from('payments').select('amount'),
+          db.from('payments').select('amount').gte('created_at', ago30),
+        ]);
+        if (allPayments) {
+          revenueTotal = (allPayments as { amount: number }[]).reduce((s, p) => s + (p.amount ?? 0), 0);
+          revenueCount = allPayments.length;
+        }
+        if (payments30dRows) {
+          revenue30d = (payments30dRows as { amount: number }[]).reduce((s, p) => s + (p.amount ?? 0), 0);
+          revenueCount30d = payments30dRows.length;
+        }
+      } catch {
+        revenueNote = 'payments table not accessible (RLS policy needed)';
+      }
+
+      setMetrics({
+        signupsTotal: signupsTotal ?? 0,
+        signups7d: signups7d ?? 0,
+        signups30d: signups30d ?? 0,
+        signupsChart,
+        subActive: subCounts['active'] ?? 0,
+        subCancelled: subCounts['cancelled'] ?? 0,
+        subFree: subCounts['free'] ?? (signupsTotal ?? 0) - (subCounts['active'] ?? 0) - (subCounts['cancelled'] ?? 0),
+        reportsTotal: reportsTotal ?? 0,
+        reports7d: reports7d ?? 0,
+        reports30d: reports30d ?? 0,
+        reportsPaid: reportsPaid ?? 0,
+        reportsPaid30d: reportsPaid30d ?? 0,
+        conversion30d,
+        revenueTotal,
+        revenueCount,
+        revenue30d,
+        revenueCount30d,
+        revenueNote,
+      });
+    } catch (e) {
+      console.error('fetchMetrics:', e);
+    } finally {
+      setMetricsLoading(false);
+    }
+  };
+
   const fetchUsers = async () => {
     setUsersLoading(true);
     try {
@@ -225,7 +362,7 @@ export default function Admin() {
     }
   };
 
-  useEffect(() => { fetchStats(); }, []);
+  useEffect(() => { fetchStats(); fetchMetrics(); }, []);
 
   useEffect(() => {
     if (section === 'users' && users.length === 0) fetchUsers();
@@ -333,6 +470,7 @@ export default function Admin() {
   // ── Sidebar nav items ─────────────────────────────────────────────────────
 
   const navItems: { id: Section; label: string; Icon: React.ElementType }[] = [
+    { id: 'metrics',  label: 'Business Metrics', Icon: BarChart3 },
     { id: 'overview', label: 'Overview', Icon: LayoutDashboard },
     { id: 'users',    label: 'Users',    Icon: Users },
     { id: 'countries',label: 'Countries',Icon: Globe },
@@ -351,6 +489,90 @@ export default function Admin() {
   const totalCountryUsers = countries.reduce((s, [, n]) => s + n, 0);
 
   // ── Section renders ───────────────────────────────────────────────────────
+
+  const renderMetrics = () => (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">Business Metrics</h2>
+        <Button variant="outline" size="sm" onClick={fetchMetrics} className="gap-2">
+          <RefreshCw className="w-4 h-4" /> Refresh
+        </Button>
+      </div>
+      {metricsLoading ? (
+        <p className="text-muted-foreground animate-pulse">Loading metrics…</p>
+      ) : metrics ? (
+        <>
+          {/* Signups */}
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Signups</p>
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              <StatCard label="Total Users" value={metrics.signupsTotal} Icon={Users} color="bg-blue-500" />
+              <StatCard label="New (7 days)" value={metrics.signups7d} Icon={Clock} color="bg-green-500" />
+              <StatCard label="New (30 days)" value={metrics.signups30d} Icon={UserCheck} color="bg-teal-500" />
+            </div>
+            <Card>
+              <CardHeader><CardTitle className="text-sm font-medium text-muted-foreground">Signups — last 30 days</CardTitle></CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={140}>
+                  <LineChart data={metrics.signupsChart}>
+                    <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={6} />
+                    <YAxis tick={{ fontSize: 10 }} allowDecimals={false} />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="count" stroke="#4F46E5" dot={false} strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Subscriptions */}
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Subscriptions</p>
+            <div className="grid grid-cols-3 gap-4">
+              <StatCard label="Active" value={metrics.subActive} Icon={Crown} color="bg-amber-500"
+                sub={metrics.signupsTotal ? `${Math.round((metrics.subActive / metrics.signupsTotal) * 100)}% of users` : undefined} />
+              <StatCard label="Cancelled" value={metrics.subCancelled} Icon={AlertTriangle} color="bg-red-400" />
+              <StatCard label="Free / Other" value={metrics.subFree} Icon={Users} color="bg-gray-400" />
+            </div>
+          </div>
+
+          {/* Reports */}
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Birthday Reports</p>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <StatCard label="Total Reports" value={metrics.reportsTotal} Icon={Gift} color="bg-pink-500" />
+              <StatCard label="Paid Reports" value={metrics.reportsPaid} Icon={CheckCircle} color="bg-green-600"
+                sub={metrics.reportsTotal ? `${Math.round((metrics.reportsPaid / metrics.reportsTotal) * 100)}% paid` : undefined} />
+              <StatCard label="New (30d)" value={metrics.reports30d} Icon={Clock} color="bg-indigo-500" />
+              <StatCard label="Conversion (30d)"
+                value={metrics.conversion30d != null ? `${metrics.conversion30d}%` : '—'}
+                Icon={BarChart3} color="bg-purple-500"
+                sub={metrics.reportsPaid30d ? `${metrics.reportsPaid30d} paid of ${metrics.reports30d}` : undefined} />
+            </div>
+          </div>
+
+          {/* Revenue */}
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Revenue</p>
+            {metrics.revenueNote ? (
+              <p className="text-sm text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">{metrics.revenueNote}</p>
+            ) : (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <StatCard label="Revenue (all-time)" value={metrics.revenueTotal != null ? `₹${(metrics.revenueTotal / 100).toLocaleString('en-IN')}` : '—'} Icon={BarChart3} color="bg-emerald-600"
+                  sub={metrics.revenueCount != null ? `${metrics.revenueCount} transactions` : undefined} />
+                <StatCard label="Revenue (30d)" value={metrics.revenue30d != null ? `₹${(metrics.revenue30d / 100).toLocaleString('en-IN')}` : '—'} Icon={Clock} color="bg-emerald-500"
+                  sub={metrics.revenueCount30d != null ? `${metrics.revenueCount30d} transactions` : undefined} />
+              </div>
+            )}
+          </div>
+
+          <p className="text-xs text-muted-foreground">Emails sent metric skipped — no emails_log table yet.</p>
+        </>
+      ) : (
+        <p className="text-muted-foreground">No metrics data.</p>
+      )}
+    </div>
+  );
 
   const renderOverview = () => (
     <div className="space-y-6">
@@ -796,6 +1018,7 @@ export default function Admin() {
   };
 
   const sectionContent: Record<Section, () => React.JSX.Element> = {
+    metrics:   renderMetrics,
     overview:  renderOverview,
     users:     renderUsers,
     countries: renderCountries,
