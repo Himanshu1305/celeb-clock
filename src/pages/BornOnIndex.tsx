@@ -20,6 +20,7 @@ export default function BornOnIndex() {
         description="Browse all famous people by birthday. Select any date from January 1 to December 31 to see celebrities born on that day, their zodiac sign, and birthday insights."
         canonicalUrl="/born-on"
         ogType="website"
+        ogImage="https://bornclock.com/og/born-on.png"
       />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">

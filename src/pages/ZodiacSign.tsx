@@ -78,6 +78,7 @@ export default function ZodiacSign() {
         description={data.seoDescription}
         keywords={data.seoKeywords}
         canonicalUrl={`/zodiac/${data.slug}`}
+        ogImage="https://bornclock.com/og/zodiac.png"
       />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>

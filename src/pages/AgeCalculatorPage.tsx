@@ -25,6 +25,7 @@ const AgeCalculatorPage = () => {
         description="The best free age calculator online. Get your exact age in years, months, days, hours, minutes & seconds — updated live. Accurate, private, no sign-up."
         keywords="best age calculator, age calculator online, exact age, age in days, age in seconds, free age calculator, birthday calculator"
         canonicalUrl="/age-calculator"
+        ogImage="https://bornclock.com/og/calculator.png"
       />
       <WebApplicationSchema
         name="Age Calculator"

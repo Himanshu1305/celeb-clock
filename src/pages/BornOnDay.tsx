@@ -135,6 +135,7 @@ export default function BornOnDay() {
         description={metaDesc}
         canonicalUrl={`/born-on/${slug}`}
         ogType="website"
+        ogImage="https://bornclock.com/og/born-on.png"
       />
       {jsonLd && (
         <Helmet>

@@ -64,6 +64,7 @@ export default function ChineseZodiacSign() {
         description={`${capitalised} Chinese Zodiac: personality, compatibility, lucky elements, famous ${capitalised}s, and 2026 outlook. Years: ${data.years.slice(0,5).join(', ')}…`}
         keywords={`year of the ${slug}, ${slug} chinese zodiac, ${slug} personality, ${slug} compatibility, chinese zodiac ${slug}`}
         canonicalUrl={`/chinese-zodiac/${slug}`}
+        ogImage="https://bornclock.com/og/zodiac.png"
       />
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-8">

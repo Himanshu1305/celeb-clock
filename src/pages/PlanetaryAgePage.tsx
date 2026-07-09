@@ -152,6 +152,7 @@ const PlanetaryAgePage = () => {
         description="How old are you on other planets? On Mercury you have hundreds of birthdays. On Neptune you've barely been born. It rains diamonds on Neptune. The sunset on Mars is blue. Calculate your cosmic age across all 8 planets using real NASA data. Mind-blowing and shareable."
         keywords="how old am I on other planets, age on Mars calculator, age on Jupiter, planetary age calculator, how old would I be on Mars, age on other planets NASA, cosmic age calculator, how old am I on Mercury, my age on other planets"
         canonicalUrl="/planetary-age"
+        ogImage="https://bornclock.com/og/calculator.png"
       />
       <FAQSchema items={FAQ_ITEMS} />
       <Helmet>

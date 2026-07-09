@@ -18,7 +18,7 @@ interface SEOProps {
 
 const SITE_NAME = 'BornClock - Age & Birthday Calculator';
 const SITE_URL = 'https://bornclock.com';
-const DEFAULT_OG_IMAGE = `${SITE_URL}/bornclock-logo.png`;
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og/default.png`;
 const TWITTER_HANDLE = '@bornclock';
 const DEFAULT_DESCRIPTION = 'Know your time. Live it well. Life expectancy, birthday insights, and the science of a longer life — all from your date of birth. Free at BornClock.';
 

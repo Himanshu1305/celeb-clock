@@ -41,6 +41,7 @@ export default function VedicZodiacSign() {
         description={`${rashiName} Rashi in Jyotish: personality, ruling planet ${signInfo.ruling_planet}, lucky gemstone ${data.lucky_gemstone}, compatibility, and Ayurveda connection. Complete Vedic astrology guide.`}
         keywords={`${rashiName.toLowerCase()} rashi, ${slug} rashi, vedic ${signInfo.english.toLowerCase()}, jyotish ${rashiName.toLowerCase()}, ${signInfo.english.toLowerCase()} vedic astrology`}
         canonicalUrl={`/vedic-zodiac/${slug}`}
+        ogImage="https://bornclock.com/og/zodiac.png"
       />
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-8">

@@ -76,6 +76,7 @@ export default function Zodiac() {
         description="Complete guide to all 12 zodiac signs — dates, personality traits, elements, mythology, and what science says about astrology. Sourced from Campion (2009) and Sachs (1952)."
         keywords="zodiac signs, all 12 zodiac signs, zodiac dates, zodiac traits, western astrology, zodiac compatibility, zodiac elements"
         canonicalUrl="/zodiac"
+        ogImage="https://bornclock.com/og/zodiac.png"
       />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>

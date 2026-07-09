@@ -49,6 +49,7 @@ export default function VedicZodiac() {
         description="Calculate your Vedic Rashi (Indian zodiac sign) using the sidereal Jyotish system. Compare your Western and Vedic signs and explore all 12 rashis with their ruling planets, gemstones, and Ayurveda connections."
         canonicalUrl="/vedic-zodiac"
         keywords="vedic zodiac, rashi calculator, vedic astrology, jyotish, sidereal zodiac, indian astrology, ayanamsa, indian zodiac sign"
+        ogImage="https://bornclock.com/og/zodiac.png"
       />
       <FAQSchema items={FAQ_ITEMS} />
 

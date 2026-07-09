@@ -168,6 +168,7 @@ const BirthdayReport = () => {
         description="Create a personalised birthday report: celebrity twins, zodiac profiles, numerology, birthstone, planetary ages, and a personalised message. The birthday gift they'll never forget."
         keywords="birthday report gift, personalised birthday gift, birthday intelligence report, zodiac birthday gift, celebrity birthday twins, numerology birthday"
         canonicalUrl="/birthday-report"
+        ogImage="https://bornclock.com/og/report.png"
       />
 
       {/* ── Nav ──────────────────────────────────────────────────────────── */}

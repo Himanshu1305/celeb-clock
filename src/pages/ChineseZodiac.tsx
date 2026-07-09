@@ -66,6 +66,7 @@ export default function ChineseZodiac() {
         description="Discover your Chinese Zodiac animal, element, and yin/yang energy. Enter your date of birth for instant results with traits and famous people born under your sign."
         canonicalUrl="/chinese-zodiac"
         keywords="chinese zodiac calculator, chinese zodiac sign, year of the rat, chinese astrology, zodiac animal, five elements"
+        ogImage="https://bornclock.com/og/zodiac.png"
       />
       <FAQSchema items={FAQ_ITEMS} />
 
