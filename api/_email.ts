@@ -95,13 +95,15 @@ function welcomeEmail(name: string, trialDays: number = 7): { subject: string; h
 <h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:#111827;">
   You're in, ${name}. 🎂
 </h1>
-<p style="margin:0 0 24px;font-size:15px;color:#6b7280;">
+<p style="margin:0 0 16px;font-size:15px;color:#6b7280;">
   Most people live their whole life without knowing this stuff.
 </p>
 
-<p style="margin:0 0 20px;font-size:15px;color:#374151;line-height:1.7;">
-  BornClock turns your date of birth into something you've never seen before — your real biological age, how long you're likely to live, what you could change to add years, and which celebrity shares your exact birthday. It starts with one number. It tells you a lot.
-</p>
+<div style="background:#f0fdf4;border-left:3px solid #16a34a;border-radius:0 6px 6px 0;padding:12px 16px;margin-bottom:20px;">
+  <p style="margin:0;font-size:13px;color:#166534;line-height:1.5;">
+    Built on peer-reviewed longevity research and real celebrity birth records — not horoscopes pretending to be science.
+  </p>
+</div>
 
 <p style="font-size:15px;font-weight:600;color:#111827;margin:0 0 12px;">
   Your ${trialDays}-day premium trial is live. Start here:
@@ -113,6 +115,7 @@ function welcomeEmail(name: string, trialDays: number = 7): { subject: string; h
   ${featureItem('🤖', '<strong>AI Longevity Coach</strong> — ask it anything about your longevity results.')}
   ${featureItem('🪐', '<strong>Planetary Age</strong> — you\'re only 15 on Mars. Probably.')}
   ${featureItem('🌟', '<strong>Celebrity Birthday Twins</strong> — who shares your exact birthday?')}
+  ${featureItem('🎁', '<strong>Birthday Blueprint</strong> — gift a personalised 11-section report to anyone.')}
 </table>
 
 ${divider()}
