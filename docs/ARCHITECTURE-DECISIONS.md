@@ -44,6 +44,10 @@ Stack: Vite + React + TS + Tailwind + shadcn + Supabase + Vercel + Razorpay + Re
 
 5. **Internal HTTP self-fetch anti-pattern** — Vercel serverless functions must not fetch their own `/api/*` endpoints. The URL construction fails on Preview (hits wrong deployment) and localhost (SSL mismatch). Solution: extract shared logic into `api/_lib/*.ts` with `.js` import extensions and import directly. The `_`-prefix keeps Vercel from treating the file as a route while still bundling it as a dependency.
 
+6. **wrangler secret extraction — strip quotes before piping** — `.env.local` has BOTH quoted (`KEY="value"`) and unquoted (`KEY=value`) lines. Any `wrangler secret put` pipeline must use: `grep '^NAME=' .env.local | cut -d'=' -f2 | tr -d '"' | tr -d '\n'` (cut on `=`, then strip quotes) — NOT `cut -d'"' -f2`, which silently produces an **empty secret** for unquoted lines. Empty secrets pass `wrangler secret list` checks (name exists, counts correct) but fail at runtime — the Worker sees an empty string, the whitelist/guard that depends on the value is empty, and the API returns an error that looks like a code bug. After any secret upload, verify behavior with a real API call against the live Worker, not just `wrangler secret list`.
+
+7. **CF Workers Builds does NOT auto-deploy on every git push to `develop`** — deploys observed only on secret changes and manual wrangler deploy runs. `wrangler deployments list` after a push will show no new entry. Until this is understood/fixed: after pushing, check the CF dashboard Deployments tab for a new build, or trigger one via a `wrangler secret put` touch on any existing secret. Do not assume "pushed + 180s = deployed and live."
+
 ---
 
 ## 3. Print architecture (Birthday report)
