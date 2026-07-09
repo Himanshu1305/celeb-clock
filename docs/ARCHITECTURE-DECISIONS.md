@@ -48,6 +48,8 @@ Stack: Vite + React + TS + Tailwind + shadcn + Supabase + Vercel + Razorpay + Re
 
 7. **CF Workers Builds does NOT auto-deploy on every git push to `develop`** — deploys observed only on secret changes and manual wrangler deploy runs. `wrangler deployments list` after a push will show no new entry. Until this is understood/fixed: after pushing, check the CF dashboard Deployments tab for a new build, or trigger one via a `wrangler secret put` touch on any existing secret. Do not assume "pushed + 180s = deployed and live."
 
+8. **CF deploy-on-push root cause — NO GitHub integration exists (2026-07-09)** — `wrangler deployments list` shows all code deploys as `Source: Unknown (deployment)`, never `Source: GitHub`. This means there is NO Cloudflare GitHub integration and NO GitHub Actions configured. All code deploys to date have been manual `npx wrangler deploy` runs. "Non-production branch uses version-upload not deploy" hypothesis does NOT apply — there is no branch config at all. **Fix options (choose one):** (a) Add `.github/workflows/deploy-cf.yml` that runs `npx wrangler deploy` on push to `develop` (recommended — gives CI visibility, commit SHA in deploy message); (b) Enable CF's GitHub integration in the Workers dashboard ("Connect to Git" → select repo → production branch = `develop`) — simpler but less visible. Until either is set up, deploy manually after each push: `npx wrangler deploy`.
+
 ---
 
 ## 3. Print architecture (Birthday report)
