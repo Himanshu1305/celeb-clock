@@ -12,7 +12,7 @@
  */
 
 import { createServer } from 'http';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, appendFileSync } from 'fs';
 import { resolve, dirname, join, extname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -20,8 +20,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const DIST = join(ROOT, 'dist');
 
-const CONCURRENCY = 1;
-const TOTAL_TIME_LIMIT_MS = 12 * 60 * 1000; // 12 minutes
+const CONCURRENCY = 8;
+const TOTAL_TIME_LIMIT_MS = 25 * 60 * 1000; // 25 minutes
 const ROUTE_TIMEOUT_MS = 15_000;
 const startTime = Date.now();
 
@@ -206,6 +206,7 @@ async function main() {
   const baseUrl = `http://127.0.0.1:${PORT}`;
   const results = { ok: 0, failed: 0, skipped: 0 };
   const failedRoutes = [];
+  const manifestEntries = [];
 
   // 4. Prerender in batches of CONCURRENCY
   // Root route goes LAST so it overwrites dist/index.html after all others
@@ -216,6 +217,9 @@ async function main() {
     if (Date.now() - startTime > TOTAL_TIME_LIMIT_MS) {
       const remaining = ordered.length - i;
       console.warn(`\n⚠️  Time limit reached after ${Math.round((Date.now()-startTime)/1000)}s. Skipping ${remaining} remaining routes.`);
+      for (const route of ordered.slice(i)) {
+        manifestEntries.push({ route, status: 'skipped' });
+      }
       results.skipped += remaining;
       break;
     }
@@ -232,10 +236,12 @@ async function main() {
     for (const r of batchResults) {
       if (r.ok) {
         results.ok++;
+        manifestEntries.push({ route: r.route, status: 'ok', title: r.title });
         if (results.ok % 50 === 0) console.log(`   Progress: ${results.ok}/${ordered.length} routes done`);
       } else {
         results.failed++;
         failedRoutes.push(r.route);
+        manifestEntries.push({ route: r.route, status: 'failed', error: r.error });
       }
     }
   }
@@ -243,8 +249,21 @@ async function main() {
   await browser.close();
   if (server) server.close();
 
+  // 5. Write manifest
+  const manifest = {
+    generatedAt: new Date().toISOString(),
+    totalRoutes: ordered.length,
+    ok: results.ok,
+    failed: results.failed,
+    skipped: results.skipped,
+    elapsedSeconds: Math.round((Date.now() - startTime) / 1000),
+    routes: manifestEntries,
+  };
+  writeFileSync(join(DIST, 'prerender-manifest.json'), JSON.stringify(manifest, null, 2), 'utf-8');
+
   const elapsed = Math.round((Date.now() - startTime) / 1000);
   console.log(`\n✅ Prerender complete: ${results.ok} ok, ${results.failed} failed, ${results.skipped} skipped (${elapsed}s)`);
+  console.log(`   Manifest written: dist/prerender-manifest.json`);
 
   if (failedRoutes.length > 0) {
     console.log('   Failed routes:', failedRoutes.slice(0, 20).join(', '));
