@@ -9,6 +9,7 @@ import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
 import { getZodiacSign } from '@/data/birthdayPersonality';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
+import { getNumerologyByNumber } from '@/data/numerologyData';
 import { ArrowLeft, ArrowRight, ArrowRightCircle, Star } from 'lucide-react';
 
 const MONTH_NAMES = [
@@ -23,6 +24,37 @@ const ZODIAC_SLUG: Record<string, string> = {
   Leo: 'leo', Virgo: 'virgo', Libra: 'libra', Scorpio: 'scorpio',
   Sagittarius: 'sagittarius', Capricorn: 'capricorn', Aquarius: 'aquarius', Pisces: 'pisces',
 };
+
+// Day-of-year (non-leap; Feb 29 treated as day 60)
+const MONTH_CUMULATIVE = [0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+function dayOfYear(month: number, day: number): number {
+  return MONTH_CUMULATIVE[month] + day;
+}
+
+// Reduce day to birthday number 1–9 (no master numbers for day reduction)
+function birthdayNumber(day: number): number {
+  let n = day;
+  while (n > 9) n = String(n).split('').reduce((a, d) => a + parseInt(d), 0);
+  return n;
+}
+
+// Northern-hemisphere season for a date
+function seasonNote(month: number, day: number): string {
+  const d = month * 100 + day;
+  if (d >= 321 && d <= 620) return 'Spring (Northern Hemisphere) — a season of beginnings and renewal.';
+  if (d >= 621 && d <= 922) return 'Summer (Northern Hemisphere) — long days, full energy, peak sun.';
+  if (d >= 923 && d <= 1220) return 'Autumn (Northern Hemisphere) — harvest season, a time of reflection.';
+  return 'Winter (Northern Hemisphere) — the quietest season, turning inward.';
+}
+
+// Days until next occurrence of this date (from today, non-leap)
+function daysUntilNext(month: number, day: number): number {
+  const today = new Date();
+  const thisYear = today.getFullYear();
+  let next = new Date(thisYear, month - 1, day);
+  if (next <= today) next = new Date(thisYear + 1, month - 1, day);
+  return Math.ceil((next.getTime() - today.getTime()) / 86_400_000);
+}
 
 function slugToMonthDay(slug: string): { month: number; day: number } | null {
   const parts = slug.split('-');
@@ -102,10 +134,16 @@ export default function BornOnDay() {
   const prev = prevDay(month, day);
   const next = nextDay(month, day);
 
+  const doy = dayOfYear(month, day);
+  const bNum = birthdayNumber(day);
+  const bNumData = getNumerologyByNumber(bNum);
+  const season = seasonNote(month, day);
+  const daysUntil = daysUntilNext(month, day);
+
   const topNames = celebrities.slice(0, 3).map(c => c.name);
   const metaDesc = topNames.length > 0
-    ? `Famous people born on ${monthName} ${day} include ${topNames.join(', ')}. Discover their zodiac sign, birthstone, and more.`
-    : `Discover celebrities born on ${monthName} ${day} — zodiac sign ${zodiac.sign}, birthstone ${birthstone?.primaryStone ?? ''}, and birthday insights.`;
+    ? `Famous people born on ${monthName} ${day} (${zodiac.sign}) include ${topNames.join(', ')}. Day ${doy} of the year — discover zodiac, birthstone, and birthday insights.`
+    : `Discover celebrities born on ${monthName} ${day} — ${zodiac.sign} (${zodiac.element}), birthstone ${birthstone?.primaryStone ?? ''}, day ${doy} of the year.`;
 
   const jsonLd = celebrities.length > 0 ? {
     '@context': 'https://schema.org',
@@ -194,6 +232,45 @@ export default function BornOnDay() {
           <Link to={`/zodiac/${zodiacSlug}`} className="text-primary hover:underline text-sm">
             Full {zodiac.sign} guide →
           </Link>
+        </div>
+
+        {/* Day-of-year + days until next */}
+        <div className="bg-card border border-border rounded-xl p-6 mb-6">
+          <h2 className="font-semibold text-lg text-foreground mb-3">Calendar Facts</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Day of the year</p>
+              <p className="text-2xl font-bold text-foreground">#{doy}</p>
+              <p className="text-xs text-muted-foreground mt-1">of 365 (non-leap)</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Days until next</p>
+              <p className="text-2xl font-bold text-foreground">{daysUntil}</p>
+              <p className="text-xs text-muted-foreground mt-1">days from today</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Birthday Number */}
+        {bNumData && (
+          <div className="bg-card border border-border rounded-xl p-6 mb-6">
+            <h2 className="font-semibold text-lg text-foreground mb-1">Birthday Number {bNum} — {bNumData.name}</h2>
+            <p className="text-xs text-muted-foreground mb-3">
+              The birthday number is the numerology reduction of the day (day {day} → {bNum}). It adds a personal note to the Life Path number.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {bNumData.keywords.slice(0, 4).join(' · ')} — {bNumData.masteryLesson.slice(0, 120)}…
+            </p>
+            <Link to={`/numerology/${bNum}`} className="text-primary hover:underline text-sm mt-3 inline-block">
+              Full numerology {bNum} guide →
+            </Link>
+          </div>
+        )}
+
+        {/* Season */}
+        <div className="bg-card border border-border rounded-xl p-6 mb-6">
+          <h2 className="font-semibold text-lg text-foreground mb-2">Season</h2>
+          <p className="text-muted-foreground text-sm">{season}</p>
         </div>
 
         {/* Chinese zodiac note */}
