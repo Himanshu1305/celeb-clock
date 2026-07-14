@@ -416,10 +416,10 @@ const ReportView = () => {
     const dob = new Date((row.report_data as any).recipientDob + 'T12:00:00');
     const mm = String(dob.getMonth() + 1).padStart(2, '0');
     const dd = String(dob.getDate()).padStart(2, '0');
-    getRankedBirthdayCelebrities(`${mm}-${dd}`, null, 6)
+    getRankedBirthdayCelebrities(`${mm}-${dd}`, profile?.country ?? null, 6)
       .then(results => { if (results?.length) setLiveCelebrities(results); })
       .catch(() => {});
-  }, [row]);
+  }, [row, profile?.country]);
 
   useEffect(() => {
     detectCountry().then(info => setIsIndia(info.isIndia)).catch(() => {});

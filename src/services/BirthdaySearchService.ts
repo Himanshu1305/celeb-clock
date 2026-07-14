@@ -306,9 +306,13 @@ export interface CelebrityBirthdayResult {
   isLiving: boolean;
 }
 
-// Query Supabase celebrity_sitelinks for ranked birthday results.
-// Returns celebrities sorted by sitelinks (global fame) with an optional country boost.
-// Falls back to empty array on any error so callers can fall back to local DB.
+/**
+ * Canonical celebrity-for-date query used by all surfaces:
+ * BirthdayResults, TodaysBirthdays, CelebrityBirthday, ReportView, BornOnDay, CelebrityMatch.
+ *
+ * Ranking: sitelinks DESC + optional country boost (+500 for userCountry match).
+ * No secondary re-sorting — callers must not override this order.
+ */
 export async function getRankedBirthdayCelebrities(
   monthDay: string,       // "MM-DD" format
   userCountry: string | null,

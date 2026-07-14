@@ -118,15 +118,7 @@ export const TodaysBirthdays = () => {
       setLoading(true);
       try {
         const supabaseResults = await getRankedBirthdayCelebrities(monthDay, userCountry, 50);
-        // Indian users: sort nationality_code='IN' rows first, then by sitelinks desc
-        const sorted = userCountry === 'IN'
-          ? [...supabaseResults].sort((a, b) => {
-              if (a.nationalityCode === 'IN' && b.nationalityCode !== 'IN') return -1;
-              if (b.nationalityCode === 'IN' && a.nationalityCode !== 'IN') return 1;
-              return (b.sitelinks ?? 0) - (a.sitelinks ?? 0);
-            })
-          : supabaseResults;
-        let celebs = sorted.map(mapSupabase);
+        let celebs = supabaseResults.map(mapSupabase);
 
         if (celebs.length < 20) {
           const localResults = await searchLocalDatabase(today);

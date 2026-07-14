@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { CakeIcon } from 'lucide-react';
-import { classifyDisplayTier, DisplayTier } from '@/data/celebrityCategories';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getRankedBirthdayCelebrities, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useAuth } from '@/hooks/useAuth';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -31,33 +31,23 @@ function supabaseToDisplay(c: CelebrityBirthdayResult): DisplayCelebrity {
 export const CelebrityMatch = ({ birthDate }: CelebrityMatchProps) => {
   const [matchingCelebrities, setMatchingCelebrities] = useState<CelebrityBirthdayResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { profile } = useAuth();
 
   useEffect(() => {
     if (!birthDate) return;
     setIsLoading(true);
     const mm = String(birthDate.getMonth() + 1).padStart(2, '0');
     const dd = String(birthDate.getDate()).padStart(2, '0');
-    getRankedBirthdayCelebrities(`${mm}-${dd}`, 'IN', 12)
+    const userCountry = profile?.country ?? null;
+    getRankedBirthdayCelebrities(`${mm}-${dd}`, userCountry, 12)
       .then(results => {
         setMatchingCelebrities(results);
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
-  }, [birthDate]);
+  }, [birthDate, profile?.country]);
 
   if (!birthDate) return null;
-
-  const getTierForCeleb = (c: CelebrityBirthdayResult): DisplayTier => {
-    const birthYear = c.birthDate ? new Date(c.birthDate + 'T12:00:00').getFullYear() : undefined;
-    return classifyDisplayTier({ profession: c.occupation ?? '', birth_year: birthYear });
-  };
-
-  const TIER_ORDER: DisplayTier[] = ['entertainment', 'public_figure', 'historical'];
-  const sorted = [...matchingCelebrities].sort((a, b) =>
-    TIER_ORDER.indexOf(getTierForCeleb(a)) - TIER_ORDER.indexOf(getTierForCeleb(b))
-  );
-  const mainCelebs = sorted.filter(c => getTierForCeleb(c) !== 'historical');
-  const historicalCelebs = sorted.filter(c => getTierForCeleb(c) === 'historical');
 
   return (
     <div className="space-y-6">
@@ -87,24 +77,11 @@ export const CelebrityMatch = ({ birthDate }: CelebrityMatchProps) => {
             </div>
           </div>
 
-          {mainCelebs.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mainCelebs.map((celebrity, index) => (
-                <CelebrityCard key={index} celebrity={supabaseToDisplay(celebrity)} index={index} />
-              ))}
-            </div>
-          )}
-
-          {historicalCelebs.length > 0 && (
-            <div className="mt-4">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">📚 Historical figures who share your birthday</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {historicalCelebs.map((celebrity, index) => (
-                  <CelebrityCard key={index} celebrity={supabaseToDisplay(celebrity)} index={mainCelebs.length + index} />
-                ))}
-              </div>
-            </div>
-          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {matchingCelebrities.map((celebrity, index) => (
+              <CelebrityCard key={index} celebrity={supabaseToDisplay(celebrity)} index={index} />
+            ))}
+          </div>
         </>
       ) : (
         <div className="glass-card p-8 text-center rounded-xl border">
