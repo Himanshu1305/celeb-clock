@@ -110,6 +110,27 @@ async function handler(request: Request): Promise<Response> {
 
   const db = serviceClient();
 
+  // For subscription payments: fetch the actual charged amount from Razorpay.
+  // The client sends amount:0 because it doesn't know the plan amount at checkout time.
+  if (product === 'subscription') {
+    const keyId = process.env.VITE_RAZORPAY_KEY_ID;
+    if (keyId) {
+      try {
+        const auth = btoa(`${keyId}:${keySecret}`);
+        const pmtRes = await fetch(`https://api.razorpay.com/v1/payments/${razorpay_payment_id}`, {
+          headers: { Authorization: `Basic ${auth}` },
+        });
+        if (pmtRes.ok) {
+          const pmtData = await pmtRes.json();
+          if (pmtData.amount) paymentAmount = pmtData.amount;
+          if (pmtData.currency) paymentCurrency = pmtData.currency;
+        }
+      } catch (e) {
+        console.warn('[verify-payment] could not fetch subscription payment amount (non-fatal):', e);
+      }
+    }
+  }
+
   // For birthday_report: fetch the Razorpay order to get authoritative values
   if (product === 'birthday_report') {
     if (!razorpay_order_id) {
