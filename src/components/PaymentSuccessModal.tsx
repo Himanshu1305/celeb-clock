@@ -51,12 +51,13 @@ export function PaymentSuccessModal({ onClose, billing: _billing }: PaymentSucce
 
         <ul className="text-left space-y-2 mb-6">
           {[
-            '🔬 What-If Simulator — unlocked',
-            '🤖 AI Longevity Coach — unlocked',
-            '🧬 Biological Blueprint — unlocked',
-            '👨‍👩‍👧 Family Dashboard — unlocked',
-            '📄 Birthday Reports (3/month) — unlocked',
-            '🌍 Country Comparison — unlocked',
+            '🔬 What-If Simulator (25+ factors)',
+            '🤖 AI Longevity Coach',
+            '🧬 Biological Blueprint report',
+            '🎂 Birthday Blueprint credits (1/month)',
+            '🌍 Country comparison (57 countries)',
+            '📊 Longevity leaderboard',
+            '…and more',
           ].map(f => (
             <li key={f} className="text-sm text-gray-700 flex items-center gap-2">
               {f}
@@ -71,7 +72,7 @@ export function PaymentSuccessModal({ onClose, billing: _billing }: PaymentSucce
         <button
           onClick={() => {
             onClose();
-            navigate('/life-expectancy');
+            navigate('/');
           }}
           className="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition-colors mb-3"
         >

@@ -166,6 +166,15 @@ export const Navigation = () => {
         </Link>
       )}
 
+      {!loading && isPremium && !isInTrial && (
+        <Link
+          to="/upgrade"
+          className="text-indigo-600 border border-indigo-200 bg-indigo-50 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-100 transition-colors"
+        >
+          ⭐ Premium
+        </Link>
+      )}
+
       {!loading && !isPremium && !isInTrial && (
         <Link
           to="/upgrade"
