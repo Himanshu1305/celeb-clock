@@ -3,8 +3,6 @@ import { CakeIcon } from 'lucide-react';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getRankedBirthdayCelebrities, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useAuth } from '@/hooks/useAuth';
-
 const CURRENT_YEAR = new Date().getFullYear();
 
 interface CelebrityMatchProps {
@@ -31,21 +29,19 @@ function supabaseToDisplay(c: CelebrityBirthdayResult): DisplayCelebrity {
 export const CelebrityMatch = ({ birthDate }: CelebrityMatchProps) => {
   const [matchingCelebrities, setMatchingCelebrities] = useState<CelebrityBirthdayResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { profile } = useAuth();
 
   useEffect(() => {
     if (!birthDate) return;
     setIsLoading(true);
     const mm = String(birthDate.getMonth() + 1).padStart(2, '0');
     const dd = String(birthDate.getDate()).padStart(2, '0');
-    const userCountry = profile?.country ?? null;
-    getRankedBirthdayCelebrities(`${mm}-${dd}`, userCountry, 12)
+    getRankedBirthdayCelebrities(`${mm}-${dd}`, null, 12)
       .then(results => {
         setMatchingCelebrities(results);
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
-  }, [birthDate, profile?.country]);
+  }, [birthDate]);
 
   if (!birthDate) return null;
 

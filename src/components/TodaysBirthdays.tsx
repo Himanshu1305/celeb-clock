@@ -112,12 +112,11 @@ export const TodaysBirthdays = () => {
     const month = String(todayMonth).padStart(2, '0');
     const day = String(todayDay).padStart(2, '0');
     const monthDay = `${month}-${day}`;
-    const userCountry = profile?.country ?? null;
 
     const load = async () => {
       setLoading(true);
       try {
-        const supabaseResults = await getRankedBirthdayCelebrities(monthDay, userCountry, 50);
+        const supabaseResults = await getRankedBirthdayCelebrities(monthDay, null, 50);
         let celebs = supabaseResults.map(mapSupabase);
 
         if (celebs.length < 20) {
@@ -143,7 +142,7 @@ export const TodaysBirthdays = () => {
       getTodayTopBoosted(3).then(setTopBoosted);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile?.country, todayMonth, todayDay]);
+  }, [todayMonth, todayDay]);
 
   // Split by tier
   const entertainmentCelebs = useMemo(() =>
