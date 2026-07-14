@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { CakeIcon } from 'lucide-react';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getRankedBirthdayCelebrities, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { Skeleton } from '@/components/ui/skeleton';
+import { CountryExtrasSection } from '@/components/CountryExtrasSection';
 const CURRENT_YEAR = new Date().getFullYear();
 
 interface CelebrityMatchProps {
@@ -29,12 +30,14 @@ function supabaseToDisplay(c: CelebrityBirthdayResult): DisplayCelebrity {
 export const CelebrityMatch = ({ birthDate }: CelebrityMatchProps) => {
   const [matchingCelebrities, setMatchingCelebrities] = useState<CelebrityBirthdayResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [monthDay, setMonthDay] = useState<string | null>(null);
 
   useEffect(() => {
     if (!birthDate) return;
     setIsLoading(true);
     const mm = String(birthDate.getMonth() + 1).padStart(2, '0');
     const dd = String(birthDate.getDate()).padStart(2, '0');
+    setMonthDay(`${mm}-${dd}`);
     getRankedBirthdayCelebrities(`${mm}-${dd}`, null, 12)
       .then(results => {
         setMatchingCelebrities(results);
@@ -42,6 +45,8 @@ export const CelebrityMatch = ({ birthDate }: CelebrityMatchProps) => {
       })
       .catch(() => setIsLoading(false));
   }, [birthDate]);
+
+  const mainListNames = useMemo(() => matchingCelebrities.map(c => c.name), [matchingCelebrities]);
 
   if (!birthDate) return null;
 
@@ -78,6 +83,10 @@ export const CelebrityMatch = ({ birthDate }: CelebrityMatchProps) => {
               <CelebrityCard key={index} celebrity={supabaseToDisplay(celebrity)} index={index} />
             ))}
           </div>
+
+          {monthDay && (
+            <CountryExtrasSection monthDay={monthDay} mainListNames={mainListNames} />
+          )}
         </>
       ) : (
         <div className="glass-card p-8 text-center rounded-xl border">

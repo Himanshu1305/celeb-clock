@@ -7,6 +7,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
+import { CountryExtrasSection } from '@/components/CountryExtrasSection';
 import { getZodiacSign } from '@/data/birthdayPersonality';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
 import { getNumerologyByNumber } from '@/data/numerologyData';
@@ -211,11 +212,18 @@ export default function BornOnDay() {
             ))}
           </div>
         ) : celebrities.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
-            {celebrities.map((celeb, i) => (
-              <CelebrityCard key={celeb.name} celebrity={celeb} index={i} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              {celebrities.map((celeb, i) => (
+                <CelebrityCard key={celeb.name} celebrity={celeb} index={i} />
+              ))}
+            </div>
+            <CountryExtrasSection
+              monthDay={`${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`}
+              mainListNames={celebrities.map(c => c.name)}
+            />
+            <div className="mb-6" />
+          </>
         ) : (
           <p className="text-muted-foreground mb-10">No celebrities found in our database for this date.</p>
         )}

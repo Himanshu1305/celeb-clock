@@ -13,6 +13,7 @@ import {
 import { WikiPerson } from '@/services/WikimediaService';
 import { CelebrityCard, DisplayCelebrity, OccupationCategory } from '@/components/CelebrityCard';
 import { classifyDisplayTier, TIER_LABELS, DisplayTier } from '@/data/celebrityCategories';
+import { CountryExtrasSection } from '@/components/CountryExtrasSection';
 const CURRENT_YEAR = new Date().getFullYear();
 const PAGE_SIZE = 20;
 
@@ -338,6 +339,11 @@ export const TodaysBirthdays = () => {
               </div>
             </section>
           )}
+
+          <CountryExtrasSection
+            monthDay={`${String(todayMonth).padStart(2, '0')}-${String(todayDay).padStart(2, '0')}`}
+            mainListNames={allCelebrities.map(c => c.name)}
+          />
         </>
       )}
     </div>
