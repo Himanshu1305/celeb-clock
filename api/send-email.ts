@@ -28,6 +28,15 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Missing required fields: type, to, name' }, 400);
   }
 
+  const VALID_TYPES = new Set([
+    'welcome', 'trial_expiry', 'payment_confirmation', 'cancellation',
+    'nudge_free', 'nudge_premium', 'premium_activated', 'payment_receipt',
+    'report_locked', 'report_created', 'data_deletion_request',
+  ]);
+  if (!VALID_TYPES.has(type)) {
+    return json({ error: `Unknown email type: ${type}` }, 400);
+  }
+
   const ok = await sendEmailDirect(body);
   return ok
     ? json({ success: true })

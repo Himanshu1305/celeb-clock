@@ -87,7 +87,7 @@ export const Navigation = () => {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden ml-1 p-1.5 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+          className="md:hidden ml-1 p-3 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
           onClick={() => setMobileOpen(o => !o)}
           aria-label="Toggle navigation menu"
           aria-expanded={mobileOpen}

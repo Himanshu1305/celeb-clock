@@ -36,6 +36,13 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Missing reportData' }, 400);
   }
 
+  if (reportData.recipientDob) {
+    const dob = new Date(reportData.recipientDob + 'T12:00:00');
+    if (dob > new Date()) {
+      return json({ error: 'recipientDob cannot be in the future' }, 400);
+    }
+  }
+
   const db = serviceClient();
 
   let userId: string | null = null;
