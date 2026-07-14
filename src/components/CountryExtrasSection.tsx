@@ -39,11 +39,16 @@ interface Props {
  * Renders nothing for non-IN visitors, when country is still resolving,
  * or when there are no non-overlapping Indian celebrities for the date.
  * Never affects the order of the main list.
+ * Suppressed during prerender (window.__PRERENDER__ = true) so bots always
+ * see the global-only HTML that matches the prerendered snapshot.
  */
 export function CountryExtrasSection({ monthDay, mainListNames }: Props) {
   const country = useCountryCode();
   const [extras, setExtras] = useState<CelebrityBirthdayResult[]>([]);
   const [loaded, setLoaded] = useState(false);
+
+  // Never render during prerender — bots see global list only
+  if (typeof window !== 'undefined' && (window as any).__PRERENDER__) return null;
 
   useEffect(() => {
     if (!country || !COUNTRY_LABEL[country]) {

@@ -78,6 +78,9 @@ async function startStaticServer(port) {
 async function prerenderRoute(page, baseUrl, route) {
   const url = `${baseUrl}${route}`;
   try {
+    // Suppress client-only personalisation sections (e.g. CountryExtrasSection)
+    // from appearing in the prerendered HTML snapshot.
+    await page.evaluateOnNewDocument(() => { window.__PRERENDER__ = true; });
     await page.goto(url, { waitUntil: 'networkidle0', timeout: ROUTE_TIMEOUT_MS });
     // 500ms settle — let React finish any pending microtask/rAF work after network idle
     await page.evaluate(() => new Promise(r => setTimeout(r, 500)));
