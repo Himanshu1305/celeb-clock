@@ -60,7 +60,7 @@ export const Navigation = () => {
   const closeMobile = () => setMobileOpen(false);
 
   const mobileLinkClass = (path: string) =>
-    `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+    `flex items-center gap-3 px-4 py-3.5 min-h-[44px] rounded-xl text-sm font-medium transition-colors ${
       isActive(path)
         ? 'bg-indigo-50 text-indigo-700'
         : 'text-gray-700 hover:bg-gray-50'
