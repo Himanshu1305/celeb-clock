@@ -283,6 +283,9 @@ star · name · `b. 1963 †` · descriptor · hook at FULL length up to 3 lines
 - **Staging smoke test:** `curl -s -X POST https://staging.bornclock.com/api/create-order -H 'Content-Type: application/json' -d '{"product":"birthday_report","report_slug":"zzzzzzzz","userId":"test-user","currency":"INR"}'` → must return `{"error":"Report not found"}`. Run after every API-touching deploy. Any other response (network error, empty body, 500 with module path) means env vars or ESM module resolution is broken — do not proceed to payment testing.
 - **Print CSS changes:** validate in headless Chromium BEFORE writing the commit; keep print-only geometry inside the pageStyle string, never in screen CSS.
 - **New print sections:** must live inside the existing tbody cell; respect the break policy in §3.
+- **Deploy command (always use local wrangler — npx re-downloads and hangs):**
+  `./node_modules/.bin/wrangler deploy`
+  Never use: `npx wrangler deploy` (downloads new version each time, hangs on large asset sets)
 
 ---
 
