@@ -74,14 +74,29 @@ async function startStaticServer(port) {
 }
 
 // ── Prerender a single route ──────────────────────────────────────────────────
-const DEFAULT_TITLE = 'BornClock — Free Age Calculator, Celebrity Birthday Match &amp; Life Expectancy';
+// Decoded form of the homepage title (document.title returns unescaped text)
+const DEFAULT_TITLE_DECODED = 'BornClock — Free Age Calculator, Celebrity Birthday Match & Life Expectancy';
 
 async function prerenderRoute(page, baseUrl, route) {
   const url = `${baseUrl}${route}`;
   try {
     await page.goto(url, { waitUntil: 'networkidle0', timeout: ROUTE_TIMEOUT_MS });
-    // Yield to the page's event loop so react-helmet-async deferred effects can flush
-    await page.evaluate(() => new Promise(r => setTimeout(r, 500)));
+    // react-helmet-async schedules title updates via requestAnimationFrame (defer:true default).
+    // At c=8 Chrome may throttle rAF for background pages — a fixed sleep is unreliable.
+    // Wait until document.title has changed from the SPA default, signalling the rAF fired.
+    // Skip for '/' whose title IS the default title.
+    if (route !== '/') {
+      try {
+        await page.waitForFunction(
+          (def) => document.title !== def,
+          { timeout: 5000, polling: 100 },
+          DEFAULT_TITLE_DECODED
+        );
+      } catch {
+        // Title never changed within 5s (page intentionally keeps the default, or very slow).
+        // Fall through — title-patch below captures whatever is live.
+      }
+    }
     // Get both the serialized HTML and the live document.title (Helmet may update one but not serialize both)
     const { html: rawHtml, liveTitle, liveMeta } = await page.evaluate(() => {
       const metas = {};
