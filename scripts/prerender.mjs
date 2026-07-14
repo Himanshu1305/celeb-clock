@@ -15,6 +15,7 @@ import { createServer } from 'http';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, appendFileSync } from 'fs';
 import { resolve, dirname, join, extname } from 'path';
 import { fileURLToPath } from 'url';
+import { getTitleForRoute } from './prerender-titles.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -74,46 +75,53 @@ async function startStaticServer(port) {
 }
 
 // ── Prerender a single route ──────────────────────────────────────────────────
-// Decoded form of the homepage title (document.title returns unescaped text)
-const DEFAULT_TITLE_DECODED = 'BornClock — Free Age Calculator, Celebrity Birthday Match & Life Expectancy';
-
 async function prerenderRoute(page, baseUrl, route) {
   const url = `${baseUrl}${route}`;
   try {
     await page.goto(url, { waitUntil: 'networkidle0', timeout: ROUTE_TIMEOUT_MS });
-    // react-helmet-async schedules title updates via requestAnimationFrame (defer:true default).
-    // At c=8 Chrome may throttle rAF for background pages — a fixed sleep is unreliable.
-    // Wait until document.title has changed from the SPA default, signalling the rAF fired.
-    // Skip for '/' whose title IS the default title.
-    if (route !== '/') {
-      try {
-        await page.waitForFunction(
-          (def) => document.title !== def,
-          { timeout: 5000, polling: 100 },
-          DEFAULT_TITLE_DECODED
-        );
-      } catch {
-        // Title never changed within 5s (page intentionally keeps the default, or very slow).
-        // Fall through — title-patch below captures whatever is live.
-      }
-    }
-    // Get both the serialized HTML and the live document.title (Helmet may update one but not serialize both)
-    const { html: rawHtml, liveTitle, liveMeta } = await page.evaluate(() => {
-      const metas = {};
-      document.querySelectorAll('meta[name], meta[property]').forEach(el => {
-        const key = el.getAttribute('name') || el.getAttribute('property');
-        metas[key] = el.getAttribute('content');
-      });
-      return { html: document.documentElement.outerHTML, liveTitle: document.title, liveMeta: metas };
-    });
-    // Patch the <title> tag if the live title differs from the serialized one
-    let html = rawHtml;
-    if (liveTitle) {
-      const escaped = liveTitle.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escaped}</title>`);
+    // 500ms settle — let React finish any pending microtask/rAF work after network idle
+    await page.evaluate(() => new Promise(r => setTimeout(r, 500)));
+
+    // For born-on routes: extract first 3 celebrity names from the live DOM
+    // (Supabase fetch has completed by networkidle0; names are in .glass-card h3)
+    let celebNames = [];
+    if (route.startsWith('/born-on/') && route !== '/born-on') {
+      celebNames = await page.evaluate(() =>
+        Array.from(document.querySelectorAll('.glass-card h3')).slice(0, 3).map(el => el.textContent.trim())
+      ).catch(() => []);
     }
 
-    // Sanity: check for unique title
+    // Capture full serialized HTML
+    const rawHtml = await page.evaluate(() => document.documentElement.outerHTML);
+
+    // ── Title + description injection (bypasses react-helmet-async rAF timing) ──
+    const meta = getTitleForRoute(route);
+    let html = rawHtml;
+
+    if (meta) {
+      // Inject title — replace whatever <title> the SPA default left in the HTML
+      const escapedTitle = meta.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escapedTitle}</title>`);
+
+      // Build description — for born-on pages, prepend real celebrity names if available
+      let desc = meta.description;
+      if (meta._month && celebNames.length > 0) {
+        desc = `Famous people born on ${meta._month} ${meta._day} (${meta._zodiac}) include ${celebNames.join(', ')}. Zodiac, birthstone, day-of-year facts, and birthday insights at BornClock.`;
+      }
+      const escapedDesc = desc.replace(/"/g, '&quot;');
+
+      // Replace meta description content attribute (handles either attribute order)
+      html = html.replace(
+        /(<meta\s+[^>]*name="description"[^>]*content=")[^"]*(")/i,
+        `$1${escapedDesc}$2`
+      );
+      html = html.replace(
+        /(<meta\s+[^>]*content=")[^"]*("\s+name="description"[^>]*)/i,
+        `$1${escapedDesc}$2`
+      );
+    }
+
+    // Sanity: check for non-default title
     const titleMatch = html.match(/<title>([^<]*)<\/title>/i);
     const title = titleMatch ? titleMatch[1] : '';
     if (!title || title.includes('BornClock') === false) {
