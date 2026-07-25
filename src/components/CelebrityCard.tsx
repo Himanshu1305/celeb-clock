@@ -129,14 +129,14 @@ export const CelebrityCard = ({ celebrity, index }: CelebrityCardProps) => {
 
           {/* Text content */}
           <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5">
-            <h3 className="font-semibold text-[15px] leading-snug text-foreground group-hover:text-primary transition-colors line-clamp-1">
+            <h3 className="font-semibold text-[15px] leading-snug text-foreground group-hover:text-primary transition-colors break-words">
               {celebrity.name}
             </h3>
-            <p className="text-[11px] text-muted-foreground uppercase tracking-wide truncate">
+            <p className="text-[11px] text-muted-foreground uppercase tracking-wide break-words">
               {celebrity.occupation}
             </p>
             {celebrity.knownFor && (
-              <p className="text-[11px] text-muted-foreground/70 truncate" title={celebrity.knownFor}>
+              <p className="text-[11px] text-muted-foreground/70 line-clamp-2" title={celebrity.knownFor}>
                 {celebrity.knownFor}
               </p>
             )}

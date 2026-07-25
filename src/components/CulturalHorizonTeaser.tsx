@@ -274,7 +274,7 @@ export const CulturalHorizonTeaser = ({
             <div className="flex flex-col items-center gap-1 shrink-0">
               <Button
                 size="lg"
-                className="px-8 py-5 text-base font-bold gap-2 animate-glow"
+                className="h-auto whitespace-normal leading-snug px-8 py-5 text-base font-bold gap-2 animate-glow"
                 onClick={onGenerateReport}
               >
                 <FileText className="w-5 h-5" />

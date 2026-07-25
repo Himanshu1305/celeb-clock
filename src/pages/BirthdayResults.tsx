@@ -291,7 +291,7 @@ const BirthdayResults = () => {
                   { label: 'Total Days', value: age?.totalDays.toLocaleString() || '0' },
                   { label: 'Total Hours', value: age?.totalHours.toLocaleString() || '0' },
                   { label: 'Total Minutes', value: age?.totalMinutes.toLocaleString() || '0' },
-                  { label: 'Heartbeats', value: ((age?.totalMinutes || 0) * 72).toLocaleString() },
+                  { label: 'Heartbeats', value: Math.round((age?.totalSeconds || 0) * 1.2).toLocaleString() },
                 ].map((stat) => (
                   <div key={stat.label} className="p-3 bg-muted/30 rounded-lg">
                     <div className="font-bold text-foreground">{stat.value}</div>
@@ -326,7 +326,7 @@ const BirthdayResults = () => {
                   <p className="text-muted-foreground">Finding your celebrity twins...</p>
                 </div>
               ) : celebrities.length > 0 ? (
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {celebrities.map((celeb, index) => (
                     <CelebrityCard key={celeb.name} celebrity={celeb} index={index} />
                   ))}
@@ -371,7 +371,7 @@ const BirthdayResults = () => {
 
         {/* Birthday Signs — 3-card grid */}
         <section className="max-w-5xl mx-auto mb-8">
-          <h2 className="text-xl font-bold text-foreground mb-4">Your Birthday Signs</h2>
+          <h2 className="text-xl font-bold text-foreground mb-4">Your Generation, Numerology &amp; Birthstone</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Card className="glass-card hover:scale-[1.02] transition-transform">
               <CardContent className="p-4 text-center">
@@ -413,7 +413,8 @@ const BirthdayResults = () => {
         {/* Your Complete Zodiac Profile — 3-column unified section */}
         <section className="max-w-5xl mx-auto mb-12">
           <h2 className="text-xl font-bold text-foreground mb-2">Your Complete Zodiac Profile</h2>
-          <p className="text-sm text-muted-foreground mb-4">Three different astrological traditions. One birth date. Your cosmic fingerprint.</p>
+          <p className="text-sm text-muted-foreground mb-1">Three different astrological traditions. One birth date. Your cosmic fingerprint.</p>
+          <p className="text-xs text-muted-foreground/80 mb-4">Different signs across systems? Western astrology uses the tropical zodiac while Vedic uses the sidereal zodiac — they're offset by about 24°, so your sign can differ between them.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Western Zodiac */}
             <Card className="glass-card border-blue-200/60 bg-gradient-to-br from-blue-50/30 to-indigo-50/30 hover:scale-[1.02] transition-transform">

@@ -476,8 +476,17 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
     ? countrySearch
     : (data.country ? `${COUNTRY_FLAG_EMOJI[data.country] || '🌍'} ${data.country}` : '');
 
+  const formTopRef = useRef<HTMLDivElement>(null);
+
+  // Step change: haptic tap (Android; iOS ignores) + smooth-scroll to top of form
+  const goToStep = (next: number) => {
+    try { navigator.vibrate?.(10); } catch { /* never throw */ }
+    setStep(next);
+    formTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
-    <Card className="backdrop-blur-sm bg-background/80 border-primary/20">
+    <Card ref={formTopRef} className="backdrop-blur-sm bg-background/80 border-primary/20">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
@@ -1500,7 +1509,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                   <div className="flex flex-col gap-2">
                     <Button
                       onClick={() => onComplete?.({ quiz: data, pillar1, pillar2 })}
-                      className="w-full bg-primary text-primary-foreground font-bold py-5 text-sm"
+                      className="w-full h-auto whitespace-normal leading-snug bg-primary text-primary-foreground font-bold px-4 py-4 text-sm"
                     >
                       Yes — Show Me My Longevity Potential →
                     </Button>
@@ -1555,9 +1564,9 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
 
         <Separator />
         <div className="flex justify-between">
-          <Button variant="outline" onClick={() => { if (step > 1) setStep(step - 1); }} disabled={step === 1}>Previous</Button>
+          <Button variant="outline" className="transition-transform active:scale-[0.97]" onClick={() => { if (step > 1) goToStep(step - 1); }} disabled={step === 1}>Previous</Button>
           {step < totalSteps && (
-            <Button onClick={() => setStep(step + 1)} disabled={(step === 1 && !data.gender) || !birthDate}>Next Step →</Button>
+            <Button className="transition-transform active:scale-[0.97]" onClick={() => goToStep(step + 1)} disabled={(step === 1 && !data.gender) || !birthDate}>Next Step →</Button>
           )}
         </div>
       </CardContent>
