@@ -272,7 +272,7 @@ const CelebrityBirthday = () => {
                 </p>
                 
                 <p className="text-center pt-4 text-muted-foreground">
-                  📧 For questions or feedback, write to <a href="/contact" className="text-primary hover:underline">support@yourdomain.com</a>
+                  📧 For questions or feedback, write to <a href="/contact" className="text-primary hover:underline">hello@bornclock.com</a>
                 </p>
               </div>
             </CardContent>
