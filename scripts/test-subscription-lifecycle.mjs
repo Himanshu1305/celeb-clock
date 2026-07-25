@@ -16,14 +16,23 @@
  */
 
 import { createHmac } from 'node:crypto';
+import { createClient } from '@supabase/supabase-js';
 
 const BASE = 'http://localhost:3001';
 const WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET;
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!WEBHOOK_SECRET) {
   console.error('ERROR: RAZORPAY_WEBHOOK_SECRET not set — run with --env-file=.env.local');
   process.exit(1);
 }
+if (!SUPABASE_URL || !SERVICE_KEY) {
+  console.error('ERROR: SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not set — run with --env-file=.env.local');
+  process.exit(1);
+}
+
+const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
 
 let passed = 0;
 let failed = 0;
@@ -131,25 +140,142 @@ check('subscription.halted + valid HMAC → 200', t6.status, 200, t6.body);
 const getRes = await fetch(`${BASE}/api/razorpay-webhook`, { method: 'GET' });
 check('GET /api/razorpay-webhook → 405', getRes.status, 405);
 
-// ── DB-state checks (TODO) ────────────────────────────────────────────────────
+// ── DB-state lifecycle assertions (real Supabase, real webhook fire) ──────────
 //
-// TODO: After subscription.cancelled/halted webhook fires with a real subscriber's
-// userId in the notes field, verify that profiles.premium_status = false in Supabase.
-// Requires: an authenticated subscriber row created in a test environment.
-// Skipped here because seeding a real subscription row reliably is too fragile
-// for a CI-safe gauntlet run. Implement with a dedicated seeded test user once
-// a staging DB is available.
-//
-// Example assertion (pseudocode):
-//   const { data } = await supabase
-//     .from('profiles')
-//     .select('premium_status')
-//     .eq('id', TEST_USER_ID)
-//     .single();
-//   assert(data.premium_status === false);
+// Seeds one throwaway subscriber, fires the two lifecycle webhooks against the
+// running endpoint, and asserts the exact profiles-table state each produces.
+// Cleaned up (auth user + profile row deleted) in the finally block.
+
+function dbAssert(label, ok, detail) {
+  if (ok) { console.log(`  ✓  ${label} — ${detail}`); passed++; }
+  else { console.error(`  ✗  ${label} — ${detail}`); failed++; }
+}
+
+async function fetchProfile(userId) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, user_id, premium_status, subscription_status, premium_until, subscription_id')
+    .eq('user_id', userId).single();
+  if (error) throw new Error(`profile query failed: ${error.message}`);
+  return data;
+}
+
+const TEST_SUB_ID = `sub_LIFECYCLE_${Date.now()}`;
+const TEST_EMAIL  = `subs-lifecycle-${Date.now()}@bornclock.com`;
+// Active period end = 40 days out (set by subscription.activated seed).
+const ACTIVE_END_EPOCH = Math.floor(Date.now() / 1000) + 40 * 24 * 3600;
+// Period end = 20 days out. The cancelled webhook derives premium_until from this.
+const PERIOD_END_EPOCH = Math.floor(Date.now() / 1000) + 20 * 24 * 3600;
+const EXPECTED_PREMIUM_UNTIL = new Date(PERIOD_END_EPOCH * 1000).toISOString();
+
+let testUserId = null;
+try {
+  console.log('\n── DB-state lifecycle (seeded subscriber) ──\n');
+
+  // Create a throwaway auth user. Its profiles row is auto-created by a DB
+  // trigger (profiles.id is a fresh PK, NOT the auth user id).
+  const { data: created, error: cErr } = await supabase.auth.admin.createUser({
+    email: TEST_EMAIL, email_confirm: true, user_metadata: { first_name: 'Lifecycle' },
+  });
+  if (cErr) throw new Error(`createUser failed: ${cErr.message}`);
+  testUserId = created.user.id;
+
+  // Premium/subscription columns are guarded (guard_premium_columns trigger) —
+  // direct client writes are rejected, only the server-side webhook may set them.
+  // So seed the active subscriber the sanctioned way: fire subscription.activated.
+  const seedProfile = await fetchProfile(testUserId);
+  const profilePk = seedProfile.id;
+  console.log(`  auth user id:  ${testUserId}`);
+  console.log(`  profile PK id: ${profilePk}`);
+  console.log(`  BEFORE activation: ${JSON.stringify(seedProfile)}`);
+
+  const activatePayload = JSON.stringify({
+    id: `${RUN_ID}_activate_db`,
+    event: 'subscription.activated',
+    payload: { subscription: { entity: {
+      id: TEST_SUB_ID, plan_id: 'plan_lifecycle_test', status: 'active',
+      current_end: ACTIVE_END_EPOCH, notes: { userId: profilePk },
+    } } },
+  });
+  const aRes = await postWebhook(activatePayload, computeHmac(WEBHOOK_SECRET, activatePayload));
+  check('subscription.activated (seed) → 200', aRes.status, 200, aRes.body);
+
+  const afterActivate = await fetchProfile(testUserId);
+  console.log(`  AFTER activation: ${JSON.stringify(afterActivate)}`);
+  // seed precondition: activation must actually persist premium_status=true
+  dbAssert('activated: premium_status = true (subscriber active)',
+    afterActivate.premium_status === true, `actual=${afterActivate.premium_status}`);
+  // links the profile to the Razorpay subscription — cancelled/halted resolve by it
+  dbAssert('activated: subscription_id persisted',
+    afterActivate.subscription_id === TEST_SUB_ID,
+    `expected="${TEST_SUB_ID}" actual="${afterActivate.subscription_id}"`);
+
+  // ── subscription.cancelled → voluntary cancel, grace until period end ──────
+  const cancelPayload = JSON.stringify({
+    id: `${RUN_ID}_cancel_db`,
+    event: 'subscription.cancelled',
+    payload: { subscription: { entity: {
+      id: TEST_SUB_ID, status: 'cancelled', current_end: PERIOD_END_EPOCH,
+      notes: { userId: testUserId },
+    } } },
+  });
+  const cRes = await postWebhook(cancelPayload, computeHmac(WEBHOOK_SECRET, cancelPayload));
+  check('subscription.cancelled (seeded) → 200', cRes.status, 200, cRes.body);
+
+  const afterCancel = await fetchProfile(testUserId);
+  console.log(`  AFTER cancelled: ${JSON.stringify(afterCancel)}`);
+  // proves the cancel event was routed to this subscriber and flagged cancelled
+  dbAssert('cancelled: subscription_status = "cancelled"',
+    afterCancel.subscription_status === 'cancelled',
+    `actual="${afterCancel.subscription_status}"`);
+  // grace preserved: premium_until must equal period-end, NOT null and NOT now
+  // (compare as instants — Postgres returns "…+00:00", JS toISOString "…Z")
+  dbAssert('cancelled: premium_until = period-end (grace preserved)',
+    afterCancel.premium_until != null &&
+      new Date(afterCancel.premium_until).getTime() === PERIOD_END_EPOCH * 1000,
+    `expected="${EXPECTED_PREMIUM_UNTIL}" actual="${afterCancel.premium_until}"`);
+  // grace preserved: premium_status stays true so access continues until expiry
+  dbAssert('cancelled: premium_status still true (access continues)',
+    afterCancel.premium_status === true,
+    `actual=${afterCancel.premium_status}`);
+
+  // ── subscription.halted → payment failed, immediate revoke ─────────────────
+  const haltPayload = JSON.stringify({
+    id: `${RUN_ID}_halt_db`,
+    event: 'subscription.halted',
+    payload: { subscription: { entity: {
+      id: TEST_SUB_ID, status: 'halted', notes: { userId: testUserId },
+    } } },
+  });
+  const hRes = await postWebhook(haltPayload, computeHmac(WEBHOOK_SECRET, haltPayload));
+  check('subscription.halted (seeded) → 200', hRes.status, 200, hRes.body);
+
+  const afterHalt = await fetchProfile(testUserId);
+  console.log(`  AFTER halted: ${JSON.stringify(afterHalt)}`);
+  // proves the halt event flipped the subscription state to halted
+  dbAssert('halted: subscription_status = "halted"',
+    afterHalt.subscription_status === 'halted',
+    `actual="${afterHalt.subscription_status}"`);
+  // immediate revoke: premium_status=false is the revoke signal useAuth.ts:247
+  // gates on (isPremium=false the instant premium_status flips), so this — NOT
+  // premium_until — is what cuts a halted user's access. The halted handler
+  // intentionally leaves premium_until untouched (it only matters for the
+  // 'cancelled' grace path), so we assert the real contract, not an expiry date.
+  dbAssert('halted: premium_status = false (access cut immediately)',
+    afterHalt.premium_status === false,
+    `actual=${afterHalt.premium_status}`);
+
+} catch (err) {
+  console.error('  ✗  lifecycle DB test threw:', err.message);
+  failed++;
+} finally {
+  // Cleanup — remove the throwaway subscriber (profile row + auth user)
+  if (testUserId) {
+    await supabase.from('profiles').delete().eq('user_id', testUserId);
+    await supabase.auth.admin.deleteUser(testUserId);
+    console.log(`\n  cleaned up test user ${testUserId}`);
+  }
+}
 
 console.log(`\n  ${passed} passed, ${failed} failed\n`);
-if (failed > 0) {
-  console.log('  TODO: Add DB-state verification once staging seeding is available.\n');
-  process.exit(1);
-}
+if (failed > 0) process.exit(1);
