@@ -310,12 +310,17 @@ export interface CelebrityBirthdayResult {
  * Canonical celebrity-for-date query used by all surfaces:
  * BirthdayResults, TodaysBirthdays, CelebrityBirthday, ReportView, BornOnDay, CelebrityMatch.
  *
- * Ranking: sitelinks DESC + optional country boost (+500 for userCountry match).
+ * Ranking: pure sitelinks DESC — ONE global list, identical for every user.
+ * The main list is NEVER reordered per user; per-country personalization lives
+ * ONLY in the additive CountryExtrasSection. The `_userCountry` parameter is
+ * intentionally ignored (kept for signature stability); do not reintroduce a
+ * per-user boost here — it would violate the global-list policy the moment
+ * nationality data lands in the DB.
  * No secondary re-sorting — callers must not override this order.
  */
 export async function getRankedBirthdayCelebrities(
   monthDay: string,       // "MM-DD" format
-  userCountry: string | null,
+  _userCountry: string | null,  // intentionally unused — see policy note above
   limit: number = 12
 ): Promise<CelebrityBirthdayResult[]> {
   try {
@@ -330,24 +335,8 @@ export async function getRankedBirthdayCelebrities(
       return [];
     }
 
-    // Apply country boost: celebrities from user's country get +500 to their score.
-    // nationality_code is NULL for all Supabase rows; use local map as fallback.
-    const scored = data.map(celeb => {
-      const effectiveNationality =
-        celeb.nationality_code ||
-        CELEBRITY_NATIONALITY[celeb.name] ||
-        null;
-      return {
-        ...celeb,
-        score: (celeb.sitelinks ?? 0) + (
-          userCountry && effectiveNationality === userCountry ? 500 : 0
-        ),
-      };
-    });
-
-    scored.sort((a, b) => b.score - a.score);
-
-    return scored.slice(0, limit).map(c => ({
+    // Pure sitelinks DESC (already ordered by the query above). No per-user boost.
+    return data.slice(0, limit).map(c => ({
       name: c.name,
       birthDate: c.birth_date,
       deathDate: c.death_date,

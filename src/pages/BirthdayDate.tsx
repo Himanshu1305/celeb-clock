@@ -6,6 +6,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
+import { CountryExtrasSection } from '@/components/CountryExtrasSection';
 import { getRankedBirthdayCelebrities, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
 import { Badge } from '@/components/ui/badge';
@@ -342,6 +343,10 @@ export default function BirthdayDate() {
                   <CelebrityCard key={celeb.name} celebrity={celeb} index={i} />
                 ))}
               </div>
+              <CountryExtrasSection
+                monthDay={monthDayKey}
+                mainListNames={celebrities.map(c => c.name)}
+              />
               {celebrities.length > 6 && (
                 <div className="text-center mt-6">
                   <Button

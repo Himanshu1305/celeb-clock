@@ -14,6 +14,7 @@ import {
   CelebrityBirthdayResult,
 } from '@/services/BirthdaySearchService';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
+import { CountryExtrasSection } from '@/components/CountryExtrasSection';
 import {
   Calendar, Clock, Users, Star, Share2, Download,
   Sparkles, Twitter, Facebook, Link as LinkIcon,
@@ -326,11 +327,17 @@ const BirthdayResults = () => {
                   <p className="text-muted-foreground">Finding your celebrity twins...</p>
                 </div>
               ) : celebrities.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {celebrities.map((celeb, index) => (
-                    <CelebrityCard key={celeb.name} celebrity={celeb} index={index} />
-                  ))}
-                </div>
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {celebrities.map((celeb, index) => (
+                      <CelebrityCard key={celeb.name} celebrity={celeb} index={index} />
+                    ))}
+                  </div>
+                  <CountryExtrasSection
+                    monthDay={`${String(birthDate.getMonth() + 1).padStart(2, '0')}-${String(birthDate.getDate()).padStart(2, '0')}`}
+                    mainListNames={celebrities.map(c => c.name)}
+                  />
+                </>
               ) : (
                 <div className="text-center py-8">
                   <Star className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />
