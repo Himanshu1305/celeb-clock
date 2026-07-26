@@ -153,3 +153,20 @@ correct unique titles, per-route trailing-slash canonical, BreadcrumbList + 3
 JSON-LD blocks each.
 
 Status: DONE.
+
+---
+
+## Phase 5 — Keyword + Competitor Research
+
+**DONE (commit: see git log for docs/SEO-STRATEGY.md).** Delivered
+`docs/SEO-STRATEGY.md`. Competitor teardown from ACTUALLY-FETCHED pages:
+famousbirthdays.com (home + /june25.html + a profile), cafeastrology.com,
+calculator.net/age-calculator.html, livingto100.com, thefamouspeople.com.
+onthisday.com and astro-seek.com returned HTTP 403 to automated fetch — recorded
+as blocked, NOT characterised from memory (Rule 7). Includes: keyword map by
+intent×difficulty mapped to existing routes; AEO/GEO section (the FAQ/answer-block
+lane is uncontested — no fetched competitor had structured Q&A); prioritised
+90-day action list. Key wedges identified: India nationality facet (famousbirthdays
+has no nationality dimension), utility+identity+longevity fusion, and AEO blocks.
+
+Status: DONE.
