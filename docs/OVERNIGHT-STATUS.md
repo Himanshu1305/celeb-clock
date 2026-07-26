@@ -88,3 +88,34 @@ truncation at 360px. (Visual 360px assertion deferred to Phase 3 mobile Playwrig
   1px→A4 iframe change targets; Chromium page.pdf cannot emulate it.
 
 Status: DONE.
+
+---
+
+## Phase 3 — Full-Site Bug Hunt
+
+**3a — DONE.** Initial gauntlet run: 40 pass / 36 fail, ALL failures
+`connect ECONNREFUSED :3001` (no API backend; vercel CLI unavailable). Brought
+up the backend locally via `wrangler dev --port 3001` (local-only `.dev.vars`
+from `.env.local`, never committed; scheduled worker NOT auto-triggered — Rule 4
+safe). Re-ran: **84/84 pass.** Tonight's changes caused ZERO regressions.
+
+**3b — DONE (commit 871ef66).** New `e2e/launch-gauntlet/12-edge-cases.spec.ts`
+(51 tests): invalid DOB (empty/future/impossible-date), leap-day + Dec-31 date
+pages, 37-route static-nav sweep (non-empty + no undefined/NaN/null + no uncaught
+error), **mobile-390px CountryExtrasSection for a mocked IN visitor + no-flash
+latch re-check (validates Phase 1)**, life-expectancy Previous-disabled-on-step-1,
+biological-age load, guest report locked-preview (real form flow), 404 + garbage
+report/route slug handling. Full suite now **135/135 pass.**
+
+**3c — DONE.** `scripts/page-sweep.mjs` → `docs/BUG-AUDIT.md`: 57 routes swept
+runtime, **57/57 clean** (no console errors after env-noise filter, no
+undefined/NaN/null, no empty renders). Findings documented: (1) malformed
+save-report payload → ReportView toLocaleString crash (error-boundary-caught,
+real form unaffected) — documented, not fixed (API scope); (2) DOB rollover —
+FIXED in BirthdayReport; (3) `/results` thin render is the expected empty state;
+(4) `/birthday/:month/:day` expects numeric month (alpha → graceful "Date not
+found"); (5) title/meta uniqueness deferred to Phase 4 (prerendered output).
+
+**3d — DONE.** Full gauntlet green: **135 passed** (84 original + 51 new).
+
+Status: DONE.
