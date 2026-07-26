@@ -170,3 +170,30 @@ lane is uncontested — no fetched competitor had structured Q&A); prioritised
 has no nationality dimension), utility+identity+longevity fusion, and AEO blocks.
 
 Status: DONE.
+
+---
+
+## Phase 6 — Content: New Pages + Existing-Page Edits (commit 7ffcbe0)
+
+**6a — DONE (1 new page, quality over quantity).**
+`/answers/how-many-days-until-my-birthday` — targets the cluster-(a) tool-intent
+keyword "how many days until my birthday" (SEO-STRATEGY §2a). All claims are
+computational/definitional (countdown method, 365 vs 366, Gregorian leap rule,
+half-birthday) — NO external science claims, so Rule-7-clean by construction (no
+fabricated citations possible). Full SEO wiring: unique title+desc in
+prerender-titles map; registered in prerender-routes + sitemap; Breadcrumb +
+Article + FAQPage JSON-LD; concise AEO answer block + question-shaped H2s.
+Inbound internal links from 3 pages (HowToCalculateAge, WhoSharesMyBirthday, FAQ).
+
+**6b — DONE.** Fixed 3 DEAD FAQ internal links (soft-404s to non-existent
+/answers routes): 'How old am I in days?' → /answers/how-to-calculate-age;
+'What is my birthstone?' → /birthstone; 'numerology life path' →
+/answers/what-is-my-life-path-number. (FAQ already referenced the new countdown
+page — dead until this page shipped, now live.) Blog posts already have a
+category-based Related Articles section; the 16 low-inlink posts are reachable
+via /blog + related blocks (left as documented in Phase 4).
+
+**6c — DONE.** `npm run build`: **882 ok, 0 failed prerenders** (was 881). New
+page verified: correct title, trailing-slash canonical, sitemap entry present.
+
+Status: DONE.
