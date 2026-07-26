@@ -197,3 +197,38 @@ via /blog + related blocks (left as documented in Phase 4).
 page verified: correct title, trailing-slash canonical, sitemap entry present.
 
 Status: DONE.
+
+---
+
+## Phase 7 — Ops Monitoring System (MONITOR-ONLY, BUILD-NOT-DEPLOY)
+
+Adapted to BornClock's REAL stack (CF Workers + Vite admin + Razorpay + Resend;
+no Supabase edge functions). Everything is INERT: no routes registered, no crons,
+table not created. Commits d130623 (7a-7d), e28f40e (7e), d781604 (7f-7g).
+
+- **7a** `supabase/migrations/NOTES-ops-inbox.sql` (FILE ONLY): pending_reviews +
+  severity check + RLS + client-write REVOKE + has_role admin SELECT + SECURITY
+  DEFINER mark_review_reviewed gated to ADMIN_EMAILS + open-items index.
+- **7b** `api/_ops.ts`: writeReview (dedupe by category), autoResolve, sendOpsAlert
+  (reuses _email.ts Resend pattern, urgent/warning only, ADMIN_EMAIL fallback
+  himanshu1305@gmail.com), reviewAndAlert.
+- **7c** `api/ops-monitor.ts` (NOT routed): create-order sentinel liveness (10s
+  retry → urgent+alert / pass→autoResolve); PDF documented no-op (no server-side
+  PDF — client iframe print); celebrity_sitelinks integrity (LIVE COUNTS:
+  total=28,148, IN=2,627, birth_date-set/month_day-null=0 — all healthy);
+  ipapi + secret-PRESENCE deps; error-rate skipped (no error-logs table).
+- **7d** `api/ops-digest.ts` (NOT routed): one mobile email of open items → /admin;
+  zero open → sends nothing.
+- **7e** Admin **Ops** tab (first, red badge, severity chips, monospace
+  action_steps, Mark-reviewed via RPC only, collapsed Auto-resolved, green
+  all-clear). Compiles (vite build ✓).
+- **7f** `docs/OPS-ACTIVATION.md`: crons block, scheduled() event.cron dispatch,
+  route registration, Studio SQL steps, ADMIN_EMAIL secret cmd — NOT APPLIED.
+- **7g** ARCHITECTURE-DECISIONS §11 — MONITOR-ONLY ops section + invariants.
+
+**Rule 4 verified:** wrangler.toml + functions/_worker.ts UNTOUCHED (git-confirmed).
+**Real PDF path found:** none — both reports print client-side via iframe
+(grep of api/ + functions/ finds no puppeteer/sparticuz/chromium/playwright).
+**DB counts (live):** total 28,148 · IN 2,627 · bad-date rows 0.
+
+Status: DONE.
