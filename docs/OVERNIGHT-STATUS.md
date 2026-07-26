@@ -119,3 +119,37 @@ found"); (5) title/meta uniqueness deferred to Phase 4 (prerendered output).
 **3d — DONE.** Full gauntlet green: **135 passed** (84 original + 51 new).
 
 Status: DONE.
+
+---
+
+## Phase 4 — Technical SEO (commit 905d4c8)
+
+**4a — DONE.** Sitemap URLs now trailing-slash (Worker 307s non-slash→slash;
+verified live with curl). robots.txt verified: GPTBot/ClaudeBot/Claude-Web/
+PerplexityBot/Google-Extended/Bingbot all Allow /, Sitemap directive present,
+private paths disallowed. llms.txt intact.
+
+**4b — DONE.** Static WebSite+SearchAction+Organization present site-wide (base
+index.html); homepage adds FAQPage (helmet). Added per-route BreadcrumbList
+JSON-LD injection in prerender (truthful, path-derived) — now on all 880 deep
+pages. No fabricated Person/ratings markup.
+
+**4c — DONE.** Meta audit of all 881 prerendered pages: 0 missing titles, 0
+missing descriptions, **0 duplicate titles/descriptions** after fixes. Fixed
+malformed /birthday/{1-12} month titles (off-by-one slice → empty month; 12
+duplicates → 0). (313 titles >70 chars / 312 desc >165 chars are SERP-truncation
+only, not penalties — not individually rewritten.)
+
+**4d — DONE (canonical) / DOCUMENTED (orphans).** ROOT FIX: helmet per-route
+canonical/og:url/twitter:url were not captured in prerender → every page's
+canonical pointed at home. Prerender now injects correct per-route trailing-slash
+canonical + og/twitter url + og/twitter title. Verified: **0 home-canonical leaks
+across 881 pages.** Orphans (<=1 internal inlink): 18/881 (16 blog posts + 1
+compatibility + 1 rashi-ratna) — blog cross-linking noted for Phase 6.
+
+**4e — DONE.** `npm run build`: **881 ok, 0 failed prerenders.** Spot-checked 5
+pages (born-on/july-15, age-calculator, birthday/9, zodiac/leo, a blog post):
+correct unique titles, per-route trailing-slash canonical, BreadcrumbList + 3
+JSON-LD blocks each.
+
+Status: DONE.
