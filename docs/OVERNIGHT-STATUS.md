@@ -50,3 +50,41 @@ Typecheck: geo files clean (`tsc -p tsconfig.app.json` — only pre-existing sta
 errors in BirthdaySearchService/PromoCodeService, unrelated).
 
 Status: DONE. Commit: (see git log — fix(geo): latch resolved country...).
+
+---
+
+## Phase 2 — Founder-Reported Bugs
+
+**2b PDF calc bug — DONE (commit 3fa9703).** "With Optimized Lifestyle 70.2 yrs
+(51.5 yrs remaining)" at age 44: remaining was computed from
+`result.controllablePotential` (theoretical ceiling ≈95.5) while the age shown was
+`displayedOptimized` (70.2). 44+51.5=95.5≠70.2. Fixed all three render sites to use
+`displayedOptimized − currentAge` (→26.2): LongevityHeroCard.tsx:15,
+EnhancedLifeExpectancyReport.tsx:126, LifeExpectancy.tsx:169 (copy-summary).
+`result.yearsRemaining` (finalForecast−age) was already correct, untouched.
+
+**2c Tab overlap — DONE (commit 6384046).** `EnhancedLifeExpectancyReport.tsx:279`
+TabsList used `grid grid-cols-3 w-full`; at ~360–380px each ~120px cell was too
+narrow for the whitespace-nowrap labels → overlap. Switched to the codebase's
+mobile-scroll idiom (HealthGuideSection): `flex + overflow-x-auto` mobile,
+`grid-cols-3` sm+. Triggers now `shrink-0 min-h-[44px] px-4 text-sm`; active tab =
+primary text + bold + primary/5 bg + underline. Horizontal scroll instead of
+truncation at 360px. (Visual 360px assertion deferred to Phase 3 mobile Playwright.)
+
+**2a Longevity PDF blank pages — DONE (commit 2a507b0).**
+- ROOT CAUSE (mobile, not reproducible in headless page.pdf): print iframe was
+  1px×1px. Mobile browsers lay iframe content out at the iframe viewport before
+  printing → 1px column wrap → exploded height → many broken/near-blank pages.
+  Fixed: iframe now real off-screen A4 (210mm×297mm).
+- Print-CSS hardening: `.page` inset moved from block `margin:1.2cm` into padding
+  under `@page margin:0` (block margins leak onto next page at forced breaks);
+  `.page:last-of-type` no longer forces a trailing break (killed guaranteed
+  trailing blank).
+- Extracted print-HTML builder → `src/pages/longevityBlueprintHtml.ts` (pure fn);
+  added `scripts/verify-longevity-print.mjs` headless harness.
+- EVIDENCE (harness, age-44): OLD & FIXED both 15 pages, 0 blank, 2 sparse
+  (p9 41%, p13 38%) in faithful + mobile-margin modes → geometry preserved, no
+  regression. Fully-blank symptom is a real-mobile-print-dialog artifact the
+  1px→A4 iframe change targets; Chromium page.pdf cannot emulate it.
+
+Status: DONE.
