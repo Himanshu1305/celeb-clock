@@ -12,7 +12,10 @@ interface LongevityHeroCardProps {
 export function LongevityHeroCard({ result, optimizedForecast, userName }: LongevityHeroCardProps) {
   const displayedOptimized = optimizedForecast ?? result.totalForecast;
   const currentRemaining = Math.max(0, Math.round((result.totalForecast - result.currentAge) * 10) / 10);
-  const optimizedRemaining = Math.max(0, Math.round((result.controllablePotential - result.currentAge) * 10) / 10);
+  // "Years remaining" must be anchored to the SAME forecast shown above it
+  // (displayedOptimized), not controllablePotential — otherwise the pair is
+  // inconsistent (e.g. "70.2 yrs (51.5 remaining)" for age 44: 44+51.5=95.5≠70.2).
+  const optimizedRemaining = Math.max(0, Math.round((displayedOptimized - result.currentAge) * 10) / 10);
   const gain = Math.round((displayedOptimized - result.totalForecast) * 10) / 10;
   const displayName = userName?.trim() || 'You';
   const country = result.quizSnapshot.country ?? 'Global';

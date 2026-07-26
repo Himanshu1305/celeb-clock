@@ -166,7 +166,7 @@ const LifeExpectancy = () => {
     if (!longevityResult) return;
     const displayed = optimizedForecast ?? longevityResult.totalForecast;
     const curRem = Math.max(0, Math.round((longevityResult.totalForecast - longevityResult.currentAge) * 10) / 10);
-    const optRem = Math.max(0, Math.round((longevityResult.controllablePotential - longevityResult.currentAge) * 10) / 10);
+    const optRem = Math.max(0, Math.round((displayed - longevityResult.currentAge) * 10) / 10);
     const gain = Math.round((displayed - longevityResult.totalForecast) * 10) / 10;
     const country = longevityResult.quizSnapshot.country ?? 'Global';
     const lines = [

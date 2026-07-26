@@ -123,8 +123,11 @@ export const EnhancedLifeExpectancyReport = ({
   );
 
   const displayedOptimized = optimizedForecast ?? result.totalForecast;
+  // Anchor "years remaining" to the displayed optimized forecast, not
+  // controllablePotential — the two diverge and produced the "70.2 yrs
+  // (51.5 remaining)" mismatch at age 44 (should be 70.2−44=26.2).
   const optimizedRemaining = Math.max(0,
-    Math.round((result.controllablePotential - result.currentAge) * 10) / 10
+    Math.round((displayedOptimized - result.currentAge) * 10) / 10
   );
 
   // Chart 1: waterfall data showing how the longevity score is built
