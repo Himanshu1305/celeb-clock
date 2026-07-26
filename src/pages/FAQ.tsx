@@ -374,10 +374,10 @@ export default function FAQ() {
               { to: '/answers/how-does-stress-affect-life-expectancy', label: 'How does stress affect life expectancy?' },
               { to: '/answers/what-is-bmi', label: 'What is BMI?' },
               { to: '/answers/what-is-my-zodiac-sign', label: 'What is my zodiac sign?' },
-              { to: '/answers/how-old-am-i-in-days', label: 'How old am I in days?' },
+              { to: '/answers/how-to-calculate-age', label: 'How old am I in days?' },
               { to: '/answers/what-generation-am-i', label: 'What generation am I?' },
-              { to: '/answers/what-is-my-birthstone', label: 'What is my birthstone?' },
-              { to: '/answers/what-is-my-numerology-life-path-number', label: 'What is my numerology life path number?' },
+              { to: '/birthstone', label: 'What is my birthstone?' },
+              { to: '/answers/what-is-my-life-path-number', label: 'What is my numerology life path number?' },
               { to: '/answers/how-many-days-until-my-birthday', label: 'How many days until my birthday?' },
             ].map(({ to, label }) => (
               <Link

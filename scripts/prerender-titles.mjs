@@ -122,6 +122,7 @@ const ANSWERS = {
   'what-is-bmi':                           'What Is BMI and What Does Your Number Actually Mean? | BornClock',
   'what-is-life-expectancy':               'What Is Life Expectancy and How Is It Calculated? | BornClock',
   'how-does-stress-affect-life-expectancy':'How Does Stress Affect Life Expectancy? The Science Explained | BornClock',
+  'how-many-days-until-my-birthday':        'How Many Days Until My Birthday? Count the Exact Days | BornClock',
 };
 
 // ── Static pages ──────────────────────────────────────────────────────────────

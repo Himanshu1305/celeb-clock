@@ -61,6 +61,7 @@ import HowToLiveLonger from '@/pages/answers/HowToLiveLonger';
 import WhatIsBMI from '@/pages/answers/WhatIsBMI';
 import WhatIsLifeExpectancy from '@/pages/answers/WhatIsLifeExpectancy';
 import HowDoesStressAffectLifeExpectancy from '@/pages/answers/HowDoesStressAffectLifeExpectancy';
+import HowManyDaysUntilMyBirthday from '@/pages/answers/HowManyDaysUntilMyBirthday';
 import TarotByBirthday from '@/pages/TarotByBirthday';
 import MoonSignPage from '@/pages/MoonSignPage';
 import NameNumerologyPage from '@/pages/NameNumerologyPage';
@@ -143,6 +144,7 @@ const App = () => (
               <Route path="/answers/what-is-bmi" element={<WhatIsBMI />} />
               <Route path="/answers/what-is-life-expectancy" element={<WhatIsLifeExpectancy />} />
               <Route path="/answers/how-does-stress-affect-life-expectancy" element={<HowDoesStressAffectLifeExpectancy />} />
+              <Route path="/answers/how-many-days-until-my-birthday" element={<HowManyDaysUntilMyBirthday />} />
               <Route path="/tarot-card-by-birthday" element={<TarotByBirthday />} />
               <Route path="/moon-sign" element={<MoonSignPage />} />
               <Route path="/name-numerology" element={<NameNumerologyPage />} />

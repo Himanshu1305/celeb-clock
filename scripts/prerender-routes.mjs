@@ -76,6 +76,7 @@ const ANSWER_ROUTES = [
   '/answers/what-is-bmi',
   '/answers/what-is-life-expectancy',
   '/answers/how-does-stress-affect-life-expectancy',
+  '/answers/how-many-days-until-my-birthday',
 ];
 
 const MONTH_NAMES_LOWER = [
