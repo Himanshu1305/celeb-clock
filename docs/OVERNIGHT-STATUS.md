@@ -232,3 +232,27 @@ table not created. Commits d130623 (7a-7d), e28f40e (7e), d781604 (7f-7g).
 **DB counts (live):** total 28,148 · IN 2,627 · bad-date rows 0.
 
 Status: DONE.
+
+---
+
+## Phase 8 — Final Verification + Single Gated Deploy
+
+**8a — GREEN.** Typecheck: 47 errors, ALL pre-existing (stale Supabase generated
+types in BirthdaySearchService/PromoCodeService; 4 `quiz.dob` errors inherited
+verbatim by the Phase-2 extraction from LifeExpectancy.tsx — net 0 new). Vite
+build (esbuild) is the real gate. Full `npm run build`: **882 ok, 0 failed
+prerenders.** Full gauntlet: **135/135 passed.**
+
+**8b — GATE PASSED → DEPLOYED ONCE.** Payment-file diff vs develop EMPTY
+(no razorpay-webhook/verify-payment/_crypto touched). `./node_modules/.bin/wrangler
+deploy` → version **391cbc7c-a549-4ac7-87af-7bdfe387ae03** (bornclock.usdvisionai
+.workers.dev + staging.bornclock.com; schedule still only `0 6 * * *` — ops crons
+NOT added, Rule 4). Smoke test: create-order → `{"error":"Report not found"}` ✓.
+Live-verified: geo bundle has `bc_country_code_v2`, new page 200, canonical
+trailing-slash. Removed local-only `.dev.vars` before deploy.
+
+**8c — DONE.** `docs/OVERNIGHT-REPORT.md` written (per-phase status + commits,
+bugs found/fixed/documented, new page, SEO summary, ops summary incl. real PDF
+path = none + DB counts, deploy version, morning checklist).
+
+Status: DONE. **All 8 phases complete.**
