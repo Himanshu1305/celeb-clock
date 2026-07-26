@@ -122,6 +122,39 @@ async function prerenderRoute(page, baseUrl, route) {
         /(<meta\s+[^>]*content=")[^"]*("\s+name="description"[^>]*)/i,
         `$1${escapedDesc}$2`
       );
+
+      // Keep og/twitter titles in sync with the per-route <title>.
+      html = html.replace(/(<meta property="og:title" content=")[^"]*(")/i, `$1${escapedTitle}$2`);
+      html = html.replace(/(<meta name="twitter:title" content=")[^"]*(")/i, `$1${escapedTitle}$2`);
+    }
+
+    // ── Canonical + og/twitter URL injection ──────────────────────────────────
+    // react-helmet's per-route canonical is NOT flushed before the outerHTML
+    // capture, so the base index.html's home-pointing canonical/og:url/twitter:url
+    // leak onto every route. Inject the correct trailing-slash canonical (matches
+    // the sitemap and the Worker's 200 URL) per route.
+    const canonicalPath = route === '/' ? '/' : route.replace(/\/+$/, '') + '/';
+    const canonicalUrl = `https://bornclock.com${canonicalPath}`;
+    html = html.replace(/(<link rel="canonical" href=")[^"]*(")/i, `$1${canonicalUrl}$2`);
+    html = html.replace(/(<meta property="og:url" content=")[^"]*(")/i, `$1${canonicalUrl}$2`);
+    html = html.replace(/(<meta name="twitter:url" content=")[^"]*(")/i, `$1${canonicalUrl}$2`);
+
+    // ── Per-route BreadcrumbList JSON-LD (truthful, derived from the URL path) ──
+    if (route !== '/') {
+      const parts = route.split('/').filter(Boolean);
+      const items = [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bornclock.com/' }];
+      let acc = '';
+      parts.forEach((p, i) => {
+        acc += `/${p}`;
+        items.push({
+          '@type': 'ListItem',
+          position: i + 2,
+          name: p.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+          item: `https://bornclock.com${acc}/`,
+        });
+      });
+      const bc = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items });
+      html = html.replace('</head>', `<script type="application/ld+json">${bc}</script></head>`);
     }
 
     // Sanity: check for non-default title

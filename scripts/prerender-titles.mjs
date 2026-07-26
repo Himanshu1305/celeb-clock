@@ -272,7 +272,7 @@ export function getTitleForRoute(route) {
 
   // /birthday/:month (index page for a month)
   if (/^\/birthday\/\d+$/.test(route)) {
-    const m = parseInt(route.slice(9), 10);
+    const m = parseInt(route.slice(10), 10); // "/birthday/" is 10 chars; slice(9) left a leading "/" → NaN → empty month
     const monthName = MONTH_NAMES[m] || '';
     return {
       title: `${monthName} Birthdays — Personality, Zodiac & Famous People | BornClock`,

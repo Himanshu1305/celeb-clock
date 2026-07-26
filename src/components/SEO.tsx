@@ -38,7 +38,13 @@ export const SEO = ({
   noindex = false
 }: SEOProps) => {
   const fullTitle = `${title} | ${SITE_NAME}`;
-  const fullCanonicalUrl = canonicalUrl ? `${SITE_URL}${canonicalUrl}` : undefined;
+  // Canonical must be the final 200 URL. The Worker 307-redirects non-slash →
+  // trailing-slash, so emit the trailing-slash form (matches the sitemap) — a
+  // non-slash canonical points at a URL that redirects, which is a weaker signal.
+  const canonicalPath = canonicalUrl
+    ? (canonicalUrl === '/' ? '/' : canonicalUrl.replace(/\/+$/, '') + '/')
+    : undefined;
+  const fullCanonicalUrl = canonicalPath ? `${SITE_URL}${canonicalPath}` : undefined;
   
   // Generate JSON-LD structured data
   const generateStructuredData = () => {

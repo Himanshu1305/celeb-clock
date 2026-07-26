@@ -51,7 +51,11 @@ async function main() {
   console.log(`\n🗺  Sitemap: ${routes.length} URLs`);
 
   const urls = routes.map(route => {
-    const loc = `${BASE_URL}${escapeXml(route)}`;
+    // Trailing slash on every URL except root: the Worker 307-redirects non-slash
+    // → trailing-slash (verified live). Emitting the canonical trailing-slash form
+    // in the sitemap removes the redirect hop crawlers would otherwise follow.
+    const path = route === '/' ? '/' : route.replace(/\/+$/, '') + '/';
+    const loc = `${BASE_URL}${escapeXml(path)}`;
     const prio = priority(route);
     const freq = changefreq(route);
     return `  <url><loc>${loc}</loc><lastmod>${TODAY}</lastmod><changefreq>${freq}</changefreq><priority>${prio}</priority></url>`;
