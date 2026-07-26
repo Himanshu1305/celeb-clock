@@ -341,3 +341,48 @@ Razorpay alone cannot take most international cards. When tier-1 traffic shows p
 - FamousBirthdays traffic/keyword figures: SimilarWeb/Semrush/Clicks.so estimates 2024–2026, Digiday & dot.LA profiles (programmatic-ads business model, editorial staff, +15% from Spanish version).
 - India AdSense RPM ranges: entertainment ₹40–₹165 RPM (upGrowth 2026 benchmarks); US 5–10× multiplier (multiple publisher sources).
 - Programmatic SEO failure modes: ~60% fail on thin/undifferentiated pages; mitigation = every page a mini-product with unique computed data.
+
+---
+
+## 11. Ops monitoring system (MONITOR-ONLY — built 2026-07-27, NOT active)
+
+**Posture: MONITOR-ONLY and BUILD-NOT-DEPLOYED.** The ops system observes and
+alerts; it never mutates product data. As committed it is completely inert:
+handlers are not routed, no crons for them exist, and the DB table is not created.
+Activation is a deliberate, reversible checklist in `docs/OPS-ACTIVATION.md`.
+
+**Why this shape (adapted to BornClock's real stack):** the reference "hearlog"
+ops pattern assumed Supabase edge functions. BornClock has none — it runs on
+Cloudflare Workers (`functions/_worker.ts` + `api/*`), a Vite admin panel,
+Razorpay, and Resend. So the ops system is built from the same primitives the app
+already uses: Worker route handlers, the service-role Supabase client for writes,
+the `has_role` RLS gate for admin reads, and the `_email.ts` Resend pattern.
+
+**Components:**
+- `supabase/migrations/NOTES-ops-inbox.sql` — `pending_reviews` inbox table. RLS
+  on; anon/authenticated write REVOKEd (only the service role writes); admin
+  SELECT via `has_role(auth.uid(),'admin')` (the app's canonical admin gate);
+  `mark_review_reviewed(p_id)` SECURITY DEFINER RPC hard-gated to the ADMIN_EMAILS
+  allowlist. NOTE-file, applied statement-by-statement in Studio (never bulk-paste).
+- `api/_ops.ts` — `writeReview` (dedupes by category — updates the open row
+  instead of stacking duplicates), `autoResolve` (closes an open item when its
+  check recovers), `sendOpsAlert` (Resend, urgent/warning only, ADMIN_EMAIL →
+  himanshu1305@gmail.com fallback).
+- `api/ops-monitor.ts` — checks: (1) payment liveness via the create-order
+  sentinel (`{"error":"Report not found"}`; 10s retry → urgent+alert / pass→
+  autoResolve); (2) PDF = documented no-op (both reports print client-side via an
+  iframe — nothing Worker-callable to probe; no endpoint invented); (3)
+  celebrity_sitelinks integrity (total ≥ 27000 / baseline 28,148, IN ≥ 300 /
+  actual ~2,627, zero birth_date-set-but-month_day-null); (4) ipapi + secret
+  PRESENCE (not values); (5) error-rate SKIPPED — no error-logs table exists.
+- `api/ops-digest.ts` — one mobile-readable Resend email of open items → /admin;
+  sends nothing when there are zero open items.
+- Admin **Ops** tab (first in nav) — red badge = open urgent+warning count,
+  severity chips, monospace action_steps, "Mark reviewed" via the RPC only,
+  collapsed Auto-resolved section, green all-clear. Reads via the has_role RLS
+  policy; shows all-clear gracefully until the table exists.
+
+**Design invariants:** monitor never writes to product tables; alerts fire only
+for urgent/warning; the digest is silent on healthy days; all writes go through
+the service role so the client-role REVOKE holds; "mark reviewed" is RPC-only,
+never a direct client UPDATE.
