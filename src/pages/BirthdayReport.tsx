@@ -86,8 +86,19 @@ const BirthdayReport = () => {
   const handleSubmit = async () => {
     if (!recipientName.trim()) { setError('Please enter the recipient\'s name.'); return; }
     if (!dob) { setError('Please enter the recipient\'s date of birth.'); return; }
-    if (isNaN(new Date(dob).getTime())) { setError('Please enter a valid date.'); return; }
-    if (new Date(dob) > new Date()) { setError("Birth date can't be in the future."); return; }
+    // Strict validity: build the date from its parts and confirm it round-trips.
+    // JS silently rolls impossible dates over (new Date('2019-02-29') → Mar 1),
+    // so an isNaN check alone accepts Feb-29 in non-leap years, day 31 of a
+    // 30-day month, etc. Round-trip comparison rejects them.
+    const [dobY, dobM, dobD] = dob.split('-').map(Number);
+    const parsedDob = new Date(dobY, dobM - 1, dobD);
+    if (
+      isNaN(parsedDob.getTime()) ||
+      parsedDob.getFullYear() !== dobY ||
+      parsedDob.getMonth() !== dobM - 1 ||
+      parsedDob.getDate() !== dobD
+    ) { setError('Please enter a valid date.'); return; }
+    if (parsedDob > new Date()) { setError("Birth date can't be in the future."); return; }
     setError('');
 
     setPhase('loading');
