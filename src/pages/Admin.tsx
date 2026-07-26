@@ -12,6 +12,7 @@ import {
   Users, Globe, BarChart3, Gift, Shield, ExternalLink,
   RefreshCw, Crown, Clock, CheckCircle, Plus,
   LayoutDashboard, ArrowLeft, AlertTriangle, UserCheck, Mail,
+  Activity, ChevronDown,
 } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -80,7 +81,21 @@ interface ConfirmState {
   onConfirm: () => Promise<void>;
 }
 
-type Section = 'metrics' | 'overview' | 'users' | 'countries' | 'usage' | 'promo' | 'system' | 'emails';
+type Section = 'ops' | 'metrics' | 'overview' | 'users' | 'countries' | 'usage' | 'promo' | 'system' | 'emails';
+
+interface OpsReview {
+  id: number;
+  created_at: string;
+  reviewed_at: string | null;
+  reviewed_by: string | null;
+  category: string;
+  severity: 'urgent' | 'warning' | 'info';
+  title: string;
+  body: string | null;
+  action_steps: string | null;
+  auto_resolved: boolean;
+  auto_resolution_note: string | null;
+}
 
 // cast for tables that may not yet be in generated Database types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,6 +148,14 @@ export default function Admin() {
   const { toast } = useToast();
 
   const [section, setSection] = useState<Section>('metrics');
+
+  // Ops inbox (monitor-only). Reads pending_reviews via the admin has_role RLS
+  // SELECT policy; the table may not exist until NOTES-ops-inbox.sql is applied,
+  // in which case the query errors gracefully → all-clear/empty state.
+  const [opsRows, setOpsRows] = useState<OpsReview[]>([]);
+  const [opsLoading, setOpsLoading] = useState(false);
+  const [opsError, setOpsError] = useState<string | null>(null);
+  const [opsShowResolved, setOpsShowResolved] = useState(false);
 
   const [metrics, setMetrics] = useState<BusinessMetrics | null>(null);
   const [metricsLoading, setMetricsLoading] = useState(true);
@@ -368,6 +391,7 @@ export default function Admin() {
     if (section === 'users' && users.length === 0) fetchUsers();
     if (section === 'countries' && countries.length === 0) fetchCountries();
     if (section === 'promo') fetchPromoCodes();
+    if (section === 'ops') fetchOps();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [section]);
 
@@ -469,7 +493,8 @@ export default function Admin() {
 
   // ── Sidebar nav items ─────────────────────────────────────────────────────
 
-  const navItems: { id: Section; label: string; Icon: React.ElementType }[] = [
+  const navItems: { id: Section; label: string; Icon: React.ElementType; badge?: number }[] = [
+    { id: 'ops',      label: 'Ops', Icon: Activity, badge: opsAlertCount },
     { id: 'metrics',  label: 'Business Metrics', Icon: BarChart3 },
     { id: 'overview', label: 'Overview', Icon: LayoutDashboard },
     { id: 'users',    label: 'Users',    Icon: Users },
@@ -1017,7 +1042,122 @@ export default function Admin() {
     );
   };
 
+  async function fetchOps() {
+    setOpsLoading(true);
+    setOpsError(null);
+    const { data, error } = await supabase
+      .from('pending_reviews')
+      .select('*')
+      .order('severity', { ascending: true })
+      .order('created_at', { ascending: false });
+    if (error) {
+      // Table may not exist yet (NOTES-ops-inbox.sql not applied) — treat as empty.
+      setOpsError(error.message);
+      setOpsRows([]);
+    } else {
+      setOpsRows((data ?? []) as OpsReview[]);
+    }
+    setOpsLoading(false);
+  }
+
+  async function markReviewed(id: number) {
+    const { error } = await supabase.rpc('mark_review_reviewed' as never, { p_id: id } as never);
+    if (error) {
+      toast({ title: 'Could not mark reviewed', description: error.message, variant: 'destructive' });
+      return;
+    }
+    toast({ title: 'Marked reviewed' });
+    fetchOps();
+  }
+
+  const opsOpen = opsRows.filter(r => !r.reviewed_at && !r.auto_resolved);
+  const opsAlertCount = opsOpen.filter(r => r.severity === 'urgent' || r.severity === 'warning').length;
+  const opsAutoResolved = opsRows.filter(r => r.auto_resolved);
+
+  const SEV_STYLE: Record<string, string> = {
+    urgent:  'bg-red-100 text-red-700 border-red-300',
+    warning: 'bg-amber-100 text-amber-700 border-amber-300',
+    info:    'bg-blue-100 text-blue-700 border-blue-300',
+  };
+
+  function renderOps() {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold flex items-center gap-2"><Activity className="w-5 h-5" /> Ops</h2>
+          <Button variant="outline" size="sm" onClick={fetchOps} disabled={opsLoading}>
+            <RefreshCw className={`w-4 h-4 ${opsLoading ? 'animate-spin' : ''}`} /> Refresh
+          </Button>
+        </div>
+
+        {opsError && (
+          <div className="text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg p-3">
+            Could not read pending_reviews ({opsError}). If the ops table has not been created yet,
+            apply <code>supabase/migrations/NOTES-ops-inbox.sql</code> per <code>docs/OPS-ACTIVATION.md</code>.
+          </div>
+        )}
+
+        {opsOpen.length === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-2 py-12 text-center">
+            <CheckCircle className="w-10 h-10 text-green-500" />
+            <p className="text-lg font-semibold text-green-700">All clear</p>
+            <p className="text-sm text-slate-500">No open ops items need review.</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {opsOpen.map(r => (
+              <Card key={r.id} className="border-l-4" style={{ borderLeftColor: r.severity === 'urgent' ? '#dc2626' : r.severity === 'warning' ? '#d97706' : '#2563eb' }}>
+                <CardContent className="p-4 space-y-2">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded border ${SEV_STYLE[r.severity]}`}>{r.severity}</span>
+                        <span className="text-[11px] text-slate-400">{r.category}</span>
+                      </div>
+                      <p className="font-semibold text-slate-900 mt-1">{r.title}</p>
+                    </div>
+                    <Button size="sm" variant="outline" className="shrink-0" onClick={() => markReviewed(r.id)}>
+                      Mark reviewed
+                    </Button>
+                  </div>
+                  {r.body && <p className="text-sm text-slate-600 whitespace-pre-wrap">{r.body}</p>}
+                  {r.action_steps && (
+                    <pre className="text-xs bg-slate-900 text-slate-100 rounded-md p-3 whitespace-pre-wrap overflow-x-auto font-mono">{r.action_steps}</pre>
+                  )}
+                  <p className="text-[11px] text-slate-400">{new Date(r.created_at).toUTCString()}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {opsAutoResolved.length > 0 && (
+          <div className="pt-2">
+            <button
+              onClick={() => setOpsShowResolved(v => !v)}
+              className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-700"
+            >
+              <ChevronDown className={`w-4 h-4 transition-transform ${opsShowResolved ? 'rotate-180' : ''}`} />
+              Auto-resolved ({opsAutoResolved.length})
+            </button>
+            {opsShowResolved && (
+              <div className="mt-2 space-y-1.5">
+                {opsAutoResolved.map(r => (
+                  <div key={r.id} className="text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+                    <span className="font-semibold text-slate-600">{r.category}</span> — {r.title}
+                    {r.auto_resolution_note && <span className="text-slate-400"> · {r.auto_resolution_note}</span>}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   const sectionContent: Record<Section, () => React.JSX.Element> = {
+    ops:       renderOps,
     metrics:   renderMetrics,
     overview:  renderOverview,
     users:     renderUsers,
@@ -1048,7 +1188,7 @@ export default function Admin() {
             </Link>
           </div>
           <nav className="flex-1 p-4 space-y-1">
-            {navItems.map(({ id, label, Icon }) => (
+            {navItems.map(({ id, label, Icon, badge }) => (
               <button
                 key={id}
                 onClick={() => setSection(id)}
@@ -1060,6 +1200,7 @@ export default function Admin() {
               >
                 <Icon className="w-4 h-4" />
                 {label}
+                {badge ? <span className="ml-auto min-w-[20px] text-center text-[11px] font-bold bg-red-600 text-white rounded-full px-1.5 py-0.5">{badge}</span> : null}
               </button>
             ))}
           </nav>
@@ -1078,7 +1219,7 @@ export default function Admin() {
               </Link>
             </div>
             <div className="flex overflow-x-auto scrollbar-none">
-              {navItems.map(({ id, label, Icon }) => (
+              {navItems.map(({ id, label, Icon, badge }) => (
                 <button
                   key={id}
                   onClick={() => setSection(id)}
@@ -1090,6 +1231,7 @@ export default function Admin() {
                 >
                   <Icon className="w-3.5 h-3.5" />
                   {label}
+                  {badge ? <span className="text-[10px] font-bold bg-red-600 text-white rounded-full px-1.5">{badge}</span> : null}
                 </button>
               ))}
             </div>
