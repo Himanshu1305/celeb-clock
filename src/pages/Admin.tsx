@@ -491,6 +491,14 @@ export default function Admin() {
     fetchPromoCodes();
   };
 
+  // ── Ops derived counts ────────────────────────────────────────────────────
+  // Declared BEFORE navItems, which reads opsAlertCount for the Ops tab badge.
+  // (These are const, not hoisted — using them before this point throws a TDZ
+  // "cannot access before initialization" the moment the Admin component renders.)
+  const opsOpen = opsRows.filter(r => !r.reviewed_at && !r.auto_resolved);
+  const opsAlertCount = opsOpen.filter(r => r.severity === 'urgent' || r.severity === 'warning').length;
+  const opsAutoResolved = opsRows.filter(r => r.auto_resolved);
+
   // ── Sidebar nav items ─────────────────────────────────────────────────────
 
   const navItems: { id: Section; label: string; Icon: React.ElementType; badge?: number }[] = [
@@ -1069,10 +1077,6 @@ export default function Admin() {
     toast({ title: 'Marked reviewed' });
     fetchOps();
   }
-
-  const opsOpen = opsRows.filter(r => !r.reviewed_at && !r.auto_resolved);
-  const opsAlertCount = opsOpen.filter(r => r.severity === 'urgent' || r.severity === 'warning').length;
-  const opsAutoResolved = opsRows.filter(r => r.auto_resolved);
 
   const SEV_STYLE: Record<string, string> = {
     urgent:  'bg-red-100 text-red-700 border-red-300',
