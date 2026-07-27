@@ -241,7 +241,7 @@ export function buildLongevityBlueprintHtml(
       const isGen = isGeneticFactor(f);
       const gapYrs = Math.max(0, geneticCeiling - Number(forecast)).toFixed(0);
       return `
-      <div style="padding:14px;background:white;border-radius:8px;border:1px solid ${isGen ? 'var(--hairline)' : '#e5e7eb'};margin-bottom:12px;page-break-inside:avoid;break-inside:avoid;${isGen ? 'border-left:3px solid var(--slate);' : ''}">
+      <div style="padding:14px;background:white;border-radius:8px;border:1px solid ${isGen ? 'var(--hairline)' : '#e5e7eb'};margin-bottom:12px;${isGen ? 'border-left:3px solid var(--slate);' : ''}">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
           <div style="display:flex;align-items:center;gap:8px;">
             <div style="background:${isGen ? 'var(--slate)' : 'var(--navy)'};color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">${i + 1}</div>
@@ -283,7 +283,7 @@ export function buildLongevityBlueprintHtml(
       longevityResult.factorBreakdown || []
     );
     const pdfActionHTML = actionPlanPhases.map((planPhase, idx) => `
-  <div style="margin-bottom:14px;border-radius:8px;overflow:hidden;border:1px solid var(--hairline);border-left:3px solid ${idx < 2 ? 'var(--navy)' : 'var(--pos)'};page-break-inside:avoid;break-inside:avoid;">
+  <div style="margin-bottom:14px;border-radius:8px;overflow:hidden;border:1px solid var(--hairline);border-left:3px solid ${idx < 2 ? 'var(--navy)' : 'var(--pos)'};">
     <div style="background:${idx < 2 ? 'var(--panel)' : '#f0fdf4'};padding:9px 14px;border-bottom:1px solid var(--hairline);">
       <div style="font-size:12px;font-weight:700;color:${idx < 2 ? 'var(--navy)' : 'var(--pos)'};">${planPhase.period} — ${planPhase.title}</div>
     </div>
@@ -459,7 +459,7 @@ export function buildLongevityBlueprintHtml(
             <div style="font-size:9px;color:#9ca3af;margin-top:1px;font-style:italic;">${rec.source}</div>
           </div>
         </div>`).join('');
-      return `<div style="margin-bottom:8px;border:1px solid ${cat.border};border-radius:7px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;">
+      return `<div style="margin-bottom:8px;border:1px solid ${cat.border};border-radius:7px;overflow:hidden;">
         <div style="padding:7px 10px;background:${cat.color}22;border-bottom:1px solid ${cat.border};display:flex;align-items:center;gap:6px;">
           <span style="font-size:15px;">${cat.emoji}</span>
           <div>
@@ -488,21 +488,21 @@ export function buildLongevityBlueprintHtml(
            font-size: 12px; line-height: 1.6; color: var(--ink); background: var(--paper);
            font-feature-settings: "tnum" 1, "lnum" 1; }
     .num { font-feature-settings: "tnum" 1; letter-spacing: -.01em; }
-    @page { margin: 0; size: A4; }
-    /* Page inset is baked into PADDING, not block margin. A block margin on a
-       paginated element (the old .page { margin: 1.2cm }) is unreliable in print:
-       at a forced page break the residual top/bottom margin lands on the next
-       physical page, spawning near-blank pages — the "many blank pages on mobile"
-       bug. box-sizing:border-box (set on * above) keeps content width identical:
-       calc(1.2cm + 40/32px) reproduces the old margin+padding inset exactly, and
-       the .page-header -32px/-40px bleed still lands the navy band 1.2cm from the
-       paper edge. Matches the working Birthday report, which also bakes insets
-       into padding under @page margin:0. */
-    .page { padding: calc(1.2cm + 32px) calc(1.2cm + 40px); }
-    .page-break { page-break-after: always; break-after: page; }
-    /* The last page must NOT force a break after itself — page-break-after:always
-       on the final .page emits a guaranteed trailing blank page. */
-    .page:last-of-type { page-break-after: auto; break-after: auto; }
+    /* CONTENT FLOW model (rewritten). The old design forced every .page section
+       onto its own physical page (page-break-after:always), so short sections left
+       huge voids — the founder's "content-then-void" pages (measured: 14/15 pages
+       <50% ink). Now content flows continuously and the browser starts a new page
+       ONLY when the next block doesn't fit. Per-physical-page margins come from
+       @page (needed once content spans pages); cards keep break-inside:avoid so
+       they don't split awkwardly. */
+    @page { margin: 1.2cm 1.1cm; size: A4; }
+    .page { padding: 0; }
+    /* Former per-section page breaks are neutralised — just a little breathing room
+       between the old section blocks. */
+    .page-break { margin-top: 14px; }
+    /* Per-section running footers repeated the "Confidential" line mid-flow; hide
+       them (the final page carries the full closing branding block). */
+    .page-footer { display: none !important; }
 
     /* Typography */
     h1 { font-size: 22px; font-weight: 800; color: var(--navy); letter-spacing: -0.3px; }
@@ -510,7 +510,7 @@ export function buildLongevityBlueprintHtml(
     h3 { font-size: 13px; font-weight: 700; color: var(--ink-soft); margin: 0 0 8px 0; }
 
     /* Section cards */
-    .section { margin-bottom: 18px; padding: 16px 20px; border-radius: 8px; page-break-inside: avoid; break-inside: avoid; border: 1px solid var(--hairline); }
+    .section { margin-bottom: 18px; padding: 16px 20px; border-radius: 8px; border: 1px solid var(--hairline); }
     .section-gray  { background: var(--panel); border-left: 4px solid var(--slate); }
     .section-green { background: #f0fdf4; border: 1px solid var(--pos-soft); border-left: 4px solid var(--pos); }
     .section-blue  { background: var(--blue-tint); border: 1px solid #c3d9ef; border-left: 4px solid var(--blue); }
