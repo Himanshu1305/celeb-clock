@@ -2100,7 +2100,7 @@ const ReportView = () => {
       })()}
 
       {/* ── Closing Section ──────────────────────────────────────────────── */}
-      <div className="py-10 px-4" style={{ background: 'var(--panel-2)' }}>
+      <div className="report-closing py-10 px-4" style={{ background: 'var(--panel-2)' }}>
         <div className="max-w-2xl mx-auto text-center">
           <div style={{ borderTop: '2px solid var(--navy)', paddingTop: '24px', marginBottom: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '8px' }}>

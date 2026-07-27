@@ -370,6 +370,47 @@
   /* Birthday Report */
   #birthday-report-print, #birthday-report-print * { visibility: visible; }
   #birthday-report-print .no-print { visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
+  /* ── Birthday Blueprint pagination ─────────────────────────────────────
+     These rules previously lived ONLY in ReportView's useReactToPrint
+     pageStyle string, so they applied to the in-app "Download PDF" button
+     but NOT to the browser's native Ctrl/Cmd+P → Save-as-PDF path (the
+     founder's real path). Without them, the cover did not force a page
+     break, so the running-header <thead> painted mid-page-1 as in-body text
+     with Twins flowing onto the same page. Promoted here so EVERY print path
+     — react-to-print AND browser print — gets identical, correct pagination. */
+  @page { margin: 0; size: A4; }
+  .report-print-table { width: 100%; border-collapse: collapse; }
+  .report-print-cell        { padding: 0 1.5cm; }
+  thead .report-print-cell  { padding-top: 1.5cm; }
+  tfoot .report-print-cell  { padding-bottom: 1.5cm; }
+  .report-running-header {
+    display: flex !important; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--hairline, #D7E1EA); padding: 9px 0;
+    font-size: 9px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted, #8A9BA8); background: white;
+  }
+  .report-print-footer {
+    display: flex !important; align-items: center; justify-content: center;
+    padding: 8px 0; border-top: 1px solid var(--hairline, #D7E1EA);
+    font-size: 9px; color: var(--muted, #8A9BA8); letter-spacing: 0.3px; background: #fff;
+  }
+  .report-cover-section {
+    padding: 1.5cm !important; break-after: page; page-break-after: always;
+    display: flex; flex-direction: column; min-height: 297mm; box-sizing: border-box;
+  }
+  .zodiac-tab-panel { display: block !important; height: auto !important; overflow: visible !important; }
+  .print-break-before { break-before: page; page-break-before: always; }
+  /* Orphaned-heading guard: keep the whole section-intro cluster
+     (rule → eyebrow → h2 → sub) with the content that follows, so a heading
+     never strands alone at the foot of a page. */
+  .report-section h2, .report-section h3 { break-after: avoid; page-break-after: avoid; }
+  .report-section .bb-rule,
+  .report-section .bb-eyebrow,
+  .report-section .bb-h2 { break-after: avoid; page-break-after: avoid; }
+  /* Trailing-page guard: the closing block's generous screen padding spilled its
+     last line (copyright) onto a near-empty final page. Trim its print padding and
+     keep it whole so it lands on the last content page, not a lone footer page. */
+  .report-closing { padding-top: 14px !important; padding-bottom: 10px !important; break-inside: avoid; page-break-inside: avoid; }
   /* Global print rules */
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   .no-print { visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
