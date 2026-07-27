@@ -12,6 +12,10 @@ import { getZodiacSign } from '@/data/birthdayPersonality';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
 import { getNumerologyByNumber } from '@/data/numerologyData';
 import { ArrowLeft, ArrowRight, ArrowRightCircle, Star } from 'lucide-react';
+import indiaDates from '@/data/indiaBornOnDates.json';
+
+// Slugs that have a dedicated /born-on/[slug]/india page (>=3 Indian celebrities).
+const INDIA_SLUGS = new Set((indiaDates as { slug: string }[]).map(d => d.slug));
 
 const MONTH_NAMES = [
   '', 'January', 'February', 'March', 'April', 'May', 'June',
@@ -222,6 +226,16 @@ export default function BornOnDay() {
               monthDay={`${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`}
               mainListNames={celebrities.map(c => c.name)}
             />
+            {slug && INDIA_SLUGS.has(slug) && (
+              <div className="mt-4 mb-2">
+                <Link
+                  to={`/born-on/${slug}/india`}
+                  className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
+                >
+                  🇮🇳 Indian celebrities born on {monthName} {day} →
+                </Link>
+              </div>
+            )}
             <div className="mb-6" />
           </>
         ) : (

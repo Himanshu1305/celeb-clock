@@ -406,3 +406,44 @@ export async function getCountryExtras(
     return [];
   }
 }
+
+/**
+ * All celebrities of a given nationality for a date, ranked by sitelinks.
+ * Unlike getCountryExtras (which fetches the global top-N then filters — so it
+ * misses nationals ranked below the cutoff on high-volume dates like 01-01),
+ * this filters by nationality_code IN THE QUERY, so the count matches the
+ * nationality facet's date index. Used by the /born-on/[slug]/india pages.
+ */
+export async function getNationalityCelebritiesForDate(
+  monthDay: string,
+  countryCode: string,
+  limit: number = 30,
+): Promise<CelebrityBirthdayResult[]> {
+  try {
+    const { data, error } = await supabase
+      .from('celebrity_sitelinks')
+      .select('name, birth_date, death_date, sitelinks, nationality, nationality_code, occupation, known_for, wikipedia_url, wikidata_id')
+      .eq('birth_month_day', monthDay)
+      .eq('nationality_code', countryCode)
+      .order('sitelinks', { ascending: false })
+      .limit(limit);
+
+    if (error || !data) return [];
+    return data.map(c => ({
+      name: c.name,
+      birthDate: c.birth_date,
+      deathDate: c.death_date,
+      sitelinks: c.sitelinks ?? 0,
+      nationality: c.nationality,
+      nationalityCode: c.nationality_code,
+      occupation: c.occupation,
+      knownFor: c.known_for ?? null,
+      wikipediaUrl: c.wikipedia_url,
+      wikidataId: c.wikidata_id,
+      isLiving: !c.death_date,
+    }));
+  } catch (err) {
+    console.error('getNationalityCelebritiesForDate: query failed (returning []):', err);
+    return [];
+  }
+}

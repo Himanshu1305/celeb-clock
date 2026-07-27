@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import {
   Accordion,
   AccordionContent,
@@ -31,9 +30,10 @@ export const PageFAQ = ({ slug, title = 'Frequently Asked Questions', items }: P
 
   return (
     <section className="max-w-3xl mx-auto mb-16">
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      </Helmet>
+      {/* JSON-LD emitted in-body (not via Helmet) so it is captured by the
+          prerender's outerHTML snapshot — Helmet's head injection does not
+          reliably flush before capture (see ARCHITECTURE-DECISIONS prerender note). */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="text-center mb-6 flex items-center justify-center gap-2">
         <HelpCircle className="w-6 h-6 text-accent" />
         <h2 className="text-2xl md:text-3xl font-bold gradient-text-primary">{title}</h2>

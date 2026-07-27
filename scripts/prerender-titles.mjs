@@ -7,6 +7,16 @@
  *   src/data/blogPosts.ts, src/services/VedicZodiacExtended.ts, src/pages/*
  */
 
+import { readFileSync } from 'fs';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+// Indian born-on facet data (slug → {top3, count}) for /born-on/:slug/india titles.
+const INDIA_BORNON_MAP = new Map(
+  JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/indiaBornOnDates.json'), 'utf-8'))
+    .map(d => [d.slug, d])
+);
+
 // ── Zodiac ───────────────────────────────────────────────────────────────────
 const ZODIAC = {
   aries:       { title: 'Aries Zodiac Sign — Dates, Traits, Compatibility & History | BornClock', desc: 'Everything about Aries (March 21–April 19) — personality traits, strengths, love life, career, mythology, famous Aries celebrities, and compatibility. Humanized and fully sourced.' },
@@ -244,6 +254,26 @@ export function getTitleForRoute(route) {
       title: `${v.name} Rashi (${v.english}) — Vedic Astrology Guide | BornClock`,
       description: `${v.name} Rashi in Jyotish: personality, compatible signs, lucky gemstone, and Ayurveda connection. Complete Vedic astrology guide for ${v.english} (${v.name}).`,
     };
+  }
+
+  // /born-on/:slug/india  (Indian celebrity facet — must match before the generic born-on handler)
+  {
+    const m = route.match(/^\/born-on\/([a-z]+-\d+)\/india$/);
+    if (m) {
+      const entry = INDIA_BORNON_MAP.get(m[1]);
+      const parsed = parseBornOnSlug(m[1]);
+      if (!entry || !parsed) return null;
+      const { monthName, day } = parsed;
+      const top = entry.top3 || [];
+      const top2 = top.slice(0, 2).join(', ');
+      const top3 = top.slice(0, 3).join(', ');
+      return {
+        title: `Indian Celebrities Born on ${monthName} ${day}${top2 ? ` — ${top2}` : ''} | BornClock`,
+        description: top3
+          ? `Indian celebrities born on ${monthName} ${day} include ${top3}. ${entry.count} notable Indians — actors, cricketers, leaders, musicians — share this birthday, ranked by global recognition.`
+          : `Famous Indian personalities born on ${monthName} ${day}, ranked by global recognition, with ages, professions and birthday facts.`,
+      };
+    }
   }
 
   // /born-on/:slug  (NOT the index)

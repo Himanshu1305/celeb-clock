@@ -69,6 +69,7 @@ import BiorhythmPage from '@/pages/BiorhythmPage';
 import CompatibilityPage from '@/pages/CompatibilityPage';
 import RashiRatnaPage from '@/pages/RashiRatnaPage';
 import BornOnDay from '@/pages/BornOnDay';
+import BornOnDayIndia from '@/pages/BornOnDayIndia';
 import BornOnIndex from '@/pages/BornOnIndex';
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
@@ -153,6 +154,7 @@ const App = () => (
               <Route path="/compatibility/:sign1/:sign2" element={<CompatibilityPage />} />
               <Route path="/rashi-ratna" element={<RashiRatnaPage />} />
               <Route path="/born-on" element={<BornOnIndex />} />
+              <Route path="/born-on/:slug/india" element={<BornOnDayIndia />} />
               <Route path="/born-on/:slug" element={<BornOnDay />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

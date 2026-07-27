@@ -32,6 +32,7 @@ BornClock is a free birthday intelligence platform that turns a date of birth in
 - https://bornclock.com/celebrity-birthday — Celebrity birthday search
 - https://bornclock.com/birthday — Birthday month index
 - https://bornclock.com/born-on — Born-on date index (366 dates, Jan 1 – Dec 31 + Feb 29)
+- https://bornclock.com/born-on/[month]-[day]/india — Indian celebrities born on a given date (nationality facet; 350 dates with 3+ Indian personalities, ranked by global recognition). Example: https://bornclock.com/born-on/september-3/india
 
 ## Blog (Longevity and Birthday Science)
 
