@@ -144,13 +144,21 @@ export interface OrderPaymentOptions {
   userId: string;
   userEmail: string;
   userName?: string;
+  // GST place-of-supply declaration captured at checkout (forwarded to Razorpay
+  // order notes so verify-payment can issue a correct tax invoice).
+  buyerCountry?: string;
+  buyerState?: string | null;
+  buyerStateCode?: string | null;
+  taxMode?: 'CGST_SGST' | 'IGST' | 'EXPORT';
   onSuccess: () => void;
   onError: (error: string) => void;
   onDismiss: () => void;
 }
 
 export async function initiateOrderPayment(options: OrderPaymentOptions): Promise<void> {
-  const { product, reportSlug, currency, userId, userEmail, userName, onSuccess, onError, onDismiss } = options;
+  const { product, reportSlug, currency, userId, userEmail, userName,
+          buyerCountry, buyerState, buyerStateCode, taxMode,
+          onSuccess, onError, onDismiss } = options;
 
   const loaded = await loadRazorpayScript();
   if (!loaded) {
@@ -171,7 +179,11 @@ export async function initiateOrderPayment(options: OrderPaymentOptions): Promis
     const res = await fetch('/api/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ product, report_slug: reportSlug, userId, currency }),
+      body: JSON.stringify({
+        product, report_slug: reportSlug, userId, currency,
+        buyer_country: buyerCountry, buyer_state: buyerState,
+        buyer_state_code: buyerStateCode, tax_mode: taxMode,
+      }),
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));

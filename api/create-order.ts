@@ -37,7 +37,8 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Invalid JSON body' }, 400);
   }
 
-  const { product, report_slug, userId, currency = 'INR' } = body ?? {};
+  const { product, report_slug, userId, currency = 'INR',
+          buyer_country, buyer_state, buyer_state_code, tax_mode } = body ?? {};
 
   if (!product || !PRODUCT_AMOUNTS[product]) {
     return json({ error: 'Invalid product' }, 400);
@@ -91,8 +92,16 @@ async function handler(request: Request): Promise<Response> {
       body: JSON.stringify({
         amount,
         currency,
-        // report_slug baked server-side so verify-payment can use it as authoritative
-        notes: { report_slug, userId, product },
+        // report_slug baked server-side so verify-payment can use it as authoritative.
+        // buyer_* carry the GST place-of-supply declared at checkout (used to issue
+        // the tax invoice in verify-payment). Razorpay note values must be strings.
+        notes: {
+          report_slug, userId, product,
+          buyer_country: buyer_country ?? '',
+          buyer_state: buyer_state ?? '',
+          buyer_state_code: buyer_state_code ?? '',
+          tax_mode: tax_mode ?? '',
+        },
       }),
     });
     order = await rzpRes.json();

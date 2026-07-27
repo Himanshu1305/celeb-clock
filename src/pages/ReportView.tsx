@@ -29,6 +29,7 @@ import { getVedicBirthstone, SECTION_EXPLAINERS, CLOSING_SECTION } from '@/data/
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { NativeShareButton } from '@/components/NativeShareButton';
+import { CheckoutRegionModal, RegionSelection } from '@/components/CheckoutRegionModal';
 import { detectCountry } from '@/services/CountryDetectionService';
 import { initiateOrderPayment } from '@/services/RazorpayService';
 import { useToast } from '@/hooks/use-toast';
@@ -334,6 +335,7 @@ const ReportView = () => {
   const [isIndia, setIsIndia] = useState(true);
   const [credits, setCredits] = useState(0);
   const [redeemLoading, setRedeemLoading] = useState(false);
+  const [regionOpen, setRegionOpen] = useState(false);
 
   const reportPrintRef = useRef<HTMLDivElement>(null);
   const handleDownloadReport = useReactToPrint({
@@ -473,6 +475,32 @@ const ReportView = () => {
 
   // Report is locked unless paid for, or the viewer is an admin.
   const isLocked = !isAdmin && !row.is_paid;
+
+  // Called after the checkout region/GST modal confirms — carries the buyer's
+  // place-of-supply declaration through to create-order (→ tax invoice).
+  const startOrderPayment = (sel: RegionSelection) => {
+    if (!slug || !user) return;
+    trackFunnel('checkout_opened', { slug, product: 'birthday_report', member: profile?.subscription_status === 'active', taxMode: sel.taxMode });
+    initiateOrderPayment({
+      product: 'birthday_report',
+      reportSlug: slug,
+      currency: isIndia ? 'INR' : 'USD',
+      userId: user.id,
+      userEmail: user.email ?? '',
+      buyerCountry: sel.buyerCountry,
+      buyerState: sel.buyerState,
+      buyerStateCode: sel.buyerStateCode,
+      taxMode: sel.taxMode,
+      onSuccess: () => {
+        // Client-side confirmation beacon ONLY — the webhook/verify flow is the source of truth.
+        trackFunnel('purchase_completed', { slug, product: 'birthday_report' });
+        setRow((prev: any) => prev ? { ...prev, is_paid: true } : prev);
+        import('@/services/BirthdayReportService').then(m => m.getReport(slug)).then(fresh => { if (fresh) setRow(fresh); });
+      },
+      onError: (msg) => toast({ title: 'Payment failed', description: msg, variant: 'destructive' }),
+      onDismiss: () => {},
+    });
+  };
 
   const handleUnlockWithCredit = async () => {
     if (!user || !slug) return;
@@ -924,31 +952,10 @@ const ReportView = () => {
               Zodiac Profile · Numerology · Cosmic Connections · Planetary Ages · Generation Portrait
             </p>
 
-            {/* Buy one-time */}
+            {/* Buy one-time — opens the region/GST modal first, then Razorpay */}
             {user ? (
               <button
-                onClick={() => {
-                  if (!slug || !user) return;
-                  trackFunnel('checkout_opened', { slug, product: 'birthday_report', member: profile?.subscription_status === 'active' });
-                  initiateOrderPayment({
-                    product: 'birthday_report',
-                    reportSlug: slug,
-                    currency: isIndia ? 'INR' : 'USD',
-                    userId: user.id,
-                    userEmail: user.email ?? '',
-                    onSuccess: () => {
-                      // Client-side confirmation beacon ONLY — the webhook/verify
-                      // flow remains the source of truth (untouched).
-                      trackFunnel('purchase_completed', { slug, product: 'birthday_report' });
-                      // Immediately flip is_paid so isLocked re-renders without waiting for the DB round-trip
-                      setRow((prev: any) => prev ? { ...prev, is_paid: true } : prev);
-                      // Sync full row in background (picks up expires_at etc.)
-                      import('@/services/BirthdayReportService').then(m => m.getReport(slug)).then(fresh => { if (fresh) setRow(fresh); });
-                    },
-                    onError: (msg) => toast({ title: 'Payment failed', description: msg, variant: 'destructive' }),
-                    onDismiss: () => {},
-                  });
-                }}
+                onClick={() => { if (slug && user) setRegionOpen(true); }}
                 className="w-full py-3.5 rounded-xl font-bold text-white text-base transition-colors mb-3"
                 style={{ background: 'var(--navy)' }}
               >
@@ -1001,6 +1008,14 @@ const ReportView = () => {
           </div>
         </div>
       )}
+
+      {/* Pre-checkout region/GST capture — opens before Razorpay */}
+      <CheckoutRegionModal
+        open={regionOpen}
+        onOpenChange={setRegionOpen}
+        priceLabel={profile?.subscription_status === 'active' ? (isIndia ? '₹149' : '$2.49') : (isIndia ? '₹199' : '$2.99')}
+        onConfirm={(sel) => { setRegionOpen(false); startOrderPayment(sel); }}
+      />
 
       {isLocked && <LockedSectionsBlock />}
 

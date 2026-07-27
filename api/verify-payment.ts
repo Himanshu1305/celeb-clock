@@ -1,6 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { sendEmailDirect } from './_email.js';
 import { verifyHmacSha256 } from './_crypto.js';
+import { generateInvoiceHTML } from '../src/lib/invoice-generator.js';
+import { sendInvoiceEmail } from './_invoice-email.js';
 
 // Service-role client — NEVER use the anon key here
 function serviceClient() {
@@ -80,6 +82,10 @@ async function handler(request: Request): Promise<Response> {
   let authoritativeSlug: string | null = report_slug ?? null;
   let paymentAmount: number = amount ?? 0;
   let paymentCurrency: string = currency ?? 'INR';
+  // Buyer/tax details set at checkout, forwarded via Razorpay order/payment notes.
+  // Read by the non-fatal GST-invoice block near the end. Hoisted here so it is in
+  // scope regardless of product branch.
+  let orderNotes: Record<string, any> = {};
 
   if (!razorpay_payment_id || !razorpay_signature) {
     return json({ error: 'Missing required payment fields' }, 400);
@@ -124,6 +130,7 @@ async function handler(request: Request): Promise<Response> {
           const pmtData = await pmtRes.json();
           if (pmtData.amount) paymentAmount = pmtData.amount;
           if (pmtData.currency) paymentCurrency = pmtData.currency;
+          if (pmtData.notes) orderNotes = pmtData.notes;
         }
       } catch (e) {
         console.warn('[verify-payment] could not fetch subscription payment amount (non-fatal):', e);
@@ -159,6 +166,7 @@ async function handler(request: Request): Promise<Response> {
     authoritativeSlug = orderData.notes?.report_slug ?? null;
     paymentAmount = orderData.amount;
     paymentCurrency = orderData.currency;
+    orderNotes = orderData.notes ?? {};
 
     if (!authoritativeSlug) {
       console.error('[verify-payment] order missing report_slug in notes', razorpay_order_id);
@@ -254,6 +262,85 @@ async function handler(request: Request): Promise<Response> {
   } catch (e) {
     console.error('[verify-payment] receipt email error (non-fatal)', e);
   }
+
+  // --- GST INVOICE (non-fatal) ---------------------------------------------
+  // Appended AFTER payment success + entitlement grant are already committed.
+  // Any failure here is logged and swallowed — the customer has paid and must
+  // keep access. The HMAC check and premium-grant paths above are never touched.
+  try {
+    // Razorpay note values arrive as strings ('' when absent) — use || not ??.
+    const buyerState     = orderNotes.buyer_state || null;
+    const buyerStateCode = orderNotes.buyer_state_code || null;
+    const buyerCountry   = orderNotes.buyer_country || 'India';
+    // tax_mode from checkout declaration; fall back safely. Never mislabel an INR
+    // domestic charge as EXPORT — only USD-with-no-state defaults to EXPORT.
+    const taxMode: 'CGST_SGST' | 'IGST' | 'EXPORT' = orderNotes.tax_mode
+      || (buyerStateCode === '36' ? 'CGST_SGST'
+        : buyerStateCode ? 'IGST'
+        : (paymentCurrency === 'USD' ? 'EXPORT' : 'IGST'));
+
+    const invCurrency = paymentCurrency === 'USD' ? 'USD' : 'INR';
+    const grossAmount = paymentAmount / 100;   // Razorpay stores paise/cents
+
+    // GST-inclusive back-calculation (sgst is PLUGGED, never independently rounded)
+    const taxable = Math.round((grossAmount / 1.18) * 100) / 100;
+    const totalTax = Math.round((grossAmount - taxable) * 100) / 100;
+    let cgst = 0, sgst = 0, igst = 0;
+    if (taxMode === 'CGST_SGST') {
+      cgst = Math.round(taxable * 0.09 * 100) / 100;
+      sgst = Math.round((totalTax - cgst) * 100) / 100;
+    } else if (taxMode === 'IGST') {
+      igst = totalTax;
+    }
+    const fxRate = taxMode === 'EXPORT' ? 87.20 : null;   // fixed fallback; live rate = future
+
+    // buyer identity (same service client already in scope)
+    const { data: buyerData } = await db.auth.admin.getUserById(user_id);
+    const buyerEmail = buyerData?.user?.email ?? '';
+    const buyerName = buyerData?.user?.user_metadata?.full_name
+      || buyerData?.user?.user_metadata?.first_name
+      || 'BornClock Customer';
+
+    const lineDesc = product === 'birthday_report'
+      ? 'BornClock — Birthday Blueprint Report'
+      : 'BornClock Premium — Subscription';
+    const lineNote = product === 'birthday_report'
+      ? 'Digital report, one-time purchase. Delivered electronically.'
+      : 'Premium subscription. Delivered electronically.';
+
+    // issue_invoice() allocates the number + inserts atomically, idempotent by payment_id
+    const { data: invoiceRow, error: invoiceErr } = await db.rpc('issue_invoice', {
+      p: {
+        order_id:         razorpay_order_id ?? razorpay_subscription_id ?? razorpay_payment_id,
+        payment_id:       razorpay_payment_id,
+        user_id:          user_id ?? null,
+        buyer_name:       buyerName,
+        buyer_email:      buyerEmail,
+        buyer_gstin:      null,
+        buyer_country:    buyerCountry,
+        buyer_state:      buyerState,
+        buyer_state_code: buyerStateCode,
+        place_of_supply:  buyerState ? `${buyerState} (${buyerStateCode})` : buyerCountry,
+        tax_mode:         taxMode,
+        currency:         invCurrency,
+        fx_rate:          fxRate,
+        gross_amount:     grossAmount,
+        taxable_value:    taxMode === 'EXPORT' ? grossAmount : taxable,
+        cgst, sgst, igst,
+        line_items: [{ desc: lineDesc, note: lineNote, qty: 1, gross: grossAmount }],
+      },
+    });
+    if (invoiceErr) throw invoiceErr;
+
+    if (invoiceRow) {
+      const row = invoiceRow as any;
+      const invoiceHTML = generateInvoiceHTML(row);
+      await sendInvoiceEmail(row.buyer_email, row.invoice_no, invoiceHTML);
+    }
+  } catch (invoiceErr) {
+    console.error('[invoice] non-fatal error:', invoiceErr);
+  }
+  // --- end GST INVOICE -----------------------------------------------------
 
   return json({ success: true, product });
 }

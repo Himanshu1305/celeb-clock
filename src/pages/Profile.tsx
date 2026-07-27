@@ -23,6 +23,7 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { ArrowLeft, Crown, Download, Gift, Loader2, Save, Shield, Tag, Trash2, User } from 'lucide-react';
 import { PromoCodeInput } from '@/components/PromoCodeInput';
+import { InvoicesCard } from '@/components/InvoicesCard';
 import { countries } from '@/data/countries';
 
 export default function Profile() {
@@ -320,6 +321,9 @@ export default function Profile() {
                 </CardContent>
               </Card>
             )}
+
+          {/* Invoices */}
+            <InvoicesCard userId={user.id} />
 
           {/* Privacy & Data Management */}
             <Card className="backdrop-blur-sm bg-background/80 border-primary/20">
