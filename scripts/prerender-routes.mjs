@@ -142,6 +142,7 @@ export const STATIC_ROUTES = [
   '/generation',
   '/planetary-age',
   '/upgrade',
+  '/pricing',
   '/zodiac',
   ...ZODIAC_SIGNS.map(s => `/zodiac/${s}`),
   '/birthstone',

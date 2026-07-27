@@ -12,6 +12,7 @@ import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import Upgrade from "./pages/Upgrade";
+import Pricing from "./pages/Pricing";
 import Zodiac from "./pages/Zodiac";
 import Birthstone from "./pages/Birthstone";
 import LifeExpectancy from "./pages/LifeExpectancy";
@@ -103,6 +104,7 @@ const App = () => (
               <Route path="/profile" element={<Profile />} />
               <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
               <Route path="/upgrade" element={<Upgrade />} />
+              <Route path="/pricing" element={<Pricing />} />
               <Route path="/zodiac" element={<Zodiac />} />
               <Route path="/zodiac/:sign" element={<ZodiacSign />} />
               <Route path="/birthstone" element={<Birthstone />} />

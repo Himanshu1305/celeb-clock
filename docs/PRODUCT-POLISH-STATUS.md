@@ -105,3 +105,43 @@ all within the first screenful; calendar path immediately below (2nd screenful).
 tsc clean for both files.
 
 Status: DONE. Commit: fix(celebrity-birthday): search into hero as equal path + prominent input.
+
+---
+
+## Phase 3 — Monetization Surfaces
+
+Real facts used (grepped, not invented): report ₹199 / member ₹149 (api/create-order.ts
+PRODUCT_AMOUNTS + MEMBER_AMOUNTS); credits **1/month, carry-forward, cap 3** (api/get-credits.ts lazy
+accrual); premium/free feature lists mirror src/pages/Upgrade.tsx; report = 11 sections
+(prerender-titles.mjs canonical copy), 21 printed pages (Phase-1 harness) → "20+ page".
+
+⚠ **CREDITS COPY DISCREPANCY (founder decision needed):** the prompt says "3 birthday report credits
+per month WITH carry-forward", but the CODE grants **1 credit/month, capped at 3 total via
+carry-forward** (get-credits.ts). Per Global Rule "do not invent benefits", ALL surfaces state the
+true mechanism ("1 per month, rolls over, up to 3"). To actually deliver 3/month, change get-credits.ts
+accrual — payment-adjacent, left for founder.
+
+**3a — homepage showcase (DONE):** new `BirthdayReportShowcase.tsx` — "A birthday gift that's actually
+about them", 3 styled section mockups (Cover/Twins/Zodiac in the report's navy+gold; no fabricated
+screenshots), ₹199 (member ₹149), CTAs to /birthday-report + /pricing, hello@bornclock.com trust line.
+Mounted in Index.tsx between the calculator hero and `<BentoGrid/>`. Verified via 390px screenshot.
+
+**3b — /pricing page (DONE):** new indexable `Pricing.tsx` (distinct from login-gated noindex /upgrade):
+3-offer grid (Free / Premium / one-time Blueprint), full Free-vs-Premium comparison table (13 real
+features), credits explainer, 7-day money-back + hello@bornclock.com. Registered: App.tsx route +
+import, STATIC_ROUTES, prerender-titles.mjs, generate-sitemap.mjs (priority 0.9), Footer (Company col),
+Navigation (navItems → desktop More + mobile). Verified via 1000px screenshot.
+
+**3c — credits visibility (DONE):** Profile "Account Status" card now shows the live credit balance
+(fetch /api/get-credits, lazy accrual) + roll-over explanation + "Use" CTA. Home FAQ gains a "How do
+birthday report credits work?" Q&A and the "Is BornClock free?" answer corrected (Premium is a
+subscription, not one-time; the one-time item is the ₹199 report). Upgrade hero credit line strengthened
+to state roll-over/stack-to-3.
+
+**3d — trust layer (DONE):** "Questions? hello@bornclock.com" adjacent to every buy point — homepage
+showcase, /pricing (+ money-back), /upgrade (existing money-back), and the ReportView unlock CTA (added).
+
+Typecheck: 0 NEW errors (47 total = pre-existing stale-Supabase baseline, identical on develop; no Phase-3
+file appears in tsc output). `npx vite build` exit 0.
+
+Status: DONE (credits copy = truthful; 3/month vs 1/month flagged for founder).

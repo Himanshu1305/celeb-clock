@@ -141,7 +141,8 @@ export default function Upgrade() {
               Science-backed tools to understand and extend your healthspan
             </p>
             <p className="text-indigo-700 font-medium mt-3">
-              Subscribers get one birthday report credit every month — unlock any report, gift it to anyone.
+              Subscribers get one birthday report credit every month — credits roll over and stack up to 3,
+              so you can save them and gift several reports at once.
             </p>
           </div>
 

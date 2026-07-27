@@ -21,7 +21,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useAuth } from '@/hooks/useAuth';
-import { ArrowLeft, Crown, Download, Loader2, Save, Shield, Tag, Trash2, User } from 'lucide-react';
+import { ArrowLeft, Crown, Download, Gift, Loader2, Save, Shield, Tag, Trash2, User } from 'lucide-react';
 import { PromoCodeInput } from '@/components/PromoCodeInput';
 import { countries } from '@/data/countries';
 
@@ -40,6 +40,17 @@ export default function Profile() {
     email_notifications: false,
     blog_subscription: true,
   });
+
+  // Live birthday-report credit balance. get-credits does lazy monthly accrual
+  // server-side (1/month, carry-forward, cap 3) so this fetch is intentional.
+  const [credits, setCredits] = useState<number | null>(null);
+  useEffect(() => {
+    if (!user) return;
+    fetch(`/api/get-credits?userId=${encodeURIComponent(user.id)}`)
+      .then(r => r.json())
+      .then(d => { if (typeof d.credits === 'number') setCredits(d.credits); })
+      .catch(() => {});
+  }, [user]);
 
   useEffect(() => {
     if (profile) {
@@ -268,6 +279,28 @@ export default function Profile() {
                       </Button>
                     </Link>
                   )}
+                </div>
+
+                {/* Birthday report credits — live balance from get-credits */}
+                <div className="flex items-center justify-between p-4 mt-3 bg-muted rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Gift className="h-6 w-6 text-accent" />
+                    <div>
+                      <p className="font-medium">
+                        Birthday report credits: {credits === null ? '—' : credits}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {isPremium
+                          ? 'You earn 1 credit each month — they roll over, up to 3.'
+                          : 'Premium members earn 1 credit/month (rolls over, up to 3).'}
+                      </p>
+                    </div>
+                  </div>
+                  <Link to="/birthday-report">
+                    <Button size="sm" variant="outline" className="gap-1.5">
+                      <Gift className="h-4 w-4" /> Use
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>

@@ -28,7 +28,7 @@ function priority(route) {
   if (route.startsWith('/answers/')) return '0.7';
   if (['/age-calculator','/life-expectancy','/celebrity-birthday','/todays-birthdays',
        '/numerology','/zodiac','/chinese-zodiac','/vedic-zodiac','/birthday','/blog',
-       '/birthstone','/planetary-age','/biological-age','/generation'].includes(route)) return '0.9';
+       '/birthstone','/planetary-age','/biological-age','/generation','/pricing'].includes(route)) return '0.9';
   return '0.6';
 }
 

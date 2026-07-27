@@ -973,6 +973,9 @@ const ReportView = () => {
             <p className="text-xs mt-4" style={{ color: 'var(--muted)' }}>
               One-time purchase · Permanent access · Download included
             </p>
+            <p className="text-xs mt-2" style={{ color: 'var(--muted)' }}>
+              Questions or need help? <a href="mailto:hello@bornclock.com" style={{ color: 'var(--navy)', textDecoration: 'underline' }}>hello@bornclock.com</a>
+            </p>
           </div>
         </div>
       )}

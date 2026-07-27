@@ -5,6 +5,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { TestimonialsSection } from '@/components/TestimonialsSection';
 import { BentoGrid } from '@/components/BentoGrid';
+import { BirthdayReportShowcase } from '@/components/BirthdayReportShowcase';
 import { useAuth } from '@/hooks/useAuth';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { Badge } from '@/components/ui/badge';
@@ -235,6 +236,10 @@ const Index = () => {
             </Card>
           </section>
         )}
+
+        {/* Birthday Report showcase — sells the paid ₹199 Blueprint, placed right
+            after the calculator entry and before the deep feature grid. */}
+        <BirthdayReportShowcase />
 
         {/* Bento Grid Features */}
         <BentoGrid />
