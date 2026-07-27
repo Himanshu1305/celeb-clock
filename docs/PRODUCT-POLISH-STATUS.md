@@ -238,3 +238,36 @@ marketing/weekly-digest flag. Admin `BlogSubscribers` reads `profiles WHERE blog
 tsc 0 new errors; `npx vite build` exit 0.
 
 Status: DONE (capture inert until NOTES SQL applied; digest built, not scheduled).
+
+---
+
+## Phase 7 — Sharing + Funnel Events
+
+**7a — sharing (DONE):**
+- New `NativeShareButton.tsx` — `navigator.share` (OS sheet incl. WhatsApp on mobile) with a
+  copy-link fallback (and WhatsApp deep-link last resort) on desktop/unsupported browsers.
+- Mounted on **/results** (share `/?dob=YYYY-MM-DD`, WhatsApp-friendly text) and on the **report
+  preview header** (replaced the raw 💬 WhatsApp link; fires `report_shared`).
+- **OG verification (verify, not rebuild):** homepage/`/` (the results share target) has complete
+  OG — og:title/description/image (og/default.png 1200×630) + twitter summary_large_image (verified
+  in built dist/index.html). The **report page** had only title+description+noindex → added
+  name-appropriate `og:title`/`og:description`/`og:type`/`og:url`. NOTE: og:image still falls back to
+  the branded default card — there is no per-report dynamic OG image (larger build, out of scope);
+  flagged for founder.
+
+**7b — funnel events (DONE, reuses existing infra):**
+No new table needed — the repo already has an `analytics_events` table + `useAnalytics` hook. Added
+`trackFunnel(name, meta)` (event_type='funnel', consent-gated). CF Web Analytics is commented-out in
+index.html and doesn't support custom events anyway, so first-party is correct.
+| Event | Fires where |
+|---|---|
+| `report_preview_viewed` | ReportView effect, once, when a locked preview renders |
+| `checkout_opened` | ReportView unlock button onClick; Upgrade `handleSubscribe` (product+plan) |
+| `purchase_completed` | ReportView order `onSuccess` — CLIENT confirmation only (webhook/verify untouched) |
+| `upgrade_modal_opened` | Upgrade page mount |
+| `report_shared` (bonus) | NativeShareButton onShared (native/copy) |
+
+tsc 0 new errors (only pre-existing LifeExpectancy:734 baseline); `npx vite build` exit 0.
+No payment files modified.
+
+Status: DONE.

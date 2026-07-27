@@ -27,6 +27,8 @@ import { getMoonSignEssence, MOON_SIGN_EXPLAINER } from '@/data/moonSignEssence'
 import { getSoulUrge, getPersonality } from '@/data/numerologyNameData';
 import { getVedicBirthstone, SECTION_EXPLAINERS, CLOSING_SECTION } from '@/data/reportContentAdditions';
 import { useAuth } from '@/hooks/useAuth';
+import { useAnalytics } from '@/hooks/useAnalytics';
+import { NativeShareButton } from '@/components/NativeShareButton';
 import { detectCountry } from '@/services/CountryDetectionService';
 import { initiateOrderPayment } from '@/services/RazorpayService';
 import { useToast } from '@/hooks/use-toast';
@@ -328,6 +330,7 @@ const ReportView = () => {
 
   const { user, isAdmin, profile } = useAuth();
   const { toast } = useToast();
+  const { trackFunnel } = useAnalytics();
   const [isIndia, setIsIndia] = useState(true);
   const [credits, setCredits] = useState(0);
   const [redeemLoading, setRedeemLoading] = useState(false);
@@ -425,6 +428,14 @@ const ReportView = () => {
   useEffect(() => {
     detectCountry().then(info => setIsIndia(info.isIndia)).catch(() => {});
   }, []);
+
+  // Funnel: fire once when a locked preview is actually shown to the visitor.
+  const previewTracked = useRef(false);
+  useEffect(() => {
+    if (previewTracked.current || !row) return;
+    const locked = !isAdmin && !row.is_paid;
+    if (locked) { previewTracked.current = true; trackFunnel('report_preview_viewed', { slug: slug ?? '' }); }
+  }, [row, isAdmin, slug, trackFunnel]);
 
   // Fetch subscriber credits whenever the user or lock state might change.
   // get-credits does lazy accrual server-side so this call is intentional.
@@ -592,6 +603,12 @@ const ReportView = () => {
         <title>{recipientName}'s Birthday Report | BornClock</title>
         <meta name="description" content={`${recipientName}'s Birthday Blueprint — celebrity twins, zodiac, numerology, birthstone, tarot, and more. A personalised gift from BornClock.`} />
         <meta name="robots" content="noindex" />
+        {/* Name-appropriate share preview. og:image falls back to the branded
+            default card in index.html (no per-report dynamic OG image yet). */}
+        <meta property="og:title" content={`${recipientName}'s Birthday Blueprint`} />
+        <meta property="og:description" content={`A personalised birthday report for ${recipientName} — celebrity twins, zodiac, numerology, tarot and more.`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={reportUrl} />
         <style>{`
           :root {
             --ink:#0C1A2B; --ink-soft:#3A4A5A; --muted:#6B7A89;
@@ -666,14 +683,15 @@ const ReportView = () => {
               ⬇ Download PDF
             </button>
             )}
-            <a
-              href={`https://wa.me/?text=${encodeURIComponent(`Check out ${recipientName}'s Birthday Report! 🎂\n${reportUrl}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-1.5 text-sm bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors"
-            >
-              💬
-            </a>
+            <NativeShareButton
+              url={reportUrl}
+              title={`${recipientName}'s Birthday Report`}
+              text={`Check out ${recipientName}'s Birthday Report! 🎂`}
+              label="Share"
+              variant="outline"
+              className="h-8 px-3 text-sm"
+              onShared={(m) => trackFunnel('report_shared', { slug: slug ?? '', method: m })}
+            />
           </div>
         </div>
       </div>
@@ -911,6 +929,7 @@ const ReportView = () => {
               <button
                 onClick={() => {
                   if (!slug || !user) return;
+                  trackFunnel('checkout_opened', { slug, product: 'birthday_report', member: profile?.subscription_status === 'active' });
                   initiateOrderPayment({
                     product: 'birthday_report',
                     reportSlug: slug,
@@ -918,6 +937,9 @@ const ReportView = () => {
                     userId: user.id,
                     userEmail: user.email ?? '',
                     onSuccess: () => {
+                      // Client-side confirmation beacon ONLY — the webhook/verify
+                      // flow remains the source of truth (untouched).
+                      trackFunnel('purchase_completed', { slug, product: 'birthday_report' });
                       // Immediately flip is_paid so isLocked re-renders without waiting for the DB round-trip
                       setRow((prev: any) => prev ? { ...prev, is_paid: true } : prev);
                       // Sync full row in background (picks up expires_at etc.)
