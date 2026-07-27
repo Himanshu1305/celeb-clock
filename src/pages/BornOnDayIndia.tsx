@@ -197,7 +197,7 @@ export default function BornOnDayIndia() {
         </div>
 
         {/* FAQ (reuses PageFAQ; JSON-LD prerenders via body script) */}
-        <PageFAQ slug={'age-calculator'} title={`${dateLabel} — Indian Birthday FAQ`} items={faqItems} />
+        <PageFAQ title={`${dateLabel} — Indian Birthday FAQ`} items={faqItems} />
 
         {/* CTA */}
         <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 mb-10 text-center">
