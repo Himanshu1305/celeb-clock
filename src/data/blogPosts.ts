@@ -125,6 +125,7 @@ A: The calculator updates in real-time, showing your age as it changes every sec
   {
     id: '2',
     slug: 'celebrities-born-on-my-birthday-famous-birthday-twins',
+    relatedPosts: ['unique-birthday-gift-ideas-personalised-meaningful-2026'],
     title: 'Which Celebrities Were Born on My Birthday? Find Your Famous Birthday Twins!',
     metaTitle: 'Celebrities Born on My Birthday | Find Famous Birthday Twins',
     excerpt: 'Discover which famous actors, musicians, athletes, and historical figures share your birthday. Find your celebrity birthday twins instantly!',
@@ -715,6 +716,7 @@ A: Some months have alternatives. June has pearl, alexandrite, and moonstone. Ch
   {
     id: '5',
     slug: 'how-to-increase-life-expectancy-science-backed-tips',
+    relatedPosts: ['life-expectancy-india-complete-guide-2026'],
     title: '10 Science-Backed Ways to Increase Your Life Expectancy in 2025',
     metaTitle: 'Increase Life Expectancy | 10 Science-Backed Tips 2025',
     excerpt: 'Discover scientifically-proven lifestyle changes that can add years to your life. Learn what factors actually affect longevity and how to optimize them.',
@@ -951,6 +953,7 @@ A: Genetics account for about 25% of lifespan variation. Lifestyle choices influ
   {
     id: '6',
     slug: 'birthday-traditions-around-the-world-unique-celebrations',
+    relatedPosts: ['unique-birthday-gift-ideas-personalised-meaningful-2026'],
     title: 'Birthday Traditions Around the World: What Every Culture Reveals About How We Mark Time',
     metaTitle: 'Birthday Traditions Around the World: What Every Culture Celebrates',
     excerpt: 'From Germany\'s self-brought birthday cake to Japan\'s 60-year zodiac rebirth, birthday traditions worldwide reveal what each culture truly values. A journey through the world\'s most fascinating birthday customs.',
@@ -1129,6 +1132,7 @@ Get your age in years, months, days, hours, minutes, and seconds — updated in 
   {
     id: '8',
     slug: 'how-sleep-affects-life-expectancy-complete-guide',
+    relatedPosts: ['life-expectancy-india-complete-guide-2026'],
     title: 'How Sleep Affects Your Life Expectancy: The Science of Rest & Longevity',
     metaTitle: 'Sleep & Life Expectancy | How Rest Affects How Long You Live',
     excerpt: 'Discover how your sleep habits impact your lifespan. Learn the optimal sleep duration, quality tips, and why poor sleep can shorten your life.',
@@ -2824,6 +2828,7 @@ Enter your smoking status and see how quitting could add years!
   {
     id: '14',
     slug: 'secrets-of-people-who-live-to-100-centenarian-habits',
+    relatedPosts: ['how-long-does-it-take-to-form-a-habit-longevity'],
     title: '10 Secrets of People Who Live to 100: Habits of Centenarians Worldwide',
     metaTitle: 'How to Live to 100 | 10 Centenarian Secrets Revealed',
     excerpt: 'Discover the common habits and lifestyle factors shared by people who live to 100+. Learn the secrets from Blue Zones and centenarian research.',
@@ -3344,6 +3349,7 @@ Frank didn't have to die the way he did. None of us do.
   {
     id: '17',
     slug: '5-minute-morning-routine-add-years-to-life',
+    relatedPosts: ['how-long-does-it-take-to-form-a-habit-longevity'],
     title: 'The 5-Minute Morning Routine That Could Add Years to Your Life',
     metaTitle: '5-Minute Morning Routine for Longevity | Science-Backed',
     excerpt: 'A short morning routine combining breathwork, cold exposure, and gratitude journaling can lower cortisol, reduce inflammation, and measurably improve health outcomes. Here\'s the science.',
@@ -5425,10 +5431,29 @@ export const getPostsByCategory = (category: BlogPost['category']): BlogPost[] =
 export const getRelatedPosts = (currentSlug: string, limit: number = 3): BlogPost[] => {
   const currentPost = blogPosts.find(p => p.slug === currentSlug);
   if (!currentPost) return [];
-  
-  return blogPosts
-    .filter(p => p.slug !== currentSlug && p.category === currentPost.category)
-    .slice(0, limit);
+
+  const picked: BlogPost[] = [];
+  const add = (p: BlogPost | undefined) => {
+    if (p && p.slug !== currentSlug && !picked.some(x => x.slug === p.slug)) picked.push(p);
+  };
+  const N = blogPosts.length;
+  const start = blogPosts.findIndex(p => p.slug === currentSlug);
+  // Walk posts in circular order STARTING AFTER the current one. Rotating the walk
+  // (rather than always scanning from index 0) spreads inbound links evenly across
+  // each cluster, so later posts in a category/tag group are not stranded — this is
+  // what fixes the blog orphans while keeping the picks topically relevant.
+  const rotated = Array.from({ length: N }, (_, i) => blogPosts[(start + 1 + i) % N]);
+
+  // 1. Manual curation, if provided.
+  (currentPost.relatedPosts ?? []).forEach(slug => add(blogPosts.find(p => p.slug === slug)));
+  // 2. Same category (rotated).
+  rotated.filter(p => p.category === currentPost.category).forEach(add);
+  // 3. Shared tags (rotated) — surfaces singleton-category posts.
+  rotated.filter(p => p.tags.some(t => currentPost.tags.includes(t))).forEach(add);
+  // 4. Rotation fill — guarantees every post is a related target for its neighbours.
+  rotated.forEach(add);
+
+  return picked.slice(0, limit);
 };
 
 export const getPostBySlug = (slug: string): BlogPost | undefined => {
