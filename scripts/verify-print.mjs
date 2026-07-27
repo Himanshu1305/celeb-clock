@@ -229,6 +229,9 @@ async function main() {
   // ── 2. Render report + generate PDF ──────────────────────────────────────
   const browser = await chromium.launch();
   const page    = await browser.newPage();
+  // The ·LIVE·/·FROZEN· source marker text is emitted only under this flag so it
+  // never ships in a real customer's PDF; set it before load so React renders it.
+  await page.addInitScript(() => { window.__VERIFY_PRINT__ = true; });
 
   try {
     const reportUrl = `${serverBase}/report/${SLUG}`;

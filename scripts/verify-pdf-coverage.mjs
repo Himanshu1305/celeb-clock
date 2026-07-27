@@ -30,6 +30,25 @@ const DEV_PORT = 3000;
 const MIN_COVERAGE = 0.50;
 GlobalWorkerOptions.workerSrc = new URL('../node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs', import.meta.url).href;
 
+// Mirror of ReportView.tsx useReactToPrint pageStyle (react-to-print injects this
+// into its print iframe; not in the route DOM at load). Kept in sync with verify-print.mjs.
+const BIRTHDAY_PAGE_STYLE = `
+  @page { margin: 0; size: A4; }
+  body { margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; font-size: 12px; line-height: 1.5; font-variant-ligatures: none; font-feature-settings: "liga" 0, "clig" 0; }
+  .zodiac-tab-panel { display: block !important; height: auto !important; overflow: visible !important; }
+  .report-print-table { width: 100%; border-collapse: collapse; }
+  .report-print-cell          { padding: 0 1.5cm; }
+  thead .report-print-cell    { padding-top: 1.5cm; }
+  tfoot  .report-print-cell   { padding-bottom: 1.5cm; }
+  .report-running-header { display: flex !important; align-items: center; justify-content: space-between; border-bottom: 1px solid #D7E1EA; padding: 9px 0; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #8A9BA8; background: white; }
+  .report-cover-section { padding: 1.5cm !important; break-after: page; display: flex; flex-direction: column; min-height: 297mm; box-sizing: border-box; }
+  .report-print-footer { display: flex !important; align-items: center; justify-content: center; padding: 8px 0; border-top: 1px solid #D7E1EA; font-size: 9px; color: #8A9BA8; letter-spacing: 0.3px; background: #fff; }
+  .print-break-before { break-before: page; }
+  .report-section h2, .report-section h3 { break-after: avoid; }
+  .print-only { display: block !important; }
+  .no-screen { display: flex !important; }
+`;
+
 const MODE = process.argv[2] || 'longevity';
 const slugArg = (process.argv.find(a => a.startsWith('--slug=')) || '').slice('--slug='.length);
 const SLUG = slugArg || 'osenyz63';
@@ -105,15 +124,46 @@ async function main() {
         const result = t.calculateLongevity(quiz, t.DEFAULT_PILLAR1, t.DEFAULT_PILLAR2, dob, []);
         return t.buildLongevityBlueprintHtml(result, { personName: 'Test Subject' });
       });
-    } else {
-      throw new Error('birthday mode uses scripts/verify-print.mjs harness; use MODE=longevity here');
     }
 
-    const render = await context.newPage();
-    await render.setViewportSize({ width: 390, height: 844 });
-    await render.setContent(html, { waitUntil: 'networkidle' });
-    await render.emulateMedia({ media: 'print' });
-    const pdf = await render.pdf({ preferCSSPageSize: true, printBackground: true });
+    let pdf;
+    if (MODE === 'longevity') {
+      const render = await context.newPage();
+      await render.setViewportSize({ width: 390, height: 844 });
+      await render.setContent(html, { waitUntil: 'networkidle' });
+      await render.emulateMedia({ media: 'print' });
+      pdf = await render.pdf({ preferCSSPageSize: true, printBackground: true });
+    } else {
+      // Birthday Blueprint: render the live report DOM (react-to-print prints this
+      // exact tree). Inject the same pageStyle react-to-print applies, mobile-emulate.
+      // Force-unlock the report client-side (paid reports aren't anon-readable;
+      // the defects are template-level). Rewrite the birthday_reports REST response
+      // to is_paid:true — no DB mutation.
+      await page.route('**/rest/v1/birthday_reports*', async route => {
+        const resp = await route.fetch();
+        let body = await resp.text();
+        try { const j = JSON.parse(body); if (Array.isArray(j)) j.forEach(r => { r.is_paid = true; }); else if (j && typeof j === 'object') j.is_paid = true; body = JSON.stringify(j); } catch {}
+        await route.fulfill({ response: resp, body });
+      });
+      await page.goto(`${base}/report/${SLUG}`, { waitUntil: 'commit' });
+      await page.waitForSelector('[data-celeb-source]', { state: 'attached', timeout: 30000 });
+      await page.waitForTimeout(1500); // let live celebrity fetch + images settle
+      await page.addStyleTag({ content: BIRTHDAY_PAGE_STYLE });
+      await page.emulateMedia({ media: 'print' });
+      pdf = await page.pdf({ preferCSSPageSize: true, printBackground: true });
+    }
+
+    if (process.argv.includes('--dump')) {
+      const doc = await getDocument({ data: new Uint8Array(pdf) }).promise;
+      for (let i = 1; i <= doc.numPages; i++) {
+        const pg = await doc.getPage(i); const vp = pg.getViewport({ scale: 1.1 });
+        const cv = createCanvas(Math.ceil(vp.width), Math.ceil(vp.height));
+        const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
+        await pg.render({ canvasContext: cx, viewport: vp }).promise;
+        (await import('fs')).writeFileSync(`/tmp/${MODE}-p${i}.png`, cv.toBuffer('image/png'));
+      }
+      console.log(`  dumped /tmp/${MODE}-p*.png`);
+    }
 
     const cov = await coverage(pdf);
     const MIN_FILL = 0.72; // content must reach ≥72% down the page (no large trailing void)

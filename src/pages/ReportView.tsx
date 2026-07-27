@@ -376,6 +376,7 @@ const ReportView = () => {
       .report-cover-section {
         padding: 1.5cm !important;
         break-after: page;
+        page-break-after: always;
         display: flex;
         flex-direction: column;
         min-height: 297mm;
@@ -614,7 +615,21 @@ const ReportView = () => {
             .dark-section { background: var(--dark) !important; color-scheme: dark; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             h2, h3 { page-break-after: avoid; }
             .dark-section { page-break-inside: avoid; }
-            .solar-section { break-before: page !important; padding-top: 8px !important; }
+            /* Solar section (7 planet cards + Neptune) is taller than a page. Keeping
+               it together (inherited .dark-section avoid) stranded the heading and
+               pushed all cards to the next page (~90% blank page); its break-before
+               also left ~60% trailing whitespace on the prior page. Let it FLOW; the
+               small cards + Neptune card keep their own no-split protection. */
+            .solar-section { page-break-inside: auto !important; break-inside: auto !important; padding-top: 8px !important; padding-bottom: 10px !important; }
+            .solar-section .planet-grid { margin-bottom: 12px !important; }
+            .solar-section .neptune-fact-card,
+            .solar-section .bb-num { page-break-inside: avoid; break-inside: avoid; }
+            /* CSS Grid containers cannot fragment across print pages — the whole
+               planet grid jumped to the next page, orphaning the heading (~90% blank
+               page). In print, render the cards as inline-blocks so they flow/break
+               naturally. Screen keeps the responsive grid. */
+            .solar-section .planet-grid { display: block !important; font-size: 0; }
+            .solar-section .planet-grid > div { display: inline-block !important; width: 48% !important; margin: 0 1% 10px !important; vertical-align: top; box-sizing: border-box; }
           }
         `}</style>
       </Helmet>
@@ -781,8 +796,12 @@ const ReportView = () => {
             <p className="bb-sub">Famous people born on {monthName} {dob.getDate()}, ranked by global recognition</p>
           </div>
 
-          {/* invisible source marker — extracted by pdfjs; asserted in verify-print */}
-          <span data-celeb-source={celebSource} aria-hidden="true" style={{ fontSize: '1px', color: 'white', lineHeight: 1, userSelect: 'none' }}>{celebSource === 'live' ? '·LIVE·' : '·FROZEN·'}</span>
+          {/* Source marker for verify-print.mjs ONLY. The data-celeb-source attribute
+              always exists (used by the harness's waitForSelector); the extractable
+              TEXT is emitted only when window.__VERIFY_PRINT__ is set by the harness,
+              so it never appears in a real customer's printed PDF (founder saw a
+              stray "·LIVE·" fragment). */}
+          <span data-celeb-source={celebSource} aria-hidden="true" style={{ fontSize: '1px', color: 'white', lineHeight: 1, userSelect: 'none' }}>{(typeof window !== 'undefined' && (window as any).__VERIFY_PRINT__) ? (celebSource === 'live' ? '·LIVE·' : '·FROZEN·') : ''}</span>
 
           {celebsSource.length > 0 ? (() => {
             const getCelebYear = (c: any): number =>
@@ -1225,7 +1244,7 @@ const ReportView = () => {
 
                   {/* Rich life domains from rashiData */}
                   {rashiEntry && (
-                    <div className="grid sm:grid-cols-3 gap-3" style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+                    <div className="grid sm:grid-cols-3 gap-3">
                       {[
                         { label: 'Career', text: rashiEntry.career },
                         { label: 'Relationships', text: rashiEntry.relationships },
@@ -1379,7 +1398,7 @@ const ReportView = () => {
       {/* SECTION 4 — NUMEROLOGY BLUEPRINT                                   */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {!isLocked && (
-      <div className="report-section print-break-before py-12 px-4 bg-white">
+      <div className="report-section py-12 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
             <div className="bb-rule"><span className="bb-code">03 · NUMBERS</span></div>
@@ -1432,7 +1451,7 @@ const ReportView = () => {
                 ))}
               </div>
             </div>
-            <div className="grid sm:grid-cols-2 gap-4" style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+            <div className="grid sm:grid-cols-2 gap-4">
               <div className="bg-green-50 rounded-2xl p-5">
                 <h3 className="font-bold text-green-800 mb-2 text-sm">Strengths</h3>
                 <ul className="space-y-1">
@@ -1617,7 +1636,7 @@ const ReportView = () => {
               </div>
 
               {/* 4-quadrant life areas */}
-              <div className="grid grid-cols-2 gap-3" style={{ breakInside: 'avoid', pageBreakInside: 'avoid' }}>
+              <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-2xl p-4" style={{ background: '#1A2B3C', border: '1px solid #2A3B4C', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
                   <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--gold)' }}>Love</div>
                   <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.8)' }}>{card.love}</p>
@@ -1645,7 +1664,7 @@ const ReportView = () => {
               {/* Famous people with this card */}
               {card.famousPeople && card.famousPeople.length > 0 && (
                 <div className="rounded-2xl p-4 text-center" style={{ background: 'rgba(255,255,255,.05)' }}>
-                  <div className="text-xs font-semibold mb-2" style={{ color: '#9DB0BF' }}>Famous {card.name} Personalities</div>
+                  <div className="text-xs font-semibold mb-2" style={{ color: '#9DB0BF' }}>Famous {card.name.replace(/^The\s+/i, '')} Personalities</div>
                   <p className="text-sm" style={{ color: 'rgba(255,255,255,.7)' }}>{card.famousPeople.map((p: any) => p.name || p).join(' · ')}</p>
                 </div>
               )}
@@ -1854,7 +1873,7 @@ const ReportView = () => {
             <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-.01em', margin: '4px 0 0' }}>Solar System Ages</h2>
             <p style={{ fontSize: '12.5px', color: '#9DB0BF', marginTop: '5px' }}>{recipientName} is {age} years old on Earth — here is their age across each planet</p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          <div className="planet-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             {Object.entries(planetaryAges).map(([planet, pAge]) => {
               const SYMBOLS: Record<string, string> = {
                 Mercury: '☿', Venus: '♀', Mars: '♂', Jupiter: '♃', Saturn: '♄', Uranus: '⛢', Neptune: '♆',
