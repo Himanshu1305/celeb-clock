@@ -268,6 +268,13 @@ async function handler(request: Request): Promise<Response> {
   // Any failure here is logged and swallowed — the customer has paid and must
   // keep access. The HMAC check and premium-grant paths above are never touched.
   try {
+    // Only the one-time birthday_report purchase is invoiced here. Subscriptions
+    // do not capture a place-of-supply declaration at checkout, so skip them
+    // entirely rather than issue an invoice with an assumed tax mode. Throw a
+    // sentinel to break out via the shared catch (keeps the single success
+    // response after the try/catch as the only exit point).
+    if (product !== 'birthday_report') throw new Error('skip');
+
     // Razorpay note values arrive as strings ('' when absent) — use || not ??.
     const buyerState     = orderNotes.buyer_state || null;
     const buyerStateCode = orderNotes.buyer_state_code || null;
@@ -338,7 +345,9 @@ async function handler(request: Request): Promise<Response> {
       await sendInvoiceEmail(row.buyer_email, row.invoice_no, invoiceHTML);
     }
   } catch (invoiceErr) {
-    console.error('[invoice] non-fatal error:', invoiceErr);
+    if ((invoiceErr as Error).message !== 'skip') {
+      console.error('[invoice] non-fatal error:', invoiceErr);
+    }
   }
   // --- end GST INVOICE -----------------------------------------------------
 
