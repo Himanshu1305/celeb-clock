@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
+import { PageFAQ } from '@/components/PageFAQ';
 import PageTagline from '@/components/PageTagline';
 import { getCompatibility, ZODIAC_SIGNS } from '@/data/compatibilityData';
 
@@ -157,6 +158,14 @@ export default function CompatibilityPage() {
 
           {result && calcSigns && (
             <div className="mb-10">
+              {/* Concise answer block (AEO) */}
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Are {calcSigns.s1} and {calcSigns.s2} compatible?</h2>
+              <div className="bg-rose-50 border-l-4 border-rose-500 rounded-r-xl p-5 mb-6">
+                <p className="text-base font-medium text-gray-900 leading-relaxed">
+                  {calcSigns.s1} and {calcSigns.s2} score {result.overall}% overall — {overallLabel(result.overall).toLowerCase()} — with {result.love}% for love, {result.friendship}% for friendship and {result.work}% at work. {result.strengths.filter(Boolean)[0]}.
+                </p>
+              </div>
+
               <div className="bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl p-8 text-white text-center mb-6">
                 <div className="flex justify-center items-center gap-6 mb-4">
                   <div className="text-center">
@@ -206,6 +215,16 @@ export default function CompatibilityPage() {
                   <p className="text-sm text-blue-900">{result.advice}</p>
                 </div>
               </div>
+
+              {/* Pair-specific FAQ (visible accordion + in-body FAQPage JSON-LD) */}
+              <PageFAQ
+                title={`${calcSigns.s1} & ${calcSigns.s2} — Compatibility FAQ`}
+                items={[
+                  { question: `Are ${calcSigns.s1} and ${calcSigns.s2} compatible?`, answer: `${calcSigns.s1} and ${calcSigns.s2} have an overall compatibility of ${result.overall}% (${overallLabel(result.overall).toLowerCase()}). ${result.description}` },
+                  { question: `How compatible are ${calcSigns.s1} and ${calcSigns.s2} in love?`, answer: `${calcSigns.s1} and ${calcSigns.s2} score ${result.love}% for love and romance, ${result.friendship}% for friendship, and ${result.work}% for work and collaboration.` },
+                  { question: `What are the strengths of a ${calcSigns.s1}–${calcSigns.s2} relationship?`, answer: `Key strengths: ${result.strengths.filter(Boolean).join('; ')}. Watch out for: ${result.challenges.filter(Boolean).join('; ')}.` },
+                ]}
+              />
 
               <div className="bg-rose-600 rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">See your compatibility profile in your Birthday Report</p>
