@@ -292,8 +292,8 @@ export function getTitleForRoute(route) {
     }
   }
 
-  // /born-on/:slug  (NOT the index)
-  if (route.startsWith('/born-on/') && route !== '/born-on') {
+  // /born-on/:slug  (NOT the index, NOT the India hub — that has a STATIC entry)
+  if (route.startsWith('/born-on/') && route !== '/born-on' && route !== '/born-on/india') {
     const slug = route.slice(9);
     const parsed = parseBornOnSlug(slug);
     if (!parsed) return null;
