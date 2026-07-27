@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
+import { SaveResultsCapture } from '@/components/SaveResultsCapture';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -693,6 +694,11 @@ const BirthdayResults = () => {
               </div>
             </CardContent>
           </Card>
+        </section>
+
+        {/* Soft email capture — save results + opt into the weekly reading */}
+        <section className="max-w-2xl mx-auto mb-16">
+          <SaveResultsCapture dob={birthDate} />
         </section>
       </div>
 

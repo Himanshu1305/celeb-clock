@@ -11,6 +11,9 @@ import { GET  as dailyCronGet,
          POST as dailyCronPost }       from '../api/daily-email-cron.js';
 import { POST as opsMonitor }          from '../api/ops-monitor.js';
 import { POST as opsDigest }           from '../api/ops-digest.js';
+import { POST as subscribe }           from '../api/subscribe.js';
+import { POST as weeklyDigest }        from '../api/weekly-digest.js';
+import { GET  as unsubscribe }         from '../api/unsubscribe.js';
 import cronHandler                     from './_cron/daily-email.js';
 
 type Env = {
@@ -53,6 +56,9 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/verify-payment':     verifyPayment,
   '/api/ops-monitor':        opsMonitor,
   '/api/ops-digest':         opsDigest,
+  '/api/subscribe':          subscribe,
+  '/api/weekly-digest':      weeklyDigest,
+  '/api/unsubscribe':        unsubscribe,
 };
 
 export default {

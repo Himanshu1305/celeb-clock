@@ -199,3 +199,42 @@ Verified: `/how-it-works` screenshot renders overview + preserved citations. tsc
 `npx vite build` exit 0.
 
 Status: DONE.
+
+---
+
+## Phase 6 — Email Capture Audit + Retention Foundation
+
+**6a — AUDIT (evidence-based map):**
+| Capture point | Where | Stored | Consent flag |
+|---|---|---|---|
+| Account signup | `useAuth.signUp` (Auth.tsx) → Supabase auth + `profiles` | `profiles.email`, `.blog_subscription`, `.email_notifications` | `blog_subscription` bool (signup checkbox, default true); `email_notifications` bool |
+| Homepage "Save your results" banner | Index.tsx | — (links to `/auth?signup=true`) | funnels to signup |
+| Blog "Never Miss an Article" box | Blog.tsx:322 | **NOT WIRED** — bare `<Input>`, no handler/insert (dead) | none |
+| Contact form | Contact.tsx | email (support, not marketing) | n/a |
+Storage = `profiles` ONLY. No anon/soft capture, no dedicated subscribers table, no
+marketing/weekly-digest flag. Admin `BlogSubscribers` reads `profiles WHERE blog_subscription != false`.
+
+**6b — soft capture (DONE, build-only):**
+- `supabase/migrations/NOTES-email-subscribers.sql` (NOT applied): `email_subscribers` table
+  (email unique, source, consent_marketing, weekly_digest, dob, country_code, unsubscribe_token,
+  unsubscribed_at) + RLS locked (service-role only) + `profiles.weekly_digest` column (the audit's
+  account-holder storage location).
+- `api/subscribe.ts` — anon soft capture, explicit consent required, idempotent upsert-by-email,
+  tolerates the table not existing yet (ok:false, never 500s). Routed in `_worker.ts`.
+- `SaveResultsCapture.tsx` mounted on `/results` (BirthdayResults) — "Save my results + get my weekly
+  reading", NOT a hard wall (free calc stays open → SEO funnel intact), unsubscribe promise.
+
+**6c — weekly digest (DONE, build-not-cron):**
+- `api/weekly-digest.ts` — composes a personalised email from REAL data: days-until-birthday,
+  biorhythm (23/28/33-day sines), and celebrities born in the next 7 days (global + India) from
+  `celebrity_sitelinks`. Reuses the Resend direct-fetch pattern (api/_email.ts). Tokened unsubscribe link.
+- `api/unsubscribe.ts` — one-click tokened flag-flip (`weekly_digest=false` + `unsubscribed_at`), HTML page.
+- Both routed in `_worker.ts`. NOT added to cron — activation documented in docs/OPS-ACTIVATION.md
+  (table SQL, Mon 08:00 UTC cron line, scheduled() branch, batch-path note).
+- **TEST SEND (single, to ADMIN fallback himanshu1305@gmail.com):** Resend HTTP 200,
+  id `6ef488fc-2796-4cfd-98f0-dc40d31e25c2`, 3 global + 3 India celebrities pulled live from the DB.
+  (ADMIN_EMAIL unset locally → fallback; run via scripts/test-digest.mjs mirroring the endpoint.)
+
+tsc 0 new errors; `npx vite build` exit 0.
+
+Status: DONE (capture inert until NOTES SQL applied; digest built, not scheduled).
