@@ -82,3 +82,26 @@ footer page. Added `.report-closing` class + print rule (trim padding, `break-in
 
 Status: DONE (Birthday: all 4 defects). Longevity void documented as non-reproducible in browser-print
 equivalent — founder to re-test on-device post-deploy.
+
+---
+
+## Phase 2 — Celebrity-Birthday Page Layout
+
+**Before:** `/celebrity-birthday` had a big hero + CTA "Find My Celebrity Match" scroll-button, then a
+calendar card, then results/zodiac, and only THEN `<CelebritySearch />` buried at line 209 — below the
+fold, invisible on mobile (the founder's complaint).
+
+**After:** search joins the hero as one of two equal paths.
+- New H1: "Find Your Celebrity Twin — by Birthday or by Name" + concise subhead.
+- Two-path grid (`md:grid-cols-2`, stacks on mobile): **Path A "Search by name"** = `<CelebritySearch/>`
+  (now first, right under the hero) · **Path B "Pick a birth date"** = the calendar card. Each labelled.
+- Removed the buried duplicate search section + its separator, and the scroll-CTA button.
+- `CelebritySearch` input upgraded (kept all functionality): search icon INSIDE a full-width bordered
+  `h-12` input, responsive row (`flex-col sm:flex-row`) so on ~380px the input is full-width and the
+  category+button drop below; no autofocus (mobile keyboard stays closed); aria-label added.
+
+**Verified:** 390px screenshot (`scripts/shot.mjs`) — headline + EEAT + subhead + prominent search input
+all within the first screenful; calendar path immediately below (2nd screenful). `npx vite build` exit 0,
+tsc clean for both files.
+
+Status: DONE. Commit: fix(celebrity-birthday): search into hero as equal path + prominent input.

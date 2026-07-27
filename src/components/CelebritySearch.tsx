@@ -149,32 +149,41 @@ export const CelebritySearch = () => {
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <div className="flex gap-2">
-          <Input
-            placeholder="Search by name or profession..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            className="flex-1"
-          />
-          <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="Category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="actor">Actors</SelectItem>
-              <SelectItem value="celebrity">Celebrities</SelectItem>
-              <SelectItem value="dancer">Dancers</SelectItem>
-              <SelectItem value="artist">Artists</SelectItem>
-              <SelectItem value="scientist">Scientists</SelectItem>
-              <SelectItem value="entrepreneur">Entrepreneurs</SelectItem>
-              <SelectItem value="sports">Sports</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button onClick={handleSearch} disabled={isSearching}>
-            {isSearching ? 'Searching...' : 'Search'}
-          </Button>
+        <div className="flex flex-col sm:flex-row gap-2">
+          {/* Prominent bordered input with a search icon inside; full-width on
+              mobile so it can't be missed. autofocus intentionally omitted so
+              the mobile keyboard doesn't spring open on load. */}
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+            <Input
+              placeholder="Search by name or profession..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              className="pl-10 h-12 text-base"
+              aria-label="Search celebrities by name or profession"
+            />
+          </div>
+          <div className="flex gap-2">
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger className="flex-1 sm:w-[150px] h-12">
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="actor">Actors</SelectItem>
+                <SelectItem value="celebrity">Celebrities</SelectItem>
+                <SelectItem value="dancer">Dancers</SelectItem>
+                <SelectItem value="artist">Artists</SelectItem>
+                <SelectItem value="scientist">Scientists</SelectItem>
+                <SelectItem value="entrepreneur">Entrepreneurs</SelectItem>
+                <SelectItem value="sports">Sports</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button onClick={handleSearch} disabled={isSearching} className="h-12 px-5">
+              {isSearching ? 'Searching...' : 'Search'}
+            </Button>
+          </div>
         </div>
 
         {results.length > 0 && (

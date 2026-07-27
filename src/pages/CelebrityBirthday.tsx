@@ -9,7 +9,7 @@ import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
-import { ArrowRight, Star, Users, Calendar as CalendarIcon, Sparkles } from 'lucide-react';
+import { Star, Users, Calendar as CalendarIcon, Sparkles, Search } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { useAuth } from '@/hooks/useAuth';
@@ -98,49 +98,53 @@ const CelebrityBirthday = () => {
           <AuthNav />
         </header>
 
-        {/* Hero Section */}
-        <section className="text-center space-y-6 pt-8 pb-12 max-w-4xl mx-auto">
-          <div className="space-y-4 animate-fade-in-up">
-            <h1 className="text-5xl md:text-7xl font-bold gradient-text-primary leading-tight">
-              Best Celebrity Birthday Match — Who Shares Your Birthday?
+        {/* Hero Section — tightened so BOTH search paths sit above the fold */}
+        <section className="text-center space-y-4 pt-4 pb-8 max-w-4xl mx-auto">
+          <div className="space-y-3 animate-fade-in-up">
+            <h1 className="text-4xl md:text-6xl font-bold gradient-text-primary leading-tight">
+              Find Your Celebrity Twin — by Birthday or by Name
             </h1>
             <EEATBadges sources={['Wikipedia', 'Verified public records']} />
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Enter your birth date and instantly discover which celebrities were born on the same day as you. Our Celebrity Birthday Match connects your special day with the stars who share it — complete with photos, bios, and fun facts.
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Two ways to explore: pick a birth date to see everyone born that day, or search
+              any famous person by name. Photos, bios, zodiac and life-path — all in one place.
             </p>
-            <div className="pt-4">
-              <Button 
-                size="lg" 
-                className="gap-2 text-lg px-8 py-6 animate-glow"
-                onClick={() => document.getElementById('birthday-picker')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                🎈 Find My Celebrity Match
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-            </div>
           </div>
         </section>
 
-        {/* Birthday Picker Section */}
-        <section id="birthday-picker" className="max-w-2xl mx-auto mb-16">
-          <Card className="glass-card">
-            <CardContent className="p-8">
-              <div className="text-center mb-6">
-                <CalendarIcon className="w-12 h-12 mx-auto mb-4 text-primary" />
-                <h2 className="text-2xl font-bold mb-2">Select Your Birth Date</h2>
-                <p className="text-muted-foreground">Choose your birthday to find your celebrity twins</p>
-              </div>
-              <div className="flex justify-center">
-                <Calendar
-                  mode="single"
-                  selected={birthDate || undefined}
-                  onSelect={handleDateSelect}
-                  className="rounded-md border"
-                  disabled={(date) => date > new Date()}
-                />
-              </div>
-            </CardContent>
-          </Card>
+        {/* Two equal entry paths — search by name AND pick a date, side by side */}
+        <section className="max-w-5xl mx-auto mb-16 grid gap-6 md:grid-cols-2 items-start">
+          {/* Path A — by name */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              <Search className="w-4 h-4 text-accent" /> Search by name
+            </div>
+            <CelebritySearch />
+          </div>
+
+          {/* Path B — by birthday */}
+          <div id="birthday-picker" className="space-y-3">
+            <div className="flex items-center justify-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              <CalendarIcon className="w-4 h-4 text-primary" /> Pick a birth date
+            </div>
+            <Card className="glass-card">
+              <CardContent className="p-6">
+                <div className="text-center mb-4">
+                  <h2 className="text-xl font-bold mb-1">Select Your Birth Date</h2>
+                  <p className="text-sm text-muted-foreground">See who shares your day</p>
+                </div>
+                <div className="flex justify-center">
+                  <Calendar
+                    mode="single"
+                    selected={birthDate || undefined}
+                    onSelect={handleDateSelect}
+                    className="rounded-md border"
+                    disabled={(date) => date > new Date()}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </section>
 
         {/* Birthday Matches Section */}
@@ -200,15 +204,6 @@ const CelebrityBirthday = () => {
             </section>
           </>
         )}
-
-        {/* Celebrity Search Section */}
-        <div className="flex items-center justify-center mb-12">
-          <Separator className="w-full max-w-md bg-gradient-primary h-0.5 border-0" />
-        </div>
-        
-        <section className="mb-16">
-          <CelebritySearch />
-        </section>
 
         {/* About Section */}
         <section className="max-w-4xl mx-auto mb-16">
