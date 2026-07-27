@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
+import { AnswerLayout } from '@/components/AnswerLayout';
 
 export default function HowOldAmIOnMars() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How old am I on other planets?", "item": "https://bornclock.com/answers/how-old-am-i-on-mars" } ] };
@@ -26,7 +27,7 @@ export default function HowOldAmIOnMars() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <div className="min-h-screen bg-white">
+      <AnswerLayout>
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">
             <Link to="/" className="hover:text-indigo-600">Home</Link>
@@ -105,7 +106,7 @@ export default function HowOldAmIOnMars() {
             </div>
           </div>
         </div>
-      </div>
+      </AnswerLayout>
     </>
   );
 }

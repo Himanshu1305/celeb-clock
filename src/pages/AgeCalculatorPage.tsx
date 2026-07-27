@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { AgeCalculator } from '@/components/AgeCalculator';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
@@ -83,6 +84,18 @@ const AgeCalculatorPage = () => {
         </section>
 
         <PageFAQ slug="age-calculator" title="Age Calculator FAQs" />
+
+        {/* Related questions — contextual internal links to /answers hub */}
+        <section className="max-w-3xl mx-auto mb-12 px-4">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">Related Questions</h2>
+          <div className="grid sm:grid-cols-2 gap-2">
+            <Link to="/answers/how-many-days-until-my-birthday" className="text-sm text-primary hover:underline">→ How many days until my birthday?</Link>
+            <Link to="/answers/how-to-calculate-age" className="text-sm text-primary hover:underline">→ How do I calculate my exact age?</Link>
+            <Link to="/answers/how-old-am-i-on-mars" className="text-sm text-primary hover:underline">→ How old am I on Mars?</Link>
+            <Link to="/answers/who-shares-my-birthday" className="text-sm text-primary hover:underline">→ Which famous people share my birthday?</Link>
+          </div>
+        </section>
+
         <RelatedTools currentSlug="age" />
         <AuthorBio />
       </div>

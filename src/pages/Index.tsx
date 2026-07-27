@@ -364,6 +364,18 @@ const Index = () => {
         <TestimonialsSection />
 
         <PageFAQ slug="home" title="Frequently Asked Questions" />
+
+        {/* Popular questions — contextual internal links to the /answers hub */}
+        <section className="max-w-3xl mx-auto mb-12 px-4 text-center">
+          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">Popular Questions</p>
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
+            <Link to="/answers/how-many-days-until-my-birthday" className="text-primary hover:underline">How many days until my birthday?</Link>
+            <Link to="/answers/how-long-will-i-live" className="text-primary hover:underline">How long will I live?</Link>
+            <Link to="/answers/who-shares-my-birthday" className="text-primary hover:underline">Who shares my birthday?</Link>
+            <Link to="/answers/what-is-my-zodiac-sign" className="text-primary hover:underline">What is my zodiac sign?</Link>
+          </div>
+        </section>
+
         <AuthorBio />
       </div>
       <Footer />

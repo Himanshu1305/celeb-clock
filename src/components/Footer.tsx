@@ -74,6 +74,7 @@ export const Footer = () => {
               <li><Link to="/vedic-zodiac" className="text-muted-foreground hover:text-accent transition-colors">Indian Zodiac (Vedic)</Link></li>
               <li><Link to="/birthstone" className="text-muted-foreground hover:text-accent transition-colors">Birthstone Finder</Link></li>
               <li><Link to="/numerology" className="text-muted-foreground hover:text-accent transition-colors">Numerology</Link></li>
+              <li><Link to="/answers/who-shares-my-birthday" className="text-muted-foreground hover:text-accent transition-colors">Who Shares My Birthday?</Link></li>
             </ul>
           </div>
 
@@ -85,6 +86,8 @@ export const Footer = () => {
               <li><Link to="/planetary-age" className="text-muted-foreground hover:text-accent transition-colors">Planetary Age Calculator</Link></li>
               <li><Link to="/life-expectancy#simulator" className="text-muted-foreground hover:text-accent transition-colors">What-If Simulator</Link></li>
               <li><Link to="/age-calculator" className="text-muted-foreground hover:text-accent transition-colors">Age Calculator</Link></li>
+              <li><Link to="/answers/how-many-days-until-my-birthday" className="text-muted-foreground hover:text-accent transition-colors">Days Until My Birthday</Link></li>
+              <li><Link to="/answers/how-long-will-i-live" className="text-muted-foreground hover:text-accent transition-colors">How Long Will I Live?</Link></li>
               <li><Link to="/leaderboard" className="text-muted-foreground hover:text-accent transition-colors">Longevity Leaderboard</Link></li>
               <li><Link to="/family" className="text-muted-foreground hover:text-accent transition-colors">Family Dashboard</Link></li>
               <li><Link to="/birthday-report" className="text-muted-foreground hover:text-accent transition-colors">Gift a Report</Link></li>
