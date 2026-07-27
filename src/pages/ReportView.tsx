@@ -449,6 +449,51 @@ const ReportView = () => {
       .catch(() => {});
   }, [user]);
 
+  // Redeem one report credit to unlock. Called by the auto-redeem effect below
+  // (opts.auto = silent on failure). Defined BEFORE the early returns so the
+  // effect can safely reference it (no use-before-init).
+  const handleUnlockWithCredit = async (opts?: { auto?: boolean }) => {
+    if (!user || !slug) return;
+    setRedeemLoading(true);
+    try {
+      const res = await fetch('/api/redeem-credit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, reportSlug: slug }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        // On auto failure, fall back silently to the paywall (no error wall).
+        if (!opts?.auto) toast({ title: 'Redemption failed', description: body.error ?? 'Please try again.', variant: 'destructive' });
+        return;
+      }
+      const remaining = typeof body.creditsRemaining === 'number' ? body.creditsRemaining : Math.max(0, credits - 1);
+      setCredits(remaining);
+      const refreshed = await import('@/services/BirthdayReportService').then(m => m.getReport(slug));
+      if (refreshed) setRow(refreshed);
+      toast({ title: 'Unlocked with a credit', description: `1 report credit used — ${remaining} of 9 remaining.` });
+    } catch {
+      if (!opts?.auto) toast({ title: 'Error', description: 'Could not redeem credit. Please try again.', variant: 'destructive' });
+    } finally {
+      setRedeemLoading(false);
+    }
+  };
+
+  // Auto-redeem: active subscriber views their OWN locked report with credits > 0
+  // → spend one automatically, once per mount (ref guard). No manual button hunt.
+  const autoRedeemTried = useRef(false);
+  useEffect(() => {
+    if (autoRedeemTried.current || !row || !user) return;
+    const locked = !isAdmin && !row.is_paid;
+    const owner = row.user_id === user.id;
+    const activeSub = profile?.subscription_status === 'active';
+    if (locked && owner && activeSub && credits > 0) {
+      autoRedeemTried.current = true;
+      void handleUnlockWithCredit({ auto: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [row, user, isAdmin, credits, profile?.subscription_status]);
+
   if (loading) return <LoadingScreen />;
   if (notFound || !row || !row.report_data) return <ExpiryPage />;
 
@@ -500,36 +545,6 @@ const ReportView = () => {
       onError: (msg) => toast({ title: 'Payment failed', description: msg, variant: 'destructive' }),
       onDismiss: () => {},
     });
-  };
-
-  const handleUnlockWithCredit = async () => {
-    if (!user || !slug) return;
-    setRedeemLoading(true);
-    try {
-      const res = await fetch('/api/redeem-credit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, reportSlug: slug }),
-      });
-      const body = await res.json();
-      if (!res.ok) {
-        toast({ title: 'Redemption failed', description: body.error ?? 'Please try again.', variant: 'destructive' });
-        return;
-      }
-      setCredits(body.creditsRemaining ?? 0);
-      // Reload report data so isLocked flips to false
-      const fresh = await fetch(`/api/get-credits?userId=${encodeURIComponent(user.id)}`).catch(() => null);
-      if (fresh) {
-        const cd = await fresh.json().catch(() => null);
-        if (typeof cd?.credits === 'number') setCredits(cd.credits);
-      }
-      const refreshed = await import('@/services/BirthdayReportService').then(m => m.getReport(slug));
-      if (refreshed) setRow(refreshed);
-    } catch (e) {
-      toast({ title: 'Error', description: 'Could not redeem credit. Please try again.', variant: 'destructive' });
-    } finally {
-      setRedeemLoading(false);
-    }
   };
 
   const handleDownloadAndTrack = () => {
@@ -960,8 +975,8 @@ const ReportView = () => {
                 style={{ background: 'var(--navy)' }}
               >
                 {profile?.subscription_status === 'active'
-                  ? `Unlock — ${isIndia ? '₹149' : '$2.49'} (member price)`
-                  : `Unlock — ${isIndia ? '₹199' : '$2.99'}`}
+                  ? `Unlock — ${isIndia ? '₹149' : '$5.49'} (member price)`
+                  : `Unlock — ${isIndia ? '₹199' : '$6.99'}`}
               </button>
             ) : (
               <>
@@ -982,25 +997,27 @@ const ReportView = () => {
               </>
             )}
 
-            {/* Subscriber credit option */}
-            {user && credits > 0 && (
-              <button
-                onClick={handleUnlockWithCredit}
-                disabled={redeemLoading}
-                className="w-full py-3 rounded-xl font-semibold text-sm border transition-colors disabled:opacity-50"
-                style={{ borderColor: 'var(--gold)', color: 'var(--gold)' }}
-              >
-                {redeemLoading ? 'Unlocking…' : `Use a subscriber credit (${credits} remaining)`}
-              </button>
+            {profile?.subscription_status !== 'active' && (
+              <p className="text-xs mb-1" style={{ color: 'var(--muted)' }}>Launch price</p>
             )}
-            {user && profile?.subscription_status === 'active' && credits === 0 && (
+
+            {/* Subscriber credit balance — credits auto-redeem for the owner, so this
+                is informational (no manual button). Shows why it may auto-unlock. */}
+            {user && profile?.subscription_status === 'active' && (
               <p className="text-xs mt-2" style={{ color: 'var(--muted)' }}>
-                Your next credit arrives at the start of next calendar month.
+                {redeemLoading
+                  ? 'Applying a report credit…'
+                  : credits > 0
+                    ? `Report credits: ${credits} of 9 — one will be used automatically to unlock this report.`
+                    : 'Report credits: 0 of 9 · 3 added monthly, unused credits carry forward (max 9).'}
               </p>
             )}
 
             <p className="text-xs mt-4" style={{ color: 'var(--muted)' }}>
               One-time purchase · Permanent access · Download included
+            </p>
+            <p className="text-xs mt-2" style={{ color: 'var(--muted)' }}>
+              7-day money-back guarantee — full refund, no questions.
             </p>
             <p className="text-xs mt-2" style={{ color: 'var(--muted)' }}>
               Questions or need help? <a href="mailto:hello@bornclock.com" style={{ color: 'var(--navy)', textDecoration: 'underline' }}>hello@bornclock.com</a>
@@ -1013,7 +1030,7 @@ const ReportView = () => {
       <CheckoutRegionModal
         open={regionOpen}
         onOpenChange={setRegionOpen}
-        priceLabel={profile?.subscription_status === 'active' ? (isIndia ? '₹149' : '$2.49') : (isIndia ? '₹199' : '$2.99')}
+        priceLabel={profile?.subscription_status === 'active' ? (isIndia ? '₹149' : '$5.49') : (isIndia ? '₹199' : '$6.99')}
         onConfirm={(sel) => { setRegionOpen(false); startOrderPayment(sel); }}
       />
 

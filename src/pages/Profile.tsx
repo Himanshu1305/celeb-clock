@@ -43,7 +43,7 @@ export default function Profile() {
   });
 
   // Live birthday-report credit balance. get-credits does lazy monthly accrual
-  // server-side (1/month, carry-forward, cap 3) so this fetch is intentional.
+  // server-side (3/month, carry-forward, cap 9) so this fetch is intentional.
   const [credits, setCredits] = useState<number | null>(null);
   useEffect(() => {
     if (!user) return;
@@ -288,12 +288,10 @@ export default function Profile() {
                     <Gift className="h-6 w-6 text-accent" />
                     <div>
                       <p className="font-medium">
-                        Birthday report credits: {credits === null ? '—' : credits}
+                        Report credits: {credits === null ? '—' : credits} of 9
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {isPremium
-                          ? 'You earn 1 credit each month — they roll over, up to 3.'
-                          : 'Premium members earn 1 credit/month (rolls over, up to 3).'}
+                        3 added monthly · unused credits carry forward · max 9.
                       </p>
                     </div>
                   </div>

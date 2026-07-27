@@ -1,15 +1,9 @@
-// OWNER ACTION REQUIRED:
-// Replace 'admin@bornclock.com' in ADMIN_EMAILS
-// with your actual login email address.
-// This controls who can access /admin.
+// Admin allowlist lives in src/lib/adminEmails.ts (single source of truth).
+// This component just gates the /admin route on it.
 
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-
-const ADMIN_EMAILS = [
-  'hello@bornclock.com', // placeholder — owner must update
-  'himanshu1305@gmail.com',// placeholder — owner must update
-];
+import { isAdminEmail as isAdminEmailShared } from '@/lib/adminEmails';
 
 export function AdminRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -22,12 +16,12 @@ export function AdminRoute({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
+  if (!isAdminEmailShared(user?.email)) {
     return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
 }
 
-export const isAdminEmail = (email: string | undefined) =>
-  ADMIN_EMAILS.includes(email || '');
+// Re-exported for existing importers (e.g. Navigation).
+export const isAdminEmail = (email: string | undefined) => isAdminEmailShared(email);

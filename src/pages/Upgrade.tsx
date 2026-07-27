@@ -76,7 +76,7 @@ export default function Upgrade() {
     'Biological Blueprint report',
     'Cultural Horizon',
     'Family dashboard (10 members)',
-    'Birthday report credits (1/month · rollover · cap 3)',
+    'Birthday report credits (3/month · rollover · cap 9)',
     'Longevity leaderboard',
     'Country comparison (57 countries)',
     'Downloadable PDF reports',
@@ -124,7 +124,7 @@ export default function Upgrade() {
             <div className="mt-4 p-4 rounded-xl border border-indigo-100 bg-indigo-50 text-left">
               <p className="text-sm font-semibold text-indigo-900 mb-1">🎂 Create a Birthday Blueprint</p>
               <p className="text-xs text-indigo-700 mb-3">
-                Gift a personalised 10-section report to anyone — zodiac, numerology, planetary ages, and more. Your subscription includes 1 credit per month.
+                Gift a personalised 11-section report to anyone — zodiac, numerology, planetary ages, and more. Your subscription includes 3 credits per month (auto-applied, up to 9).
               </p>
               <button
                 onClick={() => navigate('/birthday-report')}
@@ -147,8 +147,8 @@ export default function Upgrade() {
               Science-backed tools to understand and extend your healthspan
             </p>
             <p className="text-indigo-700 font-medium mt-3">
-              Subscribers get one birthday report credit every month — credits roll over and stack up to 3,
-              so you can save them and gift several reports at once.
+              Subscribers get three birthday report credits every month — auto-applied when you open a locked
+              report, credits roll over and stack up to 9, so you can save them and gift several reports at once.
             </p>
           </div>
 
@@ -345,7 +345,7 @@ export default function Upgrade() {
                 {
                   icon: '📄',
                   title: 'Birthday Reports',
-                  desc: 'Generate complete 8-page birthday personality and longevity PDFs. One credit per month, rolls over up to 3.',
+                  desc: 'Generate complete multi-page birthday personality PDFs. Three credits per month, auto-applied, roll over up to 9.',
                 },
               ].map(feature => (
                 <div

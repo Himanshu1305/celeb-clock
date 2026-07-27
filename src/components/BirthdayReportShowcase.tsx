@@ -57,7 +57,8 @@ export function BirthdayReportShowcase() {
               </ul>
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-1">
                 <span className="text-3xl font-black text-foreground">₹199</span>
-                <span className="text-sm text-muted-foreground">one-time · or ₹149 for members</span>
+                <span className="text-xs font-semibold uppercase tracking-wide text-accent">Launch price</span>
+                <span className="text-sm text-muted-foreground w-full">one-time · or ₹149 for members</span>
               </div>
               <div className="flex flex-wrap gap-3 pt-1">
                 <Button asChild size="lg" className="gap-2">
@@ -65,11 +66,14 @@ export function BirthdayReportShowcase() {
                     Create a Birthday Blueprint <ArrowRight className="w-4 h-4" />
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline">
+                <Button asChild size="lg" variant="secondary">
                   <Link to="/pricing">See what's included</Link>
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground pt-1">
+                7-day money-back guarantee — full refund, no questions.
+              </p>
+              <p className="text-xs text-muted-foreground">
                 Questions before you buy? <a href="mailto:hello@bornclock.com" className="text-primary hover:underline">hello@bornclock.com</a>
               </p>
             </div>

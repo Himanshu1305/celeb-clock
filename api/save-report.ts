@@ -31,6 +31,8 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Invalid JSON body' }, 400);
   }
 
+  // NOTE: `isPremium` from the body is a client flag — it is NOT trusted for the
+  // free-unlock decision below. It is only used for the (cosmetic) link-expiry.
   const { reportData, isPremium, gender } = body ?? {};
   if (!reportData) {
     return json({ error: 'Missing reportData' }, 400);
@@ -53,12 +55,44 @@ async function handler(request: Request): Promise<Response> {
     userId = data?.user?.id ?? null;
   }
 
-  const expiryDays = isPremium ? 30 : 7;
+  // ── Server-enforced trial free report ────────────────────────────────────
+  // Trial users (first 7 days from profiles.created_at) get exactly ONE free
+  // unlocked report, decided SERVER-SIDE. Guarded by the unlock_source column:
+  // until NOTES-unlock-source.sql is applied, the usage check errors and the
+  // feature stays dormant (report inserts as today, is_paid=false).
+  let trialUnlock = false;
+  if (userId) {
+    try {
+      const { data: prof } = await db
+        .from('profiles')
+        .select('created_at')
+        .eq('user_id', userId)
+        .single();
+      const createdAt = (prof as any)?.created_at ? new Date((prof as any).created_at) : null;
+      const inTrial = !!createdAt && (Date.now() - createdAt.getTime()) < 7 * 24 * 60 * 60 * 1000;
+      if (inTrial) {
+        // Count reports already unlocked via the trial for this user. If the
+        // column doesn't exist yet this throws → caught → feature dormant.
+        const { count, error: usageErr } = await db
+          .from('birthday_reports')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', userId)
+          .eq('unlock_source', 'trial');
+        if (usageErr) throw usageErr;
+        trialUnlock = (count ?? 0) === 0;
+      }
+    } catch (e) {
+      console.warn('[trial-unlock] column missing / check failed, feature dormant:', (e as Error).message);
+      trialUnlock = false;
+    }
+  }
+
+  const expiryDays = (trialUnlock || isPremium) ? 30 : 7;
   const expiresAt = new Date(Date.now() + expiryDays * 24 * 60 * 60 * 1000).toISOString();
 
   for (let attempt = 0; attempt < 3; attempt++) {
     const slug = generateSlug();
-    const { error } = await db.from('birthday_reports').insert({
+    const insertRow: Record<string, unknown> = {
       user_id: userId,
       slug,
       recipient_name: reportData.recipientName,
@@ -70,9 +104,17 @@ async function handler(request: Request): Promise<Response> {
       report_data: reportData,
       is_premium_report: isPremium ?? false,
       expires_at: expiresAt,
-    });
+    };
+    // Only set is_paid/unlock_source when granting the trial free report. The
+    // column is only referenced here when trialUnlock is true, which itself is
+    // only reachable if the earlier unlock_source query succeeded (column exists).
+    if (trialUnlock) {
+      insertRow.is_paid = true;
+      insertRow.unlock_source = 'trial';
+    }
+    const { error } = await db.from('birthday_reports').insert(insertRow);
 
-    if (!error) return json({ slug });
+    if (!error) return json({ slug, unlocked: trialUnlock });
     if (!String(error.message).includes('unique')) break;
   }
 

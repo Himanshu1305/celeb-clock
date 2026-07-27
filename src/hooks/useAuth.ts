@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { ADMIN_EMAILS } from '@/services/PDFQuotaService';
+import { ADMIN_EMAILS } from '@/lib/adminEmails';
 import { useToast } from '@/hooks/use-toast';
 import { calculateTrialStatus } from '@/utils/trialUtils';
 import { EmailService } from '@/services/EmailService';

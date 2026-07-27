@@ -10,9 +10,9 @@ import { detectCountry, formatPrice, type CountryInfo } from '@/services/Country
 
 // Indexable pricing/comparison page (distinct from the login-gated /upgrade
 // conversion page). Every benefit below is drawn from the REAL feature set:
-// free/premium lists mirror src/pages/Upgrade.tsx; report price ₹199 / member
-// ₹149 from api/create-order.ts; credits 1/month, carry-forward, cap 3 from
-// api/get-credits.ts.
+// free/premium lists mirror src/pages/Upgrade.tsx; report price ₹199 / $6.99
+// (member ₹149 / $5.49) from api/create-order.ts; credits 3/month, carry-forward,
+// cap 9 from api/get-credits.ts.
 
 const FREE_FEATURES = [
   'Celebrity birthday twin (1/day)',
@@ -36,7 +36,7 @@ const COMPARISON: Array<[string, boolean]> = [
   ['Country comparison (57 countries)', false],
   ['Longevity leaderboard', false],
   ['Downloadable PDF reports', false],
-  ['Birthday report credits (1/month · rollover · cap 3)', false],
+  ['Birthday report credits (3/month · rollover · cap 9)', false],
 ];
 
 export default function Pricing() {
@@ -45,8 +45,8 @@ export default function Pricing() {
 
   const isIndia = country?.isIndia ?? true;
   const monthly = country ? formatPrice(country, 'monthly') : { amount: '₹299', period: '/month' };
-  const reportPrice = isIndia ? '₹199' : '$2.99';
-  const reportMemberPrice = isIndia ? '₹149' : '$2.49';
+  const reportPrice = isIndia ? '₹199' : '$6.99';
+  const reportMemberPrice = isIndia ? '₹149' : '$5.49';
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -107,7 +107,7 @@ export default function Pricing() {
               ))}
               <li className="flex items-start gap-2 text-sm font-semibold text-indigo-700">
                 <Repeat size={14} className="text-indigo-500 flex-shrink-0 mt-0.5" />
-                1 birthday report credit per month — credits roll over and stack up to 3
+                3 birthday report credits per month — auto-applied, roll over, stack up to 9
               </li>
             </ul>
             <Button asChild className="w-full"><Link to="/upgrade">Go Premium <ArrowRight className="w-4 h-4 ml-1" /></Link></Button>
@@ -118,7 +118,7 @@ export default function Pricing() {
             <div className="flex items-center gap-1.5 text-lg font-bold text-amber-700 mb-1"><Gift size={16} /> Birthday Blueprint</div>
             <div className="flex items-baseline gap-2 mb-1">
               <span className="text-4xl font-black text-gray-900">{reportPrice}</span>
-              <span className="text-sm text-gray-400 line-through">{isIndia ? '' : ''}</span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-amber-600">Launch price</span>
             </div>
             <div className="text-gray-400 text-sm mb-5">one-time · {reportMemberPrice} for members</div>
             <ul className="space-y-2.5 mb-6 flex-1">
@@ -164,9 +164,10 @@ export default function Pricing() {
           <div>
             <div className="font-semibold text-indigo-900 mb-1">How birthday report credits work</div>
             <div className="text-sm text-indigo-800">
-              Premium members earn <strong>one birthday report credit each month</strong>. Unused credits
-              <strong> carry forward</strong> and stack up to a maximum of 3 — so you can save them up and
-              gift several reports at once. Each credit unlocks one full Birthday Blueprint.
+              Premium members earn <strong>three birthday report credits each month</strong>. Unused credits
+              <strong> carry forward</strong> and stack up to a maximum of 9 — so you can save them up and
+              gift several reports at once. Each credit unlocks one full Birthday Blueprint, and for members
+              a credit is <strong>applied automatically</strong> when you open a locked report.
             </div>
           </div>
         </div>
@@ -175,11 +176,20 @@ export default function Pricing() {
         <div className="bg-green-50 border border-green-200 rounded-2xl p-5 mb-8 flex items-start gap-3">
           <Shield className="text-green-600 flex-shrink-0 mt-0.5" size={20} />
           <div>
-            <div className="font-semibold text-green-900 mb-1">7-day money-back guarantee</div>
+            <div className="font-semibold text-green-900 mb-1">7-day money-back guarantee — full refund, no questions.</div>
             <div className="text-sm text-green-800">
-              Subscriptions are risk-free for 7 days. Questions or a refund? Email{' '}
-              <a href="mailto:hello@bornclock.com" className="underline">hello@bornclock.com</a> — no questions asked.
+              Reports and subscriptions are risk-free for 7 days. Email{' '}
+              <a href="mailto:hello@bornclock.com" className="underline">hello@bornclock.com</a> within 7 days of purchase for a full refund.
             </div>
+          </div>
+        </div>
+
+        {/* Refund FAQ */}
+        <div className="bg-white border rounded-2xl p-5 mb-8">
+          <div className="font-semibold text-gray-900 mb-1">What if I don't like it?</div>
+          <div className="text-sm text-gray-600">
+            Email <a href="mailto:hello@bornclock.com" className="text-indigo-600 underline">hello@bornclock.com</a> within
+            7 days of purchase for a full refund.
           </div>
         </div>
 

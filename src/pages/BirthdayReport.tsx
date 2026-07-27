@@ -46,7 +46,8 @@ const CHECKLIST_ITEMS = [
 // ── Page component ────────────────────────────────────────────────────────────
 
 const BirthdayReport = () => {
-  const { user, isPremium, isAdmin, isInTrial, trialDaysRemaining } = useAuth();
+  const { user, isPremium, isAdmin, isInTrial, trialDaysRemaining, profile } = useAuth();
+  const isActiveSubscriber = profile?.subscription_status === 'active';
   const { toast } = useToast();
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -251,13 +252,18 @@ const BirthdayReport = () => {
         <div className="max-w-sm mx-auto bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
           <div className="text-center mb-6">
             <div className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">Birthday Report</div>
-            {(isPremium || isInTrial) ? (
+            {isInTrial ? (
               <>
-                <div className="text-4xl font-black text-green-500">FREE</div>
+                <div className="text-3xl font-black text-green-500">1 free report</div>
                 <div className="text-xs text-green-600 font-medium mt-1">
-                  {isInTrial && trialDaysRemaining > 0
-                    ? `Included in your trial · ${trialDaysRemaining} day${trialDaysRemaining !== 1 ? 's' : ''} remaining`
-                    : 'Included in your Premium plan'}
+                  Included in your trial{trialDaysRemaining > 0 ? ` · ${trialDaysRemaining} day${trialDaysRemaining !== 1 ? 's' : ''} remaining` : ''}
+                </div>
+              </>
+            ) : isActiveSubscriber ? (
+              <>
+                <div className="text-3xl font-black text-green-500">Included</div>
+                <div className="text-xs text-green-600 font-medium mt-1">
+                  Unlocked automatically with your monthly report credits
                 </div>
               </>
             ) : (
@@ -265,9 +271,9 @@ const BirthdayReport = () => {
                 <div className="flex items-baseline justify-center gap-3">
                   <span className="text-4xl font-black text-rose-500">₹199</span>
                   <span className="text-gray-400">/</span>
-                  <span className="text-2xl font-bold text-gray-700">$2.99</span>
+                  <span className="text-2xl font-bold text-gray-700">$6.99</span>
                 </div>
-                <div className="text-xs text-gray-400 mt-1">India / Global</div>
+                <div className="text-xs text-gray-400 mt-1">India / Global · Launch price</div>
               </>
             )}
           </div>
@@ -286,6 +292,11 @@ const BirthdayReport = () => {
             Create Now →
           </button>
           <p className="text-xs text-center text-gray-400 mt-3">Instant web link · Shareable · 30-day access</p>
+          {!isInTrial && !isActiveSubscriber && (
+            <p className="text-xs text-center text-gray-500 mt-2">
+              7-day money-back guarantee — full refund, no questions. <a href="mailto:hello@bornclock.com" className="underline hover:text-gray-700">hello@bornclock.com</a>
+            </p>
+          )}
         </div>
       </div>
 
@@ -325,7 +336,7 @@ const BirthdayReport = () => {
       {/* ── Gifting Ideas ────────────────────────────────────────────────── */}
       <div className="py-6 px-4 bg-amber-50">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Perfect for every occasion</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">A birthday gift they'll actually keep</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {['🎂 Birthdays', '💑 Anniversaries', '🎓 Graduation', '👶 New Baby', '🏆 Retirement', '💌 Just Because'].map(tag => (
               <span key={tag} className="px-4 py-2 bg-white rounded-full text-sm text-gray-700 shadow-sm border border-amber-200">

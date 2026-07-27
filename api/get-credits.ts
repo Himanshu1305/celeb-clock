@@ -50,13 +50,13 @@ async function handler(request: Request): Promise<Response> {
   const currentMonth = new Date().toISOString().slice(0, 7);
 
   // Lazy accrual: only runs when month advances, only for active subscribers.
-  // Math: add 1 credit per elapsed month since last grant, capped at 3 total.
+  // Math: add 3 credits per elapsed month since last grant, capped at 9 total.
   //   elapsed = months since credits_granted_month (min 1 when null = first grant)
-  //   toAdd   = min(elapsed, 3 - currentCredits)
+  //   toAdd   = min(elapsed * 3, 9 - currentCredits)
   //   Always stamp credits_granted_month = currentMonth to prevent re-running this month.
   if (isSubscriberActive && lastGranted !== currentMonth) {
     const elapsed = lastGranted ? Math.max(1, monthsBetween(lastGranted, currentMonth)) : 1;
-    const toAdd = Math.min(elapsed, Math.max(0, 3 - currentCredits));
+    const toAdd = Math.min(elapsed * 3, Math.max(0, 9 - currentCredits));
     const newCredits = currentCredits + toAdd;
 
     await db.from('profiles').update({

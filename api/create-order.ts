@@ -17,12 +17,13 @@ function json(body: unknown, status = 200): Response {
 // Server-decided amounts in smallest currency unit (paise / cents).
 // Never trust an amount from the request body.
 const PRODUCT_AMOUNTS: Record<string, Partial<Record<'INR' | 'USD', number>>> = {
-  birthday_report: { INR: 19900, USD: 299 },
+  birthday_report: { INR: 19900, USD: 699 },
 };
 
-// Discounted amounts for active subscribers (member pricing).
+// Discounted amounts for active subscribers (member pricing). USD member scaled
+// to the same ~25% discount as INR (₹149/₹199) → $5.49 vs the $6.99 base.
 const MEMBER_AMOUNTS: Record<string, Partial<Record<'INR' | 'USD', number>>> = {
-  birthday_report: { INR: 14900, USD: 249 },
+  birthday_report: { INR: 14900, USD: 549 },
 };
 
 async function handler(request: Request): Promise<Response> {

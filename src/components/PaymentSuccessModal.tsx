@@ -54,7 +54,7 @@ export function PaymentSuccessModal({ onClose, billing: _billing }: PaymentSucce
             '🔬 What-If Simulator (25+ factors)',
             '🤖 AI Longevity Coach',
             '🧬 Biological Blueprint report',
-            '🎂 Birthday Blueprint credits (1/month)',
+            '🎂 Birthday Blueprint credits (3/month, up to 9)',
             '🌍 Country comparison (57 countries)',
             '📊 Longevity leaderboard',
             '…and more',

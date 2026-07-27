@@ -74,6 +74,11 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Failed to unlock report. Your credit has been restored.' }, 500);
   }
 
+  // Best-effort: stamp how it was unlocked. Separate call so a missing
+  // unlock_source column (NOTES-unlock-source.sql not yet applied) cannot fail
+  // the redemption — the is_paid unlock above is already committed. Error ignored.
+  await db.from('birthday_reports').update({ unlock_source: 'credit' } as any).eq('slug', reportSlug);
+
   return json({ success: true, creditsRemaining: currentCredits - 1 });
 }
 

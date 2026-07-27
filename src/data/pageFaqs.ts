@@ -189,7 +189,7 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'How do birthday report credits work?',
       answer:
-        'Premium members earn one birthday report credit every month. Unused credits carry forward and stack up to a maximum of 3, so you can save them and gift several Birthday Blueprints at once. Each credit unlocks one full report. You can see your live credit balance on your profile page.',
+        'Premium members earn three birthday report credits every month. Unused credits carry forward and stack up to a maximum of 9, so you can save them and gift several Birthday Blueprints at once. Each credit unlocks one full report — and for members it is applied automatically when you open a locked report. You can see your live credit balance on your profile page.',
     },
     {
       question: 'Do you store my date of birth?',
