@@ -14,6 +14,7 @@ import { PromoCodeInput } from '@/components/PromoCodeInput';
 import { Check, Shield, Star } from 'lucide-react';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 export default function Upgrade() {
   const { user, isPremium, isInTrial, trialDaysRemaining } = useAuth();
@@ -24,6 +25,7 @@ export default function Upgrade() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [lastBilling, setLastBilling] = useState<'monthly' | 'annual'>('annual');
   const [detecting, setDetecting] = useState(true);
+  const { trackFunnel } = useAnalytics();
 
   useEffect(() => {
     detectCountry().then(info => {
@@ -32,8 +34,12 @@ export default function Upgrade() {
     });
   }, []);
 
+  // Funnel: upgrade surface opened.
+  useEffect(() => { trackFunnel('upgrade_modal_opened'); }, [trackFunnel]);
+
   const handleSubscribe = async (billingType: 'monthly' | 'annual') => {
     if (!user || !countryInfo) return;
+    trackFunnel('checkout_opened', { product: 'subscription', plan: billingType });
     setLoadingBilling(billingType);
     setLastBilling(billingType);
     setError('');
@@ -141,7 +147,8 @@ export default function Upgrade() {
               Science-backed tools to understand and extend your healthspan
             </p>
             <p className="text-indigo-700 font-medium mt-3">
-              Subscribers get one birthday report credit every month — unlock any report, gift it to anyone.
+              Subscribers get one birthday report credit every month — credits roll over and stack up to 3,
+              so you can save them and gift several reports at once.
             </p>
           </div>
 

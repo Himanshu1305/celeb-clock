@@ -143,6 +143,9 @@ const STATIC = {
   '/generation':            { title: 'Which Generation Are You? — Complete Generational Guide | BornClock', desc: 'Find your generation — Baby Boomer, Gen X, Millennial, Gen Z, or Gen Alpha — from your birth year. Characteristics, defining events, and cultural context.' },
   '/planetary-age':         { title: 'Planetary Age Calculator — How Old Are You on Mars, Jupiter & Every Planet? | BornClock', desc: 'Calculate your age on all 8 planets plus the Moon. See how planetary orbital periods compare to life on Earth. Free, instant, accurate.' },
   '/upgrade':               { title: 'Upgrade to BornClock Premium | BornClock', desc: 'Unlock your Birthday Blueprint — personalised 11-section report covering celebrity twins, zodiac, numerology, life path, tarot, and more. Monthly or annual subscription.' },
+  '/pricing':               { title: 'Pricing — Free Forever, Premium When You Want More | BornClock', desc: 'BornClock pricing: a free birthday & age toolkit forever, optional Premium for the full longevity suite, and a one-time ₹199 Birthday Blueprint. Premium members get 3 birthday report credits a month with carry-forward.' },
+  '/answers':               { title: 'Answers — Science-Backed Answers to Birthday, Age & Longevity Questions | BornClock', desc: 'Straight, sourced answers to the questions people ask about age, birthdays, zodiac, life path, biological age and life expectancy — each with a free tool to try yourself.' },
+  '/born-on/india':         { title: 'Indian Celebrities by Birth Date — Born On Any Day | BornClock', desc: 'Browse notable Indians by the day they were born. Pick any date to see the Indian actors, leaders, scientists and legends who share it — 350+ dates covered.' },
   '/zodiac':                { title: 'Zodiac Signs — Dates, Traits, Science & History | BornClock', desc: 'Complete guide to all 12 Western zodiac signs — Aries through Pisces. Dates, personality traits, compatible signs, ruling planets, mythology and more. Fully sourced.' },
   '/birthstone':            { title: 'Birthstone by Month — History, Meaning & Geology | BornClock', desc: 'Find your birthstone by birth month — January (Garnet) through December (Tanzanite). Full history, mythology, geology, and care tips. Sourced from GIA.' },
   '/life-expectancy':       { title: 'Life Expectancy Calculator — How Long Will I Live? Death Clock & Lifespan Test', desc: 'Science-based life expectancy calculator using WHO, CDC, and Harvard longevity research. Get your personalised lifespan estimate and longevity score.' },
@@ -154,7 +157,7 @@ const STATIC = {
   '/terms':                 { title: 'Terms of Service | BornClock', desc: 'BornClock terms of service — your rights and responsibilities when using our platform.' },
   '/faq':                   { title: 'Frequently Asked Questions | BornClock', desc: 'Answers to common questions about BornClock — calculators, birthday reports, subscriptions, data sources, and more.' },
   '/contact':               { title: 'Contact BornClock — Get in Touch', desc: 'Contact the BornClock team — support, editorial corrections, partnership enquiries, or general feedback.' },
-  '/methodology':           { title: 'Our Methodology — How BornClock Calculates Its Results | BornClock', desc: "BornClock's methodology — data sources, calculation methods, and standards for life expectancy, biological age, planetary age, and personality insights." },
+  '/how-it-works':          { title: 'How BornClock Works — Tools, Data & Source-Cited Methodology | BornClock', desc: 'How BornClock works: the Birthday Blueprint report, life expectancy calculator, celebrity birthday matching, the Indian celebrities facet and the Answers library — each with its data sources, formulas and citations.' },
   '/editorial-policy':      { title: 'Editorial Policy — Accuracy, Sources & Corrections | BornClock', desc: 'BornClock editorial policy — how we write, source, fact-check, and correct our content. Committed to accuracy and transparency.' },
   '/leaderboard':           { title: 'Longevity Leaderboard — Top Forecasts Worldwide | BornClock', desc: 'See the top life expectancy forecasts on BornClock. Anonymous leaderboard of the highest longevity scores globally.' },
   '/biological-age':        { title: 'Biological Age Calculator — Free Test, 12 WHO Biomarkers | BornClock', desc: 'Free biological age test — no sign-up. Estimate your true (epigenetic) age from 12 science-backed biomarkers: BMI, sleep, exercise, diet, smoking, stress and more. Validated against WHO research.' },
@@ -289,8 +292,8 @@ export function getTitleForRoute(route) {
     }
   }
 
-  // /born-on/:slug  (NOT the index)
-  if (route.startsWith('/born-on/') && route !== '/born-on') {
+  // /born-on/:slug  (NOT the index, NOT the India hub — that has a STATIC entry)
+  if (route.startsWith('/born-on/') && route !== '/born-on' && route !== '/born-on/india') {
     const slug = route.slice(9);
     const parsed = parseBornOnSlug(slug);
     if (!parsed) return null;

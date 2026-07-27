@@ -5,6 +5,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { TestimonialsSection } from '@/components/TestimonialsSection';
 import { BentoGrid } from '@/components/BentoGrid';
+import { BirthdayReportShowcase } from '@/components/BirthdayReportShowcase';
 import { useAuth } from '@/hooks/useAuth';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { Badge } from '@/components/ui/badge';
@@ -236,6 +237,10 @@ const Index = () => {
           </section>
         )}
 
+        {/* Birthday Report showcase — sells the paid ₹199 Blueprint, placed right
+            after the calculator entry and before the deep feature grid. */}
+        <BirthdayReportShowcase />
+
         {/* Bento Grid Features */}
         <BentoGrid />
 
@@ -315,6 +320,46 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
+        </section>
+
+        {/* Explore BornClock — discovery grid of high-click surfaces */}
+        <section className="max-w-4xl mx-auto mb-16">
+          <h2 className="text-2xl font-bold text-center mb-6 gradient-text-primary">Explore BornClock</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+            {[
+              { to: '/todays-birthdays', emoji: '🎂', label: 'Born Today' },
+              { to: '/born-on/india', emoji: '🇮🇳', label: 'Indian Celebrities by Date' },
+              { to: '/planetary-age', emoji: '🪐', label: 'Planetary Age' },
+              { to: '/biological-age', emoji: '🧬', label: 'Biological Age' },
+              { to: '/compatibility', emoji: '💕', label: 'Compatibility' },
+              { to: '/answers', emoji: '❓', label: 'Answers' },
+            ].map(c => (
+              <Link key={c.to} to={c.to}>
+                <Card className="glass-card h-full hover:border-primary/50 transition-all group">
+                  <CardContent className="p-4 flex items-center gap-3">
+                    <span className="text-2xl leading-none flex-shrink-0">{c.emoji}</span>
+                    <span className="text-sm font-medium text-foreground">{c.label}</span>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+          {/* Zodiac grid — all 12 signs */}
+          <div className="flex flex-wrap justify-center gap-2">
+            {[
+              ['aries','♈'],['taurus','♉'],['gemini','♊'],['cancer','♋'],
+              ['leo','♌'],['virgo','♍'],['libra','♎'],['scorpio','♏'],
+              ['sagittarius','♐'],['capricorn','♑'],['aquarius','♒'],['pisces','♓'],
+            ].map(([sign, glyph]) => (
+              <Link
+                key={sign}
+                to={`/zodiac/${sign}`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-background/70 border border-border hover:border-primary/50 hover:text-primary transition-colors capitalize"
+              >
+                <span aria-hidden>{glyph}</span> {sign}
+              </Link>
+            ))}
+          </div>
         </section>
 
         {/* More Ways to Know Yourself */}

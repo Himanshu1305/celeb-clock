@@ -184,7 +184,12 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'Is BornClock free?',
       answer:
-        'Yes. Every calculator is free. An optional one-time Premium unlocks shareable infographics, exportable PDF reports, and the full What-If life-expectancy simulator.',
+        'Yes. Every birthday and age calculator is free forever. An optional Premium subscription unlocks the full longevity suite (What-If Simulator, AI coach, family dashboard, country comparison) and downloadable PDF reports. There is also a one-time ₹199 Birthday Blueprint you can buy or gift without any subscription.',
+    },
+    {
+      question: 'How do birthday report credits work?',
+      answer:
+        'Premium members earn one birthday report credit every month. Unused credits carry forward and stack up to a maximum of 3, so you can save them and gift several Birthday Blueprints at once. Each credit unlocks one full report. You can see your live credit balance on your profile page.',
     },
     {
       question: 'Do you store my date of birth?',

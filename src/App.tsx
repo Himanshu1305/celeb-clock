@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
 // Core Page Imports
@@ -12,6 +12,7 @@ import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import Upgrade from "./pages/Upgrade";
+import Pricing from "./pages/Pricing";
 import Zodiac from "./pages/Zodiac";
 import Birthstone from "./pages/Birthstone";
 import LifeExpectancy from "./pages/LifeExpectancy";
@@ -71,6 +72,8 @@ import RashiRatnaPage from '@/pages/RashiRatnaPage';
 import BornOnDay from '@/pages/BornOnDay';
 import BornOnDayIndia from '@/pages/BornOnDayIndia';
 import BornOnIndex from '@/pages/BornOnIndex';
+import BornOnIndiaIndex from '@/pages/BornOnIndiaIndex';
+import AnswersIndex from '@/pages/AnswersIndex';
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
@@ -103,6 +106,7 @@ const App = () => (
               <Route path="/profile" element={<Profile />} />
               <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
               <Route path="/upgrade" element={<Upgrade />} />
+              <Route path="/pricing" element={<Pricing />} />
               <Route path="/zodiac" element={<Zodiac />} />
               <Route path="/zodiac/:sign" element={<ZodiacSign />} />
               <Route path="/birthstone" element={<Birthstone />} />
@@ -120,7 +124,10 @@ const App = () => (
               <Route path="/terms" element={<Terms />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/methodology" element={<Methodology />} />
+              <Route path="/how-it-works" element={<Methodology />} />
+              {/* Legacy path — 301'd at the edge by the Worker; this client
+                  fallback covers dev + any direct SPA nav so it never 404s. */}
+              <Route path="/methodology" element={<Navigate to="/how-it-works" replace />} />
               <Route path="/editorial-policy" element={<EditorialPolicy />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/family" element={<FamilyDashboard />} />
@@ -133,6 +140,7 @@ const App = () => (
               <Route path="/chinese-zodiac/:animal" element={<ChineseZodiacSign />} />
               <Route path="/vedic-zodiac" element={<VedicZodiac />} />
               <Route path="/vedic-zodiac/:rashi" element={<VedicZodiacSign />} />
+              <Route path="/answers" element={<AnswersIndex />} />
               <Route path="/answers/how-long-will-i-live" element={<HowLongWillILive />} />
               <Route path="/answers/what-is-my-biological-age" element={<WhatIsMyBiologicalAge />} />
               <Route path="/answers/who-shares-my-birthday" element={<WhoSharesMyBirthday />} />
@@ -154,6 +162,7 @@ const App = () => (
               <Route path="/compatibility/:sign1/:sign2" element={<CompatibilityPage />} />
               <Route path="/rashi-ratna" element={<RashiRatnaPage />} />
               <Route path="/born-on" element={<BornOnIndex />} />
+              <Route path="/born-on/india" element={<BornOnIndiaIndex />} />
               <Route path="/born-on/:slug/india" element={<BornOnDayIndia />} />
               <Route path="/born-on/:slug" element={<BornOnDay />} />
               <Route path="*" element={<NotFound />} />

@@ -22,7 +22,7 @@ export const useAnalytics = () => {
   const lastTrackedPath = useRef<string>('');
 
   const trackEvent = useCallback(async (
-    eventType: 'page_view' | 'feature_use' | 'blog_read',
+    eventType: 'page_view' | 'feature_use' | 'blog_read' | 'funnel',
     eventName: string,
     metadata?: AnalyticsMetadata
   ) => {
@@ -70,6 +70,14 @@ export const useAnalytics = () => {
     });
   }, [location.pathname, trackEvent]);
 
+  // Funnel/conversion beacons (report_preview_viewed, checkout_opened,
+  // purchase_completed, upgrade_modal_opened). event_type='funnel' so the admin
+  // can filter conversion steps separately from feature usage. Consent-gated and
+  // fire-and-forget like the rest.
+  const trackFunnel = useCallback((eventName: string, metadata?: AnalyticsMetadata) => {
+    trackEvent('funnel', eventName, { page: location.pathname, ...metadata });
+  }, [location.pathname, trackEvent]);
+
   // Auto-track page views on route change
   useEffect(() => {
     if (location.pathname !== lastTrackedPath.current) {
@@ -81,7 +89,8 @@ export const useAnalytics = () => {
   return {
     trackPageView,
     trackFeatureUse,
-    trackBlogRead
+    trackBlogRead,
+    trackFunnel
   };
 };
 

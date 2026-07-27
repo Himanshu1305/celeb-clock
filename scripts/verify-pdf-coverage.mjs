@@ -97,6 +97,55 @@ async function coverage(pdfBuf) {
   return pages;
 }
 
+// Birthday section headings (test reference: Neeraj). Used by the layout audit
+// to detect orphaned headings (heading stranded at the foot of a page).
+const BIRTHDAY_HEADINGS = [
+  'Celebrity Birthday Twins', 'Zodiac Profile', 'Moon Sign', 'Numbers & Life Path',
+  'Name Numerology', 'Birthday Tarot Card', 'Cosmic Connections', 'Generation Portrait',
+  'Biorhythm',
+];
+const RUNNING_HEADER = 'BornClock Birthday Blueprint';
+
+// Extract per-page text items with a normalised vertical position (0 = page top,
+// 1 = page bottom). Asserts the two founder-reported layout defects the ink/fill
+// metric is blind to: (1) running header painting mid-page instead of the top
+// band; (2) section headings stranded in the bottom 15% of a page.
+async function layoutAudit(pdfBuf) {
+  const doc = await getDocument({ data: new Uint8Array(pdfBuf) }).promise;
+  const problems = [];
+  for (let i = 1; i <= doc.numPages; i++) {
+    const pg = await doc.getPage(i);
+    const vp = pg.getViewport({ scale: 1 });
+    const H = vp.height;
+    const tc = await pg.getTextContent();
+    // group text into y-normalised strings
+    const items = tc.items.map(it => ({ str: it.str, yTop: (H - it.transform[5]) / H }));
+    const lineText = items.map(it => it.str).join(' ');
+    // (1) running header band check
+    const hdr = items.find(it => it.str.includes('BornClock Birthday Blueprint') || (lineText.includes(RUNNING_HEADER) && it.str.includes('Birthday Blueprint')));
+    if (i === 1) {
+      if (lineText.includes(RUNNING_HEADER)) problems.push(`p${i}: running header present on COVER page (should be cover-only)`);
+    } else {
+      // The running HEADER is "BornClock Birthday Blueprint" in the top band.
+      // The running FOOTER ("… · bornclock.com") legitimately sits at the page
+      // bottom and also contains "Blueprint" — exclude it via the bornclock.com
+      // marker and only flag a header stranded in the MID-PAGE band.
+      const midHeader = items.find(it =>
+        it.str.includes('Blueprint') && !it.str.includes('bornclock.com') &&
+        it.yTop >= 0.28 && it.yTop <= 0.78);
+      if (midHeader) {
+        problems.push(`p${i}: running header at ${(midHeader.yTop*100).toFixed(0)}% down (mid-page, not top band)`);
+      }
+    }
+    // (2) orphaned-heading check: a section heading in the bottom 15% band
+    for (const h of BIRTHDAY_HEADINGS) {
+      const hit = items.find(it => it.str.includes(h) && it.yTop > 0.85);
+      if (hit) problems.push(`p${i}: section heading "${h}" stranded at ${(hit.yTop*100).toFixed(0)}% down (orphaned)`);
+    }
+  }
+  return { pages: doc.numPages, problems };
+}
+
 async function main() {
   const distIndex = resolve(ROOT, 'dist/index.html');
   if (!existsSync(distIndex) || process.argv.includes('--rebuild')) {
@@ -148,7 +197,12 @@ async function main() {
       await page.goto(`${base}/report/${SLUG}`, { waitUntil: 'commit' });
       await page.waitForSelector('[data-celeb-source]', { state: 'attached', timeout: 30000 });
       await page.waitForTimeout(1500); // let live celebrity fetch + images settle
-      await page.addStyleTag({ content: BIRTHDAY_PAGE_STYLE });
+      // --cmdp: simulate the browser's native Ctrl/Cmd+P → Save-as-PDF path, which
+      // does NOT receive react-to-print's injected pageStyle. Only the bundled
+      // index.css @media print rules apply. This is the founder's real path.
+      if (!process.argv.includes('--cmdp')) {
+        await page.addStyleTag({ content: BIRTHDAY_PAGE_STYLE });
+      }
       await page.emulateMedia({ media: 'print' });
       pdf = await page.pdf({ preferCSSPageSize: true, printBackground: true });
     }
@@ -180,6 +234,13 @@ async function main() {
     console.log(`\n  pages: ${cov.length} | VOID pages (non-last, content reaches <${MIN_FILL * 100}% down): ${voidPages.length}${voidPages.length ? ' → ' + voidPages.join(', ') : ''}`);
     console.log(`  (ink% is low by design — text on white; VERTICAL FILL is the no-void measure)`);
     if (voidPages.length === 0) console.log('  ✅ PASS — no content-then-void pages'); else { console.log('  ❌ FAIL'); code = 1; }
+
+    if (MODE === 'birthday') {
+      const audit = await layoutAudit(pdf);
+      console.log(`\n─── layout audit (header band + orphaned headings)${process.argv.includes('--cmdp') ? ' [Cmd+P path]' : ' [react-to-print path]'} ───`);
+      if (audit.problems.length === 0) console.log('  ✅ PASS — header only in top band, no orphaned section headings');
+      else { audit.problems.forEach(p => console.log('  ⚠ ' + p)); console.log('  ❌ FAIL'); code = 1; }
+    }
     await browser.close();
   } catch (e) { console.error('Fatal:', e.message); code = 1; }
   finally { server.kill(); }

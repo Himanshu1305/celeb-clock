@@ -406,7 +406,7 @@ export default function FAQ() {
           </a>
           <div className="mt-4 text-sm text-muted-foreground">
             or see our{' '}
-            <Link to="/methodology" className="text-blue-500 hover:underline">Methodology</Link>
+            <Link to="/how-it-works" className="text-blue-500 hover:underline">How It Works</Link>
             {' '}and{' '}
             <Link to="/privacy" className="text-blue-500 hover:underline">Privacy Policy</Link>
           </div>

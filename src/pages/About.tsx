@@ -91,7 +91,7 @@ export default function About() {
           </div>
           <p className="text-muted-foreground text-sm mt-6">
             Every source and formula is publicly documented on our{' '}
-            <a href="/methodology" className="text-blue-500 hover:underline">Methodology page</a>.
+            <a href="/how-it-works" className="text-blue-500 hover:underline">How It Works page</a>.
           </p>
         </section>
 

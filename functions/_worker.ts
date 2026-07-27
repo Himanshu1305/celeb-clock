@@ -9,6 +9,11 @@ import { POST as sendEmail }           from '../api/send-email.js';
 import { POST as verifyPayment }       from '../api/verify-payment.js';
 import { GET  as dailyCronGet,
          POST as dailyCronPost }       from '../api/daily-email-cron.js';
+import { POST as opsMonitor }          from '../api/ops-monitor.js';
+import { POST as opsDigest }           from '../api/ops-digest.js';
+import { POST as subscribe }           from '../api/subscribe.js';
+import { POST as weeklyDigest }        from '../api/weekly-digest.js';
+import { GET  as unsubscribe }         from '../api/unsubscribe.js';
 import cronHandler                     from './_cron/daily-email.js';
 
 type Env = {
@@ -25,6 +30,7 @@ const BRIDGE_KEYS = [
   'RESEND_API_KEY', 'ANTHROPIC_API_KEY', 'ADMIN_SECRET_KEY',
   'VITE_RAZORPAY_PLAN_INDIA_MONTHLY', 'VITE_RAZORPAY_PLAN_INDIA_ANNUAL',
   'VITE_RAZORPAY_PLAN_GLOBAL_MONTHLY', 'VITE_RAZORPAY_PLAN_GLOBAL_ANNUAL',
+  'ADMIN_EMAIL', 'OPS_BASE_URL',
 ];
 
 function bridgeEnv(env: Env): void {
@@ -48,6 +54,11 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/save-report':        saveReport,
   '/api/send-email':         sendEmail,
   '/api/verify-payment':     verifyPayment,
+  '/api/ops-monitor':        opsMonitor,
+  '/api/ops-digest':         opsDigest,
+  '/api/subscribe':          subscribe,
+  '/api/weekly-digest':      weeklyDigest,
+  '/api/unsubscribe':        unsubscribe,
 };
 
 export default {
@@ -55,6 +66,15 @@ export default {
     bridgeEnv(env);
 
     const { pathname } = new URL(request.url);
+
+    // Permanent redirects for renamed routes (301). Keep old SEO equity, never 404.
+    const REDIRECTS: Record<string, string> = {
+      '/methodology': '/how-it-works',
+      '/methodology/': '/how-it-works',
+    };
+    if (REDIRECTS[pathname]) {
+      return Response.redirect(new URL(REDIRECTS[pathname], request.url).toString(), 301);
+    }
 
     if (!pathname.startsWith('/api/')) {
       return env.ASSETS.fetch(request as Parameters<typeof env.ASSETS.fetch>[0]);
@@ -77,6 +97,21 @@ export default {
 
   async scheduled(event: any, env: Env, ctx: any): Promise<void> {
     bridgeEnv(env);
-    return cronHandler.scheduled(event, env, ctx);
+    const base = process.env.OPS_BASE_URL || 'https://bornclock.usdvisionai.workers.dev';
+    switch (event.cron) {
+      case '0 6 * * *':                 // existing daily email
+        return cronHandler.scheduled(event, env, ctx);
+      case '10 6 * * *':                // ops monitor — daily 06:10 UTC (all checks incl. integrity)
+        ctx.waitUntil(fetch(`${base}/api/ops-monitor`, { method: 'POST' }));
+        return;
+      case '0 7 * * 1':                 // integrity emphasis — Monday 07:00 UTC
+        ctx.waitUntil(fetch(`${base}/api/ops-monitor`, { method: 'POST' }));
+        return;
+      case '0 9 * * 0':                 // digest — Sunday 09:00 UTC
+        ctx.waitUntil(fetch(`${base}/api/ops-digest`, { method: 'POST' }));
+        return;
+      default:
+        return cronHandler.scheduled(event, env, ctx);
+    }
   },
 };

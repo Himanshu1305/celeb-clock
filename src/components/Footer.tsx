@@ -67,14 +67,14 @@ export const Footer = () => {
           <div>
             <h3 className="font-heading font-semibold text-foreground mb-3 text-sm">Explore</h3>
             <ul className="space-y-2 text-sm">
+              <li><Link to="/born-on/india" className="text-muted-foreground hover:text-accent transition-colors">Indian Celebrities by Date</Link></li>
               <li><Link to="/celebrity-birthday" className="text-muted-foreground hover:text-accent transition-colors">Celebrity Birthdays</Link></li>
-              <li><Link to="/age-calculator" className="text-muted-foreground hover:text-accent transition-colors">Today's Birthdays</Link></li>
-              <li><Link to="/zodiac" className="text-muted-foreground hover:text-accent transition-colors">Western Zodiac</Link></li>
-              <li><Link to="/chinese-zodiac" className="text-muted-foreground hover:text-accent transition-colors">Chinese Zodiac</Link></li>
-              <li><Link to="/vedic-zodiac" className="text-muted-foreground hover:text-accent transition-colors">Indian Zodiac (Vedic)</Link></li>
-              <li><Link to="/birthstone" className="text-muted-foreground hover:text-accent transition-colors">Birthstone Finder</Link></li>
+              <li><Link to="/todays-birthdays" className="text-muted-foreground hover:text-accent transition-colors">Today's Birthdays</Link></li>
+              <li><Link to="/zodiac" className="text-muted-foreground hover:text-accent transition-colors">Zodiac Signs</Link></li>
               <li><Link to="/numerology" className="text-muted-foreground hover:text-accent transition-colors">Numerology</Link></li>
-              <li><Link to="/answers/who-shares-my-birthday" className="text-muted-foreground hover:text-accent transition-colors">Who Shares My Birthday?</Link></li>
+              <li><Link to="/compatibility" className="text-muted-foreground hover:text-accent transition-colors">Compatibility</Link></li>
+              <li><Link to="/answers" className="text-muted-foreground hover:text-accent transition-colors">Answers</Link></li>
+              <li><Link to="/birthstone" className="text-muted-foreground hover:text-accent transition-colors">Birthstone Finder</Link></li>
             </ul>
           </div>
 
@@ -102,7 +102,8 @@ export const Footer = () => {
             <h3 className="font-heading font-semibold text-foreground mb-3 text-sm">Company</h3>
             <ul className="space-y-2 text-sm">
               <li><Link to="/about" className="text-muted-foreground hover:text-accent transition-colors">About</Link></li>
-              <li><Link to="/methodology" className="text-muted-foreground hover:text-accent transition-colors">How It Works</Link></li>
+              <li><Link to="/pricing" className="text-muted-foreground hover:text-accent transition-colors">Pricing</Link></li>
+              <li><Link to="/how-it-works" className="text-muted-foreground hover:text-accent transition-colors">How It Works</Link></li>
               <li><Link to="/faq" className="text-muted-foreground hover:text-accent transition-colors">FAQ</Link></li>
               <li><Link to="/privacy" className="text-muted-foreground hover:text-accent transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="text-muted-foreground hover:text-accent transition-colors">Terms of Service</Link></li>

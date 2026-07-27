@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
+import { SaveResultsCapture } from '@/components/SaveResultsCapture';
+import { NativeShareButton } from '@/components/NativeShareButton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -693,6 +695,20 @@ const BirthdayResults = () => {
               </div>
             </CardContent>
           </Card>
+        </section>
+
+        {/* Share + soft email capture */}
+        <section className="max-w-2xl mx-auto mb-16 space-y-4">
+          <div className="flex justify-center">
+            <NativeShareButton
+              url={`${typeof window !== 'undefined' ? window.location.origin : 'https://bornclock.com'}/?dob=${birthDate.getFullYear()}-${String(birthDate.getMonth() + 1).padStart(2, '0')}-${String(birthDate.getDate()).padStart(2, '0')}`}
+              title="My BornClock birthday results"
+              text="I just found my celebrity birthday twins, zodiac and life path on BornClock! 🎂 Check yours:"
+              label="Share my results"
+              variant="outline"
+            />
+          </div>
+          <SaveResultsCapture dob={birthDate} />
         </section>
       </div>
 
