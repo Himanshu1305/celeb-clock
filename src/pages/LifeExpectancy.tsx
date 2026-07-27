@@ -738,7 +738,7 @@ const LifeExpectancy = () => {
               {isPremium ? (
                 <>
                   <div className="flex items-center justify-center gap-3 flex-wrap">
-                    <Button size="sm" variant="outline" className="gap-2" onClick={() => handleDownloadBlueprint()}>
+                    <Button size="sm" variant="default" className="gap-2" onClick={() => handleDownloadBlueprint()}>
                       <Download className="w-3.5 h-3.5" />
                       Export Longevity Blueprint
                     </Button>
