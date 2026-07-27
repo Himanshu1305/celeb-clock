@@ -276,7 +276,7 @@ export const EnhancedLifeExpectancyReport = ({
 
       {/* ── Tabs ── */}
       <Tabs defaultValue="genetics" className="w-full">
-        <TabsList className="screen-only flex sm:grid sm:grid-cols-3 w-full overflow-x-auto sm:overflow-visible border-b rounded-none bg-transparent h-auto p-0">
+        <TabsList className="screen-only flex justify-start sm:grid sm:grid-cols-3 w-full overflow-x-auto sm:overflow-visible border-b rounded-none bg-transparent h-auto p-0 scroll-pl-0">
           <TabsTrigger value="genetics"  className="shrink-0 sm:shrink min-h-[44px] rounded-none border-b-2 border-transparent px-4 py-3 font-semibold text-sm text-muted-foreground transition-colors data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:font-bold data-[state=active]:bg-primary/5">🧬 Biological Blueprint</TabsTrigger>
           <TabsTrigger value="community" className="shrink-0 sm:shrink min-h-[44px] rounded-none border-b-2 border-transparent px-4 py-3 font-semibold text-sm text-muted-foreground transition-colors data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:font-bold data-[state=active]:bg-primary/5">🏘️ Community Anchor</TabsTrigger>
           <TabsTrigger value="health"    className="shrink-0 sm:shrink min-h-[44px] rounded-none border-b-2 border-transparent px-4 py-3 font-semibold text-sm text-muted-foreground transition-colors data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:font-bold data-[state=active]:bg-primary/5">💊 Health Guide</TabsTrigger>
