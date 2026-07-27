@@ -145,3 +145,35 @@ Typecheck: 0 NEW errors (47 total = pre-existing stale-Supabase baseline, identi
 file appears in tsc output). `npx vite build` exit 0.
 
 Status: DONE (credits copy = truthful; 3/month vs 1/month flagged for founder).
+
+---
+
+## Phase 4 — Navigation + Discovery
+
+**4a — hub pages (DONE):**
+- `/born-on/india` (`BornOnIndiaIndex.tsx`) — indexes `src/data/indiaBornOnDates.json` (350 dates,
+  real per-date counts + top-3 tooltip), grouped by month, chips → `/born-on/{slug}/india`. Route added
+  BEFORE `/born-on/:slug` (else 'india' would match the slug param). Registered: App.tsx route+import,
+  STATIC_ROUTES, prerender-titles, sitemap 0.9.
+- `/answers` (`AnswersIndex.tsx`) — indexes all 13 answer pages, grouped by theme (question labels
+  mirror the ANSWERS map). Registered: App.tsx route+import (before the individual answer routes),
+  STATIC_ROUTES, prerender-titles, sitemap 0.9.
+- BreadcrumbList JSON-LD is auto-injected per-route by the prerender pipeline (prior batch), so both hubs
+  get it automatically once prerendered; each page also renders a visible breadcrumb.
+
+**4b — footer Explore block (DONE):** Explore column now leads with "Indian Celebrities by Date" and adds
+Compatibility + Answers (Today's Birthdays, Zodiac, Numerology, Birthstone already present); Life
+Expectancy/Planetary Age/Biological Age/Country Comparison live in the Tools column; Pricing in Company.
+
+**4c — header Explore dropdown (DONE):** new `exploreItems` group + `Compass` "Explore" dropdown
+(desktop) and a mobile "Explore" menu section: Indian Celebrities by Date, Today's Birthdays, Answers,
+Compatibility, Planetary Age, Biological Age, Life Expectancy, Pricing. Grouped, not enumerated.
+
+**4d — homepage discovery grid (DONE):** "Explore BornClock" section on Index — 6 hub cards (Born Today,
+Indian Celebrities by Date, Planetary Age, Biological Age, Compatibility, Answers) + a 12-sign zodiac
+chip row → `/zodiac/[sign]`.
+
+Verified: `/born-on/india` and `/answers` screenshots render correctly (months+counts / themed answer
+grid); Explore dropdown + updated footer visible. tsc 0 new errors; `npx vite build` exit 0.
+
+Status: DONE.

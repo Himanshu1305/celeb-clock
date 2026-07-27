@@ -72,6 +72,8 @@ import RashiRatnaPage from '@/pages/RashiRatnaPage';
 import BornOnDay from '@/pages/BornOnDay';
 import BornOnDayIndia from '@/pages/BornOnDayIndia';
 import BornOnIndex from '@/pages/BornOnIndex';
+import BornOnIndiaIndex from '@/pages/BornOnIndiaIndex';
+import AnswersIndex from '@/pages/AnswersIndex';
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
@@ -135,6 +137,7 @@ const App = () => (
               <Route path="/chinese-zodiac/:animal" element={<ChineseZodiacSign />} />
               <Route path="/vedic-zodiac" element={<VedicZodiac />} />
               <Route path="/vedic-zodiac/:rashi" element={<VedicZodiacSign />} />
+              <Route path="/answers" element={<AnswersIndex />} />
               <Route path="/answers/how-long-will-i-live" element={<HowLongWillILive />} />
               <Route path="/answers/what-is-my-biological-age" element={<WhatIsMyBiologicalAge />} />
               <Route path="/answers/who-shares-my-birthday" element={<WhoSharesMyBirthday />} />
@@ -156,6 +159,7 @@ const App = () => (
               <Route path="/compatibility/:sign1/:sign2" element={<CompatibilityPage />} />
               <Route path="/rashi-ratna" element={<RashiRatnaPage />} />
               <Route path="/born-on" element={<BornOnIndex />} />
+              <Route path="/born-on/india" element={<BornOnIndiaIndex />} />
               <Route path="/born-on/:slug/india" element={<BornOnDayIndia />} />
               <Route path="/born-on/:slug" element={<BornOnDay />} />
               <Route path="*" element={<NotFound />} />

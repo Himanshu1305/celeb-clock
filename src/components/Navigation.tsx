@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Gem, Home, Clock, Gift, BookOpen, Crown, Hash, Globe, Cake, Menu, Trophy, Activity, Map, X, Tag } from 'lucide-react';
+import { Sparkles, Gem, Home, Clock, Gift, BookOpen, Crown, Hash, Globe, Cake, Menu, Trophy, Activity, Map, X, Tag, Compass } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
@@ -33,6 +33,19 @@ const navItems = [
 const numerologyItems = [
   { path: '/numerology', label: 'Numerology by Birthday', emoji: '🔢' },
   { path: '/name-numerology', label: 'Name Numerology', emoji: '✍️' },
+];
+
+// High-click discovery hubs, grouped under one "Explore" menu to keep the nav
+// uncluttered (rather than enumerating hundreds of pages).
+const exploreItems = [
+  { path: '/born-on/india', label: 'Indian Celebrities by Date', emoji: '🇮🇳' },
+  { path: '/todays-birthdays', label: "Today's Birthdays", emoji: '🎂' },
+  { path: '/answers', label: 'Answers', emoji: '❓' },
+  { path: '/compatibility', label: 'Compatibility', emoji: '💕' },
+  { path: '/planetary-age', label: 'Planetary Age', emoji: '🪐' },
+  { path: '/biological-age', label: 'Biological Age', emoji: '🧬' },
+  { path: '/life-expectancy', label: 'Life Expectancy', emoji: '⏳' },
+  { path: '/pricing', label: 'Pricing', emoji: '🏷️' },
 ];
 
 const astrologyItems = [
@@ -162,6 +175,26 @@ export const Navigation = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
+          {/* Explore dropdown — high-click discovery hubs */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={exploreItems.some(i => isActive(i.path)) ? 'default' : 'ghost'} size="sm" className="gap-1.5">
+                <Compass className="w-4 h-4" />
+                <span className="hidden md:inline">Explore</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {exploreItems.map((item) => (
+                <Link key={item.path} to={item.path}>
+                  <DropdownMenuItem className={`gap-2 cursor-pointer ${isActive(item.path) ? 'bg-accent' : ''}`}>
+                    <span className="text-base leading-none">{item.emoji}</span>
+                    {item.label}
+                  </DropdownMenuItem>
+                </Link>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           {/* More dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -256,6 +289,14 @@ export const Navigation = () => {
                       <Crown className="w-2.5 h-2.5 mr-0.5" />PRO
                     </Badge>
                   )}
+                </Link>
+              ))}
+
+              {mobileSectionLabel('Explore')}
+              {exploreItems.map(item => (
+                <Link key={item.path} to={item.path} onClick={closeMobile} className={mobileLinkClass(item.path)}>
+                  <span className="w-4 text-center text-base leading-none flex-shrink-0">{item.emoji}</span>
+                  {item.label}
                 </Link>
               ))}
 

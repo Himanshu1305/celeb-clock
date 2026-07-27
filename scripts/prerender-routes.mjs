@@ -169,6 +169,7 @@ export const STATIC_ROUTES = [
   ...CHINESE_ZODIAC_ANIMALS.map(a => `/chinese-zodiac/${a}`),
   '/vedic-zodiac',
   ...VEDIC_RASHIS.map(r => `/vedic-zodiac/${r}`),
+  '/answers',
   ...ANSWER_ROUTES,
   '/tarot-card-by-birthday',
   '/moon-sign',
@@ -178,6 +179,7 @@ export const STATIC_ROUTES = [
   ...compatibilityRoutes(),
   '/rashi-ratna',
   ...bornOnRoutes(),
+  '/born-on/india',
   ...indiaBornOnRoutes,
 ];
 
