@@ -977,6 +977,18 @@ const BiologicalAge = () => {
               </p>
             </div>
 
+            {/* Concise answer block (AEO) */}
+            <div className="max-w-2xl mx-auto mb-6 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5 text-left">
+              <h2 className="text-lg font-bold text-gray-900 mb-2">What is my biological age?</h2>
+              <p className="text-gray-700 leading-relaxed">
+                Your biological age estimates how old your body is functioning, versus your birthday
+                (chronological) age. It is calculated from validated aging biomarkers — grip strength,
+                balance, blood pressure, cognition and lifestyle. This calculator gives an instant
+                estimate from a short quiz — <span className="font-semibold">completely free, with no
+                sign-up or email required</span> to see your result.
+              </p>
+            </div>
+
             {/* Research credibility box */}
             <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-6 mb-6">
               <h2 className="text-indigo-900 font-bold text-base mb-4">

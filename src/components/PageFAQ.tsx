@@ -9,13 +9,15 @@ import { HelpCircle } from 'lucide-react';
 import { pageFaqs, type FAQ } from '@/data/pageFaqs';
 
 interface PageFAQProps {
-  slug: keyof typeof pageFaqs;
+  /** Pull FAQs from the shared pageFaqs map. Optional when `items` is provided. */
+  slug?: keyof typeof pageFaqs;
   title?: string;
+  /** Inline FAQ items (e.g. computed per date/sign). Takes precedence over slug. */
   items?: FAQ[];
 }
 
 export const PageFAQ = ({ slug, title = 'Frequently Asked Questions', items }: PageFAQProps) => {
-  const faqs = items ?? pageFaqs[slug];
+  const faqs = items ?? (slug ? pageFaqs[slug] : undefined);
   if (!faqs || faqs.length === 0) return null;
 
   const jsonLd = {

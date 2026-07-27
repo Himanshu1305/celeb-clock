@@ -204,9 +204,16 @@ export default function BornOnDay() {
         <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">
           Celebrities Born on {monthName} {day}
         </h1>
-        <p className="text-muted-foreground mb-8">
-          Famous people born on {monthName} {day} — ranked by global recognition.
-        </p>
+
+        {/* Concise answer block (AEO) — question-shaped H2 + direct answer */}
+        <h2 className="text-xl font-semibold text-foreground mb-2 mt-4">Who was born on {monthName} {day}?</h2>
+        <div className="bg-primary/10 border-l-4 border-primary rounded-r-xl p-5 mb-8">
+          <p className="text-base font-medium text-foreground leading-relaxed">
+            {topNames.length > 0
+              ? `Famous people born on ${monthName} ${day} include ${topNames.join(', ')}. It is day ${doy} of the year, and everyone born on this date is a ${zodiac.sign} (${zodiac.element} sign).`
+              : `${monthName} ${day} is day ${doy} of the year. Everyone born on this date is a ${zodiac.sign} (${zodiac.element} sign). See the notable people born on ${monthName} ${day} below.`}
+          </p>
+        </div>
 
         {/* Celebrity grid */}
         {loading ? (

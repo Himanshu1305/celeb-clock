@@ -1,9 +1,9 @@
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import { PageFAQ } from '@/components/PageFAQ';
 import { ZODIAC_DATA, getZodiacBySlug } from '@/data/zodiacData';
 
 const ELEMENT_BG: Record<string, string> = {
@@ -46,28 +46,17 @@ export default function ZodiacSign() {
     );
   }
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      { '@type': 'Question', name: `What are the dates for ${data.name}?`, acceptedAnswer: { '@type': 'Answer', text: `${data.name} covers ${data.dateRange}.` } },
-      { '@type': 'Question', name: `What element is ${data.name}?`, acceptedAnswer: { '@type': 'Answer', text: `${data.name} is a ${data.element} sign, ruled by ${data.rulingPlanet}.` } },
-      { '@type': 'Question', name: `What are ${data.name}'s best compatibility matches?`, acceptedAnswer: { '@type': 'Answer', text: `${data.name} is most compatible with ${data.compatibleSigns.join(', ')}.` } },
-      { '@type': 'Question', name: `What are ${data.name}'s key traits?`, acceptedAnswer: { '@type': 'Answer', text: `Core traits include: ${data.coreTraits.join(', ')}.` } },
-      { '@type': 'Question', name: `What is ${data.name}'s modality?`, acceptedAnswer: { '@type': 'Answer', text: `${data.name} is a ${data.modality} sign, meaning ${data.modality === 'Cardinal' ? 'it initiates new seasons and themes' : data.modality === 'Fixed' ? 'it represents stability and persistence in the middle of each season' : 'it bridges seasons and adapts to change'}.` } },
-      { '@type': 'Question', name: `Which body part is associated with ${data.name}?`, acceptedAnswer: { '@type': 'Answer', text: `In traditional astrology, ${data.name} rules the ${data.bodyPart.toLowerCase()}.` } },
-    ],
-  };
-
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bornclock.com' },
-      { '@type': 'ListItem', position: 2, name: 'Zodiac Signs', item: 'https://bornclock.com/zodiac' },
-      { '@type': 'ListItem', position: 3, name: data.name, item: `https://bornclock.com/zodiac/${data.slug}` },
-    ],
-  };
+  // FAQ items — used by PageFAQ for BOTH the visible accordion and the FAQPage
+  // JSON-LD (emitted in-body so the prerender captures it). BreadcrumbList is
+  // injected per-route by the prerender pipeline.
+  const faqItems = [
+    { question: `What are the ${data.name} dates?`, answer: `${data.name} covers ${data.dateRange}. Anyone born between these dates has ${data.name} as their Western (tropical) sun sign.` },
+    { question: `What element is ${data.name}?`, answer: `${data.name} is a ${data.element} sign, ruled by ${data.rulingPlanet}.` },
+    { question: `What signs are most compatible with ${data.name}?`, answer: `${data.name} is most compatible with ${data.compatibleSigns.join(', ')}.` },
+    { question: `What are ${data.name}'s key personality traits?`, answer: `Core traits include: ${data.coreTraits.join(', ')}.` },
+    { question: `What is ${data.name}'s modality?`, answer: `${data.name} is a ${data.modality} sign, meaning ${data.modality === 'Cardinal' ? 'it initiates new seasons and themes' : data.modality === 'Fixed' ? 'it represents stability and persistence in the middle of each season' : 'it bridges seasons and adapts to change'}.` },
+    { question: `Which body part does ${data.name} rule?`, answer: `In traditional astrology, ${data.name} rules the ${data.bodyPart.toLowerCase()}.` },
+  ];
 
   const otherSigns = ZODIAC_DATA.filter(z => z.slug !== data.slug);
 
@@ -80,10 +69,6 @@ export default function ZodiacSign() {
         canonicalUrl={`/zodiac/${data.slug}`}
         ogImage="https://bornclock.com/og/zodiac.png"
       />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
-      </Helmet>
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <header className="flex justify-between items-center mb-8">
@@ -118,6 +103,16 @@ export default function ZodiacSign() {
             </div>
           </div>
         </div>
+
+        {/* Concise answer block (AEO) */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-foreground mb-3">What are the {data.name} dates?</h2>
+          <div className="bg-primary/10 border-l-4 border-primary rounded-r-xl p-5">
+            <p className="text-base font-medium text-foreground leading-relaxed">
+              {data.name} dates are {data.dateRange}. If you were born in this window, {data.name} ({data.symbol}) is your Western sun sign — a {data.element} sign ruled by {data.rulingPlanet}, known for being {data.coreTraits.slice(0, 3).join(', ').toLowerCase()}.
+            </p>
+          </div>
+        </section>
 
         {/* Core Traits */}
         <section className="mb-10">
@@ -254,25 +249,8 @@ export default function ZodiacSign() {
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="mb-10">
-          <h2 className="text-2xl font-bold text-foreground mb-6 pb-2 border-b border-border">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            {[
-              { q: `What are the dates for ${data.name}?`, a: `${data.name} covers ${data.dateRange}.` },
-              { q: `What element is ${data.name}?`, a: `${data.name} is a ${data.element} sign, ruled by ${data.rulingPlanet}.` },
-              { q: `What are ${data.name}'s key personality traits?`, a: `Core traits include: ${data.coreTraits.join(', ')}.` },
-              { q: `What signs are most compatible with ${data.name}?`, a: `${data.name} is most compatible with ${data.compatibleSigns.join(', ')}.` },
-              { q: `What is ${data.name}'s modality?`, a: `${data.name} is a ${data.modality} sign.` },
-              { q: `Which body part does ${data.name} rule?`, a: `In traditional astrology, ${data.name} rules the ${data.bodyPart.toLowerCase()}.` },
-            ].map(({ q, a }) => (
-              <div key={q} className="bg-card border border-border rounded-xl p-5">
-                <p className="font-semibold text-foreground text-sm mb-2">{q}</p>
-                <p className="text-muted-foreground text-sm leading-relaxed">{a}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* FAQ — canonical PageFAQ (visible accordion + in-body FAQPage JSON-LD) */}
+        <PageFAQ title={`${data.name} — Frequently Asked Questions`} items={faqItems} />
 
         {/* Other Signs */}
         <section className="mb-10">

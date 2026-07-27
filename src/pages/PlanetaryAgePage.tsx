@@ -231,10 +231,21 @@ const PlanetaryAgePage = () => {
                   Your age is completely relative to where you're standing.
                 </p>
 
-                <p className="text-lg text-amber-400 font-medium mb-10">
+                <p className="text-lg text-amber-400 font-medium mb-6">
                   Enter your birthday to see your cosmic age across all 8 planets —
                   calculated using real NASA orbital data.
                 </p>
+
+                {/* Concise answer block (AEO) */}
+                <div className="max-w-2xl mx-auto mb-10 text-left bg-white/5 border border-white/10 rounded-xl p-5">
+                  <h2 className="text-lg font-bold text-white mb-2">How old am I on other planets?</h2>
+                  <p className="text-slate-300 leading-relaxed">
+                    Your age on another planet is your age in Earth days divided by that planet's orbital
+                    period. A 30-year-old is about 15.9 on Mars (687-day year), ~2.5 on Jupiter, and not
+                    yet 1 on Neptune (164.8 Earth years per orbit). Enter your date of birth for your exact
+                    age on all eight planets, from NASA orbital data — free, no sign-up.
+                  </p>
+                </div>
 
                 {/* DOB input card — white on dark */}
                 <div className="bg-white rounded-2xl p-6 max-w-sm mx-auto mb-6 shadow-2xl">

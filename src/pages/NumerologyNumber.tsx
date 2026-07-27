@@ -1,9 +1,9 @@
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import { PageFAQ } from '@/components/PageFAQ';
 import { NUMEROLOGY_DATA, getNumerologyByNumber, ALL_LIFE_PATH_NUMBERS } from '@/data/numerologyData';
 
 export default function NumerologyNumber() {
@@ -33,28 +33,18 @@ export default function NumerologyNumber() {
     );
   }
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      { '@type': 'Question', name: `What does Life Path ${data.number} mean?`, acceptedAnswer: { '@type': 'Answer', text: `Life Path ${data.number} — ${data.name} — is associated with ${data.keywords.join(', ')}.` } },
-      { '@type': 'Question', name: `What are the strengths of Life Path ${data.number}?`, acceptedAnswer: { '@type': 'Answer', text: data.strengths.join('. ') } },
-      { '@type': 'Question', name: `What are the challenges of Life Path ${data.number}?`, acceptedAnswer: { '@type': 'Answer', text: data.challenges.join('. ') } },
-      { '@type': 'Question', name: `Which planet rules Life Path ${data.number}?`, acceptedAnswer: { '@type': 'Answer', text: `Life Path ${data.number} is associated with ${data.planet}.` } },
-      { '@type': 'Question', name: `Is ${data.number} a master number?`, acceptedAnswer: { '@type': 'Answer', text: data.isMasterNumber ? `Yes, ${data.number} is a Master Number in Pythagorean numerology, and is not reduced further.` : `No, ${data.number} is a standard Life Path number.` } },
-      { '@type': 'Question', name: `What careers suit Life Path ${data.number}?`, acceptedAnswer: { '@type': 'Answer', text: data.career } },
-    ],
-  };
-
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bornclock.com' },
-      { '@type': 'ListItem', position: 2, name: 'Numerology', item: 'https://bornclock.com/numerology' },
-      { '@type': 'ListItem', position: 3, name: `Life Path ${data.number}`, item: `https://bornclock.com/numerology/${data.number}` },
-    ],
-  };
+  // FAQ items — PageFAQ renders the visible accordion AND the in-body FAQPage
+  // JSON-LD (prerender-captured). BreadcrumbList is injected per-route by the
+  // prerender pipeline.
+  const faqItems = [
+    { question: `What does Life Path ${data.number} mean?`, answer: `Life Path ${data.number} — ${data.name} — is associated with ${data.keywords.join(', ')}.` },
+    { question: `What are the strengths of Life Path ${data.number}?`, answer: data.strengths.join('. ') },
+    { question: `What are the challenges of Life Path ${data.number}?`, answer: data.challenges.join('. ') },
+    { question: `Which planet rules Life Path ${data.number}?`, answer: `Life Path ${data.number} is associated with ${data.planet}.` },
+    { question: `Is ${data.number} a master number?`, answer: data.isMasterNumber ? `Yes, ${data.number} is a Master Number in Pythagorean numerology, and is not reduced further.` : `No, ${data.number} is a standard Life Path number.` },
+    { question: `What careers suit Life Path ${data.number}?`, answer: data.career },
+    { question: `How is Life Path ${data.number} calculated?`, answer: `Add all digits of your full birth date (day + month + year). ${data.isMasterNumber ? `If the reduction lands on ${data.number}, it is preserved as a master number rather than reduced further.` : `Keep adding the resulting digits until you reach a single digit — if that digit is ${data.number}, that is your Life Path.`}` },
+  ];
 
   const otherNumbers = ALL_LIFE_PATH_NUMBERS.filter(n => n !== data.number);
 
@@ -66,10 +56,6 @@ export default function NumerologyNumber() {
         keywords={data.seoKeywords}
         canonicalUrl={`/numerology/${data.number}`}
       />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
-      </Helmet>
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <header className="flex justify-between items-center mb-8">
@@ -123,6 +109,16 @@ export default function NumerologyNumber() {
             <p className="text-amber-700 dark:text-amber-400 text-sm leading-relaxed">{data.masterNumberMeaning}</p>
           </div>
         )}
+
+        {/* Concise answer block (AEO) */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-foreground mb-3">What does Life Path {data.number} mean?</h2>
+          <div className="bg-primary/10 border-l-4 border-primary rounded-r-xl p-5">
+            <p className="text-base font-medium text-foreground leading-relaxed">
+              Life Path {data.number} is “{data.name}” — associated with {data.keywords.slice(0, 4).join(', ').toLowerCase()}. {data.isMasterNumber ? `A master number, ${data.number} is preserved rather than reduced.` : `You calculate it by summing all digits of your birth date down to a single digit.`} It is linked to {data.planet} and the {data.element} element.
+            </p>
+          </div>
+        </section>
 
         {/* Personality */}
         <section className="mb-10">
@@ -199,25 +195,8 @@ export default function NumerologyNumber() {
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="mb-10">
-          <h2 className="text-2xl font-bold text-foreground mb-6 pb-2 border-b border-border">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            {[
-              { q: `What does Life Path ${data.number} mean?`, a: `Life Path ${data.number} — ${data.name} — is associated with ${data.keywords.join(', ')}.` },
-              { q: `What are the strengths of Life Path ${data.number}?`, a: data.strengths.join('. ') + '.' },
-              { q: `What careers suit Life Path ${data.number}?`, a: data.career },
-              { q: `Which planet rules Life Path ${data.number}?`, a: `Life Path ${data.number} is associated with ${data.planet} and the ${data.element} element.` },
-              { q: `Is ${data.number} a master number?`, a: data.isMasterNumber ? `Yes, ${data.number} is a Master Number in Pythagorean numerology — it is preserved rather than reduced to a single digit.` : `No, ${data.number} is a standard Life Path number obtained by reducing your birth date digits to a single number.` },
-              { q: `How is Life Path ${data.number} calculated?`, a: `Add all digits of your full birth date (day + month + year). If the result is ${data.isMasterNumber ? `${data.number}, it is preserved as a master number.` : `${data.number}, that is your life path. If you get a two-digit number, add those digits again until you reach a single digit.`}` },
-            ].map(({ q, a }) => (
-              <div key={q} className="bg-card border border-border rounded-xl p-5">
-                <p className="font-semibold text-foreground text-sm mb-2">{q}</p>
-                <p className="text-muted-foreground text-sm leading-relaxed">{a}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* FAQ — canonical PageFAQ (visible accordion + in-body FAQPage JSON-LD) */}
+        <PageFAQ title={`Life Path ${data.number} — Frequently Asked Questions`} items={faqItems} />
 
         {/* Other Numbers */}
         <section className="mb-10">
