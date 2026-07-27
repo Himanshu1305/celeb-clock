@@ -271,3 +271,20 @@ tsc 0 new errors (only pre-existing LifeExpectancy:734 baseline); `npx vite buil
 No payment files modified.
 
 Status: DONE.
+
+---
+
+## FINAL GATE
+
+- Payment files touched: **EMPTY** ✓ (`git diff develop..product-polish` grep clean).
+- tsc: 47 = develop baseline, **0 new** ✓.
+- `npm run build`: **1313 ok, 0 failed** prerenders; sitemap 1313 URLs ✓.
+- Gauntlet: **135 passed, 0 failed** ✓ (vite :3000 + wrangler dev :3001 via local .dev.vars, removed after).
+- Merged product-polish → develop (dcf5715), pushed.
+- Deploy: ONE `./node_modules/.bin/wrangler deploy` → worker + 1317 assets live at
+  bornclock.usdvisionai.workers.dev + staging.bornclock.com. ⚠ cron-schedule registration hit a CF API
+  error (code live; crons unregistered — founder re-run/dashboard).
+- Smoke: create-order `{"error":"Report not found"}` ✓; `/methodology`→301→`/how-it-works` ✓;
+  `/pricing/ /answers/ /born-on/india/ /how-it-works/` all 200 with correct titles ✓.
+
+Full write-up: docs/PRODUCT-POLISH-REPORT.md.
