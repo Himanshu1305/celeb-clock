@@ -88,10 +88,10 @@ export default function Methodology() {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Our Methodology — How BornClock Calculates Its Results | BornClock"
-        description="Transparent, source-cited methodology behind BornClock's life expectancy calculator, celebrity birthday matching, planetary age, zodiac, numerology, and birthstone tools."
-        keywords="BornClock methodology, life expectancy methodology, how life expectancy is calculated, planetary age formula, zodiac methodology"
-        canonicalUrl="/methodology"
+        title="How BornClock Works — Tools, Data & Source-Cited Methodology | BornClock"
+        description="How BornClock works: the Birthday Blueprint report, life expectancy calculator, celebrity birthday matching, the Indian celebrities facet and the Answers library — each with its data sources, formulas and citations."
+        keywords="how BornClock works, birthday blueprint, life expectancy methodology, how life expectancy is calculated, planetary age formula, zodiac methodology"
+        canonicalUrl="/how-it-works"
       />
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -109,9 +109,36 @@ export default function Methodology() {
           <p className="text-sm text-muted-foreground mb-8">Methodology &amp; Data Sources</p>
 
           {/* Blue intro box */}
-          <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl p-5 mb-10 text-blue-900 dark:text-blue-200 text-sm leading-relaxed">
+          <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl p-5 mb-6 text-blue-900 dark:text-blue-200 text-sm leading-relaxed">
             <strong>Full transparency.</strong> Every number BornClock produces has a source and a formula. This page explains exactly how each tool works, what data it uses, and what its limitations are. If you spot something that needs correcting, email{' '}
             <a href="mailto:hello@bornclock.com" className="underline hover:opacity-80">hello@bornclock.com</a>.
+          </div>
+
+          {/* What BornClock offers — orients the reader across the full product */}
+          <div className="rounded-xl border border-border p-5 mb-10 text-sm leading-relaxed text-muted-foreground">
+            <p className="mb-2">
+              BornClock turns a single birth date into a set of tools and a keepsake report:
+            </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>
+                The <Link className="text-indigo-600 hover:underline font-medium" to="/birthday-report">Birthday Blueprint</Link> — a personalised 11-section
+                report (celebrity twins, zodiac, numerology, tarot, planetary ages and more), built from
+                the same source-cited data described below and printable as a gift.
+              </li>
+              <li>
+                The <Link className="text-indigo-600 hover:underline font-medium" to="/life-expectancy">life expectancy calculator</Link> and longevity suite —
+                the science core, using the peer-reviewed research cited in the sections below.
+              </li>
+              <li>
+                <Link className="text-indigo-600 hover:underline font-medium" to="/celebrity-birthday">Celebrity birthday matching</Link>, including the{' '}
+                <Link className="text-indigo-600 hover:underline font-medium" to="/born-on/india">Indian celebrities by date</Link> facet drawn from the same
+                ranked dataset.
+              </li>
+              <li>
+                The <Link className="text-indigo-600 hover:underline font-medium" to="/answers">Answers library</Link> — concise, sourced answers to common
+                birthday, age and longevity questions.
+              </li>
+            </ul>
           </div>
 
           {/* Mobile TOC */}

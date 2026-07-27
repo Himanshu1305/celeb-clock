@@ -61,6 +61,15 @@ export default {
 
     const { pathname } = new URL(request.url);
 
+    // Permanent redirects for renamed routes (301). Keep old SEO equity, never 404.
+    const REDIRECTS: Record<string, string> = {
+      '/methodology': '/how-it-works',
+      '/methodology/': '/how-it-works',
+    };
+    if (REDIRECTS[pathname]) {
+      return Response.redirect(new URL(REDIRECTS[pathname], request.url).toString(), 301);
+    }
+
     if (!pathname.startsWith('/api/')) {
       return env.ASSETS.fetch(request as Parameters<typeof env.ASSETS.fetch>[0]);
     }

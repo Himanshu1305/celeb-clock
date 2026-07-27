@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
 // Core Page Imports
@@ -124,7 +124,10 @@ const App = () => (
               <Route path="/terms" element={<Terms />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/methodology" element={<Methodology />} />
+              <Route path="/how-it-works" element={<Methodology />} />
+              {/* Legacy path — 301'd at the edge by the Worker; this client
+                  fallback covers dev + any direct SPA nav so it never 404s. */}
+              <Route path="/methodology" element={<Navigate to="/how-it-works" replace />} />
               <Route path="/editorial-policy" element={<EditorialPolicy />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/family" element={<FamilyDashboard />} />

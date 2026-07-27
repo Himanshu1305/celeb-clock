@@ -177,3 +177,25 @@ Verified: `/born-on/india` and `/answers` screenshots render correctly (months+c
 grid); Explore dropdown + updated footer visible. tsc 0 new errors; `npx vite build` exit 0.
 
 Status: DONE.
+
+---
+
+## Phase 5 — /methodology → /how-it-works
+
+- **Route rename:** `/how-it-works` → Methodology component (H1 already "How BornClock Works").
+  SEO title + `canonicalUrl` updated to `/how-it-works`.
+- **301 redirect (Worker):** `functions/_worker.ts` returns 301 `/methodology`(+trailing slash) →
+  `/how-it-works` BEFORE the ASSETS/SPA fallback (no redirect file existed; this is the new pattern).
+  Client `<Route path="/methodology" element={<Navigate to="/how-it-works" replace/>}>` added as a
+  dev/SPA fallback so it never 404s.
+- **Content refresh:** added a "What BornClock offers" overview box covering the Birthday Blueprint,
+  life expectancy suite, celebrity matching + the Indian-celebrities-by-date facet, and the Answers
+  library (all internally linked) — KEEPING every science-citation section intact.
+- **Registration:** STATIC_ROUTES `/methodology`→`/how-it-works`; titles-map key swapped; sitemap
+  regenerates from getAllRoutes (old path drops out; 301 preserves external equity).
+- **Internal links (grep-verified 0 remaining):** Footer, AuthorBio, FAQ, About → `/how-it-works`.
+
+Verified: `/how-it-works` screenshot renders overview + preserved citations. tsc 0 new errors;
+`npx vite build` exit 0.
+
+Status: DONE.

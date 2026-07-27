@@ -20,7 +20,7 @@ export const AuthorBio = () => {
             </p>
             <div className="flex flex-wrap gap-3 text-xs">
               <Link to="/about" className="text-primary hover:underline">About the team</Link>
-              <Link to="/methodology" className="text-primary hover:underline">Methodology</Link>
+              <Link to="/how-it-works" className="text-primary hover:underline">How It Works</Link>
               <Link to="/editorial-policy" className="text-primary hover:underline">Editorial policy</Link>
             </div>
           </div>

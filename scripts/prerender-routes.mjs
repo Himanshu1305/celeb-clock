@@ -159,7 +159,7 @@ export const STATIC_ROUTES = [
   '/terms',
   '/faq',
   '/contact',
-  '/methodology',
+  '/how-it-works',
   '/editorial-policy',
   '/leaderboard',
   '/biological-age',
