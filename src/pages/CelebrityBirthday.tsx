@@ -4,6 +4,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { ZodiacAndFacts } from '@/components/ZodiacAndFacts';
 import { CelebritySearch } from '@/components/CelebritySearch';
+import { CountryExtrasSection } from '@/components/CountryExtrasSection';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -177,6 +178,16 @@ const CelebrityBirthday = () => {
                   )}
                 </CardContent>
               </Card>
+
+              {/* Additive "From India" section for IN visitors (same pattern as TodaysBirthdays) */}
+              {birthDate && (
+                <div className="mt-6">
+                  <CountryExtrasSection
+                    monthDay={`${String(birthDate.getMonth() + 1).padStart(2, '0')}-${String(birthDate.getDate()).padStart(2, '0')}`}
+                    mainListNames={rankedCelebs.map(c => c.name)}
+                  />
+                </div>
+              )}
             </section>
 
             {/* Zodiac and Fun Facts Section */}

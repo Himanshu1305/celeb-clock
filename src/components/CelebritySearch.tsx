@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -64,22 +65,65 @@ export const CelebritySearch = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
-    setIsSearching(true);
-    setTimeout(async () => {
-      try {
-        const { searchCelebrities } = await import('@/data/birthdayData');
-        const searchResults = searchCelebrities(searchQuery, category !== 'all' ? category : undefined);
-        setResults(searchResults);
-      } catch (error) {
-        console.error('Search error:', error);
-        setResults([]);
-      } finally {
-        setIsSearching(false);
-      }
-    }, 500);
+  // Map a UI category to occupation/known_for search terms in celebrity_sitelinks.
+  const CATEGORY_TERMS: Record<string, string[]> = {
+    actor: ['actor', 'actress'],
+    celebrity: ['singer', 'musician', 'model', 'television'],
+    dancer: ['dancer', 'choreograph'],
+    artist: ['artist', 'painter', 'writer', 'author'],
+    scientist: ['scientist', 'physicist', 'chemist', 'mathematician', 'biologist'],
+    entrepreneur: ['business', 'entrepreneur', 'founder', 'ceo'],
+    sports: ['cricket', 'football', 'player', 'athlet', 'tennis', 'boxer', 'sportsperson'],
   };
+
+  // Real search against celebrity_sitelinks (28k rows): name ilike, optional
+  // category via occupation/known_for, top 20 by global recognition (sitelinks).
+  const runSearch = async (query: string, cat: string) => {
+    const q = query.trim();
+    if (q.length < 2) { setResults([]); setIsSearching(false); return; }
+    setIsSearching(true);
+    try {
+      let req = supabase
+        .from('celebrity_sitelinks')
+        .select('name, birth_date, death_date, occupation, known_for, sitelinks, nationality_code, wikipedia_url')
+        .ilike('name', `%${q}%`)
+        .not('birth_date', 'is', null)
+        .order('sitelinks', { ascending: false })
+        .limit(20);
+      if (cat !== 'all' && CATEGORY_TERMS[cat]) {
+        const ors = CATEGORY_TERMS[cat]
+          .flatMap(t => [`occupation.ilike.%${t}%`, `known_for.ilike.%${t}%`])
+          .join(',');
+        req = req.or(ors);
+      }
+      const { data, error } = await req;
+      if (error) throw error;
+      const mapped: WikiPerson[] = ((data as any[]) ?? []).map(r => ({
+        name: r.name,
+        birthDate: (r.birth_date ?? '').slice(0, 10),
+        deathDate: r.death_date ? r.death_date.slice(0, 10) : undefined,
+        profession: r.occupation || 'Notable person',
+        category: 'celebrity',
+        image: undefined,
+        wikipediaUrl: r.wikipedia_url ?? undefined,
+      }));
+      setResults(mapped);
+    } catch (error) {
+      console.error('Celebrity search error:', error);
+      setResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleSearch = () => runSearch(searchQuery, category);
+
+  // Debounced auto-search on query/category change (400ms).
+  useEffect(() => {
+    const t = setTimeout(() => runSearch(searchQuery, category), 400);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, category]);
 
   const handleShare = (index: number, person: WikiPerson, birthDate: Date, zodiac: string, lifePath: number) => {
     const signName = zodiac.split(' ').slice(1).join(' ');
