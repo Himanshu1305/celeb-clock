@@ -109,6 +109,19 @@ function birthdayDateRoutes() {
   return routes;
 }
 
+// Unique zodiac-compatibility pairs, alphabetical order (canonical form): 66
+// distinct pairs + 12 same-sign = 78. Reverse-order URLs canonicalize to these.
+function compatibilityRoutes() {
+  const signs = ['aquarius','aries','cancer','capricorn','gemini','leo','libra','pisces','sagittarius','scorpio','taurus','virgo'];
+  const routes = [];
+  for (let i = 0; i < signs.length; i++) {
+    for (let j = i; j < signs.length; j++) {
+      routes.push(`/compatibility/${signs[i]}/${signs[j]}`);
+    }
+  }
+  return routes;
+}
+
 // Generate 366 /born-on/:slug routes (jan-1 … dec-31, including feb-29)
 function bornOnRoutes() {
   const routes = ['/born-on'];
@@ -161,6 +174,7 @@ export const STATIC_ROUTES = [
   '/name-numerology',
   '/biorhythm',
   '/compatibility',
+  ...compatibilityRoutes(),
   '/rashi-ratna',
   ...bornOnRoutes(),
   ...indiaBornOnRoutes,

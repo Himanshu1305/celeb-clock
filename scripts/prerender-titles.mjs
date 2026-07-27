@@ -256,6 +256,19 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /compatibility/:a/:b  (zodiac pair — real % renders in-body; title stays unique+keyworded)
+  {
+    const m = route.match(/^\/compatibility\/([a-z]+)\/([a-z]+)$/);
+    if (m) {
+      const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+      const a = cap(m[1]), b = cap(m[2]);
+      return {
+        title: `${a} & ${b} Compatibility — Love, Friendship & Work Match | BornClock`,
+        description: `How compatible are ${a} and ${b}? Full zodiac compatibility for love, friendship and work — with match scores, strengths, challenges and relationship advice.`,
+      };
+    }
+  }
+
   // /born-on/:slug/india  (Indian celebrity facet — must match before the generic born-on handler)
   {
     const m = route.match(/^\/born-on\/([a-z]+-\d+)\/india$/);

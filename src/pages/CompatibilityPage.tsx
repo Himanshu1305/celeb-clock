@@ -89,13 +89,19 @@ export default function CompatibilityPage() {
     ? `${calcSigns.s1} and ${calcSigns.s2} Compatibility — ${getCompatibility(calcSigns.s1, calcSigns.s2).overall}% Match | BornClock`
     : 'Zodiac Compatibility Calculator — How Compatible Are You? | BornClock';
 
+  // Canonical = the alphabetical pair (both URL orders point to one page), so
+  // aries/leo and leo/aries don't compete as duplicate content.
+  const canonicalUrl = calcSigns
+    ? `/compatibility/${[calcSigns.s1, calcSigns.s2].map(s => s.toLowerCase()).sort().join('/')}`
+    : '/compatibility';
+
   return (
     <>
       <SEO
         title={seoTitle}
         description="Calculate zodiac compatibility for any two signs. Free love, friendship, and work compatibility calculator for all 144 sign combinations."
         keywords="zodiac compatibility, are aries and leo compatible, horoscope compatibility, birthday compatibility calculator, love compatibility zodiac"
-        canonicalUrl="/compatibility"
+        canonicalUrl={canonicalUrl}
       />
       <WebApplicationSchema
         name="Zodiac Compatibility Calculator"
