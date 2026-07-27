@@ -429,7 +429,10 @@ export async function getNationalityCelebritiesForDate(
       .limit(limit);
 
     if (error || !data) return [];
-    return data.map(c => ({
+    // Cast: the generated Supabase types are stale (missing the known_for column),
+    // which otherwise widens each row to SelectQueryError. The column exists in the
+    // DB — India pages render real data — so this is a type-only shim.
+    return (data as any[]).map(c => ({
       name: c.name,
       birthDate: c.birth_date,
       deathDate: c.death_date,
