@@ -974,9 +974,7 @@ const ReportView = () => {
                 className="w-full py-3.5 rounded-xl font-bold text-white text-base transition-colors mb-3"
                 style={{ background: 'var(--navy)' }}
               >
-                {profile?.subscription_status === 'active'
-                  ? `Unlock — ${isIndia ? '₹149' : '$5.49'} (member price)`
-                  : `Unlock — ${isIndia ? '₹199' : '$6.99'}`}
+                {`Unlock — ${isIndia ? '₹199' : '$6.99'}`}
               </button>
             ) : (
               <>
@@ -997,9 +995,7 @@ const ReportView = () => {
               </>
             )}
 
-            {profile?.subscription_status !== 'active' && (
-              <p className="text-xs mb-1" style={{ color: 'var(--muted)' }}>Launch price</p>
-            )}
+            <p className="text-xs mb-1" style={{ color: 'var(--muted)' }}>Launch price</p>
 
             {/* Subscriber credit balance — credits auto-redeem for the owner, so this
                 is informational (no manual button). Shows why it may auto-unlock. */}
@@ -1030,7 +1026,7 @@ const ReportView = () => {
       <CheckoutRegionModal
         open={regionOpen}
         onOpenChange={setRegionOpen}
-        priceLabel={profile?.subscription_status === 'active' ? (isIndia ? '₹149' : '$5.49') : (isIndia ? '₹199' : '$6.99')}
+        priceLabel={isIndia ? '₹199' : '$6.99'}
         onConfirm={(sel) => { setRegionOpen(false); startOrderPayment(sel); }}
       />
 

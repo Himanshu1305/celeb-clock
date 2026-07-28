@@ -6,7 +6,7 @@ import { ArrowRight, Gift, Check } from 'lucide-react';
 // Homepage showcase for the paid Birthday Blueprint (₹199). Sells the report
 // with styled mockups of REAL report sections (cover, celebrity twins, zodiac
 // trio) — no fabricated screenshots. Facts are verified against the codebase:
-// price ₹199 / member ₹149 (api/create-order.ts), 11-section report
+// price ₹199 / $6.99 for everyone (api/create-order.ts), 11-section report
 // (prerender-titles.mjs canonical copy), 21 printed pages (Phase-1 PDF harness).
 
 // A miniature, non-interactive preview styled in the report's own navy+gold
@@ -58,7 +58,7 @@ export function BirthdayReportShowcase() {
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-1">
                 <span className="text-3xl font-black text-foreground">₹199</span>
                 <span className="text-xs font-semibold uppercase tracking-wide text-accent">Launch price</span>
-                <span className="text-sm text-muted-foreground w-full">one-time · or ₹149 for members</span>
+                <span className="text-sm text-muted-foreground w-full">one-time · or free with Premium credits</span>
               </div>
               <div className="flex flex-wrap gap-3 pt-1">
                 <Button asChild size="lg" className="gap-2">

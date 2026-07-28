@@ -16,14 +16,10 @@ function json(body: unknown, status = 200): Response {
 
 // Server-decided amounts in smallest currency unit (paise / cents).
 // Never trust an amount from the request body.
+// One price for everyone. Active subscribers unlock free via monthly credits
+// (auto-redeemed in the app); if they have no credits they pay the same amount.
 const PRODUCT_AMOUNTS: Record<string, Partial<Record<'INR' | 'USD', number>>> = {
   birthday_report: { INR: 19900, USD: 699 },
-};
-
-// Discounted amounts for active subscribers (member pricing). USD member scaled
-// to the same ~25% discount as INR (₹149/₹199) → $5.49 vs the $6.99 base.
-const MEMBER_AMOUNTS: Record<string, Partial<Record<'INR' | 'USD', number>>> = {
-  birthday_report: { INR: 14900, USD: 549 },
 };
 
 async function handler(request: Request): Promise<Response> {
@@ -73,16 +69,8 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Payment not configured' }, 500);
   }
 
-  // Member pricing: active subscribers pay less (server-side decision only)
-  let amount = PRODUCT_AMOUNTS[product][currency as 'INR' | 'USD']!;
-  const { data: profileData } = await db
-    .from('profiles')
-    .select('subscription_status')
-    .eq('user_id', userId)
-    .single();
-  if ((profileData as any)?.subscription_status === 'active') {
-    amount = MEMBER_AMOUNTS[product]?.[currency as 'INR' | 'USD'] ?? amount;
-  }
+  // Single price for everyone (no member cash rate).
+  const amount = PRODUCT_AMOUNTS[product][currency as 'INR' | 'USD']!;
 
   const auth = btoa(`${keyId}:${keySecret}`);
   let order: any;

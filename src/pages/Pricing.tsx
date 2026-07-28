@@ -10,9 +10,9 @@ import { detectCountry, formatPrice, type CountryInfo } from '@/services/Country
 
 // Indexable pricing/comparison page (distinct from the login-gated /upgrade
 // conversion page). Every benefit below is drawn from the REAL feature set:
-// free/premium lists mirror src/pages/Upgrade.tsx; report price ₹199 / $6.99
-// (member ₹149 / $5.49) from api/create-order.ts; credits 3/month, carry-forward,
-// cap 9 from api/get-credits.ts.
+// free/premium lists mirror src/pages/Upgrade.tsx; report price ₹199 / $6.99 for
+// everyone (api/create-order.ts) — subscribers unlock free via credits, not a
+// cash member rate; credits 3/month, carry-forward, cap 9 from api/get-credits.ts.
 
 const FREE_FEATURES = [
   'Celebrity birthday twin (1/day)',
@@ -46,7 +46,6 @@ export default function Pricing() {
   const isIndia = country?.isIndia ?? true;
   const monthly = country ? formatPrice(country, 'monthly') : { amount: '₹299', period: '/month' };
   const reportPrice = isIndia ? '₹199' : '$6.99';
-  const reportMemberPrice = isIndia ? '₹149' : '$5.49';
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -120,7 +119,7 @@ export default function Pricing() {
               <span className="text-4xl font-black text-gray-900">{reportPrice}</span>
               <span className="text-xs font-semibold uppercase tracking-wide text-amber-600">Launch price</span>
             </div>
-            <div className="text-gray-400 text-sm mb-5">one-time · {reportMemberPrice} for members</div>
+            <div className="text-gray-400 text-sm mb-5">one-time · or free with Premium credits</div>
             <ul className="space-y-2.5 mb-6 flex-1">
               {['20+ page personalised PDF', '11 sections, one birth date',
                 'Celebrity twins, zodiac, numerology, tarot', 'Print it or gift it'].map(f => (
