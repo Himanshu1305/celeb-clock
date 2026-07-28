@@ -467,11 +467,21 @@ const ReportView = () => {
         if (!opts?.auto) toast({ title: 'Redemption failed', description: body.error ?? 'Please try again.', variant: 'destructive' });
         return;
       }
+      const alreadyPaid = !!body.alreadyPaid;
       const remaining = typeof body.creditsRemaining === 'number' ? body.creditsRemaining : Math.max(0, credits - 1);
       setCredits(remaining);
-      const refreshed = await import('@/services/BirthdayReportService').then(m => m.getReport(slug));
-      if (refreshed) setRow(refreshed);
-      toast({ title: 'Unlocked with a credit', description: `1 report credit used — ${remaining} of 9 remaining.` });
+      // Toast BEFORE the row re-fetch — a getReport failure must never swallow
+      // the confirmation. Skip the "used" copy when the server was idempotent
+      // (already paid → no credit was actually spent).
+      if (!alreadyPaid) {
+        toast({ title: 'Unlocked with a credit', description: `1 report credit used — ${remaining} of 9 remaining.` });
+      }
+      // Reflect the unlock immediately, then best-effort refresh the full row.
+      setRow((prev: any) => (prev ? { ...prev, is_paid: true } : prev));
+      try {
+        const refreshed = await import('@/services/BirthdayReportService').then(m => m.getReport(slug));
+        if (refreshed) setRow(refreshed);
+      } catch { /* optimistic is_paid above already unlocks the view */ }
     } catch {
       if (!opts?.auto) toast({ title: 'Error', description: 'Could not redeem credit. Please try again.', variant: 'destructive' });
     } finally {
@@ -481,18 +491,24 @@ const ReportView = () => {
 
   // Auto-redeem: active subscriber views their OWN locked report with credits > 0
   // → spend one automatically, once per mount (ref guard). No manual button hunt.
-  const autoRedeemTried = useRef(false);
+  // Keyed to the report slug (not a bare boolean) so navigating between reports
+  // re-arms the guard, while a re-render caused by the redemption itself
+  // (credits/row change) cannot re-fire it for the same slug.
+  const autoRedeemTried = useRef<string | null>(null);
   useEffect(() => {
-    if (autoRedeemTried.current || !row || !user) return;
+    if (!row || !user || !slug) return;
+    if (autoRedeemTried.current === slug) return;
     const locked = !isAdmin && !row.is_paid;
     const owner = row.user_id === user.id;
     const activeSub = profile?.subscription_status === 'active';
     if (locked && owner && activeSub && credits > 0) {
-      autoRedeemTried.current = true;
+      // Set the guard SYNCHRONOUSLY, before the async call, so a synchronous
+      // re-render or StrictMode re-invoke cannot launch a second redemption.
+      autoRedeemTried.current = slug;
       void handleUnlockWithCredit({ auto: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row, user, isAdmin, credits, profile?.subscription_status]);
+  }, [row, user, slug, isAdmin, credits, profile?.subscription_status]);
 
   if (loading) return <LoadingScreen />;
   if (notFound || !row || !row.report_data) return <ExpiryPage />;
@@ -712,6 +728,14 @@ const ReportView = () => {
             )}
           </div>
           <div className="flex items-center gap-2">
+            {user && profile?.subscription_status === 'active' && (
+              <span
+                className="px-2.5 py-1 text-xs rounded-full font-medium bg-indigo-50 text-indigo-700 border border-indigo-100"
+                title="Report credits refresh 3 per month and carry forward, up to 9."
+              >
+                {redeemLoading ? 'Applying credit…' : `Report credits: ${credits} of 9`}
+              </span>
+            )}
             <button
               onClick={handleCopy}
               className="px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg font-medium text-gray-700 transition-colors"
