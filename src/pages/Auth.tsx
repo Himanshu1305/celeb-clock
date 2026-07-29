@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,6 +22,11 @@ export default function Auth() {
   const [detectedCountry, setDetectedCountry] = useState('');
   const [blogSubscription, setBlogSubscription] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  // Synchronous guard against double form submission (fast double-click / Enter+
+  // click). Two signUp calls = two Supabase confirmation emails, and the second
+  // invalidates the first link — the cause of the "double email + only the second
+  // link works" bug. Set before the async call, cleared in finally.
+  const submittingRef = useRef(false);
   const { user, signUp, signIn } = useAuth();
 
   // Auto-detect country on signup page load
@@ -50,6 +55,8 @@ export default function Auth() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submittingRef.current) return;   // ignore a second submit for this attempt
+    submittingRef.current = true;
     setIsLoading(true);
 
     try {
@@ -60,6 +67,7 @@ export default function Auth() {
       }
     } finally {
       setIsLoading(false);
+      submittingRef.current = false;
     }
   };
 

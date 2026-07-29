@@ -674,25 +674,45 @@ export async function sendEmailDirect(payload: Record<string, unknown>): Promise
     case 'report_created':
       emailContent = reportCreatedEmail({ name, recipientName, reportLink });
       break;
-    case 'data_deletion_request':
-      sendTo = 'privacy@bornclock.com';
+    case 'account_deleted':
+      // User-facing confirmation that deletion has ALREADY completed (the
+      // delete-account edge function runs the deletion synchronously).
       emailContent = {
-        subject: `DATA DELETION REQUEST — ${userEmail}`,
+        subject: 'Your BornClock account has been deleted',
+        html: baseTemplate(`
+<div style="text-align:center;margin-bottom:24px;">
+  <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#111827;">Account deleted, ${name}</h1>
+</div>
+<p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 16px;">
+  Your BornClock account and personal data have been permanently deleted, and any
+  active subscription has been cancelled. This action is complete and cannot be undone.
+</p>
+<p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 16px;">
+  As required by Indian tax law, GST invoice records for past purchases are retained
+  for the statutory period (8 years) with your account no longer linked to them.
+</p>
+<p style="font-size:13px;color:#6b7280;line-height:1.7;margin:0;">
+  If you didn't request this, contact us at
+  <a href="mailto:hello@bornclock.com" style="color:#4F46E5;">hello@bornclock.com</a> right away.
+</p>
+`),
+      };
+      break;
+    case 'data_deletion_request':
+      // Internal record to the team inbox (the actual deletion is automated).
+      sendTo = 'hello@bornclock.com';
+      emailContent = {
+        subject: `ACCOUNT DELETED — ${userEmail}`,
         html: `
-          <h2>Data Deletion Request Received</h2>
+          <h2>Account Deletion Completed (automated)</h2>
           <p><strong>User:</strong> ${userEmail}</p>
           <p><strong>User ID:</strong> ${userId}</p>
-          <p><strong>Requested at:</strong> ${requestedAt}</p>
+          <p><strong>Completed at:</strong> ${requestedAt}</p>
           <hr>
-          <p><strong>Action required — complete within 30 days:</strong></p>
-          <ol>
-            <li>Cancel any active Razorpay subscription</li>
-            <li>Delete from family_members table where user_id = ${userId}</li>
-            <li>Delete from profiles table where user_id = ${userId}</li>
-            <li>Delete auth user from Supabase Auth</li>
-            <li>Send confirmation email to ${userEmail}</li>
-          </ol>
-          <p style="color:#6b7280;font-size:13px;">This request was submitted via the BornClock Profile page in compliance with DPDPA 2023 and GDPR Art. 17.</p>
+          <p>The delete-account edge function cancelled any active subscription,
+          removed all user-owned rows, de-identified payment/invoice records
+          (retained for GST), purged the email subscription, and deleted the auth user.</p>
+          <p style="color:#6b7280;font-size:13px;">Automated under DPDPA 2023 and GDPR Art. 17. Retain this record.</p>
         `,
       };
       break;

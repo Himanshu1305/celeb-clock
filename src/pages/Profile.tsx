@@ -33,7 +33,6 @@ export default function Profile() {
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
-  const [isDeletionRequesting, setIsDeletionRequesting] = useState(false);
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -120,30 +119,6 @@ export default function Profile() {
     setIsDeleting(false);
     if (!error) {
       navigate('/');
-    }
-  };
-
-  const handleRequestDataDeletion = async () => {
-    if (!window.confirm('Are you sure? This will permanently delete all your data and cannot be undone.')) return;
-    setIsDeletionRequesting(true);
-    try {
-      await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'data_deletion_request',
-          to: 'privacy@bornclock.com',
-          name: 'Admin',
-          userEmail: user?.email,
-          userId: user?.id,
-          requestedAt: new Date().toISOString(),
-        }),
-      });
-      alert('Your data deletion request has been received. We will permanently delete your data within 30 days and send confirmation to ' + user?.email);
-    } catch {
-      alert('Request submitted. We will contact you at ' + user?.email + ' to confirm deletion.');
-    } finally {
-      setIsDeletionRequesting(false);
     }
   };
 
@@ -417,9 +392,6 @@ export default function Profile() {
                   <p className="text-xs text-muted-foreground">
                     Permanently delete your account and all associated data. This action cannot be undone.
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    Prefer a manual review? Use <strong>Request Data Deletion</strong> below to have our team process your deletion within 30 days.
-                  </p>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="destructive" size="sm" className="gap-2">
@@ -431,14 +403,13 @@ export default function Profile() {
                       <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription className="space-y-3">
-                          <p>This will permanently delete:</p>
-                          <ul className="list-disc list-inside text-sm space-y-1">
-                            <li>Your profile and account information</li>
-                            <li>All reviews you've submitted</li>
-                            <li>Your analytics and usage data</li>
-                            <li>Your authentication credentials</li>
-                          </ul>
-                          <p className="font-medium text-destructive">This action cannot be undone.</p>
+                          <p>
+                            Your account and all personal data will be permanently deleted. This cannot be undone.
+                          </p>
+                          <p>Active subscriptions will be cancelled immediately.</p>
+                          <p className="text-xs">
+                            GST invoice records are retained as required by law (8-year statutory requirement).
+                          </p>
                           <div className="pt-2">
                             <Label htmlFor="deleteConfirm" className="text-sm">
                               Type <strong>DELETE</strong> to confirm:
@@ -466,32 +437,6 @@ export default function Profile() {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
-                </div>
-
-                <Separator />
-
-                {/* Request Data Deletion — DPDPA 2023 / GDPR compliant */}
-                <div className="border-t border-red-100 pt-4 space-y-2">
-                  <h4 className="text-sm font-semibold text-red-700">⚠️ Delete My Data</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Permanently delete all your BornClock account data including your email,
-                    subscription history, and any saved preferences. This cannot be undone.
-                    Your subscription will be cancelled immediately upon processing.
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-2 border-red-200 text-red-700 hover:bg-red-50"
-                    onClick={handleRequestDataDeletion}
-                    disabled={isDeletionRequesting}
-                  >
-                    {isDeletionRequesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-                    {isDeletionRequesting ? 'Submitting…' : 'Request Data Deletion'}
-                  </Button>
-                  <p className="text-xs text-muted-foreground">
-                    Under DPDPA 2023 and GDPR, we will process your request within 30 days.
-                    Email <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a> to check status.
-                  </p>
                 </div>
 
               </CardContent>
