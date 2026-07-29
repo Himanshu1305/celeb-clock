@@ -5,6 +5,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { getTarotCardByLifePath, MAJOR_ARCANA, type TarotCard } from '@/data/tarotData';
+import { useReportPrice } from '@/hooks/useCurrency';
 
 function calculateLifePath(day: number, month: number, year: number): number {
   const sum =
@@ -209,6 +210,7 @@ function InteractiveTarotDraw({ onCardDrawn, drawnCard }: InteractiveTarotDrawPr
 }
 
 export default function TarotByBirthday() {
+  const reportPriceLabel = useReportPrice();
   const [drawnCard, setDrawnCard] = useState<TarotCard | null>(null);
   const [dob, setDob] = useState('');
   const [birthdayResult, setBirthdayResult] = useState<{
@@ -437,7 +439,7 @@ export default function TarotByBirthday() {
                   to="/birthday-report"
                   className="inline-block bg-white text-indigo-600 px-8 py-3 rounded-xl font-semibold hover:bg-indigo-50 transition-colors"
                 >
-                  Generate My Report → ₹199
+                  Generate My Report → {reportPriceLabel}
                 </Link>
               </div>
             </div>

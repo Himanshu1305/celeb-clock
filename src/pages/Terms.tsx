@@ -6,6 +6,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { FileText, AlertCircle, DollarSign, Copyright, Ban, Shield } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { subscriptionPrice } from '@/lib/pricing';
 
 export default function Terms() {
   return (
@@ -95,8 +96,8 @@ export default function Terms() {
               <li>
                 BornClock Premium is available as a recurring subscription:
                 <ul className="list-disc list-inside ml-4 mt-1 space-y-1">
-                  <li>Monthly plan: ₹299/month (India) | $4.99/month (International)</li>
-                  <li>Annual plan: ₹2,499/year (India) | $39.99/year (International)</li>
+                  <li>Monthly plan: {subscriptionPrice('monthly', 'INR')}/month (India) | {subscriptionPrice('monthly', 'USD')}/month (International)</li>
+                  <li>Annual plan: {subscriptionPrice('annual', 'INR')}/year (India) | {subscriptionPrice('annual', 'USD')}/year (International)</li>
                 </ul>
               </li>
               <li>Pricing is determined by your location at time of purchase.</li>

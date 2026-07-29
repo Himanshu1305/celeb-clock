@@ -6,6 +6,7 @@ import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import PageTagline from '@/components/PageTagline';
 import { getCompatibility, ZODIAC_SIGNS } from '@/data/compatibilityData';
+import { useReportPrice } from '@/hooks/useCurrency';
 
 function ScoreBar({ label, score, color }: { label: string; score: number; color: string }) {
   return (
@@ -42,6 +43,7 @@ const BEST_MATCHES: Record<string, string[]> = {
 };
 
 export default function CompatibilityPage() {
+  const reportPriceLabel = useReportPrice();
   const { sign1: paramSign1, sign2: paramSign2 } = useParams<{ sign1?: string; sign2?: string }>();
 
   const [sign1, setSign1] = useState('');
@@ -236,7 +238,7 @@ export default function CompatibilityPage() {
                 <p className="text-lg font-bold mb-1">See your compatibility profile in your Birthday Report</p>
                 <p className="text-rose-200 text-sm mb-4">Your top compatible signs + moon sign + tarot card + name numerology + more.</p>
                 <Link to="/birthday-report" className="inline-block bg-white text-rose-600 px-8 py-3 rounded-xl font-semibold hover:bg-rose-50 transition-colors">
-                  Generate My Report → ₹199
+                  Generate My Report → {reportPriceLabel}
                 </Link>
               </div>
             </div>

@@ -5,6 +5,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { calculateAllNameNumbers, getLetterBreakdown, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
+import { useReportPrice } from '@/hooks/useCurrency';
 
 type NumberType = 'expression' | 'soulUrge' | 'personality';
 
@@ -15,6 +16,7 @@ const NUMBER_TYPE_INFO: Record<NumberType, { label: string; subtitle: string; co
 };
 
 export default function NameNumerologyPage() {
+  const reportPriceLabel = useReportPrice();
   const [name, setName] = useState('');
   const [result, setResult] = useState<ReturnType<typeof calculateAllNameNumbers> | null>(null);
   const [breakdown, setBreakdown] = useState<ReturnType<typeof getLetterBreakdown>>([]);
@@ -182,7 +184,7 @@ export default function NameNumerologyPage() {
                 <p className="text-lg font-bold mb-1">Get your complete Birthday Intelligence Report</p>
                 <p className="text-indigo-200 text-sm mb-4">Your name numerology + moon sign + tarot card + 12 more sections — personalised to your exact birthday.</p>
                 <Link to="/birthday-report" className="inline-block bg-white text-indigo-600 px-8 py-3 rounded-xl font-semibold hover:bg-indigo-50 transition-colors">
-                  Generate My Report → ₹199
+                  Generate My Report → {reportPriceLabel}
                 </Link>
               </div>
             </div>

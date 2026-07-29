@@ -184,7 +184,7 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'Is BornClock free?',
       answer:
-        'Yes. Every birthday and age calculator is free forever. An optional Premium subscription unlocks the full longevity suite (What-If Simulator, AI coach, family dashboard, country comparison) and downloadable PDF reports. There is also a one-time ₹199 Birthday Blueprint you can buy or gift without any subscription.',
+        'Yes. Every birthday and age calculator is free forever. An optional Premium subscription unlocks the full longevity suite (What-If Simulator, AI coach, family dashboard, country comparison) and downloadable PDF reports. There is also a one-time Birthday Blueprint you can buy or gift without any subscription — priced in your local currency at checkout.',
     },
     {
       question: 'How do birthday report credits work?',

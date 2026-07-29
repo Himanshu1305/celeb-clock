@@ -54,7 +54,7 @@ export default function Pricing() {
     <div className="min-h-screen bg-gray-50">
       <SEO
         title="Pricing — Free Forever, Premium When You Want More | BornClock"
-        description="BornClock pricing: a free birthday & age toolkit forever, optional Premium for the full longevity suite, and a one-time ₹199 Birthday Blueprint. Premium members get 3 birthday report credits a month with carry-forward."
+        description="BornClock pricing: a free birthday & age toolkit forever, optional Premium for the full longevity suite, and a one-time Birthday Blueprint (priced in your local currency). Premium members get 3 birthday report credits a month with carry-forward."
         keywords="bornclock pricing, birthday report price, longevity calculator subscription, premium plan"
         canonicalUrl="/pricing"
       />

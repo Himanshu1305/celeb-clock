@@ -6,8 +6,10 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Referenc
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { calculateBiorhythm, getBiorhythmStatus, getBiorhythmInsight, getBiorhythmSeries } from '@/data/biorhythmData';
+import { useReportPrice } from '@/hooks/useCurrency';
 
 export default function BiorhythmPage() {
+  const reportPriceLabel = useReportPrice();
   const [dob, setDob] = useState('');
   const [result, setResult] = useState<ReturnType<typeof calculateBiorhythm> | null>(null);
   const [chartData, setChartData] = useState<Array<{ label: string; physical: number; emotional: number; intellectual: number }>>([]);
@@ -188,7 +190,7 @@ export default function BiorhythmPage() {
                 <p className="text-lg font-bold mb-1">Get the complete Birthday Intelligence Report</p>
                 <p className="text-teal-200 text-sm mb-4">Your biorhythm analysis + moon sign + tarot card + name numerology + 12 more sections.</p>
                 <Link to="/birthday-report" className="inline-block bg-white text-teal-600 px-8 py-3 rounded-xl font-semibold hover:bg-teal-50 transition-colors">
-                  Generate My Report → ₹199
+                  Generate My Report → {reportPriceLabel}
                 </Link>
               </div>
             </div>

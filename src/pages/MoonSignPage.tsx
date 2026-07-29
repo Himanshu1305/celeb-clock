@@ -5,6 +5,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { calculateMoonSignAndNakshatra, MOON_SIGN_DATA, NAKSHATRAS, getNakshatraLifeApplication } from '@/data/moonSignData';
+import { useReportPrice } from '@/hooks/useCurrency';
 
 type TabKey = 'personality' | 'love' | 'shadow' | 'compatible';
 
@@ -16,6 +17,7 @@ const TAB_LABELS: Record<TabKey, string> = {
 };
 
 export default function MoonSignPage() {
+  const reportPriceLabel = useReportPrice();
   const [dob, setDob] = useState('');
   const [result, setResult] = useState<ReturnType<typeof calculateMoonSignAndNakshatra> | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>('personality');
@@ -168,7 +170,7 @@ export default function MoonSignPage() {
                 <p className="text-lg font-bold mb-1">Get the complete Birthday Intelligence Report</p>
                 <p className="text-blue-200 text-sm mb-4">Moon sign + nakshatra + tarot card + name numerology + 12 more sections — personalised to your exact birthday.</p>
                 <Link to="/birthday-report" className="inline-block bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-colors">
-                  Generate My Report → ₹199
+                  Generate My Report → {reportPriceLabel}
                 </Link>
               </div>
             </div>
