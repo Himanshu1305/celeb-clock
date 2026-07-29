@@ -6,12 +6,14 @@ import { Label } from '@/components/ui/label';
 import { INDIA_STATES, taxModeFor } from '@/data/indiaStates';
 import { countries } from '@/data/countries';
 import { detectCountry } from '@/services/CountryDetectionService';
+import { reportPrice, type Currency } from '@/lib/pricing';
 
 export interface RegionSelection {
   buyerCountry: string;      // 'India' or a country name
   buyerState: string | null;
   buyerStateCode: string | null;
   taxMode: 'CGST_SGST' | 'IGST' | 'EXPORT';
+  currency: Currency;        // authoritative: India → INR, else USD
 }
 
 interface Props {
@@ -51,6 +53,7 @@ export function CheckoutRegionModal({ open, onOpenChange, onConfirm, priceLabel 
         buyerState: st.name,
         buyerStateCode: st.code,
         taxMode: taxModeFor('India', st.code),
+        currency: 'INR',
       });
     } else if (base === 'Outside') {
       if (!country) return;
@@ -59,9 +62,16 @@ export function CheckoutRegionModal({ open, onOpenChange, onConfirm, priceLabel 
         buyerState: null,
         buyerStateCode: null,
         taxMode: 'EXPORT',
+        currency: 'USD',
       });
     }
   };
+
+  // Price follows the CONFIRMED region, not IP geo — so a user who is detected as
+  // USD but declares India (or vice-versa) sees the corrected price BEFORE
+  // Razorpay opens. Falls back to the caller's label until a region is picked.
+  const regionCurrency: Currency | null = base === 'India' ? 'INR' : base === 'Outside' ? 'USD' : null;
+  const shownPrice = regionCurrency ? reportPrice(regionCurrency) : priceLabel;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -122,7 +132,7 @@ export function CheckoutRegionModal({ open, onOpenChange, onConfirm, priceLabel 
         )}
 
         <Button onClick={confirm} disabled={!canConfirm} className="w-full">
-          Continue to payment{priceLabel ? ` · ${priceLabel}` : ''}
+          Continue to payment{shownPrice ? ` · ${shownPrice}` : ''}
         </Button>
       </DialogContent>
     </Dialog>

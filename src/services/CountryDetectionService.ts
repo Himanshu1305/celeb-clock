@@ -1,3 +1,5 @@
+import { subscriptionPrice, annualSavingLabel, resolveCurrency } from '@/lib/pricing';
+
 export interface CountryInfo {
   countryCode: string;
   countryName: string;
@@ -72,22 +74,12 @@ export function formatPrice(
   countryInfo: CountryInfo,
   billing: 'monthly' | 'annual',
 ): { amount: string; period: string; saving?: string } {
-  if (countryInfo.isIndia) {
-    if (billing === 'monthly') {
-      return { amount: '₹299', period: '/month' };
-    }
-    return {
-      amount: '₹2,499',
-      period: '/year',
-      saving: 'Save ₹1,089 vs monthly',
-    };
-  }
-  if (billing === 'monthly') {
-    return { amount: '$4.99', period: '/month' };
-  }
+  // Delegates to the single source (src/lib/pricing.ts). Respects a ?currency
+  // override so admins/testers can review both currencies without a VPN.
+  const currency = resolveCurrency(countryInfo.currency);
   return {
-    amount: '$39.99',
-    period: '/year',
-    saving: 'Save $19.89 vs monthly',
+    amount: subscriptionPrice(billing, currency),
+    period: billing === 'monthly' ? '/month' : '/year',
+    saving: billing === 'annual' ? annualSavingLabel(currency) : undefined,
   };
 }

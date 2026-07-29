@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 
 // ── NASA JPL orbital periods (mean sidereal, Earth days) ─────────────────────
 export const ORBITAL_PERIODS_DAYS: Record<string, number> = {
+  Earth:    365.256,
   Mercury:   87.969,
   Venus:    224.701,
   Mars:     686.971,
@@ -32,6 +33,16 @@ interface PlanetUIData {
 }
 
 const PLANET_UI: PlanetUIData[] = [
+  {
+    name: 'Earth',
+    emoji: '♁',
+    accentColor: '#3b82f6',
+    gravityRatio: 1.0,
+    tempDisplay: '15°C average',
+    moons: 1,
+    funFact: 'Earth is the only planet not named after a Greco-Roman god — and the only place in the universe life is confirmed to exist. It orbits the Sun at about 30 km/s.',
+    shockingFact: 'Earth is the densest planet in the solar system, and a day is slowly getting longer — the Moon steals rotational energy, adding ~1.7 milliseconds per century.',
+  },
   {
     name: 'Mercury',
     emoji: '☿',
@@ -381,7 +392,9 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
   const mercuryPerYear = (365.25 / ORBITAL_PERIODS_DAYS.Mercury).toFixed(1);
   const neptuneLastYear = new Date().getFullYear() - 165;
   const neptuneContext = getNeptuneContext(neptuneLastYear);
-  const totalBirthdays = results.reduce((s, p) => s + Math.floor(p.age), 0) + earthAge;
+  // Earth is now one of the PLANET_UI cards, so its birthdays are already in the
+  // reduce — no separate + earthAge (that double-counted after Earth was added).
+  const totalBirthdays = results.reduce((s, p) => s + Math.floor(p.age), 0);
   const earthPct = totalBirthdays > 0 ? Math.round((earthAge / totalBirthdays) * 100) : 0;
   const firstJupiterDate = new Date(birthDate.getTime() + ORBITAL_PERIODS_DAYS.Jupiter * 86400000);
 

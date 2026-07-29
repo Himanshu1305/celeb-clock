@@ -12,15 +12,18 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { isAdminEmail } from '@/components/AdminRoute';
 
+// First 4 = the main visible bar (visibleItems = slice(0,4)); the rest fall into
+// the "More" menu. Birthday Report is the paid product, so it's promoted into the
+// main bar; Planetary Age moves into More (still one click, no duplication).
 const navItems = [
   { path: '/age-calculator', label: 'Age Calculator', icon: Clock },
   { path: '/todays-birthdays', label: "Today's Birthdays", icon: Cake },
   { path: '/celebrity-birthday', label: 'Celebrity Match', icon: Gift },
+  { path: '/birthday-report', label: 'Birthday Report', icon: Gift },
   { path: '/planetary-age', label: 'Planetary Age', icon: Globe },
   { path: '/life-expectancy', label: 'Life Expectancy', icon: Crown, premium: true },
   { path: '/birthstone', label: 'Birthstone', icon: Gem },
   { path: '/leaderboard', label: 'Leaderboard', icon: Trophy },
-  { path: '/birthday-report', label: 'Birthday Report', icon: Gift },
   // TEMPORARILY DISABLED — re-enable Month 2
   // { path: '/family', label: 'Family', icon: Users },
   { path: '/blog', label: 'Blog', icon: BookOpen },
@@ -35,17 +38,13 @@ const numerologyItems = [
   { path: '/name-numerology', label: 'Name Numerology', emoji: '✍️' },
 ];
 
-// High-click discovery hubs, grouped under one "Explore" menu to keep the nav
-// uncluttered (rather than enumerating hundreds of pages).
+// High-click DISCOVERY hubs only — destinations that live nowhere else in the
+// header. Anything duplicated in the main bar or the "More" menu was removed
+// (Today's Birthdays, Planetary Age, Biological Age, Life Expectancy, Pricing).
 const exploreItems = [
   { path: '/born-on/india', label: 'Indian Celebrities by Date', emoji: '🇮🇳' },
-  { path: '/todays-birthdays', label: "Today's Birthdays", emoji: '🎂' },
   { path: '/answers', label: 'Answers', emoji: '❓' },
   { path: '/compatibility', label: 'Compatibility', emoji: '💕' },
-  { path: '/planetary-age', label: 'Planetary Age', emoji: '🪐' },
-  { path: '/biological-age', label: 'Biological Age', emoji: '🧬' },
-  { path: '/life-expectancy', label: 'Life Expectancy', emoji: '⏳' },
-  { path: '/pricing', label: 'Pricing', emoji: '🏷️' },
 ];
 
 const astrologyItems = [

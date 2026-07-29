@@ -27,6 +27,7 @@ import { getMoonSignEssence, MOON_SIGN_EXPLAINER } from '@/data/moonSignEssence'
 import { getSoulUrge, getPersonality } from '@/data/numerologyNameData';
 import { getVedicBirthstone, SECTION_EXPLAINERS, CLOSING_SECTION } from '@/data/reportContentAdditions';
 import { PLANET_COUNT } from '@/lib/reportFacts';
+import { reportPrice, resolveCurrency } from '@/lib/pricing';
 import { westernZodiacPlural, chineseZodiacPlural } from '@/lib/zodiacPlurals';
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalytics } from '@/hooks/useAnalytics';
@@ -539,15 +540,21 @@ const ReportView = () => {
   // Report is locked unless paid for, or the viewer is an admin.
   const isLocked = !isAdmin && !row.is_paid;
 
+  // Display currency: IP detection, overridable via ?currency= (admin/testing).
+  const displayCurrency = resolveCurrency(isIndia ? 'INR' : 'USD');
+
   // Called after the checkout region/GST modal confirms — carries the buyer's
   // place-of-supply declaration through to create-order (→ tax invoice).
   const startOrderPayment = (sel: RegionSelection) => {
     if (!slug || !user) return;
-    trackFunnel('checkout_opened', { slug, product: 'birthday_report', member: profile?.subscription_status === 'active', taxMode: sel.taxMode });
+    // Currency is now driven by the CONFIRMED region (sel.currency), not IP geo,
+    // so a USD-detected user who declares India is charged INR with a matching
+    // CGST/SGST invoice (no more USD-payment-with-Telangana-tax mismatch).
+    trackFunnel('checkout_opened', { slug, product: 'birthday_report', member: profile?.subscription_status === 'active', taxMode: sel.taxMode, currency: sel.currency });
     initiateOrderPayment({
       product: 'birthday_report',
       reportSlug: slug,
-      currency: isIndia ? 'INR' : 'USD',
+      currency: sel.currency,
       userId: user.id,
       userEmail: user.email ?? '',
       buyerCountry: sel.buyerCountry,
@@ -556,7 +563,7 @@ const ReportView = () => {
       taxMode: sel.taxMode,
       onSuccess: () => {
         // Client-side confirmation beacon ONLY — the webhook/verify flow is the source of truth.
-        trackFunnel('purchase_completed', { slug, product: 'birthday_report' });
+        trackFunnel('purchase_completed', { slug, product: 'birthday_report', currency: sel.currency, taxMode: sel.taxMode });
         setRow((prev: any) => prev ? { ...prev, is_paid: true } : prev);
         import('@/services/BirthdayReportService').then(m => m.getReport(slug)).then(fresh => { if (fresh) setRow(fresh); });
       },
@@ -1000,7 +1007,7 @@ const ReportView = () => {
                 className="w-full py-3.5 rounded-xl font-bold text-white text-base transition-colors mb-3"
                 style={{ background: 'var(--navy)' }}
               >
-                {`Unlock — ${isIndia ? '₹199' : '$6.99'}`}
+                {`Unlock — ${reportPrice(displayCurrency)}`}
               </button>
             ) : (
               <>
@@ -1052,7 +1059,7 @@ const ReportView = () => {
       <CheckoutRegionModal
         open={regionOpen}
         onOpenChange={setRegionOpen}
-        priceLabel={isIndia ? '₹199' : '$6.99'}
+        priceLabel={reportPrice(displayCurrency)}
         onConfirm={(sel) => { setRegionOpen(false); startOrderPayment(sel); }}
       />
 
@@ -1399,8 +1406,10 @@ const ReportView = () => {
                   <strong style={{ color: 'var(--navy)' }}>What is a Moon Sign?</strong>{' '}{MOON_SIGN_EXPLAINER.whatIsIt}{' '}{MOON_SIGN_EXPLAINER.whyMoon}
                 </div>
 
-                {/* Moon sign identity */}
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'var(--panel-2)', border: '1px solid var(--hairline)' }}>
+                {/* Moon sign identity — essence renders FLUSH (no card padding) to
+                    match the Vedic Rashi section above; the p-5 card here made the
+                    body text look indented relative to every other section. */}
+                <div className="mb-4">
                   <div className="flex items-center gap-4 mb-3">
                     <div className="text-4xl">{moonResult.moonSignData.symbol}</div>
                     <div>
@@ -1421,8 +1430,9 @@ const ReportView = () => {
 
                 <p className="text-xs italic text-center mb-4" style={{ color: 'var(--muted)' }}>Moon sign approximated from the Moon's position at date of birth — birth time is not collected.</p>
 
-                {/* Nakshatra identity */}
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'var(--gold-tint)', border: '1px solid var(--gold-soft)' }}>
+                {/* Nakshatra identity — flush like Moon/Rashi (was a p-5 gold card
+                    that indented the body); gold eyebrow + inner box keep emphasis. */}
+                <div className="mb-4">
                   <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--gold)' }}>Birth Nakshatra #{moonResult.nakshatraNumber}</div>
                   <div className="flex items-center gap-4 mb-3">
                     <div className="text-4xl">{richNakshatra.symbol}</div>
@@ -1952,12 +1962,12 @@ const ReportView = () => {
             </div>
             <div style={{ fontSize: '10.5px', letterSpacing: '.22em', textTransform: 'uppercase', fontWeight: 700, color: 'var(--gold)' }}>Your Age Across the Solar System</div>
             <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-.01em', margin: '4px 0 0' }}>Solar System Ages</h2>
-            <p style={{ fontSize: '12.5px', color: '#9DB0BF', marginTop: '5px' }}>{recipientName} is {age} years old on Earth — here is their age across each planet</p>
+            <p style={{ fontSize: '12.5px', color: '#9DB0BF', marginTop: '5px' }}>{recipientName} is {age} years old on Earth — here is their age from home outward across all {PLANET_COUNT} planets</p>
           </div>
           <div className="planet-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             {Object.entries(planetaryAges).map(([planet, pAge]) => {
               const SYMBOLS: Record<string, string> = {
-                Mercury: '☿', Venus: '♀', Mars: '♂', Jupiter: '♃', Saturn: '♄', Uranus: '⛢', Neptune: '♆',
+                Earth: '♁', Mercury: '☿', Venus: '♀', Mars: '♂', Jupiter: '♃', Saturn: '♄', Uranus: '⛢', Neptune: '♆',
               };
               return (
                 <div

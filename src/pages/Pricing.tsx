@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Check, X, Gift, Shield, ArrowRight, Repeat } from 'lucide-react';
 import { detectCountry, formatPrice, type CountryInfo } from '@/services/CountryDetectionService';
 import { REPORT_SECTION_COUNT } from '@/lib/reportFacts';
+import { reportPrice as reportPriceFor, resolveCurrency } from '@/lib/pricing';
 
 // Indexable pricing/comparison page (distinct from the login-gated /upgrade
 // conversion page). Every benefit below is drawn from the REAL feature set:
@@ -45,8 +46,9 @@ export default function Pricing() {
   useEffect(() => { detectCountry().then(setCountry).catch(() => {}); }, []);
 
   const isIndia = country?.isIndia ?? true;
+  const currency = resolveCurrency(country?.currency);
   const monthly = country ? formatPrice(country, 'monthly') : { amount: '₹299', period: '/month' };
-  const reportPrice = isIndia ? '₹199' : '$6.99';
+  const reportPrice = reportPriceFor(currency);
 
   return (
     <div className="min-h-screen bg-gray-50">

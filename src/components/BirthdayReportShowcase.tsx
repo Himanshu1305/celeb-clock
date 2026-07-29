@@ -1,8 +1,11 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Gift, Check } from 'lucide-react';
 import { REPORT_SECTION_COUNT, SECTIONS_LABEL } from '@/lib/reportFacts';
+import { reportPrice, resolveCurrency, type Currency } from '@/lib/pricing';
+import { detectCountry } from '@/services/CountryDetectionService';
 
 // Homepage showcase for the paid Birthday Blueprint (₹199). Sells the report
 // with styled mockups of REAL report sections (cover, celebrity twins, zodiac
@@ -26,6 +29,10 @@ function PreviewCard({ children, label }: { children: React.ReactNode; label: st
 }
 
 export function BirthdayReportShowcase() {
+  const [currency, setCurrency] = useState<Currency>('INR');
+  useEffect(() => {
+    detectCountry().then(info => setCurrency(resolveCurrency(info.currency))).catch(() => {});
+  }, []);
   return (
     <section className="max-w-5xl mx-auto mb-16 px-4">
       <Card className="glass-card card-party-border overflow-hidden">
@@ -57,7 +64,7 @@ export function BirthdayReportShowcase() {
                 ))}
               </ul>
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-1">
-                <span className="text-3xl font-black text-foreground">₹199</span>
+                <span className="text-3xl font-black text-foreground">{reportPrice(currency)}</span>
                 <span className="text-xs font-semibold uppercase tracking-wide text-accent">Launch price</span>
                 <span className="text-sm text-muted-foreground w-full">one-time · or free with Premium credits</span>
               </div>

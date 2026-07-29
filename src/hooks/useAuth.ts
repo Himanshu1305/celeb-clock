@@ -23,6 +23,15 @@ interface Profile {
   premium_until?: string | null;
 }
 
+// Module-level, shared across EVERY useAuth() instance in the tab. useAuth is a
+// plain hook (not a context), so 20+ components each register their own
+// onAuthStateChange listener; on SIGNED_IN they ALL fire. A per-instance
+// localStorage check can race (several read "not sent" before any writes),
+// producing the observed 3-welcome flood. This synchronous in-memory Set is the
+// authoritative in-tab guard: the first listener adds the id, the rest see it
+// and skip. localStorage below still covers cross-reload / cross-session.
+const welcomedThisSession = new Set<string>();
+
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -43,15 +52,21 @@ export const useAuth = () => {
           // synchronously before the async send so a double-fire can't duplicate.
           const u = session.user;
           const confirmed = !!(u.email_confirmed_at || (u as any).confirmed_at);
-          if (event === 'SIGNED_IN' && confirmed && u.email) {
+          // Guard order matters: the in-memory Set is checked+set FIRST and
+          // synchronously (no await between), so concurrent listeners can't all
+          // pass. localStorage is the cross-reload backstop.
+          if (event === 'SIGNED_IN' && confirmed && u.email && !welcomedThisSession.has(u.id)) {
+            welcomedThisSession.add(u.id);
             const key = `bc_welcome_sent:${u.id}`;
+            let alreadySent = false;
             try {
-              if (!localStorage.getItem(key)) {
-                localStorage.setItem(key, '1');
-                const nm = u.user_metadata?.first_name || u.user_metadata?.name || u.email.split('@')[0] || 'there';
-                EmailService.sendWelcome(u.email, nm, 7);
-              }
-            } catch { /* localStorage unavailable — skip the welcome guard */ }
+              alreadySent = !!localStorage.getItem(key);
+              if (!alreadySent) localStorage.setItem(key, '1');
+            } catch { /* localStorage unavailable — in-memory Set still guards this session */ }
+            if (!alreadySent) {
+              const nm = u.user_metadata?.first_name || u.user_metadata?.name || u.email.split('@')[0] || 'there';
+              EmailService.sendWelcome(u.email, nm, 7);
+            }
           }
 
           // Fetch user profile
@@ -160,7 +175,10 @@ export const useAuth = () => {
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
+    // scope:'local' signs out ONLY this device (default 'global' revokes refresh
+    // tokens everywhere — the founder saw one sign-out log him out on all
+    // devices). A future "sign out everywhere" can call signOut({scope:'global'}).
+    const { error } = await supabase.auth.signOut({ scope: 'local' });
     
     if (error) {
       toast({

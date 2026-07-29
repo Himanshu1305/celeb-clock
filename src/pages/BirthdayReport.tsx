@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
@@ -10,6 +10,8 @@ import { useToast } from '@/hooks/use-toast';
 import { generateReportData, saveReport } from '@/services/BirthdayReportService';
 import { EmailService } from '@/services/EmailService';
 import { PLANET_COUNT } from '@/lib/reportFacts';
+import { reportPrice, resolveCurrency, type Currency } from '@/lib/pricing';
+import { detectCountry } from '@/services/CountryDetectionService';
 
 // Server-computed entitlement powering the pricing-card state machine.
 interface Entitlement {
@@ -79,19 +81,25 @@ const BirthdayReport = () => {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
   const [entitlement, setEntitlement] = useState<Entitlement | null>(null);
+  const [currency, setCurrency] = useState<Currency>('INR');
+
+  // Resolve ONE display currency (IP detection, overridable via ?currency=).
+  useEffect(() => {
+    detectCountry().then(info => setCurrency(resolveCurrency(info.currency))).catch(() => {});
+  }, []);
 
   // Pull the authoritative, server-computed entitlement for the pricing card.
   // Anything that gates money is decided here (and re-enforced in save-report);
   // the client flags are only a fallback for display while this loads.
-  useEffect(() => {
+  const refreshEntitlement = useCallback(() => {
     if (!user?.id) { setEntitlement(null); return; }
-    let cancelled = false;
     fetch(`/api/report-entitlement?userId=${encodeURIComponent(user.id)}`)
       .then(r => r.json())
-      .then(d => { if (!cancelled && d && typeof d.credits === 'number') setEntitlement(d); })
+      .then(d => { if (d && typeof d.credits === 'number') setEntitlement(d); })
       .catch(() => {});
-    return () => { cancelled = true; };
   }, [user?.id]);
+
+  useEffect(() => { refreshEntitlement(); }, [refreshEntitlement]);
 
   // Progress animation
   useEffect(() => {
@@ -191,6 +199,10 @@ const BirthdayReport = () => {
     setCountry('India');
     setGifterName('');
     setPersonalMessage('');
+    // The just-generated report may have consumed the free trial report or a
+    // credit — re-pull entitlement so the card doesn't lie (was "1 free report"
+    // when the server would now issue a locked ₹199 report). Never cached.
+    refreshEntitlement();
   };
 
   const scrollToForm = () => {
@@ -243,6 +255,9 @@ const BirthdayReport = () => {
         </div>
       </div>
 
+      {/* Everything below the nav is pre-generation marketing. After a report is
+          generated (phase 'success') the page shows the success block ONLY. */}
+      {phase !== 'success' && (<>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <div className="bg-gradient-to-br from-amber-50 via-rose-50 to-purple-50 py-8 px-4 text-center">
         <div className="max-w-3xl mx-auto">
@@ -298,6 +313,7 @@ const BirthdayReport = () => {
           </div>
         </div>
       </div>
+      </>)}
 
       {/* ── Pricing Card (5-state machine) — hidden after generation ──────── */}
       {phase !== 'success' && (
@@ -322,9 +338,7 @@ const BirthdayReport = () => {
             ) : (
               <>
                 <div className="flex items-baseline justify-center gap-3">
-                  <span className="text-4xl font-black text-rose-500">₹199</span>
-                  <span className="text-gray-400">/</span>
-                  <span className="text-2xl font-bold text-gray-700">$6.99</span>
+                  <span className="text-4xl font-black text-rose-500">{reportPrice(currency)}</span>
                 </div>
                 <div className="text-xs text-gray-400 mt-1">
                   {cardState.kind === 'trial_used'
@@ -508,7 +522,7 @@ const BirthdayReport = () => {
                 </button>
 
                 <p className="text-center text-xs text-gray-400">
-                  Generates instantly · Celebrity Twins always free · unlock the full Blueprint for ₹199
+                  Generates instantly · Celebrity Twins always free · unlock the full Blueprint for {reportPrice(currency)}
                 </p>
               </div>
             </>

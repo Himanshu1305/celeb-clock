@@ -282,25 +282,46 @@ export default function Profile() {
                   )}
                 </div>
 
-                {/* Birthday report credits — live balance from get-credits */}
-                <div className="flex items-center justify-between p-4 mt-3 bg-muted rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Gift className="h-6 w-6 text-accent" />
-                    <div>
-                      <p className="font-medium">
-                        Report credits: {credits === null ? '—' : credits} of 9
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        3 added monthly · unused credits carry forward · max 9.
-                      </p>
+                {/* Birthday report credits. Active subscribers see their live
+                    balance; everyone else sees an upsell (showing a 0-of-9
+                    balance with mechanics they don't have is just confusing). */}
+                {profile?.subscription_status === 'active' ? (
+                  <div className="flex items-center justify-between p-4 mt-3 bg-muted rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <Gift className="h-6 w-6 text-accent" />
+                      <div>
+                        <p className="font-medium">
+                          Report credits: {credits === null ? '—' : credits} of 9
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          3 added monthly · unused credits carry forward · max 9.
+                        </p>
+                      </div>
                     </div>
+                    <Link to="/birthday-report">
+                      <Button size="sm" variant="outline" className="gap-1.5">
+                        <Gift className="h-4 w-4" /> Use
+                      </Button>
+                    </Link>
                   </div>
-                  <Link to="/birthday-report">
-                    <Button size="sm" variant="outline" className="gap-1.5">
-                      <Gift className="h-4 w-4" /> Use
-                    </Button>
-                  </Link>
-                </div>
+                ) : (
+                  <div className="flex items-center justify-between p-4 mt-3 bg-muted rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <Gift className="h-6 w-6 text-accent" />
+                      <div>
+                        <p className="font-medium">Report credits</p>
+                        <p className="text-sm text-muted-foreground">
+                          Premium members get 3 report credits every month — unused credits carry forward, up to 9.
+                        </p>
+                      </div>
+                    </div>
+                    <Link to="/upgrade">
+                      <Button size="sm" className="gap-1.5">
+                        <Gift className="h-4 w-4" /> Upgrade
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </CardContent>
             </Card>
 

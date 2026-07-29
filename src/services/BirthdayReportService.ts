@@ -10,6 +10,7 @@ import { getGenerationBasic } from '@/services/GenerationService';
 // ── Constants ──────────────────────────────────────────────────────────────────
 
 export const ORBITAL_PERIODS: Record<string, number> = {
+  Earth: 365.25,
   Mercury: 88,
   Venus: 224.7,
   Mars: 687,

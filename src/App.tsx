@@ -76,6 +76,7 @@ import BornOnIndiaIndex from '@/pages/BornOnIndiaIndex';
 import AnswersIndex from '@/pages/AnswersIndex';
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { CurrencyAdminToggle } from "@/components/CurrencyAdminToggle";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
 import { CookieConsent } from "@/components/CookieConsent";
 import { BirthDateProvider } from "./context/BirthDateContext";
@@ -92,6 +93,7 @@ const App = () => (
         <BirthDateProvider>
           <BrowserRouter>
             <ScrollToTop />
+            <CurrencyAdminToggle />
             <BirthdayDiscountBanner />
             <Routes>
               <Route path="/" element={<Index />} />

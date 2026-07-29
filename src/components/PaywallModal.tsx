@@ -1,6 +1,7 @@
 import { X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { subscriptionPrice, annualSavingLabel, resolveCurrency } from '@/lib/pricing';
 
 interface PaywallModalProps {
   forecast: number;
@@ -15,6 +16,8 @@ export function PaywallModal({
 }: PaywallModalProps) {
   const navigate = useNavigate();
   const { isInTrial } = useAuth();
+  // Single-sourced subscription copy; respects the ?currency= override, else INR.
+  const payCurrency = resolveCurrency(undefined);
   const trialUsed = localStorage.getItem('bornclock_trial_used');
   const hasExpiredTrial = !isInTrial && !!trialUsed;
 
@@ -82,8 +85,8 @@ export function PaywallModal({
 
         <p className="text-xs text-gray-400 text-center mb-3">
           {isInTrial
-            ? 'Trial ends soon · then ₹299/month or ₹2,499/year'
-            : '₹299/month · or ₹2,499/year (save ₹1,089)'}
+            ? `Trial ends soon · then ${subscriptionPrice('monthly', payCurrency)}/month or ${subscriptionPrice('annual', payCurrency)}/year`
+            : `${subscriptionPrice('monthly', payCurrency)}/month · or ${subscriptionPrice('annual', payCurrency)}/year (${annualSavingLabel(payCurrency).toLowerCase()})`}
         </p>
 
         <button
