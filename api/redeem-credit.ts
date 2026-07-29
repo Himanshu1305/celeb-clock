@@ -55,6 +55,9 @@ async function handler(request: Request): Promise<Response> {
       if (r.error === 'no_credits') {
         return json({ error: 'No credits available', creditsRemaining: r.credits_remaining ?? 0 }, 402);
       }
+      // Shared/public report opened by a non-owner: not an error, just not
+      // credit-redeemable. Clean 403; the client falls back to the paywall.
+      if (r.error === 'not_owner') return json({ error: 'Not your report', notOwner: true }, 403);
       if (r.error === 'report_not_found') return json({ error: 'Report not found' }, 404);
       if (r.error === 'user_not_found') return json({ error: 'User not found' }, 404);
       // Unknown logical result — fall through to the legacy path.
@@ -69,12 +72,18 @@ async function handler(request: Request): Promise<Response> {
   // Still guards against double-redeem by re-reading is_paid before spending.
   const { data: report, error: reportErr } = await db
     .from('birthday_reports')
-    .select('is_paid')
+    .select('is_paid, user_id')
     .eq('slug', reportSlug)
     .single();
 
   if (reportErr || !report) {
     return json({ error: 'Report not found' }, 404);
+  }
+
+  // Ownership: only the owner may spend a credit (report links are shareable).
+  const ownerId = (report as any).user_id;
+  if (!ownerId || ownerId !== userId) {
+    return json({ error: 'Not your report', notOwner: true }, 403);
   }
 
   // Fetch current credit balance

@@ -38,6 +38,22 @@ export const useAuth = () => {
         setUser(session?.user ?? null);
         
         if (session?.user) {
+          // Welcome email: fire ONCE, on the first CONFIRMED sign-in — never at
+          // signup (see signUp). Guarded by a per-user localStorage flag set
+          // synchronously before the async send so a double-fire can't duplicate.
+          const u = session.user;
+          const confirmed = !!(u.email_confirmed_at || (u as any).confirmed_at);
+          if (event === 'SIGNED_IN' && confirmed && u.email) {
+            const key = `bc_welcome_sent:${u.id}`;
+            try {
+              if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, '1');
+                const nm = u.user_metadata?.first_name || u.user_metadata?.name || u.email.split('@')[0] || 'there';
+                EmailService.sendWelcome(u.email, nm, 7);
+              }
+            } catch { /* localStorage unavailable — skip the welcome guard */ }
+          }
+
           // Fetch user profile
           setTimeout(async () => {
             const { data: profileData, error } = await supabase
@@ -45,7 +61,7 @@ export const useAuth = () => {
               .select('*')
               .eq('user_id', session.user.id)
               .single();
-              
+
             if (!error && profileData) {
               setProfile(profileData);
             }
@@ -116,14 +132,11 @@ export const useAuth = () => {
         title: "Check your email",
         description: "We've sent you a confirmation link to complete your signup."
       });
-      const userName =
-        data.user?.user_metadata?.first_name ||
-        data.user?.user_metadata?.name ||
-        data.user?.email?.split('@')[0] ||
-        'there';
-      if (data.user?.email) {
-        EmailService.sendWelcome(data.user.email, userName, 7);
-      }
+      // NOTE: the welcome email is deliberately NOT sent here. Email confirmation
+      // is load-bearing (gates the trial free report against throwaway addresses,
+      // and invoices go to that address). Welcoming at signup means the user is
+      // welcomed, then refused at login with "Email not confirmed". The welcome
+      // is sent once from onAuthStateChange, on the first CONFIRMED sign-in.
     }
 
     return { error };

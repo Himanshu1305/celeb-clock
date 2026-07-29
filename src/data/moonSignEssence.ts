@@ -1,7 +1,7 @@
 // 2-3 paragraph moon sign essence + explainer block
 
 export const MOON_SIGN_EXPLAINER = {
-  whatIsIt: `Your moon sign is determined by the position of the Moon at the exact moment of your birth — not just the date, but the hour. While your sun sign reflects the conscious self you present to the world, the Moon reveals what you need at the deepest level: how you process emotion, what makes you feel safe, how you love and grieve and recover. It is the self you are when no one is watching.`,
+  whatIsIt: `Your moon sign is shaped by the position of the Moon around the time you were born. The Moon moves quickly — it changes sign roughly every two to two-and-a-half days — so a precise reading normally uses the exact birth hour; from a birth date alone, the moon sign here is a close approximation. While your sun sign reflects the conscious self you present to the world, the Moon reveals what you need at the deepest level: how you process emotion, what makes you feel safe, how you love and grieve and recover. It is the self you are when no one is watching.`,
   whyMoon: `In Vedic astrology, the Moon is considered even more significant than the Sun — it governs the mind (manas), the emotional body, and the quality of inner experience. Where the Sun describes your life purpose and outer identity, the Moon describes the quality of your inner life, your instinctive responses, and what your nervous system is actually doing beneath the performance of the day.`,
 };
 

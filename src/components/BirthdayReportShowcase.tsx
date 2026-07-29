@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Gift, Check } from 'lucide-react';
+import { REPORT_SECTION_COUNT, SECTIONS_LABEL } from '@/lib/reportFacts';
 
 // Homepage showcase for the paid Birthday Blueprint (₹199). Sells the report
 // with styled mockups of REAL report sections (cover, celebrity twins, zodiac
@@ -39,14 +40,14 @@ export function BirthdayReportShowcase() {
                 A birthday gift that's actually about them
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                A personalised <strong>20+ page</strong> keepsake report built from anyone's birth date —
+                A personalised keepsake report built from anyone's birth date —
                 celebrity birthday twins, Western &amp; Vedic zodiac, numerology &amp; life path, tarot,
-                Chinese zodiac, planetary ages and more, across <strong>11 sections</strong>. Beautifully
+                Chinese zodiac, planetary ages and more, across <strong>{REPORT_SECTION_COUNT} sections</strong>. Beautifully
                 typeset and ready to print or gift.
               </p>
               <ul className="space-y-2">
                 {[
-                  '11 personalised sections, one birth date',
+                  SECTIONS_LABEL + ', one birth date',
                   'Celebrity birthday twins ranked by fame',
                   'Print-ready PDF — a gift they can keep',
                 ].map(f => (

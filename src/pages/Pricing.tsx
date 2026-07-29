@@ -7,6 +7,7 @@ import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Check, X, Gift, Shield, ArrowRight, Repeat } from 'lucide-react';
 import { detectCountry, formatPrice, type CountryInfo } from '@/services/CountryDetectionService';
+import { REPORT_SECTION_COUNT } from '@/lib/reportFacts';
 
 // Indexable pricing/comparison page (distinct from the login-gated /upgrade
 // conversion page). Every benefit below is drawn from the REAL feature set:
@@ -121,7 +122,7 @@ export default function Pricing() {
             </div>
             <div className="text-gray-400 text-sm mb-5">one-time · or free with Premium credits</div>
             <ul className="space-y-2.5 mb-6 flex-1">
-              {['20+ page personalised PDF', '11 sections, one birth date',
+              {['Print-ready personalised PDF', `${REPORT_SECTION_COUNT} sections, one birth date`,
                 'Celebrity twins, zodiac, numerology, tarot', 'Print it or gift it'].map(f => (
                 <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
                   <Check size={14} className="text-amber-500 flex-shrink-0" /> {f}

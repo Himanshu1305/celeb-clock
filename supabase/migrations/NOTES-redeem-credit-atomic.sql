@@ -31,10 +31,13 @@
 --   1. lock the report row FOR UPDATE — this serialises two concurrent
 --      redemptions of the SAME report. The second waiter reads is_paid =
 --      true (set by the first) and returns idempotently.
---   2. lock the profile row FOR UPDATE — no lost update on report_credits.
---   3. if the report is already paid → return current balance, spend nothing.
---   4. if no credits → 402-shaped result, spend nothing.
---   5. otherwise decrement + unlock + stamp unlock_source, all one txn.
+--   2. ownership: report links are public and shareable, but a credit may
+--      only be spent by the report's OWNER. A non-owner gets not_owner and
+--      NOTHING is decremented (the client falls back to the normal paywall).
+--   3. lock the profile row FOR UPDATE — no lost update on report_credits.
+--   4. if the report is already paid → return current balance, spend nothing.
+--   5. if no credits → 402-shaped result, spend nothing.
+--   6. otherwise decrement + unlock + stamp unlock_source, all one txn.
 --
 -- Returns jsonb the API can map straight to an HTTP response.
 -- ---------------------------------------------------------------------
@@ -46,10 +49,11 @@ set search_path = public
 as $$
 declare
   v_is_paid  boolean;
+  v_owner    uuid;
   v_credits  integer;
 begin
   -- 1. lock the report first (serialises same-report redemptions)
-  select is_paid into v_is_paid
+  select is_paid, user_id into v_is_paid, v_owner
     from public.birthday_reports
    where slug = p_slug
    for update;
@@ -58,7 +62,13 @@ begin
     return jsonb_build_object('ok', false, 'error', 'report_not_found');
   end if;
 
-  -- 2. lock the owning profile (no lost update on the balance)
+  -- 2. ownership check — only the owner may spend a credit on this report.
+  --    Anonymous reports (user_id null) are never credit-redeemable.
+  if v_owner is null or v_owner <> p_user_id then
+    return jsonb_build_object('ok', false, 'error', 'not_owner');
+  end if;
+
+  -- 3. lock the owning profile (no lost update on the balance)
   select report_credits into v_credits
     from public.profiles
    where user_id = p_user_id
@@ -68,7 +78,7 @@ begin
     return jsonb_build_object('ok', false, 'error', 'user_not_found');
   end if;
 
-  -- 3. IDEMPOTENT: already unlocked → succeed, decrement nothing
+  -- 4. IDEMPOTENT: already unlocked → succeed, decrement nothing
   if v_is_paid then
     return jsonb_build_object(
       'ok', true, 'already_paid', true,
@@ -76,7 +86,7 @@ begin
     );
   end if;
 
-  -- 4. genuinely locked but no credits to spend
+  -- 5. genuinely locked but no credits to spend
   if coalesce(v_credits, 0) <= 0 then
     return jsonb_build_object(
       'ok', false, 'error', 'no_credits',
@@ -84,7 +94,7 @@ begin
     );
   end if;
 
-  -- 5. spend one credit and unlock, in this one transaction
+  -- 6. spend one credit and unlock, in this one transaction
   update public.profiles
      set report_credits = report_credits - 1
    where user_id = p_user_id;

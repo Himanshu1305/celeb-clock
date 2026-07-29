@@ -4,6 +4,8 @@
 // NOTE: supabase/functions/delete-account (Deno runtime) cannot import this module
 // and must continue to use the HTTP endpoint.
 
+import { REPORT_SECTION_COUNT, PLANET_COUNT } from '../src/lib/reportFacts.js';
+
 const FROM_EMAIL = 'BornClock <hello@bornclock.com>';
 const LOGO_URL = 'https://bornclock.com/bornclock-logo.png';
 const BASE_URL = 'https://bornclock.com';
@@ -554,12 +556,12 @@ function reportLockedEmail(params: {
   <a href="${reportLink}" style="font-size:14px;color:#4F46E5;text-decoration:none;">${reportLink}</a>
 </div>
 <p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 20px;">
-  The preview shows the cover and celebrity birthday twins. Unlocking reveals the full 10-section Blueprint — permanently, with PDF download included.
+  The preview shows the cover and celebrity birthday twins. Unlocking reveals the full ${REPORT_SECTION_COUNT}-section Blueprint — permanently, with PDF download included.
 </p>
 <table width="100%" cellpadding="0" cellspacing="0">
   ${featureItem('♈', 'Western, Chinese &amp; Vedic zodiac profiles')}
   ${featureItem('🔢', `Numerology Life Path &amp; Personal Year ${new Date().getFullYear()}`)}
-  ${featureItem('🪐', 'Planetary ages across all 8 planets')}
+  ${featureItem('🪐', `Planetary ages across all ${PLANET_COUNT} planets`)}
   ${featureItem('💎', 'Birthstone history &amp; lore')}
   ${featureItem('📄', 'Download as PDF')}
 </table>
@@ -603,7 +605,7 @@ function reportCreatedEmail(params: {
   ${featureItem('🌟', 'Celebrity birthday twins')}
   ${featureItem('♈', 'Western, Chinese &amp; Vedic zodiac profiles')}
   ${featureItem('🔢', `Numerology Life Path &amp; Personal Year ${new Date().getFullYear()}`)}
-  ${featureItem('🪐', 'Planetary ages across all 8 planets')}
+  ${featureItem('🪐', `Planetary ages across all ${PLANET_COUNT} planets`)}
   ${featureItem('💎', 'Birthstone history &amp; lore')}
   ${featureItem('📄', 'Download as PDF')}
 </table>

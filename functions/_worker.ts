@@ -1,6 +1,7 @@
 import { POST as createOrder }        from '../api/create-order.js';
 import { POST as createSubscription }  from '../api/create-subscription.js';
 import { GET  as getCredits }          from '../api/get-credits.js';
+import { GET  as reportEntitlement }   from '../api/report-entitlement.js';
 import { POST as longevityCoach }      from '../api/longevity-coach.js';
 import { POST as razorpayWebhook }     from '../api/razorpay-webhook.js';
 import { POST as redeemCredit }        from '../api/redeem-credit.js';
@@ -48,6 +49,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/create-order':       createOrder,
   '/api/create-subscription': createSubscription,
   '/api/get-credits':        getCredits,
+  '/api/report-entitlement': reportEntitlement,
   '/api/longevity-coach':    longevityCoach,
   '/api/razorpay-webhook':   razorpayWebhook,
   '/api/redeem-credit':      redeemCredit,

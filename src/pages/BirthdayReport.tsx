@@ -9,6 +9,16 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { generateReportData, saveReport } from '@/services/BirthdayReportService';
 import { EmailService } from '@/services/EmailService';
+import { PLANET_COUNT } from '@/lib/reportFacts';
+
+// Server-computed entitlement powering the pricing-card state machine.
+interface Entitlement {
+  trialReportUsed: boolean;
+  credits: number;
+  isTrial: boolean;
+  trialDaysRemaining: number;
+  subscriptionActive: boolean;
+}
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -38,7 +48,7 @@ const CHECKLIST_ITEMS = [
   'Life path number + meaning',
   'Personal Year 2026 forecast',
   'Birthstone history & lore',
-  'Age on all 7 planets',
+  `Age on all ${PLANET_COUNT} planets`,
   'Generation portrait',
   'Personalised gift message',
 ];
@@ -68,6 +78,20 @@ const BirthdayReport = () => {
   const [reportSlug, setReportSlug] = useState('');
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
+  const [entitlement, setEntitlement] = useState<Entitlement | null>(null);
+
+  // Pull the authoritative, server-computed entitlement for the pricing card.
+  // Anything that gates money is decided here (and re-enforced in save-report);
+  // the client flags are only a fallback for display while this loads.
+  useEffect(() => {
+    if (!user?.id) { setEntitlement(null); return; }
+    let cancelled = false;
+    fetch(`/api/report-entitlement?userId=${encodeURIComponent(user.id)}`)
+      .then(r => r.json())
+      .then(d => { if (!cancelled && d && typeof d.credits === 'number') setEntitlement(d); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [user?.id]);
 
   // Progress animation
   useEffect(() => {
@@ -173,6 +197,34 @@ const BirthdayReport = () => {
     formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  // ── Pricing-card state machine (Fix 1) ──────────────────────────────────────
+  // Server entitlement is authoritative; fall back to client trial flags only
+  // until it loads. Five mutually-exclusive states, evaluated in priority order.
+  const ent = {
+    isTrial: entitlement?.isTrial ?? isInTrial,
+    trialDaysRemaining: entitlement?.trialDaysRemaining ?? trialDaysRemaining,
+    trialReportUsed: entitlement?.trialReportUsed ?? false,
+    credits: entitlement?.credits ?? 0,
+    subscriptionActive: entitlement?.subscriptionActive ?? isActiveSubscriber,
+  };
+
+  type CardState =
+    | { kind: 'trial_free'; days: number }
+    | { kind: 'sub_credits'; credits: number }
+    | { kind: 'trial_used' }
+    | { kind: 'sub_nocredits' }
+    | { kind: 'paid' };
+
+  let cardState: CardState;
+  if (ent.isTrial && !ent.trialReportUsed) cardState = { kind: 'trial_free', days: ent.trialDaysRemaining };
+  else if (ent.subscriptionActive && ent.credits > 0) cardState = { kind: 'sub_credits', credits: ent.credits };
+  else if (ent.isTrial) cardState = { kind: 'trial_used' };          // free report already used
+  else if (ent.subscriptionActive) cardState = { kind: 'sub_nocredits' }; // active sub, 0 credits
+  else cardState = { kind: 'paid' };
+
+  const isFreeState = cardState.kind === 'trial_free' || cardState.kind === 'sub_credits';
+  const ctaLabel = isFreeState ? 'Create Now →' : 'Create & unlock →';
+
   return (
     <div className="min-h-screen bg-white">
       <SEO
@@ -247,23 +299,24 @@ const BirthdayReport = () => {
         </div>
       </div>
 
-      {/* ── Pricing Card ─────────────────────────────────────────────────── */}
+      {/* ── Pricing Card (5-state machine) — hidden after generation ──────── */}
+      {phase !== 'success' && (
       <div className="py-6 px-4 bg-gray-50">
         <div className="max-w-sm mx-auto bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
           <div className="text-center mb-6">
             <div className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">Birthday Report</div>
-            {isInTrial ? (
+            {cardState.kind === 'trial_free' ? (
               <>
                 <div className="text-3xl font-black text-green-500">1 free report</div>
                 <div className="text-xs text-green-600 font-medium mt-1">
-                  Included in your trial{trialDaysRemaining > 0 ? ` · ${trialDaysRemaining} day${trialDaysRemaining !== 1 ? 's' : ''} remaining` : ''}
+                  Included in your trial{cardState.days > 0 ? ` · ${cardState.days} day${cardState.days !== 1 ? 's' : ''} remaining` : ''}
                 </div>
               </>
-            ) : isActiveSubscriber ? (
+            ) : cardState.kind === 'sub_credits' ? (
               <>
-                <div className="text-3xl font-black text-green-500">Included</div>
+                <div className="text-3xl font-black text-green-500">{cardState.credits} report credit{cardState.credits !== 1 ? 's' : ''} available</div>
                 <div className="text-xs text-green-600 font-medium mt-1">
-                  Unlocked automatically with your monthly report credits
+                  This report uses 1 · {cardState.credits - 1} remaining after
                 </div>
               </>
             ) : (
@@ -273,7 +326,13 @@ const BirthdayReport = () => {
                   <span className="text-gray-400">/</span>
                   <span className="text-2xl font-bold text-gray-700">$6.99</span>
                 </div>
-                <div className="text-xs text-gray-400 mt-1">India / Global · Launch price</div>
+                <div className="text-xs text-gray-400 mt-1">
+                  {cardState.kind === 'trial_used'
+                    ? 'Launch price · your free trial report has been used'
+                    : cardState.kind === 'sub_nocredits'
+                      ? 'Launch price · no credits left this month'
+                      : 'Launch price'}
+                </div>
               </>
             )}
           </div>
@@ -289,63 +348,17 @@ const BirthdayReport = () => {
             onClick={scrollToForm}
             className="w-full py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition-colors"
           >
-            Create Now →
+            {ctaLabel}
           </button>
           <p className="text-xs text-center text-gray-400 mt-3">Instant web link · Shareable · 30-day access</p>
-          {!isInTrial && !isActiveSubscriber && (
+          {!isFreeState && (
             <p className="text-xs text-center text-gray-500 mt-2">
               7-day money-back guarantee — full refund, no questions. <a href="mailto:hello@bornclock.com" className="underline hover:text-gray-700">hello@bornclock.com</a>
             </p>
           )}
         </div>
       </div>
-
-      {/* ── Sample Preview (blurred teaser) ──────────────────────────────── */}
-      <div className="py-14 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-3">A peek inside</h2>
-          <p className="text-center text-gray-500 mb-8 text-sm">Every section is personalised to their exact birthdate</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { icon: '🌟', title: 'Celebrity Twins', color: 'bg-rose-50' },
-              { icon: '♈', title: 'Zodiac Profiles', color: 'bg-amber-50' },
-              { icon: '🔢', title: 'Numerology', color: 'bg-purple-50' },
-              { icon: '🪐', title: 'Planetary Ages', color: 'bg-blue-50' },
-            ].map(card => (
-              <div
-                key={card.title}
-                className={`${card.color} rounded-2xl p-5 relative overflow-hidden`}
-                style={{ filter: 'blur(3px)', userSelect: 'none' }}
-              >
-                <div className="text-3xl mb-2">{card.icon}</div>
-                <div className="h-3 bg-gray-200 rounded mb-2 w-3/4" />
-                <div className="h-2 bg-gray-200 rounded mb-1 w-full" />
-                <div className="h-2 bg-gray-200 rounded mb-1 w-5/6" />
-                <div className="h-2 bg-gray-200 rounded w-4/6" />
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-6">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-500">
-              🔒 Generate a report to unlock the full view
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Gifting Ideas ────────────────────────────────────────────────── */}
-      <div className="py-6 px-4 bg-amber-50">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">A birthday gift they'll actually keep</h2>
-          <div className="flex flex-wrap justify-center gap-3">
-            {['🎂 Birthdays', '💑 Anniversaries', '🎓 Graduation', '👶 New Baby', '🏆 Retirement', '💌 Just Because'].map(tag => (
-              <span key={tag} className="px-4 py-2 bg-white rounded-full text-sm text-gray-700 shadow-sm border border-amber-200">
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
+      )}
 
       {/* ── Form / Loading / Success ──────────────────────────────────────── */}
       <div ref={formRef} className="py-8 px-4 bg-white" id="create-report">
@@ -581,6 +594,57 @@ const BirthdayReport = () => {
           )}
         </div>
       </div>
+
+      {/* ── Sample Preview (blurred teaser) — hidden after generation ─────── */}
+      {phase !== 'success' && (
+      <div className="py-14 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold text-center text-gray-900 mb-3">A peek inside</h2>
+          <p className="text-center text-gray-500 mb-8 text-sm">Every section is personalised to their exact birthdate</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { icon: '🌟', title: 'Celebrity Twins', color: 'bg-rose-50' },
+              { icon: '♈', title: 'Zodiac Profiles', color: 'bg-amber-50' },
+              { icon: '🔢', title: 'Numerology', color: 'bg-purple-50' },
+              { icon: '🪐', title: 'Planetary Ages', color: 'bg-blue-50' },
+            ].map(card => (
+              <div
+                key={card.title}
+                className={`${card.color} rounded-2xl p-5 relative overflow-hidden`}
+                style={{ filter: 'blur(3px)', userSelect: 'none' }}
+              >
+                <div className="text-3xl mb-2">{card.icon}</div>
+                <div className="h-3 bg-gray-200 rounded mb-2 w-3/4" />
+                <div className="h-2 bg-gray-200 rounded mb-1 w-full" />
+                <div className="h-2 bg-gray-200 rounded mb-1 w-5/6" />
+                <div className="h-2 bg-gray-200 rounded w-4/6" />
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-6">
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-500">
+              🔒 Generate a report to unlock the full view
+            </span>
+          </div>
+        </div>
+      </div>
+      )}
+
+      {/* ── Gifting Ideas — hidden after generation ──────────────────────── */}
+      {phase !== 'success' && (
+      <div className="py-6 px-4 bg-amber-50">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">A birthday gift they'll actually keep</h2>
+          <div className="flex flex-wrap justify-center gap-3">
+            {['🎂 Birthdays', '💑 Anniversaries', '🎓 Graduation', '👶 New Baby', '🏆 Retirement', '💌 Just Because'].map(tag => (
+              <span key={tag} className="px-4 py-2 bg-white rounded-full text-sm text-gray-700 shadow-sm border border-amber-200">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+      )}
 
       <Footer />
     </div>

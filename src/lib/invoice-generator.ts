@@ -274,8 +274,6 @@ export function generateInvoiceHTML(inv: InvoiceRecord): string {
     <div class="party">
       <h3>Supplier</h3>
       <div class="nm">${esc(SUPPLIER.legalName)}</div>
-      <div class="sm">${esc(SUPPLIER.address)}</div>
-      <div class="sm">${esc(SUPPLIER.address2)}</div>
       <div>GSTIN: ${esc(SUPPLIER.gstin)}</div>
       <div>LLPIN: ${esc(SUPPLIER.llpin)}</div>
       <div>State: ${esc(SUPPLIER.state)} (${esc(SUPPLIER.stateCode)})</div>

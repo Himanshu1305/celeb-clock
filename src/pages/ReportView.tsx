@@ -26,6 +26,8 @@ import { getNakshatraEssence } from '@/data/nakshatraEssence';
 import { getMoonSignEssence, MOON_SIGN_EXPLAINER } from '@/data/moonSignEssence';
 import { getSoulUrge, getPersonality } from '@/data/numerologyNameData';
 import { getVedicBirthstone, SECTION_EXPLAINERS, CLOSING_SECTION } from '@/data/reportContentAdditions';
+import { PLANET_COUNT } from '@/lib/reportFacts';
+import { westernZodiacPlural, chineseZodiacPlural } from '@/lib/zodiacPlurals';
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { NativeShareButton } from '@/components/NativeShareButton';
@@ -74,7 +76,7 @@ function LockedSectionsBlock() {
             { code: '02', name: 'Zodiac Profile', sub: 'Western, Chinese & Vedic' },
             { code: '03', name: 'Numerology & Life Path', sub: 'Life Path number, Personal Year forecast' },
             { code: '06', name: 'Cosmic Connections', sub: 'Birthstone & birth flower' },
-            { code: '07', name: 'Solar System Ages', sub: 'Your age across all 8 planets' },
+            { code: '07', name: 'Solar System Ages', sub: `Your age across all ${PLANET_COUNT} planets` },
             { code: '08', name: 'Generation Portrait', sub: 'Where you fit in history' },
           ].map(s => (
             <div key={s.code} className="flex items-center gap-3 px-4 py-3 rounded-xl"
@@ -1145,7 +1147,7 @@ const ReportView = () => {
                   )}
                   {((westernZodiac as any).famousPeople ?? []).length > 0 && (
                     <div className="bg-gray-50 rounded-xl p-4">
-                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Famous {westernZodiac.name}s</div>
+                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Famous {westernZodiacPlural(westernZodiac.name)}</div>
                       <p className="text-sm text-gray-600">{((westernZodiac as any).famousPeople ?? []).map((p: any) => p.name || p).join(' · ')}</p>
                     </div>
                   )}
@@ -1248,7 +1250,7 @@ const ReportView = () => {
                   )}
                   {(czd?.famousPeople ?? chineseZodiac.famous ?? []).length > 0 && (
                     <div className="bg-gray-50 rounded-xl p-4">
-                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Famous {chineseZodiac.animal}s</div>
+                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Famous {chineseZodiacPlural(chineseZodiac.animal)}</div>
                       <p className="text-sm text-gray-600">{(czd?.famousPeople ?? chineseZodiac.famous ?? []).map((p: any) => p.name || p).join(' · ')}</p>
                     </div>
                   )}
@@ -1416,6 +1418,8 @@ const ReportView = () => {
                     <p className="text-sm leading-relaxed" style={{ color: 'var(--ink)' }}>{moonResult.moonSignData.personality}</p>
                   )}
                 </div>
+
+                <p className="text-xs italic text-center mb-4" style={{ color: 'var(--muted)' }}>Moon sign approximated from the Moon's position at date of birth — birth time is not collected.</p>
 
                 {/* Nakshatra identity */}
                 <div className="rounded-2xl p-5 mb-4" style={{ background: 'var(--gold-tint)', border: '1px solid var(--gold-soft)' }}>
