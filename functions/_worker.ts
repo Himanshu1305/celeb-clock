@@ -13,6 +13,7 @@ import { GET  as dailyCronGet,
 import { POST as opsMonitor }          from '../api/ops-monitor.js';
 import { POST as opsDigest }           from '../api/ops-digest.js';
 import { POST as invoiceSweep }        from '../api/invoice-sweep.js';
+import { GET  as invoicePdf }          from '../api/invoice-pdf.js';
 import { POST as subscribe }           from '../api/subscribe.js';
 import { POST as weeklyDigest }        from '../api/weekly-digest.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
@@ -33,6 +34,7 @@ const BRIDGE_KEYS = [
   'VITE_RAZORPAY_PLAN_INDIA_MONTHLY', 'VITE_RAZORPAY_PLAN_INDIA_ANNUAL',
   'VITE_RAZORPAY_PLAN_GLOBAL_MONTHLY', 'VITE_RAZORPAY_PLAN_GLOBAL_ANNUAL',
   'ADMIN_EMAIL', 'OPS_BASE_URL',
+  'BROWSER_RENDERING_TOKEN', 'CF_ACCOUNT_ID',
 ];
 
 function bridgeEnv(env: Env): void {
@@ -60,6 +62,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/ops-monitor':        opsMonitor,
   '/api/ops-digest':         opsDigest,
   '/api/invoice-sweep':      invoiceSweep,
+  '/api/invoice-pdf':        invoicePdf,
   '/api/subscribe':          subscribe,
   '/api/weekly-digest':      weeklyDigest,
   '/api/unsubscribe':        unsubscribe,

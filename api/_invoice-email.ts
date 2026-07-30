@@ -1,6 +1,9 @@
-// Sends the GST tax invoice as an .html attachment via Resend.
+// Sends the GST tax invoice via Resend. Attaches a REAL PDF (rendered by the
+// Cloudflare Browser Rendering path in ./_pdf) when available, and falls back to
+// the HTML attachment on any rendering failure — the email always sends.
 // Web APIs only (Cloudflare Workers). Mirrors the Resend direct-fetch pattern in
 // api/_email.ts. No `env` param — reads process.env like the rest of the API.
+import { renderPdfFromHtml, bytesToBase64 } from './_pdf.js';
 
 const FROM_EMAIL = 'BornClock <hello@bornclock.com>';
 
@@ -22,11 +25,23 @@ export async function sendInvoiceEmail(to: string, invoiceNo: string, html: stri
   if (!to) { console.error('[invoice-email] no recipient'); return; }
 
   const safeNo = invoiceNo.replace(/\//g, '-');
+
+  // Render a real PDF. NON-FATAL: null → attach the HTML exactly as before. The
+  // email body copy branches on which attachment was actually used, so the text is
+  // always truthful for the file the customer receives.
+  const pdf = await renderPdfFromHtml(html, invoiceNo);
+  const attachment = pdf
+    ? { filename: `${safeNo}.pdf`, content: bytesToBase64(pdf) }
+    : { filename: `${safeNo}.html`, content: base64Utf8(html) };
+  const attachLine = pdf
+    ? `Your GST tax invoice <strong>${safeNo}</strong> is attached as a PDF — open it in any PDF viewer.`
+    : `Your GST tax invoice <strong>${safeNo}</strong> is attached as an HTML file — open it in any browser and print or save it as a PDF.`;
+
   const body = `<!doctype html><html><body style="margin:0;background:#FBF6EA;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
     <div style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #E6D8B8;border-radius:12px;padding:28px">
       <div style="font-weight:800;color:#103A5C;font-size:20px;margin-bottom:2px">BornClock</div>
       <div style="font-size:11px;color:#B8862F;font-weight:600;margin-bottom:16px">A product of USD Vision AI LLP</div>
-      <p style="font-size:14px;color:#0C1A2B;margin:0 0 12px">Thank you for your purchase. Your GST tax invoice <strong>${safeNo}</strong> is attached as an HTML file — open it in any browser and print or save it as a PDF.</p>
+      <p style="font-size:14px;color:#0C1A2B;margin:0 0 12px">Thank you for your purchase. ${attachLine}</p>
       <p style="font-size:13px;color:#5A6A7A;margin:0">Questions? Reply to this email or write to <a href="mailto:hello@bornclock.com" style="color:#103A5C">hello@bornclock.com</a>.</p>
     </div></body></html>`;
 
@@ -39,7 +54,7 @@ export async function sendInvoiceEmail(to: string, invoiceNo: string, html: stri
         to: [to],
         subject: `Your BornClock invoice – ${invoiceNo}`,
         html: body,
-        attachments: [{ filename: `${safeNo}.html`, content: base64Utf8(html) }],
+        attachments: [attachment],
       }),
     });
     if (!resp.ok) {

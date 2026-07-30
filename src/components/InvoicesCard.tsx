@@ -50,11 +50,42 @@ export function InvoicesCard({ userId }: { userId: string }) {
     return () => { cancelled = true; };
   }, [userId]);
 
+  // Fetch a real PDF from the Worker (auth + ownership enforced server-side). On
+  // any failure — no session, network error, non-2xx — fall back to the local
+  // print-to-PDF flow (the previous behaviour) so Download always does something.
   const download = async (inv: InvoiceRecord) => {
     setDownloading(inv.invoice_no);
-    try {
+    const printFallback = async () => {
       const { generateInvoiceHTML } = await import('@/lib/invoice-generator');
       printInvoiceHTML(generateInvoiceHTML(inv));
+    };
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) { await printFallback(); return; }
+
+      const res = await fetch(`/api/invoice-pdf?invoice_no=${encodeURIComponent(inv.invoice_no)}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) { await printFallback(); return; }
+
+      const ct = res.headers.get('content-type') || '';
+      if (ct.includes('application/pdf')) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${inv.invoice_no.replace(/\//g, '-')}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } else {
+        // Endpoint returned HTML (rendering outage) — print it so the user can still save a PDF.
+        printInvoiceHTML(await res.text());
+      }
+    } catch {
+      await printFallback();
     } finally {
       setTimeout(() => setDownloading(null), 800);
     }
