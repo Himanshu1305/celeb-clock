@@ -160,8 +160,11 @@ Deno.serve(async (req) => {
     // an email failure must never undo a successful deletion.
     if (userEmail) {
       const userHtml = `<!doctype html><html><body style="margin:0;background:#FBF6EA;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
-        <div style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #E6D8B8;border-radius:12px;padding:28px">
-          <div style="font-weight:800;color:#103A5C;font-size:20px;margin-bottom:16px">BornClock</div>
+        <div style="max-width:520px;margin:0 auto">
+        <div style="text-align:center;padding-bottom:20px">
+          <img src="https://bornclock.com/bornclock-logo.png" alt="BornClock" height="44" width="165" style="height:44px;width:165px;display:inline-block;border:0" border="0" />
+        </div>
+        <div style="background:#fff;border:1px solid #E6D8B8;border-radius:12px;padding:28px">
           <p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 14px;">
             Your BornClock account and personal data have been permanently deleted, and any active subscription has been cancelled.
           </p>
@@ -176,6 +179,8 @@ Deno.serve(async (req) => {
             Your data is gone but your story isn't — you're welcome back anytime at
             <a href="https://bornclock.com" style="color:#103A5C">bornclock.com</a>.
           </p>
+        </div>
+        <p style="text-align:center;font-size:12px;color:#9ca3af;font-style:italic;margin:18px 0 0">Know your time. Live it well.</p>
         </div></body></html>`
       await sendViaResend(userEmail, 'Your BornClock account has been deleted', userHtml)
 

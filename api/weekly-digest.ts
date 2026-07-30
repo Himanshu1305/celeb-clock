@@ -12,7 +12,13 @@
 import { createClient } from '@supabase/supabase-js';
 
 const FROM_EMAIL = 'BornClock <hello@bornclock.com>';
+const LOGO_URL = 'https://bornclock.com/bornclock-logo.png';
 const ADMIN_FALLBACK = 'himanshu1305@gmail.com';
+
+// Honesty register (mirrors the fitness pages / report Biorhythm note): the digest
+// carries ONE gentle prompt, never a prescription or performance/medical claim.
+const DIGEST_PROMPT =
+  'One gentle prompt for the week: rhythm charts are a reflection tool, not a plan — the thing that actually moves the needle is showing up consistently. Pick one small habit and just don\'t miss twice.';
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -57,10 +63,18 @@ function digestHtml(opts: {
 
   if (dob) {
     const dtb = daysUntilBirthday(dob, today);
-    const bio = biorhythm(dob, today);
-    subject = dtb === 0 ? '🎂 Happy birthday from BornClock!' : `Your weekly reading — ${dtb} days to your birthday`;
+    subject = dtb === 0 ? '🎂 Happy birthday from BornClock!' : `Your week ahead — ${dtb} days to your birthday`;
     bits.push(`<p style="font-size:16px;color:#0C1A2B;margin:0 0 6px"><strong>${dtb === 0 ? "It's your birthday today! 🎉" : `${dtb} day${dtb === 1 ? '' : 's'} until your next birthday.`}</strong></p>`);
-    bits.push(`<p style="font-size:14px;color:#4b5563;margin:0 0 16px">This week's biorhythm — physical ${bio.physical}%, emotional ${bio.emotional}%, intellectual ${bio.intellectual}%.</p>`);
+
+    // 7-day rhythm outline (same engine as the fitness widgets) — an awareness cue.
+    const outline: string[] = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(today); d.setDate(today.getDate() + i);
+      const b = biorhythm(dob, d);
+      const label = i === 0 ? 'Today' : d.toLocaleDateString('en-GB', { weekday: 'short' });
+      outline.push(`<tr><td style="padding:2px 8px 2px 0;color:#6b7280">${label}</td><td style="padding:2px 0;color:#4b5563">P ${b.physical > 0 ? '+' : ''}${b.physical} · E ${b.emotional > 0 ? '+' : ''}${b.emotional} · M ${b.intellectual > 0 ? '+' : ''}${b.intellectual}</td></tr>`);
+    }
+    bits.push(`<p style="font-size:14px;color:#0C1A2B;margin:14px 0 4px"><strong>Your 7-day rhythm outline</strong> <span style="color:#8A9BA8;font-weight:400">(a check-in, not a plan)</span></p><table style="font-size:12px;border-collapse:collapse">${outline.join('')}</table>`);
   }
 
   const celebRow = (c: any) => {
@@ -70,18 +84,28 @@ function digestHtml(opts: {
   if (global.length) bits.push(`<p style="font-size:14px;color:#0C1A2B;margin:16px 0 6px"><strong>Celebrities with birthdays this week</strong></p><ul style="font-size:14px;color:#4b5563;padding-left:18px;margin:0">${global.map(celebRow).join('')}</ul>`);
   if (india.length) bits.push(`<p style="font-size:14px;color:#0C1A2B;margin:16px 0 6px"><strong>From India 🇮🇳</strong></p><ul style="font-size:14px;color:#4b5563;padding-left:18px;margin:0">${india.map(celebRow).join('')}</ul>`);
 
+  // One gentle fitness/habit prompt in the honesty register.
+  bits.push(`<p style="font-size:13px;color:#4b5563;background:#FBF6EA;border-left:3px solid #B8862F;border-radius:0 8px 8px 0;padding:10px 12px;margin:16px 0 0">${DIGEST_PROMPT}</p>`);
+  // One discovery link — this week's notable birthdays.
+  bits.push(`<p style="font-size:13px;color:#0C1A2B;margin:14px 0 0"><a href="https://bornclock.com/born-on" style="color:#103A5C;font-weight:600">Discover who shares your birthday this week →</a></p>`);
+
   const html = `<!doctype html><html><body style="margin:0;background:#FBF6EA;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
-    <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:12px;padding:28px;border:1px solid #E6D8B8">
-      <div style="font-weight:800;color:#103A5C;font-size:18px;margin-bottom:2px">BornClock</div>
-      <div style="font-size:12px;color:#8A9BA8;margin-bottom:18px">Hi ${name || 'there'}, here's your weekly reading.</div>
-      ${bits.join('\n')}
-      <div style="margin-top:24px;text-align:center">
-        <a href="https://bornclock.com/" style="display:inline-block;background:#103A5C;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:8px">Open BornClock</a>
+    <div style="max-width:560px;margin:0 auto">
+      <div style="text-align:center;padding-bottom:20px">
+        <img src="${LOGO_URL}" alt="BornClock" height="44" width="165" style="height:44px;width:165px;display:inline-block;border:0" border="0" />
       </div>
-      <p style="font-size:11px;color:#9DB0BF;margin-top:22px;text-align:center">
-        You're getting this because you asked for weekly readings.
-        <a href="${unsubUrl}" style="color:#9DB0BF">Unsubscribe</a>.
-      </p>
+      <div style="background:#fff;border-radius:12px;padding:28px;border:1px solid #E6D8B8">
+        <div style="font-size:13px;color:#8A9BA8;margin-bottom:18px">Hi ${name || 'there'}, here's your week ahead.</div>
+        ${bits.join('\n')}
+        <div style="margin-top:24px;text-align:center">
+          <a href="https://bornclock.com/" style="display:inline-block;background:#103A5C;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:8px">Open BornClock</a>
+        </div>
+        <p style="font-size:11px;color:#9DB0BF;margin-top:22px;text-align:center">
+          You're getting this because you asked for weekly readings.
+          <a href="${unsubUrl}" style="color:#9DB0BF">Unsubscribe</a>.
+        </p>
+      </div>
+      <p style="text-align:center;font-size:12px;color:#9ca3af;font-style:italic;margin:18px 0 0">Know your time. Live it well.</p>
     </div></body></html>`;
   return { subject, html };
 }
@@ -95,6 +119,15 @@ async function handler(request: Request): Promise<Response> {
   if (request.method === 'POST') { try { body = await request.json(); } catch { body = {}; } }
 
   const isTest = body?.test === true;
+
+  // Real (non-test) sends are gated behind DIGEST_LIVE. Until the founder reviews a
+  // test render and sets DIGEST_LIVE=true, live sends NO-OP with a log line. Test
+  // renders to ADMIN_EMAIL always work so a sample can be reviewed.
+  if (!isTest && process.env.DIGEST_LIVE !== 'true') {
+    console.log('[weekly-digest] skipped: DIGEST_LIVE not enabled (set DIGEST_LIVE=true to go live)');
+    return json({ sent: false, skipped: true, reason: 'DIGEST_LIVE not enabled' });
+  }
+
   const to = isTest ? (process.env.ADMIN_EMAIL || ADMIN_FALLBACK) : (body?.to ?? '');
   if (!to) return json({ error: 'Missing recipient (to) or test:true' }, 400);
 

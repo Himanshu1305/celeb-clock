@@ -356,6 +356,47 @@ export async function getRankedBirthdayCelebrities(
 }
 
 /**
+ * Top celebrities born in a given MONTH (1-12), ranked by sitelinks DESC.
+ * Powers the /born-in-{month} hub pages. Filters birth_month_day 'MM-%'.
+ */
+export async function getRankedMonthCelebrities(
+  monthNumber: number,
+  limit: number = 12,
+): Promise<CelebrityBirthdayResult[]> {
+  try {
+    const mm = String(monthNumber).padStart(2, '0');
+    // Bound the query (8s) so a slow month-wide scan can't hang networkidle0 during
+    // prerender — the hub still renders its static content and celebs fill in later.
+    const { data, error } = await supabase
+      .from('celebrity_sitelinks')
+      .select('name, birth_date, death_date, sitelinks, nationality, nationality_code, occupation, known_for, wikipedia_url, wikidata_id')
+      .like('birth_month_day', `${mm}-%`)
+      .order('sitelinks', { ascending: false })
+      .limit(limit)
+      .abortSignal(AbortSignal.timeout(8000));
+
+    if (error || !data || data.length === 0) return [];
+
+    return data.map(c => ({
+      name: c.name,
+      birthDate: c.birth_date,
+      deathDate: c.death_date,
+      sitelinks: c.sitelinks ?? 0,
+      nationality: c.nationality,
+      nationalityCode: c.nationality_code,
+      occupation: c.occupation,
+      knownFor: c.known_for ?? null,
+      wikipediaUrl: c.wikipedia_url,
+      wikidataId: c.wikidata_id,
+      isLiving: !c.death_date,
+    }));
+  } catch (err) {
+    console.error('BirthdaySearchService: month celebrity query failed (returning []):', err);
+    return [];
+  }
+}
+
+/**
  * Returns celebrities for a date matching a specific country that are NOT
  * already in the main global list (deduplicated by name, case-insensitive).
  * Uses nationality_code from the DB when present, falls back to the local map.

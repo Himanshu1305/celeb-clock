@@ -42,8 +42,12 @@ test('Explore ∩ (main ∪ More) = ∅', async ({ page }) => {
   const moreHrefs = await openMenu(page, 'More');
   const exploreHrefs = await openMenu(page, 'Explore');
 
-  // Explore is exactly the three unique discovery hubs.
-  expect(new Set(exploreHrefs)).toEqual(new Set(['/born-on/india', '/answers', '/compatibility']));
+  // Explore is exactly the discovery hubs. Updated for Overnight Batch 2, which added
+  // the growth entries "Born in Each Month", "Biorhythm Workout" and "Energy Forecast".
+  expect(new Set(exploreHrefs)).toEqual(new Set([
+    '/born-in-january', '/born-on/india', '/biorhythm-workout-calculator',
+    '/energy-forecast', '/answers', '/compatibility',
+  ]));
 
   // No Explore destination is duplicated in the main bar or More.
   const mainPlusMore = new Set([...mainHrefs, ...moreHrefs]);

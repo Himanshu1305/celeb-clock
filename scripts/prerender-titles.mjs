@@ -214,8 +214,19 @@ function parseBornOnSlug(slug) {
  * The description may be a template — born-on pages get celeb names injected
  * by the caller after querying the live DOM.
  */
+// Fitness & rhythm pages (Phase B) — exact-match titles (mirror src/data/fitnessPages.ts).
+const FITNESS = {
+  '/biorhythm-workout-calculator': { title: 'Biorhythm Workout Calculator — A Daily Training Check-In | BornClock', description: 'A free biorhythm workout check-in: enter your birth date to see today’s physical, emotional and mental rhythm plus a 7-day outline. A reflection prompt, not a training prescription.' },
+  '/best-day-to-start-a-habit':    { title: 'Best Day to Start a Habit — Timing vs. Consistency | BornClock', description: 'When is the best day to start a new habit? The honest answer is “the next day you’ll actually do it.” See your next rhythm upswing as a gentle nudge, and the real science of habit formation.' },
+  '/cycle-syncing-for-men':        { title: 'Cycle Syncing for Men — Rhythm Awareness for Everyone | BornClock', description: 'Cycle syncing isn’t only about the menstrual cycle. Everyone has daily and longer rhythms worth noticing. A plain, honest look at rhythm awareness for men — with a birth-date rhythm check-in.' },
+  '/why-am-i-tired-some-days':     { title: 'Why Am I Tired Some Days and Not Others? | BornClock', description: 'Why do some days feel low-energy for no clear reason? An honest look at sleep, circadian rhythm and natural day-to-day variation — plus a birth-date rhythm check-in to notice your own pattern.' },
+  '/best-time-to-work-out':        { title: 'Best Time to Work Out — What the Science Actually Says | BornClock', description: 'Morning or evening workouts? The honest answer: the best time is the one you’ll do consistently. A clear look at chronotype, consistency and sleep — with a rhythm check-in alongside.' },
+  '/energy-forecast':              { title: 'Energy Forecast — Your 7-Day Rhythm Check-In | BornClock', description: 'When will you have energy this week? A birth-date rhythm check-in that outlines your next 7 days as a gentle awareness prompt — plus the real drivers of weekly energy. Not a prediction.' },
+};
+
 export function getTitleForRoute(route) {
   if (route === '/') return null;
+  if (FITNESS[route]) return FITNESS[route];
 
   // /zodiac/:sign
   if (route.startsWith('/zodiac/')) {
@@ -236,6 +247,18 @@ export function getTitleForRoute(route) {
     const month = route.slice(12);
     const z = BIRTHSTONE[month];
     return z ? { title: z.title, description: z.desc } : null;
+  }
+
+  // /born-in-:month  (month hub pages)
+  if (route.startsWith('/born-in-')) {
+    const slug = route.slice(9);
+    const idx = MONTH_NAMES.findIndex(m => m.toLowerCase() === slug);
+    if (idx < 1) return null;
+    const monthName = MONTH_NAMES[idx];
+    return {
+      title: `Born in ${monthName} — Zodiac, Birthstone & Famous Birthdays | BornClock`,
+      description: `What does being born in ${monthName} mean? Your ${monthName} zodiac signs, birthstone, birth flowers, famous people born in ${monthName}, and every date in the month.`,
+    };
   }
 
   // /chinese-zodiac/:animal

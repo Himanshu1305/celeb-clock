@@ -12,7 +12,7 @@ import {
   Users, Globe, BarChart3, Gift, Shield, ExternalLink,
   RefreshCw, Crown, Clock, CheckCircle, Plus,
   LayoutDashboard, ArrowLeft, AlertTriangle, UserCheck, Mail,
-  Activity, ChevronDown,
+  Activity, ChevronDown, FileText,
 } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -73,6 +73,15 @@ interface BusinessMetrics {
   revenue30d: number | null;
   revenueCount30d: number | null;
   revenueNote: string | null;
+  // GST invoice revenue split (Phase F) — from the invoices table (authoritative)
+  invInrTotal: number | null;
+  invInrCount: number | null;
+  invUsdTotal: number | null;
+  invUsdCount: number | null;
+  invExportCount: number | null;
+  invThisMonthINR: number | null;
+  invLastMonthINR: number | null;
+  invoiceNote: string | null;
 }
 
 interface ConfirmState {
@@ -319,6 +328,36 @@ export default function Admin() {
         revenueNote = 'payments table not accessible (RLS policy needed)';
       }
 
+      // --- GST invoices split by currency (authoritative; owner-read RLS by default) ---
+      let invInrTotal: number | null = null, invInrCount: number | null = null;
+      let invUsdTotal: number | null = null, invUsdCount: number | null = null;
+      let invExportCount: number | null = null;
+      let invThisMonthINR: number | null = null, invLastMonthINR: number | null = null;
+      let invoiceNote: string | null = null;
+      try {
+        const { data: invs, error: invErr } = await db.from('invoices').select('currency, tax_mode, gross_amount, invoice_date');
+        if (invErr) throw invErr;
+        const rows = (invs ?? []) as { currency: string; tax_mode: string; gross_amount: number | string; invoice_date: string }[];
+        const num = (v: number | string) => (typeof v === 'string' ? parseFloat(v) : v) || 0;
+        const inr = rows.filter(r => r.currency === 'INR');
+        const usd = rows.filter(r => r.currency === 'USD');
+        invInrTotal = inr.reduce((s, r) => s + num(r.gross_amount), 0);
+        invInrCount = inr.length;
+        invUsdTotal = usd.reduce((s, r) => s + num(r.gross_amount), 0);
+        invUsdCount = usd.length;
+        invExportCount = rows.filter(r => r.tax_mode === 'EXPORT').length;
+        const now = new Date();
+        const thisStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        const nextStart = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        const lastStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const monthSum = (a: Date, b: Date) => inr.filter(r => { const d = new Date(r.invoice_date); return d >= a && d < b; }).reduce((s, r) => s + num(r.gross_amount), 0);
+        invThisMonthINR = monthSum(thisStart, nextStart);
+        invLastMonthINR = monthSum(lastStart, thisStart);
+        if (rows.length === 0) invoiceNote = 'No invoices readable under owner-read RLS. Apply NOTES-admin-invoice-read.sql (admin SELECT policy) to see all-account revenue.';
+      } catch {
+        invoiceNote = 'invoices not accessible under RLS — apply supabase/migrations/NOTES-admin-invoice-read.sql (admin SELECT policy).';
+      }
+
       setMetrics({
         signupsTotal: signupsTotal ?? 0,
         signups7d: signups7d ?? 0,
@@ -338,6 +377,14 @@ export default function Admin() {
         revenue30d,
         revenueCount30d,
         revenueNote,
+        invInrTotal,
+        invInrCount,
+        invUsdTotal,
+        invUsdCount,
+        invExportCount,
+        invThisMonthINR,
+        invLastMonthINR,
+        invoiceNote,
       });
     } catch (e) {
       console.error('fetchMetrics:', e);
@@ -596,6 +643,28 @@ export default function Admin() {
                 <StatCard label="Revenue (30d)" value={metrics.revenue30d != null ? `₹${(metrics.revenue30d / 100).toLocaleString('en-IN')}` : '—'} Icon={Clock} color="bg-emerald-500"
                   sub={metrics.revenueCount30d != null ? `${metrics.revenueCount30d} transactions` : undefined} />
               </div>
+            )}
+          </div>
+
+          {/* GST Invoices — revenue split by currency (authoritative: invoices table) */}
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">GST Invoices — Revenue by Currency</p>
+            {metrics.invoiceNote ? (
+              <p className="text-sm text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">{metrics.invoiceNote}</p>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                  <StatCard label="INR revenue" value={`₹${(metrics.invInrTotal ?? 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} Icon={BarChart3} color="bg-emerald-600"
+                    sub={`${metrics.invInrCount ?? 0} invoice${metrics.invInrCount === 1 ? '' : 's'}`} />
+                  <StatCard label="USD revenue" value={`$${(metrics.invUsdTotal ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} Icon={BarChart3} color="bg-indigo-600"
+                    sub={`${metrics.invUsdCount ?? 0} invoice${metrics.invUsdCount === 1 ? '' : 's'}`} />
+                  <StatCard label="Export invoices" value={metrics.invExportCount ?? 0} Icon={FileText} color="bg-amber-600"
+                    sub="GSTR-1 Table 6A" />
+                  <StatCard label="This month (INR)" value={`₹${(metrics.invThisMonthINR ?? 0).toLocaleString('en-IN')}`} Icon={Clock} color="bg-emerald-500"
+                    sub={`Last month ₹${(metrics.invLastMonthINR ?? 0).toLocaleString('en-IN')}`} />
+                </div>
+                <p className="text-xs text-muted-foreground">Authoritative figures from the invoices table. Export invoices are the zero-rated (LUT) supplies to report in GSTR-1 Table 6A.</p>
+              </>
             )}
           </div>
 
@@ -891,7 +960,7 @@ export default function Admin() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {[
           { label: 'Database',   status: 'Supabase — Connected ✅',         href: 'https://supabase.com' },
-          { label: 'Hosting',    status: 'Vercel — Live ✅',                 href: 'https://vercel.com' },
+          { label: 'Hosting',    status: 'Cloudflare Workers — Live ✅',      href: 'https://dash.cloudflare.com' },
           { label: 'Domain',     status: 'bornclock.com — Active ✅',        href: 'https://bornclock.com' },
           { label: 'Test Suite', status: '158/158 tests passing ✅',          href: null },
         ].map(({ label, status, href }) => (
@@ -938,7 +1007,8 @@ export default function Admin() {
           <div className="flex flex-wrap gap-3">
             {[
               { label: 'View Live Site →',           href: 'https://bornclock.com' },
-              { label: 'Vercel Dashboard →',         href: 'https://vercel.com' },
+              { label: 'Cloudflare Dashboard →',     href: 'https://dash.cloudflare.com' },
+              { label: 'Worker (workers.dev) →',     href: 'https://bornclock.usdvisionai.workers.dev' },
               { label: 'Supabase Dashboard →',       href: 'https://supabase.com' },
               { label: 'Google Search Console →',    href: 'https://search.google.com/search-console' },
               { label: 'Staging Site →',             href: 'https://staging.bornclock.com' },

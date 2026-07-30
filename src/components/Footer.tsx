@@ -67,6 +67,9 @@ export const Footer = () => {
           <div>
             <h3 className="font-heading font-semibold text-foreground mb-3 text-sm">Explore</h3>
             <ul className="space-y-2 text-sm">
+              <li><Link to="/born-in-january" className="text-muted-foreground hover:text-accent transition-colors">Born in Each Month</Link></li>
+              <li><Link to="/biorhythm-workout-calculator" className="text-muted-foreground hover:text-accent transition-colors">Biorhythm Workout</Link></li>
+              <li><Link to="/energy-forecast" className="text-muted-foreground hover:text-accent transition-colors">Energy Forecast</Link></li>
               <li><Link to="/born-on/india" className="text-muted-foreground hover:text-accent transition-colors">Indian Celebrities by Date</Link></li>
               <li><Link to="/celebrity-birthday" className="text-muted-foreground hover:text-accent transition-colors">Celebrity Birthdays</Link></li>
               <li><Link to="/todays-birthdays" className="text-muted-foreground hover:text-accent transition-colors">Today's Birthdays</Link></li>

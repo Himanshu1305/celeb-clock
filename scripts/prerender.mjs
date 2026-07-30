@@ -23,6 +23,9 @@ const DIST = join(ROOT, 'dist');
 
 const CONCURRENCY = 8;
 const TOTAL_TIME_LIMIT_MS = 25 * 60 * 1000; // 25 minutes
+// 15s: keep per-route timeouts CHEAP so a burst of slow network-heavy routes can't
+// consume the total time budget and cause later routes to be skipped. Routes that
+// time out fall back to SPA rendering at runtime (assets not_found_handling=SPA).
 const ROUTE_TIMEOUT_MS = 15_000;
 const startTime = Date.now();
 

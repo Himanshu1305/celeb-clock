@@ -35,6 +35,7 @@ const BRIDGE_KEYS = [
   'VITE_RAZORPAY_PLAN_GLOBAL_MONTHLY', 'VITE_RAZORPAY_PLAN_GLOBAL_ANNUAL',
   'ADMIN_EMAIL', 'OPS_BASE_URL',
   'BROWSER_RENDERING_TOKEN', 'CF_ACCOUNT_ID',
+  'DIGEST_LIVE',
 ];
 
 function bridgeEnv(env: Env): void {
@@ -117,6 +118,14 @@ export default {
         return;
       case '0 9 * * 0':                 // digest — Sunday 09:00 UTC
         ctx.waitUntil(fetch(`${base}/api/ops-digest`, { method: 'POST' }));
+        // Weekly "Your Week Ahead" subscriber digest — GATED. No-op with a log
+        // until the founder reviews a test render and sets DIGEST_LIVE=true. The
+        // subscriber broadcast itself is a deliberate follow-up (not sent here).
+        if (process.env.DIGEST_LIVE === 'true') {
+          console.log('[weekly-digest] DIGEST_LIVE enabled — subscriber broadcast wiring pending founder review');
+        } else {
+          console.log('[weekly-digest] Sunday cron no-op (DIGEST_LIVE not set)');
+        }
         return;
       default:
         return cronHandler.scheduled(event, env, ctx);

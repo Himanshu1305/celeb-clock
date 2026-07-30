@@ -15,6 +15,10 @@ import Upgrade from "./pages/Upgrade";
 import Pricing from "./pages/Pricing";
 import Zodiac from "./pages/Zodiac";
 import Birthstone from "./pages/Birthstone";
+import MonthHub from "./pages/MonthHub";
+import { MONTH_HUB_DATA } from "./data/monthHubData";
+import FitnessRhythmPage from "./pages/FitnessRhythmPage";
+import { FITNESS_PAGES } from "./data/fitnessPages";
 import LifeExpectancy from "./pages/LifeExpectancy";
 import CelebrityBirthday from "./pages/CelebrityBirthday";
 import Blog from "./pages/Blog";
@@ -163,6 +167,12 @@ const App = () => (
               <Route path="/compatibility" element={<CompatibilityPage />} />
               <Route path="/compatibility/:sign1/:sign2" element={<CompatibilityPage />} />
               <Route path="/rashi-ratna" element={<RashiRatnaPage />} />
+              {MONTH_HUB_DATA.map(m => (
+                <Route key={m.slug} path={`/born-in-${m.slug}`} element={<MonthHub />} />
+              ))}
+              {FITNESS_PAGES.map(p => (
+                <Route key={p.slug} path={`/${p.slug}`} element={<FitnessRhythmPage />} />
+              ))}
               <Route path="/born-on" element={<BornOnIndex />} />
               <Route path="/born-on/india" element={<BornOnIndiaIndex />} />
               <Route path="/born-on/:slug/india" element={<BornOnDayIndia />} />

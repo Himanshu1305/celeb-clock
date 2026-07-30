@@ -11,6 +11,7 @@ import { CountryExtrasSection } from '@/components/CountryExtrasSection';
 import { getZodiacSign } from '@/data/birthdayPersonality';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
 import { getNumerologyByNumber } from '@/data/numerologyData';
+import { getNationalDays } from '@/data/nationalDays';
 import { ArrowLeft, ArrowRight, ArrowRightCircle, Star } from 'lucide-react';
 import indiaDates from '@/data/indiaBornOnDates.json';
 
@@ -144,11 +145,14 @@ export default function BornOnDay() {
   const bNumData = getNumerologyByNumber(bNum);
   const season = seasonNote(month, day);
   const daysUntil = daysUntilNext(month, day);
+  const nationalDays = getNationalDays(month, day);
+  const primaryNationalDay = nationalDays[0] ?? null;
 
   const topNames = celebrities.slice(0, 3).map(c => c.name);
-  const metaDesc = topNames.length > 0
+  const nationalDaySuffix = primaryNationalDay ? ` Also ${primaryNationalDay.country}'s ${primaryNationalDay.dayName}.` : '';
+  const metaDesc = (topNames.length > 0
     ? `Famous people born on ${monthName} ${day} (${zodiac.sign}) include ${topNames.join(', ')}. Day ${doy} of the year — discover zodiac, birthstone, and birthday insights.`
-    : `Discover celebrities born on ${monthName} ${day} — ${zodiac.sign} (${zodiac.element}), birthstone ${birthstone?.primaryStone ?? ''}, day ${doy} of the year.`;
+    : `Discover celebrities born on ${monthName} ${day} — ${zodiac.sign} (${zodiac.element}), birthstone ${birthstone?.primaryStone ?? ''}, day ${doy} of the year.`) + nationalDaySuffix;
 
   const jsonLd = celebrities.length > 0 ? {
     '@context': 'https://schema.org',
@@ -212,6 +216,7 @@ export default function BornOnDay() {
             {topNames.length > 0
               ? `Famous people born on ${monthName} ${day} include ${topNames.join(', ')}. It is day ${doy} of the year, and everyone born on this date is a ${zodiac.sign} (${zodiac.element} sign).`
               : `${monthName} ${day} is day ${doy} of the year. Everyone born on this date is a ${zodiac.sign} (${zodiac.element} sign). See the notable people born on ${monthName} ${day} below.`}
+            {primaryNationalDay && ` ${monthName} ${day} is also ${primaryNationalDay.country}'s ${primaryNationalDay.dayName}.`}
           </p>
         </div>
 
@@ -293,6 +298,24 @@ export default function BornOnDay() {
             <Link to={`/numerology/${bNum}`} className="text-primary hover:underline text-sm mt-3 inline-block">
               Full numerology {bNum} guide →
             </Link>
+          </div>
+        )}
+
+        {/* National days on this date (only when the date has entries) */}
+        {nationalDays.length > 0 && (
+          <div className="bg-card border border-border rounded-xl p-6 mb-6">
+            <h2 className="font-semibold text-lg text-foreground mb-3">National days on {monthName} {day}</h2>
+            <ul className="space-y-2">
+              {nationalDays.map(nd => (
+                <li key={`${nd.country}-${nd.dayName}`} className="flex items-start gap-2 text-sm">
+                  <span className="text-lg leading-none">{nd.flag}</span>
+                  <span>
+                    <strong className="text-foreground">{nd.country}</strong>
+                    <span className="text-muted-foreground"> — {nd.dayName}. {nd.note}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
 

@@ -135,6 +135,16 @@ function bornOnRoutes() {
 
 export const STATIC_ROUTES = [
   '/',
+  // Growth pages FIRST (Overnight Batch 2): the prerender has a 25-min budget and
+  // skips its tail; keeping these 18 high-value pages near the front guarantees they
+  // prerender before the large born-on/india tail can exhaust the budget.
+  ...MONTH_NAMES_LOWER.slice(1).map(m => `/born-in-${m}`),
+  '/biorhythm-workout-calculator',
+  '/best-day-to-start-a-habit',
+  '/cycle-syncing-for-men',
+  '/why-am-i-tired-some-days',
+  '/best-time-to-work-out',
+  '/energy-forecast',
   '/age-calculator',
   '/todays-birthdays',
   '/numerology',
@@ -181,6 +191,8 @@ export const STATIC_ROUTES = [
   ...bornOnRoutes(),
   '/born-on/india',
   ...indiaBornOnRoutes,
+  // NB: the 12 "Born in {Month}" hubs + 6 fitness pages are registered near the TOP
+  // of this list (see above) so they prerender within the time budget.
 ];
 
 // Async function for DB-driven routes (blog posts from Supabase, if any beyond static)

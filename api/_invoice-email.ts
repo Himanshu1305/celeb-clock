@@ -6,6 +6,7 @@
 import { renderPdfFromHtml, bytesToBase64 } from './_pdf.js';
 
 const FROM_EMAIL = 'BornClock <hello@bornclock.com>';
+const LOGO_URL = 'https://bornclock.com/bornclock-logo.png';
 
 // UTF-8-safe base64. btoa() alone throws on ₹/—/… (non-Latin1) — the invoice HTML
 // contains them — so encode to UTF-8 bytes first, then base64 in chunks.
@@ -38,11 +39,16 @@ export async function sendInvoiceEmail(to: string, invoiceNo: string, html: stri
     : `Your GST tax invoice <strong>${safeNo}</strong> is attached as an HTML file — open it in any browser and print or save it as a PDF.`;
 
   const body = `<!doctype html><html><body style="margin:0;background:#FBF6EA;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
-    <div style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #E6D8B8;border-radius:12px;padding:28px">
-      <div style="font-weight:800;color:#103A5C;font-size:20px;margin-bottom:2px">BornClock</div>
-      <div style="font-size:11px;color:#B8862F;font-weight:600;margin-bottom:16px">A product of USD Vision AI LLP</div>
-      <p style="font-size:14px;color:#0C1A2B;margin:0 0 12px">Thank you for your purchase. ${attachLine}</p>
-      <p style="font-size:13px;color:#5A6A7A;margin:0">Questions? Reply to this email or write to <a href="mailto:hello@bornclock.com" style="color:#103A5C">hello@bornclock.com</a>.</p>
+    <div style="max-width:520px;margin:0 auto">
+      <div style="text-align:center;padding-bottom:20px">
+        <img src="${LOGO_URL}" alt="BornClock" height="44" width="165" style="height:44px;width:165px;display:inline-block;border:0" border="0" />
+      </div>
+      <div style="background:#fff;border:1px solid #E6D8B8;border-radius:12px;padding:28px">
+        <div style="font-size:11px;color:#B8862F;font-weight:600;margin-bottom:16px">A product of USD Vision AI LLP</div>
+        <p style="font-size:14px;color:#0C1A2B;margin:0 0 12px">Thank you for your purchase. ${attachLine}</p>
+        <p style="font-size:13px;color:#5A6A7A;margin:0">Questions? Reply to this email or write to <a href="mailto:hello@bornclock.com" style="color:#103A5C">hello@bornclock.com</a>.</p>
+      </div>
+      <p style="text-align:center;font-size:12px;color:#9ca3af;font-style:italic;margin:18px 0 0">Know your time. Live it well.</p>
     </div></body></html>`;
 
   try {
