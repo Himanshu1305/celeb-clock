@@ -234,12 +234,21 @@ const BirthdayReport = () => {
     | { kind: 'sub_nocredits' }
     | { kind: 'paid' };
 
+  // Priority order. A PAID subscriber (subscriptionActive) must NEVER see a trial
+  // state, even inside the 7-day trial window — subscription states are checked
+  // first so trial messaging never leaks to someone who has paid. Non-subscribers
+  // then fall through to the trial states. (Display only — the server free-report
+  // grant in save-report.ts is unchanged.)
   let cardState: CardState;
-  if (ent.isTrial && !ent.trialReportUsed) cardState = { kind: 'trial_free', days: ent.trialDaysRemaining };
-  else if (ent.subscriptionActive && ent.credits > 0) cardState = { kind: 'sub_credits', credits: ent.credits };
-  else if (ent.isTrial) cardState = { kind: 'trial_used' };          // free report already used
-  else if (ent.subscriptionActive) cardState = { kind: 'sub_nocredits' }; // active sub, 0 credits
-  else cardState = { kind: 'paid' };
+  if (ent.subscriptionActive) {
+    cardState = ent.credits > 0 ? { kind: 'sub_credits', credits: ent.credits } : { kind: 'sub_nocredits' };
+  } else if (ent.isTrial && !ent.trialReportUsed) {
+    cardState = { kind: 'trial_free', days: ent.trialDaysRemaining };
+  } else if (ent.isTrial) {
+    cardState = { kind: 'trial_used' };          // free report already used
+  } else {
+    cardState = { kind: 'paid' };
+  }
 
   const isFreeState = cardState.kind === 'trial_free' || cardState.kind === 'sub_credits';
   const ctaLabel = isFreeState ? 'Create Now →' : 'Create & unlock →';

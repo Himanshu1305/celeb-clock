@@ -279,6 +279,11 @@ export const useAuth = () => {
     new Date(profile.premium_until) <= new Date();
 
   const isPremium = !cancelledAndExpired && (profile?.premium_status || isInTrial || isPromoActive) || false;
+  // A paying subscriber (Razorpay subscription live). Distinct from isInTrial,
+  // which is purely account-age. Used to suppress ALL trial messaging for someone
+  // who has actually paid — otherwise a user who subscribes within 7 days of
+  // signup keeps seeing "X days left in your free trial" despite having paid.
+  const isPaidSubscriber = profile?.subscription_status === 'active';
   const isAdmin = ADMIN_EMAILS.includes((user?.email ?? '').toLowerCase().trim());
 
   return {
@@ -296,5 +301,6 @@ export const useAuth = () => {
     isInTrial,
     trialDaysRemaining,
     isPromoActive,
+    isPaidSubscriber,
   };
 };

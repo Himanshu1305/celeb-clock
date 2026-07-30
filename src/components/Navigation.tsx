@@ -60,7 +60,7 @@ const astrologyItems = [
 
 export const Navigation = () => {
   const location = useLocation();
-  const { user, isPremium, isInTrial, trialDaysRemaining, profile, loading } = useAuth();
+  const { user, isPremium, isInTrial, trialDaysRemaining, isPaidSubscriber, profile, loading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const isActive = (path: string) => location.pathname === path;
   const isHomePage = location.pathname === '/';
@@ -68,7 +68,11 @@ export const Navigation = () => {
   const visibleItems = navItems.slice(0, 4);
   const moreItems = navItems.slice(4);
 
-  const showTrialBanner = isInTrial && !profile?.premium_status;
+  // Trial UI is account-age driven; a paid subscriber must never see it. Gate
+  // every trial surface on !isPaidSubscriber (premium_status also excludes them,
+  // but this is explicit and survives any premium_status timing gap).
+  const showTrialPill = isInTrial && !isPaidSubscriber;
+  const showTrialBanner = isInTrial && !profile?.premium_status && !isPaidSubscriber;
 
   const closeMobile = () => setMobileOpen(false);
 
@@ -226,7 +230,7 @@ export const Navigation = () => {
             </Link>
           )}
 
-          {!loading && isPremium && !isInTrial && (
+          {!loading && isPremium && !showTrialPill && (
             <Link
               to="/upgrade"
               className="text-indigo-600 border border-indigo-200 bg-indigo-50 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-100 transition-colors"
@@ -235,7 +239,7 @@ export const Navigation = () => {
             </Link>
           )}
 
-          {!loading && !isPremium && !isInTrial && (
+          {!loading && !isPremium && !showTrialPill && (
             <Link
               to="/upgrade"
               className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
@@ -244,7 +248,7 @@ export const Navigation = () => {
             </Link>
           )}
 
-          {!loading && isInTrial && (
+          {!loading && showTrialPill && (
             <Link
               to="/upgrade"
               className="bg-amber-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-600 transition-colors"
@@ -336,7 +340,7 @@ export const Navigation = () => {
               )}
 
               {/* Upgrade CTA for mobile — only for logged-in non-premium users */}
-              {!loading && user && !isPremium && !isInTrial && (
+              {!loading && user && !isPremium && !showTrialPill && (
                 <div className="mx-2 mt-4">
                   <Link
                     to="/upgrade"
@@ -347,7 +351,7 @@ export const Navigation = () => {
                   </Link>
                 </div>
               )}
-              {!loading && isInTrial && (
+              {!loading && showTrialPill && (
                 <div className="mx-2 mt-4">
                   <Link
                     to="/upgrade"

@@ -45,7 +45,14 @@ export function CheckoutRegionModal({ open, onOpenChange, onConfirm, priceLabel,
     }).catch(() => {});
   }, [open]);
 
-  const canConfirm = base === 'India' ? !!stateCode : base === 'Outside' ? !!country : false;
+  // India REQUIRES a state (GST Rule 46: an intra/inter-state invoice must carry a
+  // place of supply — "India" with no state is a deficiency). Validate the picked
+  // code resolves to a real state, not merely that the box is non-empty, so a
+  // CGST_SGST / IGST selection can never leave here with a null buyerState.
+  const canConfirm =
+    base === 'India'   ? !!INDIA_STATES.find(s => s.code === stateCode)
+    : base === 'Outside' ? !!country
+    : false;
 
   const confirm = () => {
     if (base === 'India') {

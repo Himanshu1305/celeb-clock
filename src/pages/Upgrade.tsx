@@ -19,7 +19,7 @@ import { Footer } from '@/components/Footer';
 import { useAnalytics } from '@/hooks/useAnalytics';
 
 export default function Upgrade() {
-  const { user, isPremium, isInTrial, trialDaysRemaining } = useAuth();
+  const { user, isPremium, isInTrial, trialDaysRemaining, isPaidSubscriber } = useAuth();
   const navigate = useNavigate();
   const [countryInfo, setCountryInfo] = useState<CountryInfo | null>(null);
   const [loadingBilling, setLoadingBilling] = useState<'monthly' | 'annual' | null>(null);
@@ -85,7 +85,9 @@ export default function Upgrade() {
     });
   };
 
-  const isPaidPremium = isPremium && !isInTrial;
+  // "Already Premium" must show for a paid subscriber even inside the 7-day
+  // trial window (isInTrial is account-age only and would otherwise mask it).
+  const isPaidPremium = (isPremium && !isInTrial) || isPaidSubscriber;
 
   const currency = resolveCurrency(countryInfo?.currency);
   const monthlyPrice = countryInfo ? formatPrice(countryInfo, 'monthly') : null;
@@ -183,8 +185,9 @@ export default function Upgrade() {
             </p>
           </div>
 
-          {/* Trial banner */}
-          {isInTrial && (
+          {/* Trial banner — never for a paid subscriber (defensive; the paid
+              branch above already short-circuits this whole grid). */}
+          {isInTrial && !isPaidSubscriber && (
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8 text-center">
               <p className="text-amber-800 font-medium">
                 🎁 You have{' '}
