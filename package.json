@@ -13,7 +13,8 @@
     "e2e": "playwright test",
     "e2e:report": "playwright show-report",
     "e2e:headed": "playwright test --headed",
-    "e2e:debug": "playwright test --debug"
+    "e2e:debug": "playwright test --debug",
+    "test:prelaunch": "playwright test --config e2e/launch-gauntlet/gauntlet.config.ts && playwright test --config e2e/prelaunch/prelaunch.config.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

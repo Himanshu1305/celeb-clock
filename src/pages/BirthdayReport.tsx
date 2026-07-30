@@ -93,7 +93,9 @@ const BirthdayReport = () => {
   // the client flags are only a fallback for display while this loads.
   const refreshEntitlement = useCallback(() => {
     if (!user?.id) { setEntitlement(null); return; }
-    fetch(`/api/report-entitlement?userId=${encodeURIComponent(user.id)}`)
+    // no-store: after "Generate another" the same GET must return the FRESH
+    // trial-used state, not a browser-cached copy of the pre-generation entitlement.
+    fetch(`/api/report-entitlement?userId=${encodeURIComponent(user.id)}`, { cache: 'no-store' })
       .then(r => r.json())
       .then(d => { if (d && typeof d.credits === 'number') setEntitlement(d); })
       .catch(() => {});
@@ -194,7 +196,12 @@ const BirthdayReport = () => {
     setMsgIndex(0);
     setError('');
     setRecipientName('');
-    setDob('');
+    // dob is derived from day/month/year — clear the parts (there is no setDob;
+    // the old setDob('') threw a ReferenceError that aborted this reset before
+    // refreshEntitlement() ran, so the card kept its stale "1 free report" state).
+    setDay('');
+    setMonth('');
+    setYear('');
     setGender('');
     setCountry('India');
     setGifterName('');

@@ -82,7 +82,7 @@ export default function Pricing() {
           {/* Free */}
           <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 flex flex-col">
             <div className="text-lg font-bold text-gray-700 mb-1">Free</div>
-            <div className="text-4xl font-black text-gray-900 mb-1">{isIndia ? '₹0' : '$0'}</div>
+            <div className="text-4xl font-black text-gray-900 mb-1">{currency === 'INR' ? '₹0' : '$0'}</div>
             <div className="text-gray-400 text-sm mb-5">forever</div>
             <ul className="space-y-2.5 mb-6 flex-1">
               {FREE_FEATURES.map(f => (

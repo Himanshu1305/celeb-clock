@@ -1965,7 +1965,12 @@ const ReportView = () => {
             <p style={{ fontSize: '12.5px', color: '#9DB0BF', marginTop: '5px' }}>{recipientName} is {age} years old on Earth — here is their age from home outward across all {PLANET_COUNT} planets</p>
           </div>
           <div className="planet-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-            {Object.entries(planetaryAges).map(([planet, pAge]) => {
+            {/* Fixed order (Earth first) — report_data is JSONB, which reorders
+                object keys by length, so we cannot rely on planetaryAges order. */}
+            {(['Earth', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'] as const)
+              .filter(planet => planetaryAges[planet] != null)
+              .map(planet => {
+              const pAge = planetaryAges[planet];
               const SYMBOLS: Record<string, string> = {
                 Earth: '♁', Mercury: '☿', Venus: '♀', Mars: '♂', Jupiter: '♃', Saturn: '♄', Uranus: '⛢', Neptune: '♆',
               };

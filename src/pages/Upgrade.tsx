@@ -8,6 +8,7 @@ import {
   formatPrice,
   type CountryInfo,
 } from '@/services/CountryDetectionService';
+import { resolveCurrency } from '@/lib/pricing';
 import { initiateSubscription } from '@/services/RazorpayService';
 import { PaymentSuccessModal } from '@/components/PaymentSuccessModal';
 import { PromoCodeInput } from '@/components/PromoCodeInput';
@@ -66,6 +67,7 @@ export default function Upgrade() {
 
   const isPaidPremium = isPremium && !isInTrial;
 
+  const currency = resolveCurrency(countryInfo?.currency);
   const monthlyPrice = countryInfo ? formatPrice(countryInfo, 'monthly') : null;
   const annualPrice = countryInfo ? formatPrice(countryInfo, 'annual') : null;
 
@@ -179,7 +181,7 @@ export default function Upgrade() {
             {/* Free card */}
             <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 flex flex-col">
               <div className="text-lg font-bold text-gray-700 mb-1">Free</div>
-              <div className="text-4xl font-black text-gray-900 mb-1">₹0</div>
+              <div className="text-4xl font-black text-gray-900 mb-1">{currency === 'INR' ? '₹0' : '$0'}</div>
               <div className="text-gray-400 text-sm mb-5">forever</div>
               <ul className="space-y-2.5 mb-6 flex-1">
                 {[
