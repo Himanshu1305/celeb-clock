@@ -162,18 +162,19 @@ Deno.serve(async (req) => {
       const userHtml = `<!doctype html><html><body style="margin:0;background:#FBF6EA;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
         <div style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #E6D8B8;border-radius:12px;padding:28px">
           <div style="font-weight:800;color:#103A5C;font-size:20px;margin-bottom:16px">BornClock</div>
-          <h1 style="margin:0 0 12px;font-size:20px;font-weight:700;color:#111827;">Account deleted, ${userName}</h1>
           <p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 14px;">
-            Your BornClock account and personal data have been permanently deleted, and any active
-            subscription has been cancelled. This action is complete and cannot be undone.
+            Your BornClock account and personal data have been permanently deleted, and any active subscription has been cancelled.
           </p>
           <p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 14px;">
-            As required by Indian tax law, GST invoice records for past purchases are retained for the
-            statutory period (8 years) with your account no longer linked to them.
+            Certain purchase records are retained and handled in accordance with applicable laws.
           </p>
-          <p style="font-size:13px;color:#6b7280;line-height:1.7;margin:0;">
+          <p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 14px;">
             If you didn't request this, contact us at
             <a href="mailto:hello@bornclock.com" style="color:#103A5C">hello@bornclock.com</a> right away.
+          </p>
+          <p style="font-size:14px;color:#374151;line-height:1.7;margin:0;">
+            Your data is gone but your story isn't — you're welcome back anytime at
+            <a href="https://bornclock.com" style="color:#103A5C">bornclock.com</a>.
           </p>
         </div></body></html>`
       await sendViaResend(userEmail, 'Your BornClock account has been deleted', userHtml)
