@@ -12,6 +12,7 @@ import { GET  as dailyCronGet,
          POST as dailyCronPost }       from '../api/daily-email-cron.js';
 import { POST as opsMonitor }          from '../api/ops-monitor.js';
 import { POST as opsDigest }           from '../api/ops-digest.js';
+import { POST as invoiceSweep }        from '../api/invoice-sweep.js';
 import { POST as subscribe }           from '../api/subscribe.js';
 import { POST as weeklyDigest }        from '../api/weekly-digest.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
@@ -58,6 +59,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/verify-payment':     verifyPayment,
   '/api/ops-monitor':        opsMonitor,
   '/api/ops-digest':         opsDigest,
+  '/api/invoice-sweep':      invoiceSweep,
   '/api/subscribe':          subscribe,
   '/api/weekly-digest':      weeklyDigest,
   '/api/unsubscribe':        unsubscribe,
@@ -103,8 +105,9 @@ export default {
     switch (event.cron) {
       case '0 6 * * *':                 // existing daily email
         return cronHandler.scheduled(event, env, ctx);
-      case '10 6 * * *':                // ops monitor — daily 06:10 UTC (all checks incl. integrity)
+      case '10 6 * * *':                // daily ops — 06:10 UTC (health checks + renewal invoice sweep)
         ctx.waitUntil(fetch(`${base}/api/ops-monitor`, { method: 'POST' }));
+        ctx.waitUntil(fetch(`${base}/api/invoice-sweep`, { method: 'POST' }));
         return;
       case '0 7 * * 1':                 // integrity emphasis — Monday 07:00 UTC
         ctx.waitUntil(fetch(`${base}/api/ops-monitor`, { method: 'POST' }));

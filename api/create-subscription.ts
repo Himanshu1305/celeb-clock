@@ -37,7 +37,10 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Invalid JSON body' }, 400);
   }
 
-  const { planId, userId } = body ?? {};
+  const {
+    planId, userId, billing,
+    buyer_country, buyer_state, buyer_state_code, tax_mode,
+  } = body ?? {};
 
   if (!planId || !userId) {
     return json({ error: 'Missing planId or userId' }, 400);
@@ -75,7 +78,17 @@ async function handler(request: Request): Promise<Response> {
         quantity: 1,
         total_count: totalCount,
         customer_notify: 0,
-        notes: { userId },
+        // GST place-of-supply declaration captured at checkout. Persisted on the
+        // subscription so it is available for reconciliation; verify-payment also
+        // receives it in its request body as the authoritative source.
+        notes: {
+          userId,
+          ...(billing ? { billing } : {}),
+          ...(buyer_country ? { buyer_country } : {}),
+          ...(buyer_state ? { buyer_state } : {}),
+          ...(buyer_state_code ? { buyer_state_code } : {}),
+          ...(tax_mode ? { tax_mode } : {}),
+        },
       }),
     });
 

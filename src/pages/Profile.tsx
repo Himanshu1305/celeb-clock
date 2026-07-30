@@ -25,9 +25,11 @@ import { ArrowLeft, Crown, Download, Gift, Loader2, Save, Shield, Tag, Trash2, U
 import { PromoCodeInput } from '@/components/PromoCodeInput';
 import { InvoicesCard } from '@/components/InvoicesCard';
 import { countries } from '@/data/countries';
+import { useReportPrice } from '@/hooks/useCurrency';
 
 export default function Profile() {
   const { user, profile, loading, updateProfile, deleteAccount, isPremium } = useAuth();
+  const oneReportPrice = useReportPrice();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -286,7 +288,8 @@ export default function Profile() {
                       <div>
                         <p className="font-medium">Report credits</p>
                         <p className="text-sm text-muted-foreground">
-                          Premium members get 3 report credits every month — unused credits carry forward, up to 9.
+                          Premium: 3 report credits every month — unused credits carry forward, up to 9.
+                          One report alone costs {oneReportPrice}.
                         </p>
                       </div>
                     </div>

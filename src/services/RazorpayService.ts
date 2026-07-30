@@ -1,4 +1,5 @@
-import { CountryInfo, getPlanId } from './CountryDetectionService';
+import { CountryInfo } from './CountryDetectionService';
+import { RAZORPAY_PLANS } from '@/lib/pricing';
 
 declare global {
   interface Window {
@@ -26,6 +27,16 @@ export interface SubscriptionOptions {
   userEmail: string;
   userName?: string;
   userId: string;
+  // GST place-of-supply declaration captured by CheckoutRegionModal BEFORE
+  // checkout opens. Forwarded to the subscription notes AND to verify-payment's
+  // request body (subscription checkout does not reliably forward notes onto the
+  // payment, so the body is the reliable channel). `currency` is the confirmed
+  // region's currency, not IP geo.
+  currency?: 'INR' | 'USD';
+  buyerCountry?: string;
+  buyerState?: string | null;
+  buyerStateCode?: string | null;
+  taxMode?: 'CGST_SGST' | 'IGST' | 'EXPORT';
   onSuccess: () => void;
   onError: (error: string) => void;
   onDismiss: () => void;
@@ -38,10 +49,19 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
     userEmail,
     userName,
     userId,
+    currency,
+    buyerCountry,
+    buyerState,
+    buyerStateCode,
+    taxMode,
     onSuccess,
     onError,
     onDismiss,
   } = options;
+
+  // Confirmed region currency wins over IP geo (a USD-detected user who declares
+  // India is charged INR with a matching CGST/SGST invoice).
+  const checkoutCurrency = currency ?? countryInfo.currency;
 
   const loaded = await loadRazorpayScript();
   if (!loaded) {
@@ -49,7 +69,9 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
     return;
   }
 
-  const planId = getPlanId(countryInfo, billing);
+  // Plan follows the CONFIRMED region's currency (single source: pricing.ts), so
+  // a USD-detected user who declares India gets the INR plan and CGST/SGST invoice.
+  const planId = RAZORPAY_PLANS[billing][checkoutCurrency];
   const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID;
 
   if (!planId || !keyId) {
@@ -63,7 +85,11 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
     const subRes = await fetch('/api/create-subscription', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ planId, userId }),
+      body: JSON.stringify({
+        planId, userId, billing,
+        buyer_country: buyerCountry, buyer_state: buyerState,
+        buyer_state_code: buyerStateCode, tax_mode: taxMode,
+      }),
     });
     if (!subRes.ok) {
       const err = await subRes.json().catch(() => ({}));
@@ -91,6 +117,12 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
       email: userEmail,
       userId: userId,
       billing: billing,
+      // Best-effort: also stamp the region on the checkout notes. verify-payment
+      // reads the request body as the authoritative source for subscriptions.
+      buyer_country: buyerCountry ?? '',
+      buyer_state: buyerState ?? '',
+      buyer_state_code: buyerStateCode ?? '',
+      tax_mode: taxMode ?? '',
     },
     theme: { color: '#4F46E5' },
     modal: {
@@ -110,7 +142,14 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
             user_id: userId,
             product: 'subscription',
             amount: 0,
-            currency: countryInfo.currency,
+            currency: checkoutCurrency,
+            // Confirmed region → verify-payment's non-fatal invoice block reads
+            // these from the body (subscription notes are not reliably forwarded).
+            billing,
+            buyer_country: buyerCountry,
+            buyer_state: buyerState,
+            buyer_state_code: buyerStateCode,
+            tax_mode: taxMode,
           }),
         });
         if (!res.ok) {

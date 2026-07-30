@@ -10,6 +10,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/hooks/useAuth';
 import { Sparkles, ArrowLeft, MapPin } from 'lucide-react';
 import { countries } from '@/data/countries';
+import { useResolvedCurrency } from '@/hooks/useCurrency';
+import { subscriptionPrice } from '@/lib/pricing';
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
@@ -28,6 +30,8 @@ export default function Auth() {
   // link works" bug. Set before the async call, cleared in finally.
   const submittingRef = useRef(false);
   const { user, signUp, signIn } = useAuth();
+  // Truthful pricing sourced from pricing.ts — there is no "$9.99 lifetime" plan.
+  const currency = useResolvedCurrency();
 
   // Auto-detect country on signup page load
   useEffect(() => {
@@ -257,7 +261,7 @@ export default function Auth() {
             </div>
           </div>
           <p className="text-center text-xs text-muted-foreground mt-4">
-            One-time payment • $9.99 lifetime access
+            7-day free trial · then from {subscriptionPrice('monthly', currency)}/mo · cancel anytime
           </p>
         </CardContent>
       </Card>

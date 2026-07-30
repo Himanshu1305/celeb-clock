@@ -21,12 +21,15 @@ interface Props {
   onOpenChange: (open: boolean) => void;
   onConfirm: (sel: RegionSelection) => void;
   priceLabel?: string;       // e.g. "₹199"
+  // Region-reactive price for the confirm button. Defaults to the one-time
+  // report price; /upgrade passes the subscription price for the chosen cadence.
+  priceForCurrency?: (currency: Currency) => string;
 }
 
 // Pre-checkout region + state capture. The selection is a LEGAL declaration used
 // to determine the GST place-of-supply, so nothing is silently inferred — the
 // user must actively confirm/change even when we pre-fill from IP geolocation.
-export function CheckoutRegionModal({ open, onOpenChange, onConfirm, priceLabel }: Props) {
+export function CheckoutRegionModal({ open, onOpenChange, onConfirm, priceLabel, priceForCurrency }: Props) {
   const [base, setBase] = useState<'' | 'India' | 'Outside'>('');
   const [stateCode, setStateCode] = useState<string>('');
   const [country, setCountry] = useState<string>('');
@@ -71,7 +74,8 @@ export function CheckoutRegionModal({ open, onOpenChange, onConfirm, priceLabel 
   // USD but declares India (or vice-versa) sees the corrected price BEFORE
   // Razorpay opens. Falls back to the caller's label until a region is picked.
   const regionCurrency: Currency | null = base === 'India' ? 'INR' : base === 'Outside' ? 'USD' : null;
-  const shownPrice = regionCurrency ? reportPrice(regionCurrency) : priceLabel;
+  const priceOf = priceForCurrency ?? reportPrice;
+  const shownPrice = regionCurrency ? priceOf(regionCurrency) : priceLabel;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

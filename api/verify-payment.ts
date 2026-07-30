@@ -268,23 +268,46 @@ async function handler(request: Request): Promise<Response> {
   // Any failure here is logged and swallowed — the customer has paid and must
   // keep access. The HMAC check and premium-grant paths above are never touched.
   try {
-    // Only the one-time birthday_report purchase is invoiced here. Subscriptions
-    // do not capture a place-of-supply declaration at checkout, so skip them
-    // entirely rather than issue an invoice with an assumed tax mode. Throw a
-    // sentinel to break out via the shared catch (keeps the single success
-    // response after the try/catch as the only exit point).
-    if (product !== 'birthday_report') throw new Error('skip');
+    // Both product types are now invoiced (every taxable supply requires an
+    // invoice). birthday_report carries its region in the Razorpay ORDER notes;
+    // subscriptions carry it in the verify-payment request BODY — the
+    // subscription checkout object does not reliably forward its notes onto the
+    // payment, so CheckoutRegionModal's confirmed region is posted in the body
+    // (buyer_state / buyer_state_code / buyer_country / tax_mode) and read here.
+    // A subscription with no resolvable amount (the Razorpay payment fetch above
+    // failed) cannot be invoiced accurately — skip rather than issue a
+    // zero-value invoice. Throw the 'skip' sentinel to exit via the shared catch.
+    if (product === 'subscription' && (!paymentAmount || paymentAmount <= 0)) {
+      throw new Error('skip');
+    }
 
     // Razorpay note values arrive as strings ('' when absent) — use || not ??.
-    const buyerState     = orderNotes.buyer_state || null;
-    const buyerStateCode = orderNotes.buyer_state_code || null;
-    const buyerCountry   = orderNotes.buyer_country || 'India';
+    // Notes first (order flow), then the request body (subscription flow).
+    const buyerState     = orderNotes.buyer_state      || body.buyer_state      || null;
+    const buyerStateCode = orderNotes.buyer_state_code || body.buyer_state_code  || null;
+    const buyerCountry   = orderNotes.buyer_country    || body.buyer_country     || 'India';
     // tax_mode from checkout declaration; fall back safely. Never mislabel an INR
     // domestic charge as EXPORT — only USD-with-no-state defaults to EXPORT.
-    const taxMode: 'CGST_SGST' | 'IGST' | 'EXPORT' = orderNotes.tax_mode
+    const taxMode: 'CGST_SGST' | 'IGST' | 'EXPORT' = orderNotes.tax_mode || body.tax_mode
       || (buyerStateCode === '36' ? 'CGST_SGST'
         : buyerStateCode ? 'IGST'
         : (paymentCurrency === 'USD' ? 'EXPORT' : 'IGST'));
+
+    // Persist the place-of-supply on the profile on the first subscription
+    // payment — it is the authoritative region for every future renewal charge,
+    // which arrives via the frozen webhook carrying no declaration of its own
+    // (read back by the daily invoice sweep). Keyed on user_id (the auth link;
+    // profiles.id is a random PK). Tolerate the column not existing yet — the
+    // founder applies NOTES-subscription-invoicing.sql; until then this is a
+    // non-fatal no-op and the sweep simply finds no region to invoice with.
+    if (product === 'subscription') {
+      const { error: posErr } = await db.from('profiles').update({
+        buyer_state: buyerState,
+        buyer_state_code: buyerStateCode,
+        buyer_country: buyerCountry,
+      }).eq('user_id', user_id);
+      if (posErr) console.warn('[invoice] place-of-supply persist skipped (non-fatal):', posErr.message);
+    }
 
     const invCurrency = paymentCurrency === 'USD' ? 'USD' : 'INR';
     const grossAmount = paymentAmount / 100;   // Razorpay stores paise/cents
@@ -308,12 +331,15 @@ async function handler(request: Request): Promise<Response> {
       || buyerData?.user?.user_metadata?.first_name
       || 'BornClock Customer';
 
+    // Cadence read from the checkout notes / body ('monthly' | 'annual').
+    const billing = (orderNotes.billing || body.billing || '').toString().toLowerCase();
+    const subCadence = billing === 'annual' ? 'Annual' : 'Monthly';
     const lineDesc = product === 'birthday_report'
       ? 'BornClock — Birthday Blueprint Report'
-      : 'BornClock Premium — Subscription';
+      : `BornClock Premium — ${subCadence} subscription`;
     const lineNote = product === 'birthday_report'
       ? 'Digital report, one-time purchase. Delivered electronically.'
-      : 'Premium subscription. Delivered electronically.';
+      : `Premium ${subCadence.toLowerCase()} subscription. Delivered electronically.`;
 
     // issue_invoice() allocates the number + inserts atomically, idempotent by payment_id
     const { data: invoiceRow, error: invoiceErr } = await db.rpc('issue_invoice', {

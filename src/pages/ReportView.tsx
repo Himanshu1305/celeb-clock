@@ -27,7 +27,7 @@ import { getMoonSignEssence, MOON_SIGN_EXPLAINER } from '@/data/moonSignEssence'
 import { getSoulUrge, getPersonality } from '@/data/numerologyNameData';
 import { getVedicBirthstone, SECTION_EXPLAINERS, CLOSING_SECTION } from '@/data/reportContentAdditions';
 import { PLANET_COUNT } from '@/lib/reportFacts';
-import { reportPrice, resolveCurrency } from '@/lib/pricing';
+import { reportPrice, resolveCurrency, subscriptionPrice, CREDITS } from '@/lib/pricing';
 import { westernZodiacPlural, chineseZodiacPlural } from '@/lib/zodiacPlurals';
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalytics } from '@/hooks/useAnalytics';
@@ -700,12 +700,17 @@ const ReportView = () => {
             .dark-section { background: var(--dark) !important; color-scheme: dark; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             h2, h3 { page-break-after: avoid; }
             .dark-section { page-break-inside: avoid; }
-            /* Solar section (7 planet cards + Neptune) is taller than a page. Keeping
-               it together (inherited .dark-section avoid) stranded the heading and
-               pushed all cards to the next page (~90% blank page); its break-before
-               also left ~60% trailing whitespace on the prior page. Let it FLOW; the
-               small cards + Neptune card keep their own no-split protection. */
-            .solar-section { page-break-inside: auto !important; break-inside: auto !important; padding-top: 8px !important; padding-bottom: 10px !important; }
+            /* Solar section (8 planet cards + Neptune) is taller than one page.
+               F6: start it on a FRESH page (break-before) so the 07·COSMOS heading
+               is never stranded at the foot of the previous page and the section no
+               longer straddles a page boundary mid-content. It still FLOWS internally
+               (page-break-inside:auto): forcing break-inside:avoid on the grid was
+               tried before and pushed the whole grid to the next page (~90% blank),
+               so it is deliberately NOT used. Residual: some trailing whitespace can
+               remain on the page BEFORE this section — accepted as the lesser evil
+               vs a mid-section split (content is genuinely taller than one page).
+               The small cards + Neptune card keep their own no-split protection. */
+            .solar-section { break-before: page !important; page-break-before: always !important; page-break-inside: auto !important; break-inside: auto !important; padding-top: 8px !important; padding-bottom: 10px !important; }
             .solar-section .planet-grid { margin-bottom: 12px !important; }
             .solar-section .neptune-fact-card,
             .solar-section .bb-num { page-break-inside: avoid; break-inside: avoid; }
@@ -1027,6 +1032,11 @@ const ReportView = () => {
                 </a>
               </>
             )}
+
+            {/* One inline comparison at the decision point — currency-aware. */}
+            <p className="text-xs mb-2" style={{ color: 'var(--muted)' }}>
+              {reportPrice(displayCurrency)} for this report · or Premium at {subscriptionPrice('monthly', displayCurrency)}/mo includes {CREDITS.perMonth} reports every month
+            </p>
 
             <p className="text-xs mb-1" style={{ color: 'var(--muted)' }}>Launch price</p>
 

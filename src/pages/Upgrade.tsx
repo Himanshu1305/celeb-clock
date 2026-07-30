@@ -8,8 +8,9 @@ import {
   formatPrice,
   type CountryInfo,
 } from '@/services/CountryDetectionService';
-import { resolveCurrency } from '@/lib/pricing';
+import { resolveCurrency, subscriptionPrice } from '@/lib/pricing';
 import { initiateSubscription } from '@/services/RazorpayService';
+import { CheckoutRegionModal, RegionSelection } from '@/components/CheckoutRegionModal';
 import { PaymentSuccessModal } from '@/components/PaymentSuccessModal';
 import { PromoCodeInput } from '@/components/PromoCodeInput';
 import { Check, Shield, Star } from 'lucide-react';
@@ -26,6 +27,10 @@ export default function Upgrade() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [lastBilling, setLastBilling] = useState<'monthly' | 'annual'>('annual');
   const [detecting, setDetecting] = useState(true);
+  // Region/GST capture opens BEFORE Razorpay (same discipline as the report
+  // checkout). pendingBilling holds the cadence chosen when the modal opened.
+  const [regionOpen, setRegionOpen] = useState(false);
+  const [pendingBilling, setPendingBilling] = useState<'monthly' | 'annual'>('annual');
   const { trackFunnel } = useAnalytics();
 
   useEffect(() => {
@@ -38,12 +43,22 @@ export default function Upgrade() {
   // Funnel: upgrade surface opened.
   useEffect(() => { trackFunnel('upgrade_modal_opened'); }, [trackFunnel]);
 
-  const handleSubscribe = async (billingType: 'monthly' | 'annual') => {
+  // Step 1: open the region/GST declaration modal (nothing opens Razorpay yet).
+  const handleSubscribe = (billingType: 'monthly' | 'annual') => {
     if (!user || !countryInfo) return;
-    trackFunnel('checkout_opened', { product: 'subscription', plan: billingType });
-    setLoadingBilling(billingType);
-    setLastBilling(billingType);
     setError('');
+    setPendingBilling(billingType);
+    setLastBilling(billingType);
+    setRegionOpen(true);
+  };
+
+  // Step 2: region confirmed — its currency AND taxMode drive checkout and the
+  // GST invoice. Now open Razorpay for the cadence chosen in step 1.
+  const startSubscription = async (sel: RegionSelection) => {
+    if (!user || !countryInfo) return;
+    const billingType = pendingBilling;
+    trackFunnel('checkout_opened', { product: 'subscription', plan: billingType, taxMode: sel.taxMode, currency: sel.currency });
+    setLoadingBilling(billingType);
 
     await initiateSubscription({
       billing: billingType,
@@ -51,6 +66,11 @@ export default function Upgrade() {
       userEmail: user.email || '',
       userName: user.user_metadata?.full_name,
       userId: user.id,
+      currency: sel.currency,
+      buyerCountry: sel.buyerCountry,
+      buyerState: sel.buyerState,
+      buyerStateCode: sel.buyerStateCode,
+      taxMode: sel.taxMode,
       onSuccess: () => {
         setLoadingBilling(null);
         setShowSuccess(true);
@@ -108,6 +128,15 @@ export default function Upgrade() {
           }}
         />
       )}
+
+      {/* Pre-checkout region/GST capture — opens before Razorpay. Its confirmed
+          currency drives both the plan (INR vs USD) and the tax invoice. */}
+      <CheckoutRegionModal
+        open={regionOpen}
+        onOpenChange={setRegionOpen}
+        priceForCurrency={(c) => subscriptionPrice(pendingBilling, c)}
+        onConfirm={(sel) => { setRegionOpen(false); startSubscription(sel); }}
+      />
 
       {isPaidPremium ? (
         <div className="min-h-[70vh] flex items-center justify-center p-4">

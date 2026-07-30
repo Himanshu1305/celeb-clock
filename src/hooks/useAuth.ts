@@ -65,7 +65,10 @@ export const useAuth = () => {
             } catch { /* localStorage unavailable — in-memory Set still guards this session */ }
             if (!alreadySent) {
               const nm = u.user_metadata?.first_name || u.user_metadata?.name || u.email.split('@')[0] || 'there';
-              EmailService.sendWelcome(u.email, nm, 7);
+              // Pass the user id so the server can atomically claim the send —
+              // the authoritative guard. The in-memory Set / localStorage above
+              // remain a first line but cannot close the two-tab race.
+              EmailService.sendWelcome(u.email, nm, 7, u.id);
             }
           }
 

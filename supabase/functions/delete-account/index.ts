@@ -7,6 +7,41 @@ const corsHeaders = {
 
 const RAZORPAY_KEY_ID     = Deno.env.get('RAZORPAY_KEY_ID') ?? ''
 const RAZORPAY_KEY_SECRET = Deno.env.get('RAZORPAY_KEY_SECRET') ?? ''
+const RESEND_API_KEY      = Deno.env.get('RESEND_API_KEY') ?? ''
+const FROM_EMAIL          = 'BornClock <hello@bornclock.com>'
+
+// Send confirmation emails DIRECTLY via Resend from the edge runtime.
+//
+// ROOT CAUSE (F3): this previously POSTed to `${SITE_URL}/api/send-email` on the
+// Worker. SITE_URL is not set as a secret on this function, so it defaulted to
+// https://bornclock.com — and the fetch result was never inspected, so a request
+// that hit the wrong origin or returned a non-2xx failed SILENTLY. The deletion
+// (which runs before the send) still succeeded, so "deletion works but the email
+// never arrives" was exactly the observed symptom.
+//
+// Calling Resend directly removes the cross-service origin dependency entirely,
+// and every non-2xx is logged with the response body so the Supabase function
+// logs show the reason. RESEND_API_KEY is now set as a Supabase secret; the
+// sender domain (hello@bornclock.com) is the same verified domain used elsewhere.
+async function sendViaResend(to: string, subject: string, html: string): Promise<void> {
+  if (!RESEND_API_KEY) {
+    console.error('[delete-account] RESEND_API_KEY not set — cannot send:', subject)
+    return
+  }
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: FROM_EMAIL, to: [to], subject, html }),
+    })
+    if (!res.ok) {
+      const bodyText = await res.text().catch(() => '')
+      console.error('[delete-account] Resend non-2xx', res.status, 'for', subject, '→', bodyText)
+    }
+  } catch (e) {
+    console.error('[delete-account] Resend fetch threw for', subject, e)
+  }
+}
 
 async function cancelRazorpaySubscription(subscriptionId: string): Promise<void> {
   if (!subscriptionId || !RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) return
@@ -120,35 +155,40 @@ Deno.serve(async (req) => {
       await supabaseAdmin.from('email_subscribers').delete().ilike('email', userEmail)
     }
 
-    // ── Step 8: confirmation emails (Bug 5) — one to the user, one internal ────
-    // Both non-fatal: an email failure must never undo a successful deletion.
+    // ── Step 8: confirmation emails (Bug 5 / F3) — one to the user, one internal
+    // Sent directly via Resend (see sendViaResend note above). Both non-fatal:
+    // an email failure must never undo a successful deletion.
     if (userEmail) {
-      const baseUrl = Deno.env.get('SITE_URL') || 'https://bornclock.com'
-      try {
-        await fetch(`${baseUrl}/api/send-email`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'account_deleted', to: userEmail, name: userName }),
-        })
-      } catch (e) {
-        console.error('User deletion confirmation email error', e)
-      }
-      try {
-        await fetch(`${baseUrl}/api/send-email`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'data_deletion_request',
-            to: 'hello@bornclock.com',
-            name: 'BornClock',
-            userEmail,
-            userId,
-            requestedAt: new Date().toISOString(),
-          }),
-        })
-      } catch (e) {
-        console.error('Internal deletion record email error', e)
-      }
+      const userHtml = `<!doctype html><html><body style="margin:0;background:#FBF6EA;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+        <div style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #E6D8B8;border-radius:12px;padding:28px">
+          <div style="font-weight:800;color:#103A5C;font-size:20px;margin-bottom:16px">BornClock</div>
+          <h1 style="margin:0 0 12px;font-size:20px;font-weight:700;color:#111827;">Account deleted, ${userName}</h1>
+          <p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 14px;">
+            Your BornClock account and personal data have been permanently deleted, and any active
+            subscription has been cancelled. This action is complete and cannot be undone.
+          </p>
+          <p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 14px;">
+            As required by Indian tax law, GST invoice records for past purchases are retained for the
+            statutory period (8 years) with your account no longer linked to them.
+          </p>
+          <p style="font-size:13px;color:#6b7280;line-height:1.7;margin:0;">
+            If you didn't request this, contact us at
+            <a href="mailto:hello@bornclock.com" style="color:#103A5C">hello@bornclock.com</a> right away.
+          </p>
+        </div></body></html>`
+      await sendViaResend(userEmail, 'Your BornClock account has been deleted', userHtml)
+
+      const internalHtml = `
+        <h2>Account Deletion Completed (automated)</h2>
+        <p><strong>User:</strong> ${userEmail}</p>
+        <p><strong>User ID:</strong> ${userId}</p>
+        <p><strong>Completed at:</strong> ${new Date().toISOString()}</p>
+        <hr>
+        <p>The delete-account edge function cancelled any active subscription, removed all
+        user-owned rows, de-identified payment/invoice records (retained for GST), purged the
+        email subscription, and deleted the auth user.</p>
+        <p style="color:#6b7280;font-size:13px;">Automated under DPDPA 2023 and GDPR Art. 17. Retain this record.</p>`
+      await sendViaResend('hello@bornclock.com', `ACCOUNT DELETED — ${userEmail}`, internalHtml)
     }
 
     return new Response(JSON.stringify({ success: true }), { headers: corsHeaders })

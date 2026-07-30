@@ -14,8 +14,10 @@ async function sendEmail(payload: object): Promise<boolean> {
 }
 
 export const EmailService = {
-  sendWelcome: (to: string, name: string, trialDays = 7) =>
-    sendEmail({ type: 'welcome', to, name, trialDays }),
+  // userId lets the server atomically claim the send (profiles.welcomed_at), the
+  // authoritative once-per-user guard that survives the two-tab confirmation race.
+  sendWelcome: (to: string, name: string, trialDays = 7, userId?: string) =>
+    sendEmail({ type: 'welcome', to, name, trialDays, userId }),
 
   sendTrialExpiry: (to: string, name: string, hoursLeft = 24) =>
     sendEmail({ type: 'trial_expiry', to, name, hoursLeft }),

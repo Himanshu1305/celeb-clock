@@ -23,7 +23,9 @@ test('[real] free user: credits upsell shown, "of 9" numeric row absent', async 
   await loginViaForm(page, freeUser.email, freeUser.password);
   await page.goto('/profile');
   await page.waitForLoadState('networkidle');
-  await expect(page.getByText(/Premium members get 3 report credits every month/i)).toBeVisible();
+  // F5: upsell copy states the mechanics + the standalone one-report price.
+  await expect(page.getByText(/Premium: 3 report credits every month/i)).toBeVisible();
+  await expect(page.getByText(/One report alone costs/i)).toBeVisible();
   await expect(page.locator('body')).not.toContainText(/\bof 9\b/);
 });
 

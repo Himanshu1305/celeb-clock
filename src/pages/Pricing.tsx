@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Check, X, Gift, Shield, ArrowRight, Repeat } from 'lucide-react';
 import { detectCountry, formatPrice, type CountryInfo } from '@/services/CountryDetectionService';
 import { REPORT_SECTION_COUNT } from '@/lib/reportFacts';
-import { reportPrice as reportPriceFor, resolveCurrency } from '@/lib/pricing';
+import { reportPrice as reportPriceFor, resolveCurrency, subscriptionPrice, annualSaving, formatMoney } from '@/lib/pricing';
 
 // Indexable pricing/comparison page (distinct from the login-gated /upgrade
 // conversion page). Every benefit below is drawn from the REAL feature set:
@@ -99,7 +99,11 @@ export default function Pricing() {
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</div>
             <div className="text-lg font-bold text-indigo-600 mb-1">Premium</div>
             <div className="text-4xl font-black text-gray-900 mb-1">{monthly.amount}</div>
-            <div className="text-gray-400 text-sm mb-5">{monthly.period} · cancel anytime</div>
+            <div className="text-gray-400 text-sm">{monthly.period} · cancel anytime</div>
+            {/* Both cadences from pricing.ts; saving computed from the constants. */}
+            <div className="text-sm font-medium text-indigo-700 mb-5">
+              or {subscriptionPrice('annual', currency)}/yr (save {formatMoney(annualSaving(currency), currency)})
+            </div>
             <ul className="space-y-2 mb-6 flex-1">
               {['Everything in Free', 'Full longevity suite & AI coach', 'Family dashboard & country comparison',
                 'Downloadable PDF reports'].map(f => (
