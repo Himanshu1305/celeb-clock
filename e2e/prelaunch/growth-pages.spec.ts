@@ -31,6 +31,9 @@ test('all 18 growth pages: 200, h1, unique title, canonical not home, FAQPage JS
     expect(resp?.status(), `${path} status`).toBe(200);
     await page.waitForLoadState('networkidle');
     await expect(page.locator('h1').first(), `${path} h1`).toBeVisible();
+    // The SPA fallback returns 200 for any path, so also assert the page did NOT fall
+    // through to a not-found / error shell — status + h1-exists alone cannot catch that.
+    await expect(page.locator('body'), `${path} not a not-found shell`).not.toContainText(/Article Not Found|Page Not Found|Sign Not Found/);
 
     const title = await page.title();
     expect(title.length, `${path} title length`).toBeGreaterThan(10);

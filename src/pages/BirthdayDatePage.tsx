@@ -56,7 +56,7 @@ export default function BirthdayDatePage() {
   if (nextDay > maxDay) { nextMonth = month === 12 ? 1 : month + 1; nextDay = 1; }
 
   const title = `${monthName} ${day} Birthday — Personality, Zodiac & Famous People`;
-  const description = `People born on ${monthName} ${day} are ${p.zodiacSign}s with Life Path ${p.lifePathNumber}. Discover your core traits, lucky day, compatible signs, and more.`;
+  const description = `People born on ${monthName} ${day} are ${p.zodiacSign}s with Birth Day Number ${p.lifePathNumber}. Discover your core traits, lucky day, compatible signs, and more.`;
 
   const faqs = [
     {
@@ -64,12 +64,12 @@ export default function BirthdayDatePage() {
       answer: `People born on ${monthName} ${day} are ${p.zodiacSign} (${p.zodiacSymbol}), ruled by ${p.rulingPlanet}. ${p.zodiacSign} is a${p.element === 'Air' || p.element === 'Earth' ? 'n' : ''} ${p.element} sign.`,
     },
     {
-      question: `What is the Life Path number for ${monthName} ${day}?`,
-      answer: `The Life Path number for day ${day} is ${p.lifePathNumber}. This is calculated by reducing ${day} to a single digit (${day} → ${p.lifePathNumber}), representing ${['', 'leadership and independence', 'harmony and cooperation', 'creativity and expression', 'structure and dependability', 'freedom and adventure', 'nurturing and responsibility', 'analysis and wisdom', 'ambition and authority', 'compassion and service'][p.lifePathNumber]}.`,
+      question: `What is the Birth Day Number for ${monthName} ${day}?`,
+      answer: `The Birth Day Number for day ${day} is ${p.lifePathNumber}. This is calculated by reducing ${day} to a single digit (${day} → ${p.lifePathNumber}), representing ${['', 'leadership and independence', 'harmony and cooperation', 'creativity and expression', 'structure and dependability', 'freedom and adventure', 'nurturing and responsibility', 'analysis and wisdom', 'ambition and authority', 'compassion and service'][p.lifePathNumber]}.`,
     },
     {
       question: `What are the personality traits for ${monthName} ${day} birthdays?`,
-      answer: `${monthName} ${day} birthdays are characterised by: ${p.coreTraits.join(', ')}. They are ${p.zodiacSign}s with a ${p.element} elemental nature, enhanced by the Life Path ${p.lifePathNumber} energy.`,
+      answer: `${monthName} ${day} birthdays are characterised by: ${p.coreTraits.join(', ')}. They are ${p.zodiacSign}s with a ${p.element} elemental nature, enhanced by the Birth Day Number ${p.lifePathNumber} energy.`,
     },
     {
       question: `Who is compatible with ${monthName} ${day} birthdays?`,
@@ -82,7 +82,7 @@ export default function BirthdayDatePage() {
       <SEO
         title={title}
         description={description}
-        keywords={`${monthName} ${day} birthday, ${p.zodiacSign} personality, life path ${p.lifePathNumber}, ${monthName} ${day} zodiac sign, ${p.zodiacSign} traits`}
+        keywords={`${monthName} ${day} birthday, ${p.zodiacSign} personality, birth day number ${p.lifePathNumber}, ${monthName} ${day} zodiac sign, ${p.zodiacSign} traits`}
         canonicalUrl={`/birthday/${month}/${day}`}
         ogType="article"
         publishedTime="2026-06-18"
@@ -133,10 +133,18 @@ export default function BirthdayDatePage() {
           <p className="text-sm font-semibold leading-relaxed">
             People born on <strong>{monthName} {day}</strong> are{' '}
             <strong>{p.zodiacSign} {p.zodiacSymbol}</strong> — a {p.element} sign ruled by{' '}
-            {p.rulingPlanet}, with a Life Path number of <strong>{p.lifePathNumber}</strong>.{' '}
+            {p.rulingPlanet}, with a Birth Day Number of <strong>{p.lifePathNumber}</strong>.{' '}
             {p.personalityBlurb}
           </p>
         </div>
+
+        {/* Birth Day Number vs full Life Path — keeps the free page from contradicting
+            the paid Blueprint (whose Life Path uses the complete birth date). */}
+        <p className="text-xs text-gray-500 -mt-4 mb-8 leading-relaxed">
+          Your <strong className="text-gray-700">Birth Day Number ({p.lifePathNumber})</strong> comes from the day of the month alone.
+          Your full <strong className="text-gray-700">Life Path number</strong>, calculated from your complete birth date, is in the{' '}
+          <Link to="/birthday-report" className="text-indigo-600 hover:underline">Birthday Blueprint</Link>.
+        </p>
 
         {/* Core traits */}
         <section className="mb-8">
@@ -312,10 +320,10 @@ export default function BirthdayDatePage() {
           </p>
         </section>
 
-        {/* Life Path Purpose */}
+        {/* Birth Day Number Purpose */}
         <section className="mb-8 bg-gray-50 border border-gray-200 rounded-xl p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Your Life Path {p.lifePathNumber} Purpose &amp; Growth Edge
+            Your Birth Day Number {p.lifePathNumber} Purpose &amp; Growth Edge
           </h2>
           <div className="space-y-4">
             <div>

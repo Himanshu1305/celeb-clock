@@ -40,11 +40,11 @@ export default function BirthdayHub() {
   const faqs = [
     {
       question: 'What determines a birthday personality?',
-      answer: 'Birthday personality is shaped by two main forces: your zodiac sign (determined by the Sun\'s position on your birth date) and your Life Path number (derived numerologically from your birth day). Together, they create a unique personality fingerprint — 12 zodiac signs × 9 life path numbers = 108 distinct combinations.',
+      answer: 'Birthday personality is shaped by two main forces: your zodiac sign (determined by the Sun\'s position on your birth date) and your Birth Day Number (derived numerologically from your birth day). Together, they create a unique personality fingerprint — 12 zodiac signs × 9 birth day numbers = 108 distinct combinations.',
     },
     {
-      question: 'How is my Life Path number calculated from my birthday?',
-      answer: 'Your Life Path number is found by reducing your birth day to a single digit. For example, if you were born on the 17th: 1 + 7 = 8. Day 29: 2 + 9 = 11, then 1 + 1 = 2. Numbers 1–9 each carry specific personality energies from leadership (1) to humanitarianism (9).',
+      question: 'How is my Birth Day Number calculated from my birthday?',
+      answer: 'Your Birth Day Number is found by reducing your birth day to a single digit. For example, if you were born on the 17th: 1 + 7 = 8. Day 29: 2 + 9 = 11, then 1 + 1 = 2. Numbers 1–9 each carry specific personality energies from leadership (1) to humanitarianism (9).',
     },
     {
       question: 'Are birthday personalities accurate?',
@@ -52,7 +52,7 @@ export default function BirthdayHub() {
     },
     {
       question: 'Can two people born on the same day have different personalities?',
-      answer: 'Yes. While the zodiac sign and life path number are identical, additional factors like birth year, exact time of birth, rising sign, and cultural upbringing all shape individual personality. The birthday profile provides a foundational template, not a fixed destiny.',
+      answer: 'Yes. While the zodiac sign and birth day number are identical, additional factors like birth year, exact time of birth, rising sign, and cultural upbringing all shape individual personality. The birthday profile provides a foundational template, not a fixed destiny.',
     },
   ];
 
@@ -60,8 +60,8 @@ export default function BirthdayHub() {
     <div className="min-h-screen bg-white">
       <SEO
         title="Birthday Personality by Date — All 365 Days | BornClock"
-        description="Discover the personality, zodiac sign, life path number, lucky day, and compatible signs for every birthday. Explore all 365 days across 12 months."
-        keywords="birthday personality, zodiac by birthday, life path number birthday, personality by birth date, birthday astrology numerology"
+        description="Discover the personality, zodiac sign, birth day number, lucky day, and compatible signs for every birthday. Explore all 365 days across 12 months."
+        keywords="birthday personality, zodiac by birthday, birth day number birthday, personality by birth date, birthday astrology numerology"
         canonicalUrl="/birthday"
       />
       <FAQSchema items={faqs} />
@@ -109,7 +109,7 @@ export default function BirthdayHub() {
 
         {/* Feature pills */}
         <div className="flex flex-wrap justify-center gap-3 mb-10">
-          {['Zodiac Sign', 'Life Path Number', 'Core Traits', 'Lucky Day', 'Lucky Color', 'Compatible Signs'].map(f => (
+          {['Zodiac Sign', 'Birth Day Number', 'Core Traits', 'Lucky Day', 'Lucky Color', 'Compatible Signs'].map(f => (
             <span key={f} className="bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full text-xs px-3 py-1.5 font-medium">
               {f}
             </span>
@@ -198,10 +198,10 @@ export default function BirthdayHub() {
               </p>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-indigo-800 mb-2">Your Life Path Number</h3>
+              <h3 className="text-sm font-bold text-indigo-800 mb-2">Your Birth Day Number</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Calculated by reducing your birth day to a single digit (e.g., born on the 23rd:
-                2+3=5), your Life Path number adds a numerological layer that modifies and deepens
+                2+3=5), your Birth Day Number adds a numerological layer that modifies and deepens
                 your zodiac traits. 12 signs × 9 numbers = 108 unique combinations.
               </p>
             </div>

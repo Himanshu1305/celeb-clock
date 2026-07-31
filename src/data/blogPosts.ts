@@ -970,47 +970,68 @@ A: Genetics account for about 25% of lifespan variation. Lifestyle choices influ
     tags: ['birthday traditions', 'birthday customs', 'cultural celebrations', 'world birthdays', 'birthday party ideas', 'international traditions'],
     keywords: ['birthday traditions around the world', 'unique birthday customs', 'how other countries celebrate birthdays', 'international birthday traditions'],
     content: `
-<h2>Why Birthday Traditions Exist at All</h2>
-<p>Every culture in the world marks the anniversary of birth with ritual. The specific customs differ wildly — from singing in darkness to eating noodles to pulling earlobes — but the impulse is universal: to acknowledge that someone has survived another orbit around the Sun, and to wish them many more. The birthday tradition is humanity's oldest shared celebration.</p>
-<p>What's remarkable is how divergent these traditions became in isolation, and how much they reveal about each culture's deepest values — what they fear, what they hope for, and what they believe deserves celebration.</p>
+## Why Birthday Traditions Exist at All
 
-<h2>🇩🇪 Germany: The Birthday Boy Sets Up — Not the Guests</h2>
-<p>In Germany, the birthday person is expected to bring cake or food to their own office or classroom to share with colleagues and classmates. Waiting for others to celebrate you is considered passive. Taking initiative — even for your own birthday — is a virtue. The tradition reflects a broader German cultural value: don't wait for things to happen to you; make them happen.</p>
-<p>There's also a strict rule about premature congratulations. Wishing someone "Happy Birthday" before the actual date is considered bad luck — a superstition taken seriously enough that Germans will awkwardly avoid mentioning an upcoming birthday entirely rather than risk it.</p>
+Every culture in the world marks the anniversary of birth with ritual. The specific customs differ wildly — from singing in darkness to eating noodles to pulling earlobes — but the impulse is universal: to acknowledge that someone has survived another orbit around the Sun, and to wish them many more. The birthday tradition is humanity's oldest shared celebration.
 
-<h2>🇲🇽 Mexico: The Piñata's Deeper Meaning</h2>
-<p>The piñata — that papier-mâché figure stuffed with sweets and hung from a rope — is iconic globally, but its Mexican origins carry a meaning most people don't know. In traditional celebrations, the piñata has seven points representing the seven deadly sins. Blindfolding the birthday person represents faith overcoming temptation. Breaking it open represents the victory of good over evil. The sweets that spill out are the rewards of virtue.</p>
-<p>Las Mañanitas, the traditional birthday song sung at dawn, is considered more culturally significant than "Happy Birthday." Families and friends often gather outside a sleeping person's window to serenade them awake — sometimes as early as midnight — with mariachi bands, guitar, and voices. The song is to the Virgin of Guadalupe and the birthday person equally, invoking dawn itself as a blessing.</p>
+What's remarkable is how divergent these traditions became in isolation, and how much they reveal about each culture's deepest values — what they fear, what they hope for, and what they believe deserves celebration.
 
-<h2>🇯🇵 Japan: The Birthday That Isn't Always Celebrated</h2>
-<p>Modern Japan has adopted Western birthday traditions enthusiastically — cake, candles, gifts. But the traditional Japanese calendar had a different system entirely: everyone aged one year on New Year's Day, not on their individual birthdays. A child born in December would turn "two" just weeks after birth when January arrived. This system, called <em>kazoedoshi</em>, persisted officially until 1950.</p>
-<p>What Japan does uniquely well is the <em>longevity birthday</em>. At age 60 (kanreki), 70 (koki), 77 (kiju), 80 (sanju), 88 (beiju), 90 (sotsuju), and 99 (hakuju), birthdays receive extraordinary celebration. The 60th birthday is especially significant — it marks the completion of a full zodiac cycle (12 animals × 5 elements = 60 years), and the person is symbolically "reborn." They traditionally wear a red vest (chanchanko) representing the red worn by newborns.</p>
+## 🇩🇪 Germany: The Birthday Boy Sets Up — Not the Guests
 
-<h2>🇩🇰 Denmark: Flags Everywhere</h2>
-<p>Danes are passionate about their flag — the Dannebrog — and birthdays are one of its primary uses. On your birthday morning, you may wake to find the Danish flag flying outside your home, decorating your breakfast table, and appearing on your birthday cake. Flag bunting is strung across rooms. It is considered one of the warmest possible welcomes a birthday person can receive.</p>
-<p>Danish children also experience <em>flagdag</em> at school — the class flies the flag when a student has a birthday. The gesture communicates: today, you specifically matter. It's a small thing that Danes describe as having an outsized emotional impact throughout life.</p>
+In Germany, the birthday person is expected to bring cake or food to their own office or classroom to share with colleagues and classmates. Waiting for others to celebrate you is considered passive. Taking initiative — even for your own birthday — is a virtue. The tradition reflects a broader German cultural value: don't wait for things to happen to you; make them happen.
 
-<h2>🇨🇳 China: Noodles for Long Life</h2>
-<p>In Chinese birthday tradition, longevity noodles (<em>shòumiàn</em>) are central. The noodles must be long — the longer the better — and must not be cut, broken, or shortened in any way during cooking or eating. The length represents the birthday person's lifespan: cutting the noodle is literally cutting their life. Some noodles are made extraordinarily long — sometimes the length of the entire bowl.</p>
-<p>Red is the dominant colour at Chinese birthdays, representing luck and prosperity. Red eggs — hard-boiled eggs dyed red — are given to friends and family to share the good fortune of the birthday. For milestone birthdays (60, 70, 80), the celebrations become community events. The 80th birthday is considered especially auspicious, believed to bring blessings not just to the individual but to the entire family.</p>
+There's also a strict rule about premature congratulations. Wishing someone "Happy Birthday" before the actual date is considered bad luck — a superstition taken seriously enough that Germans will awkwardly avoid mentioning an upcoming birthday entirely rather than risk it.
 
-<h2>🇮🇳 India: Oil and Blessings</h2>
-<p>Across India, birthday traditions vary significantly by region, religion, and family — but several themes emerge consistently. Many Hindu families begin the birthday with a visit to the temple, offering prayers and receiving blessings before any secular celebration begins. The birthday person may fast until after the temple visit.</p>
-<p>Oil is applied to the birthday person's hair and body in many traditions — a practice with ancient roots in Ayurveda, where oil massage is associated with vitality and long life. Elders touch the birthday person's feet and receive <em>pranam</em> (respectful greeting) in return — the hierarchy of respect maintained even on the day that celebrates the individual.</p>
-<p>In many South Indian families, the birthday person sits on a wooden plank (representing stability and grounding) while rice is poured over their head — a blessing ritual tied to abundance and fertility. The contrast with Western birthday traditions is striking: where Western birthdays focus on the individual receiving gifts and attention, many Indian traditions focus on the birthday person giving respect, receiving blessings, and beginning the year in spiritual alignment.</p>
+## 🇲🇽 Mexico: The Piñata's Deeper Meaning
 
-<h2>🇬🇭 Ghana: The Birthday Bath</h2>
-<p>In Ghana, the birthday morning traditionally begins before dawn with a special porridge called <em>oto</em> — made from mashed sweet potato mixed with palm oil and eggs. The birthday person eats this first, before any other food, as a blessing for the year. The meal is prepared specifically for the occasion and carries spiritual significance.</p>
-<p>In some Ghanaian communities, the birthday is also an occasion to visit the graves of ancestors — connecting the living birthday to those who came before, placing the individual's continued life in the context of the family lineage they carry forward.</p>
+The piñata — that papier-mâché figure stuffed with sweets and hung from a rope — is iconic globally, but its Mexican origins carry a meaning most people don't know. In traditional celebrations, the piñata has seven points representing the seven deadly sins. Blindfolding the birthday person represents faith overcoming temptation. Breaking it open represents the victory of good over evil. The sweets that spill out are the rewards of virtue.
 
-<h2>🇷🇺 Russia: Pie Instead of Cake</h2>
-<p>In Russia, the birthday celebration often centres on a fruit pie rather than a cake — and the pie traditionally has the birthday person's name written in pastry on top. Birthday greetings often extend far beyond the day itself, with friends and family expected to call and visit throughout the week. A Russian birthday that ends on the day itself would be considered a quiet one.</p>
-<p>One uniquely Russian birthday gesture: rather than the birthday person receiving flowers, they may give flowers to their guests — another inversion of the Western model, where generosity flows from the celebrated toward those who came to celebrate.</p>
+Las Mañanitas, the traditional birthday song sung at dawn, is considered more culturally significant than "Happy Birthday." Families and friends often gather outside a sleeping person's window to serenade them awake — sometimes as early as midnight — with mariachi bands, guitar, and voices. The song is to the Virgin of Guadalupe and the birthday person equally, invoking dawn itself as a blessing.
 
-<h2>🎂 What Birthdays Reveal About Us</h2>
-<p>Across every tradition — the German initiative, the Mexican piñata's theology, the Japanese longevity milestone, the Chinese noodle's unbroken length — birthdays function as a cultural mirror. They show us what a society most values: individual achievement, spiritual alignment, family continuity, the defeat of mortality.</p>
-<p>The candles we blow out, whatever country we're in, represent the same ancient wish: more time. More orbits. More chances to do what matters. BornClock exists because that wish deserves more than a candle — it deserves science, data, and a plan.</p>
-    `
+## 🇯🇵 Japan: The Birthday That Isn't Always Celebrated
+
+Modern Japan has adopted Western birthday traditions enthusiastically — cake, candles, gifts. But the traditional Japanese calendar had a different system entirely: everyone aged one year on New Year's Day, not on their individual birthdays. A child born in December would turn "two" just weeks after birth when January arrived. This system, called *kazoedoshi*, persisted officially until 1950.
+
+What Japan does uniquely well is the *longevity birthday*. At age 60 (kanreki), 70 (koki), 77 (kiju), 80 (sanju), 88 (beiju), 90 (sotsuju), and 99 (hakuju), birthdays receive extraordinary celebration. The 60th birthday is especially significant — it marks the completion of a full zodiac cycle (12 animals × 5 elements = 60 years), and the person is symbolically "reborn." They traditionally wear a red vest (chanchanko) representing the red worn by newborns.
+
+## 🇩🇰 Denmark: Flags Everywhere
+
+Danes are passionate about their flag — the Dannebrog — and birthdays are one of its primary uses. On your birthday morning, you may wake to find the Danish flag flying outside your home, decorating your breakfast table, and appearing on your birthday cake. Flag bunting is strung across rooms. It is considered one of the warmest possible welcomes a birthday person can receive.
+
+Danish children also experience *flagdag* at school — the class flies the flag when a student has a birthday. The gesture communicates: today, you specifically matter. It's a small thing that Danes describe as having an outsized emotional impact throughout life.
+
+## 🇨🇳 China: Noodles for Long Life
+
+In Chinese birthday tradition, longevity noodles (*shòumiàn*) are central. The noodles must be long — the longer the better — and must not be cut, broken, or shortened in any way during cooking or eating. The length represents the birthday person's lifespan: cutting the noodle is literally cutting their life. Some noodles are made extraordinarily long — sometimes the length of the entire bowl.
+
+Red is the dominant colour at Chinese birthdays, representing luck and prosperity. Red eggs — hard-boiled eggs dyed red — are given to friends and family to share the good fortune of the birthday. For milestone birthdays (60, 70, 80), the celebrations become community events. The 80th birthday is considered especially auspicious, believed to bring blessings not just to the individual but to the entire family.
+
+## 🇮🇳 India: Oil and Blessings
+
+Across India, birthday traditions vary significantly by region, religion, and family — but several themes emerge consistently. Many Hindu families begin the birthday with a visit to the temple, offering prayers and receiving blessings before any secular celebration begins. The birthday person may fast until after the temple visit.
+
+Oil is applied to the birthday person's hair and body in many traditions — a practice with ancient roots in Ayurveda, where oil massage is associated with vitality and long life. Elders touch the birthday person's feet and receive *pranam* (respectful greeting) in return — the hierarchy of respect maintained even on the day that celebrates the individual.
+
+In many South Indian families, the birthday person sits on a wooden plank (representing stability and grounding) while rice is poured over their head — a blessing ritual tied to abundance and fertility. The contrast with Western birthday traditions is striking: where Western birthdays focus on the individual receiving gifts and attention, many Indian traditions focus on the birthday person giving respect, receiving blessings, and beginning the year in spiritual alignment.
+
+## 🇬🇭 Ghana: The Birthday Bath
+
+In Ghana, the birthday morning traditionally begins before dawn with a special porridge called *oto* — made from mashed sweet potato mixed with palm oil and eggs. The birthday person eats this first, before any other food, as a blessing for the year. The meal is prepared specifically for the occasion and carries spiritual significance.
+
+In some Ghanaian communities, the birthday is also an occasion to visit the graves of ancestors — connecting the living birthday to those who came before, placing the individual's continued life in the context of the family lineage they carry forward.
+
+## 🇷🇺 Russia: Pie Instead of Cake
+
+In Russia, the birthday celebration often centres on a fruit pie rather than a cake — and the pie traditionally has the birthday person's name written in pastry on top. Birthday greetings often extend far beyond the day itself, with friends and family expected to call and visit throughout the week. A Russian birthday that ends on the day itself would be considered a quiet one.
+
+One uniquely Russian birthday gesture: rather than the birthday person receiving flowers, they may give flowers to their guests — another inversion of the Western model, where generosity flows from the celebrated toward those who came to celebrate.
+
+## 🎂 What Birthdays Reveal About Us
+
+Across every tradition — the German initiative, the Mexican piñata's theology, the Japanese longevity milestone, the Chinese noodle's unbroken length — birthdays function as a cultural mirror. They show us what a society most values: individual achievement, spiritual alignment, family continuity, the defeat of mortality.
+
+The candles we blow out, whatever country we're in, represent the same ancient wish: more time. More orbits. More chances to do what matters. BornClock exists because that wish deserves more than a candle — it deserves science, data, and a plan.
+`
   },
   {
     id: '7',
