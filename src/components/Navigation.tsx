@@ -55,7 +55,6 @@ const astrologyItems = [
   { path: '/chinese-zodiac', label: 'Chinese Zodiac', emoji: '🐉' },
   { path: '/vedic-zodiac', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
   { path: '/moon-sign', label: 'Moon Sign Calculator', emoji: '🌙' },
-  { path: '/rising-sign-calculator', label: 'Rising Sign Calculator', emoji: '⬆️' },
   { path: '/tarot-card-by-birthday', label: 'Tarot by Birthday', emoji: '🃏' },
   { path: '/compatibility', label: 'Compatibility Calculator', emoji: '💕' },
   { path: '/birthday', label: 'Birthday Personalities', emoji: '🎂' },

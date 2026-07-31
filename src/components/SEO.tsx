@@ -37,7 +37,11 @@ export const SEO = ({
   tags = [],
   noindex = false
 }: SEOProps) => {
-  const fullTitle = `${title} | ${SITE_NAME}`;
+  // Brand exactly once. Most page titles already end with "… | BornClock"; appending
+  // SITE_NAME again produced the doubled tab title "… | BornClock | BornClock - Age &
+  // Birthday Calculator". If the title already carries the brand, use it as-is; only
+  // the un-branded titles (e.g. the homepage) get the full SITE_NAME suffix.
+  const fullTitle = /\bBornClock\b/i.test(title) ? title : `${title} | ${SITE_NAME}`;
   // Canonical must be the final 200 URL. The Worker 307-redirects non-slash →
   // trailing-slash, so emit the trailing-slash form (matches the sitemap) — a
   // non-slash canonical points at a URL that redirects, which is a weaker signal.

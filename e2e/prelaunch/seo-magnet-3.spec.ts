@@ -70,13 +70,9 @@ test.describe('SEO-MAGNET-3 — prerendered content', () => {
     expect(doc).toContain('/zodiac/leo');
   });
 
-  // Phase 4 — rising sign page prerenders with the mandatory honesty framing.
-  test('rising-sign-calculator: honesty framing + WebApplication schema', () => {
-    const doc = html('/rising-sign-calculator');
-    expect(doc).toContain('approximation');
-    expect(doc).toContain('never sent anywhere or stored');
-    expect(doc).toContain('"WebApplication"');
-  });
+  // Phase 4 (rising-sign) removed — the page was retired in BATCH-5 Phase 2 (a
+  // 2-hour-block ascendant is confidently wrong without birth lat/long). Its prerender
+  // + UI assertions were deleted; the redirect is asserted below.
 });
 
 test.describe('SEO-MAGNET-3 — worker + app', () => {
@@ -108,16 +104,10 @@ test.describe('SEO-MAGNET-3 — worker + app', () => {
     expect(body.toLowerCase()).toContain('noindex');
   });
 
-  // Phase 4 — rising sign input validation + a valid computation.
-  test('rising sign: validation + result', async ({ page }) => {
-    await page.goto('/rising-sign-calculator');
-    await page.getByRole('button', { name: /find my rising sign/i }).click();
-    await expect(page.getByText('Please enter your birth date.')).toBeVisible();
-    await page.locator('input[type="date"]').fill('1990-07-15');
-    await page.getByRole('button', { name: /find my rising sign/i }).click();
-    await expect(page.getByText(/Please enter your birth time/)).toBeVisible();
-    await page.locator('input[type="time"]').fill('08:30');
-    await page.getByRole('button', { name: /find my rising sign/i }).click();
-    await expect(page.getByText(/your approximate rising sign is/i)).toBeVisible();
+  // BATCH-5 Phase 2 — the retired rising-sign URL 301s to /moon-sign (crawl-preserving).
+  test('retired /rising-sign-calculator → 301 /moon-sign', async ({ request }) => {
+    const res = await request.get(`${WORKER}/rising-sign-calculator`, { maxRedirects: 0 });
+    expect(res.status()).toBe(301);
+    expect(res.headers()['location']).toContain('/moon-sign');
   });
 });

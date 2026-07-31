@@ -47,6 +47,7 @@ const BirthdayDatePage = lazy(() => import("./pages/BirthdayDatePage"));
 const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 const FamilyDashboard = lazy(() => import("./pages/FamilyDashboard"));
 const GiftReport = lazy(() => import("./pages/GiftReport"));
+const CoachLandingPage = lazy(() => import("./pages/CoachLandingPage"));
 const BiologicalAge = lazy(() => import("./pages/BiologicalAge"));
 const CountryComparison = lazy(() => import("./pages/CountryComparison"));
 const BirthdayReport = lazy(() => import("./pages/BirthdayReport"));
@@ -70,7 +71,6 @@ const HowDoesStressAffectLifeExpectancy = lazy(() => import('@/pages/answers/How
 const HowManyDaysUntilMyBirthday = lazy(() => import('@/pages/answers/HowManyDaysUntilMyBirthday'));
 const TarotByBirthday = lazy(() => import('@/pages/TarotByBirthday'));
 const MoonSignPage = lazy(() => import('@/pages/MoonSignPage'));
-const RisingSignPage = lazy(() => import('@/pages/RisingSignPage'));
 const NameNumerologyPage = lazy(() => import('@/pages/NameNumerologyPage'));
 const BiorhythmPage = lazy(() => import('@/pages/BiorhythmPage'));
 const CompatibilityPage = lazy(() => import('@/pages/CompatibilityPage'));
@@ -141,6 +141,7 @@ const App = () => (
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/family" element={<FamilyDashboard />} />
               <Route path="/gift" element={<GiftReport />} />
+              <Route path="/coach" element={<CoachLandingPage />} />
               <Route path="/biological-age" element={<BiologicalAge />} />
               <Route path="/country-comparison" element={<CountryComparison />} />
               <Route path="/birthday-report" element={<BirthdayReport />} />
@@ -165,7 +166,6 @@ const App = () => (
               <Route path="/answers/how-many-days-until-my-birthday" element={<HowManyDaysUntilMyBirthday />} />
               <Route path="/tarot-card-by-birthday" element={<TarotByBirthday />} />
               <Route path="/moon-sign" element={<MoonSignPage />} />
-              <Route path="/rising-sign-calculator" element={<RisingSignPage />} />
               <Route path="/name-numerology" element={<NameNumerologyPage />} />
               <Route path="/biorhythm" element={<BiorhythmPage />} />
               <Route path="/compatibility" element={<CompatibilityPage />} />

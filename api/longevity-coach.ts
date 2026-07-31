@@ -159,6 +159,79 @@ Your role:
 When the exchange genuinely touches health decisions, symptoms, medication, or a specific condition, close with: "For medical advice, please consult a healthcare professional." For neutral questions — what a score means, how the calculation works, general encouragement — don't append it.`;
 }
 
+const FALLBACK = 'I could not generate a response. Please try again.';
+
+// ── Providers ─────────────────────────────────────────────────────────────────
+// Both share the SAME validated system prompt, user message, and zero-retention
+// behaviour. Selection is COACH_PROVIDER ('gemini' default | 'anthropic'), read from
+// env — the Anthropic path is kept as a one-flag rollback, not deleted.
+
+// Anthropic (rollback). Returns reply text; throws on transport/HTTP failure.
+async function callAnthropic(systemPrompt: string, message: string): Promise<string> {
+  const apiKey = process.env.ANTHROPIC_API_KEY!;
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 300,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: message }],
+    }),
+  });
+  if (!response.ok) throw new Error(`Anthropic API error: ${response.status}`);
+  const data = await response.json();
+  return data.content?.[0]?.text || FALLBACK;
+}
+
+// Gemini (default). The system prompt maps to `systemInstruction` (NOT a top-level
+// system param). safetySettings are REQUIRED: a longevity coach discusses mortality,
+// smoking, disease risk, alcohol and BMI, which trip DANGEROUS_CONTENT / HARASSMENT at
+// Gemini's default thresholds and would refuse the very questions it exists to answer.
+// All four categories are set to the least restrictive generally-available threshold.
+async function callGemini(systemPrompt: string, message: string): Promise<string> {
+  const apiKey = process.env.GEMINI_API_KEY!;
+  const response = await fetch(
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ role: 'user', parts: [{ text: message }] }],
+        generationConfig: { maxOutputTokens: 300 },
+        safetySettings: [
+          { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' },
+          { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_ONLY_HIGH' },
+          { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
+          { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' },
+        ],
+      }),
+    },
+  );
+  if (!response.ok) throw new Error(`Gemini API error: ${response.status}`);
+  const data = await response.json();
+  // A prompt-level block or a non-STOP finishReason with no text degrades to a friendly
+  // message — never a 500 and never a broken empty reply.
+  if (data?.promptFeedback?.blockReason) {
+    return "I'm not able to answer that particular question. Try asking about your forecast, a specific health factor, or how to improve your score.";
+  }
+  const candidate = data?.candidates?.[0];
+  const text: string = (candidate?.content?.parts ?? [])
+    .map((p: any) => p?.text).filter(Boolean).join('') || '';
+  if (!text) {
+    if (candidate?.finishReason && candidate.finishReason !== 'STOP') {
+      return "I couldn't complete that response. Try rephrasing, or ask about a specific factor in your forecast.";
+    }
+    return FALLBACK;
+  }
+  return text;
+}
+
 async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST') {
     return json({ error: 'Method not allowed' }, 405);
@@ -177,41 +250,29 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Missing message or context' }, 400);
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
+  // Provider selection: Gemini by default, Anthropic behind the rollback flag.
+  const provider = process.env.COACH_PROVIDER === 'anthropic' ? 'anthropic' : 'gemini';
+  const keyPresent = provider === 'anthropic'
+    ? !!process.env.ANTHROPIC_API_KEY
+    : !!process.env.GEMINI_API_KEY;
+  if (!keyPresent) {
     return json({ error: 'API key not configured' }, 500);
   }
 
   try {
     // Validate untrusted userContext against the calculator's allowlists, then build
-    // the prompt from the cleaned values only. Cap the user message length too.
+    // the prompt from the cleaned values only. Cap the user message length too. The
+    // same system prompt + message feed whichever provider is active.
     const systemPrompt = buildSystemPrompt(sanitizeUserContext(userContext));
     const safeMessage = capMessage(message);
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 300,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: safeMessage }],
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Anthropic API error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    const reply = data.content?.[0]?.text || 'I could not generate a response. Please try again.';
+    const reply = provider === 'anthropic'
+      ? await callAnthropic(systemPrompt, safeMessage)
+      : await callGemini(systemPrompt, safeMessage);
 
     return json({ reply });
   } catch (error) {
+    // Zero-retention: log ONLY the error object — never the message, userContext, or output.
     console.error('Longevity coach error:', error);
     return json({ error: 'Failed to get response. Please try again.' }, 500);
   }

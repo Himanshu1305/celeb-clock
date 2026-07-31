@@ -32,6 +32,7 @@ const BRIDGE_KEYS = [
   'SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY',
   'CRON_SECRET', 'VITE_CRON_SECRET',
   'RESEND_API_KEY', 'ANTHROPIC_API_KEY', 'ADMIN_SECRET_KEY',
+  'GEMINI_API_KEY', 'COACH_PROVIDER',
   'VITE_RAZORPAY_PLAN_INDIA_MONTHLY', 'VITE_RAZORPAY_PLAN_INDIA_ANNUAL',
   'VITE_RAZORPAY_PLAN_GLOBAL_MONTHLY', 'VITE_RAZORPAY_PLAN_GLOBAL_ANNUAL',
   'ADMIN_EMAIL', 'OPS_BASE_URL',
@@ -80,6 +81,11 @@ export default {
     const REDIRECTS: Record<string, string> = {
       '/methodology': '/how-it-works',
       '/methodology/': '/how-it-works',
+      // /rising-sign-calculator retired (a 2-hour-block ascendant is confidently wrong
+      // without birth latitude/longitude). The URL was submitted to Google + IndexNow,
+      // so 301 to the closest genuinely-useful page rather than waste the crawl on a 404.
+      '/rising-sign-calculator': '/moon-sign',
+      '/rising-sign-calculator/': '/moon-sign',
     };
     if (REDIRECTS[pathname]) {
       return Response.redirect(new URL(REDIRECTS[pathname], request.url).toString(), 301);
