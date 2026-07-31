@@ -56,7 +56,7 @@ export function CountryExtrasSection({ monthDay, mainListNames }: Props) {
       return;
     }
     setLoaded(false);
-    getCountryExtras(monthDay, country, mainListNames, 4)
+    getCountryExtras(monthDay, country, mainListNames, 15)
       .then(results => { setExtras(results); setLoaded(true); })
       .catch(() => setLoaded(true));
   }, [monthDay, country, mainListNames.join(',')]);

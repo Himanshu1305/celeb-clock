@@ -406,27 +406,36 @@ export async function getCountryExtras(
   monthDay: string,
   country: string,
   excludeNames: string[],
-  limit: number = 4,
+  limit: number = 15,
 ): Promise<CelebrityBirthdayResult[]> {
   try {
+    // Query-filter by nationality_code (canonical representation) and rank among
+    // nationals by sitelinks — NOT the old "fetch global top-200 then filter", which
+    // buried nationals below the global cutoff on high-volume dates (e.g. 01-01 has
+    // 1546 rows; the top 200 are historical global figures, so most of the 27 Indians
+    // were never fetched). Over-fetch a little to absorb the global-list exclusions.
     const { data, error } = await supabase
       .from('celebrity_sitelinks')
       .select('name, birth_date, death_date, sitelinks, nationality, nationality_code, occupation, known_for, wikipedia_url, wikidata_id')
       .eq('birth_month_day', monthDay)
+      .eq('nationality_code', country)
       .order('sitelinks', { ascending: false })
-      .limit(200);
+      .limit(limit + 10);
 
     if (error || !data || data.length === 0) return [];
 
     const excludeSet = new Set(excludeNames.map(n => n.toLowerCase()));
 
+    // Deduplicate by wikidata_id (some legacy rows share a QID) and by name, and
+    // drop anyone already shown in the global list above.
+    const seenQid = new Set<string>();
+    const seenName = new Set<string>();
     const matches = data.filter(celeb => {
-      if (excludeSet.has(celeb.name.toLowerCase())) return false;
-      const effectiveNationality =
-        celeb.nationality_code ||
-        CELEBRITY_NATIONALITY[celeb.name] ||
-        null;
-      return effectiveNationality === country;
+      const nm = celeb.name.toLowerCase();
+      if (excludeSet.has(nm) || seenName.has(nm)) return false;
+      if (celeb.wikidata_id) { if (seenQid.has(celeb.wikidata_id)) return false; seenQid.add(celeb.wikidata_id); }
+      seenName.add(nm);
+      return true;
     });
 
     return matches.slice(0, limit).map(c => ({

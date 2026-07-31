@@ -147,6 +147,51 @@ test('/born-on/february-29 loads with an h1', async ({ page }) => {
   await expect(page.locator('h1').first()).toBeVisible();
 });
 
+// ── India celebrity coverage (INDIA-CELEBS batch) ──────────────────────────────
+async function mockGeoIN(page: Page) {
+  await page.route('https://ipapi.co/**', route =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ country_code: 'IN', country_name: 'India' }) }));
+  await page.addInitScript(() => {
+    try { localStorage.setItem('bc_country_code_v2', JSON.stringify({ code: 'IN', ts: Date.now() })); } catch { /* noop */ }
+  });
+}
+const indiaSection = (page: Page) =>
+  page.locator('div', { has: page.locator('h3', { hasText: /from India/i }) }).last();
+
+test('[real] India section: /born-on/january-1 (geo IN) shows several ranked Indian cards', async ({ page }) => {
+  await mockGeoIN(page);
+  await page.goto('/born-on/january-1');
+  await page.waitForLoadState('networkidle');
+  const heading = page.locator('h3', { hasText: /from India/i });
+  await expect(heading).toBeVisible({ timeout: 15000 });
+  // Cards render with the person's name even with NO image (initials fallback).
+  await expect(page.locator('body')).toContainText('Vidya Balan');
+  // At least 6 distinct India cards (ranked). Cards carry a Wikipedia link each.
+  const cardLinks = indiaSection(page).locator('a[href*="wikipedia.org"]');
+  expect(await cardLinks.count()).toBeGreaterThanOrEqual(6);
+});
+
+test('[real] India section: no empty shell — heading only renders alongside cards', async ({ page }) => {
+  await mockGeoIN(page);
+  await page.goto('/born-on/january-1');
+  await page.waitForLoadState('networkidle');
+  // Wherever the "from India" heading appears, it must have >=1 celebrity card —
+  // CountryExtrasSection returns null when there are no extras (no empty shell).
+  const headings = page.locator('h3', { hasText: /from India/i });
+  const n = await headings.count();
+  if (n > 0) {
+    await expect(indiaSection(page).locator('a[href*="wikipedia.org"]').first()).toBeVisible();
+  }
+});
+
+test('India section is absent for a non-India visitor (gating, no empty shell)', async ({ page }) => {
+  await page.route('https://ipapi.co/**', route =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ country_code: 'US', country_name: 'United States' }) }));
+  await page.goto('/born-on/january-1');
+  await page.waitForLoadState('networkidle');
+  await expect(page.locator('h3', { hasText: /from India/i })).toHaveCount(0);
+});
+
 // Helper: find a MM-DD with no national-day entry (scan the year).
 function findDatelessDate(): { month: number; day: number; slug: string } {
   const MONTHS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
