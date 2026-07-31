@@ -6,7 +6,7 @@ import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
-import { getRankedMonthCelebrities } from '@/services/BirthdaySearchService';
+import { getRankedMonthCelebrities, getRankedMonthCelebritiesByCountry } from '@/services/BirthdaySearchService';
 import { getMonthHub, MONTH_HUB_DATA } from '@/data/monthHubData';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
 import { useReportPrice } from '@/hooks/useCurrency';
@@ -29,6 +29,7 @@ export default function MonthHub() {
   const data = getMonthHub(slug);
 
   const [celebrities, setCelebrities] = useState<DisplayCelebrity[]>([]);
+  const [indianCelebs, setIndianCelebs] = useState<(DisplayCelebrity & { dateHref: string })[]>([]);
   const [loading, setLoading] = useState(true);
   const reportPrice = useReportPrice();
 
@@ -61,6 +62,30 @@ export default function MonthHub() {
         };
       }));
       setLoading(false);
+    });
+
+    // "Indian celebrities born in {month}" — nationality-filtered so Indians aren't
+    // buried under global historical figures (same fix class as the Jan-1 date page).
+    getRankedMonthCelebritiesByCountry(data.monthNumber, 'IN', 12).then(results => {
+      setIndianCelebs(results.map(c => {
+        const year = c.birthDate ? parseInt(c.birthDate.slice(0, 4), 10) : null;
+        const deathYear = c.deathDate ? parseInt(c.deathDate.slice(0, 4), 10) : null;
+        const age = year ? (c.deathDate ? (deathYear! - year) : (new Date().getFullYear() - year)) : null;
+        const day = c.birthDate ? parseInt(c.birthDate.slice(8, 10), 10) : null;
+        return {
+          name: c.name,
+          birthYear: year,
+          deathYear,
+          age,
+          isLiving: c.isLiving,
+          occupation: c.occupation || 'Personality',
+          knownFor: c.knownFor ?? null,
+          imageUrl: null,
+          wikipediaUrl: c.wikipediaUrl,
+          sitelinks: c.sitelinks,
+          dateHref: day ? `/born-on/${slug}-${day}` : `/born-in-${slug}`,
+        };
+      }));
     });
   }, [slug]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -156,6 +181,22 @@ export default function MonthHub() {
           </>
         ) : (
           <p className="text-muted-foreground mb-10">Explore the day-by-day pages below for people born on each date in {month}.</p>
+        )}
+
+        {/* Indian celebrities born this month (only when ≥3 exist — no thin shells).
+            Nationality-filtered so recognisable Indians surface above global figures. */}
+        {indianCelebs.length >= 3 && (
+          <div className="mb-10">
+            <h2 className="text-xl font-semibold text-foreground mb-1">🇮🇳 Indian celebrities born in {month}</h2>
+            <p className="text-sm text-muted-foreground mb-4">
+              The most recognised Indians born in {month}, ranked by global prominence. Tap a card for their birthday page.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {indianCelebs.map((celeb, i) => (
+                <CelebrityCard key={`in-${celeb.name}`} celebrity={celeb} index={i} dateHref={celeb.dateHref} />
+              ))}
+            </div>
+          </div>
         )}
 
         {/* Zodiac spans */}

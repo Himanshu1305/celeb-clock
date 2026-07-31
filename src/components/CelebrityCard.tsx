@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { fetchCelebrityImage } from '@/services/WikipediaImageService';
 import { ExternalLink, Rocket } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { FEATURES } from '@/config/features';
 import { boostCelebrity } from '@/services/CelebrityBoostService';
 import { useAuth } from '@/hooks/useAuth';
@@ -41,9 +42,11 @@ export function classifyOccupation(occ: string | null | undefined): Exclude<Occu
 interface CelebrityCardProps {
   celebrity: DisplayCelebrity;
   index: number;
+  /** Optional internal link to this celebrity's /born-on date page (used on month hubs). */
+  dateHref?: string;
 }
 
-export const CelebrityCard = ({ celebrity, index }: CelebrityCardProps) => {
+export const CelebrityCard = ({ celebrity, index, dateHref }: CelebrityCardProps) => {
   const { user } = useAuth();
   const [imageUrl, setImageUrl] = useState<string | null>(celebrity.imageUrl ?? null);
   const [imageLoading, setImageLoading] = useState(!celebrity.imageUrl);
@@ -166,6 +169,16 @@ export const CelebrityCard = ({ celebrity, index }: CelebrityCardProps) => {
             <ExternalLink className="w-3 h-3" />
             ↗ Wikipedia
           </a>
+
+          {dateHref && (
+            <Link
+              to={dateHref}
+              className="inline-flex items-center gap-1 text-xs text-primary/80 hover:text-primary hover:underline transition-colors"
+              onClick={e => e.stopPropagation()}
+            >
+              🎂 Birthday page →
+            </Link>
+          )}
 
           {FEATURES.CELEBRITY_BOOST && (
             <button

@@ -397,6 +397,61 @@ export async function getRankedMonthCelebrities(
 }
 
 /**
+ * Top celebrities born in a given MONTH who match a specific nationality_code,
+ * ranked among nationals by sitelinks DESC (cap `limit`). Same fix class as the
+ * date-page getCountryExtras: query-FILTER by nationality_code instead of pulling
+ * the global top-N (where nationals lose to global historical figures). Powers the
+ * "Indian celebrities born in {month}" section on the /born-in-{month} hubs.
+ */
+export async function getRankedMonthCelebritiesByCountry(
+  monthNumber: number,
+  country: string,
+  limit: number = 12,
+): Promise<CelebrityBirthdayResult[]> {
+  try {
+    const mm = String(monthNumber).padStart(2, '0');
+    const { data, error } = await supabase
+      .from('celebrity_sitelinks')
+      .select('name, birth_date, death_date, sitelinks, nationality, nationality_code, occupation, known_for, wikipedia_url, wikidata_id')
+      .like('birth_month_day', `${mm}-%`)
+      .eq('nationality_code', country)
+      .order('sitelinks', { ascending: false })
+      .limit(limit + 8)
+      .abortSignal(AbortSignal.timeout(8000));
+
+    if (error || !data || data.length === 0) return [];
+
+    // Deduplicate by wikidata_id (legacy rows can share a QID) and by name.
+    const seenQid = new Set<string>();
+    const seenName = new Set<string>();
+    const matches = data.filter(c => {
+      const nm = c.name.toLowerCase();
+      if (seenName.has(nm)) return false;
+      if (c.wikidata_id) { if (seenQid.has(c.wikidata_id)) return false; seenQid.add(c.wikidata_id); }
+      seenName.add(nm);
+      return true;
+    });
+
+    return matches.slice(0, limit).map(c => ({
+      name: c.name,
+      birthDate: c.birth_date,
+      deathDate: c.death_date,
+      sitelinks: c.sitelinks ?? 0,
+      nationality: c.nationality,
+      nationalityCode: c.nationality_code,
+      occupation: c.occupation,
+      knownFor: c.known_for ?? null,
+      wikipediaUrl: c.wikipedia_url,
+      wikidataId: c.wikidata_id,
+      isLiving: !c.death_date,
+    }));
+  } catch (err) {
+    console.error('getRankedMonthCelebritiesByCountry: query failed (returning []):', err);
+    return [];
+  }
+}
+
+/**
  * Returns celebrities for a date matching a specific country that are NOT
  * already in the main global list (deduplicated by name, case-insensitive).
  * Uses nationality_code from the DB when present, falls back to the local map.

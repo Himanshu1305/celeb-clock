@@ -115,6 +115,8 @@ export default function CompatibilityPage() {
     s >= 85 ? 'Excellent Match' : s >= 70 ? 'Good Match' : s >= 55 ? 'Moderate Match' : 'Challenging Match';
 
   const faqItems = [
+    { question: 'Is this Western or Vedic compatibility?',
+      answer: 'This calculator uses Western (sun-sign) astrology — it compares the two signs by element, modality and ruling planet. It is not Vedic compatibility: Vedic matching (Ashta Koota / Guna Milan) is a separate system based on the Moon nakshatras of both people, and it is not what this tool computes.' },
     { question: 'How does zodiac compatibility work?',
       answer: 'Zodiac compatibility is assessed by comparing the elements (Fire, Earth, Air, Water), modalities (Cardinal, Fixed, Mutable), and ruling planets of two signs. Signs sharing the same element typically have natural understanding. Complementary elements (Fire-Air, Earth-Water) often balance each other. Opposite signs (six signs apart on the wheel) can be intensely attracted while also challenging.' },
     { question: 'Can incompatible signs have great relationships?',
@@ -127,7 +129,7 @@ export default function CompatibilityPage() {
 
   const seoTitle = calcSigns
     ? `${calcSigns.s1} and ${calcSigns.s2} Compatibility — ${getCompatibility(calcSigns.s1, calcSigns.s2).overall}% Match | BornClock`
-    : 'Zodiac Compatibility Calculator — How Compatible Are You? | BornClock';
+    : 'Western Zodiac Compatibility Calculator — How Compatible Are You? | BornClock';
 
   // Canonical = the alphabetical pair (both URL orders point to one page), so
   // aries/leo and leo/aries don't compete as duplicate content.
@@ -165,14 +167,20 @@ export default function CompatibilityPage() {
             <span className="text-gray-600">Compatibility Calculator</span>
           </nav>
 
-          <h1 className="text-3xl font-black text-gray-900 mb-1">Zodiac Compatibility Calculator</h1>
+          <h1 className="text-3xl font-black text-gray-900 mb-1">Zodiac Compatibility Calculator <span className="text-lg font-semibold text-gray-500">(Western Zodiac)</span></h1>
           <PageTagline />
 
-          <div className="bg-rose-50 border-l-4 border-rose-500 rounded-r-xl p-5 mb-8">
+          <div className="bg-rose-50 border-l-4 border-rose-500 rounded-r-xl p-5 mb-4">
             <p className="text-base font-semibold text-rose-900 leading-relaxed">
               Zodiac compatibility is assessed by comparing elements, modalities, and planetary energies. Select two signs to see how they align in love, friendship, and work — with full descriptions of strengths, challenges, and practical advice.
             </p>
           </div>
+          {/* Western vs Vedic clarifier (shown on the calculator and every pair page) */}
+          <p className="text-xs text-gray-500 leading-relaxed mb-8">
+            This uses the <strong>Western</strong> sun-sign tradition (element &amp; modality). Vedic matching
+            (Ashta Koota / Guna Milan) is a different system based on Moon nakshatras and is not what this
+            calculator computes.
+          </p>
 
           <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-200">
             <p className="text-sm font-semibold text-gray-700 mb-4">Select two zodiac signs</p>
@@ -290,6 +298,7 @@ export default function CompatibilityPage() {
                   { question: `Are ${calcSigns.s1} and ${calcSigns.s2} compatible?`, answer: `${calcSigns.s1} and ${calcSigns.s2} have an overall compatibility of ${result.overall}% (${overallLabel(result.overall).toLowerCase()}). ${result.description}` },
                   { question: `How compatible are ${calcSigns.s1} and ${calcSigns.s2} in love?`, answer: `${calcSigns.s1} and ${calcSigns.s2} score ${result.love}% for love and romance, ${result.friendship}% for friendship, and ${result.work}% for work and collaboration.` },
                   { question: `What are the strengths of a ${calcSigns.s1}–${calcSigns.s2} relationship?`, answer: `Key strengths: ${result.strengths.filter(Boolean).join('; ')}. Watch out for: ${result.challenges.filter(Boolean).join('; ')}.` },
+                  { question: `Is ${calcSigns.s1} and ${calcSigns.s2} compatibility Western or Vedic?`, answer: `This is Western (sun-sign) compatibility — ${calcSigns.s1} and ${calcSigns.s2} compared by element and modality. Vedic matching (Ashta Koota / Guna Milan) uses Moon nakshatras instead and is a different system.` },
                 ]}
               />
 

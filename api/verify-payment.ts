@@ -1,8 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
-import { sendEmailDirect } from './_email.js';
 import { verifyHmacSha256 } from './_crypto.js';
 import { generateInvoiceHTML } from '../src/lib/invoice-generator.js';
-import { sendInvoiceEmail } from './_invoice-email.js';
+import { sendPurchaseEmail } from './_invoice-email.js';
 
 // Service-role client — NEVER use the anon key here
 function serviceClient() {
@@ -239,7 +238,11 @@ async function handler(request: Request): Promise<Response> {
     }
   }
 
-  // Send payment receipt email (fire-and-forget; must not block the response)
+  // BATCH-6 Phase 2: purchases now send ONE merged email (confirmation + invoice
+  // attached), dispatched AFTER the invoice block below so it can include the PDF.
+  // Here we only CAPTURE the confirmation/receipt data (no send). Non-fatal.
+  let receipt: { to: string; name: string; product: string; amountFormatted: string; date: string; reportLink?: string } | null = null;
+  let invoiceForEmail: { invoiceNo: string; html: string } | null = null;
   try {
     const { data: userData } = await serviceClient().auth.admin.getUserById(user_id);
     const userEmail = userData?.user?.email;
@@ -249,18 +252,17 @@ async function handler(request: Request): Promise<Response> {
       const amountFormatted = `${currencySymbol}${(paymentAmount / 100).toLocaleString('en-IN')}`;
       const date = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
       const base = process.env.PRODUCTION_URL ?? 'https://bornclock.com';
-      await sendEmailDirect({
-        type: 'payment_receipt',
+      receipt = {
         to: userEmail,
         name: userName,
         product,
         amountFormatted,
         date,
         reportLink: authoritativeSlug ? `${base}/report/${authoritativeSlug}` : undefined,
-      });
+      };
     }
   } catch (e) {
-    console.error('[verify-payment] receipt email error (non-fatal)', e);
+    console.error('[verify-payment] receipt data error (non-fatal)', e);
   }
 
   // --- GST INVOICE (non-fatal) ---------------------------------------------
@@ -367,8 +369,9 @@ async function handler(request: Request): Promise<Response> {
 
     if (invoiceRow) {
       const row = invoiceRow as any;
-      const invoiceHTML = generateInvoiceHTML(row);
-      await sendInvoiceEmail(row.buyer_email, row.invoice_no, invoiceHTML);
+      // Capture for the single merged email (sent below); the receipt recipient is the
+      // same auth user as row.buyer_email. No separate invoice email is sent here now.
+      invoiceForEmail = { invoiceNo: row.invoice_no, html: generateInvoiceHTML(row) };
     }
   } catch (invoiceErr) {
     if ((invoiceErr as Error).message !== 'skip') {
@@ -376,6 +379,21 @@ async function handler(request: Request): Promise<Response> {
     }
   }
   // --- end GST INVOICE -----------------------------------------------------
+
+  // ONE merged purchase email: confirmation + the invoice attached when it was issued.
+  // FAILURE ISOLATION: if invoicing above failed (invoiceForEmail is null), the customer
+  // STILL receives a confirmation — sendPurchaseEmail simply omits the attachment.
+  try {
+    if (receipt) {
+      await sendPurchaseEmail({
+        ...receipt,
+        invoiceNo: invoiceForEmail?.invoiceNo,
+        invoiceHtml: invoiceForEmail?.html,
+      });
+    }
+  } catch (e) {
+    console.error('[verify-payment] purchase email error (non-fatal)', e);
+  }
 
   return json({ success: true, product });
 }
