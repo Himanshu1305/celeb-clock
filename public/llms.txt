@@ -33,6 +33,18 @@ BornClock is a free birthday intelligence platform that turns a date of birth in
 - https://bornclock.com/birthday — Birthday month index
 - https://bornclock.com/born-on — Born-on date index (366 dates, Jan 1 – Dec 31 + Feb 29)
 - https://bornclock.com/born-on/[month]-[day]/india — Indian celebrities born on a given date (nationality facet; 350 dates with 3+ Indian personalities, ranked by global recognition). Example: https://bornclock.com/born-on/september-3/india
+- https://bornclock.com/born-in-[month] — "Born in {Month}" hubs (12): zodiac signs, birthstone, birth flowers, famous births, and national days for the month. Example: https://bornclock.com/born-in-august
+
+## Rhythm and Fitness (rhythm-awareness, NOT medical advice)
+
+These pages use the classic biorhythm model as a daily reflection prompt. HONESTY POLICY (stated on every page): the three-cycle biorhythm model dates from the early 20th century and controlled research has not found it predictive; it is framed as a rhythm-awareness / check-in practice, never a prescription. No claims of performance, injury prevention, hormonal/medical effects, or weight loss. Where real science exists (consistency, chronotype, sleep) it is stated plainly and kept separate from the rhythm layer.
+
+- https://bornclock.com/biorhythm-workout-calculator — Biorhythm workout check-in (anchor)
+- https://bornclock.com/best-day-to-start-a-habit — Habit timing vs. consistency (evidence-first)
+- https://bornclock.com/cycle-syncing-for-men — Rhythm awareness for everyone (circadian, not hormonal claims)
+- https://bornclock.com/why-am-i-tired-some-days — Honest look at sleep, circadian rhythm, daily variation
+- https://bornclock.com/best-time-to-work-out — What the science says (consistency, chronotype) + rhythm layer
+- https://bornclock.com/energy-forecast — 7-day rhythm check-in (not a prediction)
 
 ## Blog (Longevity and Birthday Science)
 

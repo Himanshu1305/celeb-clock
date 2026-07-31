@@ -482,7 +482,7 @@ const ReportView = () => {
       // Reflect the unlock immediately, then best-effort refresh the full row.
       setRow((prev: any) => (prev ? { ...prev, is_paid: true } : prev));
       try {
-        const refreshed = await import('@/services/BirthdayReportService').then(m => m.getReport(slug));
+        const refreshed = await getReport(slug);
         if (refreshed) setRow(refreshed);
       } catch { /* optimistic is_paid above already unlocks the view */ }
     } catch {
@@ -565,7 +565,7 @@ const ReportView = () => {
         // Client-side confirmation beacon ONLY — the webhook/verify flow is the source of truth.
         trackFunnel('purchase_completed', { slug, product: 'birthday_report', currency: sel.currency, taxMode: sel.taxMode });
         setRow((prev: any) => prev ? { ...prev, is_paid: true } : prev);
-        import('@/services/BirthdayReportService').then(m => m.getReport(slug)).then(fresh => { if (fresh) setRow(fresh); });
+        getReport(slug).then(fresh => { if (fresh) setRow(fresh); });
       },
       onError: (msg) => toast({ title: 'Payment failed', description: msg, variant: 'destructive' }),
       onDismiss: () => {},

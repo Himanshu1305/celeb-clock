@@ -160,10 +160,16 @@ async function prerenderRoute(page, baseUrl, route) {
       html = html.replace('</head>', `<script type="application/ld+json">${bc}</script></head>`);
     }
 
-    // Sanity: check for non-default title
+    // Sanity: flag a GENUINELY generic title — missing, too short, or identical to
+    // the site's default/home title (i.e. no per-route title was injected). The old
+    // check warned whenever the title lacked the word "BornClock", which is a false
+    // positive: many strong SEO titles (e.g. "Best Age Calculator Online — Exact Age
+    // in Seconds") and every blog post title deliberately lead with keywords and omit
+    // the brand to stay within the ~60-char limit. Brand-absence is not generic-ness.
     const titleMatch = html.match(/<title>([^<]*)<\/title>/i);
     const title = titleMatch ? titleMatch[1] : '';
-    if (!title || title.includes('BornClock') === false) {
+    const DEFAULT_TITLE_FRAGMENT = 'Age & Birthday Calculator'; // the base index.html title tail
+    if (!title || title.trim().length < 12 || (route !== '/' && title.includes(DEFAULT_TITLE_FRAGMENT))) {
       console.warn(`  [WARN] ${route}: title may be missing or generic: "${title}"`);
     }
 

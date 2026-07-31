@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,77 +8,77 @@ import { HelmetProvider } from "react-helmet-async";
 
 // Core Page Imports
 import Index from "./pages/Index";
-import BirthdayResults from "./pages/BirthdayResults";
-import Auth from "./pages/Auth";
-import Profile from "./pages/Profile";
-import Admin from "./pages/Admin";
-import Upgrade from "./pages/Upgrade";
-import Pricing from "./pages/Pricing";
-import Zodiac from "./pages/Zodiac";
-import Birthstone from "./pages/Birthstone";
-import MonthHub from "./pages/MonthHub";
+const BirthdayResults = lazy(() => import("./pages/BirthdayResults"));
+const Auth = lazy(() => import("./pages/Auth"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Admin = lazy(() => import("./pages/Admin"));
+const Upgrade = lazy(() => import("./pages/Upgrade"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const Zodiac = lazy(() => import("./pages/Zodiac"));
+const Birthstone = lazy(() => import("./pages/Birthstone"));
+const MonthHub = lazy(() => import("./pages/MonthHub"));
 import { MONTH_HUB_DATA } from "./data/monthHubData";
-import FitnessRhythmPage from "./pages/FitnessRhythmPage";
+const FitnessRhythmPage = lazy(() => import("./pages/FitnessRhythmPage"));
 import { FITNESS_PAGES } from "./data/fitnessPages";
-import LifeExpectancy from "./pages/LifeExpectancy";
-import CelebrityBirthday from "./pages/CelebrityBirthday";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
-import About from "./pages/About";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import FAQ from "./pages/FAQ";
-import Contact from "./pages/Contact";
-import NotFound from "./pages/NotFound";
-import AgeCalculatorPage from "./pages/AgeCalculatorPage";
-import TodaysBirthdaysPage from "./pages/TodaysBirthdaysPage";
-import NumerologyPage from "./pages/NumerologyPage";
-import PlanetaryAgePage from "./pages/PlanetaryAgePage";
-import Methodology from "./pages/Methodology";
-import EditorialPolicy from "./pages/EditorialPolicy";
-import ZodiacSign from "./pages/ZodiacSign";
-import BirthstonePage from "./pages/BirthstonePage";
-import NumerologyNumber from "./pages/NumerologyNumber";
-import GenerationPage from "./pages/Generation";
-import BirthdayDate from "./pages/BirthdayDate";
-import BirthdayHub from "./pages/BirthdayHub";
-import BirthdayMonthPage from "./pages/BirthdayMonthPage";
-import BirthdayDatePage from "./pages/BirthdayDatePage";
-import Leaderboard from "./pages/Leaderboard";
-import FamilyDashboard from "./pages/FamilyDashboard";
-import GiftReport from "./pages/GiftReport";
-import BiologicalAge from "./pages/BiologicalAge";
-import CountryComparison from "./pages/CountryComparison";
-import BirthdayReport from "./pages/BirthdayReport";
-import ReportView from "./pages/ReportView";
-import ChineseZodiac from "./pages/ChineseZodiac";
-import ChineseZodiacSign from "./pages/ChineseZodiacSign";
-import VedicZodiac from "./pages/VedicZodiac";
-import VedicZodiacSign from "./pages/VedicZodiacSign";
-import HowLongWillILive from '@/pages/answers/HowLongWillILive';
-import WhatIsMyBiologicalAge from '@/pages/answers/WhatIsMyBiologicalAge';
-import WhoSharesMyBirthday from '@/pages/answers/WhoSharesMyBirthday';
-import HowOldAmIOnMars from '@/pages/answers/HowOldAmIOnMars';
-import WhatIsMyZodiacSign from '@/pages/answers/WhatIsMyZodiacSign';
-import WhatIsMyLifePathNumber from '@/pages/answers/WhatIsMyLifePathNumber';
-import HowToCalculateAge from '@/pages/answers/HowToCalculateAge';
-import WhatGenerationAmI from '@/pages/answers/WhatGenerationAmI';
-import HowToLiveLonger from '@/pages/answers/HowToLiveLonger';
-import WhatIsBMI from '@/pages/answers/WhatIsBMI';
-import WhatIsLifeExpectancy from '@/pages/answers/WhatIsLifeExpectancy';
-import HowDoesStressAffectLifeExpectancy from '@/pages/answers/HowDoesStressAffectLifeExpectancy';
-import HowManyDaysUntilMyBirthday from '@/pages/answers/HowManyDaysUntilMyBirthday';
-import TarotByBirthday from '@/pages/TarotByBirthday';
-import MoonSignPage from '@/pages/MoonSignPage';
-import NameNumerologyPage from '@/pages/NameNumerologyPage';
-import BiorhythmPage from '@/pages/BiorhythmPage';
-import CompatibilityPage from '@/pages/CompatibilityPage';
-import RashiRatnaPage from '@/pages/RashiRatnaPage';
-import BornOnDay from '@/pages/BornOnDay';
-import BornOnDayIndia from '@/pages/BornOnDayIndia';
-import BornOnIndex from '@/pages/BornOnIndex';
-import BornOnIndiaIndex from '@/pages/BornOnIndiaIndex';
-import AnswersIndex from '@/pages/AnswersIndex';
+const LifeExpectancy = lazy(() => import("./pages/LifeExpectancy"));
+const CelebrityBirthday = lazy(() => import("./pages/CelebrityBirthday"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const About = lazy(() => import("./pages/About"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const Contact = lazy(() => import("./pages/Contact"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const AgeCalculatorPage = lazy(() => import("./pages/AgeCalculatorPage"));
+const TodaysBirthdaysPage = lazy(() => import("./pages/TodaysBirthdaysPage"));
+const NumerologyPage = lazy(() => import("./pages/NumerologyPage"));
+const PlanetaryAgePage = lazy(() => import("./pages/PlanetaryAgePage"));
+const Methodology = lazy(() => import("./pages/Methodology"));
+const EditorialPolicy = lazy(() => import("./pages/EditorialPolicy"));
+const ZodiacSign = lazy(() => import("./pages/ZodiacSign"));
+const BirthstonePage = lazy(() => import("./pages/BirthstonePage"));
+const NumerologyNumber = lazy(() => import("./pages/NumerologyNumber"));
+const GenerationPage = lazy(() => import("./pages/Generation"));
+const BirthdayDate = lazy(() => import("./pages/BirthdayDate"));
+const BirthdayHub = lazy(() => import("./pages/BirthdayHub"));
+const BirthdayMonthPage = lazy(() => import("./pages/BirthdayMonthPage"));
+const BirthdayDatePage = lazy(() => import("./pages/BirthdayDatePage"));
+const Leaderboard = lazy(() => import("./pages/Leaderboard"));
+const FamilyDashboard = lazy(() => import("./pages/FamilyDashboard"));
+const GiftReport = lazy(() => import("./pages/GiftReport"));
+const BiologicalAge = lazy(() => import("./pages/BiologicalAge"));
+const CountryComparison = lazy(() => import("./pages/CountryComparison"));
+const BirthdayReport = lazy(() => import("./pages/BirthdayReport"));
+const ReportView = lazy(() => import("./pages/ReportView"));
+const ChineseZodiac = lazy(() => import("./pages/ChineseZodiac"));
+const ChineseZodiacSign = lazy(() => import("./pages/ChineseZodiacSign"));
+const VedicZodiac = lazy(() => import("./pages/VedicZodiac"));
+const VedicZodiacSign = lazy(() => import("./pages/VedicZodiacSign"));
+const HowLongWillILive = lazy(() => import('@/pages/answers/HowLongWillILive'));
+const WhatIsMyBiologicalAge = lazy(() => import('@/pages/answers/WhatIsMyBiologicalAge'));
+const WhoSharesMyBirthday = lazy(() => import('@/pages/answers/WhoSharesMyBirthday'));
+const HowOldAmIOnMars = lazy(() => import('@/pages/answers/HowOldAmIOnMars'));
+const WhatIsMyZodiacSign = lazy(() => import('@/pages/answers/WhatIsMyZodiacSign'));
+const WhatIsMyLifePathNumber = lazy(() => import('@/pages/answers/WhatIsMyLifePathNumber'));
+const HowToCalculateAge = lazy(() => import('@/pages/answers/HowToCalculateAge'));
+const WhatGenerationAmI = lazy(() => import('@/pages/answers/WhatGenerationAmI'));
+const HowToLiveLonger = lazy(() => import('@/pages/answers/HowToLiveLonger'));
+const WhatIsBMI = lazy(() => import('@/pages/answers/WhatIsBMI'));
+const WhatIsLifeExpectancy = lazy(() => import('@/pages/answers/WhatIsLifeExpectancy'));
+const HowDoesStressAffectLifeExpectancy = lazy(() => import('@/pages/answers/HowDoesStressAffectLifeExpectancy'));
+const HowManyDaysUntilMyBirthday = lazy(() => import('@/pages/answers/HowManyDaysUntilMyBirthday'));
+const TarotByBirthday = lazy(() => import('@/pages/TarotByBirthday'));
+const MoonSignPage = lazy(() => import('@/pages/MoonSignPage'));
+const NameNumerologyPage = lazy(() => import('@/pages/NameNumerologyPage'));
+const BiorhythmPage = lazy(() => import('@/pages/BiorhythmPage'));
+const CompatibilityPage = lazy(() => import('@/pages/CompatibilityPage'));
+const RashiRatnaPage = lazy(() => import('@/pages/RashiRatnaPage'));
+const BornOnDay = lazy(() => import('@/pages/BornOnDay'));
+const BornOnDayIndia = lazy(() => import('@/pages/BornOnDayIndia'));
+const BornOnIndex = lazy(() => import('@/pages/BornOnIndex'));
+const BornOnIndiaIndex = lazy(() => import('@/pages/BornOnIndiaIndex'));
+const AnswersIndex = lazy(() => import('@/pages/AnswersIndex'));
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { CurrencyAdminToggle } from "@/components/CurrencyAdminToggle";
@@ -99,6 +100,7 @@ const App = () => (
             <ScrollToTop />
             <CurrencyAdminToggle />
             <BirthdayDiscountBanner />
+            <Suspense fallback={<div className="min-h-screen" aria-hidden="true" />}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/results" element={<BirthdayResults />} />
@@ -179,6 +181,7 @@ const App = () => (
               <Route path="/born-on/:slug" element={<BornOnDay />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            </Suspense>
           </BrowserRouter>
         </BirthDateProvider>
       </TooltipProvider>

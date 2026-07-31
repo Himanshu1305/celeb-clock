@@ -35,16 +35,31 @@ async function handler(request: Request): Promise<Response> {
 
   const sb = createClient(url, key, { auth: { persistSession: false } });
 
-  // Upsert by email (unique on lower(email)). onConflict updates consent/prefs.
-  const { error } = await sb
-    .from('email_subscribers')
-    .upsert(
-      { email, source, consent_marketing: true, weekly_digest: weeklyDigest, dob, country_code: countryCode },
-      { onConflict: 'email', ignoreDuplicates: false },
-    );
-
-  if (error) {
+  // Idempotent by email via explicit check-then-write. NOTE: the table's unique
+  // index is on lower(email) — an EXPRESSION index — which PostgREST's onConflict
+  // cannot target (it needs a column name / named constraint), so the previous
+  // `.upsert({}, {onConflict:'email'})` always failed with "no unique or exclusion
+  // constraint matching the ON CONFLICT specification" and NOTHING was ever stored.
+  // `email` is already lowercased above, so `ilike` matches an existing row
+  // case-insensitively.
+  const prefs = { source, consent_marketing: true, weekly_digest: weeklyDigest, dob, country_code: countryCode };
+  const existing = await sb.from('email_subscribers').select('id').ilike('email', email).maybeSingle();
+  if (existing.error) {
     // Table may not exist yet (NOTES SQL unapplied) — degrade gracefully.
+    console.error('[subscribe] lookup error:', existing.error.message);
+    return json({ ok: false, reason: 'store_unavailable' }, 200);
+  }
+
+  if (existing.data?.id) {
+    const { error } = await sb.from('email_subscribers').update(prefs).eq('id', existing.data.id);
+    if (error) { console.error('[subscribe] update error:', error.message); return json({ ok: false, reason: 'store_unavailable' }, 200); }
+    return json({ ok: true });
+  }
+
+  const { error } = await sb.from('email_subscribers').insert({ email, ...prefs });
+  if (error) {
+    // 23505 = a concurrent insert won the race; the email is captured — treat as success.
+    if ((error as { code?: string }).code === '23505') return json({ ok: true });
     console.error('[subscribe] insert error:', error.message);
     return json({ ok: false, reason: 'store_unavailable' }, 200);
   }

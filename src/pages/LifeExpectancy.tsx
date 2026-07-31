@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
-import { SEO, WebApplicationSchema } from '@/components/SEO';
+import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
 import { RelatedTools } from '@/components/RelatedTools';
@@ -363,6 +363,12 @@ const LifeExpectancy = () => {
         description="Free life expectancy calculator using WHO and CDC data across 15+ health factors to estimate your lifespan and the years you can gain."
         url="/life-expectancy"
       />
+      <FAQSchema items={[
+        { question: 'How is life expectancy calculated?', answer: 'A base life expectancy for your age, sex and country (from WHO/GBD actuarial data) is adjusted up or down by lifestyle and health factors — smoking, exercise, diet, sleep, BMI, stress and more — each weighted by published research.' },
+        { question: 'Is the life expectancy calculator accurate?', answer: 'It is an evidence-based estimate, not a prediction. It reflects population-level associations from large studies; individual outcomes vary. Use it to see which habits move your estimate most, not as a medical forecast.' },
+        { question: 'Is my health data stored?', answer: 'No. All inputs are processed entirely in your browser and are never sent to or stored on a server.' },
+        { question: 'Can I really add years to my life?', answer: 'The evidence is strong that not smoking, regular activity, good sleep, a healthy diet and managing stress are associated with longer life. The calculator shows the estimated years linked to each change so you can see the biggest levers.' },
+      ]} />
       {/* Shared result banner — shown when page opened via shared countdown URL */}
       {sharedResult && (
         <div className="bg-indigo-600 text-white text-center py-3 px-4">

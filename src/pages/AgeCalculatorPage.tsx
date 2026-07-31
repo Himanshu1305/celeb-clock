@@ -10,7 +10,7 @@ import { LifeExpectancyCTA } from '@/components/LifeExpectancyCTA';
 import { GenerationLabel } from '@/components/GenerationLabel';
 import { ReviewForm } from '@/components/ReviewForm';
 import { useBirthDate } from '@/context/BirthDateContext';
-import { SEO, WebApplicationSchema } from '@/components/SEO';
+import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
 import { RelatedTools } from '@/components/RelatedTools';
@@ -33,6 +33,12 @@ const AgeCalculatorPage = () => {
         description="Free online age calculator — find your exact age in years, months, days, hours, minutes and seconds. Live countdown, no sign-up required."
         url="/age-calculator"
       />
+      <FAQSchema items={[
+        { question: 'How do I calculate my exact age?', answer: 'Enter your date of birth and the calculator subtracts it from the current date, giving your exact age in years, months, days, hours, minutes and seconds — updated live.' },
+        { question: 'Is this age calculator free?', answer: 'Yes. It is completely free, requires no sign-up, and runs entirely in your browser — your date of birth is never stored on a server.' },
+        { question: 'How do I calculate age in days or seconds?', answer: 'The calculator shows your total age in days, hours, minutes and seconds automatically once you enter your birth date, alongside the standard years/months/days breakdown.' },
+        { question: 'How accurate is the age calculation?', answer: 'It accounts for leap years and exact time elapsed, so the years/months/days figure matches how age is counted officially. The live seconds counter updates every second.' },
+      ]} />
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-12">
           <Navigation />

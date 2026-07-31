@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { BlogNewsletter } from '@/components/BlogNewsletter';
 import { blogPosts, BlogPost, getAllTags, getPostsByTag, getPostsByCategory } from '@/data/blogPosts';
 import { Calendar, Clock, User, Search, Tag, ArrowRight, BookOpen } from 'lucide-react';
 
@@ -318,10 +319,7 @@ const Blog = () => {
               <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
                 Get the latest insights about age calculation, celebrity birthdays, and more delivered straight to your inbox.
               </p>
-              <div className="flex gap-2 max-w-md mx-auto">
-                <Input placeholder="Enter your email" type="email" />
-                <Button>Subscribe</Button>
-              </div>
+              <BlogNewsletter source="blog" />
             </CardContent>
           </Card>
         </section>
