@@ -17,12 +17,27 @@ import { ZODIAC_DATA } from '../src/data/zodiacData';
 import { MONTH_HUB_DATA } from '../src/data/monthHubData';
 import { FITNESS_PAGES } from '../src/data/fitnessPages';
 import { blogPosts } from '../src/data/blogPosts';
+import { BORNCLOCK_LOGO_B64 } from '../src/lib/invoice-logo';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = resolve(ROOT, 'dist/og');
 const INK = '#0C1A2B', NAVY = '#103A5C', GOLD = '#B8862F', LIGHT = '#F5EAD2', MUTE = '#9DB0BF';
 const W = 1200, H = 630;
 const logoB64 = readFileSync(resolve(ROOT, 'public/bornclock-logo.png')).toString('base64');
+
+// Homepage / default share card — light, brand-forward (WhatsApp preview). Uses the
+// dark-on-white invoice logo (the public/bornclock-logo.png is light, for dark cards).
+function homeCardSvg(): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <rect width="${W}" height="${H}" fill="#FFFFFF"/>
+    <rect width="${W}" height="8" fill="${GOLD}"/>
+    <image href="${BORNCLOCK_LOGO_B64}" x="80" y="60" height="60"/>
+    <text x="600" y="292" text-anchor="middle" fill="${NAVY}" font-family="Georgia, 'Times New Roman', serif" font-size="80" font-weight="800">Know your time.</text>
+    <text x="600" y="384" text-anchor="middle" fill="${NAVY}" font-family="Georgia, 'Times New Roman', serif" font-size="80" font-weight="800">Live it well.</text>
+    <text x="600" y="458" text-anchor="middle" fill="${GOLD}" font-family="Helvetica, Arial, sans-serif" font-size="27" font-weight="600">Celebrity twins &#183; Biological age &#183; Life expectancy &#183; Zodiac &#183; Numerology</text>
+    <text x="1120" y="586" text-anchor="end" fill="#8A97A3" font-family="Helvetica, Arial, sans-serif" font-size="24">bornclock.com</text>
+  </svg>`;
+}
 
 const MONTHS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 const MONTH_DAYS = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -77,8 +92,8 @@ async function main() {
   const t0 = Date.now();
   const jobs: Array<{ rel: string; markup: string }> = [];
 
-  // Default (refreshed)
-  jobs.push({ rel: 'default.webp', markup: svg({ eyebrow: 'BornClock', title: 'Your birthday, decoded', sub: 'Age · celebrity twins · zodiac · longevity', titleSize: 76 }) });
+  // Default / homepage card (light, brand-forward)
+  jobs.push({ rel: 'default.webp', markup: homeCardSvg() });
 
   // Born-on date cards (366) — birthstone accent per month
   for (let m = 1; m <= 12; m++) {

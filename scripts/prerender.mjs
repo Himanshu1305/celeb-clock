@@ -179,6 +179,26 @@ async function prerenderRoute(page, baseUrl, route) {
       `<meta name="twitter:image:alt" content="BornClock" />`;
     html = html.replace('</head>', `${cardMeta}</head>`);
 
+    // ── Homepage social title/description (brand tagline) ──────────────────────
+    // getTitleForRoute('/') is null, so the block above never rewrites the home meta,
+    // and the page ends up with TWO og:title tags (static index.html + react-helmet).
+    // Strip both og/twitter title+description and inject one clean branded set. The
+    // <title> (SEO) is deliberately left untouched.
+    if (route === '/') {
+      const ogT = 'BornClock — Know Your Time. Live It Well.';
+      const ogD = 'Celebrity birthday twins, biological age, life expectancy, zodiac &amp; numerology — all from your birth date. Free.';
+      html = html.replace(/<meta\b[^>]*\bproperty="og:title"[^>]*>\s*/gi, '');
+      html = html.replace(/<meta\b[^>]*\bname="twitter:title"[^>]*>\s*/gi, '');
+      html = html.replace(/<meta\b[^>]*\bproperty="og:description"[^>]*>\s*/gi, '');
+      html = html.replace(/<meta\b[^>]*\bname="twitter:description"[^>]*>\s*/gi, '');
+      const brand =
+        `<meta property="og:title" content="${ogT}" />` +
+        `<meta name="twitter:title" content="${ogT}" />` +
+        `<meta property="og:description" content="${ogD}" />` +
+        `<meta name="twitter:description" content="${ogD}" />`;
+      html = html.replace('</head>', `${brand}</head>`);
+    }
+
     // ── Per-route BreadcrumbList JSON-LD (truthful, derived from the URL path) ──
     if (route !== '/') {
       const parts = route.split('/').filter(Boolean);
