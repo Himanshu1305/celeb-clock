@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer';
 import { RhythmWidget } from '@/components/RhythmWidget';
 import { getFitnessPage, FITNESS_PAGES } from '@/data/fitnessPages';
 import { RHYTHM_SCIENCE_NOTE, RHYTHM_DISCLAIMER } from '@/data/rhythmFraming';
+import { postsForTags } from '@/lib/mesh';
 
 export default function FitnessRhythmPage() {
   const slug = useLocation().pathname.replace(/^\//, '').replace(/\/+$/, '').toLowerCase();
@@ -13,6 +14,8 @@ export default function FitnessRhythmPage() {
   if (!page) return <Navigate to="/biorhythm" replace />;
 
   const related = FITNESS_PAGES.filter(p => p.slug !== page.slug).slice(0, 4);
+  // Tag-matched blog reads for the internal mesh (rhythm/energy/exercise cluster).
+  const meshPosts = postsForTags([...page.keywords.split(',').map(k => k.trim()), 'biorhythm', 'energy', 'exercise'], 2);
 
   return (
     <>
@@ -98,6 +101,12 @@ export default function FitnessRhythmPage() {
               ))}
               <Link to="/biorhythm" className="p-3 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50 text-sm text-gray-700 hover:text-teal-700 transition-colors">→ Full Biorhythm Calculator</Link>
               <Link to="/birthday-report" className="p-3 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50 text-sm text-gray-700 hover:text-teal-700 transition-colors">→ Your Birthday Report</Link>
+              {meshPosts.map(p => (
+                <Link key={p.slug} to={`/blog/${p.slug}`}
+                  className="p-3 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50 text-sm text-gray-700 hover:text-teal-700 transition-colors">
+                  → {p.title}
+                </Link>
+              ))}
             </div>
           </div>
 

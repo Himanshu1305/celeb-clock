@@ -5,6 +5,7 @@ import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { ZODIAC_DATA, getZodiacBySlug } from '@/data/zodiacData';
+import { monthsForZodiac } from '@/lib/mesh';
 
 const ELEMENT_BG: Record<string, string> = {
   Fire: 'from-red-500/20 to-orange-500/20',
@@ -59,6 +60,8 @@ export default function ZodiacSign() {
   ];
 
   const otherSigns = ZODIAC_DATA.filter(z => z.slug !== data.slug);
+  // Month hubs this sign's date range spans (SEO-MAGNET-2 Phase B mesh).
+  const spanMonths = monthsForZodiac(data.startMonth, data.endMonth);
 
   return (
     <div className="min-h-screen bg-background">
@@ -251,6 +254,21 @@ export default function ZodiacSign() {
 
         {/* FAQ — canonical PageFAQ (visible accordion + in-body FAQPage JSON-LD) */}
         <PageFAQ title={`${data.name} — Frequently Asked Questions`} items={faqItems} />
+
+        {/* Born-in month hubs this sign spans (SEO-MAGNET-2 Phase B mesh) */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Born under {data.name}</h2>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {spanMonths.map(m => (
+              <Link key={m.slug} to={`/born-in-${m.slug}`}
+                className="block rounded-xl border border-border bg-card p-4 hover:border-primary transition-colors">
+                <div className="font-semibold text-foreground">Born in {m.label}</div>
+                <div className="text-sm text-muted-foreground">Zodiac, birthstone, birth flowers & famous {m.label} birthdays</div>
+                <div className="text-xs text-primary mt-1">Explore {m.label} →</div>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         {/* Other Signs */}
         <section className="mb-10">

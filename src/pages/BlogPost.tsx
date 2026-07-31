@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getPostBySlug, getRelatedPosts, BlogPost } from '@/data/blogPosts';
+import { toolsForTags } from '@/lib/mesh';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { Calendar, Clock, User, ArrowLeft, ArrowRight, Share2, BookOpen, Tag } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -21,7 +22,14 @@ const categoryLabels: Record<BlogPost['category'], string> = {
   'zodiac': 'Zodiac',
   'birthstone': 'Birthstone',
   'life-expectancy': 'Life Expectancy',
-  'lifestyle': 'Lifestyle'
+  'lifestyle': 'Lifestyle',
+  'longevity-science': 'Longevity Science',
+  'country-insights': 'Country Insights',
+  'astrology': 'Astrology',
+  'nutrition': 'Nutrition',
+  'numerology': 'Numerology',
+  'health-science': 'Health Science',
+  'birthday': 'Birthday'
 };
 
 const categoryColors: Record<BlogPost['category'], string> = {
@@ -30,7 +38,14 @@ const categoryColors: Record<BlogPost['category'], string> = {
   'zodiac': 'bg-indigo-500/10 text-indigo-600 border-indigo-500/30',
   'birthstone': 'bg-pink-500/10 text-pink-600 border-pink-500/30',
   'life-expectancy': 'bg-green-500/10 text-green-600 border-green-500/30',
-  'lifestyle': 'bg-orange-500/10 text-orange-600 border-orange-500/30'
+  'lifestyle': 'bg-orange-500/10 text-orange-600 border-orange-500/30',
+  'longevity-science': 'bg-green-500/10 text-green-600 border-green-500/30',
+  'country-insights': 'bg-cyan-500/10 text-cyan-600 border-cyan-500/30',
+  'astrology': 'bg-indigo-500/10 text-indigo-600 border-indigo-500/30',
+  'nutrition': 'bg-orange-500/10 text-orange-600 border-orange-500/30',
+  'numerology': 'bg-purple-500/10 text-purple-600 border-purple-500/30',
+  'health-science': 'bg-teal-500/10 text-teal-600 border-teal-500/30',
+  'birthday': 'bg-pink-500/10 text-pink-600 border-pink-500/30'
 };
 
 const BlogPostPage = () => {
@@ -302,6 +317,29 @@ const BlogPostPage = () => {
               </Link>
             ))}
           </div>
+
+          {/* Tools mentioned (SEO-MAGNET-2 Phase B mesh) — derived from post tags */}
+          {(() => {
+            const tools = toolsForTags(post.tags, post.keywords || []);
+            return tools.length > 0 ? (
+              <Card className="glass-card mb-8">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg gradient-text-primary">Tools mentioned in this article</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {tools.map(t => (
+                      <Link key={t.to} to={t.to}
+                        className="flex items-center justify-between rounded-lg border border-border p-3 text-sm text-foreground hover:border-primary hover:bg-primary/5 transition-colors">
+                        <span className="font-medium">{t.label}</span>
+                        <ArrowRight className="h-4 w-4 text-primary" />
+                      </Link>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ) : null;
+          })()}
 
           {/* FAQ Section */}
           {post.faqs && post.faqs.length > 0 && (

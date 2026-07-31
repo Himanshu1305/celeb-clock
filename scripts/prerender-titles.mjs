@@ -116,6 +116,13 @@ const BLOG = {
   'blue-zones-diet-what-centenarians-actually-eat':            'The Blue Zones Diet: What Centenarians Actually Eat Every Day',
   'heart-disease-risk-factors-how-age-affects-heart-health':   'Heart Disease Risk Factors: How Age, Habits and Genetics Determine Your Risk',
   'unique-birthday-gift-ideas-personalised-meaningful-2026':   '30 Unique Birthday Gift Ideas 2026: Personalised & Meaningful',
+  // SEO-MAGNET-2 Phase C
+  'best-month-to-be-born-what-data-says':                      'Best Month to Be Born? The Data | BornClock',
+  'biorhythm-workouts-honest-guide-training-by-cycles':        'Biorhythm Workouts: An Honest Guide | BornClock',
+  'born-on-a-national-holiday-birthday-history':               'Born on a National Holiday | BornClock',
+  'cycle-syncing-for-men-gender-neutral-version':              'Cycle Syncing for Men | BornClock',
+  'how-we-rank-celebrity-birthdays-sitelinks':                 'How We Rank Celebrity Birthdays | BornClock',
+  '7-day-energy-forecast-rhythm-awareness':                    'The 7-Day Energy Forecast Explained | BornClock',
 };
 
 // ── Answers pages ─────────────────────────────────────────────────────────────

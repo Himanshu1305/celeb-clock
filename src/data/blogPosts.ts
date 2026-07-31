@@ -1,4 +1,5 @@
 import { WikiPerson } from '@/services/WikimediaService';
+import { EXTRA_POSTS } from './blogPostsExtra';
 
 export interface BlogPost {
   id: string;
@@ -23,6 +24,8 @@ export interface BlogPost {
 }
 
 export const blogPosts: BlogPost[] = [
+  // Six SEO-magnet articles (SEO-MAGNET-2 Phase C) prepended as the most-recent posts.
+  ...EXTRA_POSTS,
   {
     id: '1',
     slug: 'calculate-exact-age-seconds-minutes-hours',

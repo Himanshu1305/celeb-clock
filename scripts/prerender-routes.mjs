@@ -72,6 +72,13 @@ const BLOG_SLUGS = [
   'blue-zones-diet-what-centenarians-actually-eat',
   'heart-disease-risk-factors-how-age-affects-heart-health',
   'unique-birthday-gift-ideas-personalised-meaningful-2026',
+  // SEO-MAGNET-2 Phase C — six new articles serving the growth clusters.
+  'best-month-to-be-born-what-data-says',
+  'biorhythm-workouts-honest-guide-training-by-cycles',
+  'born-on-a-national-holiday-birthday-history',
+  'cycle-syncing-for-men-gender-neutral-version',
+  'how-we-rank-celebrity-birthdays-sitelinks',
+  '7-day-energy-forecast-rhythm-awareness',
 ];
 
 const ANSWER_ROUTES = [

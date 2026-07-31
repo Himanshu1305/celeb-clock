@@ -4,9 +4,11 @@
  * The key file public/45894fcfd9f370d9927aaa9bfdf01d65.txt (hosted at https://bornclock.com/45894fcfd9f370d9927aaa9bfdf01d65.txt) proves
  * ownership. Reads dist/sitemap.xml for the URL list (batched, IndexNow caps 10k/req).
  *
- * Run after deploy:  node scripts/indexnow-ping.mjs [--all]
+ * Run after deploy:  node scripts/indexnow-ping.mjs [--all] [url ...]
  *   default: pings the homepage + the 18 growth pages + hubs (fast).
  *   --all:   pings every URL in the sitemap (use sparingly).
+ *   url ...: any explicit https URLs passed as args are pinged instead (e.g. the
+ *            six SEO-MAGNET-2 articles). Overrides the default CORE list.
  * Manual: submit the sitemap once in Bing Webmaster Tools (see docs/SEO-MAGNET-REPORT.md).
  */
 import { readFileSync } from 'node:fs';
@@ -31,7 +33,9 @@ const CORE = [
   'https://bornclock.com/best-time-to-work-out','https://bornclock.com/energy-forecast','https://bornclock.com/blog',
 ];
 
-const urls = ALL ? sitemapUrls() : CORE;
+// Explicit https URLs passed as CLI args take precedence over the CORE default.
+const explicit = process.argv.slice(2).filter(a => a.startsWith('https://'));
+const urls = ALL ? sitemapUrls() : (explicit.length ? explicit : CORE);
 if (!urls.length) { console.error('no URLs to submit'); process.exit(1); }
 
 async function ping(endpoint, list) {

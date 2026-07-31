@@ -14,6 +14,7 @@ import { getNumerologyByNumber } from '@/data/numerologyData';
 import { getNationalDays } from '@/data/nationalDays';
 import { ArrowLeft, ArrowRight, ArrowRightCircle, Star } from 'lucide-react';
 import indiaDates from '@/data/indiaBornOnDates.json';
+import { postsForTags } from '@/lib/mesh';
 
 // Slugs that have a dedicated /born-on/[slug]/india page (>=3 Indian celebrities).
 const INDIA_SLUGS = new Set((indiaDates as { slug: string }[]).map(d => d.slug));
@@ -362,6 +363,20 @@ export default function BornOnDay() {
             <ArrowRightCircle className="w-4 h-4" />
             Generate my birthday report
           </Link>
+        </div>
+
+        {/* Internal mesh (SEO-MAGNET-2 Phase B) — month hub, rhythm tool + a
+            tag-matched read, keeping every date page inside the topical graph. */}
+        <div className="bg-card border border-border rounded-xl p-6 mb-6">
+          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Explore more</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <Link to={`/born-in-${monthName.toLowerCase()}`} className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ Everyone born in {monthName}</Link>
+            <Link to={`/zodiac/${zodiacSlug}`} className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ {zodiac.sign} zodiac guide</Link>
+            <Link to="/energy-forecast" className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ Your 7-day energy forecast</Link>
+            {postsForTags([zodiacSlug, 'birthday', 'birthstone'], 1).map(p => (
+              <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ {p.title}</Link>
+            ))}
+          </div>
         </div>
 
         {/* Prev / Next navigation */}

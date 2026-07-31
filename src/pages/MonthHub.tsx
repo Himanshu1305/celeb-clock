@@ -10,6 +10,7 @@ import { getRankedMonthCelebrities } from '@/services/BirthdaySearchService';
 import { getMonthHub, MONTH_HUB_DATA } from '@/data/monthHubData';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
 import { useReportPrice } from '@/hooks/useCurrency';
+import { postsForTags } from '@/lib/mesh';
 import { ArrowLeft, ArrowRight, ArrowRightCircle, Star, Flower2, Gem } from 'lucide-react';
 
 // Days per month (leap Feb → 29 so Feb-29 date page is linked)
@@ -70,6 +71,8 @@ export default function MonthHub() {
   const next = MONTH_HUB_DATA[monthNumber % 12];         // next month (12→Jan)
   const days = MONTH_DAYS[monthNumber];
   const topNames = celebrities.slice(0, 3).map(c => c.name);
+  // Two tag-matched reads (this month's zodiac signs + birthstone) for the mesh.
+  const meshPosts = postsForTags([...data.zodiacSpans.map(z => z.slug), 'birthstone', 'zodiac'], 2);
 
   const pageTitle = `Born in ${month} — Zodiac, Birthstone, Birth Flower & Famous Birthdays | BornClock`;
   const metaDesc = `Everything about being born in ${month}: ${data.zodiacSpans.map(z => z.sign).join(' & ')} zodiac signs, the ${birthstone?.primaryStone ?? ''} birthstone, ${data.birthFlowers.map(f => f.name).join(' & ')} birth flowers, and famous people born in ${month}.`;
@@ -213,6 +216,22 @@ export default function MonthHub() {
             ))}
           </div>
         </div>
+
+        {/* From the blog (SEO-MAGNET-2 Phase B mesh) — tag-matched reads */}
+        {meshPosts.length > 0 && (
+          <div className="bg-card border border-border rounded-xl p-6 mb-6">
+            <h2 className="font-semibold text-lg text-foreground mb-4">Related reading</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {meshPosts.map(p => (
+                <Link key={p.slug} to={`/blog/${p.slug}`}
+                  className="block rounded-lg border border-border p-4 hover:border-primary transition-colors">
+                  <div className="font-semibold text-foreground text-sm leading-snug">{p.title}</div>
+                  <div className="text-xs text-primary mt-1">Read the guide →</div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Currency-aware Birthday Report CTA */}
         <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 mb-10 text-center">

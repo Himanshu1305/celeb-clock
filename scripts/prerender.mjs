@@ -77,6 +77,27 @@ async function startStaticServer(port) {
   });
 }
 
+// ── Per-route OG share card resolver ──────────────────────────────────────────
+// scripts/generate-og-cards.mts writes branded 1200x630 WebP cards into dist/og/
+// (one per page type) BEFORE this prerender runs. Map a route to its card by
+// building candidate paths and returning the first that exists on disk; anything
+// without a bespoke card falls back to the refreshed default. Absolute https URLs.
+function ogImageForRoute(route) {
+  const base = 'https://bornclock.com/og/';
+  const candidates = [];
+  let m;
+  if ((m = route.match(/^\/born-on\/([a-z]+-\d+)$/))) candidates.push(`born-on/${m[1]}.webp`);
+  if ((m = route.match(/^\/born-in-([a-z]+)$/)))       candidates.push(`month/${m[1]}.webp`);
+  if ((m = route.match(/^\/zodiac\/([a-z]+)$/)))        candidates.push(`zodiac/${m[1]}.webp`);
+  if ((m = route.match(/^\/blog\/([a-z0-9-]+)$/)))      candidates.push(`blog/${m[1]}.webp`);
+  // Single-segment fitness/rhythm pages (e.g. /energy-forecast) — cards keyed by slug.
+  if ((m = route.match(/^\/([a-z0-9-]+)$/)))            candidates.push(`fitness/${m[1]}.webp`);
+  for (const c of candidates) {
+    if (existsSync(join(DIST, 'og', c))) return base + c;
+  }
+  return base + 'default.webp';
+}
+
 // ── Prerender a single route ──────────────────────────────────────────────────
 async function prerenderRoute(page, baseUrl, route) {
   const url = `${baseUrl}${route}`;
@@ -141,6 +162,22 @@ async function prerenderRoute(page, baseUrl, route) {
     html = html.replace(/(<link rel="canonical" href=")[^"]*(")/i, `$1${canonicalUrl}$2`);
     html = html.replace(/(<meta property="og:url" content=")[^"]*(")/i, `$1${canonicalUrl}$2`);
     html = html.replace(/(<meta name="twitter:url" content=")[^"]*(")/i, `$1${canonicalUrl}$2`);
+
+    // ── Per-page-type OG share card (og:image + twitter:image) ─────────────────
+    // The page ends up with TWO image tags — the static one from index.html and a
+    // react-helmet-async duplicate (data-rh, attribute order varies) — so a single
+    // ordered regex can't catch both. Strip every og:image / twitter:image tag
+    // (the quote after :image spares og:image:width/:height and twitter:image:alt)
+    // then inject exactly one branded, page-specific card. Absolute https URL.
+    const ogImage = ogImageForRoute(route);
+    html = html.replace(/<meta\b[^>]*\b(?:property="og:image(?::width|:height)?"|name="twitter:image(?::alt)?")[^>]*>\s*/gi, '');
+    const cardMeta =
+      `<meta property="og:image" content="${ogImage}" />` +
+      `<meta property="og:image:width" content="1200" />` +
+      `<meta property="og:image:height" content="630" />` +
+      `<meta name="twitter:image" content="${ogImage}" />` +
+      `<meta name="twitter:image:alt" content="BornClock" />`;
+    html = html.replace('</head>', `${cardMeta}</head>`);
 
     // ── Per-route BreadcrumbList JSON-LD (truthful, derived from the URL path) ──
     if (route !== '/') {
