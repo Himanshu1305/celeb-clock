@@ -8,13 +8,14 @@ import { Footer } from '@/components/Footer';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
 import { CountryExtrasSection } from '@/components/CountryExtrasSection';
-import { getZodiacSign } from '@/data/birthdayPersonality';
+import { getZodiacSign, getBirthdayPersonality } from '@/data/birthdayPersonality';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
 import { getNumerologyByNumber } from '@/data/numerologyData';
 import { getNationalDays } from '@/data/nationalDays';
-import { ArrowLeft, ArrowRight, ArrowRightCircle, Star } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowRightCircle, Star, Sparkles } from 'lucide-react';
 import indiaDates from '@/data/indiaBornOnDates.json';
 import { postsForTags } from '@/lib/mesh';
+import { SharePageBar } from '@/components/SharePageBar';
 
 // Slugs that have a dedicated /born-on/[slug]/india page (>=3 Indian celebrities).
 const INDIA_SLUGS = new Set((indiaDates as { slug: string }[]).map(d => d.slug));
@@ -151,6 +152,45 @@ export default function BornOnDay() {
 
   const topNames = celebrities.slice(0, 3).map(c => c.name);
   const nationalDaySuffix = primaryNationalDay ? ` Also ${primaryNationalDay.country}'s ${primaryNationalDay.dayName}.` : '';
+
+  // ── Birthday personality (SEO-MAGNET-3 Phase 2) ────────────────────────────
+  // Structured traits from the sign × birth-day-number matrix; A2: the day-derived
+  // number is the "Birth Day Number", never Life Path (the full Life Path uses the
+  // complete date and lives in the paid Blueprint). A3 thin-content guard: this
+  // date's UNIQUE data (top celebrity, national day, birthstone) is interleaved
+  // into the prose so no two same-sign/same-number dates read identically.
+  const persona = getBirthdayPersonality(month, day);
+  const topCeleb = topNames[0] ?? null;
+  const uniqueThread = [
+    topCeleb ? `${topCeleb} shares this birthday` : null,
+    primaryNationalDay ? `${monthName} ${day} is ${primaryNationalDay.country}'s ${primaryNationalDay.dayName}` : null,
+    birthstone ? `the birthstone is ${birthstone.primaryStone}` : null,
+  ].filter(Boolean).join(', ');
+  const personaAnswer =
+    `People born on ${monthName} ${day} are ${persona.coreTraits.slice(0, 3).join(', ')} — ${zodiac.sign} ` +
+    `(${zodiac.element}) energy carried through Birth Day Number ${bNum}.` +
+    (uniqueThread ? ` For ${monthName} ${day} specifically, ${uniqueThread}.` : '');
+  // Compatible signs → zodiac hub + the canonical (alphabetical) compatibility pair.
+  const compatLinks = persona.compatibleSigns.slice(0, 4).map(s => {
+    const otherSlug = ZODIAC_SLUG[s] ?? s.toLowerCase();
+    const pair = [zodiacSlug, otherSlug].sort();
+    return { sign: s, zodiac: `/zodiac/${otherSlug}`, compat: `/compatibility/${pair[0]}/${pair[1]}` };
+  });
+  const personaFaqs = [
+    { question: `What is the personality of someone born on ${monthName} ${day}?`, answer: personaAnswer },
+    { question: `What is the Birth Day Number for ${monthName} ${day}?`, answer: `${monthName} ${day} reduces to Birth Day Number ${bNum}${bNumData ? ` (${bNumData.name})` : ''}. This reflects the day of the month only — your full Life Path number, calculated from your complete birth date, is in the Birthday Blueprint.` },
+    { question: `Which zodiac signs are most compatible with ${monthName} ${day} (${zodiac.sign})?`, answer: `As a ${zodiac.sign}, people born on ${monthName} ${day} are most compatible with ${persona.compatibleSigns.join(', ')}.` },
+    { question: `What are the lucky day and colour for ${monthName} ${day}?`, answer: `Lucky day: ${persona.luckyDay}. Lucky colour: ${persona.luckyColor}.` },
+  ];
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: personaFaqs.map(f => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  };
   const metaDesc = (topNames.length > 0
     ? `Famous people born on ${monthName} ${day} (${zodiac.sign}) include ${topNames.join(', ')}. Day ${doy} of the year — discover zodiac, birthstone, and birthday insights.`
     : `Discover celebrities born on ${monthName} ${day} — ${zodiac.sign} (${zodiac.element}), birthstone ${birthstone?.primaryStone ?? ''}, day ${doy} of the year.`) + nationalDaySuffix;
@@ -220,6 +260,13 @@ export default function BornOnDay() {
             {primaryNationalDay && ` ${monthName} ${day} is also ${primaryNationalDay.country}'s ${primaryNationalDay.dayName}.`}
           </p>
         </div>
+
+        <SharePageBar
+          path={`/born-on/${slug}`}
+          title={`Born on ${monthName} ${day}`}
+          text={`People born on ${monthName} ${day} are ${zodiac.sign} — see who shares this birthday and their personality`}
+          className="mb-8"
+        />
 
         {/* Celebrity grid */}
         {loading ? (
@@ -301,6 +348,89 @@ export default function BornOnDay() {
             </Link>
           </div>
         )}
+
+        {/* Birthday personality (SEO-MAGNET-3 Phase 2) */}
+        <div className="bg-card border border-border rounded-xl p-6 mb-6">
+          <div className="flex items-center gap-3 mb-3">
+            <Sparkles className="w-5 h-5 text-primary" />
+            <h2 className="font-semibold text-lg text-foreground">Born on {monthName} {day}: Personality</h2>
+          </div>
+          {/* Answer-first sentence — snippet target, interleaves this date's unique data */}
+          <div className="bg-primary/10 border-l-4 border-primary rounded-r-xl p-4 mb-4">
+            <p className="text-base font-medium text-foreground leading-relaxed">{personaAnswer}</p>
+          </div>
+
+          <div className="flex flex-wrap gap-2 mb-4">
+            {persona.coreTraits.map(t => (
+              <span key={t} className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">{t}</span>
+            ))}
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4 mb-4">
+            <div className="rounded-lg border border-border p-4">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Strengths</p>
+              <ul className="space-y-1">
+                {persona.strengths.map(s => (
+                  <li key={s} className="text-sm text-foreground flex items-start gap-2"><span className="text-primary mt-0.5">✓</span>{s}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-lg border border-border p-4">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Growth areas</p>
+              <ul className="space-y-1">
+                {persona.challenges.map(c => (
+                  <li key={c} className="text-sm text-muted-foreground flex items-start gap-2"><span className="mt-0.5">△</span>{c}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 mb-4">
+            <div className="rounded-lg border border-border p-3 text-center">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Lucky day</p>
+              <p className="text-sm font-bold text-foreground">{persona.luckyDay}</p>
+            </div>
+            <div className="rounded-lg border border-border p-3 text-center">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Lucky colour</p>
+              <p className="text-sm font-bold text-foreground">{persona.luckyColor}</p>
+            </div>
+            <div className="rounded-lg border border-border p-3 text-center">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Birth Day No.</p>
+              <p className="text-sm font-bold text-foreground">{bNum}</p>
+            </div>
+          </div>
+
+          <p className="text-sm font-semibold text-foreground mb-2">Most compatible signs</p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {compatLinks.map(c => (
+              <span key={c.sign} className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1 text-sm">
+                <Link to={c.zodiac} className="text-primary hover:underline">{c.sign}</Link>
+                <Link to={c.compat} className="text-muted-foreground hover:text-foreground text-xs" aria-label={`${zodiac.sign} and ${c.sign} compatibility`}>· match</Link>
+              </span>
+            ))}
+          </div>
+
+          {/* A2 clarifying line — the day-derived number is NOT the full Life Path */}
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Birth Day Number {bNum} comes from the day of the month alone. Your full <strong className="text-foreground">Life Path number</strong>, calculated from your complete birth date, is in the{' '}
+            <Link to="/birthday-report" className="text-primary hover:underline">Birthday Blueprint</Link>.
+          </p>
+        </div>
+
+        {/* Personality FAQ — in-body FAQPage JSON-LD (Helmet-injected LD does not
+            survive the prerender capture, so it is rendered here in the body). */}
+        <div className="bg-card border border-border rounded-xl p-6 mb-6">
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+          <h2 className="font-semibold text-lg text-foreground mb-4">{monthName} {day} birthday personality FAQ</h2>
+          <div className="space-y-3">
+            {personaFaqs.map(f => (
+              <details key={f.question} className="border border-border rounded-xl p-4">
+                <summary className="font-semibold text-foreground cursor-pointer text-sm">{f.question}</summary>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-2">{f.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
 
         {/* National days on this date (only when the date has entries) */}
         {nationalDays.length > 0 && (

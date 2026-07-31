@@ -190,6 +190,7 @@ export const STATIC_ROUTES = [
   ...ANSWER_ROUTES,
   '/tarot-card-by-birthday',
   '/moon-sign',
+  '/rising-sign-calculator',
   '/name-numerology',
   '/biorhythm',
   '/compatibility',

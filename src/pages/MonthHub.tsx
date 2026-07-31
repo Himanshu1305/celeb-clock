@@ -11,6 +11,7 @@ import { getMonthHub, MONTH_HUB_DATA } from '@/data/monthHubData';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
 import { useReportPrice } from '@/hooks/useCurrency';
 import { postsForTags } from '@/lib/mesh';
+import { SharePageBar } from '@/components/SharePageBar';
 import { ArrowLeft, ArrowRight, ArrowRightCircle, Star, Flower2, Gem } from 'lucide-react';
 
 // Days per month (leap Feb → 29 so Feb-29 date page is linked)
@@ -127,9 +128,16 @@ export default function MonthHub() {
 
         {/* AEO answer block */}
         <h2 className="text-xl font-semibold text-foreground mb-2 mt-4">What does being born in {month} mean?</h2>
-        <div className="bg-primary/10 border-l-4 border-primary rounded-r-xl p-5 mb-8">
+        <div className="bg-primary/10 border-l-4 border-primary rounded-r-xl p-5 mb-6">
           <p className="text-base font-medium text-foreground leading-relaxed">{data.answerParagraph}</p>
         </div>
+
+        <SharePageBar
+          path={`/born-in-${slug}`}
+          title={`Born in ${month}`}
+          text={`Born in ${month}? Discover the zodiac signs, birthstone and famous ${month} birthdays`}
+          className="mb-8"
+        />
 
         {/* Famous people born this month */}
         <h2 className="text-xl font-semibold text-foreground mb-4">Famous people born in {month}</h2>

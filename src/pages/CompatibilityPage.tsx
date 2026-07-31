@@ -7,6 +7,44 @@ import { PageFAQ } from '@/components/PageFAQ';
 import PageTagline from '@/components/PageTagline';
 import { getCompatibility, ZODIAC_SIGNS } from '@/data/compatibilityData';
 import { useReportPrice } from '@/hooks/useCurrency';
+import { SharePageBar } from '@/components/SharePageBar';
+
+// Element × modality composition — adds pair-specific prose (beyond the curated
+// description) so every one of the 78 pages carries unique, non-thin content.
+const ELEMENT: Record<string, string> = {
+  Aries: 'Fire', Leo: 'Fire', Sagittarius: 'Fire', Taurus: 'Earth', Virgo: 'Earth', Capricorn: 'Earth',
+  Gemini: 'Air', Libra: 'Air', Aquarius: 'Air', Cancer: 'Water', Scorpio: 'Water', Pisces: 'Water',
+};
+const MODALITY: Record<string, string> = {
+  Aries: 'Cardinal', Cancer: 'Cardinal', Libra: 'Cardinal', Capricorn: 'Cardinal',
+  Taurus: 'Fixed', Leo: 'Fixed', Scorpio: 'Fixed', Aquarius: 'Fixed',
+  Gemini: 'Mutable', Virgo: 'Mutable', Sagittarius: 'Mutable', Pisces: 'Mutable',
+};
+const ELEMENT_PAIR_NOTE: Record<string, string> = {
+  'Air-Fire': 'and Air feeds Fire — ideas spark action, which makes this an energising, forward-moving match.',
+  'Earth-Water': 'and Water softens Earth while Earth grounds Water — a naturally nurturing, stabilising pairing.',
+  'Earth-Fire': 'which can grind: Fire wants to move now while Earth wants a plan, so respecting each other’s pace is essential.',
+  'Fire-Water': 'the zodiac’s trickiest mix — Fire’s heat can boil Water’s depth and Water can dampen Fire’s spark, so emotional attunement matters most.',
+  'Air-Water': 'mind meets emotion — Air rationalises where Water feels, so translating between logic and feeling is the ongoing work.',
+  'Air-Earth': 'Air brings the ideas and Earth brings the follow-through — complementary in theory but different in speed.',
+};
+const MODALITY_WORD: Record<string, string> = { Cardinal: 'an initiator', Fixed: 'a stabiliser', Mutable: 'an adapter' };
+const MODALITY_SAME: Record<string, string> = {
+  Cardinal: 'they both like to initiate and drive things forward, so the risk is a tug-of-war over who sets the direction.',
+  Fixed: 'they both value loyalty and staying power, so the risk is digging in when compromise is what’s needed.',
+  Mutable: 'they both adapt easily and go with the flow, so the risk is that neither one holds the course.',
+};
+
+function elementModalityProse(s1: string, s2: string): string {
+  const e1 = ELEMENT[s1], e2 = ELEMENT[s2], m1 = MODALITY[s1], m2 = MODALITY[s2];
+  const elLine = e1 === e2
+    ? `${s1} and ${s2} are both ${e1} signs, so they instinctively understand each other’s tempo — the challenge is adding enough contrast to stay interesting rather than amplifying the same habits.`
+    : `${s1} leads with ${e1} energy and ${s2} with ${e2}, ${ELEMENT_PAIR_NOTE[[e1, e2].sort().join('-')] ?? 'and blending the two elements is the heart of the relationship.'}`;
+  const modLine = m1 === m2
+    ? `Both are ${m1} signs, meaning ${MODALITY_SAME[m1]}`
+    : `${s1} is ${m1} (${MODALITY_WORD[m1]}) and ${s2} is ${m2} (${MODALITY_WORD[m2]}), so they naturally take on different roles — one sets things in motion, holds them steady, or adapts them, while the other supplies what’s missing.`;
+  return `${elLine} ${modLine}`;
+}
 
 function ScoreBar({ label, score, color }: { label: string; score: number; color: string }) {
   return (
@@ -218,11 +256,32 @@ export default function CompatibilityPage() {
                   </div>
                 </div>
 
-                <div className="bg-blue-50 rounded-xl p-4">
+                <div className="bg-blue-50 rounded-xl p-4 mb-4">
                   <p className="text-xs font-bold text-blue-700 mb-1">💡 Relationship Advice</p>
                   <p className="text-sm text-blue-900">{result.advice}</p>
                 </div>
+
+                {/* Composed element × modality prose — pair-specific, non-thin */}
+                <p className="text-sm text-gray-700 leading-relaxed mb-4">
+                  {elementModalityProse(calcSigns.s1, calcSigns.s2)}
+                </p>
+
+                {/* Links to both zodiac hubs (Phase 3 requirement) */}
+                <div className="flex flex-wrap gap-2">
+                  <Link to={`/zodiac/${calcSigns.s1.toLowerCase()}`} className="text-sm text-indigo-600 hover:underline">Full {calcSigns.s1} guide →</Link>
+                  <span className="text-gray-300">·</span>
+                  <Link to={`/zodiac/${calcSigns.s2.toLowerCase()}`} className="text-sm text-indigo-600 hover:underline">Full {calcSigns.s2} guide →</Link>
+                  <span className="text-gray-300">·</span>
+                  <Link to="/compatibility" className="text-sm text-indigo-600 hover:underline">Check another pair →</Link>
+                </div>
               </div>
+
+              <SharePageBar
+                path={`/compatibility/${[calcSigns.s1, calcSigns.s2].map(s => s.toLowerCase()).sort().join('/')}`}
+                title={`${calcSigns.s1} & ${calcSigns.s2} Compatibility`}
+                text={`${calcSigns.s1} & ${calcSigns.s2} are a ${result.overall}% match — see the love, friendship & work breakdown`}
+                className="mb-6"
+              />
 
               {/* Pair-specific FAQ (visible accordion + in-body FAQPage JSON-LD) */}
               <PageFAQ

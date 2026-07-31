@@ -227,6 +227,53 @@ async function prerenderRoute(page, baseUrl, route) {
   }
 }
 
+// ── Launch chromium (sparticuz on CI/Linux, local Chrome on macOS/dev) ─────────
+// Returns a browser or null. Extracted so the main loop can RELAUNCH after a browser
+// crash / OOM without aborting the whole run (a single fatal error over 1000+ heavy
+// pages used to skip every remaining route).
+async function launchBrowser() {
+  const puppeteer = await import('puppeteer-core');
+  const puppeteerCore = puppeteer.default || puppeteer;
+
+  const LOCAL_CHROME_PATHS = [
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium-browser',
+    '/usr/bin/chromium',
+  ];
+
+  // Try sparticuz first
+  try {
+    const chromiumMod = await import('@sparticuz/chromium');
+    const chromium = chromiumMod.default || chromiumMod;
+    const executablePath = await chromium.executablePath();
+    return await puppeteerCore.launch({
+      executablePath,
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      headless: true,
+    });
+  } catch { /* fall through to local Chrome */ }
+
+  for (const executablePath of LOCAL_CHROME_PATHS) {
+    if (!existsSync(executablePath)) continue;
+    try {
+      const b = await puppeteerCore.launch({
+        executablePath,
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+        headless: true,
+      });
+      console.log(`   Using local Chrome: ${executablePath}`);
+      return b;
+    } catch { /* try next path */ }
+  }
+  return null;
+}
+
+// Recycle the browser every N routes so memory can't accumulate across 1000+ heavy
+// pages and OOM/hang the process near the tail.
+const RESTART_EVERY = 300;
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 async function main() {
   // 1. Load routes
@@ -235,63 +282,9 @@ async function main() {
   console.log(`\n🚀 Prerender: ${routes.length} routes`);
 
   // 2. Launch chromium
-  let browser;
-  try {
-    const puppeteer = await import('puppeteer-core');
-    const puppeteerCore = puppeteer.default || puppeteer;
-
-    // Candidates in priority order: sparticuz (Linux/CF), then local paths (macOS/dev)
-    const LOCAL_CHROME_PATHS = [
-      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-      '/usr/bin/google-chrome',
-      '/usr/bin/chromium-browser',
-      '/usr/bin/chromium',
-    ];
-
-    let lastErr;
-    let launched = false;
-
-    // Try sparticuz first
-    try {
-      const chromiumMod = await import('@sparticuz/chromium');
-      const chromium = chromiumMod.default || chromiumMod;
-      const executablePath = await chromium.executablePath();
-      browser = await puppeteerCore.launch({
-        executablePath,
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        headless: true,
-      });
-      launched = true;
-    } catch (err) {
-      lastErr = err;
-    }
-
-    // Fall back to local Chrome installation
-    if (!launched) {
-      for (const executablePath of LOCAL_CHROME_PATHS) {
-        if (!existsSync(executablePath)) continue;
-        try {
-          browser = await puppeteerCore.launch({
-            executablePath,
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-            headless: true,
-          });
-          launched = true;
-          console.log(`   Using local Chrome: ${executablePath}`);
-          break;
-        } catch (err) {
-          lastErr = err;
-        }
-      }
-    }
-
-    if (!launched) {
-      throw lastErr || new Error('No chromium executable could launch');
-    }
-  } catch (err) {
-    console.error('\n⚠️  PRERENDER SKIPPED — chromium could not launch:');
-    console.error('   ' + err.message);
+  let browser = await launchBrowser();
+  if (!browser) {
+    console.error('\n⚠️  PRERENDER SKIPPED — chromium could not launch.');
     console.error('   Build succeeded; bots will see client-rendered HTML until next prerender run.\n');
     process.exit(0);
   }
@@ -329,14 +322,41 @@ async function main() {
       break;
     }
 
+    // Periodically recycle the browser to bound memory growth over a long run.
+    // i steps by CONCURRENCY, so trigger when we cross a RESTART_EVERY boundary.
+    if (i > 0 && Math.floor(i / RESTART_EVERY) !== Math.floor((i - CONCURRENCY) / RESTART_EVERY)) {
+      await browser.close().catch(() => {});
+      const fresh = await launchBrowser();
+      if (fresh) { browser = fresh; console.log(`   ↻ recycled browser at ${i}/${ordered.length}`); }
+      else { browser = await launchBrowser(); } // one more attempt; if still null the batch try/catch handles it
+    }
+
     const batch = ordered.slice(i, i + CONCURRENCY);
-    const pages = await Promise.all(batch.map(() => browser.newPage()));
 
-    const batchResults = await Promise.all(
-      batch.map((route, idx) => prerenderRoute(pages[idx], baseUrl, route))
-    );
-
-    await Promise.all(pages.map(p => p.close().catch(() => {})));
+    // Run the batch; if the BROWSER itself died (crash/OOM → newPage/close throw
+    // outside prerenderRoute's per-route catch), relaunch it and retry this batch
+    // ONCE so the crash costs one batch, not every remaining route.
+    let batchResults;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const pages = await Promise.all(batch.map(() => browser.newPage()));
+        batchResults = await Promise.all(
+          batch.map((route, idx) => prerenderRoute(pages[idx], baseUrl, route))
+        );
+        await Promise.all(pages.map(p => p.close().catch(() => {})));
+        break;
+      } catch (err) {
+        console.warn(`   ⚠️  batch at ${i} failed (${err.message}); relaunching browser${attempt === 0 ? ' and retrying' : ''}`);
+        try { await browser.close(); } catch { /* already dead */ }
+        browser = await launchBrowser();
+        if (!browser) { console.error('   could not relaunch browser'); break; }
+        if (attempt === 1) {
+          batchResults = batch.map(route => ({ route, ok: false, error: err.message }));
+        }
+      }
+    }
+    if (!batchResults) batchResults = batch.map(route => ({ route, ok: false, error: 'browser unavailable' }));
+    if (!browser) break;
 
     for (const r of batchResults) {
       if (r.ok) {
@@ -351,7 +371,7 @@ async function main() {
     }
   }
 
-  await browser.close();
+  if (browser) await browser.close().catch(() => {});
   if (server) server.close();
 
   // 5. Write manifest

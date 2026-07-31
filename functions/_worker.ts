@@ -18,6 +18,7 @@ import { POST as subscribe }           from '../api/subscribe.js';
 import { POST as weeklyDigest }        from '../api/weekly-digest.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
 import cronHandler                     from './_cron/daily-email.js';
+import { handleReportOg, injectReportOgTags } from './og-report.js';
 
 type Env = {
   ASSETS: { fetch: (request: Request) => Promise<Response> };
@@ -82,6 +83,32 @@ export default {
     };
     if (REDIRECTS[pathname]) {
       return Response.redirect(new URL(REDIRECTS[pathname], request.url).toString(), 301);
+    }
+
+    // Compatibility pairs are prerendered once per unordered pair in ALPHABETICAL
+    // order (the canonical form). 301 the reverse order to the canonical so both
+    // orderings consolidate their SEO equity onto a single indexed URL rather than
+    // serving duplicate 200s. Only fires for two valid signs in non-canonical order.
+    {
+      const m = pathname.match(/^\/compatibility\/([a-z]+)\/([a-z]+)\/?$/);
+      if (m) {
+        const SIGNS = new Set(['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces']);
+        const [, a, b] = m;
+        if (SIGNS.has(a) && SIGNS.has(b) && a > b) {
+          return Response.redirect(new URL(`/compatibility/${b}/${a}/`, request.url).toString(), 301);
+        }
+      }
+    }
+
+    // Personalised report OG card (SEO-MAGNET-3 Phase 5). Both branches are
+    // cache-first and fall back to the static default card / untouched SPA shell on
+    // any failure, so they can never break a report view or a share preview.
+    if (pathname.startsWith('/og/report/')) {
+      return handleReportOg(request, env, ctx);
+    }
+    if (pathname.startsWith('/report/')) {
+      const injected = await injectReportOgTags(request, env);
+      if (injected) return injected;
     }
 
     if (!pathname.startsWith('/api/')) {

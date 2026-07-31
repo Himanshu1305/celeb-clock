@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getPostBySlug, getRelatedPosts, BlogPost } from '@/data/blogPosts';
 import { toolsForTags } from '@/lib/mesh';
+import { SharePageBar } from '@/components/SharePageBar';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { Calendar, Clock, User, ArrowLeft, ArrowRight, Share2, BookOpen, Tag } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -186,6 +187,13 @@ const BlogPostPage = () => {
               </span>
             </div>
           </header>
+
+          <SharePageBar
+            path={`/blog/${post.slug}`}
+            title={post.title}
+            text={post.excerpt}
+            className="justify-center mb-2"
+          />
 
           <Separator className="my-8" />
 

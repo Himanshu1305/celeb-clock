@@ -671,12 +671,17 @@ const ReportView = () => {
         <title>{recipientName}'s Birthday Report | BornClock</title>
         <meta name="description" content={`${recipientName}'s Birthday Blueprint — celebrity twins, zodiac, numerology, birthstone, tarot, and more. A personalised gift from BornClock.`} />
         <meta name="robots" content="noindex" />
-        {/* Name-appropriate share preview. og:image falls back to the branded
-            default card in index.html (no per-report dynamic OG image yet). */}
+        {/* Name-appropriate share preview. The Worker route /og/report/{slug}.png
+            renders "{Name}'s Birthday Blueprint" on the brand card (SEO-MAGNET-3
+            Phase 5) and falls back to the static default card on any failure. The
+            Worker also injects this og:image into the server HTML for crawlers. */}
         <meta property="og:title" content={`${recipientName}'s Birthday Blueprint`} />
         <meta property="og:description" content={`A personalised birthday report for ${recipientName} — celebrity twins, zodiac, numerology, tarot and more.`} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={reportUrl} />
+        {slug && <meta property="og:image" content={`https://bornclock.com/og/report/${slug}.png`} />}
+        {slug && <meta name="twitter:image" content={`https://bornclock.com/og/report/${slug}.png`} />}
+        <meta name="twitter:card" content="summary_large_image" />
         <style>{`
           :root {
             --ink:#0C1A2B; --ink-soft:#3A4A5A; --muted:#6B7A89;

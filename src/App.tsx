@@ -70,6 +70,7 @@ const HowDoesStressAffectLifeExpectancy = lazy(() => import('@/pages/answers/How
 const HowManyDaysUntilMyBirthday = lazy(() => import('@/pages/answers/HowManyDaysUntilMyBirthday'));
 const TarotByBirthday = lazy(() => import('@/pages/TarotByBirthday'));
 const MoonSignPage = lazy(() => import('@/pages/MoonSignPage'));
+const RisingSignPage = lazy(() => import('@/pages/RisingSignPage'));
 const NameNumerologyPage = lazy(() => import('@/pages/NameNumerologyPage'));
 const BiorhythmPage = lazy(() => import('@/pages/BiorhythmPage'));
 const CompatibilityPage = lazy(() => import('@/pages/CompatibilityPage'));
@@ -164,6 +165,7 @@ const App = () => (
               <Route path="/answers/how-many-days-until-my-birthday" element={<HowManyDaysUntilMyBirthday />} />
               <Route path="/tarot-card-by-birthday" element={<TarotByBirthday />} />
               <Route path="/moon-sign" element={<MoonSignPage />} />
+              <Route path="/rising-sign-calculator" element={<RisingSignPage />} />
               <Route path="/name-numerology" element={<NameNumerologyPage />} />
               <Route path="/biorhythm" element={<BiorhythmPage />} />
               <Route path="/compatibility" element={<CompatibilityPage />} />

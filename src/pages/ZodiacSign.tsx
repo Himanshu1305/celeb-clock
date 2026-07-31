@@ -6,6 +6,7 @@ import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { ZODIAC_DATA, getZodiacBySlug } from '@/data/zodiacData';
 import { monthsForZodiac } from '@/lib/mesh';
+import { SharePageBar } from '@/components/SharePageBar';
 
 const ELEMENT_BG: Record<string, string> = {
   Fire: 'from-red-500/20 to-orange-500/20',
@@ -115,6 +116,12 @@ export default function ZodiacSign() {
               {data.name} dates are {data.dateRange}. If you were born in this window, {data.name} ({data.symbol}) is your Western sun sign — a {data.element} sign ruled by {data.rulingPlanet}, known for being {data.coreTraits.slice(0, 3).join(', ').toLowerCase()}.
             </p>
           </div>
+          <SharePageBar
+            path={`/zodiac/${data.slug}`}
+            title={`${data.name} Zodiac Sign`}
+            text={`${data.name} (${data.dateRange}) — traits, compatibility and famous ${data.name} personalities`}
+            className="mt-6"
+          />
         </section>
 
         {/* Core Traits */}

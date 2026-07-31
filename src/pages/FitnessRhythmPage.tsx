@@ -7,6 +7,7 @@ import { RhythmWidget } from '@/components/RhythmWidget';
 import { getFitnessPage, FITNESS_PAGES } from '@/data/fitnessPages';
 import { RHYTHM_SCIENCE_NOTE, RHYTHM_DISCLAIMER } from '@/data/rhythmFraming';
 import { postsForTags } from '@/lib/mesh';
+import { SharePageBar } from '@/components/SharePageBar';
 
 export default function FitnessRhythmPage() {
   const slug = useLocation().pathname.replace(/^\//, '').replace(/\/+$/, '').toLowerCase();
@@ -53,6 +54,13 @@ export default function FitnessRhythmPage() {
           <div className="bg-teal-50 border-l-4 border-teal-500 rounded-r-xl p-5 mb-6">
             <p className="text-base font-medium text-teal-900 leading-relaxed">{page.directAnswer}</p>
           </div>
+
+          <SharePageBar
+            path={`/${page.slug}`}
+            title={page.h1}
+            text={page.h1}
+            className="mb-6"
+          />
 
           {/* Mandatory science note (honesty framing) — top of page, before the widget */}
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8">
