@@ -207,10 +207,33 @@ export const FITNESS_PAGES: FitnessPage[] = [
           'Treat “high” and “low” days as conversation starters with yourself, not instructions. The biorhythm model dates from the early 20th century and hasn’t been found predictive, so nothing here forecasts your actual energy. Use it to build the habit of checking in — that habit, not the chart, is the real benefit.',
         ],
       },
+      {
+        h2: 'How to read your 7 days',
+        paragraphs: [
+          'The outline marks three kinds of day, and each is a prompt rather than a prediction. On a peak day, the cycle is high — a fine cue to ask what you’d like to spend energy on, then check whether you actually feel up to it. On a low day, the cycle dips — treat it as a nudge to be a little kinder to yourself and to notice why you might feel flat, not as a verdict that you will.',
+          'The most interesting marker is the critical day, when a cycle crosses its midline. These were traditionally framed as “unstable” days — but there is no evidence they carry any real risk, so read a critical day simply as a natural transition point: a good moment to pause and take stock. One honest action per state is plenty — lean into something demanding on a high, protect your rest on a low, and slow down to reflect on a crossing.',
+        ],
+      },
+      {
+        h2: 'The three cycles, and why those lengths',
+        paragraphs: [
+          'Classic biorhythm tracks three cycles counted from your birth date: a physical cycle of about 23 days, an emotional cycle of about 28 days, and an intellectual cycle of about 33 days. The physical cycle is the traditional stand-in for stamina and strength, the emotional cycle for mood and sensitivity, and the intellectual cycle for focus and mental sharpness.',
+          'Those specific lengths come from the model’s early-1900s origins, not from anything measurable in the body — nothing physiological actually ticks on a rigid 23, 28 or 33-day schedule keyed to your birthday. We keep the cycles because they give the weekly check-in a shape, and we say plainly that the shape is arithmetic, not biology. The value is the ritual of looking, not the numbers themselves.',
+        ],
+      },
+      {
+        h2: 'Turn the week into a check-in you’ll keep',
+        paragraphs: [
+          'Here is the reframe that makes this worthwhile: use the outline as a daily journaling prompt. Each morning, glance at the day’s marker, then write one honest line — how is my energy right now, how did I sleep, what’s my stress like today? Over a few weeks those notes reveal real patterns from your own life, like dips after short-sleep nights, that no fixed cycle could have told you.',
+          'Let a low marker be a question, not a sentence: am I actually low today, and if so, why — and is it something I can respond to? Used this way the forecast builds a genuinely useful habit of attention. It won’t change your body or predict your performance, and it isn’t a substitute for medical advice if fatigue persists — its entire, modest value is prompting you to notice.',
+        ],
+      },
     ],
     faqs: [
       { question: 'Can you forecast my energy for the week?', answer: 'Not literally — no chart can. This is a rhythm-awareness outline. Your sleep, stress and recovery are the real drivers of weekly energy.' },
       { question: 'What really affects my energy day to day?', answer: 'Sleep quantity and quality, circadian timing, stress, hydration, movement and food. These matter far more than any birth-date cycle.' },
+      { question: 'What is a “critical” day, and should I worry?', answer: 'A critical day is just when a cycle crosses its midline. There’s no evidence it carries any real risk — read it as a natural transition point and a good moment to pause and take stock, nothing more.' },
+      { question: 'How do I use this to plan my week?', answer: 'Lightly. Use the markers as prompts: lean into demanding tasks when you feel up to it, protect rest when you’re flat, and slow down to reflect on a crossing day. Your real schedule, sleep and energy always override the chart.' },
       { question: 'Is the biorhythm energy forecast accurate?', answer: 'No. It hasn’t been found predictive in controlled research. It’s useful only as a daily check-in prompt.' },
       { question: 'How can I actually have more energy this week?', answer: 'Prioritise consistent sleep, manage stress, move a little each day, hydrate and eat regularly. Simple, boring, and genuinely effective.' },
     ],

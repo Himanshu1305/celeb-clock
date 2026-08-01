@@ -6,7 +6,17 @@ import { Footer } from '@/components/Footer';
 import { PageFAQ } from '@/components/PageFAQ';
 import { SharePageBar } from '@/components/SharePageBar';
 import { postsForTags } from '@/lib/mesh';
-import { Bot, Check, X, ArrowRightCircle } from 'lucide-react';
+import { useResolvedCurrency } from '@/hooks/useCurrency';
+import { subscriptionPrice, annualPerMonth } from '@/lib/pricing';
+import { Bot, Check, X, ArrowRightCircle, Lock } from 'lucide-react';
+
+// Concrete, everyday things the Coach helps with — with the kind of question you'd ask.
+const HELPS_WITH = [
+  { emoji: '📊', title: 'Make sense of your numbers', ex: '“My forecast dropped two years for sleep — what does that actually mean, and which factor should I fix first?”' },
+  { emoji: '🥗', title: 'Everyday food choices', ex: '“Is my usual breakfast helping or hurting? What’s one swap that would move the needle?”' },
+  { emoji: '🏃', title: 'When and how to move', ex: '“I can train three days a week — where does that time do the most good for longevity?”' },
+  { emoji: '🔁', title: 'Build habits that stick', ex: '“Give me one small change I can start today, and how to keep it going past week two.”' },
+];
 
 const CAN_DO = [
   'Explain what each factor in your forecast means and why it moved your number',
@@ -35,6 +45,7 @@ const WEBAPP_LD = {
 
 export default function CoachLandingPage() {
   const meshPosts = postsForTags(['life expectancy', 'longevity', 'health', 'stress', 'sleep'], 2);
+  const currency = useResolvedCurrency();
 
   const faqs = [
     { question: 'What is the BornClock Longevity Coach?', answer: 'It is an AI coach built into your life-expectancy results. It reads your own forecast — your factor breakdown, genetic score and bonuses — and answers questions about them in plain language, with practical, evidence-based next steps. It explains your data; it never diagnoses.' },
@@ -87,6 +98,45 @@ export default function CoachLandingPage() {
         <div className="mt-6"><SharePageBar path="/coach" title="AI Longevity Coach" text="An AI coach that explains your life-expectancy forecast in plain language — never a diagnosis" className="justify-center" /></div>
       </section>
 
+      {/* Gentle urgency — the unknowns, without fear */}
+      <section className="max-w-2xl mx-auto px-4 pt-2 pb-2">
+        <p className="text-center text-gray-600 leading-relaxed">
+          Most of what shapes how long and how well you live is quietly decided by ordinary, repeatable choices —
+          sleep, movement, food, stress. The hard part isn’t knowing that; it’s knowing <em>which</em> one matters
+          most for <em>you</em>, right now. That’s the gap the Coach is built to close — no alarm bells, just your
+          numbers turned into a clear next step.
+        </p>
+      </section>
+
+      {/* What it concretely helps with */}
+      <section className="max-w-3xl mx-auto px-4 py-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">What it actually helps you with</h2>
+        <div className="grid sm:grid-cols-2 gap-4">
+          {HELPS_WITH.map(h => (
+            <div key={h.title} className="border border-gray-200 rounded-2xl p-5">
+              <div className="text-2xl mb-2">{h.emoji}</div>
+              <p className="font-semibold text-gray-900 mb-1">{h.title}</p>
+              <p className="text-sm text-gray-500 italic leading-relaxed">{h.ex}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Prominent privacy guarantee — the zero-retention contract is real (in code) */}
+      <section className="max-w-2xl mx-auto px-4 py-8">
+        <div className="border-2 border-indigo-200 bg-indigo-50 rounded-2xl p-6 flex items-start gap-4">
+          <Lock className="w-8 h-8 text-indigo-600 shrink-0 mt-0.5" />
+          <div>
+            <p className="font-bold text-indigo-900 mb-1">Your conversations are never stored</p>
+            <p className="text-sm text-indigo-900/80 leading-relaxed">
+              Each message is processed just long enough to write a reply, then it’s gone — nothing is saved, logged
+              or added to a profile. Close the tab and the conversation no longer exists anywhere. Talking about your
+              health should feel private, so we built it that way rather than promising it in the fine print.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Can / cannot — the honest register */}
       <section className="max-w-3xl mx-auto px-4 py-8">
         <div className="grid md:grid-cols-2 gap-4">
@@ -113,8 +163,13 @@ export default function CoachLandingPage() {
             The Coach is part of the Premium experience and is available during your{' '}
             <strong>free trial</strong>. It lives inside your{' '}
             <Link to="/life-expectancy" className="text-indigo-600 hover:underline">Life Expectancy results</Link>{' '}
-            — generate a forecast, then open the Coach panel to ask your first question. See{' '}
-            <Link to="/upgrade" className="text-indigo-600 hover:underline">Premium pricing</Link> for details.
+            — generate a forecast, then open the Coach panel to ask your first question.
+          </p>
+          <p className="text-gray-700 leading-relaxed mt-3">
+            Premium is <strong>{subscriptionPrice('annual', currency)}/year</strong> (about{' '}
+            {annualPerMonth(currency)}/month) or <strong>{subscriptionPrice('monthly', currency)}/month</strong>,
+            and includes the Coach plus report credits. See{' '}
+            <Link to="/upgrade" className="text-indigo-600 hover:underline">full Premium pricing</Link> for what’s included.
           </p>
         </div>
       </section>

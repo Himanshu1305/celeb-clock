@@ -115,6 +115,8 @@ async function main() {
   for (const f of FITNESS_PAGES) {
     jobs.push({ rel: `fitness/${f.slug}.webp`, markup: svg({ eyebrow: 'Rhythm Check-in', title: f.h1, sub: 'A reflection tool, not a prescription', titleSize: 58 }) });
   }
+  // Weight on planets (single-segment route → picked up by the fitness/{slug} OG mapping)
+  jobs.push({ rel: 'fitness/weight-on-planets.webp', markup: svg({ eyebrow: 'Cosmic Weigh-in', title: 'Your weight on every planet', sub: 'From bouncy Moon to crushing Jupiter', titleSize: 60 }) });
   // Blog posts (all)
   for (const p of blogPosts) {
     jobs.push({ rel: `blog/${p.slug}.webp`, markup: svg({ eyebrow: 'BornClock Blog', title: p.title, sub: `${p.readTime} min read`, titleSize: 54 }) });

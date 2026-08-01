@@ -76,6 +76,7 @@ export const Footer = () => {
               <li><Link to="/zodiac" className="text-muted-foreground hover:text-accent transition-colors">Zodiac Signs</Link></li>
               <li><Link to="/numerology" className="text-muted-foreground hover:text-accent transition-colors">Numerology</Link></li>
               <li><Link to="/compatibility" className="text-muted-foreground hover:text-accent transition-colors">Compatibility</Link></li>
+              <li><Link to="/weight-on-planets" className="text-muted-foreground hover:text-accent transition-colors">Weight on Planets</Link></li>
               <li><Link to="/answers" className="text-muted-foreground hover:text-accent transition-colors">Answers</Link></li>
               <li><Link to="/birthstone" className="text-muted-foreground hover:text-accent transition-colors">Birthstone Finder</Link></li>
             </ul>
@@ -93,7 +94,8 @@ export const Footer = () => {
               <li><Link to="/answers/how-long-will-i-live" className="text-muted-foreground hover:text-accent transition-colors">How Long Will I Live?</Link></li>
               <li><Link to="/leaderboard" className="text-muted-foreground hover:text-accent transition-colors">Longevity Leaderboard</Link></li>
               <li><Link to="/family" className="text-muted-foreground hover:text-accent transition-colors">Family Dashboard</Link></li>
-              <li><Link to="/birthday-report" className="text-muted-foreground hover:text-accent transition-colors">Gift a Report</Link></li>
+              <li><Link to="/gift" className="text-muted-foreground hover:text-accent transition-colors">Gift a Report</Link></li>
+              <li><Link to="/coach" className="text-muted-foreground hover:text-accent transition-colors">Longevity Coach</Link></li>
               <li><Link to="/biological-age" className="text-muted-foreground hover:text-accent transition-colors">Biological Age Test</Link></li>
               <li><Link to="/country-comparison" className="text-muted-foreground hover:text-accent transition-colors">Country Comparison</Link></li>
               <li><Link to="/birthday-report" className="text-muted-foreground hover:text-accent transition-colors">Birthday Report</Link></li>

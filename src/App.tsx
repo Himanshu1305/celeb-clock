@@ -35,6 +35,7 @@ const AgeCalculatorPage = lazy(() => import("./pages/AgeCalculatorPage"));
 const TodaysBirthdaysPage = lazy(() => import("./pages/TodaysBirthdaysPage"));
 const NumerologyPage = lazy(() => import("./pages/NumerologyPage"));
 const PlanetaryAgePage = lazy(() => import("./pages/PlanetaryAgePage"));
+const WeightOnPlanetsPage = lazy(() => import("./pages/WeightOnPlanetsPage"));
 const Methodology = lazy(() => import("./pages/Methodology"));
 const EditorialPolicy = lazy(() => import("./pages/EditorialPolicy"));
 const ZodiacSign = lazy(() => import("./pages/ZodiacSign"));
@@ -112,6 +113,7 @@ const App = () => (
               <Route path="/numerology/:number" element={<NumerologyNumber />} />
               <Route path="/generation" element={<GenerationPage />} />
               <Route path="/planetary-age" element={<PlanetaryAgePage />} />
+              <Route path="/weight-on-planets" element={<WeightOnPlanetsPage />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />

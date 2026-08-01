@@ -8,6 +8,10 @@ import PageTagline from '@/components/PageTagline';
 import { getCompatibility, ZODIAC_SIGNS } from '@/data/compatibilityData';
 import { useReportPrice } from '@/hooks/useCurrency';
 import { SharePageBar } from '@/components/SharePageBar';
+import {
+  loveProse, friendshipProse, workProse, clicksAndClashes,
+  aspectName, RULING_PLANET, type Sign,
+} from '@/lib/compatibilityProse';
 
 // Element × modality composition — adds pair-specific prose (beyond the curated
 // description) so every one of the 78 pages carries unique, non-thin content.
@@ -88,16 +92,25 @@ export default function CompatibilityPage() {
   const [sign2, setSign2] = useState('');
   const [result, setResult] = useState<ReturnType<typeof getCompatibility> | null>(null);
   const [calcSigns, setCalcSigns] = useState<{ s1: string; s2: string } | null>(null);
+  // True when the URL carries two path params but at least one is NOT a real sign
+  // (e.g. /compatibility/aries/dragon) — we render an explicit not-found, never the
+  // calculator shell, so a bogus slug can't masquerade as a valid page.
+  const [invalidPair, setInvalidPair] = useState(false);
 
   useEffect(() => {
     if (paramSign1 && paramSign2) {
       const s1 = paramSign1.charAt(0).toUpperCase() + paramSign1.slice(1).toLowerCase();
       const s2 = paramSign2.charAt(0).toUpperCase() + paramSign2.slice(1).toLowerCase();
       if (ZODIAC_SIGNS.includes(s1 as typeof ZODIAC_SIGNS[number]) && ZODIAC_SIGNS.includes(s2 as typeof ZODIAC_SIGNS[number])) {
+        setInvalidPair(false);
         setSign1(s1);
         setSign2(s2);
         setResult(getCompatibility(s1, s2));
         setCalcSigns({ s1, s2 });
+      } else {
+        setInvalidPair(true);
+        setResult(null);
+        setCalcSigns(null);
       }
     }
   }, [paramSign1, paramSign2]);
@@ -136,6 +149,38 @@ export default function CompatibilityPage() {
   const canonicalUrl = calcSigns
     ? `/compatibility/${[calcSigns.s1, calcSigns.s2].map(s => s.toLowerCase()).sort().join('/')}`
     : '/compatibility';
+
+  // Invalid pairing (bogus sign in the URL) → explicit not-found content, not the SPA
+  // calculator shell. Distinct <title> + noindex so search engines don't index junk URLs.
+  if (invalidPair) {
+    return (
+      <div className="min-h-screen bg-white">
+        <SEO
+          title="Zodiac pairing not found | BornClock"
+          description="That is not a valid zodiac pairing. Pick two of the twelve zodiac signs to see their compatibility."
+          canonicalUrl="/compatibility"
+          noindex
+        />
+        <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
+          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+            <Navigation />
+            <AuthNav />
+          </div>
+        </div>
+        <div className="max-w-xl mx-auto px-4 py-20 text-center">
+          <p className="text-6xl mb-4">🔭</p>
+          <h1 className="text-3xl font-black text-gray-900 mb-3">That zodiac pairing doesn’t exist</h1>
+          <p className="text-gray-600 leading-relaxed mb-8">
+            “{paramSign1}” and “{paramSign2}” aren’t both zodiac signs. Compatibility is calculated between two of
+            the twelve signs — Aries through Pisces. Head back to the calculator and pick a real pair.
+          </p>
+          <Link to="/compatibility" className="inline-block bg-rose-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-rose-700 transition-colors">
+            Open the Compatibility Calculator →
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -220,6 +265,23 @@ export default function CompatibilityPage() {
                 </p>
               </div>
 
+              {/* Clicks & Clashes — fast scannable verdict (element/aspect/modality/polarity) */}
+              {(() => {
+                const cc = clicksAndClashes(calcSigns.s1 as Sign, calcSigns.s2 as Sign);
+                return (
+                  <div className="grid sm:grid-cols-2 gap-3 mb-6">
+                    <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                      <p className="text-xs font-bold text-green-700 mb-1">✨ Where you click</p>
+                      <p className="text-sm text-green-900 leading-relaxed">{cc.click}</p>
+                    </div>
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                      <p className="text-xs font-bold text-amber-700 mb-1">⚡ Where you clash</p>
+                      <p className="text-sm text-amber-900 leading-relaxed">{cc.clash}</p>
+                    </div>
+                  </div>
+                );
+              })()}
+
               <div className="bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl p-8 text-white text-center mb-6">
                 <div className="flex justify-center items-center gap-6 mb-4">
                   <div className="text-center">
@@ -282,6 +344,23 @@ export default function CompatibilityPage() {
                   <span className="text-gray-300">·</span>
                   <Link to="/compatibility" className="text-sm text-indigo-600 hover:underline">Check another pair →</Link>
                 </div>
+              </div>
+
+              {/* Composed, pair-specific long-form — Love (planets) · Friendship (element+aspect) · Work (modality) */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-4">
+                <h2 className="text-xl font-bold text-gray-900 mb-1">{calcSigns.s1} &amp; {calcSigns.s2}: the full reading</h2>
+                <p className="text-xs text-gray-400 mb-5">
+                  {calcSigns.s1} is ruled by {RULING_PLANET[calcSigns.s1 as Sign]}, {calcSigns.s2} by {RULING_PLANET[calcSigns.s2 as Sign]} — and on the zodiac wheel they form a {aspectName(calcSigns.s1 as Sign, calcSigns.s2 as Sign)}.
+                </p>
+
+                <h3 className="text-base font-bold text-rose-700 mb-1">❤️ How {calcSigns.s1} and {calcSigns.s2} do love</h3>
+                <p className="text-sm text-gray-700 leading-relaxed mb-5">{loveProse(calcSigns.s1 as Sign, calcSigns.s2 as Sign)}</p>
+
+                <h3 className="text-base font-bold text-blue-700 mb-1">🤝 As friends</h3>
+                <p className="text-sm text-gray-700 leading-relaxed mb-5">{friendshipProse(calcSigns.s1 as Sign, calcSigns.s2 as Sign)}</p>
+
+                <h3 className="text-base font-bold text-amber-700 mb-1">💼 Working together</h3>
+                <p className="text-sm text-gray-700 leading-relaxed">{workProse(calcSigns.s1 as Sign, calcSigns.s2 as Sign)}</p>
               </div>
 
               <SharePageBar

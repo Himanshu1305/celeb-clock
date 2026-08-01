@@ -159,6 +159,7 @@ export const STATIC_ROUTES = [
   ...NUMEROLOGY_NUMBERS.map(n => `/numerology/${n}`),
   '/generation',
   '/planetary-age',
+  '/weight-on-planets',
   '/upgrade',
   '/pricing',
   '/zodiac',

@@ -31,6 +31,14 @@ const OCCASIONS = [
   { emoji: '✈️', label: 'Long-distance friends', note: 'Instant delivery, no shipping, arrives the moment you send it' },
 ];
 
+// Concrete emotional moments — the whole point is the FEELING, not the object.
+// Specific, warm, and true to what the report is (a keepsake, never a prediction).
+const MOMENTS = [
+  { emoji: '👴', title: 'A father reads his own story', body: 'He opens it expecting a novelty and finds his birth date laid out like a life — the twins who share it, the era he was shaped by, the small cosmic facts of the day he arrived. He goes quiet. That quiet is the gift.' },
+  { emoji: '🌏', title: 'A friend abroad opens it on the day', body: 'You couldn’t be there for the birthday. But at midnight their time, a link lands — proof you counted the hours and thought about exactly who they are, not just that a date rolled around.' },
+  { emoji: '💐', title: 'A partner sees you noticed', body: 'They scroll to their birth flower and birthstone and realise you didn’t just buy something — you looked up the details of the day they were born. It’s the difference between a present and being paid attention to.' },
+];
+
 export default function GiftReport() {
   const reportPrice = useReportPrice();
   const meshPosts = postsForTags(['celebrity', 'birthday', 'gift', 'zodiac'], 2);
@@ -90,6 +98,21 @@ export default function GiftReport() {
             One takes ten seconds and a number. The other takes their birth date and a moment of thought
             about the person they are.
           </p>
+        </div>
+      </section>
+
+      {/* 2.5 — EMOTIONAL MOMENTS (the feeling, not the object) */}
+      <section className="max-w-3xl mx-auto px-4 py-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">What it actually feels like to give</h2>
+        <p className="text-gray-500 text-center mb-6 max-w-xl mx-auto">The Blueprint isn’t really about zodiac charts. It’s about the moment someone realises you <em>saw</em> them.</p>
+        <div className="grid sm:grid-cols-3 gap-4">
+          {MOMENTS.map(m => (
+            <div key={m.title} className="border border-gray-200 rounded-2xl p-5">
+              <div className="text-3xl mb-2">{m.emoji}</div>
+              <p className="font-semibold text-gray-900 mb-1">{m.title}</p>
+              <p className="text-sm text-gray-600 leading-relaxed">{m.body}</p>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -43,10 +43,11 @@ test('Explore ∩ (main ∪ More) = ∅', async ({ page }) => {
   const exploreHrefs = await openMenu(page, 'Explore');
 
   // Explore is exactly the discovery hubs. BATCH-7 P6 repointed "Born in Each Month"
-  // from /born-in-january (a single month) to the new /born-in months hub.
+  // from /born-in-january (a single month) to the new /born-in months hub; BATCH-7B P10
+  // added the /weight-on-planets fun tool as a discovery hub.
   expect(new Set(exploreHrefs)).toEqual(new Set([
     '/born-in', '/born-on/india', '/biorhythm-workout-calculator',
-    '/energy-forecast', '/answers', '/compatibility',
+    '/energy-forecast', '/answers', '/compatibility', '/weight-on-planets',
   ]));
 
   // No Explore destination is duplicated in the main bar or More.

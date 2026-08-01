@@ -30,6 +30,8 @@ const navItems = [
   { path: '/biological-age', label: 'Biological Age', icon: Activity },
   { path: '/country-comparison', label: 'Country Comparison', icon: Map },
   { path: '/biorhythm', label: 'Biorhythm Calculator', icon: Activity },
+  { path: '/gift', label: 'Gift a Report', icon: Gift },
+  { path: '/coach', label: 'Longevity Coach', icon: Activity },
   { path: '/pricing', label: 'Pricing', icon: Tag },
 ];
 
@@ -48,6 +50,7 @@ const exploreItems = [
   { path: '/energy-forecast', label: 'Energy Forecast', emoji: '⚡' },
   { path: '/answers', label: 'Answers', emoji: '❓' },
   { path: '/compatibility', label: 'Compatibility', emoji: '💕' },
+  { path: '/weight-on-planets', label: 'Weight on Planets', emoji: '🪐' },
 ];
 
 const astrologyItems = [
