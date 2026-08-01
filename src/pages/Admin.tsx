@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { supabase } from '@/integrations/supabase/client';
+import { loadAdminUsers, grantPromoDays, grantFullPremium, revokePremium } from '@/lib/adminUsers';
 import { SEO } from '@/components/SEO';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -175,6 +176,8 @@ export default function Admin() {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [usersLoading, setUsersLoading] = useState(false);
   const [userSearch, setUserSearch] = useState('');
+  // Visible banner for admin data-fetch problems — never fail silently.
+  const [adminError, setAdminError] = useState<string | null>(null);
 
   const [countries, setCountries] = useState<[string, number][]>([]);
   const [countriesLoading, setCountriesLoading] = useState(false);
@@ -250,6 +253,10 @@ export default function Admin() {
   const fetchMetrics = async () => {
     setMetricsLoading(true);
     try {
+      // AUTH-TIMING: hydrate the session before any RLS-gated read so metrics/invoices
+      // run as the admin, not anon. sessionTag feeds the diagnostic invoice note below.
+      const { data: { session } } = await supabase.auth.getSession();
+      const sessionTag = session ? 'present' : 'ABSENT';
       const now = new Date();
       const ago7  = new Date(now.getTime() - 7  * 86_400_000).toISOString();
       const ago30 = new Date(now.getTime() - 30 * 86_400_000).toISOString();
@@ -353,9 +360,13 @@ export default function Admin() {
         const monthSum = (a: Date, b: Date) => inr.filter(r => { const d = new Date(r.invoice_date); return d >= a && d < b; }).reduce((s, r) => s + num(r.gross_amount), 0);
         invThisMonthINR = monthSum(thisStart, nextStart);
         invLastMonthINR = monthSum(lastStart, thisStart);
-        if (rows.length === 0) invoiceNote = 'No invoices readable under owner-read RLS. Apply NOTES-admin-invoice-read.sql (admin SELECT policy) to see all-account revenue.';
-      } catch {
-        invoiceNote = 'invoices not accessible under RLS — apply supabase/migrations/NOTES-admin-invoice-read.sql (admin SELECT policy).';
+        // DIAGNOSTIC: 0 rows with NO error = RLS returned nothing. If session is ABSENT this
+        // fired as anon (reload); if present, the admin SELECT policy is missing. Distinct from
+        // the catch branch (an actual query error). Includes the observed count + session state.
+        if (rows.length === 0) invoiceNote = `0 invoices readable · session: ${sessionTag}. ${session ? 'Session is present, so apply/verify invoices_admin_read (NOTES-admin-invoice-read.sql).' : 'Session was ABSENT — this ran as anon; hard-refresh /admin so the JWT loads before the query.'}`;
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        invoiceNote = `invoices query error · session: ${sessionTag}: ${msg} — verify invoices_admin_read (NOTES-admin-invoice-read.sql).`;
       }
 
       setMetrics({
@@ -395,13 +406,27 @@ export default function Admin() {
 
   const fetchUsers = async () => {
     setUsersLoading(true);
+    setAdminError(null);
     try {
-      const { data } = await supabase
-        .from('profiles')
-        .select('id, email, name, country, created_at, premium_status, promo_premium_until')
-        .order('created_at', { ascending: false })
-        .limit(50);
-      setUsers((data as UserProfile[]) ?? []);
+      // loadAdminUsers awaits the session (RLS as admin, not anon) and falls back to a
+      // select WITHOUT promo_premium_until if that column is missing pre-migration.
+      const res = await loadAdminUsers(supabase as unknown as Parameters<typeof loadAdminUsers>[0]);
+      if (res.error) {
+        console.error('[admin] fetchUsers failed:', res.error);
+        setAdminError(`Could not load users: ${res.error}`);
+        setUsers([]);
+        return;
+      }
+      if (res.warning) {
+        console.error('[admin] fetchUsers used fallback (promo column missing):', res.warning);
+        setAdminError(`Users loaded via fallback — promo column missing, apply NOTES-promo-column.sql. (${res.warning})`);
+      }
+      setUsers(res.users as unknown as UserProfile[]);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error('[admin] fetchUsers error:', msg);
+      setAdminError(`Could not load users: ${msg}`);
+      setUsers([]);
     } finally {
       setUsersLoading(false);
     }
@@ -432,7 +457,25 @@ export default function Admin() {
     }
   };
 
-  useEffect(() => { fetchStats(); fetchMetrics(); }, []);
+  // AUTH-TIMING FIX: on a hard refresh the persisted Supabase session hydrates from
+  // localStorage asynchronously. If these RLS-gated reads fire before that, they run as
+  // ANON → RLS returns 0 rows → the Users list is empty and the GST card shows the amber
+  // note even though everything is configured. Await getSession() first so the JWT is
+  // attached, and re-run when the session actually arrives / refreshes.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      await supabase.auth.getSession();
+      if (cancelled) return;
+      fetchStats();
+      fetchMetrics();
+    })();
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') { fetchStats(); fetchMetrics(); }
+    });
+    return () => { cancelled = true; sub.subscription.unsubscribe(); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (section === 'users' && users.length === 0) fetchUsers();
@@ -444,30 +487,39 @@ export default function Admin() {
 
   // ── User actions ──────────────────────────────────────────────────────────
 
+  const db2 = supabase as unknown as Parameters<typeof grantPromoDays>[0];
+
   const grantPromo = async (u: UserProfile) => {
-    const until = new Date();
-    until.setDate(until.getDate() + 30);
-    await supabase
-      .from('profiles')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .update({ promo_premium_until: until.toISOString() } as any)
-      .eq('id', u.id);
+    const { error } = await grantPromoDays(db2, u.id, 30);
+    if (error) {
+      // Surface the real failure (e.g. promo_premium_until missing pre NOTES-promo-column.sql)
+      // instead of pretending the write succeeded.
+      console.error('[admin] grantPromo failed:', error);
+      toast({ title: 'Promo grant failed', description: error, variant: 'destructive' });
+      return;
+    }
     toast({ title: 'Promo granted', description: `${u.email} gets 30 days premium.` });
     fetchUsers();
   };
 
   const grantFull = async (u: UserProfile) => {
-    await supabase.from('profiles').update({ premium_status: true }).eq('id', u.id);
+    const { error } = await grantFullPremium(db2, u.id);
+    if (error) {
+      console.error('[admin] grantFull failed:', error);
+      toast({ title: 'Grant failed', description: error, variant: 'destructive' });
+      return;
+    }
     toast({ title: 'Premium granted', description: `${u.email} is now full premium.` });
     fetchUsers();
   };
 
   const revoke = async (u: UserProfile) => {
-    await supabase
-      .from('profiles')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .update({ premium_status: false, promo_premium_until: null } as any)
-      .eq('id', u.id);
+    const { error } = await revokePremium(db2, u.id);
+    if (error) {
+      console.error('[admin] revoke failed:', error);
+      toast({ title: 'Revoke failed', description: error, variant: 'destructive' });
+      return;
+    }
     toast({ title: 'Premium revoked', description: `${u.email} reverted to free.` });
     fetchUsers();
   };
@@ -1313,6 +1365,16 @@ export default function Admin() {
 
           {/* Section content */}
           <main className="flex-1 p-6 overflow-auto">
+            {adminError && (
+              <div
+                role="alert"
+                data-testid="admin-error-banner"
+                className="mb-4 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800 flex items-start justify-between gap-3"
+              >
+                <span>{adminError}</span>
+                <button onClick={() => setAdminError(null)} className="text-red-500 hover:text-red-700 font-bold shrink-0">×</button>
+              </div>
+            )}
             {sectionContent[section]()}
           </main>
         </div>
