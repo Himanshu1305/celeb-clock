@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { calculateBiorhythm, getBiorhythmStatus } from '@/data/biorhythmData';
+import { DobInput, toISODate } from '@/components/DobInput';
 import { checkInPrompt, nextUpswing, validateDob } from '@/data/rhythmFraming';
 
 const MONTHS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -41,15 +42,10 @@ export function RhythmWidget({ variant = 'today', ctaLabel = 'Calculate my rhyth
   return (
     <div className="bg-teal-50 rounded-2xl p-6 border border-teal-100">
       <p className="text-sm font-semibold text-gray-700 mb-3">Enter your date of birth</p>
-      <div className="flex flex-col sm:flex-row gap-3">
-        <input
-          type="date"
-          value={dob}
-          max={today.toISOString().slice(0, 10)}
-          onChange={e => setDob(e.target.value)}
-          aria-label="Date of birth"
-          className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500"
-        />
+      <div className="flex flex-col sm:flex-row gap-3 sm:items-start">
+        <div className="flex-1">
+          <DobInput label="" onValidChange={d => setDob(d ? toISODate(d) : '')} />
+        </div>
         <button onClick={run} className="bg-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-teal-700 transition-colors">
           {ctaLabel}
         </button>

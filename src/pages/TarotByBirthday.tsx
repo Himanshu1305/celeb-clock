@@ -1,6 +1,7 @@
 import React, { useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
+import { DobInput, toISODate } from '@/components/DobInput';
 import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
@@ -322,13 +323,10 @@ export default function TarotByBirthday() {
             <p className="text-sm text-gray-500 text-center mb-4">
               Determined by your Life Path number — this card is permanent and unique to your birthday.
             </p>
-            <div className="flex gap-3">
-              <input
-                type="date"
-                value={dob}
-                onChange={e => setDob(e.target.value)}
-                className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
+            <div className="flex gap-3 items-start">
+              <div className="flex-1">
+                <DobInput label="" onValidChange={d => setDob(d ? toISODate(d) : '')} />
+              </div>
               <button
                 onClick={handleCalculate}
                 className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors whitespace-nowrap"

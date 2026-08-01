@@ -42,12 +42,12 @@ test('Explore ∩ (main ∪ More) = ∅', async ({ page }) => {
   const moreHrefs = await openMenu(page, 'More');
   const exploreHrefs = await openMenu(page, 'Explore');
 
-  // Explore is exactly the discovery hubs. BATCH-7 P6 repointed "Born in Each Month"
-  // from /born-in-january (a single month) to the new /born-in months hub; BATCH-7B P10
-  // added the /weight-on-planets fun tool as a discovery hub.
+  // Explore = the discovery hubs. BATCH-8 P5 moved Numerology (both) and Gift a Report
+  // into Explore and removed the standalone Numerology dropdown from the bar.
   expect(new Set(exploreHrefs)).toEqual(new Set([
-    '/born-in', '/born-on/india', '/biorhythm-workout-calculator',
-    '/energy-forecast', '/answers', '/compatibility', '/weight-on-planets',
+    '/born-in', '/born-on/india', '/numerology', '/name-numerology',
+    '/biorhythm-workout-calculator', '/energy-forecast', '/answers',
+    '/compatibility', '/weight-on-planets', '/gift',
   ]));
 
   // No Explore destination is duplicated in the main bar or More.

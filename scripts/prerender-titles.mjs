@@ -300,8 +300,10 @@ export function getTitleForRoute(route) {
       const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
       const a = cap(m[1]), b = cap(m[2]);
       return {
-        title: `${a} & ${b} Compatibility — Love, Friendship & Work Match | BornClock`,
-        description: `How compatible are ${a} and ${b}? Full zodiac compatibility for love, friendship and work — with match scores, strengths, challenges and relationship advice.`,
+        // P7: trimmed to ≤65 chars — keeps the head term "{A} & {B} Compatibility"; the
+        // "love / friendship / work" descriptor lives in the H1 and description.
+        title: `${a} & ${b} Compatibility | BornClock`,
+        description: `How compatible are ${a} and ${b}? Zodiac compatibility for love, friendship and work — with match scores, strengths and challenges.`,
       };
     }
   }
@@ -348,7 +350,9 @@ export function getTitleForRoute(route) {
   if (route.startsWith('/blog/') && route !== '/blog') {
     const slug = route.slice(6);
     const t = BLOG[slug];
-    return t ? { title: t, description: `Read ${t} on the BornClock Health & Longevity Blog. Science-backed, sourced, updated regularly.` } : null;
+    // P7 brand-suffix: append "| BornClock" only when it won't push the title past ~65 chars
+    // (per the "unless length would overflow" rule) — most article titles keep their natural form.
+    return t ? { title: (t.length + 12 <= 65) ? `${t} | BornClock` : t, description: `Read ${t} on the BornClock Health & Longevity Blog. Science-backed, sourced, updated regularly.` } : null;
   }
 
   // /birthday/:month (index page for a month)
@@ -368,7 +372,7 @@ export function getTitleForRoute(route) {
     const d = parseInt(parts[2], 10);
     const monthName = MONTH_NAMES[m] || '';
     return {
-      title: `${monthName} ${d} Birthday — Personality, Zodiac & Famous People | BornClock`,
+      title: `${monthName} ${d} Birthday — Personality & Famous People | BornClock`,
       description: `Birthday personality profile for ${monthName} ${d} — zodiac sign, life path number, birthstone, famous people, and compatibility.`,
     };
   }

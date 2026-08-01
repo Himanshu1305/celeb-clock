@@ -45,6 +45,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
+import { DobInput, toISODate } from '@/components/DobInput';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { Button } from '@/components/ui/button';
@@ -488,12 +489,7 @@ function FamilyDashboardInner() {
             </div>
             <div>
               <Label>Date of Birth</Label>
-              <Input
-                type="date"
-                value={form.date_of_birth}
-                onChange={e => setForm(f => ({ ...f, date_of_birth: e.target.value }))}
-                className="mt-1"
-              />
+              <DobInput label="" onValidChange={d => setForm(f => ({ ...f, date_of_birth: d ? toISODate(d) : '' }))} />
             </div>
             <div>
               <Label>Gender</Label>

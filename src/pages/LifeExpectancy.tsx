@@ -2,6 +2,7 @@ import { useState, useRef, Component, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
+import { DobInput, toISODate } from '@/components/DobInput';
 import { Footer } from '@/components/Footer';
 import { LifeExpectancyCalculator } from '@/components/LifeExpectancyCalculator';
 import { WhatIfSimulator } from '@/components/WhatIfSimulator';
@@ -463,13 +464,7 @@ const LifeExpectancy = () => {
                       <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-bold">Required</span>
                     </Label>
                     <p className="text-sm text-muted-foreground mb-3">Your date of birth is required to calculate your personalised life expectancy forecast.</p>
-                    <Input
-                      id="birthdate-life"
-                      type="date"
-                      value={rawDateInput}
-                      onChange={handleDateChange}
-                      className={`text-lg ${!birthDate ? 'ring-2 ring-primary/40' : ''}`}
-                    />
+                    <DobInput label="" onValidChange={d => { setRawDateInput(d ? toISODate(d) : ''); if (d) setBirthDate(d); }} />
                   </div>
                 </CardContent>
               </Card>

@@ -322,6 +322,29 @@ export default function Leaderboard() {
             </Button>
           </div>
         )}
+
+        {/* P7 — explanatory content (what it ranks, how, provenance) so the page isn't thin */}
+        <div className="mt-10 max-w-2xl mx-auto text-left space-y-4">
+          <h2 className="text-xl font-bold text-foreground">How the Longevity Leaderboard works</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            The Longevity Leaderboard ranks members by their <strong>longevity score</strong> — the
+            personalised life-expectancy estimate produced by the BornClock{' '}
+            <Link to="/life-expectancy" className="text-primary hover:underline">Life Expectancy Calculator</Link>.
+            The score combines your age with self-reported lifestyle and health factors — sleep, exercise,
+            stress, diet, BMI, smoking status and more — weighted using published population research from
+            the WHO, the Global Burden of Disease study, and peer-reviewed longevity literature. A higher
+            score reflects habits statistically associated with a longer, healthier life.
+          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Scores are <strong>self-reported estimates, not medical measurements or predictions</strong> —
+            the leaderboard is a friendly nudge toward healthier habits, not a diagnosis or a forecast of
+            how long anyone will actually live. You choose a display name when you join, and only members
+            who opt in appear here; you can leave at any time. To add your score, generate your forecast and
+            join as a Premium member. Curious how the factors move a real number? Try the{' '}
+            <Link to="/life-expectancy" className="text-primary hover:underline">what-if simulator</Link>{' '}
+            and watch each habit shift the estimate.
+          </p>
+        </div>
       </div>
 
       {/* Join Modal */}

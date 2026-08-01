@@ -137,6 +137,9 @@ Deno.serve(async (req) => {
     await supabaseAdmin.from('birthday_reports').delete().eq('user_id', userId)
     await supabaseAdmin.from('analytics_events').delete().eq('user_id', userId)
     await supabaseAdmin.from('user_reviews').delete().eq('user_id', userId)
+    // feedback (BATCH-8 P4) — tolerate-absent: swallow the error if NOTES-feedback.sql isn't
+    // applied yet, so a missing table never blocks account deletion. (The FK also CASCADEs.)
+    await supabaseAdmin.from('feedback').delete().eq('user_id', userId).then(() => {}, () => {})
     await supabaseAdmin.from('user_roles').delete().eq('user_id', userId)
     await supabaseAdmin.from('family_members').delete().eq('user_id', userId)
     await supabaseAdmin.from('leaderboard_entries').delete().eq('user_id', userId)

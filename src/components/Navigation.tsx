@@ -12,45 +12,40 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { isAdminEmail } from '@/components/AdminRoute';
 
-// First 4 = the main visible bar (visibleItems = slice(0,4)); the rest fall into
-// the "More" menu. Birthday Report is the paid product, so it's promoted into the
-// main bar; Planetary Age moves into More (still one click, no duplication).
+// BATCH-8 P5: first 5 = the main visible bar (visibleItems = slice(0,5)) —
+// Age Calculator · Today's Birthdays · Celebrity Match · Birthday Report · Life Expectancy.
+// The rest fall into "More". Birthday Report stays the single money item on the bar;
+// Numerology and Gift moved into Explore (see below); Planetary Age lives under More.
 const navItems = [
   { path: '/age-calculator', label: 'Age Calculator', icon: Clock },
   { path: '/todays-birthdays', label: "Today's Birthdays", icon: Cake },
   { path: '/celebrity-birthday', label: 'Celebrity Match', icon: Gift },
   { path: '/birthday-report', label: 'Birthday Report', icon: Gift },
-  { path: '/planetary-age', label: 'Planetary Age', icon: Globe },
   { path: '/life-expectancy', label: 'Life Expectancy', icon: Crown, premium: true },
+  // ↑ first 5 = main bar · ↓ More menu
+  { path: '/planetary-age', label: 'Planetary Age', icon: Globe },
   { path: '/birthstone', label: 'Birthstone', icon: Gem },
   { path: '/leaderboard', label: 'Leaderboard', icon: Trophy },
-  // TEMPORARILY DISABLED — re-enable Month 2
-  // { path: '/family', label: 'Family', icon: Users },
   { path: '/blog', label: 'Blog', icon: BookOpen },
   { path: '/biological-age', label: 'Biological Age', icon: Activity },
   { path: '/country-comparison', label: 'Country Comparison', icon: Map },
   { path: '/biorhythm', label: 'Biorhythm Calculator', icon: Activity },
-  { path: '/gift', label: 'Gift a Report', icon: Gift },
   { path: '/coach', label: 'Longevity Coach', icon: Activity },
   { path: '/pricing', label: 'Pricing', icon: Tag },
 ];
 
-const numerologyItems = [
-  { path: '/numerology', label: 'Numerology by Birthday', emoji: '🔢' },
-  { path: '/name-numerology', label: 'Name Numerology', emoji: '✍️' },
-];
-
-// High-click DISCOVERY hubs only — destinations that live nowhere else in the
-// header. Anything duplicated in the main bar or the "More" menu was removed
-// (Today's Birthdays, Planetary Age, Biological Age, Life Expectancy, Pricing).
+// High-click DISCOVERY hubs. BATCH-8 P5 moved Numerology (both) and Gift a Report in here.
 const exploreItems = [
   { path: '/born-in', label: 'Born in Each Month', emoji: '📅' },
   { path: '/born-on/india', label: 'Indian Celebrities by Date', emoji: '🇮🇳' },
+  { path: '/numerology', label: 'Numerology by Birthday', emoji: '🔢' },
+  { path: '/name-numerology', label: 'Name Numerology', emoji: '✍️' },
   { path: '/biorhythm-workout-calculator', label: 'Biorhythm Workout', emoji: '🏃' },
   { path: '/energy-forecast', label: 'Energy Forecast', emoji: '⚡' },
   { path: '/answers', label: 'Answers', emoji: '❓' },
   { path: '/compatibility', label: 'Compatibility', emoji: '💕' },
   { path: '/weight-on-planets', label: 'Weight on Planets', emoji: '🪐' },
+  { path: '/gift', label: 'Gift a Report', emoji: '🎁' },
 ];
 
 const astrologyItems = [
@@ -71,8 +66,8 @@ export const Navigation = () => {
   const isActive = (path: string) => location.pathname === path;
   const isHomePage = location.pathname === '/';
 
-  const visibleItems = navItems.slice(0, 4);
-  const moreItems = navItems.slice(4);
+  const visibleItems = navItems.slice(0, 5);
+  const moreItems = navItems.slice(5);
 
   // Trial UI is account-age driven; a paid subscriber must never see it. Gate
   // every trial surface on !isPaidSubscriber (premium_status also excludes them,
@@ -143,26 +138,6 @@ export const Navigation = () => {
               </Button>
             </Link>
           ))}
-
-          {/* Numerology dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={numerologyItems.some(i => isActive(i.path)) ? 'default' : 'ghost'} size="sm" className="gap-1.5">
-                <Hash className="w-4 h-4" />
-                <span className="hidden md:inline">Numerology</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {numerologyItems.map((item) => (
-                <Link key={item.path} to={item.path}>
-                  <DropdownMenuItem className={`gap-2 cursor-pointer ${isActive(item.path) ? 'bg-accent' : ''}`}>
-                    <span className="text-base leading-none">{item.emoji}</span>
-                    {item.label}
-                  </DropdownMenuItem>
-                </Link>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
 
           {/* Astrology dropdown */}
           <DropdownMenu>
@@ -303,14 +278,6 @@ export const Navigation = () => {
 
               {mobileSectionLabel('Explore')}
               {exploreItems.map(item => (
-                <Link key={item.path} to={item.path} onClick={closeMobile} className={mobileLinkClass(item.path)}>
-                  <span className="w-4 text-center text-base leading-none flex-shrink-0">{item.emoji}</span>
-                  {item.label}
-                </Link>
-              ))}
-
-              {mobileSectionLabel('Numerology')}
-              {numerologyItems.map(item => (
                 <Link key={item.path} to={item.path} onClick={closeMobile} className={mobileLinkClass(item.path)}>
                   <span className="w-4 text-center text-base leading-none flex-shrink-0">{item.emoji}</span>
                   {item.label}

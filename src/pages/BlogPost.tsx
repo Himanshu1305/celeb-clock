@@ -5,6 +5,8 @@ import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { ArticleSEO, FAQSchema } from '@/components/SEO';
+import { FeedbackPrompt } from '@/components/FeedbackPrompt';
+import { ReaderComments } from '@/components/ReaderComments';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -318,6 +320,10 @@ const BlogPostPage = () => {
               >{post.content}</ReactMarkdown>
             </div>
           </div>
+
+          {/* P4 — engagement-gated feedback + public reader comments (article end) */}
+          <FeedbackPrompt contentType="blog" slug={post.slug} variant="blog" />
+          <ReaderComments contentType="blog" slug={post.slug} />
 
           {/* Tags */}
           <div className="flex flex-wrap items-center gap-2 mb-8">

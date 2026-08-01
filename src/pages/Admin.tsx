@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Users, Globe, BarChart3, Gift, Shield, ExternalLink,
   RefreshCw, Crown, Clock, CheckCircle, Plus,
-  LayoutDashboard, ArrowLeft, AlertTriangle, UserCheck, Mail,
+  LayoutDashboard, ArrowLeft, AlertTriangle, UserCheck, Mail, Star,
   Activity, ChevronDown, FileText,
 } from 'lucide-react';
 
@@ -91,7 +91,12 @@ interface ConfirmState {
   onConfirm: () => Promise<void>;
 }
 
-type Section = 'ops' | 'metrics' | 'overview' | 'users' | 'countries' | 'usage' | 'promo' | 'system' | 'emails';
+type Section = 'ops' | 'metrics' | 'overview' | 'users' | 'countries' | 'usage' | 'promo' | 'system' | 'emails' | 'feedback';
+
+interface FeedbackAdminRow {
+  id: string; user_id: string; content_type: string; slug: string; rating: number;
+  comment: string | null; consent: boolean; approved: boolean; dismissed: boolean; created_at: string;
+}
 
 interface OpsReview {
   id: number;
@@ -178,6 +183,11 @@ export default function Admin() {
   const [userSearch, setUserSearch] = useState('');
   // Visible banner for admin data-fetch problems — never fail silently.
   const [adminError, setAdminError] = useState<string | null>(null);
+  // BATCH-8 P4 — feedback moderation
+  const [feedbacks, setFeedbacks] = useState<FeedbackAdminRow[]>([]);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
+  const [feedbackFilter, setFeedbackFilter] = useState<'all' | 'low' | 'consented' | 'report' | 'blog'>('all');
+  const [feedbackNote, setFeedbackNote] = useState<string | null>(null);
 
   const [countries, setCountries] = useState<[string, number][]>([]);
   const [countriesLoading, setCountriesLoading] = useState(false);
@@ -404,6 +414,35 @@ export default function Admin() {
     }
   };
 
+  const fetchFeedbacks = async () => {
+    setFeedbackLoading(true);
+    setFeedbackNote(null);
+    try {
+      await supabase.auth.getSession(); // RLS as admin, not anon
+      const { data, error } = await db.from('feedback').select('*').order('created_at', { ascending: false }).limit(500);
+      if (error) {
+        // tolerate-absent: the table only exists after NOTES-feedback.sql is applied.
+        if (/does not exist|find the table|schema cache/i.test(error.message ?? '')) {
+          setFeedbackNote('The feedback table isn’t created yet — apply NOTES-feedback.sql in Studio to enable moderation.');
+          setFeedbacks([]);
+        } else { setFeedbackNote(`Could not load feedback: ${error.message}`); setFeedbacks([]); }
+        return;
+      }
+      setFeedbacks((data as FeedbackAdminRow[]) ?? []);
+    } catch (e) {
+      setFeedbackNote(`Could not load feedback: ${e instanceof Error ? e.message : String(e)}`);
+      setFeedbacks([]);
+    } finally {
+      setFeedbackLoading(false);
+    }
+  };
+
+  const toggleApprove = async (row: FeedbackAdminRow) => {
+    const { error } = await db.from('feedback').update({ approved: !row.approved }).eq('id', row.id);
+    if (error) { toast({ title: 'Update failed', description: error.message, variant: 'destructive' }); return; }
+    setFeedbacks(fs => fs.map(f => f.id === row.id ? { ...f, approved: !f.approved } : f));
+  };
+
   const fetchUsers = async () => {
     setUsersLoading(true);
     setAdminError(null);
@@ -479,6 +518,7 @@ export default function Admin() {
 
   useEffect(() => {
     if (section === 'users' && users.length === 0) fetchUsers();
+    if (section === 'feedback') fetchFeedbacks();
     if (section === 'countries' && countries.length === 0) fetchCountries();
     if (section === 'promo') fetchPromoCodes();
     if (section === 'ops') fetchOps();
@@ -608,6 +648,7 @@ export default function Admin() {
     { id: 'countries',label: 'Countries',Icon: Globe },
     { id: 'usage',    label: 'Usage',    Icon: BarChart3 },
     { id: 'promo',    label: 'Promo Codes', Icon: Gift },
+    { id: 'feedback', label: 'Feedback', Icon: Star },
     { id: 'emails',   label: 'Emails',   Icon: Mail },
     { id: 'system',   label: 'System',   Icon: Shield },
   ];
@@ -1282,6 +1323,67 @@ export default function Admin() {
     );
   }
 
+  const renderFeedback = () => {
+    const filtered = feedbacks.filter(f => {
+      if (feedbackFilter === 'low') return f.rating > 0 && f.rating <= 3;
+      if (feedbackFilter === 'consented') return f.consent;
+      if (feedbackFilter === 'report') return f.content_type === 'report';
+      if (feedbackFilter === 'blog') return f.content_type === 'blog';
+      return f.rating > 0; // 'all' hides pure dismissals
+    });
+    const rated = feedbacks.filter(f => f.rating > 0);
+    const avg = rated.length ? (rated.reduce((s, f) => s + f.rating, 0) / rated.length).toFixed(2) : '—';
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <h2 className="text-2xl font-bold">Feedback &amp; Ratings</h2>
+          <p className="text-sm text-gray-500">Average: <strong>{avg}</strong> · {rated.length} ratings</p>
+        </div>
+        {feedbackNote && <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">{feedbackNote}</div>}
+        <div className="flex flex-wrap gap-2">
+          {(['all', 'low', 'consented', 'report', 'blog'] as const).map(f => (
+            <button key={f} onClick={() => setFeedbackFilter(f)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${feedbackFilter === f ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-300'}`}>
+              {f === 'low' ? 'Low-rating queue' : f === 'consented' ? 'Consented only' : f[0].toUpperCase() + f.slice(1)}
+            </button>
+          ))}
+        </div>
+        {feedbackLoading ? <p className="text-gray-500">Loading…</p> : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead><tr className="text-left text-gray-500 border-b">
+                <th className="py-2 pr-3">Type</th><th className="py-2 pr-3">Slug</th><th className="py-2 pr-3">★</th>
+                <th className="py-2 pr-3">Comment</th><th className="py-2 pr-3">Consent</th><th className="py-2 pr-3">Approved</th><th className="py-2">Action</th>
+              </tr></thead>
+              <tbody>
+                {filtered.map(f => (
+                  <tr key={f.id} className="border-b align-top">
+                    <td className="py-2 pr-3">{f.content_type}</td>
+                    <td className="py-2 pr-3 max-w-[160px] truncate" title={f.slug}>{f.slug}</td>
+                    <td className="py-2 pr-3 font-bold">{f.rating}</td>
+                    {/* React escapes — hostile comment content renders inert */}
+                    <td className="py-2 pr-3 max-w-[280px]">{f.comment || <span className="text-gray-300">—</span>}</td>
+                    <td className="py-2 pr-3">{f.consent ? '✓' : '—'}</td>
+                    <td className="py-2 pr-3">{f.approved ? '✓' : '—'}</td>
+                    <td className="py-2">
+                      <button onClick={() => toggleApprove(f)}
+                        disabled={!f.consent}
+                        title={!f.consent ? 'No public consent — cannot be shown even if approved' : ''}
+                        className={`px-2.5 py-1 rounded text-xs font-semibold ${f.approved ? 'bg-gray-200 text-gray-700' : 'bg-green-600 text-white'} disabled:opacity-40`}>
+                        {f.approved ? 'Unapprove' : 'Approve'}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {filtered.length === 0 && !feedbackNote && <tr><td colSpan={7} className="py-6 text-center text-gray-400">No feedback in this view.</td></tr>}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const sectionContent: Record<Section, () => React.JSX.Element> = {
     ops:       renderOps,
     metrics:   renderMetrics,
@@ -1292,6 +1394,7 @@ export default function Admin() {
     promo:     renderPromo,
     emails:    renderEmails,
     system:    renderSystem,
+    feedback:  renderFeedback,
   };
 
   // ── Layout ─────────────────────────────────────────────────────────────────

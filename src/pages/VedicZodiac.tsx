@@ -5,7 +5,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { DobInput, toISODate } from '@/components/DobInput';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { VEDIC_SIGNS, getVedicRashi, compareZodiacs } from '@/services/VedicZodiacService';
@@ -92,14 +92,8 @@ export default function VedicZodiac() {
         <Card className="glass-card max-w-md mx-auto mb-10">
           <CardContent className="p-6 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="dob">Enter Your Date of Birth</Label>
-              <Input
-                id="dob"
-                type="date"
-                value={dob}
-                onChange={e => setDob(e.target.value)}
-                max={new Date().toISOString().split('T')[0]}
-              />
+              <Label htmlFor="dob-day">Enter Your Date of Birth</Label>
+              <DobInput label="" onValidChange={d => setDob(d ? toISODate(d) : '')} />
             </div>
           </CardContent>
         </Card>

@@ -5,6 +5,8 @@ import { Helmet } from 'react-helmet-async';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
+import { FeedbackPrompt } from '@/components/FeedbackPrompt';
+import { ReaderComments } from '@/components/ReaderComments';
 import { getReport } from '@/services/BirthdayReportService';
 import { supabase } from '@/integrations/supabase/client';
 import type { BirthdayReportData } from '@/services/BirthdayReportService';
@@ -2265,6 +2267,13 @@ const ReportView = () => {
       </td></tr></tfoot></table>
 
       <div className="no-print">
+        {/* P4 — feedback prompt + reader comments, only after unlock (never on the locked preview or PDF) */}
+        {!isLocked && slug && (
+          <div className="max-w-2xl mx-auto px-4">
+            <FeedbackPrompt contentType="report" slug={slug} variant="report" />
+            <ReaderComments contentType="report" slug={slug} />
+          </div>
+        )}
         <Footer />
       </div>
     </div>

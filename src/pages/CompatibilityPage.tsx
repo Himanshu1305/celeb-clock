@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
@@ -87,6 +87,7 @@ const BEST_MATCHES: Record<string, string[]> = {
 
 export default function CompatibilityPage() {
   const reportPriceLabel = useReportPrice();
+  const navigate = useNavigate();
   const { sign1: paramSign1, sign2: paramSign2 } = useParams<{ sign1?: string; sign2?: string }>();
 
   const [sign1, setSign1] = useState('');
@@ -97,6 +98,7 @@ export default function CompatibilityPage() {
   // (e.g. /compatibility/aries/dragon) — we render an explicit not-found, never the
   // calculator shell, so a bogus slug can't masquerade as a valid page.
   const [invalidPair, setInvalidPair] = useState(false);
+  const [browseSign, setBrowseSign] = useState<string>('Aries'); // P6 browse-grid picker
 
   useEffect(() => {
     if (paramSign1 && paramSign2) {
@@ -116,10 +118,12 @@ export default function CompatibilityPage() {
     }
   }, [paramSign1, paramSign2]);
 
+  // P6: selecting two signs NAVIGATES to the canonical (alphabetical) pair page rather
+  // than rendering inline — so the 78 pages are reachable and never served through a redirect.
   const handleCalculate = () => {
     if (!sign1 || !sign2) return;
-    setResult(getCompatibility(sign1, sign2));
-    setCalcSigns({ s1: sign1, s2: sign2 });
+    const [a, b] = [sign1, sign2].map(s => s.toLowerCase()).sort();
+    navigate(`/compatibility/${a}/${b}`);
   };
 
   const overallColor = (s: number) =>
@@ -449,6 +453,54 @@ export default function CompatibilityPage() {
                 <Link to="/birthday-report" className="inline-block bg-white text-rose-600 px-8 py-3 rounded-xl font-semibold hover:bg-rose-50 transition-colors">
                   Generate My Report → {reportPriceLabel}
                 </Link>
+              </div>
+            </div>
+          )}
+
+          {/* P6 — BROWSE GRID (hub only): pick a sign → its 12 canonical pairings, plus a
+              full A-Z index of all 78 pairs (static links for crawl + browsing). */}
+          {!calcSigns && (
+            <div className="mt-10">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Browse compatibility by sign</h2>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {ZODIAC_SIGNS.map(s => (
+                  <button
+                    key={s}
+                    onClick={() => setBrowseSign(s)}
+                    className={`px-3 py-1.5 rounded-full text-sm font-semibold border transition-colors ${browseSign === s ? 'bg-rose-600 text-white border-rose-600' : 'bg-white text-gray-700 border-gray-300 hover:border-rose-300'}`}
+                  >
+                    {SIGN_EMOJIS[s]} {s}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-10">
+                {ZODIAC_SIGNS.map(other => (
+                  <Link
+                    key={other}
+                    to={`/compatibility/${[browseSign, other].map(s => s.toLowerCase()).sort().join('/')}`}
+                    className="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700 transition-colors"
+                  >
+                    {SIGN_EMOJIS[browseSign]} {browseSign} & {other} {SIGN_EMOJIS[other]}
+                  </Link>
+                ))}
+              </div>
+
+              <h2 className="text-xl font-bold text-gray-900 mb-3">All 78 zodiac pairings (A–Z)</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1">
+                {ZODIAC_SIGNS.flatMap((a, i) =>
+                  ZODIAC_SIGNS.slice(i).map(b => {
+                    const [ca, cb] = [a, b].map(s => s.toLowerCase()).sort(); // canonical (alphabetical) order
+                    return (
+                      <Link
+                        key={`${a}-${b}`}
+                        to={`/compatibility/${ca}/${cb}`}
+                        className="text-xs text-indigo-600 hover:underline py-0.5"
+                      >
+                        {a} & {b}
+                      </Link>
+                    );
+                  })
+                )}
               </div>
             </div>
           )}

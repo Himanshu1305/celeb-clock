@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
+import { DobInput, toISODate } from '@/components/DobInput';
 import { Footer } from '@/components/Footer';
 import { PlanetaryAge, SPACE_FACTS, GRAVITY_DATA } from '@/components/PlanetaryAge';
 import { useBirthDate } from '@/context/BirthDateContext';
@@ -252,13 +253,9 @@ const PlanetaryAgePage = () => {
                   <label className="block text-sm font-semibold text-gray-700 text-left mb-2">
                     Your date of birth
                   </label>
-                  <input
-                    type="date"
-                    value={localDob}
-                    onChange={e => setLocalDob(e.target.value)}
-                    max={new Date().toISOString().split('T')[0]}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4 text-base"
-                  />
+                  <div className="mb-4">
+                    <DobInput label="" onValidChange={d => setLocalDob(d ? toISODate(d) : '')} />
+                  </div>
                   <button
                     onClick={handleCalculate}
                     disabled={!localDob}
