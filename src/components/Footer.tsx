@@ -68,12 +68,15 @@ export const Footer = () => {
             <h3 className="font-heading font-semibold text-foreground mb-3 text-sm">Explore</h3>
             <ul className="space-y-2 text-sm">
               <li><Link to="/born-in" className="text-muted-foreground hover:text-accent transition-colors">Born in Each Month</Link></li>
+              <li><Link to="/birthday" className="text-muted-foreground hover:text-accent transition-colors">Birthday Personalities</Link></li>
               <li><Link to="/biorhythm-workout-calculator" className="text-muted-foreground hover:text-accent transition-colors">Biorhythm Workout</Link></li>
               <li><Link to="/energy-forecast" className="text-muted-foreground hover:text-accent transition-colors">Energy Forecast</Link></li>
               <li><Link to="/born-on/india" className="text-muted-foreground hover:text-accent transition-colors">Indian Celebrities by Date</Link></li>
               <li><Link to="/celebrity-birthday" className="text-muted-foreground hover:text-accent transition-colors">Celebrity Birthdays</Link></li>
               <li><Link to="/todays-birthdays" className="text-muted-foreground hover:text-accent transition-colors">Today's Birthdays</Link></li>
               <li><Link to="/zodiac" className="text-muted-foreground hover:text-accent transition-colors">Zodiac Signs</Link></li>
+              <li><Link to="/chinese-zodiac" className="text-muted-foreground hover:text-accent transition-colors">Chinese Zodiac</Link></li>
+              <li><Link to="/rashi-ratna" className="text-muted-foreground hover:text-accent transition-colors">Rashi Ratna</Link></li>
               <li><Link to="/numerology" className="text-muted-foreground hover:text-accent transition-colors">Numerology</Link></li>
               <li><Link to="/compatibility" className="text-muted-foreground hover:text-accent transition-colors">Compatibility</Link></li>
               <li><Link to="/weight-on-planets" className="text-muted-foreground hover:text-accent transition-colors">Weight on Planets</Link></li>

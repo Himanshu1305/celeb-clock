@@ -9,8 +9,9 @@ BornClock is a free birthday intelligence platform that turns a date of birth in
 - https://bornclock.com/life-expectancy — Life expectancy calculator (WHO/GBD data, 8-factor questionnaire)
 - https://bornclock.com/biological-age — Biological age estimator (12-question WHO-aligned assessment)
 - https://bornclock.com/planetary-age — Planetary age calculator (NASA orbital periods, all 8 planets)
+- https://bornclock.com/weight-on-planets — Weight on other planets calculator (your weight across all 8 planets and the Moon, from NASA surface-gravity ratios; mass vs weight explained)
 - https://bornclock.com/biorhythm — Biorhythm calculator (physical/emotional/intellectual cycles)
-- https://bornclock.com/compatibility — Birthday compatibility calculator
+- https://bornclock.com/compatibility — Western-zodiac compatibility calculator (78 sign-pair pages: love, friendship and work match per pair)
 - https://bornclock.com/moon-sign — Moon sign calculator
 - https://bornclock.com/name-numerology — Name numerology calculator
 - https://bornclock.com/country-comparison — Life expectancy comparison across 57 countries (UN WPP 2024)
@@ -61,12 +62,13 @@ These pages use the classic biorhythm model as a daily reflection prompt. HONEST
 
 - https://bornclock.com/upgrade — Premium plans and pricing (monthly/annual, India/Global)
 - https://bornclock.com/birthday-report — Birthday Blueprint gift report generator
-- https://bornclock.com/gift-report — Gift a Birthday Blueprint to someone
+- https://bornclock.com/gift — Gift a Birthday Blueprint to someone (emotional-gifting landing page)
+- https://bornclock.com/coach — AI Longevity Coach: explains your life-expectancy forecast in plain language (never diagnoses; conversations are never stored)
 
 ## Information
 
 - https://bornclock.com/about — About BornClock
-- https://bornclock.com/methodology — Data sources and methodology (longevity, celebrity data, zodiac systems)
+- https://bornclock.com/how-it-works — Data sources and methodology (longevity, celebrity data, zodiac systems)
 - https://bornclock.com/editorial-policy — Editorial standards
 - https://bornclock.com/faq — Frequently asked questions
 - https://bornclock.com/privacy — Privacy policy (GDPR/DPDPA 2023 compliant; longevity data browser-only)

@@ -98,27 +98,30 @@ export const SEO = ({
   // Generate BreadcrumbList structured data
   const generateBreadcrumbData = () => {
     if (!canonicalUrl) return null;
-    
     const pathParts = canonicalUrl.split('/').filter(Boolean);
     const items = [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: SITE_URL
-      }
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL }
     ];
 
-    let currentPath = '';
-    pathParts.forEach((part, index) => {
-      currentPath += `/${part}`;
-      items.push({
-        '@type': 'ListItem',
-        position: index + 2,
-        name: part.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-        item: `${SITE_URL}${currentPath}`
+    const ZODIAC = new Set(['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces']);
+    if (pathParts.length === 3 && pathParts[0] === 'compatibility' && ZODIAC.has(pathParts[1]) && ZODIAC.has(pathParts[2])) {
+      // Compatibility pair: collapse the fake middle single-sign segment (not a real page)
+      // to Home > Compatibility > "Sign1 & Sign2" so no breadcrumb item 404s.
+      const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+      items.push({ '@type': 'ListItem', position: 2, name: 'Compatibility', item: `${SITE_URL}/compatibility` });
+      items.push({ '@type': 'ListItem', position: 3, name: `${cap(pathParts[1])} & ${cap(pathParts[2])}`, item: `${SITE_URL}/${pathParts.join('/')}` });
+    } else {
+      let currentPath = '';
+      pathParts.forEach((part, index) => {
+        currentPath += `/${part}`;
+        items.push({
+          '@type': 'ListItem',
+          position: index + 2,
+          name: part.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+          item: `${SITE_URL}${currentPath}`
+        });
       });
-    });
+    }
 
     return JSON.stringify({
       '@context': 'https://schema.org',

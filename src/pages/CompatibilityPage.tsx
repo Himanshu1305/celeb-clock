@@ -186,7 +186,9 @@ export default function CompatibilityPage() {
     <>
       <SEO
         title={seoTitle}
-        description="Calculate zodiac compatibility for any two signs. Free love, friendship, and work compatibility calculator for all 144 sign combinations."
+        description={calcSigns
+          ? `${calcSigns.s1} and ${calcSigns.s2} compatibility (Western zodiac): their love, friendship and work match with pair-specific strengths, challenges and advice — element, modality and ruling-planet reasoning.`
+          : "Calculate zodiac compatibility for any two signs. Free love, friendship, and work compatibility calculator for all 144 sign combinations."}
         keywords="zodiac compatibility, are aries and leo compatible, horoscope compatibility, birthday compatibility calculator, love compatibility zodiac"
         canonicalUrl={canonicalUrl}
       />
@@ -381,6 +383,32 @@ export default function CompatibilityPage() {
                 ]}
               />
 
+              {/* Contextual mesh — link every other pairing for both signs (canonical order),
+                  so no pair page is an orphan and each is ≤2 clicks from the hub. */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-6">
+                {(calcSigns.s1 === calcSigns.s2
+                  ? [[calcSigns.s1, calcSigns.s2]]
+                  : [[calcSigns.s1, calcSigns.s2], [calcSigns.s2, calcSigns.s1]]
+                ).map(([sign, partner]) => (
+                  <div key={sign} className="mb-4 last:mb-0">
+                    <p className="text-sm font-bold text-gray-900 mb-2">More {sign} pairings</p>
+                    <div className="flex flex-wrap gap-2">
+                      {/* All pairings for this sign EXCEPT the current partner — includes the
+                          same-sign pairing so those pages aren't orphaned. */}
+                      {ZODIAC_SIGNS.filter(o => o !== partner).map(other => (
+                        <Link
+                          key={other}
+                          to={`/compatibility/${[sign, other].map(s => s.toLowerCase()).sort().join('/')}`}
+                          className="text-xs text-indigo-600 hover:underline"
+                        >
+                          {SIGN_EMOJIS[other]} {sign} & {other}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               <div className="bg-rose-600 rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">See your compatibility profile in your Birthday Report</p>
                 <p className="text-rose-200 text-sm mb-4">Your top compatible signs + moon sign + tarot card + name numerology + more.</p>
@@ -402,7 +430,9 @@ export default function CompatibilityPage() {
                   </div>
                   <div className="flex flex-col gap-1">
                     {(BEST_MATCHES[sign] || []).map(match => (
-                      <Link key={match} to={`/compatibility/${sign.toLowerCase()}/${match.toLowerCase()}`}
+                      // Link to the CANONICAL (alphabetical) pair URL, never the reverse order —
+                      // the Worker 301s reverse pairs, and internal links must point at final targets.
+                      <Link key={match} to={`/compatibility/${[sign, match].map(s => s.toLowerCase()).sort().join('/')}`}
                         className="text-xs text-indigo-600 hover:underline">
                         {SIGN_EMOJIS[match]} {match}
                       </Link>

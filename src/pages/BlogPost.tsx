@@ -310,7 +310,12 @@ const BlogPostPage = () => {
               prose-img:shadow-lg
               prose-img:my-6
             ">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+              {/* Demote any in-content H1 to H2 — the page already renders the article title as
+                  the single <h1>, so a leading "# Title" in the markdown would create a duplicate. */}
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{ h1: ({ node, ...props }) => <h2 {...props} /> }}
+              >{post.content}</ReactMarkdown>
             </div>
           </div>
 

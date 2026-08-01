@@ -203,16 +203,25 @@ async function prerenderRoute(page, baseUrl, route) {
     if (route !== '/') {
       const parts = route.split('/').filter(Boolean);
       const items = [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bornclock.com/' }];
-      let acc = '';
-      parts.forEach((p, i) => {
-        acc += `/${p}`;
-        items.push({
-          '@type': 'ListItem',
-          position: i + 2,
-          name: p.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-          item: `https://bornclock.com${acc}/`,
+      const ZODIAC = new Set(['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces']);
+      if (parts.length === 3 && parts[0] === 'compatibility' && ZODIAC.has(parts[1]) && ZODIAC.has(parts[2])) {
+        // Compatibility pair: the middle single-sign segment (/compatibility/aquarius) is NOT a
+        // real page, so collapse to Home > Compatibility > "Sign1 & Sign2" — no breadcrumb 404s.
+        const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+        items.push({ '@type': 'ListItem', position: 2, name: 'Compatibility', item: 'https://bornclock.com/compatibility/' });
+        items.push({ '@type': 'ListItem', position: 3, name: `${cap(parts[1])} & ${cap(parts[2])}`, item: `https://bornclock.com/${parts.join('/')}/` });
+      } else {
+        let acc = '';
+        parts.forEach((p, i) => {
+          acc += `/${p}`;
+          items.push({
+            '@type': 'ListItem',
+            position: i + 2,
+            name: p.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+            item: `https://bornclock.com${acc}/`,
+          });
         });
-      });
+      }
       const bc = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items });
       html = html.replace('</head>', `<script type="application/ld+json">${bc}</script></head>`);
     }
