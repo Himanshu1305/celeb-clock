@@ -36,12 +36,21 @@ for (const path of DEDICATED) {
 }
 
 // ── Calculator CTA pages: trigger, then assert the CTA link's currency ─────────
+// BATCH-8 P3: these calculators now use the shared DobInput (DD/MM/YYYY fields), not a
+// native date picker — fill the three fields to trigger the result + priced CTA.
+const fillDob = async (p: Page) => {
+  await p.locator('#dob-day').first().fill('01');
+  await p.locator('#dob-month').first().fill('01');
+  await p.locator('#dob-year').first().fill('1990');
+};
 const CTA_PAGES: Array<{ path: string; trigger: (p: Page) => Promise<void> }> = [
-  { path: '/biorhythm', trigger: async p => { await p.locator('input[type="date"]').first().fill('1990-01-01'); await p.getByRole('button', { name: /Calculate/i }).first().click(); } },
-  { path: '/moon-sign', trigger: async p => { await p.locator('input[type="date"]').first().fill('1990-01-01'); await p.getByRole('button', { name: /Find My Sign/i }).first().click(); } },
+  { path: '/biorhythm', trigger: async p => { await fillDob(p); await p.getByRole('button', { name: /Calculate/i }).first().click(); } },
+  { path: '/moon-sign', trigger: async p => { await fillDob(p); await p.getByRole('button', { name: /Find My Sign/i }).first().click(); } },
   { path: '/name-numerology', trigger: async p => { await p.locator('input[type="text"]').first().fill('Ravi Kumar'); await p.getByRole('button', { name: /Calculate/i }).first().click(); } },
-  { path: '/tarot-card-by-birthday', trigger: async p => { await p.locator('input[type="date"]').first().fill('1990-01-01'); await p.getByRole('button', { name: /Find My Card/i }).first().click(); } },
-  { path: '/compatibility', trigger: async p => { await p.locator('select').nth(0).selectOption({ index: 1 }); await p.locator('select').nth(1).selectOption({ index: 2 }); await p.getByRole('button', { name: /compatib|calculate|check/i }).first().click(); } },
+  { path: '/tarot-card-by-birthday', trigger: async p => { await fillDob(p); await p.getByRole('button', { name: /Find My Card/i }).first().click(); } },
+  // BATCH-8 P6: the compatibility calculator now NAVIGATES to the canonical pair page,
+  // where the priced "Generate My Report" CTA renders.
+  { path: '/compatibility', trigger: async p => { await p.locator('select').nth(0).selectOption({ index: 1 }); await p.locator('select').nth(1).selectOption({ index: 2 }); await p.getByRole('button', { name: /compatib|calculate|check/i }).first().click(); await p.waitForURL(/\/compatibility\/[a-z]+\/[a-z]+/); } },
 ];
 
 for (const { path, trigger } of CTA_PAGES) {

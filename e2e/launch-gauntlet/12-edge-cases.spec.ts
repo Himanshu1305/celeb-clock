@@ -137,7 +137,10 @@ test('life-expectancy: Previous is disabled on step 1 of the quiz', async ({ pag
   await page.goto('/life-expectancy');
   await page.waitForLoadState('networkidle');
   // The quiz only mounts after a birth date is entered; enter one to reveal step 1.
-  await page.locator('input[type="date"]').first().fill('1982-05-10');
+  // BATCH-8 P3 replaced the native date picker with the shared DobInput (DD/MM/YYYY fields).
+  await page.locator('#dob-day').first().fill('10');
+  await page.locator('#dob-month').first().fill('05');
+  await page.locator('#dob-year').first().fill('1982'); // valid trio → onValidChange mounts the quiz
   const prev = page.getByRole('button', { name: /^Previous$/i });
   await expect(prev.first()).toBeVisible({ timeout: 10000 });
   await expect(prev.first()).toBeDisabled();

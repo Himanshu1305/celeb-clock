@@ -7,53 +7,14 @@
  * soft failure, so the UI hides gracefully rather than throwing.
  */
 import { supabase } from '@/integrations/supabase/client';
+import { publicComments, type ContentType, type FeedbackRow } from '@/lib/feedbackLogic';
 
-export type ContentType = 'report' | 'blog';
-
-export interface FeedbackRow {
-  id?: string;
-  user_id: string;
-  content_type: ContentType;
-  slug: string;
-  rating: number;          // 1-5
-  comment: string | null;
-  consent: boolean;        // user allows the comment to be shown publicly
-  approved: boolean;       // founder approved it in admin
-  dismissed: boolean;      // user dismissed the prompt (don't ask again)
-  created_at?: string;
-}
-
-// ── Pure logic ────────────────────────────────────────────────────────────────
-
-/** Engagement gate: prompt only after ≥50% scroll OR ≥45s dwell. */
-export function passesEngagementGate(scrollPct: number, dwellSec: number): boolean {
-  return scrollPct >= 50 || dwellSec >= 45;
-}
-
-/** Sentiment routing: 4-5★ → ask for a public-consent comment; 1-3★ → private "what would improve this". */
-export function routeSentiment(rating: number): 'consent' | 'improve' {
-  return rating >= 4 ? 'consent' : 'improve';
-}
-
-/** TWO-KEY publication — a row shows publicly ONLY with consent AND approval (no exceptions). */
-export function isPubliclyVisible(row: Pick<FeedbackRow, 'consent' | 'approved'>): boolean {
-  return row.consent === true && row.approved === true;
-}
-
-/** Average stars are shown on a page only once it has ≥5 ratings. */
-export const MIN_RATINGS_FOR_AVERAGE = 5;
-export function shouldShowAverage(ratingCount: number): boolean {
-  return ratingCount >= MIN_RATINGS_FOR_AVERAGE;
-}
-export function averageRating(ratings: number[]): number {
-  if (!ratings.length) return 0;
-  return Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10;
-}
-
-/** Public comments = the two-key survivors only. */
-export function publicComments(rows: FeedbackRow[]): FeedbackRow[] {
-  return rows.filter(r => isPubliclyVisible(r) && (r.comment ?? '').trim().length > 0);
-}
+// Re-export the pure logic so existing importers of '@/lib/feedback' keep working.
+export {
+  passesEngagementGate, routeSentiment, isPubliclyVisible, shouldShowAverage,
+  MIN_RATINGS_FOR_AVERAGE, averageRating, publicComments,
+} from '@/lib/feedbackLogic';
+export type { ContentType, FeedbackRow } from '@/lib/feedbackLogic';
 
 // ── Supabase ops (tolerate-absent) ──────────────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
