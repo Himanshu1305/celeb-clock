@@ -145,6 +145,7 @@ export const STATIC_ROUTES = [
   // Growth pages FIRST (Overnight Batch 2): the prerender has a 25-min budget and
   // skips its tail; keeping these 18 high-value pages near the front guarantees they
   // prerender before the large born-on/india tail can exhaust the budget.
+  '/born-in',
   ...MONTH_NAMES_LOWER.slice(1).map(m => `/born-in-${m}`),
   '/biorhythm-workout-calculator',
   '/best-day-to-start-a-habit',

@@ -142,7 +142,7 @@ export default function MonthHub() {
         <nav className="text-sm text-muted-foreground mb-6 flex items-center gap-2">
           <Link to="/" className="hover:text-foreground">Home</Link>
           <span>›</span>
-          <Link to="/born-on" className="hover:text-foreground">Born On</Link>
+          <Link to="/born-in" className="hover:text-foreground">Born in Each Month</Link>
           <span>›</span>
           <span className="text-foreground">Born in {month}</span>
         </nav>

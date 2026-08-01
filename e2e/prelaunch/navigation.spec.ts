@@ -42,10 +42,10 @@ test('Explore ∩ (main ∪ More) = ∅', async ({ page }) => {
   const moreHrefs = await openMenu(page, 'More');
   const exploreHrefs = await openMenu(page, 'Explore');
 
-  // Explore is exactly the discovery hubs. Updated for Overnight Batch 2, which added
-  // the growth entries "Born in Each Month", "Biorhythm Workout" and "Energy Forecast".
+  // Explore is exactly the discovery hubs. BATCH-7 P6 repointed "Born in Each Month"
+  // from /born-in-january (a single month) to the new /born-in months hub.
   expect(new Set(exploreHrefs)).toEqual(new Set([
-    '/born-in-january', '/born-on/india', '/biorhythm-workout-calculator',
+    '/born-in', '/born-on/india', '/biorhythm-workout-calculator',
     '/energy-forecast', '/answers', '/compatibility',
   ]));
 

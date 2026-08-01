@@ -154,7 +154,7 @@ const BlogPostPage = () => {
         {/* Article */}
         <article className="max-w-4xl mx-auto">
           {/* Article Header */}
-          <header className="mb-8 text-center">
+          <header className="mb-5 text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Badge variant="outline" className={categoryColors[post.category]}>
                 {categoryLabels[post.category]}
@@ -192,10 +192,10 @@ const BlogPostPage = () => {
             path={`/blog/${post.slug}`}
             title={post.title}
             text={post.excerpt}
-            className="justify-center mb-2"
+            className="justify-center"
           />
 
-          <Separator className="my-8" />
+          <Separator className="my-4" />
 
           {/* Article Content */}
           <div className="glass-card p-8 md:p-12 mb-8">

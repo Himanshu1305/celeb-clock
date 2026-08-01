@@ -42,7 +42,7 @@ const numerologyItems = [
 // header. Anything duplicated in the main bar or the "More" menu was removed
 // (Today's Birthdays, Planetary Age, Biological Age, Life Expectancy, Pricing).
 const exploreItems = [
-  { path: '/born-in-january', label: 'Born in Each Month', emoji: '📅' },
+  { path: '/born-in', label: 'Born in Each Month', emoji: '📅' },
   { path: '/born-on/india', label: 'Indian Celebrities by Date', emoji: '🇮🇳' },
   { path: '/biorhythm-workout-calculator', label: 'Biorhythm Workout', emoji: '🏃' },
   { path: '/energy-forecast', label: 'Energy Forecast', emoji: '⚡' },

@@ -17,6 +17,7 @@ const Pricing = lazy(() => import("./pages/Pricing"));
 const Zodiac = lazy(() => import("./pages/Zodiac"));
 const Birthstone = lazy(() => import("./pages/Birthstone"));
 const MonthHub = lazy(() => import("./pages/MonthHub"));
+const MonthsHubPage = lazy(() => import("./pages/MonthsHubPage"));
 import { MONTH_HUB_DATA } from "./data/monthHubData";
 const FitnessRhythmPage = lazy(() => import("./pages/FitnessRhythmPage"));
 import { FITNESS_PAGES } from "./data/fitnessPages";
@@ -177,6 +178,7 @@ const App = () => (
               {FITNESS_PAGES.map(p => (
                 <Route key={p.slug} path={`/${p.slug}`} element={<FitnessRhythmPage />} />
               ))}
+              <Route path="/born-in" element={<MonthsHubPage />} />
               <Route path="/born-on" element={<BornOnIndex />} />
               <Route path="/born-on/india" element={<BornOnIndiaIndex />} />
               <Route path="/born-on/:slug/india" element={<BornOnDayIndia />} />

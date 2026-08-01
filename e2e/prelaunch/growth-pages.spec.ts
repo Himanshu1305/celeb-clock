@@ -100,7 +100,7 @@ test('national days: Aug 15 shows the block with India; a dateless day shows non
 test('nav/footer expose the new growth entries', async ({ page }) => {
   await page.goto('/');
   await page.waitForLoadState('networkidle');
-  await expect(page.locator('a[href="/born-in-january"]').first()).toBeVisible();
+  await expect(page.locator('a[href="/born-in"]').first()).toBeVisible();
   await expect(page.locator('a[href="/biorhythm-workout-calculator"]').first()).toBeVisible();
 });
 
