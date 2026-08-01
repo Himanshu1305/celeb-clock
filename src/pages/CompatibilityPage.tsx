@@ -10,6 +10,7 @@ import { useReportPrice } from '@/hooks/useCurrency';
 import { SharePageBar } from '@/components/SharePageBar';
 import {
   loveProse, friendshipProse, workProse, clicksAndClashes,
+  dayToDayProse, frictionProse, makingItWorkProse, strengthsList, challengesList,
   aspectName, RULING_PLANET, type Sign,
 } from '@/lib/compatibilityProse';
 
@@ -362,7 +363,39 @@ export default function CompatibilityPage() {
                 <p className="text-sm text-gray-700 leading-relaxed mb-5">{friendshipProse(calcSigns.s1 as Sign, calcSigns.s2 as Sign)}</p>
 
                 <h3 className="text-base font-bold text-amber-700 mb-1">💼 Working together</h3>
-                <p className="text-sm text-gray-700 leading-relaxed">{workProse(calcSigns.s1 as Sign, calcSigns.s2 as Sign)}</p>
+                <p className="text-sm text-gray-700 leading-relaxed mb-5">{workProse(calcSigns.s1 as Sign, calcSigns.s2 as Sign)}</p>
+
+                <h3 className="text-base font-bold text-gray-900 mb-1">🏠 How {calcSigns.s1} and {calcSigns.s2} work day-to-day</h3>
+                <p className="text-sm text-gray-700 leading-relaxed mb-5">{dayToDayProse(calcSigns.s1 as Sign, calcSigns.s2 as Sign)}</p>
+
+                <h3 className="text-base font-bold text-gray-900 mb-1">⚠️ Where it gets hard</h3>
+                <p className="text-sm text-gray-700 leading-relaxed mb-5">{frictionProse(calcSigns.s1 as Sign, calcSigns.s2 as Sign)}</p>
+
+                <h3 className="text-base font-bold text-gray-900 mb-2">✅ Making it work</h3>
+                <ul className="space-y-2 mb-5">
+                  {makingItWorkProse(calcSigns.s1 as Sign, calcSigns.s2 as Sign).map((tip, i) => (
+                    <li key={i} className="text-sm text-gray-700 leading-relaxed flex gap-2"><span className="text-green-600 shrink-0">→</span><span>{tip}</span></li>
+                  ))}
+                </ul>
+
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="bg-green-50 rounded-xl p-4">
+                    <p className="text-xs font-bold text-green-700 mb-2">Strengths of a {calcSigns.s1}–{calcSigns.s2} match</p>
+                    <ul className="space-y-1">
+                      {strengthsList(calcSigns.s1 as Sign, calcSigns.s2 as Sign).map(s => (
+                        <li key={s} className="text-xs text-green-800">• {s}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="bg-amber-50 rounded-xl p-4">
+                    <p className="text-xs font-bold text-amber-700 mb-2">Challenges to watch</p>
+                    <ul className="space-y-1">
+                      {challengesList(calcSigns.s1 as Sign, calcSigns.s2 as Sign).map(c => (
+                        <li key={c} className="text-xs text-amber-800">• {c}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               </div>
 
               <SharePageBar
@@ -377,9 +410,10 @@ export default function CompatibilityPage() {
                 title={`${calcSigns.s1} & ${calcSigns.s2} — Compatibility FAQ`}
                 items={[
                   { question: `Are ${calcSigns.s1} and ${calcSigns.s2} compatible?`, answer: `${calcSigns.s1} and ${calcSigns.s2} have an overall compatibility of ${result.overall}% (${overallLabel(result.overall).toLowerCase()}). ${result.description}` },
-                  { question: `How compatible are ${calcSigns.s1} and ${calcSigns.s2} in love?`, answer: `${calcSigns.s1} and ${calcSigns.s2} score ${result.love}% for love and romance, ${result.friendship}% for friendship, and ${result.work}% for work and collaboration.` },
-                  { question: `What are the strengths of a ${calcSigns.s1}–${calcSigns.s2} relationship?`, answer: `Key strengths: ${result.strengths.filter(Boolean).join('; ')}. Watch out for: ${result.challenges.filter(Boolean).join('; ')}.` },
-                  { question: `Is ${calcSigns.s1} and ${calcSigns.s2} compatibility Western or Vedic?`, answer: `This is Western (sun-sign) compatibility — ${calcSigns.s1} and ${calcSigns.s2} compared by element and modality. Vedic matching (Ashta Koota / Guna Milan) uses Moon nakshatras instead and is a different system.` },
+                  { question: `Is ${calcSigns.s1} and ${calcSigns.s2} a good marriage match?`, answer: `For the long haul, ${calcSigns.s1} and ${calcSigns.s2} do best when they respect the differences the daily rhythm surfaces. ${dayToDayProse(calcSigns.s1 as Sign, calcSigns.s2 as Sign)} In the Western sun-sign tradition this is a starting point, not a verdict — a full birth-chart comparison refines it, and shared values and communication matter more than sun signs alone.` },
+                  { question: `Are ${calcSigns.s1} and ${calcSigns.s2} compatible as friends?`, answer: friendshipProse(calcSigns.s1 as Sign, calcSigns.s2 as Sign) },
+                  { question: `What are the strengths and challenges of a ${calcSigns.s1}–${calcSigns.s2} relationship?`, answer: `Strengths: ${strengthsList(calcSigns.s1 as Sign, calcSigns.s2 as Sign).join('; ')}. Challenges: ${challengesList(calcSigns.s1 as Sign, calcSigns.s2 as Sign).join('; ')}.` },
+                  { question: `Is ${calcSigns.s1} and ${calcSigns.s2} compatibility Western or Vedic?`, answer: `This is Western (sun-sign) compatibility — ${calcSigns.s1} and ${calcSigns.s2} compared by element, modality and ruling planet as a cultural lens, never a prediction. Vedic matching (Ashta Koota / Guna Milan) uses Moon nakshatras instead and is a different system.` },
                 ]}
               />
 

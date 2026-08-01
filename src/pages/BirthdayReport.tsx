@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
+import { DobInput } from '@/components/DobInput';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
@@ -421,44 +422,10 @@ const BirthdayReport = () => {
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Date of Birth <span className="text-rose-500">*</span>
                   </label>
-                  <div className="flex gap-3">
-                    <div className="flex-1">
-                      <input
-                        type="number"
-                        placeholder="DD"
-                        min="1"
-                        max="31"
-                        value={day}
-                        onChange={e => setDay(e.target.value)}
-                        className="w-full px-4 py-3 text-center border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-300"
-                      />
-                      <span className="text-xs text-gray-400 mt-1 block text-center">Day</span>
-                    </div>
-                    <div className="flex-1">
-                      <input
-                        type="number"
-                        placeholder="MM"
-                        min="1"
-                        max="12"
-                        value={month}
-                        onChange={e => setMonth(e.target.value)}
-                        className="w-full px-4 py-3 text-center border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-300"
-                      />
-                      <span className="text-xs text-gray-400 mt-1 block text-center">Month</span>
-                    </div>
-                    <div className="flex-1">
-                      <input
-                        type="number"
-                        placeholder="YYYY"
-                        min="1900"
-                        max={new Date().getFullYear()}
-                        value={year}
-                        onChange={e => setYear(e.target.value)}
-                        className="w-full px-4 py-3 text-center border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-300"
-                      />
-                      <span className="text-xs text-gray-400 mt-1 block text-center">Year</span>
-                    </div>
-                  </div>
+                  <DobInput
+                    label=""
+                    onChange={({ day: d, month: m, year: y }) => { setDay(d); setMonth(m); setYear(y); }}
+                  />
                 </div>
 
                 {/* Gender */}

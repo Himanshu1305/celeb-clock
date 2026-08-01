@@ -163,3 +163,143 @@ export function clicksAndClashes(s1: Sign, s2: Sign): { click: string; clash: st
         : 'Different speeds — patience is the price of the balance.';
   return { click, clash };
 }
+
+// ── Depth v2 — day-to-day, friction, making-it-work, and summary lists ──────────
+// Each composed from a DIFFERENT driver so two same-element pairs still read apart:
+// day-to-day = element pace × modality decisions; friction = "the strength over-applied"
+// (shared element/planet/polarity/aspect); making-it-work = the antidote to that friction.
+
+const ELEMENT_PACE: Record<string, string> = {
+  Fire: 'move fast and figure it out on the way',
+  Earth: 'move deliberately and want a plan before you commit',
+  Air: 'live in ideas, options and conversation',
+  Water: 'move by feeling and read the emotional weather first',
+};
+const ELEMENT_HOME: Record<string, string> = {
+  Fire: 'a household that’s always doing something',
+  Earth: 'a settled home with comfortable, dependable routines',
+  Air: 'a home full of talk, plans and half-open browser tabs',
+  Water: 'a private, emotionally attuned nest',
+};
+const MODALITY_DECISION: Record<string, string> = {
+  Cardinal: 'wants to make the call and get moving',
+  Fixed: 'wants to lock in what already works',
+  Mutable: 'is happy to keep the options open a little longer',
+};
+// Ruling planets that two different signs can share — the "doubled trait" driver.
+const SHARED_RULER_NOTE: Record<string, string> = {
+  Mercury: 'you both live in your heads and talk everything to pieces — analysis can outrun feeling',
+  Venus: 'you both want beauty, comfort and harmony — so nobody wants to be the one to raise the hard thing',
+  Mars: 'you both run on drive and want — two accelerators and no brake when tempers spike',
+};
+
+function baseRuler(s: Sign): string {
+  const r = RULING_PLANET[s];
+  if (r.startsWith('Pluto')) return 'Mars';
+  if (r === 'Uranus') return 'Saturn'; // classical co-ruler, for shared-ruler pairing only
+  if (r === 'Neptune') return 'Jupiter';
+  return r.replace('the ', '');
+}
+
+/** DAY-TO-DAY — element pace × modality decision-making × home rhythm. */
+export function dayToDayProse(s1: Sign, s2: Sign): string {
+  if (s1 === s2) {
+    return `Two ${s1}s keep the same clock — you both ${ELEMENT_PACE[ELEMENT[s1]]}, so the everyday rhythm feels effortless and you rarely have to explain why you do things the way you do. The catch is that no one plays a different role: with both of you ${MODALITY_DECISION[MODALITY[s1]].replace('wants', 'wanting').replace('is happy', 'happy')}, the small decisions — what to eat, whose plan wins — either sail through or stall in a standoff, and the household chores neither ${s1} enjoys tend to sit undone. You build ${ELEMENT_HOME[ELEMENT[s1]]}; just agree who owns the jobs you both instinctively dodge.`;
+  }
+  const sameEl = ELEMENT[s1] === ELEMENT[s2];
+  const paceLine = sameEl
+    ? `You keep a similar pace — both of you ${ELEMENT_PACE[ELEMENT[s1]]} — so mornings and weekends rarely need negotiating.`
+    : `${s1} tends to ${ELEMENT_PACE[ELEMENT[s1]]}, while ${s2} tends to ${ELEMENT_PACE[ELEMENT[s2]]}, so the daily tempo is the first thing you’ll learn to sync.`;
+  const decisionLine = MODALITY[s1] === MODALITY[s2]
+    ? `On decisions you’re alike — each of you ${MODALITY_DECISION[MODALITY[s1]]} — which is smooth until you disagree, and then neither backs down.`
+    : `When it’s time to decide, ${s1} ${MODALITY_DECISION[MODALITY[s1]]} and ${s2} ${MODALITY_DECISION[MODALITY[s2]]}, so you naturally split the work: one of you starts and steers, the other refines or keeps it flexible.`;
+  return `${paceLine} ${decisionLine} Left to your own devices you’d each build a different home — ${ELEMENT_HOME[ELEMENT[s1]]} for ${s1}, ${ELEMENT_HOME[ELEMENT[s2]]} for ${s2} — and the shared version is the quiet, ongoing negotiation of this match.`;
+}
+
+/** WHERE IT GETS HARD — the strength over-applied (element/planet/polarity/aspect). */
+export function frictionProse(s1: Sign, s2: Sign): string {
+  const dist = signDistance(s1, s2);
+  if (s1 === s2) {
+    return `The hard part with two ${s1}s is that there’s no counterweight. Every ${s1} strength is doubled — and so is every ${s1} blind spot, with no one in the room wired to balance it. When you’re both low, you amplify rather than steady each other, and because you sit at the same point on the wheel there’s no built-in tension to keep things charged, so passion can flatten into routine. Whatever ${s1} finds hardest to do, expect to have to do it on purpose, because neither of you will do it by instinct.`;
+  }
+  const r1 = baseRuler(s1), r2 = baseRuler(s2);
+  if (r1 === r2 && SHARED_RULER_NOTE[r1]) {
+    return `Your friction has a specific source: ${s1} and ${s2} share a ruling planet (${r1}), so ${SHARED_RULER_NOTE[r1]}. The very wiring that lets you understand each other instantly is the wiring you both over-use, with no opposite tendency to temper it.`;
+  }
+  if (dist === 3) {
+    return `${s1} and ${s2} sit at a square — three signs apart — which is the zodiac’s built-in friction angle. You want the same things on different timelines and by different methods, so the tension shows up in pace and priorities: what feels urgent to one reads as reckless or slow to the other. It’s productive friction if you let it stretch you, corrosive if you keep it a scoreboard.`;
+  }
+  if (dist === 6) {
+    return `As opposite signs, ${s1} and ${s2} want genuinely different things — the magnetic pull is real, but so is the clash of priorities. What ${s1} treats as essential, ${s2} can treat as optional, and vice versa. The relationship works when you read the opposition as two halves of one axis rather than a contest over who’s right.`;
+  }
+  if (POLARITY[s1] === POLARITY[s2] && POLARITY[s1] === 'Yang') {
+    return `Both ${s1} and ${s2} are assertive Yang signs, so the friction is about command: two people who both want to lead, neither wired to yield. The heat that makes you exciting together is the same heat that turns an ordinary disagreement into a standoff. Nothing’s wrong with the match — you just have to decide, in advance, who owns which call.`;
+  }
+  if (POLARITY[s1] === POLARITY[s2] && POLARITY[s1] === 'Yin') {
+    return `${s1} and ${s2} are both receptive Yin signs, which makes you gentle and safe together — but it also means the hard conversation can sit untouched for weeks because neither of you wants to be the one to start it. Comfort curdles into avoidance if you let it; the friction here is the thing you’re both too kind to name.`;
+  }
+  if (ELEMENT[s1] === ELEMENT[s2]) {
+    return `Sharing the ${ELEMENT[s1]} element means you understand each other fast — and it means you share the same weakness with no one to offset it. Two ${ELEMENT[s1]} signs can amplify a ${ELEMENT[s1]} rut (${ELEMENT[s1] === 'Fire' ? 'ego and impatience' : ELEMENT[s1] === 'Earth' ? 'stubbornness and inertia' : ELEMENT[s1] === 'Air' ? 'over-thinking and detachment' : 'moodiness and over-sensitivity'}) rather than balancing it. The strength and the strain come from the same place.`;
+  }
+  return `The friction between ${s1} and ${s2} is one of translation: ${ELEMENT[s1]} and ${ELEMENT[s2]} process the world differently — ${s1} leads with ${ELEMENT[s1] === 'Fire' || ELEMENT[s1] === 'Air' ? 'action and logic' : 'feeling and steadiness'}, ${s2} with ${ELEMENT[s2] === 'Fire' || ELEMENT[s2] === 'Air' ? 'action and logic' : 'feeling and steadiness'}. Misread each other’s signals and small things escalate; learn each other’s language and the difference becomes the point.`;
+}
+
+/** MAKING IT WORK — the antidote tied to this pair's specific friction. */
+export function makingItWorkProse(s1: Sign, s2: Sign): string[] {
+  const dist = signDistance(s1, s2);
+  const tips: string[] = [];
+  if (s1 === s2) {
+    tips.push(`Manufacture the contrast the zodiac didn’t give you: take turns leading, keep separate interests, and protect some autonomy so there’s something to miss.`);
+    tips.push(`Because your shared blind spot has no counterweight, one of you has to consciously develop the trait neither ${s1} does naturally — usually ${ELEMENT[s1] === 'Fire' ? 'patience' : ELEMENT[s1] === 'Earth' ? 'spontaneity' : ELEMENT[s1] === 'Air' ? 'emotional follow-through' : 'objectivity'}.`);
+    tips.push(`Name the chores and hard conversations you both avoid and assign them on purpose, before resentment does it for you.`);
+    return tips;
+  }
+  if (POLARITY[s1] === POLARITY[s2] && POLARITY[s1] === 'Yang') {
+    tips.push(`Divide the territory in advance — agree who has the final call on money, plans, home, work — so a normal decision doesn’t become a duel.`);
+  } else if (POLARITY[s1] === POLARITY[s2] && POLARITY[s1] === 'Yin') {
+    tips.push(`Appoint a "we say the hard thing on Sundays" habit — a standing time to raise what you’re both too gentle to bring up.`);
+  } else {
+    tips.push(`Lean into the pursuer-and-receiver rhythm instead of fighting it: let the initiator initiate and the responder genuinely respond, and both of you feel wanted.`);
+  }
+  if (dist === 4 || dist === 2) {
+    tips.push(`Your angle is easy — almost too easy — so deliberately introduce novelty (new places, new challenges) before comfort tips into complacency.`);
+  } else if (dist === 3) {
+    tips.push(`Treat the square as a training ground, not a scoreboard: when pace and priorities clash, ask "what is the other pace protecting?" rather than who’s right.`);
+  } else if (dist === 6) {
+    tips.push(`Read your differences as one shared axis — ${s1}’s strength covers ${s2}’s blind spot and vice versa — and consciously borrow from each other instead of competing.`);
+  } else {
+    tips.push(`Translate before you react: assume good intent and check what the other actually meant before a small mismatch becomes a fight.`);
+  }
+  tips.push(`Play to the split: let ${MODALITY[s1] === 'Cardinal' ? s1 : MODALITY[s2] === 'Cardinal' ? s2 : s1} kick things off and ${MODALITY[s1] === 'Fixed' ? s1 : MODALITY[s2] === 'Fixed' ? s2 : s2} see them through, so nothing you start together quietly dies halfway.`);
+  return tips;
+}
+
+/** Composed strengths / challenges bullet summary (pair-specific). */
+export function strengthsList(s1: Sign, s2: Sign): string[] {
+  const out: string[] = [];
+  const dist = signDistance(s1, s2);
+  if (ELEMENT[s1] === ELEMENT[s2]) out.push(`Instant ${ELEMENT[s1]}-element understanding — you rarely have to explain yourselves`);
+  else out.push(`Complementary elements — ${s1} and ${s2} each supply what the other runs short on`);
+  if (dist === 4) out.push('A harmonious trine angle that makes cooperation feel natural');
+  else if (dist === 6) out.push('Opposite-sign magnetism — strong attraction and mutual fascination');
+  else if (dist === 2) out.push('An easy sextile — low-friction, genuinely enjoyable company');
+  if (MODALITY[s1] !== MODALITY[s2]) out.push(`A natural division of labour: one of you starts things, the other finishes them`);
+  else out.push(`Shared ${MODALITY[s1]} drive — when you’re aligned you’re unstoppable`);
+  if (s1 === s2) return ['Effortless mutual understanding — you truly get each other', 'Shared values, pace and priorities', 'Deep loyalty once you commit', 'No translation needed — you speak the same language'];
+  return out;
+}
+export function challengesList(s1: Sign, s2: Sign): string[] {
+  const dist = signDistance(s1, s2);
+  if (s1 === s2) return [`Doubled blind spots with no counterweight`, `Little built-in tension — passion needs manufacturing`, `Stand-offs when two ${MODALITY[s1]} signs both dig in`, `The chores and hard talks you both avoid`];
+  const out: string[] = [];
+  if (POLARITY[s1] === POLARITY[s2] && POLARITY[s1] === 'Yang') out.push('Two leaders, no natural follower — power struggles');
+  else if (POLARITY[s1] === POLARITY[s2] && POLARITY[s1] === 'Yin') out.push('Both too gentle to raise the hard thing — avoidance');
+  else out.push('Different speeds that need patience to sync');
+  if (dist === 3) out.push('A square’s friction over pace and priorities');
+  else if (dist === 6) out.push('Opposite priorities — what’s essential to one is optional to the other');
+  else if (ELEMENT[s1] === ELEMENT[s2]) out.push(`A shared ${ELEMENT[s1]}-element rut, amplified not balanced`);
+  else out.push('Signals that are easy to misread across different elements');
+  if (MODALITY[s1] === MODALITY[s2]) out.push(`Neither ${MODALITY[s1]} sign wants to yield the role`);
+  else out.push('One starts, one finishes — but only if egos allow the handoff');
+  return out;
+}

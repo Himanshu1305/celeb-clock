@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
+import { DobInput } from '@/components/DobInput';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { TestimonialsSection } from '@/components/TestimonialsSection';
@@ -126,50 +127,10 @@ const Index = () => {
                   <div className="space-y-4">
                     <p className="text-sm font-medium text-muted-foreground">Enter your birthday</p>
                     
-                    <div className="flex gap-3">
-                      <div className="flex-1">
-                        <label className="sr-only">Day</label>
-                        <input
-                          type="number"
-                          placeholder="DD"
-                          min="1"
-                          max="31"
-                          value={day}
-                          onChange={(e) => setDay(e.target.value)}
-                          className="w-full px-4 py-3 text-center text-lg font-semibold bg-background border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
-                          data-testid="hero-day-input"
-                        />
-                        <span className="text-xs text-muted-foreground mt-1 block">Day</span>
-                      </div>
-                      <div className="flex-1">
-                        <label className="sr-only">Month</label>
-                        <input
-                          type="number"
-                          placeholder="MM"
-                          min="1"
-                          max="12"
-                          value={month}
-                          onChange={(e) => setMonth(e.target.value)}
-                          className="w-full px-4 py-3 text-center text-lg font-semibold bg-background border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
-                          data-testid="hero-month-input"
-                        />
-                        <span className="text-xs text-muted-foreground mt-1 block">Month</span>
-                      </div>
-                      <div className="flex-1">
-                        <label className="sr-only">Year</label>
-                        <input
-                          type="number"
-                          placeholder="YYYY"
-                          min="1900"
-                          max={new Date().getFullYear()}
-                          value={year}
-                          onChange={(e) => setYear(e.target.value)}
-                          className="w-full px-4 py-3 text-center text-lg font-semibold bg-background border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
-                          data-testid="hero-year-input"
-                        />
-                        <span className="text-xs text-muted-foreground mt-1 block">Year</span>
-                      </div>
-                    </div>
+                    <DobInput
+                      label=""
+                      onChange={({ day: d, month: m, year: y }) => { setDay(d); setMonth(m); setYear(y); }}
+                    />
 
                     <Button 
                       size="lg" 

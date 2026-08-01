@@ -44,7 +44,7 @@ export default function GiftReport() {
   const meshPosts = postsForTags(['celebrity', 'birthday', 'gift', 'zodiac'], 2);
 
   const faqs = [
-    { question: 'Is the Birthday Blueprint a good gift?', answer: `It is a personalised, ${9}-section keepsake built from one person's birth date — celebrity twins, zodiac, numerology, birthstone, tarot, planetary ages and more, from ${reportPrice}. It works best as a thoughtful gift for someone hard to shop for, because it proves you know their birthday and thought about who they are. It is a keepsake and conversation starter, not a prediction.` },
+    { question: 'Is the Birthday Blueprint a good gift?', answer: `It is a personalised, ${9}-section keepsake built from one person's birth date — celebrity twins, zodiac, numerology, birthstone, tarot, planetary ages and more, from ${reportPrice}. It works best as a thoughtful gift for someone hard to shop for, because it shows real care — the kind of attention that makes someone feel genuinely seen. It is a keepsake and conversation starter, not a prediction.` },
     { question: 'How is it delivered?', answer: 'Instantly, online. You generate it from their birth date and get a private link (and a downloadable PDF) — nothing ships, so it works for last-minute and long-distance gifts.' },
     { question: 'Do they need an account?', answer: 'No. They open the link and read it. There is nothing to sign up for.' },
     { question: 'What if I am not happy with it?', answer: 'There is a 7-day guarantee — if the report is not what you expected, contact us within 7 days for a refund.' },
@@ -55,9 +55,9 @@ export default function GiftReport() {
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title="Gift a Birthday Blueprint — The Gift That Proves You Know Them | BornClock"
-        description="Anyone can send a gift card. The Birthday Blueprint is a personalised 9-section keepsake built from their birth date — celebrity twins, zodiac, numerology, birthstone and more. Instant delivery."
-        keywords="birthday gift, personalised birthday gift, unique birthday gift, gift for someone who has everything, birthday report gift, meaningful birthday gift"
+        title="Gift a Birthday Blueprint — A Gift That Makes Them Feel Truly Seen | BornClock"
+        description="A birthday gift that says: I pay attention to you. The Birthday Blueprint is a personalised 9-section keepsake built from their birth date — celebrity twins, zodiac, numerology, birthstone and more. Instant delivery."
+        keywords="birthday gift, personalised birthday gift, meaningful birthday gift, thoughtful gift, gift that shows you care, gift for someone who has everything, birthday keepsake"
         canonicalUrl="/gift"
       />
 
@@ -74,29 +74,29 @@ export default function GiftReport() {
           <Gift className="w-4 h-4" /> The Birthday Blueprint
         </div>
         <h1 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-4">
-          The gift that proves you actually know them
+          A gift that makes them feel truly seen
         </h1>
         {/* Answer-first (AEO) */}
         <p className="text-lg text-gray-700 leading-relaxed mb-6 max-w-2xl mx-auto">
           The Birthday Blueprint is a personalised, 9-section keepsake built from one person's
           birth date — celebrity twins, zodiac, numerology, birthstone, tarot and more, from{' '}
-          <strong className="text-gray-900">{reportPrice}</strong>, delivered instantly. Anyone can
-          send a gift card; this one requires knowing their birthday and thinking about who they are.
-          It is a keepsake and conversation starter, never a prediction.
+          <strong className="text-gray-900">{reportPrice}</strong>, delivered instantly. It's a way to
+          say <em>I pay attention to you</em> — a gift built entirely around them, so they open it and
+          feel noticed, valued and cared for. A keepsake and conversation starter, never a prediction.
         </p>
         <Link to="/birthday-report" className="inline-flex items-center gap-2 bg-indigo-600 text-white rounded-xl px-7 py-3.5 font-semibold hover:bg-indigo-700 transition-colors">
           <ArrowRightCircle className="w-5 h-5" /> Create their Blueprint — {reportPrice}
         </Link>
-        <div className="mt-6"><SharePageBar path="/gift" title="Gift a Birthday Blueprint" text="The gift that proves you actually know them — a personalised birthday keepsake from BornClock" className="justify-center" /></div>
+        <div className="mt-6"><SharePageBar path="/gift" title="Gift a Birthday Blueprint" text="A birthday gift that makes them feel truly seen — a personalised keepsake from BornClock" className="justify-center" /></div>
       </section>
 
       {/* 2 — THE PROBLEM */}
       <section className="max-w-2xl mx-auto px-4 py-8">
         <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 text-center">
           <p className="text-lg text-gray-800 leading-relaxed">
-            A gift card says <em>"I remembered."</em> The Birthday Blueprint says <em>"I know you."</em>{' '}
-            One takes ten seconds and a number. The other takes their birth date and a moment of thought
-            about the person they are.
+            Most gifts are about the occasion. This one is about <em>them</em>. Anyone can buy a present;
+            a Blueprint says <em>"I pay attention to you"</em> — built from the one date that's entirely
+            theirs, so what they feel when they open it isn't "nice, a gift," but "someone really sees me."
           </p>
         </div>
       </section>

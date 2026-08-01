@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { DobInput } from '@/components/DobInput';
 import { useAgeCalculator } from '@/hooks/useAgeCalculator';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { CalendarIcon, ClockIcon } from 'lucide-react';
@@ -23,28 +23,19 @@ const CounterCard = ({ value, label, unit }: { value: number; label: string; uni
 
 export const AgeCalculator = ({ onBirthDateChange, initialDate }: AgeCalculatorProps) => {
   const [birthDate, setBirthDate] = useState<Date | null>(initialDate || null);
-  const [inputValue, setInputValue] = useState<string>('');
   const ageData = useAgeCalculator(birthDate);
   const { trackFeatureUse } = useAnalytics();
   const hasTrackedCalculation = useRef(false);
 
   // Set initial date value for input field
   useEffect(() => {
-    if (initialDate) {
-      setBirthDate(initialDate);
-      // Format date as YYYY-MM-DD for input
-      const formatted = initialDate.toISOString().split('T')[0];
-      setInputValue(formatted);
-    }
+    if (initialDate) setBirthDate(initialDate);
   }, [initialDate]);
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setInputValue(value);
-    const newDate = value ? new Date(value) : null;
+  const handleDob = (newDate: Date | null) => {
     setBirthDate(newDate);
     onBirthDateChange?.(newDate);
-    
+
     // Track feature usage when user calculates age
     if (newDate && !hasTrackedCalculation.current) {
       hasTrackedCalculation.current = true;
@@ -74,18 +65,11 @@ export const AgeCalculator = ({ onBirthDateChange, initialDate }: AgeCalculatorP
       {/* Date Input */}
       <Card className="glass-card p-6 max-w-md mx-auto">
         <div className="space-y-2">
-          <Label htmlFor="birthdate" className="text-base font-semibold flex items-center gap-2">
+          <Label htmlFor="dob-day" className="text-base font-semibold flex items-center gap-2">
             <CalendarIcon className="h-4 w-4" />
             Enter Your Birth Date
           </Label>
-          <Input
-            id="birthdate"
-            type="date"
-            value={inputValue}
-            onChange={handleDateChange}
-            max={new Date().toISOString().split('T')[0]}
-            className="text-lg"
-          />
+          <DobInput label="" onValidChange={handleDob} value={initialDate ? { day: String(initialDate.getDate()).padStart(2, '0'), month: String(initialDate.getMonth() + 1).padStart(2, '0'), year: String(initialDate.getFullYear()) } : undefined} />
         </div>
       </Card>
 
