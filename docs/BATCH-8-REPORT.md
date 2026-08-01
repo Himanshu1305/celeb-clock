@@ -194,8 +194,13 @@ threshold / gate LOGIC is fully unit-tested, which is the deterministic core.
     `currency` drive the new DobInput fields instead of the removed native date input; `batch-7b` /gift now
     under Explore (P5). Also self-caught + fixed the P1 same-element thin-content issue (§2).
 - frozen files empty diff · invoice_counters **BC 1002 / BN 1001 / BX 1001** unchanged. ✅
-- live post-deploy: <FILL>
-- ONE deploy · IndexNow ping changed URLs — <FILL>.
+- **ONE deploy** (`Uploaded bornclock` + `Deployed bornclock triggers`; trailing exit 1 = known cron
+  `schedules` token-scope error). ✅
+- **live post-deploy** (bornclock.usdvisionai.workers.dev): `/compatibility/aries/leo` shows all 4 v2 sections
+  + the marriage/friends FAQ ✅ · homepage has the DobInput (`id="dob-day"`) + a `/life-expectancy` bar link ✅
+  · `/gift` renders "feel truly seen" ✅ · calculator reverse-order `/compatibility/leo/aries` → 301
+  `/aries/leo` (P6 canonical) ✅ · sentinel `{"error":"Report not found"}` ✅.
+- **IndexNow**: pinged /gift, /leaderboard, /compatibility + sample pairs — IndexNow 200, Yandex 202. ✅
 
 ---
 
