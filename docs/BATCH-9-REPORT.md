@@ -100,14 +100,23 @@ design); the two-key/threshold/gate logic is unit-tested, and the legacy-removal
 
 ## 7. Gate
 - tsc: 0 errors (0 new). ✅
-- build: <FILL> ok / 0 failed. **Count reconciliation:** `/contact` was ALREADY a routed + prerendered page
-  (P9 upgraded it in place), so there is **no net new route** — expected **1341**, not the prompt's 1342.
-- test:prelaunch: gauntlet 135 + prelaunch (185 + new: dob-regression 8 + batch-9-logic 10 + batch-9 13) — <FILL>.
-- frozen files empty diff · invoice_counters BC 1002 / BN 1001 / BX 1001 — <FILL>.
-- SEO audit before/after (SEV-1 0, soft not increased) — <FILL>.
-- live post-deploy: homepage DOB typing 14/12/1990 · /life-expectancy cold load · /contact submit · /age-calculator
-  feedback widget · homepage card row · sentinel — <FILL>.
-- ONE deploy · IndexNow ping changed URLs — <FILL>.
+- build: **1341 ok / 0 failed**. **Count reconciliation:** `/contact` was ALREADY a routed + prerendered page
+  (P9 upgraded it in place), so there is **no net new route** — **1341**, not the prompt's assumed 1342. ✅
+- test:prelaunch: gauntlet **135/135** + prelaunch **216/216** (185 baseline + dob-regression 8 + batch-9-logic
+  10 + batch-9 13). Fix-loop: the initial run had 3 prelaunch failures, ALL classified **TEST-BUG** from
+  intended changes (no product code, no weakened assertions): growth-pages filled the removed native date input
+  on the RhythmWidget→DobInput fitness pages (now drive DobInput fields); batch-7b `177 kg` now also appears in
+  the P5 fitness-era blurb (scoped `.first()`). Re-ran green. ✅
+- frozen files empty diff ✅ · invoice_counters **BC 1002 / BN 1001 / BX 1001** unchanged ✅.
+- SEO audit (P11): **1158 findings, SEVERITY-1 = 0** — identical distribution to batch-8, so **soft findings did
+  not increase**. Changed pages keep self-canonical + brand-suffix titles. ✅
+- **ONE deploy** (`Uploaded bornclock` + `Deployed bornclock triggers`; trailing exit 1 = known cron
+  `schedules` token-scope error). ✅
+- live post-deploy (bornclock.usdvisionai.workers.dev): homepage has DobInput (`#dob-day`) + science-card-row +
+  `/weight-on-planets` link ✅ · `/life-expectancy` serves the depth section ✅ · `/age-calculator` no longer has
+  "Share Your Experience" ✅ · `/contact` 200; `/api/contact` honeypot probe → `{"ok":true}` (dropped, no email
+  sent) ✅ · sentinel `{"error":"Report not found"}` ✅. (DOB typing + contact submit verified via e2e.)
+- **IndexNow**: 8 changed URLs pinged — IndexNow 200, Yandex 202. ✅
 
 ## 8. Founder task list
 1. Apply `NOTES-feedback.sql` (now includes `'tool'`) to switch on /age-calculator feedback.
