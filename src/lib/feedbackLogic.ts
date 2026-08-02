@@ -3,7 +3,7 @@
  * Node. The engagement gate, sentiment routing, TWO-KEY publication rule and thresholds
  * live here; src/lib/feedback.ts re-exports these and adds the Supabase ops.
  */
-export type ContentType = 'report' | 'blog';
+export type ContentType = 'report' | 'blog' | 'tool';
 
 export interface FeedbackRow {
   id?: string;

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
+import { INDIA_LIFE_EXPECTANCY as INDIA_LE } from '@/data/lifeExpectancyFacts';
 import { AnswerLayout } from '@/components/AnswerLayout';
 
 export default function WhatIsLifeExpectancy() {
@@ -73,7 +74,7 @@ export default function WhatIsLifeExpectancy() {
                 </tbody>
               </table>
             </div>
-            <p className="text-sm text-gray-500 italic">Source: WHO Global Health Observatory 2023. Global average: 72.8 years. India: 70.4 years.</p>
+            <p className="text-sm text-gray-500 italic">Source: WHO Global Health Observatory 2023 (top-10). Global average: 72.8 years. India: {INDIA_LE.overall} years (UN WPP {INDIA_LE.refYear}).</p>
 
             <h2 className="text-xl font-bold text-gray-900">India-Specific Data</h2>
             <p>India's national average of 70.4 years masks enormous internal variation. Kerala (77.3 years) and Goa (76.7 years) approach Western European levels, while Uttar Pradesh (65.8) and Chhattisgarh (64.2) lag 10+ years behind. This variation is driven by: healthcare access, diet patterns, urban vs rural divide, air quality, sanitation, and literacy levels (which correlate strongly with health outcomes).</p>

@@ -11,7 +11,7 @@
 create table if not exists public.feedback (
   id            uuid primary key default gen_random_uuid(),
   user_id       uuid not null references auth.users(id) on delete cascade,
-  content_type  text not null check (content_type in ('report','blog')),
+  content_type  text not null check (content_type in ('report','blog','tool')),
   slug          text not null,
   rating        integer not null default 0 check (rating >= 0 and rating <= 5),
   comment       text,

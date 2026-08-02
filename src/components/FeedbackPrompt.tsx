@@ -10,7 +10,9 @@ import { Star, X } from 'lucide-react';
 interface FeedbackPromptProps {
   contentType: ContentType;
   slug: string;
-  variant?: 'report' | 'blog';
+  variant?: 'report' | 'blog' | 'tool';
+  /** Tool pages: open the prompt as soon as the user has a RESULT, bypassing scroll/dwell. */
+  resultReady?: boolean;
 }
 
 /**
@@ -20,7 +22,7 @@ interface FeedbackPromptProps {
  * and submission are persisted server-side, so it won't reappear. Hides for logged-out users
  * and whenever the feedback table is absent (tolerate-absent).
  */
-export function FeedbackPrompt({ contentType, slug, variant = 'report' }: FeedbackPromptProps) {
+export function FeedbackPrompt({ contentType, slug, variant = 'report', resultReady = false }: FeedbackPromptProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const [gateOpen, setGateOpen] = useState(false);
@@ -42,9 +44,12 @@ export function FeedbackPrompt({ contentType, slug, variant = 'report' }: Feedba
     return () => { cancelled = true; };
   }, [user, contentType, slug]);
 
-  // Engagement gate — poll scroll% + dwell.
+  // Tool pages open the prompt the moment a result exists (not scroll/dwell).
+  useEffect(() => { if (resultReady) setGateOpen(true); }, [resultReady]);
+
+  // Engagement gate — poll scroll% + dwell (skipped once resultReady has opened it).
   useEffect(() => {
-    if (!user || hidden) return;
+    if (!user || hidden || resultReady) return;
     const check = () => {
       const doc = document.documentElement;
       const scrollable = doc.scrollHeight - doc.clientHeight;

@@ -1,4 +1,5 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
+import { lazyWithReload, ChunkErrorBoundary } from "@/lib/lazyWithRetry";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,80 +9,80 @@ import { HelmetProvider } from "react-helmet-async";
 
 // Core Page Imports
 import Index from "./pages/Index";
-const BirthdayResults = lazy(() => import("./pages/BirthdayResults"));
-const Auth = lazy(() => import("./pages/Auth"));
-const Profile = lazy(() => import("./pages/Profile"));
-const Admin = lazy(() => import("./pages/Admin"));
-const Upgrade = lazy(() => import("./pages/Upgrade"));
-const Pricing = lazy(() => import("./pages/Pricing"));
-const Zodiac = lazy(() => import("./pages/Zodiac"));
-const Birthstone = lazy(() => import("./pages/Birthstone"));
-const MonthHub = lazy(() => import("./pages/MonthHub"));
-const MonthsHubPage = lazy(() => import("./pages/MonthsHubPage"));
+const BirthdayResults = lazyWithReload(() => import("./pages/BirthdayResults"));
+const Auth = lazyWithReload(() => import("./pages/Auth"));
+const Profile = lazyWithReload(() => import("./pages/Profile"));
+const Admin = lazyWithReload(() => import("./pages/Admin"));
+const Upgrade = lazyWithReload(() => import("./pages/Upgrade"));
+const Pricing = lazyWithReload(() => import("./pages/Pricing"));
+const Zodiac = lazyWithReload(() => import("./pages/Zodiac"));
+const Birthstone = lazyWithReload(() => import("./pages/Birthstone"));
+const MonthHub = lazyWithReload(() => import("./pages/MonthHub"));
+const MonthsHubPage = lazyWithReload(() => import("./pages/MonthsHubPage"));
 import { MONTH_HUB_DATA } from "./data/monthHubData";
-const FitnessRhythmPage = lazy(() => import("./pages/FitnessRhythmPage"));
+const FitnessRhythmPage = lazyWithReload(() => import("./pages/FitnessRhythmPage"));
 import { FITNESS_PAGES } from "./data/fitnessPages";
-const LifeExpectancy = lazy(() => import("./pages/LifeExpectancy"));
-const CelebrityBirthday = lazy(() => import("./pages/CelebrityBirthday"));
-const Blog = lazy(() => import("./pages/Blog"));
-const BlogPost = lazy(() => import("./pages/BlogPost"));
-const About = lazy(() => import("./pages/About"));
-const Privacy = lazy(() => import("./pages/Privacy"));
-const Terms = lazy(() => import("./pages/Terms"));
-const FAQ = lazy(() => import("./pages/FAQ"));
-const Contact = lazy(() => import("./pages/Contact"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const AgeCalculatorPage = lazy(() => import("./pages/AgeCalculatorPage"));
-const TodaysBirthdaysPage = lazy(() => import("./pages/TodaysBirthdaysPage"));
-const NumerologyPage = lazy(() => import("./pages/NumerologyPage"));
-const PlanetaryAgePage = lazy(() => import("./pages/PlanetaryAgePage"));
-const WeightOnPlanetsPage = lazy(() => import("./pages/WeightOnPlanetsPage"));
-const Methodology = lazy(() => import("./pages/Methodology"));
-const EditorialPolicy = lazy(() => import("./pages/EditorialPolicy"));
-const ZodiacSign = lazy(() => import("./pages/ZodiacSign"));
-const BirthstonePage = lazy(() => import("./pages/BirthstonePage"));
-const NumerologyNumber = lazy(() => import("./pages/NumerologyNumber"));
-const GenerationPage = lazy(() => import("./pages/Generation"));
-const BirthdayDate = lazy(() => import("./pages/BirthdayDate"));
-const BirthdayHub = lazy(() => import("./pages/BirthdayHub"));
-const BirthdayMonthPage = lazy(() => import("./pages/BirthdayMonthPage"));
-const BirthdayDatePage = lazy(() => import("./pages/BirthdayDatePage"));
-const Leaderboard = lazy(() => import("./pages/Leaderboard"));
-const FamilyDashboard = lazy(() => import("./pages/FamilyDashboard"));
-const GiftReport = lazy(() => import("./pages/GiftReport"));
-const CoachLandingPage = lazy(() => import("./pages/CoachLandingPage"));
-const BiologicalAge = lazy(() => import("./pages/BiologicalAge"));
-const CountryComparison = lazy(() => import("./pages/CountryComparison"));
-const BirthdayReport = lazy(() => import("./pages/BirthdayReport"));
-const ReportView = lazy(() => import("./pages/ReportView"));
-const ChineseZodiac = lazy(() => import("./pages/ChineseZodiac"));
-const ChineseZodiacSign = lazy(() => import("./pages/ChineseZodiacSign"));
-const VedicZodiac = lazy(() => import("./pages/VedicZodiac"));
-const VedicZodiacSign = lazy(() => import("./pages/VedicZodiacSign"));
-const HowLongWillILive = lazy(() => import('@/pages/answers/HowLongWillILive'));
-const WhatIsMyBiologicalAge = lazy(() => import('@/pages/answers/WhatIsMyBiologicalAge'));
-const WhoSharesMyBirthday = lazy(() => import('@/pages/answers/WhoSharesMyBirthday'));
-const HowOldAmIOnMars = lazy(() => import('@/pages/answers/HowOldAmIOnMars'));
-const WhatIsMyZodiacSign = lazy(() => import('@/pages/answers/WhatIsMyZodiacSign'));
-const WhatIsMyLifePathNumber = lazy(() => import('@/pages/answers/WhatIsMyLifePathNumber'));
-const HowToCalculateAge = lazy(() => import('@/pages/answers/HowToCalculateAge'));
-const WhatGenerationAmI = lazy(() => import('@/pages/answers/WhatGenerationAmI'));
-const HowToLiveLonger = lazy(() => import('@/pages/answers/HowToLiveLonger'));
-const WhatIsBMI = lazy(() => import('@/pages/answers/WhatIsBMI'));
-const WhatIsLifeExpectancy = lazy(() => import('@/pages/answers/WhatIsLifeExpectancy'));
-const HowDoesStressAffectLifeExpectancy = lazy(() => import('@/pages/answers/HowDoesStressAffectLifeExpectancy'));
-const HowManyDaysUntilMyBirthday = lazy(() => import('@/pages/answers/HowManyDaysUntilMyBirthday'));
-const TarotByBirthday = lazy(() => import('@/pages/TarotByBirthday'));
-const MoonSignPage = lazy(() => import('@/pages/MoonSignPage'));
-const NameNumerologyPage = lazy(() => import('@/pages/NameNumerologyPage'));
-const BiorhythmPage = lazy(() => import('@/pages/BiorhythmPage'));
-const CompatibilityPage = lazy(() => import('@/pages/CompatibilityPage'));
-const RashiRatnaPage = lazy(() => import('@/pages/RashiRatnaPage'));
-const BornOnDay = lazy(() => import('@/pages/BornOnDay'));
-const BornOnDayIndia = lazy(() => import('@/pages/BornOnDayIndia'));
-const BornOnIndex = lazy(() => import('@/pages/BornOnIndex'));
-const BornOnIndiaIndex = lazy(() => import('@/pages/BornOnIndiaIndex'));
-const AnswersIndex = lazy(() => import('@/pages/AnswersIndex'));
+const LifeExpectancy = lazyWithReload(() => import("./pages/LifeExpectancy"));
+const CelebrityBirthday = lazyWithReload(() => import("./pages/CelebrityBirthday"));
+const Blog = lazyWithReload(() => import("./pages/Blog"));
+const BlogPost = lazyWithReload(() => import("./pages/BlogPost"));
+const About = lazyWithReload(() => import("./pages/About"));
+const Privacy = lazyWithReload(() => import("./pages/Privacy"));
+const Terms = lazyWithReload(() => import("./pages/Terms"));
+const FAQ = lazyWithReload(() => import("./pages/FAQ"));
+const Contact = lazyWithReload(() => import("./pages/Contact"));
+const NotFound = lazyWithReload(() => import("./pages/NotFound"));
+const AgeCalculatorPage = lazyWithReload(() => import("./pages/AgeCalculatorPage"));
+const TodaysBirthdaysPage = lazyWithReload(() => import("./pages/TodaysBirthdaysPage"));
+const NumerologyPage = lazyWithReload(() => import("./pages/NumerologyPage"));
+const PlanetaryAgePage = lazyWithReload(() => import("./pages/PlanetaryAgePage"));
+const WeightOnPlanetsPage = lazyWithReload(() => import("./pages/WeightOnPlanetsPage"));
+const Methodology = lazyWithReload(() => import("./pages/Methodology"));
+const EditorialPolicy = lazyWithReload(() => import("./pages/EditorialPolicy"));
+const ZodiacSign = lazyWithReload(() => import("./pages/ZodiacSign"));
+const BirthstonePage = lazyWithReload(() => import("./pages/BirthstonePage"));
+const NumerologyNumber = lazyWithReload(() => import("./pages/NumerologyNumber"));
+const GenerationPage = lazyWithReload(() => import("./pages/Generation"));
+const BirthdayDate = lazyWithReload(() => import("./pages/BirthdayDate"));
+const BirthdayHub = lazyWithReload(() => import("./pages/BirthdayHub"));
+const BirthdayMonthPage = lazyWithReload(() => import("./pages/BirthdayMonthPage"));
+const BirthdayDatePage = lazyWithReload(() => import("./pages/BirthdayDatePage"));
+const Leaderboard = lazyWithReload(() => import("./pages/Leaderboard"));
+const FamilyDashboard = lazyWithReload(() => import("./pages/FamilyDashboard"));
+const GiftReport = lazyWithReload(() => import("./pages/GiftReport"));
+const CoachLandingPage = lazyWithReload(() => import("./pages/CoachLandingPage"));
+const BiologicalAge = lazyWithReload(() => import("./pages/BiologicalAge"));
+const CountryComparison = lazyWithReload(() => import("./pages/CountryComparison"));
+const BirthdayReport = lazyWithReload(() => import("./pages/BirthdayReport"));
+const ReportView = lazyWithReload(() => import("./pages/ReportView"));
+const ChineseZodiac = lazyWithReload(() => import("./pages/ChineseZodiac"));
+const ChineseZodiacSign = lazyWithReload(() => import("./pages/ChineseZodiacSign"));
+const VedicZodiac = lazyWithReload(() => import("./pages/VedicZodiac"));
+const VedicZodiacSign = lazyWithReload(() => import("./pages/VedicZodiacSign"));
+const HowLongWillILive = lazyWithReload(() => import('@/pages/answers/HowLongWillILive'));
+const WhatIsMyBiologicalAge = lazyWithReload(() => import('@/pages/answers/WhatIsMyBiologicalAge'));
+const WhoSharesMyBirthday = lazyWithReload(() => import('@/pages/answers/WhoSharesMyBirthday'));
+const HowOldAmIOnMars = lazyWithReload(() => import('@/pages/answers/HowOldAmIOnMars'));
+const WhatIsMyZodiacSign = lazyWithReload(() => import('@/pages/answers/WhatIsMyZodiacSign'));
+const WhatIsMyLifePathNumber = lazyWithReload(() => import('@/pages/answers/WhatIsMyLifePathNumber'));
+const HowToCalculateAge = lazyWithReload(() => import('@/pages/answers/HowToCalculateAge'));
+const WhatGenerationAmI = lazyWithReload(() => import('@/pages/answers/WhatGenerationAmI'));
+const HowToLiveLonger = lazyWithReload(() => import('@/pages/answers/HowToLiveLonger'));
+const WhatIsBMI = lazyWithReload(() => import('@/pages/answers/WhatIsBMI'));
+const WhatIsLifeExpectancy = lazyWithReload(() => import('@/pages/answers/WhatIsLifeExpectancy'));
+const HowDoesStressAffectLifeExpectancy = lazyWithReload(() => import('@/pages/answers/HowDoesStressAffectLifeExpectancy'));
+const HowManyDaysUntilMyBirthday = lazyWithReload(() => import('@/pages/answers/HowManyDaysUntilMyBirthday'));
+const TarotByBirthday = lazyWithReload(() => import('@/pages/TarotByBirthday'));
+const MoonSignPage = lazyWithReload(() => import('@/pages/MoonSignPage'));
+const NameNumerologyPage = lazyWithReload(() => import('@/pages/NameNumerologyPage'));
+const BiorhythmPage = lazyWithReload(() => import('@/pages/BiorhythmPage'));
+const CompatibilityPage = lazyWithReload(() => import('@/pages/CompatibilityPage'));
+const RashiRatnaPage = lazyWithReload(() => import('@/pages/RashiRatnaPage'));
+const BornOnDay = lazyWithReload(() => import('@/pages/BornOnDay'));
+const BornOnDayIndia = lazyWithReload(() => import('@/pages/BornOnDayIndia'));
+const BornOnIndex = lazyWithReload(() => import('@/pages/BornOnIndex'));
+const BornOnIndiaIndex = lazyWithReload(() => import('@/pages/BornOnIndiaIndex'));
+const AnswersIndex = lazyWithReload(() => import('@/pages/AnswersIndex'));
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { CurrencyAdminToggle } from "@/components/CurrencyAdminToggle";
@@ -103,6 +104,7 @@ const App = () => (
             <ScrollToTop />
             <CurrencyAdminToggle />
             <BirthdayDiscountBanner />
+            <ChunkErrorBoundary>
             <Suspense fallback={<div className="min-h-screen" aria-hidden="true" />}>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -188,6 +190,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>
+            </ChunkErrorBoundary>
           </BrowserRouter>
         </BirthDateProvider>
       </TooltipProvider>

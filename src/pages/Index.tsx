@@ -205,7 +205,7 @@ const Index = () => {
         {/* Bento Grid Features */}
         <BentoGrid />
 
-        {/* Planetary Weight Teaser — links to /planetary-age */}
+        {/* Planetary Weight Teaser — links to /weight-on-planets (the dedicated weight tool) */}
         <section className="max-w-4xl mx-auto mb-12 px-4">
           <div className="bg-gradient-to-br from-slate-900 to-indigo-950 rounded-2xl p-6 text-white">
             <h3 className="text-base font-bold mb-1 flex items-center gap-2">
@@ -250,10 +250,10 @@ const Index = () => {
             </div>
 
             <a
-              href="/planetary-age"
+              href="/weight-on-planets"
               className="block w-full text-center bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-semibold text-sm transition-colors"
             >
-              Calculate My Planetary Weight &amp; Age →
+              Calculate My Weight on Every Planet →
             </a>
           </div>
         </section>
@@ -363,6 +363,24 @@ const Index = () => {
                 </CardContent>
               </Card>
             </Link>
+          </div>
+        </section>
+
+        {/* P10 — science-not-just-astrology card row (founder items 4/5/12) */}
+        <section className="max-w-4xl mx-auto mb-16 px-4" data-testid="science-card-row">
+          <h2 className="text-lg font-bold text-center mb-4 text-foreground">The science behind BornClock</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              { href: '/biological-age', emoji: '🧬', title: 'Biological Age', hook: 'Is your body older or younger than your birthday? A 10-question, WHO-aligned estimate.' },
+              { href: '/country-comparison', emoji: '🌍', title: 'Compare 57 Countries', hook: 'See how your health profile would play out across the world — UN WPP 2024 data.' },
+              { href: '/energy-forecast', emoji: '⚡', title: "Today's Energy", hook: 'A 7-day rhythm check-in from your birth date — a reflection prompt, not a prediction.' },
+            ].map(c => (
+              <Link key={c.href} to={c.href} className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors">
+                <div className="text-2xl mb-2">{c.emoji}</div>
+                <h3 className="font-bold text-foreground mb-1">{c.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{c.hook}</p>
+              </Link>
+            ))}
           </div>
         </section>
 

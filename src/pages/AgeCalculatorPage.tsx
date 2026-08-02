@@ -8,7 +8,8 @@ import { CelebrityMatch } from '@/components/CelebrityMatch';
 import { ZodiacAndFacts } from '@/components/ZodiacAndFacts';
 import { LifeExpectancyCTA } from '@/components/LifeExpectancyCTA';
 import { GenerationLabel } from '@/components/GenerationLabel';
-import { ReviewForm } from '@/components/ReviewForm';
+import { FeedbackPrompt } from '@/components/FeedbackPrompt';
+import { ReaderComments } from '@/components/ReaderComments';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -85,8 +86,11 @@ const AgeCalculatorPage = () => {
 
         {birthDate && <LifeExpectancyCTA />}
 
+        {/* BATCH-9 P3 — batch-8 feedback (stars-only valid, comment optional, two-key),
+            result-gated: shown only once the user has an age result. */}
         <section className="max-w-xl mx-auto mb-16">
-          <ReviewForm />
+          <FeedbackPrompt contentType="tool" slug="age-calculator" variant="tool" resultReady={!!birthDate} />
+          <ReaderComments contentType="tool" slug="age-calculator" />
         </section>
 
         <PageFAQ slug="age-calculator" title="Age Calculator FAQs" />

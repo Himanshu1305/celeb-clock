@@ -1,0 +1,33 @@
+-- NOTES-user-reviews-disposition.sql — legacy user_reviews disposition (BATCH-9 P3 / A2).
+-- NOT APPLIED. Founder decides. Run nothing here automatically.
+--
+-- CONTEXT: the legacy "Share Your Experience" widget (removed this batch, ReviewForm.tsx
+-- deleted) wrote site TESTIMONIALS to public.user_reviews (rating/title/content/display_name,
+-- is_approved/is_featured). The new batch-8 feedback system uses a SEPARATE public.feedback
+-- table (per-content stars + two-key publication). They are different concepts:
+--   • user_reviews  = homepage testimonials carousel (TestimonialsSection) + admin ReviewManagement
+--   • feedback      = per-report / per-blog / per-tool ratings + moderated reader comments
+--
+-- ROW COUNT AT MIGRATION TIME: user_reviews has **8 rows** (checked live). Because rows exist,
+-- they are NOT auto-migrated. The homepage testimonials carousel + admin moderation still read
+-- user_reviews, so the table and its 8 rows are kept AS-IS by default (no action needed).
+--
+-- OPTIONS (pick ONE if you want to change the default of "keep as testimonials"):
+--
+-- OPTION A — KEEP (default, recommended): do nothing. The 8 testimonials keep powering the
+--   homepage carousel; the new /age-calculator feedback flows into public.feedback separately.
+--
+-- OPTION B — MIGRATE approved testimonials into the feedback table as tool feedback:
+--   insert into public.feedback (user_id, content_type, slug, rating, comment, consent, approved, dismissed, created_at)
+--   select user_id, 'tool', 'age-calculator', rating, content, is_featured, is_approved, false, created_at
+--   from public.user_reviews
+--   where is_approved = true
+--   on conflict (user_id, content_type, slug) do nothing;
+--   -- (consent := is_featured so only already-featured ones can surface publicly under two-key.)
+--
+-- OPTION C — ARCHIVE then drop (if you no longer want the testimonials carousel):
+--   create table if not exists public.user_reviews_archive as table public.user_reviews;
+--   -- then, only after removing TestimonialsSection + ReviewManagement from the app:
+--   -- drop table public.user_reviews;
+--
+-- The app remains correct under Option A with no SQL run.

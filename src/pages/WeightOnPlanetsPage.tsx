@@ -156,6 +156,37 @@ export default function WeightOnPlanetsPage() {
         </p>
       </section>
 
+      {/* P5 — cosmic fun facts (witty register) */}
+      <section className="max-w-2xl mx-auto px-4 py-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Cosmic fun facts</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { emoji: '💎', title: 'Neptune rains diamonds', body: 'Crushing pressure deep in Neptune (and Uranus) squeezes carbon into literal diamond hail. You’d weigh a touch more than on Earth — and it’s raining gems.' },
+            { emoji: '🥊', title: 'Jupiter is the heavyweight', body: 'At ~2.5× Earth gravity, a 30 kg kid would tip the scales like a full-grown adult. Standing up would feel like wearing a second person.' },
+            { emoji: '🦘', title: 'The Moon turns you into a kangaroo', body: 'At 1/6 gravity, every step is a moon-bounce. Apollo astronauts gave up walking and hopped — it was simply easier.' },
+            { emoji: '🏃', title: 'Mercury: sprinter’s paradise', body: 'About a third of Earth’s pull means longer strides and higher jumps — though the 430°C days make it a poor choice for a marathon.' },
+            { emoji: '🪐', title: 'Saturn would let you float — almost', body: 'Despite being 95× Earth’s mass, Saturn’s gravity is basically Earth’s (0.92×): it’s so puffy it would float in a big enough bathtub.' },
+            { emoji: '🔴', title: 'Mars: the high-jump record awaits', body: 'At 38% gravity you could clear roughly 3× your Earth high-jump — one reason Mars is the friendliest world for future explorers.' },
+          ].map(f => (
+            <div key={f.title} className="border border-gray-200 rounded-xl p-4">
+              <div className="text-2xl mb-1">{f.emoji}</div>
+              <p className="font-semibold text-gray-900 text-sm mb-1">{f.title}</p>
+              <p className="text-xs text-gray-600 leading-relaxed">{f.body}</p>
+            </div>
+          ))}
+        </div>
+        {valid && (
+          <div className="mt-5 rounded-2xl bg-amber-50 border border-amber-200 p-5">
+            <p className="text-sm font-bold text-amber-900 mb-1">🏋️ Which planet matches your fitness era?</p>
+            <p className="text-sm text-amber-900/80 leading-relaxed">
+              Feeling springy? You’re in your <strong>Moon era</strong> — {displayWeight(weightOn(parsed, moon.gravity))} {unit}, basically bouncing.
+              Ready to train heavy? Welcome to your <strong>Jupiter era</strong> — {displayWeight(weightOn(parsed, jupiter.gravity))} {unit},
+              where even standing is a workout. Most of us live happiest somewhere around <strong>Mars</strong> ({displayWeight(weightOn(parsed, mars.gravity))} {unit}) — light on your feet, still grounded.
+            </p>
+          </div>
+        )}
+      </section>
+
       {/* CTA to sister tools */}
       <section className="max-w-2xl mx-auto px-4 py-4">
         <div className="rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 p-6 text-center text-white">

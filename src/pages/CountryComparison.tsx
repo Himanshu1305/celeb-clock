@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { Globe, Search, ArrowUpDown, ChevronDown, ChevronUp, Share2 } from 'lucide-react';
 import PageTagline from '@/components/PageTagline';
+import { INDIA_LIFE_EXPECTANCY as INDIA_LE, INDIA_LE_CITATION } from '@/data/lifeExpectancyFacts';
 import {
   BIRTH_BASELINES,
   COUNTRY_FLAG_EMOJI,
@@ -38,7 +39,7 @@ const FAQ_ITEMS = [
   },
   {
     question: "What is the difference between India's best and worst states for life expectancy?",
-    answer: 'India has significant internal variation. Kerala consistently records life expectancy comparable to many European nations (around 77+ years), while some northeastern and rural states record figures in the low 60s. The gap reflects differences in healthcare infrastructure, education, diet, and economic development. India\'s national average of ~72 years masks this important variation. [India NFHS-5, 2021; UN WPP 2024]',
+    answer: `India has significant internal variation. Kerala consistently records life expectancy comparable to many European nations (around 77+ years), while some northeastern and rural states record figures in the low 60s. The gap reflects differences in healthcare infrastructure, education, diet, and economic development. India's national average of ~${INDIA_LE.overall} years masks this important variation. [India NFHS-5, 2021; UN WPP ${INDIA_LE.refYear}]`,
   },
   {
     question: "Can lifestyle choices overcome a country's low life expectancy?",
@@ -519,7 +520,7 @@ const CountryComparison = () => {
               <div className="text-4xl mb-3">🇮🇳</div>
               <h3 className="text-lg font-black mb-2 text-orange-900">India's Longevity Opportunity</h3>
               <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                India's life expectancy has increased by over <strong>30 years</strong> since independence in 1947 — one of the fastest improvements in human history. From 32 years in 1947 to 72 years today.
+                India's life expectancy has increased by over <strong>{INDIA_LE.overall - INDIA_LE.historical1947} years</strong> since independence in 1947 — one of the fastest improvements in human history. From {INDIA_LE.historical1947} years in 1947 to {INDIA_LE.overall} years today {INDIA_LE_CITATION}.
               </p>
               <p className="text-sm text-gray-700 leading-relaxed mb-3">
                 The challenge: a 15-year gap between India's top and bottom states. Kerala performs comparably to many European nations. The opportunity: India's improvement trajectory is accelerating.
@@ -563,7 +564,7 @@ const CountryComparison = () => {
                 { idx: 4, gradient: 'from-rose-600 to-rose-800', icon: '💃', title: 'The Dancing Sardinians', body: 'Sardinia, Italy is a Blue Zone with the world\'s highest concentration of centenarians. Sardinian men specifically outlive men from all other Blue Zones — daily walking, red wine, pecorino cheese (high omega-3s), and tight-knit multigenerational families.', cite: '[Buettner, D. — Blue Zones, 2023]' },
                 { idx: 5, gradient: 'from-amber-600 to-amber-800', icon: '🏃', title: 'The Exercise Equation', body: 'A landmark study of 650,000 adults found that 75 minutes of vigorous exercise per week added 3.4 years to life expectancy — regardless of country of birth. 150 minutes/week added 3.5 years. Marginal return decreases quickly after 150 minutes.', cite: '[Moore et al., PLOS Medicine, 2012]' },
                 { idx: 6, gradient: 'from-teal-600 to-teal-800', icon: '👥', title: 'The Loneliness Penalty', body: 'Social isolation reduces life expectancy by 26% — comparable to smoking 15 cigarettes per day. Countries with stronger social bonds consistently rank higher in longevity. Japan\'s "moai" (lifelong friend groups) and Sardinia\'s village culture are key factors.', cite: '[Holt-Lunstad et al., PLOS Medicine, 2010]' },
-                { idx: 7, gradient: 'from-slate-600 to-slate-800', icon: '🇮🇳', title: 'India\'s 30-Year Miracle', body: 'India\'s life expectancy rose from 32 years at independence (1947) to 72 years today — an increase of 40 years in less than 80 years. One of the fastest sustained improvements in human history, driven by vaccination, sanitation, maternal care, and economic development.', cite: '[UN WPP 2024; India NHFS 2021]' },
+                { idx: 7, gradient: 'from-slate-600 to-slate-800', icon: '🇮🇳', title: 'India\'s 30-Year Miracle', body: `India's life expectancy rose from ${INDIA_LE.historical1947} years at independence (1947) to ${INDIA_LE.overall} years today — an increase of ${INDIA_LE.overall - INDIA_LE.historical1947} years in less than 80 years. One of the fastest sustained improvements in human history, driven by vaccination, sanitation, maternal care, and economic development.`, cite: `[UN WPP ${INDIA_LE.refYear}; India NHFS 2021]` },
               ].map(fact => (
                 <div key={fact.idx} className={`min-w-64 max-w-64 bg-gradient-to-br ${fact.gradient} rounded-xl p-4 text-white flex-shrink-0`}>
                   <div className="text-2xl mb-2">{fact.icon}</div>
@@ -818,6 +819,11 @@ const CountryComparison = () => {
               ? 'Your Personalized Forecast — How Your Health Profile Plays Out in 57 Countries'
               : 'Baseline Forecasts — 57 Countries'}
           </h2>
+          {savedResult && (
+            <p className="text-sm text-muted-foreground mb-4">
+              🔒 Calculated from the answers you just entered — nothing is saved. Everything runs on your device.
+            </p>
+          )}
           {!savedResult && (
             <p className="text-sm text-muted-foreground mb-4">
               Complete the longevity quiz for your personalized numbers.{' '}
