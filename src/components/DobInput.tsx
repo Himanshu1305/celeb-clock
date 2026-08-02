@@ -1,4 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
+import { CalendarDays } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 
 /**
  * DobInput — the ONE shared date-of-birth entry component (P3, batch 8).
@@ -50,6 +53,8 @@ export function DobInput({ value, onChange, onValidChange, label = 'Date of birt
   const [month, setMonth] = useState(value?.month ?? '');
   const [year, setYear] = useState(value?.year ?? '');
   const [touched, setTouched] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const currentYear = new Date().getFullYear();
 
   const dayRef = useRef<HTMLInputElement>(null);
   const monthRef = useRef<HTMLInputElement>(null);
@@ -92,6 +97,16 @@ export function DobInput({ value, onChange, onValidChange, label = 'Date of birt
     setYear(v); emit(day, month, v);
   };
 
+  // Calendar picker (secondary affordance) fills the three fields; typing stays primary.
+  const pickDate = (d?: Date) => {
+    if (!d) return;
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yy = String(d.getFullYear());
+    setDay(dd); setMonth(mm); setYear(yy); emit(dd, mm, yy);
+    setTouched(true); setPickerOpen(false);
+  };
+
   // Backspace on an empty field returns focus to the previous field (value intact).
   const onKeyDown = (which: 'day' | 'month' | 'year') => (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace' && e.currentTarget.value === '') {
@@ -100,11 +115,17 @@ export function DobInput({ value, onChange, onValidChange, label = 'Date of birt
     }
   };
 
-  // Zero-pad day/month on blur (5 → 05); mark touched so validation can show.
-  const padOnBlur = (which: 'day' | 'month') => () => {
+  // Zero-pad day/month ON BLUR ONLY (5 → 05). Read the LIVE DOM value (currentTarget),
+  // never the closure state: an auto-advance fires this blur synchronously before the
+  // setDay("14") re-render commits, so the closure `day` is stale ("1"). Padding the stale
+  // value was the batch-8 regression that made 10-19 days / 10-12 months untypeable.
+  const padOnBlur = (which: 'day' | 'month') => (e: React.FocusEvent<HTMLInputElement>) => {
     setTouched(true);
-    if (which === 'day' && day.length === 1) { const v = day.padStart(2, '0'); setDay(v); emit(v, month, year); }
-    if (which === 'month' && month.length === 1) { const v = month.padStart(2, '0'); setMonth(v); emit(day, v, year); }
+    const cur = digitsOnly(e.currentTarget.value).slice(0, 2);
+    if (cur.length !== 1) return; // empty, or already 2 digits (advanced) — nothing to pad
+    const v = cur.padStart(2, '0');
+    if (which === 'day') { setDay(v); emit(v, month, year); }
+    else { setMonth(v); emit(day, v, year); }
   };
 
   // Paste of a full date into any field distributes across the trio.
@@ -133,7 +154,8 @@ export function DobInput({ value, onChange, onValidChange, label = 'Date of birt
   return (
     <div className={className}>
       {label && <label className="block text-sm font-semibold text-gray-700 mb-1.5" htmlFor={`${idPrefix}-day`}>{label}</label>}
-      <div className="grid grid-cols-[1fr_1fr_1.4fr] gap-2" role="group" aria-label={label}>
+      <div className="flex items-start gap-2">
+      <div className="grid grid-cols-[1fr_1fr_1.4fr] gap-2 flex-1" role="group" aria-label={label}>
         <input
           ref={dayRef} id={`${idPrefix}-day`} type="text" inputMode="numeric" pattern="[0-9]*"
           autoComplete="bday-day" placeholder="DD" aria-label="Day" maxLength={2} autoFocus={autoFocus}
@@ -155,6 +177,31 @@ export function DobInput({ value, onChange, onValidChange, label = 'Date of birt
           onPaste={onPaste} onFocus={e => e.target.select()}
           className={fieldCls} aria-invalid={!!showError}
         />
+      </div>
+      <Popover open={pickerOpen} onOpenChange={setPickerOpen}>
+        <PopoverTrigger asChild>
+          <button
+            type="button" aria-label="Open calendar picker"
+            className="shrink-0 h-[50px] px-3 border border-gray-300 rounded-xl text-gray-500 hover:text-indigo-600 hover:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            <CalendarDays className="w-5 h-5" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent align="end" className="w-auto p-0">
+          {/* Year-first navigation — dropdowns for year & month (no endless month-scrolling). */}
+          <Calendar
+            mode="single"
+            captionLayout="dropdown-buttons"
+            fromYear={currentYear - 120}
+            toYear={currentYear}
+            defaultMonth={date ?? new Date(1990, 0)}
+            selected={date ?? undefined}
+            onSelect={pickDate}
+            disabled={{ after: new Date() }}
+            classNames={{ caption_dropdowns: 'flex gap-1', dropdown: 'border rounded px-1 py-0.5 text-sm bg-white', vhidden: 'sr-only' }}
+          />
+        </PopoverContent>
+      </Popover>
       </div>
       {showError
         ? <p className="mt-1.5 text-sm text-rose-600" role="alert">{error}</p>
