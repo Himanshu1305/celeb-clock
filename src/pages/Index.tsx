@@ -366,6 +366,27 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Science cards — biological age, country comparison, biorhythm */}
+        <section className="max-w-4xl mx-auto mb-16 px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { href: '/biological-age', emoji: '🧬', badge: 'Science', title: "What's Your Biological Age?", body: 'Your body may be older or younger than your birth year. Find out in 2 minutes.', cta: 'Test my biological age →' },
+              { href: '/country-comparison', emoji: '🌍', badge: 'Compare', title: 'Life Expectancy by Country', body: 'See how your forecast changes if you lived in Japan, France, or 50+ other countries.', cta: 'Compare countries →' },
+              { href: '/biorhythm', emoji: '⚡', badge: 'Rhythm', title: 'Your Energy Cycles Today', body: 'Biorhythm science predicts your physical, emotional, and mental peaks for any day.', cta: 'See my biorhythm →' },
+            ].map(c => (
+              <Link key={c.href} to={c.href} className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">{c.emoji}</span>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">{c.badge}</span>
+                </div>
+                <h3 className="font-bold text-foreground mb-1">{c.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">{c.body}</p>
+                <span className="text-xs text-primary font-medium">{c.cta}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* P10 — science-not-just-astrology card row (founder items 4/5/12) */}
         <section className="max-w-4xl mx-auto mb-16 px-4" data-testid="science-card-row">
           <h2 className="text-lg font-bold text-center mb-4 text-foreground">The science behind BornClock</h2>
