@@ -148,7 +148,7 @@ test.describe('P5 — nav', () => {
 test.describe('P2 — gift', () => {
   test('hero renders the chosen care-centred headline + testimonial placeholder', async ({ page }) => {
     await page.goto('/gift');
-    await expect(page.getByRole('heading', { name: /feel truly seen/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /feel truly special/i })).toBeVisible();
     await expect(page.getByText(/Testimonials — placeholder/i)).toBeVisible();
   });
   test('price is currency-aware — ₹ by default, $ under ?currency=USD', async ({ page }) => {

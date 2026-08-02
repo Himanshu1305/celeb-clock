@@ -55,7 +55,7 @@ export default function GiftReport() {
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title="Gift a Birthday Blueprint — A Gift That Makes Them Feel Truly Seen | BornClock"
+        title="Gift a Birthday Blueprint — A Gift That Makes Them Feel Truly Special | BornClock"
         description="A birthday gift that says: I pay attention to you. The Birthday Blueprint is a personalised 9-section keepsake built from their birth date — celebrity twins, zodiac, numerology, birthstone and more. Instant delivery."
         keywords="birthday gift, personalised birthday gift, meaningful birthday gift, thoughtful gift, gift that shows you care, gift for someone who has everything, birthday keepsake"
         canonicalUrl="/gift"
@@ -74,7 +74,7 @@ export default function GiftReport() {
           <Gift className="w-4 h-4" /> The Birthday Blueprint
         </div>
         <h1 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-4">
-          A gift that makes them feel truly seen
+          A gift that makes them feel truly special
         </h1>
         {/* Answer-first (AEO) */}
         <p className="text-lg text-gray-700 leading-relaxed mb-6 max-w-2xl mx-auto">
