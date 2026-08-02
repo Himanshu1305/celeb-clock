@@ -7,6 +7,7 @@ import { POST as razorpayWebhook }     from '../api/razorpay-webhook.js';
 import { POST as redeemCredit }        from '../api/redeem-credit.js';
 import { POST as saveReport }          from '../api/save-report.js';
 import { POST as sendEmail }           from '../api/send-email.js';
+import { POST as contact }             from '../api/contact.js';
 import { POST as verifyPayment }       from '../api/verify-payment.js';
 import { GET  as dailyCronGet,
          POST as dailyCronPost }       from '../api/daily-email-cron.js';
@@ -61,6 +62,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/redeem-credit':      redeemCredit,
   '/api/save-report':        saveReport,
   '/api/send-email':         sendEmail,
+  '/api/contact':            contact,
   '/api/verify-payment':     verifyPayment,
   '/api/ops-monitor':        opsMonitor,
   '/api/ops-digest':         opsDigest,

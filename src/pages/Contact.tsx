@@ -18,46 +18,48 @@ export default function Contact() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [topic, setTopic] = useState('general');
+  const [website, setWebsite] = useState(''); // honeypot — real users leave this empty
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [errorField, setErrorField] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Basic validation
+    setErrorField(null);
+
     if (!name.trim() || !email.trim() || !message.trim()) {
-      toast({
-        title: "Missing information",
-        description: "Please fill in all fields",
-        variant: "destructive"
-      });
+      setErrorField(!name.trim() ? 'name' : !email.trim() ? 'email' : 'message');
+      toast({ title: 'Missing information', description: 'Please fill in all fields', variant: 'destructive' });
       return;
     }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast({
-        title: "Invalid email",
-        description: "Please enter a valid email address",
-        variant: "destructive"
-      });
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setErrorField('email');
+      toast({ title: 'Invalid email', description: 'Please enter a valid email address', variant: 'destructive' });
       return;
     }
 
     setIsSubmitting(true);
-
-    // Simulate form submission (replace with actual API call)
-    setTimeout(() => {
-      toast({
-        title: "Message sent!",
-        description: "We'll get back to you within 48 hours.",
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message, topic, website }),
       });
-      setName('');
-      setEmail('');
-      setMessage('');
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok) {
+        setSubmitted(true);
+        setName(''); setEmail(''); setMessage(''); setTopic('general');
+      } else {
+        if (data.field) setErrorField(data.field);
+        toast({ title: 'Could not send', description: data.error || 'Please try again, or email hello@bornclock.com directly.', variant: 'destructive' });
+      }
+    } catch {
+      toast({ title: 'Could not send', description: 'Please try again, or email hello@bornclock.com directly.', variant: 'destructive' });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -163,7 +165,14 @@ export default function Contact() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              {submitted ? (
+                <div className="text-center py-6" data-testid="contact-success">
+                  <div className="text-4xl mb-3">✅</div>
+                  <p className="font-semibold text-foreground mb-1">Thanks — your message is on its way.</p>
+                  <p className="text-sm text-muted-foreground">We typically reply within 24 hours, at the email you gave us.</p>
+                </div>
+              ) : (
+              <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                 <div className="space-y-2">
                   <Label htmlFor="name">Name</Label>
                   <Input
@@ -171,7 +180,7 @@ export default function Contact() {
                     placeholder="Your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    required
+                    aria-invalid={errorField === 'name'}
                   />
                 </div>
 
@@ -183,8 +192,26 @@ export default function Contact() {
                     placeholder="your@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    required
+                    aria-invalid={errorField === 'email'}
                   />
+                  {errorField === 'email' && <p className="text-sm text-rose-600" role="alert">Please enter a valid email address.</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="topic">Topic</Label>
+                  <select
+                    id="topic"
+                    value={topic}
+                    onChange={(e) => setTopic(e.target.value)}
+                    className="w-full border border-input rounded-md px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+                  >
+                    <option value="general">General enquiry</option>
+                    <option value="support">Support</option>
+                    <option value="feedback">Feedback</option>
+                    <option value="partnership">Partnership</option>
+                    <option value="privacy">Privacy / data request</option>
+                    <option value="correction">Editorial correction</option>
+                  </select>
                 </div>
 
                 <div className="space-y-2">
@@ -195,12 +222,19 @@ export default function Contact() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     rows={5}
-                    required
+                    aria-invalid={errorField === 'message'}
                   />
                 </div>
 
-                <Button 
-                  type="submit" 
+                {/* Honeypot — hidden from real users; bots that fill it are silently dropped. */}
+                <input
+                  type="text" tabIndex={-1} autoComplete="off" aria-hidden="true"
+                  value={website} onChange={(e) => setWebsite(e.target.value)}
+                  name="website" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
+                />
+
+                <Button
+                  type="submit"
                   className="w-full font-heading"
                   disabled={isSubmitting}
                 >
@@ -214,6 +248,7 @@ export default function Contact() {
                   )}
                 </Button>
               </form>
+              )}
             </CardContent>
           </Card>
         </div>

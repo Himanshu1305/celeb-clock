@@ -115,11 +115,7 @@ export const Footer = () => {
               <li><Link to="/faq" className="text-muted-foreground hover:text-accent transition-colors">FAQ</Link></li>
               <li><Link to="/privacy" className="text-muted-foreground hover:text-accent transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="text-muted-foreground hover:text-accent transition-colors">Terms of Service</Link></li>
-              <li>
-                <a href="mailto:hello@bornclock.com" className="text-muted-foreground hover:text-accent transition-colors">
-                  Contact
-                </a>
-              </li>
+              <li><Link to="/contact" className="text-muted-foreground hover:text-accent transition-colors">Contact</Link></li>
               <li>
                 <button
                   onClick={() => setShowCookiePrefs(true)}

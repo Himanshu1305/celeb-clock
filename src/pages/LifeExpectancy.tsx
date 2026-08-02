@@ -1021,12 +1021,46 @@ const LifeExpectancy = () => {
         )}
 
 
-        {(phase === 'result' || phase === 'report') && (
-          <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
-        )}
+        {/* P8 — flagship content (always visible): answer-first, how it works, what it means */}
+        <section className="max-w-2xl mx-auto px-4 py-8 space-y-6" data-testid="le-depth">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">How long will I live?</h2>
+            <p className="text-gray-700 leading-relaxed">
+              No one can know for certain — but a life-expectancy estimate turns population data into a
+              personalised figure. This calculator starts from your country and age using WHO life tables and
+              UN World Population Prospects 2024 baselines, then adjusts up or down for the lifestyle and health
+              factors you enter — sleep, exercise, stress, diet, BMI, smoking and more. It's a science-informed
+              projection and a motivator, never a prediction of your actual lifespan.
+            </p>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">How it works</h2>
+            <p className="text-gray-700 leading-relaxed mb-2">
+              A <strong>life table</strong> is the demographer's core tool: for a given population it records the
+              probability of surviving each year of age, and from that computes the average remaining years at
+              birth — your baseline life expectancy. We take the WHO/UN baseline for your country and sex, then
+              apply a <strong>factor model</strong> drawn from peer-reviewed cohort studies: each habit carries an
+              evidence-based effect size (e.g. regular exercise, never smoking, good sleep add years; heavy
+              smoking, obesity and chronic high stress subtract them). Your answers move the baseline within
+              plausible bounds to produce your estimate.
+            </p>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">What your result does — and doesn't — mean</h2>
+            <p className="text-gray-700 leading-relaxed">
+              Your number is a <strong>statistical average for people like you</strong>, not a countdown. It can't
+              see accidents, a specific diagnosis, your genetics beyond what you tell it, or medical care you
+              receive — so treat it as a directional signal, most useful for the "what-if": watching how a habit
+              you can change shifts the estimate. It is not a diagnosis or medical advice. If you have real health
+              concerns, a qualified clinician who knows your history is the right guide.
+            </p>
+          </div>
+        </section>
+
+        <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
         <RelatedTools currentSlug="life" />
         <AuthorBio />
-        <div className="max-w-2xl mx-auto px-4 py-8 text-center">
+        <div className="max-w-2xl mx-auto px-4 py-4 text-center">
           <p className="text-xs text-gray-400 leading-relaxed">
             ⚠️ This calculator provides statistical projections based on WHO life tables and peer-reviewed research (UN World Population Prospects 2024). Results are for informational and motivational purposes only — not medical advice. Actual lifespan is influenced by many factors beyond any model's scope including disease, accidents, genetics, and environmental conditions. Consult a qualified healthcare professional for personalized medical guidance.
           </p>
