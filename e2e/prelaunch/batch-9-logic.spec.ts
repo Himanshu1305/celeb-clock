@@ -99,9 +99,8 @@ test.describe('FIX 3 — /api/contact send verification (delivery)', () => {
   });
   test.afterEach(() => { globalThis.fetch = realFetch; delete process.env.RESEND_API_KEY; delete process.env.ADMIN_EMAIL; });
 
-  test('Resend 200 → {ok:true}; TO=ADMIN_EMAIL, reply_to=submitter, FROM stays hello@', async () => {
+  test('Resend 200 → {ok:true}; TO=hello@bornclock.com, reply_to=submitter, FROM stays hello@', async () => {
     process.env.RESEND_API_KEY = 'test-key';
-    process.env.ADMIN_EMAIL = 'founder@real-inbox.test';
     let captured: { url: string; body: Record<string, string> } | undefined;
     globalThis.fetch = (async (url: string, init: RequestInit) => {
       captured = { url: String(url), body: JSON.parse(String(init.body)) };
@@ -111,7 +110,7 @@ test.describe('FIX 3 — /api/contact send verification (delivery)', () => {
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ ok: true });
     expect(captured!.url).toContain('api.resend.com/emails');
-    expect(captured!.body.to).toBe('founder@real-inbox.test');        // delivered to founder, NOT unverified hello@ inbound
+    expect(captured!.body.to).toBe('hello@bornclock.com');             // delivery address
     expect(captured!.body.reply_to).toBe('ada@bornclock-test.invalid'); // founder can reply straight to the user
     expect(captured!.body.from).toContain('hello@bornclock.com');       // verified sender unchanged
   });

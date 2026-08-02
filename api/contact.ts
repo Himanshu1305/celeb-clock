@@ -50,10 +50,6 @@ async function handler(request: Request): Promise<Response> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return json({ error: 'Email service not configured' }, 500);
 
-  // Deliver to the founder's real inbox (see header note). Read per-request, not at
-  // module load, because the Worker env shim isn't populated until a request is handled.
-  const toEmail = process.env.ADMIN_EMAIL || 'hello@bornclock.com';
-
   const subject = `[Contact · ${topic}] ${name}`;
   const html =
     `<p><strong>Topic:</strong> ${esc(topic)}</p>` +
@@ -64,7 +60,7 @@ async function handler(request: Request): Promise<Response> {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: FROM_EMAIL, to: toEmail, reply_to: email, subject, html }),
+      body: JSON.stringify({ from: FROM_EMAIL, to: 'hello@bornclock.com', reply_to: email, subject, html }),
     });
     if (!res.ok) {
       console.error('[contact] Resend failed', res.status, await res.text().catch(() => ''));
