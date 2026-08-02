@@ -69,10 +69,11 @@ test.describe('BATCH-7B P10 — weight on planets', () => {
   test('/weight-on-planets renders and computes a result for the default weight', async ({ page }) => {
     await page.goto('/weight-on-planets');
     await expect(page.getByRole('heading', { name: /weigh on other planets/i })).toBeVisible();
-    // Default 70 kg → results grid computes each body. "177 kg" is Jupiter's unique result
-    // (70 × 2.53 = 177.1) and "63.5 kg" is Venus (70 × 0.907) — proving the grid renders + computes.
-    await expect(page.getByText('177 kg')).toBeVisible();
-    await expect(page.getByText('63.5 kg')).toBeVisible();
+    // Default 70 kg → results grid computes each body. "177 kg" is Jupiter's result
+    // (70 × 2.53 = 177.1) and "63.5 kg" is Venus (70 × 0.907). BATCH-9 P5 added a "fitness era"
+    // blurb that also references the Jupiter figure, so scope to first().
+    await expect(page.getByText('177 kg').first()).toBeVisible();
+    await expect(page.getByText('63.5 kg').first()).toBeVisible();
   });
 });
 

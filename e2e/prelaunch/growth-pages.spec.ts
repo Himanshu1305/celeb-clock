@@ -65,7 +65,10 @@ test('month hub: single currency under geo IN + links every date incl. Feb 29', 
 test('fitness widget renders a rhythm result for a valid DOB', async ({ page }) => {
   await page.goto('/biorhythm-workout-calculator');
   await page.waitForLoadState('networkidle');
-  await page.locator('input[type="date"]').first().fill('1990-06-15');
+  // BATCH-8 P3: the fitness widget uses the shared DobInput (DD/MM/YYYY), not a native date.
+  await page.locator('#dob-day').first().fill('15');
+  await page.locator('#dob-month').first().fill('06');
+  await page.locator('#dob-year').first().fill('1990');
   await page.getByRole('button', { name: /rhythm|show|calculate|check|outline|week/i }).first().click();
   await expect(page.locator('body')).toContainText('Physical');
   await expect(page.locator('body')).toContainText('%');
@@ -134,9 +137,12 @@ test('getNationalDays: known day populated, dateless day empty', () => {
 test('fitness widget shows a clean message for a future DOB (no crash)', async ({ page }) => {
   await page.goto('/energy-forecast');
   await page.waitForLoadState('networkidle');
-  const future = new Date(); future.setFullYear(future.getFullYear() + 2);
-  await page.locator('input[type="date"]').first().fill(future.toISOString().slice(0, 10));
-  await page.getByRole('button', { name: /outline|week|rhythm|calculate|check/i }).first().click();
+  // BATCH-8 P3: DobInput fields; a future trio surfaces its own inline "future" alert.
+  const futureYear = String(new Date().getFullYear() + 2);
+  await page.locator('#dob-day').first().fill('01');
+  await page.locator('#dob-month').first().fill('01');
+  await page.locator('#dob-year').first().fill(futureYear);
+  await page.locator('#dob-year').first().blur(); // mark touched so inline validation shows
   await expect(page.locator('[role="alert"]')).toContainText(/future/i);
   // page still alive
   await expect(page.locator('h1').first()).toBeVisible();
