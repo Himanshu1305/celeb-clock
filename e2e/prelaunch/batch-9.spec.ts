@@ -73,6 +73,16 @@ test.describe('P9 — contact form', () => {
     await expect(page.getByText(/valid email address/i).first()).toBeVisible();
     await expect(page.getByTestId('contact-success')).toHaveCount(0);
   });
+  test('FIX 3: server 502 (Resend rejected) → error surfaced, NO false success', async ({ page }) => {
+    await page.route('**/api/contact', route => route.fulfill({ status: 502, contentType: 'application/json', body: JSON.stringify({ error: 'Could not send your message. Please email hello@bornclock.com directly.' }) }));
+    await page.goto('/contact'); await page.waitForLoadState('networkidle');
+    await page.locator('#name').fill('Ada Test');
+    await page.locator('#email').fill('ada@bornclock-test.invalid');
+    await page.locator('#message').fill('Hello, this is a test message.');
+    await page.getByRole('button', { name: /Send Message/i }).click();
+    await expect(page.getByText(/could not send/i).first()).toBeVisible(); // error toast, not success
+    await expect(page.getByTestId('contact-success')).toHaveCount(0);
+  });
 });
 
 // ── P3 — legacy review widget gone from /age-calculator ──────────────────────────

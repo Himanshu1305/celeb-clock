@@ -79,6 +79,15 @@ test.describe('P1 — DobInput realistic typing (homepage hero)', () => {
     // Year-first: dropdowns present (month + year); pick 1985.
     const selects = cal.locator('select');
     await expect(selects).toHaveCount(2);
+    // FIX 1 (label duplication): dropdown-buttons renders, per dropdown, BOTH a native <select>
+    // AND a redundant aria-hidden caption_label element that also prints the value → the founder
+    // saw doubled "January January" / "1990 1990" (shadcn styles the select visibly instead of
+    // overlaying it). The redundant month/year labels must be hidden (sr-only) so each renders
+    // exactly once via the select. Assert both redundant labels carry sr-only.
+    const redundant = cal.locator('.rdp-dropdown_month > [aria-hidden="true"], .rdp-dropdown_year > [aria-hidden="true"]');
+    await expect(redundant).toHaveCount(2);
+    await expect(redundant.nth(0)).toHaveClass(/sr-only/);
+    await expect(redundant.nth(1)).toHaveClass(/sr-only/);
     await selects.filter({ has: page.locator('option[value="1985"]') }).selectOption('1985');
     await selects.first().selectOption('2'); // March (0-indexed month)
     await cal.getByText('15', { exact: true }).first().click();

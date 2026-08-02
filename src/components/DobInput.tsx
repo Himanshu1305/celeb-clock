@@ -198,7 +198,15 @@ export function DobInput({ value, onChange, onValidChange, label = 'Date of birt
             selected={date ?? undefined}
             onSelect={pickDate}
             disabled={{ after: new Date() }}
-            classNames={{ caption_dropdowns: 'flex gap-1', dropdown: 'border rounded px-1 py-0.5 text-sm bg-white', vhidden: 'sr-only' }}
+            classNames={{
+              caption_dropdowns: 'flex gap-1',
+              dropdown: 'border rounded px-1 py-0.5 text-sm bg-white',
+              // dropdown-buttons renders month+year <select>s AND a text caption_label; the
+              // shadcn default styles caption_label visible → doubled "January January".
+              // Hide the redundant label (still SR-accessible) so each renders exactly once.
+              caption_label: 'sr-only',
+              vhidden: 'sr-only',
+            }}
           />
         </PopoverContent>
       </Popover>

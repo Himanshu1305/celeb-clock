@@ -3,6 +3,8 @@
  * No browser/servers.
  */
 import { test, expect } from '@playwright/test';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { loadWithReload, isChunkLoadError, type ReloadDeps } from '../../src/lib/lazyWithRetry';
 import { POST as contactPost } from '../../api/contact';
 import { INDIA_LIFE_EXPECTANCY } from '../../src/data/lifeExpectancyFacts';
@@ -85,6 +87,66 @@ test.describe('P9 — /api/contact handler', () => {
   test('GET is rejected', async () => {
     const res = await contactPost(new Request('https://x/api/contact', { method: 'GET' }));
     expect(res.status).toBe(405);
+  });
+});
+
+test.describe('FIX 3 — /api/contact send verification (delivery)', () => {
+  const realFetch = globalThis.fetch;
+  const sendReq = (ip: string) => new Request('https://x/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': ip },
+    body: JSON.stringify({ name: 'Ada', email: 'ada@bornclock-test.invalid', message: 'A real question about my report.' }),
+  });
+  test.afterEach(() => { globalThis.fetch = realFetch; delete process.env.RESEND_API_KEY; delete process.env.ADMIN_EMAIL; });
+
+  test('Resend 200 → {ok:true}; TO=ADMIN_EMAIL, reply_to=submitter, FROM stays hello@', async () => {
+    process.env.RESEND_API_KEY = 'test-key';
+    process.env.ADMIN_EMAIL = 'founder@real-inbox.test';
+    let captured: { url: string; body: Record<string, string> } | undefined;
+    globalThis.fetch = (async (url: string, init: RequestInit) => {
+      captured = { url: String(url), body: JSON.parse(String(init.body)) };
+      return new Response(JSON.stringify({ id: 'msg_abc123' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }) as typeof fetch;
+    const res = await contactPost(sendReq('10.0.0.1'));
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true });
+    expect(captured!.url).toContain('api.resend.com/emails');
+    expect(captured!.body.to).toBe('founder@real-inbox.test');        // delivered to founder, NOT unverified hello@ inbound
+    expect(captured!.body.reply_to).toBe('ada@bornclock-test.invalid'); // founder can reply straight to the user
+    expect(captured!.body.from).toContain('hello@bornclock.com');       // verified sender unchanged
+  });
+
+  test('Resend 5xx → 502 error, NO false success', async () => {
+    process.env.RESEND_API_KEY = 'test-key';
+    globalThis.fetch = (async () => new Response('upstream boom', { status: 500 })) as typeof fetch;
+    const res = await contactPost(sendReq('10.0.0.2'));
+    expect(res.status).toBe(502);
+    const j = await res.json();
+    expect(j.ok).toBeUndefined();
+    expect(j.error).toMatch(/could not send/i);
+  });
+
+  test('Resend 4xx (e.g. domain not verified) → 502 error, NO false success', async () => {
+    process.env.RESEND_API_KEY = 'test-key';
+    globalThis.fetch = (async () => new Response(JSON.stringify({ message: 'domain not verified' }), { status: 422 })) as typeof fetch;
+    const res = await contactPost(sendReq('10.0.0.3'));
+    expect(res.status).toBe(502);
+    expect((await res.json()).error).toMatch(/could not send/i);
+  });
+});
+
+test.describe('FIX 2 — prerendered homepage carries the science-card row', () => {
+  // The bug was a stale edge-cached shell WITHOUT the row. The prerendered artifact (source of
+  // truth for what gets deployed) must always contain the row + all three card hrefs; if this
+  // fails, the homepage will ship without the row regardless of edge caching.
+  test('dist/index.html contains the row section and all three card hrefs', () => {
+    let html: string;
+    try { html = readFileSync(resolve(process.cwd(), 'dist/index.html'), 'utf8'); }
+    catch { test.skip(true, 'dist/index.html not built — run after `npm run build`'); return; }
+    expect(html).toContain('science-card-row');
+    for (const href of ['/biological-age', '/country-comparison', '/energy-forecast']) {
+      expect(html).toContain(`href="${href}"`);
+    }
   });
 });
 

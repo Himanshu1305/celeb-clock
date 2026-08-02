@@ -120,7 +120,21 @@ export default {
     }
 
     if (!pathname.startsWith('/api/')) {
-      return env.ASSETS.fetch(request as Parameters<typeof env.ASSETS.fetch>[0]);
+      const assetRes = await env.ASSETS.fetch(request as Parameters<typeof env.ASSETS.fetch>[0]);
+      // Prevent STALE HTML at the Cloudflare edge. Prerendered page shells (index.html and
+      // per-route index.html) carry hashed JS/CSS references; when a deploy changes them, a
+      // long-cached HTML shell would keep pinning the OLD bundle — which is exactly how the
+      // homepage science-card row went missing on production (the edge served a pre-prerender
+      // shell that referenced a stale bundle, so even a hard refresh never showed the row).
+      // Force revalidation on HTML documents so every deploy takes effect immediately; hashed
+      // assets keep their own immutable caching untouched.
+      const ct = assetRes.headers.get('content-type') || '';
+      if (ct.includes('text/html')) {
+        const headers = new Headers(assetRes.headers);
+        headers.set('Cache-Control', 'no-cache, must-revalidate');
+        return new Response(assetRes.body, { status: assetRes.status, statusText: assetRes.statusText, headers });
+      }
+      return assetRes;
     }
 
     if (pathname === '/api/daily-email-cron') {
