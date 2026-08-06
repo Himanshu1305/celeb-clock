@@ -33,6 +33,9 @@ const FAQ = lazyWithReload(() => import("./pages/FAQ"));
 const Contact = lazyWithReload(() => import("./pages/Contact"));
 const NotFound = lazyWithReload(() => import("./pages/NotFound"));
 const AgeCalculatorPage = lazyWithReload(() => import("./pages/AgeCalculatorPage"));
+const AgeInDays = lazyWithReload(() => import("./pages/AgeInDays"));
+const AgeInSeconds = lazyWithReload(() => import("./pages/AgeInSeconds"));
+const BirthdayCountdown = lazyWithReload(() => import("./pages/BirthdayCountdown"));
 const TodaysBirthdaysPage = lazyWithReload(() => import("./pages/TodaysBirthdaysPage"));
 const NumerologyPage = lazyWithReload(() => import("./pages/NumerologyPage"));
 const PlanetaryAgePage = lazyWithReload(() => import("./pages/PlanetaryAgePage"));
@@ -110,6 +113,9 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/results" element={<BirthdayResults />} />
               <Route path="/age-calculator" element={<AgeCalculatorPage />} />
+              <Route path="/age-in-days" element={<AgeInDays />} />
+              <Route path="/age-in-seconds" element={<AgeInSeconds />} />
+              <Route path="/birthday-countdown" element={<BirthdayCountdown />} />
               <Route path="/todays-birthdays" element={<TodaysBirthdaysPage />} />
               <Route path="/numerology" element={<NumerologyPage />} />
               <Route path="/numerology/:number" element={<NumerologyNumber />} />
