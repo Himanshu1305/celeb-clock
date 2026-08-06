@@ -95,6 +95,10 @@ const ANSWER_ROUTES = [
   '/answers/what-is-life-expectancy',
   '/answers/how-does-stress-affect-life-expectancy',
   '/answers/how-many-days-until-my-birthday',
+  '/answers/what-is-my-moon-sign',
+  '/answers/what-affects-life-expectancy-most',
+  '/answers/what-is-epigenetic-age',
+  '/answers/what-is-vedic-astrology',
 ];
 
 const MONTH_NAMES_LOWER = [
@@ -154,6 +158,13 @@ export const STATIC_ROUTES = [
   '/best-time-to-work-out',
   '/energy-forecast',
   '/age-calculator',
+  // SEO Batch 1 — kept near the front so they prerender within the time budget.
+  '/age-in-days',
+  '/age-in-seconds',
+  '/birthday-countdown',
+  '/biological-age-vs-chronological-age',
+  '/life-expectancy-india-vs-usa',
+  '/sun-vs-moon-sign',
   '/todays-birthdays',
   '/numerology',
   ...NUMEROLOGY_NUMBERS.map(n => `/numerology/${n}`),

@@ -140,11 +140,21 @@ const ANSWERS = {
   'what-is-life-expectancy':               'What Is Life Expectancy and How Is It Calculated? | BornClock',
   'how-does-stress-affect-life-expectancy':'How Does Stress Affect Life Expectancy? The Science Explained | BornClock',
   'how-many-days-until-my-birthday':        'How Many Days Until My Birthday? Count the Exact Days | BornClock',
+  'what-is-my-moon-sign':                  'What Is My Moon Sign? How to Find It by Date of Birth | BornClock',
+  'what-affects-life-expectancy-most':     'What Affects Life Expectancy Most? What a Harvard Study Found | BornClock',
+  'what-is-epigenetic-age':                'What Is Epigenetic Age? The Science of Biological Aging | BornClock',
+  'what-is-vedic-astrology':               'What Is Vedic Astrology? Why Your Sign Is Probably Different | BornClock',
 };
 
 // ── Static pages ──────────────────────────────────────────────────────────────
 const STATIC = {
   '/age-calculator':        { title: 'Best Age Calculator Online — Exact Age in Seconds (Free)', desc: 'Free age calculator — find your exact age in years, months, days, hours and seconds. Plus celebrity birthday match, zodiac sign, and life expectancy. Instant, accurate, free.' },
+  '/age-in-days':           { title: 'Age in Days Calculator — How Many Days Old Are You?', desc: 'Find out exactly how many days old you are — updated live, including leap years. Most people are surprised how large the number is. Free, instant, no sign-up.' },
+  '/age-in-seconds':        { title: 'Age in Seconds Calculator — How Many Seconds Have You Been Alive?', desc: 'Calculate exactly how many seconds old you are — live, updating every second. Most 30-year-olds have passed 946 million seconds. Free, instant, no sign-up.' },
+  '/birthday-countdown':    { title: 'Birthday Countdown — How Many Days Until Your Next Birthday?', desc: 'Find out exactly how many days until your next birthday — down to the day. See what day of the week it falls on and who shares it. Free, no sign-up.' },
+  '/biological-age-vs-chronological-age': { title: 'Biological Age vs Chronological Age — Which One Actually Matters?', desc: 'Chronological age counts the years. Biological age measures how your body is actually aging. The two can differ by over a decade — and only one of them can change.' },
+  '/life-expectancy-india-vs-usa': { title: 'Life Expectancy India vs USA — The 6.6-Year Gap Explained', desc: "India's life expectancy is 70.9 years; the USA's is 77.5. The gap has specific causes — and India is closing it faster than most people realize." },
+  '/sun-vs-moon-sign':      { title: 'Sun Sign vs Moon Sign — Which One Actually Describes You?', desc: "Your sun sign is your public face. Your moon sign is your 2am self. Most people find their moon sign more accurate once they discover it. Here's why." },
   '/todays-birthdays':      { title: 'Famous Birthdays Today | BornClock', desc: "See which celebrities share today's birthday. Ranked by global recognition — athletes, actors, politicians, musicians. Updated daily at BornClock." },
   '/numerology':            { title: 'Numerology Calculator — Your Life Path Number & Meaning | BornClock', desc: 'Calculate your Numerology Life Path number from your date of birth. Full guides for Life Path 1–9, Master Numbers 11, 22, 33. Meaning, traits, famous people.' },
   '/generation':            { title: 'Which Generation Are You? — Complete Generational Guide | BornClock', desc: 'Find your generation — Baby Boomer, Gen X, Millennial, Gen Z, or Gen Alpha — from your birth year. Characteristics, defining events, and cultural context.' },
