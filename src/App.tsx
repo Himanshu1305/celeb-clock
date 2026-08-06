@@ -78,6 +78,10 @@ const WhatIsBMI = lazyWithReload(() => import('@/pages/answers/WhatIsBMI'));
 const WhatIsLifeExpectancy = lazyWithReload(() => import('@/pages/answers/WhatIsLifeExpectancy'));
 const HowDoesStressAffectLifeExpectancy = lazyWithReload(() => import('@/pages/answers/HowDoesStressAffectLifeExpectancy'));
 const HowManyDaysUntilMyBirthday = lazyWithReload(() => import('@/pages/answers/HowManyDaysUntilMyBirthday'));
+const WhatIsMyMoonSign = lazyWithReload(() => import('@/pages/answers/WhatIsMyMoonSign'));
+const WhatAffectsLifeExpectancyMost = lazyWithReload(() => import('@/pages/answers/WhatAffectsLifeExpectancyMost'));
+const WhatIsEpigeneticAge = lazyWithReload(() => import('@/pages/answers/WhatIsEpigeneticAge'));
+const WhatIsVedicAstrology = lazyWithReload(() => import('@/pages/answers/WhatIsVedicAstrology'));
 const TarotByBirthday = lazyWithReload(() => import('@/pages/TarotByBirthday'));
 const MoonSignPage = lazyWithReload(() => import('@/pages/MoonSignPage'));
 const NameNumerologyPage = lazyWithReload(() => import('@/pages/NameNumerologyPage'));
@@ -181,6 +185,10 @@ const App = () => (
               <Route path="/answers/what-is-life-expectancy" element={<WhatIsLifeExpectancy />} />
               <Route path="/answers/how-does-stress-affect-life-expectancy" element={<HowDoesStressAffectLifeExpectancy />} />
               <Route path="/answers/how-many-days-until-my-birthday" element={<HowManyDaysUntilMyBirthday />} />
+              <Route path="/answers/what-is-my-moon-sign" element={<WhatIsMyMoonSign />} />
+              <Route path="/answers/what-affects-life-expectancy-most" element={<WhatAffectsLifeExpectancyMost />} />
+              <Route path="/answers/what-is-epigenetic-age" element={<WhatIsEpigeneticAge />} />
+              <Route path="/answers/what-is-vedic-astrology" element={<WhatIsVedicAstrology />} />
               <Route path="/tarot-card-by-birthday" element={<TarotByBirthday />} />
               <Route path="/moon-sign" element={<MoonSignPage />} />
               <Route path="/name-numerology" element={<NameNumerologyPage />} />
