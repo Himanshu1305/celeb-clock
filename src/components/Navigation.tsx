@@ -46,6 +46,11 @@ const exploreItems = [
   { path: '/compatibility', label: 'Compatibility', emoji: '💕' },
   { path: '/weight-on-planets', label: 'Weight on Planets', emoji: '🪐' },
   { path: '/gift', label: 'Gift a Report', emoji: '🎁' },
+  { path: '/age-in-days', label: 'Age in Days', emoji: '📅' },
+  { path: '/age-in-seconds', label: 'Age in Seconds', emoji: '⏱️' },
+  { path: '/birthday-countdown', label: 'Birthday Countdown', emoji: '🎂' },
+  { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age', emoji: '🧬' },
+  { path: '/life-expectancy-india-vs-usa', label: 'India vs USA Life Expectancy', emoji: '🌍' },
 ];
 
 const astrologyItems = [
@@ -57,6 +62,7 @@ const astrologyItems = [
   { path: '/compatibility', label: 'Compatibility Calculator', emoji: '💕' },
   { path: '/birthday', label: 'Birthday Personalities', emoji: '🎂' },
   { path: '/rashi-ratna', label: 'Rashi Ratna', emoji: '💎' },
+  { path: '/sun-vs-moon-sign', label: 'Sun Sign vs Moon Sign', emoji: '☀️' },
 ];
 
 export const Navigation = () => {
