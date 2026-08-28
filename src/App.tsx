@@ -53,6 +53,8 @@ const HindiLifeExpectancy = lazyWithReload(() => import("./pages/HindiLifeExpect
 const HindiNumerology = lazyWithReload(() => import("./pages/HindiNumerology"));
 const HindiZodiac = lazyWithReload(() => import("./pages/HindiZodiac"));
 const HindiBiologicalAge = lazyWithReload(() => import("./pages/HindiBiologicalAge"));
+const Widget = lazyWithReload(() => import("./pages/Widget"));
+const EmbedPage = lazyWithReload(() => import("./pages/EmbedPage"));
 const SunVsMoonSign = lazyWithReload(() => import("./pages/SunVsMoonSign"));
 const TodaysBirthdaysPage = lazyWithReload(() => import("./pages/TodaysBirthdaysPage"));
 const NumerologyPage = lazyWithReload(() => import("./pages/NumerologyPage"));
@@ -160,6 +162,8 @@ const App = () => (
               <Route path="/numerology-hindi" element={<HindiNumerology />} />
               <Route path="/rashifal-by-date-of-birth" element={<HindiZodiac />} />
               <Route path="/biological-age-hindi" element={<HindiBiologicalAge />} />
+              <Route path="/widget/age-calculator" element={<Widget />} />
+              <Route path="/embed" element={<EmbedPage />} />
               <Route path="/sun-vs-moon-sign" element={<SunVsMoonSign />} />
               <Route path="/todays-birthdays" element={<TodaysBirthdaysPage />} />
               <Route path="/numerology" element={<NumerologyPage />} />

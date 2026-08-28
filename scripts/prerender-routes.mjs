@@ -181,6 +181,9 @@ export const STATIC_ROUTES = [
   '/numerology-hindi',
   '/rashifal-by-date-of-birth',
   '/biological-age-hindi',
+  // SEO Batch 2 (P2-C) — embeddable widget landing + the widget frame itself.
+  '/embed',
+  '/widget/age-calculator',
   '/sun-vs-moon-sign',
   '/todays-birthdays',
   '/numerology',

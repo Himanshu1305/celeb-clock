@@ -61,6 +61,7 @@ const exploreItems = [
   { path: '/life-expectancy-china', label: 'Life Expectancy in China', emoji: '🇨🇳' },
   { path: '/life-expectancy-singapore', label: 'Life Expectancy in Singapore', emoji: '🇸🇬' },
   { path: '/life-expectancy-brazil', label: 'Life Expectancy in Brazil', emoji: '🇧🇷' },
+  { path: '/embed', label: 'Embed Our Widget', emoji: '🔗' },
 ];
 
 const astrologyItems = [
