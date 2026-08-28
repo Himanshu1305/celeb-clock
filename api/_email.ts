@@ -191,65 +191,6 @@ ${divider()}
   return { subject, html };
 }
 
-function paymentConfirmationEmail(name: string, plan: string, amount: string, nextBilling: string): { subject: string; html: string } {
-  const subjects = [
-    `You're in, ${name}. Premium is live. 🎉`,
-    `Payment confirmed — welcome to the inner circle, ${name}`,
-    `${name}, your longevity journey just levelled up 🚀`,
-    `Premium activated, ${name} — let's get to work`,
-  ];
-  const subject = subjects[Math.floor(Math.random() * subjects.length)];
-  const html = baseTemplate(`
-<div style="text-align:center;margin-bottom:28px;">
-  <div style="font-size:52px;margin-bottom:12px;">🎉</div>
-  <h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:#111827;">
-    You're premium, ${name}.
-  </h1>
-  <p style="margin:0;font-size:15px;color:#6b7280;">
-    The full picture of your health and longevity is now unlocked.
-  </p>
-</div>
-
-<div style="background:#f0fdf4;border-radius:10px;padding:20px;margin-bottom:24px;">
-  <table width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-      <td style="font-size:13px;color:#6b7280;padding:5px 0;">Plan</td>
-      <td style="font-size:14px;color:#111827;font-weight:600;text-align:right;padding:5px 0;">${plan}</td>
-    </tr>
-    <tr>
-      <td style="font-size:13px;color:#6b7280;padding:5px 0;">Amount charged</td>
-      <td style="font-size:14px;color:#111827;font-weight:600;text-align:right;padding:5px 0;">${amount}</td>
-    </tr>
-    <tr>
-      <td style="font-size:13px;color:#6b7280;padding:5px 0;">Next billing</td>
-      <td style="font-size:14px;color:#111827;font-weight:600;text-align:right;padding:5px 0;">${nextBilling}</td>
-    </tr>
-  </table>
-</div>
-
-<p style="font-size:14px;font-weight:600;color:#111827;margin:0 0 12px;">
-  Three things to do right now:
-</p>
-
-<table width="100%" cellpadding="0" cellspacing="0">
-  ${featureItem('1️⃣', '<strong>Open the What-If Simulator</strong> — adjust your sleep by 1 hour and watch the forecast change')}
-  ${featureItem('2️⃣', '<strong>Ask your AI Longevity Coach</strong> — "What\'s the single biggest change I should make?"')}
-  ${featureItem('3️⃣', '<strong>Generate a Birthday Report</strong> — gift one to someone whose birthday is coming up')}
-</table>
-
-${divider()}
-
-<div style="text-align:center;">
-  ${primaryButton('Explore Premium Now →', `${BASE_URL}/life-expectancy`)}
-</div>
-
-<p style="margin:16px 0 0;font-size:13px;color:#9ca3af;text-align:center;">
-  Questions? Just reply to this email. We read every one.
-</p>
-`);
-  return { subject, html };
-}
-
 function cancellationEmail(name: string, accessUntil: string): { subject: string; html: string } {
   const subjects = [
     `Cancelled, ${name}. Here's what you still have.`,
@@ -478,62 +419,6 @@ ${divider()}
   };
 }
 
-function paymentReceiptEmail(params: {
-  name: string;
-  product: string;
-  amountFormatted: string;
-  date: string;
-  reportLink?: string;
-}): { subject: string; html: string } {
-  const { name, product, amountFormatted, date, reportLink } = params;
-  const isReport = product === 'birthday_report';
-  return {
-    subject: `Payment confirmed — ${isReport ? 'Birthday Blueprint' : 'BornClock Premium'}, ${name}`,
-    html: baseTemplate(`
-<h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#111827;">
-  Payment confirmed ✓
-</h1>
-<p style="margin:0 0 24px;font-size:15px;color:#6b7280;">
-  Here's your receipt, ${name}.
-</p>
-<div style="background:#f9fafb;border-radius:10px;padding:20px;margin-bottom:24px;">
-  <table width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-      <td style="font-size:13px;color:#6b7280;padding:5px 0;">Product</td>
-      <td style="font-size:14px;color:#111827;font-weight:600;text-align:right;padding:5px 0;">
-        ${isReport ? 'Birthday Blueprint' : 'BornClock Premium Subscription'}
-      </td>
-    </tr>
-    <tr>
-      <td style="font-size:13px;color:#6b7280;padding:5px 0;">Amount</td>
-      <td style="font-size:14px;color:#111827;font-weight:600;text-align:right;padding:5px 0;">${amountFormatted}</td>
-    </tr>
-    <tr>
-      <td style="font-size:13px;color:#6b7280;padding:5px 0;">Date</td>
-      <td style="font-size:14px;color:#111827;font-weight:600;text-align:right;padding:5px 0;">${date}</td>
-    </tr>
-  </table>
-</div>
-${isReport && reportLink ? `
-<p style="font-size:14px;font-weight:600;color:#111827;margin:0 0 8px;">Your report link:</p>
-<div style="background:#f0f9ff;border-radius:10px;padding:16px 20px;margin-bottom:16px;word-break:break-all;">
-  <a href="${reportLink}" style="font-size:14px;color:#4F46E5;text-decoration:none;">${reportLink}</a>
-</div>
-<p style="font-size:12px;color:#9ca3af;margin:0 0 24px;">
-  This link is live for your recipient — reports unviewed for 12 months are removed.
-</p>
-` : ''}
-<div style="text-align:center;">
-  ${primaryButton(isReport ? 'Open Birthday Report →' : 'Explore Premium →', reportLink || `${BASE_URL}/life-expectancy`)}
-</div>
-${divider()}
-<p style="margin:0;font-size:12px;color:#9ca3af;text-align:center;">
-  Questions? Email <a href="mailto:hello@bornclock.com" style="color:#9ca3af;">hello@bornclock.com</a> · Transaction records are retained for accounting purposes.
-</p>
-`),
-  };
-}
-
 function reportLockedEmail(params: {
   name: string;
   recipientName: string;
@@ -632,11 +517,10 @@ export async function sendEmailDirect(payload: Record<string, unknown>): Promise
   const {
     type, to, name,
     trialDays, hoursLeft,
-    plan, amount, nextBilling,
     accessUntil,
     week, zodiacSign, lifePathNumber,
     userEmail, userId, requestedAt,
-    product, amountFormatted, date, reportLink,
+    reportLink,
     recipientName,
   } = payload as Record<string, any>;
 
@@ -650,9 +534,6 @@ export async function sendEmailDirect(payload: Record<string, unknown>): Promise
     case 'trial_expiry':
       emailContent = trialExpiryEmail(name, hoursLeft);
       break;
-    case 'payment_confirmation':
-      emailContent = paymentConfirmationEmail(name, plan, amount, nextBilling);
-      break;
     case 'cancellation':
       emailContent = cancellationEmail(name, accessUntil);
       break;
@@ -664,9 +545,6 @@ export async function sendEmailDirect(payload: Record<string, unknown>): Promise
       break;
     case 'premium_activated':
       emailContent = premiumActivatedEmail(name);
-      break;
-    case 'payment_receipt':
-      emailContent = paymentReceiptEmail({ name, product, amountFormatted, date, reportLink });
       break;
     case 'report_locked':
       emailContent = reportLockedEmail({ name, recipientName, reportLink });

@@ -22,15 +22,6 @@ export const EmailService = {
   sendTrialExpiry: (to: string, name: string, hoursLeft = 24) =>
     sendEmail({ type: 'trial_expiry', to, name, hoursLeft }),
 
-  sendPaymentConfirmation: (
-    to: string,
-    name: string,
-    plan: string,
-    amount: string,
-    nextBilling: string
-  ) =>
-    sendEmail({ type: 'payment_confirmation', to, name, plan, amount, nextBilling }),
-
   sendCancellation: (to: string, name: string, accessUntil: string) =>
     sendEmail({ type: 'cancellation', to, name, accessUntil }),
 

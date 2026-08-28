@@ -76,8 +76,8 @@ async function handler(request: Request): Promise<Response> {
   }
 
   const VALID_TYPES = new Set([
-    'welcome', 'trial_expiry', 'payment_confirmation', 'cancellation',
-    'nudge_free', 'nudge_premium', 'premium_activated', 'payment_receipt',
+    'welcome', 'trial_expiry', 'cancellation',
+    'nudge_free', 'nudge_premium', 'premium_activated',
     'report_locked', 'report_created', 'data_deletion_request', 'account_deleted',
   ]);
   if (!VALID_TYPES.has(type)) {

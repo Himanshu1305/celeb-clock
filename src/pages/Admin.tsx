@@ -1154,7 +1154,7 @@ export default function Admin() {
             {[
               { name: 'Welcome',              trigger: 'On signup',                 type: 'welcome' },
               { name: 'Trial Expiry Warning', trigger: 'Day 6 of trial (cron)',     type: 'trial_expiry' },
-              { name: 'Payment Confirmation', trigger: 'After Razorpay success',    type: 'payment_confirmation' },
+              { name: 'Premium Activated',    trigger: 'Subscription activated (webhook)', type: 'premium_activated' },
               { name: 'Cancellation',         trigger: 'Razorpay webhook',          type: 'cancellation' },
               { name: 'Free User Nudge',      trigger: 'Day 7 inactive (cron)',     type: 'nudge_free' },
               { name: 'Premium User Nudge',   trigger: 'Day 7 inactive (cron)',     type: 'nudge_premium' },
