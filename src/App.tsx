@@ -38,6 +38,16 @@ const AgeInSeconds = lazyWithReload(() => import("./pages/AgeInSeconds"));
 const BirthdayCountdown = lazyWithReload(() => import("./pages/BirthdayCountdown"));
 const BiologicalAgeVsChronologicalAge = lazyWithReload(() => import("./pages/BiologicalAgeVsChronologicalAge"));
 const LifeExpectancyIndiaVsUsa = lazyWithReload(() => import("./pages/LifeExpectancyIndiaVsUsa"));
+const LifeExpectancyIndia = lazyWithReload(() => import("./pages/LifeExpectancyIndia"));
+const LifeExpectancyUSA = lazyWithReload(() => import("./pages/LifeExpectancyUSA"));
+const LifeExpectancyJapan = lazyWithReload(() => import("./pages/LifeExpectancyJapan"));
+const LifeExpectancyUK = lazyWithReload(() => import("./pages/LifeExpectancyUK"));
+const LifeExpectancyAustralia = lazyWithReload(() => import("./pages/LifeExpectancyAustralia"));
+const LifeExpectancyCanada = lazyWithReload(() => import("./pages/LifeExpectancyCanada"));
+const LifeExpectancyGermany = lazyWithReload(() => import("./pages/LifeExpectancyGermany"));
+const LifeExpectancyChina = lazyWithReload(() => import("./pages/LifeExpectancyChina"));
+const LifeExpectancySingapore = lazyWithReload(() => import("./pages/LifeExpectancySingapore"));
+const LifeExpectancyBrazil = lazyWithReload(() => import("./pages/LifeExpectancyBrazil"));
 const SunVsMoonSign = lazyWithReload(() => import("./pages/SunVsMoonSign"));
 const TodaysBirthdaysPage = lazyWithReload(() => import("./pages/TodaysBirthdaysPage"));
 const NumerologyPage = lazyWithReload(() => import("./pages/NumerologyPage"));
@@ -130,6 +140,16 @@ const App = () => (
               <Route path="/birthday-countdown" element={<BirthdayCountdown />} />
               <Route path="/biological-age-vs-chronological-age" element={<BiologicalAgeVsChronologicalAge />} />
               <Route path="/life-expectancy-india-vs-usa" element={<LifeExpectancyIndiaVsUsa />} />
+              <Route path="/life-expectancy-india" element={<LifeExpectancyIndia />} />
+              <Route path="/life-expectancy-usa" element={<LifeExpectancyUSA />} />
+              <Route path="/life-expectancy-japan" element={<LifeExpectancyJapan />} />
+              <Route path="/life-expectancy-uk" element={<LifeExpectancyUK />} />
+              <Route path="/life-expectancy-australia" element={<LifeExpectancyAustralia />} />
+              <Route path="/life-expectancy-canada" element={<LifeExpectancyCanada />} />
+              <Route path="/life-expectancy-germany" element={<LifeExpectancyGermany />} />
+              <Route path="/life-expectancy-china" element={<LifeExpectancyChina />} />
+              <Route path="/life-expectancy-singapore" element={<LifeExpectancySingapore />} />
+              <Route path="/life-expectancy-brazil" element={<LifeExpectancyBrazil />} />
               <Route path="/sun-vs-moon-sign" element={<SunVsMoonSign />} />
               <Route path="/todays-birthdays" element={<TodaysBirthdaysPage />} />
               <Route path="/numerology" element={<NumerologyPage />} />

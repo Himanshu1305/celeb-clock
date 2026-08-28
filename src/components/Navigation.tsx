@@ -51,6 +51,16 @@ const exploreItems = [
   { path: '/birthday-countdown', label: 'Birthday Countdown', emoji: '🎂' },
   { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age', emoji: '🧬' },
   { path: '/life-expectancy-india-vs-usa', label: 'India vs USA Life Expectancy', emoji: '🌍' },
+  { path: '/life-expectancy-india', label: 'Life Expectancy in India', emoji: '🇮🇳' },
+  { path: '/life-expectancy-usa', label: 'Life Expectancy in USA', emoji: '🇺🇸' },
+  { path: '/life-expectancy-japan', label: 'Life Expectancy in Japan', emoji: '🇯🇵' },
+  { path: '/life-expectancy-uk', label: 'Life Expectancy in UK', emoji: '🇬🇧' },
+  { path: '/life-expectancy-australia', label: 'Life Expectancy in Australia', emoji: '🇦🇺' },
+  { path: '/life-expectancy-canada', label: 'Life Expectancy in Canada', emoji: '🇨🇦' },
+  { path: '/life-expectancy-germany', label: 'Life Expectancy in Germany', emoji: '🇩🇪' },
+  { path: '/life-expectancy-china', label: 'Life Expectancy in China', emoji: '🇨🇳' },
+  { path: '/life-expectancy-singapore', label: 'Life Expectancy in Singapore', emoji: '🇸🇬' },
+  { path: '/life-expectancy-brazil', label: 'Life Expectancy in Brazil', emoji: '🇧🇷' },
 ];
 
 const astrologyItems = [
