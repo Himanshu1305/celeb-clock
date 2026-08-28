@@ -1035,6 +1035,23 @@ const CountryComparison = () => {
           </div>
         </section>
 
+        {/* P1-H internal linking */}
+        <section className="max-w-5xl mx-auto mb-12">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Related Topics</h2>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
+              { path: '/biological-age', label: 'Biological Age Test' },
+              { path: '/coach', label: 'Longevity Coach' },
+              { path: '/life-expectancy-india', label: 'Life Expectancy in India' },
+              { path: '/life-expectancy-usa', label: 'Life Expectancy in USA' },
+              { path: '/life-expectancy-japan', label: 'Life Expectancy in Japan' },
+            ].map((t) => (
+              <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground transition-colors">{t.label}</Link>
+            ))}
+          </div>
+        </section>
+
       </div>
       <Footer />
     </div>

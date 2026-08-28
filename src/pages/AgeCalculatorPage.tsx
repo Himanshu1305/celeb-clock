@@ -106,6 +106,22 @@ const AgeCalculatorPage = () => {
           </div>
         </section>
 
+        {/* P1-H internal linking */}
+        <section className="max-w-3xl mx-auto mb-12 px-4">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Related Topics</h2>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { path: '/age-in-days', label: 'Age in Days' },
+              { path: '/age-in-seconds', label: 'Age in Seconds' },
+              { path: '/birthday-countdown', label: 'Birthday Countdown' },
+              { path: '/biological-age', label: 'Biological Age Test' },
+              { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
+            ].map((t) => (
+              <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground transition-colors">{t.label}</Link>
+            ))}
+          </div>
+        </section>
+
         <RelatedTools currentSlug="age" />
         <AuthorBio />
       </div>

@@ -286,6 +286,10 @@ export default function MoonSignPage() {
                 { text: 'Vedic Zodiac (Rashi)', href: '/vedic-zodiac' },
                 { text: 'Compatibility Calculator', href: '/compatibility' },
                 { text: 'Numerology Calculator', href: '/numerology' },
+                { text: 'Western Zodiac Signs', href: '/zodiac' },
+                { text: 'Sun Sign vs Moon Sign', href: '/sun-vs-moon-sign' },
+                { text: 'What Is My Moon Sign?', href: '/answers/what-is-my-moon-sign' },
+                { text: 'What Is Vedic Astrology?', href: '/answers/what-is-vedic-astrology' },
               ].map(item => (
                 <Link key={item.href} to={item.href}
                   className="p-3 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-sm text-gray-700 hover:text-blue-700 transition-colors">

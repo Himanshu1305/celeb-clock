@@ -106,6 +106,19 @@ export default function WhatIsMyBiologicalAge() {
               <Link to="/answers/how-does-stress-affect-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ How does stress affect life expectancy?</Link>
             </div>
           </div>
+          <div className="mt-8 pt-6 border-t border-gray-100">
+            <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Tools</p>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { path: '/biological-age', label: 'Biological Age Test' },
+                { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
+                { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age' },
+                { path: '/answers/what-is-epigenetic-age', label: 'What Is Epigenetic Age?' },
+              ].map((t) => (
+                <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-gray-700 hover:text-indigo-700 transition-colors">{t.label}</Link>
+              ))}
+            </div>
+          </div>
         </div>
       </AnswerLayout>
     </>

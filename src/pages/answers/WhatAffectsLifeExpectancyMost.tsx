@@ -17,6 +17,7 @@ const RELATED = [
   { path: '/biological-age', label: 'Biological Age Test' },
   { path: '/coach', label: 'Longevity Coach' },
   { path: '/country-comparison', label: 'Country Comparison' },
+  { path: '/answers/what-is-epigenetic-age', label: 'What Is Epigenetic Age?' },
 ];
 
 export default function WhatAffectsLifeExpectancyMost() {

@@ -571,6 +571,7 @@ export default function CompatibilityPage() {
                 { text: 'Vedic Zodiac', href: '/vedic-zodiac' },
                 { text: 'Moon Sign Calculator', href: '/moon-sign' },
                 { text: 'Tarot by Birthday', href: '/tarot-card-by-birthday' },
+                { text: 'Numerology Calculator', href: '/numerology' },
               ].map(item => (
                 <Link key={item.href} to={item.href}
                   className="p-3 rounded-xl border border-gray-200 hover:border-rose-300 hover:bg-rose-50 text-sm text-gray-700 hover:text-rose-700 transition-colors">

@@ -238,6 +238,22 @@ export default function Zodiac() {
         <div className="p-4 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl text-sm text-blue-700 dark:text-blue-300">
           <strong>About This Content:</strong> Zodiac history draws on Campion, N. (2009), <em>A History of Western Astrology</em>, Continuum; and Sachs, A. (1952), Babylonian Horoscopes, <em>Journal of Cuneiform Studies</em>. Mythology sources: Grimal, P. (1951), <em>The Dictionary of Classical Mythology</em>. Science section sources: Forer (1949), Jung (1952), Chotai et al. (2003). Zodiac signs are a cultural and entertainment system — BornClock does not endorse predictive claims.
         </div>
+
+        {/* P1-H internal linking */}
+        <section className="mt-8">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Related Topics</h2>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { path: '/moon-sign', label: 'Moon Sign Calculator' },
+              { path: '/compatibility', label: 'Compatibility' },
+              { path: '/vedic-zodiac', label: 'Vedic Zodiac' },
+              { path: '/sun-vs-moon-sign', label: 'Sun vs Moon Sign' },
+              { path: '/numerology', label: 'Numerology' },
+            ].map((t) => (
+              <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground transition-colors">{t.label}</Link>
+            ))}
+          </div>
+        </section>
       </div>
 
       <Footer />

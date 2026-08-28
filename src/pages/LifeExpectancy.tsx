@@ -1059,6 +1059,23 @@ const LifeExpectancy = () => {
 
         <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
         <RelatedTools currentSlug="life" />
+        {/* P1-H internal linking */}
+        <section className="max-w-3xl mx-auto mb-12 px-4">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Related Topics</h2>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { path: '/biological-age', label: 'Biological Age Test' },
+              { path: '/country-comparison', label: 'Country Comparison' },
+              { path: '/coach', label: 'Longevity Coach' },
+              { path: '/life-expectancy-india', label: 'Life Expectancy in India' },
+              { path: '/life-expectancy-usa', label: 'Life Expectancy in USA' },
+              { path: '/life-expectancy-japan', label: 'Life Expectancy in Japan' },
+              { path: '/how-it-works', label: 'How It Works' },
+            ].map((t) => (
+              <a key={t.path} href={t.path} className="text-sm px-3 py-1.5 rounded-full border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground transition-colors">{t.label}</a>
+            ))}
+          </div>
+        </section>
         <AuthorBio />
         <div className="max-w-2xl mx-auto px-4 py-4 text-center">
           <p className="text-xs text-gray-400 leading-relaxed">

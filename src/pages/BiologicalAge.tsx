@@ -1537,6 +1537,22 @@ const BiologicalAge = () => {
             <MedicalDisclaimer />
           </div>
         )}
+
+        {/* P1-H internal linking */}
+        <section className="max-w-3xl mx-auto mb-12 px-4">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Related Topics</h2>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
+              { path: '/country-comparison', label: 'Country Comparison' },
+              { path: '/coach', label: 'Longevity Coach' },
+              { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age' },
+              { path: '/answers/what-is-my-biological-age', label: 'What Is My Biological Age?' },
+            ].map((t) => (
+              <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-gray-700 hover:text-indigo-700 transition-colors">{t.label}</Link>
+            ))}
+          </div>
+        </section>
       </div>
       <Footer />
     </div>

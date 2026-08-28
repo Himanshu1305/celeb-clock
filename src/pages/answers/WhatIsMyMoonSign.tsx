@@ -25,6 +25,7 @@ const RELATED = [
   { path: '/compatibility', label: 'Compatibility' },
   { path: '/sun-vs-moon-sign', label: 'Sun vs Moon Sign' },
   { path: '/vedic-zodiac', label: 'Vedic Zodiac' },
+  { path: '/answers/what-is-vedic-astrology', label: 'What Is Vedic Astrology?' },
 ];
 
 export default function WhatIsMyMoonSign() {

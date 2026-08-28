@@ -18,6 +18,7 @@ const FAQ_ITEMS = [
 
 const RELATED = [
   { path: '/age-calculator', label: 'Age Calculator' },
+  { path: '/age-in-seconds', label: 'Age in Seconds' },
   { path: '/birthday-countdown', label: 'Birthday Countdown' },
 ];
 
