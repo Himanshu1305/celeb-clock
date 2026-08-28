@@ -211,7 +211,14 @@ async function handler(request: Request): Promise<Response> {
         subscription_status: 'active',
         updated_at: new Date().toISOString(),
       })
-      .eq('id', user_id);
+      // INVARIANT: grant premium keyed on `user_id` (the auth link), NEVER `id`.
+      // `profiles.id` is a RANDOM synthetic PK (handle_new_user inserts
+      // (user_id,…) VALUES (NEW.id,…) and lets id default gen_random_uuid()),
+      // so in the live DB id != user_id for every row. Keying on `id` here
+      // silently matched ZERO rows — a paid subscriber never became premium.
+      // The read side (useAuth.ts) and the invoice block below both key on
+      // `user_id`; the grant MUST use the same column. See BORNCLOCK_AUDIT_FIXES.md.
+      .eq('user_id', user_id);
 
     if (profileErr) {
       console.error('[verify-payment] profile update error', profileErr);

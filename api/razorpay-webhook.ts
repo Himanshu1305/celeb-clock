@@ -120,7 +120,14 @@ async function handler(request: Request): Promise<Response> {
           subscription_status: 'active',
           premium_until: endDate?.toISOString() ?? null,
           updated_at: new Date().toISOString(),
-        }).eq('id', userId);
+        })
+        // INVARIANT: key on `user_id`, not `id`. profiles.id is a random synthetic
+        // PK (id != user_id for every live row), so keying the grant on the `id`
+        // column matched zero rows and renewals never refreshed premium status. The
+        // cancelled/expired/halted handlers below correctly re-select by
+        // subscription_id and update by that row's real `id` PK — only this
+        // activated/charged grant, which resolves userId from notes/email, was wrong.
+        .eq('user_id', userId);
 
         // Record payment row (amount in paise → store as-is)
         if (payment?.id) {
