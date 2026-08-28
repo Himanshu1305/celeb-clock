@@ -78,8 +78,14 @@ async function handler(request: Request): Promise<Response> {
       console.log('[webhook] duplicate event ignored', eventId);
       return json({ received: true, duplicate: true });
     }
-    console.error('[webhook] failed to record event', insertErr);
-    // Proceed anyway — better to process twice than drop
+    // Any OTHER insert failure (transient DB error, etc.) means we could NOT
+    // record this event, so the idempotency guard is not in place. Processing
+    // anyway is unsafe: the payments upsert is idempotent but the profiles
+    // premium/premium_until update is not, so a later re-delivery of the SAME
+    // event would apply it twice. Return 5xx instead — Razorpay retries, and
+    // once the insert succeeds the guard covers the (now single) processing.
+    console.error('[webhook] failed to record event — returning 500 so Razorpay retries', insertErr);
+    return json({ error: 'Failed to record event; Razorpay should retry' }, 500);
   }
 
   try {
