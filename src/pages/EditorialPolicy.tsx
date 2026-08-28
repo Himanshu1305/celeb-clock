@@ -44,6 +44,22 @@ const EditorialPolicy = () => (
             <h2 className="text-xl font-semibold text-foreground mb-2">Independence</h2>
             <p>We do not accept payment to alter editorial content. Sponsored or affiliate links, when present, are clearly disclosed.</p>
           </section>
+          <section>
+            <h2 className="text-xl font-semibold text-foreground mb-2">Data sources</h2>
+            <p>BornClock uses primary data sources exclusively: WHO Global Health Observatory, UN World Population Prospects, NASA JPL Horizons (astronomical calculations), US Naval Observatory Astronomical Almanac, peer-reviewed journals (The Lancet, Genome Biology, Circulation, Aging Cell), and official national statistics agencies. We do not aggregate from secondary sources without citing the original.</p>
+          </section>
+          <section>
+            <h2 className="text-xl font-semibold text-foreground mb-2">AI and automated content</h2>
+            <p>Some BornClock pages use AI-assisted drafting, reviewed and verified by our editorial team before publication. All factual claims — statistics, research citations, historical dates — are independently verified against primary sources. AI is a writing tool here, not a fact source.</p>
+          </section>
+          <section>
+            <h2 className="text-xl font-semibold text-foreground mb-2">Calculator methodology</h2>
+            <p>Every calculator on BornClock has a dedicated methodology page explaining the data sources, calculation method, and known limitations. We publish our methodology so users can evaluate our approach. Calculators are tested against known cases before launch and re-verified when underlying data sources update. See <a href="/how-it-works" className="text-primary hover:underline">/how-it-works</a> for full methodology details.</p>
+          </section>
+          <section>
+            <h2 className="text-xl font-semibold text-foreground mb-2">Update policy</h2>
+            <p>Pages are reviewed when: (1) an underlying data source publishes updated figures, (2) a reader submits a correction that is confirmed, or (3) our annual content audit identifies a material change. The “Last reviewed” date shown on each page reflects the most recent review, not the original publication date.</p>
+          </section>
         </CardContent>
       </Card>
     </div>

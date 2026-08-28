@@ -299,6 +299,19 @@ export default function MoonSignPage() {
             </div>
           </div>
 
+          <div className="mt-12 mb-8">
+            <div className="p-4 rounded-xl border border-border bg-muted/30">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Sources &amp; Methodology</p>
+              <ul className="text-xs text-muted-foreground space-y-1 list-none">
+                <li>NASA JPL Horizons System — lunar ephemeris data</li>
+                <li>US Naval Observatory Astronomical Almanac</li>
+              </ul>
+            </div>
+          </div>
+          <p className="text-center text-xs text-muted-foreground mt-8 mb-4">
+            Last reviewed: August 2026 · Sources verified by BornClock Editorial Team
+          </p>
+
         </div>
       </div>
     </>

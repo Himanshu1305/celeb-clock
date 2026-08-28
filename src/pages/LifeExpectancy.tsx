@@ -1084,6 +1084,21 @@ const LifeExpectancy = () => {
         </div>
       </div>
 
+      <div className="max-w-3xl mx-auto mt-12 px-4 mb-8">
+        <div className="p-4 rounded-xl border border-border bg-muted/30">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Sources &amp; Methodology</p>
+          <ul className="text-xs text-muted-foreground space-y-1 list-none">
+            <li>WHO Global Health Observatory — life tables and mortality data, 2023</li>
+            <li>UN World Population Prospects 2023 — demographic projections</li>
+            <li>Harvard T.H. Chan School of Public Health — Li et al., Circulation, 2018 (lifestyle and mortality)</li>
+            <li>The Lancet — Global Burden of Disease Study 2023</li>
+          </ul>
+        </div>
+      </div>
+      <p className="text-center text-xs text-muted-foreground mt-8 mb-4 px-4">
+        Last reviewed: August 2026 · Sources verified by BornClock Editorial Team
+      </p>
+
       <Footer />
 
       {showPaywallModal && longevityResult && (

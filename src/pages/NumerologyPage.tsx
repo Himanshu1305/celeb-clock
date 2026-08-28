@@ -227,6 +227,10 @@ export default function NumerologyPage() {
         </div>
       </div>
 
+      <p className="text-center text-xs text-muted-foreground mt-8 mb-4 px-4">
+        Last reviewed: August 2026 · Sources verified by BornClock Editorial Team
+      </p>
+
       <Footer />
     </div>
   );

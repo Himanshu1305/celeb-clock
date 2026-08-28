@@ -125,6 +125,20 @@ const AgeCalculatorPage = () => {
         <RelatedTools currentSlug="age" />
         <AuthorBio />
       </div>
+
+      <div className="max-w-3xl mx-auto mt-12 px-4 mb-8">
+        <div className="p-4 rounded-xl border border-border bg-muted/30">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Sources &amp; Methodology</p>
+          <ul className="text-xs text-muted-foreground space-y-1 list-none">
+            <li>ISO 8601 Date and Time Standard</li>
+            <li>Gregorian Calendar — leap year rules (divisible by 4, except centuries unless divisible by 400)</li>
+          </ul>
+        </div>
+      </div>
+      <p className="text-center text-xs text-muted-foreground mt-8 mb-4 px-4">
+        Last reviewed: August 2026 · Sources verified by BornClock Editorial Team
+      </p>
+
       <Footer />
     </div>
   );

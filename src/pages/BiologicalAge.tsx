@@ -1554,6 +1554,22 @@ const BiologicalAge = () => {
           </div>
         </section>
       </div>
+
+      <div className="max-w-3xl mx-auto mt-12 px-4 mb-8">
+        <div className="p-4 rounded-xl border border-border bg-muted/30">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Sources &amp; Methodology</p>
+          <ul className="text-xs text-muted-foreground space-y-1 list-none">
+            <li>WHO health assessment frameworks — validated biomarker set</li>
+            <li>Horvath S. (2013) — DNA methylation age of human tissues and cell types, Genome Biology</li>
+            <li>Fitzgerald et al. (2021) — Potential reversal of epigenetic age using diet and lifestyle, Aging Cell</li>
+            <li>National Institute on Aging, NIH — biological aging research</li>
+          </ul>
+        </div>
+      </div>
+      <p className="text-center text-xs text-muted-foreground mt-8 mb-4 px-4">
+        Last reviewed: August 2026 · Sources verified by BornClock Editorial Team
+      </p>
+
       <Footer />
     </div>
   );
