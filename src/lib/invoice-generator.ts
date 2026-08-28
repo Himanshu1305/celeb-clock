@@ -29,6 +29,11 @@ export interface InvoiceRecord {
   tax_mode: 'CGST_SGST' | 'IGST' | 'EXPORT';
   currency: 'INR' | 'USD';
   fx_rate: number | null;
+  // Provenance for the export FX rate: the date the rate was captured and where
+  // it came from. Optional so already-issued rows (and non-export invoices)
+  // render unchanged when the columns are absent/null.
+  fx_rate_date?: string | null;   // 'YYYY-MM-DD'
+  fx_rate_source?: string | null;
   gross_amount: number | string;
   taxable_value: number | string;
   cgst: number | string;
@@ -188,8 +193,14 @@ export function generateInvoiceHTML(inv: InvoiceRecord): string {
          Place of supply determined from the State declared by the recipient at checkout.
        </div>`;
 
+  // Export FX row states the rate AND its provenance (date captured + source),
+  // so the invoice never presents a fixed/stale rate as if it were live.
+  const fxProvenance = isExport && inv.fx_rate
+    ? [inv.fx_rate_date ? `as of ${esc(fmtDate(String(inv.fx_rate_date)))}` : '',
+       inv.fx_rate_source ? esc(inv.fx_rate_source) : ''].filter(Boolean).join(' · ')
+    : '';
   const fxRow = isExport && inv.fx_rate
-    ? `<tr><td class="k">FX rate</td><td>1 USD = ₹${n(inv.fx_rate).toFixed(2)}</td></tr>`
+    ? `<tr><td class="k">FX rate</td><td>1 USD = ₹${n(inv.fx_rate).toFixed(2)}${fxProvenance ? `<br/><span style="font-size:9px;color:var(--muted)">${fxProvenance}</span>` : ''}</td></tr>`
     : '';
 
   return `<!doctype html>

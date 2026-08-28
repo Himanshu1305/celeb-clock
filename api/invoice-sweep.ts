@@ -122,6 +122,9 @@ async function handler(request: Request): Promise<Response> {
         igst = totalTax;
       }
       const fxRate = taxMode === 'EXPORT' ? 87.20 : null;
+      // FX provenance — see verify-payment.ts / BORNCLOCK_AUDIT_FIXES.md open item.
+      const fxRateDate = fxRate ? new Date().toISOString().slice(0, 10) : null;
+      const fxRateSource = fxRate ? 'Fixed fallback rate (₹87.20; no live FX feed yet)' : null;
 
       // Buyer identity — auth is authoritative; profile is the fallback.
       const { data: buyerData } = await db.auth.admin.getUserById(p.user_id);
@@ -145,6 +148,8 @@ async function handler(request: Request): Promise<Response> {
           tax_mode:         taxMode,
           currency:         paymentCurrency,
           fx_rate:          fxRate,
+          fx_rate_date:     fxRateDate,
+          fx_rate_source:   fxRateSource,
           gross_amount:     grossAmount,
           taxable_value:    taxMode === 'EXPORT' ? grossAmount : taxable,
           cgst, sgst, igst,

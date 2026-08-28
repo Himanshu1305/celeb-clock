@@ -332,6 +332,12 @@ async function handler(request: Request): Promise<Response> {
       igst = totalTax;
     }
     const fxRate = taxMode === 'EXPORT' ? 87.20 : null;   // fixed fallback; live rate = future
+    // Record the rate's provenance so an export invoice never presents this
+    // fixed value as a live market rate. OPEN ITEM: wire a live FX feed (RBI
+    // reference rate / provider) and set fx_rate + source from it. See
+    // BORNCLOCK_AUDIT_FIXES.md → "Open items".
+    const fxRateDate = fxRate ? new Date().toISOString().slice(0, 10) : null;
+    const fxRateSource = fxRate ? 'Fixed fallback rate (₹87.20; no live FX feed yet)' : null;
 
     // buyer identity (same service client already in scope)
     const { data: buyerData } = await db.auth.admin.getUserById(user_id);
@@ -366,6 +372,8 @@ async function handler(request: Request): Promise<Response> {
         tax_mode:         taxMode,
         currency:         invCurrency,
         fx_rate:          fxRate,
+        fx_rate_date:     fxRateDate,
+        fx_rate_source:   fxRateSource,
         gross_amount:     grossAmount,
         taxable_value:    taxMode === 'EXPORT' ? grossAmount : taxable,
         cgst, sgst, igst,
