@@ -48,6 +48,11 @@ const LifeExpectancyGermany = lazyWithReload(() => import("./pages/LifeExpectanc
 const LifeExpectancyChina = lazyWithReload(() => import("./pages/LifeExpectancyChina"));
 const LifeExpectancySingapore = lazyWithReload(() => import("./pages/LifeExpectancySingapore"));
 const LifeExpectancyBrazil = lazyWithReload(() => import("./pages/LifeExpectancyBrazil"));
+const HindiAgeCalculator = lazyWithReload(() => import("./pages/HindiAgeCalculator"));
+const HindiLifeExpectancy = lazyWithReload(() => import("./pages/HindiLifeExpectancy"));
+const HindiNumerology = lazyWithReload(() => import("./pages/HindiNumerology"));
+const HindiZodiac = lazyWithReload(() => import("./pages/HindiZodiac"));
+const HindiBiologicalAge = lazyWithReload(() => import("./pages/HindiBiologicalAge"));
 const SunVsMoonSign = lazyWithReload(() => import("./pages/SunVsMoonSign"));
 const TodaysBirthdaysPage = lazyWithReload(() => import("./pages/TodaysBirthdaysPage"));
 const NumerologyPage = lazyWithReload(() => import("./pages/NumerologyPage"));
@@ -150,6 +155,11 @@ const App = () => (
               <Route path="/life-expectancy-china" element={<LifeExpectancyChina />} />
               <Route path="/life-expectancy-singapore" element={<LifeExpectancySingapore />} />
               <Route path="/life-expectancy-brazil" element={<LifeExpectancyBrazil />} />
+              <Route path="/meri-umar-kitni-hai" element={<HindiAgeCalculator />} />
+              <Route path="/jivan-kal-calculator" element={<HindiLifeExpectancy />} />
+              <Route path="/numerology-hindi" element={<HindiNumerology />} />
+              <Route path="/rashifal-by-date-of-birth" element={<HindiZodiac />} />
+              <Route path="/biological-age-hindi" element={<HindiBiologicalAge />} />
               <Route path="/sun-vs-moon-sign" element={<SunVsMoonSign />} />
               <Route path="/todays-birthdays" element={<TodaysBirthdaysPage />} />
               <Route path="/numerology" element={<NumerologyPage />} />

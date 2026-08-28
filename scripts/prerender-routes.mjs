@@ -175,6 +175,12 @@ export const STATIC_ROUTES = [
   '/life-expectancy-china',
   '/life-expectancy-singapore',
   '/life-expectancy-brazil',
+  // SEO Batch 2 (P1-G) — Hindi vernacular landing pages.
+  '/meri-umar-kitni-hai',
+  '/jivan-kal-calculator',
+  '/numerology-hindi',
+  '/rashifal-by-date-of-birth',
+  '/biological-age-hindi',
   '/sun-vs-moon-sign',
   '/todays-birthdays',
   '/numerology',
