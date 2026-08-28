@@ -6,9 +6,9 @@ import { Label } from '@/components/ui/label';
 import { INDIA_STATES, isValidIndiaStateCode } from '@/data/indiaStates';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { shouldShowMissingStateModal } from '@/components/missingStateGate';
+import { shouldShowMissingStateModal, isMissingStateModalOpen } from '@/components/missingStateGate';
 
-export { shouldShowMissingStateModal };
+export { shouldShowMissingStateModal, isMissingStateModalOpen };
 
 // Non-dismissible, one-time capture of the Indian state (GST place-of-supply) for
 // a premium user whose subscription renewals would otherwise be un-invoiceable
@@ -18,13 +18,16 @@ export function MissingStateModal() {
   const { toast } = useToast();
   const [stateCode, setStateCode] = useState('');
   const [saving, setSaving] = useState(false);
-  const [done, setDone] = useState(false);
+  // Set the instant a save succeeds → closes the modal immediately and keeps it
+  // closed for the rest of the session, even before the profile is re-fetched.
+  const [dismissed, setDismissed] = useState(false);
 
-  const show = !done && shouldShowMissingStateModal({
+  const open = isMissingStateModalOpen({
     isPremium,
     buyerStateCode: profile?.buyer_state_code,
+    dismissed,
   });
-  if (!show) return null;
+  if (!open) return null;
 
   const canSave = isValidIndiaStateCode(stateCode) && !saving;
 
@@ -47,9 +50,11 @@ export function MissingStateModal() {
         toast({ title: 'Could not save', description: err.error || 'Please try again.', variant: 'destructive' });
         return;
       }
-      // Persisted server-side → never show again (this session via `done`, future
-      // sessions because profiles.buyer_state_code is now set).
-      setDone(true);
+      // SUCCESS: close the modal now (dismissed → `open` becomes false → unmounts)
+      // and keep it closed this session; future sessions stay closed because
+      // profiles.buyer_state_code is now persisted server-side.
+      console.log('[MissingStateModal] buyer_state saved — closing modal');
+      setDismissed(true);
       toast({ title: 'Thank you', description: 'Your state has been saved for GST invoicing.' });
     } catch {
       toast({ title: 'Network error', description: 'Please try again.', variant: 'destructive' });
@@ -59,7 +64,7 @@ export function MissingStateModal() {
   };
 
   return (
-    <Dialog open onOpenChange={() => { /* non-dismissible — user must complete it */ }}>
+    <Dialog open={open} onOpenChange={() => { /* non-dismissible — user must complete it */ }}>
       <DialogContent
         // Block every close affordance: no X (hide the built-in close button),
         // no Esc, no outside click.
