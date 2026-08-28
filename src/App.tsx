@@ -97,6 +97,7 @@ import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { CurrencyAdminToggle } from "@/components/CurrencyAdminToggle";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
+import { MissingStateModal } from "@/components/MissingStateModal";
 import { CookieConsent } from "@/components/CookieConsent";
 import { BirthDateProvider } from "./context/BirthDateContext";
 
@@ -114,6 +115,10 @@ const App = () => (
             <ScrollToTop />
             <CurrencyAdminToggle />
             <BirthdayDiscountBanner />
+            {/* One-time GST place-of-supply capture. Self-gates: renders only for a
+                logged-in premium user with no buyer_state_code (radix portals to
+                body, so it overlays everything). Invisible during prerender (no session). */}
+            <MissingStateModal />
             <ChunkErrorBoundary>
             <Suspense fallback={<div className="min-h-screen" aria-hidden="true" />}>
             <Routes>

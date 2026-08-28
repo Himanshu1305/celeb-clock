@@ -50,3 +50,16 @@ export function taxModeFor(country: 'India' | 'Outside', stateCode: string | nul
   if (stateCode === SUPPLIER_STATE_CODE) return 'CGST_SGST';
   return 'IGST';
 }
+
+// True only for a code that resolves to a real GST state/UT. Used to validate the
+// place-of-supply on both the client (MissingStateModal) and the server
+// (api/update-buyer-state) so a bad code can never reach the invoices row.
+export function isValidIndiaStateCode(code: string | null | undefined): boolean {
+  return !!code && INDIA_STATES.some(s => s.code === code);
+}
+
+// Resolve the canonical state name for a code, or null if the code is unknown.
+export function stateNameForCode(code: string | null | undefined): string | null {
+  if (!code) return null;
+  return INDIA_STATES.find(s => s.code === code)?.name ?? null;
+}

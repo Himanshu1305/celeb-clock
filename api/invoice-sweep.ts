@@ -19,6 +19,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { generateInvoiceHTML } from '../src/lib/invoice-generator.js';
 import { sendInvoiceEmail } from './_invoice-email.js';
+import { sendOpsAlert } from './_ops.js';
 
 function serviceClient() {
   return createClient(
@@ -44,6 +45,9 @@ async function handler(request: Request): Promise<Response> {
   const result: Record<string, unknown> = { invoiced: 0, skipped: [] as string[], errors: [] as string[] };
   const skipped = result.skipped as string[];
   const errors = result.errors as string[];
+  // Renewals we could not invoice because the payer has no GST place-of-supply on
+  // file. Collected so an ops alert can surface the gap instead of it staying silent.
+  const missingState: { user_id: string; email: string }[] = [];
 
   // 1. captured subscription payments (webhook + verify both write here).
   const { data: payments, error: payErr } = await db
@@ -100,6 +104,7 @@ async function handler(request: Request): Promise<Response> {
       const hasRegion = !!(buyerStateCode || buyerCountry);
       if (!hasRegion) {
         skipped.push(`${paymentId}: no persisted place-of-supply (apply NOTES-subscription-invoicing.sql; invoices once a payment persists region)`);
+        missingState.push({ user_id: p.user_id, email: prof?.email ?? '(unknown)' });
         continue;
       }
       const invBuyerCountry = buyerCountry || 'India';
@@ -178,7 +183,26 @@ async function handler(request: Request): Promise<Response> {
     }
   }
 
-  return json({ ranAt: new Date().toISOString(), pending: pending.length, ...result });
+  // Surface the invoicing gap: if any renewals were skipped for a missing
+  // place-of-supply, alert ops (warning) with each affected user_id + email so it
+  // can be chased (the user is prompted for their state by MissingStateModal on
+  // next login). Best-effort — never fail the sweep on an alert error.
+  if (missingState.length > 0) {
+    const list = missingState.map((m) => `• ${m.user_id} — ${m.email}`).join('\n');
+    try {
+      await sendOpsAlert({
+        severity: 'warning',
+        title: `Invoice sweep: ${missingState.length} renewals skipped — missing state`,
+        body: `These premium subscribers renewed but have no GST place-of-supply on file, so no tax `
+          + `invoice could be issued. They will be prompted for their state on next login `
+          + `(MissingStateModal). Affected:\n${list}`,
+      });
+    } catch (e) {
+      console.error('[invoice-sweep] ops alert failed (non-fatal)', e);
+    }
+  }
+
+  return json({ ranAt: new Date().toISOString(), pending: pending.length, missingState: missingState.length, ...result });
 }
 
 export const POST = handler;

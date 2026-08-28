@@ -21,6 +21,11 @@ interface Profile {
   created_at?: string;
   promo_premium_until?: string | null;
   premium_until?: string | null;
+  // GST place-of-supply (NOTES-subscription-invoicing columns). Null until the
+  // user declares it — captured at checkout or by MissingStateModal.
+  buyer_state?: string | null;
+  buyer_state_code?: string | null;
+  buyer_country?: string | null;
 }
 
 // Module-level, shared across EVERY useAuth() instance in the tab. useAuth is a

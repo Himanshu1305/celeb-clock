@@ -9,6 +9,7 @@ import { POST as saveReport }          from '../api/save-report.js';
 import { POST as sendEmail }           from '../api/send-email.js';
 import { POST as contact }             from '../api/contact.js';
 import { POST as verifyPayment }       from '../api/verify-payment.js';
+import { POST as updateBuyerState }     from '../api/update-buyer-state.js';
 import { GET  as dailyCronGet,
          POST as dailyCronPost }       from '../api/daily-email-cron.js';
 import { POST as opsMonitor }          from '../api/ops-monitor.js';
@@ -64,6 +65,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/send-email':         sendEmail,
   '/api/contact':            contact,
   '/api/verify-payment':     verifyPayment,
+  '/api/update-buyer-state': updateBuyerState,
   '/api/ops-monitor':        opsMonitor,
   '/api/ops-digest':         opsDigest,
   '/api/invoice-sweep':      invoiceSweep,
