@@ -568,12 +568,15 @@ delete-account-fks, user-reviews-disposition.
 
 ## SECTION 6 — KNOWN BUGS & INVARIANTS
 
-**BUG/TRAP — `profiles.id` vs `user_id` premium grant.** `handle_new_user` never sets `id` (random
-PK); premium is written keyed `.eq('id', user_id)` in `verify-payment.ts:214` + `razorpay-webhook.ts:123`,
-but read keyed `.eq('user_id', …)` in `useAuth.ts` and every newer endpoint. Kept deliberately per
-`docs/FINAL-FIXES-REPORT.md:283-286`. **Detect:** paying user's `profiles` row (by user_id) lacks
-`premium_status=true`, or user pays but stays non-premium. **Rule:** all NEW `profiles` access keys on
-`user_id`; verify the two frozen grant sites against the live DB (they only work if live `id == user_id`).
+**FIXED 2026-08-28 — `profiles.id` vs `user_id` premium grant.** `handle_new_user` never sets `id`
+(random PK). The August 2026 audit verified against the live DB that **`id != user_id` for ALL rows**,
+so the old grants `.eq('id', user_id)` (`verify-payment.ts`) + `.eq('id', userId)` (`razorpay-webhook.ts`)
+matched **zero rows** — the "kept deliberately" decision in `docs/FINAL-FIXES-REPORT.md:283-286` was a
+latent bug, not a working design. **Both grant sites now key on `user_id`** (matching the read side in
+`useAuth.ts` and the invoice block). The webhook cancelled/expired/halted handlers stay keyed on the
+real `id` PK because they first select the row by `subscription_id`. **INVARIANT (guarded by a test):**
+a `profiles` write and its read MUST use the same key column — always `user_id`. See
+`BORNCLOCK_AUDIT_FIXES.md` and `api/__tests__/audit-fixes-invariants.test.ts`.
 
 **INVARIANT — `guard_premium_columns` trigger** (`20260705120000`): blocks non-service-role UPDATEs to
 `premium_status`/`subscription_*`/`premium_until`. Consequence: the client can never self-grant premium;
@@ -798,11 +801,26 @@ Studio; reports unviewed 12 months. Quarterly; no scheduler by design.
 **WHY:** ESM resolution needs it at runtime; TS2835 is a real `ERR_MODULE_NOT_FOUND`, not a type nit; dev+gauntlet don't catch it.
 **HOW:** add `.js` to new shared modules immediately; run the post-deploy smoke curl.
 
-**RULE:** Never modify `api/verify-payment.ts`, `api/razorpay-webhook.ts`, `api/_crypto.ts`, or the
-`.eq('id', user_id)` premium-grant sites without explicit instruction.
-**WHY:** they are frozen; the premium grant deliberately keys on `profiles.id` and the whole billing
-flow (idempotency, GST, HMAC) is load-bearing.
-**HOW:** all NEW `profiles` access keys on `user_id`; verify grant behaviour against the live DB.
+**RULE:** Never modify `api/verify-payment.ts`, `api/razorpay-webhook.ts`, `api/_crypto.ts` without
+explicit instruction.
+**WHY:** they are frozen; the billing flow (idempotency, GST, HMAC) is load-bearing.
+**HOW:** all `profiles` access keys on `user_id`; verify behaviour against the live DB after any change.
+
+**RULE:** A `profiles` write and its read MUST use the same key column — always `user_id`, never the
+random `id` PK.
+**WHY:** `profiles.id` defaults to `gen_random_uuid()` and (verified 2026-08-28) `id != user_id` for
+every live row. The premium grant historically keyed on `id` and silently matched zero rows — paying
+users never became premium. Fixed 2026-08-28; guarded by `api/__tests__/audit-fixes-invariants.test.ts`.
+**HOW:** grep new endpoints for `.eq('id',` on `profiles`; it should almost always be `.eq('user_id',`.
+
+**RULE:** Operational DDL in `supabase/migrations/NOTES-*.sql` can be silently never applied — treat a
+NOTES file as "maybe applied, verify."
+**WHY:** the invoicing schema (`invoices`/`invoice_counters`/`issue_invoice()`) lived only in
+`NOTES-invoicing.sql` and was hand-applied to prod with nothing in the migration history recording it;
+a rebuild-from-migrations would have silently shipped payments with no invoicing (caught non-fatally).
+**HOW:** promote applied NOTES DDL to a timestamped, idempotent migration
+(`20260828120000_invoicing_schema_and_fx_provenance.sql` is the pattern); verify table/function
+existence against the live DB with a read-only script before assuming.
 
 **RULE:** Add a new secret to `BRIDGE_KEYS` too.
 **WHY:** CF `env` is a Proxy; unlisted keys are invisible to `api/*` handlers even though the secret exists.
