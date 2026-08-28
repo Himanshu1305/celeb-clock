@@ -10,7 +10,30 @@
 // depend on a rendering service being up. Every failure logs '[invoice-pdf] fallback'
 // with the reason.
 
+import { sendOpsAlert } from './_ops.js';
+
 const PDF_TIMEOUT_MS = 10_000;
+
+// Fire an ops alert the FIRST time Browser Rendering fails at runtime in this
+// isolate, so a genuine outage is visible instead of being discovered months
+// later. Throttled to once per isolate lifetime so a 200-invoice sweep can't
+// storm the inbox. Fire-and-forget — never blocks or fails invoice delivery.
+// NOT fired for missing creds (that path is an expected config state in
+// preview/local and is already logged; a prod misconfig is caught by the smoke
+// test). Only true render failures (HTTP error, timeout, non-PDF body) alert.
+let pdfOutageAlerted = false;
+function alertPdfOutage(reason: string, label: string): void {
+  if (pdfOutageAlerted) return;
+  pdfOutageAlerted = true;
+  void sendOpsAlert({
+    severity: 'warning',
+    title: 'Invoice PDF rendering unavailable — attaching HTML instead',
+    body: `Cloudflare Browser Rendering failed (${reason}) while rendering "${label}". `
+      + `This and any further invoices this run are being delivered as HTML attachments, not PDF. `
+      + `Invoice delivery is NOT interrupted. Check BROWSER_RENDERING_TOKEN / CF_ACCOUNT_ID and the `
+      + `Browser Rendering quota/status.`,
+  });
+}
 
 export async function renderPdfFromHtml(html: string, label = 'invoice'): Promise<Uint8Array | null> {
   const token = process.env.BROWSER_RENDERING_TOKEN;
@@ -43,6 +66,7 @@ export async function renderPdfFromHtml(html: string, label = 'invoice'): Promis
     if (!resp.ok) {
       const detail = await resp.text().catch(() => '');
       console.error(`[invoice-pdf] fallback: Browser Rendering HTTP ${resp.status} (${label}) ${detail.slice(0, 200)}`);
+      alertPdfOutage(`HTTP ${resp.status}`, label);
       return null;
     }
 
@@ -51,12 +75,14 @@ export async function renderPdfFromHtml(html: string, label = 'invoice'): Promis
     const isPdf = buf.length > 4 && buf[0] === 0x25 && buf[1] === 0x50 && buf[2] === 0x44 && buf[3] === 0x46 && buf[4] === 0x2d;
     if (!isPdf) {
       console.error(`[invoice-pdf] fallback: response not a PDF (${label}, ${buf.length} bytes)`);
+      alertPdfOutage(`non-PDF body (${buf.length} bytes)`, label);
       return null;
     }
     return buf;
   } catch (e: any) {
     const reason = e?.name === 'TimeoutError' ? `timeout >${PDF_TIMEOUT_MS}ms` : (e?.message ?? String(e));
     console.error(`[invoice-pdf] fallback: ${reason} (${label})`);
+    alertPdfOutage(reason, label);
     return null;
   }
 }
