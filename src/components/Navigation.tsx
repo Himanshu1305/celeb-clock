@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Gem, Home, Clock, Gift, BookOpen, Crown, Hash, Globe, Cake, Menu, Trophy, Activity, Map, X, Tag, Compass } from 'lucide-react';
+import { Sparkles, Gem, Home, Clock, Gift, BookOpen, Crown, Hash, Globe, Cake, Menu, Trophy, Activity, X, Tag, Compass } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
@@ -28,7 +28,8 @@ const navItems = [
   { path: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { path: '/blog', label: 'Blog', icon: BookOpen },
   { path: '/biological-age', label: 'Biological Age', icon: Activity },
-  { path: '/country-comparison', label: 'Country Comparison', icon: Map },
+  // /country-comparison moved to the Explore dropdown as the "Life Expectancy by
+  // Country" hub (SEO Batch 2) — kept out of More to preserve Explore ∩ More = ∅.
   { path: '/biorhythm', label: 'Biorhythm Calculator', icon: Activity },
   { path: '/coach', label: 'Longevity Coach', icon: Activity },
   { path: '/pricing', label: 'Pricing', icon: Tag },
@@ -50,17 +51,10 @@ const exploreItems = [
   { path: '/age-in-seconds', label: 'Age in Seconds', emoji: '⏱️' },
   { path: '/birthday-countdown', label: 'Birthday Countdown', emoji: '🎂' },
   { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age', emoji: '🧬' },
-  { path: '/life-expectancy-india-vs-usa', label: 'India vs USA Life Expectancy', emoji: '🌍' },
-  { path: '/life-expectancy-india', label: 'Life Expectancy in India', emoji: '🇮🇳' },
-  { path: '/life-expectancy-usa', label: 'Life Expectancy in USA', emoji: '🇺🇸' },
-  { path: '/life-expectancy-japan', label: 'Life Expectancy in Japan', emoji: '🇯🇵' },
-  { path: '/life-expectancy-uk', label: 'Life Expectancy in UK', emoji: '🇬🇧' },
-  { path: '/life-expectancy-australia', label: 'Life Expectancy in Australia', emoji: '🇦🇺' },
-  { path: '/life-expectancy-canada', label: 'Life Expectancy in Canada', emoji: '🇨🇦' },
-  { path: '/life-expectancy-germany', label: 'Life Expectancy in Germany', emoji: '🇩🇪' },
-  { path: '/life-expectancy-china', label: 'Life Expectancy in China', emoji: '🇨🇳' },
-  { path: '/life-expectancy-singapore', label: 'Life Expectancy in Singapore', emoji: '🇸🇬' },
-  { path: '/life-expectancy-brazil', label: 'Life Expectancy in Brazil', emoji: '🇧🇷' },
+  // SEO Batch 2 hub: the 10 country longevity pages + India-vs-USA live behind the
+  // /country-comparison hub (and are cross-linked from /life-expectancy) rather than
+  // flooding the Explore dropdown with 11 near-identical entries.
+  { path: '/country-comparison', label: 'Life Expectancy by Country', emoji: '🌍' },
   { path: '/embed', label: 'Embed Our Widget', emoji: '🔗' },
 ];
 

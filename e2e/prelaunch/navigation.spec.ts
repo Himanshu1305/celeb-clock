@@ -43,18 +43,15 @@ test('Explore ∩ (main ∪ More) = ∅', async ({ page }) => {
   const exploreHrefs = await openMenu(page, 'Explore');
 
   // Explore = the discovery hubs. BATCH-8 P5 moved Numerology (both) and Gift a Report
-  // into Explore; SEO Batch 1 added the age/longevity facet pages; SEO Batch 2 added the
-  // country longevity pages and the widget-embed hub. Kept in sync with exploreItems.
+  // into Explore; SEO Batch 1 added the age/longevity facet pages; SEO Batch 2 folded the
+  // 10 country longevity pages behind the /country-comparison hub ("Life Expectancy by
+  // Country") and added the widget-embed hub. Kept in sync with exploreItems.
   expect(new Set(exploreHrefs)).toEqual(new Set([
     '/born-in', '/born-on/india', '/numerology', '/name-numerology',
     '/biorhythm-workout-calculator', '/energy-forecast', '/answers',
     '/compatibility', '/weight-on-planets', '/gift',
     '/age-in-days', '/age-in-seconds', '/birthday-countdown',
-    '/biological-age-vs-chronological-age', '/life-expectancy-india-vs-usa',
-    '/life-expectancy-india', '/life-expectancy-usa', '/life-expectancy-japan',
-    '/life-expectancy-uk', '/life-expectancy-australia', '/life-expectancy-canada',
-    '/life-expectancy-germany', '/life-expectancy-china', '/life-expectancy-singapore',
-    '/life-expectancy-brazil', '/embed',
+    '/biological-age-vs-chronological-age', '/country-comparison', '/embed',
   ]));
 
   // No Explore destination is duplicated in the main bar or More.

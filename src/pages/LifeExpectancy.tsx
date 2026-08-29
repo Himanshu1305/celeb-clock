@@ -72,6 +72,21 @@ class ReportErrorBoundary extends Component<
 
 type Phase = 'quiz' | 'result' | 'report';
 
+// Country longevity pages (SEO Batch 2) — surfaced here so all 10 are discoverable
+// from the main life-expectancy tool. Figures: UN World Population Prospects 2023.
+const COUNTRY_PAGES = [
+  { path: '/life-expectancy-india', label: '🇮🇳 India', stat: '70.9 years' },
+  { path: '/life-expectancy-usa', label: '🇺🇸 United States', stat: '77.5 years' },
+  { path: '/life-expectancy-japan', label: '🇯🇵 Japan', stat: '84.3 years' },
+  { path: '/life-expectancy-uk', label: '🇬🇧 United Kingdom', stat: '81.3 years' },
+  { path: '/life-expectancy-australia', label: '🇦🇺 Australia', stat: '83.2 years' },
+  { path: '/life-expectancy-canada', label: '🇨🇦 Canada', stat: '82.3 years' },
+  { path: '/life-expectancy-germany', label: '🇩🇪 Germany', stat: '80.6 years' },
+  { path: '/life-expectancy-china', label: '🇨🇳 China', stat: '78.2 years' },
+  { path: '/life-expectancy-singapore', label: '🇸🇬 Singapore', stat: '83.5 years' },
+  { path: '/life-expectancy-brazil', label: '🇧🇷 Brazil', stat: '74.6 years' },
+];
+
 // ── Page component ────────────────────────────────────────────────────────────
 const LifeExpectancy = () => {
   const { birthDate, setBirthDate } = useBirthDate();
@@ -1058,6 +1073,20 @@ const LifeExpectancy = () => {
         </section>
 
         <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
+
+        {/* Life Expectancy by Country — SEO Batch 2 country pages */}
+        <section className="max-w-4xl mx-auto mb-12 px-4">
+          <h2 className="text-2xl font-bold text-center mb-6 gradient-text-primary">Life Expectancy by Country</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {COUNTRY_PAGES.map((c) => (
+              <a key={c.path} href={c.path} className="flex items-center justify-between rounded-xl border border-border p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors">
+                <span className="font-medium text-foreground">{c.label}</span>
+                <span className="text-sm text-muted-foreground tabular-nums">{c.stat}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+
         <RelatedTools currentSlug="life" />
         {/* P1-H internal linking */}
         <section className="max-w-3xl mx-auto mb-12 px-4">

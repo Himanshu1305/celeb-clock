@@ -166,6 +166,21 @@ const SHARE_OPTIONS = [
   },
 ];
 
+// Country longevity pages (SEO Batch 2) — the per-country deep dives this hub links to.
+// Figures: UN World Population Prospects 2023.
+const COUNTRY_PAGES = [
+  { path: '/life-expectancy-india', label: '🇮🇳 India', stat: '70.9 years' },
+  { path: '/life-expectancy-usa', label: '🇺🇸 United States', stat: '77.5 years' },
+  { path: '/life-expectancy-japan', label: '🇯🇵 Japan', stat: '84.3 years' },
+  { path: '/life-expectancy-uk', label: '🇬🇧 United Kingdom', stat: '81.3 years' },
+  { path: '/life-expectancy-australia', label: '🇦🇺 Australia', stat: '83.2 years' },
+  { path: '/life-expectancy-canada', label: '🇨🇦 Canada', stat: '82.3 years' },
+  { path: '/life-expectancy-germany', label: '🇩🇪 Germany', stat: '80.6 years' },
+  { path: '/life-expectancy-china', label: '🇨🇳 China', stat: '78.2 years' },
+  { path: '/life-expectancy-singapore', label: '🇸🇬 Singapore', stat: '83.5 years' },
+  { path: '/life-expectancy-brazil', label: '🇧🇷 Brazil', stat: '74.6 years' },
+];
+
 // ── Main page component ───────────────────────────────────────────────────────
 
 const CountryComparison = () => {
@@ -1032,6 +1047,19 @@ const CountryComparison = () => {
             <p><strong>India Data:</strong> National Family Health Survey NFHS-5 (2019–21). Ministry of Health and Family Welfare, India.</p>
             <p><strong>CIA World Factbook:</strong> Central Intelligence Agency. Country Comparisons — Life Expectancy at Birth (2024 edition).</p>
             <p className="text-gray-400 italic">All baselines are population-level statistical estimates. Individual outcomes vary based on genetics, lifestyle, healthcare access, and factors not captured here. BornClock data is for educational purposes only.</p>
+          </div>
+        </section>
+
+        {/* Life Expectancy by Country — SEO Batch 2 country pages */}
+        <section className="max-w-4xl mx-auto mb-12">
+          <h2 className="text-xl font-bold mb-4 text-foreground">Life Expectancy by Country</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {COUNTRY_PAGES.map((c) => (
+              <Link key={c.path} to={c.path} className="flex items-center justify-between rounded-xl border border-border p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors">
+                <span className="font-medium text-foreground">{c.label}</span>
+                <span className="text-sm text-muted-foreground tabular-nums">{c.stat}</span>
+              </Link>
+            ))}
           </div>
         </section>
 
