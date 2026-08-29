@@ -216,7 +216,7 @@ export default function GenerationPage() {
     <div className="min-h-screen bg-background">
       <SEO
         title="Which Generation Are You? — Complete Generational Guide | BornClock"
-        description="Find out which generation you belong to — Silent Generation, Boomers, Gen X, Millennials, Gen Z, or Alpha. Dates, defining events, values, and research citations from Pew Research Center."
+        description="Gen Z, Millennial, Gen X, Boomer — find out which generation you belong to and what shaped the way you see the world."
         keywords="what generation am I, generational guide, millennial gen z baby boomer gen x generation alpha, pew research generations"
         canonicalUrl="/generation"
       />

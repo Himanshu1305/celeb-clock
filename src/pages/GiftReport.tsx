@@ -56,7 +56,7 @@ export default function GiftReport() {
     <div className="min-h-screen bg-white">
       <SEO
         title="Gift a Birthday Blueprint — A Gift That Makes Them Feel Truly Special | BornClock"
-        description="A birthday gift that says: I pay attention to you. The Birthday Blueprint is a personalised 9-section keepsake built from their birth date — celebrity twins, zodiac, numerology, birthstone and more. Instant delivery."
+        description="A 9-section personalised birthday report built from their date of birth. The most thoughtful gift they'll get this year."
         keywords="birthday gift, personalised birthday gift, meaningful birthday gift, thoughtful gift, gift that shows you care, gift for someone who has everything, birthday keepsake"
         canonicalUrl="/gift"
       />

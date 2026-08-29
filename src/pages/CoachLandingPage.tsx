@@ -60,7 +60,7 @@ export default function CoachLandingPage() {
     <div className="min-h-screen bg-white">
       <SEO
         title="AI Longevity Coach — Understand Your Life-Expectancy Forecast | BornClock"
-        description="A personal AI longevity coach that explains your life-expectancy forecast and health factors in plain language, with evidence-based next steps. It explains your data — it never diagnoses."
+        description="Your personalised longevity plan — built from your birthday and your habits. Start adding years today. Free."
         keywords="ai longevity coach, ai health coach, longevity coach, personalised health guidance, life expectancy coach, understand my health score"
         canonicalUrl="/coach"
       />

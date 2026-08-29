@@ -369,7 +369,7 @@ const LifeExpectancy = () => {
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
         title="Life Expectancy Calculator — How Long Will I Live? Death Clock & Lifespan Test"
-        description="How long will I live? Our free life expectancy calculator uses WHO and CDC actuarial data across 15+ health factors to estimate your lifespan. More accurate than any death clock — see the years you can gain."
+        description="Harvard tracked 123,000 people for 30 years. 5 habits add 14 years to life. Find out where you stand — free."
         keywords="how long will I live, life expectancy calculator, death clock, when will I die, lifespan calculator, longevity calculator, how many years do I have left, life expectancy test"
         canonicalUrl="/life-expectancy"
         ogImage="https://bornclock.com/og/calculator.png"

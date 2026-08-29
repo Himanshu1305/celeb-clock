@@ -940,7 +940,7 @@ const BiologicalAge = () => {
     <div className="min-h-screen bg-white">
       <SEO
         title="Biological Age Calculator — 12 WHO-Validated Biomarkers"
-        description="Find out your true biological age with 12 peer-reviewed biomarkers including BMI (WHO Asian thresholds), waist circumference, blood pressure, balance, and cardiovascular fitness. Based on Journal of Gerontology Expert Consensus (2025). Free, no blood test."
+        description="Your body may be 10 years younger — or older — than your birthday says. Find out in 2 minutes. Free."
         keywords="biological age calculator, how old is my body, biological age test free, body age calculator, epigenetic age test, WHO BMI calculator, biological vs chronological age, how to reduce biological age"
         canonicalUrl="/biological-age"
         ogImage="https://bornclock.com/og/calculator.png"

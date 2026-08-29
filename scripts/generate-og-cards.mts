@@ -122,6 +122,185 @@ async function main() {
     jobs.push({ rel: `blog/${p.slug}.webp`, markup: svg({ eyebrow: 'BornClock Blog', title: p.title, sub: `${p.readTime} min read`, titleSize: 54 }) });
   }
 
+  // ── Single-segment calculator pages (fitness/ prefix = auto-detected by prerender) ──
+
+  jobs.push({ rel: 'fitness/age-calculator.webp', markup: svg({
+    eyebrow: 'Age Calculator',
+    title: 'How old are you — really?',
+    sub: 'Years · months · days · hours · seconds · live',
+    titleSize: 72
+  })});
+
+  jobs.push({ rel: 'fitness/life-expectancy.webp', markup: svg({
+    eyebrow: 'Life Expectancy',
+    title: 'How long will you live?',
+    sub: 'Science-based longevity estimate · 15 lifestyle factors · WHO data',
+    titleSize: 68
+  })});
+
+  jobs.push({ rel: 'fitness/biological-age.webp', markup: svg({
+    eyebrow: 'Biological Age',
+    title: 'Your body may be younger than your birthday.',
+    sub: '12 WHO-validated biomarkers · Free · No sign-up needed',
+    titleSize: 60
+  })});
+
+  jobs.push({ rel: 'fitness/moon-sign.webp', markup: svg({
+    eyebrow: 'Moon Sign Calculator',
+    title: "Your moon sign is probably more 'you' than your sun sign.",
+    sub: 'Find yours free — by date of birth',
+    titleSize: 54
+  })});
+
+  jobs.push({ rel: 'fitness/compatibility.webp', markup: svg({
+    eyebrow: 'Compatibility Calculator',
+    title: 'Are you compatible?',
+    sub: 'Zodiac · numerology · Western & Vedic — by date of birth',
+    titleSize: 72
+  })});
+
+  jobs.push({ rel: 'fitness/numerology.webp', markup: svg({
+    eyebrow: 'Numerology',
+    title: 'Your life path number reveals more than you think.',
+    sub: 'Free numerology calculator · by date of birth',
+    titleSize: 60
+  })});
+
+  jobs.push({ rel: 'fitness/country-comparison.webp', markup: svg({
+    eyebrow: 'Life Expectancy by Country',
+    title: 'How does where you live affect how long you live?',
+    sub: 'Compare 50+ countries · WHO 2023 data · Free',
+    titleSize: 58
+  })});
+
+  jobs.push({ rel: 'fitness/biorhythm.webp', markup: svg({
+    eyebrow: 'Biorhythm Calculator',
+    title: 'Your physical, emotional & mental cycles — mapped.',
+    sub: 'Free biorhythm calculator · by date of birth',
+    titleSize: 60
+  })});
+
+  jobs.push({ rel: 'fitness/generation.webp', markup: svg({
+    eyebrow: 'Generation Finder',
+    title: "Gen Z? Millennial? Boomer? Find out what shaped you.",
+    sub: 'Your generation · defining events · cultural identity',
+    titleSize: 60
+  })});
+
+  jobs.push({ rel: 'fitness/planetary-age.webp', markup: svg({
+    eyebrow: 'Planetary Age',
+    title: 'How old are you on Mars?',
+    sub: 'Your age on every planet in the solar system · NASA data',
+    titleSize: 68
+  })});
+
+  jobs.push({ rel: 'fitness/birthday-report.webp', markup: svg({
+    eyebrow: 'Birthday Report',
+    title: 'The most meaningful birthday gift — their complete story.',
+    sub: '9-section personalised report · from their date of birth',
+    titleSize: 60
+  })});
+
+  jobs.push({ rel: 'fitness/coach.webp', markup: svg({
+    eyebrow: 'Longevity Coach',
+    title: 'Add years to your life. Start with your birthday.',
+    sub: 'Personalised longevity plan · science-backed · free',
+    titleSize: 64
+  })});
+
+  jobs.push({ rel: 'fitness/celebrity-birthday.webp', markup: svg({
+    eyebrow: 'Celebrity Birthday Twin',
+    title: 'Who shares your birthday?',
+    sub: '50,000+ celebrities · actors · athletes · leaders · scientists',
+    titleSize: 64
+  })});
+
+  jobs.push({ rel: 'fitness/todays-birthdays.webp', markup: svg({
+    eyebrow: "Today's Famous Birthdays",
+    title: 'Who is celebrating today?',
+    sub: 'Famous birthdays updated daily · worldwide',
+    titleSize: 68
+  })});
+
+  jobs.push({ rel: 'fitness/zodiac.webp', markup: svg({
+    eyebrow: 'Zodiac Calculator',
+    title: 'More than your sun sign.',
+    sub: 'Western · Vedic · Chinese · Moon sign · by date of birth',
+    titleSize: 72
+  })});
+
+  jobs.push({ rel: 'fitness/birthstone.webp', markup: svg({
+    eyebrow: 'Birthstone Finder',
+    title: 'Your birth month gem — and what it means.',
+    sub: 'History · healing properties · how to wear it',
+    titleSize: 64
+  })});
+
+  jobs.push({ rel: 'fitness/biological-age-vs-chronological-age.webp', markup: svg({
+    eyebrow: 'Biological vs Chronological Age',
+    title: 'Only one of these can change.',
+    sub: 'Which one is actually you? The science explained.',
+    titleSize: 68
+  })});
+
+  jobs.push({ rel: 'fitness/sun-vs-moon-sign.webp', markup: svg({
+    eyebrow: 'Sun Sign vs Moon Sign',
+    title: 'Which one actually describes you?',
+    sub: 'Most people identify more with their moon sign once they find it.',
+    titleSize: 56
+  })});
+
+  jobs.push({ rel: 'fitness/answers.webp', markup: svg({
+    eyebrow: 'BornClock Answers',
+    title: 'Birthday questions. Science-backed answers.',
+    sub: 'Age · longevity · astrology · numerology',
+    titleSize: 68
+  })});
+
+  jobs.push({ rel: 'fitness/embed.webp', markup: svg({
+    eyebrow: 'Free Widget',
+    title: 'Embed BornClock on your website — free.',
+    sub: 'Age calculator widget · one line of code · always up to date',
+    titleSize: 60
+  })});
+
+  jobs.push({ rel: 'fitness/age-in-days.webp', markup: svg({
+    eyebrow: 'Age in Days',
+    title: 'How many days old are you?',
+    sub: 'A 30-year-old has lived 10,957 days. What about you?',
+    titleSize: 68
+  })});
+
+  jobs.push({ rel: 'fitness/age-in-seconds.webp', markup: svg({
+    eyebrow: 'Age in Seconds',
+    title: 'You have lived this many seconds.',
+    sub: 'A 30-year-old has passed 946 million seconds. Watch it tick.',
+    titleSize: 60
+  })});
+
+  jobs.push({ rel: 'fitness/birthday-countdown.webp', markup: svg({
+    eyebrow: 'Birthday Countdown',
+    title: 'How many days until your next birthday?',
+    sub: 'Exact countdown · day of week · celebrity twins',
+    titleSize: 60
+  })});
+
+  // Shared card for all country longevity pages (multi-segment — needs prerender fix too)
+  jobs.push({ rel: 'fitness/country-longevity.webp', markup: svg({
+    eyebrow: 'Life Expectancy',
+    title: 'What does where you were born mean for how long you live?',
+    sub: 'WHO 2023 data · country comparison · personalised estimate',
+    titleSize: 56
+  })});
+
+  // Shared card for Hindi pages (multi-segment — needs prerender fix too)
+  jobs.push({ rel: 'fitness/hindi.webp', markup: svg({
+    eyebrow: 'BornClock हिंदी',
+    title: 'अपनी जन्म तिथि से सब कुछ जानें।',
+    sub: 'Age · life expectancy · zodiac · numerology — free',
+    titleSize: 60
+  })});
+
   await runBatched(jobs, j => write(j.rel, j.markup));
   console.log(`[og-cards] generated ${jobs.length} images into dist/og/ in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
 }

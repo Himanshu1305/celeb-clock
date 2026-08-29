@@ -90,6 +90,24 @@ function ogImageForRoute(route) {
   if ((m = route.match(/^\/born-in-([a-z]+)$/)))       candidates.push(`month/${m[1]}.webp`);
   if ((m = route.match(/^\/zodiac\/([a-z]+)$/)))        candidates.push(`zodiac/${m[1]}.webp`);
   if ((m = route.match(/^\/blog\/([a-z0-9-]+)$/)))      candidates.push(`blog/${m[1]}.webp`);
+  // Country longevity pages (multi-segment)
+  if (route.match(/^\/life-expectancy-(india|usa|japan|uk|australia|canada|germany|china|singapore|brazil)$/))
+    candidates.push('fitness/country-longevity.webp');
+  // Hindi pages (multi-segment)
+  if (route.match(/^\/(meri-umar-kitni-hai|jivan-kal-calculator|numerology-hindi|rashifal-by-date-of-birth|biological-age-hindi)$/))
+    candidates.push('fitness/hindi.webp');
+  // Life expectancy India vs USA comparison page
+  if (route === '/life-expectancy-india-vs-usa')
+    candidates.push('fitness/country-longevity.webp');
+  // Biological age vs chronological (multi-segment)
+  if (route === '/biological-age-vs-chronological-age')
+    candidates.push('fitness/biological-age-vs-chronological-age.webp');
+  // Sun vs moon sign (multi-segment)
+  if (route === '/sun-vs-moon-sign')
+    candidates.push('fitness/sun-vs-moon-sign.webp');
+  // Best X calculator pages
+  if (route.match(/^\/(best-age-calculator|best-life-expectancy-calculator|best-birthday-calculator|best-biological-age-calculator|best-numerology-calculator)$/))
+    candidates.push('fitness/answers.webp');
   // Single-segment fitness/rhythm pages (e.g. /energy-forecast) — cards keyed by slug.
   if ((m = route.match(/^\/([a-z0-9-]+)$/)))            candidates.push(`fitness/${m[1]}.webp`);
   for (const c of candidates) {
@@ -97,6 +115,22 @@ function ogImageForRoute(route) {
   }
   return base + 'default.webp';
 }
+
+// ── Per-route WhatsApp-optimised social descriptions ──────────────────────────
+// react-helmet-async does NOT flush per-route og:description before the outerHTML
+// capture, so the base index.html default leaks onto every route (the same leak the
+// canonical/og:image injection already fixes). For these high-value share pages we
+// inject a punchy, curiosity-driven og/twitter:description here. The keyword-rich
+// SEO <meta name="description"> (from prerender-titles) is deliberately left intact.
+const OG_DESCRIPTIONS = {
+  '/life-expectancy': 'Harvard tracked 123,000 people for 30 years. 5 habits add 14 years to life. Find out where you stand — free.',
+  '/biological-age': 'Your body may be 10 years younger — or older — than your birthday says. Find out in 2 minutes. Free.',
+  '/gift': "A 9-section personalised birthday report built from their date of birth. The most thoughtful gift they'll get this year.",
+  '/coach': 'Your personalised longevity plan — built from your birthday and your habits. Start adding years today. Free.',
+  '/celebrity-birthday': '50,000+ celebrities in our database. Find out which famous actor, athlete, or scientist shares your exact birthday.',
+  '/generation': 'Gen Z, Millennial, Gen X, Boomer — find out which generation you belong to and what shaped the way you see the world.',
+  '/age-calculator': "You're not just 30 years old. You've lived 10,957 days. 946 million seconds. Find your exact age — live, free.",
+};
 
 // ── Prerender a single route ──────────────────────────────────────────────────
 async function prerenderRoute(page, baseUrl, route) {
@@ -178,6 +212,18 @@ async function prerenderRoute(page, baseUrl, route) {
       `<meta name="twitter:image" content="${ogImage}" />` +
       `<meta name="twitter:image:alt" content="BornClock" />`;
     html = html.replace('</head>', `${cardMeta}</head>`);
+
+    // ── Per-route WhatsApp-optimised social description (og/twitter:description) ──
+    const socialDesc = OG_DESCRIPTIONS[route];
+    if (socialDesc) {
+      const escSocial = socialDesc
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      html = html.replace(/<meta\b[^>]*\bproperty="og:description"[^>]*>\s*/gi, '');
+      html = html.replace(/<meta\b[^>]*\bname="twitter:description"[^>]*>\s*/gi, '');
+      html = html.replace('</head>',
+        `<meta property="og:description" content="${escSocial}" />` +
+        `<meta name="twitter:description" content="${escSocial}" /></head>`);
+    }
 
     // ── Homepage social title/description (brand tagline) ──────────────────────
     // getTitleForRoute('/') is null, so the block above never rewrites the home meta,

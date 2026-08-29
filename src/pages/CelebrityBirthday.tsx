@@ -87,7 +87,7 @@ const CelebrityBirthday = () => {
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
         title="Best Celebrity Birthday Match — Who Shares Your Birthday?"
-        description="The best free celebrity birthday match tool. Discover which famous celebrities, actors, athletes, scientists, and world leaders share your exact birth date."
+        description="50,000+ celebrities in our database. Find out which famous actor, athlete, or scientist shares your exact birthday."
         keywords="best celebrity birthday match, celebrities born on my birthday, birthday twin, famous birthdays, who shares my birthday"
         canonicalUrl="/celebrity-birthday"
       />
