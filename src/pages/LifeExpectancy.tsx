@@ -1,5 +1,5 @@
 import { useState, useRef, Component, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { DobInput, toISODate } from '@/components/DobInput';
@@ -1073,6 +1073,13 @@ const LifeExpectancy = () => {
         </section>
 
         <PageFAQ slug="life-expectancy" title="Life Expectancy Calculator FAQs" />
+
+        <p className="text-sm text-muted-foreground text-center max-w-2xl mx-auto mb-8 px-4">
+          Looking for more context?{' '}
+          <Link to="/longevity-calculator" className="text-primary hover:underline">
+            Read our complete longevity calculator guide →
+          </Link>
+        </p>
 
         {/* Life Expectancy by Country — SEO Batch 2 country pages */}
         <section className="max-w-4xl mx-auto mb-12 px-4">

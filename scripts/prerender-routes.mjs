@@ -158,6 +158,9 @@ export const STATIC_ROUTES = [
   '/best-time-to-work-out',
   '/energy-forecast',
   '/age-calculator',
+  // Day-3 growth page — high-value global keyword "longevity calculator"; kept near
+  // the front so it prerenders within the 25-min budget (before the born-on tail).
+  '/longevity-calculator',
   // SEO Batch 1 — kept near the front so they prerender within the time budget.
   '/age-in-days',
   '/age-in-seconds',
