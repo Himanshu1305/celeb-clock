@@ -5,6 +5,7 @@ import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
+import { BirthdayReportCTA } from '@/components/BirthdayReportCTA';
 import { PageFAQ } from '@/components/PageFAQ';
 import { getNationalityCelebritiesForDate, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { generateBornOnTitle, generateBornOnMeta } from '@/utils/seoHelpers';
@@ -176,7 +177,7 @@ export default function BornOnDayIndia() {
             ))}
           </div>
         ) : display.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div data-testid="celebrity-list" className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             {display.map((celeb, i) => (
               <CelebrityCard key={celeb.name} celebrity={celeb} index={i} />
             ))}
@@ -185,6 +186,12 @@ export default function BornOnDayIndia() {
           <p className="text-muted-foreground mb-8">No Indian celebrities found in our database for this date.</p>
         )}
         <p className="text-xs text-muted-foreground mb-10">Biographical details from Wikipedia · ranked by global recognition (sitelinks).</p>
+
+        {/* Birthday Report CTA — Day 2 growth plan. Converts born-on traffic into
+            report generations. Rendered from the live celeb list; on prerender the
+            Supabase fetch has resolved by networkidle0 so the celebrity name is baked
+            into the static HTML. */}
+        <BirthdayReportCTA celebrities={celebs} month={monthName} day={day} />
 
         {/* Parent link */}
         <div className="bg-card border border-border rounded-xl p-6 mb-6">

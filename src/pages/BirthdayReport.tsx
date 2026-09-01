@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { DobInput } from '@/components/DobInput';
 import { AuthNav } from '@/components/AuthNav';
@@ -56,6 +56,14 @@ const CHECKLIST_ITEMS = [
   'Personalised gift message',
 ];
 
+// Parse the ?dob=YYYY-MM-DD deep-link (from the born-on page CTA) into month/day
+// seeds. The year is intentionally dropped — the CTA sends a placeholder year, so
+// we prefill only month + day and let the visitor enter their real birth year.
+function parseDobSeed(dob: string | null): { day: string; month: string } {
+  const m = /^\d{4}-(\d{2})-(\d{2})$/.exec(dob ?? '');
+  return m ? { month: String(Number(m[1])), day: String(Number(m[2])) } : { month: '', day: '' };
+}
+
 // ── Page component ────────────────────────────────────────────────────────────
 
 const BirthdayReport = () => {
@@ -64,9 +72,12 @@ const BirthdayReport = () => {
   const { toast } = useToast();
   const formRef = useRef<HTMLDivElement>(null);
 
+  const [searchParams] = useSearchParams();
+  const dobSeed = parseDobSeed(searchParams.get('dob'));
+
   const [recipientName, setRecipientName] = useState('');
-  const [day, setDay] = useState('');
-  const [month, setMonth] = useState('');
+  const [day, setDay] = useState(dobSeed.day);
+  const [month, setMonth] = useState(dobSeed.month);
   const [year, setYear] = useState('');
   const dob = year && month && day
     ? `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
@@ -424,6 +435,7 @@ const BirthdayReport = () => {
                   </label>
                   <DobInput
                     label=""
+                    value={{ day, month, year }}
                     onChange={({ day: d, month: m, year: y }) => { setDay(d); setMonth(m); setYear(y); }}
                   />
                 </div>

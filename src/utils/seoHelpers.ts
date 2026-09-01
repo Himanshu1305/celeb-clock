@@ -79,3 +79,62 @@ export function generateBornOnMeta(
   // Hard cap
   return withShort.slice(0, 157) + '...';
 }
+
+// ── Months lookup ────────────────────────────────────────────
+const MONTH_TO_NUM: Record<string, string> = {
+  January: '01', February: '02', March: '03', April: '04',
+  May: '05', June: '06', July: '07', August: '08',
+  September: '09', October: '10', November: '11', December: '12',
+};
+
+/**
+ * Builds the heading text for the Birthday Report CTA.
+ * Exported separately so it can be unit-tested independently.
+ *
+ * 0 celebs  → "Discover your complete Birthday Intelligence Report for August 6"
+ * 1 celeb   → "You share a birthday with Tom Hanks"
+ * 2 celebs  → "You share a birthday with Virat Kohli and Kader Khan"
+ * 3+ celebs → "You share a birthday with Chanakya and 27 others"
+ */
+export function buildCTAHeading(
+  celebrities: Array<{ name: string }> = [],
+  month: string,
+  day: number | string
+): string {
+  const dayNum = Number(day);
+  const count = celebrities?.length ?? 0;
+
+  if (count === 0 || !celebrities) {
+    return `Discover your complete Birthday Intelligence Report for ${month} ${dayNum}`;
+  }
+
+  const first = celebrities[0]?.name?.trim() || '';
+  if (!first) {
+    return `Discover your complete Birthday Intelligence Report for ${month} ${dayNum}`;
+  }
+
+  if (count === 1) return `You share a birthday with ${first}`;
+
+  if (count === 2) {
+    const second = celebrities[1]?.name?.trim() || '';
+    return second
+      ? `You share a birthday with ${first} and ${second}`
+      : `You share a birthday with ${first}`;
+  }
+
+  // 3 or more
+  return `You share a birthday with ${first} and ${count - 1} others`;
+}
+
+/**
+ * Constructs the DOB query parameter for the birthday report URL.
+ * Uses representative year 1990 — BirthdayReport prefills the month/day from
+ * this and leaves the year blank so the visitor supplies their actual birth year.
+ *
+ * Format: ISO YYYY-MM-DD (matches the dob string BirthdayReport builds internally).
+ */
+export function buildDobParam(month: string, day: number | string): string {
+  const monthNum = MONTH_TO_NUM[month] ?? '01';
+  const dayStr = String(Number(day)).padStart(2, '0');
+  return `1990-${monthNum}-${dayStr}`;
+}
