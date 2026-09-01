@@ -96,8 +96,9 @@ test.describe('Born-On Page — Birthday Report CTA', () => {
     await page.goto(`${BASE}/born-on/august-6/india`);
     // Tab to the CTA button
     await page.keyboard.press('Tab');
-    // Keep tabbing until we reach the CTA button
-    for (let i = 0; i < 20; i++) {
+    // Keep tabbing until we reach the CTA button. Budget scales past the nav,
+    // breadcrumb and per-celebrity card links that precede the CTA in tab order.
+    for (let i = 0; i < 60; i++) {
       const focused = await page.evaluate(() => document.activeElement?.getAttribute('data-testid'));
       if (focused === 'cta-button') break;
       await page.keyboard.press('Tab');
@@ -143,6 +144,9 @@ test.describe('Born-On Page — Birthday Report CTA', () => {
 
   test('TC-E2E-15: existing page content still renders after CTA added', async ({ page }) => {
     await page.goto(`${BASE}/born-on/august-6/india`);
+    // Wait for the CTA (which renders alongside the celebrity list) so we read the
+    // hydrated page, not the loading skeleton.
+    await page.locator('[data-testid="birthday-report-cta"]').waitFor({ state: 'visible' });
     // The celebrity list should still be there
     // Adapt selector to match actual celebrity list element
     const pageText = await page.evaluate(() => document.body.textContent);

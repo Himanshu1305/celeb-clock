@@ -30,7 +30,7 @@ export function BirthdayReportCTA({
       data-testid="birthday-report-cta"
       aria-label="Generate your Birthday Intelligence Report"
       className="mt-8 mb-6 rounded-2xl border border-indigo-200
-                 bg-gradient-to-br from-indigo-50 to-purple-50 p-6
+                 bg-gradient-to-br from-indigo-50 to-purple-50 p-4 sm:p-6
                  shadow-sm"
     >
       {/* ── Heading ── */}
