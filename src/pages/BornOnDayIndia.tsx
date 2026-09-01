@@ -7,6 +7,7 @@ import { Footer } from '@/components/Footer';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { PageFAQ } from '@/components/PageFAQ';
 import { getNationalityCelebritiesForDate, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
+import { generateBornOnTitle, generateBornOnMeta } from '@/utils/seoHelpers';
 import { ArrowLeft, ArrowRight, ArrowRightCircle } from 'lucide-react';
 import indiaDates from '@/data/indiaBornOnDates.json';
 
@@ -131,8 +132,8 @@ export default function BornOnDayIndia() {
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
-        title={`Indian Celebrities Born on ${dateLabel} | BornClock`}
-        description={answer}
+        title={generateBornOnTitle(monthName, day, celebs)}
+        description={generateBornOnMeta(monthName, day, celebs)}
         canonicalUrl={`/born-on/${slug}/india`}
         ogType="website"
         ogImage="https://bornclock.com/og/born-on.png"
