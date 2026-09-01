@@ -32,8 +32,11 @@ test.describe('Longevity Calculator Page', () => {
   });
 
   // ── SEO META TAGS ────────────────────────────────────────────
+  // NB: react-helmet-async mutates <head> asynchronously on hydration (remove +
+  // re-add), so read head tags after networkidle to avoid the reconciliation window.
   test('TC-E2E-05: title tag contains "longevity calculator"', async ({ page }) => {
     await page.goto(URL);
+    await page.waitForLoadState('networkidle');
     const title = await page.title();
     expect(title.toLowerCase()).toContain('longevity calculator');
     expect(title).toContain('BornClock');
@@ -41,14 +44,19 @@ test.describe('Longevity Calculator Page', () => {
 
   test('TC-E2E-06: title tag is under 70 characters', async ({ page }) => {
     await page.goto(URL);
+    await page.waitForLoadState('networkidle');
     const title = await page.title();
     expect(title.length).toBeLessThanOrEqual(70);
   });
 
   test('TC-E2E-07: meta description exists and is relevant', async ({ page }) => {
     await page.goto(URL);
+    await page.waitForLoadState('networkidle');
+    // Site emits head tags twice (SEO component + prerender injection), identical
+    // values — read the first to avoid Playwright strict-mode on the duplicate.
     const meta = await page
       .locator('meta[name="description"]')
+      .first()
       .getAttribute('content');
     expect(meta?.toLowerCase()).toContain('longevity');
     expect(meta?.length || 0).toBeLessThanOrEqual(160);
@@ -57,8 +65,10 @@ test.describe('Longevity Calculator Page', () => {
 
   test('TC-E2E-08: canonical URL is correct', async ({ page }) => {
     await page.goto(URL);
+    await page.waitForLoadState('networkidle');
     const canonical = await page
       .locator('link[rel="canonical"]')
+      .first()
       .getAttribute('href');
     // Project convention (SEO.tsx + prerender.mjs): canonical is the trailing-slash
     // form, which is the Worker's 200 URL (non-slash 307-redirects to it). So the
@@ -69,7 +79,8 @@ test.describe('Longevity Calculator Page', () => {
 
   test('TC-E2E-09: og:title exists', async ({ page }) => {
     await page.goto(URL);
-    const og = await page.locator('meta[property="og:title"]').getAttribute('content');
+    await page.waitForLoadState('networkidle');
+    const og = await page.locator('meta[property="og:title"]').first().getAttribute('content');
     expect(og).toBeTruthy();
     expect(og?.toLowerCase()).toContain('longevity');
   });
@@ -104,18 +115,22 @@ test.describe('Longevity Calculator Page', () => {
 
   test('TC-E2E-14: FAQ section has 6 or more questions', async ({ page }) => {
     await page.goto(URL);
+    // Auto-wait for render (rides through the hydration re-render flash) before the count.
+    await expect(page.locator('[data-testid="faq-question"]').first()).toBeVisible();
     const count = await page.locator('[data-testid="faq-question"]').count();
     expect(count).toBeGreaterThanOrEqual(6);
   });
 
   test('TC-E2E-15: at least 3 CTAs link to the calculator', async ({ page }) => {
     await page.goto(URL);
+    await expect(page.locator('[data-testid="cta-to-calculator"]').first()).toBeVisible();
     const count = await page.locator('[data-testid="cta-to-calculator"]').count();
     expect(count).toBeGreaterThanOrEqual(3);
   });
 
   test('TC-E2E-16: article content is substantial (2000+ words)', async ({ page }) => {
     await page.goto(URL);
+    await expect(page.locator('[data-testid="article-content"]')).toBeVisible();
     const article = page.locator('[data-testid="article-content"]');
     const text = await article.textContent();
     const wordCount = text?.trim().split(/\s+/).length || 0;
@@ -124,14 +139,13 @@ test.describe('Longevity Calculator Page', () => {
 
   test('TC-E2E-17: score band section has 4 bands', async ({ page }) => {
     await page.goto(URL);
-    const count = await page.locator('[data-testid="score-band"]').count();
-    expect(count).toBe(4);
+    // toHaveCount auto-retries until the DOM settles — robust to the hydration flash.
+    await expect(page.locator('[data-testid="score-band"]')).toHaveCount(4);
   });
 
   test('TC-E2E-18: related tools section has 4 links', async ({ page }) => {
     await page.goto(URL);
-    const count = await page.locator('[data-testid="related-tool"]').count();
-    expect(count).toBe(4);
+    await expect(page.locator('[data-testid="related-tool"]')).toHaveCount(4);
   });
 
   // ── SCHEMA ───────────────────────────────────────────────────
@@ -155,12 +169,16 @@ test.describe('Longevity Calculator Page', () => {
 
   test('TC-E2E-20: FAQPage schema is valid with 6+ questions', async ({ page }) => {
     await page.goto(URL);
+    // Settle hydration: React re-inserting the body JSON-LD scripts transiently
+    // duplicates them, so read the stable post-hydration DOM.
+    await page.waitForLoadState('networkidle');
     const schemas = await page.locator('script[type="application/ld+json"]').all();
     let count = 0;
     for (const s of schemas) {
       try {
         const d = JSON.parse(await s.textContent() || '');
-        if (d['@type'] === 'FAQPage') count = d.mainEntity?.length || 0;
+        // max() so a transient/duplicate empty FAQPage can't clobber the real one.
+        if (d['@type'] === 'FAQPage') count = Math.max(count, d.mainEntity?.length || 0);
       } catch {}
     }
     expect(count).toBeGreaterThanOrEqual(6);
