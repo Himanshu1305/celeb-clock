@@ -245,6 +245,43 @@ function parseBornOnSlug(slug) {
   return { month: monthIdx, day, monthName: MONTH_NAMES[monthIdx] };
 }
 
+// CTR-optimised born-on India title/meta (mirrors src/utils/seoHelpers.ts —
+// keep in sync). Names come from entry.top3; count is the authoritative
+// entry.count, so the meta reports the true total, not just the top-3 length.
+function bornOnIndiaTitle(monthName, day, top) {
+  const dayNum = Number(day);
+  const first = (top && top[0]) || '';
+  if (!first) return `Born on ${monthName} ${dayNum}? Discover Your Celebrity Birthday Twins · BornClock`;
+  const full = `Born on ${monthName} ${dayNum}? ${first} Shares Your Birthday · BornClock`;
+  if (full.length <= 70) return full;
+  const firstName = first.split(' ')[0];
+  const short = `Born on ${monthName} ${dayNum}? ${firstName} Shares Your Birthday · BornClock`;
+  if (short.length <= 70) return short;
+  return `Born on ${monthName} ${dayNum}? Discover Your Celebrity Birthday Twins · BornClock`;
+}
+
+function bornOnIndiaMeta(monthName, day, top, count) {
+  const dayNum = Number(day);
+  if (!count || !top || top.length === 0) {
+    return `Discover famous people born on ${monthName} ${dayNum}. Find your zodiac, numerology, life expectancy, and complete birthday intelligence. Free instant report.`;
+  }
+  const personWord = count === 1 ? 'person shares' : 'people share';
+  const name1 = top[0] || '';
+  const name2 = top[1] || '';
+  const suffix = 'Discover your zodiac, numerology, life expectancy. Free instant report.';
+  const withTwo = name2
+    ? `${count} famous ${personWord} your ${monthName} ${dayNum} birthday including ${name1} and ${name2}. ${suffix}`
+    : `${count} famous ${personWord} your ${monthName} ${dayNum} birthday including ${name1}. ${suffix}`;
+  if (withTwo.length <= 160) return withTwo;
+  const short1 = name1.split(' ')[0];
+  const short2 = name2 ? name2.split(' ')[0] : '';
+  const withShort = short2
+    ? `${count} famous ${personWord} your ${monthName} ${dayNum} birthday including ${short1} and ${short2}. ${suffix}`
+    : `${count} famous ${personWord} your ${monthName} ${dayNum} birthday including ${short1}. ${suffix}`;
+  if (withShort.length <= 160) return withShort;
+  return withShort.slice(0, 157) + '...';
+}
+
 // ── Main export ───────────────────────────────────────────────────────────────
 
 /**
@@ -344,13 +381,9 @@ export function getTitleForRoute(route) {
       if (!entry || !parsed) return null;
       const { monthName, day } = parsed;
       const top = entry.top3 || [];
-      const top2 = top.slice(0, 2).join(', ');
-      const top3 = top.slice(0, 3).join(', ');
       return {
-        title: `Indian Celebrities Born on ${monthName} ${day}${top2 ? ` — ${top2}` : ''} | BornClock`,
-        description: top3
-          ? `Indian celebrities born on ${monthName} ${day} include ${top3}. ${entry.count} notable Indians — actors, cricketers, leaders, musicians — share this birthday, ranked by global recognition.`
-          : `Famous Indian personalities born on ${monthName} ${day}, ranked by global recognition, with ages, professions and birthday facts.`,
+        title: bornOnIndiaTitle(monthName, day, top),
+        description: bornOnIndiaMeta(monthName, day, top, entry.count),
       };
     }
   }
