@@ -98,7 +98,7 @@ export function HowLongWillILivePage() {
             <h1
               id="page-h1"
               className="text-3xl sm:text-4xl lg:text-5xl font-black
-                         text-gray-900 leading-tight mb-4"
+                         gradient-text-primary leading-tight mb-4"
             >
               {HLWIL_COPY.hero.h1}
             </h1>
@@ -124,7 +124,7 @@ export function HowLongWillILivePage() {
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-indigo-600 hover:bg-indigo-500
+              className="inline-block bg-primary hover:bg-primary/90
                          text-white font-black py-4 px-10 rounded-xl
                          transition-colors text-lg shadow-md
                          focus:outline-none focus:ring-2 focus:ring-indigo-400
@@ -215,7 +215,7 @@ export function HowLongWillILivePage() {
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-indigo-600 hover:bg-indigo-500
+              className="inline-block bg-primary hover:bg-primary/90
                          text-white font-bold py-3 px-8 rounded-xl transition-colors"
             >
               Find Out How Long I'll Live →
@@ -419,7 +419,7 @@ export function HowLongWillILivePage() {
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-indigo-600 hover:bg-indigo-500
+              className="inline-block bg-primary hover:bg-primary/90
                          text-white font-bold py-3 px-8 rounded-xl transition-colors"
             >
               Take the 3-Minute Quiz →
@@ -529,7 +529,7 @@ export function HowLongWillILivePage() {
 
           {/* Bottom CTA */}
           <div
-            className="bg-gradient-to-br from-indigo-600 to-indigo-600
+            className="bg-gradient-to-br from-primary to-primary
                         rounded-2xl p-8 text-center text-white"
             role="complementary"
           >
@@ -542,7 +542,7 @@ export function HowLongWillILivePage() {
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-white text-indigo-600 hover:bg-indigo-50
+              className="inline-block bg-white text-primary hover:bg-indigo-50
                          font-black py-4 px-8 rounded-xl transition-colors text-lg"
             >
               {HLWIL_COPY.hero.ctaButton}

@@ -74,11 +74,11 @@ export function LongevityCalculatorPage() {
 
             <h1
               id="page-h1"
-              className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900
+              className="text-3xl sm:text-4xl lg:text-5xl font-black gradient-text-primary
                          leading-tight mb-4"
             >
               {LC_COPY.hero.h1Line1}{' '}
-              <span className="text-indigo-600">{LC_COPY.hero.h1Line2}</span>
+              <span>{LC_COPY.hero.h1Line2}</span>
             </h1>
 
             <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6 leading-relaxed">
@@ -102,7 +102,7 @@ export function LongevityCalculatorPage() {
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-indigo-600 hover:bg-indigo-500
+              className="inline-block bg-primary hover:bg-primary/90
                          text-white font-black py-4 px-10 rounded-xl
                          transition-colors text-lg shadow-md
                          focus:outline-none focus:ring-2 focus:ring-indigo-400
@@ -141,7 +141,7 @@ export function LongevityCalculatorPage() {
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-indigo-600 hover:bg-indigo-500
+              className="inline-block bg-primary hover:bg-primary/90
                          text-white font-black py-4 px-10 rounded-xl
                          transition-colors text-lg"
             >
@@ -212,7 +212,7 @@ export function LongevityCalculatorPage() {
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-indigo-600 hover:bg-indigo-500
+              className="inline-block bg-primary hover:bg-primary/90
                          text-white font-bold py-3 px-8 rounded-xl transition-colors"
             >
               {LC_COPY.midCTA.button}
@@ -449,7 +449,7 @@ export function LongevityCalculatorPage() {
 
           {/* Bottom CTA */}
           <div
-            className="bg-gradient-to-br from-indigo-600 to-indigo-600
+            className="bg-gradient-to-br from-primary to-primary
                         rounded-2xl p-8 text-center text-white"
             role="complementary"
           >
@@ -462,7 +462,7 @@ export function LongevityCalculatorPage() {
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-white text-indigo-600 hover:bg-indigo-50
+              className="inline-block bg-white text-primary hover:bg-indigo-50
                          font-black py-4 px-8 rounded-xl transition-colors text-lg"
             >
               {LC_COPY.bottomCTA.button}
