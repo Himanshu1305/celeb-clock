@@ -360,11 +360,14 @@ test.describe('How Long Will I Live Page', () => {
   // ── INTERNAL LINKING ─────────────────────────────────────────
   test('TC-E2E-44: /longevity-calculator links to this page', async ({ page }) => {
     await page.goto(`${BASE}/longevity-calculator`);
+    // Auto-wait for the related-tools link (rides through the hydration re-render flash).
+    await expect(page.locator('a[href*="how-long-will-i-live"]').first()).toBeVisible();
     expect(await page.locator('a[href*="how-long-will-i-live"]').count()).toBeGreaterThanOrEqual(1);
   });
 
   test('TC-E2E-45: /biological-age-calculator links to this page', async ({ page }) => {
     await page.goto(`${BASE}/biological-age-calculator`);
+    await expect(page.locator('a[href*="how-long-will-i-live"]').first()).toBeVisible();
     expect(await page.locator('a[href*="how-long-will-i-live"]').count()).toBeGreaterThanOrEqual(1);
   });
 
