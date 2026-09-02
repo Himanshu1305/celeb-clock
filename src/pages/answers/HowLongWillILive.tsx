@@ -46,6 +46,15 @@ export default function HowLongWillILive() {
             </p>
           </div>
 
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-8">
+            <p className="text-sm text-emerald-800">
+              Want a personalised estimate based on your specific lifestyle?{' '}
+              <Link to="/how-long-will-i-live" className="font-bold underline">
+                Take our 8-factor life expectancy quiz →
+              </Link>
+            </p>
+          </div>
+
           <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
             <h2 className="text-xl font-bold text-gray-900">Global Life Expectancy Averages</h2>
             <p>Life expectancy varies enormously by country. Japan leads with 84.3 years, followed by Switzerland (83.8), Australia (83.7), and South Korea (83.5). At the other end, several sub-Saharan nations average below 60 years — not because of genetics, but because of healthcare access, nutrition, sanitation, and infectious disease burden.</p>

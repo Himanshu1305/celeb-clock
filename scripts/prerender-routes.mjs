@@ -163,6 +163,8 @@ export const STATIC_ROUTES = [
   '/longevity-calculator',
   // Day-4 growth page — "biological age calculator" (~75K/mo, Bryan Johnson trend).
   '/biological-age-calculator',
+  // Day-5 growth page — "how long will I live" (~200K/mo, highest-volume of the three).
+  '/how-long-will-i-live',
   // SEO Batch 1 — kept near the front so they prerender within the time budget.
   '/age-in-days',
   '/age-in-seconds',

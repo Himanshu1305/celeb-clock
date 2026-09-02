@@ -398,7 +398,7 @@ export const BA_COPY = {
     { href: '/longevity-calculator', title: 'Longevity Calculator', desc: 'Full life expectancy estimate with WHO baseline' },
     { href: '/life-expectancy', title: 'Life Expectancy Calculator', desc: 'Complete 8-factor assessment with PDF report' },
     { href: '/birthday-report', title: 'Birthday Intelligence Report', desc: 'Full zodiac, numerology, and birthday profile' },
-    { href: '/answers/how-long-will-i-live', title: 'How Long Will I Live?', desc: 'Science-backed life expectancy guide' },
+    { href: '/how-long-will-i-live', title: 'How Long Will I Live?', desc: 'Science-backed life expectancy guide' },
   ] as const,
 } as const;
 

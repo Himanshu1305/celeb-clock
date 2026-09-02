@@ -300,7 +300,7 @@ export const LC_COPY = {
   },
   relatedTools: [
     { href: '/biological-age-calculator', title: 'Biological Age Calculator', desc: 'Find out if your body is younger or older than your age' },
-    { href: '/answers/how-long-will-i-live', title: 'How Long Will I Live?', desc: 'Science-backed life expectancy quiz' },
+    { href: '/how-long-will-i-live', title: 'How Long Will I Live?', desc: 'Science-backed life expectancy quiz' },
     { href: '/birthday-report', title: 'Birthday Intelligence Report', desc: 'Full zodiac, numerology, and birthday profile' },
     { href: '/life-expectancy', title: 'Full Life Expectancy Calculator', desc: 'Complete 8-factor assessment with PDF report' },
   ],
