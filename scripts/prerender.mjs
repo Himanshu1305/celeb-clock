@@ -184,6 +184,14 @@ async function prerenderRoute(page, baseUrl, route) {
       // Keep og/twitter titles in sync with the per-route <title>.
       html = html.replace(/(<meta property="og:title" content=")[^"]*(")/i, `$1${escapedTitle}$2`);
       html = html.replace(/(<meta name="twitter:title" content=")[^"]*(")/i, `$1${escapedTitle}$2`);
+
+      // Keep og/twitter descriptions in sync with the per-route SEO description.
+      // Without this the base index.html default og:description leaks onto every
+      // prerendered page (react-helmet-async does not flush per-route og:description
+      // before the outerHTML capture). Routes with a share-optimised entry in
+      // OG_DESCRIPTIONS override this below, so this only fills the gap for the rest.
+      html = html.replace(/(<meta property="og:description" content=")[^"]*(")/i, `$1${escapedDesc}$2`);
+      html = html.replace(/(<meta name="twitter:description" content=")[^"]*(")/i, `$1${escapedDesc}$2`);
     }
 
     // ── Canonical + og/twitter URL injection ──────────────────────────────────
