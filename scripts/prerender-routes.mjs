@@ -161,6 +161,8 @@ export const STATIC_ROUTES = [
   // Day-3 growth page — high-value global keyword "longevity calculator"; kept near
   // the front so it prerenders within the 25-min budget (before the born-on tail).
   '/longevity-calculator',
+  // Day-4 growth page — "biological age calculator" (~75K/mo, Bryan Johnson trend).
+  '/biological-age-calculator',
   // SEO Batch 1 — kept near the front so they prerender within the time budget.
   '/age-in-days',
   '/age-in-seconds',

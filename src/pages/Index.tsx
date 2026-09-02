@@ -371,6 +371,7 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
               { href: '/longevity-calculator', emoji: '🔬', badge: 'Longevity', title: 'Longevity Calculator', body: 'Science-backed life expectancy from 8 factors — WHO, Harvard and NIH research.', cta: 'Calculate how long I\'ll live →' },
+              { href: '/biological-age-calculator', emoji: '🧬', badge: 'Epigenetics', title: 'Biological Age Calculator', body: 'Is your body younger or older than your age? Epigenetic science, Horvath clock, 12 habits.', cta: 'Calculate my biological age →' },
               { href: '/biological-age', emoji: '🧬', badge: 'Science', title: "What's Your Biological Age?", body: 'Your body may be older or younger than your birth year. Find out in 2 minutes.', cta: 'Test my biological age →' },
               { href: '/country-comparison', emoji: '🌍', badge: 'Compare', title: 'Life Expectancy by Country', body: 'See how your forecast changes if you lived in Japan, France, or 50+ other countries.', cta: 'Compare countries →' },
               { href: '/biorhythm', emoji: '⚡', badge: 'Rhythm', title: 'Your Energy Cycles Today', body: 'Biorhythm science predicts your physical, emotional, and mental peaks for any day.', cta: 'See my biorhythm →' },

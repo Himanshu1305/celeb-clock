@@ -24,6 +24,7 @@ const FitnessRhythmPage = lazyWithReload(() => import("./pages/FitnessRhythmPage
 import { FITNESS_PAGES } from "./data/fitnessPages";
 const LifeExpectancy = lazyWithReload(() => import("./pages/LifeExpectancy"));
 const LongevityCalculatorPage = lazyWithReload(() => import("./pages/LongevityCalculatorPage"));
+const BiologicalAgeCalculatorPage = lazyWithReload(() => import("./pages/BiologicalAgeCalculatorPage"));
 const CelebrityBirthday = lazyWithReload(() => import("./pages/CelebrityBirthday"));
 const Blog = lazyWithReload(() => import("./pages/Blog"));
 const BlogPost = lazyWithReload(() => import("./pages/BlogPost"));
@@ -183,6 +184,7 @@ const App = () => (
               <Route path="/birthstone/:month" element={<BirthstonePage />} />
               <Route path="/life-expectancy" element={<LifeExpectancy />} />
               <Route path="/longevity-calculator" element={<LongevityCalculatorPage />} />
+              <Route path="/biological-age-calculator" element={<BiologicalAgeCalculatorPage />} />
               <Route path="/celebrity-birthday" element={<CelebrityBirthday />} />
               <Route path="/birthday" element={<BirthdayHub />} />
               <Route path="/birthday/:month/:day" element={<BirthdayDatePage />} />
