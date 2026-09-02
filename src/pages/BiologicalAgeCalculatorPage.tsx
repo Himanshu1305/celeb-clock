@@ -72,11 +72,11 @@ export function BiologicalAgeCalculatorPage() {
         {/* ── HERO ── */}
         <section
           aria-labelledby="page-h1"
-          className="bg-gradient-to-br from-violet-50 to-indigo-50
-                     border-b border-violet-100 py-12 px-4 mt-4"
+          className="bg-gradient-to-br from-indigo-50 to-indigo-50
+                     border-b border-indigo-100 py-12 px-4 mt-4"
         >
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-violet-100 text-violet-700
+            <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700
                             rounded-full px-4 py-1.5 text-sm font-semibold mb-4">
               {BA_COPY.hero.badge}
             </div>
@@ -87,7 +87,7 @@ export function BiologicalAgeCalculatorPage() {
                          leading-tight mb-4"
             >
               {BA_COPY.hero.h1Line1}{' '}
-              <span className="text-violet-600">{BA_COPY.hero.h1Line2}</span>
+              <span className="text-indigo-600">{BA_COPY.hero.h1Line2}</span>
             </h1>
 
             <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6 leading-relaxed">
@@ -111,10 +111,10 @@ export function BiologicalAgeCalculatorPage() {
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-violet-600 hover:bg-violet-500
+              className="inline-block bg-indigo-600 hover:bg-indigo-500
                          text-white font-black py-4 px-10 rounded-xl
                          transition-colors text-lg shadow-md
-                         focus:outline-none focus:ring-2 focus:ring-violet-400
+                         focus:outline-none focus:ring-2 focus:ring-indigo-400
                          focus:ring-offset-2"
               aria-label="Start the free biological age calculator"
             >
@@ -132,8 +132,8 @@ export function BiologicalAgeCalculatorPage() {
           className="max-w-4xl mx-auto px-4 py-10"
           aria-labelledby="bj-heading"
         >
-          <div className="bg-gradient-to-r from-violet-50 to-indigo-50
-                          border border-violet-200 rounded-2xl p-6 sm:p-8">
+          <div className="bg-gradient-to-r from-indigo-50 to-indigo-50
+                          border border-indigo-200 rounded-2xl p-6 sm:p-8">
             <h2 id="bj-heading" className="text-2xl font-black text-gray-900 mb-4">
               {BA_COPY.bryanJohnson.heading}
             </h2>
@@ -149,7 +149,7 @@ export function BiologicalAgeCalculatorPage() {
               <Link
                 to="/life-expectancy"
                 data-testid="cta-to-calculator"
-                className="inline-block bg-violet-600 hover:bg-violet-500
+                className="inline-block bg-indigo-600 hover:bg-indigo-500
                            text-white font-bold py-3 px-8 rounded-xl transition-colors"
               >
                 Get My Free Biological Age Estimate →
@@ -205,9 +205,9 @@ export function BiologicalAgeCalculatorPage() {
                   {BA_COPY.chronoVsBio.chronological.example}
                 </p>
               </div>
-              <div className="bg-violet-50 border border-violet-200 rounded-xl p-5">
+              <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
                 <div className="text-3xl mb-2" aria-hidden="true">🔬</div>
-                <h3 className="font-bold text-violet-900 mb-2">
+                <h3 className="font-bold text-indigo-900 mb-2">
                   {BA_COPY.chronoVsBio.biological.label}
                 </h3>
                 <p className="text-gray-700 text-sm mb-3">
@@ -241,7 +241,7 @@ export function BiologicalAgeCalculatorPage() {
 
           {/* Mid-article CTA */}
           <div
-            className="my-10 bg-violet-50 border border-violet-200
+            className="my-10 bg-indigo-50 border border-indigo-200
                         rounded-2xl p-6 text-center"
             role="complementary"
           >
@@ -254,7 +254,7 @@ export function BiologicalAgeCalculatorPage() {
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-violet-600 hover:bg-violet-500
+              className="inline-block bg-indigo-600 hover:bg-indigo-500
                          text-white font-bold py-3 px-8 rounded-xl transition-colors"
             >
               Calculate My Biological Age →
@@ -277,8 +277,8 @@ export function BiologicalAgeCalculatorPage() {
             <p className="text-gray-600 mb-3">{BA_COPY.twelveHabits.intro}</p>
 
             {/* Realistic potential — NOT raw sum */}
-            <div className="bg-violet-50 border border-violet-200 rounded-xl p-3 mb-3">
-              <p className="text-sm font-semibold text-violet-800">
+            <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3 mb-3">
+              <p className="text-sm font-semibold text-indigo-800">
                 🎯 Realistic combined potential: up to +{BA_REALISTIC_POTENTIAL} years
                 (with consistent practice across multiple habits)
               </p>
@@ -302,7 +302,7 @@ export function BiologicalAgeCalculatorPage() {
                     <span
                       aria-hidden="true"
                       className="inline-flex items-center justify-center
-                                 w-6 h-6 bg-violet-600 text-white rounded-full
+                                 w-6 h-6 bg-indigo-600 text-white rounded-full
                                  text-xs font-black flex-shrink-0"
                     >
                       {habit.id}
@@ -324,7 +324,7 @@ export function BiologicalAgeCalculatorPage() {
                       {habit.mechanism}
                     </p>
                     <div className="flex items-start justify-between gap-2">
-                      <p className="text-xs text-violet-600 italic flex-1 leading-relaxed">
+                      <p className="text-xs text-indigo-600 italic flex-1 leading-relaxed">
                         {habit.source}
                       </p>
                       <span
@@ -359,7 +359,7 @@ export function BiologicalAgeCalculatorPage() {
                              border border-gray-200 rounded-xl p-5"
                 >
                   <div
-                    className="flex-shrink-0 w-8 h-8 bg-violet-600 text-white
+                    className="flex-shrink-0 w-8 h-8 bg-indigo-600 text-white
                                rounded-full flex items-center justify-center
                                font-black text-sm"
                     aria-label={`Step ${step.step}`}
@@ -500,12 +500,12 @@ export function BiologicalAgeCalculatorPage() {
                   to={tool.href}
                   data-testid="related-tool"
                   className="flex items-start gap-3 p-4 bg-white rounded-xl
-                             border border-gray-200 hover:border-violet-300
-                             hover:bg-violet-50 transition-colors group"
+                             border border-gray-200 hover:border-indigo-300
+                             hover:bg-indigo-50 transition-colors group"
                 >
                   <div>
                     <div className="font-semibold text-sm text-gray-900
-                                    group-hover:text-violet-700 mb-0.5">
+                                    group-hover:text-indigo-700 mb-0.5">
                       {tool.title}
                     </div>
                     <div className="text-xs text-gray-500">{tool.desc}</div>
@@ -547,25 +547,25 @@ export function BiologicalAgeCalculatorPage() {
 
           {/* Bottom CTA */}
           <div
-            className="bg-gradient-to-br from-violet-600 to-indigo-600
+            className="bg-gradient-to-br from-indigo-600 to-indigo-600
                         rounded-2xl p-8 text-center text-white"
             role="complementary"
           >
             <h2 className="text-2xl font-black mb-2">
               Find Out Your Biological Age — Free
             </h2>
-            <p className="text-violet-200 mb-6 max-w-md mx-auto">
+            <p className="text-indigo-200 mb-6 max-w-md mx-auto">
               3 minutes. Epigenetic science. Personalised plan to lower your biological age.
             </p>
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-white text-violet-600 hover:bg-violet-50
+              className="inline-block bg-white text-indigo-600 hover:bg-indigo-50
                          font-black py-4 px-8 rounded-xl transition-colors text-lg"
             >
               Calculate My Biological Age →
             </Link>
-            <p className="text-violet-300 text-xs mt-3">
+            <p className="text-indigo-300 text-xs mt-3">
               Free · No blood test · No account required
             </p>
           </div>

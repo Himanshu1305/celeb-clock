@@ -63,7 +63,7 @@ export function LongevityCalculatorPage() {
         {/* ── HERO ── */}
         <section
           aria-labelledby="page-h1"
-          className="bg-gradient-to-br from-indigo-50 to-purple-50
+          className="bg-gradient-to-br from-indigo-50 to-indigo-50
                      border-b border-indigo-100 py-12 px-4 mt-4"
         >
           <div className="max-w-4xl mx-auto text-center">
@@ -449,7 +449,7 @@ export function LongevityCalculatorPage() {
 
           {/* Bottom CTA */}
           <div
-            className="bg-gradient-to-br from-indigo-600 to-purple-600
+            className="bg-gradient-to-br from-indigo-600 to-indigo-600
                         rounded-2xl p-8 text-center text-white"
             role="complementary"
           >

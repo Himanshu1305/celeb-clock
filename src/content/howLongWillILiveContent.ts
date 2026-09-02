@@ -255,7 +255,7 @@ export const HLWIL_COPY = {
     heading: 'The Direct Answer: It Depends on You',
     stats: [
       { label: 'Global average', value: '73 years',   note: 'WHO 2023', color: 'text-gray-700' as const },
-      { label: 'Highest (Japan)', value: '84.3 years', note: 'WHO 2023', color: 'text-emerald-600' as const },
+      { label: 'Highest (Japan)', value: '84.3 years', note: 'WHO 2023', color: 'text-indigo-600' as const },
       { label: 'India average',   value: '70.2 years', note: 'WHO 2023', color: 'text-indigo-600' as const },
       { label: 'United States',   value: '76.4 years', note: 'WHO 2023', color: 'text-blue-600' as const },
     ] as const,
