@@ -69,10 +69,11 @@ const ZODIAC_DATA: ZodiacInfo[] = [
 ];
 
 export function calculateWesternZodiac(day: number, month: number): ZodiacInfo {
+  // ZODIAC_DATA is ordered by end date. A date belongs to the first sign whose
+  // (endMonth, endDay) is >= the date. Dec 22–31 falls through to Capricorn (wrap).
   for (let i = 0; i < ZODIAC_DATA.length; i++) {
     const z = ZODIAC_DATA[i];
-    if (month === z.endMonth && day <= z.endDay) return z;
-    if (month < z.endMonth) return ZODIAC_DATA[i === 0 ? 11 : i - 1];
+    if (month < z.endMonth || (month === z.endMonth && day <= z.endDay)) return z;
   }
   return ZODIAC_DATA[0]; // Dec 22-31 → Capricorn
 }
