@@ -18,10 +18,10 @@ config({ path: '.env.local' });
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
-const GEMINI_API_KEY = process.env.VITE_GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.VITE_GEMINI_API_KEY ?? process.env.GEMINI_API_KEY;
 const BIOS_PATH = join(process.cwd(), 'src/data/celebrity-bios.json');
 const CELEBS_PATH = join(process.cwd(), 'src/data/indianCelebrities.ts');
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
 
 // ── CLI ───────────────────────────────────────────────────────
 const args = process.argv.slice(2);
@@ -72,8 +72,13 @@ function validateBio(bio: string, name: string): string | null {
   const words = bio.trim().split(/\s+/).length;
   if (words < 100) return `Too short (${words} words, need ≥100)`;
   if (words > 260) return `Too long (${words} words, need ≤260)`;
-  const firstName = name.split(' ')[0].toLowerCase();
-  if (!bio.toLowerCase().includes(firstName)) return `Bio doesn't mention name "${firstName}"`;
+  // Name check: pass if any meaningful name token (≥3 chars) appears in the bio.
+  // Guards against false-negatives for initial-led names (e.g. "MS Dhoni", "PV Sindhu").
+  const lowerBio = bio.toLowerCase();
+  const nameTokens = name.toLowerCase().split(/\s+/).filter(t => t.length >= 3);
+  const checkTokens = nameTokens.length > 0 ? nameTokens : [name.split(' ')[0].toLowerCase()];
+  if (!checkTokens.some(t => lowerBio.includes(t)))
+    return `Bio doesn't mention name "${name}"`;
   return null;
 }
 
@@ -101,7 +106,7 @@ Return ONLY the biography. No headings, labels, or commentary.`;
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.3, maxOutputTokens: 320, topP: 0.8 },
+      generationConfig: { temperature: 0.3, maxOutputTokens: 8192, topP: 0.8, thinkingConfig: { thinkingBudget: 0 } },
       safetySettings: [
         { category: 'HARM_CATEGORY_HARASSMENT',  threshold: 'BLOCK_NONE' },
         { category: 'HARM_CATEGORY_HATE_SPEECH',  threshold: 'BLOCK_NONE' },
