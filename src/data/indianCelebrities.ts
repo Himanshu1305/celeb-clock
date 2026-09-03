@@ -763,3 +763,6 @@ export function getIndianCelebritiesByDate(month: number, day: number): IndianCe
 export function getIndianCelebritiesByYear(year: number): IndianCelebrity[] {
   return INDIAN_CELEBRITIES.filter(c => c.birth_year === year);
 }
+
+// Day-8 celebrity pages consume this alias (components, utils, tests).
+export const indianCelebrities = INDIAN_CELEBRITIES;
