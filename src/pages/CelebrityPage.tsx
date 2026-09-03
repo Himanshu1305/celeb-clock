@@ -1,3 +1,4 @@
+import React from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 import { indianCelebrities } from '@/data/indianCelebrities';
@@ -11,6 +12,15 @@ import {
   calculateWesternZodiac, calculateChineseZodiac, calculateVedicRashi,
   calculateNakshatra, calculatePlanetaryAges,
 } from '@/utils/celebrityCalculations';
+import {
+  WESTERN_ZODIAC_PROFILES, VEDIC_RASHI_PROFILES,
+  CHINESE_ZODIAC_PROFILES, NAKSHATRA_PROFILES, LIFE_PATH_EXTENDED,
+} from '@/data/astrologicalData';
+import type {
+  WesternZodiacProfile, VedicRashiProfile,
+  ChineseZodiacProfile, NakshatraProfile, LifePathProfile,
+} from '@/data/astrologicalData';
+import celebBios from '@/data/celebrity-bios.json';
 
 // Build the slug map ONCE at module load (deterministic, ~598 entries).
 const SLUG_MAP = generateAllSlugs(indianCelebrities as unknown as Record<string, unknown>[]);
@@ -24,6 +34,46 @@ function JsonLd({ data }: { data: object }) {
   return (
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
   );
+}
+
+function buildPersonalitySynthesis(
+  name: string,
+  zodiacProfile: WesternZodiacProfile | null,
+  rashiProfile: VedicRashiProfile | null,
+  lifePath: number | null,
+  lpExtended: LifePathProfile | null,
+  nakshatraProfile: NakshatraProfile | null,
+  zodiacSign: string | null,
+  rashiName: string | null,
+  nakshatraName: string | null
+): string {
+  const parts: string[] = [];
+
+  if (zodiacProfile && rashiProfile && zodiacSign && rashiName) {
+    parts.push(
+      `As a ${zodiacSign} with ${rashiName} Rashi, ${name} combines the ${zodiacProfile.element.toLowerCase()} energy of ${zodiacSign} with the ${rashiProfile.element.toLowerCase()} depth of ${rashiName}, ruled by ${rashiProfile.lord} (${rashiProfile.lord_devanagari}).`
+    );
+  } else if (zodiacProfile && zodiacSign) {
+    parts.push(
+      `As a ${zodiacSign}, ${name} carries the ${zodiacProfile.element.toLowerCase()} energy of the archer — ${zodiacProfile.personality_summary.slice(0, 80).toLowerCase()}.`
+    );
+  }
+
+  if (lifePath && lpExtended) {
+    parts.push(
+      `Their Life Path ${lifePath} — the ${lpExtended.title} — guided by ${lpExtended.ruling_planet}, brings ${lpExtended.traits.slice(0, 60).toLowerCase()} to everything they do.`
+    );
+  }
+
+  if (nakshatraProfile && nakshatraName) {
+    parts.push(
+      `Born in the ${nakshatraName} Nakshatra (${nakshatraProfile.quality}), their ${nakshatraProfile.strengths.slice(0, 2).join(' and ').toLowerCase()} nature is a thread that runs through their entire life.`
+    );
+  }
+
+  return parts.length > 0
+    ? parts.join(' ')
+    : `${name} is an accomplished Indian personality whose work has left a lasting mark on their field and on audiences across the nation.`;
 }
 
 export function CelebrityPage() {
@@ -48,6 +98,27 @@ export function CelebrityPage() {
   const chinese = dob ? calculateChineseZodiac(dob.year) : null;
   const lifePath = isFull ? calculateLifePathNumber(dob!.day, dob!.month, dob!.year) : null;
   const planetary = dob ? calculatePlanetaryAges(dob) : [];
+
+  // ── Day 8B: rich astrological profiles (all null-guarded) ──
+  const zodiacProfile: WesternZodiacProfile | null = western
+    ? (WESTERN_ZODIAC_PROFILES[western.sign] ?? null) : null;
+  const rashiProfile: VedicRashiProfile | null = vedic
+    ? (VEDIC_RASHI_PROFILES[vedic.rashi] ?? null) : null;
+  const chineseProfile: ChineseZodiacProfile | null = chinese
+    ? (CHINESE_ZODIAC_PROFILES[chinese.animal] ?? null) : null;
+  const nakshatraProfile: NakshatraProfile | null = nakshatra
+    ? (NAKSHATRA_PROFILES[nakshatra.nakshatra] ?? null) : null;
+  const lpExtended: LifePathProfile | null = lifePath
+    ? (LIFE_PATH_EXTENDED[lifePath] ?? null) : null;
+  const bio: string | null = (celebBios as Record<string, string>)[slug ?? ''] ?? null;
+
+  // Active tab state for astrological section
+  const [activeTab, setActiveTab] = React.useState<'western' | 'vedic' | 'chinese' | 'numerology'>('western');
+
+  const personalitySynthesis = buildPersonalitySynthesis(
+    name, zodiacProfile, rashiProfile, lifePath, lpExtended, nakshatraProfile,
+    western?.sign ?? null, vedic?.rashi ?? null, nakshatra?.nakshatra ?? null
+  );
 
   // Age string (honest for every DOB situation).
   const currentYear = new Date().getFullYear();
@@ -189,6 +260,110 @@ export function CelebrityPage() {
         </section>
 
         <div className="max-w-4xl mx-auto px-4 pb-16">
+          {/* ── LUCKY ELEMENTS PANEL ── */}
+          <section
+            data-testid="lucky-elements-panel"
+            className="mt-8 mb-6 overflow-x-auto pb-1"
+            aria-label="Lucky elements"
+          >
+            <div className="flex gap-2 flex-wrap">
+              {rashiProfile ? (
+                <>
+                  <span data-testid="lucky-chip-color"
+                    className="flex-shrink-0 bg-indigo-50 border border-indigo-200
+                               rounded-full px-3 py-1.5 text-xs font-medium text-indigo-800 whitespace-nowrap">
+                    🎨 Colour: {rashiProfile.lucky_colors[0]}
+                  </span>
+                  <span data-testid="lucky-chip-stone"
+                    className="flex-shrink-0 bg-indigo-50 border border-indigo-200
+                               rounded-full px-3 py-1.5 text-xs font-medium text-indigo-800 whitespace-nowrap">
+                    💎 Stone: {rashiProfile.lucky_stone} ({rashiProfile.lucky_stone_hindi})
+                  </span>
+                  <span data-testid="lucky-chip-day"
+                    className="flex-shrink-0 bg-indigo-50 border border-indigo-200
+                               rounded-full px-3 py-1.5 text-xs font-medium text-indigo-800 whitespace-nowrap">
+                    📅 Day: {rashiProfile.lucky_day}
+                  </span>
+                  <span data-testid="lucky-chip-number"
+                    className="flex-shrink-0 bg-indigo-50 border border-indigo-200
+                               rounded-full px-3 py-1.5 text-xs font-medium text-indigo-800 whitespace-nowrap">
+                    🔢 Number: {rashiProfile.lucky_numbers.join(', ')}
+                  </span>
+                  <span data-testid="lucky-chip-direction"
+                    className="flex-shrink-0 bg-indigo-50 border border-indigo-200
+                               rounded-full px-3 py-1.5 text-xs font-medium text-indigo-800 whitespace-nowrap">
+                    🧭 Direction: {rashiProfile.lucky_direction}
+                  </span>
+                  <span data-testid="lucky-chip-metal"
+                    className="flex-shrink-0 bg-indigo-50 border border-indigo-200
+                               rounded-full px-3 py-1.5 text-xs font-medium text-indigo-800 whitespace-nowrap">
+                    ⚙️ Metal: {rashiProfile.lucky_metal}
+                  </span>
+                  {zodiacProfile && (
+                    <span data-testid="lucky-chip-tarot"
+                      className="flex-shrink-0 bg-indigo-50 border border-indigo-200
+                                 rounded-full px-3 py-1.5 text-xs font-medium text-indigo-800 whitespace-nowrap">
+                      🃏 Tarot: {zodiacProfile.tarot_card}
+                    </span>
+                  )}
+                </>
+              ) : chineseProfile ? (
+                <>
+                  <span data-testid="lucky-chip-color"
+                    className="flex-shrink-0 bg-indigo-50 border border-indigo-200
+                               rounded-full px-3 py-1.5 text-xs font-medium text-indigo-800 whitespace-nowrap">
+                    🎨 Lucky Colour: {chineseProfile.lucky_colors[0]}
+                  </span>
+                  <span data-testid="lucky-chip-number"
+                    className="flex-shrink-0 bg-indigo-50 border border-indigo-200
+                               rounded-full px-3 py-1.5 text-xs font-medium text-indigo-800 whitespace-nowrap">
+                    🔢 Lucky Number: {chineseProfile.lucky_numbers.join(', ')}
+                  </span>
+                  <span className="flex-shrink-0 text-xs text-gray-400 italic self-center">
+                    Full lucky profile requires exact date of birth
+                  </span>
+                </>
+              ) : (
+                <span className="text-xs text-gray-400 italic">
+                  Lucky elements require a full date of birth.
+                </span>
+              )}
+            </div>
+          </section>
+
+          {/* ── PERSONALITY SYNTHESIS ── */}
+          {personalitySynthesis && (
+            <section
+              data-testid="personality-synthesis"
+              className="mb-6 bg-indigo-50 border border-indigo-100 rounded-xl p-4"
+            >
+              <p className="text-sm text-indigo-900 leading-relaxed">{personalitySynthesis}</p>
+            </section>
+          )}
+
+          {/* ── BIO SECTION ── */}
+          {bio ? (
+            <section
+              data-testid="celebrity-bio"
+              className="mb-6 bg-white rounded-xl border border-gray-200 p-5"
+            >
+              <h2 className="text-lg font-black text-gray-900 mb-3">About {name}</h2>
+              <p className="text-gray-700 leading-relaxed text-sm">{bio}</p>
+              <p className="text-xs text-gray-400 mt-3 italic">
+                Based on publicly available information.
+              </p>
+            </section>
+          ) : (
+            <section data-testid="celebrity-bio-pending" className="mb-6">
+              <div className="bg-gray-50 border border-dashed border-gray-200
+                              rounded-xl p-4 text-center">
+                <p className="text-gray-400 text-sm">
+                  Detailed biography for {name} coming soon.
+                </p>
+              </div>
+            </section>
+          )}
+
           {/* ── FACTS TABLE ── */}
           <section className="mt-8 mb-10" aria-labelledby="facts-heading">
             <h2 id="facts-heading" className="text-2xl font-black text-gray-900 mb-4 pb-3 border-b border-gray-200">
@@ -257,37 +432,361 @@ export function CelebrityPage() {
             )}
           </section>
 
-          {/* ── ZODIAC CARDS ── */}
-          <section className="mb-10" aria-labelledby="zodiac-heading">
-            <h2 id="zodiac-heading" className="text-2xl font-black text-gray-900 mb-4 pb-3 border-b border-gray-200">
-              {name}'s Astrological Profile
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {western && (
-                <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
-                  <div className="text-3xl mb-1" aria-hidden="true">{western.symbol}</div>
-                  <div className="font-bold text-indigo-900">Western: {western.sign}</div>
-                  <div className="text-xs text-gray-500 mb-1">{western.date_range} · {western.element} · {western.ruling_planet}</div>
-                  <p className="text-sm text-gray-700">{western.traits}</p>
-                </div>
-              )}
-              {chinese && (
-                <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
-                  <div className="text-3xl mb-1" aria-hidden="true">{chinese.emoji}</div>
-                  <div className="font-bold text-indigo-900">Chinese: {chinese.animal}</div>
-                  <div className="text-xs text-gray-500 mb-1">{chinese.element} {chinese.animal}</div>
-                  <p className="text-sm text-gray-700">{chinese.traits}</p>
-                </div>
-              )}
-              {vedic && (
-                <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
-                  <div className="text-3xl mb-1" aria-hidden="true">🕉️</div>
-                  <div className="font-bold text-indigo-900">Vedic: {vedic.rashi}</div>
-                  <div className="text-xs text-gray-500 mb-1">Lord {vedic.lord} · {vedic.element}</div>
-                  <p className="text-sm text-gray-700">{vedic.traits}</p>
-                </div>
-              )}
+          {/* ── EXPANDED ASTROLOGICAL TABS ── */}
+          <section data-testid="astro-tabs" className="mb-8">
+            <h2 className="text-xl font-black text-gray-900 mb-4">Astrological Profile</h2>
+
+            {/* Tab buttons */}
+            <div className="flex gap-1 mb-4 overflow-x-auto pb-1">
+              {[
+                { id: 'western',    label: '⭐ Western Zodiac' },
+                { id: 'vedic',      label: '🕉 Vedic / Rashi' },
+                { id: 'chinese',    label: '🐉 Chinese Zodiac' },
+                { id: 'numerology', label: '🔢 Numerology' },
+              ].map(({ id, label }) => (
+                <button
+                  key={id}
+                  data-testid={`tab-${id}`}
+                  onClick={() => setActiveTab(id as typeof activeTab)}
+                  className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                    activeTab === id
+                      ? 'bg-primary text-white shadow-sm'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
+
+            {/* WESTERN TAB — conditional rendering (NOT CSS display:none) */}
+            {activeTab === 'western' && (
+              <div data-testid="tab-content-western" className="animate-in fade-in">
+                {zodiacProfile ? (
+                  <>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+                      {western?.sign} {western?.symbol} — The {zodiacProfile.element} Sign
+                    </h3>
+                    <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                      {zodiacProfile.personality_summary}
+                    </p>
+                    {/* Strengths + Weaknesses */}
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div>
+                        <h4 className="text-xs font-bold text-green-700 mb-2">Strengths</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {zodiacProfile.strengths.map(s => (
+                            <span key={s} className="bg-green-100 text-green-800 text-xs
+                                                      px-2 py-1 rounded-full">{s}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-red-700 mb-2">Challenges</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {zodiacProfile.weaknesses.map(w => (
+                            <span key={w} className="bg-red-100 text-red-800 text-xs
+                                                      px-2 py-1 rounded-full">{w}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    {/* Lucky elements grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-xs">
+                      {[
+                        { label: 'Lucky Colour', value: zodiacProfile.lucky_color },
+                        { label: 'Lucky Stone',  value: zodiacProfile.lucky_stone },
+                        { label: 'Lucky Day',    value: zodiacProfile.lucky_day },
+                        { label: 'Lucky Numbers', value: zodiacProfile.lucky_numbers.join(', ') },
+                      ].map(({ label, value }) => (
+                        <div key={label}
+                          className="bg-gray-50 border border-gray-200 rounded-lg p-2 text-center">
+                          <div className="text-gray-400 mb-0.5 text-xs">{label}</div>
+                          <div className="font-semibold text-gray-900 text-xs">{value ?? '—'}</div>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Tarot */}
+                    <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3 mb-4">
+                      <div className="text-xs font-bold text-indigo-800 mb-1">
+                        🃏 Tarot Card: {zodiacProfile.tarot_card}
+                      </div>
+                      <div className="text-xs text-indigo-700">{zodiacProfile.tarot_meaning}</div>
+                    </div>
+                    {/* Compatibility */}
+                    <div className="mb-4">
+                      <h4 className="text-xs font-bold text-gray-700 mb-2">Compatibility</h4>
+                      <div className="flex flex-wrap gap-1 mb-1">
+                        {zodiacProfile.love_compatibility.map(s => (
+                          <span key={s} className="bg-green-100 text-green-700 text-xs
+                                                    px-2 py-1 rounded-full">✓ {s}</span>
+                        ))}
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {zodiacProfile.challenging_signs.map(s => (
+                          <span key={s} className="bg-red-100 text-red-700 text-xs
+                                                    px-2 py-1 rounded-full">✗ {s}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      <strong>Career: </strong>{zodiacProfile.career_strengths}
+                    </p>
+                  </>
+                ) : (
+                  <div className="text-center py-8 text-gray-400 text-sm">
+                    Western zodiac requires an exact birth date (day and month).
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* VEDIC TAB — only in DOM when active */}
+            {activeTab === 'vedic' && (
+              <div data-testid="tab-content-vedic" className="animate-in fade-in">
+                {rashiProfile ? (
+                  <>
+                    <h3 className="text-lg font-bold text-gray-900 mb-1">
+                      {rashiProfile.rashi} ({rashiProfile.rashi_devanagari}) — {rashiProfile.western_equivalent}
+                    </h3>
+                    <div className="flex flex-wrap gap-2 text-xs text-gray-500 mb-4">
+                      <span>Lord: {rashiProfile.lord} ({rashiProfile.lord_devanagari})</span>
+                      <span>•</span>
+                      <span>{rashiProfile.element}</span>
+                      <span>•</span>
+                      <span>{rashiProfile.quality}</span>
+                      <span>•</span>
+                      <span>{rashiProfile.symbol}</span>
+                    </div>
+                    {/* Lucky elements 8-cell grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-xs">
+                      {[
+                        { label: 'Lucky Stone',     value: `${rashiProfile.lucky_stone} (${rashiProfile.lucky_stone_hindi})` },
+                        { label: 'Lucky Colour',    value: rashiProfile.lucky_colors[0] },
+                        { label: 'Lucky Day',       value: rashiProfile.lucky_day },
+                        { label: 'Lucky Number',    value: rashiProfile.lucky_numbers.join(', ') },
+                        { label: 'Direction',       value: rashiProfile.lucky_direction },
+                        { label: 'Metal',           value: rashiProfile.lucky_metal },
+                        { label: 'Ruling Deity',    value: rashiProfile.ruling_deity },
+                        { label: 'Body',            value: rashiProfile.body_part },
+                      ].map(({ label, value }) => (
+                        <div key={label}
+                          className="bg-gray-50 border border-gray-200 rounded-lg p-2 text-center">
+                          <div className="text-gray-400 mb-0.5 text-xs">{label}</div>
+                          <div className="font-semibold text-gray-900 text-xs leading-tight">{value}</div>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Mantra */}
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4">
+                      <div className="text-xs font-bold text-amber-800 mb-1">🕉 Mantra</div>
+                      <div className="text-sm font-medium text-amber-900">{rashiProfile.mantra}</div>
+                    </div>
+                    <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                      {rashiProfile.personality_summary}
+                    </p>
+                    {/* Strengths + Challenges */}
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div>
+                        <h4 className="text-xs font-bold text-green-700 mb-2">Strengths</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {rashiProfile.strengths.map(s => (
+                            <span key={s} className="bg-green-100 text-green-800 text-xs
+                                                      px-2 py-1 rounded-full">{s}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-red-700 mb-2">Challenges</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {rashiProfile.challenges.map(c => (
+                            <span key={c} className="bg-red-100 text-red-800 text-xs
+                                                      px-2 py-1 rounded-full">{c}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-600 leading-relaxed mb-3">
+                      <strong>Career: </strong>{rashiProfile.career_strengths}
+                    </p>
+                    <div className="mb-3">
+                      <h4 className="text-xs font-bold text-gray-700 mb-1">Compatible Rashis</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {rashiProfile.compatible_rashis.map(r => (
+                          <span key={r} className="bg-green-100 text-green-700 text-xs
+                                                    px-2 py-1 rounded-full">✓ {r}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-3">
+                      <h4 className="text-xs font-bold text-amber-800 mb-1">Health Tendencies</h4>
+                      <p className="text-xs text-amber-900">{rashiProfile.health_tendencies}</p>
+                    </div>
+                    <p className="text-xs text-gray-400 italic">
+                      Note: For precise Rashi, exact birth time and location are required. This is an approximate calculation.
+                    </p>
+                  </>
+                ) : (
+                  <div className="text-center py-8 text-gray-400 text-sm">
+                    Vedic Rashi calculation requires an exact birth date (day and month).
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* CHINESE TAB */}
+            {activeTab === 'chinese' && (
+              <div data-testid="tab-content-chinese" className="animate-in fade-in">
+                {chineseProfile ? (
+                  <>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+                      {chineseProfile.emoji} Year of the {chineseProfile.animal}
+                      <span className="text-sm font-normal text-gray-500 ml-2">
+                        ({chineseProfile.element_fixed} {chineseProfile.yin_yang})
+                      </span>
+                    </h3>
+                    <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                      {chineseProfile.personality_summary}
+                    </p>
+                    {/* Lucky and Unlucky */}
+                    <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
+                      <div>
+                        <h4 className="font-bold text-green-700 mb-2">Lucky</h4>
+                        <p className="text-gray-600">Numbers: {chineseProfile.lucky_numbers.join(', ')}</p>
+                        <p className="text-gray-600">Colours: {chineseProfile.lucky_colors.join(', ')}</p>
+                        <p className="text-gray-600">Flowers: {chineseProfile.lucky_flowers.join(', ')}</p>
+                        <p className="text-gray-600">Directions: {chineseProfile.lucky_directions.join(', ')}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-red-700 mb-2">Unlucky</h4>
+                        <p className="text-gray-600">Numbers: {chineseProfile.unlucky_numbers.join(', ')}</p>
+                        <p className="text-gray-600">Colours: {chineseProfile.unlucky_colors.join(', ')}</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div>
+                        <h4 className="text-xs font-bold text-green-700 mb-2">Strengths</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {chineseProfile.strengths.map(s => (
+                            <span key={s} className="bg-green-100 text-green-800 text-xs
+                                                      px-2 py-1 rounded-full">{s}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-red-700 mb-2">Weaknesses</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {chineseProfile.weaknesses.map(w => (
+                            <span key={w} className="bg-red-100 text-red-800 text-xs
+                                                      px-2 py-1 rounded-full">{w}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mb-3">
+                      <h4 className="text-xs font-bold text-gray-700 mb-1">Best Match</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {chineseProfile.best_match.map(a => (
+                          <span key={a} className="bg-green-100 text-green-700 text-xs
+                                                    px-2 py-1 rounded-full">✓ {a}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="mb-3">
+                      <h4 className="text-xs font-bold text-gray-700 mb-1">Challenging Match</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {chineseProfile.worst_match.map(a => (
+                          <span key={a} className="bg-red-100 text-red-700 text-xs
+                                                    px-2 py-1 rounded-full">✗ {a}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      <strong>Career: </strong>{chineseProfile.career_strengths}
+                    </p>
+                  </>
+                ) : (
+                  <div className="text-center py-8 text-gray-400 text-sm">
+                    Chinese zodiac requires a birth year.
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* NUMEROLOGY TAB */}
+            {activeTab === 'numerology' && (
+              <div data-testid="tab-content-numerology" className="animate-in fade-in">
+                {lpExtended && lifePath ? (
+                  <>
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-16 h-16 bg-indigo-100 border-2 border-indigo-300 rounded-full
+                                      flex items-center justify-center text-2xl font-black text-indigo-700">
+                        {lifePath}
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-gray-900">Life Path {lifePath}</h3>
+                        <p className="text-gray-500 text-sm">{lpExtended.title}</p>
+                        <p className="text-xs text-gray-400">
+                          {lpExtended.ruling_planet} · {lpExtended.element}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-gray-700 text-sm leading-relaxed mb-4">{lpExtended.traits}</p>
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div>
+                        <h4 className="text-xs font-bold text-green-700 mb-2">Strengths</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {lpExtended.strengths.map(s => (
+                            <span key={s} className="bg-green-100 text-green-800 text-xs
+                                                      px-2 py-1 rounded-full">{s}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-red-700 mb-2">Challenges</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {lpExtended.challenges.map(c => (
+                            <span key={c} className="bg-red-100 text-red-800 text-xs
+                                                      px-2 py-1 rounded-full">{c}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3 mb-3">
+                      <h4 className="text-xs font-bold text-indigo-800 mb-1">💖 Love Style</h4>
+                      <p className="text-xs text-indigo-900">{lpExtended.love_style}</p>
+                    </div>
+                    <div className="mb-3">
+                      <h4 className="text-xs font-bold text-gray-700 mb-2">Career Paths</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {lpExtended.career_paths.map(c => (
+                          <span key={c} className="bg-gray-100 text-gray-700 text-xs
+                                                    px-2 py-1 rounded-full">{c}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-purple-50 border border-purple-200 rounded-xl p-3 mb-3">
+                      <h4 className="text-xs font-bold text-purple-800 mb-1">✨ Spiritual Lesson</h4>
+                      <p className="text-xs text-purple-900">{lpExtended.spiritual_lesson}</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-2 text-center">
+                        <div className="text-gray-400 mb-0.5">Lucky Colour</div>
+                        <div className="font-semibold text-gray-900">{lpExtended.lucky_color}</div>
+                      </div>
+                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-2 text-center">
+                        <div className="text-gray-400 mb-0.5">Lucky Stone</div>
+                        <div className="font-semibold text-gray-900">{lpExtended.lucky_stone}</div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-8 text-gray-400 text-sm">
+                    Life Path numerology requires a full date of birth.
+                  </div>
+                )}
+              </div>
+            )}
           </section>
 
           {/* ── PLANETARY AGES (full DOB only) ── */}
