@@ -13,6 +13,23 @@ const INDIA_BORNON = JSON.parse(
 );
 const indiaBornOnRoutes = INDIA_BORNON.map(d => `/born-on/${d.slug}/india`);
 
+// Day-8 celebrity pages. celebrity-meta.json ({slug:{title,desc}}) is regenerated
+// from the TS data by `tsx scripts/gen-celebrity-slugs.mts` at the start of the
+// build, so these routes always match the CelebrityPage slug map. Defensive read:
+// if the file is missing (e.g. a bare dev run), fall back to no celebrity routes.
+let celebritySlugs = [];
+try {
+  const celebMeta = JSON.parse(
+    readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), './celebrity-meta.json'), 'utf-8')
+  );
+  celebritySlugs = Object.keys(celebMeta);
+} catch {
+  console.warn('[prerender-routes] celebrity-meta.json not found — celebrity routes skipped');
+}
+const celebrityHubRoutes = ['bollywood', 'cricket', 'politics', 'business', 'music', 'sports']
+  .map(h => `/celebrity/${h}`);
+const celebrityRoutes = celebritySlugs.map(s => `/celebrity/${s}`);
+
 const ZODIAC_SIGNS = [
   'aries','taurus','gemini','cancer','leo','virgo',
   'libra','scorpio','sagittarius','capricorn','aquarius','pisces',
@@ -240,6 +257,10 @@ export const STATIC_ROUTES = [
   ...bornOnRoutes(),
   '/born-on/india',
   ...indiaBornOnRoutes,
+  // Day-8 celebrity pages — index + 6 hubs first (high value), then 598 individuals.
+  '/celebrity',
+  ...celebrityHubRoutes,
+  ...celebrityRoutes,
   // NB: the 12 "Born in {Month}" hubs + 6 fitness pages are registered near the TOP
   // of this list (see above) so they prerender within the time budget.
 ];

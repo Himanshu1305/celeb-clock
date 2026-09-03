@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsx scripts/generate-og-cards.mts && node scripts/prerender.mjs && node scripts/generate-sitemap.mjs",
+    "build": "vite build && tsx scripts/gen-celebrity-slugs.mts && tsx scripts/generate-og-cards.mts && node scripts/prerender.mjs && node scripts/generate-sitemap.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",

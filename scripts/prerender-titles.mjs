@@ -17,6 +17,15 @@ const INDIA_BORNON_MAP = new Map(
     .map(d => [d.slug, d])
 );
 
+// Day-8 celebrity titles/descriptions (slug → {title, desc}), generated from the
+// TS data by tsx scripts/gen-celebrity-slugs.mts at build start.
+let CELEB_META = {};
+try {
+  CELEB_META = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), './celebrity-meta.json'), 'utf-8'));
+} catch {
+  CELEB_META = {};
+}
+
 // ── Zodiac ───────────────────────────────────────────────────────────────────
 const ZODIAC = {
   aries:       { title: 'Aries Zodiac Sign — Dates, Traits, Compatibility & History | BornClock', desc: 'Everything about Aries (March 21–April 19) — personality traits, strengths, love life, career, mythology, famous Aries celebrities, and compatibility. Humanized and fully sourced.' },
@@ -148,6 +157,14 @@ const ANSWERS = {
 
 // ── Static pages ──────────────────────────────────────────────────────────────
 const STATIC = {
+  // Day-8 celebrity index + hubs
+  '/celebrity':            { title: 'Indian Celebrity Birthday Profiles — 598 Celebrities | BornClock', desc: 'Birthday, zodiac, and numerology profiles for 598 Indian celebrities — actors, cricketers, singers, leaders and more.' },
+  '/celebrity/bollywood':  { title: 'Bollywood Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Bollywood actors and film personalities.' },
+  '/celebrity/cricket':    { title: 'Indian Cricket Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Indian cricketers.' },
+  '/celebrity/politics':   { title: 'Indian Political Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Indian political leaders.' },
+  '/celebrity/business':   { title: 'Indian Business Leader Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Indian business leaders.' },
+  '/celebrity/music':      { title: 'Indian Music Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Indian musicians and singers.' },
+  '/celebrity/sports':     { title: 'Indian Sports Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Indian sports personalities.' },
   '/age-calculator':        { title: 'Best Age Calculator Online — Exact Age in Seconds (Free)', desc: 'Free age calculator — find your exact age in years, months, days, hours and seconds. Plus celebrity birthday match, zodiac sign, and life expectancy. Instant, accurate, free.' },
   '/age-in-days':           { title: 'Age in Days Calculator — How Many Days Old Are You?', desc: 'Find out exactly how many days old you are — updated live, including leap years. Most people are surprised how large the number is. Free, instant, no sign-up.' },
   '/age-in-seconds':        { title: 'Age in Seconds Calculator — How Many Seconds Have You Been Alive?', desc: 'Calculate exactly how many seconds old you are — live, updating every second. Most 30-year-olds have passed 946 million seconds. Free, instant, no sign-up.' },
@@ -445,6 +462,13 @@ export function getTitleForRoute(route) {
     const slug = route.slice(9);
     const t = ANSWERS[slug];
     return t ? { title: t, description: `${t} — answered with science-backed sources at BornClock.` } : null;
+  }
+
+  // /celebrity/:slug — individual celebrity pages (hubs + index handled by STATIC below)
+  const cm = route.match(/^\/celebrity\/([^/]+)$/);
+  if (cm && CELEB_META[cm[1]]) {
+    const e = CELEB_META[cm[1]];
+    return { title: e.title, description: e.desc };
   }
 
   // Static lookup
