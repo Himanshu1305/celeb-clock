@@ -44,9 +44,11 @@ interface CelebrityCardProps {
   index: number;
   /** Optional internal link to this celebrity's /born-on date page (used on month hubs). */
   dateHref?: string;
+  /** Optional slug for this celebrity's /celebrity/[slug]/ profile page (Day 8). */
+  profileSlug?: string;
 }
 
-export const CelebrityCard = ({ celebrity, index, dateHref }: CelebrityCardProps) => {
+export const CelebrityCard = ({ celebrity, index, dateHref, profileSlug }: CelebrityCardProps) => {
   const { user } = useAuth();
   const [imageUrl, setImageUrl] = useState<string | null>(celebrity.imageUrl ?? null);
   const [imageLoading, setImageLoading] = useState(!celebrity.imageUrl);
@@ -133,7 +135,13 @@ export const CelebrityCard = ({ celebrity, index, dateHref }: CelebrityCardProps
           {/* Text content */}
           <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5">
             <h3 className="font-semibold text-[15px] leading-snug text-foreground group-hover:text-primary transition-colors break-words">
-              {celebrity.name}
+              {profileSlug ? (
+                <Link to={`/celebrity/${profileSlug}/`} className="hover:underline" data-testid="born-on-celebrity-link">
+                  {celebrity.name}
+                </Link>
+              ) : (
+                celebrity.name
+              )}
             </h3>
             <p className="text-[11px] text-muted-foreground uppercase tracking-wide break-words">
               {celebrity.occupation}

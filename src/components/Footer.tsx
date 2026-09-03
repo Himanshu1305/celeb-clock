@@ -67,6 +67,13 @@ export const Footer = () => {
           <div>
             <h3 className="font-heading font-semibold text-foreground mb-3 text-sm">Explore</h3>
             <ul className="space-y-2 text-sm">
+              <li><Link to="/celebrity/" className="text-muted-foreground hover:text-accent transition-colors">Celebrity Profiles</Link></li>
+              <li><Link to="/celebrity/bollywood/" className="text-muted-foreground hover:text-accent transition-colors">Bollywood Celebrities</Link></li>
+              <li><Link to="/celebrity/cricket/" className="text-muted-foreground hover:text-accent transition-colors">Cricket Celebrities</Link></li>
+              <li><Link to="/celebrity/politics/" className="text-muted-foreground hover:text-accent transition-colors">Political Celebrities</Link></li>
+              <li><Link to="/celebrity/business/" className="text-muted-foreground hover:text-accent transition-colors">Business Leaders</Link></li>
+              <li><Link to="/celebrity/music/" className="text-muted-foreground hover:text-accent transition-colors">Music Celebrities</Link></li>
+              <li><Link to="/celebrity/sports/" className="text-muted-foreground hover:text-accent transition-colors">Sports Celebrities</Link></li>
               <li><Link to="/born-in" className="text-muted-foreground hover:text-accent transition-colors">Born in Each Month</Link></li>
               <li><Link to="/birthday" className="text-muted-foreground hover:text-accent transition-colors">Birthday Personalities</Link></li>
               <li><Link to="/biorhythm-workout-calculator" className="text-muted-foreground hover:text-accent transition-colors">Biorhythm Workout</Link></li>

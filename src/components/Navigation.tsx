@@ -37,6 +37,7 @@ const navItems = [
 
 // High-click DISCOVERY hubs. BATCH-8 P5 moved Numerology (both) and Gift a Report in here.
 const exploreItems = [
+  { path: '/celebrity', label: 'Celebrity Birthday Profiles', emoji: '⭐' },
   { path: '/born-in', label: 'Born in Each Month', emoji: '📅' },
   { path: '/born-on/india', label: 'Indian Celebrities by Date', emoji: '🇮🇳' },
   { path: '/numerology', label: 'Numerology by Birthday', emoji: '🔢' },

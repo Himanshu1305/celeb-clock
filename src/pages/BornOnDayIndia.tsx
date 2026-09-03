@@ -9,8 +9,17 @@ import { BirthdayReportCTA } from '@/components/BirthdayReportCTA';
 import { PageFAQ } from '@/components/PageFAQ';
 import { getNationalityCelebritiesForDate, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { generateBornOnTitle, generateBornOnMeta } from '@/utils/seoHelpers';
+import { generateAllSlugs } from '@/utils/celebrityUtils';
+import { indianCelebrities } from '@/data/indianCelebrities';
 import { ArrowLeft, ArrowRight, ArrowRightCircle } from 'lucide-react';
 import indiaDates from '@/data/indiaBornOnDates.json';
+
+// Day-8: name → celebrity-profile slug map, so born-on names link to /celebrity/[slug]/.
+const NAME_TO_SLUG = new Map<string, string>();
+generateAllSlugs(indianCelebrities as unknown as Record<string, unknown>[]).forEach((celeb, slug) => {
+  const nm = String((celeb as Record<string, unknown>).name || '');
+  if (nm && !NAME_TO_SLUG.has(nm)) NAME_TO_SLUG.set(nm, slug);
+});
 
 const MONTH_NAMES = [
   '', 'January', 'February', 'March', 'April', 'May', 'June',
@@ -179,7 +188,7 @@ export default function BornOnDayIndia() {
         ) : display.length > 0 ? (
           <div data-testid="celebrity-list" className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             {display.map((celeb, i) => (
-              <CelebrityCard key={celeb.name} celebrity={celeb} index={i} />
+              <CelebrityCard key={celeb.name} celebrity={celeb} index={i} profileSlug={NAME_TO_SLUG.get(celeb.name)} />
             ))}
           </div>
         ) : (

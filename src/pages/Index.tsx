@@ -376,6 +376,7 @@ const Index = () => {
               { href: '/biological-age', emoji: '🧬', badge: 'Science', title: "What's Your Biological Age?", body: 'Your body may be older or younger than your birth year. Find out in 2 minutes.', cta: 'Test my biological age →' },
               { href: '/country-comparison', emoji: '🌍', badge: 'Compare', title: 'Life Expectancy by Country', body: 'See how your forecast changes if you lived in Japan, France, or 50+ other countries.', cta: 'Compare countries →' },
               { href: '/biorhythm', emoji: '⚡', badge: 'Rhythm', title: 'Your Energy Cycles Today', body: 'Biorhythm science predicts your physical, emotional, and mental peaks for any day.', cta: 'See my biorhythm →' },
+              { href: '/celebrity/', emoji: '⭐', badge: 'Celebrities', title: 'Celebrity Birthday Profiles', body: '598 Indian celebrities — birthday, zodiac, numerology and life path for actors, cricketers, singers & leaders.', cta: 'Browse celebrity profiles →' },
             ].map(c => (
               <Link key={c.href} to={c.href} className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors">
                 <div className="flex items-center gap-2 mb-2">
@@ -387,6 +388,31 @@ const Index = () => {
                 <span className="text-xs text-primary font-medium">{c.cta}</span>
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* Featured celebrity profiles — Day 8 discovery */}
+        <section className="max-w-4xl mx-auto mb-16 px-4">
+          <h2 className="text-lg font-bold text-center mb-4 text-foreground">Featured Indian Celebrity Profiles</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { slug: 'virat-kohli', name: 'Virat Kohli', cat: 'Cricketer' },
+              { slug: 'sachin-tendulkar', name: 'Sachin Tendulkar', cat: 'Cricketer' },
+              { slug: 'shah-rukh-khan', name: 'Shah Rukh Khan', cat: 'Actor' },
+              { slug: 'amitabh-bachchan', name: 'Amitabh Bachchan', cat: 'Actor' },
+              { slug: 'ar-rahman', name: 'AR Rahman', cat: 'Music Composer' },
+              { slug: 'lata-mangeshkar', name: 'Lata Mangeshkar', cat: 'Singer' },
+              { slug: 'narendra-modi', name: 'Narendra Modi', cat: 'Politician' },
+              { slug: 'ratan-tata', name: 'Ratan Tata', cat: 'Business Leader' },
+            ].map(f => (
+              <Link key={f.slug} to={`/celebrity/${f.slug}/`} className="p-4 bg-primary/5 rounded-xl border border-border hover:border-primary/50 transition-colors text-center">
+                <div className="font-semibold text-sm text-foreground">{f.name}</div>
+                <div className="text-xs text-muted-foreground">{f.cat}</div>
+              </Link>
+            ))}
+          </div>
+          <div className="text-center mt-4">
+            <Link to="/celebrity/" className="text-sm text-primary font-medium hover:underline">See all 598 celebrity profiles →</Link>
           </div>
         </section>
 
