@@ -26,6 +26,9 @@ const LifeExpectancy = lazyWithReload(() => import("./pages/LifeExpectancy"));
 const LongevityCalculatorPage = lazyWithReload(() => import("./pages/LongevityCalculatorPage"));
 const BiologicalAgeCalculatorPage = lazyWithReload(() => import("./pages/BiologicalAgeCalculatorPage"));
 const HowLongWillILivePage = lazyWithReload(() => import("./pages/HowLongWillILivePage"));
+const CelebrityPage = lazyWithReload(() => import("./pages/CelebrityPage"));
+const CelebrityIndexPage = lazyWithReload(() => import("./pages/CelebrityIndexPage"));
+const CelebrityHubPage = lazyWithReload(() => import("./pages/CelebrityHubPage"));
 const CelebrityBirthday = lazyWithReload(() => import("./pages/CelebrityBirthday"));
 const Blog = lazyWithReload(() => import("./pages/Blog"));
 const BlogPost = lazyWithReload(() => import("./pages/BlogPost"));
@@ -187,6 +190,15 @@ const App = () => (
               <Route path="/longevity-calculator" element={<LongevityCalculatorPage />} />
               <Route path="/biological-age-calculator" element={<BiologicalAgeCalculatorPage />} />
               <Route path="/how-long-will-i-live" element={<HowLongWillILivePage />} />
+              {/* Celebrity pages (Day 8): index, explicit hubs, then individual slug. */}
+              <Route path="/celebrity" element={<CelebrityIndexPage />} />
+              <Route path="/celebrity/bollywood" element={<CelebrityHubPage />} />
+              <Route path="/celebrity/cricket" element={<CelebrityHubPage />} />
+              <Route path="/celebrity/politics" element={<CelebrityHubPage />} />
+              <Route path="/celebrity/business" element={<CelebrityHubPage />} />
+              <Route path="/celebrity/music" element={<CelebrityHubPage />} />
+              <Route path="/celebrity/sports" element={<CelebrityHubPage />} />
+              <Route path="/celebrity/:slug" element={<CelebrityPage />} />
               <Route path="/celebrity-birthday" element={<CelebrityBirthday />} />
               <Route path="/birthday" element={<BirthdayHub />} />
               <Route path="/birthday/:month/:day" element={<BirthdayDatePage />} />
