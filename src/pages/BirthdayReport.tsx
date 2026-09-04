@@ -520,6 +520,13 @@ const BirthdayReport = () => {
                 <p className="text-center text-xs text-gray-400">
                   Generates instantly · Celebrity Twins always free · unlock the full Blueprint for {reportPrice(currency)}
                 </p>
+
+                <p data-testid="sample-report-link" className="text-center text-sm text-gray-500 mt-4">
+                  Not sure what you'll get?{' '}
+                  <a href="/birthday-report/sample" className="text-primary font-semibold hover:underline">
+                    See a sample report →
+                  </a>
+                </p>
               </div>
             </>
           )}
