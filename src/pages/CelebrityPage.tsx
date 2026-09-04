@@ -21,6 +21,7 @@ import type {
   ChineseZodiacProfile, NakshatraProfile, LifePathProfile,
 } from '@/data/astrologicalData';
 import celebBios from '@/data/celebrity-bios.json';
+import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 
 // Build the slug map ONCE at module load (deterministic, ~598 entries).
 const SLUG_MAP = generateAllSlugs(indianCelebrities as unknown as Record<string, unknown>[]);
@@ -868,6 +869,20 @@ export function CelebrityPage() {
               </>
             )}
           </section>
+
+          {/* ── WHATSAPP SHARE (Day 7A) ── */}
+          <div data-testid="celebrity-whatsapp-share" className="flex flex-col items-center gap-2 mb-10">
+            <p className="text-sm text-gray-500">Share {name}'s profile:</p>
+            <WhatsAppShareButton
+              message={
+                `${name}'s birthday profile on BornClock 🎂\n`
+                + (western ? `${name} is a ${western.sign}` : `${name}`)
+                + (lifePath ? `, Life Path ${lifePath}` : '')
+                + (vedic ? `, ${vedic.rashi} Rashi` : '')
+                + `.\nFind YOUR profile → https://bornclock.com/celebrity/${slug}/`
+              }
+            />
+          </div>
 
           {/* ── FAQ ── */}
           <section data-testid="faq-section" className="mb-10" aria-labelledby="faq-heading">

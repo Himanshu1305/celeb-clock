@@ -6,6 +6,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { BirthdayReportCTA } from '@/components/BirthdayReportCTA';
+import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { PageFAQ } from '@/components/PageFAQ';
 import { getNationalityCelebritiesForDate, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { generateBornOnTitle, generateBornOnMeta } from '@/utils/seoHelpers';
@@ -195,6 +196,18 @@ export default function BornOnDayIndia() {
           <p className="text-muted-foreground mb-8">No Indian celebrities found in our database for this date.</p>
         )}
         <p className="text-xs text-muted-foreground mb-10">Biographical details from Wikipedia · ranked by global recognition (sitelinks).</p>
+
+        {/* Day 7A — WhatsApp share. Built from live celeb names (topNames) + the page URL. */}
+        <div data-testid="born-on-whatsapp-share" className="flex flex-col items-center gap-2 mb-10">
+          <p className="text-sm text-muted-foreground">Know someone born on {dateLabel}? Share it:</p>
+          <WhatsAppShareButton
+            message={
+              topNames.length > 0
+                ? `I found my celebrity birthday twins on BornClock! 🎂\n${topNames.join(', ')} ${topNames.length === 1 ? 'shares' : 'share'} my birthday (${dateLabel}).\nFind YOUR birthday twins → https://bornclock.com/born-on/${slug}/india/`
+                : `Discover who shares your birthday on BornClock! 🎂\nhttps://bornclock.com/born-on/${slug}/india/`
+            }
+          />
+        </div>
 
         {/* Birthday Report CTA — Day 2 growth plan. Converts born-on traffic into
             report generations. Rendered from the live celeb list; on prerender the

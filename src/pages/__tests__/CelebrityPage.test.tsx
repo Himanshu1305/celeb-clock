@@ -612,3 +612,25 @@ describe('Bio Section — Negative/Edge (TC-8B-N)', () => {
   });
 
 });
+
+// ── WHATSAPP SHARE (Day 7A) ───────────────────────────────────
+describe('Celebrity WhatsApp Share (TC-WA)', () => {
+  it('TC-WA-P-05: celebrity page has whatsapp share container', () => {
+    renderCelebPage(FULL_DOB_SLUG);
+    expect(document.querySelector('[data-testid="celebrity-whatsapp-share"]')).toBeTruthy();
+  });
+  it('TC-WA-N-05: celebrity whatsapp message has no undefined', () => {
+    renderCelebPage(FULL_DOB_SLUG);
+    const href = document.querySelector('[data-testid="celebrity-whatsapp-share"] [data-testid="whatsapp-share-btn"]')?.getAttribute('href') || '';
+    expect(decodeURIComponent(href)).not.toContain('undefined');
+  });
+  it('TC-WA-N-06: no undefined in whatsapp share for 15 sampled celebrities', () => {
+    const stride = Math.floor(ALL_SLUGS.length / 15);
+    ALL_SLUGS.filter((_, i) => i % stride === 0).slice(0, 15).forEach(slug => {
+      const { unmount } = renderCelebPage(slug);
+      const href = document.querySelector('[data-testid="celebrity-whatsapp-share"] [data-testid="whatsapp-share-btn"]')?.getAttribute('href') || '';
+      expect(decodeURIComponent(href), `${slug}`).not.toContain('undefined');
+      unmount();
+    });
+  });
+});
