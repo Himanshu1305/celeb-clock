@@ -84,6 +84,7 @@ const BiologicalAge = lazyWithReload(() => import("./pages/BiologicalAge"));
 const CountryComparison = lazyWithReload(() => import("./pages/CountryComparison"));
 const BirthdayReport = lazyWithReload(() => import("./pages/BirthdayReport"));
 const SampleReportPage = lazyWithReload(() => import("./pages/SampleReportPage"));
+const NumerologyArticle = lazyWithReload(() => import("./pages/articles/NumerologyArticle"));
 const ReportView = lazyWithReload(() => import("./pages/ReportView"));
 const ChineseZodiac = lazyWithReload(() => import("./pages/ChineseZodiac"));
 const ChineseZodiacSign = lazyWithReload(() => import("./pages/ChineseZodiacSign"));
@@ -224,6 +225,7 @@ const App = () => (
               <Route path="/biological-age" element={<BiologicalAge />} />
               <Route path="/country-comparison" element={<CountryComparison />} />
               <Route path="/birthday-report/sample" element={<SampleReportPage />} />
+              <Route path="/articles/numerology-by-date-of-birth" element={<NumerologyArticle />} />
               <Route path="/birthday-report" element={<BirthdayReport />} />
               <Route path="/report/:slug" element={<ReportView />} />
               <Route path="/chinese-zodiac" element={<ChineseZodiac />} />
