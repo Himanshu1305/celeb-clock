@@ -119,6 +119,7 @@ export const Footer = () => {
               <li><Link to="/about" className="text-muted-foreground hover:text-accent transition-colors">About</Link></li>
               <li><Link to="/pricing" className="text-muted-foreground hover:text-accent transition-colors">Pricing</Link></li>
               <li><Link to="/how-it-works" className="text-muted-foreground hover:text-accent transition-colors">How It Works</Link></li>
+              <li><Link to="/articles" className="text-muted-foreground hover:text-accent transition-colors">Articles</Link></li>
               <li><Link to="/faq" className="text-muted-foreground hover:text-accent transition-colors">FAQ</Link></li>
               <li><Link to="/privacy" className="text-muted-foreground hover:text-accent transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="text-muted-foreground hover:text-accent transition-colors">Terms of Service</Link></li>

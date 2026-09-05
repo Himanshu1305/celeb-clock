@@ -439,6 +439,29 @@ const Index = () => {
 
         <PageFAQ slug="home" title="Frequently Asked Questions" />
 
+        {/* Latest articles — internal links so no article is orphaned */}
+        <section className="max-w-4xl mx-auto mb-16 px-4" data-testid="homepage-articles">
+          <h2 className="text-lg font-bold text-center mb-4 text-foreground">Explore Articles</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { href: '/articles/how-to-live-to-100', emoji: '🧬', title: 'How to Live to 100' },
+              { href: '/articles/blue-zones-diet', emoji: '🥗', title: 'The Blue Zones Diet' },
+              { href: '/articles/longevity-quiz', emoji: '📝', title: 'Longevity Quiz' },
+              { href: '/articles/numerology-by-date-of-birth', emoji: '🔢', title: 'Numerology by Date of Birth' },
+              { href: '/articles/moon-sign-by-date-of-birth', emoji: '🌙', title: 'Moon Sign by Date of Birth' },
+              { href: '/articles/nakshatra-by-date-of-birth', emoji: '✨', title: 'Nakshatra by Date of Birth' },
+            ].map(a => (
+              <Link key={a.href} to={a.href} className="flex items-center gap-3 rounded-2xl border border-border p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors">
+                <span className="text-2xl">{a.emoji}</span>
+                <span className="font-semibold text-foreground text-sm">{a.title}</span>
+              </Link>
+            ))}
+          </div>
+          <div className="text-center mt-5">
+            <Link to="/articles" className="text-primary font-medium hover:underline">Browse all articles →</Link>
+          </div>
+        </section>
+
         {/* Popular questions — contextual internal links to the /answers hub */}
         <section className="max-w-3xl mx-auto mb-12 px-4 text-center">
           <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">Popular Questions</p>

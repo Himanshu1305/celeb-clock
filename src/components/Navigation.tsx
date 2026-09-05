@@ -44,6 +44,7 @@ const exploreItems = [
   { path: '/name-numerology', label: 'Name Numerology', emoji: '✍️' },
   { path: '/biorhythm-workout-calculator', label: 'Biorhythm Workout', emoji: '🏃' },
   { path: '/energy-forecast', label: 'Energy Forecast', emoji: '⚡' },
+  { path: '/articles', label: 'Articles', emoji: '📰' },
   { path: '/answers', label: 'Answers', emoji: '❓' },
   { path: '/compatibility', label: 'Compatibility', emoji: '💕' },
   { path: '/weight-on-planets', label: 'Weight on Planets', emoji: '🪐' },
