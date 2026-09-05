@@ -140,6 +140,21 @@ export default function BornOnDayIndia() {
     })),
   } : null;
 
+  const qaPageJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'QAPage',
+    mainEntity: {
+      '@type': 'Question',
+      name: `Which celebrities were born on ${dateLabel}?`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: topNames.length > 0
+          ? `${topNames.join(', ')} were born on ${dateLabel}.`
+          : `See the ranked list of Indian celebrities born on ${dateLabel} on this page.`,
+      },
+    },
+  };
+
   return (
     <div className="min-h-screen bg-gradient-cosmic">
       <SEO
@@ -152,6 +167,7 @@ export default function BornOnDayIndia() {
       {itemListJsonLd && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
       )}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(qaPageJsonLd) }} />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <header className="flex justify-between items-center mb-8">

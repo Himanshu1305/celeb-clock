@@ -84,6 +84,16 @@ export function LongevityQuizArticle() {
       acceptedAnswer: { '@type': 'Answer', text: f.a },
     })),
   };
+  const howToSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to Calculate Your Life Expectancy',
+    step: [
+      { '@type': 'HowToStep', name: 'Enter your date of birth', text: 'Provide your date of birth to establish your baseline.' },
+      { '@type': 'HowToStep', name: 'Answer 8 lifestyle questions', text: 'Answer questions on smoking, BMI, health, diet, sleep, exercise, stress and social connections.' },
+      { '@type': 'HowToStep', name: 'Get your personalised score', text: 'Receive your estimated life expectancy and the factors to improve.' },
+    ],
+  };
 
   return (
     <>
@@ -95,6 +105,7 @@ export function LongevityQuizArticle() {
       />
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />
+      <JsonLd data={howToSchema} />
 
       <main data-testid="longevity-quiz-article" className="min-h-screen bg-white">
         <article className="max-w-3xl mx-auto px-4 py-10">
