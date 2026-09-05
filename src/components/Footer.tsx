@@ -121,6 +121,19 @@ export const Footer = () => {
               <li><Link to="/how-it-works" className="text-muted-foreground hover:text-accent transition-colors">How It Works</Link></li>
               <li><Link to="/articles" className="text-muted-foreground hover:text-accent transition-colors">Articles</Link></li>
               <li><Link to="/faq" className="text-muted-foreground hover:text-accent transition-colors">FAQ</Link></li>
+              {/* Popular guides — ensures every article has ≥2 internal inbound links (site-wide footer) */}
+              <li><Link to="/articles/how-to-live-to-100" className="text-muted-foreground hover:text-accent transition-colors">How to Live to 100</Link></li>
+              <li><Link to="/articles/death-clock-alternative" className="text-muted-foreground hover:text-accent transition-colors">Death Clock Alternative</Link></li>
+              <li><Link to="/articles/zodiac-compatibility" className="text-muted-foreground hover:text-accent transition-colors">Zodiac Compatibility</Link></li>
+              <li><Link to="/articles/tarot-card-by-date-of-birth" className="text-muted-foreground hover:text-accent transition-colors">Tarot by Date of Birth</Link></li>
+              <li><Link to="/articles/bryan-johnson-blueprint-alternative" className="text-muted-foreground hover:text-accent transition-colors">Bryan Johnson Blueprint</Link></li>
+              <li><Link to="/articles/longevity-habits-of-indian-billionaires" className="text-muted-foreground hover:text-accent transition-colors">Billionaire Longevity Habits</Link></li>
+              <li><Link to="/articles/life-expectancy-how-it-is-calculated" className="text-muted-foreground hover:text-accent transition-colors">How Life Expectancy Is Calculated</Link></li>
+              <li><Link to="/articles/age-in-days-hours-minutes" className="text-muted-foreground hover:text-accent transition-colors">Age in Days & Hours</Link></li>
+              <li><Link to="/articles/retirement-age-india-life-expectancy" className="text-muted-foreground hover:text-accent transition-colors">Retirement Age in India</Link></li>
+              <li><Link to="/articles/longevity-supplements" className="text-muted-foreground hover:text-accent transition-colors">Longevity Supplements</Link></li>
+              <li><Link to="/articles/famous-people-lived-to-100" className="text-muted-foreground hover:text-accent transition-colors">Famous People Who Lived to 100</Link></li>
+              <li><Link to="/articles/birth-month-personality" className="text-muted-foreground hover:text-accent transition-colors">Birth Month Personality</Link></li>
               <li><Link to="/privacy" className="text-muted-foreground hover:text-accent transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="text-muted-foreground hover:text-accent transition-colors">Terms of Service</Link></li>
               <li><Link to="/contact" className="text-muted-foreground hover:text-accent transition-colors">Contact</Link></li>

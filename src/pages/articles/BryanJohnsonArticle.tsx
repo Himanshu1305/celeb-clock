@@ -5,7 +5,7 @@ function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
-const TITLE = 'Bryan Johnson Blueprint — A Free, Science-Backed Alternative | BornClock';
+const TITLE = 'Bryan Johnson Blueprint — Free Alternative | BornClock';
 const DESC = "Bryan Johnson's Blueprint protocol costs $2M/year. Here's a free, science-backed longevity alternative — the habits that actually matter, no budget needed.";
 const SLUG = 'bryan-johnson-blueprint-alternative';
 
