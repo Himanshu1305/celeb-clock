@@ -22,6 +22,7 @@ import type {
 } from '@/data/astrologicalData';
 import celebBios from '@/data/celebrity-bios.json';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
+import { LuckyStoneAffiliate, CosmicTwins } from '@/components/CelebrityAffiliateAndTwins';
 
 // Unified celebrity DB (static Indian + Supabase, slugs pre-assigned by
 // scripts/export-celebrities.ts). Build the slug → entry map ONCE at load.
@@ -821,6 +822,10 @@ export function CelebrityPage() {
               </div>
             </section>
           )}
+
+          {/* ── COSMIC TWINS (only if visitor's saved DOB matches) + LUCKY GEMSTONE affiliate ── */}
+          <CosmicTwins day={isFull ? dob!.day : null} month={isFull ? dob!.month : null} celebName={name} />
+          <LuckyStoneAffiliate rashi={vedic?.rashi ?? null} />
 
           {/* ── BIRTHDAY TWINS ── */}
           <section className="mb-10" aria-labelledby="twins-heading">

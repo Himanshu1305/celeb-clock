@@ -319,6 +319,7 @@ export const STATIC_ROUTES = [
   ...compatibilityRoutes(),
   '/wish',
   '/birthday-report/gift',
+  '/for-business',
   '/rashi-ratna',
   ...bornOnRoutes(),
   '/born-on/india',
