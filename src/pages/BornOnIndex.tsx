@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
@@ -11,6 +12,73 @@ const MONTH_NAMES = [
 ];
 
 const MONTH_DAYS = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+const CURRENT_YEAR = new Date().getFullYear();
+const YEARS = Array.from({ length: CURRENT_YEAR - 1920 + 1 }, (_, i) => CURRENT_YEAR - i);
+
+// Compact month/day/year selector — lets a visitor jump straight to their full
+// birthday report (Task 2C: year dropdown 1920 → current year).
+function BirthdayJump() {
+  const navigate = useNavigate();
+  const [month, setMonth] = useState(1);
+  const [day, setDay] = useState(1);
+  const [year, setYear] = useState(CURRENT_YEAR - 25);
+  const maxDay = MONTH_DAYS[month];
+  const safeDay = Math.min(day, maxDay);
+  const go = () => {
+    const dob = `${year}-${String(month).padStart(2, '0')}-${String(safeDay).padStart(2, '0')}`;
+    navigate(`/birthday-report?dob=${dob}`);
+  };
+  const selectClass =
+    'h-11 rounded-lg border border-border bg-background px-3 text-sm text-foreground';
+  return (
+    <div className="mb-10 bg-card/60 border border-border rounded-xl p-5">
+      <h2 className="font-semibold text-lg text-foreground mb-3">Find your exact birthday</h2>
+      <div className="flex flex-wrap items-center gap-2">
+        <select
+          aria-label="Month"
+          data-testid="bornon-month-select"
+          value={month}
+          onChange={(e) => setMonth(Number(e.target.value))}
+          className={selectClass}
+        >
+          {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+            <option key={m} value={m}>{MONTH_NAMES[m]}</option>
+          ))}
+        </select>
+        <select
+          aria-label="Day"
+          data-testid="bornon-day-select"
+          value={safeDay}
+          onChange={(e) => setDay(Number(e.target.value))}
+          className={selectClass}
+        >
+          {Array.from({ length: maxDay }, (_, i) => i + 1).map((d) => (
+            <option key={d} value={d}>{d}</option>
+          ))}
+        </select>
+        <select
+          aria-label="Year"
+          data-testid="bornon-year-select"
+          value={year}
+          onChange={(e) => setYear(Number(e.target.value))}
+          className={selectClass}
+        >
+          {YEARS.map((y) => (
+            <option key={y} value={y}>{y}</option>
+          ))}
+        </select>
+        <button
+          onClick={go}
+          data-testid="bornon-jump-btn"
+          className="h-11 px-5 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
+        >
+          Go
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function BornOnIndex() {
   return (
@@ -44,6 +112,8 @@ export default function BornOnIndex() {
         <p className="text-muted-foreground mb-10">
           Browse famous birthdays by date — from January 1 to December 31, including February 29.
         </p>
+
+        <BirthdayJump />
 
         <div className="space-y-8">
           {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (

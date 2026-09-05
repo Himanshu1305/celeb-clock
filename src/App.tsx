@@ -252,7 +252,7 @@ const App = () => (
               <Route path="/celebrity/music" element={<CelebrityHubPage />} />
               <Route path="/celebrity/sports" element={<CelebrityHubPage />} />
               <Route path="/celebrity/:slug" element={<CelebrityPage />} />
-              <Route path="/celebrity-birthday" element={<CelebrityBirthday />} />
+              <Route path="/celebrity-birthday" element={<Navigate to="/celebrity/" replace />} />
               <Route path="/birthday" element={<BirthdayHub />} />
               <Route path="/birthday/:month/:day" element={<BirthdayDatePage />} />
               <Route path="/birthday/:month" element={<BirthdayMonthPage />} />

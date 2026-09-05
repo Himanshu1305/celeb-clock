@@ -242,7 +242,7 @@ export const CelebritySearch = () => {
                       {/* Actions */}
                       <div className="flex flex-wrap gap-2 mt-3">
                         <Link
-                          to={`/?dob=${dobForUrl}`}
+                          to={`/birthday-report?dob=${dobForUrl}`}
                           className="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-700 transition-colors"
                         >
                           🌟 View Birthday Profile
