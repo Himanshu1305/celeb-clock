@@ -8,6 +8,17 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search } from 'lucide-react';
 import type { WikiPerson } from '@/services/WikimediaService';
+import celebritiesData from '@/data/celebrities.json';
+
+// Slugs that have a dedicated /celebrity/[slug]/ page (unified DB). Built once.
+const CELEB_SLUGS = new Set<string>(
+  (celebritiesData.celebrities as { slug: string }[]).map(c => c.slug)
+);
+// Canonical slug base — mirrors scripts/export-celebrities.ts / celebrityUtils.
+const toCelebSlug = (name: string): string =>
+  name.toLowerCase().replace(/['’‘`´]/g, '').replace(/\./g, '')
+    .replace(/[^a-z0-9\s-]/g, ' ').replace(/\s+/g, '-')
+    .replace(/-+/g, '-').replace(/^-|-$/g, '');
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -206,6 +217,13 @@ export const CelebritySearch = () => {
                 const birthstone = getBirthstone(birthDate.getMonth() + 1);
                 const lifePath = getLifePath(birthDate);
                 const dobForUrl = person.birthDate;
+                // Indian celebrities with a dedicated page → /celebrity/[slug]/;
+                // everyone else → their birthday report prefilled with the DOB.
+                const celebSlug = toCelebSlug(person.name);
+                const hasCelebPage = CELEB_SLUGS.has(celebSlug);
+                const ctaHref = hasCelebPage
+                  ? `/celebrity/${celebSlug}/`
+                  : `/birthday-report?dob=${dobForUrl}`;
                 const initials = person.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
                 const formattedDOB = birthDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
@@ -242,10 +260,10 @@ export const CelebritySearch = () => {
                       {/* Actions */}
                       <div className="flex flex-wrap gap-2 mt-3">
                         <Link
-                          to={`/birthday-report?dob=${dobForUrl}`}
+                          to={ctaHref}
                           className="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-700 transition-colors"
                         >
-                          🌟 View Birthday Profile
+                          {hasCelebPage ? '🌟 View Profile' : '🌟 View Birthday Profile'}
                         </Link>
                         <button
                           onClick={() => handleShare(index, person, birthDate, zodiac, lifePath)}

@@ -44,7 +44,7 @@ describe('CelebritySearch CTA — TC-CELFIX', () => {
     // Trigger search via the exposed input
     const { fireEvent } = await import('@testing-library/react');
     fireEvent.change(input, { target: { value: 'Virat' } });
-    await waitFor(() => expect(screen.getByText(/View Birthday Profile/i)).toBeTruthy(), { timeout: 2000 });
+    await waitFor(() => expect(screen.getByText(/View.*Profile/i)).toBeTruthy(), { timeout: 2000 });
   });
 
   it('TC-CELFIX-P-02: CTA href points to /birthday-report?dob=', async () => {
@@ -101,5 +101,67 @@ describe('born-on year picker — TC-CELFIX', () => {
     const src = readFileSync('src/pages/BornOnIndex.tsx', 'utf8');
     expect(src).toContain('data-testid="bornon-year-select"');
     expect(src).toContain('1920');
+  });
+});
+
+describe('CelebritySearch slug-aware CTA — TC-SEARCH', () => {
+  beforeEach(() => setRows([]));
+  afterEach(() => cleanup());
+
+  it('TC-SEARCH-P-01: Indian celebrity with a page → href contains /celebrity/[slug]/', async () => {
+    setRows([{ name: 'Virat Kohli', birth_date: '1988-11-05', nationality_code: 'IN', sitelinks: 100 }]);
+    const { container } = renderSearch();
+    const input = container.querySelector('input') as HTMLInputElement;
+    const { fireEvent } = await import('@testing-library/react');
+    fireEvent.change(input, { target: { value: 'Virat' } });
+    await waitFor(() => {
+      const link = container.querySelector('a[href^="/celebrity/"]') as HTMLAnchorElement;
+      expect(link).toBeTruthy();
+      expect(link.getAttribute('href')).toBe('/celebrity/virat-kohli/');
+    }, { timeout: 2000 });
+  });
+
+  it('TC-SEARCH-P-02: person with no page → /birthday-report', async () => {
+    setRows([{ name: 'Some Unknown Person Xyz', birth_date: '1990-03-15', nationality_code: 'US', sitelinks: 3 }]);
+    const { container } = renderSearch();
+    const input = container.querySelector('input') as HTMLInputElement;
+    const { fireEvent } = await import('@testing-library/react');
+    fireEvent.change(input, { target: { value: 'Unknown' } });
+    await waitFor(() => {
+      const link = container.querySelector('a[href*="birthday-report"]') as HTMLAnchorElement;
+      expect(link).toBeTruthy();
+      expect(link.getAttribute('href')).toContain('/birthday-report?dob=1990-03-15');
+    }, { timeout: 2000 });
+  });
+
+  it('TC-SEARCH-N-01: no /?dob= pattern in any href', async () => {
+    setRows([{ name: 'Virat Kohli', birth_date: '1988-11-05', nationality_code: 'IN', sitelinks: 100 }]);
+    const { container } = renderSearch();
+    const input = container.querySelector('input') as HTMLInputElement;
+    const { fireEvent } = await import('@testing-library/react');
+    fireEvent.change(input, { target: { value: 'Virat' } });
+    await waitFor(() => expect(container.querySelectorAll('a').length).toBeGreaterThan(0), { timeout: 2000 });
+    container.querySelectorAll('a').forEach(l => expect(l.getAttribute('href') || '').not.toMatch(/^\/\?dob=/));
+  });
+
+  it('TC-SEARCH-N-02: no undefined in any CTA href', async () => {
+    setRows([{ name: 'Virat Kohli', birth_date: '1988-11-05', nationality_code: 'IN', sitelinks: 100 }]);
+    const { container } = renderSearch();
+    const input = container.querySelector('input') as HTMLInputElement;
+    const { fireEvent } = await import('@testing-library/react');
+    fireEvent.change(input, { target: { value: 'Virat' } });
+    await waitFor(() => expect(container.querySelectorAll('a').length).toBeGreaterThan(0), { timeout: 2000 });
+    container.querySelectorAll('a').forEach(l => expect(l.getAttribute('href') || '').not.toContain('undefined'));
+  });
+
+  it('TC-SEARCH-EDGE-01: null birth_date → no crash', async () => {
+    setRows([{ name: 'No Date Person', birth_date: null, nationality_code: 'IN', sitelinks: 1 }]);
+    expect(() => renderSearch()).not.toThrow();
+    const { container } = renderSearch();
+    const input = container.querySelector('input') as HTMLInputElement;
+    const { fireEvent } = await import('@testing-library/react');
+    fireEvent.change(input, { target: { value: 'No Date' } });
+    await new Promise(r => setTimeout(r, 500));
+    expect(document.body.textContent).not.toContain('[object Object]');
   });
 });
