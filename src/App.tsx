@@ -104,6 +104,28 @@ const LifeExpectancyUKPage = lazyWithReload(() => import("./pages/LifeExpectancy
 const LifeExpectancyAustraliaPage = lazyWithReload(() => import("./pages/LifeExpectancyAustraliaPage"));
 const LifeExpectancyUSAPage = lazyWithReload(() => import("./pages/LifeExpectancyUSAPage"));
 const LifeExpectancyCanadaPage = lazyWithReload(() => import("./pages/LifeExpectancyCanadaPage"));
+const ZodiacCompatibilityArticle = lazyWithReload(() => import("./pages/articles/ZodiacCompatibilityArticle"));
+const BiorhythmArticle = lazyWithReload(() => import("./pages/articles/BiorhythmArticle"));
+const TarotByDateOfBirthArticle = lazyWithReload(() => import("./pages/articles/TarotByDateOfBirthArticle"));
+const PlanetaryAgeArticle = lazyWithReload(() => import("./pages/articles/PlanetaryAgeArticle"));
+const ChineseZodiacArticle = lazyWithReload(() => import("./pages/articles/ChineseZodiacArticle"));
+const BirthMonthPersonalityArticle = lazyWithReload(() => import("./pages/articles/BirthMonthPersonalityArticle"));
+const EpigeneticsArticle = lazyWithReload(() => import("./pages/articles/EpigeneticsArticle"));
+const LongevitySupplementsArticle = lazyWithReload(() => import("./pages/articles/LongevitySupplementsArticle"));
+const IndianCelebritiesFitnessArticle = lazyWithReload(() => import("./pages/articles/IndianCelebritiesFitnessArticle"));
+const FamousPeopleLivedTo100Article = lazyWithReload(() => import("./pages/articles/FamousPeopleLivedTo100Article"));
+const FamousIndiansBornInJanuary = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInJanuary"));
+const FamousIndiansBornInFebruary = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInFebruary"));
+const FamousIndiansBornInMarch = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInMarch"));
+const FamousIndiansBornInApril = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInApril"));
+const FamousIndiansBornInMay = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInMay"));
+const FamousIndiansBornInJune = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInJune"));
+const FamousIndiansBornInJuly = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInJuly"));
+const FamousIndiansBornInAugust = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInAugust"));
+const FamousIndiansBornInSeptember = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInSeptember"));
+const FamousIndiansBornInOctober = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInOctober"));
+const FamousIndiansBornInNovember = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInNovember"));
+const FamousIndiansBornInDecember = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInDecember"));
 const ReportView = lazyWithReload(() => import("./pages/ReportView"));
 const ChineseZodiac = lazyWithReload(() => import("./pages/ChineseZodiac"));
 const ChineseZodiacSign = lazyWithReload(() => import("./pages/ChineseZodiacSign"));
@@ -264,6 +286,28 @@ const App = () => (
               <Route path="/life-expectancy-calculator-australia" element={<LifeExpectancyAustraliaPage />} />
               <Route path="/life-expectancy-calculator-usa" element={<LifeExpectancyUSAPage />} />
               <Route path="/life-expectancy-calculator-canada" element={<LifeExpectancyCanadaPage />} />
+              <Route path="/articles/zodiac-compatibility" element={<ZodiacCompatibilityArticle />} />
+              <Route path="/articles/biorhythm-calculator" element={<BiorhythmArticle />} />
+              <Route path="/articles/tarot-card-by-date-of-birth" element={<TarotByDateOfBirthArticle />} />
+              <Route path="/articles/planetary-age-calculator" element={<PlanetaryAgeArticle />} />
+              <Route path="/articles/chinese-zodiac-by-year" element={<ChineseZodiacArticle />} />
+              <Route path="/articles/birth-month-personality" element={<BirthMonthPersonalityArticle />} />
+              <Route path="/articles/epigenetics-and-longevity" element={<EpigeneticsArticle />} />
+              <Route path="/articles/longevity-supplements" element={<LongevitySupplementsArticle />} />
+              <Route path="/articles/how-indian-celebrities-stay-fit" element={<IndianCelebritiesFitnessArticle />} />
+              <Route path="/articles/famous-people-lived-to-100" element={<FamousPeopleLivedTo100Article />} />
+              <Route path="/articles/famous-indians-born-in-january" element={<FamousIndiansBornInJanuary />} />
+              <Route path="/articles/famous-indians-born-in-february" element={<FamousIndiansBornInFebruary />} />
+              <Route path="/articles/famous-indians-born-in-march" element={<FamousIndiansBornInMarch />} />
+              <Route path="/articles/famous-indians-born-in-april" element={<FamousIndiansBornInApril />} />
+              <Route path="/articles/famous-indians-born-in-may" element={<FamousIndiansBornInMay />} />
+              <Route path="/articles/famous-indians-born-in-june" element={<FamousIndiansBornInJune />} />
+              <Route path="/articles/famous-indians-born-in-july" element={<FamousIndiansBornInJuly />} />
+              <Route path="/articles/famous-indians-born-in-august" element={<FamousIndiansBornInAugust />} />
+              <Route path="/articles/famous-indians-born-in-september" element={<FamousIndiansBornInSeptember />} />
+              <Route path="/articles/famous-indians-born-in-october" element={<FamousIndiansBornInOctober />} />
+              <Route path="/articles/famous-indians-born-in-november" element={<FamousIndiansBornInNovember />} />
+              <Route path="/articles/famous-indians-born-in-december" element={<FamousIndiansBornInDecember />} />
               <Route path="/birthday-report" element={<BirthdayReport />} />
               <Route path="/report/:slug" element={<ReportView />} />
               <Route path="/chinese-zodiac" element={<ChineseZodiac />} />
