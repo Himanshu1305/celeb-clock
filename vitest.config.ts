@@ -13,7 +13,7 @@ export default defineConfig({
     // Unit tests only. Exclude the Playwright e2e suites (they use @playwright/test
     // and must be run via `playwright test`, not vitest) so a bare `vitest run`
     // doesn't try to collect them and fail on the wrong `test()` runtime.
-    include: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'api/**/*.test.ts', 'tests/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'api/**/*.test.ts', 'tests/**/*.test.ts', 'scripts/**/*.test.ts'],
     exclude: ['node_modules/**', 'dist/**', 'e2e/**', '.claude/**'],
   },
 });
