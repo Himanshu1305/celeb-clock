@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
+import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import {
   LC_SEO, LC_SCHEMA, LC_FACTORS, LC_COPY
 } from '@/content/longevityCalculatorContent';
@@ -221,6 +222,49 @@ export function LongevityCalculatorPage() {
             >
               Calculate My Life Expectancy →
             </Link>
+          </div>
+
+          {/* ── ENGAGEMENT ROW: share · PDF hook · comparison teaser ── */}
+          <div className="mt-6 grid grid-cols-1 gap-4">
+
+            {/* WhatsApp share — the live score is computed inside the /life-expectancy
+                calculator, not on this landing page, so we share a generic invite. */}
+            <div
+              data-testid="longevity-whatsapp-share"
+              className="bg-green-50 border border-green-200 rounded-2xl p-5
+                         flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left"
+            >
+              <p className="text-gray-700 text-sm font-medium">
+                Challenge a friend — share the free BornClock longevity quiz.
+              </p>
+              <WhatsAppShareButton
+                message="Discover how long you could live — take the free BornClock longevity quiz: bornclock.com/longevity-calculator"
+                label="Share on WhatsApp"
+                className="flex-shrink-0"
+              />
+            </div>
+
+            {/* PDF / 90-day plan hook */}
+            <Link
+              to="/birthday-report"
+              data-testid="longevity-pdf-cta"
+              className="block bg-indigo-50 border border-indigo-200 rounded-2xl p-5
+                         text-indigo-800 font-bold text-center hover:bg-indigo-100
+                         transition-colors"
+            >
+              Get your personalised 90-day longevity plan → Download Free PDF
+            </Link>
+
+            {/* Comparison teaser */}
+            <div
+              data-testid="longevity-comparison-teaser"
+              className="bg-amber-50 border border-amber-200 rounded-2xl p-5
+                         text-amber-800 text-sm text-center"
+            >
+              How do you compare to the average? India's average life expectancy is
+              70.2 years — see where you land.
+            </div>
+
           </div>
         </section>
 
