@@ -5,9 +5,9 @@
 import { writeFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { indianCelebrities } from '../src/data/indianCelebrities';
+import { createRequire } from 'module';
 import {
-  generateAllSlugs, parseCelebrityDOB,
+  parseCelebrityDOB,
   generateCelebrityTitle, generateCelebrityMeta,
 } from '../src/utils/celebrityUtils';
 import {
@@ -16,11 +16,18 @@ import {
 } from '../src/utils/celebrityCalculations';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
 
-const slugMap = generateAllSlugs(indianCelebrities as unknown as Record<string, unknown>[]);
+// Unified celebrity DB (static Indian + Supabase) — slugs pre-assigned by
+// scripts/export-celebrities.ts. Iterate its entries so every prerendered
+// celebrity route matches exactly what CelebrityPage resolves at runtime.
+const celebritiesData = require('../src/data/celebrities.json');
+const allCelebrities = celebritiesData.celebrities as Record<string, unknown>[];
 
 const meta: Record<string, { title: string; desc: string }> = {};
-slugMap.forEach((celeb, slug) => {
+allCelebrities.forEach((celeb) => {
+  const slug = String(celeb.slug || '');
+  if (!slug) return;
   const name = String(celeb.name || '');
   const dob = parseCelebrityDOB(celeb);
   const isFull = !!dob?.isFullDate;

@@ -8,6 +8,8 @@ import { CelebrityIndexPage } from '../CelebrityIndexPage';
 import { CelebrityHubPage } from '../CelebrityHubPage';
 import { generateAllSlugs, parseCelebrityDOB, formatDOBDisplay } from '@/utils/celebrityUtils';
 import { indianCelebrities } from '@/data/indianCelebrities';
+import celebritiesData from '@/data/celebrities.json';
+const unifiedCelebs = celebritiesData.celebrities as unknown as Record<string, unknown>[];
 import {
   WESTERN_ZODIAC_PROFILES, VEDIC_RASHI_PROFILES,
 } from '@/data/astrologicalData';
@@ -225,7 +227,9 @@ describe('CelebrityPage — Edge Cases', () => {
       const celeb = SLUG_MAP.get(slug) as Record<string,unknown>;
       const dob = parseCelebrityDOB(celeb);
       if (!dob?.isFullDate) return false;
-      const twins = (indianCelebrities as unknown as Record<string,unknown>[]).filter(c => {
+      // Twins are computed by the page over the unified DB (celebrities.json),
+      // so evaluate "no twins" against that same superset, not the 598 static set.
+      const twins = (unifiedCelebs as Record<string,unknown>[]).filter(c => {
         if (String(c.name) === String(celeb.name)) return false;
         const cDob = parseCelebrityDOB(c);
         return cDob?.isFullDate && cDob.day === dob.day && cDob.month === dob.month;

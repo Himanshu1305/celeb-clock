@@ -1,9 +1,9 @@
 import React from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { indianCelebrities } from '@/data/indianCelebrities';
+import celebritiesData from '@/data/celebrities.json';
 import {
-  generateAllSlugs, parseCelebrityDOB, formatDOBDisplay,
+  parseCelebrityDOB, formatDOBDisplay,
   generateCelebrityTitle, generateCelebrityMeta,
   getCategoryHubSlug, CATEGORY_CONFIG,
 } from '@/utils/celebrityUtils';
@@ -23,10 +23,13 @@ import type {
 import celebBios from '@/data/celebrity-bios.json';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 
-// Build the slug map ONCE at module load (deterministic, ~598 entries).
-const SLUG_MAP = generateAllSlugs(indianCelebrities as unknown as Record<string, unknown>[]);
+// Unified celebrity DB (static Indian + Supabase, slugs pre-assigned by
+// scripts/export-celebrities.ts). Build the slug → entry map ONCE at load.
+const ALL_CELEBRITIES = celebritiesData.celebrities as unknown as Record<string, unknown>[];
+const SLUG_MAP = new Map<string, Record<string, unknown>>();
+ALL_CELEBRITIES.forEach(c => SLUG_MAP.set(String(c.slug), c));
 const CELEB_TO_SLUG = new Map<Record<string, unknown>, string>();
-SLUG_MAP.forEach((celeb, slug) => CELEB_TO_SLUG.set(celeb, slug));
+ALL_CELEBRITIES.forEach(c => CELEB_TO_SLUG.set(c, String(c.slug)));
 
 const MONTH_NAMES = ['January','February','March','April','May','June',
   'July','August','September','October','November','December'];
@@ -136,7 +139,7 @@ export function CelebrityPage() {
 
   // Birthday twins — only for full-DOB celebrities.
   const twins = isFull
-    ? (indianCelebrities as unknown as Record<string, unknown>[]).filter(c => {
+    ? ALL_CELEBRITIES.filter(c => {
         if (c === celeb || String(c.name) === name) return false;
         const d = parseCelebrityDOB(c);
         return d?.isFullDate && d.day === dob!.day && d.month === dob!.month;
