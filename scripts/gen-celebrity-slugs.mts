@@ -24,8 +24,17 @@ const require = createRequire(import.meta.url);
 const celebritiesData = require('../src/data/celebrities.json');
 const allCelebrities = celebritiesData.celebrities as Record<string, unknown>[];
 
+// Prerender curation: every static Indian celebrity (canonical, hand-curated)
+// PLUS Supabase celebrities notable enough to warrant a static page (present on
+// ≥30 Wikipedia language editions). The full 2595-entry set still resolves
+// client-side via CelebrityPage; this only bounds which pages get static HTML,
+// keeping the build tractable and avoiding thin-content mass publishing.
+const NOTABLE_SITELINKS = 30;
+const shouldPrerender = (c: Record<string, unknown>) =>
+  c.source === 'static' || Number(c.sitelinks ?? 0) >= NOTABLE_SITELINKS;
+
 const meta: Record<string, { title: string; desc: string }> = {};
-allCelebrities.forEach((celeb) => {
+allCelebrities.filter(shouldPrerender).forEach((celeb) => {
   const slug = String(celeb.slug || '');
   if (!slug) return;
   const name = String(celeb.name || '');
