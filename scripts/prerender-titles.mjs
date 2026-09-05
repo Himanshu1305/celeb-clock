@@ -260,6 +260,15 @@ const STATIC = {
   '/articles/famous-indians-born-in-october': { title: 'Famous Indians Born in October — Birthdays & Zodiac | BornClock', desc: 'Famous Indians born in October — birthdays, Libra and Scorpio zodiac profiles, and celebrity birthday twins.' },
   '/articles/famous-indians-born-in-november': { title: 'Famous Indians Born in November — Birthdays & Zodiac | BornClock', desc: 'Famous Indians born in November — birthdays, Scorpio and Sagittarius zodiac profiles, and celebrity birthday twins.' },
   '/articles/famous-indians-born-in-december': { title: 'Famous Indians Born in December — Birthdays & Zodiac | BornClock', desc: 'Famous Indians born in December — birthdays, Sagittarius and Capricorn zodiac profiles, and celebrity birthday twins.' },
+  '/articles/age-in-days-hours-minutes': { title: 'Age in Days, Hours & Minutes — Life Countdown | BornClock', desc: 'How many days, hours and minutes have you lived? Free calculator — exact days, hours, minutes, heartbeats, breaths, full moons and Mercury years from your DOB.' },
+  '/articles/life-expectancy-how-it-is-calculated': { title: 'How Is Life Expectancy Calculated? WHO Method | BornClock', desc: 'How life expectancy is calculated — WHO methodology, period vs cohort life tables, the 5 data sources, and why India\'s figure may be underestimated.' },
+  '/articles/retirement-age-india-life-expectancy': { title: 'Retirement Age & Life Expectancy in India | BornClock', desc: 'Retirement age and life expectancy in India — EPFO pension, NPS, when early retirement makes sense given your longevity, and the FIRE approach.' },
+  '/articles/longevity-habits-of-indian-billionaires': { title: 'Longevity Habits of Indian Billionaires | BornClock', desc: 'Longevity habits of Indian billionaires — Ratan Tata, Azim Premji, Mukesh Ambani. Documented health habits, their Life Path numbers, and lessons for you.' },
+  '/articles': { title: 'All Articles — Longevity, Numerology & Astrology Guides | BornClock', desc: 'Browse all BornClock articles — longevity science, numerology, Vedic and Western astrology, Chinese zodiac, and Hindi guides. Free, evidence-based.' },
+  '/hi/life-expectancy-calculator': { title: 'जीवन प्रत्याशा कैलकुलेटर — आप कितने साल जिएंगे? | BornClock', desc: 'WHO डेटा पर आधारित मुफ्त जीवन प्रत्याशा कैलकुलेटर। धूम्रपान, व्यायाम, आहार, नींद और तनाव जैसे 5 कारक जानें और स्वस्थ लंबा जीवन जिएं।' },
+  '/hi/numerology-by-date-of-birth': { title: 'अंकज्योतिष जन्मतिथि से — अपना मूलांक जानें | BornClock', desc: 'जन्मतिथि से अपना मूलांक निकालें। मूलांक 1 से 9 तक का पूरा अर्थ हिंदी में, शासक ग्रह और जीवन उद्देश्य के साथ। मुफ्त गणना करें।' },
+  '/hi/meri-jeevan-pratyasha': { title: 'मेरी जीवन प्रत्याशा क्या है? | BornClock', desc: 'जानें आपकी जीवन प्रत्याशा क्या है। WHO डेटा और धूम्रपान, व्यायाम, आहार जैसे 5 कारकों के साथ अपनी अनुमानित आयु की मुफ्त गणना करें।' },
+  '/life-expectancy-calculator-singapore-uae': { title: 'Life Expectancy Calculator — Singapore & UAE | BornClock', desc: 'Life expectancy in Singapore (83.9) and UAE (78.5) — WHO data for the Indian diaspora. Compare with India 70.2 and calculate your own with 8 factors.' },
   '/articles/moon-sign-by-date-of-birth': { title: 'Moon Sign by Date of Birth — Find Your Vedic Rashi India | BornClock', desc: 'Find your Vedic Rashi (moon sign) by date of birth. All 12 Rashis with lucky stone, mantra, personality, Devanagari names, and free Rashi calculator.' },
   '/chinese-zodiac':        { title: 'Chinese Zodiac Calculator — Find Your Chinese Zodiac Sign | BornClock', desc: 'Find your Chinese Zodiac animal from your birth year — Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, or Pig. Full personality guides.' },
   '/vedic-zodiac':          { title: 'Indian Zodiac (Vedic Rashi) Calculator — Find Your Jyotish Sign | BornClock', desc: 'Calculate your Vedic Rashi (Moon sign) from date of birth. Full guides for all 12 Rashis — Mesha through Meena. Jyotish astrology explained.' },
@@ -365,6 +374,17 @@ const FITNESS = {
 export function getTitleForRoute(route) {
   if (route === '/') return null;
   if (FITNESS[route]) return FITNESS[route];
+
+  // Global born-on: /born-on/:month/:day (no /india suffix) — Task 29
+  const gbo = route.match(/^\/born-on\/([a-z]+)\/(\d{1,2})$/);
+  if (gbo) {
+    const monthName = gbo[1].charAt(0).toUpperCase() + gbo[1].slice(1);
+    const day = gbo[2];
+    return {
+      title: `Famous People Born on ${monthName} ${day} — Birthdays | BornClock`,
+      description: `Discover the famous people born on ${monthName} ${day} — actors, athletes, leaders and more who share this birthday, ranked by global recognition.`,
+    };
+  }
 
   // /zodiac/:sign
   if (route.startsWith('/zodiac/')) {

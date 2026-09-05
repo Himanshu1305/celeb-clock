@@ -161,6 +161,17 @@ function bornOnRoutes() {
   return routes;
 }
 
+// Task 29 — 366 GLOBAL born-on routes: /born-on/:month/:day/ (canonical → /india/ variant).
+const GLOBAL_BORN_ON_ROUTES = (() => {
+  const routes = [];
+  for (let m = 1; m <= 12; m++) {
+    for (let d = 1; d <= MONTH_DAYS_BORN_ON[m]; d++) {
+      routes.push(`/born-on/${MONTH_NAMES_LOWER[m]}/${d}`);
+    }
+  }
+  return routes;
+})();
+
 export const STATIC_ROUTES = [
   '/',
   // Growth pages FIRST (Overnight Batch 2): the prerender has a 25-min budget and
@@ -282,6 +293,16 @@ export const STATIC_ROUTES = [
   '/articles/famous-indians-born-in-october',
   '/articles/famous-indians-born-in-november',
   '/articles/famous-indians-born-in-december',
+  '/articles/age-in-days-hours-minutes',
+  '/articles/life-expectancy-how-it-is-calculated',
+  '/articles/retirement-age-india-life-expectancy',
+  '/articles/longevity-habits-of-indian-billionaires',
+  '/articles',
+  '/hi/life-expectancy-calculator',
+  '/hi/numerology-by-date-of-birth',
+  '/hi/meri-jeevan-pratyasha',
+  '/life-expectancy-calculator-singapore-uae',
+  ...GLOBAL_BORN_ON_ROUTES,
   '/gift',
   '/coach',
   '/chinese-zodiac',

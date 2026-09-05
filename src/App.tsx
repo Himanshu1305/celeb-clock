@@ -126,6 +126,16 @@ const FamousIndiansBornInSeptember = lazyWithReload(() => import("./pages/articl
 const FamousIndiansBornInOctober = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInOctober"));
 const FamousIndiansBornInNovember = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInNovember"));
 const FamousIndiansBornInDecember = lazyWithReload(() => import("./pages/articles/FamousIndiansBornInDecember"));
+const AgeDaysHoursMinutesArticle = lazyWithReload(() => import("./pages/articles/AgeDaysHoursMinutesArticle"));
+const LifeExpectancyHowCalculatedArticle = lazyWithReload(() => import("./pages/articles/LifeExpectancyHowCalculatedArticle"));
+const RetirementAgeIndiaArticle = lazyWithReload(() => import("./pages/articles/RetirementAgeIndiaArticle"));
+const BillionaireLongevityArticle = lazyWithReload(() => import("./pages/articles/BillionaireLongevityArticle"));
+const ArticlesIndexPage = lazyWithReload(() => import("./pages/ArticlesIndexPage"));
+const HindiLifeExpectancyArticle = lazyWithReload(() => import("./pages/articles/HindiLifeExpectancyArticle"));
+const HindiNumerologyArticle = lazyWithReload(() => import("./pages/articles/HindiNumerologyArticle"));
+const HindiJeevanPratyashaPage = lazyWithReload(() => import("./pages/articles/HindiJeevanPratyashaPage"));
+const LifeExpectancySingaporeUAEPage = lazyWithReload(() => import("./pages/LifeExpectancySingaporeUAEPage"));
+const BornOnDayGlobal = lazyWithReload(() => import("./pages/BornOnDayGlobal"));
 const ReportView = lazyWithReload(() => import("./pages/ReportView"));
 const ChineseZodiac = lazyWithReload(() => import("./pages/ChineseZodiac"));
 const ChineseZodiacSign = lazyWithReload(() => import("./pages/ChineseZodiacSign"));
@@ -308,6 +318,16 @@ const App = () => (
               <Route path="/articles/famous-indians-born-in-october" element={<FamousIndiansBornInOctober />} />
               <Route path="/articles/famous-indians-born-in-november" element={<FamousIndiansBornInNovember />} />
               <Route path="/articles/famous-indians-born-in-december" element={<FamousIndiansBornInDecember />} />
+              <Route path="/articles/age-in-days-hours-minutes" element={<AgeDaysHoursMinutesArticle />} />
+              <Route path="/articles/life-expectancy-how-it-is-calculated" element={<LifeExpectancyHowCalculatedArticle />} />
+              <Route path="/articles/retirement-age-india-life-expectancy" element={<RetirementAgeIndiaArticle />} />
+              <Route path="/articles/longevity-habits-of-indian-billionaires" element={<BillionaireLongevityArticle />} />
+              <Route path="/articles" element={<ArticlesIndexPage />} />
+              <Route path="/hi/life-expectancy-calculator" element={<HindiLifeExpectancyArticle />} />
+              <Route path="/hi/numerology-by-date-of-birth" element={<HindiNumerologyArticle />} />
+              <Route path="/hi/meri-jeevan-pratyasha" element={<HindiJeevanPratyashaPage />} />
+              <Route path="/life-expectancy-calculator-singapore-uae" element={<LifeExpectancySingaporeUAEPage />} />
+              <Route path="/born-on/:month/:day" element={<BornOnDayGlobal />} />
               <Route path="/birthday-report" element={<BirthdayReport />} />
               <Route path="/report/:slug" element={<ReportView />} />
               <Route path="/chinese-zodiac" element={<ChineseZodiac />} />
