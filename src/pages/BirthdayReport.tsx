@@ -7,6 +7,7 @@ import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
+import { ShareMyProfileButton } from '@/components/ShareMyProfileButton';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { generateReportData, saveReport } from '@/services/BirthdayReportService';
@@ -567,9 +568,15 @@ const BirthdayReport = () => {
               </div>
 
               {/* Day 7A — dedicated WhatsApp share button (null-safe: reportUrl always set in success) */}
-              <div data-testid="report-whatsapp-share" className="flex justify-center mb-6">
+              <div data-testid="report-whatsapp-share" className="flex flex-col items-center gap-3 mb-6">
                 <WhatsAppShareButton
                   message={`I made this Birthday Report${recipientName ? ` for ${recipientName}` : ''}! 🎂\nEverything about the day they were born — celebrity twins, zodiac, numerology and more.\n${reportUrl || 'https://bornclock.com/birthday-report'}`}
+                />
+                {/* Task 19 — share the profile as an image */}
+                <ShareMyProfileButton
+                  name={recipientName || 'My'}
+                  subtitle="Birthday intelligence report"
+                  url={reportUrl || 'https://bornclock.com/birthday-report'}
                 />
               </div>
 

@@ -827,6 +827,14 @@ export function CelebrityPage() {
           <CosmicTwins day={isFull ? dob!.day : null} month={isFull ? dob!.month : null} celebName={name} />
           <LuckyStoneAffiliate rashi={vedic?.rashi ?? null} />
 
+          {/* Internal link to the compatibility tool (Task 19) */}
+          <p className="text-sm text-gray-600 my-4">
+            Curious how you match with {name}?{' '}
+            <Link to="/compatibility" className="text-indigo-600 font-medium hover:underline">
+              Check your birthday compatibility →
+            </Link>
+          </p>
+
           {/* ── BIRTHDAY TWINS ── */}
           <section className="mb-10" aria-labelledby="twins-heading">
             <h2 id="twins-heading" className="text-2xl font-black text-gray-900 mb-4 pb-3 border-b border-gray-200">

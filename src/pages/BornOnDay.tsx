@@ -529,6 +529,16 @@ export default function BornOnDay() {
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
+
+        {/* Cross-links to viral tools (Task 19 internal linking) */}
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link to="/wish" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+            🎂 Send a birthday wish →
+          </Link>
+          <Link to="/compatibility" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+            💞 Check birthday compatibility →
+          </Link>
+        </div>
       </div>
       <Footer />
     </div>
