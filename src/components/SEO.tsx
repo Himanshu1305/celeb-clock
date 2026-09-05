@@ -14,6 +14,7 @@ interface SEOProps {
   section?: string;
   tags?: string[];
   noindex?: boolean;
+  hreflang?: Array<{ lang: string; url: string }>;
 }
 
 const SITE_NAME = 'BornClock - Age & Birthday Calculator';
@@ -35,7 +36,8 @@ export const SEO = ({
   modifiedTime,
   section,
   tags = [],
-  noindex = false
+  noindex = false,
+  hreflang
 }: SEOProps) => {
   // Brand exactly once. Most page titles already end with "… | BornClock"; appending
   // SITE_NAME again produced the doubled tab title "… | BornClock | BornClock - Age &
@@ -142,6 +144,11 @@ export const SEO = ({
       
       {/* Canonical URL */}
       {fullCanonicalUrl && <link rel="canonical" href={fullCanonicalUrl} />}
+
+      {/* hreflang alternates — international SEO */}
+      {hreflang && hreflang.map(h => (
+        <link key={h.lang} rel="alternate" hrefLang={h.lang} href={h.url} />
+      ))}
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={ogType} />
