@@ -15,6 +15,73 @@ function JsonLd({ data }: { data: object }) {
   );
 }
 
+// ── Additional structured-data schemas (SEO batch) ───────────
+// FAQPage (exactly 5), SoftwareApplication, and WebPage+speakable.
+const HLWIL_FAQ_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How long will I live?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The global average life expectancy is approximately 73 years (WHO, 2023), but this varies dramatically based on country, gender, and individual lifestyle. A non-smoking, regularly exercising person with strong social connections and good sleep may have a statistical life expectancy above 85. Someone with multiple lifestyle risk factors may be well below the national average. BornClock\'s 8-factor quiz gives you a personalised estimate using WHO baseline data adjusted for your specific lifestyle choices.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What determines how long you live?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Research from the Karolinska Institute (2018) confirmed that genetics accounts for only 25-30% of longevity. The remaining 70-75% is determined by lifestyle. The most impactful factors are: smoking (up to 10 years difference), physical exercise (31% reduction in all-cause mortality with 150+ min/week, WHO 2022), BMI (each 5-unit increase above 25 reduces life expectancy by 0.9 years, Lancet 2016), sleep (under 6 hours linked to 12% higher mortality), and social connections (isolation has mortality impact comparable to smoking 15 cigarettes per day).',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I increase how long I live?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Because 70-75% of longevity is determined by lifestyle rather than genetics, meaningful change is possible at any age. Research shows that quitting smoking before 40 reduces smoking-related death risk by 90%. Adding 15 minutes of daily moderate exercise adds approximately 3 years of life expectancy. Improving sleep from 5 to 7 hours consistently can add up to 2 years. BornClock\'s personalised 90-day action plan identifies your highest-impact opportunities and provides specific steps to improve your forecast.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Which country has the highest life expectancy?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'According to WHO 2023 data, Japan has the highest life expectancy at approximately 84.3 years, followed by Switzerland (83.4), South Korea (83.3), Singapore (83.2), and Australia (83.2). India\'s average is approximately 70.2 years. The United States averages 76.4 years, lower than many high-income countries due to lifestyle factors including obesity rates, limited healthcare access for some populations, and higher rates of accidents. BornClock uses country-specific WHO baselines so your estimate is calibrated for your actual national context.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How accurate is a life expectancy calculator?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Life expectancy calculators provide statistical estimates based on population research — they cannot predict individual outcomes. BornClock uses WHO Global Health Observatory baselines specific to your country and gender, then applies adjustments from 8 peer-reviewed factors. Research shows these 8 factors account for 70-75% of longevity variance, making them the most reliable basis for personalised estimation without a clinical examination. Accuracy depends on answering honestly and completely.',
+      },
+    },
+  ],
+} as const;
+
+const HLWIL_SOFTWARE_APP_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: `${HLWIL_SEO.title} — BornClock`,
+  applicationCategory: 'HealthApplication',
+  operatingSystem: 'Web',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+} as const;
+
+const HLWIL_WEBPAGE_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    xpath: ['/html/body//h1', "/html/body//div[@data-testid='result-summary']"],
+  },
+} as const;
+
 // Direction badge styles
 const DIRECTION_CONFIG = {
   negative: {
@@ -54,6 +121,11 @@ export function HowLongWillILivePage() {
       <JsonLd data={HLWIL_SCHEMA.softwareApp} />
       <JsonLd data={HLWIL_SCHEMA.faq} />
       <JsonLd data={HLWIL_SCHEMA.breadcrumb} />
+
+      {/* Additional structured data: FAQPage (5), SoftwareApplication, speakable WebPage */}
+      <JsonLd data={HLWIL_FAQ_SCHEMA} />
+      <JsonLd data={HLWIL_SOFTWARE_APP_SCHEMA} />
+      <JsonLd data={HLWIL_WEBPAGE_SCHEMA} />
 
       <main
         data-testid="hlwil-page"

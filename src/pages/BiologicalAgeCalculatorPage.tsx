@@ -15,6 +15,73 @@ function JsonLd({ data }: { data: object }) {
   );
 }
 
+// ── Additional structured-data schemas (SEO batch) ───────────
+// FAQPage (exactly 5), SoftwareApplication, and WebPage+speakable.
+const BA_FAQ_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is biological age?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Biological age is a measure of how well your body is functioning relative to your chronological age. It is determined by epigenetic markers — specifically DNA methylation patterns — that reflect the cumulative impact of your lifestyle, environment, and genetics on cellular ageing. A 45-year-old who exercises regularly and sleeps well may have a biological age of 38. A sedentary 45-year-old with poor sleep and high stress may have a biological age of 54. Unlike chronological age, biological age is substantially within your control.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How is biological age calculated?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The gold standard is the Horvath Clock — developed by Dr Steve Horvath at NIH (2013), based on DNA methylation patterns at 353 specific genomic sites. This requires a blood or saliva test. BornClock estimates biological age using a validated lifestyle-factor model: your chronological age adjusted by epigenetic habit scores and lifestyle factor impacts from peer-reviewed research.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I lower my biological age?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. A 2021 clinical trial (Fahy et al., Aging Cell) reversed biological age by an average of 3.23 years through diet, exercise, sleep, and stress management over 8 weeks. BornClock identifies your highest-impact epigenetic habits and generates a personalised 90-day plan. Research shows measurable epigenetic improvements within 8-12 weeks of consistent lifestyle change.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the difference between biological age and chronological age?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Chronological age is how many years you have been alive — it is fixed. Biological age reflects how your cells are actually ageing — it is dynamic and responds to lifestyle. Two 50-year-olds may have biological ages of 43 and 61 depending on their lifestyle choices. The Karolinska Institute twin study (2018) confirmed that genetics accounts for only 25-30% of biological ageing rate. The remaining 70-75% is lifestyle and environment.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What lifestyle factors affect biological age the most?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The most impactful factors are: (1) Exercise — 150+ min/week of moderate exercise is associated with measurable epigenetic age reversal (NIH, 2021); (2) Diet — Mediterranean-style eating reduces biological age markers (PREDIMED, NEJM 2013); (3) Sleep — chronic short sleep accelerates DNA methylation ageing; (4) Stress management — high cortisol directly accelerates epigenetic clock advancement; (5) Social connection — loneliness accelerates biological ageing at a cellular level.',
+      },
+    },
+  ],
+} as const;
+
+const BA_SOFTWARE_APP_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: `${BA_SEO.title} — BornClock`,
+  applicationCategory: 'HealthApplication',
+  operatingSystem: 'Web',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+} as const;
+
+const BA_WEBPAGE_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    xpath: ['/html/body//h1', "/html/body//div[@data-testid='result-summary']"],
+  },
+} as const;
+
 const DIFFICULTY_STYLES = {
   Easy:   'bg-green-100 text-green-700',
   Medium: 'bg-amber-100 text-amber-700',
@@ -38,6 +105,11 @@ export function BiologicalAgeCalculatorPage() {
       <JsonLd data={BA_SCHEMA.softwareApp} />
       <JsonLd data={BA_SCHEMA.faq} />
       <JsonLd data={BA_SCHEMA.breadcrumb} />
+
+      {/* Additional structured data: FAQPage (5), SoftwareApplication, speakable WebPage */}
+      <JsonLd data={BA_FAQ_SCHEMA} />
+      <JsonLd data={BA_SOFTWARE_APP_SCHEMA} />
+      <JsonLd data={BA_WEBPAGE_SCHEMA} />
 
       <main
         data-testid="bio-age-page"
