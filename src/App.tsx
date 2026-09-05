@@ -86,6 +86,24 @@ const BirthdayReport = lazyWithReload(() => import("./pages/BirthdayReport"));
 const SampleReportPage = lazyWithReload(() => import("./pages/SampleReportPage"));
 const NumerologyArticle = lazyWithReload(() => import("./pages/articles/NumerologyArticle"));
 const MoonSignArticle = lazyWithReload(() => import("./pages/articles/MoonSignArticle"));
+const LifeExpectancyByCountryArticle = lazyWithReload(() => import("./pages/articles/LifeExpectancyByCountryArticle"));
+const LifeExpectancyIndiaArticle = lazyWithReload(() => import("./pages/articles/LifeExpectancyIndiaArticle"));
+const BiologicalAgeArticle = lazyWithReload(() => import("./pages/articles/BiologicalAgeArticle"));
+const VedicAstrologyArticle = lazyWithReload(() => import("./pages/articles/VedicAstrologyArticle"));
+const LongevityQuizArticle = lazyWithReload(() => import("./pages/articles/LongevityQuizArticle"));
+const BryanJohnsonArticle = lazyWithReload(() => import("./pages/articles/BryanJohnsonArticle"));
+const HowToLiveTo100Article = lazyWithReload(() => import("./pages/articles/HowToLiveTo100Article"));
+const ExerciseLongevityArticle = lazyWithReload(() => import("./pages/articles/ExerciseLongevityArticle"));
+const BlueZonesDietArticle = lazyWithReload(() => import("./pages/articles/BlueZonesDietArticle"));
+const NakshatraArticle = lazyWithReload(() => import("./pages/articles/NakshatraArticle"));
+const LongevityFoodsIndiaArticle = lazyWithReload(() => import("./pages/articles/LongevityFoodsIndiaArticle"));
+const LifePathCompatibilityArticle = lazyWithReload(() => import("./pages/articles/LifePathCompatibilityArticle"));
+const DeathClockAlternativeArticle = lazyWithReload(() => import("./pages/articles/DeathClockAlternativeArticle"));
+const RetirementLifeExpectancyArticle = lazyWithReload(() => import("./pages/articles/RetirementLifeExpectancyArticle"));
+const LifeExpectancyUKPage = lazyWithReload(() => import("./pages/LifeExpectancyUKPage"));
+const LifeExpectancyAustraliaPage = lazyWithReload(() => import("./pages/LifeExpectancyAustraliaPage"));
+const LifeExpectancyUSAPage = lazyWithReload(() => import("./pages/LifeExpectancyUSAPage"));
+const LifeExpectancyCanadaPage = lazyWithReload(() => import("./pages/LifeExpectancyCanadaPage"));
 const ReportView = lazyWithReload(() => import("./pages/ReportView"));
 const ChineseZodiac = lazyWithReload(() => import("./pages/ChineseZodiac"));
 const ChineseZodiacSign = lazyWithReload(() => import("./pages/ChineseZodiacSign"));
@@ -228,6 +246,24 @@ const App = () => (
               <Route path="/birthday-report/sample" element={<SampleReportPage />} />
               <Route path="/articles/numerology-by-date-of-birth" element={<NumerologyArticle />} />
               <Route path="/articles/moon-sign-by-date-of-birth" element={<MoonSignArticle />} />
+              <Route path="/articles/life-expectancy-by-country-2026" element={<LifeExpectancyByCountryArticle />} />
+              <Route path="/articles/how-long-will-i-live-in-india" element={<LifeExpectancyIndiaArticle />} />
+              <Route path="/articles/biological-age-vs-chronological-age" element={<BiologicalAgeArticle />} />
+              <Route path="/articles/vedic-astrology-birth-chart" element={<VedicAstrologyArticle />} />
+              <Route path="/articles/longevity-quiz" element={<LongevityQuizArticle />} />
+              <Route path="/articles/bryan-johnson-blueprint-alternative" element={<BryanJohnsonArticle />} />
+              <Route path="/articles/how-to-live-to-100" element={<HowToLiveTo100Article />} />
+              <Route path="/articles/exercise-and-longevity" element={<ExerciseLongevityArticle />} />
+              <Route path="/articles/blue-zones-diet" element={<BlueZonesDietArticle />} />
+              <Route path="/articles/nakshatra-by-date-of-birth" element={<NakshatraArticle />} />
+              <Route path="/articles/longevity-foods-india" element={<LongevityFoodsIndiaArticle />} />
+              <Route path="/articles/life-path-number-compatibility" element={<LifePathCompatibilityArticle />} />
+              <Route path="/articles/death-clock-alternative" element={<DeathClockAlternativeArticle />} />
+              <Route path="/articles/retirement-planning-life-expectancy" element={<RetirementLifeExpectancyArticle />} />
+              <Route path="/life-expectancy-calculator-uk" element={<LifeExpectancyUKPage />} />
+              <Route path="/life-expectancy-calculator-australia" element={<LifeExpectancyAustraliaPage />} />
+              <Route path="/life-expectancy-calculator-usa" element={<LifeExpectancyUSAPage />} />
+              <Route path="/life-expectancy-calculator-canada" element={<LifeExpectancyCanadaPage />} />
               <Route path="/birthday-report" element={<BirthdayReport />} />
               <Route path="/report/:slug" element={<ReportView />} />
               <Route path="/chinese-zodiac" element={<ChineseZodiac />} />
