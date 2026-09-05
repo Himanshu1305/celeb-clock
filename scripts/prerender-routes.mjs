@@ -317,6 +317,8 @@ export const STATIC_ROUTES = [
   '/biorhythm',
   '/compatibility',
   ...compatibilityRoutes(),
+  '/wish',
+  '/birthday-report/gift',
   '/rashi-ratna',
   ...bornOnRoutes(),
   '/born-on/india',

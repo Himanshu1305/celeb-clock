@@ -281,6 +281,8 @@ const STATIC = {
   '/name-numerology':       { title: 'Name Numerology — Expression & Soul Urge Numbers | BornClock', desc: 'Calculate your Expression Number, Soul Urge, and Personality Number from your full birth name. Complete Pythagorean name numerology guide.' },
   '/biorhythm':             { title: 'Biorhythm Calculator — Physical & Emotional Cycles | BornClock', desc: 'Calculate your biorhythm cycles — 23-day physical, 28-day emotional, and 33-day intellectual. See your cycle status for any date.' },
   '/compatibility':         { title: 'Zodiac Compatibility Calculator — How Compatible Are You? | BornClock', desc: 'Calculate zodiac compatibility between any two signs. Western, Vedic, and Chinese compatibility scores with detailed analysis.' },
+  '/wish':                  { title: 'Free Birthday Wish Card Maker — Send a Wish | BornClock', desc: 'Create a personalised birthday wish card in seconds — with their zodiac and Life Path — and share it on WhatsApp. Free, no signup.' },
+  '/birthday-report/gift':  { title: 'Gift a Birthday Report — Thoughtful & Personal | BornClock', desc: 'Gift a personalised Birthday Report — zodiac, numerology, life path and celebrity twins — with your own message. The gift that proves you know them.' },
   '/rashi-ratna':           { title: 'Rashi Ratna — Gemstone by Zodiac Sign | BornClock', desc: 'Find your Vedic gemstone (Rashi Ratna) by zodiac sign. Full guides for all 12 Rashis — mythology, benefits, wearing instructions, and care.' },
 };
 
