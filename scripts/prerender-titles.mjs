@@ -375,7 +375,10 @@ const FITNESS = {
 };
 
 export function getTitleForRoute(route) {
-  if (route === '/') return null;
+  if (route === '/') return {
+    title: 'Free Birthday, Zodiac & Longevity Calculator | BornClock',
+    description: 'Decode your birthday — celebrity twins, zodiac, Vedic rashi, numerology, life path and a science-backed longevity forecast. Free, from your date of birth.',
+  };
   if (FITNESS[route]) return FITNESS[route];
 
   // Global born-on: /born-on/:month/:day (no /india suffix) — Task 29

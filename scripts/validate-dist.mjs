@@ -36,8 +36,11 @@ for (const route of ROUTES) {
   const html = readFileSync(file, 'utf8');
   const problems = [];
 
+  const decode = (s) => s
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&apos;/g, "'");
   const titleM = /<title>([^<]*)<\/title>/.exec(html);
-  const title = titleM ? titleM[1] : '';
+  const title = titleM ? decode(titleM[1]) : '';
   if (!title) problems.push('no <title>');
   else if (title.length > 70) problems.push(`title ${title.length}c > 70`);
 
