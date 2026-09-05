@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
+import DobCompatibility from '@/components/DobCompatibility';
 import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -221,6 +222,9 @@ export default function CompatibilityPage() {
 
           <h1 className="text-3xl font-black text-gray-900 mb-1">Zodiac Compatibility Calculator <span className="text-lg font-semibold text-gray-500">(Western Zodiac)</span></h1>
           <PageTagline />
+
+          {/* DOB-based 4-dimension compatibility (Task 15) — zodiac, rashi, life path, nakshatra. */}
+          <DobCompatibility />
 
           <div className="bg-rose-50 border-l-4 border-rose-500 rounded-r-xl p-5 mb-4">
             <p className="text-base font-semibold text-rose-900 leading-relaxed">
