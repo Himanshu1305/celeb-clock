@@ -287,6 +287,8 @@ const STATIC = {
   '/kundali':               { title: 'Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock', desc: 'Generate your free Vedic Kundali — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, computed with the Swiss Ephemeris.' },
   '/kundali-match':          { title: 'Kundali Matching — Free Guna Milan (Ashtakoota) | BornClock', desc: 'Free Kundali matching by the 36-point Ashtakoota (Guna Milan) system — Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi, with dosha checks.' },
   '/baby-names':             { title: 'Baby Names by Nakshatra — Birth Star Syllables | BornClock', desc: 'Find auspicious baby-name starting syllables (aksharas) by Nakshatra (birth star), the traditional Vedic way. Enter birth details or pick the Nakshatra.' },
+  '/articles/kundali-compatibility': { title: 'Kundali Matching Guide — Ashtakoota (36 Guna) Explained | BornClock', desc: 'A complete guide to Kundali matching by Ashtakoota (Guna Milan): all eight kootas, scores, doshas and what a good match really means.' },
+  '/diwali-gift':            { title: 'Diwali Gift — Personalised Birthday & Kundali Reading | BornClock', desc: 'This Diwali, gift a personalised Birthday Report or Kundali (₹199 each), or the combo (₹299). Delivered with your own festive message.' },
   '/rashi-ratna':           { title: 'Rashi Ratna — Gemstone by Zodiac Sign | BornClock', desc: 'Find your Vedic gemstone (Rashi Ratna) by zodiac sign. Full guides for all 12 Rashis — mythology, benefits, wearing instructions, and care.' },
 };
 
