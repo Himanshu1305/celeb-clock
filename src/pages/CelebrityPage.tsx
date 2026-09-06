@@ -24,6 +24,7 @@ import celebBios from '@/data/celebrity-bios.json';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { LuckyStoneAffiliate, CosmicTwins } from '@/components/CelebrityAffiliateAndTwins';
 import { NakshatraPlaceholder } from '@/components/NakshatraPlaceholder';
+import { BirthdayRarityCard } from '@/components/BirthdayRarityCard';
 
 // Unified celebrity DB (static Indian + Supabase, slugs pre-assigned by
 // scripts/export-celebrities.ts). Build the slug → entry map ONCE at load.
@@ -429,6 +430,7 @@ export function CelebrityPage() {
             {/* Nakshatra requires exact birth time+location — day/month approximation
                 removed (astronomically unreliable). Direct users to the report. */}
             <NakshatraPlaceholder />
+            {isFull && <BirthdayRarityCard month={dob!.month} day={dob!.day} />}
             {!isFull && (
               <p className="text-xs text-gray-500 mt-2 italic">
                 Only the birth year is documented for {name}. Zodiac sign, life path, and planetary ages require an exact birth date and are omitted to avoid guessing.
