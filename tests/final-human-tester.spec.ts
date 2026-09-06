@@ -100,6 +100,7 @@ test.describe('FINAL Human Tester Checklist', () => {
   });
   test('HT-HINDI-03: Rashifal vrischika has Devanagari', async ({ page }) => {
     const r = await page.goto('/hi/rashifal/vrischika/');
+    await page.waitForLoadState('networkidle');
     if (r?.status() === 200) { const body = await page.textContent('body'); expect(body).toMatch(/[ऀ-ॿ]/); expect(body).not.toContain('\nundefined\n'); }
   });
   // MOBILE
