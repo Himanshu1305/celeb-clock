@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { LanguageToggle } from '@/components/LanguageToggle';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +22,7 @@ export const AuthNav = () => {
   if (!user) {
     return (
       <div className="flex items-center gap-2">
+        <LanguageToggle />
         <Link to="/auth">
           <Button variant="outline" size="sm">
             Sign In
