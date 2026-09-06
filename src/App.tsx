@@ -378,6 +378,10 @@ const App = () => (
               <Route path="/baby-names" element={<BabyNamesPage />} />
               <Route path="/hi/rashifal/:rashi" element={<RashifalPage />} />
               <Route path="/hi/rashifal" element={<RashifalPage />} />
+              <Route path="/born-on/:month/:day/personality" element={<DatePersonalityPage />} />
+              <Route path="/reminders" element={<RemindersPage />} />
+              <Route path="/articles/kundali-compatibility" element={<KundaliCompatArticle />} />
+              <Route path="/diwali-gift" element={<DiwaliGiftPage />} />
               <Route path="/compatibility/:sign1/:sign2" element={<CompatibilityPage />} />
               <Route path="/rashi-ratna" element={<RashiRatnaPage />} />
               {MONTH_HUB_DATA.map(m => (
