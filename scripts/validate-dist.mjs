@@ -12,6 +12,9 @@ const ROUTES = [
   '/', '/birthday-report', '/longevity-calculator',
   '/wish', '/birthday-report/gift', '/compatibility',
   '/todays-birthdays', '/for-business',
+  '/kundali', '/kundali-match', '/baby-names', '/diwali-gift', '/reminders',
+  '/hi/rashifal/vrischika', '/born-on/august/6/personality',
+  '/articles/kundali-compatibility',
   '/celebrity/virat-kohli', '/celebrity/srila-prabhupada', '/celebrity/shah-rukh-khan',
   '/born-on/august-6/india', '/articles', '/numerology/7',
 ];
