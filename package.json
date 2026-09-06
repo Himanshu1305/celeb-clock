@@ -17,6 +17,7 @@
     "test:prelaunch": "playwright test --config e2e/launch-gauntlet/gauntlet.config.ts && playwright test --config e2e/prelaunch/prelaunch.config.ts"
   },
   "dependencies": {
+    "@fusionstrings/panchangam": "^0.2.0",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
