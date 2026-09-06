@@ -335,6 +335,7 @@ export const STATIC_ROUTES = [
   '/kundali',
   '/kundali-match',
   '/baby-names',
+  '/reminders',
   '/hi/rashifal',
   ...['mesha','vrisha','mithuna','karka','simha','kanya','tula','vrischika','dhanu','makara','kumbha','meena'].map(r => '/hi/rashifal/' + r),
   '/rashi-ratna',
