@@ -286,6 +286,7 @@ const STATIC = {
   '/for-business':          { title: 'BornClock for Business — Birthday & Astrology API | BornClock', desc: 'Add birthday intelligence to your product — zodiac, Vedic rashi, numerology, life path and compatibility via a simple REST API. Plans from ₹4,999/mo.' },
   '/kundali':               { title: 'Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock', desc: 'Generate your free Vedic Kundali — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, computed with the Swiss Ephemeris.' },
   '/kundali-match':          { title: 'Kundali Matching — Free Guna Milan (Ashtakoota) | BornClock', desc: 'Free Kundali matching by the 36-point Ashtakoota (Guna Milan) system — Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi, with dosha checks.' },
+  '/baby-names':             { title: 'Baby Names by Nakshatra — Birth Star Syllables | BornClock', desc: 'Find auspicious baby-name starting syllables (aksharas) by Nakshatra (birth star), the traditional Vedic way. Enter birth details or pick the Nakshatra.' },
   '/rashi-ratna':           { title: 'Rashi Ratna — Gemstone by Zodiac Sign | BornClock', desc: 'Find your Vedic gemstone (Rashi Ratna) by zodiac sign. Full guides for all 12 Rashis — mythology, benefits, wearing instructions, and care.' },
 };
 

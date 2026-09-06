@@ -169,6 +169,7 @@ const BirthdayReportGiftPage = lazyWithReload(() => import('@/pages/BirthdayRepo
 const ForBusinessPage = lazyWithReload(() => import('@/pages/ForBusinessPage'));
 const KundaliPage = lazyWithReload(() => import('@/pages/KundaliPage'));
 const KundaliMatchPage = lazyWithReload(() => import('@/pages/KundaliMatchPage'));
+const BabyNamesPage = lazyWithReload(() => import('@/pages/BabyNamesPage'));
 const RashiRatnaPage = lazyWithReload(() => import('@/pages/RashiRatnaPage'));
 const BornOnDay = lazyWithReload(() => import('@/pages/BornOnDay'));
 const BornOnDayIndia = lazyWithReload(() => import('@/pages/BornOnDayIndia'));
@@ -369,6 +370,7 @@ const App = () => (
               <Route path="/for-business" element={<ForBusinessPage />} />
               <Route path="/kundali" element={<KundaliPage />} />
               <Route path="/kundali-match" element={<KundaliMatchPage />} />
+              <Route path="/baby-names" element={<BabyNamesPage />} />
               <Route path="/compatibility/:sign1/:sign2" element={<CompatibilityPage />} />
               <Route path="/rashi-ratna" element={<RashiRatnaPage />} />
               {MONTH_HUB_DATA.map(m => (

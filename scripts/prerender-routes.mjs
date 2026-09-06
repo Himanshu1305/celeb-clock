@@ -322,6 +322,7 @@ export const STATIC_ROUTES = [
   '/for-business',
   '/kundali',
   '/kundali-match',
+  '/baby-names',
   '/rashi-ratna',
   ...bornOnRoutes(),
   '/born-on/india',
