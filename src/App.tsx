@@ -13,6 +13,7 @@ const BirthdayResults = lazyWithReload(() => import("./pages/BirthdayResults"));
 const Auth = lazyWithReload(() => import("./pages/Auth"));
 const Profile = lazyWithReload(() => import("./pages/Profile"));
 const Admin = lazyWithReload(() => import("./pages/Admin"));
+const AccuracyDashboard = lazyWithReload(() => import("./pages/admin/AccuracyDashboard"));
 const Upgrade = lazyWithReload(() => import("./pages/Upgrade"));
 const Pricing = lazyWithReload(() => import("./pages/Pricing"));
 const Zodiac = lazyWithReload(() => import("./pages/Zodiac"));
@@ -236,6 +237,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
+              <Route path="/admin/accuracy" element={<AdminRoute><AccuracyDashboard /></AdminRoute>} />
               <Route path="/upgrade" element={<Upgrade />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/zodiac" element={<Zodiac />} />
