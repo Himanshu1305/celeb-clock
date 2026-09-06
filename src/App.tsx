@@ -170,6 +170,7 @@ const ForBusinessPage = lazyWithReload(() => import('@/pages/ForBusinessPage'));
 const KundaliPage = lazyWithReload(() => import('@/pages/KundaliPage'));
 const KundaliMatchPage = lazyWithReload(() => import('@/pages/KundaliMatchPage'));
 const BabyNamesPage = lazyWithReload(() => import('@/pages/BabyNamesPage'));
+const RashifalPage = lazyWithReload(() => import('@/pages/hi/RashifalPage'));
 const RashiRatnaPage = lazyWithReload(() => import('@/pages/RashiRatnaPage'));
 const BornOnDay = lazyWithReload(() => import('@/pages/BornOnDay'));
 const BornOnDayIndia = lazyWithReload(() => import('@/pages/BornOnDayIndia'));
@@ -371,6 +372,8 @@ const App = () => (
               <Route path="/kundali" element={<KundaliPage />} />
               <Route path="/kundali-match" element={<KundaliMatchPage />} />
               <Route path="/baby-names" element={<BabyNamesPage />} />
+              <Route path="/hi/rashifal/:rashi" element={<RashifalPage />} />
+              <Route path="/hi/rashifal" element={<RashifalPage />} />
               <Route path="/compatibility/:sign1/:sign2" element={<CompatibilityPage />} />
               <Route path="/rashi-ratna" element={<RashiRatnaPage />} />
               {MONTH_HUB_DATA.map(m => (

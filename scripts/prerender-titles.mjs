@@ -384,6 +384,17 @@ export function getTitleForRoute(route) {
   };
   if (FITNESS[route]) return FITNESS[route];
 
+  // /hi/rashifal/:rashi — Hindi daily horoscope (Task 16)
+  const rf = route.match(/^\/hi\/rashifal\/([a-z]+)$/);
+  if (rf) {
+    const RASHI_HI = { mesha: 'मेष', vrisha: 'वृष', mithuna: 'मिथुन', karka: 'कर्क', simha: 'सिंह', kanya: 'कन्या', tula: 'तुला', vrischika: 'वृश्चिक', dhanu: 'धनु', makara: 'मकर', kumbha: 'कुम्भ', meena: 'मीन' };
+    const hi = RASHI_HI[rf[1]];
+    if (hi) return {
+      title: `${hi} राशिफल — आज का राशिफल | BornClock`,
+      description: `${hi} राशि का आज का राशिफल — प्रेम, करियर और स्वास्थ्य के लिए दैनिक भविष्यवाणी। BornClock पर पढ़ें।`,
+    };
+  }
+
   // Global born-on: /born-on/:month/:day (no /india suffix) — Task 29
   const gbo = route.match(/^\/born-on\/([a-z]+)\/(\d{1,2})$/);
   if (gbo) {
