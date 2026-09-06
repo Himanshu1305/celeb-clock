@@ -78,45 +78,60 @@ async function main() {
   } else {
     const sb = createClient(url, key);
     const PAGE = 1000;
-    let from = 0, added = 0, dupSkipped = 0, blocked = 0;
-    for (;;) {
-      const { data, error } = await sb
-        .from('celebrity_sitelinks')
-        .select('id, name, birth_date, birth_month_day, death_date, sitelinks, occupation, known_for, nationality_code')
-        .eq('nationality_code', 'IN')
-        .not('birth_date', 'is', null)
-        .order('sitelinks', { ascending: false })
-        .range(from, from + PAGE - 1);
-      if (error) { console.log('❌ fetch error:', error.message); break; }
+    let added = 0, dupSkipped = 0, blocked = 0;
+
+    const processRow = (row: any): boolean => {
+      if (BLOCKED_IDS.has(row.id)) { blocked++; return false; }
+      const base = nameToSlug(row.name);
+      if (!base) return false;
+      if (used.has(base)) { dupSkipped++; return false; }
+      used.add(base);
+      const by = row.birth_date ? Number(String(row.birth_date).slice(0, 4)) : null;
+      const dy = row.death_date ? Number(String(row.death_date).slice(0, 4)) : null;
+      out.push({
+        id: row.id, name: row.name, slug: base,
+        birth_date: row.birth_date ?? null,
+        birth_month_day: row.birth_month_day ?? monthDay(row.birth_date ?? null),
+        birth_year: by, death_year: dy,
+        category: row.occupation || 'Celebrity',
+        known_for: row.known_for || '',
+        occupation: row.occupation ?? null,
+        nationality_code: row.nationality_code || 'IN',
+        sitelinks: row.sitelinks ?? null,
+        source: 'db',
+      });
+      added++;
+      return true;
+    };
+
+    const SEL = 'id, name, birth_date, birth_month_day, death_date, sitelinks, occupation, known_for, nationality_code';
+
+    // Pass 1 — ALL Indian celebrities with a birth date.
+    for (let from = 0; ; from += PAGE) {
+      const { data, error } = await sb.from('celebrity_sitelinks').select(SEL)
+        .eq('nationality_code', 'IN').not('birth_date', 'is', null)
+        .order('sitelinks', { ascending: false }).range(from, from + PAGE - 1);
+      if (error) { console.log('❌ IN fetch error:', error.message); break; }
       if (!data || data.length === 0) break;
-      for (const row of data) {
-        if (BLOCKED_IDS.has(row.id)) { blocked++; continue; }
-        const base = nameToSlug(row.name);
-        if (!base) continue;
-        if (used.has(base)) { dupSkipped++; continue; } // same person as a static/earlier entry
-        used.add(base);
-        const by = row.birth_date ? Number(String(row.birth_date).slice(0, 4)) : null;
-        const dy = row.death_date ? Number(String(row.death_date).slice(0, 4)) : null;
-        out.push({
-          id: row.id,
-          name: row.name,
-          slug: base,
-          birth_date: row.birth_date ?? null,
-          birth_month_day: row.birth_month_day ?? monthDay(row.birth_date ?? null),
-          birth_year: by,
-          death_year: dy,
-          category: row.occupation || 'Celebrity',
-          known_for: row.known_for || '',
-          occupation: row.occupation ?? null,
-          nationality_code: row.nationality_code || 'IN',
-          sitelinks: row.sitelinks ?? null,
-          source: 'db',
-        });
-        added++;
-      }
-      from += PAGE;
+      data.forEach(processRow);
     }
-    console.log(`Added ${added} DB celebrities (${dupSkipped} dedup-skipped, ${blocked} blocked).`);
+
+    // Pass 2 — top-tier INTERNATIONAL celebrities (present on ≥100 Wikipedia
+    // language editions, incl. Obama at 326), capped to keep celebrities.json
+    // lean and the prerender/bundle bounded. The long tail stays Indian-focused.
+    const INTL_CAP = 800;
+    let intlAdded = 0;
+    for (let from = 0; intlAdded < INTL_CAP; from += PAGE) {
+      const { data, error } = await sb.from('celebrity_sitelinks').select(SEL)
+        .neq('nationality_code', 'IN').not('birth_date', 'is', null)
+        .gte('sitelinks', 100)
+        .order('sitelinks', { ascending: false }).range(from, from + PAGE - 1);
+      if (error) { console.log('❌ INTL fetch error:', error.message); break; }
+      if (!data || data.length === 0) break;
+      for (const row of data) { if (processRow(row)) intlAdded++; if (intlAdded >= INTL_CAP) break; }
+    }
+
+    console.log(`Added ${added} DB celebrities (${intlAdded} international, ${dupSkipped} dedup-skipped, ${blocked} blocked).`);
   }
 
   const indianCount = out.filter(c => c.nationality_code === 'IN').length;
@@ -127,7 +142,7 @@ async function main() {
     celebrities: out,
   };
   // Stamp without Date (deterministic-friendly): use env or leave marker replaced by shell.
-  payload.generated_at = process.env.EXPORT_STAMP || String(Math.floor(Date.now() / 1000));
+  payload.generated_at = process.env.EXPORT_STAMP || new Date().toISOString();
   writeFileSync('src/data/celebrities.json', JSON.stringify(payload, null, 2));
   console.log(`\n✅ Wrote src/data/celebrities.json — total ${payload.total}, indian ${indianCount}.`);
 }
