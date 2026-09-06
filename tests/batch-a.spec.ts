@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test';
 test.describe('Batch A Human Tester', () => {
   test('HT-A-01: Virat Scorpio yes Dhanishtha no placeholder visible', async ({ page }) => {
     await page.goto('/celebrity/virat-kohli/');
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('[data-testid="nakshatra-placeholder"]')).toBeVisible();
     const body = await page.textContent('body');
     expect(body).toContain('Scorpio');
     expect(body).not.toContain('Dhanishtha');
@@ -13,6 +15,7 @@ test.describe('Batch A Human Tester', () => {
   });
   test('HT-A-02: compatibility no gana score zodiac present', async ({ page }) => {
     await page.goto('/compatibility/');
+    await page.waitForLoadState('networkidle');
     const body = await page.textContent('body');
     expect(body).not.toContain('Nakshatra score');
     expect(body).toMatch(/zodiac|compatibility/i);

@@ -8,7 +8,7 @@ test.describe('Batch C Kundali+Hindi Human Tester', () => {
     await expect(page.locator('[data-testid="kundali-generate-btn"]')).toBeDisabled();
   });
   test('HT-C-02: /kundali title <=70c contains Kundali', async ({ page }) => {
-    await page.goto('/kundali');
+    await page.goto('/kundali/');
     const t = await page.title();
     expect(t).toMatch(/Kundali|kundali/i);
     expect(t.length).toBeLessThanOrEqual(70);

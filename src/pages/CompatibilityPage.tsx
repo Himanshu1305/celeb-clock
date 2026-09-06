@@ -148,7 +148,7 @@ export default function CompatibilityPage() {
 
   const seoTitle = calcSigns
     ? `${calcSigns.s1} and ${calcSigns.s2} Compatibility — ${getCompatibility(calcSigns.s1, calcSigns.s2).overall}% Match | BornClock`
-    : 'Western Zodiac Compatibility Calculator — How Compatible Are You? | BornClock';
+    : 'Zodiac Compatibility Calculator — How Compatible Are You? | BornClock';
 
   // Canonical = the alphabetical pair (both URL orders point to one page), so
   // aries/leo and leo/aries don't compete as duplicate content.

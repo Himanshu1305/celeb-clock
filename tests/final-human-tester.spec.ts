@@ -11,21 +11,21 @@ test.describe('FINAL Human Tester Checklist', () => {
     expect(title.length).toBeLessThanOrEqual(70);
   });
   test('HT-BRAND-02: favicon accessible', async ({ page }) => {
-    expect((await page.goto('/favicon.ico'))?.status()).toBeLessThan(400);
+    expect((await page.goto('/favicon.png'))?.status()).toBeLessThan(400);
   });
   // PRICING
   test('HT-PRICE-01: 199 on birthday report', async ({ page }) => {
-    await page.goto('/birthday-report');
+    await page.goto('/birthday-report/');
     const body = await page.textContent('body');
     if (body?.includes('₹')) expect(body).toContain('₹199');
   });
   test('HT-PRICE-02: 199 on gift product, no 299 on it', async ({ page }) => {
-    await page.goto('/birthday-report/gift');
+    await page.goto('/birthday-report/gift/');
     const report = await page.locator('[data-testid="gift-product-report"]').textContent().catch(() => '');
     if (report) { expect(report).toContain('₹199'); expect(report).not.toContain('₹299'); }
   });
   test('HT-PRICE-03: 199 on Kundali page', async ({ page }) => {
-    await page.goto('/kundali');
+    await page.goto('/kundali/');
     const body = await page.textContent('body');
     if (body?.includes('₹')) expect(body).toContain('₹199');
   });
@@ -36,12 +36,13 @@ test.describe('FINAL Human Tester Checklist', () => {
   });
   // NO UNDEFINED
   test('HT-QUALITY-01: no undefined on key pages', async ({ page }) => {
-    const PAGES = ['/', '/birthday-report', '/celebrity/virat-kohli/', '/kundali',
-      '/compatibility/', '/wish', '/kundali-match', '/born-on/august-6/india/',
-      '/articles/', '/for-business/', '/baby-names', '/diwali-gift/',
-      '/birthday-report/gift', '/celebrity/barack-obama/', PRABHUPADA];
+    const PAGES = ['/', '/birthday-report/', '/celebrity/virat-kohli/', '/kundali/',
+      '/compatibility/', '/wish/', '/kundali-match/', '/born-on/august-6/india/',
+      '/articles/', '/for-business/', '/baby-names/', '/diwali-gift/',
+      '/birthday-report/gift/', '/celebrity/barack-obama/', PRABHUPADA];
     for (const p of PAGES) {
       await page.goto(p);
+      await page.waitForLoadState('networkidle');
       const body = await page.textContent('body');
       expect(body, `undefined on ${p}`).not.toContain('\nundefined\n');
       expect(body, `[object Object] on ${p}`).not.toContain('[object Object]');
@@ -49,14 +50,14 @@ test.describe('FINAL Human Tester Checklist', () => {
   });
   // SEO
   test('HT-SEO-01: meta descriptions on core pages', async ({ page }) => {
-    for (const p of ['/', '/kundali', '/celebrity/virat-kohli/', '/born-on/august-6/india/', '/birthday-report', '/kundali-match']) {
+    for (const p of ['/', '/kundali/', '/celebrity/virat-kohli/', '/born-on/august-6/india/', '/birthday-report/', '/kundali-match/']) {
       await page.goto(p);
       const meta = await page.$eval('meta[name="description"]', (m: any) => m.content).catch(() => '');
       expect(meta.length, `No meta on ${p}`).toBeGreaterThan(30);
     }
   });
   test('HT-SEO-02: titles <=70c on core pages', async ({ page }) => {
-    for (const p of ['/', '/kundali', '/celebrity/virat-kohli/', '/compatibility/', '/wish', '/kundali-match']) {
+    for (const p of ['/', '/kundali/', '/celebrity/virat-kohli/', '/compatibility/', '/wish/', '/kundali-match/']) {
       await page.goto(p);
       const t = await page.title();
       expect(t.length, `Title ${t.length}c on ${p}: "${t}"`).toBeLessThanOrEqual(70);
@@ -64,16 +65,21 @@ test.describe('FINAL Human Tester Checklist', () => {
   });
   test('HT-SEO-03: celeb page has Person schema', async ({ page }) => {
     await page.goto('/celebrity/virat-kohli/');
+    await page.waitForLoadState('networkidle');
     const schemas = await page.$$eval('script[type="application/ld+json"]',
       (els: any[]) => els.map((e: any) => { try { return JSON.parse(e.textContent); } catch { return null; } }));
     expect(schemas.some((s: any) => s?.['@type'] === 'Person')).toBe(true);
   });
   // VEDIC ACCURACY
-  test('HT-VEDIC-01: Virat Scorpio yes, no wrong Nakshatra', async ({ page }) => {
+  test('HT-VEDIC-01: Virat Scorpio yes, Nakshatra shown as a placeholder (no computed value)', async ({ page }) => {
     await page.goto('/celebrity/virat-kohli/');
+    await page.waitForLoadState('networkidle');
     const body = await page.textContent('body');
     expect(body).toContain('Scorpio');
-    expect(body).not.toContain('Anuradha');
+    // No day/month Nakshatra is asserted — the page shows a "requires birth time"
+    // placeholder instead. (We don't check for the string "Anuradha" because that
+    // is also a common Indian personal name that can appear in a birthday-twin.)
+    await expect(page.locator('[data-testid="nakshatra-placeholder"]')).toBeVisible();
   });
   test('HT-VEDIC-02: nakshatra placeholder links to birthday-report', async ({ page }) => {
     await page.goto('/celebrity/virat-kohli/');
@@ -104,18 +110,18 @@ test.describe('FINAL Human Tester Checklist', () => {
   });
   test('HT-MOBILE-02: Kundali 375px inputs visible', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto('/kundali');
+    await page.goto('/kundali/');
     expect(await page.evaluate(() => document.body.scrollWidth)).toBeLessThanOrEqual(385);
     await expect(page.locator('[data-testid="kundali-dob"]')).toBeVisible();
   });
   test('HT-MOBILE-03: Kundali match 375px no scroll', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto('/kundali-match');
+    await page.goto('/kundali-match/');
     expect(await page.evaluate(() => document.body.scrollWidth)).toBeLessThanOrEqual(385);
   });
   // WHATSAPP
   test('HT-WA-01: wish generator WA link correct format', async ({ page }) => {
-    await page.goto('/wish');
+    await page.goto('/wish/');
     const nameInp = page.locator('[data-testid="wish-name-input"]');
     if (await nameInp.isVisible()) {
       await nameInp.fill('Priya');
@@ -134,14 +140,14 @@ test.describe('FINAL Human Tester Checklist', () => {
   });
   // ASHTAKOOTA
   test('HT-ASHTAKOOTA-01: kundali-match has 2 DOB inputs button disabled', async ({ page }) => {
-    await page.goto('/kundali-match');
+    await page.goto('/kundali-match/');
     await expect(page.locator('[data-testid="kmatch-dob-a"]')).toBeVisible();
     await expect(page.locator('[data-testid="kmatch-dob-b"]')).toBeVisible();
     await expect(page.locator('[data-testid="kmatch-calculate-btn"]')).toBeDisabled();
   });
   // BABY NAMES
   test('HT-BABY-01: baby-names loads DOB input visible', async ({ page }) => {
-    await page.goto('/baby-names');
+    await page.goto('/baby-names/');
     const title = await page.title();
     expect(title).toMatch(/baby|Baby|name|Name/i);
     await expect(page.locator('[data-testid="baby-dob-input"]')).toBeVisible();
