@@ -31,7 +31,7 @@ export default function RemindersPage() {
   return (
     <div data-testid="reminders-page" className="min-h-screen bg-gradient-cosmic">
       <SEO
-        title="Birthday Reminders — Never Forget a Birthday | BornClock"
+        title="Birthday Reminders — Never Miss a Birthday | BornClock"
         description="Save your friends' and family's birthdays and get a reminder a few days before — so you never miss a birthday again. Free."
         canonicalUrl="/reminders"
         ogType="website"
