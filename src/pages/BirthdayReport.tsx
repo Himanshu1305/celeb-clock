@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { DobInput } from '@/components/DobInput';
+import { BirthTimeVedicSection } from '@/components/BirthTimeVedicSection';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
@@ -441,6 +442,9 @@ const BirthdayReport = () => {
                     onChange={({ day: d, month: m, year: y }) => { setDay(d); setMonth(m); setYear(y); }}
                   />
                 </div>
+
+                {/* Optional birth time + city → accurate Vedic profile (Task 9). */}
+                <BirthTimeVedicSection dob={dob} />
 
                 {/* Gender */}
                 <div>

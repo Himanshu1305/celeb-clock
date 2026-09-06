@@ -1,17 +1,15 @@
 import { useEffect, useState } from 'react';
-import { calculateVedicProfile } from '@/utils/vedicCalculations';
-import { VIRAT, SRK, SACHIN, MODI, AMITABH } from '@/__tests__/testData';
 
 // Ground truth = astronomically-correct Lahiri Nakshatras (Swiss Ephemeris),
-// see src/__tests__/testData.ts. Any drift here means the ephemeris/ayanamsha
-// wiring regressed.
-const GROUND_TRUTH = [VIRAT, SRK, SACHIN, MODI, AMITABH].map(c => ({
-  name: c.name,
-  dob: c.dob,
-  time: c.time,
-  loc: { city: c.city, lat: c.lat, lon: c.lon, timezone: c.tz },
-  expected: c.nakshatra,
-}));
+// see src/__tests__/testData.ts. Kept inline so this shipped page never imports
+// the Node-only ephemeris WASM; the actual value is fetched from /api/vedic-profile.
+const GROUND_TRUTH = [
+  { name: 'Virat Kohli', y: 1988, m: 11, d: 5, h: 12, min: 30, lat: 28.6139, lon: 77.2090, tz: 5.5, expected: 'Uttara Phalguni' },
+  { name: 'Shah Rukh Khan', y: 1965, m: 11, d: 2, h: 14, min: 30, lat: 28.6139, lon: 77.2090, tz: 5.5, expected: 'Dhanishtha' },
+  { name: 'Sachin Tendulkar', y: 1973, m: 4, d: 24, h: 12, min: 0, lat: 19.0760, lon: 72.8777, tz: 5.5, expected: 'Purva Ashadha' },
+  { name: 'Narendra Modi', y: 1950, m: 9, d: 17, h: 11, min: 0, lat: 23.7867, lon: 72.6367, tz: 5.5, expected: 'Anuradha' },
+  { name: 'Amitabh Bachchan', y: 1942, m: 10, d: 11, h: 16, min: 0, lat: 25.4358, lon: 81.8463, tz: 5.5, expected: 'Swati' },
+];
 
 interface Row { name: string; expected: string; actual: string | null; match: boolean | null; }
 
@@ -25,16 +23,13 @@ export default function AccuracyDashboard() {
     (async () => {
       const next: Row[] = [];
       for (const g of GROUND_TRUTH) {
-        const [y, m, d] = g.dob.split('-').map(Number);
-        const [h, min] = g.time.split(':').map(Number);
         let actual: string | null = null;
         try {
-          const r = await calculateVedicProfile(d, m, y, h, min, g.loc);
-          actual = r.nakshatra.nakshatra;
-        } catch {
-          actual = null;
-        }
-        next.push({ name: g.name, expected: g.expected, actual, match: actual === g.expected });
+          const params = new URLSearchParams({ y: `${g.y}`, m: `${g.m}`, d: `${g.d}`, h: `${g.h}`, min: `${g.min}`, lat: `${g.lat}`, lon: `${g.lon}`, tz: `${g.tz}` });
+          const res = await fetch(`/api/vedic-profile?${params.toString()}`);
+          if (res.ok) { const data = await res.json(); actual = data?.nakshatra?.nakshatra ?? null; }
+        } catch { actual = null; }
+        next.push({ name: g.name, expected: g.expected, actual, match: actual === null ? null : actual === g.expected });
       }
       if (!cancelled) setRows(next);
     })();
@@ -49,7 +44,7 @@ export default function AccuracyDashboard() {
     <div data-testid="accuracy-dashboard" className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold text-gray-900 mb-1">Nakshatra Accuracy</h1>
       <p className="text-sm text-gray-500 mb-4">
-        calculateVedicProfile vs known-correct Lahiri ground truth (Swiss Ephemeris).
+        /api/vedic-profile vs known-correct Lahiri ground truth (Swiss Ephemeris).
       </p>
       <div className="mb-4 text-lg font-semibold" data-testid="accuracy-summary">
         Accuracy: {accuracy === null ? 'calculating…' : `${accuracy}% (${matched}/${done.length})`}
