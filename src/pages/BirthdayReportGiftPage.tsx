@@ -18,6 +18,8 @@ export default function BirthdayReportGiftPage() {
   const [recipientDob, setRecipientDob] = useState('');
   const [giverName, setGiverName] = useState('');
   const [message, setMessage] = useState('');
+  const [product, setProduct] = useState<'report' | 'kundali' | 'combo' | string>('report');
+  const selectedPrice = product === 'combo' ? '₹299' : price;
 
   const isValidDob =
     /^\d{4}-\d{2}-\d{2}$/.test(recipientDob) && recipientDob <= todayISO();
@@ -39,7 +41,7 @@ export default function BirthdayReportGiftPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
+    <div data-testid="gift-page" className="min-h-screen bg-gradient-cosmic">
       <SEO
         title="Gift a Birthday Report — Thoughtful & Personal | BornClock"
         description="Gift a personalised Birthday Report — zodiac, numerology, life path and celebrity twins — with your own message. The gift that proves you know them."
@@ -53,11 +55,34 @@ export default function BirthdayReportGiftPage() {
         </header>
 
         <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">
-          Gift a Birthday Report
+          Gift a Birthday Blueprint
         </h1>
-        <p className="text-muted-foreground mb-8">
-          A personalised {price} report — zodiac, numerology, life path and celebrity twins — delivered with your own message.
+        <p className="text-muted-foreground mb-6">
+          A personalised report — zodiac, numerology, life path and celebrity twins — delivered with your own message.
         </p>
+
+        {/* Product selector: individual products {price}, combo ₹299 (Task 12). */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8" data-testid="gift-products">
+          {[
+            { key: 'report', label: 'Birthday Blueprint', price, note: 'Zodiac, numerology, celebrity twins' },
+            { key: 'kundali', label: 'Kundali', price, note: 'Vedic birth chart, Lagna & Dasha' },
+            { key: 'combo', label: 'Report + Kundali Combo', price: '₹299', note: 'Both — best value' },
+          ].map(p => (
+            <button
+              key={p.key}
+              type="button"
+              onClick={() => setProduct(p.key)}
+              data-testid={`gift-product-${p.key}`}
+              className={`text-left rounded-xl border p-4 transition-colors ${
+                product === p.key ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+              }`}
+            >
+              <div className="font-semibold text-foreground">{p.label}</div>
+              <div className="text-lg font-black text-primary">{p.price}</div>
+              <div className="text-xs text-muted-foreground">{p.note}</div>
+            </button>
+          ))}
+        </div>
 
         <Card>
           <CardContent className="p-6 space-y-4">
@@ -125,7 +150,7 @@ export default function BirthdayReportGiftPage() {
               disabled={!canPay}
               onClick={handlePay}
             >
-              Gift this report — {price}
+              Gift this {product === 'combo' ? 'combo' : product === 'kundali' ? 'Kundali' : 'report'} — {selectedPrice}
             </Button>
             <p className="text-xs text-muted-foreground text-center">
               Secure checkout. You'll get a shareable gift link after payment.
@@ -135,7 +160,7 @@ export default function BirthdayReportGiftPage() {
 
         <p className="text-sm text-muted-foreground text-center mt-6">
           Prefer to buy for yourself?{' '}
-          <Link to="/birthday-report" className="text-primary hover:underline">Get your own Birthday Report →</Link>
+          <Link to="/birthday-report" className="text-primary hover:underline">Get your own Birthday Blueprint →</Link>
         </p>
       </div>
       <Footer />
