@@ -320,6 +320,7 @@ export const STATIC_ROUTES = [
   '/wish',
   '/birthday-report/gift',
   '/for-business',
+  '/kundali',
   '/rashi-ratna',
   ...bornOnRoutes(),
   '/born-on/india',

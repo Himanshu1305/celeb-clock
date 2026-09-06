@@ -284,6 +284,7 @@ const STATIC = {
   '/wish':                  { title: 'Free Birthday Wish Card Maker — Send a Wish | BornClock', desc: 'Create a personalised birthday wish card in seconds — with their zodiac and Life Path — and share it on WhatsApp. Free, no signup.' },
   '/birthday-report/gift':  { title: 'Gift a Birthday Report — Thoughtful & Personal | BornClock', desc: 'Gift a personalised Birthday Report — zodiac, numerology, life path and celebrity twins — with your own message. The gift that proves you know them.' },
   '/for-business':          { title: 'BornClock for Business — Birthday & Astrology API | BornClock', desc: 'Add birthday intelligence to your product — zodiac, Vedic rashi, numerology, life path and compatibility via a simple REST API. Plans from ₹4,999/mo.' },
+  '/kundali':               { title: 'Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock', desc: 'Generate your free Vedic Kundali — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, computed with the Swiss Ephemeris.' },
   '/rashi-ratna':           { title: 'Rashi Ratna — Gemstone by Zodiac Sign | BornClock', desc: 'Find your Vedic gemstone (Rashi Ratna) by zodiac sign. Full guides for all 12 Rashis — mythology, benefits, wearing instructions, and care.' },
 };
 
