@@ -28,13 +28,15 @@ describe('Compatibility Calculator — TC-COMPAT', () => {
   it('TC-COMPAT-P-02: Person A DOB input present', () => { renderCompat(); expect(q('compat-dob-a')).toBeTruthy(); });
   it('TC-COMPAT-P-03: Person B DOB input present', () => { renderCompat(); expect(q('compat-dob-b')).toBeTruthy(); });
   it('TC-COMPAT-P-04: calculate button present', () => { renderCompat(); expect(q('compat-calc-btn')).toBeTruthy(); });
-  it('TC-COMPAT-P-05: two DOBs → 4 dimension sections appear', () => {
+  it('TC-COMPAT-P-05: two DOBs → 3 dimension sections + nakshatra disclaimer', () => {
     renderCompat();
     calc('1988-11-05', '1965-08-06');
     expect(q('compat-zodiac')).toBeTruthy();
     expect(q('compat-rashi')).toBeTruthy();
     expect(q('compat-lifepath')).toBeTruthy();
-    expect(q('compat-nakshatra')).toBeTruthy();
+    // Nakshatra dimension removed (needs exact birth time) → disclaimer instead.
+    expect(q('compat-nakshatra')).toBeFalsy();
+    expect(q('compat-nakshatra-disclaimer')).toBeTruthy();
   });
   it('TC-COMPAT-P-06: overall score is 0-100', () => {
     renderCompat();

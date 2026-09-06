@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   calculateWesternZodiac, calculateVedicRashi,
-  calculateLifePathNumber, calculateNakshatra,
+  calculateLifePathNumber,
 } from '@/utils/celebrityCalculations';
 
 /**
@@ -52,7 +52,6 @@ export default function DobCompatibility() {
     zodiac: { score: number; text: string };
     rashi: { score: number; text: string };
     lifepath: { score: number; text: string };
-    nakshatra: { score: number; text: string };
     overall: number;
   }>(null);
 
@@ -78,17 +77,14 @@ export default function DobCompatibility() {
     const lpScore = Math.max(50, 92 - diff * 8);
     const lpText = `Life Path ${lpA} and Life Path ${lpB} — ${verdict(lpScore).toLowerCase()}. ${lpA === lpB ? 'Identical life paths share the same core drive.' : 'Different numbers can complement each other.'}`;
 
-    const nA = calculateNakshatra(a.day, a.month);
-    const nB = calculateNakshatra(b.day, b.month);
-    const nScore = nA.lord === nB.lord ? 88 : nA.nakshatra === nB.nakshatra ? 90 : 70;
-    const nText = `${nA.nakshatra} and ${nB.nakshatra} Nakshatra — ${verdict(nScore).toLowerCase()}${nA.lord === nB.lord ? ` (shared ruling planet ${nA.lord})` : ''}.`;
-
-    const overall = Math.round((zScore + rScore + lpScore + nScore) / 4);
+    // Nakshatra dimension removed: accurate Nakshatra needs exact birth times
+    // for BOTH people (see NakshatraPlaceholder). Sun-sign date-only matching
+    // cannot produce it honestly, so this is a 3-dimension compatibility.
+    const overall = Math.round((zScore + rScore + lpScore) / 3);
     setRes({
       zodiac: { score: zScore, text: zText },
       rashi: { score: rScore, text: rText },
       lifepath: { score: lpScore, text: lpText },
-      nakshatra: { score: nScore, text: nText },
       overall,
     });
   };
@@ -102,7 +98,7 @@ export default function DobCompatibility() {
     <div className="bg-indigo-50 rounded-2xl p-6 mb-10 border border-indigo-200">
       <h2 className="text-xl font-bold text-gray-900 mb-1">Full Birthday Compatibility</h2>
       <p className="text-sm text-gray-600 mb-4">
-        Enter two dates of birth to compare across four dimensions — Western zodiac, Vedic rashi, Life Path number and Nakshatra.
+        Enter two dates of birth to compare across three dimensions — Western zodiac, Vedic rashi and Life Path number.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
         <div>
@@ -146,7 +142,10 @@ export default function DobCompatibility() {
           <Dimension id="compat-zodiac" icon="♈" title="Western Zodiac" score={res.zodiac.score} detail={res.zodiac.text} />
           <Dimension id="compat-rashi" icon="🕉️" title="Vedic Rashi" score={res.rashi.score} detail={res.rashi.text} />
           <Dimension id="compat-lifepath" icon="🔢" title="Life Path" score={res.lifepath.score} detail={res.lifepath.text} />
-          <Dimension id="compat-nakshatra" icon="⭐" title="Nakshatra" score={res.nakshatra.score} detail={res.nakshatra.text} />
+          <p data-testid="compat-nakshatra-disclaimer" className="text-xs text-gray-500 italic">
+            Nakshatra (Guna Milan) compatibility needs both people's exact birth times — get it in the full{' '}
+            <a href="/kundali-match" className="text-indigo-600 underline">Kundali match</a>.
+          </p>
 
           <div className="flex flex-wrap gap-3">
             <a

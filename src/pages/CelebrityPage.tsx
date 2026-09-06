@@ -10,11 +10,11 @@ import {
 import {
   calculateAge, calculateLifePathNumber, LIFE_PATH_TRAITS,
   calculateWesternZodiac, calculateChineseZodiac, calculateVedicRashi,
-  calculateNakshatra, calculatePlanetaryAges,
+  calculatePlanetaryAges,
 } from '@/utils/celebrityCalculations';
 import {
   WESTERN_ZODIAC_PROFILES, VEDIC_RASHI_PROFILES,
-  CHINESE_ZODIAC_PROFILES, NAKSHATRA_PROFILES, LIFE_PATH_EXTENDED,
+  CHINESE_ZODIAC_PROFILES, LIFE_PATH_EXTENDED,
 } from '@/data/astrologicalData';
 import type {
   WesternZodiacProfile, VedicRashiProfile,
@@ -23,6 +23,7 @@ import type {
 import celebBios from '@/data/celebrity-bios.json';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { LuckyStoneAffiliate, CosmicTwins } from '@/components/CelebrityAffiliateAndTwins';
+import { NakshatraPlaceholder } from '@/components/NakshatraPlaceholder';
 
 // Unified celebrity DB (static Indian + Supabase, slugs pre-assigned by
 // scripts/export-celebrities.ts). Build the slug → entry map ONCE at load.
@@ -99,7 +100,9 @@ export function CelebrityPage() {
   // Calculations (guarded by DOB availability).
   const western = isFull ? calculateWesternZodiac(dob!.day, dob!.month) : null;
   const vedic   = isFull ? calculateVedicRashi(dob!.day, dob!.month) : null;
-  const nakshatra = isFull ? calculateNakshatra(dob!.day, dob!.month) : null;
+  // Nakshatra intentionally NOT computed from day/month — that approximation is
+  // astronomically unreliable (see NakshatraPlaceholder). Requires birth time.
+  const nakshatra = null;
   const chinese = dob ? calculateChineseZodiac(dob.year) : null;
   const lifePath = isFull ? calculateLifePathNumber(dob!.day, dob!.month, dob!.year) : null;
   const planetary = dob ? calculatePlanetaryAges(dob) : [];
@@ -111,8 +114,7 @@ export function CelebrityPage() {
     ? (VEDIC_RASHI_PROFILES[vedic.rashi] ?? null) : null;
   const chineseProfile: ChineseZodiacProfile | null = chinese
     ? (CHINESE_ZODIAC_PROFILES[chinese.animal] ?? null) : null;
-  const nakshatraProfile: NakshatraProfile | null = nakshatra
-    ? (NAKSHATRA_PROFILES[nakshatra.nakshatra] ?? null) : null;
+  const nakshatraProfile: NakshatraProfile | null = null;
   const lpExtended: LifePathProfile | null = lifePath
     ? (LIFE_PATH_EXTENDED[lifePath] ?? null) : null;
   const bio: string | null = (celebBios as Record<string, string>)[slug ?? ''] ?? null;
@@ -122,7 +124,7 @@ export function CelebrityPage() {
 
   const personalitySynthesis = buildPersonalitySynthesis(
     name, zodiacProfile, rashiProfile, lifePath, lpExtended, nakshatraProfile,
-    western?.sign ?? null, vedic?.rashi ?? null, nakshatra?.nakshatra ?? null
+    western?.sign ?? null, vedic?.rashi ?? null, null
   );
 
   // Age string (honest for every DOB situation).
@@ -415,12 +417,6 @@ export function CelebrityPage() {
                       <td className="px-4 py-3 text-gray-900">{vedic.rashi} ({vedic.western_equivalent})</td>
                     </tr>
                   )}
-                  {nakshatra && (
-                    <tr className="border-b border-gray-100">
-                      <th scope="row" className="text-left px-4 py-3 font-semibold text-gray-600 bg-gray-50">Nakshatra</th>
-                      <td className="px-4 py-3 text-gray-900">{nakshatra.nakshatra} (No. {nakshatra.number})</td>
-                    </tr>
-                  )}
                   {lifePath != null && (
                     <tr>
                       <th scope="row" className="text-left px-4 py-3 font-semibold text-gray-600 bg-gray-50">Life Path Number</th>
@@ -430,6 +426,9 @@ export function CelebrityPage() {
                 </tbody>
               </table>
             </div>
+            {/* Nakshatra requires exact birth time+location — day/month approximation
+                removed (astronomically unreliable). Direct users to the report. */}
+            <NakshatraPlaceholder />
             {!isFull && (
               <p className="text-xs text-gray-500 mt-2 italic">
                 Only the birth year is documented for {name}. Zodiac sign, life path, and planetary ages require an exact birth date and are omitted to avoid guessing.
