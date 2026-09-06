@@ -171,6 +171,7 @@ const KundaliPage = lazyWithReload(() => import('@/pages/KundaliPage'));
 const KundaliMatchPage = lazyWithReload(() => import('@/pages/KundaliMatchPage'));
 const BabyNamesPage = lazyWithReload(() => import('@/pages/BabyNamesPage'));
 const RashifalPage = lazyWithReload(() => import('@/pages/hi/RashifalPage'));
+const DatePersonalityPage = lazyWithReload(() => import('@/pages/DatePersonalityPage'));
 const RashiRatnaPage = lazyWithReload(() => import('@/pages/RashiRatnaPage'));
 const BornOnDay = lazyWithReload(() => import('@/pages/BornOnDay'));
 const BornOnDayIndia = lazyWithReload(() => import('@/pages/BornOnDayIndia'));

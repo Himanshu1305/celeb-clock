@@ -395,6 +395,16 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /born-on/:month/:day/personality — date personality (Task 17)
+  const pers = route.match(/^\/born-on\/([a-z]+)\/(\d{1,2})\/personality$/);
+  if (pers) {
+    const monthName = pers[1].charAt(0).toUpperCase() + pers[1].slice(1);
+    return {
+      title: `Born on ${monthName} ${pers[2]}? Personality & Traits | BornClock`,
+      description: `The personality of people born on ${monthName} ${pers[2]} — zodiac traits, birth number, famous birthdays and what your birth date reveals about you.`,
+    };
+  }
+
   // Global born-on: /born-on/:month/:day (no /india suffix) — Task 29
   const gbo = route.match(/^\/born-on\/([a-z]+)\/(\d{1,2})$/);
   if (gbo) {

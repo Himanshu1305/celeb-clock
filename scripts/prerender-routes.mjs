@@ -172,6 +172,17 @@ const GLOBAL_BORN_ON_ROUTES = (() => {
   return routes;
 })();
 
+// Task 17 — 366 date-personality routes: /born-on/:month/:day/personality/
+const PERSONALITY_ROUTES = (() => {
+  const routes = [];
+  for (let m = 1; m <= 12; m++) {
+    for (let d = 1; d <= MONTH_DAYS_BORN_ON[m]; d++) {
+      routes.push(`/born-on/${MONTH_NAMES_LOWER[m]}/${d}/personality`);
+    }
+  }
+  return routes;
+})();
+
 export const STATIC_ROUTES = [
   '/',
   // Growth pages FIRST (Overnight Batch 2): the prerender has a 25-min budget and
@@ -303,6 +314,7 @@ export const STATIC_ROUTES = [
   '/hi/meri-jeevan-pratyasha',
   '/life-expectancy-calculator-singapore-uae',
   ...GLOBAL_BORN_ON_ROUTES,
+  ...PERSONALITY_ROUTES,
   '/gift',
   '/coach',
   '/chinese-zodiac',
