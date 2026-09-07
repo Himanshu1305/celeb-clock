@@ -1,7 +1,3 @@
-/**
- * Kundali via ProKerala API — no WASM, safe for Cloudflare Workers.
- * GET /api/kundali?y=&m=&d=&h=&min=&lat=&lon=&tz=
- */
 async function getProKeralaToken(env) {
   const id = (env && env.VITE_PROKERALA_CLIENT_ID) || process.env.VITE_PROKERALA_CLIENT_ID;
   const secret = (env && env.VITE_PROKERALA_CLIENT_SECRET) || process.env.VITE_PROKERALA_CLIENT_SECRET;
@@ -23,11 +19,34 @@ function prokeralaDatetime(y, m, d, h, min, tz) {
 }
 const RASHI_NAMES = ['Mesha','Vrisha','Mithuna','Karka','Simha','Kanya','Tula','Vrischika','Dhanu','Makara','Kumbha','Meena'];
 const NK_DEV = {'Ashwini':'अश्विनी','Bharani':'भरणी','Krittika':'कृत्तिका','Rohini':'रोहिणी','Mrigashira':'मृगशिरा','Ardra':'आर्द्रा','Punarvasu':'पुनर्वसु','Pushya':'पुष्य','Ashlesha':'आश्लेषा','Magha':'मघा','Purva Phalguni':'पूर्वाफाल्गुनी','Uttara Phalguni':'उत्तराफाल्गुनी','Hasta':'हस्त','Chitra':'चित्रा','Swati':'स्वाती','Vishakha':'विशाखा','Anuradha':'अनुराधा','Jyeshtha':'ज्येष्ठा','Mula':'मूल','Purva Ashadha':'पूर्वाषाढ़ा','Uttara Ashadha':'उत्तराषाढ़ा','Shravana':'श्रवण','Dhanishtha':'धनिष्ठा','Shatabhisha':'शतभिषा','Purva Bhadrapada':'पूर्वाभाद्रपदा','Uttara Bhadrapada':'उत्तराभाद्रपदा','Revati':'रेवती'};
+
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=86400' },
   });
 }
+
+function findCurrentDasha(dashaPeriods, refDate) {
+  if (!Array.isArray(dashaPeriods)) return null;
+  const ref = refDate.getTime();
+  const inRange = (p) => {
+    const s = new Date(p.start).getTime();
+    const e = new Date(p.end).getTime();
+    return ref >= s && ref <= e;
+  };
+  const maha = dashaPeriods.find(inRange);
+  if (!maha) return null;
+  const antar = Array.isArray(maha.antardasha) ? maha.antardasha.find(inRange) : null;
+  return {
+    mahadasha: maha.name,
+    mahadasha_start: maha.start,
+    mahadasha_end: maha.end,
+    antardasha: antar ? antar.name : '',
+    antardasha_start: antar ? antar.start : null,
+    antardasha_end: antar ? antar.end : null,
+  };
+}
+
 async function handler(request, env) {
   if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
   const { searchParams } = new URL(request.url, 'http://localhost');
@@ -41,17 +60,21 @@ async function handler(request, env) {
     const datetime = prokeralaDatetime(y, m, d, h, min, tz);
     const coords = lat+','+lon;
     const hdrs = { Authorization:'Bearer '+token };
-    const [planetRes, bdRes, dashaRes] = await Promise.all([
+    const [planetRes, bdRes, advRes] = await Promise.all([
       fetch('https://api.prokerala.com/v2/astrology/planet-position?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
       fetch('https://api.prokerala.com/v2/astrology/birth-details?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
-      fetch('https://api.prokerala.com/v2/astrology/vimshottari-dasha?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
+      fetch('https://api.prokerala.com/v2/astrology/kundli/advanced?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
     ]);
-    const [pd, bd, dd] = await Promise.all([planetRes.json(), bdRes.json(), dashaRes.json()]);
+    const [pd, bd, adv] = await Promise.all([planetRes.json(), bdRes.json(), advRes.json()]);
+
     const rawPlanets = pd?.data?.planet_position || [];
     const nk = bd?.data?.nakshatra;
     const rashi = bd?.data?.chandra_rasi;
     const asc = pd?.data?.ascendant;
-    const currentDasha = dd?.data?.dasha_periods?.[0] || dd?.data?.mahadasha?.[0];
+
+    const dashaPeriods = adv?.data?.dasha_periods;
+    const currentDasha = findCurrentDasha(dashaPeriods, new Date());
+
     const ascLon = asc?.longitude ?? rawPlanets.find(p => p.name === 'Ascendant')?.longitude ?? 0;
     const lagnaIdx = Math.floor(((ascLon % 360) + 360) % 360 / 30);
     const planets = rawPlanets.filter(p => p.name !== 'Ascendant').map(p => {
@@ -60,13 +83,14 @@ async function handler(request, env) {
     });
     const nkName = nk?.name || 'Unknown';
     const rashiName = rashi?.name || null;
+
     return json({
       lagna: { sign:RASHI_NAMES[lagnaIdx]||'Unknown', signIndex:lagnaIdx+1, degrees:Number((ascLon||0).toFixed(2)) },
       planets,
       nakshatra: { nakshatra:nkName, nakshatra_devanagari:NK_DEV[nkName]||nkName, pada:nk?.pada||1, confidence:'high', is_boundary:false },
       rashi: rashiName,
       rashi_devanagari: null,
-      dasha: currentDasha ? { mahadasha:currentDasha.planet||currentDasha.name, antardasha:currentDasha.sub_periods?.[0]?.planet||'' } : null,
+      dasha: currentDasha,
       requires_birth_time: false,
     });
   } catch(e) { return json({ error:'calc-failed', detail:String(e.message||e) }, 500); }
