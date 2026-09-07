@@ -47,9 +47,6 @@ function findCurrentDasha(dashaPeriods, refDate) {
   };
 }
 
-// Cache key normalizes birth identity to a fixed string. Lat/lon rounded to
-// 4 decimals (~11m precision, far tighter than any real geocoding accuracy)
-// so trivial float formatting differences don't cause cache misses.
 function buildCacheKey(y, m, d, h, min, lat, lon, tz) {
   const rlat = Number(lat).toFixed(4);
   const rlon = Number(lon).toFixed(4);
@@ -73,7 +70,6 @@ async function getCachedChart(sb, cacheKey) {
       .eq('cache_key', cacheKey)
       .maybeSingle();
     if (error || !data) return null;
-    // fire-and-forget access tracking, don't block the response on it
     sb.from('vedic_chart_cache')
       .update({ last_accessed_at: new Date().toISOString() })
       .eq('cache_key', cacheKey)
@@ -98,6 +94,18 @@ async function setCachedChart(sb, cacheKey, chartData) {
   }
 }
 
+// Validates that a ProKerala JSON response is a genuine success, not an
+// error payload or a rate-limit response disguised as a 200. ProKerala
+// returns status:"error" with an errors[] array on failures like rate
+// limiting - we must never treat that as valid data.
+function checkProKeralaStatus(data, label) {
+  if (!data || data.status === 'error') {
+    const detail = data?.errors?.[0]?.detail || 'unknown error';
+    return `ProKerala ${label} failed: ${detail}`;
+  }
+  return null;
+}
+
 async function fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz) {
   const token = await getProKeralaToken(env);
   if (!token) return { error: 'Kundali service not configured', status: 503 };
@@ -111,15 +119,42 @@ async function fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz) {
   ]);
   const [pd, bd, adv] = await Promise.all([planetRes.json(), bdRes.json(), advRes.json()]);
 
+  // Explicitly check each response's own status field. A 200 HTTP status
+  // does not guarantee success - ProKerala returns status:"error" with
+  // a 200 in some cases (e.g. rate limiting), and silently proceeding
+  // with empty defaults produces a wrong chart that then gets cached
+  // forever. Fail loudly instead.
+  const planetErr = checkProKeralaStatus(pd, 'planet-position');
+  if (planetErr) return { error: planetErr, status: 502 };
+  const bdErr = checkProKeralaStatus(bd, 'birth-details');
+  if (bdErr) return { error: bdErr, status: 502 };
+  const advErr = checkProKeralaStatus(adv, 'kundli/advanced');
+  if (advErr) return { error: advErr, status: 502 };
+
   const rawPlanets = pd?.data?.planet_position || [];
   const nk = bd?.data?.nakshatra;
   const rashi = bd?.data?.chandra_rasi;
-  const asc = pd?.data?.ascendant;
+
+  // Ascendant is embedded inside planet_position as an entry named
+  // "Ascendant", not a separate top-level field - this was the root
+  // cause of an earlier silent-failure bug where asc = pd?.data?.ascendant
+  // was always undefined, silently falling through to a wrong 0-degree
+  // default when the array-search fallback also failed to run correctly
+  // under certain response conditions.
+  const ascEntry = rawPlanets.find(p => p.name === 'Ascendant');
+
+  // Sanity check: a genuinely successful response always has 9 planets
+  // plus Ascendant (10 entries) and a real nakshatra name. If this
+  // isn't true, something is wrong even though status wasn't "error" -
+  // refuse to proceed rather than compute a chart from incomplete data.
+  if (!ascEntry || rawPlanets.length < 9 || !nk?.name) {
+    return { error: 'ProKerala returned incomplete data (missing Ascendant, planets, or nakshatra)', status: 502 };
+  }
 
   const dashaPeriods = adv?.data?.dasha_periods;
   const currentDasha = findCurrentDasha(dashaPeriods, new Date());
 
-  const ascLon = asc?.longitude ?? rawPlanets.find(p => p.name === 'Ascendant')?.longitude ?? 0;
+  const ascLon = ascEntry.longitude;
   const lagnaIdx = Math.floor(((ascLon % 360) + 360) % 360 / 30);
   const planets = rawPlanets.filter(p => p.name !== 'Ascendant').map(p => {
     const sIdx = Math.floor(((p.longitude % 360) + 360) % 360 / 30);
