@@ -47,44 +47,89 @@ function findCurrentDasha(dashaPeriods, refDate) {
   };
 }
 
-async function handler(request, env) {
-  if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
-  const { searchParams } = new URL(request.url, 'http://localhost');
-  const n = (k, def) => { const v = searchParams.get(k); return (v===null||v==='') ? def : Number(v); };
-  const y=n('y'), m=n('m'), d=n('d');
-  if (![y,m,d].every(v=>Number.isFinite(v))) return json({ error:'Missing y/m/d' }, 400);
-  const h=n('h',12), min=n('min',0), lat=n('lat',28.6139), lon=n('lon',77.2090), tz=n('tz',5.5);
+// Cache key normalizes birth identity to a fixed string. Lat/lon rounded to
+// 4 decimals (~11m precision, far tighter than any real geocoding accuracy)
+// so trivial float formatting differences don't cause cache misses.
+function buildCacheKey(y, m, d, h, min, lat, lon, tz) {
+  const rlat = Number(lat).toFixed(4);
+  const rlon = Number(lon).toFixed(4);
+  return [y, m, d, h, min, rlat, rlon, tz].join('-');
+}
+
+async function getSupabase(env) {
+  const url = (env && env.SUPABASE_URL) || process.env.SUPABASE_URL;
+  const key = (env && env.SUPABASE_SERVICE_ROLE_KEY) || process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return null;
+  const { createClient } = await import('@supabase/supabase-js');
+  return createClient(url, key);
+}
+
+async function getCachedChart(sb, cacheKey) {
+  if (!sb) return null;
   try {
-    const token = await getProKeralaToken(env);
-    if (!token) return json({ error:'Kundali service not configured' }, 503);
-    const datetime = prokeralaDatetime(y, m, d, h, min, tz);
-    const coords = lat+','+lon;
-    const hdrs = { Authorization:'Bearer '+token };
-    const [planetRes, bdRes, advRes] = await Promise.all([
-      fetch('https://api.prokerala.com/v2/astrology/planet-position?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
-      fetch('https://api.prokerala.com/v2/astrology/birth-details?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
-      fetch('https://api.prokerala.com/v2/astrology/kundli/advanced?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
-    ]);
-    const [pd, bd, adv] = await Promise.all([planetRes.json(), bdRes.json(), advRes.json()]);
+    const { data, error } = await sb
+      .from('vedic_chart_cache')
+      .select('chart_data')
+      .eq('cache_key', cacheKey)
+      .maybeSingle();
+    if (error || !data) return null;
+    // fire-and-forget access tracking, don't block the response on it
+    sb.from('vedic_chart_cache')
+      .update({ last_accessed_at: new Date().toISOString() })
+      .eq('cache_key', cacheKey)
+      .then(() => {}, () => {});
+    return data.chart_data;
+  } catch (e) {
+    return null;
+  }
+}
 
-    const rawPlanets = pd?.data?.planet_position || [];
-    const nk = bd?.data?.nakshatra;
-    const rashi = bd?.data?.chandra_rasi;
-    const asc = pd?.data?.ascendant;
-
-    const dashaPeriods = adv?.data?.dasha_periods;
-    const currentDasha = findCurrentDasha(dashaPeriods, new Date());
-
-    const ascLon = asc?.longitude ?? rawPlanets.find(p => p.name === 'Ascendant')?.longitude ?? 0;
-    const lagnaIdx = Math.floor(((ascLon % 360) + 360) % 360 / 30);
-    const planets = rawPlanets.filter(p => p.name !== 'Ascendant').map(p => {
-      const sIdx = Math.floor(((p.longitude % 360) + 360) % 360 / 30);
-      return { name:p.name, sign:RASHI_NAMES[sIdx]||'Unknown', signIndex:sIdx+1, house:((sIdx-lagnaIdx+12)%12)+1, longitude:Number((p.longitude||0).toFixed(2)), retrograde:!!p.is_retrograde };
+async function setCachedChart(sb, cacheKey, chartData) {
+  if (!sb) return;
+  try {
+    await sb.from('vedic_chart_cache').upsert({
+      cache_key: cacheKey,
+      chart_data: chartData,
+      source: 'prokerala',
+      last_accessed_at: new Date().toISOString(),
     });
-    const nkName = nk?.name || 'Unknown';
-    const rashiName = rashi?.name || null;
+  } catch (e) {
+    // cache write failure should never break the response
+  }
+}
 
-    return json({
+async function fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz) {
+  const token = await getProKeralaToken(env);
+  if (!token) return { error: 'Kundali service not configured', status: 503 };
+  const datetime = prokeralaDatetime(y, m, d, h, min, tz);
+  const coords = lat+','+lon;
+  const hdrs = { Authorization:'Bearer '+token };
+  const [planetRes, bdRes, advRes] = await Promise.all([
+    fetch('https://api.prokerala.com/v2/astrology/planet-position?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
+    fetch('https://api.prokerala.com/v2/astrology/birth-details?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
+    fetch('https://api.prokerala.com/v2/astrology/kundli/advanced?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
+  ]);
+  const [pd, bd, adv] = await Promise.all([planetRes.json(), bdRes.json(), advRes.json()]);
+
+  const rawPlanets = pd?.data?.planet_position || [];
+  const nk = bd?.data?.nakshatra;
+  const rashi = bd?.data?.chandra_rasi;
+  const asc = pd?.data?.ascendant;
+
+  const dashaPeriods = adv?.data?.dasha_periods;
+  const currentDasha = findCurrentDasha(dashaPeriods, new Date());
+
+  const ascLon = asc?.longitude ?? rawPlanets.find(p => p.name === 'Ascendant')?.longitude ?? 0;
+  const lagnaIdx = Math.floor(((ascLon % 360) + 360) % 360 / 30);
+  const planets = rawPlanets.filter(p => p.name !== 'Ascendant').map(p => {
+    const sIdx = Math.floor(((p.longitude % 360) + 360) % 360 / 30);
+    return { name:p.name, sign:RASHI_NAMES[sIdx]||'Unknown', signIndex:sIdx+1, house:((sIdx-lagnaIdx+12)%12)+1, longitude:Number((p.longitude||0).toFixed(2)), retrograde:!!p.is_retrograde };
+  });
+  const nkName = nk?.name || 'Unknown';
+  const rashiName = rashi?.name || null;
+
+  return {
+    chart: {
       lagna: { sign:RASHI_NAMES[lagnaIdx]||'Unknown', signIndex:lagnaIdx+1, degrees:Number((ascLon||0).toFixed(2)) },
       planets,
       nakshatra: { nakshatra:nkName, nakshatra_devanagari:NK_DEV[nkName]||nkName, pada:nk?.pada||1, confidence:'high', is_boundary:false },
@@ -92,7 +137,33 @@ async function handler(request, env) {
       rashi_devanagari: null,
       dasha: currentDasha,
       requires_birth_time: false,
-    });
+    },
+  };
+}
+
+async function handler(request, env) {
+  if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
+  const { searchParams } = new URL(request.url, 'http://localhost');
+  const n = (k, def) => { const v = searchParams.get(k); return (v===null||v==='') ? def : Number(v); };
+  const y=n('y'), m=n('m'), d=n('d');
+  if (![y,m,d].every(v=>Number.isFinite(v))) return json({ error:'Missing y/m/d' }, 400);
+  const h=n('h',12), min=n('min',0), lat=n('lat',28.6139), lon=n('lon',77.2090), tz=n('tz',5.5);
+
+  try {
+    const sb = await getSupabase(env);
+    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz);
+
+    const cached = await getCachedChart(sb, cacheKey);
+    if (cached) {
+      return json({ ...cached, _cache: 'hit' });
+    }
+
+    const result = await fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz);
+    if (result.error) return json({ error: result.error }, result.status);
+
+    await setCachedChart(sb, cacheKey, result.chart);
+
+    return json({ ...result.chart, _cache: 'miss' });
   } catch(e) { return json({ error:'calc-failed', detail:String(e.message||e) }, 500); }
 }
 export const GET = handler;
