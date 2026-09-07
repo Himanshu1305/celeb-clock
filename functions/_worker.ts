@@ -18,6 +18,10 @@ import { POST as invoiceSweep }        from '../api/invoice-sweep.js';
 import { GET  as invoicePdf }          from '../api/invoice-pdf.js';
 import { POST as subscribe }           from '../api/subscribe.js';
 import { POST as weeklyDigest }        from '../api/weekly-digest.js';
+import { GET  as kundali }              from '../api/kundali.js';
+import { GET  as vedicProfile }         from '../api/vedic-profile.js';
+import { GET  as kundali }              from '../api/kundali.js';
+import { GET  as vedicProfile }         from '../api/vedic-profile.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
 import cronHandler                     from './_cron/daily-email.js';
 import { handleReportOg, injectReportOgTags } from './og-report.js';
@@ -73,6 +77,10 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/subscribe':          subscribe,
   '/api/weekly-digest':      weeklyDigest,
   '/api/unsubscribe':        unsubscribe,
+  '/api/kundali':            kundali,
+  '/api/vedic-profile':      vedicProfile,
+  '/api/kundali':            kundali,
+  '/api/vedic-profile':      vedicProfile,
 };
 
 export default {

@@ -1,69 +1,74 @@
 /**
- * Full Kundali (birth chart) data — computed SERVER-SIDE via the Swiss Ephemeris
- * WASM (Node only). Returns Lagna, 9 planet positions (sign + house), Moon
- * Nakshatra/Rashi and current Dasha. ProKerala is not required; a key only
- * refines rare Nakshatra-boundary cases.
+ * Kundali via ProKerala API — no WASM, safe for Cloudflare Workers.
  * GET /api/kundali?y=&m=&d=&h=&min=&lat=&lon=&tz=
  */
-import * as panchangam from '@fusionstrings/panchangam';
-import { calculateVedicProfile, RASHI_NAMES } from '../src/utils/vedicCalculations';
-
-const { p_julday, calculate_planets, calculate_houses, AyanamshaMode } = panchangam as any;
-
-function json(body: unknown, status = 200): Response {
+async function getProKeralaToken(env) {
+  const id = (env && env.VITE_PROKERALA_CLIENT_ID) || process.env.VITE_PROKERALA_CLIENT_ID;
+  const secret = (env && env.VITE_PROKERALA_CLIENT_SECRET) || process.env.VITE_PROKERALA_CLIENT_SECRET;
+  if (!id || !secret) return null;
+  const res = await fetch('https://api.prokerala.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ grant_type: 'client_credentials', client_id: id, client_secret: secret }),
+  });
+  const data = await res.json();
+  return data.access_token || null;
+}
+function prokeralaDatetime(y, m, d, h, min, tz) {
+  const sign = tz >= 0 ? '+' : '-';
+  const abstz = Math.abs(tz);
+  const tzH = String(Math.floor(abstz)).padStart(2, '0');
+  const tzM = tz % 1 === 0.5 ? '30' : '00';
+  return y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0')+'T'+String(h).padStart(2,'0')+':'+String(min).padStart(2,'0')+':00'+sign+tzH+':'+tzM;
+}
+const RASHI_NAMES = ['Mesha','Vrisha','Mithuna','Karka','Simha','Kanya','Tula','Vrischika','Dhanu','Makara','Kumbha','Meena'];
+const NK_DEV = {'Ashwini':'अश्विनी','Bharani':'भरणी','Krittika':'कृत्तिका','Rohini':'रोहिणी','Mrigashira':'मृगशिरा','Ardra':'आर्द्रा','Punarvasu':'पुनर्वसु','Pushya':'पुष्य','Ashlesha':'आश्लेषा','Magha':'मघा','Purva Phalguni':'पूर्वाफाल्गुनी','Uttara Phalguni':'उत्तराफाल्गुनी','Hasta':'हस्त','Chitra':'चित्रा','Swati':'स्वाती','Vishakha':'विशाखा','Anuradha':'अनुराधा','Jyeshtha':'ज्येष्ठा','Mula':'मूल','Purva Ashadha':'पूर्वाषाढ़ा','Uttara Ashadha':'उत्तराषाढ़ा','Shravana':'श्रवण','Dhanishtha':'धनिष्ठा','Shatabhisha':'शतभिषा','Purva Bhadrapada':'पूर्वाभाद्रपदा','Uttara Bhadrapada':'उत्तराभाद्रपदा','Revati':'रेवती'};
+function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=86400' },
   });
 }
-
-async function handler(request: Request): Promise<Response> {
+async function handler(request, env) {
   if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
   const { searchParams } = new URL(request.url, 'http://localhost');
-  const n = (k: string, d?: number) => { const v = searchParams.get(k); return v === null || v === '' ? d : Number(v); };
-  const y = n('y'), m = n('m'), d = n('d');
-  if (![y, m, d].every(v => Number.isFinite(v))) return json({ error: 'Missing y/m/d' }, 400);
-  const h = n('h', 12)!, min = n('min', 0)!;
-  const lat = n('lat', 28.6139)!, lon = n('lon', 77.2090)!, tz = n('tz', 5.5)!;
-
+  const n = (k, def) => { const v = searchParams.get(k); return (v===null||v==='') ? def : Number(v); };
+  const y=n('y'), m=n('m'), d=n('d');
+  if (![y,m,d].every(v=>Number.isFinite(v))) return json({ error:'Missing y/m/d' }, 400);
+  const h=n('h',12), min=n('min',0), lat=n('lat',28.6139), lon=n('lon',77.2090), tz=n('tz',5.5);
   try {
-    const profile = await calculateVedicProfile(d!, m!, y!, h, min, { city: '', lat, lon, timezone: tz });
-    const jd = p_julday(y!, m!, d!, h + min / 60 - tz, 1);
-    const rawPlanets: any[] = calculate_planets(jd, 1) || [];
-
-    let lagnaSignIdx = 0;
-    let lagnaDeg = 0;
-    try {
-      const houses: any = calculate_houses(jd, lat, lon, 'W', 1);
-      lagnaDeg = ((houses.ascendant % 360) + 360) % 360;
-      lagnaSignIdx = Math.floor(lagnaDeg / 30);
-    } catch { /* invalid coords — default lagna */ }
-
-    const planets = rawPlanets.map(p => {
-      const lon360 = ((p.longitude % 360) + 360) % 360;
-      const signIdx = Math.floor(lon360 / 30);
-      const house = ((signIdx - lagnaSignIdx + 12) % 12) + 1; // whole-sign houses
-      return {
-        name: p.name,
-        sign: RASHI_NAMES[signIdx],
-        signIndex: signIdx + 1,
-        house,
-        longitude: Number(lon360.toFixed(2)),
-        retrograde: !!p.is_retrograde,
-      };
+    const token = await getProKeralaToken(env);
+    if (!token) return json({ error:'Kundali service not configured' }, 503);
+    const datetime = prokeralaDatetime(y, m, d, h, min, tz);
+    const coords = lat+','+lon;
+    const hdrs = { Authorization:'Bearer '+token };
+    const [planetRes, bdRes, dashaRes] = await Promise.all([
+      fetch('https://api.prokerala.com/v2/astrology/planet-position?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
+      fetch('https://api.prokerala.com/v2/astrology/birth-details?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
+      fetch('https://api.prokerala.com/v2/astrology/vimshottari-dasha?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
+    ]);
+    const [pd, bd, dd] = await Promise.all([planetRes.json(), bdRes.json(), dashaRes.json()]);
+    const rawPlanets = pd?.data?.planet_position || [];
+    const nk = bd?.data?.nakshatra;
+    const rashi = bd?.data?.chandra_rasi;
+    const asc = pd?.data?.ascendant;
+    const currentDasha = dd?.data?.dasha_periods?.[0] || dd?.data?.mahadasha?.[0];
+    const ascLon = asc?.longitude ?? rawPlanets.find(p => p.name === 'Ascendant')?.longitude ?? 0;
+    const lagnaIdx = Math.floor(((ascLon % 360) + 360) % 360 / 30);
+    const planets = rawPlanets.filter(p => p.name !== 'Ascendant').map(p => {
+      const sIdx = Math.floor(((p.longitude % 360) + 360) % 360 / 30);
+      return { name:p.name, sign:RASHI_NAMES[sIdx]||'Unknown', signIndex:sIdx+1, house:((sIdx-lagnaIdx+12)%12)+1, longitude:Number((p.longitude||0).toFixed(2)), retrograde:!!p.is_retrograde };
     });
-
+    const nkName = nk?.name || 'Unknown';
+    const rashiName = rashi?.name || null;
     return json({
-      lagna: { sign: RASHI_NAMES[lagnaSignIdx], signIndex: lagnaSignIdx + 1, degrees: Number(lagnaDeg.toFixed(2)) },
+      lagna: { sign:RASHI_NAMES[lagnaIdx]||'Unknown', signIndex:lagnaIdx+1, degrees:Number((ascLon||0).toFixed(2)) },
       planets,
-      nakshatra: profile.nakshatra,
-      rashi: profile.rashi,
-      rashi_devanagari: profile.rashi_devanagari,
-      dasha: profile.dasha,
-      requires_birth_time: profile.requires_birth_time,
+      nakshatra: { nakshatra:nkName, nakshatra_devanagari:NK_DEV[nkName]||nkName, pada:nk?.pada||1, confidence:'high', is_boundary:false },
+      rashi: rashiName,
+      rashi_devanagari: null,
+      dasha: currentDasha ? { mahadasha:currentDasha.planet||currentDasha.name, antardasha:currentDasha.sub_periods?.[0]?.planet||'' } : null,
+      requires_birth_time: false,
     });
-  } catch (e) {
-    return json({ error: 'calc-failed', detail: String((e as Error).message || e) }, 500);
-  }
+  } catch(e) { return json({ error:'calc-failed', detail:String(e.message||e) }, 500); }
 }
-
 export const GET = handler;
