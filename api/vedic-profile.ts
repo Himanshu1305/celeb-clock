@@ -28,6 +28,29 @@ function json(body, status = 200) {
     status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=86400' },
   });
 }
+
+// Walk dasha_periods -> antardasha to find whichever level contains refDate.
+function findCurrentDasha(dashaPeriods, refDate) {
+  if (!Array.isArray(dashaPeriods)) return null;
+  const ref = refDate.getTime();
+  const inRange = (p) => {
+    const s = new Date(p.start).getTime();
+    const e = new Date(p.end).getTime();
+    return ref >= s && ref <= e;
+  };
+  const maha = dashaPeriods.find(inRange);
+  if (!maha) return null;
+  const antar = Array.isArray(maha.antardasha) ? maha.antardasha.find(inRange) : null;
+  return {
+    mahadasha: maha.name,
+    mahadasha_start: maha.start,
+    mahadasha_end: maha.end,
+    antardasha: antar ? antar.name : '',
+    antardasha_start: antar ? antar.start : null,
+    antardasha_end: antar ? antar.end : null,
+  };
+}
+
 async function handler(request, env) {
   if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
   const { searchParams } = new URL(request.url, 'http://localhost');
@@ -42,15 +65,16 @@ async function handler(request, env) {
     const datetime = prokeralaDatetime(y, m, d, h, min, tz);
     const coords = lat+','+lon;
     const hdrs = { Authorization:'Bearer '+token };
-    const [bdRes, dashaRes] = await Promise.all([
+    const [bdRes, advRes] = await Promise.all([
       fetch('https://api.prokerala.com/v2/astrology/birth-details?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }),
-      hasBirthTime ? fetch('https://api.prokerala.com/v2/astrology/vimshottari-dasha?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }) : Promise.resolve(null),
+      hasBirthTime ? fetch('https://api.prokerala.com/v2/astrology/kundli/advanced?datetime='+encodeURIComponent(datetime)+'&coordinates='+coords+'&ayanamsa=1', { headers: hdrs }) : Promise.resolve(null),
     ]);
     const bd = await bdRes.json();
-    const dd = dashaRes ? await dashaRes.json() : null;
+    const adv = advRes ? await advRes.json() : null;
     const nk = bd?.data?.nakshatra;
     const rashi = bd?.data?.chandra_rasi;
-    const currentDasha = dd?.data?.dasha_periods?.[0] || dd?.data?.mahadasha?.[0];
+    const dashaPeriods = adv?.data?.dasha_periods;
+    const currentDasha = hasBirthTime ? findCurrentDasha(dashaPeriods, new Date()) : null;
     const nkName = nk?.name || 'Unknown';
     const rashiName = rashi?.name || null;
     return json({
@@ -58,7 +82,7 @@ async function handler(request, env) {
       rashi: rashiName,
       rashi_devanagari: rashiName ? (RASHI_DEV[rashiName]||rashiName) : null,
       lagna: null,
-      dasha: currentDasha ? { mahadasha:currentDasha.planet||currentDasha.name, antardasha:currentDasha.sub_periods?.[0]?.planet||'' } : null,
+      dasha: currentDasha,
       requires_birth_time: !hasBirthTime,
       input_summary: hasBirthTime ? 'Calculated with birth time via ProKerala' : 'Date-only approximation',
     });
