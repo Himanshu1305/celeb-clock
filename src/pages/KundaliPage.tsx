@@ -6,7 +6,7 @@ import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { KundaliChart } from '@/components/KundaliChart';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
-import { fetchKundali, buildInterpretation, hasProkeralaKey, type KundaliData } from '@/services/kundaliService';
+import { fetchKundali, buildInterpretation, type KundaliData } from '@/services/kundaliService';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
 
 export default function KundaliPage() {
@@ -65,12 +65,6 @@ export default function KundaliPage() {
         <p className="text-muted-foreground mb-6">
           Your Vedic birth chart with planetary positions, Lagna, Nakshatra and Dasha — accurate sidereal (Lahiri) astronomy. Full report {price}.
         </p>
-
-        {!hasProkeralaKey() && (
-          <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
-            Complete Kundali requires ProKerala API key (free at prokerala.com/developers). Your core chart below is computed with the Swiss Ephemeris.
-          </p>
-        )}
 
         <div className="bg-card/60 border border-border rounded-xl p-5 mb-8 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
