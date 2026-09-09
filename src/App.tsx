@@ -169,6 +169,7 @@ const BirthdayReportGiftPage = lazyWithReload(() => import('@/pages/BirthdayRepo
 const ForBusinessPage = lazyWithReload(() => import('@/pages/ForBusinessPage'));
 const KundaliPage = lazyWithReload(() => import('@/pages/KundaliPage'));
 const KundaliMatchPage = lazyWithReload(() => import('@/pages/KundaliMatchPage'));
+const AstrologerPage = lazyWithReload(() => import('@/pages/AstrologerPage'));
 const BabyNamesPage = lazyWithReload(() => import('@/pages/BabyNamesPage'));
 const RashifalPage = lazyWithReload(() => import('@/pages/hi/RashifalPage'));
 const DatePersonalityPage = lazyWithReload(() => import('@/pages/DatePersonalityPage'));
@@ -375,6 +376,7 @@ const App = () => (
               <Route path="/for-business" element={<ForBusinessPage />} />
               <Route path="/kundali" element={<KundaliPage />} />
               <Route path="/kundali-match" element={<KundaliMatchPage />} />
+              <Route path="/astrologer" element={<AstrologerPage />} />
               <Route path="/baby-names" element={<BabyNamesPage />} />
               <Route path="/hi/rashifal/:rashi" element={<RashifalPage />} />
               <Route path="/hi/rashifal" element={<RashifalPage />} />

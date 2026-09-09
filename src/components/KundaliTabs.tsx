@@ -10,7 +10,7 @@
  */
 import { Link } from 'react-router-dom';
 
-export type KundaliTab = 'kundali' | 'match';
+export type KundaliTab = 'kundali' | 'match' | 'astrologer';
 
 const base = 'px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap';
 
@@ -25,15 +25,9 @@ export function KundaliTabs({ active }: { active: KundaliTab }) {
       <Link data-testid="tab-match" to="/kundali-match" className={cls(active === 'match')} aria-current={active === 'match' ? 'page' : undefined}>
         Kundali Matching
       </Link>
-      {/* Placeholder for the future "Ask your personal astrologer" AI chat — not built this session. */}
-      <span
-        data-testid="tab-astrologer-placeholder"
-        aria-disabled="true"
-        title="Coming soon — talk to your personal astrologer"
-        className={`${base} bg-muted/30 border border-dashed border-border text-muted-foreground cursor-not-allowed`}
-      >
-        Ask your personal astrologer <span className="ml-1 text-[10px] uppercase tracking-wide">soon</span>
-      </span>
+      <Link data-testid="tab-astrologer" to="/astrologer" className={cls(active === 'astrologer')} aria-current={active === 'astrologer' ? 'page' : undefined}>
+        Ask your personal astrologer
+      </Link>
     </nav>
   );
 }
