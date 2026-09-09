@@ -91,6 +91,7 @@
     "@vercel/node": "^5.8.22",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "@vitest/ui": "^4.1.8",
+    "astronomy-engine": "^2.1.19",
     "autoprefixer": "^10.4.21",
     "dotenv": "^17.4.2",
     "eslint": "^9.32.0",

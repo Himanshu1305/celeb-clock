@@ -1,3 +1,6 @@
+import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
+import { toKundaliLegacy } from '../src/lib/vedic/legacyAdapters.js';
+
 async function getProKeralaToken(env) {
   const id = (env && env.VITE_PROKERALA_CLIENT_ID) || process.env.VITE_PROKERALA_CLIENT_ID;
   const secret = (env && env.VITE_PROKERALA_CLIENT_SECRET) || process.env.VITE_PROKERALA_CLIENT_SECRET;
@@ -80,17 +83,34 @@ async function getCachedChart(sb, cacheKey) {
   }
 }
 
-async function setCachedChart(sb, cacheKey, chartData) {
+async function setCachedChart(sb, cacheKey, chartData, source = 'prokerala') {
   if (!sb) return;
   try {
     await sb.from('vedic_chart_cache').upsert({
       cache_key: cacheKey,
       chart_data: chartData,
-      source: 'prokerala',
+      source,
       last_accessed_at: new Date().toISOString(),
     });
   } catch (e) {
     // cache write failure should never break the response
+  }
+}
+
+// Local engine first (validated, offline, no rate limit). ProKerala is used
+// only if the local engine throws — the fallback path is preserved per the
+// integration contract, not removed. Returns { chart, source } or { error, status }.
+async function computeChart(env, y, m, d, h, min, lat, lon, tz) {
+  try {
+    const result = await calculateBirthChart(
+      { year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon, timezoneOffset: tz },
+    );
+    return { chart: toKundaliLegacy(result), source: 'local' };
+  } catch (localErr) {
+    // Fall back to ProKerala on any local-engine failure.
+    const pk = await fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz);
+    if (pk.error) return { error: pk.error, status: pk.status, localError: String(localErr?.message || localErr) };
+    return { chart: pk.chart, source: 'prokerala' };
   }
 }
 
@@ -193,10 +213,10 @@ async function handler(request, env) {
       return json({ ...cached, _cache: 'hit' });
     }
 
-    const result = await fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz);
+    const result = await computeChart(env, y, m, d, h, min, lat, lon, tz);
     if (result.error) return json({ error: result.error }, result.status);
 
-    await setCachedChart(sb, cacheKey, result.chart);
+    await setCachedChart(sb, cacheKey, result.chart, result.source);
 
     return json({ ...result.chart, _cache: 'miss' });
   } catch(e) { return json({ error:'calc-failed', detail:String(e.message||e) }, 500); }

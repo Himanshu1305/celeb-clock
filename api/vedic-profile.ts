@@ -1,3 +1,6 @@
+import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
+import { toVedicProfileLegacy } from '../src/lib/vedic/legacyAdapters.js';
+
 async function getProKeralaToken(env) {
   const id = (env && env.VITE_PROKERALA_CLIENT_ID) || process.env.VITE_PROKERALA_CLIENT_ID;
   const secret = (env && env.VITE_PROKERALA_CLIENT_SECRET) || process.env.VITE_PROKERALA_CLIENT_SECRET;
@@ -80,18 +83,30 @@ async function getCachedChart(sb, cacheKey) {
   }
 }
 
-async function setCachedChart(sb, cacheKey, chartData) {
+async function setCachedChart(sb, cacheKey, chartData, source = 'prokerala') {
   if (!sb) return;
   try {
     await sb.from('vedic_chart_cache').upsert({
       cache_key: cacheKey,
       chart_data: chartData,
-      source: 'prokerala',
+      source,
       last_accessed_at: new Date().toISOString(),
     });
   } catch (e) {
     // cache write failure should never break the response
   }
+}
+
+// Validates that a ProKerala JSON response is a genuine success, not an error
+// payload or a rate-limit response disguised as a 200. Mirrors the guard in
+// api/kundali.ts — this endpoint previously lacked it, so rate-limit/error
+// responses could be cached with null nakshatra/rashi forever.
+function checkProKeralaStatus(data, label) {
+  if (!data || data.status === 'error') {
+    const detail = data?.errors?.[0]?.detail || 'unknown error';
+    return `ProKerala ${label} failed: ${detail}`;
+  }
+  return null;
 }
 
 async function fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz, hasBirthTime) {
@@ -106,6 +121,19 @@ async function fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz, hasBirthTi
   ]);
   const bd = await bdRes.json();
   const adv = advRes ? await advRes.json() : null;
+
+  // Fail loudly on an error/rate-limit payload rather than caching a chart with
+  // null fields (the silent-failure bug this guard closes).
+  const bdErr = checkProKeralaStatus(bd, 'birth-details');
+  if (bdErr) return { error: bdErr, status: 502 };
+  if (hasBirthTime) {
+    const advErr = checkProKeralaStatus(adv, 'kundli/advanced');
+    if (advErr) return { error: advErr, status: 502 };
+  }
+  if (!bd?.data?.nakshatra?.name) {
+    return { error: 'ProKerala returned incomplete data (missing nakshatra)', status: 502 };
+  }
+
   const nk = bd?.data?.nakshatra;
   const rashi = bd?.data?.chandra_rasi;
   const dashaPeriods = adv?.data?.dasha_periods;
@@ -126,6 +154,21 @@ async function fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz, hasBirthTi
   };
 }
 
+// Local engine first; ProKerala only on local-engine error. Returns
+// { chart, source } or { error, status }.
+async function computeProfile(env, y, m, d, h, min, lat, lon, tz, hasBirthTime) {
+  try {
+    const result = await calculateBirthChart(
+      { year: y, month: m, day: d, hour: hasBirthTime ? h : 12, minute: hasBirthTime ? min : 0, latitude: lat, longitude: lon, timezoneOffset: tz },
+    );
+    return { chart: toVedicProfileLegacy(result, hasBirthTime), source: 'local' };
+  } catch (localErr) {
+    const pk = await fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz, hasBirthTime);
+    if (pk.error) return { error: pk.error, status: pk.status, localError: String(localErr?.message || localErr) };
+    return { chart: pk.chart, source: 'prokerala' };
+  }
+}
+
 async function handler(request, env) {
   if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
   const { searchParams } = new URL(request.url, 'http://localhost');
@@ -144,10 +187,10 @@ async function handler(request, env) {
       return json({ ...cached, _cache: 'hit' });
     }
 
-    const result = await fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz, hasBirthTime);
+    const result = await computeProfile(env, y, m, d, h, min, lat, lon, tz, hasBirthTime);
     if (result.error) return json({ error: result.error }, result.status);
 
-    await setCachedChart(sb, cacheKey, result.chart);
+    await setCachedChart(sb, cacheKey, result.chart, result.source);
 
     return json({ ...result.chart, _cache: 'miss' });
   } catch(e) { return json({ error:'calc-failed', detail:String(e.message||e) }, 500); }
