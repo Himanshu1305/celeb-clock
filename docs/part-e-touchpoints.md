@@ -50,3 +50,29 @@ Updating the Vedic forms (0.1.A/B) to check-a-saved-profile / pre-fill / edit / 
 
 ## Scope verdict
 Build size is **moderate (~5 forms + nav + storage hook + shared form + tests)** — comparable to Part D and doable in one session **once decisions 1-3 are made**. Flagging now per the spec's Phase-0 discipline, because #1 is a privacy conflict I must not resolve silently.
+
+---
+
+## Decisions (confirmed by owner) & what was built
+
+**Decisions:** (1) **Explicit opt-in save** — a "Save my birth details" checkbox; nothing persists silently (keeps the privacy policy unchanged). (2) **Vedic features only.** (3) **Browser storage now, account-sync deferred.**
+
+### New code
+- `src/services/savedProfile.ts` — localStorage store. Writes ONLY via `saveProfile` (called from an explicit opt-in). `loadProfile` validates the shape and **self-heals** corrupted/garbage storage (removes it, returns null) — never a wrong/half-built profile. Validates real calendar dates + real clock times.
+- `src/hooks/useSavedProfile.ts` — React hook (`profile`, `save`, `clear`, `loaded`); reacts to cross-tab storage clears.
+- `src/components/BirthDetailsForm.tsx` — the shared date+time+city form (native inputs, preserves KundaliPage testids) with the opt-in "Save my birth details" checkbox.
+- `src/components/KundaliTabs.tsx` — section tabs (Kundali · Kundali Matching · **"Ask your personal astrologer — soon"** disabled placeholder; chat NOT built).
+
+### Touchpoints updated
+- **KundaliPage** — now uses `BirthDetailsForm`; pre-fills from a saved profile, shows a "★ Using your saved details / Use different details" banner, saves on opt-in. Tabs added.
+- **KundaliMatchPage** — Person A comes from the saved profile (incl. its real birthplace, replacing the old hardcoded Delhi); only the second person is asked. "Use different details" available. Tabs added.
+- **BirthTimeVedicSection** (birthday report) — adds an explicit **"Use my saved birth time & city"** button (opt-in per use, because a birthday report can be a gift about someone else — never auto-applied).
+
+### Deliberately NOT wired (documented)
+- **BabyNamesPage** — the baby is a *different person*; auto-filling the user's own saved details there would be wrong data. Left as its own distinct-person form.
+- **The ~20 age/longevity/numerology date-only tools** — out of scope (per decision 2); they keep their existing ephemeral `BirthDateContext`.
+- **Account-level sync** — deferred (no birth column on `profiles`; migrations unreliable from here).
+
+### Tests
+- Unit: `savedProfile.test.ts` (opt-in, corruption safety), `BirthDetailsForm.test.tsx`. Unit suite **1590 → 1600, zero regressions**.
+- Playwright (local preview + route-mocked `/api`): `e2e-reading/saved-profile.spec.ts` — save→carry-over-to-Matching, returning session, "use different details" without overwrite, corrupted-storage fallback. **12/12 local E2E green** (4 new + 8 Part D reading, confirming no regression).

@@ -5,19 +5,20 @@ import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { KundaliChart } from '@/components/KundaliChart';
-import { geocodeCity, type GeoResult } from '@/services/geocoding';
+import { KundaliTabs } from '@/components/KundaliTabs';
+import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
+import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { fetchKundali, buildInterpretation, type KundaliData } from '@/services/kundaliService';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
 import { VedicReading } from '@/components/reading/VedicReading';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
 
 export default function KundaliPage() {
-  const price = reportPrice(resolveCurrency());
-  const [dob, setDob] = useState('');
-  const [time, setTime] = useState('');
-  const [cityQuery, setCityQuery] = useState('');
-  const [options, setOptions] = useState<GeoResult[]>([]);
-  const [city, setCity] = useState<GeoResult | null>(null);
+  const price = reportPrice(resolveCurrency(undefined));
+  const { profile, save, loaded } = useSavedProfile();
+  const [usingDifferent, setUsingDifferent] = useState(false);
+  const [saveChecked, setSaveChecked] = useState(false);
+
   const [data, setData] = useState<KundaliData | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -25,27 +26,21 @@ export default function KundaliPage() {
   const [readingLoading, setReadingLoading] = useState(false);
   const [readingFailed, setReadingFailed] = useState(false);
 
-  const validDob = /^\d{4}-\d{2}-\d{2}$/.test(dob);
-  const validTime = /^\d{2}:\d{2}$/.test(time);
-  const canGenerate = validDob && validTime && !!city;
+  const usingSaved = !!profile && !usingDifferent;
+  const initial = usingSaved ? { dob: profile!.dob, time: profile!.time, city: profile!.city } : undefined;
 
-  const onCity = async (v: string) => {
-    setCityQuery(v); setCity(null); setData(null);
-    if (v.trim().length >= 3) { try { setOptions(await geocodeCity(v)); } catch { setOptions([]); } }
-    else setOptions([]);
-  };
-  const pickCity = (c: GeoResult) => { setCity(c); setCityQuery(c.name); setOptions([]); };
-
-  const generate = async () => {
-    if (!canGenerate || !city) return;
+  const generate = async (details: BirthDetails) => {
     setLoading(true); setFailed(false); setReading(null); setReadingFailed(false);
-    const loc = { lat: city.lat, lon: city.lon, tz: city.utcOffset };
+    const loc = { lat: details.city.lat, lon: details.city.lon, tz: details.city.tz };
     try {
-      setData(await fetchKundali(dob, time, loc));
-      // Load the plain-language reading after the chart. A reading failure must
-      // never break the chart view — it shows a friendly note instead.
+      setData(await fetchKundali(details.dob, details.time, loc));
+      // Explicit opt-in only: persist just when the user ticked the box (or when
+      // regenerating their already-saved profile after an edit).
+      if (saveChecked || usingSaved) {
+        save({ dob: details.dob, time: details.time, city: details.city });
+      }
       setReadingLoading(true);
-      try { setReading(await fetchReading(dob, time, loc)); }
+      try { setReading(await fetchReading(details.dob, details.time, loc)); }
       catch { setReadingFailed(true); }
       finally { setReadingLoading(false); }
     } catch { setFailed(true); }
@@ -74,51 +69,38 @@ export default function KundaliPage() {
         <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">
           Free Kundali (Janam Kundali)
         </h1>
-        <p className="text-muted-foreground mb-6">
+        <p className="text-muted-foreground mb-4">
           Your Vedic birth chart with planetary positions, Lagna, Nakshatra and Dasha — accurate sidereal (Lahiri) astronomy. Full report {price}.
         </p>
 
-        <div className="bg-card/60 border border-border rounded-xl p-5 mb-8 space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label className="block text-xs text-muted-foreground mb-1" htmlFor="kundali-dob">Date of birth</label>
-              <input id="kundali-dob" data-testid="kundali-dob" type="date" value={dob}
-                     onChange={e => { setDob(e.target.value); setData(null); }}
-                     className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
-            </div>
-            <div>
-              <label className="block text-xs text-muted-foreground mb-1" htmlFor="kundali-time">Birth time</label>
-              <input id="kundali-time" data-testid="kundali-time" type="time" value={time}
-                     onChange={e => { setTime(e.target.value); setData(null); }}
-                     className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
-            </div>
-            <div className="relative">
-              <label className="block text-xs text-muted-foreground mb-1" htmlFor="kundali-city">Birth city</label>
-              <input id="kundali-city" data-testid="kundali-city" type="text" value={cityQuery}
-                     onChange={e => onCity(e.target.value)} placeholder="e.g. Delhi"
-                     className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
-              {options.length > 0 && (
-                <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow max-h-48 overflow-y-auto">
-                  {options.map((o, i) => (
-                    <li key={`${o.name}-${i}`}>
-                      <button type="button" onClick={() => pickCity(o)} className="w-full text-left px-3 py-2 text-sm hover:bg-indigo-50 text-gray-900">
-                        {o.name}{o.state ? `, ${o.state}` : ''}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+        <KundaliTabs active="kundali" />
+
+        {/* Saved-profile banner: shown only once the user has explicitly saved. */}
+        {loaded && usingSaved && (
+          <div data-testid="saved-profile-banner" className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm">
+            <span className="text-indigo-900">
+              ★ Using your saved birth details — <strong>{profile!.dob}</strong>, {profile!.time}, {profile!.city.name}
+            </span>
+            <button data-testid="use-different-details" type="button"
+                    onClick={() => { setUsingDifferent(true); setSaveChecked(false); setData(null); }}
+                    className="text-indigo-700 underline hover:text-indigo-900">
+              Use different details
+            </button>
           </div>
-          <button data-testid="kundali-generate-btn" onClick={generate} disabled={!canGenerate || loading}
-                  className="w-full py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50">
-            {loading ? 'Generating…' : 'Generate my Kundali →'}
-          </button>
-          {!canGenerate && (
-            <p data-testid="kundali-validation-hint" className="text-xs text-muted-foreground text-center">
-              Please enter your date of birth, birth time, and birth city to generate your reading.
-            </p>
-          )}
+        )}
+
+        <div className="mb-8">
+          <BirthDetailsForm
+            key={usingSaved ? 'saved' : 'new'}
+            testIdPrefix="kundali"
+            initial={initial}
+            submitLabel="Generate my Kundali →"
+            loading={loading}
+            onSubmit={generate}
+            showSaveOption={!usingSaved}
+            saveChecked={saveChecked}
+            onSaveCheckedChange={setSaveChecked}
+          />
         </div>
 
         {failed && (

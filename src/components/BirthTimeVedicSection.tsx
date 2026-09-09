@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
+import { useSavedProfile } from '@/hooks/useSavedProfile';
 
 interface VedicApiResult {
   nakshatra: { nakshatra: string; nakshatra_devanagari: string; pada: number; confidence: string; is_boundary: boolean };
@@ -17,6 +18,7 @@ interface VedicApiResult {
  * endpoint is unavailable.
  */
 export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
+  const { profile } = useSavedProfile();
   const [time, setTime] = useState('');
   const [cityQuery, setCityQuery] = useState('');
   const [options, setOptions] = useState<GeoResult[]>([]);
@@ -26,6 +28,18 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
   const [failed, setFailed] = useState(false);
 
   const hasTime = /^\d{2}:\d{2}$/.test(time);
+
+  // Explicit opt-in prefill only: a birthday report can be a GIFT about someone
+  // else, so we never auto-apply the user's own saved details — we only offer a
+  // one-click fill when a saved profile exists and this section is still empty.
+  const canOfferSaved = !!profile && !time && !city;
+  const useSavedDetails = () => {
+    if (!profile) return;
+    setTime(profile.time);
+    setCity({ name: profile.city.name, lat: profile.city.lat, lon: profile.city.lon, timezone: '', utcOffset: profile.city.tz, country: '' });
+    setCityQuery(profile.city.name);
+    setResult(null);
+  };
 
   const onCityChange = async (v: string) => {
     setCityQuery(v);
@@ -62,6 +76,13 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
   return (
     <div className="rounded-xl border border-indigo-200 bg-indigo-50/50 p-4">
       <p className="text-sm font-semibold text-indigo-900 mb-2">🌙 Accurate Vedic profile (optional)</p>
+
+      {canOfferSaved && (
+        <button type="button" data-testid="vedic-use-saved" onClick={useSavedDetails}
+                className="mb-3 text-sm text-indigo-700 underline hover:text-indigo-900">
+          Use my saved birth time &amp; city ({profile!.city.name})
+        </button>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
