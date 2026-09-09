@@ -7,6 +7,8 @@ import { SEO } from '@/components/SEO';
 import { KundaliChart } from '@/components/KundaliChart';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
 import { fetchKundali, buildInterpretation, type KundaliData } from '@/services/kundaliService';
+import { fetchReading, type ReadingPayload } from '@/services/readingService';
+import { VedicReading } from '@/components/reading/VedicReading';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
 
 export default function KundaliPage() {
@@ -19,6 +21,9 @@ export default function KundaliPage() {
   const [data, setData] = useState<KundaliData | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [reading, setReading] = useState<ReadingPayload | null>(null);
+  const [readingLoading, setReadingLoading] = useState(false);
+  const [readingFailed, setReadingFailed] = useState(false);
 
   const validDob = /^\d{4}-\d{2}-\d{2}$/.test(dob);
   const validTime = /^\d{2}:\d{2}$/.test(time);
@@ -33,9 +38,16 @@ export default function KundaliPage() {
 
   const generate = async () => {
     if (!canGenerate || !city) return;
-    setLoading(true); setFailed(false);
+    setLoading(true); setFailed(false); setReading(null); setReadingFailed(false);
+    const loc = { lat: city.lat, lon: city.lon, tz: city.utcOffset };
     try {
-      setData(await fetchKundali(dob, time, { lat: city.lat, lon: city.lon, tz: city.utcOffset }));
+      setData(await fetchKundali(dob, time, loc));
+      // Load the plain-language reading after the chart. A reading failure must
+      // never break the chart view — it shows a friendly note instead.
+      setReadingLoading(true);
+      try { setReading(await fetchReading(dob, time, loc)); }
+      catch { setReadingFailed(true); }
+      finally { setReadingLoading(false); }
     } catch { setFailed(true); }
     finally { setLoading(false); }
   };
@@ -102,6 +114,11 @@ export default function KundaliPage() {
                   className="w-full py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50">
             {loading ? 'Generating…' : 'Generate my Kundali →'}
           </button>
+          {!canGenerate && (
+            <p data-testid="kundali-validation-hint" className="text-xs text-muted-foreground text-center">
+              Please enter your date of birth, birth time, and birth city to generate your reading.
+            </p>
+          )}
         </div>
 
         {failed && (
@@ -154,6 +171,24 @@ export default function KundaliPage() {
             <div data-testid="kundali-interpretation" className="rounded-lg border border-border p-4 text-sm text-foreground leading-relaxed">
               <h2 className="font-semibold mb-2">Your chart, interpreted</h2>
               {buildInterpretation(data)}
+            </div>
+
+            <div>
+              <h2 className="font-heading text-2xl font-bold text-foreground mb-1">Your personal reading</h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                A plain-language reading of your chart, organised by life area. Traditional guidance — offered
+                thoughtfully, never as certainty.
+              </p>
+              {readingLoading && (
+                <p data-testid="reading-loading" className="text-sm text-muted-foreground">Preparing your reading…</p>
+              )}
+              {readingFailed && !readingLoading && (
+                <p data-testid="reading-failed" className="rounded-xl border border-border bg-muted/30 p-4 text-sm text-muted-foreground">
+                  Your written reading couldn’t be loaded just now, but your full chart above is ready. Please try
+                  again in a little while for the narrated version.
+                </p>
+              )}
+              {reading && <VedicReading payload={reading} />}
             </div>
 
             <div className="flex flex-wrap gap-3">
