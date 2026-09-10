@@ -6,23 +6,29 @@ import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
-import { calculateAshtakoota, type AshtakootaResult } from '@/utils/ashtakoota';
+import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
 import type { SavedCity } from '@/services/savedProfile';
 
-const RASHI_ORDER = ['Mesha', 'Vrisha', 'Mithuna', 'Karka', 'Simha', 'Kanya', 'Tula', 'Vrischika', 'Dhanu', 'Makara', 'Kumbha', 'Meena'];
+interface TimingWindow { planet: string; level: string; range: string; status: string; describe: string }
+interface MatchResponse {
+  gunaMilan: GunaMilanResult;
+  timing: {
+    personA: { significators: string[]; windows: TimingWindow[] };
+    personB: { significators: string[]; windows: TimingWindow[] };
+    overlaps: Array<{ range: string; aPlanet: string; bPlanet: string }>;
+    note: string;
+  };
+  people: { a: { lagna: string; rashi: string; nakshatra: string; pada: number }; b: { lagna: string; rashi: string; nakshatra: string; pada: number } };
+}
 
-async function profileFor(dob: string, time: string, coords: { lat: number; lon: number; tz: number }): Promise<{ nakshatra: string; rashiIndex: number } | null> {
-  try {
-    const [y, m, d] = dob.split('-');
-    const [h, min] = (time || '12:00').split(':');
-    const params = new URLSearchParams({ y, m, d, h, min, lat: String(coords.lat), lon: String(coords.lon), tz: String(coords.tz) });
-    const res = await fetch(`/api/vedic-profile?${params.toString()}`);
-    if (!res.ok) return null;
-    const data = await res.json();
-    const rashiIndex = data.rashi ? RASHI_ORDER.indexOf(data.rashi) + 1 : 1;
-    return { nakshatra: data?.nakshatra?.nakshatra, rashiIndex: rashiIndex || 1 };
-  } catch { return null; }
+function partsFor(dob: string, time: string, coords: { lat: number; lon: number; tz: number }, suffix: string): Record<string, string> {
+  const [y, m, d] = dob.split('-');
+  const [h, min] = (time || '12:00').split(':');
+  return {
+    ['y' + suffix]: y, ['m' + suffix]: m, ['d' + suffix]: d, ['h' + suffix]: h, ['min' + suffix]: min,
+    ['lat' + suffix]: String(coords.lat), ['lon' + suffix]: String(coords.lon), ['tz' + suffix]: String(coords.tz),
+  };
 }
 
 /** Inline birth-city picker (Part 1) — reuses the same geocoding service the
@@ -56,11 +62,6 @@ function CityPicker({ testid, value, onPick }: { testid: string; value: SavedCit
   );
 }
 
-const KOOTAS: Array<[keyof AshtakootaResult, string, number]> = [
-  ['varna', 'Varna', 1], ['vashya', 'Vashya', 2], ['tara', 'Tara', 3], ['yoni', 'Yoni', 4],
-  ['graha_maitri', 'Graha Maitri', 5], ['gana', 'Gana', 6], ['bhakoot', 'Bhakoot', 7], ['nadi', 'Nadi', 8],
-];
-
 export default function KundaliMatchPage() {
   const { profile } = useSavedProfile();
   const [usingDifferent, setUsingDifferent] = useState(false);
@@ -72,7 +73,7 @@ export default function KundaliMatchPage() {
   const [dobB, setDobB] = useState('');
   const [timeB, setTimeB] = useState('');
   const [cityB, setCityB] = useState<SavedCity | null>(null);
-  const [result, setResult] = useState<AshtakootaResult | null>(null);
+  const [result, setResult] = useState<MatchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -91,12 +92,15 @@ export default function KundaliMatchPage() {
     if (!canCalc || !coordsA || !cityB) return;
     setLoading(true); setFailed(false);
     try {
-      const [a, b] = await Promise.all([
-        profileFor(effDobA, effTimeA, coordsA),
-        profileFor(dobB, timeB, cityB),
-      ]);
-      if (!a?.nakshatra || !b?.nakshatra) throw new Error('unavailable');
-      setResult(calculateAshtakoota(a.nakshatra, b.nakshatra, a.rashiIndex, b.rashiIndex));
+      const params = new URLSearchParams({
+        ...partsFor(effDobA, effTimeA, coordsA, 'A'),
+        ...partsFor(dobB, timeB, cityB, 'B'),
+      });
+      const res = await fetch(`/api/kundali-match?${params.toString()}`);
+      if (!res.ok) throw new Error('unavailable');
+      const data = await res.json();
+      if (!data?.gunaMilan) throw new Error('unavailable');
+      setResult(data as MatchResponse);
     } catch { setFailed(true); }
     finally { setLoading(false); }
   };
@@ -110,7 +114,7 @@ export default function KundaliMatchPage() {
         ogType="website"
       />
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center mb-8 print:hidden">
           <Navigation />
           <AuthNav />
         </header>
@@ -122,7 +126,7 @@ export default function KundaliMatchPage() {
 
         <KundaliTabs active="match" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 print:hidden">
           {/* Person A — saved profile if present, else a form */}
           {usingSaved ? (
             <div data-testid="kmatch-saved-a" className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 space-y-2">
@@ -161,38 +165,86 @@ export default function KundaliMatchPage() {
         </div>
 
         <button data-testid="kmatch-calculate-btn" onClick={calculate} disabled={!canCalc || loading}
-                className="w-full py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50 mb-6">
+                className="w-full py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50 mb-6 print:hidden">
           {loading ? 'Matching…' : 'Match Kundalis →'}
         </button>
 
         {failed && <p className="text-sm text-muted-foreground mb-6">Matching service is temporarily unavailable. Please try again shortly.</p>}
 
         {result && (
-          <div data-testid="kmatch-result" className="space-y-4">
+          <div data-testid="kmatch-result" id="kmatch-report" className="space-y-5">
+            <div className="flex justify-end print:hidden">
+              <button data-testid="kmatch-print" type="button" onClick={() => window.print()}
+                      className="text-sm px-3 py-1.5 rounded-lg border border-indigo-200 text-indigo-700 hover:bg-indigo-50">
+                ⤓ Download / Print PDF
+              </button>
+            </div>
+
             <div className="text-center rounded-xl border border-border p-4">
               <div className="text-sm text-muted-foreground">Total Guna Milan</div>
-              <div className="text-4xl font-black text-indigo-600">{result.total} / 36</div>
-              <div className="font-semibold text-foreground">{result.compatibility}</div>
+              <div className="text-4xl font-black text-indigo-600">{result.gunaMilan.total} / 36</div>
+              <div className="font-semibold text-foreground">{result.gunaMilan.compatibility}</div>
+              <div className="text-xs text-muted-foreground mt-1">
+                {result.people.a.rashi}/{result.people.a.nakshatra} × {result.people.b.rashi}/{result.people.b.nakshatra}
+              </div>
             </div>
-            {(result.nadi_dosha || result.bhakoot_dosha) && (
-              <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 text-sm text-amber-800">
-                {result.nadi_dosha && <div>⚠️ Nadi Dosha present (same Nadi).</div>}
-                {result.bhakoot_dosha && <div>⚠️ Bhakoot Dosha present.</div>}
+
+            {/* Doshas with cancellation transparency (Part 2.2) */}
+            {result.gunaMilan.doshas.some(d => d.present) && (
+              <div data-testid="kmatch-doshas" className="space-y-2">
+                {result.gunaMilan.doshas.filter(d => d.present).map(d => (
+                  <div key={d.name} className={`rounded-lg border p-3 text-sm ${d.cancelled ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-200 text-amber-900'}`}>
+                    <span className="font-semibold">{d.cancelled ? '✓' : '⚠️'} {d.name}{d.cancelled ? ' — cancelled' : ''}:</span> {d.reason}
+                  </div>
+                ))}
               </div>
             )}
-            <table className="w-full text-sm border border-border rounded-lg overflow-hidden">
-              <thead className="bg-muted/40 text-muted-foreground"><tr><th className="text-left px-3 py-2">Koota</th><th className="text-left px-3 py-2">Score</th><th className="text-left px-3 py-2">Max</th></tr></thead>
-              <tbody>
-                {KOOTAS.map(([key, label, max]) => (
-                  <tr key={label} className="border-t border-border">
-                    <td className="px-3 py-2 text-foreground">{label}</td>
-                    <td className="px-3 py-2 text-foreground">{result[key] as number}</td>
-                    <td className="px-3 py-2 text-muted-foreground">{max}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <Link to="/articles/kundali-compatibility" className="text-indigo-600 hover:underline text-sm">Learn what each koota means →</Link>
+
+            {/* Full 8-Koota breakdown (Part 2.1) with Nadi/Bhakoot emphasis (Part 2.3) */}
+            <div data-testid="kmatch-kootas" className="space-y-2">
+              {result.gunaMilan.kootas.map(k => (
+                <div key={k.key} className={`rounded-lg border p-3 ${k.heavy ? 'border-indigo-300 bg-indigo-50/50' : 'border-border'}`}>
+                  <div className="flex items-center justify-between">
+                    <div className="font-semibold text-foreground">
+                      {k.heavy && <span title="Heaviest kootas" className="mr-1 text-indigo-600">★</span>}{k.label}
+                      {k.heavy && <span className="ml-2 text-[10px] uppercase tracking-wide text-indigo-600">high weight</span>}
+                    </div>
+                    <div className={`font-bold ${k.score === 0 ? 'text-amber-600' : 'text-indigo-600'}`}>{k.score} / {k.max}</div>
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1">{k.explanation}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Marriage-timing windows (Part 2.5) — reuses the D-Fix3 activation engine */}
+            <div data-testid="kmatch-timing" className="rounded-xl border border-border p-4 space-y-2">
+              <div className="font-semibold text-foreground">Favourable marriage-timing windows</div>
+              <p className="text-xs text-muted-foreground">{result.timing.note}</p>
+              {result.timing.overlaps.length > 0 ? (
+                <div className="text-sm text-foreground">
+                  <div className="font-medium mb-1">When BOTH charts are favourable (strongest):</div>
+                  <ul className="list-disc pl-5 space-y-0.5">
+                    {result.timing.overlaps.map((o, i) => (
+                      <li key={i}><span className="font-medium">{o.range}</span> <span className="text-muted-foreground">(Person A’s {o.aPlanet} period overlapping Person B’s {o.bPlanet} period)</span></li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">No overlapping favourable window in the near future — each person’s individual windows are listed below.</p>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-sm">
+                <div><div className="font-medium text-foreground">Person A</div>{result.timing.personA.windows.slice(0, 2).map((w, i) => <div key={i} className="text-muted-foreground">{w.describe}</div>) || '—'}</div>
+                <div><div className="font-medium text-foreground">Person B</div>{result.timing.personB.windows.slice(0, 2).map((w, i) => <div key={i} className="text-muted-foreground">{w.describe}</div>) || '—'}</div>
+              </div>
+            </div>
+
+            {/* Methodology disclosure (Part 2.4) */}
+            <details data-testid="kmatch-methodology" className="rounded-lg border border-border p-3 text-sm text-muted-foreground">
+              <summary className="cursor-pointer font-medium text-foreground">How this is calculated (methodology)</summary>
+              <p className="mt-2">{result.gunaMilan.methodology}</p>
+            </details>
+
+            <Link to="/articles/kundali-compatibility" className="text-indigo-600 hover:underline text-sm print:hidden">Learn what each koota means →</Link>
           </div>
         )}
 
