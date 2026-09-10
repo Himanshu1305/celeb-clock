@@ -61,6 +61,12 @@ const exploreItems = [
 ];
 
 const astrologyItems = [
+  // Flagship Vedic hub (Parts B–G): the birth chart, matching, and AI astrologer.
+  // Placed first so a first-time visitor can DISCOVER them from the site nav —
+  // previously reachable only via the in-page KundaliTabs or a direct URL.
+  { path: '/kundali', label: 'Free Kundali (Birth Chart)', emoji: '🪔' },
+  { path: '/kundali-match', label: 'Kundali Matching', emoji: '💑' },
+  { path: '/astrologer', label: 'Ask an Astrologer (AI)', emoji: '💬' },
   { path: '/zodiac', label: 'Western Zodiac', emoji: '♈' },
   { path: '/chinese-zodiac', label: 'Chinese Zodiac', emoji: '🐉' },
   { path: '/vedic-zodiac', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
