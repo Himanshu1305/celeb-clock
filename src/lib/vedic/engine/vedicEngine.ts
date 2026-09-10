@@ -640,3 +640,9 @@ export function getSaturnSignIndex(date: Date): number {
   const lon = getPlanetSiderealLongitude('Saturn', t, getLahiriAyanamsa(date));
   return Math.floor(lon / 30);
 }
+
+/** Sidereal (Lahiri) longitude of a body at an arbitrary date — same validated
+ * path the chart uses (Part I.9, Panchang/Muhurat). No new astronomy. */
+export function getSiderealLongitude(planet: string, date: Date): number {
+  return getPlanetSiderealLongitude(planet, Astronomy.MakeTime(date), getLahiriAyanamsa(date));
+}

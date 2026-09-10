@@ -68,6 +68,7 @@ const astrologyItems = [
   { path: '/kundali-match', label: 'Kundali Matching', emoji: '💑' },
   { path: '/astrologer', label: 'Ask an Astrologer (AI)', emoji: '💬' },
   { path: '/sade-sati', label: 'Sade Sati Calculator', emoji: '🪐' },
+  { path: '/muhurat', label: 'Muhurat Finder', emoji: '🗓️' },
   { path: '/zodiac', label: 'Western Zodiac', emoji: '♈' },
   { path: '/chinese-zodiac', label: 'Chinese Zodiac', emoji: '🐉' },
   { path: '/vedic-zodiac', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
