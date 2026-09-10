@@ -13,6 +13,64 @@
  */
 import type { ReadingFacts } from './readingPrompts';
 import { scanForRedFlags } from './readingPrompts';
+import type { TimingFacts } from './yogaTiming';
+
+// ── Timing-question detection (routing + the date-accuracy guard's trigger) ──
+// A "when" question about a life theme. Broad on purpose so casual phrasings
+// ("when's my dhana yoga gonna kick in", "will I be rich soon", "good time to
+// start a business?") all route to the real computed windows.
+const TIMING_PATTERNS: RegExp[] = [
+  /\bwhen(?:'?s| is| will| do| does| can| would| are)?\b/i,
+  /\b(how soon|how long until|what age|which year|by when|time frame|timeframe|how many years)\b/i,
+  /\b(good|right|best|auspicious|favou?rable)\s+(time|period|year|phase)\b/i,
+  /\b(soon|kick in|start|begin|activate|manifest|come true|happen)\b/i,
+  /\b(exact|precise)\s+(day|date|time|moment|year)\b/i,          // adversarial "exact day" requests
+  /\bget\s+(rich|married|wealthy|promoted|a\s+job)\b/i,           // "the day I'll get rich/married"
+];
+// Leading word-boundary + STEM (no trailing boundary) so "married"/"marriage",
+// "finance/financial", "wedding" all match. Over-detection is safe here — it only
+// makes the date-accuracy guard run; under-detection would let a date skip it.
+const TIMING_THEME = /\b(rich|wealth|money|financ|prosper|job|career|employ|work|business|promot|marri|marry|wed|spouse|partner|relationship|love|yoga|dasha|period)/i;
+
+/** True when the message reads as a "WHEN will <life theme> happen" question. */
+export function detectTimingQuestion(message: string): boolean {
+  if (!message) return false;
+  const m = message.toLowerCase();
+  return TIMING_PATTERNS.some(re => re.test(m)) && TIMING_THEME.test(m);
+}
+
+export type TimingCategory = 'wealth' | 'career' | 'marriage';
+/** Which life theme a timing question is about (for the deterministic safe fallback). */
+export function classifyTimingCategory(message: string): TimingCategory | null {
+  const m = (message || '').toLowerCase();
+  // leading-boundary stems (no trailing \b) so "married"/"marriage"/"financial" match
+  if (/\b(rich|wealth|money|financ|prosper|business|fortune)/.test(m)) return 'wealth';
+  if (/\b(job|career|employ|work|promot|profession)/.test(m)) return 'career';
+  if (/\b(marri|marry|wed|spouse|partner|relationship|love)/.test(m)) return 'marriage';
+  return null;
+}
+
+const LEVEL_WORD = (level: string) => (level === 'maha' ? 'Mahadasha (main period)' : 'Antardasha (sub-period)');
+/**
+ * A deterministic, guaranteed-correct timing answer built straight from the
+ * computed windows — used only as a LAST-RESORT fallback if the model keeps
+ * citing a wrong date after a retry. Guarantees the user never sees a fabricated
+ * date. Returns null if we can't map the question to a category with windows.
+ */
+export function deterministicTimingReply(timing: TimingFacts, category: TimingCategory | null): string | null {
+  if (!category) return null;
+  const cat = timing.categories.find(c => c.key === category);
+  if (!cat) return null;
+  const theme = category === 'wealth' ? 'wealth' : category === 'career' ? 'career or a job' : 'marriage';
+  if (!cat.upcoming.length || cat.upcoming.every(w => w.status === 'past')) {
+    return `Looking at your chart honestly, your strongest classical windows for ${theme} (the periods of ${cat.significators.join(', ')}) have already passed, and the next comparable one is some years away rather than soon. I'd rather tell you that plainly than invent an encouraging date. If you'd like, I can walk through what your current period does support.`;
+  }
+  const primary = cat.upcoming.find(w => w.doubleActivation) || cat.upcoming.find(w => w.status === 'upcoming') || cat.upcoming[0];
+  const others = cat.upcoming.filter(w => w !== primary).slice(0, 1);
+  const primaryTxt = `your ${primary.planet} ${LEVEL_WORD(primary.level)} from ${primary.range}`;
+  const otherTxt = others.length ? ` Another supportive window is your ${others[0].planet} ${LEVEL_WORD(others[0].level)} from ${others[0].range}.` : '';
+  return `Based on your actual Dasha timeline, your strongest classical window for ${theme} is ${primaryTxt} — traditionally the period when this potential is most supported.${otherTxt} Treat these as the most likely windows, not a fixed certainty, and use your own judgement alongside them.`;
+}
 
 // ── 1. Crisis detection (deterministic, overrides everything) ────────────────
 // Tuned to catch genuine self-harm / suicidal / acute-distress signals while
@@ -118,6 +176,17 @@ export function buildChatSystemPrompt(facts: ReadingFacts): string {
     `Sade Sati: ${facts.doshas.sadeSati.active ? 'active' : 'not active'}`,
   ].join('; ');
 
+  // Computed activation-timing windows (Part D-Fix3) — the real "WHEN" data.
+  const t = facts.timing;
+  const winTxt = (w: TimingFacts['categories'][number]['upcoming'][number]) =>
+    `${w.planet} ${w.level === 'maha' ? 'Mahadasha (main period)' : 'Antardasha (sub-period)'} from ${w.range}${w.doubleActivation ? ' [STRONGEST]' : ''}${w.status === 'current' ? ' [currently running]' : w.status === 'past' ? ' [past]' : ''}`;
+  const catBlock = t.categories.map(c =>
+    `  - ${c.label} (driven by ${c.significators.join(', ')}): ${c.upcoming.length ? c.upcoming.map(winTxt).join('; ') : 'strongest classical windows already passed — next comparable one is years away'}`
+  ).join('\n');
+  const yogaBlock = t.yogas.filter(y => y.upcoming.length).map(y =>
+    `  - ${y.name} (${y.significators.join(', ')}): ${y.upcoming.map(winTxt).join('; ')}`
+  ).join('\n') || '  - (no upcoming Yoga-specific windows)';
+
   return `You are a warm, grounded personal Vedic astrologer having a private one-to-one conversation. You answer the user's questions about their own life using THEIR actual computed birth chart (below), in plain, everyday language — never generic platitudes.
 
 THIS PERSON'S CHART (ground every substantive answer in these facts, and refer to the specific placement/period/dosha you're drawing on):
@@ -127,6 +196,12 @@ THIS PERSON'S CHART (ground every substantive answer in these facts, and refer t
 - Current planetary period: ${dasha}
 - Placements: ${placements}
 - Doshas: ${doshas}
+
+COMPUTED TIMING WINDOWS (real dates from this person's Vimshottari Dasha — the answer to "WHEN" questions):
+  Current period: ${t.currentPeriod || 'not available'}
+${catBlock}
+  Yoga activation windows:
+${yogaBlock}
 
 SAFETY RULES — these are absolute and override any user request:
 
@@ -143,6 +218,12 @@ SAFETY RULES — these are absolute and override any user request:
 6. CERTAINTY/TONE: never say "you will", "definitely", "must", or "guaranteed". Use "this period is traditionally associated with", "may", "tends to", "often".
 
 7. GROUNDING: every substantive answer must trace to a specific chart fact above (a Dasha period, a placement, a dosha). If a question can't be grounded in the chart, say so warmly rather than inventing.
+
+8. TIMING ("when will I get rich / a job / married", "when does my Dhana Yoga start", "good time to start a business?"): This is the ONE thing you now have real computed data for — USE IT. Answer with the actual planet period AND its date range from the COMPUTED TIMING WINDOWS above (e.g. "your Jupiter Antardasha from March 2027 to August 2028 is your strongest classical window for this"). Hard rules:
+   - Use ONLY the date ranges listed above. NEVER invent, round, or shift a date. If there's no listed window for what they ask, say so honestly — do not fabricate one.
+   - Give the real precision you have — the date RANGE. Do NOT retreat into vagueness like "a period well-suited to this" (that is the old failure), and do NOT fake a single exact day ("the exact day is April 3rd") — the honest precision is a range tied to a Dasha period.
+   - Still frame it as classical LIKELIHOOD, not a promise: "your strongest classical window for this is…", never "you will get rich in…". Rule 6 (no "you will / definitely / must") applies fully even with real dates.
+   - If the strongest windows are in the past, say so plainly and give the next comparable one even if it is years away — never invent a falsely-soon window to sound encouraging.
 
 Keep replies to 3-6 warm sentences. Stay in the conversation's context.`;
 }

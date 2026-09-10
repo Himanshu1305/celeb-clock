@@ -131,11 +131,49 @@ export function verifyReadingClaims(reading: Partial<GeneratedReading>, facts: R
     }
   }
 
+  // (6) DATE claims (Part D-Fix3): any "Month YYYY" the reading states must match a
+  // real computed activation-window/period endpoint. A fabricated date about
+  // someone's real future is worse than a vague answer — zero tolerance.
+  if (facts.timing) {
+    const valid = new Set(facts.timing.validMonths);
+    for (const section of READING_SECTION_KEYS) {
+      const text = reading[section] || '';
+      if (!text) continue;
+      for (const m of text.matchAll(MONTH_YEAR_RE)) {
+        const token = `${cap(m[1])} ${m[2]}`;
+        all.push({ section, type: 'date-claim', text: m[0], claimed: token, actual: valid.has(token) ? 'matches a computed window' : `NOT a computed window date (valid: ${[...valid].slice(0, 6).join(', ')}…)`, ok: valid.has(token) });
+      }
+    }
+  }
+
   // De-duplicate identical (section,type,claimed) checks.
   const seen = new Set<string>();
   const byClaim = all.filter(c => { const k = `${c.section}|${c.type}|${c.claimed}`; if (seen.has(k)) return false; seen.add(k); return true; });
   const wrong = byClaim.filter(c => !c.ok);
   return { checked: byClaim.length, correct: byClaim.filter(c => c.ok).length, wrong, byClaim };
+}
+
+const MONTH_NAMES = 'January|February|March|April|May|June|July|August|September|October|November|December';
+const MONTH_YEAR_RE = new RegExp(`\\b(${MONTH_NAMES})\\s+(\\d{4})\\b`, 'gi');
+
+export interface DateCheck { claimed: string; ok: boolean; }
+export interface TimingClaimResult { checked: number; correct: number; wrong: DateCheck[]; }
+/**
+ * Standalone date-accuracy guard for the CHAT (Part D-Fix3 / Part 4): every
+ * "Month YYYY" in the text must be a real computed window endpoint. Same
+ * zero-tolerance standard as the reading's date check, reusable outside the
+ * per-section reading structure.
+ */
+export function verifyTimingClaims(text: string, validMonths: string[]): TimingClaimResult {
+  const valid = new Set(validMonths);
+  const wrong: DateCheck[] = [];
+  let checked = 0;
+  for (const m of (text || '').matchAll(MONTH_YEAR_RE)) {
+    const token = `${m[1].charAt(0).toUpperCase()}${m[1].slice(1).toLowerCase()} ${m[2]}`;
+    checked++;
+    if (!valid.has(token)) wrong.push({ claimed: token, ok: false });
+  }
+  return { checked, correct: checked - wrong.length, wrong };
 }
 
 function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase(); }

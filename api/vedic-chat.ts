@@ -13,7 +13,9 @@ import {
   detectCrisis, crisisMatches, CRISIS_RESPONSE,
   detectHealthSymptom, HEALTH_REDIRECT_RESPONSE,
   buildChatSystemPrompt, scanChatResponse, UNSAFE_REPLY_FALLBACK,
+  detectTimingQuestion, classifyTimingCategory, deterministicTimingReply,
 } from '../src/lib/vedic/chatGuardrails.js';
+import { verifyTimingClaims } from '../src/lib/vedic/readingSpecificity.js';
 import { isOverLimit, limitReachedMessage } from '../src/lib/vedic/rateLimit.js';
 
 const GEMINI_MODEL = 'gemini-flash-latest';
@@ -76,14 +78,45 @@ export async function buildChatReply(facts, history, message, generate) {
     `SadeSati:${facts.doshas.sadeSati.active ? 'active' : 'none'}`,
   ].filter(Boolean);
 
+  // Timing questions ("when will I get rich/a job/married") now cite REAL dates,
+  // so they get a dedicated date-accuracy guard (Part D-Fix3) with the same
+  // zero-tolerance + retry discipline as the Part F safety guardrails: a date
+  // that isn't a real computed window is never shown — retry once, then fall
+  // back to a deterministic, guaranteed-correct answer built from the windows.
+  const isTiming = detectTimingQuestion(message);
+  const validMonths = facts.timing?.validMonths || [];
+  const SAFETY_FIX = 'Reminder: your previous reply used a forbidden word. Do NOT use "will", "must", "definitely", "guaranteed", "invest", "buy", or "sell" anywhere — rephrase as "tends to", "often", "may", "put time/care into". Never name assets or give a financial instruction.';
+  const DATE_FIX = 'Reminder: your previous reply stated a date that is NOT in the COMPUTED TIMING WINDOWS list. Re-answer using ONLY the exact planet periods and date ranges from that list — never invent, round, or shift a date.';
+
   try {
-    const raw = await generate(systemPrompt, contents);
-    const flags = scanChatResponse(raw);
-    if (flags.length > 0) {
-      // The model produced disallowed language — never show it.
-      return { reply: UNSAFE_REPLY_FALLBACK, crisis: false, degraded: false, sanitized: true, redFlags: flags, grounding };
+    let lastFlags: string[] = [], lastBadDates: string[] = [];
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const corrections: string[] = [];
+      if (attempt > 1) {
+        if (lastFlags.length) corrections.push(SAFETY_FIX);
+        if (lastBadDates.length) corrections.push(DATE_FIX);
+      }
+      const turns = corrections.length ? [...contents, { role: 'user', parts: [{ text: corrections.join(' ') }] }] : contents;
+      const raw = await generate(systemPrompt, turns);
+
+      // Safety scan (never show banned language) + date-accuracy scan (never show a
+      // fabricated date) run together, with the SAME retry discipline.
+      const flags = scanChatResponse(raw);
+      const badDates = (isTiming && validMonths.length) ? verifyTimingClaims(raw, validMonths).wrong.map(w => w.claimed) : [];
+      if (!flags.length && !badDates.length) {
+        return { reply: raw, crisis: false, degraded: false, sanitized: false, ...(isTiming ? { timingChecked: true } : {}), grounding };
+      }
+      lastFlags = flags; lastBadDates = badDates;
     }
-    return { reply: raw, crisis: false, degraded: false, sanitized: false, grounding };
+
+    // Exhausted retries. For a timing question, fall back to a deterministic,
+    // guaranteed-correct-and-safe answer built straight from the computed windows
+    // (so the user still gets their real dates). Otherwise, the safe fallback.
+    if (isTiming) {
+      const safe = deterministicTimingReply(facts.timing, classifyTimingCategory(message));
+      if (safe) return { reply: safe, crisis: false, degraded: false, sanitized: false, timingCorrected: true, grounding };
+    }
+    return { reply: UNSAFE_REPLY_FALLBACK, crisis: false, degraded: false, sanitized: true, redFlags: [...lastFlags, ...lastBadDates.map(d => `bad-date:${d}`)], grounding };
   } catch (e) {
     return {
       reply: "I'm having a little trouble reaching your chart right now — please try again in a moment. If it keeps happening, your full reading on the Kundali page is always available.",
