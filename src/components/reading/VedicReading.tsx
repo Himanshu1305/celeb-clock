@@ -112,6 +112,29 @@ function Section({ testid, title, children }: { testid: string; title: string; c
   );
 }
 
+/**
+ * Progressive disclosure (Part I.18): shows a 2-line preview by default with a
+ * "Read more" toggle. The FULL text is always present in the DOM (only visually
+ * clamped via CSS), so no content is lost and every accuracy/safety guarantee is
+ * unchanged — this is a presentation change only.
+ */
+function CollapsibleText({ text, section }: { text: string; section: string }) {
+  const [open, setOpen] = useState(false);
+  const clampStyle = open ? undefined : { display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden' };
+  const long = text.length > 140;
+  return (
+    <div data-testid={`reading-collapsible-${section}`}>
+      <p data-collapsed={!open && long} style={long ? clampStyle : undefined}>{text}</p>
+      {long && (
+        <button type="button" data-testid={`reading-more-${section}`} onClick={() => setOpen(o => !o)}
+                className="mt-1 text-xs font-medium text-indigo-600 hover:text-indigo-700 hover:underline">
+          {open ? 'Show less' : 'Read more'}
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function VedicReading({ payload }: { payload: ReadingPayload }) {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const { facts, reading, degraded } = payload;
@@ -155,7 +178,7 @@ export function VedicReading({ payload }: { payload: ReadingPayload }) {
         {LIFE_AREAS.map(area => (
           <Section key={area.key} testid={`reading-area-${area.key}`} title={area.label}>
             {reading ? (
-              <p>{reading[area.key]}</p>
+              <CollapsibleText text={reading[area.key]} section={area.key} />
             ) : (
               <p className="text-muted-foreground">
                 {area.label} guidance returns with the narrated reading. Your relevant placements are in the
@@ -167,15 +190,15 @@ export function VedicReading({ payload }: { payload: ReadingPayload }) {
       </div>
 
       <Section testid="reading-right-now" title="Right now for you">
-        <p>{reading ? reading.rightNow : fb.rightNow}</p>
+        {reading ? <CollapsibleText text={reading.rightNow} section="rightNow" /> : <p>{fb.rightNow}</p>}
       </Section>
 
       <Section testid="reading-doshas" title="Doshas — areas to be mindful of">
-        <p>{reading ? reading.doshas : fb.doshas}</p>
+        {reading ? <CollapsibleText text={reading.doshas} section="doshas" /> : <p>{fb.doshas}</p>}
       </Section>
 
       <Section testid="reading-divisional" title="Deeper chart layers">
-        <p>{reading ? reading.divisional : fb.divisional}</p>
+        {reading ? <CollapsibleText text={reading.divisional} section="divisional" /> : <p>{fb.divisional}</p>}
         <p data-testid="reading-d60-disclaimer" className="text-xs text-muted-foreground italic">
           {facts.divisional.d60Disclaimer}
         </p>

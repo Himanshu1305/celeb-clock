@@ -276,6 +276,30 @@ test('timing: real Dasha date ranges render fully in Money / Right-now / Relatio
   await page.screenshot({ path: 'e2e-reading/__screens__/12-timing-dates.png', fullPage: true });
 });
 
+// ── PART I.18: progressive disclosure — collapsed default + expand, no content lost
+test('progressive disclosure: sections collapse by default and expand on Read more', async ({ page }) => {
+  await page.route('**/api/kundali*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ...KUNDALI, _cache: 'miss' }) }));
+  await page.route('**/api/vedic-reading*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(readingPayload()) }));
+  await fillFormAndGenerate(page);
+  await expect(page.locator('[data-testid="vedic-reading"]')).toBeVisible();
+
+  // Career section: "Read more" present (collapsed by default), FULL text still in the DOM (not lost).
+  const moreBtn = page.locator('[data-testid="reading-more-career"]');
+  await expect(moreBtn).toBeVisible();
+  await expect(moreBtn).toHaveText('Read more');
+  const para = page.locator('[data-testid="reading-collapsible-career"] p');
+  await expect(para).toHaveAttribute('data-collapsed', 'true');
+  // full content present regardless of visual clamp (accuracy preserved)
+  await expect(page.locator('[data-testid="reading-area-career"]')).toContainText('Rahu');
+  await page.screenshot({ path: 'e2e-reading/__screens__/pi-18a-collapsed.png', fullPage: true });
+
+  // Expand → button flips, clamp removed.
+  await moreBtn.click();
+  await expect(moreBtn).toHaveText('Show less');
+  await expect(para).toHaveAttribute('data-collapsed', 'false');
+  await page.screenshot({ path: 'e2e-reading/__screens__/pi-18b-expanded.png', fullPage: true });
+});
+
 // ── EDGE FLOW: very old + very recent birth dates both render ─────────────────
 for (const [label, dob] of [['old-1901', '1901-06-10'], ['recent-2015', '2015-12-25']] as const) {
   test(`edge: birth date ${label} renders correctly`, async ({ page }) => {
