@@ -20,16 +20,18 @@ const KUNDALI = {
   requires_birth_time: false,
 };
 
+// Real, longer NEW-prompt reading text (reference chart) — so the render check
+// screenshots genuine chart-specific length, not a short placeholder.
 const READING_SECTIONS = {
-  snapshot: 'With your steady Capricorn rising, practical Virgo Moon, and the bright energy of Uttara Phalguni, you carry a natural blend of grounded determination and quiet generosity.',
-  career: 'Your professional life is shaped by a drive to bring balance and thoughtful communication into your work. This period is traditionally associated with adaptability and steady, methodical progress.',
-  relationships: 'In partnership, you tend to show care through practical devotion and attentive listening. A calm, supportive environment helps your connections deepen over time.',
-  health: 'Your wellbeing tends to respond best to steady daily rhythms, wholesome nourishment, and gentle, unhurried routines. Making space for rest can help restore your vitality.',
-  money: 'Your natural inclination often leans toward prudence and long-term security. A relaxed, mindful relationship with resources tends to keep you grounded.',
-  family: 'Home and family life often serve as a space for quiet reflection and mutual support. Creating a peaceful, organised sanctuary can give you emotional grounding.',
-  rightNow: 'You are currently moving through a Rahu period with a Moon sub-period, an interval traditionally associated with inner reflection and shifting emotional landscapes.',
-  doshas: 'Your chart is reassuringly free from major intense patterns such as Mangal Dosha or Kaal Sarp. Traditional astrology views this as a calm foundation — simply mindful living is the gentle suggestion.',
-  divisional: 'A look into your deeper layers suggests inner resilience that strengthens with maturity. In one classical reading some traditions suggest deeper transformations over time — one of several perspectives.',
+  snapshot: `With your rising sign (Lagna) in Makara and its ruler Saturn resting in your 12th house in Dhanu, your baseline nature leans toward quiet introspection, patience, and working behind the scenes. Your Moon sits in Kanya within the solar-ruled Nakshatra of Uttara Phalguni (pada 2), pairing this grounded Makara endurance with an analytical, service-oriented mindset and an innate urge to bring order to your environment.`,
+  career: `Your 10th house (career) falls in balanced Tula, hosting both Sun (with an indicative strong Shadbala of 446 virupas) and Mercury, while its ruling planet Venus sits in the 9th house in Kanya with moderate strength (310 virupas). Because 10th lord Venus connects with 9th lord Mercury in the 10th house, professional milestones often tie to advisory roles, ethics, and higher learning. Your current major period lord Rahu sits in your 2nd house in Kumbha, linking recent public efforts to building a distinctive voice.`,
+  relationships: `Partnership is governed by your 7th house in nurturing Karka, whose ruler Moon is placed in analytical Kanya in your 9th house alongside Venus. Venus holds moderate strength in Kanya but gains dignity in its own Navamsa sign of Vrishabha, while the Moon moves through Makara in the Navamsa. Mars rests in the 3rd house in Meena, so Mangal Dosha is entirely absent from your relationship dynamics.`,
+  health: `Your 6th house (daily routines and resilience) is Mithuna, governed by Mercury located in your 10th house in Tula. Because your Lagna ruler Saturn shows solid indicative strength (344 virupas) from the restful 12th house in Dhanu, your vitality relies on intentional solitude, unhurried sleep, and structured downtime. Keeping regular hours and pacing mental activity helps your natural stamina stay balanced.`,
+  money: `Financial matters are shaped by your 2nd house of resources in Kumbha, ruled by Saturn in the 12th house, with Rahu also in the 2nd house. Your 11th house of gains is Vrischika, whose lord Mars is in your 3rd house in Meena, while a strong retrograde Jupiter (440 virupas) sits in your 5th house in Vrishabha. Income tends to come through self-directed effort, with disciplined saving habits smoothing occasional impulses.`,
+  family: `Your 4th house of domestic roots is Mesha, ruled by Mars in Meena in your 3rd house, fostering an active, candid home life. The 9th house of paternal influence is Kanya, ruled by Mercury placed in the 10th house in Tula, with both Moon and Venus in the 9th house — a family foundation that values craftsmanship, integrity, and shared moral principles.`,
+  rightNow: `You are navigating the major period of Rahu with the sub-period of the Moon. Rahu sits in your 2nd house in Kumbha (and Meena in the Navamsa), turning focus toward speech, family affairs, and resource management. Because the Moon is your 7th lord and resides in your 9th house in Kanya with strong indicative Shadbala (368 virupas), this chapter often highlights joint initiatives and growth through study or travel.`,
+  doshas: `You can feel reassured: Mangal Dosha is not present because Mars occupies your 3rd house in Meena rather than relationship-sensitive houses. Kaal Sarp is not formed, and Saturn is not casting Sade Sati over your Kanya Moon. The gentle area to stay mindful of is simply Rahu in your 2nd house of Kumbha, which invites care around speech and everyday balance.`,
+  divisional: `In your Navamsa (D9) chart, your Sun shifts into Meena, your Moon is in Makara, and Venus returns to its own sign of Vrishabha. In the Dasamsa (D10 career chart) the Sun is exalted in Mesha, reflecting strong executive potential. In one classical interpretation of the subtle Shashtiamsa (D60), your Moon resides in Vrischika — a tentative glimpse of quiet emotional depth.`,
 };
 
 const FACTS = {
@@ -73,12 +75,12 @@ test('positive: full reading renders all 5 sections with real text + advanced to
 
   const reading = page.locator('[data-testid="vedic-reading"]');
   await expect(reading).toBeVisible();
-  await expect(page.locator('[data-testid="reading-snapshot"]')).toContainText('grounded determination');
+  await expect(page.locator('[data-testid="reading-snapshot"]')).toContainText('Makara');
   for (const area of ['career', 'relationships', 'health', 'money', 'family']) {
     await expect(page.locator(`[data-testid="reading-area-${area}"]`)).toBeVisible();
   }
-  await expect(page.locator('[data-testid="reading-right-now"]')).toContainText('Rahu period');
-  await expect(page.locator('[data-testid="reading-doshas"]')).toContainText('calm foundation');
+  await expect(page.locator('[data-testid="reading-right-now"]')).toContainText('Rahu');
+  await expect(page.locator('[data-testid="reading-doshas"]')).toContainText('Mangal Dosha is not present');
   await expect(page.locator('[data-testid="reading-d60-disclaimer"]')).toContainText('one interpretation');
   // no stuck spinner, no empty
   await expect(page.locator('[data-testid="reading-loading"]')).toHaveCount(0);

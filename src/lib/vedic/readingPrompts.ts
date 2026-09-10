@@ -1,137 +1,251 @@
 /**
  * Reading/prediction prompt construction, fact extraction, and content-safety
- * scanning for the Vedic reading UX (Part D).
+ * scanning for the Vedic reading UX (Part D; specificity overhaul in Part D-Fix).
  *
- * Kept SEPARATE from the celebrity-bio and longevity-coach prompts (different
- * purpose/tone), but follows the coach's proven graceful-degradation shape.
- *
- * Confidence handling (from the Part B confidence table): D60, Sthana Bala and
- * Chesta Bala are lower-confidence and MUST be described with visibly softer
- * language than the 100%-validated Rashi/Nakshatra/Lagna/Dasha/Mangal fields.
+ * Part D-Fix goal: readings must be genuinely chart-SPECIFIC (name the actual
+ * houses, house-lords, planet placements, Navamsa signs, Shadbala strength and
+ * current Dasha-lord placement for THIS chart) — not generic astrology prose —
+ * while keeping every Part D safety/tone rule. This file now:
+ *   1. extracts the full validated data set (house lords, all 9 planets incl.
+ *      combust + Navamsa + Shadbala category, Dasha-lord placement), and
+ *   2. builds prompts that REQUIRE specific facts per section + forbid generic
+ *      phrasing. The anti-hallucination + specificity CHECKS live in
+ *      readingSpecificity.ts (paired: specific but WRONG is worse than generic).
  */
 import type { BirthChartResult } from './calculateBirthChart';
+import { RASHI_NAMES } from './engine/vedicEngine';
+import { SIGN_LORDS } from './engine/sthanaBala';
+
+export interface PlanetFact {
+  planet: string; sign: string; house: number;
+  retrograde: boolean; combust: boolean; navamsa: string;
+  shadbala?: { total: number; category: 'strong' | 'moderate' | 'weak' };
+}
+export interface HouseLordFact {
+  house: number; sign: string; lord: string; lordSign: string; lordHouse: number;
+}
 
 export interface ReadingFacts {
   rashi: string;
   nakshatra: { name: string; pada: number; lord: string };
   lagna: string;
   dasha: { maha: string; antar: string } | null;
+  /** All 9 grahas — sign, house, retrograde, combust, Navamsa, Shadbala. */
+  planets: PlanetFact[];
+  /** Back-compat subset for the existing UI (VedicReading advanced/degraded view). */
   placements: Array<{ planet: string; sign: string; house: number; retrograde: boolean }>;
+  /** Whole-sign house lords for the houses the reading references. */
+  houseLords: HouseLordFact[];
+  /** The current Mahadasha lord's own placement + strength in THIS chart. */
+  dashaLord: { planet: string; sign: string; house: number; shadbalaCategory?: string } | null;
   doshas: {
-    mangal: { present: boolean; severityLabel: string };
+    mangal: { present: boolean; severityLabel: string; cause: string | null };
     kaalSarp: { present: boolean; isPartial: boolean; type: string | null };
     sadeSati: { active: boolean; phase: string | null };
   };
-  divisional: { d9Moon: string; d10Sun: string; d60Moon: string; d60Disclaimer: string };
+  divisional: { d9: Record<string, string>; d10: Record<string, string>; d60: Record<string, string>; d10Sun: string; d60Moon: string; d60Disclaimer: string; navamsaMoon: string; navamsaVenus: string };
   warnings: Array<{ code: string; message: string }>;
-  /** Which chart fields fed which section — stored alongside the reading for QA. */
   fieldsUsed: Record<string, string[]>;
 }
 
-/** Extract the plain, confidence-aware facts that feed both the prompt and the
- * deterministic (non-AI) fallback display. */
+// Classical minimum required Shadbala (Ishta) in Virupas (Rupas × 60). Used only
+// to bucket strong/moderate/weak. Shadbala is an INDICATIVE score (Part B
+// confidence table: ~94% Sthana, ~80% Chesta), so the prompt must hedge it.
+const REQUIRED_SHADBALA: Record<string, number> = { Sun: 300, Moon: 360, Mars: 300, Mercury: 420, Jupiter: 390, Venus: 330, Saturn: 300 };
+function shadbalaCategory(planet: string, total: number): 'strong' | 'moderate' | 'weak' {
+  const req = REQUIRED_SHADBALA[planet];
+  if (!req) return 'moderate';
+  if (total >= req) return 'strong';
+  if (total >= req * 0.75) return 'moderate';
+  return 'weak';
+}
+
+const HOUSES_OF_INTEREST = [1, 2, 4, 6, 7, 9, 10, 11];
+
+/** Extract the full, confidence-aware fact set that feeds the prompt, the
+ * accuracy checker, and the deterministic fallback display. */
 export function extractReadingFacts(chart: BirthChartResult): ReadingFacts {
-  const placements = chart.planets
-    .filter(p => p.name !== 'Rahu' && p.name !== 'Ketu')
-    .map(p => ({ planet: p.name, sign: p.sign, house: p.house, retrograde: p.retrograde }));
+  const byName: Record<string, BirthChartResult['planets'][number]> = {};
+  for (const p of chart.planets) byName[p.name] = p;
+
+  const planets: PlanetFact[] = chart.planets.map(p => {
+    const sb = chart.shadbala?.[p.name];
+    return {
+      planet: p.name, sign: p.sign, house: p.house,
+      retrograde: p.retrograde, combust: !!p.combust, navamsa: p.navamsaSign,
+      shadbala: sb ? { total: Math.round(sb.total), category: shadbalaCategory(p.name, sb.total) } : undefined,
+    };
+  });
+
+  const lagnaIdx = chart.lagna.rashiIndex; // 0-based
+  const houseLords: HouseLordFact[] = HOUSES_OF_INTEREST.map(h => {
+    const signIdx = (lagnaIdx + (h - 1)) % 12;
+    const sign = RASHI_NAMES[signIdx];
+    const lord = SIGN_LORDS[signIdx];
+    const lp = byName[lord];
+    return { house: h, sign, lord, lordSign: lp ? lp.sign : sign, lordHouse: lp ? lp.house : h };
+  });
+
+  const dashaMaha = chart.currentDasha?.mahadasha || null;
+  const dashaLordPlanet = dashaMaha ? byName[dashaMaha] : undefined;
+  const dashaLordSb = dashaMaha ? chart.shadbala?.[dashaMaha] : undefined;
+  const dashaLord = dashaLordPlanet
+    ? { planet: dashaMaha!, sign: dashaLordPlanet.sign, house: dashaLordPlanet.house, shadbalaCategory: dashaLordSb ? shadbalaCategory(dashaMaha!, dashaLordSb.total) : undefined }
+    : null;
+
+  const marsFact = byName['Mars'];
+  const mangalCause = chart.doshas.mangalDosha.hasDosha && marsFact ? `Mars in your ${ordinal(marsFact.house)} house` : null;
+
   return {
     rashi: chart.rashi,
     nakshatra: { name: chart.nakshatra.nakshatra, pada: chart.nakshatra.pada, lord: chart.nakshatra.lord },
     lagna: chart.lagna.sign,
     dasha: chart.currentDasha ? { maha: chart.currentDasha.mahadasha, antar: chart.currentDasha.antardasha } : null,
-    placements,
+    planets,
+    placements: planets.filter(p => p.planet !== 'Rahu' && p.planet !== 'Ketu').map(p => ({ planet: p.planet, sign: p.sign, house: p.house, retrograde: p.retrograde })),
+    houseLords,
+    dashaLord,
     doshas: {
-      mangal: { present: chart.doshas.mangalDosha.hasDosha, severityLabel: chart.doshas.mangalDosha.severityLabel },
+      mangal: { present: chart.doshas.mangalDosha.hasDosha, severityLabel: chart.doshas.mangalDosha.severityLabel, cause: mangalCause },
       kaalSarp: { present: chart.doshas.kaalSarp.present, isPartial: chart.doshas.kaalSarp.isPartial, type: chart.doshas.kaalSarp.type },
       sadeSati: { active: chart.doshas.sadeSati.active, phase: chart.doshas.sadeSati.phase },
     },
     divisional: {
-      d9Moon: chart.divisionalCharts.d9.Moon,
+      d9: chart.divisionalCharts.d9,
+      d10: chart.divisionalCharts.d10,
+      d60: chart.divisionalCharts.d60,
       d10Sun: chart.divisionalCharts.d10.Sun,
       d60Moon: chart.divisionalCharts.d60.Moon,
       d60Disclaimer: chart.divisionalCharts.d60Disclaimer,
+      navamsaMoon: chart.divisionalCharts.d9.Moon,
+      navamsaVenus: chart.divisionalCharts.d9.Venus,
     },
     warnings: chart.warnings.map(w => ({ code: w.code, message: w.message })),
     fieldsUsed: {
-      snapshot: ['rashi', 'nakshatra', 'lagna'],
-      career: ['Sun/Saturn placements', 'current Dasha'],
-      relationships: ['Venus/Mars placements', 'Mangal Dosha'],
-      health: ['Lagna', 'Moon', 'Sade Sati'],
-      money: ['Jupiter/Mercury placements', 'current Dasha'],
-      family: ['Moon placement', '4th-house context'],
-      rightNow: ['current Mahadasha', 'current Antardasha'],
-      doshasSection: ['Mangal Dosha severity', 'Kaal Sarp', 'Sade Sati'],
-      divisional: ['Navamsa (D9)', 'Dasamsa (D10)', 'Shashtiamsa (D60, low-confidence)'],
+      snapshot: ['Lagna + lord placement', 'Moon sign', 'Nakshatra'],
+      career: ['10th house sign + lord placement', 'Sun/Mercury/Saturn', 'current Dasha'],
+      relationships: ['7th house sign + lord', 'Venus placement + Shadbala', 'Navamsa Venus/Moon'],
+      health: ['6th house sign + lord', 'Lagna lord strength', 'planets in health houses'],
+      money: ['2nd + 11th house signs + lords', 'Jupiter placement'],
+      family: ['4th house (mother/home) sign + lord', '9th house (father/fortune) sign + lord'],
+      rightNow: ['current Dasha lord house + sign + Shadbala'],
+      doshasSection: ['dosha-causing planet + house', 'Kaal Sarp', 'Sade Sati'],
+      divisional: ['Navamsa (D9) placements', 'Dasamsa (D10)', 'Shashtiamsa (D60, low-confidence)'],
     },
   };
 }
 
-/** The system prompt — the safety + tone contract for every reading. */
-export function buildReadingSystemPrompt(): string {
-  return `You are a warm, grounded Vedic astrology writer creating a personal reading for one person from their birth chart. You write in plain, everyday English for someone who knows nothing about astrology jargon.
-
-ABSOLUTE RULES (a response that breaks any of these is unusable):
-- Never predict the future as certain. Never use the words "will", "definitely", "must", or "guaranteed" as predictions. Instead use "this period is traditionally associated with", "may", "tends to", "often", "you might find".
-- No medical claims or diagnoses of any kind. Never name diseases or conditions. For health, speak only in gentle, general wellbeing terms (rest, balance, routine).
-- No financial advice or instructions. Never say "invest", "buy", or "sell", and never name assets. For money, speak about general habits and mindset only.
-- Doshas are NOT curses or omens. Frame any dosha calmly as "an area to be mindful of", with a constructive, de-stigmatising tone. Dosha stigma causes real harm (e.g. in marriage) — never alarm the reader.
-- Organise everything by life area (Career, Relationships, Health, Money, Family) in plain language. Never use chart jargon like "9th house", "lord", "exalted" in the output.
-- Warm and constructive even for difficult placements — never fatalistic.
-
-CONFIDENCE — softer language for less-certain parts:
-- Rashi, Nakshatra, Lagna and the current planetary period (Dasha) are reliable — you may state them plainly.
-- The Shashtiamsa (D60) divisional chart and any "strength" scores are ONE of several classical interpretations and are less certain — when you mention them, explicitly hedge ("in one classical reading…", "some traditions suggest…").`;
+function ordinal(n: number): string {
+  const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
-/** The user prompt — the person's chart facts + what each section should cover. */
+// ── Prompt building ──────────────────────────────────────────────────────────
+
+/** The system prompt — safety + tone contract AND the specificity contract. */
+export function buildReadingSystemPrompt(): string {
+  return `You are a skilled Vedic astrologer writing a genuinely PERSONAL reading from one specific birth chart. Your writing is warm and plain-spoken, but it is grounded in this exact chart's real placements — not generic astrology that could apply to anyone.
+
+THE SPECIFICITY CONTRACT (this is the point of the reading):
+- Every substantive sentence must reference a SPECIFIC fact from the chart data provided: a named planet, a house (e.g. "your 10th house"), a sign, a house-lord placement, a Navamsa sign, a Shadbala strength, or the current Dasha lord's placement.
+- Do NOT write sentences that would be equally true for a different birth chart. Avoid generic phrases like "you may feel drawn toward", "this is a time for", "you value loyalty" UNLESS you immediately tie them to a specific placement ("...because your 7th lord Venus sits in Kanya").
+- SYNTHESIS, not listing: connect at least two chart elements to each other and to a real-world implication — e.g. "your 10th lord Mars sits in your 1st house, so career progress tends to come through personal drive and direct action rather than diplomacy" — not "Mars is in the 1st house" stated in isolation.
+- Name houses/planets/signs in the output. Briefly gloss jargon in plain words the first time (e.g. "your 10th house (career)"), so a beginner follows along — but DO name the real placement.
+- CRITICAL — accuracy over fluency: only state placements that are actually in the data below. Never invent or guess a planet's house or sign. A confidently wrong placement is worse than a cautious one. If you're unsure, describe only what the data states.
+
+ABSOLUTE SAFETY RULES (unchanged — a response that breaks any is unusable):
+- BANNED WORDS — never output any of these, even once, in ANY sense: "will", "must", "definitely", "guaranteed", "invest", "buy", "sell", "disease", "illness", "diagnosis", "condition", or any named ailment. Substitutions: "will"→"tends to"/"often"; "invest"→"put time/care into"; "disease/illness/condition"→"wellbeing"/"resilience"/"vitality".
+- Never predict the future as certain. Use "tends to", "traditionally associated with", "may", "often".
+- No medical claims or diagnoses. For health, name the real chart placements (6th house, Lagna lord strength) but speak ONLY to general wellbeing, daily rhythm, rest and resilience — never any ailment, and never the banned health words above.
+- No financial advice/instructions. Never say "invest", "buy", or "sell", and never name assets. Describe money HABITS and the real 2nd/11th-house placements only.
+- Doshas are NOT curses. Name the specific cause (which planet, which house) but frame calmly as "an area to be mindful of", de-stigmatising and remedy-aware. Never alarm.
+- Warm and constructive even for difficult or weak placements.
+
+CONFIDENCE — these layers are less certain, so use softer language and hedge them explicitly:
+- Rashi, Nakshatra, Lagna, house placements and the current Dasha are reliable — state them plainly.
+- Shadbala "strength" and the Shashtiamsa (D60) are INDICATIVE, one of several classical methods — when you use them, hedge ("its indicative strength is…", "in one classical reading…").`;
+}
+
+/** The user prompt — the full chart data + exactly which facts each section must use. */
 export function buildReadingUserPrompt(f: ReadingFacts): string {
-  const placements = f.placements.map(p => `${p.planet} in ${p.sign} (house ${p.house})${p.retrograde ? ', retrograde' : ''}`).join('; ');
-  const dasha = f.dasha ? `${f.dasha.maha} main period, ${f.dasha.antar} sub-period` : 'not available';
+  const planetLine = f.planets.map(p => {
+    const bits = [`${p.planet} in ${p.sign} (${ordinal(p.house)} house)`];
+    if (p.retrograde) bits.push('retrograde');
+    if (p.combust) bits.push('combust');
+    bits.push(`Navamsa ${p.navamsa}`);
+    if (p.shadbala) bits.push(`Shadbala ${p.shadbala.category} (${p.shadbala.total} virupas)`);
+    return '  - ' + bits.join(', ');
+  }).join('\n');
+
+  const lordLine = f.houseLords.map(h =>
+    `  - ${ordinal(h.house)} house is ${h.sign}, ruled by ${h.lord}; ${h.lord} sits in ${h.lordSign} (${ordinal(h.lordHouse)} house)`
+  ).join('\n');
+
+  const dashaLord = f.dashaLord
+    ? `${f.dashaLord.planet} (the current main-period lord) sits in ${f.dashaLord.sign}, ${ordinal(f.dashaLord.house)} house${f.dashaLord.shadbalaCategory ? `, indicative Shadbala strength: ${f.dashaLord.shadbalaCategory}` : ''}`
+    : 'not available (birth time needed)';
+
   const doshaLines = [
-    `Mangal Dosha: ${f.doshas.mangal.present ? `present (${f.doshas.mangal.severityLabel})` : 'not present'}`,
+    `Mangal Dosha: ${f.doshas.mangal.present ? `present (${f.doshas.mangal.severityLabel})${f.doshas.mangal.cause ? `, caused by ${f.doshas.mangal.cause}` : ''}` : 'not present'}`,
     `Kaal Sarp: ${f.doshas.kaalSarp.present ? `${f.doshas.kaalSarp.isPartial ? 'partial' : 'full'} (${f.doshas.kaalSarp.type})` : 'not present'}`,
     `Sade Sati: ${f.doshas.sadeSati.active ? `active — ${f.doshas.sadeSati.phase}` : 'not active'}`,
   ].join('; ');
+
+  const navamsaLine = Object.entries(f.divisional.d9).map(([pl, sg]) => `${pl}→${sg}`).join(', ');
   const polar = f.warnings.some(w => w.code === 'POLAR_LATITUDE')
-    ? '\nIMPORTANT: This birth is at an extreme (polar) latitude where the rising sign and houses are astronomically unreliable. Gently note in the snapshot that the ascendant/house-based parts are approximate for this birth.'
+    ? '\nIMPORTANT: extreme (polar) latitude — the rising sign and houses are astronomically unreliable here; note in the snapshot that ascendant/house parts are approximate.'
     : '';
 
-  return `Here is the person's Vedic birth chart (sidereal / Lahiri):
+  return `THIS PERSON'S BIRTH CHART (sidereal / Lahiri). Use ONLY these facts; do not invent placements.
+
+Core:
 - Moon sign (Rashi): ${f.rashi}
 - Birth star (Nakshatra): ${f.nakshatra.name}, pada ${f.nakshatra.pada} (ruled by ${f.nakshatra.lord})
 - Rising sign (Lagna): ${f.lagna}
-- Current planetary period: ${dasha}
-- Planet placements: ${placements}
-- Doshas: ${doshaLines}
-- Divisional highlights: Navamsa (D9) Moon in ${f.divisional.d9Moon}; Dasamsa (D10) Sun in ${f.divisional.d10Sun}; Shashtiamsa (D60) Moon in ${f.divisional.d60Moon} [D60 is one of several classical methods].${polar}
+- Current planetary period: ${f.dasha ? `${f.dasha.maha} main / ${f.dasha.antar} sub` : 'not available'}
+- Current period lord placement: ${dashaLord}
 
-Write the reading as JSON with exactly these fields:
-- "snapshot": 2-3 warm sentences introducing them from their Moon sign, birth star and rising sign.
-- "career": one short paragraph on work/vocation, grounded in the placements and current period.
-- "relationships": one short paragraph on connection and partnership (fold in the Mangal Dosha calmly if present).
-- "health": one short paragraph on general wellbeing and routine — no medical terms.
-- "money": one short paragraph on money habits and mindset — no financial instructions.
-- "family": one short paragraph on home and family life.
-- "rightNow": one short paragraph titled to the current period, describing what this ${f.dasha ? f.dasha.maha : 'current'} period is traditionally associated with, in plain language.
-- "doshas": one calm, de-stigmatising paragraph explaining any doshas present and gentle traditional remedies/context; if none are present, say so reassuringly.
-- "divisional": one short paragraph on what the Navamsa and Dasamsa add, and mention the D60 only with an explicit "one interpretation" hedge.
+Planets (all nine):
+${planetLine}
 
-Keep each field to 2-5 sentences. Return ONLY the JSON object.`;
+House lords (whole-sign):
+${lordLine}
+
+Navamsa (D9) signs: ${navamsaLine}
+Dasamsa (D10) Sun: ${f.divisional.d10Sun}; Shashtiamsa (D60) Moon: ${f.divisional.d60Moon} [D60 = one of several classical methods].
+Doshas: ${doshaLines}${polar}
+
+Write the reading as JSON with exactly these fields. EACH must cite the specific facts listed for it:
+- "snapshot": 2-3 sentences from the Lagna (${f.lagna}) + its lord's placement, the Moon sign (${f.rashi}) and Nakshatra. Name them.
+- "career": MUST reference the 10th house sign AND its ruling planet's placement (house/sign/strength), AND at least one of Sun/Mercury/Saturn by its real placement, AND connect to the current Dasha lord if relevant. Draw a real-world implication.
+- "relationships": MUST reference the 7th house sign and its lord's placement, Venus's placement (sign/house/strength), and the Navamsa sign of Venus or Moon. Fold in Mangal Dosha calmly IF present, naming its cause.
+- "health": MUST reference the 6th house sign and lord, the Lagna lord's strength, and any planet in a health-relevant house — but describe the 6th house as daily routines, service, habits and resilience, speaking ONLY to general wellbeing, rest and energy. Never use "disease", "illness", "condition" or any ailment name.
+- "money": MUST reference the 2nd and 11th house signs and their lords' placements, and Jupiter's placement. Habits/mindset only.
+- "family": MUST reference the 4th house (home/mother) and 9th house (father/fortune) signs and their lords' placements.
+- "rightNow": MUST describe the CURRENT Dasha lord (${f.dasha ? f.dasha.maha : 'current'}) by its actual house, sign and indicative Shadbala strength in THIS chart — not a textbook description of that planet.
+- "doshas": name the specific planet/house behind any dosha present (or reassure plainly if none), calm and de-stigmatising.
+- "divisional": name at least TWO real Navamsa (D9) placements by sign (from the Navamsa list above), plus the Dasamsa; mention D60 only with a "one interpretation" hedge.
+
+Every sentence must be traceable to a fact above. Do not write anything equally true of another chart. Keep each field to 3-5 sentences. Return ONLY the JSON object.`;
 }
+
+/** Appended to the prompt on a retry when the first output was too generic or wrong. */
+export const STRONGER_REMINDER = `
+
+RETRY — the previous attempt was too generic or named a placement not in the data. This time: in EVERY section, name at least one specific house number, house-lord, planet placement or Navamsa/Shadbala value FROM THE DATA ABOVE, and do not state any placement that is not listed above.`;
+
+/** Appended on a retry when the previous attempt used a forbidden word. */
+export const SAFETY_REMINDER = `
+
+RETRY — the previous attempt used a forbidden word. Do NOT use "will", "must", "definitely", "guaranteed", "invest", "buy", or "sell" ANYWHERE, even in harmless senses (write "put time into" not "invest time", "tends to bring" not "will bring"). Do not name any disease or medical condition.`;
 
 /** JSON response schema for Gemini structured output. */
 export const READING_RESPONSE_SCHEMA = {
   type: 'object',
   properties: {
-    snapshot: { type: 'string' },
-    career: { type: 'string' },
-    relationships: { type: 'string' },
-    health: { type: 'string' },
-    money: { type: 'string' },
-    family: { type: 'string' },
-    rightNow: { type: 'string' },
-    doshas: { type: 'string' },
-    divisional: { type: 'string' },
+    snapshot: { type: 'string' }, career: { type: 'string' }, relationships: { type: 'string' },
+    health: { type: 'string' }, money: { type: 'string' }, family: { type: 'string' },
+    rightNow: { type: 'string' }, doshas: { type: 'string' }, divisional: { type: 'string' },
   },
   required: ['snapshot', 'career', 'relationships', 'health', 'money', 'family', 'rightNow', 'doshas', 'divisional'],
 } as const;
@@ -140,11 +254,7 @@ export const READING_SECTION_KEYS = ['snapshot', 'career', 'relationships', 'hea
 export type ReadingSectionKey = typeof READING_SECTION_KEYS[number];
 export type GeneratedReading = Record<ReadingSectionKey, string>;
 
-/**
- * Content-safety scanner. Returns the list of red-flag phrases found in the text
- * (empty = clean). Used both server-side (reject/degrade unsafe AI output) and
- * in tests (scan real generated text). Word-boundary matched, case-insensitive.
- */
+// ── Content-safety scanner (unchanged from Part D) ───────────────────────────
 const RED_FLAG_PATTERNS: Array<{ label: string; re: RegExp }> = [
   { label: 'will (absolute prediction)', re: /\bwill\b/i },
   { label: 'definitely', re: /\bdefinitely\b/i },
@@ -161,7 +271,6 @@ export function scanForRedFlags(text: string): string[] {
   return RED_FLAG_PATTERNS.filter(p => p.re.test(text)).map(p => p.label);
 }
 
-/** Scan a whole generated reading (all sections). Returns per-section flags. */
 export function scanReadingForRedFlags(reading: Partial<GeneratedReading>): Record<string, string[]> {
   const out: Record<string, string[]> = {};
   for (const key of READING_SECTION_KEYS) {

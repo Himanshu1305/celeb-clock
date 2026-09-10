@@ -9,10 +9,13 @@ import {
   extractReadingFacts,
   buildReadingSystemPrompt,
   buildReadingUserPrompt,
+  STRONGER_REMINDER,
+  SAFETY_REMINDER,
   READING_RESPONSE_SCHEMA,
   READING_SECTION_KEYS,
   scanReadingForRedFlags,
 } from '../src/lib/vedic/readingPrompts.js';
+import { verifyReadingClaims, scoreReadingSpecificity } from '../src/lib/vedic/readingSpecificity.js';
 
 const GEMINI_MODEL = 'gemini-flash-latest';
 
@@ -67,7 +70,7 @@ async function generateReading(systemPrompt, userPrompt) {
       contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
       generationConfig: {
         maxOutputTokens: 2048,
-        temperature: 0.7,
+        temperature: 0.6,
         responseMimeType: 'application/json',
         responseSchema: READING_RESPONSE_SCHEMA,
         // gemini-flash-latest is a thinking model; without this it spends the
@@ -106,29 +109,83 @@ export interface ReadingResult {
   degraded: boolean;
   degradedReason?: string;
   redFlags?: Record<string, string[]>;
+  /** Anti-hallucination results: claims checked/correct + any wrong claim vs the real value. */
+  accuracy?: { checked: number; correct: number; wrong: Array<{ section: string; claimed: string; actual: string }> };
+  /** Specificity results: which sections still read generic (if any). */
+  specificity?: { failing: string[] };
+  /** Set when shipped despite low specificity after retries (flagged, not silently shipped). */
+  lowSpecificity?: boolean;
+  attempts?: number;
   prompt: { systemPrompt: string; userPrompt: string };
   model?: string;
   fieldsUsed?: Record<string, string[]>;
 }
 
-// Exposed for reuse/testing: given a chart-facts object, produce the full
-// response payload. `generate` is injected so tests can supply a fake Gemini.
+// Exposed for reuse/testing: given a chart-facts object, produce the full payload.
+// `generate` is injected so tests can supply a fake Gemini. Runs up to 2 attempts,
+// gating on safety (never ship flagged text), accuracy (never ship WRONG chart
+// facts — retry, then degrade), and specificity (retry; if still generic, ship but
+// flag — generic is safe, just low quality).
+const MAX_ATTEMPTS = 3;
+
 export async function buildReadingPayload(facts, generate): Promise<ReadingResult> {
   const systemPrompt = buildReadingSystemPrompt();
-  const userPrompt = buildReadingUserPrompt(facts);
+  const baseUserPrompt = buildReadingUserPrompt(facts);
   const base = { facts, source: 'local', warnings: facts.warnings };
-  try {
-    const reading = await generate(systemPrompt, userPrompt);
-    const flags = scanReadingForRedFlags(reading);
-    if (Object.keys(flags).length > 0) {
-      // The model emitted disallowed language — never show it. Degrade to facts.
-      return { ...base, reading: null, degraded: true, degradedReason: 'safety', redFlags: flags, prompt: { systemPrompt, userPrompt } };
+  const pack = (a: ReturnType<typeof verifyReadingClaims>) => ({ checked: a.checked, correct: a.correct, wrong: a.wrong.map(w => ({ section: w.section, claimed: w.claimed, actual: w.actual })) });
+
+  // The best safety-clean + accuracy-clean reading seen so far (may be low-specificity).
+  let best: { reading: any; accuracy: ReturnType<typeof verifyReadingClaims>; specificity: ReturnType<typeof scoreReadingSpecificity> } | null = null;
+  let sawSafety = false, sawAccuracyWrong = false;
+  let lastFlags: Record<string, string[]> = {};
+  let lastAccuracy: ReturnType<typeof verifyReadingClaims> | null = null;
+  let lastSpecificity: ReturnType<typeof scoreReadingSpecificity> | null = null;
+  let needSafety = false, needSpecificity = false;
+  let attempt = 0;
+
+  for (attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    let userPrompt = baseUserPrompt;
+    if (needSpecificity) userPrompt += STRONGER_REMINDER;
+    if (needSafety) userPrompt += SAFETY_REMINDER;
+
+    let reading;
+    try {
+      reading = await generate(systemPrompt, userPrompt);
+    } catch (e) {
+      if (best) break; // we already have something shippable
+      return { ...base, reading: null, degraded: true, degradedReason: String(e?.message || e), attempts: attempt, prompt: { systemPrompt, userPrompt } };
     }
-    return { ...base, reading, degraded: false, prompt: { systemPrompt, userPrompt }, model: GEMINI_MODEL, fieldsUsed: facts.fieldsUsed };
-  } catch (e) {
-    // AI unavailable/blocked/malformed → deterministic facts only, no crash.
-    return { ...base, reading: null, degraded: true, degradedReason: String(e?.message || e), prompt: { systemPrompt, userPrompt } };
+
+    // Safety — never ship flagged language. Retry rather than immediately fail.
+    const flags = scanReadingForRedFlags(reading);
+    if (Object.keys(flags).length > 0) { sawSafety = true; needSafety = true; lastFlags = flags; continue; }
+
+    // Accuracy — never ship a WRONG placement. Retry.
+    const accuracy = verifyReadingClaims(reading, facts);
+    const specificity = scoreReadingSpecificity(reading, facts);
+    lastAccuracy = accuracy; lastSpecificity = specificity;
+    if (accuracy.wrong.length > 0) { sawAccuracyWrong = true; needSpecificity = true; continue; }
+
+    // Safety-clean + accuracy-clean: this is shippable. Keep it as best.
+    best = { reading, accuracy, specificity };
+    if (specificity.overallPass) {
+      return { ...base, reading, degraded: false, attempts: attempt, model: GEMINI_MODEL, fieldsUsed: facts.fieldsUsed, accuracy: pack(accuracy), specificity: { failing: [] }, prompt: { systemPrompt, userPrompt } };
+    }
+    needSpecificity = true; // shippable but generic — try once more for a full pass
   }
+
+  if (best) {
+    // Safe + accurate, but never hit a full specificity pass → ship, but FLAG it.
+    return { ...base, reading: best.reading, degraded: false, lowSpecificity: !best.specificity.overallPass, attempts: attempt - 1, model: GEMINI_MODEL, fieldsUsed: facts.fieldsUsed, accuracy: pack(best.accuracy), specificity: { failing: best.specificity.failing }, prompt: { systemPrompt, userPrompt: baseUserPrompt } };
+  }
+  // Nothing shippable across all attempts → degrade to facts (never ship unsafe/wrong).
+  const reason = sawAccuracyWrong && !sawSafety ? 'accuracy' : sawSafety ? 'safety' : 'unspecific';
+  return {
+    ...base, reading: null, degraded: true, degradedReason: reason, attempts: attempt - 1,
+    redFlags: reason === 'safety' ? lastFlags : undefined,
+    accuracy: lastAccuracy ? pack(lastAccuracy) : undefined, specificity: lastSpecificity ? { failing: lastSpecificity.failing } : undefined,
+    prompt: { systemPrompt, userPrompt: baseUserPrompt },
+  };
 }
 
 async function handler(request, env?) {
@@ -149,7 +206,7 @@ async function handler(request, env?) {
     // Chart via the local engine (Part B). Invalid input throws → 400.
     let chart;
     try {
-      chart = await calculateBirthChart({ year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon, timezoneOffset: tz });
+      chart = await calculateBirthChart({ year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon, timezoneOffset: tz }, { includeShadbala: true });
     } catch (inputErr) {
       return json({ error: String(inputErr?.message || inputErr) }, 400);
     }

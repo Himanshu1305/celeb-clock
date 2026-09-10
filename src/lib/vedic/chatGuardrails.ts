@@ -110,7 +110,7 @@ export const UNSAFE_REPLY_FALLBACK =
 
 // ── 2. System prompt (all 7 guardrail categories + grounding) ────────────────
 export function buildChatSystemPrompt(facts: ReadingFacts): string {
-  const placements = facts.placements.map(p => `${p.planet} in ${p.sign} (house ${p.house})${p.retrograde ? ', retrograde' : ''}`).join('; ');
+  const placements = facts.planets.map(p => `${p.planet} in ${p.sign} (house ${p.house})${p.retrograde ? ', retrograde' : ''}`).join('; ');
   const dasha = facts.dasha ? `${facts.dasha.maha} main period, ${facts.dasha.antar} sub-period` : 'not available';
   const doshas = [
     `Mangal Dosha: ${facts.doshas.mangal.present ? `present (${facts.doshas.mangal.severityLabel})` : 'not present'}`,

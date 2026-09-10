@@ -52,7 +52,7 @@ describe('Reading — POSITIVE: reference chart produces complete, clean text (a
     }
     expect(Object.keys(scanReadingForRedFlags(payload.reading!))).toHaveLength(0);
     // the exact prompt + input are stored alongside (spec requirement)
-    expect(payload.prompt.systemPrompt).toContain('Vedic astrology');
+    expect(payload.prompt.systemPrompt).toMatch(/Vedic astrolog/);
     expect(payload.prompt.userPrompt).toContain('Kanya'); // reference Moon sign in the prompt
     expect(payload.fieldsUsed.career).toContain('current Dasha');
   });
