@@ -242,7 +242,10 @@ Doshas: ${doshaLines}${polar}
 
 Detected classical Yogas (present in THIS chart, with grade — cite these by name as evidence where relevant):
 ${yogaLine}
-How to use Yogas: cite a present Yoga BY NAME in the section it fits (Raj Yoga / Pancha Mahapurusha → career/status & snapshot; Dhana Yoga / Chandra-Mangal → money; Gaja Kesari → snapshot/wisdom). A "strong"/"full" Yoga is firm evidence you may speak a little more confidently from; a "partial"/"moderate" one, or one whose caveat says it is COMMON (Gaja Kesari, Budha-Aditya), should be mentioned lightly and honestly as "formed but not fully activated" — do NOT treat mere formation as a guarantee, and NEVER claim a Yoga that is not in the list above.
+How to use Yogas: mention EVERY present Yoga above at least once, by name, in the section it fits (Raj Yoga / Pancha Mahapurusha → career/status & snapshot; Dhana Yoga / Chandra-Mangal → money; Gaja Kesari → snapshot/wisdom). Grade tells you HOW to speak of it:
+- "strong"/"full" → firm evidence; you may speak a little more confidently from it.
+- "partial"/"moderate", OR any Yoga whose caveat says it is COMMON (Gaja Kesari, Budha-Aditya) → you MUST mention it but frame it explicitly as "present/formed but not fully activated" (or "a common combination, so only mildly so here"). Do NOT silently omit a present Yoga, and do NOT treat mere formation as a guarantee.
+- NEVER claim a Yoga that is not in the list above.
 
 Write the reading as JSON with exactly these fields. EACH must cite the specific facts listed for it:
 - "snapshot": 2-3 sentences from the Lagna (${f.lagna}) + its lord's placement, the Moon sign (${f.rashi}) and Nakshatra. Name them, and briefly explain what the Nakshatra traditionally signifies using the meaning above — but do NOT inflate a neutral/"mixed" Nakshatra to sound exceptional; describe it honestly.

@@ -35,7 +35,10 @@ async function callGemini(systemPrompt, contents) {
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: systemPrompt }] },
       contents,
-      generationConfig: { maxOutputTokens: 800, temperature: 0.7, thinkingConfig: { thinkingBudget: 0 } },
+      // gemini-flash-latest ignores thinkingBudget:0 and still spends ~700 hidden
+      // "thinking" tokens, so the cap must cover thinking + a full answer or the
+      // reply truncates mid-sentence. 1400 leaves comfortable headroom.
+      generationConfig: { maxOutputTokens: 1400, temperature: 0.7, thinkingConfig: { thinkingBudget: 0 } },
       safetySettings: [
         { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' },
         { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_ONLY_HIGH' },

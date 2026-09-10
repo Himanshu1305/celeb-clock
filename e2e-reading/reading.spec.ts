@@ -54,8 +54,16 @@ const FACTS = {
   warnings: [] as Array<{ code: string; message: string }>,
 };
 
+// Detected classical Yogas (Part G) — graded, mirroring the real engine output.
+// Includes a "full" Raj Yoga (spoken confidently) and a "partial" Gaja Kesari
+// (spoken as formed-but-not-fully-activated) so the graded display is visible.
+const YOGAS = [
+  { name: 'Raj Yoga', grade: 'full', summary: 'Yogakaraka Venus links a Kendra and a Trikona, giving authority and rise in status.', conditions: ['Venus rules both the 5th (Trikona) and 10th (Kendra) for Makara Lagna', 'Placed with strength in the 9th house'] },
+  { name: 'Gaja Kesari Yoga', grade: 'partial', summary: 'Jupiter and the Moon relate by Kendra, associated with wisdom and good repute.', note: 'A common combination; formation alone is not a guarantee of full results.', conditions: ['Jupiter in a Kendra from the Moon', 'Neither is combust'] },
+];
+
 const readingPayload = (over: Partial<any> = {}) => ({
-  facts: { ...FACTS, ...(over.facts || {}) },
+  facts: { ...FACTS, yogas: YOGAS, ...(over.facts || {}) },
   reading: over.reading === null ? null : READING_SECTIONS,
   degraded: over.degraded ?? false,
   warnings: over.warnings ?? [],
@@ -174,6 +182,39 @@ test('edge: multiple doshas present — doshas section reads calm, not alarming'
   const text = (await doshas.textContent()) || '';
   expect(text).not.toMatch(/curse|doomed|danger|unlucky|suffer/i);
   await page.screenshot({ path: 'e2e-reading/__screens__/07-doshas-calm.png', fullPage: true });
+});
+
+// ── PART G: Yogas — narrative citation + graded advanced view ────────────────
+test('yogas: narrative cites Yogas by grade + advanced view lists them graded', async ({ page }) => {
+  // A reading that cites the full Raj Yoga confidently AND names the partial
+  // Gaja Kesari as formed-but-not-fully-activated (the graded honesty).
+  const yogaReading = {
+    ...READING_SECTIONS,
+    snapshot: `${READING_SECTIONS.snapshot} With a partial Gaja Kesari Yoga present, a reflective, good-humoured wisdom runs beneath your choices — a common combination, so held lightly rather than as a promise.`,
+    career: `${READING_SECTIONS.career} Your chart also carries a strong Raj Yoga through Yogakaraka Venus, which classically supports steady rise in standing and responsibility.`,
+  };
+  await page.route('**/api/kundali*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ...KUNDALI, _cache: 'miss' }) }));
+  await page.route('**/api/vedic-reading*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(readingPayload({ top: { reading: yogaReading } })) }));
+
+  await fillFormAndGenerate(page);
+  await expect(page.locator('[data-testid="vedic-reading"]')).toBeVisible();
+
+  // Narrative cites Yogas by name, with graded language (not an absolute promise).
+  await expect(page.locator('[data-testid="reading-area-career"]')).toContainText('Raj Yoga');
+  await expect(page.locator('[data-testid="reading-snapshot"]')).toContainText('Gaja Kesari');
+  await expect(page.locator('[data-testid="reading-snapshot"]')).toContainText(/partial|held lightly/i);
+  await page.screenshot({ path: 'e2e-reading/__screens__/09-yogas-narrative.png', fullPage: true });
+
+  // Advanced view lists each Yoga with its grade + the conditions checked.
+  await page.click('[data-testid="reading-advanced-toggle"]');
+  const yogaBox = page.locator('[data-testid="reading-yogas"]');
+  await expect(yogaBox).toBeVisible();
+  await expect(yogaBox).toContainText('Raj Yoga');
+  await expect(yogaBox).toContainText('full');
+  await expect(yogaBox).toContainText('Gaja Kesari Yoga');
+  await expect(yogaBox).toContainText('partial');
+  await expect(yogaBox).toContainText(/formation does not guarantee/i);
+  await page.screenshot({ path: 'e2e-reading/__screens__/10-yogas-advanced.png', fullPage: true });
 });
 
 // ── EDGE FLOW: very old + very recent birth dates both render ─────────────────
