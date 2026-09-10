@@ -15,6 +15,7 @@
 import type { BirthChartResult } from './calculateBirthChart';
 import { RASHI_NAMES } from './engine/vedicEngine';
 import { SIGN_LORDS } from './engine/sthanaBala';
+import { getNakshatraMeaning, nakshatraMeaningLine } from './nakshatraMeanings';
 
 export interface PlanetFact {
   planet: string; sign: string; house: number;
@@ -27,7 +28,7 @@ export interface HouseLordFact {
 
 export interface ReadingFacts {
   rashi: string;
-  nakshatra: { name: string; pada: number; lord: string };
+  nakshatra: { name: string; pada: number; lord: string; meaning: string | null; significance: string | null };
   lagna: string;
   dasha: { maha: string; antar: string } | null;
   /** All 9 grahas — sign, house, retrograde, combust, Navamsa, Shadbala. */
@@ -104,7 +105,11 @@ export function extractReadingFacts(chart: BirthChartResult): ReadingFacts {
 
   return {
     rashi: chart.rashi,
-    nakshatra: { name: chart.nakshatra.nakshatra, pada: chart.nakshatra.pada, lord: chart.nakshatra.lord },
+    nakshatra: {
+      name: chart.nakshatra.nakshatra, pada: chart.nakshatra.pada, lord: chart.nakshatra.lord,
+      meaning: getNakshatraMeaning(chart.nakshatra.nakshatra)?.meaning ?? null,
+      significance: getNakshatraMeaning(chart.nakshatra.nakshatra)?.significance ?? null,
+    },
     lagna: chart.lagna.sign,
     dasha: chart.currentDasha ? { maha: chart.currentDasha.mahadasha, antar: chart.currentDasha.antardasha } : null,
     planets,
@@ -213,6 +218,7 @@ export function buildReadingUserPrompt(f: ReadingFacts): string {
 Core:
 - Moon sign (Rashi): ${f.rashi}
 - Birth star (Nakshatra): ${f.nakshatra.name}, pada ${f.nakshatra.pada} (ruled by ${f.nakshatra.lord})
+- Nakshatra meaning (traditional, use to explain WHY it matters — do not overstate a neutral one): ${nakshatraMeaningLine(f.nakshatra.name) || 'not available'}
 - Rising sign (Lagna): ${f.lagna}
 - Current planetary period: ${f.dasha ? `${f.dasha.maha} main / ${f.dasha.antar} sub` : 'not available'}
 - Current period lord placement: ${dashaLord}
@@ -228,7 +234,7 @@ Dasamsa (D10) Sun: ${f.divisional.d10Sun}; Shashtiamsa (D60) Moon: ${f.divisiona
 Doshas: ${doshaLines}${polar}
 
 Write the reading as JSON with exactly these fields. EACH must cite the specific facts listed for it:
-- "snapshot": 2-3 sentences from the Lagna (${f.lagna}) + its lord's placement, the Moon sign (${f.rashi}) and Nakshatra. Name them.
+- "snapshot": 2-3 sentences from the Lagna (${f.lagna}) + its lord's placement, the Moon sign (${f.rashi}) and Nakshatra. Name them, and briefly explain what the Nakshatra traditionally signifies using the meaning above — but do NOT inflate a neutral/"mixed" Nakshatra to sound exceptional; describe it honestly.
 - "career": MUST reference the 10th house sign AND its ruling planet's placement (house/sign/strength), AND at least one of Sun/Mercury/Saturn by its real placement, AND connect to the current Dasha lord if relevant. Draw a real-world implication.
 - "relationships": MUST reference the 7th house sign and its lord's placement, Venus's placement (sign/house/strength), and the Navamsa sign of Venus or Moon. Fold in Mangal Dosha calmly IF present, naming its cause.
 - "health": MUST reference the 6th house sign and lord, the Lagna lord's strength, and any planet in a health-relevant house — but describe the 6th house as daily routines, service, habits and resilience, speaking ONLY to general wellbeing, rest and energy. Never use "disease", "illness", "condition" or any ailment name.
