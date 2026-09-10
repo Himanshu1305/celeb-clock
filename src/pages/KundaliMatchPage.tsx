@@ -7,9 +7,10 @@ import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { calculateAshtakoota, type AshtakootaResult } from '@/utils/ashtakoota';
+import { geocodeCity, type GeoResult } from '@/services/geocoding';
+import type { SavedCity } from '@/services/savedProfile';
 
 const RASHI_ORDER = ['Mesha', 'Vrisha', 'Mithuna', 'Karka', 'Simha', 'Kanya', 'Tula', 'Vrischika', 'Dhanu', 'Makara', 'Kumbha', 'Meena'];
-const DELHI = { lat: 28.6139, lon: 77.2090, tz: 5.5 };
 
 async function profileFor(dob: string, time: string, coords: { lat: number; lon: number; tz: number }): Promise<{ nakshatra: string; rashiIndex: number } | null> {
   try {
@@ -24,6 +25,37 @@ async function profileFor(dob: string, time: string, coords: { lat: number; lon:
   } catch { return null; }
 }
 
+/** Inline birth-city picker (Part 1) — reuses the same geocoding service the
+ * Kundali form uses, so both people's real birthplaces are collected (previously
+ * Person B was silently hardcoded to Delhi, producing wrong Lagna/house results). */
+function CityPicker({ testid, value, onPick }: { testid: string; value: SavedCity | null; onPick: (c: SavedCity | null) => void }) {
+  const [query, setQuery] = useState(value?.name ?? '');
+  const [options, setOptions] = useState<GeoResult[]>([]);
+  const onChange = async (v: string) => {
+    setQuery(v); onPick(null);
+    if (v.trim().length >= 3) { try { setOptions(await geocodeCity(v)); } catch { setOptions([]); } }
+    else setOptions([]);
+  };
+  return (
+    <div className="relative">
+      <input data-testid={testid} type="text" value={query} onChange={e => onChange(e.target.value)} placeholder="Birth city (e.g. Delhi)"
+             className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" aria-label="Birth city" />
+      {options.length > 0 && (
+        <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow max-h-48 overflow-y-auto">
+          {options.map((o, i) => (
+            <li key={`${o.name}-${i}`}>
+              <button type="button" onClick={() => { onPick({ name: o.name, lat: o.lat, lon: o.lon, tz: o.utcOffset }); setQuery(o.name); setOptions([]); }}
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-indigo-50 text-gray-900">
+                {o.name}{o.state ? `, ${o.state}` : ''}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 const KOOTAS: Array<[keyof AshtakootaResult, string, number]> = [
   ['varna', 'Varna', 1], ['vashya', 'Vashya', 2], ['tara', 'Tara', 3], ['yoni', 'Yoni', 4],
   ['graha_maitri', 'Graha Maitri', 5], ['gana', 'Gana', 6], ['bhakoot', 'Bhakoot', 7], ['nadi', 'Nadi', 8],
@@ -36,29 +68,32 @@ export default function KundaliMatchPage() {
 
   const [dobA, setDobA] = useState('');
   const [timeA, setTimeA] = useState('');
+  const [cityA, setCityA] = useState<SavedCity | null>(null);
   const [dobB, setDobB] = useState('');
   const [timeB, setTimeB] = useState('');
+  const [cityB, setCityB] = useState<SavedCity | null>(null);
   const [result, setResult] = useState<AshtakootaResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
 
   // Person A comes from the saved profile (incl. real birthplace) when present;
-  // otherwise from the form. Person B is always entered fresh.
+  // otherwise from the form. Person B is always entered fresh — now WITH birthplace.
   const effDobA = usingSaved ? profile!.dob : dobA;
   const effTimeA = usingSaved ? profile!.time : timeA;
-  const coordsA = usingSaved ? { lat: profile!.city.lat, lon: profile!.city.lon, tz: profile!.city.tz } : DELHI;
+  const coordsA = usingSaved ? { lat: profile!.city.lat, lon: profile!.city.lon, tz: profile!.city.tz } : cityA;
 
-  const validA = usingSaved || /^\d{4}-\d{2}-\d{2}$/.test(dobA);
-  const validB = /^\d{4}-\d{2}-\d{2}$/.test(dobB);
+  // Every person now needs date + time + a real birthplace (Part 1 accuracy fix).
+  const validA = usingSaved || (/^\d{4}-\d{2}-\d{2}$/.test(dobA) && /^\d{2}:\d{2}$/.test(timeA) && !!cityA);
+  const validB = /^\d{4}-\d{2}-\d{2}$/.test(dobB) && /^\d{2}:\d{2}$/.test(timeB) && !!cityB;
   const canCalc = validA && validB;
 
   const calculate = async () => {
-    if (!canCalc) return;
+    if (!canCalc || !coordsA || !cityB) return;
     setLoading(true); setFailed(false);
     try {
       const [a, b] = await Promise.all([
         profileFor(effDobA, effTimeA, coordsA),
-        profileFor(dobB, timeB, DELHI),
+        profileFor(dobB, timeB, cityB),
       ]);
       if (!a?.nakshatra || !b?.nakshatra) throw new Error('unavailable');
       setResult(calculateAshtakoota(a.nakshatra, b.nakshatra, a.rashiIndex, b.rashiIndex));
@@ -108,10 +143,11 @@ export default function KundaliMatchPage() {
               <input data-testid="kmatch-time-a" type="time" value={timeA}
                      onChange={e => { setTimeA(e.target.value); setResult(null); }}
                      className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" aria-label="Person A birth time" />
+              <CityPicker testid="kmatch-city-a" value={cityA} onPick={c => { setCityA(c); setResult(null); }} />
             </div>
           )}
 
-          {/* Person B — always entered fresh */}
+          {/* Person B — always entered fresh, now including birthplace */}
           <div className="rounded-xl border border-border p-4 space-y-3">
             <div className="font-semibold text-foreground">{usingSaved ? 'The other person' : 'Person B'}</div>
             <input data-testid="kmatch-dob-b" type="date" value={dobB}
@@ -120,6 +156,7 @@ export default function KundaliMatchPage() {
             <input data-testid="kmatch-time-b" type="time" value={timeB}
                    onChange={e => { setTimeB(e.target.value); setResult(null); }}
                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" aria-label="Person B birth time" />
+            <CityPicker testid="kmatch-city-b" value={cityB} onPick={c => { setCityB(c); setResult(null); }} />
           </div>
         </div>
 

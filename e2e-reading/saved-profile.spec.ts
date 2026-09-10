@@ -60,9 +60,11 @@ test('walkthrough: save on /kundali, then Matching pre-fills own details, asks o
   await expect(page.locator('[data-testid="kmatch-dob-b"]')).toBeVisible();  // only the 2nd person
   await page.screenshot({ path: 'e2e-reading/__screens__/pe-03-matching-prefilled.png', fullPage: true });
 
-  // Complete the match with only the second person's details.
+  // Complete the match with only the second person's details — now incl. birthplace (Part 1).
   await page.fill('[data-testid="kmatch-dob-b"]', '1990-04-20');
   await page.fill('[data-testid="kmatch-time-b"]', '09:15');
+  await page.fill('[data-testid="kmatch-city-b"]', 'Mumbai');
+  await page.locator('li button', { hasText: 'Mumbai' }).first().click();
   await page.click('[data-testid="kmatch-calculate-btn"]');
   await expect(page.locator('[data-testid="kmatch-result"]')).toBeVisible();
 });
