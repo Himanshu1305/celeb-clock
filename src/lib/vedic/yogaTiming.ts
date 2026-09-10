@@ -199,6 +199,26 @@ export function describeWindow(w: ActivationWindow): string {
   return `${w.planet} ${kind} (${formatWindowRange(w)}, ${when})`;
 }
 
+/**
+ * A cache-staleness tag (Part 3.5). Readings cite "current period" and "next
+ * upcoming window" — both are TIME-dependent, changing as real time passes even
+ * though the birth chart never does. This returns an identity for the CURRENT
+ * Maha/Antar period; folding it into the reading cache key means a cached reading
+ * is auto-invalidated the moment `now` crosses into a new sub-period (when the
+ * "current"/"next" framing would otherwise go stale). Within one Antardasha the
+ * tag is stable, so the expensive AI reading is still cached normally.
+ */
+export function currentDashaTag(chart: BirthChartResult, now: Date = new Date()): string {
+  const tl = chart.dashaTimeline;
+  if (!tl?.length) return 'nd';
+  const maha = tl.find(m => now >= new Date(m.start) && now < new Date(m.end));
+  if (!maha) return 'nd';
+  const antar = maha.antardashas.find(a => now >= new Date(a.start) && now < new Date(a.end));
+  if (!antar) return `${maha.lord}-x`;
+  const endYM = new Date(antar.end).toISOString().slice(0, 7); // YYYY-MM of this sub-period's end
+  return `${maha.lord}-${antar.lord}-${endYM}`;
+}
+
 // ── Reading/chat-ready timing facts (single source of truth for prose + checker) ─
 export interface TimingFactWindow {
   planet: string; level: WindowLevel; start: string; end: string;

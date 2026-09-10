@@ -16,6 +16,7 @@ import {
   scanReadingForRedFlags,
 } from '../src/lib/vedic/readingPrompts.js';
 import { verifyReadingClaims, scoreReadingSpecificity } from '../src/lib/vedic/readingSpecificity.js';
+import { currentDashaTag } from '../src/lib/vedic/yogaTiming.js';
 
 const GEMINI_MODEL = 'gemini-flash-latest';
 
@@ -37,10 +38,14 @@ async function getSupabase(env) {
 // old cached readings are not served after an upgrade. v2 = Part D-Fix specificity
 // + warmth (strength-in-words) overhaul.
 const READING_VERSION = 'v8';
-function buildCacheKey(y, m, d, h, min, lat, lon, tz) {
+// `dashaTag` (Part D-Fix3) makes the key TIME-AWARE: it encodes the current
+// Maha/Antar sub-period, so a cached reading is invalidated the moment real time
+// crosses into a new period and the "current / next window" framing would go
+// stale. Stable within a sub-period, so the AI reading is still cached normally.
+function buildCacheKey(y, m, d, h, min, lat, lon, tz, dashaTag = 'na') {
   const rlat = Number(lat).toFixed(4);
   const rlon = Number(lon).toFixed(4);
-  return ['reading', READING_VERSION, y, m, d, h, min, rlat, rlon, tz].join('-');
+  return ['reading', READING_VERSION, y, m, d, h, min, rlat, rlon, tz, dashaTag].join('-');
 }
 
 async function getCached(sb, cacheKey) {
@@ -202,20 +207,24 @@ async function handler(request, env?) {
 
   try {
     const sb = await getSupabase(env);
-    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz);
 
-    const cached = await getCached(sb, cacheKey);
-    if (cached) return json({ ...cached, _cache: 'hit' });
-
-    // Chart via the local engine (Part B). Invalid input throws → 400.
+    // Chart via the local engine (Part B). Computed BEFORE the cache lookup so the
+    // cache key can be made time-aware (Part 3.5) — chart compute is cheap (~3ms);
+    // the cache still saves the expensive Gemini call. Use one shared `now` so the
+    // chart, the timing facts, and the cache tag are all consistent.
+    const now = new Date();
     let chart;
     try {
-      chart = await calculateBirthChart({ year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon, timezoneOffset: tz }, { includeShadbala: true });
+      chart = await calculateBirthChart({ year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon, timezoneOffset: tz }, { includeShadbala: true, refDate: now });
     } catch (inputErr) {
       return json({ error: String(inputErr?.message || inputErr) }, 400);
     }
 
-    const facts = extractReadingFacts(chart);
+    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz, currentDashaTag(chart, now));
+    const cached = await getCached(sb, cacheKey);
+    if (cached) return json({ ...cached, _cache: 'hit' });
+
+    const facts = extractReadingFacts(chart, now);
     const payload = await buildReadingPayload(facts, generateReading);
 
     // Only cache a full, safe AI reading — never cache a degraded/fallback
