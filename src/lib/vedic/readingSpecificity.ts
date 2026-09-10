@@ -221,6 +221,68 @@ export function measureProse(reading: Partial<GeneratedReading>): ProseMetric {
   };
 }
 
+// ── Repetition metric (objective proxy for "robotic / templated") ────────────
+// Self-critique item C: the same filler phrase ("indicative strength") and the
+// same sentence-opener structure ("Your Nth house …") repeat within one section,
+// which reads mechanical. This makes that measurable, per section and overall,
+// so a fix can be shown in NUMBERS rather than by eye.
+export interface SectionRepetition {
+  section: string;
+  strengthPhrases: number;   // occurrences of the "indicative strength" filler in THIS section
+  redundant: number;         // occurrences beyond the first (0 = never repeats)
+  openerRepeatMax: number;   // largest group of sentences sharing the same 2-word opener
+}
+export interface RepetitionMetric {
+  perSection: SectionRepetition[];
+  strengthPhraseMax: number;    // worst single-section "indicative strength" count
+  strengthPhraseTotal: number;  // total across the reading
+  redundantStrengthPhrases: number; // total occurrences BEYOND the first per section (the excess to kill)
+  openerRepeatMax: number;      // worst repeated 2-word sentence opener in any section
+  worstSection: string;         // the section carrying the worst strength-phrase repetition
+}
+
+// The specific filler flagged in the self-critique. Kept narrow on purpose: it
+// counts the templated strength tag, not legitimate single uses of "strong".
+const STRENGTH_FILLER_RE = /\bindicative strength\b/gi;
+
+function sentencesOf(text: string): string[] {
+  return text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(s => s.split(/\s+/).length >= 3);
+}
+
+function maxSharedOpener(text: string): number {
+  const counts = new Map<string, number>();
+  for (const s of sentencesOf(text)) {
+    const opener = s.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).slice(0, 2).join(' ');
+    if (!opener) continue;
+    counts.set(opener, (counts.get(opener) || 0) + 1);
+  }
+  let m = 0;
+  for (const v of counts.values()) if (v > m) m = v;
+  return m;
+}
+
+/** Measure per-section repetition of the flagged filler phrase + sentence openers. */
+export function measureRepetition(reading: Partial<GeneratedReading>): RepetitionMetric {
+  const perSection: SectionRepetition[] = READING_SECTION_KEYS.map(section => {
+    const text = reading[section] || '';
+    const strengthPhrases = (text.match(STRENGTH_FILLER_RE) || []).length;
+    return {
+      section,
+      strengthPhrases,
+      redundant: Math.max(0, strengthPhrases - 1),
+      openerRepeatMax: maxSharedOpener(text),
+    };
+  });
+  let strengthPhraseMax = 0, strengthPhraseTotal = 0, redundantStrengthPhrases = 0, openerRepeatMax = 0, worstSection = '';
+  for (const s of perSection) {
+    strengthPhraseTotal += s.strengthPhrases;
+    redundantStrengthPhrases += s.redundant;
+    if (s.strengthPhrases > strengthPhraseMax) { strengthPhraseMax = s.strengthPhrases; worstSection = s.section; }
+    if (s.openerRepeatMax > openerRepeatMax) openerRepeatMax = s.openerRepeatMax;
+  }
+  return { perSection, strengthPhraseMax, strengthPhraseTotal, redundantStrengthPhrases, openerRepeatMax, worstSection };
+}
+
 export function scoreReadingSpecificity(reading: Partial<GeneratedReading>, facts: ReadingFacts, minTerms = 3): SpecificityResult {
   const perSection: SectionScore[] = READING_SECTION_KEYS.map(section => {
     const text = reading[section] || '';

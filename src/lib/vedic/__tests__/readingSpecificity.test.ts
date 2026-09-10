@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { calculateBirthChart } from '../calculateBirthChart';
 import { extractReadingFacts } from '../readingPrompts';
-import { verifyReadingClaims, scoreReadingSpecificity, measureProse } from '../readingSpecificity';
+import { verifyReadingClaims, scoreReadingSpecificity, measureProse, measureRepetition } from '../readingSpecificity';
 import { strengthWord } from '../readingPrompts';
 
 const REF = new Date(Date.UTC(2026, 8, 9));
@@ -112,6 +112,26 @@ describe('specificity checker', () => {
   it('measureProse: detects raw virupa numbers leaking into narrative', () => {
     expect(measureProse({ career: 'Venus has 310 virupas of strength.' } as any).virupaNumberMentions).toBeGreaterThan(0);
     expect(measureProse({ career: 'Venus is moderately strong.' } as any).virupaNumberMentions).toBe(0);
+  });
+
+  it('measureRepetition: counts the "indicative strength" filler + repeated openers per section', () => {
+    const repetitive = {
+      career: 'Venus shows strong indicative strength. Mercury shows moderate indicative strength. Saturn shows strong indicative strength here.',
+      health: 'Your chart is steady. Your chart favours rest. Your chart rewards routine.', // 3× "your chart" opener
+    } as any;
+    const rep = measureRepetition(repetitive);
+    expect(rep.strengthPhraseMax).toBe(3);        // career: "indicative strength" ×3
+    expect(rep.worstSection).toBe('career');
+    expect(rep.redundantStrengthPhrases).toBe(2); // 3 − 1 = 2 excess in career
+    expect(rep.openerRepeatMax).toBe(3);          // health: "your chart" ×3 (same 2-word opener)
+
+    const varied = {
+      career: 'A strong Venus anchors your 10th house. Mercury sits gently in the 3rd. Saturn stands steady in the 9th, an indicative strength worth noting.',
+    } as any;
+    const rv = measureRepetition(varied);
+    expect(rv.strengthPhraseMax).toBe(1);         // used once, on purpose
+    expect(rv.redundantStrengthPhrases).toBe(0);
+    expect(rv.openerRepeatMax).toBeLessThanOrEqual(1);
   });
 
   it('flags a generic reading (the old style) as failing', async () => {

@@ -168,6 +168,7 @@ THE SPECIFICITY CONTRACT (this is the point of the reading):
 - Name houses/planets/signs in the output. Briefly gloss jargon in plain words the first time (e.g. "your 10th house (career)"), so a beginner follows along — but DO name the real placement.
 - CRITICAL — accuracy over fluency: only state placements that are actually in the data below. Never invent or guess a planet's house or sign. A confidently wrong placement is worse than a cautious one. If you're unsure, describe only what the data states.
 - STRENGTH IN WORDS: describe planetary strength only with the words provided ("strong", "moderately strong", "gentle") — NEVER quote a number or the unit "virupas" in your reply.
+- VARY THE PHRASING: weave strength in naturally and differently each time ("a strong Venus", "Saturn stands steady here", "gently placed Mercury") — do NOT bolt the same stock tag onto every planet. In particular, use the word "indicative strength" AT MOST ONCE in the whole reading; elsewhere just use the plain strength word. Likewise vary how sentences open within a section — don't start three sentences the same way.
 
 VOICE (warmth without losing specificity):
 - Write warmly and conversationally, like a thoughtful person talking to one person — not a chart printout.
@@ -184,7 +185,7 @@ ABSOLUTE SAFETY RULES (unchanged — a response that breaks any is unusable):
 
 CONFIDENCE — these layers are less certain, so use softer language and hedge them explicitly:
 - Rashi, Nakshatra, Lagna, house placements and the current Dasha are reliable — state them plainly.
-- Shadbala "strength" and the Shashtiamsa (D60) are INDICATIVE, one of several classical methods — when you use them, hedge ("its indicative strength is…", "in one classical reading…").`;
+- Shadbala "strength" and the Shashtiamsa (D60) are INDICATIVE, one of several classical methods — signal this ONCE where natural ("as an indicative strength…", "in one classical reading…"), not on every planet.`;
 }
 
 /** The user prompt — the full chart data + exactly which facts each section must use. */
@@ -194,7 +195,7 @@ export function buildReadingUserPrompt(f: ReadingFacts): string {
     if (p.retrograde) bits.push('retrograde');
     if (p.combust) bits.push('combust');
     bits.push(`Navamsa ${p.navamsa}`);
-    if (p.shadbala) bits.push(`indicative strength ${strengthWord(p.shadbala.category)}`);
+    if (p.shadbala) bits.push(`strength ${strengthWord(p.shadbala.category)}`);
     return '  - ' + bits.join(', ');
   }).join('\n');
 
@@ -203,7 +204,7 @@ export function buildReadingUserPrompt(f: ReadingFacts): string {
   ).join('\n');
 
   const dashaLord = f.dashaLord
-    ? `${f.dashaLord.planet} (the current main-period lord) sits in ${f.dashaLord.sign}, ${ordinal(f.dashaLord.house)} house${f.dashaLord.shadbalaCategory ? `, indicative strength ${strengthWord(f.dashaLord.shadbalaCategory)}` : ''}`
+    ? `${f.dashaLord.planet} (the current main-period lord) sits in ${f.dashaLord.sign}, ${ordinal(f.dashaLord.house)} house${f.dashaLord.shadbalaCategory ? `, strength ${strengthWord(f.dashaLord.shadbalaCategory)}` : ''}`
     : 'not available (birth time needed)';
 
   const doshaLines = [
