@@ -28,7 +28,25 @@ async function mockApis(page: Page) {
   await page.route('**/api/kundali*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(KUNDALI) }));
   await page.route('**/api/vedic-reading*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(READING) }));
   await page.route('**/api/vedic-profile*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(VEDIC_PROFILE) }));
+  // Registered last so it wins over the broader **/api/kundali* route for the match endpoint.
+  await page.route('**/api/kundali-match*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MATCH_MIN) }));
 }
+
+const MATCH_MIN = {
+  gunaMilan: {
+    total: 24, max: 36, compatibility: 'Good',
+    kootas: [
+      { key: 'varna', label: 'Varna', score: 1, max: 1, explanation: '.' }, { key: 'vashya', label: 'Vashya', score: 2, max: 2, explanation: '.' },
+      { key: 'tara', label: 'Tara', score: 3, max: 3, explanation: '.' }, { key: 'yoni', label: 'Yoni', score: 2, max: 4, explanation: '.' },
+      { key: 'graha_maitri', label: 'Graha Maitri', score: 3, max: 5, explanation: '.' }, { key: 'gana', label: 'Gana', score: 6, max: 6, explanation: '.' },
+      { key: 'bhakoot', label: 'Bhakoot', score: 7, max: 7, heavy: true, explanation: '.' }, { key: 'nadi', label: 'Nadi', score: 0, max: 8, heavy: true, explanation: '.' },
+    ],
+    doshas: [{ name: 'Nadi Dosha', present: true, cancelled: false, reason: 'Same Nadi.' }], methodology: 'Lahiri + BPHS.',
+    a: {}, b: {},
+  },
+  timing: { personA: { significators: [], windows: [] }, personB: { significators: [], windows: [] }, overlaps: [], note: 'n' },
+  people: { a: { lagna: 'Makara', rashi: 'Kanya', nakshatra: 'Uttara Phalguni', pada: 2 }, b: { lagna: 'Vrishabha', rashi: 'Makara', nakshatra: 'Dhanishtha', pada: 2 } },
+};
 
 // ── POSITIVE: enter once on /kundali (opt-in save) → carry over to Matching ───
 test('walkthrough: save on /kundali, then Matching pre-fills own details, asks only 2nd person', async ({ page }) => {
