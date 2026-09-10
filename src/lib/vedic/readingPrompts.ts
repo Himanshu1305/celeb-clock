@@ -60,6 +60,12 @@ function shadbalaCategory(planet: string, total: number): 'strong' | 'moderate' 
   return 'weak';
 }
 
+/** Plain-language strength word for the NARRATIVE (raw virupa numbers stay in the
+ * advanced/technical view only, never in the generated prose). */
+export function strengthWord(category?: string): string {
+  return category === 'strong' ? 'strong' : category === 'weak' ? 'gentle (more tender)' : 'moderately strong';
+}
+
 const HOUSES_OF_INTEREST = [1, 2, 4, 6, 7, 9, 10, 11];
 
 /** Extract the full, confidence-aware fact set that feeds the prompt, the
@@ -152,6 +158,12 @@ THE SPECIFICITY CONTRACT (this is the point of the reading):
 - SYNTHESIS, not listing: connect at least two chart elements to each other and to a real-world implication — e.g. "your 10th lord Mars sits in your 1st house, so career progress tends to come through personal drive and direct action rather than diplomacy" — not "Mars is in the 1st house" stated in isolation.
 - Name houses/planets/signs in the output. Briefly gloss jargon in plain words the first time (e.g. "your 10th house (career)"), so a beginner follows along — but DO name the real placement.
 - CRITICAL — accuracy over fluency: only state placements that are actually in the data below. Never invent or guess a planet's house or sign. A confidently wrong placement is worse than a cautious one. If you're unsure, describe only what the data states.
+- STRENGTH IN WORDS: describe planetary strength only with the words provided ("strong", "moderately strong", "gentle") — NEVER quote a number or the unit "virupas" in your reply.
+
+VOICE (warmth without losing specificity):
+- Write warmly and conversationally, like a thoughtful person talking to one person — not a chart printout.
+- Keep sentences fairly SHORT and let them breathe. Do NOT pack more than TWO chart facts into a single sentence — when you have several facts, split them across several short sentences instead of one long, comma-stacked one. More short, natural sentences read better than fewer dense ones.
+- Keep every required fact (below) — this is about phrasing, not dropping facts.
 
 ABSOLUTE SAFETY RULES (unchanged — a response that breaks any is unusable):
 - BANNED WORDS — never output any of these, even once, in ANY sense: "will", "must", "definitely", "guaranteed", "invest", "buy", "sell", "disease", "illness", "diagnosis", "condition", or any named ailment. Substitutions: "will"→"tends to"/"often"; "invest"→"put time/care into"; "disease/illness/condition"→"wellbeing"/"resilience"/"vitality".
@@ -173,7 +185,7 @@ export function buildReadingUserPrompt(f: ReadingFacts): string {
     if (p.retrograde) bits.push('retrograde');
     if (p.combust) bits.push('combust');
     bits.push(`Navamsa ${p.navamsa}`);
-    if (p.shadbala) bits.push(`Shadbala ${p.shadbala.category} (${p.shadbala.total} virupas)`);
+    if (p.shadbala) bits.push(`indicative strength ${strengthWord(p.shadbala.category)}`);
     return '  - ' + bits.join(', ');
   }).join('\n');
 
@@ -182,7 +194,7 @@ export function buildReadingUserPrompt(f: ReadingFacts): string {
   ).join('\n');
 
   const dashaLord = f.dashaLord
-    ? `${f.dashaLord.planet} (the current main-period lord) sits in ${f.dashaLord.sign}, ${ordinal(f.dashaLord.house)} house${f.dashaLord.shadbalaCategory ? `, indicative Shadbala strength: ${f.dashaLord.shadbalaCategory}` : ''}`
+    ? `${f.dashaLord.planet} (the current main-period lord) sits in ${f.dashaLord.sign}, ${ordinal(f.dashaLord.house)} house${f.dashaLord.shadbalaCategory ? `, indicative strength ${strengthWord(f.dashaLord.shadbalaCategory)}` : ''}`
     : 'not available (birth time needed)';
 
   const doshaLines = [
@@ -226,7 +238,7 @@ Write the reading as JSON with exactly these fields. EACH must cite the specific
 - "doshas": name the specific planet/house behind any dosha present (or reassure plainly if none), calm and de-stigmatising.
 - "divisional": name at least TWO real Navamsa (D9) placements by sign (from the Navamsa list above), plus the Dasamsa; mention D60 only with a "one interpretation" hedge.
 
-Every sentence must be traceable to a fact above. Do not write anything equally true of another chart. Keep each field to 3-5 sentences. Return ONLY the JSON object.`;
+Every sentence must be traceable to a fact above. Do not write anything equally true of another chart. Describe strength only in words (strong / moderately strong / gentle) — never a number or "virupas". Keep sentences short and warm: at most two facts per sentence, and prefer several short sentences over one dense one. Aim for 4-6 short sentences per field. Return ONLY the JSON object.`;
 }
 
 /** Appended to the prompt on a retry when the first output was too generic or wrong. */

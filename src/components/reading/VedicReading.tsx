@@ -53,6 +53,28 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
         {' '}Dasamsa (D10) Sun: <span className="text-foreground">{facts.divisional.d10Sun}</span>;
         {' '}Shashtiamsa (D60) Moon: <span className="text-foreground">{facts.divisional.d60Moon}</span>.
       </div>
+
+      {/* Raw Shadbala strengths — the narrative uses plain words ("strong"), so the
+          exact computed virupa numbers live here for power users. */}
+      {facts.planets && facts.planets.some(p => p.shadbala) && (
+        <div data-testid="reading-shadbala">
+          <div className="text-muted-foreground mb-1">Planetary strength (Shadbala, in virupas — indicative):</div>
+          <table className="w-full text-left">
+            <thead className="text-muted-foreground">
+              <tr><th className="py-1 pr-3 font-medium">Planet</th><th className="py-1 pr-3 font-medium">Strength</th><th className="py-1 font-medium">Virupas</th></tr>
+            </thead>
+            <tbody>
+              {facts.planets.filter(p => p.shadbala).map(p => (
+                <tr key={p.planet} className="border-t border-border/60">
+                  <td className="py-1 pr-3 text-foreground">{p.planet}</td>
+                  <td className="py-1 pr-3 text-foreground capitalize">{p.shadbala!.category}</td>
+                  <td className="py-1 text-foreground">{p.shadbala!.total}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

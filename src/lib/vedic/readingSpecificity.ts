@@ -154,6 +154,41 @@ function requiredRefPresent(section: string, text: string, facts: ReadingFacts):
   }
 }
 
+// ── Prose density metric (objective proxy for "warmth") ──────────────────────
+// Warmth isn't directly testable, but "facts stacked per sentence" is. Looser,
+// more conversational phrasing → more, shorter sentences → FEWER facts/sentence.
+export interface ProseMetric { sentences: number; words: number; avgWordsPerSentence: number; totalFacts: number; avgFactsPerSentence: number; virupaNumberMentions: number; }
+
+const FACT_RES = [
+  new RegExp(`\\b(${PLANET_ALT})\\b`, 'gi'),
+  new RegExp(`\\b(${SIGN_ALT})\\b`, 'gi'),
+  new RegExp(`\\b(${ORD_ALT})\\s+house\\b`, 'gi'),
+  /\b(Navamsa|Shadbala|Dasamsa|Shashtiamsa|Mangal|Kaal Sarp|Sade Sati)\b/gi,
+];
+
+function countFactOccurrences(s: string): number {
+  let n = 0;
+  for (const re of FACT_RES) n += (s.match(re) || []).length;
+  return n;
+}
+
+/** Measure prose density across a whole reading (all sections concatenated). */
+export function measureProse(reading: Partial<GeneratedReading>): ProseMetric {
+  const text = READING_SECTION_KEYS.map(k => reading[k] || '').join(' ');
+  const sentences = text.split(/[.!?]+/).map(s => s.trim()).filter(s => s.split(/\s+/).length >= 3);
+  const words = text.split(/\s+/).filter(Boolean).length;
+  const totalFacts = sentences.reduce((a, s) => a + countFactOccurrences(s), 0);
+  const virupaNumberMentions = (text.match(/\b\d+\s*virupa/gi) || []).length + (text.match(/\bvirupas?\b/gi) || []).length;
+  const n = sentences.length || 1;
+  return {
+    sentences: sentences.length, words,
+    avgWordsPerSentence: Math.round((words / n) * 10) / 10,
+    totalFacts,
+    avgFactsPerSentence: Math.round((totalFacts / n) * 100) / 100,
+    virupaNumberMentions,
+  };
+}
+
 export function scoreReadingSpecificity(reading: Partial<GeneratedReading>, facts: ReadingFacts, minTerms = 3): SpecificityResult {
   const perSection: SectionScore[] = READING_SECTION_KEYS.map(section => {
     const text = reading[section] || '';

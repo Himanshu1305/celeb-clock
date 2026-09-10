@@ -24,6 +24,8 @@ export interface ReadingFactsClient {
   lagna: string;
   dasha: { maha: string; antar: string } | null;
   placements: Array<{ planet: string; sign: string; house: number; retrograde: boolean }>;
+  /** All 9 grahas incl. raw Shadbala (shown only in the advanced/technical view). */
+  planets?: Array<{ planet: string; sign: string; house: number; retrograde: boolean; combust?: boolean; navamsa?: string; shadbala?: { total: number; category: string } }>;
   doshas: {
     mangal: { present: boolean; severityLabel: string };
     kaalSarp: { present: boolean; isPartial: boolean; type: string | null };

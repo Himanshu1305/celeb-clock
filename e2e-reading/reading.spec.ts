@@ -20,18 +20,19 @@ const KUNDALI = {
   requires_birth_time: false,
 };
 
-// Real, longer NEW-prompt reading text (reference chart) — so the render check
-// screenshots genuine chart-specific length, not a short placeholder.
+// Real NEW (warmth pass) reading text (reference chart) — strength in words, no
+// virupa numbers in the prose; shorter, warmer sentences. So the render check
+// screenshots the genuine current output.
 const READING_SECTIONS = {
-  snapshot: `With your rising sign (Lagna) in Makara and its ruler Saturn resting in your 12th house in Dhanu, your baseline nature leans toward quiet introspection, patience, and working behind the scenes. Your Moon sits in Kanya within the solar-ruled Nakshatra of Uttara Phalguni (pada 2), pairing this grounded Makara endurance with an analytical, service-oriented mindset and an innate urge to bring order to your environment.`,
-  career: `Your 10th house (career) falls in balanced Tula, hosting both Sun (with an indicative strong Shadbala of 446 virupas) and Mercury, while its ruling planet Venus sits in the 9th house in Kanya with moderate strength (310 virupas). Because 10th lord Venus connects with 9th lord Mercury in the 10th house, professional milestones often tie to advisory roles, ethics, and higher learning. Your current major period lord Rahu sits in your 2nd house in Kumbha, linking recent public efforts to building a distinctive voice.`,
-  relationships: `Partnership is governed by your 7th house in nurturing Karka, whose ruler Moon is placed in analytical Kanya in your 9th house alongside Venus. Venus holds moderate strength in Kanya but gains dignity in its own Navamsa sign of Vrishabha, while the Moon moves through Makara in the Navamsa. Mars rests in the 3rd house in Meena, so Mangal Dosha is entirely absent from your relationship dynamics.`,
-  health: `Your 6th house (daily routines and resilience) is Mithuna, governed by Mercury located in your 10th house in Tula. Because your Lagna ruler Saturn shows solid indicative strength (344 virupas) from the restful 12th house in Dhanu, your vitality relies on intentional solitude, unhurried sleep, and structured downtime. Keeping regular hours and pacing mental activity helps your natural stamina stay balanced.`,
-  money: `Financial matters are shaped by your 2nd house of resources in Kumbha, ruled by Saturn in the 12th house, with Rahu also in the 2nd house. Your 11th house of gains is Vrischika, whose lord Mars is in your 3rd house in Meena, while a strong retrograde Jupiter (440 virupas) sits in your 5th house in Vrishabha. Income tends to come through self-directed effort, with disciplined saving habits smoothing occasional impulses.`,
-  family: `Your 4th house of domestic roots is Mesha, ruled by Mars in Meena in your 3rd house, fostering an active, candid home life. The 9th house of paternal influence is Kanya, ruled by Mercury placed in the 10th house in Tula, with both Moon and Venus in the 9th house — a family foundation that values craftsmanship, integrity, and shared moral principles.`,
-  rightNow: `You are navigating the major period of Rahu with the sub-period of the Moon. Rahu sits in your 2nd house in Kumbha (and Meena in the Navamsa), turning focus toward speech, family affairs, and resource management. Because the Moon is your 7th lord and resides in your 9th house in Kanya with strong indicative Shadbala (368 virupas), this chapter often highlights joint initiatives and growth through study or travel.`,
-  doshas: `You can feel reassured: Mangal Dosha is not present because Mars occupies your 3rd house in Meena rather than relationship-sensitive houses. Kaal Sarp is not formed, and Saturn is not casting Sade Sati over your Kanya Moon. The gentle area to stay mindful of is simply Rahu in your 2nd house of Kumbha, which invites care around speech and everyday balance.`,
-  divisional: `In your Navamsa (D9) chart, your Sun shifts into Meena, your Moon is in Makara, and Venus returns to its own sign of Vrishabha. In the Dasamsa (D10 career chart) the Sun is exalted in Mesha, reflecting strong executive potential. In one classical interpretation of the subtle Shashtiamsa (D60), your Moon resides in Vrischika — a tentative glimpse of quiet emotional depth.`,
+  snapshot: `Your rising sign is Makara, giving you a steady and grounded approach to life. Its lord Saturn rests in your 12th house in Dhanu, which brings an inner pull toward reflection and quiet independence. Meanwhile, your Moon resides in Kanya in the bright star Uttara Phalguni, blending analytical care with warmth and natural integrity.`,
+  career: `Your 10th house of career sits in sociable Tula, ruled by Venus in your 9th house in Kanya with moderately strong indicative strength. Sun and Mercury also occupy your 10th house, showing that professional success often grows through communication, advisory roles, and diplomatic tact. The Sun brings strong indicative presence to this house, helping you earn respect through thoughtful authority. With your current main period ruled by Rahu in your 2nd house, your work may increasingly center on resource management and purposeful speech.`,
+  relationships: `Your 7th house of partnerships is gentle Karka, ruled by the Moon which sits peacefully in your 9th house in Kanya with strong indicative strength. Venus also rests in Kanya in your 9th house, bringing a helpful and devoted nature to personal bonds. In the Navamsa chart, Venus reaches Vrishabha, which supports deep emotional loyalty and long-term security. These placements foster partnerships that flourish through mutual growth and daily acts of kindness.`,
+  health: `Your 6th house of daily routines and personal resilience is Mithuna, ruled by Mercury who sits in your 10th house in Tula. This pattern suggests your vitality thrives when your schedule is mentally engaging yet free from clutter. Your Lagna lord Saturn shows strong indicative strength, giving you reliable endurance over the long haul. Because Saturn rests in the 12th house, honoring quiet retreat and consistent sleep rhythms remains vital for your wellbeing.`,
+  money: `Your 2nd house of resources is Kumbha, ruled by Saturn who sits in your 12th house in Dhanu. Your 11th house of gains is Vrischika, guided by a strong Mars placed in your 3rd house in Meena. This mix shows that financial growth tends to come through personal initiative and careful planning rather than quick luck. A retrograde Jupiter sits in your 5th house in Vrishabha with strong indicative strength, encouraging thoughtful and patient habits.`,
+  family: `Your 4th house of home life is Mesha, ruled by Mars placed in your 3rd house in Meena. This placement often brings an active, self-directed spirit into your domestic sphere. Your 9th house of fatherhood and wisdom sits in analytical Kanya, with its lord Mercury in your 10th house in Tula. This harmony suggests your family values frequently inform your public path.`,
+  rightNow: `You are currently navigating a Rahu main period paired with a Moon sub-period. Rahu sits in your 2nd house in Kumbha, drawing your attention toward family matters, financial habits, and authentic expression. The Moon brings strong indicative strength from your 9th house in Kanya, softening this phase with higher learning and emotional balance. Together, they tend to make this an introspective yet practical period.`,
+  doshas: `Your chart is entirely free from Mangal Dosha, as Mars rests peacefully in your 3rd house in Meena. You also do not carry Kaal Sarp combinations, and Sade Sati is not currently active for you. There are no burdensome planetary afflictions in these areas, leaving your primary path clear and grounded. You can focus forward with calm confidence and steady personal effort.`,
+  divisional: `Looking deeper into your subtle charts, your Navamsa rising sign settles in Meena with the Sun, while your Moon shifts to Makara. Venus gains graceful dignity in Vrishabha within this same D9 chart. In the Dasamsa chart of public life, the Sun sits in purposeful Mesha. According to one classical reading of the Shashtiamsa chart, your Moon rests in Vrischika, pointing to intuitive depth behind the scenes.`,
 };
 
 const FACTS = {
@@ -41,6 +42,12 @@ const FACTS = {
     { planet: 'Sun', sign: 'Tula', house: 10, retrograde: false },
     { planet: 'Moon', sign: 'Kanya', house: 9, retrograde: false },
     { planet: 'Saturn', sign: 'Dhanu', house: 12, retrograde: false },
+  ],
+  // Raw Shadbala numbers live in the advanced view (narrative uses words only).
+  planets: [
+    { planet: 'Sun', sign: 'Tula', house: 10, retrograde: false, shadbala: { total: 446, category: 'strong' } },
+    { planet: 'Venus', sign: 'Kanya', house: 9, retrograde: false, shadbala: { total: 310, category: 'moderate' } },
+    { planet: 'Saturn', sign: 'Dhanu', house: 12, retrograde: false, shadbala: { total: 344, category: 'strong' } },
   ],
   doshas: { mangal: { present: false, severityLabel: 'None' }, kaalSarp: { present: false, isPartial: false, type: null }, sadeSati: { active: false, phase: null } },
   divisional: { d9Moon: 'Makara', d10Sun: 'Mesha', d60Moon: 'Simha', d60Disclaimer: 'The Shashtiamsa (D60) is calculated using one of several classical traditions; treat it as one interpretation.' },
@@ -80,16 +87,24 @@ test('positive: full reading renders all 5 sections with real text + advanced to
     await expect(page.locator(`[data-testid="reading-area-${area}"]`)).toBeVisible();
   }
   await expect(page.locator('[data-testid="reading-right-now"]')).toContainText('Rahu');
-  await expect(page.locator('[data-testid="reading-doshas"]')).toContainText('Mangal Dosha is not present');
+  await expect(page.locator('[data-testid="reading-doshas"]')).toContainText('Mangal Dosha');
   await expect(page.locator('[data-testid="reading-d60-disclaimer"]')).toContainText('one interpretation');
   // no stuck spinner, no empty
   await expect(page.locator('[data-testid="reading-loading"]')).toHaveCount(0);
 
+  // Critique #1 — strength shown as WORDS in the narrative, no raw virupa numbers.
+  const narrative = (await reading.textContent()) || '';
+  expect(narrative).not.toMatch(/virupa/i);
+  await expect(page.locator('[data-testid="reading-area-career"]')).toContainText('moderately strong');
+
   await page.screenshot({ path: 'e2e-reading/__screens__/01-positive-full-reading.png', fullPage: true });
 
-  // advanced toggle reveals chart data
+  // advanced toggle reveals chart data — AND the raw Shadbala virupa numbers live here.
   await page.click('[data-testid="reading-advanced-toggle"]');
   await expect(page.locator('[data-testid="reading-advanced"]')).toBeVisible();
+  await expect(page.locator('[data-testid="reading-shadbala"]')).toContainText('virupas');
+  await expect(page.locator('[data-testid="reading-shadbala"]')).toContainText('446');
+  await page.screenshot({ path: 'e2e-reading/__screens__/df-advanced-shadbala.png', fullPage: true });
   await expect(page.locator('[data-testid="reading-advanced"]')).toContainText('Sun');
   await page.screenshot({ path: 'e2e-reading/__screens__/02-advanced-view.png', fullPage: true });
 });

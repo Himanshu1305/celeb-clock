@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { calculateBirthChart } from '../calculateBirthChart';
 import { extractReadingFacts } from '../readingPrompts';
-import { verifyReadingClaims, scoreReadingSpecificity } from '../readingSpecificity';
+import { verifyReadingClaims, scoreReadingSpecificity, measureProse } from '../readingSpecificity';
+import { strengthWord } from '../readingPrompts';
 
 const REF = new Date(Date.UTC(2026, 8, 9));
 async function refFacts() {
@@ -73,6 +74,25 @@ describe('specificity checker', () => {
     const s = scoreReadingSpecificity(good, f);
     expect(s.overallPass).toBe(true);
     expect(s.failing).toHaveLength(0);
+  });
+
+  it('strengthWord maps categories to plain words (no numbers)', () => {
+    expect(strengthWord('strong')).toBe('strong');
+    expect(strengthWord('moderate')).toBe('moderately strong');
+    expect(strengthWord('weak')).toMatch(/gentle/);
+  });
+
+  it('measureProse: denser prose scores MORE facts/sentence than looser prose', () => {
+    const dense = { career: 'Your 10th house is Tula ruled by Venus in the 9th house in Kanya with Sun and Mercury also in the 10th house while Rahu sits in the 2nd house in Kumbha.' } as any;
+    const loose = { career: 'Your 10th house is Tula. Venus rules it from your 9th house. The Sun adds warmth. Rahu sits in your 2nd house.' } as any;
+    const md = measureProse(dense), ml = measureProse(loose);
+    expect(md.avgFactsPerSentence).toBeGreaterThan(ml.avgFactsPerSentence);
+    expect(ml.avgWordsPerSentence).toBeLessThan(md.avgWordsPerSentence);
+  });
+
+  it('measureProse: detects raw virupa numbers leaking into narrative', () => {
+    expect(measureProse({ career: 'Venus has 310 virupas of strength.' } as any).virupaNumberMentions).toBeGreaterThan(0);
+    expect(measureProse({ career: 'Venus is moderately strong.' } as any).virupaNumberMentions).toBe(0);
   });
 
   it('flags a generic reading (the old style) as failing', async () => {
