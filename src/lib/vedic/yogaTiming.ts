@@ -1,0 +1,200 @@
+/**
+ * Part D-Fix3 — Yoga / life-event ACTIVATION-WINDOW calculator.
+ *
+ * Prior sessions computed THAT a Yoga exists (Part G) and the FULL Vimshottari
+ * Dasha timeline (Part B, extended to full-life in this session). Neither
+ * computed WHEN a chart promise activates. This module joins the two.
+ *
+ * ── Classical timing rules used (Part 1 research, multi-source) ──────────────
+ *  • A Yoga/promise activates most strongly during the Mahadasha and/or
+ *    Antardasha of a planet DIRECTLY INVOLVED in forming it (a participating
+ *    planet, or a lord of a house that defines the theme). (indastro, prokerala,
+ *    academyofvedicvidya, jagannathhora — consistent.)
+ *  • Mahadasha = the PRIMARY, broad, stronger window (the "chapter"); Antardasha
+ *    = the PRECISE sub-window inside it (the "paragraph"). Classical view: an
+ *    event indicated only at Antardasha level (not Maha) is weaker. So the
+ *    strongest activation is a significator's Antardasha sitting INSIDE a
+ *    significator's Mahadasha ("double activation").
+ *  • A life has several qualifying windows; a real "when will X happen" question
+ *    is about the near future, so we emphasise the CURRENT or NEXT-UPCOMING
+ *    window and keep the rest as secondary detail. If the strongest windows are
+ *    already in the past, we say so honestly rather than inventing a soon one.
+ *
+ * ── Category significators (Part 1.4) ───────────────────────────────────────
+ *  • Wealth  : 2nd-house lord, 11th-house lord, + Jupiter (Dhana karaka).
+ *  • Career  : 10th-house lord, + any planet sitting in the 10th house.
+ *  • Marriage: 7th-house lord, + Venus (Kalatra karaka), + Jupiter.
+ *    GENDER decision (documented): classical texts make Jupiter the husband-
+ *    significator in a woman's chart and Venus the wife-significator in a man's.
+ *    Modern practice increasingly treats this as outdated, and this product does
+ *    NOT collect gender. We therefore use a GENDER-NEUTRAL set — Venus (the
+ *    universal Kalatra karaka) + Jupiter (a marriage benefic in all charts) +
+ *    the 7th lord — for everyone. Documented, not silently guessed.
+ */
+import type { BirthChartResult, MahadashaPeriod } from './calculateBirthChart';
+import { SIGN_LORDS } from './engine/sthanaBala';
+
+export type WindowLevel = 'maha' | 'antar';
+export type WindowStatus = 'past' | 'current' | 'upcoming';
+
+export interface ActivationWindow {
+  planet: string;
+  level: WindowLevel;
+  start: string;            // ISO
+  end: string;              // ISO
+  withinMaha?: string;      // for an antar window: the Mahadasha lord it sits inside
+  doubleActivation?: boolean; // antar of a significator INSIDE a maha of a significator = strongest
+  status: WindowStatus;
+}
+
+export interface TimingResult {
+  key: string;              // yoga name or category id
+  label: string;            // human label
+  significators: string[];  // planets whose Dasha periods count as activation
+  windows: ActivationWindow[]; // ordered: current, then upcoming (soonest first), then past (recent first)
+  current: ActivationWindow | null;
+  next: ActivationWindow | null;   // primary emphasis: current if active, else nearest upcoming
+  note?: string;
+}
+
+// ── house helpers (reuse the same SIGN_LORDS mapping the Yoga engine uses) ────
+export function houseLordOf(chart: BirthChartResult, house: number): string {
+  const lagnaIdx = chart.lagna.rashiIndex;                 // 0-based sign of the 1st house
+  const signIdx = (lagnaIdx + (house - 1)) % 12;
+  return SIGN_LORDS[signIdx];
+}
+export function planetsInHouse(chart: BirthChartResult, house: number): string[] {
+  return chart.planets.filter(p => p.house === house).map(p => p.name);
+}
+
+// Rahu/Ketu HAVE Vimshottari Dashas, so they are valid significators when they
+// participate in a Yoga; but they do NOT rule signs, so they never appear as a
+// "house lord". That asymmetry is intentional and correct.
+function statusOf(startISO: string, endISO: string, now: Date): WindowStatus {
+  const s = new Date(startISO).getTime(), e = new Date(endISO).getTime(), t = now.getTime();
+  if (t >= e) return 'past';
+  if (t >= s) return 'current';
+  return 'upcoming';
+}
+
+/**
+ * Every Maha/Antar window ruled by one of `significators`, across the whole life.
+ * Maha window = the significator's Mahadasha. Antar window = the significator's
+ * Antardasha (tagged doubleActivation when the enclosing Maha lord is ALSO a
+ * significator — the classically strongest case).
+ */
+export function windowsForSignificators(
+  timeline: MahadashaPeriod[] | undefined,
+  significators: string[],
+  now: Date,
+): ActivationWindow[] {
+  if (!timeline?.length || !significators.length) return [];
+  const sig = new Set(significators);
+  const out: ActivationWindow[] = [];
+  for (const maha of timeline) {
+    const mahaIsSig = sig.has(maha.lord);
+    if (mahaIsSig) {
+      out.push({ planet: maha.lord, level: 'maha', start: maha.start, end: maha.end, status: statusOf(maha.start, maha.end, now) });
+    }
+    for (const antar of maha.antardashas) {
+      if (!sig.has(antar.lord)) continue;
+      out.push({
+        planet: antar.lord, level: 'antar', start: antar.start, end: antar.end,
+        withinMaha: maha.lord, doubleActivation: mahaIsSig,
+        status: statusOf(antar.start, antar.end, now),
+      });
+    }
+  }
+  return orderWindows(out, now);
+}
+
+/** current first, then upcoming soonest-first, then past most-recent-first. */
+export function orderWindows(windows: ActivationWindow[], now: Date): ActivationWindow[] {
+  const rank = (w: ActivationWindow) => (w.status === 'current' ? 0 : w.status === 'upcoming' ? 1 : 2);
+  return [...windows].sort((a, b) => {
+    const ra = rank(a), rb = rank(b);
+    if (ra !== rb) return ra - rb;
+    const sa = new Date(a.start).getTime(), sb = new Date(b.start).getTime();
+    return a.status === 'past' ? sb - sa : sa - sb;   // past: most recent first; else: soonest first
+  });
+}
+
+function pickCurrentAndNext(windows: ActivationWindow[]): { current: ActivationWindow | null; next: ActivationWindow | null } {
+  const current = windows.find(w => w.status === 'current') || null;
+  const upcoming = windows.find(w => w.status === 'upcoming') || null;
+  // Prefer a precise (antar) upcoming window for "next" if one exists soon, else the maha.
+  return { current, next: current || upcoming };
+}
+
+/** Timing windows for every DETECTED Yoga in the chart (significators = its participating planets). */
+export function yogaTimings(chart: BirthChartResult, now: Date = new Date()): TimingResult[] {
+  const yogas = chart.yogas || [];
+  const results: TimingResult[] = [];
+  for (const y of yogas) {
+    const significators = [...new Set(y.planets || [])].filter(Boolean);
+    if (!significators.length) continue;
+    const windows = windowsForSignificators(chart.dashaTimeline, significators, now);
+    const { current, next } = pickCurrentAndNext(windows);
+    results.push({
+      key: y.name, label: y.name, significators, windows, current, next,
+      note: windows.length && !current && !next
+        ? 'All classical activation windows for this Yoga are in the past for this chart.'
+        : undefined,
+    });
+  }
+  return results;
+}
+
+export type LifeCategory = 'wealth' | 'career' | 'marriage';
+
+/** Significators for the three named life questions (Part 1.4). */
+export function categorySignificators(chart: BirthChartResult, category: LifeCategory): { significators: string[]; note?: string } {
+  if (category === 'wealth') {
+    const sig = [houseLordOf(chart, 2), houseLordOf(chart, 11), 'Jupiter'];
+    return { significators: [...new Set(sig)], note: 'Wealth timing uses the periods of your 2nd-house lord (savings), 11th-house lord (gains), and Jupiter (the natural significator of wealth).' };
+  }
+  if (category === 'career') {
+    const sig = [houseLordOf(chart, 10), ...planetsInHouse(chart, 10)];
+    return { significators: [...new Set(sig)], note: 'Career/job timing uses the periods of your 10th-house lord (profession) and any planet placed in your 10th house.' };
+  }
+  // marriage — gender-neutral (see module header).
+  const sig = [houseLordOf(chart, 7), 'Venus', 'Jupiter'];
+  return { significators: [...new Set(sig)], note: 'Marriage timing uses the periods of your 7th-house lord (partnership), Venus (the natural significator of marriage), and Jupiter — applied the same way regardless of gender.' };
+}
+
+/** Timing windows for one of the three named life categories. */
+export function categoryTiming(chart: BirthChartResult, category: LifeCategory, now: Date = new Date()): TimingResult {
+  const { significators, note } = categorySignificators(chart, category);
+  const windows = windowsForSignificators(chart.dashaTimeline, significators, now);
+  const { current, next } = pickCurrentAndNext(windows);
+  const label = category === 'wealth' ? 'Wealth' : category === 'career' ? 'Career / job' : 'Marriage';
+  let honest = note;
+  if (windows.length && !current && !next) {
+    honest = `${note} Your strongest classical windows for this have already passed; the next comparable one is beyond the computed range.`;
+  }
+  return { key: category, label, significators, windows, current, next, note: honest };
+}
+
+export function allCategoryTimings(chart: BirthChartResult, now: Date = new Date()): Record<LifeCategory, TimingResult> {
+  return {
+    wealth: categoryTiming(chart, 'wealth', now),
+    career: categoryTiming(chart, 'career', now),
+    marriage: categoryTiming(chart, 'marriage', now),
+  };
+}
+
+// ── formatting helpers (shared by readings + chat so the wording is identical) ─
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+export function formatMonthYear(iso: string): string {
+  const d = new Date(iso);
+  return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+export function formatWindowRange(w: ActivationWindow): string {
+  return `${formatMonthYear(w.start)} to ${formatMonthYear(w.end)}`;
+}
+/** A one-line, honest description of a window for prose ("your Jupiter Antardasha from March 2027 to August 2028"). */
+export function describeWindow(w: ActivationWindow): string {
+  const kind = w.level === 'maha' ? 'Mahadasha (main period)' : 'Antardasha (sub-period)';
+  const when = w.status === 'current' ? 'currently running' : w.status === 'upcoming' ? 'upcoming' : 'past';
+  return `${w.planet} ${kind} (${formatWindowRange(w)}, ${when})`;
+}

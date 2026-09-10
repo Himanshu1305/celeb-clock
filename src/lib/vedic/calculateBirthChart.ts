@@ -72,6 +72,20 @@ export interface CurrentDasha {
   antardasha_end: string | null;
 }
 
+/** One Antardasha (sub-period) — ISO date strings. */
+export interface AntardashaPeriod {
+  lord: string;
+  start: string;
+  end: string;
+}
+/** One Mahadasha with its nested Antardashas — the full-lifetime timeline (Part D-Fix3). */
+export interface MahadashaPeriod {
+  lord: string;
+  start: string;
+  end: string;
+  antardashas: AntardashaPeriod[];
+}
+
 export interface DivisionalCharts {
   /** D60 uses one of several classical methods — UI MUST show the disclaimer. */
   d60Method: string;
@@ -101,6 +115,8 @@ export interface BirthChartResult {
   /** Moon's sign (chandra rasi). */
   rashi: string;
   currentDasha: CurrentDasha | null;
+  /** Full-lifetime Vimshottari timeline (9 Mahadashas × 9 Antardashas). Part D-Fix3. */
+  dashaTimeline?: MahadashaPeriod[];
   doshas: {
     mangalDosha: { hasDosha: boolean; severityLabel: string; severityPercentage: number; fromLagna: boolean; fromMoon: boolean; fromVenus: boolean };
     kaalSarp: KaalSarpDetails;
@@ -344,6 +360,7 @@ function toResult(chart: FullChart, source: 'local' | 'prokerala', includeShadba
     nakshatra: { nakshatra: moon.nakshatra, pada: moon.pada, lord: nakshatraLord(moon.nakshatraIndex) },
     rashi: moon.rashi,
     currentDasha: dasha,
+    dashaTimeline: (chart as any).fullDashaTimeline,
     doshas: {
       mangalDosha: {
         hasDosha: chart.doshas.mangalDosha.hasDosha,

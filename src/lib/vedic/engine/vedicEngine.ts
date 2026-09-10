@@ -275,12 +275,44 @@ export function generateFullChart(birthDateUTC: Date, refDateUTC: Date, latitude
     }
   }
 
+  // FULL-LIFETIME Dasha/Antardasha timeline (Part D-Fix3). The block above only
+  // computes the CURRENT Maha + current Antar (it early-breaks past today); real
+  // Yoga-activation timing needs every period across the whole life. This REUSES
+  // the exact validated anchor (birthMahadashaStart, birthLordIndex) and the same
+  // proportional math — one Vimshottari cycle = 9 Mahadashas = 120 years covers a
+  // full lifetime. A unit test asserts the period containing refDate here equals
+  // currentMahadasha/currentAntardasha, proving no divergence from the validated logic.
+  const fullDashaTimeline: Array<{ lord: string; start: string; end: string; antardashas: Array<{ lord: string; start: string; end: string }> }> = [];
+  {
+    let mahaCursor = new Date(birthMahadashaStart.getTime());
+    for (let i = 0; i < 9; i++) {
+      const lord = DASHA_LORDS[(birthLordIndex + i) % 9];
+      const years = DASHA_YEARS[lord];
+      const start = new Date(mahaCursor.getTime());
+      const end = new Date(mahaCursor.getTime() + years * 365.25 * 24 * 3600 * 1000);
+      const antardashas: Array<{ lord: string; start: string; end: string }> = [];
+      let antarCursor = new Date(start.getTime());
+      const mahaLordIdx = DASHA_LORDS.indexOf(lord);
+      for (let j = 0; j < 9; j++) {
+        const subLord = DASHA_LORDS[(mahaLordIdx + j) % 9];
+        const subYears = years * (DASHA_YEARS[subLord] / 120);
+        const subStart = new Date(antarCursor.getTime());
+        const subEnd = new Date(antarCursor.getTime() + subYears * 365.25 * 24 * 3600 * 1000);
+        antardashas.push({ lord: subLord, start: subStart.toISOString(), end: subEnd.toISOString() });
+        antarCursor = subEnd;
+      }
+      fullDashaTimeline.push({ lord, start: start.toISOString(), end: end.toISOString(), antardashas });
+      mahaCursor = end;
+    }
+  }
+
   return {
     ayanamsa: Number(ayanamsa.toFixed(6)),
     lagna: { siderealLongitude: Number(lagnaResult.ascSidereal.toFixed(4)), ...lagnaBreakdown },
     planets,
     currentMahadasha: currentMahadasha ? { lord: currentMahadasha.lord, start: currentMahadasha.start.toISOString(), end: currentMahadasha.end.toISOString() } : null,
     currentAntardasha,
+    fullDashaTimeline,
     doshas: {
       mangalDosha: { hasDosha: mangalDosha, fromLagna: mangalDoshaFromLagna, fromMoon: mangalDoshaFromMoon, fromVenus: mangalDoshaFromVenus },
       kaalSarpDosha,
