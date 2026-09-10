@@ -131,7 +131,10 @@ function countSpecificTerms(text: string): number {
   for (const re of [new RegExp(`\\b(${PLANET_ALT})\\b`, 'gi'), new RegExp(`\\b(${SIGN_ALT})\\b`, 'gi'), new RegExp(`\\b(${ORD_ALT})\\s+house\\b`, 'gi')]) {
     for (const m of text.matchAll(re)) found.add(m[0].toLowerCase());
   }
-  for (const re of [/\bNavamsa\b/i, /\bShadbala\b/i, /\b(Mangal|Kaal Sarp|Sade Sati)\b/i]) {
+  // Count each named concept individually — the three doshas are distinct facts
+  // (a clean-chart doshas section legitimately names all three), so they must not
+  // collapse into one bucket.
+  for (const re of [/\bNavamsa\b/i, /\bShadbala\b/i, /\bDasamsa\b/i, /\bShashtiamsa\b/i, /\bMangal\b/i, /\bKaal Sarp\b/i, /\bSade Sati\b/i]) {
     if (re.test(text)) found.add(re.source);
   }
   return found.size;

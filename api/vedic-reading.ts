@@ -33,10 +33,14 @@ async function getSupabase(env) {
   return createClient(url, key);
 }
 
+// Bump READING_VERSION whenever the prompt/output format changes materially, so
+// old cached readings are not served after an upgrade. v2 = Part D-Fix specificity
+// + warmth (strength-in-words) overhaul.
+const READING_VERSION = 'v3';
 function buildCacheKey(y, m, d, h, min, lat, lon, tz) {
   const rlat = Number(lat).toFixed(4);
   const rlon = Number(lon).toFixed(4);
-  return ['reading', y, m, d, h, min, rlat, rlon, tz].join('-');
+  return ['reading', READING_VERSION, y, m, d, h, min, rlat, rlon, tz].join('-');
 }
 
 async function getCached(sb, cacheKey) {
