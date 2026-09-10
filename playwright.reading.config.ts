@@ -12,6 +12,7 @@ export default defineConfig({
   timeout: 45000,
   reporter: [['list']],
   use: {
+    storageState: 'e2e/.playwright-consent.json',
     baseURL: 'http://localhost:4173',
     trace: 'off',
     screenshot: 'off', // we take explicit screenshots for the deliverable

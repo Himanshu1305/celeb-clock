@@ -1,0 +1,17 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "https://staging.bornclock.com",
+      "localStorage": [
+        { "name": "cookie_consent", "value": "{\"essential\":true,\"analytics\":true,\"marketing\":true,\"timestamp\":\"2026-01-01T00:00:00.000Z\",\"version\":\"1.0\"}" }
+      ]
+    },
+    {
+      "origin": "http://localhost:4173",
+      "localStorage": [
+        { "name": "cookie_consent", "value": "{\"essential\":true,\"analytics\":true,\"marketing\":true,\"timestamp\":\"2026-01-01T00:00:00.000Z\",\"version\":\"1.0\"}" }
+      ]
+    }
+  ]
+}
