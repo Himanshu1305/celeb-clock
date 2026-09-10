@@ -16,6 +16,7 @@ import type { BirthChartResult } from './calculateBirthChart';
 import { RASHI_NAMES } from './engine/vedicEngine';
 import { SIGN_LORDS } from './engine/sthanaBala';
 import { getNakshatraMeaning, nakshatraMeaningLine } from './nakshatraMeanings';
+import { buildTimingFacts, type TimingFacts } from './yogaTiming';
 
 export interface PlanetFact {
   planet: string; sign: string; house: number;
@@ -48,6 +49,8 @@ export interface ReadingFacts {
   /** Detected classical Yogas (present, graded) — cited as evidence in relevant sections.
    * `conditions` are for the advanced view only (the prompt ignores them). */
   yogas: Array<{ name: string; grade: string; summary: string; note?: string; conditions: string[] }>;
+  /** Computed activation-window timing (Part D-Fix3) — real dates for "when" questions. */
+  timing: TimingFacts;
   warnings: Array<{ code: string; message: string }>;
   fieldsUsed: Record<string, string[]>;
 }
@@ -74,7 +77,7 @@ const HOUSES_OF_INTEREST = [1, 2, 4, 6, 7, 9, 10, 11];
 
 /** Extract the full, confidence-aware fact set that feeds the prompt, the
  * accuracy checker, and the deterministic fallback display. */
-export function extractReadingFacts(chart: BirthChartResult): ReadingFacts {
+export function extractReadingFacts(chart: BirthChartResult, now: Date = new Date()): ReadingFacts {
   const byName: Record<string, BirthChartResult['planets'][number]> = {};
   for (const p of chart.planets) byName[p.name] = p;
 
@@ -135,6 +138,7 @@ export function extractReadingFacts(chart: BirthChartResult): ReadingFacts {
       navamsaVenus: chart.divisionalCharts.d9.Venus,
     },
     yogas: (chart.yogas ?? []).map(y => ({ name: y.name, grade: y.grade, summary: y.summary, note: y.note, conditions: y.conditions })),
+    timing: buildTimingFacts(chart, now),
     warnings: chart.warnings.map(w => ({ code: w.code, message: w.message })),
     fieldsUsed: {
       snapshot: ['Lagna + lord placement', 'Moon sign', 'Nakshatra'],
@@ -221,6 +225,21 @@ export function buildReadingUserPrompt(f: ReadingFacts): string {
     ? '\nIMPORTANT: extreme (polar) latitude — the rising sign and houses are astronomically unreliable here; note in the snapshot that ascendant/house parts are approximate.'
     : '';
 
+  // Computed activation-timing windows (Part D-Fix3) — real Dasha date ranges.
+  const fmtWin = (w: TimingFacts['categories'][number]['upcoming'][number]) => {
+    const kind = w.level === 'maha' ? 'Mahadasha (main period)' : 'Antardasha (sub-period)';
+    const when = w.status === 'current' ? ' (currently running)' : w.status === 'past' ? ' (already past)' : '';
+    const strongest = w.doubleActivation ? ' — STRONGEST (an activating sub-period inside a supporting main period)' : '';
+    return `${w.planet} ${kind} ${w.range}${when}${strongest}`;
+  };
+  const catTimingLine = f.timing.categories.map(c => {
+    const wins = c.upcoming.length ? c.upcoming.map(fmtWin).join('; ') : 'no current/upcoming window — the strongest windows are in the past';
+    return `  - ${c.label} (driven by ${c.significators.join(', ')}): ${wins}`;
+  }).join('\n');
+  const yogaTimingLine = f.timing.yogas.filter(y => y.upcoming.length).map(y =>
+    `  - ${y.name} (planets ${y.significators.join(', ')}): ${y.upcoming.map(fmtWin).join('; ')}`
+  ).join('\n') || '  - (no upcoming Yoga-specific windows)';
+
   return `THIS PERSON'S BIRTH CHART (sidereal / Lahiri). Use ONLY these facts; do not invent placements.
 
 Core:
@@ -251,14 +270,25 @@ Two more rules:
 1) SHOW, don't just assert: when you name a Yoga, attach the one-clause reason it forms, taken from its listed conditions (e.g. "a Raj Yoga, since your Yogakaraka Venus rules both a Kendra and a Trikona") — never name a Yoga with no reason, which reads as empty decoration.
 2) Use the Yoga's EXACT grade word (full / strong / moderate / partial) as given above; do not swap in a different strength word, and if you mention the same Yoga in two sections use the SAME grade word both times. Even for a strong/full Yoga, phrase the effect as a tendency ("tends to", "supports"), never a certainty.
 
+COMPUTED ACTIVATION-TIMING WINDOWS (real dates from THIS chart's Vimshottari Dasha — this is the "WHEN" data. Cite these EXACTLY):
+${catTimingLine}
+Yoga activation windows:
+${yogaTimingLine}
+How to use timing — this is what makes the reading answer "WHEN", not just "what":
+- When a section touches WHEN something is likely (money growth, career moves, partnership/marriage), cite the actual planet period AND its date range from above, e.g. "your Jupiter Antardasha from March 2027 to August 2028 is your strongest classical window for this".
+- Use ONLY the date ranges listed above — never invent, round, or shift a date. If it's not listed, don't state a date.
+- Frame every window as classical LIKELIHOOD ("your strongest classical window", "traditionally the most supportive period for this"), NEVER a guarantee — do not write that something WILL happen on/in a date.
+- If a theme's windows are all in the past, say that honestly ("your strongest classical window for this already ran during …; the next comparable one is years away") — do NOT invent a soon-sounding date.
+- A window marked STRONGEST is the one to emphasise for that theme.
+
 Write the reading as JSON with exactly these fields. EACH must cite the specific facts listed for it:
 - "snapshot": 2-3 sentences from the Lagna (${f.lagna}) + its lord's placement, the Moon sign (${f.rashi}) and Nakshatra. Name them, and briefly explain what the Nakshatra traditionally signifies using the meaning above — but do NOT inflate a neutral/"mixed" Nakshatra to sound exceptional; describe it honestly.
-- "career": MUST reference the 10th house sign AND its ruling planet's placement (house/sign/strength), AND at least one of Sun/Mercury/Saturn by its real placement, AND connect to the current Dasha lord if relevant. Draw a real-world implication.
-- "relationships": MUST reference the 7th house sign and its lord's placement, Venus's placement (sign/house/strength), and the Navamsa sign of Venus or Moon. Fold in Mangal Dosha calmly IF present, naming its cause.
+- "career": MUST reference the 10th house sign AND its ruling planet's placement (house/sign/strength), AND at least one of Sun/Mercury/Saturn by its real placement, AND connect to the current Dasha lord if relevant. Draw a real-world implication. Cite the computed Career timing window (with its real date range) as the strongest upcoming period for professional moves.
+- "relationships": MUST reference the 7th house sign and its lord's placement, Venus's placement (sign/house/strength), and the Navamsa sign of Venus or Moon. Fold in Mangal Dosha calmly IF present, naming its cause. If partnership/marriage timing fits, cite the computed Marriage timing window (real date range) as the strongest classical period for this.
 - "health": MUST reference the 6th house sign and lord, the Lagna lord's strength, and any planet in a health-relevant house — but describe the 6th house as daily routines, service, habits and resilience, speaking ONLY to general wellbeing, rest and energy. Never use "disease", "illness", "condition" or any ailment name.
-- "money": MUST reference the 2nd and 11th house signs and their lords' placements, and Jupiter's placement. Habits/mindset only.
+- "money": MUST reference the 2nd and 11th house signs and their lords' placements, and Jupiter's placement. Cite the computed Wealth timing window (with its real date range) as the strongest upcoming period for the financial promise to manifest. Habits/mindset otherwise.
 - "family": MUST reference the 4th house (home/mother) and 9th house (father/fortune) signs and their lords' placements.
-- "rightNow": MUST describe the CURRENT Dasha lord (${f.dasha ? f.dasha.maha : 'current'}) by its actual house, sign and indicative Shadbala strength in THIS chart — not a textbook description of that planet.
+- "rightNow": MUST describe the CURRENT Dasha lord (${f.dasha ? f.dasha.maha : 'current'}) by its actual house, sign and indicative Shadbala strength in THIS chart — not a textbook description of that planet. Then name the NEXT upcoming activation window from the timing block above, with its real date range, as what's on the horizon.
 - "doshas": name the specific planet/house behind any dosha present (or reassure plainly if none), calm and de-stigmatising.
 - "divisional": name at least TWO real Navamsa (D9) placements by sign (from the Navamsa list above), plus the Dasamsa; mention D60 only with a "one interpretation" hedge.
 

@@ -198,3 +198,60 @@ export function describeWindow(w: ActivationWindow): string {
   const when = w.status === 'current' ? 'currently running' : w.status === 'upcoming' ? 'upcoming' : 'past';
   return `${w.planet} ${kind} (${formatWindowRange(w)}, ${when})`;
 }
+
+// ── Reading/chat-ready timing facts (single source of truth for prose + checker) ─
+export interface TimingFactWindow {
+  planet: string; level: WindowLevel; start: string; end: string;
+  range: string; status: WindowStatus; doubleActivation?: boolean;
+}
+export interface TimingFactCategory {
+  key: string; label: string; significators: string[];
+  next: TimingFactWindow | null; upcoming: TimingFactWindow[]; note?: string;
+}
+export interface TimingFacts {
+  categories: TimingFactCategory[];
+  yogas: Array<{ name: string; significators: string[]; next: TimingFactWindow | null; upcoming: TimingFactWindow[] }>;
+  currentPeriod: string | null;
+  /** Every date-range the model is ALLOWED to cite ("March 2027 to August 2028"). */
+  validRanges: string[];
+  /** Every month-year endpoint that appears in a real computed window ("March 2027"). */
+  validMonths: string[];
+}
+
+function toFactWindow(w: ActivationWindow): TimingFactWindow {
+  return { planet: w.planet, level: w.level, start: w.start, end: w.end, range: formatWindowRange(w), status: w.status, doubleActivation: w.doubleActivation };
+}
+/** Up to `n` windows to surface: prefer current + soonest upcoming (precise antar windows first). */
+function surfaceWindows(t: TimingResult, n = 3): TimingFactWindow[] {
+  const relevant = t.windows.filter(w => w.status === 'current' || w.status === 'upcoming');
+  const chosen = relevant.length ? relevant : t.windows.slice(0, n); // all-past → show the most recent past ones honestly
+  return chosen.slice(0, n).map(toFactWindow);
+}
+
+/** Assemble the timing block consumed by both the reading prompt and the chat. */
+export function buildTimingFacts(chart: BirthChartResult, now: Date = new Date()): TimingFacts {
+  const cats = allCategoryTimings(chart, now);
+  const categories: TimingFactCategory[] = (['wealth', 'career', 'marriage'] as LifeCategory[]).map(k => {
+    const t = cats[k];
+    return { key: t.key, label: t.label, significators: t.significators, next: t.next ? toFactWindow(t.next) : null, upcoming: surfaceWindows(t), note: t.note };
+  });
+  const yogas = yogaTimings(chart, now).map(t => ({
+    name: t.key, significators: t.significators, next: t.next ? toFactWindow(t.next) : null, upcoming: surfaceWindows(t),
+  }));
+
+  // Valid-date set for the accuracy checker: all surfaced windows + the current
+  // Maha and current Antar periods (always legitimately citable context).
+  const validRanges = new Set<string>();
+  const validMonths = new Set<string>();
+  const addWin = (w: TimingFactWindow) => { validRanges.add(w.range); validMonths.add(formatMonthYear(w.start)); validMonths.add(formatMonthYear(w.end)); };
+  for (const c of categories) { if (c.next) addWin(c.next); c.upcoming.forEach(addWin); }
+  for (const y of yogas) { if (y.next) addWin(y.next); y.upcoming.forEach(addWin); }
+  // Current periods from the validated timeline.
+  const curM = chart.dashaTimeline?.find(m => now >= new Date(m.start) && now < new Date(m.end));
+  const curA = curM?.antardashas.find(a => now >= new Date(a.start) && now < new Date(a.end));
+  let currentPeriod: string | null = null;
+  if (curM) { validMonths.add(formatMonthYear(curM.start)); validMonths.add(formatMonthYear(curM.end)); }
+  if (curM && curA) { currentPeriod = `${curM.lord} / ${curA.lord}`; validMonths.add(formatMonthYear(curA.start)); validMonths.add(formatMonthYear(curA.end)); }
+
+  return { categories, yogas, currentPeriod, validRanges: [...validRanges], validMonths: [...validMonths] };
+}
