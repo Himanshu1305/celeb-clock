@@ -23,6 +23,7 @@ import { GET  as vedicProfile }         from '../api/vedic-profile.js';
 import { GET  as vedicReading }         from '../api/vedic-reading.js';
 import { POST as vedicChat }            from '../api/vedic-chat.js';
 import { GET  as kundaliMatch }         from '../api/kundali-match.js';
+import { GET  as sadeSati }             from '../api/sade-sati.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
 import cronHandler                     from './_cron/daily-email.js';
 import { handleReportOg, injectReportOgTags } from './og-report.js';
@@ -83,6 +84,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/vedic-reading':      vedicReading,
   '/api/vedic-chat':         vedicChat,
   '/api/kundali-match':      kundaliMatch,
+  '/api/sade-sati':          sadeSati,
 };
 
 export default {

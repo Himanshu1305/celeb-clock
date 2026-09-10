@@ -631,3 +631,12 @@ export function getMangalDoshaSeverity(marsHouseFromLagna: number, hasCancellati
 }
 
 export { RASHI_NAMES, NAKSHATRA_NAMES, DASHA_LORDS, DASHA_YEARS };
+
+/** Saturn's sidereal sign index (0-11) at an arbitrary date — reuses the same
+ * validated position + Lahiri-ayanamsa path the chart uses (Part I.10, Sade Sati
+ * cycle dates). No new astronomy. */
+export function getSaturnSignIndex(date: Date): number {
+  const t = Astronomy.MakeTime(date);
+  const lon = getPlanetSiderealLongitude('Saturn', t, getLahiriAyanamsa(date));
+  return Math.floor(lon / 30);
+}
