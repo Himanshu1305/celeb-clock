@@ -25,6 +25,7 @@ import { POST as vedicChat }            from '../api/vedic-chat.js';
 import { GET  as kundaliMatch }         from '../api/kundali-match.js';
 import { GET  as sadeSati }             from '../api/sade-sati.js';
 import { GET  as muhurat }             from '../api/muhurat.js';
+import { GET  as careerReport }        from '../api/career-report.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
 import cronHandler                     from './_cron/daily-email.js';
 import { handleReportOg, injectReportOgTags } from './og-report.js';
@@ -87,6 +88,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/kundali-match':      kundaliMatch,
   '/api/sade-sati':          sadeSati,
   '/api/muhurat':            muhurat,
+  '/api/career-report':      careerReport,
 };
 
 export default {
