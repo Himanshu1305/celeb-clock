@@ -250,6 +250,32 @@ test('yogas: advanced toggle survives close/reopen and shows no stale data after
   await page.screenshot({ path: 'e2e-reading/__screens__/11-yogas-no-stale.png', fullPage: true });
 });
 
+// ── PART D-Fix3: computed activation-window DATES render fully in the reading ─
+test('timing: real Dasha date ranges render fully in Money / Right-now / Relationships', async ({ page }) => {
+  const datedReading = {
+    ...READING_SECTIONS,
+    money: `${READING_SECTIONS.money} Your Mars Antardasha from September 2026 to September 2027 opens this flow, while your Jupiter Antardasha from September 2027 to November 2029 is your strongest classical window for wealth to manifest.`,
+    rightNow: `${READING_SECTIONS.rightNow} Your current Moon sub-period runs until September 2026, and your Mars sub-period from September 2026 to September 2027 is the next activation window on the horizon.`,
+    relationships: `${READING_SECTIONS.relationships} Your Jupiter Antardasha from September 2027 to November 2029 stands as your strongest classical period for marriage.`,
+  };
+  await page.route('**/api/kundali*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ...KUNDALI, _cache: 'miss' }) }));
+  await page.route('**/api/vedic-reading*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(readingPayload({ top: { reading: datedReading } })) }));
+
+  await fillFormAndGenerate(page);
+  await expect(page.locator('[data-testid="vedic-reading"]')).toBeVisible();
+
+  // The full date-range text must be present and readable (not truncated).
+  const money = page.locator('[data-testid="reading-area-money"]');
+  await expect(money).toContainText('September 2027 to November 2029');
+  await expect(money).toContainText('strongest classical window');
+  await expect(page.locator('[data-testid="reading-right-now"]')).toContainText('September 2026 to September 2027');
+  await expect(page.locator('[data-testid="reading-area-relationships"]')).toContainText('September 2027 to November 2029');
+  // no clipping: the section's scrollHeight fits its rendered text (text isn't cut off)
+  const clipped = await money.evaluate((el: HTMLElement) => el.scrollHeight > el.clientHeight + 4);
+  expect(clipped).toBe(false);
+  await page.screenshot({ path: 'e2e-reading/__screens__/12-timing-dates.png', fullPage: true });
+});
+
 // ── EDGE FLOW: very old + very recent birth dates both render ─────────────────
 for (const [label, dob] of [['old-1901', '1901-06-10'], ['recent-2015', '2015-12-25']] as const) {
   test(`edge: birth date ${label} renders correctly`, async ({ page }) => {

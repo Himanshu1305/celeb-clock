@@ -73,6 +73,25 @@ describe('deterministic safe fallback', () => {
   });
 });
 
+describe('D-Fix2 hard boundary still holds WITH real dates (Part 4.5)', () => {
+  it('a real date RANGE framed as likelihood passes safety; a "you will definitely" + date is still blocked', () => {
+    // Legitimate: specific dates, framed as classical likelihood, no yes/no verb.
+    const ok = 'Your strongest classical window is your Jupiter Antardasha from September 2027 to November 2029 — traditionally the most supportive period for this.';
+    expect(scanChatResponse(ok)).toHaveLength(0);
+    // Still forbidden: a literal certainty, even though a real date is attached.
+    const bad = 'You will definitely become rich in September 2027.';
+    const flags = scanChatResponse(bad);
+    expect(flags.length).toBeGreaterThan(0);           // caught by the D-Fix2 boundary
+    expect(flags.join(' ')).toMatch(/will|definitely/i);
+  });
+
+  it('citing a date range is not a yes/no guarantee — both boundaries coexist', () => {
+    // "guaranteed"/"will" remain banned; a date range with "tends to / your strongest window" is fine.
+    expect(scanChatResponse('This is guaranteed by March 2027.').length).toBeGreaterThan(0);
+    expect(scanChatResponse('Your Mars Antardasha from September 2026 to September 2027 tends to support this.')).toHaveLength(0);
+  });
+});
+
 describe('buildChatReply — timing accuracy retry loop (Part F rigor)', () => {
   const facts = async () => refFacts();
 

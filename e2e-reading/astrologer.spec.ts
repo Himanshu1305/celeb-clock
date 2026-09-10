@@ -20,6 +20,27 @@ async function mockChat(page: Page) {
   });
 }
 
+// ── PART D-Fix3: a timing answer with real computed dates renders cleanly ─────
+test('timing question: dated activation-window answer renders fully in the chat', async ({ page }) => {
+  await seedProfile(page);
+  await page.route('**/api/vedic-chat', route => route.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({
+      reply: 'Based on your chart, your Mars sub-period from September 2026 to September 2027 opens a first window, and your strongest classical window for wealth is your Jupiter Antardasha from September 2027 to November 2029 — traditionally the most supportive period for this, though not a fixed certainty.',
+      crisis: false, degraded: false, sanitized: false, timingChecked: true, grounding: ['Dasha:Rahu/Moon'],
+    }),
+  }));
+  await page.goto('/astrologer');
+  await expect(page.locator('[data-testid="astrologer-chat"]')).toBeVisible();
+  await page.fill('[data-testid="astrologer-input"]', 'when will I get rich?');
+  await page.click('[data-testid="astrologer-send"]');
+  const bot = page.locator('[data-testid="astrologer-msg-bot"]').first();
+  await expect(bot).toContainText('September 2027 to November 2029');
+  await expect(bot).toContainText('strongest classical window');
+  await expect(bot).not.toContainText(/\bwill\b|definitely|guaranteed/i); // D-Fix2 boundary visibly holds
+  await page.screenshot({ path: 'e2e-reading/__screens__/13-timing-chat.png', fullPage: true });
+});
+
 test('conversation flow: grounded answer + contextual follow-up', async ({ page }) => {
   await seedProfile(page);
   await mockChat(page);
