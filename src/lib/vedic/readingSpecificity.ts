@@ -102,6 +102,35 @@ export function verifyReadingClaims(reading: Partial<GeneratedReading>, facts: R
     }
   }
 
+  // (5) Yoga claims: a reading must not assert a Yoga the chart doesn't actually
+  // have. Match Yoga names; if asserted as PRESENT (no negation in the sentence)
+  // but not in the detected list, that's a fabrication.
+  const YOGA_TOKENS: Array<[string, RegExp]> = [
+    ['Raj Yoga', /\braj\s*yoga\b/i], ['Yogakaraka', /\byogakaraka\b/i], ['Dhana', /\bdhana\s*yoga\b/i],
+    ['Gaja Kesari', /\bgaja[-\s]?kesari\b/i], ['Ruchaka', /\bruchaka\b/i], ['Bhadra', /\bbhadra\b/i],
+    ['Hamsa', /\bhamsa\b/i], ['Malavya', /\bmalavya\b/i], ['Sasa', /\bsasa\b/i],
+    ['Neecha Bhanga', /\bneecha\s*bhanga\b/i], ['Budha-Aditya', /\bbudha[-\s]?aditya\b/i], ['Chandra-Mangal', /\bchandra[-\s]?mangal\b/i],
+  ];
+  const presentNames = facts.yogas.map(y => y.name.toLowerCase());
+  const yogaPresent = (token: string) =>
+    presentNames.some(n => n.includes(token.toLowerCase())) ||
+    (token === 'Yogakaraka' && facts.yogas.some(y => /yogakaraka/i.test(y.note || '')));
+  for (const section of READING_SECTION_KEYS) {
+    const text = reading[section] || '';
+    if (!text) continue;
+    for (const sentence of text.split(/(?<=[.!?])\s+/)) {
+      const negated = /\b(no|not|without|absent|free from|lack|lacks|lacking|isn'?t|aren'?t|does\s*not|doesn'?t|don'?t|nor)\b/i.test(sentence);
+      for (const [token, re] of YOGA_TOKENS) {
+        if (!re.test(sentence)) continue;
+        const present = yogaPresent(token);
+        // Only a POSITIVE claim of a NON-present Yoga is wrong. (Correctly saying a
+        // present Yoga is present, or negating an absent one, both pass.)
+        const ok = present || negated;
+        all.push({ section, type: 'yoga-claim', text: sentence.trim().slice(0, 80), claimed: `${token} Yoga present`, actual: present ? `${token} IS detected` : `${token} is NOT detected in this chart`, ok });
+      }
+    }
+  }
+
   // De-duplicate identical (section,type,claimed) checks.
   const seen = new Set<string>();
   const byClaim = all.filter(c => { const k = `${c.section}|${c.type}|${c.claimed}`; if (seen.has(k)) return false; seen.add(k); return true; });

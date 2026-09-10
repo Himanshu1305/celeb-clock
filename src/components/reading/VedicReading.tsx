@@ -75,6 +75,30 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
           </table>
         </div>
       )}
+
+      {/* Detected classical Yogas — name, grade, and the conditions that were checked
+          (mirrors how Shadbala numbers live here, not in the narrative). */}
+      {facts.yogas && facts.yogas.length > 0 && (
+        <div data-testid="reading-yogas">
+          <div className="text-muted-foreground mb-1">Classical Yogas detected (graded — formation does not guarantee full delivery):</div>
+          <ul className="space-y-2">
+            {facts.yogas.map((y, i) => (
+              <li key={i} className="rounded border border-border/60 p-2">
+                <div className="font-semibold text-foreground">
+                  {y.name} <span className="ml-1 text-xs uppercase tracking-wide text-indigo-600">[{y.grade}]</span>
+                </div>
+                <div className="text-muted-foreground">{y.summary}</div>
+                {y.conditions && y.conditions.length > 0 && (
+                  <ul className="mt-1 list-disc pl-4 text-muted-foreground">
+                    {y.conditions.map((c, j) => <li key={j}>{c}</li>)}
+                  </ul>
+                )}
+                {y.note && <div className="mt-1 text-xs italic text-muted-foreground">{y.note}</div>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

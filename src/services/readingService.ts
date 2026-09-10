@@ -26,6 +26,8 @@ export interface ReadingFactsClient {
   placements: Array<{ planet: string; sign: string; house: number; retrograde: boolean }>;
   /** All 9 grahas incl. raw Shadbala (shown only in the advanced/technical view). */
   planets?: Array<{ planet: string; sign: string; house: number; retrograde: boolean; combust?: boolean; navamsa?: string; shadbala?: { total: number; category: string } }>;
+  /** Detected classical Yogas (advanced view: name + grade + conditions checked). */
+  yogas?: Array<{ name: string; grade: string; summary: string; note?: string; conditions: string[] }>;
   doshas: {
     mangal: { present: boolean; severityLabel: string };
     kaalSarp: { present: boolean; isPartial: boolean; type: string | null };

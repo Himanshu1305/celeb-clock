@@ -36,6 +36,7 @@ import {
 import { getKalaBalaComplete } from './engine/kalaBala';
 import { getChestaBala } from './engine/chestaBala';
 import { getDrikBala } from './engine/drikBala';
+import { detectYogas, type YogaResult } from './yogas';
 
 export interface BirthChartInput {
   year: number;
@@ -111,6 +112,8 @@ export interface BirthChartResult {
   /** Internal debugging only — which engine produced this chart. */
   source: 'local' | 'prokerala';
   warnings: ChartWarning[];
+  /** Detected classical Yogas (present ones, graded). Part G. */
+  yogas?: YogaResult[];
 }
 
 /** Thrown for invalid/malformed input — never a silently-wrong chart. */
@@ -365,6 +368,9 @@ function toResult(chart: FullChart, source: 'local' | 'prokerala', includeShadba
   if (includeShadbala) {
     result.shadbala = safe(() => buildShadbala(chart, birthDateUTC, input), undefined as any);
   }
+  // Detected classical Yogas (Part G) — fast rule-checking on the computed chart.
+  // Shadbala (if present) lets the grading reflect delivery strength.
+  result.yogas = safe(() => detectYogas(result), []);
   return result;
 }
 

@@ -45,6 +45,9 @@ export interface ReadingFacts {
     sadeSati: { active: boolean; phase: string | null };
   };
   divisional: { d9: Record<string, string>; d10: Record<string, string>; d60: Record<string, string>; d10Sun: string; d60Moon: string; d60Disclaimer: string; navamsaMoon: string; navamsaVenus: string };
+  /** Detected classical Yogas (present, graded) — cited as evidence in relevant sections.
+   * `conditions` are for the advanced view only (the prompt ignores them). */
+  yogas: Array<{ name: string; grade: string; summary: string; note?: string; conditions: string[] }>;
   warnings: Array<{ code: string; message: string }>;
   fieldsUsed: Record<string, string[]>;
 }
@@ -131,6 +134,7 @@ export function extractReadingFacts(chart: BirthChartResult): ReadingFacts {
       navamsaMoon: chart.divisionalCharts.d9.Moon,
       navamsaVenus: chart.divisionalCharts.d9.Venus,
     },
+    yogas: (chart.yogas ?? []).map(y => ({ name: y.name, grade: y.grade, summary: y.summary, note: y.note, conditions: y.conditions })),
     warnings: chart.warnings.map(w => ({ code: w.code, message: w.message })),
     fieldsUsed: {
       snapshot: ['Lagna + lord placement', 'Moon sign', 'Nakshatra'],
@@ -209,6 +213,9 @@ export function buildReadingUserPrompt(f: ReadingFacts): string {
   ].join('; ');
 
   const navamsaLine = Object.entries(f.divisional.d9).map(([pl, sg]) => `${pl}→${sg}`).join(', ');
+  const yogaLine = f.yogas.length
+    ? f.yogas.map(y => `  - ${y.name} [${y.grade}]: ${y.summary}${y.note ? ` (caveat: ${y.note.split('.')[0]}.)` : ''}`).join('\n')
+    : '  - (none of the classical Yogas this engine checks are present)';
   const polar = f.warnings.some(w => w.code === 'POLAR_LATITUDE')
     ? '\nIMPORTANT: extreme (polar) latitude — the rising sign and houses are astronomically unreliable here; note in the snapshot that ascendant/house parts are approximate.'
     : '';
@@ -232,6 +239,10 @@ ${lordLine}
 Navamsa (D9) signs: ${navamsaLine}
 Dasamsa (D10) Sun: ${f.divisional.d10Sun}; Shashtiamsa (D60) Moon: ${f.divisional.d60Moon} [D60 = one of several classical methods].
 Doshas: ${doshaLines}${polar}
+
+Detected classical Yogas (present in THIS chart, with grade — cite these by name as evidence where relevant):
+${yogaLine}
+How to use Yogas: cite a present Yoga BY NAME in the section it fits (Raj Yoga / Pancha Mahapurusha → career/status & snapshot; Dhana Yoga / Chandra-Mangal → money; Gaja Kesari → snapshot/wisdom). A "strong"/"full" Yoga is firm evidence you may speak a little more confidently from; a "partial"/"moderate" one, or one whose caveat says it is COMMON (Gaja Kesari, Budha-Aditya), should be mentioned lightly and honestly as "formed but not fully activated" — do NOT treat mere formation as a guarantee, and NEVER claim a Yoga that is not in the list above.
 
 Write the reading as JSON with exactly these fields. EACH must cite the specific facts listed for it:
 - "snapshot": 2-3 sentences from the Lagna (${f.lagna}) + its lord's placement, the Moon sign (${f.rashi}) and Nakshatra. Name them, and briefly explain what the Nakshatra traditionally signifies using the meaning above — but do NOT inflate a neutral/"mixed" Nakshatra to sound exceptional; describe it honestly.

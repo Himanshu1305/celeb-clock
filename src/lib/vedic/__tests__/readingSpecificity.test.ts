@@ -48,6 +48,25 @@ describe('accuracy checker (anti-hallucination) — high precision', () => {
     expect(claims.some(c => /10th house is Mesha/.test(c) && /Tula/.test(c))).toBe(true);
   });
 
+  it('flags a FABRICATED Yoga but passes a real one (and passes correct negations)', async () => {
+    const f = await refFacts();
+    const present = f.yogas.map(y => y.name).join(', ');
+    expect(present).toMatch(/Raj Yoga/); // reference chart really has Raj Yoga
+    // Claiming a real Yoga → ok; claiming an ABSENT one (Gaja Kesari) → flagged; negating an absent one → ok.
+    const reading = {
+      career: 'You have a strong Raj Yoga giving professional rise.',
+      snapshot: 'You also have a powerful Gaja Kesari Yoga of great wisdom.',
+      doshas: 'You do not have Gaja Kesari Yoga.',
+    } as any;
+    const r = verifyReadingClaims(reading, f);
+    const wrong = r.wrong.filter(w => w.type === 'yoga-claim');
+    expect(wrong).toHaveLength(1);
+    expect(wrong[0].claimed).toMatch(/Gaja Kesari/);
+    expect(wrong[0].section).toBe('snapshot');
+    // The true Raj Yoga claim and the negated Gaja Kesari must NOT be flagged.
+    expect(r.byClaim.some(c => c.type === 'yoga-claim' && c.claimed.includes('Raj Yoga') && c.ok)).toBe(true);
+  });
+
   it('does NOT false-flag a Navamsa/divisional sign the planet really occupies in a varga', async () => {
     const f = await refFacts();
     // Mars D1 = Meena, but Mars Navamsa = Simha — stating Simha must NOT be flagged.
