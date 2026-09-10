@@ -217,6 +217,39 @@ test('yogas: narrative cites Yogas by grade + advanced view lists them graded', 
   await page.screenshot({ path: 'e2e-reading/__screens__/10-yogas-advanced.png', fullPage: true });
 });
 
+// ── PART G 5.1(b): advanced-Yoga toggle state + no stale data on re-generate ─
+test('yogas: advanced toggle survives close/reopen and shows no stale data after a new chart', async ({ page }) => {
+  await page.route('**/api/kundali*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ...KUNDALI, _cache: 'miss' }) }));
+  // First chart: the 2-Yoga fixture (Raj + Gaja Kesari).
+  await page.route('**/api/vedic-reading*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(readingPayload()) }), { times: 1 });
+  await fillFormAndGenerate(page);
+  await expect(page.locator('[data-testid="vedic-reading"]')).toBeVisible();
+
+  const yogaBox = page.locator('[data-testid="reading-yogas"]');
+  // open → visible; close → gone; reopen → visible again with the SAME data (no break).
+  await page.click('[data-testid="reading-advanced-toggle"]');
+  await expect(yogaBox).toContainText('Gaja Kesari Yoga');
+  await page.click('[data-testid="reading-advanced-toggle"]');
+  await expect(yogaBox).toHaveCount(0);
+  await page.click('[data-testid="reading-advanced-toggle"]');
+  await expect(yogaBox).toContainText('Gaja Kesari Yoga');
+
+  // Now generate a DIFFERENT chart that has only ONE Yoga → confirm the old
+  // Gaja Kesari does NOT linger (no stale data), and toggle re-collapses.
+  await page.route('**/api/vedic-reading*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(readingPayload({ facts: { ...FACTS, yogas: [YOGAS[0]] } })) }));
+  await page.goto('/kundali');
+  await page.fill('[data-testid="kundali-dob"]', '1972-03-14');
+  await page.fill('[data-testid="kundali-time"]', '06:45');
+  await page.fill('[data-testid="kundali-city"]', 'Delhi');
+  await page.locator('li button', { hasText: 'Delhi' }).first().click();
+  await page.click('[data-testid="kundali-generate-btn"]');
+  await expect(page.locator('[data-testid="vedic-reading"]')).toBeVisible();
+  await page.click('[data-testid="reading-advanced-toggle"]');
+  await expect(yogaBox).toContainText('Raj Yoga');
+  await expect(yogaBox).not.toContainText('Gaja Kesari'); // stale data from the first chart is gone
+  await page.screenshot({ path: 'e2e-reading/__screens__/11-yogas-no-stale.png', fullPage: true });
+});
+
 // ── EDGE FLOW: very old + very recent birth dates both render ─────────────────
 for (const [label, dob] of [['old-1901', '1901-06-10'], ['recent-2015', '2015-12-25']] as const) {
   test(`edge: birth date ${label} renders correctly`, async ({ page }) => {

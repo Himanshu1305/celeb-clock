@@ -246,6 +246,9 @@ How to use Yogas: mention EVERY present Yoga above at least once, by name, in th
 - "strong"/"full" → firm evidence; you may speak a little more confidently from it.
 - "partial"/"moderate", OR any Yoga whose caveat says it is COMMON (Gaja Kesari, Budha-Aditya) → you MUST mention it but frame it explicitly as "present/formed but not fully activated" (or "a common combination, so only mildly so here"). Do NOT silently omit a present Yoga, and do NOT treat mere formation as a guarantee.
 - NEVER claim a Yoga that is not in the list above.
+Two more rules:
+1) SHOW, don't just assert: when you name a Yoga, attach the one-clause reason it forms, taken from its listed conditions (e.g. "a Raj Yoga, since your Yogakaraka Venus rules both a Kendra and a Trikona") — never name a Yoga with no reason, which reads as empty decoration.
+2) Use the Yoga's EXACT grade word (full / strong / moderate / partial) as given above; do not swap in a different strength word, and if you mention the same Yoga in two sections use the SAME grade word both times. Even for a strong/full Yoga, phrase the effect as a tendency ("tends to", "supports"), never a certainty.
 
 Write the reading as JSON with exactly these fields. EACH must cite the specific facts listed for it:
 - "snapshot": 2-3 sentences from the Lagna (${f.lagna}) + its lord's placement, the Moon sign (${f.rashi}) and Nakshatra. Name them, and briefly explain what the Nakshatra traditionally signifies using the meaning above — but do NOT inflate a neutral/"mixed" Nakshatra to sound exceptional; describe it honestly.
