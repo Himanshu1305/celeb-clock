@@ -1,17 +1,25 @@
 /**
- * Gemstone / remedy suggestions (Part I.11) — built CAUTIOUSLY.
+ * Gemstone / remedy suggestions (Part J rebuild) — LAGNA-BASED, methodologically correct.
  *
- * This is a more contested and commercially-sensitive area than the rest of the
- * project (real gemstone-selling scams exist), so:
- *  • The Navaratna planet→gem MAPPING is standard and agreed (Sun→Ruby, etc.).
- *  • The SELECTION METHOD genuinely varies across traditions — (a) the Lagna
- *    lord's lifelong stone, (b) a Shadbala-weak-but-favourable planet's stone,
- *    (c) the current Mahadasha lord's stone. We use (a)+(b), the mainstream
- *    Parashari approach, and DISCLOSE this — see docs/part-i-flags.md.
- *  • Everything is framed as a TRADITIONAL/CLASSICAL ASSOCIATION only — never a
- *    medical claim, never a guaranteed effect, and there is NO purchase/sales flow.
- *  • The three "powerful" stones (Blue Sapphire, Hessonite, Cat's Eye) carry the
- *    classical "trial first" caution.
+ * Research finding (not a 50/50 call — a clear hierarchy across multiple independent
+ * sources, incl. ones written to correct common bad practice): recommending by Rashi
+ * (Moon sign) alone is the low-effort shortcut; the rigorous method is Ascendant-based:
+ *   1. Lagna (Ascendant) lord — the real foundation (always a safe strengthener).
+ *   2. Yogakaraka — for the 6 Lagnas that have one (a planet ruling BOTH a Kendra and a
+ *      Trikona), the single most powerful, specific recommendation.
+ *   3. Planetary strength (Shadbala) — a functional benefic that is WEAK is the clearest
+ *      candidate; an already-strong planet needs no reinforcement.
+ *   4. Current Dasha/Antardasha — a functional benefic running its own period now is the
+ *      most time-relevant recommendation.
+ *   5. Avoid functional malefics for that specific Lagna (planets ruling only dusthanas).
+ *
+ * Yogakaraka + functional benefic/malefic are COMPUTED from the engine's whole-sign
+ * lordship (not a hardcoded table), which sidesteps the house-lordship errors found in
+ * secondary sources. Everything reuses already-validated engine data — no new astronomy.
+ *
+ * Framing (unchanged from the cautious overnight build): informational only, no sales
+ * flow, non-medical / non-guaranteed. The methodology critique is aimed at the METHOD
+ * (Rashi-only vs Lagna-based), never at any competitor, product or seller.
  */
 import type { BirthChartResult } from './calculateBirthChart';
 import { SIGN_LORDS } from './engine/sthanaBala';
@@ -23,14 +31,27 @@ const GEM: Record<string, Gem> = {
   Saturn: { gem: 'Blue Sapphire', hindi: 'Neelam' }, Rahu: { gem: 'Hessonite', hindi: 'Gomed' }, Ketu: { gem: "Cat's Eye", hindi: 'Lehsunia' },
 };
 const NATURAL_BENEFICS = new Set(['Jupiter', 'Venus', 'Mercury', 'Moon']);
-const POWERFUL = new Set(['Saturn', 'Rahu', 'Ketu']); // Blue Sapphire / Hessonite / Cat's Eye — trial first
-const KENDRA_TRIKONA = new Set([1, 4, 5, 7, 9, 10]);
+const POWERFUL = new Set(['Saturn', 'Rahu', 'Ketu']); // trial-first stones
+const KENDRA = new Set([4, 7, 10]);
+const TRIKONA = new Set([5, 9]);
+const DUSTHANA = new Set([6, 8, 12]);
 
-export interface GemSuggestion { planet: string; gem: string; hindi: string; reason: string; trialCaution: boolean; }
+export interface GemSuggestion { planet: string; gem: string; hindi: string; role: string; reason: string; trialCaution: boolean; dashaActive: boolean; }
+export interface GemAvoid { planet: string; gem: string; reason: string; }
+export interface GemMethodology {
+  lagna: string; lagnaLord: string;
+  yogakaraka: string | null; yogakarakaHouses: number[] | null;
+  primaryPlanet: string; primaryStrength: 'strong' | 'moderate' | 'weak' | 'unknown';
+  currentDashaLord: string | null; dashaRelevant: boolean;
+  text: string;
+}
 export interface GemstoneReport {
-  primary: GemSuggestion | null;      // the Lagna lord's stone
-  supportive: GemSuggestion[];        // weak natural benefics ruling good houses
-  methodology: string;
+  primary: GemSuggestion | null;
+  additional: GemSuggestion[];
+  additionalNote: string | null;   // honest note when no functional benefic is currently weak
+  avoid: GemAvoid[];
+  methodology: GemMethodology;
+  classificationNote: string;      // discloses that functional-malefic classification varies
   disclaimer: string;
 }
 
@@ -39,43 +60,128 @@ function housesRuledBy(lagnaIdx: number, planet: string): number[] {
   for (let h = 1; h <= 12; h++) if (SIGN_LORDS[(lagnaIdx + h - 1) % 12] === planet) houses.push(h);
   return houses;
 }
-function shadCat(chart: BirthChartResult, planet: string): 'strong' | 'moderate' | 'weak' | null {
-  const sb = chart.shadbala?.[planet]; if (!sb) return null;
+function shadCat(chart: BirthChartResult, planet: string): 'strong' | 'moderate' | 'weak' | 'unknown' {
+  const sb = chart.shadbala?.[planet]; if (!sb) return 'unknown';
   const req = 300; return sb.total >= req ? 'strong' : sb.total >= req * 0.75 ? 'moderate' : 'weak';
+}
+/** The Yogakaraka: a planet ruling BOTH a Kendra (4/7/10) and a Trikona (5/9). Computed. */
+function findYogakaraka(lagnaIdx: number): { planet: string; houses: number[] } | null {
+  for (const planet of ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn']) {
+    const h = housesRuledBy(lagnaIdx, planet);
+    if (h.some(x => KENDRA.has(x)) && h.some(x => TRIKONA.has(x))) return { planet, houses: h };
+  }
+  return null;
+}
+/** Functional malefic (conservative): rules a dusthana (6/8/12) and gains no benefic status
+ *  from also ruling the Lagna, a Trikona, or being the Yogakaraka. */
+function isFunctionalMalefic(houses: number[], planet: string, lagnaLord: string, yk: string | null): boolean {
+  if (planet === lagnaLord || planet === yk) return false;
+  const rulesDusthana = houses.some(h => DUSTHANA.has(h));
+  const rulesGood = houses.some(h => h === 1 || TRIKONA.has(h));
+  return rulesDusthana && !rulesGood;
 }
 
 export function buildGemstoneReport(chart: BirthChartResult): GemstoneReport {
   const lagnaIdx = chart.lagna.rashiIndex;
   const lagnaLord = SIGN_LORDS[lagnaIdx];
+  const yk = findYogakaraka(lagnaIdx);
+  const dashaLord = chart.currentDasha?.mahadasha || null;
+  const antarLord = chart.currentDasha?.antardasha || null;
+  const isDashaActive = (p: string) => p === dashaLord || p === antarLord;
 
-  // Primary: the Lagna lord's stone (the most universally-agreed lifelong strengthener).
-  const primary: GemSuggestion = {
-    planet: lagnaLord, ...GEM[lagnaLord],
-    reason: `${lagnaLord} rules your Ascendant (${chart.lagna.sign}), making it your life-force planet. Its stone, ${GEM[lagnaLord].gem} (${GEM[lagnaLord].hindi}), is the classical lifelong strengthener for the whole chart.`,
-    trialCaution: POWERFUL.has(lagnaLord),
-  };
+  const mk = (planet: string, role: string, reason: string): GemSuggestion => ({
+    planet, ...GEM[planet], role, reason, trialCaution: POWERFUL.has(planet), dashaActive: isDashaActive(planet),
+  });
 
-  // Supportive: natural benefics that are Shadbala-WEAK and rule a Kendra/Trikona
-  // (functionally favourable) — so strengthening them is classically supportive,
-  // not risky. We deliberately do NOT suggest stones for functional malefics.
-  const supportive: GemSuggestion[] = [];
+  // PRIMARY: the Yogakaraka if this Lagna has one (the single strongest recommendation),
+  // otherwise the Lagna lord (the universal lifelong strengthener).
+  let primary: GemSuggestion;
+  if (yk) {
+    primary = mk(yk.planet, 'Yogakaraka', `${yk.planet} is your Yogakaraka — it rules both a Kendra and a Trikona (houses ${yk.houses.join(', ')}) for ${chart.lagna.sign} rising, making it the single most powerful planet to strengthen. Its stone is ${GEM[yk.planet].gem} (${GEM[yk.planet].hindi}).`);
+  } else {
+    primary = mk(lagnaLord, 'Ascendant lord', `${lagnaLord} rules your Ascendant (${chart.lagna.sign}), your life-force planet. ${chart.lagna.sign} rising has no single Yogakaraka, so the Ascendant lord's stone, ${GEM[lagnaLord].gem} (${GEM[lagnaLord].hindi}), is the primary lifelong strengthener.`);
+  }
+
+  // ADDITIONAL: the Lagna lord (if the primary was the Yogakaraka), plus any natural
+  // benefic that is functionally favourable (rules Lagna/Trikona/Kendra, not a functional
+  // malefic) AND currently WEAK per Shadbala — the clearest "needs support" candidates.
+  const additional: GemSuggestion[] = [];
+  if (yk && lagnaLord !== yk.planet) {
+    additional.push(mk(lagnaLord, 'Ascendant lord', `${lagnaLord} rules your Ascendant, so its stone ${GEM[lagnaLord].gem} (${GEM[lagnaLord].hindi}) is a supportive lifelong strengthener alongside the Yogakaraka.`));
+  }
   for (const p of NATURAL_BENEFICS) {
-    if (p === lagnaLord) continue;
+    if (p === primary.planet || additional.some(a => a.planet === p)) continue;
     const houses = housesRuledBy(lagnaIdx, p);
-    const rulesGood = houses.some(h => KENDRA_TRIKONA.has(h));
-    const rulesDusthana = houses.some(h => [6, 8, 12].includes(h));
-    if (rulesGood && !rulesDusthana && shadCat(chart, p) === 'weak') {
-      supportive.push({
-        planet: p, ...GEM[p], trialCaution: POWERFUL.has(p),
-        reason: `${p} is a natural benefic that rules your ${houses.map(ordinal).join(' & ')} house and is currently gentle (low computed strength). Its stone, ${GEM[p].gem} (${GEM[p].hindi}), is traditionally worn to support it.`,
-      });
+    const favourable = houses.some(h => h === 1 || TRIKONA.has(h) || KENDRA.has(h));
+    if (favourable && !isFunctionalMalefic(houses, p, lagnaLord, yk?.planet ?? null) && shadCat(chart, p) === 'weak') {
+      const dasha = isDashaActive(p) ? ` It is also running its own planetary period right now, making this especially timely.` : '';
+      additional.push(mk(p, 'weak functional benefic', `${p} is a natural benefic ruling your ${houses.map(ordinal).join(' & ')} house and is computed as WEAK (Shadbala), so it is a clear candidate to support with ${GEM[p].gem} (${GEM[p].hindi}).${dasha}`));
     }
   }
 
-  const methodology = 'Suggestions use the standard Navaratna planet→gem mapping and the mainstream Parashari selection method: the Ascendant lord’s stone as the lifelong strengthener, plus the stone of any natural benefic that rules a good house but is computed as weak. Other valid traditions instead prioritise the current Dasha lord’s stone, or judge functional benefic/malefic differently — this is a genuine area of variance (flagged), so treat these as one classical view.';
-  const disclaimer = 'These are TRADITIONAL/CLASSICAL associations only — not medical advice, not a guaranteed effect, and not a product recommendation. The powerful stones (Blue Sapphire, Hessonite, Cat’s Eye) are classically tested on a short trial before regular wear. Please consult a qualified astrologer before wearing any gemstone; BornClock sells nothing and links to no seller.';
+  // AVOID: functional malefics for this Lagna — explicitly NOT recommended.
+  const avoid: GemAvoid[] = [];
+  for (const p of ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn']) {
+    const houses = housesRuledBy(lagnaIdx, p);
+    if (isFunctionalMalefic(houses, p, lagnaLord, yk?.planet ?? null)) {
+      avoid.push({ planet: p, gem: GEM[p].gem, reason: `${p} rules the ${houses.filter(h => DUSTHANA.has(h)).map(ordinal).join(' & ')} house (a difficult house) for ${chart.lagna.sign} rising and gains no offsetting benefic rulership, so its stone (${GEM[p].gem}) is traditionally avoided for you.` });
+    }
+  }
 
-  return { primary, supportive, methodology, disclaimer };
+  // Methodology note — generated from the REAL computed factors for THIS chart.
+  const primaryStrength = shadCat(chart, primary.planet);
+  const dashaRelevant = isDashaActive(primary.planet) || additional.some(a => a.dashaActive);
+  const parts = [
+    `This recommendation is based on your Ascendant (Lagna), which multiple classical sources identify as the correct foundation for gemstone selection — not your Moon sign (Rashi) alone, which is a common but less precise shortcut.`,
+    `We considered: your Ascendant ${chart.lagna.sign} and its lord ${lagnaLord}; ${yk ? `your Yogakaraka ${yk.planet} (rules houses ${yk.houses.join(', ')})` : `that ${chart.lagna.sign} rising has no single Yogakaraka`}; the current strength of ${primary.planet} (${primaryStrength} per Shadbala); and your current planetary period (${dashaLord || 'unavailable'}${antarLord ? ` / ${antarLord}` : ''}).`,
+    `The primary suggestion is ${primary.gem} for ${primary.planet} (${primary.role}).`,
+  ];
+  const methodology: GemMethodology = {
+    lagna: chart.lagna.sign, lagnaLord,
+    yogakaraka: yk?.planet ?? null, yogakarakaHouses: yk?.houses ?? null,
+    primaryPlanet: primary.planet, primaryStrength,
+    currentDashaLord: dashaLord, dashaRelevant,
+    text: parts.join(' '),
+  };
+
+  const weakBenefics = additional.filter(a => a.role === 'weak functional benefic');
+  const additionalNote = weakBenefics.length === 0
+    ? 'No functional benefic is currently weak enough to specifically need strengthening — the primary stone above is the main suggestion, and no extra stone is forced to fit.'
+    : null;
+
+  const classificationNote = 'Functional benefic/malefic status here is computed from your Ascendant’s whole-sign house rulerships (Trikona/Kendra vs. the difficult 6/8/12 houses). Traditions differ on some edge cases — notably a natural benefic that rules both a good and a difficult house (the "kendradhipati" nuance) — so treat the "avoid" list as the mainstream conservative view, not the only one.';
+
+  const disclaimer = 'These are TRADITIONAL/CLASSICAL associations only — not medical advice, not a guaranteed effect, and not a product recommendation. The powerful stones (Blue Sapphire, Hessonite, Cat’s Eye) are classically tested on a short trial before regular wear. Please consult a qualified astrologer before wearing any gemstone; BornClock sells nothing and links to no seller.';
+  return { primary, additional, additionalNote, avoid, methodology, classificationNote, disclaimer };
 }
 
 function ordinal(n: number): string { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+
+/**
+ * Zero-tolerance accuracy check for the methodology note (Part J testing): every
+ * fact the note STATES must match what the engine independently computes for THIS
+ * chart. A mismatch is a failure — same discipline as every other generated claim.
+ */
+export interface GemNoteCheck { checked: number; correct: number; wrong: Array<{ field: string; stated: string; actual: string }>; }
+export function verifyGemstoneReport(report: GemstoneReport, chart: BirthChartResult): GemNoteCheck {
+  const lagnaIdx = chart.lagna.rashiIndex;
+  const wrong: Array<{ field: string; stated: string; actual: string }> = [];
+  const check = (field: string, stated: string, actual: string) => { if (stated !== actual) wrong.push({ field, stated, actual }); };
+  const m = report.methodology;
+
+  check('lagna', m.lagna, chart.lagna.sign);
+  check('lagnaLord', m.lagnaLord, SIGN_LORDS[lagnaIdx]);
+  const yk = findYogakaraka(lagnaIdx);
+  check('yogakaraka', String(m.yogakaraka), String(yk?.planet ?? null));
+  check('yogakarakaHouses', JSON.stringify(m.yogakarakaHouses), JSON.stringify(yk?.houses ?? null));
+  check('primaryStrength', m.primaryStrength, shadCat(chart, m.primaryPlanet));
+  check('currentDashaLord', String(m.currentDashaLord), String(chart.currentDasha?.mahadasha ?? null));
+  // The note TEXT must not name a wrong lord/yogakaraka.
+  check('note-mentions-lagnaLord', String(m.text.includes(`lord ${SIGN_LORDS[lagnaIdx]}`)), 'true');
+  if (yk) check('note-mentions-yogakaraka', String(m.text.includes(`Yogakaraka ${yk.planet}`)), 'true');
+  // Primary suggestion must be the Yogakaraka (if present) or the Lagna lord.
+  check('primaryPlanet', m.primaryPlanet, yk?.planet ?? SIGN_LORDS[lagnaIdx]);
+
+  const checked = 7 + (yk ? 1 : 0);
+  return { checked, correct: checked - wrong.length, wrong };
+}

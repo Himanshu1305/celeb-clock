@@ -11,13 +11,22 @@ import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 
-interface Sugg { planet: string; gem: string; hindi: string; reason: string; trialCaution: boolean }
-interface Report { primary: Sugg | null; supportive: Sugg[]; methodology: string; disclaimer: string }
+interface Sugg { planet: string; gem: string; hindi: string; role: string; reason: string; trialCaution: boolean; dashaActive: boolean }
+interface Avoid { planet: string; gem: string; reason: string }
+interface Methodology { text: string }
+interface Report {
+  primary: Sugg | null; additional: Sugg[]; additionalNote: string | null;
+  avoid: Avoid[]; methodology: Methodology; classificationNote: string; disclaimer: string;
+}
 
 function Card({ s, primary }: { s: Sugg; primary?: boolean }) {
   return (
-    <div data-testid={primary ? 'gem-primary' : 'gem-supportive'} className={`rounded-xl border p-4 ${primary ? 'border-indigo-300 bg-indigo-50/50' : 'border-border'}`}>
-      <div className="font-semibold text-foreground">{s.gem} <span className="text-muted-foreground">({s.hindi})</span> — for {s.planet}</div>
+    <div data-testid={primary ? 'gem-primary' : 'gem-additional'} className={`rounded-xl border p-4 ${primary ? 'border-indigo-300 bg-indigo-50/50' : 'border-border'}`}>
+      <div className="font-semibold text-foreground">
+        {s.gem} <span className="text-muted-foreground">({s.hindi})</span> — for {s.planet}
+        <span className="ml-2 text-[10px] uppercase tracking-wide text-indigo-600">{s.role}</span>
+        {s.dashaActive && <span className="ml-2 text-[10px] uppercase tracking-wide text-emerald-600">period active now</span>}
+      </div>
       <p className="text-sm text-muted-foreground mt-1">{s.reason}</p>
       {s.trialCaution && <p className="text-xs text-amber-700 mt-1">⚠️ A powerful stone — traditionally worn on a short trial before regular wear.</p>}
     </div>
@@ -59,12 +68,28 @@ export default function GemstonePage() {
 
         {report && (
           <div data-testid="gemstone-result" className="mt-6 space-y-4">
+            {/* Methodology note FIRST — the transparency that builds trust (Part J). */}
+            <div data-testid="gemstone-methodology" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
+              <div className="font-semibold text-foreground mb-1">How we chose this (based on your Ascendant, not your Moon sign)</div>
+              <p className="text-sm text-foreground">{report.methodology.text}</p>
+            </div>
+
             {report.primary && <Card s={report.primary} primary />}
-            {report.supportive.map(s => <Card key={s.planet} s={s} />)}
-            {report.supportive.length === 0 && <p className="text-sm text-muted-foreground">No additional supportive stone stands out — the Ascendant-lord stone above is the primary traditional suggestion.</p>}
-            <details data-testid="gemstone-methodology" className="rounded-lg border border-border p-3 text-sm text-muted-foreground">
-              <summary className="cursor-pointer font-medium text-foreground">How this is chosen (and where traditions differ)</summary>
-              <p className="mt-2">{report.methodology}</p>
+            {report.additional.map(s => <Card key={s.planet} s={s} />)}
+            {report.additionalNote && <p data-testid="gem-additional-note" className="text-sm text-muted-foreground">{report.additionalNote}</p>}
+
+            {report.avoid.length > 0 && (
+              <div data-testid="gemstone-avoid" className="rounded-lg border border-border p-4">
+                <div className="font-semibold text-foreground mb-1">Traditionally avoid for your Ascendant</div>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  {report.avoid.map(a => <li key={a.planet}>• <span className="font-medium">{a.gem}</span> ({a.planet}) — {a.reason}</li>)}
+                </ul>
+              </div>
+            )}
+
+            <details className="rounded-lg border border-border p-3 text-sm text-muted-foreground">
+              <summary className="cursor-pointer font-medium text-foreground">Where traditions differ</summary>
+              <p className="mt-2">{report.classificationNote}</p>
             </details>
             <div className="rounded-lg border-2 border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">{report.disclaimer}</div>
           </div>
