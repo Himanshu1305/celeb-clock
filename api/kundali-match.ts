@@ -7,6 +7,7 @@
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
 import { calculateGunaMilan, type PersonInput } from '../src/lib/vedic/matchmaking.js';
+import { buildMatchSynthesis } from '../src/lib/vedic/matchSynthesis.js';
 import { categoryTiming, describeWindow, formatWindowRange, type ActivationWindow } from '../src/lib/vedic/yogaTiming.js';
 import { RASHI_NAMES } from '../src/lib/vedic/engine/vedicEngine.js';
 
@@ -71,8 +72,15 @@ async function handler(request) {
       note: 'Marriage-timing windows are the classical activation periods (7th-house lord, Venus and Jupiter) from each person’s Vimshottari Dasha, computed as real date ranges — a likelihood window, never a guaranteed date. Overlaps are periods when BOTH partners are in a favourable window.',
     };
 
+    // Narrative synthesis (Part M) — deterministic, built from the same result.
+    // Wrapped so any failure degrades to the factual report, never a broken page.
+    let synthesis = null;
+    try { synthesis = buildMatchSynthesis({ gunaMilan, overlaps: timing.overlaps }); }
+    catch (e) { console.debug('[kundali-match] synthesis fallback:', e); }
+
     return json({
       gunaMilan,
+      synthesis,
       timing,
       people: {
         a: { lagna: chartA.lagna.sign, rashi: chartA.rashi, nakshatra: chartA.nakshatra.nakshatra, pada: chartA.nakshatra.pada },

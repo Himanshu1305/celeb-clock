@@ -13,6 +13,7 @@ import type { SavedCity } from '@/services/savedProfile';
 interface TimingWindow { planet: string; level: string; range: string; status: string; describe: string }
 interface MatchResponse {
   gunaMilan: GunaMilanResult;
+  synthesis?: { verdict: string; paragraphs: string[] } | null;
   timing: {
     personA: { significators: string[]; windows: TimingWindow[] };
     personB: { significators: string[]; windows: TimingWindow[] };
@@ -191,6 +192,19 @@ export default function KundaliMatchPage() {
                 {result.people.a.rashi}/{result.people.a.nakshatra} × {result.people.b.rashi}/{result.people.b.nakshatra}
               </div>
             </div>
+
+            {/* Overall reading — narrative synthesis (Part M). Short synthesis first,
+                details below — same structure as the Kundali reading. Degrades
+                gracefully: if synthesis is absent, the factual breakdown still shows. */}
+            {result.synthesis && (
+              <div data-testid="kmatch-synthesis" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4 space-y-2">
+                <div className="text-[10px] uppercase tracking-wide text-indigo-600 font-semibold">Overall reading</div>
+                <p className="font-semibold text-foreground">{result.synthesis.verdict}</p>
+                {result.synthesis.paragraphs.map((para, i) => (
+                  <p key={i} className="text-sm text-muted-foreground">{para}</p>
+                ))}
+              </div>
+            )}
 
             {/* Doshas with cancellation transparency (Part 2.2) */}
             {result.gunaMilan.doshas.some(d => d.present) && (
