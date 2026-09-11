@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const PUBLIC_ROUTES = [
-  { path: '/', title: 'BornClock', h1Contains: 'Know your time' },
+  { path: '/', title: 'BornClock', h1Contains: 'decoded' },
   { path: '/age-calculator', title: 'Age Calculator', h1Contains: 'Age' },
   { path: '/life-expectancy', title: 'Life Expectancy', h1Contains: 'Life Expectancy' },
   { path: '/biological-age', title: 'Biological Age', h1Contains: 'Biological Age' },
@@ -16,7 +16,7 @@ const PUBLIC_ROUTES = [
   { path: '/celebrity-birthday', title: 'Celebrity', h1Contains: 'Celebrity' },
   { path: '/todays-birthdays', title: "Today's Birthdays", h1Contains: 'Birthday' },
   { path: '/birthday-report', title: 'Birthday Report', h1Contains: 'Birthday' },
-  { path: '/upgrade', title: 'Upgrade', h1Contains: 'longevity' },
+  { path: '/upgrade', title: 'Upgrade', h1Contains: 'Premium' },
   { path: '/blog', title: 'Blog', h1Contains: 'Guide' },
   { path: '/about', title: 'About', h1Contains: 'About' },
   { path: '/methodology', title: 'Methodology', h1Contains: 'Works' },

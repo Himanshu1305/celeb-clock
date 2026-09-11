@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { fillDOB } from './helpers';
 
 test.describe('Error boundaries and resilience', () => {
   test('malformed birthday route shows graceful page not blank', async ({ page }) => {
@@ -52,9 +53,7 @@ test.describe('Error boundaries and resilience', () => {
     await page.goto('/life-expectancy');
     await page.waitForLoadState('networkidle');
 
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
-    await dobInput.fill('1985-06-15');
+    await fillDOB(page, '1985-06-15');
     await page.waitForTimeout(600);
 
     await page.locator('label[for="male"]').or(page.locator('text=Male').first()).first().click();

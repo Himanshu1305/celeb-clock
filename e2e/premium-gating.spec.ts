@@ -1,4 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
+import { fillDOB } from './helpers';
 
 // ─────────────────────────────────────────────
 // Shared helper: complete the quiz as a free user
@@ -9,9 +10,7 @@ async function completeQuizAsFreeUser(page: Page) {
   await page.waitForLoadState('networkidle');
 
   // Enter DOB — this also triggers the quiz to render (DOB is now mandatory)
-  const dobInput = page.locator('input[type="date"]').first();
-  await dobInput.waitFor({ state: 'visible', timeout: 10000 });
-  await dobInput.fill('1990-06-15');
+  await fillDOB(page, '1990-06-15');
   await page.waitForTimeout(400);
 
   // Step 1 requires gender selection before Next Step is enabled
@@ -72,7 +71,7 @@ test.describe('DOB mandatory field', () => {
     ).not.toBeVisible({ timeout: 3000 });
 
     // The DOB input must be visible
-    await expect(page.locator('input[type="date"]').first()).toBeVisible();
+    await expect(page.locator('#dob-day').first()).toBeVisible();
 
     // The "Required" badge must be visible
     await expect(
@@ -84,8 +83,7 @@ test.describe('DOB mandatory field', () => {
     await page.goto('/life-expectancy');
     await page.waitForLoadState('networkidle');
 
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
+    await page.locator('#dob-day').first().waitFor({ state: 'visible', timeout: 10000 });
 
     // Before DOB — quiz should not be visible
     await expect(
@@ -93,7 +91,7 @@ test.describe('DOB mandatory field', () => {
     ).not.toBeVisible({ timeout: 2000 }).catch(() => {});
 
     // Enter DOB
-    await dobInput.fill('1992-03-20');
+    await fillDOB(page, '1992-03-20');
     await page.waitForTimeout(600);
 
     // After DOB — quiz Step 1 card should appear
@@ -106,9 +104,7 @@ test.describe('DOB mandatory field', () => {
     await page.goto('/life-expectancy');
     await page.waitForLoadState('networkidle');
 
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
-    await dobInput.fill('1985-11-25');
+    await fillDOB(page, '1985-11-25');
     await page.waitForTimeout(400);
 
     // Refresh
@@ -116,8 +112,8 @@ test.describe('DOB mandatory field', () => {
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(500);
 
-    // DOB input must be empty after reload
-    const dobAfterReload = page.locator('input[type="date"]').first();
+    // DOB input must be empty after reload (check the day field of the DD/MM/YYYY trio)
+    const dobAfterReload = page.locator('#dob-day').first();
     await dobAfterReload.waitFor({ state: 'visible', timeout: 10000 });
     const value = await dobAfterReload.inputValue();
     expect(value).toBe('');

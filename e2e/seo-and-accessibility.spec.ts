@@ -78,8 +78,9 @@ test.describe('Accessibility — basic checks', () => {
     await page.goto('/life-expectancy');
     await page.waitForLoadState('networkidle');
 
-    // Check the label BEFORE filling DOB — after fill the date section may change display
-    const dobInput = page.locator('input[type="date"]').first();
+    // Check the label BEFORE filling DOB — after fill the date section may change display.
+    // DobInput renders a DD/MM/YYYY trio (#dob-day/#dob-month/#dob-year), not a native date input.
+    const dobInput = page.locator('#dob-day').first();
     await dobInput.waitFor({ state: 'visible', timeout: 10000 });
 
     // The label[for="birthdate-life"] must be present in the DOM

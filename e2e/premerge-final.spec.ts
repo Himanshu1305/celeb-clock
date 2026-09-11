@@ -12,67 +12,58 @@ test.describe('DOB input — no max attribute auto-select', () => {
 
   // POSITIVE: past date accepted and quiz renders
   test('POSITIVE: valid past date triggers quiz render', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
-    await dobInput.fill('1990-06-15');
+    await fillDOB(page, '1990-06-15');
     await page.waitForTimeout(600);
     await expect(page.locator('text=Step 1 of').first()).toBeVisible({ timeout: 5000 });
   });
 
-  // POSITIVE: max attribute removed — input accepts any year without restriction
+  // POSITIVE: the DD/MM/YYYY trio has no `max` attribute — accepts any year without a
+  // native picker cap (the old native <input type="date"> used max to gate future dates;
+  // DobInput validates in JS instead, so no field carries a max attribute).
   test('POSITIVE: input has no max attribute set', async ({ page }) => {
-    const maxAttr = await page.locator('input[type="date"]').first().getAttribute('max');
-    expect(maxAttr).toBeNull();
+    await page.locator('#dob-day').first().waitFor({ state: 'visible', timeout: 10000 });
+    for (const id of ['#dob-day', '#dob-month', '#dob-year']) {
+      expect(await page.locator(id).first().getAttribute('max')).toBeNull();
+    }
   });
 
   // NEGATIVE: future date (next year) is rejected — quiz does not render
   test('NEGATIVE: future date (next year) rejected', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
     const future = new Date();
     future.setFullYear(future.getFullYear() + 1);
-    await dobInput.fill(future.toISOString().split('T')[0]);
+    await fillDOB(page, future.toISOString().split('T')[0]);
     await page.waitForTimeout(600);
     await expect(page.locator('text=Step 1 of').first()).not.toBeVisible({ timeout: 2000 });
   });
 
   // NEGATIVE: tomorrow's date is rejected (strictly future — guard: newDate > new Date())
   test('NEGATIVE: tomorrow date rejected — quiz does not appear', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    await dobInput.fill(tomorrow.toISOString().split('T')[0]);
+    await fillDOB(page, tomorrow.toISOString().split('T')[0]);
     await page.waitForTimeout(600);
     await expect(page.locator('text=Step 1 of').first()).not.toBeVisible({ timeout: 2000 });
   });
 
-  // NEGATIVE: partial string (YYYY-MM only) does not trigger quiz
+  // NEGATIVE: a partial trio (day + month, no full year) does not trigger the quiz
   test('NEGATIVE: partial date string does not trigger quiz', async ({ page }) => {
-    await page.evaluate(() => {
-      const input = document.querySelector('input[type="date"]') as HTMLInputElement;
-      if (input) {
-        const event = new Event('change', { bubbles: true });
-        Object.defineProperty(event, 'target', { value: { value: '1990-06' } });
-        input.dispatchEvent(event);
-      }
-    });
+    await page.locator('#dob-day').first().waitFor({ state: 'visible', timeout: 10000 });
+    await page.locator('#dob-day').first().fill('15');
+    await page.locator('#dob-month').first().fill('6'); // year left blank → incomplete
     await page.waitForTimeout(400);
     await expect(page.locator('text=Step 1 of').first()).not.toBeVisible({ timeout: 2000 });
   });
 
   // EDGE: Change button clears the input
   test('EDGE: Change button clears rawDateInput so picker starts fresh', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
-    await dobInput.fill('1985-03-15');
+    await fillDOB(page, '1985-03-15');
     await page.waitForTimeout(600);
     const changeBtn = page.locator('button:has-text("Change")').first();
     await changeBtn.waitFor({ state: 'visible', timeout: 5000 });
     await changeBtn.click();
     await page.waitForTimeout(400);
-    // Input should be empty after Change
-    const dobAgain = page.locator('input[type="date"]').first();
+    // The day field of the DD/MM/YYYY trio should be empty after Change
+    const dobAgain = page.locator('#dob-day').first();
     await dobAgain.waitFor({ state: 'visible', timeout: 5000 });
     const value = await dobAgain.inputValue();
     expect(value).toBe('');
@@ -80,9 +71,7 @@ test.describe('DOB input — no max attribute auto-select', () => {
 
   // EDGE: very old date (1900) does not crash
   test('EDGE: very old date 1900 does not crash the page', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
-    await dobInput.fill('1900-01-01');
+    await fillDOB(page, '1900-01-01');
     await page.waitForTimeout(600);
     await expect(page.locator('text=Something went wrong')).not.toBeVisible();
   });

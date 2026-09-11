@@ -3,9 +3,17 @@ import { Page, expect } from '@playwright/test';
 // ── Quiz completion ────────────────────────────────────────────────────────────
 
 export async function fillDOB(page: Page, dob: string) {
-  const dobInput = page.locator('input[type="date"]').first();
-  await dobInput.waitFor({ state: 'visible', timeout: 10000 });
-  await dobInput.fill(dob);
+  // DobInput (the ONE shared DOB component, P3/batch-8) renders three labelled text
+  // fields — #dob-day / #dob-month / #dob-year — and NEVER a native <input type="date">.
+  // Fill the trio from an ISO 'YYYY-MM-DD'. (Older tests waited for input[type="date"],
+  // which no longer exists on DobInput pages — that stale selector is the pre-existing
+  // failure this fixes.)
+  const [y, m, d] = dob.split('-');
+  const day = page.locator('#dob-day').first();
+  await day.waitFor({ state: 'visible', timeout: 10000 });
+  await day.fill(String(parseInt(d, 10)));
+  await page.locator('#dob-month').first().fill(String(parseInt(m, 10)));
+  await page.locator('#dob-year').first().fill(y);
   await page.waitForTimeout(500);
 }
 

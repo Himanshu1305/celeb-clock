@@ -8,21 +8,17 @@ test.describe('DOB input — edge cases', () => {
   });
 
   test('future date is rejected — quiz does not appear', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
     // Fill a future date
     const future = new Date();
     future.setFullYear(future.getFullYear() + 1);
-    await dobInput.fill(future.toISOString().split('T')[0]);
+    await fillDOB(page, future.toISOString().split('T')[0]);
     await page.waitForTimeout(600);
     // Quiz must NOT render
     await expect(page.locator('text=Step 1 of').first()).not.toBeVisible({ timeout: 2000 });
   });
 
   test('date over 120 years ago is rejected', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
-    await dobInput.fill('1880-01-01');
+    await fillDOB(page, '1880-01-01');
     await page.waitForTimeout(600);
     // Quiz should not appear for implausible age
     // Either rejected or shows a result >120 years — check no crash
@@ -30,22 +26,18 @@ test.describe('DOB input — edge cases', () => {
   });
 
   test('tomorrow\'s date (future) is rejected — quiz does not appear', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
     // Use tomorrow — always in the future regardless of time of day
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    await dobInput.fill(tomorrow.toISOString().split('T')[0]);
+    await fillDOB(page, tomorrow.toISOString().split('T')[0]);
     await page.waitForTimeout(600);
     await expect(page.locator('text=Step 1 of').first()).not.toBeVisible({ timeout: 2000 });
   });
 
   test('valid DOB at exact boundary (born yesterday) is accepted', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    await dobInput.fill(yesterday.toISOString().split('T')[0]);
+    await fillDOB(page, yesterday.toISOString().split('T')[0]);
     await page.waitForTimeout(600);
     // Very young person — quiz may or may not appear depending on age gate
     // Just verify no crash
@@ -58,9 +50,7 @@ test.describe('DOB input — edge cases', () => {
   });
 
   test('DOB input clears when Change button is clicked', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.waitFor({ state: 'visible', timeout: 10000 });
-    await dobInput.fill('1990-06-15');
+    await fillDOB(page, '1990-06-15');
     await page.waitForTimeout(600);
 
     // Quiz should appear
@@ -72,7 +62,7 @@ test.describe('DOB input — edge cases', () => {
       await changeBtn.click();
       await page.waitForTimeout(500);
       // DOB input should reappear empty
-      const dobAgain = page.locator('input[type="date"]').first();
+      const dobAgain = page.locator('#dob-day').first();
       await expect(dobAgain).toBeVisible({ timeout: 3000 });
       // Quiz should be gone
       await expect(page.locator('text=Step 1 of').first()).not.toBeVisible({ timeout: 2000 });

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { fillDOB } from './helpers';
 
 test.describe('/life-expectancy', () => {
   test.beforeEach(async ({ page }) => {
@@ -16,10 +17,7 @@ test.describe('/life-expectancy', () => {
 
   test('complete quiz flow shows result', async ({ page }) => {
     // Step 1 — Date of birth (required)
-    const dobInput = page.locator('input[type="date"]').first();
-    if (await dobInput.isVisible()) {
-      await dobInput.fill('1980-02-18');
-    }
+    await fillDOB(page, '1980-02-18');
 
     // Step 1 — Gender selection is required before Next Step is enabled
     await page.locator('label[for="male"]').or(page.locator('text=Male').first()).first().click();
@@ -58,10 +56,7 @@ test.describe('/life-expectancy', () => {
 
   test('What-If Simulator does not show Optimized Lifestyle before interaction', async ({ page }) => {
     // Need to complete quiz to reach simulator — step through quiz first
-    const dobInput = page.locator('input[type="date"]').first();
-    if (await dobInput.isVisible()) {
-      await dobInput.fill('1980-02-18');
-    }
+    await fillDOB(page, '1980-02-18');
 
     // Gender required on step 1
     await page.locator('label[for="male"]').or(page.locator('text=Male').first()).first().click();

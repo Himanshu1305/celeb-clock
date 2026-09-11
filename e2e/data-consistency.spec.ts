@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { fillDOB } from './helpers';
 
 test.describe('Data consistency across pages', () => {
   const TEST_DOB = '1985-07-20';
@@ -9,13 +10,13 @@ test.describe('Data consistency across pages', () => {
     await page.goto('/age-calculator');
     await page.waitForLoadState('networkidle');
 
-    const dobInput = page.locator('input[type="date"]').first();
+    const dobInput = page.locator('#dob-day').first();
     if (!await dobInput.isVisible({ timeout: 3000 })) {
       test.skip();
       return;
     }
 
-    await dobInput.fill(TEST_DOB);
+    await fillDOB(page, TEST_DOB);
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1500);
 
@@ -28,12 +29,12 @@ test.describe('Data consistency across pages', () => {
 
     // Get celebrities from age calculator
     await page.goto('/age-calculator');
-    const dobInput = page.locator('input[type="date"]').first();
+    const dobInput = page.locator('#dob-day').first();
     if (!await dobInput.isVisible({ timeout: 3000 })) {
       test.skip();
       return;
     }
-    await dobInput.fill(TEST_DATE);
+    await fillDOB(page, TEST_DATE);
     await page.keyboard.press('Enter');
     await page.waitForTimeout(2000);
 
@@ -66,8 +67,9 @@ test.describe('Data consistency across pages', () => {
       const exists = await ctaLink.isVisible({ timeout: 3000 });
       expect(exists).toBe(true);
 
-      // Breadcrumb should be present
-      await expect(page.locator('nav').filter({ hasText: 'Home' })).toBeVisible();
+      // Breadcrumb / nav with Home should be present (page has both a top nav and a
+      // breadcrumb nav containing "Home" — assert at least one is visible).
+      await expect(page.locator('nav').filter({ hasText: 'Home' }).first()).toBeVisible();
     }
   });
 

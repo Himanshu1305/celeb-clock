@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { fillDOB } from './helpers';
 
 test.describe('/age-calculator', () => {
   test.beforeEach(async ({ page }) => {
@@ -14,8 +15,7 @@ test.describe('/age-calculator', () => {
   });
 
   test('entering DOB shows age results', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.fill('1980-06-17');
+    await fillDOB(page, '1980-06-17');
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1000);
 
@@ -32,8 +32,7 @@ test.describe('/age-calculator', () => {
   });
 
   test('total seconds counter updates every second', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.fill('1980-01-01');
+    await fillDOB(page, '1980-01-01');
     await page.keyboard.press('Enter');
     await page.waitForTimeout(500);
 
@@ -56,8 +55,7 @@ test.describe('/age-calculator', () => {
   });
 
   test('shows generation for 1980 birth year', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.fill('1980-06-17');
+    await fillDOB(page, '1980-06-17');
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1000);
 
@@ -66,8 +64,7 @@ test.describe('/age-calculator', () => {
   });
 
   test('shows celebrity birthday matches', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.fill('1980-06-17');
+    await fillDOB(page, '1980-06-17');
     await page.keyboard.press('Enter');
     await page.waitForTimeout(2000);
 
@@ -78,8 +75,7 @@ test.describe('/age-calculator', () => {
   });
 
   test('generation matches homepage results for same DOB', async ({ page }) => {
-    const dobInput = page.locator('input[type="date"]').first();
-    await dobInput.fill('1990-03-15');
+    await fillDOB(page, '1990-03-15');
     await page.keyboard.press('Enter');
     await page.waitForTimeout(1000);
 
