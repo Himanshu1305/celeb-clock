@@ -60,3 +60,34 @@ Re-examined honestly. The blocker genuinely still applies from this environment:
   entertainment calculators with bespoke inputs, predating the saved-profile design, that don't
   produce a reusable profile. `SavedDateOffer` makes adding them a clean mechanical follow-up
   if desired — a low-value/bounded item deferred rather than forced across ~6 varied pages.
+
+## Item 5 — Playwright suite cleanup (bounded, evidence-based)
+
+**Fresh measurement.** The main `e2e/` suite is **891 tests across 71 files** and targets
+**remote staging** (`playwright.config.ts` baseURL = staging.bornclock.com). A full run did
+not converge in a bounded time (very slow against a remote server), so — per the resource
+safety-net — I stopped it and ran a representative **bounded sample** (`navigation.spec.ts` +
+`seo.spec.ts` and their prelaunch deps): **63 passed / 5 failed**.
+
+**Categorised root causes of the 5 sampled failures** (all against DEPLOYED staging, which is
+Part D-Fix3 — NOT this Part K branch):
+- `navigation › / loads correctly`, `› /upgrade loads correctly` — homepage/upgrade content
+  assertions against live staging.
+- `prelaunch/navigation › Explore ∩ (main ∪ More) = ∅` — nav-set overlap check.
+- `prelaunch/ops-seo › create-order sentinel`, `› /methodology → 301` — ops/redirect checks.
+
+**Why not "fix the stale selectors" here:** because this suite runs against **deployed old
+staging**, not the local branch, I cannot see the DOM my current code produces, so any selector
+"fix" would be guessing against a page state I can't verify — exactly what Item 5.4 says NOT to
+do. The one category with a clean mechanical fix (the site-wide cookie-consent banner) was
+already resolved in Part I via the `storageState` baseline, and that fix was active in this run.
+
+**What IS a reliable regression signal for this branch:** the LOCAL `e2e-reading` suite (builds
+from this branch, deterministic, no remote flakiness), plus the unit suite — both run green in
+the final regression below.
+
+**For human review / a dedicated future session (Item 5.4):** a proper main-suite cleanup needs
+(1) this branch deployed to staging so tests run against the current DOM, then (2) per-failure
+triage of the ~5-failures-per-2-files rate (extrapolating, on the order of dozens across 71
+files) into genuine bugs vs stale expectations. That is a dedicated effort, not a bounded
+in-session mechanical pass.
