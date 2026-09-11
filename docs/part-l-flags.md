@@ -15,3 +15,11 @@
 - Anonymous users are untouched (device-only, unchanged); all sync failures fall back to device-only.
 
 <!-- Items 2, 3 flags appended as they complete. -->
+
+## Item 2 — novelty single-date tools wired to the shared profile
+Confirmed the remaining list from the consolidated map, then wired all 6 via the reusable
+`SavedDateOffer` (offer-reuse + offer-save, opt-in, no change for users without a profile):
+`/chinese-zodiac`, `/vedic-zodiac`, `/biorhythm`, `/tarot-card-by-birthday`, `/planetary-age`,
+`/life-expectancy`. None had a structural reason to be excluded (all are self-use date tools).
+Baby Names and Birthday Report remain excluded (they're about a different person). Consolidated
+touchpoint map updated to match.

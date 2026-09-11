@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { DobInput, toISODate } from '@/components/DobInput';
+import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { AuthNav } from '@/components/AuthNav';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ReferenceLine, ResponsiveContainer } from 'recharts';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
@@ -113,7 +114,8 @@ export default function BiorhythmPage() {
             <p className="text-sm font-semibold text-gray-700 mb-3">Enter your date of birth</p>
             <div className="flex gap-3 items-start">
               <div className="flex-1">
-                <DobInput label="" onValidChange={d => setDob(d ? toISODate(d) : '')} />
+                <SavedDateOffer dobIso={dob} onUseSaved={setDob} prefix="biorhythm" />
+              <DobInput label="" value={dob ? { day: dob.slice(8, 10), month: dob.slice(5, 7), year: dob.slice(0, 4) } : undefined} onValidChange={d => setDob(d ? toISODate(d) : '')} />
               </div>
               <button
                 onClick={handleCalculate}

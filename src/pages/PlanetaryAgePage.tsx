@@ -249,7 +249,9 @@ const PlanetaryAgePage = () => {
                     Your date of birth
                   </label>
                   <div className="mb-4">
-                    <DobInput label="" onValidChange={d => setLocalDob(d ? toISODate(d) : '')} />
+                    <SavedDateOffer dobIso={localDob} onUseSaved={setLocalDob} prefix="planetary-age" />
+                    <DobInput label="" value={localDob ? { day: localDob.slice(8, 10), month: localDob.slice(5, 7), year: localDob.slice(0, 4) } : undefined}
+                              onValidChange={d => setLocalDob(d ? toISODate(d) : '')} />
                   </div>
                   <button
                     onClick={handleCalculate}

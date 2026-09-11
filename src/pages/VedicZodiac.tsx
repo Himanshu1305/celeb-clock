@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
 import { DobInput, toISODate } from '@/components/DobInput';
+import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { VEDIC_SIGNS, getVedicRashi, compareZodiacs } from '@/services/VedicZodiacService';
@@ -93,7 +94,8 @@ export default function VedicZodiac() {
           <CardContent className="p-6 space-y-4">
             <div className="space-y-2">
               <Label htmlFor="dob-day">Enter Your Date of Birth</Label>
-              <DobInput label="" onValidChange={d => setDob(d ? toISODate(d) : '')} />
+              <SavedDateOffer dobIso={dob} onUseSaved={setDob} prefix="vedic-zodiac" />
+              <DobInput label="" value={dob ? { day: dob.slice(8, 10), month: dob.slice(5, 7), year: dob.slice(0, 4) } : undefined} onValidChange={d => setDob(d ? toISODate(d) : '')} />
             </div>
           </CardContent>
         </Card>

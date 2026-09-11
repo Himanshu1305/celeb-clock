@@ -41,23 +41,27 @@ gemstone, career, Sade Sati, Muhurat).
 - `src/components/BirthDetailsForm.tsx` — shared date+time+city form (pre-fills partial `initial`).
 - `src/components/SavedDateOffer.tsx` — reusable offer-reuse/offer-save bridge for date-only tools.
 - `src/services/profileSync.ts` — account-level sync (`syncProfileToAccount`, `loadProfileFromAccount`,
-  `resolveProfile`). **Prepared + unit-tested against a mock; DORMANT** — not wired live because the
-  `profiles.birth_profile` column isn't applied yet (enable steps in `docs/part-k-flags.md`).
+  `resolveWithConflict`, `resolveAccountProfile`, `sameProfile`). **ACTIVE (Part L):** the
+  `profiles.birth_profile` (jsonb) column exists; a logged-in user's profile syncs to their account
+  row (matched by `user_id`) and follows them across devices; anonymous users stay device-only. On a
+  device-vs-account conflict the account wins and `ProfileConflictNotice` surfaces a one-tap switch.
+- `src/components/ProfileConflictNotice.tsx` — global notice for the device-vs-account conflict case.
 
 ## 4. Where the saved profile is integrated (current)
 - **Full Vedic profile (date+time+place)** — reused, prompting only for missing pieces:
   `/kundali`, `/kundali-match`, `/astrologer`, `/sade-sati`, `/career-report`, `/gemstones`,
   and the birthday-report Vedic section (`BirthTimeVedicSection`).
-- **Date-only reuse** (offer-reuse + offer-save): `/age-calculator` (page-level bridge, Part K.1),
-  `/moon-sign` (via `SavedDateOffer`, Part K.6).
+- **Date-only reuse** (offer-reuse + offer-save via `SavedDateOffer`): `/age-calculator` (page-level
+  bridge, Part K.1), `/moon-sign` (Part K.6), and — **added in Part L Item 2** — `/chinese-zodiac`,
+  `/vedic-zodiac`, `/biorhythm`, `/tarot-card-by-birthday`, `/planetary-age`, `/life-expectancy`.
+- **Account sync (Part L Item 1):** for logged-in users, all of the above reuse the account-synced
+  profile across devices via `profileSync` + `useSavedProfile`.
 
 ## 5. Deliberately EXCLUDED from the self-profile (by design, documented)
 - **Baby Names** — checks a different child each time.
 - **Birthday Report (`/birthday-report`)** — a GIFT report about a *recipient* (recipientName +
   gifterName + recipient DOB), not the user's own chart.
-- **Single-date novelty tools** (Chinese/Vedic Zodiac, Planetary Age, Biorhythm, Tarot-by-birthday,
-  Life Expectancy) — one-shot entertainment calculators; a clean future follow-up via `SavedDateOffer`,
-  intentionally not forced (see `docs/part-k-flags.md`).
+(As of Part L, the previously-deferred single-date novelty tools are now integrated — see §4.)
 
 ## 6. Deeper detail / history
 Per-session touchpoint files (Parts D, E, F, G, I, J) are in `docs/archive/`. Session flag files:

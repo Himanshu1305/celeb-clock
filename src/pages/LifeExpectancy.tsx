@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { DobInput, toISODate } from '@/components/DobInput';
+import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { Footer } from '@/components/Footer';
 import { LifeExpectancyCalculator } from '@/components/LifeExpectancyCalculator';
 import { WhatIfSimulator } from '@/components/WhatIfSimulator';
@@ -479,7 +480,9 @@ const LifeExpectancy = () => {
                       <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-bold">Required</span>
                     </Label>
                     <p className="text-sm text-muted-foreground mb-3">Your date of birth is required to calculate your personalised life expectancy forecast.</p>
-                    <DobInput label="" onValidChange={d => { setRawDateInput(d ? toISODate(d) : ''); if (d) setBirthDate(d); }} />
+                    <SavedDateOffer dobIso={rawDateInput} onUseSaved={iso => { setRawDateInput(iso); setBirthDate(new Date(iso + 'T12:00:00')); }} prefix="life-expectancy" />
+                    <DobInput label="" value={rawDateInput ? { day: rawDateInput.slice(8, 10), month: rawDateInput.slice(5, 7), year: rawDateInput.slice(0, 4) } : undefined}
+                              onValidChange={d => { setRawDateInput(d ? toISODate(d) : ''); if (d) setBirthDate(d); }} />
                   </div>
                 </CardContent>
               </Card>
