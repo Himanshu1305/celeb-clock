@@ -1,3 +1,5 @@
+> ⚠️ SUPERSEDED — see the consolidated docs/vedic-integration-touchpoints.md (Part K). Kept for history.
+
 # Part G (Classical Yoga Detection) — Phase -1 Touchpoints
 
 > Deliverable for `docs/BornClock_PartG_YogaDetection.md` Phase -1. Written before

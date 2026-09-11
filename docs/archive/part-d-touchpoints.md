@@ -1,3 +1,5 @@
+> ⚠️ SUPERSEDED — see the consolidated docs/vedic-integration-touchpoints.md (Part K). Kept for history.
+
 # Part D (Reading & Prediction UX) — Phase 0 Touchpoints & Scope Decision
 
 > Deliverable for `docs/BornClock_PartD_ReadingUX_v2.md` Phase 0. Written before

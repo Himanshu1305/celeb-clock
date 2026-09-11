@@ -1,3 +1,5 @@
+> ⚠️ SUPERSEDED — see the consolidated docs/vedic-integration-touchpoints.md (Part K). Kept for history.
+
 # Part F (AI Astrologer + Guardrails) — Phase 0 Touchpoints & Scope
 
 > Deliverable for `docs/BornClock_PartF_AIAgent_Guardrails.md` Phase 0. Written

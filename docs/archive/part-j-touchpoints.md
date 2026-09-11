@@ -1,3 +1,5 @@
+> ⚠️ SUPERSEDED — see the consolidated docs/vedic-integration-touchpoints.md (Part K). Kept for history.
+
 # Part J — Phase 0 Touchpoints (dependency map)
 
 Branch: `feature/gemstone-chat-profile-part-j` (off `feature/overnight-batch-part-i`).

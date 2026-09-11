@@ -1,3 +1,5 @@
+> ⚠️ SUPERSEDED — see the consolidated docs/vedic-integration-touchpoints.md (Part K). Kept for history.
+
 # Part I — Phase 0 Touchpoints (dependency map)
 
 Branch: `feature/overnight-batch-part-i` (off `feature/timing-calculation-dfix3`, which

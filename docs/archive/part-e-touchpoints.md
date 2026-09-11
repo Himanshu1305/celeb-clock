@@ -1,3 +1,5 @@
+> ⚠️ SUPERSEDED — see the consolidated docs/vedic-integration-touchpoints.md (Part K). Kept for history.
+
 # Part E (Saved Birth Profile + Navigation) — Phase 0 Touchpoints & Scope
 
 > Deliverable for `docs/BornClock_PartE_SavedProfile_Navigation.md` Phase 0.
