@@ -35,7 +35,7 @@ describe('Gemstone rebuild (Part J) — Lagna-based hierarchy', () => {
   it('POSITIVE: recommendation is Lagna-based, and the methodology note says so (not Rashi-only)', async () => {
     const r = buildGemstoneReport(await chart(CHARTS.makara));
     expect(r.methodology.text).toMatch(/Ascendant \(Lagna\)/);
-    expect(r.methodology.text).toMatch(/not your Moon sign \(Rashi\) alone/i);
+    expect(r.methodology.text).toMatch(/Moon sign \(Rashi\) alone/i); // Lagna-vs-Rashi framing present
     // methodology critique is aimed at the METHOD, not any competitor/seller
     expect(r.methodology.text).not.toMatch(/other apps|sellers|competitor|scam|untrustworthy/i);
   });

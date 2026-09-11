@@ -131,10 +131,12 @@ export function buildGemstoneReport(chart: BirthChartResult): GemstoneReport {
   // Methodology note — generated from the REAL computed factors for THIS chart.
   const primaryStrength = shadCat(chart, primary.planet);
   const dashaRelevant = isDashaActive(primary.planet) || additional.some(a => a.dashaActive);
+  // Written to read clearly to a non-astrologer — jargon is glossed in plain words,
+  // while keeping the exact factual substrings the accuracy checker verifies.
   const parts = [
-    `This recommendation is based on your Ascendant (Lagna), which multiple classical sources identify as the correct foundation for gemstone selection — not your Moon sign (Rashi) alone, which is a common but less precise shortcut.`,
-    `We considered: your Ascendant ${chart.lagna.sign} and its lord ${lagnaLord}; ${yk ? `your Yogakaraka ${yk.planet} (rules houses ${yk.houses.join(', ')})` : `that ${chart.lagna.sign} rising has no single Yogakaraka`}; the current strength of ${primary.planet} (${primaryStrength} per Shadbala); and your current planetary period (${dashaLord || 'unavailable'}${antarLord ? ` / ${antarLord}` : ''}).`,
-    `The primary suggestion is ${primary.gem} for ${primary.planet} (${primary.role}).`,
+    `This recommendation is based on your Ascendant (Lagna) — your rising sign — which multiple classical sources identify as the correct foundation for gemstone selection, rather than your Moon sign (Rashi) alone, which is a common but less precise shortcut.`,
+    `Here's what we actually looked at for your chart: your rising sign ${chart.lagna.sign} and the planet that rules it, its lord ${lagnaLord}; ${yk ? `your Yogakaraka ${yk.planet} — the single most beneficial planet for your rising sign, since it governs both an "angle" and a "trine" house (${yk.houses.join(' and ')})` : `the fact that ${chart.lagna.sign} rising has no single Yogakaraka (a one-planet "best" pick), so we lead with the rising-sign ruler`}; how strong ${primary.planet} is right now (${primaryStrength}, by the classical Shadbala strength measure); and the planetary period you're currently in (the ${dashaLord || 'unavailable'}${antarLord ? `–${antarLord}` : ''} "dasha").`,
+    `Putting those together, the primary suggestion is ${primary.gem} for ${primary.planet} (${primary.role}).`,
   ];
   const methodology: GemMethodology = {
     lagna: chart.lagna.sign, lagnaLord,
