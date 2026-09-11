@@ -18,6 +18,7 @@ export default function MuhuratPage() {
   const [purpose, setPurpose] = useState<'business' | 'travel' | 'general'>('business');
   const [days, setDays] = useState(30);
   const [result, setResult] = useState<Day[] | null>(null);
+  const [methodology, setMethodology] = useState('');
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -28,6 +29,7 @@ export default function MuhuratPage() {
       if (!res.ok) throw new Error('unavailable');
       const data = await res.json();
       setResult(data.auspicious as Day[]);
+      setMethodology(data.methodology || '');
     } catch { setFailed(true); } finally { setLoading(false); }
   };
   const fmt = (iso: string) => new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
@@ -67,6 +69,12 @@ export default function MuhuratPage() {
 
         {result && (
           <div data-testid="muhurat-result" className="mt-6 space-y-3">
+            {methodology && (
+              <div data-testid="muhurat-methodology" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4 text-sm text-foreground">
+                <div className="font-semibold mb-1">How these dates are chosen</div>
+                <p>{methodology}</p>
+              </div>
+            )}
             <div className="text-sm text-muted-foreground">{result.length} auspicious {result.length === 1 ? 'date' : 'dates'} found in the next {days} days.</div>
             {result.length === 0 && <p className="text-sm text-foreground">No strongly auspicious day in this window — try a longer range, or a general astrologer would look at your personal chart too.</p>}
             {result.map(d => (

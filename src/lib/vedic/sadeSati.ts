@@ -21,6 +21,7 @@ export interface SadeSatiReport {
   phase: 'Rising (12th from Moon)' | 'Peak (on Moon sign)' | 'Setting (2nd from Moon)' | null;
   currentCycle: SadeSatiCycle | null;     // the ongoing 7.5yr cycle (if active)
   nextCycle: SadeSatiCycle | null;        // the next upcoming 7.5yr cycle
+  methodology: string;                    // plain-language "what we computed" note (Item 2)
   dhaiya: { active: boolean; type: 'Kantaka (4th from Moon)' | 'Ashtama (8th from Moon)' | null; currentEnd: string | null };
 }
 
@@ -75,5 +76,12 @@ export function computeSadeSati(moonSign: number, now: Date, saturnSignAt: Satur
     dhaiyaEnd = nextIngress ? new Date(nextIngress.date).toISOString() : null;
   }
 
-  return { moonSign, active, phase, currentCycle, nextCycle, dhaiya: { active: dhaiyaType !== null, type: dhaiyaType, currentEnd: dhaiyaEnd } };
+  // Methodology note (Item 2) — plain-language "what we computed".
+  const RASHI = ['Mesha', 'Vrisha', 'Mithuna', 'Karka', 'Simha', 'Kanya', 'Tula', 'Vrischika', 'Dhanu', 'Makara', 'Kumbha', 'Meena'];
+  const houseFromMoon = ((cur - moonSign + 12) % 12) + 1;
+  const methodology = `How this was worked out: Sade Sati is defined by where the planet Saturn is transiting right now, measured from your Moon sign (${RASHI[moonSign]}). Saturn is currently in ${RASHI[cur]} — the ${houseFromMoon}${ordinalSuffix(houseFromMoon)} sign from your Moon${active ? ` — and the 12th, 1st and 2nd from the Moon are exactly the three signs that make up Sade Sati (the Rising, Peak and Setting phases), so it is active for you.` : `, which is outside the 12th/1st/2nd signs that make up Sade Sati, so it is not active right now.`} The start and end dates come from tracking the real dates Saturn enters and leaves those signs (its ~2.5-years-per-sign transit) — not an estimate.`;
+
+  return { moonSign, active, phase, currentCycle, nextCycle, methodology, dhaiya: { active: dhaiyaType !== null, type: dhaiyaType, currentEnd: dhaiyaEnd } };
 }
+
+function ordinalSuffix(n: number): string { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return s[(v - 20) % 10] || s[v] || s[0]; }

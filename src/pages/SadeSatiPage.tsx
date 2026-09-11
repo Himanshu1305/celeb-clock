@@ -15,6 +15,7 @@ interface Cycle { start: string; end: string }
 interface Report {
   moonSignName: string; active: boolean; phase: string | null;
   currentCycle: Cycle | null; nextCycle: Cycle | null;
+  methodology: string;
   dhaiya: { active: boolean; type: string | null; currentEnd: string | null };
 }
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -88,6 +89,11 @@ export default function SadeSatiPage() {
                 <p className="text-xs text-muted-foreground mt-1">A 2.5-year Saturn transit (the 4th or 8th from your Moon), traditionally a lighter version of Sade Sati’s themes.</p>
               </div>
             )}
+
+            <div data-testid="sadesati-methodology" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
+              <div className="font-semibold text-foreground mb-1">How this was worked out</div>
+              <p className="text-sm text-foreground">{report.methodology}</p>
+            </div>
 
             <p className="text-xs text-muted-foreground">Dates are computed from Saturn’s real transit through the signs, using the same Lahiri-ayanamsa engine as the rest of BornClock. Treat Sade Sati as a classical timing indicator, not a fixed prediction.</p>
           </div>

@@ -84,6 +84,14 @@ const AVOID_VARA: Record<MuhuratPurpose, Set<string>> = {
 
 export interface MuhuratDay extends Panchang { score: number; reasons: string[]; auspicious: boolean }
 
+/** Plain-language "what we checked" note for the Muhurat results (Item 2). */
+export function muhuratMethodology(purpose: MuhuratPurpose): string {
+  const focus = purpose === 'business' ? 'starting a venture (favouring Wednesday for commerce, and the Pushya star)'
+    : purpose === 'travel' ? 'travel (favouring the mobile, gentle travel Nakshatras)'
+    : 'a general auspicious start';
+  return `How each date is chosen: we compute that day's Panchang — the five classical "limbs" — and score it for ${focus}. Specifically we check the Tithi (lunar day: favouring Dwitiya, Tritiya, Panchami, Saptami, Dashami, Ekadashi and Trayodashi; avoiding the "Rikta" days 4/9/14 and Amavasya), the Nakshatra (birth star of the day: Pushya is the supreme one for beginnings), the Yoga, and the weekday — then we flag the Rahu Kalam window to avoid within the day. A date is only shown as auspicious when it scores well across these; each date below lists the specific reasons it qualified.`;
+}
+
 /** Score one day's Panchang for a purpose. Higher = more auspicious. */
 export function scoreMuhurat(p: Panchang, purpose: MuhuratPurpose): { score: number; reasons: string[] } {
   const reasons: string[] = [];

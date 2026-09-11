@@ -21,7 +21,7 @@ interface Report {
   dasamsa: { analysis: string };
   yogas: Array<{ name: string; grade: string; summary: string }>;
   timing: { windows: Array<{ describe: string }>; next: string | null; note: string };
-  verdict: string; disclaimer: string;
+  verdict: string; methodology: string; disclaimer: string;
 }
 
 export default function CareerReportPage() {
@@ -65,6 +65,10 @@ export default function CareerReportPage() {
 
         {report && (
           <div data-testid="career-result" className="mt-6 space-y-4">
+            <div data-testid="career-methodology" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
+              <div className="font-semibold text-foreground mb-1">How this report was built (from your chart)</div>
+              <p className="text-sm text-foreground">{report.methodology}</p>
+            </div>
             <div data-testid="career-tenth" className="rounded-xl border border-border p-4">
               <div className="font-semibold text-foreground mb-1">Your 10th house of career</div>
               <p className="text-sm text-foreground">{report.tenthHouse.analysis}</p>

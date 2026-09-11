@@ -3,7 +3,7 @@
 // Deterministic — no LLM.
 
 import { getSiderealLongitude } from '../src/lib/vedic/engine/vedicEngine.js';
-import { findMuhurats, type MuhuratPurpose } from '../src/lib/vedic/panchang.js';
+import { findMuhurats, muhuratMethodology, type MuhuratPurpose } from '../src/lib/vedic/panchang.js';
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600' } });
@@ -21,7 +21,7 @@ async function handler(request) {
     const from = fromStr && /^\d{4}-\d{2}-\d{2}$/.test(fromStr) ? new Date(fromStr + 'T00:00:00Z') : new Date();
     const all = findMuhurats(purpose, from, days, sunMoon, tz);
     const auspicious = all.filter(d => d.auspicious);
-    return json({ purpose, days, tz, count: auspicious.length, auspicious, all, _cache: 'miss' });
+    return json({ purpose, days, tz, count: auspicious.length, methodology: muhuratMethodology(purpose), auspicious, all, _cache: 'miss' });
   } catch (e) {
     return json({ error: 'muhurat-failed', detail: String(e?.message || e) }, 500);
   }

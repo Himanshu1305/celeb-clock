@@ -21,6 +21,7 @@ export interface CareerReport {
   yogas: Array<{ name: string; grade: string; summary: string }>;
   timing: { significators: string[]; windows: Array<{ describe: string; range: string; status: string }>; next: string | null; note: string };
   verdict: string;
+  methodology: string;
   disclaimer: string;
 }
 
@@ -67,9 +68,12 @@ export function buildCareerReport(chart: BirthChartResult, now: Date = new Date(
     t.next ? `Your strongest upcoming professional window is your ${describeWindow(t.next)} — the classically most supported period for a move.` : `Your strongest career windows are not in the near future; steady consolidation suits the current period.`,
   ].join(' ');
 
+  // Methodology note (Item 2) — generated from the REAL factors used, in plain words.
+  const methodology = `Here's what this report is actually built from: your 10th house of career (${tenthSign}) and the planet that rules it, ${lord} — placed in your ${ordinal(lordP?.house ?? 10)} house and ${lordStrength} right now (by the classical Shadbala strength measure); the Dasamsa (D10), the dedicated "career" sub-chart; ${yogas.length ? `your career-relevant Yoga${yogas.length > 1 ? 's' : ''} (${yogas.map(y => `${y.name} [${y.grade}]`).join(', ')})` : `the fact that no single career-specific Yoga stands out in your chart`}; and the real timing windows from your Vimshottari Dasha (the ${t.significators.join(', ')} periods). We didn't use a generic template — every line above comes from these specific placements.`;
+
   return {
     tenthHouse: { sign: tenthSign, lord, lordSign: lordP?.sign ?? tenthSign, lordHouse: lordP?.house ?? 10, lordStrength, analysis: tenthAnalysis },
-    occupants, dasamsa, yogas, timing, verdict,
+    occupants, dasamsa, yogas, timing, verdict, methodology,
     disclaimer: 'This is a classical, evidence-based reading of career tendencies and timing — a decision-support layer, not a guarantee or a substitute for your own judgement. Dates are real computed Dasha windows describing when classical support is highest, not fixed outcomes.',
   };
 }
