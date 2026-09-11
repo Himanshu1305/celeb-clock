@@ -370,6 +370,17 @@
   /* Birthday Report */
   #birthday-report-print, #birthday-report-print * { visibility: visible; }
   #birthday-report-print .no-print { visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
+  /* Kundali Matching report — Part I wired window.print() + this container but never
+     added it to the print whitelist, so `body * { visibility: hidden }` blanked the PDF.
+     Re-show it, lift it to the page top (the hidden form above it still reserves space),
+     and force the methodology <details> open so its content prints too. */
+  #kmatch-report, #kmatch-report * { visibility: visible; }
+  #kmatch-report {
+    position: absolute; left: 0; top: 0; width: 100% !important;
+    margin: 0 !important; padding: 16px 24px !important; color: hsl(220 13% 18%);
+  }
+  #kmatch-report details > *:not(summary) { display: block !important; visibility: visible !important; }
+  #kmatch-report summary { list-style: none; }
   /* ── Birthday Blueprint pagination ─────────────────────────────────────
      These rules previously lived ONLY in ReportView's useReactToPrint
      pageStyle string, so they applied to the in-app "Download PDF" button
