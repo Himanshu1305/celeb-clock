@@ -134,3 +134,53 @@ appears among them:
   `age-calculator.spec.ts`, `life-expectancy.spec.ts`, `data-consistency.spec.ts`,
   `error-boundaries.spec.ts`, `seo-and-accessibility.spec.ts`, `navigation.spec.ts` — stale-selector
   and stale-copy fixes described above.
+
+## Final — mimic-manual-testing + self-critique (account sync is the novel, risky part)
+
+I stress-tested the account-sync code the way a suspicious human would, exercising the REAL
+production functions (not re-running the unit suite): **34/34 adversarial checks passed**, including
+a live round-trip against the real database.
+
+- **Corrupted / hostile synced data (12 shapes).** For every malformed value the account row could
+  hold — `null`, `{}`, `{dob:null}`, numeric dob, calendar rollover (`1988-13-45`), time-without-dob,
+  `25:99`, non-string time, a bare string, an array, a city missing lat/lon, a city with a
+  string `tz` — the loader returns `null` and the app falls back to the device profile. Nothing
+  crashes; garbage never reaches a tool. (A valid dob with extra unknown keys is correctly accepted —
+  only dob/time/city are ever read.)
+- **Live corrupted round-trip (real DB).** I wrote `{dob:'1988-13-45', evil:true}` into the real
+  `profiles.birth_profile` column, read it back through a fresh client via the production loader
+  (rejected → `null`, as designed), then restored the row's original value exactly.
+- **Two-device sync-then-edit race.** Device A saved P1; device B typed a different P2 and logged in →
+  B sees **account precedence (P1 active)** AND a **surfaced conflict** (never a silent overwrite of
+  P2). B taps "use this device" → P2 is persisted and re-synced up; device A then sees the **mirror
+  conflict** (P2 active, its own P1 offered) — so neither device's entry is ever lost. First login on
+  a fresh account best-effort pushes the device profile up; anonymous users are never touched.
+
+**Honest self-critique — real edges that exist by design (not bugs, but you should know):**
+1. **Logout does not wipe the device profile.** The saved DOB lives in `localStorage` (the
+   device-only model, unchanged since Part E). On a *shared* browser, the next person can see the
+   previous user's saved date until they clear it; on their login, their account copy takes over and
+   surfaces a conflict. Account sync makes this slightly more visible but didn't introduce it. If you
+   want logout to clear the local profile, that's a deliberate product decision I did not make
+   unilaterally (it would change the consent/persistence model).
+2. **Two devices with genuinely different birth data will ping-pong conflicts** until they converge.
+   Correct (never loses data) but can nag. In practice a user's own DOB is identical everywhere, so
+   this is rare.
+3. **Last-write-wins on simultaneous saves** — no row versioning/locking. Fine for one user editing
+   their own data across their own devices; not built for concurrent multi-writer.
+4. **The initial device→account push is fire-and-forget.** If it fails (network/RLS), cross-device
+   sync won't happen until the next login (`resolvedFor` resets on logout). Device-only keeps working
+   throughout, so the degradation is invisible and safe.
+5. **`resolveConflict` performs side effects inside a `setState` updater** — harmless here (persist and
+   sync are idempotent) but a minor code smell; in React StrictMode dev it may run the idempotent
+   effects twice. Worth tidying later; not a correctness issue.
+
+## Regression totals (this session)
+
+- **Unit:** 1751 passed / 139 files — unchanged, **0 regressions** (the mimic tests above are
+  additional, run ad-hoc against real code paths; the Item 1 conflict + ProfileConflictNotice unit
+  tests remain green in the suite).
+- **Playwright (full suite vs staging):** 665→**797 passed**, 193→**61 failed**; the 61 are all
+  pre-existing/environmental (see the table above), none new from this session.
+- **UI touched by Item 2** (`SavedDateOffer` on the 6 novelty tools) covered by
+  `e2e-reading/novelty-profile.spec.ts` (offer-reuse, no-profile-regression, contribute-to-save).
