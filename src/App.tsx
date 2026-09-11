@@ -192,6 +192,7 @@ import { CurrencyAdminToggle } from "@/components/CurrencyAdminToggle";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
 import { MissingStateModal } from "@/components/MissingStateModal";
 import { CookieConsent } from "@/components/CookieConsent";
+import { ProfileConflictNotice } from "@/components/ProfileConflictNotice";
 import { BirthDateProvider } from "./context/BirthDateContext";
 
 const queryClient = new QueryClient();
@@ -203,6 +204,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <CookieConsent />
+        <ProfileConflictNotice />
         <BirthDateProvider>
           <BrowserRouter>
             <ScrollToTop />
