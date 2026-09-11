@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { DobInput, toISODate } from '@/components/DobInput';
+import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
@@ -84,9 +85,11 @@ export default function MoonSignPage() {
 
           <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-200">
             <p className="text-sm font-semibold text-gray-700 mb-3">Enter your date of birth</p>
+            <SavedDateOffer dobIso={dob} onUseSaved={setDob} prefix="moonsign" />
             <div className="flex gap-3 items-start">
               <div className="flex-1">
-                <DobInput label="" onValidChange={d => setDob(d ? toISODate(d) : '')} />
+                <DobInput label="" value={dob ? { day: dob.slice(8, 10), month: dob.slice(5, 7), year: dob.slice(0, 4) } : undefined}
+                          onValidChange={d => setDob(d ? toISODate(d) : '')} />
               </div>
               <button
                 onClick={handleCalculate}

@@ -44,3 +44,19 @@ Re-examined honestly. The blocker genuinely still applies from this environment:
    `resolveProfile(...)` / `syncProfileToAccount(...)` from `useSavedProfile` for
    logged-in users (falling back to device-only for anonymous users — already the
    default). The tested code is ready; only this wiring remains.
+
+## Item 6 — site-wide profile extension: integrated vs deliberately excluded
+- **Birthday Report (`/birthday-report`) → deliberately EXCLUDED (documented).** It collects a
+  recipientName + gifterName + the *recipient's* DOB — a GIFT report about ANOTHER person, not
+  the user's own chart. Offering "use my saved birth date" would be wrong. Same structural
+  reasoning as Baby Names. (Its embedded Vedic section already offers the saved profile for the
+  self-use case, gated on a full profile in Part J.)
+- **Baby Names → confirmed EXCLUDED** (checks a different child each time; correct per Part E).
+- **Moon Sign (`/moon-sign`) → NEWLY INTEGRATED** via a reusable `SavedDateOffer` component
+  (opt-in offer-reuse + offer-save, device-only) — a concrete date-only example proving the
+  pattern generalises beyond the Age Calculator.
+- **Other single-date novelty tools** (Chinese/Vedic Zodiac, Planetary Age, Biorhythm, Tarot,
+  Life Expectancy) → NOT integrated this session (documented, not silently skipped): one-shot
+  entertainment calculators with bespoke inputs, predating the saved-profile design, that don't
+  produce a reusable profile. `SavedDateOffer` makes adding them a clean mechanical follow-up
+  if desired — a low-value/bounded item deferred rather than forced across ~6 varied pages.
