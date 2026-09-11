@@ -63,11 +63,14 @@ function CityPicker({ testid, value, onPick }: { testid: string; value: SavedCit
 }
 
 export default function KundaliMatchPage() {
-  const { profile } = useSavedProfile();
+  const { profile, isFull } = useSavedProfile();
   const [usingDifferent, setUsingDifferent] = useState(false);
-  const usingSaved = !!profile && !usingDifferent;
+  // Progressive (Part J): reuse Person A outright ONLY when the saved profile is full;
+  // a partial (date-only) profile pre-fills Person A's date and asks for the rest.
+  const usingSaved = isFull && !usingDifferent;
+  const hasPartial = !!profile && !isFull && !usingDifferent;
 
-  const [dobA, setDobA] = useState('');
+  const [dobA, setDobA] = useState(hasPartial ? profile!.dob : '');
   const [timeA, setTimeA] = useState('');
   const [cityA, setCityA] = useState<SavedCity | null>(null);
   const [dobB, setDobB] = useState('');

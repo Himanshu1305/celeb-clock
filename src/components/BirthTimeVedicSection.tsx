@@ -18,7 +18,7 @@ interface VedicApiResult {
  * endpoint is unavailable.
  */
 export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
-  const { profile } = useSavedProfile();
+  const { profile, isFull } = useSavedProfile();
   const [time, setTime] = useState('');
   const [cityQuery, setCityQuery] = useState('');
   const [options, setOptions] = useState<GeoResult[]>([]);
@@ -32,9 +32,10 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
   // Explicit opt-in prefill only: a birthday report can be a GIFT about someone
   // else, so we never auto-apply the user's own saved details — we only offer a
   // one-click fill when a saved profile exists and this section is still empty.
-  const canOfferSaved = !!profile && !time && !city;
+  // Offer the one-click fill only when a FULL profile exists (needs time + city).
+  const canOfferSaved = isFull && !time && !city;
   const useSavedDetails = () => {
-    if (!profile) return;
+    if (!isFull || !profile?.time || !profile?.city) return;
     setTime(profile.time);
     setCity({ name: profile.city.name, lat: profile.city.lat, lon: profile.city.lon, timezone: '', utcOffset: profile.city.tz, country: '' });
     setCityQuery(profile.city.name);

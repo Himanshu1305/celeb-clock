@@ -25,13 +25,15 @@ interface Report {
 }
 
 export default function CareerReportPage() {
-  const { profile } = useSavedProfile();
+  const { profile, save } = useSavedProfile();
   const [report, setReport] = useState<Report | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [saveChecked, setSaveChecked] = useState(false);
 
   const run = async (d: BirthDetails) => {
     setLoading(true); setFailed(false); setReport(null);
+    if (saveChecked) save({ dob: d.dob, time: d.time, city: d.city });
     try {
       const [y, m, day] = d.dob.split('-'); const [h, min] = (d.time || '12:00').split(':');
       const p = new URLSearchParams({ y, m, d: day, h, min, lat: String(d.city.lat), lon: String(d.city.lon), tz: String(d.city.tz) });
@@ -58,7 +60,7 @@ export default function CareerReportPage() {
         <p className="text-muted-foreground mb-4">A dedicated, decisive-but-bounded read of your career: the 10th house and its lord, the Dasamsa (D10) career chart, career Yogas, and real timing windows.</p>
         <KundaliTabs active="kundali" />
 
-        <div className="mt-4"><BirthDetailsForm initial={initial} submitLabel="Generate my career report" loadingLabel="Analysing…" loading={loading} onSubmit={run} testIdPrefix="career" /></div>
+        <div className="mt-4"><BirthDetailsForm initial={initial} submitLabel="Generate my career report" loadingLabel="Analysing…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="career" /></div>
         {failed && <p className="text-sm text-muted-foreground mt-4">The service is temporarily unavailable. Please try again shortly.</p>}
 
         {report && (

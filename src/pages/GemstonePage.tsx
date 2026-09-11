@@ -34,13 +34,15 @@ function Card({ s, primary }: { s: Sugg; primary?: boolean }) {
 }
 
 export default function GemstonePage() {
-  const { profile } = useSavedProfile();
+  const { profile, save } = useSavedProfile();
   const [report, setReport] = useState<Report | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [saveChecked, setSaveChecked] = useState(false);
 
   const run = async (d: BirthDetails) => {
     setLoading(true); setFailed(false); setReport(null);
+    if (saveChecked) save({ dob: d.dob, time: d.time, city: d.city });
     try {
       const [y, m, day] = d.dob.split('-'); const [h, min] = (d.time || '12:00').split(':');
       const p = new URLSearchParams({ y, m, d: day, h, min, lat: String(d.city.lat), lon: String(d.city.lon), tz: String(d.city.tz) });
@@ -63,7 +65,7 @@ export default function GemstonePage() {
         <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">Gemstone Suggestions</h1>
         <p className="text-muted-foreground mb-4">A traditional, informational suggestion based on your Ascendant lord and computed planetary strength. This is classical association only — not a medical claim, not a guarantee, and we sell nothing.</p>
 
-        <BirthDetailsForm initial={initial} submitLabel="Suggest my gemstone" loadingLabel="Analysing…" loading={loading} onSubmit={run} testIdPrefix="gemstone" />
+        <BirthDetailsForm initial={initial} submitLabel="Suggest my gemstone" loadingLabel="Analysing…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="gemstone" />
         {failed && <p className="text-sm text-muted-foreground mt-4">The service is temporarily unavailable. Please try again shortly.</p>}
 
         {report && (

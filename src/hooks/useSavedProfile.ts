@@ -8,6 +8,7 @@ import {
   loadProfile,
   saveProfile as persist,
   clearProfile as forget,
+  isFullVedicProfile,
   SAVED_PROFILE_STORAGE_KEY,
   type SavedBirthProfile,
 } from '@/services/savedProfile';
@@ -15,6 +16,8 @@ import {
 export interface UseSavedProfile {
   profile: SavedBirthProfile | null;
   loaded: boolean;
+  /** True when the saved profile has date + time + place (what Vedic tools need). */
+  isFull: boolean;
   /** Explicit opt-in save. Returns whether it persisted. */
   save: (p: SavedBirthProfile) => boolean;
   /** Forget the saved profile. */
@@ -54,5 +57,5 @@ export function useSavedProfile(): UseSavedProfile {
     setProfile(null);
   }, []);
 
-  return { profile, loaded, save, clear, refresh };
+  return { profile, loaded, isFull: isFullVedicProfile(profile), save, clear, refresh };
 }

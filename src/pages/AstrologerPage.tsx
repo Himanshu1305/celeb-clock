@@ -8,7 +8,7 @@ import { AstrologerChat } from '@/components/AstrologerChat';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 
 export default function AstrologerPage() {
-  const { profile, loaded } = useSavedProfile();
+  const { profile, loaded, isFull } = useSavedProfile();
 
   return (
     <div data-testid="astrologer-page" className="min-h-screen bg-gradient-cosmic">
@@ -32,18 +32,19 @@ export default function AstrologerPage() {
 
         <KundaliTabs active="astrologer" />
 
-        {loaded && profile ? (
+        {loaded && isFull ? (
           <AstrologerChat profile={profile} />
         ) : loaded ? (
           <div data-testid="astrologer-no-profile" className="rounded-xl border border-indigo-200 bg-indigo-50 p-6 text-center">
-            <p className="text-indigo-900 font-semibold mb-2">First, add your birth details</p>
+            <p className="text-indigo-900 font-semibold mb-2">{profile ? 'Just add your birth time and place' : 'First, add your birth details'}</p>
             <p className="text-sm text-indigo-900/80 mb-4">
-              Your astrologer answers from your real chart, so it needs your date, time and place of birth. Add
-              them once on the Kundali page (you choose whether to save them) and come back here.
+              {profile
+                ? `We have your birth date (${profile.dob}) saved. Your astrologer answers from your full chart, so it also needs your birth time and place — add them once on the Kundali page and come back here.`
+                : 'Your astrologer answers from your real chart, so it needs your date, time and place of birth. Add them once on the Kundali page (you choose whether to save them) and come back here.'}
             </p>
             <Link to="/kundali" data-testid="astrologer-add-details"
                   className="inline-flex items-center gap-2 bg-indigo-600 text-white rounded-lg px-6 py-3 font-semibold hover:bg-indigo-700">
-              Add my birth details →
+              {profile ? 'Complete my birth details →' : 'Add my birth details →'}
             </Link>
           </div>
         ) : null}

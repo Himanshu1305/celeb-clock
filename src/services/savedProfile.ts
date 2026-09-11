@@ -20,11 +20,17 @@ export interface SavedCity {
   tz: number;
 }
 
+/**
+ * PROGRESSIVE profile (Part J): only `dob` is required. `time` and `city` are
+ * optional so a date-only tool (e.g. the Age Calculator) can save just a date, and
+ * a richer Vedic tool can later fill in the missing pieces — never re-asking for
+ * what's already saved. Opt-in + device-only is UNCHANGED (privacy model preserved).
+ */
 export interface SavedBirthProfile {
-  dob: string;   // YYYY-MM-DD
-  time: string;  // HH:MM (24h)
-  city: SavedCity;
-  savedAt?: string; // ISO
+  dob: string;         // YYYY-MM-DD (required)
+  time?: string;       // HH:MM (24h) — optional (Vedic tools need it)
+  city?: SavedCity;    // optional (Vedic tools need it)
+  savedAt?: string;    // ISO
 }
 
 const DOB_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -46,19 +52,46 @@ function isRealTime(s: string): boolean {
   return h >= 0 && h <= 23 && min >= 0 && min <= 59;
 }
 
-/** True only for a structurally-valid profile. Guards against corrupted storage. */
+function isValidCity(c: unknown): c is SavedCity {
+  if (!c || typeof c !== 'object') return false;
+  const o = c as Record<string, unknown>;
+  if (typeof o.name !== 'string' || !o.name) return false;
+  if (typeof o.lat !== 'number' || !Number.isFinite(o.lat) || o.lat < -90 || o.lat > 90) return false;
+  if (typeof o.lon !== 'number' || !Number.isFinite(o.lon) || o.lon < -180 || o.lon > 180) return false;
+  if (typeof o.tz !== 'number' || !Number.isFinite(o.tz) || o.tz < -14 || o.tz > 14) return false;
+  return true;
+}
+
+/**
+ * True for a structurally-valid (possibly PARTIAL) profile: a real `dob` is
+ * required; `time`/`city` are validated ONLY if present. Guards corrupted storage
+ * without rejecting a legitimate date-only profile.
+ */
 export function isValidProfile(p: unknown): p is SavedBirthProfile {
   if (!p || typeof p !== 'object') return false;
   const o = p as Record<string, unknown>;
   if (typeof o.dob !== 'string' || !isRealDate(o.dob)) return false;
-  if (typeof o.time !== 'string' || !isRealTime(o.time)) return false;
-  const c = o.city as Record<string, unknown> | undefined;
-  if (!c || typeof c !== 'object') return false;
-  if (typeof c.name !== 'string' || !c.name) return false;
-  if (typeof c.lat !== 'number' || !Number.isFinite(c.lat) || c.lat < -90 || c.lat > 90) return false;
-  if (typeof c.lon !== 'number' || !Number.isFinite(c.lon) || c.lon < -180 || c.lon > 180) return false;
-  if (typeof c.tz !== 'number' || !Number.isFinite(c.tz) || c.tz < -14 || c.tz > 14) return false;
+  if (o.time !== undefined && (typeof o.time !== 'string' || !isRealTime(o.time))) return false;
+  if (o.city !== undefined && !isValidCity(o.city)) return false;
   return true;
+}
+
+/** True when the profile has everything a Vedic tool needs (date + time + place). */
+export function isFullVedicProfile(p: unknown): p is Required<Pick<SavedBirthProfile, 'dob' | 'time' | 'city'>> & SavedBirthProfile {
+  return isValidProfile(p) && typeof (p as SavedBirthProfile).time === 'string' && isValidCity((p as SavedBirthProfile).city);
+}
+
+/**
+ * Merge a patch into an existing profile (progressive extension). Only fills/updates
+ * fields present in the patch; never drops what's already saved. Returns a profile
+ * that must still pass isValidProfile before saving.
+ */
+export function mergeProfile(existing: SavedBirthProfile | null, patch: Partial<SavedBirthProfile>): SavedBirthProfile {
+  return {
+    dob: patch.dob ?? existing?.dob ?? '',
+    time: patch.time ?? existing?.time,
+    city: patch.city ?? existing?.city,
+  };
 }
 
 /**

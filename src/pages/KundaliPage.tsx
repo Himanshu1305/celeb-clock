@@ -15,7 +15,7 @@ import { reportPrice, resolveCurrency } from '@/lib/pricing';
 
 export default function KundaliPage() {
   const price = reportPrice(resolveCurrency(undefined));
-  const { profile, save, loaded } = useSavedProfile();
+  const { profile, save, loaded, isFull } = useSavedProfile();
   const [usingDifferent, setUsingDifferent] = useState(false);
   const [saveChecked, setSaveChecked] = useState(false);
 
@@ -26,8 +26,11 @@ export default function KundaliPage() {
   const [readingLoading, setReadingLoading] = useState(false);
   const [readingFailed, setReadingFailed] = useState(false);
 
-  const usingSaved = !!profile && !usingDifferent;
-  const initial = usingSaved ? { dob: profile!.dob, time: profile!.time, city: profile!.city } : undefined;
+  // Progressive profile (Part J): a FULL saved profile is reused outright; a PARTIAL
+  // one (e.g. just a date) pre-fills what's known and prompts only for the missing pieces.
+  const usingSaved = isFull && !usingDifferent;
+  const hasPartial = !!profile && !isFull && !usingDifferent;
+  const initial = (usingSaved || hasPartial) ? { dob: profile!.dob, time: profile!.time, city: profile!.city } : undefined;
 
   const generate = async (details: BirthDetails) => {
     setLoading(true); setFailed(false); setReading(null); setReadingFailed(false);
@@ -36,6 +39,9 @@ export default function KundaliPage() {
       setData(await fetchKundali(details.dob, details.time, loc));
       // Explicit opt-in only: persist just when the user ticked the box (or when
       // regenerating their already-saved profile after an edit).
+      // Consent-respecting: full re-save refreshes an existing full profile; a partial
+      // profile is only EXTENDED to full when the user explicitly ticks "save" (shown
+      // via showSaveOption below) — never silently expanded.
       if (saveChecked || usingSaved) {
         save({ dob: details.dob, time: details.time, city: details.city });
       }
@@ -86,6 +92,13 @@ export default function KundaliPage() {
                     className="text-indigo-700 underline hover:text-indigo-900">
               Use different details
             </button>
+          </div>
+        )}
+
+        {/* Progressive: only a date is saved so far — pre-fill it and ask only for the rest. */}
+        {loaded && hasPartial && (
+          <div data-testid="partial-profile-banner" className="mb-4 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm text-indigo-900">
+            ★ We’ve filled in your saved birth date (<strong>{profile!.dob}</strong>) — just add your birth time and place below to see your full Kundali.
           </div>
         )}
 
