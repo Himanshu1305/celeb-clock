@@ -16,6 +16,55 @@ import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
 import { RelatedTools } from '@/components/RelatedTools';
 import { AuthorBio } from '@/components/AuthorBio';
+import { useState } from 'react';
+import { useSavedProfile } from '@/hooks/useSavedProfile';
+
+/**
+ * Progressive-profile bridge for the Age Calculator (Part K, Item 1).
+ *
+ * DELIBERATELY NON-INVASIVE: this sits at the PAGE level and only uses the existing
+ * `setBirthDate` the page already passes into <AgeCalculator>, plus the shared saved
+ * profile. It NEVER modifies BirthDateContext (in-memory, non-persisting by design)
+ * or the AgeCalculator component. So a user with no saved profile sees the exact same
+ * page as before (both offers render nothing). Both offers are opt-in, never forced.
+ */
+function AgeCalcProfileBridge({ birthDate, onUseSaved }: { birthDate: Date | null; onUseSaved: (d: Date) => void }) {
+  const { profile, save } = useSavedProfile();
+  const [dismissed, setDismissed] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const savedDob = profile?.dob || null;
+
+  // Offer to REUSE a saved date (only if one exists and the calc is still empty).
+  if (savedDob && !birthDate && !dismissed) {
+    const [y, m, d] = savedDob.split('-').map(Number);
+    return (
+      <div data-testid="agecalc-use-saved" className="max-w-4xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm">
+        <span className="text-indigo-900">★ Use your saved birth date — <strong>{savedDob}</strong>?</span>
+        <span className="flex gap-3">
+          <button type="button" data-testid="agecalc-use-saved-btn" onClick={() => onUseSaved(new Date(y, m - 1, d))}
+                  className="text-indigo-700 underline hover:text-indigo-900">Use it</button>
+          <button type="button" onClick={() => setDismissed(true)} className="text-indigo-500 hover:text-indigo-700">No thanks</button>
+        </span>
+      </div>
+    );
+  }
+
+  // Offer to CONTRIBUTE the entered date to the shared profile (only if none saved yet).
+  if (birthDate && !profile && !saved) {
+    const iso = `${birthDate.getFullYear()}-${String(birthDate.getMonth() + 1).padStart(2, '0')}-${String(birthDate.getDate()).padStart(2, '0')}`;
+    return (
+      <div data-testid="agecalc-save-offer" className="max-w-4xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm">
+        <span className="text-indigo-900">Save this birth date on this device so BornClock’s other tools (Kundali, Sade Sati…) can reuse it?</span>
+        <button type="button" data-testid="agecalc-save-btn" onClick={() => { if (save({ dob: iso })) setSaved(true); }}
+                className="text-indigo-700 underline hover:text-indigo-900">Save my date</button>
+      </div>
+    );
+  }
+  if (saved) {
+    return <div data-testid="agecalc-saved-confirm" className="max-w-4xl mx-auto mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">✓ Saved. Your other tools can now offer to reuse this date (you can change it any time).</div>;
+  }
+  return null;
+}
 
 const AgeCalculatorPage = () => {
   const { birthDate, setBirthDate } = useBirthDate();
@@ -55,6 +104,8 @@ const AgeCalculatorPage = () => {
           </p>
           <EEATBadges sources={['ISO 8601', 'JavaScript Date Spec']} />
         </section>
+
+        <AgeCalcProfileBridge birthDate={birthDate} onUseSaved={setBirthDate} />
 
         <section id="calculator" className="max-w-4xl mx-auto mb-16">
           <AgeCalculator onBirthDateChange={setBirthDate} initialDate={birthDate} />
