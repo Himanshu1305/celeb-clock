@@ -13,4 +13,34 @@ mechanism" risk is avoided. Built: an opt-in "use your saved birth date?" banner
 opt-in "save this date for other tools?" offer. A user with no saved profile sees the
 page exactly as before (both offers render nothing). No defer needed.
 
-<!-- Items 2-7 flags appended as they complete. -->
+## Item 4 — Account-level profile sync → DEFERRED again (migration still not applicable here), but sync CODE is written + tested
+
+Re-examined honestly. The blocker genuinely still applies from this environment:
+- There is **no Supabase CLI** installed, and migrations follow the manual
+  `supabase/NOTES-*.sql` "run this in the dashboard yourself" pattern.
+- The **service-role key in the local env is invalid** ("Invalid API key"), so I
+  cannot even connect to the DB from here — no reliable apply path AND no reliable
+  verify path. Per Item 4.3, I did NOT attempt the migration.
+
+**What's real vs prepared (Item 4.4):**
+- REAL + TESTED (against a mocked schema, 5 tests): `src/services/profileSync.ts` —
+  `syncProfileToAccount`, `loadProfileFromAccount`, `resolveProfile`. Every function
+  degrades gracefully if the column is missing (Postgres 42703) → the app keeps
+  working device-only exactly as today. Opt-in/device-only consent unchanged.
+- NOT DONE: the live migration, and wiring the sync into `useSavedProfile` (left
+  dormant so no untested auth path ships against a non-existent column).
+
+**Concrete, ready-to-execute unblock (for the person, ~2 minutes in the Supabase dashboard):**
+1. Supabase dashboard → SQL editor, run:
+   ```sql
+   ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS birth_profile jsonb;
+   ```
+2. Verify it took (run this; it should return rows with a null column, not an error):
+   ```sql
+   SELECT id, birth_profile FROM public.profiles LIMIT 1;
+   ```
+3. Then the small enable step (a future session, ~30 min): add `birth_profile: Json | null`
+   to the `profiles` Row type in `src/integrations/supabase/types.ts`, and call
+   `resolveProfile(...)` / `syncProfileToAccount(...)` from `useSavedProfile` for
+   logged-in users (falling back to device-only for anonymous users — already the
+   default). The tested code is ready; only this wiring remains.
