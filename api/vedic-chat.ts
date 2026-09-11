@@ -15,7 +15,7 @@ import {
   buildChatSystemPrompt, scanChatResponse, UNSAFE_REPLY_FALLBACK,
   detectTimingQuestion, classifyTimingCategory, deterministicTimingReply,
 } from '../src/lib/vedic/chatGuardrails.js';
-import { verifyTimingClaims } from '../src/lib/vedic/readingSpecificity.js';
+import { verifyTimingClaims, verifyYogaClaims } from '../src/lib/vedic/readingSpecificity.js';
 import { isOverLimit, limitReachedMessage } from '../src/lib/vedic/rateLimit.js';
 
 const GEMINI_MODEL = 'gemini-flash-latest';
@@ -85,38 +85,45 @@ export async function buildChatReply(facts, history, message, generate) {
   // back to a deterministic, guaranteed-correct answer built from the windows.
   const isTiming = detectTimingQuestion(message);
   const validMonths = facts.timing?.validMonths || [];
+  // Yoga-citation guard (Part J): the reply must never assert a Yoga the chart
+  // doesn't have. Runs on EVERY reply (cheap), same zero-tolerance/retry discipline.
+  const presentYogaNames = (facts.yogas || []).map((y: any) => y.name);
+  const hasYogakaraka = (facts.yogas || []).some((y: any) => /yogakaraka/i.test(y.note || ''));
   const SAFETY_FIX = 'Reminder: your previous reply used a forbidden word. Do NOT use "will", "must", "definitely", "guaranteed", "invest", "buy", or "sell" anywhere — rephrase as "tends to", "often", "may", "put time/care into". Never name assets or give a financial instruction.';
   const DATE_FIX = 'Reminder: your previous reply stated a date that is NOT in the COMPUTED TIMING WINDOWS list. Re-answer using ONLY the exact planet periods and date ranges from that list — never invent, round, or shift a date.';
+  const YOGA_FIX = 'Reminder: your previous reply named a Yoga that is NOT in the DETECTED YOGAS list for this chart. Only cite Yogas from that list (with their exact grade); if the user asked about one that is not present, say plainly they do not have it — do not invent one.';
 
   try {
-    let lastFlags: string[] = [], lastBadDates: string[] = [];
+    let lastFlags: string[] = [], lastBadDates: string[] = [], lastBadYogas: string[] = [];
     for (let attempt = 1; attempt <= 3; attempt++) {
       const corrections: string[] = [];
       if (attempt > 1) {
         if (lastFlags.length) corrections.push(SAFETY_FIX);
         if (lastBadDates.length) corrections.push(DATE_FIX);
+        if (lastBadYogas.length) corrections.push(YOGA_FIX);
       }
       const turns = corrections.length ? [...contents, { role: 'user', parts: [{ text: corrections.join(' ') }] }] : contents;
       const raw = await generate(systemPrompt, turns);
 
-      // Safety scan (never show banned language) + date-accuracy scan (never show a
-      // fabricated date) run together, with the SAME retry discipline.
+      // Safety scan (never banned language) + date-accuracy + Yoga-citation accuracy,
+      // all under the SAME retry discipline — nothing unverified reaches the user.
       const flags = scanChatResponse(raw);
       const badDates = (isTiming && validMonths.length) ? verifyTimingClaims(raw, validMonths).wrong.map(w => w.claimed) : [];
-      if (!flags.length && !badDates.length) {
-        return { reply: raw, crisis: false, degraded: false, sanitized: false, ...(isTiming ? { timingChecked: true } : {}), grounding };
+      const badYogas = verifyYogaClaims(raw, presentYogaNames, hasYogakaraka).wrong.map(w => w.token);
+      if (!flags.length && !badDates.length && !badYogas.length) {
+        return { reply: raw, crisis: false, degraded: false, sanitized: false, ...(isTiming ? { timingChecked: true } : {}), yogaChecked: true, grounding };
       }
-      lastFlags = flags; lastBadDates = badDates;
+      lastFlags = flags; lastBadDates = badDates; lastBadYogas = badYogas;
     }
 
     // Exhausted retries. For a timing question, fall back to a deterministic,
     // guaranteed-correct-and-safe answer built straight from the computed windows
     // (so the user still gets their real dates). Otherwise, the safe fallback.
-    if (isTiming) {
+    if (isTiming && !lastBadYogas.length) {
       const safe = deterministicTimingReply(facts.timing, classifyTimingCategory(message));
       if (safe) return { reply: safe, crisis: false, degraded: false, sanitized: false, timingCorrected: true, grounding };
     }
-    return { reply: UNSAFE_REPLY_FALLBACK, crisis: false, degraded: false, sanitized: true, redFlags: [...lastFlags, ...lastBadDates.map(d => `bad-date:${d}`)], grounding };
+    return { reply: UNSAFE_REPLY_FALLBACK, crisis: false, degraded: false, sanitized: true, redFlags: [...lastFlags, ...lastBadDates.map(d => `bad-date:${d}`), ...lastBadYogas.map(y => `bad-yoga:${y}`)], grounding };
   } catch (e) {
     return {
       reply: "I'm having a little trouble reaching your chart right now — please try again in a moment. If it keeps happening, your full reading on the Kundali page is always available.",

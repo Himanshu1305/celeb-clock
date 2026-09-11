@@ -176,6 +176,39 @@ export function verifyTimingClaims(text: string, validMonths: string[]): TimingC
   return { checked, correct: checked - wrong.length, wrong };
 }
 
+// ── Standalone Yoga-claim guard for the CHAT (Part J) ────────────────────────
+const CHAT_YOGA_TOKENS: Array<[string, RegExp]> = [
+  ['Raj Yoga', /\braj\s*yoga\b/i], ['Yogakaraka', /\byogakaraka\b/i], ['Dhana', /\bdhana\s*yoga\b/i],
+  ['Gaja Kesari', /\bgaja[-\s]?kesari\b/i], ['Ruchaka', /\bruchaka\b/i], ['Bhadra', /\bbhadra\b/i],
+  ['Hamsa', /\bhamsa\b/i], ['Malavya', /\bmalavya\b/i], ['Sasa', /\bsasa\b/i],
+  ['Neecha Bhanga', /\bneecha\s*bhanga\b/i], ['Budha-Aditya', /\bbudha[-\s]?aditya\b/i], ['Chandra-Mangal', /\bchandra[-\s]?mangal\b/i],
+];
+const NEGATION_RE = /\b(no|not|without|absent|free from|lack|lacks|lacking|isn'?t|aren'?t|does\s*not|doesn'?t|don'?t|nor|don't (?:have|find)|not? (?:present|there)|recogni[sz]e)\b/i;
+
+export interface YogaClaimResult { checked: number; correct: number; wrong: Array<{ token: string; sentence: string }>; }
+/**
+ * Zero-tolerance Yoga-citation guard for the CHAT (Part J): if the reply asserts a
+ * Yoga as PRESENT (no negation in the sentence) but it is NOT in the detected list,
+ * that's a fabrication — same discipline as the reading's yoga-claim check. Correctly
+ * citing a present Yoga, or negating an absent one, both pass.
+ */
+export function verifyYogaClaims(text: string, presentYogaNames: string[], hasYogakaraka = false): YogaClaimResult {
+  const present = presentYogaNames.map(n => n.toLowerCase());
+  const isPresent = (token: string) =>
+    present.some(n => n.includes(token.toLowerCase())) || (token === 'Yogakaraka' && hasYogakaraka);
+  const wrong: Array<{ token: string; sentence: string }> = [];
+  let checked = 0;
+  for (const sentence of (text || '').split(/(?<=[.!?])\s+/)) {
+    const negated = NEGATION_RE.test(sentence);
+    for (const [token, re] of CHAT_YOGA_TOKENS) {
+      if (!re.test(sentence)) continue;
+      checked++;
+      if (!(isPresent(token) || negated)) wrong.push({ token, sentence: sentence.trim().slice(0, 80) });
+    }
+  }
+  return { checked, correct: checked - wrong.length, wrong };
+}
+
 function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase(); }
 function ord(n: number): string { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
 
