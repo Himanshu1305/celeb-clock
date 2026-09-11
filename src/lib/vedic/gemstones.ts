@@ -23,6 +23,7 @@
  */
 import type { BirthChartResult } from './calculateBirthChart';
 import { SIGN_LORDS } from './engine/sthanaBala';
+import { RASHI_NAMES } from './engine/vedicEngine';
 
 interface Gem { gem: string; hindi: string }
 const GEM: Record<string, Gem> = {
@@ -158,6 +159,23 @@ export function buildGemstoneReport(chart: BirthChartResult): GemstoneReport {
 }
 
 function ordinal(n: number): string { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+
+/**
+ * Gemstone context for the astrologer CHAT (Part K, Item 3). Provides BOTH the
+ * rigorous Lagna-based recommendation (the same computed result the dedicated page
+ * uses — reused, not recalculated differently) AND the Rashi-only shortcut, so the
+ * chat can default to the Lagna method yet still explain the Moon-sign alternative
+ * if asked. Deterministic; the chat cites these, never invents a stone.
+ */
+export function gemstoneChatContext(chart: BirthChartResult): { lagnaBased: string; rashiBased: string } {
+  const rep = buildGemstoneReport(chart);
+  const p = rep.primary!;
+  const lagnaBased = `LAGNA-BASED recommendation (the rigorous method, same as the dedicated gemstone page): primary stone ${p.gem} (${p.hindi}) for ${p.planet}, which is your ${p.role}. Your rising sign is ${rep.methodology.lagna}, ruled by ${rep.methodology.lagnaLord}${rep.methodology.yogakaraka ? `, and your Yogakaraka is ${rep.methodology.yogakaraka}` : ' (no single Yogakaraka)'}.${rep.additional.length ? ` Additional: ${rep.additional.map(a => `${a.gem} for ${a.planet}`).join(', ')}.` : ''}${rep.avoid.length ? ` Traditionally avoid: ${rep.avoid.map(a => `${a.gem} (${a.planet})`).join(', ')}.` : ''}`;
+  const moonLord = SIGN_LORDS[Math.max(0, RASHI_NAMES.indexOf(chart.rashi))];
+  const rashiGem = GEM[moonLord];
+  const rashiBased = `RASHI-ONLY alternative (the common but less precise shortcut): your Moon sign is ${chart.rashi}, ruled by ${moonLord}, whose stone is ${rashiGem.gem} (${rashiGem.hindi}). This uses only the Moon sign, not the Ascendant, so it is less tailored than the Lagna-based method above.`;
+  return { lagnaBased, rashiBased };
+}
 
 /**
  * Zero-tolerance accuracy check for the methodology note (Part J testing): every

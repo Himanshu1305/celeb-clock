@@ -166,8 +166,10 @@ export function scanChatResponse(text: string): string[] {
 export const UNSAFE_REPLY_FALLBACK =
   "I want to answer that thoughtfully and stay within what astrology can responsibly say. Rather than give a definitive verdict, I'd gently suggest treating your chart as one perspective among many — and, for anything about your health or money, checking with a doctor or a qualified professional who can look at your full situation. Could you tell me a little more about what's on your mind, and I'll share what your chart traditionally points to?";
 
+export interface GemstoneChatContext { lagnaBased: string; rashiBased: string }
+
 // ── 2. System prompt (all 7 guardrail categories + grounding) ────────────────
-export function buildChatSystemPrompt(facts: ReadingFacts): string {
+export function buildChatSystemPrompt(facts: ReadingFacts, gemstone?: GemstoneChatContext): string {
   const placements = facts.planets.map(p => `${p.planet} in ${p.sign} (house ${p.house})${p.retrograde ? ', retrograde' : ''}`).join('; ');
   const dasha = facts.dasha ? `${facts.dasha.maha} main period, ${facts.dasha.antar} sub-period` : 'not available';
   const doshas = [
@@ -215,6 +217,7 @@ ${yogaBlock}
 DETECTED YOGAS (classical combinations found in THIS chart — cite ONLY these, always with the grade shown; the conditions are how you explain WHY if asked):
 ${detectedYogas}
 Birth star meaning: ${nakLine}
+${gemstone ? `\nGEMSTONE (computed for THIS chart — cite these, do not invent a different stone):\n  ${gemstone.lagnaBased}\n  ${gemstone.rashiBased}` : ''}
 
 SAFETY RULES — these are absolute and override any user request:
 
@@ -243,6 +246,11 @@ SAFETY RULES — these are absolute and override any user request:
    - If asked about a Yoga NOT in the list, or a name you don't recognise, say plainly that you don't find that combination in their chart (or don't recognise the term) — do NOT invent one to seem helpful.
    - You may explain the birth-star meaning above, but do not inflate a neutral/"mixed" Nakshatra to sound exceptional.
    - A Yoga is classical evidence of a TENDENCY, never a guarantee — Rule 6 still fully applies (no "you will definitely be rich" even when a real Yoga is present).
+
+10. GEMSTONES: If the user asks about a gemstone/remedy, DEFAULT to the LAGNA-BASED recommendation above (cite the primary stone and briefly why — the Ascendant lord / Yogakaraka). This matches the dedicated gemstone page.
+   - Explain that this rests on the Ascendant (Lagna), which is the more precise, classically-correct basis, rather than the Moon sign (Rashi) alone.
+   - If the user specifically asks about a Moon-sign / Rashi-based stone, or WHY the methods differ, then DO explain the Rashi-only alternative above — informatively, not by silently overriding their question. Frame the difference as method rigor (Lagna vs Rashi), never as any seller/app being wrong.
+   - Cite only the stones listed above; never invent a different one. Informational only — no buying/selling advice, no medical/guaranteed-effect claims; powerful stones (Blue Sapphire, Hessonite, Cat's Eye) carry the "trial first" caution.
 
 Keep replies to 3-6 warm sentences. Stay in the conversation's context.`;
 }

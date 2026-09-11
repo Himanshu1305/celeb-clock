@@ -9,6 +9,7 @@
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
 import { extractReadingFacts } from '../src/lib/vedic/readingPrompts.js';
+import { gemstoneChatContext } from '../src/lib/vedic/gemstones.js';
 import {
   detectCrisis, crisisMatches, CRISIS_RESPONSE,
   detectHealthSymptom, HEALTH_REDIRECT_RESPONSE,
@@ -59,8 +60,8 @@ async function callGemini(systemPrompt, contents) {
 
 // Exposed for testing: given facts + history + message, produce the reply
 // payload. `generate` is injected so tests can supply a fake model.
-export async function buildChatReply(facts, history, message, generate) {
-  const systemPrompt = buildChatSystemPrompt(facts);
+export async function buildChatReply(facts, history, message, generate, gemstone?) {
+  const systemPrompt = buildChatSystemPrompt(facts, gemstone);
   const contents = [
     ...history.slice(-MAX_HISTORY).map(m => ({
       role: m.role === 'user' ? 'user' : 'model',
@@ -167,20 +168,21 @@ async function handler(request) {
 
   try {
     // 4) Ground in the computed chart.
-    let facts;
+    let facts, gemstone;
     try {
       const chart = await calculateBirthChart({
         year: Number(birth.y), month: Number(birth.m), day: Number(birth.d),
         hour: Number(birth.h ?? 12), minute: Number(birth.min ?? 0),
         latitude: Number(birth.lat ?? 28.6139), longitude: Number(birth.lon ?? 77.209), timezoneOffset: Number(birth.tz ?? 5.5),
-      });
+      }, { includeShadbala: true });
       facts = extractReadingFacts(chart);
+      gemstone = gemstoneChatContext(chart); // Item 3: Lagna-based gemstone context for the chat
     } catch (inputErr) {
       return json({ error: 'bad-birth', reply: String(inputErr?.message || inputErr) }, 400);
     }
 
     const history = Array.isArray(messages) ? messages : [];
-    const payload = await buildChatReply(facts, history, text, callGemini);
+    const payload = await buildChatReply(facts, history, text, callGemini, gemstone);
     return json(payload);
   } catch (e) {
     return json({ error: 'chat-failed', reply: 'Something went wrong on my side — please try again.', detail: String(e?.message || e) }, 500);
