@@ -45,7 +45,7 @@ export interface ReadingFacts {
     kaalSarp: { present: boolean; isPartial: boolean; type: string | null };
     sadeSati: { active: boolean; phase: string | null };
   };
-  divisional: { d9: Record<string, string>; d10: Record<string, string>; d60: Record<string, string>; d10Sun: string; d60Moon: string; d60Disclaimer: string; navamsaMoon: string; navamsaVenus: string };
+  divisional: { d9: Record<string, string>; d10: Record<string, string>; d60: Record<string, string>; d9Moon: string; d10Sun: string; d60Moon: string; d60Disclaimer: string; navamsaMoon: string; navamsaVenus: string };
   /** Detected classical Yogas (present, graded) — cited as evidence in relevant sections.
    * `conditions` are for the advanced view only (the prompt ignores them). */
   yogas: Array<{ name: string; grade: string; summary: string; note?: string; conditions: string[] }>;
@@ -131,6 +131,13 @@ export function extractReadingFacts(chart: BirthChartResult, now: Date = new Dat
       d9: chart.divisionalCharts.d9,
       d10: chart.divisionalCharts.d10,
       d60: chart.divisionalCharts.d60,
+      // d9Moon is the field the client contract (ReadingFactsClient) + the advanced
+      // "Divisional highlights" line + the degraded fallback narrative all read. It was
+      // previously only exposed as `navamsaMoon`/`d9.Moon`, so the client's `d9Moon`
+      // read resolved to undefined → the advanced view showed a BLANK Navamsa Moon even
+      // though the LLM narrative (built from the full d9 map) cited it correctly. This
+      // alias closes that server↔client field-name mismatch (Part O Item 2).
+      d9Moon: chart.divisionalCharts.d9.Moon,
       d10Sun: chart.divisionalCharts.d10.Sun,
       d60Moon: chart.divisionalCharts.d60.Moon,
       d60Disclaimer: chart.divisionalCharts.d60Disclaimer,
@@ -282,7 +289,7 @@ How to use timing — this is what makes the reading answer "WHEN", not just "wh
 - A window marked STRONGEST is the one to emphasise for that theme.
 
 Write the reading as JSON with exactly these fields. EACH must cite the specific facts listed for it:
-- "snapshot": 2-3 sentences from the Lagna (${f.lagna}) + its lord's placement, the Moon sign (${f.rashi}) and Nakshatra. Name them, and briefly explain what the Nakshatra traditionally signifies using the meaning above — but do NOT inflate a neutral/"mixed" Nakshatra to sound exceptional; describe it honestly.
+- "snapshot": read the core pieces TOGETHER, not as a list. First frame what they are and how they combine: your Lagna (${f.lagna}) is your outer self and life-approach, your Moon sign (${f.rashi}) is your inner, emotional self — name both and say in one clause how they harmonise or contrast. Then fold in the Lagna lord's placement and your Nakshatra (${f.nakshatra.name}), briefly explaining what that Nakshatra traditionally signifies using the meaning above — but do NOT inflate a neutral/"mixed" Nakshatra to sound exceptional; describe it honestly.
 - "career": MUST reference the 10th house sign AND its ruling planet's placement (house/sign/strength), AND at least one of Sun/Mercury/Saturn by its real placement, AND connect to the current Dasha lord if relevant. Draw a real-world implication. Cite the computed Career timing window (with its real date range) as the strongest upcoming period for professional moves.
 - "relationships": MUST reference the 7th house sign and its lord's placement, Venus's placement (sign/house/strength), and the Navamsa sign of Venus or Moon. Fold in Mangal Dosha calmly IF present, naming its cause. If partnership/marriage timing fits, cite the computed Marriage timing window (real date range) as the strongest classical period for this.
 - "health": MUST reference the 6th house sign and lord, the Lagna lord's strength, and any planet in a health-relevant house — but describe the 6th house as daily routines, service, habits and resilience, speaking ONLY to general wellbeing, rest and energy. Never use "disease", "illness", "condition" or any ailment name.

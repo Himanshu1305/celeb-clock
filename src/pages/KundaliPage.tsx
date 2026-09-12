@@ -8,7 +8,7 @@ import { KundaliChart } from '@/components/KundaliChart';
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
-import { fetchKundali, buildInterpretation, type KundaliData } from '@/services/kundaliService';
+import { fetchKundali, buildInterpretationBlocks, type KundaliData } from '@/services/kundaliService';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
 import { VedicReading } from '@/components/reading/VedicReading';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
@@ -164,8 +164,15 @@ export default function KundaliPage() {
             </table>
 
             <div data-testid="kundali-interpretation" className="rounded-lg border border-border p-4 text-sm text-foreground leading-relaxed">
-              <h2 className="font-semibold mb-2">Your chart, interpreted</h2>
-              {buildInterpretation(data)}
+              <h2 className="font-semibold mb-3">Your chart, interpreted</h2>
+              <div className="space-y-3">
+                {buildInterpretationBlocks(data).map((b, i) => (
+                  <div key={i} data-testid="kundali-interp-block">
+                    <div className="font-semibold text-foreground">{b.title}</div>
+                    <p className="text-muted-foreground">{b.body}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div>

@@ -37,7 +37,9 @@ async function getSupabase(env) {
 // Bump READING_VERSION whenever the prompt/output format changes materially, so
 // old cached readings are not served after an upgrade. v2 = Part D-Fix specificity
 // + warmth (strength-in-words) overhaul.
-const READING_VERSION = 'v8';
+// v9 = Part O: deeper four-dimension snapshot (Lagna↔Moon connection) + the
+// facts.divisional.d9Moon field fix (Item 2). Bumped so stale v8 readings aren't served.
+const READING_VERSION = 'v9';
 // `dashaTag` (Part D-Fix3) makes the key TIME-AWARE: it encodes the current
 // Maha/Antar sub-period, so a cached reading is invalidated the moment real time
 // crosses into a new period and the "current / next window" framing would go

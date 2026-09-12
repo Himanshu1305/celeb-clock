@@ -40,6 +40,27 @@ async function factsFor(input: typeof REFERENCE) {
   return extractReadingFacts(chart);
 }
 
+// Part O Item 2 — the advanced "Divisional highlights" line and the degraded fallback
+// narrative both read `facts.divisional.d9Moon`. It was previously never populated by
+// the server (only `navamsaMoon`/`d9.Moon` existed), so the advanced view showed a BLANK
+// Navamsa Moon while the LLM narrative cited it correctly. These assertions would have
+// caught that: the client-read field must be present, non-blank, and equal to d9.Moon.
+describe('Reading — Item 2: divisional highlights are never blank when the data exists', () => {
+  for (const [name, input] of [['reference', REFERENCE], ['sydney', SYDNEY], ['polar', POLAR]] as const) {
+    it(`${name}: facts.divisional.d9Moon is populated and matches the D9 Moon sign`, async () => {
+      const facts = await factsFor(input);
+      const d9Moon = facts.divisional.d9Moon;
+      expect(typeof d9Moon).toBe('string');
+      expect(d9Moon.trim().length).toBeGreaterThan(0);            // never blank
+      expect(d9Moon).toBe(facts.divisional.d9.Moon);              // agrees with the source map
+      expect(d9Moon).toBe(facts.divisional.navamsaMoon);          // agrees with the narrative source
+      // d10Sun / d60Moon (the other two advanced-view cells) must also be non-blank.
+      expect(facts.divisional.d10Sun.trim().length).toBeGreaterThan(0);
+      expect(facts.divisional.d60Moon.trim().length).toBeGreaterThan(0);
+    });
+  }
+});
+
 describe('Reading — POSITIVE: reference chart produces complete, clean text (all 5 sections)', () => {
   it('all 9 fields present, non-empty, no placeholders, no red flags', async () => {
     const facts = await factsFor(REFERENCE);
