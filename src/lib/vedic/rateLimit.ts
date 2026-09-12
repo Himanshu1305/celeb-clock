@@ -9,7 +9,12 @@
  * system, both deferred. Paid tier is a stub flag (no payment system built).
  */
 
-export type Tier = 'free' | 'paid';
+// 'admin' is the server-verified testing tier (Part N): unlimited questions. It is
+// only ever granted by the SERVER after verifying the caller's Supabase JWT against
+// the admin allowlist — a client can set tier:'admin' in a request but the server
+// ignores that claim and re-derives the tier from the verified identity. See
+// api/_adminAuth.ts and the tier short-circuit in api/vedic-chat.ts.
+export type Tier = 'free' | 'paid' | 'admin';
 
 export interface UsageRecord {
   day: string;   // YYYY-MM-DD (local)
@@ -20,6 +25,7 @@ export const FREE_DAILY_LIMIT = 3;
 export const PAID_DAILY_LIMIT = 15;
 
 export function limitForTier(tier: Tier): number {
+  if (tier === 'admin') return Number.POSITIVE_INFINITY; // unlimited testing access
   return tier === 'paid' ? PAID_DAILY_LIMIT : FREE_DAILY_LIMIT;
 }
 
@@ -67,6 +73,7 @@ export function isOverLimit(count: number, tier: Tier): boolean {
 
 /** Friendly message shown when the daily limit is reached. */
 export function limitReachedMessage(tier: Tier): string {
+  if (tier === 'admin') return ''; // admin/testing tier is unlimited — never reaches a limit
   const limit = limitForTier(tier);
   return tier === 'paid'
     ? `You've reached today's limit of ${limit} questions. Your questions refresh tomorrow — I'll be here when you're back.`

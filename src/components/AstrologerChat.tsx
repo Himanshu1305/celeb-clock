@@ -23,7 +23,15 @@ const SUGGESTIONS = [
 
 interface Msg { role: 'user' | 'astrologer'; text: string; kind?: 'crisis' | 'health' | 'normal' }
 
-export function AstrologerChat({ profile, tier = 'free' }: { profile: SavedBirthProfile; tier?: Tier }) {
+export function AstrologerChat(
+  { profile, tier: baseTier = 'free', isAdmin = false, accessToken = null }:
+  { profile: SavedBirthProfile; tier?: Tier; isAdmin?: boolean; accessToken?: string | null },
+) {
+  // Part N: a verified admin uses the unlimited 'admin' tier. This client flag only
+  // affects the local UI/counter — the REAL grant is the server verifying the JWT we
+  // send below. A non-admin flipping this in dev tools gains nothing: the server
+  // still caps them (and the local counter was never a real boundary anyway).
+  const tier: Tier = isAdmin ? 'admin' : baseTier;
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -48,7 +56,7 @@ export function AstrologerChat({ profile, tier = 'free' }: { profile: SavedBirth
     setLoading(true);
     setLimitMsg(null);
 
-    const res = await sendChatMessage(profile, history, q, tier, status.used);
+    const res = await sendChatMessage(profile, history, q, tier, status.used, accessToken);
     const kind: Msg['kind'] = res.crisis ? 'crisis' : res.healthRedirect ? 'health' : 'normal';
     setMessages(prev => [...prev, { role: 'astrologer', text: res.reply, kind }]);
 
@@ -72,7 +80,7 @@ export function AstrologerChat({ profile, tier = 'free' }: { profile: SavedBirth
           Ask about your life — grounded in your own birth chart ({profile.city.name}). Private to you.
         </p>
         <span data-testid="astrologer-remaining" className="inline-block text-xs text-indigo-600 mt-1 bg-indigo-100 px-2 py-0.5 rounded-full">
-          {remaining} question{remaining === 1 ? '' : 's'} left today
+          {isAdmin ? '∞ Unlimited (admin / testing mode)' : `${remaining} question${remaining === 1 ? '' : 's'} left today`}
         </span>
       </div>
 

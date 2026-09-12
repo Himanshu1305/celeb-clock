@@ -18,6 +18,7 @@ import {
 } from '../src/lib/vedic/chatGuardrails.js';
 import { verifyTimingClaims, verifyYogaClaims } from '../src/lib/vedic/readingSpecificity.js';
 import { isOverLimit, limitReachedMessage } from '../src/lib/vedic/rateLimit.js';
+import { verifyAdminRequest } from './_adminAuth.js';
 
 const GEMINI_MODEL = 'gemini-flash-latest';
 const MAX_MESSAGE = 1000;
@@ -140,7 +141,15 @@ async function handler(request) {
   try { body = await request.json(); } catch { return json({ error: 'Invalid JSON body' }, 400); }
 
   const { birth, messages, message, tier: rawTier, questionCount } = body ?? {};
-  const tier = rawTier === 'paid' ? 'paid' : 'free';
+
+  // TIER RESOLUTION (Part N). Admin is checked FIRST and short-circuits the
+  // free/paid logic entirely. Crucially, the tier is re-derived SERVER-SIDE from a
+  // verified Supabase JWT — the client's `rawTier` is NEVER trusted to claim admin.
+  // A verified admin gets `tier:'admin'` (unlimited); everyone else keeps free/paid.
+  const admin = await verifyAdminRequest(request);
+  const tier = admin.isAdmin ? 'admin' : (rawTier === 'paid' ? 'paid' : 'free');
+  if (admin.isAdmin) console.log('[vedic-chat] admin/testing bypass — excluded from usage analytics:', admin.email);
+
   const text = typeof message === 'string' ? message.trim().slice(0, MAX_MESSAGE) : '';
 
   if (!text) return json({ error: 'empty-message', reply: 'Please type a question and I’ll look at your chart.' }, 400);
@@ -161,8 +170,10 @@ async function handler(request) {
     return json({ error: 'no-profile', reply: 'To answer from your real chart, I need your birth details first. Add them on the Kundali page and come back — I’ll remember them here.' }, 400);
   }
 
-  // 3) Rate limit (server-side double-check; client is authoritative this session).
-  if (Number.isFinite(Number(questionCount)) && isOverLimit(Number(questionCount), tier)) {
+  // 3) Rate limit. A verified admin has tier 'admin' → isOverLimit is always false,
+  // so this block is short-circuited and the daily cap never applies to them. For
+  // everyone else the existing free/paid enforcement is unchanged.
+  if (!admin.isAdmin && Number.isFinite(Number(questionCount)) && isOverLimit(Number(questionCount), tier)) {
     return json({ reply: limitReachedMessage(tier), rateLimited: true, crisis: false }, 429);
   }
 
@@ -183,7 +194,9 @@ async function handler(request) {
 
     const history = Array.isArray(messages) ? messages : [];
     const payload = await buildChatReply(facts, history, text, callGemini, gemstone);
-    return json(payload);
+    // Tag admin/testing replies so this traffic is identifiable and can be excluded
+    // from real usage analytics later (Part N design principle 4).
+    return json(admin.isAdmin ? { ...payload, admin: true } : payload);
   } catch (e) {
     return json({ error: 'chat-failed', reply: 'Something went wrong on my side — please try again.', detail: String(e?.message || e) }, 500);
   }

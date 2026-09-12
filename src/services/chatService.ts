@@ -29,12 +29,18 @@ export async function sendChatMessage(
   profile: SavedBirthProfile,
   history: ChatTurn[],
   message: string,
-  tier: 'free' | 'paid',
+  tier: 'free' | 'paid' | 'admin',
   questionCount: number,
+  accessToken?: string | null,
 ): Promise<ChatResponse> {
+  // The access token (a signed Supabase JWT) is what the SERVER verifies to grant
+  // the unlimited admin/testing tier — the client cannot self-promote by sending
+  // tier:'admin' alone. For non-admins this header is simply absent.
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
   const res = await fetch('/api/vedic-chat', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({ birth: birthFromProfile(profile), messages: history, message, tier, questionCount }),
   });
   const data = await res.json().catch(() => ({}));
