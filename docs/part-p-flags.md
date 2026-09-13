@@ -1,6 +1,28 @@
 # Part P — flags for the person's review
 
-## 🚩🚩 DEPLOYMENT BLOCKER (found while deploying Part P to staging)
+## ✅ DEPLOYMENT BLOCKER — RESOLVED (Cloudflare cache purge)
+The blocker below was fixed by a **zone-wide "Purge Everything"** on the Cloudflare
+dashboard, then re-deploying. After the purge, `/api/chart-events` responds correctly on
+both `staging.bornclock.com` and `workers.dev`, `/kundali` (→ `/kundali/`) serves the new
+bundle `index-CRLHVn82.js`, and all three Part P features verified live on staging:
+- Kundali heading "Priya's chart, interpreted" (named) / "Your chart, interpreted" (unnamed).
+- Matching "Arjun (Kanya/Hasta) × Meera (Kanya/Uttara Phalguni)", Koota text uses the names.
+- Notifications: opted-in shows the notice (2 events), opted-out shows nothing.
+- Reading history: shows dated snapshots + "↳ Your Dasha period has since moved from Venus /
+  Mercury to Rahu / Mars."
+Root cause was a stale Cloudflare edge cache serving an older worker/bundle despite
+successful deploys. **Takeaway for future staging deploys: if a deploy doesn't appear to
+take effect, Purge Everything on the zone and re-deploy.** (The stored wrangler OAuth token
+is expired, so I can't purge from the CLI — it's a dashboard action for now.)
+
+Staging regression after Part P: 755 passed / 54 (vs Part O baseline 767/41). ZERO Part-P
+surfaces failed. ~24 of the failures were transient `net::ERR_INTERNET_DISCONNECTED` blips on
+the LOCAL test-runner (confirmed: `pdf-content` re-ran 20/0 clean once the local network
+recovered); the remainder are the same documented environmental set (local-only mixed specs,
+born-on dropdown, 429 flakiness, forms/birthday-report). No regression attributable to Part P.
+
+---
+## (historical) 🚩🚩 DEPLOYMENT BLOCKER (found while deploying Part P to staging)
 **Staging is NOT serving Part P despite `wrangler deploy` reporting success.** New worker
 versions upload and are reported "active (100%)" by `wrangler deployments list`, and the
 built bundle demonstrably contains the new code (`--dry-run` shows `/api/chart-events` in
