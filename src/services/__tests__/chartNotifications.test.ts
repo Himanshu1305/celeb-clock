@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { getDueChartEvents } from '../chartNotifications';
 import type { SavedBirthProfile } from '../savedProfile';
