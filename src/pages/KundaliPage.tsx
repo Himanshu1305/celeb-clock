@@ -9,6 +9,8 @@ import { KundaliTabs } from '@/components/KundaliTabs';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { ChartEventNotice } from '@/components/ChartEventNotice';
+import { ReadingHistory } from '@/components/ReadingHistory';
+import { recordReading } from '@/services/readingHistory';
 import { mergeProfile } from '@/services/savedProfile';
 import { fetchKundali, buildInterpretationBlocks, type KundaliData } from '@/services/kundaliService';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
@@ -23,6 +25,7 @@ export default function KundaliPage() {
 
   const [data, setData] = useState<KundaliData | null>(null);
   const [displayName, setDisplayName] = useState('');   // Part P: optional name for headings only
+  const [historyKey, setHistoryKey] = useState(0);      // Part P: bump to refresh reading history
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
   const [reading, setReading] = useState<ReadingPayload | null>(null);
@@ -40,15 +43,25 @@ export default function KundaliPage() {
     setDisplayName(details.name ?? ''); // display/identification only — never sent to any calculation
     const loc = { lat: details.city.lat, lon: details.city.lon, tz: details.city.tz };
     try {
-      setData(await fetchKundali(details.dob, details.time, loc));
+      const k = await fetchKundali(details.dob, details.time, loc);
+      setData(k);
       // Explicit opt-in only: persist just when the user ticked the box (or when
       // regenerating their already-saved profile after an edit).
       // Consent-respecting: full re-save refreshes an existing full profile; a partial
       // profile is only EXTENDED to full when the user explicitly ticks "save" (shown
       // via showSaveOption below) — never silently expanded.
-      if (saveChecked || usingSaved) {
+      const hasSavedProfile = saveChecked || usingSaved;
+      if (hasSavedProfile) {
         save({ dob: details.dob, time: details.time, city: details.city, name: details.name });
       }
+      // Part P.3: record a device-local reading-history snapshot — ONLY for a saved
+      // profile (same consent as saving birth data). Reuses already-computed facts.
+      recordReading({
+        dob: details.dob, rashi: k.rashi ?? '—', lagna: k.lagna.sign,
+        nakshatra: k.nakshatra?.nakshatra ?? '—',
+        dasha: k.dasha ? `${k.dasha.mahadasha} / ${k.dasha.antardasha}` : '—',
+      }, hasSavedProfile);
+      setHistoryKey(x => x + 1);
       setReadingLoading(true);
       try { setReading(await fetchReading(details.dob, details.time, loc)); }
       catch { setReadingFailed(true); }
@@ -212,6 +225,10 @@ export default function KundaliPage() {
               )}
               {reading && <VedicReading payload={reading} />}
             </div>
+
+            {/* Reading history (Part P.3): device-local continuity, shown only for a
+                saved profile (same consent as saving birth data). */}
+            {loaded && !!profile && <ReadingHistory dob={profile.dob} refreshKey={historyKey} />}
 
             <div className="flex flex-wrap gap-3">
               <a data-testid="kundali-whatsapp-share" href={whatsappHref} target="_blank" rel="noopener noreferrer"

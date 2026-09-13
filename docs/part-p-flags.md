@@ -69,4 +69,25 @@ cron-dependent job. See Part 2 below.
   to the in-app notice (whose "stop" is simply un-ticking the opt-in). The detection engine
   is delivery-agnostic and ready for that channel.
 
-<!-- Part 3 flags appended below. -->
+## Part 3 — saved reading history
+- **What & where:** a lightweight per-reading snapshot (when + Rashi/Lagna/Nakshatra/
+  current Dasha — reusing computed facts, no new calc, no reading prose), stored
+  device-local in localStorage. Shown on the Kundali page as "Your reading history" with a
+  "what's changed since" note between snapshots.
+- **Consent:** recorded ONLY for a user who has SAVED their profile (already opted into
+  on-device storage of birth data). No saved profile → nothing retained and the section is
+  cleanly absent (verified), not broken. Same "on this device only" posture; disclosed in
+  the UI ("Kept on this device only… Not synced to your account").
+- **Retention bound:** most recent **10** entries; older dropped. Chosen to show years of
+  Dasha evolution without unbounded growth on a small device store.
+- **Account-sync interaction (deliberate, tested — Part 3.5):** history is DEVICE-LOCAL,
+  keyed to the birth date, with NO account/auth concept in the store — so logging in or out
+  does NOT wipe, merge, or sync it; on a device it simply persists (same birth date → same
+  history). It does NOT transfer across devices. This is an explicit scope bound (a full
+  account-synced history is a documented future step), chosen to avoid bloating the Part L
+  account jsonb and to keep the privacy surface minimal. Unit-tested.
+- **Real example:** after generating with the reference profile over seeded prior snapshots,
+  the list showed 3 dated entries with the note "↳ Your Dasha period has since moved from
+  Venus / Mercury to Rahu / Mars." A user with no saved profile sees no history section.
+- De-dupe: re-opening an unchanged chart refreshes the newest entry's timestamp instead of
+  adding a duplicate row.
