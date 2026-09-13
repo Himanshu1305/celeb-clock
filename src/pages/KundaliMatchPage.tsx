@@ -8,7 +8,7 @@ import { KundaliTabs } from '@/components/KundaliTabs';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
-import type { SavedCity } from '@/services/savedProfile';
+import { type SavedCity, sanitizeName, NAME_MAX } from '@/services/savedProfile';
 
 interface TimingWindow { planet: string; level: string; range: string; status: string; describe: string }
 interface MatchResponse {
@@ -74,9 +74,11 @@ export default function KundaliMatchPage() {
   const [dobA, setDobA] = useState(hasPartial ? profile!.dob : '');
   const [timeA, setTimeA] = useState('');
   const [cityA, setCityA] = useState<SavedCity | null>(null);
+  const [nameA, setNameA] = useState('');
   const [dobB, setDobB] = useState('');
   const [timeB, setTimeB] = useState('');
   const [cityB, setCityB] = useState<SavedCity | null>(null);
+  const [nameB, setNameB] = useState('');
   const [result, setResult] = useState<MatchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -86,6 +88,15 @@ export default function KundaliMatchPage() {
   const effDobA = usingSaved ? profile!.dob : dobA;
   const effTimeA = usingSaved ? profile!.time : timeA;
   const coordsA = usingSaved ? { lat: profile!.city.lat, lon: profile!.city.lon, tz: profile!.city.tz } : cityA;
+
+  // Part P: OPTIONAL display names. Person A defaults to the saved profile's name
+  // when reusing it; Person B is always entered fresh. Display/identification only —
+  // never sent to the /api/kundali-match calculation. `withNames` is a pure display
+  // transform of the computed report text; with no name it's a no-op (labels stay
+  // "Person A/B"), so nothing breaks in the unnamed case.
+  const dispA = sanitizeName(usingSaved ? (profile?.name ?? '') : nameA) || 'Person A';
+  const dispB = sanitizeName(nameB) || 'Person B';
+  const withNames = (s: string) => s.split('Person A').join(dispA).split('Person B').join(dispB);
 
   // Every person now needs date + time + a real birthplace (Part 1 accuracy fix).
   const validA = usingSaved || (/^\d{4}-\d{2}-\d{2}$/.test(dobA) && /^\d{2}:\d{2}$/.test(timeA) && !!cityA);
@@ -145,6 +156,10 @@ export default function KundaliMatchPage() {
           ) : (
             <div className="rounded-xl border border-border p-4 space-y-3">
               <div className="font-semibold text-foreground">Person A</div>
+              <input data-testid="kmatch-name-a" type="text" value={nameA} maxLength={NAME_MAX}
+                     onChange={e => { setNameA(e.target.value); setResult(null); }}
+                     placeholder="Name (optional)" aria-label="Person A name"
+                     className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
               <input data-testid="kmatch-dob-a" type="date" value={dobA}
                      onChange={e => { setDobA(e.target.value); setResult(null); }}
                      className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" aria-label="Person A date of birth" />
@@ -158,6 +173,10 @@ export default function KundaliMatchPage() {
           {/* Person B — always entered fresh, now including birthplace */}
           <div className="rounded-xl border border-border p-4 space-y-3">
             <div className="font-semibold text-foreground">{usingSaved ? 'The other person' : 'Person B'}</div>
+            <input data-testid="kmatch-name-b" type="text" value={nameB} maxLength={NAME_MAX}
+                   onChange={e => { setNameB(e.target.value); setResult(null); }}
+                   placeholder="Name (optional)" aria-label="Person B name"
+                   className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
             <input data-testid="kmatch-dob-b" type="date" value={dobB}
                    onChange={e => { setDobB(e.target.value); setResult(null); }}
                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" aria-label="Person B date of birth" />
@@ -188,8 +207,10 @@ export default function KundaliMatchPage() {
               <div className="text-sm text-muted-foreground">Total Guna Milan</div>
               <div className="text-4xl font-black text-indigo-600">{result.gunaMilan.total} / 36</div>
               <div className="font-semibold text-foreground">{result.gunaMilan.compatibility}</div>
-              <div className="text-xs text-muted-foreground mt-1">
-                {result.people.a.rashi}/{result.people.a.nakshatra} × {result.people.b.rashi}/{result.people.b.nakshatra}
+              <div data-testid="kmatch-people-line" className="text-xs text-muted-foreground mt-1">
+                <span className="font-medium text-foreground">{dispA}</span> ({result.people.a.rashi}/{result.people.a.nakshatra})
+                {' × '}
+                <span className="font-medium text-foreground">{dispB}</span> ({result.people.b.rashi}/{result.people.b.nakshatra})
               </div>
             </div>
 
@@ -199,9 +220,9 @@ export default function KundaliMatchPage() {
             {result.synthesis && (
               <div data-testid="kmatch-synthesis" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4 space-y-2">
                 <div className="text-[10px] uppercase tracking-wide text-indigo-600 font-semibold">Overall reading</div>
-                <p className="font-semibold text-foreground">{result.synthesis.verdict}</p>
+                <p className="font-semibold text-foreground">{withNames(result.synthesis.verdict)}</p>
                 {result.synthesis.paragraphs.map((para, i) => (
-                  <p key={i} className="text-sm text-muted-foreground">{para}</p>
+                  <p key={i} className="text-sm text-muted-foreground">{withNames(para)}</p>
                 ))}
               </div>
             )}
@@ -211,7 +232,7 @@ export default function KundaliMatchPage() {
               <div data-testid="kmatch-doshas" className="space-y-2">
                 {result.gunaMilan.doshas.filter(d => d.present).map(d => (
                   <div key={d.name} className={`rounded-lg border p-3 text-sm ${d.cancelled ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-200 text-amber-900'}`}>
-                    <span className="font-semibold">{d.cancelled ? '✓' : '⚠️'} {d.name}{d.cancelled ? ' — cancelled' : ''}:</span> {d.reason}
+                    <span className="font-semibold">{d.cancelled ? '✓' : '⚠️'} {d.name}{d.cancelled ? ' — cancelled' : ''}:</span> {withNames(d.reason)}
                   </div>
                 ))}
               </div>
@@ -228,7 +249,7 @@ export default function KundaliMatchPage() {
                     </div>
                     <div className={`font-bold ${k.score === 0 ? 'text-amber-600' : 'text-indigo-600'}`}>{k.score} / {k.max}</div>
                   </div>
-                  <div className="text-sm text-muted-foreground mt-1">{k.explanation}</div>
+                  <div className="text-sm text-muted-foreground mt-1">{withNames(k.explanation)}</div>
                 </div>
               ))}
             </div>
@@ -242,7 +263,7 @@ export default function KundaliMatchPage() {
                   <div className="font-medium mb-1">When BOTH charts are favourable (strongest):</div>
                   <ul className="list-disc pl-5 space-y-0.5">
                     {result.timing.overlaps.map((o, i) => (
-                      <li key={i}><span className="font-medium">{o.range}</span> <span className="text-muted-foreground">(Person A’s {o.aPlanet} period overlapping Person B’s {o.bPlanet} period)</span></li>
+                      <li key={i}><span className="font-medium">{o.range}</span> <span className="text-muted-foreground">({dispA}’s {o.aPlanet} period overlapping {dispB}’s {o.bPlanet} period)</span></li>
                     ))}
                   </ul>
                 </div>
@@ -250,8 +271,8 @@ export default function KundaliMatchPage() {
                 <p className="text-sm text-muted-foreground">No overlapping favourable window in the near future — each person’s individual windows are listed below.</p>
               )}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-sm">
-                <div><div className="font-medium text-foreground">Person A</div>{result.timing.personA.windows.slice(0, 2).map((w, i) => <div key={i} className="text-muted-foreground">{w.describe}</div>) || '—'}</div>
-                <div><div className="font-medium text-foreground">Person B</div>{result.timing.personB.windows.slice(0, 2).map((w, i) => <div key={i} className="text-muted-foreground">{w.describe}</div>) || '—'}</div>
+                <div><div className="font-medium text-foreground">{dispA}</div>{result.timing.personA.windows.slice(0, 2).map((w, i) => <div key={i} className="text-muted-foreground">{w.describe}</div>) || '—'}</div>
+                <div><div className="font-medium text-foreground">{dispB}</div>{result.timing.personB.windows.slice(0, 2).map((w, i) => <div key={i} className="text-muted-foreground">{w.describe}</div>) || '—'}</div>
               </div>
             </div>
 

@@ -9,12 +9,12 @@
  */
 import { useState, useEffect } from 'react';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
-import type { SavedCity } from '@/services/savedProfile';
+import { type SavedCity, sanitizeName, NAME_MAX } from '@/services/savedProfile';
 
-export interface BirthDetails { dob: string; time: string; city: SavedCity }
+export interface BirthDetails { dob: string; time: string; city: SavedCity; name?: string }
 
 export interface BirthDetailsFormProps {
-  initial?: { dob?: string; time?: string; city?: SavedCity | null };
+  initial?: { dob?: string; time?: string; city?: SavedCity | null; name?: string };
   submitLabel: string;
   loadingLabel?: string;
   loading?: boolean;
@@ -32,6 +32,7 @@ export function BirthDetailsForm({
   showSaveOption = false, saveChecked = false, onSaveCheckedChange, testIdPrefix = 'birth',
 }: BirthDetailsFormProps) {
   const p = testIdPrefix;
+  const [name, setName] = useState(initial?.name ?? '');
   const [dob, setDob] = useState(initial?.dob ?? '');
   const [time, setTime] = useState(initial?.time ?? '');
   const [cityQuery, setCityQuery] = useState(initial?.city?.name ?? '');
@@ -42,9 +43,10 @@ export function BirthDetailsForm({
   useEffect(() => {
     if (initial?.dob !== undefined) setDob(initial.dob);
     if (initial?.time !== undefined) setTime(initial.time);
+    if (initial?.name !== undefined) setName(initial.name);
     if (initial?.city) { setCity(initial.city); setCityQuery(initial.city.name); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initial?.dob, initial?.time, initial?.city?.name, initial?.city?.lat]);
+  }, [initial?.dob, initial?.time, initial?.city?.name, initial?.city?.lat, initial?.name]);
 
   const validDob = /^\d{4}-\d{2}-\d{2}$/.test(dob);
   const validTime = /^\d{2}:\d{2}$/.test(time);
@@ -60,10 +62,18 @@ export function BirthDetailsForm({
     setCityQuery(c.name); setOptions([]);
   };
 
-  const submit = () => { if (canSubmit && city) onSubmit({ dob, time, city }); };
+  const submit = () => { if (canSubmit && city) onSubmit({ dob, time, city, name: sanitizeName(name) || undefined }); };
 
   return (
     <div data-testid={`${p}-form`} className="bg-card/60 border border-border rounded-xl p-5 space-y-4">
+      <div>
+        <label className="block text-xs text-muted-foreground mb-1" htmlFor={`${p}-name`}>
+          Your name <span className="text-muted-foreground/70">(optional — used only to personalise headings, never in the calculation)</span>
+        </label>
+        <input id={`${p}-name`} data-testid={`${p}-name`} type="text" value={name} maxLength={NAME_MAX}
+               onChange={e => setName(e.target.value)} placeholder="e.g. Priya"
+               className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
           <label className="block text-xs text-muted-foreground mb-1" htmlFor={`${p}-dob`}>Date of birth</label>

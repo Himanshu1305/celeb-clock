@@ -30,7 +30,22 @@ export interface SavedBirthProfile {
   dob: string;         // YYYY-MM-DD (required)
   time?: string;       // HH:MM (24h) — optional (Vedic tools need it)
   city?: SavedCity;    // optional (Vedic tools need it)
+  name?: string;       // OPTIONAL display/identification name (Part P) — NEVER an
+                       // astrological input; used only for headings/labels/PDF titles.
   savedAt?: string;    // ISO
+}
+
+/** Max stored display-name length — guards layout + storage against absurd input. */
+export const NAME_MAX = 60;
+
+/**
+ * Normalise a user-entered display name: trim, collapse internal whitespace, strip
+ * control characters, and cap length. Returns '' for empty/whitespace-only input.
+ * Display-only, so React's own escaping handles safety; this just keeps it sane.
+ */
+export function sanitizeName(raw: unknown): string {
+  if (typeof raw !== 'string') return '';
+  return raw.replace(/[\u0000-\u001F\u007F]/g, '').replace(/\s+/g, ' ').trim().slice(0, NAME_MAX);
 }
 
 const DOB_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -73,6 +88,9 @@ export function isValidProfile(p: unknown): p is SavedBirthProfile {
   if (typeof o.dob !== 'string' || !isRealDate(o.dob)) return false;
   if (o.time !== undefined && (typeof o.time !== 'string' || !isRealTime(o.time))) return false;
   if (o.city !== undefined && !isValidCity(o.city)) return false;
+  // name is display-only + optional: reject only a non-string (corrupted storage);
+  // length is enforced at the input/save layer via sanitizeName.
+  if (o.name !== undefined && typeof o.name !== 'string') return false;
   return true;
 }
 
@@ -91,6 +109,7 @@ export function mergeProfile(existing: SavedBirthProfile | null, patch: Partial<
     dob: patch.dob ?? existing?.dob ?? '',
     time: patch.time ?? existing?.time,
     city: patch.city ?? existing?.city,
+    name: patch.name ?? existing?.name,
   };
 }
 

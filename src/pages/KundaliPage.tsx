@@ -20,6 +20,7 @@ export default function KundaliPage() {
   const [saveChecked, setSaveChecked] = useState(false);
 
   const [data, setData] = useState<KundaliData | null>(null);
+  const [displayName, setDisplayName] = useState('');   // Part P: optional name for headings only
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
   const [reading, setReading] = useState<ReadingPayload | null>(null);
@@ -30,10 +31,11 @@ export default function KundaliPage() {
   // one (e.g. just a date) pre-fills what's known and prompts only for the missing pieces.
   const usingSaved = isFull && !usingDifferent;
   const hasPartial = !!profile && !isFull && !usingDifferent;
-  const initial = (usingSaved || hasPartial) ? { dob: profile!.dob, time: profile!.time, city: profile!.city } : undefined;
+  const initial = (usingSaved || hasPartial) ? { dob: profile!.dob, time: profile!.time, city: profile!.city, name: profile!.name } : undefined;
 
   const generate = async (details: BirthDetails) => {
     setLoading(true); setFailed(false); setReading(null); setReadingFailed(false);
+    setDisplayName(details.name ?? ''); // display/identification only — never sent to any calculation
     const loc = { lat: details.city.lat, lon: details.city.lon, tz: details.city.tz };
     try {
       setData(await fetchKundali(details.dob, details.time, loc));
@@ -43,7 +45,7 @@ export default function KundaliPage() {
       // profile is only EXTENDED to full when the user explicitly ticks "save" (shown
       // via showSaveOption below) — never silently expanded.
       if (saveChecked || usingSaved) {
-        save({ dob: details.dob, time: details.time, city: details.city });
+        save({ dob: details.dob, time: details.time, city: details.city, name: details.name });
       }
       setReadingLoading(true);
       try { setReading(await fetchReading(details.dob, details.time, loc)); }
@@ -164,7 +166,9 @@ export default function KundaliPage() {
             </table>
 
             <div data-testid="kundali-interpretation" className="rounded-lg border border-border p-4 text-sm text-foreground leading-relaxed">
-              <h2 className="font-semibold mb-3">Your chart, interpreted</h2>
+              <h2 data-testid="kundali-interp-heading" className="font-semibold mb-3">
+                {displayName ? `${displayName}’s chart, interpreted` : 'Your chart, interpreted'}
+              </h2>
               <div className="space-y-3">
                 {buildInterpretationBlocks(data).map((b, i) => (
                   <div key={i} data-testid="kundali-interp-block">
