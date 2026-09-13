@@ -8,6 +8,8 @@ import { KundaliChart } from '@/components/KundaliChart';
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
+import { ChartEventNotice } from '@/components/ChartEventNotice';
+import { mergeProfile } from '@/services/savedProfile';
 import { fetchKundali, buildInterpretationBlocks, type KundaliData } from '@/services/kundaliService';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
 import { VedicReading } from '@/components/reading/VedicReading';
@@ -82,6 +84,20 @@ export default function KundaliPage() {
         </p>
 
         <KundaliTabs active="kundali" />
+
+        {/* Chart-event notifications (Part P): only for a user with a full saved profile.
+            The notice itself renders only when they've opted in AND something is due. */}
+        {loaded && isFull && (
+          <div className="mb-4 space-y-3">
+            <ChartEventNotice profile={profile} />
+            <label data-testid="kundali-notify-optin" className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
+              <input type="checkbox" checked={!!profile?.notifyOptIn}
+                     onChange={e => save(mergeProfile(profile, { notifyOptIn: e.target.checked }))}
+                     className="h-4 w-4 rounded border-border" />
+              🔔 Notify me in-app about upcoming events in my chart (Dasha changes, Sade Sati, favourable windows)
+            </label>
+          </div>
+        )}
 
         {/* Saved-profile banner: shown only once the user has explicitly saved. */}
         {loaded && usingSaved && (

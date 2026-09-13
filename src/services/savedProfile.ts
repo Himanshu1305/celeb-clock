@@ -32,6 +32,7 @@ export interface SavedBirthProfile {
   city?: SavedCity;    // optional (Vedic tools need it)
   name?: string;       // OPTIONAL display/identification name (Part P) — NEVER an
                        // astrological input; used only for headings/labels/PDF titles.
+  notifyOptIn?: boolean; // OPTIONAL explicit opt-in to chart-event notifications (Part P).
   savedAt?: string;    // ISO
 }
 
@@ -91,6 +92,7 @@ export function isValidProfile(p: unknown): p is SavedBirthProfile {
   // name is display-only + optional: reject only a non-string (corrupted storage);
   // length is enforced at the input/save layer via sanitizeName.
   if (o.name !== undefined && typeof o.name !== 'string') return false;
+  if (o.notifyOptIn !== undefined && typeof o.notifyOptIn !== 'boolean') return false;
   return true;
 }
 
@@ -110,6 +112,7 @@ export function mergeProfile(existing: SavedBirthProfile | null, patch: Partial<
     time: patch.time ?? existing?.time,
     city: patch.city ?? existing?.city,
     name: patch.name ?? existing?.name,
+    notifyOptIn: patch.notifyOptIn ?? existing?.notifyOptIn,
   };
 }
 

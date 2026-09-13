@@ -41,4 +41,32 @@ cron-dependent job. See Part 2 below.
   interpreted"; Matching "Arjun (Kanya/Hasta) × Meera (Kanya/Uttara Phalguni)" with the
   Koota text using the names and zero "Person A/B" remnants, vs the neutral unnamed case.
 
-<!-- Part 2 & 3 flags appended below as they complete. -->
+## Part 2 — chart-event notifications (opt-in, NOT cron-dependent)
+- **Delivery decision (because cron is broken):** per the prompt's explicit instruction,
+  Part 2 does NOT build a Cloudflare-cron daily job. Instead the deterministic detection
+  runs server-side (`/api/chart-events`) and is surfaced **in-app, opportunistically when
+  an opted-in user visits** the Kundali page. This channel needs neither cron nor email,
+  so it actually works in this environment today. `/api/chart-events` is also directly
+  hittable by an external scheduler later to drive email.
+- **Detection engine** (`notificationTriggers.ts`, fully unit-tested) reuses already-computed
+  data — a Dasha sub/main-period ending within 45 days, active Sade Sati (calm, non-fear
+  framing), and an upcoming favourable window (D-Fix3) starting soon. No new astronomy.
+- **Opt-in (hard gate):** nothing is checked, fetched, or shown unless the saved profile
+  has `notifyOptIn === true` (a checkbox on the Kundali page). Stored in the same
+  consented saved-profile structure — no DB migration. Verified: an un-opted-in user
+  never even calls the API.
+- **Frequency / retention bound:** each event has a transition-specific key; a per-device
+  last-shown store enforces a **30-day cooldown per event** (so the same transition can't
+  re-notify within a month). Dismissing starts the cooldown.
+- **Real example (1964-03-15, Delhi):** "Your Venus sub-period is changing soon — Around
+  October 2026 your current Venus Antardasha moves on…" and "Your Sade Sati is currently
+  active — Saturn is in its Peak phase… a period of consolidation and patience". Opted-out:
+  no notice at all.
+- **Email + unsubscribe status (honest):** real EMAIL delivery is NOT built this session
+  (the in-app channel is the working first version). The project already has `api/send-email`
+  + a working tokened `api/unsubscribe` to reuse when email delivery is added; per the
+  prompt, the unsubscribe requirement attaches to real email delivery when it's built, not
+  to the in-app notice (whose "stop" is simply un-ticking the opt-in). The detection engine
+  is delivery-agnostic and ready for that channel.
+
+<!-- Part 3 flags appended below. -->

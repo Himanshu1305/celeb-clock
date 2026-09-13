@@ -23,6 +23,7 @@ import { GET  as vedicProfile }         from '../api/vedic-profile.js';
 import { GET  as vedicReading }         from '../api/vedic-reading.js';
 import { POST as vedicChat }            from '../api/vedic-chat.js';
 import { GET  as kundaliMatch }         from '../api/kundali-match.js';
+import { GET  as chartEvents }          from '../api/chart-events.js';
 import { GET  as sadeSati }             from '../api/sade-sati.js';
 import { GET  as muhurat }             from '../api/muhurat.js';
 import { GET  as careerReport }        from '../api/career-report.js';
@@ -87,6 +88,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/vedic-reading':      vedicReading,
   '/api/vedic-chat':         vedicChat,
   '/api/kundali-match':      kundaliMatch,
+  '/api/chart-events':       chartEvents,
   '/api/sade-sati':          sadeSati,
   '/api/muhurat':            muhurat,
   '/api/career-report':      careerReport,
