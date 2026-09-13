@@ -89,6 +89,10 @@ test.describe('BATCH-6 Phase 5 — compatibility Western label + nav', () => {
   test('Compatibility is discoverable from the footer (every page)', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    await expect(page.locator('footer').getByRole('link', { name: 'Compatibility' })).toBeVisible();
+    // Part Q triage: the footer now carries TWO "Compatibility" links (see Part Q flags —
+    // duplicate footer/nav link, a pre-existing product-intent question, not a Part Q change).
+    // This test only asserts DISCOVERABILITY, which either link satisfies → scope to .first()
+    // to avoid a strict-mode violation without masking the duplication (flagged separately).
+    await expect(page.locator('footer').getByRole('link', { name: 'Compatibility' }).first()).toBeVisible();
   });
 });

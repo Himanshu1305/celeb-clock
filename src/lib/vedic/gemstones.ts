@@ -152,7 +152,15 @@ export function buildGemstoneReport(chart: BirthChartResult): GemstoneReport {
     ? 'No functional benefic is currently weak enough to specifically need strengthening — the primary stone above is the main suggestion, and no extra stone is forced to fit.'
     : null;
 
-  const classificationNote = 'Functional benefic/malefic status here is computed from your Ascendant’s whole-sign house rulerships (Trikona/Kendra vs. the difficult 6/8/12 houses). Traditions differ on some edge cases — notably a natural benefic that rules both a good and a difficult house (the "kendradhipati" nuance) — so treat the "avoid" list as the mainstream conservative view, not the only one.';
+  // Classification disclosure (Part Q Item 1 — clarity refinement, logic UNCHANGED).
+  // Fresh 3-source research (Sep 2026) confirmed the underlying rule set is the
+  // mainstream-conservative one (dusthana lordship = avoid, offset only by 1st/Trikona
+  // rulership — e.g. Taurus Venus rules 1st+6th and stays benefic, corroborated), and
+  // that the genuine "kendradhipati" (angle-ownership) variance remains split — sources
+  // even contradict each other on its direction for a natural malefic ruling a Kendra.
+  // So logic is left as-is; only the wording is made more precise, no longer conflating
+  // the mixed-rulership case with the distinct kendradhipati (angle) rule.
+  const classificationNote = 'How a planet is sorted into "strengthen" vs. "avoid" here comes only from the houses it rules for your rising sign: ruling a good house (your 1st, or a 5th/9th "trine") counts in its favour, while ruling a difficult house (6th, 8th or 12th) counts against it. When a planet rules BOTH kinds — e.g. a benefic ruling a good house and a difficult one — we keep it on the benefic side, the mainstream conservative reading. This is a separate point from the classical "kendradhipati" rule (about planets ruling an "angle" house — the 1st/4th/7th/10th), where traditions genuinely differ, and sources even contradict each other, on whether such a planet should be strengthened at all; where that call is unsettled we do not force it. So treat the "avoid" list as the mainstream conservative view, not the only one.';
 
   const disclaimer = 'These are TRADITIONAL/CLASSICAL associations only — not medical advice, not a guaranteed effect, and not a product recommendation. The powerful stones (Blue Sapphire, Hessonite, Cat’s Eye) are classically tested on a short trial before regular wear. Please consult a qualified astrologer before wearing any gemstone; BornClock sells nothing and links to no seller.';
   return { primary, additional, additionalNote, avoid, methodology, classificationNote, disclaimer };

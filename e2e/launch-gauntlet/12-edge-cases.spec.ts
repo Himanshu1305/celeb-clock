@@ -48,7 +48,11 @@ test('birthday-report: future DOB shows validation error', async ({ page }) => {
   await page.waitForLoadState('networkidle');
   const future = new Date();
   future.setFullYear(future.getFullYear() + 1);
-  await page.getByPlaceholder(/Priya|James|Mum/i).fill('Test Recipient');
+  // Part Q triage: recipient-name placeholder is "e.g. Priya, James, Mum...". A
+  // birth-city field ("e.g. Delhi, Mumbai…") was added to this form since this test
+  // was written, and "Mumbai" collides with the /Mum/ alternative → strict-mode
+  // violation (2 matches). Drop "Mum" so the selector uniquely targets the name field.
+  await page.getByPlaceholder(/Priya|James/i).fill('Test Recipient');
   await page.getByPlaceholder('DD', { exact: true }).fill(String(future.getDate()));
   await page.getByPlaceholder('MM', { exact: true }).fill(String(future.getMonth() + 1));
   await page.getByPlaceholder('YYYY', { exact: true }).fill(String(future.getFullYear()));
@@ -59,7 +63,8 @@ test('birthday-report: future DOB shows validation error', async ({ page }) => {
 test('birthday-report: impossible date (Feb 29 non-leap) shows validation error', async ({ page }) => {
   await page.goto('/birthday-report');
   await page.waitForLoadState('networkidle');
-  await page.getByPlaceholder(/Priya|James|Mum/i).fill('Test Recipient');
+  // Same "Mum"↔"Mumbai" selector collision as above — target the name field uniquely.
+  await page.getByPlaceholder(/Priya|James/i).fill('Test Recipient');
   await page.getByPlaceholder('DD', { exact: true }).fill('29');
   await page.getByPlaceholder('MM', { exact: true }).fill('2');
   await page.getByPlaceholder('YYYY', { exact: true }).fill('2019'); // not a leap year
