@@ -1,6 +1,38 @@
 # Part P — flags for the person's review
 
-## 🚩 BIGGEST FINDING: scheduled triggers (cron) are genuinely broken — NOT harmless
+## 🚩🚩 DEPLOYMENT BLOCKER (found while deploying Part P to staging)
+**Staging is NOT serving Part P despite `wrangler deploy` reporting success.** New worker
+versions upload and are reported "active (100%)" by `wrangler deployments list`, and the
+built bundle demonstrably contains the new code (`--dry-run` shows `/api/chart-events` in
+`_worker.js`) — but the edge keeps serving an OLDER worker version:
+- `GET /api/chart-events` (new Part P route) returns the worker's own `{"error":"Not found"}`
+  — on BOTH `staging.bornclock.com` AND the uncached `bornclock.usdvisionai.workers.dev`.
+- `/kundali` HTML references the OLD entry bundle `index-VKsZaCGZ.js` (with `cf-cache-status:
+  HIT`), while the NEW `index-CRLHVn82.js` is uploaded and reachable (200) but unreferenced.
+- Meanwhile Part M's `/api/kundali-match` (with `synthesis`) DOES work — so the served worker
+  is an earlier version (Part M/O-era), not broken.
+
+Tried, without success: re-deploy (×2), a fully CLEAN deploy with the `[triggers]` block
+temporarily removed (deploy then succeeded with NO error, yet the old version still served),
+`--dry-run` bundle verification, `wrangler versions list` / `deployments list` (newest version
+shows as promoted at 100%). A read-only Cloudflare API re-verify/purge was NOT possible — the
+stored wrangler OAuth token is expired.
+
+**Most likely causes (need Cloudflare dashboard access to resolve — I don't have it):**
+1. A stuck Cloudflare **edge cache** on the zone serving old HTML + old worker responses →
+   fix: Caching → **Purge Everything** for `staging.bornclock.com`, then re-deploy/re-test.
+2. A **gradual-deployment / version-pin** keeping traffic on an old version → fix: in the
+   Workers dashboard, set the latest version to 100% (or delete the pin) and re-deploy.
+
+**Impact:** Part P is fully built, unit-tested (1803/145), locally Playwright-verified for all
+three features, and committed — but I could NOT verify it live on staging because staging isn't
+serving the new version. Staging itself is UP and functional on the prior version (no outage).
+Nothing was deployed to production/main (confirmed: only `staging.bornclock.com` is a route;
+I was on the feature branch throughout). Please purge the cache / fix the version pin (or
+provide a fresh Cloudflare API token) and I'll immediately re-deploy and run the full
+on-staging verification.
+
+## 🚩 scheduled triggers (cron) are genuinely broken — NOT harmless
 The recurring "schedules failed to deploy" message, dismissed as harmless in prior
 sessions, was investigated for real this time. The worker HAS a proper `scheduled()`
 handler and 4 crons in `wrangler.toml`, but **every deploy's `PUT …/schedules` call
