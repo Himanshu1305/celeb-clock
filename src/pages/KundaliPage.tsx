@@ -15,6 +15,7 @@ import { mergeProfile } from '@/services/savedProfile';
 import { fetchKundali, buildInterpretationBlocks, type KundaliData } from '@/services/kundaliService';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
 import { VedicReading } from '@/components/reading/VedicReading';
+import { PastPeriodReflection } from '@/components/reading/PastPeriodReflection';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
 
 export default function KundaliPage() {
@@ -24,6 +25,7 @@ export default function KundaliPage() {
   const [saveChecked, setSaveChecked] = useState(false);
 
   const [data, setData] = useState<KundaliData | null>(null);
+  const [readingDob, setReadingDob] = useState('');     // Part R: dob the reflection is keyed to
   const [displayName, setDisplayName] = useState('');   // Part P: optional name for headings only
   const [historyKey, setHistoryKey] = useState(0);      // Part P: bump to refresh reading history
   const [loading, setLoading] = useState(false);
@@ -40,6 +42,7 @@ export default function KundaliPage() {
 
   const generate = async (details: BirthDetails) => {
     setLoading(true); setFailed(false); setReading(null); setReadingFailed(false);
+    setReadingDob(details.dob);           // Part R: key the reflection tracking to this dob
     setDisplayName(details.name ?? ''); // display/identification only — never sent to any calculation
     const loc = { lat: details.city.lat, lon: details.city.lon, tz: details.city.tz };
     try {
@@ -224,6 +227,18 @@ export default function KundaliPage() {
                 </p>
               )}
               {reading && <VedicReading payload={reading} />}
+
+              {/* Past-Period Reflection (Part R): optional, low-key, shown after the
+                  main reading. Gated by saved-profile consent (usingSaved || saveChecked),
+                  which is also the persistent identity the "once ever per theme" tracking
+                  keys against. Renders nothing when the chart qualifies for no themes. */}
+              {reading && (usingSaved || saveChecked) && (
+                <PastPeriodReflection
+                  reflections={reading.reflections}
+                  dob={readingDob}
+                  hasSavedProfile={usingSaved || saveChecked}
+                />
+              )}
             </div>
 
             {/* Reading history (Part P.3): device-local continuity, shown only for a

@@ -37,12 +37,26 @@ export interface ReadingFactsClient {
   warnings: Array<{ code: string; message: string }>;
 }
 
+/** One Past-Period Reflection question (Part R) — see src/lib/vedic/reflection.ts. */
+export interface ReflectionQuestionClient {
+  theme: 'marriage' | 'career' | 'travel';
+  dashaLord: string;
+  antardashaLord: string;
+  start: string;
+  end: string;
+  houses: number[];
+  themeDescription: string;
+  questionText: string;
+}
+
 export interface ReadingPayload {
   facts: ReadingFactsClient;
   reading: ReadingSections | null;
   degraded: boolean;
   degradedReason?: string;
   warnings: Array<{ code: string; message: string }>;
+  /** Past-Period Reflection questions this chart qualifies for (Part R). May be []. */
+  reflections?: ReflectionQuestionClient[];
   source: string;
   _cache?: string;
 }

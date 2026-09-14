@@ -17,6 +17,7 @@ import {
 } from '../src/lib/vedic/readingPrompts.js';
 import { verifyReadingClaims, scoreReadingSpecificity } from '../src/lib/vedic/readingSpecificity.js';
 import { currentDashaTag } from '../src/lib/vedic/yogaTiming.js';
+import { selectReflectionQuestions } from '../src/lib/vedic/reflection.js';
 
 const GEMINI_MODEL = 'gemini-flash-latest';
 
@@ -222,18 +223,25 @@ async function handler(request, env?) {
       return json({ error: String(inputErr?.message || inputErr) }, 400);
     }
 
+    // Past-Period Reflection (Part R): deterministic, computed fresh from the chart
+    // (never cached — it depends on `now` for the past/completed cutoff, and is cheap).
+    // Birth instant in UTC so the "lived after birth" filter is correct.
+    const birthUTC = new Date(Date.UTC(y, m - 1, d, h, min) - Math.round(tz * 60) * 60000);
+    const reflections = selectReflectionQuestions(chart, birthUTC, now);
+
     const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz, currentDashaTag(chart, now));
     const cached = await getCached(sb, cacheKey);
-    if (cached) return json({ ...cached, _cache: 'hit' });
+    if (cached) return json({ ...cached, reflections, _cache: 'hit' });
 
     const facts = extractReadingFacts(chart, now);
     const payload = await buildReadingPayload(facts, generateReading);
 
     // Only cache a full, safe AI reading — never cache a degraded/fallback
-    // response (so a transient Gemini outage isn't frozen into the cache).
+    // response (so a transient Gemini outage isn't frozen into the cache). Reflections
+    // are added AFTER caching so a cache hit still gets a freshly-computed set.
     if (!payload.degraded) await setCached(sb, cacheKey, payload);
 
-    return json({ ...payload, _cache: 'miss' });
+    return json({ ...payload, reflections, _cache: 'miss' });
   } catch (e) {
     return json({ error: 'reading-failed', detail: String(e?.message || e) }, 500);
   }
