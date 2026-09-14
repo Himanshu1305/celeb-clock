@@ -40,7 +40,10 @@ async function getSupabase(env) {
 // + warmth (strength-in-words) overhaul.
 // v9 = Part O: deeper four-dimension snapshot (Lagna↔Moon connection) + the
 // facts.divisional.d9Moon field fix (Item 2). Bumped so stale v8 readings aren't served.
-const READING_VERSION = 'v9';
+// v10 = Part S: Family raised to full D-Fix2 depth; dosha timing (Mangal→Mars,
+// Sade Sati phase, Kaal Sarp structural) and divisional-placement activation timing
+// added. Bumped so stale v9 readings aren't served.
+const READING_VERSION = 'v10';
 // `dashaTag` (Part D-Fix3) makes the key TIME-AWARE: it encodes the current
 // Maha/Antar sub-period, so a cached reading is invalidated the moment real time
 // crosses into a new period and the "current / next window" framing would go

@@ -33,6 +33,7 @@
  */
 import type { BirthChartResult, MahadashaPeriod } from './calculateBirthChart';
 import { SIGN_LORDS } from './engine/sthanaBala';
+import { RASHI_NAMES } from './engine/vedicEngine';
 
 export type WindowLevel = 'maha' | 'antar';
 export type WindowStatus = 'past' | 'current' | 'upcoming';
@@ -145,7 +146,7 @@ export function yogaTimings(chart: BirthChartResult, now: Date = new Date()): Ti
   return results;
 }
 
-export type LifeCategory = 'wealth' | 'career' | 'marriage';
+export type LifeCategory = 'wealth' | 'career' | 'marriage' | 'family';
 
 /** Significators for the three named life questions (Part 1.4). */
 export function categorySignificators(chart: BirthChartResult, category: LifeCategory): { significators: string[]; note?: string } {
@@ -157,6 +158,12 @@ export function categorySignificators(chart: BirthChartResult, category: LifeCat
     const sig = [houseLordOf(chart, 10), ...planetsInHouse(chart, 10)];
     return { significators: [...new Set(sig)], note: 'Career/job timing uses the periods of your 10th-house lord (profession) and any planet placed in your 10th house.' };
   }
+  if (category === 'family') {
+    // Family (Part S): 4th-house lord (home/mother) + 9th-house lord (father/fortune) —
+    // the same houses the Family section already reads, now with a Dasha timing angle.
+    const sig = [houseLordOf(chart, 4), houseLordOf(chart, 9)];
+    return { significators: [...new Set(sig)], note: 'Family timing uses the periods of your 4th-house lord (home and mother) and 9th-house lord (father and fortune).' };
+  }
   // marriage — gender-neutral (see module header).
   const sig = [houseLordOf(chart, 7), 'Venus', 'Jupiter'];
   return { significators: [...new Set(sig)], note: 'Marriage timing uses the periods of your 7th-house lord (partnership), Venus (the natural significator of marriage), and Jupiter — applied the same way regardless of gender.' };
@@ -167,7 +174,7 @@ export function categoryTiming(chart: BirthChartResult, category: LifeCategory, 
   const { significators, note } = categorySignificators(chart, category);
   const windows = windowsForSignificators(chart.dashaTimeline, significators, now);
   const { current, next } = pickCurrentAndNext(windows);
-  const label = category === 'wealth' ? 'Wealth' : category === 'career' ? 'Career / job' : 'Marriage';
+  const label = category === 'wealth' ? 'Wealth' : category === 'career' ? 'Career / job' : category === 'family' ? 'Family' : 'Marriage';
   let honest = note;
   if (windows.length && !current && !next) {
     honest = `${note} Your strongest classical windows for this have already passed; the next comparable one is beyond the computed range.`;
@@ -180,6 +187,7 @@ export function allCategoryTimings(chart: BirthChartResult, now: Date = new Date
     wealth: categoryTiming(chart, 'wealth', now),
     career: categoryTiming(chart, 'career', now),
     marriage: categoryTiming(chart, 'marriage', now),
+    family: categoryTiming(chart, 'family', now),
   };
 }
 
@@ -228,9 +236,30 @@ export interface TimingFactCategory {
   key: string; label: string; significators: string[];
   next: TimingFactWindow | null; upcoming: TimingFactWindow[]; note?: string;
 }
+/**
+ * Timing for a present dosha (Part S). `structural: true` means the dosha is a
+ * permanent chart feature with NO phase-based timing (e.g. Kaal Sarp) — we say so
+ * honestly and never invent a window; any windows listed are only the periods during
+ * which its effects are traditionally most PRONOUNCED (the participating planets'
+ * periods), not a start/end of the dosha itself. `phase` carries Sade Sati's genuine
+ * phase timing (which is transit-based, not Dasha-based). */
+export interface DoshaTimingFact {
+  name: string; structural: boolean;
+  significators: string[]; windows: TimingFactWindow[];
+  phase?: string | null; note: string;
+}
+/** Timing for a divisional-chart placement (Part S): the varga promise is classically
+ * activated during the Dasha of the placement's ruling planet (its dispositor). */
+export interface DivisionalTimingFact {
+  varga: string; placement: string; ruler: string; windows: TimingFactWindow[]; note: string;
+}
 export interface TimingFacts {
   categories: TimingFactCategory[];
   yogas: Array<{ name: string; significators: string[]; next: TimingFactWindow | null; upcoming: TimingFactWindow[] }>;
+  /** Dosha expression timing (Part S) — empty when no dosha is present. */
+  doshaTiming: DoshaTimingFact[];
+  /** Divisional-placement activation timing (Part S). */
+  divisionalTiming: DivisionalTimingFact[];
   currentPeriod: string | null;
   /** Every date-range the model is ALLOWED to cite ("March 2027 to August 2028"). */
   validRanges: string[];
@@ -251,13 +280,60 @@ function surfaceWindows(t: TimingResult, n = 3): TimingFactWindow[] {
 /** Assemble the timing block consumed by both the reading prompt and the chat. */
 export function buildTimingFacts(chart: BirthChartResult, now: Date = new Date()): TimingFacts {
   const cats = allCategoryTimings(chart, now);
-  const categories: TimingFactCategory[] = (['wealth', 'career', 'marriage'] as LifeCategory[]).map(k => {
+  const categories: TimingFactCategory[] = (['wealth', 'career', 'marriage', 'family'] as LifeCategory[]).map(k => {
     const t = cats[k];
     return { key: t.key, label: t.label, significators: t.significators, next: t.next ? toFactWindow(t.next) : null, upcoming: surfaceWindows(t), note: t.note };
   });
   const yogas = yogaTimings(chart, now).map(t => ({
     name: t.key, significators: t.significators, next: t.next ? toFactWindow(t.next) : null, upcoming: surfaceWindows(t),
   }));
+
+  // Dosha expression timing (Part S) — reuse the activation-window engine. Presence is
+  // structural; EXPRESSION is time-bound to the participating planets' periods. Sade
+  // Sati carries its own genuine phase timing (transit-based, not Dasha-based). Kaal
+  // Sarp is a permanent/structural feature (no phase timing) — most felt in Rahu/Ketu
+  // periods; we say that honestly rather than fabricating a start/end.
+  const doshaTiming: DoshaTimingFact[] = [];
+  const surfacePlain = (sig: string[]): TimingFactWindow[] => {
+    const wins = windowsForSignificators(chart.dashaTimeline, sig, now);
+    const rel = wins.filter(w => w.status === 'current' || w.status === 'upcoming');
+    return (rel.length ? rel : wins).slice(0, 3).map(toFactWindow);
+  };
+  if (chart.doshas.mangalDosha.hasDosha) {
+    doshaTiming.push({ name: 'Mangal Dosha', structural: false, significators: ['Mars'], windows: surfacePlain(['Mars']),
+      note: 'Mangal Dosha is present in the chart at all times, but its effects are classically most pronounced during Mars Maha/Antar periods and comparatively dormant otherwise.' });
+  }
+  if (chart.doshas.kaalSarp.present) {
+    doshaTiming.push({ name: 'Kaal Sarp', structural: true, significators: ['Rahu', 'Ketu'], windows: surfacePlain(['Rahu', 'Ketu']),
+      note: 'Kaal Sarp is a permanent/structural chart pattern — it has no phase-based timing the way Sade Sati does. It is traditionally felt most during Rahu/Ketu periods.' });
+  }
+  if (chart.doshas.sadeSati.active) {
+    doshaTiming.push({ name: 'Sade Sati', structural: false, significators: ['Saturn'], windows: [], phase: chart.doshas.sadeSati.phase,
+      note: `Sade Sati has genuine phase-based timing: it is currently in its ${chart.doshas.sadeSati.phase || 'active'} phase.` });
+  }
+
+  // Divisional-placement activation timing (Part S): a varga promise activates during
+  // the Dasha of the placement's ruling planet (dispositor). Verified classical basis:
+  // "varga results only activate during supportive Maha/Antar periods." We tie the two
+  // placements the reading already surfaces — Dasamsa (D10) Sun (public/career varga)
+  // and Navamsa (D9) Moon (dharma/relationship varga) — to their dispositors' periods.
+  const dispositorOf = (sign: string): string | null => {
+    const idx = RASHI_NAMES.indexOf(sign);
+    return idx >= 0 ? SIGN_LORDS[idx] : null;
+  };
+  const divisionalTiming: DivisionalTimingFact[] = [];
+  const d10SunSign = chart.divisionalCharts.d10?.Sun;
+  const d10Ruler = d10SunSign ? dispositorOf(d10SunSign) : null;
+  if (d10Ruler) {
+    divisionalTiming.push({ varga: 'Dasamsa (D10)', placement: `Sun in ${d10SunSign}`, ruler: d10Ruler, windows: surfacePlain([d10Ruler]),
+      note: `Your Dasamsa (D10, career/public-life) placement of the Sun in ${d10SunSign} is ruled by ${d10Ruler}; its promise is classically most likely to express during ${d10Ruler} Maha/Antar periods.` });
+  }
+  const d9MoonSign = chart.divisionalCharts.d9?.Moon;
+  const d9Ruler = d9MoonSign ? dispositorOf(d9MoonSign) : null;
+  if (d9Ruler) {
+    divisionalTiming.push({ varga: 'Navamsa (D9)', placement: `Moon in ${d9MoonSign}`, ruler: d9Ruler, windows: surfacePlain([d9Ruler]),
+      note: `Your Navamsa (D9, inner/relationship) placement of the Moon in ${d9MoonSign} is ruled by ${d9Ruler}; its promise is classically most likely to express during ${d9Ruler} Maha/Antar periods.` });
+  }
 
   // Valid-date set for the accuracy checker: all surfaced windows + the current
   // Maha and current Antar periods (always legitimately citable context).
@@ -266,6 +342,8 @@ export function buildTimingFacts(chart: BirthChartResult, now: Date = new Date()
   const addWin = (w: TimingFactWindow) => { validRanges.add(w.range); validMonths.add(formatMonthYear(w.start)); validMonths.add(formatMonthYear(w.end)); };
   for (const c of categories) { if (c.next) addWin(c.next); c.upcoming.forEach(addWin); }
   for (const y of yogas) { if (y.next) addWin(y.next); y.upcoming.forEach(addWin); }
+  for (const d of doshaTiming) d.windows.forEach(addWin);
+  for (const dv of divisionalTiming) dv.windows.forEach(addWin);
   // Current periods from the validated timeline.
   const curM = chart.dashaTimeline?.find(m => now >= new Date(m.start) && now < new Date(m.end));
   const curA = curM?.antardashas.find(a => now >= new Date(a.start) && now < new Date(a.end));
@@ -273,5 +351,5 @@ export function buildTimingFacts(chart: BirthChartResult, now: Date = new Date()
   if (curM) { validMonths.add(formatMonthYear(curM.start)); validMonths.add(formatMonthYear(curM.end)); }
   if (curM && curA) { currentPeriod = `${curM.lord} / ${curA.lord}`; validMonths.add(formatMonthYear(curA.start)); validMonths.add(formatMonthYear(curA.end)); }
 
-  return { categories, yogas, currentPeriod, validRanges: [...validRanges], validMonths: [...validMonths] };
+  return { categories, yogas, doshaTiming, divisionalTiming, currentPeriod, validRanges: [...validRanges], validMonths: [...validMonths] };
 }

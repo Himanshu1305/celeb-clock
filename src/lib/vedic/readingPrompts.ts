@@ -153,10 +153,10 @@ export function extractReadingFacts(chart: BirthChartResult, now: Date = new Dat
       relationships: ['7th house sign + lord', 'Venus placement + Shadbala', 'Navamsa Venus/Moon'],
       health: ['6th house sign + lord', 'Lagna lord strength', 'planets in health houses'],
       money: ['2nd + 11th house signs + lords', 'Jupiter placement'],
-      family: ['4th house (mother/home) sign + lord', '9th house (father/fortune) sign + lord'],
+      family: ['4th house (mother/home) sign + lord', '9th house (father/fortune) sign + lord', 'Dasha connection + Family timing window (Part S)'],
       rightNow: ['current Dasha lord house + sign + Shadbala'],
-      doshasSection: ['dosha-causing planet + house', 'Kaal Sarp', 'Sade Sati'],
-      divisional: ['Navamsa (D9) placements', 'Dasamsa (D10)', 'Shashtiamsa (D60, low-confidence)'],
+      doshasSection: ['dosha-causing planet + house', 'Kaal Sarp (structural)', 'Sade Sati phase', 'dosha timing windows (Part S)'],
+      divisional: ['Navamsa (D9) placements', 'Dasamsa (D10)', 'Shashtiamsa (D60, low-confidence)', 'divisional activation timing (Part S)'],
     },
   };
 }
@@ -246,6 +246,18 @@ export function buildReadingUserPrompt(f: ReadingFacts): string {
   const yogaTimingLine = f.timing.yogas.filter(y => y.upcoming.length).map(y =>
     `  - ${y.name} (planets ${y.significators.join(', ')}): ${y.upcoming.map(fmtWin).join('; ')}`
   ).join('\n') || '  - (no upcoming Yoga-specific windows)';
+  // Dosha + divisional timing (Part S) — reuse the same activation windows.
+  const doshaTimingLine = f.timing.doshaTiming.length
+    ? f.timing.doshaTiming.map(d => {
+        const wins = d.windows.length ? d.windows.map(fmtWin).join('; ') : (d.phase ? `phase: ${d.phase}` : 'no Dasha window in the computed range');
+        return `  - ${d.name}${d.structural ? ' [STRUCTURAL / permanent — NO phase timing; do not invent a start/end]' : ''}: ${d.note} Periods: ${wins}`;
+      }).join('\n')
+    : '  - (no doshas present)';
+  const divTimingLine = f.timing.divisionalTiming.length
+    ? f.timing.divisionalTiming.map(d =>
+        `  - ${d.varga} ${d.placement}, ruled by ${d.ruler}: ${d.windows.length ? d.windows.map(fmtWin).join('; ') : 'no window in the computed range'}`
+      ).join('\n')
+    : '  - (none)';
 
   return `THIS PERSON'S BIRTH CHART (sidereal / Lahiri). Use ONLY these facts; do not invent placements.
 
@@ -281,6 +293,10 @@ COMPUTED ACTIVATION-TIMING WINDOWS (real dates from THIS chart's Vimshottari Das
 ${catTimingLine}
 Yoga activation windows:
 ${yogaTimingLine}
+Dosha timing (WHEN a present dosha's effects are most pronounced — a STRUCTURAL/permanent one has NO phase timing, say so honestly, never invent a date):
+${doshaTimingLine}
+Divisional-placement timing (a varga's promise activates during the Dasha of its ruling planet):
+${divTimingLine}
 How to use timing — this is what makes the reading answer "WHEN", not just "what":
 - When a section touches WHEN something is likely (money growth, career moves, partnership/marriage), cite the actual planet period AND its date range from above, e.g. "your Jupiter Antardasha from March 2027 to August 2028 is your strongest classical window for this".
 - Use ONLY the date ranges listed above — never invent, round, or shift a date. If it's not listed, don't state a date.
@@ -294,10 +310,10 @@ Write the reading as JSON with exactly these fields. EACH must cite the specific
 - "relationships": MUST reference the 7th house sign and its lord's placement, Venus's placement (sign/house/strength), and the Navamsa sign of Venus or Moon. Fold in Mangal Dosha calmly IF present, naming its cause. If partnership/marriage timing fits, cite the computed Marriage timing window (real date range) as the strongest classical period for this.
 - "health": MUST reference the 6th house sign and lord, the Lagna lord's strength, and any planet in a health-relevant house — but describe the 6th house as daily routines, service, habits and resilience, speaking ONLY to general wellbeing, rest and energy. Never use "disease", "illness", "condition" or any ailment name.
 - "money": MUST reference the 2nd and 11th house signs and their lords' placements, and Jupiter's placement. Cite the computed Wealth timing window (with its real date range) as the strongest upcoming period for the financial promise to manifest. Habits/mindset otherwise.
-- "family": MUST reference the 4th house (home/mother) and 9th house (father/fortune) signs and their lords' placements.
+- "family": MUST reference the 4th house (home/mother) and 9th house (father/fortune) signs AND their lords' placements (house/sign, and strength if given), CONNECT the two together and to the current Dasha lord where relevant, and land on a real, decisive conclusion about home/roots and parental influence — the SAME depth as career and money, not a bare two-fact list. Where a family timing point fits, cite the computed Family timing window (its real date range) as the strongest classical period for it.
 - "rightNow": MUST describe the CURRENT Dasha lord (${f.dasha ? f.dasha.maha : 'current'}) by its actual house, sign and indicative Shadbala strength in THIS chart — not a textbook description of that planet. Then name the NEXT upcoming activation window from the timing block above, with its real date range, as what's on the horizon.
-- "doshas": name the specific planet/house behind any dosha present (or reassure plainly if none), calm and de-stigmatising.
-- "divisional": name at least TWO real Navamsa (D9) placements by sign (from the Navamsa list above), plus the Dasamsa; mention D60 only with a "one interpretation" hedge.
+- "doshas": name the specific planet/house behind any dosha present (or reassure plainly if none), calm and de-stigmatising. For EACH present dosha, also say WHEN it is most relevant, using the Dosha timing block above: for a time-bound dosha (Mangal → Mars periods; Sade Sati → its named phase) cite the real window/phase; for a STRUCTURAL/permanent one (e.g. Kaal Sarp) say plainly that it is a permanent chart feature with no phase-based timing, and only if listed add that it is traditionally most felt during its listed Rahu/Ketu periods. NEVER invent a start/end date for a structural feature. Keep the whole section calm and non-fear-based.
+- "divisional": name at least TWO real Navamsa (D9) placements by sign (from the Navamsa list above), plus the Dasamsa; mention D60 only with a "one interpretation" hedge. Then CONNECT at least one divisional placement to timing using the Divisional-placement timing block above — e.g. "your Dasamsa Sun's promise is most likely to express during your [ruling planet] period, [real date range]" — reusing ONLY the listed windows, framed as classical likelihood, never a guarantee.
 
 Every sentence must be traceable to a fact above. Do not write anything equally true of another chart. Describe strength only in words (strong / moderately strong / gentle) — never a number or "virupas". Keep sentences short and warm: at most two facts per sentence, and prefer several short sentences over one dense one. Aim for 4-6 short sentences per field. Return ONLY the JSON object.`;
 }
