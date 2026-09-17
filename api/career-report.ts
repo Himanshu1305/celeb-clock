@@ -1,6 +1,7 @@
 // Career analysis report endpoint (Part I.12). Deterministic — reuses the validated
 // chart + Yoga + D-Fix3 timing engines. No LLM, so every fact/date is exact.
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
+import { birthRangeError } from './_birthParams.js';
 import { buildCareerReport } from '../src/lib/vedic/careerReport.js';
 
 function json(body, status = 200) {
@@ -13,6 +14,8 @@ async function handler(request) {
   const y = n('y'), m = n('m'), d = n('d');
   if (![y, m, d].every(Number.isFinite)) return json({ error: 'Missing y/m/d' }, 400);
   const h = n('h', 12), min = n('min', 0), lat = n('lat', 28.6139), lon = n('lon', 77.209), tz = n('tz', 5.5);
+  const rangeErr = birthRangeError({ m, d, h, min, lat, lon, tz }); // Part T: clean 400, not 500
+  if (rangeErr) return json({ error: rangeErr }, 400);
   try {
     const now = new Date();
     const chart = await calculateBirthChart({ year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon, timezoneOffset: tz }, { includeShadbala: true, refDate: now });

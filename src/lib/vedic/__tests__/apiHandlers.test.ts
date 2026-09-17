@@ -65,6 +65,15 @@ describe('/api/kundali — cache behavior + local-first (no ProKerala calls)', (
     expect(store.size).toBe(0);
   });
 
+  // Part T: out-of-range input must 400 up front — NOT fall through to the ProKerala
+  // fallback (which previously returned a 502 and wasted a real ProKerala API call).
+  it('returns 400 for out-of-range input (month 13, impossible lat/lon) WITHOUT a ProKerala call', async () => {
+    const r = await kundali(new Request('http://localhost/api/kundali?y=1990&m=13&d=45&h=99&min=0&lat=200&lon=999&tz=5.5'), ENV as any);
+    expect(r.status).toBe(400);
+    expect(fetchSpy).not.toHaveBeenCalled(); // the whole point: no wasted ProKerala call on garbage
+    expect(store.size).toBe(0);
+  });
+
   it('surfaces POLAR_LATITUDE warning through the API response for polar births', async () => {
     const r = await kundali(new Request('http://localhost/api/kundali?y=1988&m=11&d=5&h=12&min=30&lat=69.6&lon=18.9&tz=1'), ENV as any);
     const j = await r.json();

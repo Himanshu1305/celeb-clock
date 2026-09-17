@@ -1,4 +1,5 @@
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
+import { birthRangeError } from './_birthParams.js';
 import { toKundaliLegacy } from '../src/lib/vedic/legacyAdapters.js';
 
 async function getProKeralaToken(env) {
@@ -203,6 +204,10 @@ async function handler(request, env) {
   const y=n('y'), m=n('m'), d=n('d');
   if (![y,m,d].every(v=>Number.isFinite(v))) return json({ error:'Missing y/m/d' }, 400);
   const h=n('h',12), min=n('min',0), lat=n('lat',28.6139), lon=n('lon',77.2090), tz=n('tz',5.5);
+  // Part T: reject out-of-range input up front with a clean 400 (was falling through to
+  // the ProKerala fallback and returning a 502, wasting a ProKerala call on garbage).
+  const rangeErr = birthRangeError({ m, d, h, min, lat, lon, tz });
+  if (rangeErr) return json({ error: rangeErr }, 400);
 
   try {
     const sb = await getSupabase(env);

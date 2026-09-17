@@ -6,6 +6,7 @@
 // is exact by construction (accuracy guaranteed, unlike the LLM readings).
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
+import { birthRangeError } from './_birthParams.js';
 import { calculateGunaMilan, type PersonInput } from '../src/lib/vedic/matchmaking.js';
 import { buildMatchSynthesis } from '../src/lib/vedic/matchSynthesis.js';
 import { categoryTiming, describeWindow, formatWindowRange, type ActivationWindow } from '../src/lib/vedic/yogaTiming.js';
@@ -51,6 +52,10 @@ async function handler(request) {
   if (![A.year, A.month, A.day, B.year, B.month, B.day].every(Number.isFinite)) {
     return json({ error: 'Missing birth details for one or both people' }, 400);
   }
+  // Part T: reject out-of-range input up front with a clean 400 (was a 500).
+  const rangeErrAB = birthRangeError({ m: A.month, d: A.day, h: A.hour, min: A.minute, lat: A.latitude, lon: A.longitude, tz: A.timezoneOffset })
+    || birthRangeError({ m: B.month, d: B.day, h: B.hour, min: B.minute, lat: B.latitude, lon: B.longitude, tz: B.timezoneOffset });
+  if (rangeErrAB) return json({ error: rangeErrAB }, 400);
   try {
     const now = new Date();
     const [chartA, chartB] = await Promise.all([
