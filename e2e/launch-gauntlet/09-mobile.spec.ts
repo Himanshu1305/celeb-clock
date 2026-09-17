@@ -55,12 +55,13 @@ test('hamburger opens mobile menu with section labels', async ({ page }) => {
   await hamburger.click();
   await expect(menuPanel).toBeVisible();
 
-  // All four section labels should appear inside the mobile menu panel.
-  // BATCH-8 P5 removed the standalone Numerology section (merged into Explore).
-  await expect(menuPanel.getByText('Popular', { exact: true })).toBeVisible();
-  await expect(menuPanel.getByText('Explore', { exact: true })).toBeVisible();
-  await expect(menuPanel.getByText('Astrology', { exact: true })).toBeVisible();
-  await expect(menuPanel.getByText('More Tools', { exact: true })).toBeVisible();
+  // Part U: the mobile menu now groups items under the four category headings
+  // (+ Resources), replacing the old Popular/Explore/Astrology/More Tools labels.
+  await expect(menuPanel.getByText('Science & Longevity', { exact: true })).toBeVisible();
+  await expect(menuPanel.getByText('Vedic Astrology', { exact: true })).toBeVisible();
+  await expect(menuPanel.getByText('Birthday Fun & Celebrity Twins', { exact: true })).toBeVisible();
+  await expect(menuPanel.getByText('Mystic Corner', { exact: true })).toBeVisible();
+  await expect(menuPanel.getByText('Resources', { exact: true })).toBeVisible();
 });
 
 test('hamburger closes mobile menu on second click', async ({ page }) => {

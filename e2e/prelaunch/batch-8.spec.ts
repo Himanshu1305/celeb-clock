@@ -114,15 +114,19 @@ async function menuHrefs(page: Page, trigger: string): Promise<string[]> {
   return hrefs;
 }
 test.describe('P5 — nav', () => {
-  test('desktop 1280: main bar shows Life Expectancy; Explore has Numerology + Gift', async ({ page }) => {
+  test('desktop 1280: Life Expectancy under Science & Longevity; Numerology under Mystic; Gift under Birthday Fun', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/'); await page.waitForLoadState('networkidle');
-    const bar = page.locator('nav.hidden.md\\:flex').first();
-    await expect(bar.locator('a[href="/life-expectancy"]')).toBeVisible();
-    const explore = await menuHrefs(page, 'Explore');
-    expect(explore).toContain('/numerology');
-    expect(explore).toContain('/gift');
-    // no standalone Numerology dropdown remains on the bar
+    // Part U: the flat visible bar was replaced by four category dropdowns. Life
+    // Expectancy is now under Science & Longevity; Numerology under Mystic Corner;
+    // Gift under Birthday Fun. All still reachable — regrouped, not removed.
+    const science = await menuHrefs(page, 'Science & Longevity');
+    expect(science).toContain('/life-expectancy');
+    const mystic = await menuHrefs(page, 'Mystic Corner');
+    expect(mystic).toContain('/numerology');
+    const birthday = await menuHrefs(page, 'Birthday Fun');
+    expect(birthday).toContain('/gift');
+    // no standalone Numerology dropdown trigger on the bar
     await expect(page.locator('nav.hidden.md\\:flex button', { hasText: 'Numerology' })).toHaveCount(0);
   });
   test('bar does not wrap/overflow at 1280 or 1024', async ({ page }) => {

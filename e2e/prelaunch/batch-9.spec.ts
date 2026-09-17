@@ -133,10 +133,15 @@ test.describe('A3 — prior-batch regressions', () => {
     await page.getByRole('button', { name: /Check Compatibility/i }).click();
     await expect(page).toHaveURL(/\/compatibility\/aries\/leo$/);
   });
-  test('/gift hero still "feel truly special"; nav has Life Expectancy', async ({ page }) => {
+  test('/gift hero still "feel truly special"; nav reaches Life Expectancy', async ({ page }) => {
     await page.goto('/gift'); await page.waitForLoadState('networkidle');
     await expect(page.getByRole('heading', { name: /feel truly special/i })).toBeVisible();
     await page.goto('/'); await page.waitForLoadState('networkidle');
-    await expect(page.locator('nav.hidden.md\\:flex a[href="/life-expectancy"]').first()).toBeVisible();
+    // Part U: Life Expectancy moved from the visible bar into the Science & Longevity
+    // dropdown — open it, then assert the link is present.
+    await page.locator('nav.hidden.md\\:flex [data-testid="nav-cat-science"]').click();
+    const menu = page.locator('[role="menu"]').last();
+    await menu.waitFor({ state: 'visible' });
+    await expect(menu.locator('a[href="/life-expectancy"]')).toBeVisible();
   });
 });

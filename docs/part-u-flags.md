@@ -45,3 +45,15 @@
 - **`e2e/navigation.spec.ts`:** needed NO change (it tests route loading + generic nav
   visibility, not dropdown structure).
 - **No genuine/unexpected regressions found** outside these deliberately-updated tests.
+
+## Staging deploy (Part U)
+- First `wrangler deploy` FAILED on a transient Cloudflare asset-upload timeout
+  ("Upload took too long on bucket 4/6" — 3,819 assets). Wrangler saved progress; the
+  RETRY resumed and succeeded (uploaded in 64s). NOT a code issue.
+- Final deploy log shows the KNOWN cron/schedules trigger failure
+  ("Some triggers failed to deploy … /schedules") — this is the already-diagnosed
+  Cloudflare scheduled-trigger issue (docs/part-p-flags.md), harmless to this nav/
+  homepage change. Worker + assets deployed fine.
+- Verified LIVE on staging: new tagline present, all five nav-cat triggers present,
+  staging JS bundle == local build (index-Cue19vXu.js). Nav spec 10/10 green vs live
+  staging. Production untouched.

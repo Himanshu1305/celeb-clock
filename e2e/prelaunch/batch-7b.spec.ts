@@ -89,15 +89,17 @@ async function menuHrefs(page: Page, triggerText: string): Promise<string[]> {
 }
 
 test.describe('BATCH-7B T1 — discoverability of new surfaces', () => {
-  test('desktop nav: /coach under More; /gift + /weight-on-planets under Explore', async ({ page }) => {
+  test('desktop nav: /coach under Science & Longevity; /gift + /weight-on-planets under Birthday Fun', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    // BATCH-8 P5 moved /gift from More into Explore; /coach stays under More.
-    const more = await menuHrefs(page, 'More');
-    expect(more).toContain('/coach');
-    const explore = await menuHrefs(page, 'Explore');
-    expect(explore).toContain('/gift');
-    expect(explore).toContain('/weight-on-planets');
+    // Part U: the flat More/Explore lists were replaced by four category dropdowns.
+    // /coach (Longevity Coach) now lives under Science & Longevity; /gift and
+    // /weight-on-planets under Birthday Fun. Still reachable — just regrouped.
+    const science = await menuHrefs(page, 'Science & Longevity');
+    expect(science).toContain('/coach');
+    const birthday = await menuHrefs(page, 'Birthday Fun');
+    expect(birthday).toContain('/gift');
+    expect(birthday).toContain('/weight-on-planets');
   });
 
   test('footer links to /gift, /coach, /weight-on-planets, /compatibility', async ({ page }) => {
