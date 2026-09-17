@@ -112,7 +112,7 @@ const Index = () => {
               </h1>
 
               <p className="text-lg md:text-xl text-gray-600 text-center max-w-2xl mx-auto mt-4">
-                Birthday intelligence from your date of birth — celebrity twins, zodiac, numerology, life path, and your longevity forecast.
+                Your date of birth, fully explored — real longevity science, precisely computed Vedic astrology, and birthday fun, all in one place.
               </p>
 
               <p className="text-sm text-indigo-600 font-medium text-center mb-3 italic">
@@ -152,7 +152,7 @@ const Index = () => {
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground pt-2">
               <div className="flex items-center gap-1.5">
                 <Users className="w-4 h-4 text-primary" />
-                <span>50,000+ celebrities</span>
+                <span>3,000+ celebrities</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-accent" />
@@ -206,6 +206,35 @@ const Index = () => {
             </Card>
           </section>
         )}
+
+        {/* Part U — "Choose your path": four-category entry points (NEW, additive —
+            surfaces all four categories equally; astrology framed "precisely computed",
+            never "scientific", per the project positioning). */}
+        <section className="max-w-4xl mx-auto mb-14 px-4" data-testid="choose-your-path">
+          <h2 className="text-2xl font-bold text-center mb-6 gradient-text-primary">Choose your path</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { to: '/life-expectancy', emoji: '🔬', title: 'Science & Longevity', body: 'Real, research-backed life-expectancy and biological-age tools.' },
+              { to: '/kundali', emoji: '🪔', title: 'Vedic Astrology', body: 'Precisely computed birth chart, matching and AI astrologer.' },
+              { to: '/todays-birthdays', emoji: '🎂', title: 'Birthday Fun & Celebrity Twins', body: 'Your celebrity birthday twin, age tools and birthday reports.' },
+              { to: '/numerology', emoji: '🔢', title: 'Mystic Corner', body: 'Numerology, name numerology and tarot by your birthday.' },
+            ].map(c => (
+              <Link
+                key={c.to}
+                to={c.to}
+                data-testid={`path-card-${c.to.replace(/\//g, '')}`}
+                className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
+              >
+                <div className="text-3xl mb-2">{c.emoji}</div>
+                <h3 className="font-bold text-foreground mb-1 text-sm">{c.title}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{c.body}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══ Part U block: Birthday Fun & Celebrity Twins ═══ */}
+        <h2 data-testid="block-birthday" className="max-w-4xl mx-auto px-4 mb-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">🎂 Birthday Fun &amp; Celebrity Twins</h2>
 
         {/* Birthday Report showcase — sells the paid ₹199 Blueprint, placed right
             after the calculator entry and before the deep feature grid. */}
@@ -267,31 +296,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* EEAT Trust Section */}
-        <section className="max-w-4xl mx-auto mb-16">
-          <Card className="glass-card card-party-border">
-            <CardContent className="p-8 space-y-6">
-              <div className="flex items-center justify-center gap-3 mb-2">
-                <ShieldCheck className="w-7 h-7 text-primary" />
-                <h2 className="text-3xl font-bold gradient-text-primary">
-                  Built on Trust & Accuracy
-                </h2>
-              </div>
-              <div className="prose prose-lg max-w-none text-foreground space-y-4">
-                <p>
-                  Every calculator and report on this platform is built with verified algorithms, cross-referenced data sources, and scientific methodology. Our life expectancy model draws from peer-reviewed health research covering smoking, alcohol, diabetes, cardiac health, BMI, exercise, and stress factors.
-                </p>
-                <p>
-                  Celebrity birthday data is sourced from verified public records and continuously updated. Our content follows <strong>E-E-A-T principles</strong> (Experience, Expertise, Authoritativeness, and Trustworthiness) to ensure every result you see is precise, transparent, and trustworthy.
-                </p>
-                <p className="text-center pt-4 text-muted-foreground">
-                  Have feedback? Reach us at <a href="/contact" className="text-primary hover:underline">our contact page</a>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
         {/* Explore BornClock — discovery grid of high-click surfaces */}
         <section className="max-w-4xl mx-auto mb-16">
           <h2 className="text-2xl font-bold text-center mb-6 gradient-text-primary">Explore BornClock</h2>
@@ -331,6 +335,35 @@ const Index = () => {
             ))}
           </div>
         </section>
+
+        {/* Featured celebrity profiles — Day 8 discovery (Part U: moved into the
+            Birthday Fun & Celebrity Twins block) */}
+        <section className="max-w-4xl mx-auto mb-16 px-4">
+          <h2 className="text-lg font-bold text-center mb-4 text-foreground">Featured Indian Celebrity Profiles</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { slug: 'virat-kohli', name: 'Virat Kohli', cat: 'Cricketer' },
+              { slug: 'sachin-tendulkar', name: 'Sachin Tendulkar', cat: 'Cricketer' },
+              { slug: 'shah-rukh-khan', name: 'Shah Rukh Khan', cat: 'Actor' },
+              { slug: 'amitabh-bachchan', name: 'Amitabh Bachchan', cat: 'Actor' },
+              { slug: 'ar-rahman', name: 'AR Rahman', cat: 'Music Composer' },
+              { slug: 'lata-mangeshkar', name: 'Lata Mangeshkar', cat: 'Singer' },
+              { slug: 'narendra-modi', name: 'Narendra Modi', cat: 'Politician' },
+              { slug: 'ratan-tata', name: 'Ratan Tata', cat: 'Business Leader' },
+            ].map(f => (
+              <Link key={f.slug} to={`/celebrity/${f.slug}/`} className="p-4 bg-primary/5 rounded-xl border border-border hover:border-primary/50 transition-colors text-center">
+                <div className="font-semibold text-sm text-foreground">{f.name}</div>
+                <div className="text-xs text-muted-foreground">{f.cat}</div>
+              </Link>
+            ))}
+          </div>
+          <div className="text-center mt-4">
+            <Link to="/celebrity/" className="text-sm text-primary font-medium hover:underline">See all 598 celebrity profiles →</Link>
+          </div>
+        </section>
+
+        {/* ═══ Part U block: Science & Longevity ═══ */}
+        <h2 data-testid="block-science" className="max-w-4xl mx-auto px-4 mb-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">🔬 Science &amp; Longevity</h2>
 
         {/* More Ways to Know Yourself */}
         <section className="max-w-4xl mx-auto mb-16">
@@ -400,31 +433,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Featured celebrity profiles — Day 8 discovery */}
-        <section className="max-w-4xl mx-auto mb-16 px-4">
-          <h2 className="text-lg font-bold text-center mb-4 text-foreground">Featured Indian Celebrity Profiles</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {[
-              { slug: 'virat-kohli', name: 'Virat Kohli', cat: 'Cricketer' },
-              { slug: 'sachin-tendulkar', name: 'Sachin Tendulkar', cat: 'Cricketer' },
-              { slug: 'shah-rukh-khan', name: 'Shah Rukh Khan', cat: 'Actor' },
-              { slug: 'amitabh-bachchan', name: 'Amitabh Bachchan', cat: 'Actor' },
-              { slug: 'ar-rahman', name: 'AR Rahman', cat: 'Music Composer' },
-              { slug: 'lata-mangeshkar', name: 'Lata Mangeshkar', cat: 'Singer' },
-              { slug: 'narendra-modi', name: 'Narendra Modi', cat: 'Politician' },
-              { slug: 'ratan-tata', name: 'Ratan Tata', cat: 'Business Leader' },
-            ].map(f => (
-              <Link key={f.slug} to={`/celebrity/${f.slug}/`} className="p-4 bg-primary/5 rounded-xl border border-border hover:border-primary/50 transition-colors text-center">
-                <div className="font-semibold text-sm text-foreground">{f.name}</div>
-                <div className="text-xs text-muted-foreground">{f.cat}</div>
-              </Link>
-            ))}
-          </div>
-          <div className="text-center mt-4">
-            <Link to="/celebrity/" className="text-sm text-primary font-medium hover:underline">See all 598 celebrity profiles →</Link>
-          </div>
-        </section>
-
         {/* P10 — science-not-just-astrology card row (founder items 4/5/12) */}
         <section className="max-w-4xl mx-auto mb-16 px-4" data-testid="science-card-row">
           <h2 className="text-lg font-bold text-center mb-4 text-foreground">The science behind BornClock</h2>
@@ -441,6 +449,31 @@ const Index = () => {
               </Link>
             ))}
           </div>
+        </section>
+
+        {/* EEAT Trust Section (Part U: moved into the Science & Longevity block) */}
+        <section className="max-w-4xl mx-auto mb-16">
+          <Card className="glass-card card-party-border">
+            <CardContent className="p-8 space-y-6">
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <ShieldCheck className="w-7 h-7 text-primary" />
+                <h2 className="text-3xl font-bold gradient-text-primary">
+                  Built on Trust & Accuracy
+                </h2>
+              </div>
+              <div className="prose prose-lg max-w-none text-foreground space-y-4">
+                <p>
+                  Every calculator and report on this platform is built with verified algorithms, cross-referenced data sources, and scientific methodology. Our life expectancy model draws from peer-reviewed health research covering smoking, alcohol, diabetes, cardiac health, BMI, exercise, and stress factors.
+                </p>
+                <p>
+                  Celebrity birthday data is sourced from verified public records and continuously updated. Our content follows <strong>E-E-A-T principles</strong> (Experience, Expertise, Authoritativeness, and Trustworthiness) to ensure every result you see is precise, transparent, and trustworthy.
+                </p>
+                <p className="text-center pt-4 text-muted-foreground">
+                  Have feedback? Reach us at <a href="/contact" className="text-primary hover:underline">our contact page</a>
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </section>
 
         {/* Testimonials */}

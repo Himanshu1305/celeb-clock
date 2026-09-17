@@ -62,7 +62,13 @@ describe('Compatibility Calculator — TC-COMPAT', () => {
     }, { timeout: 2000 });
   });
   it('TC-COMPAT-P-09: CTA links to birthday-report', () => {
+    // Part U: the page's own birthday-report CTA lives in the post-calculation results
+    // block (the rose cross-sell card), so calculate first. Previously this test passed
+    // without calculating only because the OLD nav rendered a /birthday-report link in
+    // its always-visible bar; the Part U nav moves that link into the Birthday Fun
+    // dropdown (rendered on open), so we now assert the page's REAL results CTA.
     renderCompat();
+    calc('1988-11-05', '1965-08-06');
     const links = Array.from(document.querySelectorAll('a'));
     expect(links.some(l => l.getAttribute('href')?.includes('birthday-report'))).toBe(true);
   });

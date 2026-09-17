@@ -460,7 +460,7 @@ export const BentoGrid = () => {
           tag="🌟 Celebrity Match"
           tagColor="bg-accent/10 text-accent"
           title="Find Your Famous Birthday Twin"
-          description="50,000+ celebrities in our database. Discover actors, athletes, scientists, and legends who share your special day."
+          description="3,000+ celebrities in our database. Discover actors, athletes, scientists, and legends who share your special day."
           cta="Find my celebrity twins"
           path="/celebrity-birthday"
         >

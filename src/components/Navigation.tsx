@@ -1,86 +1,108 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Gem, Home, Clock, Gift, BookOpen, Crown, Hash, Globe, Cake, Menu, Trophy, Activity, X, Tag, Compass } from 'lucide-react';
+import { Sparkles, Home, Crown, Cake, Menu, Star, Activity, X, type LucideIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/useAuth';
 import { isAdminEmail } from '@/components/AdminRoute';
 
-// BATCH-8 P5: first 5 = the main visible bar (visibleItems = slice(0,5)) —
-// Age Calculator · Today's Birthdays · Celebrity Match · Birthday Report · Life Expectancy.
-// The rest fall into "More". Birthday Report stays the single money item on the bar;
-// Numerology and Gift moved into Explore (see below); Planetary Age lives under More.
-const navItems = [
-  { path: '/age-calculator', label: 'Age Calculator', icon: Clock },
-  { path: '/todays-birthdays', label: "Today's Birthdays", icon: Cake },
-  { path: '/celebrity-birthday', label: 'Celebrity Match', icon: Gift },
-  { path: '/birthday-report', label: 'Birthday Report', icon: Gift },
-  { path: '/life-expectancy', label: 'Life Expectancy', icon: Crown, premium: true },
-  // ↑ first 5 = main bar · ↓ More menu
-  { path: '/planetary-age', label: 'Planetary Age', icon: Globe },
-  { path: '/birthstone', label: 'Birthstone', icon: Gem },
-  { path: '/leaderboard', label: 'Leaderboard', icon: Trophy },
-  { path: '/blog', label: 'Blog', icon: BookOpen },
-  { path: '/biological-age', label: 'Biological Age', icon: Activity },
-  // /country-comparison moved to the Explore dropdown as the "Life Expectancy by
-  // Country" hub (SEO Batch 2) — kept out of More to preserve Explore ∩ More = ∅.
-  { path: '/biorhythm', label: 'Biorhythm Calculator', icon: Activity },
-  { path: '/coach', label: 'Longevity Coach', icon: Activity },
-  { path: '/pricing', label: 'Pricing', icon: Tag },
+// ── Part U: FOUR-CATEGORY navigation (+ a small fifth "More/Resources" group) ──
+// This is a PRESENTATION-LAYER regrouping only — every route below is unchanged
+// from the previous navItems/exploreItems/astrologyItems arrays; items were only
+// relabeled into categories. "Compatibility" (/compatibility) was de-duplicated —
+// it previously appeared in BOTH the old Astrology and Explore lists; it now lives
+// in Vedic Astrology only. See docs/part-u-before-state.md for the full mapping.
+type NavItem = { path: string; label: string; emoji: string; premium?: boolean };
+type NavCategory = { key: string; trigger: string; heading: string; icon: LucideIcon; items: NavItem[] };
+
+const NAV_CATEGORIES: NavCategory[] = [
+  {
+    key: 'science', trigger: 'Science & Longevity', heading: 'Science & Longevity', icon: Activity,
+    items: [
+      { path: '/life-expectancy', label: 'Life Expectancy', emoji: '⏳', premium: true },
+      { path: '/biological-age', label: 'Biological Age', emoji: '🧬' },
+      { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age', emoji: '📈' },
+      { path: '/coach', label: 'Longevity Coach', emoji: '🧘' },
+      { path: '/country-comparison', label: 'Life Expectancy by Country', emoji: '🌍' },
+      { path: '/biorhythm', label: 'Biorhythm Calculator', emoji: '🌀' },
+      { path: '/biorhythm-workout-calculator', label: 'Biorhythm Workout', emoji: '🏃' },
+      { path: '/energy-forecast', label: 'Energy Forecast', emoji: '⚡' },
+    ],
+  },
+  {
+    key: 'vedic', trigger: 'Vedic Astrology', heading: 'Vedic Astrology', icon: Sparkles,
+    items: [
+      { path: '/kundali', label: 'Free Kundali (Birth Chart)', emoji: '🪔' },
+      { path: '/kundali-match', label: 'Kundali Matching', emoji: '💑' },
+      { path: '/astrologer', label: 'Ask an Astrologer (AI)', emoji: '💬' },
+      { path: '/sade-sati', label: 'Sade Sati Calculator', emoji: '🪐' },
+      { path: '/muhurat', label: 'Muhurat Finder', emoji: '🗓️' },
+      { path: '/career-report', label: 'Career Analysis (Vedic)', emoji: '💼' },
+      { path: '/gemstones', label: 'Gemstone Suggestions', emoji: '💍' },
+      { path: '/zodiac', label: 'Western Zodiac', emoji: '♈' },
+      { path: '/chinese-zodiac', label: 'Chinese Zodiac', emoji: '🐉' },
+      { path: '/vedic-zodiac', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
+      { path: '/moon-sign', label: 'Moon Sign Calculator', emoji: '🌙' },
+      { path: '/compatibility', label: 'Compatibility Calculator', emoji: '💕' },
+      { path: '/rashi-ratna', label: 'Rashi Ratna', emoji: '💎' },
+      { path: '/sun-vs-moon-sign', label: 'Sun Sign vs Moon Sign', emoji: '☀️' },
+    ],
+  },
+  {
+    key: 'birthday', trigger: 'Birthday Fun', heading: 'Birthday Fun & Celebrity Twins', icon: Cake,
+    items: [
+      { path: '/age-calculator', label: 'Age Calculator', emoji: '⏰' },
+      { path: '/todays-birthdays', label: "Today's Birthdays", emoji: '🎂' },
+      { path: '/celebrity-birthday', label: 'Celebrity Match', emoji: '🌟' },
+      { path: '/birthday-report', label: 'Birthday Report', emoji: '📋' },
+      { path: '/planetary-age', label: 'Planetary Age', emoji: '🌏' },
+      { path: '/age-in-days', label: 'Age in Days', emoji: '📅' },
+      { path: '/age-in-seconds', label: 'Age in Seconds', emoji: '⏱️' },
+      { path: '/birthday-countdown', label: 'Birthday Countdown', emoji: '🎉' },
+      { path: '/celebrity', label: 'Celebrity Birthday Profiles', emoji: '⭐' },
+      { path: '/born-in', label: 'Born in Each Month', emoji: '📆' },
+      { path: '/born-on/india', label: 'Indian Celebrities by Date', emoji: '🇮🇳' },
+      { path: '/weight-on-planets', label: 'Weight on Planets', emoji: '⚖️' },
+      { path: '/gift', label: 'Gift a Report', emoji: '🎁' },
+      { path: '/birthstone', label: 'Birthstone', emoji: '💠' },
+      { path: '/birthday', label: 'Birthday Personalities', emoji: '🎈' },
+    ],
+  },
+  {
+    key: 'mystic', trigger: 'Mystic Corner', heading: 'Mystic Corner', icon: Star,
+    items: [
+      { path: '/numerology', label: 'Numerology by Birthday', emoji: '🔢' },
+      { path: '/name-numerology', label: 'Name Numerology', emoji: '✍️' },
+      { path: '/tarot-card-by-birthday', label: 'Tarot by Birthday', emoji: '🃏' },
+    ],
+  },
+  {
+    key: 'more', trigger: 'More', heading: 'Resources', icon: Menu,
+    items: [
+      { path: '/articles', label: 'Articles', emoji: '📰' },
+      { path: '/answers', label: 'Answers', emoji: '❓' },
+      { path: '/blog', label: 'Blog', emoji: '📝' },
+      { path: '/leaderboard', label: 'Leaderboard', emoji: '🏆' },
+      { path: '/pricing', label: 'Pricing', emoji: '🏷️' },
+      { path: '/embed', label: 'Embed Our Widget', emoji: '🔗' },
+    ],
+  },
 ];
 
-// High-click DISCOVERY hubs. BATCH-8 P5 moved Numerology (both) and Gift a Report in here.
-const exploreItems = [
-  { path: '/celebrity', label: 'Celebrity Birthday Profiles', emoji: '⭐' },
-  { path: '/born-in', label: 'Born in Each Month', emoji: '📅' },
-  { path: '/born-on/india', label: 'Indian Celebrities by Date', emoji: '🇮🇳' },
-  { path: '/numerology', label: 'Numerology by Birthday', emoji: '🔢' },
-  { path: '/name-numerology', label: 'Name Numerology', emoji: '✍️' },
-  { path: '/biorhythm-workout-calculator', label: 'Biorhythm Workout', emoji: '🏃' },
-  { path: '/energy-forecast', label: 'Energy Forecast', emoji: '⚡' },
-  { path: '/articles', label: 'Articles', emoji: '📰' },
-  { path: '/answers', label: 'Answers', emoji: '❓' },
-  { path: '/compatibility', label: 'Compatibility', emoji: '💕' },
-  { path: '/weight-on-planets', label: 'Weight on Planets', emoji: '🪐' },
-  { path: '/gift', label: 'Gift a Report', emoji: '🎁' },
-  { path: '/age-in-days', label: 'Age in Days', emoji: '📅' },
-  { path: '/age-in-seconds', label: 'Age in Seconds', emoji: '⏱️' },
-  { path: '/birthday-countdown', label: 'Birthday Countdown', emoji: '🎂' },
-  { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age', emoji: '🧬' },
-  // SEO Batch 2 hub: the 10 country longevity pages + India-vs-USA live behind the
-  // /country-comparison hub (and are cross-linked from /life-expectancy) rather than
-  // flooding the Explore dropdown with 11 near-identical entries.
-  { path: '/country-comparison', label: 'Life Expectancy by Country', emoji: '🌍' },
-  { path: '/embed', label: 'Embed Our Widget', emoji: '🔗' },
-];
-
-const astrologyItems = [
-  // Flagship Vedic hub (Parts B–G): the birth chart, matching, and AI astrologer.
-  // Placed first so a first-time visitor can DISCOVER them from the site nav —
-  // previously reachable only via the in-page KundaliTabs or a direct URL.
-  { path: '/kundali', label: 'Free Kundali (Birth Chart)', emoji: '🪔' },
-  { path: '/kundali-match', label: 'Kundali Matching', emoji: '💑' },
-  { path: '/astrologer', label: 'Ask an Astrologer (AI)', emoji: '💬' },
-  { path: '/sade-sati', label: 'Sade Sati Calculator', emoji: '🪐' },
-  { path: '/muhurat', label: 'Muhurat Finder', emoji: '🗓️' },
-  { path: '/career-report', label: 'Career Analysis (Vedic)', emoji: '💼' },
-  { path: '/gemstones', label: 'Gemstone Suggestions', emoji: '💍' },
-  { path: '/zodiac', label: 'Western Zodiac', emoji: '♈' },
-  { path: '/chinese-zodiac', label: 'Chinese Zodiac', emoji: '🐉' },
-  { path: '/vedic-zodiac', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
-  { path: '/moon-sign', label: 'Moon Sign Calculator', emoji: '🌙' },
-  { path: '/tarot-card-by-birthday', label: 'Tarot by Birthday', emoji: '🃏' },
-  { path: '/compatibility', label: 'Compatibility Calculator', emoji: '💕' },
-  { path: '/birthday', label: 'Birthday Personalities', emoji: '🎂' },
-  { path: '/rashi-ratna', label: 'Rashi Ratna', emoji: '💎' },
-  { path: '/sun-vs-moon-sign', label: 'Sun Sign vs Moon Sign', emoji: '☀️' },
-];
+// PRO badge (kept identical to the previous Life Expectancy treatment).
+const ProBadge = ({ className = '' }: { className?: string }) => (
+  <Badge className={`bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/20 hover:bg-amber-500/15 text-[10px] px-1.5 py-0 h-4 ${className}`}>
+    <Crown className="w-2.5 h-2.5 mr-0.5" />
+    PRO
+  </Badge>
+);
 
 export const Navigation = () => {
   const location = useLocation();
@@ -89,9 +111,6 @@ export const Navigation = () => {
   const isActive = (path: string) => location.pathname === path;
   const isHomePage = location.pathname === '/';
 
-  const visibleItems = navItems.slice(0, 5);
-  const moreItems = navItems.slice(5);
-
   // Trial UI is account-age driven; a paid subscriber must never see it. Gate
   // every trial surface on !isPaidSubscriber (premium_status also excludes them,
   // but this is explicit and survives any premium_status timing gap).
@@ -99,6 +118,7 @@ export const Navigation = () => {
   const showTrialBanner = isInTrial && !profile?.premium_status && !isPaidSubscriber;
 
   const closeMobile = () => setMobileOpen(false);
+  const categoryActive = (cat: NavCategory) => cat.items.some(i => isActive(i.path));
 
   const mobileLinkClass = (path: string) =>
     `flex items-center gap-3 px-4 py-3.5 min-h-[44px] rounded-xl text-sm font-medium transition-colors ${
@@ -136,7 +156,8 @@ export const Navigation = () => {
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
 
-        {/* Desktop nav — hidden on mobile */}
+        {/* Desktop nav — hidden on mobile. Part U: four category dropdowns + a small
+            fifth "More" (Resources) group. */}
         <nav className="hidden md:flex items-center gap-1 flex-wrap">
           {!isHomePage && (
             <Link to="/">
@@ -147,86 +168,35 @@ export const Navigation = () => {
             </Link>
           )}
 
-          {visibleItems.map((item) => (
-            <Link key={item.path} to={item.path}>
-              <Button variant={isActive(item.path) ? 'default' : 'ghost'} size="sm" className="gap-1.5 transition-all">
-                <item.icon className="w-4 h-4" />
-                <span className="hidden md:inline">{item.label}</span>
-                {item.premium && (
-                  <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/20 hover:bg-amber-500/15 text-[10px] px-1.5 py-0 h-4 hidden md:inline-flex">
-                    <Crown className="w-2.5 h-2.5 mr-0.5" />
-                    PRO
-                  </Badge>
-                )}
-              </Button>
-            </Link>
+          {NAV_CATEGORIES.map((cat) => (
+            <DropdownMenu key={cat.key}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant={categoryActive(cat) ? 'default' : 'ghost'}
+                  size="sm"
+                  className="gap-1.5"
+                  data-testid={`nav-cat-${cat.key}`}
+                >
+                  <cat.icon className="w-4 h-4" />
+                  <span className="hidden md:inline">{cat.trigger}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="max-h-[80vh] overflow-y-auto">
+                <DropdownMenuLabel className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                  {cat.heading}
+                </DropdownMenuLabel>
+                {cat.items.map((item) => (
+                  <Link key={item.path} to={item.path}>
+                    <DropdownMenuItem className={`gap-2 cursor-pointer ${isActive(item.path) ? 'bg-accent' : ''}`}>
+                      <span className="text-base leading-none">{item.emoji}</span>
+                      <span className="flex-1">{item.label}</span>
+                      {item.premium && <ProBadge className="ml-auto" />}
+                    </DropdownMenuItem>
+                  </Link>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           ))}
-
-          {/* Astrology dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={astrologyItems.some(i => isActive(i.path)) ? 'default' : 'ghost'} size="sm" className="gap-1.5">
-                <Sparkles className="w-4 h-4" />
-                <span className="hidden md:inline">Astrology</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {astrologyItems.map((item) => (
-                <Link key={item.path} to={item.path}>
-                  <DropdownMenuItem className={`gap-2 cursor-pointer ${isActive(item.path) ? 'bg-accent' : ''}`}>
-                    <span className="text-base leading-none">{item.emoji}</span>
-                    {item.label}
-                  </DropdownMenuItem>
-                </Link>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* Explore dropdown — high-click discovery hubs */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={exploreItems.some(i => isActive(i.path)) ? 'default' : 'ghost'} size="sm" className="gap-1.5">
-                <Compass className="w-4 h-4" />
-                <span className="hidden md:inline">Explore</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {exploreItems.map((item) => (
-                <Link key={item.path} to={item.path}>
-                  <DropdownMenuItem className={`gap-2 cursor-pointer ${isActive(item.path) ? 'bg-accent' : ''}`}>
-                    <span className="text-base leading-none">{item.emoji}</span>
-                    {item.label}
-                  </DropdownMenuItem>
-                </Link>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* More dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="gap-1.5">
-                <Menu className="w-4 h-4" />
-                <span className="hidden sm:inline">More</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {moreItems.map((item) => (
-                <Link key={item.path} to={item.path}>
-                  <DropdownMenuItem className={`gap-2 cursor-pointer ${isActive(item.path) ? 'bg-accent' : ''}`}>
-                    <item.icon className="w-4 h-4" />
-                    {item.label}
-                    {item.premium && (
-                      <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/20 hover:bg-amber-500/15 text-[10px] px-1.5 py-0 h-4 ml-auto">
-                        <Crown className="w-2.5 h-2.5 mr-0.5" />
-                        PRO
-                      </Badge>
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
 
           {isAdminEmail(user?.email) && (
             <Link to="/admin" className="text-xs text-gray-400 hover:text-gray-600 px-2 py-1 rounded transition-colors">
@@ -273,7 +243,7 @@ export const Navigation = () => {
             onClick={closeMobile}
           />
 
-          {/* Menu panel */}
+          {/* Menu panel — same expandable-section pattern, now four categories + More */}
           <div
             className="fixed inset-x-0 z-50 md:hidden bg-white shadow-xl border-t border-gray-100 overflow-y-auto"
             style={{ top: '56px', maxHeight: 'calc(100vh - 56px)' }}
@@ -286,46 +256,21 @@ export const Navigation = () => {
                 </Link>
               )}
 
-              {mobileSectionLabel('Popular')}
-              {visibleItems.map(item => (
-                <Link key={item.path} to={item.path} onClick={closeMobile} className={mobileLinkClass(item.path)}>
-                  <item.icon className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                  <span className="flex-1">{item.label}</span>
-                  {item.premium && (
-                    <Badge className="bg-amber-500/15 text-amber-700 border-amber-500/20 text-[10px] px-1.5 py-0 h-4">
-                      <Crown className="w-2.5 h-2.5 mr-0.5" />PRO
-                    </Badge>
-                  )}
-                </Link>
-              ))}
-
-              {mobileSectionLabel('Explore')}
-              {exploreItems.map(item => (
-                <Link key={item.path} to={item.path} onClick={closeMobile} className={mobileLinkClass(item.path)}>
-                  <span className="w-4 text-center text-base leading-none flex-shrink-0">{item.emoji}</span>
-                  {item.label}
-                </Link>
-              ))}
-
-              {mobileSectionLabel('Astrology')}
-              {astrologyItems.map(item => (
-                <Link key={item.path} to={item.path} onClick={closeMobile} className={mobileLinkClass(item.path)}>
-                  <span className="w-4 text-center text-base leading-none flex-shrink-0">{item.emoji}</span>
-                  {item.label}
-                </Link>
-              ))}
-
-              {mobileSectionLabel('More Tools')}
-              {moreItems.map(item => (
-                <Link key={item.path} to={item.path} onClick={closeMobile} className={mobileLinkClass(item.path)}>
-                  <item.icon className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                  <span className="flex-1">{item.label}</span>
-                  {item.premium && (
-                    <Badge className="bg-amber-500/15 text-amber-700 border-amber-500/20 text-[10px] px-1.5 py-0 h-4">
-                      <Crown className="w-2.5 h-2.5 mr-0.5" />PRO
-                    </Badge>
-                  )}
-                </Link>
+              {NAV_CATEGORIES.map((cat) => (
+                <div key={cat.key} data-testid={`mobile-cat-${cat.key}`}>
+                  {mobileSectionLabel(cat.heading)}
+                  {cat.items.map(item => (
+                    <Link key={item.path} to={item.path} onClick={closeMobile} className={mobileLinkClass(item.path)}>
+                      <span className="w-4 text-center text-base leading-none flex-shrink-0">{item.emoji}</span>
+                      <span className="flex-1">{item.label}</span>
+                      {item.premium && (
+                        <Badge className="bg-amber-500/15 text-amber-700 border-amber-500/20 text-[10px] px-1.5 py-0 h-4">
+                          <Crown className="w-2.5 h-2.5 mr-0.5" />PRO
+                        </Badge>
+                      )}
+                    </Link>
+                  ))}
+                </div>
               ))}
 
               {isAdminEmail(user?.email) && (
