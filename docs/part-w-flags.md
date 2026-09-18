@@ -31,3 +31,16 @@ for the "what makes this different" callout and hero.
 ## Hindi for this page — out of scope (follow-up)
 Language selector built as real UI; Hindi = honest "coming soon" state. Full Hindi
 translation of /vedic-astrology is a flagged follow-up, not this session.
+
+## Deploy + regression (Part W)
+- Deployed to STAGING only. wrangler exited 1 ONLY on the known cron/schedules trigger
+  (harmless, pre-existing) — worker+assets deployed fine (staging bundle == local
+  index-iMXh8p83.js). Verified live: /vedic-astrology serves the new page ("Ours
+  computes"), prerendered title/meta/schema present, in sitemap, indexable. Production
+  untouched.
+- Full staging regression: 792 passed / 23 unexpected / 2 flaky / 31 skipped.
+  The 23 = 16 environmental local-only + 7 pre-existing content drift — IDENTICAL to the
+  Part T/U/V baseline. ZERO unexpected regressions, ZERO nav-coupled failures (nav spec
+  EXPECTED.vedic updated for the +/vedic-astrology item, passes on live staging).
+- Full-page staging screenshots (desktop 100% width + 3 breakpoints, 0px overflow):
+  docs/part-w-screens/staging/.
