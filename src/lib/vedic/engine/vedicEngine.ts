@@ -258,6 +258,10 @@ export function generateFullChart(birthDateUTC: Date, refDateUTC: Date, latitude
   // engine returned Mahadasha only); Dasha timing is 100%-validated so this
   // nested split inherits that confidence.
   let currentAntardasha: { lord: string; start: string; end: string } | null = null;
+  // Pratyantardasha (Part X) — the 3rd Dasha level, computed with the SAME validated
+  // proportional math (pratyantar length = antar years × (pratyantar-lord years / 120),
+  // starting from the antar lord). Advanced-view/chat only; never in the main narrative.
+  let currentPratyantardasha: { lord: string; start: string; end: string } | null = null;
   if (currentMahadasha) {
     const mahaLordIdx = DASHA_LORDS.indexOf(currentMahadasha.lord);
     const mahaYears = DASHA_YEARS[currentMahadasha.lord];
@@ -269,6 +273,20 @@ export function generateFullChart(birthDateUTC: Date, refDateUTC: Date, latitude
       const subEnd = new Date(antarCursor.getTime() + subYears * 365.25 * 24 * 3600 * 1000);
       if (refDateUTC >= subStart && refDateUTC < subEnd) {
         currentAntardasha = { lord: subLord, start: subStart.toISOString(), end: subEnd.toISOString() };
+        // Descend one more level: the Pratyantardasha within THIS Antardasha.
+        const antarLordIdx = DASHA_LORDS.indexOf(subLord);
+        let pratCursor = new Date(subStart.getTime());
+        for (let k = 0; k < 9; k++) {
+          const pratLord = DASHA_LORDS[(antarLordIdx + k) % 9];
+          const pratYears = subYears * (DASHA_YEARS[pratLord] / 120);
+          const pratStart = new Date(pratCursor.getTime());
+          const pratEnd = new Date(pratCursor.getTime() + pratYears * 365.25 * 24 * 3600 * 1000);
+          if (refDateUTC >= pratStart && refDateUTC < pratEnd) {
+            currentPratyantardasha = { lord: pratLord, start: pratStart.toISOString(), end: pratEnd.toISOString() };
+            break;
+          }
+          pratCursor = pratEnd;
+        }
         break;
       }
       antarCursor = subEnd;
@@ -312,6 +330,7 @@ export function generateFullChart(birthDateUTC: Date, refDateUTC: Date, latitude
     planets,
     currentMahadasha: currentMahadasha ? { lord: currentMahadasha.lord, start: currentMahadasha.start.toISOString(), end: currentMahadasha.end.toISOString() } : null,
     currentAntardasha,
+    currentPratyantardasha,
     fullDashaTimeline,
     doshas: {
       mangalDosha: { hasDosha: mangalDosha, fromLagna: mangalDoshaFromLagna, fromMoon: mangalDoshaFromMoon, fromVenus: mangalDoshaFromVenus },

@@ -43,7 +43,11 @@ async function getSupabase(env) {
 // v10 = Part S: Family raised to full D-Fix2 depth; dosha timing (Mangal→Mars,
 // Sade Sati phase, Kaal Sarp structural) and divisional-placement activation timing
 // added. Bumped so stale v9 readings aren't served.
-const READING_VERSION = 'v10';
+// v11 = Part X: impact-first FOUR-PART structure (verdict → plain impact → evidence →
+// forward-looking close) applied to every section. Bumped so structurally-old v10
+// readings regenerate fresh rather than being compared/served against the new shape
+// (also keeps Part P "what's changed" history comparisons structure-consistent).
+const READING_VERSION = 'v11';
 // `dashaTag` (Part D-Fix3) makes the key TIME-AWARE: it encodes the current
 // Maha/Antar sub-period, so a cached reading is invalidated the moment real time
 // crosses into a new period and the "current / next window" framing would go

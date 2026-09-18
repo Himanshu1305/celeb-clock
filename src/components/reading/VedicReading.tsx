@@ -34,6 +34,19 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
           <span className="font-semibold text-foreground">{facts.dasha.maha} / {facts.dasha.antar}</span>
         </div>
       )}
+      {/* Pratyantardasha (Part X) — 3rd Dasha level, ADVANCED-VIEW ONLY (not in the
+          plain-language reading narrative). */}
+      {facts.pratyantardasha && (
+        <div data-testid="reading-pratyantardasha">
+          <span className="text-muted-foreground">Current sub-sub-period (Pratyantardasha): </span>
+          <span className="font-semibold text-foreground">
+            {facts.pratyantardasha.lord}
+            {facts.pratyantardasha.start && facts.pratyantardasha.end
+              ? ` (${new Date(facts.pratyantardasha.start).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })} – ${new Date(facts.pratyantardasha.end).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })})`
+              : ''}
+          </span>
+        </div>
+      )}
       <table className="w-full text-left">
         <thead className="text-muted-foreground">
           <tr><th className="py-1 pr-3 font-medium">Planet</th><th className="py-1 pr-3 font-medium">Sign</th><th className="py-1 font-medium">House</th></tr>

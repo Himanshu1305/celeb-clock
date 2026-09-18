@@ -23,6 +23,8 @@ export interface ReadingFactsClient {
   nakshatra: { name: string; pada: number; lord: string };
   lagna: string;
   dasha: { maha: string; antar: string } | null;
+  /** Pratyantardasha (Part X) — 3rd Dasha level, shown ONLY in the advanced view. */
+  pratyantardasha?: { lord: string; start: string; end: string } | null;
   placements: Array<{ planet: string; sign: string; house: number; retrograde: boolean }>;
   /** All 9 grahas incl. raw Shadbala (shown only in the advanced/technical view). */
   planets?: Array<{ planet: string; sign: string; house: number; retrograde: boolean; combust?: boolean; navamsa?: string; shadbala?: { total: number; category: string } }>;

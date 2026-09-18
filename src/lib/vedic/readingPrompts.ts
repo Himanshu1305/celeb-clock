@@ -32,6 +32,10 @@ export interface ReadingFacts {
   nakshatra: { name: string; pada: number; lord: string; meaning: string | null; significance: string | null };
   lagna: string;
   dasha: { maha: string; antar: string } | null;
+  /** Pratyantardasha (Part X) — 3rd Dasha level. Carried SEPARATELY from `dasha` and
+   * NEVER printed into buildReadingUserPrompt, so it cannot leak into the main narrative;
+   * surfaced only to the advanced view (client facts) and, if asked, the chat. */
+  pratyantardasha: { lord: string; start: string; end: string } | null;
   /** All 9 grahas — sign, house, retrograde, combust, Navamsa, Shadbala. */
   planets: PlanetFact[];
   /** Back-compat subset for the existing UI (VedicReading advanced/degraded view). */
@@ -118,6 +122,9 @@ export function extractReadingFacts(chart: BirthChartResult, now: Date = new Dat
     },
     lagna: chart.lagna.sign,
     dasha: chart.currentDasha ? { maha: chart.currentDasha.mahadasha, antar: chart.currentDasha.antardasha } : null,
+    pratyantardasha: chart.currentDasha?.pratyantardasha
+      ? { lord: chart.currentDasha.pratyantardasha, start: chart.currentDasha.pratyantardasha_start || '', end: chart.currentDasha.pratyantardasha_end || '' }
+      : null,
     planets,
     placements: planets.filter(p => p.planet !== 'Rahu' && p.planet !== 'Ketu').map(p => ({ planet: p.planet, sign: p.sign, house: p.house, retrograde: p.retrograde })),
     houseLords,
@@ -196,7 +203,16 @@ ABSOLUTE SAFETY RULES (unchanged — a response that breaks any is unusable):
 
 CONFIDENCE — these layers are less certain, so use softer language and hedge them explicitly:
 - Rashi, Nakshatra, Lagna, house placements and the current Dasha are reliable — state them plainly.
-- Shadbala "strength" and the Shashtiamsa (D60) are INDICATIVE, one of several classical methods — signal this ONCE where natural ("as an indicative strength…", "in one classical reading…"), not on every planet.`;
+- Shadbala "strength" and the Shashtiamsa (D60) are INDICATIVE, one of several classical methods — signal this ONCE where natural ("as an indicative strength…", "in one classical reading…"), not on every planet.
+
+THE FOUR-PART STRUCTURE (Part X — apply to EVERY section, in this exact order; this is the whole point of this reading — lead with MEANING, put mechanism second):
+1. VERDICT LINE — open with ONE plain sentence saying whether this area is broadly positive, negative, mixed, or neutral for THIS person. NEVER a number or score of any kind (no "78/100", no "7 out of 10") — that false precision is explicitly banned. Honestly say "mixed" when signals genuinely conflict; do not force a positive or negative.
+2. PLAIN-LANGUAGE IMPACT — 1–2 sentences on what this actually means for their real day-to-day life in this area, written for someone with ZERO astrology knowledge. No jargon here yet.
+3. EVIDENCE, ONE LEVEL IN — THEN give the supporting chart facts, phrased as "This reading comes from…" / "This comes from…". EVERY specific placement required for this section (listed below) belongs HERE — after the meaning, never before it.
+4. FORWARD-LOOKING CLOSE — where a real computed timing window is provided for this section, end with it as "worth knowing" guidance (e.g. "your strongest window … runs from [date] to [date] — worth having plans ready by then"), never a command and never a guarantee. Omit if no window applies.
+Two approved worked examples to match for TONE (do not copy verbatim — mirror the shape and warmth):
+• Career: "A generally favorable period for career growth, with one thing to watch. [plain impact…] This reading comes from your 10th house of career sitting in [sign], ruled by [planet] ([strength])… Your strongest window for a real career move opens in your [Dasha lord] Antardasha, from [date] to [date] — worth having any big plans ready by then."
+• The verdict line is a real sentence, not a label — "A steady, quietly supportive area of your chart." reads better than "Verdict: neutral."`;
 }
 
 /** The user prompt — the full chart data + exactly which facts each section must use. */
@@ -304,7 +320,7 @@ How to use timing — this is what makes the reading answer "WHEN", not just "wh
 - If a theme's windows are all in the past, say that honestly ("your strongest classical window for this already ran during …; the next comparable one is years away") — do NOT invent a soon-sounding date.
 - A window marked STRONGEST is the one to emphasise for that theme.
 
-Write the reading as JSON with exactly these fields. EACH must cite the specific facts listed for it:
+Write the reading as JSON with exactly these fields. EACH field MUST follow the FOUR-PART STRUCTURE from the system prompt: (1) a plain verdict line, (2) plain-language impact, (3) the evidence "this comes from…" — the specific facts listed for that section belong in THIS third part, and (4) a forward-looking timing close where a window applies. Lead with meaning; the required placements below are the EVIDENCE layer, cited after the meaning, never before it:
 - "snapshot": read the core pieces TOGETHER, not as a list. First frame what they are and how they combine: your Lagna (${f.lagna}) is your outer self and life-approach, your Moon sign (${f.rashi}) is your inner, emotional self — name both and say in one clause how they harmonise or contrast. Then fold in the Lagna lord's placement and your Nakshatra (${f.nakshatra.name}), briefly explaining what that Nakshatra traditionally signifies using the meaning above — but do NOT inflate a neutral/"mixed" Nakshatra to sound exceptional; describe it honestly.
 - "career": MUST reference the 10th house sign AND its ruling planet's placement (house/sign/strength), AND at least one of Sun/Mercury/Saturn by its real placement, AND connect to the current Dasha lord if relevant. Draw a real-world implication. Cite the computed Career timing window (with its real date range) as the strongest upcoming period for professional moves.
 - "relationships": MUST reference the 7th house sign and its lord's placement, Venus's placement (sign/house/strength), and the Navamsa sign of Venus or Moon. Fold in Mangal Dosha calmly IF present, naming its cause. If partnership/marriage timing fits, cite the computed Marriage timing window (real date range) as the strongest classical period for this.
@@ -315,7 +331,7 @@ Write the reading as JSON with exactly these fields. EACH must cite the specific
 - "doshas": name the specific planet/house behind any dosha present (or reassure plainly if none), calm and de-stigmatising. For EACH present dosha, also say WHEN it is most relevant, using the Dosha timing block above: for a time-bound dosha (Mangal → Mars periods; Sade Sati → its named phase) cite the real window/phase; for a STRUCTURAL/permanent one (e.g. Kaal Sarp) say plainly that it is a permanent chart feature with no phase-based timing, and only if listed add that it is traditionally most felt during its listed Rahu/Ketu periods. NEVER invent a start/end date for a structural feature. Keep the whole section calm and non-fear-based.
 - "divisional": name at least TWO real Navamsa (D9) placements by sign (from the Navamsa list above), plus the Dasamsa; mention D60 only with a "one interpretation" hedge. Then CONNECT at least one divisional placement to timing using the Divisional-placement timing block above — e.g. "your Dasamsa Sun's promise is most likely to express during your [ruling planet] period, [real date range]" — reusing ONLY the listed windows, framed as classical likelihood, never a guarantee.
 
-Every sentence must be traceable to a fact above. Do not write anything equally true of another chart. Describe strength only in words (strong / moderately strong / gentle) — never a number or "virupas". Keep sentences short and warm: at most two facts per sentence, and prefer several short sentences over one dense one. Aim for 4-6 short sentences per field. Return ONLY the JSON object.`;
+Every EVIDENCE fact must be traceable to the data above. Do not write anything equally true of another chart. Describe strength only in words (strong / moderately strong / gentle) — never a number or "virupas". Keep sentences short and warm: at most two facts per sentence, and prefer several short sentences over one dense one. With the four-part structure each field is naturally a little longer — aim for 5-8 short sentences per field, still tight and skimmable, never a wall of text. Return ONLY the JSON object.`;
 }
 
 /** Appended to the prompt on a retry when the first output was too generic or wrong. */

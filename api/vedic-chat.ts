@@ -75,6 +75,10 @@ export async function buildChatReply(facts, history, message, generate, gemstone
     `Nakshatra:${facts.nakshatra.name}(pada ${facts.nakshatra.pada})`,
     `Lagna:${facts.lagna}`,
     facts.dasha ? `Dasha:${facts.dasha.maha}/${facts.dasha.antar}` : null,
+    // Part X: the chat MAY answer a direct Pratyantardasha question accurately (it's now
+    // computed). It stays out of the main reading narrative, but the chat is grounded
+    // with it so it gives a correct answer if asked rather than a broken/invented one.
+    facts.pratyantardasha ? `Pratyantardasha(3rd level):${facts.pratyantardasha.lord}` : null,
     `Mangal:${facts.doshas.mangal.present ? facts.doshas.mangal.severityLabel : 'none'}`,
     `KaalSarp:${facts.doshas.kaalSarp.present ? 'present' : 'none'}`,
     `SadeSati:${facts.doshas.sadeSati.active ? 'active' : 'none'}`,

@@ -14,12 +14,55 @@ import { useSavedProfile } from '@/hooks/useSavedProfile';
 interface Cycle { start: string; end: string }
 interface Report {
   moonSignName: string; active: boolean; phase: string | null;
-  currentCycle: Cycle | null; nextCycle: Cycle | null;
+  currentCycle: Cycle | null; nextCycle: Cycle | null; previousCycle: Cycle | null;
   methodology: string;
   dhaiya: { active: boolean; type: string | null; currentEnd: string | null };
 }
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const fmt = (iso: string | null | undefined) => { if (!iso) return '—'; const d = new Date(iso); return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+const yearsFromNow = (iso: string | null | undefined) => { if (!iso) return null; const yrs = (new Date(iso).getTime() - Date.now()) / (365.25 * 24 * 3600 * 1000); return Math.max(0, Math.round(yrs * 10) / 10); };
+
+/**
+ * Part X — the approved impact-first Sade Sati narrative (verdict → plain impact →
+ * evidence/dates → forward-looking close), built deterministically from the computed
+ * report so the exact approved wording is guaranteed (not LLM-generated). Covers the
+ * active (with Rising/Peak/Setting phase note) and inactive cases.
+ */
+function sadeSatiNarrative(r: Report): { verdict: string; body: string[] } {
+  if (r.active) {
+    const phaseKey = (r.phase || '').toLowerCase();
+    const phaseNote = phaseKey.includes('rising')
+      ? 'The Rising phase often brings the first pressures that set the stage for what follows.'
+      : phaseKey.includes('peak')
+        ? 'The Peak phase is typically the most demanding but also where the deepest growth happens.'
+        : phaseKey.includes('setting')
+          ? 'The Setting phase is where earlier effort starts paying off.'
+          : '';
+    const phaseLabel = r.phase ? r.phase.split(' (')[0] : 'current';
+    const start = fmt(r.currentCycle?.start), end = fmt(r.currentCycle?.end);
+    return {
+      verdict: "You're currently in a Sade Sati period — and that's genuinely nothing to worry about.",
+      body: [
+        "Despite its reputation, this is one of the most misunderstood periods in Vedic astrology, and for good reason: it's far more often a season of real, lasting growth than the hardship people fear.",
+        "Sade Sati refers to the roughly seven-and-a-half years when Saturn transits the signs before, on, and after your Moon sign. Saturn's themes are discipline, patience, and long-term reward — many people look back on their Sade Sati as the period that built their strongest foundations: real maturity, financial discipline, or a career that held up long after the effort of building it.",
+        `You're specifically in the ${phaseLabel} phase, which began ${start} and runs until ${end}.${phaseNote ? ' ' + phaseNote : ''}`,
+        "There's no need to brace for anything — just know that what you build now tends to last.",
+      ],
+    };
+  }
+  // Inactive case (approved template).
+  const lines: string[] = [
+    'Traditionally, Sade Sati periods bring pressure toward restructuring, added responsibility, or slower, harder-won progress. Since you\'re outside one currently, your day-to-day life isn\'t carrying that particular weight.',
+  ];
+  if (r.previousCycle) {
+    lines.push(`Your last Sade Sati ran from ${fmt(r.previousCycle.start)} to ${fmt(r.previousCycle.end)} — if that stretch felt like a time of consolidation or slow, deliberate change, that lines up with the classical pattern.`);
+  }
+  if (r.nextCycle) {
+    const away = yearsFromNow(r.nextCycle.start);
+    lines.push(`Your next one begins in ${fmt(r.nextCycle.start)}, lasting until ${fmt(r.nextCycle.end)}${away !== null ? ` — that's about ${away} year${away === 1 ? '' : 's'} away, so there's no reason for concern now, just something to keep in mind well ahead of time.` : '.'}`);
+  }
+  return { verdict: "Good news — you're not in a Sade Sati period right now.", body: lines };
+}
 
 export default function SadeSatiPage() {
   const { profile, save } = useSavedProfile();
@@ -66,6 +109,14 @@ export default function SadeSatiPage() {
               </div>
               {report.active && report.phase && <div className="font-semibold text-foreground mt-1">Phase: {report.phase}</div>}
             </div>
+
+            {/* Part X — impact-first approved narrative (verdict → plain impact → dates → close). */}
+            {(() => { const n = sadeSatiNarrative(report); return (
+              <div data-testid="sadesati-narrative" className="rounded-xl border border-border p-5">
+                <p className="font-bold text-foreground mb-2">{n.verdict}</p>
+                {n.body.map((para, i) => <p key={i} className="text-sm text-foreground leading-relaxed mb-2 last:mb-0">{para}</p>)}
+              </div>
+            ); })()}
 
             {report.active && report.currentCycle && (
               <div data-testid="sadesati-current" className="rounded-lg border border-border p-4">

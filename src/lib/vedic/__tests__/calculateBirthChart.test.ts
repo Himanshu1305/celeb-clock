@@ -22,6 +22,18 @@ describe('calculateBirthChart — positive: reference chart (1988-11-05, 12:30 I
     expect(r.lagna.sign).toBe('Makara');
     expect(r.currentDasha?.mahadasha).toBe('Rahu');
     expect(r.currentDasha?.antardasha).toBe('Moon');     // nested antardasha
+    // Part X: Pratyantardasha (3rd level) is computed and internally consistent —
+    // it falls WITHIN the current Antardasha window and contains the ref instant.
+    expect(r.currentDasha?.pratyantardasha).toBeTruthy();
+    {
+      const d = r.currentDasha!;
+      const pStart = new Date(d.pratyantardasha_start!).getTime();
+      const pEnd = new Date(d.pratyantardasha_end!).getTime();
+      expect(pStart).toBeGreaterThanOrEqual(new Date(d.antardasha_start!).getTime());
+      expect(pEnd).toBeLessThanOrEqual(new Date(d.antardasha_end!).getTime());
+      expect(pStart).toBeLessThanOrEqual(REF.getTime());
+      expect(REF.getTime()).toBeLessThan(pEnd);
+    }
     expect(r.doshas.mangalDosha.hasDosha).toBe(false);
     expect(r.doshas.kaalSarp.present).toBe(false);
     expect(r.warnings).toEqual([]);

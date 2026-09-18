@@ -70,6 +70,11 @@ export interface CurrentDasha {
   antardasha: string;
   antardasha_start: string | null;
   antardasha_end: string | null;
+  // Pratyantardasha (Part X) — 3rd Dasha level. ADVANCED-VIEW / chat only; never woven
+  // into the main plain-language reading narrative this session.
+  pratyantardasha?: string | null;
+  pratyantardasha_start?: string | null;
+  pratyantardasha_end?: string | null;
 }
 
 /** One Antardasha (sub-period) — ISO date strings. */
@@ -351,6 +356,9 @@ function toResult(chart: FullChart, source: 'local' | 'prokerala', includeShadba
     antardasha: chart.currentAntardasha ? chart.currentAntardasha.lord : '',
     antardasha_start: chart.currentAntardasha ? chart.currentAntardasha.start : null,
     antardasha_end: chart.currentAntardasha ? chart.currentAntardasha.end : null,
+    pratyantardasha: chart.currentPratyantardasha ? chart.currentPratyantardasha.lord : null,
+    pratyantardasha_start: chart.currentPratyantardasha ? chart.currentPratyantardasha.start : null,
+    pratyantardasha_end: chart.currentPratyantardasha ? chart.currentPratyantardasha.end : null,
   } : null;
 
   const result: BirthChartResult = {

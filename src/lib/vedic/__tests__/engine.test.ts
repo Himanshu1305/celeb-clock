@@ -28,10 +28,10 @@ describe('engine port — parity with the validated scripts/vedic-lab/*.cjs', ()
     it(`ported TS output equals lab .cjs output: ${name}`, () => {
       const ts = generateFullChart(birthUTC, REF, lat, lon);
       const ref = cjs.generateFullChart(birthUTC, REF, lat, lon);
-      // The port adds currentAntardasha (nested Vimshottari) and fullDashaTimeline
-      // (Part D-Fix3 full-life timeline) not present in the lab engine; everything
-      // else must be byte-identical.
-      const { currentAntardasha, fullDashaTimeline, ...tsShared } = ts as any;
+      // The port adds currentAntardasha (nested Vimshottari), fullDashaTimeline
+      // (Part D-Fix3 full-life timeline) and currentPratyantardasha (Part X 3rd Dasha
+      // level) not present in the lab engine; everything else must be byte-identical.
+      const { currentAntardasha, fullDashaTimeline, currentPratyantardasha, ...tsShared } = ts as any;
       expect(tsShared).toEqual(ref);
     });
   }
