@@ -142,6 +142,9 @@ const ChineseZodiac = lazyWithReload(() => import("./pages/ChineseZodiac"));
 const ChineseZodiacSign = lazyWithReload(() => import("./pages/ChineseZodiacSign"));
 const VedicZodiac = lazyWithReload(() => import("./pages/VedicZodiac"));
 const VedicAstrologyLanding = lazyWithReload(() => import("./pages/VedicAstrologyLanding"));
+const ScienceLongevityLanding = lazyWithReload(() => import("./pages/ScienceLongevityLanding"));
+const BirthdayFunLanding = lazyWithReload(() => import("./pages/BirthdayFunLanding"));
+const MysticCornerLanding = lazyWithReload(() => import("./pages/MysticCornerLanding"));
 const VedicZodiacSign = lazyWithReload(() => import("./pages/VedicZodiacSign"));
 const HowLongWillILive = lazyWithReload(() => import('@/pages/answers/HowLongWillILive'));
 const WhatIsMyBiologicalAge = lazyWithReload(() => import('@/pages/answers/WhatIsMyBiologicalAge'));
@@ -354,6 +357,9 @@ const App = () => (
               <Route path="/chinese-zodiac" element={<ChineseZodiac />} />
               <Route path="/chinese-zodiac/:animal" element={<ChineseZodiacSign />} />
               <Route path="/vedic-astrology" element={<VedicAstrologyLanding />} />
+              <Route path="/science-longevity" element={<ScienceLongevityLanding />} />
+              <Route path="/birthday-fun" element={<BirthdayFunLanding />} />
+              <Route path="/mystic-corner" element={<MysticCornerLanding />} />
               <Route path="/vedic-zodiac" element={<VedicZodiac />} />
               <Route path="/vedic-zodiac/:rashi" element={<VedicZodiacSign />} />
               <Route path="/answers" element={<AnswersIndex />} />

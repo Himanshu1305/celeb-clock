@@ -68,3 +68,34 @@ environment-dependent checks (Playwright reading-page screenshot, live chat Prat
 answer, live reading generation) are performed against that deployed staging. Part X's
 content testing (before/after, accuracy, safety, adversarial, structure) was already done
 live via the generation harness and is complete.
+
+## Parts Y/Z/AA — build + commit notes
+- Extracted shared `src/components/landing/CategoryLandingPage.tsx`; refactored Part W's
+  /vedic-astrology to use it (same output), then built /science-longevity (Y),
+  /birthday-fun (Z), /mystic-corner (AA) as thin configs → all four read as ONE coherent
+  family (verified by the "same template family" e2e test).
+- COMMIT DECISION: Y/Z/AA committed together as one cohesive unit (X remains a separate
+  commit). They share one extracted template + one Navigation array + one nav spec + one
+  landing e2e file, so 3 separate commits would create broken intermediate states (a nav
+  item / spec entry pointing at a page not yet committed). Honest deviation from strict
+  per-part commits, per the session's "use judgment, document it" discipline.
+- Verified real stats (Phase 0, not assumed): Science 15+ health factors (model uses 20
+  inputs / 14 surfaced factors), **54 countries** (BIRTH_BASELINES — the site's other
+  "57 countries" copy is STALE/inaccurate, flagged below), 3 sources (UN/WHO/GBD).
+  Birthday **3,000+** celebrities (celebrities.json=3,107; NOT the stale "50,000+"),
+  7 tools, 366 days. Mystic 3 tools / 9 Life Path numbers (tarot tool maps 12 life-path
+  cards, so NO "78 cards" overclaim).
+- Copy guardrails verified by e2e: NO "waste your time" framing on Birthday Fun; NO
+  "precisely computed"/"rigorously verified" on Mystic Corner (reserved for Vedic).
+- SEO/AEO: all 4 pages prerendered with ≤70-char titles, meta, direct-answer opening,
+  WebApplication schema (rendered INLINE in the body — fixed a react-helmet-async rAF
+  race that was intermittently dropping the schema from the prerendered HTML), indexable
+  (noindex=0), in sitemap; each added as first item in its nav dropdown.
+- Density: full container width (100% at desktop), grids fill rows, 0px horizontal
+  overflow at desktop + 3 breakpoints (narrow-360, tablet-768, landscape-844x390).
+
+## FLAG for user: site-wide "57 countries" is inaccurate (real = 54)
+BIRTH_BASELINES has 54 countries, but existing copy says "57 countries" in Index.tsx,
+PaymentSuccessModal.tsx and blogPosts.ts. The NEW /science-longevity page uses the
+honest 54. → USER: consider correcting the other "57" occurrences site-wide (out of this
+session's scope, same pattern as Part V's off-homepage "50,000+" flag).

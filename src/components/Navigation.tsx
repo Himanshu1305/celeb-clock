@@ -50,6 +50,7 @@ const NAV_CATEGORIES: NavCategory[] = [
   {
     key: 'birthday', trigger: 'Birthday Fun', heading: 'Birthday Fun & Celebrity Twins', icon: Cake,
     items: [
+      { path: '/birthday-fun', label: 'Birthday Fun — overview', emoji: '🎈' },
       { path: '/age-calculator', label: 'Age Calculator', emoji: '⏰' },
       { path: '/todays-birthdays', label: "Today's Birthdays", emoji: '🎂' },
       { path: '/celebrity-birthday', label: 'Celebrity Match', emoji: '🌟' },
@@ -70,6 +71,7 @@ const NAV_CATEGORIES: NavCategory[] = [
   {
     key: 'mystic', trigger: 'Mystic Corner', heading: 'Mystic Corner', icon: Star,
     items: [
+      { path: '/mystic-corner', label: 'Mystic Corner — overview', emoji: '🔮' },
       { path: '/numerology', label: 'Numerology by Birthday', emoji: '🔢' },
       { path: '/name-numerology', label: 'Name Numerology', emoji: '✍️' },
       { path: '/tarot-card-by-birthday', label: 'Tarot by Birthday', emoji: '🃏' },
@@ -78,6 +80,7 @@ const NAV_CATEGORIES: NavCategory[] = [
   {
     key: 'science', trigger: 'Science & Longevity', heading: 'Science & Longevity', icon: Activity,
     items: [
+      { path: '/science-longevity', label: 'Science & Longevity — overview', emoji: '🔬' },
       { path: '/life-expectancy', label: 'Life Expectancy', emoji: '⏳', premium: true },
       { path: '/biological-age', label: 'Biological Age', emoji: '🧬' },
       { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age', emoji: '📈' },
