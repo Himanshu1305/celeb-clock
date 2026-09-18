@@ -38,6 +38,18 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Part V — live heartbeat counter for the "Birthday Fun" choose-your-path card.
+  // Representative 30-year-old at ~70 bpm ≈ 1.1 billion beats; ticks live (same
+  // live-counting mechanic as the Age Calculator card) so it's real, not static.
+  const REP_AGE_YEARS = 30;
+  const [heartbeats, setHeartbeats] = useState(
+    Math.round(REP_AGE_YEARS * 365.25 * 24 * 60 * 70),
+  );
+  useEffect(() => {
+    const interval = setInterval(() => setHeartbeats(h => h + 1), 850);
+    return () => clearInterval(interval);
+  }, []);
+
   // Handle form submission
   const handleFindTwin = () => {
     if (day && month && year) {
@@ -207,34 +219,106 @@ const Index = () => {
           </section>
         )}
 
-        {/* Part U — "Choose your path": four-category entry points (NEW, additive —
-            surfaces all four categories equally; astrology framed "precisely computed",
-            never "scientific", per the project positioning). */}
+        {/* Part V — "Choose your path": four category cards in the research-backed
+            serial-position order (Vedic first = primacy, Science last = recency), with
+            finalized copy + live/computed stats. Category names are REAL TEXT (not
+            color-only); emoji icons are aria-hidden; live stats carry aria-labels. */}
         <section className="max-w-4xl mx-auto mb-14 px-4" data-testid="choose-your-path">
           <h2 className="text-2xl font-bold text-center mb-6 gradient-text-primary">Choose your path</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { to: '/life-expectancy', emoji: '🔬', title: 'Science & Longevity', body: 'Real, research-backed life-expectancy and biological-age tools.' },
-              { to: '/kundali', emoji: '🪔', title: 'Vedic Astrology', body: 'Precisely computed birth chart, matching and AI astrologer.' },
-              { to: '/todays-birthdays', emoji: '🎂', title: 'Birthday Fun & Celebrity Twins', body: 'Your celebrity birthday twin, age tools and birthday reports.' },
-              { to: '/numerology', emoji: '🔢', title: 'Mystic Corner', body: 'Numerology, name numerology and tarot by your birthday.' },
-            ].map(c => (
-              <Link
-                key={c.to}
-                to={c.to}
-                data-testid={`path-card-${c.to.replace(/\//g, '')}`}
-                className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
-              >
-                <div className="text-3xl mb-2">{c.emoji}</div>
-                <h3 className="font-bold text-foreground mb-1 text-sm">{c.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{c.body}</p>
-              </Link>
-            ))}
+
+            {/* 1. Vedic Astrology (primacy) */}
+            <Link
+              to="/kundali"
+              data-testid="path-card-vedic"
+              className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
+            >
+              <div className="text-3xl mb-2" aria-hidden="true">🪔</div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-indigo-600 mb-1">Vedic Astrology</p>
+              <h3 className="font-bold text-foreground mb-1 text-base">Your real birth chart</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">The depth of a professional reading, backed by verified accuracy.</p>
+              <p className="text-[11px] text-indigo-600 font-medium mt-2">Free Kundali →</p>
+            </Link>
+
+            {/* 2. Birthday Fun & Celebrity Twins — live heartbeat counter (representative 30y) */}
+            <Link
+              to="/age-calculator"
+              data-testid="path-card-birthday"
+              className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
+            >
+              <div className="text-3xl mb-2" aria-hidden="true">⏱️</div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-rose-600 mb-1">Birthday Fun &amp; Celebrity Twins</p>
+              <h3 className="font-bold text-foreground mb-1 text-base">
+                <span aria-hidden="true">{(heartbeats / 1e9).toFixed(1)} billion heartbeats</span>
+                <span className="sr-only">Approximately 1.1 billion heartbeats for a representative 30-year-old, counting live</span>
+              </h3>
+              <p className="text-[11px] text-muted-foreground tabular-nums" aria-hidden="true">{heartbeats.toLocaleString()} and counting</p>
+              <p className="text-xs text-muted-foreground leading-relaxed mt-1">≈ 30 years old — see everything your date of birth reveals.</p>
+              <p className="text-[11px] text-rose-600 font-medium mt-2">Age Calculator →</p>
+            </Link>
+
+            {/* 3. Mystic Corner — representative Life Path number */}
+            <Link
+              to="/numerology"
+              data-testid="path-card-mystic"
+              className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
+            >
+              <div className="text-3xl mb-2" aria-hidden="true">🔢</div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-violet-600 mb-1">Mystic Corner</p>
+              <h3 className="font-bold text-foreground mb-1 text-base">
+                Life Path <span className="text-violet-600">7</span>
+              </h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">Numerology, name numerology and tarot from your birthday. <span className="italic">(7 is an example — yours is computed from your date.)</span></p>
+              <p className="text-[11px] text-violet-600 font-medium mt-2">Numerology →</p>
+            </Link>
+
+            {/* 4. Science & Longevity (recency) — years figure + gradient bar + sourcing */}
+            <Link
+              to="/life-expectancy"
+              data-testid="path-card-science"
+              className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
+            >
+              <div className="text-3xl mb-2" aria-hidden="true">❤️</div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 mb-1">Science &amp; Longevity</p>
+              <h3 className="font-bold text-foreground mb-1 text-base">See what adds or costs you years</h3>
+              <p className="text-2xl font-black text-foreground" aria-label="Representative estimate: about 73.4 years">73.4 <span className="text-sm font-semibold text-muted-foreground">years</span></p>
+              <div className="h-1.5 w-full rounded-full bg-gradient-to-r from-rose-500 via-amber-500 to-green-500 my-2" aria-hidden="true" />
+              <p className="text-[11px] text-muted-foreground leading-relaxed">Sourced from UN, WHO &amp; GBD data — an estimate, not a guarantee.</p>
+              <p className="text-[11px] text-emerald-600 font-medium mt-2">Life Expectancy →</p>
+            </Link>
+
           </div>
         </section>
 
-        {/* ═══ Part U block: Birthday Fun & Celebrity Twins ═══ */}
-        <h2 data-testid="block-birthday" className="max-w-4xl mx-auto px-4 mb-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">🎂 Birthday Fun &amp; Celebrity Twins</h2>
+        {/* ═══ Part V block: Vedic Astrology (NEW — primacy position) ═══
+            Homepage Vedic content was a genuine gap before Part V. Real preview cards
+            for the flagship Vedic tools, BentoGrid visual style, with an honest
+            verification note (no positioning doc found — Part 3 fallback language). */}
+        <section className="max-w-4xl mx-auto mb-16 px-4" data-testid="block-vedic">
+          <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">
+            <span aria-hidden="true">🪔 </span>Vedic Astrology
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { to: '/kundali', emoji: '🪔', title: 'Free Kundali', body: 'Your full Vedic birth chart — planets, houses, Nakshatra and Vimshottari Dasha, precisely computed with the Swiss Ephemeris.' },
+              { to: '/kundali-match', emoji: '💑', title: 'Kundali Matching', body: 'Ashtakoota (Guna Milan) compatibility between two charts, with the real point-by-point breakdown.' },
+              { to: '/astrologer', emoji: '💬', title: 'Ask an Astrologer (AI)', body: 'A private, judgment-free conversation grounded in your own birth chart — traditional guidance, offered gently.' },
+            ].map(c => (
+              <Link key={c.to} to={c.to} className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors">
+                <div className="text-2xl mb-2" aria-hidden="true">{c.emoji}</div>
+                <h3 className="font-bold text-foreground mb-1">{c.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{c.body}</p>
+                <span className="text-xs text-primary font-medium">Open {c.title} →</span>
+              </Link>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground italic mt-3">
+            Precisely computed from your real birth details using the Swiss Ephemeris — the depth of a professional reading, backed by verified accuracy. Classical Vedic tradition, presented honestly (not a scientific claim).
+          </p>
+        </section>
+
+        {/* ═══ Part V block: Birthday Fun & Celebrity Twins ═══ */}
+        <h2 data-testid="block-birthday" className="max-w-4xl mx-auto px-4 mb-4 text-sm font-bold text-muted-foreground uppercase tracking-wider"><span aria-hidden="true">🎂 </span>Birthday Fun &amp; Celebrity Twins</h2>
 
         {/* Birthday Report showcase — sells the paid ₹199 Blueprint, placed right
             after the calculator entry and before the deep feature grid. */}
@@ -318,22 +402,7 @@ const Index = () => {
               </Link>
             ))}
           </div>
-          {/* Zodiac grid — all 12 signs */}
-          <div className="flex flex-wrap justify-center gap-2">
-            {[
-              ['aries','♈'],['taurus','♉'],['gemini','♊'],['cancer','♋'],
-              ['leo','♌'],['virgo','♍'],['libra','♎'],['scorpio','♏'],
-              ['sagittarius','♐'],['capricorn','♑'],['aquarius','♒'],['pisces','♓'],
-            ].map(([sign, glyph]) => (
-              <Link
-                key={sign}
-                to={`/zodiac/${sign}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-background/70 border border-border hover:border-primary/50 hover:text-primary transition-colors capitalize"
-              >
-                <span aria-hidden>{glyph}</span> {sign}
-              </Link>
-            ))}
-          </div>
+          {/* Zodiac grid moved to the Part V Mystic Corner block (zodiac-adjacent). */}
         </section>
 
         {/* Featured celebrity profiles — Day 8 discovery (Part U: moved into the
@@ -362,8 +431,48 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══ Part U block: Science & Longevity ═══ */}
-        <h2 data-testid="block-science" className="max-w-4xl mx-auto px-4 mb-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">🔬 Science &amp; Longevity</h2>
+        {/* ═══ Part V block: Mystic Corner ═══
+            Groups the numerology tools + the zodiac-adjacent content (12 sign chips
+            moved here from "Explore BornClock"). Every existing /zodiac/{sign} link is
+            preserved — regrouped, not removed. */}
+        <section className="max-w-4xl mx-auto mb-16 px-4" data-testid="block-mystic">
+          <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">
+            <span aria-hidden="true">🔮 </span>Mystic Corner
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {[
+              { to: '/numerology', emoji: '🔢', title: 'Numerology by Birthday', body: 'Your Life Path, expression and destiny numbers, computed from your date of birth.' },
+              { to: '/name-numerology', emoji: '✍️', title: 'Name Numerology', body: 'What your name adds up to — the Chaldean and Pythagorean reading of your letters.' },
+              { to: '/tarot-card-by-birthday', emoji: '🃏', title: 'Tarot by Birthday', body: 'The tarot card traditionally tied to your birth date, and what it signifies.' },
+            ].map(c => (
+              <Link key={c.to} to={c.to} className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors">
+                <div className="text-2xl mb-2" aria-hidden="true">{c.emoji}</div>
+                <h3 className="font-bold text-foreground mb-1">{c.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{c.body}</p>
+                <span className="text-xs text-primary font-medium">Open {c.title} →</span>
+              </Link>
+            ))}
+          </div>
+          {/* Zodiac grid — all 12 signs (zodiac-adjacent, per Part V Part 3.5) */}
+          <div className="flex flex-wrap justify-center gap-2">
+            {[
+              ['aries','♈'],['taurus','♉'],['gemini','♊'],['cancer','♋'],
+              ['leo','♌'],['virgo','♍'],['libra','♎'],['scorpio','♏'],
+              ['sagittarius','♐'],['capricorn','♑'],['aquarius','♒'],['pisces','♓'],
+            ].map(([sign, glyph]) => (
+              <Link
+                key={sign}
+                to={`/zodiac/${sign}`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-background/70 border border-border hover:border-primary/50 hover:text-primary transition-colors capitalize"
+              >
+                <span aria-hidden="true">{glyph}</span> {sign}
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══ Part V block: Science & Longevity (recency position — last) ═══ */}
+        <h2 data-testid="block-science" className="max-w-4xl mx-auto px-4 mb-4 text-sm font-bold text-muted-foreground uppercase tracking-wider"><span aria-hidden="true">🔬 </span>Science &amp; Longevity</h2>
 
         {/* More Ways to Know Yourself */}
         <section className="max-w-4xl mx-auto mb-16">

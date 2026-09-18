@@ -22,20 +22,11 @@ import { isAdminEmail } from '@/components/AdminRoute';
 type NavItem = { path: string; label: string; emoji: string; premium?: boolean };
 type NavCategory = { key: string; trigger: string; heading: string; icon: LucideIcon; items: NavItem[] };
 
+// Part V — category order follows the serial-position effect: Vedic first (primacy,
+// most differentiated), Science last of the four (recency, most evidence-based), with
+// the small Resources "More" group after. Same order used in the homepage
+// "choose your path" cards and grouped content blocks. Membership unchanged from Part U.
 const NAV_CATEGORIES: NavCategory[] = [
-  {
-    key: 'science', trigger: 'Science & Longevity', heading: 'Science & Longevity', icon: Activity,
-    items: [
-      { path: '/life-expectancy', label: 'Life Expectancy', emoji: '⏳', premium: true },
-      { path: '/biological-age', label: 'Biological Age', emoji: '🧬' },
-      { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age', emoji: '📈' },
-      { path: '/coach', label: 'Longevity Coach', emoji: '🧘' },
-      { path: '/country-comparison', label: 'Life Expectancy by Country', emoji: '🌍' },
-      { path: '/biorhythm', label: 'Biorhythm Calculator', emoji: '🌀' },
-      { path: '/biorhythm-workout-calculator', label: 'Biorhythm Workout', emoji: '🏃' },
-      { path: '/energy-forecast', label: 'Energy Forecast', emoji: '⚡' },
-    ],
-  },
   {
     key: 'vedic', trigger: 'Vedic Astrology', heading: 'Vedic Astrology', icon: Sparkles,
     items: [
@@ -81,6 +72,19 @@ const NAV_CATEGORIES: NavCategory[] = [
       { path: '/numerology', label: 'Numerology by Birthday', emoji: '🔢' },
       { path: '/name-numerology', label: 'Name Numerology', emoji: '✍️' },
       { path: '/tarot-card-by-birthday', label: 'Tarot by Birthday', emoji: '🃏' },
+    ],
+  },
+  {
+    key: 'science', trigger: 'Science & Longevity', heading: 'Science & Longevity', icon: Activity,
+    items: [
+      { path: '/life-expectancy', label: 'Life Expectancy', emoji: '⏳', premium: true },
+      { path: '/biological-age', label: 'Biological Age', emoji: '🧬' },
+      { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age', emoji: '📈' },
+      { path: '/coach', label: 'Longevity Coach', emoji: '🧘' },
+      { path: '/country-comparison', label: 'Life Expectancy by Country', emoji: '🌍' },
+      { path: '/biorhythm', label: 'Biorhythm Calculator', emoji: '🌀' },
+      { path: '/biorhythm-workout-calculator', label: 'Biorhythm Workout', emoji: '🏃' },
+      { path: '/energy-forecast', label: 'Energy Forecast', emoji: '⚡' },
     ],
   },
   {

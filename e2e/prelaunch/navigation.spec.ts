@@ -20,18 +20,26 @@ async function openCategory(page: Page, key: string): Promise<string[]> {
   await menu.waitFor({ state: 'visible' });
   const hrefs = await menu.locator('a[href^="/"]').evaluateAll(els =>
     els.map(e => (e as HTMLAnchorElement).getAttribute('href')!).filter(Boolean));
-  await page.keyboard.press('Escape'); // close before opening the next
+  // Close and WAIT for the Radix dismissible layer to fully detach — otherwise its
+  // lingering overlay intercepts the click on the next category trigger (flake fix).
+  await page.keyboard.press('Escape');
+  await page.locator('[role="menu"]').waitFor({ state: 'detached' }).catch(() => {});
   return hrefs;
 }
 
-// Exact expected grouping (routes unchanged from before Part U — only regrouped).
+// Exact expected grouping (routes unchanged from Part U — only regrouped/reordered).
+// Part V: object key order = the on-page category order (Vedic first, Science last of
+// the four, then Resources/More) per the serial-position effect.
 const EXPECTED: Record<string, string[]> = {
-  science: ['/life-expectancy', '/biological-age', '/biological-age-vs-chronological-age', '/coach', '/country-comparison', '/biorhythm', '/biorhythm-workout-calculator', '/energy-forecast'],
   vedic: ['/kundali', '/kundali-match', '/astrologer', '/sade-sati', '/muhurat', '/career-report', '/gemstones', '/zodiac', '/chinese-zodiac', '/vedic-zodiac', '/moon-sign', '/compatibility', '/rashi-ratna', '/sun-vs-moon-sign'],
   birthday: ['/age-calculator', '/todays-birthdays', '/celebrity-birthday', '/birthday-report', '/planetary-age', '/age-in-days', '/age-in-seconds', '/birthday-countdown', '/celebrity', '/born-in', '/born-on/india', '/weight-on-planets', '/gift', '/birthstone', '/birthday'],
   mystic: ['/numerology', '/name-numerology', '/tarot-card-by-birthday'],
+  science: ['/life-expectancy', '/biological-age', '/biological-age-vs-chronological-age', '/coach', '/country-comparison', '/biorhythm', '/biorhythm-workout-calculator', '/energy-forecast'],
   more: ['/articles', '/answers', '/blog', '/leaderboard', '/pricing', '/embed'],
 };
+
+// Part V — the four category triggers must appear in this exact order (primacy/recency).
+const CATEGORY_ORDER = ['vedic', 'birthday', 'mystic', 'science', 'more'];
 
 test('desktop bar shows the five category dropdown triggers', async ({ page }) => {
   await page.goto('/');
@@ -39,6 +47,22 @@ test('desktop bar shows the five category dropdown triggers', async ({ page }) =
   for (const key of Object.keys(EXPECTED)) {
     await expect(desktopNav(page).locator(`[data-testid="nav-cat-${key}"]`)).toBeVisible();
   }
+});
+
+test('Part V: nav triggers are in the exact serial-position order (Vedic first, Science last of four)', async ({ page }) => {
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+  const domOrder = await desktopNav(page).locator('[data-testid^="nav-cat-"]')
+    .evaluateAll(els => els.map(e => (e as HTMLElement).getAttribute('data-testid')!.replace('nav-cat-', '')));
+  expect(domOrder).toEqual(CATEGORY_ORDER);
+});
+
+test('Part V: "choose your path" homepage cards are in the same order (Vedic → Birthday → Mystic → Science)', async ({ page }) => {
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+  const cardOrder = await page.locator('[data-testid="choose-your-path"] [data-testid^="path-card-"]')
+    .evaluateAll(els => els.map(e => (e as HTMLElement).getAttribute('data-testid')!.replace('path-card-', '')));
+  expect(cardOrder).toEqual(['vedic', 'birthday', 'mystic', 'science']);
 });
 
 for (const [key, expected] of Object.entries(EXPECTED)) {
