@@ -58,3 +58,13 @@ the session's shared-component discipline.
   reading tone. Spot check passed; no change made.
 - **Length**: AFTER sections 98–150 words (5–8 short sentences) — richer but still tight,
   not a wall of text.
+
+## Deploy strategy (X/Y/Z/AA) — honest note
+Each part is committed SEPARATELY (X = 8f3d8c0; Y/Z/AA to follow). Because all four
+target ONE staging environment and each build takes ~11 min, the staging DEPLOY is done
+ONCE after all parts are built, then serving is verified for EACH part's distinct marker
+(v11 reading + Pratyantardasha advanced line for X; each new /slug for Y/Z/AA). Part X's
+environment-dependent checks (Playwright reading-page screenshot, live chat Pratyantardasha
+answer, live reading generation) are performed against that deployed staging. Part X's
+content testing (before/after, accuracy, safety, adversarial, structure) was already done
+live via the generation harness and is complete.
