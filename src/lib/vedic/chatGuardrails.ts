@@ -171,7 +171,10 @@ export interface GemstoneChatContext { lagnaBased: string; rashiBased: string }
 // ── 2. System prompt (all 7 guardrail categories + grounding) ────────────────
 export function buildChatSystemPrompt(facts: ReadingFacts, gemstone?: GemstoneChatContext): string {
   const placements = facts.planets.map(p => `${p.planet} in ${p.sign} (house ${p.house})${p.retrograde ? ', retrograde' : ''}`).join('; ');
-  const dasha = facts.dasha ? `${facts.dasha.maha} main period, ${facts.dasha.antar} sub-period` : 'not available';
+  // Part X: include Pratyantardasha (3rd level) so the chat can answer a direct question
+  // about it accurately (it's computed but kept out of the main reading narrative).
+  const prat = facts.pratyantardasha ? `, ${facts.pratyantardasha.lord} sub-sub-period (Pratyantardasha)` : '';
+  const dasha = facts.dasha ? `${facts.dasha.maha} main period, ${facts.dasha.antar} sub-period${prat}` : 'not available';
   const doshas = [
     `Mangal Dosha: ${facts.doshas.mangal.present ? `present (${facts.doshas.mangal.severityLabel})` : 'not present'}`,
     `Kaal Sarp: ${facts.doshas.kaalSarp.present ? `${facts.doshas.kaalSarp.isPartial ? 'partial' : 'full'}` : 'not present'}`,
