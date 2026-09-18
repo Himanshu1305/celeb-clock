@@ -332,6 +332,7 @@ export const STATIC_ROUTES = [
   '/wish',
   '/birthday-report/gift',
   '/for-business',
+  '/vedic-astrology',
   '/kundali',
   '/kundali-match',
   '/baby-names',

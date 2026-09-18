@@ -31,7 +31,7 @@ async function openCategory(page: Page, key: string): Promise<string[]> {
 // Part V: object key order = the on-page category order (Vedic first, Science last of
 // the four, then Resources/More) per the serial-position effect.
 const EXPECTED: Record<string, string[]> = {
-  vedic: ['/kundali', '/kundali-match', '/astrologer', '/sade-sati', '/muhurat', '/career-report', '/gemstones', '/zodiac', '/chinese-zodiac', '/vedic-zodiac', '/moon-sign', '/compatibility', '/rashi-ratna', '/sun-vs-moon-sign'],
+  vedic: ['/vedic-astrology', '/kundali', '/kundali-match', '/astrologer', '/sade-sati', '/muhurat', '/career-report', '/gemstones', '/zodiac', '/chinese-zodiac', '/vedic-zodiac', '/moon-sign', '/compatibility', '/rashi-ratna', '/sun-vs-moon-sign'],
   birthday: ['/age-calculator', '/todays-birthdays', '/celebrity-birthday', '/birthday-report', '/planetary-age', '/age-in-days', '/age-in-seconds', '/birthday-countdown', '/celebrity', '/born-in', '/born-on/india', '/weight-on-planets', '/gift', '/birthstone', '/birthday'],
   mystic: ['/numerology', '/name-numerology', '/tarot-card-by-birthday'],
   science: ['/life-expectancy', '/biological-age', '/biological-age-vs-chronological-age', '/coach', '/country-comparison', '/biorhythm', '/biorhythm-workout-calculator', '/energy-forecast'],

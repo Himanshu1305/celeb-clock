@@ -30,6 +30,7 @@ const NAV_CATEGORIES: NavCategory[] = [
   {
     key: 'vedic', trigger: 'Vedic Astrology', heading: 'Vedic Astrology', icon: Sparkles,
     items: [
+      { path: '/vedic-astrology', label: 'Vedic Astrology — overview', emoji: '🕉️' },
       { path: '/kundali', label: 'Free Kundali (Birth Chart)', emoji: '🪔' },
       { path: '/kundali-match', label: 'Kundali Matching', emoji: '💑' },
       { path: '/astrologer', label: 'Ask an Astrologer (AI)', emoji: '💬' },
