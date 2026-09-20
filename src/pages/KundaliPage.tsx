@@ -10,7 +10,10 @@ import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsFo
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { ChartEventNotice } from '@/components/ChartEventNotice';
 import { ReadingHistory } from '@/components/ReadingHistory';
-import { recordReading } from '@/services/readingHistory';
+import { recordReading, getReadingHistory } from '@/services/readingHistory';
+import { syncHistoryToAccount, isHistorySyncEligible } from '@/services/readingHistorySync';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 import { mergeProfile } from '@/services/savedProfile';
 import { fetchKundali, buildInterpretationBlocks, type KundaliData } from '@/services/kundaliService';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
@@ -21,6 +24,7 @@ import { reportPrice, resolveCurrency } from '@/lib/pricing';
 export default function KundaliPage() {
   const price = reportPrice(resolveCurrency(undefined));
   const { profile, save, loaded, isFull } = useSavedProfile();
+  const { user } = useAuth();
   const [usingDifferent, setUsingDifferent] = useState(false);
   const [saveChecked, setSaveChecked] = useState(false);
 
@@ -64,6 +68,11 @@ export default function KundaliPage() {
         nakshatra: k.nakshatra?.nakshatra ?? '—',
         dasha: k.dasha ? `${k.dasha.mahadasha} / ${k.dasha.antardasha}` : '—',
       }, hasSavedProfile);
+      // Part AC (Part S.6): if signed in and sync-eligible, push the updated history to
+      // the account so it follows the user across devices (best-effort, non-blocking).
+      if (hasSavedProfile && user?.id && isHistorySyncEligible(user.email)) {
+        void syncHistoryToAccount(supabase as any, user.id, getReadingHistory());
+      }
       setHistoryKey(x => x + 1);
       setReadingLoading(true);
       try { setReading(await fetchReading(details.dob, details.time, loc)); }

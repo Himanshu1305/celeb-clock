@@ -77,6 +77,17 @@ export function clearReadingHistory(): void {
 }
 
 /**
+ * Replace the entire device history with a given list (capped, most-recent-first).
+ * Used by the account-sync reconcile (Part AC / Part S.6) to write the merged
+ * account+device superset back to this device. Not a per-entry API — callers that add
+ * a single snapshot should use recordReading.
+ */
+export function replaceAllHistory(entries: ReadingHistoryEntry[]): void {
+  const clean = (entries || []).filter(e => e && typeof e.generatedAt === 'string' && typeof e.dob === 'string');
+  writeAll(clean);
+}
+
+/**
  * "What's changed since" note for an entry, comparing it to the NEXT-OLDER entry with
  * the same dob. Returns null when nothing notable changed. Reuses stored data only.
  */
