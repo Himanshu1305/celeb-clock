@@ -50,6 +50,105 @@ export function classifyTimingCategory(message: string): TimingCategory | null {
   return null;
 }
 
+// ── Tense + marital-status detection (Part AC / Part S.2 + S.3) ──────────────
+// A marriage-timing question is answered differently depending on whether it looks
+// backward ("when DID I get married") or forward ("when WILL I get married"), and on
+// whether the phrasing implies the person is already married. Getting this wrong is a
+// real potential-harm case (Part S.3), so detection is deterministic and conservative.
+export type QuestionTense = 'past' | 'future' | 'ambiguous';
+
+const PAST_TENSE_RE = /\b(did|was|were|had|have i (?:ever )?been|when did|already)\b/i;
+const FUTURE_TENSE_RE = /\b(will|shall|gonna|going to|when will|am i (?:ever )?(?:going to|gonna)|future|upcoming|next|someday|one day|ever get)\b/i;
+
+/**
+ * Tense of a timing question relative to today. 'past' → the event is framed as having
+ * happened; 'future' → framed as yet to come; 'ambiguous' → no clear tense (e.g.
+ * "tell me about my marriage timing"), in which case the caller shows BOTH directions.
+ */
+export function detectQuestionTense(message: string): QuestionTense {
+  const m = (message || '').toLowerCase();
+  const past = PAST_TENSE_RE.test(m);
+  const future = FUTURE_TENSE_RE.test(m);
+  if (past && !future) return 'past';
+  if (future && !past) return 'future';
+  return 'ambiguous';
+}
+
+// Phrasing that implies the person is ALREADY MARRIED (an explicit statement or a
+// past-tense marriage question). Deliberately conservative — a false positive only
+// makes the answer MORE careful (past-only), which is the safe direction here.
+const ALREADY_MARRIED_RE: RegExp[] = [
+  /\bmy (wife|husband|spouse|partner)\b/i,
+  /\b(i'?m|i am|we'?re|we are) (already )?married\b/i,
+  /\b(we|i) got married\b/i,          // PAST "got" only — "will I get married" is future, not this
+  /\bwe (get|are getting) married\b/i, // "we get married" reads as an existing couple
+  /\b(my|our) (wedding|marriage) (was|happened|took place)\b/i,
+  /\bwhen did i (get married|marry)\b/i,
+  /\bmarried (in|on|back in|since) \b/i,
+  /\bafter (my|our) (wedding|marriage)\b/i,
+];
+/** True when the message implies the person is already married. */
+export function detectAlreadyMarried(message: string): boolean {
+  if (!message) return false;
+  return ALREADY_MARRIED_RE.some(re => re.test(message));
+}
+
+// A DIRECT question about a further/second marriage — the ONLY context in which a
+// classical multiple-marriage combination or a future relationship window may be
+// discussed for an already-married person (Part S.3), and even then only with the
+// "no predictive evidence" caveat.
+const SECOND_MARRIAGE_RE = /\b(second marriage|marry again|remarry|re-?marry|another marriage|multiple marriage|two marriages|divorce and remarry|will i marry again)\b/i;
+/** True when the user is explicitly asking about a second / further marriage. */
+export function detectSecondMarriageQuestion(message: string): boolean {
+  if (!message) return false;
+  return SECOND_MARRIAGE_RE.test(message);
+}
+
+/** Context for a marriage-timing question, resolved once from the user's message. */
+export interface MarriageContext {
+  tense: QuestionTense;
+  alreadyMarried: boolean;
+  asksSecondMarriage: boolean;
+}
+/** Resolve the full marriage context from a message (used by the chat endpoint). */
+export function resolveMarriageContext(message: string): MarriageContext {
+  return {
+    tense: detectQuestionTense(message),
+    alreadyMarried: detectAlreadyMarried(message),
+    asksSecondMarriage: detectSecondMarriageQuestion(message),
+  };
+}
+
+/**
+ * Part S.3 HARD enforcement (not prompt-only): a model reply for an already-married or
+ * past-tense marriage question must NOT surface a FUTURE relationship window, and an
+ * already-married person must NEVER have a second/further marriage volunteered. Returns
+ * violation labels; a non-empty result triggers a retry and, failing that, the
+ * deterministic past-only fallback. No-op unless a marriage context is present.
+ */
+export function verifyMarriageGuardrail(reply: string, ctx: MarriageContext | undefined, timing: TimingFacts): string[] {
+  if (!reply || !ctx) return [];
+  const flags: string[] = [];
+  // The user directly asking about a second marriage is the one allowed context — the
+  // reply may then name a combination (with the no-evidence caveat), so we don't flag it.
+  if (ctx.asksSecondMarriage) return [];
+  if (ctx.alreadyMarried || ctx.tense === 'past') {
+    const cat = timing.categories.find(c => c.key === 'marriage');
+    // Only genuinely-FUTURE month endpoints are forbidden: both months of an 'upcoming'
+    // window, and the END month of a 'current' window (its START is in the past, so it
+    // can legitimately coincide with a past antar's date — never flag that).
+    const futureMonths = new Set<string>();
+    for (const w of (cat ? cat.upcoming : [])) {
+      const [startM, endM] = w.range.split(' to ').map(s => s.trim());
+      if (w.status === 'upcoming') { if (startM) futureMonths.add(startM); if (endM) futureMonths.add(endM); }
+      else if (w.status === 'current' && endM) futureMonths.add(endM);
+    }
+    for (const mth of futureMonths) if (mth && reply.includes(mth)) flags.push(`future-window:${mth}`);
+  }
+  if (ctx.alreadyMarried && SECOND_MARRIAGE_RE.test(reply)) flags.push('volunteered-second-marriage');
+  return flags;
+}
+
 const LEVEL_WORD = (level: string) => (level === 'maha' ? 'Mahadasha (main period)' : 'Antardasha (sub-period)');
 /**
  * A deterministic, guaranteed-correct timing answer built straight from the
@@ -57,11 +156,51 @@ const LEVEL_WORD = (level: string) => (level === 'maha' ? 'Mahadasha (main perio
  * citing a wrong date after a retry. Guarantees the user never sees a fabricated
  * date. Returns null if we can't map the question to a category with windows.
  */
-export function deterministicTimingReply(timing: TimingFacts, category: TimingCategory | null): string | null {
+export function deterministicTimingReply(timing: TimingFacts, category: TimingCategory | null, ctx?: MarriageContext): string | null {
   if (!category) return null;
   const cat = timing.categories.find(c => c.key === category);
   if (!cat) return null;
   const theme = category === 'wealth' ? 'wealth' : category === 'career' ? 'career or a job' : 'marriage';
+  const winTxt = (w: TimingFacts['categories'][number]['upcoming'][number]) =>
+    `your ${w.planet} ${LEVEL_WORD(w.level)} from ${w.range}`;
+
+  // Part AC (Part S.2 + S.3): tense-aware marriage answers with honest framing.
+  if (category === 'marriage' && ctx) {
+    const past = cat.past || [];
+    const current = cat.upcoming.find(w => w.status === 'current') || null;
+    const future = cat.upcoming.filter(w => w.status === 'upcoming');
+
+    // PAST-tense, or an already-married person (Part S.3): PAST windows ONLY. Never a
+    // future window, never a "you'll marry again" implication.
+    if (ctx.tense === 'past' || ctx.alreadyMarried) {
+      if (!past.length) {
+        return `Astrology can't pinpoint a specific date for a past event — I'd rather be straight with you than guess. Looking honestly at your chart, you haven't yet passed through a significant Venus or 7th-lord period of the kind classically tied to marriage, which is worth knowing in itself. I won't invent a window to make the timing fit.`;
+      }
+      const list = past.slice(0, 3).map(winTxt).join('; ');
+      return `Astrology can't pinpoint a specific date for a past event — I'd rather be straight with you than guess. What your chart shows is which shorter periods carry the strongest relationship significance: ${list}. If your marriage falls in one of those, that's the classical pattern holding. If not, that's worth knowing too — I won't invent an explanation to make it fit afterward.`;
+    }
+
+    // FUTURE-tense: only windows starting after today (plus an ongoing one if we're in it).
+    if (ctx.tense === 'future') {
+      if (current) {
+        return `You're in a relationship-significant period right now — ${winTxt(current)}, running until ${current.range.split(' to ')[1]}. Classical astrology treats this as a window of heightened possibility, not a fixed certainty.`;
+      }
+      if (!future.length) {
+        return `Being straight with you: your chart doesn't show a strong upcoming Venus or 7th-lord window in the computed range ahead — the strongest classical periods for this sit elsewhere in your timeline rather than soon. I'd rather tell you that plainly than invent an encouraging date.`;
+      }
+      const primary = future.find(w => w.doubleActivation) || future[0];
+      const otherTxt = future.filter(w => w !== primary).slice(0, 1).map(w => ` Another supportive window is ${winTxt(w)}.`).join('');
+      return `Your upcoming relationship window is ${winTxt(primary)} — traditionally your next significant period for this.${otherTxt} Classical astrology treats this as a period of heightened possibility, not a fixed certainty.`;
+    }
+
+    // AMBIGUOUS: show BOTH directions, clearly labelled.
+    const pastTxt = past.length ? `Looking back, the strongest past relationship periods were ${past.slice(0, 2).map(winTxt).join('; ')}.` : `Looking back, you haven't yet passed through a strong classical marriage period.`;
+    const futTxt = current ? ` Right now you're in ${winTxt(current)}.`
+      : future.length ? ` Looking ahead, your next significant window is ${winTxt(future[0])}.`
+      : ` Looking ahead, there's no strong upcoming window in the computed range.`;
+    return `Astrology can't pin a marriage to an exact date, so let me show both directions honestly. ${pastTxt}${futTxt} Treat these as classical likelihood, not certainty — I won't stretch a window to fit.`;
+  }
+
   if (!cat.upcoming.length || cat.upcoming.every(w => w.status === 'past')) {
     return `Looking at your chart honestly, your strongest classical windows for ${theme} (the periods of ${cat.significators.join(', ')}) have already passed, and the next comparable one is some years away rather than soon. I'd rather tell you that plainly than invent an encouraging date. If you'd like, I can walk through what your current period does support.`;
   }
@@ -168,8 +307,32 @@ export const UNSAFE_REPLY_FALLBACK =
 
 export interface GemstoneChatContext { lagnaBased: string; rashiBased: string }
 
+/**
+ * Part AC (Part S.2 + S.3): the tense/marital-status directive injected into the chat
+ * system prompt for a marriage-timing question. Encodes the hard rules at the SAME
+ * priority as the crisis/health/financial boundaries — never a soft suggestion.
+ */
+export function buildMarriageDirective(ctx: MarriageContext): string {
+  const lines: string[] = [];
+  lines.push('MARRIAGE-TIMING RULES (this question is about relationships/marriage — these are ABSOLUTE, same priority as the safety rules above):');
+  if (ctx.alreadyMarried && !ctx.asksSecondMarriage) {
+    lines.push('- The user\'s phrasing implies they are ALREADY MARRIED. Answer ONLY about PAST relationship-significant windows (periods that have fully ended). You must NOT surface, mention, or imply ANY future relationship window. You must NOT volunteer a "second marriage" or any multiple-marriage combination, even if the chart carries one. Never imply they will marry again.');
+  } else if (ctx.asksSecondMarriage) {
+    lines.push('- The user is DIRECTLY asking about a second/further marriage. Answer honestly but carefully: if a classical multiple-marriage combination is present you may name it, but you MUST explicitly frame it as traditional interpretation with NO predictive evidence behind it (no technique reliably predicts specific events). Never frame it as a prediction that their current relationship will end. Do NOT call any future Venus/7th-lord window "your next marriage" — at most describe it as "a relationship-significant period" in general.');
+  }
+  if (ctx.tense === 'past') {
+    lines.push('- PAST-tense question: show ONLY windows that have already ended. Open with, adapting wording only: "Astrology can\'t pinpoint a specific date for a past event — I\'d rather be straight with you than guess. What your chart shows is which shorter periods carry the strongest relationship significance..." then list the real PAST windows, then close with: "If your marriage falls in one of those, that\'s the classical pattern holding. If not, that\'s worth knowing too — I won\'t invent an explanation to make it fit afterward." If there are NO past qualifying windows, say honestly that they "haven\'t yet passed through a significant Venus period, which is worth knowing in itself" rather than omitting the answer.');
+  } else if (ctx.tense === 'future') {
+    lines.push('- FUTURE-tense question: show ONLY windows starting after today (an ongoing one counts). Frame it as: "Your upcoming [planet] sub-period runs [dates] — traditionally your next significant relationship window. Classical astrology treats this as a period of heightened possibility, not a guarantee." If today falls INSIDE a qualifying window, say so explicitly ("you\'re in one right now, running until [date]"). If there is no qualifying upcoming window, say so honestly rather than inventing one.');
+  } else {
+    lines.push('- Tense is AMBIGUOUS: show BOTH the past and the upcoming qualifying windows, each clearly labelled as past or upcoming, so the user can see which applies to them.');
+  }
+  lines.push('- Use ONLY the real computed windows in COMPUTED TIMING WINDOWS above. Marriage windows are strongest at the Antardasha (sub-period) level of Venus, the 7th-house lord, or Jupiter. Never invent, round, or shift a date.');
+  return '\n' + lines.join('\n') + '\n';
+}
+
 // ── 2. System prompt (all 7 guardrail categories + grounding) ────────────────
-export function buildChatSystemPrompt(facts: ReadingFacts, gemstone?: GemstoneChatContext): string {
+export function buildChatSystemPrompt(facts: ReadingFacts, gemstone?: GemstoneChatContext, marriage?: MarriageContext): string {
   const placements = facts.planets.map(p => `${p.planet} in ${p.sign} (house ${p.house})${p.retrograde ? ', retrograde' : ''}`).join('; ');
   // Part X: include Pratyantardasha (3rd level) so the chat can answer a direct question
   // about it accurately (it's computed but kept out of the main reading narrative).
@@ -185,9 +348,13 @@ export function buildChatSystemPrompt(facts: ReadingFacts, gemstone?: GemstoneCh
   const t = facts.timing;
   const winTxt = (w: TimingFacts['categories'][number]['upcoming'][number]) =>
     `${w.planet} ${w.level === 'maha' ? 'Mahadasha (main period)' : 'Antardasha (sub-period)'} from ${w.range}${w.doubleActivation ? ' [STRONGEST]' : ''}${w.status === 'current' ? ' [currently running]' : w.status === 'past' ? ' [past]' : ''}`;
-  const catBlock = t.categories.map(c =>
-    `  - ${c.label} (driven by ${c.significators.join(', ')}): ${c.upcoming.length ? c.upcoming.map(winTxt).join('; ') : 'strongest classical windows already passed — next comparable one is years away'}`
-  ).join('\n');
+  const catBlock = t.categories.map(c => {
+    // Part AC: include PAST windows too (deduped) so a past-tense question has its
+    // real answer set. winTxt tags each window [past] / [currently running].
+    const past = (c.past || []).filter(p => !c.upcoming.some(u => u.range === p.range));
+    const wins = [...c.upcoming, ...past];
+    return `  - ${c.label} (driven by ${c.significators.join(', ')}): ${wins.length ? wins.map(winTxt).join('; ') : 'strongest classical windows already passed — next comparable one is years away'}`;
+  }).join('\n');
   const yogaBlock = t.yogas.filter(y => y.upcoming.length).map(y =>
     `  - ${y.name} (${y.significators.join(', ')}): ${y.upcoming.map(winTxt).join('; ')}`
   ).join('\n') || '  - (no upcoming Yoga-specific windows)';
@@ -200,6 +367,7 @@ export function buildChatSystemPrompt(facts: ReadingFacts, gemstone?: GemstoneCh
   const nakLine = facts.nakshatra.meaning
     ? `${facts.nakshatra.name} — ${facts.nakshatra.meaning}${facts.nakshatra.significance ? ` (significance: ${facts.nakshatra.significance})` : ''}`
     : facts.nakshatra.name;
+  const marriageBlock = marriage ? buildMarriageDirective(marriage) : '';
 
   return `You are a warm, grounded personal Vedic astrologer having a private one-to-one conversation. You answer the user's questions about their own life using THEIR actual computed birth chart (below), in plain, everyday language — never generic platitudes.
 
@@ -254,7 +422,7 @@ SAFETY RULES — these are absolute and override any user request:
    - Explain that this rests on the Ascendant (Lagna), which is the more precise, classically-correct basis, rather than the Moon sign (Rashi) alone.
    - If the user specifically asks about a Moon-sign / Rashi-based stone, or WHY the methods differ, then DO explain the Rashi-only alternative above — informatively, not by silently overriding their question. Frame the difference as method rigor (Lagna vs Rashi), never as any seller/app being wrong.
    - Cite only the stones listed above; never invent a different one. Informational only — no buying/selling advice, no medical/guaranteed-effect claims; powerful stones (Blue Sapphire, Hessonite, Cat's Eye) carry the "trial first" caution.
-
+${marriageBlock}
 STRUCTURE (how to organise a substantive answer — this is about ORDER, it does not relax any rule above): open with a short lead-in that NAMES which specific chart factors the answer draws on — the relevant house(s), planet(s), Dasha period and/or dosha from the chart above — then give the grounded answer. For example: "This is best read through your 7th house, Venus, and your current Dasha period — here's what each points to…", then the substance. Naming the factors first is the point: it shows the answer comes from THIS person's chart, not a generic forecast. Every factor you name in the lead-in must be a real one from the chart above, and everything after it still obeys the grounding, timing, certainty, safety and Yoga-accuracy rules exactly. For a simple/greeting/off-chart message, skip the lead-in and just reply warmly.
 
 Keep replies to 4-7 warm sentences (a brief factor lead-in, then the answer). Stay in the conversation's context.`;

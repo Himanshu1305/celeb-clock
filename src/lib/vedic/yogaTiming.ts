@@ -234,7 +234,12 @@ export interface TimingFactWindow {
 }
 export interface TimingFactCategory {
   key: string; label: string; significators: string[];
-  next: TimingFactWindow | null; upcoming: TimingFactWindow[]; note?: string;
+  next: TimingFactWindow | null; upcoming: TimingFactWindow[];
+  /** Part AC (Part S.2): most-recent-first windows that have FULLY ENDED — the answer
+   * set for a PAST-tense question ("when did I get married"). Separate from `upcoming`
+   * so tense-aware filtering never has to guess. Up to 3. */
+  past: TimingFactWindow[];
+  note?: string;
 }
 /**
  * Timing for a present dosha (Part S). `structural: true` means the dosha is a
@@ -276,13 +281,18 @@ function surfaceWindows(t: TimingResult, n = 3): TimingFactWindow[] {
   const chosen = relevant.length ? relevant : t.windows.slice(0, n); // all-past → show the most recent past ones honestly
   return chosen.slice(0, n).map(toFactWindow);
 }
+/** Part AC: the ENDED windows only, most-recent-first (windows are already ordered so
+ * past ones come last, most-recent-first). The answer set for a past-tense question. */
+function surfacePast(t: TimingResult, n = 3): TimingFactWindow[] {
+  return t.windows.filter(w => w.status === 'past').slice(0, n).map(toFactWindow);
+}
 
 /** Assemble the timing block consumed by both the reading prompt and the chat. */
 export function buildTimingFacts(chart: BirthChartResult, now: Date = new Date()): TimingFacts {
   const cats = allCategoryTimings(chart, now);
   const categories: TimingFactCategory[] = (['wealth', 'career', 'marriage', 'family'] as LifeCategory[]).map(k => {
     const t = cats[k];
-    return { key: t.key, label: t.label, significators: t.significators, next: t.next ? toFactWindow(t.next) : null, upcoming: surfaceWindows(t), note: t.note };
+    return { key: t.key, label: t.label, significators: t.significators, next: t.next ? toFactWindow(t.next) : null, upcoming: surfaceWindows(t), past: surfacePast(t), note: t.note };
   });
   const yogas = yogaTimings(chart, now).map(t => ({
     name: t.key, significators: t.significators, next: t.next ? toFactWindow(t.next) : null, upcoming: surfaceWindows(t),
@@ -340,7 +350,7 @@ export function buildTimingFacts(chart: BirthChartResult, now: Date = new Date()
   const validRanges = new Set<string>();
   const validMonths = new Set<string>();
   const addWin = (w: TimingFactWindow) => { validRanges.add(w.range); validMonths.add(formatMonthYear(w.start)); validMonths.add(formatMonthYear(w.end)); };
-  for (const c of categories) { if (c.next) addWin(c.next); c.upcoming.forEach(addWin); }
+  for (const c of categories) { if (c.next) addWin(c.next); c.upcoming.forEach(addWin); c.past.forEach(addWin); }
   for (const y of yogas) { if (y.next) addWin(y.next); y.upcoming.forEach(addWin); }
   for (const d of doshaTiming) d.windows.forEach(addWin);
   for (const dv of divisionalTiming) dv.windows.forEach(addWin);

@@ -15,6 +15,7 @@ import {
   detectHealthSymptom, HEALTH_REDIRECT_RESPONSE,
   buildChatSystemPrompt, scanChatResponse, UNSAFE_REPLY_FALLBACK,
   detectTimingQuestion, classifyTimingCategory, deterministicTimingReply,
+  resolveMarriageContext, verifyMarriageGuardrail,
 } from '../src/lib/vedic/chatGuardrails.js';
 import { verifyTimingClaims, verifyYogaClaims } from '../src/lib/vedic/readingSpecificity.js';
 import { isOverLimit, limitReachedMessage } from '../src/lib/vedic/rateLimit.js';
@@ -62,7 +63,12 @@ async function callGemini(systemPrompt, contents) {
 // Exposed for testing: given facts + history + message, produce the reply
 // payload. `generate` is injected so tests can supply a fake model.
 export async function buildChatReply(facts, history, message, generate, gemstone?) {
-  const systemPrompt = buildChatSystemPrompt(facts, gemstone);
+  // Part AC (Part S.2 + S.3): for a marriage-timing question, resolve tense +
+  // marital-status context so the prompt (and the deterministic fallback) filter
+  // windows by tense and honour the already-married guardrail.
+  const isMarriage = detectTimingQuestion(message) && classifyTimingCategory(message) === 'marriage';
+  const marriageCtx = isMarriage ? resolveMarriageContext(message) : undefined;
+  const systemPrompt = buildChatSystemPrompt(facts, gemstone, marriageCtx);
   const contents = [
     ...history.slice(-MAX_HISTORY).map(m => ({
       role: m.role === 'user' ? 'user' : 'model',
@@ -98,38 +104,42 @@ export async function buildChatReply(facts, history, message, generate, gemstone
   const SAFETY_FIX = 'Reminder: your previous reply used a forbidden word. Do NOT use "will", "must", "definitely", "guaranteed", "invest", "buy", or "sell" anywhere — rephrase as "tends to", "often", "may", "put time/care into". Never name assets or give a financial instruction.';
   const DATE_FIX = 'Reminder: your previous reply stated a date that is NOT in the COMPUTED TIMING WINDOWS list. Re-answer using ONLY the exact planet periods and date ranges from that list — never invent, round, or shift a date.';
   const YOGA_FIX = 'Reminder: your previous reply named a Yoga that is NOT in the DETECTED YOGAS list for this chart. Only cite Yogas from that list (with their exact grade); if the user asked about one that is not present, say plainly they do not have it — do not invent one.';
+  const MARRIAGE_FIX = 'Reminder: this person is already married and/or asked about the PAST. Do NOT mention any future/upcoming relationship window and do NOT bring up a second/further marriage. Answer ONLY about periods that have already ended.';
 
   try {
-    let lastFlags: string[] = [], lastBadDates: string[] = [], lastBadYogas: string[] = [];
+    let lastFlags: string[] = [], lastBadDates: string[] = [], lastBadYogas: string[] = [], lastBadMarriage: string[] = [];
     for (let attempt = 1; attempt <= 3; attempt++) {
       const corrections: string[] = [];
       if (attempt > 1) {
         if (lastFlags.length) corrections.push(SAFETY_FIX);
         if (lastBadDates.length) corrections.push(DATE_FIX);
         if (lastBadYogas.length) corrections.push(YOGA_FIX);
+        if (lastBadMarriage.length) corrections.push(MARRIAGE_FIX);
       }
       const turns = corrections.length ? [...contents, { role: 'user', parts: [{ text: corrections.join(' ') }] }] : contents;
       const raw = await generate(systemPrompt, turns);
 
-      // Safety scan (never banned language) + date-accuracy + Yoga-citation accuracy,
-      // all under the SAME retry discipline — nothing unverified reaches the user.
+      // Safety scan (never banned language) + date-accuracy + Yoga-citation accuracy +
+      // the Part S.3 marriage guardrail — all under the SAME retry discipline, so nothing
+      // unverified reaches the user.
       const flags = scanChatResponse(raw);
       const badDates = (isTiming && validMonths.length) ? verifyTimingClaims(raw, validMonths).wrong.map(w => w.claimed) : [];
       const badYogas = verifyYogaClaims(raw, presentYogaNames, hasYogakaraka).wrong.map(w => w.token);
-      if (!flags.length && !badDates.length && !badYogas.length) {
-        return { reply: raw, crisis: false, degraded: false, sanitized: false, ...(isTiming ? { timingChecked: true } : {}), yogaChecked: true, grounding };
+      const badMarriage = verifyMarriageGuardrail(raw, marriageCtx, facts.timing);
+      if (!flags.length && !badDates.length && !badYogas.length && !badMarriage.length) {
+        return { reply: raw, crisis: false, degraded: false, sanitized: false, ...(isTiming ? { timingChecked: true } : {}), yogaChecked: true, ...(marriageCtx ? { marriageChecked: true } : {}), grounding };
       }
-      lastFlags = flags; lastBadDates = badDates; lastBadYogas = badYogas;
+      lastFlags = flags; lastBadDates = badDates; lastBadYogas = badYogas; lastBadMarriage = badMarriage;
     }
 
     // Exhausted retries. For a timing question, fall back to a deterministic,
     // guaranteed-correct-and-safe answer built straight from the computed windows
     // (so the user still gets their real dates). Otherwise, the safe fallback.
     if (isTiming && !lastBadYogas.length) {
-      const safe = deterministicTimingReply(facts.timing, classifyTimingCategory(message));
+      const safe = deterministicTimingReply(facts.timing, classifyTimingCategory(message), marriageCtx);
       if (safe) return { reply: safe, crisis: false, degraded: false, sanitized: false, timingCorrected: true, grounding };
     }
-    return { reply: UNSAFE_REPLY_FALLBACK, crisis: false, degraded: false, sanitized: true, redFlags: [...lastFlags, ...lastBadDates.map(d => `bad-date:${d}`), ...lastBadYogas.map(y => `bad-yoga:${y}`)], grounding };
+    return { reply: UNSAFE_REPLY_FALLBACK, crisis: false, degraded: false, sanitized: true, redFlags: [...lastFlags, ...lastBadDates.map(d => `bad-date:${d}`), ...lastBadYogas.map(y => `bad-yoga:${y}`), ...lastBadMarriage.map(m => `bad-marriage:${m}`)], grounding };
   } catch (e) {
     return {
       reply: "I'm having a little trouble reaching your chart right now — please try again in a moment. If it keeps happening, your full reading on the Kundali page is always available.",
