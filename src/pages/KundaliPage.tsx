@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
@@ -25,6 +25,8 @@ export default function KundaliPage() {
   const price = reportPrice(resolveCurrency(undefined));
   const { profile, save, loaded, isFull } = useSavedProfile();
   const { user } = useAuth();
+  const location = useLocation();
+  const autoRan = useRef(false);
   const [usingDifferent, setUsingDifferent] = useState(false);
   const [saveChecked, setSaveChecked] = useState(false);
 
@@ -81,6 +83,19 @@ export default function KundaliPage() {
     } catch { setFailed(true); }
     finally { setLoading(false); }
   };
+
+  // Part AE: the /vedic-astrology hero form hands birth details here via router state and
+  // we auto-run the SAME generate() flow (no rebuilt logic). Runs once, then clears the
+  // state so a refresh/back doesn't re-trigger it.
+  useEffect(() => {
+    const incoming = (location.state as { autoGenerateBirth?: BirthDetails } | null)?.autoGenerateBirth;
+    if (incoming && !autoRan.current) {
+      autoRan.current = true;
+      window.history.replaceState({}, '');
+      void generate(incoming);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state]);
 
   const shareText = data
     ? `My Kundali: ${data.lagna.sign} Lagna, ${data.rashi} Rashi, ${data.nakshatra.nakshatra} Nakshatra. Get yours at https://bornclock.com/kundali`

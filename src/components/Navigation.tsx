@@ -22,31 +22,12 @@ import { isAdminEmail } from '@/components/AdminRoute';
 type NavItem = { path: string; label: string; emoji: string; premium?: boolean };
 type NavCategory = { key: string; trigger: string; heading: string; icon: LucideIcon; items: NavItem[] };
 
-// Part V — category order follows the serial-position effect: Vedic first (primacy,
-// most differentiated), Science last of the four (recency, most evidence-based), with
-// the small Resources "More" group after. Same order used in the homepage
-// "choose your path" cards and grouped content blocks. Membership unchanged from Part U.
+// Part AE positioning decision — category order now leads with Birthday & Celebrity
+// (broadest-appeal entry point), Vedic Astrology second (most differentiated), then
+// Mystic, Science, and the small Resources "More" group. This is a SITE-WIDE nav change
+// (every page). (Superseding the earlier Part V "Vedic first" order.) The homepage
+// "choose your path" cards are intentionally left as-is unless a later part changes them.
 const NAV_CATEGORIES: NavCategory[] = [
-  {
-    key: 'vedic', trigger: 'Vedic Astrology', heading: 'Vedic Astrology', icon: Sparkles,
-    items: [
-      { path: '/vedic-astrology', label: 'Vedic Astrology — overview', emoji: '🕉️' },
-      { path: '/kundali', label: 'Free Kundali (Birth Chart)', emoji: '🪔' },
-      { path: '/kundali-match', label: 'Kundali Matching', emoji: '💑' },
-      { path: '/astrologer', label: 'Ask an Astrologer (AI)', emoji: '💬' },
-      { path: '/sade-sati', label: 'Sade Sati Calculator', emoji: '🪐' },
-      { path: '/muhurat', label: 'Muhurat Finder', emoji: '🗓️' },
-      { path: '/career-report', label: 'Career Analysis (Vedic)', emoji: '💼' },
-      { path: '/gemstones', label: 'Gemstone Suggestions', emoji: '💍' },
-      { path: '/zodiac', label: 'Western Zodiac', emoji: '♈' },
-      { path: '/chinese-zodiac', label: 'Chinese Zodiac', emoji: '🐉' },
-      { path: '/vedic-zodiac', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
-      { path: '/moon-sign', label: 'Moon Sign Calculator', emoji: '🌙' },
-      { path: '/compatibility', label: 'Compatibility Calculator', emoji: '💕' },
-      { path: '/rashi-ratna', label: 'Rashi Ratna', emoji: '💎' },
-      { path: '/sun-vs-moon-sign', label: 'Sun Sign vs Moon Sign', emoji: '☀️' },
-    ],
-  },
   {
     key: 'birthday', trigger: 'Birthday Fun', heading: 'Birthday Fun & Celebrity Twins', icon: Cake,
     items: [
@@ -66,6 +47,26 @@ const NAV_CATEGORIES: NavCategory[] = [
       { path: '/gift', label: 'Gift a Report', emoji: '🎁' },
       { path: '/birthstone', label: 'Birthstone', emoji: '💠' },
       { path: '/birthday', label: 'Birthday Personalities', emoji: '🎈' },
+    ],
+  },
+  {
+    key: 'vedic', trigger: 'Vedic Astrology', heading: 'Vedic Astrology', icon: Sparkles,
+    items: [
+      { path: '/vedic-astrology', label: 'Vedic Astrology — overview', emoji: '🕉️' },
+      { path: '/kundali', label: 'Free Kundali (Birth Chart)', emoji: '🪔' },
+      { path: '/kundali-match', label: 'Kundali Matching', emoji: '💑' },
+      { path: '/astrologer', label: 'Ask an Astrologer (AI)', emoji: '💬' },
+      { path: '/sade-sati', label: 'Sade Sati Calculator', emoji: '🪐' },
+      { path: '/muhurat', label: 'Muhurat Finder', emoji: '🗓️' },
+      { path: '/career-report', label: 'Career Analysis (Vedic)', emoji: '💼' },
+      { path: '/gemstones', label: 'Gemstone Suggestions', emoji: '💍' },
+      { path: '/zodiac', label: 'Western Zodiac', emoji: '♈' },
+      { path: '/chinese-zodiac', label: 'Chinese Zodiac', emoji: '🐉' },
+      { path: '/vedic-zodiac', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
+      { path: '/moon-sign', label: 'Moon Sign Calculator', emoji: '🌙' },
+      { path: '/compatibility', label: 'Compatibility Calculator', emoji: '💕' },
+      { path: '/rashi-ratna', label: 'Rashi Ratna', emoji: '💎' },
+      { path: '/sun-vs-moon-sign', label: 'Sun Sign vs Moon Sign', emoji: '☀️' },
     ],
   },
   {
