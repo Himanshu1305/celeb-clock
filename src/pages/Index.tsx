@@ -227,9 +227,10 @@ const Index = () => {
           <h2 className="text-2xl font-bold text-center mb-6 gradient-text-primary">Choose your path</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-            {/* 1. Vedic Astrology (primacy) */}
+            {/* 1. Vedic Astrology (primacy) — Part AE: links to the /vedic-astrology
+                 category landing page (was /kundali; the CTA label is updated to match). */}
             <Link
-              to="/kundali"
+              to="/vedic-astrology"
               data-testid="path-card-vedic"
               className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
             >
@@ -237,7 +238,7 @@ const Index = () => {
               <p className="text-xs font-semibold uppercase tracking-wider text-indigo-600 mb-1">Vedic Astrology</p>
               <h3 className="font-bold text-foreground mb-1 text-base">Your real birth chart</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">The depth of a professional reading, backed by verified accuracy.</p>
-              <p className="text-[11px] text-indigo-600 font-medium mt-2">Free Kundali →</p>
+              <p className="text-[11px] text-indigo-600 font-medium mt-2">Explore Vedic Astrology →</p>
             </Link>
 
             {/* 2. Birthday Fun & Celebrity Twins — live heartbeat counter (representative 30y) */}
