@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
@@ -95,9 +95,15 @@ const BlogCard = ({ post }: { post: BlogPost }) => (
 
 const Blog = () => {
   const { user } = useAuth();
+  // Part AD (SEO): honour the ?tag= URL param so tag links actually filter (they didn't
+  // before — the param was ignored, making /blog?tag=X a near-duplicate of /blog), and so
+  // we can detect a tag-archive view to mark it noindex,follow.
+  const [searchParams] = useSearchParams();
+  const urlTag = searchParams.get('tag');
+  const isTagArchive = !!urlTag;
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<BlogPost['category'] | 'all'>('all');
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(urlTag);
 
   const allTags = getAllTags();
   const categories: (BlogPost['category'] | 'all')[] = ['all', 'age-calculator', 'celebrity', 'zodiac', 'birthstone', 'life-expectancy', 'lifestyle'];
@@ -131,6 +137,8 @@ const Blog = () => {
         title="Health & Longevity Blog — Science-Backed Articles | BornClock"
         description="Evidence-based articles on sleep, exercise, nutrition, mental health, preventive care, and community wellbeing. Every article cites peer-reviewed research. Written for real people, not medical professionals."
         keywords="longevity blog, health and longevity, sleep longevity, exercise lifespan, Mediterranean diet longevity, preventive health screenings, social connection longevity, age calculator blog"
+        canonicalUrl="/blog"
+        noindexFollow={isTagArchive}
       />
       <div className="container mx-auto px-4 py-8">
         {/* Header */}

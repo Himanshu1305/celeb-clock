@@ -329,7 +329,7 @@ const BlogPostPage = () => {
           <div className="flex flex-wrap items-center gap-2 mb-8">
             <Tag className="h-4 w-4 text-muted-foreground" />
             {post.tags.map((tag) => (
-              <Link key={tag} to={`/blog?tag=${encodeURIComponent(tag)}`}>
+              <Link key={tag} to={`/blog/?tag=${encodeURIComponent(tag)}`}>
                 <Badge variant="outline" className="hover:bg-primary/10 cursor-pointer">
                   {tag}
                 </Badge>

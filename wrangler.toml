@@ -4,6 +4,12 @@ compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 main = "functions/_worker.ts"
 workers_dev = true
 
+# ⚠️ IMPORTANT (verified 2026-09-22): although only staging.bornclock.com is listed here,
+# the PRODUCTION domain bornclock.com is ALSO attached to this same `bornclock` worker via
+# the Cloudflare dashboard. Therefore `wrangler deploy` publishes to BOTH staging AND
+# production at once. For a production-SAFE preview, use `npx wrangler versions upload`
+# (creates a preview URL without promoting to live); use `wrangler versions deploy`/
+# `wrangler rollback` to change what is live. Do NOT assume `wrangler deploy` is staging-only.
 routes = [
   { pattern = "staging.bornclock.com", custom_domain = true }
 ]
@@ -12,6 +18,11 @@ routes = [
 directory = "./dist"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
+# Part AD (SEO): run the Worker BEFORE the static-asset router so functions/_worker.ts can
+# intercept requests to prerendered pages — needed to (a) upgrade the asset layer's
+# trailing-slash 307 to a 301, and (b) 301 homepage query-param duplicate URLs. Without
+# this, the asset router short-circuits those paths (307 / 200) before the Worker runs.
+run_worker_first = true
 
 [triggers]
 crons = [

@@ -252,7 +252,7 @@ export default function BornOnDayIndia() {
             Get your complete birthday report — celebrity twins, zodiac deep-dive, numerology and life insights.
           </p>
           <Link
-            to={`/?day=${day}&month=${month}`}
+            to={`/birthday/${month}/${day}/`}
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold hover:opacity-90 transition-opacity"
           >
             <ArrowRightCircle className="w-4 h-4" />

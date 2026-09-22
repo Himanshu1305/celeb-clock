@@ -245,7 +245,7 @@ export default function BirthdayDatePage() {
             Discover famous people born on your exact date — athletes, artists, scientists, and leaders.
           </p>
           <Button asChild className="bg-white text-indigo-700 hover:bg-indigo-50 font-bold">
-            <Link to={`/?birthDate=${month}/${day}`}>
+            <Link to={`/born-on/${monthName.toLowerCase()}-${day}/`}>
               Explore Your Birthday <ArrowRight className="w-4 h-4 ml-1.5" />
             </Link>
           </Button>
