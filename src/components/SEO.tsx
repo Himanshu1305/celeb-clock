@@ -14,6 +14,10 @@ interface SEOProps {
   section?: string;
   tags?: string[];
   noindex?: boolean;
+  /** Part AD (SEO): emit `noindex, follow` (NOT nofollow) — keeps the page out of the
+   * index while STILL letting link equity flow to the pages it links to. Used for thin
+   * blog tag-archive views so the real articles they link to stay fully indexable. */
+  noindexFollow?: boolean;
   hreflang?: Array<{ lang: string; url: string }>;
 }
 
@@ -37,6 +41,7 @@ export const SEO = ({
   section,
   tags = [],
   noindex = false,
+  noindexFollow = false,
   hreflang
 }: SEOProps) => {
   // Brand exactly once. Most page titles already end with "… | BornClock"; appending
@@ -141,6 +146,7 @@ export const SEO = ({
       {keywords && <meta name="keywords" content={keywords} />}
       {author && <meta name="author" content={author} />}
       {noindex && <meta name="robots" content="noindex, nofollow" />}
+      {!noindex && noindexFollow && <meta name="robots" content="noindex, follow" />}
       
       {/* Canonical URL */}
       {fullCanonicalUrl && <link rel="canonical" href={fullCanonicalUrl} />}
