@@ -89,10 +89,13 @@ describe('CelebritySearch CTA — TC-CELFIX', () => {
   });
 });
 
-describe('celebrity-birthday redirect — TC-CELFIX', () => {
-  it('TC-CELFIX-P-04: App.tsx redirects /celebrity-birthday to /celebrity/', () => {
+describe('celebrity-birthday page — Part AF', () => {
+  it('/celebrity-birthday renders the Birthday & Celebrity landing page (no longer a redirect)', () => {
+    // Part AF: the design brief explicitly repurposed the indexed /celebrity-birthday URL
+    // from a redirect-to-/celebrity/ into the enhanced Birthday & Celebrity category page.
     const app = readFileSync('src/App.tsx', 'utf8');
-    expect(app).toMatch(/path="\/celebrity-birthday"\s+element=\{<Navigate to="\/celebrity\/" replace \/>\}/);
+    expect(app).toMatch(/path="\/celebrity-birthday"\s+element=\{<BirthdayCelebrityLanding \/>\}/);
+    expect(app).not.toMatch(/path="\/celebrity-birthday"\s+element=\{<Navigate/);
   });
 });
 
