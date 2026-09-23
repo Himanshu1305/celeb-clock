@@ -4,6 +4,7 @@
 export const ADMIN_EMAILS: string[] = [
   'himanshu1305@gmail.com',
   'hello@bornclock.com',
+  'dixisurabhi@gmail.com',   // unlimited/Pro access grant — unlimited AI astrologer + free report unlock (Part N mechanism)
 ];
 
 export function isAdminEmail(email: string | null | undefined): boolean {

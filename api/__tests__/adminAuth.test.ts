@@ -16,6 +16,7 @@ describe('adminAllowlist', () => {
   it('always includes the shared admin emails', () => {
     expect(adminAllowlist()).toContain('himanshu1305@gmail.com');
     expect(adminAllowlist()).toContain('hello@bornclock.com');
+    expect(adminAllowlist()).toContain('dixisurabhi@gmail.com'); // unlimited/Pro access grant
   });
   it('merges the ADMIN_EMAILS env var (comma-separated, revocable without a rebuild)', () => {
     process.env.ADMIN_EMAILS = 'Temp-Admin@Test.com, another@test.com';
