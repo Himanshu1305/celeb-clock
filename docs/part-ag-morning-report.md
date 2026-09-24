@@ -57,3 +57,21 @@ Preview URL: https://5c32ffbc-bornclock.usdvisionai.workers.dev
 - All 14 links resolve HTTP 200 (both pages) with distinct real titles.
 - Mobile (iPhone 13, 390px): both pages no horizontal overflow, correct h1, 0 console errors.
 - Mystic hero deep-link: filled 7/11/1988 → /birthday-report?dob=1988-11-07, prefilled day=7/month=11.
+
+## Merge + deploy — COMPLETE ✅
+- Merged `part-ag-mystic-science-pages` → develop **5ef3f39**, no conflicts.
+- Post-merge full suite: **1855 passed** (151 files).
+- Built develop → `index-BpcuVBwt.js` → real `wrangler deploy` succeeded (attempt 1; "Deployed bornclock triggers").
+- main untouched (5b5cfa3). Nothing excluded — both pages verified cleanly, so both shipped.
+
+## LIVE verification on bornclock.com — COMPLETE ✅
+- Production bundle: `index-BpcuVBwt.js` (matches local build).
+- /mystic-corner → 200 (→ /mystic-corner/), real page: headline "The mystical side of your birth date.", §5 real data (Sachin Tendulkar, Taurus) present. Homepage Mystic card CLICK navigates to /mystic-corner (verified in a real browser).
+- Mystic hero deep-link (live): filled 24/4/1973 → /birthday-report?dob=1973-04-24, prefilled day=24/month=4.
+- /life-expectancy → 200, honesty box VISIBLE, enhancement live, calculator INTACT, 0 console errors.
+- All 14 links across both pages resolve HTTP 200.
+
+## Final identifiers
+- develop HEAD: **5ef3f39** (5ef3f39114c4e713a34d30a3358795c584ef0a01)
+- live production bundle: **index-BpcuVBwt.js**
+- Nothing held back / excluded. main untouched.
