@@ -444,6 +444,57 @@ const LifeExpectancy = () => {
           </div>
         </section>
 
+        {/* ── Part AG: Science & Longevity hub enhancement (additive; does not touch the
+             calculator). Styled to match THIS page's existing theme, not the navy/gold
+             category system, so it reads as native rather than a clashing mid-page band. ── */}
+        <section data-testid="le-enhancement" className="max-w-4xl mx-auto mb-14 px-1 space-y-8">
+          <div>
+            <p className="text-2xl md:text-3xl font-bold text-foreground">How long could you live — and what actually moves the number.</p>
+            <p className="mt-2 text-muted-foreground">Real, research-backed longevity factors — for information and curiosity, not a diagnosis.</p>
+          </div>
+
+          {/* Honesty section — prominent, not fine print (mandatory) */}
+          <div data-testid="le-honesty" className="rounded-xl border-2 border-amber-300 bg-amber-50 p-5">
+            <p className="text-sm md:text-base text-amber-900">
+              <strong>This is a statistical estimate based on population research — not a medical prediction, and not a substitute for a real doctor.</strong> Genetics, healthcare access, and factors we can’t measure all matter more than any single number here.
+            </p>
+          </div>
+
+          {/* What you get — real, verified tools only */}
+          <div>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">In this vertical</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <a href="#calculator" className="block rounded-lg border border-border p-4 hover:bg-muted/40 transition-colors">
+                <div className="font-semibold text-foreground">Life Expectancy Estimate</div>
+                <div className="mt-1 text-sm text-muted-foreground">Your projection from WHO life tables and research-backed factors.</div>
+              </a>
+              <Link to="/biological-age" className="block rounded-lg border border-border p-4 hover:bg-muted/40 transition-colors">
+                <div className="font-semibold text-foreground">Biological Age</div>
+                <div className="mt-1 text-sm text-muted-foreground">How old your body may be vs. your calendar age.</div>
+              </Link>
+              <Link to="/articles/longevity-quiz" className="block rounded-lg border border-border p-4 hover:bg-muted/40 transition-colors">
+                <div className="font-semibold text-foreground">Longevity Quiz</div>
+                <div className="mt-1 text-sm text-muted-foreground">A quick, research-based look at your habits.</div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Common questions */}
+          <div>
+            <h2 className="text-lg font-bold text-foreground mb-2">Common questions</h2>
+            <div className="space-y-2 text-sm text-muted-foreground">
+              <p><strong className="text-foreground">Is this medical advice?</strong> No. This is an educational, statistical estimate — not a diagnosis, prescription, or a substitute for a qualified doctor. Always consult a healthcare professional for medical decisions.</p>
+              <p><strong className="text-foreground">How accurate is this really?</strong> It reflects population-level averages from WHO life tables and peer-reviewed research applied to the factors you enter. It’s a directional estimate for a person like you — not a precise forecast of your individual lifespan.</p>
+              <p><strong className="text-foreground">What can’t the estimate account for?</strong> The things that often matter most and can’t be modelled from a short form: your genetics, your access to healthcare, accidents, undiagnosed conditions, and future medical advances.</p>
+            </div>
+          </div>
+
+          {/* Light cross-links (one soft line, not a heavy funnel) */}
+          <p className="text-sm text-muted-foreground">
+            Curious about the rest of your birth date? See your <Link to="/vedic-astrology" className="text-primary hover:underline">Vedic chart</Link> or find your <Link to="/celebrity-birthday" className="text-primary hover:underline">celebrity birthday twins</Link>.
+          </p>
+        </section>
+
         {/* ── Phase 1: Health Quiz ── */}
         {phase === 'quiz' && (
           <section id="calculator" className="max-w-4xl mx-auto mb-16">

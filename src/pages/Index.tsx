@@ -258,9 +258,10 @@ const Index = () => {
               <p className="text-[11px] text-rose-600 font-medium mt-2">Age Calculator →</p>
             </Link>
 
-            {/* 3. Mystic Corner — representative Life Path number */}
+            {/* 3. Mystic Corner — representative Life Path number. Part AG: points to the
+                 /mystic-corner hub (was /numerology) now that the hub page exists. */}
             <Link
-              to="/numerology"
+              to="/mystic-corner"
               data-testid="path-card-mystic"
               className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
             >
