@@ -145,6 +145,7 @@ const VedicAstrologyLanding = lazyWithReload(() => import("./pages/VedicAstrolog
 const ScienceLongevityLanding = lazyWithReload(() => import("./pages/ScienceLongevityLanding"));
 const BirthdayFunLanding = lazyWithReload(() => import("./pages/BirthdayFunLanding"));
 const MysticCornerLanding = lazyWithReload(() => import("./pages/MysticCornerLanding"));
+const BirthdayCelebrityLanding = lazyWithReload(() => import("./pages/BirthdayCelebrityLanding"));
 const VedicZodiacSign = lazyWithReload(() => import("./pages/VedicZodiacSign"));
 const HowLongWillILive = lazyWithReload(() => import('@/pages/answers/HowLongWillILive'));
 const WhatIsMyBiologicalAge = lazyWithReload(() => import('@/pages/answers/WhatIsMyBiologicalAge'));
@@ -276,7 +277,9 @@ const App = () => (
               <Route path="/celebrity/music" element={<CelebrityHubPage />} />
               <Route path="/celebrity/sports" element={<CelebrityHubPage />} />
               <Route path="/celebrity/:slug" element={<CelebrityPage />} />
-              <Route path="/celebrity-birthday" element={<Navigate to="/celebrity/" replace />} />
+              {/* Part AF: /celebrity-birthday is now the enhanced Birthday & Celebrity category
+                  landing page (was a redirect to /celebrity/). Keeps its indexed traffic. */}
+              <Route path="/celebrity-birthday" element={<BirthdayCelebrityLanding />} />
               <Route path="/birthday" element={<BirthdayHub />} />
               <Route path="/birthday/:month/:day" element={<BirthdayDatePage />} />
               <Route path="/birthday/:month" element={<BirthdayMonthPage />} />
