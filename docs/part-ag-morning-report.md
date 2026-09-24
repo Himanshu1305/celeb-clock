@@ -49,3 +49,11 @@ _(further checkpoints appended below as reached)_
 - Full unit suite BEFORE Part 1: 1855 passed (develop baseline).
 - Full unit suite AFTER Part 1 + Part 2 built: **1855 passed** (151 files).
 - tsc: no NEW errors in Part AG files (the 3 LifeExpectancy.tsx errors at 232/367/804 are PRE-EXISTING — 804 is the pre-existing 753 shifted by the additive insertion).
+
+## Preview verified ✅ (wrangler versions upload — prod untouched)
+Preview URL: https://5c32ffbc-bornclock.usdvisionai.workers.dev
+- Direct-load /mystic-corner → 200, real page (not soft-404); /life-expectancy → 200, honesty + enhancement present.
+- Homepage `path-card-mystic` href = /mystic-corner ✓.
+- All 14 links resolve HTTP 200 (both pages) with distinct real titles.
+- Mobile (iPhone 13, 390px): both pages no horizontal overflow, correct h1, 0 console errors.
+- Mystic hero deep-link: filled 7/11/1988 → /birthday-report?dob=1988-11-07, prefilled day=7/month=11.
