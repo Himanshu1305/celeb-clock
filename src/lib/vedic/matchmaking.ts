@@ -14,6 +14,7 @@
  * Reuses the engine's validated planetary FRIENDS/ENEMIES/SIGN_LORDS.
  */
 import { FRIENDS, ENEMIES, SIGN_LORDS } from './engine/sthanaBala';
+import { glossInline } from './termDefinitions';
 
 const NAK_ORDER = [
   'Ashwini', 'Bharani', 'Krittika', 'Rohini', 'Mrigashira', 'Ardra', 'Punarvasu', 'Pushya', 'Ashlesha',
@@ -202,7 +203,7 @@ function ganaCancellation(a: PersonInput, b: PersonInput): DoshaDetail {
 }
 
 const METHODOLOGY =
-  'Computed by the classical Ashtakoota (Guna Milan) system of the Brihat Parashara Hora Shastra, using the Lahiri ayanamsa. All eight Kootas derive from each person’s Moon Nakshatra and Moon sign. Where mainstream software genuinely differs — the Varna direction (groom ≥ bride; Person A is taken as the groom-position here since no gender is collected), the Vashya half-sign splits, and the Yoni friend/enemy tiers — the common convention is used; these are lower-precision by nature. Nadi and Bhakoot are the two heaviest Kootas and are emphasised accordingly.';
+  `Computed by the classical Ashtakoota (Guna Milan) system of the Brihat Parashara Hora Shastra (the foundational classical text of Vedic astrology), using the Lahiri ayanamsa — ${glossInline('ayanamsa')}. All eight Kootas derive from each person’s Moon Nakshatra and Moon sign. Where mainstream software genuinely differs — the Varna direction (groom ≥ bride; Person A is taken as the groom-position here since no gender is collected), the Vashya half-sign splits, and the Yoni friend/enemy tiers — the common convention is used; these are lower-precision by nature. Nadi and Bhakoot are the two heaviest Kootas and are emphasised accordingly.`;
 
 export function calculateGunaMilan(a: PersonInput, b: PersonInput): GunaMilanResult {
   const kootas = [varna(a, b), vashya(a, b), tara(a, b), yoni(a, b), grahaMaitri(a, b), gana(a, b), bhakoot(a, b), nadi(a, b)];

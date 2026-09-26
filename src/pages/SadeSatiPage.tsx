@@ -10,6 +10,7 @@ import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
+import { TermTip } from '@/components/vedic/TermTip';
 
 interface Cycle { start: string; end: string }
 interface Report {
@@ -146,7 +147,22 @@ export default function SadeSatiPage() {
               <p className="text-sm text-foreground">{report.methodology}</p>
             </div>
 
-            <p className="text-xs text-muted-foreground">Dates are computed from Saturn’s real transit through the signs, using the same Lahiri-ayanamsa engine as the rest of BornClock. Treat Sade Sati as a classical timing indicator, not a fixed prediction.</p>
+            {/* Part AI — calm, optional upay/remedies section (non-fear-based). */}
+            <div data-testid="sadesati-upay" className="rounded-xl border border-border p-5">
+              <div className="font-semibold text-foreground mb-1">Traditional upay (remedies) — optional, not required</div>
+              <p className="text-sm text-muted-foreground mb-2">
+                First, the honest part: <strong className="text-foreground">nothing here is necessary to "avoid harm"</strong> — Sade Sati is a period to move through steadily, not a threat to defend against. These are simply the customs people have found grounding during Saturn periods, offered for interest.
+              </p>
+              <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
+                <li><strong className="text-foreground">Lean into Saturn’s own themes</strong> — patience, routine, honest hard work and finishing what you start. This is the most-cited "remedy" and the one that actually matches the period.</li>
+                <li><strong className="text-foreground">Service &amp; generosity</strong> — helping elders, workers or those in need on a Saturday is a traditional Saturn practice many find genuinely centring.</li>
+                <li><strong className="text-foreground">Devotional custom</strong> — some recite the Hanuman Chalisa or a Shani mantra on Saturdays; take it or leave it as suits your beliefs.</li>
+                <li><strong className="text-foreground">Gemstone (with caution)</strong> — a Blue Sapphire (<TermTip id="ratna">Ratna</TermTip>) is the classical Saturn stone, but it’s a powerful one — always trialled first. See the <a href="/gemstones" className="text-primary hover:underline">Gemstone tool</a> for a full-chart check before considering it.</li>
+              </ul>
+              <p className="mt-2 text-xs text-amber-700">Offered as tradition and reflection, not medical or financial advice — and never as something you must do out of fear.</p>
+            </div>
+
+            <p className="text-xs text-muted-foreground">Dates are computed from Saturn’s real transit through the signs, using the same Lahiri-ayanamsa engine (<TermTip id="ayanamsa">the traditional Indian star-based calculation</TermTip>) as the rest of BornClock. Treat Sade Sati as a classical timing indicator, not a fixed prediction.</p>
           </div>
         )}
       </div>
