@@ -10,6 +10,8 @@ import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
+import { Link } from 'react-router-dom';
+import { WEARING_RITUAL, SIZING_RULE } from '@/lib/vedic/gemstones';
 
 interface Sugg { planet: string; gem: string; hindi: string; role: string; reason: string; trialCaution: boolean; dashaActive: boolean }
 interface Avoid { planet: string; gem: string; reason: string }
@@ -79,6 +81,25 @@ export default function GemstonePage() {
             {report.primary && <Card s={report.primary} primary />}
             {report.additional.map(s => <Card key={s.planet} s={s} />)}
             {report.additionalNote && <p data-testid="gem-additional-note" className="text-sm text-muted-foreground">{report.additionalNote}</p>}
+
+            {/* Part AI — traditional wearing-ritual detail for the primary stone. */}
+            {report.primary && WEARING_RITUAL[report.primary.planet] && (
+              <div data-testid="gem-wearing" className="rounded-xl border border-border p-4">
+                <div className="font-semibold text-foreground mb-2">How to wear it (traditional guidance)</div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                  <div><div className="text-[11px] uppercase tracking-wider text-muted-foreground">Metal</div><div className="font-medium text-foreground">{WEARING_RITUAL[report.primary.planet].metal}</div></div>
+                  <div><div className="text-[11px] uppercase tracking-wider text-muted-foreground">Finger</div><div className="font-medium text-foreground">{WEARING_RITUAL[report.primary.planet].finger}</div></div>
+                  <div><div className="text-[11px] uppercase tracking-wider text-muted-foreground">Day to first wear</div><div className="font-medium text-foreground">{WEARING_RITUAL[report.primary.planet].day}</div></div>
+                </div>
+                <p className="mt-3 text-xs text-muted-foreground"><span className="font-semibold text-foreground">Sizing: </span>{SIZING_RULE}</p>
+                <p className="mt-1 text-xs text-amber-700">These are traditional customs, offered for interest — not requirements, and not medical advice.</p>
+              </div>
+            )}
+
+            {/* Part AI — honest cross-reference to the simpler Rashi Ratna tool. */}
+            <p data-testid="gem-rashiratna-crossref" className="text-sm text-muted-foreground">
+              Looking for the quick, Moon-sign version instead? The <Link to="/rashi-ratna" className="text-primary hover:underline font-medium">Rashi Ratna</Link> page gives one stone per zodiac sign from the ruling planet alone — a general starting point. This page is the more precise, full-chart recommendation, so if the two differ, this one is the more personalised.
+            </p>
 
             {report.avoid.length > 0 && (
               <div data-testid="gemstone-avoid" className="rounded-lg border border-border p-4">

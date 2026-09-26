@@ -6,6 +6,7 @@ import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { Footer } from '@/components/Footer';
 import { RASHI_RATNA_DATA, NAVRATNA_INFO, type RashiRatna } from '@/data/rashiRatnaData';
+import { TermTip } from '@/components/vedic/TermTip';
 
 export default function RashiRatnaPage() {
   const [selectedRashi, setSelectedRashi] = useState<RashiRatna | null>(null);
@@ -53,7 +54,15 @@ export default function RashiRatnaPage() {
 
         <div className="bg-orange-50 border-l-4 border-orange-500 rounded-r-xl p-5 my-6">
           <p className="text-base font-semibold text-orange-900 leading-relaxed">
-            In the Indian Vedic tradition, your birthstone is determined not by your birth month but by your Rashi (zodiac sign) and its ruling planet. These gemstones — drawn from the sacred Navratna system — have been used for over 2,000 years to strengthen planetary energies, protect against malefic influences, and bring prosperity, health, and clarity.
+            In the Indian Vedic tradition, your birthstone is determined not by your birth month but by your Rashi (zodiac sign) and its ruling planet. These gemstones — drawn from the sacred <TermTip id="navratna">Navratna</TermTip> system — have been used for over 2,000 years to strengthen planetary energies, protect against <TermTip id="malefic">malefic</TermTip> influences, and bring prosperity, health, and clarity.
+          </p>
+        </div>
+
+        {/* Part AI — honest cross-reference to the precise, full-chart Gemstones tool. */}
+        <div data-testid="rashi-ratna-crossref" className="bg-indigo-50 border border-indigo-200 rounded-xl p-5 my-6">
+          <p className="text-sm text-indigo-900 leading-relaxed">
+            <strong>This is a general, Moon-sign-based starting point.</strong> It gives one stone per Rashi from the ruling planet alone — a quick, popular reference. For the <strong>precise recommendation based on your full birth chart</strong> — your Ascendant (Lagna), functional benefics, and which planets are actually weak or strong in your chart — use the{' '}
+            <Link to="/gemstones" className="underline font-semibold hover:text-indigo-700">Gemstone Recommendation tool</Link>. The two can suggest different stones: this page reads only your Moon sign, while the full-chart method is more tailored, so if they differ, the full-chart result is the more personalised one.
           </p>
         </div>
 
@@ -185,6 +194,7 @@ export default function RashiRatnaPage() {
           <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related Tools</p>
           <div className="grid grid-cols-2 gap-2">
             {[
+              { text: 'Gemstone Recommendation (full chart)', href: '/gemstones' },
               { text: 'Western Birthstones', href: '/birthstone' },
               { text: 'Vedic Zodiac (Rashi)', href: '/vedic-zodiac' },
               { text: 'Moon Sign Calculator', href: '/moon-sign' },

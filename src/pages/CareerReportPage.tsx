@@ -13,6 +13,7 @@ import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
+import { GradeLegend } from '@/components/vedic/TermTip';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 
 interface Report {
@@ -54,7 +55,7 @@ export default function CareerReportPage() {
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         <header className="flex justify-between items-center mb-8"><Navigation /><AuthNav /></header>
         <div className="flex items-center gap-2 mb-2">
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground">Career Analysis</h1>
+          <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground">Career Analysis (Vedic)</h1>
           <span className="text-[10px] uppercase tracking-wide bg-amber-500/15 text-amber-700 border border-amber-500/30 rounded px-1.5 py-0.5">Premium depth</span>
         </div>
         <p className="text-muted-foreground mb-4">A dedicated, decisive-but-bounded read of your career: the 10th house and its lord, the Dasamsa (D10) career chart, career Yogas, and real timing windows.</p>
@@ -80,9 +81,11 @@ export default function CareerReportPage() {
             {report.yogas.length > 0 && (
               <div data-testid="career-yogas" className="rounded-xl border border-border p-4">
                 <div className="font-semibold text-foreground mb-1">Career-relevant Yogas</div>
+                <p className="text-xs text-muted-foreground mb-2">A "Yoga" here is a classical planetary combination linked to a career strength — an indication, never a guarantee.</p>
                 <ul className="text-sm text-foreground space-y-1">
                   {report.yogas.map(y => <li key={y.name}><span className="font-medium">{y.name}</span> <span className="text-xs uppercase text-indigo-600">[{y.grade}]</span> — {y.summary}</li>)}
                 </ul>
+                <GradeLegend />
               </div>
             )}
             <div data-testid="career-timing" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">

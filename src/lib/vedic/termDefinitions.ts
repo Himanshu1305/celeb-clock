@@ -222,6 +222,18 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     why: 'Each planet has an associated Ratna; the aim is to support a weak-but-important planet in your chart.',
     inline: 'a planet-strengthening gemstone',
   },
+  malefic: {
+    term: 'Malefic influence',
+    impact: 'A planet or period that tends to bring friction — handled consciously, not feared.',
+    why: 'In the tradition, some planets/placements are classed as "malefic" (challenging) and others "benefic" (supportive) — a description of tendency, not a curse.',
+    inline: 'a challenging (vs supportive) planetary tendency',
+  },
+  navratna: {
+    term: 'Navratna (the nine gems)',
+    impact: 'The nine classical gemstones, one for each of the nine planets.',
+    why: 'Navratna literally means "nine gems"; each is tied to a planet, and each Rashi’s stone is drawn from this set.',
+    inline: 'the nine classical planetary gemstones',
+  },
   cusp: {
     term: 'Cusp',
     impact: 'Being born within a day or two of where one sign changes to the next.',
