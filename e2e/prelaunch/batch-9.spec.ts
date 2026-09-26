@@ -25,16 +25,17 @@ test.describe('P4 — planets link + dedupe', () => {
 });
 
 // ── P10 — homepage science card row ──────────────────────────────────────────────
-test.describe('P10 — science card row', () => {
-  test('three cards with correct hrefs render; row present at 390px', async ({ page }) => {
+test.describe('P10 — homepage science entry points (Part AH redesign)', () => {
+  // Part AH replaced the homepage "science-card-row" with the orbit row + footer sitemap.
+  // Science & Longevity is reachable via the orbit tile (→ /life-expectancy) and the footer
+  // (→ /biological-age). The old /country-comparison + /energy-forecast homepage links were
+  // dropped from the homepage (still reachable via nav / the science category page).
+  test('science orbit tile + footer science links render; layout holds at 390px', async ({ page }) => {
     for (const w of [1280, 390]) {
       await page.setViewportSize({ width: w, height: 900 });
       await page.goto('/'); await page.waitForLoadState('networkidle');
-      const row = page.getByTestId('science-card-row');
-      await expect(row).toBeVisible();
-      for (const href of ['/biological-age', '/country-comparison', '/energy-forecast']) {
-        await expect(row.locator(`a[href="${href}"]`)).toBeVisible();
-      }
+      await expect(page.getByTestId('orbit-science')).toBeVisible();
+      await expect(page.locator('footer a[href="/biological-age"]')).toBeVisible();
     }
   });
 });

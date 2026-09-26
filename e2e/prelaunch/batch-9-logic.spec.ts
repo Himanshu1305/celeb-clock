@@ -134,16 +134,15 @@ test.describe('FIX 3 — /api/contact send verification (delivery)', () => {
   });
 });
 
-test.describe('FIX 2 — prerendered homepage carries the science-card row', () => {
-  // The bug was a stale edge-cached shell WITHOUT the row. The prerendered artifact (source of
-  // truth for what gets deployed) must always contain the row + all three card hrefs; if this
-  // fails, the homepage will ship without the row regardless of edge caching.
-  test('dist/index.html contains the row section and all three card hrefs', () => {
+test.describe('Part AH — prerendered homepage carries the orbit row + footer sitemap', () => {
+  // Part AH replaced the science-card-row with the orbit row + a full footer sitemap. The
+  // prerendered artifact (source of truth for what deploys) must contain the four category
+  // links and the footer science link, so the homepage ships with the interlinking intact.
+  test('dist/index.html contains the four category links + footer biological-age', () => {
     let html: string;
     try { html = readFileSync(resolve(process.cwd(), 'dist/index.html'), 'utf8'); }
     catch { test.skip(true, 'dist/index.html not built — run after `npm run build`'); return; }
-    expect(html).toContain('science-card-row');
-    for (const href of ['/biological-age', '/country-comparison', '/energy-forecast']) {
+    for (const href of ['/vedic-astrology', '/celebrity-birthday', '/mystic-corner', '/life-expectancy', '/biological-age']) {
       expect(html).toContain(`href="${href}"`);
     }
   });

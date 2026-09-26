@@ -32,15 +32,16 @@ describe('Homepage Hero — TC-HERO', () => {
     const h1 = document.querySelector('h1')?.textContent?.toLowerCase() || '';
     expect(h1.includes('birthday') || h1.includes('birth')).toBe(true);
   });
-  it('TC-HERO-P-04: primary CTA links to /birthday-report', () => {
+  it('TC-HERO-P-04: a primary CTA links to /birthday-report (Part AH: final-CTA card)', () => {
     renderPage();
-    const primary = document.querySelector('[data-testid="hero-primary-cta"]');
+    // Part AH redesign moved the Birthday Blueprint CTA into the final-CTA card block.
+    const primary = document.querySelector('[data-testid="cta-birthday"]');
     expect(primary?.getAttribute('href')).toContain('birthday-report');
   });
-  it('TC-HERO-N-01: longevity still accessible below the fold', () => {
+  it('TC-HERO-N-01: Science & Longevity still accessible (Part AH: orbit tile + footer)', () => {
     renderPage();
     const links = Array.from(document.querySelectorAll('a'));
-    expect(links.some(l => l.getAttribute('href')?.includes('longevity'))).toBe(true);
+    expect(links.some(l => l.getAttribute('href')?.includes('life-expectancy'))).toBe(true);
   });
   it('TC-HERO-EDGE-01: homepage renders without throwing', () => {
     expect(() => renderPage()).not.toThrow();

@@ -57,11 +57,13 @@ test('Part V: nav triggers are in the exact serial-position order (Vedic first, 
   expect(domOrder).toEqual(CATEGORY_ORDER);
 });
 
-test('Part V: "choose your path" homepage cards are in the same order (Vedic → Birthday → Mystic → Science)', async ({ page }) => {
+test('Part AH: homepage category orbit tiles are in order (Vedic → Birthday → Mystic → Science)', async ({ page }) => {
+  // Part AH homepage redesign replaced the "choose your path" card section with the
+  // "orbit row" (data-testid="orbit-row", tiles orbit-<key>). Same job, same order.
   await page.goto('/');
   await page.waitForLoadState('networkidle');
-  const cardOrder = await page.locator('[data-testid="choose-your-path"] [data-testid^="path-card-"]')
-    .evaluateAll(els => els.map(e => (e as HTMLElement).getAttribute('data-testid')!.replace('path-card-', '')));
+  const cardOrder = await page.locator('[data-testid="orbit-row"] [data-testid^="orbit-"]')
+    .evaluateAll(els => els.map(e => (e as HTMLElement).getAttribute('data-testid')!.replace('orbit-', '')));
   expect(cardOrder).toEqual(['vedic', 'birthday', 'mystic', 'science']);
 });
 
