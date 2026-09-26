@@ -68,7 +68,26 @@ export function computePanchang(date: Date, sunMoon: SunMoonFn, tzOffsetHours = 
   } as Panchang;
 }
 
-export type MuhuratPurpose = 'business' | 'travel' | 'general';
+// Part AI — expanded occasion set. Classical Nakshatra/Vara preferences per
+// occasion (Brihat Samhita / Muhurta Chintamani tradition). Existing ids
+// (business/travel/general) preserved so the API and older links keep working.
+export type MuhuratPurpose =
+  | 'business' | 'travel' | 'general'
+  | 'marriage' | 'engagement' | 'griha-pravesh' | 'naming' | 'vehicle' | 'vidyarambh';
+
+/** Human labels for the occasion dropdown (source of truth for UI too). */
+export const MUHURAT_OCCASIONS: Array<{ id: MuhuratPurpose; label: string }> = [
+  { id: 'marriage', label: 'Marriage (Vivah)' },
+  { id: 'engagement', label: 'Engagement (Sagai / Roka)' },
+  { id: 'griha-pravesh', label: 'House-warming (Griha Pravesh)' },
+  { id: 'business', label: 'Start a business / venture' },
+  { id: 'vehicle', label: 'Buy a vehicle' },
+  { id: 'naming', label: 'Naming ceremony (Namakaran)' },
+  { id: 'vidyarambh', label: 'Start of education (Vidyarambh)' },
+  { id: 'travel', label: 'Travel / journey' },
+  { id: 'general', label: 'General auspicious start' },
+];
+export const MUHURAT_PURPOSE_IDS = MUHURAT_OCCASIONS.map(o => o.id);
 
 const AUSPICIOUS_TITHI = new Set([2, 3, 5, 7, 10, 11, 13]);
 const RIKTA_TITHI = new Set([4, 9, 14]);
@@ -76,20 +95,48 @@ const PURPOSE_NAK: Record<MuhuratPurpose, string[]> = {
   business: ['Ashwini', 'Rohini', 'Mrigashira', 'Punarvasu', 'Pushya', 'Hasta', 'Chitra', 'Swati', 'Anuradha', 'Uttara Phalguni', 'Uttara Ashadha', 'Uttara Bhadrapada', 'Shravana', 'Dhanishtha', 'Shatabhisha', 'Revati'],
   travel: ['Ashwini', 'Mrigashira', 'Punarvasu', 'Pushya', 'Hasta', 'Anuradha', 'Shravana', 'Dhanishtha', 'Revati'],
   general: ['Ashwini', 'Rohini', 'Mrigashira', 'Punarvasu', 'Pushya', 'Hasta', 'Chitra', 'Swati', 'Anuradha', 'Shravana', 'Dhanishtha', 'Revati', 'Uttara Phalguni', 'Uttara Ashadha', 'Uttara Bhadrapada'],
+  // Classical marriage stars (sthira/mridu/chara mix used for Vivah).
+  marriage: ['Rohini', 'Mrigashira', 'Magha', 'Uttara Phalguni', 'Hasta', 'Swati', 'Anuradha', 'Mula', 'Uttara Ashadha', 'Uttara Bhadrapada', 'Revati'],
+  engagement: ['Rohini', 'Mrigashira', 'Magha', 'Uttara Phalguni', 'Hasta', 'Swati', 'Anuradha', 'Uttara Ashadha', 'Uttara Bhadrapada', 'Revati'],
+  // Griha Pravesh favours the "fixed" (sthira) and gentle stars.
+  'griha-pravesh': ['Rohini', 'Mrigashira', 'Chitra', 'Anuradha', 'Uttara Phalguni', 'Uttara Ashadha', 'Uttara Bhadrapada', 'Dhanishtha', 'Shatabhisha', 'Swati', 'Revati'],
+  vehicle: ['Ashwini', 'Rohini', 'Mrigashira', 'Punarvasu', 'Pushya', 'Hasta', 'Chitra', 'Anuradha', 'Shravana', 'Dhanishtha', 'Revati'],
+  naming: ['Ashwini', 'Rohini', 'Mrigashira', 'Punarvasu', 'Pushya', 'Hasta', 'Chitra', 'Swati', 'Anuradha', 'Shravana', 'Dhanishtha', 'Shatabhisha', 'Revati'],
+  vidyarambh: ['Ashwini', 'Mrigashira', 'Punarvasu', 'Pushya', 'Hasta', 'Chitra', 'Swati', 'Anuradha', 'Shravana', 'Dhanishtha', 'Revati'],
 };
-// Weekdays to gently avoid for new/forward-moving ventures.
+// Weekdays to gently avoid for each occasion.
 const AVOID_VARA: Record<MuhuratPurpose, Set<string>> = {
   business: new Set(['Tuesday', 'Saturday']), travel: new Set(['Tuesday']), general: new Set(),
+  marriage: new Set(['Tuesday', 'Sunday']), engagement: new Set(['Tuesday', 'Sunday']),
+  'griha-pravesh': new Set(['Tuesday', 'Saturday', 'Sunday']), vehicle: new Set(['Saturday']),
+  naming: new Set(['Tuesday', 'Saturday']), vidyarambh: new Set(['Tuesday', 'Saturday']),
+};
+// Weekdays classically favoured for each occasion (small positive nudge).
+const FAVOUR_VARA: Record<MuhuratPurpose, Set<string>> = {
+  business: new Set(['Wednesday']), travel: new Set(['Monday', 'Wednesday', 'Thursday', 'Friday']), general: new Set(['Wednesday', 'Thursday', 'Friday']),
+  marriage: new Set(['Monday', 'Wednesday', 'Thursday', 'Friday']), engagement: new Set(['Monday', 'Wednesday', 'Thursday', 'Friday']),
+  'griha-pravesh': new Set(['Monday', 'Wednesday', 'Thursday', 'Friday']), vehicle: new Set(['Monday', 'Wednesday', 'Thursday', 'Friday']),
+  naming: new Set(['Monday', 'Wednesday', 'Thursday', 'Friday']), vidyarambh: new Set(['Wednesday', 'Thursday']),
 };
 
 export interface MuhuratDay extends Panchang { score: number; reasons: string[]; auspicious: boolean }
 
 /** Plain-language "what we checked" note for the Muhurat results (Item 2). */
+const PURPOSE_FOCUS: Record<MuhuratPurpose, string> = {
+  business: 'starting a venture (favouring Wednesday for commerce, and the Pushya star)',
+  travel: 'travel (favouring the mobile, gentle travel Nakshatras)',
+  general: 'a general auspicious start',
+  marriage: 'marriage (favouring the classical Vivah stars and gentle weekdays, avoiding Tuesday/Sunday)',
+  engagement: 'an engagement (the same gentle basis as marriage)',
+  'griha-pravesh': 'a house-warming (favouring the "fixed" stars for settling into a home)',
+  vehicle: 'buying a vehicle (favouring swift, gentle stars and avoiding Saturday)',
+  naming: 'a naming ceremony (favouring gentle, benefic stars)',
+  vidyarambh: 'starting education (favouring Mercury/Jupiter weekdays and learning stars)',
+};
+
 export function muhuratMethodology(purpose: MuhuratPurpose): string {
-  const focus = purpose === 'business' ? 'starting a venture (favouring Wednesday for commerce, and the Pushya star)'
-    : purpose === 'travel' ? 'travel (favouring the mobile, gentle travel Nakshatras)'
-    : 'a general auspicious start';
-  return `How each date is chosen: we compute that day's Panchang — the five classical "limbs" — and score it for ${focus}. Specifically we check the Tithi (lunar day: favouring Dwitiya, Tritiya, Panchami, Saptami, Dashami, Ekadashi and Trayodashi; avoiding the "Rikta" days 4/9/14 and Amavasya), the Nakshatra (birth star of the day: Pushya is the supreme one for beginnings), the Yoga, and the weekday — then we flag the Rahu Kalam window to avoid within the day. A date is only shown as auspicious when it scores well across these; each date below lists the specific reasons it qualified.`;
+  const focus = PURPOSE_FOCUS[purpose] ?? PURPOSE_FOCUS.general;
+  return `How each date is chosen: we compute that day's Panchang — the five classical "limbs" — and score it for ${focus}. Specifically we check the Tithi (lunar day: favouring Dwitiya, Tritiya, Panchami, Saptami, Dashami, Ekadashi and Trayodashi; avoiding the "Rikta" days 4/9/14 and Amavasya), the Nakshatra (birth star of the day: Pushya is the supreme one for beginnings), the Yoga, and the weekday — then we flag the Rahu Kalam window to avoid within the day. A date is only shown as auspicious when it scores well across these; each date below lists the specific reasons it qualified. This is a general Panchang selection, not a personalised chart Muhurta — for marriage especially, a qualified astrologer also matches the couple's charts.`;
 }
 
 /** Score one day's Panchang for a purpose. Higher = more auspicious. */
@@ -105,7 +152,8 @@ export function scoreMuhurat(p: Panchang, purpose: MuhuratPurpose): { score: num
   else if (RIKTA_TITHI.has(p.tithi) || p.tithiName === 'Amavasya') { score -= 2; reasons.push(`${p.tithiName} is an inauspicious (Rikta/Amavasya) Tithi`); }
 
   if (purpose === 'business' && p.weekday === 'Wednesday') { score += 1; reasons.push('Wednesday favours trade & commerce'); }
-  if (purpose === 'business' && p.weekday === 'Thursday' && p.nakshatra === 'Pushya') { score += 2; reasons.push('Guru-Pushya (Pushya on Thursday) — the most prized combination'); }
+  else if (FAVOUR_VARA[purpose]?.has(p.weekday)) { score += 1; reasons.push(`${p.weekday} is a favourable weekday for this`); }
+  if (p.weekday === 'Thursday' && p.nakshatra === 'Pushya') { score += 2; reasons.push('Guru-Pushya (Pushya on Thursday) — the most prized combination'); }
   if (AVOID_VARA[purpose].has(p.weekday)) { score -= 1; reasons.push(`${p.weekday} is gently avoided for this`); }
 
   if (INAUSPICIOUS_YOGAS.has(p.yoga)) { score -= 2; reasons.push(`${p.yoga} Yoga is inauspicious`); }
