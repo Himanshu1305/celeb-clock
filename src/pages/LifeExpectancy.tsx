@@ -407,9 +407,16 @@ const LifeExpectancy = () => {
         {/* Hero */}
         <section className="text-center space-y-6 pt-8 pb-12 max-w-4xl mx-auto">
           <div className="space-y-4 animate-fade-in-up">
+            {/* Part AJ (Part 4): H1 updated to the finalized category headline. The exact-match
+                head term "Life Expectancy Calculator — How Long Will You Live" is deliberately
+                preserved on-page as the H2 below (and remains in the <title> tag, the strongest
+                signal) so no keyword value is lost. See docs/part-aj-flags.md (FLAG 3). */}
             <h1 className="text-5xl md:text-7xl font-bold gradient-text-primary leading-tight">
-              Best Life Expectancy Calculator — How Long Will You Live?
+              How long could you live — and why.
             </h1>
+            <h2 className="text-2xl md:text-3xl font-semibold text-muted-foreground max-w-3xl mx-auto leading-tight">
+              Life Expectancy Calculator — how long will you live, and what actually moves the number
+            </h2>
             <PageTagline />
             <EEATBadges sources={['WHO', 'CDC', 'NIH', 'The Lancet']} />
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
