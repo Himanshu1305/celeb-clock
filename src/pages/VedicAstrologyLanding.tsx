@@ -257,13 +257,12 @@ export default function VedicAstrologyLanding() {
         <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </Helmet>
 
-      {/* Header — real site Navigation + AuthNav on the navy bar (carried forward) */}
-      <header className="site-header">
-        <Link className="brand" to="/" aria-label="BornClock home">bornclock<span className="brand-dot">.</span></Link>
-        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16 }}>
-          <Navigation />
-          <AuthNav />
-        </div>
+      {/* Header — real site Navigation + AuthNav on the navy bar (carried forward).
+          Navigation already carries the brand logo + mobile hamburger; AuthNav is the
+          sign-in/join group. The header wraps on narrow viewports so nothing overflows. */}
+      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <Navigation />
+        <AuthNav />
       </header>
       <div className="breadcrumb">
         <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; </span><span className="crumb-name">Vedic Astrology</span></div>

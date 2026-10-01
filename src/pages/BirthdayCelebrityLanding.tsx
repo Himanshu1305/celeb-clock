@@ -176,12 +176,9 @@ export default function BirthdayCelebrityLanding() {
         <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </Helmet>
 
-      <header className="site-header">
-        <Link className="brand" to="/" aria-label="BornClock home">bornclock<span className="brand-dot">.</span></Link>
-        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16 }}>
-          <Navigation />
-          <AuthNav />
-        </div>
+      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <Navigation />
+        <AuthNav />
       </header>
       <div className="breadcrumb">
         <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; </span><span className="crumb-name">Birthday &amp; Celebrity</span></div>

@@ -1,75 +1,72 @@
 /**
- * Mystic Corner category landing — /mystic-corner (Part AG).
+ * Mystic Corner category landing — /mystic-corner (Part AJ redesign).
  *
- * Bespoke hub for personality/divination systems that aren't classical Vedic and aren't
- * birthday-specific: numerology, Western zodiac, Chinese zodiac, tarot, compatibility.
- * Rebuilds the prior shared-template page into the same navy/gold/ivory + Fraunces/Public
- * Sans dense layout shipped on /vedic-astrology and /celebrity-birthday (scoped to this
- * page; homepage/others untouched).
+ * Rebuilt to the finalized "Atlas" design (docs/design-reference/mystic-final.html) using the
+ * shared scoped design system (src/styles/part-aj.css). class="paj atlas".
  *
- * HERO: input-only DOB form → navigates to the VERIFIED /birthday-report?dob=YYYY-MM-DD
- * deep-link (which computes Life Path numerology + Western zodiac from the DOB). /numerology
- * has no ?dob= deep-link and the app deliberately doesn't persist DOB, so this reuses a real
- * working flow rather than duplicating calc logic — the conservative choice. See part-ag-flags.
- *
- * §5 example is REAL: Sachin Tendulkar (24 Apr 1973, real DOB in celebrities.json) →
- * Taurus (calculateWesternZodiac) + Life Path 3 (calculateLifePathNumber). Not fabricated.
- *
- * Every linked tool is a confirmed-real route: /numerology, /name-numerology, /zodiac,
- * /chinese-zodiac, /tarot-card-by-birthday, /compatibility.
+ * Carried forward + made genuinely interactive: the three real tools — Numerology (life path),
+ * Western zodiac, Chinese zodiac — are now COMPUTED ON-PAGE from the entered date with the real
+ * calc utils (calculateLifePathNumber / calculateWesternZodiac / calculateChineseZodiac,
+ * LIFE_PATH_TRAITS), with the workings shown. The honest "these are different systems, not a
+ * generic horoscope" framing and the cross-links to Vedic Astrology + Birthday & Celebrity are
+ * preserved. WhatsApp share (reused) at the result moment.
  */
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { SEO } from '@/components/SEO';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { DobInput, type DobValue } from '@/components/DobInput';
+import { DobInput, type DobValue, parseDob } from '@/components/DobInput';
+import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
+import {
+  calculateWesternZodiac, calculateChineseZodiac, calculateLifePathNumber,
+  LIFE_PATH_TRAITS, type ZodiacInfo,
+} from '@/utils/celebrityCalculations';
+import '@/styles/part-aj.css';
 
-const NAVY = '#0E2238', GOLD = '#C6A15B', IVORY = '#FAF7F0';
-const INK = '#1A2230', INK2 = '#3E4759', MUTE = '#5B6472', DIV = '#E4DCC8';
-const serif = "'Fraunces', Georgia, serif";
-const sans = "'Public Sans', system-ui, sans-serif";
+type Tab = 'numerology' | 'western' | 'chinese';
 
-function DenseRow({ items, testid }: { items: Array<{ title: string; desc: string; to: string }>; testid: string }) {
-  return (
-    <div data-testid={testid} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-      {items.map((it) => (
-        <Link key={it.to + it.title} to={it.to} className="block p-4 hover:bg-[#FAF7F0] transition-colors" style={{ borderLeft: `2px solid ${GOLD}` }}>
-          <div className="font-semibold" style={{ color: INK, fontFamily: serif }}>{it.title}</div>
-          <div className="mt-1 text-sm" style={{ color: INK2 }}>{it.desc}</div>
-        </Link>
-      ))}
-    </div>
-  );
+// The 12 signs for the browse selector — real ZodiacInfo via representative in-range dates.
+const SIGN_REPS: Array<[number, number]> = [[4, 5], [5, 5], [6, 5], [7, 5], [8, 5], [9, 5], [10, 5], [11, 5], [12, 5], [1, 5], [2, 5], [3, 5]];
+const SIGNS: ZodiacInfo[] = SIGN_REPS.map(([m, d]) => calculateWesternZodiac(d, m));
+
+function lifePathCalc(day: number, month: number, year: number) {
+  const digits = `${year}${String(month).padStart(2, '0')}${String(day).padStart(2, '0')}`.split('').map(Number);
+  const sum = digits.reduce((a, b) => a + b, 0);
+  return { expr: `${digits.join(' + ')} = ${sum}`, sum };
 }
 
 export default function MysticCornerLanding() {
-  const navigate = useNavigate();
-  const [dob, setDob] = useState<DobValue>({ day: '', month: '', year: '' });
-  const valid = /^\d{1,2}$/.test(dob.day) && /^\d{1,2}$/.test(dob.month) && /^\d{4}$/.test(dob.year)
-    && Number(dob.month) >= 1 && Number(dob.month) <= 12 && Number(dob.day) >= 1 && Number(dob.day) <= 31;
-  const onSubmit = () => {
-    if (!valid) return;
-    const iso = `${dob.year}-${dob.month.padStart(2, '0')}-${dob.day.padStart(2, '0')}`;
-    navigate(`/birthday-report?dob=${encodeURIComponent(iso)}`);
-  };
+  const [tab, setTab] = useState<Tab>('numerology');
+  // Default to the reference sample (14 Mar 1990) so the workings show real content immediately.
+  const [dob, setDob] = useState<DobValue>({ day: '14', month: '03', year: '1990' });
+  const active = useMemo(() => {
+    const { date } = parseDob(dob.day, dob.month, dob.year);
+    return date ?? new Date(1990, 2, 14);
+  }, [dob]);
 
-  const faqs: Array<[string, string]> = [
-    ['How is numerology calculated?',
-     'Your Life Path number is derived from your full date of birth by reducing its digits to a single digit (with 11, 22 and 33 kept as master numbers). It’s deterministic arithmetic — the same date always gives the same number — not a random or hand-written result.'],
-    ['Are Western and Vedic zodiac signs the same thing?',
-     'No — and it’s worth being honest about this. Your Western (tropical) sun sign is based on the season; your Vedic (sidereal) Rashi is based on the Moon’s actual constellation and often comes out as a different sign. This page shows the Western side; the Vedic Rashi lives on the Vedic Astrology page, computed from real sidereal astronomy.'],
-    ['How is this different from a generic daily horoscope?',
-     'A generic horoscope writes one paragraph per sun-sign for millions of people. Here, your numerology is computed from your own birth date and your zodiac from your exact day — calculated each time, not a pre-written template recycled for everyone born that month.'],
-  ];
+  const d = active.getDate(), m = active.getMonth() + 1, y = active.getFullYear();
+  const lifePath = calculateLifePathNumber(d, m, y);
+  const lpTrait = LIFE_PATH_TRAITS[lifePath] ?? LIFE_PATH_TRAITS[9];
+  const lpCalc = lifePathCalc(d, m, y);
+  const western = calculateWesternZodiac(d, m);
+  const chinese = calculateChineseZodiac(y);
+
+  const [browseSign, setBrowseSign] = useState<string | null>(null);
+  const shownSign = SIGNS.find(s => s.sign === (browseSign ?? western.sign)) ?? western;
+
+  const openTool = (t: Tab) => { setTab(t); document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' }); };
+
+  const dateLabel = active.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+  const shareMsg = `My birth date through three lenses on BornClock — Life Path ${lifePath} (${lpTrait.title}), ${western.sign} (Western), ${chinese.animal} · ${chinese.element} (Chinese). Each one actually computed: https://bornclock.com/mystic-corner`;
 
   return (
-    <div data-testid="mystic-corner-page" style={{ background: '#fff', color: INK, fontFamily: sans }}>
+    <div className="paj atlas" data-category="mystic" data-testid="mystic-corner-page">
       <SEO
         title="Mystic Corner — Numerology, Zodiac & Chinese Sign | BornClock"
-        description="The mystical side of your birth date: numerology Life Path, Western zodiac, Chinese zodiac, tarot and compatibility — each one actually computed, not a templated horoscope."
-        keywords="numerology, life path number, western zodiac, chinese zodiac, tarot by birthday, name numerology, compatibility"
+        description="The mystical side of your birth date: numerology Life Path, Western zodiac, Chinese zodiac — each one actually computed from your date, with the workings shown. Not a templated horoscope."
+        keywords="numerology, life path number, western zodiac, chinese zodiac, birth date numerology, zodiac sign calculator"
         canonicalUrl="/mystic-corner"
         ogType="website"
       />
@@ -79,183 +76,239 @@ export default function MysticCornerLanding() {
         <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </Helmet>
 
-      <div style={{ background: NAVY }}>
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Navigation />
-          <AuthNav />
-        </div>
+      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <Navigation />
+        <AuthNav />
+      </header>
+      <div className="breadcrumb">
+        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; </span><span className="crumb-name">Mystic Corner</span></div>
+        <div className="edition"><span className="dot" />Three distinct traditions</div>
       </div>
 
-      {/* 1 · HERO */}
-      <section style={{ background: IVORY, borderBottom: `1px solid ${DIV}` }}>
-        <div className="max-w-6xl mx-auto px-4 py-9 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: GOLD }}>Mystic Corner</div>
-            <h1 className="mt-2 text-4xl md:text-5xl font-bold leading-tight" style={{ fontFamily: serif, color: INK }}>
-              The mystical side of your birth date.
-            </h1>
-            <p className="mt-3 text-lg" style={{ color: INK2 }}>
-              Numerology, your zodiac sign, and more — multiple systems, each one actually computed,
-              not copy-pasted from a generic horoscope.
-            </p>
-          </div>
-          <div className="rounded-xl p-5" style={{ background: '#fff', border: `1px solid ${DIV}` }}>
-            <label className="block text-sm font-semibold mb-2" style={{ color: INK }}>Your date of birth</label>
-            <DobInput value={dob} onChange={setDob} label="" idPrefix="mc" />
-            <button data-testid="mc-hero-submit" onClick={onSubmit} disabled={!valid}
-              className="mt-4 w-full py-3 rounded font-semibold disabled:opacity-50" style={{ background: NAVY, color: '#fff' }}>
-              Reveal my numbers &amp; signs →
-            </button>
-            <p className="mt-2 text-xs text-center" style={{ color: MUTE }}>Numerology &amp; zodiac computed from your date</p>
-          </div>
-        </div>
-      </section>
-
-      {/* 2 · WHAT YOU GET (real tools) */}
-      <section>
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: MUTE }}>What you get</h2>
-          <DenseRow testid="mc-what-you-get" items={[
-            { title: 'Numerology (Life Path)', desc: 'Your Life Path number, computed from your date.', to: '/numerology' },
-            { title: 'Western Zodiac', desc: 'Your sun sign, its element and traits.', to: '/zodiac' },
-            { title: 'Chinese Zodiac', desc: 'Your animal sign and its meaning.', to: '/chinese-zodiac' },
-            { title: 'Tarot by Birthday', desc: 'Your birth-card from your date.', to: '/tarot-card-by-birthday' },
-            { title: 'Name Numerology', desc: 'The numbers behind your name.', to: '/name-numerology' },
-          ]} />
-        </div>
-      </section>
-
-      {/* 3 · GO DEEPER (thin — only what's genuinely real beyond the basics) */}
-      <section style={{ background: IVORY, borderTop: `1px solid ${DIV}`, borderBottom: `1px solid ${DIV}` }}>
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: MUTE }}>Go deeper</h2>
-          <DenseRow testid="mc-go-deeper" items={[
-            { title: 'Name Numerology', desc: 'Beyond Life Path — your name’s numbers.', to: '/name-numerology' },
-            { title: 'Compatibility', desc: 'How two dates line up, by the numbers.', to: '/compatibility' },
-          ]} />
-        </div>
-      </section>
-
-      {/* 4 · HOW IT WORKS */}
-      <section style={{ background: NAVY, color: '#fff' }}>
-        <div className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            ['1', 'Enter your birth date', 'Just your date — the systems do the rest.'],
-            ['2', 'See your numbers & signs', 'Life Path, zodiac and more, actually computed.'],
-            ['3', 'Go deeper into any system', 'Name numerology, Chinese zodiac, tarot or compatibility.'],
-          ].map(([n, t, d]) => (
-            <div key={n} style={{ borderLeft: `2px solid ${GOLD}` }} className="pl-4">
-              <div className="text-2xl font-bold" style={{ color: GOLD, fontFamily: serif }}>{n}</div>
-              <div className="mt-1 text-lg font-semibold" style={{ fontFamily: serif }}>{t}</div>
-              <div className="mt-1 text-sm" style={{ color: '#C7CFDA' }}>{d}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 5 · SEE A REAL EXAMPLE (real: Sachin Tendulkar 24 Apr 1973) */}
-      <section style={{ background: IVORY }}>
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <h2 className="text-2xl font-bold mb-3" style={{ fontFamily: serif, color: INK }}>See a real example</h2>
-          <div data-testid="mc-example" className="grid grid-cols-1 sm:grid-cols-3" style={{ border: `1px solid ${DIV}` }}>
-            {([
-              ['Born', 'Sachin Tendulkar · 24 Apr 1973'],
-              ['Western zodiac', 'Taurus ♉'],
-              ['Life Path number', '3'],
-            ] as Array<[string, string]>).map(([label, value], i) => (
-              <div key={label} className="p-4" style={{ borderLeft: i === 0 ? 'none' : `1px solid ${DIV}`, background: '#fff' }}>
-                <div className="text-[11px] uppercase tracking-wider" style={{ color: MUTE }}>{label}</div>
-                <div className="mt-1 font-semibold" style={{ color: INK, fontFamily: serif }}>{value}</div>
+      <main id="main">
+        {/* HERO (atlas) */}
+        <section className="hero" id="start" aria-label="Introduction">
+          <div className="hero-top">
+            <aside className="atlas-index" aria-label="On this page">
+              <div>
+                <span className="eyebrow">The index</span>
+                <ol>
+                  <li><a href="#start"><span>01</span>Your birth date</a></li>
+                  <li><a href="#tools"><span>02</span>Three traditions</a></li>
+                  <li><a href="#results"><span>03</span>Show the workings</a></li>
+                  <li><a href="#explore"><span>04</span>Keep exploring</a></li>
+                </ol>
               </div>
-            ))}
-            <p className="col-span-1 sm:col-span-3 px-4 py-3 text-sm" style={{ color: INK2, background: IVORY, borderTop: `1px solid ${DIV}` }}>
-              Real person, real date, real math — the zodiac and Life Path here are computed from an actual, verifiable birth date, not invented.
-            </p>
+              <div><div className="index-no">03</div><span className="small muted">A BornClock collection</span></div>
+            </aside>
+            <div className="hero-copy">
+              <span className="eyebrow kicker">Curiosity, with perspective</span>
+              <h1>The mystical side of your birth date.<br /><em>Numerology, zodiac, and more — actually computed.</em></h1>
+              <p className="lead">Numerology, Western zodiac and Chinese zodiac — distinct systems, clearly explained. An invitation to reflect, never an instruction to believe.</p>
+              <div className="hero-links">
+                <a className="btn" href="#tools">Explore the three tools →</a>
+                <a className="text-button" href="#results">See how it works</a>
+              </div>
+              <p className="hero-note">Personalised inputs, transparent conventions. No daily prediction dressed up as insight.</p>
+            </div>
+            <div className="hero-visual">
+              <div className="visual-wrap">
+                <div className="visual-top"><strong>Your reflection, in three lenses</strong><span className="pill accent">{dateLabel} · computed</span></div>
+                <div className="mystic-art">
+                  <div className="number-orbit">
+                    <span className="orbit-dot" />
+                    <span className="big-num">{lifePath}</span>
+                    <span className="orbit-label">LIFE PATH · NUMEROLOGY</span>
+                  </div>
+                  <div className="chart-stats">
+                    <div className="chart-stat"><small>Western zodiac</small><strong>{western.sign}</strong><span>Conventional date ranges</span></div>
+                    <div className="chart-stat"><small>Chinese zodiac</small><strong>{chinese.animal}</strong><span>{chinese.element} · lunar-year convention</span></div>
+                    <div className="chart-stat"><small>A useful question</small><span>What resonates — and what doesn’t?</span></div>
+                  </div>
+                </div>
+                <div className="visual-caption"><span>Symbolic traditions, not scientific assessments.</span><a className="textlink" href="#results">See the workings →</a></div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+          <div className="form-band">
+            <div><h3>What’s your birth date?</h3><p className="small muted">One date. A place to begin.</p></div>
+            <div className="entry-form">
+              <DobInput value={dob} onChange={setDob} label="" idPrefix="mc" />
+              <p className="small muted" style={{ marginTop: 8 }}>Calculated locally in your browser. Symbolic interpretations are not scientific findings.</p>
+            </div>
+          </div>
+        </section>
 
-      {/* 6 · PROOF OF SUBSTANCE */}
-      <section>
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <p className="text-base md:text-lg" style={{ color: INK2 }}>
-            <strong style={{ color: INK }}>Real calculations, not templated horoscopes</strong> — your numerology is
-            computed from your actual birth date, every time.
-          </p>
+        <div className="trust-strip">
+          <div><span className="tick" aria-hidden="true">✓</span>Three distinct traditions</div>
+          <div><span className="tick" aria-hidden="true">✓</span>The workings, not just the result</div>
+          <div><span className="tick" aria-hidden="true">✓</span>Reflection, not prediction</div>
         </div>
-      </section>
 
-      {/* 7 · COMMON QUESTIONS */}
-      <section style={{ background: IVORY, borderTop: `1px solid ${DIV}` }}>
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: serif, color: INK }}>Common questions</h2>
-          <div className="space-y-3">
-            {faqs.map(([q, a]) => (
-              <p key={q} style={{ color: INK2, borderTop: `1px solid ${DIV}`, paddingTop: '0.75rem' }}>
-                <strong style={{ color: INK }}>{q}</strong> {a}
-              </p>
+        {/* TOOLS */}
+        <section className="section" id="tools">
+          <div className="section-head">
+            <div><span className="eyebrow">Choose a lens</span><h2>A small atlas of possibilities.</h2></div>
+            <p>These systems ask different questions. They are not interchangeable.</p>
+          </div>
+          <div className="feature-grid three">
+            <article className="feature"><span className="feature-no">01</span><h3>Numerology</h3><p>Start with the digits of your birth date. See your life-path calculation and the convention used.</p><button className="text-button" type="button" onClick={() => openTool('numerology')}>Explore numerology →</button></article>
+            <article className="feature"><span className="feature-no">02</span><h3>Western zodiac</h3><p>Discover your conventional Sun-sign category. Date-only readings are not a full natal chart.</p><button className="text-button" type="button" onClick={() => openTool('western')}>Explore Western zodiac →</button></article>
+            <article className="feature"><span className="feature-no">03</span><h3>Chinese zodiac</h3><p>Find your animal and element using the Chinese year, not simply 1 January alone.</p><button className="text-button" type="button" onClick={() => openTool('chinese')}>Explore Chinese zodiac →</button></article>
+          </div>
+        </section>
+
+        {/* RESULTS — the three lenses, computed */}
+        <section className="section white" id="results">
+          <div className="section-head">
+            <div><span className="eyebrow">Show the workings</span><h2>Your date, through three lenses.</h2></div>
+            <p>Computed from {dateLabel}. Change the date above to explore another — it recalculates locally.</p>
+          </div>
+          <div className="tabs" role="tablist" aria-label="Explore the output">
+            {(['numerology', 'western', 'chinese'] as Tab[]).map(t => (
+              <button key={t} type="button" role="tab" aria-selected={tab === t} onClick={() => setTab(t)}>
+                {t === 'numerology' ? 'Numerology' : t === 'western' ? 'Western zodiac' : 'Chinese zodiac'}
+              </button>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* 8 · EXPLORE BY TOPIC */}
-      <section>
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-2" style={{ color: MUTE }}>Explore by topic</h2>
-          <p className="text-base leading-loose" data-testid="mc-explore">
+          {tab === 'numerology' && (
+            <div className="tabpanel" role="tabpanel">
+              <div className="reading-panel">
+                <div>
+                  <div className="reading-number">
+                    <strong>{lifePath}</strong>
+                    <div><span>Life-path number</span><h3>{lpTrait.title}</h3><span>Symbolic interpretation</span></div>
+                  </div>
+                  <div className="calculation">{lpCalc.expr} → {lifePath}</div>
+                  <p className="subtle">This convention adds every birth-date digit, then reduces the total while retaining the master numbers 11, 22 and 33. It does not predict your abilities or future.</p>
+                </div>
+                <div className="reflection">
+                  <span className="eyebrow">A prompt, not a prescription</span>
+                  <h3>Where could your experience be useful to someone else?</h3>
+                  <p>{lpTrait.traits} Notice what feels familiar without treating the label as a fact about you.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {tab === 'western' && (
+            <div className="tabpanel" role="tabpanel">
+              <div className="explain-grid">
+                <div>
+                  <span className="eyebrow">Western · tropical tradition</span>
+                  <h2 style={{ margin: '8px 0' }}>{shownSign.symbol} {shownSign.sign}</h2>
+                  <p>Common date range: {shownSign.date_range}. Traditionally associated with the {shownSign.element.toLowerCase()} element; ruling planet {shownSign.ruling_planet}. {shownSign.traits}</p>
+                </div>
+                <div>
+                  <h3>A Sun sign is not a whole chart.</h3>
+                  <p>These are conventional date ranges. Births near a boundary need the actual Sun position, birth time and timezone. The interpretation is cultural and reflective, not a scientifically validated personality assessment.</p>
+                </div>
+              </div>
+              <div className="zodiac-select" aria-label="Browse zodiac traditions">
+                {SIGNS.map(s => (
+                  <button key={s.sign} type="button" className={s.sign === shownSign.sign ? 'active' : ''}
+                    aria-pressed={s.sign === shownSign.sign} onClick={() => setBrowseSign(s.sign)}>
+                    <span aria-hidden="true">{s.symbol}</span>{s.sign}
+                  </button>
+                ))}
+              </div>
+              {browseSign && browseSign !== western.sign && (
+                <p className="small-note">Browsing {browseSign}. Your date’s sign is {western.sign}.</p>
+              )}
+            </div>
+          )}
+
+          {tab === 'chinese' && (
+            <div className="tabpanel" role="tabpanel">
+              <div className="explain-grid">
+                <div>
+                  <span className="eyebrow">Chinese · lunar-year convention</span>
+                  <h2 style={{ margin: '10px 0' }}>{chinese.emoji} {chinese.animal}</h2>
+                  <p><strong>{chinese.element} · {chinese.animal}</strong></p>
+                  <p>{chinese.traits} This maps the Chinese year associated with {y}.</p>
+                </div>
+                <div className="reflection">
+                  <span className="eyebrow">The boundary matters</span>
+                  <h3>Born in January or February?</h3>
+                  <p>This uses the Gregorian birth year. Births in January or early February can fall in the previous Chinese year under the Lunar New Year boundary; a full BaZi reading needs more than the year alone.</p>
+                  <a className="text-button" href="https://www.hko.gov.hk/en/gts/time/conversion.htm" target="_blank" rel="noopener noreferrer">Calendar reference: Hong Kong Observatory ↗</a>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="result-notes">
+            <p><strong>For reflection and entertainment.</strong> An exact calculation within a tradition does not make that tradition a scientific explanation of personality or future events.</p>
+            <WhatsAppShareButton message={shareMsg} label="Share my three lenses" />
+          </div>
+        </section>
+
+        {/* HONESTY */}
+        <section className="section" id="honesty">
+          <div className="honesty">
+            <div><span className="eyebrow">Our approach</span><h2>Personal to your inputs.<br />Not a claim about your future.</h2></div>
+            <div className="honesty-items">
+              <div><h3>Not a generic daily horoscope</h3><p>The date changes the arithmetic and calendar mapping. You can inspect the rule that produced the result.</p></div>
+              <div><h3>Not scientific personality testing</h3><p>The symbolic meanings are traditions. A personalised calculation does not validate the associated interpretation.</p></div>
+              <div><h3>Different systems stay distinct</h3><p>Tropical Sun signs, Chinese lunar years and Vedic sidereal charts use different conventions; they are not one combined score.</p></div>
+              <div><h3>Your judgement stays yours</h3><p>Use a result as a journal prompt, not as a basis for medical, financial, legal or major life decisions.</p></div>
+            </div>
+          </div>
+        </section>
+
+        {/* EXPLORE + cross-links */}
+        <section className="section white" id="explore">
+          <div className="section-head"><div><span className="eyebrow">Keep exploring</span><h2>Follow a different thread.</h2></div><p>Choose the kind of discovery you came for.</p></div>
+          <div className="crosslinks">
+            <Link className="crosslink" to="/vedic-astrology">
+              <div><span className="eyebrow">For a deeper chart</span><h3>Explore Vedic Astrology</h3><p>Sidereal positions, birth-time detail and traditional chart interpretation — actually computed.</p></div><span aria-hidden="true">↗</span>
+            </Link>
+            <Link className="crosslink" to="/celebrity-birthday">
+              <div><span className="eyebrow">For a lighter discovery</span><h3>Meet your birthday twins</h3><p>Famous company and calendar connections worth sharing.</p></div><span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+          <p className="lead" data-testid="mc-explore" style={{ maxWidth: 'none', marginTop: 20 }}>
             {([
-              ['Numerology', '/numerology'], ['Name Numerology', '/name-numerology'], ['Western Zodiac', '/zodiac'],
-              ['Chinese Zodiac', '/chinese-zodiac'], ['Tarot by Birthday', '/tarot-card-by-birthday'], ['Compatibility', '/compatibility'],
+              ['Numerology', '/numerology'], ['Name numerology', '/name-numerology'],
+              ['Western zodiac', '/zodiac'], ['Chinese zodiac', '/chinese-zodiac'],
+              ['Tarot by birthday', '/tarot-card-by-birthday'], ['Compatibility', '/compatibility'],
             ] as Array<[string, string]>).map(([label, to], i, arr) => (
-              <span key={label}>
-                <Link to={to} className="font-medium hover:underline" style={{ color: NAVY }}>{label}</Link>
-                {i < arr.length - 1 && <span style={{ color: MUTE }}> · </span>}
-              </span>
+              <span key={label}><Link className="textlink" to={to}>{label}</Link>{i < arr.length - 1 && <span className="muted"> · </span>}</span>
             ))}
           </p>
-        </div>
-      </section>
+        </section>
 
-      {/* 9 · CROSS-LINKS BOTH DIRECTIONS */}
-      <section style={{ background: IVORY, borderTop: `1px solid ${DIV}`, borderBottom: `1px solid ${DIV}` }}>
-        <div className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div style={{ borderLeft: `2px solid ${GOLD}` }} className="pl-4">
-            <h3 className="text-lg font-bold" style={{ fontFamily: serif, color: INK }}>Want the classical, computed version?</h3>
-            <p className="mt-1 text-sm" style={{ color: INK2 }}>Your Vedic chart uses real sidereal astronomy — Rashi, Nakshatra, Dasha timing.</p>
-            <Link to="/vedic-astrology" className="mt-2 inline-block font-semibold hover:underline" style={{ color: NAVY }}>Explore Vedic Astrology →</Link>
+        {/* FAQ */}
+        <section className="section white">
+          <div className="faq-layout">
+            <div><span className="eyebrow">Before you begin</span><h2>A few good questions.</h2></div>
+            <div className="faq-list">
+              <details><summary>Is this different from a generic horoscope?</summary><p>Yes. The numerology result and calendar assignments respond to your actual input, with the calculation method shown. The interpretations remain symbolic, not scientifically validated personal predictions.</p></details>
+              <details><summary>Why could my Chinese zodiac differ elsewhere?</summary><p>This uses the Chinese year for your Gregorian birth year. Births in January or early February can fall in the previous Chinese year under the Lunar New Year boundary. A full BaZi reading also needs additional birth information.</p></details>
+              <details><summary>Are Western and Vedic signs the same?</summary><p>No. This Western tool uses conventional tropical Sun-sign date ranges. Vedic systems typically use sidereal positions with a chosen ayanamsa — see the Vedic Astrology page. Different reference systems can produce different sign labels.</p></details>
+            </div>
           </div>
-          <div style={{ borderLeft: `2px solid ${GOLD}` }} className="pl-4">
-            <h3 className="text-lg font-bold" style={{ fontFamily: serif, color: INK }}>Curious who shares your birthday?</h3>
-            <p className="mt-1 text-sm" style={{ color: INK2 }}>Find your celebrity birthday twins and what your date says about you.</p>
-            <Link to="/celebrity-birthday" className="mt-2 inline-block font-semibold hover:underline" style={{ color: NAVY }}>Birthday &amp; Celebrity Twins →</Link>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <div className="footer-main">
+          <div>
+            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+            <p className="subtle">One birth date. Different kinds of discovery. Facts, traditions and research — with the difference made clear.</p>
           </div>
+          <nav className="footer-nav" aria-label="Footer navigation">
+            <Link to="/vedic-astrology">Vedic Astrology</Link>
+            <Link to="/celebrity-birthday">Birthday &amp; Celebrity</Link>
+            <Link to="/mystic-corner">Mystic Corner</Link>
+            <Link to="/life-expectancy">Science &amp; Longevity</Link>
+            <Link to="/how-it-works">Methodology</Link>
+            <Link to="/privacy">Privacy</Link>
+            <Link to="/contact">Contact</Link>
+          </nav>
         </div>
-      </section>
-
-      {/* 10 · FINAL CTA — real applicable product (Birthday Blueprint includes numerology) */}
-      <section style={{ background: NAVY, color: '#fff' }}>
-        <div className="max-w-6xl mx-auto px-4 py-10 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: serif }}>Want it all in one report?</h2>
-          <p className="mt-2 max-w-2xl mx-auto" style={{ color: '#C7CFDA' }}>
-            Your numerology, zodiac and more come together in the full Birthday Blueprint — one personalised report for your date.
-          </p>
-          <Link to="/birthday-report" data-testid="mc-final-cta" className="mt-4 inline-block px-6 py-3 rounded font-semibold" style={{ background: GOLD, color: NAVY }}>
-            Get your Birthday Blueprint — ₹199 →
-          </Link>
-          <p className="mt-3 text-sm" style={{ color: '#C7CFDA' }}>Premium members: covered by your monthly credits.</p>
-        </div>
-      </section>
-
-      <footer style={{ background: NAVY, color: '#C7CFDA' }}>
-        <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
-          <span>© {'2026'} BornClock · Real calculations, not templated horoscopes.</span>
-          <span className="flex gap-4">
-            <Link to="/how-it-works" className="hover:underline" style={{ color: '#fff' }}>Methodology</Link>
-            <Link to="/privacy" className="hover:underline" style={{ color: '#fff' }}>Privacy</Link>
-            <Link to="/contact" className="hover:underline" style={{ color: '#fff' }}>Contact</Link>
-          </span>
-        </div>
+        <div className="footer-bottom"><span>© 2026 BornClock · Independent perspectives. Clear boundaries.</span></div>
       </footer>
     </div>
   );
