@@ -171,8 +171,20 @@ CPU throttle + ~Slow 4G**:
 - Built with the full production pipeline (`npm run build` — vite + celebrity slugs + OG cards +
   prerender + sitemap), then **`npx wrangler versions upload`** (creates a preview URL **without**
   promoting to live). **No `wrangler deploy` was run.**
-- **Preview URL:** _(filled in below once the upload completes)_
-- Preview verification: _(filled in below)_
+- **Preview URL:** **https://3046ba0c-bornclock.usdvisionai.workers.dev** (Worker Version ID
+  `3046ba0c-4976-40d7-a610-9554eaf9345d`). This is a prod-safe preview — **not** promoted to live.
+  (Full build: 3630 routes prerendered, sitemap 3630 URLs, 3834 assets uploaded.)
+- **Preview verification (against the preview URL specifically, not local):**
+  - All four pages: **HTTP 200**, correct prerendered H1s
+    (Vedic "Your birth chart, computed — not guessed."; Birthday "Everything your birthday reveals.";
+    Mystic "The mystical side of your birth date."; Science "How long could you live — and why.").
+  - Live engine on preview: `/api/vedic-reading` returns real output (Lagna Vrishabha/Taurus, Rashi
+    Tula/Libra, Chitra pada 3) — and the Vedic page shows the **"✓ re-computed live — engine agrees"** badge.
+  - **Birthday:** 15 person cards with **15 real Wikipedia photos**, WhatsApp share present, snapshot
+    computed (♎ Libra / Life path 4 / Friday). No JS errors.
+  - **Vedic:** live badge present, 9-row real placements table, WhatsApp share, 4 glossary tooltips. No JS errors.
+  - **Mystic:** life path 9, workings `1 + 9 + 9 + 0 + 0 + 3 + 1 + 4 = 27 → 9`, WhatsApp share. No JS errors.
+  - **Mobile (Pixel 5): no horizontal overflow on any of the four pages.**
 
 ---
 

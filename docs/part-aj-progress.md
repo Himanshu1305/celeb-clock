@@ -49,3 +49,11 @@ Session start. Branch: `part-aj-four-page-redesign`. Operating unattended per ow
 - H1/SEO decision DONE + committed (416f11f): H1 → "How long could you live — and why."; exact head term kept as H2 + title tag unchanged; calculator + honesty intact; tsc 0; build OK; no JS errors.
 - Full Workbench VISUAL rebuild DEFERRED via resource safety net (FLAG 3) — 1,209-line interactive app w/ paywall + premium + phases + highest traffic → too risky to rewrite unattended before review. Honesty-forward content + disclaimers + sources already present (Part AG) and carried forward.
 - Carry-forward confirmed intact: calculateLongevity/score/recalcWithOverrides untouched; all 5 disclaimer blocks; country-page grid; cross-links to /vedic-astrology + /celebrity-birthday; citations/sources.
+
+## Combined testing + preview ✅ (CHECKPOINT: preview verified — SESSION COMPLETE)
+- Full suite green (1860), tsc 0, four-way interlinking confirmed, CLS fixed (<0.05), Lighthouse-style metrics captured.
+- Full production build OK: 3630 routes prerendered (all four pages w/ correct H1s), sitemap 3630 URLs.
+- `wrangler versions upload` → PROD-SAFE preview (NO deploy). Version 3046ba0c-4976-40d7-a610-9554eaf9345d.
+  Preview URL: https://3046ba0c-bornclock.usdvisionai.workers.dev
+- Preview verified (against the preview URL): all 4 pages 200 + correct H1s; live /api/vedic-reading works + Vedic "engine agrees" badge; Birthday 15 cards/15 real photos + share + computed snapshot; Vedic 9-row table + share + 4 tooltips; Mystic life-path 9 + workings + share; NO mobile overflow on any of the 4; no JS errors.
+- STOPPED here per instruction. Awaiting explicit go-ahead before merge to develop or real deploy.
