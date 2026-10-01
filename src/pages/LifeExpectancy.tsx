@@ -498,7 +498,7 @@ const LifeExpectancy = () => {
 
           {/* Light cross-links (one soft line, not a heavy funnel) */}
           <p className="text-sm text-muted-foreground">
-            Curious about the rest of your birth date? See your <Link to="/vedic-astrology" className="text-primary hover:underline">Vedic chart</Link> or find your <Link to="/celebrity-birthday" className="text-primary hover:underline">celebrity birthday twins</Link>.
+            Curious about the rest of your birth date? See your <Link to="/vedic-astrology" className="text-primary hover:underline">Vedic chart</Link>, find your <Link to="/celebrity-birthday" className="text-primary hover:underline">celebrity birthday twins</Link>, or explore <Link to="/mystic-corner" className="text-primary hover:underline">numerology &amp; zodiac</Link>.
           </p>
         </section>
 
