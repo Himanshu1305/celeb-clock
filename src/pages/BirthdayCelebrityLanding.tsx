@@ -76,8 +76,23 @@ function PersonCard({ p }: { p: Person }) {
   );
 }
 
-function PeopleGrid({ people, loading, emptyNote }: { people: Person[]; loading: boolean; emptyNote: string }) {
-  if (loading) return <div className="people-grid"><p className="empty-state muted">Loading real birthday profiles…</p></div>;
+// Fixed-height skeleton card — reserves the real .person footprint during async load so the
+// grid populating from the Supabase query does not shift the page (keeps CLS low, Part AJ step 6).
+function PersonSkeleton() {
+  return (
+    <article className="person" aria-hidden="true">
+      <div className="person-avatar" />
+      <div style={{ width: '100%' }}>
+        <div style={{ height: 10, width: '40%', background: 'var(--line)', borderRadius: 2 }} />
+        <div style={{ height: 18, width: '70%', background: 'var(--line)', borderRadius: 2, margin: '8px 0' }} />
+        <div style={{ height: 10, width: '55%', background: 'var(--line)', borderRadius: 2 }} />
+      </div>
+    </article>
+  );
+}
+
+function PeopleGrid({ people, loading, emptyNote, skeletonCount = 6 }: { people: Person[]; loading: boolean; emptyNote: string; skeletonCount?: number }) {
+  if (loading) return <div className="people-grid">{Array.from({ length: skeletonCount }, (_, i) => <PersonSkeleton key={i} />)}</div>;
   if (!people.length) return <div className="people-grid"><p className="empty-state muted">{emptyNote}</p></div>;
   return <div className="people-grid">{people.map(p => <PersonCard key={p.name + (p.birthDate ?? '')} p={p} />)}</div>;
 }
@@ -264,14 +279,14 @@ export default function BirthdayCelebrityLanding() {
           </div>
           {(query.trim().length >= 2) && (
             <div style={{ marginBottom: 18 }}>
-              <PeopleGrid people={searchResults} loading={searching} emptyNote={`No one found matching “${query}”. Try another name.`} />
+              <PeopleGrid people={searchResults} loading={searching} skeletonCount={3} emptyNote={`No one found matching “${query}”. Try another name.`} />
             </div>
           )}
           <div className="inline-actions" style={{ marginBottom: 14 }}>
             <span className="pill accent">{MONTHS[active.month - 1].slice(0, 3)} {active.day} · {twins.length} profile{twins.length !== 1 ? 's' : ''}</span>
             <WhatsAppShareButton message={shareMsg} label="Share a birthday note" />
           </div>
-          <PeopleGrid people={twins} loading={twinsLoading} emptyNote="No notable profiles recorded for this date yet. Try another date, or search a name above." />
+          <PeopleGrid people={twins} loading={twinsLoading} skeletonCount={9} emptyNote="No notable profiles recorded for this date yet. Try another date, or search a name above." />
           <p className="small-note">Photos load live from Wikipedia; initials stand in only when no photo is on file. Each card links to its source.</p>
         </section>
 

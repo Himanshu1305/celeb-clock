@@ -79,6 +79,10 @@ const overrides = `
 .paj[data-category="birthday"]{--accent:#F0715A;--accent-text:#0E2238;--green:#F0715A}
 .paj[data-category="mystic"]{--accent:#6E5AA6;--accent-text:#6E5AA6;--green:#6E5AA6}
 .paj[data-category="science"]{--accent:#2F6FB0;--accent-text:#2F6FB0;--green:#2E9E7B;--bg:#FFFFFF;--line:#DDE4EA}
+
+/* The real Navigation + AuthNav header wraps to two rows on narrow viewports. Reserve its
+   final height so font-swap / auth-state settling can't push the page down (keeps CLS low). */
+@media(max-width:820px){.paj .site-header{min-height:104px;align-content:center;row-gap:4px}}
 `;
 
 writeFileSync('src/styles/part-aj.css', header + out.join('\n') + '\n' + overrides);
