@@ -19,6 +19,7 @@ import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { DobInput, type DobValue, parseDob } from '@/components/DobInput';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
+import { TrustStrip } from '@/components/paj/TrustStrip';
 import {
   calculateWesternZodiac, calculateChineseZodiac, calculateLifePathNumber,
   LIFE_PATH_TRAITS, type ZodiacInfo,
@@ -164,6 +165,7 @@ export default function MysticCornerLanding() {
             <div><span className="eyebrow">Show the workings</span><h2>Your date, through three lenses.</h2></div>
             <p>Computed from {dateLabel}. Change the date above to explore another — it recalculates locally.</p>
           </div>
+          <TrustStrip claim="Calculated from your actual birth date, every time — not a generic daily horoscope." />
           <div className="tabs" role="tablist" aria-label="Explore the output">
             {(['numerology', 'western', 'chinese'] as Tab[]).map(t => (
               <button key={t} type="button" role="tab" aria-selected={tab === t} onClick={() => setTab(t)}>

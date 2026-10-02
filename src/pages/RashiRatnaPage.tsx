@@ -6,6 +6,7 @@ import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { RASHI_RATNA_DATA, NAVRATNA_INFO, type RashiRatna } from '@/data/rashiRatnaData';
 import { TermTip } from '@/components/vedic/TermTip';
+import { TrustStrip } from '@/components/paj/TrustStrip';
 import '@/styles/part-aj.css';
 
 export default function RashiRatnaPage() {
@@ -54,6 +55,7 @@ export default function RashiRatnaPage() {
         <h1 className="text-3xl font-black text-gray-900 mb-1">Rashi Ratna — Indian Vedic Birthstones</h1>
         <PageTagline />
 
+        <TrustStrip claim="A general guide by Rashi and its ruling planet — the Gemstone tool is the precise, full-chart version." />
         <div className="bg-orange-50 border-l-4 border-orange-500 rounded-r-xl p-5 my-6">
           <p className="text-base font-semibold text-orange-900 leading-relaxed">
             In the Indian Vedic tradition, your birthstone is determined not by your birth month but by your Rashi (zodiac sign) and its ruling planet. These gemstones — drawn from the sacred <TermTip id="navratna">Navratna</TermTip> system — have been used for over 2,000 years to strengthen planetary energies, protect against <TermTip id="malefic">malefic</TermTip> influences, and bring prosperity, health, and clarity.

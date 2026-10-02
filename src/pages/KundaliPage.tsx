@@ -19,6 +19,7 @@ import { fetchReading, type ReadingPayload } from '@/services/readingService';
 import { VedicReading } from '@/components/reading/VedicReading';
 import { PastPeriodReflection } from '@/components/reading/PastPeriodReflection';
 import { TermTip } from '@/components/vedic/TermTip';
+import { TrustStrip } from '@/components/paj/TrustStrip';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
 import '@/styles/part-aj.css';
 
@@ -160,6 +161,7 @@ export default function KundaliPage() {
             <p>Your Vedic birth chart — planetary positions, <TermTip id="lagna">Lagna</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip> and <TermTip id="dasha">Dasha</TermTip>, in accurate sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) astronomy. Full report {price}.</p>
           </div>
 
+          <TrustStrip claim="Computed with the Swiss Ephemeris (sidereal · Lahiri) and cross-checked for accuracy — not a template." />
           <KundaliTabs active="kundali" />
 
           {loaded && isFull && (

@@ -11,6 +11,7 @@ import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsFo
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { Link } from 'react-router-dom';
 import { WEARING_RITUAL, SIZING_RULE } from '@/lib/vedic/gemstones';
+import { TrustStrip } from '@/components/paj/TrustStrip';
 import '@/styles/part-aj.css';
 
 interface Sugg { planet: string; gem: string; hindi: string; role: string; reason: string; trialCaution: boolean; dashaActive: boolean }
@@ -73,6 +74,7 @@ export default function GemstonePage() {
             <div><span className="eyebrow">Ratna</span><h1>Gemstone Suggestions.</h1></div>
             <p>A traditional, informational suggestion based on your Ascendant lord and computed planetary strength — classical association only, not a medical claim or guarantee, and we sell nothing.</p>
           </div>
+          <TrustStrip claim="We tell you the method — your Ascendant lord and computed planetary strength — and why." />
           <div className="form-band" style={{ marginTop: 16 }}>
             <div><h3>Your birth details</h3><p className="small muted">The stone is matched to your Ascendant lord.</p></div>
             <BirthDetailsForm initial={initial} submitLabel="Suggest my gemstone" loadingLabel="Analysing…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="gemstone" />

@@ -30,6 +30,7 @@ import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { DobInput, type DobValue, parseDob } from '@/components/DobInput';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
+import { TrustStrip } from '@/components/paj/TrustStrip';
 import { calculateWesternZodiac, calculateLifePathNumber } from '@/utils/celebrityCalculations';
 import { getRankedBirthdayCelebrities, type CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { fetchCelebrityImage } from '@/services/WikipediaImageService';
@@ -271,6 +272,8 @@ export default function BirthdayCelebrityLanding() {
             <div><span className="eyebrow">The birthday club</span><h2>Meet your birthday twins.</h2></div>
             <p>Same month and day, not necessarily the same year — real people, ranked by global recognition.</p>
           </div>
+          <TrustStrip claim="Real people from our database, ranked by recognition — each card links to its source." />
+
           <div className="inline-actions" style={{ marginBottom: 14, gap: 10 }}>
             <label htmlFor="celebSearch" className="eyebrow" style={{ margin: 0 }}>Search a name directly</label>
             <input id="celebSearch" type="text" value={query} onChange={e => setQuery(e.target.value)}
