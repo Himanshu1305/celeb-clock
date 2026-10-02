@@ -4,9 +4,9 @@ import { SEO, FAQSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { RASHI_RATNA_DATA, NAVRATNA_INFO, type RashiRatna } from '@/data/rashiRatnaData';
 import { TermTip } from '@/components/vedic/TermTip';
+import '@/styles/part-aj.css';
 
 export default function RashiRatnaPage() {
   const [selectedRashi, setSelectedRashi] = useState<RashiRatna | null>(null);
@@ -23,7 +23,7 @@ export default function RashiRatnaPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="paj editorial" data-category="vedic">
       <SEO
         title="Rashi Ratna — Gemstone by Zodiac Sign (Indian Vedic Birthstones) | BornClock"
         description="Find your Rashi Ratna — the Indian Vedic birthstone for your zodiac sign. Complete guide to Navratna gems: Ruby, Pearl, Emerald, Diamond, Yellow Sapphire, Blue Sapphire, and more."
@@ -32,14 +32,16 @@ export default function RashiRatnaPage() {
       />
       <FAQSchema items={faqItems} />
 
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
+      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <Navigation />
+        <AuthNav />
+      </header>
+      <div className="breadcrumb">
+        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Rashi Ratna</span></div>
+        <div className="edition"><span className="dot" />Ratna · gemstone by Rashi</div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-10">
+      <div className="section" style={{ maxWidth: 820, margin: '0 auto' }}>
 
         <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
           <Link to="/" className="hover:text-indigo-600">Home</Link>
@@ -209,7 +211,22 @@ export default function RashiRatnaPage() {
         </div>
       </div>
 
-      <Footer />
+      <footer className="site-footer">
+        <div className="footer-main">
+          <div>
+            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+            <p className="subtle">Rashi Ratna — the Indian Vedic birthstone for your zodiac sign and its ruling planet.</p>
+          </div>
+          <nav className="footer-nav" aria-label="Footer navigation">
+            <Link to="/vedic-astrology">Vedic Astrology</Link>
+            <Link to="/gemstones">Gemstone Recommendation</Link>
+            <Link to="/kundali">Kundali</Link>
+            <Link to="/moon-sign">Moon Sign</Link>
+            <Link to="/privacy">Privacy</Link>
+          </nav>
+        </div>
+        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
+      </footer>
     </div>
   );
 }
