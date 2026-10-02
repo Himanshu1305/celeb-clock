@@ -74,8 +74,8 @@
 .paj .visual-top{display:flex;justify-content:space-between;gap:12px;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line);font-size:11px}
 .paj .visual-top strong{font-weight:600}
 .paj .visual-caption{border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;gap:12px;font-size:11px;color:var(--muted)}
-.paj .editorial .hero-top{display:grid;grid-template-columns:1.02fr 1fr;min-height:414px}
-.paj .editorial .hero-copy{display:flex;flex-direction:column;justify-content:center}
+.paj.editorial .hero-top{display:grid;grid-template-columns:1.02fr 1fr;min-height:414px}
+.paj.editorial .hero-copy{display:flex;flex-direction:column;justify-content:center}
 .paj .hero-note{border-left:2px solid var(--accent);padding:2px 0 2px 12px;margin-top:24px;font-size:12px;color:var(--muted);max-width:480px}
 .paj .form-band{padding:18px var(--pad);border-top:1px solid var(--line);background:var(--paper);display:grid;grid-template-columns:190px 1fr;align-items:center;gap:22px}
 .paj .form-band h3{font-family:'Fraunces',serif;font-size:23px}
@@ -97,46 +97,46 @@
 .paj .trust-strip>div{padding:13px var(--pad);font-size:12px;display:flex;align-items:center;gap:10px}
 .paj .trust-strip>div+div{border-left:1px solid var(--line)}
 .paj .trust-strip .tick{color:var(--accent-text);font-size:16px}
-.paj .atlas .hero-top{display:grid;grid-template-columns:180px 1.15fr 1fr;min-height:420px}
+.paj.atlas .hero-top{display:grid;grid-template-columns:180px 1.15fr 1fr;min-height:420px}
 .paj .atlas-index{padding:26px 20px;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between}
 .paj .atlas-index ol{padding:0;list-style:none;margin:23px 0}
 .paj .atlas-index li{border-top:1px solid var(--line)}
 .paj .atlas-index li a{padding:13px 0;display:flex;gap:12px;align-items:center;font-size:12px}
 .paj .atlas-index li a span{color:var(--muted);font-size:10px}
 .paj .index-no{font-family:'Fraunces',serif;font-size:88px;line-height:1;color:var(--navy);letter-spacing:-5px}
-.paj .atlas .hero-copy{align-self:center}
-.paj .atlas h1{font-size:clamp(44px,4.4vw,69px)}
-.paj .atlas .hero-visual{padding:20px}
-.paj .atlas .form-band{grid-template-columns:180px 1fr}
-.paj .atlas .feature-grid{display:block;border-bottom:0}
-.paj .atlas .feature{display:grid;grid-template-columns:45px 210px 1fr auto;gap:14px;align-items:center;border-bottom:1px solid var(--line);padding:16px 0;border-right:0}
-.paj .atlas .feature p{max-width:650px;margin:0}
-.paj .atlas .feature .text-button{white-space:nowrap}
-.paj .atlas .feature .feature-no{display:none}
-.paj .workbench .hero-top{display:grid;grid-template-columns:.9fr 1.3fr;min-height:528px}
-.paj .workbench .hero-copy{padding:24px var(--pad)}
-.paj .workbench h1{font-size:clamp(40px,3.7vw,59px);margin-top:13px;margin-bottom:14px}
-.paj .workbench .hero-copy .lead{font-size:15px}
-.paj .workbench .hero-links{margin-top:12px}
-.paj .workbench .entry-form{margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
-.paj .workbench .form-fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.paj .workbench .form-fields .btn{grid-column:1/-1;width:100%}
-.paj .workbench .field.place{grid-column:1/-1}
-.paj .workbench .hero-note{display:none}
-.paj .workbench .hero-visual{padding:24px 32px}
-.paj .workbench .visual-wrap{max-width:640px}
-.paj .workbench .feature-grid{grid-template-columns:repeat(3,1fr)}
-.paj .workbench .feature:nth-child(n+4){border-top:1px solid var(--line)}
-.paj .field-guide .wide-title{display:flex;gap:24px;justify-content:space-between;align-items:end;padding:24px var(--pad);border-bottom:1px solid var(--line)}
-.paj .field-guide .wide-title h1{font-size:clamp(48px,6.2vw,92px);max-width:1000px;line-height:1.02;margin-top:10px}
-.paj .field-guide .wide-title .serial{font:500 90px/1 'Fraunces',serif;color:var(--navy);letter-spacing:-5px;border-bottom:5px solid var(--accent);padding-bottom:9px}
-.paj .field-guide .hero-top{display:grid;grid-template-columns:.85fr 1.2fr 1fr;min-height:330px}
-.paj .field-guide .hero-copy{display:flex;flex-direction:column;justify-content:space-between;padding:23px var(--pad)}
-.paj .field-guide .hero-copy .lead{font-size:16px}
-.paj .field-guide .hero-links{gap:10px;margin-top:15px}
-.paj .field-guide .hero-note{margin-top:15px}
-.paj .field-guide .hero-visual{padding:20px}
-.paj .field-guide .guide-form{padding:24px;border-left:1px solid var(--line);background:var(--paper)}
+.paj.atlas .hero-copy{align-self:center}
+.paj.atlas h1{font-size:clamp(44px,4.4vw,69px)}
+.paj.atlas .hero-visual{padding:20px}
+.paj.atlas .form-band{grid-template-columns:180px 1fr}
+.paj.atlas .feature-grid{display:block;border-bottom:0}
+.paj.atlas .feature{display:grid;grid-template-columns:45px 210px 1fr auto;gap:14px;align-items:center;border-bottom:1px solid var(--line);padding:16px 0;border-right:0}
+.paj.atlas .feature p{max-width:650px;margin:0}
+.paj.atlas .feature .text-button{white-space:nowrap}
+.paj.atlas .feature .feature-no{display:none}
+.paj.workbench .hero-top{display:grid;grid-template-columns:.9fr 1.3fr;min-height:528px}
+.paj.workbench .hero-copy{padding:24px var(--pad)}
+.paj.workbench h1{font-size:clamp(40px,3.7vw,59px);margin-top:13px;margin-bottom:14px}
+.paj.workbench .hero-copy .lead{font-size:15px}
+.paj.workbench .hero-links{margin-top:12px}
+.paj.workbench .entry-form{margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.paj.workbench .form-fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.paj.workbench .form-fields .btn{grid-column:1/-1;width:100%}
+.paj.workbench .field.place{grid-column:1/-1}
+.paj.workbench .hero-note{display:none}
+.paj.workbench .hero-visual{padding:24px 32px}
+.paj.workbench .visual-wrap{max-width:640px}
+.paj.workbench .feature-grid{grid-template-columns:repeat(3,1fr)}
+.paj.workbench .feature:nth-child(n+4){border-top:1px solid var(--line)}
+.paj.field-guide .wide-title{display:flex;gap:24px;justify-content:space-between;align-items:end;padding:24px var(--pad);border-bottom:1px solid var(--line)}
+.paj.field-guide .wide-title h1{font-size:clamp(48px,6.2vw,92px);max-width:1000px;line-height:1.02;margin-top:10px}
+.paj.field-guide .wide-title .serial{font:500 90px/1 'Fraunces',serif;color:var(--navy);letter-spacing:-5px;border-bottom:5px solid var(--accent);padding-bottom:9px}
+.paj.field-guide .hero-top{display:grid;grid-template-columns:.85fr 1.2fr 1fr;min-height:330px}
+.paj.field-guide .hero-copy{display:flex;flex-direction:column;justify-content:space-between;padding:23px var(--pad)}
+.paj.field-guide .hero-copy .lead{font-size:16px}
+.paj.field-guide .hero-links{gap:10px;margin-top:15px}
+.paj.field-guide .hero-note{margin-top:15px}
+.paj.field-guide .hero-visual{padding:20px}
+.paj.field-guide .guide-form{padding:24px;border-left:1px solid var(--line);background:var(--paper)}
 .paj .guide-form h3{font-family:'Fraunces',serif;font-size:26px;margin:9px 0 17px}
 .paj .guide-form .form-fields{display:grid;grid-template-columns:1fr 1fr}
 .paj .guide-form .field.place,.paj .guide-form .form-fields .btn{grid-column:1/-1}
@@ -352,21 +352,21 @@
 .paj .inline-bullet{font-size:12px;color:var(--muted)}
 .paj .form-band .science-fields .field{flex:1}
 .paj .source-ref{font-size:11px;text-decoration:underline!important;text-underline-offset:3px;color:var(--muted)}
-.paj .field-guide .chart-with-stats,.paj .atlas .chart-with-stats{grid-template-columns:1fr}
-.paj .field-guide .chart-with-stats .chart-stats,.paj .atlas .chart-with-stats .chart-stats{display:none}
-.paj .field-guide .chart-svg{max-height:260px}
-.paj .field-guide .big-date .day{font-size:120px}
-.paj .field-guide .mystic-art{gap:14px}
-.paj .field-guide .number-orbit .big-num{font-size:95px}
-.paj .field-guide .orbit-label{font-size:8px;bottom:20px}
-.paj .field-guide .science-metrics .value{font-size:58px}
-.paj .field-guide .research-chart{height:95px}
-.paj .workbench .hero-visual .chart-svg{max-height:360px}
-.paj .workbench .hero-visual .chart-with-stats{padding:28px 0}
-.paj .workbench .hero-visual .number-orbit{max-height:340px}
-.paj .workbench .hero-visual .number-orbit .big-num{font-size:165px}
-.paj .workbench .hero-visual .birthday-ticket{padding:45px 0}
-.paj .workbench .hero-visual .research-chart{height:190px}
+.paj.field-guide .chart-with-stats,.paj.atlas .chart-with-stats{grid-template-columns:1fr}
+.paj.field-guide .chart-with-stats .chart-stats,.paj.atlas .chart-with-stats .chart-stats{display:none}
+.paj.field-guide .chart-svg{max-height:260px}
+.paj.field-guide .big-date .day{font-size:120px}
+.paj.field-guide .mystic-art{gap:14px}
+.paj.field-guide .number-orbit .big-num{font-size:95px}
+.paj.field-guide .orbit-label{font-size:8px;bottom:20px}
+.paj.field-guide .science-metrics .value{font-size:58px}
+.paj.field-guide .research-chart{height:95px}
+.paj.workbench .hero-visual .chart-svg{max-height:360px}
+.paj.workbench .hero-visual .chart-with-stats{padding:28px 0}
+.paj.workbench .hero-visual .number-orbit{max-height:340px}
+.paj.workbench .hero-visual .number-orbit .big-num{font-size:165px}
+.paj.workbench .hero-visual .birthday-ticket{padding:45px 0}
+.paj.workbench .hero-visual .research-chart{height:190px}
 .paj .hero-visual .visual-wrap{animation:arrive .5s ease both}
 @keyframes arrive{from{transform:translateY(6px);opacity:.6}to{transform:translateY(0);opacity:1}}
 @media(prefers-reduced-motion:reduce){
@@ -382,16 +382,16 @@
 .paj .main-nav{gap:17px}
 .paj .main-nav a{font-size:11px}
 .paj .header-cta{display:none}
-.paj .atlas .hero-top{grid-template-columns:140px 1fr 1fr}
+.paj.atlas .hero-top{grid-template-columns:140px 1fr 1fr}
 .paj .atlas-index{padding:24px 15px}
-.paj .atlas .form-band{grid-template-columns:150px 1fr}
+.paj.atlas .form-band{grid-template-columns:150px 1fr}
 .paj .form-band{grid-template-columns:150px 1fr}
-.paj .field-guide .hero-top{grid-template-columns:1fr 1fr}
-.paj .field-guide .hero-copy{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:20px;border-bottom:1px solid var(--line)}
-.paj .field-guide .hero-copy .hero-note,.paj .field-guide .guide-steps{display:none}
-.paj .field-guide .hero-links{justify-content:end;margin:0}
-.paj .field-guide .hero-visual{border-left:0}
-.paj .field-guide .wide-title .serial{font-size:70px}
+.paj.field-guide .hero-top{grid-template-columns:1fr 1fr}
+.paj.field-guide .hero-copy{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:20px;border-bottom:1px solid var(--line)}
+.paj.field-guide .hero-copy .hero-note,.paj.field-guide .guide-steps{display:none}
+.paj.field-guide .hero-links{justify-content:end;margin:0}
+.paj.field-guide .hero-visual{border-left:0}
+.paj.field-guide .wide-title .serial{font-size:70px}
 .paj .feature{padding:17px 14px}
 .paj .person{grid-template-columns:64px 1fr;gap:12px;padding:17px}
 .paj .person-avatar{width:64px;height:80px}
@@ -417,7 +417,7 @@
 .paj .main-nav a[aria-current="page"]:after{width:34px;right:auto}
 .paj .breadcrumb{font-size:10px;gap:10px}
 .paj .edition .edition-extra{display:none}
-.paj .editorial .hero-top{grid-template-columns:1fr 1fr}
+.paj.editorial .hero-top{grid-template-columns:1fr 1fr}
 .paj .hero-copy{padding:24px 20px}
 .paj h1{font-size:48px}
 .paj .hero-copy .lead{font-size:15px}
@@ -433,7 +433,7 @@
 .paj .ticket-side h3{font-size:23px}
 .paj .initial-stack{display:none}
 .paj .ticket-side .small{display:none}
-.paj .form-band,.paj .atlas .form-band{grid-template-columns:1fr;gap:14px}
+.paj .form-band,.paj.atlas .form-band{grid-template-columns:1fr;gap:14px}
 .paj .form-band .form-fields{display:grid;grid-template-columns:repeat(2,1fr)}
 .paj .form-fields .btn{min-width:0}
 .paj .feature-grid{grid-template-columns:repeat(3,1fr)}
@@ -448,24 +448,24 @@
 .paj .section-head{align-items:start}
 .paj .section-head>p{max-width:250px}
 .paj .trust-strip>div{padding:12px 15px;font-size:11px;gap:7px}
-.paj .atlas .hero-top{grid-template-columns:1.1fr 1fr}
+.paj.atlas .hero-top{grid-template-columns:1.1fr 1fr}
 .paj .atlas-index{display:none}
-.paj .atlas h1{font-size:46px}
-.paj .atlas .feature{grid-template-columns:35px 155px 1fr}
-.paj .atlas .feature .text-button{grid-column:3}
-.paj .atlas .feature .icon{margin:0}
-.paj .atlas .feature p{font-size:12px}
-.paj .workbench .hero-top{grid-template-columns:1fr 1fr}
-.paj .workbench .hero-copy{padding:23px 18px}
-.paj .workbench h1{font-size:42px}
-.paj .workbench .hero-visual{padding:18px}
-.paj .workbench .form-fields{grid-template-columns:1fr}
-.paj .workbench .form-fields .field,.paj .workbench .form-fields .btn{grid-column:auto}
-.paj .workbench .hero-visual .birthday-ticket{padding:20px 0}
-.paj .workbench .hero-visual .number-orbit .big-num{font-size:95px}
-.paj .workbench .hero-visual .mystic-art{grid-template-columns:1fr}
-.paj .workbench .mystic-art .chart-stats{display:none}
-.paj .workbench .hero-visual .research-chart{height:150px}
+.paj.atlas h1{font-size:46px}
+.paj.atlas .feature{grid-template-columns:35px 155px 1fr}
+.paj.atlas .feature .text-button{grid-column:3}
+.paj.atlas .feature .icon{margin:0}
+.paj.atlas .feature p{font-size:12px}
+.paj.workbench .hero-top{grid-template-columns:1fr 1fr}
+.paj.workbench .hero-copy{padding:23px 18px}
+.paj.workbench h1{font-size:42px}
+.paj.workbench .hero-visual{padding:18px}
+.paj.workbench .form-fields{grid-template-columns:1fr}
+.paj.workbench .form-fields .field,.paj.workbench .form-fields .btn{grid-column:auto}
+.paj.workbench .hero-visual .birthday-ticket{padding:20px 0}
+.paj.workbench .hero-visual .number-orbit .big-num{font-size:95px}
+.paj.workbench .hero-visual .mystic-art{grid-template-columns:1fr}
+.paj.workbench .mystic-art .chart-stats{display:none}
+.paj.workbench .hero-visual .research-chart{height:150px}
 .paj .science-metrics{grid-template-columns:1fr}
 .paj .science-metrics>div:nth-child(2){display:none}
 .paj .people-grid{grid-template-columns:1fr}
@@ -498,7 +498,7 @@
 .paj .edition{font-size:9px;gap:5px}
 .paj .hero-copy{padding:24px 16px}
 .paj .hero-copy h1{font-size:47px;margin:14px 0 16px}
-.paj .editorial .hero-top,.paj .atlas .hero-top,.paj .workbench .hero-top{display:flex;flex-direction:column;min-height:0}
+.paj.editorial .hero-top,.paj.atlas .hero-top,.paj.workbench .hero-top{display:flex;flex-direction:column;min-height:0}
 .paj .hero-visual{border-left:0;border-top:1px solid var(--line);padding:20px 16px}
 .paj .hero-note{margin-top:17px}
 .paj .hero-links{margin-top:19px}
@@ -508,11 +508,11 @@
 .paj .chart-stat{padding:10px 0}
 .paj .chart-stat strong{font-size:23px}
 .paj .chart-svg{max-height:265px}
-.paj .editorial .hero-visual,.paj .atlas .hero-visual{min-height:0}
+.paj.editorial .hero-visual,.paj.atlas .hero-visual{min-height:0}
 .paj .form-band{padding:18px 16px;gap:12px}
-.paj .form-band .form-fields,.paj .workbench .form-fields{grid-template-columns:1fr 1fr}
+.paj .form-band .form-fields,.paj.workbench .form-fields{grid-template-columns:1fr 1fr}
 .paj .field.place,.paj .form-band .form-fields .btn{grid-column:1/-1}
-.paj .workbench .form-fields .field.place,.paj .workbench .form-fields .btn{grid-column:1/-1}
+.paj.workbench .form-fields .field.place,.paj.workbench .form-fields .btn{grid-column:1/-1}
 .paj .form-fields .btn{width:100%}
 .paj .form-fields .field:only-of-type{grid-column:1/-1}
 .paj .form-band .form-fields.science-fields{grid-template-columns:1fr 1fr}
@@ -526,7 +526,7 @@
 .paj .section-head{flex-direction:column;gap:12px;margin-bottom:18px}
 .paj .section-head>p{max-width:none}
 .paj .section-head h2{font-size:32px}
-.paj .feature-grid,.paj .feature-grid.three,.paj .feature-grid.four,.paj .workbench .feature-grid{grid-template-columns:1fr}
+.paj .feature-grid,.paj .feature-grid.three,.paj .feature-grid.four,.paj.workbench .feature-grid{grid-template-columns:1fr}
 .paj .feature,.paj .feature:first-child,.paj .feature-grid .feature{padding:16px 0;border-right:0;border-top:1px solid var(--line)}
 .paj .feature:first-child{border-top:0}
 .paj .feature .icon{width:25px;height:25px;float:left;margin:2px 15px 35px 0}
@@ -534,10 +534,10 @@
 .paj .feature .text-button{margin-left:40px}
 .paj .feature-no{top:17px;right:0}
 .paj .feature h3{font-size:18px;padding-right:24px}
-.paj .atlas .feature{grid-template-columns:32px 1fr;gap:0 12px}
-.paj .atlas .feature .icon{float:none;grid-row:1/3;align-self:start}
-.paj .atlas .feature p{grid-column:2;padding:0;margin-top:7px}
-.paj .atlas .feature .text-button{grid-column:2;margin:0;justify-self:start}
+.paj.atlas .feature{grid-template-columns:32px 1fr;gap:0 12px}
+.paj.atlas .feature .icon{float:none;grid-row:1/3;align-self:start}
+.paj.atlas .feature p{grid-column:2;padding:0;margin-top:7px}
+.paj.atlas .feature .text-button{grid-column:2;margin:0;justify-self:start}
 .paj .result-layout{grid-template-columns:1fr;gap:22px}
 .paj .tabs button{font-size:11px;padding:10px 13px}
 .paj .tabpanel{padding-top:17px}
@@ -558,27 +558,27 @@
 .paj .review-nav{align-items:start;flex-direction:column;gap:10px;padding:13px 16px}
 .paj .review-nav nav{gap:5px}
 .paj .review-nav a{padding:6px 8px}
-.paj .workbench .hero-copy{padding:23px 16px}
-.paj .workbench .hero-copy h1{font-size:43px}
-.paj .workbench .hero-visual{padding:20px 16px}
-.paj .workbench .hero-visual .chart-with-stats{padding:14px 0}
-.paj .workbench .hero-visual .chart-svg{max-height:265px}
-.paj .workbench .hero-visual .mystic-art{grid-template-columns:1fr 1fr}
-.paj .workbench .mystic-art .chart-stats{display:block}
-.paj .workbench .hero-visual .number-orbit .big-num{font-size:100px}
-.paj .workbench .hero-visual .number-orbit{max-height:250px}
-.paj .field-guide .wide-title{padding:23px 16px;gap:16px;align-items:start}
-.paj .field-guide .wide-title h1{font-size:47px}
-.paj .field-guide .wide-title .serial{display:none}
-.paj .field-guide .hero-top{display:flex;flex-direction:column}
-.paj .field-guide .hero-copy{display:block;padding:20px 16px;border-bottom:0}
-.paj .field-guide .hero-copy .hero-links{justify-content:start;margin-top:16px}
-.paj .field-guide .hero-visual{padding:18px 16px}
-.paj .field-guide .guide-form{border-left:0;border-top:1px solid var(--line);padding:20px 16px}
-.paj .field-guide .chart-with-stats,.paj .atlas .chart-with-stats{grid-template-columns:1.4fr .9fr}
-.paj .field-guide .chart-with-stats .chart-stats,.paj .atlas .chart-with-stats .chart-stats{display:block}
-.paj .field-guide .guide-form h3{font-size:26px}
-.paj .birthday-ticket,.paj .workbench .hero-visual .birthday-ticket{grid-template-columns:.85fr 1.1fr;padding:23px 0}
+.paj.workbench .hero-copy{padding:23px 16px}
+.paj.workbench .hero-copy h1{font-size:43px}
+.paj.workbench .hero-visual{padding:20px 16px}
+.paj.workbench .hero-visual .chart-with-stats{padding:14px 0}
+.paj.workbench .hero-visual .chart-svg{max-height:265px}
+.paj.workbench .hero-visual .mystic-art{grid-template-columns:1fr 1fr}
+.paj.workbench .mystic-art .chart-stats{display:block}
+.paj.workbench .hero-visual .number-orbit .big-num{font-size:100px}
+.paj.workbench .hero-visual .number-orbit{max-height:250px}
+.paj.field-guide .wide-title{padding:23px 16px;gap:16px;align-items:start}
+.paj.field-guide .wide-title h1{font-size:47px}
+.paj.field-guide .wide-title .serial{display:none}
+.paj.field-guide .hero-top{display:flex;flex-direction:column}
+.paj.field-guide .hero-copy{display:block;padding:20px 16px;border-bottom:0}
+.paj.field-guide .hero-copy .hero-links{justify-content:start;margin-top:16px}
+.paj.field-guide .hero-visual{padding:18px 16px}
+.paj.field-guide .guide-form{border-left:0;border-top:1px solid var(--line);padding:20px 16px}
+.paj.field-guide .chart-with-stats,.paj.atlas .chart-with-stats{grid-template-columns:1.4fr .9fr}
+.paj.field-guide .chart-with-stats .chart-stats,.paj.atlas .chart-with-stats .chart-stats{display:block}
+.paj.field-guide .guide-form h3{font-size:26px}
+.paj .birthday-ticket,.paj.workbench .hero-visual .birthday-ticket{grid-template-columns:.85fr 1.1fr;padding:23px 0}
 .paj .big-date{border-bottom:0;border-right:1px dashed var(--accent);padding:0 16px 0 0}
 .paj .big-date .day{font-size:118px}
 .paj .ticket-side h3{font-size:26px}
@@ -612,7 +612,7 @@
 .paj .science-metrics>div:nth-child(2){display:block}
 .paj .science-metrics .value{font-size:65px}
 .paj .science-metrics .bio-unavailable{font-size:25px}
-.paj .research-chart,.paj .workbench .hero-visual .research-chart{height:130px}
+.paj .research-chart,.paj.workbench .hero-visual .research-chart{height:130px}
 .paj .result-measures{grid-template-columns:1fr}
 .paj .result-measures>div{border-right:0;border-bottom:1px solid var(--line)}
 .paj .source-box{padding:13px 14px}

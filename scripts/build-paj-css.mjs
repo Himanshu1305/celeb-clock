@@ -33,6 +33,15 @@ function prefixSelector(sel) {
   if (sel.startsWith('html')) return '.paj' + sel.slice(4);
   if (sel === '*') return '.paj *';
   if (sel.startsWith('*')) return '.paj ' + sel;
+  // The four design-variant classes (editorial/atlas/field-guide/workbench) live on the SAME
+  // element as .paj (<div class="paj editorial">), not as a descendant — so they must attach
+  // with NO space. Scoping them as a descendant ("\.paj .editorial") silently broke every
+  // variant-specific layout rule (the editorial 2-col hero collapsed to a stacked white panel).
+  for (const v of ['.editorial', '.atlas', '.field-guide', '.workbench']) {
+    if (sel === v || sel.startsWith(v + ' ') || sel.startsWith(v + '.') || sel.startsWith(v + '[') || sel.startsWith(v + ':')) {
+      return '.paj' + sel;
+    }
+  }
   return '.paj ' + sel;
 }
 
