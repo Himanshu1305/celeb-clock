@@ -19,7 +19,7 @@
  * GradeLegend, and a WhatsApp share (reused WhatsAppShareButton) at the real-example moment.
  */
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { SEO } from '@/components/SEO';
 import { Navigation } from '@/components/Navigation';
@@ -27,7 +27,21 @@ import { AuthNav } from '@/components/AuthNav';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { TermTip, GradeLegend } from '@/components/vedic/TermTip';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
+import { fetchReading } from '@/services/readingService';
 import '@/styles/part-aj.css';
+
+// Build the DOB carry-forward URL (Part AK): extends Birthday's ?dob= pattern to carry the
+// date + time + place (with coordinates) a real chart needs, so /kundali requires no re-entry.
+function kundaliCarryUrl(d: BirthDetails): string {
+  const params = new URLSearchParams({
+    dob: d.dob, time: d.time, place: d.city.name,
+    lat: String(d.city.lat), lon: String(d.city.lon), tz: String(d.city.tz),
+  });
+  if (d.name) params.set('name', d.name);
+  return `/kundali?${params.toString()}`;
+}
+
+type Teaser = { lagna: string; rashi: string; nakshatra: string; dasha: string | null; name: string | null } | { error: true };
 
 // ── The reference example chart: 14 Mar 1990, 10:30 IST, New Delhi ────────────
 // Real Swiss-Ephemeris 2.10.03 output (Lahiri sidereal, whole-sign houses). These are the
@@ -231,8 +245,30 @@ const DEEPER: Array<{ title: string; desc: string; to: string }> = [
 ];
 
 export default function VedicAstrologyLanding() {
-  const navigate = useNavigate();
-  const onGenerate = (details: BirthDetails) => navigate('/kundali', { state: { autoGenerateBirth: details } });
+  // Tier 1.3 inline teaser: on submit, compute a real quick preview (Lagna/Rashi/Nakshatra +
+  // current Dasha) right here, then offer "See your full chart →" into /kundali WITH the birth
+  // details carried forward in the URL (no re-entry). The teaser uses the same real engine as
+  // the chart; if the engine is unreachable, the carry-forward link still works.
+  const [teaser, setTeaser] = useState<Teaser | null>(null);
+  const [teaserLoading, setTeaserLoading] = useState(false);
+  const [carryUrl, setCarryUrl] = useState('/kundali');
+
+  const onGenerate = async (details: BirthDetails) => {
+    setCarryUrl(kundaliCarryUrl(details));
+    setTeaserLoading(true); setTeaser(null);
+    setTimeout(() => document.getElementById('teaser')?.scrollIntoView({ behavior: 'smooth' }), 60);
+    try {
+      const payload = await fetchReading(details.dob, details.time, { lat: details.city.lat, lon: details.city.lon, tz: details.city.tz });
+      const f = payload.facts;
+      setTeaser({
+        lagna: f.lagna, rashi: f.rashi,
+        nakshatra: f.nakshatra ? `${f.nakshatra.name} (pada ${f.nakshatra.pada})` : '—',
+        dasha: f.dasha ? `${f.dasha.maha} / ${f.dasha.antar}` : null,
+        name: details.name || null,
+      });
+    } catch { setTeaser({ error: true }); }
+    finally { setTeaserLoading(false); }
+  };
 
   const faqs: Array<[string, string]> = [
     ['Can I use this without my exact birth time?', 'You still get your Moon sign, Nakshatra and Dasha (these depend mainly on the date). The Ascendant (Lagna) and house-based details need an accurate time — we tell you plainly which parts are affected rather than guessing a time for you.'],
@@ -307,6 +343,37 @@ export default function VedicAstrologyLanding() {
             <BirthDetailsForm submitLabel="Generate My Kundli — Free" onSubmit={onGenerate} testIdPrefix="vap" />
           </div>
         </section>
+
+        {/* Tier 1.3 — inline teaser: a real, instant preview after the hero form is submitted */}
+        {(teaserLoading || teaser) && (
+          <section className="section white" id="teaser" data-testid="vap-teaser">
+            <div className="section-head">
+              <div><span className="eyebrow">Your instant preview</span>
+                <h2>{teaser && !('error' in teaser) && teaser.name ? `${teaser.name}, here’s your chart at a glance.` : 'Your chart at a glance.'}</h2></div>
+              <p>A real, computed snapshot — the full chart (planets, Dasha, yogas, remedies) is one click away.</p>
+            </div>
+            {teaserLoading && <p className="subtle">Computing your chart from the Swiss-Ephemeris engine…</p>}
+            {teaser && !('error' in teaser) && (
+              <>
+                <div className="snapshot">
+                  <div><span className="eyebrow"><TermTip id="lagna">Lagna</TermTip> · Ascendant</span><strong>{teaser.lagna}</strong><p>The sign rising at your birth — your outward self and approach to life.</p></div>
+                  <div><span className="eyebrow"><TermTip id="rashi">Rashi</TermTip> · Moon sign</span><strong>{teaser.rashi}</strong><p>Where the Moon sits — your emotional nature and inner life.</p></div>
+                  <div><span className="eyebrow"><TermTip id="nakshatra">Nakshatra</TermTip></span><strong>{teaser.nakshatra}</strong><p>Your birth lunar mansion — a finer layer beneath the Moon sign.</p></div>
+                </div>
+                <div className="inline-actions" style={{ marginTop: 18 }}>
+                  <Link className="btn" to={carryUrl} data-testid="vap-see-full-chart">See your full chart →</Link>
+                  {teaser.dasha && <span className="inline-bullet">Current <TermTip id="dasha">Dasha</TermTip> period: <strong>{teaser.dasha}</strong></span>}
+                </div>
+              </>
+            )}
+            {teaser && 'error' in teaser && (
+              <div className="inline-actions">
+                <Link className="btn" to={carryUrl} data-testid="vap-see-full-chart">See your full chart →</Link>
+                <span className="inline-bullet">Your full computed chart opens on the next page — no need to re-enter anything.</span>
+              </div>
+            )}
+          </section>
+        )}
 
         <div className="trust-strip">
           <div><span className="tick" aria-hidden="true">✓</span>Positions you can inspect</div>
