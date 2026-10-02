@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
+import '@/styles/part-aj.css';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
@@ -121,27 +121,31 @@ export default function KundaliMatchPage() {
   };
 
   return (
-    <div data-testid="kmatch-page" className="min-h-screen bg-gradient-cosmic">
+    <div data-testid="kmatch-page" className="paj editorial" data-category="vedic">
       <SEO
         title="Kundali Matching — Free Guna Milan (Ashtakoota) | BornClock"
         description="Free Kundali matching by the 36-point Ashtakoota (Guna Milan) system — Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi, with Nadi & Bhakoot dosha checks."
         canonicalUrl="/kundali-match"
         ogType="website"
       />
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center mb-8 print:hidden">
-          <Navigation />
-          <AuthNav />
-        </header>
+      <header className="site-header print:hidden" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <Navigation />
+        <AuthNav />
+      </header>
+      <div className="breadcrumb">
+        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Kundali Matching</span></div>
+        <div className="edition"><span className="dot" />Ashtakoota · 36-point Guna Milan</div>
+      </div>
+      <main id="main">
+        <section className="section">
+          <div className="section-head">
+            <div><span className="eyebrow">Guna Milan</span><h1>Kundali Matching.</h1></div>
+            <p>The traditional 36-point Ashtakoota system. {usingSaved ? 'Your details are already filled in — just add the second person.' : 'Enter both birth dates (and times for accurate Nakshatra) to see all eight kootas.'}</p>
+          </div>
 
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">Kundali Matching (Guna Milan)</h1>
-        <p className="text-muted-foreground mb-4">
-          The traditional 36-point Ashtakoota system. {usingSaved ? 'Your details are already filled in — just add the second person.' : 'Enter both birth dates (and times for accurate Nakshatra) to see all eight kootas.'}
-        </p>
+          <KundaliTabs active="match" />
 
-        <KundaliTabs active="match" />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 print:hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 print:hidden" style={{ marginTop: 16 }}>
           {/* Person A — saved profile if present, else a form */}
           {usingSaved ? (
             <div data-testid="kmatch-saved-a" className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 space-y-2">
@@ -188,12 +192,14 @@ export default function KundaliMatchPage() {
         </div>
 
         <button data-testid="kmatch-calculate-btn" onClick={calculate} disabled={!canCalc || loading}
-                className="w-full py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50 mb-6 print:hidden">
+                className="btn print:hidden" style={{ width: '100%', marginBottom: 8 }}>
           {loading ? 'Matching…' : 'Match Kundalis →'}
         </button>
 
-        {failed && <p className="text-sm text-muted-foreground mb-6">Matching service is temporarily unavailable. Please try again shortly.</p>}
+        {failed && <p className="subtle" style={{ marginTop: 12 }}>Matching service is temporarily unavailable. Please try again shortly.</p>}
+        </section>
 
+        <section className="section white">
         {result && (
           <div data-testid="kmatch-result" id="kmatch-report" className="space-y-5">
             <div className="flex justify-end print:hidden">
@@ -286,11 +292,28 @@ export default function KundaliMatchPage() {
           </div>
         )}
 
-        <div className="mt-10 text-sm text-muted-foreground">
-          Read the full <Link to="/articles/kundali-compatibility" className="text-primary hover:underline">Kundali compatibility guide</Link>.
+        <p className="subtle" style={{ marginTop: 24 }}>
+          Read the full <Link to="/articles/kundali-compatibility" className="textlink">Kundali compatibility guide</Link>.
+        </p>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <div className="footer-main">
+          <div>
+            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+            <p className="subtle">Kundali matching by the traditional 36-point Ashtakoota system — computed, with every koota shown.</p>
+          </div>
+          <nav className="footer-nav" aria-label="Footer navigation">
+            <Link to="/vedic-astrology">Vedic Astrology</Link>
+            <Link to="/kundali">Kundali</Link>
+            <Link to="/sade-sati">Sade Sati</Link>
+            <Link to="/muhurat">Muhurat</Link>
+            <Link to="/privacy">Privacy</Link>
+          </nav>
         </div>
-      </div>
-      <Footer />
+        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
+      </footer>
     </div>
   );
 }
