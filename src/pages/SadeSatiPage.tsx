@@ -4,13 +4,14 @@
  * around already-validated data, matching the other Vedic tool pages.
  */
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { TermTip } from '@/components/vedic/TermTip';
+import '@/styles/part-aj.css';
 
 interface Cycle { start: string; end: string }
 interface Report {
@@ -89,17 +90,26 @@ export default function SadeSatiPage() {
   const initial = profile ? { dob: profile.dob, time: profile.time, city: profile.city } : undefined;
 
   return (
-    <div data-testid="sadesati-page" className="min-h-screen bg-gradient-cosmic">
+    <div data-testid="sadesati-page" className="paj editorial" data-category="vedic">
       <SEO title="Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock"
         description="Free Sade Sati calculator — find whether Saturn's 7.5-year Sade Sati (or the 2.5-year Dhaiya) is active for you, which phase, and the real start and end dates of your current and next cycle."
         canonicalUrl="/sade-sati" ogType="website" />
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center mb-8"><Navigation /><AuthNav /></header>
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">Sade Sati Calculator</h1>
-        <p className="text-muted-foreground mb-6">Saturn’s 7.5-year Sade Sati passes over the 12th, 1st and 2nd signs from your Moon. This tool shows whether it’s active for you now, which phase, and the real start/end dates — plus the 2.5-year Dhaiya (small Panoti).</p>
-
-        <BirthDetailsForm initial={initial} submitLabel="Check my Sade Sati" loadingLabel="Calculating…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="sadesati" />
-        {failed && <p className="text-sm text-muted-foreground mt-4">The service is temporarily unavailable. Please try again shortly.</p>}
+      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}><Navigation /><AuthNav /></header>
+      <div className="breadcrumb">
+        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Sade Sati</span></div>
+        <div className="edition"><span className="dot" />Shani · Saturn transit</div>
+      </div>
+      <main id="main">
+        <section className="section">
+          <div className="section-head">
+            <div><span className="eyebrow">Shani · Saturn transit</span><h1>Sade Sati Calculator.</h1></div>
+            <p>Saturn’s 7.5-year Sade Sati passes over the 12th, 1st and 2nd signs from your Moon — this shows whether it’s active now, which phase, the real start/end dates, plus the 2.5-year Dhaiya (small Panoti).</p>
+          </div>
+          <div className="form-band" style={{ marginTop: 16 }}>
+            <div><h3>Your birth details</h3><p className="small muted">We use your Moon sign to locate Saturn’s transit.</p></div>
+            <BirthDetailsForm initial={initial} submitLabel="Check my Sade Sati" loadingLabel="Calculating…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="sadesati" />
+          </div>
+        {failed && <p className="subtle" style={{ marginTop: 12 }}>The service is temporarily unavailable. Please try again shortly.</p>}
 
         {report && (
           <div data-testid="sadesati-result" className="mt-6 space-y-4">
@@ -165,8 +175,24 @@ export default function SadeSatiPage() {
             <p className="text-xs text-muted-foreground">Dates are computed from Saturn’s real transit through the signs, using the same Lahiri-ayanamsa engine (<TermTip id="ayanamsa">the traditional Indian star-based calculation</TermTip>) as the rest of BornClock. Treat Sade Sati as a classical timing indicator, not a fixed prediction.</p>
           </div>
         )}
-      </div>
-      <Footer />
+        </section>
+      </main>
+      <footer className="site-footer">
+        <div className="footer-main">
+          <div>
+            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+            <p className="subtle">Sade Sati from Saturn’s real transit — the same Lahiri-ayanamsa engine as the rest of BornClock.</p>
+          </div>
+          <nav className="footer-nav" aria-label="Footer navigation">
+            <Link to="/vedic-astrology">Vedic Astrology</Link>
+            <Link to="/kundali">Kundali</Link>
+            <Link to="/muhurat">Muhurat</Link>
+            <Link to="/gemstones">Gemstones</Link>
+            <Link to="/privacy">Privacy</Link>
+          </nav>
+        </div>
+        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
+      </footer>
     </div>
   );
 }
