@@ -338,6 +338,13 @@ export const STATIC_ROUTES = [
   '/mystic-corner',
   '/kundali',
   '/kundali-match',
+  // Part AL Step 7: prerender the redesigned Vedic tool pages so crawlers see real content
+  // on first load (previously served a bare SPA shell before React hydrated).
+  '/sade-sati',
+  '/muhurat',
+  '/gemstones',
+  '/career-report',
+  '/astrologer',
   '/baby-names',
   '/reminders',
   '/articles/kundali-compatibility',
