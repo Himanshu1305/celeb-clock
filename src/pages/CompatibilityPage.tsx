@@ -6,6 +6,8 @@ import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import PageTagline from '@/components/PageTagline';
+import { TrustStrip } from '@/components/paj/TrustStrip';
+import '@/styles/part-aj.css';
 import { getCompatibility, ZODIAC_SIGNS } from '@/data/compatibilityData';
 import { useReportPrice } from '@/hooks/useCurrency';
 import { SharePageBar } from '@/components/SharePageBar';
@@ -205,23 +207,20 @@ export default function CompatibilityPage() {
       />
       <FAQSchema items={faqItems} />
 
-      <div className="min-h-screen bg-white">
-        <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <Navigation />
-            <AuthNav />
-          </div>
+      <div className="paj atlas" data-category="mystic">
+        <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+          <Navigation />
+          <AuthNav />
+        </header>
+        <div className="breadcrumb">
+          <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/mystic-corner" className="textlink">Mystic Corner</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Compatibility</span></div>
+          <div className="edition"><span className="dot" />Zodiac · Rashi · Life Path</div>
         </div>
         <div className="max-w-2xl mx-auto px-4 py-10">
-
-          <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
-            <span>›</span>
-            <span className="text-gray-600">Compatibility Calculator</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-1">Zodiac Compatibility Calculator <span className="text-lg font-semibold text-gray-500">(Western Zodiac)</span></h1>
+          <span className="eyebrow">Compatibility</span>
+          <h1 style={{ margin: '8px 0 10px' }}>Zodiac Compatibility Calculator <span style={{ fontSize: 18, color: 'var(--muted)' }}>(Western Zodiac)</span></h1>
           <PageTagline />
+          <TrustStrip claim="Calculated from both actual birth dates — zodiac, Rashi, Life Path and Nakshatra, not a generic pairing table." />
 
           {/* DOB-based 4-dimension compatibility (Task 15) — zodiac, rashi, life path, nakshatra. */}
           <DobCompatibility />
@@ -590,6 +589,22 @@ export default function CompatibilityPage() {
           </p>
 
         </div>
+        <footer className="site-footer">
+          <div className="footer-main">
+            <div>
+              <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+              <p className="subtle">Compatibility computed from both real birth dates across four systems — not a generic pairing table.</p>
+            </div>
+            <nav className="footer-nav" aria-label="Footer navigation">
+              <Link to="/mystic-corner">Mystic Corner</Link>
+              <Link to="/numerology">Numerology</Link>
+              <Link to="/zodiac">Zodiac</Link>
+              <Link to="/chinese-zodiac">Chinese Zodiac</Link>
+              <Link to="/privacy">Privacy</Link>
+            </nav>
+          </div>
+          <div className="footer-bottom"><span>© 2026 BornClock · Calculated, not templated.</span></div>
+        </footer>
       </div>
     </>
   );
