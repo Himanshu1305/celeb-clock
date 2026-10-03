@@ -2,50 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Age Calculator App Design System - Cosmic Time Theme */
+/* BornClock Design System — Part AO new language (navy / ivory / category accents).
+   Fraunces (headings) + Public Sans (body); hairline borders; compact radius.
+   These are the SHARED tokens every shadcn/ui primitive, Navigation and Footer read,
+   so retuning them here restyles the whole site at once. */
 
 @layer base {
   :root {
-    /* Modern Minimalist Color Palette */
-    --background: 210 20% 98%;
-    --foreground: 220 13% 18%;
+    /* Warm ivory canvas + navy ink */
+    --background: 42 50% 96%;      /* ivory #FAF7F0 */
+    --foreground: 211 45% 15%;     /* navy ink */
 
     /* Cards with subtle elevation */
     --card: 0 0% 100%;
-    --card-foreground: 220 13% 18%;
+    --card-foreground: 211 45% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 13% 18%;
+    --popover-foreground: 211 45% 15%;
 
-    /* Deep Blue Primary */
-    --primary: 214 84% 36%;
+    /* Navy primary (#0E2238) */
+    --primary: 211 60% 14%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 214 84% 46%;
+    --primary-glow: 211 55% 22%;
 
-    /* Cool Gray Secondary */
-    --secondary: 215 16% 47%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-glow: 215 16% 57%;
+    /* Warm neutral secondary */
+    --secondary: 42 25% 91%;
+    --secondary-foreground: 211 45% 15%;
+    --secondary-glow: 42 25% 95%;
 
-    --muted: 210 20% 95%;
-    --muted-foreground: 215 13% 45%;
+    --muted: 42 30% 93%;
+    --muted-foreground: 211 12% 42%;
 
-    /* Muted Teal Accent */
-    --accent: 174 44% 47%;
-    --accent-foreground: 0 0% 100%;
-    --accent-glow: 174 44% 57%;
+    /* Subtle warm hover surface (ghost/dropdown/active rows) */
+    --accent: 42 38% 89%;
+    --accent-foreground: 211 45% 15%;
+    --accent-glow: 42 38% 93%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 48%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 20% 88%;
-    --input: 214 20% 94%;
-    --ring: 214 84% 36%;
+    --border: 40 22% 85%;          /* hairline */
+    --input: 40 22% 85%;
+    --ring: 211 60% 25%;           /* navy focus ring */
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
+
+    /* Category accents (shared, for inline use) */
+    --accent-gold: 38 42% 57%;     /* #C6A15B Vedic */
+    --accent-gold-ink: 38 37% 32%; /* #806125 bronze text */
+    --accent-coral: 9 82% 65%;     /* #F0715A Birthday */
+    --accent-coral-ink: 12 62% 44%;/* #B5432A */
+    --accent-amethyst: 258 28% 50%;/* #6E5AA6 Mystic */
+    --accent-blue: 207 59% 44%;    /* #2F6FB0 Science */
+    --accent-green-ink: 162 54% 31%;/* #237A60 */
 
     /* Subtle Gradients */
-    --gradient-cosmic: linear-gradient(135deg, hsl(210 20% 98%), hsl(214 25% 95%), hsl(210 20% 98%));
+    --gradient-cosmic: linear-gradient(180deg, hsl(42 50% 96%), hsl(42 50% 96%));
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
     --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--secondary-glow)));
     --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-glow)));
@@ -80,33 +92,33 @@
   }
 
   .dark {
-    --background: 220 16% 12%;
-    --foreground: 210 20% 95%;
+    --background: 211 40% 10%;
+    --foreground: 42 40% 94%;
 
-    --card: 220 16% 16%;
-    --card-foreground: 210 20% 95%;
+    --card: 211 35% 14%;
+    --card-foreground: 42 40% 94%;
 
-    --popover: 220 16% 16%;
-    --popover-foreground: 210 20% 95%;
+    --popover: 211 35% 14%;
+    --popover-foreground: 42 40% 94%;
 
-    --primary: 214 84% 46%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 38 42% 57%;
+    --primary-foreground: 211 60% 12%;
 
-    --secondary: 215 16% 35%;
-    --secondary-foreground: 210 20% 95%;
+    --secondary: 211 25% 22%;
+    --secondary-foreground: 42 40% 94%;
 
-    --muted: 220 16% 22%;
-    --muted-foreground: 215 13% 65%;
+    --muted: 211 25% 20%;
+    --muted-foreground: 42 15% 70%;
 
-    --accent: 174 44% 40%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 211 25% 24%;
+    --accent-foreground: 42 40% 94%;
 
     --destructive: 0 62.8% 50.6%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 16% 24%;
-    --input: 220 16% 20%;
-    --ring: 214 84% 46%;
+    --border: 211 25% 24%;
+    --input: 211 25% 22%;
+    --ring: 38 42% 57%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -338,7 +350,7 @@
 
 /* Card glow on hover */
 .tarot-card-container:not(.flipped):hover {
-  filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.6));
+  filter: drop-shadow(0 0 12px rgba(198, 161, 91, 0.55));
   transition: filter 0.2s ease;
 }
 

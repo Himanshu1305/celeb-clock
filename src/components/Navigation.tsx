@@ -130,10 +130,10 @@ export const Navigation = () => {
   const categoryActive = (cat: NavCategory) => cat.items.some(i => isActive(i.path));
 
   const mobileLinkClass = (path: string) =>
-    `flex items-center gap-3 px-4 py-3.5 min-h-[44px] rounded-xl text-sm font-medium transition-colors ${
+    `flex items-center gap-3 px-4 py-3.5 min-h-[44px] rounded-lg text-sm font-medium transition-colors ${
       isActive(path)
-        ? 'bg-indigo-50 text-indigo-700'
-        : 'text-gray-700 hover:bg-gray-50'
+        ? 'bg-[#0E2238]/8 text-[#0E2238]'
+        : 'text-gray-700 hover:bg-[#FAF7F0]'
     }`;
 
   const mobileSectionLabel = (label: string) => (
@@ -216,7 +216,7 @@ export const Navigation = () => {
           {!loading && isPremium && !showTrialPill && (
             <Link
               to="/upgrade"
-              className="text-indigo-600 border border-indigo-200 bg-indigo-50 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-100 transition-colors"
+              className="text-[#806125] border border-[#C6A15B]/40 bg-[#C6A15B]/12 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-[#C6A15B]/20 transition-colors"
             >
               ⭐ Premium
             </Link>
@@ -225,7 +225,7 @@ export const Navigation = () => {
           {!loading && !isPremium && !showTrialPill && (
             <Link
               to="/upgrade"
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+              className="bg-[#C6A15B] text-[#0E2238] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
             >
               Upgrade
             </Link>
@@ -234,7 +234,7 @@ export const Navigation = () => {
           {!loading && showTrialPill && (
             <Link
               to="/upgrade"
-              className="bg-amber-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-600 transition-colors"
+              className="bg-[#C6A15B] text-[#0E2238] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
             >
               Trial: {trialDaysRemaining}d left
             </Link>
@@ -295,7 +295,7 @@ export const Navigation = () => {
                   <Link
                     to="/upgrade"
                     onClick={closeMobile}
-                    className="flex items-center justify-center gap-2 w-full bg-indigo-600 text-white py-3 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors"
+                    className="flex items-center justify-center gap-2 w-full bg-[#C6A15B] text-[#0E2238] py-3 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
                   >
                     <Crown className="w-4 h-4" /> Upgrade to Premium
                   </Link>
