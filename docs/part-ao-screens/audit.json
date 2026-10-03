@@ -241,7 +241,7 @@
     "purple": [],
     "cosmic": false,
     "navyHeader": true,
-    "h1s": 2,
+    "h1s": 1,
     "errors": [],
     "img": "numerology.desktop.png"
   },
@@ -252,7 +252,7 @@
     "purple": [],
     "cosmic": false,
     "navyHeader": true,
-    "h1s": 2,
+    "h1s": 1,
     "errors": [],
     "img": "numerology.mobile.png"
   },
@@ -373,7 +373,7 @@
     "purple": [],
     "cosmic": false,
     "navyHeader": true,
-    "h1s": 2,
+    "h1s": 1,
     "errors": [],
     "img": "age_calculator.desktop.png"
   },
@@ -384,7 +384,7 @@
     "purple": [],
     "cosmic": false,
     "navyHeader": true,
-    "h1s": 2,
+    "h1s": 1,
     "errors": [],
     "img": "age_calculator.mobile.png"
   },
@@ -483,7 +483,7 @@
     "purple": [],
     "cosmic": false,
     "navyHeader": true,
-    "h1s": 2,
+    "h1s": 1,
     "errors": [],
     "img": "age_in_days.desktop.png"
   },
@@ -494,7 +494,7 @@
     "purple": [],
     "cosmic": false,
     "navyHeader": true,
-    "h1s": 2,
+    "h1s": 1,
     "errors": [],
     "img": "age_in_seconds.desktop.png"
   },
@@ -505,7 +505,7 @@
     "purple": [],
     "cosmic": false,
     "navyHeader": true,
-    "h1s": 2,
+    "h1s": 1,
     "errors": [],
     "img": "birthday_countdown.desktop.png"
   },
@@ -517,9 +517,7 @@
     "cosmic": false,
     "navyHeader": true,
     "h1s": 1,
-    "errors": [
-      "Failed to load resource: the server responded with a status of 429 ()"
-    ],
+    "errors": [],
     "img": "born_on_march_14.desktop.png"
   },
   {
@@ -561,7 +559,7 @@
     "status": 200,
     "purple": [],
     "cosmic": false,
-    "navyHeader": false,
+    "navyHeader": true,
     "h1s": 1,
     "errors": [],
     "img": "celebrity.desktop.png"
@@ -572,7 +570,7 @@
     "status": 200,
     "purple": [],
     "cosmic": false,
-    "navyHeader": false,
+    "navyHeader": true,
     "h1s": 1,
     "errors": [],
     "img": "celebrity_bollywood.desktop.png"
@@ -684,9 +682,7 @@
     "cosmic": false,
     "navyHeader": true,
     "h1s": 1,
-    "errors": [
-      "Failed to load resource: the server responded with a status of 429 ()"
-    ],
+    "errors": [],
     "img": "coach.desktop.png"
   },
   {
@@ -730,9 +726,7 @@
     "cosmic": false,
     "navyHeader": true,
     "h1s": 1,
-    "errors": [
-      "Failed to load resource: the server responded with a status of 429 ()"
-    ],
+    "errors": [],
     "img": "upgrade.desktop.png"
   },
   {
