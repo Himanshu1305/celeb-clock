@@ -38,3 +38,8 @@ Autonomous, no stopping, conservative-omission. Continues on `part-aj-four-page-
 - LIVE validator.schema.org result: /compatibility = 5 objects, 0 errors, 0 warnings (Organization, WebSite, BreadcrumbList, WebApplication, FAQPage). rashi-ratna + 3 hubs = 4 objects, 0 errors (FAQPage added). numerology = 7, 0 errors.
 - Known remaining (reported, not fixed this pass): SEO-component WebPage JSON-LD still missing from prerendered output on most pages (same Helmet race; low value; shared-component fix flagged, not done).
 - Part AM spec file NOT present in repo as of this check — did not start Part AM.
+
+## Part AM — Part A pages (one commit each)
+- ✅ /career-report → Vedic theme + trust + DOB carry-forward + in-body WebApplication schema. DOM-verified.
+- ✅ /name-numerology → Mystic theme + trust + in-body WebApplication+FAQPage schema. DOM-verified.
+- Global: sitewide WebPage JSON-LD now injected in prerender (deduped). JsonLd.tsx is the schema pattern going forward.
