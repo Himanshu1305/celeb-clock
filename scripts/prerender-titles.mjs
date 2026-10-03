@@ -157,6 +157,8 @@ const ANSWERS = {
 
 // ── Static pages ──────────────────────────────────────────────────────────────
 const STATIC = {
+  // Part AN: homepage title (keeps the ranking key terms; ≤70 chars; positioning lives in the H1 + meta description)
+  '/':                     { title: 'Birthday, Zodiac & Longevity Calculator | BornClock', desc: 'Everything your birth date reveals: your Vedic birth chart, celebrity birthday twins, numerology and zodiac, and longevity science — all from one date. Free at BornClock.' },
   // Day-8 celebrity index + hubs
   '/celebrity':            { title: 'Indian Celebrity Birthday Profiles — 598 Celebrities | BornClock', desc: 'Birthday, zodiac, and numerology profiles for 598 Indian celebrities — actors, cricketers, singers, leaders and more.' },
   '/celebrity/bollywood':  { title: 'Bollywood Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Bollywood actors and film personalities.' },
@@ -297,7 +299,6 @@ const STATIC = {
   '/gemstones':              { title: 'Gemstone Suggestions (Vedic) — Ascendant-Lord Stone | BornClock', desc: 'Informational Vedic gemstone suggestions based on your Ascendant lord and computed planetary strength — a traditional association, not a medical or guaranteed-effect claim. No sales.' },
   '/astrologer':             { title: 'Ask Your Personal Astrologer — AI Vedic Chat | BornClock', desc: 'Chat privately with a personal AI astrologer grounded in your own Vedic birth chart. Ask about career, relationships and life — thoughtful, judgment-free, never a verdict.' },
   '/career-report':          { title: 'Career Analysis Report (Vedic) — 10th House, D10 & Timing | BornClock', desc: 'A deeper Vedic career report: your 10th house and its lord, the Dasamsa (D10) career chart, career-relevant Yogas, and the real classical timing windows for professional moves.' },
-  '/name-numerology':        { title: 'Name Numerology Calculator — Expression, Soul Urge & Personality | BornClock', desc: 'Calculate your Expression, Soul Urge and Personality numbers from your name with the Pythagorean method — full meanings, nothing templated.' },
   '/baby-names':             { title: 'Baby Names by Nakshatra — Birth Star Syllables | BornClock', desc: 'Find auspicious baby-name starting syllables (aksharas) by Nakshatra (birth star), the traditional Vedic way. Enter birth details or pick the Nakshatra.' },
   '/articles/kundali-compatibility': { title: 'Kundali Matching Guide — Ashtakoota (36 Guna) Explained | BornClock', desc: 'A complete guide to Kundali matching by Ashtakoota (Guna Milan): all eight kootas, scores, doshas and what a good match really means.' },
   '/diwali-gift':            { title: 'Diwali Gift — Personalised Birthday & Kundali Reading | BornClock', desc: 'This Diwali, gift a personalised Birthday Report or Kundali (₹199 each), or the combo (₹299). Delivered with your own festive message.' },

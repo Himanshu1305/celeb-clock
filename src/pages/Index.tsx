@@ -1,636 +1,361 @@
-import { useState, useEffect } from 'react';
+/**
+ * BornClock homepage (Part AN) — built to docs/design-reference/homepage-final.dc.html.
+ *
+ * Real React + real data + the site's OWN functions (src/utils/homepageDecode wraps
+ * calculateWesternZodiac / calculateLifePathNumber / BIRTHSTONE_DATA) — never the mockup's copies.
+ * Clock, "Born today" and decoded values are client-side (never prerendered — the page is
+ * prerendered at build time). Everything reads as an EXAMPLE until the visitor enters their own
+ * date or a saved profile is in use. No date is ever put in the URL (Part AD). Structured data is
+ * body-rendered via JsonLd (never Helmet). The ticking clock is NOT an ARIA live region.
+ */
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { DobInput } from '@/components/DobInput';
+import { Helmet } from 'react-helmet-async';
+import { SEO } from '@/components/SEO';
 import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
-import { TestimonialsSection } from '@/components/TestimonialsSection';
-import { BentoGrid } from '@/components/BentoGrid';
-import { BirthdayReportShowcase } from '@/components/BirthdayReportShowcase';
-import { useAuth } from '@/hooks/useAuth';
+import { AuthNav } from '@/components/AuthNav';
+import { JsonLd } from '@/components/JsonLd';
+import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { useBirthDate } from '@/context/BirthDateContext';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Crown, ArrowRight, ShieldCheck, Sparkles, Star, Users, Activity, Globe, FileText } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { SEO, WebSiteSchema } from '@/components/SEO';
-import { PageFAQ } from '@/components/PageFAQ';
-import { AuthorBio } from '@/components/AuthorBio';
+import { zodiacSign, lifePath, birthstoneForMonth, marsAge, marsYearProgress, marsWeightKg } from '@/utils/homepageDecode';
+import { getRankedBirthdayCelebrities, type CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
+import { fetchCelebrityImage } from '@/services/WikipediaImageService';
+import { supabase } from '@/integrations/supabase/client';
+import '@/styles/homepage.css';
 
-const Index = () => {
-  const { user, profile, isPremium } = useAuth();
-  const { setBirthDate } = useBirthDate();
-  const navigate = useNavigate();
-  
-  // Birthday input state
-  const [day, setDay] = useState('');
-  const [month, setMonth] = useState('');
-  const [year, setYear] = useState('');
-  
-  // Live counter for social proof
-  const [decodedCount, setDecodedCount] = useState(12847);
+const EXAMPLE_ISO = '1998-03-14';
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const pad = (n: number) => String(n).padStart(2, '0');
+const parseIso = (iso: string) => { const [y, m, d] = iso.split('-').map(Number); return new Date(y, m - 1, d, 0, 0, 0); };
+const isValidIso = (iso: string) => {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return false;
+  const [y, m, day] = iso.split('-').map(Number);
+  const d = parseIso(iso);
+  return d.getFullYear() === y && d.getMonth() === m - 1 && d.getDate() === day && d.getTime() <= Date.now();
+};
 
-  // Animate the counter
+// ── Born-today band (client-side; real daily celebrities + real photos) ──────
+function BornTodayPhoto({ name }: { name: string }) {
+  const [img, setImg] = useState<string | null>(null);
+  useEffect(() => { let c = false; fetchCelebrityImage(name).then(u => { if (!c) setImg(u); }).catch(() => {}); return () => { c = true; }; }, [name]);
+  const initials = name.split(/\s+/).map(w => w[0]).filter(Boolean).join('').slice(0, 2).toUpperCase();
+  return <div className="ph">{img ? <img src={img} alt={name} loading="lazy" decoding="async" /> : initials}</div>;
+}
+
+function BornToday() {
+  const now = useMemo(() => new Date(), []);
+  const mmdd = `${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  const [people, setPeople] = useState<CelebrityBirthdayResult[]>([]);
+  const [total, setTotal] = useState<number | null>(null);
   useEffect(() => {
-    const interval = setInterval(() => {
-      setDecodedCount(prev => prev + Math.floor(Math.random() * 3) + 1);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Part V — live heartbeat counter for the "Birthday Fun" choose-your-path card.
-  // Representative 30-year-old at ~70 bpm ≈ 1.1 billion beats; ticks live (same
-  // live-counting mechanic as the Age Calculator card) so it's real, not static.
-  const REP_AGE_YEARS = 30;
-  const [heartbeats, setHeartbeats] = useState(
-    Math.round(REP_AGE_YEARS * 365.25 * 24 * 60 * 70),
+    let c = false;
+    getRankedBirthdayCelebrities(mmdd, null, 3).then(r => { if (!c) setPeople(r); }).catch(() => {});
+    supabase.from('celebrity_sitelinks').select('*', { count: 'exact', head: true }).eq('birth_month_day', mmdd)
+      .then(({ count }) => { if (!c && typeof count === 'number') setTotal(count); });
+    return () => { c = true; };
+  }, [mmdd]);
+  const moreLabel = total != null ? `+${Math.max(0, total - people.length)} more today →` : 'See everyone born today →';
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 22, padding: '12px 24px', background: '#FFFFFF', borderBottom: '1px solid #E4DCC8', flexWrap: 'wrap', minHeight: 60 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.7px', color: '#B5432A', whiteSpace: 'nowrap' }}>
+        BORN TODAY · {now.getDate()} {MONTHS[now.getMonth()].toUpperCase()}
+      </div>
+      {people.map((p, i) => (
+        <div className="bt" style={{ animationDelay: `${0.1 + i * 0.15}s` }} key={p.name}>
+          <BornTodayPhoto name={p.name} />
+          <div style={{ fontSize: 12.5 }}>
+            <b style={{ color: '#0E2238' }}>{p.name}</b>
+            <div style={{ fontSize: 10.5, color: '#5B6472' }}>{(p.occupation || p.knownFor || 'Notable person')}{p.birthDate ? ` · ${p.birthDate.slice(0, 4)}` : ''}</div>
+          </div>
+        </div>
+      ))}
+      <Link to="/todays-birthdays" className="bt" style={{ animationDelay: '.55s', fontSize: 12.5, fontWeight: 700, color: '#B5432A' }}>{moreLabel}</Link>
+    </div>
   );
-  useEffect(() => {
-    const interval = setInterval(() => setHeartbeats(h => h + 1), 850);
-    return () => clearInterval(interval);
-  }, []);
+}
 
-  // Handle form submission
-  const handleFindTwin = () => {
-    if (day && month && year) {
-      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-      if (!isNaN(date.getTime())) {
-        setBirthDate(date);
-        navigate('/results');
-      }
+// ── Directory tool columns (every link a real route) ─────────────────────────
+type Tool = { label: string; tag: string; to: string };
+const VEDIC_TOOLS: Tool[] = [
+  { label: 'Kundli Chart', tag: 'free', to: '/kundali' },
+  { label: 'Kundali Matching', tag: '36-point', to: '/kundali-match' },
+  { label: 'Dasha Timing', tag: 'to Pratyantar', to: '/kundali' },
+  { label: 'Yoga Detection', tag: 'graded', to: '/kundali' },
+  { label: 'Sade Sati Checker', tag: 'real transit', to: '/sade-sati' },
+  { label: 'Muhurat Finder', tag: 'by city', to: '/muhurat' },
+  { label: 'Gemstone Recommendation', tag: 'Lagna-based', to: '/gemstones' },
+  { label: 'Rashi Ratna', tag: 'by Rashi', to: '/rashi-ratna' },
+  { label: 'Career Report', tag: '10th house', to: '/career-report' },
+  { label: 'AI Astrologer', tag: 'chat', to: '/astrologer' },
+];
+const BIRTHDAY_TOOLS: Tool[] = [
+  { label: 'Celebrity Birthday Twins', tag: 'real profiles', to: '/celebrity-birthday' },
+  { label: "Today's Birthdays", tag: 'live', to: '/todays-birthdays' },
+  { label: 'Age Calculator', tag: 'to the second', to: '/age-calculator' },
+  { label: 'Birthstone', tag: 'by month', to: '/birthstone' },
+  { label: 'Indian Celebrities by Date', tag: 'daily', to: '/born-on/india' },
+  { label: 'Birthday Blueprint', tag: '8-page PDF', to: '/birthday-report' },
+];
+const MYSTIC_TOOLS: Tool[] = [
+  { label: 'Numerology', tag: 'Life Path + Name', to: '/numerology' },
+  { label: 'Western Zodiac', tag: 'sun sign', to: '/zodiac' },
+  { label: 'Chinese Zodiac', tag: 'lunar year', to: '/chinese-zodiac' },
+  { label: 'Tarot by Birthday', tag: 'birth card', to: '/tarot-card-by-birthday' },
+  { label: 'Compatibility', tag: 'names + dates', to: '/compatibility' },
+  { label: 'Biorhythm', tag: 'daily cycles', to: '/biorhythm' },
+];
+const SCIENCE_TOOLS: Tool[] = [
+  { label: 'Life Expectancy', tag: 'WHO / NIH-informed', to: '/life-expectancy' },
+  { label: 'Biological Age Test', tag: '10 questions', to: '/biological-age' },
+  { label: 'Country Comparison', tag: '57 countries', to: '/country-comparison' },
+  { label: 'Planetary Age', tag: 'orbital periods', to: '/planetary-age' },
+  { label: 'Planetary Weight', tag: 'NASA 2023', to: '/weight-on-planets' },
+];
+function ToolList({ tools }: { tools: Tool[] }) {
+  return <div className="tools">{tools.map(t => <Link key={t.label + t.to} to={t.to}>{t.label} <span>{t.tag}</span></Link>)}</div>;
+}
+
+export default function Index() {
+  const navigate = useNavigate();
+  const { setBirthDate } = useBirthDate();
+  const { profile } = useSavedProfile();
+
+  const savedDob = profile?.dob && isValidIso(profile.dob) ? profile.dob : null;
+  const [entered, setEntered] = useState<string | null>(null);
+  const activeIso = (entered && isValidIso(entered)) ? entered : (savedDob ?? EXAMPLE_ISO);
+  const isExample = !(entered && isValidIso(entered)) && !savedDob;
+
+  // Ticking clock (NOT an ARIA live region).
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => { const t = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(t); }, []);
+
+  // One-time polite announcement when the visitor's own results first appear.
+  const [announce, setAnnounce] = useState('');
+  const announcedRef = useRef(false);
+
+  const birth = parseIso(activeIso);
+  const [y, m, d] = activeIso.split('-').map(Number);
+
+  const yearsLived = (() => { let a = now.getFullYear() - y; if (now < new Date(now.getFullYear(), m - 1, d)) a--; return a; })();
+  const lastBday = new Date(y + yearsLived, m - 1, d);
+  const nextBday = new Date(y + yearsLived + 1, m - 1, d);
+  const totalSec = Math.max(0, Math.floor((now.getTime() - birth.getTime()) / 1000));
+  const daysInYear = Math.floor((now.getTime() - lastBday.getTime()) / 86400000);
+  const nextIn = Math.ceil((nextBday.getTime() - now.getTime()) / 86400000);
+  const pct = Math.min(100, Math.max(0, ((now.getTime() - lastBday.getTime()) / (nextBday.getTime() - lastBday.getTime())) * 100));
+  const isBirthdayToday = now.getMonth() + 1 === m && now.getDate() === d;
+
+  const sign = zodiacSign(d, m);
+  const lp = lifePath(d, m, y);
+  const stone = birthstoneForMonth(m);
+  const marsYears = marsAge(birth, now);
+  const marsPctThisYear = Math.floor(marsYearProgress(birth, now) * 100);
+  const marsKg = marsWeightKg(70);
+
+  const onDate = (v: string) => {
+    if (isValidIso(v)) {
+      setEntered(v);
+      if (!announcedRef.current) { announcedRef.current = true; setAnnounce('Your birth date has been decoded below.'); }
     }
   };
 
-  // Check if form is valid
-  const isFormValid = day && month && year && 
-    parseInt(day) >= 1 && parseInt(day) <= 31 &&
-    parseInt(month) >= 1 && parseInt(month) <= 12 &&
-    parseInt(year) >= 1900 && parseInt(year) <= new Date().getFullYear();
+  const kundaliUrl = useMemo(() => {
+    const params = new URLSearchParams({ dob: activeIso });
+    if (!entered && savedDob && profile?.time && profile?.city) {
+      params.set('time', profile.time);
+      params.set('place', profile.city.name);
+      params.set('lat', String(profile.city.lat)); params.set('lon', String(profile.city.lon)); params.set('tz', String(profile.city.tz));
+    }
+    return `/kundali?${params.toString()}`;
+  }, [activeIso, entered, savedDob, profile]);
+
+  const seeFullProfile = () => { setBirthDate(birth); navigate('/results'); };
+
+  const exampleLabel = isExample ? `Example: ${d} ${MONTHS[m - 1]} ${y} — enter yours` : null;
+  const DEC = [
+    { lab: 'WESTERN SIGN', color: '#6E5AA6', top: '#6E5AA6', val: sign, sub: 'by date cut-offs' },
+    { lab: 'LIFE PATH', color: '#6E5AA6', top: '#6E5AA6', val: String(lp), sub: 'every digit summed' },
+    { lab: 'BIRTHSTONE', color: '#B5432A', top: '#F0715A', val: stone, sub: 'by birth month' },
+    { lab: 'AGE ON MARS', color: '#2F6FB0', top: '#2F6FB0', val: `${marsYears.toFixed(1)} yrs`, sub: 'Mars year = 1.881 Earth yrs' },
+    { lab: 'WEIGHT ON MARS', color: '#2F6FB0', top: '#2F6FB0', val: `${marsKg.toFixed(1)} kg`, sub: 'per 70 kg on Earth (0.38×)' },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
+    <div className="hp">
       <SEO
-        title="Free Birthday, Zodiac & Longevity Calculator | BornClock"
-        description="The best free age calculator, celebrity birthday match, zodiac, birthstone, numerology, planetary age and life expectancy tools — accurate, live, sourced from WHO, CDC, NASA and Wikipedia."
-        keywords="age calculator, how old am I, born in 1990 how old, born in 1985 how old, born in 1995 how old, celebrity birthday match, famous birthdays today, life expectancy calculator, how long will I live, death clock, zodiac sign calculator, birthstone finder, planetary age calculator"
+        title="Birthday, Zodiac & Longevity Calculator | BornClock"
+        description="Everything your birth date reveals: your Vedic birth chart, celebrity birthday twins, numerology and zodiac, and longevity science — all from one date. Free birthday, zodiac & longevity calculators."
+        keywords="birthday calculator, zodiac calculator, longevity calculator, numerology, life path, vedic birth chart, kundli, celebrity birthdays, biological age"
         canonicalUrl="/"
       />
-      <WebSiteSchema />
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <header className="flex justify-between items-center mb-8">
-          <Navigation />
-          <AuthNav />
-        </header>
+      <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+      </Helmet>
+      {/* Structured data — body-rendered (Part AM JsonLd), never Helmet */}
+      <JsonLd id="org" data={{ '@context': 'https://schema.org', '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com/', logo: 'https://bornclock.com/og/default.png' }} />
+      <JsonLd id="website" data={{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'BornClock', url: 'https://bornclock.com/', potentialAction: { '@type': 'SearchAction', target: 'https://bornclock.com/celebrity?q={search_term_string}', 'query-input': 'required name=search_term_string' } }} />
+      <JsonLd id="webpage" data={{ '@context': 'https://schema.org', '@type': 'WebPage', name: 'BornClock — Birthday, Zodiac & Longevity Calculator', description: 'Everything your birth date reveals — Vedic chart, celebrity twins, numerology, zodiac and longevity science from one date.', url: 'https://bornclock.com/' }} />
 
-        {/* Welcome Message for logged in users */}
-        {user && profile?.name && (
-          <div className="text-center py-4 animate-fade-in mb-4">
-            <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 rounded-full border border-primary/20">
-              <span className="text-lg">Welcome back, <strong className="gradient-text-primary">{profile.name}</strong>!</span>
-              {isPremium && (
-                <Badge variant="secondary" className="bg-accent/20 text-accent">
-                  <Crown className="w-3 h-3 mr-1" />
-                  Premium
-                </Badge>
-              )}
+      {/* Polite, one-time announcement (NOT the ticking clock) */}
+      <div aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>{announce}</div>
+
+      {/* Header — real Navigation + AuthNav on the navy bar (global Navigation not restyled) */}
+      <header style={{ background: '#0E2238', padding: '0 24px', minHeight: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <Navigation />
+        <AuthNav />
+      </header>
+
+      <div style={{ width: '100%', maxWidth: 1440, margin: '0 auto', display: 'flex', flexDirection: 'column' }}>
+
+        {/* HERO */}
+        <div className="hero" style={{ display: 'flex', gap: 28, padding: '30px 24px', borderBottom: '1px solid #E4DCC8' }}>
+          <div style={{ flex: 1.05, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.4px', color: '#806125' }}>RIGOROUSLY CALCULATED BIRTH INTELLIGENCE</div>
+            <h1 style={{ fontSize: 42, lineHeight: 1.08, color: '#0E2238', fontWeight: 700 }}>Everything your birth date reveals.</h1>
+            <p style={{ fontSize: 15, lineHeight: 1.55, color: '#3E4759', margin: 0, maxWidth: 540 }}>Your Vedic birth chart, the celebrities who share your birthday, your numerology and zodiac, and what longevity science says — all from one date.</p>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 6, flexWrap: 'wrap' }}>
+              <label htmlFor="dob" style={{ fontSize: 12, fontWeight: 700, color: '#0E2238' }}>Your birth date</label>
+              <input id="dob" type="date" defaultValue={activeIso} max={new Date().toISOString().slice(0, 10)}
+                onInput={e => onDate((e.target as HTMLInputElement).value)}
+                style={{ height: 40, border: '1px solid #D8D2C2', borderRadius: 6, padding: '0 12px', fontSize: 14, background: '#FFFFFF' }} />
+              <button type="button" onClick={() => { const el = document.getElementById('dob') as HTMLInputElement | null; if (el) onDate(el.value); }}
+                style={{ height: 40, background: '#0E2238', color: '#FFFFFF', border: 'none', borderRadius: 6, fontSize: 13.5, fontWeight: 700, padding: '0 18px' }}>Decode my date</button>
+            </div>
+            {exampleLabel && <div style={{ fontSize: 11.5, fontWeight: 600, color: '#B5432A' }}>{exampleLabel}</div>}
+            <div className="doors" data-testid="choose-your-path">
+              <Link className="door" to="/vedic-astrology" style={{ ['--ac' as string]: '#C6A15B' }}><b>Vedic Astrology</b><span>Kundli · Matching · Sade Sati</span></Link>
+              <Link className="door" to="/celebrity-birthday" style={{ ['--ac' as string]: '#F0715A' }}><b>Birthday &amp; Celebrity</b><span>Celebrity twins · Today's birthdays</span></Link>
+              <Link className="door" to="/mystic-corner" style={{ ['--ac' as string]: '#6E5AA6' }}><b>Mystic Corner</b><span>Numerology · Zodiac · Tarot</span></Link>
+              <Link className="door" to="/life-expectancy" style={{ ['--ac' as string]: '#2F6FB0' }}><b>Science &amp; Longevity</b><span>Life expectancy · Biological age</span></Link>
             </div>
           </div>
-        )}
-
-        {/* NEW VIRAL HERO SECTION */}
-        <section className="relative text-center pt-6 pb-16 max-w-4xl mx-auto" data-testid="hero-section">
-          {/* Background decoration */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-            <div className="absolute top-10 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-10 right-10 w-72 h-72 bg-accent/5 rounded-full blur-3xl" />
-          </div>
-
-          <div className="relative z-10 space-y-8 animate-fade-in-up">
-            {/* Social Proof Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 border border-primary/20 rounded-full text-sm text-muted-foreground">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              <span><strong className="text-foreground">{decodedCount.toLocaleString()}</strong> birthdays decoded today</span>
+          {/* Live clock panel */}
+          <div style={{ flex: 0.95, background: '#FFFFFF', border: '1px solid #E4DCC8', borderRadius: 10, padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.8px', color: '#B5432A' }}>{isExample ? 'EXAMPLE — ALIVE FOR' : "YOU'VE BEEN ALIVE FOR — LIVE"}</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+              <div><div className="tick">{yearsLived}</div><div className="ticklab">YEARS</div></div>
+              <div><div className="tick">{daysInYear}</div><div className="ticklab">DAYS</div></div>
+              <div><div className="tick">{now.getHours()}</div><div className="ticklab">HOURS</div></div>
+              <div><div className="tick">{pad(now.getMinutes())}</div><div className="ticklab">MINUTES</div></div>
+              <div><div className="tick" style={{ color: '#B5432A' }}>{pad(now.getSeconds())}</div><div className="ticklab">SECONDS</div></div>
             </div>
-
-            {/* Main Headline */}
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 text-center leading-tight">
-                Your birthday,{' '}
-                <span className="text-indigo-600">fully decoded.</span>
-              </h1>
-
-              <p className="text-lg md:text-xl text-gray-600 text-center max-w-2xl mx-auto mt-4">
-                Your date of birth, fully explored — real longevity science, precisely computed Vedic astrology, and birthday fun, all in one place.
-              </p>
-
-              <p className="text-sm text-indigo-600 font-medium text-center mb-3 italic">
-                Enter your date of birth to discover your celebrity birthday twin, zodiac signs, longevity forecast, and more →
-              </p>
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', borderTop: '1px solid #EFE9DA', paddingTop: 10 }}>
+              <div style={{ fontSize: 12.5, color: '#1A2230' }}><b>{totalSec.toLocaleString()}</b> seconds in total</div>
+              <div style={{ fontSize: 12.5, color: '#1A2230' }}>≈ <b>{Math.floor(totalSec * 1.2).toLocaleString()}</b> heartbeats</div>
+              {isBirthdayToday
+                ? <div style={{ fontSize: 12.5, color: '#B5432A', fontWeight: 700 }}>🎉 Happy birthday — today's the day!</div>
+                : <div style={{ fontSize: 12.5, color: '#1A2230' }}>Next birthday in <b>{nextIn}</b> days</div>}
             </div>
-
-            {/* Birthday Input Form */}
-            <div className="max-w-md mx-auto">
-              <Card className="glass-card card-party-border">
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <p className="text-sm font-medium text-muted-foreground">Enter your birthday</p>
-                    
-                    <DobInput
-                      label=""
-                      onChange={({ day: d, month: m, year: y }) => { setDay(d); setMonth(m); setYear(y); }}
-                    />
-
-                    <Button 
-                      size="lg" 
-                      className="w-full gap-2 text-lg py-6 animate-shimmer"
-                      onClick={handleFindTwin}
-                      disabled={!isFormValid}
-                      data-testid="hero-cta-button"
-                    >
-                      <Sparkles className="w-5 h-5" />
-                      Reveal Everything
-                      <ArrowRight className="w-5 h-5" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Trust indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground pt-2">
-              <div className="flex items-center gap-1.5">
-                <Users className="w-4 h-4 text-primary" />
-                <span>3,000+ celebrities</span>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: '#1A2230', marginBottom: 5 }}>
+                <span>Year <b>{yearsLived + 1}</b> of {isExample ? 'this life' : 'your life'}</span><span><b>{Math.floor(pct)}</b>% complete</span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-accent" />
-                <span>42+ insights</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-green-600" />
-                <span>100% free</span>
-              </div>
+              <div className="pbar" role="progressbar" aria-label="Progress through the current year of life" aria-valuenow={Math.floor(pct)} aria-valuemin={0} aria-valuemax={100}><div style={{ width: `${pct.toFixed(2)}%` }} /></div>
             </div>
+            <div style={{ fontSize: 10.5, color: '#5B6472' }}>Heartbeats estimated at an average 72 bpm. Clock assumes a 00:00 birth time.</div>
+          </div>
+        </div>
 
-            {/* Primary CTA — the full paid Birthday Report */}
-            <div className="pt-2">
-              <Button asChild size="lg" className="gap-2">
-                <Link to="/birthday-report" data-testid="hero-primary-cta">
-                  Get your full Birthday Report →
-                </Link>
-              </Button>
+        {/* YOUR DATE, DECODED */}
+        <div style={{ padding: '10px 24px 0', display: 'flex', gap: 14, alignItems: 'baseline', flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.8px', color: '#0E2238' }}>YOUR DATE, DECODED</span>
+          {exampleLabel && <span style={{ fontSize: 11, color: '#B5432A', fontWeight: 600 }}>{exampleLabel}</span>}
+          <button type="button" onClick={seeFullProfile} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#B5432A', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>See your full birthday profile →</button>
+        </div>
+        <div className="decrow" key={activeIso} style={{ display: 'flex', margin: '8px 24px 18px', background: '#FFFFFF', border: '1px solid #E4DCC8', borderRadius: 10 }}>
+          {DEC.map((c, i) => (
+            <div className="dec" key={c.lab} style={{ borderTop: `3px solid ${c.top}`, ...(i === 0 ? { borderTopLeftRadius: 10 } : {}) }}>
+              <div className="lab" style={{ color: c.color }}>{c.lab}</div>
+              <div className="val pop">{c.val}</div>
+              <div className="sub">{c.sub}</div>
             </div>
+          ))}
+          <div className="dec" style={{ borderTop: '3px solid #C6A15B', borderTopRightRadius: 10 }}>
+            <div className="lab" style={{ color: '#806125' }}>VEDIC CHART</div>
+            <div className="val">Free</div>
+            <div className="sub">needs time + place · <Link to={kundaliUrl} style={{ fontWeight: 700 }}>generate</Link></div>
+          </div>
+        </div>
 
-            {/* Secondary CTA */}
-            <div className="pt-2">
-              <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
-                <Link to="/todays-birthdays">
-                  Or see who's celebrating today →
-                </Link>
-              </Button>
+        {/* TRUST STRIP */}
+        <div className="trust" style={{ display: 'flex', padding: '14px 24px', background: '#FFFFFF', borderTop: '1px solid #E4DCC8', borderBottom: '1px solid #E4DCC8' }}>
+          <div style={{ flex: 1, borderRight: '1px solid #E4DCC8', paddingRight: 16 }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#806125' }}>CROSS-CHECKED — </span><span style={{ fontSize: 12, color: '#3E4759' }}>Vedic calculations checked against independent reference calculations, not a template.</span></div>
+          <div style={{ flex: 1, borderRight: '1px solid #E4DCC8', padding: '0 16px' }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#806125' }}>CLASSICAL — </span><span style={{ fontSize: 12, color: '#3E4759' }}>the 36-point Ashtakoota system, per the Brihat Parashara Hora Shastra.</span></div>
+          <div style={{ flex: 1, paddingLeft: 16 }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#806125' }}>SOURCED — </span><span style={{ fontSize: 12, color: '#3E4759' }}>WHO, Harvard, NIH, UN WPP 2024 and NASA's Planetary Fact Sheet (2023).</span></div>
+        </div>
+
+        {/* BORN TODAY (client-side) */}
+        <BornToday />
+
+        {/* DIRECTORY */}
+        <div className="dir" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', background: '#FAF7F0', borderBottom: '1px solid #E4DCC8' }}>
+          <div className="col" id="vedic" style={{ ['--ac' as string]: '#C6A15B' }}>
+            <div className="eyebrow" style={{ color: '#806125' }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#806125" strokeWidth="1.4" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" /><path d="M1.5 1.5l13 13M14.5 1.5l-13 13" /></svg>VEDIC ASTROLOGY</div>
+            <h2>Traditional systems, computed.</h2>
+            <div className="teaser"><span>Your real Kundli — Lagna, Nakshatra and Dasha — free. <span style={{ color: '#5B6472', fontSize: 11 }}>House 1 (Lagna) sits at the top, as in the classical North-Indian chart.</span></span></div>
+            <ToolList tools={VEDIC_TOOLS} />
+            <Link className="explore" to="/vedic-astrology" style={{ color: '#806125' }}>Explore Vedic Astrology →</Link>
+          </div>
+          <div className="col" id="birthday" style={{ ['--ac' as string]: '#F0715A' }}>
+            <div className="eyebrow" style={{ color: '#B5432A' }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#B5432A" strokeWidth="1.4" aria-hidden="true"><path d="M2 14h12M3 14V8h10v6M8 8V5M8 5c-1-1-1-2 0-3 1 1 1 2 0 3z" /></svg>BIRTHDAY &amp; CELEBRITY</div>
+            <h2>Specific beats generic.</h2>
+            <div className="teaser">{isBirthdayToday ? 'Your birthday is today — see who else celebrates it.' : <>Next birthday in <b>{nextIn}</b> days — see who else celebrates it.</>}</div>
+            <ToolList tools={BIRTHDAY_TOOLS} />
+            <Link className="explore" to="/celebrity-birthday" style={{ color: '#B5432A' }}>Explore Birthdays →</Link>
+          </div>
+          <div className="col" id="mystic" style={{ ['--ac' as string]: '#6E5AA6' }}>
+            <div className="eyebrow" style={{ color: '#6E5AA6' }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#6E5AA6" strokeWidth="1.4" aria-hidden="true"><path d="M8 1.5l1.6 4.9L14.5 8l-4.9 1.6L8 14.5 6.4 9.6 1.5 8l4.9-1.6z" /></svg>MYSTIC CORNER</div>
+            <h2>Many symbols. Different rules.</h2>
+            <div className="teaser">Your Life Path is <b>{lp}</b> — see what it's said to mean.</div>
+            <ToolList tools={MYSTIC_TOOLS} />
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 4 }}>
+              <span className="chip">Each system has its own rules — we say which</span>
+              <span className="chip">Western ≠ Vedic sign</span>
             </div>
+            <Link className="explore" to="/mystic-corner" style={{ color: '#6E5AA6' }}>Explore Mystic Corner →</Link>
           </div>
-        </section>
-
-        {/* Sign Up Banner */}
-        {!user && (
-          <section className="max-w-3xl mx-auto mb-12 animate-bounce-in" style={{ animationDelay: '0.2s' }}>
-            <Card className="glass-card card-party-border bg-gradient-to-r from-primary/5 via-accent/5 to-secondary/5">
-              <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl">🎁</span>
-                  <div>
-                    <h3 className="font-semibold text-lg text-foreground">Save your results forever</h3>
-                    <p className="text-sm text-muted-foreground">Create a free account to save matches & get weekly birthday insights</p>
-                  </div>
-                </div>
-                <Button asChild className="gap-1 whitespace-nowrap">
-                  <Link to="/auth?signup=true">
-                    Join Free
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          </section>
-        )}
-
-        {/* Part V — "Choose your path": four category cards in the research-backed
-            serial-position order (Vedic first = primacy, Science last = recency), with
-            finalized copy + live/computed stats. Category names are REAL TEXT (not
-            color-only); emoji icons are aria-hidden; live stats carry aria-labels. */}
-        <section className="max-w-4xl mx-auto mb-14 px-4" data-testid="choose-your-path">
-          <h2 className="text-2xl font-bold text-center mb-6 gradient-text-primary">Choose your path</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-
-            {/* 1. Vedic Astrology (primacy) — Part AE: links to the /vedic-astrology
-                 category landing page (was /kundali; the CTA label is updated to match). */}
-            <Link
-              to="/vedic-astrology"
-              data-testid="path-card-vedic"
-              className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
-            >
-              <div className="text-3xl mb-2" aria-hidden="true">🪔</div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-indigo-600 mb-1">Vedic Astrology</p>
-              <h3 className="font-bold text-foreground mb-1 text-base">Your real birth chart</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">The depth of a professional reading, backed by verified accuracy.</p>
-              <p className="text-[11px] text-indigo-600 font-medium mt-2">Explore Vedic Astrology →</p>
-            </Link>
-
-            {/* 2. Birthday Fun & Celebrity Twins — live heartbeat counter (representative 30y) */}
-            <Link
-              to="/age-calculator"
-              data-testid="path-card-birthday"
-              className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
-            >
-              <div className="text-3xl mb-2" aria-hidden="true">⏱️</div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-rose-600 mb-1">Birthday Fun &amp; Celebrity Twins</p>
-              <h3 className="font-bold text-foreground mb-1 text-base">
-                <span aria-hidden="true">{(heartbeats / 1e9).toFixed(1)} billion heartbeats</span>
-                <span className="sr-only">Approximately 1.1 billion heartbeats for a representative 30-year-old, counting live</span>
-              </h3>
-              <p className="text-[11px] text-muted-foreground tabular-nums" aria-hidden="true">{heartbeats.toLocaleString()} and counting</p>
-              <p className="text-xs text-muted-foreground leading-relaxed mt-1">≈ 30 years old — see everything your date of birth reveals.</p>
-              <p className="text-[11px] text-rose-600 font-medium mt-2">Age Calculator →</p>
-            </Link>
-
-            {/* 3. Mystic Corner — representative Life Path number. Part AG: points to the
-                 /mystic-corner hub (was /numerology) now that the hub page exists. */}
-            <Link
-              to="/mystic-corner"
-              data-testid="path-card-mystic"
-              className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
-            >
-              <div className="text-3xl mb-2" aria-hidden="true">🔢</div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-violet-600 mb-1">Mystic Corner</p>
-              <h3 className="font-bold text-foreground mb-1 text-base">
-                Life Path <span className="text-violet-600">7</span>
-              </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">Numerology, name numerology and tarot from your birthday. <span className="italic">(7 is an example — yours is computed from your date.)</span></p>
-              <p className="text-[11px] text-violet-600 font-medium mt-2">Numerology →</p>
-            </Link>
-
-            {/* 4. Science & Longevity (recency) — years figure + gradient bar + sourcing */}
-            <Link
-              to="/life-expectancy"
-              data-testid="path-card-science"
-              className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors text-center"
-            >
-              <div className="text-3xl mb-2" aria-hidden="true">❤️</div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 mb-1">Science &amp; Longevity</p>
-              <h3 className="font-bold text-foreground mb-1 text-base">See what adds or costs you years</h3>
-              <p className="text-2xl font-black text-foreground" aria-label="Representative estimate: about 73.4 years">73.4 <span className="text-sm font-semibold text-muted-foreground">years</span></p>
-              <div className="h-1.5 w-full rounded-full bg-gradient-to-r from-rose-500 via-amber-500 to-green-500 my-2" aria-hidden="true" />
-              <p className="text-[11px] text-muted-foreground leading-relaxed">Sourced from UN, WHO &amp; GBD data — an estimate, not a guarantee.</p>
-              <p className="text-[11px] text-emerald-600 font-medium mt-2">Life Expectancy →</p>
-            </Link>
-
-          </div>
-        </section>
-
-        {/* ═══ Part V block: Vedic Astrology (NEW — primacy position) ═══
-            Homepage Vedic content was a genuine gap before Part V. Real preview cards
-            for the flagship Vedic tools, BentoGrid visual style, with an honest
-            verification note (no positioning doc found — Part 3 fallback language). */}
-        <section className="max-w-4xl mx-auto mb-16 px-4" data-testid="block-vedic">
-          <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">
-            <span aria-hidden="true">🪔 </span>Vedic Astrology
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { to: '/kundali', emoji: '🪔', title: 'Free Kundali', body: 'Your full Vedic birth chart — planets, houses, Nakshatra and Vimshottari Dasha, precisely computed with the Swiss Ephemeris.' },
-              { to: '/kundali-match', emoji: '💑', title: 'Kundali Matching', body: 'Ashtakoota (Guna Milan) compatibility between two charts, with the real point-by-point breakdown.' },
-              { to: '/astrologer', emoji: '💬', title: 'Ask an Astrologer (AI)', body: 'A private, judgment-free conversation grounded in your own birth chart — traditional guidance, offered gently.' },
-            ].map(c => (
-              <Link key={c.to} to={c.to} className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors">
-                <div className="text-2xl mb-2" aria-hidden="true">{c.emoji}</div>
-                <h3 className="font-bold text-foreground mb-1">{c.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{c.body}</p>
-                <span className="text-xs text-primary font-medium">Open {c.title} →</span>
-              </Link>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground italic mt-3">
-            Precisely computed from your real birth details using the Swiss Ephemeris — the depth of a professional reading, backed by verified accuracy. Classical Vedic tradition, presented honestly (not a scientific claim).
-          </p>
-        </section>
-
-        {/* ═══ Part V block: Birthday Fun & Celebrity Twins ═══ */}
-        <h2 data-testid="block-birthday" className="max-w-4xl mx-auto px-4 mb-4 text-sm font-bold text-muted-foreground uppercase tracking-wider"><span aria-hidden="true">🎂 </span>Birthday Fun &amp; Celebrity Twins</h2>
-
-        {/* Birthday Report showcase — sells the paid ₹199 Blueprint, placed right
-            after the calculator entry and before the deep feature grid. */}
-        <BirthdayReportShowcase />
-
-        {/* Bento Grid Features */}
-        <BentoGrid />
-
-        {/* Planetary Weight Teaser — links to /weight-on-planets (the dedicated weight tool) */}
-        <section className="max-w-4xl mx-auto mb-12 px-4">
-          <div className="bg-gradient-to-br from-slate-900 to-indigo-950 rounded-2xl p-6 text-white">
-            <h3 className="text-base font-bold mb-1 flex items-center gap-2">
-              ⚖️ How Heavy Are You on Other Planets?
-            </h3>
-            <p className="text-sm text-slate-300 mb-4 leading-relaxed">
-              Your weight isn't fixed — it changes dramatically across the solar system.
-              Gravity on Jupiter is 2.5× Earth's. On Mars, you'd weigh less than half.
-            </p>
-
-            {/* Sample weight cards — based on 70kg default */}
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              {[
-                { planet: 'Mars',    emoji: '🔴', multiplier: 0.38, color: 'bg-red-900/40' },
-                { planet: 'Jupiter', emoji: '🟠', multiplier: 2.53, color: 'bg-orange-900/40' },
-                { planet: 'Moon',    emoji: '🌕', multiplier: 0.17, color: 'bg-slate-700/40' },
-                { planet: 'Saturn',  emoji: '🪐', multiplier: 1.07, color: 'bg-yellow-900/40' },
-              ].map(({ planet, emoji, multiplier, color }) => (
-                <div key={planet} className={`${color} rounded-xl p-3 text-center border border-white/10`}>
-                  <div className="text-xl mb-1">{emoji}</div>
-                  <p className="text-xs text-slate-400 mb-0.5">{planet}</p>
-                  <p className="text-base font-bold text-white">{Math.round(70 * multiplier)} kg</p>
-                  <p className="text-xs text-slate-400">{multiplier}× Earth</p>
-                </div>
-              ))}
+          <div className="col" id="science" style={{ ['--ac' as string]: '#2F6FB0', background: '#FFFFFF' }}>
+            <div className="eyebrow" style={{ color: '#2F6FB0' }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#2F6FB0" strokeWidth="1.4" aria-hidden="true"><path d="M1 9h3l2-5 3 9 2-6 1 2h3" /></svg>SCIENCE &amp; LONGEVITY</div>
+            <h2>Numbers with a source trail.</h2>
+            <div className="teaser"><span>You're <b>{marsYears.toFixed(1)}</b> years old on Mars — <b>{marsPctThisYear}</b>% through your current Mars year.</span></div>
+            <ToolList tools={SCIENCE_TOOLS} />
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 4 }}>
+              {['WHO', 'Harvard', 'NIH', 'UN WPP 2024', 'NASA 2023'].map(s => <span className="chip" key={s}>{s}</span>)}
             </div>
-
-            <p className="text-xs text-slate-400 italic mb-3 text-center">
-              Sample based on 70 kg. Calculate your exact weight →
-            </p>
-
-            <div className="bg-blue-900/30 rounded-xl p-3 border border-blue-500/20 mb-4">
-              <p className="text-xs font-semibold text-blue-300 mb-1">🔬 The Science</p>
-              <p className="text-xs text-blue-200 leading-relaxed">
-                Weight is determined by surface gravitational acceleration (g).
-                Jupiter's g = 24.8 m/s² vs Earth's 9.8 m/s², making you 2.53× heavier.
-                This is why Mars (g = 3.7 m/s²) is a leading colonisation candidate —
-                the human body can adapt to 38% Earth gravity far more easily than to
-                Jupiter's crushing 2.5× gravity.
-              </p>
-              <p className="text-xs text-blue-400 mt-1">Source: NASA Planetary Fact Sheet, 2023</p>
-            </div>
-
-            <a
-              href="/weight-on-planets"
-              className="block w-full text-center bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-semibold text-sm transition-colors"
-            >
-              Calculate My Weight on Every Planet →
-            </a>
+            <div style={{ fontSize: 11, color: '#237A60', fontWeight: 600 }}>Estimates, not predictions — limits stated on every page.</div>
+            <Link className="explore" to="/life-expectancy" style={{ color: '#2F6FB0' }}>Explore Science &amp; Longevity →</Link>
           </div>
-        </section>
+        </div>
 
-        {/* Explore BornClock — discovery grid of high-click surfaces */}
-        <section className="max-w-4xl mx-auto mb-16">
-          <h2 className="text-2xl font-bold text-center mb-6 gradient-text-primary">Explore BornClock</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-            {[
-              { to: '/todays-birthdays', emoji: '🎂', label: 'Born Today' },
-              { to: '/born-on/india', emoji: '🇮🇳', label: 'Indian Celebrities by Date' },
-              { to: '/planetary-age', emoji: '🪐', label: 'Planetary Age' },
-              { to: '/biological-age', emoji: '🧬', label: 'Biological Age' },
-              { to: '/compatibility', emoji: '💕', label: 'Compatibility' },
-              { to: '/answers', emoji: '❓', label: 'Answers' },
-            ].map(c => (
-              <Link key={c.to} to={c.to}>
-                <Card className="glass-card h-full hover:border-primary/50 transition-all group">
-                  <CardContent className="p-4 flex items-center gap-3">
-                    <span className="text-2xl leading-none flex-shrink-0">{c.emoji}</span>
-                    <span className="text-sm font-medium text-foreground">{c.label}</span>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+        {/* FOOTER SITEMAP (real routes; extended so every current-homepage link stays reachable) */}
+        <div style={{ background: '#0E2238', padding: '22px 24px 16px' }}>
+          <div className="foot" style={{ display: 'flex', gap: 28 }}>
+            <FootCol color="#D9BC82" title="VEDIC" links={[['Kundli', '/kundali'], ['Matching', '/kundali-match'], ['Sade Sati', '/sade-sati'], ['Muhurat', '/muhurat'], ['Gemstones', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'], ['Career', '/career-report'], ['AI Astrologer', '/astrologer']]} />
+            <FootCol color="#F7A08E" title="BIRTHDAY" links={[['Celebrity Twins', '/celebrity-birthday'], ["Today's Birthdays", '/todays-birthdays'], ['Age Calculator', '/age-calculator'], ['Birthstone', '/birthstone'], ['Indian Celebrities', '/born-on/india'], ['Blueprint', '/birthday-report']]} />
+            <FootCol color="#B3A4DE" title="MYSTIC" links={[['Numerology', '/numerology'], ['Name Numerology', '/name-numerology'], ['Western Zodiac', '/zodiac'], ['Chinese Zodiac', '/chinese-zodiac'], ['Tarot', '/tarot-card-by-birthday'], ['Compatibility', '/compatibility'], ['Biorhythm', '/biorhythm']]} />
+            <FootCol color="#8FC1E6" title="SCIENCE" links={[['Life Expectancy', '/life-expectancy'], ['Biological Age', '/biological-age'], ['Country Comparison', '/country-comparison'], ['Planetary Age', '/planetary-age'], ['Planetary Weight', '/weight-on-planets']]} />
+            <FootCol color="#FFFFFF" title="BORNCLOCK" links={[['How it works', '/how-it-works'], ['Answers', '/answers'], ['Articles', '/articles'], ['About', '/about'], ['Editorial Policy', '/editorial-policy'], ['Pricing', '/pricing'], ['Privacy', '/privacy'], ['Contact', '/contact']]} />
           </div>
-          {/* Zodiac grid moved to the Part V Mystic Corner block (zodiac-adjacent). */}
-        </section>
-
-        {/* Featured celebrity profiles — Day 8 discovery (Part U: moved into the
-            Birthday Fun & Celebrity Twins block) */}
-        <section className="max-w-4xl mx-auto mb-16 px-4">
-          <h2 className="text-lg font-bold text-center mb-4 text-foreground">Featured Indian Celebrity Profiles</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {[
-              { slug: 'virat-kohli', name: 'Virat Kohli', cat: 'Cricketer' },
-              { slug: 'sachin-tendulkar', name: 'Sachin Tendulkar', cat: 'Cricketer' },
-              { slug: 'shah-rukh-khan', name: 'Shah Rukh Khan', cat: 'Actor' },
-              { slug: 'amitabh-bachchan', name: 'Amitabh Bachchan', cat: 'Actor' },
-              { slug: 'ar-rahman', name: 'AR Rahman', cat: 'Music Composer' },
-              { slug: 'lata-mangeshkar', name: 'Lata Mangeshkar', cat: 'Singer' },
-              { slug: 'narendra-modi', name: 'Narendra Modi', cat: 'Politician' },
-              { slug: 'ratan-tata', name: 'Ratan Tata', cat: 'Business Leader' },
-            ].map(f => (
-              <Link key={f.slug} to={`/celebrity/${f.slug}/`} className="p-4 bg-primary/5 rounded-xl border border-border hover:border-primary/50 transition-colors text-center">
-                <div className="font-semibold text-sm text-foreground">{f.name}</div>
-                <div className="text-xs text-muted-foreground">{f.cat}</div>
-              </Link>
-            ))}
-          </div>
-          <div className="text-center mt-4">
-            <Link to="/celebrity/" className="text-sm text-primary font-medium hover:underline">See all 598 celebrity profiles →</Link>
-          </div>
-        </section>
-
-        {/* ═══ Part V block: Mystic Corner ═══
-            Groups the numerology tools + the zodiac-adjacent content (12 sign chips
-            moved here from "Explore BornClock"). Every existing /zodiac/{sign} link is
-            preserved — regrouped, not removed. */}
-        <section className="max-w-4xl mx-auto mb-16 px-4" data-testid="block-mystic">
-          <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">
-            <span aria-hidden="true">🔮 </span>Mystic Corner
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            {[
-              { to: '/numerology', emoji: '🔢', title: 'Numerology by Birthday', body: 'Your Life Path, expression and destiny numbers, computed from your date of birth.' },
-              { to: '/name-numerology', emoji: '✍️', title: 'Name Numerology', body: 'What your name adds up to — the Chaldean and Pythagorean reading of your letters.' },
-              { to: '/tarot-card-by-birthday', emoji: '🃏', title: 'Tarot by Birthday', body: 'The tarot card traditionally tied to your birth date, and what it signifies.' },
-            ].map(c => (
-              <Link key={c.to} to={c.to} className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors">
-                <div className="text-2xl mb-2" aria-hidden="true">{c.emoji}</div>
-                <h3 className="font-bold text-foreground mb-1">{c.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{c.body}</p>
-                <span className="text-xs text-primary font-medium">Open {c.title} →</span>
-              </Link>
-            ))}
-          </div>
-          {/* Zodiac grid — all 12 signs (zodiac-adjacent, per Part V Part 3.5) */}
-          <div className="flex flex-wrap justify-center gap-2">
-            {[
-              ['aries','♈'],['taurus','♉'],['gemini','♊'],['cancer','♋'],
-              ['leo','♌'],['virgo','♍'],['libra','♎'],['scorpio','♏'],
-              ['sagittarius','♐'],['capricorn','♑'],['aquarius','♒'],['pisces','♓'],
-            ].map(([sign, glyph]) => (
-              <Link
-                key={sign}
-                to={`/zodiac/${sign}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-background/70 border border-border hover:border-primary/50 hover:text-primary transition-colors capitalize"
-              >
-                <span aria-hidden="true">{glyph}</span> {sign}
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* ═══ Part V block: Science & Longevity (recency position — last) ═══ */}
-        <h2 data-testid="block-science" className="max-w-4xl mx-auto px-4 mb-4 text-sm font-bold text-muted-foreground uppercase tracking-wider"><span aria-hidden="true">🔬 </span>Science &amp; Longevity</h2>
-
-        {/* More Ways to Know Yourself */}
-        <section className="max-w-4xl mx-auto mb-16">
-          <h2 className="text-2xl font-bold text-center mb-6 gradient-text-primary">More Ways to Know Yourself</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <Link to="/biological-age">
-              <Card className="glass-card h-full hover:border-primary/50 transition-all cursor-pointer group">
-                <CardContent className="p-6 space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <Activity className="w-5 h-5 text-primary" />
-                  </div>
-                  <h3 className="font-bold text-foreground">Biological Age Test</h3>
-                  <p className="text-sm text-muted-foreground">Take our 10-question quiz to discover if your body is younger or older than your calendar age.</p>
-                  <span className="text-xs text-primary font-medium">Start quiz →</span>
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to="/country-comparison">
-              <Card className="glass-card h-full hover:border-primary/50 transition-all cursor-pointer group">
-                <CardContent className="p-6 space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                    <Globe className="w-5 h-5 text-accent" />
-                  </div>
-                  <h3 className="font-bold text-foreground">Country Longevity Comparison</h3>
-                  <p className="text-sm text-muted-foreground">Compare life expectancy across 57 countries with UN WPP 2024 data.</p>
-                  <span className="text-xs text-accent font-medium">Explore countries →</span>
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to="/birthday-report">
-              <Card className="glass-card h-full hover:border-primary/50 transition-all cursor-pointer group">
-                <CardContent className="p-6 space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
-                    <FileText className="w-5 h-5 text-secondary-foreground" />
-                  </div>
-                  <h3 className="font-bold text-foreground">Birthday PDF Report</h3>
-                  <p className="text-sm text-muted-foreground">Download a free 8-page personalised report with zodiac, numerology, birthstone, and more.</p>
-                  <span className="text-xs text-foreground font-medium">Get your report →</span>
-                </CardContent>
-              </Card>
-            </Link>
-          </div>
-        </section>
-
-        {/* Science cards — biological age, country comparison, biorhythm */}
-        <section className="max-w-4xl mx-auto mb-16 px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { href: '/longevity-calculator', emoji: '🔬', badge: 'Longevity', title: 'Longevity Calculator', body: 'Science-backed life expectancy from 8 factors — WHO, Harvard and NIH research.', cta: 'Calculate how long I\'ll live →' },
-              { href: '/biological-age-calculator', emoji: '🧬', badge: 'Epigenetics', title: 'Biological Age Calculator', body: 'Is your body younger or older than your age? Epigenetic science, Horvath clock, 12 habits.', cta: 'Calculate my biological age →' },
-              { href: '/how-long-will-i-live', emoji: '⏳', badge: 'Life Expectancy', title: 'How Long Will I Live?', body: '8-question life expectancy quiz with a 20-country WHO table and personalised 90-day plan.', cta: 'Find out how long I\'ll live →' },
-              { href: '/biological-age', emoji: '🧬', badge: 'Science', title: "What's Your Biological Age?", body: 'Your body may be older or younger than your birth year. Find out in 2 minutes.', cta: 'Test my biological age →' },
-              { href: '/country-comparison', emoji: '🌍', badge: 'Compare', title: 'Life Expectancy by Country', body: 'See how your forecast changes if you lived in Japan, France, or 50+ other countries.', cta: 'Compare countries →' },
-              { href: '/biorhythm', emoji: '⚡', badge: 'Rhythm', title: 'Your Energy Cycles Today', body: 'Biorhythm science predicts your physical, emotional, and mental peaks for any day.', cta: 'See my biorhythm →' },
-              { href: '/celebrity/', emoji: '⭐', badge: 'Celebrities', title: 'Celebrity Birthday Profiles', body: '598 Indian celebrities — birthday, zodiac, numerology and life path for actors, cricketers, singers & leaders.', cta: 'Browse celebrity profiles →' },
-            ].map(c => (
-              <Link key={c.href} to={c.href} className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">{c.emoji}</span>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">{c.badge}</span>
-                </div>
-                <h3 className="font-bold text-foreground mb-1">{c.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-3">{c.body}</p>
-                <span className="text-xs text-primary font-medium">{c.cta}</span>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* P10 — science-not-just-astrology card row (founder items 4/5/12) */}
-        <section className="max-w-4xl mx-auto mb-16 px-4" data-testid="science-card-row">
-          <h2 className="text-lg font-bold text-center mb-4 text-foreground">The science behind BornClock</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              { href: '/biological-age', emoji: '🧬', title: 'Biological Age', hook: 'Is your body older or younger than your birthday? A 10-question, WHO-aligned estimate.' },
-              { href: '/country-comparison', emoji: '🌍', title: 'Compare 57 Countries', hook: 'See how your health profile would play out across the world — UN WPP 2024 data.' },
-              { href: '/energy-forecast', emoji: '⚡', title: "Today's Energy", hook: 'A 7-day rhythm check-in from your birth date — a reflection prompt, not a prediction.' },
-            ].map(c => (
-              <Link key={c.href} to={c.href} className="block rounded-2xl border border-border p-5 hover:border-primary/50 hover:bg-primary/5 transition-colors">
-                <div className="text-2xl mb-2">{c.emoji}</div>
-                <h3 className="font-bold text-foreground mb-1">{c.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{c.hook}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* EEAT Trust Section (Part U: moved into the Science & Longevity block) */}
-        <section className="max-w-4xl mx-auto mb-16">
-          <Card className="glass-card card-party-border">
-            <CardContent className="p-8 space-y-6">
-              <div className="flex items-center justify-center gap-3 mb-2">
-                <ShieldCheck className="w-7 h-7 text-primary" />
-                <h2 className="text-3xl font-bold gradient-text-primary">
-                  Built on Trust & Accuracy
-                </h2>
-              </div>
-              <div className="prose prose-lg max-w-none text-foreground space-y-4">
-                <p>
-                  Every calculator and report on this platform is built with verified algorithms, cross-referenced data sources, and scientific methodology. Our life expectancy model draws from peer-reviewed health research covering smoking, alcohol, diabetes, cardiac health, BMI, exercise, and stress factors.
-                </p>
-                <p>
-                  Celebrity birthday data is sourced from verified public records and continuously updated. Our content follows <strong>E-E-A-T principles</strong> (Experience, Expertise, Authoritativeness, and Trustworthiness) to ensure every result you see is precise, transparent, and trustworthy.
-                </p>
-                <p className="text-center pt-4 text-muted-foreground">
-                  Have feedback? Reach us at <a href="/contact" className="text-primary hover:underline">our contact page</a>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
-        {/* Testimonials */}
-        <TestimonialsSection />
-
-        <PageFAQ slug="home" title="Frequently Asked Questions" />
-
-        {/* Latest articles — internal links so no article is orphaned */}
-        <section className="max-w-4xl mx-auto mb-16 px-4" data-testid="homepage-articles">
-          <h2 className="text-lg font-bold text-center mb-4 text-foreground">Explore Articles</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              { href: '/articles/how-to-live-to-100', emoji: '🧬', title: 'How to Live to 100' },
-              { href: '/articles/blue-zones-diet', emoji: '🥗', title: 'The Blue Zones Diet' },
-              { href: '/articles/longevity-quiz', emoji: '📝', title: 'Longevity Quiz' },
-              { href: '/articles/numerology-by-date-of-birth', emoji: '🔢', title: 'Numerology by Date of Birth' },
-              { href: '/articles/moon-sign-by-date-of-birth', emoji: '🌙', title: 'Moon Sign by Date of Birth' },
-              { href: '/articles/nakshatra-by-date-of-birth', emoji: '✨', title: 'Nakshatra by Date of Birth' },
-            ].map(a => (
-              <Link key={a.href} to={a.href} className="flex items-center gap-3 rounded-2xl border border-border p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors">
-                <span className="text-2xl">{a.emoji}</span>
-                <span className="font-semibold text-foreground text-sm">{a.title}</span>
-              </Link>
-            ))}
-          </div>
-          <div className="text-center mt-5">
-            <Link to="/articles" className="text-primary font-medium hover:underline">Browse all articles →</Link>
-          </div>
-        </section>
-
-        {/* Popular questions — contextual internal links to the /answers hub */}
-        <section className="max-w-3xl mx-auto mb-12 px-4 text-center">
-          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">Popular Questions</p>
-          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
-            <Link to="/answers/how-many-days-until-my-birthday" className="text-primary hover:underline">How many days until my birthday?</Link>
-            <Link to="/answers/how-long-will-i-live" className="text-primary hover:underline">How long will I live?</Link>
-            <Link to="/answers/who-shares-my-birthday" className="text-primary hover:underline">Who shares my birthday?</Link>
-            <Link to="/answers/what-is-my-zodiac-sign" className="text-primary hover:underline">What is my zodiac sign?</Link>
-          </div>
-        </section>
-
-        <AuthorBio />
+        </div>
       </div>
-      <Footer />
     </div>
   );
-};
+}
 
-export default Index;
+function FootCol({ color, title, links }: { color: string; title: string; links: Array<[string, string]> }) {
+  return (
+    <div style={{ flex: 1 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color, marginBottom: 8 }}>{title}</div>
+      <div style={{ fontSize: 11.5, lineHeight: 1.9 }}>
+        {links.map(([label, to], i) => (
+          <span key={to}>{i > 0 && <span style={{ color: '#5B6472' }}> · </span>}<Link to={to} style={{ color: '#B9C2CF' }}>{label}</Link></span>
+        ))}
+      </div>
+    </div>
+  );
+}
