@@ -25,3 +25,11 @@
   H1 + meta description, since leading with it in the title and keeping the key terms would exceed 70.
 - **Primary flow:** today's `/results` destination is preserved via the "See your full birthday
   profile →" button (sets BirthDateContext + navigates to `/results`). Inline decoding is additive.
+
+## Title decision (final, after Fifth-Rule check of served output)
+getTitleForRoute('/') hard-codes the homepage title, so the prerendered homepage served the proven
+ranking title "Free Birthday, Zodiac & Longevity Calculator | BornClock" (≤70, all key terms incl.
+"Free"). The constraints collide: keeping that full key phrase + brand + ≤70 leaves no room to also
+lead with the 34-char positioning. Resolved by KEEPING the ranking title (lowest SEO risk for a
+ranking homepage) and leading with the new positioning in the H1 + meta description (updated). Index
+SEO title aligned to the same string; dead STATIC['/'] entry removed.
