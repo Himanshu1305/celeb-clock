@@ -10,7 +10,6 @@
  */
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { SEO } from '@/components/SEO';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
@@ -188,10 +187,8 @@ export default function Index() {
         keywords="birthday calculator, zodiac calculator, longevity calculator, numerology, life path, vedic birth chart, kundli, celebrity birthdays, biological age"
         canonicalUrl="/"
       />
-      <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </Helmet>
+      {/* Fonts (Fraunces + Public Sans) are loaded in the static index.html shell with a gstatic
+          preconnect (Part AN perf fix) — no per-page Helmet font link needed here. */}
       {/* Structured data — body-rendered (Part AM JsonLd), never Helmet */}
       <JsonLd id="org" data={{ '@context': 'https://schema.org', '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com/', logo: 'https://bornclock.com/og/default.png' }} />
       <JsonLd id="website" data={{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'BornClock', url: 'https://bornclock.com/', potentialAction: { '@type': 'SearchAction', target: 'https://bornclock.com/celebrity?q={search_term_string}', 'query-input': 'required name=search_term_string' } }} />

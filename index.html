@@ -19,6 +19,11 @@
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://jwrpqiypvystivtqyhro.supabase.co" />
     <link rel="preconnect" href="https://static.cloudflareinsights.com" crossorigin />
+    <!-- Part AN: fonts in the static shell (earliest discovery) + gstatic preconnect so Fraunces
+         loads fast — the homepage H1 (LCP element) swapped late without the gstatic preconnect. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&amp;family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
     <link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
 
     <!-- Open Graph -->
