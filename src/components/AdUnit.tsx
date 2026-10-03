@@ -11,8 +11,17 @@ import { useEffect, useRef } from 'react';
  * Placement guidance: use below the fold / between content sections only — never
  * above the primary CTA or inside the hero.
  */
+/** Part AO: ads run only on the real production hosts — never on staging / *.workers.dev
+ *  previews / localhost, so automated testing can't generate invalid ad traffic. */
+function isProductionHost(): boolean {
+  if (typeof window === 'undefined') return false;
+  const h = window.location.hostname.toLowerCase();
+  return h === 'bornclock.com' || h === 'www.bornclock.com';
+}
+
 export function AdUnit({ slot, className = '' }: { slot: string; className?: string }) {
-  const client = (import.meta as any).env?.VITE_ADSENSE_CLIENT as string | undefined;
+  const envClient = (import.meta as any).env?.VITE_ADSENSE_CLIENT as string | undefined;
+  const client = isProductionHost() ? envClient : undefined;
   const pushed = useRef(false);
 
   useEffect(() => {

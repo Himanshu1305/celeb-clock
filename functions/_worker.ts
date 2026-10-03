@@ -31,6 +31,7 @@ import { GET  as gemstones }           from '../api/gemstones.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
 import cronHandler                     from './_cron/daily-email.js';
 import { handleReportOg, injectReportOgTags } from './og-report.js';
+import { isProductionHost, DISALLOW_ALL_ROBOTS } from './host.js';
 
 type Env = {
   ASSETS: { fetch: (request: Request) => Promise<Response> };
@@ -99,7 +100,21 @@ export default {
   async fetch(request: Request, env: Env, ctx: any): Promise<Response> {
     bridgeEnv(env);
 
-    const { pathname } = new URL(request.url);
+    const _url = new URL(request.url);
+    const { pathname } = _url;
+    // Part AO: staging / *.workers.dev / localhost are non-production — hide from search and
+    // disable tracking by HOSTNAME only (never by editing public/robots.txt or page HTML).
+    const isProd = isProductionHost(_url.hostname);
+
+    // Non-production hosts serve a disallow-all robots.txt (the static one, which allows
+    // crawling, is reserved for production bornclock.com). Decided by hostname, not by
+    // editing the shipped file.
+    if (!isProd && (pathname === '/robots.txt')) {
+      return new Response(DISALLOW_ALL_ROBOTS, {
+        status: 200,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8', 'X-Robots-Tag': 'noindex' },
+      });
+    }
 
     // Permanent redirects for renamed routes (301). Keep old SEO equity, never 404.
     const REDIRECTS: Record<string, string> = {
@@ -210,6 +225,26 @@ export default {
       if (ct.includes('text/html')) {
         const headers = new Headers(assetRes.headers);
         headers.set('Cache-Control', 'no-cache, must-revalidate');
+        // Part AO: on every non-production host (staging worker, *.workers.dev previews,
+        // localhost) tell crawlers not to index, and strip any analytics / ad scripts so
+        // automated testing never pollutes production analytics or generates invalid ad
+        // views. Production (bornclock.com / www) is untouched — no noindex, tags intact.
+        if (!isProd) {
+          headers.set('X-Robots-Tag', 'noindex, nofollow');
+          const stripped = new HTMLRewriter()
+            .on('script', {
+              element(el) {
+                const src = el.getAttribute('src') || '';
+                const beacon = el.getAttribute('data-cf-beacon');
+                if (beacon !== null ||
+                    /cloudflareinsights\.com|googlesyndication\.com|googletagmanager\.com|google-analytics\.com|adsbygoogle/i.test(src)) {
+                  el.remove();
+                }
+              },
+            })
+            .transform(new Response(assetRes.body, { status: assetRes.status, statusText: assetRes.statusText, headers }));
+          return stripped;
+        }
         // Part AD (SEO): thin blog TAG-ARCHIVE views (/blog?tag=X) are near-duplicate
         // listing pages that waste crawl budget. Mark them `noindex, follow` (NOT nofollow,
         // and NOT a robots.txt disallow) so they leave the index while link equity still

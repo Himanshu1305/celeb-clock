@@ -4,6 +4,7 @@
 // Web APIs only (Cloudflare Workers). Mirrors the Resend direct-fetch pattern in
 // api/_email.ts. No `env` param — reads process.env like the rest of the API.
 import { renderPdfFromHtml, bytesToBase64 } from './_pdf.js';
+import { isOutboundEmailSuppressed } from './_email.js';
 
 const FROM_EMAIL = 'BornClock <hello@bornclock.com>';
 const LOGO_URL = 'https://bornclock.com/bornclock-logo.png';
@@ -42,6 +43,12 @@ async function buildInvoiceAttachment(invoiceNo: string, html: string): Promise<
 async function resendSend(payload: Record<string, unknown>): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) { console.error('[invoice-email] RESEND_API_KEY not configured'); return; }
+  // Part AO: staging suppresses invoice email to non-allowlist recipients (never to real users).
+  const recip = Array.isArray(payload.to) ? String((payload.to as unknown[])[0] ?? '') : String(payload.to ?? '');
+  if (isOutboundEmailSuppressed(recip)) {
+    console.log(`[invoice-email] suppressed on staging (not in allowlist): ${recip}`);
+    return;
+  }
   try {
     const resp = await fetch('https://api.resend.com/emails', {
       method: 'POST',

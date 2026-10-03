@@ -35,3 +35,37 @@ crons = [
 # Secrets added via CF dashboard — do not add secret values here
 # process.env works via nodejs_compat shim for all simple string reads
 
+# ── Part AO: separate STAGING worker ─────────────────────────────────────────────
+# A SEPARATE Cloudflare Worker (`bornclock-staging`) on its own *.workers.dev address.
+# It shares the same Supabase database but has NO custom domain and NO routes, so it can
+# never serve or affect production. A named [env.staging] block INHERITS routes/custom
+# domains, scheduled triggers and workers_dev from the top level and does NOT inherit vars
+# or bindings — so every one of those is set EXPLICITLY below.
+#   • routes = []                → no custom domain, cannot capture production traffic
+#   • triggers.crons = []        → no scheduled jobs run on staging
+#   • workers_dev = true         → reachable only at bornclock-staging.<subdomain>.workers.dev
+#   • assets + vars redeclared   → not inherited; must be restated
+# Deploy with:  npm run deploy:staging   (never `wrangler deploy`, which hits production).
+# Verify first: npx wrangler deploy --env staging --dry-run
+[env.staging]
+name = "bornclock-staging"
+workers_dev = true
+routes = []
+
+[env.staging.assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = true
+
+[env.staging.triggers]
+crons = []
+
+[env.staging.vars]
+# Staging-only flags. Production has NO [vars] block, so these exist on staging alone and
+# cannot change production behaviour. The worker suppresses outbound email on staging except
+# to the allowlist, so automated tests never email real users.
+BORNCLOCK_ENV = "staging"
+SUPPRESS_OUTBOUND_EMAIL = "true"
+EMAIL_ALLOWLIST = "hello@bornclock.com"
+
