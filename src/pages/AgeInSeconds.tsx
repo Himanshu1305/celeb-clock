@@ -57,8 +57,8 @@ const AgeInSeconds = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Take a breath. In the time it took to read that, three seconds passed — and your counter just went up by three. A 30-year-old has lived approximately 946 million seconds. Watch yours tick upward live above. Most people find the number simultaneously larger and smaller than they expected.
             </p>
           </div>

@@ -30,18 +30,18 @@ export default function HowManyDaysUntilMyBirthday() {
       <AnswerLayout>
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
+            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
             <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-indigo-600">FAQ</Link>
+            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
             <span className="mx-2">›</span>
             <span className="text-gray-600">How many days until my birthday?</span>
           </nav>
 
           <h1 className="text-3xl font-black text-gray-900 mb-2">How Many Days Until My Birthday?</h1>
-          <p className="text-indigo-500 italic text-sm mb-8">Know your time. Live it well.</p>
+          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
 
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               To find how many days until your birthday, count the whole days from today to your next birthday — this year if it hasn't happened yet, otherwise next year. If today is your birthday, the answer is 0. Because months are different lengths and leap years add a February 29, the reliable way is to subtract the two dates directly rather than counting months by hand.
             </p>
           </div>
@@ -76,7 +76,7 @@ export default function HowManyDaysUntilMyBirthday() {
             <p className="text-lg font-bold text-gray-900 mb-2">Count Down to Your Next Birthday</p>
             <p className="text-sm text-gray-500 mb-4">Your exact age, next-birthday countdown, zodiac and birthday twins — from your date of birth</p>
             <Link to="/age-calculator"
-              className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Open the Age &amp; Birthday Calculator →
             </Link>
           </div>
@@ -84,10 +84,10 @@ export default function HowManyDaysUntilMyBirthday() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-to-calculate-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ How do I calculate my exact age?</Link>
-              <Link to="/answers/who-shares-my-birthday" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ Which famous people share my birthday?</Link>
-              <Link to="/answers/what-is-my-zodiac-sign" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ What is my zodiac sign?</Link>
-              <Link to="/answers/how-old-am-i-on-mars" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ How old am I on Mars?</Link>
+              <Link to="/answers/how-to-calculate-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How do I calculate my exact age?</Link>
+              <Link to="/answers/who-shares-my-birthday" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ Which famous people share my birthday?</Link>
+              <Link to="/answers/what-is-my-zodiac-sign" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my zodiac sign?</Link>
+              <Link to="/answers/how-old-am-i-on-mars" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How old am I on Mars?</Link>
             </div>
           </div>
         </div>

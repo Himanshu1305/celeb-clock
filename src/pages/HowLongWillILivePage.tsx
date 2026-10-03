@@ -135,11 +135,11 @@ export function HowLongWillILivePage() {
         <nav aria-label="Breadcrumb" className="max-w-4xl mx-auto px-4 pt-4">
           <ol className="flex items-center gap-2 text-sm text-gray-400 flex-wrap list-none p-0">
             <li data-testid="breadcrumb-item">
-              <Link to="/" className="hover:text-indigo-600">Home</Link>
+              <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
             </li>
             <li aria-hidden="true">›</li>
             <li data-testid="breadcrumb-item">
-              <Link to="/longevity-calculator" className="hover:text-indigo-600">
+              <Link to="/longevity-calculator" className="hover:text-[#6E5AA6]">
                 Longevity Calculator
               </Link>
             </li>
@@ -157,12 +157,12 @@ export function HowLongWillILivePage() {
         {/* ── HERO ── */}
         <section
           aria-labelledby="page-h1"
-          className="bg-gradient-to-br from-indigo-50 to-indigo-50
-                     border-b border-indigo-100 py-12 px-4 mt-4"
+          className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6]
+                     border-b border-[#6E5AA6]/30 py-12 px-4 mt-4"
         >
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-indigo-100
-                            text-indigo-700 rounded-full px-4 py-1.5
+            <div className="inline-flex items-center gap-2 bg-[#6E5AA6]/10
+                            text-[#6E5AA6] rounded-full px-4 py-1.5
                             text-sm font-semibold mb-4">
               {HLWIL_COPY.hero.badge}
             </div>
@@ -199,7 +199,7 @@ export function HowLongWillILivePage() {
               className="inline-block bg-primary hover:bg-primary/90
                          text-white font-black py-4 px-10 rounded-xl
                          transition-colors text-lg shadow-md
-                         focus:outline-none focus:ring-2 focus:ring-indigo-400
+                         focus:outline-none focus:ring-2 focus:ring-[#0E2238]
                          focus:ring-offset-2"
               aria-label="Start the free life expectancy quiz"
             >
@@ -240,11 +240,11 @@ export function HowLongWillILivePage() {
             ))}
           </div>
 
-          <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4">
-            <p className="text-indigo-800 text-sm leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-4">
+            <p className="text-[#6E5AA6] text-sm leading-relaxed">
               💡 {HLWIL_COPY.directAnswer.insight}
               {' '}
-              <span className="text-xs text-indigo-600 italic">
+              <span className="text-xs text-[#6E5AA6] italic">
                 — {HLWIL_COPY.directAnswer.karolinskaSource}
               </span>
             </p>
@@ -274,7 +274,7 @@ export function HowLongWillILivePage() {
 
           {/* Mid-article CTA 1 */}
           <div
-            className="my-10 bg-indigo-50 border border-indigo-200
+            className="my-10 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
                         rounded-2xl p-6 text-center"
             role="complementary"
           >
@@ -320,7 +320,7 @@ export function HowLongWillILivePage() {
                       <span
                         aria-hidden="true"
                         className="inline-flex items-center justify-center
-                                   w-6 h-6 bg-indigo-600 text-white rounded-full
+                                   w-6 h-6 bg-[#0E2238] text-white rounded-full
                                    text-xs font-black flex-shrink-0"
                       >
                         {factor.id}
@@ -344,7 +344,7 @@ export function HowLongWillILivePage() {
                       <p className="text-xs text-gray-600 mb-2 leading-relaxed">
                         {factor.detail}
                       </p>
-                      <p className="text-xs text-indigo-700 italic">
+                      <p className="text-xs text-[#6E5AA6] italic">
                         📚 {factor.source}
                       </p>
                     </div>
@@ -392,13 +392,13 @@ export function HowLongWillILivePage() {
                       data-country={row.country}
                       className={`border-b border-gray-100 last:border-0 ${
                         row.country === 'India'
-                          ? 'bg-indigo-50 font-semibold'
+                          ? 'bg-[#6E5AA6]/10 font-semibold'
                           : i % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                       }`}
                     >
                       <td className="px-4 py-3 text-gray-500 text-sm">{row.rank}</td>
                       <td className="px-4 py-3 text-gray-900">{row.country}</td>
-                      <td className="px-4 py-3 text-right font-bold text-indigo-700">{row.expectancy}</td>
+                      <td className="px-4 py-3 text-right font-bold text-[#6E5AA6]">{row.expectancy}</td>
                       <td className="px-4 py-3 text-right text-gray-600">{row.male}</td>
                       <td className="px-4 py-3 text-right text-gray-600">{row.female}</td>
                     </tr>
@@ -410,8 +410,8 @@ export function HowLongWillILivePage() {
             <p className="text-xs text-gray-400 mt-2 italic">
               {HLWIL_COPY.countryTable.source}
             </p>
-            <div className="mt-3 bg-indigo-50 border border-indigo-200 rounded-xl p-3">
-              <p className="text-xs text-indigo-800 leading-relaxed">
+            <div className="mt-3 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-3">
+              <p className="text-xs text-[#6E5AA6] leading-relaxed">
                 🇮🇳 {HLWIL_COPY.countryTable.indiaNote}
               </p>
             </div>
@@ -456,11 +456,11 @@ export function HowLongWillILivePage() {
                 <div
                   key={step.step}
                   data-testid={`step-${step.step}`}
-                  className="flex gap-4 items-start bg-indigo-50
-                             border border-indigo-200 rounded-xl p-4"
+                  className="flex gap-4 items-start bg-[#6E5AA6]/10
+                             border border-[#6E5AA6]/30 rounded-xl p-4"
                 >
                   <div
-                    className="flex-shrink-0 w-8 h-8 bg-indigo-600 text-white
+                    className="flex-shrink-0 w-8 h-8 bg-[#0E2238] text-white
                                rounded-full flex items-center justify-center
                                font-black text-sm"
                     aria-label={`Step ${step.step}`}
@@ -478,7 +478,7 @@ export function HowLongWillILivePage() {
 
           {/* Mid-article CTA 2 */}
           <div
-            className="my-10 bg-indigo-50 border border-indigo-200
+            className="my-10 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
                         rounded-2xl p-6 text-center"
             role="complementary"
           >
@@ -554,12 +554,12 @@ export function HowLongWillILivePage() {
                   to={tool.href}
                   data-testid="related-tool"
                   className="flex items-start gap-3 p-4 bg-white rounded-xl
-                             border border-gray-200 hover:border-indigo-300
-                             hover:bg-indigo-50 transition-colors group"
+                             border border-gray-200 hover:border-[#6E5AA6]/30
+                             hover:bg-[#6E5AA6]/10 transition-colors group"
                 >
                   <div>
                     <div className="font-semibold text-sm text-gray-900
-                                    group-hover:text-indigo-700 mb-0.5">
+                                    group-hover:text-[#6E5AA6] mb-0.5">
                       {tool.title}
                     </div>
                     <div className="text-xs text-gray-500">{tool.desc}</div>
@@ -608,18 +608,18 @@ export function HowLongWillILivePage() {
             <h2 className="text-2xl font-black mb-2">
               How Long Will You Live? Find Out Free.
             </h2>
-            <p className="text-indigo-200 mb-6 max-w-md mx-auto">
+            <p className="text-[#6E5AA6] mb-6 max-w-md mx-auto">
               3 minutes. 8 science-backed factors. Personalised result and 90-day plan.
             </p>
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-white text-primary hover:bg-indigo-50
+              className="inline-block bg-white text-primary hover:bg-[#6E5AA6]/10
                          font-black py-4 px-8 rounded-xl transition-colors text-lg"
             >
               {HLWIL_COPY.hero.ctaButton}
             </Link>
-            <p className="text-indigo-300 text-xs mt-3">
+            <p className="text-[#6E5AA6] text-xs mt-3">
               Free · No account required · Results in 3 minutes
             </p>
           </div>

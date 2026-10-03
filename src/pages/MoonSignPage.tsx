@@ -69,7 +69,7 @@ export default function MoonSignPage() {
         <div className="max-w-2xl mx-auto px-4 py-10">
 
           <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
+            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
             <span>›</span>
             <span className="text-gray-600">Moon Sign Calculator</span>
           </nav>
@@ -104,19 +104,19 @@ export default function MoonSignPage() {
           {result && (
             <div className="mb-10">
               <div className="grid sm:grid-cols-2 gap-4 mb-6">
-                <div className="bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl p-6 text-white text-center">
+                <div className="bg-gradient-to-br from-blue-900 to-[#6E5AA6] rounded-2xl p-6 text-white text-center">
                   <p className="text-xs text-blue-300 mb-1 uppercase tracking-wide">Moon Sign</p>
                   <div className="text-5xl mb-2">{result.moonSignData.symbol}</div>
                   <h2 className="text-2xl font-black text-white mb-1">{result.moonSign} Moon</h2>
                   <p className="text-xs text-blue-300">{result.moonSignData.element} · {result.moonSignData.rulingPlanet}</p>
                   <p className="text-xs text-blue-200 mt-2 italic">{result.moonSignData.emotionalNature}</p>
                 </div>
-                <div className="bg-gradient-to-br from-purple-900 to-pink-900 rounded-2xl p-6 text-white text-center">
-                  <p className="text-xs text-purple-300 mb-1 uppercase tracking-wide">Nakshatra</p>
+                <div className="bg-gradient-to-br from-[#6E5AA6] to-pink-900 rounded-2xl p-6 text-white text-center">
+                  <p className="text-xs text-[#6E5AA6] mb-1 uppercase tracking-wide">Nakshatra</p>
                   <div className="text-5xl mb-2">{result.nakshatraData.symbol}</div>
                   <h2 className="text-2xl font-black text-white mb-1">{result.nakshatraData.name}</h2>
-                  <p className="text-xs text-purple-300">#{result.nakshatraNumber} · {result.nakshatraData.meaning}</p>
-                  <p className="text-xs text-purple-200 mt-2 italic">{result.nakshatraData.quality}</p>
+                  <p className="text-xs text-[#6E5AA6]">#{result.nakshatraNumber} · {result.nakshatraData.meaning}</p>
+                  <p className="text-xs text-[#6E5AA6] mt-2 italic">{result.nakshatraData.quality}</p>
                 </div>
               </div>
 
@@ -258,8 +258,8 @@ export default function MoonSignPage() {
                         <span><strong>Quality:</strong> {nak.quality}</span>
                       </div>
                       <p className="text-sm text-gray-700 leading-relaxed">{nak.description}</p>
-                      <div className="bg-purple-50 border border-purple-100 rounded-lg p-3">
-                        <p className="text-xs font-bold text-purple-700 mb-2">🌙 In Your Daily Life</p>
+                      <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-lg p-3">
+                        <p className="text-xs font-bold text-[#6E5AA6] mb-2">🌙 In Your Daily Life</p>
                         <p className="text-xs text-gray-700 leading-relaxed">{getNakshatraLifeApplication(nak.name)}</p>
                       </div>
                     </div>

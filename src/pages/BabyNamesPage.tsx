@@ -68,7 +68,7 @@ export default function BabyNamesPage() {
           </div>
           <button data-testid="baby-compute-btn" onClick={computeFromBirth}
                   disabled={computing || !/^\d{4}-\d{2}-\d{2}$/.test(dob) || !/^\d{2}:\d{2}$/.test(time)}
-                  className="w-full py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50">
+                  className="w-full py-2.5 rounded-lg bg-[#0E2238] text-white font-semibold hover:bg-[#0E2238] disabled:opacity-50">
             {computing ? 'Finding Nakshatra…' : 'Find Nakshatra from birth details →'}
           </button>
           {failed && <p className="text-xs text-muted-foreground">Couldn't compute the Nakshatra automatically — pick it below instead.</p>}
@@ -85,13 +85,13 @@ export default function BabyNamesPage() {
         </div>
 
         {nakshatra && (
-          <div data-testid="baby-aksharas" className="rounded-xl border border-indigo-200 bg-indigo-50/50 p-5">
+          <div data-testid="baby-aksharas" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/50 p-5">
             <h2 className="font-semibold text-foreground mb-1">
               {nakshatra} {NAKSHATRA_HINDI[nakshatra] || ''} — auspicious starting sounds
             </h2>
             <div className="flex flex-wrap gap-2 my-3">
               {aksharas.map(a => (
-                <span key={a} className="px-3 py-1.5 rounded-lg bg-white border border-indigo-200 font-semibold text-indigo-700">{a}</span>
+                <span key={a} className="px-3 py-1.5 rounded-lg bg-white border border-[#6E5AA6]/30 font-semibold text-[#6E5AA6]">{a}</span>
               ))}
             </div>
             <p className="text-sm text-muted-foreground mb-2">Baby names traditionally begin with one of these syllables.</p>

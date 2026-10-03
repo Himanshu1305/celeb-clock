@@ -71,11 +71,11 @@ function TarotCalculator() {
 
   return (
     <div data-testid="tarot-calculator"
-         className="bg-purple-50 border-2 border-purple-200 rounded-2xl p-6 my-8">
-      <h3 className="text-lg font-black text-purple-900 mb-1">
+         className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
+      <h3 className="text-lg font-black text-[#6E5AA6] mb-1">
         Find Your Tarot Card by Date of Birth — Free
       </h3>
-      <p className="text-sm text-purple-700 mb-4">
+      <p className="text-sm text-[#6E5AA6] mb-4">
         Enter your date of birth to reveal your zodiac's Major Arcana card and its meaning.
       </p>
       <input
@@ -83,25 +83,25 @@ function TarotCalculator() {
         value={dob}
         onChange={handleChange}
         max={new Date().toISOString().split('T')[0]}
-        className="w-full border-2 border-purple-300 rounded-xl px-4 py-3
-                   text-base bg-white mb-4 focus:outline-none focus:border-purple-500"
+        className="w-full border-2 border-[#6E5AA6]/30 rounded-xl px-4 py-3
+                   text-base bg-white mb-4 focus:outline-none focus:border-[#6E5AA6]/30"
         aria-label="Enter your date of birth"
       />
       {profile && (
         <div data-testid="tarot-result"
-             className="bg-white rounded-xl border-2 border-purple-300 p-5">
+             className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-5">
           <div className="text-sm text-gray-500 mb-1">
             {profile.sign} {profile.symbol} · {profile.element} · {profile.date_range}
           </div>
-          <div className="text-2xl font-black text-purple-800 mb-2">
+          <div className="text-2xl font-black text-[#6E5AA6] mb-2">
             {profile.tarot_card}
           </div>
           <p className="text-sm text-gray-700 leading-relaxed mb-4">
             {profile.tarot_meaning}.
           </p>
           <a href={`/birthday-report?dob=${dob}`}
-             className="inline-block bg-purple-600 text-white font-bold px-5 py-2.5
-                        rounded-full text-sm hover:bg-purple-700">
+             className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
+                        rounded-full text-sm hover:bg-[#0E2238]">
             See my full birthday profile →
           </a>
         </div>
@@ -202,7 +202,7 @@ export function TarotByDateOfBirthArticle() {
           <div className="overflow-x-auto mb-8">
             <table className="w-full text-sm border-collapse">
               <thead>
-                <tr className="bg-purple-100 text-purple-900">
+                <tr className="bg-[#6E5AA6]/10 text-[#6E5AA6]">
                   <th className="text-left px-3 py-2 font-bold">Zodiac Sign</th>
                   <th className="text-left px-3 py-2 font-bold">Dates</th>
                   <th className="text-left px-3 py-2 font-bold">Tarot Card</th>
@@ -219,7 +219,7 @@ export function TarotByDateOfBirthArticle() {
                         {p.symbol} {p.sign}
                       </td>
                       <td className="px-3 py-2 text-gray-600">{p.date_range}</td>
-                      <td className="px-3 py-2 font-bold text-purple-700">{p.tarot_card}</td>
+                      <td className="px-3 py-2 font-bold text-[#6E5AA6]">{p.tarot_card}</td>
                       <td className="px-3 py-2 text-gray-600">{p.tarot_meaning}</td>
                     </tr>
                   );
@@ -237,7 +237,7 @@ export function TarotByDateOfBirthArticle() {
           <div className="overflow-x-auto mb-8">
             <table data-testid="life-path-tarot-table" className="w-full text-sm border-collapse">
               <thead>
-                <tr className="bg-indigo-100 text-indigo-900">
+                <tr className="bg-[#6E5AA6]/10 text-[#6E5AA6]">
                   <th className="text-left px-3 py-2 font-bold">Life Path</th>
                   <th className="text-left px-3 py-2 font-bold">Major Arcana Card</th>
                   <th className="text-left px-3 py-2 font-bold">Concept</th>
@@ -246,7 +246,7 @@ export function TarotByDateOfBirthArticle() {
               <tbody>
                 {LIFE_PATH_TAROT.map((row, i) => (
                   <tr key={row.num} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="px-3 py-2 font-bold text-indigo-700">Life Path {row.num}</td>
+                    <td className="px-3 py-2 font-bold text-[#6E5AA6]">Life Path {row.num}</td>
                     <td className="px-3 py-2 font-semibold text-gray-900">{row.card}</td>
                     <td className="px-3 py-2 text-gray-600">{row.concept}</td>
                   </tr>
@@ -261,16 +261,16 @@ export function TarotByDateOfBirthArticle() {
             person who repeatedly reinvents themselves and builds something new from the ashes.
           </p>
 
-          <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-6 text-center text-white my-8">
             <h2 className="text-xl font-black mb-2">Want both of your birth cards at once?</h2>
-            <p className="text-purple-100 mb-4 text-sm">
+            <p className="text-[#6E5AA6] mb-4 text-sm">
               BornClock reads your date of birth for your zodiac tarot card, Life Path number,
               Vedic Rashi, lucky stone and more — all in one free profile.
             </p>
             <a href="/birthday-report"
-               className="inline-block bg-white text-purple-700 font-black px-6 py-2.5
-                          rounded-full hover:bg-purple-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-6 py-2.5
+                          rounded-full hover:bg-[#6E5AA6]/10 transition-colors">
               Get My Free Birthday Profile →
             </a>
           </div>
@@ -298,7 +298,7 @@ export function TarotByDateOfBirthArticle() {
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
-          <ul className="list-disc pl-6 text-indigo-700 mb-10 space-y-1">
+          <ul className="list-disc pl-6 text-[#6E5AA6] mb-10 space-y-1">
             <li>
               <a href="/articles/numerology-by-date-of-birth" className="hover:underline">
                 Numerology by Date of Birth — Find Your Life Path Number
@@ -311,16 +311,16 @@ export function TarotByDateOfBirthArticle() {
             </li>
           </ul>
 
-          <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Discover Your Complete Birthday Profile</h2>
-            <p className="text-purple-100 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               Your tarot cards are one layer. BornClock also shows your Western zodiac, Vedic
               Rashi, Nakshatra, Life Path number, lucky stone and more — all from your date of birth.
             </p>
             <a href="/birthday-report"
-               className="inline-block bg-white text-purple-700 font-black px-8 py-3
-                          rounded-full text-lg hover:bg-purple-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Generate My Free Birthday Profile →
             </a>
           </div>

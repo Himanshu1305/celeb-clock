@@ -53,7 +53,7 @@ function CityPicker({ testid, value, onPick }: { testid: string; value: SavedCit
           {options.map((o, i) => (
             <li key={`${o.name}-${i}`}>
               <button type="button" onClick={() => { onPick({ name: o.name, lat: o.lat, lon: o.lon, tz: o.utcOffset }); setQuery(o.name); setOptions([]); }}
-                      className="w-full text-left px-3 py-2 text-sm hover:bg-indigo-50 text-gray-900">
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-[#6E5AA6]/10 text-gray-900">
                 {o.name}{o.state ? `, ${o.state}` : ''}
               </button>
             </li>
@@ -150,12 +150,12 @@ export default function KundaliMatchPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 print:hidden" style={{ marginTop: 16 }}>
           {/* Person A — saved profile if present, else a form */}
           {usingSaved ? (
-            <div data-testid="kmatch-saved-a" className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 space-y-2">
-              <div className="font-semibold text-indigo-900">You</div>
-              <div className="text-sm text-indigo-900">★ {profile!.dob}, {profile!.time}<br />{profile!.city.name}</div>
+            <div data-testid="kmatch-saved-a" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 p-4 space-y-2">
+              <div className="font-semibold text-[#6E5AA6]">You</div>
+              <div className="text-sm text-[#6E5AA6]">★ {profile!.dob}, {profile!.time}<br />{profile!.city.name}</div>
               <button data-testid="kmatch-use-different-a" type="button"
                       onClick={() => { setUsingDifferent(true); setResult(null); }}
-                      className="text-indigo-700 underline text-sm hover:text-indigo-900">
+                      className="text-[#6E5AA6] underline text-sm hover:text-[#6E5AA6]">
                 Use different details
               </button>
             </div>
@@ -206,14 +206,14 @@ export default function KundaliMatchPage() {
           <div data-testid="kmatch-result" id="kmatch-report" className="space-y-5">
             <div className="flex justify-end print:hidden">
               <button data-testid="kmatch-print" type="button" onClick={() => window.print()}
-                      className="text-sm px-3 py-1.5 rounded-lg border border-indigo-200 text-indigo-700 hover:bg-indigo-50">
+                      className="text-sm px-3 py-1.5 rounded-lg border border-[#6E5AA6]/30 text-[#6E5AA6] hover:bg-[#6E5AA6]/10">
                 ⤓ Download / Print PDF
               </button>
             </div>
 
             <div className="text-center rounded-xl border border-border p-4">
               <div className="text-sm text-muted-foreground">Total Guna Milan</div>
-              <div className="text-4xl font-black text-indigo-600">{result.gunaMilan.total} / 36</div>
+              <div className="text-4xl font-black text-[#6E5AA6]">{result.gunaMilan.total} / 36</div>
               <div className="font-semibold text-foreground">{result.gunaMilan.compatibility}</div>
               <div data-testid="kmatch-people-line" className="text-xs text-muted-foreground mt-1">
                 <span className="font-medium text-foreground">{dispA}</span> ({result.people.a.rashi}/{result.people.a.nakshatra})
@@ -226,8 +226,8 @@ export default function KundaliMatchPage() {
                 details below — same structure as the Kundali reading. Degrades
                 gracefully: if synthesis is absent, the factual breakdown still shows. */}
             {result.synthesis && (
-              <div data-testid="kmatch-synthesis" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4 space-y-2">
-                <div className="text-[10px] uppercase tracking-wide text-indigo-600 font-semibold">Overall reading</div>
+              <div data-testid="kmatch-synthesis" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4 space-y-2">
+                <div className="text-[10px] uppercase tracking-wide text-[#6E5AA6] font-semibold">Overall reading</div>
                 <p className="font-semibold text-foreground">{withNames(result.synthesis.verdict)}</p>
                 {result.synthesis.paragraphs.map((para, i) => (
                   <p key={i} className="text-sm text-muted-foreground">{withNames(para)}</p>
@@ -249,13 +249,13 @@ export default function KundaliMatchPage() {
             {/* Full 8-Koota breakdown (Part 2.1) with Nadi/Bhakoot emphasis (Part 2.3) */}
             <div data-testid="kmatch-kootas" className="space-y-2">
               {result.gunaMilan.kootas.map(k => (
-                <div key={k.key} className={`rounded-lg border p-3 ${k.heavy ? 'border-indigo-300 bg-indigo-50/50' : 'border-border'}`}>
+                <div key={k.key} className={`rounded-lg border p-3 ${k.heavy ? 'border-[#6E5AA6]/30 bg-[#6E5AA6]/50' : 'border-border'}`}>
                   <div className="flex items-center justify-between">
                     <div className="font-semibold text-foreground">
-                      {k.heavy && <span title="Heaviest kootas" className="mr-1 text-indigo-600">★</span>}{k.label}
-                      {k.heavy && <span className="ml-2 text-[10px] uppercase tracking-wide text-indigo-600">high weight</span>}
+                      {k.heavy && <span title="Heaviest kootas" className="mr-1 text-[#6E5AA6]">★</span>}{k.label}
+                      {k.heavy && <span className="ml-2 text-[10px] uppercase tracking-wide text-[#6E5AA6]">high weight</span>}
                     </div>
-                    <div className={`font-bold ${k.score === 0 ? 'text-amber-600' : 'text-indigo-600'}`}>{k.score} / {k.max}</div>
+                    <div className={`font-bold ${k.score === 0 ? 'text-amber-600' : 'text-[#6E5AA6]'}`}>{k.score} / {k.max}</div>
                   </div>
                   <div className="text-sm text-muted-foreground mt-1">{withNames(k.explanation)}</div>
                 </div>
@@ -290,7 +290,7 @@ export default function KundaliMatchPage() {
               <p className="mt-2">{result.gunaMilan.methodology}</p>
             </details>
 
-            <Link to="/articles/kundali-compatibility" className="text-indigo-600 hover:underline text-sm print:hidden">Learn what each koota means →</Link>
+            <Link to="/articles/kundali-compatibility" className="text-[#6E5AA6] hover:underline text-sm print:hidden">Learn what each koota means →</Link>
           </div>
         )}
 

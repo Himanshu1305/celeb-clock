@@ -106,7 +106,7 @@ const calculateLifePath = (date: Date) => {
 const getBirthstone = (month: number) => {
   const birthstones = [
     { name: 'Garnet', emoji: '🔴', color: 'text-red-500' },
-    { name: 'Amethyst', emoji: '💜', color: 'text-purple-500' },
+    { name: 'Amethyst', emoji: '💜', color: 'text-[#6E5AA6]' },
     { name: 'Aquamarine', emoji: '💎', color: 'text-cyan-500' },
     { name: 'Diamond', emoji: '💍', color: 'text-gray-100' },
     { name: 'Emerald', emoji: '💚', color: 'text-emerald-500' },
@@ -426,7 +426,7 @@ const BirthdayResults = () => {
           <p className="text-xs text-muted-foreground/80 mb-4">Different signs across systems? Western astrology uses the tropical zodiac while Vedic uses the sidereal zodiac — they're offset by about 24°, so your sign can differ between them.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Western Zodiac */}
-            <Card className="glass-card border-blue-200/60 bg-gradient-to-br from-blue-50/30 to-indigo-50/30 hover:scale-[1.02] transition-transform">
+            <Card className="glass-card border-blue-200/60 bg-gradient-to-br from-blue-50/30 to-[#6E5AA6]/30 hover:scale-[1.02] transition-transform">
               <CardContent className="p-5">
                 <div className="text-center mb-3">
                   <span className="text-4xl block mb-1">{zodiac.symbol}</span>
@@ -549,17 +549,17 @@ const BirthdayResults = () => {
             </Card>
 
             {/* Card 2 — Planetary Ages */}
-            <Card className="glass-card border-purple-200/50 dark:border-purple-900/50 bg-gradient-to-br from-purple-500/5 to-purple-500/10 hover:scale-105 transition-all duration-300 flex flex-col">
+            <Card className="glass-card border-[#6E5AA6]/50 dark:border-[#6E5AA6]/50 bg-gradient-to-br from-[#6E5AA6]/5 to-[#6E5AA6]/10 hover:scale-105 transition-all duration-300 flex flex-col">
               <CardContent className="p-6 flex flex-col flex-1">
                 <span className="text-4xl mb-3 block">🪐</span>
                 <h3 className="text-lg font-bold text-foreground mb-2">Your Age Across the Universe</h3>
                 <p className="text-sm text-muted-foreground mb-2 flex-1">
                   You're only {((age?.years || 0) / 11.86).toFixed(1)} Jupiter years old — discover your cosmic age on every planet
                 </p>
-                <p className="text-xs font-semibold text-purple-600 dark:text-purple-400 mb-4">
+                <p className="text-xs font-semibold text-[#6E5AA6] dark:text-[#6E5AA6] mb-4">
                   On Mercury you'd be celebrating your {Math.round((age?.years || 0) / 0.24)}th birthday
                 </p>
-                <Button asChild className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+                <Button asChild className="w-full bg-[#0E2238] hover:bg-[#0E2238] text-white">
                   <Link to="/planetary-age">Explore Cosmic Ages →</Link>
                 </Button>
               </CardContent>
@@ -629,7 +629,7 @@ const BirthdayResults = () => {
                           <div className="text-xs opacity-70">{generation.name}</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-violet-400">{lifePath}</div>
+                          <div className="text-2xl font-bold text-[#6E5AA6]">{lifePath}</div>
                           <div className="text-xs opacity-70">Life Path</div>
                         </div>
                         <div className="text-center">

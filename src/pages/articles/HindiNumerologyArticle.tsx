@@ -94,16 +94,16 @@ export function HindiNumerologyArticle() {
             स्वभाव, शक्तियों, चुनौतियों और जीवन के सबक को दर्शाता है।
           </p>
 
-          <div className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 my-8 text-center">
-            <h2 className="text-xl font-black text-indigo-900 mb-2">
+          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8 text-center">
+            <h2 className="text-xl font-black text-[#6E5AA6] mb-2">
               अपना मूलांक अभी जानें
             </h2>
-            <p className="text-indigo-700 mb-5">
+            <p className="text-[#6E5AA6] mb-5">
               अपनी जन्मतिथि दर्ज करें और अपनी पूरी अंकज्योतिष प्रोफ़ाइल तुरंत प्राप्त करें।
             </p>
             <a href="/birthday-report"
-               className="inline-block bg-indigo-600 text-white font-black px-8 py-3
-                          rounded-full text-lg hover:bg-indigo-700 transition-colors">
+               className="inline-block bg-[#0E2238] text-white font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#0E2238] transition-colors">
               मुफ्त जन्मतिथि रिपोर्ट बनाएं →
             </a>
           </div>
@@ -144,16 +144,16 @@ export function HindiNumerologyArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">अपनी पूरी जन्मतिथि प्रोफ़ाइल जानें</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               मूलांक तो केवल एक हिस्सा है। BornClock आपकी वैदिक राशि, पश्चिमी राशि, नक्षत्र,
               भाग्यशाली रत्न और बहुत कुछ आपकी जन्मतिथि से बताता है।
             </p>
             <a href="/birthday-report"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3
-                          rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               मेरी मुफ्त जन्मतिथि रिपोर्ट बनाएं →
             </a>
           </div>

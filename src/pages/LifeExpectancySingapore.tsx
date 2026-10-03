@@ -49,8 +49,8 @@ const LifeExpectancySingapore = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Singapore's average life expectancy is approximately 83.5 years as of 2023 — one of the highest of any nation. Women average 85.9 years; men average 81.2 years. Singapore achieved this with no natural resources and a population of only 5.9 million — through deliberate, evidence-based public health policy sustained over 60 years.
             </p>
           </div>

@@ -43,7 +43,7 @@ export default function BirthdayMonthPage() {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center p-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Month not found</h1>
-          <Link to="/birthday" className="text-indigo-600 hover:underline">Browse all months</Link>
+          <Link to="/birthday" className="text-[#6E5AA6] hover:underline">Browse all months</Link>
         </div>
       </div>
     );
@@ -99,9 +99,9 @@ export default function BirthdayMonthPage() {
 
         {/* Breadcrumb */}
         <nav className="text-xs text-gray-400 mb-6 flex items-center gap-1.5">
-          <Link to="/" className="hover:text-indigo-600 transition-colors">Home</Link>
+          <Link to="/" className="hover:text-[#6E5AA6] transition-colors">Home</Link>
           <span>/</span>
-          <Link to="/birthday" className="hover:text-indigo-600 transition-colors">Birthday</Link>
+          <Link to="/birthday" className="hover:text-[#6E5AA6] transition-colors">Birthday</Link>
           <span>/</span>
           <span className="text-gray-600 font-medium">{monthName}</span>
         </nav>
@@ -130,14 +130,14 @@ export default function BirthdayMonthPage() {
                 Air:   'hover:bg-blue-50 hover:border-blue-300',
                 Water: 'hover:bg-cyan-50 hover:border-cyan-300',
               };
-              const hoverClass = elementColors[z.element] ?? 'hover:bg-indigo-50 hover:border-indigo-300';
+              const hoverClass = elementColors[z.element] ?? 'hover:bg-[#6E5AA6]/10 hover:border-[#6E5AA6]/30';
               return (
                 <Link
                   key={d}
                   to={`/birthday/${month}/${d}`}
                   className={`group border border-gray-200 rounded-lg p-2 text-center transition-all ${hoverClass}`}
                 >
-                  <span className="block text-lg font-black text-gray-900 group-hover:text-indigo-700">
+                  <span className="block text-lg font-black text-gray-900 group-hover:text-[#6E5AA6]">
                     {d}
                   </span>
                   <span className="block text-[10px] text-gray-400 mt-0.5 leading-none">
@@ -174,7 +174,7 @@ export default function BirthdayMonthPage() {
                 <p className="text-sm text-gray-700 leading-relaxed">{mc.intro}</p>
               </section>
 
-              <section className="mb-8 bg-indigo-50 border border-indigo-100 rounded-xl p-6">
+              <section className="mb-8 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-3">
                   {monthName} Personality Traits
                 </h2>
@@ -215,17 +215,17 @@ export default function BirthdayMonthPage() {
         <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
           <Link
             to={`/birthday/${prevMonth}`}
-            className="flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 font-semibold transition-colors"
+            className="flex items-center gap-2 text-sm text-[#6E5AA6] hover:text-[#6E5AA6] font-semibold transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             {MONTH_NAMES[prevMonth]}
           </Link>
-          <Link to="/birthday" className="text-xs text-gray-400 hover:text-indigo-600 transition-colors">
+          <Link to="/birthday" className="text-xs text-gray-400 hover:text-[#6E5AA6] transition-colors">
             All 12 Months
           </Link>
           <Link
             to={`/birthday/${nextMonth}`}
-            className="flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 font-semibold transition-colors"
+            className="flex items-center gap-2 text-sm text-[#6E5AA6] hover:text-[#6E5AA6] font-semibold transition-colors"
           >
             {MONTH_NAMES[nextMonth]}
             <ChevronRight className="w-4 h-4" />

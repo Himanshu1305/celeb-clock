@@ -100,7 +100,7 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
             {facts.yogas.map((y, i) => (
               <li key={i} className="rounded border border-border/60 p-2">
                 <div className="font-semibold text-foreground">
-                  {y.name} <span className="ml-1 text-xs uppercase tracking-wide text-indigo-600">[{y.grade}]</span>
+                  {y.name} <span className="ml-1 text-xs uppercase tracking-wide text-[#6E5AA6]">[{y.grade}]</span>
                 </div>
                 <div className="text-muted-foreground">{y.summary}</div>
                 {y.conditions && y.conditions.length > 0 && (
@@ -180,7 +180,7 @@ function CollapsibleText({ text, section }: { text: string; section: string }) {
       <p data-collapsed={!open && long} style={long ? clampStyle : undefined}>{text}</p>
       {long && (
         <button type="button" data-testid={`reading-more-${section}`} onClick={() => setOpen(o => !o)}
-                className="mt-1 text-xs font-medium text-indigo-600 hover:text-indigo-700 hover:underline">
+                className="mt-1 text-xs font-medium text-[#6E5AA6] hover:text-[#6E5AA6] hover:underline">
           {open ? 'Show less' : 'Read more'}
         </button>
       )}
@@ -263,7 +263,7 @@ export function VedicReading({ payload }: { payload: ReadingPayload }) {
           type="button"
           data-testid="reading-advanced-toggle"
           onClick={() => setShowAdvanced(v => !v)}
-          className="text-sm font-medium text-indigo-600 hover:text-indigo-700 underline"
+          className="text-sm font-medium text-[#6E5AA6] hover:text-[#6E5AA6] underline"
         >
           {showAdvanced ? 'Hide chart details' : 'Show chart details (advanced)'}
         </button>

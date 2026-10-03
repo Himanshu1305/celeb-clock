@@ -175,7 +175,7 @@ export default function ChineseZodiacSign() {
                   <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-2">Lucky Directions</h3>
                   <div className="flex flex-wrap gap-2">
                     {data.lucky_directions.map((d) => (
-                      <span key={d} className="px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm">{d}</span>
+                      <span key={d} className="px-2 py-1 bg-[#6E5AA6]/10 text-[#6E5AA6] rounded text-sm">{d}</span>
                     ))}
                   </div>
                 </div>

@@ -39,8 +39,8 @@ const HindiNumerology = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-10 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               अंक ज्योतिष (Numerology) में माना जाता है कि आपकी जन्म तिथि के अंक आपके स्वभाव और जीवन के उद्देश्य के बारे में बताते हैं। सबसे महत्वपूर्ण है आपका Life Path Number — यह वैसे ही है जैसे astrology में sun sign।
             </p>
           </div>

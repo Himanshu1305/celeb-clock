@@ -55,18 +55,18 @@ export function CelebrityHubPage() {
         {/* ── BREADCRUMB ── */}
         <nav aria-label="Breadcrumb" className="max-w-5xl mx-auto px-4 pt-4">
           <ol className="flex items-center gap-2 text-sm text-gray-400 flex-wrap list-none p-0">
-            <li data-testid="breadcrumb-item"><Link to="/" className="hover:text-indigo-600">Home</Link></li>
+            <li data-testid="breadcrumb-item"><Link to="/" className="hover:text-[#6E5AA6]">Home</Link></li>
             <li aria-hidden="true">›</li>
-            <li data-testid="breadcrumb-item"><Link to="/celebrity/" className="hover:text-indigo-600">Celebrity Profiles</Link></li>
+            <li data-testid="breadcrumb-item"><Link to="/celebrity/" className="hover:text-[#6E5AA6]">Celebrity Profiles</Link></li>
             <li aria-hidden="true">›</li>
             <li data-testid="breadcrumb-item" className="text-gray-700 font-medium" aria-current="page">{cfg.label}</li>
           </ol>
         </nav>
 
         {/* ── HERO ── */}
-        <section aria-labelledby="page-h1" className="bg-gradient-to-br from-indigo-50 to-indigo-50 border-b border-indigo-100 py-10 px-4 mt-4">
+        <section aria-labelledby="page-h1" className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border-b border-[#6E5AA6]/30 py-10 px-4 mt-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 rounded-full px-4 py-1.5 text-sm font-semibold mb-4">
+            <div className="inline-flex items-center gap-2 bg-[#6E5AA6]/10 text-[#6E5AA6] rounded-full px-4 py-1.5 text-sm font-semibold mb-4">
               ⭐ {celebs.length} {cfg.label} Profiles
             </div>
             <h1 id="page-h1" className="text-3xl sm:text-4xl lg:text-5xl font-black gradient-text-primary leading-tight mb-3">
@@ -87,7 +87,7 @@ export function CelebrityHubPage() {
                   key={c.slug}
                   to={`/celebrity/${c.slug}/`}
                   data-testid="hub-celebrity-link"
-                  className="flex flex-col p-4 bg-white rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
+                  className="flex flex-col p-4 bg-white rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors"
                 >
                   <span className="font-semibold text-sm text-gray-900">{c.name}</span>
                   <span className="text-xs text-gray-500">{c.category}</span>
@@ -96,7 +96,7 @@ export function CelebrityHubPage() {
             </div>
 
             <div className="mt-8">
-              <Link to="/celebrity/" className="text-sm text-indigo-600 hover:underline">← All celebrity profiles</Link>
+              <Link to="/celebrity/" className="text-sm text-[#6E5AA6] hover:underline">← All celebrity profiles</Link>
             </div>
           </section>
         </div>

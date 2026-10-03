@@ -121,8 +121,8 @@ export default function Privacy() {
               <section id="data-model" className="mb-12 scroll-mt-8">
                 <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Data Model by User Type</h2>
 
-                <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 rounded-xl p-5 mb-6">
-                  <h3 className="font-bold text-indigo-900 dark:text-indigo-200 mb-2">Two products, two promises.</h3>
+                <div className="bg-[#6E5AA6]/10 dark:bg-[#6E5AA6]/30 border border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30 rounded-xl p-5 mb-6">
+                  <h3 className="font-bold text-[#6E5AA6] dark:text-[#6E5AA6] mb-2">Two products, two promises.</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-3">
                     <strong className="text-foreground">Your health data (Life Expectancy / Longevity):</strong> never stored — every calculation happens in your browser and no health input or result ever reaches our servers.
                   </p>
@@ -150,8 +150,8 @@ export default function Privacy() {
                       We store your name, email address, country, and account preferences to enable your login and personalise your experience. Your login data is encrypted and stored securely with Supabase (hosted on AWS Mumbai, ap-south-1; SOC 2 compliant). Health calculation data remains browser-only and is never transmitted to our servers.
                     </p>
                   </div>
-                  <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 rounded-xl p-4">
-                    <h3 className="font-semibold text-purple-800 dark:text-purple-300 mb-2">👑 Premium users</h3>
+                  <div className="bg-[#6E5AA6]/10 dark:bg-[#6E5AA6]/30 border border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30 rounded-xl p-4">
+                    <h3 className="font-semibold text-[#6E5AA6] dark:text-[#6E5AA6] mb-2">👑 Premium users</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       When you use premium features, we additionally store your subscription status and any profile preferences you explicitly save. This data is used solely to provide the service and is never sold or shared with third parties for advertising. Payment is handled entirely by Razorpay — BornClock never sees your card details.
                     </p>

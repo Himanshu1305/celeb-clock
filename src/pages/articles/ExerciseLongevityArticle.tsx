@@ -77,7 +77,7 @@ export function ExerciseLongevityArticle() {
             respected studies ever run. This guide walks through what the science
             actually shows, how it applies to everyday Indian life, and a practical
             30-day plan to get you moving. If you want to see how your own habits stack
-            up, try the <a href="/longevity-calculator" className="text-indigo-600 font-semibold underline">BornClock longevity calculator</a> once
+            up, try the <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">BornClock longevity calculator</a> once
             you have read through the numbers below.
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
@@ -126,18 +126,18 @@ export function ExerciseLongevityArticle() {
             through the day matters as much as any single workout.
           </p>
 
-          <div className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 my-8">
-            <h3 className="text-lg font-black text-indigo-900 mb-3">The Numbers at a Glance</h3>
-            <ul className="text-sm text-indigo-900 space-y-2">
+          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
+            <h3 className="text-lg font-black text-[#6E5AA6] mb-3">The Numbers at a Glance</h3>
+            <ul className="text-sm text-[#6E5AA6] space-y-2">
               <li>• <strong>+3.4 years</strong> of life — 150 min/week moderate exercise (JAMA 2012, Wen et al.)</li>
               <li>• <strong>39% lower</strong> all-cause mortality — high-intensity exercise (Lancet 2017)</li>
               <li>• <strong>51% lower</strong> all-cause mortality — 8,000+ steps/day vs 4,000 (JAMA 2021)</li>
               <li>• <strong>23% lower</strong> mortality — resistance training 1–2×/week (British Journal of Sports Medicine 2022)</li>
               <li>• Sitting <strong>&gt;8 hrs/day</strong> ≈ risk of smoking (Annals of Internal Medicine)</li>
             </ul>
-            <p className="text-sm text-indigo-700 mt-4">
+            <p className="text-sm text-[#6E5AA6] mt-4">
               Curious what these habits could mean for you personally? The{' '}
-              <a href="/longevity-calculator" className="text-indigo-700 font-bold underline">longevity calculator</a> turns
+              <a href="/longevity-calculator" className="text-[#6E5AA6] font-bold underline">longevity calculator</a> turns
               lifestyle inputs like activity level into an estimated life expectancy.
             </p>
           </div>
@@ -213,7 +213,7 @@ export function ExerciseLongevityArticle() {
             resistance training twice a week, and far less unbroken sitting. Keep it
             going and the years, on the evidence, add up. Check your progress against an
             estimate with the{' '}
-            <a href="/longevity-calculator" className="text-indigo-600 font-semibold underline">longevity calculator</a>.
+            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">longevity calculator</a>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Frequently Asked Questions</h2>
@@ -226,17 +226,17 @@ export function ExerciseLongevityArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">See How Many Years You Could Gain</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               Exercise is one of the biggest levers on lifespan. Enter your habits into
               the BornClock longevity calculator to get a personalised life-expectancy
               estimate — and see the impact of moving more.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3
-                          rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Try the Longevity Calculator →
             </a>
           </div>
@@ -245,12 +245,12 @@ export function ExerciseLongevityArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/how-to-live-to-100" className="text-indigo-600 font-semibold underline">
+                <a href="/articles/how-to-live-to-100" className="text-[#6E5AA6] font-semibold underline">
                   How to Live to 100 — Habits of the World's Longest-Lived People
                 </a>
               </li>
               <li>
-                <a href="/articles/longevity-quiz" className="text-indigo-600 font-semibold underline">
+                <a href="/articles/longevity-quiz" className="text-[#6E5AA6] font-semibold underline">
                   The Longevity Quiz — Test Your Lifestyle Against the Science
                 </a>
               </li>

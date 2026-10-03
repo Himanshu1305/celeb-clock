@@ -388,7 +388,7 @@ const LifeExpectancy = () => {
       ]} />
       {/* Shared result banner — shown when page opened via shared countdown URL */}
       {sharedResult && (
-        <div className="bg-indigo-600 text-white text-center py-3 px-4">
+        <div className="bg-[#0E2238] text-white text-center py-3 px-4">
           <p className="text-sm font-semibold">
             Someone shared their BornClock forecast with you!
             {sharedResult.age > 0 && ` They are ${sharedResult.age} years old`}
@@ -507,13 +507,13 @@ const LifeExpectancy = () => {
           <section id="calculator" className="max-w-4xl mx-auto mb-16">
             {/* Pre-filled from family dashboard banner */}
             {prefilledFor && (
-              <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-6 flex items-center gap-3">
+              <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-4 mb-6 flex items-center gap-3">
                 <span className="text-xl">👨‍👩‍👧</span>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-indigo-800">
+                  <p className="text-sm font-semibold text-[#6E5AA6]">
                     Calculating forecast for {prefilledFor}
                   </p>
-                  <p className="text-xs text-indigo-500 mt-0.5">
+                  <p className="text-xs text-[#6E5AA6] mt-0.5">
                     Date of birth and sex pre-filled from Family Dashboard. You can edit any field.
                   </p>
                 </div>
@@ -522,7 +522,7 @@ const LifeExpectancy = () => {
                     setPrefilledFor(null);
                     window.history.replaceState({}, '', '/life-expectancy');
                   }}
-                  className="text-xs text-indigo-400 hover:text-indigo-600 underline flex-shrink-0"
+                  className="text-xs text-[#6E5AA6] hover:text-[#6E5AA6] underline flex-shrink-0"
                 >
                   Clear
                 </button>
@@ -702,11 +702,11 @@ const LifeExpectancy = () => {
         {/* ── Visual connector ── */}
         {(phase === 'result' || phase === 'report') && longevityResult && (
           <div className="flex items-center gap-3 max-w-sm mx-auto py-4 mb-4 px-4">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-indigo-200"/>
-            <p className="text-xs text-indigo-400 font-semibold text-center whitespace-nowrap">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-[#6E5AA6]"/>
+            <p className="text-xs text-[#6E5AA6] font-semibold text-center whitespace-nowrap">
               📊 Your habit score
             </p>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-indigo-200"/>
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-[#6E5AA6]"/>
           </div>
         )}
 
@@ -738,13 +738,13 @@ const LifeExpectancy = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-indigo-50 rounded-xl p-4 mb-6 border border-indigo-100">
-              <p className="text-sm text-indigo-800 leading-relaxed">
+            <div className="bg-[#6E5AA6]/10 rounded-xl p-4 mb-6 border border-[#6E5AA6]/30">
+              <p className="text-sm text-[#6E5AA6] leading-relaxed">
                 <strong>See what's possible.</strong> Research shows 70-75% of your longevity outcome is
                 controlled by lifestyle — not genetics. Move any slider below to see exactly how specific
                 habit changes could add years to your life.
               </p>
-              <p className="text-xs text-indigo-500 mt-1">
+              <p className="text-xs text-[#6E5AA6] mt-1">
                 Source: Karolinska Institute twin study, Science journal, 2017
               </p>
             </div>
@@ -884,7 +884,7 @@ const LifeExpectancy = () => {
                 <div className="bg-white rounded-xl p-4 border border-green-200 mb-4">
                   <p className="text-sm text-gray-700 leading-relaxed">
                     Your <strong>#1 opportunity</strong> is{' '}
-                    <strong className="text-indigo-600">{top1Factor}</strong>.
+                    <strong className="text-[#6E5AA6]">{top1Factor}</strong>.
                     {' '}Addressing your top 3 factors could add up to{' '}
                     <strong
                       className="text-green-600"
@@ -905,7 +905,7 @@ const LifeExpectancy = () => {
                     <div className="space-y-4">
                       {phases.map((planPhase, idx) => (
                         <div key={idx} className="bg-white rounded-xl border border-green-100 overflow-hidden">
-                          <div className={`px-4 py-2.5 ${idx < 2 ? 'bg-indigo-600' : 'bg-green-600'}`}>
+                          <div className={`px-4 py-2.5 ${idx < 2 ? 'bg-[#0E2238]' : 'bg-green-600'}`}>
                             <h4 className="text-sm font-bold text-white">
                               {planPhase.period} — {planPhase.title}
                             </h4>
@@ -913,7 +913,7 @@ const LifeExpectancy = () => {
                           <div className="p-4 space-y-2">
                             {planPhase.items.map((item, i) => (
                               <div key={i} className="flex gap-2.5 items-start">
-                                <div className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <div className="w-5 h-5 rounded-full bg-[#6E5AA6]/10 text-[#6E5AA6] text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
                                   {i + 1}
                                 </div>
                                 <p className="text-sm text-gray-700 leading-relaxed">{item}</p>
@@ -926,7 +926,7 @@ const LifeExpectancy = () => {
                     <div className="mt-4 grid grid-cols-3 gap-3">
                       <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
                         <p className="text-xs text-gray-400 mb-1">Current Forecast</p>
-                        <p className="text-xl font-black text-indigo-600">{longevityResult.totalForecast?.toFixed(1)} yrs</p>
+                        <p className="text-xl font-black text-[#6E5AA6]">{longevityResult.totalForecast?.toFixed(1)} yrs</p>
                       </div>
                       <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
                         <p className="text-xs text-gray-400 mb-1">Realistic Gain</p>
@@ -935,7 +935,7 @@ const LifeExpectancy = () => {
                       </div>
                       <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
                         <p className="text-xs text-gray-400 mb-1">Retake In</p>
-                        <p className="text-xl font-black text-purple-600">90 days</p>
+                        <p className="text-xl font-black text-[#6E5AA6]">90 days</p>
                       </div>
                     </div>
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mt-4">
@@ -951,7 +951,7 @@ const LifeExpectancy = () => {
                       {phases.map((planPhase, idx) => (
                         <div key={idx} className="bg-white rounded-xl border border-green-100 overflow-hidden">
                           {/* Phase header — always visible */}
-                          <div className={`px-4 py-2.5 ${idx < 2 ? 'bg-indigo-600' : 'bg-green-600'}`}>
+                          <div className={`px-4 py-2.5 ${idx < 2 ? 'bg-[#0E2238]' : 'bg-green-600'}`}>
                             <h4 className="text-sm font-bold text-white">
                               {planPhase.period} — {planPhase.title}
                             </h4>
@@ -961,7 +961,7 @@ const LifeExpectancy = () => {
                             <div className="space-y-2 blur-sm select-none pointer-events-none">
                               {planPhase.items.slice(0, 2).map((item, i) => (
                                 <div key={i} className="flex gap-2.5 items-start">
-                                  <div className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                                  <div className="w-5 h-5 rounded-full bg-[#6E5AA6]/10 text-[#6E5AA6] text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
                                     {i + 1}
                                   </div>
                                   <p className="text-sm text-gray-700 leading-relaxed">{item}</p>
@@ -980,7 +980,7 @@ const LifeExpectancy = () => {
                     </div>
 
                     {/* Upgrade CTA */}
-                    <div className="mt-5 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-5 text-center text-white">
+                    <div className="mt-5 bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-5 text-center text-white">
                       <p className="text-base font-black mb-1">Unlock Your Full 90-Day Plan</p>
                       <p className="text-xs opacity-80 mb-4">
                         Get personalised weekly actions across all 4 phases — specific to your health profile, not a generic plan.
@@ -988,7 +988,7 @@ const LifeExpectancy = () => {
                       </p>
                       <a
                         href="/upgrade"
-                        className="inline-block bg-white text-indigo-700 font-black text-sm px-6 py-2.5 rounded-xl hover:bg-gray-100 transition-colors"
+                        className="inline-block bg-white text-[#6E5AA6] font-black text-sm px-6 py-2.5 rounded-xl hover:bg-gray-100 transition-colors"
                       >
                         Upgrade to Premium →
                       </a>
@@ -1003,7 +1003,7 @@ const LifeExpectancy = () => {
         {/* ── Scientific Foundation (collapsible) ── */}
         {(phase === 'result' || phase === 'report') && longevityResult && (
           <section className="max-w-4xl mx-auto mb-10">
-            <details className="rounded-2xl border border-indigo-200 bg-indigo-50 overflow-hidden">
+            <details className="rounded-2xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 overflow-hidden">
               <summary className="flex items-center gap-3 p-5 cursor-pointer list-none select-none">
                 <span className="text-xl">🔬</span>
                 <div className="flex-1">
@@ -1013,13 +1013,13 @@ const LifeExpectancy = () => {
                 <span className="text-gray-400 text-sm">▼</span>
               </summary>
               <div className="px-5 pb-5 space-y-4">
-                <div className="bg-white rounded-xl p-4 border border-indigo-100">
+                <div className="bg-white rounded-xl p-4 border border-[#6E5AA6]/30">
                   <h3 className="text-sm font-bold text-gray-800 mb-2">Methodology</h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
                     Your forecast starts from the WHO Global Health Observatory life expectancy baseline for your country and gender. Eight lifestyle and health factors are applied using established risk ratios from peer-reviewed research. Epigenetic bonuses are drawn from Blue Zones and NIH epigenetic ageing studies. Genetic adjustment is calibrated against the Karolinska twin study (2018): genetics accounts for 25–30% of longevity variance; 70–75% is lifestyle-controlled.
                   </p>
                 </div>
-                <div className="bg-white rounded-xl p-4 border border-indigo-100">
+                <div className="bg-white rounded-xl p-4 border border-[#6E5AA6]/30">
                   <h3 className="text-sm font-bold text-gray-800 mb-2">🌍 Blue Zones Power 9® — Principles of Centenarian Populations</h3>
                   <p className="text-xs text-gray-500 mb-3">Dan Buettner's research across five world regions where people routinely live past 100</p>
                   <div className="grid grid-cols-3 gap-2">
@@ -1034,7 +1034,7 @@ const LifeExpectancy = () => {
                       { emoji: '👨‍👩‍👧', name: 'Loved Ones First', desc: 'Invest in family bonds' },
                       { emoji: '👥', name: 'Right Tribe', desc: 'Social circles that support health' },
                     ] as const).map(({ emoji, name, desc }) => (
-                      <div key={name} className="bg-indigo-50 rounded-lg p-2 text-center">
+                      <div key={name} className="bg-[#6E5AA6]/10 rounded-lg p-2 text-center">
                         <span className="text-lg block mb-1">{emoji}</span>
                         <p className="text-[10px] font-bold text-gray-800">{name}</p>
                         <p className="text-[10px] text-gray-500">{desc}</p>
@@ -1042,7 +1042,7 @@ const LifeExpectancy = () => {
                     ))}
                   </div>
                 </div>
-                <div className="bg-white rounded-xl p-4 border border-indigo-100">
+                <div className="bg-white rounded-xl p-4 border border-[#6E5AA6]/30">
                   <h3 className="text-sm font-bold text-gray-800 mb-2">Key Research Citations</h3>
                   <ul className="space-y-1.5">
                     {[
@@ -1055,7 +1055,7 @@ const LifeExpectancy = () => {
                       'WHO Physical Activity Guidelines (2022) — 15 min/day moderate activity adds ~3 years',
                     ].map(s => (
                       <li key={s} className="flex gap-2 text-xs text-gray-600">
-                        <span className="text-indigo-400 flex-shrink-0">●</span>
+                        <span className="text-[#6E5AA6] flex-shrink-0">●</span>
                         <span>{s}</span>
                       </li>
                     ))}

@@ -127,7 +127,7 @@ export function LongevityCalculatorPage() {
           className="max-w-4xl mx-auto px-4 pt-4"
         >
           <ol className="flex items-center gap-2 text-sm text-gray-400">
-            <li><Link to="/" className="hover:text-indigo-600">Home</Link></li>
+            <li><Link to="/" className="hover:text-[#6E5AA6]">Home</Link></li>
             <li aria-hidden="true">›</li>
             <li className="text-gray-700 font-medium" aria-current="page">
               Longevity Calculator
@@ -138,11 +138,11 @@ export function LongevityCalculatorPage() {
         {/* ── HERO ── */}
         <section
           aria-labelledby="page-h1"
-          className="bg-gradient-to-br from-indigo-50 to-indigo-50
-                     border-b border-indigo-100 py-12 px-4 mt-4"
+          className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6]
+                     border-b border-[#6E5AA6]/30 py-12 px-4 mt-4"
         >
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700
+            <div className="inline-flex items-center gap-2 bg-[#6E5AA6]/10 text-[#6E5AA6]
                             rounded-full px-4 py-1.5 text-sm font-semibold mb-4">
               {LC_COPY.hero.badge}
             </div>
@@ -180,7 +180,7 @@ export function LongevityCalculatorPage() {
               className="inline-block bg-primary hover:bg-primary/90
                          text-white font-black py-4 px-10 rounded-xl
                          transition-colors text-lg shadow-md
-                         focus:outline-none focus:ring-2 focus:ring-indigo-400
+                         focus:outline-none focus:ring-2 focus:ring-[#0E2238]
                          focus:ring-offset-2"
               aria-label="Start the free longevity calculator"
             >
@@ -203,7 +203,7 @@ export function LongevityCalculatorPage() {
         >
           <div
             data-testid="calculator-embed"
-            className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl
+            className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl
                        p-8 text-center"
           >
             <p className="text-xl font-bold text-gray-900 mb-2">
@@ -248,8 +248,8 @@ export function LongevityCalculatorPage() {
             <Link
               to="/birthday-report"
               data-testid="longevity-pdf-cta"
-              className="block bg-indigo-50 border border-indigo-200 rounded-2xl p-5
-                         text-indigo-800 font-bold text-center hover:bg-indigo-100
+              className="block bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-2xl p-5
+                         text-[#6E5AA6] font-bold text-center hover:bg-[#6E5AA6]/10
                          transition-colors"
             >
               Get your personalised 90-day longevity plan → Download Free PDF
@@ -318,7 +318,7 @@ export function LongevityCalculatorPage() {
 
           {/* Mid-article CTA */}
           <div
-            className="my-10 bg-indigo-50 border border-indigo-200
+            className="my-10 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
                         rounded-2xl p-6 text-center"
             role="complementary"
             aria-label="Calculator call to action"
@@ -364,7 +364,7 @@ export function LongevityCalculatorPage() {
                     <span
                       aria-hidden="true"
                       className="inline-flex items-center justify-center
-                                 w-7 h-7 bg-indigo-600 text-white rounded-full
+                                 w-7 h-7 bg-[#0E2238] text-white rounded-full
                                  text-sm font-black flex-shrink-0"
                     >
                       {factor.id}
@@ -384,7 +384,7 @@ export function LongevityCalculatorPage() {
                   <div className="px-5 py-4">
                     <p className="text-gray-700 font-medium mb-2">{factor.summary}</p>
                     <p className="text-gray-600 text-sm mb-3">{factor.detail}</p>
-                    <p className="text-xs text-indigo-600 italic">
+                    <p className="text-xs text-[#6E5AA6] italic">
                       📚 {factor.source}
                     </p>
                   </div>
@@ -411,7 +411,7 @@ export function LongevityCalculatorPage() {
                              rounded-xl border border-gray-200 p-4"
                 >
                   <div className="flex-shrink-0 text-center min-w-[80px]">
-                    <div className="font-black text-indigo-600 text-sm">
+                    <div className="font-black text-[#6E5AA6] text-sm">
                       {band.range}
                     </div>
                     <div className="text-xs text-gray-500 font-medium">
@@ -517,12 +517,12 @@ export function LongevityCalculatorPage() {
                   to={tool.href}
                   data-testid="related-tool"
                   className="flex items-start gap-3 p-4 bg-white rounded-xl
-                             border border-gray-200 hover:border-indigo-300
-                             hover:bg-indigo-50 transition-colors group"
+                             border border-gray-200 hover:border-[#6E5AA6]/30
+                             hover:bg-[#6E5AA6]/10 transition-colors group"
                 >
                   <div>
                     <div className="font-semibold text-sm text-gray-900
-                                    group-hover:text-indigo-700 mb-0.5">
+                                    group-hover:text-[#6E5AA6] mb-0.5">
                       {tool.title}
                     </div>
                     <div className="text-xs text-gray-500">{tool.desc}</div>
@@ -574,18 +574,18 @@ export function LongevityCalculatorPage() {
             <h2 className="text-2xl font-black mb-2">
               {LC_COPY.bottomCTA.heading}
             </h2>
-            <p className="text-indigo-200 mb-6 max-w-md mx-auto">
+            <p className="text-[#6E5AA6] mb-6 max-w-md mx-auto">
               {LC_COPY.bottomCTA.sub}
             </p>
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-white text-primary hover:bg-indigo-50
+              className="inline-block bg-white text-primary hover:bg-[#6E5AA6]/10
                          font-black py-4 px-8 rounded-xl transition-colors text-lg"
             >
               {LC_COPY.bottomCTA.button}
             </Link>
-            <p className="text-indigo-300 text-xs mt-3">
+            <p className="text-[#6E5AA6] text-xs mt-3">
               {LC_COPY.bottomCTA.footnote}
             </p>
           </div>

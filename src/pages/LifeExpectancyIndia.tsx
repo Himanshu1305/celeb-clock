@@ -49,8 +49,8 @@ const LifeExpectancyIndia = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               India's average life expectancy is 70.9 years as of 2023 (UN World Population Prospects). Women average 72.3 years; men average 69.5 years. India has gained nearly 30 years of life expectancy since 1960 — one of the fastest improvements of any large nation in history.
             </p>
           </div>

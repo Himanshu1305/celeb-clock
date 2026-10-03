@@ -128,22 +128,22 @@ export function LongevityQuizArticle() {
             live. The other 70–75% comes down to the daily choices this quiz measures. Below,
             each factor gets its own section — what it measures, the science behind it, and the
             optimal target — followed by a full worked example.{' '}
-            <a href="/longevity-calculator" className="text-indigo-600 font-semibold underline">
+            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">
               You can take the quiz itself in the longevity calculator
             </a>.
           </p>
 
-          <div className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 my-8">
-            <h2 className="text-lg font-black text-indigo-900 mb-1">
+          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
+            <h2 className="text-lg font-black text-[#6E5AA6] mb-1">
               Take the Longevity Quiz Free
             </h2>
-            <p className="text-sm text-indigo-700 mb-4">
+            <p className="text-sm text-[#6E5AA6] mb-4">
               8 questions, 3 minutes, WHO country baselines. Get your longevity score, life
               expectancy estimate, and a personalised 90-day action plan.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-indigo-600 text-white font-bold px-5 py-2.5
-                          rounded-full text-sm hover:bg-indigo-700 transition-colors">
+               className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
+                          rounded-full text-sm hover:bg-[#0E2238] transition-colors">
               Start My Free Longevity Quiz →
             </a>
           </div>
@@ -229,16 +229,16 @@ export function LongevityQuizArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Ready to Take the Longevity Quiz?</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               8 science-backed factors. 3 minutes. Free personalised 90-day action plan and
               biological age estimate.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3
-                          rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Start My Free Longevity Quiz →
             </a>
           </div>
@@ -247,12 +247,12 @@ export function LongevityQuizArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-3">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/how-to-live-to-100" className="text-indigo-600 font-semibold underline">
+                <a href="/articles/how-to-live-to-100" className="text-[#6E5AA6] font-semibold underline">
                   How to Live to 100 — Habits of Centenarians
                 </a>
               </li>
               <li>
-                <a href="/articles/exercise-and-longevity" className="text-indigo-600 font-semibold underline">
+                <a href="/articles/exercise-and-longevity" className="text-[#6E5AA6] font-semibold underline">
                   Exercise and Longevity — How Much You Really Need
                 </a>
               </li>

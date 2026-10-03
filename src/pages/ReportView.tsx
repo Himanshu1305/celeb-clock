@@ -751,7 +751,7 @@ const ReportView = () => {
           <div className="flex items-center gap-2">
             {user && profile?.subscription_status === 'active' && (
               <span
-                className="px-2.5 py-1 text-xs rounded-full font-medium bg-indigo-50 text-indigo-700 border border-indigo-100"
+                className="px-2.5 py-1 text-xs rounded-full font-medium bg-[#6E5AA6]/10 text-[#6E5AA6] border border-[#6E5AA6]/30"
                 title="Report credits refresh 3 per month and carry forward, up to 9."
               >
                 {redeemLoading ? 'Applying credit…' : `Report credits: ${credits} of 9`}

@@ -43,12 +43,12 @@ const CardBack = () => (
     />
     <div className="relative z-10 text-center">
       <div className="text-3xl mb-1">✦</div>
-      <div className="text-xs text-indigo-300 font-medium tracking-widest uppercase">BornClock</div>
+      <div className="text-xs text-[#6E5AA6] font-medium tracking-widest uppercase">BornClock</div>
     </div>
-    <div className="absolute top-2 left-2 text-indigo-400 text-xs">✦</div>
-    <div className="absolute top-2 right-2 text-indigo-400 text-xs">✦</div>
-    <div className="absolute bottom-2 left-2 text-indigo-400 text-xs">✦</div>
-    <div className="absolute bottom-2 right-2 text-indigo-400 text-xs">✦</div>
+    <div className="absolute top-2 left-2 text-[#6E5AA6] text-xs">✦</div>
+    <div className="absolute top-2 right-2 text-[#6E5AA6] text-xs">✦</div>
+    <div className="absolute bottom-2 left-2 text-[#6E5AA6] text-xs">✦</div>
+    <div className="absolute bottom-2 right-2 text-[#6E5AA6] text-xs">✦</div>
     <div className="absolute inset-0 tarot-card-shimmer" />
   </div>
 );
@@ -59,13 +59,13 @@ const CardFront = ({ card }: { card: TarotCard }) => (
     className="w-full h-full flex flex-col items-center justify-center p-3 text-center"
     style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}
   >
-    <p className="text-xs text-indigo-300 mb-1 tracking-wider">Card {card.number}</p>
+    <p className="text-xs text-[#6E5AA6] mb-1 tracking-wider">Card {card.number}</p>
     <div className="text-4xl mb-2">{card.emoji}</div>
     <p className="text-white font-black text-sm leading-tight">{card.name}</p>
-    <div className="w-8 h-px bg-indigo-400 my-2" />
+    <div className="w-8 h-px bg-[#0E2238] my-2" />
     <div className="flex flex-wrap justify-center gap-1">
       {card.keywords.slice(0, 2).map(kw => (
-        <span key={kw} className="text-indigo-300 text-xs">{kw}</span>
+        <span key={kw} className="text-[#6E5AA6] text-xs">{kw}</span>
       ))}
     </div>
   </div>
@@ -139,18 +139,18 @@ function InteractiveTarotDraw({ onCardDrawn, drawnCard }: InteractiveTarotDrawPr
           style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}
         >
           <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
-            <p className="text-xs text-indigo-300 mb-2 tracking-wider">Card {drawnCard.number}</p>
+            <p className="text-xs text-[#6E5AA6] mb-2 tracking-wider">Card {drawnCard.number}</p>
             <div className="text-5xl mb-3">{drawnCard.emoji}</div>
             <p className="text-white font-black text-base leading-tight">{drawnCard.name}</p>
-            <div className="w-10 h-px bg-indigo-400 my-2" />
+            <div className="w-10 h-px bg-[#0E2238] my-2" />
             <div className="flex flex-wrap justify-center gap-1">
               {drawnCard.keywords.slice(0, 2).map(kw => (
-                <span key={kw} className="text-indigo-300 text-xs">{kw}</span>
+                <span key={kw} className="text-[#6E5AA6] text-xs">{kw}</span>
               ))}
             </div>
           </div>
         </div>
-        <p className="text-sm text-indigo-600 font-medium mt-3 italic">
+        <p className="text-sm text-[#6E5AA6] font-medium mt-3 italic">
           You drew {drawnCard.name} ✨
         </p>
         <button
@@ -292,7 +292,7 @@ export default function TarotByBirthday() {
         <div className="max-w-2xl mx-auto px-4 py-10">
 
           <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
+            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
             <span>›</span>
             <span className="text-gray-600">Tarot Card by Birthday</span>
           </nav>
@@ -300,8 +300,8 @@ export default function TarotByBirthday() {
           <h1 className="text-3xl font-black text-gray-900 mb-1">Your Tarot Card by Birthday</h1>
           <PageTagline />
 
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Your birthday tarot card is determined by your Life Path number — the single most
               important number in numerology, calculated from your full date of birth. Each Life
               Path corresponds to one of the 22 Major Arcana cards, representing your soul's core
@@ -331,7 +331,7 @@ export default function TarotByBirthday() {
               </div>
               <button
                 onClick={handleCalculate}
-                className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors whitespace-nowrap"
+                className="bg-[#0E2238] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors whitespace-nowrap"
               >
                 Find My Card →
               </button>
@@ -341,12 +341,12 @@ export default function TarotByBirthday() {
           {/* Birthday card result */}
           {birthdayResult && (
             <div className="mb-8">
-              <div className="bg-gradient-to-br from-indigo-900 to-purple-900 rounded-2xl p-8 text-white text-center mb-6">
-                <p className="text-sm text-indigo-300 mb-1">
+              <div className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-white text-center mb-6">
+                <p className="text-sm text-[#6E5AA6] mb-1">
                   Your Life Path is {birthdayResult.lifePathNumber} · Your card is
                 </p>
                 <div className="text-7xl mb-3">{birthdayResult.card.emoji}</div>
-                <p className="text-sm font-semibold text-indigo-300 mb-1">
+                <p className="text-sm font-semibold text-[#6E5AA6] mb-1">
                   Card {birthdayResult.card.number}
                 </p>
                 <h2 className="text-3xl font-black text-white mb-4">{birthdayResult.card.name}</h2>
@@ -366,7 +366,7 @@ export default function TarotByBirthday() {
                     onClick={() => setActiveTab(tab.key)}
                     className={`flex-1 min-w-0 py-2 px-3 rounded-lg text-sm font-medium capitalize transition-colors whitespace-nowrap ${
                       activeTab === tab.key
-                        ? 'bg-white text-indigo-700 shadow-sm'
+                        ? 'bg-white text-[#6E5AA6] shadow-sm'
                         : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
@@ -429,15 +429,15 @@ export default function TarotByBirthday() {
                 )}
               </div>
 
-              <div className="bg-indigo-600 rounded-2xl p-6 mt-6 text-center text-white">
+              <div className="bg-[#0E2238] rounded-2xl p-6 mt-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">Get the complete Birthday Intelligence Report</p>
-                <p className="text-indigo-200 text-sm mb-4">
+                <p className="text-[#6E5AA6] text-sm mb-4">
                   Your tarot card + moon sign + nakshatra + name numerology + 12 more sections —
                   personalised to your exact birthday.
                 </p>
                 <Link
                   to="/birthday-report"
-                  className="inline-block bg-white text-indigo-600 px-8 py-3 rounded-xl font-semibold hover:bg-indigo-50 transition-colors"
+                  className="inline-block bg-white text-[#6E5AA6] px-8 py-3 rounded-xl font-semibold hover:bg-[#6E5AA6]/10 transition-colors"
                 >
                   Generate My Report → {reportPriceLabel}
                 </Link>
@@ -447,22 +447,22 @@ export default function TarotByBirthday() {
 
           {/* SECTION 3: Combination reading — only when both present */}
           {drawnCard && birthdayResult && (
-            <div className="bg-gradient-to-br from-indigo-900 to-purple-900 rounded-2xl p-6 mb-8 text-white">
+            <div className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-6 mb-8 text-white">
               <h2 className="text-lg font-bold text-center mb-4">✨ Your Combined Reading</h2>
               <div className="flex justify-center gap-8 mb-6">
                 <div className="text-center">
                   <div className="text-3xl mb-1">{drawnCard.emoji}</div>
-                  <p className="text-xs text-indigo-300">Drawn card</p>
+                  <p className="text-xs text-[#6E5AA6]">Drawn card</p>
                   <p className="text-sm font-bold text-white">{drawnCard.name}</p>
                 </div>
-                <div className="text-2xl self-center text-indigo-300">+</div>
+                <div className="text-2xl self-center text-[#6E5AA6]">+</div>
                 <div className="text-center">
                   <div className="text-3xl mb-1">{birthdayResult.card.emoji}</div>
-                  <p className="text-xs text-indigo-300">Birthday card</p>
+                  <p className="text-xs text-[#6E5AA6]">Birthday card</p>
                   <p className="text-sm font-bold text-white">{birthdayResult.card.name}</p>
                 </div>
               </div>
-              <p className="text-sm text-indigo-200 leading-relaxed text-center">
+              <p className="text-sm text-[#6E5AA6] leading-relaxed text-center">
                 {getCombinationReading(drawnCard, birthdayResult.card)}
               </p>
             </div>
@@ -481,7 +481,7 @@ export default function TarotByBirthday() {
                 return (
                   <div
                     key={num}
-                    className={`border rounded-xl transition-colors ${isOpen ? 'border-indigo-400 bg-indigo-50/40' : 'border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/20'}`}
+                    className={`border rounded-xl transition-colors ${isOpen ? 'border-[#6E5AA6]/30 bg-[#6E5AA6]/40' : 'border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/20'}`}
                   >
                     <button
                       className="w-full text-left p-4 flex items-center gap-3"
@@ -496,7 +496,7 @@ export default function TarotByBirthday() {
                         </div>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {card.keywords.slice(0, 3).map(kw => (
-                            <span key={kw} className="text-xs text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded-full">{kw}</span>
+                            <span key={kw} className="text-xs text-[#6E5AA6] bg-[#6E5AA6]/10 px-2 py-0.5 rounded-full">{kw}</span>
                           ))}
                         </div>
                       </div>
@@ -504,7 +504,7 @@ export default function TarotByBirthday() {
                     </button>
 
                     {isOpen && (
-                      <div className="px-4 pb-4 space-y-4 border-t border-indigo-100 pt-4">
+                      <div className="px-4 pb-4 space-y-4 border-t border-[#6E5AA6]/30 pt-4">
                         <p className="text-sm text-gray-700 leading-relaxed">{card.deepMeaning}</p>
                         <div className="grid sm:grid-cols-2 gap-3">
                           <div className="bg-rose-50 border border-rose-100 rounded-lg p-3">
@@ -519,13 +519,13 @@ export default function TarotByBirthday() {
                             <p className="text-xs font-bold text-green-700 mb-1">🌿 Health</p>
                             <p className="text-xs text-gray-700 leading-relaxed">{card.health}</p>
                           </div>
-                          <div className="bg-purple-50 border border-purple-100 rounded-lg p-3">
-                            <p className="text-xs font-bold text-purple-700 mb-1">🕯️ Spirituality</p>
+                          <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-lg p-3">
+                            <p className="text-xs font-bold text-[#6E5AA6] mb-1">🕯️ Spirituality</p>
                             <p className="text-xs text-gray-700 leading-relaxed">{card.spirituality}</p>
                           </div>
                         </div>
                         {card.affirmation && (
-                          <div className="bg-indigo-900 text-indigo-100 rounded-lg p-3 text-center">
+                          <div className="bg-[#0E2238] text-[#6E5AA6] rounded-lg p-3 text-center">
                             <p className="text-xs font-medium italic">"{card.affirmation}"</p>
                           </div>
                         )}
@@ -561,7 +561,7 @@ export default function TarotByBirthday() {
                 <Link
                   key={item.href}
                   to={item.href}
-                  className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors"
+                  className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors"
                 >
                   → {item.text}
                 </Link>

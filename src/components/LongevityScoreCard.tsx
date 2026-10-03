@@ -69,10 +69,10 @@ export function LongevityScoreCard({ result, userId, isPremium, onRetake }: Long
     .slice(0, 3);
 
   return (
-    <div className="rounded-2xl border border-indigo-200 dark:border-indigo-800 bg-white dark:bg-card shadow-sm overflow-hidden">
-      <div className="bg-gradient-to-r from-indigo-50 to-violet-50 dark:from-indigo-950/20 dark:to-violet-950/20 px-5 py-4 border-b border-indigo-100 dark:border-indigo-800">
+    <div className="rounded-2xl border border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30 bg-white dark:bg-card shadow-sm overflow-hidden">
+      <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] dark:from-[#6E5AA6]/20 dark:to-[#6E5AA6]/20 px-5 py-4 border-b border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-indigo-600" />
+          <TrendingUp className="w-5 h-5 text-[#6E5AA6]" />
           <h3 className="font-semibold text-foreground">Your Longevity Score</h3>
         </div>
       </div>
@@ -97,14 +97,14 @@ export function LongevityScoreCard({ result, userId, isPremium, onRetake }: Long
             {onRetake ? (
               <button
                 onClick={onRetake}
-                className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:underline"
+                className="inline-flex items-center gap-1 text-xs text-[#6E5AA6] hover:underline"
               >
                 <RefreshCw className="w-3 h-3" /> Retake quiz to update →
               </button>
             ) : (
               <Link
                 to="/life-expectancy"
-                className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:underline"
+                className="inline-flex items-center gap-1 text-xs text-[#6E5AA6] hover:underline"
               >
                 <RefreshCw className="w-3 h-3" /> Retake quiz to update →
               </Link>

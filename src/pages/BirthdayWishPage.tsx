@@ -141,7 +141,7 @@ export default function BirthdayWishPage() {
               <CardContent className="p-6">
                 <div
                   data-testid="wish-card"
-                  className="rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-600 to-pink-600 text-white text-center p-8"
+                  className="rounded-2xl overflow-hidden bg-gradient-to-br from-[#6E5AA6] to-pink-600 text-white text-center p-8"
                 >
                   {imgSrc ? (
                     <img src={imgSrc} alt={`Birthday card for ${wish.name}`} className="w-full rounded-xl" />

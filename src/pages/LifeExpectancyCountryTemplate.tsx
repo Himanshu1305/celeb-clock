@@ -114,7 +114,7 @@ export function LifeExpectancyCountryTemplate(props: LifeExpectancyCountryProps)
             Below you will find the latest {country} figures, how they vary by region and sex, how they
             compare internationally, and the eight factors research has established as the primary
             drivers of longevity. When you are ready for your own number, run the{' '}
-            <a href={CTA_TARGET} className="text-indigo-600 font-semibold underline">
+            <a href={CTA_TARGET} className="text-[#6E5AA6] font-semibold underline">
               free longevity calculator
             </a>.
           </p>
@@ -123,9 +123,9 @@ export function LifeExpectancyCountryTemplate(props: LifeExpectancyCountryProps)
             {country} Life Expectancy Statistics ({source})
           </h2>
           <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-5 text-center">
-              <div className="text-3xl font-black text-indigo-900">{avg}</div>
-              <div className="text-xs text-indigo-700 font-semibold mt-1">Overall (years)</div>
+            <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-5 text-center">
+              <div className="text-3xl font-black text-[#6E5AA6]">{avg}</div>
+              <div className="text-xs text-[#6E5AA6] font-semibold mt-1">Overall (years)</div>
             </div>
             <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-5 text-center">
               <div className="text-3xl font-black text-blue-900">{men}</div>
@@ -197,17 +197,17 @@ export function LifeExpectancyCountryTemplate(props: LifeExpectancyCountryProps)
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">
               Calculate Your Personal {country} Life Expectancy
             </h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               The {country} average is {avg} years — but your number could be very different. Answer 8
               quick questions and get your personalised estimate plus a free 90-day action plan.
             </p>
             <a
               href={CTA_TARGET}
-              className="inline-block bg-white text-indigo-700 font-black px-8 py-3 rounded-full text-lg hover:bg-indigo-50 transition-colors"
+              className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors"
             >
               Start My Free Longevity Calculator →
             </a>
@@ -227,7 +227,7 @@ export function LifeExpectancyCountryTemplate(props: LifeExpectancyCountryProps)
 
           <p className="text-gray-700 leading-relaxed mb-6">
             Ready to move beyond the {country} average? Our science-backed{' '}
-            <a href={CTA_TARGET} className="text-indigo-600 font-semibold underline">
+            <a href={CTA_TARGET} className="text-[#6E5AA6] font-semibold underline">
               longevity calculator
             </a>{' '}
             gives you a personalised life expectancy estimate, a biological age reading, and a free

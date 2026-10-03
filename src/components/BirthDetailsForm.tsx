@@ -96,7 +96,7 @@ export function BirthDetailsForm({
             <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow max-h-48 overflow-y-auto">
               {options.map((o, i) => (
                 <li key={`${o.name}-${i}`}>
-                  <button type="button" onClick={() => pickCity(o)} className="w-full text-left px-3 py-2 text-sm hover:bg-indigo-50 text-gray-900">
+                  <button type="button" onClick={() => pickCity(o)} className="w-full text-left px-3 py-2 text-sm hover:bg-[#6E5AA6]/10 text-gray-900">
                     {o.name}{o.state ? `, ${o.state}` : ''}
                   </button>
                 </li>
@@ -115,7 +115,7 @@ export function BirthDetailsForm({
       )}
 
       <button data-testid={`${p}-generate-btn`} onClick={submit} disabled={!canSubmit}
-              className="w-full py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50">
+              className="w-full py-3 rounded-lg bg-[#0E2238] text-white font-semibold hover:bg-[#0E2238] disabled:opacity-50">
         {loading ? loadingLabel : submitLabel}
       </button>
       {!canSubmit && !loading && (

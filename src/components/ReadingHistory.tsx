@@ -45,7 +45,7 @@ export function ReadingHistory({ dob, refreshKey }: { dob?: string; refreshKey?:
                   <span className="font-medium">{fmt(e.generatedAt)}</span>
                   <span className="text-muted-foreground"> — {e.rashi} Rashi · {e.nakshatra} · Dasha {e.dasha}</span>
                 </div>
-                {delta && <div data-testid="reading-history-delta" className="text-xs text-indigo-700 mt-0.5">↳ {delta}</div>}
+                {delta && <div data-testid="reading-history-delta" className="text-xs text-[#6E5AA6] mt-0.5">↳ {delta}</div>}
               </li>
             );
           })}

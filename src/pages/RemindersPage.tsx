@@ -74,7 +74,7 @@ export default function RemindersPage() {
             </div>
           </div>
           <button data-testid="remind-add-btn" onClick={add} disabled={!canAdd}
-                  className="w-full py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50">
+                  className="w-full py-2.5 rounded-lg bg-[#0E2238] text-white font-semibold hover:bg-[#0E2238] disabled:opacity-50">
             Add reminder
           </button>
           {!user && <p className="text-xs text-muted-foreground">Sign in to sync reminders across devices — they're saved on this device for now.</p>}

@@ -72,7 +72,7 @@ export function ShareMyProfileButton({
       data-testid="share-profile-image"
       onClick={handleShare}
       disabled={busy}
-      className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors disabled:opacity-60 ${className}`}
+      className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold bg-[#0E2238] text-white hover:bg-[#0E2238] transition-colors disabled:opacity-60 ${className}`}
     >
       {busy ? 'Preparing…' : '🖼️ Share my profile as an image'}
     </button>

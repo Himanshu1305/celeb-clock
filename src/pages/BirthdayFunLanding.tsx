@@ -49,7 +49,7 @@ const CONFIG: CategoryLandingConfig = {
       Most birthday sites stop at a name and a photo. We go further — the Nakshatra,
       zodiac and numerology behind every celebrity twin, your age to the exact second,
       and a fresh set of birthdays every single day.
-      <strong className="text-indigo-700"> Come find who you share your day with.</strong>
+      <strong className="text-[#6E5AA6]"> Come find who you share your day with.</strong>
     </p>
   ),
 };

@@ -48,8 +48,8 @@ const SunVsMoonSign = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Your sun sign is determined by where the Sun was on your birthday — it changes roughly every 30 days and represents your core identity and the self you show the world. Your moon sign is determined by where the Moon was at your birth — it changes every 2.5 days and represents your emotional inner world, your instincts, and the self you are when nobody's watching. If you've ever read your sun sign and thought "that's not quite me," your moon sign is usually the explanation.
             </p>
           </div>

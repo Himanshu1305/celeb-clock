@@ -113,10 +113,10 @@ export function LifeExpectancyIndiaArticle() {
           <div className="overflow-x-auto mb-6">
             <table className="w-full border-collapse text-sm">
               <thead>
-                <tr className="bg-indigo-50">
-                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-indigo-900">Rank</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-indigo-900">State</th>
-                  <th className="border border-gray-300 px-4 py-2 text-right font-black text-indigo-900">Life Expectancy (years)</th>
+                <tr className="bg-[#6E5AA6]/10">
+                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-[#6E5AA6]">Rank</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-[#6E5AA6]">State</th>
+                  <th className="border border-gray-300 px-4 py-2 text-right font-black text-[#6E5AA6]">Life Expectancy (years)</th>
                 </tr>
               </thead>
               <tbody>
@@ -130,9 +130,9 @@ export function LifeExpectancyIndiaArticle() {
                     <td className="border border-gray-300 px-4 py-2 text-right font-bold text-green-700">{row.le}</td>
                   </tr>
                 ))}
-                <tr className="bg-indigo-100">
-                  <td className="border border-gray-300 px-4 py-2 font-bold text-indigo-900" colSpan={2}>India — national average</td>
-                  <td className="border border-gray-300 px-4 py-2 text-right font-black text-indigo-900">70.2</td>
+                <tr className="bg-[#6E5AA6]/10">
+                  <td className="border border-gray-300 px-4 py-2 font-bold text-[#6E5AA6]" colSpan={2}>India — national average</td>
+                  <td className="border border-gray-300 px-4 py-2 text-right font-black text-[#6E5AA6]">70.2</td>
                 </tr>
                 <tr className="bg-red-50">
                   <td colSpan={3} className="border border-gray-300 px-4 py-2 font-bold text-red-800">Lowest life expectancy</td>
@@ -149,8 +149,8 @@ export function LifeExpectancyIndiaArticle() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-            <div className="bg-indigo-50 rounded-xl p-4 text-center">
-              <div className="text-2xl font-black text-indigo-900">70.2</div>
+            <div className="bg-[#6E5AA6]/10 rounded-xl p-4 text-center">
+              <div className="text-2xl font-black text-[#6E5AA6]">70.2</div>
               <div className="text-xs text-gray-600">National average</div>
             </div>
             <div className="bg-blue-50 rounded-xl p-4 text-center">
@@ -234,7 +234,7 @@ export function LifeExpectancyIndiaArticle() {
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             BornClock takes you beyond the crude state average. Our{' '}
-            <a href="/longevity-calculator" className="text-indigo-600 font-semibold underline hover:text-indigo-800">
+            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline hover:text-[#6E5AA6]">
               longevity calculator
             </a>{' '}
             personalises your estimate using your own lifestyle inputs — your habits, activity
@@ -243,16 +243,16 @@ export function LifeExpectancyIndiaArticle() {
             how many years the changes within your control could add.
           </p>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Find Out How Long <em>You</em> Might Live</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               Stop guessing from a state average. The BornClock longevity calculator turns your
               own lifestyle into a personalised life-expectancy estimate — and shows how many
               years your habits could add.
             </p>
             <a
               href="/longevity-calculator"
-              className="inline-block bg-white text-indigo-700 font-black px-8 py-3 rounded-full text-lg hover:bg-indigo-50 transition-colors"
+              className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors"
             >
               Calculate My Life Expectancy →
             </a>
@@ -272,12 +272,12 @@ export function LifeExpectancyIndiaArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/life-expectancy-by-country-2026" className="text-indigo-600 font-semibold underline hover:text-indigo-800">
+                <a href="/articles/life-expectancy-by-country-2026" className="text-[#6E5AA6] font-semibold underline hover:text-[#6E5AA6]">
                   Life Expectancy by Country 2026 — Global Rankings
                 </a>
               </li>
               <li>
-                <a href="/articles/how-to-live-to-100" className="text-indigo-600 font-semibold underline hover:text-indigo-800">
+                <a href="/articles/how-to-live-to-100" className="text-[#6E5AA6] font-semibold underline hover:text-[#6E5AA6]">
                   How to Live to 100 — Habits of the World's Longest-Lived People
                 </a>
               </li>

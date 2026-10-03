@@ -255,8 +255,8 @@ export const HLWIL_COPY = {
     heading: 'The Direct Answer: It Depends on You',
     stats: [
       { label: 'Global average', value: '73 years',   note: 'WHO 2023', color: 'text-gray-700' as const },
-      { label: 'Highest (Japan)', value: '84.3 years', note: 'WHO 2023', color: 'text-indigo-600' as const },
-      { label: 'India average',   value: '70.2 years', note: 'WHO 2023', color: 'text-indigo-600' as const },
+      { label: 'Highest (Japan)', value: '84.3 years', note: 'WHO 2023', color: 'text-[#6E5AA6]' as const },
+      { label: 'India average',   value: '70.2 years', note: 'WHO 2023', color: 'text-[#6E5AA6]' as const },
       { label: 'United States',   value: '76.4 years', note: 'WHO 2023', color: 'text-blue-600' as const },
     ] as const,
     insight: 'Averages are for everyone. Your actual life expectancy could be 10-15 years above or below your national average depending on your lifestyle. Genetics accounts for only 25-30% of longevity. The remaining 70-75% is in your hands.',

@@ -93,7 +93,7 @@ export default function MuhuratPage() {
               <div className="absolute z-10 w-full mt-1 bg-white border border-border rounded-lg shadow-lg max-h-56 overflow-auto">
                 {options.map((o, i) => (
                   <button key={i} type="button" data-testid="muhurat-city-option" onClick={() => pickCity(o)}
-                          className="w-full text-left px-3 py-2 text-sm hover:bg-indigo-50 text-gray-900">
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-[#6E5AA6]/10 text-gray-900">
                     {o.name}
                   </button>
                 ))}
@@ -129,7 +129,7 @@ export default function MuhuratPage() {
         {result && (
           <div data-testid="muhurat-result" className="mt-6 space-y-3">
             {methodology && (
-              <div data-testid="muhurat-methodology" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4 text-sm text-foreground">
+              <div data-testid="muhurat-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4 text-sm text-foreground">
                 <div className="font-semibold mb-1">How these dates are chosen</div>
                 <p>{methodology}</p>
               </div>

@@ -74,7 +74,7 @@ export function PaymentSuccessModal({ onClose, billing: _billing }: PaymentSucce
             onClose();
             navigate('/');
           }}
-          className="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition-colors mb-3"
+          className="w-full bg-[#0E2238] text-white font-bold py-3 rounded-xl hover:bg-[#0E2238] transition-colors mb-3"
         >
           Start Exploring Premium →
         </button>

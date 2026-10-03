@@ -24,17 +24,17 @@ export function ChartEventNotice({ profile }: { profile: SavedBirthProfile | nul
   const dismiss = () => { markNotificationsShown(events.map(e => e.key)); setEvents([]); };
 
   return (
-    <div data-testid="chart-event-notice" className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 space-y-3">
+    <div data-testid="chart-event-notice" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <div className="text-sm font-semibold text-indigo-900">🔔 Coming up in your chart</div>
+        <div className="text-sm font-semibold text-[#6E5AA6]">🔔 Coming up in your chart</div>
         <button data-testid="chart-event-dismiss" type="button" onClick={dismiss}
-                className="text-xs text-indigo-700 underline hover:text-indigo-900">Got it, dismiss</button>
+                className="text-xs text-[#6E5AA6] underline hover:text-[#6E5AA6]">Got it, dismiss</button>
       </div>
       <ul className="space-y-2">
         {events.map(e => (
           <li key={e.key} data-testid="chart-event-item" className="text-sm">
-            <div className="font-medium text-indigo-900">{e.title}</div>
-            <div className="text-indigo-900/80">{e.body}</div>
+            <div className="font-medium text-[#6E5AA6]">{e.title}</div>
+            <div className="text-[#6E5AA6]/80">{e.body}</div>
           </li>
         ))}
       </ul>

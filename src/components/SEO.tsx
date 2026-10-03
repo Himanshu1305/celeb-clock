@@ -195,7 +195,7 @@ export const SEO = ({
       <meta name="twitter:image:alt" content={title} />
       
       {/* Additional SEO Meta Tags */}
-      <meta name="theme-color" content="#8B5CF6" />
+      <meta name="theme-color" content="#6E5AA6" />
       <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
       <meta name="application-name" content={SITE_NAME} />
       

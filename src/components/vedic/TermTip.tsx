@@ -31,7 +31,7 @@ export function TermTip({ id, children }: { id: string; children: React.ReactNod
         {/* impact-first: plain-language impact leads */}
         <p className="mt-1 text-sm font-medium text-foreground">{def.impact}</p>
         {def.why && <p className="mt-2 text-xs text-muted-foreground leading-relaxed">{def.why}</p>}
-        {def.guidance && <p className="mt-2 text-xs text-indigo-700">{def.guidance}</p>}
+        {def.guidance && <p className="mt-2 text-xs text-[#6E5AA6]">{def.guidance}</p>}
       </HoverCardContent>
     </HoverCard>
   );

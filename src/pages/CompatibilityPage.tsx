@@ -358,11 +358,11 @@ export default function CompatibilityPage() {
 
                 {/* Links to both zodiac hubs (Phase 3 requirement) */}
                 <div className="flex flex-wrap gap-2">
-                  <Link to={`/zodiac/${calcSigns.s1.toLowerCase()}`} className="text-sm text-indigo-600 hover:underline">Full {calcSigns.s1} guide →</Link>
+                  <Link to={`/zodiac/${calcSigns.s1.toLowerCase()}`} className="text-sm text-[#6E5AA6] hover:underline">Full {calcSigns.s1} guide →</Link>
                   <span className="text-gray-300">·</span>
-                  <Link to={`/zodiac/${calcSigns.s2.toLowerCase()}`} className="text-sm text-indigo-600 hover:underline">Full {calcSigns.s2} guide →</Link>
+                  <Link to={`/zodiac/${calcSigns.s2.toLowerCase()}`} className="text-sm text-[#6E5AA6] hover:underline">Full {calcSigns.s2} guide →</Link>
                   <span className="text-gray-300">·</span>
-                  <Link to="/compatibility" className="text-sm text-indigo-600 hover:underline">Check another pair →</Link>
+                  <Link to="/compatibility" className="text-sm text-[#6E5AA6] hover:underline">Check another pair →</Link>
                 </div>
               </div>
 
@@ -450,7 +450,7 @@ export default function CompatibilityPage() {
                         <Link
                           key={other}
                           to={`/compatibility/${[sign, other].map(s => s.toLowerCase()).sort().join('/')}`}
-                          className="text-xs text-indigo-600 hover:underline"
+                          className="text-xs text-[#6E5AA6] hover:underline"
                         >
                           {SIGN_EMOJIS[other]} {sign} & {other}
                         </Link>
@@ -507,7 +507,7 @@ export default function CompatibilityPage() {
                       <Link
                         key={`${a}-${b}`}
                         to={`/compatibility/${ca}/${cb}`}
-                        className="text-xs text-indigo-600 hover:underline py-0.5"
+                        className="text-xs text-[#6E5AA6] hover:underline py-0.5"
                       >
                         {a} & {b}
                       </Link>
@@ -532,7 +532,7 @@ export default function CompatibilityPage() {
                       // Link to the CANONICAL (alphabetical) pair URL, never the reverse order —
                       // the Worker 301s reverse pairs, and internal links must point at final targets.
                       <Link key={match} to={`/compatibility/${[sign, match].map(s => s.toLowerCase()).sort().join('/')}`}
-                        className="text-xs text-indigo-600 hover:underline">
+                        className="text-xs text-[#6E5AA6] hover:underline">
                         {SIGN_EMOJIS[match]} {match}
                       </Link>
                     ))}

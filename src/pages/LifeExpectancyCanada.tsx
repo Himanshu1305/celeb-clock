@@ -49,8 +49,8 @@ const LifeExpectancyCanada = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Canada's average life expectancy is approximately 82.3 years as of 2023. Women average 84.6 years; men average 80.1 years. Canada consistently outperforms the United States by approximately 5 years — largely due to universal healthcare, lower gun violence, lower opioid mortality, and stronger social safety nets.
             </p>
           </div>

@@ -57,8 +57,8 @@ const BirthdayCountdown = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Your birthday countdown is the exact number of calendar days between today and your next birthday — whether that's this year or next, depending on whether it's already passed. Enter your date of birth above and see your count now, along with what day of the week it falls on.
             </p>
           </div>

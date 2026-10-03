@@ -38,7 +38,7 @@ function Dimension({ id, icon, title, score, detail }: { id: string; icon: strin
     <div data-testid={id} className="rounded-xl border border-gray-200 p-4">
       <div className="flex justify-between items-center mb-2">
         <span className="font-semibold text-gray-900">{icon} {title}</span>
-        <span className="font-bold text-indigo-600">{score}%</span>
+        <span className="font-bold text-[#6E5AA6]">{score}%</span>
       </div>
       <p className="text-sm text-gray-600">{detail}</p>
     </div>
@@ -95,7 +95,7 @@ export default function DobCompatibility() {
   const whatsappHref = `https://wa.me/?text=${encodeURIComponent(shareText).replace(/'/g, '%27')}`;
 
   return (
-    <div className="bg-indigo-50 rounded-2xl p-6 mb-10 border border-indigo-200">
+    <div className="bg-[#6E5AA6]/10 rounded-2xl p-6 mb-10 border border-[#6E5AA6]/30">
       <h2 className="text-xl font-bold text-gray-900 mb-1">Full Birthday Compatibility</h2>
       <p className="text-sm text-gray-600 mb-4">
         Enter two dates of birth to compare across three dimensions — Western zodiac, Vedic rashi and Life Path number.
@@ -128,7 +128,7 @@ export default function DobCompatibility() {
         data-testid="compat-calc-btn"
         onClick={calculate}
         disabled={!canCalc}
-        className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors disabled:opacity-50"
+        className="w-full bg-[#0E2238] text-white py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors disabled:opacity-50"
       >
         Calculate compatibility →
       </button>
@@ -137,14 +137,14 @@ export default function DobCompatibility() {
         <div className="mt-6 space-y-4">
           <div className="text-center">
             <p className="text-sm text-gray-500">Overall compatibility</p>
-            <p data-testid="compat-overall-score" className="text-4xl font-black text-indigo-600">{res.overall}%</p>
+            <p data-testid="compat-overall-score" className="text-4xl font-black text-[#6E5AA6]">{res.overall}%</p>
           </div>
           <Dimension id="compat-zodiac" icon="♈" title="Western Zodiac" score={res.zodiac.score} detail={res.zodiac.text} />
           <Dimension id="compat-rashi" icon="🕉️" title="Vedic Rashi" score={res.rashi.score} detail={res.rashi.text} />
           <Dimension id="compat-lifepath" icon="🔢" title="Life Path" score={res.lifepath.score} detail={res.lifepath.text} />
           <p data-testid="compat-nakshatra-disclaimer" className="text-xs text-gray-500 italic">
             Nakshatra (Guna Milan) compatibility needs both people's exact birth times — get it in the full{' '}
-            <a href="/kundali-match" className="text-indigo-600 underline">Kundali match</a>.
+            <a href="/kundali-match" className="text-[#6E5AA6] underline">Kundali match</a>.
           </p>
 
           <div className="flex flex-wrap gap-3">
@@ -159,7 +159,7 @@ export default function DobCompatibility() {
             </a>
             <Link
               to="/birthday-report"
-              className="inline-flex items-center gap-2 bg-indigo-600 text-white rounded-lg px-5 py-3 font-semibold hover:bg-indigo-700 transition-colors"
+              className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-lg px-5 py-3 font-semibold hover:bg-[#0E2238] transition-colors"
             >
               Get the full Birthday Report →
             </Link>

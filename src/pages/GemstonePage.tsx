@@ -24,10 +24,10 @@ interface Report {
 
 function Card({ s, primary }: { s: Sugg; primary?: boolean }) {
   return (
-    <div data-testid={primary ? 'gem-primary' : 'gem-additional'} className={`rounded-xl border p-4 ${primary ? 'border-indigo-300 bg-indigo-50/50' : 'border-border'}`}>
+    <div data-testid={primary ? 'gem-primary' : 'gem-additional'} className={`rounded-xl border p-4 ${primary ? 'border-[#6E5AA6]/30 bg-[#6E5AA6]/50' : 'border-border'}`}>
       <div className="font-semibold text-foreground">
         {s.gem} <span className="text-muted-foreground">({s.hindi})</span> — for {s.planet}
-        <span className="ml-2 text-[10px] uppercase tracking-wide text-indigo-600">{s.role}</span>
+        <span className="ml-2 text-[10px] uppercase tracking-wide text-[#6E5AA6]">{s.role}</span>
         {s.dashaActive && <span className="ml-2 text-[10px] uppercase tracking-wide text-emerald-600">period active now</span>}
       </div>
       <p className="text-sm text-muted-foreground mt-1">{s.reason}</p>
@@ -84,7 +84,7 @@ export default function GemstonePage() {
         {report && (
           <div data-testid="gemstone-result" className="mt-6 space-y-4">
             {/* Methodology note FIRST — the transparency that builds trust (Part J). */}
-            <div data-testid="gemstone-methodology" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
+            <div data-testid="gemstone-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
               <div className="font-semibold text-foreground mb-1">How we chose this (based on your Ascendant, not your Moon sign)</div>
               <p className="text-sm text-foreground">{report.methodology.text}</p>
             </div>

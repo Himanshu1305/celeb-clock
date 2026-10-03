@@ -44,7 +44,7 @@ const PersonCard = ({ person, onClick }: { person: WikiPerson; onClick: () => vo
     switch (person.category) {
       case 'celebrity':
       case 'actor': return 'text-primary';
-      case 'dancer': return 'text-purple-500';
+      case 'dancer': return 'text-[#6E5AA6]';
       case 'artist': return 'text-pink-500';
       case 'internet_celebrity': return 'text-cyan-500';
       case 'scientist': return 'text-blue-500';
@@ -301,7 +301,7 @@ export const WikiBirthdayMatches = ({ birthDate, onCelebritiesChange }: WikiBirt
                     switch (category) {
                       case 'celebrity': return { icon: <StarIcon className="h-5 w-5 text-primary" />, label: 'Celebrities' };
                       case 'actor': return { icon: <StarIcon className="h-5 w-5 text-primary" />, label: 'Actors' };
-                      case 'dancer': return { icon: <Music className="h-5 w-5 text-purple-500" />, label: 'Dancers' };
+                      case 'dancer': return { icon: <Music className="h-5 w-5 text-[#6E5AA6]" />, label: 'Dancers' };
                       case 'artist': return { icon: <Palette className="h-5 w-5 text-pink-500" />, label: 'Artists' };
                       case 'internet_celebrity': return { icon: <UsersIcon className="h-5 w-5 text-cyan-500" />, label: 'Internet Celebrities' };
                       case 'scientist': return { icon: <FlaskConical className="h-5 w-5 text-blue-500" />, label: 'Scientists' };

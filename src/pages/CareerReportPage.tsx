@@ -108,7 +108,7 @@ export default function CareerReportPage() {
 
           {report && (
             <div data-testid="career-result" className="mt-6 space-y-4" style={{ marginTop: 20 }}>
-              <div data-testid="career-methodology" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
+              <div data-testid="career-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
                 <div className="font-semibold text-foreground mb-1">How this report was built (from your chart)</div>
                 <p className="text-sm text-foreground">{report.methodology}</p>
               </div>
@@ -125,17 +125,17 @@ export default function CareerReportPage() {
                   <div className="font-semibold text-foreground mb-1">Career-relevant Yogas</div>
                   <p className="text-xs text-muted-foreground mb-2">A "Yoga" here is a classical planetary combination linked to a career strength — an indication, never a guarantee.</p>
                   <ul className="text-sm text-foreground space-y-1">
-                    {report.yogas.map(y => <li key={y.name}><span className="font-medium">{y.name}</span> <span className="text-xs uppercase text-indigo-600">[{y.grade}]</span> — {y.summary}</li>)}
+                    {report.yogas.map(y => <li key={y.name}><span className="font-medium">{y.name}</span> <span className="text-xs uppercase text-[#6E5AA6]">[{y.grade}]</span> — {y.summary}</li>)}
                   </ul>
                   <GradeLegend />
                 </div>
               )}
-              <div data-testid="career-timing" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
+              <div data-testid="career-timing" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
                 <div className="font-semibold text-foreground mb-1">Career timing windows</div>
                 <p className="text-xs text-muted-foreground mb-2">{report.timing.note}</p>
                 <ul className="text-sm text-foreground space-y-0.5">{report.timing.windows.map((w, i) => <li key={i}>• {w.describe}</li>)}</ul>
               </div>
-              <div data-testid="career-verdict" className="rounded-xl border-2 border-indigo-300 bg-card/70 p-5">
+              <div data-testid="career-verdict" className="rounded-xl border-2 border-[#6E5AA6]/30 bg-card/70 p-5">
                 <div className="font-semibold text-foreground mb-1">The bottom line</div>
                 <p className="text-sm text-foreground">{report.verdict}</p>
               </div>

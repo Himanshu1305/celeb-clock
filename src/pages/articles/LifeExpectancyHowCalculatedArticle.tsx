@@ -132,14 +132,14 @@ export function LifeExpectancyHowCalculatedArticle() {
             already escaped.
           </p>
 
-          <div className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 my-8">
-            <h3 className="text-lg font-black text-indigo-900 mb-2">See your own adjusted estimate</h3>
-            <p className="text-sm text-indigo-700 mb-4">
+          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
+            <h3 className="text-lg font-black text-[#6E5AA6] mb-2">See your own adjusted estimate</h3>
+            <p className="text-sm text-[#6E5AA6] mb-4">
               The national life table is only a starting point. BornClock takes the baseline and
               adjusts for your age, sex and lifestyle to estimate your personal outlook.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-indigo-600 text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-indigo-700 transition-colors">
+               className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-[#0E2238] transition-colors">
               Try the Longevity Calculator →
             </a>
           </div>
@@ -236,14 +236,14 @@ export function LifeExpectancyHowCalculatedArticle() {
             abstract statistic into a number you can plan around.
           </p>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Get Your Personal Life Expectancy Estimate</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               Move beyond the national average. Enter your details and see an estimate adjusted for
               your age, sex and lifestyle in seconds.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3 rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Open the Longevity Calculator →
             </a>
           </div>
@@ -259,7 +259,7 @@ export function LifeExpectancyHowCalculatedArticle() {
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
-          <ul className="list-disc pl-6 text-indigo-700 space-y-2 mb-6">
+          <ul className="list-disc pl-6 text-[#6E5AA6] space-y-2 mb-6">
             <li>
               <a href="/articles/life-expectancy-by-country-2026" className="hover:underline font-semibold">
                 Life Expectancy by Country 2026

@@ -352,8 +352,8 @@ export function ArticlesIndexPage() {
                 aria-pressed={active === cat}
                 className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-colors ${
                   active === cat
-                    ? 'bg-indigo-600 text-white border-indigo-600'
-                    : 'bg-white text-indigo-700 border-indigo-200 hover:border-indigo-400'
+                    ? 'bg-[#0E2238] text-white border-[#6E5AA6]/30'
+                    : 'bg-white text-[#6E5AA6] border-[#6E5AA6]/30 hover:border-[#6E5AA6]/30'
                 }`}
               >
                 {cat}
@@ -369,10 +369,10 @@ export function ArticlesIndexPage() {
                 href={a.href}
                 data-testid="article-card"
                 className="block bg-white border-2 border-gray-100 rounded-2xl p-5
-                           hover:border-indigo-300 hover:shadow-md transition-all"
+                           hover:border-[#6E5AA6]/30 hover:shadow-md transition-all"
               >
                 <span className="inline-block text-[11px] font-bold uppercase tracking-wide
-                                 text-indigo-600 bg-indigo-50 rounded-full px-2.5 py-1 mb-3">
+                                 text-[#6E5AA6] bg-[#6E5AA6]/10 rounded-full px-2.5 py-1 mb-3">
                   {a.category}
                 </span>
                 <h2 className="text-lg font-black text-gray-900 leading-snug mb-2">
@@ -384,10 +384,10 @@ export function ArticlesIndexPage() {
           </div>
 
           {/* CTA */}
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                           p-8 text-center text-white mt-12">
             <h2 className="text-2xl font-black mb-2">Start With Your Own Numbers</h2>
-            <p className="text-indigo-100 mb-6 max-w-xl mx-auto">
+            <p className="text-[#6E5AA6] mb-6 max-w-xl mx-auto">
               Reading is a great start — but the real insight comes from your own
               date of birth. Generate your free profile or estimate your life
               expectancy in seconds.
@@ -396,16 +396,16 @@ export function ArticlesIndexPage() {
               <a
                 href="/birthday-report"
                 data-testid="cta-birthday-report"
-                className="inline-block bg-white text-indigo-700 font-black px-6 py-3
-                           rounded-full text-base hover:bg-indigo-50 transition-colors"
+                className="inline-block bg-white text-[#6E5AA6] font-black px-6 py-3
+                           rounded-full text-base hover:bg-[#6E5AA6]/10 transition-colors"
               >
                 Generate My Birthday Report →
               </a>
               <a
                 href="/longevity-calculator"
                 data-testid="cta-longevity-calculator"
-                className="inline-block bg-indigo-800 text-white font-black px-6 py-3
-                           rounded-full text-base hover:bg-indigo-900 transition-colors"
+                className="inline-block bg-[#0E2238] text-white font-black px-6 py-3
+                           rounded-full text-base hover:bg-[#0E2238] transition-colors"
               >
                 Estimate My Life Expectancy →
               </a>

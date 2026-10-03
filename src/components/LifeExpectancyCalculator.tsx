@@ -624,12 +624,12 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                   <p className="text-xl font-black text-gray-800">{currentAge}</p>
                   <p className="text-xs text-gray-400">years</p>
                 </div>
-                <div className="bg-indigo-50 rounded-xl p-3 text-center border border-indigo-200">
-                  <p className="text-xs text-indigo-400 mb-1">Projected Age</p>
-                  <p className="text-xl font-black text-indigo-700">
+                <div className="bg-[#6E5AA6]/10 rounded-xl p-3 text-center border border-[#6E5AA6]/30">
+                  <p className="text-xs text-[#6E5AA6] mb-1">Projected Age</p>
+                  <p className="text-xl font-black text-[#6E5AA6]">
                     {countUpAge !== null ? countUpAge : liveResult.totalForecast}
                   </p>
-                  <p className="text-xs text-indigo-400">years</p>
+                  <p className="text-xs text-[#6E5AA6]">years</p>
                 </div>
               </div>
             )}
@@ -1458,9 +1458,9 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                         <div className="text-[9px] text-blue-800 font-semibold leading-tight">can be added through evidence-based changes</div>
                         <div className="text-[9px] text-muted-foreground">(Blue Zones Research)</div>
                       </div>
-                      <div className="text-center bg-purple-50 border border-purple-200 rounded-lg p-2 space-y-0.5">
-                        <div className="text-base font-black text-purple-700">25+</div>
-                        <div className="text-[9px] text-purple-800 font-semibold leading-tight">factors influence your lifespan — most within your control</div>
+                      <div className="text-center bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-lg p-2 space-y-0.5">
+                        <div className="text-base font-black text-[#6E5AA6]">25+</div>
+                        <div className="text-[9px] text-[#6E5AA6] font-semibold leading-tight">factors influence your lifespan — most within your control</div>
                         <div className="text-[9px] text-muted-foreground">(Harvard Health)</div>
                       </div>
                     </div>

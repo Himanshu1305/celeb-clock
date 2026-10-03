@@ -96,7 +96,7 @@ export default function BiorhythmPage() {
         <div className="max-w-2xl mx-auto px-4 py-10">
 
           <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
+            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
             <span>›</span>
             <span className="text-gray-600">Biorhythm Calculator</span>
           </nav>

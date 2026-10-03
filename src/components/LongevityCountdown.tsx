@@ -85,15 +85,15 @@ export const LongevityCountdown = ({ forecast, currentAge, birthDate }: Props) =
   const pad = (n: number) => String(n).padStart(2, '0');
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 rounded-2xl p-6 md:p-8 my-6 border border-purple-800/30 shadow-xl space-y-6">
+    <div className="bg-gradient-to-br from-slate-900 via-[#6E5AA6] to-slate-900 rounded-2xl p-6 md:p-8 my-6 border border-[#6E5AA6]/30 shadow-xl space-y-6">
       {isSharedView && (
-        <div className="flex items-center gap-2 bg-purple-900/60 border border-purple-500/40 rounded-xl px-4 py-3 text-sm text-purple-200">
-          <Gift className="w-4 h-4 text-purple-400 shrink-0" />
-          <span>Someone shared their BornClock countdown with you. <a href="/life-expectancy" className="underline text-purple-300 hover:text-white">Calculate yours →</a></span>
+        <div className="flex items-center gap-2 bg-[#0E2238]/60 border border-[#6E5AA6]/40 rounded-xl px-4 py-3 text-sm text-[#6E5AA6]">
+          <Gift className="w-4 h-4 text-[#6E5AA6] shrink-0" />
+          <span>Someone shared their BornClock countdown with you. <a href="/life-expectancy" className="underline text-[#6E5AA6] hover:text-white">Calculate yours →</a></span>
         </div>
       )}
       <div className="text-center space-y-1">
-        <p className="text-xs font-bold uppercase tracking-widest text-purple-300">⏳ Your Life Countdown</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-[#6E5AA6]">⏳ Your Life Countdown</p>
         <p className="text-sm text-slate-400">Estimated time remaining until age {forecast}</p>
         <p className="text-xs text-white/50 italic">
           ⓘ Countdown to your statistical life expectancy date, calculated from your date of birth.
@@ -119,12 +119,12 @@ export const LongevityCountdown = ({ forecast, currentAge, birthDate }: Props) =
       <div className="space-y-2">
         <div className="flex justify-between text-xs text-slate-400">
           <span>Birth</span>
-          <span className="text-purple-300 font-semibold">{progress}% of forecast lived</span>
+          <span className="text-[#6E5AA6] font-semibold">{progress}% of forecast lived</span>
           <span>Age {forecast}</span>
         </div>
         <div className="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-1000"
+            className="h-full bg-gradient-to-r from-[#6E5AA6] to-pink-500 rounded-full transition-all duration-1000"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -141,7 +141,7 @@ export const LongevityCountdown = ({ forecast, currentAge, birthDate }: Props) =
           variant="outline"
           size="sm"
           onClick={handleShare}
-          className="gap-2 border-purple-700 text-purple-300 hover:bg-purple-900/30"
+          className="gap-2 border-[#6E5AA6]/30 text-[#6E5AA6] hover:bg-[#6E5AA6]/30"
         >
           {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
           {copied ? 'Copied!' : 'Share Countdown'}

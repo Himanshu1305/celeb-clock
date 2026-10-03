@@ -49,8 +49,8 @@ const LifeExpectancyJapan = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Japan's average life expectancy is 84.3 years — the highest of any large nation on Earth (UN World Population Prospects 2023). Women average 87.1 years; men average 81.1 years. Japan has held this position for decades, and the reasons are specific and well-studied.
             </p>
           </div>

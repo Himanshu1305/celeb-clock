@@ -16,7 +16,7 @@ const base = 'px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap';
 
 export function KundaliTabs({ active }: { active: KundaliTab }) {
   const cls = (isActive: boolean) =>
-    `${base} ${isActive ? 'bg-indigo-600 text-white' : 'bg-card/60 border border-border text-foreground hover:bg-muted/40'}`;
+    `${base} ${isActive ? 'bg-[#0E2238] text-white' : 'bg-card/60 border border-border text-foreground hover:bg-muted/40'}`;
   return (
     <nav data-testid="kundali-tabs" aria-label="Vedic sections" className="flex flex-wrap gap-2 mb-6">
       <Link data-testid="tab-kundali" to="/kundali" className={cls(active === 'kundali')} aria-current={active === 'kundali' ? 'page' : undefined}>

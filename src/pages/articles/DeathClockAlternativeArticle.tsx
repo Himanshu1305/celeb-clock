@@ -177,13 +177,13 @@ export function DeathClockAlternativeArticle() {
             </table>
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 text-center text-white my-8">
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-6 text-center text-white my-8">
             <h2 className="text-xl font-black mb-2">Skip the morbid countdown</h2>
-            <p className="text-indigo-100 mb-4 text-sm">
+            <p className="text-[#6E5AA6] mb-4 text-sm">
               Get a science-backed life expectancy estimate from 8 real factors — in about 3 minutes, free.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-indigo-700 font-black px-6 py-3 rounded-full text-base hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-6 py-3 rounded-full text-base hover:bg-[#6E5AA6]/10 transition-colors">
               Try the Longevity Calculator →
             </a>
           </div>
@@ -200,7 +200,7 @@ export function DeathClockAlternativeArticle() {
                 <h3 className="text-lg font-black text-gray-900 mb-1">
                   {factor.id}. {factor.name}
                 </h3>
-                <div className="text-xs font-semibold text-indigo-600 mb-2">{factor.impact}</div>
+                <div className="text-xs font-semibold text-[#6E5AA6] mb-2">{factor.impact}</div>
                 <p className="text-gray-700 text-sm leading-relaxed mb-1">{factor.summary}</p>
                 <p className="text-gray-600 text-sm leading-relaxed">{factor.detail}</p>
               </section>
@@ -211,7 +211,7 @@ export function DeathClockAlternativeArticle() {
             account for roughly 70-75% of longevity variance. That is the entire reason a
             factor-based estimate is worth trusting over a countdown: it is built from the
             things that actually move the needle. Ready to see your own number? Run the free{' '}
-            <a href="/longevity-calculator" className="text-indigo-600 font-semibold underline">
+            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">
               BornClock longevity calculator
             </a>.
           </p>
@@ -226,14 +226,14 @@ export function DeathClockAlternativeArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white mt-10">
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">A Better Answer Than a Death Clock</h2>
-            <p className="text-indigo-100 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               Trade the morbid countdown for a science-backed estimate you can actually
               improve. 8 factors, WHO baselines, a personalised 90-day plan — all free.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3 rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Calculate My Life Expectancy →
             </a>
           </div>
@@ -242,12 +242,12 @@ export function DeathClockAlternativeArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/how-long-will-i-live-in-india" className="text-indigo-600 font-semibold hover:underline">
+                <a href="/articles/how-long-will-i-live-in-india" className="text-[#6E5AA6] font-semibold hover:underline">
                   How Long Will I Live in India? →
                 </a>
               </li>
               <li>
-                <a href="/articles/longevity-quiz" className="text-indigo-600 font-semibold hover:underline">
+                <a href="/articles/longevity-quiz" className="text-[#6E5AA6] font-semibold hover:underline">
                   The Longevity Quiz — Test Your Life Expectancy →
                 </a>
               </li>

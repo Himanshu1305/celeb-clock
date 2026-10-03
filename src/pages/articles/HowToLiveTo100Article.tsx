@@ -124,7 +124,7 @@ export function HowToLiveTo100Article() {
             study of human happiness reveals about ageing, how much of your lifespan is
             actually written in your DNA, and how these ideas translate to life in India.
             You can also estimate your own trajectory with our{' '}
-            <a href="/how-long-will-i-live" className="text-indigo-600 font-semibold underline">
+            <a href="/how-long-will-i-live" className="text-[#6E5AA6] font-semibold underline">
               life expectancy calculator
             </a>.
           </p>
@@ -157,7 +157,7 @@ export function HowToLiveTo100Article() {
           <div className="space-y-4 mb-10">
             {POWER_9.map((p, i) => (
               <section key={p.name} className="flex gap-4">
-                <div className="w-9 h-9 bg-indigo-600 rounded-full flex items-center justify-center text-white font-black flex-shrink-0">
+                <div className="w-9 h-9 bg-[#0E2238] rounded-full flex items-center justify-center text-white font-black flex-shrink-0">
                   {i + 1}
                 </div>
                 <div>
@@ -223,14 +223,14 @@ export function HowToLiveTo100Article() {
             and protecting the air we breathe.
           </p>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">How Long Will You Live?</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               Get a personalised life expectancy estimate from your age and country — then see
               which science-backed habits could add healthy years to your life.
             </p>
             <a href="/how-long-will-i-live"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3 rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Calculate My Life Expectancy →
             </a>
           </div>
@@ -249,16 +249,16 @@ export function HowToLiveTo100Article() {
             <h2 className="text-xl font-black text-gray-900 mb-3">Keep Reading</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
               Ready to put this into practice? Estimate your own numbers with the{' '}
-              <a href="/how-long-will-i-live" className="text-indigo-600 font-semibold underline">
+              <a href="/how-long-will-i-live" className="text-[#6E5AA6] font-semibold underline">
                 life expectancy calculator
               </a>{' '}
               or explore the science further with our{' '}
-              <a href="/longevity-calculator" className="text-indigo-600 font-semibold underline">
+              <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">
                 longevity calculator
               </a>.
             </p>
             <h3 className="font-bold text-gray-900 mb-2">Related Articles</h3>
-            <ul className="list-disc pl-6 text-indigo-600 space-y-1">
+            <ul className="list-disc pl-6 text-[#6E5AA6] space-y-1">
               <li>
                 <a href="/articles/blue-zones-diet" className="font-semibold underline">
                   The Blue Zones Diet: What the World's Longest-Lived People Eat

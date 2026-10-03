@@ -12,7 +12,7 @@ const ELEMENT_BG: Record<string, string> = {
   Fire: 'from-red-500/20 to-orange-500/20',
   Earth: 'from-green-600/20 to-emerald-500/20',
   Air: 'from-sky-400/20 to-blue-400/20',
-  Water: 'from-blue-600/20 to-indigo-500/20',
+  Water: 'from-blue-600/20 to-[#6E5AA6]/20',
 };
 
 const ELEMENT_BADGE: Record<string, string> = {

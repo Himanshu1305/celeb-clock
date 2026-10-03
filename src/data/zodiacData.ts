@@ -355,7 +355,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
     endMonth: 12,
     endDay: 21,
     element: 'Fire',
-    elementColor: '#8B5CF6',
+    elementColor: '#6E5AA6',
     rulingPlanet: 'Jupiter',
     modality: 'Mutable',
     bodyPart: 'Hips, thighs, liver',

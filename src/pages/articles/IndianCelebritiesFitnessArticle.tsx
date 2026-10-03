@@ -192,11 +192,11 @@ export function IndianCelebritiesFitnessArticle() {
             Everything here is limited to widely reported facts. The numerology and astrology are
             offered purely as a light, self-reflection lens — never as medical, performance or
             factual claims. Want the same breakdown for yourself? Explore the{' '}
-            <a href="/celebrity" className="text-indigo-600 font-semibold underline">
+            <a href="/celebrity" className="text-[#6E5AA6] font-semibold underline">
               celebrity index
             </a>{' '}
             or generate your own{' '}
-            <a href="/birthday-report" className="text-indigo-600 font-semibold underline">
+            <a href="/birthday-report" className="text-[#6E5AA6] font-semibold underline">
               birthday report
             </a>.
           </p>
@@ -205,7 +205,7 @@ export function IndianCelebritiesFitnessArticle() {
             <section key={c.name} className="mb-10 border border-gray-100 rounded-2xl p-6 bg-gray-50">
               <div className="flex items-center justify-between flex-wrap gap-2 mb-1">
                 <h2 className="text-2xl font-black text-gray-900">{c.name}</h2>
-                <span className="text-xs font-semibold text-indigo-700 bg-indigo-100 px-3 py-1 rounded-full">
+                <span className="text-xs font-semibold text-[#6E5AA6] bg-[#6E5AA6]/10 px-3 py-1 rounded-full">
                   {c.discipline}
                 </span>
               </div>
@@ -223,14 +223,14 @@ export function IndianCelebritiesFitnessArticle() {
               </ul>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="bg-white rounded-xl border border-indigo-100 p-4">
-                  <div className="text-xs font-bold text-indigo-700 mb-1">Life Path {c.lifePath}</div>
+                <div className="bg-white rounded-xl border border-[#6E5AA6]/30 p-4">
+                  <div className="text-xs font-bold text-[#6E5AA6] mb-1">Life Path {c.lifePath}</div>
                   <p className="text-xs text-gray-600 leading-relaxed">
                     {LIFEPATH_FITNESS_STYLE[c.lifePath]}
                   </p>
                 </div>
-                <div className="bg-white rounded-xl border border-purple-100 p-4">
-                  <div className="text-xs font-bold text-purple-700 mb-1">
+                <div className="bg-white rounded-xl border border-[#6E5AA6]/30 p-4">
+                  <div className="text-xs font-bold text-[#6E5AA6] mb-1">
                     {c.zodiac.sign} {c.zodiac.symbol}
                   </div>
                   <p className="text-xs text-gray-600 leading-relaxed">
@@ -269,11 +269,11 @@ export function IndianCelebritiesFitnessArticle() {
             Notice the pattern above — several of these stars share a Life Path 6 or 9, numbers tied to
             purpose, care and the long game, which fits routines built for decades rather than quick
             results. Curious what your own number suggests? Browse the{' '}
-            <a href="/celebrity" className="text-indigo-600 font-semibold underline">
+            <a href="/celebrity" className="text-[#6E5AA6] font-semibold underline">
               full celebrity index
             </a>{' '}
             to compare, or run your{' '}
-            <a href="/birthday-report" className="text-indigo-600 font-semibold underline">
+            <a href="/birthday-report" className="text-[#6E5AA6] font-semibold underline">
               free birthday report
             </a>{' '}
             to see your Life Path, zodiac and more in seconds.
@@ -290,7 +290,7 @@ export function IndianCelebritiesFitnessArticle() {
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
-          <ul className="list-disc pl-6 text-indigo-600 mb-10 space-y-1">
+          <ul className="list-disc pl-6 text-[#6E5AA6] mb-10 space-y-1">
             <li>
               <a href="/articles/exercise-and-longevity" className="font-semibold underline">
                 Exercise and Longevity — How Movement Adds Years
@@ -303,14 +303,14 @@ export function IndianCelebritiesFitnessArticle() {
             </li>
           </ul>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white mt-10">
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Compare Yourself to Your Favourite Stars</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               See the Life Path number, zodiac sign and birth details of hundreds of Indian celebrities —
               and find out who shares yours.
             </p>
             <a href="/celebrity"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3 rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Explore the Celebrity Index →
             </a>
           </div>

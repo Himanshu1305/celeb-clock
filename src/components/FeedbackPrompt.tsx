@@ -86,7 +86,7 @@ export function FeedbackPrompt({ contentType, slug, variant = 'report', resultRe
 
   const wrap = variant === 'blog'
     ? 'border-t border-gray-200 mt-10 pt-6'
-    : 'bg-indigo-50 border border-indigo-200 rounded-2xl p-6 mt-8';
+    : 'bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-2xl p-6 mt-8';
 
   return (
     <div className={wrap} data-testid="feedback-prompt">
@@ -110,7 +110,7 @@ export function FeedbackPrompt({ contentType, slug, variant = 'report', resultRe
           <textarea
             value={comment} onChange={e => setComment(e.target.value)} maxLength={1000}
             placeholder="What did you love? (optional)"
-            className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
             rows={3}
           />
           <label className="flex items-start gap-2 text-sm text-gray-700">
@@ -124,7 +124,7 @@ export function FeedbackPrompt({ contentType, slug, variant = 'report', resultRe
           <textarea
             value={comment} onChange={e => setComment(e.target.value)} maxLength={1000}
             placeholder="What would have made this better?"
-            className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
             rows={3}
           />
           <p className="text-xs text-gray-400">This is private — it goes only to the BornClock team.</p>
@@ -134,7 +134,7 @@ export function FeedbackPrompt({ contentType, slug, variant = 'report', resultRe
       {rating > 0 && (
         <button
           onClick={doSubmit} disabled={submitting}
-          className="mt-4 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition-colors disabled:opacity-50"
+          className="mt-4 bg-[#0E2238] text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-[#0E2238] transition-colors disabled:opacity-50"
         >
           {submitting ? 'Sending…' : 'Send feedback'}
         </button>
