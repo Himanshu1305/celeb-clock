@@ -90,7 +90,7 @@ const AgeCalculatorPage = () => {
         { question: 'How accurate is the age calculation?', answer: 'It accounts for leap years and exact time elapsed, so the years/months/days figure matches how age is counted officially. The live seconds counter updates every second.' },
       ]} />
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>

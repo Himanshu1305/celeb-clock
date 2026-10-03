@@ -245,7 +245,7 @@ const GENERATION_CONTENT: Record<string, {
 
 const ExpiryPage = () => (
   <div className="min-h-screen bg-white flex flex-col">
-    <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm no-print">
+    <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm no-print">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Navigation />
         <AuthNav />
@@ -281,7 +281,7 @@ const ExpiryPage = () => (
 
 const LoadingScreen = () => (
   <div className="min-h-screen bg-white flex flex-col">
-    <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Navigation />
         <AuthNav />
@@ -732,7 +732,7 @@ const ReportView = () => {
       </Helmet>
 
       {/* ── Site nav ─────────────────────────────────────────────────────── */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm no-print">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm no-print">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />

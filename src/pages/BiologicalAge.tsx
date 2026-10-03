@@ -950,7 +950,7 @@ const BiologicalAge = () => {
         <script type="application/ld+json">{JSON.stringify(webAppSchema)}</script>
       </Helmet>
 
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm mb-8">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm mb-8">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />

@@ -68,7 +68,7 @@ export default function BirthdayHub() {
       <FAQSchema items={faqs} />
 
       {/* Nav */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
