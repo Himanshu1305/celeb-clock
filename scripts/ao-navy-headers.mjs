@@ -20,9 +20,11 @@ const A = [
 
 // Pattern B — bare container header → full-bleed navy bar (breaks out of container px-4,
 // pulls up over the container pt-8). Keeps the flex row + adds wrap for mobile.
+const NAVY_HEADER = `<header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[${NAVY}] text-white sticky top-0 z-50">`;
 const B = [
-  [/<header className="flex justify-between items-center mb-12">/g,
-   `<header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[${NAVY}] text-white sticky top-0 z-50">`],
+  [/<header className="flex justify-between items-center mb-12">/g, NAVY_HEADER],
+  [/<header className="flex justify-between items-center mb-8">/g, NAVY_HEADER],
+  [/<header className="flex justify-between items-center mb-6">/g, NAVY_HEADER],
 ];
 
 function walk(dir, acc = []) {

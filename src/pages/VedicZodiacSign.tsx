@@ -44,7 +44,7 @@ export default function VedicZodiacSign() {
         ogImage="https://bornclock.com/og/zodiac.png"
       />
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>

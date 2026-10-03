@@ -22,7 +22,7 @@ export default function KundaliCompatArticle() {
       />
       <FAQSchema items={FAQ} />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
-        <header className="flex justify-between items-center mb-8"><Navigation /><AuthNav /></header>
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
 
         <article className="prose prose-slate max-w-none text-foreground">
           <h1 className="font-heading text-3xl md:text-4xl font-bold mb-4">Kundali Matching: The Complete Guide to Ashtakoota (Guna Milan)</h1>
