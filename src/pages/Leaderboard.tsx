@@ -135,7 +135,7 @@ export default function Leaderboard() {
       />
 
       <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -216,9 +216,9 @@ export default function Leaderboard() {
 
         {/* My rank banner */}
         {myEntry && myRank && (
-          <div className="mb-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 px-4 py-3 flex items-center gap-3">
-            <Trophy className="w-5 h-5 text-indigo-600" />
-            <span className="text-sm font-medium text-indigo-800 dark:text-indigo-200">
+          <div className="mb-4 rounded-xl bg-[#6E5AA6]/10 dark:bg-[#6E5AA6]/30 border border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30 px-4 py-3 flex items-center gap-3">
+            <Trophy className="w-5 h-5 text-[#6E5AA6]" />
+            <span className="text-sm font-medium text-[#6E5AA6] dark:text-[#6E5AA6]">
               You are ranked <strong>#{myRank}</strong> globally with a forecast of <strong>{myEntry.forecast} years</strong>
             </span>
           </div>
@@ -259,7 +259,7 @@ export default function Leaderboard() {
                       key={entry.id}
                       className={`border-b last:border-0 transition-colors ${
                         isMe
-                          ? 'bg-indigo-50 dark:bg-indigo-950/20'
+                          ? 'bg-[#6E5AA6]/10 dark:bg-[#6E5AA6]/20'
                           : 'hover:bg-muted/20'
                       }`}
                     >
@@ -268,7 +268,7 @@ export default function Leaderboard() {
                       </td>
                       <td className="px-4 py-3 font-medium text-foreground">
                         {entry.display_name}
-                        {isMe && <span className="ml-2 text-xs text-indigo-600">(you)</span>}
+                        {isMe && <span className="ml-2 text-xs text-[#6E5AA6]">(you)</span>}
                       </td>
                       <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">
                         {entry.country || '—'}
@@ -298,10 +298,10 @@ export default function Leaderboard() {
 
         {/* Non-member CTA */}
         {user && !myEntry && (
-          <div className="mt-6 rounded-xl border border-dashed border-indigo-300 dark:border-indigo-700 p-5 text-center">
+          <div className="mt-6 rounded-xl border border-dashed border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30 p-5 text-center">
             <p className="text-sm text-muted-foreground mb-3">
               Take the quiz at{' '}
-              <Link to="/life-expectancy" className="text-indigo-600 hover:underline">
+              <Link to="/life-expectancy" className="text-[#6E5AA6] hover:underline">
                 /life-expectancy
               </Link>{' '}
               to get your forecast, then join the leaderboard.

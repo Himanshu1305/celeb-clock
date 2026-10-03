@@ -1,31 +1,53 @@
 /**
- * Muhurat (auspicious timing) finder (Part I.9). Reuses the validated engine's
- * Sun/Moon positions → Panchang → auspicious-day scoring. Scope (v1): find
- * auspicious dates in the next N days for a common purpose, with the Panchang
- * detail and the Rahu Kalam window to avoid. Fuller Muhurta categories (Chaughadia,
- * Hora, per-event exact-minute windows) are deferred to a future expansion.
+ * Muhurat (auspicious timing) finder (Part I.9; expanded in Part AI).
+ * Reuses the validated engine's Sun/Moon positions → Panchang → auspicious-day
+ * scoring. Part AI adds: a fuller occasion list (marriage, griha pravesh, vehicle,
+ * naming, vidyarambh, engagement …), a REQUIRED location so the Panchang is
+ * computed in the user's own timezone, a custom start date + look-ahead range
+ * (capped at 180 days), and plain-language glosses for the Panchang jargon.
  */
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import { TermTip } from '@/components/vedic/TermTip';
+import { MUHURAT_OCCASIONS, type MuhuratPurpose } from '@/lib/vedic/panchang';
+import { geocodeCity, type GeoResult } from '@/services/geocoding';
+import { TrustStrip } from '@/components/paj/TrustStrip';
+import '@/styles/part-aj.css';
 
 interface Day { date: string; weekday: string; nakshatra: string; tithiName: string; paksha: string; yoga: string; rahuKalam: { start: string; end: string }; score: number; reasons: string[]; auspicious: boolean }
-const PURPOSES = [{ id: 'business', label: 'Start a business / venture' }, { id: 'travel', label: 'Travel / journey' }, { id: 'general', label: 'General auspicious start' }] as const;
+
+// Look-ahead choices — custom range capped at 180 days (Part AI).
+const RANGES = [30, 60, 90, 120, 180] as const;
 
 export default function MuhuratPage() {
-  const [purpose, setPurpose] = useState<'business' | 'travel' | 'general'>('business');
-  const [days, setDays] = useState(30);
+  const [purpose, setPurpose] = useState<MuhuratPurpose>('marriage');
+  const [days, setDays] = useState(90);
+  const [from, setFrom] = useState(''); // empty = today
+  const [cityQuery, setCityQuery] = useState('');
+  const [city, setCity] = useState<GeoResult | null>(null);
+  const [options, setOptions] = useState<GeoResult[]>([]);
   const [result, setResult] = useState<Day[] | null>(null);
   const [methodology, setMethodology] = useState('');
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
 
+  const onCity = async (v: string) => {
+    setCityQuery(v); setCity(null);
+    if (v.trim().length >= 3) { try { setOptions(await geocodeCity(v)); } catch { setOptions([]); } }
+    else setOptions([]);
+  };
+  const pickCity = (c: GeoResult) => { setCity(c); setCityQuery(c.name); setOptions([]); };
+
   const find = async () => {
+    if (!city) return;
     setLoading(true); setFailed(false); setResult(null);
     try {
-      const res = await fetch(`/api/muhurat?purpose=${purpose}&days=${days}`);
+      const params = new URLSearchParams({ purpose, days: String(days), tz: String(city.utcOffset) });
+      if (from && /^\d{4}-\d{2}-\d{2}$/.test(from)) params.set('from', from);
+      const res = await fetch(`/api/muhurat?${params.toString()}`);
       if (!res.ok) throw new Error('unavailable');
       const data = await res.json();
       setResult(data.auspicious as Day[]);
@@ -35,33 +57,70 @@ export default function MuhuratPage() {
   const fmt = (iso: string) => new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
   return (
-    <div data-testid="muhurat-page" className="min-h-screen bg-gradient-cosmic">
+    <div data-testid="muhurat-page" className="paj editorial" data-category="vedic">
       <SEO title="Muhurat Finder — Auspicious Dates (Panchang) | BornClock"
-        description="Find auspicious Muhurat dates in the coming weeks for starting a business, travel or any new beginning — by Tithi, Nakshatra, Yoga and weekday, with the Rahu Kalam window to avoid."
+        description="Find auspicious Muhurat dates for marriage, house-warming, business, a vehicle, naming or travel — by Tithi, Nakshatra, Yoga and weekday for your own location, with the Rahu Kalam window to avoid."
         canonicalUrl="/muhurat" ogType="website" />
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center mb-8"><Navigation /><AuthNav /></header>
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">Muhurat Finder</h1>
-        <p className="text-muted-foreground mb-6">Auspicious dates for a fresh start, chosen by the Panchang (Tithi, Nakshatra, Yoga and weekday). Each day also shows the Rahu Kalam window to avoid.</p>
+      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}><Navigation /><AuthNav /></header>
+      <div className="breadcrumb">
+        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Muhurat Finder</span></div>
+        <div className="edition"><span className="dot" />Panchang · auspicious timing</div>
+      </div>
+      <main id="main">
+        <section className="section">
+          <div className="section-head">
+            <div><span className="eyebrow">Panchang</span><h1>Muhurat Finder.</h1></div>
+            <p>Auspicious dates for a specific occasion, chosen by the Panchang (<TermTip id="tithi">Tithi</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip>, <TermTip id="panchangYoga">Yoga</TermTip> and weekday) for your location — each day shows the <TermTip id="rahuKalam">Rahu Kalam</TermTip> window to avoid.</p>
+          </div>
 
-        <div className="rounded-xl border border-border bg-card/60 p-5 space-y-4">
+        <TrustStrip claim="Your Panchang, computed for your exact location — timing shifts by city, so we don't guess." />
+        <div className="rounded-xl border border-border bg-card/60 p-5 space-y-4" style={{ marginTop: 16 }}>
           <div>
-            <label className="block text-xs text-muted-foreground mb-1">Purpose</label>
-            <select data-testid="muhurat-purpose" value={purpose} onChange={e => setPurpose(e.target.value as any)}
+            <label className="block text-xs text-muted-foreground mb-1">Occasion</label>
+            <select data-testid="muhurat-purpose" value={purpose} onChange={e => setPurpose(e.target.value as MuhuratPurpose)}
                     className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground">
-              {PURPOSES.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+              {MUHURAT_OCCASIONS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
             </select>
           </div>
-          <div>
-            <label className="block text-xs text-muted-foreground mb-1">Look ahead</label>
-            <select data-testid="muhurat-days" value={days} onChange={e => setDays(Number(e.target.value))}
-                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground">
-              <option value={30}>Next 30 days</option><option value={60}>Next 60 days</option><option value={90}>Next 90 days</option>
-            </select>
+
+          {/* Required location — the Panchang day is computed in this location's timezone. */}
+          <div className="relative">
+            <label className="block text-xs text-muted-foreground mb-1" htmlFor="muhurat-city">Location <span className="text-amber-700">(required)</span></label>
+            <input id="muhurat-city" data-testid="muhurat-city" type="text" value={cityQuery}
+                   onChange={e => onCity(e.target.value)} placeholder="e.g. Delhi, London, New York"
+                   className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
+            {options.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-border rounded-lg shadow-lg max-h-56 overflow-auto">
+                {options.map((o, i) => (
+                  <button key={i} type="button" data-testid="muhurat-city-option" onClick={() => pickCity(o)}
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-[#6E5AA6]/10 text-gray-900">
+                    {o.name}
+                  </button>
+                ))}
+              </div>
+            )}
+            {city && <p className="mt-1 text-xs text-muted-foreground">Using {city.name} (UTC{city.utcOffset >= 0 ? '+' : ''}{city.utcOffset}) for the day’s Panchang.</p>}
           </div>
-          <button data-testid="muhurat-find-btn" onClick={find} disabled={loading}
-                  className="w-full py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50">
-            {loading ? 'Finding…' : 'Find auspicious dates →'}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1" htmlFor="muhurat-from">Start from</label>
+              <input id="muhurat-from" data-testid="muhurat-from" type="date" value={from} onChange={e => setFrom(e.target.value)}
+                     className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
+              <p className="mt-1 text-[11px] text-muted-foreground">Leave blank for today.</p>
+            </div>
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Look ahead</label>
+              <select data-testid="muhurat-days" value={days} onChange={e => setDays(Number(e.target.value))}
+                      className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground">
+                {RANGES.map(r => <option key={r} value={r}>Next {r} days</option>)}
+              </select>
+            </div>
+          </div>
+
+          <button data-testid="muhurat-find-btn" onClick={find} disabled={loading || !city}
+                  className="btn" style={{ width: '100%' }}>
+            {loading ? 'Finding…' : !city ? 'Enter a location to search' : 'Find auspicious dates →'}
           </button>
         </div>
 
@@ -70,7 +129,7 @@ export default function MuhuratPage() {
         {result && (
           <div data-testid="muhurat-result" className="mt-6 space-y-3">
             {methodology && (
-              <div data-testid="muhurat-methodology" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4 text-sm text-foreground">
+              <div data-testid="muhurat-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4 text-sm text-foreground">
                 <div className="font-semibold mb-1">How these dates are chosen</div>
                 <p>{methodology}</p>
               </div>
@@ -83,19 +142,35 @@ export default function MuhuratPage() {
                   <div className="font-semibold text-foreground">{fmt(d.date)}</div>
                   <div className="text-xs px-2 py-0.5 rounded-full bg-emerald-600 text-white">auspicious</div>
                 </div>
-                <div className="text-sm text-foreground mt-1">{d.nakshatra} Nakshatra · {d.tithiName} ({d.paksha}) · {d.yoga} Yoga</div>
+                <div className="text-sm text-foreground mt-1">{d.nakshatra} Nakshatra · {d.tithiName} ({d.paksha}) · {d.yoga} <TermTip id="panchangYoga">Yoga</TermTip></div>
                 <div className="text-xs text-muted-foreground mt-1">{d.reasons.slice(0, 2).join(' · ')}</div>
-                <div className="text-xs text-amber-700 mt-1">Avoid the Rahu Kalam window that day: {d.rahuKalam.start}–{d.rahuKalam.end} (approx, local).</div>
+                <div className="text-xs text-amber-700 mt-1">Avoid the <TermTip id="rahuKalam">Rahu Kalam</TermTip> window that day: {d.rahuKalam.start}–{d.rahuKalam.end} (approx, local).</div>
               </div>
             ))}
           </div>
         )}
 
         <p className="text-xs text-muted-foreground mt-6">
-          Scope: this first version evaluates each day’s Panchang at approximately local sunrise and reports the standard weekday Rahu Kalam. Finer categories (Chaughadia, Hora, exact-minute windows and personal-chart Chandrashtama) are a planned expansion. Treat Muhurat as classical guidance, not a guarantee.
+          Scope: this evaluates each day’s Panchang at approximately local sunrise for your chosen location and reports the standard weekday Rahu Kalam. Finer intraday categories (<TermTip id="choghadiya">Choghadiya</TermTip>, <TermTip id="hora">Hora</TermTip>, exact-minute windows and personal-chart <TermTip id="chandrashtama">Chandrashtama</TermTip>) are a planned expansion. Treat Muhurat as classical guidance, not a guarantee.
         </p>
-      </div>
-      <Footer />
+        </section>
+      </main>
+      <footer className="site-footer">
+        <div className="footer-main">
+          <div>
+            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+            <p className="subtle">Auspicious dates from the Panchang, computed for your own location and timezone.</p>
+          </div>
+          <nav className="footer-nav" aria-label="Footer navigation">
+            <Link to="/vedic-astrology">Vedic Astrology</Link>
+            <Link to="/kundali">Kundali</Link>
+            <Link to="/sade-sati">Sade Sati</Link>
+            <Link to="/gemstones">Gemstones</Link>
+            <Link to="/privacy">Privacy</Link>
+          </nav>
+        </div>
+        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
+      </footer>
     </div>
   );
 }

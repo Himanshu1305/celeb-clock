@@ -121,7 +121,7 @@ export function BlueZonesDietArticle() {
             longevity, the core dietary rules — and how an everyday Indian diet already
             aligns with most of them. If you want to see how these habits translate into
             years, try our{' '}
-            <a href="/longevity-calculator" className="text-indigo-600 font-semibold underline">
+            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">
               free longevity calculator
             </a>.
           </p>
@@ -185,8 +185,8 @@ export function BlueZonesDietArticle() {
             afterwards, a mild form of daily calorie restriction linked to longer life.
           </p>
 
-          <div className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 my-8">
-            <h2 className="text-2xl font-black text-indigo-900 mb-2">The Indian Blue Zones Plate</h2>
+          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
+            <h2 className="text-2xl font-black text-[#6E5AA6] mb-2">The Indian Blue Zones Plate</h2>
             <p className="text-gray-700 leading-relaxed mb-3">
               A traditional vegetarian Indian diet is, in many ways, already a Blue Zones
               diet. The overlap is remarkable:
@@ -231,15 +231,15 @@ export function BlueZonesDietArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white mt-10">
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">How Long Could You Live?</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               Eating like the Blue Zones is one of the biggest levers you can pull. See how
               your diet, movement and habits add up in years with our science-based tool.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3
-                          rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Try the Free Longevity Calculator →
             </a>
           </div>
@@ -248,12 +248,12 @@ export function BlueZonesDietArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/longevity-foods-india" className="text-indigo-600 font-semibold underline">
+                <a href="/articles/longevity-foods-india" className="text-[#6E5AA6] font-semibold underline">
                   Longevity Foods of India — What to Eat to Live Longer
                 </a>
               </li>
               <li>
-                <a href="/articles/how-to-live-to-100" className="text-indigo-600 font-semibold underline">
+                <a href="/articles/how-to-live-to-100" className="text-[#6E5AA6] font-semibold underline">
                   How to Live to 100 — Blue Zones & Science-Backed Habits
                 </a>
               </li>

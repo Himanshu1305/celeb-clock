@@ -290,6 +290,17 @@ async function handler(request: Request): Promise<Response> {
       throw new Error('skip');
     }
 
+    // Part AO: in Razorpay TEST mode (staging), NEVER allocate a real GST invoice number —
+    // issue_invoice() draws from the single live sequence shared with production, so a test
+    // purchase would burn a real number and leave a gap in the statutory series. Detect test
+    // mode by the key prefix and skip invoicing entirely (entitlement was already granted
+    // above, so the paywall still unlocks for the test). Production uses rzp_live_ → unchanged.
+    const isTestMode = (process.env.VITE_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID || '').startsWith('rzp_test_');
+    if (isTestMode) {
+      console.log('[verify-payment] TEST mode — skipping real GST invoice numbering (protects the live series)');
+      throw new Error('skip');
+    }
+
     // Razorpay note values arrive as strings ('' when absent) — use || not ??.
     // Notes first (order flow), then the request body (subscription flow).
     const buyerState     = orderNotes.buyer_state      || body.buyer_state      || null;

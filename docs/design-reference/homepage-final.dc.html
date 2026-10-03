@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>BornClock — Homepage v2</title><script src="./support.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head><body><x-dc><helmet><style>
+*{box-sizing:border-box}
+body{margin:0;background:#FAF7F0;font-family:'Public Sans',sans-serif;color:#1A2230}
+h1,h2,h3{font-family:'Fraunces',serif;margin:0}
+a{color:#0E2238;text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:'Public Sans',sans-serif;cursor:pointer}
+.tick{font-family:'Fraunces',serif;font-weight:700;color:#0E2238;font-size:34px;line-height:1}
+.ticklab{font-size:10px;font-weight:700;letter-spacing:.6px;color:#5B6472;margin-top:4px}
+.dec{flex:1;padding:12px 16px;border-right:1px solid #E4DCC8;display:flex;flex-direction:column;gap:3px}
+.dec:last-child{border-right:none}
+.dec .lab{font-size:10px;font-weight:700;letter-spacing:.5px}
+.dec .val{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:#0E2238}
+.dec .sub{font-size:11px;color:#5B6472}
+.col{padding:18px 18px 16px;border-right:1px solid #E4DCC8;display:flex;flex-direction:column;gap:8px}
+.col:last-child{border-right:none}
+.col .eyebrow{display:flex;align-items:center;gap:8px;font-size:10.5px;font-weight:700;letter-spacing:.6px}
+.col h2{font-size:19px;color:#0E2238;font-weight:700;line-height:1.2}
+.col .teaser{font-size:12.5px;color:#1A2230;padding:8px 10px;border-left:3px solid var(--ac);background:#FFFFFF}
+.tools a{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:7px 0;border-bottom:1px solid #EFE9DA;font-size:12.5px;font-weight:600;color:#0E2238}
+.tools a span{font-size:10.5px;font-weight:500;color:#5B6472;white-space:nowrap}
+.chip{font-size:10.5px;color:#3E4759;background:#FFFFFF;border:1px solid #E4DCC8;border-radius:12px;padding:3px 9px}
+.av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#FFFFFF;border:2px solid #FFFFFF;margin-left:-6px}
+.explore{font-size:12px;font-weight:700;margin-top:auto;padding-top:6px}
+.doors{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.door{display:flex;flex-direction:column;gap:3px;padding:9px 11px;background:#FFFFFF;border:1px solid #E4DCC8;border-top:3px solid var(--ac);border-radius:6px;min-height:44px}
+.door:hover{text-decoration:none;border-color:var(--ac)}
+.door b{font-size:12.5px;color:#0E2238;line-height:1.2}
+.door span{font-size:10.5px;color:#5B6472;line-height:1.35}
+.col{scroll-margin-top:16px}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.pop{animation:pop .55s cubic-bezier(.2,.7,.2,1) both}
+@keyframes draw{to{stroke-dashoffset:0}}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.6s ease-out forwards}
+.d2{animation-delay:.35s}.d3{animation-delay:.7s}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.late{opacity:0;animation:fadein .6s ease 1.5s forwards}
+.pbar{height:7px;background:#EFE9DA;border-radius:4px;overflow:hidden}
+.pbar div{height:100%;width:0;background:#F0715A;border-radius:4px;transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+.ring{transition:stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1)}
+.bt{display:flex;align-items:center;gap:8px;opacity:0;animation:pop .5s ease forwards}
+.ph{width:34px;height:34px;border-radius:50%;border:1.5px dashed #D8A08F;background:#FFF5F1;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#B5432A;flex-shrink:0}
+@media (prefers-reduced-motion: reduce){
+  .pop,.bt,.late{animation:none !important;opacity:1 !important;transform:none !important}
+  .draw{animation:none !important;stroke-dashoffset:0 !important}
+  .pbar div,.ring{transition:none !important}
+}
+@media (max-width:1000px){
+  .dir{grid-template-columns:1fr 1fr !important}
+  .col:nth-child(2){border-right:none}
+  .col{border-bottom:1px solid #E4DCC8}
+}
+@media (max-width:760px){
+  .hero{flex-direction:column !important}
+  .doors{grid-template-columns:1fr 1fr !important}
+  .decrow{flex-wrap:wrap !important}
+  .dec{flex:1 1 33% !important;border-bottom:1px solid #E4DCC8}
+  .trust{flex-direction:column !important;gap:8px}
+  .trust>div{border-right:none !important;padding:0 !important}
+  .dir{grid-template-columns:1fr !important}
+  .col{border-right:none !important}
+  .foot{flex-wrap:wrap !important}
+  .foot>div{flex:1 1 44% !important}
+  .tick{font-size:26px}
+}
+</style></helmet>
+
+<div style="width:100%;max-width:1440px;margin:0 auto;display:flex;flex-direction:column;">
+
+<!-- NAV -->
+<div style="height:52px;background:#0E2238;padding:0 24px;display:flex;align-items:center;justify-content:space-between;">
+<a href="#" style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:#C6A15B;">BornClock</a>
+<nav style="display:flex;gap:18px;align-items:center;">
+<a href="#" style="font-size:12.5px;color:#F7A08E;font-weight:700;">Birthday</a>
+<a href="#" style="font-size:12.5px;color:#D9BC82;font-weight:700;">Vedic</a>
+<a href="#" style="font-size:12.5px;color:#B3A4DE;font-weight:700;">Mystic</a>
+<a href="#" style="font-size:12.5px;color:#8FC1E6;font-weight:700;">Science</a>
+</nav>
+</div>
+
+<!-- HERO: Claude D1 liveness + Gemini 4 voice -->
+<div class="hero" style="display:flex;gap:28px;padding:30px 24px;border-bottom:1px solid #E4DCC8;">
+<div style="flex:1.05;display:flex;flex-direction:column;justify-content:center;gap:10px;">
+<div style="font-size:11px;font-weight:700;letter-spacing:1.4px;color:#806125;">RIGOROUSLY CALCULATED BIRTH INTELLIGENCE</div>
+<h1 style="font-size:42px;line-height:1.08;color:#0E2238;font-weight:700;">Everything your birth date reveals.</h1>
+<p style="font-size:15px;line-height:1.55;color:#3E4759;margin:0;max-width:540px;">Your Vedic birth chart, the celebrities who share your birthday, your numerology and zodiac, and what longevity science says — all from one date.</p>
+<div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap;">
+<label for="dob" style="font-size:12px;font-weight:700;color:#0E2238;">Your birth date</label>
+<input id="dob" type="date" value="1998-03-14" oninput="decode()" style="height:40px;border:1px solid #D8D2C2;border-radius:6px;padding:0 12px;font-size:14px;background:#FFFFFF;">
+<button type="button" onclick="decode()" style="height:40px;background:#0E2238;color:#FFFFFF;border:none;border-radius:6px;font-size:13.5px;font-weight:700;padding:0 18px;">Decode my date</button>
+</div>
+<div class="doors">
+<a class="door" href="#vedic" style="--ac:#C6A15B;"><b>Vedic Astrology</b><span>Kundli · Matching · Sade Sati</span></a>
+<a class="door" href="#birthday" style="--ac:#F0715A;"><b>Birthday &amp; Celebrity</b><span>Celebrity twins · Today's birthdays</span></a>
+<a class="door" href="#mystic" style="--ac:#6E5AA6;"><b>Mystic Corner</b><span>Numerology · Zodiac · Tarot</span></a>
+<a class="door" href="#science" style="--ac:#2F6FB0;"><b>Science &amp; Longevity</b><span>Life expectancy · Biological age</span></a>
+</div>
+</div>
+<div style="flex:0.95;background:#FFFFFF;border:1px solid #E4DCC8;border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;">
+<div style="font-size:11px;font-weight:700;letter-spacing:.8px;color:#B5432A;">YOU'VE BEEN ALIVE FOR — LIVE</div>
+<div style="display:flex;justify-content:space-between;gap:8px;">
+<div><div class="tick" id="tY">—</div><div class="ticklab">YEARS</div></div>
+<div><div class="tick" id="tD">—</div><div class="ticklab">DAYS</div></div>
+<div><div class="tick" id="tH">—</div><div class="ticklab">HOURS</div></div>
+<div><div class="tick" id="tM">—</div><div class="ticklab">MINUTES</div></div>
+<div><div class="tick" id="tS" style="color:#B5432A;">—</div><div class="ticklab">SECONDS</div></div>
+</div>
+<div style="display:flex;gap:16px;flex-wrap:wrap;border-top:1px solid #EFE9DA;padding-top:10px;">
+<div style="font-size:12.5px;color:#1A2230;"><b id="tTotal">—</b> seconds in total</div>
+<div style="font-size:12.5px;color:#1A2230;">≈ <b id="tHB">—</b> heartbeats</div>
+<div style="font-size:12.5px;color:#1A2230;">Next birthday in <b id="tNext">—</b> days</div>
+</div>
+<div>
+<div style="display:flex;justify-content:space-between;font-size:11.5px;color:#1A2230;margin-bottom:5px;"><span>Year <b id="tAgeNext">—</b> of your life</span><span><b id="tPct">—</b>% complete</span></div>
+<div class="pbar" role="progressbar" aria-label="Progress through your current year of life"><div id="bdBar"></div></div>
+</div>
+<div style="font-size:10.5px;color:#5B6472;">Heartbeats estimated at an average 72 bpm. Clock assumes a 00:00 birth time.</div>
+</div>
+</div>
+
+<!-- YOUR DATE, DECODED: real live computation -->
+<div style="padding:10px 24px 0;font-size:11px;font-weight:700;letter-spacing:.8px;color:#0E2238;">YOUR DATE, DECODED</div>
+<div class="decrow" style="display:flex;margin:8px 24px 18px;background:#FFFFFF;border:1px solid #E4DCC8;border-radius:10px;">
+<div class="dec" style="border-top:3px solid #6E5AA6;border-top-left-radius:10px;"><div class="lab" style="color:#6E5AA6;">WESTERN SIGN</div><div class="val" id="dSign">—</div><div class="sub">by date cut-offs</div></div>
+<div class="dec" style="border-top:3px solid #6E5AA6;"><div class="lab" style="color:#6E5AA6;">LIFE PATH</div><div class="val" id="dLP">—</div><div class="sub">every digit summed</div></div>
+<div class="dec" style="border-top:3px solid #F0715A;"><div class="lab" style="color:#B5432A;">BIRTHSTONE</div><div class="val" id="dStone">—</div><div class="sub">by birth month</div></div>
+<div class="dec" style="border-top:3px solid #2F6FB0;"><div class="lab" style="color:#2F6FB0;">AGE ON MARS</div><div class="val" id="dMars">—</div><div class="sub">Mars year = 1.881 Earth yrs</div></div>
+<div class="dec" style="border-top:3px solid #2F6FB0;"><div class="lab" style="color:#2F6FB0;">WEIGHT ON MARS</div><div class="val">26.6 kg</div><div class="sub">per 70 kg on Earth (0.38×)</div></div>
+<div class="dec" style="border-top:3px solid #C6A15B;border-top-right-radius:10px;"><div class="lab" style="color:#806125;">VEDIC CHART</div><div class="val">Free</div><div class="sub">needs time + place · <a href="#" style="font-weight:700;">generate</a></div></div>
+</div>
+
+<!-- TRUST STRIP -->
+<div class="trust" style="display:flex;padding:14px 24px;background:#FFFFFF;border-top:1px solid #E4DCC8;border-bottom:1px solid #E4DCC8;">
+<div style="flex:1;border-right:1px solid #E4DCC8;padding-right:16px;"><span style="font-size:10.5px;font-weight:700;color:#806125;">CROSS-CHECKED — </span><span style="font-size:12px;color:#3E4759;">Vedic calculations checked against independent reference calculations, not a template.</span></div>
+<div style="flex:1;border-right:1px solid #E4DCC8;padding:0 16px;"><span style="font-size:10.5px;font-weight:700;color:#806125;">CLASSICAL — </span><span style="font-size:12px;color:#3E4759;">the 36-point Ashtakoota system, per the Brihat Parashara Hora Shastra.</span></div>
+<div style="flex:1;padding-left:16px;"><span style="font-size:10.5px;font-weight:700;color:#806125;">SOURCED — </span><span style="font-size:12px;color:#3E4759;">WHO, Harvard, NIH, UN WPP 2024 and NASA's Planetary Fact Sheet (2023).</span></div>
+</div>
+
+<!-- BORN TODAY: real daily data; photo slots are placeholders until build -->
+<div style="display:flex;align-items:center;gap:22px;padding:12px 24px;background:#FFFFFF;border-bottom:1px solid #E4DCC8;flex-wrap:wrap;">
+<div style="font-size:11px;font-weight:700;letter-spacing:.7px;color:#B5432A;white-space:nowrap;">BORN TODAY · 3 OCTOBER</div>
+<div class="bt" style="animation-delay:.1s;"><div class="ph">GS</div><div style="font-size:12.5px;"><b style="color:#0E2238;">Gwen Stefani</b><div style="font-size:10.5px;color:#5B6472;">Singer · 1969</div></div></div>
+<div class="bt" style="animation-delay:.25s;"><div class="ph">GV</div><div style="font-size:12.5px;"><b style="color:#0E2238;">Gore Vidal</b><div style="font-size:10.5px;color:#5B6472;">Writer · 1925</div></div></div>
+<div class="bt" style="animation-delay:.4s;"><div class="ph">LA</div><div style="font-size:12.5px;"><b style="color:#0E2238;">Louis Aragon</b><div style="font-size:10.5px;color:#5B6472;">Poet · 1897</div></div></div>
+<a href="#" class="bt" style="animation-delay:.55s;font-size:12.5px;font-weight:700;color:#B5432A;">+54 more today →</a>
+</div>
+
+<!-- DIRECTORY: ChatGPT 04 organisation, dense, every real tool visible -->
+<div class="dir" style="display:grid;grid-template-columns:repeat(4,1fr);background:#FAF7F0;border-bottom:1px solid #E4DCC8;">
+
+<div class="col" id="vedic" style="--ac:#C6A15B;">
+<div class="eyebrow" style="color:#806125;">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#806125" stroke-width="1.4" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13"/><path d="M1.5 1.5l13 13M14.5 1.5l-13 13"/></svg>VEDIC ASTROLOGY</div>
+<h2>Traditional systems, computed.</h2>
+<div class="teaser" style="display:flex;align-items:center;gap:12px;">
+<svg width="58" height="58" viewBox="0 0 100 100" fill="none" stroke="#806125" stroke-width="2.2" aria-label="North-Indian Kundli chart frame" role="img" style="flex-shrink:0;">
+<rect class="draw" pathLength="1" x="3" y="3" width="94" height="94"/>
+<path class="draw d2" pathLength="1" d="M3 3L97 97M97 3L3 97"/>
+<path class="draw d3" pathLength="1" d="M50 3L97 50L50 97L3 50Z"/>
+<text class="late" x="50" y="30" text-anchor="middle" font-size="11" font-family="Public Sans" fill="#806125" stroke="none" font-weight="700">1</text>
+</svg>
+<span>Your real Kundli — Lagna, Nakshatra and Dasha — free. <span style="color:#5B6472;font-size:11px;">House 1 (Lagna) sits at the top, as in the classical North-Indian chart.</span></span>
+</div>
+<div class="tools">
+<a href="#">Kundli Chart <span>free</span></a>
+<a href="#">Kundali Matching <span>36-point</span></a>
+<a href="#">Dasha Timing <span>to Pratyantar</span></a>
+<a href="#">Yoga Detection <span>graded</span></a>
+<a href="#">Sade Sati Checker <span>real transit</span></a>
+<a href="#">Muhurat Finder <span>by city</span></a>
+<a href="#">Gemstone Recommendation <span>Lagna-based</span></a>
+<a href="#">Rashi Ratna <span>by Rashi</span></a>
+<a href="#">Career Report <span>10th house</span></a>
+<a href="#">AI Astrologer <span>chat</span></a>
+</div>
+<a class="explore" href="#" style="color:#806125;">Explore Vedic Astrology →</a>
+</div>
+
+<div class="col" id="birthday" style="--ac:#F0715A;">
+<div class="eyebrow" style="color:#B5432A;">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#B5432A" stroke-width="1.4" aria-hidden="true"><path d="M2 14h12M3 14V8h10v6M8 8V5M8 5c-1-1-1-2 0-3 1 1 1 2 0 3z"/></svg>BIRTHDAY &amp; CELEBRITY</div>
+<h2>Specific beats generic.</h2>
+<div class="teaser">Next birthday in <b id="cNext">—</b> days — see who else celebrates it.</div>
+<div class="tools">
+<a href="#">Celebrity Birthday Twins <span>598 profiles</span></a>
+<a href="#">Today's Birthdays <span>live</span></a>
+<a href="#">Age Calculator <span>to the second</span></a>
+<a href="#">Birthstone <span>by month</span></a>
+<a href="#">Indian Celebrities by Date <span>daily</span></a>
+<a href="#">Birthday Blueprint <span>8-page PDF</span></a>
+</div>
+<div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+<div style="display:flex;padding-left:6px;">
+<div class="av" style="background:#0E2238;">VK</div><div class="av" style="background:#B5432A;">SRK</div><div class="av" style="background:#6E5AA6;">ARR</div><div class="av" style="background:#806125;">LM</div>
+</div>
+<div style="font-size:11px;color:#5B6472;">Virat Kohli, Shah Rukh Khan, AR Rahman, Lata Mangeshkar &amp; more</div>
+</div>
+<a class="explore" href="#" style="color:#B5432A;">Explore Birthdays →</a>
+</div>
+
+<div class="col" id="mystic" style="--ac:#6E5AA6;">
+<div class="eyebrow" style="color:#6E5AA6;">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#6E5AA6" stroke-width="1.4" aria-hidden="true"><path d="M8 1.5l1.6 4.9L14.5 8l-4.9 1.6L8 14.5 6.4 9.6 1.5 8l4.9-1.6z"/></svg>MYSTIC CORNER</div>
+<h2>Many symbols. Different rules.</h2>
+<div class="teaser">Your Life Path is <b id="cLP">—</b> — see what it's said to mean.</div>
+<div class="tools">
+<a href="#">Numerology <span>Life Path + Name</span></a>
+<a href="#">Western Zodiac <span>sun sign</span></a>
+<a href="#">Chinese Zodiac <span>lunar year</span></a>
+<a href="#">Tarot by Birthday <span>birth card</span></a>
+<a href="#">Compatibility <span>names + dates</span></a>
+<a href="#">Biorhythm <span>daily cycles</span></a>
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+<span class="chip">Each system has its own rules — we say which</span>
+<span class="chip">Western ≠ Vedic sign</span>
+</div>
+<a class="explore" href="#" style="color:#6E5AA6;">Explore Mystic Corner →</a>
+</div>
+
+<div class="col" id="science" style="--ac:#2F6FB0;background:#FFFFFF;">
+<div class="eyebrow" style="color:#2F6FB0;">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#2F6FB0" stroke-width="1.4" aria-hidden="true"><path d="M1 9h3l2-5 3 9 2-6 1 2h3"/></svg>SCIENCE &amp; LONGEVITY</div>
+<h2>Numbers with a source trail.</h2>
+<div class="teaser" style="display:flex;align-items:center;gap:12px;">
+<svg width="58" height="58" viewBox="0 0 64 64" aria-label="Progress through your current Mars year" role="img" style="flex-shrink:0;">
+<circle cx="32" cy="32" r="27" fill="none" stroke="#E2EAF2" stroke-width="5"/>
+<circle id="marsRing" class="ring" cx="32" cy="32" r="27" fill="none" stroke="#2F6FB0" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" transform="rotate(-90 32 32)"/>
+<circle cx="32" cy="32" r="15" fill="#B5432A"/>
+<circle cx="27" cy="28" r="3" fill="#9A3822"/><circle cx="37" cy="36" r="2" fill="#9A3822"/>
+</svg>
+<span>You're <b id="cMars">—</b> years old on Mars — <b id="cMarsPct">—</b>% through your current Mars year.</span>
+</div>
+<div class="tools">
+<a href="#">Life Expectancy <span>WHO / NIH-informed</span></a>
+<a href="#">Biological Age Test <span>10 questions</span></a>
+<a href="#">Country Comparison <span>57 countries</span></a>
+<a href="#">Planetary Age <span>orbital periods</span></a>
+<a href="#">Planetary Weight <span>NASA 2023</span></a>
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+<span class="chip">WHO</span><span class="chip">Harvard</span><span class="chip">NIH</span><span class="chip">UN WPP 2024</span><span class="chip">NASA 2023</span>
+</div>
+<div style="font-size:11px;color:#237A60;font-weight:600;">Estimates, not predictions — limits stated on every page.</div>
+<a class="explore" href="#" style="color:#2F6FB0;">Explore Science &amp; Longevity →</a>
+</div>
+
+</div>
+
+<!-- FOOTER SITEMAP -->
+<div style="background:#0E2238;padding:22px 24px 16px;">
+<div class="foot" style="display:flex;gap:28px;">
+<div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#D9BC82;margin-bottom:8px;">VEDIC</div><div style="font-size:11.5px;color:#B9C2CF;line-height:1.8;">Kundli · Matching · Dasha · Yogas · Sade Sati · Muhurat · Gemstones · Rashi Ratna · Career · AI Astrologer</div></div>
+<div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#F7A08E;margin-bottom:8px;">BIRTHDAY</div><div style="font-size:11.5px;color:#B9C2CF;line-height:1.8;">Celebrity Twins · Today's Birthdays · Age Calculator · Birthstone · Indian Celebrities · Blueprint</div></div>
+<div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#B3A4DE;margin-bottom:8px;">MYSTIC</div><div style="font-size:11.5px;color:#B9C2CF;line-height:1.8;">Numerology · Western Zodiac · Chinese Zodiac · Tarot · Compatibility · Biorhythm</div></div>
+<div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#8FC1E6;margin-bottom:8px;">SCIENCE</div><div style="font-size:11.5px;color:#B9C2CF;line-height:1.8;">Life Expectancy · Biological Age · Country Comparison · Planetary Age · Planetary Weight</div></div>
+<div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#FFFFFF;margin-bottom:8px;">BORNCLOCK</div><div style="font-size:11.5px;color:#B9C2CF;line-height:1.8;">How it works · Answers · Privacy · Contact</div></div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1320}}'>
+class Component extends DCLogic{renderVals(){return{};}}
+function sumDigits(n){return String(n).split('').reduce(function(a,b){return a+(+b);},0);}
+function reduceNum(n){var x=n;while(x>9&&[11,22,33].indexOf(x)===-1){x=sumDigits(x);}return x;}
+function westernSign(d,m){
+  var r=[[1,20,'Capricorn','Aquarius'],[2,19,'Aquarius','Pisces'],[3,21,'Pisces','Aries'],[4,20,'Aries','Taurus'],[5,21,'Taurus','Gemini'],[6,21,'Gemini','Cancer'],[7,23,'Cancer','Leo'],[8,23,'Leo','Virgo'],[9,23,'Virgo','Libra'],[10,23,'Libra','Scorpio'],[11,22,'Scorpio','Sagittarius'],[12,22,'Sagittarius','Capricorn']];
+  var row=r[m-1]; return d<row[1]?row[2]:row[3];
+}
+var STONES=['Garnet','Amethyst','Aquamarine','Diamond','Emerald','Pearl','Ruby','Peridot','Sapphire','Opal','Topaz','Turquoise'];
+function setT(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+var RM=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+var tokens={};
+function countUp(id,to,dec,suffix,ms){
+  var el=document.getElementById(id); if(!el)return;
+  var tok=(tokens[id]||0)+1; tokens[id]=tok;
+  if(RM){el.textContent=to.toFixed(dec)+suffix;return;}
+  var t0=null;
+  function step(t){ if(tokens[id]!==tok)return; if(t0===null)t0=t;
+    var p=Math.min(1,(t-t0)/ms); var e=1-Math.pow(1-p,3);
+    el.textContent=(to*e).toFixed(dec)+suffix; if(p<1)requestAnimationFrame(step); }
+  requestAnimationFrame(step);
+}
+function popIn(id,text){var el=document.getElementById(id); if(!el)return; el.textContent=text; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');}
+function parts(){var inp=document.getElementById('dob'); if(!inp||!inp.value)return null;
+  var a=inp.value.split('-'); var Y=+a[0],M=+a[1],D=+a[2]; var birth=new Date(Y,M-1,D,0,0,0);
+  if(new Date()<birth)return null; return {raw:inp.value,Y:Y,M:M,D:D,birth:birth};}
+function lifeSpan(P,now){var years=now.getFullYear()-P.Y; if(now<new Date(now.getFullYear(),P.M-1,P.D))years--;
+  var last=new Date(P.Y+years,P.M-1,P.D), next=new Date(P.Y+years+1,P.M-1,P.D);
+  return {years:years,last:last,next:next,pct:(now-last)/(next-last)};}
+function setBar(pct,fromZero){var b=document.getElementById('bdBar'); if(!b)return;
+  if(fromZero&&!RM){b.style.transition='none'; b.style.width='0%'; void b.offsetWidth; b.style.transition='';}
+  b.style.width=(pct*100).toFixed(2)+'%';}
+function tick(){
+  var P=parts(); if(!P)return; var now=new Date(); var L=lifeSpan(P,now);
+  var totalSec=Math.floor((now-P.birth)/1000);
+  setT('tY',L.years); setT('tD',Math.floor((now-L.last)/86400000)); setT('tH',now.getHours());
+  setT('tM',String(now.getMinutes()).padStart(2,'0')); setT('tS',String(now.getSeconds()).padStart(2,'0'));
+  setT('tTotal',totalSec.toLocaleString()); setT('tHB',Math.floor(totalSec*1.2).toLocaleString());
+  var nextIn=Math.ceil((L.next-now)/86400000); setT('tNext',nextIn); setT('cNext',nextIn);
+  setT('tAgeNext',L.years+1); setT('tPct',Math.floor(L.pct*100)); setBar(L.pct,false);
+}
+function decode(){
+  var P=parts(); if(!P)return; var now=new Date(); var L=lifeSpan(P,now);
+  var lp=reduceNum(sumDigits(P.raw.replace(/-/g,'')));
+  var marsYrs=(now-P.birth)/(365.25*86400000)/1.8808;
+  var marsPct=Math.floor((marsYrs-Math.floor(marsYrs))*100);
+  popIn('dSign',westernSign(P.D,P.M)); popIn('dStone',STONES[P.M-1]);
+  countUp('dLP',lp,0,'',700); countUp('dMars',marsYrs,1,' yrs',900);
+  setT('cLP',lp); setT('cMars',marsYrs.toFixed(1)); setT('cMarsPct',marsPct);
+  var ring=document.getElementById('marsRing');
+  if(ring){ if(!RM){ring.style.transition='none'; ring.setAttribute('stroke-dashoffset','100'); void ring.getBoundingClientRect(); ring.style.transition='';}
+    requestAnimationFrame(function(){ring.setAttribute('stroke-dashoffset',String(100-marsPct));}); }
+  setBar(L.pct,true); tick();
+}
+setInterval(tick,1000); decode();
+</script></body></html>

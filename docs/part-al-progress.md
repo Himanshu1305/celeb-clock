@@ -1,0 +1,53 @@
+# Part AL — Full Site Redesign + Launch Readiness — Progress Log
+
+One hard rule: NEVER a real `wrangler deploy`/promote — only `wrangler versions upload` (isolated preview).
+Autonomous, no stopping, conservative-omission. Continues on `part-aj-four-page-redesign`.
+
+## Step 0 — base verification ✅
+- On `part-aj-four-page-redesign`; 9 AJ/AK pages present as `paj`; tree clean (only the AL spec untracked).
+
+## Step 1 — full audit ✅ (docs/part-al-audit.md)
+- 117 page components: 9 NEW, 59 OLD-cosmic, 49 OLD-plain. Categorized; priority order recorded.
+
+## Step 2 — stub/duplicate decisions ✅ (logged in audit)
+- LE-calculator country wrappers: KEEP (distinct intent, no risky unsupervised redirects).
+- Hindi/rashifal: leave compute logic intact (deeper verify deferred). /vedic-zodiac: keep as labeled solar tool.
+- /diwali-gift, /for-business, /coach: not broken; light shell only; don't over-invest.
+
+## Step 2.5 — shared CSS scoping bug ✅ (already fixed in Part AK, re-verified)
+- `.paj.editorial` (same-element) generator logic + 109 corrected rules present. Re-verified rendering (see regression check). No new commit needed — already an independent commit (`aa85f68`).
+
+(Per-page + remaining global checkpoints appended below.)
+
+## Step 9a — TrustStrip component + rollout ✅
+- New TrustStrip component; verified page-specific claims applied to all 9 redesigned pages (kundali, kundali-match, sade-sati, muhurat, gemstones, rashi-ratna, + 3 hubs). rashi-ratna claim is an honest "general guide by Rashi" (not a false per-chart-computed claim). Tests 1860; build OK.
+- ✅ /numerology → Mystic theme + trust + SEO verified (commit).
+- ✅ /compatibility → Mystic theme + trust + SEO (commit).
+
+## Step 8 + preview + report ✅ (SESSION END)
+- Link crawl: 128 unique internal links across 11 redesigned pages → 0 dead/404. Console errors: only benign external/local artifacts (/api under local vite, ipapi.co CORS) — none in redesign code.
+- Payment: TEST keys in .env.preview but shared-Worker backend key mode ambiguous + Supabase shared with production → live charge + DB writes conservatively omitted; no paywalled page modified this session; gating intact.
+- Full build OK (3635 routes prerendered, sitemap 3635). Isolated `wrangler versions upload` → https://11e6b1a0-bornclock.usdvisionai.workers.dev (NOT promoted).
+- Preview verified: 10 redesigned pages 200 + trust + paj + no overflow + no errors; kundali live engine 9-planet chart via carry-forward.
+- Report: docs/part-al-report.md. NOTHING merged or deployed.
+
+## Part AM-prep — JSON-LD prerender fix VERIFIED LIVE (not just DOM)
+- Root cause: prerender captured outerHTML before react-helmet-async flushed; only BreadcrumbList was manually re-injected, so Helmet WebApplication/FAQPage never landed in prerendered HTML.
+- Fix: in-body JsonLd component (src/components/JsonLd.tsx) on /compatibility (WebApplication+FAQPage), /rashi-ratna (FAQPage), and the 3 hubs (FAQPage from real on-page FAQs). Commit on branch.
+- Full rebuild (16m, 3635-URL sitemap) → isolated `wrangler versions upload` (NOT promoted): https://534687f3-bornclock.usdvisionai.workers.dev
+- LIVE validator.schema.org result: /compatibility = 5 objects, 0 errors, 0 warnings (Organization, WebSite, BreadcrumbList, WebApplication, FAQPage). rashi-ratna + 3 hubs = 4 objects, 0 errors (FAQPage added). numerology = 7, 0 errors.
+- Known remaining (reported, not fixed this pass): SEO-component WebPage JSON-LD still missing from prerendered output on most pages (same Helmet race; low value; shared-component fix flagged, not done).
+- Part AM spec file NOT present in repo as of this check — did not start Part AM.
+
+## Part AM — Part A pages (one commit each)
+- ✅ /career-report → Vedic theme + trust + DOB carry-forward + in-body WebApplication schema. DOM-verified.
+- ✅ /name-numerology → Mystic theme + trust + in-body WebApplication+FAQPage schema. DOM-verified.
+- Global: sitewide WebPage JSON-LD now injected in prerender (deduped). JsonLd.tsx is the schema pattern going forward.
+
+## Part AM — self-verification + final preview (SESSION BLOCK END)
+- Fifth-Rule catch: /sade-sati,/muhurat,/gemstones,/astrologer served GENERIC homepage <title> + no WebPage (prerendered since AL Step 7 with no title entry). FIXED via prerender-titles entries; verified correct unique titles + WebPage=1 in final prerendered output.
+- Final isolated preview: https://d7dd234e-bornclock.usdvisionai.workers.dev (version d7dd234e; NOT promoted).
+- Live validator.schema.org: career-report=6, name-numerology=6, compatibility=6, numerology=7, sade-sati/muhurat/gemstones=4 — ALL 0 errors/0 warnings.
+- Fresh suite 1860 pass (26.3s). Fresh live crawl 128 links / 0 dead. career-report carry-forward renders real computed report on live page.
+- Part E: preview bundle ships LIVE Razorpay key (rzp_live) → real transaction NOT run (evidence-based); no paywalled file touched; gating intact; recommend building preview with --mode preview for future payment tests.
+- NOT done (backlog): ~104 Part A pages incl. Science rebuild, zodiac/chinese-zodiac/tarot/sun-vs-moon/moon-sign, astrologer theme, Birthday templates; Part C new pages (research done); nav/footer restyle (deferred, documented).

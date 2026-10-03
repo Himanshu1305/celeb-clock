@@ -48,7 +48,7 @@ export function SampleReportPage() {
           <section
             data-testid="sample-report-banner"
             className="flex flex-col sm:flex-row items-center justify-between gap-3
-                       bg-gradient-to-r from-primary to-indigo-700 text-white
+                       bg-gradient-to-r from-primary to-[#6E5AA6] text-white
                        rounded-2xl px-5 py-4 mb-8"
           >
             <p className="text-sm font-semibold">
@@ -57,7 +57,7 @@ export function SampleReportPage() {
             <Link
               to="/birthday-report"
               className="flex-shrink-0 bg-white text-primary font-bold px-5 py-2 rounded-full
-                         text-sm hover:bg-indigo-50 transition-colors whitespace-nowrap"
+                         text-sm hover:bg-[#6E5AA6]/10 transition-colors whitespace-nowrap"
             >
               Generate Mine Free →
             </Link>
@@ -98,8 +98,8 @@ export function SampleReportPage() {
                   `⚙️ Metal: ${rashiProfile.lucky_metal}`,
                   ...(zodiacProfile ? [`🃏 Tarot: ${zodiacProfile.tarot_card}`] : []),
                 ].map(chip => (
-                  <span key={chip} className="flex-shrink-0 bg-indigo-50 border border-indigo-200
-                                              rounded-full px-3 py-1.5 text-xs font-medium text-indigo-800 whitespace-nowrap">
+                  <span key={chip} className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
+                                              rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
                     {chip}
                   </span>
                 ))}
@@ -133,9 +133,9 @@ export function SampleReportPage() {
                   </div>
                 </div>
               </div>
-              <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3 text-xs">
-                <strong className="text-indigo-800">🃏 Tarot Card: {zodiacProfile.tarot_card}</strong>
-                <span className="text-indigo-700"> — {zodiacProfile.tarot_meaning}</span>
+              <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-3 text-xs">
+                <strong className="text-[#6E5AA6]">🃏 Tarot Card: {zodiacProfile.tarot_card}</strong>
+                <span className="text-[#6E5AA6]"> — {zodiacProfile.tarot_meaning}</span>
               </div>
             </section>
           )}
@@ -195,19 +195,19 @@ export function SampleReportPage() {
           {lpProfile && (
             <section className="mb-6 bg-white border border-gray-200 rounded-2xl p-5">
               <div className="flex items-center gap-4 mb-3">
-                <div className="w-14 h-14 bg-indigo-600 rounded-full flex items-center justify-center text-2xl font-black text-white flex-shrink-0">
+                <div className="w-14 h-14 bg-[#0E2238] rounded-full flex items-center justify-center text-2xl font-black text-white flex-shrink-0">
                   {lifePath}
                 </div>
                 <div>
                   <h2 className="text-lg font-black text-gray-900">Life Path {lifePath}</h2>
-                  <div className="text-indigo-600 font-semibold text-sm">{lpProfile.title}</div>
+                  <div className="text-[#6E5AA6] font-semibold text-sm">{lpProfile.title}</div>
                   <div className="text-xs text-gray-400">{lpProfile.ruling_planet} · {lpProfile.element}</div>
                 </div>
               </div>
               <p className="text-sm text-gray-700 leading-relaxed mb-3">{lpProfile.traits}</p>
               <p className="text-sm text-gray-600 mb-1"><strong>Love: </strong>{lpProfile.love_style}</p>
               <p className="text-sm text-gray-600 mb-1"><strong>Career paths: </strong>{lpProfile.career_paths.join(', ')}.</p>
-              <p className="text-sm text-indigo-700 italic"><strong>Spiritual lesson: </strong>{lpProfile.spiritual_lesson}</p>
+              <p className="text-sm text-[#6E5AA6] italic"><strong>Spiritual lesson: </strong>{lpProfile.spiritual_lesson}</p>
             </section>
           )}
 

@@ -95,7 +95,7 @@ export default function Methodology() {
       />
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -121,21 +121,21 @@ export default function Methodology() {
             </p>
             <ul className="list-disc pl-5 space-y-1">
               <li>
-                The <Link className="text-indigo-600 hover:underline font-medium" to="/birthday-report">Birthday Blueprint</Link> — a personalised 11-section
+                The <Link className="text-[#6E5AA6] hover:underline font-medium" to="/birthday-report">Birthday Blueprint</Link> — a personalised 11-section
                 report (celebrity twins, zodiac, numerology, tarot, planetary ages and more), built from
                 the same source-cited data described below and printable as a gift.
               </li>
               <li>
-                The <Link className="text-indigo-600 hover:underline font-medium" to="/life-expectancy">life expectancy calculator</Link> and longevity suite —
+                The <Link className="text-[#6E5AA6] hover:underline font-medium" to="/life-expectancy">life expectancy calculator</Link> and longevity suite —
                 the science core, using the peer-reviewed research cited in the sections below.
               </li>
               <li>
-                <Link className="text-indigo-600 hover:underline font-medium" to="/celebrity-birthday">Celebrity birthday matching</Link>, including the{' '}
-                <Link className="text-indigo-600 hover:underline font-medium" to="/born-on/india">Indian celebrities by date</Link> facet drawn from the same
+                <Link className="text-[#6E5AA6] hover:underline font-medium" to="/celebrity-birthday">Celebrity birthday matching</Link>, including the{' '}
+                <Link className="text-[#6E5AA6] hover:underline font-medium" to="/born-on/india">Indian celebrities by date</Link> facet drawn from the same
                 ranked dataset.
               </li>
               <li>
-                The <Link className="text-indigo-600 hover:underline font-medium" to="/answers">Answers library</Link> — concise, sourced answers to common
+                The <Link className="text-[#6E5AA6] hover:underline font-medium" to="/answers">Answers library</Link> — concise, sourced answers to common
                 birthday, age and longevity questions.
               </li>
             </ul>
@@ -168,7 +168,7 @@ export default function Methodology() {
                   <h3 className="text-xl font-semibold text-foreground mb-3">The Three-Pillar Framework</h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
                     BornClock's{' '}
-                    <Link to="/life-expectancy" className="text-indigo-600 hover:underline font-medium">life expectancy</Link>{' '}
+                    <Link to="/life-expectancy" className="text-[#6E5AA6] hover:underline font-medium">life expectancy</Link>{' '}
                     estimate is built on three pillars that are calculated sequentially and then combined:
                   </p>
                   <div className="grid md:grid-cols-3 gap-4 mb-4">
@@ -383,7 +383,7 @@ export default function Methodology() {
                   </p>
                   <p className="text-muted-foreground leading-relaxed mt-4">
                     Only the day and month of your birth date are used for matching. The year is never transmitted. Visit the{' '}
-                    <Link to="/celebrity-birthday" className="text-indigo-600 hover:underline font-medium">Celebrity Birthday Match</Link>{' '}
+                    <Link to="/celebrity-birthday" className="text-[#6E5AA6] hover:underline font-medium">Celebrity Birthday Match</Link>{' '}
                     tool to see this in action.
                   </p>
                 </div>
@@ -397,7 +397,7 @@ export default function Methodology() {
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   Your age on another planet is the number of complete orbits that planet has made around the Sun since your birth. BornClock's{' '}
-                  <Link to="/planetary-age" className="text-indigo-600 hover:underline font-medium">Planetary Age Calculator</Link>{' '}
+                  <Link to="/planetary-age" className="text-[#6E5AA6] hover:underline font-medium">Planetary Age Calculator</Link>{' '}
                   uses mean sidereal orbital periods from the NASA JPL Planetary Fact Sheet (Williams, D.R., NASA GSFC, 2024).
                 </p>
                 <FormulaBlock>
@@ -443,7 +443,7 @@ export default function Methodology() {
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   BornClock's{' '}
-                  <Link to="/zodiac" className="text-indigo-600 hover:underline font-medium">Zodiac Analysis</Link>{' '}
+                  <Link to="/zodiac" className="text-[#6E5AA6] hover:underline font-medium">Zodiac Analysis</Link>{' '}
                   uses the <strong className="text-foreground">Western tropical zodiac</strong> — the twelve equal 30° divisions of the ecliptic, fixed to the vernal equinox. Date ranges follow the standard astronomical calendar boundaries that have been used since classical antiquity.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
@@ -458,7 +458,7 @@ export default function Methodology() {
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   BornClock's{' '}
-                  <Link to="/numerology" className="text-indigo-600 hover:underline font-medium">Numerology Calculator</Link>{' '}
+                  <Link to="/numerology" className="text-[#6E5AA6] hover:underline font-medium">Numerology Calculator</Link>{' '}
                   computes the <strong className="text-foreground">Pythagorean Life Path Number</strong>: reduce the full birth date (day + month + year) to a single digit by repeatedly summing its digits. Master numbers 11, 22, and 33 are preserved without further reduction.
                 </p>
                 <p className="text-muted-foreground font-medium mb-2">Example — 15 June 1990:</p>
@@ -477,7 +477,7 @@ export default function Methodology() {
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   BornClock's{' '}
-                  <Link to="/birthstone" className="text-indigo-600 hover:underline font-medium">Birthstone</Link>{' '}
+                  <Link to="/birthstone" className="text-[#6E5AA6] hover:underline font-medium">Birthstone</Link>{' '}
                   tool uses the <strong className="text-foreground">American Gem Society / Jewelers of America official birthstone list</strong>, updated in 2002 (Tanzanite added for December) and 2016 (Spinel added for August). Where a month has multiple modern stones, all alternatives are displayed with their historical provenance.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
@@ -493,7 +493,7 @@ export default function Methodology() {
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   BornClock's{' '}
-                  <Link to="/generation" className="text-indigo-600 hover:underline font-medium">Generation Classification</Link>{' '}
+                  <Link to="/generation" className="text-[#6E5AA6] hover:underline font-medium">Generation Classification</Link>{' '}
                   tool classifies birth years into generational cohorts using Pew Research Center (2019) definitions:
                 </p>
                 <div className="overflow-x-auto rounded-lg border border-border">

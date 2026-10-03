@@ -24,7 +24,7 @@ export default function AstrologerPage() {
         ogType="website"
       />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -40,15 +40,15 @@ export default function AstrologerPage() {
         {loaded && isFull ? (
           <AstrologerChat profile={profile} isAdmin={isAdmin} accessToken={session?.access_token ?? null} />
         ) : loaded ? (
-          <div data-testid="astrologer-no-profile" className="rounded-xl border border-indigo-200 bg-indigo-50 p-6 text-center">
-            <p className="text-indigo-900 font-semibold mb-2">{profile ? 'Just add your birth time and place' : 'First, add your birth details'}</p>
-            <p className="text-sm text-indigo-900/80 mb-4">
+          <div data-testid="astrologer-no-profile" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 p-6 text-center">
+            <p className="text-[#6E5AA6] font-semibold mb-2">{profile ? 'Just add your birth time and place' : 'First, add your birth details'}</p>
+            <p className="text-sm text-[#6E5AA6]/80 mb-4">
               {profile
                 ? `We have your birth date (${profile.dob}) saved. Your astrologer answers from your full chart, so it also needs your birth time and place — add them once on the Kundali page and come back here.`
                 : 'Your astrologer answers from your real chart, so it needs your date, time and place of birth. Add them once on the Kundali page (you choose whether to save them) and come back here.'}
             </p>
             <Link to="/kundali" data-testid="astrologer-add-details"
-                  className="inline-flex items-center gap-2 bg-indigo-600 text-white rounded-lg px-6 py-3 font-semibold hover:bg-indigo-700">
+                  className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-lg px-6 py-3 font-semibold hover:bg-[#0E2238]">
               {profile ? 'Complete my birth details →' : 'Add my birth details →'}
             </Link>
           </div>

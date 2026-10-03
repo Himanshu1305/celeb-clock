@@ -89,8 +89,8 @@ const GENERATIONS: Generation[] = [
     shortName: 'Gen Z',
     startYear: 1997,
     endYear: 2012,
-    color: 'bg-violet-50 dark:bg-violet-950/30',
-    hexColor: '#7C3AED',
+    color: 'bg-[#6E5AA6]/10 dark:bg-[#6E5AA6]/30',
+    hexColor: '#6E5AA6',
     tagline: 'Born between 1997 and 2012',
     description: 'Generation Z is the first generation to have grown up with smartphones from early childhood — the iPhone launched in 2007, meaning the oldest Gen Zers were 10, and the youngest were only 5 by the time touchscreen devices became ubiquitous. This has created a fundamentally different relationship with communication, information, and attention compared to every previous generation. Gen Z is also the most diverse generation in American history by ethnicity and gender identity, and the most globally connected cohort of young people ever measured. They are entering adulthood during climate crisis, pandemic aftermath, and extraordinary economic uncertainty. Early research — notably Jonathan Haidt\'s work on adolescent mental health [Haidt, J. & Lukianoff, G., 2018. The Coddling of the American Mind] — suggests that social media exposure during adolescence correlates with elevated rates of anxiety and depression in this cohort, a finding that has generated significant ongoing debate among researchers.',
     definingEvents: ['September 11, 2001 (early childhood for oldest)', 'COVID-19 pandemic (formative adolescent years for many)', 'Climate change as existential concern', 'School shootings and active shooter drills', 'Black Lives Matter movement', '#MeToo'],
@@ -230,7 +230,7 @@ export default function GenerationPage() {
       </Helmet>
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>

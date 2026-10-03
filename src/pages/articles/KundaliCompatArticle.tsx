@@ -22,7 +22,7 @@ export default function KundaliCompatArticle() {
       />
       <FAQSchema items={FAQ} />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
-        <header className="flex justify-between items-center mb-8"><Navigation /><AuthNav /></header>
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
 
         <article className="prose prose-slate max-w-none text-foreground">
           <h1 className="font-heading text-3xl md:text-4xl font-bold mb-4">Kundali Matching: The Complete Guide to Ashtakoota (Guna Milan)</h1>
@@ -68,8 +68,8 @@ export default function KundaliCompatArticle() {
 
           <h2 className="text-2xl font-bold mt-8 mb-3">Calculate your match</h2>
           <p>You can compute your own eight-Koota breakdown instantly with our free tool. Enter both birth dates — and, for the most accurate Nakshatra, both birth times — to see every Koota scored, along with Nadi and Bhakoot Dosha checks.</p>
-          <p><Link to="/kundali-match" className="text-indigo-600 font-semibold underline">Try the free Kundali matching calculator →</Link></p>
-          <p>To understand a single person's chart in depth — Lagna, planetary positions, Nakshatra and Dasha — generate a full <Link to="/kundali" className="text-indigo-600 underline">Janam Kundali</Link>. And remember: astrology at its best is a mirror for self-understanding and honest conversation between partners, never a substitute for it.</p>
+          <p><Link to="/kundali-match" className="text-[#6E5AA6] font-semibold underline">Try the free Kundali matching calculator →</Link></p>
+          <p>To understand a single person's chart in depth — Lagna, planetary positions, Nakshatra and Dasha — generate a full <Link to="/kundali" className="text-[#6E5AA6] underline">Janam Kundali</Link>. And remember: astrology at its best is a mirror for self-understanding and honest conversation between partners, never a substitute for it.</p>
 
           <h2 className="text-2xl font-bold mt-8 mb-3">Frequently asked questions</h2>
           {FAQ.map((f, i) => (

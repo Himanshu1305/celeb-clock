@@ -17,7 +17,7 @@ export default function About() {
       />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -71,8 +71,8 @@ export default function About() {
               </p>
             </div>
             <div className="bg-card border border-border rounded-xl p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mx-auto mb-4">
-                <FlaskConical className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              <div className="w-12 h-12 rounded-full bg-[#6E5AA6]/10 dark:bg-[#6E5AA6]/40 flex items-center justify-center mx-auto mb-4">
+                <FlaskConical className="w-6 h-6 text-[#6E5AA6] dark:text-[#6E5AA6]" />
               </div>
               <h3 className="font-bold text-foreground mb-2">Pillar 1 — Your Genes</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">

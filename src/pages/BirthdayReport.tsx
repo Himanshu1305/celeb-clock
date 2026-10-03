@@ -279,7 +279,7 @@ const BirthdayReport = () => {
       />
 
       {/* ── Nav ──────────────────────────────────────────────────────────── */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
@@ -290,7 +290,7 @@ const BirthdayReport = () => {
           generated (phase 'success') the page shows the success block ONLY. */}
       {phase !== 'success' && (<>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <div className="bg-gradient-to-br from-amber-50 via-rose-50 to-purple-50 py-8 px-4 text-center">
+      <div className="bg-gradient-to-br from-amber-50 via-rose-50 to-[#6E5AA6] py-8 px-4 text-center">
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col items-center mb-6">
             <img
@@ -298,7 +298,7 @@ const BirthdayReport = () => {
               alt="BornClock"
               className="h-16 w-auto mb-2"
             />
-            <p className="text-sm text-indigo-500 italic font-medium mt-1">Know your time. Live it well.</p>
+            <p className="text-sm text-[#6E5AA6] italic font-medium mt-1">Know your time. Live it well.</p>
           </div>
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-rose-100 text-rose-700 rounded-full text-sm font-medium mb-6">
             🎁 The Birthday Gift They'll Actually Remember
@@ -336,7 +336,7 @@ const BirthdayReport = () => {
               <h3 className="font-bold text-gray-900 mb-2">Three Zodiac Profiles</h3>
               <p className="text-gray-600 text-sm leading-relaxed">Deep-dive into their Western, Chinese, and Vedic zodiac signs — compatibility, elements, and 2026 forecast.</p>
             </div>
-            <div className="bg-purple-50 rounded-2xl p-6 text-center">
+            <div className="bg-[#6E5AA6]/10 rounded-2xl p-6 text-center">
               <div className="text-4xl mb-3">🔢</div>
               <h3 className="font-bold text-gray-900 mb-2">Numerology Blueprint</h3>
               <p className="text-gray-600 text-sm leading-relaxed">Their life path number, what it means, and their personal year forecast for 2026 — calculated from their birthdate.</p>
@@ -545,7 +545,7 @@ const BirthdayReport = () => {
               <div className="max-w-sm mx-auto mb-4">
                 <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-rose-400 to-purple-500 rounded-full transition-all duration-300"
+                    className="h-full bg-gradient-to-r from-rose-400 to-[#6E5AA6] rounded-full transition-all duration-300"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -640,7 +640,7 @@ const BirthdayReport = () => {
             {[
               { icon: '🌟', title: 'Celebrity Twins', color: 'bg-rose-50' },
               { icon: '♈', title: 'Zodiac Profiles', color: 'bg-amber-50' },
-              { icon: '🔢', title: 'Numerology', color: 'bg-purple-50' },
+              { icon: '🔢', title: 'Numerology', color: 'bg-[#6E5AA6]/10' },
               { icon: '🪐', title: 'Planetary Ages', color: 'bg-blue-50' },
             ].map(card => (
               <div

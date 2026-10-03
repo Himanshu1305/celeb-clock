@@ -219,7 +219,7 @@ const PlanetaryAgePage = () => {
 
                 <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-4">
                   How Old Are You<br />
-                  <span className="text-indigo-400">in the Universe?</span>
+                  <span className="text-[#6E5AA6]">in the Universe?</span>
                 </h1>
                 <PageTagline />
 
@@ -257,7 +257,7 @@ const PlanetaryAgePage = () => {
                   <button
                     onClick={handleCalculate}
                     disabled={!localDob}
-                    className="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-lg"
+                    className="w-full py-3 bg-[#0E2238] text-white font-bold rounded-xl hover:bg-[#0E2238] transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-lg"
                   >
                     Calculate My Cosmic Age 🚀
                   </button>
@@ -278,17 +278,17 @@ const PlanetaryAgePage = () => {
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="text-indigo-400 text-sm shrink-0 mt-0.5">♃</span>
+                      <span className="text-[#6E5AA6] text-sm shrink-0 mt-0.5">♃</span>
                       <p className="text-sm text-slate-300 leading-relaxed">
                         Your age on Jupiter is probably a single digit.{' '}
                         <span className="text-slate-500 italic">Enter your birthday above to find out.</span>
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="text-indigo-300 text-sm shrink-0 mt-0.5">♆</span>
+                      <span className="text-[#6E5AA6] text-sm shrink-0 mt-0.5">♆</span>
                       <p className="text-sm text-slate-300 leading-relaxed">
                         The last time Neptune completed a full orbit, it was{' '}
-                        <span className="text-indigo-300 font-bold">{neptuneLastYear}</span>
+                        <span className="text-[#6E5AA6] font-bold">{neptuneLastYear}</span>
                         {' '}— the year the American Civil War began.
                       </p>
                     </div>
@@ -374,7 +374,7 @@ const PlanetaryAgePage = () => {
             <div
               key={i}
               className="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-white flex-shrink-0"
-              style={{ minWidth: '288px', maxWidth: '288px', borderLeft: `4px solid ${fact.useAmber ? '#f59e0b' : '#6366f1'}` }}
+              style={{ minWidth: '288px', maxWidth: '288px', borderLeft: `4px solid ${fact.useAmber ? '#f59e0b' : '#6E5AA6'}` }}
             >
               <div className="text-3xl mb-3">{fact.icon}</div>
               <h3 className="font-black text-sm mb-2 leading-tight text-white">{fact.title}</h3>
@@ -383,20 +383,20 @@ const PlanetaryAgePage = () => {
             </div>
           ))}
         </div>
-        <div className="bg-indigo-950/50 border border-indigo-800/40 rounded-xl px-4 py-3 mt-4 text-sm text-indigo-200">
-          <span className="font-bold text-indigo-400">The science:</span> Each planet's year is governed by Kepler's Third Law (1619) — the further a planet is from the Sun, the slower it orbits. Neptune's year lasts 164.8 Earth years because it travels 30× further from the Sun than Earth, at 5.4 km/s vs Earth's 29.8 km/s.
+        <div className="bg-[#0E2238]/50 border border-[#6E5AA6]/40 rounded-xl px-4 py-3 mt-4 text-sm text-[#6E5AA6]">
+          <span className="font-bold text-[#6E5AA6]">The science:</span> Each planet's year is governed by Kepler's Third Law (1619) — the further a planet is from the Sun, the slower it orbits. Neptune's year lasts 164.8 Earth years because it travels 30× further from the Sun than Earth, at 5.4 km/s vs Earth's 29.8 km/s.
         </div>
       </div>
 
       {/* ── Cross-link to the dedicated weight tool (weight ≠ age — separate concepts) ── */}
       <div className="container mx-auto px-4 pb-12 max-w-5xl">
-        <a href="/weight-on-planets" className="block rounded-2xl bg-slate-900 border border-slate-800 p-6 hover:border-indigo-500/50 transition-colors">
+        <a href="/weight-on-planets" className="block rounded-2xl bg-slate-900 border border-slate-800 p-6 hover:border-[#6E5AA6]/50 transition-colors">
           <h2 className="text-xl font-bold text-white mb-1">⚖️ How heavy are you on other planets?</h2>
           <p className="text-sm text-slate-300">
             Age is about orbits; <strong>weight</strong> is about gravity — a different question entirely. See your
             weight across all 8 planets and the Moon on the dedicated calculator →
           </p>
-          <span className="inline-block mt-3 text-sm font-semibold text-indigo-400">Open the Weight on Planets calculator →</span>
+          <span className="inline-block mt-3 text-sm font-semibold text-[#6E5AA6]">Open the Weight on Planets calculator →</span>
         </a>
       </div>
 

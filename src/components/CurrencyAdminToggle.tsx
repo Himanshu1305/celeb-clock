@@ -20,7 +20,7 @@ export function CurrencyAdminToggle() {
       onClick={() => pick(val)}
       className={`px-2 py-0.5 rounded text-xs font-semibold transition-colors ${
         active === val || (val === null && !active)
-          ? 'bg-indigo-600 text-white'
+          ? 'bg-[#0E2238] text-white'
           : 'bg-white text-gray-600 hover:bg-gray-100'
       }`}
     >

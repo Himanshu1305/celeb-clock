@@ -109,7 +109,7 @@ export default function Upgrade() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-6">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
         </header>
       </div>
@@ -150,18 +150,18 @@ export default function Upgrade() {
             </p>
             <button
               onClick={() => navigate('/life-expectancy')}
-              className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
+              className="bg-[#0E2238] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors"
             >
               Continue to Longevity Calculator →
             </button>
-            <div className="mt-4 p-4 rounded-xl border border-indigo-100 bg-indigo-50 text-left">
-              <p className="text-sm font-semibold text-indigo-900 mb-1">🎂 Create a Birthday Blueprint</p>
-              <p className="text-xs text-indigo-700 mb-3">
+            <div className="mt-4 p-4 rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 text-left">
+              <p className="text-sm font-semibold text-[#6E5AA6] mb-1">🎂 Create a Birthday Blueprint</p>
+              <p className="text-xs text-[#6E5AA6] mb-3">
                 Gift a personalised 11-section report to anyone — zodiac, numerology, planetary ages, and more. Your subscription includes 3 credits per month (auto-applied, up to 9).
               </p>
               <button
                 onClick={() => navigate('/birthday-report')}
-                className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+                className="text-xs font-semibold text-[#6E5AA6] hover:text-[#6E5AA6] transition-colors"
               >
                 Create a report →
               </button>
@@ -179,7 +179,7 @@ export default function Upgrade() {
             <p className="text-gray-600 text-lg max-w-xl mx-auto">
               Science-backed tools to understand and extend your healthspan
             </p>
-            <p className="text-indigo-700 font-medium mt-3">
+            <p className="text-[#6E5AA6] font-medium mt-3">
               Subscribers get three birthday report credits every month — auto-applied when you open a locked
               report, credits roll over and stack up to 9, so you can save them and gift several reports at once.
             </p>
@@ -238,8 +238,8 @@ export default function Upgrade() {
             </div>
 
             {/* Monthly Premium card */}
-            <div className="bg-white rounded-2xl border-2 border-indigo-200 p-6 flex flex-col">
-              <div className="text-lg font-bold text-indigo-600 mb-1">Premium Monthly</div>
+            <div className="bg-white rounded-2xl border-2 border-[#6E5AA6]/30 p-6 flex flex-col">
+              <div className="text-lg font-bold text-[#6E5AA6] mb-1">Premium Monthly</div>
               {detecting ? (
                 <div className="text-4xl font-black text-gray-300 mb-1">...</div>
               ) : (
@@ -253,7 +253,7 @@ export default function Upgrade() {
               <ul className="space-y-2 mb-6 flex-1">
                 {premiumFeatures.map(f => (
                   <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
-                    <Check size={14} className="text-indigo-500 flex-shrink-0" />
+                    <Check size={14} className="text-[#6E5AA6] flex-shrink-0" />
                     {f}
                   </li>
                 ))}
@@ -261,7 +261,7 @@ export default function Upgrade() {
               <button
                 onClick={() => handleSubscribe('monthly')}
                 disabled={loadingBilling !== null || detecting || !user}
-                className="w-full py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-[#0E2238] text-white rounded-xl font-bold hover:bg-[#0E2238] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loadingBilling === 'monthly' ? (
                   <span className="flex items-center justify-center gap-2">
@@ -280,19 +280,19 @@ export default function Upgrade() {
             </div>
 
             {/* Annual Premium card */}
-            <div className="bg-indigo-600 rounded-2xl border-2 border-indigo-600 p-6 text-white flex flex-col relative">
+            <div className="bg-[#0E2238] rounded-2xl border-2 border-[#6E5AA6]/30 p-6 text-white flex flex-col relative">
               <div className="absolute top-4 right-4 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
                 <Star size={10} />
                 BEST VALUE
               </div>
 
-              <div className="text-lg font-bold text-indigo-200 mb-1">Premium Annual</div>
+              <div className="text-lg font-bold text-[#6E5AA6] mb-1">Premium Annual</div>
               {detecting ? (
                 <div className="text-4xl font-black text-white/50 mb-1">...</div>
               ) : (
                 <>
                   <div className="text-4xl font-black mb-1">{annualPrice?.amount}</div>
-                  <div className="text-indigo-200 text-sm mb-1">{annualPrice?.period}</div>
+                  <div className="text-[#6E5AA6] text-sm mb-1">{annualPrice?.period}</div>
                   {annualPrice?.saving && (
                     <div className="text-green-300 text-sm font-semibold mb-4">
                       {annualPrice.saving}
@@ -303,7 +303,7 @@ export default function Upgrade() {
 
               <ul className="space-y-2 mb-6 flex-1 mt-2">
                 {premiumFeatures.map(f => (
-                  <li key={f} className="flex items-center gap-2 text-sm text-indigo-100">
+                  <li key={f} className="flex items-center gap-2 text-sm text-[#6E5AA6]">
                     <Check size={14} className="text-green-300 flex-shrink-0" />
                     {f}
                   </li>
@@ -313,11 +313,11 @@ export default function Upgrade() {
               <button
                 onClick={() => handleSubscribe('annual')}
                 disabled={loadingBilling !== null || detecting || !user}
-                className="w-full py-3 bg-white text-indigo-600 rounded-xl font-bold hover:bg-indigo-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-white text-[#6E5AA6] rounded-xl font-bold hover:bg-[#6E5AA6]/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loadingBilling === 'annual' ? (
                   <span className="flex items-center justify-center gap-2">
-                    <div className="w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-[#6E5AA6]/30 border-t-transparent rounded-full animate-spin" />
                     Opening checkout...
                   </span>
                 ) : !user ? (
@@ -332,13 +332,13 @@ export default function Upgrade() {
               {!user && (
                 <button
                   onClick={() => navigate('/auth?redirect=/upgrade')}
-                  className="w-full mt-2 py-2 text-indigo-200 text-sm underline"
+                  className="w-full mt-2 py-2 text-[#6E5AA6] text-sm underline"
                 >
                   Sign in first →
                 </button>
               )}
 
-              <p className="text-indigo-300 text-xs text-center mt-3">
+              <p className="text-[#6E5AA6] text-xs text-center mt-3">
                 7-day money-back guarantee · Cancel anytime
               </p>
             </div>
@@ -402,7 +402,7 @@ export default function Upgrade() {
               { num: '169', label: 'automated accuracy tests' },
             ].map(stat => (
               <div key={stat.label} className="bg-white rounded-xl border p-4">
-                <div className="text-2xl font-black text-indigo-600">{stat.num}</div>
+                <div className="text-2xl font-black text-[#6E5AA6]">{stat.num}</div>
                 <div className="text-xs text-gray-500 mt-1">{stat.label}</div>
               </div>
             ))}

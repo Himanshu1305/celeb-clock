@@ -101,15 +101,15 @@ export function LongevityCoachChat({ result, userName, isPremium }: LongevityCoa
       )}
 
       {/* Header */}
-      <div className="p-4 border-b bg-gradient-to-r from-indigo-50 to-violet-50 dark:from-indigo-950/20 dark:to-violet-950/20">
+      <div className="p-4 border-b bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] dark:from-[#6E5AA6]/20 dark:to-[#6E5AA6]/20">
         <div className="flex items-center gap-2 mb-1">
-          <Bot className="w-5 h-5 text-indigo-600" />
+          <Bot className="w-5 h-5 text-[#6E5AA6]" />
           <h3 className="font-semibold text-foreground">Your Personal Longevity Coach</h3>
         </div>
         <p className="text-sm text-muted-foreground">
           Ask me anything about your forecast, your health factors, or how to improve your score.
         </p>
-        <span className="inline-block text-xs text-indigo-600 dark:text-indigo-400 mt-1 bg-indigo-100 dark:bg-indigo-900/30 px-2 py-0.5 rounded-full">
+        <span className="inline-block text-xs text-[#6E5AA6] dark:text-[#6E5AA6] mt-1 bg-[#6E5AA6]/10 dark:bg-[#6E5AA6]/30 px-2 py-0.5 rounded-full">
           Powered by AI · Uses your personal data
         </span>
       </div>
@@ -127,7 +127,7 @@ export function LongevityCoachChat({ result, userName, isPremium }: LongevityCoa
                   key={s}
                   onClick={() => sendMessage(s)}
                   disabled={!isPremium}
-                  className="text-xs px-3 py-1.5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-900/50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="text-xs px-3 py-1.5 rounded-full bg-[#6E5AA6]/10 dark:bg-[#6E5AA6]/30 text-[#6E5AA6] dark:text-[#6E5AA6] hover:bg-[#6E5AA6]/10 dark:hover:bg-[#0E2238]/50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {s}
                 </button>
@@ -144,7 +144,7 @@ export function LongevityCoachChat({ result, userName, isPremium }: LongevityCoa
             <div
               className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                 msg.role === 'user'
-                  ? 'bg-indigo-600 text-white rounded-br-sm'
+                  ? 'bg-[#0E2238] text-white rounded-br-sm'
                   : 'bg-gray-100 dark:bg-muted text-foreground rounded-bl-sm'
               }`}
             >
@@ -169,9 +169,9 @@ export function LongevityCoachChat({ result, userName, isPremium }: LongevityCoa
           <div className="flex justify-start">
             <div className="bg-gray-100 dark:bg-muted px-4 py-3 rounded-2xl rounded-bl-sm">
               <span className="flex gap-1">
-                <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <span className="w-1.5 h-1.5 bg-[#0E2238] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-1.5 h-1.5 bg-[#0E2238] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-1.5 h-1.5 bg-[#0E2238] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
               </span>
             </div>
           </div>
@@ -189,7 +189,7 @@ export function LongevityCoachChat({ result, userName, isPremium }: LongevityCoa
               Max conversation length reached.{' '}
               <button
                 onClick={() => setMessages([])}
-                className="text-indigo-600 hover:underline"
+                className="text-[#6E5AA6] hover:underline"
               >
                 Start a new conversation
               </button>
@@ -214,7 +214,7 @@ export function LongevityCoachChat({ result, userName, isPremium }: LongevityCoa
             type="submit"
             size="icon"
             disabled={!isPremium || loading || !input.trim() || messages.length >= 20}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white"
+            className="bg-[#0E2238] hover:bg-[#0E2238] text-white"
           >
             <Send className="w-4 h-4" />
           </Button>

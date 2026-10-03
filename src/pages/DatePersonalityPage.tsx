@@ -24,7 +24,7 @@ export default function DatePersonalityPage() {
       <div data-testid="personality-page" className="min-h-screen bg-gradient-cosmic">
         <SEO title="Birthday Personality | BornClock" description="Discover the personality of any birth date." canonicalUrl="/born-in" />
         <div className="container mx-auto px-4 py-8 max-w-2xl">
-          <header className="flex justify-between items-center mb-8"><Navigation /><AuthNav /></header>
+          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
           <h1 className="text-2xl font-bold text-foreground">Birthday Personality</h1>
           <p className="text-muted-foreground mt-2">Pick a valid date to see its personality profile.</p>
         </div>
@@ -50,7 +50,7 @@ export default function DatePersonalityPage() {
         canonicalUrl={`/born-on/${month}/${dayNum}/personality`}
       />
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center mb-8"><Navigation /><AuthNav /></header>
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
 
         <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">
           Born on {monthName} {dayNum}: Personality

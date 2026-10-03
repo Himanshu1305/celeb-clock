@@ -14,7 +14,7 @@ export default function RashifalPage() {
       <div data-testid="rashifal-page" className="min-h-screen bg-gradient-cosmic">
         <SEO title="राशिफल — आज का राशिफल | BornClock" description="अपनी राशि चुनें और आज का राशिफल पढ़ें।" canonicalUrl="/hi/rashifal" />
         <div className="container mx-auto px-4 py-8 max-w-2xl">
-          <header className="flex justify-between items-center mb-8"><Navigation /><AuthNav /></header>
+          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
           <h1 className="text-2xl font-bold text-foreground mb-4">राशिफल</h1>
           <p className="text-muted-foreground mb-4">कृपया एक मान्य राशि चुनें:</p>
           <div className="flex flex-wrap gap-2">
@@ -38,7 +38,7 @@ export default function RashifalPage() {
         canonicalUrl={`/hi/rashifal/${entry.slug}`}
       />
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center mb-8"><Navigation /><AuthNav /></header>
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
 
         <nav className="text-sm text-muted-foreground mb-4 flex gap-2 items-center">
           <Link to="/hi/rashifal" className="hover:text-foreground">राशिफल</Link>

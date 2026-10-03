@@ -53,7 +53,7 @@ export default function BirthdayWishPage() {
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
       const grad = ctx.createLinearGradient(0, 0, 1080, 1080);
-      grad.addColorStop(0, '#4f46e5'); grad.addColorStop(1, '#db2777');
+      grad.addColorStop(0, '#0E2238'); grad.addColorStop(1, '#C6A15B');
       ctx.fillStyle = grad; ctx.fillRect(0, 0, 1080, 1080);
       ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
       ctx.font = 'bold 64px sans-serif';
@@ -85,7 +85,7 @@ export default function BirthdayWishPage() {
         ogType="website"
       />
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -141,7 +141,7 @@ export default function BirthdayWishPage() {
               <CardContent className="p-6">
                 <div
                   data-testid="wish-card"
-                  className="rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-600 to-pink-600 text-white text-center p-8"
+                  className="rounded-2xl overflow-hidden bg-gradient-to-br from-[#6E5AA6] to-pink-600 text-white text-center p-8"
                 >
                   {imgSrc ? (
                     <img src={imgSrc} alt={`Birthday card for ${wish.name}`} className="w-full rounded-xl" />

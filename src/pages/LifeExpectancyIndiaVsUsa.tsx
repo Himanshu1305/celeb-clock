@@ -32,7 +32,7 @@ const LifeExpectancyIndiaVsUsa = () => {
       />
       <FAQSchema items={FAQ_ITEMS} />
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -45,8 +45,8 @@ const LifeExpectancyIndiaVsUsa = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               India's average life expectancy is approximately 70.9 years (UN World Population Prospects, 2023). The USA's is approximately 77.5 years — a difference of 6.6 years. But here's the context that matters: in 1960, India's life expectancy was 41.4 years. It has nearly doubled in six decades — one of the most dramatic public health achievements of the 20th and 21st centuries. The gap is real, but the trajectory tells a different story.
             </p>
           </div>

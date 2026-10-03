@@ -14,7 +14,10 @@
     "e2e:report": "playwright show-report",
     "e2e:headed": "playwright test --headed",
     "e2e:debug": "playwright test --debug",
-    "test:prelaunch": "playwright test --config e2e/launch-gauntlet/gauntlet.config.ts && playwright test --config e2e/prelaunch/prelaunch.config.ts"
+    "test:prelaunch": "playwright test --config e2e/launch-gauntlet/gauntlet.config.ts && playwright test --config e2e/prelaunch/prelaunch.config.ts",
+    "build:staging": "vite build --mode preview && tsx scripts/gen-celebrity-slugs.mts && tsx scripts/generate-og-cards.mts && node scripts/prerender.mjs && node scripts/generate-sitemap.mjs",
+    "deploy:staging": "npm run build:staging && wrangler deploy --env staging",
+    "deploy:production:DANGER": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@fusionstrings/panchangam": "^0.2.0",

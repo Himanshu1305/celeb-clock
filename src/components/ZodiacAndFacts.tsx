@@ -246,11 +246,11 @@ export const ZodiacAndFacts = ({ birthDate }: Props) => {
 
         {/* Numerology - Clickable Link */}
         <Link to="/numerology" className="block group">
-          <Card className="backdrop-blur-sm bg-background/80 border-violet-500/30 hover:border-violet-500/50 hover:shadow-lg transition-all h-full">
+          <Card className="backdrop-blur-sm bg-background/80 border-[#6E5AA6]/30 hover:border-[#6E5AA6]/50 hover:shadow-lg transition-all h-full">
             <CardHeader className="text-center pb-2">
-              <div className="text-4xl mb-2 font-bold text-violet-500">{lifePath.number}</div>
-              <CardTitle className="flex items-center justify-center gap-2 group-hover:text-violet-500 transition-colors text-lg">
-                <Hash className="w-4 h-4 text-violet-500" />
+              <div className="text-4xl mb-2 font-bold text-[#6E5AA6]">{lifePath.number}</div>
+              <CardTitle className="flex items-center justify-center gap-2 group-hover:text-[#6E5AA6] transition-colors text-lg">
+                <Hash className="w-4 h-4 text-[#6E5AA6]" />
                 Life Path {lifePath.number}
               </CardTitle>
               <CardDescription className="text-xs">
@@ -258,7 +258,7 @@ export const ZodiacAndFacts = ({ birthDate }: Props) => {
               </CardDescription>
             </CardHeader>
             <CardContent className="text-center space-y-2 pt-0">
-              <Badge variant="secondary" className="bg-violet-500/20 text-violet-600 text-xs">
+              <Badge variant="secondary" className="bg-[#6E5AA6]/20 text-[#6E5AA6] text-xs">
                 {lifePath.meaning}
               </Badge>
               <p className="text-xs text-muted-foreground">Click to learn more →</p>

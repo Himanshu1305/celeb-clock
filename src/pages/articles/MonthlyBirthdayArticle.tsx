@@ -322,13 +322,13 @@ export function MonthlyBirthdayArticle({ month }: { month: number }) {
             <strong>{span.second}</strong>. Both signs are explored below.
           </p>
 
-          <div className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 my-8 text-center">
-            <p className="text-indigo-900 font-bold mb-3">
+          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8 text-center">
+            <p className="text-[#6E5AA6] font-bold mb-3">
               Born in {monthName}? Discover your complete birthday profile in seconds.
             </p>
             <a href="/birthday-report"
-               className="inline-block bg-indigo-600 text-white font-bold px-6 py-3
-                          rounded-full text-sm hover:bg-indigo-700 transition-colors">
+               className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3
+                          rounded-full text-sm hover:bg-[#0E2238] transition-colors">
               Generate My Free Birthday Profile →
             </a>
           </div>
@@ -376,7 +376,7 @@ export function MonthlyBirthdayArticle({ month }: { month: number }) {
             {celebs.map(c => (
               <li key={c.name} className="py-3 flex items-center justify-between gap-4">
                 <a href={`/celebrity/${celebritySlug(c.name)}/`}
-                   className="font-semibold text-indigo-700 hover:text-indigo-900 hover:underline">
+                   className="font-semibold text-[#6E5AA6] hover:text-[#6E5AA6] hover:underline">
                   {c.name}
                 </a>
                 <span className="text-sm text-gray-500 whitespace-nowrap">{formatDOB(c.dob)}</span>
@@ -394,17 +394,17 @@ export function MonthlyBirthdayArticle({ month }: { month: number }) {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Find Your Own Birthday Profile</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               Share a birthday with someone famous? BornClock reveals your Western zodiac,
               Vedic Rashi, Nakshatra, Chinese zodiac, Life Path number, lucky stone and more —
               all free, from your date of birth.
             </p>
             <a href="/birthday-report"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3
-                          rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Generate My Free Birthday Profile →
             </a>
           </div>
@@ -414,19 +414,19 @@ export function MonthlyBirthdayArticle({ month }: { month: number }) {
             <ul className="space-y-2">
               <li>
                 <a href={`/articles/famous-indians-born-in-${MONTH_NAMES[relatedA - 1].toLowerCase()}`}
-                   className="text-indigo-700 hover:underline">
+                   className="text-[#6E5AA6] hover:underline">
                   Famous Indians Born in {MONTH_NAMES[relatedA - 1]}
                 </a>
               </li>
               <li>
                 <a href={`/articles/famous-indians-born-in-${MONTH_NAMES[relatedB - 1].toLowerCase()}`}
-                   className="text-indigo-700 hover:underline">
+                   className="text-[#6E5AA6] hover:underline">
                   Famous Indians Born in {MONTH_NAMES[relatedB - 1]}
                 </a>
               </li>
               <li>
                 <a href="/articles/numerology-by-date-of-birth"
-                   className="text-indigo-700 hover:underline">
+                   className="text-[#6E5AA6] hover:underline">
                   Numerology by Date of Birth — Find Your Life Path Number
                 </a>
               </li>

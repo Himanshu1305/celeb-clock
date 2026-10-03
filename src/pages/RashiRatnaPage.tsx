@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SEO, FAQSchema } from '@/components/SEO';
+import { SEO } from '@/components/SEO';
+import { JsonLd } from '@/components/JsonLd';
 import PageTagline from '@/components/PageTagline';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { RASHI_RATNA_DATA, NAVRATNA_INFO, type RashiRatna } from '@/data/rashiRatnaData';
+import { TermTip } from '@/components/vedic/TermTip';
+import { TrustStrip } from '@/components/paj/TrustStrip';
+import '@/styles/part-aj.css';
 
 export default function RashiRatnaPage() {
   const [selectedRashi, setSelectedRashi] = useState<RashiRatna | null>(null);
@@ -22,28 +25,34 @@ export default function RashiRatnaPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="paj editorial" data-category="vedic">
       <SEO
         title="Rashi Ratna — Gemstone by Zodiac Sign (Indian Vedic Birthstones) | BornClock"
         description="Find your Rashi Ratna — the Indian Vedic birthstone for your zodiac sign. Complete guide to Navratna gems: Ruby, Pearl, Emerald, Diamond, Yellow Sapphire, Blue Sapphire, and more."
         keywords="rashi ratna, rashi ratna by zodiac, gemstone by rashi, vedic birthstone, navratna, moonga for aries, pukhraj for leo, neelam for capricorn, heera for taurus"
         canonicalUrl="/rashi-ratna"
       />
-      <FAQSchema items={faqItems} />
+      {/* Part AM: in-body JSON-LD so it reliably lands in the prerendered HTML (not Helmet). */}
+      <JsonLd id="faq" data={{
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: faqItems.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
+      }} />
 
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
+      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <Navigation />
+        <AuthNav />
+      </header>
+      <div className="breadcrumb">
+        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Rashi Ratna</span></div>
+        <div className="edition"><span className="dot" />Ratna · gemstone by Rashi</div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-10">
+      <div className="section" style={{ maxWidth: 820, margin: '0 auto' }}>
 
         <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-          <Link to="/" className="hover:text-indigo-600">Home</Link>
+          <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
           <span>›</span>
-          <Link to="/birthstone" className="hover:text-indigo-600">Birthstone</Link>
+          <Link to="/birthstone" className="hover:text-[#6E5AA6]">Birthstone</Link>
           <span>›</span>
           <span className="text-gray-600">Rashi Ratna</span>
         </nav>
@@ -51,9 +60,18 @@ export default function RashiRatnaPage() {
         <h1 className="text-3xl font-black text-gray-900 mb-1">Rashi Ratna — Indian Vedic Birthstones</h1>
         <PageTagline />
 
+        <TrustStrip claim="A general guide by Rashi and its ruling planet — the Gemstone tool is the precise, full-chart version." />
         <div className="bg-orange-50 border-l-4 border-orange-500 rounded-r-xl p-5 my-6">
           <p className="text-base font-semibold text-orange-900 leading-relaxed">
-            In the Indian Vedic tradition, your birthstone is determined not by your birth month but by your Rashi (zodiac sign) and its ruling planet. These gemstones — drawn from the sacred Navratna system — have been used for over 2,000 years to strengthen planetary energies, protect against malefic influences, and bring prosperity, health, and clarity.
+            In the Indian Vedic tradition, your birthstone is determined not by your birth month but by your Rashi (zodiac sign) and its ruling planet. These gemstones — drawn from the sacred <TermTip id="navratna">Navratna</TermTip> system — have been used for over 2,000 years to strengthen planetary energies, protect against <TermTip id="malefic">malefic</TermTip> influences, and bring prosperity, health, and clarity.
+          </p>
+        </div>
+
+        {/* Part AI — honest cross-reference to the precise, full-chart Gemstones tool. */}
+        <div data-testid="rashi-ratna-crossref" className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-5 my-6">
+          <p className="text-sm text-[#6E5AA6] leading-relaxed">
+            <strong>This is a general, Moon-sign-based starting point.</strong> It gives one stone per Rashi from the ruling planet alone — a quick, popular reference. For the <strong>precise recommendation based on your full birth chart</strong> — your Ascendant (Lagna), functional benefics, and which planets are actually weak or strong in your chart — use the{' '}
+            <Link to="/gemstones" className="underline font-semibold hover:text-[#6E5AA6]">Gemstone Recommendation tool</Link>. The two can suggest different stones: this page reads only your Moon sign, while the full-chart method is more tailored, so if they differ, the full-chart result is the more personalised one.
           </p>
         </div>
 
@@ -185,6 +203,7 @@ export default function RashiRatnaPage() {
           <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related Tools</p>
           <div className="grid grid-cols-2 gap-2">
             {[
+              { text: 'Gemstone Recommendation (full chart)', href: '/gemstones' },
               { text: 'Western Birthstones', href: '/birthstone' },
               { text: 'Vedic Zodiac (Rashi)', href: '/vedic-zodiac' },
               { text: 'Moon Sign Calculator', href: '/moon-sign' },
@@ -199,7 +218,22 @@ export default function RashiRatnaPage() {
         </div>
       </div>
 
-      <Footer />
+      <footer className="site-footer">
+        <div className="footer-main">
+          <div>
+            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+            <p className="subtle">Rashi Ratna — the Indian Vedic birthstone for your zodiac sign and its ruling planet.</p>
+          </div>
+          <nav className="footer-nav" aria-label="Footer navigation">
+            <Link to="/vedic-astrology">Vedic Astrology</Link>
+            <Link to="/gemstones">Gemstone Recommendation</Link>
+            <Link to="/kundali">Kundali</Link>
+            <Link to="/moon-sign">Moon Sign</Link>
+            <Link to="/privacy">Privacy</Link>
+          </nav>
+        </div>
+        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
+      </footer>
     </div>
   );
 }

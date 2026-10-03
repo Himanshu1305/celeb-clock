@@ -30,18 +30,18 @@ export default function WhatIsMyBiologicalAge() {
       <AnswerLayout>
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
+            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
             <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-indigo-600">FAQ</Link>
+            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
             <span className="mx-2">›</span>
             <span className="text-gray-600">What is biological age?</span>
           </nav>
 
           <h1 className="text-3xl font-black text-gray-900 mb-2">What Is Biological Age and How Is It Different From My Real Age?</h1>
-          <p className="text-indigo-500 italic text-sm mb-8">Know your time. Live it well.</p>
+          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
 
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Biological age measures how old your body actually is at a cellular and physiological level — as opposed to your chronological age (how many years since you were born). The two can differ by 10 years or more in either direction, depending on your lifestyle, stress levels, sleep quality, and diet.
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function WhatIsMyBiologicalAge() {
             <p className="text-lg font-bold text-gray-900 mb-2">Test My Biological Age</p>
             <p className="text-sm text-gray-500 mb-4">12-biomarker assessment · WHO-validated · Takes 3 minutes</p>
             <Link to="/biological-age"
-              className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Test My Biological Age →
             </Link>
           </div>
@@ -100,10 +100,10 @@ export default function WhatIsMyBiologicalAge() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-long-will-i-live" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ How long will I live?</Link>
-              <Link to="/answers/what-is-bmi" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ What is BMI and what does my number mean?</Link>
-              <Link to="/answers/how-to-live-longer" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ How to live longer: what science actually says</Link>
-              <Link to="/answers/how-does-stress-affect-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ How does stress affect life expectancy?</Link>
+              <Link to="/answers/how-long-will-i-live" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How long will I live?</Link>
+              <Link to="/answers/what-is-bmi" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is BMI and what does my number mean?</Link>
+              <Link to="/answers/how-to-live-longer" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How to live longer: what science actually says</Link>
+              <Link to="/answers/how-does-stress-affect-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How does stress affect life expectancy?</Link>
             </div>
           </div>
           <div className="mt-8 pt-6 border-t border-gray-100">
@@ -115,7 +115,7 @@ export default function WhatIsMyBiologicalAge() {
                 { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age' },
                 { path: '/answers/what-is-epigenetic-age', label: 'What Is Epigenetic Age?' },
               ].map((t) => (
-                <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-gray-700 hover:text-indigo-700 transition-colors">{t.label}</Link>
+                <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-gray-700 hover:text-[#6E5AA6] transition-colors">{t.label}</Link>
               ))}
             </div>
           </div>

@@ -26,7 +26,7 @@ export function ShareMyProfileButton({
         const ctx = canvas.getContext('2d');
         if (!ctx) return resolve(null);
         const g = ctx.createLinearGradient(0, 0, 1080, 1080);
-        g.addColorStop(0, '#4f46e5'); g.addColorStop(1, '#db2777');
+        g.addColorStop(0, '#0E2238'); g.addColorStop(1, '#C6A15B');
         ctx.fillStyle = g; ctx.fillRect(0, 0, 1080, 1080);
         ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
         ctx.font = 'bold 56px sans-serif';
@@ -72,7 +72,7 @@ export function ShareMyProfileButton({
       data-testid="share-profile-image"
       onClick={handleShare}
       disabled={busy}
-      className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors disabled:opacity-60 ${className}`}
+      className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold bg-[#0E2238] text-white hover:bg-[#0E2238] transition-colors disabled:opacity-60 ${className}`}
     >
       {busy ? 'Preparing…' : '🖼️ Share my profile as an image'}
     </button>

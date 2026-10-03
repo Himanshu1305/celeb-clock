@@ -31,6 +31,23 @@ const GEM: Record<string, Gem> = {
   Mercury: { gem: 'Emerald', hindi: 'Panna' }, Jupiter: { gem: 'Yellow Sapphire', hindi: 'Pukhraj' }, Venus: { gem: 'Diamond', hindi: 'Heera' },
   Saturn: { gem: 'Blue Sapphire', hindi: 'Neelam' }, Rahu: { gem: 'Hessonite', hindi: 'Gomed' }, Ketu: { gem: "Cat's Eye", hindi: 'Lehsunia' },
 };
+// Part AI — traditional wearing-ritual details per planet (metal / finger / day). These are
+// the standard classical associations (widely documented) — informational, not medical.
+export interface WearingRitual { metal: string; finger: string; day: string }
+export const WEARING_RITUAL: Record<string, WearingRitual> = {
+  Sun:     { metal: 'Gold or copper', finger: 'Ring finger', day: 'Sunday morning' },
+  Moon:    { metal: 'Silver',         finger: 'Little finger', day: 'Monday evening' },
+  Mars:    { metal: 'Gold or copper', finger: 'Ring finger', day: 'Tuesday morning' },
+  Mercury: { metal: 'Gold or silver', finger: 'Little finger', day: 'Wednesday morning' },
+  Jupiter: { metal: 'Gold',           finger: 'Index finger', day: 'Thursday morning' },
+  Venus:   { metal: 'Silver or white gold', finger: 'Middle or ring finger', day: 'Friday morning' },
+  Saturn:  { metal: 'Silver or panchdhatu', finger: 'Middle finger', day: 'Saturday evening' },
+  Rahu:    { metal: 'Silver',         finger: 'Middle finger', day: 'Saturday' },
+  Ketu:    { metal: 'Silver',         finger: 'Middle finger', day: 'Thursday' },
+};
+/** Traditional sizing rule of thumb. */
+export const SIZING_RULE = 'A common traditional guide is roughly 1 Ratti (about 0.18 g / ~0.91 carat) of stone per 10 kg of body weight — so ~7 Ratti for a 70 kg person. Treat it as a rough guide, not a strict rule, and consult a jeweller/astrologer for the exact stone.';
+
 const NATURAL_BENEFICS = new Set(['Jupiter', 'Venus', 'Mercury', 'Moon']);
 const POWERFUL = new Set(['Saturn', 'Rahu', 'Ketu']); // trial-first stones
 const KENDRA = new Set([4, 7, 10]);
@@ -98,7 +115,7 @@ export function buildGemstoneReport(chart: BirthChartResult): GemstoneReport {
   // otherwise the Lagna lord (the universal lifelong strengthener).
   let primary: GemSuggestion;
   if (yk) {
-    primary = mk(yk.planet, 'Yogakaraka', `${yk.planet} is your Yogakaraka — it rules both a Kendra and a Trikona (houses ${yk.houses.join(', ')}) for ${chart.lagna.sign} rising, making it the single most powerful planet to strengthen. Its stone is ${GEM[yk.planet].gem} (${GEM[yk.planet].hindi}).`);
+    primary = mk(yk.planet, 'Yogakaraka', `${yk.planet} is your Yogakaraka — it rules both a Kendra (an "angle" house — a position of power) and a Trikona (a "trine" house — a fortunate position), houses ${yk.houses.join(', ')} for ${chart.lagna.sign} rising, making it the single most powerful planet to strengthen. Its stone is ${GEM[yk.planet].gem} (${GEM[yk.planet].hindi}).`);
   } else {
     primary = mk(lagnaLord, 'Ascendant lord', `${lagnaLord} rules your Ascendant (${chart.lagna.sign}), your life-force planet. ${chart.lagna.sign} rising has no single Yogakaraka, so the Ascendant lord's stone, ${GEM[lagnaLord].gem} (${GEM[lagnaLord].hindi}), is the primary lifelong strengthener.`);
   }

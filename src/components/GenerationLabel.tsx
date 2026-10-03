@@ -14,7 +14,7 @@ interface GenerationInfo {
 }
 
 const GENERATION_EXTRAS: Record<string, { traits: string[]; color: string }> = {
-  'Gen Alpha':        { traits: ['Digital natives', 'Tech-fluent', 'Socially aware', 'AI-era kids'],            color: 'from-violet-500/20 to-fuchsia-500/20' },
+  'Gen Alpha':        { traits: ['Digital natives', 'Tech-fluent', 'Socially aware', 'AI-era kids'],            color: 'from-[#6E5AA6]/20 to-[#6E5AA6]/20' },
   'Gen Z':            { traits: ['Entrepreneurial', 'Diverse', 'Digitally savvy', 'Socially conscious'],         color: 'from-blue-500/20 to-cyan-500/20' },
   'Millennial':       { traits: ['Adaptable', 'Purpose-driven', 'Tech-comfortable', 'Experience-seeking'],       color: 'from-emerald-500/20 to-teal-500/20' },
   'Gen X':            { traits: ['Independent', 'Resourceful', 'Work-life balanced', 'Self-reliant'],            color: 'from-amber-500/20 to-orange-500/20' },

@@ -106,7 +106,7 @@ const fmt = (n: number) => n.toLocaleString('en-IN');
 const BIRTHSTONE_META: Record<number, { color: string; hex: string; flower: string; lore: string }> = {
   1:  { color: 'Deep Red',        hex: '#b91c1c', flower: 'Carnation & Snowdrop',
         lore: 'Garnet has been treasured for over 5,000 years. Ancient Egyptians used garnets as inlaid gemstones in pharaohs\' jewellery and buried them with their mummified dead for protection in the afterlife. The name comes from the Latin "granatum" (pomegranate seed) — early red garnets resembled the jewel-like seeds of the fruit. Medieval warriors wore garnets believing they lit the night and ensured a safe return home.' },
-  2:  { color: 'Violet Purple',   hex: '#7c3aed', flower: 'Violet & Primrose',
+  2:  { color: 'Violet Purple',   hex: '#6E5AA6', flower: 'Violet & Primrose',
         lore: 'Amethyst was once considered as precious as ruby and emerald — the ancient Greeks believed it prevented intoxication (amethystos means "not drunk"). Leonardo da Vinci wrote that amethyst could dissipate evil thoughts and quicken intelligence. Until the 18th century, only royalty could wear amethyst; the discovery of large deposits in Brazil made it widely available. It remains one of the most spiritually revered stones across virtually every culture.' },
   3:  { color: 'Pale Blue',       hex: '#0369a1', flower: 'Daffodil & Jonquil',
         lore: 'Aquamarine was once believed to be the treasure of mermaids — Roman sailors wore aquamarine amulets engraved with the god Neptune for protection at sea. Its name comes from the Latin "aqua marina" (sea water). Ancient seers used aquamarine as a fortune-telling medium, and it was thought to restore youth and happiness to married couples. The finest aquamarines come from Brazil\'s Minas Gerais state; the largest ever found, the "Dom Pedro," weighs 10,363 carats.' },
@@ -245,7 +245,7 @@ const GENERATION_CONTENT: Record<string, {
 
 const ExpiryPage = () => (
   <div className="min-h-screen bg-white flex flex-col">
-    <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm no-print">
+    <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm no-print">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Navigation />
         <AuthNav />
@@ -281,7 +281,7 @@ const ExpiryPage = () => (
 
 const LoadingScreen = () => (
   <div className="min-h-screen bg-white flex flex-col">
-    <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Navigation />
         <AuthNav />
@@ -732,7 +732,7 @@ const ReportView = () => {
       </Helmet>
 
       {/* ── Site nav ─────────────────────────────────────────────────────── */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm no-print">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm no-print">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
@@ -751,7 +751,7 @@ const ReportView = () => {
           <div className="flex items-center gap-2">
             {user && profile?.subscription_status === 'active' && (
               <span
-                className="px-2.5 py-1 text-xs rounded-full font-medium bg-indigo-50 text-indigo-700 border border-indigo-100"
+                className="px-2.5 py-1 text-xs rounded-full font-medium bg-[#6E5AA6]/10 text-[#6E5AA6] border border-[#6E5AA6]/30"
                 title="Report credits refresh 3 per month and carry forward, up to 9."
               >
                 {redeemLoading ? 'Applying credit…' : `Report credits: ${credits} of 9`}

@@ -36,7 +36,7 @@ const LifeExpectancyAustralia = () => {
       />
       <FAQSchema items={FAQ_ITEMS} />
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -49,8 +49,8 @@ const LifeExpectancyAustralia = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Australia's average life expectancy is approximately 83.2 years as of 2023 — one of the highest of any nation. Women average 85.2 years; men average 81.2 years. Australia has maintained this position for decades through universal healthcare, outdoor lifestyle culture, and strong public health investment.
             </p>
           </div>

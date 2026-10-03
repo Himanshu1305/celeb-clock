@@ -78,7 +78,7 @@ export function PaywallModal({
 
         <button
           onClick={handleUpgrade}
-          className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl hover:bg-indigo-700 transition-colors mb-3"
+          className="w-full bg-[#0E2238] text-white font-semibold py-3 rounded-xl hover:bg-[#0E2238] transition-colors mb-3"
         >
           {isInTrial ? 'Keep My Premium Access →' : 'Get Full Access →'}
         </button>

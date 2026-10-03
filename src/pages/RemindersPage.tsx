@@ -37,7 +37,7 @@ export default function RemindersPage() {
         ogType="website"
       />
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center mb-8"><Navigation /><AuthNav /></header>
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
 
         <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">Birthday Reminders</h1>
         <p className="text-muted-foreground mb-6">Save birthdays and we'll remind you before the big day.</p>
@@ -74,7 +74,7 @@ export default function RemindersPage() {
             </div>
           </div>
           <button data-testid="remind-add-btn" onClick={add} disabled={!canAdd}
-                  className="w-full py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50">
+                  className="w-full py-2.5 rounded-lg bg-[#0E2238] text-white font-semibold hover:bg-[#0E2238] disabled:opacity-50">
             Add reminder
           </button>
           {!user && <p className="text-xs text-muted-foreground">Sign in to sync reminders across devices — they're saved on this device for now.</p>}

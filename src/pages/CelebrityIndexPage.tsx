@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
+import { Navigation } from '@/components/Navigation';
+import { AuthNav } from '@/components/AuthNav';
 import { indianCelebrities } from '@/data/indianCelebrities';
 import { generateAllSlugs, HUB_SLUGS, getHubConfig } from '@/utils/celebrityUtils';
 
@@ -49,19 +51,23 @@ export function CelebrityIndexPage() {
       <JsonLd data={breadcrumbSchema} />
 
       <main data-testid="celebrity-index-page" className="min-h-screen bg-white">
+        <header className="flex items-center justify-between gap-3 flex-wrap px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
+          <Navigation />
+          <AuthNav />
+        </header>
         {/* ── BREADCRUMB ── */}
         <nav aria-label="Breadcrumb" className="max-w-5xl mx-auto px-4 pt-4">
           <ol className="flex items-center gap-2 text-sm text-gray-400 flex-wrap list-none p-0">
-            <li data-testid="breadcrumb-item"><Link to="/" className="hover:text-indigo-600">Home</Link></li>
+            <li data-testid="breadcrumb-item"><Link to="/" className="hover:text-[#6E5AA6]">Home</Link></li>
             <li aria-hidden="true">›</li>
             <li data-testid="breadcrumb-item" className="text-gray-700 font-medium" aria-current="page">Celebrity Profiles</li>
           </ol>
         </nav>
 
         {/* ── HERO ── */}
-        <section aria-labelledby="page-h1" className="bg-gradient-to-br from-indigo-50 to-indigo-50 border-b border-indigo-100 py-10 px-4 mt-4">
+        <section aria-labelledby="page-h1" className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border-b border-[#6E5AA6]/30 py-10 px-4 mt-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 rounded-full px-4 py-1.5 text-sm font-semibold mb-4">
+            <div className="inline-flex items-center gap-2 bg-[#6E5AA6]/10 text-[#6E5AA6] rounded-full px-4 py-1.5 text-sm font-semibold mb-4">
               ⭐ {indianCelebrities.length} Indian Celebrities
             </div>
             <h1 id="page-h1" className="text-3xl sm:text-4xl lg:text-5xl font-black gradient-text-primary leading-tight mb-3">
@@ -85,7 +91,7 @@ export function CelebrityIndexPage() {
                     key={hub}
                     to={`/celebrity/${hub}/`}
                     data-testid="category-hub-link"
-                    className="p-4 bg-white rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
+                    className="p-4 bg-white rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors"
                   >
                     <div className="font-bold text-sm text-gray-900">{cfg.label}</div>
                     <div className="text-xs text-gray-500">{cfg.label} celebrity profiles</div>
@@ -105,7 +111,7 @@ export function CelebrityIndexPage() {
                     key={f.slug}
                     to={`/celebrity/${f.slug}/`}
                     data-testid="featured-celebrity-link"
-                    className="p-4 bg-indigo-50 rounded-xl border border-indigo-200 hover:border-indigo-400 transition-colors text-center"
+                    className="p-4 bg-[#6E5AA6]/10 rounded-xl border border-[#6E5AA6]/30 hover:border-[#6E5AA6]/30 transition-colors text-center"
                   >
                     <div className="font-semibold text-sm text-gray-900">{f.name}</div>
                     <div className="text-xs text-gray-500">{f.category}</div>
@@ -126,7 +132,7 @@ export function CelebrityIndexPage() {
                   key={c.slug}
                   to={`/celebrity/${c.slug}/`}
                   data-testid="celebrity-index-link"
-                  className="text-sm text-gray-700 hover:text-indigo-700 hover:underline py-1 truncate"
+                  className="text-sm text-gray-700 hover:text-[#6E5AA6] hover:underline py-1 truncate"
                 >
                   {c.name}
                 </Link>

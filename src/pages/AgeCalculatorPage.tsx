@@ -38,12 +38,12 @@ function AgeCalcProfileBridge({ birthDate, onUseSaved }: { birthDate: Date | nul
   if (savedDob && !birthDate && !dismissed) {
     const [y, m, d] = savedDob.split('-').map(Number);
     return (
-      <div data-testid="agecalc-use-saved" className="max-w-4xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm">
-        <span className="text-indigo-900">★ Use your saved birth date — <strong>{savedDob}</strong>?</span>
+      <div data-testid="agecalc-use-saved" className="max-w-4xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 px-4 py-3 text-sm">
+        <span className="text-[#6E5AA6]">★ Use your saved birth date — <strong>{savedDob}</strong>?</span>
         <span className="flex gap-3">
           <button type="button" data-testid="agecalc-use-saved-btn" onClick={() => onUseSaved(new Date(y, m - 1, d))}
-                  className="text-indigo-700 underline hover:text-indigo-900">Use it</button>
-          <button type="button" onClick={() => setDismissed(true)} className="text-indigo-500 hover:text-indigo-700">No thanks</button>
+                  className="text-[#6E5AA6] underline hover:text-[#6E5AA6]">Use it</button>
+          <button type="button" onClick={() => setDismissed(true)} className="text-[#6E5AA6] hover:text-[#6E5AA6]">No thanks</button>
         </span>
       </div>
     );
@@ -53,10 +53,10 @@ function AgeCalcProfileBridge({ birthDate, onUseSaved }: { birthDate: Date | nul
   if (birthDate && !profile && !saved) {
     const iso = `${birthDate.getFullYear()}-${String(birthDate.getMonth() + 1).padStart(2, '0')}-${String(birthDate.getDate()).padStart(2, '0')}`;
     return (
-      <div data-testid="agecalc-save-offer" className="max-w-4xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm">
-        <span className="text-indigo-900">Save this birth date on this device so BornClock’s other tools (Kundali, Sade Sati…) can reuse it?</span>
+      <div data-testid="agecalc-save-offer" className="max-w-4xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 px-4 py-3 text-sm">
+        <span className="text-[#6E5AA6]">Save this birth date on this device so BornClock’s other tools (Kundali, Sade Sati…) can reuse it?</span>
         <button type="button" data-testid="agecalc-save-btn" onClick={() => { if (save({ dob: iso })) setSaved(true); }}
-                className="text-indigo-700 underline hover:text-indigo-900">Save my date</button>
+                className="text-[#6E5AA6] underline hover:text-[#6E5AA6]">Save my date</button>
       </div>
     );
   }
@@ -90,7 +90,7 @@ const AgeCalculatorPage = () => {
         { question: 'How accurate is the age calculation?', answer: 'It accounts for leap years and exact time elapsed, so the years/months/days figure matches how age is counted officially. The live seconds counter updates every second.' },
       ]} />
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>

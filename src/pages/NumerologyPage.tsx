@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { AuthNav } from '@/components/AuthNav';
 import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { TrustStrip } from '@/components/paj/TrustStrip';
 import { NumerologyLifePath } from '@/components/NumerologyLifePath';
+import '@/styles/part-aj.css';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
@@ -35,7 +36,7 @@ export default function NumerologyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="paj atlas" data-category="mystic">
       <SEO
         title="Numerology Calculator — Find Your Life Path Number | BornClock"
         description="Free numerology calculator using the Pythagorean method. Find your Life Path Number, explore all 12 numbers including Master Numbers 11, 22, 33 — with verified celebrity examples."
@@ -51,22 +52,23 @@ export default function NumerologyPage() {
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
+      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <Navigation />
+        <AuthNav />
+      </header>
+      <div className="breadcrumb">
+        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/mystic-corner" className="textlink">Mystic Corner</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Numerology</span></div>
+        <div className="edition"><span className="dot" />Pythagorean · Life Path</div>
+      </div>
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center mb-8">
-          <Navigation />
-          <AuthNav />
-        </header>
-
         {/* Hero */}
-        <div className="mb-10">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Numerology Calculator — Your Life Path Number
-          </h1>
+        <div style={{ marginBottom: 20 }}>
+          <span className="eyebrow">Numerology</span>
+          <h1 style={{ margin: '8px 0 10px' }}>Numerology Calculator — Your Life Path Number</h1>
           <PageTagline />
-          <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
-            Enter your date of birth to calculate your Life Path Number using the classical Pythagorean method — then explore what it means, which famous people share it, and how the system works.
-          </p>
+          <p className="lead">Enter your date of birth to calculate your Life Path Number using the classical Pythagorean method — then explore what it means, which famous people share it, and how the system works.</p>
         </div>
+        <TrustStrip claim="Calculated from your actual birth date with the Pythagorean method — not a generic daily horoscope." />
 
         {/* Calculator */}
         {!birthDate && (
@@ -231,7 +233,22 @@ export default function NumerologyPage() {
         Last reviewed: August 2026 · Sources verified by BornClock Editorial Team
       </p>
 
-      <Footer />
+      <footer className="site-footer">
+        <div className="footer-main">
+          <div>
+            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+            <p className="subtle">Numerology computed from your actual birth date — the Pythagorean Life Path method, every time.</p>
+          </div>
+          <nav className="footer-nav" aria-label="Footer navigation">
+            <Link to="/mystic-corner">Mystic Corner</Link>
+            <Link to="/name-numerology">Name Numerology</Link>
+            <Link to="/compatibility">Compatibility</Link>
+            <Link to="/zodiac">Zodiac</Link>
+            <Link to="/privacy">Privacy</Link>
+          </nav>
+        </div>
+        <div className="footer-bottom"><span>© 2026 BornClock · Calculated, not templated.</span></div>
+      </footer>
     </div>
   );
 }

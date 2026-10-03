@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
+import { SEO } from '@/components/SEO';
+import { JsonLd } from '@/components/JsonLd';
+import { TrustStrip } from '@/components/paj/TrustStrip';
+import '@/styles/part-aj.css';
 import PageTagline from '@/components/PageTagline';
 import { calculateAllNameNumbers, getLetterBreakdown, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 import { useReportPrice } from '@/hooks/useCurrency';
@@ -10,7 +13,7 @@ import { useReportPrice } from '@/hooks/useCurrency';
 type NumberType = 'expression' | 'soulUrge' | 'personality';
 
 const NUMBER_TYPE_INFO: Record<NumberType, { label: string; subtitle: string; color: string; bgColor: string; borderColor: string }> = {
-  expression: { label: 'Expression Number', subtitle: 'Calculated from all letters — who you are destined to be', color: 'text-indigo-700', bgColor: 'bg-indigo-50', borderColor: 'border-indigo-300' },
+  expression: { label: 'Expression Number', subtitle: 'Calculated from all letters — who you are destined to be', color: 'text-[#6E5AA6]', bgColor: 'bg-[#6E5AA6]/10', borderColor: 'border-[#6E5AA6]/30' },
   soulUrge: { label: 'Soul Urge Number', subtitle: "Calculated from vowels — what your heart truly desires", color: 'text-rose-700', bgColor: 'bg-rose-50', borderColor: 'border-rose-300' },
   personality: { label: 'Personality Number', subtitle: 'Calculated from consonants — how others see you', color: 'text-emerald-700', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-300' },
 };
@@ -53,33 +56,35 @@ export default function NameNumerologyPage() {
         keywords="name numerology calculator, numerology by name, expression number calculator, soul urge number, name number meaning, personality number"
         canonicalUrl="/name-numerology"
       />
-      <WebApplicationSchema
-        name="Name Numerology Calculator"
-        description="Free Pythagorean name numerology calculator — find your Expression Number, Soul Urge Number, and Personality Number with full meaning guides."
-        url="/name-numerology"
-      />
-      <FAQSchema items={faqItems} />
-
-      <div className="min-h-screen bg-white">
-        <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <Navigation />
-            <AuthNav />
-          </div>
+      <div className="paj atlas" data-category="mystic">
+        <JsonLd id="webapp" data={{
+          '@context': 'https://schema.org', '@type': 'WebApplication',
+          name: 'Name Numerology Calculator',
+          description: 'Free Pythagorean name numerology calculator — find your Expression Number, Soul Urge Number, and Personality Number with full meaning guides.',
+          url: 'https://bornclock.com/name-numerology/', applicationCategory: 'LifestyleApplication', operatingSystem: 'Web',
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+          provider: { '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com' },
+        }} />
+        <JsonLd id="faq" data={{
+          '@context': 'https://schema.org', '@type': 'FAQPage',
+          mainEntity: faqItems.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
+        }} />
+        <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+          <Navigation />
+          <AuthNav />
+        </header>
+        <div className="breadcrumb">
+          <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/mystic-corner" className="textlink">Mystic Corner</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Name Numerology</span></div>
+          <div className="edition"><span className="dot" />Pythagorean · Expression / Soul Urge / Personality</div>
         </div>
         <div className="max-w-2xl mx-auto px-4 py-10">
-
-          <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
-            <span>›</span>
-            <span className="text-gray-600">Name Numerology</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-1">Name Numerology Calculator</h1>
+          <span className="eyebrow">Name Numerology</span>
+          <h1 style={{ margin: '8px 0 10px' }}>Name Numerology Calculator</h1>
           <PageTagline />
+          <TrustStrip claim="Calculated from the letters of your actual name (Pythagorean values) — not a generic reading." />
 
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Every letter in your name carries a numerical vibration. Together, they reveal three distinct numbers: your Expression Number (who you're destined to be), your Soul Urge Number (what your heart truly wants), and your Personality Number (how others perceive you). Enter your full birth name below.
             </p>
           </div>
@@ -93,11 +98,11 @@ export default function NameNumerologyPage() {
                 onChange={e => setName(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') handleCalculate(); }}
                 placeholder="e.g. Ravi Shankar Kumar"
-                className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
               />
               <button
                 onClick={handleCalculate}
-                className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
+                className="bg-[#0E2238] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors"
               >
                 Calculate →
               </button>
@@ -168,22 +173,22 @@ export default function NameNumerologyPage() {
                 <p className="text-sm font-semibold text-gray-700 mb-3">Letter-by-letter breakdown</p>
                 <div className="flex flex-wrap gap-1.5">
                   {breakdown.map((item, i) => (
-                    <div key={i} className={`rounded-lg px-2 py-2 text-center min-w-[36px] ${item.isVowel ? 'bg-rose-50 border border-rose-200' : 'bg-indigo-50 border border-indigo-200'}`}>
-                      <div className={`text-xs font-black ${item.isVowel ? 'text-rose-700' : 'text-indigo-700'}`}>{item.letter}</div>
+                    <div key={i} className={`rounded-lg px-2 py-2 text-center min-w-[36px] ${item.isVowel ? 'bg-rose-50 border border-rose-200' : 'bg-[#6E5AA6]/10 border border-[#6E5AA6]/30'}`}>
+                      <div className={`text-xs font-black ${item.isVowel ? 'text-rose-700' : 'text-[#6E5AA6]'}`}>{item.letter}</div>
                       <div className="text-xs text-gray-500">{item.value}</div>
                     </div>
                   ))}
                 </div>
                 <div className="flex gap-4 mt-3 text-xs text-gray-500">
                   <span><span className="inline-block w-3 h-3 bg-rose-100 border border-rose-200 rounded mr-1"></span>Vowels (Soul Urge)</span>
-                  <span><span className="inline-block w-3 h-3 bg-indigo-100 border border-indigo-200 rounded mr-1"></span>Consonants (Personality)</span>
+                  <span><span className="inline-block w-3 h-3 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded mr-1"></span>Consonants (Personality)</span>
                 </div>
               </div>
 
-              <div className="bg-indigo-600 rounded-2xl p-6 text-center text-white">
+              <div className="bg-[#0E2238] rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">Get your complete Birthday Intelligence Report</p>
-                <p className="text-indigo-200 text-sm mb-4">Your name numerology + moon sign + tarot card + 12 more sections — personalised to your exact birthday.</p>
-                <Link to="/birthday-report" className="inline-block bg-white text-indigo-600 px-8 py-3 rounded-xl font-semibold hover:bg-indigo-50 transition-colors">
+                <p className="text-[#6E5AA6] text-sm mb-4">Your name numerology + moon sign + tarot card + 12 more sections — personalised to your exact birthday.</p>
+                <Link to="/birthday-report" className="inline-block bg-white text-[#6E5AA6] px-8 py-3 rounded-xl font-semibold hover:bg-[#6E5AA6]/10 transition-colors">
                   Generate My Report → {reportPriceLabel}
                 </Link>
               </div>
@@ -196,7 +201,7 @@ export default function NameNumerologyPage() {
               {Object.entries(NAME_NUMBER_MEANINGS).map(([num, m]) => (
                 <div key={num} className="border border-gray-200 rounded-xl p-4">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-black text-sm flex items-center justify-center">{num}</span>
+                    <span className="w-8 h-8 rounded-full bg-[#6E5AA6]/10 text-[#6E5AA6] font-black text-sm flex items-center justify-center">{num}</span>
                     <span className="font-bold text-gray-900">{m.title}</span>
                   </div>
                   <p className="text-sm text-gray-600 leading-relaxed">{m.expression.slice(0, 180)}...</p>
@@ -227,7 +232,7 @@ export default function NameNumerologyPage() {
                 { text: 'Biorhythm Calculator', href: '/biorhythm' },
               ].map(item => (
                 <Link key={item.href} to={item.href}
-                  className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">
+                  className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">
                   → {item.text}
                 </Link>
               ))}
@@ -235,6 +240,22 @@ export default function NameNumerologyPage() {
           </div>
 
         </div>
+        <footer className="site-footer">
+          <div className="footer-main">
+            <div>
+              <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+              <p className="subtle">Name numerology computed from your name's letters (Pythagorean) — Expression, Soul Urge and Personality numbers.</p>
+            </div>
+            <nav className="footer-nav" aria-label="Footer navigation">
+              <Link to="/mystic-corner">Mystic Corner</Link>
+              <Link to="/numerology">Numerology</Link>
+              <Link to="/compatibility">Compatibility</Link>
+              <Link to="/tarot-card-by-birthday">Tarot by Birthday</Link>
+              <Link to="/privacy">Privacy</Link>
+            </nav>
+          </div>
+          <div className="footer-bottom"><span>© 2026 BornClock · Calculated, not templated.</span></div>
+        </footer>
       </div>
     </>
   );

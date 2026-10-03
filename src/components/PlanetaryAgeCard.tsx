@@ -108,7 +108,7 @@ export const PlanetaryAgeCard = forwardRef<HTMLDivElement, PlanetaryAgeCardProps
               style={{
                 fontSize: '18px',
                 letterSpacing: '0.2em',
-                color: '#6366f1',
+                color: '#6E5AA6',
                 textTransform: 'uppercase',
                 marginBottom: '12px',
               }}
@@ -136,7 +136,7 @@ export const PlanetaryAgeCard = forwardRef<HTMLDivElement, PlanetaryAgeCardProps
           style={{
             height: '1px',
             background:
-              'linear-gradient(90deg, transparent, #6366f1, #8b5cf6, transparent)',
+              'linear-gradient(90deg, transparent, #6E5AA6, #6E5AA6, transparent)',
             marginBottom: '32px',
             position: 'relative',
             zIndex: 1,

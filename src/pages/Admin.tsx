@@ -691,7 +691,7 @@ export default function Admin() {
                     <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={6} />
                     <YAxis tick={{ fontSize: 10 }} allowDecimals={false} />
                     <Tooltip />
-                    <Line type="monotone" dataKey="count" stroke="#4F46E5" dot={false} strokeWidth={2} />
+                    <Line type="monotone" dataKey="count" stroke="#0E2238" dot={false} strokeWidth={2} />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -716,10 +716,10 @@ export default function Admin() {
               <StatCard label="Total Reports" value={metrics.reportsTotal} Icon={Gift} color="bg-pink-500" />
               <StatCard label="Paid Reports" value={metrics.reportsPaid} Icon={CheckCircle} color="bg-green-600"
                 sub={metrics.reportsTotal ? `${Math.round((metrics.reportsPaid / metrics.reportsTotal) * 100)}% paid` : undefined} />
-              <StatCard label="New (30d)" value={metrics.reports30d} Icon={Clock} color="bg-indigo-500" />
+              <StatCard label="New (30d)" value={metrics.reports30d} Icon={Clock} color="bg-[#0E2238]" />
               <StatCard label="Conversion (30d)"
                 value={metrics.conversion30d != null ? `${metrics.conversion30d}%` : '—'}
-                Icon={BarChart3} color="bg-purple-500"
+                Icon={BarChart3} color="bg-[#0E2238]"
                 sub={metrics.reportsPaid30d ? `${metrics.reportsPaid30d} paid of ${metrics.reports30d}` : undefined} />
             </div>
           </div>
@@ -749,7 +749,7 @@ export default function Admin() {
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                   <StatCard label="INR revenue" value={`₹${(metrics.invInrTotal ?? 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} Icon={BarChart3} color="bg-emerald-600"
                     sub={`${metrics.invInrCount ?? 0} invoice${metrics.invInrCount === 1 ? '' : 's'}`} />
-                  <StatCard label="USD revenue" value={`$${(metrics.invUsdTotal ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} Icon={BarChart3} color="bg-indigo-600"
+                  <StatCard label="USD revenue" value={`$${(metrics.invUsdTotal ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} Icon={BarChart3} color="bg-[#0E2238]"
                     sub={`${metrics.invUsdCount ?? 0} invoice${metrics.invUsdCount === 1 ? '' : 's'}`} />
                   <StatCard label="Export invoices" value={metrics.invExportCount ?? 0} Icon={FileText} color="bg-amber-600"
                     sub="GSTR-1 Table 6A" />
@@ -792,13 +792,13 @@ export default function Admin() {
                   : undefined}
               />
               <StatCard label="New This Week" value={stats?.trialUsers ?? 0} Icon={Clock} color="bg-green-500" />
-              <StatCard label="New Today" value={stats?.todayUsers ?? 0} Icon={UserCheck} color="bg-purple-500" />
+              <StatCard label="New Today" value={stats?.todayUsers ?? 0} Icon={UserCheck} color="bg-[#0E2238]" />
             </div>
           </div>
           <div>
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Feature Usage</p>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <StatCard label="Quizzes Completed" value={stats?.quizCount ?? 0} Icon={BarChart3} color="bg-indigo-500" />
+              <StatCard label="Quizzes Completed" value={stats?.quizCount ?? 0} Icon={BarChart3} color="bg-[#0E2238]" />
               <StatCard label="PDFs Generated"    value={stats?.pdfCount ?? 0}  Icon={Gift}     color="bg-pink-500" />
               <StatCard label="Family Members"     value={stats?.familyCount ?? 0} Icon={Users}  color="bg-teal-500" />
               <StatCard label="Celebrity Boosts"   value={stats?.boostCount ?? 0} Icon={Crown}   color="bg-orange-500" />
@@ -1135,7 +1135,7 @@ export default function Admin() {
           <Card>
             <CardContent className="p-6">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Current Week Variant</p>
-              <p className="text-3xl font-bold text-indigo-600">Week {currentWeek}</p>
+              <p className="text-3xl font-bold text-[#6E5AA6]">Week {currentWeek}</p>
               <p className="text-xs text-muted-foreground mt-1">Rotates 1 → 4 every 4 weeks</p>
             </CardContent>
           </Card>
@@ -1343,7 +1343,7 @@ export default function Admin() {
         <div className="flex flex-wrap gap-2">
           {(['all', 'low', 'consented', 'report', 'blog'] as const).map(f => (
             <button key={f} onClick={() => setFeedbackFilter(f)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${feedbackFilter === f ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-300'}`}>
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${feedbackFilter === f ? 'bg-[#0E2238] text-white border-[#6E5AA6]/30' : 'bg-white text-gray-600 border-gray-300'}`}>
               {f === 'low' ? 'Low-rating queue' : f === 'consented' ? 'Consented only' : f[0].toUpperCase() + f.slice(1)}
             </button>
           ))}
@@ -1409,7 +1409,7 @@ export default function Admin() {
         <aside className="hidden lg:flex flex-col w-64 bg-slate-900 text-white shrink-0">
           <div className="p-6 border-b border-slate-700">
             <div className="flex items-center gap-2 mb-2">
-              <Shield className="w-5 h-5 text-indigo-400" />
+              <Shield className="w-5 h-5 text-[#6E5AA6]" />
               <span className="font-bold text-lg">BornClock Admin</span>
             </div>
             <Link to="/" className="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition-colors">
@@ -1423,7 +1423,7 @@ export default function Admin() {
                 onClick={() => setSection(id)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   section === id
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-[#0E2238] text-white'
                     : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                 }`}
               >
@@ -1441,7 +1441,7 @@ export default function Admin() {
           {/* Mobile header + tabs */}
           <div className="lg:hidden bg-slate-900 text-white sticky top-0 z-40">
             <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-700">
-              <Shield className="w-5 h-5 text-indigo-400" />
+              <Shield className="w-5 h-5 text-[#6E5AA6]" />
               <span className="font-bold">BornClock Admin</span>
               <Link to="/" className="ml-auto text-xs text-slate-400 hover:text-white flex items-center gap-1">
                 <ArrowLeft className="w-3 h-3" /> Site
@@ -1454,7 +1454,7 @@ export default function Admin() {
                   onClick={() => setSection(id)}
                   className={`flex items-center gap-1.5 px-4 py-3 text-xs font-medium whitespace-nowrap border-b-2 transition-colors ${
                     section === id
-                      ? 'border-indigo-400 text-white'
+                      ? 'border-[#6E5AA6]/30 text-white'
                       : 'border-transparent text-slate-400 hover:text-white'
                   }`}
                 >

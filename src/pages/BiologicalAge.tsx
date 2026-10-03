@@ -72,7 +72,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
   const bmi: number | null = bmiSliderActive ? bmiSlider : calculatedBmi;
 
   let category = '';
-  let bmiColor = '#6366f1';
+  let bmiColor = '#6E5AA6';
   let bmiOptionId = '';
 
   if (bmi !== null) {
@@ -102,7 +102,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
         <button
           onClick={() => setUnit('metric')}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            unit === 'metric' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+            unit === 'metric' ? 'bg-[#0E2238] text-white' : 'text-gray-600 hover:bg-gray-100'
           }`}
         >
           Metric (kg / cm)
@@ -110,7 +110,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
         <button
           onClick={() => setUnit('imperial')}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            unit === 'imperial' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+            unit === 'imperial' ? 'bg-[#0E2238] text-white' : 'text-gray-600 hover:bg-gray-100'
           }`}
         >
           Imperial (lbs / ft)
@@ -128,7 +128,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   placeholder="70"
                   value={weightKg}
                   onChange={e => { setWeightKg(e.target.value); setBmiSliderActive(false); }}
-                  className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
                 />
                 <span className="absolute right-3 top-2.5 text-gray-400 text-sm">kg</span>
               </div>
@@ -141,7 +141,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   placeholder="170"
                   value={heightCm}
                   onChange={e => { setHeightCm(e.target.value); setBmiSliderActive(false); }}
-                  className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
                 />
                 <span className="absolute right-3 top-2.5 text-gray-400 text-sm">cm</span>
               </div>
@@ -158,7 +158,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   placeholder="154"
                   value={weightLbs}
                   onChange={e => { setWeightLbs(e.target.value); setBmiSliderActive(false); }}
-                  className="w-full border rounded-lg px-3 py-2 pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full border rounded-lg px-3 py-2 pr-12 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
                 />
                 <span className="absolute right-3 top-2.5 text-gray-400 text-sm">lbs</span>
               </div>
@@ -172,7 +172,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                     placeholder="5"
                     value={heightFt}
                     onChange={e => { setHeightFt(e.target.value); setBmiSliderActive(false); }}
-                    className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
                   />
                   <span className="absolute right-2 top-2.5 text-gray-400 text-sm">ft</span>
                 </div>
@@ -182,7 +182,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                     placeholder="8"
                     value={heightIn}
                     onChange={e => { setHeightIn(e.target.value); setBmiSliderActive(false); }}
-                    className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
                   />
                   <span className="absolute right-2 top-2.5 text-gray-400 text-sm">in</span>
                 </div>
@@ -203,12 +203,12 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
             step={0.1}
             value={bmiSlider}
             onChange={e => { setBmiSlider(parseFloat(e.target.value)); setBmiSliderActive(true); }}
-            className="flex-1 accent-indigo-600"
+            className="flex-1 accent-[#0E2238]"
           />
           <span className="text-sm font-bold text-gray-700 w-10 text-right">{bmiSlider.toFixed(1)}</span>
         </div>
         {bmiSliderActive && (
-          <p className="text-xs text-center text-indigo-600 mt-1">Using slider BMI value</p>
+          <p className="text-xs text-center text-[#6E5AA6] mt-1">Using slider BMI value</p>
         )}
       </div>
 
@@ -242,7 +242,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
           </p>
           <button
             onClick={() => onSelect(bmiOptionId, heightCmValue)}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors"
+            className="bg-[#0E2238] hover:bg-[#0E2238] text-white font-semibold px-8 py-3 rounded-xl transition-colors"
           >
             Use My BMI ({bmi}) — {category} →
           </button>
@@ -302,7 +302,7 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
               onClick={() => setGender(s)}
               className={`flex-1 py-2 rounded-lg text-sm font-medium capitalize transition-colors ${
                 gender === s
-                  ? 'bg-indigo-600 text-white'
+                  ? 'bg-[#0E2238] text-white'
                   : 'bg-white border text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -318,7 +318,7 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
             key={u}
             onClick={() => setUnit(u)}
             className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              unit === u ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+              unit === u ? 'bg-[#0E2238] text-white' : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
             {u}
@@ -338,7 +338,7 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
                 placeholder="85"
                 value={waistCm}
                 onChange={e => setWaistCm(e.target.value)}
-                className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
               />
               <span className="absolute right-3 top-2.5 text-gray-400 text-sm">cm</span>
             </div>
@@ -349,7 +349,7 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
                 placeholder="33.5"
                 value={waistInches}
                 onChange={e => setWaistInches(e.target.value)}
-                className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
               />
               <span className="absolute right-3 top-2.5 text-gray-400 text-sm">in</span>
             </div>
@@ -365,7 +365,7 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
               placeholder="170"
               value={heightForRatio}
               onChange={e => setHeightForRatio(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
             />
             <span className="absolute right-3 top-2.5 text-gray-400 text-sm">cm</span>
           </div>
@@ -437,7 +437,7 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
           )}
           <button
             onClick={() => onSelect(risk.optionId)}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors"
+            className="bg-[#0E2238] hover:bg-[#0E2238] text-white font-semibold px-8 py-3 rounded-xl transition-colors"
           >
             Use My Measurement ({waistCmNum.toFixed(0)} cm — {risk.label}) →
           </button>
@@ -467,7 +467,7 @@ const CATEGORY_CONFIG: Record<string, { emoji: string; label: string; pillClass:
   neurological: {
     emoji: '🧠',
     label: 'Neurological',
-    pillClass: 'bg-purple-100 text-purple-700 border border-purple-200',
+    pillClass: 'bg-[#6E5AA6]/10 text-[#6E5AA6] border border-[#6E5AA6]/30',
   },
   bodycomp: {
     emoji: '⚖️',
@@ -950,7 +950,7 @@ const BiologicalAge = () => {
         <script type="application/ld+json">{JSON.stringify(webAppSchema)}</script>
       </Helmet>
 
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm mb-8">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm mb-8">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
@@ -970,7 +970,7 @@ const BiologicalAge = () => {
               <PageTagline />
               <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
                 Chronological age counts years since birth. Biological age (
-                <span className="font-semibold text-indigo-600">epigenetic age</span> — how old your
+                <span className="font-semibold text-[#6E5AA6]">epigenetic age</span> — how old your
                 DNA methylation patterns suggest your cells are) measures something far more
                 important: how efficiently your cells, organs, and physiological systems are actually
                 functioning right now.
@@ -978,7 +978,7 @@ const BiologicalAge = () => {
             </div>
 
             {/* Concise answer block (AEO) */}
-            <div className="max-w-2xl mx-auto mb-6 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5 text-left">
+            <div className="max-w-2xl mx-auto mb-6 bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 text-left">
               <h2 className="text-lg font-bold text-gray-900 mb-2">What is my biological age?</h2>
               <p className="text-gray-700 leading-relaxed">
                 Your biological age estimates how old your body is functioning, versus your birthday
@@ -990,8 +990,8 @@ const BiologicalAge = () => {
             </div>
 
             {/* Research credibility box */}
-            <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-6 mb-6">
-              <h2 className="text-indigo-900 font-bold text-base mb-4">
+            <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-2xl p-6 mb-6">
+              <h2 className="text-[#6E5AA6] font-bold text-base mb-4">
                 📊 Peer-Reviewed Scientific Basis
               </h2>
               <div className="space-y-4">
@@ -1015,8 +1015,8 @@ const BiologicalAge = () => {
                   <div key={i} className="flex gap-3">
                     <span className="text-emerald-600 mt-0.5 flex-shrink-0">✓</span>
                     <div>
-                      <p className="text-indigo-800 text-sm leading-relaxed">{item.text}</p>
-                      <p className="text-indigo-600 text-xs mt-1 italic">[{item.source}]</p>
+                      <p className="text-[#6E5AA6] text-sm leading-relaxed">{item.text}</p>
+                      <p className="text-[#6E5AA6] text-xs mt-1 italic">[{item.source}]</p>
                     </div>
                   </div>
                 ))}
@@ -1044,7 +1044,7 @@ const BiologicalAge = () => {
                   'Subjective vitality (allostatic load)',
                 ].map(item => (
                   <div key={item} className="flex items-start gap-2">
-                    <span className="text-indigo-600 mt-0.5 flex-shrink-0 text-xs">●</span>
+                    <span className="text-[#6E5AA6] mt-0.5 flex-shrink-0 text-xs">●</span>
                     <span className="text-xs leading-snug">{item}</span>
                   </div>
                 ))}
@@ -1080,12 +1080,12 @@ const BiologicalAge = () => {
                 placeholder="e.g. 35"
                 value={chronoAge}
                 onChange={e => setChronoAge(e.target.value)}
-                className="w-full border rounded-xl px-4 py-3 text-xl text-center focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4"
+                className="w-full border rounded-xl px-4 py-3 text-xl text-center focus:outline-none focus:ring-2 focus:ring-[#0E2238] mb-4"
               />
               <button
                 disabled={!chronoAge || parseInt(chronoAge) < 18 || parseInt(chronoAge) > 120}
                 onClick={handleStart}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
+                className="w-full bg-[#0E2238] hover:bg-[#0E2238] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
               >
                 Begin My Biological Age Assessment
                 <ArrowRight className="w-4 h-4" />
@@ -1121,7 +1121,7 @@ const BiologicalAge = () => {
               </div>
               <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
                 <div
-                  className="h-2 bg-indigo-600 rounded-full transition-all duration-300"
+                  className="h-2 bg-[#0E2238] rounded-full transition-all duration-300"
                   style={{ width: `${((current + 1) / BIO_QUESTIONS.length) * 100}%` }}
                 />
               </div>
@@ -1152,7 +1152,7 @@ const BiologicalAge = () => {
 
               {/* Motivational context */}
               {q.motivationalContext && (
-                <div className="bg-indigo-50 border-l-4 border-indigo-500 px-3 py-2 text-sm text-indigo-800 mb-4 rounded-r-lg leading-relaxed">
+                <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 px-3 py-2 text-sm text-[#6E5AA6] mb-4 rounded-r-lg leading-relaxed">
                   💡 {q.motivationalContext}
                 </div>
               )}
@@ -1191,7 +1191,7 @@ const BiologicalAge = () => {
                       <button
                         key={opt.id}
                         onClick={() => handleAnswer(q.id, opt.id)}
-                        className="w-full text-left px-4 py-3 rounded-xl border border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all"
+                        className="w-full text-left px-4 py-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-all"
                       >
                         <span className="block font-medium text-sm text-gray-900">{opt.label}</span>
                         {opt.sublabel && (
@@ -1220,7 +1220,7 @@ const BiologicalAge = () => {
           <div className="max-w-3xl mx-auto pb-16 space-y-6">
 
             {/* ── SECTION A: INSPIRED ── */}
-            <div className="bg-gradient-to-b from-slate-900 to-indigo-950 text-white p-8 rounded-2xl">
+            <div className="bg-gradient-to-b from-slate-900 to-[#6E5AA6] text-white p-8 rounded-2xl">
               <div className="text-center">
                 <p className="text-slate-400 text-sm uppercase tracking-widest font-medium">
                   Your Biological Age Assessment
@@ -1456,18 +1456,18 @@ const BiologicalAge = () => {
               )}
 
               {/* Longevity CTA */}
-              <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl p-6 text-center mt-6">
+              <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-6 text-center mt-6">
                 <p className="text-white font-semibold text-base mb-1">
                   🔬 Want to see how these factors affect your longevity forecast?
                 </p>
-                <p className="text-indigo-200 text-sm mb-4">
+                <p className="text-[#6E5AA6] text-sm mb-4">
                   Your biological age results give important context to your life expectancy
                   calculation. Take the full BornClock longevity quiz to see your personalized
                   forecast.
                 </p>
                 <Link
                   to="/life-expectancy"
-                  className="inline-block bg-white text-indigo-700 font-semibold px-6 py-3 rounded-xl hover:bg-indigo-50 transition-colors"
+                  className="inline-block bg-white text-[#6E5AA6] font-semibold px-6 py-3 rounded-xl hover:bg-[#6E5AA6]/10 transition-colors"
                 >
                   Calculate My Life Expectancy →
                 </Link>
@@ -1549,7 +1549,7 @@ const BiologicalAge = () => {
               { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age' },
               { path: '/answers/what-is-my-biological-age', label: 'What Is My Biological Age?' },
             ].map((t) => (
-              <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-gray-700 hover:text-indigo-700 transition-colors">{t.label}</Link>
+              <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-gray-700 hover:text-[#6E5AA6] transition-colors">{t.label}</Link>
             ))}
           </div>
         </section>

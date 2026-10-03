@@ -44,7 +44,7 @@ export default function VedicZodiacSign() {
         ogImage="https://bornclock.com/og/zodiac.png"
       />
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -87,7 +87,7 @@ export default function VedicZodiacSign() {
             <span className="px-3 py-1.5 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
               {signInfo.element} Element
             </span>
-            <span className="px-3 py-1.5 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+            <span className="px-3 py-1.5 bg-[#6E5AA6]/10 text-[#6E5AA6] rounded-full text-sm font-medium">
               Ruled by {signInfo.ruling_planet}
             </span>
             <span className="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">

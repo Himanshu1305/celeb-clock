@@ -3,9 +3,12 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import DobCompatibility from '@/components/DobCompatibility';
 import { AuthNav } from '@/components/AuthNav';
-import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
+import { SEO } from '@/components/SEO';
+import { JsonLd } from '@/components/JsonLd';
 import { PageFAQ } from '@/components/PageFAQ';
 import PageTagline from '@/components/PageTagline';
+import { TrustStrip } from '@/components/paj/TrustStrip';
+import '@/styles/part-aj.css';
 import { getCompatibility, ZODIAC_SIGNS } from '@/data/compatibilityData';
 import { useReportPrice } from '@/hooks/useCurrency';
 import { SharePageBar } from '@/components/SharePageBar';
@@ -167,7 +170,7 @@ export default function CompatibilityPage() {
           canonicalUrl="/compatibility"
           noindex
         />
-        <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
             <Navigation />
             <AuthNav />
@@ -198,30 +201,36 @@ export default function CompatibilityPage() {
         keywords="zodiac compatibility, are aries and leo compatible, horoscope compatibility, birthday compatibility calculator, love compatibility zodiac"
         canonicalUrl={canonicalUrl}
       />
-      <WebApplicationSchema
-        name="Zodiac Compatibility Calculator"
-        description="Free zodiac compatibility calculator for all 144 sign combinations — love, friendship, and work compatibility across every pairing."
-        url="/compatibility"
-      />
-      <FAQSchema items={faqItems} />
+      {/* Part AM: in-body JSON-LD (NOT Helmet) so it reliably lands in the prerendered HTML —
+          verified via validator.schema.org. See src/components/JsonLd.tsx. */}
+      <JsonLd id="webapp" data={{
+        '@context': 'https://schema.org', '@type': 'WebApplication',
+        name: 'Zodiac Compatibility Calculator',
+        description: 'Free zodiac compatibility calculator for all 144 sign combinations — love, friendship, and work compatibility across every pairing.',
+        url: 'https://bornclock.com/compatibility/',
+        applicationCategory: 'LifestyleApplication', operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        provider: { '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com' },
+      }} />
+      <JsonLd id="faq" data={{
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: faqItems.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
+      }} />
 
-      <div className="min-h-screen bg-white">
-        <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <Navigation />
-            <AuthNav />
-          </div>
+      <div className="paj atlas" data-category="mystic">
+        <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+          <Navigation />
+          <AuthNav />
+        </header>
+        <div className="breadcrumb">
+          <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/mystic-corner" className="textlink">Mystic Corner</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Compatibility</span></div>
+          <div className="edition"><span className="dot" />Zodiac · Rashi · Life Path</div>
         </div>
         <div className="max-w-2xl mx-auto px-4 py-10">
-
-          <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
-            <span>›</span>
-            <span className="text-gray-600">Compatibility Calculator</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-1">Zodiac Compatibility Calculator <span className="text-lg font-semibold text-gray-500">(Western Zodiac)</span></h1>
+          <span className="eyebrow">Compatibility</span>
+          <h1 style={{ margin: '8px 0 10px' }}>Zodiac Compatibility Calculator <span style={{ fontSize: 18, color: 'var(--muted)' }}>(Western Zodiac)</span></h1>
           <PageTagline />
+          <TrustStrip claim="Calculated from both actual birth dates — zodiac, Rashi, Life Path and Nakshatra, not a generic pairing table." />
 
           {/* DOB-based 4-dimension compatibility (Task 15) — zodiac, rashi, life path, nakshatra. */}
           <DobCompatibility />
@@ -349,11 +358,11 @@ export default function CompatibilityPage() {
 
                 {/* Links to both zodiac hubs (Phase 3 requirement) */}
                 <div className="flex flex-wrap gap-2">
-                  <Link to={`/zodiac/${calcSigns.s1.toLowerCase()}`} className="text-sm text-indigo-600 hover:underline">Full {calcSigns.s1} guide →</Link>
+                  <Link to={`/zodiac/${calcSigns.s1.toLowerCase()}`} className="text-sm text-[#6E5AA6] hover:underline">Full {calcSigns.s1} guide →</Link>
                   <span className="text-gray-300">·</span>
-                  <Link to={`/zodiac/${calcSigns.s2.toLowerCase()}`} className="text-sm text-indigo-600 hover:underline">Full {calcSigns.s2} guide →</Link>
+                  <Link to={`/zodiac/${calcSigns.s2.toLowerCase()}`} className="text-sm text-[#6E5AA6] hover:underline">Full {calcSigns.s2} guide →</Link>
                   <span className="text-gray-300">·</span>
-                  <Link to="/compatibility" className="text-sm text-indigo-600 hover:underline">Check another pair →</Link>
+                  <Link to="/compatibility" className="text-sm text-[#6E5AA6] hover:underline">Check another pair →</Link>
                 </div>
               </div>
 
@@ -441,7 +450,7 @@ export default function CompatibilityPage() {
                         <Link
                           key={other}
                           to={`/compatibility/${[sign, other].map(s => s.toLowerCase()).sort().join('/')}`}
-                          className="text-xs text-indigo-600 hover:underline"
+                          className="text-xs text-[#6E5AA6] hover:underline"
                         >
                           {SIGN_EMOJIS[other]} {sign} & {other}
                         </Link>
@@ -498,7 +507,7 @@ export default function CompatibilityPage() {
                       <Link
                         key={`${a}-${b}`}
                         to={`/compatibility/${ca}/${cb}`}
-                        className="text-xs text-indigo-600 hover:underline py-0.5"
+                        className="text-xs text-[#6E5AA6] hover:underline py-0.5"
                       >
                         {a} & {b}
                       </Link>
@@ -523,7 +532,7 @@ export default function CompatibilityPage() {
                       // Link to the CANONICAL (alphabetical) pair URL, never the reverse order —
                       // the Worker 301s reverse pairs, and internal links must point at final targets.
                       <Link key={match} to={`/compatibility/${[sign, match].map(s => s.toLowerCase()).sort().join('/')}`}
-                        className="text-xs text-indigo-600 hover:underline">
+                        className="text-xs text-[#6E5AA6] hover:underline">
                         {SIGN_EMOJIS[match]} {match}
                       </Link>
                     ))}
@@ -590,6 +599,22 @@ export default function CompatibilityPage() {
           </p>
 
         </div>
+        <footer className="site-footer">
+          <div className="footer-main">
+            <div>
+              <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+              <p className="subtle">Compatibility computed from both real birth dates across four systems — not a generic pairing table.</p>
+            </div>
+            <nav className="footer-nav" aria-label="Footer navigation">
+              <Link to="/mystic-corner">Mystic Corner</Link>
+              <Link to="/numerology">Numerology</Link>
+              <Link to="/zodiac">Zodiac</Link>
+              <Link to="/chinese-zodiac">Chinese Zodiac</Link>
+              <Link to="/privacy">Privacy</Link>
+            </nav>
+          </div>
+          <div className="footer-bottom"><span>© 2026 BornClock · Calculated, not templated.</span></div>
+        </footer>
       </div>
     </>
   );

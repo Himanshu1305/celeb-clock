@@ -37,16 +37,16 @@ const categoryLabels: Record<BlogPost['category'], string> = {
 
 const categoryColors: Record<BlogPost['category'], string> = {
   'age-calculator': 'bg-blue-500/10 text-blue-600 border-blue-500/30',
-  'celebrity': 'bg-purple-500/10 text-purple-600 border-purple-500/30',
-  'zodiac': 'bg-indigo-500/10 text-indigo-600 border-indigo-500/30',
+  'celebrity': 'bg-[#6E5AA6]/10 text-[#6E5AA6] border-[#6E5AA6]/30',
+  'zodiac': 'bg-[#6E5AA6]/10 text-[#6E5AA6] border-[#6E5AA6]/30',
   'birthstone': 'bg-pink-500/10 text-pink-600 border-pink-500/30',
   'life-expectancy': 'bg-green-500/10 text-green-600 border-green-500/30',
   'lifestyle': 'bg-orange-500/10 text-orange-600 border-orange-500/30',
   'longevity-science': 'bg-green-500/10 text-green-600 border-green-500/30',
   'country-insights': 'bg-cyan-500/10 text-cyan-600 border-cyan-500/30',
-  'astrology': 'bg-indigo-500/10 text-indigo-600 border-indigo-500/30',
+  'astrology': 'bg-[#6E5AA6]/10 text-[#6E5AA6] border-[#6E5AA6]/30',
   'nutrition': 'bg-orange-500/10 text-orange-600 border-orange-500/30',
-  'numerology': 'bg-purple-500/10 text-purple-600 border-purple-500/30',
+  'numerology': 'bg-[#6E5AA6]/10 text-[#6E5AA6] border-[#6E5AA6]/30',
   'health-science': 'bg-teal-500/10 text-teal-600 border-teal-500/30',
   'birthday': 'bg-pink-500/10 text-pink-600 border-pink-500/30'
 };
@@ -78,7 +78,7 @@ const BlogPostPage = () => {
     return (
       <div className="min-h-screen bg-gradient-cosmic">
         <div className="container mx-auto px-4 py-8">
-          <header className="flex justify-between items-center mb-12">
+          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
             <Navigation />
             <AuthNav />
           </header>
@@ -137,7 +137,7 @@ const BlogPostPage = () => {
       )}
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>

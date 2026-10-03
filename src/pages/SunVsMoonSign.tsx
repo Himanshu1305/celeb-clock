@@ -6,6 +6,7 @@ import { SEO, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
 import { AuthorBio } from '@/components/AuthorBio';
+import { TermTip } from '@/components/vedic/TermTip';
 
 const FAQ_ITEMS = [
   { question: 'Can your sun and moon sign be the same?', answer: 'Yes — this happens when the Moon is passing through the same sign as the Sun on your birthday, which occurs roughly once a month. People with matching sun and moon signs are said to have a particularly unified personality — their outward and inner selves are in close alignment.' },
@@ -15,6 +16,8 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
+  { path: '/kundali', label: 'Free Kundli (find your Rising sign / Lagna)' },
+  { path: '/vedic-astrology', label: 'Vedic Astrology' },
   { path: '/moon-sign', label: 'Moon Sign Calculator' },
   { path: '/zodiac', label: 'Zodiac Signs' },
   { path: '/compatibility', label: 'Compatibility' },
@@ -32,7 +35,7 @@ const SunVsMoonSign = () => {
       />
       <FAQSchema items={FAQ_ITEMS} />
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -45,8 +48,8 @@ const SunVsMoonSign = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Your sun sign is determined by where the Sun was on your birthday — it changes roughly every 30 days and represents your core identity and the self you show the world. Your moon sign is determined by where the Moon was at your birth — it changes every 2.5 days and represents your emotional inner world, your instincts, and the self you are when nobody's watching. If you've ever read your sun sign and thought "that's not quite me," your moon sign is usually the explanation.
             </p>
           </div>
@@ -56,13 +59,13 @@ const SunVsMoonSign = () => {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Why most people only know their sun sign</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Sun signs became the public face of astrology largely because of newspaper horoscope columns, which began in the 1930s. Horoscopes needed to apply to one-twelfth of all readers at once — so they used the sun sign, which only requires knowing your birth month. Simple, scalable, and ultimately reductive.</p>
-            <p className="text-muted-foreground leading-relaxed mb-4">Professional astrologers consider the full birth chart — moon sign, rising sign, and planetary placements — to be far more descriptive of an individual than the sun sign alone. The sun sign is the broad stroke. The moon sign is where the portrait gets specific.</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">Professional astrologers consider the full birth chart — moon sign, <TermTip id="risingSign">rising sign</TermTip>, and planetary placements — to be far more descriptive of an individual than the sun sign alone. The sun sign is the broad stroke. The moon sign is where the portrait gets specific.</p>
             <p className="text-muted-foreground leading-relaxed">If you've never felt quite captured by your sun sign description, you're not unusual. Many people — particularly those who are introverted or emotionally self-aware — find their moon sign describes their inner experience far more accurately than the outward-facing sun sign personality.</p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">How each is calculated</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">Sun sign</strong> — The Sun takes approximately 365 days to travel through all 12 signs, spending roughly 30 days in each. Your sun sign is determined simply by your birth date. The boundaries are fixed and consistent year to year, with minor variation of a day or two for cusp births.</p>
+            <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">Sun sign</strong> — The Sun takes approximately 365 days to travel through all 12 signs, spending roughly 30 days in each. Your sun sign is determined simply by your birth date. The boundaries are fixed and consistent year to year, with minor variation of a day or two for <TermTip id="cusp">cusp</TermTip> births.</p>
             <p className="text-muted-foreground leading-relaxed"><strong className="text-foreground">Moon sign</strong> — The Moon is much faster. It travels through all 12 signs in approximately 27.3 days, spending only about 2.5 days in each. Two people born in the same week can have different moon signs — and knowing your birth date alone isn't always enough if the Moon was changing signs on your birth day. For most dates, though, the birth date is sufficient.</p>
           </section>
 
@@ -70,6 +73,13 @@ const SunVsMoonSign = () => {
             <h2 className="text-2xl font-bold text-foreground mb-4">What each sign governs</h2>
             <p className="text-muted-foreground leading-relaxed mb-4"><strong className="text-foreground">Your sun sign governs:</strong> core identity and sense of self, ego and conscious personality, how you present yourself to the world, your relationship with ambition and recognition, long-term direction and life goals.</p>
             <p className="text-muted-foreground leading-relaxed"><strong className="text-foreground">Your moon sign governs:</strong> emotional responses and instincts, what makes you feel safe and nurtured, subconscious patterns and habitual reactions, how you behave in close relationships, what you need to feel emotionally secure, your 2am self — the one that surfaces when the performance of day is over.</p>
+          </section>
+
+          <section data-testid="svm-big-three">
+            <h2 className="text-2xl font-bold text-foreground mb-4">The third piece: your rising sign (the "Big Three")</h2>
+            <p className="text-muted-foreground leading-relaxed mb-4">Sun and Moon are two of three. The third is your <TermTip id="risingSign">rising sign</TermTip> (also called the Ascendant, or <TermTip id="lagna">Lagna</TermTip> in Vedic astrology) — <strong className="text-foreground">the mask you meet the world with, and the frame the rest of your chart is read from.</strong> Together, Sun + Moon + Rising are what astrologers call your "Big Three."</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">The reason most sun-vs-moon explainers stop at two is that the rising sign needs your <em>exact birth time and place</em>, not just the date — it changes roughly every two hours. Once you have it, you can see all three at once.</p>
+            <p className="text-muted-foreground leading-relaxed">BornClock computes your real rising sign (Lagna) from your birth details on the Kundli tool. See it alongside your Moon sign and Nakshatra: <Link to="/kundali" className="text-primary hover:underline font-medium">generate your free Kundli (birth chart)</Link>, or explore the full <Link to="/vedic-astrology" className="text-primary hover:underline font-medium">Vedic Astrology</Link> suite.</p>
           </section>
 
           <section>

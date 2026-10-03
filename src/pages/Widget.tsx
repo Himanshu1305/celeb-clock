@@ -11,7 +11,7 @@ import { SEO } from '@/components/SEO';
 
 const Cell = ({ value, label }: { value: number; label: string }) => (
   <div className="rounded-lg bg-gray-50 border border-gray-100 py-2 px-1 text-center">
-    <div className="text-lg md:text-xl font-bold text-indigo-600 tabular-nums leading-none">{value.toLocaleString()}</div>
+    <div className="text-lg md:text-xl font-bold text-[#6E5AA6] tabular-nums leading-none">{value.toLocaleString()}</div>
     <div className="text-[10px] text-gray-500 mt-1">{label}</div>
   </div>
 );
@@ -46,7 +46,7 @@ const WidgetInner = () => {
             href="https://bornclock.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-gray-400 hover:text-indigo-600 transition-colors"
+            className="text-xs text-gray-400 hover:text-[#6E5AA6] transition-colors"
           >
             Powered by BornClock
           </a>

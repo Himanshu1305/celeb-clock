@@ -113,7 +113,7 @@ function FamilyDashboardInner() {
             Track longevity forecasts for your whole family — coming soon.
           </p>
           <p className="text-xs text-gray-400 mb-4">Available in the next update.</p>
-          <a href="/" className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors">
+          <a href="/" className="inline-block bg-[#0E2238] text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-[#0E2238] transition-colors">
             ← Back to BornClock
           </a>
         </div>
@@ -259,7 +259,7 @@ function FamilyDashboardInner() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full mx-auto mb-3" />
+          <div className="animate-spin w-8 h-8 border-4 border-[#6E5AA6]/30 border-t-transparent rounded-full mx-auto mb-3" />
           <p className="text-gray-500 text-sm">Loading your dashboard...</p>
         </div>
       </div>
@@ -271,7 +271,7 @@ function FamilyDashboardInner() {
       <div className="min-h-screen bg-background">
         <SEO title="Family Longevity Dashboard | BornClock Premium" description="Compare longevity forecasts for your family." noindex={true} />
         <div className="container mx-auto px-4 py-8">
-          <header className="flex justify-between items-center mb-8">
+          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
             <Navigation />
             <AuthNav />
           </header>
@@ -295,7 +295,7 @@ function FamilyDashboardInner() {
           <div className="text-4xl mb-4">👨‍👩‍👧</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Family Dashboard</h1>
           <p className="text-gray-500 mb-6">Track longevity forecasts for up to 10 family members. Compare results side by side. Start important conversations about health.</p>
-          <Link to="/upgrade" className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+          <Link to="/upgrade" className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
             Unlock Family Dashboard →
           </Link>
           <p className="text-xs text-gray-400 mt-3">Included in all premium plans from ₹299/month</p>
@@ -313,7 +313,7 @@ function FamilyDashboardInner() {
       />
 
       <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -373,7 +373,7 @@ function FamilyDashboardInner() {
                     <CardContent className="p-5">
                       <div className="text-lg font-bold text-foreground mb-0.5">{m.name}</div>
                       {m.relationship && (
-                        <p className="text-xs text-indigo-500 capitalize font-medium mb-1">
+                        <p className="text-xs text-[#6E5AA6] capitalize font-medium mb-1">
                           {m.relationship}
                         </p>
                       )}
@@ -389,7 +389,7 @@ function FamilyDashboardInner() {
                       {/* TEMPORARILY DISABLED
                       <Link
                         to={buildLifeExpectancyUrl(m)}
-                        className="text-xs text-indigo-600 hover:underline flex items-center gap-1"
+                        className="text-xs text-[#6E5AA6] hover:underline flex items-center gap-1"
                       >
                         Full quiz for {m.name}'s personalized forecast <ArrowRight className="w-3 h-3" />
                       </Link>

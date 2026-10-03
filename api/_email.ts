@@ -507,6 +507,21 @@ ${divider()}
 
 // ── Router + Resend send ───────────────────────────────────────────────────────
 
+/**
+ * Part AO: on the staging environment, suppress outbound email to everyone except the
+ * configured test allowlist, so automated testing never emails real users. The flag
+ * (SUPPRESS_OUTBOUND_EMAIL) is set ONLY in [env.staging].vars — production has no [vars]
+ * block, so this returns false in production and behaviour there is unchanged.
+ */
+export function isOutboundEmailSuppressed(to: string): boolean {
+  if (process.env.SUPPRESS_OUTBOUND_EMAIL !== 'true') return false;
+  const allow = (process.env.EMAIL_ALLOWLIST || '')
+    .split(',')
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+  return !allow.includes((to || '').trim().toLowerCase());
+}
+
 export async function sendEmailDirect(payload: Record<string, unknown>): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
@@ -600,6 +615,11 @@ export async function sendEmailDirect(payload: Record<string, unknown>): Promise
   }
 
   if (!emailContent) return false;
+
+  if (isOutboundEmailSuppressed(sendTo)) {
+    console.log(`[sendEmailDirect] suppressed on staging (not in allowlist): ${sendTo} / ${type}`);
+    return true; // report success so caller flows (e.g. signup) are not broken on staging
+  }
 
   try {
     const response = await fetch('https://api.resend.com/emails', {

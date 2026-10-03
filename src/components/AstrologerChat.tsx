@@ -71,15 +71,15 @@ export function AstrologerChat(
 
   return (
     <div data-testid="astrologer-chat" className="rounded-2xl border bg-white dark:bg-card shadow-sm overflow-hidden">
-      <div className="p-4 border-b bg-gradient-to-r from-indigo-50 to-violet-50 dark:from-indigo-950/20 dark:to-violet-950/20">
+      <div className="p-4 border-b bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] dark:from-[#6E5AA6]/20 dark:to-[#6E5AA6]/20">
         <div className="flex items-center gap-2 mb-1">
-          <Bot className="w-5 h-5 text-indigo-600" />
+          <Bot className="w-5 h-5 text-[#6E5AA6]" />
           <h3 className="font-semibold text-foreground">Your Personal Astrologer</h3>
         </div>
         <p className="text-sm text-muted-foreground">
           Ask about your life — grounded in your own birth chart ({profile.city.name}). Private to you.
         </p>
-        <span data-testid="astrologer-remaining" className="inline-block text-xs text-indigo-600 mt-1 bg-indigo-100 px-2 py-0.5 rounded-full">
+        <span data-testid="astrologer-remaining" className="inline-block text-xs text-[#6E5AA6] mt-1 bg-[#6E5AA6]/10 px-2 py-0.5 rounded-full">
           {isAdmin ? '∞ Unlimited (admin / testing mode)' : `${remaining} question${remaining === 1 ? '' : 's'} left today`}
         </span>
       </div>
@@ -91,7 +91,7 @@ export function AstrologerChat(
             <div className="flex flex-wrap gap-2 justify-center">
               {SUGGESTIONS.map(s => (
                 <button key={s} data-testid="astrologer-suggestion" onClick={() => send(s)}
-                        className="text-xs px-3 py-1.5 rounded-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200">
+                        className="text-xs px-3 py-1.5 rounded-full bg-[#6E5AA6]/10 text-[#6E5AA6] hover:bg-[#6E5AA6]/10">
                   {s}
                 </button>
               ))}
@@ -104,7 +104,7 @@ export function AstrologerChat(
             <div data-testid={m.role === 'user' ? 'astrologer-msg-user' : 'astrologer-msg-bot'}
                  data-crisis={m.role === 'astrologer' && m.kind === 'crisis' ? 'true' : undefined}
                  className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
-                   m.role === 'user' ? 'bg-indigo-600 text-white rounded-br-sm'
+                   m.role === 'user' ? 'bg-[#0E2238] text-white rounded-br-sm'
                    : m.kind === 'crisis' ? 'bg-amber-50 border border-amber-200 text-amber-900 rounded-bl-sm'
                    : 'bg-gray-100 dark:bg-muted text-foreground rounded-bl-sm'}`}>
               {m.role === 'astrologer'
@@ -118,9 +118,9 @@ export function AstrologerChat(
           <div className="flex justify-start">
             <div data-testid="astrologer-loading" className="bg-gray-100 dark:bg-muted px-4 py-3 rounded-2xl rounded-bl-sm">
               <span className="flex gap-1">
-                <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" />
-                <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <span className="w-1.5 h-1.5 bg-[#0E2238] rounded-full animate-bounce" />
+                <span className="w-1.5 h-1.5 bg-[#0E2238] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-1.5 h-1.5 bg-[#0E2238] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
               </span>
             </div>
           </div>
@@ -135,7 +135,7 @@ export function AstrologerChat(
           <Input data-testid="astrologer-input" value={input} onChange={e => setInput(e.target.value)}
                  placeholder="Ask your astrologer anything…" disabled={loading} className="flex-1 text-sm" />
           <Button data-testid="astrologer-send" type="submit" size="icon" disabled={loading || !input.trim()}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                  className="bg-[#0E2238] hover:bg-[#0E2238] text-white">
             <Send className="w-4 h-4" />
           </Button>
         </form>

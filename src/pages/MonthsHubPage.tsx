@@ -31,7 +31,7 @@ export default function MonthsHubPage() {
         canonicalUrl="/born-in"
       />
 
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
@@ -40,7 +40,7 @@ export default function MonthsHubPage() {
 
       <div className="max-w-3xl mx-auto px-4 py-10">
         <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-          <Link to="/" className="hover:text-indigo-600">Home</Link>
+          <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
           <span>›</span>
           <span className="text-gray-600">Born in Each Month</span>
         </nav>
@@ -63,10 +63,10 @@ export default function MonthsHubPage() {
             const signs = m.zodiacSpans.map(z => z.sign).join(' & ');
             return (
               <Link key={m.slug} to={`/born-in-${m.slug}`}
-                className="block rounded-xl border border-gray-200 p-5 hover:border-indigo-300 hover:bg-indigo-50/40 transition-colors">
+                className="block rounded-xl border border-gray-200 p-5 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/40 transition-colors">
                 <p className="text-lg font-bold text-gray-900 mb-1">{m.month}</p>
                 <p className="text-sm text-gray-600">💎 {stone?.primaryStone ?? '—'} · ♈ {signs}</p>
-                <p className="text-xs text-indigo-600 mt-2">Explore {m.month} →</p>
+                <p className="text-xs text-[#6E5AA6] mt-2">Explore {m.month} →</p>
               </Link>
             );
           })}
@@ -78,10 +78,10 @@ export default function MonthsHubPage() {
           <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {meshPosts.map(p => (
-              <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ {p.title}</Link>
+              <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ {p.title}</Link>
             ))}
-            <Link to="/born-on" className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ Browse by exact birth date</Link>
-            <Link to="/birthstone" className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ Birthstone finder</Link>
+            <Link to="/born-on" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Browse by exact birth date</Link>
+            <Link to="/birthstone" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Birthstone finder</Link>
           </div>
         </div>
       </div>

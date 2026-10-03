@@ -64,7 +64,7 @@ export const BIRTHSTONE_DATA: BirthstoneData[] = [
     primaryStone: 'Amethyst',
     alternateStones: [],
     color: 'Purple to Violet',
-    hexColor: '#9966CC',
+    hexColor: '#6E5AA6',
     hardness: '7 on Mohs scale',
     chemicalFormula: 'SiO₂ with iron impurities',
     crystalSystem: 'Trigonal',

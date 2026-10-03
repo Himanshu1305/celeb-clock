@@ -308,7 +308,7 @@ export function VedicAstrologyArticle() {
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
-          <ul className="list-disc pl-6 text-indigo-700 mb-10 space-y-1">
+          <ul className="list-disc pl-6 text-[#6E5AA6] mb-10 space-y-1">
             <li><a href="/articles/moon-sign-by-date-of-birth" className="hover:underline">Moon Sign by Date of Birth — Find Your Vedic Rashi</a></li>
             <li><a href="/articles/nakshatra-by-date-of-birth" className="hover:underline">Nakshatra by Date of Birth — Your Lunar Mansion</a></li>
           </ul>

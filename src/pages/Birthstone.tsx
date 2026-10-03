@@ -59,14 +59,14 @@ export default function Birthstone() {
       </Helmet>
 
       <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
 
         {/* Breadcrumb */}
         <nav className="text-xs text-gray-400 mb-6 flex items-center gap-1.5 flex-wrap">
-          <Link to="/" className="hover:text-indigo-600 transition-colors">Home</Link>
+          <Link to="/" className="hover:text-[#6E5AA6] transition-colors">Home</Link>
           <span>/</span>
           <span className="text-gray-600 font-medium">Birthstone Guide</span>
         </nav>
@@ -87,13 +87,13 @@ export default function Birthstone() {
               onClick={() => setActiveTab('western')}
               className={`flex flex-col items-start px-5 py-3 rounded-xl border-2 text-left transition-all min-w-[160px] ${
                 activeTab === 'western'
-                  ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-200'
-                  : 'bg-white border-gray-200 text-gray-600 hover:border-indigo-300 hover:bg-indigo-50'
+                  ? 'bg-[#0E2238] border-[#6E5AA6]/30 text-white shadow-lg shadow-[#6E5AA6]/20'
+                  : 'bg-white border-gray-200 text-gray-600 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10'
               }`}
             >
               <span className="text-xl mb-0.5">🌍</span>
               <span className="font-bold text-sm">Western</span>
-              <span className={`text-xs leading-tight ${activeTab === 'western' ? 'text-indigo-200' : 'text-gray-400'}`}>By birth month</span>
+              <span className={`text-xs leading-tight ${activeTab === 'western' ? 'text-[#6E5AA6]' : 'text-gray-400'}`}>By birth month</span>
             </button>
             <button
               onClick={() => setActiveTab('indian')}

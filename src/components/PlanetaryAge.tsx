@@ -106,7 +106,7 @@ const PLANET_UI: PlanetUIData[] = [
   {
     name: 'Neptune',
     emoji: '♆',
-    accentColor: '#818cf8',
+    accentColor: '#6E5AA6',
     gravityRatio: 1.14,
     tempDisplay: '-201°C 🥶',
     moons: 16,
@@ -333,7 +333,7 @@ const SVG_PLANETS = [
   { name: 'Jupiter', color: '#fb923c', orbitR: 118, planetR: 9, dur: '15s' },
   { name: 'Saturn',  color: '#fbbf24', orbitR: 142, planetR: 7, dur: '25s' },
   { name: 'Uranus',  color: '#7dd3fc', orbitR: 163, planetR: 6, dur: '40s' },
-  { name: 'Neptune', color: '#6366f1', orbitR: 185, planetR: 6, dur: '60s' },
+  { name: 'Neptune', color: '#6E5AA6', orbitR: 185, planetR: 6, dur: '60s' },
 ];
 
 // ── Main component ────────────────────────────────────────────────────────────
@@ -479,7 +479,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
         ))}
         <div className="relative z-10">
           <p className="text-slate-500 text-sm uppercase tracking-widest mb-3">Your Cosmic Age Profile</p>
-          <div className="text-6xl font-black text-indigo-400 leading-none mb-1 tabular-nums">
+          <div className="text-6xl font-black text-[#6E5AA6] leading-none mb-1 tabular-nums">
             {primaryAgeStr}
           </div>
           <p className="text-2xl text-slate-300 mb-2">{primaryLabel}</p>
@@ -509,7 +509,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             <span className="text-4xl">🌍</span>
             <div className="text-right">
               <div className="text-xs text-slate-400 uppercase tracking-widest">Earth</div>
-              <div className="text-[10px] text-indigo-400 font-medium">reference</div>
+              <div className="text-[10px] text-[#6E5AA6] font-medium">reference</div>
             </div>
           </div>
           <div className="text-4xl font-black mb-0.5 leading-none" style={{ color: '#4fa3e0' }}>
@@ -536,7 +536,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
       <div className="text-center mt-6 mb-12">
         <button
           onClick={handleShare}
-          className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors shadow-lg"
+          className="inline-flex items-center gap-2 bg-[#0E2238] hover:bg-[#0E2238] text-white font-semibold px-8 py-3 rounded-xl transition-colors shadow-lg"
         >
           {shareCopied ? '✓ Link Copied!' : '🚀 Share My Cosmic Ages'}
         </button>
@@ -569,12 +569,12 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             {jupiter.age < 1 ? (
               <p className="text-slate-300 text-sm leading-relaxed">
                 You haven't reached your first Jupiter birthday yet. You'll celebrate on{' '}
-                <span className="text-indigo-300 font-bold">{format(firstJupiterDate, 'MMMM d, yyyy')}</span>.
+                <span className="text-[#6E5AA6] font-bold">{format(firstJupiterDate, 'MMMM d, yyyy')}</span>.
               </p>
             ) : (
               <p className="text-slate-300 text-sm leading-relaxed">
                 You are{' '}
-                <span className="text-indigo-300 font-bold">{jupiter.age.toFixed(2)}</span>
+                <span className="text-[#6E5AA6] font-bold">{jupiter.age.toFixed(2)}</span>
                 {' '}years old on Jupiter — a number most humans never reach in a full lifetime.
               </p>
             )}
@@ -586,9 +586,9 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             <h3 className="font-semibold text-white mb-1">Neptune Status</h3>
             <p className="text-slate-300 text-sm leading-relaxed">
               On Neptune, you are{' '}
-              <span className="text-indigo-400 font-bold">{neptune.age.toFixed(3)}</span>
+              <span className="text-[#6E5AA6] font-bold">{neptune.age.toFixed(3)}</span>
               {' '}years old. The last time Neptune completed a full orbit, it was{' '}
-              <span className="text-indigo-400 font-bold">{neptuneLastYear}</span>
+              <span className="text-[#6E5AA6] font-bold">{neptuneLastYear}</span>
               {' '}— {neptuneContext}.
             </p>
           </div>
@@ -622,11 +622,11 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             value={userName}
             onChange={e => setUserName(e.target.value)}
             maxLength={30}
-            className="w-full max-w-xs mx-auto block px-4 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white placeholder-slate-500 text-center focus:outline-none focus:border-indigo-500 mb-4"
+            className="w-full max-w-xs mx-auto block px-4 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white placeholder-slate-500 text-center focus:outline-none focus:border-[#6E5AA6]/30 mb-4"
           />
           <button
             onClick={handleGenerateCard}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors"
+            className="bg-[#0E2238] hover:bg-[#0E2238] text-white font-semibold px-8 py-3 rounded-xl transition-colors"
           >
             Generate My Cosmic Card ✨
           </button>
@@ -651,7 +651,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
           <div className="flex flex-wrap gap-3 justify-center mb-4">
             <button
               onClick={() => { const l = document.createElement('a'); l.download = `${userName || 'my'}-cosmic-age-bornclock.png`; l.href = cardDataUrl; l.click(); }}
-              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+              className="flex items-center gap-2 bg-[#0E2238] hover:bg-[#0E2238] text-white font-semibold px-6 py-3 rounded-xl transition-colors"
             >
               ⬇️ Download PNG
             </button>
@@ -678,10 +678,10 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             📸 For Instagram: Download the PNG then share to your Story or Feed
           </p>
           {!user && (
-            <div className="border border-indigo-800 rounded-xl p-4 bg-indigo-950/40 text-center max-w-sm mx-auto mb-4">
+            <div className="border border-[#6E5AA6]/30 rounded-xl p-4 bg-[#6E5AA6]/40 text-center max-w-sm mx-auto mb-4">
               <p className="font-semibold text-white mb-1">Save your Cosmic Profile</p>
               <p className="text-sm text-slate-300 mb-3">Sign in to save your planetary ages and get birthday reminders</p>
-              <Link to="/auth?redirect=/planetary-age" className="inline-block bg-indigo-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm">
+              <Link to="/auth?redirect=/planetary-age" className="inline-block bg-[#0E2238] text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#0E2238] transition-colors text-sm">
                 Sign In to Save →
               </Link>
             </div>

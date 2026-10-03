@@ -415,7 +415,7 @@ export function buildLongevityBlueprintHtml(
       emoji: string; name: string; stat: string; color: string; border: string;
       recs: Array<{ emoji: string; title: string; impact?: number; quickWin: string; source: string }>;
     }> = [
-      { emoji: '😴', name: 'Sleep', stat: '7–9 hrs/night linked to +2.5 yrs life expectancy', color: '#6366f1', border: '#a5b4fc',
+      { emoji: '😴', name: 'Sleep', stat: '7–9 hrs/night linked to +2.5 yrs life expectancy', color: '#6E5AA6', border: '#a5b4fc',
         recs: [
           { emoji: '⏰', title: 'Consistent Sleep Schedule', impact: 1.5, quickWin: 'Set both a bedtime alarm and wake alarm — keep them on weekends too.', source: 'Sleep Medicine Reviews, 2022' },
           { emoji: '📵', title: 'Screen-Free 90 Min Before Bed', impact: 0.8, quickWin: 'Enable Night Mode on all devices and set a "screens off" reminder.', source: 'Harvard Medical School, 2020' },
@@ -430,7 +430,7 @@ export function buildLongevityBlueprintHtml(
           { emoji: '🐟', title: 'Mediterranean Diet Pattern', impact: 2.0, quickWin: 'Replace one red meat meal per week with fatty fish (salmon, mackerel, sardines).', source: 'PREDIMED Trial, NEJM 2018' },
           { emoji: '🫘', title: 'Legumes Daily', impact: 1.3, quickWin: "Add a can of chickpeas or lentils to tonight's meal.", source: 'British Journal of Nutrition, 2014' },
         ]},
-      { emoji: '🧠', name: 'Mental Health', stat: 'Strong social ties reduce premature mortality by 50%', color: '#8b5cf6', border: '#c4b5fd',
+      { emoji: '🧠', name: 'Mental Health', stat: 'Strong social ties reduce premature mortality by 50%', color: '#6E5AA6', border: '#c4b5fd',
         recs: [
           { emoji: '🎯', title: 'Purpose & Meaning (Ikigai)', impact: 1.0, quickWin: "Write one sentence: 'My purpose today is...' and post it visibly.", source: 'Rush University Medical Center, 2012' },
           { emoji: '🧘', title: 'Daily Stress Management', impact: 0.8, quickWin: 'Try box breathing: 4s inhale → 4s hold → 6s exhale, repeat 5 cycles.', source: 'Lancet Psychiatry, 2021' },

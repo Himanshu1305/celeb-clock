@@ -68,7 +68,7 @@ export default function BirthdayHub() {
       <FAQSchema items={faqs} />
 
       {/* Nav */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
@@ -79,7 +79,7 @@ export default function BirthdayHub() {
 
         {/* Breadcrumb */}
         <nav className="text-xs text-gray-400 mb-6 flex items-center gap-1.5">
-          <Link to="/" className="hover:text-indigo-600 transition-colors">Home</Link>
+          <Link to="/" className="hover:text-[#6E5AA6] transition-colors">Home</Link>
           <span>/</span>
           <span className="text-gray-600 font-medium">Birthday Personality</span>
         </nav>
@@ -111,14 +111,14 @@ export default function BirthdayHub() {
         {/* Feature pills */}
         <div className="flex flex-wrap justify-center gap-3 mb-10">
           {['Zodiac Sign', 'Birth Day Number', 'Core Traits', 'Lucky Day', 'Lucky Color', 'Compatible Signs'].map(f => (
-            <span key={f} className="bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full text-xs px-3 py-1.5 font-medium">
+            <span key={f} className="bg-[#6E5AA6]/10 text-[#6E5AA6] border border-[#6E5AA6]/30 rounded-full text-xs px-3 py-1.5 font-medium">
               {f}
             </span>
           ))}
         </div>
 
         {/* Date picker */}
-        <section className="mb-10 bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100 rounded-2xl p-6">
+        <section className="mb-10 bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border border-[#6E5AA6]/30 rounded-2xl p-6">
           <h2 className="text-lg font-bold text-gray-900 mb-1 text-center">
             Jump to Any Birthday
           </h2>
@@ -155,12 +155,12 @@ export default function BirthdayHub() {
                 <Link
                   key={m}
                   to={`/birthday/${m}`}
-                  className={`group block rounded-xl border-2 p-4 text-center transition-all hover:shadow-md hover:border-indigo-400 ${
-                    isCurrentMonth ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 bg-white hover:bg-indigo-50/50'
+                  className={`group block rounded-xl border-2 p-4 text-center transition-all hover:shadow-md hover:border-[#6E5AA6]/30 ${
+                    isCurrentMonth ? 'border-[#6E5AA6]/30 bg-[#6E5AA6]/10' : 'border-gray-200 bg-white hover:bg-[#6E5AA6]/50'
                   }`}
                 >
                   <div className="text-3xl mb-2">{MONTH_EMOJIS[m]}</div>
-                  <p className="font-black text-gray-900 text-base group-hover:text-indigo-700">
+                  <p className="font-black text-gray-900 text-base group-hover:text-[#6E5AA6]">
                     {MONTH_NAMES[m]}
                   </p>
                   <p className="text-[11px] text-gray-400 mt-0.5 leading-tight">
@@ -168,7 +168,7 @@ export default function BirthdayHub() {
                   </p>
                   <p className="text-[10px] text-gray-300 mt-1">{MONTH_DAYS[m]} days</p>
                   {isCurrentMonth && (
-                    <span className="inline-block mt-1.5 text-[10px] bg-indigo-600 text-white px-2 py-0.5 rounded-full font-bold">
+                    <span className="inline-block mt-1.5 text-[10px] bg-[#0E2238] text-white px-2 py-0.5 rounded-full font-bold">
                       This month
                     </span>
                   )}
@@ -179,14 +179,14 @@ export default function BirthdayHub() {
         </section>
 
         {/* How it works */}
-        <section className="mb-12 bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100 rounded-2xl p-8">
+        <section className="mb-12 bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border border-[#6E5AA6]/30 rounded-2xl p-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">
-            <Sparkles className="w-5 h-5 inline mr-2 text-indigo-500" />
+            <Sparkles className="w-5 h-5 inline mr-2 text-[#6E5AA6]" />
             What Shapes Your Birthday Personality?
           </h2>
           <div className="grid sm:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-sm font-bold text-indigo-800 mb-2">Your Zodiac Sign</h3>
+              <h3 className="text-sm font-bold text-[#6E5AA6] mb-2">Your Zodiac Sign</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Determined by the Sun's position on your birth date, your zodiac sign provides the
                 elemental foundation of your character — Fire (Aries, Leo, Sagittarius), Earth
@@ -194,7 +194,7 @@ export default function BirthdayHub() {
               </p>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-indigo-800 mb-2">Your Birth Day Number</h3>
+              <h3 className="text-sm font-bold text-[#6E5AA6] mb-2">Your Birth Day Number</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Calculated by reducing your birth day to a single digit (e.g., born on the 23rd:
                 2+3=5), your Birth Day Number adds a numerological layer that modifies and deepens
@@ -202,7 +202,7 @@ export default function BirthdayHub() {
               </p>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-indigo-800 mb-2">Ruling Planet</h3>
+              <h3 className="text-sm font-bold text-[#6E5AA6] mb-2">Ruling Planet</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Each zodiac sign is governed by a ruling planet — Mars for Aries, Venus for Taurus
                 and Libra, Mercury for Gemini and Virgo. The planet's mythological qualities
@@ -210,7 +210,7 @@ export default function BirthdayHub() {
               </p>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-indigo-800 mb-2">Lucky Attributes</h3>
+              <h3 className="text-sm font-bold text-[#6E5AA6] mb-2">Lucky Attributes</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Your birth date maps to a lucky day of the week, lucky color, and lucky number.
                 These aren't superstitions — they're ancient shorthand for when and how your energy
@@ -223,7 +223,7 @@ export default function BirthdayHub() {
         {/* Quick-access: today & nearby */}
         <section className="mb-10">
           <h2 className="text-xl font-bold text-gray-900 mb-4">
-            <Calendar className="w-5 h-5 inline mr-2 text-indigo-500" />
+            <Calendar className="w-5 h-5 inline mr-2 text-[#6E5AA6]" />
             Today & Nearby
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -239,8 +239,8 @@ export default function BirthdayHub() {
                   to={`/birthday/${m}/${dy}`}
                   className={`border rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     isToday
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'border-gray-200 text-gray-600 hover:border-indigo-400 hover:text-indigo-700'
+                      ? 'bg-[#0E2238] text-white border-[#6E5AA6]/30'
+                      : 'border-gray-200 text-gray-600 hover:border-[#6E5AA6]/30 hover:text-[#6E5AA6]'
                   }`}
                 >
                   {isToday && '★ '}
@@ -266,13 +266,13 @@ export default function BirthdayHub() {
         </section>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white">
+        <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white">
           <h2 className="text-xl font-bold mb-2">Find Your Complete Birthday Intelligence Report</h2>
-          <p className="text-indigo-100 text-sm mb-5 max-w-md mx-auto">
+          <p className="text-[#6E5AA6] text-sm mb-5 max-w-md mx-auto">
             Beyond personality — discover your celebrity birthday twins, birthstone, numerology
             number, and longevity forecast all in one place.
           </p>
-          <Button asChild className="bg-white text-indigo-700 hover:bg-indigo-50 font-bold gap-2">
+          <Button asChild className="bg-white text-[#6E5AA6] hover:bg-[#6E5AA6]/10 font-bold gap-2">
             <Link to="/">
               Get Your Free Report <ArrowRight className="w-4 h-4" />
             </Link>

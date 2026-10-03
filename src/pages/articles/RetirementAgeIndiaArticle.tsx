@@ -137,8 +137,8 @@ export function RetirementAgeIndiaArticle() {
           <p className="text-gray-700 leading-relaxed mb-3">
             Every retirement plan comes down to one gap you must fund:
           </p>
-          <div className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 my-6 text-center">
-            <p className="text-lg font-black text-indigo-900">
+          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-6 text-center">
+            <p className="text-lg font-black text-[#6E5AA6]">
               Years to fund = Life Expectancy − Retirement Age
             </p>
           </div>
@@ -162,7 +162,7 @@ export function RetirementAgeIndiaArticle() {
                     <td className="p-3 text-gray-700">{s.label}</td>
                     <td className="p-3 text-center text-gray-700">{s.retire}</td>
                     <td className="p-3 text-center text-gray-700">{s.le}</td>
-                    <td className="p-3 text-center font-black text-indigo-700">{s.le - s.retire}</td>
+                    <td className="p-3 text-center font-black text-[#6E5AA6]">{s.le - s.retire}</td>
                   </tr>
                 ))}
               </tbody>
@@ -175,14 +175,14 @@ export function RetirementAgeIndiaArticle() {
             plan. Underestimate your lifespan and you risk running out of money in your eighties.
           </p>
 
-          <div className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 my-8">
-            <h3 className="text-lg font-black text-indigo-900 mb-2">Start with your own number</h3>
-            <p className="text-sm text-indigo-700 mb-4">
+          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
+            <h3 className="text-lg font-black text-[#6E5AA6] mb-2">Start with your own number</h3>
+            <p className="text-sm text-[#6E5AA6] mb-4">
               Before you pick a retirement age, get a personalised life expectancy so you know how
               many years you actually need to fund.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-indigo-600 text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-indigo-700 transition-colors">
+               className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-[#0E2238] transition-colors">
               Estimate My Life Expectancy →
             </a>
           </div>
@@ -206,14 +206,14 @@ export function RetirementAgeIndiaArticle() {
             build a larger cushion and to favour lifelong-income products like the NPS annuity.
           </p>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Plan Retirement Around Your Real Lifespan</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               Get a personalised life expectancy, then subtract your target retirement age to see
               exactly how many years you need to fund.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3 rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Open the Longevity Calculator →
             </a>
           </div>
@@ -229,7 +229,7 @@ export function RetirementAgeIndiaArticle() {
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
-          <ul className="list-disc pl-6 text-indigo-700 space-y-2 mb-6">
+          <ul className="list-disc pl-6 text-[#6E5AA6] space-y-2 mb-6">
             <li>
               <a href="/articles/retirement-planning-life-expectancy" className="hover:underline font-semibold">
                 Retirement Planning &amp; Life Expectancy

@@ -1,7 +1,7 @@
 import { getBirthdayRarityScore } from '@/utils/birthdayStatistics';
 
 const LABEL_COLOR: Record<string, string> = {
-  'Rare': 'bg-purple-100 text-purple-800 border-purple-200',
+  'Rare': 'bg-[#6E5AA6]/10 text-[#6E5AA6] border-[#6E5AA6]/30',
   'Uncommon': 'bg-blue-100 text-blue-800 border-blue-200',
   'Common': 'bg-green-100 text-green-800 border-green-200',
   'Very Common': 'bg-amber-100 text-amber-800 border-amber-200',
@@ -24,7 +24,7 @@ export function BirthdayRarityCard({ month, day }: { month: number; day: number 
       </div>
       <p className="text-sm text-gray-600 mt-1">{score.description}</p>
       <div className="mt-2 h-2 w-full rounded-full bg-gray-100 overflow-hidden">
-        <div className="h-full rounded-full bg-indigo-500" style={{ width: `${score.percentile}%` }} />
+        <div className="h-full rounded-full bg-[#0E2238]" style={{ width: `${score.percentile}%` }} />
       </div>
       <p className="text-xs text-gray-400 mt-1">Rarity percentile: {score.percentile}%</p>
     </div>

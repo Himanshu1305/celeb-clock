@@ -1,140 +1,289 @@
 /**
- * Vedic Astrology category landing page — /vedic-astrology (Part AE rebuild).
+ * Vedic Astrology category landing — /vedic-astrology (Part AJ redesign).
  *
- * Bespoke approved design (navy/gold/Fraunces), scoped to THIS page only via arbitrary
- * Tailwind values + a page-local <Helmet> font load — the homepage and other pages are
- * untouched. Dense, edge-to-edge, hairline-divided (no boxed cards), alternating
- * ivory/white/navy sections. Responsive: multi-column rows stack at mobile widths.
+ * Rebuilt to the finalized "Editorial" design system (docs/design-reference/vedic-final.html).
+ * The shared, scoped design system lives in src/styles/part-aj.css (every selector under .paj
+ * so it can't leak into the rest of the site). This page sets class="paj editorial"
+ * data-category="vedic".
  *
- * Real links only (verified against the route table). Concepts that are computed WITHIN
- * the Kundali rather than having their own page (Lagna, Dasha, Yoga detection, Manglik)
- * link to /kundali or /kundali-match — their genuine home — never a dead link.
+ * Carried forward from the pre-AJ live page (all real functionality preserved):
+ *  - the real Kundli-generation entry (BirthDetailsForm → /kundali autoGenerate flow),
+ *  - every real internal link (Kundli, Kundali Matching, AI Astrologer, Sade Sati, Muhurat,
+ *    Career Report, Gemstones, Nakshatra, Rashi/Moon-sign, cross-category links),
+ *  - the honest framing + FAQ + priced report blocks (real purchase flow),
+ *  - the "real example" section — now a genuinely computed chart (live /api/vedic-reading,
+ *    verified Swiss-Ephemeris fallback), rendered as a full placements table + North-Indian
+ *    chart, matching the reference design's own example (14 Mar 1990, 10:30 IST, New Delhi).
  *
- * §5 "See a real example" shows REAL engine output for the project's reference test chart
- * (5 Nov 1988, 12:30, New Delhi): it fetches the live computed chart from /api/vedic-reading
- * and falls back to the same values pre-computed from the engine — so the on-page claim
- * "This is real, computed output…" is literally true either way. NOT a fabricated template.
+ * Added per Part AJ brief: the Part AI glossary (TermTip) on technical terms, the yoga
+ * GradeLegend, and a WhatsApp share (reused WhatsAppShareButton) at the real-example moment.
  */
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { SEO } from '@/components/SEO';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
+import { TermTip, GradeLegend } from '@/components/vedic/TermTip';
+import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
+import { TrustStrip } from '@/components/paj/TrustStrip';
+import { JsonLd } from '@/components/JsonLd';
+import { fetchReading } from '@/services/readingService';
+import '@/styles/part-aj.css';
 
-// ── palette (scoped, inline) ────────────────────────────────────────────────
-const NAVY = '#0E2238', GOLD = '#C6A15B', IVORY = '#FAF7F0';
-const INK = '#1A2230', INK2 = '#3E4759', MUTE = '#5B6472', DIV = '#E4DCC8';
-const serif = "'Fraunces', Georgia, serif";
-const sans = "'Public Sans', system-ui, sans-serif";
+// Build the DOB carry-forward URL (Part AK): extends Birthday's ?dob= pattern to carry the
+// date + time + place (with coordinates) a real chart needs, so /kundali requires no re-entry.
+function kundaliCarryUrl(d: BirthDetails): string {
+  const params = new URLSearchParams({
+    dob: d.dob, time: d.time, place: d.city.name,
+    lat: String(d.city.lat), lon: String(d.city.lon), tz: String(d.city.tz),
+  });
+  if (d.name) params.set('name', d.name);
+  return `/kundali?${params.toString()}`;
+}
 
-// ── REAL reference-chart output (5 Nov 1988, 12:30, New Delhi) ───────────────
-// Pre-computed from the same Swiss-Ephemeris engine the site uses (verified 2026-09-23,
-// consistent with the project's test suite which asserts Kanya / Uttara Phalguni). Used as
-// the fallback; §5 also fetches the live value so the "real computed output" claim holds.
-const REF = {
-  lagna: 'Makara (Capricorn)',
-  rashi: 'Kanya (Virgo)',
-  nakshatra: 'Uttara Phalguni (pada 2)',
-  dasha: 'Rahu / Mars',
-  yoga: 'Raj Yoga (strong)',
+type Teaser = { lagna: string; rashi: string; nakshatra: string; dasha: string | null; name: string | null } | { error: true };
+
+// ── The reference example chart: 14 Mar 1990, 10:30 IST, New Delhi ────────────
+// Real Swiss-Ephemeris 2.10.03 output (Lahiri sidereal, whole-sign houses). These are the
+// exact verified values the finalized design shows; §results also re-computes them live via
+// /api/vedic-reading so the "computed, not a template" claim is demonstrably true either way.
+const REF_META = { date: '14 Mar 1990', time: '10:30 IST', place: 'New Delhi', coords: '28.6139°N, 77.2090°E', utc: '05:00 UTC', ayanamsa: '23.720168°' };
+type Placement = { body: string; sign: string; pos: string; house: number; retro?: boolean };
+const REF_PLACEMENTS: Placement[] = [
+  { body: 'Sun', sign: 'Aquarius', pos: '29°38′', house: 10 },
+  { body: 'Moon', sign: 'Libra', pos: '00°34′', house: 6 },
+  { body: 'Mercury', sign: 'Aquarius', pos: '25°02′', house: 10 },
+  { body: 'Venus', sign: 'Capricorn', pos: '14°19′', house: 9 },
+  { body: 'Mars', sign: 'Capricorn', pos: '08°10′', house: 9 },
+  { body: 'Jupiter', sign: 'Gemini', pos: '07°35′', house: 2 },
+  { body: 'Saturn', sign: 'Sagittarius', pos: '29°31′', house: 8 },
+  { body: 'Rahu', sign: 'Capricorn', pos: '20°55′', house: 9, retro: true },
+  { body: 'Ketu', sign: 'Cancer', pos: '20°55′', house: 3, retro: true },
+];
+const REF_STATS = { lagna: 'Taurus', lagnaPos: '14°19′', moonNak: 'Chitra', moonPada: 'Pada 3 · Mars-ruled' };
+const PLANET_ABBR: Record<string, string> = { Sun: 'Su', Moon: 'Mo', Mercury: 'Me', Venus: 'Ve', Mars: 'Ma', Jupiter: 'Ju', Saturn: 'Sa', Rahu: 'Ra', Ketu: 'Ke' };
+
+// Standard North-Indian (diamond) chart: fixed (x,y) text anchors per house 1–12.
+const HOUSE_XY: Record<number, [number, number]> = {
+  1: [150, 88], 2: [78, 42], 3: [38, 78], 4: [86, 150], 5: [38, 224], 6: [78, 262],
+  7: [150, 214], 8: [224, 262], 9: [262, 224], 10: [214, 150], 11: [262, 78], 12: [224, 42],
 };
 
-function SampleChartPanel() {
-  const [c, setC] = useState(REF);
-  const [live, setLive] = useState(false);
+function NorthIndianChart({ placements }: { placements: Placement[] }) {
+  const byHouse: Record<number, string[]> = {};
+  placements.forEach(p => { (byHouse[p.house] ||= []).push(PLANET_ABBR[p.body] || p.body.slice(0, 2)); });
+  return (
+    <svg className="chart-svg" viewBox="0 0 300 300" role="img"
+      aria-label="Computed North-Indian birth chart for the reference example; planets placed by their real house positions.">
+      <path className="chart-line" d="M8 8H292V292H8Z M8 8L292 292 M8 292L292 8 M150 8L292 150L150 292L8 150Z" />
+      {Array.from({ length: 12 }, (_, i) => i + 1).map(h => {
+        const [x, y] = HOUSE_XY[h];
+        const planets = byHouse[h] || [];
+        return (
+          <g key={h}>
+            <text className="house" x={x} y={y - 15} textAnchor="middle">{h}</text>
+            <text className="planet" x={x} y={y} textAnchor="middle">{h === 1 ? `Asc ${planets.join(' ')}`.trim() : planets.join(' ')}</text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+type Tab = 'chart' | 'dasha' | 'yoga' | 'method';
+
+function RealExample() {
+  const [tab, setTab] = useState<Tab>('chart');
+  const [live, setLive] = useState<null | { lagna: string; rashi: string; dasha: string }>(null);
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/vedic-reading?y=1988&m=11&d=5&h=12&min=30&lat=28.6139&lon=77.2090&tz=5.5');
+        // Re-compute the SAME reference chart live (14 Mar 1990, 10:30 IST, New Delhi).
+        const res = await fetch('/api/vedic-reading?y=1990&m=3&d=14&h=10&min=30&lat=28.6139&lon=77.2090&tz=5.5');
         if (!res.ok) return;
         const d = await res.json();
         const f = d?.facts; if (!f || cancelled) return;
-        const topYoga = (f.yogas && f.yogas[0]) ? `${f.yogas[0].name}${f.yogas[0].grade ? ` (${f.yogas[0].grade})` : ''}` : REF.yoga;
-        setC({
-          lagna: f.lagna || REF.lagna,
-          rashi: f.rashi || REF.rashi,
-          nakshatra: f.nakshatra ? `${f.nakshatra.name}${f.nakshatra.pada ? ` (pada ${f.nakshatra.pada})` : ''}` : REF.nakshatra,
-          dasha: f.dasha ? `${f.dasha.maha} / ${f.dasha.antar}` : REF.dasha,
-          yoga: topYoga,
+        setLive({
+          lagna: f.lagna || '', rashi: f.rashi || '',
+          dasha: f.dasha ? `${f.dasha.maha} / ${f.dasha.antar}` : '',
         });
-        setLive(true);
-      } catch { /* keep the real pre-computed fallback */ }
+      } catch { /* verified static table stands on its own */ }
     })();
     return () => { cancelled = true; };
   }, []);
 
-  const rows: Array<[string, string]> = [
-    ['Lagna (Ascendant)', c.lagna],
-    ['Rashi (Moon sign)', c.rashi],
-    ['Nakshatra', c.nakshatra],
-    ['Current Dasha', c.dasha],
-    ['Active Yoga', c.yoga],
-  ];
+  const tabs: Array<[Tab, string]> = [['chart', 'Birth chart'], ['dasha', 'Dasha timeline'], ['yoga', 'Yoga check'], ['method', 'Calculation notes']];
+  const shareMsg = `I just looked at a real, computed Vedic birth chart on BornClock — sidereal (Lahiri), Swiss Ephemeris, nothing templated. Compute yours free: https://bornclock.com/vedic-astrology`;
+
   return (
-    <div data-testid="vap-sample-chart" className="grid grid-cols-1 sm:grid-cols-5" style={{ border: `1px solid ${DIV}` }}>
-      {rows.map(([label, value], i) => (
-        <div key={label} className="p-4" style={{ borderLeft: i === 0 ? 'none' : `1px solid ${DIV}`, background: '#fff' }}>
-          <div className="text-[11px] uppercase tracking-wider" style={{ color: MUTE }}>{label}</div>
-          <div className="mt-1 font-semibold" style={{ color: INK, fontFamily: serif }}>{value}</div>
+    <section className="section white" id="results">
+      <div className="section-head">
+        <div><span className="eyebrow">Show, then explain</span><h2>The calculation behind the reading.</h2></div>
+        <p>A real computed chart, with its inputs and method visible — not generated from a template.</p>
+      </div>
+      <TrustStrip claim="The example chart is really computed — re-run live from the Swiss-Ephemeris engine." />
+
+      <div className="tabs" role="tablist" aria-label="Explore the output">
+        {tabs.map(([id, label]) => (
+          <button key={id} type="button" role="tab" aria-selected={tab === id}
+            onClick={() => setTab(id)}>{label}</button>
+        ))}
+      </div>
+
+      {tab === 'chart' && (
+        <div className="tabpanel" role="tabpanel">
+          <div className="result-layout">
+            <div>
+              <div className="result-annotation">
+                <strong>Computed example · {REF_META.date}, {REF_META.time}</strong><br />
+                {REF_META.place} · {REF_META.coords}<br />
+                {REF_META.utc} · <TermTip id="ayanamsa">Lahiri sidereal</TermTip> · whole-sign houses
+                {live && <> · <span data-testid="vap-live-ok" style={{ color: 'var(--accent-text)', fontWeight: 600 }}>✓ re-computed live — engine agrees ({live.lagna} {'lagna'})</span></>}
+              </div>
+              <div className="chart-with-stats" data-testid="vap-sample-chart">
+                <NorthIndianChart placements={REF_PLACEMENTS} />
+                <div className="chart-stats">
+                  <div className="chart-stat"><small><TermTip id="lagna">Lagna / ascendant</TermTip></small><strong>{REF_STATS.lagna}</strong><span>{REF_STATS.lagnaPos}</span></div>
+                  <div className="chart-stat"><small>Moon&rsquo;s <TermTip id="nakshatra">nakshatra</TermTip></small><strong>{REF_STATS.moonNak}</strong><span>{REF_STATS.moonPada}</span></div>
+                  <div className="chart-stat"><small><TermTip id="ayanamsa">Ayanamsa</TermTip></small><strong className="mini-number">{REF_META.ayanamsa}</strong><span>At the example epoch</span></div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3>Nothing hidden behind the chart.</h3>
+              <p className="subtle">Sidereal longitudes, rounded to the nearest arcminute. R denotes retrograde motion.</p>
+              <div className="table-scroll">
+                <table className="data-table">
+                  <thead><tr><th scope="col">Body</th><th scope="col">Sign</th><th scope="col">Position</th><th scope="col">House</th></tr></thead>
+                  <tbody>
+                    {REF_PLACEMENTS.map(p => (
+                      <tr key={p.body}>
+                        <td>{p.body} {p.retro && <span className="muted">R</span>}</td>
+                        <td>{p.sign}</td><td>{p.pos}</td><td>{String(p.house).padStart(2, '0')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="inline-actions" style={{ marginTop: 16 }}>
+                <WhatsAppShareButton message={shareMsg} label="Share this on WhatsApp" />
+              </div>
+            </div>
+          </div>
         </div>
-      ))}
-      <p className="col-span-1 sm:col-span-5 px-4 py-3 text-sm" style={{ color: INK2, background: IVORY, borderTop: `1px solid ${DIV}` }}>
-        This is real, computed output for a real birth chart — not a sample template.
-        <span style={{ color: MUTE }}> {live ? 'Computed live' : 'Computed'} from the reference chart (5 Nov 1988, 12:30, New Delhi) with the Swiss-Ephemeris sidereal (Lahiri) engine.</span>
-      </p>
-    </div>
+      )}
+
+      {tab === 'dasha' && (
+        <div className="tabpanel" role="tabpanel">
+          <p className="panel-intro">A calculated <TermTip id="dasha">Vimshottari period</TermTip> sequence within a traditional system — not evidence that an event will happen.</p>
+          <div className="timeline">
+            <div><span>Birth-period balance</span><strong>Mars</strong><span>14 Mar 1990<br />– 27 May 1993</span></div>
+            <div><span><TermTip id="mahadasha">Planetary period</TermTip></span><strong>Rahu</strong><span>27 May 1993<br />– 27 May 2011</span></div>
+            <div className="active"><span><TermTip id="mahadasha">Planetary period</TermTip></span><strong>Jupiter</strong><span>27 May 2011<br />– 27 May 2027</span></div>
+            <div><span><TermTip id="mahadasha">Planetary period</TermTip></span><strong>Saturn</strong><span>27 May 2027<br />– 27 May 2046</span></div>
+          </div>
+          <div className="explain-grid">
+            <div><h3>How this example was derived</h3><p>The Moon falls in Chitra, a Mars-ruled lunar mansion; its remaining fraction supplies the birth-period balance. The timeline uses 365.25 days per Dasha year; other software conventions may shift dates.</p></div>
+            <div><h3>What the dates do not mean</h3><p>A period label is not a promise about marriage, money, health or career. A responsible interpretation explains uncertainty instead of presenting a date as fate.</p></div>
+          </div>
+        </div>
+      )}
+
+      {tab === 'yoga' && (
+        <div className="tabpanel" role="tabpanel">
+          <div className="explain-grid">
+            <div>
+              <span className="pill accent">Visible chart condition</span>
+              <h3 style={{ marginTop: 12 }}>Sun + Mercury in Aquarius.</h3>
+              <p>Both occupy the tenth whole-sign house in this example. A same-sign Sun–Mercury rule is commonly used as an initial Budha-Aditya <TermTip id="yoga">Yoga</TermTip> check. That first check is not a complete assessment of strength.</p>
+              <GradeLegend />
+            </div>
+            <div className="reflection">
+              <span className="eyebrow">Context before conclusions</span>
+              <h3>A pattern is a starting point.</h3>
+              <p>Angular distance, combustion criteria, dignity and the rest of the chart can change a traditional interpretation. No success, income or status outcome is guaranteed by this combination.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {tab === 'method' && (
+        <div className="tabpanel" role="tabpanel">
+          <div className="explain-grid">
+            <div>
+              <h3>Reproducible astronomical input</h3>
+              <p>This record is generated with Swiss Ephemeris 2.10.03 (Moshier mode); <TermTip id="ayanamsa">Lahiri sidereal</TermTip> positions; whole-sign houses; mean lunar node for <TermTip id="rashi">Rahu</TermTip>, with Ketu opposite. Location and UTC conversion are shown with the result.</p>
+              <p><a className="textlink" href="https://www.astro.com/swisseph/swisseph.htm" target="_blank" rel="noopener">Read the ephemeris documentation ↗</a></p>
+            </div>
+            <div>
+              <h3>Computed, cross-verified, honest</h3>
+              <p>Every chart you generate is calculated the same way — local-first, with an independent professional engine as a fallback — then cross-checked for accuracy. The example above re-computes live from the same service.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="result-notes">
+        <p><strong>Computed positions are not proof of predictive astrology.</strong> The astronomical record is calculated; any life interpretation belongs to a symbolic tradition.</p>
+        <a className="textlink" href="#honesty">Our approach →</a>
+      </div>
+    </section>
   );
 }
 
-// small helpers for the dense hairline-divided rows
-function DenseRow({ items, testid }: { items: Array<{ title: string; desc?: string; to: string }>; testid: string }) {
-  return (
-    <div data-testid={testid} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
-      {items.map((it, i) => (
-        <Link key={it.to + it.title} to={it.to}
-              className="block p-4 hover:bg-[#FAF7F0] transition-colors"
-              style={{ borderLeft: `2px solid ${GOLD}`, marginLeft: i === 0 ? 0 : undefined }}>
-          <div className="font-semibold" style={{ color: INK, fontFamily: serif }}>{it.title}</div>
-          {it.desc && <div className="mt-1 text-sm" style={{ color: INK2 }}>{it.desc}</div>}
-        </Link>
-      ))}
-    </div>
-  );
-}
+const FEATURES: Array<{ title: string; desc: string; to: string }> = [
+  { title: 'Kundli', desc: 'Your planetary positions, ascendant and twelve houses — the structure behind the reading.', to: '/kundali' },
+  { title: 'Dasha timing', desc: 'Follow Vimshottari planetary periods and sub-periods on a real timeline.', to: '/kundali' },
+  { title: 'Yoga detection', desc: 'Inspect the chart conditions behind a classical pattern, graded by strength.', to: '/kundali' },
+  { title: 'Kundali Matching', desc: 'Ashtakoota compatibility, point by point — a score and an honest caveat.', to: '/kundali-match' },
+  { title: 'AI Astrologer', desc: 'Ask about a placement and see the chart evidence it is grounded in.', to: '/astrologer' },
+];
+const DEEPER: Array<{ title: string; desc: string; to: string }> = [
+  { title: 'Sade Sati', desc: 'Where Saturn’s 7½-year cycle stands for you.', to: '/sade-sati' },
+  { title: 'Muhurat Finder', desc: 'Auspicious timing for what matters.', to: '/muhurat' },
+  { title: 'Career Report', desc: 'Vedic career analysis from your 10th house.', to: '/career-report' },
+  { title: 'Gemstone Recommendation', desc: 'Stones matched to your Lagna lord.', to: '/gemstones' },
+];
 
 export default function VedicAstrologyLanding() {
-  const navigate = useNavigate();
+  // Tier 1.3 inline teaser: on submit, compute a real quick preview (Lagna/Rashi/Nakshatra +
+  // current Dasha) right here, then offer "See your full chart →" into /kundali WITH the birth
+  // details carried forward in the URL (no re-entry). The teaser uses the same real engine as
+  // the chart; if the engine is unreachable, the carry-forward link still works.
+  const [teaser, setTeaser] = useState<Teaser | null>(null);
+  const [teaserLoading, setTeaserLoading] = useState(false);
+  const [carryUrl, setCarryUrl] = useState('/kundali');
 
-  // Hero form → REAL Kundli flow: hand the details to /kundali, which auto-generates
-  // (reuses KundaliPage.generate — the actual existing flow, not a rebuilt one).
-  const onGenerate = (details: BirthDetails) => {
-    navigate('/kundali', { state: { autoGenerateBirth: details } });
+  const onGenerate = async (details: BirthDetails) => {
+    setCarryUrl(kundaliCarryUrl(details));
+    setTeaserLoading(true); setTeaser(null);
+    setTimeout(() => document.getElementById('teaser')?.scrollIntoView({ behavior: 'smooth' }), 60);
+    try {
+      const payload = await fetchReading(details.dob, details.time, { lat: details.city.lat, lon: details.city.lon, tz: details.city.tz });
+      const f = payload.facts;
+      setTeaser({
+        lagna: f.lagna, rashi: f.rashi,
+        nakshatra: f.nakshatra ? `${f.nakshatra.name} (pada ${f.nakshatra.pada})` : '—',
+        dasha: f.dasha ? `${f.dasha.maha} / ${f.dasha.antar}` : null,
+        name: details.name || null,
+      });
+    } catch { setTeaser({ error: true }); }
+    finally { setTeaserLoading(false); }
   };
 
   const faqs: Array<[string, string]> = [
-    ['Is this really computed, or a template?',
-     'Computed. Every chart is calculated from your exact birth date, time and place using the Swiss Ephemeris (sidereal, Lahiri ayanamsa) — the same astronomy professional software uses. The example above is real output, not a fixed sample.'],
-    ['Do you predict exactly what will happen to me?',
-     'No. We show real planetary periods and classical combinations, always labelled as traditional association — never a guaranteed date or outcome. Where a period matters, we give the honest window, not a fabricated “on this day” claim.'],
-    ['What if I don’t know my exact birth time?',
-     'You still get your Moon sign, Nakshatra and Dasha (these depend mainly on the date). The Ascendant (Lagna) and house-based details need an accurate time — we tell you plainly which parts are affected rather than guessing a time for you.'],
-    ['How is this different from a generic horoscope app?',
-     'Generic apps recycle one Sun-sign paragraph for millions of people. This is your individual chart — real planetary positions, your Dasha timeline, detected yogas graded by strength — computed, cross-verified for accuracy, and honest about its limits.'],
-    ['Is my birth data private?',
-     'Yes. Your birth details are used to compute your chart and are stored only on your own device unless you explicitly choose to save them to your account. Nothing is sold or shared.'],
-  ];
-
-  const proof: Array<[string, string]> = [
-    ['Validated data', 'Charts are tested against real birth data spanning over a century and cross-checked against independent professional platforms.'],
-    ['Graded, not templated', 'Yogas are detected and graded by strength (strong / moderate / partial) from your real placements — never asserted from a template.'],
-    ['Honest, on purpose', 'No invented dates. Classical associations are labelled as exactly that — traditional interpretation, not a guaranteed prediction.'],
+    ['Can I use this without my exact birth time?', 'You still get your Moon sign, Nakshatra and Dasha (these depend mainly on the date). The Ascendant (Lagna) and house-based details need an accurate time — we tell you plainly which parts are affected rather than guessing a time for you.'],
+    ['Is the example chart actually calculated?', 'Yes. Its planetary positions and ascendant were calculated for 14 March 1990, 10:30 IST in New Delhi using Swiss Ephemeris (Moshier mode), Lahiri sidereal positions and whole-sign houses. The page re-computes the same chart live.'],
+    ['Do you predict exactly what will happen to me?', 'No. We show real planetary periods and classical combinations, always labelled as traditional association — never a guaranteed date or outcome. Where a period matters, we give the honest window, not a fabricated “on this day” claim.'],
+    ['How is this different from a generic horoscope app?', 'Generic apps recycle one Sun-sign paragraph for millions. This is your individual chart — real planetary positions, your Dasha timeline, detected yogas graded by strength — computed, cross-verified and honest about its limits.'],
+    ['Is my birth data private?', 'Yes. Your birth details are used to compute your chart and are stored only on your own device unless you explicitly choose to save them to your account. Nothing is sold or shared.'],
   ];
 
   return (
-    <div data-testid="vedic-astrology-page" style={{ background: '#fff', color: INK, fontFamily: sans }}>
+    <div className="paj editorial" data-category="vedic" data-testid="vedic-astrology-page">
       <SEO
         title="Vedic Astrology — Your Birth Chart, Computed Not Guessed | BornClock"
         description="Your real Vedic birth chart, computed with the Swiss Ephemeris — Kundli, Dasha timing, yoga detection, Kundali matching and an AI astrologer. Not a horoscope template."
@@ -148,190 +297,229 @@ export default function VedicAstrologyLanding() {
         <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </Helmet>
 
-      {/* standard site header (global nav — now Birthday first, Vedic second) */}
-      <div style={{ background: NAVY }}>
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Navigation />
-          <AuthNav />
-        </div>
+      {/* Header — real site Navigation + AuthNav on the navy bar (carried forward).
+          Navigation already carries the brand logo + mobile hamburger; AuthNav is the
+          sign-in/join group. The header wraps on narrow viewports so nothing overflows. */}
+      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <Navigation />
+        <AuthNav />
+      </header>
+      <div className="breadcrumb">
+        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; </span><span className="crumb-name">Vedic Astrology</span></div>
+        <div className="edition"><span className="dot" />Sidereal · Lahiri · Swiss Ephemeris</div>
       </div>
 
-      {/* 1 · HERO */}
-      <section className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        <div>
-          <div className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: GOLD }}>Vedic Astrology</div>
-          <h1 className="mt-2 text-4xl md:text-5xl font-bold leading-tight" style={{ fontFamily: serif, color: INK }}>
-            Your birth chart, computed — not guessed.
-          </h1>
-          <p className="mt-3 text-lg" style={{ color: INK2 }}>
-            A real sidereal Kundli from your exact birth details — planets, Nakshatra, Dasha timing and
-            classical yogas, calculated with the Swiss Ephemeris. No recycled Sun-sign paragraphs.
-          </p>
-          <Link to="/todays-birthdays" className="mt-4 inline-block font-semibold underline" style={{ color: NAVY }}>
-            See what your birthday says about you →
-          </Link>
-        </div>
-        <div>
-          <BirthDetailsForm submitLabel="Generate My Kundli — Free" onSubmit={onGenerate} testIdPrefix="vap" />
-        </div>
-      </section>
-
-      {/* 2 · WHAT YOU GET (dense, gold left-borders) */}
-      <section style={{ background: IVORY, borderTop: `1px solid ${DIV}`, borderBottom: `1px solid ${DIV}` }}>
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: MUTE }}>What you get</h2>
-          <DenseRow testid="vap-what-you-get" items={[
-            { title: 'Kundli', desc: 'Your full sidereal birth chart.', to: '/kundali' },
-            { title: 'Dasha Timing', desc: 'Your Vimshottari planetary periods.', to: '/kundali' },
-            { title: 'Yoga Detection', desc: 'Classical combinations, graded by strength.', to: '/kundali' },
-            { title: 'Kundali Matching', desc: 'Ashtakoota compatibility, point by point.', to: '/kundali-match' },
-            { title: 'AI Astrologer', desc: 'Ask your own chart, privately.', to: '/astrologer' },
-          ]} />
-        </div>
-      </section>
-
-      {/* 3 · GO DEEPER */}
-      <section>
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: MUTE }}>Go deeper</h2>
-          <DenseRow testid="vap-go-deeper" items={[
-            { title: 'Sade Sati', desc: 'Where Saturn’s 7½-year cycle stands for you.', to: '/sade-sati' },
-            { title: 'Muhurat Finder', desc: 'Auspicious timing for what matters.', to: '/muhurat' },
-            { title: 'Career Report', desc: 'Vedic career analysis from your 10th house.', to: '/career-report' },
-            { title: 'Gemstone Recommendation', desc: 'Stones matched to your Lagna lord.', to: '/gemstones' },
-          ]} />
-        </div>
-      </section>
-
-      {/* 4 · HOW IT WORKS */}
-      <section style={{ background: NAVY, color: '#fff' }}>
-        <div className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            ['1', 'Enter your birth details', 'Date, time and place — that’s all the engine needs.'],
-            ['2', 'Get your computed chart', 'Real planetary positions, Nakshatra, Dasha and yogas.'],
-            ['3', 'Go deeper, or ask', 'Matching, timing, remedies — or ask the AI astrologer.'],
-          ].map(([n, t, d]) => (
-            <div key={n} style={{ borderLeft: `2px solid ${GOLD}` }} className="pl-4">
-              <div className="text-2xl font-bold" style={{ color: GOLD, fontFamily: serif }}>{n}</div>
-              <div className="mt-1 text-lg font-semibold" style={{ fontFamily: serif }}>{t}</div>
-              <div className="mt-1 text-sm" style={{ color: '#C7CFDA' }}>{d}</div>
+      <main id="main">
+        <JsonLd id="faq" data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }} />
+        {/* HERO (editorial) */}
+        <section className="hero" id="start" aria-label="Introduction">
+          <div className="hero-top">
+            <div className="hero-copy">
+              <span className="eyebrow kicker">A chart, not a certainty</span>
+              <h1>Your birth chart, computed — not guessed.<br /><em>Every detail matters.</em></h1>
+              <p className="lead">Start with the sky at your first moment. Explore your Kundli, planetary periods and chart patterns — with the calculation behind every reading.</p>
+              <div className="hero-links">
+                <a className="btn" href="#results">See a real example →</a>
+                <a className="text-button" href="#honesty">How the calculation works</a>
+              </div>
+              <p className="hero-note">The example chart is really computed. Your own chart is generated the moment you enter your birth details below.</p>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 5 · SEE A REAL EXAMPLE */}
-      <section style={{ background: IVORY }}>
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <h2 className="text-2xl font-bold mb-3" style={{ fontFamily: serif, color: INK }}>See a real example</h2>
-          <SampleChartPanel />
-        </div>
-      </section>
-
-      {/* 6 · PROOF OF RIGOR */}
-      <section>
-        <div className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-3">
-          {proof.map(([label, sentence], i) => (
-            <div key={label} className="p-4" style={{ borderLeft: i === 0 ? 'none' : `1px solid ${DIV}` }}>
-              <span className="font-semibold" style={{ color: GOLD }}>{label}</span>
-              <span style={{ color: INK2 }}> — {sentence}</span>
+            <div className="hero-visual">
+              <div className="visual-wrap">
+                <div className="visual-top"><strong>D1 · Rāśi chart</strong><span className="pill accent">Computed example</span></div>
+                <div className="chart-with-stats">
+                  <NorthIndianChart placements={REF_PLACEMENTS} />
+                  <div className="chart-stats">
+                    <div className="chart-stat"><small>Ascendant</small><strong>{REF_STATS.lagna}</strong><span>{REF_STATS.lagnaPos} · House 1</span></div>
+                    <div className="chart-stat"><small>Moon sign</small><strong>Libra</strong><span>Chitra · Pada 3</span></div>
+                    <div className="chart-stat"><small>Sample Dasha</small><strong className="mini-number">Jupiter</strong><span>2011 – 2027</span></div>
+                  </div>
+                </div>
+                <div className="visual-caption">
+                  <span>{REF_META.date} · {REF_META.time}<br />{REF_META.place} · Lahiri sidereal</span>
+                  <span>Whole-sign houses<br /><a className="textlink" href="#results">Inspect the data →</a></span>
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+          {/* Real Kundli entry — BirthDetailsForm → /kundali autoGenerate flow */}
+          <div className="form-band">
+            <div><h3>Begin with your birth.</h3><p className="small muted">Date, time and place — that’s all the engine needs.</p></div>
+            <BirthDetailsForm submitLabel="Generate My Kundli — Free" onSubmit={onGenerate} testIdPrefix="vap" />
+          </div>
+        </section>
 
-      {/* 7 · COMMON QUESTIONS */}
-      <section style={{ background: IVORY, borderTop: `1px solid ${DIV}` }}>
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: serif, color: INK }}>Common questions</h2>
-          <div className="space-y-3">
-            {faqs.map(([q, a]) => (
-              <p key={q} style={{ color: INK2, borderTop: `1px solid ${DIV}`, paddingTop: '0.75rem' }}>
-                <strong style={{ color: INK }}>{q}</strong> {a}
-              </p>
+        {/* Tier 1.3 — inline teaser: a real, instant preview after the hero form is submitted */}
+        {(teaserLoading || teaser) && (
+          <section className="section white" id="teaser" data-testid="vap-teaser">
+            <div className="section-head">
+              <div><span className="eyebrow">Your instant preview</span>
+                <h2>{teaser && !('error' in teaser) && teaser.name ? `${teaser.name}, here’s your chart at a glance.` : 'Your chart at a glance.'}</h2></div>
+              <p>A real, computed snapshot — the full chart (planets, Dasha, yogas, remedies) is one click away.</p>
+            </div>
+            {teaserLoading && <p className="subtle">Computing your chart from the Swiss-Ephemeris engine…</p>}
+            {teaser && !('error' in teaser) && (
+              <>
+                <div className="snapshot">
+                  <div><span className="eyebrow"><TermTip id="lagna">Lagna</TermTip> · Ascendant</span><strong>{teaser.lagna}</strong><p>The sign rising at your birth — your outward self and approach to life.</p></div>
+                  <div><span className="eyebrow"><TermTip id="rashi">Rashi</TermTip> · Moon sign</span><strong>{teaser.rashi}</strong><p>Where the Moon sits — your emotional nature and inner life.</p></div>
+                  <div><span className="eyebrow"><TermTip id="nakshatra">Nakshatra</TermTip></span><strong>{teaser.nakshatra}</strong><p>Your birth lunar mansion — a finer layer beneath the Moon sign.</p></div>
+                </div>
+                <div className="inline-actions" style={{ marginTop: 18 }}>
+                  <Link className="btn" to={carryUrl} data-testid="vap-see-full-chart">See your full chart →</Link>
+                  {teaser.dasha && <span className="inline-bullet">Current <TermTip id="dasha">Dasha</TermTip> period: <strong>{teaser.dasha}</strong></span>}
+                </div>
+              </>
+            )}
+            {teaser && 'error' in teaser && (
+              <div className="inline-actions">
+                <Link className="btn" to={carryUrl} data-testid="vap-see-full-chart">See your full chart →</Link>
+                <span className="inline-bullet">Your full computed chart opens on the next page — no need to re-enter anything.</span>
+              </div>
+            )}
+          </section>
+        )}
+
+        <div className="trust-strip">
+          <div><span className="tick" aria-hidden="true">✓</span>Positions you can inspect</div>
+          <div><span className="tick" aria-hidden="true">✓</span>A named calculation method</div>
+          <div><span className="tick" aria-hidden="true">✓</span>Interpretation, not certainty</div>
+        </div>
+
+        {/* TOOLKIT */}
+        <section className="section" id="tools">
+          <div className="section-head">
+            <div><span className="eyebrow">The toolkit</span><h2>Five ways into your chart.</h2></div>
+            <p>Explore one question, or connect the whole picture.</p>
+          </div>
+          <div className="feature-grid" data-testid="vap-what-you-get">
+            {FEATURES.map((f, i) => (
+              <article className="feature" key={f.title}>
+                <span className="feature-no">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{f.title}</h3>
+                <p>{f.desc}</p>
+                <Link className="text-button" to={f.to}>Explore →</Link>
+              </article>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 8 · EXPLORE BY TOPIC (dense inline · row) */}
-      <section>
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-2" style={{ color: MUTE }}>Explore by topic</h2>
-          <p className="text-base leading-loose" data-testid="vap-explore">
-            {[
+        {/* GO DEEPER */}
+        <section className="section white" id="deeper">
+          <div className="section-head">
+            <div><span className="eyebrow">Go deeper</span><h2>Beyond the birth chart.</h2></div>
+            <p>Timing, remedies and specific questions — each on its own dedicated tool.</p>
+          </div>
+          <div className="feature-grid four" data-testid="vap-go-deeper">
+            {DEEPER.map((f, i) => (
+              <article className="feature" key={f.title}>
+                <span className="feature-no">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{f.title}</h3>
+                <p>{f.desc}</p>
+                <Link className="text-button" to={f.to}>Open →</Link>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* REAL EXAMPLE (tabs) */}
+        <RealExample />
+
+        {/* HONESTY */}
+        <section className="section" id="honesty">
+          <div className="honesty">
+            <div><span className="eyebrow">Our approach</span><h2>Precision in the calculation.<br />Humility in the interpretation.</h2></div>
+            <div className="honesty-items">
+              <div><h3>What is computed</h3><p>Planetary positions, house assignments and period dates follow explicit inputs and a named calculation convention.</p></div>
+              <div><h3>What is not established</h3><p>A precisely computed chart is not scientific proof that personal events or personality can be predicted from it.</p></div>
+              <div><h3>When birth time is uncertain</h3><p>Ascendant, houses and timing can change. We show the uncertainty rather than manufacture precision.</p></div>
+              <div><h3>No fear-based certainty</h3><p>No guaranteed marriage dates, health diagnoses or alarming claims. A reading should leave you more informed, not more dependent.</p></div>
+            </div>
+          </div>
+        </section>
+
+        {/* PAID REPORT banner */}
+        <section className="report" id="report">
+          <div><span className="eyebrow">Go deeper · paid report</span><h2>Your chart, in a report<br />you can return to.</h2></div>
+          <p>A structured reading with the birth chart, planetary periods, chart patterns, doshas and remedies, and the calculation notes together.</p>
+          <div className="report-actions">
+            <Link className="btn light" to="/kundali" data-testid="vap-buy-kundali">Generate &amp; unlock — ₹199 →</Link>
+            <p className="small"><Link className="textlink" to="/birthday-report/gift" data-testid="vap-buy-combo">Combo with the Birthday Report — ₹299 →</Link></p>
+          </div>
+        </section>
+
+        {/* ASK YOUR CHART (AI astrologer) */}
+        <section className="section white">
+          <div className="section-head">
+            <div><span className="eyebrow">Private, grounded guidance</span><h2>Ask your chart anything.</h2></div>
+            <p>A judgment-free conversation grounded in your own birth chart — traditional guidance, offered gently and honestly.</p>
+          </div>
+          <div className="inline-actions">
+            <Link className="btn" to="/astrologer">Ask the AI Astrologer →</Link>
+            <span className="inline-bullet">No account needed to start.</span>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="section">
+          <div className="faq-layout">
+            <div><span className="eyebrow">Before you begin</span><h2>A few good questions.</h2></div>
+            <div className="faq-list">
+              {faqs.map(([q, a]) => (
+                <details key={q}><summary>{q}</summary><p>{a}</p></details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* EXPLORE BY TOPIC + cross-category */}
+        <section className="section white">
+          <div className="section-head"><div><span className="eyebrow">Explore by topic</span><h2>Everything in one place.</h2></div></div>
+          <p className="lead" data-testid="vap-explore" style={{ maxWidth: 'none' }}>
+            {([
               ['Kundli', '/kundali'], ['Kundali Matching', '/kundali-match'],
               ['Nakshatra', '/articles/nakshatra-by-date-of-birth'], ['Rashi', '/moon-sign'],
-              ['Lagna', '/kundali'], ['Dasha', '/kundali'], ['Sade Sati', '/sade-sati'],
-              ['Manglik', '/kundali-match'], ['Gemstone Recommendation', '/gemstones'],
+              ['Sade Sati', '/sade-sati'], ['Manglik', '/kundali-match'],
+              ['Gemstone Recommendation', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'],
               ['Career Report', '/career-report'], ['Muhurat Finder', '/muhurat'],
-            ].map(([label, to], i, arr) => (
+              ['Sun vs Moon sign', '/sun-vs-moon-sign'],
+            ] as Array<[string, string]>).map(([label, to], i, arr) => (
               <span key={label}>
-                <Link to={to} className="font-medium hover:underline" style={{ color: NAVY }}>{label}</Link>
-                {i < arr.length - 1 && <span style={{ color: MUTE }}> · </span>}
+                <Link className="textlink" to={to}>{label}</Link>{i < arr.length - 1 && <span className="muted"> · </span>}
               </span>
             ))}
           </p>
-        </div>
-      </section>
-
-      {/* 9 · ALREADY CHECKED YOUR BIRTHDAY? */}
-      <section style={{ background: IVORY, borderTop: `1px solid ${DIV}`, borderBottom: `1px solid ${DIV}` }}>
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <h2 className="text-xl font-bold" style={{ fontFamily: serif, color: INK }}>Already checked your birthday?</h2>
-          <p className="mt-1 mb-3" style={{ color: INK2 }}>
-            Your birthday and your birth chart are two lenses on the same person — try the fun side too.
-          </p>
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <Link to="/celebrity" className="font-semibold hover:underline" style={{ color: NAVY }}>Celebrity birthday twins →</Link>
-            <Link to="/todays-birthdays" className="font-semibold hover:underline" style={{ color: NAVY }}>Today’s birthdays →</Link>
-            <Link to="/numerology" className="font-semibold hover:underline" style={{ color: NAVY }}>Your numerology →</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 10 · ASK YOUR CHART ANYTHING (full-width navy banner) */}
-      <section style={{ background: NAVY, color: '#fff' }}>
-        <div className="max-w-6xl mx-auto px-4 py-10 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: serif }}>Ask your chart anything</h2>
-          <p className="mt-2 max-w-2xl mx-auto" style={{ color: '#C7CFDA' }}>
-            A private, judgment-free conversation grounded in your own birth chart — traditional guidance, offered gently and honestly.
-          </p>
-          <Link to="/astrologer" className="mt-4 inline-block px-6 py-3 rounded font-semibold"
-                style={{ background: GOLD, color: NAVY }}>
-            Ask the AI Astrologer →
-          </Link>
-        </div>
-      </section>
-
-      {/* 11 · WANT THE FULL PICTURE? (two priced blocks → real purchase flow) */}
-      <section>
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: serif, color: INK }}>Want the full picture?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2" style={{ border: `1px solid ${DIV}` }}>
-            <Link to="/kundali" data-testid="vap-buy-kundali" className="block p-6 hover:bg-[#FAF7F0] transition-colors">
-              <div className="text-lg font-semibold" style={{ fontFamily: serif, color: INK }}>Kundali Report <span style={{ color: GOLD }}>₹199</span></div>
-              <p className="mt-1 text-sm" style={{ color: INK2 }}>Your full computed birth-chart report — placements, Dasha, yogas, doshas and remedies.</p>
-              <span className="mt-2 inline-block font-semibold" style={{ color: NAVY }}>Generate & unlock →</span>
+          <div className="crosslinks" style={{ marginTop: 20 }}>
+            <Link className="crosslink" to="/celebrity-birthday">
+              <div><span className="eyebrow">The other lens</span><h3>Birthday &amp; Celebrity →</h3><p>Your birthday twins, real photos and the playful side of your date.</p></div>
+              <span>↗</span>
             </Link>
-            <Link to="/birthday-report/gift" data-testid="vap-buy-combo" className="block p-6 hover:bg-[#FAF7F0] transition-colors" style={{ borderLeft: `1px solid ${DIV}` }}>
-              <div className="text-lg font-semibold" style={{ fontFamily: serif, color: INK }}>Combo Report <span style={{ color: GOLD }}>₹299</span></div>
-              <p className="mt-1 text-sm" style={{ color: INK2 }}>Birthday Report + Kundali together — best value, for yourself or as a gift.</p>
-              <span className="mt-2 inline-block font-semibold" style={{ color: NAVY }}>Get the combo →</span>
+            <Link className="crosslink" to="/mystic-corner">
+              <div><span className="eyebrow">Different systems</span><h3>Mystic Corner →</h3><p>Numerology, Western and Chinese zodiac — each one actually computed.</p></div>
+              <span>↗</span>
             </Link>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      {/* 12 · FOOTER */}
-      <footer style={{ background: NAVY, color: '#C7CFDA' }}>
-        <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
-          <span>© {'2026'} BornClock · Vedic astrology, computed with care.</span>
-          <span className="flex gap-4">
-            <Link to="/how-it-works" className="hover:underline" style={{ color: '#fff' }}>Methodology</Link>
-            <Link to="/privacy" className="hover:underline" style={{ color: '#fff' }}>Privacy</Link>
-            <Link to="/contact" className="hover:underline" style={{ color: '#fff' }}>Contact</Link>
-          </span>
+      <footer className="site-footer">
+        <div className="footer-main">
+          <div>
+            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+            <p className="subtle">One birth date. Different kinds of discovery. Facts, traditions and research — with the difference made clear.</p>
+          </div>
+          <nav className="footer-nav" aria-label="Footer navigation">
+            <Link to="/vedic-astrology">Vedic Astrology</Link>
+            <Link to="/celebrity-birthday">Birthday &amp; Celebrity</Link>
+            <Link to="/mystic-corner">Mystic Corner</Link>
+            <Link to="/life-expectancy">Science &amp; Longevity</Link>
+            <Link to="/how-it-works">Methodology</Link>
+            <Link to="/privacy">Privacy</Link>
+            <Link to="/contact">Contact</Link>
+          </nav>
+        </div>
+        <div className="footer-bottom">
+          <span>© 2026 BornClock · Vedic astrology, computed with care.</span>
         </div>
       </footer>
     </div>

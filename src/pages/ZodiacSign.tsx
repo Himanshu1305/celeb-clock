@@ -12,7 +12,7 @@ const ELEMENT_BG: Record<string, string> = {
   Fire: 'from-red-500/20 to-orange-500/20',
   Earth: 'from-green-600/20 to-emerald-500/20',
   Air: 'from-sky-400/20 to-blue-400/20',
-  Water: 'from-blue-600/20 to-indigo-500/20',
+  Water: 'from-blue-600/20 to-[#6E5AA6]/20',
 };
 
 const ELEMENT_BADGE: Record<string, string> = {
@@ -30,7 +30,7 @@ export default function ZodiacSign() {
     return (
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <header className="flex justify-between items-center mb-12">
+          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
             <Navigation />
             <AuthNav />
           </header>
@@ -75,7 +75,7 @@ export default function ZodiacSign() {
       />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>

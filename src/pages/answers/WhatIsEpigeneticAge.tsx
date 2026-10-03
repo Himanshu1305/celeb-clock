@@ -46,18 +46,18 @@ export default function WhatIsEpigeneticAge() {
       <AnswerLayout>
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
+            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
             <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-indigo-600">FAQ</Link>
+            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
             <span className="mx-2">›</span>
             <span className="text-gray-600">What is epigenetic age?</span>
           </nav>
 
           <h1 className="text-3xl font-black text-gray-900 mb-2">What Is Epigenetic Age — and Why It's the Most Honest Number About How You're Aging</h1>
-          <p className="text-indigo-500 italic text-sm mb-8">Know your time. Live it well.</p>
+          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
 
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Epigenetic age is a measure of biological aging based on DNA methylation — chemical changes to your DNA that accumulate in predictable patterns as you age. It was pioneered by UCLA geneticist Steve Horvath in 2013 and is currently the most scientifically validated way to measure how fast your body is aging at a cellular level. Unlike your chronological age, which only moves forward, epigenetic age can — with the right interventions — actually go down.
             </p>
           </div>
@@ -87,7 +87,7 @@ export default function WhatIsEpigeneticAge() {
             <p className="text-lg font-bold text-gray-900 mb-2">Test My Biological Age</p>
             <p className="text-sm text-gray-500 mb-4">12-biomarker assessment · WHO-validated · Takes 3 minutes</p>
             <Link to="/biological-age"
-              className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Test my biological age →
             </Link>
           </div>
@@ -96,7 +96,7 @@ export default function WhatIsEpigeneticAge() {
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Tools</p>
             <div className="space-y-2">
               {RELATED.map((t) => (
-                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ {t.label}</Link>
+                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ {t.label}</Link>
               ))}
             </div>
           </div>

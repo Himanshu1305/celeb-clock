@@ -4,6 +4,7 @@
  * plain-language interpretation. ProKerala is optional (boundary refinement only).
  */
 import { NAKSHATRA_MEANINGS } from '@/lib/vedic/nakshatraMeanings';
+import { glossInline } from '@/lib/vedic/termDefinitions';
 
 export interface KundaliPlanet { name: string; sign: string; signIndex: number; house: number; longitude: number; retrograde: boolean }
 export interface KundaliData {
@@ -129,7 +130,7 @@ export function buildInterpretationBlocks(k: KundaliData): InterpretationBlock[]
 
   blocks.push({
     title: 'How to read this',
-    body: 'This is a computed sidereal (Lahiri ayanamsa) reading. These layers are meant to be read together — Lagna with Moon sign, planets with the houses they occupy, and all of it through the lens of your current Dasha. A full consultation would additionally weigh aspects, Yogas and the divisional charts shown in your personal reading below.',
+    body: `This is a computed sidereal (Lahiri ayanamsa) reading — ${glossInline('ayanamsa')}. These layers are meant to be read together — Lagna with Moon sign, planets with the houses they occupy, and all of it through the lens of your current Dasha. A full consultation would additionally weigh aspects, Yogas and the divisional charts shown in your personal reading below.`,
   });
 
   return blocks;

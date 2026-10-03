@@ -280,6 +280,21 @@ async function prerenderRoute(page, baseUrl, route) {
       html = html.replace('</head>', `<script type="application/ld+json">${bc}</script></head>`);
     }
 
+    // ── Per-route WebPage JSON-LD (Part AM) ────────────────────────────────────
+    // react-helmet-async's WebPage schema does not reliably survive the outerHTML
+    // capture (same race as the BreadcrumbList above), so it was missing from the
+    // live output on most pages. Inject it here from the real per-route title/
+    // description/canonical — but only when the page doesn't already carry one
+    // (e.g. a page that rendered its own via body-level JsonLd), to avoid duplicates.
+    if (meta && !/"@type"\s*:\s*"WebPage"/.test(html)) {
+      const wp = JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'WebPage',
+        name: meta.title, description: meta.description, url: canonicalUrl,
+        isPartOf: { '@type': 'WebSite', name: 'BornClock', url: 'https://bornclock.com/' },
+      });
+      html = html.replace('</head>', `<script type="application/ld+json">${wp}</script></head>`);
+    }
+
     // Sanity: flag a GENUINELY generic title — missing, too short, or identical to
     // the site's default/home title (i.e. no per-route title was injected). The old
     // check warned whenever the title lacked the word "BornClock", which is a false

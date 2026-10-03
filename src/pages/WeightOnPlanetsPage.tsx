@@ -56,7 +56,7 @@ export default function WeightOnPlanetsPage() {
         canonicalUrl="/weight-on-planets"
       />
 
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
@@ -64,7 +64,7 @@ export default function WeightOnPlanetsPage() {
       </div>
 
       <section className="max-w-2xl mx-auto px-4 pt-12 pb-6 text-center">
-        <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-full px-3 py-1 mb-5">
+        <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[#6E5AA6] bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-full px-3 py-1 mb-5">
           <Globe className="w-4 h-4" /> Cosmic weigh-in
         </div>
         <h1 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-4">
@@ -91,7 +91,7 @@ export default function WeightOnPlanetsPage() {
                 value={raw}
                 min="0"
                 onChange={e => setRaw(e.target.value)}
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
               />
             </div>
             <div className="inline-flex rounded-xl border border-gray-300 overflow-hidden">
@@ -99,7 +99,7 @@ export default function WeightOnPlanetsPage() {
                 <button
                   key={u}
                   onClick={() => switchUnit(u)}
-                  className={`px-5 py-3 text-sm font-bold transition-colors ${unit === u ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
+                  className={`px-5 py-3 text-sm font-bold transition-colors ${unit === u ? 'bg-[#0E2238] text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
                 >
                   {u}
                 </button>
@@ -124,7 +124,7 @@ export default function WeightOnPlanetsPage() {
                 <div>
                   <div className="flex items-baseline gap-2">
                     <span className="font-bold text-gray-900">{p.name}</span>
-                    <span className="text-lg font-black text-indigo-600">{w(p)}</span>
+                    <span className="text-lg font-black text-[#6E5AA6]">{w(p)}</span>
                   </div>
                   <p className="text-xs text-gray-500 leading-relaxed mt-0.5">{p.fact}</p>
                 </div>
@@ -189,10 +189,10 @@ export default function WeightOnPlanetsPage() {
 
       {/* CTA to sister tools */}
       <section className="max-w-2xl mx-auto px-4 py-4">
-        <div className="rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 p-6 text-center text-white">
+        <div className="rounded-2xl bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] p-6 text-center text-white">
           <p className="text-lg font-bold mb-1">Loved this? See your age on every planet</p>
-          <p className="text-indigo-100 text-sm mb-4">You’re a different number of years old on Mercury, Mars and Jupiter too — find out in seconds.</p>
-          <Link to="/planetary-age" className="inline-flex items-center gap-2 bg-white text-indigo-600 px-6 py-3 rounded-xl font-semibold hover:bg-indigo-50 transition-colors">
+          <p className="text-[#6E5AA6] text-sm mb-4">You’re a different number of years old on Mercury, Mars and Jupiter too — find out in seconds.</p>
+          <Link to="/planetary-age" className="inline-flex items-center gap-2 bg-white text-[#6E5AA6] px-6 py-3 rounded-xl font-semibold hover:bg-[#6E5AA6]/10 transition-colors">
             <ArrowRightCircle className="w-5 h-5" /> Try the Planetary Age calculator
           </Link>
         </div>
@@ -212,10 +212,10 @@ export default function WeightOnPlanetsPage() {
         <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Keep exploring</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {meshPosts.map(p => (
-            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ {p.title}</Link>
+            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ {p.title}</Link>
           ))}
-          <Link to="/planetary-age" className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ Your age on every planet</Link>
-          <Link to="/birthday-report" className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ Your Birthday Report</Link>
+          <Link to="/planetary-age" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Your age on every planet</Link>
+          <Link to="/birthday-report" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Your Birthday Report</Link>
         </div>
       </div>
 

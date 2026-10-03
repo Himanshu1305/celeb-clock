@@ -29,7 +29,7 @@ const HEALTH_CATEGORIES: HealthCategory[] = [
     id: 'sleep', name: 'Sleep', emoji: '😴',
     stat: '7–9 hrs/night linked to +2.5 yrs life expectancy',
     border: 'border-l-indigo-500',
-    headerBg: 'bg-indigo-50/70 dark:bg-indigo-950/30',
+    headerBg: 'bg-[#6E5AA6]/70 dark:bg-[#6E5AA6]/30',
     blogPath: '/blog/sleep-longevity',
     recs: [
       { emoji: '⏰', title: 'Consistent Sleep Schedule', impact: 1.5, detail: 'Going to bed and waking at the same time daily synchronizes your circadian rhythm, reducing mortality risk by 24%. Irregular sleep is independently linked to metabolic and cardiovascular disease.', quickWin: 'Set both a bedtime alarm and wake alarm tonight — keep them on weekends too.', source: 'Sleep Medicine Reviews, 2022' },
@@ -68,7 +68,7 @@ const HEALTH_CATEGORIES: HealthCategory[] = [
     id: 'mental', name: 'Mental Health', emoji: '🧠',
     stat: 'Strong social ties reduce premature mortality by 50%',
     border: 'border-l-purple-500',
-    headerBg: 'bg-purple-50/70 dark:bg-purple-950/30',
+    headerBg: 'bg-[#6E5AA6]/70 dark:bg-[#6E5AA6]/30',
     blogPath: '/blog/mental-health-longevity',
     recs: [
       { emoji: '🧘', title: 'Daily Stress Management', impact: 0.8, detail: 'Chronic high cortisol accelerates cellular aging via telomere shortening. Daily downshift rituals — even 5 minutes of deep breathing — measurably lower cortisol and slow biological aging.', quickWin: 'Try box breathing right now: 4s inhale → 4s hold → 6s exhale, for 5 cycles.', source: 'Lancet Psychiatry, 2021' },

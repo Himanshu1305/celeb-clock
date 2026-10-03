@@ -106,11 +106,11 @@ function CountryLookup() {
 
   return (
     <div data-testid="country-le-lookup"
-         className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 my-8">
-      <h3 className="text-lg font-black text-indigo-900 mb-1">
+         className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
+      <h3 className="text-lg font-black text-[#6E5AA6] mb-1">
         Look Up a Country&apos;s Life Expectancy
       </h3>
-      <p className="text-sm text-indigo-700 mb-4">
+      <p className="text-sm text-[#6E5AA6] mb-4">
         Type a country name (try Japan, India, USA, UK, China, Brazil, or Chad) to see its
         2026 life expectancy and how it compares globally.
       </p>
@@ -119,21 +119,21 @@ function CountryLookup() {
         value={query}
         onChange={(e) => handleLookup(e.target.value)}
         placeholder="Enter a country name…"
-        className="w-full border-2 border-indigo-300 rounded-xl px-4 py-3
-                   text-base focus:outline-none focus:border-indigo-500 bg-white mb-4"
+        className="w-full border-2 border-[#6E5AA6]/30 rounded-xl px-4 py-3
+                   text-base focus:outline-none focus:border-[#6E5AA6]/30 bg-white mb-4"
         aria-label="Enter a country name to look up its life expectancy"
       />
       {result && (
         <div data-testid="country-le-result"
-             className="bg-white rounded-xl border-2 border-indigo-300 p-5">
+             className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-5">
           <div className="flex items-center gap-4 mb-3">
-            <div className="w-20 h-14 bg-indigo-600 rounded-xl flex items-center
+            <div className="w-20 h-14 bg-[#0E2238] rounded-xl flex items-center
                             justify-center text-2xl font-black text-white flex-shrink-0">
               {result.le}
             </div>
             <div>
               <div className="text-xl font-black text-gray-900">{result.name}</div>
-              <div className="text-indigo-600 font-semibold">
+              <div className="text-[#6E5AA6] font-semibold">
                 {result.le} years (life expectancy at birth)
               </div>
             </div>
@@ -142,7 +142,7 @@ function CountryLookup() {
         </div>
       )}
       {result === null && query.trim() && (
-        <div className="bg-white rounded-xl border-2 border-indigo-300 p-4 text-sm text-gray-600">
+        <div className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-4 text-sm text-gray-600">
           No match for &ldquo;{query}&rdquo; in this table. Try Japan, Switzerland, India,
           United States, United Kingdom, China, Brazil, Nigeria, or Chad.
         </div>
@@ -205,7 +205,7 @@ export function LifeExpectancyByCountryArticle() {
             climbed from the low 50s in 1970 to the low 70s today, and countries like India
             have gained nearly two decades of life in a single generation. Curious what the
             numbers mean for you personally? Our{' '}
-            <a href="/longevity-calculator" className="text-indigo-600 font-semibold underline">
+            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">
               longevity calculator
             </a>{' '}
             estimates your own life expectancy from your lifestyle and habits.
@@ -385,7 +385,7 @@ export function LifeExpectancyByCountryArticle() {
             by more than a decade, which shows how much room there is for continued gains as
             healthcare and incomes keep rising. If you want to see how these national numbers
             translate to an individual in India, our{' '}
-            <a href="/longevity-calculator" className="text-indigo-600 font-semibold underline">
+            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">
               longevity calculator
             </a>{' '}
             factors in your own lifestyle rather than a national average.
@@ -414,17 +414,17 @@ export function LifeExpectancyByCountryArticle() {
             live, the levers above are within your control.
           </p>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">How Long Will You Live?</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               National averages only tell part of the story. See a personalised estimate based
               on your own lifestyle, habits and health with the free BornClock longevity
               calculator.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3
-                          rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Calculate My Life Expectancy →
             </a>
           </div>
@@ -444,13 +444,13 @@ export function LifeExpectancyByCountryArticle() {
             <ul className="space-y-2">
               <li>
                 <a href="/articles/how-long-will-i-live-in-india"
-                   className="text-indigo-600 font-semibold underline">
+                   className="text-[#6E5AA6] font-semibold underline">
                   How Long Will I Live in India? →
                 </a>
               </li>
               <li>
                 <a href="/articles/how-to-live-to-100"
-                   className="text-indigo-600 font-semibold underline">
+                   className="text-[#6E5AA6] font-semibold underline">
                   How to Live to 100 →
                 </a>
               </li>

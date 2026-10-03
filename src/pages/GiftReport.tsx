@@ -61,7 +61,7 @@ export default function GiftReport() {
         canonicalUrl="/gift"
       />
 
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
@@ -84,7 +84,7 @@ export default function GiftReport() {
           say <em>I pay attention to you</em> — a gift built entirely around them, so they open it and
           feel noticed, valued and cared for. A keepsake and conversation starter, never a prediction.
         </p>
-        <Link to="/birthday-report" className="inline-flex items-center gap-2 bg-indigo-600 text-white rounded-xl px-7 py-3.5 font-semibold hover:bg-indigo-700 transition-colors">
+        <Link to="/birthday-report" className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-xl px-7 py-3.5 font-semibold hover:bg-[#0E2238] transition-colors">
           <ArrowRightCircle className="w-5 h-5" /> Create their Blueprint — {reportPrice}
         </Link>
         <div className="mt-6"><SharePageBar path="/gift" title="Gift a Birthday Blueprint" text="A birthday gift that makes them feel truly seen — a personalised keepsake from BornClock" className="justify-center" /></div>
@@ -122,7 +122,7 @@ export default function GiftReport() {
         <div className="grid sm:grid-cols-2 gap-3">
           {SECTIONS.map(s => (
             <div key={s.n} className="flex gap-3 border border-gray-200 rounded-xl p-4">
-              <span className="text-sm font-black text-indigo-300">{s.n}</span>
+              <span className="text-sm font-black text-[#6E5AA6]">{s.n}</span>
               <div>
                 <p className="font-semibold text-gray-900 text-sm">{s.title}</p>
                 <p className="text-xs text-gray-500 leading-relaxed">{s.sub}</p>
@@ -134,9 +134,9 @@ export default function GiftReport() {
 
       {/* 4 — VISUAL / LIVE EXAMPLE */}
       <section className="max-w-2xl mx-auto px-4 py-8 text-center">
-        <div className="rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 p-8">
+        <div className="rounded-2xl bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border border-[#6E5AA6]/30 p-8">
           <p className="text-sm text-gray-600 mb-3">Every Blueprint is a designed, shareable keepsake — a private web page plus a downloadable PDF.</p>
-          <Link to="/birthday-report" className="text-indigo-600 font-semibold hover:underline">See what's inside a Birthday Blueprint →</Link>
+          <Link to="/birthday-report" className="text-[#6E5AA6] font-semibold hover:underline">See what's inside a Birthday Blueprint →</Link>
         </div>
       </section>
 
@@ -165,17 +165,17 @@ export default function GiftReport() {
       <section className="max-w-3xl mx-auto px-4 py-8">
         <div className="grid sm:grid-cols-3 gap-3">
           <div className="border border-gray-200 rounded-xl p-4 text-center">
-            <Clock className="w-6 h-6 text-indigo-500 mx-auto mb-2" />
+            <Clock className="w-6 h-6 text-[#6E5AA6] mx-auto mb-2" />
             <p className="font-semibold text-gray-900 text-sm">Instant delivery</p>
             <p className="text-xs text-gray-500">A private link the moment you create it — nothing ships.</p>
           </div>
           <div className="border border-gray-200 rounded-xl p-4 text-center">
-            <ShieldCheck className="w-6 h-6 text-indigo-500 mx-auto mb-2" />
+            <ShieldCheck className="w-6 h-6 text-[#6E5AA6] mx-auto mb-2" />
             <p className="font-semibold text-gray-900 text-sm">7-day guarantee</p>
             <p className="text-xs text-gray-500">Not what you expected? Contact us within 7 days for a refund.</p>
           </div>
           <div className="border border-gray-200 rounded-xl p-4 text-center">
-            <InfinityIcon className="w-6 h-6 text-indigo-500 mx-auto mb-2" />
+            <InfinityIcon className="w-6 h-6 text-[#6E5AA6] mx-auto mb-2" />
             <p className="font-semibold text-gray-900 text-sm">Permanent access</p>
             <p className="text-xs text-gray-500">The link keeps working — a keepsake, not a one-time view.</p>
           </div>
@@ -186,7 +186,7 @@ export default function GiftReport() {
       <section className="max-w-2xl mx-auto px-4 py-8 text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-3">Give a gift only you could give</h2>
         <p className="text-gray-600 mb-5">One-time {reportPrice}. No subscription. Delivered instantly.</p>
-        <Link to="/birthday-report" className="inline-flex items-center gap-2 bg-indigo-600 text-white rounded-xl px-7 py-3.5 font-semibold hover:bg-indigo-700 transition-colors">
+        <Link to="/birthday-report" className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-xl px-7 py-3.5 font-semibold hover:bg-[#0E2238] transition-colors">
           <ArrowRightCircle className="w-5 h-5" /> Create their Blueprint — {reportPrice}
         </Link>
       </section>
@@ -201,10 +201,10 @@ export default function GiftReport() {
         <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related reading</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {meshPosts.map(p => (
-            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ {p.title}</Link>
+            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ {p.title}</Link>
           ))}
-          <Link to="/birthday-report" className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ Create a Birthday Report</Link>
-          <Link to="/celebrity-birthday" className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ Celebrity birthday match</Link>
+          <Link to="/birthday-report" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Create a Birthday Report</Link>
+          <Link to="/celebrity-birthday" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Celebrity birthday match</Link>
         </div>
       </div>
 

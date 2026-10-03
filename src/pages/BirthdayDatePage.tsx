@@ -102,7 +102,7 @@ export default function BirthdayDatePage() {
       </Helmet>
 
       {/* Nav */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
@@ -113,11 +113,11 @@ export default function BirthdayDatePage() {
 
         {/* Breadcrumb */}
         <nav className="text-xs text-gray-400 mb-6 flex items-center gap-1.5 flex-wrap">
-          <Link to="/" className="hover:text-indigo-600 transition-colors">Home</Link>
+          <Link to="/" className="hover:text-[#6E5AA6] transition-colors">Home</Link>
           <span>/</span>
-          <Link to="/birthday" className="hover:text-indigo-600 transition-colors">Birthday</Link>
+          <Link to="/birthday" className="hover:text-[#6E5AA6] transition-colors">Birthday</Link>
           <span>/</span>
-          <Link to={`/birthday/${month}`} className="hover:text-indigo-600 transition-colors">{monthName}</Link>
+          <Link to={`/birthday/${month}`} className="hover:text-[#6E5AA6] transition-colors">{monthName}</Link>
           <span>/</span>
           <span className="text-gray-600 font-medium">{monthName} {day}</span>
         </nav>
@@ -129,7 +129,7 @@ export default function BirthdayDatePage() {
         <PageTagline />
 
         {/* Direct answer box */}
-        <div className={`rounded-xl border-2 p-5 mb-8 ${ELEMENT_COLORS[p.element] ?? 'bg-indigo-50 border-indigo-200 text-indigo-800'}`}>
+        <div className={`rounded-xl border-2 p-5 mb-8 ${ELEMENT_COLORS[p.element] ?? 'bg-[#6E5AA6]/10 border-[#6E5AA6]/30 text-[#6E5AA6]'}`}>
           <p className="text-sm font-semibold leading-relaxed">
             People born on <strong>{monthName} {day}</strong> are{' '}
             <strong>{p.zodiacSign} {p.zodiacSymbol}</strong> — a {p.element} sign ruled by{' '}
@@ -143,7 +143,7 @@ export default function BirthdayDatePage() {
         <p className="text-xs text-gray-500 -mt-4 mb-8 leading-relaxed">
           Your <strong className="text-gray-700">Birth Day Number ({p.lifePathNumber})</strong> comes from the day of the month alone.
           Your full <strong className="text-gray-700">Life Path number</strong>, calculated from your complete birth date, is in the{' '}
-          <Link to="/birthday-report" className="text-indigo-600 hover:underline">Birthday Blueprint</Link>.
+          <Link to="/birthday-report" className="text-[#6E5AA6] hover:underline">Birthday Blueprint</Link>.
         </p>
 
         {/* Core traits */}
@@ -151,7 +151,7 @@ export default function BirthdayDatePage() {
           <h2 className="text-lg font-bold text-gray-900 mb-3">Core Personality Traits</h2>
           <div className="flex flex-wrap gap-2">
             {p.coreTraits.map(trait => (
-              <span key={trait} className="bg-indigo-100 text-indigo-800 px-3 py-1.5 rounded-full text-sm font-medium capitalize">
+              <span key={trait} className="bg-[#6E5AA6]/10 text-[#6E5AA6] px-3 py-1.5 rounded-full text-sm font-medium capitalize">
                 {trait}
               </span>
             ))}
@@ -196,22 +196,22 @@ export default function BirthdayDatePage() {
         <section className="mb-8">
           <h2 className="text-lg font-bold text-gray-900 mb-3">Lucky Attributes</h2>
           <div className="grid grid-cols-3 gap-3">
-            <Card className="text-center border-indigo-100">
+            <Card className="text-center border-[#6E5AA6]/30">
               <CardContent className="p-4">
                 <p className="text-xs text-gray-500 uppercase font-bold mb-1">Lucky Day</p>
-                <p className="text-base font-black text-indigo-700">{p.luckyDay}</p>
+                <p className="text-base font-black text-[#6E5AA6]">{p.luckyDay}</p>
               </CardContent>
             </Card>
-            <Card className="text-center border-indigo-100">
+            <Card className="text-center border-[#6E5AA6]/30">
               <CardContent className="p-4">
                 <p className="text-xs text-gray-500 uppercase font-bold mb-1">Lucky Color</p>
-                <p className="text-base font-black text-indigo-700">{p.luckyColor}</p>
+                <p className="text-base font-black text-[#6E5AA6]">{p.luckyColor}</p>
               </CardContent>
             </Card>
-            <Card className="text-center border-indigo-100">
+            <Card className="text-center border-[#6E5AA6]/30">
               <CardContent className="p-4">
                 <p className="text-xs text-gray-500 uppercase font-bold mb-1">Lucky Number</p>
-                <p className="text-base font-black text-indigo-700">{p.luckyNumber}</p>
+                <p className="text-base font-black text-[#6E5AA6]">{p.luckyNumber}</p>
               </CardContent>
             </Card>
           </div>
@@ -222,7 +222,7 @@ export default function BirthdayDatePage() {
           <h2 className="text-lg font-bold text-gray-900 mb-3">Compatible Zodiac Signs</h2>
           <div className="flex flex-wrap gap-2">
             {p.compatibleSigns.map(sign => (
-              <Badge key={sign} variant="outline" className="text-sm px-3 py-1.5 border-indigo-300 text-indigo-700">
+              <Badge key={sign} variant="outline" className="text-sm px-3 py-1.5 border-[#6E5AA6]/30 text-[#6E5AA6]">
                 {sign}
               </Badge>
             ))}
@@ -232,19 +232,19 @@ export default function BirthdayDatePage() {
         {/* Date fact */}
         <section className="mb-8 bg-gray-50 border border-gray-200 rounded-xl p-5">
           <h2 className="text-lg font-bold text-gray-900 mb-2">
-            <Calendar className="w-4 h-4 inline mr-1.5 text-indigo-500" />
+            <Calendar className="w-4 h-4 inline mr-1.5 text-[#6E5AA6]" />
             About {monthName} {day}
           </h2>
           <p className="text-sm text-gray-700 leading-relaxed">{p.dateFact}</p>
         </section>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 mb-8 text-white text-center">
+        <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-6 mb-8 text-white text-center">
           <h2 className="text-lg font-bold mb-2">Find who shares your {monthName} {day} birthday</h2>
-          <p className="text-sm text-indigo-100 mb-4">
+          <p className="text-sm text-[#6E5AA6] mb-4">
             Discover famous people born on your exact date — athletes, artists, scientists, and leaders.
           </p>
-          <Button asChild className="bg-white text-indigo-700 hover:bg-indigo-50 font-bold">
+          <Button asChild className="bg-white text-[#6E5AA6] hover:bg-[#6E5AA6]/10 font-bold">
             <Link to={`/born-on/${monthName.toLowerCase()}-${day}/`}>
               Explore Your Birthday <ArrowRight className="w-4 h-4 ml-1.5" />
             </Link>
@@ -263,11 +263,11 @@ export default function BirthdayDatePage() {
         </section>
 
         {/* Numerology Context */}
-        <section className="mb-8 bg-indigo-50 border border-indigo-100 rounded-xl p-6">
+        <section className="mb-8 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-1">
             {getNumerologyDescription(p.lifePathNumber)}
           </h2>
-          <p className="text-xs text-indigo-600 font-semibold mb-3 uppercase tracking-wide">
+          <p className="text-xs text-[#6E5AA6] font-semibold mb-3 uppercase tracking-wide">
             Your numerological foundation
           </p>
           <p className="text-sm text-gray-700 leading-relaxed">
@@ -341,20 +341,20 @@ export default function BirthdayDatePage() {
         <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
           <Link
             to={`/birthday/${prevMonth}/${prevDay}`}
-            className="flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 font-semibold transition-colors"
+            className="flex items-center gap-2 text-sm text-[#6E5AA6] hover:text-[#6E5AA6] font-semibold transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             {MONTH_NAMES[prevMonth]} {prevDay}
           </Link>
           <Link
             to={`/birthday/${month}`}
-            className="text-xs text-gray-400 hover:text-indigo-600 transition-colors"
+            className="text-xs text-gray-400 hover:text-[#6E5AA6] transition-colors"
           >
             All {monthName} Birthdays
           </Link>
           <Link
             to={`/birthday/${nextMonth}/${nextDay}`}
-            className="flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-800 font-semibold transition-colors"
+            className="flex items-center gap-2 text-sm text-[#6E5AA6] hover:text-[#6E5AA6] font-semibold transition-colors"
           >
             {MONTH_NAMES[nextMonth]} {nextDay}
             <ChevronRight className="w-4 h-4" />

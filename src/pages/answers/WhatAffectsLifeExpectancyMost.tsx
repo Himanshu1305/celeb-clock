@@ -48,18 +48,18 @@ export default function WhatAffectsLifeExpectancyMost() {
       <AnswerLayout>
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
+            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
             <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-indigo-600">FAQ</Link>
+            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
             <span className="mx-2">›</span>
             <span className="text-gray-600">What affects life expectancy most?</span>
           </nav>
 
           <h1 className="text-3xl font-black text-gray-900 mb-2">What Affects Life Expectancy the Most? The Answer Might Surprise You</h1>
-          <p className="text-indigo-500 italic text-sm mb-8">Know your time. Live it well.</p>
+          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
 
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               The five factors that most affect individual life expectancy are smoking status, physical activity, diet quality, body weight, and alcohol consumption. Harvard researchers tracked 123,000 Americans over three decades and found that people who maintained all five healthy habits by age 50 lived an average of 14 years longer (women) and 12 years longer (men) than those with none. Genetics, by contrast, accounts for only about 20–30% of how long you live. The rest is largely within your control.
             </p>
           </div>
@@ -87,7 +87,7 @@ export default function WhatAffectsLifeExpectancyMost() {
             <p className="text-lg font-bold text-gray-900 mb-2">Calculate My Life Expectancy</p>
             <p className="text-sm text-gray-500 mb-4">Personalised to your habits, country, and family history</p>
             <Link to="/life-expectancy"
-              className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Calculate my life expectancy →
             </Link>
           </div>
@@ -96,7 +96,7 @@ export default function WhatAffectsLifeExpectancyMost() {
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Tools</p>
             <div className="space-y-2">
               {RELATED.map((t) => (
-                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ {t.label}</Link>
+                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ {t.label}</Link>
               ))}
             </div>
           </div>

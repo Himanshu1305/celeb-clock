@@ -30,18 +30,18 @@ export default function WhatGenerationAmI() {
       <AnswerLayout>
         <div className="max-w-2xl mx-auto px-4 py-12">
           <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
+            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
             <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-indigo-600">FAQ</Link>
+            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
             <span className="mx-2">›</span>
             <span className="text-gray-600">What generation am I?</span>
           </nav>
 
           <h1 className="text-3xl font-black text-gray-900 mb-2">What Generation Am I? Gen Z, Millennial, Gen X, Boomer Explained</h1>
-          <p className="text-indigo-500 italic text-sm mb-8">Know your time. Live it well.</p>
+          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
 
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Your generation is determined by your birth year. Gen Alpha: 2013+. Gen Z: 1997–2012. Millennials: 1981–1996. Gen X: 1965–1980. Baby Boomers: 1946–1964. Silent Generation: 1928–1945. Each generation was shaped by the technology, world events, and cultural forces of their formative years.
             </p>
           </div>
@@ -76,7 +76,7 @@ export default function WhatGenerationAmI() {
             <p className="text-lg font-bold text-gray-900 mb-2">Find My Generation and Birthday Insights</p>
             <p className="text-sm text-gray-500 mb-4">Instant · Celebrity twins · Zodiac · Live age countdown</p>
             <Link to="/age-calculator"
-              className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Find My Generation and Birthday Insights →
             </Link>
           </div>
@@ -84,10 +84,10 @@ export default function WhatGenerationAmI() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-to-calculate-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ How to calculate my exact age</Link>
-              <Link to="/answers/who-shares-my-birthday" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ Who shares my birthday?</Link>
-              <Link to="/answers/how-long-will-i-live" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ How long will I live?</Link>
-              <Link to="/answers/what-is-my-zodiac-sign" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors text-sm text-gray-700 hover:text-indigo-700">→ What is my zodiac sign?</Link>
+              <Link to="/answers/how-to-calculate-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How to calculate my exact age</Link>
+              <Link to="/answers/who-shares-my-birthday" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ Who shares my birthday?</Link>
+              <Link to="/answers/how-long-will-i-live" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How long will I live?</Link>
+              <Link to="/answers/what-is-my-zodiac-sign" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my zodiac sign?</Link>
             </div>
           </div>
         </div>

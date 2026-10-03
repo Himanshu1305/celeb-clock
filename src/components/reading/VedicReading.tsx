@@ -8,6 +8,8 @@
  */
 import { useState } from 'react';
 import type { ReadingPayload, ReadingFactsClient } from '@/services/readingService';
+import { TermTip } from '@/components/vedic/TermTip';
+import { activeDoshaDetails } from '@/lib/vedic/doshaRemedies';
 
 const LIFE_AREAS: Array<{ key: 'career' | 'relationships' | 'health' | 'money' | 'family'; label: string }> = [
   { key: 'career', label: 'Career' },
@@ -62,16 +64,16 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
         </tbody>
       </table>
       <div className="text-muted-foreground">
-        Divisional highlights — Navamsa (D9) Moon: <span className="text-foreground">{facts.divisional.d9Moon}</span>;
-        {' '}Dasamsa (D10) Sun: <span className="text-foreground">{facts.divisional.d10Sun}</span>;
-        {' '}Shashtiamsa (D60) Moon: <span className="text-foreground">{facts.divisional.d60Moon}</span>.
+        Divisional highlights — <TermTip id="navamsa">Navamsa (D9)</TermTip> Moon: <span className="text-foreground">{facts.divisional.d9Moon}</span>;
+        {' '}<TermTip id="dasamsa">Dasamsa (D10)</TermTip> Sun: <span className="text-foreground">{facts.divisional.d10Sun}</span>;
+        {' '}<TermTip id="shashtiamsa">Shashtiamsa (D60)</TermTip> Moon: <span className="text-foreground">{facts.divisional.d60Moon}</span>.
       </div>
 
       {/* Raw Shadbala strengths — the narrative uses plain words ("strong"), so the
           exact computed virupa numbers live here for power users. */}
       {facts.planets && facts.planets.some(p => p.shadbala) && (
         <div data-testid="reading-shadbala">
-          <div className="text-muted-foreground mb-1">Planetary strength (Shadbala, in virupas — indicative):</div>
+          <div className="text-muted-foreground mb-1">Planetary strength (<TermTip id="shadbala">Shadbala</TermTip>, in virupas — indicative):</div>
           <table className="w-full text-left">
             <thead className="text-muted-foreground">
               <tr><th className="py-1 pr-3 font-medium">Planet</th><th className="py-1 pr-3 font-medium">Strength</th><th className="py-1 font-medium">Virupas</th></tr>
@@ -98,7 +100,7 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
             {facts.yogas.map((y, i) => (
               <li key={i} className="rounded border border-border/60 p-2">
                 <div className="font-semibold text-foreground">
-                  {y.name} <span className="ml-1 text-xs uppercase tracking-wide text-indigo-600">[{y.grade}]</span>
+                  {y.name} <span className="ml-1 text-xs uppercase tracking-wide text-[#6E5AA6]">[{y.grade}]</span>
                 </div>
                 <div className="text-muted-foreground">{y.summary}</div>
                 {y.conditions && y.conditions.length > 0 && (
@@ -112,6 +114,44 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
           </ul>
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * Part AI — deterministic, impact-first dosha detail with FREE, calm remedies.
+ * Gives Kaal Sarp the same first-class labelled treatment as Manglik and adds a
+ * remedies list for every detected pattern. If no major dosha is present, shows
+ * a short reassurance instead of nothing.
+ */
+function DoshaDetails({ facts }: { facts: ReadingFactsClient }) {
+  const details = activeDoshaDetails(facts.doshas);
+  if (details.length === 0) {
+    return (
+      <p data-testid="reading-doshas-none" className="mt-3 text-sm text-muted-foreground">
+        Your chart is free of the three major traditional patterns (Mangal Dosha, Kaal Sarp and Sade Sati) — a calm foundation, with nothing here needing a remedy.
+      </p>
+    );
+  }
+  return (
+    <div data-testid="reading-doshas-detail" className="mt-3 space-y-3">
+      {details.map(d => (
+        <div key={d.termId} data-testid={`dosha-${d.termId}`} className="rounded-lg border border-border p-4">
+          <div className="font-semibold text-foreground">
+            <TermTip id={d.termId}>{d.label}</TermTip>
+          </div>
+          {/* Impact FIRST, then reasoning. */}
+          <p className="mt-1 text-sm text-foreground">{d.impact}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{d.why}</p>
+          <div className="mt-2">
+            <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Free remedies (traditional customs — optional)</div>
+            <ul className="mt-1 list-disc pl-5 text-sm text-muted-foreground space-y-1">
+              {d.remedies.map((r, i) => <li key={i}>{r}</li>)}
+            </ul>
+          </div>
+        </div>
+      ))}
+      <p className="text-xs text-amber-700">All remedies above are free, traditional customs offered for interest — never something you must pay for or do out of fear.</p>
     </div>
   );
 }
@@ -140,7 +180,7 @@ function CollapsibleText({ text, section }: { text: string; section: string }) {
       <p data-collapsed={!open && long} style={long ? clampStyle : undefined}>{text}</p>
       {long && (
         <button type="button" data-testid={`reading-more-${section}`} onClick={() => setOpen(o => !o)}
-                className="mt-1 text-xs font-medium text-indigo-600 hover:text-indigo-700 hover:underline">
+                className="mt-1 text-xs font-medium text-[#6E5AA6] hover:text-[#6E5AA6] hover:underline">
           {open ? 'Show less' : 'Read more'}
         </button>
       )}
@@ -208,6 +248,7 @@ export function VedicReading({ payload }: { payload: ReadingPayload }) {
 
       <Section testid="reading-doshas" title="Doshas — areas to be mindful of">
         {reading ? <CollapsibleText text={reading.doshas} section="doshas" /> : <p>{fb.doshas}</p>}
+        <DoshaDetails facts={facts} />
       </Section>
 
       <Section testid="reading-divisional" title="Deeper chart layers">
@@ -222,7 +263,7 @@ export function VedicReading({ payload }: { payload: ReadingPayload }) {
           type="button"
           data-testid="reading-advanced-toggle"
           onClick={() => setShowAdvanced(v => !v)}
-          className="text-sm font-medium text-indigo-600 hover:text-indigo-700 underline"
+          className="text-sm font-medium text-[#6E5AA6] hover:text-[#6E5AA6] underline"
         >
           {showAdvanced ? 'Hide chart details' : 'Show chart details (advanced)'}
         </button>

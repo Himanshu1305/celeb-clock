@@ -67,7 +67,7 @@ export default function ChineseZodiacSign() {
         ogImage="https://bornclock.com/og/zodiac.png"
       />
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -175,7 +175,7 @@ export default function ChineseZodiacSign() {
                   <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-2">Lucky Directions</h3>
                   <div className="flex flex-wrap gap-2">
                     {data.lucky_directions.map((d) => (
-                      <span key={d} className="px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm">{d}</span>
+                      <span key={d} className="px-2 py-1 bg-[#6E5AA6]/10 text-[#6E5AA6] rounded text-sm">{d}</span>
                     ))}
                   </div>
                 </div>

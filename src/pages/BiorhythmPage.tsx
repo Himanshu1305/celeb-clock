@@ -87,7 +87,7 @@ export default function BiorhythmPage() {
       <FAQSchema items={faqItems} />
 
       <div className="min-h-screen bg-white">
-        <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
             <Navigation />
             <AuthNav />
@@ -96,7 +96,7 @@ export default function BiorhythmPage() {
         <div className="max-w-2xl mx-auto px-4 py-10">
 
           <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
+            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
             <span>›</span>
             <span className="text-gray-600">Biorhythm Calculator</span>
           </nav>

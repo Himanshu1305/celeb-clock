@@ -53,9 +53,11 @@ export const AgeCalculator = ({ onBirthDateChange, initialDate }: AgeCalculatorP
         <div className="flex items-center justify-center gap-2 mb-2">
           <ClockIcon className="h-8 w-8 text-primary animate-pulse-glow" />
         </div>
-        <h1 className="text-4xl md:text-6xl font-bold gradient-text-primary">
+        {/* Part AO: h2 — this widget is always embedded under a page-level <h1>, so it must
+            not introduce a second <h1> (single-h1 SEO rule). */}
+        <h2 className="text-4xl md:text-6xl font-bold gradient-text-primary">
           Age Calculator
-        </h1>
+        </h2>
         <PageTagline />
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Discover your precise age and see the time ticking by in real-time

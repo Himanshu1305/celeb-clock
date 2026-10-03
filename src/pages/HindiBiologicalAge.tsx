@@ -27,7 +27,7 @@ const HindiBiologicalAge = () => {
         url="/biological-age-hindi"
       />
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -39,8 +39,8 @@ const HindiBiologicalAge = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-10 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Biological age वह उम्र है जो आपका शरीर actually जी रहा है — आपके जन्म प्रमाण पत्र की उम्र नहीं। दो लोग जो एक ही दिन पैदा हुए हों, उनकी biological age 10 साल तक अलग हो सकती है — उनकी lifestyle के आधार पर।
             </p>
           </div>

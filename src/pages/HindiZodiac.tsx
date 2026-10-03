@@ -27,7 +27,7 @@ const HindiZodiac = () => {
         url="/rashifal-by-date-of-birth"
       />
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -39,8 +39,8 @@ const HindiZodiac = () => {
         </section>
 
         <section className="max-w-3xl mx-auto mb-10 px-4">
-          <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-indigo-900 leading-relaxed">
+          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               आपकी राशि आपकी जन्म तिथि से तय होती है। Western astrology में 12 राशियाँ हैं जो सूर्य की स्थिति पर आधारित हैं। Vedic astrology में चंद्रमा की स्थिति (moon sign या rashi) को ज्यादा महत्वपूर्ण माना जाता है।
             </p>
           </div>

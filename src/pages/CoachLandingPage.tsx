@@ -66,7 +66,7 @@ export default function CoachLandingPage() {
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBAPP_LD) }} />
 
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
+      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Navigation />
           <AuthNav />
@@ -74,7 +74,7 @@ export default function CoachLandingPage() {
       </div>
 
       <section className="max-w-3xl mx-auto px-4 pt-12 pb-6 text-center">
-        <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-full px-3 py-1 mb-5">
+        <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[#6E5AA6] bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-full px-3 py-1 mb-5">
           <Bot className="w-4 h-4" /> Longevity Coach
         </div>
         <h1 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-4">
@@ -88,10 +88,10 @@ export default function CoachLandingPage() {
           and points you toward what you can change; it never diagnoses, and never predicts a date.
         </p>
         <div className="mt-6 flex flex-wrap gap-3 justify-center">
-          <Link to="/life-expectancy" className="inline-flex items-center gap-2 bg-indigo-600 text-white rounded-xl px-6 py-3 font-semibold hover:bg-indigo-700 transition-colors">
+          <Link to="/life-expectancy" className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#0E2238] transition-colors">
             <ArrowRightCircle className="w-5 h-5" /> Get your forecast & meet the Coach
           </Link>
-          <Link to="/upgrade" className="inline-flex items-center gap-2 border border-gray-300 rounded-xl px-6 py-3 font-semibold text-gray-700 hover:border-indigo-300 hover:text-indigo-700 transition-colors">
+          <Link to="/upgrade" className="inline-flex items-center gap-2 border border-gray-300 rounded-xl px-6 py-3 font-semibold text-gray-700 hover:border-[#6E5AA6]/30 hover:text-[#6E5AA6] transition-colors">
             See Premium pricing
           </Link>
         </div>
@@ -124,11 +124,11 @@ export default function CoachLandingPage() {
 
       {/* Prominent privacy guarantee — the zero-retention contract is real (in code) */}
       <section className="max-w-2xl mx-auto px-4 py-8">
-        <div className="border-2 border-indigo-200 bg-indigo-50 rounded-2xl p-6 flex items-start gap-4">
-          <Lock className="w-8 h-8 text-indigo-600 shrink-0 mt-0.5" />
+        <div className="border-2 border-[#6E5AA6]/30 bg-[#6E5AA6]/10 rounded-2xl p-6 flex items-start gap-4">
+          <Lock className="w-8 h-8 text-[#6E5AA6] shrink-0 mt-0.5" />
           <div>
-            <p className="font-bold text-indigo-900 mb-1">Your conversations are never stored</p>
-            <p className="text-sm text-indigo-900/80 leading-relaxed">
+            <p className="font-bold text-[#6E5AA6] mb-1">Your conversations are never stored</p>
+            <p className="text-sm text-[#6E5AA6]/80 leading-relaxed">
               Each message is processed just long enough to write a reply, then it’s gone — nothing is saved, logged
               or added to a profile. Close the tab and the conversation no longer exists anywhere. Talking about your
               health should feel private, so we built it that way rather than promising it in the fine print.
@@ -162,14 +162,14 @@ export default function CoachLandingPage() {
           <p className="text-gray-700 leading-relaxed">
             The Coach is part of the Premium experience and is available during your{' '}
             <strong>free trial</strong>. It lives inside your{' '}
-            <Link to="/life-expectancy" className="text-indigo-600 hover:underline">Life Expectancy results</Link>{' '}
+            <Link to="/life-expectancy" className="text-[#6E5AA6] hover:underline">Life Expectancy results</Link>{' '}
             — generate a forecast, then open the Coach panel to ask your first question.
           </p>
           <p className="text-gray-700 leading-relaxed mt-3">
             Premium is <strong>{subscriptionPrice('annual', currency)}/year</strong> (about{' '}
             {annualPerMonth(currency)}/month) or <strong>{subscriptionPrice('monthly', currency)}/month</strong>,
             and includes the Coach plus report credits. See{' '}
-            <Link to="/upgrade" className="text-indigo-600 hover:underline">full Premium pricing</Link> for what’s included.
+            <Link to="/upgrade" className="text-[#6E5AA6] hover:underline">full Premium pricing</Link> for what’s included.
           </p>
         </div>
       </section>
@@ -182,10 +182,10 @@ export default function CoachLandingPage() {
         <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {meshPosts.map(p => (
-            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ {p.title}</Link>
+            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ {p.title}</Link>
           ))}
-          <Link to="/life-expectancy" className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ Life Expectancy Calculator</Link>
-          <Link to="/biological-age" className="p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm text-gray-700 hover:text-indigo-700 transition-colors">→ Biological Age</Link>
+          <Link to="/life-expectancy" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Life Expectancy Calculator</Link>
+          <Link to="/biological-age" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Biological Age</Link>
         </div>
       </div>
 

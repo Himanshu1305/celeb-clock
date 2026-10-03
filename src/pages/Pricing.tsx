@@ -59,7 +59,7 @@ export default function Pricing() {
         canonicalUrl="/pricing"
       />
       <div className="container mx-auto px-4 py-6">
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
           <Navigation />
           <AuthNav />
         </header>
@@ -95,24 +95,24 @@ export default function Pricing() {
           </div>
 
           {/* Premium */}
-          <div className="bg-white rounded-2xl border-2 border-indigo-300 p-6 flex flex-col relative shadow-md">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</div>
-            <div className="text-lg font-bold text-indigo-600 mb-1">Premium</div>
+          <div className="bg-white rounded-2xl border-2 border-[#6E5AA6]/30 p-6 flex flex-col relative shadow-md">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#0E2238] text-white text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</div>
+            <div className="text-lg font-bold text-[#6E5AA6] mb-1">Premium</div>
             <div className="text-4xl font-black text-gray-900 mb-1">{monthly.amount}</div>
             <div className="text-gray-400 text-sm">{monthly.period} · cancel anytime</div>
             {/* Both cadences from pricing.ts; saving computed from the constants. */}
-            <div className="text-sm font-medium text-indigo-700 mb-5">
+            <div className="text-sm font-medium text-[#6E5AA6] mb-5">
               or {subscriptionPrice('annual', currency)}/yr (save {formatMoney(annualSaving(currency), currency)})
             </div>
             <ul className="space-y-2 mb-6 flex-1">
               {['Everything in Free', 'Full longevity suite & AI coach', 'Family dashboard & country comparison',
                 'Downloadable PDF reports'].map(f => (
                 <li key={f} className="flex items-center gap-2 text-sm text-gray-700">
-                  <Check size={14} className="text-indigo-500 flex-shrink-0" /> {f}
+                  <Check size={14} className="text-[#6E5AA6] flex-shrink-0" /> {f}
                 </li>
               ))}
-              <li className="flex items-start gap-2 text-sm font-semibold text-indigo-700">
-                <Repeat size={14} className="text-indigo-500 flex-shrink-0 mt-0.5" />
+              <li className="flex items-start gap-2 text-sm font-semibold text-[#6E5AA6]">
+                <Repeat size={14} className="text-[#6E5AA6] flex-shrink-0 mt-0.5" />
                 3 birthday report credits per month — auto-applied, roll over, stack up to 9
               </li>
             </ul>
@@ -147,7 +147,7 @@ export default function Pricing() {
               <tr className="border-b bg-gray-50">
                 <th className="text-left font-semibold text-gray-700 px-4 py-3">Feature</th>
                 <th className="text-center font-semibold text-gray-700 px-4 py-3 w-24">Free</th>
-                <th className="text-center font-semibold text-indigo-700 px-4 py-3 w-28">Premium</th>
+                <th className="text-center font-semibold text-[#6E5AA6] px-4 py-3 w-28">Premium</th>
               </tr>
             </thead>
             <tbody>
@@ -157,7 +157,7 @@ export default function Pricing() {
                   <td className="px-4 py-3 text-center">
                     {free ? <Check size={16} className="text-green-600 inline" /> : <X size={16} className="text-gray-300 inline" />}
                   </td>
-                  <td className="px-4 py-3 text-center"><Check size={16} className="text-indigo-600 inline" /></td>
+                  <td className="px-4 py-3 text-center"><Check size={16} className="text-[#6E5AA6] inline" /></td>
                 </tr>
               ))}
             </tbody>
@@ -165,11 +165,11 @@ export default function Pricing() {
         </div>
 
         {/* Credits explainer */}
-        <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-8 flex items-start gap-3">
-          <Repeat className="text-indigo-600 flex-shrink-0 mt-0.5" size={20} />
+        <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-2xl p-6 mb-8 flex items-start gap-3">
+          <Repeat className="text-[#6E5AA6] flex-shrink-0 mt-0.5" size={20} />
           <div>
-            <div className="font-semibold text-indigo-900 mb-1">How birthday report credits work</div>
-            <div className="text-sm text-indigo-800">
+            <div className="font-semibold text-[#6E5AA6] mb-1">How birthday report credits work</div>
+            <div className="text-sm text-[#6E5AA6]">
               Premium members earn <strong>three birthday report credits each month</strong>. Unused credits
               <strong> carry forward</strong> and stack up to a maximum of 9 — so you can save them up and
               gift several reports at once. Each credit unlocks one full Birthday Blueprint, and for members
@@ -194,7 +194,7 @@ export default function Pricing() {
         <div className="bg-white border rounded-2xl p-5 mb-8">
           <div className="font-semibold text-gray-900 mb-1">What if I don't like it?</div>
           <div className="text-sm text-gray-600">
-            Email <a href="mailto:hello@bornclock.com" className="text-indigo-600 underline">hello@bornclock.com</a> within
+            Email <a href="mailto:hello@bornclock.com" className="text-[#6E5AA6] underline">hello@bornclock.com</a> within
             7 days of purchase for a full refund.
           </div>
         </div>

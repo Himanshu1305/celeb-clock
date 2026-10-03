@@ -4,12 +4,15 @@
  * around already-validated data, matching the other Vedic tool pages.
  */
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
+import { TermTip } from '@/components/vedic/TermTip';
+import { TrustStrip } from '@/components/paj/TrustStrip';
+import '@/styles/part-aj.css';
 
 interface Cycle { start: string; end: string }
 interface Report {
@@ -88,17 +91,27 @@ export default function SadeSatiPage() {
   const initial = profile ? { dob: profile.dob, time: profile.time, city: profile.city } : undefined;
 
   return (
-    <div data-testid="sadesati-page" className="min-h-screen bg-gradient-cosmic">
+    <div data-testid="sadesati-page" className="paj editorial" data-category="vedic">
       <SEO title="Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock"
         description="Free Sade Sati calculator — find whether Saturn's 7.5-year Sade Sati (or the 2.5-year Dhaiya) is active for you, which phase, and the real start and end dates of your current and next cycle."
         canonicalUrl="/sade-sati" ogType="website" />
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center mb-8"><Navigation /><AuthNav /></header>
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">Sade Sati Calculator</h1>
-        <p className="text-muted-foreground mb-6">Saturn’s 7.5-year Sade Sati passes over the 12th, 1st and 2nd signs from your Moon. This tool shows whether it’s active for you now, which phase, and the real start/end dates — plus the 2.5-year Dhaiya (small Panoti).</p>
-
-        <BirthDetailsForm initial={initial} submitLabel="Check my Sade Sati" loadingLabel="Calculating…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="sadesati" />
-        {failed && <p className="text-sm text-muted-foreground mt-4">The service is temporarily unavailable. Please try again shortly.</p>}
+      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}><Navigation /><AuthNav /></header>
+      <div className="breadcrumb">
+        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Sade Sati</span></div>
+        <div className="edition"><span className="dot" />Shani · Saturn transit</div>
+      </div>
+      <main id="main">
+        <section className="section">
+          <div className="section-head">
+            <div><span className="eyebrow">Shani · Saturn transit</span><h1>Sade Sati Calculator.</h1></div>
+            <p>Saturn’s 7.5-year Sade Sati passes over the 12th, 1st and 2nd signs from your Moon — this shows whether it’s active now, which phase, the real start/end dates, plus the 2.5-year Dhaiya (small Panoti).</p>
+          </div>
+          <TrustStrip claim="Computed from your real Saturn transit, not a lookup table." />
+          <div className="form-band" style={{ marginTop: 16 }}>
+            <div><h3>Your birth details</h3><p className="small muted">We use your Moon sign to locate Saturn’s transit.</p></div>
+            <BirthDetailsForm initial={initial} submitLabel="Check my Sade Sati" loadingLabel="Calculating…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="sadesati" />
+          </div>
+        {failed && <p className="subtle" style={{ marginTop: 12 }}>The service is temporarily unavailable. Please try again shortly.</p>}
 
         {report && (
           <div data-testid="sadesati-result" className="mt-6 space-y-4">
@@ -134,23 +147,54 @@ export default function SadeSatiPage() {
             )}
 
             {report.dhaiya.active && (
-              <div data-testid="sadesati-dhaiya" className="rounded-lg border border-indigo-200 bg-indigo-50/50 p-4">
+              <div data-testid="sadesati-dhaiya" className="rounded-lg border border-[#6E5AA6]/30 bg-[#6E5AA6]/50 p-4">
                 <div className="font-semibold text-foreground">Dhaiya (small Panoti) is active</div>
                 <div className="text-sm text-foreground">{report.dhaiya.type} — until {fmt(report.dhaiya.currentEnd)}</div>
                 <p className="text-xs text-muted-foreground mt-1">A 2.5-year Saturn transit (the 4th or 8th from your Moon), traditionally a lighter version of Sade Sati’s themes.</p>
               </div>
             )}
 
-            <div data-testid="sadesati-methodology" className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
+            <div data-testid="sadesati-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
               <div className="font-semibold text-foreground mb-1">How this was worked out</div>
               <p className="text-sm text-foreground">{report.methodology}</p>
             </div>
 
-            <p className="text-xs text-muted-foreground">Dates are computed from Saturn’s real transit through the signs, using the same Lahiri-ayanamsa engine as the rest of BornClock. Treat Sade Sati as a classical timing indicator, not a fixed prediction.</p>
+            {/* Part AI — calm, optional upay/remedies section (non-fear-based). */}
+            <div data-testid="sadesati-upay" className="rounded-xl border border-border p-5">
+              <div className="font-semibold text-foreground mb-1">Traditional upay (remedies) — optional, not required</div>
+              <p className="text-sm text-muted-foreground mb-2">
+                First, the honest part: <strong className="text-foreground">nothing here is necessary to "avoid harm"</strong> — Sade Sati is a period to move through steadily, not a threat to defend against. These are simply the customs people have found grounding during Saturn periods, offered for interest.
+              </p>
+              <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
+                <li><strong className="text-foreground">Lean into Saturn’s own themes</strong> — patience, routine, honest hard work and finishing what you start. This is the most-cited "remedy" and the one that actually matches the period.</li>
+                <li><strong className="text-foreground">Service &amp; generosity</strong> — helping elders, workers or those in need on a Saturday is a traditional Saturn practice many find genuinely centring.</li>
+                <li><strong className="text-foreground">Devotional custom</strong> — some recite the Hanuman Chalisa or a Shani mantra on Saturdays; take it or leave it as suits your beliefs.</li>
+                <li><strong className="text-foreground">Gemstone (with caution)</strong> — a Blue Sapphire (<TermTip id="ratna">Ratna</TermTip>) is the classical Saturn stone, but it’s a powerful one — always trialled first. See the <a href="/gemstones" className="text-primary hover:underline">Gemstone tool</a> for a full-chart check before considering it.</li>
+              </ul>
+              <p className="mt-2 text-xs text-amber-700">Offered as tradition and reflection, not medical or financial advice — and never as something you must do out of fear.</p>
+            </div>
+
+            <p className="text-xs text-muted-foreground">Dates are computed from Saturn’s real transit through the signs, using the same Lahiri-ayanamsa engine (<TermTip id="ayanamsa">the traditional Indian star-based calculation</TermTip>) as the rest of BornClock. Treat Sade Sati as a classical timing indicator, not a fixed prediction.</p>
           </div>
         )}
-      </div>
-      <Footer />
+        </section>
+      </main>
+      <footer className="site-footer">
+        <div className="footer-main">
+          <div>
+            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+            <p className="subtle">Sade Sati from Saturn’s real transit — the same Lahiri-ayanamsa engine as the rest of BornClock.</p>
+          </div>
+          <nav className="footer-nav" aria-label="Footer navigation">
+            <Link to="/vedic-astrology">Vedic Astrology</Link>
+            <Link to="/kundali">Kundali</Link>
+            <Link to="/muhurat">Muhurat</Link>
+            <Link to="/gemstones">Gemstones</Link>
+            <Link to="/privacy">Privacy</Link>
+          </nav>
+        </div>
+        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
+      </footer>
     </div>
   );
 }

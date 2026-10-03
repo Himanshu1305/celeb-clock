@@ -29,8 +29,8 @@ export function BirthdayReportCTA({
     <section
       data-testid="birthday-report-cta"
       aria-label="Generate your Birthday Intelligence Report"
-      className="mt-8 mb-6 rounded-2xl border border-indigo-200
-                 bg-gradient-to-br from-indigo-50 to-purple-50 p-4 sm:p-6
+      className="mt-8 mb-6 rounded-2xl border border-[#6E5AA6]/30
+                 bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] p-4 sm:p-6
                  shadow-sm"
     >
       {/* ── Heading ── */}
@@ -55,7 +55,7 @@ export function BirthdayReportCTA({
           <li key={text} className="flex items-start gap-2">
             <span
               aria-hidden="true"
-              className="text-indigo-500 font-bold flex-shrink-0 mt-0.5"
+              className="text-[#6E5AA6] font-bold flex-shrink-0 mt-0.5"
             >
               ✓
             </span>
@@ -70,10 +70,10 @@ export function BirthdayReportCTA({
         data-testid="cta-button"
         aria-label="Generate your free Birthday Intelligence Report"
         className="block w-full text-center
-                   bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700
+                   bg-[#0E2238] hover:bg-[#0E2238] active:bg-[#0E2238]
                    text-white font-bold py-4 px-6
                    rounded-xl transition-colors text-base shadow-sm
-                   focus:outline-none focus:ring-2 focus:ring-indigo-400
+                   focus:outline-none focus:ring-2 focus:ring-[#0E2238]
                    focus:ring-offset-2"
       >
         Generate My Free Birthday Report →

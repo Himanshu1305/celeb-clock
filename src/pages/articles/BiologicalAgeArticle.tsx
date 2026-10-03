@@ -89,16 +89,16 @@ function BioAgeCalculator() {
 
   return (
     <div data-testid="bio-age-calculator"
-         className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-6 my-8">
-      <h3 className="text-lg font-black text-indigo-900 mb-1">
+         className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
+      <h3 className="text-lg font-black text-[#6E5AA6] mb-1">
         Estimate Your Biological Age (Illustrative)
       </h3>
-      <p className="text-sm text-indigo-700 mb-4">
+      <p className="text-sm text-[#6E5AA6] mb-4">
         Enter your chronological age and toggle three lifestyle factors to see a rough,
         illustrative biological-age delta. This is a simplified demo — not a clinical test.
       </p>
 
-      <label className="block text-sm font-semibold text-indigo-900 mb-1" htmlFor="chrono-age">
+      <label className="block text-sm font-semibold text-[#6E5AA6] mb-1" htmlFor="chrono-age">
         Your chronological age
       </label>
       <input
@@ -109,8 +109,8 @@ function BioAgeCalculator() {
         value={chrono}
         onChange={(e) => setChrono(e.target.value)}
         placeholder="e.g. 42"
-        className="w-full border-2 border-indigo-300 rounded-xl px-4 py-3
-                   text-base focus:outline-none focus:border-indigo-500 bg-white mb-4"
+        className="w-full border-2 border-[#6E5AA6]/30 rounded-xl px-4 py-3
+                   text-base focus:outline-none focus:border-[#6E5AA6]/30 bg-white mb-4"
         aria-label="Enter your chronological age in years"
       />
 
@@ -121,13 +121,13 @@ function BioAgeCalculator() {
           { label: 'I eat a mostly plant-based, whole-food diet', val: eatsPlants, set: setEatsPlants },
         ].map((t) => (
           <label key={t.label}
-                 className="flex items-center gap-3 bg-white border-2 border-indigo-200
+                 className="flex items-center gap-3 bg-white border-2 border-[#6E5AA6]/30
                             rounded-xl px-4 py-3 text-sm text-gray-800 cursor-pointer">
             <input
               type="checkbox"
               checked={t.val}
               onChange={(e) => t.set(e.target.checked)}
-              className="w-5 h-5 accent-indigo-600"
+              className="w-5 h-5 accent-[#0E2238]"
             />
             {t.label}
           </label>
@@ -136,9 +136,9 @@ function BioAgeCalculator() {
 
       {valid && (
         <div data-testid="bio-age-result"
-             className="bg-white rounded-xl border-2 border-indigo-300 p-5">
+             className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-5">
           <div className="flex items-center gap-4 mb-2">
-            <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center
+            <div className="w-16 h-16 bg-[#0E2238] rounded-full flex items-center
                             justify-center text-2xl font-black text-white flex-shrink-0">
               {bioAge}
             </div>
@@ -146,7 +146,7 @@ function BioAgeCalculator() {
               <div className="text-xl font-black text-gray-900">
                 Estimated biological age: {bioAge}
               </div>
-              <div className="text-indigo-600 font-semibold text-sm">
+              <div className="text-[#6E5AA6] font-semibold text-sm">
                 Roughly {deltaLabel} than your calendar age
               </div>
             </div>
@@ -156,8 +156,8 @@ function BioAgeCalculator() {
             population health research. For a proper reading, use the calculator below.
           </p>
           <a href="/biological-age-calculator"
-             className="inline-block bg-indigo-600 text-white font-bold px-5 py-2.5
-                        rounded-full text-sm hover:bg-indigo-700 transition-colors">
+             className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
+                        rounded-full text-sm hover:bg-[#0E2238] transition-colors">
             Get my full biological age estimate →
           </a>
         </div>
@@ -218,7 +218,7 @@ export function BiologicalAgeArticle() {
             changed the field, which markers actually matter, and the five lifestyle changes with
             the strongest evidence for lowering your biological age. If you want a quick,
             illustrative estimate right now, you can try the mini-calculator further down, or use
-            the full <a href="/biological-age-calculator" className="text-indigo-600 font-semibold underline">biological age calculator</a>.
+            the full <a href="/biological-age-calculator" className="text-[#6E5AA6] font-semibold underline">biological age calculator</a>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">
@@ -233,8 +233,8 @@ export function BiologicalAgeArticle() {
                 nothing less.
               </p>
             </div>
-            <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
-              <h3 className="font-bold text-indigo-900 mb-2">Biological age</h3>
+            <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-5">
+              <h3 className="font-bold text-[#6E5AA6] mb-2">Biological age</h3>
               <p className="text-sm text-gray-700 leading-relaxed">
                 How old the body is, estimated from biomarkers of ageing. It can run younger or
                 older than your calendar age, and it responds — slowly — to how you live.
@@ -268,10 +268,10 @@ export function BiologicalAgeArticle() {
             The Main Ways Biological Age Is Measured
           </h2>
           {MARKERS.map((m) => (
-            <div key={m.name} className="mb-5 border-l-4 border-indigo-200 pl-4">
+            <div key={m.name} className="mb-5 border-l-4 border-[#6E5AA6]/30 pl-4">
               <div className="flex items-baseline justify-between gap-3 mb-1">
                 <h3 className="text-lg font-bold text-gray-900">{m.name}</h3>
-                <span className="text-xs font-semibold text-indigo-700 bg-indigo-100
+                <span className="text-xs font-semibold text-[#6E5AA6] bg-[#6E5AA6]/10
                                  rounded-full px-2 py-0.5 flex-shrink-0 whitespace-nowrap">
                   {m.strength}
                 </span>
@@ -300,7 +300,7 @@ export function BiologicalAgeArticle() {
             {LEVERS.map((l, i) => (
               <li key={l.name} className="flex gap-4 items-start bg-gray-50
                          border border-gray-200 rounded-xl p-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-indigo-600 text-white
+                <div className="flex-shrink-0 w-8 h-8 bg-[#0E2238] text-white
                                 rounded-full flex items-center justify-center font-black text-sm">
                   {i + 1}
                 </div>
@@ -347,9 +347,9 @@ export function BiologicalAgeArticle() {
             It is a starting point, not a diagnosis. But it points at exactly the same
             interventions the epigenetic science highlights, in a form you can act on today. To
             see your own number, use the{' '}
-            <a href="/biological-age-calculator" className="text-indigo-600 font-semibold underline">biological age calculator</a>{' '}
+            <a href="/biological-age-calculator" className="text-[#6E5AA6] font-semibold underline">biological age calculator</a>{' '}
             — and to see how those habits translate into a projected lifespan, try the{' '}
-            <a href="/longevity-calculator" className="text-indigo-600 font-semibold underline">longevity calculator</a>.
+            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">longevity calculator</a>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Frequently Asked Questions</h2>
@@ -367,7 +367,7 @@ export function BiologicalAgeArticle() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <a href="/articles/epigenetics-and-longevity"
                  className="block p-4 bg-white rounded-xl border border-gray-200
-                            hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
+                            hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors">
                 <div className="font-semibold text-sm text-gray-900 mb-0.5">
                   Epigenetics and Longevity
                 </div>
@@ -377,7 +377,7 @@ export function BiologicalAgeArticle() {
               </a>
               <a href="/articles/how-to-live-to-100"
                  className="block p-4 bg-white rounded-xl border border-gray-200
-                            hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
+                            hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors">
                 <div className="font-semibold text-sm text-gray-900 mb-0.5">
                   How to Live to 100
                 </div>
@@ -388,16 +388,16 @@ export function BiologicalAgeArticle() {
             </div>
           </section>
 
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl
+          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Find Out Your Biological Age — Free</h2>
-            <p className="text-indigo-200 mb-6">
+            <p className="text-[#6E5AA6] mb-6">
               See how your lifestyle stacks up against the science, and get a personalised
               estimate of your biological age in a few minutes.
             </p>
             <a href="/biological-age-calculator"
-               className="inline-block bg-white text-indigo-700 font-black px-8 py-3
-                          rounded-full text-lg hover:bg-indigo-50 transition-colors">
+               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Calculate My Biological Age →
             </a>
           </div>
