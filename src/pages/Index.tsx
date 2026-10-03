@@ -16,7 +16,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { JsonLd } from '@/components/JsonLd';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { useBirthDate } from '@/context/BirthDateContext';
-import { zodiacSign, lifePath, birthstoneForMonth, marsAge, marsYearProgress, marsWeightKg } from '@/utils/homepageDecode';
+import { zodiacSign, lifePath, birthstoneForMonth, marsAge, marsYearProgress, marsWeightKg, bornOnWeekday, nextMilestone } from '@/utils/homepageDecode';
 import { getRankedBirthdayCelebrities, type CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { fetchCelebrityImage } from '@/services/WikipediaImageService';
 import { supabase } from '@/integrations/supabase/client';
@@ -141,8 +141,12 @@ export default function Index() {
   const totalSec = Math.max(0, Math.floor((now.getTime() - birth.getTime()) / 1000));
   const daysInYear = Math.floor((now.getTime() - lastBday.getTime()) / 86400000);
   const nextIn = Math.ceil((nextBday.getTime() - now.getTime()) / 86400000);
-  const pct = Math.min(100, Math.max(0, ((now.getTime() - lastBday.getTime()) / (nextBday.getTime() - lastBday.getTime())) * 100));
   const isBirthdayToday = now.getMonth() + 1 === m && now.getDate() === d;
+
+  // Part AO: born-on weekday + next 1,000-day milestone (UTC maths, DST-safe).
+  const weekday = bornOnWeekday(y, m, d);
+  const ms = nextMilestone(y, m, d, now);
+  const milestoneDateStr = `${ms.date.getUTCDate()} ${MONTHS[ms.date.getUTCMonth()]} ${ms.date.getUTCFullYear()}`;
 
   const sign = zodiacSign(d, m);
   const lp = lifePath(d, m, y);
@@ -245,10 +249,23 @@ export default function Index() {
                 : <div style={{ fontSize: 12.5, color: '#1A2230' }}>Next birthday in <b>{nextIn}</b> days</div>}
             </div>
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: '#1A2230', marginBottom: 5 }}>
-                <span>Year <b>{yearsLived + 1}</b> of {isExample ? 'this life' : 'your life'}</span><span><b>{Math.floor(pct)}</b>% complete</span>
+              <div style={{ fontSize: 12.5, color: '#1A2230', marginBottom: 8 }}>
+                {isExample ? 'This date falls on a ' : 'You were born on a '}<b>{weekday}</b>.
               </div>
-              <div className="pbar" role="progressbar" aria-label="Progress through the current year of life" aria-valuenow={Math.floor(pct)} aria-valuemin={0} aria-valuemax={100}><div style={{ width: `${pct.toFixed(2)}%` }} /></div>
+              {ms.isMilestoneToday ? (
+                <div style={{ fontSize: 12.5, color: '#B5432A', fontWeight: 700 }}>
+                  🎊 {isExample ? 'This date is' : "You're"} exactly <b>{ms.milestone.toLocaleString()}</b> days old today!
+                </div>
+              ) : (
+                <>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: '#1A2230', marginBottom: 5 }}>
+                    <span>Next milestone: <b>{ms.milestone.toLocaleString()}</b> days old</span>
+                    <span><b>{ms.daysToGo.toLocaleString()}</b> days to go</span>
+                  </div>
+                  <div className="pbar" role="progressbar" aria-label={`Progress toward ${ms.milestone.toLocaleString()} days old`} aria-valuenow={Math.floor(ms.blockProgress * 100)} aria-valuemin={0} aria-valuemax={100}><div style={{ width: `${(ms.blockProgress * 100).toFixed(2)}%` }} /></div>
+                  <div style={{ fontSize: 10.5, color: '#5B6472', marginTop: 4 }}>Reaches {ms.milestone.toLocaleString()} days on {milestoneDateStr}</div>
+                </>
+              )}
             </div>
             <div style={{ fontSize: 10.5, color: '#5B6472' }}>Heartbeats estimated at an average 72 bpm. Clock assumes a 00:00 birth time.</div>
           </div>

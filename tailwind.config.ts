@@ -14,8 +14,11 @@ export default {
     },
     extend: {
       fontFamily: {
-        'sans': ['"Public Sans"', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'],
-        'heading': ['Fraunces', 'Georgia', 'ui-serif', 'serif'],
+        // Noto Sans Devanagari sits in the fallback chain: its @font-face carries a devanagari
+        // unicode-range, so the browser only fetches it when a Devanagari glyph is rendered
+        // (Hindi pages) and uses Public Sans / Fraunces for Latin — English pages pay nothing.
+        'sans': ['"Public Sans"', '"Noto Sans Devanagari"', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'],
+        'heading': ['Fraunces', '"Noto Sans Devanagari"', 'Georgia', 'ui-serif', 'serif'],
         'devanagari': ['"Noto Sans Devanagari"', '"Public Sans"', 'system-ui', 'sans-serif'],
       },
       colors: {

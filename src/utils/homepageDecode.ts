@@ -45,3 +45,51 @@ export function marsYearProgress(birth: Date, now: Date = new Date()): number {
 export function marsWeightKg(earthKg = 70): number {
   return earthKg * MARS_GRAVITY_FACTOR;
 }
+
+// ── Part AO: born-on weekday + next 1,000-day milestone ──────────────────────
+// All date maths is done on calendar dates in UTC so daylight-saving transitions
+// can never shift a day boundary and produce an off-by-one weekday or day count.
+
+const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const;
+const MS_PER_DAY = 86400000;
+
+/** The weekday a person was born on, computed in UTC (DST-safe). */
+export function bornOnWeekday(year: number, month: number, day: number): string {
+  return WEEKDAYS[new Date(Date.UTC(year, month - 1, day)).getUTCDay()];
+}
+
+/** Whole days lived from the birth date to `now`, counted midnight-to-midnight in UTC. */
+export function daysOld(year: number, month: number, day: number, now: Date = new Date()): number {
+  const birthUTC = Date.UTC(year, month - 1, day);
+  const nowUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  return Math.floor((nowUTC - birthUTC) / MS_PER_DAY);
+}
+
+export interface MilestoneInfo {
+  daysOld: number;
+  /** true when today is exactly a 1,000-day multiple. */
+  isMilestoneToday: boolean;
+  /** the upcoming (or today's) 1,000-day mark, e.g. 11000. */
+  milestone: number;
+  /** calendar date (UTC) on which that mark is/was reached. */
+  date: Date;
+  daysToGo: number;
+  /** 0–1 progress through the current 1,000-day block. */
+  blockProgress: number;
+  prevMilestone: number;
+}
+
+/**
+ * The next 1,000-day milestone. Leap years are handled automatically because the
+ * milestone date is the birth date plus an exact number of days in UTC.
+ */
+export function nextMilestone(year: number, month: number, day: number, now: Date = new Date()): MilestoneInfo {
+  const d = daysOld(year, month, day, now);
+  const isMilestoneToday = d > 0 && d % 1000 === 0;
+  const prev = Math.floor(d / 1000) * 1000;
+  const milestone = isMilestoneToday ? d : prev + 1000;
+  const daysToGo = milestone - d;
+  const date = new Date(Date.UTC(year, month - 1, day) + milestone * MS_PER_DAY);
+  const blockProgress = isMilestoneToday ? 1 : (d - prev) / 1000;
+  return { daysOld: d, isMilestoneToday, milestone, date, daysToGo, blockProgress, prevMilestone: prev };
+}
