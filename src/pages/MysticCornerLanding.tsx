@@ -20,6 +20,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { DobInput, type DobValue, parseDob } from '@/components/DobInput';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { TrustStrip } from '@/components/paj/TrustStrip';
+import { JsonLd } from '@/components/JsonLd';
 import {
   calculateWesternZodiac, calculateChineseZodiac, calculateLifePathNumber,
   LIFE_PATH_TRAITS, type ZodiacInfo,
@@ -87,6 +88,11 @@ export default function MysticCornerLanding() {
       </div>
 
       <main id="main">
+        <JsonLd id="faq" data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
+          { '@type': 'Question', name: 'Is this different from a generic horoscope?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. The numerology result and calendar assignments respond to your actual input, with the calculation method shown. The interpretations remain symbolic, not scientifically validated personal predictions.' } },
+          { '@type': 'Question', name: 'Why could my Chinese zodiac differ elsewhere?', acceptedAnswer: { '@type': 'Answer', text: 'This uses the Chinese year for your Gregorian birth year. Births in January or early February can fall in the previous Chinese year under the Lunar New Year boundary. A full BaZi reading also needs additional birth information.' } },
+          { '@type': 'Question', name: 'Are Western and Vedic signs the same?', acceptedAnswer: { '@type': 'Answer', text: 'No. This Western tool uses conventional tropical Sun-sign date ranges. Vedic systems typically use sidereal positions with a chosen ayanamsa — see the Vedic Astrology page. Different reference systems can produce different sign labels.' } },
+        ] }} />
         {/* HERO (atlas) */}
         <section className="hero" id="start" aria-label="Introduction">
           <div className="hero-top">

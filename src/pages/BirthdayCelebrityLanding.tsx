@@ -31,6 +31,7 @@ import { AuthNav } from '@/components/AuthNav';
 import { DobInput, type DobValue, parseDob } from '@/components/DobInput';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { TrustStrip } from '@/components/paj/TrustStrip';
+import { JsonLd } from '@/components/JsonLd';
 import { calculateWesternZodiac, calculateLifePathNumber } from '@/utils/celebrityCalculations';
 import { getRankedBirthdayCelebrities, type CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { fetchCelebrityImage } from '@/services/WikipediaImageService';
@@ -202,6 +203,7 @@ export default function BirthdayCelebrityLanding() {
       </div>
 
       <main id="main">
+        <JsonLd id="faq" data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }} />
         {/* HERO (field-guide) */}
         <section className="hero" id="start" aria-label="Introduction">
           <div className="wide-title">

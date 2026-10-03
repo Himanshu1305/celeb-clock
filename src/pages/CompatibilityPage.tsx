@@ -3,7 +3,8 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import DobCompatibility from '@/components/DobCompatibility';
 import { AuthNav } from '@/components/AuthNav';
-import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
+import { SEO } from '@/components/SEO';
+import { JsonLd } from '@/components/JsonLd';
 import { PageFAQ } from '@/components/PageFAQ';
 import PageTagline from '@/components/PageTagline';
 import { TrustStrip } from '@/components/paj/TrustStrip';
@@ -200,12 +201,21 @@ export default function CompatibilityPage() {
         keywords="zodiac compatibility, are aries and leo compatible, horoscope compatibility, birthday compatibility calculator, love compatibility zodiac"
         canonicalUrl={canonicalUrl}
       />
-      <WebApplicationSchema
-        name="Zodiac Compatibility Calculator"
-        description="Free zodiac compatibility calculator for all 144 sign combinations — love, friendship, and work compatibility across every pairing."
-        url="/compatibility"
-      />
-      <FAQSchema items={faqItems} />
+      {/* Part AM: in-body JSON-LD (NOT Helmet) so it reliably lands in the prerendered HTML —
+          verified via validator.schema.org. See src/components/JsonLd.tsx. */}
+      <JsonLd id="webapp" data={{
+        '@context': 'https://schema.org', '@type': 'WebApplication',
+        name: 'Zodiac Compatibility Calculator',
+        description: 'Free zodiac compatibility calculator for all 144 sign combinations — love, friendship, and work compatibility across every pairing.',
+        url: 'https://bornclock.com/compatibility/',
+        applicationCategory: 'LifestyleApplication', operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        provider: { '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com' },
+      }} />
+      <JsonLd id="faq" data={{
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: faqItems.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
+      }} />
 
       <div className="paj atlas" data-category="mystic">
         <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>

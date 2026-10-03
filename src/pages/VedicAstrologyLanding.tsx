@@ -28,6 +28,7 @@ import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsFo
 import { TermTip, GradeLegend } from '@/components/vedic/TermTip';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { TrustStrip } from '@/components/paj/TrustStrip';
+import { JsonLd } from '@/components/JsonLd';
 import { fetchReading } from '@/services/readingService';
 import '@/styles/part-aj.css';
 
@@ -309,6 +310,7 @@ export default function VedicAstrologyLanding() {
       </div>
 
       <main id="main">
+        <JsonLd id="faq" data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }} />
         {/* HERO (editorial) */}
         <section className="hero" id="start" aria-label="Introduction">
           <div className="hero-top">

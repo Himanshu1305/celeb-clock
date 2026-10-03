@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SEO, FAQSchema } from '@/components/SEO';
+import { SEO } from '@/components/SEO';
+import { JsonLd } from '@/components/JsonLd';
 import PageTagline from '@/components/PageTagline';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
@@ -31,7 +32,11 @@ export default function RashiRatnaPage() {
         keywords="rashi ratna, rashi ratna by zodiac, gemstone by rashi, vedic birthstone, navratna, moonga for aries, pukhraj for leo, neelam for capricorn, heera for taurus"
         canonicalUrl="/rashi-ratna"
       />
-      <FAQSchema items={faqItems} />
+      {/* Part AM: in-body JSON-LD so it reliably lands in the prerendered HTML (not Helmet). */}
+      <JsonLd id="faq" data={{
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: faqItems.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
+      }} />
 
       <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
         <Navigation />
