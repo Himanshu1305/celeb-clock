@@ -53,7 +53,7 @@ export default function BirthdayWishPage() {
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
       const grad = ctx.createLinearGradient(0, 0, 1080, 1080);
-      grad.addColorStop(0, '#4f46e5'); grad.addColorStop(1, '#db2777');
+      grad.addColorStop(0, '#0E2238'); grad.addColorStop(1, '#C6A15B');
       ctx.fillStyle = grad; ctx.fillRect(0, 0, 1080, 1080);
       ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
       ctx.font = 'bold 64px sans-serif';

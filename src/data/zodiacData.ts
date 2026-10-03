@@ -316,7 +316,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
     endMonth: 11,
     endDay: 21,
     element: 'Water',
-    elementColor: '#7C3AED',
+    elementColor: '#6E5AA6',
     rulingPlanet: 'Pluto / Mars',
     modality: 'Fixed',
     bodyPart: 'Reproductive organs',

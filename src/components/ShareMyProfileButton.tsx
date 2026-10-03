@@ -26,7 +26,7 @@ export function ShareMyProfileButton({
         const ctx = canvas.getContext('2d');
         if (!ctx) return resolve(null);
         const g = ctx.createLinearGradient(0, 0, 1080, 1080);
-        g.addColorStop(0, '#4f46e5'); g.addColorStop(1, '#db2777');
+        g.addColorStop(0, '#0E2238'); g.addColorStop(1, '#C6A15B');
         ctx.fillStyle = g; ctx.fillRect(0, 0, 1080, 1080);
         ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
         ctx.font = 'bold 56px sans-serif';

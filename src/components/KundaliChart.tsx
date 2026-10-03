@@ -26,10 +26,10 @@ export function KundaliChart({ lagnaSignIndex, planets }: { lagnaSignIndex: numb
 
   return (
     <svg data-testid="kundali-chart" viewBox="0 0 300 300" className="w-full max-w-xs mx-auto" role="img" aria-label="North Indian Kundali chart">
-      <rect x="2" y="2" width="296" height="296" fill="#fff" stroke="#4f46e5" strokeWidth="2" />
-      <line x1="2" y1="2" x2="298" y2="298" stroke="#4f46e5" strokeWidth="1" />
-      <line x1="298" y1="2" x2="2" y2="298" stroke="#4f46e5" strokeWidth="1" />
-      <polygon points="150,2 298,150 150,298 2,150" fill="none" stroke="#4f46e5" strokeWidth="1" />
+      <rect x="2" y="2" width="296" height="296" fill="#fff" stroke="#0E2238" strokeWidth="2" />
+      <line x1="2" y1="2" x2="298" y2="298" stroke="#0E2238" strokeWidth="1" />
+      <line x1="298" y1="2" x2="2" y2="298" stroke="#0E2238" strokeWidth="1" />
+      <polygon points="150,2 298,150 150,298 2,150" fill="none" stroke="#0E2238" strokeWidth="1" />
       {Array.from({ length: 12 }, (_, i) => i + 1).map(h => {
         const pos = HOUSE_POS[h];
         const planetsHere = byHouse[h] || [];

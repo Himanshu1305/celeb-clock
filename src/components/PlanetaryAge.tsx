@@ -106,7 +106,7 @@ const PLANET_UI: PlanetUIData[] = [
   {
     name: 'Neptune',
     emoji: '♆',
-    accentColor: '#818cf8',
+    accentColor: '#6E5AA6',
     gravityRatio: 1.14,
     tempDisplay: '-201°C 🥶',
     moons: 16,

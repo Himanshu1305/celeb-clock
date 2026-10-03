@@ -124,7 +124,7 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
       buyer_state_code: buyerStateCode ?? '',
       tax_mode: taxMode ?? '',
     },
-    theme: { color: '#4F46E5' },
+    theme: { color: '#0E2238' },
     modal: {
       ondismiss: onDismiss,
       confirm_close: true,
@@ -252,7 +252,7 @@ export async function initiateOrderPayment(options: OrderPaymentOptions): Promis
     image: 'https://bornclock.com/favicon.png',
     prefill: { email: userEmail, name: userName || '' },
     notes: { email: userEmail, userId, product },
-    theme: { color: '#4F46E5' },
+    theme: { color: '#0E2238' },
     modal: { ondismiss: onDismiss, confirm_close: true, escape: false },
     handler: async (response: any) => {
       try {

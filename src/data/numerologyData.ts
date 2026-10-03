@@ -196,7 +196,7 @@ export const NUMEROLOGY_DATA: NumerologyNumberData[] = [
     name: 'The Seeker',
     isMasterNumber: false,
     color: 'Violet',
-    hexColor: '#7C3AED',
+    hexColor: '#6E5AA6',
     planet: 'Neptune',
     element: 'Water',
     keywords: ['Analysis', 'Introspection', 'Wisdom', 'Spirituality', 'Solitude'],
