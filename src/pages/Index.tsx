@@ -183,7 +183,7 @@ export default function Index() {
   return (
     <div className="hp">
       <SEO
-        title="Birthday, Zodiac & Longevity Calculator | BornClock"
+        title="Free Birthday, Zodiac & Longevity Calculator | BornClock"
         description="Everything your birth date reveals: your Vedic birth chart, celebrity birthday twins, numerology and zodiac, and longevity science — all from one date. Free birthday, zodiac & longevity calculators."
         keywords="birthday calculator, zodiac calculator, longevity calculator, numerology, life path, vedic birth chart, kundli, celebrity birthdays, biological age"
         canonicalUrl="/"

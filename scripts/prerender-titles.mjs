@@ -157,8 +157,7 @@ const ANSWERS = {
 
 // ── Static pages ──────────────────────────────────────────────────────────────
 const STATIC = {
-  // Part AN: homepage title (keeps the ranking key terms; ≤70 chars; positioning lives in the H1 + meta description)
-  '/':                     { title: 'Birthday, Zodiac & Longevity Calculator | BornClock', desc: 'Everything your birth date reveals: your Vedic birth chart, celebrity birthday twins, numerology and zodiac, and longevity science — all from one date. Free at BornClock.' },
+  // (homepage '/' title is handled directly in getTitleForRoute above)
   // Day-8 celebrity index + hubs
   '/celebrity':            { title: 'Indian Celebrity Birthday Profiles — 598 Celebrities | BornClock', desc: 'Birthday, zodiac, and numerology profiles for 598 Indian celebrities — actors, cricketers, singers, leaders and more.' },
   '/celebrity/bollywood':  { title: 'Bollywood Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Bollywood actors and film personalities.' },
@@ -395,8 +394,9 @@ const FITNESS = {
 
 export function getTitleForRoute(route) {
   if (route === '/') return {
+    // Part AN: title keeps the proven ranking key terms (≤70); the new positioning leads the H1 + description.
     title: 'Free Birthday, Zodiac & Longevity Calculator | BornClock',
-    description: 'Decode your birthday — celebrity twins, zodiac, Vedic rashi, numerology, life path and a science-backed longevity forecast. Free, from your date of birth.',
+    description: 'Everything your birth date reveals: your Vedic birth chart, celebrity birthday twins, numerology and zodiac, and longevity science — all from one date. Free at BornClock.',
   };
   if (FITNESS[route]) return FITNESS[route];
 
