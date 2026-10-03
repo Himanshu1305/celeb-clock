@@ -43,3 +43,11 @@ Autonomous, no stopping, conservative-omission. Continues on `part-aj-four-page-
 - ✅ /career-report → Vedic theme + trust + DOB carry-forward + in-body WebApplication schema. DOM-verified.
 - ✅ /name-numerology → Mystic theme + trust + in-body WebApplication+FAQPage schema. DOM-verified.
 - Global: sitewide WebPage JSON-LD now injected in prerender (deduped). JsonLd.tsx is the schema pattern going forward.
+
+## Part AM — self-verification + final preview (SESSION BLOCK END)
+- Fifth-Rule catch: /sade-sati,/muhurat,/gemstones,/astrologer served GENERIC homepage <title> + no WebPage (prerendered since AL Step 7 with no title entry). FIXED via prerender-titles entries; verified correct unique titles + WebPage=1 in final prerendered output.
+- Final isolated preview: https://d7dd234e-bornclock.usdvisionai.workers.dev (version d7dd234e; NOT promoted).
+- Live validator.schema.org: career-report=6, name-numerology=6, compatibility=6, numerology=7, sade-sati/muhurat/gemstones=4 — ALL 0 errors/0 warnings.
+- Fresh suite 1860 pass (26.3s). Fresh live crawl 128 links / 0 dead. career-report carry-forward renders real computed report on live page.
+- Part E: preview bundle ships LIVE Razorpay key (rzp_live) → real transaction NOT run (evidence-based); no paywalled file touched; gating intact; recommend building preview with --mode preview for future payment tests.
+- NOT done (backlog): ~104 Part A pages incl. Science rebuild, zodiac/chinese-zodiac/tarot/sun-vs-moon/moon-sign, astrologer theme, Birthday templates; Part C new pages (research done); nav/footer restyle (deferred, documented).
