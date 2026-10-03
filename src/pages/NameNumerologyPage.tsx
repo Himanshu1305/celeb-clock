@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
-import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
+import { SEO } from '@/components/SEO';
+import { JsonLd } from '@/components/JsonLd';
+import { TrustStrip } from '@/components/paj/TrustStrip';
+import '@/styles/part-aj.css';
 import PageTagline from '@/components/PageTagline';
 import { calculateAllNameNumbers, getLetterBreakdown, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 import { useReportPrice } from '@/hooks/useCurrency';
@@ -53,30 +56,32 @@ export default function NameNumerologyPage() {
         keywords="name numerology calculator, numerology by name, expression number calculator, soul urge number, name number meaning, personality number"
         canonicalUrl="/name-numerology"
       />
-      <WebApplicationSchema
-        name="Name Numerology Calculator"
-        description="Free Pythagorean name numerology calculator — find your Expression Number, Soul Urge Number, and Personality Number with full meaning guides."
-        url="/name-numerology"
-      />
-      <FAQSchema items={faqItems} />
-
-      <div className="min-h-screen bg-white">
-        <div className="bg-white border-b border-gray-100 sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <Navigation />
-            <AuthNav />
-          </div>
+      <div className="paj atlas" data-category="mystic">
+        <JsonLd id="webapp" data={{
+          '@context': 'https://schema.org', '@type': 'WebApplication',
+          name: 'Name Numerology Calculator',
+          description: 'Free Pythagorean name numerology calculator — find your Expression Number, Soul Urge Number, and Personality Number with full meaning guides.',
+          url: 'https://bornclock.com/name-numerology/', applicationCategory: 'LifestyleApplication', operatingSystem: 'Web',
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+          provider: { '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com' },
+        }} />
+        <JsonLd id="faq" data={{
+          '@context': 'https://schema.org', '@type': 'FAQPage',
+          mainEntity: faqItems.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
+        }} />
+        <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+          <Navigation />
+          <AuthNav />
+        </header>
+        <div className="breadcrumb">
+          <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/mystic-corner" className="textlink">Mystic Corner</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Name Numerology</span></div>
+          <div className="edition"><span className="dot" />Pythagorean · Expression / Soul Urge / Personality</div>
         </div>
         <div className="max-w-2xl mx-auto px-4 py-10">
-
-          <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-indigo-600">Home</Link>
-            <span>›</span>
-            <span className="text-gray-600">Name Numerology</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-1">Name Numerology Calculator</h1>
+          <span className="eyebrow">Name Numerology</span>
+          <h1 style={{ margin: '8px 0 10px' }}>Name Numerology Calculator</h1>
           <PageTagline />
+          <TrustStrip claim="Calculated from the letters of your actual name (Pythagorean values) — not a generic reading." />
 
           <div className="bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-5 mb-8">
             <p className="text-base font-semibold text-indigo-900 leading-relaxed">
@@ -235,6 +240,22 @@ export default function NameNumerologyPage() {
           </div>
 
         </div>
+        <footer className="site-footer">
+          <div className="footer-main">
+            <div>
+              <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
+              <p className="subtle">Name numerology computed from your name's letters (Pythagorean) — Expression, Soul Urge and Personality numbers.</p>
+            </div>
+            <nav className="footer-nav" aria-label="Footer navigation">
+              <Link to="/mystic-corner">Mystic Corner</Link>
+              <Link to="/numerology">Numerology</Link>
+              <Link to="/compatibility">Compatibility</Link>
+              <Link to="/tarot-card-by-birthday">Tarot by Birthday</Link>
+              <Link to="/privacy">Privacy</Link>
+            </nav>
+          </div>
+          <div className="footer-bottom"><span>© 2026 BornClock · Calculated, not templated.</span></div>
+        </footer>
       </div>
     </>
   );
