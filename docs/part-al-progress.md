@@ -30,3 +30,11 @@ Autonomous, no stopping, conservative-omission. Continues on `part-aj-four-page-
 - Full build OK (3635 routes prerendered, sitemap 3635). Isolated `wrangler versions upload` → https://11e6b1a0-bornclock.usdvisionai.workers.dev (NOT promoted).
 - Preview verified: 10 redesigned pages 200 + trust + paj + no overflow + no errors; kundali live engine 9-planet chart via carry-forward.
 - Report: docs/part-al-report.md. NOTHING merged or deployed.
+
+## Part AM-prep — JSON-LD prerender fix VERIFIED LIVE (not just DOM)
+- Root cause: prerender captured outerHTML before react-helmet-async flushed; only BreadcrumbList was manually re-injected, so Helmet WebApplication/FAQPage never landed in prerendered HTML.
+- Fix: in-body JsonLd component (src/components/JsonLd.tsx) on /compatibility (WebApplication+FAQPage), /rashi-ratna (FAQPage), and the 3 hubs (FAQPage from real on-page FAQs). Commit on branch.
+- Full rebuild (16m, 3635-URL sitemap) → isolated `wrangler versions upload` (NOT promoted): https://534687f3-bornclock.usdvisionai.workers.dev
+- LIVE validator.schema.org result: /compatibility = 5 objects, 0 errors, 0 warnings (Organization, WebSite, BreadcrumbList, WebApplication, FAQPage). rashi-ratna + 3 hubs = 4 objects, 0 errors (FAQPage added). numerology = 7, 0 errors.
+- Known remaining (reported, not fixed this pass): SEO-component WebPage JSON-LD still missing from prerendered output on most pages (same Helmet race; low value; shared-component fix flagged, not done).
+- Part AM spec file NOT present in repo as of this check — did not start Part AM.
