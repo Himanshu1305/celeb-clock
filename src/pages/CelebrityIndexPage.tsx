@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
+import { Navigation } from '@/components/Navigation';
+import { AuthNav } from '@/components/AuthNav';
 import { indianCelebrities } from '@/data/indianCelebrities';
 import { generateAllSlugs, HUB_SLUGS, getHubConfig } from '@/utils/celebrityUtils';
 
@@ -49,6 +51,10 @@ export function CelebrityIndexPage() {
       <JsonLd data={breadcrumbSchema} />
 
       <main data-testid="celebrity-index-page" className="min-h-screen bg-white">
+        <header className="flex items-center justify-between gap-3 flex-wrap px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
+          <Navigation />
+          <AuthNav />
+        </header>
         {/* ── BREADCRUMB ── */}
         <nav aria-label="Breadcrumb" className="max-w-5xl mx-auto px-4 pt-4">
           <ol className="flex items-center gap-2 text-sm text-gray-400 flex-wrap list-none p-0">
