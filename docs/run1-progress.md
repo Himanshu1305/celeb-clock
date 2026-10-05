@@ -28,3 +28,24 @@ article: /articles/moon-sign-by-date-of-birth, /articles/vedic-astrology-birth-c
 
 ## Step 4 — Deploy staging + push
 - [ ] pending
+
+## Step 2 — Vedic migration (status)
+MOVED + verified on live staging (200, single hydrated h1, data-theme=vedic, header/
+footer/single-main, JSON-LD, 0 console errors): **/vedic-astrology, /kundali, /muhurat,
+/sade-sati, /gemstones** (5 of 29).
+NOT yet moved (still on old .paj, working via data-category — coexistence): the other
+24 Vedic routes (kundali-match, rashi-ratna, moon-sign, sun-vs-moon-sign, rashifal,
+hi/rashifal*, answers/*, zodiac*, chinese-zodiac*, vedic-zodiac*, articles/*,
+career-report, astrologer, articles/kundali-compatibility).
+
+## Step 3 — Testing done this run
+- Full unit suite: 155 files / 1888 tests pass (incl. Kundali TC-KUNDALI regression).
+- Central unit tests: 10/10 (theme selection + each layout's header block).
+- Live staging verify (chromium): 5/5 migrated + 4 regression pages — see
+  docs/run1-screens/verify.json and index.html contact sheet.
+- NOT run: WebKit/Android, axe, validator.schema.org, full positive/negative/edge
+  input matrix, full journeys — see report "not done".
+
+## Step 4 — Deploy + push
+- Built (3635 prerendered, sitemap), dry-run confirmed staging vars, deployed
+  bornclock-staging (version a9bd5bbe). Pushing redesign-central.
