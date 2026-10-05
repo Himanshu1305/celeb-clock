@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation, Link, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getRankedMonthCelebrities, getRankedMonthCelebritiesByCountry } from '@/services/BirthdaySearchService';
 import { getMonthHub, MONTH_HUB_DATA } from '@/data/monthHubData';
@@ -118,39 +116,40 @@ export default function MonthHub() {
   } : null;
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title={pageTitle.length > 65 ? `Born in ${month} — Zodiac, Birthstone & Famous Birthdays | BornClock` : pageTitle}
-        description={metaDesc}
-        canonicalUrl={`/born-in-${slug}`}
-        ogType="website"
-      />
-      <FAQSchema items={faqItems} />
-      {celebJsonLd && (
-        <Helmet>
-          <script type="application/ld+json">{JSON.stringify(celebJsonLd)}</script>
-        </Helmet>
+    <CollectionLayout
+      theme="birthday"
+      testId="month-hub-page"
+      seo={(
+        <>
+          <SEO
+            title={pageTitle.length > 65 ? `Born in ${month} — Zodiac, Birthstone & Famous Birthdays | BornClock` : pageTitle}
+            description={metaDesc}
+            canonicalUrl={`/born-in-${slug}`}
+            ogType="website"
+          />
+          <FAQSchema items={faqItems} />
+          {celebJsonLd && (
+            <Helmet>
+              <script type="application/ld+json">{JSON.stringify(celebJsonLd)}</script>
+            </Helmet>
+          )}
+        </>
       )}
-
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Breadcrumb (matches the /born-on date pages) */}
-        <nav className="text-sm text-muted-foreground mb-6 flex items-center gap-2">
-          <Link to="/" className="hover:text-foreground">Home</Link>
-          <span>›</span>
-          <Link to="/born-in" className="hover:text-foreground">Born in Each Month</Link>
-          <span>›</span>
-          <span className="text-foreground">Born in {month}</span>
-        </nav>
-
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">
-          Born in {month}
-        </h1>
-
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }, { label: 'Born in Each Month', to: '/born-in' }], current: `Born in ${month}` }}
+      footer={{
+        tagline: `Zodiac, birthstone, birth flowers and famous people born in ${month}.`,
+        nav: [
+          { label: 'Born On', to: '/born-on' },
+          { label: 'Born In (months)', to: '/born-in' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Born-on dates.',
+      }}
+      eyebrow="Birth month"
+      h1={<>Born in {month}</>}
+    >
+      <section className="section">
         {/* AEO answer block */}
         <h2 className="text-xl font-semibold text-foreground mb-2 mt-4">What does being born in {month} mean?</h2>
         <div className="bg-primary/10 border-l-4 border-primary rounded-r-xl p-5 mb-6">
@@ -318,8 +317,7 @@ export default function MonthHub() {
             Born in {next.month} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </CollectionLayout>
   );
 }

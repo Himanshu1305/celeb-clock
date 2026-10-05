@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { AgeCalculator } from '@/components/AgeCalculator';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
 import { ShareableCard } from '@/components/ShareableCard';
 import { CelebrityMatch } from '@/components/CelebrityMatch';
 import { ZodiacAndFacts } from '@/components/ZodiacAndFacts';
@@ -70,38 +68,47 @@ const AgeCalculatorPage = () => {
   const { birthDate, setBirthDate } = useBirthDate();
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Best Age Calculator Online — Exact Age in Seconds (Free)"
-        description="You're not just 30 years old. You've lived 10,957 days. 946 million seconds. Find your exact age — live, free."
-        keywords="best age calculator, age calculator online, exact age, age in days, age in seconds, free age calculator, birthday calculator"
-        canonicalUrl="/age-calculator"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Age Calculator"
-        description="Free online age calculator — find your exact age in years, months, days, hours, minutes and seconds. Live countdown, no sign-up required."
-        url="/age-calculator"
-      />
-      <FAQSchema items={[
-        { question: 'How do I calculate my exact age?', answer: 'Enter your date of birth and the calculator subtracts it from the current date, giving your exact age in years, months, days, hours, minutes and seconds — updated live.' },
-        { question: 'Is this age calculator free?', answer: 'Yes. It is completely free, requires no sign-up, and runs entirely in your browser — your date of birth is never stored on a server.' },
-        { question: 'How do I calculate age in days or seconds?', answer: 'The calculator shows your total age in days, hours, minutes and seconds automatically once you enter your birth date, alongside the standard years/months/days breakdown.' },
-        { question: 'How accurate is the age calculation?', answer: 'It accounts for leap years and exact time elapsed, so the years/months/days figure matches how age is counted officially. The live seconds counter updates every second.' },
-      ]} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Best Age Calculator — Your Exact Age, Live to the Second
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Enter your date of birth and instantly see your precise age in years, months, days, hours, minutes and seconds — calculated live in your browser and never stored.
-          </p>
+    <ToolLayout
+      theme="birthday"
+      testId="age-calculator-page"
+      seo={(
+        <>
+          <SEO
+            title="Best Age Calculator Online — Exact Age in Seconds (Free)"
+            description="You're not just 30 years old. You've lived 10,957 days. 946 million seconds. Find your exact age — live, free."
+            keywords="best age calculator, age calculator online, exact age, age in days, age in seconds, free age calculator, birthday calculator"
+            canonicalUrl="/age-calculator"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Age Calculator"
+            description="Free online age calculator — find your exact age in years, months, days, hours, minutes and seconds. Live countdown, no sign-up required."
+            url="/age-calculator"
+          />
+          <FAQSchema items={[
+            { question: 'How do I calculate my exact age?', answer: 'Enter your date of birth and the calculator subtracts it from the current date, giving your exact age in years, months, days, hours, minutes and seconds — updated live.' },
+            { question: 'Is this age calculator free?', answer: 'Yes. It is completely free, requires no sign-up, and runs entirely in your browser — your date of birth is never stored on a server.' },
+            { question: 'How do I calculate age in days or seconds?', answer: 'The calculator shows your total age in days, hours, minutes and seconds automatically once you enter your birth date, alongside the standard years/months/days breakdown.' },
+            { question: 'How accurate is the age calculation?', answer: 'It accounts for leap years and exact time elapsed, so the years/months/days figure matches how age is counted officially. The live seconds counter updates every second.' },
+          ]} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday' }], current: 'Age Calculator' }}
+      footer={{
+        tagline: 'Your exact age in years, months, days, hours and seconds — live.',
+        nav: [
+          { label: 'Age Calculator', to: '/age-calculator' },
+          { label: 'Birthday Countdown', to: '/birthday-countdown' },
+          { label: "Today's Birthdays", to: '/todays-birthdays' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Age & birthday tools.',
+      }}
+      eyebrow="Exact age calculator"
+      h1="Best Age Calculator — Your Exact Age, Live to the Second"
+      lead={<>Enter your date of birth and instantly see your precise age in years, months, days, hours, minutes and seconds — calculated live in your browser and never stored.</>}
+    >
+        <section className="section">
           <EEATBadges sources={['ISO 8601', 'JavaScript Date Spec']} />
         </section>
 
@@ -175,7 +182,6 @@ const AgeCalculatorPage = () => {
 
         <RelatedTools currentSlug="age" />
         <AuthorBio />
-      </div>
 
       <div className="max-w-3xl mx-auto mt-12 px-4 mb-8">
         <div className="p-4 rounded-xl border border-border bg-muted/30">
@@ -189,9 +195,7 @@ const AgeCalculatorPage = () => {
       <p className="text-center text-xs text-muted-foreground mt-8 mb-4 px-4">
         Last reviewed: August 2026 · Sources verified by BornClock Editorial Team
       </p>
-
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

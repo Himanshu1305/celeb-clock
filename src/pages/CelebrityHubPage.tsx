@@ -1,7 +1,6 @@
 import { useParams, useLocation, Navigate, Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { CollectionLayout } from '@/components/central';
 import { indianCelebrities } from '@/data/indianCelebrities';
 import {
   generateAllSlugs, HUB_SLUGS, getHubConfig, getCategoryHubSlug,
@@ -44,44 +43,35 @@ export function CelebrityHubPage() {
   };
 
   return (
-    <>
-      <SEO
-        title={`${cfg.h1} | BornClock`.length <= 70 ? `${cfg.h1} | BornClock` : `${cfg.label} Celebrity Profiles | BornClock`}
-        description={cfg.desc}
-        canonicalUrl={`/celebrity/${hubSlug}`}
-        ogType="website"
-      />
-      <JsonLd data={breadcrumbSchema} />
-
-      <main data-testid="celebrity-hub-page" className="min-h-screen bg-white">
-        <header className="flex items-center justify-between gap-3 flex-wrap px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-        {/* ── BREADCRUMB ── */}
-        <nav aria-label="Breadcrumb" className="max-w-5xl mx-auto px-4 pt-4">
-          <ol className="flex items-center gap-2 text-sm text-gray-400 flex-wrap list-none p-0">
-            <li data-testid="breadcrumb-item"><Link to="/" className="hover:text-[#6E5AA6]">Home</Link></li>
-            <li aria-hidden="true">›</li>
-            <li data-testid="breadcrumb-item"><Link to="/celebrity/" className="hover:text-[#6E5AA6]">Celebrity Profiles</Link></li>
-            <li aria-hidden="true">›</li>
-            <li data-testid="breadcrumb-item" className="text-gray-700 font-medium" aria-current="page">{cfg.label}</li>
-          </ol>
-        </nav>
-
-        {/* ── HERO ── */}
-        <section aria-labelledby="page-h1" className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border-b border-[#6E5AA6]/30 py-10 px-4 mt-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-[#6E5AA6]/10 text-[#6E5AA6] rounded-full px-4 py-1.5 text-sm font-semibold mb-4">
-              ⭐ {celebs.length} {cfg.label} Profiles
-            </div>
-            <h1 id="page-h1" className="text-3xl sm:text-4xl lg:text-5xl font-black gradient-text-primary leading-tight mb-3">
-              {cfg.h1}
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">{cfg.desc}</p>
-          </div>
-        </section>
-
+    <CollectionLayout
+      theme="birthday"
+      testId="celebrity-hub-page"
+      seo={(
+        <>
+          <SEO
+            title={`${cfg.h1} | BornClock`.length <= 70 ? `${cfg.h1} | BornClock` : `${cfg.label} Celebrity Profiles | BornClock`}
+            description={cfg.desc}
+            canonicalUrl={`/celebrity/${hubSlug}`}
+            ogType="website"
+          />
+          <JsonLd data={breadcrumbSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity' }], current: cfg.label }}
+      footer={{
+        tagline: cfg.desc,
+        nav: [
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Birthdays Today', to: '/todays-birthdays' },
+          { label: 'Born On', to: '/born-on' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Celebrity birthdays.',
+      }}
+      eyebrow={`⭐ ${celebs.length} ${cfg.label} Profiles`}
+      h1={cfg.h1}
+      lead={<>{cfg.desc}</>}
+    >
         <div className="max-w-5xl mx-auto px-4 pb-16">
           <section className="mt-8" aria-labelledby="list-heading">
             <h2 id="list-heading" className="text-2xl font-black text-gray-900 mb-4 pb-3 border-b border-gray-200">
@@ -106,8 +96,7 @@ export function CelebrityHubPage() {
             </div>
           </section>
         </div>
-      </main>
-    </>
+    </CollectionLayout>
   );
 }
 

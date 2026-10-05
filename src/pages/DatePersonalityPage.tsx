@@ -1,7 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { calculateWesternZodiac } from '@/utils/celebrityCalculations';
 import { WESTERN_ZODIAC_PROFILES } from '@/data/astrologicalData';
@@ -21,15 +19,27 @@ export default function DatePersonalityPage() {
 
   if (!valid) {
     return (
-      <div data-testid="personality-page" className="min-h-screen bg-gradient-cosmic">
-        <SEO title="Birthday Personality | BornClock" description="Discover the personality of any birth date." canonicalUrl="/born-in" />
-        <div className="container mx-auto px-4 py-8 max-w-2xl">
-          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
-          <h1 className="text-2xl font-bold text-foreground">Birthday Personality</h1>
-          <p className="text-muted-foreground mt-2">Pick a valid date to see its personality profile.</p>
-        </div>
-        <Footer />
-      </div>
+      <ToolLayout
+        theme="birthday"
+        testId="personality-page"
+        seo={<SEO title="Birthday Personality | BornClock" description="Discover the personality of any birth date." canonicalUrl="/born-in" />}
+        breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: 'Birthday Personality' }}
+        footer={{
+          tagline: 'The personality behind any birth date.',
+          nav: [
+            { label: 'Born On', to: '/born-on' },
+            { label: 'Born In (months)', to: '/born-in' },
+            { label: 'Celebrities', to: '/celebrity' },
+            { label: 'Privacy', to: '/privacy' },
+          ],
+          note: '© 2026 BornClock · Born-on dates.',
+        }}
+        eyebrow="Birthday personality"
+        h1="Birthday Personality"
+        lead={<>Pick a valid date to see its personality profile.</>}
+      >
+        <section className="section" />
+      </ToolLayout>
     );
   }
 
@@ -43,22 +53,32 @@ export default function DatePersonalityPage() {
     .filter(c => c.birth_month_day === md).slice(0, 6);
 
   return (
-    <div data-testid="personality-page" className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title={`Born on ${monthName} ${dayNum}? Personality & Traits | BornClock`}
-        description={`The personality of people born on ${monthName} ${dayNum} — ${zodiac.sign} zodiac traits, birth number ${birthNumber}, famous birthdays and what your birth date says about you.`}
-        canonicalUrl={`/born-on/${month}/${dayNum}/personality`}
-      />
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
-
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">
-          Born on {monthName} {dayNum}: Personality
-        </h1>
-        <p className="text-muted-foreground mb-6">
-          {zodiac.symbol} {zodiac.sign} · Birth Number {birthNumber}
-        </p>
-
+    <ToolLayout
+      theme="birthday"
+      testId="personality-page"
+      seo={(
+        <SEO
+          title={`Born on ${monthName} ${dayNum}? Personality & Traits | BornClock`}
+          description={`The personality of people born on ${monthName} ${dayNum} — ${zodiac.sign} zodiac traits, birth number ${birthNumber}, famous birthdays and what your birth date says about you.`}
+          canonicalUrl={`/born-on/${month}/${dayNum}/personality`}
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: `${monthName} ${dayNum} Personality` }}
+      footer={{
+        tagline: `The personality of people born on ${monthName} ${dayNum}.`,
+        nav: [
+          { label: 'Born On', to: '/born-on' },
+          { label: 'Born In (months)', to: '/born-in' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Born-on dates.',
+      }}
+      eyebrow="Birthday personality"
+      h1={<>Born on {monthName} {dayNum}: Personality</>}
+      lead={<>{zodiac.symbol} {zodiac.sign} · Birth Number {birthNumber}</>}
+    >
+      <section className="section">
         <div className="rounded-xl border border-border p-4 mb-4">
           <h2 className="font-semibold text-foreground mb-1">Your {zodiac.sign} nature</h2>
           <p className="text-muted-foreground">{profile?.personality_summary || zodiac.traits}</p>
@@ -94,8 +114,7 @@ export default function DatePersonalityPage() {
         <p className="mt-6 text-sm">
           <Link to={`/born-on/${month}-${dayNum}`} className="text-primary hover:underline">See everyone born on {monthName} {dayNum} →</Link>
         </p>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </ToolLayout>
   );
 }

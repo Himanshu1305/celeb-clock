@@ -43,10 +43,8 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine,
 } from 'recharts';
 import { supabase } from '@/integrations/supabase/client';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
+import { ToolLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
-import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -268,22 +266,32 @@ function FamilyDashboardInner() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-background">
-        <SEO title="Family Longevity Dashboard | BornClock Premium" description="Compare longevity forecasts for your family." noindex={true} />
-        <div className="container mx-auto px-4 py-8">
-          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-            <Navigation />
-            <AuthNav />
-          </header>
+      <ToolLayout
+        theme="birthday"
+        testId="family-dashboard-signed-out"
+        seo={<SEO title="Family Longevity Dashboard | BornClock Premium" description="Compare longevity forecasts for your family." noindex={true} />}
+        breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'Family Dashboard' }}
+        footer={{
+          tagline: 'Track longevity forecasts for your whole family in one place.',
+          nav: [
+            { label: 'Answers', to: '/answers' },
+            { label: 'Age Calculator', to: '/age-calculator' },
+            { label: 'Birthdays', to: '/birthday' },
+            { label: 'Privacy', to: '/privacy' },
+          ],
+          note: '© 2026 BornClock.',
+        }}
+        eyebrow="Family"
+        h1="Sign In Required"
+        lead={<>Please sign in to access the Family Longevity Dashboard.</>}
+      >
+        <section className="section">
           <div className="max-w-md mx-auto text-center py-20">
             <Lock className="w-12 h-12 text-primary mx-auto mb-4" />
-            <h1 className="text-2xl font-bold mb-3">Sign In Required</h1>
-            <p className="text-muted-foreground mb-6">Please sign in to access the Family Longevity Dashboard.</p>
             <Button asChild><Link to="/auth">Sign In</Link></Button>
           </div>
-        </div>
-        <Footer />
-      </div>
+        </section>
+      </ToolLayout>
     );
   }
 
@@ -305,29 +313,34 @@ function FamilyDashboardInner() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Family Longevity Dashboard | BornClock Premium"
-        description="Compare longevity forecasts for your entire family. Add family members and see who is on the healthiest path."
-        noindex={true}
-      />
-
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <div className="flex items-start justify-between mb-6 flex-wrap gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
-              <Users className="w-7 h-7 text-primary" />
-              Your Family's Longevity Dashboard
-            </h1>
-            <p className="text-muted-foreground mt-1 text-sm">
-              Baseline forecasts based on age, country, and gender. Encourage family members to take the full quiz.
-            </p>
-          </div>
+    <ToolLayout
+      theme="birthday"
+      testId="family-dashboard"
+      seo={(
+        <SEO
+          title="Family Longevity Dashboard | BornClock Premium"
+          description="Compare longevity forecasts for your entire family. Add family members and see who is on the healthiest path."
+          noindex={true}
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'Family Dashboard' }}
+      footer={{
+        tagline: 'Track longevity forecasts for your whole family in one place.',
+        nav: [
+          { label: 'Answers', to: '/answers' },
+          { label: 'Age Calculator', to: '/age-calculator' },
+          { label: 'Birthdays', to: '/birthday' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock.',
+      }}
+      eyebrow="Family"
+      h1={(<span className="inline-flex items-center gap-2"><Users className="w-7 h-7 text-primary" />Your Family's Longevity Dashboard</span>)}
+      lead={<>Baseline forecasts based on age, country, and gender. Encourage family members to take the full quiz.</>}
+    >
+      <section className="section">
+        <div className="container mx-auto px-4 max-w-5xl">
+        <div className="flex items-start justify-end mb-6 flex-wrap gap-4">
           <Button
             onClick={() => setShowAdd(true)}
             disabled={members.length >= MAX_MEMBERS}
@@ -443,7 +456,8 @@ function FamilyDashboardInner() {
             )}
           </>
         )}
-      </div>
+        </div>
+      </section>
 
       {/* Add member modal */}
       <Dialog open={showAdd} onOpenChange={setShowAdd}>
@@ -540,9 +554,7 @@ function FamilyDashboardInner() {
           </div>
         </DialogContent>
       </Dialog>
-
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 }
 

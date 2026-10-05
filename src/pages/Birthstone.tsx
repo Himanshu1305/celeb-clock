@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import PageTagline from '@/components/PageTagline';
 import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
 import { RASHI_RATNA_DATA, NAVRATNA_INFO } from '@/data/rashiRatnaData';
 
@@ -46,41 +43,42 @@ export default function Birthstone() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <SEO
-        title="Birthstone by Month — History, Meaning & Geology | BornClock"
-        description="Complete guide to birthstones for all 12 months — history, geology, mythology, and what makes each stone unique. Sources: GIA, Kunz (1913), American Gem Society."
-        keywords="birthstone by month, birthstones, January birthstone garnet, birthstone meaning, birthstone history, gemstone guide"
-        canonicalUrl="/birthstone"
-      />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-      </Helmet>
-
+    <CollectionLayout
+      theme="birthday"
+      testId="birthstone-page"
+      seo={(
+        <>
+          <SEO
+            title="Birthstone by Month — History, Meaning & Geology | BornClock"
+            description="Complete guide to birthstones for all 12 months — history, geology, mythology, and what makes each stone unique. Sources: GIA, Kunz (1913), American Gem Society."
+            keywords="birthstone by month, birthstones, January birthstone garnet, birthstone meaning, birthstone history, gemstone guide"
+            canonicalUrl="/birthstone"
+          />
+          <Helmet>
+            <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
+            <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+          </Helmet>
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Birthstone Guide' }}
+      footer={{
+        tagline: 'Birthstones by month and Vedic Rashi Ratna — history, meaning and geology.',
+        nav: [
+          { label: 'Birthday Report', to: '/birthday-report' },
+          { label: 'Results', to: '/results' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock.',
+      }}
+      eyebrow="Birthstone guide"
+      h1="Birthstone Guide — Western & Indian Traditions"
+      lead={<>Two great traditions. Western birthstones are assigned by birth month; Indian Rashi Ratna are assigned by Vedic zodiac sign and ruling planet. This guide covers both.</>}
+    >
       <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Breadcrumb */}
-        <nav className="text-xs text-gray-400 mb-6 flex items-center gap-1.5 flex-wrap">
-          <Link to="/" className="hover:text-[#6E5AA6] transition-colors">Home</Link>
-          <span>/</span>
-          <span className="text-gray-600 font-medium">Birthstone Guide</span>
-        </nav>
 
         {/* Hero */}
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
-            Birthstone Guide — Western & Indian Traditions
-          </h1>
-          <PageTagline />
-          <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mb-6">
-            Two great traditions. Western birthstones are assigned by birth month; Indian Rashi Ratna are assigned by Vedic zodiac sign and ruling planet. This guide covers both.
-          </p>
-
           {/* Tab toggle */}
           <div className="flex gap-3 flex-wrap">
             <button
@@ -310,8 +308,6 @@ export default function Birthstone() {
         </>
         )}
       </div>
-
-      <Footer />
-    </div>
+    </CollectionLayout>
   );
 }

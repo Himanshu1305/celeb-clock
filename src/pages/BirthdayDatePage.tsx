@@ -1,10 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
-import PageTagline from '@/components/PageTagline';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -35,13 +32,30 @@ export default function BirthdayDatePage() {
 
   if (!validMonth || !validDay) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Date not found</h1>
-          <p className="text-gray-500 mb-4">That date doesn't exist in the calendar.</p>
-          <Button asChild><Link to="/birthday">Browse all birthdays</Link></Button>
-        </div>
-      </div>
+      <CollectionLayout
+        theme="birthday"
+        testId="birthday-date-page"
+        breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: 'Date not found' }}
+        footer={{
+          tagline: 'Discover the personality behind every birthday.',
+          nav: [
+            { label: 'Birthdays', to: '/birthday' },
+            { label: "Today's Birthdays", to: '/todays-birthdays' },
+            { label: 'Celebrities', to: '/celebrity' },
+            { label: 'Privacy', to: '/privacy' },
+          ],
+          note: '© 2026 BornClock · Birthdays.',
+        }}
+        eyebrow="Birthday personality"
+        h1="Date not found"
+        lead={<>That date doesn't exist in the calendar.</>}
+      >
+        <section className="section">
+          <div className="text-center">
+            <Button asChild><Link to="/birthday">Browse all birthdays</Link></Button>
+          </div>
+        </section>
+      </CollectionLayout>
     );
   }
 
@@ -78,55 +92,50 @@ export default function BirthdayDatePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <SEO
-        title={title}
-        description={description}
-        keywords={`${monthName} ${day} birthday, ${p.zodiacSign} personality, birth day number ${p.lifePathNumber}, ${monthName} ${day} zodiac sign, ${p.zodiacSign} traits`}
-        canonicalUrl={`/birthday/${month}/${day}`}
-        ogType="article"
-        publishedTime="2026-06-18"
-      />
-      <FAQSchema items={faqs} />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bornclock.com' },
-            { '@type': 'ListItem', position: 2, name: 'Birthday Personality', item: 'https://bornclock.com/birthday' },
-            { '@type': 'ListItem', position: 3, name: monthName, item: `https://bornclock.com/birthday/${month}` },
-            { '@type': 'ListItem', position: 4, name: `${monthName} ${day}`, item: `https://bornclock.com/birthday/${month}/${day}` },
-          ],
-        })}</script>
-      </Helmet>
-
-      {/* Nav */}
-      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-10 max-w-3xl">
-
-        {/* Breadcrumb */}
-        <nav className="text-xs text-gray-400 mb-6 flex items-center gap-1.5 flex-wrap">
-          <Link to="/" className="hover:text-[#6E5AA6] transition-colors">Home</Link>
-          <span>/</span>
-          <Link to="/birthday" className="hover:text-[#6E5AA6] transition-colors">Birthday</Link>
-          <span>/</span>
-          <Link to={`/birthday/${month}`} className="hover:text-[#6E5AA6] transition-colors">{monthName}</Link>
-          <span>/</span>
-          <span className="text-gray-600 font-medium">{monthName} {day}</span>
-        </nav>
-
-        {/* H1 */}
-        <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-2 leading-tight">
-          {monthName} {day} Birthday — Personality, Zodiac &amp; Famous People
-        </h1>
-        <PageTagline />
+    <CollectionLayout
+      theme="birthday"
+      testId="birthday-date-page"
+      seo={(
+        <>
+          <SEO
+            title={title}
+            description={description}
+            keywords={`${monthName} ${day} birthday, ${p.zodiacSign} personality, birth day number ${p.lifePathNumber}, ${monthName} ${day} zodiac sign, ${p.zodiacSign} traits`}
+            canonicalUrl={`/birthday/${month}/${day}`}
+            ogType="article"
+            publishedTime="2026-06-18"
+          />
+          <FAQSchema items={faqs} />
+          <Helmet>
+            <script type="application/ld+json">{JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bornclock.com' },
+                { '@type': 'ListItem', position: 2, name: 'Birthday Personality', item: 'https://bornclock.com/birthday' },
+                { '@type': 'ListItem', position: 3, name: monthName, item: `https://bornclock.com/birthday/${month}` },
+                { '@type': 'ListItem', position: 4, name: `${monthName} ${day}`, item: `https://bornclock.com/birthday/${month}/${day}` },
+              ],
+            })}</script>
+          </Helmet>
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }, { label: monthName, to: `/birthday/${month}` }], current: `${monthName} ${day}` }}
+      footer={{
+        tagline: 'Discover the personality behind every birthday.',
+        nav: [
+          { label: 'Birthdays', to: '/birthday' },
+          { label: "Today's Birthdays", to: '/todays-birthdays' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Birthdays.',
+      }}
+      eyebrow="Birthday personality"
+      h1={<>{monthName} {day} Birthday — Personality, Zodiac &amp; Famous People</>}
+    >
+      <section className="section">
+        <div className="max-w-3xl mx-auto">
 
         {/* Direct answer box */}
         <div className={`rounded-xl border-2 p-5 mb-8 ${ELEMENT_COLORS[p.element] ?? 'bg-[#6E5AA6]/10 border-[#6E5AA6]/30 text-[#6E5AA6]'}`}>
@@ -373,9 +382,8 @@ export default function BirthdayDatePage() {
             ))}
           </div>
         </section>
-      </div>
-
-      <Footer />
-    </div>
+        </div>
+      </section>
+    </CollectionLayout>
   );
 }

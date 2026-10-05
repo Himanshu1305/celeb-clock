@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { Calendar } from 'lucide-react';
 
 const MONTH_NAMES = [
@@ -82,37 +80,34 @@ function BirthdayJump() {
 
 export default function BornOnIndex() {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Celebrities Born On — Browse by Birthday | BornClock"
-        description="Browse all famous people by birthday. Select any date from January 1 to December 31 to see celebrities born on that day, their zodiac sign, and birthday insights."
-        canonicalUrl="/born-on"
-        ogType="website"
-        ogImage="https://bornclock.com/og/born-on.png"
-      />
-
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <nav className="text-sm text-muted-foreground mb-6 flex items-center gap-2">
-          <Link to="/" className="hover:text-foreground">Home</Link>
-          <span>›</span>
-          <span className="text-foreground">Born On</span>
-        </nav>
-
-        <div className="flex items-center gap-3 mb-2">
-          <Calendar className="w-7 h-7 text-primary" />
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground">
-            Celebrities Born On
-          </h1>
-        </div>
-        <p className="text-muted-foreground mb-10">
-          Browse famous birthdays by date — from January 1 to December 31, including February 29.
-        </p>
-
+    <ToolLayout
+      theme="birthday"
+      testId="born-on-index-page"
+      seo={(
+        <SEO
+          title="Celebrities Born On — Browse by Birthday | BornClock"
+          description="Browse all famous people by birthday. Select any date from January 1 to December 31 to see celebrities born on that day, their zodiac sign, and birthday insights."
+          canonicalUrl="/born-on"
+          ogType="website"
+          ogImage="https://bornclock.com/og/born-on.png"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: 'Browse by Birthday' }}
+      footer={{
+        tagline: 'Browse famous birthdays by date — January 1 to December 31.',
+        nav: [
+          { label: 'Born On', to: '/born-on' },
+          { label: 'Born In (months)', to: '/born-in' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Born-on dates.',
+      }}
+      eyebrow="Famous birthdays"
+      h1={<span className="inline-flex items-center gap-3"><Calendar className="w-7 h-7 text-primary" />Celebrities Born On</span>}
+      lead={<>Browse famous birthdays by date — from January 1 to December 31, including February 29.</>}
+    >
+      <section className="section">
         <BirthdayJump />
 
         <div className="space-y-8">
@@ -148,8 +143,7 @@ export default function BornOnIndex() {
             Generate my birthday report
           </Link>
         </div>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </ToolLayout>
   );
 }

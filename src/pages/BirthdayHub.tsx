@@ -1,12 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
-import PageTagline from '@/components/PageTagline';
-import { Navigation } from '@/components/Navigation';
 import { DobInput, toISODate } from '@/components/DobInput';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles, Star, Calendar, Users } from 'lucide-react';
 import { MONTH_NAMES, MONTH_DAYS, getZodiacSign } from '@/data/birthdayPersonality';
@@ -58,43 +54,42 @@ export default function BirthdayHub() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <SEO
-        title="Birthday Personality by Date — All 365 Days | BornClock"
-        description="Discover the personality, zodiac sign, birth day number, lucky day, and compatible signs for every birthday. Explore all 365 days across 12 months."
-        keywords="birthday personality, zodiac by birthday, birth day number birthday, personality by birth date, birthday astrology numerology"
-        canonicalUrl="/birthday"
-      />
-      <FAQSchema items={faqs} />
+    <CollectionLayout
+      theme="birthday"
+      testId="birthday-hub"
+      seo={(
+        <>
+          <SEO
+            title="Birthday Personality by Date — All 365 Days | BornClock"
+            description="Discover the personality, zodiac sign, birth day number, lucky day, and compatible signs for every birthday. Explore all 365 days across 12 months."
+            keywords="birthday personality, zodiac by birthday, birth day number birthday, personality by birth date, birthday astrology numerology"
+            canonicalUrl="/birthday"
+          />
+          <FAQSchema items={faqs} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: 'Birthday Personality' }}
+      footer={{
+        tagline: 'Every birthday carries a unique blend of zodiac energy and numerology.',
+        nav: [
+          { label: 'Birthdays', to: '/birthday' },
+          { label: "Today's Birthdays", to: '/todays-birthdays' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Birthdays.',
+      }}
+      eyebrow="Birthday personality"
+      h1="Birthday Personality by Date — All 365 Days"
+      lead={<>Every birthday carries a unique blend of zodiac energy and numerology. Discover the
+        personality traits, lucky attributes, and compatible signs for any day of the year.</>}
+    >
+      <section className="section">
+        <div className="max-w-5xl mx-auto">
 
-      {/* Nav */}
-      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-10 max-w-5xl">
-
-        {/* Breadcrumb */}
-        <nav className="text-xs text-gray-400 mb-6 flex items-center gap-1.5">
-          <Link to="/" className="hover:text-[#6E5AA6] transition-colors">Home</Link>
-          <span>/</span>
-          <span className="text-gray-600 font-medium">Birthday Personality</span>
-        </nav>
-
-        {/* H1 */}
+        {/* Hero CTAs */}
         <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-2 leading-tight">
-            Birthday Personality by Date — All 365 Days
-          </h1>
-          <PageTagline />
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto mt-3">
-            Every birthday carries a unique blend of zodiac energy and numerology. Discover the
-            personality traits, lucky attributes, and compatible signs for any day of the year.
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-5 flex-wrap">
+          <div className="flex items-center justify-center gap-4 flex-wrap">
             <Button asChild className="gap-2">
               <Link to={`/birthday/${currentMonth}/${currentDay}`}>
                 <Star className="w-4 h-4" /> My Birthday ({MONTH_NAMES[currentMonth]} {currentDay})
@@ -279,8 +274,8 @@ export default function BirthdayHub() {
           </Button>
         </div>
 
-      </div>
-      <Footer />
-    </div>
+        </div>
+      </section>
+    </CollectionLayout>
   );
 }

@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
 import { CountryExtrasSection } from '@/components/CountryExtrasSection';
@@ -217,39 +215,40 @@ export default function BornOnDay() {
     : pageTitle;
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title={shortTitle}
-        description={metaDesc}
-        canonicalUrl={`/born-on/${slug}`}
-        ogType="website"
-        ogImage="https://bornclock.com/og/born-on.png"
-      />
-      {jsonLd && (
-        <Helmet>
-          <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-        </Helmet>
+    <ToolLayout
+      theme="birthday"
+      testId="born-on-day-page"
+      seo={(
+        <>
+          <SEO
+            title={shortTitle}
+            description={metaDesc}
+            canonicalUrl={`/born-on/${slug}`}
+            ogType="website"
+            ogImage="https://bornclock.com/og/born-on.png"
+          />
+          {jsonLd && (
+            <Helmet>
+              <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+            </Helmet>
+          )}
+        </>
       )}
-
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Breadcrumb */}
-        <nav className="text-sm text-muted-foreground mb-6 flex items-center gap-2">
-          <Link to="/" className="hover:text-foreground">Home</Link>
-          <span>›</span>
-          <Link to="/born-on" className="hover:text-foreground">Born On</Link>
-          <span>›</span>
-          <span className="text-foreground">{monthName} {day}</span>
-        </nav>
-
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">
-          Celebrities Born on {monthName} {day}
-        </h1>
-
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: `${monthName} ${day}` }}
+      footer={{
+        tagline: `Celebrities, zodiac and birthday facts for ${monthName} ${day}.`,
+        nav: [
+          { label: 'Born On', to: '/born-on' },
+          { label: 'Born In (months)', to: '/born-in' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Born-on dates.',
+      }}
+      eyebrow="Famous birthdays"
+      h1={<>Celebrities Born on {monthName} {day}</>}
+    >
+      <section className="section">
         {/* Concise answer block (AEO) — question-shaped H2 + direct answer */}
         <h2 className="text-xl font-semibold text-foreground mb-2 mt-4">Who was born on {monthName} {day}?</h2>
         <div className="bg-primary/10 border-l-4 border-primary rounded-r-xl p-5 mb-8">
@@ -539,8 +538,7 @@ export default function BornOnDay() {
             💞 Check birthday compatibility →
           </Link>
         </div>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </ToolLayout>
   );
 }

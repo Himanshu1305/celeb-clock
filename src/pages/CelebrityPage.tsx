@@ -1,8 +1,7 @@
 import React from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { ReportLayout } from '@/components/central';
 import celebritiesData from '@/data/celebrities.json';
 import {
   parseCelebrityDOB, formatDOBDisplay,
@@ -237,43 +236,32 @@ export function CelebrityPage() {
   };
 
   return (
-    <>
-      <SEO title={title} description={description} canonicalUrl={canonical} ogType="profile" />
-      <JsonLd data={personSchema} />
-      <JsonLd data={faqSchema} />
-      <JsonLd data={breadcrumbSchema} />
-
-      <main data-testid="celebrity-page" className="min-h-screen bg-white">
-        <header className="flex items-center justify-between gap-3 flex-wrap px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-        {/* ── BREADCRUMB ── */}
-        <nav aria-label="Breadcrumb" className="max-w-4xl mx-auto px-4 pt-4">
-          <ol className="flex items-center gap-2 text-sm text-gray-400 flex-wrap list-none p-0">
-            <li data-testid="breadcrumb-item"><Link to="/" className="hover:text-[#6E5AA6]">Home</Link></li>
-            <li aria-hidden="true">›</li>
-            <li data-testid="breadcrumb-item"><Link to="/celebrity/" className="hover:text-[#6E5AA6]">Celebrity Profiles</Link></li>
-            <li aria-hidden="true">›</li>
-            <li data-testid="breadcrumb-item" className="text-gray-700 font-medium" aria-current="page">{name}</li>
-          </ol>
-        </nav>
-
-        {/* ── HERO ── */}
-        <section aria-labelledby="page-h1" className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border-b border-[#6E5AA6]/30 py-10 px-4 mt-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-[#6E5AA6]/10 text-[#6E5AA6] rounded-full px-4 py-1.5 text-sm font-semibold mb-4">
-              ⭐ {hubLabel} · Indian Celebrity
-            </div>
-            <h1 id="page-h1" className="text-3xl sm:text-4xl lg:text-5xl font-black gradient-text-primary leading-tight mb-3">
-              {name}
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              {knownFor || `Indian ${category.toLowerCase()}.`}
-            </p>
-          </div>
-        </section>
-
+    <ReportLayout
+      theme="birthday"
+      testId="celebrity-page"
+      seo={(
+        <>
+          <SEO title={title} description={description} canonicalUrl={canonical} ogType="profile" />
+          <JsonLd data={personSchema} />
+          <JsonLd data={faqSchema} />
+          <JsonLd data={breadcrumbSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity' }, { label: 'Celebrity Profiles', to: '/celebrity' }], current: name }}
+      footer={{
+        tagline: `${name} — birthday, zodiac, numerology and life path, calculated from date of birth.`,
+        nav: [
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Birthdays Today', to: '/todays-birthdays' },
+          { label: 'Born On', to: '/born-on' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Celebrity birthdays.',
+      }}
+      eyebrow={`⭐ ${hubLabel} · Indian Celebrity`}
+      h1={name}
+      lead={<>{knownFor || `Indian ${category.toLowerCase()}.`}</>}
+    >
         <div className="max-w-4xl mx-auto px-4 pb-16">
           {/* ── LUCKY ELEMENTS PANEL ── */}
           <section
@@ -954,8 +942,7 @@ export function CelebrityPage() {
             <p className="text-[#6E5AA6] text-xs mt-3">Free · Instant · No account required</p>
           </div>
         </div>
-      </main>
-    </>
+    </ReportLayout>
   );
 }
 

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ToolLayout } from '@/components/central';
 
 export default function HowManyDaysUntilMyBirthday() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How many days until my birthday?", "item": "https://bornclock.com/answers/how-many-days-until-my-birthday" } ] };
@@ -17,35 +17,43 @@ export default function HowManyDaysUntilMyBirthday() {
   };
 
   return (
-    <>
-      <SEO
-        title="How Many Days Until My Birthday? Count the Exact Days | BornClock"
-        description="Work out exactly how many days until your next birthday, why the number changes each year, and how leap years shift the count. Weeks, hours and half-birthday math too."
-        canonicalUrl="/answers/how-many-days-until-my-birthday"
-        ogType="article"
-      />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
-        <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">How many days until my birthday?</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-2">How Many Days Until My Birthday?</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              To find how many days until your birthday, count the whole days from today to your next birthday — this year if it hasn't happened yet, otherwise next year. If today is your birthday, the answer is 0. Because months are different lengths and leap years add a February 29, the reliable way is to subtract the two dates directly rather than counting months by hand.
-            </p>
-          </div>
-
+    <ToolLayout
+      theme="birthday"
+      testId="how-many-days-until-my-birthday"
+      seo={(
+        <>
+          <SEO
+            title="How Many Days Until My Birthday? Count the Exact Days | BornClock"
+            description="Work out exactly how many days until your next birthday, why the number changes each year, and how leap years shift the count. Weeks, hours and half-birthday math too."
+            canonicalUrl="/answers/how-many-days-until-my-birthday"
+            ogType="article"
+          />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'How many days until my birthday?' }}
+      footer={{
+        tagline: 'Count the exact days until your next birthday — and what they add up to.',
+        nav: [
+          { label: 'Answers', to: '/answers' },
+          { label: 'Age Calculator', to: '/age-calculator' },
+          { label: 'Birthdays', to: '/birthday' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock.',
+      }}
+      eyebrow="Answers"
+      h1="How Many Days Until My Birthday?"
+      lead={(
+        <>
+          To find how many days until your birthday, count the whole days from today to your next birthday — this year if it hasn't happened yet, otherwise next year. If today is your birthday, the answer is 0. Because months are different lengths and leap years add a February 29, the reliable way is to subtract the two dates directly rather than counting months by hand.
+        </>
+      )}
+    >
+      <section className="section">
+        <div className="max-w-2xl mx-auto">
           <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
             <h2 className="text-xl font-bold text-gray-900">The simplest method</h2>
             <p>Pick your <strong>next</strong> birthday. If your birthday later this year still lies ahead, use that date; if it has already passed, use the same date next year. Then count the number of whole days from today up to that date. Counting by months is error-prone because a month can be 28, 29, 30, or 31 days — so it's far safer to work in days directly, which is exactly what an age or countdown tool does.</p>
@@ -91,7 +99,7 @@ export default function HowManyDaysUntilMyBirthday() {
             </div>
           </div>
         </div>
-      </AnswerLayout>
-    </>
+      </section>
+    </ToolLayout>
   );
 }

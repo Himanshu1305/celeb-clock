@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ReportLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import {
   calculateWesternZodiac, calculateLifePathNumber,
@@ -33,15 +34,33 @@ export function SampleReportPage() {
   const daysUntil = calculateDaysUntilBirthday(DEMO.day, DEMO.month);
 
   return (
-    <>
-      <SEO
-        title="Sample Birthday Intelligence Report — Preview Before You Sign Up | BornClock"
-        description="See a complete Birthday Intelligence Report before creating yours. Preview zodiac, life path, Vedic Rashi, lucky elements, and more."
-        canonicalUrl="/birthday-report/sample"
-        ogType="article"
-      />
-
-      <main data-testid="sample-report-page" className="min-h-screen bg-white pb-32">
+    <ReportLayout
+      theme="birthday"
+      testId="sample-report-page"
+      seo={(
+        <SEO
+          title="Sample Birthday Intelligence Report — Preview Before You Sign Up | BornClock"
+          description="See a complete Birthday Intelligence Report before creating yours. Preview zodiac, life path, Vedic Rashi, lucky elements, and more."
+          canonicalUrl="/birthday-report/sample"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Sample Report' }}
+      footer={{
+        tagline: 'A sample Birthday Intelligence Report — zodiac, numerology, Vedic Rashi and more.',
+        nav: [
+          { label: 'Birthday Report', to: '/birthday-report' },
+          { label: 'Results', to: '/results' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock.',
+      }}
+      eyebrow="Sample report"
+      h1={`Birthday Profile: ${DEMO_LABEL}`}
+      lead={<>A complete birthday intelligence snapshot — zodiac, numerology, Vedic Rashi and more.</>}
+    >
+      <div className="bg-white pb-32">
         <div className="max-w-3xl mx-auto px-4 py-8">
 
           {/* 1. Sample banner */}
@@ -62,14 +81,6 @@ export function SampleReportPage() {
               Generate Mine Free →
             </Link>
           </section>
-
-          {/* 2. Profile header */}
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary mb-2">
-            Birthday Profile: {DEMO_LABEL}
-          </h1>
-          <p className="text-gray-500 mb-6">
-            A complete birthday intelligence snapshot — zodiac, numerology, Vedic Rashi and more.
-          </p>
 
           {/* 3. Quick stats row */}
           <div className="grid grid-cols-3 gap-3 mb-8">
@@ -240,8 +251,8 @@ export function SampleReportPage() {
             Generate My Free Birthday Report →
           </a>
         </div>
-      </main>
-    </>
+      </div>
+    </ReportLayout>
   );
 }
 

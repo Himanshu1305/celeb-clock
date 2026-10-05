@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { CollectionLayout } from '@/components/central';
 import { indianCelebrities } from '@/data/indianCelebrities';
 import { generateAllSlugs, HUB_SLUGS, getHubConfig } from '@/utils/celebrityUtils';
 
@@ -41,44 +40,35 @@ export function CelebrityIndexPage() {
   };
 
   return (
-    <>
-      <SEO
-        title={`Indian Celebrity Birthday Profiles — ${indianCelebrities.length} Profiles | BornClock`}
-        description={`Birthday, age, zodiac and numerology profiles for ${indianCelebrities.length} Indian celebrities — actors, cricketers, singers, leaders and more.`}
-        canonicalUrl="/celebrity"
-        ogType="website"
-      />
-      <JsonLd data={breadcrumbSchema} />
-
-      <main data-testid="celebrity-index-page" className="min-h-screen bg-white">
-        <header className="flex items-center justify-between gap-3 flex-wrap px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-        {/* ── BREADCRUMB ── */}
-        <nav aria-label="Breadcrumb" className="max-w-5xl mx-auto px-4 pt-4">
-          <ol className="flex items-center gap-2 text-sm text-gray-400 flex-wrap list-none p-0">
-            <li data-testid="breadcrumb-item"><Link to="/" className="hover:text-[#6E5AA6]">Home</Link></li>
-            <li aria-hidden="true">›</li>
-            <li data-testid="breadcrumb-item" className="text-gray-700 font-medium" aria-current="page">Celebrity Profiles</li>
-          </ol>
-        </nav>
-
-        {/* ── HERO ── */}
-        <section aria-labelledby="page-h1" className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border-b border-[#6E5AA6]/30 py-10 px-4 mt-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-[#6E5AA6]/10 text-[#6E5AA6] rounded-full px-4 py-1.5 text-sm font-semibold mb-4">
-              ⭐ {indianCelebrities.length} Indian Celebrities
-            </div>
-            <h1 id="page-h1" className="text-3xl sm:text-4xl lg:text-5xl font-black gradient-text-primary leading-tight mb-3">
-              Indian Celebrity Birthday Profiles
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              Birthday, age, zodiac sign, numerology and life-path profiles for {indianCelebrities.length} Indian celebrities — every fact calculated from date of birth.
-            </p>
-          </div>
-        </section>
-
+    <CollectionLayout
+      theme="birthday"
+      testId="celebrity-index-page"
+      seo={(
+        <>
+          <SEO
+            title={`Indian Celebrity Birthday Profiles — ${indianCelebrities.length} Profiles | BornClock`}
+            description={`Birthday, age, zodiac and numerology profiles for ${indianCelebrities.length} Indian celebrities — actors, cricketers, singers, leaders and more.`}
+            canonicalUrl="/celebrity"
+            ogType="website"
+          />
+          <JsonLd data={breadcrumbSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity' }], current: 'Celebrity Profiles' }}
+      footer={{
+        tagline: 'Birthday, age, zodiac and numerology profiles for Indian celebrities — every fact calculated from date of birth.',
+        nav: [
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Birthdays Today', to: '/todays-birthdays' },
+          { label: 'Born On', to: '/born-on' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Celebrity birthdays.',
+      }}
+      eyebrow={`⭐ ${indianCelebrities.length} Indian Celebrities`}
+      h1="Indian Celebrity Birthday Profiles"
+      lead={<>Birthday, age, zodiac sign, numerology and life-path profiles for {indianCelebrities.length} Indian celebrities — every fact calculated from date of birth.</>}
+    >
         <div className="max-w-5xl mx-auto px-4 pb-16">
           {/* ── CATEGORY HUBS ── */}
           <section className="mt-8 mb-10" aria-labelledby="hubs-heading">
@@ -140,8 +130,7 @@ export function CelebrityIndexPage() {
             </div>
           </section>
         </div>
-      </main>
-    </>
+    </CollectionLayout>
   );
 }
 

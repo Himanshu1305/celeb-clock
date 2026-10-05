@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { getGenerationBasic } from '@/services/GenerationService';
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ReportLayout } from '@/components/central';
 import { SaveResultsCapture } from '@/components/SaveResultsCapture';
 import { NativeShareButton } from '@/components/NativeShareButton';
 import { Button } from '@/components/ui/button';
@@ -184,16 +182,41 @@ const BirthdayResults = () => {
 
   if (!birthDate) {
     return (
-      <div className="min-h-screen bg-gradient-cosmic flex items-center justify-center">
-        <Card className="glass-card max-w-md mx-4">
-          <CardContent className="p-8 text-center space-y-4">
-            <Calendar className="w-16 h-16 mx-auto text-primary" />
-            <h1 className="text-2xl font-bold">No Birthday Selected</h1>
-            <p className="text-muted-foreground">Enter your birthday to see your personalized results.</p>
-            <Button asChild><Link to="/">Go to Homepage</Link></Button>
-          </CardContent>
-        </Card>
-      </div>
+      <ReportLayout
+        theme="birthday"
+        testId="birthday-results-empty"
+        seo={(
+          <SEO
+            title="Your Birthday Decoded | BornClock"
+            description="Discover your exact age, celebrity birthday twins, zodiac sign, and more personalized birthday insights."
+          />
+        )}
+        breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Results' }}
+        footer={{
+          tagline: 'Your exact age, celebrity twins, zodiac and numerology — from your birthday.',
+          nav: [
+            { label: 'Birthday Report', to: '/birthday-report' },
+            { label: 'Results', to: '/results' },
+            { label: 'Celebrities', to: '/celebrity' },
+            { label: 'Privacy', to: '/privacy' },
+          ],
+          note: '© 2026 BornClock.',
+        }}
+        eyebrow="Birthday results"
+        h1="No Birthday Selected"
+        lead={<>Enter your birthday to see your personalized results.</>}
+      >
+        <section className="section">
+          <div className="flex items-center justify-center">
+            <Card className="glass-card max-w-md mx-4">
+              <CardContent className="p-8 text-center space-y-4">
+                <Calendar className="w-16 h-16 mx-auto text-primary" />
+                <Button asChild><Link to="/">Go to Homepage</Link></Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+      </ReportLayout>
     );
   }
 
@@ -236,16 +259,31 @@ const BirthdayResults = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title={`Your Birthday Decoded - ${age?.years} Years Old`}
-        description={`Discover your exact age, celebrity birthday twins, zodiac sign, and more personalized birthday insights.`}
-      />
+    <ReportLayout
+      theme="birthday"
+      testId="birthday-results"
+      seo={(
+        <SEO
+          title={`Your Birthday Decoded - ${age?.years} Years Old`}
+          description={`Discover your exact age, celebrity birthday twins, zodiac sign, and more personalized birthday insights.`}
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Results' }}
+      footer={{
+        tagline: 'Your exact age, celebrity twins, zodiac and numerology — from your birthday.',
+        nav: [
+          { label: 'Birthday Report', to: '/birthday-report' },
+          { label: 'Results', to: '/results' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock.',
+      }}
+      eyebrow="Birthday decoded"
+      h1={`Born on ${birthDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`}
+      lead={<>Here's everything we discovered about your birthday</>}
+    >
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
 
         {/* Results Hero */}
         <section className="text-center mb-12 animate-fade-in-up">
@@ -253,10 +291,6 @@ const BirthdayResults = () => {
             <Sparkles className="w-4 h-4" />
             Birthday Decoded Successfully!
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-            Born on {birthDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-          </h1>
-          <p className="text-muted-foreground">Here's everything we discovered about your birthday</p>
         </section>
 
         {/* Live Age Section */}
@@ -711,9 +745,7 @@ const BirthdayResults = () => {
           <SaveResultsCapture dob={birthDate} />
         </section>
       </div>
-
-      <Footer />
-    </div>
+    </ReportLayout>
   );
 };
 

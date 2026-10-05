@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { ReportLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -41,25 +39,33 @@ export default function BirthdayReportGiftPage() {
   };
 
   return (
-    <div data-testid="gift-page" className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Gift a Birthday Report — Thoughtful & Personal | BornClock"
-        description="Gift a personalised Birthday Report — zodiac, numerology, life path and celebrity twins — with your own message. The gift that proves you know them."
-        canonicalUrl="/birthday-report/gift"
-        ogType="website"
-      />
+    <ReportLayout
+      theme="birthday"
+      testId="gift-page"
+      seo={(
+        <SEO
+          title="Gift a Birthday Report — Thoughtful & Personal | BornClock"
+          description="Gift a personalised Birthday Report — zodiac, numerology, life path and celebrity twins — with your own message. The gift that proves you know them."
+          canonicalUrl="/birthday-report/gift"
+          ogType="website"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Gift a Report' }}
+      footer={{
+        tagline: 'Gift a personalised Birthday Report — delivered with your own message.',
+        nav: [
+          { label: 'Birthday Report', to: '/birthday-report' },
+          { label: 'Results', to: '/results' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock.',
+      }}
+      eyebrow="Gift a report"
+      h1="Gift a Birthday Blueprint"
+      lead={<>A personalised report — zodiac, numerology, life path and celebrity twins — delivered with your own message.</>}
+    >
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">
-          Gift a Birthday Blueprint
-        </h1>
-        <p className="text-muted-foreground mb-6">
-          A personalised report — zodiac, numerology, life path and celebrity twins — delivered with your own message.
-        </p>
 
         {/* Product selector: individual products {price}, combo ₹299 (Task 12). */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8" data-testid="gift-products">
@@ -163,7 +169,6 @@ export default function BirthdayReportGiftPage() {
           <Link to="/birthday-report" className="text-primary hover:underline">Get your own Birthday Blueprint →</Link>
         </p>
       </div>
-      <Footer />
-    </div>
+    </ReportLayout>
   );
 }

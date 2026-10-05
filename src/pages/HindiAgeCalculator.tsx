@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { AgeCalculator } from '@/components/AgeCalculator';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 
@@ -17,31 +15,39 @@ const HindiAgeCalculator = () => {
   const { birthDate, setBirthDate } = useBirthDate();
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="मेरी उम्र कितनी है — Age Calculator in Hindi | BornClock"
-        description="अपनी सटीक उम्र जानें — साल, महीने, दिन, घंटे और सेकंड में। BornClock का मुफ्त age calculator हिंदी में।"
-        keywords="meri umar kitni hai, age calculator hindi, meri age kya hai, umar calculator"
-        canonicalUrl="/meri-umar-kitni-hai"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="मेरी उम्र कितनी है — Age Calculator in Hindi"
-        description="अपनी सटीक उम्र साल, महीने, दिन, घंटे और सेकंड में जानें — BornClock का मुफ्त हिंदी age calculator।"
-        url="/meri-umar-kitni-hai"
-      />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            मेरी उम्र कितनी है?
-          </h1>
-        </section>
-
+    <ToolLayout
+      theme="birthday"
+      testId="hindi-age-calculator-page"
+      seo={(
+        <>
+          <SEO
+            title="मेरी उम्र कितनी है — Age Calculator in Hindi | BornClock"
+            description="अपनी सटीक उम्र जानें — साल, महीने, दिन, घंटे और सेकंड में। BornClock का मुफ्त age calculator हिंदी में।"
+            keywords="meri umar kitni hai, age calculator hindi, meri age kya hai, umar calculator"
+            canonicalUrl="/meri-umar-kitni-hai"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="मेरी उम्र कितनी है — Age Calculator in Hindi"
+            description="अपनी सटीक उम्र साल, महीने, दिन, घंटे और सेकंड में जानें — BornClock का मुफ्त हिंदी age calculator।"
+            url="/meri-umar-kitni-hai"
+          />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday' }], current: 'मेरी उम्र कितनी है' }}
+      footer={{
+        tagline: 'अपनी सटीक उम्र साल, महीने, दिन और सेकंड में जानें।',
+        nav: [
+          { label: 'Age Calculator', to: '/age-calculator' },
+          { label: 'Birthday Countdown', to: '/birthday-countdown' },
+          { label: "Today's Birthdays", to: '/todays-birthdays' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Age & birthday tools.',
+      }}
+      eyebrow="Age calculator (हिंदी)"
+      h1="मेरी उम्र कितनी है?"
+    >
         <section className="max-w-3xl mx-auto mb-10 px-4">
           <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
             <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
@@ -81,9 +87,7 @@ const HindiAgeCalculator = () => {
             ))}
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

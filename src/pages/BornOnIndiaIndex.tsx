@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import bornOnDates from '@/data/indiaBornOnDates.json';
 
 const MONTH_NAMES = [
@@ -22,38 +20,34 @@ for (const m of Object.keys(byMonth)) byMonth[+m].sort((a, b) => a.day - b.day);
 
 export default function BornOnIndiaIndex() {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Indian Celebrities by Birth Date — Born On Any Day | BornClock"
-        description={`Browse ${TOTAL_CELEBS.toLocaleString()}+ notable Indians by the day they were born. Pick any date to see the Indian actors, leaders, scientists and legends who share it.`}
-        canonicalUrl="/born-on/india"
-        ogType="website"
-      />
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <nav className="text-sm text-muted-foreground mb-6 flex items-center gap-2">
-          <Link to="/" className="hover:text-foreground">Home</Link>
-          <span>›</span>
-          <Link to="/born-on" className="hover:text-foreground">Born On</Link>
-          <span>›</span>
-          <span className="text-foreground">India 🇮🇳</span>
-        </nav>
-
-        <div className="flex items-center gap-3 mb-2">
-          <span className="text-3xl">🇮🇳</span>
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground">
-            Indian Celebrities by Birth Date
-          </h1>
-        </div>
-        <p className="text-muted-foreground mb-8 max-w-2xl">
-          {TOTAL_CELEBS.toLocaleString()}+ notable Indians across {DATES.length} birth dates — actors,
-          freedom fighters, scientists, cricketers and cultural icons. Pick a date to see who shares it.
-        </p>
-
+    <ToolLayout
+      theme="birthday"
+      testId="born-on-india-index-page"
+      seo={(
+        <SEO
+          title="Indian Celebrities by Birth Date — Born On Any Day | BornClock"
+          description={`Browse ${TOTAL_CELEBS.toLocaleString()}+ notable Indians by the day they were born. Pick any date to see the Indian actors, leaders, scientists and legends who share it.`}
+          canonicalUrl="/born-on/india"
+          ogType="website"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: 'India 🇮🇳' }}
+      footer={{
+        tagline: 'Notable Indians by the day they were born.',
+        nav: [
+          { label: 'Born On', to: '/born-on' },
+          { label: 'Born In (months)', to: '/born-in' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Born-on dates.',
+      }}
+      eyebrow="Born in India"
+      h1={<span className="inline-flex items-center gap-3"><span className="text-3xl">🇮🇳</span>Indian Celebrities by Birth Date</span>}
+      lead={<>{TOTAL_CELEBS.toLocaleString()}+ notable Indians across {DATES.length} birth dates — actors,
+        freedom fighters, scientists, cricketers and cultural icons. Pick a date to see who shares it.</>}
+    >
+      <section className="section">
         <div className="space-y-8">
           {Array.from({ length: 12 }, (_, i) => i + 1).map(m => {
             const dates = byMonth[m];
@@ -83,8 +77,7 @@ export default function BornOnIndiaIndex() {
             );
           })}
         </div>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </ToolLayout>
   );
 }

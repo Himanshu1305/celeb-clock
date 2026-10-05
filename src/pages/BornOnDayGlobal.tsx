@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { BirthdayReportCTA } from '@/components/BirthdayReportCTA';
 import { getNationalityCelebritiesForDate, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
@@ -87,23 +85,29 @@ export default function BornOnDayGlobal() {
   // Graceful "date not found" — no hard redirect, no crash.
   if (!parsed) {
     return (
-      <div className="min-h-screen bg-gradient-cosmic" data-testid="born-on-global-page">
-        <SEO title="Date not found · BornClock" noindex />
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-            <Navigation />
-            <AuthNav />
-          </header>
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-3">
-            Date not found
-          </h1>
-          <p className="text-muted-foreground mb-6">
-            We couldn't find that date. Try browsing all birthdays instead.
-          </p>
+      <ToolLayout
+        theme="birthday"
+        testId="born-on-global-page"
+        seo={<SEO title="Date not found · BornClock" noindex />}
+        breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: 'Date not found' }}
+        footer={{
+          tagline: 'Browse famous birthdays by date.',
+          nav: [
+            { label: 'Born On', to: '/born-on' },
+            { label: 'Born In (months)', to: '/born-in' },
+            { label: 'Celebrities', to: '/celebrity' },
+            { label: 'Privacy', to: '/privacy' },
+          ],
+          note: '© 2026 BornClock · Born-on dates.',
+        }}
+        eyebrow="Famous birthdays"
+        h1="Date not found"
+        lead={<>We couldn't find that date. Try browsing all birthdays instead.</>}
+      >
+        <section className="section">
           <Link to="/born-on" className="text-primary hover:underline">Browse all born-on dates →</Link>
-        </div>
-        <Footer />
-      </div>
+        </section>
+      </ToolLayout>
     );
   }
 
@@ -133,41 +137,38 @@ export default function BornOnDayGlobal() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic" data-testid="born-on-global-page">
-      {/* Canonical intentionally points to the India variant to avoid duplicate content. */}
-      <SEO
-        title={generateBornOnTitle(monthName, day, celebs)}
-        description={generateBornOnMeta(monthName, day, celebs)}
-        canonicalUrl={`/born-on/${monthName.toLowerCase()}-${day}/india`}
-        ogType="website"
-        ogImage="https://bornclock.com/og/born-on.png"
-      />
-      <JsonLd data={qaJsonLd} />
-
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Breadcrumb */}
-        <nav className="text-sm text-muted-foreground mb-6 flex items-center gap-2 flex-wrap">
-          <Link to="/" className="hover:text-foreground">Home</Link>
-          <span>›</span>
-          <Link to="/born-on" className="hover:text-foreground">Born On</Link>
-          <span>›</span>
-          <span className="text-foreground">{dateLabel}</span>
-        </nav>
-
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-3">
-          Famous People Born on {dateLabel}
-        </h1>
-
-        {/* Concise answer block (AEO) */}
-        <div className="bg-primary/10 border-l-4 border-primary rounded-r-xl p-5 mb-8">
-          <p className="text-base font-medium text-foreground leading-relaxed">{answer}</p>
-        </div>
-
+    <ToolLayout
+      theme="birthday"
+      testId="born-on-global-page"
+      seo={(
+        <>
+          {/* Canonical intentionally points to the India variant to avoid duplicate content. */}
+          <SEO
+            title={generateBornOnTitle(monthName, day, celebs)}
+            description={generateBornOnMeta(monthName, day, celebs)}
+            canonicalUrl={`/born-on/${monthName.toLowerCase()}-${day}/india`}
+            ogType="website"
+            ogImage="https://bornclock.com/og/born-on.png"
+          />
+          <JsonLd data={qaJsonLd} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: dateLabel }}
+      footer={{
+        tagline: `Famous people born on ${dateLabel}, ranked by global recognition.`,
+        nav: [
+          { label: 'Born On', to: '/born-on' },
+          { label: 'Born In (months)', to: '/born-in' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Born-on dates.',
+      }}
+      eyebrow="Famous birthdays"
+      h1={<>Famous People Born on {dateLabel}</>}
+      lead={<>{answer}</>}
+    >
+      <section className="section">
         {/* Celebrity grid */}
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
@@ -214,8 +215,7 @@ export default function BornOnDayGlobal() {
             Generate my birthday report
           </Link>
         </div>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </ToolLayout>
   );
 }

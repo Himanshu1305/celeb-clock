@@ -1,12 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
+import { ReportLayout } from '@/components/central';
 import { DobInput } from '@/components/DobInput';
 import { BirthTimeVedicSection } from '@/components/BirthTimeVedicSection';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
-import PageTagline from '@/components/PageTagline';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { ShareMyProfileButton } from '@/components/ShareMyProfileButton';
 import { useAuth } from '@/hooks/useAuth';
@@ -269,49 +266,39 @@ const BirthdayReport = () => {
   const ctaLabel = isFreeState ? 'Create Now →' : 'Create & unlock →';
 
   return (
-    <div className="min-h-screen bg-white">
-      <SEO
-        title="Birthday Blueprint — The Ultimate Personalised Birthday Gift | BornClock"
-        description="Create a personalised birthday report: celebrity twins, zodiac profiles, numerology, birthstone, planetary ages, and a personalised message. The birthday gift they'll never forget."
-        keywords="birthday report gift, personalised birthday gift, birthday intelligence report, zodiac birthday gift, celebrity birthday twins, numerology birthday"
-        canonicalUrl="/birthday-report"
-        ogImage="https://bornclock.com/og/report.png"
-      />
-
-      {/* ── Nav ──────────────────────────────────────────────────────────── */}
-      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
-      </div>
-
+    <ReportLayout
+      theme="birthday"
+      testId="birthday-report-page"
+      seo={(
+        <SEO
+          title="Birthday Blueprint — The Ultimate Personalised Birthday Gift | BornClock"
+          description="Create a personalised birthday report: celebrity twins, zodiac profiles, numerology, birthstone, planetary ages, and a personalised message. The birthday gift they'll never forget."
+          keywords="birthday report gift, personalised birthday gift, birthday intelligence report, zodiac birthday gift, celebrity birthday twins, numerology birthday"
+          canonicalUrl="/birthday-report"
+          ogImage="https://bornclock.com/og/report.png"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Create a Report' }}
+      footer={{
+        tagline: 'A personalised Birthday Blueprint — celebrity twins, zodiac, numerology and a personal message.',
+        nav: [
+          { label: 'Birthday Report', to: '/birthday-report' },
+          { label: 'Results', to: '/results' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock.',
+      }}
+      eyebrow="🎁 The Birthday Gift They'll Actually Remember"
+      h1={<>The Birthday Gift<br /><span className="text-rose-500">They'll Never Forget</span></>}
+      lead={<>A beautifully crafted web report revealing their celebrity birthday twins, three zodiac profiles, life path number, birthstone, planetary ages, and a personalised message — all in one link.</>}
+    >
       {/* Everything below the nav is pre-generation marketing. After a report is
           generated (phase 'success') the page shows the success block ONLY. */}
       {phase !== 'success' && (<>
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      {/* ── Hero CTA ─────────────────────────────────────────────────────── */}
       <div className="bg-gradient-to-br from-amber-50 via-rose-50 to-[#6E5AA6] py-8 px-4 text-center">
         <div className="max-w-3xl mx-auto">
-          <div className="flex flex-col items-center mb-6">
-            <img
-              src="/bornclock-logo.png"
-              alt="BornClock"
-              className="h-16 w-auto mb-2"
-            />
-            <p className="text-sm text-[#6E5AA6] italic font-medium mt-1">Know your time. Live it well.</p>
-          </div>
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-rose-100 text-rose-700 rounded-full text-sm font-medium mb-6">
-            🎁 The Birthday Gift They'll Actually Remember
-          </div>
-          <h1 className="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-5">
-            The Birthday Gift<br />
-            <span className="text-rose-500">They'll Never Forget</span>
-          </h1>
-          <PageTagline />
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
-            A beautifully crafted web report revealing their celebrity birthday twins, three zodiac profiles,
-            life path number, birthstone, planetary ages, and a personalised message — all in one link.
-          </p>
           <button
             onClick={scrollToForm}
             className="inline-flex items-center gap-2 px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl text-lg transition-colors shadow-lg"
@@ -680,9 +667,7 @@ const BirthdayReport = () => {
         </div>
       </div>
       )}
-
-      <Footer />
-    </div>
+    </ReportLayout>
   );
 };
 

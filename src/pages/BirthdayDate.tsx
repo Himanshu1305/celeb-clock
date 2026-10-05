@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { CountryExtrasSection } from '@/components/CountryExtrasSection';
@@ -269,37 +267,39 @@ export default function BirthdayDate() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title={`Celebrities Born on ${label} — Famous Birthdays | BornClock`}
-        description={`Discover famous people born on ${label}.${topCeleb ? ` See ${topCeleb}` : ''} and ${celebrities.length} more celebrities who share this birthday, with their zodiac sign, age, and more.`}
-        keywords={`celebrities born on ${label}, famous birthdays ${monthName2} ${day}, who was born on ${label}${topCeleb ? `, ${topCeleb} birthday` : ''}`}
-        canonicalUrl={`/birthday/${slug}`}
-      />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
-      </Helmet>
-
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Breadcrumb */}
-        <nav className="text-xs text-muted-foreground mb-6 flex items-center gap-1.5">
-          <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
-          <span>/</span>
-          <Link to="/birthday" className="hover:text-foreground transition-colors">Birthday</Link>
-          <span>/</span>
-          <span className="text-foreground font-medium">{label}</span>
-        </nav>
-
-        {/* H1 */}
-        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-          Famous Celebrities Born on {label}
-        </h1>
+    <CollectionLayout
+      theme="birthday"
+      testId="birthday-date"
+      seo={(
+        <>
+          <SEO
+            title={`Celebrities Born on ${label} — Famous Birthdays | BornClock`}
+            description={`Discover famous people born on ${label}.${topCeleb ? ` See ${topCeleb}` : ''} and ${celebrities.length} more celebrities who share this birthday, with their zodiac sign, age, and more.`}
+            keywords={`celebrities born on ${label}, famous birthdays ${monthName2} ${day}, who was born on ${label}${topCeleb ? `, ${topCeleb} birthday` : ''}`}
+            canonicalUrl={`/birthday/${slug}`}
+          />
+          <Helmet>
+            <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+            <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+          </Helmet>
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: label }}
+      footer={{
+        tagline: 'Discover the famous people who share your birthday.',
+        nav: [
+          { label: 'Birthdays', to: '/birthday' },
+          { label: "Today's Birthdays", to: '/todays-birthdays' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Birthdays.',
+      }}
+      eyebrow="Famous birthdays"
+      h1={<>Famous Celebrities Born on {label}</>}
+    >
+      <section className="section">
+        <div className="max-w-5xl mx-auto">
 
         {/* Quick facts bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
@@ -464,9 +464,8 @@ export default function BirthdayDate() {
             </Button>
           </Card>
         </section>
-      </div>
-
-      <Footer />
-    </div>
+        </div>
+      </section>
+    </CollectionLayout>
   );
 }

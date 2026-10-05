@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Trophy, Users, TrendingUp, Globe } from 'lucide-react';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -127,28 +125,35 @@ export default function Leaderboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Longevity Leaderboard — Top Forecasts Worldwide | BornClock"
-        description="See the highest longevity forecasts from BornClock users around the world. Filter by country and age group. Join the leaderboard to see how you compare."
-        canonicalUrl="/leaderboard"
-      />
-
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-3 flex items-center justify-center gap-3">
-            <Trophy className="w-9 h-9 text-yellow-500" />
-            BornClock Longevity Leaderboard
-          </h1>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Anonymous rankings of the highest longevity forecasts from our community. Join to see how you compare.
-          </p>
-        </div>
+    <CollectionLayout
+      theme="birthday"
+      testId="leaderboard-page"
+      seo={(
+        <>
+          <SEO
+            title="Longevity Leaderboard — Top Forecasts Worldwide | BornClock"
+            description="See the highest longevity forecasts from BornClock users around the world. Filter by country and age group. Join the leaderboard to see how you compare."
+            canonicalUrl="/leaderboard"
+          />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: 'Longevity Leaderboard' }}
+      footer={{
+        tagline: 'Anonymous rankings of the highest longevity forecasts from our community.',
+        nav: [
+          { label: 'Birthdays', to: '/birthday' },
+          { label: "Today's Birthdays", to: '/todays-birthdays' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Birthdays.',
+      }}
+      eyebrow="Longevity"
+      h1={<span className="flex items-center justify-center gap-3"><Trophy className="w-9 h-9 text-yellow-500" />BornClock Longevity Leaderboard</span>}
+      lead={<>Anonymous rankings of the highest longevity forecasts from our community. Join to see how you compare.</>}
+    >
+      <section className="section">
+        <div className="container mx-auto px-4 max-w-5xl">
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -345,7 +350,8 @@ export default function Leaderboard() {
             and watch each habit shift the estimate.
           </p>
         </div>
-      </div>
+        </div>
+      </section>
 
       {/* Join Modal */}
       <Dialog open={showJoinModal} onOpenChange={setShowJoinModal}>
@@ -388,8 +394,6 @@ export default function Leaderboard() {
           )}
         </DialogContent>
       </Dialog>
-
-      <Footer />
-    </div>
+    </CollectionLayout>
   );
 }

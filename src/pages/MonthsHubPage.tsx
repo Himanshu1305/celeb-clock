@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { PageFAQ } from '@/components/PageFAQ';
 import { SharePageBar } from '@/components/SharePageBar';
 import { MONTH_HUB_DATA } from '@/data/monthHubData';
@@ -23,37 +21,36 @@ export default function MonthsHubPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <SEO
-        title="Born in Each Month — Birthstones, Zodiac Signs & Famous Birthdays | BornClock"
-        description="Browse all 12 birth months: the zodiac signs, birthstone and birth flowers of each, plus the famous people born in it. Cultural tradition and celebration — never a prediction."
-        keywords="birth month, birthstone by month, zodiac signs by month, born in month, birth month meaning, birthstones and birth flowers"
-        canonicalUrl="/born-in"
-      />
-
-      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
-      </div>
-
-      <div className="max-w-3xl mx-auto px-4 py-10">
-        <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-          <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-          <span>›</span>
-          <span className="text-gray-600">Born in Each Month</span>
-        </nav>
-
-        <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">Born in Each Month</h1>
-        {/* Answer-first (AEO) */}
-        <p className="text-lg text-gray-700 leading-relaxed mb-6">
-          Every birth month carries its own zodiac signs, birthstone and birth flowers — from January's
-          garnet and Capricorn–Aquarius pairing to December's turquoise and Sagittarius–Capricorn. Browse
-          all 12 below for the traits, gems, flowers and famous people tied to each. It's cultural
-          tradition and celebration, not a prediction.
-        </p>
-
+    <ToolLayout
+      theme="birthday"
+      testId="months-hub-page"
+      seo={(
+        <SEO
+          title="Born in Each Month — Birthstones, Zodiac Signs & Famous Birthdays | BornClock"
+          description="Browse all 12 birth months: the zodiac signs, birthstone and birth flowers of each, plus the famous people born in it. Cultural tradition and celebration — never a prediction."
+          keywords="birth month, birthstone by month, zodiac signs by month, born in month, birth month meaning, birthstones and birth flowers"
+          canonicalUrl="/born-in"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: 'Born in Each Month' }}
+      footer={{
+        tagline: 'Every birth month’s zodiac signs, birthstone, flowers and famous birthdays.',
+        nav: [
+          { label: 'Born On', to: '/born-on' },
+          { label: 'Born In (months)', to: '/born-in' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Born-on dates.',
+      }}
+      eyebrow="Birth months"
+      h1="Born in Each Month"
+      lead={<>Every birth month carries its own zodiac signs, birthstone and birth flowers — from January's
+        garnet and Capricorn–Aquarius pairing to December's turquoise and Sagittarius–Capricorn. Browse
+        all 12 below for the traits, gems, flowers and famous people tied to each. It's cultural
+        tradition and celebration, not a prediction.</>}
+    >
+      <section className="section">
         <SharePageBar path="/born-in" title="Born in Each Month" text="Every birth month's zodiac signs, birthstone and famous birthdays — all 12 in one place" className="mb-8" />
 
         {/* The 12 months */}
@@ -84,8 +81,7 @@ export default function MonthsHubPage() {
             <Link to="/birthstone" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Birthstone finder</Link>
           </div>
         </div>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </ToolLayout>
   );
 }

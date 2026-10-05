@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { AgeCalculator } from '@/components/AgeCalculator';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -26,30 +24,41 @@ const AgeInDays = () => {
   const { birthDate, setBirthDate } = useBirthDate();
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Age in Days Calculator — How Many Days Old Are You?"
-        description="Find out exactly how many days old you are — updated live, including leap years. Most people are surprised how large the number is. Free, instant, no sign-up."
-        keywords="age in days, how many days old am I, age calculator days, days old calculator"
-        canonicalUrl="/age-in-days"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Age in Days Calculator"
-        description="Find your exact age in days, updated live. Accounts for leap years automatically."
-        url="/age-in-days"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            How Many Days Old Are You?
-          </h1>
+    <ToolLayout
+      theme="birthday"
+      testId="age-in-days-page"
+      seo={(
+        <>
+          <SEO
+            title="Age in Days Calculator — How Many Days Old Are You?"
+            description="Find out exactly how many days old you are — updated live, including leap years. Most people are surprised how large the number is. Free, instant, no sign-up."
+            keywords="age in days, how many days old am I, age calculator days, days old calculator"
+            canonicalUrl="/age-in-days"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Age in Days Calculator"
+            description="Find your exact age in days, updated live. Accounts for leap years automatically."
+            url="/age-in-days"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday' }], current: 'Age in Days' }}
+      footer={{
+        tagline: 'Exactly how many days old you are — recalculated every midnight.',
+        nav: [
+          { label: 'Age Calculator', to: '/age-calculator' },
+          { label: 'Birthday Countdown', to: '/birthday-countdown' },
+          { label: "Today's Birthdays", to: '/todays-birthdays' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Age & birthday tools.',
+      }}
+      eyebrow="Age in days"
+      h1="How Many Days Old Are You?"
+    >
+        <section className="section">
           <EEATBadges sources={['ISO 8601', 'WHO Health Metrics']} />
         </section>
 
@@ -136,9 +145,7 @@ const AgeInDays = () => {
         </section>
 
         <AuthorBio />
-      </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

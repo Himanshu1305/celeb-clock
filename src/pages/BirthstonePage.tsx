@@ -1,8 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { BIRTHSTONE_DATA, getBirthstoneBySlug } from '@/data/birthstoneData';
 import { GemIllustration } from '@/components/GemIllustration';
@@ -13,23 +11,34 @@ export default function BirthstonePage() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-background">
+      <CollectionLayout
+        theme="birthday"
+        testId="birthstone-month-page"
+        seo={<SEO title="Month Not Found — Birthstone | BornClock" description="That birthstone month doesn't exist in our database." canonicalUrl="/birthstone" />}
+        breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }, { label: 'Birthstone', to: '/birthstone' }], current: 'Not Found' }}
+        footer={{
+          tagline: 'Birthstones by month — history, meaning and geology.',
+          nav: [
+            { label: 'Birthday Report', to: '/birthday-report' },
+            { label: 'Results', to: '/results' },
+            { label: 'Celebrities', to: '/celebrity' },
+            { label: 'Privacy', to: '/privacy' },
+          ],
+          note: '© 2026 BornClock.',
+        }}
+        eyebrow="Birthstone"
+        h1="Month Not Found"
+        lead={<>That birthstone month doesn't exist in our database.</>}
+      >
         <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-            <Navigation />
-            <AuthNav />
-          </header>
           <div className="text-center py-24">
             <p className="text-5xl mb-6">💎</p>
-            <h1 className="text-3xl font-bold text-foreground mb-4">Month Not Found</h1>
-            <p className="text-muted-foreground mb-8">That birthstone month doesn't exist in our database.</p>
             <Link to="/birthstone" className="inline-block bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity">
               Back to All Birthstones
             </Link>
           </div>
         </div>
-        <Footer />
-      </div>
+      </CollectionLayout>
     );
   }
 
@@ -59,33 +68,38 @@ export default function BirthstonePage() {
   const otherMonths = BIRTHSTONE_DATA.filter(b => b.slug !== data.slug);
 
   return (
-    <div className="min-h-screen bg-background">
-      <SEO
-        title={data.seoTitle}
-        description={data.seoDescription}
-        keywords={data.seoKeywords}
-        canonicalUrl={`/birthstone/${data.slug}`}
-      />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
-      </Helmet>
-
+    <CollectionLayout
+      theme="birthday"
+      testId="birthstone-month-page"
+      seo={(
+        <>
+          <SEO
+            title={data.seoTitle}
+            description={data.seoDescription}
+            keywords={data.seoKeywords}
+            canonicalUrl={`/birthstone/${data.slug}`}
+          />
+          <Helmet>
+            <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+            <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+          </Helmet>
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }, { label: 'Birthstone', to: '/birthstone' }], current: data.month }}
+      footer={{
+        tagline: `${data.month} birthstone — ${data.primaryStone}, its history, meaning and geology.`,
+        nav: [
+          { label: 'Birthday Report', to: '/birthday-report' },
+          { label: 'Results', to: '/results' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock.',
+      }}
+      eyebrow={`${data.month} Birthstone`}
+      h1={data.primaryStone}
+    >
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Breadcrumb */}
-        <nav className="text-sm text-muted-foreground mb-8 flex items-center gap-2">
-          <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
-          <span>›</span>
-          <Link to="/birthstone" className="hover:text-foreground transition-colors">Birthstone Finder</Link>
-          <span>›</span>
-          <span className="text-foreground">{data.month}</span>
-        </nav>
-
         {/* Hero */}
         <div className="rounded-2xl border border-border overflow-hidden mb-10">
           <div className="h-3 w-full" style={{ backgroundColor: data.hexColor }} />
@@ -95,8 +109,6 @@ export default function BirthstonePage() {
                 <GemIllustration month={data.monthNumber} size={96} />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-muted-foreground mb-1">{data.month} Birthstone</p>
-                <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">{data.primaryStone}</h1>
                 {data.alternateStones.length > 0 && (
                   <p className="text-muted-foreground text-sm mb-3">Also: {data.alternateStones.join(' · ')}</p>
                 )}
@@ -255,8 +267,6 @@ export default function BirthstonePage() {
           <strong>About This Content:</strong> Gemological data sourced from GIA (gia.edu) and Mindat.org. Historical and cultural content draws on Kunz, G.F. (1913), <em>The Curious Lore of Precious Stones</em>. Birthstone properties described here are traditional and cultural — they are not medical claims.
         </div>
       </div>
-
-      <Footer />
-    </div>
+    </CollectionLayout>
   );
 }

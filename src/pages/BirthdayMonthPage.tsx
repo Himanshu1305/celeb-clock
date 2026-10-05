@@ -1,9 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
+import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
-import PageTagline from '@/components/PageTagline';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getZodiacSign, MONTH_NAMES, MONTH_DAYS } from '@/data/birthdayPersonality';
 import { MONTH_CONTENT } from '@/data/birthdayMonthContent';
@@ -40,12 +37,29 @@ export default function BirthdayMonthPage() {
 
   if (month < 1 || month > 12) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Month not found</h1>
-          <Link to="/birthday" className="text-[#6E5AA6] hover:underline">Browse all months</Link>
-        </div>
-      </div>
+      <CollectionLayout
+        theme="birthday"
+        testId="birthday-month-page"
+        breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: 'Month not found' }}
+        footer={{
+          tagline: 'Explore personality insights for every day of the year.',
+          nav: [
+            { label: 'Birthdays', to: '/birthday' },
+            { label: "Today's Birthdays", to: '/todays-birthdays' },
+            { label: 'Celebrities', to: '/celebrity' },
+            { label: 'Privacy', to: '/privacy' },
+          ],
+          note: '© 2026 BornClock · Birthdays.',
+        }}
+        eyebrow="Birthday personality"
+        h1="Month not found"
+      >
+        <section className="section">
+          <div className="text-center">
+            <Link to="/birthday" className="text-[#6E5AA6] hover:underline">Browse all months</Link>
+          </div>
+        </section>
+      </CollectionLayout>
     );
   }
 
@@ -78,45 +92,38 @@ export default function BirthdayMonthPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <SEO
-        title={title}
-        description={description}
-        keywords={`${monthName} birthdays, ${monthName} zodiac personality, ${monthName} birthday traits, born in ${monthName}`}
-        canonicalUrl={`/birthday/${month}`}
-      />
-      <FAQSchema items={faqs} />
-
-      {/* Nav */}
-      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-10 max-w-4xl">
-
-        {/* Breadcrumb */}
-        <nav className="text-xs text-gray-400 mb-6 flex items-center gap-1.5">
-          <Link to="/" className="hover:text-[#6E5AA6] transition-colors">Home</Link>
-          <span>/</span>
-          <Link to="/birthday" className="hover:text-[#6E5AA6] transition-colors">Birthday</Link>
-          <span>/</span>
-          <span className="text-gray-600 font-medium">{monthName}</span>
-        </nav>
-
-        {/* H1 */}
-        <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-2 leading-tight">
-          {monthName} Birthdays — Personality, Zodiac &amp; Famous People
-        </h1>
-        <PageTagline />
-
-        {/* Intro */}
-        <p className="text-gray-600 text-base leading-relaxed mb-8 max-w-2xl">
-          {monthName} covers <strong>{zodiacText}</strong>. Each day brings a unique combination of
-          zodiac energy and life path numerology. Select your birthday to discover your full personality profile.
-        </p>
+    <CollectionLayout
+      theme="birthday"
+      testId="birthday-month-page"
+      seo={(
+        <>
+          <SEO
+            title={title}
+            description={description}
+            keywords={`${monthName} birthdays, ${monthName} zodiac personality, ${monthName} birthday traits, born in ${monthName}`}
+            canonicalUrl={`/birthday/${month}`}
+          />
+          <FAQSchema items={faqs} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: monthName }}
+      footer={{
+        tagline: 'Explore personality insights for every day of the year.',
+        nav: [
+          { label: 'Birthdays', to: '/birthday' },
+          { label: "Today's Birthdays", to: '/todays-birthdays' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Birthdays.',
+      }}
+      eyebrow="Birthday personality"
+      h1={<>{monthName} Birthdays — Personality, Zodiac &amp; Famous People</>}
+      lead={<>{monthName} covers <strong>{zodiacText}</strong>. Each day brings a unique combination of
+        zodiac energy and life path numerology. Select your birthday to discover your full personality profile.</>}
+    >
+      <section className="section">
+        <div className="max-w-4xl mx-auto">
 
         {/* Day grid */}
         <section className="mb-10">
@@ -231,9 +238,8 @@ export default function BirthdayMonthPage() {
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
-      </div>
-
-      <Footer />
-    </div>
+        </div>
+      </section>
+    </CollectionLayout>
   );
 }

@@ -1,9 +1,6 @@
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { TodaysBirthdays } from '@/components/TodaysBirthdays';
 import { SEO } from '@/components/SEO';
-import PageTagline from '@/components/PageTagline';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -20,18 +17,36 @@ const TodaysBirthdaysPage = () => {
   const todaySlug = `${MONTH_SLUGS[today.getMonth() + 1]}-${today.getDate()}`;
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title={`Famous Birthdays Today — ${formattedDate} | BornClock`}
-        description={`Best list of famous people born on ${formattedDate}. See which celebrities, scientists, athletes, and historical figures share today's birthday — sourced live from Wikipedia.`}
-        keywords="famous birthdays today, celebrity birthdays today, born today, who was born today"
-        canonicalUrl="/todays-birthdays"
-      />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
+    <CollectionLayout
+      theme="birthday"
+      testId="todays-birthdays-page"
+      seo={(
+        <>
+          <SEO
+            title={`Famous Birthdays Today — ${formattedDate} | BornClock`}
+            description={`Best list of famous people born on ${formattedDate}. See which celebrities, scientists, athletes, and historical figures share today's birthday — sourced live from Wikipedia.`}
+            keywords="famous birthdays today, celebrity birthdays today, born today, who was born today"
+            canonicalUrl="/todays-birthdays"
+          />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: "Today's Birthdays" }}
+      footer={{
+        tagline: 'The best daily list of notable people born today.',
+        nav: [
+          { label: 'Birthdays', to: '/birthday' },
+          { label: "Today's Birthdays", to: '/todays-birthdays' },
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Birthdays.',
+      }}
+      eyebrow="Famous birthdays"
+      h1={<>Famous Birthdays Today — {formattedDate}</>}
+      lead={<>The best daily list of notable people born on {formattedDate} — celebrities, scientists, athletes and world leaders, refreshed live from Wikipedia.</>}
+    >
+      <section className="section">
+        <div className="container mx-auto px-4">
 
         <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
           <div className="text-sm text-muted-foreground mb-2">
@@ -44,13 +59,6 @@ const TodaysBirthdaysPage = () => {
               Born-on deep dive →
             </Link>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Famous Birthdays Today — {formattedDate}
-          </h1>
-          <PageTagline />
-          <p className="text-lg text-muted-foreground">
-            The best daily list of notable people born on {formattedDate} — celebrities, scientists, athletes and world leaders, refreshed live from Wikipedia.
-          </p>
           <EEATBadges sources={['Wikipedia']} />
         </section>
 
@@ -70,9 +78,9 @@ const TodaysBirthdaysPage = () => {
         <PageFAQ slug="todays-birthdays" title="Today's Birthdays FAQs" />
         <RelatedTools currentSlug="today" />
         <AuthorBio />
-      </div>
-      <Footer />
-    </div>
+        </div>
+      </section>
+    </CollectionLayout>
   );
 };
 

@@ -26,8 +26,7 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { ToolLayout } from '@/components/central';
 import { DobInput, type DobValue, parseDob } from '@/components/DobInput';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { TrustStrip } from '@/components/paj/TrustStrip';
@@ -179,45 +178,48 @@ export default function BirthdayCelebrityLanding() {
   ];
 
   return (
-    <div className="paj field-guide" data-category="birthday" data-testid="birthday-celebrity-page">
-      <SEO
-        title="Everything Your Birthday Reveals — Celebrity Twins | BornClock"
-        description="Find the famous people who share your birthday — real profiles, real photos, ranked by recognition — plus your zodiac, life path and the weekday you were born. Free."
-        keywords="celebrity birthday twins, famous birthdays, who shares my birthday, born on this day, birthday zodiac, life path number"
-        canonicalUrl="/celebrity-birthday"
-        ogType="website"
-      />
-      <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </Helmet>
-
-      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-        <Navigation />
-        <AuthNav />
-      </header>
-      <div className="breadcrumb">
-        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; </span><span className="crumb-name">Birthday &amp; Celebrity</span></div>
-        <div className="edition"><span className="dot" />Real dates · sourced profiles</div>
-      </div>
-
-      <main id="main">
+    <ToolLayout
+      theme="birthday"
+      variant="field-guide"
+      testId="birthday-celebrity-page"
+      seo={(
+        <>
+          <SEO
+            title="Everything Your Birthday Reveals — Celebrity Twins | BornClock"
+            description="Find the famous people who share your birthday — real profiles, real photos, ranked by recognition — plus your zodiac, life path and the weekday you were born. Free."
+            keywords="celebrity birthday twins, famous birthdays, who shares my birthday, born on this day, birthday zodiac, life path number"
+            canonicalUrl="/celebrity-birthday"
+            ogType="website"
+          />
+          <Helmet>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+            <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+          </Helmet>
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity' }], current: 'Birthday & Celebrity', edition: 'Real dates · sourced profiles' }}
+      footer={{
+        tagline: 'One birth date. Different kinds of discovery. Facts, traditions and research — with the difference made clear.',
+        nav: [
+          { label: 'Celebrities', to: '/celebrity' },
+          { label: 'Birthdays Today', to: '/todays-birthdays' },
+          { label: 'Born On', to: '/born-on' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Celebrity birthdays.',
+      }}
+      eyebrow="Your date. Good company."
+      h1={<>Everything your birthday reveals.<br /><em>Made for your story.</em></>}
+      lead={<>Some connections deserve to be celebrated. Start with the date that’s yours, then meet the people who turned it into something memorable.</>}
+    >
         <JsonLd id="faq" data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }} />
         {/* HERO (field-guide) */}
         <section className="hero" id="start" aria-label="Introduction">
-          <div className="wide-title">
-            <div>
-              <span className="eyebrow kicker">Your date. Good company.</span>
-              <h1>Everything your birthday reveals.<br /><em>Made for your story.</em></h1>
-            </div>
-            <span className="serial" aria-hidden="true">02</span>
-          </div>
           <div className="hero-top">
             <div className="hero-copy">
               <div>
                 <div className="accent-rule" />
-                <p className="lead">Some connections deserve to be celebrated. Start with the date that’s yours, then meet the people who turned it into something memorable.</p>
                 <div className="hero-links">
                   <a className="btn" href="#results">Meet the birthday twins →</a>
                   <a className="text-button" href="#today">Today’s birthdays</a>
@@ -372,26 +374,6 @@ export default function BirthdayCelebrityLanding() {
             </Link>
           </div>
         </section>
-      </main>
-
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div>
-            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-            <p className="subtle">One birth date. Different kinds of discovery. Facts, traditions and research — with the difference made clear.</p>
-          </div>
-          <nav className="footer-nav" aria-label="Footer navigation">
-            <Link to="/vedic-astrology">Vedic Astrology</Link>
-            <Link to="/celebrity-birthday">Birthday &amp; Celebrity</Link>
-            <Link to="/mystic-corner">Mystic Corner</Link>
-            <Link to="/life-expectancy">Science &amp; Longevity</Link>
-            <Link to="/how-it-works">Methodology</Link>
-            <Link to="/privacy">Privacy</Link>
-            <Link to="/contact">Contact</Link>
-          </nav>
-        </div>
-        <div className="footer-bottom"><span>© 2026 BornClock · Independent perspectives. Clear boundaries.</span></div>
-      </footer>
-    </div>
+    </ToolLayout>
   );
 }

@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { AgeCalculator } from '@/components/AgeCalculator';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -26,29 +24,40 @@ const BirthdayCountdown = () => {
   const { birthDate, setBirthDate } = useBirthDate();
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Birthday Countdown — How Many Days Until Your Next Birthday?"
-        description="Find out exactly how many days until your next birthday — down to the day. See what day of the week it falls on and who shares it. Free, no sign-up."
-        keywords="birthday countdown, days until my birthday, how many days until my birthday, birthday timer"
-        canonicalUrl="/birthday-countdown"
-      />
-      <WebApplicationSchema
-        name="Birthday Countdown Calculator"
-        description="Count down the exact days until your next birthday. Shows day of week, season, and celebrity birthday twins."
-        url="/birthday-countdown"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            How Many Days Until Your Next Birthday?
-          </h1>
+    <ToolLayout
+      theme="birthday"
+      testId="birthday-countdown-page"
+      seo={(
+        <>
+          <SEO
+            title="Birthday Countdown — How Many Days Until Your Next Birthday?"
+            description="Find out exactly how many days until your next birthday — down to the day. See what day of the week it falls on and who shares it. Free, no sign-up."
+            keywords="birthday countdown, days until my birthday, how many days until my birthday, birthday timer"
+            canonicalUrl="/birthday-countdown"
+          />
+          <WebApplicationSchema
+            name="Birthday Countdown Calculator"
+            description="Count down the exact days until your next birthday. Shows day of week, season, and celebrity birthday twins."
+            url="/birthday-countdown"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday' }], current: 'Birthday Countdown' }}
+      footer={{
+        tagline: 'Exactly how many days until your next birthday — down to the day.',
+        nav: [
+          { label: 'Age Calculator', to: '/age-calculator' },
+          { label: 'Birthday Countdown', to: '/birthday-countdown' },
+          { label: "Today's Birthdays", to: '/todays-birthdays' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Age & birthday tools.',
+      }}
+      eyebrow="Birthday countdown"
+      h1="How Many Days Until Your Next Birthday?"
+    >
+        <section className="section">
           <EEATBadges sources={['Psychological Science Journal', 'Pew Research']} />
         </section>
 
@@ -111,9 +120,7 @@ const BirthdayCountdown = () => {
         </section>
 
         <AuthorBio />
-      </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

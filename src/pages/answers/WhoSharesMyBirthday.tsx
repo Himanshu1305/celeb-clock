@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ToolLayout } from '@/components/central';
 
 export default function WhoSharesMyBirthday() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "Who shares my birthday?", "item": "https://bornclock.com/answers/who-shares-my-birthday" } ] };
@@ -16,35 +16,43 @@ export default function WhoSharesMyBirthday() {
   };
 
   return (
-    <>
-      <SEO
-        title="Which Famous People Share My Birthday? | BornClock"
-        description="Discover which celebrities, athletes, scientists and world leaders share your exact birthday. BornClock searches 50,000+ celebrities by date of birth."
-        canonicalUrl="/answers/who-shares-my-birthday"
-        ogType="article"
-      />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
-        <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">Who shares my birthday?</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-2">Which Famous People Share My Birthday?</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Thousands of notable people share every birthday — from world leaders and Oscar winners to scientists and athletes. BornClock's database of 50,000+ celebrities lets you find your famous birthday twins instantly by entering your date of birth.
-            </p>
-          </div>
-
+    <ToolLayout
+      theme="birthday"
+      testId="who-shares-my-birthday"
+      seo={(
+        <>
+          <SEO
+            title="Which Famous People Share My Birthday? | BornClock"
+            description="Discover which celebrities, athletes, scientists and world leaders share your exact birthday. BornClock searches 50,000+ celebrities by date of birth."
+            canonicalUrl="/answers/who-shares-my-birthday"
+            ogType="article"
+          />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'Who shares my birthday?' }}
+      footer={{
+        tagline: 'Find the famous people who share your exact birthday — free and instant.',
+        nav: [
+          { label: 'Answers', to: '/answers' },
+          { label: 'Age Calculator', to: '/age-calculator' },
+          { label: 'Birthdays', to: '/birthday' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock.',
+      }}
+      eyebrow="Answers"
+      h1="Which Famous People Share My Birthday?"
+      lead={(
+        <>
+          Thousands of notable people share every birthday — from world leaders and Oscar winners to scientists and athletes. BornClock's database of 50,000+ celebrities lets you find your famous birthday twins instantly by entering your date of birth.
+        </>
+      )}
+    >
+      <section className="section">
+        <div className="max-w-2xl mx-auto">
           <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
             <h2 className="text-xl font-bold text-gray-900">Why Celebrity Birthdays Are Fascinating</h2>
             <p>There are 365 days in a year (366 in a leap year), and roughly 8 billion people on Earth. That means an average of 21 million people share your birthday worldwide. Among those, thousands have achieved recognition across every field — from Nobel laureates to Olympic champions, from Oscar-winning actors to heads of state.</p>
@@ -101,7 +109,7 @@ export default function WhoSharesMyBirthday() {
             </div>
           </div>
         </div>
-      </AnswerLayout>
-    </>
+      </section>
+    </ToolLayout>
   );
 }

@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { AgeCalculator } from '@/components/AgeCalculator';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -26,29 +24,40 @@ const AgeInSeconds = () => {
   const { birthDate, setBirthDate } = useBirthDate();
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Age in Seconds Calculator — How Many Seconds Have You Been Alive?"
-        description="Calculate exactly how many seconds old you are — live, updating every second. Most 30-year-olds have passed 946 million seconds. Free, instant, no sign-up."
-        keywords="age in seconds, how many seconds old am I, seconds old calculator, how many seconds have I lived"
-        canonicalUrl="/age-in-seconds"
-      />
-      <WebApplicationSchema
-        name="Age in Seconds Calculator"
-        description="Find your exact age in seconds, updating live every second. Includes leap year calculation."
-        url="/age-in-seconds"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            You've Been Alive for This Many Seconds
-          </h1>
+    <ToolLayout
+      theme="birthday"
+      testId="age-in-seconds-page"
+      seo={(
+        <>
+          <SEO
+            title="Age in Seconds Calculator — How Many Seconds Have You Been Alive?"
+            description="Calculate exactly how many seconds old you are — live, updating every second. Most 30-year-olds have passed 946 million seconds. Free, instant, no sign-up."
+            keywords="age in seconds, how many seconds old am I, seconds old calculator, how many seconds have I lived"
+            canonicalUrl="/age-in-seconds"
+          />
+          <WebApplicationSchema
+            name="Age in Seconds Calculator"
+            description="Find your exact age in seconds, updating live every second. Includes leap year calculation."
+            url="/age-in-seconds"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday' }], current: 'Age in Seconds' }}
+      footer={{
+        tagline: 'Exactly how many seconds you have been alive — ticking live.',
+        nav: [
+          { label: 'Age Calculator', to: '/age-calculator' },
+          { label: 'Birthday Countdown', to: '/birthday-countdown' },
+          { label: "Today's Birthdays", to: '/todays-birthdays' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Age & birthday tools.',
+      }}
+      eyebrow="Age in seconds"
+      h1="You've Been Alive for This Many Seconds"
+    >
+        <section className="section">
           <EEATBadges sources={['ISO 8601', 'University of Pennsylvania Research']} />
         </section>
 
@@ -132,9 +141,7 @@ const AgeInSeconds = () => {
         </section>
 
         <AuthorBio />
-      </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 
