@@ -1,0 +1,11 @@
+/* Central design-system themes — Run 1.
+ * Keyed on [data-theme] on a `.paj` root (see src/components/central/PajPage.tsx).
+ * Values mirror src/components/central/themes.ts (THEME_TOKENS) and the proven
+ * per-category tokens in part-aj.css, and add the `neutral` theme. Loaded AFTER
+ * part-aj.css so [data-theme] is the canonical theme selector going forward while
+ * not-yet-migrated pages keep working via [data-category]. */
+.paj[data-theme="vedic"]    { --accent:#C6A15B; --accent-text:#806125; --green:#C6A15B; }
+.paj[data-theme="birthday"] { --accent:#F0715A; --accent-text:#B5432A; --green:#F0715A; }
+.paj[data-theme="mystic"]   { --accent:#6E5AA6; --accent-text:#6E5AA6; --green:#6E5AA6; }
+.paj[data-theme="science"]  { --accent:#2F6FB0; --accent-text:#237A60; --green:#2E9E7B; --bg:#FFFFFF; --line:#DDE4EA; }
+.paj[data-theme="neutral"]  { --accent:#C6A15B; --accent-text:#0E2238; --green:#0E2238; }
