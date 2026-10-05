@@ -29,3 +29,11 @@ Branch `redesign-central` from `develop` @ 52ed513.
 
 ## Part F — Merge / RC
 - [ ] open (see decisions D0)
+
+## Final state this run (see docs/part-ap-report.md)
+- [x] Part D — DONE + verified (actionlint clean).
+- [x] Part C secrets — DONE + verified (16 on bornclock-staging, Razorpay=TEST).
+- [x] Part A — design spec + full 186-route mapping DONE (code migration pending).
+- [x] Baseline — 1878/1878 unit tests pass.
+- [ ] Part A migration, Part B speed, Part E full matrix, Part C payment, Part F RC — OPEN (6 blockers).
+- LAUNCH-READY: NO — 6 blockers.
