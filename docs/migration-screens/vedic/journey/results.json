@@ -1,0 +1,67 @@
+[
+  {
+    "name": "positive /vedic-zodiac DOB 15/08/1990 → rashi result",
+    "pass": true,
+    "detail": "rashiShown=true errs=0"
+  },
+  {
+    "name": "edge leap-day 29/02/2000 → result, no crash",
+    "pass": true,
+    "detail": "errs=0"
+  },
+  {
+    "name": "edge year 1900 → result, no crash",
+    "pass": true,
+    "detail": "errs=0"
+  },
+  {
+    "name": "negative /kundali empty → blocked (disabled or hint), no crash",
+    "pass": true,
+    "detail": "btnDisabled=true hint=true errs=0"
+  },
+  {
+    "name": "negative /kundali future DOB 2099 → handled, no crash",
+    "pass": true,
+    "detail": "errs=0 signal=true"
+  },
+  {
+    "name": "negative /muhurat unknown city → no options, find disabled, no crash",
+    "pass": true,
+    "detail": "opts=0 findDisabled=true errs=0"
+  },
+  {
+    "name": "journey saved profile → /kundali shows saved-profile banner",
+    "pass": true,
+    "detail": "visible=true"
+  },
+  {
+    "name": "journey saved profile → /kundali-match prefills person A",
+    "pass": true,
+    "detail": "visible=true"
+  },
+  {
+    "name": "journey saved profile → /astrologer past no-profile gate",
+    "pass": true,
+    "detail": "noProfileShown=false errs=0"
+  },
+  {
+    "name": "journey saved profile → /career-report renders, no crash",
+    "pass": true,
+    "detail": "errs=0"
+  },
+  {
+    "name": "gating /astrologer no profile → add-details prompt shown",
+    "pass": true,
+    "detail": "visible=true"
+  },
+  {
+    "name": "gating /career-report no profile → renders form/paywall, no crash",
+    "pass": true,
+    "detail": "errs=0"
+  },
+  {
+    "name": "hindi /hi/rashifal renders Devanagari, no crash",
+    "pass": true,
+    "detail": "devanagari=true errs=0"
+  }
+]

@@ -5,7 +5,21 @@ Supersedes `docs/run1-bugs.md` (carried over below).
 
 ## VEDIC run
 
-_(bugs logged here as found during Step 2/3 verification)_
+### BUG-V1 — `/muhurat` two `<select>` with no accessible name (axe `select-name`, critical)
+- Where: `/muhurat` — the "Occasion" and "Look ahead" `<select>` elements. Their
+  visible `<label>`s were not programmatically associated (no `htmlFor`/`id`), so axe
+  flagged a **critical** `select-name` violation (2 nodes) on live staging. Pre-existing
+  in the page content; surfaced by the Step-0 axe scan during this run.
+- Cause: the labels lacked `htmlFor`, and the selects lacked `id`/`aria-label` — unlike
+  the sibling date/city inputs on the same form, which already use `htmlFor`+`id`.
+- Fix: added `id` + `aria-label` to each `<select>` and `htmlFor` to each `<label>`
+  (`src/pages/MuhuratPage.tsx`). No logic, content or styling change.
+- Retest (fresh deploy `021246c3`, chromium/webkit/android): `/muhurat` axe now reports
+  only `color-contrast` (INV-2), **no `select-name`** — critical cleared. Muhurat still
+  200 · single h1 · theme=vedic · 0 console errors; unknown-city negative path still
+  blocks submit with no crash; full unit suite unchanged (1888/1888).
+
+_(other bugs logged here as found during Step 2/3 verification)_
 
 ### INV-2 — axe `color-contrast` serious violations (investigated)
 - Where: present on the already-migrated run-1 page `/kundali` (6 nodes) and on

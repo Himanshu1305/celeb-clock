@@ -1,0 +1,98 @@
+[
+  {
+    "route": "/",
+    "bro": "chromium",
+    "diffPct": 2.79,
+    "verdict": "MINOR"
+  },
+  {
+    "route": "/",
+    "bro": "webkit",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/pricing",
+    "bro": "chromium",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/pricing",
+    "bro": "webkit",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/age-calculator",
+    "bro": "chromium",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/age-calculator",
+    "bro": "webkit",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/celebrity",
+    "bro": "chromium",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/celebrity",
+    "bro": "webkit",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/numerology",
+    "bro": "chromium",
+    "diffPct": 0.03,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/numerology",
+    "bro": "webkit",
+    "diffPct": 2.39,
+    "verdict": "MINOR"
+  },
+  {
+    "route": "/compatibility",
+    "bro": "chromium",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/compatibility",
+    "bro": "webkit",
+    "diffPct": 0.02,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/life-expectancy",
+    "bro": "chromium",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/life-expectancy",
+    "bro": "webkit",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/biological-age",
+    "bro": "chromium",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/biological-age",
+    "bro": "webkit",
+    "diffPct": 2.39,
+    "verdict": "MINOR"
+  }
+]

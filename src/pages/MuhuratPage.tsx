@@ -85,8 +85,8 @@ export default function MuhuratPage() {
         <TrustStrip claim="Your Panchang, computed for your exact location — timing shifts by city, so we don't guess." />
         <div className="rounded-xl border border-border bg-card/60 p-5 space-y-4" style={{ marginTop: 16 }}>
           <div>
-            <label className="block text-xs text-muted-foreground mb-1">Occasion</label>
-            <select data-testid="muhurat-purpose" value={purpose} onChange={e => setPurpose(e.target.value as MuhuratPurpose)}
+            <label className="block text-xs text-muted-foreground mb-1" htmlFor="muhurat-purpose">Occasion</label>
+            <select id="muhurat-purpose" aria-label="Occasion" data-testid="muhurat-purpose" value={purpose} onChange={e => setPurpose(e.target.value as MuhuratPurpose)}
                     className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground">
               {MUHURAT_OCCASIONS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
             </select>
@@ -119,8 +119,8 @@ export default function MuhuratPage() {
               <p className="mt-1 text-[11px] text-muted-foreground">Leave blank for today.</p>
             </div>
             <div>
-              <label className="block text-xs text-muted-foreground mb-1">Look ahead</label>
-              <select data-testid="muhurat-days" value={days} onChange={e => setDays(Number(e.target.value))}
+              <label className="block text-xs text-muted-foreground mb-1" htmlFor="muhurat-days">Look ahead</label>
+              <select id="muhurat-days" aria-label="Look ahead" data-testid="muhurat-days" value={days} onChange={e => setDays(Number(e.target.value))}
                       className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground">
                 {RANGES.map(r => <option key={r} value={r}>Next {r} days</option>)}
               </select>
