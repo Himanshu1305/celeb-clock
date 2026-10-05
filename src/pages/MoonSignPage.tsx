@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
+import { ToolLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
-import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
-import PageTagline from '@/components/PageTagline';
 import { calculateMoonSignAndNakshatra, MOON_SIGN_DATA, NAKSHATRAS, getNakshatraLifeApplication } from '@/data/moonSignData';
 import { useReportPrice } from '@/hooks/useCurrency';
 
@@ -45,43 +43,42 @@ export default function MoonSignPage() {
   ];
 
   return (
-    <>
-      <SEO
-        title="Moon Sign Calculator — Find Your Vedic & Western Moon Sign | BornClock"
-        description="Calculate your moon sign and nakshatra by date of birth. Free moon rashi calculator with full personality interpretations for all 12 moon signs and 27 nakshatras."
-        keywords="moon sign calculator, what is my moon sign, nakshatra calculator, moon sign by date of birth India, moon rashi calculator"
-        canonicalUrl="/moon-sign"
-      />
-      <WebApplicationSchema
-        name="Moon Sign Calculator"
-        description="Free moon sign and nakshatra calculator by date of birth with personality interpretations for all 12 moon signs and 27 nakshatras."
-        url="/moon-sign"
-      />
-      <FAQSchema items={faqItems} />
-
-      <div className="min-h-screen bg-white">
-        <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <Navigation />
-            <AuthNav />
-          </div>
-        </div>
-        <div className="max-w-2xl mx-auto px-4 py-10">
-
-          <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span>›</span>
-            <span className="text-gray-600">Moon Sign Calculator</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-1">Moon Sign Calculator</h1>
-          <PageTagline />
-
-          <div className="bg-blue-50 border-l-4 border-blue-500 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-blue-900 leading-relaxed">
-              Your moon sign reveals your emotional nature, instincts, and subconscious self — things your sun sign cannot show. The Moon changes signs every 2.5 days, making it far more personally specific than your sun sign. Your nakshatra (Vedic lunar mansion) refines this further to one of 27 precise cosmic positions.
-            </p>
-          </div>
+    <ToolLayout
+      theme="vedic"
+      testId="moon-sign-page"
+      seo={(
+        <>
+          <SEO
+            title="Moon Sign Calculator — Find Your Vedic & Western Moon Sign | BornClock"
+            description="Calculate your moon sign and nakshatra by date of birth. Free moon rashi calculator with full personality interpretations for all 12 moon signs and 27 nakshatras."
+            keywords="moon sign calculator, what is my moon sign, nakshatra calculator, moon sign by date of birth India, moon rashi calculator"
+            canonicalUrl="/moon-sign"
+          />
+          <WebApplicationSchema
+            name="Moon Sign Calculator"
+            description="Free moon sign and nakshatra calculator by date of birth with personality interpretations for all 12 moon signs and 27 nakshatras."
+            url="/moon-sign"
+          />
+          <FAQSchema items={faqItems} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Moon Sign Calculator' }}
+      footer={{
+        tagline: 'Your moon sign and nakshatra by date of birth, computed with care.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Moon Sign', to: '/moon-sign' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+      eyebrow="Moon sign & nakshatra"
+      h1="Moon Sign Calculator"
+      lead={<>Your moon sign reveals your emotional nature, instincts, and subconscious self — things your sun sign cannot show. The Moon changes signs every 2.5 days, making it far more personally specific than your sun sign. Your nakshatra (Vedic lunar mansion) refines this further to one of 27 precise cosmic positions.</>}
+    >
+      <section className="section">
+        <div className="max-w-2xl mx-auto">
 
           <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-200">
             <p className="text-sm font-semibold text-gray-700 mb-3">Enter your date of birth</p>
@@ -316,7 +313,7 @@ export default function MoonSignPage() {
           </p>
 
         </div>
-      </div>
-    </>
+      </section>
+    </ToolLayout>
   );
 }

@@ -1,0 +1,1310 @@
+[
+  {
+    "browser": "chromium",
+    "route": "/vedic-astrology",
+    "label": "Vedic hub",
+    "status": 200,
+    "title": "Vedic Astrology — Your Birth Chart, Computed Not Guessed | BornClock",
+    "h1Count": 1,
+    "h1First": "Your birth chart, computed — not guessed.Every detail matters.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/kundali",
+    "label": "Kundali",
+    "status": 200,
+    "title": "Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock",
+    "h1Count": 1,
+    "h1First": "Your Kundali, computed.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/muhurat",
+    "label": "Muhurat",
+    "status": 200,
+    "title": "Muhurat Finder — Auspicious Dates (Panchang) | BornClock",
+    "h1Count": 1,
+    "h1First": "Muhurat Finder.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/sade-sati",
+    "label": "Sade Sati",
+    "status": 200,
+    "title": "Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock",
+    "h1Count": 1,
+    "h1First": "Sade Sati Calculator.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/gemstones",
+    "label": "Gemstones",
+    "status": 200,
+    "title": "Gemstone Suggestions (Vedic) — Ascendant-Lord Stone | BornClock",
+    "h1Count": 1,
+    "h1First": "Gemstone Suggestions.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/kundali-match",
+    "label": "Kundali Matching",
+    "status": 200,
+    "title": "Kundali Matching — Free Guna Milan (Ashtakoota) | BornClock",
+    "h1Count": 1,
+    "h1First": "Kundali Matching.",
+    "dataTheme": null,
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/rashi-ratna",
+    "label": "Rashi Ratna",
+    "status": 200,
+    "title": "Rashi Ratna — Gemstone by Zodiac Sign (Indian Vedic Birthstones) | BornClock",
+    "h1Count": 1,
+    "h1First": "Rashi Ratna — Indian Vedic Birthstones",
+    "dataTheme": null,
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 0,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/rashifal-by-date-of-birth",
+    "label": "Rashifal by DOB",
+    "status": 200,
+    "title": "राशिफल by Date of Birth — Zodiac Sign in Hindi | BornClock",
+    "h1Count": 1,
+    "h1First": "अपनी राशि जानें — Zodiac by Date of Birth",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 7,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/sun-vs-moon-sign",
+    "label": "Sun vs Moon Sign",
+    "status": 200,
+    "title": "Sun Sign vs Moon Sign — Which One Actually Describes You? | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "Sun Sign vs Moon Sign — Which One Is Actually You?",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 8,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/moon-sign",
+    "label": "Moon Sign",
+    "status": 200,
+    "title": "Moon Sign Calculator — Find Your Vedic & Western Moon Sign | BornClock",
+    "h1Count": 1,
+    "h1First": "Moon Sign Calculator",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/vedic-zodiac",
+    "label": "Vedic Zodiac",
+    "status": 200,
+    "title": "Indian Zodiac (Vedic Rashi) Calculator — Find Your Jyotish Sign | BornClock",
+    "h1Count": 1,
+    "h1First": "Indian Zodiac Calculator",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 7,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/vedic-zodiac/mesha",
+    "label": "Vedic Zodiac — Mesha",
+    "status": 200,
+    "title": "Indian Zodiac (Vedic Rashi) Calculator — Find Your Jyotish Sign | BornClock",
+    "h1Count": 1,
+    "h1First": "Indian Zodiac Calculator",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 5,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 5,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/hi/rashifal",
+    "label": "Rashifal (Hindi)",
+    "status": 200,
+    "title": "राशिफल — आज का राशिफल | BornClock",
+    "h1Count": 1,
+    "h1First": "राशिफल",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 5,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 5,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/hi/rashifal/mesh",
+    "label": "Rashifal — Mesh (Hindi)",
+    "status": 200,
+    "title": "राशिफल — आज का राशिफल | BornClock",
+    "h1Count": 1,
+    "h1First": "राशिफल",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 4,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 4,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/answers/what-is-my-moon-sign",
+    "label": "Answer: moon sign",
+    "status": 200,
+    "title": "What Is My Moon Sign? How to Find It by Date of Birth | BornClock",
+    "h1Count": 1,
+    "h1First": "What Is My Moon Sign — and Why It's Probably More \"You\" Than Your Sun ",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/answers/what-is-vedic-astrology",
+    "label": "Answer: vedic astrology",
+    "status": 200,
+    "title": "What Is Vedic Astrology? Why Your Sign Is Probably Different | BornClock",
+    "h1Count": 1,
+    "h1First": "What Is Vedic Astrology — and Why Are You Probably a Different Sign?",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/articles/moon-sign-by-date-of-birth",
+    "label": "Article: moon sign by DOB",
+    "status": 200,
+    "title": "Moon Sign by Date of Birth — Find Your Vedic Rashi India | BornClock",
+    "h1Count": 1,
+    "h1First": "Moon Sign by Date of Birth — Find Your Vedic Rashi (India Guide)",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/articles/vedic-astrology-birth-chart",
+    "label": "Article: vedic birth chart",
+    "status": 200,
+    "title": "Vedic Astrology Birth Chart — Rashi & Nakshatra Guide | BornClock",
+    "h1Count": 1,
+    "h1First": "Vedic Astrology Birth Chart — Your Rashi, Nakshatra & Lagna Explained",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/articles/nakshatra-by-date-of-birth",
+    "label": "Article: nakshatra by DOB",
+    "status": 200,
+    "title": "Nakshatra by Date of Birth — All 27 Lunar Mansions | BornClock",
+    "h1Count": 1,
+    "h1First": "Nakshatra by Date of Birth — All 27 Lunar Mansions",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/articles/kundali-compatibility",
+    "label": "Article: kundali compatibility",
+    "status": 200,
+    "title": "Kundali Matching Guide — Ashtakoota (36 Guna) Explained | BornClock",
+    "h1Count": 1,
+    "h1First": "Kundali Matching: The Complete Guide to Ashtakoota (Guna Milan)",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 7,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/vedic-astrology",
+    "label": "Vedic hub",
+    "status": 200,
+    "title": "Vedic Astrology — Your Birth Chart, Computed Not Guessed | BornClock",
+    "h1Count": 1,
+    "h1First": "Your birth chart, computed — not guessed.Every detail matters.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/kundali",
+    "label": "Kundali",
+    "status": 200,
+    "title": "Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock",
+    "h1Count": 1,
+    "h1First": "Your Kundali, computed.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/muhurat",
+    "label": "Muhurat",
+    "status": 200,
+    "title": "Muhurat Finder — Auspicious Dates (Panchang) | BornClock",
+    "h1Count": 1,
+    "h1First": "Muhurat Finder.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/sade-sati",
+    "label": "Sade Sati",
+    "status": 200,
+    "title": "Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock",
+    "h1Count": 1,
+    "h1First": "Sade Sati Calculator.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/gemstones",
+    "label": "Gemstones",
+    "status": 200,
+    "title": "Gemstone Suggestions (Vedic) — Ascendant-Lord Stone | BornClock",
+    "h1Count": 1,
+    "h1First": "Gemstone Suggestions.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/kundali-match",
+    "label": "Kundali Matching",
+    "status": 200,
+    "title": "Kundali Matching — Free Guna Milan (Ashtakoota) | BornClock",
+    "h1Count": 1,
+    "h1First": "Kundali Matching.",
+    "dataTheme": null,
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/rashi-ratna",
+    "label": "Rashi Ratna",
+    "status": 200,
+    "title": "Rashi Ratna — Gemstone by Zodiac Sign (Indian Vedic Birthstones) | BornClock",
+    "h1Count": 1,
+    "h1First": "Rashi Ratna — Indian Vedic Birthstones",
+    "dataTheme": null,
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 0,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/rashifal-by-date-of-birth",
+    "label": "Rashifal by DOB",
+    "status": 200,
+    "title": "राशिफल by Date of Birth — Zodiac Sign in Hindi | BornClock",
+    "h1Count": 1,
+    "h1First": "अपनी राशि जानें — Zodiac by Date of Birth",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 7,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/sun-vs-moon-sign",
+    "label": "Sun vs Moon Sign",
+    "status": 200,
+    "title": "Sun Sign vs Moon Sign — Which One Actually Describes You? | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "Sun Sign vs Moon Sign — Which One Is Actually You?",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 8,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/moon-sign",
+    "label": "Moon Sign",
+    "status": 200,
+    "title": "Moon Sign Calculator — Find Your Vedic & Western Moon Sign | BornClock",
+    "h1Count": 1,
+    "h1First": "Moon Sign Calculator",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/vedic-zodiac",
+    "label": "Vedic Zodiac",
+    "status": 200,
+    "title": "Indian Zodiac (Vedic Rashi) Calculator — Find Your Jyotish Sign | BornClock",
+    "h1Count": 1,
+    "h1First": "Indian Zodiac Calculator",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 7,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/vedic-zodiac/mesha",
+    "label": "Vedic Zodiac — Mesha",
+    "status": 200,
+    "title": "Indian Zodiac (Vedic Rashi) Calculator — Find Your Jyotish Sign | BornClock",
+    "h1Count": 1,
+    "h1First": "Indian Zodiac Calculator",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 5,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 5,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/hi/rashifal",
+    "label": "Rashifal (Hindi)",
+    "status": 200,
+    "title": "राशिफल — आज का राशिफल | BornClock",
+    "h1Count": 1,
+    "h1First": "राशिफल",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 5,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 5,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/hi/rashifal/mesh",
+    "label": "Rashifal — Mesh (Hindi)",
+    "status": 200,
+    "title": "राशिफल — आज का राशिफल | BornClock",
+    "h1Count": 1,
+    "h1First": "राशिफल",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 4,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 4,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/answers/what-is-my-moon-sign",
+    "label": "Answer: moon sign",
+    "status": 200,
+    "title": "What Is My Moon Sign? How to Find It by Date of Birth | BornClock",
+    "h1Count": 1,
+    "h1First": "What Is My Moon Sign — and Why It's Probably More \"You\" Than Your Sun ",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/answers/what-is-vedic-astrology",
+    "label": "Answer: vedic astrology",
+    "status": 200,
+    "title": "What Is Vedic Astrology? Why Your Sign Is Probably Different | BornClock",
+    "h1Count": 1,
+    "h1First": "What Is Vedic Astrology — and Why Are You Probably a Different Sign?",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/articles/moon-sign-by-date-of-birth",
+    "label": "Article: moon sign by DOB",
+    "status": 200,
+    "title": "Moon Sign by Date of Birth — Find Your Vedic Rashi India | BornClock",
+    "h1Count": 1,
+    "h1First": "Moon Sign by Date of Birth — Find Your Vedic Rashi (India Guide)",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/articles/vedic-astrology-birth-chart",
+    "label": "Article: vedic birth chart",
+    "status": 200,
+    "title": "Vedic Astrology Birth Chart — Rashi & Nakshatra Guide | BornClock",
+    "h1Count": 1,
+    "h1First": "Vedic Astrology Birth Chart — Your Rashi, Nakshatra & Lagna Explained",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/articles/nakshatra-by-date-of-birth",
+    "label": "Article: nakshatra by DOB",
+    "status": 200,
+    "title": "Nakshatra by Date of Birth — All 27 Lunar Mansions | BornClock",
+    "h1Count": 1,
+    "h1First": "Nakshatra by Date of Birth — All 27 Lunar Mansions",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/articles/kundali-compatibility",
+    "label": "Article: kundali compatibility",
+    "status": 200,
+    "title": "Kundali Matching Guide — Ashtakoota (36 Guna) Explained | BornClock",
+    "h1Count": 1,
+    "h1First": "Kundali Matching: The Complete Guide to Ashtakoota (Guna Milan)",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 7,
+    "hasOldNav": true,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": false
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  }
+]

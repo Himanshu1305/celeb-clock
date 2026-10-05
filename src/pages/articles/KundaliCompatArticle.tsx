@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 
 const FAQ = [
@@ -13,21 +11,37 @@ const FAQ = [
 
 export default function KundaliCompatArticle() {
   return (
-    <div data-testid="kundali-compat-article" className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Kundali Matching Guide — Ashtakoota (36 Guna) Explained | BornClock"
-        description="A complete guide to Kundali matching by Ashtakoota (Guna Milan): all eight kootas — Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi — scores, doshas and what a good match really means."
-        canonicalUrl="/articles/kundali-compatibility"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="vedic"
+      testId="kundali-compat-article"
+      seo={(
+        <SEO
+          title="Kundali Matching Guide — Ashtakoota (36 Guna) Explained | BornClock"
+          description="A complete guide to Kundali matching by Ashtakoota (Guna Milan): all eight kootas — Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi — scores, doshas and what a good match really means."
+          canonicalUrl="/articles/kundali-compatibility"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali Compatibility' }}
+      footer={{
+        tagline: 'Kundali matching by Ashtakoota (Guna Milan) — all eight kootas explained.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Kundali Matching', to: '/kundali-match' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+      eyebrow="Vedic Astrology"
+      h1="Kundali Matching: The Complete Guide to Ashtakoota (Guna Milan)"
+      lead={(
+        <>In Vedic astrology, <strong>Kundali matching</strong> — also called <em>Guna Milan</em> or Ashtakoota Milan — is the traditional method used across India to assess the compatibility of two people before marriage. The system compares the birth stars (Nakshatras) and Moon signs (Rashis) of the prospective partners across eight distinct dimensions, or <strong>Kootas</strong>. Each Koota is assigned a maximum number of points, and the sum of all eight gives a total out of 36. This article explains every one of the eight factors in depth, what the scores mean, which doshas to watch for, and how to interpret a match honestly rather than superstitiously.</>
+      )}
+    >
       <FAQSchema items={FAQ} />
-      <div className="container mx-auto px-4 py-8 max-w-3xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
-
-        <article className="prose prose-slate max-w-none text-foreground">
-          <h1 className="font-heading text-3xl md:text-4xl font-bold mb-4">Kundali Matching: The Complete Guide to Ashtakoota (Guna Milan)</h1>
-
-          <p>In Vedic astrology, <strong>Kundali matching</strong> — also called <em>Guna Milan</em> or Ashtakoota Milan — is the traditional method used across India to assess the compatibility of two people before marriage. The system compares the birth stars (Nakshatras) and Moon signs (Rashis) of the prospective partners across eight distinct dimensions, or <strong>Kootas</strong>. Each Koota is assigned a maximum number of points, and the sum of all eight gives a total out of 36. This article explains every one of the eight factors in depth, what the scores mean, which doshas to watch for, and how to interpret a match honestly rather than superstitiously.</p>
+      <section className="section" data-testid="kundali-compat-article">
+        <article className="prose prose-slate max-w-none text-foreground container mx-auto px-4 py-8 max-w-3xl">
 
           <p>The word Ashtakoota literally means "eight pillars." The eight pillars are Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi. Together they carry a maximum of 36 points (Gunas). The higher the number of matching Gunas, the more harmonious the pairing is said to be. But as we will see, the raw number is only part of the story — the presence or absence of specific doshas can matter more than a single point difference.</p>
 
@@ -79,8 +93,7 @@ export default function KundaliCompatArticle() {
             </div>
           ))}
         </article>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </ArticleLayout>
   );
 }

@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
 import { DobInput, toISODate } from '@/components/DobInput';
@@ -44,34 +42,42 @@ export default function VedicZodiac() {
   const result = dob ? compareZodiacs(new Date(dob + 'T12:00:00')) : null;
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Indian Zodiac (Vedic Rashi) Calculator — Find Your Jyotish Sign | BornClock"
-        description="Calculate your Vedic Rashi (Indian zodiac sign) using the sidereal Jyotish system. Compare your Western and Vedic signs and explore all 12 rashis with their ruling planets, gemstones, and Ayurveda connections."
-        canonicalUrl="/vedic-zodiac"
-        keywords="vedic zodiac, rashi calculator, vedic astrology, jyotish, sidereal zodiac, indian astrology, ayanamsa, indian zodiac sign"
-        ogImage="https://bornclock.com/og/zodiac.png"
-      />
+    <CollectionLayout
+      theme="vedic"
+      testId="vedic-zodiac-page"
+      seo={(
+        <SEO
+          title="Indian Zodiac (Vedic Rashi) Calculator — Find Your Jyotish Sign | BornClock"
+          description="Calculate your Vedic Rashi (Indian zodiac sign) using the sidereal Jyotish system. Compare your Western and Vedic signs and explore all 12 rashis with their ruling planets, gemstones, and Ayurveda connections."
+          canonicalUrl="/vedic-zodiac"
+          keywords="vedic zodiac, rashi calculator, vedic astrology, jyotish, sidereal zodiac, indian astrology, ayanamsa, indian zodiac sign"
+          ogImage="https://bornclock.com/og/zodiac.png"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Indian Zodiac (Vedic)' }}
+      footer={{
+        tagline: 'Calculate your Indian zodiac sign (Rashi) using the ancient Jyotish sidereal system.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Moon Sign', to: '/moon-sign' },
+          { label: 'Rashi Ratna', to: '/rashi-ratna' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+      eyebrow="Vedic Rashi — Jyotish Astrology"
+      h1="Indian Zodiac Calculator"
+      lead={(
+        <>
+          Calculate your Indian zodiac sign (Rashi) using the ancient Jyotish sidereal system.
+          Compare it with your Western sign — many people discover they are different.
+        </>
+      )}
+    >
       <FAQSchema items={FAQ_ITEMS} />
 
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Hero */}
-        <section className="text-center mb-8 animate-fade-in-up">
-          <div className="text-5xl mb-4">🕉️</div>
-          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-2">
-            Indian Zodiac Calculator
-          </h1>
-          <p className="text-lg text-orange-700 font-semibold mb-3">Vedic Rashi — Jyotish Astrology</p>
-          <p className="text-muted-foreground text-base max-w-2xl mx-auto">
-            Calculate your Indian zodiac sign (Rashi) using the ancient Jyotish sidereal system.
-            Compare it with your Western sign — many people discover they are different.
-          </p>
-        </section>
+      <section className="section container mx-auto px-4 py-8 max-w-5xl">
 
         {/* Jyotish Authority Box */}
         <div className="bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50 border border-orange-200 rounded-xl p-5 mb-8 max-w-3xl mx-auto">
@@ -243,8 +249,7 @@ export default function VedicZodiac() {
             </Link>
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </CollectionLayout>
   );
 }

@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { TrustStrip } from '@/components/paj/TrustStrip';
-import '@/styles/part-aj.css';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
@@ -122,22 +120,31 @@ export default function KundaliMatchPage() {
   };
 
   return (
-    <div data-testid="kmatch-page" className="paj editorial" data-category="vedic">
-      <SEO
-        title="Kundali Matching — Free Guna Milan (Ashtakoota) | BornClock"
-        description="Free Kundali matching by the 36-point Ashtakoota (Guna Milan) system — Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi, with Nadi & Bhakoot dosha checks."
-        canonicalUrl="/kundali-match"
-        ogType="website"
-      />
-      <header className="site-header print:hidden" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-        <Navigation />
-        <AuthNav />
-      </header>
-      <div className="breadcrumb">
-        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Kundali Matching</span></div>
-        <div className="edition"><span className="dot" />Ashtakoota · 36-point Guna Milan</div>
-      </div>
-      <main id="main">
+    <PajPage
+      theme="vedic"
+      variant="editorial"
+      testId="kmatch-page"
+      seo={(
+        <SEO
+          title="Kundali Matching — Free Guna Milan (Ashtakoota) | BornClock"
+          description="Free Kundali matching by the 36-point Ashtakoota (Guna Milan) system — Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi, with Nadi & Bhakoot dosha checks."
+          canonicalUrl="/kundali-match"
+          ogType="website"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali Matching', edition: 'Ashtakoota · 36-point Guna Milan' }}
+      footer={{
+        tagline: 'Kundali matching by the traditional 36-point Ashtakoota system — computed, with every koota shown.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Sade Sati', to: '/sade-sati' },
+          { label: 'Muhurat', to: '/muhurat' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+    >
         <section className="section">
           <div className="section-head">
             <div><span className="eyebrow">Guna Milan</span><h1>Kundali Matching.</h1></div>
@@ -298,24 +305,6 @@ export default function KundaliMatchPage() {
           Read the full <Link to="/articles/kundali-compatibility" className="textlink">Kundali compatibility guide</Link>.
         </p>
         </section>
-      </main>
-
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div>
-            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-            <p className="subtle">Kundali matching by the traditional 36-point Ashtakoota system — computed, with every koota shown.</p>
-          </div>
-          <nav className="footer-nav" aria-label="Footer navigation">
-            <Link to="/vedic-astrology">Vedic Astrology</Link>
-            <Link to="/kundali">Kundali</Link>
-            <Link to="/sade-sati">Sade Sati</Link>
-            <Link to="/muhurat">Muhurat</Link>
-            <Link to="/privacy">Privacy</Link>
-          </nav>
-        </div>
-        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
-      </footer>
-    </div>
+    </PajPage>
   );
 }

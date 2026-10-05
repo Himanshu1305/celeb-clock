@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { VEDIC_RASHI_PROFILES, NAKSHATRA_PROFILES } from '@/data/astrologicalData';
 import type { VedicRashiProfile, NakshatraProfile } from '@/data/astrologicalData';
@@ -167,33 +168,49 @@ export function VedicAstrologyArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Vedic Astrology Birth Chart — Rashi & Nakshatra Guide | BornClock"
-        description="Vedic astrology birth chart explained — your Moon Rashi, Nakshatra, and Lagna from date of birth. Free calculator with all 12 Rashis and 27 Nakshatras."
-        canonicalUrl="/articles/vedic-astrology-birth-chart"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="vedic"
+      testId="vedic-astrology-article"
+      seo={(
+        <SEO
+          title="Vedic Astrology Birth Chart — Rashi & Nakshatra Guide | BornClock"
+          description="Vedic astrology birth chart explained — your Moon Rashi, Nakshatra, and Lagna from date of birth. Free calculator with all 12 Rashis and 27 Nakshatras."
+          canonicalUrl="/articles/vedic-astrology-birth-chart"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Vedic Astrology Birth Chart' }}
+      footer={{
+        tagline: 'Your Vedic astrology birth chart — Moon Rashi, Nakshatra and Lagna, explained from your date of birth.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Moon Sign', to: '/moon-sign' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+      eyebrow="Vedic Astrology"
+      h1="Vedic Astrology Birth Chart — Your Rashi, Nakshatra & Lagna Explained"
+      lead={(
+        <>
+          A <strong>Vedic astrology birth chart</strong> — known in India as your
+          <strong> Kundali</strong> or <strong>Janam Kundali</strong> — is a snapshot of the
+          entire sky at the precise moment and place you were born. Rooted in Jyotish, the
+          ancient Indian science of light, it maps the Sun, the Moon, the planets and the
+          rising sign across twelve houses and the sidereal zodiac. Where Western astrology
+          asks for your Sun sign, Vedic astrology places the <strong>Moon Rashi</strong> and
+          the <strong>27 Nakshatras</strong> at the heart of the reading.
+        </>
+      )}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={softwareSchema} />
       <JsonLd data={faqSchema} />
 
-      <main data-testid="vedic-astrology-article" className="min-h-screen bg-white">
+      <section className="section" data-testid="vedic-astrology-article">
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Vedic Astrology Birth Chart — Your Rashi, Nakshatra & Lagna Explained
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            A <strong>Vedic astrology birth chart</strong> — known in India as your
-            <strong> Kundali</strong> or <strong>Janam Kundali</strong> — is a snapshot of the
-            entire sky at the precise moment and place you were born. Rooted in Jyotish, the
-            ancient Indian science of light, it maps the Sun, the Moon, the planets and the
-            rising sign across twelve houses and the sidereal zodiac. Where Western astrology
-            asks for your Sun sign, Vedic astrology places the <strong>Moon Rashi</strong> and
-            the <strong>27 Nakshatras</strong> at the heart of the reading.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             This guide explains how a Vedic chart is built, how it differs from Western
             astrology, and how far you can get from your date of birth alone. Use the free
@@ -328,8 +345,8 @@ export function VedicAstrologyArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }
 

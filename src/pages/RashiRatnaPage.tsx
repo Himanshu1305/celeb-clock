@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { JsonLd } from '@/components/JsonLd';
 import PageTagline from '@/components/PageTagline';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
 import { RASHI_RATNA_DATA, NAVRATNA_INFO, type RashiRatna } from '@/data/rashiRatnaData';
 import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
-import '@/styles/part-aj.css';
 
 export default function RashiRatnaPage() {
   const [selectedRashi, setSelectedRashi] = useState<RashiRatna | null>(null);
@@ -25,27 +23,36 @@ export default function RashiRatnaPage() {
   ];
 
   return (
-    <div className="paj editorial" data-category="vedic">
-      <SEO
-        title="Rashi Ratna — Gemstone by Zodiac Sign (Indian Vedic Birthstones) | BornClock"
-        description="Find your Rashi Ratna — the Indian Vedic birthstone for your zodiac sign. Complete guide to Navratna gems: Ruby, Pearl, Emerald, Diamond, Yellow Sapphire, Blue Sapphire, and more."
-        keywords="rashi ratna, rashi ratna by zodiac, gemstone by rashi, vedic birthstone, navratna, moonga for aries, pukhraj for leo, neelam for capricorn, heera for taurus"
-        canonicalUrl="/rashi-ratna"
-      />
+    <PajPage
+      theme="vedic"
+      variant="editorial"
+      testId="rashi-ratna-page"
+      seo={(
+        <SEO
+          title="Rashi Ratna — Gemstone by Zodiac Sign (Indian Vedic Birthstones) | BornClock"
+          description="Find your Rashi Ratna — the Indian Vedic birthstone for your zodiac sign. Complete guide to Navratna gems: Ruby, Pearl, Emerald, Diamond, Yellow Sapphire, Blue Sapphire, and more."
+          keywords="rashi ratna, rashi ratna by zodiac, gemstone by rashi, vedic birthstone, navratna, moonga for aries, pukhraj for leo, neelam for capricorn, heera for taurus"
+          canonicalUrl="/rashi-ratna"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Rashi Ratna', edition: 'Ratna · gemstone by Rashi' }}
+      footer={{
+        tagline: 'Rashi Ratna — the Indian Vedic birthstone for your zodiac sign and its ruling planet.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Gemstone Recommendation', to: '/gemstones' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Moon Sign', to: '/moon-sign' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+    >
       {/* Part AM: in-body JSON-LD so it reliably lands in the prerendered HTML (not Helmet). */}
       <JsonLd id="faq" data={{
         '@context': 'https://schema.org', '@type': 'FAQPage',
         mainEntity: faqItems.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
       }} />
-
-      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-        <Navigation />
-        <AuthNav />
-      </header>
-      <div className="breadcrumb">
-        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Rashi Ratna</span></div>
-        <div className="edition"><span className="dot" />Ratna · gemstone by Rashi</div>
-      </div>
 
       <div className="section" style={{ maxWidth: 820, margin: '0 auto' }}>
 
@@ -217,23 +224,6 @@ export default function RashiRatnaPage() {
           </div>
         </div>
       </div>
-
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div>
-            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-            <p className="subtle">Rashi Ratna — the Indian Vedic birthstone for your zodiac sign and its ruling planet.</p>
-          </div>
-          <nav className="footer-nav" aria-label="Footer navigation">
-            <Link to="/vedic-astrology">Vedic Astrology</Link>
-            <Link to="/gemstones">Gemstone Recommendation</Link>
-            <Link to="/kundali">Kundali</Link>
-            <Link to="/moon-sign">Moon Sign</Link>
-            <Link to="/privacy">Privacy</Link>
-          </nav>
-        </div>
-        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
-      </footer>
-    </div>
+    </PajPage>
   );
 }

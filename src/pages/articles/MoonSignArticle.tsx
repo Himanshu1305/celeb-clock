@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { VEDIC_RASHI_PROFILES } from '@/data/astrologicalData';
 import type { VedicRashiProfile } from '@/data/astrologicalData';
@@ -146,31 +147,47 @@ export function MoonSignArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Moon Sign by Date of Birth — Find Your Vedic Rashi India | BornClock"
-        description="Find your Vedic Rashi (moon sign) by date of birth. All 12 Rashis with lucky stone, mantra, personality, Devanagari names, and free Rashi calculator."
-        canonicalUrl="/articles/moon-sign-by-date-of-birth"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="vedic"
+      testId="moon-sign-article"
+      seo={(
+        <SEO
+          title="Moon Sign by Date of Birth — Find Your Vedic Rashi India | BornClock"
+          description="Find your Vedic Rashi (moon sign) by date of birth. All 12 Rashis with lucky stone, mantra, personality, Devanagari names, and free Rashi calculator."
+          canonicalUrl="/articles/moon-sign-by-date-of-birth"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Moon Sign by Date of Birth' }}
+      footer={{
+        tagline: 'Find your Vedic Rashi (moon sign) by date of birth — all 12 Rashis with lucky stone, mantra and personality.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Moon Sign', to: '/moon-sign' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+      eyebrow="Vedic Astrology"
+      h1="Moon Sign by Date of Birth — Find Your Vedic Rashi (India Guide)"
+      lead={(
+        <>
+          In Indian astrology, the sign that matters most is not your Western "sun sign" —
+          it is your <strong>Rashi</strong>, or moon sign: the zodiac sign the Moon occupied
+          at the moment you were born. While Western astrology asks "what's your sign?" and
+          means the Sun, Vedic astrology (Jyotish) places the Moon at the centre, because the
+          Moon governs the mind, emotions, and inner life. Your Rashi is the sign most Indians
+          identify with, and the one used in traditional practice.
+        </>
+      )}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />
 
-      <main data-testid="moon-sign-article" className="min-h-screen bg-white">
+      <section className="section" data-testid="moon-sign-article">
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Moon Sign by Date of Birth — Find Your Vedic Rashi (India Guide)
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            In Indian astrology, the sign that matters most is not your Western "sun sign" —
-            it is your <strong>Rashi</strong>, or moon sign: the zodiac sign the Moon occupied
-            at the moment you were born. While Western astrology asks "what's your sign?" and
-            means the Sun, Vedic astrology (Jyotish) places the Moon at the centre, because the
-            Moon governs the mind, emotions, and inner life. Your Rashi is the sign most Indians
-            identify with, and the one used in traditional practice.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             Rashi shapes real-world decisions across India — from marriage matching (Kundali
             Milan) and choosing auspicious dates (muhurta) to the syllable a newborn is named
@@ -283,8 +300,8 @@ export function MoonSignArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }
 

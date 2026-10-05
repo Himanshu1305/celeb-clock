@@ -1,0 +1,22 @@
+[
+  { "route": "/vedic-astrology", "theme": "vedic", "label": "Vedic hub" },
+  { "route": "/kundali", "theme": "vedic", "label": "Kundali" },
+  { "route": "/muhurat", "theme": "vedic", "label": "Muhurat" },
+  { "route": "/sade-sati", "theme": "vedic", "label": "Sade Sati" },
+  { "route": "/gemstones", "theme": "vedic", "label": "Gemstones" },
+  { "route": "/kundali-match", "theme": "vedic", "label": "Kundali Matching" },
+  { "route": "/rashi-ratna", "theme": "vedic", "label": "Rashi Ratna" },
+  { "route": "/rashifal-by-date-of-birth", "theme": "vedic", "label": "Rashifal by DOB" },
+  { "route": "/sun-vs-moon-sign", "theme": "vedic", "label": "Sun vs Moon Sign" },
+  { "route": "/moon-sign", "theme": "vedic", "label": "Moon Sign" },
+  { "route": "/vedic-zodiac", "theme": "vedic", "label": "Vedic Zodiac" },
+  { "route": "/vedic-zodiac/mesha", "theme": "vedic", "label": "Vedic Zodiac — Mesha" },
+  { "route": "/hi/rashifal", "theme": "vedic", "label": "Rashifal (Hindi)" },
+  { "route": "/hi/rashifal/mesh", "theme": "vedic", "label": "Rashifal — Mesh (Hindi)" },
+  { "route": "/answers/what-is-my-moon-sign", "theme": "vedic", "label": "Answer: moon sign" },
+  { "route": "/answers/what-is-vedic-astrology", "theme": "vedic", "label": "Answer: vedic astrology" },
+  { "route": "/articles/moon-sign-by-date-of-birth", "theme": "vedic", "label": "Article: moon sign by DOB" },
+  { "route": "/articles/vedic-astrology-birth-chart", "theme": "vedic", "label": "Article: vedic birth chart" },
+  { "route": "/articles/nakshatra-by-date-of-birth", "theme": "vedic", "label": "Article: nakshatra by DOB" },
+  { "route": "/articles/kundali-compatibility", "theme": "vedic", "label": "Article: kundali compatibility" }
+]

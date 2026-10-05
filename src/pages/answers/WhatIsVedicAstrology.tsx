@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 const CANONICAL = 'https://bornclock.com/answers/what-is-vedic-astrology';
 
@@ -26,36 +26,41 @@ export default function WhatIsVedicAstrology() {
   };
 
   return (
-    <>
-      <SEO
-        title="What Is Vedic Astrology? Why Your Sign Is Probably Different | BornClock"
-        description="Vedic astrology uses a different zodiac than Western — which is why your Vedic sign is usually one sign behind. Plus what Vedic astrology actually emphasizes that Western doesn't."
-        canonicalUrl="/answers/what-is-vedic-astrology"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="vedic"
+      seo={(
+        <SEO
+          title="What Is Vedic Astrology? Why Your Sign Is Probably Different | BornClock"
+          description="Vedic astrology uses a different zodiac than Western — which is why your Vedic sign is usually one sign behind. Plus what Vedic astrology actually emphasizes that Western doesn't."
+          canonicalUrl="/answers/what-is-vedic-astrology"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'What is Vedic astrology?' }}
+      footer={{
+        tagline: 'Vedic astrology uses the sidereal zodiac — which is why your Vedic sign is usually one sign behind your Western one.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Moon Sign', to: '/moon-sign' },
+          { label: 'Vedic Zodiac', to: '/vedic-zodiac' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+      eyebrow="Answers"
+      h1="What Is Vedic Astrology — and Why Are You Probably a Different Sign?"
+      lead={(
+        <>
+          Vedic astrology (Jyotisha — Sanskrit for "science of light") is an ancient Indian system with roots stretching back over 5,000 years. It differs from Western astrology primarily in the zodiac it uses: Vedic astrology uses the sidereal zodiac, based on the actual positions of constellations as observed from Earth. Western astrology uses the tropical zodiac, anchored to the seasons. Because of a phenomenon called the precession of the equinoxes, the two zodiacs have drifted about 23–24 degrees apart — enough to shift most people back one full sign. If you've always been a Western Scorpio, you're probably a Vedic Libra.
+        </>
+      )}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
-        <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">What is Vedic astrology?</span>
-          </nav>
 
-          <h1 className="text-3xl font-black text-gray-900 mb-2">What Is Vedic Astrology — and Why Are You Probably a Different Sign?</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Vedic astrology (Jyotisha — Sanskrit for "science of light") is an ancient Indian system with roots stretching back over 5,000 years. It differs from Western astrology primarily in the zodiac it uses: Vedic astrology uses the sidereal zodiac, based on the actual positions of constellations as observed from Earth. Western astrology uses the tropical zodiac, anchored to the seasons. Because of a phenomenon called the precession of the equinoxes, the two zodiacs have drifted about 23–24 degrees apart — enough to shift most people back one full sign. If you've always been a Western Scorpio, you're probably a Vedic Libra.
-            </p>
-          </div>
-
-          <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
+      <section className="section">
+        <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
             <h2 className="text-xl font-bold text-gray-900">The identity moment</h2>
             <p>For many people, discovering their Vedic sign triggers something unexpected: a quiet identity crisis. You've spent years — maybe decades — reading about your Western sign, identifying with its traits, explaining yourself through it. And now someone is telling you that you're actually something else.</p>
             <p>Here's the thing: you're not. Both are right, and both describe something real about you. They're just measuring different things.</p>
@@ -94,8 +99,7 @@ export default function WhatIsVedicAstrology() {
               ))}
             </div>
           </div>
-        </div>
-      </AnswerLayout>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }

@@ -62,11 +62,23 @@ a human eyeball during migration (semantics ambiguous from the path alone).
 - **tool (13):** /articles, /hi/meri-jeevan-pratyasha ⚠(science+hi), /mystic-corner ⚠(mystic), /answers, /answers/how-old-am-i-on-mars, /answers/how-to-calculate-age, /answers/what-is-bmi, /wish, /for-business, /astrologer, /baby-names, /reminders, `*` (404→utility)
 - **report (2):** /report/:slug, /career-report ⚠(science)
 
-### vedic (27)
-- **tool (13):** /rashifal-by-date-of-birth, /sun-vs-moon-sign, /vedic-astrology, /answers/what-is-my-zodiac-sign, /answers/what-is-my-moon-sign, /answers/what-is-vedic-astrology, /moon-sign, /sade-sati, /muhurat, /gemstones, /hi/rashifal/:rashi, /hi/rashifal, /rashi-ratna
-- **collection (6):** /zodiac, /zodiac/:sign, /chinese-zodiac, /chinese-zodiac/:animal, /vedic-zodiac, /vedic-zodiac/:rashi
-- **article (5):** /articles/moon-sign-by-date-of-birth, /articles/vedic-astrology-birth-chart, /articles/nakshatra-by-date-of-birth, /articles/zodiac-compatibility, /articles/chinese-zodiac-by-year
+### vedic (20) — CORRECTED
+**Migration-run correction (applied):** Western zodiac, Chinese zodiac, tarot,
+numerology (life path + name), compatibility and biorhythm — and their articles and
+answers pages — belong to **MYSTIC**, not VEDIC. Reassigned OUT of vedic: `/zodiac`,
+`/zodiac/:sign`, `/chinese-zodiac`, `/chinese-zodiac/:animal`,
+`/answers/what-is-my-zodiac-sign`, `/articles/zodiac-compatibility`,
+`/articles/chinese-zodiac-by-year` → now in the **mystic** group below.
+
+- **tool (10):** /rashifal-by-date-of-birth, /sun-vs-moon-sign, /vedic-astrology, /answers/what-is-my-moon-sign, /answers/what-is-vedic-astrology, /moon-sign, /sade-sati, /muhurat, /gemstones, /rashi-ratna
+- **tool/hindi (2):** /hi/rashifal/:rashi, /hi/rashifal
+- **collection (2):** /vedic-zodiac, /vedic-zodiac/:rashi
+- **article (3):** /articles/moon-sign-by-date-of-birth, /articles/vedic-astrology-birth-chart, /articles/nakshatra-by-date-of-birth
 - **report (3):** /kundali, /kundali-match, /articles/kundali-compatibility ⚠(article vs report)
+
+All 20 migrated onto the central system in the VEDIC run (see
+`docs/migration-vedic-report.md`). The 5 reassigned western/chinese zodiac routes
+remain on the old `.paj` via `data-category` (coexistence) until the MYSTIC run.
 
 ### birthday (52)
 - **report (4):** /results, /birthday-report/sample, /birthday-report, /birthday-report/gift
@@ -75,10 +87,10 @@ a human eyeball during migration (semantics ambiguous from the path alone).
 - **collection (16):** /todays-birthdays, /birthstone, /birthstone/:month, /celebrity, /celebrity/{bollywood,cricket,politics,business,music,sports}, /celebrity/:slug, /birthday, /birthday/:month/:day, /birthday/:month, /birthday/:date, /leaderboard
 - **article (14):** /articles/birth-month-personality, /articles/famous-indians-born-in-{january…december}, /articles/age-in-days-hours-minutes
 
-### mystic (14)
-- **tool (9):** /numerology-hindi, /numerology/:number, /hi/numerology-by-date-of-birth, /answers/what-is-my-life-path-number, /tarot-card-by-birthday, /name-numerology, /biorhythm, /compatibility, /compatibility/:sign1/:sign2
-- **collection (1):** /numerology
-- **article (4):** /articles/numerology-by-date-of-birth, /articles/life-path-number-compatibility, /articles/biorhythm-calculator, /articles/tarot-card-by-date-of-birth
+### mystic (21) — CORRECTED (gained 7 from vedic)
+- **tool (10):** /numerology-hindi, /numerology/:number, /hi/numerology-by-date-of-birth, /answers/what-is-my-life-path-number, /tarot-card-by-birthday, /name-numerology, /biorhythm, /compatibility, /compatibility/:sign1/:sign2, /answers/what-is-my-zodiac-sign ⟵(from vedic)
+- **collection (5):** /numerology, /zodiac ⟵, /zodiac/:sign ⟵, /chinese-zodiac ⟵, /chinese-zodiac/:animal ⟵ (from vedic)
+- **article (6):** /articles/numerology-by-date-of-birth, /articles/life-path-number-compatibility, /articles/biorhythm-calculator, /articles/tarot-card-by-date-of-birth, /articles/zodiac-compatibility ⟵, /articles/chinese-zodiac-by-year ⟵ (from vedic)
 
 ### science & longevity (58) — included, not deferred
 - **tool (30):** /biological-age-vs-chronological-age, /life-expectancy-{india-vs-usa,india,usa,japan,uk,australia,canada,germany,china,singapore,brazil}, /jivan-kal-calculator, /biological-age-hindi, /planetary-age, /weight-on-planets, /longevity-calculator, /biological-age-calculator, /how-long-will-i-live, /life-expectancy-calculator-{uk,australia,usa,canada}, /hi/life-expectancy-calculator, /life-expectancy-calculator-singapore-uae, /science-longevity, /answers/{how-long-will-i-live,how-to-live-longer,what-affects-life-expectancy-most,what-is-epigenetic-age}

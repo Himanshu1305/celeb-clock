@@ -1,0 +1,47 @@
+[
+  {
+    "browser": "chromium",
+    "route": "/kundali",
+    "label": "Kundali smoke",
+    "status": 200,
+    "title": "Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock",
+    "h1Count": 1,
+    "h1First": "Your Kundali, computed.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 6
+        }
+      ],
+      "total": 3
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "errors": 0,
+      "numObjects": 6
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  }
+]

@@ -1,0 +1,15 @@
+[
+  { "route": "/", "theme": "neutral", "label": "Home" },
+  { "route": "/pricing", "theme": "neutral", "label": "Pricing" },
+  { "route": "/age-calculator", "theme": "birthday", "label": "Age Calculator" },
+  { "route": "/celebrity", "theme": "birthday", "label": "Celebrity index" },
+  { "route": "/numerology", "theme": "mystic", "label": "Numerology" },
+  { "route": "/compatibility", "theme": "mystic", "label": "Compatibility" },
+  { "route": "/life-expectancy", "theme": "science", "label": "Life Expectancy" },
+  { "route": "/biological-age", "theme": "science", "label": "Biological Age" },
+  { "route": "/vedic-astrology", "theme": "vedic", "label": "Vedic hub (moved run1)" },
+  { "route": "/kundali", "theme": "vedic", "label": "Kundali (moved run1)" },
+  { "route": "/muhurat", "theme": "vedic", "label": "Muhurat (moved run1)" },
+  { "route": "/sade-sati", "theme": "vedic", "label": "Sade Sati (moved run1)" },
+  { "route": "/gemstones", "theme": "vedic", "label": "Gemstones (moved run1)" }
+]

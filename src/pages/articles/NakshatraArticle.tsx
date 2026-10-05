@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { NAKSHATRA_PROFILES } from '@/data/astrologicalData';
 import type { NakshatraProfile } from '@/data/astrologicalData';
@@ -165,32 +166,48 @@ export function NakshatraArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Nakshatra by Date of Birth — All 27 Lunar Mansions | BornClock"
-        description="Find your Nakshatra by date of birth — all 27 lunar mansions with lord, deity, gana and personality. Free calculator plus the meaning of each Nakshatra."
-        canonicalUrl="/articles/nakshatra-by-date-of-birth"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="vedic"
+      testId="nakshatra-article"
+      seo={(
+        <SEO
+          title="Nakshatra by Date of Birth — All 27 Lunar Mansions | BornClock"
+          description="Find your Nakshatra by date of birth — all 27 lunar mansions with lord, deity, gana and personality. Free calculator plus the meaning of each Nakshatra."
+          canonicalUrl="/articles/nakshatra-by-date-of-birth"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Nakshatra' }}
+      footer={{
+        tagline: 'Nakshatra by date of birth — all 27 lunar mansions with lord, deity and gana.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Kundali Matching', to: '/kundali-match' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+      eyebrow="Vedic Astrology"
+      h1="Nakshatra by Date of Birth — All 27 Lunar Mansions"
+      lead={(
+        <>
+          In Vedic astrology, the <strong>Nakshatra</strong> — or lunar mansion — is the most
+          intimate layer of your birth sky. While your Rashi (moon sign) is one of 12 broad
+          signs, your Nakshatra is one of <strong>27</strong> finer divisions: the exact
+          segment of the zodiac the Moon occupied at the moment you were born. Each Nakshatra
+          spans roughly 13°20&rsquo; of the heavens, and together the 27 of them map the full 360°
+          journey of the Moon against the fixed stars.
+        </>
+      )}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={softwareSchema} />
       <JsonLd data={faqSchema} />
 
-      <main data-testid="nakshatra-article" className="min-h-screen bg-white">
+      <section className="section" data-testid="nakshatra-article">
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Nakshatra by Date of Birth — All 27 Lunar Mansions
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            In Vedic astrology, the <strong>Nakshatra</strong> — or lunar mansion — is the most
-            intimate layer of your birth sky. While your Rashi (moon sign) is one of 12 broad
-            signs, your Nakshatra is one of <strong>27</strong> finer divisions: the exact
-            segment of the zodiac the Moon occupied at the moment you were born. Each Nakshatra
-            spans roughly 13°20&rsquo; of the heavens, and together the 27 of them map the full 360°
-            journey of the Moon against the fixed stars.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             Because the Nakshatra tracks the Moon so closely, it is treasured in Indian tradition
             for detail the Rashi cannot give: the temperament (gana) used in marriage matching,
@@ -336,8 +353,8 @@ export function NakshatraArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }
 

@@ -1,7 +1,5 @@
 import { useParams, Navigate, Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -34,29 +32,41 @@ export default function VedicZodiacSign() {
   const faqItems = data.faq.map((item) => ({ question: item.q, answer: item.a }));
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
+    <CollectionLayout
+      theme="vedic"
+      testId="vedic-zodiac-sign-page"
+      seo={(
+        <SEO
+          title={`${rashiName} Rashi (${signInfo.english}) — Vedic Astrology Guide | BornClock`}
+          description={`${rashiName} Rashi in Jyotish: personality, ruling planet ${signInfo.ruling_planet}, lucky gemstone ${data.lucky_gemstone}, compatibility, and Ayurveda connection. Complete Vedic astrology guide.`}
+          keywords={`${rashiName.toLowerCase()} rashi, ${slug} rashi, vedic ${signInfo.english.toLowerCase()}, jyotish ${rashiName.toLowerCase()}, ${signInfo.english.toLowerCase()} vedic astrology`}
+          canonicalUrl={`/vedic-zodiac/${slug}`}
+          ogImage="https://bornclock.com/og/zodiac.png"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Indian Zodiac (Vedic)', to: '/vedic-zodiac' }], current: `${rashiName} Rashi` }}
+      footer={{
+        tagline: `${rashiName} Rashi in Jyotish — personality, ruling planet, gemstone, and Ayurveda connection.`,
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Moon Sign', to: '/moon-sign' },
+          { label: 'Rashi Ratna', to: '/rashi-ratna' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+      eyebrow={`${signInfo.english} in Western Astrology`}
+      h1={`${rashiName} Rashi`}
+      lead={(
+        <>
+          Jyotish (Sanskrit: ज्योतिष) uses the sidereal zodiac corrected for the precession of equinoxes
+          (ayanamsa ≈ 23.85°) — making your Vedic rashi typically one sign earlier than your Western sign.
+        </>
+      )}
+    >
       <FAQSchema items={faqItems} />
-      <SEO
-        title={`${rashiName} Rashi (${signInfo.english}) — Vedic Astrology Guide | BornClock`}
-        description={`${rashiName} Rashi in Jyotish: personality, ruling planet ${signInfo.ruling_planet}, lucky gemstone ${data.lucky_gemstone}, compatibility, and Ayurveda connection. Complete Vedic astrology guide.`}
-        keywords={`${rashiName.toLowerCase()} rashi, ${slug} rashi, vedic ${signInfo.english.toLowerCase()}, jyotish ${rashiName.toLowerCase()}, ${signInfo.english.toLowerCase()} vedic astrology`}
-        canonicalUrl={`/vedic-zodiac/${slug}`}
-        ogImage="https://bornclock.com/og/zodiac.png"
-      />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Breadcrumb */}
-        <nav className="text-sm text-muted-foreground mb-6">
-          <Link to="/" className="hover:text-foreground">Home</Link>
-          <span className="mx-2">/</span>
-          <Link to="/vedic-zodiac" className="hover:text-foreground">Indian Zodiac (Vedic)</Link>
-          <span className="mx-2">/</span>
-          <span className="text-foreground">{rashiName} Rashi</span>
-        </nav>
+      <section className="section container mx-auto px-4 py-8">
 
         {/* Jyotish Authority Box */}
         <div className="bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50 border border-orange-200 rounded-xl p-5 mb-8 max-w-4xl mx-auto">
@@ -73,16 +83,10 @@ export default function VedicZodiacSign() {
           </div>
         </div>
 
-        {/* Hero */}
-        <section className="text-center py-8 max-w-3xl mx-auto mb-8">
+        {/* Sign emblem + chips */}
+        <div className="text-center py-8 max-w-3xl mx-auto mb-8">
           <div className="text-7xl mb-4">{signInfo.emoji}</div>
           <div className="text-3xl mb-2">{signInfo.symbol}</div>
-          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-2">
-            {rashiName} Rashi
-          </h1>
-          <p className="text-xl text-muted-foreground mb-1">
-            {signInfo.english} in Western Astrology
-          </p>
           <div className="flex flex-wrap justify-center gap-3 mt-4">
             <span className="px-3 py-1.5 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
               {signInfo.element} Element
@@ -97,7 +101,7 @@ export default function VedicZodiacSign() {
               Sign {idx + 1} of 12
             </span>
           </div>
-        </section>
+        </div>
 
         <div className="max-w-4xl mx-auto space-y-8">
 
@@ -264,8 +268,7 @@ export default function VedicZodiacSign() {
             </Link>
           </div>
         </div>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </CollectionLayout>
   );
 }

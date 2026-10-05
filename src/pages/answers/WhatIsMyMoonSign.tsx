@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 const CANONICAL = 'https://bornclock.com/answers/what-is-my-moon-sign';
 
@@ -43,36 +43,41 @@ export default function WhatIsMyMoonSign() {
   };
 
   return (
-    <>
-      <SEO
-        title="What Is My Moon Sign? How to Find It by Date of Birth | BornClock"
-        description="Your moon sign is where the Moon was when you were born — and it changes every 2.5 days, making it far more personal than your sun sign. Find yours free on BornClock."
-        canonicalUrl="/answers/what-is-my-moon-sign"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="vedic"
+      seo={(
+        <SEO
+          title="What Is My Moon Sign? How to Find It by Date of Birth | BornClock"
+          description="Your moon sign is where the Moon was when you were born — and it changes every 2.5 days, making it far more personal than your sun sign. Find yours free on BornClock."
+          canonicalUrl="/answers/what-is-my-moon-sign"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'What is my moon sign?' }}
+      footer={{
+        tagline: 'Your moon sign is where the Moon was when you were born — far more personal than your sun sign.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Moon Sign', to: '/moon-sign' },
+          { label: 'Vedic Zodiac', to: '/vedic-zodiac' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+      eyebrow="Answers"
+      h1={'What Is My Moon Sign — and Why It\'s Probably More "You" Than Your Sun Sign'}
+      lead={(
+        <>
+          Your moon sign is the zodiac sign the Moon was passing through at the moment of your birth. The Moon moves through all 12 signs every 27.3 days — roughly 2.5 days per sign — so it's far more individual than your sun sign, which one-twelfth of the population shares. In most cases, your birth date alone is enough to find it. Most people who discover their moon sign for the first time say the same thing: "that's actually me."
+        </>
+      )}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
-        <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">What is my moon sign?</span>
-          </nav>
 
-          <h1 className="text-3xl font-black text-gray-900 mb-2">What Is My Moon Sign — and Why It's Probably More "You" Than Your Sun Sign</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Your moon sign is the zodiac sign the Moon was passing through at the moment of your birth. The Moon moves through all 12 signs every 27.3 days — roughly 2.5 days per sign — so it's far more individual than your sun sign, which one-twelfth of the population shares. In most cases, your birth date alone is enough to find it. Most people who discover their moon sign for the first time say the same thing: "that's actually me."
-            </p>
-          </div>
-
-          <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
+      <section className="section">
+        <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
             <h2 className="text-xl font-bold text-gray-900">What the moon sign reveals</h2>
             <p>Your sun sign describes how you present yourself to the world — your public personality, your ambitions, your conscious identity. Your moon sign describes what happens underneath: your emotional responses, your instincts under pressure, what you need to feel safe, and how you behave when you're completely at ease.</p>
             <p>Think of the sun sign as your daytime self — the one colleagues and acquaintances see. The moon sign is your 2am self — the one that surfaces when you're tired, stressed, or fully relaxed with someone you trust completely.</p>
@@ -112,8 +117,7 @@ export default function WhatIsMyMoonSign() {
               ))}
             </div>
           </div>
-        </div>
-      </AnswerLayout>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }

@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -26,34 +24,38 @@ const RELATED = [
 
 const SunVsMoonSign = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Sun Sign vs Moon Sign — Which One Actually Describes You?"
-        description="Your sun sign is your public face. Your moon sign is your 2am self. Most people find their moon sign more accurate once they discover it. Here's why."
-        keywords="sun sign vs moon sign, difference between sun and moon sign, moon sign more accurate, sun moon sign astrology"
-        canonicalUrl="/sun-vs-moon-sign"
-      />
+    <ArticleLayout
+      theme="vedic"
+      seo={(
+        <SEO
+          title="Sun Sign vs Moon Sign — Which One Actually Describes You?"
+          description="Your sun sign is your public face. Your moon sign is your 2am self. Most people find their moon sign more accurate once they discover it. Here's why."
+          keywords="sun sign vs moon sign, difference between sun and moon sign, moon sign more accurate, sun moon sign astrology"
+          canonicalUrl="/sun-vs-moon-sign"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Sun vs Moon Sign' }}
+      footer={{
+        tagline: 'Sun sign, moon sign and rising — the three pieces of your astrological "Big Three."',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Moon Sign', to: '/moon-sign' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+      eyebrow="Vedic Astrology"
+      h1="Sun Sign vs Moon Sign — Which One Is Actually You?"
+      lead={(
+        <>
+          Your sun sign is determined by where the Sun was on your birthday — it changes roughly every 30 days and represents your core identity and the self you show the world. Your moon sign is determined by where the Moon was at your birth — it changes every 2.5 days and represents your emotional inner world, your instincts, and the self you are when nobody's watching. If you've ever read your sun sign and thought "that's not quite me," your moon sign is usually the explanation.
+        </>
+      )}
+    >
       <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Sun Sign vs Moon Sign — Which One Is Actually You?
-          </h1>
-          <EEATBadges sources={['Astrology tradition', 'Psychological research on personality']} />
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Your sun sign is determined by where the Sun was on your birthday — it changes roughly every 30 days and represents your core identity and the self you show the world. Your moon sign is determined by where the Moon was at your birth — it changes every 2.5 days and represents your emotional inner world, your instincts, and the self you are when nobody's watching. If you've ever read your sun sign and thought "that's not quite me," your moon sign is usually the explanation.
-            </p>
-          </div>
-        </section>
+      <section className="section">
+        <EEATBadges sources={['Astrology tradition', 'Psychological research on personality']} />
 
         <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
@@ -103,9 +105,8 @@ const SunVsMoonSign = () => {
         </section>
 
         <AuthorBio />
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </ArticleLayout>
   );
 };
 

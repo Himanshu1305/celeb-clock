@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 
 const RELATED = [
@@ -13,38 +11,41 @@ const RELATED = [
 
 const HindiZodiac = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="राशिफल by Date of Birth — Zodiac Sign in Hindi | BornClock"
-        description="अपनी राशि जानें जन्म तिथि से। BornClock का मुफ्त zodiac calculator हिंदी में — Western और Vedic दोनों।"
-        keywords="rashifal by date of birth, rashi by date of birth, apni rashi jane, zodiac hindi"
-        canonicalUrl="/rashifal-by-date-of-birth"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="राशिफल by Date of Birth — Zodiac Sign in Hindi"
-        description="BornClock का मुफ्त हिंदी zodiac calculator — जन्म तिथि से अपनी राशि (Western और Vedic) जानें।"
-        url="/rashifal-by-date-of-birth"
-      />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            अपनी राशि जानें — Zodiac by Date of Birth
-          </h1>
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-10 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              आपकी राशि आपकी जन्म तिथि से तय होती है। Western astrology में 12 राशियाँ हैं जो सूर्य की स्थिति पर आधारित हैं। Vedic astrology में चंद्रमा की स्थिति (moon sign या rashi) को ज्यादा महत्वपूर्ण माना जाता है।
-            </p>
-          </div>
-        </section>
+    <ToolLayout
+      theme="vedic"
+      testId="hindi-zodiac-page"
+      seo={(
+        <>
+          <SEO
+            title="राशिफल by Date of Birth — Zodiac Sign in Hindi | BornClock"
+            description="अपनी राशि जानें जन्म तिथि से। BornClock का मुफ्त zodiac calculator हिंदी में — Western और Vedic दोनों।"
+            keywords="rashifal by date of birth, rashi by date of birth, apni rashi jane, zodiac hindi"
+            canonicalUrl="/rashifal-by-date-of-birth"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="राशिफल by Date of Birth — Zodiac Sign in Hindi"
+            description="BornClock का मुफ्त हिंदी zodiac calculator — जन्म तिथि से अपनी राशि (Western और Vedic) जानें।"
+            url="/rashifal-by-date-of-birth"
+          />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'राशिफल by Date of Birth' }}
+      footer={{
+        tagline: 'अपनी राशि जानें जन्म तिथि से — Western और Vedic दोनों।',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Moon Sign', to: '/moon-sign' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+      eyebrow="राशिफल · Zodiac in Hindi"
+      h1="अपनी राशि जानें — Zodiac by Date of Birth"
+      lead={<>आपकी राशि आपकी जन्म तिथि से तय होती है। Western astrology में 12 राशियाँ हैं जो सूर्य की स्थिति पर आधारित हैं। Vedic astrology में चंद्रमा की स्थिति (moon sign या rashi) को ज्यादा महत्वपूर्ण माना जाता है।</>}
+    >
+      <section className="section">
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
@@ -83,9 +84,8 @@ const HindiZodiac = () => {
             ))}
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </ToolLayout>
   );
 };
 
