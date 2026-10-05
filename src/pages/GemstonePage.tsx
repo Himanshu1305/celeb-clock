@@ -4,15 +4,13 @@
  * not medical/guaranteed, consult a qualified astrologer, trial powerful stones).
  */
 import { useState } from 'react';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { Link } from 'react-router-dom';
 import { WEARING_RITUAL, SIZING_RULE } from '@/lib/vedic/gemstones';
 import { TrustStrip } from '@/components/paj/TrustStrip';
-import '@/styles/part-aj.css';
 
 interface Sugg { planet: string; gem: string; hindi: string; role: string; reason: string; trialCaution: boolean; dashaActive: boolean }
 interface Avoid { planet: string; gem: string; reason: string }
@@ -59,16 +57,28 @@ export default function GemstonePage() {
   const initial = profile ? { dob: profile.dob, time: profile.time, city: profile.city } : undefined;
 
   return (
-    <div data-testid="gemstone-page" className="paj editorial" data-category="vedic">
-      <SEO title="Gemstone Suggestions (Vedic) — Ascendant-Lord Stone | BornClock"
-        description="Informational Vedic gemstone suggestions based on your Ascendant lord and computed planetary strength — a traditional association, not a medical or guaranteed-effect claim. No sales."
-        canonicalUrl="/gemstones" ogType="website" />
-      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}><Navigation /><AuthNav /></header>
-      <div className="breadcrumb">
-        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Gemstones</span></div>
-        <div className="edition"><span className="dot" />Ratna · Ascendant-lord stone</div>
-      </div>
-      <main id="main">
+    <PajPage
+      theme="vedic"
+      variant="editorial"
+      testId="gemstone-page"
+      seo={(
+        <SEO title="Gemstone Suggestions (Vedic) — Ascendant-Lord Stone | BornClock"
+          description="Informational Vedic gemstone suggestions based on your Ascendant lord and computed planetary strength — a traditional association, not a medical or guaranteed-effect claim. No sales."
+          canonicalUrl="/gemstones" ogType="website" />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Gemstones', edition: 'Ratna · Ascendant-lord stone' }}
+      footer={{
+        tagline: 'Informational Vedic gemstone guidance from your Ascendant lord — no sales, no guarantees.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Rashi Ratna', to: '/rashi-ratna' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Sade Sati', to: '/sade-sati' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+    >
         <section className="section">
           <div className="section-head">
             <div><span className="eyebrow">Ratna</span><h1>Gemstone Suggestions.</h1></div>
@@ -129,23 +139,6 @@ export default function GemstonePage() {
           </div>
         )}
         </section>
-      </main>
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div>
-            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-            <p className="subtle">Informational Vedic gemstone guidance from your Ascendant lord — no sales, no guarantees.</p>
-          </div>
-          <nav className="footer-nav" aria-label="Footer navigation">
-            <Link to="/vedic-astrology">Vedic Astrology</Link>
-            <Link to="/rashi-ratna">Rashi Ratna</Link>
-            <Link to="/kundali">Kundali</Link>
-            <Link to="/sade-sati">Sade Sati</Link>
-            <Link to="/privacy">Privacy</Link>
-          </nav>
-        </div>
-        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
-      </footer>
-    </div>
+    </PajPage>
   );
 }

@@ -20,17 +20,14 @@
  */
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { PajPage } from '@/components/central';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { TermTip, GradeLegend } from '@/components/vedic/TermTip';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
 import { fetchReading } from '@/services/readingService';
-import '@/styles/part-aj.css';
 
 // Build the DOB carry-forward URL (Part AK): extends Birthday's ?dob= pattern to carry the
 // date + time + place (with coordinates) a real chart needs, so /kundali requires no re-entry.
@@ -283,33 +280,22 @@ export default function VedicAstrologyLanding() {
   ];
 
   return (
-    <div className="paj editorial" data-category="vedic" data-testid="vedic-astrology-page">
-      <SEO
-        title="Vedic Astrology — Your Birth Chart, Computed Not Guessed | BornClock"
-        description="Your real Vedic birth chart, computed with the Swiss Ephemeris — Kundli, Dasha timing, yoga detection, Kundali matching and an AI astrologer. Not a horoscope template."
-        keywords="vedic astrology, kundli, birth chart, kundali matching, dasha, nakshatra, rashi, lagna, sade sati, manglik, gemstone, muhurat"
-        canonicalUrl="/vedic-astrology"
-        ogType="website"
-      />
-      <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </Helmet>
-
-      {/* Header — real site Navigation + AuthNav on the navy bar (carried forward).
-          Navigation already carries the brand logo + mobile hamburger; AuthNav is the
-          sign-in/join group. The header wraps on narrow viewports so nothing overflows. */}
-      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-        <Navigation />
-        <AuthNav />
-      </header>
-      <div className="breadcrumb">
-        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; </span><span className="crumb-name">Vedic Astrology</span></div>
-        <div className="edition"><span className="dot" />Sidereal · Lahiri · Swiss Ephemeris</div>
-      </div>
-
-      <main id="main">
+    <PajPage
+      theme="vedic"
+      variant="editorial"
+      testId="vedic-astrology-page"
+      seo={(
+        <SEO
+          title="Vedic Astrology — Your Birth Chart, Computed Not Guessed | BornClock"
+          description="Your real Vedic birth chart, computed with the Swiss Ephemeris — Kundli, Dasha timing, yoga detection, Kundali matching and an AI astrologer. Not a horoscope template."
+          keywords="vedic astrology, kundli, birth chart, kundali matching, dasha, nakshatra, rashi, lagna, sade sati, manglik, gemstone, muhurat"
+          canonicalUrl="/vedic-astrology"
+          ogType="website"
+        />
+      )}
+      breadcrumb={{ current: 'Vedic Astrology', edition: 'Sidereal · Lahiri · Swiss Ephemeris' }}
+      footer={{ note: '© 2026 BornClock · Vedic astrology, computed with care.' }}
+    >
         <JsonLd id="faq" data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }} />
         {/* HERO (editorial) */}
         <section className="hero" id="start" aria-label="Introduction">
@@ -500,28 +486,6 @@ export default function VedicAstrologyLanding() {
             </Link>
           </div>
         </section>
-      </main>
-
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div>
-            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-            <p className="subtle">One birth date. Different kinds of discovery. Facts, traditions and research — with the difference made clear.</p>
-          </div>
-          <nav className="footer-nav" aria-label="Footer navigation">
-            <Link to="/vedic-astrology">Vedic Astrology</Link>
-            <Link to="/celebrity-birthday">Birthday &amp; Celebrity</Link>
-            <Link to="/mystic-corner">Mystic Corner</Link>
-            <Link to="/life-expectancy">Science &amp; Longevity</Link>
-            <Link to="/how-it-works">Methodology</Link>
-            <Link to="/privacy">Privacy</Link>
-            <Link to="/contact">Contact</Link>
-          </nav>
-        </div>
-        <div className="footer-bottom">
-          <span>© 2026 BornClock · Vedic astrology, computed with care.</span>
-        </div>
-      </footer>
-    </div>
+    </PajPage>
   );
 }

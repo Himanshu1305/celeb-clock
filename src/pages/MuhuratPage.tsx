@@ -7,15 +7,12 @@
  * (capped at 180 days), and plain-language glosses for the Panchang jargon.
  */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
 import { MUHURAT_OCCASIONS, type MuhuratPurpose } from '@/lib/vedic/panchang';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
 import { TrustStrip } from '@/components/paj/TrustStrip';
-import '@/styles/part-aj.css';
 
 interface Day { date: string; weekday: string; nakshatra: string; tithiName: string; paksha: string; yoga: string; rahuKalam: { start: string; end: string }; score: number; reasons: string[]; auspicious: boolean }
 
@@ -57,16 +54,28 @@ export default function MuhuratPage() {
   const fmt = (iso: string) => new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
   return (
-    <div data-testid="muhurat-page" className="paj editorial" data-category="vedic">
-      <SEO title="Muhurat Finder — Auspicious Dates (Panchang) | BornClock"
-        description="Find auspicious Muhurat dates for marriage, house-warming, business, a vehicle, naming or travel — by Tithi, Nakshatra, Yoga and weekday for your own location, with the Rahu Kalam window to avoid."
-        canonicalUrl="/muhurat" ogType="website" />
-      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}><Navigation /><AuthNav /></header>
-      <div className="breadcrumb">
-        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Muhurat Finder</span></div>
-        <div className="edition"><span className="dot" />Panchang · auspicious timing</div>
-      </div>
-      <main id="main">
+    <PajPage
+      theme="vedic"
+      variant="editorial"
+      testId="muhurat-page"
+      seo={(
+        <SEO title="Muhurat Finder — Auspicious Dates (Panchang) | BornClock"
+          description="Find auspicious Muhurat dates for marriage, house-warming, business, a vehicle, naming or travel — by Tithi, Nakshatra, Yoga and weekday for your own location, with the Rahu Kalam window to avoid."
+          canonicalUrl="/muhurat" ogType="website" />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Muhurat Finder', edition: 'Panchang · auspicious timing' }}
+      footer={{
+        tagline: 'Auspicious dates from the Panchang, computed for your own location and timezone.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Sade Sati', to: '/sade-sati' },
+          { label: 'Gemstones', to: '/gemstones' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+    >
         <section className="section">
           <div className="section-head">
             <div><span className="eyebrow">Panchang</span><h1>Muhurat Finder.</h1></div>
@@ -154,23 +163,6 @@ export default function MuhuratPage() {
           Scope: this evaluates each day’s Panchang at approximately local sunrise for your chosen location and reports the standard weekday Rahu Kalam. Finer intraday categories (<TermTip id="choghadiya">Choghadiya</TermTip>, <TermTip id="hora">Hora</TermTip>, exact-minute windows and personal-chart <TermTip id="chandrashtama">Chandrashtama</TermTip>) are a planned expansion. Treat Muhurat as classical guidance, not a guarantee.
         </p>
         </section>
-      </main>
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div>
-            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-            <p className="subtle">Auspicious dates from the Panchang, computed for your own location and timezone.</p>
-          </div>
-          <nav className="footer-nav" aria-label="Footer navigation">
-            <Link to="/vedic-astrology">Vedic Astrology</Link>
-            <Link to="/kundali">Kundali</Link>
-            <Link to="/sade-sati">Sade Sati</Link>
-            <Link to="/gemstones">Gemstones</Link>
-            <Link to="/privacy">Privacy</Link>
-          </nav>
-        </div>
-        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
-      </footer>
-    </div>
+    </PajPage>
   );
 }

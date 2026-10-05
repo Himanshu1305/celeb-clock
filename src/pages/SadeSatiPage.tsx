@@ -4,15 +4,12 @@
  * around already-validated data, matching the other Vedic tool pages.
  */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
-import '@/styles/part-aj.css';
 
 interface Cycle { start: string; end: string }
 interface Report {
@@ -91,16 +88,28 @@ export default function SadeSatiPage() {
   const initial = profile ? { dob: profile.dob, time: profile.time, city: profile.city } : undefined;
 
   return (
-    <div data-testid="sadesati-page" className="paj editorial" data-category="vedic">
-      <SEO title="Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock"
-        description="Free Sade Sati calculator — find whether Saturn's 7.5-year Sade Sati (or the 2.5-year Dhaiya) is active for you, which phase, and the real start and end dates of your current and next cycle."
-        canonicalUrl="/sade-sati" ogType="website" />
-      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}><Navigation /><AuthNav /></header>
-      <div className="breadcrumb">
-        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Sade Sati</span></div>
-        <div className="edition"><span className="dot" />Shani · Saturn transit</div>
-      </div>
-      <main id="main">
+    <PajPage
+      theme="vedic"
+      variant="editorial"
+      testId="sadesati-page"
+      seo={(
+        <SEO title="Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock"
+          description="Free Sade Sati calculator — find whether Saturn's 7.5-year Sade Sati (or the 2.5-year Dhaiya) is active for you, which phase, and the real start and end dates of your current and next cycle."
+          canonicalUrl="/sade-sati" ogType="website" />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Sade Sati', edition: 'Shani · Saturn transit' }}
+      footer={{
+        tagline: 'Sade Sati from Saturn’s real transit — the same Lahiri-ayanamsa engine as the rest of BornClock.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Muhurat', to: '/muhurat' },
+          { label: 'Gemstones', to: '/gemstones' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+    >
         <section className="section">
           <div className="section-head">
             <div><span className="eyebrow">Shani · Saturn transit</span><h1>Sade Sati Calculator.</h1></div>
@@ -178,23 +187,6 @@ export default function SadeSatiPage() {
           </div>
         )}
         </section>
-      </main>
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div>
-            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-            <p className="subtle">Sade Sati from Saturn’s real transit — the same Lahiri-ayanamsa engine as the rest of BornClock.</p>
-          </div>
-          <nav className="footer-nav" aria-label="Footer navigation">
-            <Link to="/vedic-astrology">Vedic Astrology</Link>
-            <Link to="/kundali">Kundali</Link>
-            <Link to="/muhurat">Muhurat</Link>
-            <Link to="/gemstones">Gemstones</Link>
-            <Link to="/privacy">Privacy</Link>
-          </nav>
-        </div>
-        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
-      </footer>
-    </div>
+    </PajPage>
   );
 }

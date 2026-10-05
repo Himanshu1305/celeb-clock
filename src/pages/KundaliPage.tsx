@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { KundaliChart } from '@/components/KundaliChart';
 import { KundaliTabs } from '@/components/KundaliTabs';
@@ -21,7 +20,6 @@ import { PastPeriodReflection } from '@/components/reading/PastPeriodReflection'
 import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
-import '@/styles/part-aj.css';
 
 export default function KundaliPage() {
   const price = reportPrice(resolveCurrency(undefined));
@@ -135,23 +133,32 @@ export default function KundaliPage() {
   const whatsappHref = `https://wa.me/?text=${encodeURIComponent(shareText).replace(/'/g, '%27')}`;
 
   return (
-    <div data-testid="kundali-page" className="paj editorial" data-category="vedic">
-      <SEO
-        title="Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock"
-        description="Generate your free Vedic Kundali (Janam Kundali) — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, computed with the Swiss Ephemeris."
-        canonicalUrl="/kundali"
-        ogType="website"
-      />
-      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-        <Navigation />
-        <AuthNav />
-      </header>
-      <div className="breadcrumb">
-        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Kundali</span></div>
-        <div className="edition"><span className="dot" />Sidereal · Lahiri · Swiss Ephemeris</div>
-      </div>
-
-      <main id="main">
+    <PajPage
+      theme="vedic"
+      variant="editorial"
+      testId="kundali-page"
+      seo={(
+        <SEO
+          title="Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock"
+          description="Generate your free Vedic Kundali (Janam Kundali) — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, computed with the Swiss Ephemeris."
+          canonicalUrl="/kundali"
+          ogType="website"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali', edition: 'Sidereal · Lahiri · Swiss Ephemeris' }}
+      footer={{
+        tagline: 'Your Vedic birth chart, computed with care — sidereal (Lahiri), Swiss Ephemeris.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali Matching', to: '/kundali-match' },
+          { label: 'Sade Sati', to: '/sade-sati' },
+          { label: 'Muhurat', to: '/muhurat' },
+          { label: 'AI Astrologer', to: '/astrologer' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+    >
         <section className="section">
           <div className="section-head">
             <div>
@@ -298,25 +305,6 @@ export default function KundaliPage() {
             <p className="small"><Link className="textlink" to="/birthday-report/gift">Gift a Kundali ({price}) →</Link></p>
           </div>
         </section>
-      </main>
-
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div>
-            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-            <p className="subtle">Your Vedic birth chart, computed with care — sidereal (Lahiri), Swiss Ephemeris.</p>
-          </div>
-          <nav className="footer-nav" aria-label="Footer navigation">
-            <Link to="/vedic-astrology">Vedic Astrology</Link>
-            <Link to="/kundali-match">Kundali Matching</Link>
-            <Link to="/sade-sati">Sade Sati</Link>
-            <Link to="/muhurat">Muhurat</Link>
-            <Link to="/astrologer">AI Astrologer</Link>
-            <Link to="/privacy">Privacy</Link>
-          </nav>
-        </div>
-        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
-      </footer>
-    </div>
+    </PajPage>
   );
 }
