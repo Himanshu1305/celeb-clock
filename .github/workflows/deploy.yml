@@ -1,31 +1,64 @@
 name: Deploy & Nightly Automation
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Part AP — SAFE RELEASE PIPELINE
+#
+# Triggers and what they do:
+#   • push to `main`          → PRODUCTION deploy (bornclock worker). Only main.
+#   • workflow_dispatch       → PRODUCTION deploy ONLY if the `deploy_production`
+#                               input is exactly "deploy-production". A blank
+#                               manual run does nothing (safe no-deploy).
+#   • schedule (02:30 UTC)    → NIGHTLY: refresh data on `develop` and deploy the
+#                               STAGING worker only (`--env staging`). It can
+#                               NEVER touch production.
+#
+# IMPORTANT: scheduled workflows always run the workflow FILE from the default
+# branch (`main`). So this nightly only takes effect after the launch merge into
+# `main`. The Cloudflare API token must be added to GitHub ONLY after that merge
+# (until then the nightly fails harmlessly at the deploy step instead of pushing
+# September `main` code to production).
+# ─────────────────────────────────────────────────────────────────────────────
+
 on:
   push:
     branches: [main]
   schedule:
-    # 02:30 UTC daily — nightly bio fill + redeploy.
+    # 02:30 UTC daily — nightly bio fill + staging redeploy from develop.
     - cron: '30 2 * * *'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      deploy_production:
+        description: 'Type "deploy-production" to deploy the PRODUCTION worker. Leave blank for a safe no-deploy run.'
+        required: false
+        default: ''
+
+# Needed so the nightly job can push the refreshed data commit back to develop.
+# (The old workflow lacked this, so `git push` 403'd and the failure was hidden
+#  by `|| echo "push skipped"`. Both are fixed below.)
+permissions:
+  contents: write
 
 jobs:
-  build-and-deploy:
+  # ── NIGHTLY: data refresh on develop + STAGING deploy only ──────────────────
+  nightly:
+    if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout develop
         uses: actions/checkout@v4
+        with:
+          ref: develop
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Nightly bio fill (scheduled runs only)
-        if: github.event_name == 'schedule'
+      - name: Nightly bio fill
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -41,17 +74,58 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Commit refreshed data (scheduled runs only)
-        if: github.event_name == 'schedule'
+      - name: Commit refreshed data to develop (fails loudly if push is rejected)
         run: |
           git config user.name "bornclock-bot"
           git config user.email "bot@bornclock.com"
-          git add src/data/celebrity-bios.json src/data/celebrities.json || true
-          git commit -m "chore(auto): nightly bio + celebrity refresh" || echo "nothing to commit"
-          git push || echo "push skipped"
+          git add src/data/celebrity-bios.json src/data/celebrities.json
+          # Only the "nothing changed" case is tolerated; a real push failure must
+          # fail the job (no more `|| echo "push skipped"` hiding 403s).
+          if git commit -m "chore(auto): nightly bio + celebrity refresh"; then
+            git push origin HEAD:develop
+          else
+            echo "No data changes to commit."
+          fi
 
-      - name: Deploy to Cloudflare
+      - name: Deploy to Cloudflare STAGING (never production)
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: deploy --env staging
+
+  # ── PRODUCTION: push to main, or explicit confirmed manual dispatch ─────────
+  production:
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       github.event.inputs.deploy_production == 'deploy-production')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Export unified celebrities
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npx tsx scripts/export-celebrities.ts
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to Cloudflare PRODUCTION
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: deploy
