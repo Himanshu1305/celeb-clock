@@ -176,7 +176,7 @@ export default function Leaderboard() {
         {/* Filters */}
         <div className="flex flex-wrap gap-3 mb-6">
           <Select value={countryFilter} onValueChange={v => { setCountryFilter(v); }}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-40" aria-label="Filter by country">
               <SelectValue placeholder="All Countries" />
             </SelectTrigger>
             <SelectContent>
@@ -186,7 +186,7 @@ export default function Leaderboard() {
           </Select>
 
           <Select value={ageGroupFilter} onValueChange={v => { setAgeGroupFilter(v); }}>
-            <SelectTrigger className="w-36">
+            <SelectTrigger className="w-36" aria-label="Filter by age group">
               <SelectValue placeholder="All Ages" />
             </SelectTrigger>
             <SelectContent>
@@ -196,7 +196,7 @@ export default function Leaderboard() {
           </Select>
 
           <Select value={viewFilter} onValueChange={v => setViewFilter(v as any)}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-40" aria-label="Sort leaderboard">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

@@ -8,10 +8,15 @@ import sharp from 'sharp';
 const BASE = process.env.BASE || 'https://bornclock-staging.usdvisionai.workers.dev';
 const beforeDir = 'docs/migration-screens/regression-before';
 const afterDir = 'docs/migration-screens/regression-after';
-mkdirSync(afterDir, { recursive: true });
 
-// Non-VEDIC pages — these MUST be unchanged. (vedic pages are expected to change.)
-const NON_GROUP = ['/', '/pricing', '/age-calculator', '/celebrity', '/numerology', '/compatibility', '/life-expectancy', '/biological-age'];
+// Pages NOT in the current run's group — these MUST be unchanged. Override with the
+// NON_GROUP env (comma list). MODE=before captures the baseline into beforeDir.
+const MODE = process.env.MODE || 'after';
+const NON_GROUP = (process.env.NON_GROUP
+  ? process.env.NON_GROUP.split(',').map(s => s.trim()).filter(Boolean)
+  : ['/', '/pricing', '/numerology', '/compatibility', '/life-expectancy', '/biological-age', '/vedic-astrology', '/kundali', '/muhurat', '/sade-sati', '/gemstones']);
+const shootDir = MODE === 'before' ? beforeDir : afterDir;
+mkdirSync(shootDir, { recursive: true });
 const slug = (r) => (r === '/' ? 'home' : r.replace(/[^a-z0-9]+/gi, '_').replace(/^_|_$/g, ''));
 
 async function shoot() {
@@ -27,7 +32,7 @@ async function shoot() {
       try {
         await page.goto(BASE + route, { waitUntil: 'networkidle', timeout: 60000 });
         await page.waitForTimeout(900);
-        await page.screenshot({ path: `${afterDir}/${slug(route)}__${p.name}_${p.w}.png`, fullPage: false });
+        await page.screenshot({ path: `${shootDir}/${slug(route)}__${p.name}_${p.w}.png`, fullPage: false });
       } catch (e) { console.log('shoot ERR', route, p.name, String(e).slice(0, 80)); }
       await ctx.close();
     }
@@ -46,6 +51,7 @@ async function diff(a, b) {
 }
 
 await shoot();
+if (MODE === 'before') { console.log(`baseline captured → ${beforeDir} (${NON_GROUP.length} routes)`); process.exit(0); }
 const report = [];
 for (const route of NON_GROUP) {
   for (const [bro, w] of [['chromium', 1440], ['webkit', 390]]) {

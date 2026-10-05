@@ -103,19 +103,34 @@ function FamilyDashboardInner() {
 
   if (!FAMILY_DASHBOARD_ENABLED) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="text-center bg-white rounded-2xl p-8 shadow-sm border border-gray-200 max-w-sm">
-          <div className="text-4xl mb-4">👨‍👩‍👧</div>
-          <h1 className="text-xl font-bold text-gray-900 mb-2">Family Dashboard</h1>
-          <p className="text-gray-500 mb-2 text-sm">
-            Track longevity forecasts for your whole family — coming soon.
-          </p>
-          <p className="text-xs text-gray-400 mb-4">Available in the next update.</p>
-          <a href="/" className="inline-block bg-[#0E2238] text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-[#0E2238] transition-colors">
-            ← Back to BornClock
-          </a>
-        </div>
-      </div>
+      <ToolLayout
+        theme="birthday"
+        testId="family-dashboard-coming-soon"
+        breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'Family Dashboard' }}
+        footer={{
+          tagline: 'Track your family’s birthdays and longevity in one place.',
+          nav: [
+            { label: 'Age Calculator', to: '/age-calculator' },
+            { label: 'Birthday Countdown', to: '/birthday-countdown' },
+            { label: "Today's Birthdays", to: '/todays-birthdays' },
+            { label: 'Privacy', to: '/privacy' },
+          ],
+          note: '© 2026 BornClock · Age & birthday tools.',
+        }}
+        eyebrow="Family"
+        h1="Family Dashboard"
+        lead={<>Track longevity forecasts for your whole family — coming soon.</>}
+      >
+        <section className="section">
+          <div className="max-w-sm mx-auto text-center bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
+            <div className="text-4xl mb-4">👨‍👩‍👧</div>
+            <p className="text-xs text-gray-400 mb-4">Available in the next update.</p>
+            <a href="/" className="inline-block bg-[#0E2238] text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-[#0E2238] transition-colors">
+              ← Back to BornClock
+            </a>
+          </div>
+        </section>
+      </ToolLayout>
     );
   }
 

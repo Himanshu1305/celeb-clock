@@ -372,7 +372,7 @@ export function CelebrityPage() {
             <h2 id="facts-heading" className="text-2xl font-black text-gray-900 mb-4 pb-3 border-b border-gray-200">
               {name} — Birthday & Personal Facts
             </h2>
-            <div className="overflow-x-auto rounded-xl border border-gray-200">
+            <div className="overflow-x-auto rounded-xl border border-gray-200" tabIndex={0} role="region" aria-label={`${name} — birthday and personal facts table`}>
               <table data-testid="facts-table" className="w-full text-sm">
                 <tbody>
                   <tr className="border-b border-gray-100">
@@ -797,7 +797,7 @@ export function CelebrityPage() {
               <h2 id="planetary-heading" className="text-2xl font-black text-gray-900 mb-4 pb-3 border-b border-gray-200">
                 {name}'s Age on Other Planets
               </h2>
-              <div data-testid="planetary-table-wrapper" className="overflow-x-auto rounded-xl border border-gray-200">
+              <div data-testid="planetary-table-wrapper" className="overflow-x-auto rounded-xl border border-gray-200" tabIndex={0} role="region" aria-label={`${name} — planetary positions table`}>
                 <table className="w-full text-sm min-w-[420px]">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-200">
