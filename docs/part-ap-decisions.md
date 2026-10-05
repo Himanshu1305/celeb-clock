@@ -52,3 +52,24 @@ Per Part D. The scheduled job checks out `develop`, commits refreshed data back
 to `develop`, deploys `--env staging` only. Note (also in report): schedules
 run from the workflow file on the **default branch (main)**, so this new nightly
 only takes effect after the launch merge into `main`.
+
+## D3 — SAFETY CATCH: `.env.local` Razorpay keys are LIVE, not test
+`.env.local` holds `rzp_live_…` keys. Rule 2 explicitly warns that putting a live
+Razorpay key on staging would risk **real customer charges**, and Part C requires
+the **test** secret. I did **not** use `.env.local` for Razorpay. The **test**
+keys (`rzp_test_…`) live in `.env.preview` (same Supabase project), so all
+Razorpay secrets on staging were sourced from there. Verified `rzp_test_` prefix
+before writing, and asserted it in the build script (abort-on-non-test).
+
+## D4 — Part C result
+Set **16 runtime secrets** on `bornclock-staging` via `wrangler secret bulk
+--env staging` (output confirmed worker `bornclock-staging`; temp file shredded;
+`secret list --env staging` shows all 16). Runtime secret names were derived from
+`process.env.*` reads in `functions/ api/ backend/`.
+- **Needs the person** (runtime-read but not in local env): `ADMIN_EMAIL`,
+  `ADMIN_EMAILS`, `BROWSER_RENDERING_TOKEN`. Non-secret config with code defaults
+  (`OPS_BASE_URL`, `PRODUCTION_URL`, `COACH_PROVIDER`, `DIGEST_LIVE`) left unset;
+  `CF_ACCOUNT_ID` is supplied by the deploy environment.
+- **Payment check:** not run this session — it requires the new design-system
+  build deployed to staging **and** a working staging sign-in, neither of which
+  is completed here. A 4-step manual payment script is in the report.
