@@ -5,9 +5,8 @@
  * lat&lon&tz) and the saved profile; fresh carried params take precedence over stale saved data.
  */
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { useLocation } from 'react-router-dom';
+import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
@@ -15,7 +14,6 @@ import { GradeLegend } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
-import '@/styles/part-aj.css';
 
 interface Report {
   tenthHouse: { sign: string; lord: string; analysis: string };
@@ -69,10 +67,28 @@ export default function CareerReportPage() {
     : profile ? { dob: profile.dob, time: profile.time, city: profile.city } : undefined;
 
   return (
-    <div data-testid="career-page" className="paj editorial" data-category="vedic">
-      <SEO title="Career Analysis Report (Vedic) — 10th House, D10 & Timing | BornClock"
-        description="A deeper Vedic career report: your 10th house and its lord, the Dasamsa (D10) career chart, career-relevant Yogas, and the real classical timing windows for professional moves."
-        canonicalUrl="/career-report" ogType="website" />
+    <PajPage
+      theme="vedic"
+      variant="editorial"
+      testId="career-page"
+      seo={(
+        <SEO title="Career Analysis Report (Vedic) — 10th House, D10 & Timing | BornClock"
+          description="A deeper Vedic career report: your 10th house and its lord, the Dasamsa (D10) career chart, career-relevant Yogas, and the real classical timing windows for professional moves."
+          canonicalUrl="/career-report" ogType="website" />
+      )}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Career Analysis', edition: '10th house · D10 · timing' }}
+      footer={{
+        tagline: 'A Vedic career read from your real 10th house, D10 and timing periods — computed, not a trait list.',
+        nav: [
+          { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Kundali', to: '/kundali' },
+          { label: 'Sade Sati', to: '/sade-sati' },
+          { label: 'Gemstones', to: '/gemstones' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Vedic astrology, computed with care.',
+      }}
+    >
       <JsonLd id="webapp" data={{
         '@context': 'https://schema.org', '@type': 'WebApplication',
         name: 'Vedic Career Analysis Report',
@@ -81,13 +97,6 @@ export default function CareerReportPage() {
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
         provider: { '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com' },
       }} />
-      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}><Navigation /><AuthNav /></header>
-      <div className="breadcrumb">
-        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/vedic-astrology" className="textlink">Vedic Astrology</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Career Analysis</span></div>
-        <div className="edition"><span className="dot" />10th house · D10 · timing</div>
-      </div>
-
-      <main id="main">
         <section className="section">
           <div className="section-head">
             <div>
@@ -143,24 +152,6 @@ export default function CareerReportPage() {
             </div>
           )}
         </section>
-      </main>
-
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div>
-            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-            <p className="subtle">A Vedic career read from your real 10th house, D10 and timing periods — computed, not a trait list.</p>
-          </div>
-          <nav className="footer-nav" aria-label="Footer navigation">
-            <Link to="/vedic-astrology">Vedic Astrology</Link>
-            <Link to="/kundali">Kundali</Link>
-            <Link to="/sade-sati">Sade Sati</Link>
-            <Link to="/gemstones">Gemstones</Link>
-            <Link to="/privacy">Privacy</Link>
-          </nav>
-        </div>
-        <div className="footer-bottom"><span>© 2026 BornClock · Vedic astrology, computed with care.</span></div>
-      </footer>
-    </div>
+    </PajPage>
   );
 }
