@@ -26,7 +26,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -70,7 +70,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -114,7 +114,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -158,7 +158,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -202,7 +202,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -246,7 +246,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 10
+          "nodes": 9
         }
       ],
       "total": 2
@@ -290,7 +290,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 14
+          "nodes": 13
         }
       ],
       "total": 2
@@ -334,7 +334,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -378,7 +378,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 13
+          "nodes": 12
         }
       ],
       "total": 2
@@ -422,7 +422,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -466,7 +466,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 11
+          "nodes": 10
         }
       ],
       "total": 2
@@ -510,7 +510,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 3
@@ -554,7 +554,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 28
+          "nodes": 27
         }
       ],
       "total": 2
@@ -598,7 +598,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -642,7 +642,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 7
+          "nodes": 6
         }
       ],
       "total": 2
@@ -686,7 +686,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -730,7 +730,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -774,7 +774,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -818,7 +818,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 17
+          "nodes": 16
         }
       ],
       "total": 2
@@ -862,7 +862,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 14
+          "nodes": 13
         }
       ],
       "total": 2
@@ -906,7 +906,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -950,7 +950,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -994,7 +994,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -1038,7 +1038,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 18
+          "nodes": 17
         }
       ],
       "total": 2
@@ -1082,7 +1082,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 18
+          "nodes": 17
         }
       ],
       "total": 3
@@ -1126,7 +1126,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 3
+          "nodes": 2
         }
       ],
       "total": 2
@@ -1170,7 +1170,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 3
+          "nodes": 2
         }
       ],
       "total": 2
@@ -1214,7 +1214,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -1258,7 +1258,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -1302,7 +1302,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -1346,7 +1346,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -1390,7 +1390,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2

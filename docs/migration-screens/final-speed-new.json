@@ -1,0 +1,58 @@
+[
+  {
+    "route": "/age-calculator/",
+    "layout": "tool",
+    "lcp_ms": 672,
+    "cls": 0,
+    "tbt_ms": 141,
+    "samples": 5
+  },
+  {
+    "route": "/kundali/",
+    "layout": "report",
+    "lcp_ms": 776,
+    "cls": 0,
+    "tbt_ms": 326,
+    "samples": 5
+  },
+  {
+    "route": "/",
+    "layout": "hub/home",
+    "lcp_ms": 744,
+    "cls": 0,
+    "tbt_ms": 363,
+    "samples": 5
+  },
+  {
+    "route": "/celebrity/",
+    "layout": "collection",
+    "lcp_ms": 692,
+    "cls": 0,
+    "tbt_ms": 189,
+    "samples": 5
+  },
+  {
+    "route": "/blog/",
+    "layout": "article",
+    "lcp_ms": 688,
+    "cls": 0,
+    "tbt_ms": 195,
+    "samples": 5
+  },
+  {
+    "route": "/pricing/",
+    "layout": "money",
+    "lcp_ms": 556,
+    "cls": 0,
+    "tbt_ms": 131,
+    "samples": 5
+  },
+  {
+    "route": "/privacy/",
+    "layout": "utility",
+    "lcp_ms": 548,
+    "cls": 0,
+    "tbt_ms": 142,
+    "samples": 5
+  }
+]

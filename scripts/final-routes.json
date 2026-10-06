@@ -1,0 +1,10 @@
+[
+  { "route": "/biorhythm-workout-calculator", "theme": "mystic", "label": "Fitness: biorhythm workout" },
+  { "route": "/best-day-to-start-a-habit", "theme": "mystic", "label": "Fitness: best day to start a habit" },
+  { "route": "/cycle-syncing-for-men", "theme": "mystic", "label": "Fitness: cycle syncing for men" },
+  { "route": "/why-am-i-tired-some-days", "theme": "mystic", "label": "Fitness: why am I tired some days" },
+  { "route": "/best-time-to-work-out", "theme": "mystic", "label": "Fitness: best time to work out" },
+  { "route": "/energy-forecast", "theme": "mystic", "label": "Fitness: energy forecast" },
+  { "route": "/compatibility/foo/bar", "theme": "mystic", "label": "Compatibility invalid-pair (UtilityLayout soft-404)" },
+  { "route": "/compatibility/aries/leo", "theme": "mystic", "label": "Compatibility valid pair (regression)" }
+]

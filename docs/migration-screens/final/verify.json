@@ -1,0 +1,994 @@
+[
+  {
+    "browser": "chromium",
+    "route": "/biorhythm-workout-calculator",
+    "label": "Fitness: biorhythm workout",
+    "status": 200,
+    "title": "Biorhythm Workout Calculator — A Daily Training Check-In | BornClock",
+    "h1Count": 1,
+    "h1First": "Biorhythm Workout Calculator",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 7
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/best-day-to-start-a-habit",
+    "label": "Fitness: best day to start a habit",
+    "status": 200,
+    "title": "Best Day to Start a Habit — Timing vs. Consistency | BornClock",
+    "h1Count": 1,
+    "h1First": "The Best Day to Start a Habit",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 7
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/cycle-syncing-for-men",
+    "label": "Fitness: cycle syncing for men",
+    "status": 200,
+    "title": "Cycle Syncing for Men — Rhythm Awareness for Everyone | BornClock",
+    "h1Count": 1,
+    "h1First": "Cycle Syncing for Men",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 7
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/why-am-i-tired-some-days",
+    "label": "Fitness: why am I tired some days",
+    "status": 200,
+    "title": "Why Am I Tired Some Days and Not Others? | BornClock",
+    "h1Count": 1,
+    "h1First": "Why Am I Tired Some Days and Not Others?",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 7
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/best-time-to-work-out",
+    "label": "Fitness: best time to work out",
+    "status": 200,
+    "title": "Best Time to Work Out — What the Science Actually Says | BornClock",
+    "h1Count": 1,
+    "h1First": "The Best Time to Work Out",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 7
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/energy-forecast",
+    "label": "Fitness: energy forecast",
+    "status": 200,
+    "title": "Energy Forecast — Your 7-Day Rhythm Check-In | BornClock",
+    "h1Count": 1,
+    "h1First": "Your 7-Day Energy Forecast",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 7
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/compatibility/foo/bar",
+    "label": "Compatibility invalid-pair (UtilityLayout soft-404)",
+    "status": 200,
+    "title": "Zodiac pairing not found | BornClock",
+    "h1Count": 1,
+    "h1First": "That zodiac pairing doesn’t exist",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 4,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 3
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 4,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/compatibility/aries/leo",
+    "label": "Compatibility valid pair (regression)",
+    "status": 200,
+    "title": "Aries and Leo Compatibility — 90% Match | BornClock",
+    "h1Count": 1,
+    "h1First": "Zodiac Compatibility Calculator (Western Zodiac)",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 384,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 9
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/biorhythm-workout-calculator",
+    "label": "Fitness: biorhythm workout",
+    "status": 200,
+    "title": "Biorhythm Workout Calculator — A Daily Training Check-In | BornClock",
+    "h1Count": 1,
+    "h1First": "Biorhythm Workout Calculator",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 5
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/best-day-to-start-a-habit",
+    "label": "Fitness: best day to start a habit",
+    "status": 200,
+    "title": "Best Day to Start a Habit — Timing vs. Consistency | BornClock",
+    "h1Count": 1,
+    "h1First": "The Best Day to Start a Habit",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 5
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/cycle-syncing-for-men",
+    "label": "Fitness: cycle syncing for men",
+    "status": 200,
+    "title": "Cycle Syncing for Men — Rhythm Awareness for Everyone | BornClock",
+    "h1Count": 1,
+    "h1First": "Cycle Syncing for Men",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 5
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/why-am-i-tired-some-days",
+    "label": "Fitness: why am I tired some days",
+    "status": 200,
+    "title": "Why Am I Tired Some Days and Not Others? | BornClock",
+    "h1Count": 1,
+    "h1First": "Why Am I Tired Some Days and Not Others?",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 5
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/best-time-to-work-out",
+    "label": "Fitness: best time to work out",
+    "status": 200,
+    "title": "Best Time to Work Out — What the Science Actually Says | BornClock",
+    "h1Count": 1,
+    "h1First": "The Best Time to Work Out",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 5
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/energy-forecast",
+    "label": "Fitness: energy forecast",
+    "status": 200,
+    "title": "Energy Forecast — Your 7-Day Rhythm Check-In | BornClock",
+    "h1Count": 1,
+    "h1First": "Your 7-Day Energy Forecast",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 5
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/compatibility/foo/bar",
+    "label": "Compatibility invalid-pair (UtilityLayout soft-404)",
+    "status": 200,
+    "title": "Zodiac pairing not found | BornClock",
+    "h1Count": 1,
+    "h1First": "That zodiac pairing doesn’t exist",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 4,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 4
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 4,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/compatibility/aries/leo",
+    "label": "Compatibility valid pair (regression)",
+    "status": 200,
+    "title": "Aries and Leo Compatibility — 90% Match | BornClock",
+    "h1Count": 1,
+    "h1First": "Zodiac Compatibility Calculator (Western Zodiac)",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 8
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/biorhythm-workout-calculator",
+    "label": "Fitness: biorhythm workout",
+    "status": 200,
+    "title": "Biorhythm Workout Calculator — A Daily Training Check-In | BornClock",
+    "h1Count": 1,
+    "h1First": "Biorhythm Workout Calculator",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 6
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/best-day-to-start-a-habit",
+    "label": "Fitness: best day to start a habit",
+    "status": 200,
+    "title": "Best Day to Start a Habit — Timing vs. Consistency | BornClock",
+    "h1Count": 1,
+    "h1First": "The Best Day to Start a Habit",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 6
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/cycle-syncing-for-men",
+    "label": "Fitness: cycle syncing for men",
+    "status": 200,
+    "title": "Cycle Syncing for Men — Rhythm Awareness for Everyone | BornClock",
+    "h1Count": 1,
+    "h1First": "Cycle Syncing for Men",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 6
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/why-am-i-tired-some-days",
+    "label": "Fitness: why am I tired some days",
+    "status": 200,
+    "title": "Why Am I Tired Some Days and Not Others? | BornClock",
+    "h1Count": 1,
+    "h1First": "Why Am I Tired Some Days and Not Others?",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 5
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/best-time-to-work-out",
+    "label": "Fitness: best time to work out",
+    "status": 200,
+    "title": "Best Time to Work Out — What the Science Actually Says | BornClock",
+    "h1Count": 1,
+    "h1First": "The Best Time to Work Out",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 6
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/energy-forecast",
+    "label": "Fitness: energy forecast",
+    "status": 200,
+    "title": "Energy Forecast — Your 7-Day Rhythm Check-In | BornClock",
+    "h1Count": 1,
+    "h1First": "Your 7-Day Energy Forecast",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 6
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/compatibility/foo/bar",
+    "label": "Compatibility invalid-pair (UtilityLayout soft-404)",
+    "status": 200,
+    "title": "Zodiac pairing not found | BornClock",
+    "h1Count": 1,
+    "h1First": "That zodiac pairing doesn’t exist",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 4,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 4
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 4,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/compatibility/aries/leo",
+    "label": "Compatibility valid pair (regression)",
+    "status": 200,
+    "title": "Aries and Leo Compatibility — 90% Match | BornClock",
+    "h1Count": 1,
+    "h1First": "Zodiac Compatibility Calculator (Western Zodiac)",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 8
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  }
+]

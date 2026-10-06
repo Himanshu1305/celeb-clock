@@ -1,0 +1,42 @@
+[
+  {
+    "name": "fitness /energy-forecast widget computes a rhythm",
+    "pass": true,
+    "detail": "changed=true errs=0"
+  },
+  {
+    "name": "paid flow: pricing CTA opens checkout/upgrade surface (up to opening)",
+    "pass": false,
+    "detail": "cta=true surfaces=0 landed=https://bornclock-staging.usdvisionai.workers.dev/upgrade errs=0"
+  },
+  {
+    "name": "phone menu opens navigation (mobile)",
+    "pass": false,
+    "detail": "hasMenu=true navVisible=false errs=0"
+  },
+  {
+    "name": "हि route renders Devanagari",
+    "pass": true,
+    "detail": "devanagari=true"
+  },
+  {
+    "name": "API create-order missing product → 400 guard",
+    "pass": true,
+    "detail": "status=400 body={\"error\":\"Invalid product\"}"
+  },
+  {
+    "name": "API create-order invalid product → 400 guard",
+    "pass": true,
+    "detail": "status=400 body={\"error\":\"Invalid product\"}"
+  },
+  {
+    "name": "API create-order GET → 405 method guard",
+    "pass": true,
+    "detail": "status=405 body={\"error\":\"Method not allowed\"}"
+  },
+  {
+    "name": "API get-credits unauth → guarded",
+    "pass": true,
+    "detail": "status=400 body={\"error\":\"Missing userId\"}"
+  }
+]
