@@ -24,7 +24,14 @@ export const AuthNav = () => {
       <div className="flex items-center gap-2">
         <LanguageToggle />
         <Link to="/auth">
-          <Button variant="outline" size="sm">
+          {/* Navy site-header forces white text; the default shadcn outline button
+              uses an ivory bg-background → white-on-ivory (invisible). Make it
+              readable on the navy bar (a11y: color-contrast). */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-transparent border-white/50 text-white hover:bg-white/10 hover:text-white"
+          >
             Sign In
           </Button>
         </Link>

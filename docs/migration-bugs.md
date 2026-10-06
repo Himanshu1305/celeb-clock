@@ -133,3 +133,59 @@ _(other bugs logged here as found during Step 2/3 verification)_
 - Non-migrated AND migrated pages alike show 2 `<h1>` in the static prerendered HTML
   — the pre-existing Part AO prerender LCP-h1 technique, project-wide. The hydrated
   DOM has a single `<h1>` on every migrated page (verified live). No fix needed.
+
+## NEUTRAL run (docs/migration-neutral-report.md)
+
+### STEP00 — interrupted SCIENCE work stashed (not discarded)
+- Working tree at run start had 17 uncommitted modified files, all SCIENCE-group pages
+  (LifeExpectancy, BiologicalAge*, CountryComparison, PlanetaryAge, WeightOnPlanets,
+  Longevity*, Generation, Hindi*, CoachLandingPage, CategoryLandingPage, WhatGenerationAmI).
+  Per STEP 00.1 they belong to the SCIENCE run, not NEUTRAL → `git stash push -u` with a clear
+  message (`stash@{0}`). To be resumed in the SCIENCE run. Nothing discarded.
+
+### BUG-N1 — AuthNav "Sign In" button invisible on the navy site-header (axe color-contrast, FIXED)
+- Where: `src/components/AuthNav.tsx` signed-out state. `.paj .site-header` sets `color:#FFFFFF`
+  on descendants; the shadcn `<Button variant="outline">` ("Sign In") renders `bg-background`
+  (ivory) → white text on ivory = contrast 1.06 (confirmed visually in the captured header
+  screenshot: an invisible white pill before "Join Free"). **Pre-existing and site-wide** — the
+  same component renders on every group's pages (old raw pages used the same navy `<header>` +
+  AuthNav) and the same violation is present right now on prior-migrated pages
+  (/numerology, /kundali, /zodiac, /life-expectancy).
+- Fix: explicit navy-header styling on the Sign In button — `bg-transparent border-white/50
+  text-white hover:bg-white/10 hover:text-white`. Restores the obviously-intended outlined
+  look; benefits all groups. Retest after fresh deploy below.
+
+### INV-N2 — remaining color-contrast is pre-existing, site-wide a11y debt (NOT cleared this run)
+- The Step-0 axe scan reports `color-contrast` (serious) on the neutral routes, but the SAME
+  violations exist on every previously-"passed" group page on this same staging build
+  (/numerology 12 nodes, /kundali 6, /zodiac 10, /life-expectancy 7). Sources are SHARED global
+  components and pre-existing page content, NOT this run's shell swap:
+  • CookieConsent banner (`.bg-accent` "Accept All" ~1.04; legal links `.text-accent[href$=privacy]`/
+    `a[href$=terms]` ~1.04) — global overlay on every page.
+  • Navigation search box (`.border-input.bg-background`, light text on ivory) and brand wordmark
+    (`.font-heading` gradient, ~1.5).
+  • Page content: muted helper text on ivory/tinted boxes (`text-muted-foreground`, `text-slate-400`,
+    `text-gray-400`), category chips (blog `text-pink-600`/`text-teal-600`/… on /10 tints, 3.0–4.1),
+    in-page `/auth?signup=true` CTA (navy-on-navy 1.03). Heaviest on /blog (78 nodes), /pricing (13).
+- Decision: a correct fix is a dedicated CENTRAL a11y pass (CookieConsent + Navigation + shadcn
+  token contrast + per-page content colours) verified across ALL groups — it changes shared chrome
+  on ~180 routes, so it must not be done blind in a headless run (Rule 9: no regressions elsewhere;
+  keep approved design). Logged honestly rather than reported as cleared (Fifth Rule). This is the
+  primary reason NEUTRAL is COMPLETE: NO.
+
+### INV-N3 — transient HTTP 429 during the rapid 3-browser crawl (not a page defect)
+- 3 rows logged one console error `Failed to load resource: 429` (webkit /auth, android /gift,
+  android /auth) — intermittent rate-limit from hammering staging with 75 fast loads. Same class
+  as MYSTIC INV-M5. Re-verified on the fresh deploy below.
+
+### INV-N4 — homepage `data-theme` not on a `.paj` root (by design)
+- The harness reads `data-theme` from `document.querySelector('.paj')`; the homepage keeps its
+  approved bespoke `.hp` shell (NEUTRAL note: "keep its approved design"), so it reports theme=null.
+  It IS connected to the central system via `data-theme="neutral"` on its own root + the central
+  themes.css import. Not a defect; the generic harness just looks for `.paj` specifically.
+
+### INV-N5 — `.paj` removal deferred (blocked by SCIENCE)
+- The NEUTRAL note ends with "once no page uses it, remove the old `.paj` styling system." The
+  central layouts THEMSELVES render on `.paj` (coexistence design), and SCIENCE pages are not yet
+  migrated (stashed at STEP00). `.paj` cannot be removed until the SCIENCE (and FINAL) runs are done.
+  Deferred, not attempted. Second reason NEUTRAL is COMPLETE: NO.
