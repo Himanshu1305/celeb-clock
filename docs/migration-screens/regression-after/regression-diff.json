@@ -2,8 +2,8 @@
   {
     "route": "/",
     "bro": "chromium",
-    "diffPct": 2.79,
-    "verdict": "MINOR"
+    "diffPct": 0.43,
+    "verdict": "SAME"
   },
   {
     "route": "/",
@@ -24,40 +24,16 @@
     "verdict": "SAME"
   },
   {
-    "route": "/age-calculator",
+    "route": "/numerology",
     "bro": "chromium",
-    "diffPct": 0,
-    "verdict": "SAME"
-  },
-  {
-    "route": "/age-calculator",
-    "bro": "webkit",
-    "diffPct": 0,
-    "verdict": "SAME"
-  },
-  {
-    "route": "/celebrity",
-    "bro": "chromium",
-    "diffPct": 0,
-    "verdict": "SAME"
-  },
-  {
-    "route": "/celebrity",
-    "bro": "webkit",
     "diffPct": 0,
     "verdict": "SAME"
   },
   {
     "route": "/numerology",
-    "bro": "chromium",
-    "diffPct": 0.03,
-    "verdict": "SAME"
-  },
-  {
-    "route": "/numerology",
     "bro": "webkit",
-    "diffPct": 2.39,
-    "verdict": "MINOR"
+    "diffPct": 0,
+    "verdict": "SAME"
   },
   {
     "route": "/compatibility",
@@ -68,13 +44,13 @@
   {
     "route": "/compatibility",
     "bro": "webkit",
-    "diffPct": 0.02,
+    "diffPct": 0,
     "verdict": "SAME"
   },
   {
     "route": "/life-expectancy",
     "bro": "chromium",
-    "diffPct": 0,
+    "diffPct": 0.05,
     "verdict": "SAME"
   },
   {
@@ -94,5 +70,65 @@
     "bro": "webkit",
     "diffPct": 2.39,
     "verdict": "MINOR"
+  },
+  {
+    "route": "/vedic-astrology",
+    "bro": "chromium",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/vedic-astrology",
+    "bro": "webkit",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/kundali",
+    "bro": "chromium",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/kundali",
+    "bro": "webkit",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/muhurat",
+    "bro": "chromium",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/muhurat",
+    "bro": "webkit",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/sade-sati",
+    "bro": "chromium",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/sade-sati",
+    "bro": "webkit",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/gemstones",
+    "bro": "chromium",
+    "diffPct": 0,
+    "verdict": "SAME"
+  },
+  {
+    "route": "/gemstones",
+    "bro": "webkit",
+    "diffPct": 0,
+    "verdict": "SAME"
   }
 ]

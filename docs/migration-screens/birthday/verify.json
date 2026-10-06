@@ -681,20 +681,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
-        {
-          "id": "button-name",
-          "impact": "critical",
-          "nodes": 3
-        },
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 6
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {
       "ran": true,
@@ -716,18 +711,17 @@
     "title": "Free Birthday, Zodiac & Longevity Calculator | BornClock",
     "h1Count": 1,
     "h1First": "Family Dashboard",
-    "dataTheme": null,
-    "dataCategory": null,
-    "hasSiteHeader": false,
-    "hasFooter": false,
-    "singleMain": 0,
-    "jsonLdBlocks": 4,
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 2,
     "hasOldNav": false,
     "layout": {
-      "blankBand": null,
-      "h1AboveFold": null,
-      "mainWidth": null,
-      "note": "no main#main"
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
     },
     "axe": {
       "ran": true,
@@ -739,7 +733,7 @@
           "nodes": 4
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {
       "ran": true,
@@ -747,7 +741,7 @@
       "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
     },
     "structuralJsonLd": {
-      "count": 4,
+      "count": 2,
       "parseErrors": 0,
       "missingType": 0
     },
@@ -819,20 +813,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 17
-        },
-        {
-          "id": "select-name",
-          "impact": "critical",
-          "nodes": 1
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {
       "ran": true,
@@ -1840,20 +1829,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 10
-        },
-        {
-          "id": "scrollable-region-focusable",
-          "impact": "serious",
-          "nodes": 1
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
@@ -2045,20 +2029,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
-        {
-          "id": "button-name",
-          "impact": "critical",
-          "nodes": 3
-        },
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 3
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
@@ -2076,18 +2055,17 @@
     "title": "Free Birthday, Zodiac & Longevity Calculator | BornClock",
     "h1Count": 1,
     "h1First": "Family Dashboard",
-    "dataTheme": null,
-    "dataCategory": null,
-    "hasSiteHeader": false,
-    "hasFooter": false,
-    "singleMain": 0,
-    "jsonLdBlocks": 4,
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 2,
     "hasOldNav": false,
     "layout": {
-      "blankBand": null,
-      "h1AboveFold": null,
-      "mainWidth": null,
-      "note": "no main#main"
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
     },
     "axe": {
       "ran": true,
@@ -2096,14 +2074,14 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 5
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
-      "count": 4,
+      "count": 2,
       "parseErrors": 0,
       "missingType": 0
     },
@@ -2171,20 +2149,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 15
-        },
-        {
-          "id": "select-name",
-          "impact": "critical",
-          "nodes": 1
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
@@ -3136,20 +3109,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 10
-        },
-        {
-          "id": "scrollable-region-focusable",
-          "impact": "serious",
-          "nodes": 1
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
@@ -3341,20 +3309,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
-        {
-          "id": "button-name",
-          "impact": "critical",
-          "nodes": 3
-        },
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 5
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
@@ -3372,18 +3335,17 @@
     "title": "Free Birthday, Zodiac & Longevity Calculator | BornClock",
     "h1Count": 1,
     "h1First": "Family Dashboard",
-    "dataTheme": null,
-    "dataCategory": null,
-    "hasSiteHeader": false,
-    "hasFooter": false,
-    "singleMain": 0,
-    "jsonLdBlocks": 4,
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 2,
     "hasOldNav": false,
     "layout": {
-      "blankBand": null,
-      "h1AboveFold": null,
-      "mainWidth": null,
-      "note": "no main#main"
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
     },
     "axe": {
       "ran": true,
@@ -3392,14 +3354,14 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 5
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
-      "count": 4,
+      "count": 2,
       "parseErrors": 0,
       "missingType": 0
     },
@@ -3467,20 +3429,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 16
-        },
-        {
-          "id": "select-name",
-          "impact": "critical",
-          "nodes": 1
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
