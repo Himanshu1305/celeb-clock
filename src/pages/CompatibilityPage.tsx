@@ -264,6 +264,7 @@ export default function CompatibilityPage() {
                   <select
                     value={value}
                     onChange={e => setter(e.target.value)}
+                    aria-label={label}
                     className="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                   >
                     <option value="">Choose sign...</option>

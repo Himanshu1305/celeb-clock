@@ -217,7 +217,7 @@ export function TarotByDateOfBirthArticle() {
             Here is the complete table of all 12 zodiac signs and the Major Arcana card each one
             corresponds to, with the traditional meaning of that card.
           </p>
-          <div className="overflow-x-auto mb-8">
+          <div className="overflow-x-auto mb-8" tabIndex={0} role="region" aria-label="Tarot card by zodiac sign">
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-[#6E5AA6]/10 text-[#6E5AA6]">
@@ -252,7 +252,7 @@ export function TarotByDateOfBirthArticle() {
             single digit (keeping master numbers) and read across to find your Life Path tarot
             card and the concept it carries.
           </p>
-          <div className="overflow-x-auto mb-8">
+          <div className="overflow-x-auto mb-8" tabIndex={0} role="region" aria-label="Life Path tarot card by number">
             <table data-testid="life-path-tarot-table" className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-[#6E5AA6]/10 text-[#6E5AA6]">
