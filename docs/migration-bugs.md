@@ -80,6 +80,53 @@ _(other bugs logged here as found during Step 2/3 verification)_
   (affects every theme/page), out of scope for a per-page layout migration; logged
   here so the NEUTRAL/FINAL token-consolidation run can address it once centrally.
 
+## MYSTIC run
+
+### BUG-M1 — `/compatibility` two sign `<select>` had no accessible name (axe `select-name`, critical, 2 nodes)
+- Where: `CompatibilityPage` — the "Sign 1" / "Sign 2" `<select>` dropdowns. Their visible
+  labels are plain `<p>` text (not `<label htmlFor>`), so axe flagged a **critical**
+  `select-name` violation (2 nodes) on live staging, on both `/compatibility` and every
+  `/compatibility/:s1/:s2` pair page, all three browsers. Pre-existing page content, surfaced
+  by the Step-0 axe scan during this run (same class as VEDIC BUG-V1 / BIRTHDAY BUG-B2).
+- Fix: added `aria-label={label}` (label = "Sign 1"/"Sign 2") to each `<select>`
+  (`src/pages/CompatibilityPage.tsx`). No logic/content/style change.
+- Retest (fresh deploy, chromium/webkit/android): `/compatibility` + `/compatibility/aries/leo`
+  axe no longer reports `select-name` — critical cleared. Only pre-existing INV-2
+  `color-contrast` remains.
+
+### BUG-M2 — `/articles/tarot-card-by-date-of-birth` scrollable table regions not keyboard-focusable (axe `scrollable-region-focusable`, serious, mobile)
+- Where: `TarotByDateOfBirthArticle` — the "tarot by zodiac sign" and "life path tarot" tables
+  sit in `overflow-x-auto` wrappers that overflow at 390px with no focusable children, so they
+  were not keyboard scrollable. Pre-existing content, surfaced at mobile viewport by the axe
+  scan (same class as BIRTHDAY BUG-B4).
+- Fix: added `tabIndex={0}` + `role="region"` + `aria-label` to both table wrappers
+  (`src/pages/articles/TarotByDateOfBirthArticle.tsx`). No data/content change.
+- Retest (fresh deploy): tarot article axe no longer reports `scrollable-region-focusable`.
+
+### BUG-M3 — `ChineseZodiacArticle` JSX shell mismatch after migration (build-time, caught pre-deploy)
+- Where: during the shell swap the old `</main>` closing tag and a stray `</>` fragment were
+  left in place while the opener became `<ArticleLayout><section>`, producing an unclosed-tag
+  parse error. Caught by the post-migration unit run (`vitest` esbuild transform) BEFORE any
+  deploy — 1 test file failed, total dropped 1888→1874.
+- Fix: closed with `</section></ArticleLayout>` (`src/pages/articles/ChineseZodiacArticle.tsx`).
+- Retest: unit suite back to **1888/1888**; typecheck clean; page renders 200 · h1=1 ·
+  theme=mystic on all three browsers on live staging.
+
+### INV-M4 — validator.schema.org returned HTML, not JSON (external tool unavailable)
+- The Step-0 harness posts each live URL to `https://validator.schema.org/validate`; this run
+  the endpoint responded with an HTML document (`<!DOCTYPE …`) instead of JSON for every route,
+  so the online JSON-LD validation could not run (not a page defect). The harness's **structural
+  JSON-LD fallback** (parse every `application/ld+json` block, check `@type`) ran on all 21
+  routes × 3 browsers: **0 parse errors, 0 missing @type** (7–9 valid blocks per page). JSON-LD
+  integrity verified locally; the online validator is flagged as externally unavailable, per the
+  Fifth Rule (not reported as "validated" when it did not run).
+
+### INV-M5 — transient HTTP 429 on an external resource during the rapid 3-browser crawl
+- A few rows logged one console error: `Failed to load resource: 429` on `/compatibility`,
+  `/compatibility/aries/leo` and `/tarot-card-by-birthday` — intermittent (different browser each
+  pass), a rate-limit from hammering staging with 63 fast page loads, not a page error. Re-verified
+  on a fresh deploy: see MYSTIC report for the clean re-run.
+
 ## Carried over from run 1 (`docs/run1-bugs.md`)
 
 ### INV-1 — Prerendered HTML shows two `<h1>` (investigated — NOT a bug)
