@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { WESTERN_ZODIAC_PROFILES } from '@/data/astrologicalData';
 import type { WesternZodiacProfile } from '@/data/astrologicalData';
@@ -139,34 +140,51 @@ export function TarotByDateOfBirthArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Tarot Card by Date of Birth — Find Your Card | BornClock"
-        description="Find your tarot card by date of birth — your zodiac's Major Arcana card and your Life Path tarot card, with meanings. Free tarot-by-birthday guide."
-        canonicalUrl="/articles/tarot-card-by-date-of-birth"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="mystic"
+      testId="tarot-article"
+      seo={(
+        <SEO
+          title="Tarot Card by Date of Birth — Find Your Card | BornClock"
+          description="Find your tarot card by date of birth — your zodiac's Major Arcana card and your Life Path tarot card, with meanings. Free tarot-by-birthday guide."
+          canonicalUrl="/articles/tarot-card-by-date-of-birth"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Tarot by Date of Birth' }}
+      footer={{
+        tagline: 'Find your tarot card by date of birth — your zodiac Major Arcana card and your Life Path tarot card.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Tarot"
+      h1="Tarot Card by Date of Birth — Find Your Tarot Card"
+      lead={(
+        <>
+          Your date of birth is linked to two distinct tarot cards, both drawn from the 22
+          cards of the <strong>Major Arcana</strong> — the powerful, archetypal images at the
+          heart of every tarot deck. The first is your <strong>zodiac tarot card</strong>:
+          each of the 12 sun signs corresponds to one Major Arcana card in the Western esoteric
+          tradition. The second is your <strong>Life Path tarot card</strong>, found by reducing
+          your birth date to a single Life Path number and matching it to a numbered Major
+          Arcana card. Together they describe your outward nature and the deeper theme of your
+          life's journey.
+        </>
+      )}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={softwareSchema} />
       <JsonLd data={faqSchema} />
 
-      <main data-testid="tarot-article" className="min-h-screen bg-white">
+      <section className="section" data-testid="tarot-article">
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Tarot Card by Date of Birth — Find Your Tarot Card
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Your date of birth is linked to two distinct tarot cards, both drawn from the 22
-            cards of the <strong>Major Arcana</strong> — the powerful, archetypal images at the
-            heart of every tarot deck. The first is your <strong>zodiac tarot card</strong>:
-            each of the 12 sun signs corresponds to one Major Arcana card in the Western esoteric
-            tradition. The second is your <strong>Life Path tarot card</strong>, found by reducing
-            your birth date to a single Life Path number and matching it to a numbered Major
-            Arcana card. Together they describe your outward nature and the deeper theme of your
-            life's journey.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             BornClock does not invent these pairings. Every zodiac tarot card below comes from the
             long-established correspondence between the signs and the Major Arcana — the same
@@ -326,8 +344,8 @@ export function TarotByDateOfBirthArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }
 

@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 
 const RELATED = [
@@ -13,30 +11,41 @@ const RELATED = [
 
 const HindiNumerology = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Numerology in Hindi — अंक ज्योतिष by Date of Birth | BornClock"
-        description="अपना life path number जानें। BornClock का मुफ्त numerology calculator हिंदी में — जन्म तिथि से अपना अंक ज्योतिष जानें।"
-        keywords="numerology hindi, ank jyotish, life path number hindi, numerology by date of birth hindi"
-        canonicalUrl="/numerology-hindi"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Numerology in Hindi — अंक ज्योतिष"
-        description="BornClock का मुफ्त हिंदी numerology calculator — जन्म तिथि से अपना Life Path Number जानें।"
-        url="/numerology-hindi"
-      />
+    <ToolLayout
+      theme="mystic"
+      seo={(
+        <>
+          <SEO
+            title="Numerology in Hindi — अंक ज्योतिष by Date of Birth | BornClock"
+            description="अपना life path number जानें। BornClock का मुफ्त numerology calculator हिंदी में — जन्म तिथि से अपना अंक ज्योतिष जानें।"
+            keywords="numerology hindi, ank jyotish, life path number hindi, numerology by date of birth hindi"
+            canonicalUrl="/numerology-hindi"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Numerology in Hindi — अंक ज्योतिष"
+            description="BornClock का मुफ्त हिंदी numerology calculator — जन्म तिथि से अपना Life Path Number जानें।"
+            url="/numerology-hindi"
+          />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Numerology in Hindi' }}
+      footer={{
+        tagline: 'अपना Life Path Number जानें जन्म तिथि से — अंक ज्योतिष, हिंदी में।',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Numerology (Hindi)"
+      h1="अंक ज्योतिष — अपना Life Path Number जानें"
+    >
+      <section className="section">
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            अंक ज्योतिष — अपना Life Path Number जानें
-          </h1>
-        </section>
 
         <section className="max-w-3xl mx-auto mb-10 px-4">
           <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
@@ -94,8 +103,8 @@ const HindiNumerology = () => {
           </div>
         </section>
       </div>
-      <Footer />
-    </div>
+      </section>
+    </ToolLayout>
   );
 };
 

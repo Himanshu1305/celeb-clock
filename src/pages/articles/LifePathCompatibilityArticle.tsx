@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { LIFE_PATH_EXTENDED } from '@/data/astrologicalData';
 import { calculateLifePathNumber } from '@/utils/celebrityCalculations';
@@ -203,32 +204,49 @@ export function LifePathCompatibilityArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Life Path Number Compatibility — Numerology Love Match | BornClock"
-        description="Life Path number compatibility guide — how numbers 1-9 and master numbers 11, 22, 33 match in love. Free calculator plus a full compatibility matrix."
-        canonicalUrl="/articles/life-path-number-compatibility"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="mystic"
+      testId="life-path-compatibility-article"
+      seo={(
+        <SEO
+          title="Life Path Number Compatibility — Numerology Love Match | BornClock"
+          description="Life Path number compatibility guide — how numbers 1-9 and master numbers 11, 22, 33 match in love. Free calculator plus a full compatibility matrix."
+          canonicalUrl="/articles/life-path-number-compatibility"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Life Path Compatibility' }}
+      footer={{
+        tagline: 'How Life Path numbers match in love — a numerology compatibility guide with a free calculator.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Numerology"
+      h1="Life Path Number Compatibility — Your Numerology Love Match"
+      lead={(
+        <>
+          Of all the tools in numerology, none is used more often for relationships than the
+          Life Path number. Calculated from your full date of birth and fixed for life, your
+          Life Path reveals your core nature, your natural strengths, and the lessons you are
+          here to learn. When you place two people's Life Path numbers side by side, you get a
+          surprisingly rich picture of how their temperaments meet — where they flow together
+          easily, and where they will have to work.
+        </>
+      )}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />
       <JsonLd data={softwareSchema} />
 
-      <main data-testid="life-path-compatibility-article" className="min-h-screen bg-white">
+      <section className="section" data-testid="life-path-compatibility-article">
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Life Path Number Compatibility — Your Numerology Love Match
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Of all the tools in numerology, none is used more often for relationships than the
-            Life Path number. Calculated from your full date of birth and fixed for life, your
-            Life Path reveals your core nature, your natural strengths, and the lessons you are
-            here to learn. When you place two people's Life Path numbers side by side, you get a
-            surprisingly rich picture of how their temperaments meet — where they flow together
-            easily, and where they will have to work.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             This guide explains how Life Path number compatibility works, walks through all
             twelve Life Paths — the single digits 1 through 9 plus the three master numbers
@@ -373,8 +391,8 @@ export function LifePathCompatibilityArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }
 

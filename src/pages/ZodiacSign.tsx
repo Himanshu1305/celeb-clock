@@ -1,7 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { ZODIAC_DATA, getZodiacBySlug } from '@/data/zodiacData';
@@ -28,23 +26,42 @@ export default function ZodiacSign() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-            <Navigation />
-            <AuthNav />
-          </header>
+      <CollectionLayout
+        theme="mystic"
+        testId="zodiac-sign-not-found"
+        seo={(
+          <SEO
+            title="Sign Not Found | BornClock"
+            description="That zodiac sign doesn't exist in our database."
+            canonicalUrl="/zodiac"
+            ogImage="https://bornclock.com/og/zodiac.png"
+          />
+        )}
+        breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Zodiac Signs', to: '/zodiac' }], current: 'Sign Not Found' }}
+        footer={{
+          tagline: 'Explore all 12 Western zodiac signs — dates, traits and compatibility.',
+          nav: [
+            { label: 'Mystic Corner', to: '/mystic-corner' },
+            { label: 'Numerology', to: '/numerology' },
+            { label: 'Zodiac', to: '/zodiac' },
+            { label: 'Compatibility', to: '/compatibility' },
+            { label: 'Privacy', to: '/privacy' },
+          ],
+          note: '© 2026 BornClock · Calculated, not templated.',
+        }}
+        eyebrow="Western Zodiac"
+        h1="Sign Not Found"
+      >
+        <section className="section container mx-auto px-4 py-8 max-w-4xl">
           <div className="text-center py-24">
             <p className="text-5xl mb-6">🔍</p>
-            <h1 className="text-3xl font-bold text-foreground mb-4">Sign Not Found</h1>
             <p className="text-muted-foreground mb-8">That zodiac sign doesn't exist in our database.</p>
             <Link to="/zodiac" className="inline-block bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity">
               Back to All Signs
             </Link>
           </div>
-        </div>
-        <Footer />
-      </div>
+        </section>
+      </CollectionLayout>
     );
   }
 
@@ -65,29 +82,35 @@ export default function ZodiacSign() {
   const spanMonths = monthsForZodiac(data.startMonth, data.endMonth);
 
   return (
-    <div className="min-h-screen bg-background">
-      <SEO
-        title={data.seoTitle}
-        description={data.seoDescription}
-        keywords={data.seoKeywords}
-        canonicalUrl={`/zodiac/${data.slug}`}
-        ogImage="https://bornclock.com/og/zodiac.png"
-      />
-
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Breadcrumb */}
-        <nav className="text-sm text-muted-foreground mb-8 flex items-center gap-2">
-          <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
-          <span>›</span>
-          <Link to="/zodiac" className="hover:text-foreground transition-colors">Zodiac Signs</Link>
-          <span>›</span>
-          <span className="text-foreground">{data.name}</span>
-        </nav>
+    <CollectionLayout
+      theme="mystic"
+      testId="zodiac-sign-page"
+      seo={(
+        <SEO
+          title={data.seoTitle}
+          description={data.seoDescription}
+          keywords={data.seoKeywords}
+          canonicalUrl={`/zodiac/${data.slug}`}
+          ogImage="https://bornclock.com/og/zodiac.png"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Zodiac Signs', to: '/zodiac' }], current: `${data.name} Zodiac` }}
+      footer={{
+        tagline: `${data.name} (${data.dateRange}) — traits, compatibility and famous ${data.name} personalities.`,
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Western Zodiac"
+      h1={data.name}
+      lead={`${data.dateRange} · The ${data.symbol}`}
+    >
+      <section className="section container mx-auto px-4 py-8 max-w-4xl">
 
         {/* Hero */}
         <div className={`rounded-2xl bg-gradient-to-br ${ELEMENT_BG[data.element]} border border-border p-8 mb-10`}>
@@ -96,8 +119,6 @@ export default function ZodiacSign() {
               <div className="text-8xl mb-4 leading-none">{data.unicode}</div>
             </div>
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">{data.name}</h1>
-              <p className="text-lg text-muted-foreground mb-4">{data.dateRange} · The {data.symbol}</p>
               <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${ELEMENT_BADGE[data.element]}`}>{data.element}</span>
                 <span className="px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground">Ruled by {data.rulingPlanet}</span>
@@ -309,9 +330,7 @@ export default function ZodiacSign() {
         <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl text-sm text-blue-700 dark:text-blue-300">
           <strong>About This Content:</strong> Zodiac sign content on BornClock draws on historical and cultural sources including Campion (2009) and Sachs (1952). Zodiac signs are a cultural and entertainment system with no scientific basis for predicting personality or future events. Celebrity birth dates are sourced from Wikipedia and IMDb.
         </div>
-      </div>
-
-      <Footer />
-    </div>
+      </section>
+    </CollectionLayout>
   );
 }

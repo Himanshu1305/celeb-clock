@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 export default function WhatIsMyLifePathNumber() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "What is my life path number?", "item": "https://bornclock.com/answers/what-is-my-life-path-number" } ] };
@@ -17,35 +17,41 @@ export default function WhatIsMyLifePathNumber() {
   };
 
   return (
-    <>
-      <SEO
-        title="What Is My Life Path Number and What Does It Mean? | BornClock"
-        description="Your Life Path number is calculated from your full date of birth and reveals your core purpose. Calculate yours free and get your 2026 Personal Year forecast."
-        canonicalUrl="/answers/what-is-my-life-path-number"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="mystic"
+      seo={(
+        <SEO
+          title="What Is My Life Path Number and What Does It Mean? | BornClock"
+          description="Your Life Path number is calculated from your full date of birth and reveals your core purpose. Calculate yours free and get your 2026 Personal Year forecast."
+          canonicalUrl="/answers/what-is-my-life-path-number"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'What is my Life Path number?' }}
+      footer={{
+        tagline: 'Your Life Path number reduces your full date of birth to reveal your core purpose.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Answers"
+      h1="What Is My Life Path Number and What Does It Mean?"
+      lead={(
+        <>
+          Your Life Path number is calculated by reducing your full date of birth to a single digit (or master number 11, 22, 33). It represents your core purpose, the challenges you're here to master, and the strengths you were born with. It is the most important number in numerology.
+        </>
+      )}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
-        <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">What is my Life Path number?</span>
-          </nav>
 
-          <h1 className="text-3xl font-black text-gray-900 mb-2">What Is My Life Path Number and What Does It Mean?</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Your Life Path number is calculated by reducing your full date of birth to a single digit (or master number 11, 22, 33). It represents your core purpose, the challenges you're here to master, and the strengths you were born with. It is the most important number in numerology.
-            </p>
-          </div>
-
+      <section className="section">
           <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
             <h2 className="text-xl font-bold text-gray-900">How to Calculate Your Life Path Number</h2>
             <p>The Pythagorean method reduces your full date of birth to a single digit by adding all digits together repeatedly. Example: <strong>July 14, 1990 = 07/14/1990</strong></p>
@@ -92,8 +98,7 @@ export default function WhatIsMyLifePathNumber() {
               <Link to="/answers/what-generation-am-i" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What generation am I?</Link>
             </div>
           </div>
-        </div>
-      </AnswerLayout>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }

@@ -1,12 +1,10 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
+import { ToolLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
-import { AuthNav } from '@/components/AuthNav';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ReferenceLine, ResponsiveContainer } from 'recharts';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
-import PageTagline from '@/components/PageTagline';
 import { calculateBiorhythm, getBiorhythmStatus, getBiorhythmInsight, getBiorhythmSeries } from '@/data/biorhythmData';
 import { useReportPrice } from '@/hooks/useCurrency';
 
@@ -72,43 +70,46 @@ export default function BiorhythmPage() {
   ];
 
   return (
-    <>
-      <SEO
-        title="Biorhythm Calculator — Your Physical, Emotional & Intellectual Cycles | BornClock"
-        description="Calculate your biorhythm chart by date of birth. Free biorhythm calculator showing your 30-day physical, emotional, and intellectual cycles with peak day predictions."
-        keywords="biorhythm calculator, biorhythm chart, physical emotional intellectual cycle calculator, biorhythm today"
-        canonicalUrl="/biorhythm"
-      />
-      <WebApplicationSchema
-        name="Biorhythm Calculator"
-        description="Free biorhythm chart calculator by date of birth — see your physical, emotional, and intellectual cycles with 30-day peak day predictions."
-        url="/biorhythm"
-      />
+    <ToolLayout
+      theme="mystic"
+      seo={(
+        <>
+          <SEO
+            title="Biorhythm Calculator — Your Physical, Emotional & Intellectual Cycles | BornClock"
+            description="Calculate your biorhythm chart by date of birth. Free biorhythm calculator showing your 30-day physical, emotional, and intellectual cycles with peak day predictions."
+            keywords="biorhythm calculator, biorhythm chart, physical emotional intellectual cycle calculator, biorhythm today"
+            canonicalUrl="/biorhythm"
+          />
+          <WebApplicationSchema
+            name="Biorhythm Calculator"
+            description="Free biorhythm chart calculator by date of birth — see your physical, emotional, and intellectual cycles with 30-day peak day predictions."
+            url="/biorhythm"
+          />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Biorhythm Calculator' }}
+      footer={{
+        tagline: 'Your physical, emotional and intellectual cycles — charted from your date of birth.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Biorhythm"
+      h1="Biorhythm Calculator"
+      lead={(
+        <>
+          Biorhythm theory proposes that three natural cycles — Physical (23 days), Emotional (28 days), and Intellectual (33 days) — begin at birth and continue throughout life. When cycles are high, performance in those domains tends to be elevated. When crossing zero (critical days), extra care is warranted.
+        </>
+      )}
+    >
       <FAQSchema items={faqItems} />
-
-      <div className="min-h-screen bg-white">
-        <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <Navigation />
-            <AuthNav />
-          </div>
-        </div>
+      <section className="section">
         <div className="max-w-2xl mx-auto px-4 py-10">
-
-          <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span>›</span>
-            <span className="text-gray-600">Biorhythm Calculator</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-1">Biorhythm Calculator</h1>
-          <PageTagline />
-
-          <div className="bg-teal-50 border-l-4 border-teal-500 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-teal-900 leading-relaxed">
-              Biorhythm theory proposes that three natural cycles — Physical (23 days), Emotional (28 days), and Intellectual (33 days) — begin at birth and continue throughout life. When cycles are high, performance in those domains tends to be elevated. When crossing zero (critical days), extra care is warranted.
-            </p>
-          </div>
 
           <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-200">
             <p className="text-sm font-semibold text-gray-700 mb-3">Enter your date of birth</p>
@@ -255,7 +256,7 @@ export default function BiorhythmPage() {
           </p>
 
         </div>
-      </div>
-    </>
+      </section>
+    </ToolLayout>
   );
 }

@@ -1,0 +1,23 @@
+[
+  { "route": "/numerology", "theme": "mystic", "label": "Numerology (collection)" },
+  { "route": "/numerology/7", "theme": "mystic", "label": "Numerology Number 7" },
+  { "route": "/numerology-hindi", "theme": "mystic", "label": "Numerology Hindi" },
+  { "route": "/hi/numerology-by-date-of-birth", "theme": "mystic", "label": "Numerology by DOB (Hindi article)" },
+  { "route": "/name-numerology", "theme": "mystic", "label": "Name Numerology" },
+  { "route": "/biorhythm", "theme": "mystic", "label": "Biorhythm" },
+  { "route": "/compatibility", "theme": "mystic", "label": "Compatibility" },
+  { "route": "/compatibility/aries/leo", "theme": "mystic", "label": "Compatibility Aries-Leo" },
+  { "route": "/tarot-card-by-birthday", "theme": "mystic", "label": "Tarot by Birthday" },
+  { "route": "/zodiac", "theme": "mystic", "label": "Zodiac (collection)" },
+  { "route": "/zodiac/aries", "theme": "mystic", "label": "Zodiac — Aries" },
+  { "route": "/chinese-zodiac", "theme": "mystic", "label": "Chinese Zodiac (collection)" },
+  { "route": "/chinese-zodiac/dragon", "theme": "mystic", "label": "Chinese Zodiac — Dragon" },
+  { "route": "/answers/what-is-my-zodiac-sign", "theme": "mystic", "label": "Answer: zodiac sign" },
+  { "route": "/answers/what-is-my-life-path-number", "theme": "mystic", "label": "Answer: life path number" },
+  { "route": "/articles/numerology-by-date-of-birth", "theme": "mystic", "label": "Article: numerology by DOB" },
+  { "route": "/articles/life-path-number-compatibility", "theme": "mystic", "label": "Article: life path compatibility" },
+  { "route": "/articles/biorhythm-calculator", "theme": "mystic", "label": "Article: biorhythm" },
+  { "route": "/articles/tarot-card-by-date-of-birth", "theme": "mystic", "label": "Article: tarot by DOB" },
+  { "route": "/articles/zodiac-compatibility", "theme": "mystic", "label": "Article: zodiac compatibility" },
+  { "route": "/articles/chinese-zodiac-by-year", "theme": "mystic", "label": "Article: chinese zodiac by year" }
+]

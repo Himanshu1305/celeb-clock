@@ -1,7 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { NUMEROLOGY_DATA, getNumerologyByNumber, ALL_LIFE_PATH_NUMBERS } from '@/data/numerologyData';
@@ -13,23 +11,42 @@ export default function NumerologyNumber() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-            <Navigation />
-            <AuthNav />
-          </header>
-          <div className="text-center py-24">
-            <p className="text-5xl mb-6">🔢</p>
-            <h1 className="text-3xl font-bold text-foreground mb-4">Number Not Found</h1>
-            <p className="text-muted-foreground mb-8">Valid Life Path numbers are 1–9, 11, 22, and 33.</p>
-            <Link to="/numerology" className="inline-block bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity">
-              Back to Numerology
-            </Link>
+      <ToolLayout
+        theme="mystic"
+        seo={(
+          <SEO
+            title="Number Not Found — Numerology | BornClock"
+            description="Valid Life Path numbers are 1–9, 11, 22, and 33."
+            canonicalUrl="/numerology"
+          />
+        )}
+        breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Number Not Found' }}
+        footer={{
+          tagline: 'Discover the meaning of every Life Path number — calculated, not templated.',
+          nav: [
+            { label: 'Mystic Corner', to: '/mystic-corner' },
+            { label: 'Numerology', to: '/numerology' },
+            { label: 'Zodiac', to: '/zodiac' },
+            { label: 'Compatibility', to: '/compatibility' },
+            { label: 'Privacy', to: '/privacy' },
+          ],
+          note: '© 2026 BornClock · Calculated, not templated.',
+        }}
+        eyebrow="Numerology"
+        h1="Number Not Found"
+      >
+        <section className="section">
+          <div className="container mx-auto px-4 py-8 max-w-4xl">
+            <div className="text-center py-24">
+              <p className="text-5xl mb-6">🔢</p>
+              <p className="text-muted-foreground mb-8">Valid Life Path numbers are 1–9, 11, 22, and 33.</p>
+              <Link to="/numerology" className="inline-block bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity">
+                Back to Numerology
+              </Link>
+            </div>
           </div>
-        </div>
-        <Footer />
-      </div>
+        </section>
+      </ToolLayout>
     );
   }
 
@@ -49,28 +66,33 @@ export default function NumerologyNumber() {
   const otherNumbers = ALL_LIFE_PATH_NUMBERS.filter(n => n !== data.number);
 
   return (
-    <div className="min-h-screen bg-background">
-      <SEO
-        title={data.seoTitle}
-        description={data.seoDescription}
-        keywords={data.seoKeywords}
-        canonicalUrl={`/numerology/${data.number}`}
-      />
-
+    <ToolLayout
+      theme="mystic"
+      seo={(
+        <SEO
+          title={data.seoTitle}
+          description={data.seoDescription}
+          keywords={data.seoKeywords}
+          canonicalUrl={`/numerology/${data.number}`}
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: `Life Path ${data.number}` }}
+      footer={{
+        tagline: 'Discover the meaning of every Life Path number — calculated, not templated.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Numerology"
+      h1={data.name}
+    >
+      <section className="section">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Breadcrumb */}
-        <nav className="text-sm text-muted-foreground mb-8 flex items-center gap-2">
-          <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
-          <span>›</span>
-          <Link to="/numerology" className="hover:text-foreground transition-colors">Numerology</Link>
-          <span>›</span>
-          <span className="text-foreground">Life Path {data.number}</span>
-        </nav>
 
         {/* Hero */}
         <div className="rounded-2xl border border-border overflow-hidden mb-10">
@@ -83,7 +105,6 @@ export default function NumerologyNumber() {
               </div>
               <div className="flex-1 text-center md:text-left">
                 <p className="text-sm font-medium text-muted-foreground mb-1">Life Path Number</p>
-                <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">{data.name}</h1>
                 {data.isMasterNumber && (
                   <span className="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 mb-3">
                     ✦ Master Number
@@ -236,8 +257,7 @@ export default function NumerologyNumber() {
           <strong>About This Content:</strong> Numerology life path content uses the classical Pythagorean digit-sum method. Life path numbers are a cultural and symbolic system. The famous person calculations shown are independently verified using each person's documented birth date. Numerology is not a scientifically validated system for predicting personality or outcomes.
         </div>
       </div>
-
-      <Footer />
-    </div>
+      </section>
+    </ToolLayout>
   );
 }

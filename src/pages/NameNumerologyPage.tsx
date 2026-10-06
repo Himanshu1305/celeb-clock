@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { JsonLd } from '@/components/JsonLd';
 import { TrustStrip } from '@/components/paj/TrustStrip';
-import '@/styles/part-aj.css';
 import PageTagline from '@/components/PageTagline';
 import { calculateAllNameNumbers, getLetterBreakdown, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 import { useReportPrice } from '@/hooks/useCurrency';
@@ -49,14 +47,32 @@ export default function NameNumerologyPage() {
   };
 
   return (
-    <>
-      <SEO
-        title="Name Numerology Calculator — Expression, Soul Urge & Personality Numbers | BornClock"
-        description="Calculate your Expression Number, Soul Urge Number, and Personality Number from your name. Free Pythagorean name numerology calculator with full meanings."
-        keywords="name numerology calculator, numerology by name, expression number calculator, soul urge number, name number meaning, personality number"
-        canonicalUrl="/name-numerology"
-      />
-      <div className="paj atlas" data-category="mystic">
+    <ToolLayout
+      theme="mystic"
+      testId="name-numerology-page"
+      seo={(
+        <SEO
+          title="Name Numerology Calculator — Expression, Soul Urge & Personality Numbers | BornClock"
+          description="Calculate your Expression Number, Soul Urge Number, and Personality Number from your name. Free Pythagorean name numerology calculator with full meanings."
+          keywords="name numerology calculator, numerology by name, expression number calculator, soul urge number, name number meaning, personality number"
+          canonicalUrl="/name-numerology"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Name Numerology', edition: 'Pythagorean · Expression / Soul Urge / Personality' }}
+      footer={{
+        tagline: "Name numerology computed from your name's letters (Pythagorean) — Expression, Soul Urge and Personality numbers.",
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Tarot by Birthday', to: '/tarot-card-by-birthday' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Name Numerology"
+      h1="Name Numerology Calculator"
+    >
         <JsonLd id="webapp" data={{
           '@context': 'https://schema.org', '@type': 'WebApplication',
           name: 'Name Numerology Calculator',
@@ -69,17 +85,7 @@ export default function NameNumerologyPage() {
           '@context': 'https://schema.org', '@type': 'FAQPage',
           mainEntity: faqItems.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
         }} />
-        <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-          <Navigation />
-          <AuthNav />
-        </header>
-        <div className="breadcrumb">
-          <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/mystic-corner" className="textlink">Mystic Corner</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Name Numerology</span></div>
-          <div className="edition"><span className="dot" />Pythagorean · Expression / Soul Urge / Personality</div>
-        </div>
         <div className="max-w-2xl mx-auto px-4 py-10">
-          <span className="eyebrow">Name Numerology</span>
-          <h1 style={{ margin: '8px 0 10px' }}>Name Numerology Calculator</h1>
           <PageTagline />
           <TrustStrip claim="Calculated from the letters of your actual name (Pythagorean values) — not a generic reading." />
 
@@ -240,23 +246,6 @@ export default function NameNumerologyPage() {
           </div>
 
         </div>
-        <footer className="site-footer">
-          <div className="footer-main">
-            <div>
-              <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-              <p className="subtle">Name numerology computed from your name's letters (Pythagorean) — Expression, Soul Urge and Personality numbers.</p>
-            </div>
-            <nav className="footer-nav" aria-label="Footer navigation">
-              <Link to="/mystic-corner">Mystic Corner</Link>
-              <Link to="/numerology">Numerology</Link>
-              <Link to="/compatibility">Compatibility</Link>
-              <Link to="/tarot-card-by-birthday">Tarot by Birthday</Link>
-              <Link to="/privacy">Privacy</Link>
-            </nav>
-          </div>
-          <div className="footer-bottom"><span>© 2026 BornClock · Calculated, not templated.</span></div>
-        </footer>
-      </div>
-    </>
+    </ToolLayout>
   );
 }

@@ -1,7 +1,5 @@
 import { useParams, Navigate, Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
 import { CHINESE_SIGN_EXTENDED } from '@/services/ChineseZodiacService';
@@ -57,39 +55,40 @@ export default function ChineseZodiacSign() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
+    <CollectionLayout
+      theme="mystic"
+      testId="chinese-zodiac-sign-page"
+      seo={(
+        <SEO
+          title={`Year of the ${capitalised} — Chinese Zodiac Sign Guide | BornClock`}
+          description={`${capitalised} Chinese Zodiac: personality, compatibility, lucky elements, famous ${capitalised}s, and 2026 outlook. Years: ${data.years.slice(0,5).join(', ')}…`}
+          keywords={`year of the ${slug}, ${slug} chinese zodiac, ${slug} personality, ${slug} compatibility, chinese zodiac ${slug}`}
+          canonicalUrl={`/chinese-zodiac/${slug}`}
+          ogImage="https://bornclock.com/og/zodiac.png"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Chinese Zodiac', to: '/chinese-zodiac' }], current: `${capitalised} — Chinese Zodiac` }}
+      footer={{
+        tagline: `Year of the ${capitalised} — personality, compatibility, lucky elements and 2026 outlook.`,
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Chinese Zodiac"
+      h1={`Year of the ${capitalised}`}
+      lead={`${element} element · Chinese Zodiac Sign ${idx + 1} of 12`}
+    >
       <FAQSchema items={faqItems} />
-      <SEO
-        title={`Year of the ${capitalised} — Chinese Zodiac Sign Guide | BornClock`}
-        description={`${capitalised} Chinese Zodiac: personality, compatibility, lucky elements, famous ${capitalised}s, and 2026 outlook. Years: ${data.years.slice(0,5).join(', ')}…`}
-        keywords={`year of the ${slug}, ${slug} chinese zodiac, ${slug} personality, ${slug} compatibility, chinese zodiac ${slug}`}
-        canonicalUrl={`/chinese-zodiac/${slug}`}
-        ogImage="https://bornclock.com/og/zodiac.png"
-      />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Breadcrumb */}
-        <nav className="text-sm text-muted-foreground mb-6">
-          <Link to="/" className="hover:text-foreground">Home</Link>
-          <span className="mx-2">/</span>
-          <Link to="/chinese-zodiac" className="hover:text-foreground">Chinese Zodiac</Link>
-          <span className="mx-2">/</span>
-          <span className="text-foreground">{capitalised}</span>
-        </nav>
+      <section className="section container mx-auto px-4 py-8">
 
         {/* Hero */}
         <section className="text-center py-10 max-w-3xl mx-auto mb-10">
           <div className="text-8xl mb-4">{emoji}</div>
-          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-3">
-            Year of the {capitalised}
-          </h1>
-          <p className="text-lg text-muted-foreground mb-6">
-            {element} element · Chinese Zodiac Sign {idx + 1} of 12
-          </p>
           {/* Years row */}
           <div className="flex flex-wrap justify-center gap-2">
             {data.years.map((y) => (
@@ -279,8 +278,7 @@ export default function ChineseZodiacSign() {
             </Link>
           </div>
         </div>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </CollectionLayout>
   );
 }

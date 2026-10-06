@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 export default function WhatIsMyZodiacSign() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "What is my zodiac sign?", "item": "https://bornclock.com/answers/what-is-my-zodiac-sign" } ] };
@@ -17,35 +17,41 @@ export default function WhatIsMyZodiacSign() {
   };
 
   return (
-    <>
-      <SEO
-        title="What Is My Zodiac Sign? Western, Vedic and Chinese Explained | BornClock"
-        description="Find your Western sun sign, Vedic Rashi, and Chinese zodiac animal from your birthday. Most people have a different sign in Vedic astrology than Western."
-        canonicalUrl="/answers/what-is-my-zodiac-sign"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="mystic"
+      seo={(
+        <SEO
+          title="What Is My Zodiac Sign? Western, Vedic and Chinese Explained | BornClock"
+          description="Find your Western sun sign, Vedic Rashi, and Chinese zodiac animal from your birthday. Most people have a different sign in Vedic astrology than Western."
+          canonicalUrl="/answers/what-is-my-zodiac-sign"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'What is my zodiac sign?' }}
+      footer={{
+        tagline: 'Your zodiac sign depends on the system — Western sun sign, Vedic Rashi, or Chinese zodiac animal.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Answers"
+      h1="What Is My Zodiac Sign? Western, Vedic and Chinese Explained"
+      lead={(
+        <>
+          Your zodiac sign depends on which system you use. In Western astrology, your sign is determined by the Sun's position on your birthday. In Vedic (Indian) astrology, the system is shifted by ~24 degrees — so most people have a different Rashi than their Western sign. Your Chinese zodiac is determined by your birth year, not birth date.
+        </>
+      )}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
-        <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">What is my zodiac sign?</span>
-          </nav>
 
-          <h1 className="text-3xl font-black text-gray-900 mb-2">What Is My Zodiac Sign? Western, Vedic and Chinese Explained</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Your zodiac sign depends on which system you use. In Western astrology, your sign is determined by the Sun's position on your birthday. In Vedic (Indian) astrology, the system is shifted by ~24 degrees — so most people have a different Rashi than their Western sign. Your Chinese zodiac is determined by your birth year, not birth date.
-            </p>
-          </div>
-
+      <section className="section">
           <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
             <h2 className="text-xl font-bold text-gray-900">Western Astrology (Tropical Zodiac)</h2>
             <p>Western astrology uses the <strong>tropical zodiac</strong>, which is anchored to the seasons rather than the actual star positions. The Sun enters Aries on the spring equinox (around March 21), regardless of whether the stars have shifted. The 12 signs, each covering approximately 30 degrees of the ecliptic, are:</p>
@@ -99,8 +105,7 @@ export default function WhatIsMyZodiacSign() {
               <Link to="/answers/how-old-am-i-on-mars" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How old am I on Mars?</Link>
             </div>
           </div>
-        </div>
-      </AnswerLayout>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { LIFE_PATH_EXTENDED } from '@/data/astrologicalData';
 import { calculateLifePathNumber } from '@/utils/celebrityCalculations';
@@ -133,32 +134,49 @@ export function NumerologyArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Numerology by Date of Birth — Life Path Number Guide India | BornClock"
-        description="Calculate your Life Path number by date of birth. All 9 life paths explained with famous Indian examples, compatibility guide, and free calculator."
-        canonicalUrl="/articles/numerology-by-date-of-birth"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="mystic"
+      testId="numerology-article"
+      seo={(
+        <SEO
+          title="Numerology by Date of Birth — Life Path Number Guide India | BornClock"
+          description="Calculate your Life Path number by date of birth. All 9 life paths explained with famous Indian examples, compatibility guide, and free calculator."
+          canonicalUrl="/articles/numerology-by-date-of-birth"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Numerology by Date of Birth' }}
+      footer={{
+        tagline: 'Calculate your Life Path number by date of birth — all life paths explained with a free calculator.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Numerology"
+      h1="Numerology by Date of Birth — Find Your Life Path Number (India Guide)"
+      lead={(
+        <>
+          Numerology is one of the oldest systems of self-understanding, used across
+          cultures for thousands of years to reveal personality, purpose, and potential
+          from a person's birth date. In India, numerology has deep roots — from the
+          Vedic tradition of Jyotish to everyday decisions about auspicious dates,
+          business names, and compatibility matching. At BornClock, every birth date
+          is automatically analysed to reveal your Life Path number — the single most
+          important number in your numerological chart.
+        </>
+      )}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />
 
-      <main data-testid="numerology-article" className="min-h-screen bg-white">
+      <section className="section" data-testid="numerology-article">
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Numerology by Date of Birth — Find Your Life Path Number (India Guide)
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Numerology is one of the oldest systems of self-understanding, used across
-            cultures for thousands of years to reveal personality, purpose, and potential
-            from a person's birth date. In India, numerology has deep roots — from the
-            Vedic tradition of Jyotish to everyday decisions about auspicious dates,
-            business names, and compatibility matching. At BornClock, every birth date
-            is automatically analysed to reveal your Life Path number — the single most
-            important number in your numerological chart.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             Your Life Path number is calculated from the full digits of your date of birth
             and never changes. Unlike personality tests that depend on how you answer
@@ -257,8 +275,8 @@ export function NumerologyArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }
 

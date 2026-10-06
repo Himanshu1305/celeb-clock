@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { CHINESE_ZODIAC_PROFILES } from '@/data/astrologicalData';
 import { calculateChineseZodiac } from '@/utils/celebrityCalculations';
@@ -127,33 +128,50 @@ export function ChineseZodiacArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Chinese Zodiac by Year — Find Your Animal Sign | BornClock"
-        description="Chinese zodiac by birth year — find your animal sign and its personality, luck and compatibility. All 12 animals with a free year-to-animal calculator."
-        canonicalUrl="/articles/chinese-zodiac-by-year"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="mystic"
+      testId="chinese-zodiac-article"
+      seo={(
+        <SEO
+          title="Chinese Zodiac by Year — Find Your Animal Sign | BornClock"
+          description="Chinese zodiac by birth year — find your animal sign and its personality, luck and compatibility. All 12 animals with a free year-to-animal calculator."
+          canonicalUrl="/articles/chinese-zodiac-by-year"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Chinese Zodiac by Year' }}
+      footer={{
+        tagline: 'Find your Chinese zodiac animal by birth year — personality, luck and compatibility for all 12 animals.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Chinese Zodiac"
+      h1="Chinese Zodiac by Year — Find Your Animal Sign"
+      lead={(
+        <>
+          The Chinese zodiac, known as <strong>Shengxiao</strong>, is one of the oldest and most
+          beloved systems of astrology in the world. Unlike Western astrology, which assigns a
+          sign based on the month you were born, the Chinese zodiac works by <strong>year</strong>.
+          It runs in a repeating twelve-year cycle, with each year ruled by one of twelve animals:
+          the Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog and Pig.
+          Whatever year you were born in, one of these animals is your zodiac sign — and it is said
+          to shape your personality, your fortune, and even how well you get along with others.
+        </>
+      )}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />
       <JsonLd data={softwareSchema} />
 
-      <main data-testid="chinese-zodiac-article" className="min-h-screen bg-white">
+      <section className="section" data-testid="chinese-zodiac-article">
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Chinese Zodiac by Year — Find Your Animal Sign
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            The Chinese zodiac, known as <strong>Shengxiao</strong>, is one of the oldest and most
-            beloved systems of astrology in the world. Unlike Western astrology, which assigns a
-            sign based on the month you were born, the Chinese zodiac works by <strong>year</strong>.
-            It runs in a repeating twelve-year cycle, with each year ruled by one of twelve animals:
-            the Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog and Pig.
-            Whatever year you were born in, one of these animals is your zodiac sign — and it is said
-            to shape your personality, your fortune, and even how well you get along with others.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             For thousands of years, families across China and much of East Asia have used the zodiac
             to understand character, choose auspicious wedding dates, and match couples for marriage.
@@ -278,8 +296,8 @@ export function ChineseZodiacArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }
 

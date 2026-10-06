@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { LIFE_PATH_EXTENDED } from '@/data/astrologicalData';
 
@@ -63,30 +64,47 @@ export function HindiNumerologyArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="अंकज्योतिष जन्मतिथि से — अपना मूलांक जानें | BornClock"
-        description="जन्मतिथि से अपना मूलांक निकालें। मूलांक 1 से 9 तक का पूरा अर्थ हिंदी में, शासक ग्रह और जीवन उद्देश्य के साथ। मुफ्त गणना करें।"
-        canonicalUrl="/hi/numerology-by-date-of-birth"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="mystic"
+      testId="hindi-numerology-article"
+      seo={(
+        <SEO
+          title="अंकज्योतिष जन्मतिथि से — अपना मूलांक जानें | BornClock"
+          description="जन्मतिथि से अपना मूलांक निकालें। मूलांक 1 से 9 तक का पूरा अर्थ हिंदी में, शासक ग्रह और जीवन उद्देश्य के साथ। मुफ्त गणना करें।"
+          canonicalUrl="/hi/numerology-by-date-of-birth"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'अंकज्योतिष जन्मतिथि से' }}
+      footer={{
+        tagline: 'जन्मतिथि से अपना मूलांक जानें — मूलांक 1 से 9 तक का पूरा अर्थ हिंदी में।',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Numerology (Hindi)"
+      h1="अंकज्योतिष जन्मतिथि से — अपना मूलांक जानें"
+      lead={(
+        <>
+          अंकज्योतिष (Numerology) आत्म-समझ की सबसे प्राचीन प्रणालियों में से एक है, जिसका
+          उपयोग हजारों वर्षों से व्यक्तित्व, उद्देश्य और संभावनाओं को समझने के लिए किया जाता
+          है। भारत में अंकज्योतिष की गहरी जड़ें हैं — शुभ तिथियों के चयन से लेकर नाम और
+          व्यवसाय के निर्णयों तक। BornClock पर आपकी जन्मतिथि से आपका <strong>मूलांक</strong>
+          स्वतः निकाला जाता है, जो आपकी अंकज्योतिष कुंडली का सबसे महत्वपूर्ण अंक है।
+        </>
+      )}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />
 
-      <main data-testid="hindi-numerology-article" className="min-h-screen bg-white">
+      <section className="section" data-testid="hindi-numerology-article">
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            अंकज्योतिष जन्मतिथि से — अपना मूलांक जानें
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            अंकज्योतिष (Numerology) आत्म-समझ की सबसे प्राचीन प्रणालियों में से एक है, जिसका
-            उपयोग हजारों वर्षों से व्यक्तित्व, उद्देश्य और संभावनाओं को समझने के लिए किया जाता
-            है। भारत में अंकज्योतिष की गहरी जड़ें हैं — शुभ तिथियों के चयन से लेकर नाम और
-            व्यवसाय के निर्णयों तक। BornClock पर आपकी जन्मतिथि से आपका <strong>मूलांक</strong>
-            स्वतः निकाला जाता है, जो आपकी अंकज्योतिष कुंडली का सबसे महत्वपूर्ण अंक है।
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             आपका मूलांक आपकी जन्मतिथि के सभी अंकों को जोड़कर निकाला जाता है और यह जीवनभर
             नहीं बदलता। व्यक्तित्व परीक्षणों के विपरीत, जो आपके उत्तरों पर निर्भर करते हैं,
@@ -159,8 +177,8 @@ export function HindiNumerologyArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }
 

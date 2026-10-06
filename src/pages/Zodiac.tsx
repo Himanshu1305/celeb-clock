@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { ZODIAC_DATA } from '@/data/zodiacData';
 
@@ -70,34 +68,40 @@ export default function Zodiac() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <SEO
-        title="Zodiac Signs — Dates, Traits, Science & History | BornClock"
-        description="Complete guide to all 12 zodiac signs — dates, personality traits, elements, mythology, and what science says about astrology. Sourced from Campion (2009) and Sachs (1952)."
-        keywords="zodiac signs, all 12 zodiac signs, zodiac dates, zodiac traits, western astrology, zodiac compatibility, zodiac elements"
-        canonicalUrl="/zodiac"
-        ogImage="https://bornclock.com/og/zodiac.png"
-      />
+    <CollectionLayout
+      theme="mystic"
+      testId="zodiac-page"
+      seo={(
+        <SEO
+          title="Zodiac Signs — Dates, Traits, Science & History | BornClock"
+          description="Complete guide to all 12 zodiac signs — dates, personality traits, elements, mythology, and what science says about astrology. Sourced from Campion (2009) and Sachs (1952)."
+          keywords="zodiac signs, all 12 zodiac signs, zodiac dates, zodiac traits, western astrology, zodiac compatibility, zodiac elements"
+          canonicalUrl="/zodiac"
+          ogImage="https://bornclock.com/og/zodiac.png"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Zodiac Signs' }}
+      footer={{
+        tagline: 'The complete reference to all 12 zodiac signs — dates, traits, history and what science says.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Western Zodiac"
+      h1="The 12 Zodiac Signs — Dates, Traits, History and Science"
+      lead="The Western zodiac has been used to interpret human personality and fate for over 2,500 years. This is the complete reference — what each sign means, where it came from, and what the research actually says about the system itself."
+    >
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Hero */}
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            The 12 Zodiac Signs — Dates, Traits, History and Science
-          </h1>
-          <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
-            The Western zodiac has been used to interpret human personality and fate for over 2,500 years. This is the complete reference — what each sign means, where it came from, and what the research actually says about the system itself.
-          </p>
-        </div>
+      <section className="section container mx-auto px-4 py-8 max-w-5xl">
 
         {/* What Is the Zodiac */}
         <section className="mb-12">
@@ -254,9 +258,7 @@ export default function Zodiac() {
             ))}
           </div>
         </section>
-      </div>
-
-      <Footer />
-    </div>
+      </section>
+    </CollectionLayout>
   );
 }

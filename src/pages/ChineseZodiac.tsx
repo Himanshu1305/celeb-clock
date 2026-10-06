@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DobInput, toISODate } from '@/components/DobInput';
@@ -61,33 +59,42 @@ export default function ChineseZodiac() {
   const currentAnimal = getChineseZodiacAnimal(today.getFullYear());
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Chinese Zodiac Calculator — Find Your Chinese Zodiac Sign"
-        description="Discover your Chinese Zodiac animal, element, and yin/yang energy. Enter your date of birth for instant results with traits and famous people born under your sign."
-        canonicalUrl="/chinese-zodiac"
-        keywords="chinese zodiac calculator, chinese zodiac sign, year of the rat, chinese astrology, zodiac animal, five elements"
-        ogImage="https://bornclock.com/og/zodiac.png"
-      />
+    <CollectionLayout
+      theme="mystic"
+      testId="chinese-zodiac-page"
+      seo={(
+        <SEO
+          title="Chinese Zodiac Calculator — Find Your Chinese Zodiac Sign"
+          description="Discover your Chinese Zodiac animal, element, and yin/yang energy. Enter your date of birth for instant results with traits and famous people born under your sign."
+          canonicalUrl="/chinese-zodiac"
+          keywords="chinese zodiac calculator, chinese zodiac sign, year of the rat, chinese astrology, zodiac animal, five elements"
+          ogImage="https://bornclock.com/og/zodiac.png"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Chinese Zodiac' }}
+      footer={{
+        tagline: 'Discover your Chinese Zodiac animal, element, and yin/yang energy from your date of birth.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Chinese Zodiac"
+      h1="Chinese Zodiac Calculator"
+      lead={(
+        <>
+          Discover your Chinese Zodiac animal, element, and yin/yang energy from your date of birth.
+          {' '}2026 is the Year of the <strong>{currentAnimal}</strong>.
+        </>
+      )}
+    >
       <FAQSchema items={FAQ_ITEMS} />
 
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Hero */}
-        <section className="text-center mb-10 animate-fade-in-up">
-          <div className="text-5xl mb-4">🐉</div>
-          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-3">
-            Chinese Zodiac Calculator
-          </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Discover your Chinese Zodiac animal, element, and yin/yang energy from your date of birth.
-            {' '}2026 is the Year of the <strong>{currentAnimal}</strong>.
-          </p>
-        </section>
+      <section className="section container mx-auto px-4 py-8 max-w-5xl">
 
         {/* Calculator */}
         <Card className="glass-card max-w-md mx-auto mb-10">
@@ -214,8 +221,7 @@ export default function ChineseZodiac() {
             </Link>
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+      </section>
+    </CollectionLayout>
   );
 }

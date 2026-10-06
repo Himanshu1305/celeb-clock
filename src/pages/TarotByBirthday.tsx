@@ -1,11 +1,9 @@
 import React, { useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
+import { ToolLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
-import { AuthNav } from '@/components/AuthNav';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
-import PageTagline from '@/components/PageTagline';
 import { getTarotCardByLifePath, MAJOR_ARCANA, type TarotCard } from '@/data/tarotData';
 import { useReportPrice } from '@/hooks/useCurrency';
 
@@ -268,46 +266,49 @@ export default function TarotByBirthday() {
   ];
 
   return (
-    <>
-      <SEO
-        title="Tarot Card by Birthday — Draw Your Card & Find Your Major Arcana | BornClock"
-        description="Draw your tarot card interactively — then discover your permanent Major Arcana card from your date of birth. Free animated tarot card reading with full interpretations."
-        keywords="tarot card by birthday, birthday tarot card, major arcana calculator, life path tarot, tarot by date of birth"
-        canonicalUrl="/tarot-card-by-birthday"
-      />
-      <WebApplicationSchema
-        name="Tarot Card by Birthday Calculator"
-        description="Free interactive tarot card reading by birthday — discover your permanent Major Arcana card from your date of birth with full interpretations."
-        url="/tarot-card-by-birthday"
-      />
+    <ToolLayout
+      theme="mystic"
+      seo={(
+        <>
+          <SEO
+            title="Tarot Card by Birthday — Draw Your Card & Find Your Major Arcana | BornClock"
+            description="Draw your tarot card interactively — then discover your permanent Major Arcana card from your date of birth. Free animated tarot card reading with full interpretations."
+            keywords="tarot card by birthday, birthday tarot card, major arcana calculator, life path tarot, tarot by date of birth"
+            canonicalUrl="/tarot-card-by-birthday"
+          />
+          <WebApplicationSchema
+            name="Tarot Card by Birthday Calculator"
+            description="Free interactive tarot card reading by birthday — discover your permanent Major Arcana card from your date of birth with full interpretations."
+            url="/tarot-card-by-birthday"
+          />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Tarot Card by Birthday' }}
+      footer={{
+        tagline: 'Draw your card, then discover the permanent Major Arcana card written into your birthday.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Tarot"
+      h1="Your Tarot Card by Birthday"
+      lead={(
+        <>
+          Your birthday tarot card is determined by your Life Path number — the single most
+          important number in numerology, calculated from your full date of birth. Each Life
+          Path corresponds to one of the 22 Major Arcana cards, representing your soul's core
+          archetype and the deepest theme of your life journey.
+        </>
+      )}
+    >
       <FAQSchema items={faqItems} />
-
-      <div className="min-h-screen bg-white">
-        <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <Navigation />
-            <AuthNav />
-          </div>
-        </div>
+      <section className="section">
         <div className="max-w-2xl mx-auto px-4 py-10">
-
-          <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span>›</span>
-            <span className="text-gray-600">Tarot Card by Birthday</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-1">Your Tarot Card by Birthday</h1>
-          <PageTagline />
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Your birthday tarot card is determined by your Life Path number — the single most
-              important number in numerology, calculated from your full date of birth. Each Life
-              Path corresponds to one of the 22 Major Arcana cards, representing your soul's core
-              archetype and the deepest theme of your life journey.
-            </p>
-          </div>
 
           {/* SECTION 1: Interactive card draw */}
           <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-200">
@@ -570,7 +571,7 @@ export default function TarotByBirthday() {
           </div>
 
         </div>
-      </div>
-    </>
+      </section>
+    </ToolLayout>
   );
 }

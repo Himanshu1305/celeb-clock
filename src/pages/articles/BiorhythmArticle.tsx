@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { calculateDaysLived } from '@/utils/celebrityCalculations';
 
@@ -185,34 +186,51 @@ export function BiorhythmArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title={TITLE}
-        description={DESC}
-        canonicalUrl="/articles/biorhythm-calculator"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="mystic"
+      testId="biorhythm-article"
+      seo={(
+        <SEO
+          title={TITLE}
+          description={DESC}
+          canonicalUrl="/articles/biorhythm-calculator"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Biorhythm Calculator' }}
+      footer={{
+        tagline: 'Track your physical, emotional and intellectual cycles from your date of birth.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Biorhythm"
+      h1="Biorhythm Calculator — Your Physical, Emotional & Intellectual Cycles"
+      lead={(
+        <>
+          The biorhythm theory proposes that from the moment you are born, three natural
+          cycles begin to rise and fall like waves — a <strong>physical</strong> cycle of
+          23 days, an <strong>emotional</strong> cycle of 28 days, and an{' '}
+          <strong>intellectual</strong> cycle of 33 days. Each cycle starts at zero on the
+          day you are born and then swings smoothly between a high phase and a low phase,
+          repeating for the rest of your life. Because the three cycles have different
+          lengths, they drift in and out of alignment, so no two days ever feel exactly
+          the same.
+        </>
+      )}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />
       <JsonLd data={appSchema} />
 
-      <main data-testid="biorhythm-article" className="min-h-screen bg-white">
+      <section className="section" data-testid="biorhythm-article">
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Biorhythm Calculator — Your Physical, Emotional & Intellectual Cycles
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            The biorhythm theory proposes that from the moment you are born, three natural
-            cycles begin to rise and fall like waves — a <strong>physical</strong> cycle of
-            23 days, an <strong>emotional</strong> cycle of 28 days, and an{' '}
-            <strong>intellectual</strong> cycle of 33 days. Each cycle starts at zero on the
-            day you are born and then swings smoothly between a high phase and a low phase,
-            repeating for the rest of your life. Because the three cycles have different
-            lengths, they drift in and out of alignment, so no two days ever feel exactly
-            the same.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             Our free biorhythm calculator works entirely from your date of birth. It counts
             the number of days you have lived and then plots each cycle as a simple sine wave.
@@ -309,8 +327,8 @@ export function BiorhythmArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }
 

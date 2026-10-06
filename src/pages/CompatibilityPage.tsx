@@ -3,12 +3,12 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import DobCompatibility from '@/components/DobCompatibility';
 import { AuthNav } from '@/components/AuthNav';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { JsonLd } from '@/components/JsonLd';
 import { PageFAQ } from '@/components/PageFAQ';
 import PageTagline from '@/components/PageTagline';
 import { TrustStrip } from '@/components/paj/TrustStrip';
-import '@/styles/part-aj.css';
 import { getCompatibility, ZODIAC_SIGNS } from '@/data/compatibilityData';
 import { useReportPrice } from '@/hooks/useCurrency';
 import { SharePageBar } from '@/components/SharePageBar';
@@ -192,15 +192,34 @@ export default function CompatibilityPage() {
   }
 
   return (
-    <>
-      <SEO
-        title={seoTitle}
-        description={calcSigns
-          ? `${calcSigns.s1} and ${calcSigns.s2} compatibility (Western zodiac): their love, friendship and work match with pair-specific strengths, challenges and advice — element, modality and ruling-planet reasoning.`
-          : "Calculate zodiac compatibility for any two signs. Free love, friendship, and work compatibility calculator for all 144 sign combinations."}
-        keywords="zodiac compatibility, are aries and leo compatible, horoscope compatibility, birthday compatibility calculator, love compatibility zodiac"
-        canonicalUrl={canonicalUrl}
-      />
+    <ToolLayout
+      theme="mystic"
+      testId="compatibility-page"
+      seo={(
+        <SEO
+          title={seoTitle}
+          description={calcSigns
+            ? `${calcSigns.s1} and ${calcSigns.s2} compatibility (Western zodiac): their love, friendship and work match with pair-specific strengths, challenges and advice — element, modality and ruling-planet reasoning.`
+            : "Calculate zodiac compatibility for any two signs. Free love, friendship, and work compatibility calculator for all 144 sign combinations."}
+          keywords="zodiac compatibility, are aries and leo compatible, horoscope compatibility, birthday compatibility calculator, love compatibility zodiac"
+          canonicalUrl={canonicalUrl}
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Compatibility', edition: 'Zodiac · Rashi · Life Path' }}
+      footer={{
+        tagline: 'Compatibility computed from both real birth dates across four systems — not a generic pairing table.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Chinese Zodiac', to: '/chinese-zodiac' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Compatibility"
+      h1={<>Zodiac Compatibility Calculator <span style={{ fontSize: 18, color: 'var(--muted)' }}>(Western Zodiac)</span></>}
+    >
       {/* Part AM: in-body JSON-LD (NOT Helmet) so it reliably lands in the prerendered HTML —
           verified via validator.schema.org. See src/components/JsonLd.tsx. */}
       <JsonLd id="webapp" data={{
@@ -217,18 +236,7 @@ export default function CompatibilityPage() {
         mainEntity: faqItems.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
       }} />
 
-      <div className="paj atlas" data-category="mystic">
-        <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-          <Navigation />
-          <AuthNav />
-        </header>
-        <div className="breadcrumb">
-          <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; <Link to="/mystic-corner" className="textlink">Mystic Corner</Link>&nbsp; /&nbsp; </span><span className="crumb-name">Compatibility</span></div>
-          <div className="edition"><span className="dot" />Zodiac · Rashi · Life Path</div>
-        </div>
         <div className="max-w-2xl mx-auto px-4 py-10">
-          <span className="eyebrow">Compatibility</span>
-          <h1 style={{ margin: '8px 0 10px' }}>Zodiac Compatibility Calculator <span style={{ fontSize: 18, color: 'var(--muted)' }}>(Western Zodiac)</span></h1>
           <PageTagline />
           <TrustStrip claim="Calculated from both actual birth dates — zodiac, Rashi, Life Path and Nakshatra, not a generic pairing table." />
 
@@ -599,23 +607,6 @@ export default function CompatibilityPage() {
           </p>
 
         </div>
-        <footer className="site-footer">
-          <div className="footer-main">
-            <div>
-              <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-              <p className="subtle">Compatibility computed from both real birth dates across four systems — not a generic pairing table.</p>
-            </div>
-            <nav className="footer-nav" aria-label="Footer navigation">
-              <Link to="/mystic-corner">Mystic Corner</Link>
-              <Link to="/numerology">Numerology</Link>
-              <Link to="/zodiac">Zodiac</Link>
-              <Link to="/chinese-zodiac">Chinese Zodiac</Link>
-              <Link to="/privacy">Privacy</Link>
-            </nav>
-          </div>
-          <div className="footer-bottom"><span>© 2026 BornClock · Calculated, not templated.</span></div>
-        </footer>
-      </div>
-    </>
+    </ToolLayout>
   );
 }

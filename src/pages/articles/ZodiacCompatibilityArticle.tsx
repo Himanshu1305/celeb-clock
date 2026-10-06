@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { WESTERN_ZODIAC_PROFILES } from '@/data/astrologicalData';
 
@@ -153,33 +154,50 @@ export function ZodiacCompatibilityArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Zodiac Compatibility — Which Signs Match Best? | BornClock"
-        description="Zodiac compatibility guide — how all 12 signs match in love and friendship. Free compatibility checker plus the best and worst matches for every sign."
-        canonicalUrl="/articles/zodiac-compatibility"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="mystic"
+      testId="zodiac-compatibility-article"
+      seo={(
+        <SEO
+          title="Zodiac Compatibility — Which Signs Match Best? | BornClock"
+          description="Zodiac compatibility guide — how all 12 signs match in love and friendship. Free compatibility checker plus the best and worst matches for every sign."
+          canonicalUrl="/articles/zodiac-compatibility"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Zodiac Compatibility' }}
+      footer={{
+        tagline: 'How all 12 zodiac signs match in love and friendship — best and worst matches for every sign.',
+        nav: [
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Zodiac', to: '/zodiac' },
+          { label: 'Compatibility', to: '/compatibility' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Zodiac"
+      h1="Zodiac Compatibility — Which Zodiac Signs Match Best?"
+      lead={(
+        <>
+          Few questions are as universal — or as fun — as "are we compatible?" Zodiac
+          compatibility looks at how the 12 star signs blend in love, friendship, and daily
+          life. It is one of the oldest lenses people have used to understand attraction,
+          chemistry, and the small frictions that make or break a relationship. This guide
+          covers the best and worst matches for every sign, explains why some pairings click
+          instantly while others take work, and gives you a free compatibility checker to test
+          any two signs in seconds.
+        </>
+      )}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />
       <JsonLd data={softwareSchema} />
 
-      <main data-testid="zodiac-compatibility-article" className="min-h-screen bg-white">
+      <section className="section" data-testid="zodiac-compatibility-article">
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Zodiac Compatibility — Which Zodiac Signs Match Best?
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Few questions are as universal — or as fun — as "are we compatible?" Zodiac
-            compatibility looks at how the 12 star signs blend in love, friendship, and daily
-            life. It is one of the oldest lenses people have used to understand attraction,
-            chemistry, and the small frictions that make or break a relationship. This guide
-            covers the best and worst matches for every sign, explains why some pairings click
-            instantly while others take work, and gives you a free compatibility checker to test
-            any two signs in seconds.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             Every compatibility rating on this page comes from BornClock's own astrology data —
             each sign's documented love matches and challenging signs. Nothing here is invented.
@@ -312,8 +330,8 @@ export function ZodiacCompatibilityArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+      </section>
+    </ArticleLayout>
   );
 }
 
