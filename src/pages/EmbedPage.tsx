@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 const EMBED_CODE = '<iframe src="https://bornclock.com/widget/age-calculator" width="100%" height="220" frameborder="0" style="border-radius:12px;border:1px solid #e5e7eb;" title="Age Calculator"></iframe>';
@@ -25,28 +23,22 @@ const EmbedPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Free Age Calculator Widget for Your Website | BornClock"
-        description="Embed BornClock's live age calculator on your website in 30 seconds. Copy one line of code — free forever, no API key, we handle hosting and accuracy."
-        keywords="age calculator widget, embed age calculator, free website widget, age calculator iframe"
-        canonicalUrl="/embed"
-      />
+    <ToolLayout
+      theme="neutral"
+      testId="embed-page"
+      seo={(
+        <SEO
+          title="Free Age Calculator Widget for Your Website | BornClock"
+          description="Embed BornClock's live age calculator on your website in 30 seconds. Copy one line of code — free forever, no API key, we handle hosting and accuracy."
+          keywords="age calculator widget, embed age calculator, free website widget, age calculator iframe"
+          canonicalUrl="/embed"
+        />
+      )}
+      breadcrumb={{ current: 'Widget' }}
+      h1="Free Age Calculator Widget for Your Website"
+      lead="Embed BornClock's live age calculator on your website in 30 seconds. Copy one line of code. We handle updates, hosting, and accuracy — forever free."
+    >
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 mb-10 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Free Age Calculator Widget for Your Website
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Embed BornClock's live age calculator on your website in 30 seconds. Copy one line of code. We handle updates, hosting, and accuracy — forever free.
-          </p>
-        </section>
-
         <section className="max-w-2xl mx-auto mb-12 px-4">
           <h2 className="text-xl font-bold text-foreground mb-4 text-center">Live Preview</h2>
           <iframe
@@ -88,8 +80,7 @@ const EmbedPage = () => {
           </div>
         </section>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

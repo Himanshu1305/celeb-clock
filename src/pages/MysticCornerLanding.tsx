@@ -13,10 +13,8 @@
  */
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
+import { PajPage } from '@/components/central';
 import { DobInput, type DobValue, parseDob } from '@/components/DobInput';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { TrustStrip } from '@/components/paj/TrustStrip';
@@ -25,7 +23,6 @@ import {
   calculateWesternZodiac, calculateChineseZodiac, calculateLifePathNumber,
   LIFE_PATH_TRAITS, type ZodiacInfo,
 } from '@/utils/celebrityCalculations';
-import '@/styles/part-aj.css';
 
 type Tab = 'numerology' | 'western' | 'chinese';
 
@@ -64,30 +61,22 @@ export default function MysticCornerLanding() {
   const shareMsg = `My birth date through three lenses on BornClock — Life Path ${lifePath} (${lpTrait.title}), ${western.sign} (Western), ${chinese.animal} · ${chinese.element} (Chinese). Each one actually computed: https://bornclock.com/mystic-corner`;
 
   return (
-    <div className="paj atlas" data-category="mystic" data-testid="mystic-corner-page">
-      <SEO
-        title="Mystic Corner — Numerology, Zodiac & Chinese Sign | BornClock"
-        description="The mystical side of your birth date: numerology Life Path, Western zodiac, Chinese zodiac — each one actually computed from your date, with the workings shown. Not a templated horoscope."
-        keywords="numerology, life path number, western zodiac, chinese zodiac, birth date numerology, zodiac sign calculator"
-        canonicalUrl="/mystic-corner"
-        ogType="website"
-      />
-      <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </Helmet>
-
-      <header className="site-header" style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-        <Navigation />
-        <AuthNav />
-      </header>
-      <div className="breadcrumb">
-        <div><span className="crumb-parent">BornClock&nbsp; /&nbsp; </span><span className="crumb-name">Mystic Corner</span></div>
-        <div className="edition"><span className="dot" />Three distinct traditions</div>
-      </div>
-
-      <main id="main">
+    <PajPage
+      theme="mystic"
+      variant="atlas"
+      testId="mystic-corner-page"
+      seo={(
+        <SEO
+          title="Mystic Corner — Numerology, Zodiac & Chinese Sign | BornClock"
+          description="The mystical side of your birth date: numerology Life Path, Western zodiac, Chinese zodiac — each one actually computed from your date, with the workings shown. Not a templated horoscope."
+          keywords="numerology, life path number, western zodiac, chinese zodiac, birth date numerology, zodiac sign calculator"
+          canonicalUrl="/mystic-corner"
+          ogType="website"
+        />
+      )}
+      breadcrumb={{ current: 'Mystic Corner', edition: 'Three distinct traditions' }}
+      footer={{ note: '© 2026 BornClock · Independent perspectives. Clear boundaries.' }}
+    >
         <JsonLd id="faq" data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
           { '@type': 'Question', name: 'Is this different from a generic horoscope?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. The numerology result and calendar assignments respond to your actual input, with the calculation method shown. The interpretations remain symbolic, not scientifically validated personal predictions.' } },
           { '@type': 'Question', name: 'Why could my Chinese zodiac differ elsewhere?', acceptedAnswer: { '@type': 'Answer', text: 'This uses the Chinese year for your Gregorian birth year. Births in January or early February can fall in the previous Chinese year under the Lunar New Year boundary. A full BaZi reading also needs additional birth information.' } },
@@ -298,26 +287,6 @@ export default function MysticCornerLanding() {
             </div>
           </div>
         </section>
-      </main>
-
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div>
-            <Link className="brand" to="/">bornclock<span className="brand-dot">.</span></Link>
-            <p className="subtle">One birth date. Different kinds of discovery. Facts, traditions and research — with the difference made clear.</p>
-          </div>
-          <nav className="footer-nav" aria-label="Footer navigation">
-            <Link to="/vedic-astrology">Vedic Astrology</Link>
-            <Link to="/celebrity-birthday">Birthday &amp; Celebrity</Link>
-            <Link to="/mystic-corner">Mystic Corner</Link>
-            <Link to="/life-expectancy">Science &amp; Longevity</Link>
-            <Link to="/how-it-works">Methodology</Link>
-            <Link to="/privacy">Privacy</Link>
-            <Link to="/contact">Contact</Link>
-          </nav>
-        </div>
-        <div className="footer-bottom"><span>© 2026 BornClock · Independent perspectives. Clear boundaries.</span></div>
-      </footer>
-    </div>
+    </PajPage>
   );
 }

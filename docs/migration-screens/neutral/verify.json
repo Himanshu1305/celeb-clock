@@ -71,7 +71,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 9
+          "nodes": 8
         }
       ],
       "total": 2
@@ -115,7 +115,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 24
+          "nodes": 23
         }
       ],
       "total": 2
@@ -159,7 +159,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 7
+          "nodes": 6
         }
       ],
       "total": 2
@@ -203,7 +203,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 9
+          "nodes": 8
         }
       ],
       "total": 2
@@ -247,7 +247,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 3
@@ -262,7 +262,9 @@
       "parseErrors": 0,
       "missingType": 0
     },
-    "consoleErrors": []
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 429 ()"
+    ]
   },
   {
     "browser": "chromium",
@@ -291,7 +293,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 9
+          "nodes": 8
         }
       ],
       "total": 3
@@ -335,7 +337,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 3
@@ -379,7 +381,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -423,7 +425,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 3
@@ -467,7 +469,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -511,7 +513,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 3
+          "nodes": 2
         }
       ],
       "total": 2
@@ -555,7 +557,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 3
@@ -599,7 +601,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 81
+          "nodes": 80
         }
       ],
       "total": 2
@@ -643,7 +645,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 12
+          "nodes": 11
         }
       ],
       "total": 2
@@ -687,7 +689,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -731,7 +733,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -775,7 +777,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -819,7 +821,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -863,7 +865,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -907,7 +909,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 3
+          "nodes": 2
         }
       ],
       "total": 2
@@ -951,7 +953,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -995,7 +997,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -1039,7 +1041,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 3
+          "nodes": 2
         }
       ],
       "total": 2
@@ -1083,7 +1085,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 3
@@ -1095,6 +1097,94 @@
     },
     "structuralJsonLd": {
       "count": 2,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/embed",
+    "label": "Embed widget (tool)",
+    "status": 200,
+    "title": "Free Age Calculator Widget for Your Website | BornClock",
+    "h1Count": 1,
+    "h1First": "Free Age Calculator Widget for Your Website",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 20,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 4
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/mystic-corner",
+    "label": "Mystic Corner hub (mystic-themed landing)",
+    "status": 200,
+    "title": "Mystic Corner — Numerology, Zodiac & Chinese Sign | BornClock",
+    "h1Count": 1,
+    "h1First": "The mystical side of your birth date.Numerology, zodiac, and more — ac",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 6
+        }
+      ],
+      "total": 4
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 7,
       "parseErrors": 0,
       "missingType": 0
     },
@@ -1168,7 +1258,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 8
+          "nodes": 7
         }
       ],
       "total": 2
@@ -1208,7 +1298,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 23
+          "nodes": 22
         }
       ],
       "total": 2
@@ -1248,7 +1338,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -1288,7 +1378,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 7
+          "nodes": 6
         }
       ],
       "total": 2
@@ -1328,7 +1418,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 3
@@ -1339,9 +1429,7 @@
       "parseErrors": 0,
       "missingType": 0
     },
-    "consoleErrors": [
-      "Failed to load resource: the server responded with a status of 429 ()"
-    ]
+    "consoleErrors": []
   },
   {
     "browser": "webkit",
@@ -1370,7 +1458,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -1410,7 +1498,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 3
@@ -1450,7 +1538,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -1490,7 +1578,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 3
@@ -1530,7 +1618,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -1570,7 +1658,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -1610,7 +1698,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -1650,7 +1738,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 79
+          "nodes": 78
         }
       ],
       "total": 2
@@ -1690,7 +1778,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 11
+          "nodes": 10
         }
       ],
       "total": 2
@@ -1730,7 +1818,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -1770,7 +1858,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -1810,7 +1898,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -1850,7 +1938,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -1890,7 +1978,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -1930,7 +2018,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 3
+          "nodes": 2
         }
       ],
       "total": 2
@@ -1970,7 +2058,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2010,7 +2098,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -2050,7 +2138,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2090,7 +2178,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 3
@@ -2098,6 +2186,86 @@
     "jsonld": {},
     "structuralJsonLd": {
       "count": 2,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/embed",
+    "label": "Embed widget (tool)",
+    "status": 200,
+    "title": "Free Age Calculator Widget for Your Website | BornClock",
+    "h1Count": 1,
+    "h1First": "Free Age Calculator Widget for Your Website",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 1
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/mystic-corner",
+    "label": "Mystic Corner hub (mystic-themed landing)",
+    "status": 200,
+    "title": "Mystic Corner — Numerology, Zodiac & Chinese Sign | BornClock",
+    "h1Count": 1,
+    "h1First": "The mystical side of your birth date.Numerology, zodiac, and more — ac",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 5
+        }
+      ],
+      "total": 3
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
       "parseErrors": 0,
       "missingType": 0
     },
@@ -2171,7 +2339,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 8
+          "nodes": 7
         }
       ],
       "total": 2
@@ -2211,7 +2379,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 23
+          "nodes": 22
         }
       ],
       "total": 2
@@ -2251,7 +2419,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 6
+          "nodes": 5
         }
       ],
       "total": 2
@@ -2262,9 +2430,7 @@
       "parseErrors": 0,
       "missingType": 0
     },
-    "consoleErrors": [
-      "Failed to load resource: the server responded with a status of 429 ()"
-    ]
+    "consoleErrors": []
   },
   {
     "browser": "android",
@@ -2293,7 +2459,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 8
+          "nodes": 7
         }
       ],
       "total": 2
@@ -2304,7 +2470,9 @@
       "parseErrors": 0,
       "missingType": 0
     },
-    "consoleErrors": []
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 429 ()"
+    ]
   },
   {
     "browser": "android",
@@ -2333,7 +2501,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 3
@@ -2344,9 +2512,7 @@
       "parseErrors": 0,
       "missingType": 0
     },
-    "consoleErrors": [
-      "Failed to load resource: the server responded with a status of 429 ()"
-    ]
+    "consoleErrors": []
   },
   {
     "browser": "android",
@@ -2375,7 +2541,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 7
+          "nodes": 6
         }
       ],
       "total": 2
@@ -2415,7 +2581,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 3
@@ -2455,7 +2621,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2495,7 +2661,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 3
@@ -2535,7 +2701,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2575,7 +2741,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2615,7 +2781,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2655,7 +2821,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 80
+          "nodes": 79
         }
       ],
       "total": 2
@@ -2695,7 +2861,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 9
+          "nodes": 8
         }
       ],
       "total": 2
@@ -2735,7 +2901,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2775,7 +2941,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2815,7 +2981,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2855,7 +3021,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2895,7 +3061,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2935,7 +3101,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -2975,7 +3141,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 2
@@ -3015,7 +3181,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -3055,7 +3221,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 4
+          "nodes": 3
         }
       ],
       "total": 2
@@ -3095,7 +3261,7 @@
         {
           "id": "color-contrast",
           "impact": "serious",
-          "nodes": 5
+          "nodes": 4
         }
       ],
       "total": 3
@@ -3103,6 +3269,86 @@
     "jsonld": {},
     "structuralJsonLd": {
       "count": 2,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/embed",
+    "label": "Embed widget (tool)",
+    "status": 200,
+    "title": "Free Age Calculator Widget for Your Website | BornClock",
+    "h1Count": 1,
+    "h1First": "Free Age Calculator Widget for Your Website",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 1
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/mystic-corner",
+    "label": "Mystic Corner hub (mystic-themed landing)",
+    "status": 200,
+    "title": "Mystic Corner — Numerology, Zodiac & Chinese Sign | BornClock",
+    "h1Count": 1,
+    "h1First": "The mystical side of your birth date.Numerology, zodiac, and more — ac",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 4
+        }
+      ],
+      "total": 3
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
       "parseErrors": 0,
       "missingType": 0
     },

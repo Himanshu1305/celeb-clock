@@ -23,5 +23,7 @@
   { "route": "/for-business", "theme": "neutral", "label": "For Business (tool)" },
   { "route": "/baby-names", "theme": "neutral", "label": "Baby Names (tool)" },
   { "route": "/reminders", "theme": "neutral", "label": "Reminders (tool)" },
-  { "route": "/profile", "theme": "neutral", "label": "Account (utility, signed-out state)" }
+  { "route": "/profile", "theme": "neutral", "label": "Account (utility, signed-out state)" },
+  { "route": "/embed", "theme": "neutral", "label": "Embed widget (tool)" },
+  { "route": "/mystic-corner", "theme": "mystic", "label": "Mystic Corner hub (mystic-themed landing)" }
 ]

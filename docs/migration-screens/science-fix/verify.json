@@ -1,0 +1,870 @@
+[
+  {
+    "browser": "chromium",
+    "route": "/country-comparison",
+    "label": "Country Comparison (report)",
+    "status": 200,
+    "title": "Country Life Expectancy Comparison — How Your Country Affects How Long You Live | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "Your Personal Forecast Across 57 Countries",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 336,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 18
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/planetary-age",
+    "label": "Planetary Age",
+    "status": 200,
+    "title": "Planetary Age Calculator — How Old Are You on Mars, Jupiter & Every Planet? | BornClock",
+    "h1Count": 1,
+    "h1First": "How Old Are You in the Universe?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 384,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 33
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/biological-age-calculator",
+    "label": "Biological Age Calculator",
+    "status": 200,
+    "title": "Biological Age Calculator — How Old Is Your Body? | BornClock",
+    "h1Count": 1,
+    "h1First": "Biological Age Calculator — How Old Is Your Body Really?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 11,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 272,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 4
+        }
+      ],
+      "total": 3
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 11,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/how-long-will-i-live",
+    "label": "How Long Will I Live",
+    "status": 200,
+    "title": "How Long Will I Live? Life Expectancy Quiz | BornClock",
+    "h1Count": 1,
+    "h1First": "How Long Will I Live?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 11,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 272,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 15
+        }
+      ],
+      "total": 3
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 11,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/articles/bryan-johnson-blueprint-alternative",
+    "label": "Article: Bryan Johnson",
+    "status": 200,
+    "title": "Bryan Johnson Blueprint — Free Alternative | BornClock",
+    "h1Count": 1,
+    "h1First": "The Bryan Johnson Blueprint — And a Free, Science-Backed Alternative",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 336,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 4
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/articles/longevity-supplements",
+    "label": "Article: longevity supplements",
+    "status": 200,
+    "title": "Longevity Supplements — What Works, What's Hype (India) | BornClock",
+    "h1Count": 1,
+    "h1First": "Longevity Supplements — Which Supplement Actually Works, and What's Ju",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 336,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 4
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/articles/famous-people-lived-to-100",
+    "label": "Article: famous people lived to 100",
+    "status": 200,
+    "title": "Famous People Who Lived to 100 — Centenarian Secrets | BornClock",
+    "h1Count": 1,
+    "h1First": "Famous People Who Lived to 100 — Centenarian Secrets",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 336,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 4
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": true,
+      "method": "validator.schema.org",
+      "error": "SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/country-comparison",
+    "label": "Country Comparison (report)",
+    "status": 200,
+    "title": "Country Life Expectancy Comparison — How Your Country Affects How Long You Live | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "Your Personal Forecast Across 57 Countries",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 18
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/planetary-age",
+    "label": "Planetary Age",
+    "status": 200,
+    "title": "Planetary Age Calculator — How Old Are You on Mars, Jupiter & Every Planet? | BornClock",
+    "h1Count": 1,
+    "h1First": "How Old Are You in the Universe?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 30
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/biological-age-calculator",
+    "label": "Biological Age Calculator",
+    "status": 200,
+    "title": "Biological Age Calculator — How Old Is Your Body? | BornClock",
+    "h1Count": 1,
+    "h1First": "Biological Age Calculator — How Old Is Your Body Really?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 11,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 5
+        }
+      ],
+      "total": 3
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 11,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/how-long-will-i-live",
+    "label": "How Long Will I Live",
+    "status": 200,
+    "title": "How Long Will I Live? Life Expectancy Quiz | BornClock",
+    "h1Count": 1,
+    "h1First": "How Long Will I Live?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 11,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 14
+        }
+      ],
+      "total": 3
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 11,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/articles/bryan-johnson-blueprint-alternative",
+    "label": "Article: Bryan Johnson",
+    "status": 200,
+    "title": "Bryan Johnson Blueprint — Free Alternative | BornClock",
+    "h1Count": 1,
+    "h1First": "The Bryan Johnson Blueprint — And a Free, Science-Backed Alternative",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 3
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/articles/longevity-supplements",
+    "label": "Article: longevity supplements",
+    "status": 200,
+    "title": "Longevity Supplements — What Works, What's Hype (India) | BornClock",
+    "h1Count": 1,
+    "h1First": "Longevity Supplements — Which Supplement Actually Works, and What's Ju",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 3
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/articles/famous-people-lived-to-100",
+    "label": "Article: famous people lived to 100",
+    "status": 200,
+    "title": "Famous People Who Lived to 100 — Centenarian Secrets | BornClock",
+    "h1Count": 1,
+    "h1First": "Famous People Who Lived to 100 — Centenarian Secrets",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 3
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/country-comparison",
+    "label": "Country Comparison (report)",
+    "status": 200,
+    "title": "Country Life Expectancy Comparison — How Your Country Affects How Long You Live | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "Your Personal Forecast Across 57 Countries",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 17
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/planetary-age",
+    "label": "Planetary Age",
+    "status": 200,
+    "title": "Planetary Age Calculator — How Old Are You on Mars, Jupiter & Every Planet? | BornClock",
+    "h1Count": 1,
+    "h1First": "How Old Are You in the Universe?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 30
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/biological-age-calculator",
+    "label": "Biological Age Calculator",
+    "status": 200,
+    "title": "Biological Age Calculator — How Old Is Your Body? | BornClock",
+    "h1Count": 1,
+    "h1First": "Biological Age Calculator — How Old Is Your Body Really?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 11,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 5
+        }
+      ],
+      "total": 3
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 11,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/how-long-will-i-live",
+    "label": "How Long Will I Live",
+    "status": 200,
+    "title": "How Long Will I Live? Life Expectancy Quiz | BornClock",
+    "h1Count": 1,
+    "h1First": "How Long Will I Live?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 11,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 14
+        }
+      ],
+      "total": 3
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 11,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/articles/bryan-johnson-blueprint-alternative",
+    "label": "Article: Bryan Johnson",
+    "status": 200,
+    "title": "Bryan Johnson Blueprint — Free Alternative | BornClock",
+    "h1Count": 1,
+    "h1First": "The Bryan Johnson Blueprint — And a Free, Science-Backed Alternative",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 3
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/articles/longevity-supplements",
+    "label": "Article: longevity supplements",
+    "status": 200,
+    "title": "Longevity Supplements — What Works, What's Hype (India) | BornClock",
+    "h1Count": 1,
+    "h1First": "Longevity Supplements — Which Supplement Actually Works, and What's Ju",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 3
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/articles/famous-people-lived-to-100",
+    "label": "Article: famous people lived to 100",
+    "status": 200,
+    "title": "Famous People Who Lived to 100 — Centenarian Secrets | BornClock",
+    "h1Count": 1,
+    "h1First": "Famous People Who Lived to 100 — Centenarian Secrets",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 1,
+      "seriousList": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 3
+        }
+      ],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  }
+]

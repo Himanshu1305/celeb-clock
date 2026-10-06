@@ -190,6 +190,53 @@ _(other bugs logged here as found during Step 2/3 verification)_
   migrated (stashed at STEP00). `.paj` cannot be removed until the SCIENCE (and FINAL) runs are done.
   Deferred, not attempted. Second reason NEUTRAL is COMPLETE: NO.
 
+### STEP00 (continuation session) — resumed interrupted NEUTRAL run
+- The prior NEUTRAL session committed Step 1-2 (`2d9a8e5`, 26 routes + homepage) and the BUG-N1
+  a11y fix (`72d7be4`) and wrote the bug-log entries above, but was interrupted before the Step-3
+  full retest and never created `docs/migration-neutral-report.md`. This session resumed on a clean
+  tree (the two untracked `docs/migration-screens/{neutral-regr-before,science-fix}/` dirs are prior
+  screenshot output, not work-in-progress). Baseline unit suite re-confirmed **1888/1888**. SCIENCE
+  has since shipped COMPLETE: YES (`2661146`), so the INV-N5 cross-group dependency is re-evaluated below.
+
+### BUG-N5b — two public neutral routes were missed by the prior session (`/embed`, `/mystic-corner`)
+- Where: `/embed` (EmbedPage) was still on the OLD design — `bg-gradient-cosmic` root + raw
+  `<header>` with `<Navigation/>` + `<AuthNav/>` + old `<Footer/>` (harness `hasOldNav=true`
+  class). `/mystic-corner` (MysticCornerLanding) was on the OLD `.paj` coexistence shell
+  (`<div className="paj atlas" data-category="mystic">` with a hand-rolled site-header/breadcrumb/
+  main/footer), NOT routed through the central `PajPage`. Neither was in `scripts/neutral-routes.json`,
+  so the prior session's harness never covered them.
+- Fix: `/embed` → `ToolLayout theme="neutral"` (header block = its H1 + lead; iframe preview, embed
+  code, copy button and related-tools kept verbatim). `/mystic-corner` → shell-swap to `PajPage
+  theme="mystic" variant="atlas"` per the run-1 recipe (seo/breadcrumb/footer props; all hero +
+  computed-tool + FAQ content kept byte-for-byte — the central SiteFooter default nav already equals
+  the page's old footer nav). Both added to `neutral-routes.json`.
+- Retest (fresh deploy, chromium/webkit/android): `/embed` → 200 · single h1 · data-theme=neutral ·
+  site-header + single `<main>` · hasOldNav=false · 0 console errors. `/mystic-corner` → 200 · single
+  h1 · data-theme=mystic · 0 console errors; the 3 computed lenses (numerology/western/chinese) and
+  the tabs still work live. tsc clean; unit suite 1888/1888.
+
+### BUG-N6 — `/*` 404 page logged a console **error** on every unknown route (Rule 4: zero console errors)
+- Where: `src/pages/NotFound.tsx` `useEffect` did `console.error("404 Error: User attempted to access
+  non-existent route:", pathname)` on mount — so the styled 404 page (which NEUTRAL owns) tripped the
+  "zero console errors" bar on every bad URL. Pre-existing diagnostic (Lovable/Vite template default),
+  surfaced by this run's catch-all input test; the page itself renders correctly (styled, single h1,
+  neutral theme, Go-Home recovery link, SPA soft-200 per INV-3).
+- Fix: downgraded to `console.warn` (keeps the diagnostic; no longer an error-level log). No test
+  asserts on the old string (grep clean). No markup/content change.
+- Retest (fresh deploy): catch-all route `/this-route-does-not-exist-xyz-123` → styled 404, single h1,
+  neutral theme, **0 console errors**. Unit suite 1888/1888.
+
+### INV-N5 (re-evaluated) — `.paj` removal remains a FINAL task, does NOT block NEUTRAL migration
+- Re-check after SCIENCE shipped YES: the blocker was never only "SCIENCE un-migrated" — it is that the
+  **central layouts themselves render on `.paj`** (`PajPage` emits `className="paj …"`; the central
+  system reads `src/styles/part-aj.css`). So the NEUTRAL note's precondition "*once no page uses it*"
+  is structurally unmet while coexistence is the design — removing `.paj` now would delete the live
+  central styling for every migrated route across all groups. This is exactly the FINAL-run deliverable
+  ("confirm every public route is on the central system and `.paj` is gone; finish anything left") and
+  is carried there, same as the color-contrast token pass (INV-N2). Every NEUTRAL *page* is on the
+  central system; `.paj` *removal* is a cross-cutting cleanup, not a page-migration item — the same
+  basis on which VEDIC/BIRTHDAY/MYSTIC/SCIENCE each shipped COMPLETE: YES with this debt documented.
+
 ## SCIENCE run (docs/migration-science-report.md)
 
 ### STEP00 — resumed the NEUTRAL-stashed SCIENCE work (nothing discarded)
