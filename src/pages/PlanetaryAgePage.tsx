@@ -356,6 +356,9 @@ const PlanetaryAgePage = () => {
         <p className="text-sm text-slate-400 mb-5">Auto-scrolling · hover to pause</p>
         <div
           ref={carouselRef}
+          tabIndex={0}
+          role="region"
+          aria-label="Facts that will break your brain (scrollable)"
           className="overflow-x-auto pb-4 flex gap-4"
           style={{ scrollBehavior: 'smooth' }}
           onMouseEnter={() => { isPausedRef.current = true; }}

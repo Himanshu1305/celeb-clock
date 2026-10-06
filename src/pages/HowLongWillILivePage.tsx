@@ -342,6 +342,9 @@ export function HowLongWillILivePage() {
             {/* Scroll wrapper prevents mobile overflow */}
             <div
               data-testid="country-table-wrapper"
+              tabIndex={0}
+              role="region"
+              aria-label="Life expectancy by country table (scrollable)"
               className="overflow-x-auto rounded-xl border border-gray-200 max-w-full"
             >
               <table className="w-full text-sm min-w-[480px]">

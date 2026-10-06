@@ -178,7 +178,7 @@ export function BryanJohnsonArticle() {
             Here is a plain comparison of two free tools against the full Blueprint protocol,
             across the things that matter most.
           </p>
-          <div className="overflow-x-auto mb-8">
+          <div className="overflow-x-auto mb-8" tabIndex={0} role="region" aria-label="Comparison table (scrollable)">
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-gray-100 text-gray-900">

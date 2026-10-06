@@ -189,3 +189,59 @@ _(other bugs logged here as found during Step 2/3 verification)_
   central layouts THEMSELVES render on `.paj` (coexistence design), and SCIENCE pages are not yet
   migrated (stashed at STEP00). `.paj` cannot be removed until the SCIENCE (and FINAL) runs are done.
   Deferred, not attempted. Second reason NEUTRAL is COMPLETE: NO.
+
+## SCIENCE run (docs/migration-science-report.md)
+
+### STEP00 — resumed the NEUTRAL-stashed SCIENCE work (nothing discarded)
+- The SCIENCE Step 1-2 migration (recovered from NEUTRAL's `stash@{0}`, STEP00.1) was already
+  committed as `8471f2f` before this session. Working tree was clean at run start. This run did
+  Step 0 (routes harness), Step 2 (live-staging deploy + 3-browser verify + input/gating tests),
+  the two a11y fixes below, and the Step 3 full retest. Baseline unit suite: 1888/1888.
+
+### BUG-S1 — `/country-comparison` "Current age" `<input type=number>` had no accessible name (axe `label`, critical, 1 node)
+- Where: `CountryComparison` controls bar — the age `<input type="number">` has a visible
+  `<span>Current age:</span>` beside it but no programmatic association, so axe flagged a
+  **critical** `label` violation (1 node) on live staging, all three browsers. Pre-existing page
+  content, surfaced by the Step-0 axe scan (same class as VEDIC BUG-V1 / BIRTHDAY BUG-B2 / MYSTIC BUG-M1).
+- Fix: added `aria-label="Current age"` to the `<input>` (`src/pages/CountryComparison.tsx`).
+  No logic/content/style change.
+- Retest (fresh deploy `b18cc1f3`, chromium/webkit/android): `/country-comparison` axe no longer
+  reports `label` — critical cleared. Only pre-existing INV-S3 `color-contrast` remains.
+
+### BUG-S2 — scrollable overflow regions not keyboard-focusable (axe `scrollable-region-focusable`, serious)
+- Where: `overflow-x-auto` wrappers that overflow their viewport with no focusable children, so
+  they were not keyboard scrollable. On `/planetary-age` the "Facts that will break your brain"
+  carousel (all 3 browsers); and at 390px mobile the data tables on `/biological-age-calculator`,
+  `/how-long-will-i-live`, `/articles/bryan-johnson-blueprint-alternative`,
+  `/articles/longevity-supplements`, `/articles/famous-people-lived-to-100`. Pre-existing content,
+  surfaced by the axe scan (same class as BIRTHDAY BUG-B4 / MYSTIC BUG-M2).
+- Fix: added `tabIndex={0}` + `role="region"` + descriptive `aria-label` to each of the 7 wrappers
+  (`PlanetaryAgePage.tsx`, `BiologicalAgeCalculatorPage.tsx`, `HowLongWillILivePage.tsx`,
+  `articles/BryanJohnsonArticle.tsx`, `articles/LongevitySupplementsArticle.tsx`,
+  `articles/FamousPeopleLivedTo100Article.tsx`). No data/content/style change. Unit tests for the
+  two calculator pages (testid wrappers) still 60/60 green.
+- Retest (fresh deploy `b18cc1f3`, chromium/webkit/android): all 7 pages — `scrollable-region-focusable`
+  gone. Confirmed again on the Step-3 full 177-row crawl: 0 `scrollable-region-focusable` across the group.
+
+### INV-S3 — axe `color-contrast` (serious) is the same site-wide pre-existing debt (NOT cleared this run)
+- The Step-0 axe scan reports `color-contrast` (serious) on every SCIENCE page (typically 3–5 nodes
+  on simple pages; more where there is denser tinted content). The SAME violations are present on the
+  cross-group regression sample on this same staging build (/numerology, /kundali, /compatibility, /pricing,
+  homepage, etc.), i.e. it is pre-existing, project-wide, from the shared chrome (CookieConsent "Accept
+  All"/legal links, Navigation search box, brand wordmark) and pre-existing page content — identical to
+  VEDIC INV-2 / NEUTRAL INV-N2. NOT introduced by this run: the science recolor `#6E5AA6`→`#2F6FB0`
+  (blue on white ≈ 5.25:1) passes AA for normal text, so it did not add contrast failures; the flagged
+  nodes are the shared overlays/chrome, not the recolored elements.
+- Decision: a correct fix is the dedicated CENTRAL a11y / token-consolidation pass that NEUTRAL/FINAL
+  already owns (INV-N2), affecting ~180 routes across every theme — it must not be done blind in a
+  headless per-group migration (Rule 9). Logged honestly rather than reported as cleared (Fifth Rule).
+  This is cross-cutting debt carried by the FINAL run, not SCIENCE-migration work — so it does not block
+  SCIENCE COMPLETE: YES (same precedent as VEDIC/BIRTHDAY/MYSTIC, which shipped YES with this same debt).
+
+### INV-S4 — validator.schema.org returned HTML, not JSON (external tool unavailable)
+- Same as MYSTIC INV-M4: the Step-0 harness posts each live URL to `https://validator.schema.org/validate`;
+  it responded with an HTML document (`<!DOCTYPE …`) instead of JSON for all 59 routes, so the online
+  JSON-LD validation could not run (not a page defect). The harness's **structural JSON-LD fallback**
+  (parse every `application/ld+json` block, check `@type`) ran on all 59 routes: **479 blocks, 0 parse
+  errors, 0 missing @type**. JSON-LD integrity verified locally; the online validator flagged as
+  externally unavailable, per the Fifth Rule.

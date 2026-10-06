@@ -347,6 +347,7 @@ const CountryComparison = () => {
               <span className="text-muted-foreground">Current age:</span>
               <input
                 type="number" min={1} max={100} value={age}
+                aria-label="Current age"
                 onChange={e => setAge(parseInt(e.target.value) || 35)}
                 className="w-20 px-3 py-1.5 rounded-lg border border-border bg-background text-center text-sm"
               />

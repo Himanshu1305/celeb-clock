@@ -155,7 +155,7 @@ export function FamousPeopleLivedTo100Article() {
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Real Centenarians Who Lived to 100 and Beyond</h2>
-          <div className="overflow-x-auto mb-8">
+          <div className="overflow-x-auto mb-8" tabIndex={0} role="region" aria-label="Centenarians table (scrollable)">
             <table className="w-full text-left border-collapse text-sm">
               <thead>
                 <tr className="border-b-2 border-gray-300">

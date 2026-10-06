@@ -430,6 +430,9 @@ export function BiologicalAgeCalculatorPage() {
             {/* Intervention table with scroll wrapper for mobile */}
             <div
               data-testid="intervention-table-wrapper"
+              tabIndex={0}
+              role="region"
+              aria-label="Intervention comparison table (scrollable)"
               className="overflow-x-auto rounded-xl border border-gray-200 mt-6"
             >
               <table

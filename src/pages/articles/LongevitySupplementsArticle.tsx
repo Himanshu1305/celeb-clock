@@ -173,7 +173,7 @@ export function LongevitySupplementsArticle() {
             more human-tested evidence.
           </p>
 
-          <div className="overflow-x-auto mb-6">
+          <div className="overflow-x-auto mb-6" tabIndex={0} role="region" aria-label="Supplement comparison table (scrollable)">
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-gray-100 text-left">
