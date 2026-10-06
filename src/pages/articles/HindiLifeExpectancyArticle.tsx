@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -72,22 +73,25 @@ export function HindiLifeExpectancyArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="जीवन प्रत्याशा कैलकुलेटर — आप कितने साल जिएंगे? | BornClock"
-        description="WHO डेटा पर आधारित मुफ्त जीवन प्रत्याशा कैलकुलेटर। धूम्रपान, व्यायाम, आहार, नींद और तनाव जैसे 5 कारक जानें और स्वस्थ लंबा जीवन जिएं।"
-        canonicalUrl="/hi/life-expectancy-calculator"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="science"
+      testId="hindi-life-expectancy-article"
+      seo={(
+        <SEO
+          title="जीवन प्रत्याशा कैलकुलेटर — आप कितने साल जिएंगे? | BornClock"
+          description="WHO डेटा पर आधारित मुफ्त जीवन प्रत्याशा कैलकुलेटर। धूम्रपान, व्यायाम, आहार, नींद और तनाव जैसे 5 कारक जानें और स्वस्थ लंबा जीवन जिएं।"
+          canonicalUrl="/hi/life-expectancy-calculator"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'जीवन प्रत्याशा कैलकुलेटर' }}
+      eyebrow="Articles"
+      h1={<>जीवन प्रत्याशा कैलकुलेटर — आप कितने साल जिएंगे?</>}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />
 
-      <main data-testid="hindi-life-expectancy-article" className="min-h-screen bg-white">
         <article className="max-w-3xl mx-auto px-4 py-10">
-
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            जीवन प्रत्याशा कैलकुलेटर — आप कितने साल जिएंगे?
-          </h1>
 
           <p className="text-gray-700 leading-relaxed mb-4">
             जीवन प्रत्याशा (Life Expectancy) का अर्थ है वह औसत आयु जितने वर्ष एक व्यक्ति के
@@ -172,8 +176,7 @@ export function HindiLifeExpectancyArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

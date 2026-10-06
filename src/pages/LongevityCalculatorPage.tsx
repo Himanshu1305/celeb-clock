@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import {
@@ -96,70 +97,42 @@ const IMPACT_COLORS = {
 
 export function LongevityCalculatorPage() {
   return (
-    <>
-      {/* SEO via the project's standard react-helmet-async component — title, meta,
-          canonical (trailing-slash form, the Worker's 200 URL), og + twitter. */}
-      <SEO
-        title={LC_SEO.title}
-        description={LC_SEO.description}
-        canonicalUrl="/longevity-calculator"
-        ogType="website"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
+    <ToolLayout
+      theme="science"
+      testId="longevity-calc-page"
+      seo={(
+        <>
+          {/* SEO via the project's standard react-helmet-async component — title, meta,
+              canonical (trailing-slash form, the Worker's 200 URL), og + twitter. */}
+          <SEO
+            title={LC_SEO.title}
+            description={LC_SEO.description}
+            canonicalUrl="/longevity-calculator"
+            ogType="website"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
 
-      {/* Schema — body scripts for reliable prerender capture */}
-      <JsonLd data={LC_SCHEMA.softwareApp} />
-      <JsonLd data={LC_SCHEMA.faq} />
-      <JsonLd data={LC_SCHEMA.breadcrumb} />
+          {/* Schema — body scripts for reliable prerender capture */}
+          <JsonLd data={LC_SCHEMA.softwareApp} />
+          <JsonLd data={LC_SCHEMA.faq} />
+          <JsonLd data={LC_SCHEMA.breadcrumb} />
 
-      {/* Additional structured data: FAQPage (5), SoftwareApplication, speakable WebPage */}
-      <JsonLd data={LC_FAQ_SCHEMA} />
-      <JsonLd data={LC_SOFTWARE_APP_SCHEMA} />
-      <JsonLd data={LC_WEBPAGE_SCHEMA} />
-
-      <main
-        data-testid="longevity-calc-page"
-        className="min-h-screen bg-white"
-      >
-        {/* ── BREADCRUMB ── */}
-        <nav
-          aria-label="Breadcrumb"
-          className="max-w-4xl mx-auto px-4 pt-4"
-        >
-          <ol className="flex items-center gap-2 text-sm text-gray-400">
-            <li><Link to="/" className="hover:text-[#6E5AA6]">Home</Link></li>
-            <li aria-hidden="true">›</li>
-            <li className="text-gray-700 font-medium" aria-current="page">
-              Longevity Calculator
-            </li>
-          </ol>
-        </nav>
-
-        {/* ── HERO ── */}
-        <section
-          aria-labelledby="page-h1"
-          className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6]
-                     border-b border-[#6E5AA6]/30 py-12 px-4 mt-4"
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-[#6E5AA6]/10 text-[#6E5AA6]
-                            rounded-full px-4 py-1.5 text-sm font-semibold mb-4">
-              {LC_COPY.hero.badge}
-            </div>
-
-            <h1
-              id="page-h1"
-              className="text-3xl sm:text-4xl lg:text-5xl font-black gradient-text-primary
-                         leading-tight mb-4"
-            >
-              {LC_COPY.hero.h1Line1}{' '}
-              <span>{LC_COPY.hero.h1Line2}</span>
-            </h1>
-
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6 leading-relaxed">
-              {LC_COPY.hero.subtitle}
-            </p>
-
+          {/* Additional structured data: FAQPage (5), SoftwareApplication, speakable WebPage */}
+          <JsonLd data={LC_FAQ_SCHEMA} />
+          <JsonLd data={LC_SOFTWARE_APP_SCHEMA} />
+          <JsonLd data={LC_WEBPAGE_SCHEMA} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Longevity Calculator' }}
+      eyebrow={LC_COPY.hero.badge}
+      h1={<>{LC_COPY.hero.h1Line1}{' '}<span>{LC_COPY.hero.h1Line2}</span></>}
+      lead={LC_COPY.hero.subtitle}
+      footer={{ note: '© 2026 BornClock.' }}
+    >
+      <>
+        {/* ── HERO TRUST + CTA ── */}
+        <section className="max-w-4xl mx-auto px-4 pt-4">
+          <div className="text-center">
             <ul
               aria-label="Calculator features"
               className="flex flex-wrap justify-center gap-4 text-sm text-gray-500 mb-8
@@ -203,7 +176,7 @@ export function LongevityCalculatorPage() {
         >
           <div
             data-testid="calculator-embed"
-            className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl
+            className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl
                        p-8 text-center"
           >
             <p className="text-xl font-bold text-gray-900 mb-2">
@@ -248,8 +221,8 @@ export function LongevityCalculatorPage() {
             <Link
               to="/birthday-report"
               data-testid="longevity-pdf-cta"
-              className="block bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-2xl p-5
-                         text-[#6E5AA6] font-bold text-center hover:bg-[#6E5AA6]/10
+              className="block bg-[#2F6FB0]/10 border border-[#2F6FB0]/30 rounded-2xl p-5
+                         text-[#2F6FB0] font-bold text-center hover:bg-[#2F6FB0]/10
                          transition-colors"
             >
               Get your personalised 90-day longevity plan → Download Free PDF
@@ -318,7 +291,7 @@ export function LongevityCalculatorPage() {
 
           {/* Mid-article CTA */}
           <div
-            className="my-10 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
+            className="my-10 bg-[#2F6FB0]/10 border border-[#2F6FB0]/30
                         rounded-2xl p-6 text-center"
             role="complementary"
             aria-label="Calculator call to action"
@@ -384,7 +357,7 @@ export function LongevityCalculatorPage() {
                   <div className="px-5 py-4">
                     <p className="text-gray-700 font-medium mb-2">{factor.summary}</p>
                     <p className="text-gray-600 text-sm mb-3">{factor.detail}</p>
-                    <p className="text-xs text-[#6E5AA6] italic">
+                    <p className="text-xs text-[#2F6FB0] italic">
                       📚 {factor.source}
                     </p>
                   </div>
@@ -411,7 +384,7 @@ export function LongevityCalculatorPage() {
                              rounded-xl border border-gray-200 p-4"
                 >
                   <div className="flex-shrink-0 text-center min-w-[80px]">
-                    <div className="font-black text-[#6E5AA6] text-sm">
+                    <div className="font-black text-[#2F6FB0] text-sm">
                       {band.range}
                     </div>
                     <div className="text-xs text-gray-500 font-medium">
@@ -517,12 +490,12 @@ export function LongevityCalculatorPage() {
                   to={tool.href}
                   data-testid="related-tool"
                   className="flex items-start gap-3 p-4 bg-white rounded-xl
-                             border border-gray-200 hover:border-[#6E5AA6]/30
-                             hover:bg-[#6E5AA6]/10 transition-colors group"
+                             border border-gray-200 hover:border-[#2F6FB0]/30
+                             hover:bg-[#2F6FB0]/10 transition-colors group"
                 >
                   <div>
                     <div className="font-semibold text-sm text-gray-900
-                                    group-hover:text-[#6E5AA6] mb-0.5">
+                                    group-hover:text-[#2F6FB0] mb-0.5">
                       {tool.title}
                     </div>
                     <div className="text-xs text-gray-500">{tool.desc}</div>
@@ -574,25 +547,25 @@ export function LongevityCalculatorPage() {
             <h2 className="text-2xl font-black mb-2">
               {LC_COPY.bottomCTA.heading}
             </h2>
-            <p className="text-[#6E5AA6] mb-6 max-w-md mx-auto">
+            <p className="text-[#2F6FB0] mb-6 max-w-md mx-auto">
               {LC_COPY.bottomCTA.sub}
             </p>
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-white text-primary hover:bg-[#6E5AA6]/10
+              className="inline-block bg-white text-primary hover:bg-[#2F6FB0]/10
                          font-black py-4 px-8 rounded-xl transition-colors text-lg"
             >
               {LC_COPY.bottomCTA.button}
             </Link>
-            <p className="text-[#6E5AA6] text-xs mt-3">
+            <p className="text-[#2F6FB0] text-xs mt-3">
               {LC_COPY.bottomCTA.footnote}
             </p>
           </div>
 
         </article>
-      </main>
-    </>
+      </>
+    </ToolLayout>
   );
 }
 

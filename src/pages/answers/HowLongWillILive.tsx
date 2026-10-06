@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 export default function HowLongWillILive() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How long will I live?", "item": "https://bornclock.com/answers/how-long-will-i-live" } ] };
@@ -17,31 +17,28 @@ export default function HowLongWillILive() {
   };
 
   return (
-    <>
-      <SEO
-        title="How Long Will I Live? A Science-Based Answer | BornClock"
-        description="How long will I live? Science shows life expectancy depends on genetics (25%), lifestyle (75%), country, and habits. Calculate your personal forecast free."
-        canonicalUrl="/answers/how-long-will-i-live"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="science"
+      testId="answer-how-long-will-i-live"
+      seo={(
+        <SEO
+          title="How Long Will I Live? A Science-Based Answer | BornClock"
+          description="How long will I live? Science shows life expectancy depends on genetics (25%), lifestyle (75%), country, and habits. Calculate your personal forecast free."
+          canonicalUrl="/answers/how-long-will-i-live"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'How long will I live?' }}
+      eyebrow="Answers"
+      h1={<>How Long Will I Live? A Science-Based Answer</>}
+      lead={<>Know your time. Live it well.</>}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">How long will I live?</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-2">How Long Will I Live? A Science-Based Answer</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
+          <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
               The average global life expectancy is 72.8 years (WHO 2023), but your personal forecast depends far more on lifestyle than genetics. Research from the Karolinska Institute shows genetics accounts for only 25–30% of longevity — your habits, environment, and choices control the remaining 70–75%.
             </p>
           </div>
@@ -98,14 +95,13 @@ export default function HowLongWillILive() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-to-live-longer" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How to live longer: what science actually says</Link>
-              <Link to="/answers/what-is-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is life expectancy and how is it calculated?</Link>
-              <Link to="/answers/how-does-stress-affect-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How does stress affect life expectancy?</Link>
-              <Link to="/answers/what-is-my-biological-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my biological age?</Link>
+              <Link to="/answers/how-to-live-longer" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How to live longer: what science actually says</Link>
+              <Link to="/answers/what-is-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is life expectancy and how is it calculated?</Link>
+              <Link to="/answers/how-does-stress-affect-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How does stress affect life expectancy?</Link>
+              <Link to="/answers/what-is-my-biological-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is my biological age?</Link>
             </div>
           </div>
         </div>
-      </AnswerLayout>
-    </>
+    </ArticleLayout>
   );
 }

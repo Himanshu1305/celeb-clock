@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -92,28 +93,23 @@ export function BlueZonesDietArticle() {
   };
 
   return (
-    <>
-      <SEO title={TITLE} description={DESC} canonicalUrl="/articles/blue-zones-diet" ogType="article" />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
+    <ArticleLayout
+      theme="science"
+      testId="blue-zones-diet-article"
+      seo={(
+        <>
+          <SEO title={TITLE} description={DESC} canonicalUrl="/articles/blue-zones-diet" ogType="article" />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: "The Blue Zones Diet — What the World's Longest-Lived People Eat" }}
+      eyebrow="Longevity"
+      h1="The Blue Zones Diet — What the World's Longest-Lived People Eat"
+      lead="A Blue Zone is a region where people live measurably longer than anywhere else on Earth and reach 100 at extraordinary rates. Author and researcher Dan Buettner identified five: Okinawa in Japan, Sardinia in Italy, Ikaria in Greece, Nicoya in Costa Rica, and Loma Linda in California. Despite being separated by oceans and cultures, the people in these places eat in strikingly similar ways — and their diets look far more like a traditional Indian thali than a modern Western plate."
+    >
+      <article className="max-w-3xl mx-auto px-4 py-10">
 
-      <main data-testid="blue-zones-diet-article" className="min-h-screen bg-white">
-        <article className="max-w-3xl mx-auto px-4 py-10">
-
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            The Blue Zones Diet — What the World's Longest-Lived People Eat
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            A Blue Zone is a region where people live measurably longer than anywhere
-            else on Earth and reach 100 at extraordinary rates. Author and researcher
-            Dan Buettner identified five: <strong>Okinawa</strong> in Japan,{' '}
-            <strong>Sardinia</strong> in Italy, <strong>Ikaria</strong> in Greece,{' '}
-            <strong>Nicoya</strong> in Costa Rica, and <strong>Loma Linda</strong> in
-            California. Despite being separated by oceans and cultures, the people in
-            these places eat in strikingly similar ways — and their diets look far more
-            like a traditional Indian thali than a modern Western plate.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             The headline is simple: the world's longest-lived people eat mostly plants,
             centre their meals on beans, rarely eat meat, and stop before they are full.
@@ -121,7 +117,7 @@ export function BlueZonesDietArticle() {
             longevity, the core dietary rules — and how an everyday Indian diet already
             aligns with most of them. If you want to see how these habits translate into
             years, try our{' '}
-            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">
+            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">
               free longevity calculator
             </a>.
           </p>
@@ -185,8 +181,8 @@ export function BlueZonesDietArticle() {
             afterwards, a mild form of daily calorie restriction linked to longer life.
           </p>
 
-          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
-            <h2 className="text-2xl font-black text-[#6E5AA6] mb-2">The Indian Blue Zones Plate</h2>
+          <div className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8">
+            <h2 className="text-2xl font-black text-[#2F6FB0] mb-2">The Indian Blue Zones Plate</h2>
             <p className="text-gray-700 leading-relaxed mb-3">
               A traditional vegetarian Indian diet is, in many ways, already a Blue Zones
               diet. The overlap is remarkable:
@@ -231,15 +227,15 @@ export function BlueZonesDietArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white mt-10">
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">How Long Could You Live?</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               Eating like the Blue Zones is one of the biggest levers you can pull. See how
               your diet, movement and habits add up in years with our science-based tool.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Try the Free Longevity Calculator →
             </a>
           </div>
@@ -248,12 +244,12 @@ export function BlueZonesDietArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/longevity-foods-india" className="text-[#6E5AA6] font-semibold underline">
+                <a href="/articles/longevity-foods-india" className="text-[#2F6FB0] font-semibold underline">
                   Longevity Foods of India — What to Eat to Live Longer
                 </a>
               </li>
               <li>
-                <a href="/articles/how-to-live-to-100" className="text-[#6E5AA6] font-semibold underline">
+                <a href="/articles/how-to-live-to-100" className="text-[#2F6FB0] font-semibold underline">
                   How to Live to 100 — Blue Zones & Science-Backed Habits
                 </a>
               </li>
@@ -261,8 +257,7 @@ export function BlueZonesDietArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

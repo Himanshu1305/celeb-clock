@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { calculateLifePathNumber } from '@/utils/celebrityCalculations';
 
@@ -90,27 +91,23 @@ export function BillionaireLongevityArticle() {
   };
 
   return (
-    <>
-      <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article" />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
-
-      <main data-testid="billionaire-longevity-article" className="min-h-screen bg-white">
+    <ArticleLayout
+      theme="science"
+      testId="billionaire-longevity-article"
+      seo={(
+        <>
+          <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article" />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Longevity Habits of Indian Billionaires' }}
+      eyebrow="Longevity"
+      h1="Longevity Habits of Indian Billionaires"
+      lead="When people picture the health routines of the ultra-wealthy, they imagine private doctors and exotic interventions. The publicly documented habits of India's most famous billionaires — Ratan Tata, Azim Premji and Mukesh Ambani — tell a quieter, more useful story. Their common threads are discipline, purpose, and, in the case of Ambani, an ordinary vegetarian diet and daily walking. This article sticks strictly to what is on the public record, adds each person's numerology Life Path number computed from their real date of birth, and draws out the longevity lessons that anyone can apply."
+    >
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Longevity Habits of Indian Billionaires
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            When people picture the health routines of the ultra-wealthy, they imagine private
-            doctors and exotic interventions. The publicly documented habits of India's most famous
-            billionaires — Ratan Tata, Azim Premji and Mukesh Ambani — tell a quieter, more useful
-            story. Their common threads are discipline, purpose, and, in the case of Ambani, an
-            ordinary vegetarian diet and daily walking. This article sticks strictly to what is on
-            the public record, adds each person's numerology Life Path number computed from their
-            real date of birth, and draws out the longevity lessons that anyone can apply.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             A note on honesty: we deliberately avoid inventing health claims. Where a habit is not
             publicly documented, we do not speculate. What follows is measured and verifiable.
@@ -126,7 +123,7 @@ export function BillionaireLongevityArticle() {
                   </div>
                   <div>
                     <h3 className="text-xl font-black text-gray-900">{b.name}</h3>
-                    <div className="text-sm text-[#6E5AA6] font-semibold">
+                    <div className="text-sm text-[#2F6FB0] font-semibold">
                       Life Path {b.lifePath}
                     </div>
                     <div className="text-xs text-gray-500">Born {b.dobLabel}</div>
@@ -149,9 +146,9 @@ export function BillionaireLongevityArticle() {
             and we make no such claim. It is simply a lens some readers enjoy.
           </p>
 
-          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
-            <h3 className="text-lg font-black text-[#6E5AA6] mb-2">How long might you live?</h3>
-            <p className="text-sm text-[#6E5AA6] mb-4">
+          <div className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8">
+            <h3 className="text-lg font-black text-[#2F6FB0] mb-2">How long might you live?</h3>
+            <p className="text-sm text-[#2F6FB0] mb-4">
               The habits below are free. Start by seeing your own baseline — then decide which
               lessons are worth adopting.
             </p>
@@ -198,14 +195,14 @@ export function BillionaireLongevityArticle() {
             longevity advantage of the ultra-wealthy is less about money and more about habit.
           </p>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">See Your Own Longevity Baseline</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               Adopt the free habits — and track your progress against a personalised estimate of how
               long you might live.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Open the Longevity Calculator →
             </a>
           </div>
@@ -221,7 +218,7 @@ export function BillionaireLongevityArticle() {
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
-          <ul className="list-disc pl-6 text-[#6E5AA6] space-y-2 mb-6">
+          <ul className="list-disc pl-6 text-[#2F6FB0] space-y-2 mb-6">
             <li>
               <a href="/articles/how-indian-celebrities-stay-fit" className="hover:underline font-semibold">
                 How Indian Celebrities Stay Fit
@@ -235,8 +232,7 @@ export function BillionaireLongevityArticle() {
           </ul>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

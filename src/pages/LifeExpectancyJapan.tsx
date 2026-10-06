@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 
@@ -21,42 +19,36 @@ const RELATED = [
 
 const LifeExpectancyJapan = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Life Expectancy in Japan — Why Japan Lives Longest & What We Can Learn"
-        description="Japan's life expectancy is 84.3 years — the highest of any large nation. The reasons are specific, evidence-based, and partially replicable anywhere."
-        keywords="life expectancy Japan, why does Japan live longest, Japanese longevity, Japan average lifespan"
-        canonicalUrl="/life-expectancy-japan"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Life Expectancy in Japan"
-        description="Japan's life expectancy is 84.3 years — why the Japanese live longest and what the science says about it."
-        url="/life-expectancy-japan"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
+    <ArticleLayout
+      theme="science"
+      testId="life-expectancy-japan"
+      seo={(
+        <>
+          <SEO
+            title="Life Expectancy in Japan — Why Japan Lives Longest & What We Can Learn"
+            description="Japan's life expectancy is 84.3 years — the highest of any large nation. The reasons are specific, evidence-based, and partially replicable anywhere."
+            keywords="life expectancy Japan, why does Japan live longest, Japanese longevity, Japan average lifespan"
+            canonicalUrl="/life-expectancy-japan"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Life Expectancy in Japan"
+            description="Japan's life expectancy is 84.3 years — why the Japanese live longest and what the science says about it."
+            url="/life-expectancy-japan"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Japan Life Expectancy' }}
+      eyebrow="Life Expectancy"
+      h1="Life Expectancy in Japan — Why the Japanese Live Longest and What Science Says About It"
+      lead="Japan's average life expectancy is 84.3 years — the highest of any large nation on Earth (UN World Population Prospects 2023). Women average 87.1 years; men average 81.1 years. Japan has held this position for decades, and the reasons are specific and well-studied."
+    >
+      <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
+        <EEATBadges sources={['UN WPP 2023', 'Blue Zones', 'The Lancet']} />
+      </section>
 
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Life Expectancy in Japan — Why the Japanese Live Longest and What Science Says About It
-          </h1>
-          <EEATBadges sources={['UN WPP 2023', 'Blue Zones', 'The Lancet']} />
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Japan's average life expectancy is 84.3 years — the highest of any large nation on Earth (UN World Population Prospects 2023). Women average 87.1 years; men average 81.1 years. Japan has held this position for decades, and the reasons are specific and well-studied.
-            </p>
-          </div>
-        </section>
-
-        <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
+      <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">The Japanese Diet — What Actually Drives Longevity</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Diet does the heavy lifting. High fish consumption, a steady intake of fermented foods like miso, natto and pickles, and unusual plant diversity combine with a very low share of ultra-processed food. Portions are small by design.</p>
@@ -114,9 +106,7 @@ const LifeExpectancyJapan = () => {
             ))}
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

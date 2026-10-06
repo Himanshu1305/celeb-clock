@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 
@@ -21,42 +19,36 @@ const RELATED = [
 
 const LifeExpectancyChina = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Life Expectancy in China — 2026 Data, the Dramatic Rise & Regional Gaps"
-        description="China's life expectancy is 78.2 years — up from 43 in 1960. Here's one of history's most dramatic health transformations and what still drives gaps."
-        keywords="life expectancy China, Chinese lifespan 2026, how long do Chinese live, China longevity"
-        canonicalUrl="/life-expectancy-china"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Life Expectancy in China"
-        description="China's life expectancy is 78.2 years — one of history's most dramatic health transformations, and the gaps that remain."
-        url="/life-expectancy-china"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
+    <ArticleLayout
+      theme="science"
+      testId="life-expectancy-china"
+      seo={(
+        <>
+          <SEO
+            title="Life Expectancy in China — 2026 Data, the Dramatic Rise & Regional Gaps"
+            description="China's life expectancy is 78.2 years — up from 43 in 1960. Here's one of history's most dramatic health transformations and what still drives gaps."
+            keywords="life expectancy China, Chinese lifespan 2026, how long do Chinese live, China longevity"
+            canonicalUrl="/life-expectancy-china"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Life Expectancy in China"
+            description="China's life expectancy is 78.2 years — one of history's most dramatic health transformations, and the gaps that remain."
+            url="/life-expectancy-china"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'China Life Expectancy' }}
+      eyebrow="Life Expectancy"
+      h1="Life Expectancy in China — One of History's Most Dramatic Health Transformations"
+      lead="China's average life expectancy is approximately 78.2 years as of 2023. Women average 81.1 years; men average 75.5 years. China has gained over 34 years of life expectancy since 1960 — from 43.7 years to 78.2 — one of the most rapid improvements ever recorded for a large population."
+    >
+      <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
+        <EEATBadges sources={['UN WPP 2023', 'WHO', 'EPIC']} />
+      </section>
 
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Life Expectancy in China — One of History's Most Dramatic Health Transformations
-          </h1>
-          <EEATBadges sources={['UN WPP 2023', 'WHO', 'EPIC']} />
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              China's average life expectancy is approximately 78.2 years as of 2023. Women average 81.1 years; men average 75.5 years. China has gained over 34 years of life expectancy since 1960 — from 43.7 years to 78.2 — one of the most rapid improvements ever recorded for a large population.
-            </p>
-          </div>
-        </section>
-
-        <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
+      <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">The Extraordinary Rise</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">The trajectory is almost hard to believe: from 43.7 years in 1960 to 78.2 in 2023. Economic growth, improved nutrition, expanded healthcare access, mass vaccination and a sharp fall in infectious disease all compounded.</p>
@@ -114,9 +106,7 @@ const LifeExpectancyChina = () => {
             ))}
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

@@ -1,9 +1,7 @@
 import { useLocation, Link } from 'react-router-dom';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -213,37 +211,33 @@ export default function GenerationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <SEO
-        title="Which Generation Are You? — Complete Generational Guide | BornClock"
-        description="Gen Z, Millennial, Gen X, Boomer — find out which generation you belong to and what shaped the way you see the world."
-        keywords="what generation am I, generational guide, millennial gen z baby boomer gen x generation alpha, pew research generations"
-        canonicalUrl="/generation"
-      />
-      <WebApplicationSchema
-        name="Generation Calculator"
-        description="Free generation calculator — find out if you're Gen Z, Millennial, Gen X, Boomer or another generation with Pew Research-based dates and defining events."
-        url="/generation"
-      />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-      </Helmet>
-
+    <CollectionLayout
+      theme="science"
+      testId="generation-page"
+      seo={(
+        <>
+          <SEO
+            title="Which Generation Are You? — Complete Generational Guide | BornClock"
+            description="Gen Z, Millennial, Gen X, Boomer — find out which generation you belong to and what shaped the way you see the world."
+            keywords="what generation am I, generational guide, millennial gen z baby boomer gen x generation alpha, pew research generations"
+            canonicalUrl="/generation"
+          />
+          <WebApplicationSchema
+            name="Generation Calculator"
+            description="Free generation calculator — find out if you're Gen Z, Millennial, Gen X, Boomer or another generation with Pew Research-based dates and defining events."
+            url="/generation"
+          />
+          <Helmet>
+            <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+          </Helmet>
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Generation' }}
+      eyebrow="Generations"
+      h1={<>Which Generation Are You? — Complete Guide</>}
+      lead={<>From the Silent Generation to Generation Alpha — dates, defining events, values, and what the research actually says about each cohort.</>}
+    >
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Hero */}
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Which Generation Are You? — Complete Guide
-          </h1>
-          <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-            From the Silent Generation to Generation Alpha — dates, defining events, values, and what the research actually says about each cohort.
-          </p>
-        </div>
 
         {/* User's generation (if year param provided) */}
         {userGen && (
@@ -366,8 +360,6 @@ export default function GenerationPage() {
           <strong>Sources:</strong> Pew Research Center (2019), "Defining Generations: Where Millennials end and Generation Z begins." McCrindle Research (2021), "Generation Alpha." Jonathan Haidt & Greg Lukianoff (2018), "The Coddling of the American Mind." Brookings Institution generational research series.
         </div>
       </div>
-
-      <Footer />
-    </div>
+    </CollectionLayout>
   );
 }

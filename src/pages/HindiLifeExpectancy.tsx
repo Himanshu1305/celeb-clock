@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 
 const RELATED = [
@@ -13,38 +11,30 @@ const RELATED = [
 
 const HindiLifeExpectancy = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="जीवन काल Calculator — Life Expectancy in Hindi | BornClock"
-        description="आप कितने साल जिएंगे? BornClock का मुफ्त life expectancy calculator आपकी lifestyle के आधार पर आपका जीवन काल बताता है।"
-        keywords="jivan kal calculator, life expectancy hindi, kitne saal jienge, umra calculator hindi"
-        canonicalUrl="/jivan-kal-calculator"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="जीवन काल Calculator — Life Expectancy in Hindi"
-        description="BornClock का मुफ्त हिंदी life expectancy calculator — आपकी lifestyle के आधार पर आपका जीवन काल।"
-        url="/jivan-kal-calculator"
-      />
+    <ToolLayout
+      theme="science"
+      seo={(
+        <>
+          <SEO
+            title="जीवन काल Calculator — Life Expectancy in Hindi | BornClock"
+            description="आप कितने साल जिएंगे? BornClock का मुफ्त life expectancy calculator आपकी lifestyle के आधार पर आपका जीवन काल बताता है।"
+            keywords="jivan kal calculator, life expectancy hindi, kitne saal jienge, umra calculator hindi"
+            canonicalUrl="/jivan-kal-calculator"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="जीवन काल Calculator — Life Expectancy in Hindi"
+            description="BornClock का मुफ्त हिंदी life expectancy calculator — आपकी lifestyle के आधार पर आपका जीवन काल।"
+            url="/jivan-kal-calculator"
+          />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'जीवन काल Calculator' }}
+      eyebrow="Life Expectancy"
+      h1="आप कितने साल जिएंगे?"
+      lead={<>आपका जीवन काल आपकी जन्म तिथि नहीं, आपकी lifestyle तय करती है। Harvard के एक अध्ययन में 1.23 लाख लोगों को 30 साल तक track किया गया। नतीजा: 5 healthy habits अपनाने वाले लोग औसतन 14 साल ज्यादा जीते हैं।</>}
+    >
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            आप कितने साल जिएंगे?
-          </h1>
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-10 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              आपका जीवन काल आपकी जन्म तिथि नहीं, आपकी lifestyle तय करती है। Harvard के एक अध्ययन में 1.23 लाख लोगों को 30 साल तक track किया गया। नतीजा: 5 healthy habits अपनाने वाले लोग औसतन 14 साल ज्यादा जीते हैं।
-            </p>
-          </div>
-        </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
@@ -84,8 +74,7 @@ const HindiLifeExpectancy = () => {
           </div>
         </section>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

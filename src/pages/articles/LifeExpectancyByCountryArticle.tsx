@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -106,11 +107,11 @@ function CountryLookup() {
 
   return (
     <div data-testid="country-le-lookup"
-         className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
-      <h3 className="text-lg font-black text-[#6E5AA6] mb-1">
+         className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8">
+      <h3 className="text-lg font-black text-[#2F6FB0] mb-1">
         Look Up a Country&apos;s Life Expectancy
       </h3>
-      <p className="text-sm text-[#6E5AA6] mb-4">
+      <p className="text-sm text-[#2F6FB0] mb-4">
         Type a country name (try Japan, India, USA, UK, China, Brazil, or Chad) to see its
         2026 life expectancy and how it compares globally.
       </p>
@@ -119,13 +120,13 @@ function CountryLookup() {
         value={query}
         onChange={(e) => handleLookup(e.target.value)}
         placeholder="Enter a country name…"
-        className="w-full border-2 border-[#6E5AA6]/30 rounded-xl px-4 py-3
-                   text-base focus:outline-none focus:border-[#6E5AA6]/30 bg-white mb-4"
+        className="w-full border-2 border-[#2F6FB0]/30 rounded-xl px-4 py-3
+                   text-base focus:outline-none focus:border-[#2F6FB0]/30 bg-white mb-4"
         aria-label="Enter a country name to look up its life expectancy"
       />
       {result && (
         <div data-testid="country-le-result"
-             className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-5">
+             className="bg-white rounded-xl border-2 border-[#2F6FB0]/30 p-5">
           <div className="flex items-center gap-4 mb-3">
             <div className="w-20 h-14 bg-[#0E2238] rounded-xl flex items-center
                             justify-center text-2xl font-black text-white flex-shrink-0">
@@ -133,7 +134,7 @@ function CountryLookup() {
             </div>
             <div>
               <div className="text-xl font-black text-gray-900">{result.name}</div>
-              <div className="text-[#6E5AA6] font-semibold">
+              <div className="text-[#2F6FB0] font-semibold">
                 {result.le} years (life expectancy at birth)
               </div>
             </div>
@@ -142,7 +143,7 @@ function CountryLookup() {
         </div>
       )}
       {result === null && query.trim() && (
-        <div className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-4 text-sm text-gray-600">
+        <div className="bg-white rounded-xl border-2 border-[#2F6FB0]/30 p-4 text-sm text-gray-600">
           No match for &ldquo;{query}&rdquo; in this table. Try Japan, Switzerland, India,
           United States, United Kingdom, China, Brazil, Nigeria, or Chad.
         </div>
@@ -172,40 +173,34 @@ export function LifeExpectancyByCountryArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Life Expectancy by Country 2026 — Global Rankings | BornClock"
-        description="Life expectancy by country in 2026 — WHO data for 190+ nations. See global rankings, what drives the differences, and how to improve your own."
-        canonicalUrl="/articles/life-expectancy-by-country-2026"
-        ogType="article"
-      />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
+    <ArticleLayout
+      theme="science"
+      testId="life-expectancy-country-article"
+      seo={(
+        <>
+          <SEO
+            title="Life Expectancy by Country 2026 — Global Rankings | BornClock"
+            description="Life expectancy by country in 2026 — WHO data for 190+ nations. See global rankings, what drives the differences, and how to improve your own."
+            canonicalUrl="/articles/life-expectancy-by-country-2026"
+            ogType="article"
+          />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Life Expectancy by Country 2026 — Global Rankings' }}
+      eyebrow="Life Expectancy"
+      h1="Life Expectancy by Country 2026 — Global Rankings"
+      lead="Life expectancy is one of the clearest single measures of how well a nation cares for its people. It captures healthcare, nutrition, sanitation, income, and safety in a single number: the average years a newborn can expect to live if today's conditions hold. In 2026, drawing on the latest World Health Organization (WHO) data covering more than 190 nations, the gap between the longest- and shortest-living countries is roughly 30 years — from Japan at 84.3 years down to Chad at 54.3. This guide ranks the leaders and laggards, explains what drives the differences, and shows how to add years to your own life no matter where you were born."
+    >
+      <article className="max-w-3xl mx-auto px-4 py-10">
 
-      <main data-testid="life-expectancy-country-article" className="min-h-screen bg-white">
-        <article className="max-w-3xl mx-auto px-4 py-10">
-
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Life Expectancy by Country 2026 — Global Rankings
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Life expectancy is one of the clearest single measures of how well a nation cares
-            for its people. It captures healthcare, nutrition, sanitation, income, and safety
-            in a single number: the average years a newborn can expect to live if today&apos;s
-            conditions hold. In 2026, drawing on the latest World Health Organization (WHO)
-            data covering more than 190 nations, the gap between the longest- and
-            shortest-living countries is roughly <strong>30 years</strong> — from Japan at
-            84.3 years down to Chad at 54.3. This guide ranks the leaders and laggards,
-            explains what drives the differences, and shows how to add years to your own life
-            no matter where you were born.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             The good news is that these numbers are not fixed. Global life expectancy has
             climbed from the low 50s in 1970 to the low 70s today, and countries like India
             have gained nearly two decades of life in a single generation. Curious what the
             numbers mean for you personally? Our{' '}
-            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">
+            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">
               longevity calculator
             </a>{' '}
             estimates your own life expectancy from your lifestyle and habits.
@@ -385,7 +380,7 @@ export function LifeExpectancyByCountryArticle() {
             by more than a decade, which shows how much room there is for continued gains as
             healthcare and incomes keep rising. If you want to see how these national numbers
             translate to an individual in India, our{' '}
-            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">
+            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">
               longevity calculator
             </a>{' '}
             factors in your own lifestyle rather than a national average.
@@ -414,17 +409,17 @@ export function LifeExpectancyByCountryArticle() {
             live, the levers above are within your control.
           </p>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
                p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">How Long Will You Live?</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               National averages only tell part of the story. See a personalised estimate based
               on your own lifestyle, habits and health with the free BornClock longevity
               calculator.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Calculate My Life Expectancy →
             </a>
           </div>
@@ -444,13 +439,13 @@ export function LifeExpectancyByCountryArticle() {
             <ul className="space-y-2">
               <li>
                 <a href="/articles/how-long-will-i-live-in-india"
-                   className="text-[#6E5AA6] font-semibold underline">
+                   className="text-[#2F6FB0] font-semibold underline">
                   How Long Will I Live in India? →
                 </a>
               </li>
               <li>
                 <a href="/articles/how-to-live-to-100"
-                   className="text-[#6E5AA6] font-semibold underline">
+                   className="text-[#2F6FB0] font-semibold underline">
                   How to Live to 100 →
                 </a>
               </li>
@@ -458,8 +453,7 @@ export function LifeExpectancyByCountryArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

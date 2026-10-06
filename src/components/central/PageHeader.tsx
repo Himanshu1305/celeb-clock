@@ -14,7 +14,7 @@ export function PageHeader({
   trust,
   white = false,
 }: {
-  eyebrow?: string;
+  eyebrow?: ReactNode;
   h1: ReactNode;
   lead?: ReactNode;
   trust?: string;

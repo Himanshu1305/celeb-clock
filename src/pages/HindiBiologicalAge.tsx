@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 
 const RELATED = [
@@ -13,38 +11,30 @@ const RELATED = [
 
 const HindiBiologicalAge = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Biological Age in Hindi — आपका शरीर कितना पुराना है? | BornClock"
-        description="आपकी biological age आपकी असली उम्र से 10 साल कम या ज्यादा हो सकती है। BornClock का मुफ्त test हिंदी में।"
-        keywords="biological age hindi, body age calculator hindi, jism ki umar, biological age test hindi"
-        canonicalUrl="/biological-age-hindi"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Biological Age in Hindi — आपका शरीर कितना पुराना है?"
-        description="BornClock का मुफ्त हिंदी biological age test — जानें आपका शरीर actually कितना पुराना है।"
-        url="/biological-age-hindi"
-      />
+    <ToolLayout
+      theme="science"
+      seo={(
+        <>
+          <SEO
+            title="Biological Age in Hindi — आपका शरीर कितना पुराना है? | BornClock"
+            description="आपकी biological age आपकी असली उम्र से 10 साल कम या ज्यादा हो सकती है। BornClock का मुफ्त test हिंदी में।"
+            keywords="biological age hindi, body age calculator hindi, jism ki umar, biological age test hindi"
+            canonicalUrl="/biological-age-hindi"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Biological Age in Hindi — आपका शरीर कितना पुराना है?"
+            description="BornClock का मुफ्त हिंदी biological age test — जानें आपका शरीर actually कितना पुराना है।"
+            url="/biological-age-hindi"
+          />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Biological Age (Hindi)' }}
+      eyebrow="Biological Age"
+      h1="आपकी Biological Age क्या है?"
+      lead={<>Biological age वह उम्र है जो आपका शरीर actually जी रहा है — आपके जन्म प्रमाण पत्र की उम्र नहीं। दो लोग जो एक ही दिन पैदा हुए हों, उनकी biological age 10 साल तक अलग हो सकती है — उनकी lifestyle के आधार पर।</>}
+    >
       <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            आपकी Biological Age क्या है?
-          </h1>
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-10 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Biological age वह उम्र है जो आपका शरीर actually जी रहा है — आपके जन्म प्रमाण पत्र की उम्र नहीं। दो लोग जो एक ही दिन पैदा हुए हों, उनकी biological age 10 साल तक अलग हो सकती है — उनकी lifestyle के आधार पर।
-            </p>
-          </div>
-        </section>
 
         <section className="max-w-3xl mx-auto mb-12 px-4">
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
@@ -84,8 +74,7 @@ const HindiBiologicalAge = () => {
           </div>
         </section>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 };
 

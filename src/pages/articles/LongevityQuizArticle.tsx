@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { LC_FACTORS } from '@/content/longevityCalculatorContent';
 
@@ -96,48 +97,45 @@ export function LongevityQuizArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Longevity Quiz — How Long Will You Live? 8 Factors | BornClock"
-        description="Take the longevity quiz — 8 science-backed factors (WHO, Harvard) that determine how long you'll live. Free, 3 minutes, with worked example."
-        canonicalUrl="/articles/longevity-quiz"
-        ogType="article"
-      />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
-      <JsonLd data={howToSchema} />
+    <ArticleLayout
+      theme="science"
+      testId="longevity-quiz-article"
+      seo={(
+        <>
+          <SEO
+            title="Longevity Quiz — How Long Will You Live? 8 Factors | BornClock"
+            description="Take the longevity quiz — 8 science-backed factors (WHO, Harvard) that determine how long you'll live. Free, 3 minutes, with worked example."
+            canonicalUrl="/articles/longevity-quiz"
+            ogType="article"
+          />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+          <JsonLd data={howToSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Longevity Quiz — How Long Will You Live? The 8 Factors That Decide' }}
+      eyebrow="Longevity"
+      h1="Longevity Quiz — How Long Will You Live? The 8 Factors That Decide"
+      lead="A longevity quiz answers a deceptively simple question: how long will you live? Most online quizzes ask your age and whether you smoke, then quote the national average and call it personalised. This one is built differently. It scores 8 evidence-based factors against research from the World Health Organization (WHO), Harvard, the NIH, the Lancet, and the Karolinska Institute — and turns your answers into a personalised estimate you can actually act on."
+    >
+      <article className="max-w-3xl mx-auto px-4 py-10">
 
-      <main data-testid="longevity-quiz-article" className="min-h-screen bg-white">
-        <article className="max-w-3xl mx-auto px-4 py-10">
-
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Longevity Quiz — How Long Will You Live? The 8 Factors That Decide
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            A longevity quiz answers a deceptively simple question: how long will you live?
-            Most online quizzes ask your age and whether you smoke, then quote the national
-            average and call it personalised. This one is built differently. It scores{' '}
-            <strong>8 evidence-based factors</strong> against research from the World Health
-            Organization (WHO), Harvard, the NIH, the Lancet, and the Karolinska Institute —
-            and turns your answers into a personalised estimate you can actually act on.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             The reason 8 factors matter is that longevity is mostly modifiable. The Karolinska
             Institute's landmark twin study found genetics explains only 25–30% of how long we
             live. The other 70–75% comes down to the daily choices this quiz measures. Below,
             each factor gets its own section — what it measures, the science behind it, and the
             optimal target — followed by a full worked example.{' '}
-            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">
+            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">
               You can take the quiz itself in the longevity calculator
             </a>.
           </p>
 
-          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
-            <h2 className="text-lg font-black text-[#6E5AA6] mb-1">
+          <div className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8">
+            <h2 className="text-lg font-black text-[#2F6FB0] mb-1">
               Take the Longevity Quiz Free
             </h2>
-            <p className="text-sm text-[#6E5AA6] mb-4">
+            <p className="text-sm text-[#2F6FB0] mb-4">
               8 questions, 3 minutes, WHO country baselines. Get your longevity score, life
               expectancy estimate, and a personalised 90-day action plan.
             </p>
@@ -229,16 +227,16 @@ export function LongevityQuizArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Ready to Take the Longevity Quiz?</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               8 science-backed factors. 3 minutes. Free personalised 90-day action plan and
               biological age estimate.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Start My Free Longevity Quiz →
             </a>
           </div>
@@ -247,12 +245,12 @@ export function LongevityQuizArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-3">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/how-to-live-to-100" className="text-[#6E5AA6] font-semibold underline">
+                <a href="/articles/how-to-live-to-100" className="text-[#2F6FB0] font-semibold underline">
                   How to Live to 100 — Habits of Centenarians
                 </a>
               </li>
               <li>
-                <a href="/articles/exercise-and-longevity" className="text-[#6E5AA6] font-semibold underline">
+                <a href="/articles/exercise-and-longevity" className="text-[#2F6FB0] font-semibold underline">
                   Exercise and Longevity — How Much You Really Need
                 </a>
               </li>
@@ -260,8 +258,7 @@ export function LongevityQuizArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

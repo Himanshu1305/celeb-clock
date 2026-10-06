@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 const CANONICAL = 'https://bornclock.com/answers/what-is-epigenetic-age';
 
@@ -33,31 +33,28 @@ export default function WhatIsEpigeneticAge() {
   };
 
   return (
-    <>
-      <SEO
-        title="What Is Epigenetic Age? The Science of Biological Aging | BornClock"
-        description="Epigenetic age measures biological aging at the DNA level — and it can be reduced. Here's how it works, what it predicts, and what the latest research shows."
-        canonicalUrl="/answers/what-is-epigenetic-age"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="science"
+      testId="answer-what-is-epigenetic-age"
+      seo={(
+        <SEO
+          title="What Is Epigenetic Age? The Science of Biological Aging | BornClock"
+          description="Epigenetic age measures biological aging at the DNA level — and it can be reduced. Here's how it works, what it predicts, and what the latest research shows."
+          canonicalUrl="/answers/what-is-epigenetic-age"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What is epigenetic age?' }}
+      eyebrow="Answers"
+      h1={<>What Is Epigenetic Age — and Why It's the Most Honest Number About How You're Aging</>}
+      lead={<>Know your time. Live it well.</>}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">What is epigenetic age?</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-2">What Is Epigenetic Age — and Why It's the Most Honest Number About How You're Aging</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
+          <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
               Epigenetic age is a measure of biological aging based on DNA methylation — chemical changes to your DNA that accumulate in predictable patterns as you age. It was pioneered by UCLA geneticist Steve Horvath in 2013 and is currently the most scientifically validated way to measure how fast your body is aging at a cellular level. Unlike your chronological age, which only moves forward, epigenetic age can — with the right interventions — actually go down.
             </p>
           </div>
@@ -96,12 +93,11 @@ export default function WhatIsEpigeneticAge() {
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Tools</p>
             <div className="space-y-2">
               {RELATED.map((t) => (
-                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ {t.label}</Link>
+                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ {t.label}</Link>
               ))}
             </div>
           </div>
         </div>
-      </AnswerLayout>
-    </>
+    </ArticleLayout>
   );
 }

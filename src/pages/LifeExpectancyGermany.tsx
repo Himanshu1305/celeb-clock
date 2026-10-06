@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 
@@ -21,42 +19,36 @@ const RELATED = [
 
 const LifeExpectancyGermany = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Life Expectancy in Germany — 2026 Data, East-West Gap & Key Drivers"
-        description="Germany's life expectancy is 80.6 years — below most Western European neighbours. Here's why, including the persistent east-west divide."
-        keywords="life expectancy Germany, German lifespan 2026, how long do Germans live, Germany longevity"
-        canonicalUrl="/life-expectancy-germany"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Life Expectancy in Germany"
-        description="Germany's life expectancy is 80.6 years — strong healthcare, but below its European neighbours. Here's why."
-        url="/life-expectancy-germany"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
+    <ArticleLayout
+      theme="science"
+      testId="life-expectancy-germany"
+      seo={(
+        <>
+          <SEO
+            title="Life Expectancy in Germany — 2026 Data, East-West Gap & Key Drivers"
+            description="Germany's life expectancy is 80.6 years — below most Western European neighbours. Here's why, including the persistent east-west divide."
+            keywords="life expectancy Germany, German lifespan 2026, how long do Germans live, Germany longevity"
+            canonicalUrl="/life-expectancy-germany"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Life Expectancy in Germany"
+            description="Germany's life expectancy is 80.6 years — strong healthcare, but below its European neighbours. Here's why."
+            url="/life-expectancy-germany"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Germany Life Expectancy' }}
+      eyebrow="Life Expectancy"
+      h1="Life Expectancy in Germany — Strong Healthcare, But Below Its European Neighbours"
+      lead="Germany's average life expectancy is approximately 80.6 years as of 2023. Women average 83.2 years; men average 78.2 years. Despite having one of the world's most advanced healthcare systems, Germany ranks below most Western European neighbours — largely due to higher smoking rates, higher alcohol consumption, and a rising obesity rate."
+    >
+      <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
+        <EEATBadges sources={['UN WPP 2023', 'Destatis', 'WHO']} />
+      </section>
 
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Life Expectancy in Germany — Strong Healthcare, But Below Its European Neighbours
-          </h1>
-          <EEATBadges sources={['UN WPP 2023', 'Destatis', 'WHO']} />
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Germany's average life expectancy is approximately 80.6 years as of 2023. Women average 83.2 years; men average 78.2 years. Despite having one of the world's most advanced healthcare systems, Germany ranks below most Western European neighbours — largely due to higher smoking rates, higher alcohol consumption, and a rising obesity rate.
-            </p>
-          </div>
-        </section>
-
-        <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
+      <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Why Germany Underperforms vs France, Spain, and Italy</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Germany is the clearest case of world-class healthcare not being enough on its own. Smoking prevalence runs higher than in its southern European neighbours, and alcohol consumption is higher too.</p>
@@ -114,9 +106,7 @@ const LifeExpectancyGermany = () => {
             ))}
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

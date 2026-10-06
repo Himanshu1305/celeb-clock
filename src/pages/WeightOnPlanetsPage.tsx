@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { PageFAQ } from '@/components/PageFAQ';
 import { SharePageBar } from '@/components/SharePageBar';
 import { postsForTags } from '@/lib/mesh';
@@ -48,35 +46,28 @@ export default function WeightOnPlanetsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <SEO
-        title="How Much Would You Weigh on Other Planets? — Free Calculator | BornClock"
-        description="Enter your weight and instantly see it on all 8 planets and the Moon, from bouncy Moon gravity to crushing Jupiter — computed from NASA surface-gravity data. Fun, free, nothing stored."
-        keywords="weight on other planets, how much would i weigh on mars, weight on the moon, weight on jupiter, planet weight calculator, gravity on other planets"
-        canonicalUrl="/weight-on-planets"
-      />
-
-      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
-      </div>
-
-      <section className="max-w-2xl mx-auto px-4 pt-12 pb-6 text-center">
-        <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[#6E5AA6] bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-full px-3 py-1 mb-5">
-          <Globe className="w-4 h-4" /> Cosmic weigh-in
-        </div>
-        <h1 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-4">
-          How much would you weigh on other planets?
-        </h1>
-        {/* Answer-first (AEO) */}
-        <p className="text-lg text-gray-700 leading-relaxed max-w-xl mx-auto">
+    <ToolLayout
+      theme="science"
+      testId="weight-on-planets-page"
+      seo={(
+        <SEO
+          title="How Much Would You Weigh on Other Planets? — Free Calculator | BornClock"
+          description="Enter your weight and instantly see it on all 8 planets and the Moon, from bouncy Moon gravity to crushing Jupiter — computed from NASA surface-gravity data. Fun, free, nothing stored."
+          keywords="weight on other planets, how much would i weigh on mars, weight on the moon, weight on jupiter, planet weight calculator, gravity on other planets"
+          canonicalUrl="/weight-on-planets"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Weight on Planets' }}
+      eyebrow={<span className="inline-flex items-center gap-2"><Globe className="w-4 h-4" /> Cosmic weigh-in</span>}
+      h1={<>How much would you weigh on other planets?</>}
+      lead={(
+        <>
           Your <strong>mass</strong> never changes — but your <strong>weight</strong> is just gravity’s pull on
           that mass, and every world pulls differently. Type your weight below and watch it swing from featherweight
           on the Moon to crushing on Jupiter, all computed from NASA surface-gravity data.
-        </p>
-      </section>
+        </>
+      )}
+    >
 
       {/* Calculator */}
       <section className="max-w-2xl mx-auto px-4 pb-4">
@@ -124,7 +115,7 @@ export default function WeightOnPlanetsPage() {
                 <div>
                   <div className="flex items-baseline gap-2">
                     <span className="font-bold text-gray-900">{p.name}</span>
-                    <span className="text-lg font-black text-[#6E5AA6]">{w(p)}</span>
+                    <span className="text-lg font-black text-[#2F6FB0]">{w(p)}</span>
                   </div>
                   <p className="text-xs text-gray-500 leading-relaxed mt-0.5">{p.fact}</p>
                 </div>
@@ -189,10 +180,10 @@ export default function WeightOnPlanetsPage() {
 
       {/* CTA to sister tools */}
       <section className="max-w-2xl mx-auto px-4 py-4">
-        <div className="rounded-2xl bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] p-6 text-center text-white">
+        <div className="rounded-2xl bg-gradient-to-br from-[#2F6FB0] to-[#2F6FB0] p-6 text-center text-white">
           <p className="text-lg font-bold mb-1">Loved this? See your age on every planet</p>
-          <p className="text-[#6E5AA6] text-sm mb-4">You’re a different number of years old on Mercury, Mars and Jupiter too — find out in seconds.</p>
-          <Link to="/planetary-age" className="inline-flex items-center gap-2 bg-white text-[#6E5AA6] px-6 py-3 rounded-xl font-semibold hover:bg-[#6E5AA6]/10 transition-colors">
+          <p className="text-white/80 text-sm mb-4">You’re a different number of years old on Mercury, Mars and Jupiter too — find out in seconds.</p>
+          <Link to="/planetary-age" className="inline-flex items-center gap-2 bg-white text-[#2F6FB0] px-6 py-3 rounded-xl font-semibold hover:bg-[#2F6FB0]/10 transition-colors">
             <ArrowRightCircle className="w-5 h-5" /> Try the Planetary Age calculator
           </Link>
         </div>
@@ -212,14 +203,12 @@ export default function WeightOnPlanetsPage() {
         <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Keep exploring</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {meshPosts.map(p => (
-            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ {p.title}</Link>
+            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ {p.title}</Link>
           ))}
-          <Link to="/planetary-age" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Your age on every planet</Link>
-          <Link to="/birthday-report" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Your Birthday Report</Link>
+          <Link to="/planetary-age" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Your age on every planet</Link>
+          <Link to="/birthday-report" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Your Birthday Report</Link>
         </div>
       </div>
-
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 }

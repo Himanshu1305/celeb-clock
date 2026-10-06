@@ -193,11 +193,11 @@ describe('HowLongWillILivePage — Structure', () => {
       .toContain('Blue Zone');
   });
 
-  it('TC-PAGE-28: 3 breadcrumb items', () => {
+  it('TC-PAGE-28: 4 breadcrumb items (central shell: BornClock + trail + current)', () => {
     renderPage(HowLongWillILivePage);
     expect(
       document.querySelectorAll('[data-testid="breadcrumb-item"]').length
-    ).toBe(3);
+    ).toBe(4);
   });
 
   it('TC-PAGE-29: country table section contains Kerala text (India note)', () => {

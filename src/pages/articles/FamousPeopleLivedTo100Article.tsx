@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -123,37 +124,34 @@ export function FamousPeopleLivedTo100Article() {
   };
 
   return (
-    <>
-      <SEO
-        title="Famous People Who Lived to 100 — Centenarian Secrets | BornClock"
-        description="Famous people who lived to 100+ — Kane Tanaka, Bob Hope, Olivia de Havilland and more. What the world's centenarians had in common, and how to apply it."
-        canonicalUrl="/articles/famous-people-lived-to-100"
-        ogType="article"
-      />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
-
-      <main data-testid="famous-centenarians-article" className="min-h-screen bg-white">
+    <ArticleLayout
+      theme="science"
+      testId="famous-centenarians-article"
+      seo={(
+        <>
+          <SEO
+            title="Famous People Who Lived to 100 — Centenarian Secrets | BornClock"
+            description="Famous people who lived to 100+ — Kane Tanaka, Bob Hope, Olivia de Havilland and more. What the world's centenarians had in common, and how to apply it."
+            canonicalUrl="/articles/famous-people-lived-to-100"
+            ogType="article"
+          />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Famous People Who Lived to 100 — Centenarian Secrets' }}
+      eyebrow="Longevity"
+      h1="Famous People Who Lived to 100 — Centenarian Secrets"
+      lead="Reaching your 100th birthday is still rare enough to make headlines — and for good reason. Only a tiny fraction of people ever join the centenarian club, and the handful who go well beyond it, into their 110s, are rarer still. Yet the famous people who lived to 100 are more than a curiosity. Studied together, they reveal a surprisingly consistent set of habits and circumstances that anyone can learn from."
+    >
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Famous People Who Lived to 100 — Centenarian Secrets
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Reaching your 100th birthday is still rare enough to make headlines — and for
-            good reason. Only a tiny fraction of people ever join the centenarian club, and
-            the handful who go well beyond it, into their 110s, are rarer still. Yet the
-            famous people who lived to 100 are more than a curiosity. Studied together, they
-            reveal a surprisingly consistent set of habits and circumstances that anyone can
-            learn from.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             Below is a table of real, verified centenarians — from the Japanese
             supercentenarian Kane Tanaka to Hollywood's Olivia de Havilland — followed by
             the six traits they most had in common, and how you can apply those lessons to
             your own life. Curious where you stand? You can estimate your own outlook with our
-            free <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">longevity calculator</a>.
+            free <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">longevity calculator</a>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Real Centenarians Who Lived to 100 and Beyond</h2>
@@ -211,16 +209,16 @@ export function FamousPeopleLivedTo100Article() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
                p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">How Long Might You Live?</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               The habits of centenarians are within your reach. See how your own lifestyle
               shapes your outlook with BornClock's free, private longevity estimate.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Try the Longevity Calculator →
             </a>
           </div>
@@ -239,21 +237,20 @@ export function FamousPeopleLivedTo100Article() {
           <div className="grid gap-3 mb-10">
             <a href="/articles/how-to-live-to-100"
                className="block bg-white border-2 border-gray-200 rounded-xl p-4
-                          hover:border-[#6E5AA6]/30 transition-colors">
-              <span className="font-bold text-[#6E5AA6]">How to Live to 100 →</span>
+                          hover:border-[#2F6FB0]/30 transition-colors">
+              <span className="font-bold text-[#2F6FB0]">How to Live to 100 →</span>
               <span className="block text-sm text-gray-600">The evidence-based habits that add healthy years to your life.</span>
             </a>
             <a href="/articles/blue-zones-diet"
                className="block bg-white border-2 border-gray-200 rounded-xl p-4
-                          hover:border-[#6E5AA6]/30 transition-colors">
-              <span className="font-bold text-[#6E5AA6]">The Blue Zones Diet →</span>
+                          hover:border-[#2F6FB0]/30 transition-colors">
+              <span className="font-bold text-[#2F6FB0]">The Blue Zones Diet →</span>
               <span className="block text-sm text-gray-600">What the world's longest-lived communities actually eat.</span>
             </a>
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

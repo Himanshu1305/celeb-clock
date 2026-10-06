@@ -1,9 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { ReportLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { ArrowRight, RefreshCw, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { BIO_QUESTIONS, calculateBiologicalAge, getWHOWaistRisk } from '@/services/BiologicalAgeService';
@@ -208,7 +206,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
           <span className="text-sm font-bold text-gray-700 w-10 text-right">{bmiSlider.toFixed(1)}</span>
         </div>
         {bmiSliderActive && (
-          <p className="text-xs text-center text-[#6E5AA6] mt-1">Using slider BMI value</p>
+          <p className="text-xs text-center text-[#2F6FB0] mt-1">Using slider BMI value</p>
         )}
       </div>
 
@@ -937,48 +935,51 @@ const BiologicalAge = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <SEO
-        title="Biological Age Calculator — 12 WHO-Validated Biomarkers"
-        description="Your body may be 10 years younger — or older — than your birthday says. Find out in 2 minutes. Free."
-        keywords="biological age calculator, how old is my body, biological age test free, body age calculator, epigenetic age test, WHO BMI calculator, biological vs chronological age, how to reduce biological age"
-        canonicalUrl="/biological-age"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <FAQSchema items={faqSchemaItems} />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(webAppSchema)}</script>
-      </Helmet>
-
-      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm mb-8">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
-      </div>
+    <ReportLayout
+      theme="science"
+      testId="biological-age-page"
+      seo={(
+        <>
+          <SEO
+            title="Biological Age Calculator — 12 WHO-Validated Biomarkers"
+            description="Your body may be 10 years younger — or older — than your birthday says. Find out in 2 minutes. Free."
+            keywords="biological age calculator, how old is my body, biological age test free, body age calculator, epigenetic age test, WHO BMI calculator, biological vs chronological age, how to reduce biological age"
+            canonicalUrl="/biological-age"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <FAQSchema items={faqSchemaItems} />
+          <Helmet>
+            <script type="application/ld+json">{JSON.stringify(webAppSchema)}</script>
+          </Helmet>
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Biological Age' }}
+      eyebrow="Biological Age"
+      h1="What Is Your True Biological Age?"
+      lead={(
+        <>
+          Chronological age counts years since birth. Biological age (
+          <span className="font-semibold text-[#2F6FB0]">epigenetic age</span> — how old your
+          DNA methylation patterns suggest your cells are) measures something far more
+          important: how efficiently your cells, organs, and physiological systems are actually
+          functioning right now.
+        </>
+      )}
+      footer={{ note: '© 2026 BornClock · Science & longevity tools. Educational only — not medical advice.' }}
+    >
 
       <div className="container mx-auto px-4 py-8">
 
         {/* ── INTRO ── */}
         {step === 'intro' && (
           <div className="max-w-2xl mx-auto pb-16">
-            {/* Hero */}
+            {/* Hero intro tagline (H1 + lead now live in the central layout header) */}
             <div className="text-center mb-8 pt-4">
-              <h1 className="text-4xl md:text-6xl font-black text-gray-900 text-center leading-tight mb-4">
-                What Is Your True Biological Age?
-              </h1>
               <PageTagline />
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Chronological age counts years since birth. Biological age (
-                <span className="font-semibold text-[#6E5AA6]">epigenetic age</span> — how old your
-                DNA methylation patterns suggest your cells are) measures something far more
-                important: how efficiently your cells, organs, and physiological systems are actually
-                functioning right now.
-              </p>
             </div>
 
             {/* Concise answer block (AEO) */}
-            <div className="max-w-2xl mx-auto mb-6 bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 text-left">
+            <div className="max-w-2xl mx-auto mb-6 bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 text-left">
               <h2 className="text-lg font-bold text-gray-900 mb-2">What is my biological age?</h2>
               <p className="text-gray-700 leading-relaxed">
                 Your biological age estimates how old your body is functioning, versus your birthday
@@ -990,8 +991,8 @@ const BiologicalAge = () => {
             </div>
 
             {/* Research credibility box */}
-            <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-2xl p-6 mb-6">
-              <h2 className="text-[#6E5AA6] font-bold text-base mb-4">
+            <div className="bg-[#2F6FB0]/10 border border-[#2F6FB0]/30 rounded-2xl p-6 mb-6">
+              <h2 className="text-[#2F6FB0] font-bold text-base mb-4">
                 📊 Peer-Reviewed Scientific Basis
               </h2>
               <div className="space-y-4">
@@ -1015,8 +1016,8 @@ const BiologicalAge = () => {
                   <div key={i} className="flex gap-3">
                     <span className="text-emerald-600 mt-0.5 flex-shrink-0">✓</span>
                     <div>
-                      <p className="text-[#6E5AA6] text-sm leading-relaxed">{item.text}</p>
-                      <p className="text-[#6E5AA6] text-xs mt-1 italic">[{item.source}]</p>
+                      <p className="text-[#2F6FB0] text-sm leading-relaxed">{item.text}</p>
+                      <p className="text-[#2F6FB0] text-xs mt-1 italic">[{item.source}]</p>
                     </div>
                   </div>
                 ))}
@@ -1044,7 +1045,7 @@ const BiologicalAge = () => {
                   'Subjective vitality (allostatic load)',
                 ].map(item => (
                   <div key={item} className="flex items-start gap-2">
-                    <span className="text-[#6E5AA6] mt-0.5 flex-shrink-0 text-xs">●</span>
+                    <span className="text-[#2F6FB0] mt-0.5 flex-shrink-0 text-xs">●</span>
                     <span className="text-xs leading-snug">{item}</span>
                   </div>
                 ))}
@@ -1152,7 +1153,7 @@ const BiologicalAge = () => {
 
               {/* Motivational context */}
               {q.motivationalContext && (
-                <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 px-3 py-2 text-sm text-[#6E5AA6] mb-4 rounded-r-lg leading-relaxed">
+                <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 px-3 py-2 text-sm text-[#2F6FB0] mb-4 rounded-r-lg leading-relaxed">
                   💡 {q.motivationalContext}
                 </div>
               )}
@@ -1191,7 +1192,7 @@ const BiologicalAge = () => {
                       <button
                         key={opt.id}
                         onClick={() => handleAnswer(q.id, opt.id)}
-                        className="w-full text-left px-4 py-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-all"
+                        className="w-full text-left px-4 py-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-all"
                       >
                         <span className="block font-medium text-sm text-gray-900">{opt.label}</span>
                         {opt.sublabel && (
@@ -1220,7 +1221,7 @@ const BiologicalAge = () => {
           <div className="max-w-3xl mx-auto pb-16 space-y-6">
 
             {/* ── SECTION A: INSPIRED ── */}
-            <div className="bg-gradient-to-b from-slate-900 to-[#6E5AA6] text-white p-8 rounded-2xl">
+            <div className="bg-gradient-to-b from-slate-900 to-[#2F6FB0] text-white p-8 rounded-2xl">
               <div className="text-center">
                 <p className="text-slate-400 text-sm uppercase tracking-widest font-medium">
                   Your Biological Age Assessment
@@ -1456,18 +1457,18 @@ const BiologicalAge = () => {
               )}
 
               {/* Longevity CTA */}
-              <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-6 text-center mt-6">
+              <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-6 text-center mt-6">
                 <p className="text-white font-semibold text-base mb-1">
                   🔬 Want to see how these factors affect your longevity forecast?
                 </p>
-                <p className="text-[#6E5AA6] text-sm mb-4">
+                <p className="text-[#2F6FB0] text-sm mb-4">
                   Your biological age results give important context to your life expectancy
                   calculation. Take the full BornClock longevity quiz to see your personalized
                   forecast.
                 </p>
                 <Link
                   to="/life-expectancy"
-                  className="inline-block bg-white text-[#6E5AA6] font-semibold px-6 py-3 rounded-xl hover:bg-[#6E5AA6]/10 transition-colors"
+                  className="inline-block bg-white text-[#2F6FB0] font-semibold px-6 py-3 rounded-xl hover:bg-[#2F6FB0]/10 transition-colors"
                 >
                   Calculate My Life Expectancy →
                 </Link>
@@ -1549,7 +1550,7 @@ const BiologicalAge = () => {
               { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age' },
               { path: '/answers/what-is-my-biological-age', label: 'What Is My Biological Age?' },
             ].map((t) => (
-              <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-gray-700 hover:text-[#6E5AA6] transition-colors">{t.label}</Link>
+              <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-gray-700 hover:text-[#2F6FB0] transition-colors">{t.label}</Link>
             ))}
           </div>
         </section>
@@ -1569,9 +1570,7 @@ const BiologicalAge = () => {
       <p className="text-center text-xs text-muted-foreground mt-8 mb-4 px-4">
         Last reviewed: August 2026 · Sources verified by BornClock Editorial Team
       </p>
-
-      <Footer />
-    </div>
+    </ReportLayout>
   );
 };
 

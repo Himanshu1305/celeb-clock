@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 
@@ -21,42 +19,36 @@ const RELATED = [
 
 const LifeExpectancyUSA = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Life Expectancy in the USA — 2026 Data, the Decline & What It Means"
-        description="US life expectancy is 77.5 years — but it fell sharply in 2020-21 and hasn't fully recovered. Here's why, and what Americans can do about it."
-        keywords="life expectancy USA, US life expectancy 2026, American lifespan, average life expectancy United States"
-        canonicalUrl="/life-expectancy-usa"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Life Expectancy in the USA"
-        description="US life expectancy is 77.5 years — why it fell, where it stands now, and what Americans can do about it."
-        url="/life-expectancy-usa"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
+    <ArticleLayout
+      theme="science"
+      testId="life-expectancy-usa"
+      seo={(
+        <>
+          <SEO
+            title="Life Expectancy in the USA — 2026 Data, the Decline & What It Means"
+            description="US life expectancy is 77.5 years — but it fell sharply in 2020-21 and hasn't fully recovered. Here's why, and what Americans can do about it."
+            keywords="life expectancy USA, US life expectancy 2026, American lifespan, average life expectancy United States"
+            canonicalUrl="/life-expectancy-usa"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Life Expectancy in the USA"
+            description="US life expectancy is 77.5 years — why it fell, where it stands now, and what Americans can do about it."
+            url="/life-expectancy-usa"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'USA Life Expectancy' }}
+      eyebrow="Life Expectancy"
+      h1="Life Expectancy in the USA — Why It Fell and Where It Stands Now"
+      lead="The United States life expectancy is approximately 77.5 years as of 2023. Women average 80.5 years; men average 74.8 years. US life expectancy fell from 78.8 years in 2019 to 76.1 years in 2021 — driven by COVID-19, the opioid crisis, and gun violence — and has only partially recovered."
+    >
+      <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
+        <EEATBadges sources={['UN WPP 2023', 'CDC', 'Peterson-KFF']} />
+      </section>
 
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Life Expectancy in the USA — Why It Fell and Where It Stands Now
-          </h1>
-          <EEATBadges sources={['UN WPP 2023', 'CDC', 'Peterson-KFF']} />
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              The United States life expectancy is approximately 77.5 years as of 2023. Women average 80.5 years; men average 74.8 years. US life expectancy fell from 78.8 years in 2019 to 76.1 years in 2021 — driven by COVID-19, the opioid crisis, and gun violence — and has only partially recovered.
-            </p>
-          </div>
-        </section>
-
-        <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
+      <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">The Dramatic Fall — What Happened Between 2019 and 2021</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Three forces drove almost the entire 2.7-year drop, something unprecedented for a wealthy nation in peacetime. COVID-19 killed hundreds of thousands directly and strained the system that keeps everyone else alive.</p>
@@ -114,9 +106,7 @@ const LifeExpectancyUSA = () => {
             ))}
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

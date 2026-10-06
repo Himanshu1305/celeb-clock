@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -173,32 +174,28 @@ export function LongevityFoodsIndiaArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Longevity Foods in India — 15 Foods for a Longer Life | BornClock"
-        description="15 Indian longevity foods backed by evidence — turmeric, dal, amla, ghee, millets and more. What to eat for a longer, healthier life, the Indian way."
-        canonicalUrl="/articles/longevity-foods-india"
-        ogType="article"
-      />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
+    <ArticleLayout
+      theme="science"
+      testId="longevity-foods-india-article"
+      seo={(
+        <>
+          <SEO
+            title="Longevity Foods in India — 15 Foods for a Longer Life | BornClock"
+            description="15 Indian longevity foods backed by evidence — turmeric, dal, amla, ghee, millets and more. What to eat for a longer, healthier life, the Indian way."
+            canonicalUrl="/articles/longevity-foods-india"
+            ogType="article"
+          />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Longevity Foods in India — 15 Foods for a Longer, Healthier Life' }}
+      eyebrow="Longevity"
+      h1="Longevity Foods in India — 15 Foods for a Longer, Healthier Life"
+      lead={'You do not need imported superfoods or expensive supplements to eat for a longer life. Some of the most evidence-backed longevity foods in the world are already sitting in the Indian kitchen — in the dal pot, the spice box, and the vegetable basket. The world\'s longest-lived communities, studied by longevity researchers as the "Blue Zones", share a strikingly simple pattern: mostly plants, plenty of beans and whole grains, modest dairy, and very little ultra-processed food. A traditional Indian thali, when built from whole ingredients, maps onto that pattern remarkably well.'}
+    >
+      <article className="max-w-3xl mx-auto px-4 py-10">
 
-      <main data-testid="longevity-foods-india-article" className="min-h-screen bg-white">
-        <article className="max-w-3xl mx-auto px-4 py-10">
-
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Longevity Foods in India — 15 Foods for a Longer, Healthier Life
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            You do not need imported superfoods or expensive supplements to eat for a longer
-            life. Some of the most evidence-backed longevity foods in the world are already
-            sitting in the Indian kitchen — in the dal pot, the spice box, and the vegetable
-            basket. The world's longest-lived communities, studied by longevity researchers as
-            the "Blue Zones", share a strikingly simple pattern: mostly plants, plenty of beans
-            and whole grains, modest dairy, and very little ultra-processed food. A traditional
-            Indian thali, when built from whole ingredients, maps onto that pattern remarkably well.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             Below are 15 well-established Indian foods and the longevity mechanism behind each
             one. To keep things honest, every food carries an evidence label —
@@ -294,8 +291,7 @@ export function LongevityFoodsIndiaArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -140,28 +141,23 @@ export function LongevitySupplementsArticle() {
   };
 
   return (
-    <>
-      <SEO title={TITLE} description={DESC} canonicalUrl="/articles/longevity-supplements" ogType="article" />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
-
-      <main data-testid="longevity-supplements-article" className="min-h-screen bg-white">
+    <ArticleLayout
+      theme="science"
+      testId="longevity-supplements-article"
+      seo={(
+        <>
+          <SEO title={TITLE} description={DESC} canonicalUrl="/articles/longevity-supplements" ogType="article" />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: "Longevity Supplements — Which Supplement Actually Works, and What's Just Hype" }}
+      eyebrow="Longevity"
+      h1="Longevity Supplements — Which Supplement Actually Works, and What's Just Hype"
+      lead={'Walk into any pharmacy or scroll any wellness feed in India and you will be promised a longer life in a bottle. NMN, resveratrol, "cellular anti-aging" capsules, exotic mushroom blends — the marketing is relentless and the prices are high. The honest truth is that only a handful of supplements have real, repeatable science behind them, and most of the popular ones are hype. This guide ranks the best-known longevity supplements strictly by the strength of their evidence, notes availability and cost in India, and keeps one message at the centre: food first, supplements only to fill genuine gaps.'}
+    >
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Longevity Supplements — Which Supplement Actually Works, and What's Just Hype
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Walk into any pharmacy or scroll any wellness feed in India and you will be
-            promised a longer life in a bottle. NMN, resveratrol, "cellular anti-aging"
-            capsules, exotic mushroom blends — the marketing is relentless and the prices
-            are high. The honest truth is that only a handful of supplements have real,
-            repeatable science behind them, and most of the popular ones are hype. This
-            guide ranks the best-known longevity supplements strictly by the strength of
-            their evidence, notes availability and cost in India, and keeps one message at
-            the centre: <strong>food first, supplements only to fill genuine gaps.</strong>
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             We do not invent efficacy numbers or overstate benefits. Where a supplement has
             strong human data — like Vitamin D and its link to reduced all-cause mortality —
@@ -248,14 +244,14 @@ export function LongevitySupplementsArticle() {
             animal data or weak bioavailability and are expensive — promising, not proven.
           </p>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">How Long Could You Live?</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               Supplements are a small lever. Sleep, movement, diet and stress matter far more.
               See how your habits shape your lifespan with our free longevity calculator.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Try the Longevity Calculator →
             </a>
           </div>
@@ -270,8 +266,8 @@ export function LongevitySupplementsArticle() {
             ))}
           </div>
 
-          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8 text-center">
-            <p className="text-[#6E5AA6] font-semibold mb-4">
+          <div className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8 text-center">
+            <p className="text-[#2F6FB0] font-semibold mb-4">
               Curious what really moves the needle on how long you live? Your daily habits
               outweigh any pill.
             </p>
@@ -284,20 +280,19 @@ export function LongevitySupplementsArticle() {
           <h2 className="text-2xl font-black text-gray-900 mb-4">Related Articles</h2>
           <div className="grid gap-3 mb-6">
             <a href="/articles/longevity-foods-india"
-               className="block bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-[#6E5AA6]/30 transition-colors">
+               className="block bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-[#2F6FB0]/30 transition-colors">
               <div className="font-bold text-gray-900">Longevity Foods in India</div>
               <div className="text-sm text-gray-600">The food-first foundation these supplements are meant to support.</div>
             </a>
             <a href="/articles/how-to-live-to-100"
-               className="block bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-[#6E5AA6]/30 transition-colors">
+               className="block bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-[#2F6FB0]/30 transition-colors">
               <div className="font-bold text-gray-900">How to Live to 100</div>
               <div className="text-sm text-gray-600">The habits and lifestyle patterns of the world's longest-lived people.</div>
             </a>
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

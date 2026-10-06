@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -23,33 +21,27 @@ const RELATED = [
 
 const BiologicalAgeVsChronologicalAge = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Biological Age vs Chronological Age — Which One Actually Matters?"
-        description="Chronological age counts the years. Biological age measures how your body is actually aging. The two can differ by over a decade — and only one of them can change."
-        keywords="biological age vs chronological age, biological age difference, what is biological age, chronological age meaning"
-        canonicalUrl="/biological-age-vs-chronological-age"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
+    <ArticleLayout
+      theme="science"
+      testId="biological-age-vs-chronological-age"
+      seo={(
+        <>
+          <SEO
+            title="Biological Age vs Chronological Age — Which One Actually Matters?"
+            description="Chronological age counts the years. Biological age measures how your body is actually aging. The two can differ by over a decade — and only one of them can change."
+            keywords="biological age vs chronological age, biological age difference, what is biological age, chronological age meaning"
+            canonicalUrl="/biological-age-vs-chronological-age"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Biological vs Chronological Age' }}
+      eyebrow="Biological Age"
+      h1="Biological Age vs Chronological Age — Only One of These Can Change"
+      lead="Your chronological age is fixed — it's simply the number of years since you were born, and it only moves forward. Your biological age is different: it measures how efficiently your body's cells, organs, and systems are functioning compared to population averages for your birth year. The two can differ by 10 years or more in either direction. And unlike your chronological age, your biological age can actually go down."
+    >
         <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Biological Age vs Chronological Age — Only One of These Can Change
-          </h1>
           <EEATBadges sources={['Nature Aging', 'Aging Cell Journal', 'WHO']} />
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Your chronological age is fixed — it's simply the number of years since you were born, and it only moves forward. Your biological age is different: it measures how efficiently your body's cells, organs, and systems are functioning compared to population averages for your birth year. The two can differ by 10 years or more in either direction. And unlike your chronological age, your biological age can actually go down.
-            </p>
-          </div>
         </section>
 
         <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
@@ -107,9 +99,7 @@ const BiologicalAgeVsChronologicalAge = () => {
         </section>
 
         <AuthorBio />
-      </div>
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

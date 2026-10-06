@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 
@@ -21,42 +19,36 @@ const RELATED = [
 
 const LifeExpectancyAustralia = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Life Expectancy in Australia — 2026 Data & Why Australians Live So Long"
-        description="Australia's life expectancy is 83.2 years — among the highest in the world. Here's what drives it and where the gaps remain."
-        keywords="life expectancy Australia, Australian lifespan 2026, how long do Australians live, Australia longevity"
-        canonicalUrl="/life-expectancy-australia"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Life Expectancy in Australia"
-        description="Australia's life expectancy is 83.2 years — what drives one of the world's longest-lived populations and where gaps remain."
-        url="/life-expectancy-australia"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
+    <ArticleLayout
+      theme="science"
+      testId="life-expectancy-australia"
+      seo={(
+        <>
+          <SEO
+            title="Life Expectancy in Australia — 2026 Data & Why Australians Live So Long"
+            description="Australia's life expectancy is 83.2 years — among the highest in the world. Here's what drives it and where the gaps remain."
+            keywords="life expectancy Australia, Australian lifespan 2026, how long do Australians live, Australia longevity"
+            canonicalUrl="/life-expectancy-australia"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Life Expectancy in Australia"
+            description="Australia's life expectancy is 83.2 years — what drives one of the world's longest-lived populations and where gaps remain."
+            url="/life-expectancy-australia"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Australia Life Expectancy' }}
+      eyebrow="Life Expectancy"
+      h1="Life Expectancy in Australia — Why Australians Are Among the World's Longest-Lived"
+      lead="Australia's average life expectancy is approximately 83.2 years as of 2023 — one of the highest of any nation. Women average 85.2 years; men average 81.2 years. Australia has maintained this position for decades through universal healthcare, outdoor lifestyle culture, and strong public health investment."
+    >
+      <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
+        <EEATBadges sources={['UN WPP 2023', 'AIHW', 'WHO']} />
+      </section>
 
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Life Expectancy in Australia — Why Australians Are Among the World's Longest-Lived
-          </h1>
-          <EEATBadges sources={['UN WPP 2023', 'AIHW', 'WHO']} />
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Australia's average life expectancy is approximately 83.2 years as of 2023 — one of the highest of any nation. Women average 85.2 years; men average 81.2 years. Australia has maintained this position for decades through universal healthcare, outdoor lifestyle culture, and strong public health investment.
-            </p>
-          </div>
-        </section>
-
-        <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
+      <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">What Drives Australian Longevity</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Universal Medicare, in place since 1984, means care is not gated by income — a structural advantage that shows up directly in the numbers. On top of that sits a genuinely outdoor culture, with high rates of everyday physical activity.</p>
@@ -114,9 +106,7 @@ const LifeExpectancyAustralia = () => {
             ))}
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

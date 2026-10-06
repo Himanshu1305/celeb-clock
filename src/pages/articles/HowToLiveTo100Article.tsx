@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -92,39 +93,35 @@ export function HowToLiveTo100Article() {
   };
 
   return (
-    <>
-      <SEO
-        title={TITLE}
-        description={DESC}
-        canonicalUrl="/articles/how-to-live-to-100"
-        ogType="article"
-      />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
+    <ArticleLayout
+      theme="science"
+      testId="how-to-live-to-100-article"
+      seo={(
+        <>
+          <SEO
+            title={TITLE}
+            description={DESC}
+            canonicalUrl="/articles/how-to-live-to-100"
+            ogType="article"
+          />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'How to Live to 100 — Blue Zones & Science-Backed Habits' }}
+      eyebrow="Longevity"
+      h1="How to Live to 100 — Blue Zones & Science-Backed Habits"
+      lead="Living to 100 was once vanishingly rare. Today it is the fastest-growing age group on Earth, and researchers have learned that reaching a healthy century is far less about luck — or even genes — than most people assume. The clearest evidence comes from a handful of places where people routinely live past 100 in good health, identified by researcher Dan Buettner and a team of demographers and named the Blue Zones. Study how these communities live and a surprisingly simple, repeatable pattern emerges."
+    >
+      <article className="max-w-3xl mx-auto px-4 py-10">
 
-      <main data-testid="how-to-live-to-100-article" className="min-h-screen bg-white">
-        <article className="max-w-3xl mx-auto px-4 py-10">
-
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            How to Live to 100 — Blue Zones & Science-Backed Habits
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Living to 100 was once vanishingly rare. Today it is the fastest-growing age
-            group on Earth, and researchers have learned that reaching a healthy century is
-            far less about luck — or even genes — than most people assume. The clearest
-            evidence comes from a handful of places where people routinely live past 100 in
-            good health, identified by researcher Dan Buettner and a team of demographers and
-            named the <strong>Blue Zones</strong>. Study how these communities live and a
-            surprisingly simple, repeatable pattern emerges.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             This guide walks through the five original Blue Zones, the nine shared habits
             researchers distilled from them (the "Power 9"), what the world's longest-running
             study of human happiness reveals about ageing, how much of your lifespan is
             actually written in your DNA, and how these ideas translate to life in India.
             You can also estimate your own trajectory with our{' '}
-            <a href="/how-long-will-i-live" className="text-[#6E5AA6] font-semibold underline">
+            <a href="/how-long-will-i-live" className="text-[#2F6FB0] font-semibold underline">
               life expectancy calculator
             </a>.
           </p>
@@ -223,14 +220,14 @@ export function HowToLiveTo100Article() {
             and protecting the air we breathe.
           </p>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">How Long Will You Live?</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               Get a personalised life expectancy estimate from your age and country — then see
               which science-backed habits could add healthy years to your life.
             </p>
             <a href="/how-long-will-i-live"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Calculate My Life Expectancy →
             </a>
           </div>
@@ -249,16 +246,16 @@ export function HowToLiveTo100Article() {
             <h2 className="text-xl font-black text-gray-900 mb-3">Keep Reading</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
               Ready to put this into practice? Estimate your own numbers with the{' '}
-              <a href="/how-long-will-i-live" className="text-[#6E5AA6] font-semibold underline">
+              <a href="/how-long-will-i-live" className="text-[#2F6FB0] font-semibold underline">
                 life expectancy calculator
               </a>{' '}
               or explore the science further with our{' '}
-              <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline">
+              <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">
                 longevity calculator
               </a>.
             </p>
             <h3 className="font-bold text-gray-900 mb-2">Related Articles</h3>
-            <ul className="list-disc pl-6 text-[#6E5AA6] space-y-1">
+            <ul className="list-disc pl-6 text-[#2F6FB0] space-y-1">
               <li>
                 <a href="/articles/blue-zones-diet" className="font-semibold underline">
                   The Blue Zones Diet: What the World's Longest-Lived People Eat
@@ -273,8 +270,7 @@ export function HowToLiveTo100Article() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

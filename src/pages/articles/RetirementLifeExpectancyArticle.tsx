@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -46,47 +47,47 @@ function CorpusYearsCalculator() {
 
   return (
     <div data-testid="corpus-calculator"
-         className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
-      <h3 className="text-lg font-black text-[#6E5AA6] mb-1">
+         className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8">
+      <h3 className="text-lg font-black text-[#2F6FB0] mb-1">
         Years-Funded Calculator: How Long Must Your Corpus Last?
       </h3>
-      <p className="text-sm text-[#6E5AA6] mb-4">
+      <p className="text-sm text-[#2F6FB0] mb-4">
         Your years funded = life expectancy − retirement age. Enter both to see how many
         years your retirement corpus must cover.
       </p>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <label className="block">
-          <span className="text-xs font-semibold text-[#6E5AA6]">Retirement age</span>
+          <span className="text-xs font-semibold text-[#2F6FB0]">Retirement age</span>
           <input
             type="number"
             min={30}
             max={90}
             value={retireAge}
             onChange={e => setRetireAge(e.target.value)}
-            className="mt-1 w-full border-2 border-[#6E5AA6]/30 rounded-xl px-4 py-3
-                       text-base focus:outline-none focus:border-[#6E5AA6]/30 bg-white"
+            className="mt-1 w-full border-2 border-[#2F6FB0]/30 rounded-xl px-4 py-3
+                       text-base focus:outline-none focus:border-[#2F6FB0]/30 bg-white"
             aria-label="Retirement age"
           />
         </label>
         <label className="block">
-          <span className="text-xs font-semibold text-[#6E5AA6]">Life expectancy</span>
+          <span className="text-xs font-semibold text-[#2F6FB0]">Life expectancy</span>
           <input
             type="number"
             min={40}
             max={110}
             value={lifeExpectancy}
             onChange={e => setLifeExpectancy(e.target.value)}
-            className="mt-1 w-full border-2 border-[#6E5AA6]/30 rounded-xl px-4 py-3
-                       text-base focus:outline-none focus:border-[#6E5AA6]/30 bg-white"
+            className="mt-1 w-full border-2 border-[#2F6FB0]/30 rounded-xl px-4 py-3
+                       text-base focus:outline-none focus:border-[#2F6FB0]/30 bg-white"
             aria-label="Life expectancy"
           />
         </label>
       </div>
       {yearsFunded !== null && bufferedYears !== null && (
         <div data-testid="corpus-result"
-             className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-5">
+             className="bg-white rounded-xl border-2 border-[#2F6FB0]/30 p-5">
           <div className="text-xl font-black text-gray-900 mb-1">
-            Your corpus must fund <span className="text-[#6E5AA6]">{yearsFunded} years</span>
+            Your corpus must fund <span className="text-[#2F6FB0]">{yearsFunded} years</span>
           </div>
           <p className="text-sm text-gray-700 leading-relaxed mb-3">
             If you retire at {r} and live to {le}, you fund {yearsFunded} years of retirement.
@@ -134,27 +135,24 @@ export function RetirementLifeExpectancyArticle() {
   };
 
   return (
-    <>
-      <SEO title={TITLE} description={DESC} canonicalUrl={SLUG} ogType="article" />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={softwareSchema} />
-      <JsonLd data={faqSchema} />
-
-      <main data-testid="retirement-life-expectancy-article" className="min-h-screen bg-white">
+    <ArticleLayout
+      theme="science"
+      testId="retirement-life-expectancy-article"
+      seo={(
+        <>
+          <SEO title={TITLE} description={DESC} canonicalUrl={SLUG} ogType="article" />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={softwareSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Retirement Planning & Life Expectancy in India: How Long Must Your Money Last?' }}
+      eyebrow="Longevity"
+      h1="Retirement Planning & Life Expectancy in India: How Long Must Your Money Last?"
+      lead={'Most retirement plans in India answer the wrong question. They ask "how much can I save?" when the question that actually determines whether you run out of money is "how long will I live?" Retirement planning and life expectancy are two halves of the same equation, and the number that connects them is deceptively simple: your years funded = life expectancy − retirement age. Get that number wrong and even a large corpus can be exhausted while you are still very much alive.'}
+    >
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Retirement Planning &amp; Life Expectancy in India: How Long Must Your Money Last?
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Most retirement plans in India answer the wrong question. They ask "how much can I
-            save?" when the question that actually determines whether you run out of money is
-            "how long will I live?" Retirement planning and life expectancy are two halves of the
-            same equation, and the number that connects them is deceptively simple:
-            <strong> your years funded = life expectancy − retirement age</strong>. Get that
-            number wrong and even a large corpus can be exhausted while you are still very much alive.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             In India the standard retirement age is around 60, and the national average life
             expectancy is about {AVG_LE} years. On paper that suggests you only need to fund
@@ -185,7 +183,7 @@ export function RetirementLifeExpectancyArticle() {
             The arithmetic is easy once you use your <em>real</em> life expectancy rather than the
             national average. Here is the core example:
           </p>
-          <div className="bg-gray-50 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-3">
+          <div className="bg-gray-50 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-3">
             <p className="text-gray-800 leading-relaxed font-semibold">
               If you live to 82 and retire at 60, you fund 22 years.
             </p>
@@ -261,16 +259,16 @@ export function RetirementLifeExpectancyArticle() {
             because the earlier you stop earning, the longer your money has to survive.
           </p>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
                p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Plan for Your Real Lifespan, Not the Average</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               The most important input to your retirement corpus is how long you will actually live.
               Estimate your personal, lifestyle-adjusted life expectancy — then size your money to match.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Estimate My Life Expectancy Free →
             </a>
           </div>
@@ -288,20 +286,20 @@ export function RetirementLifeExpectancyArticle() {
           <div className="border-t border-gray-200 pt-6 mb-4">
             <p className="text-gray-700 leading-relaxed mb-3">
               Ready to turn your lifespan into a number you can plan around? Start with our
-              <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold hover:underline"> life expectancy calculator</a> and
+              <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold hover:underline"> life expectancy calculator</a> and
               feed the result straight back into the years-funded rule above.
             </p>
             <h2 className="text-xl font-black text-gray-900 mb-3">Related Articles</h2>
             <ul className="space-y-2">
               <li>
                 <a href="/articles/how-long-will-i-live-in-india"
-                   className="text-[#6E5AA6] font-semibold hover:underline">
+                   className="text-[#2F6FB0] font-semibold hover:underline">
                   How Long Will I Live in India? — Life Expectancy Explained
                 </a>
               </li>
               <li>
                 <a href="/articles/how-to-live-to-100"
-                   className="text-[#6E5AA6] font-semibold hover:underline">
+                   className="text-[#2F6FB0] font-semibold hover:underline">
                   How to Live to 100 — Habits That Extend Your Lifespan
                 </a>
               </li>
@@ -309,8 +307,7 @@ export function RetirementLifeExpectancyArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

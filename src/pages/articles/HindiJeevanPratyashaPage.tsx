@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -57,22 +58,25 @@ export function HindiJeevanPratyashaPage() {
   };
 
   return (
-    <>
-      <SEO
-        title="मेरी जीवन प्रत्याशा क्या है? | BornClock"
-        description="जानें आपकी जीवन प्रत्याशा क्या है। WHO डेटा और धूम्रपान, व्यायाम, आहार जैसे 5 कारकों के साथ अपनी अनुमानित आयु की मुफ्त गणना करें।"
-        canonicalUrl="/hi/meri-jeevan-pratyasha"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="science"
+      testId="hindi-jeevan-pratyasha-page"
+      seo={(
+        <SEO
+          title="मेरी जीवन प्रत्याशा क्या है? | BornClock"
+          description="जानें आपकी जीवन प्रत्याशा क्या है। WHO डेटा और धूम्रपान, व्यायाम, आहार जैसे 5 कारकों के साथ अपनी अनुमानित आयु की मुफ्त गणना करें।"
+          canonicalUrl="/hi/meri-jeevan-pratyasha"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'मेरी जीवन प्रत्याशा क्या है?' }}
+      eyebrow="Articles"
+      h1={<>मेरी जीवन प्रत्याशा क्या है?</>}
+    >
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />
 
-      <main data-testid="hindi-jeevan-pratyasha-page" className="min-h-screen bg-white">
         <article className="max-w-3xl mx-auto px-4 py-10">
-
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            मेरी जीवन प्रत्याशा क्या है?
-          </h1>
 
           <p className="text-gray-700 leading-relaxed mb-4">
             यह एक ऐसा प्रश्न है जो हर व्यक्ति के मन में कभी न कभी आता है — मैं कितने साल
@@ -148,8 +152,7 @@ export function HindiJeevanPratyashaPage() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

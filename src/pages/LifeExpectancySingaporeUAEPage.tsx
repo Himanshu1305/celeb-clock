@@ -1,4 +1,5 @@
 import { SEO } from '@/components/SEO';
+import { ToolLayout } from '@/components/central';
 import { LC_FACTORS } from '@/content/longevityCalculatorContent';
 
 function JsonLd({ data }: { data: object }) {
@@ -83,31 +84,37 @@ export function LifeExpectancySingaporeUAEPage() {
   };
 
   return (
-    <>
-      <SEO
-        title={TITLE}
-        description={DESC}
-        canonicalUrl="/life-expectancy-calculator-singapore-uae"
-        ogType="website"
-      />
-      <JsonLd data={softwareSchema} />
-      <JsonLd data={faqSchema} />
+    <ToolLayout
+      theme="science"
+      testId="sg-uae-le-page"
+      seo={(
+        <>
+          <SEO
+            title={TITLE}
+            description={DESC}
+            canonicalUrl="/life-expectancy-calculator-singapore-uae"
+            ogType="website"
+          />
+          <JsonLd data={softwareSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Singapore & UAE Life Expectancy' }}
+      eyebrow="Life Expectancy"
+      h1="Life Expectancy Calculator — Singapore & UAE"
+      lead={(
+        <>
+          For the millions of people of Indian origin living in Singapore and the UAE, life
+          expectancy is more than a statistic — it shapes decisions about careers, families,
+          retirement and where to grow old. Singapore records one of the highest life
+          expectancies on Earth at <strong>83.9 years</strong> (WHO 2023), while the UAE sits
+          at <strong>78.5 years</strong> and continues to climb. Both comfortably exceed
+          India&apos;s figure of <strong>70.2 years</strong>.
+        </>
+      )}
+    >
+      <article className="max-w-3xl mx-auto px-4 py-10">
 
-      <main data-testid="sg-uae-le-page" className="min-h-screen bg-white">
-        <article className="max-w-3xl mx-auto px-4 py-10">
-
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Life Expectancy Calculator — Singapore & UAE
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            For the millions of people of Indian origin living in Singapore and the UAE, life
-            expectancy is more than a statistic — it shapes decisions about careers, families,
-            retirement and where to grow old. Singapore records one of the highest life
-            expectancies on Earth at <strong>83.9 years</strong> (WHO 2023), while the UAE sits
-            at <strong>78.5 years</strong> and continues to climb. Both comfortably exceed
-            India&apos;s figure of <strong>70.2 years</strong>.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             This page pulls together WHO country data for the Indian diaspora, explains why the
             gap exists, and lets you go one step further — estimating your own life expectancy
@@ -215,8 +222,7 @@ export function LifeExpectancySingaporeUAEPage() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ToolLayout>
   );
 }
 

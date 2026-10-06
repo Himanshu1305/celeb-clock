@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 export default function HowDoesStressAffectLifeExpectancy() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How stress affects life expectancy", "item": "https://bornclock.com/answers/how-does-stress-affect-life-expectancy" } ] };
@@ -17,31 +17,28 @@ export default function HowDoesStressAffectLifeExpectancy() {
   };
 
   return (
-    <>
-      <SEO
-        title="How Does Stress Affect Life Expectancy? The Science Explained | BornClock"
-        description="Chronic stress can reduce life expectancy by up to 2.8 years. Here's how stress damages the body at a cellular level — and 5 science-backed ways to reverse it."
-        canonicalUrl="/answers/how-does-stress-affect-life-expectancy"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="science"
+      testId="answer-how-does-stress-affect-life-expectancy"
+      seo={(
+        <SEO
+          title="How Does Stress Affect Life Expectancy? The Science Explained | BornClock"
+          description="Chronic stress can reduce life expectancy by up to 2.8 years. Here's how stress damages the body at a cellular level — and 5 science-backed ways to reverse it."
+          canonicalUrl="/answers/how-does-stress-affect-life-expectancy"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'How stress affects life expectancy' }}
+      eyebrow="Answers"
+      h1={<>How Does Stress Affect Life Expectancy? The Science Explained</>}
+      lead={<>Know your time. Live it well.</>}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">How stress affects life expectancy</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-2">How Does Stress Affect Life Expectancy? The Science Explained</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
+          <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
               Chronic stress reduces life expectancy through multiple biological pathways: it shortens telomeres (accelerating cellular aging), raises cortisol (damaging cardiovascular health), suppresses immune function, and increases inflammation. Studies estimate chronic stress reduces life expectancy by 2–3 years on average — more in people with high-stress occupations or trauma histories.
             </p>
           </div>
@@ -84,14 +81,13 @@ export default function HowDoesStressAffectLifeExpectancy() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-long-will-i-live" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How long will I live?</Link>
-              <Link to="/answers/what-is-my-biological-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my biological age?</Link>
-              <Link to="/answers/how-to-live-longer" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How to live longer</Link>
-              <Link to="/answers/what-is-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is life expectancy?</Link>
+              <Link to="/answers/how-long-will-i-live" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How long will I live?</Link>
+              <Link to="/answers/what-is-my-biological-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is my biological age?</Link>
+              <Link to="/answers/how-to-live-longer" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How to live longer</Link>
+              <Link to="/answers/what-is-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is life expectancy?</Link>
             </div>
           </div>
         </div>
-      </AnswerLayout>
-    </>
+    </ArticleLayout>
   );
 }

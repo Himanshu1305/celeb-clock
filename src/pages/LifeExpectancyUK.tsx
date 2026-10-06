@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 
@@ -21,42 +19,36 @@ const RELATED = [
 
 const LifeExpectancyUK = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Life Expectancy in the UK — 2026 Data, Regional Gaps & Key Drivers"
-        description="UK life expectancy is 81.3 years, but there's a 10-year gap between the healthiest and least healthy regions. Here's what the data shows."
-        keywords="life expectancy UK, United Kingdom life expectancy 2026, British lifespan, average life expectancy England"
-        canonicalUrl="/life-expectancy-uk"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Life Expectancy in the UK"
-        description="UK life expectancy is 81.3 years — the national average, the regional reality, and the key drivers behind both."
-        url="/life-expectancy-uk"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
+    <ArticleLayout
+      theme="science"
+      testId="life-expectancy-uk"
+      seo={(
+        <>
+          <SEO
+            title="Life Expectancy in the UK — 2026 Data, Regional Gaps & Key Drivers"
+            description="UK life expectancy is 81.3 years, but there's a 10-year gap between the healthiest and least healthy regions. Here's what the data shows."
+            keywords="life expectancy UK, United Kingdom life expectancy 2026, British lifespan, average life expectancy England"
+            canonicalUrl="/life-expectancy-uk"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Life Expectancy in the UK"
+            description="UK life expectancy is 81.3 years — the national average, the regional reality, and the key drivers behind both."
+            url="/life-expectancy-uk"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'UK Life Expectancy' }}
+      eyebrow="Life Expectancy"
+      h1="Life Expectancy in the UK — The National Average and the Regional Reality"
+      lead="The United Kingdom's average life expectancy is approximately 81.3 years as of 2023. Women average 83.1 years; men average 79.4 years. The UK has some of the most dramatic regional life expectancy gaps of any wealthy nation — up to 12 years between the healthiest and least healthy areas."
+    >
+      <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
+        <EEATBadges sources={['UN WPP 2023', 'ONS', 'WHO']} />
+      </section>
 
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Life Expectancy in the UK — The National Average and the Regional Reality
-          </h1>
-          <EEATBadges sources={['UN WPP 2023', 'ONS', 'WHO']} />
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              The United Kingdom's average life expectancy is approximately 81.3 years as of 2023. Women average 83.1 years; men average 79.4 years. The UK has some of the most dramatic regional life expectancy gaps of any wealthy nation — up to 12 years between the healthiest and least healthy areas.
-            </p>
-          </div>
-        </section>
-
-        <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
+      <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">The North-South Divide</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">The national average hides a chasm. A man in Glasgow can expect around 73 years; a man in Kensington &amp; Chelsea around 85 — a 12-year gap inside one country. Poverty, unemployment, diet and healthcare access all feed into it.</p>
@@ -114,9 +106,7 @@ const LifeExpectancyUK = () => {
             ))}
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

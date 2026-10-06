@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import {
   HLWIL_SEO, HLWIL_SCHEMA, HLWIL_COUNTRY_TABLE,
@@ -106,79 +107,48 @@ const DIRECTION_CONFIG = {
 
 export function HowLongWillILivePage() {
   return (
-    <>
-      {/* SEO via the project's react-helmet-async component. canonicalUrl is the
-          RELATIVE path (the component adds domain + trailing slash). */}
-      <SEO
-        title={HLWIL_SEO.title}
-        description={HLWIL_SEO.description}
-        canonicalUrl="/how-long-will-i-live"
-        ogType="website"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
+    <ToolLayout
+      theme="science"
+      testId="hlwil-page"
+      seo={(
+        <>
+          {/* SEO via the project's react-helmet-async component. canonicalUrl is the
+              RELATIVE path (the component adds domain + trailing slash). */}
+          <SEO
+            title={HLWIL_SEO.title}
+            description={HLWIL_SEO.description}
+            canonicalUrl="/how-long-will-i-live"
+            ogType="website"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
 
-      {/* Schema tags in body — dangerouslySetInnerHTML pattern */}
-      <JsonLd data={HLWIL_SCHEMA.softwareApp} />
-      <JsonLd data={HLWIL_SCHEMA.faq} />
-      <JsonLd data={HLWIL_SCHEMA.breadcrumb} />
+          {/* Schema tags in body — dangerouslySetInnerHTML pattern */}
+          <JsonLd data={HLWIL_SCHEMA.softwareApp} />
+          <JsonLd data={HLWIL_SCHEMA.faq} />
+          <JsonLd data={HLWIL_SCHEMA.breadcrumb} />
 
-      {/* Additional structured data: FAQPage (5), SoftwareApplication, speakable WebPage */}
-      <JsonLd data={HLWIL_FAQ_SCHEMA} />
-      <JsonLd data={HLWIL_SOFTWARE_APP_SCHEMA} />
-      <JsonLd data={HLWIL_WEBPAGE_SCHEMA} />
-
-      <main
-        data-testid="hlwil-page"
-        className="min-h-screen bg-white"
-      >
-        {/* ── BREADCRUMB ── */}
-        <nav aria-label="Breadcrumb" className="max-w-4xl mx-auto px-4 pt-4">
-          <ol className="flex items-center gap-2 text-sm text-gray-400 flex-wrap list-none p-0">
-            <li data-testid="breadcrumb-item">
-              <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            </li>
-            <li aria-hidden="true">›</li>
-            <li data-testid="breadcrumb-item">
-              <Link to="/longevity-calculator" className="hover:text-[#6E5AA6]">
-                Longevity Calculator
-              </Link>
-            </li>
-            <li aria-hidden="true">›</li>
-            <li
-              data-testid="breadcrumb-item"
-              className="text-gray-700 font-medium"
-              aria-current="page"
-            >
-              How Long Will I Live?
-            </li>
-          </ol>
-        </nav>
-
-        {/* ── HERO ── */}
-        <section
-          aria-labelledby="page-h1"
-          className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6]
-                     border-b border-[#6E5AA6]/30 py-12 px-4 mt-4"
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-[#6E5AA6]/10
-                            text-[#6E5AA6] rounded-full px-4 py-1.5
-                            text-sm font-semibold mb-4">
-              {HLWIL_COPY.hero.badge}
-            </div>
-
-            <h1
-              id="page-h1"
-              className="text-3xl sm:text-4xl lg:text-5xl font-black
-                         gradient-text-primary leading-tight mb-4"
-            >
-              {HLWIL_COPY.hero.h1}
-            </h1>
-
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6 leading-relaxed">
-              {HLWIL_COPY.hero.subtitle}
-            </p>
-
+          {/* Additional structured data: FAQPage (5), SoftwareApplication, speakable WebPage */}
+          <JsonLd data={HLWIL_FAQ_SCHEMA} />
+          <JsonLd data={HLWIL_SOFTWARE_APP_SCHEMA} />
+          <JsonLd data={HLWIL_WEBPAGE_SCHEMA} />
+        </>
+      )}
+      breadcrumb={{
+        trail: [
+          { label: 'Science & Longevity', to: '/science-longevity' },
+          { label: 'Longevity Calculator', to: '/longevity-calculator' },
+        ],
+        current: 'How Long Will I Live',
+      }}
+      eyebrow={HLWIL_COPY.hero.badge}
+      h1={HLWIL_COPY.hero.h1}
+      lead={HLWIL_COPY.hero.subtitle}
+      footer={{ note: '© 2026 BornClock.' }}
+    >
+      <>
+        {/* ── HERO TRUST + CTA ── */}
+        <section className="max-w-4xl mx-auto px-4 pt-4">
+          <div className="text-center">
             <ul
               aria-label="Calculator features"
               className="flex flex-wrap justify-center gap-4 text-sm
@@ -240,11 +210,11 @@ export function HowLongWillILivePage() {
             ))}
           </div>
 
-          <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-4">
-            <p className="text-[#6E5AA6] text-sm leading-relaxed">
+          <div className="bg-[#2F6FB0]/10 border border-[#2F6FB0]/30 rounded-xl p-4">
+            <p className="text-[#2F6FB0] text-sm leading-relaxed">
               💡 {HLWIL_COPY.directAnswer.insight}
               {' '}
-              <span className="text-xs text-[#6E5AA6] italic">
+              <span className="text-xs text-[#2F6FB0] italic">
                 — {HLWIL_COPY.directAnswer.karolinskaSource}
               </span>
             </p>
@@ -274,7 +244,7 @@ export function HowLongWillILivePage() {
 
           {/* Mid-article CTA 1 */}
           <div
-            className="my-10 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
+            className="my-10 bg-[#2F6FB0]/10 border border-[#2F6FB0]/30
                         rounded-2xl p-6 text-center"
             role="complementary"
           >
@@ -344,7 +314,7 @@ export function HowLongWillILivePage() {
                       <p className="text-xs text-gray-600 mb-2 leading-relaxed">
                         {factor.detail}
                       </p>
-                      <p className="text-xs text-[#6E5AA6] italic">
+                      <p className="text-xs text-[#2F6FB0] italic">
                         📚 {factor.source}
                       </p>
                     </div>
@@ -392,13 +362,13 @@ export function HowLongWillILivePage() {
                       data-country={row.country}
                       className={`border-b border-gray-100 last:border-0 ${
                         row.country === 'India'
-                          ? 'bg-[#6E5AA6]/10 font-semibold'
+                          ? 'bg-[#2F6FB0]/10 font-semibold'
                           : i % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                       }`}
                     >
                       <td className="px-4 py-3 text-gray-500 text-sm">{row.rank}</td>
                       <td className="px-4 py-3 text-gray-900">{row.country}</td>
-                      <td className="px-4 py-3 text-right font-bold text-[#6E5AA6]">{row.expectancy}</td>
+                      <td className="px-4 py-3 text-right font-bold text-[#2F6FB0]">{row.expectancy}</td>
                       <td className="px-4 py-3 text-right text-gray-600">{row.male}</td>
                       <td className="px-4 py-3 text-right text-gray-600">{row.female}</td>
                     </tr>
@@ -410,8 +380,8 @@ export function HowLongWillILivePage() {
             <p className="text-xs text-gray-400 mt-2 italic">
               {HLWIL_COPY.countryTable.source}
             </p>
-            <div className="mt-3 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-3">
-              <p className="text-xs text-[#6E5AA6] leading-relaxed">
+            <div className="mt-3 bg-[#2F6FB0]/10 border border-[#2F6FB0]/30 rounded-xl p-3">
+              <p className="text-xs text-[#2F6FB0] leading-relaxed">
                 🇮🇳 {HLWIL_COPY.countryTable.indiaNote}
               </p>
             </div>
@@ -456,8 +426,8 @@ export function HowLongWillILivePage() {
                 <div
                   key={step.step}
                   data-testid={`step-${step.step}`}
-                  className="flex gap-4 items-start bg-[#6E5AA6]/10
-                             border border-[#6E5AA6]/30 rounded-xl p-4"
+                  className="flex gap-4 items-start bg-[#2F6FB0]/10
+                             border border-[#2F6FB0]/30 rounded-xl p-4"
                 >
                   <div
                     className="flex-shrink-0 w-8 h-8 bg-[#0E2238] text-white
@@ -478,7 +448,7 @@ export function HowLongWillILivePage() {
 
           {/* Mid-article CTA 2 */}
           <div
-            className="my-10 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
+            className="my-10 bg-[#2F6FB0]/10 border border-[#2F6FB0]/30
                         rounded-2xl p-6 text-center"
             role="complementary"
           >
@@ -554,12 +524,12 @@ export function HowLongWillILivePage() {
                   to={tool.href}
                   data-testid="related-tool"
                   className="flex items-start gap-3 p-4 bg-white rounded-xl
-                             border border-gray-200 hover:border-[#6E5AA6]/30
-                             hover:bg-[#6E5AA6]/10 transition-colors group"
+                             border border-gray-200 hover:border-[#2F6FB0]/30
+                             hover:bg-[#2F6FB0]/10 transition-colors group"
                 >
                   <div>
                     <div className="font-semibold text-sm text-gray-900
-                                    group-hover:text-[#6E5AA6] mb-0.5">
+                                    group-hover:text-[#2F6FB0] mb-0.5">
                       {tool.title}
                     </div>
                     <div className="text-xs text-gray-500">{tool.desc}</div>
@@ -608,25 +578,25 @@ export function HowLongWillILivePage() {
             <h2 className="text-2xl font-black mb-2">
               How Long Will You Live? Find Out Free.
             </h2>
-            <p className="text-[#6E5AA6] mb-6 max-w-md mx-auto">
+            <p className="text-[#2F6FB0] mb-6 max-w-md mx-auto">
               3 minutes. 8 science-backed factors. Personalised result and 90-day plan.
             </p>
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-white text-primary hover:bg-[#6E5AA6]/10
+              className="inline-block bg-white text-primary hover:bg-[#2F6FB0]/10
                          font-black py-4 px-8 rounded-xl transition-colors text-lg"
             >
               {HLWIL_COPY.hero.ctaButton}
             </Link>
-            <p className="text-[#6E5AA6] text-xs mt-3">
+            <p className="text-[#2F6FB0] text-xs mt-3">
               Free · No account required · Results in 3 minutes
             </p>
           </div>
 
         </article>
-      </main>
-    </>
+      </>
+    </ToolLayout>
   );
 }
 

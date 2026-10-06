@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -64,31 +65,28 @@ export function EpigeneticsArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Epigenetics and Longevity — How Lifestyle Rewrites Genes | BornClock"
-        description="Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 proven interventions."
-        canonicalUrl="/articles/epigenetics-and-longevity"
-        ogType="article"
-      />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
-
-      <main data-testid="epigenetics-article" className="min-h-screen bg-white">
+    <ArticleLayout
+      theme="science"
+      testId="epigenetics-article"
+      seo={(
+        <>
+          <SEO
+            title="Epigenetics and Longevity — How Lifestyle Rewrites Genes | BornClock"
+            description="Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 proven interventions."
+            canonicalUrl="/articles/epigenetics-and-longevity"
+            ogType="article"
+          />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Epigenetics and Longevity — How Lifestyle Rewrites Your Genes' }}
+      eyebrow="Science & Longevity"
+      h1="Epigenetics and Longevity — How Lifestyle Rewrites Your Genes"
+      lead="For most of the twentieth century, DNA was treated as destiny: the genes you inherited were the genes you were stuck with. Epigenetics has rewritten that story. Epigenetics is the study of changes in gene expression that occur without any change to the underlying DNA sequence itself. Your DNA is the hardware; epigenetic marks are the software layer that decides which genes each cell actually switches on — and that software can be edited by how you live."
+    >
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Epigenetics and Longevity — How Lifestyle Rewrites Your Genes
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            For most of the twentieth century, DNA was treated as destiny: the genes you
-            inherited were the genes you were stuck with. <strong>Epigenetics</strong> has
-            rewritten that story. Epigenetics is the study of changes in gene expression that
-            occur <em>without</em> any change to the underlying DNA sequence itself. Your DNA is
-            the hardware; epigenetic marks are the software layer that decides which genes each
-            cell actually switches on — and that software can be edited by how you live.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             This matters enormously for longevity. The way you eat, move, sleep, and manage
             stress leaves chemical marks on your genome that speed up or slow down biological
@@ -179,8 +177,7 @@ export function EpigeneticsArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

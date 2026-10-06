@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import {
   BA_SEO, BA_SCHEMA, BA_EPIGENETIC_HABITS,
@@ -90,82 +91,48 @@ const DIFFICULTY_STYLES = {
 
 export function BiologicalAgeCalculatorPage() {
   return (
-    <>
-      {/* SEO via the project's react-helmet-async component. The SEO component derives
-          og:title/description from title/description and emits the trailing-slash canonical. */}
-      <SEO
-        title={BA_SEO.title}
-        description={BA_SEO.description}
-        canonicalUrl="/biological-age-calculator"
-        ogType="website"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
+    <ToolLayout
+      theme="science"
+      testId="bio-age-page"
+      seo={(
+        <>
+          {/* SEO via the project's react-helmet-async component. The SEO component derives
+              og:title/description from title/description and emits the trailing-slash canonical. */}
+          <SEO
+            title={BA_SEO.title}
+            description={BA_SEO.description}
+            canonicalUrl="/biological-age-calculator"
+            ogType="website"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
 
-      {/* Schema — dangerouslySetInnerHTML in body */}
-      <JsonLd data={BA_SCHEMA.softwareApp} />
-      <JsonLd data={BA_SCHEMA.faq} />
-      <JsonLd data={BA_SCHEMA.breadcrumb} />
+          {/* Schema — dangerouslySetInnerHTML in body */}
+          <JsonLd data={BA_SCHEMA.softwareApp} />
+          <JsonLd data={BA_SCHEMA.faq} />
+          <JsonLd data={BA_SCHEMA.breadcrumb} />
 
-      {/* Additional structured data: FAQPage (5), SoftwareApplication, speakable WebPage */}
-      <JsonLd data={BA_FAQ_SCHEMA} />
-      <JsonLd data={BA_SOFTWARE_APP_SCHEMA} />
-      <JsonLd data={BA_WEBPAGE_SCHEMA} />
-
-      <main
-        data-testid="bio-age-page"
-        className="min-h-screen bg-white"
-      >
-        {/* ── BREADCRUMB ── */}
-        <nav
-          aria-label="Breadcrumb"
-          className="max-w-4xl mx-auto px-4 pt-4"
-        >
-          <ol className="flex items-center gap-2 text-sm text-gray-400 flex-wrap list-none p-0">
-            <li data-testid="breadcrumb-item">
-              <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            </li>
-            <li aria-hidden="true">›</li>
-            <li data-testid="breadcrumb-item">
-              <Link to="/longevity-calculator" className="hover:text-[#6E5AA6]">
-                Longevity Calculator
-              </Link>
-            </li>
-            <li aria-hidden="true">›</li>
-            <li
-              data-testid="breadcrumb-item"
-              className="text-gray-700 font-medium"
-              aria-current="page"
-            >
-              Biological Age Calculator
-            </li>
-          </ol>
-        </nav>
-
-        {/* ── HERO ── */}
-        <section
-          aria-labelledby="page-h1"
-          className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6]
-                     border-b border-[#6E5AA6]/30 py-12 px-4 mt-4"
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-[#6E5AA6]/10 text-[#6E5AA6]
-                            rounded-full px-4 py-1.5 text-sm font-semibold mb-4">
-              {BA_COPY.hero.badge}
-            </div>
-
-            <h1
-              id="page-h1"
-              className="text-3xl sm:text-4xl lg:text-5xl font-black gradient-text-primary
-                         leading-tight mb-4"
-            >
-              {BA_COPY.hero.h1Line1}{' '}
-              <span>{BA_COPY.hero.h1Line2}</span>
-            </h1>
-
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6 leading-relaxed">
-              {BA_COPY.hero.subtitle}
-            </p>
-
+          {/* Additional structured data: FAQPage (5), SoftwareApplication, speakable WebPage */}
+          <JsonLd data={BA_FAQ_SCHEMA} />
+          <JsonLd data={BA_SOFTWARE_APP_SCHEMA} />
+          <JsonLd data={BA_WEBPAGE_SCHEMA} />
+        </>
+      )}
+      breadcrumb={{
+        trail: [
+          { label: 'Science & Longevity', to: '/science-longevity' },
+          { label: 'Longevity Calculator', to: '/longevity-calculator' },
+        ],
+        current: 'Biological Age Calculator',
+      }}
+      eyebrow={BA_COPY.hero.badge}
+      h1={<>{BA_COPY.hero.h1Line1}{' '}<span>{BA_COPY.hero.h1Line2}</span></>}
+      lead={BA_COPY.hero.subtitle}
+      footer={{ note: '© 2026 BornClock.' }}
+    >
+      <>
+        {/* ── HERO TRUST + CTA ── */}
+        <section className="max-w-4xl mx-auto px-4 pt-4">
+          <div className="text-center">
             <ul
               aria-label="Calculator features"
               className="flex flex-wrap justify-center gap-4 text-sm
@@ -204,8 +171,8 @@ export function BiologicalAgeCalculatorPage() {
           className="max-w-4xl mx-auto px-4 py-10"
           aria-labelledby="bj-heading"
         >
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6]
-                          border border-[#6E5AA6]/30 rounded-2xl p-6 sm:p-8">
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0]
+                          border border-[#2F6FB0]/30 rounded-2xl p-6 sm:p-8">
             <h2 id="bj-heading" className="text-2xl font-black text-gray-900 mb-4">
               {BA_COPY.bryanJohnson.heading}
             </h2>
@@ -277,9 +244,9 @@ export function BiologicalAgeCalculatorPage() {
                   {BA_COPY.chronoVsBio.chronological.example}
                 </p>
               </div>
-              <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-5">
+              <div className="bg-[#2F6FB0]/10 border border-[#2F6FB0]/30 rounded-xl p-5">
                 <div className="text-3xl mb-2" aria-hidden="true">🔬</div>
-                <h3 className="font-bold text-[#6E5AA6] mb-2">
+                <h3 className="font-bold text-[#2F6FB0] mb-2">
                   {BA_COPY.chronoVsBio.biological.label}
                 </h3>
                 <p className="text-gray-700 text-sm mb-3">
@@ -290,8 +257,8 @@ export function BiologicalAgeCalculatorPage() {
                 </p>
               </div>
             </div>
-            <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-4">
-              <p className="text-[#6E5AA6] text-sm font-medium">
+            <div className="bg-[#2F6FB0]/10 border border-[#2F6FB0]/30 rounded-xl p-4">
+              <p className="text-[#2F6FB0] text-sm font-medium">
                 💡 {BA_COPY.chronoVsBio.keyInsight}
               </p>
             </div>
@@ -313,7 +280,7 @@ export function BiologicalAgeCalculatorPage() {
 
           {/* Mid-article CTA */}
           <div
-            className="my-10 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
+            className="my-10 bg-[#2F6FB0]/10 border border-[#2F6FB0]/30
                         rounded-2xl p-6 text-center"
             role="complementary"
           >
@@ -349,8 +316,8 @@ export function BiologicalAgeCalculatorPage() {
             <p className="text-gray-600 mb-3">{BA_COPY.twelveHabits.intro}</p>
 
             {/* Realistic potential — NOT raw sum */}
-            <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-3 mb-3">
-              <p className="text-sm font-semibold text-[#6E5AA6]">
+            <div className="bg-[#2F6FB0]/10 border border-[#2F6FB0]/30 rounded-xl p-3 mb-3">
+              <p className="text-sm font-semibold text-[#2F6FB0]">
                 🎯 Realistic combined potential: up to +{BA_REALISTIC_POTENTIAL} years
                 (with consistent practice across multiple habits)
               </p>
@@ -396,7 +363,7 @@ export function BiologicalAgeCalculatorPage() {
                       {habit.mechanism}
                     </p>
                     <div className="flex items-start justify-between gap-2">
-                      <p className="text-xs text-[#6E5AA6] italic flex-1 leading-relaxed">
+                      <p className="text-xs text-[#2F6FB0] italic flex-1 leading-relaxed">
                         {habit.source}
                       </p>
                       <span
@@ -572,12 +539,12 @@ export function BiologicalAgeCalculatorPage() {
                   to={tool.href}
                   data-testid="related-tool"
                   className="flex items-start gap-3 p-4 bg-white rounded-xl
-                             border border-gray-200 hover:border-[#6E5AA6]/30
-                             hover:bg-[#6E5AA6]/10 transition-colors group"
+                             border border-gray-200 hover:border-[#2F6FB0]/30
+                             hover:bg-[#2F6FB0]/10 transition-colors group"
                 >
                   <div>
                     <div className="font-semibold text-sm text-gray-900
-                                    group-hover:text-[#6E5AA6] mb-0.5">
+                                    group-hover:text-[#2F6FB0] mb-0.5">
                       {tool.title}
                     </div>
                     <div className="text-xs text-gray-500">{tool.desc}</div>
@@ -626,25 +593,25 @@ export function BiologicalAgeCalculatorPage() {
             <h2 className="text-2xl font-black mb-2">
               Find Out Your Biological Age — Free
             </h2>
-            <p className="text-[#6E5AA6] mb-6 max-w-md mx-auto">
+            <p className="text-[#2F6FB0] mb-6 max-w-md mx-auto">
               3 minutes. Epigenetic science. Personalised plan to lower your biological age.
             </p>
             <Link
               to="/life-expectancy"
               data-testid="cta-to-calculator"
-              className="inline-block bg-white text-primary hover:bg-[#6E5AA6]/10
+              className="inline-block bg-white text-primary hover:bg-[#2F6FB0]/10
                          font-black py-4 px-8 rounded-xl transition-colors text-lg"
             >
               Calculate My Biological Age →
             </Link>
-            <p className="text-[#6E5AA6] text-xs mt-3">
+            <p className="text-[#2F6FB0] text-xs mt-3">
               Free · No blood test · No account required
             </p>
           </div>
 
         </article>
-      </main>
-    </>
+      </>
+    </ToolLayout>
   );
 }
 

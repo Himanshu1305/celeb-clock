@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -87,27 +88,23 @@ export function BryanJohnsonArticle() {
   };
 
   return (
-    <>
-      <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article" />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
+    <ArticleLayout
+      theme="science"
+      testId="bryan-johnson-article"
+      seo={(
+        <>
+          <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article" />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'The Bryan Johnson Blueprint — And a Free, Science-Backed Alternative' }}
+      eyebrow="Longevity"
+      h1="The Bryan Johnson Blueprint — And a Free, Science-Backed Alternative"
+      lead="Tech entrepreneur Bryan Johnson has become the most visible face of the modern longevity movement. After selling his payments company Braintree, he poured his fortune into Project Blueprint — an intensely measured attempt to slow, and ideally reverse, his own biological ageing. His routine is documented in granular detail: hundreds of biomarkers tracked, dozens of supplements, custom meals weighed to the gram, MRI and ultrasound scans, and a full medical team interpreting the data."
+    >
+      <article className="max-w-3xl mx-auto px-4 py-10">
 
-      <main data-testid="bryan-johnson-article" className="min-h-screen bg-white">
-        <article className="max-w-3xl mx-auto px-4 py-10">
-
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            The Bryan Johnson Blueprint — And a Free, Science-Backed Alternative
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Tech entrepreneur Bryan Johnson has become the most visible face of the modern
-            longevity movement. After selling his payments company Braintree, he poured his
-            fortune into <strong>Project Blueprint</strong> — an intensely measured attempt to
-            slow, and ideally reverse, his own biological ageing. His routine is documented in
-            granular detail: hundreds of biomarkers tracked, dozens of supplements, custom
-            meals weighed to the gram, MRI and ultrasound scans, and a full medical team
-            interpreting the data.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             The headline number is what stops most people: Johnson has said Blueprint costs him
             around <strong>$2 million a year</strong>. That price tag is the whole problem. The
@@ -163,9 +160,9 @@ export function BryanJohnsonArticle() {
             ))}
           </div>
 
-          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8 text-center">
-            <h3 className="text-lg font-black text-[#6E5AA6] mb-2">See how these habits change your numbers</h3>
-            <p className="text-sm text-[#6E5AA6] mb-4">
+          <div className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8 text-center">
+            <h3 className="text-lg font-black text-[#2F6FB0] mb-2">See how these habits change your numbers</h3>
+            <p className="text-sm text-[#2F6FB0] mb-4">
               Our free longevity calculator estimates how sleep, exercise, diet, and smoking
               status shift your life-expectancy — no budget, no medical team required.
             </p>
@@ -234,17 +231,17 @@ export function BryanJohnsonArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Build Your Own Longevity Plan — Free</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               You do not need a $2M budget to take ageing seriously. Use BornClock&apos;s free
               longevity calculator to see how the habits that matter reshape your projected
               lifespan.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Open the Free Longevity Calculator →
             </a>
           </div>
@@ -254,13 +251,13 @@ export function BryanJohnsonArticle() {
             <ul className="space-y-2">
               <li>
                 <a href="/articles/how-to-live-to-100"
-                   className="text-[#6E5AA6] font-semibold hover:underline">
+                   className="text-[#2F6FB0] font-semibold hover:underline">
                   How to Live to 100 — Habits of the World&apos;s Longest-Lived People →
                 </a>
               </li>
               <li>
                 <a href="/articles/blue-zones-diet"
-                   className="text-[#6E5AA6] font-semibold hover:underline">
+                   className="text-[#2F6FB0] font-semibold hover:underline">
                   The Blue Zones Diet — What the Longest-Living Communities Eat →
                 </a>
               </li>
@@ -268,8 +265,7 @@ export function BryanJohnsonArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

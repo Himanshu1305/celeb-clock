@@ -215,18 +215,19 @@ describe('BiologicalAgeCalculatorPage — Structure', () => {
       .toContain('NIH');
   });
 
-  it('TC-PAGE-29: breadcrumb has 3 items', () => {
+  it('TC-PAGE-29: breadcrumb has 4 items (central shell: BornClock + trail + current)', () => {
     renderPage();
     const items = document.querySelectorAll('[data-testid="breadcrumb-item"]');
-    expect(items.length).toBe(3);
+    expect(items.length).toBe(4);
   });
 
-  it('TC-PAGE-30: breadcrumb items are Home, Longevity Calculator, Biological Age Calculator', () => {
+  it('TC-PAGE-30: breadcrumb items are BornClock, Science & Longevity, Longevity Calculator, Biological Age Calculator', () => {
     renderPage();
     const items = document.querySelectorAll('[data-testid="breadcrumb-item"]');
-    expect(items[0]?.textContent?.trim()).toContain('Home');
-    expect(items[1]?.textContent?.trim()).toContain('Longevity Calculator');
-    expect(items[2]?.textContent?.trim()).toContain('Biological Age');
+    expect(items[0]?.textContent?.trim()).toContain('BornClock');
+    expect(items[1]?.textContent?.trim()).toContain('Science & Longevity');
+    expect(items[2]?.textContent?.trim()).toContain('Longevity Calculator');
+    expect(items[3]?.textContent?.trim()).toContain('Biological Age');
   });
 
 });

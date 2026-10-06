@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -60,27 +61,22 @@ export function RetirementAgeIndiaArticle() {
   };
 
   return (
-    <>
-      <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article" />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
-
-      <main data-testid="retirement-age-india-article" className="min-h-screen bg-white">
+    <ArticleLayout
+      theme="science"
+      testId="retirement-age-india-article"
+      seo={(
+        <>
+          <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article" />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Retirement Age & Life Expectancy in India' }}
+      eyebrow="Longevity"
+      h1="Retirement Age & Life Expectancy in India"
+      lead="Retirement planning in India used to be simple: work until 60, collect a provident fund and a pension, and rely on family. That world has changed. People are living longer, joint-family support is thinner, and healthcare costs are rising fast. The single most important input into any retirement plan is no longer just how much you save — it is how long you are likely to live. This guide connects retirement age in India to your personal life expectancy, walks through EPFO and NPS, and shows exactly when early retirement or a FIRE strategy actually adds up."
+    >
         <article className="max-w-3xl mx-auto px-4 py-10">
-
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Retirement Age &amp; Life Expectancy in India
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Retirement planning in India used to be simple: work until 60, collect a provident fund
-            and a pension, and rely on family. That world has changed. People are living longer,
-            joint-family support is thinner, and healthcare costs are rising fast. The single most
-            important input into any retirement plan is no longer just how much you save — it is how
-            long you are likely to live. This guide connects <strong>retirement age in India</strong>
-            {' '}to your personal life expectancy, walks through EPFO and NPS, and shows exactly when
-            early retirement or a FIRE strategy actually adds up.
-          </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">The Standard Retirement Age: 60</h2>
           <p className="text-gray-700 leading-relaxed mb-3">
@@ -137,8 +133,8 @@ export function RetirementAgeIndiaArticle() {
           <p className="text-gray-700 leading-relaxed mb-3">
             Every retirement plan comes down to one gap you must fund:
           </p>
-          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-6 text-center">
-            <p className="text-lg font-black text-[#6E5AA6]">
+          <div className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-6 text-center">
+            <p className="text-lg font-black text-[#2F6FB0]">
               Years to fund = Life Expectancy − Retirement Age
             </p>
           </div>
@@ -162,7 +158,7 @@ export function RetirementAgeIndiaArticle() {
                     <td className="p-3 text-gray-700">{s.label}</td>
                     <td className="p-3 text-center text-gray-700">{s.retire}</td>
                     <td className="p-3 text-center text-gray-700">{s.le}</td>
-                    <td className="p-3 text-center font-black text-[#6E5AA6]">{s.le - s.retire}</td>
+                    <td className="p-3 text-center font-black text-[#2F6FB0]">{s.le - s.retire}</td>
                   </tr>
                 ))}
               </tbody>
@@ -175,9 +171,9 @@ export function RetirementAgeIndiaArticle() {
             plan. Underestimate your lifespan and you risk running out of money in your eighties.
           </p>
 
-          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
-            <h3 className="text-lg font-black text-[#6E5AA6] mb-2">Start with your own number</h3>
-            <p className="text-sm text-[#6E5AA6] mb-4">
+          <div className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8">
+            <h3 className="text-lg font-black text-[#2F6FB0] mb-2">Start with your own number</h3>
+            <p className="text-sm text-[#2F6FB0] mb-4">
               Before you pick a retirement age, get a personalised life expectancy so you know how
               many years you actually need to fund.
             </p>
@@ -206,14 +202,14 @@ export function RetirementAgeIndiaArticle() {
             build a larger cushion and to favour lifelong-income products like the NPS annuity.
           </p>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Plan Retirement Around Your Real Lifespan</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               Get a personalised life expectancy, then subtract your target retirement age to see
               exactly how many years you need to fund.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Open the Longevity Calculator →
             </a>
           </div>
@@ -229,7 +225,7 @@ export function RetirementAgeIndiaArticle() {
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
-          <ul className="list-disc pl-6 text-[#6E5AA6] space-y-2 mb-6">
+          <ul className="list-disc pl-6 text-[#2F6FB0] space-y-2 mb-6">
             <li>
               <a href="/articles/retirement-planning-life-expectancy" className="hover:underline font-semibold">
                 Retirement Planning &amp; Life Expectancy
@@ -243,8 +239,7 @@ export function RetirementAgeIndiaArticle() {
           </ul>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

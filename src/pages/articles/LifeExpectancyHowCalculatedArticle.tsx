@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -81,27 +82,23 @@ export function LifeExpectancyHowCalculatedArticle() {
   };
 
   return (
-    <>
-      <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article" />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
-
-      <main data-testid="le-how-calculated-article" className="min-h-screen bg-white">
+    <ArticleLayout
+      theme="science"
+      testId="le-how-calculated-article"
+      seo={(
+        <>
+          <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article" />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'How Life Expectancy Is Calculated — The WHO Method Explained' }}
+      eyebrow="Science & Longevity"
+      h1="How Life Expectancy Is Calculated — The WHO Method Explained"
+      lead={'When a headline says "life expectancy in India is 70.2 years," it can sound like a simple fact — a stopwatch on the average life. In reality that number is the output of a careful statistical machine called a life table, built from millions of records and standardised so that every country\'s figure means the same thing. This guide explains exactly how life expectancy is calculated, why demographers distinguish period from cohort life tables, the five data sources that feed the model, and why India\'s official figure may actually underestimate how long a child born today will live.'}
+    >
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            How Life Expectancy Is Calculated — The WHO Method Explained
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            When a headline says "life expectancy in India is 70.2 years," it can sound like a
-            simple fact — a stopwatch on the average life. In reality that number is the output of
-            a careful statistical machine called a <strong>life table</strong>, built from millions
-            of records and standardised so that every country's figure means the same thing. This
-            guide explains exactly how life expectancy is calculated, why demographers distinguish
-            period from cohort life tables, the five data sources that feed the model, and why
-            India's official figure may actually underestimate how long a child born today will live.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             Understanding the method matters because a population average is not a personal
             forecast. Once you know how the number is built, you can see why your own outlook can be
@@ -132,9 +129,9 @@ export function LifeExpectancyHowCalculatedArticle() {
             already escaped.
           </p>
 
-          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
-            <h3 className="text-lg font-black text-[#6E5AA6] mb-2">See your own adjusted estimate</h3>
-            <p className="text-sm text-[#6E5AA6] mb-4">
+          <div className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8">
+            <h3 className="text-lg font-black text-[#2F6FB0] mb-2">See your own adjusted estimate</h3>
+            <p className="text-sm text-[#2F6FB0] mb-4">
               The national life table is only a starting point. BornClock takes the baseline and
               adjusts for your age, sex and lifestyle to estimate your personal outlook.
             </p>
@@ -236,14 +233,14 @@ export function LifeExpectancyHowCalculatedArticle() {
             abstract statistic into a number you can plan around.
           </p>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Get Your Personal Life Expectancy Estimate</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               Move beyond the national average. Enter your details and see an estimate adjusted for
               your age, sex and lifestyle in seconds.
             </p>
             <a href="/longevity-calculator"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Open the Longevity Calculator →
             </a>
           </div>
@@ -259,7 +256,7 @@ export function LifeExpectancyHowCalculatedArticle() {
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
-          <ul className="list-disc pl-6 text-[#6E5AA6] space-y-2 mb-6">
+          <ul className="list-disc pl-6 text-[#2F6FB0] space-y-2 mb-6">
             <li>
               <a href="/articles/life-expectancy-by-country-2026" className="hover:underline font-semibold">
                 Life Expectancy by Country 2026
@@ -273,8 +270,7 @@ export function LifeExpectancyHowCalculatedArticle() {
           </ul>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

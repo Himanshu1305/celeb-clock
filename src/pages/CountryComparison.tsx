@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { ReportLayout } from '@/components/central';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -77,7 +75,7 @@ const COUNTRY_INSIGHTS: Record<string, string> = {
 // ── Tier badge ────────────────────────────────────────────────────────────────
 
 function getTier(forecast: number): { label: string; cls: string } {
-  if (forecast > 88) return { label: '🌟 Elite', cls: 'bg-[#6E5AA6]/10 text-[#6E5AA6]' };
+  if (forecast > 88) return { label: '🌟 Elite', cls: 'bg-[#2F6FB0]/10 text-[#2F6FB0]' };
   if (forecast >= 85) return { label: '🟢 Excellent', cls: 'bg-green-100 text-green-800' };
   if (forecast >= 80) return { label: '🔵 Strong', cls: 'bg-blue-100 text-blue-800' };
   if (forecast >= 75) return { label: '🟡 Average', cls: 'bg-yellow-100 text-yellow-800' };
@@ -287,28 +285,33 @@ const CountryComparison = () => {
   const shareText = SHARE_OPTIONS[selectedShareIdx].text;
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <FAQSchema items={FAQ_ITEMS.map(f => ({ question: f.question, answer: f.answer }))} />
-      <SEO
-        title="Country Life Expectancy Comparison — How Your Country Affects How Long You Live"
-        description="Shocking interactive comparison: How does your country affect your lifespan? Japan reversed from G7's shortest to longest life expectancy in 60 years. The USA spends more on healthcare than any nation yet ranks 50th. See your personalized forecast across 57 countries. Free."
-        keywords="life expectancy by country, country longevity comparison, why does japan have highest life expectancy, USA life expectancy vs other countries, how does country affect lifespan, longevity by country, country life expectancy calculator"
-        canonicalUrl="/country-comparison"
-      />
-      <WebApplicationSchema
-        name="Country Life Expectancy Comparison"
-        description="Interactive life expectancy comparison tool across 57 countries — see how your country affects your lifespan with WHO and CDC data."
-        url="/country-comparison"
-      />
-
-      {/* ── STICKY NAV ────────────────────────────────────────────────────── */}
-      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm mb-8">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
-      </div>
-
+    <ReportLayout
+      theme="science"
+      testId="country-comparison"
+      seo={(
+        <>
+          <FAQSchema items={FAQ_ITEMS.map(f => ({ question: f.question, answer: f.answer }))} />
+          <SEO
+            title="Country Life Expectancy Comparison — How Your Country Affects How Long You Live"
+            description="Shocking interactive comparison: How does your country affect your lifespan? Japan reversed from G7's shortest to longest life expectancy in 60 years. The USA spends more on healthcare than any nation yet ranks 50th. See your personalized forecast across 57 countries. Free."
+            keywords="life expectancy by country, country longevity comparison, why does japan have highest life expectancy, USA life expectancy vs other countries, how does country affect lifespan, longevity by country, country life expectancy calculator"
+            canonicalUrl="/country-comparison"
+          />
+          <WebApplicationSchema
+            name="Country Life Expectancy Comparison"
+            description="Interactive life expectancy comparison tool across 57 countries — see how your country affects your lifespan with WHO and CDC data."
+            url="/country-comparison"
+          />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Country Comparison' }}
+      eyebrow={<span className="inline-flex items-center gap-2"><Globe className="w-4 h-4" /> 57 countries · UN WPP 2024 data</span>}
+      h1="Your Personal Forecast Across 57 Countries"
+      lead={savedResult
+        ? `Personalised to your health profile — see exactly how where you live changes your numbers.`
+        : `Compare baseline life expectancy across 57 countries. Complete the Life Expectancy Calculator for your personalised comparison.`}
+      footer={{ note: '© 2026 BornClock · Country life expectancy comparison.' }}
+    >
       {/* ── SHOCKING HERO (dark section) ──────────────────────────────────── */}
       <div className="bg-slate-900 text-white py-16">
         <div className="container mx-auto px-4">
@@ -316,7 +319,7 @@ const CountryComparison = () => {
             <p className="text-2xl md:text-4xl font-black leading-tight">
               In 1800, no country on Earth had a life expectancy above 40 years.
             </p>
-            <p className="text-[#6E5AA6] text-xl mt-4 font-semibold">
+            <p className="text-[#2F6FB0] text-xl mt-4 font-semibold">
               Today, 50+ countries exceed 75 years.
             </p>
             <p className="text-slate-300 text-lg mt-2">
@@ -331,22 +334,7 @@ const CountryComparison = () => {
 
       <div className="container mx-auto px-4 py-8">
 
-        {/* ── YOUR PERSONAL FORECAST ──────────────────────────────────────── */}
-        <section className="text-center space-y-4 pt-6 pb-8 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm text-muted-foreground">
-            <Globe className="w-4 h-4 text-primary" />
-            <span>57 countries · UN WPP 2024 data</span>
-          </div>
-          <h1 className="text-3xl md:text-5xl font-black gradient-text-primary leading-tight">
-            Your Personal Forecast Across 57 Countries
-          </h1>
-          <PageTagline />
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {savedResult
-              ? `Personalised to your health profile — see exactly how where you live changes your numbers.`
-              : `Compare baseline life expectancy across 57 countries. Complete the Life Expectancy Calculator for your personalised comparison.`}
-          </p>
-        </section>
+        <div className="max-w-3xl mx-auto text-center pb-8"><PageTagline /></div>
 
         {/* Controls */}
         <div className="max-w-5xl mx-auto mb-8 flex flex-wrap gap-4 items-center justify-between">
@@ -454,7 +442,7 @@ const CountryComparison = () => {
                         <td className="py-2 text-muted-foreground">Birth baseline</td>
                         <td className="py-2 text-center font-bold text-foreground">{selectedBaseline.male}</td>
                         <td className="py-2 text-center font-bold text-foreground">{selectedBaseline.female}</td>
-                        <td className="py-2 text-center text-xs text-[#6E5AA6] font-medium">+{(selectedBaseline.female - selectedBaseline.male).toFixed(1)} F</td>
+                        <td className="py-2 text-center text-xs text-[#2F6FB0] font-medium">+{(selectedBaseline.female - selectedBaseline.male).toFixed(1)} F</td>
                       </tr>
                       <tr>
                         <td className="py-2 text-muted-foreground">Your forecast here</td>
@@ -480,9 +468,9 @@ const CountryComparison = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             {/* Card 1 — Japan Paradox */}
-            <div className="bg-white rounded-2xl border border-[#6E5AA6]/30 shadow-sm p-6 hover:shadow-md transition-shadow">
+            <div className="bg-white rounded-2xl border border-[#2F6FB0]/30 shadow-sm p-6 hover:shadow-md transition-shadow">
               <div className="text-4xl mb-3">🇯🇵</div>
-              <h3 className="text-lg font-black mb-2 text-[#6E5AA6]">The Japan Paradox</h3>
+              <h3 className="text-lg font-black mb-2 text-[#2F6FB0]">The Japan Paradox</h3>
               <p className="text-sm text-gray-700 leading-relaxed mb-2">
                 In 1960, Japan had the <strong>SHORTEST</strong> life expectancy among G7 nations. Today it has the <strong>LONGEST</strong> — a complete reversal in 60 years.
               </p>
@@ -492,7 +480,7 @@ const CountryComparison = () => {
               <p className="text-xs text-gray-400 italic mb-2">
                 [European Journal of Clinical Nutrition, Nature, 2021] [WHO Global Health Data, 2024]
               </p>
-              <Link to="/blog/best-foods-to-eat-to-live-longer-longevity-diet" className="text-[#6E5AA6] text-xs underline hover:text-[#6E5AA6]">
+              <Link to="/blog/best-foods-to-eat-to-live-longer-longevity-diet" className="text-[#2F6FB0] text-xs underline hover:text-[#2F6FB0]">
                 → Read: How Diet Affects Your Longevity
               </Link>
             </div>
@@ -546,9 +534,9 @@ const CountryComparison = () => {
             </div>
 
             {/* Card 5 — Lifestyle Multiplier */}
-            <div className="bg-white rounded-2xl border border-[#6E5AA6]/30 shadow-sm p-6 hover:shadow-md transition-shadow md:col-span-2 lg:col-span-1">
+            <div className="bg-white rounded-2xl border border-[#2F6FB0]/30 shadow-sm p-6 hover:shadow-md transition-shadow md:col-span-2 lg:col-span-1">
               <div className="text-4xl mb-3">⚡</div>
-              <h3 className="text-lg font-black mb-2 text-[#6E5AA6]">The Lifestyle Multiplier</h3>
+              <h3 className="text-lg font-black mb-2 text-[#2F6FB0]">The Lifestyle Multiplier</h3>
               <p className="text-sm text-gray-700 leading-relaxed mb-2">
                 The gap between the highest and lowest life expectancy countries is about 30 years. But research shows lifestyle choices within <em>any</em> country can add or subtract up to <strong>14 years</strong> from your personal forecast.
               </p>
@@ -572,10 +560,10 @@ const CountryComparison = () => {
             <div className="flex gap-4" style={{ minWidth: 'max-content' }}>
 
               {[
-                { idx: 0, gradient: 'from-[#6E5AA6] to-[#6E5AA6]', icon: '🎯', title: 'The Monaco Effect', body: 'Monaco has the world\'s highest life expectancy at 89.8 years. Tiny, wealthy, universal healthcare, Mediterranean climate. But wealth alone doesn\'t explain it — neighboring France still reaches 83+ years with far more people.', cite: '[CIA World Factbook, 2024]' },
+                { idx: 0, gradient: 'from-[#2F6FB0] to-[#2F6FB0]', icon: '🎯', title: 'The Monaco Effect', body: 'Monaco has the world\'s highest life expectancy at 89.8 years. Tiny, wealthy, universal healthcare, Mediterranean climate. But wealth alone doesn\'t explain it — neighboring France still reaches 83+ years with far more people.', cite: '[CIA World Factbook, 2024]' },
                 { idx: 1, gradient: 'from-emerald-600 to-emerald-800', icon: '🍵', title: 'The Green Tea Effect', body: 'Japan\'s per-capita green tea consumption: ~700g per person per year. Green tea contains EGCG — a polyphenol that reduces inflammation. Japanese adults who drink 5+ cups per day show 26% lower risk of heart disease mortality.', cite: '[Japan Public Health Center Study, 2006]' },
                 { idx: 2, gradient: 'from-blue-600 to-blue-800', icon: '🏥', title: 'The Healthcare Gap', body: 'The US spends $12,000+ per person on healthcare annually — nearly double comparable countries. Yet Americans live shorter lives than citizens in 50+ countries who spend far less. Healthcare spending and life expectancy are surprisingly weakly correlated.', cite: '[OECD Health Statistics, 2024]' },
-                { idx: 3, gradient: 'from-[#6E5AA6] to-[#6E5AA6]', icon: '🌍', title: 'The 200-Year Miracle', body: 'In 1800, the global average life expectancy was around 30 years. By 2024 it exceeded 73 years. Humanity effectively gained 43 years of average lifespan in 200 years — primarily through sanitation, vaccines, and antibiotics.', cite: '[Our World in Data, 2024]' },
+                { idx: 3, gradient: 'from-[#2F6FB0] to-[#2F6FB0]', icon: '🌍', title: 'The 200-Year Miracle', body: 'In 1800, the global average life expectancy was around 30 years. By 2024 it exceeded 73 years. Humanity effectively gained 43 years of average lifespan in 200 years — primarily through sanitation, vaccines, and antibiotics.', cite: '[Our World in Data, 2024]' },
                 { idx: 4, gradient: 'from-rose-600 to-rose-800', icon: '💃', title: 'The Dancing Sardinians', body: 'Sardinia, Italy is a Blue Zone with the world\'s highest concentration of centenarians. Sardinian men specifically outlive men from all other Blue Zones — daily walking, red wine, pecorino cheese (high omega-3s), and tight-knit multigenerational families.', cite: '[Buettner, D. — Blue Zones, 2023]' },
                 { idx: 5, gradient: 'from-amber-600 to-amber-800', icon: '🏃', title: 'The Exercise Equation', body: 'A landmark study of 650,000 adults found that 75 minutes of vigorous exercise per week added 3.4 years to life expectancy — regardless of country of birth. 150 minutes/week added 3.5 years. Marginal return decreases quickly after 150 minutes.', cite: '[Moore et al., PLOS Medicine, 2012]' },
                 { idx: 6, gradient: 'from-teal-600 to-teal-800', icon: '👥', title: 'The Loneliness Penalty', body: 'Social isolation reduces life expectancy by 26% — comparable to smoking 15 cigarettes per day. Countries with stronger social bonds consistently rank higher in longevity. Japan\'s "moai" (lifelong friend groups) and Sardinia\'s village culture are key factors.', cite: '[Holt-Lunstad et al., PLOS Medicine, 2010]' },
@@ -622,22 +610,22 @@ const CountryComparison = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             {/* Japan Switch */}
-            <Card className="glass-card border-[#6E5AA6]/30 bg-gradient-to-br from-[#6E5AA6]/40 to-white">
+            <Card className="glass-card border-[#2F6FB0]/30 bg-gradient-to-br from-[#2F6FB0]/40 to-white">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-2">
                   <div className="text-3xl">🇯🇵</div>
-                  <button onClick={() => setExpandedWhatif(expandedWhatif === 'japan' ? null : 'japan')} className="text-[#6E5AA6] hover:text-[#6E5AA6] text-xs flex items-center gap-1 mt-1">
+                  <button onClick={() => setExpandedWhatif(expandedWhatif === 'japan' ? null : 'japan')} className="text-[#2F6FB0] hover:text-[#2F6FB0] text-xs flex items-center gap-1 mt-1">
                     {expandedWhatif === 'japan' ? <><ChevronUp className="w-3 h-3" />Less</> : <><ChevronDown className="w-3 h-3" />Details</>}
                   </button>
                 </div>
-                <h3 className="font-bold text-[#6E5AA6] mb-1">The Japan Switch</h3>
+                <h3 className="font-bold text-[#2F6FB0] mb-1">The Japan Switch</h3>
                 <p className="text-xs text-muted-foreground mb-4">If you maintained your exact current lifestyle in Japan:</p>
                 {japanRow ? (
                   <>
                     <div className="flex justify-between items-end mb-3">
                       <div>
                         <p className="text-[10px] text-muted-foreground">Japan forecast</p>
-                        <p className="text-2xl font-black text-[#6E5AA6]">{japanRow.forecast}</p>
+                        <p className="text-2xl font-black text-[#2F6FB0]">{japanRow.forecast}</p>
                       </div>
                       {savedResult && (
                         <div className="text-right">
@@ -670,9 +658,9 @@ const CountryComparison = () => {
                       </div>
                     </div>
                     {expandedWhatif === 'japan' && (
-                      <div className="bg-[#6E5AA6]/10 rounded-lg p-3 mb-3 text-xs text-[#6E5AA6] leading-relaxed">
+                      <div className="bg-[#2F6FB0]/10 rounded-lg p-3 mb-3 text-xs text-[#2F6FB0] leading-relaxed">
                         <p className="font-semibold mb-1">Why Japan leads:</p>
-                        <ul className="space-y-1 text-[#6E5AA6]">
+                        <ul className="space-y-1 text-[#2F6FB0]">
                           <li>• Obesity rate 3.6% (vs 36% in USA)</li>
                           <li>• Traditional fish, fermented foods, vegetables diet</li>
                           <li>• Universal healthcare since 1961</li>
@@ -952,7 +940,7 @@ const CountryComparison = () => {
                   <p className="text-xs text-gray-600 mt-1 flex-1 leading-relaxed">{post.teaser}</p>
                   <div className="mt-3 flex items-center justify-between">
                     <span className="text-[10px] text-gray-400">{post.readTime} min read</span>
-                    <span className="text-[#6E5AA6] text-xs font-medium">Read →</span>
+                    <span className="text-[#2F6FB0] text-xs font-medium">Read →</span>
                   </div>
                 </div>
               </Link>
@@ -972,12 +960,12 @@ const CountryComparison = () => {
 
         {/* ── SHARE SECTION ─────────────────────────────────────────────────── */}
         <section className="max-w-5xl mx-auto mb-16">
-          <div className="bg-[#6E5AA6]/10 rounded-2xl p-6 text-center">
+          <div className="bg-[#2F6FB0]/10 rounded-2xl p-6 text-center">
             <div className="flex justify-center mb-3">
-              <Share2 className="w-6 h-6 text-[#6E5AA6]" />
+              <Share2 className="w-6 h-6 text-[#2F6FB0]" />
             </div>
-            <h2 className="text-xl font-bold text-[#6E5AA6] mb-2">🌍 Share This Discovery</h2>
-            <p className="text-sm text-[#6E5AA6] mb-6 max-w-2xl mx-auto">
+            <h2 className="text-xl font-bold text-[#2F6FB0] mb-2">🌍 Share This Discovery</h2>
+            <p className="text-sm text-[#2F6FB0] mb-6 max-w-2xl mx-auto">
               Most people have never seen how dramatically their country affects their lifespan — or how much their habits can override it.
             </p>
 
@@ -987,7 +975,7 @@ const CountryComparison = () => {
                 <button
                   key={opt.id}
                   onClick={() => setSelectedShareIdx(idx)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${selectedShareIdx === idx ? 'bg-[#0E2238] text-white border-[#6E5AA6]/30' : 'bg-white text-[#6E5AA6] border-[#6E5AA6]/30 hover:border-[#6E5AA6]/30'}`}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${selectedShareIdx === idx ? 'bg-[#0E2238] text-white border-[#2F6FB0]/30' : 'bg-white text-[#2F6FB0] border-[#2F6FB0]/30 hover:border-[#2F6FB0]/30'}`}
                 >
                   Option {opt.id}
                 </button>
@@ -995,7 +983,7 @@ const CountryComparison = () => {
             </div>
 
             {/* Selected text preview */}
-            <div className="bg-white rounded-xl border border-[#6E5AA6]/30 p-4 mb-5 max-w-2xl mx-auto text-left">
+            <div className="bg-white rounded-xl border border-[#2F6FB0]/30 p-4 mb-5 max-w-2xl mx-auto text-left">
               <p className="text-sm text-gray-700 leading-relaxed">{SHARE_OPTIONS[selectedShareIdx].text}</p>
             </div>
 
@@ -1095,9 +1083,7 @@ const CountryComparison = () => {
       <p className="text-center text-xs text-muted-foreground mt-8 mb-4 px-4">
         Last reviewed: August 2026 · Sources verified by BornClock Editorial Team
       </p>
-
-      <Footer />
-    </div>
+    </ReportLayout>
   );
 };
 

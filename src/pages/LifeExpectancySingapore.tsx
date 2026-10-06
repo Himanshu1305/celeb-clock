@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 
@@ -21,42 +19,36 @@ const RELATED = [
 
 const LifeExpectancySingapore = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Life Expectancy in Singapore — Why This City-State Ranks Among the World's Best"
-        description="Singapore's life expectancy is 83.5 years — one of the highest globally. Here's how a city-state with no natural resources built one of the world's healthiest populations."
-        keywords="life expectancy Singapore, Singapore lifespan 2026, how long do Singaporeans live, Singapore longevity"
-        canonicalUrl="/life-expectancy-singapore"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Life Expectancy in Singapore"
-        description="Singapore's life expectancy is 83.5 years — how a city-state built one of the world's healthiest populations through deliberate policy."
-        url="/life-expectancy-singapore"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
+    <ArticleLayout
+      theme="science"
+      testId="life-expectancy-singapore"
+      seo={(
+        <>
+          <SEO
+            title="Life Expectancy in Singapore — Why This City-State Ranks Among the World's Best"
+            description="Singapore's life expectancy is 83.5 years — one of the highest globally. Here's how a city-state with no natural resources built one of the world's healthiest populations."
+            keywords="life expectancy Singapore, Singapore lifespan 2026, how long do Singaporeans live, Singapore longevity"
+            canonicalUrl="/life-expectancy-singapore"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Life Expectancy in Singapore"
+            description="Singapore's life expectancy is 83.5 years — how a city-state built one of the world's healthiest populations through deliberate policy."
+            url="/life-expectancy-singapore"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Singapore Life Expectancy' }}
+      eyebrow="Life Expectancy"
+      h1="Life Expectancy in Singapore — How a City-State Built One of the World's Healthiest Populations"
+      lead="Singapore's average life expectancy is approximately 83.5 years as of 2023 — one of the highest of any nation. Women average 85.9 years; men average 81.2 years. Singapore achieved this with no natural resources and a population of only 5.9 million — through deliberate, evidence-based public health policy sustained over 60 years."
+    >
+      <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
+        <EEATBadges sources={['UN WPP 2023', 'WHO', 'MOH Singapore']} />
+      </section>
 
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Life Expectancy in Singapore — How a City-State Built One of the World's Healthiest Populations
-          </h1>
-          <EEATBadges sources={['UN WPP 2023', 'WHO', 'MOH Singapore']} />
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Singapore's average life expectancy is approximately 83.5 years as of 2023 — one of the highest of any nation. Women average 85.9 years; men average 81.2 years. Singapore achieved this with no natural resources and a population of only 5.9 million — through deliberate, evidence-based public health policy sustained over 60 years.
-            </p>
-          </div>
-        </section>
-
-        <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
+      <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">How Singapore Built Its Health System</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Singapore's longevity is engineered, not inherited. Mandatory health-savings accounts (Medisave), running since 1984, ensure everyone has funds set aside for care, sitting on top of universal primary care.</p>
@@ -114,9 +106,7 @@ const LifeExpectancySingapore = () => {
             ))}
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

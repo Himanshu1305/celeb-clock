@@ -1,10 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
+import { ToolLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
-import { Footer } from '@/components/Footer';
 import { PlanetaryAge, SPACE_FACTS } from '@/components/PlanetaryAge';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, FAQSchema } from '@/components/SEO';
@@ -142,42 +140,44 @@ const PlanetaryAgePage = () => {
   const neptuneLastYear = new Date().getFullYear() - 165;
 
   return (
-    <>
-    <div className="min-h-screen bg-slate-950">
-      <SEO
-        title="Planetary Age Calculator — How Old Are You on Mars, Jupiter & Every Planet? | BornClock"
-        description="How old are you on other planets? On Mercury you have hundreds of birthdays. On Neptune you've barely been born. It rains diamonds on Neptune. The sunset on Mars is blue. Calculate your cosmic age across all 8 planets using real NASA data. Mind-blowing and shareable."
-        keywords="how old am I on other planets, age on Mars calculator, age on Jupiter, planetary age calculator, how old would I be on Mars, age on other planets NASA, cosmic age calculator, how old am I on Mercury, my age on other planets"
-        canonicalUrl="/planetary-age"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(WEB_APP_SCHEMA)}</script>
-        <style>{`
-          @keyframes pa-page-twinkle {
-            0%, 100% { opacity: 0.15; }
-            50%       { opacity: 0.85; }
-          }
-          @keyframes emoji-drift {
-            0%   { transform: translateX(-10px); }
-            50%  { transform: translateX(10px); }
-            100% { transform: translateX(-10px); }
-          }
-          @keyframes bounce-down {
-            0%, 100% { transform: translateY(0); }
-            50%       { transform: translateY(8px); }
-          }
-        `}</style>
-      </Helmet>
-
-      {/* ── WHITE NAVBAR — always light, always readable ─────────────────── */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
-      </div>
+    <ToolLayout
+      theme="science"
+      testId="planetary-age-page"
+      seo={(
+        <>
+          <SEO
+            title="Planetary Age Calculator — How Old Are You on Mars, Jupiter & Every Planet? | BornClock"
+            description="How old are you on other planets? On Mercury you have hundreds of birthdays. On Neptune you've barely been born. It rains diamonds on Neptune. The sunset on Mars is blue. Calculate your cosmic age across all 8 planets using real NASA data. Mind-blowing and shareable."
+            keywords="how old am I on other planets, age on Mars calculator, age on Jupiter, planetary age calculator, how old would I be on Mars, age on other planets NASA, cosmic age calculator, how old am I on Mercury, my age on other planets"
+            canonicalUrl="/planetary-age"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+          <Helmet>
+            <script type="application/ld+json">{JSON.stringify(WEB_APP_SCHEMA)}</script>
+            <style>{`
+              @keyframes pa-page-twinkle {
+                0%, 100% { opacity: 0.15; }
+                50%       { opacity: 0.85; }
+              }
+              @keyframes emoji-drift {
+                0%   { transform: translateX(-10px); }
+                50%  { transform: translateX(10px); }
+                100% { transform: translateX(-10px); }
+              }
+              @keyframes bounce-down {
+                0%, 100% { transform: translateY(0); }
+                50%       { transform: translateY(8px); }
+              }
+            `}</style>
+          </Helmet>
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Planetary Age' }}
+      eyebrow="Cosmic age"
+      h1={<>How Old Are You in the Universe?</>}
+      lead={<>On Mercury you have hundreds of birthdays. On Neptune you haven't had your first yet. Your age is completely relative to where you're standing.</>}
+    >
 
       {/* ── PHASE 1 — Space landing hero (before DOB) ────────────────────── */}
       {!showResults && (
@@ -217,16 +217,7 @@ const PlanetaryAgePage = () => {
                   ☿ &nbsp; ♀ &nbsp; 🌍 &nbsp; ♂ &nbsp; ♃ &nbsp; ♄ &nbsp; ⛢ &nbsp; ♆
                 </div>
 
-                <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-4">
-                  How Old Are You<br />
-                  <span className="text-[#6E5AA6]">in the Universe?</span>
-                </h1>
                 <PageTagline />
-
-                <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-4 leading-relaxed">
-                  On Mercury you have hundreds of birthdays. On Neptune you haven't had your first yet.
-                  Your age is completely relative to where you're standing.
-                </p>
 
                 <p className="text-lg text-amber-400 font-medium mb-6">
                   Enter your birthday to see your cosmic age across all 8 planets —
@@ -278,17 +269,17 @@ const PlanetaryAgePage = () => {
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="text-[#6E5AA6] text-sm shrink-0 mt-0.5">♃</span>
+                      <span className="text-[#2F6FB0] text-sm shrink-0 mt-0.5">♃</span>
                       <p className="text-sm text-slate-300 leading-relaxed">
                         Your age on Jupiter is probably a single digit.{' '}
                         <span className="text-slate-500 italic">Enter your birthday above to find out.</span>
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="text-[#6E5AA6] text-sm shrink-0 mt-0.5">♆</span>
+                      <span className="text-[#2F6FB0] text-sm shrink-0 mt-0.5">♆</span>
                       <p className="text-sm text-slate-300 leading-relaxed">
                         The last time Neptune completed a full orbit, it was{' '}
-                        <span className="text-[#6E5AA6] font-bold">{neptuneLastYear}</span>
+                        <span className="text-[#2F6FB0] font-bold">{neptuneLastYear}</span>
                         {' '}— the year the American Civil War began.
                       </p>
                     </div>
@@ -374,7 +365,7 @@ const PlanetaryAgePage = () => {
             <div
               key={i}
               className="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-white flex-shrink-0"
-              style={{ minWidth: '288px', maxWidth: '288px', borderLeft: `4px solid ${fact.useAmber ? '#f59e0b' : '#6E5AA6'}` }}
+              style={{ minWidth: '288px', maxWidth: '288px', borderLeft: `4px solid ${fact.useAmber ? '#f59e0b' : '#2F6FB0'}` }}
             >
               <div className="text-3xl mb-3">{fact.icon}</div>
               <h3 className="font-black text-sm mb-2 leading-tight text-white">{fact.title}</h3>
@@ -383,28 +374,24 @@ const PlanetaryAgePage = () => {
             </div>
           ))}
         </div>
-        <div className="bg-[#0E2238]/50 border border-[#6E5AA6]/40 rounded-xl px-4 py-3 mt-4 text-sm text-[#6E5AA6]">
-          <span className="font-bold text-[#6E5AA6]">The science:</span> Each planet's year is governed by Kepler's Third Law (1619) — the further a planet is from the Sun, the slower it orbits. Neptune's year lasts 164.8 Earth years because it travels 30× further from the Sun than Earth, at 5.4 km/s vs Earth's 29.8 km/s.
+        <div className="bg-[#0E2238]/50 border border-[#2F6FB0]/40 rounded-xl px-4 py-3 mt-4 text-sm text-[#2F6FB0]">
+          <span className="font-bold text-[#2F6FB0]">The science:</span> Each planet's year is governed by Kepler's Third Law (1619) — the further a planet is from the Sun, the slower it orbits. Neptune's year lasts 164.8 Earth years because it travels 30× further from the Sun than Earth, at 5.4 km/s vs Earth's 29.8 km/s.
         </div>
       </div>
 
       {/* ── Cross-link to the dedicated weight tool (weight ≠ age — separate concepts) ── */}
       <div className="container mx-auto px-4 pb-12 max-w-5xl">
-        <a href="/weight-on-planets" className="block rounded-2xl bg-slate-900 border border-slate-800 p-6 hover:border-[#6E5AA6]/50 transition-colors">
+        <a href="/weight-on-planets" className="block rounded-2xl bg-slate-900 border border-slate-800 p-6 hover:border-[#2F6FB0]/50 transition-colors">
           <h2 className="text-xl font-bold text-white mb-1">⚖️ How heavy are you on other planets?</h2>
           <p className="text-sm text-slate-300">
             Age is about orbits; <strong>weight</strong> is about gravity — a different question entirely. See your
             weight across all 8 planets and the Moon on the dedicated calculator →
           </p>
-          <span className="inline-block mt-3 text-sm font-semibold text-[#6E5AA6]">Open the Weight on Planets calculator →</span>
+          <span className="inline-block mt-3 text-sm font-semibold text-[#2F6FB0]">Open the Weight on Planets calculator →</span>
         </a>
       </div>
 
-    </div>
-    <div className="bg-white">
-      <Footer />
-    </div>
-    </>
+    </ToolLayout>
   );
 };
 

@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 
@@ -21,42 +19,36 @@ const RELATED = [
 
 const LifeExpectancyBrazil = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Life Expectancy in Brazil — 2026 Data, Inequality & Regional Gaps"
-        description="Brazil's life expectancy is 74.6 years. Here's how inequality, violence, and regional gaps shape Brazilian longevity — and what's improving."
-        keywords="life expectancy Brazil, Brazilian lifespan 2026, how long do Brazilians live, Brazil longevity"
-        canonicalUrl="/life-expectancy-brazil"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Life Expectancy in Brazil"
-        description="Brazil's life expectancy is 74.6 years — progress, inequality, and the regional divide behind the number."
-        url="/life-expectancy-brazil"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
+    <ArticleLayout
+      theme="science"
+      testId="life-expectancy-brazil"
+      seo={(
+        <>
+          <SEO
+            title="Life Expectancy in Brazil — 2026 Data, Inequality & Regional Gaps"
+            description="Brazil's life expectancy is 74.6 years. Here's how inequality, violence, and regional gaps shape Brazilian longevity — and what's improving."
+            keywords="life expectancy Brazil, Brazilian lifespan 2026, how long do Brazilians live, Brazil longevity"
+            canonicalUrl="/life-expectancy-brazil"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Life Expectancy in Brazil"
+            description="Brazil's life expectancy is 74.6 years — progress, inequality, and the regional divide behind the number."
+            url="/life-expectancy-brazil"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Brazil Life Expectancy' }}
+      eyebrow="Life Expectancy"
+      h1="Life Expectancy in Brazil — Progress, Inequality, and the Regional Divide"
+      lead="Brazil's average life expectancy is approximately 74.6 years as of 2023. Women average 78.5 years; men average 70.9 years — a large 7.6-year gender gap driven significantly by high male homicide and accident rates. Brazil has improved substantially since 1960 (when life expectancy was 54 years) but inequality remains the central challenge."
+    >
+      <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
+        <EEATBadges sources={['UN WPP 2023', 'WHO', 'IBGE']} />
+      </section>
 
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Life Expectancy in Brazil — Progress, Inequality, and the Regional Divide
-          </h1>
-          <EEATBadges sources={['UN WPP 2023', 'WHO', 'IBGE']} />
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Brazil's average life expectancy is approximately 74.6 years as of 2023. Women average 78.5 years; men average 70.9 years — a large 7.6-year gender gap driven significantly by high male homicide and accident rates. Brazil has improved substantially since 1960 (when life expectancy was 54 years) but inequality remains the central challenge.
-            </p>
-          </div>
-        </section>
-
-        <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
+      <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">The Inequality Dimension</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Brazil has one of the world's highest income-inequality measures, and it maps directly onto lifespan. Wealthy São Paulo neighbourhoods reach above 80 years, while poor northeastern regions average 10-12 years less.</p>
@@ -114,9 +106,7 @@ const LifeExpectancyBrazil = () => {
             ))}
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

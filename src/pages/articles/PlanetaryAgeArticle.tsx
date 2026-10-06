@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { calculatePlanetaryAges, calculateDaysLived } from '@/utils/celebrityCalculations';
 
@@ -67,11 +68,11 @@ function PlanetaryAgeCalculator() {
 
   return (
     <div data-testid="planetary-age-calculator"
-         className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
-      <h3 className="text-lg font-black text-[#6E5AA6] mb-1">
+         className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8">
+      <h3 className="text-lg font-black text-[#2F6FB0] mb-1">
         Planetary Age Calculator — Your Age on Every Planet
       </h3>
-      <p className="text-sm text-[#6E5AA6] mb-4">
+      <p className="text-sm text-[#2F6FB0] mb-4">
         Enter your date of birth to instantly see how old you are on all seven other planets.
       </p>
       <input
@@ -79,14 +80,14 @@ function PlanetaryAgeCalculator() {
         value={dob}
         onChange={handleChange}
         max={new Date().toISOString().split('T')[0]}
-        className="w-full border-2 border-[#6E5AA6]/30 rounded-xl px-4 py-3
-                   text-base focus:outline-none focus:border-[#6E5AA6]/30 bg-white mb-4"
+        className="w-full border-2 border-[#2F6FB0]/30 rounded-xl px-4 py-3
+                   text-base focus:outline-none focus:border-[#2F6FB0]/30 bg-white mb-4"
         aria-label="Enter your date of birth"
       />
       {planets.length > 0 && earthYears !== null && (
         <div data-testid="planetary-age-result"
-             className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-5">
-          <div className="mb-4 pb-3 border-b border-[#6E5AA6]/30">
+             className="bg-white rounded-xl border-2 border-[#2F6FB0]/30 p-5">
+          <div className="mb-4 pb-3 border-b border-[#2F6FB0]/30">
             <div className="text-sm text-gray-500">On Earth you are</div>
             <div className="text-2xl font-black text-gray-900">
               {earthYears} years <span className="text-base font-semibold text-gray-500">({earthDays?.toLocaleString()} days)</span>
@@ -95,10 +96,10 @@ function PlanetaryAgeCalculator() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {planets.map(p => (
               <div key={p.planet}
-                   className="flex items-center gap-3 bg-[#6E5AA6]/10 rounded-xl p-3">
+                   className="flex items-center gap-3 bg-[#2F6FB0]/10 rounded-xl p-3">
                 <span className="text-2xl w-8 text-center flex-shrink-0" aria-hidden="true">{p.emoji}</span>
                 <div>
-                  <div className="font-black text-[#6E5AA6]">{p.planet}</div>
+                  <div className="font-black text-[#2F6FB0]">{p.planet}</div>
                   <div className="text-sm text-gray-700">
                     <strong>{p.age.toLocaleString()}</strong> {p.planet} {p.age === 1 ? 'year' : 'years'} old
                   </div>
@@ -147,32 +148,29 @@ export function PlanetaryAgeArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="Planetary Age Calculator — Your Age on Every Planet | BornClock"
-        description="How old are you on Mercury, Mars, Jupiter? Free planetary age calculator — your age on all 7 planets from your date of birth, based on orbital periods."
-        canonicalUrl="/articles/planetary-age-calculator"
-        ogType="article"
-      />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
-      <JsonLd data={softwareSchema} />
-
-      <main data-testid="planetary-age-article" className="min-h-screen bg-white">
+    <ArticleLayout
+      theme="science"
+      testId="planetary-age-article"
+      seo={(
+        <>
+          <SEO
+            title="Planetary Age Calculator — Your Age on Every Planet | BornClock"
+            description="How old are you on Mercury, Mars, Jupiter? Free planetary age calculator — your age on all 7 planets from your date of birth, based on orbital periods."
+            canonicalUrl="/articles/planetary-age-calculator"
+            ogType="article"
+          />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+          <JsonLd data={softwareSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Planetary Age Calculator — Your Age on Every Planet' }}
+      eyebrow="Numerology & Astrology"
+      h1="Planetary Age Calculator — Your Age on Every Planet"
+      lead={'Your age is just a count of how many times the Earth has travelled around the Sun since the day you were born. But Earth is only one of eight planets, and every one of them orbits the Sun at a different speed. A "year" on Mercury lasts only 88 Earth days, while a single year on Neptune stretches across almost 165 Earth years. That means your age is completely different on every planet — and this free planetary age calculator shows you exactly how old you are on all seven of the others.'}
+    >
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            Planetary Age Calculator — Your Age on Every Planet
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Your age is just a count of how many times the Earth has travelled around the Sun
-            since the day you were born. But Earth is only one of eight planets, and every one
-            of them orbits the Sun at a different speed. A "year" on Mercury lasts only 88 Earth
-            days, while a single year on Neptune stretches across almost 165 Earth years. That
-            means your age is completely different on every planet — and this free planetary age
-            calculator shows you exactly how old you are on all seven of the others.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             The idea is beautifully simple. One "planet year" is the time that planet takes to
             complete a single orbit of the Sun, known as its orbital period. Divide the number
@@ -232,7 +230,7 @@ export function PlanetaryAgeArticle() {
             over 37 years old on Mercury but not yet one year old on Saturn, the sizes of the
             orbits suddenly become real. The numbers are exact, based on the same orbital periods
             astronomers use, applied to your own date of birth. Want the full picture from your
-            birthday? <a href="/birthday-report" className="text-[#6E5AA6] font-semibold hover:underline">Generate
+            birthday? <a href="/birthday-report" className="text-[#2F6FB0] font-semibold hover:underline">Generate
             your free birthday report</a> to see your planetary ages alongside your zodiac sign,
             Life Path number and more.
           </p>
@@ -248,29 +246,28 @@ export function PlanetaryAgeArticle() {
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
-          <ul className="list-disc pl-6 text-[#6E5AA6] mb-10 space-y-1">
+          <ul className="list-disc pl-6 text-[#2F6FB0] mb-10 space-y-1">
             <li><a href="/articles/biorhythm-calculator" className="hover:underline">Biorhythm Calculator — Track Your Physical, Emotional &amp; Intellectual Cycles</a></li>
             <li><a href="/articles/chinese-zodiac-by-year" className="hover:underline">Chinese Zodiac by Year — Find Your Animal Sign</a></li>
           </ul>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Discover Your Complete Birthday Report</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               Your planetary ages are just the start. BornClock also reveals your zodiac sign,
               Life Path number, days lived, next birthday countdown and more — all from your
               date of birth.
             </p>
             <a href="/birthday-report"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
+                          rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Generate My Free Birthday Report →
             </a>
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 

@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 
@@ -21,42 +19,36 @@ const RELATED = [
 
 const LifeExpectancyCanada = () => {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Life Expectancy in Canada — 2026 Data, Provincial Differences & Key Factors"
-        description="Canada's life expectancy is 82.3 years. Here's what drives it, how provinces compare, and why Canada outperforms the USA by nearly 5 years."
-        keywords="life expectancy Canada, Canadian lifespan 2026, how long do Canadians live, Canada longevity"
-        canonicalUrl="/life-expectancy-canada"
-        ogImage="https://bornclock.com/og/calculator.png"
-      />
-      <WebApplicationSchema
-        name="Life Expectancy in Canada"
-        description="Canada's life expectancy is 82.3 years — what drives it, how provinces compare, and why Canadians outlive Americans by nearly 5 years."
-        url="/life-expectancy-canada"
-      />
-      <FAQSchema items={FAQ_ITEMS} />
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
+    <ArticleLayout
+      theme="science"
+      testId="life-expectancy-canada"
+      seo={(
+        <>
+          <SEO
+            title="Life Expectancy in Canada — 2026 Data, Provincial Differences & Key Factors"
+            description="Canada's life expectancy is 82.3 years. Here's what drives it, how provinces compare, and why Canada outperforms the USA by nearly 5 years."
+            keywords="life expectancy Canada, Canadian lifespan 2026, how long do Canadians live, Canada longevity"
+            canonicalUrl="/life-expectancy-canada"
+            ogImage="https://bornclock.com/og/calculator.png"
+          />
+          <WebApplicationSchema
+            name="Life Expectancy in Canada"
+            description="Canada's life expectancy is 82.3 years — what drives it, how provinces compare, and why Canadians outlive Americans by nearly 5 years."
+            url="/life-expectancy-canada"
+          />
+          <FAQSchema items={FAQ_ITEMS} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Canada Life Expectancy' }}
+      eyebrow="Life Expectancy"
+      h1="Life Expectancy in Canada — Why Canadians Outlive Americans by 5 Years"
+      lead="Canada's average life expectancy is approximately 82.3 years as of 2023. Women average 84.6 years; men average 80.1 years. Canada consistently outperforms the United States by approximately 5 years — largely due to universal healthcare, lower gun violence, lower opioid mortality, and stronger social safety nets."
+    >
+      <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
+        <EEATBadges sources={['UN WPP 2023', 'Statistics Canada', 'WHO']} />
+      </section>
 
-        <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text-primary">
-            Life Expectancy in Canada — Why Canadians Outlive Americans by 5 Years
-          </h1>
-          <EEATBadges sources={['UN WPP 2023', 'Statistics Canada', 'WHO']} />
-        </section>
-
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Canada's average life expectancy is approximately 82.3 years as of 2023. Women average 84.6 years; men average 80.1 years. Canada consistently outperforms the United States by approximately 5 years — largely due to universal healthcare, lower gun violence, lower opioid mortality, and stronger social safety nets.
-            </p>
-          </div>
-        </section>
-
-        <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
+      <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Canada vs USA — Why the 5-Year Gap Exists</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Two similar, neighbouring, wealthy countries diverge by five years — and the reasons are structural. Universal healthcare since 1966 removes the financial barrier to treatment that shortens American lives, and gun-violence mortality of about 2.1 per 100,000 in Canada versus 12.2 in the USA is a stark contrast.</p>
@@ -114,9 +106,7 @@ const LifeExpectancyCanada = () => {
             ))}
           </div>
         </section>
-      </div>
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

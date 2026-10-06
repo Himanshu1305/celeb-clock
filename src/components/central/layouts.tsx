@@ -10,7 +10,7 @@ import { PageHeader } from './PageHeader';
  * a page's approved look used a different `.paj` hero.
  */
 type ShellProps = Omit<PajPageProps, 'variant' | 'children'>;
-type HeaderBlock = { eyebrow?: string; h1: ReactNode; lead?: ReactNode; trust?: string; headerWhite?: boolean };
+type HeaderBlock = { eyebrow?: ReactNode; h1: ReactNode; lead?: ReactNode; trust?: string; headerWhite?: boolean };
 export type LayoutProps = ShellProps & HeaderBlock & { variant?: PajVariant; children: ReactNode };
 
 function makeLayout(defaultVariant: PajVariant) {

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 const CANONICAL = 'https://bornclock.com/answers/what-affects-life-expectancy-most';
 
@@ -35,31 +35,28 @@ export default function WhatAffectsLifeExpectancyMost() {
   };
 
   return (
-    <>
-      <SEO
-        title="What Affects Life Expectancy Most? What a Harvard Study Found | BornClock"
-        description="A Harvard study of 123,000 people found 5 habits that add up to 14 extra years of life. Genetics matters less than you think. Here's what the evidence actually shows."
-        canonicalUrl="/answers/what-affects-life-expectancy-most"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="science"
+      testId="answer-what-affects-life-expectancy-most"
+      seo={(
+        <SEO
+          title="What Affects Life Expectancy Most? What a Harvard Study Found | BornClock"
+          description="A Harvard study of 123,000 people found 5 habits that add up to 14 extra years of life. Genetics matters less than you think. Here's what the evidence actually shows."
+          canonicalUrl="/answers/what-affects-life-expectancy-most"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What affects life expectancy most?' }}
+      eyebrow="Answers"
+      h1={<>What Affects Life Expectancy the Most? The Answer Might Surprise You</>}
+      lead={<>Know your time. Live it well.</>}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">What affects life expectancy most?</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-2">What Affects Life Expectancy the Most? The Answer Might Surprise You</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
+          <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
               The five factors that most affect individual life expectancy are smoking status, physical activity, diet quality, body weight, and alcohol consumption. Harvard researchers tracked 123,000 Americans over three decades and found that people who maintained all five healthy habits by age 50 lived an average of 14 years longer (women) and 12 years longer (men) than those with none. Genetics, by contrast, accounts for only about 20–30% of how long you live. The rest is largely within your control.
             </p>
           </div>
@@ -96,12 +93,11 @@ export default function WhatAffectsLifeExpectancyMost() {
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Tools</p>
             <div className="space-y-2">
               {RELATED.map((t) => (
-                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ {t.label}</Link>
+                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ {t.label}</Link>
               ))}
             </div>
           </div>
         </div>
-      </AnswerLayout>
-    </>
+    </ArticleLayout>
   );
 }

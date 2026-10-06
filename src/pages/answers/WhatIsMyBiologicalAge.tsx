@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 export default function WhatIsMyBiologicalAge() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "What is my biological age?", "item": "https://bornclock.com/answers/what-is-my-biological-age" } ] };
@@ -17,31 +17,28 @@ export default function WhatIsMyBiologicalAge() {
   };
 
   return (
-    <>
-      <SEO
-        title="What Is Biological Age? How It Differs From Chronological Age | BornClock"
-        description="Biological age measures how your body is actually aging vs your calendar age. It can differ by 10+ years. Test yours free with 12 WHO-validated biomarkers."
-        canonicalUrl="/answers/what-is-my-biological-age"
-        ogType="article"
-      />
+    <ArticleLayout
+      theme="science"
+      testId="answer-what-is-my-biological-age"
+      seo={(
+        <SEO
+          title="What Is Biological Age? How It Differs From Chronological Age | BornClock"
+          description="Biological age measures how your body is actually aging vs your calendar age. It can differ by 10+ years. Test yours free with 12 WHO-validated biomarkers."
+          canonicalUrl="/answers/what-is-my-biological-age"
+          ogType="article"
+        />
+      )}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What is biological age?' }}
+      eyebrow="Answers"
+      h1={<>What Is Biological Age and How Is It Different From My Real Age?</>}
+      lead={<>Know your time. Live it well.</>}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">What is biological age?</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-2">What Is Biological Age and How Is It Different From My Real Age?</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
+          <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
               Biological age measures how old your body actually is at a cellular and physiological level — as opposed to your chronological age (how many years since you were born). The two can differ by 10 years or more in either direction, depending on your lifestyle, stress levels, sleep quality, and diet.
             </p>
           </div>
@@ -100,10 +97,10 @@ export default function WhatIsMyBiologicalAge() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-long-will-i-live" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How long will I live?</Link>
-              <Link to="/answers/what-is-bmi" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is BMI and what does my number mean?</Link>
-              <Link to="/answers/how-to-live-longer" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How to live longer: what science actually says</Link>
-              <Link to="/answers/how-does-stress-affect-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How does stress affect life expectancy?</Link>
+              <Link to="/answers/how-long-will-i-live" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How long will I live?</Link>
+              <Link to="/answers/what-is-bmi" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is BMI and what does my number mean?</Link>
+              <Link to="/answers/how-to-live-longer" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How to live longer: what science actually says</Link>
+              <Link to="/answers/how-does-stress-affect-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How does stress affect life expectancy?</Link>
             </div>
           </div>
           <div className="mt-8 pt-6 border-t border-gray-100">
@@ -115,12 +112,11 @@ export default function WhatIsMyBiologicalAge() {
                 { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age' },
                 { path: '/answers/what-is-epigenetic-age', label: 'What Is Epigenetic Age?' },
               ].map((t) => (
-                <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-gray-700 hover:text-[#6E5AA6] transition-colors">{t.label}</Link>
+                <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-gray-700 hover:text-[#2F6FB0] transition-colors">{t.label}</Link>
               ))}
             </div>
           </div>
         </div>
-      </AnswerLayout>
-    </>
+    </ArticleLayout>
   );
 }

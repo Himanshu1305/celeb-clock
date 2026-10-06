@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 function JsonLd({ data }: { data: object }) {
@@ -66,34 +67,28 @@ export function LifeExpectancyIndiaArticle() {
   };
 
   return (
-    <>
-      <SEO
-        title="How Long Will I Live in India? Life Expectancy Guide | BornClock"
-        description="Life expectancy in India by state — SRS data. Kerala 75.1 leads; national average 70.2. See your state and how to beat the average."
-        canonicalUrl="/articles/how-long-will-i-live-in-india"
-        ogType="article"
-      />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
+    <ArticleLayout
+      theme="science"
+      testId="life-expectancy-india-article"
+      seo={(
+        <>
+          <SEO
+            title="How Long Will I Live in India? Life Expectancy Guide | BornClock"
+            description="Life expectancy in India by state — SRS data. Kerala 75.1 leads; national average 70.2. See your state and how to beat the average."
+            canonicalUrl="/articles/how-long-will-i-live-in-india"
+            ogType="article"
+          />
+          <JsonLd data={articleSchema} />
+          <JsonLd data={faqSchema} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'How Long Will I Live in India? Life Expectancy by State' }}
+      eyebrow="Life Expectancy"
+      h1="How Long Will I Live in India? Life Expectancy by State"
+      lead={'"How long will I live?" is one of the most human questions there is — and in India, the honest answer depends enormously on where you were born and how you live today. According to the Sample Registration System (SRS) 2020, the official demographic survey run by the Office of the Registrar General of India, the national life expectancy at birth is 70.2 years. But that single number hides a range of more than ten years between states. A child born in Kerala can expect to live to 75.1, while a child born in Uttar Pradesh averages just 65.0 — a difference of a full decade, inside the same country.'}
+    >
+      <article className="max-w-3xl mx-auto px-4 py-10">
 
-      <main data-testid="life-expectancy-india-article" className="min-h-screen bg-white">
-        <article className="max-w-3xl mx-auto px-4 py-10">
-
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-6">
-            How Long Will I Live in India? Life Expectancy by State
-          </h1>
-
-          <p className="text-gray-700 leading-relaxed mb-4">
-            "How long will I live?" is one of the most human questions there is — and in
-            India, the honest answer depends enormously on <em>where</em> you were born and
-            how you live today. According to the Sample Registration System (SRS) 2020, the
-            official demographic survey run by the Office of the Registrar General of India,
-            the national life expectancy at birth is <strong>70.2 years</strong>. But that
-            single number hides a range of more than ten years between states. A child born
-            in Kerala can expect to live to <strong>75.1</strong>, while a child born in
-            Uttar Pradesh averages just 65.0 — a difference of a full decade, inside the same
-            country.
-          </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             This guide breaks down life expectancy in India state by state, explains the
             "Kerala model" behind the country's longest lives, unpacks the stubborn gap
@@ -113,10 +108,10 @@ export function LifeExpectancyIndiaArticle() {
           <div className="overflow-x-auto mb-6">
             <table className="w-full border-collapse text-sm">
               <thead>
-                <tr className="bg-[#6E5AA6]/10">
-                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-[#6E5AA6]">Rank</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-[#6E5AA6]">State</th>
-                  <th className="border border-gray-300 px-4 py-2 text-right font-black text-[#6E5AA6]">Life Expectancy (years)</th>
+                <tr className="bg-[#2F6FB0]/10">
+                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-[#2F6FB0]">Rank</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-[#2F6FB0]">State</th>
+                  <th className="border border-gray-300 px-4 py-2 text-right font-black text-[#2F6FB0]">Life Expectancy (years)</th>
                 </tr>
               </thead>
               <tbody>
@@ -130,9 +125,9 @@ export function LifeExpectancyIndiaArticle() {
                     <td className="border border-gray-300 px-4 py-2 text-right font-bold text-green-700">{row.le}</td>
                   </tr>
                 ))}
-                <tr className="bg-[#6E5AA6]/10">
-                  <td className="border border-gray-300 px-4 py-2 font-bold text-[#6E5AA6]" colSpan={2}>India — national average</td>
-                  <td className="border border-gray-300 px-4 py-2 text-right font-black text-[#6E5AA6]">70.2</td>
+                <tr className="bg-[#2F6FB0]/10">
+                  <td className="border border-gray-300 px-4 py-2 font-bold text-[#2F6FB0]" colSpan={2}>India — national average</td>
+                  <td className="border border-gray-300 px-4 py-2 text-right font-black text-[#2F6FB0]">70.2</td>
                 </tr>
                 <tr className="bg-red-50">
                   <td colSpan={3} className="border border-gray-300 px-4 py-2 font-bold text-red-800">Lowest life expectancy</td>
@@ -149,8 +144,8 @@ export function LifeExpectancyIndiaArticle() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-            <div className="bg-[#6E5AA6]/10 rounded-xl p-4 text-center">
-              <div className="text-2xl font-black text-[#6E5AA6]">70.2</div>
+            <div className="bg-[#2F6FB0]/10 rounded-xl p-4 text-center">
+              <div className="text-2xl font-black text-[#2F6FB0]">70.2</div>
               <div className="text-xs text-gray-600">National average</div>
             </div>
             <div className="bg-blue-50 rounded-xl p-4 text-center">
@@ -234,7 +229,7 @@ export function LifeExpectancyIndiaArticle() {
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             BornClock takes you beyond the crude state average. Our{' '}
-            <a href="/longevity-calculator" className="text-[#6E5AA6] font-semibold underline hover:text-[#6E5AA6]">
+            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
               longevity calculator
             </a>{' '}
             personalises your estimate using your own lifestyle inputs — your habits, activity
@@ -243,16 +238,16 @@ export function LifeExpectancyIndiaArticle() {
             how many years the changes within your control could add.
           </p>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Find Out How Long <em>You</em> Might Live</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-[#2F6FB0] mb-6">
               Stop guessing from a state average. The BornClock longevity calculator turns your
               own lifestyle into a personalised life-expectancy estimate — and shows how many
               years your habits could add.
             </p>
             <a
               href="/longevity-calculator"
-              className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3 rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors"
+              className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors"
             >
               Calculate My Life Expectancy →
             </a>
@@ -272,12 +267,12 @@ export function LifeExpectancyIndiaArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/life-expectancy-by-country-2026" className="text-[#6E5AA6] font-semibold underline hover:text-[#6E5AA6]">
+                <a href="/articles/life-expectancy-by-country-2026" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
                   Life Expectancy by Country 2026 — Global Rankings
                 </a>
               </li>
               <li>
-                <a href="/articles/how-to-live-to-100" className="text-[#6E5AA6] font-semibold underline hover:text-[#6E5AA6]">
+                <a href="/articles/how-to-live-to-100" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
                   How to Live to 100 — Habits of the World's Longest-Lived People
                 </a>
               </li>
@@ -285,8 +280,7 @@ export function LifeExpectancyIndiaArticle() {
           </div>
 
         </article>
-      </main>
-    </>
+    </ArticleLayout>
   );
 }
 
