@@ -292,3 +292,76 @@ _(other bugs logged here as found during Step 2/3 verification)_
   (parse every `application/ld+json` block, check `@type`) ran on all 59 routes: **479 blocks, 0 parse
   errors, 0 missing @type**. JSON-LD integrity verified locally; the online validator flagged as
   externally unavailable, per the Fifth Rule.
+
+## FINAL run (docs/migration-FINAL-report.md)
+
+### BUG-F1 — `FitnessRhythmPage` (6 public rhythm routes) still on the OLD raw-header shell (coverage gap)
+- Where: `/biorhythm-workout-calculator`, `/best-day-to-start-a-habit`, `/cycle-syncing-for-men`,
+  `/why-am-i-tired-some-days`, `/best-time-to-work-out`, `/energy-forecast` — all rendered by
+  `src/pages/FitnessRhythmPage.tsx`, which used a `min-h-screen bg-white` root with a raw navy
+  `<header>` + `<Navigation/>` + `<AuthNav/>` + old `<Footer/>` (no `.paj` central shell). Missed by
+  every prior group run (these slugs were added after the group route lists; biorhythm itself is
+  mystic). Surfaced by the FINAL coverage audit (independent grep for `bg-gradient-cosmic` / raw
+  Navigation+AuthNav across `src/pages`).
+- Fix: migrated to `ToolLayout theme="mystic"` (matches its sibling `/biorhythm`, which is
+  `ToolLayout theme="mystic"`). Header block = eyebrow "Biorhythm" · page H1 · the page's direct-answer
+  snippet as the lead; breadcrumb → `/biorhythm`; central `SiteFooter`. All content (RhythmWidget,
+  science note, question-form sections, FAQ + FAQPage JSON-LD, cross-links, disclaimer, SharePageBar)
+  kept byte-for-byte. No calc/logic/content change.
+- Retest (fresh staging deploy `4df70da3`, chromium/webkit/android on all 6 routes): 200 · single h1 ·
+  `data-theme=mystic` · `.paj workbench` shell · site-header + single `<main>` · 0 console errors ·
+  blankBand=0 · structural JSON-LD 0 errors; prerendered HTML carries the H1 + lead before JS; no
+  `bg-gradient-cosmic` / old sticky navy header. Widget computes a rhythm live (final-journeys PASS).
+  Only the pre-existing site-wide `color-contrast` debt remains (INV-N2/S3).
+
+### BUG-F2 — `/compatibility/:bad/:pair` invalid-pairing branch rendered the OLD raw navy header
+- Where: `src/pages/CompatibilityPage.tsx` `invalidPair` branch (reachable public soft-404 state, e.g.
+  `/compatibility/foo/bar`) returned a `min-h-screen bg-white` root with the raw navy `<header>` +
+  `<Navigation/>` + `<AuthNav/>` — i.e. an old-design public state the per-group MYSTIC run left on the
+  old shell (it migrated only the main calculator return). Surfaced by the same FINAL sweep.
+- Fix: migrated the branch to `UtilityLayout theme="mystic"` (breadcrumb → `/compatibility`, central
+  shell + footer), keeping the `noindex` SEO, the "pairing doesn't exist" copy and the
+  Open-the-Calculator CTA. Removed the now-unused `Navigation`/`AuthNav` imports. Main calculator return
+  (valid pairs) unchanged.
+- Retest (fresh staging deploy, chromium/webkit/android): `/compatibility/foo/bar` → 200 (SPA soft-404
+  per INV-3) · single h1 · `data-theme=mystic` · 0 console errors. Valid pair `/compatibility/aries/leo`
+  unchanged (200 · h1=1 · theme=mystic). tsc clean; the 141 compatibility-area unit tests still green;
+  full suite 1888/1888.
+
+### INV-F3 — `.paj` is the central system's own class; the old coexistence layer is removed, not `.paj`
+- The FINAL note says "confirm every public route is on the central system and `.paj` is gone." Code
+  reality (confirmed by a full read of `src/components/central/`): the central layouts **are built on
+  `.paj`** — `PajPage` emits `className="paj …"`, the 7 layouts map to `.paj` hero variants
+  (`workbench`/`editorial`/`atlas`/`field-guide`), and `src/styles/part-aj.css` (the single source of
+  the design tokens + hero structures) is imported by `PajPage`. This is by design per
+  `part-ap-design-system.md §1-2` ("the central system renames the selector to `data-theme` on the page
+  root"; "the `.paj` CSS already ships four hero structures that map directly to these layouts"). So
+  `.paj` **cannot** be removed without deleting the live central styling for every migrated route.
+- What *was* removable — the OLD coexistence shell (pages that rendered `<div className="paj atlas"
+  data-category=…>` or the raw navy header OUTSIDE a central layout) — is now gone: BUG-F1/F2 above
+  migrated the last two, and the FINAL sweep finds no remaining old-shell public route. The only residual
+  `.paj` old-selector surface is the harmless back-compat `data-category` attribute that `PajPage` still
+  emits alongside the canonical `data-theme` (and the matching `.paj[data-category=…]` overrides in
+  part-aj.css, lines ~646-649). Removing the back-compat attribute would drop those category overrides →
+  a visual-regression risk across every theme, so it is intentionally kept (Rule 9). Documented honestly
+  rather than claiming "`.paj` is gone."
+
+### INV-F4 — two final-journeys assertions were over-strict (test-harness false negatives, re-verified PASS)
+- The supplementary `scripts/final-journeys.mjs` initially flagged two checks FAIL, both with `errs=0`
+  (no crash): (a) "pricing CTA opens checkout surface" looked for an `iframe[razorpay]`/`[role=dialog]`/
+  `<form>`; the CTA correctly navigates to `/upgrade`, whose upgrade/checkout surface uses buttons
+  ("Continue Free", Join/Sign-In, premium copy), not a form. (b) "phone menu opens navigation" used a
+  `.menu-toggle`/`aria-expanded` selector that doesn't match the homepage's bespoke `.hp` toggle
+  (`button[aria-label="Toggle navigation menu"]`). Direct DOM re-verification on staging: `/upgrade` shows
+  the full upgrade surface (purchase affordance present, 0 errors); clicking the homepage toggle reveals
+  126 visible nav links. Both are real PASSES; the selectors were the defect, not the product. Logged per
+  the Fifth Rule.
+
+### INV-F5 — site-wide `color-contrast` a11y debt (INV-N2/S3) NOT cleared — carried as a launch blocker
+- The dedicated CENTRAL a11y / token-consolidation pass that the FINAL run owns (per NEUTRAL INV-N2 /
+  SCIENCE INV-S3) was **not** done this run: it recolours shared chrome (CookieConsent "Accept All" +
+  legal links, Navigation search box, brand wordmark) and shadcn `muted-foreground`/content tokens across
+  ~180 routes and every theme, so doing it blind in an unattended headless run risks Rule 9 regressions and
+  altering the approved design. The Step-0 axe scan still reports `color-contrast` (serious) on every page
+  (this-run + all prior groups alike, identical node sets) — pre-existing, project-wide, unchanged by this
+  run. Documented honestly and listed as the primary launch blocker with a scoped plan in the report.
