@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 export default function WhatIsBMI() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "What is BMI?", "item": "https://bornclock.com/answers/what-is-bmi" } ] };
@@ -17,29 +17,26 @@ export default function WhatIsBMI() {
   };
 
   return (
-    <>
-      <SEO
-        title="What Is BMI and What Does Your Number Actually Mean? | BornClock"
-        description="BMI (Body Mass Index) explained: how to calculate it, what the ranges mean, and why waist-to-height ratio is actually a better predictor of health. Calculate yours free."
-        canonicalUrl="/answers/what-is-bmi"
-        ogType="article"
-      />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
+    <ArticleLayout
+      theme="neutral"
+      testId="what-is-bmi-page"
+      seo={(
+        <>
+          <SEO
+            title="What Is BMI and What Does Your Number Actually Mean? | BornClock"
+            description="BMI (Body Mass Index) explained: how to calculate it, what the ranges mean, and why waist-to-height ratio is actually a better predictor of health. Calculate yours free."
+            canonicalUrl="/answers/what-is-bmi"
+            ogType="article"
+          />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What is BMI?' }}
+      h1="What Is BMI and What Does Your Number Actually Mean?"
+    >
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">What is BMI?</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-2">What Is BMI and What Does Your Number Actually Mean?</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
           <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
             <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               BMI (Body Mass Index) is calculated by dividing your weight in kilograms by your height in metres squared (kg/m²). A BMI of 18.5–24.9 is considered healthy, 25–29.9 is overweight, and 30+ is obese. However, BMI does not measure body fat directly and can be misleading for athletes and older adults.
@@ -104,7 +101,6 @@ export default function WhatIsBMI() {
             </div>
           </div>
         </div>
-      </AnswerLayout>
-    </>
+    </ArticleLayout>
   );
 }

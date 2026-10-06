@@ -1,36 +1,30 @@
-import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { UtilityLayout } from '@/components/central';
 import { FileText, AlertCircle, DollarSign, Copyright, Ban, Shield } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { subscriptionPrice } from '@/lib/pricing';
 
 export default function Terms() {
   return (
-    <>
-      <SEO
-        title="Terms of Service | BornClock"
-        description="Read BornClock's terms of service covering usage rights, subscriptions, privacy, and user responsibilities for our birthday and age calculator tools."
-        canonicalUrl="/terms"
-        ogType="website"
-      />
-    <div className="min-h-screen bg-gradient-cosmic">
+    <UtilityLayout
+      theme="neutral"
+      testId="terms-page"
+      seo={
+        <SEO
+          title="Terms of Service | BornClock"
+          description="Read BornClock's terms of service covering usage rights, subscriptions, privacy, and user responsibilities for our birthday and age calculator tools."
+          canonicalUrl="/terms"
+          ogType="website"
+        />
+      }
+      breadcrumb={{ current: 'Terms of Service' }}
+      h1="Terms of Service"
+    >
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header */}
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
         {/* Hero Section */}
         <div className="text-center mb-12 animate-fade-in-up">
           <FileText className="w-16 h-16 text-accent mx-auto mb-4" />
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4 text-foreground">
-            Terms of Service
-          </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Please read these terms carefully before using our app
           </p>
@@ -163,8 +157,6 @@ export default function Terms() {
           Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
         </p>
       </div>
-      <Footer />
-    </div>
-    </>
+    </UtilityLayout>
   );
 }

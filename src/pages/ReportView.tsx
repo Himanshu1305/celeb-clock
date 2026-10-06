@@ -2,9 +2,7 @@ import { useEffect, useState, useRef, Component } from 'react';
 import type { ReactNode, ErrorInfo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { ReportLayout } from '@/components/central';
 import { FeedbackPrompt } from '@/components/FeedbackPrompt';
 import { ReaderComments } from '@/components/ReaderComments';
 import { getReport } from '@/services/BirthdayReportService';
@@ -244,16 +242,14 @@ const GENERATION_CONTENT: Record<string, {
 // ── Expiry page ─────────────────────────────────────────────────────────────────
 
 const ExpiryPage = () => (
-  <div className="min-h-screen bg-white flex flex-col">
-    <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm no-print">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Navigation />
-        <AuthNav />
-      </div>
-    </div>
+  <ReportLayout
+    theme="neutral"
+    testId="report-expired-page"
+    breadcrumb={{ current: 'Report' }}
+    h1="This Report Has Expired"
+  >
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-20 text-center">
       <div className="text-6xl mb-6">🔒</div>
-      <h1 className="text-3xl font-black text-gray-900 mb-3">This Report Has Expired</h1>
       <p className="text-gray-500 max-w-md mb-8 leading-relaxed">
         Birthday reports are available for 7 days (30 days for premium accounts). This report's link has
         expired or may not exist. Create a new one for free!
@@ -273,27 +269,25 @@ const ExpiryPage = () => (
         </Link>
       </div>
     </div>
-    <Footer />
-  </div>
+  </ReportLayout>
 );
 
 // ── Loading skeleton ────────────────────────────────────────────────────────────
 
 const LoadingScreen = () => (
-  <div className="min-h-screen bg-white flex flex-col">
-    <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Navigation />
-        <AuthNav />
-      </div>
-    </div>
-    <div className="flex-1 flex items-center justify-center">
+  <ReportLayout
+    theme="neutral"
+    testId="report-loading-page"
+    breadcrumb={{ current: 'Report' }}
+    h1="Birthday Report"
+  >
+    <div className="flex-1 flex items-center justify-center py-20">
       <div className="text-center">
         <div className="text-5xl mb-4 animate-pulse">🎂</div>
         <p className="text-gray-500">Loading birthday report...</p>
       </div>
     </div>
-  </div>
+  </ReportLayout>
 );
 
 // ── Error boundary ─────────────────────────────────────────────────────────────
@@ -668,7 +662,13 @@ const ReportView = () => {
   }
 
   return (
-    <div ref={reportPrintRef} id="birthday-report-print" className="min-h-screen bg-white">
+    <ReportLayout
+      theme="neutral"
+      testId="report-view-page"
+      breadcrumb={{ current: `${recipientName}'s Birthday Report` }}
+      eyebrow="A Birthday Blueprint for"
+      h1={recipientName}
+      seo={(
       <Helmet>
         <title>{recipientName}'s Birthday Report | BornClock</title>
         <meta name="description" content={`${recipientName}'s Birthday Blueprint — celebrity twins, zodiac, numerology, birthstone, tarot, and more. A personalised gift from BornClock.`} />
@@ -730,15 +730,9 @@ const ReportView = () => {
           }
         `}</style>
       </Helmet>
-
-      {/* ── Site nav ─────────────────────────────────────────────────────── */}
-      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50 shadow-sm no-print">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
-      </div>
-
+      )}
+    >
+    <div ref={reportPrintRef} id="birthday-report-print" className="min-h-screen bg-white">
       {/* ── Sticky report header ──────────────────────────────────────────── */}
       <div className="bg-white border-b border-gray-100 sticky top-[57px] z-40 shadow-sm no-print">
         <div className="container mx-auto px-4 py-2 flex flex-wrap items-center gap-3 justify-between">
@@ -815,9 +809,9 @@ const ReportView = () => {
           {/* Gold eyebrow + name */}
           <div className="mb-2">
             <div className="bb-eyebrow mb-2">A Birthday Blueprint for</div>
-            <h1 className="font-black leading-none" style={{ fontSize: '42px', color: 'var(--navy)', letterSpacing: '-0.02em' }}>
+            <h2 className="font-black leading-none" style={{ fontSize: '42px', color: 'var(--navy)', letterSpacing: '-0.02em' }}>
               {recipientName}
-            </h1>
+            </h2>
             <p className="mt-2 text-sm" style={{ color: 'var(--ink-soft)' }}>
               Born on a {dayOfWeekBorn} · {dob.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
             </p>
@@ -2274,9 +2268,9 @@ const ReportView = () => {
             <ReaderComments contentType="report" slug={slug} />
           </div>
         )}
-        <Footer />
       </div>
     </div>
+    </ReportLayout>
   );
 };
 

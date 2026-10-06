@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -77,26 +75,22 @@ export default function BirthdayWishPage() {
   const whatsappHref = `https://wa.me/?text=${encodeURIComponent(shareText).replace(/'/g, '%27')}`;
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Free Birthday Wish Card Maker — Send a Wish | BornClock"
-        description="Create a personalised birthday wish card in seconds — with their zodiac sign and Life Path number — and share it on WhatsApp. Free, no signup."
-        canonicalUrl="/wish"
-        ogType="website"
-      />
+    <ToolLayout
+      theme="neutral"
+      testId="birthday-wish-page"
+      seo={(
+        <SEO
+          title="Free Birthday Wish Card Maker — Send a Wish | BornClock"
+          description="Create a personalised birthday wish card in seconds — with their zodiac sign and Life Path number — and share it on WhatsApp. Free, no signup."
+          canonicalUrl="/wish"
+          ogType="website"
+        />
+      )}
+      breadcrumb={{ current: 'Birthday Wish' }}
+      h1="Birthday Wish Card Maker"
+      lead={<>Make a beautiful birthday card for a friend — with their zodiac and Life Path — and share it on WhatsApp in one tap.</>}
+    >
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">
-          Birthday Wish Card Maker
-        </h1>
-        <p className="text-muted-foreground mb-8">
-          Make a beautiful birthday card for a friend — with their zodiac and Life Path — and share it on WhatsApp in one tap.
-        </p>
-
         {!wish ? (
           <Card>
             <CardContent className="p-6 space-y-4">
@@ -186,7 +180,6 @@ export default function BirthdayWishPage() {
           </div>
         )}
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 }

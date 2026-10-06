@@ -21,7 +21,8 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useAuth } from '@/hooks/useAuth';
-import { ArrowLeft, Crown, Download, Gift, Loader2, Save, Shield, Tag, Trash2, User } from 'lucide-react';
+import { UtilityLayout } from '@/components/central';
+import { ArrowLeft, Crown, Download, Gift, Loader2, Save, Shield, Tag, Trash2 } from 'lucide-react';
 import { PromoCodeInput } from '@/components/PromoCodeInput';
 import { InvoicesCard } from '@/components/InvoicesCard';
 import { countries } from '@/data/countries';
@@ -125,14 +126,14 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-1 h-1 bg-primary rounded-full animate-pulse animation-delay-300"></div>
-        <div className="absolute bottom-20 left-1/4 w-1.5 h-1.5 bg-accent rounded-full animate-pulse animation-delay-700"></div>
-      </div>
-
-      <div className="container mx-auto px-4 py-8 relative z-10">
+    <UtilityLayout
+      theme="neutral"
+      testId="profile-page"
+      breadcrumb={{ current: 'Account' }}
+      h1="My Profile"
+      lead="Manage your account settings"
+    >
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
           <Link to="/">
@@ -141,15 +142,6 @@ export default function Profile() {
               Back to Home
             </Button>
           </Link>
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-full bg-primary/10">
-              <User className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold">My Profile</h1>
-              <p className="text-muted-foreground">Manage your account settings</p>
-            </div>
-          </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -447,6 +439,6 @@ export default function Profile() {
           </div>
         </div>
       </div>
-    </div>
+    </UtilityLayout>
   );
 }

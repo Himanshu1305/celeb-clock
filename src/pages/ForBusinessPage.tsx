@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,23 +15,22 @@ const PLANS = [
 
 export default function ForBusinessPage() {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="BornClock for Business — Birthday & Astrology API | BornClock"
-        description="Add birthday intelligence to your product — zodiac, Vedic rashi, numerology, life path and compatibility via a simple REST API. Plans from ₹4,999/mo."
-        canonicalUrl="/for-business"
-        ogType="website"
-      />
+    <ToolLayout
+      theme="neutral"
+      testId="for-business-page"
+      seo={(
+        <SEO
+          title="BornClock for Business — Birthday & Astrology API | BornClock"
+          description="Add birthday intelligence to your product — zodiac, Vedic rashi, numerology, life path and compatibility via a simple REST API. Plans from ₹4,999/mo."
+          canonicalUrl="/for-business"
+          ogType="website"
+        />
+      )}
+      breadcrumb={{ current: 'For Business' }}
+      h1="Birthday intelligence, as an API"
+    >
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
         <div className="text-center mb-12">
-          <h1 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-3">
-            Birthday intelligence, as an API
-          </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Power your app, CRM or marketing with zodiac, Vedic rashi, numerology, life path and
             compatibility data — the same engine behind BornClock, available over a simple REST API.
@@ -102,7 +99,6 @@ export default function ForBusinessPage() {
           </Button>
         </div>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 }

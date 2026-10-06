@@ -14,8 +14,7 @@ import { CheckoutRegionModal, RegionSelection } from '@/components/CheckoutRegio
 import { PaymentSuccessModal } from '@/components/PaymentSuccessModal';
 import { PromoCodeInput } from '@/components/PromoCodeInput';
 import { Check, Shield, Star } from 'lucide-react';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { MoneyLayout } from '@/components/central';
 import { useAnalytics } from '@/hooks/useAnalytics';
 
 export default function Upgrade() {
@@ -107,20 +106,20 @@ export default function Upgrade() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-6">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-        </header>
-      </div>
-
-      <SEO
-        title="Upgrade to BornClock Premium | BornClock"
-        description="Unlock your complete longevity blueprint. What-If Simulator, AI Coach, Family Dashboard, Birthday Reports and more."
-        canonicalUrl="/upgrade"
-        noindex
-      />
-
+    <MoneyLayout
+      theme="neutral"
+      testId="upgrade-page"
+      seo={
+        <SEO
+          title="Upgrade to BornClock Premium | BornClock"
+          description="Unlock your complete longevity blueprint. What-If Simulator, AI Coach, Family Dashboard, Birthday Reports and more."
+          canonicalUrl="/upgrade"
+          noindex
+        />
+      }
+      breadcrumb={{ current: 'Upgrade' }}
+      h1="Unlock BornClock Premium"
+    >
       {showSuccess && (
         <PaymentSuccessModal
           billing={lastBilling}
@@ -144,7 +143,7 @@ export default function Upgrade() {
         <div className="min-h-[70vh] flex items-center justify-center p-4">
           <div className="text-center max-w-md">
             <div className="text-6xl mb-4">⭐</div>
-            <h1 className="text-2xl font-bold mb-2">You're Already Premium</h1>
+            <p className="text-2xl font-bold mb-2">You're Already Premium</p>
             <p className="text-gray-600 mb-6">
               You have full access to all BornClock premium features.
             </p>
@@ -172,9 +171,6 @@ export default function Upgrade() {
         <div className="max-w-5xl mx-auto px-4 py-8 pb-16">
           {/* Hero */}
           <div className="text-center mb-10">
-            <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">
-              Unlock BornClock Premium
-            </h1>
             <PageTagline />
             <p className="text-gray-600 text-lg max-w-xl mx-auto">
               Science-backed tools to understand and extend your healthspan
@@ -461,7 +457,6 @@ export default function Upgrade() {
           )}
         </div>
       )}
-      <Footer />
-    </div>
+    </MoneyLayout>
   );
 }

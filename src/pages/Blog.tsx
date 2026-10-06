@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Link, useSearchParams } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import { ArticleLayout } from '@/components/central';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { BlogNewsletter } from '@/components/BlogNewsletter';
 import { blogPosts, BlogPost, getAllTags, getPostsByTag, getPostsByCategory } from '@/data/blogPosts';
-import { Calendar, Clock, User, Search, Tag, ArrowRight, BookOpen } from 'lucide-react';
+import { Calendar, Clock, User, Search, Tag, ArrowRight } from 'lucide-react';
 
 const categoryLabels: Record<BlogPost['category'], string> = {
   'age-calculator': 'Age Calculator',
@@ -132,36 +130,27 @@ const Blog = () => {
   const featuredPost = blogPosts[0];
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Health & Longevity Blog — Science-Backed Articles | BornClock"
-        description="Evidence-based articles on sleep, exercise, nutrition, mental health, preventive care, and community wellbeing. Every article cites peer-reviewed research. Written for real people, not medical professionals."
-        keywords="longevity blog, health and longevity, sleep longevity, exercise lifespan, Mediterranean diet longevity, preventive health screenings, social connection longevity, age calculator blog"
-        canonicalUrl="/blog"
-        noindexFollow={isTagArchive}
-      />
+    <ArticleLayout
+      theme="neutral"
+      testId="blog-page"
+      seo={(
+        <SEO
+          title="Health & Longevity Blog — Science-Backed Articles | BornClock"
+          description="Evidence-based articles on sleep, exercise, nutrition, mental health, preventive care, and community wellbeing. Every article cites peer-reviewed research. Written for real people, not medical professionals."
+          keywords="longevity blog, health and longevity, sleep longevity, exercise lifespan, Mediterranean diet longevity, preventive health screenings, social connection longevity, age calculator blog"
+          canonicalUrl="/blog"
+          noindexFollow={isTagArchive}
+        />
+      )}
+      breadcrumb={{ current: 'Blog' }}
+      h1="The BornClock Health & Longevity Guide"
+      lead={(
+        <>
+          Evidence-based articles on sleep, exercise, nutrition, mental health, preventive care, and community wellbeing. Every article cites peer-reviewed research and is written for curious non-specialists — not medical professionals.
+        </>
+      )}
+    >
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Hero Section */}
-        <section className="text-center space-y-6 pt-8 pb-12 max-w-4xl mx-auto">
-          <div className="space-y-4 animate-fade-in-up">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <BookOpen className="h-10 w-10 text-primary" />
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold gradient-text-primary leading-tight">
-              The BornClock Health &amp; Longevity Guide
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Evidence-based articles on sleep, exercise, nutrition, mental health, preventive care, and community wellbeing. Every article cites peer-reviewed research and is written for curious non-specialists — not medical professionals.
-            </p>
-          </div>
-        </section>
-
         {/* Search and Filters */}
         <section className="max-w-6xl mx-auto mb-12">
           <div className="glass-card p-6 space-y-4">
@@ -346,9 +335,7 @@ const Blog = () => {
           </Card>
         </section>
       </div>
-      
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

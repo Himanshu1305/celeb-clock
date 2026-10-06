@@ -1,23 +1,23 @@
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
 
 const EditorialPolicy = () => (
-  <div className="min-h-screen bg-gradient-cosmic">
-    <SEO
-      title="Editorial Policy — Accuracy, Sources & Corrections"
-      description="BornClock's editorial policy: how we source data, review content for accuracy, disclose limitations, and handle corrections — built on Google E-E-A-T principles."
-      keywords="editorial policy, EEAT, fact checking, corrections"
-      canonicalUrl="/editorial-policy"
-    />
+  <ArticleLayout
+    theme="neutral"
+    testId="editorial-policy-page"
+    seo={
+      <SEO
+        title="Editorial Policy — Accuracy, Sources & Corrections"
+        description="BornClock's editorial policy: how we source data, review content for accuracy, disclose limitations, and handle corrections — built on Google E-E-A-T principles."
+        keywords="editorial policy, EEAT, fact checking, corrections"
+        canonicalUrl="/editorial-policy"
+      />
+    }
+    breadcrumb={{ current: 'Editorial Policy' }}
+    h1="Editorial Policy"
+  >
     <div className="container mx-auto px-4 py-8 max-w-3xl">
-      <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-        <Navigation />
-        <AuthNav />
-      </header>
-      <h1 className="text-4xl font-bold mb-6 gradient-text-primary text-center">Editorial Policy</h1>
       <Card className="glass-card">
         <CardContent className="p-6 space-y-6 text-muted-foreground leading-relaxed">
           <section>
@@ -63,8 +63,7 @@ const EditorialPolicy = () => (
         </CardContent>
       </Card>
     </div>
-    <Footer />
-  </div>
+  </ArticleLayout>
 );
 
 export default EditorialPolicy;

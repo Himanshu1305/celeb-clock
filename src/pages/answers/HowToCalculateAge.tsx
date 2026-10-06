@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 export default function HowToCalculateAge() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How to calculate your exact age", "item": "https://bornclock.com/answers/how-to-calculate-age" } ] };
@@ -17,29 +17,26 @@ export default function HowToCalculateAge() {
   };
 
   return (
-    <>
-      <SEO
-        title="How to Calculate Your Exact Age in Years, Months, Days and Seconds | BornClock"
-        description="Calculate your exact age right now — in years, months, days, hours, minutes and seconds. Updated live every second. Also find your generation and birthday twin."
-        canonicalUrl="/answers/how-to-calculate-age"
-        ogType="article"
-      />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
+    <ArticleLayout
+      theme="neutral"
+      testId="how-to-calculate-age-page"
+      seo={(
+        <>
+          <SEO
+            title="How to Calculate Your Exact Age in Years, Months, Days and Seconds | BornClock"
+            description="Calculate your exact age right now — in years, months, days, hours, minutes and seconds. Updated live every second. Also find your generation and birthday twin."
+            canonicalUrl="/answers/how-to-calculate-age"
+            ogType="article"
+          />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'How to calculate age' }}
+      h1="How to Calculate Your Exact Age in Years, Months, Days and Seconds"
+    >
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">How to calculate age</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-2">How to Calculate Your Exact Age in Years, Months, Days and Seconds</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
           <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
             <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Your exact age is the difference between your date of birth and the current date and time, expressed in years, months, days, hours, minutes, and seconds. It updates every second. BornClock calculates this live and also shows your total days lived, generation, and which celebrities share your birthday.
@@ -98,7 +95,6 @@ export default function HowToCalculateAge() {
             </div>
           </div>
         </div>
-      </AnswerLayout>
-    </>
+    </ArticleLayout>
   );
 }

@@ -1,32 +1,28 @@
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Globe, FlaskConical, HeartHandshake } from 'lucide-react';
 import PageTagline from '@/components/PageTagline';
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-background">
-      <SEO
-        title="About BornClock — Built in India, Designed for the World | BornClock"
-        description="BornClock is a free birthday and longevity tool built by an independent team in India. Learn about our mission, the science behind our calculators, and how to reach us."
-        keywords="about BornClock, BornClock team, about bornclock.com"
-        canonicalUrl="/about"
-      />
-
+    <ArticleLayout
+      theme="neutral"
+      testId="about-page"
+      seo={
+        <SEO
+          title="About BornClock — Built in India, Designed for the World | BornClock"
+          description="BornClock is a free birthday and longevity tool built by an independent team in India. Learn about our mission, the science behind our calculators, and how to reach us."
+          keywords="about BornClock, BornClock team, about bornclock.com"
+          canonicalUrl="/about"
+        />
+      }
+      breadcrumb={{ current: 'About' }}
+      h1="About BornClock"
+    >
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
         {/* Hero */}
         <div className="mb-14">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            About BornClock
-          </h1>
           <PageTagline />
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
             We believe everyone deserves to understand their own timeline — not just in years, months, and days, but in the full cosmic and biological richness of what a human life actually is.
@@ -159,8 +155,6 @@ export default function About() {
           </div>
         </section>
       </div>
-
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 }

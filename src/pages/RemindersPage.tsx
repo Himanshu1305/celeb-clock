@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { useAuth } from '@/hooks/useAuth';
 import { addReminder, listReminders, type BirthdayReminder } from '@/services/reminderService';
@@ -29,19 +27,22 @@ export default function RemindersPage() {
   };
 
   return (
-    <div data-testid="reminders-page" className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Birthday Reminders — Never Miss a Birthday | BornClock"
-        description="Save your friends' and family's birthdays and get a reminder a few days before — so you never miss a birthday again. Free."
-        canonicalUrl="/reminders"
-        ogType="website"
-      />
+    <ToolLayout
+      theme="neutral"
+      testId="reminders-page"
+      seo={(
+        <SEO
+          title="Birthday Reminders — Never Miss a Birthday | BornClock"
+          description="Save your friends' and family's birthdays and get a reminder a few days before — so you never miss a birthday again. Free."
+          canonicalUrl="/reminders"
+          ogType="website"
+        />
+      )}
+      breadcrumb={{ current: 'Reminders' }}
+      h1="Birthday Reminders"
+      lead={<>Save birthdays and we'll remind you before the big day.</>}
+    >
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
-
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">Birthday Reminders</h1>
-        <p className="text-muted-foreground mb-6">Save birthdays and we'll remind you before the big day.</p>
-
         <div className="rounded-xl border border-border p-5 space-y-4 mb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -92,7 +93,6 @@ export default function RemindersPage() {
           </div>
         )}
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 }

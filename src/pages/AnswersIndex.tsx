@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { CollectionLayout } from '@/components/central';
 import { Card, CardContent } from '@/components/ui/card';
-import { HelpCircle, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 // Index of every /answers/* page. Question labels mirror the ANSWERS map in
 // scripts/prerender-titles.mjs. Grouped by theme for scannability.
@@ -41,34 +39,27 @@ const GROUPS: Array<{ theme: string; items: Array<{ slug: string; q: string }> }
 
 export default function AnswersIndex() {
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Answers — Science-Backed Answers to Birthday, Age & Longevity Questions | BornClock"
-        description="Straight, sourced answers to the questions people ask about age, birthdays, zodiac, life path, biological age and life expectancy — each with a tool to try yourself."
-        canonicalUrl="/answers"
-        ogType="website"
-      />
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <nav className="text-sm text-muted-foreground mb-6 flex items-center gap-2">
-          <Link to="/" className="hover:text-foreground">Home</Link>
-          <span>›</span>
-          <span className="text-foreground">Answers</span>
-        </nav>
-
-        <div className="flex items-center gap-3 mb-2">
-          <HelpCircle className="w-7 h-7 text-primary" />
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground">Answers</h1>
-        </div>
-        <p className="text-muted-foreground mb-8 max-w-2xl">
+    <CollectionLayout
+      theme="neutral"
+      testId="answers-index-page"
+      seo={(
+        <SEO
+          title="Answers — Science-Backed Answers to Birthday, Age & Longevity Questions | BornClock"
+          description="Straight, sourced answers to the questions people ask about age, birthdays, zodiac, life path, biological age and life expectancy — each with a tool to try yourself."
+          canonicalUrl="/answers"
+          ogType="website"
+        />
+      )}
+      breadcrumb={{ current: 'Answers' }}
+      h1="Answers"
+      lead={(
+        <>
           Clear, science-backed answers to the questions people ask us most — each one links straight to
           the free tool that works it out for you.
-        </p>
-
+        </>
+      )}
+    >
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="space-y-8">
           {GROUPS.map(group => (
             <section key={group.theme}>
@@ -89,7 +80,6 @@ export default function AnswersIndex() {
           ))}
         </div>
       </div>
-      <Footer />
-    </div>
+    </CollectionLayout>
   );
 }

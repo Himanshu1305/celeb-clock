@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { UtilityLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -75,24 +73,22 @@ function TOCDropdown() {
 
 export default function Privacy() {
   return (
-    <div className="min-h-screen bg-background">
-      <SEO
-        title="Privacy Policy | BornClock"
-        description="BornClock's privacy policy written in plain English. We explain exactly what data we collect, what we never store, and how we protect your information."
-        keywords="BornClock privacy policy, data privacy, what data bornclock collects"
-        canonicalUrl="/privacy"
-      />
-
+    <UtilityLayout
+      theme="neutral"
+      testId="privacy-page"
+      seo={
+        <SEO
+          title="Privacy Policy | BornClock"
+          description="BornClock's privacy policy written in plain English. We explain exactly what data we collect, what we never store, and how we protect your information."
+          keywords="BornClock privacy policy, data privacy, what data bornclock collects"
+          canonicalUrl="/privacy"
+        />
+      }
+      breadcrumb={{ current: 'Privacy Policy' }}
+      h1="Privacy Policy"
+    >
       <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
         <div className="max-w-5xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
-            Privacy Policy
-          </h1>
           <p className="text-sm text-muted-foreground mb-8">Last updated: July 2026</p>
 
           {/* Blue info box */}
@@ -395,8 +391,6 @@ export default function Privacy() {
           </div>
         </div>
       </div>
-
-      <Footer />
-    </div>
+    </UtilityLayout>
   );
 }

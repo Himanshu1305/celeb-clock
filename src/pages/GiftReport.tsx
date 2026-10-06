@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { MoneyLayout } from '@/components/central';
 import { PageFAQ } from '@/components/PageFAQ';
 import { SharePageBar } from '@/components/SharePageBar';
 import { useReportPrice } from '@/hooks/useCurrency';
@@ -53,29 +51,25 @@ export default function GiftReport() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <SEO
-        title="Gift a Birthday Blueprint — A Gift That Makes Them Feel Truly Special | BornClock"
-        description="A 9-section personalised birthday report built from their date of birth. The most thoughtful gift they'll get this year."
-        keywords="birthday gift, personalised birthday gift, meaningful birthday gift, thoughtful gift, gift that shows you care, gift for someone who has everything, birthday keepsake"
-        canonicalUrl="/gift"
-      />
-
-      <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Navigation />
-          <AuthNav />
-        </div>
-      </div>
-
+    <MoneyLayout
+      theme="neutral"
+      testId="gift-report-page"
+      seo={
+        <SEO
+          title="Gift a Birthday Blueprint — A Gift That Makes Them Feel Truly Special | BornClock"
+          description="A 9-section personalised birthday report built from their date of birth. The most thoughtful gift they'll get this year."
+          keywords="birthday gift, personalised birthday gift, meaningful birthday gift, thoughtful gift, gift that shows you care, gift for someone who has everything, birthday keepsake"
+          canonicalUrl="/gift"
+        />
+      }
+      breadcrumb={{ current: 'Gift' }}
+      h1="A gift that makes them feel truly special"
+    >
       {/* 1 — HERO */}
       <section className="max-w-3xl mx-auto px-4 pt-12 pb-8 text-center">
         <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 mb-5">
           <Gift className="w-4 h-4" /> The Birthday Blueprint
         </div>
-        <h1 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-4">
-          A gift that makes them feel truly special
-        </h1>
         {/* Answer-first (AEO) */}
         <p className="text-lg text-gray-700 leading-relaxed mb-6 max-w-2xl mx-auto">
           The Birthday Blueprint is a personalised, 9-section keepsake built from one person's
@@ -207,8 +201,6 @@ export default function GiftReport() {
           <Link to="/celebrity-birthday" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Celebrity birthday match</Link>
         </div>
       </div>
-
-      <Footer />
-    </div>
+    </MoneyLayout>
   );
 }

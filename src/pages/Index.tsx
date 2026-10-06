@@ -21,6 +21,10 @@ import { getRankedBirthdayCelebrities, type CelebrityBirthdayResult } from '@/se
 import { fetchCelebrityImage } from '@/services/WikipediaImageService';
 import { supabase } from '@/integrations/supabase/client';
 import '@/styles/homepage.css';
+// Connect the approved homepage to the central design system: the neutral theme
+// marker (data-theme) ties it to the single token source so a central change
+// follows here too. Its bespoke, approved visual design is kept as-is.
+import '@/styles/central/themes.css';
 
 const EXAMPLE_ISO = '1998-03-14';
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -184,7 +188,7 @@ export default function Index() {
   ];
 
   return (
-    <div className="hp">
+    <div className="hp" data-theme="neutral" data-category="neutral">
       <SEO
         title="Free Birthday, Zodiac & Longevity Calculator | BornClock"
         description="Everything your birth date reveals: your Vedic birth chart, celebrity birthday twins, numerology and zodiac, and longevity science — all from one date. Free birthday, zodiac & longevity calculators."

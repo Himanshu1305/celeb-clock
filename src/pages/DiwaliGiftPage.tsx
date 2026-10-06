@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { MoneyLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { useReportPrice } from '@/hooks/useCurrency';
 
@@ -14,19 +12,23 @@ export default function DiwaliGiftPage() {
   const whatsappHref = `https://wa.me/?text=${encodeURIComponent(shareText).replace(/'/g, '%27')}`;
 
   return (
-    <div data-testid="diwali-gift-page" className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-100">
-      <SEO
-        title="Diwali Gift — Personalised Birthday & Kundali Reading | BornClock"
-        description="This Diwali, gift something meaningful — a personalised Birthday Report or Kundali (₹199 each), or the combo (₹299). Delivered with your own festive message."
-        canonicalUrl="/diwali-gift"
-        ogType="website"
-      />
+    <MoneyLayout
+      theme="neutral"
+      testId="diwali-gift-page"
+      seo={
+        <SEO
+          title="Diwali Gift — Personalised Birthday & Kundali Reading | BornClock"
+          description="This Diwali, gift something meaningful — a personalised Birthday Report or Kundali (₹199 each), or the combo (₹299). Delivered with your own festive message."
+          canonicalUrl="/diwali-gift"
+          ogType="website"
+        />
+      }
+      breadcrumb={{ current: 'Diwali Gift' }}
+      h1="A Diwali Gift That Means Something"
+    >
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50"><Navigation /><AuthNav /></header>
-
         <div className="text-center mb-8">
           <div className="text-4xl mb-2">🪔</div>
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-2">A Diwali Gift That Means Something</h1>
           <p className="text-gray-600">This Diwali, give a personalised birthday reading — thoughtful, personal and instant.</p>
         </div>
 
@@ -64,7 +66,6 @@ export default function DiwaliGiftPage() {
           Prefer to shop the regular <Link to="/birthday-report/gift" className="text-orange-700 underline">gift options</Link>?
         </p>
       </div>
-      <Footer />
-    </div>
+    </MoneyLayout>
   );
 }

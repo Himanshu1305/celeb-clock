@@ -1,5 +1,6 @@
 import React from 'react';
 import { SEO } from '@/components/SEO';
+import { CollectionLayout } from '@/components/central';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
@@ -320,27 +321,32 @@ export function ArticlesIndexPage() {
   };
 
   return (
-    <>
-      <SEO
-        title="All Articles — Longevity, Numerology & Astrology Guides | BornClock"
-        description="Browse all BornClock articles — longevity science, numerology, Vedic and Western astrology, Chinese zodiac, and Hindi guides. Free, evidence-based."
-        canonicalUrl="/articles"
-        ogType="website"
-      />
-      <JsonLd data={collectionSchema} />
-
-      <main data-testid="articles-index-page" className="min-h-screen bg-white">
-        <div className="max-w-5xl mx-auto px-4 py-10">
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text-primary leading-tight mb-4">
-            All Articles
-          </h1>
-          <p className="text-gray-700 leading-relaxed mb-8 max-w-3xl">
-            Every BornClock guide in one place — the science of a longer life,
-            numerology and astrology from your date of birth, Chinese zodiac,
-            monthly birthday collections, and guides in Hindi. All free and
-            evidence-based.
-          </p>
-
+    <CollectionLayout
+      theme="neutral"
+      testId="articles-index-page"
+      seo={(
+        <>
+          <SEO
+            title="All Articles — Longevity, Numerology & Astrology Guides | BornClock"
+            description="Browse all BornClock articles — longevity science, numerology, Vedic and Western astrology, Chinese zodiac, and Hindi guides. Free, evidence-based."
+            canonicalUrl="/articles"
+            ogType="website"
+          />
+          <JsonLd data={collectionSchema} />
+        </>
+      )}
+      breadcrumb={{ current: 'Articles' }}
+      h1="Articles"
+      lead={(
+        <>
+          Every BornClock guide in one place — the science of a longer life,
+          numerology and astrology from your date of birth, Chinese zodiac,
+          monthly birthday collections, and guides in Hindi. All free and
+          evidence-based.
+        </>
+      )}
+    >
+      <div className="max-w-5xl mx-auto px-4 py-10">
           {/* Category filter */}
           <div className="flex flex-wrap gap-2 mb-8">
             {CATEGORIES.map(cat => (
@@ -412,8 +418,7 @@ export function ArticlesIndexPage() {
             </div>
           </div>
         </div>
-      </main>
-    </>
+    </CollectionLayout>
   );
 }
 

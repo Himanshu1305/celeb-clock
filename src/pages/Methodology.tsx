@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import { ArticleLayout } from '@/components/central';
 import PageTagline from '@/components/PageTagline';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -86,24 +84,22 @@ function FormulaBlock({ children }: { children: React.ReactNode }) {
 
 export default function Methodology() {
   return (
-    <div className="min-h-screen bg-background">
-      <SEO
-        title="How BornClock Works — Tools, Data & Source-Cited Methodology | BornClock"
-        description="How BornClock works: the Birthday Blueprint report, life expectancy calculator, celebrity birthday matching, the Indian celebrities facet and the Answers library — each with its data sources, formulas and citations."
-        keywords="how BornClock works, birthday blueprint, life expectancy methodology, how life expectancy is calculated, planetary age formula, zodiac methodology"
-        canonicalUrl="/how-it-works"
-      />
-
+    <ArticleLayout
+      theme="neutral"
+      testId="methodology-page"
+      seo={(
+        <SEO
+          title="How BornClock Works — Tools, Data & Source-Cited Methodology | BornClock"
+          description="How BornClock works: the Birthday Blueprint report, life expectancy calculator, celebrity birthday matching, the Indian celebrities facet and the Answers library — each with its data sources, formulas and citations."
+          keywords="how BornClock works, birthday blueprint, life expectancy methodology, how life expectancy is calculated, planetary age formula, zodiac methodology"
+          canonicalUrl="/how-it-works"
+        />
+      )}
+      breadcrumb={{ current: 'How It Works' }}
+      h1="How BornClock Works"
+    >
       <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
         <div className="max-w-5xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
-            How BornClock Works
-          </h1>
           <PageTagline />
           <p className="text-sm text-muted-foreground mb-1">Your Birthday Intelligence Platform</p>
           <p className="text-sm text-muted-foreground mb-8">Methodology &amp; Data Sources</p>
@@ -608,8 +604,6 @@ export default function Methodology() {
 
         </div>
       </div>
-
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 }

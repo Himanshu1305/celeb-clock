@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { AnswerLayout } from '@/components/AnswerLayout';
+import { ArticleLayout } from '@/components/central';
 
 export default function HowOldAmIOnMars() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How old am I on other planets?", "item": "https://bornclock.com/answers/how-old-am-i-on-mars" } ] };
@@ -17,29 +17,26 @@ export default function HowOldAmIOnMars() {
   };
 
   return (
-    <>
-      <SEO
-        title="How Old Am I on Mars and Other Planets? | BornClock"
-        description="Calculate your age on Mars, Jupiter, Saturn and all 8 planets using real NASA orbital data. A 30-year-old on Earth is only 15.9 on Mars."
-        canonicalUrl="/answers/how-old-am-i-on-mars"
-        ogType="article"
-      />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <AnswerLayout>
+    <ArticleLayout
+      theme="neutral"
+      testId="how-old-am-i-on-mars-page"
+      seo={(
+        <>
+          <SEO
+            title="How Old Am I on Mars and Other Planets? | BornClock"
+            description="Calculate your age on Mars, Jupiter, Saturn and all 8 planets using real NASA orbital data. A 30-year-old on Earth is only 15.9 on Mars."
+            canonicalUrl="/answers/how-old-am-i-on-mars"
+            ogType="article"
+          />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+        </>
+      )}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'How old am I on Mars?' }}
+      h1="How Old Am I on Mars and Other Planets?"
+    >
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
-            <span className="mx-2">›</span>
-            <Link to="/faq" className="hover:text-[#6E5AA6]">FAQ</Link>
-            <span className="mx-2">›</span>
-            <span className="text-gray-600">How old am I on Mars?</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-2">How Old Am I on Mars and Other Planets?</h1>
-          <p className="text-[#6E5AA6] italic text-sm mb-8">Know your time. Live it well.</p>
-
           <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
             <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
               Your age on another planet is calculated by dividing your age in Earth days by that planet's orbital period. A 30-year-old on Earth is 15.9 years old on Mars (which takes 687 Earth days to orbit the Sun), 2.5 on Jupiter, and just 0.1 on Neptune — which takes 165 Earth years to complete one orbit.
@@ -106,7 +103,6 @@ export default function HowOldAmIOnMars() {
             </div>
           </div>
         </div>
-      </AnswerLayout>
-    </>
+    </ArticleLayout>
   );
 }

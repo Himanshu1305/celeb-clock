@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { MoneyLayout } from '@/components/central';
 import { Button } from '@/components/ui/button';
 import { Check, X, Gift, Shield, ArrowRight, Repeat } from 'lucide-react';
 import { detectCountry, formatPrice, type CountryInfo } from '@/services/CountryDetectionService';
@@ -51,32 +49,22 @@ export default function Pricing() {
   const reportPrice = reportPriceFor(currency);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <SEO
-        title="Pricing — Free Forever, Premium When You Want More | BornClock"
-        description="BornClock pricing: a free birthday & age toolkit forever, optional Premium for the full longevity suite, and a one-time Birthday Blueprint (priced in your local currency). Premium members get 3 birthday report credits a month with carry-forward."
-        keywords="bornclock pricing, birthday report price, longevity calculator subscription, premium plan"
-        canonicalUrl="/pricing"
-      />
-      <div className="container mx-auto px-4 py-6">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-      </div>
-
+    <MoneyLayout
+      theme="neutral"
+      testId="pricing-page"
+      seo={
+        <SEO
+          title="Pricing — Free Forever, Premium When You Want More | BornClock"
+          description="BornClock pricing: a free birthday & age toolkit forever, optional Premium for the full longevity suite, and a one-time Birthday Blueprint (priced in your local currency). Premium members get 3 birthday report credits a month with carry-forward."
+          keywords="bornclock pricing, birthday report price, longevity calculator subscription, premium plan"
+          canonicalUrl="/pricing"
+        />
+      }
+      breadcrumb={{ current: 'Pricing' }}
+      h1="Simple pricing. Free forever, premium when you want more."
+      lead={<>The birthday and age tools are free for everyone. Upgrade for the full science-backed longevity suite, or buy a one-time Birthday Blueprint to gift.</>}
+    >
       <div className="max-w-5xl mx-auto px-4 pb-16">
-        {/* Hero */}
-        <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-3">
-            Simple pricing. Free forever, premium when you want more.
-          </h1>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            The birthday and age tools are free for everyone. Upgrade for the full science-backed
-            longevity suite, or buy a one-time Birthday Blueprint to gift.
-          </p>
-        </div>
-
         {/* Three offers */}
         <div className="grid md:grid-cols-3 gap-6 mb-14">
           {/* Free */}
@@ -203,7 +191,6 @@ export default function Pricing() {
           <Button asChild size="lg"><Link to="/upgrade">Compare plans &amp; subscribe <ArrowRight className="w-4 h-4 ml-1" /></Link></Button>
         </div>
       </div>
-      <Footer />
-    </div>
+    </MoneyLayout>
   );
 }

@@ -1,9 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
+import { ArticleLayout } from '@/components/central';
 import { ArticleSEO, FAQSchema } from '@/components/SEO';
 import { FeedbackPrompt } from '@/components/FeedbackPrompt';
 import { ReaderComments } from '@/components/ReaderComments';
@@ -76,26 +74,23 @@ const BlogPostPage = () => {
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-gradient-cosmic">
-        <div className="container mx-auto px-4 py-8">
-          <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-            <Navigation />
-            <AuthNav />
-          </header>
-          <div className="max-w-2xl mx-auto text-center py-20">
-            <div className="text-6xl mb-6">📄</div>
-            <h1 className="text-3xl font-bold mb-4">Article Not Found</h1>
-            <p className="text-muted-foreground mb-8">
-              The article you're looking for doesn't exist or has been moved.
-            </p>
-            <Button onClick={() => navigate('/blog')}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Blog
-            </Button>
-          </div>
+      <ArticleLayout
+        theme="neutral"
+        testId="blog-post-page"
+        breadcrumb={{ trail: [{ label: 'Blog', to: '/blog' }], current: 'Article Not Found' }}
+        h1="Article Not Found"
+      >
+        <div className="max-w-2xl mx-auto text-center py-20">
+          <div className="text-6xl mb-6">📄</div>
+          <p className="text-muted-foreground mb-8">
+            The article you're looking for doesn't exist or has been moved.
+          </p>
+          <Button onClick={() => navigate('/blog')}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Blog
+          </Button>
         </div>
-        <Footer />
-      </div>
+      </ArticleLayout>
     );
   }
 
@@ -120,39 +115,32 @@ const BlogPostPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic">
-      <ArticleSEO 
-        title={post.metaTitle || post.title}
-        description={post.metaDescription || post.excerpt}
-        slug={post.slug}
-        author={post.author}
-        publishedDate={post.publishedDate}
-        modifiedDate={post.updatedDate}
-        category={categoryLabels[post.category]}
-        tags={post.tags}
-        featuredImage={post.ogImage}
-      />
-      {post.faqs && post.faqs.length > 0 && (
-        <FAQSchema items={post.faqs} />
+    <ArticleLayout
+      theme="neutral"
+      testId="blog-post-page"
+      seo={(
+        <>
+          <ArticleSEO
+            title={post.metaTitle || post.title}
+            description={post.metaDescription || post.excerpt}
+            slug={post.slug}
+            author={post.author}
+            publishedDate={post.publishedDate}
+            modifiedDate={post.updatedDate}
+            category={categoryLabels[post.category]}
+            tags={post.tags}
+            featuredImage={post.ogImage}
+          />
+          {post.faqs && post.faqs.length > 0 && (
+            <FAQSchema items={post.faqs} />
+          )}
+        </>
       )}
+      breadcrumb={{ trail: [{ label: 'Blog', to: '/blog' }], current: post.title }}
+      h1={post.title}
+      lead={<>{post.excerpt}</>}
+    >
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        {/* Breadcrumb */}
-        <nav className="max-w-4xl mx-auto mb-8">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Link to="/" className="hover:text-primary">Home</Link>
-            <span>/</span>
-            <Link to="/blog" className="hover:text-primary">Blog</Link>
-            <span>/</span>
-            <span className="text-foreground truncate max-w-[200px]">{post.title}</span>
-          </div>
-        </nav>
-
         {/* Article */}
         <article className="max-w-4xl mx-auto">
           {/* Article Header */}
@@ -166,15 +154,7 @@ const BlogPostPage = () => {
                 {post.readTime} min read
               </span>
             </div>
-            
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 gradient-text-primary leading-tight">
-              {post.title}
-            </h1>
-            
-            <p className="text-xl text-muted-foreground mb-6 max-w-3xl mx-auto">
-              {post.excerpt}
-            </p>
-            
+
             <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground flex-wrap">
               <span className="flex items-center gap-2">
                 <User className="h-4 w-4" />
@@ -499,9 +479,7 @@ const BlogPostPage = () => {
           </Card>
         </article>
       </div>
-      
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 };
 

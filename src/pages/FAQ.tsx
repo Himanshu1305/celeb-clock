@@ -1,10 +1,8 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { AuthNav } from '@/components/AuthNav';
-import { Navigation } from '@/components/Navigation';
-import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import { ArticleLayout } from '@/components/central';
 import PageTagline from '@/components/PageTagline';
 import { ChevronDown, ChevronUp, Search } from 'lucide-react';
 
@@ -271,36 +269,37 @@ export default function FAQ() {
   const totalResults = filtered.reduce((n, cat) => n + cat.items.length, 0);
 
   return (
-    <div className="min-h-screen bg-background">
-      <SEO
-        title="Frequently Asked Questions | BornClock"
-        description="Answers to common questions about BornClock's age calculator, life expectancy calculator, planetary age, celebrity birthday matching, zodiac, numerology, and account features."
-        keywords="BornClock FAQ, age calculator questions, life expectancy FAQ, planetary age FAQ"
-        canonicalUrl="/faq"
-      />
-
-      {/* FAQPage structured data */}
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(FAQ_SCHEMA)}</script>
-      </Helmet>
-
+    <ArticleLayout
+      theme="neutral"
+      testId="faq-page"
+      seo={(
+        <>
+          <SEO
+            title="Frequently Asked Questions | BornClock"
+            description="Answers to common questions about BornClock's age calculator, life expectancy calculator, planetary age, celebrity birthday matching, zodiac, numerology, and account features."
+            keywords="BornClock FAQ, age calculator questions, life expectancy FAQ, planetary age FAQ"
+            canonicalUrl="/faq"
+          />
+          {/* FAQPage structured data */}
+          <Helmet>
+            <script type="application/ld+json">{JSON.stringify(FAQ_SCHEMA)}</script>
+          </Helmet>
+        </>
+      )}
+      breadcrumb={{ current: 'FAQ' }}
+      h1="Frequently Asked Questions"
+      lead={(
+        <>
+          Everything you need to know about BornClock. Can't find an answer?{' '}
+          <a href="mailto:hello@bornclock.com" className="text-blue-500 hover:underline">
+            Email us
+          </a>.
+        </>
+      )}
+    >
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
         <div className="mb-10">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Frequently Asked Questions
-          </h1>
           <PageTagline />
-          <p className="text-muted-foreground text-lg">
-            Everything you need to know about BornClock. Can't find an answer?{' '}
-            <a href="mailto:hello@bornclock.com" className="text-blue-500 hover:underline">
-              Email us
-            </a>.
-          </p>
         </div>
 
         {/* Search */}
@@ -412,8 +411,6 @@ export default function FAQ() {
           </div>
         </div>
       </div>
-
-      <Footer />
-    </div>
+    </ArticleLayout>
   );
 }

@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
+import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { NAKSHATRA_AKSHARAS, NAKSHATRA_LIST, SAMPLE_NAMES } from '@/data/nakshatraAksharas';
 import { NAKSHATRA_HINDI } from '@/data/vedicTermsHindi';
@@ -33,24 +31,22 @@ export default function BabyNamesPage() {
   };
 
   return (
-    <div data-testid="baby-names-page" className="min-h-screen bg-gradient-cosmic">
-      <SEO
-        title="Baby Names by Nakshatra — Birth Star Name Syllables | BornClock"
-        description="Find auspicious baby-name starting syllables (aksharas) by Nakshatra (birth star), the traditional Vedic way. Enter the birth details or pick the Nakshatra directly."
-        canonicalUrl="/baby-names"
-        ogType="website"
-      />
+    <ToolLayout
+      theme="neutral"
+      testId="baby-names-page"
+      seo={(
+        <SEO
+          title="Baby Names by Nakshatra — Birth Star Name Syllables | BornClock"
+          description="Find auspicious baby-name starting syllables (aksharas) by Nakshatra (birth star), the traditional Vedic way. Enter the birth details or pick the Nakshatra directly."
+          canonicalUrl="/baby-names"
+          ogType="website"
+        />
+      )}
+      breadcrumb={{ current: 'Baby Names' }}
+      h1="Baby Names by Nakshatra"
+      lead={<>In the Vedic tradition, a baby's name begins with an auspicious syllable (akshara) determined by the Moon's Nakshatra at birth.</>}
+    >
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <header className="flex justify-between items-center gap-3 flex-wrap -mx-4 -mt-8 mb-8 px-4 md:px-6 py-3 bg-[#0E2238] text-white sticky top-0 z-50">
-          <Navigation />
-          <AuthNav />
-        </header>
-
-        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">Baby Names by Nakshatra</h1>
-        <p className="text-muted-foreground mb-6">
-          In the Vedic tradition, a baby's name begins with an auspicious syllable (akshara) determined by the Moon's Nakshatra at birth.
-        </p>
-
         <div className="rounded-xl border border-border p-5 mb-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -110,7 +106,6 @@ export default function BabyNamesPage() {
           </Link>
         </div>
       </div>
-      <Footer />
-    </div>
+    </ToolLayout>
   );
 }

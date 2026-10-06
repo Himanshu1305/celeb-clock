@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/hooks/useAuth';
+import { UtilityLayout } from '@/components/central';
 import { Sparkles, ArrowLeft, MapPin } from 'lucide-react';
 import { countries } from '@/data/countries';
 import { useResolvedCurrency } from '@/hooks/useCurrency';
@@ -76,34 +77,23 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic flex flex-col items-center justify-center p-4">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-1 h-1 bg-primary rounded-full animate-pulse animation-delay-300"></div>
-        <div className="absolute bottom-20 left-1/4 w-1.5 h-1.5 bg-accent rounded-full animate-pulse animation-delay-700"></div>
-      </div>
-
-      {/* Header */}
-      <div className="text-center mb-8 relative z-10">
-        <Link 
-          to="/" 
-          className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-6"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Calculator
-        </Link>
-        
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <Sparkles className="w-8 h-8 text-primary" />
-          <h1 className="text-3xl font-bold bg-gradient-text bg-clip-text text-transparent">
-            Cosmic Age
-          </h1>
+    <UtilityLayout
+      theme="neutral"
+      testId="auth-page"
+      breadcrumb={{ current: 'Sign In' }}
+      h1={isSignUp ? 'Create Account' : 'Sign In'}
+      lead={isSignUp ? 'Create your account to unlock premium features' : 'Welcome back to your cosmic journey'}
+    >
+      <div className="flex flex-col items-center justify-center p-4">
+        <div className="text-center mb-6">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Calculator
+          </Link>
         </div>
-        <p className="text-muted-foreground">
-          {isSignUp ? 'Create your account to unlock premium features' : 'Welcome back to your cosmic journey'}
-        </p>
-      </div>
 
       {/* Auth Form */}
       <Card className="w-full max-w-md backdrop-blur-sm bg-background/80 border-primary/20">
@@ -265,6 +255,7 @@ export default function Auth() {
           </p>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </UtilityLayout>
   );
 }
