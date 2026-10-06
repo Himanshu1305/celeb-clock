@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Navigation } from '@/components/Navigation';
 import DobCompatibility from '@/components/DobCompatibility';
-import { AuthNav } from '@/components/AuthNav';
-import { ToolLayout } from '@/components/central';
+import { ToolLayout, UtilityLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { JsonLd } from '@/components/JsonLd';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -163,31 +161,32 @@ export default function CompatibilityPage() {
   // calculator shell. Distinct <title> + noindex so search engines don't index junk URLs.
   if (invalidPair) {
     return (
-      <div className="min-h-screen bg-white">
-        <SEO
-          title="Zodiac pairing not found | BornClock"
-          description="That is not a valid zodiac pairing. Pick two of the twelve zodiac signs to see their compatibility."
-          canonicalUrl="/compatibility"
-          noindex
-        />
-        <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <Navigation />
-            <AuthNav />
+      <UtilityLayout
+        theme="mystic"
+        breadcrumb={{ trail: [{ label: 'Compatibility', to: '/compatibility' }], current: 'Not Found' }}
+        h1="That zodiac pairing doesn’t exist"
+        seo={(
+          <SEO
+            title="Zodiac pairing not found | BornClock"
+            description="That is not a valid zodiac pairing. Pick two of the twelve zodiac signs to see their compatibility."
+            canonicalUrl="/compatibility"
+            noindex
+          />
+        )}
+      >
+        <section className="section">
+          <div className="max-w-xl mx-auto px-4 py-12 text-center">
+            <p className="text-6xl mb-4">🔭</p>
+            <p className="text-gray-600 leading-relaxed mb-8">
+              “{paramSign1}” and “{paramSign2}” aren’t both zodiac signs. Compatibility is calculated between two of
+              the twelve signs — Aries through Pisces. Head back to the calculator and pick a real pair.
+            </p>
+            <Link to="/compatibility" className="inline-block bg-rose-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-rose-700 transition-colors">
+              Open the Compatibility Calculator →
+            </Link>
           </div>
-        </div>
-        <div className="max-w-xl mx-auto px-4 py-20 text-center">
-          <p className="text-6xl mb-4">🔭</p>
-          <h1 className="text-3xl font-black text-gray-900 mb-3">That zodiac pairing doesn’t exist</h1>
-          <p className="text-gray-600 leading-relaxed mb-8">
-            “{paramSign1}” and “{paramSign2}” aren’t both zodiac signs. Compatibility is calculated between two of
-            the twelve signs — Aries through Pisces. Head back to the calculator and pick a real pair.
-          </p>
-          <Link to="/compatibility" className="inline-block bg-rose-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-rose-700 transition-colors">
-            Open the Compatibility Calculator →
-          </Link>
-        </div>
-      </div>
+        </section>
+      </UtilityLayout>
     );
   }
 

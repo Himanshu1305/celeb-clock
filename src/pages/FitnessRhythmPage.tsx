@@ -1,8 +1,6 @@
 import { useLocation, Link, Navigate } from 'react-router-dom';
+import { ToolLayout } from '@/components/central';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
-import { Navigation } from '@/components/Navigation';
-import { AuthNav } from '@/components/AuthNav';
-import { Footer } from '@/components/Footer';
 import { RhythmWidget } from '@/components/RhythmWidget';
 import { getFitnessPage, FITNESS_PAGES } from '@/data/fitnessPages';
 import { RHYTHM_SCIENCE_NOTE, RHYTHM_DISCLAIMER } from '@/data/rhythmFraming';
@@ -19,42 +17,40 @@ export default function FitnessRhythmPage() {
   const meshPosts = postsForTags([...page.keywords.split(',').map(k => k.trim()), 'biorhythm', 'energy', 'exercise'], 2);
 
   return (
-    <>
-      <SEO
-        title={page.seoTitle}
-        description={page.seoDescription}
-        keywords={page.keywords}
-        canonicalUrl={`/${page.slug}`}
-      />
-      {page.isApp && (
-        <WebApplicationSchema name={page.h1} description={page.seoDescription} url={`/${page.slug}`} />
+    <ToolLayout
+      theme="mystic"
+      seo={(
+        <>
+          <SEO
+            title={page.seoTitle}
+            description={page.seoDescription}
+            keywords={page.keywords}
+            canonicalUrl={`/${page.slug}`}
+          />
+          {page.isApp && (
+            <WebApplicationSchema name={page.h1} description={page.seoDescription} url={`/${page.slug}`} />
+          )}
+          <FAQSchema items={page.faqs.map(f => ({ question: f.question, answer: f.answer }))} />
+        </>
       )}
-      <FAQSchema items={page.faqs.map(f => ({ question: f.question, answer: f.answer }))} />
-
-      <div className="min-h-screen bg-white">
-        <div className="bg-[#0E2238] text-white border-b border-[#0E2238] sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <Navigation />
-            <AuthNav />
-          </div>
-        </div>
-
+      breadcrumb={{ trail: [{ label: 'Biorhythm', to: '/biorhythm' }], current: page.h1 }}
+      footer={{
+        tagline: 'Energy and rhythm pages — charted from your date of birth.',
+        nav: [
+          { label: 'Biorhythm', to: '/biorhythm' },
+          { label: 'Mystic Corner', to: '/mystic-corner' },
+          { label: 'Numerology', to: '/numerology' },
+          { label: 'Birthday Report', to: '/birthday-report' },
+          { label: 'Privacy', to: '/privacy' },
+        ],
+        note: '© 2026 BornClock · Calculated, not templated.',
+      }}
+      eyebrow="Biorhythm"
+      h1={page.h1}
+      lead={page.directAnswer}
+    >
+      <section className="section">
         <div className="max-w-2xl mx-auto px-4 py-10">
-          <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
-            <Link to="/" className="hover:text-teal-600">Home</Link>
-            <span>›</span>
-            <Link to="/biorhythm" className="hover:text-teal-600">Biorhythm</Link>
-            <span>›</span>
-            <span className="text-gray-600">{page.h1}</span>
-          </nav>
-
-          <h1 className="text-3xl font-black text-gray-900 mb-3">{page.h1}</h1>
-
-          {/* Direct answer (snippet target) */}
-          <div className="bg-teal-50 border-l-4 border-teal-500 rounded-r-xl p-5 mb-6">
-            <p className="text-base font-medium text-teal-900 leading-relaxed">{page.directAnswer}</p>
-          </div>
-
           <SharePageBar
             path={`/${page.slug}`}
             title={page.h1}
@@ -121,8 +117,7 @@ export default function FitnessRhythmPage() {
           {/* Mandatory standard disclaimer — page footer */}
           <p className="mt-8 pt-6 border-t border-gray-100 text-xs text-gray-400 leading-relaxed">{RHYTHM_DISCLAIMER}</p>
         </div>
-        <Footer />
-      </div>
-    </>
+      </section>
+    </ToolLayout>
   );
 }
