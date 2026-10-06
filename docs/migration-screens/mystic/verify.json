@@ -285,20 +285,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 8
-        },
-        {
-          "id": "select-name",
-          "impact": "critical",
-          "nodes": 2
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {
       "ran": true,
@@ -334,20 +329,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 10
-        },
-        {
-          "id": "select-name",
-          "impact": "critical",
-          "nodes": 2
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {
       "ran": true,
@@ -1197,20 +1187,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 7
-        },
-        {
-          "id": "select-name",
-          "impact": "critical",
-          "nodes": 2
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
@@ -1244,20 +1229,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 9
-        },
-        {
-          "id": "select-name",
-          "impact": "critical",
-          "nodes": 2
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
@@ -1691,20 +1671,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 4
-        },
-        {
-          "id": "scrollable-region-focusable",
-          "impact": "serious",
-          "nodes": 1
         }
       ],
-      "total": 4
+      "total": 3
     },
     "jsonld": {},
     "structuralJsonLd": {
@@ -2056,20 +2031,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 7
-        },
-        {
-          "id": "select-name",
-          "impact": "critical",
-          "nodes": 2
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
@@ -2103,20 +2073,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 9
-        },
-        {
-          "id": "select-name",
-          "impact": "critical",
-          "nodes": 2
         }
       ],
-      "total": 3
+      "total": 2
     },
     "jsonld": {},
     "structuralJsonLd": {
@@ -2550,20 +2515,15 @@
     },
     "axe": {
       "ran": true,
-      "serious": 2,
+      "serious": 1,
       "seriousList": [
         {
           "id": "color-contrast",
           "impact": "serious",
           "nodes": 4
-        },
-        {
-          "id": "scrollable-region-focusable",
-          "impact": "serious",
-          "nodes": 1
         }
       ],
-      "total": 4
+      "total": 3
     },
     "jsonld": {},
     "structuralJsonLd": {
