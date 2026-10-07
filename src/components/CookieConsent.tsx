@@ -101,7 +101,7 @@ export const CookieConsent = () => {
                 </div>
                 
                 <div className="flex flex-wrap gap-3">
-                  <Button onClick={handleAcceptAll} className="bg-accent hover:bg-accent/90">
+                  <Button onClick={handleAcceptAll}>
                     Accept All
                   </Button>
                   <Button variant="outline" onClick={handleRejectAll}>
@@ -119,9 +119,9 @@ export const CookieConsent = () => {
                 
                 <p className="text-xs text-muted-foreground">
                   By continuing to use this site, you agree to our{' '}
-                  <a href="/privacy" className="text-accent hover:underline">Privacy Policy</a>
+                  <a href="/privacy" className="font-medium text-foreground underline underline-offset-2 hover:opacity-80">Privacy Policy</a>
                   {' '}and{' '}
-                  <a href="/terms" className="text-accent hover:underline">Terms of Service</a>.
+                  <a href="/terms" className="font-medium text-foreground underline underline-offset-2 hover:opacity-80">Terms of Service</a>.
                 </p>
               </div>
               

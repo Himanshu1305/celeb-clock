@@ -34,19 +34,19 @@ const categoryLabels: Record<BlogPost['category'], string> = {
 };
 
 const categoryColors: Record<BlogPost['category'], string> = {
-  'age-calculator': 'bg-blue-500/10 text-blue-600 border-blue-500/30',
-  'celebrity': 'bg-[#6E5AA6]/10 text-[#6E5AA6] border-[#6E5AA6]/30',
-  'zodiac': 'bg-[#6E5AA6]/10 text-[#6E5AA6] border-[#6E5AA6]/30',
-  'birthstone': 'bg-pink-500/10 text-pink-600 border-pink-500/30',
-  'life-expectancy': 'bg-green-500/10 text-green-600 border-green-500/30',
-  'lifestyle': 'bg-orange-500/10 text-orange-600 border-orange-500/30',
-  'longevity-science': 'bg-green-500/10 text-green-600 border-green-500/30',
-  'country-insights': 'bg-cyan-500/10 text-cyan-600 border-cyan-500/30',
-  'astrology': 'bg-[#6E5AA6]/10 text-[#6E5AA6] border-[#6E5AA6]/30',
-  'nutrition': 'bg-orange-500/10 text-orange-600 border-orange-500/30',
-  'numerology': 'bg-[#6E5AA6]/10 text-[#6E5AA6] border-[#6E5AA6]/30',
-  'health-science': 'bg-teal-500/10 text-teal-600 border-teal-500/30',
-  'birthday': 'bg-pink-500/10 text-pink-600 border-pink-500/30'
+  'age-calculator': 'bg-blue-500/10 text-blue-700 border-blue-500/30',
+  'celebrity': 'bg-[#6E5AA6]/10 text-[#4C3E78] border-[#6E5AA6]/30',
+  'zodiac': 'bg-[#6E5AA6]/10 text-[#4C3E78] border-[#6E5AA6]/30',
+  'birthstone': 'bg-pink-500/10 text-pink-700 border-pink-500/30',
+  'life-expectancy': 'bg-green-500/10 text-green-700 border-green-500/30',
+  'lifestyle': 'bg-orange-500/10 text-orange-700 border-orange-500/30',
+  'longevity-science': 'bg-green-500/10 text-green-700 border-green-500/30',
+  'country-insights': 'bg-cyan-500/10 text-cyan-700 border-cyan-500/30',
+  'astrology': 'bg-[#6E5AA6]/10 text-[#4C3E78] border-[#6E5AA6]/30',
+  'nutrition': 'bg-orange-500/10 text-orange-700 border-orange-500/30',
+  'numerology': 'bg-[#6E5AA6]/10 text-[#4C3E78] border-[#6E5AA6]/30',
+  'health-science': 'bg-teal-500/10 text-teal-700 border-teal-500/30',
+  'birthday': 'bg-pink-500/10 text-pink-700 border-pink-500/30'
 };
 
 const BlogPostPage = () => {

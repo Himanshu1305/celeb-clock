@@ -31,7 +31,7 @@
     --secondary-glow: 42 25% 95%;
 
     --muted: 42 30% 93%;
-    --muted-foreground: 211 12% 42%;
+    --muted-foreground: 211 24% 30%; /* RC2 a11y: darkened from 211 12% 42% (#5B6472, ~4:1) to ~#3A4452 (>=6:1 on ivory) for WCAG AA */
 
     /* Subtle warm hover surface (ghost/dropdown/active rows) */
     --accent: 42 38% 89%;
@@ -49,7 +49,7 @@
 
     /* Category accents (shared, for inline use) */
     --accent-gold: 38 42% 57%;     /* #C6A15B Vedic */
-    --accent-gold-ink: 38 37% 32%; /* #806125 bronze text */
+    --accent-gold-ink: 38 50% 24%; /* RC2 a11y: darkened bronze text (~#5C4620) for >=4.5:1 on gold tints */
     --accent-coral: 9 82% 65%;     /* #F0715A Birthday */
     --accent-coral-ink: 12 62% 44%;/* #B5432A */
     --accent-amethyst: 258 28% 50%;/* #6E5AA6 Mystic */

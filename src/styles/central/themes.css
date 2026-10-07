@@ -4,8 +4,17 @@
  * per-category tokens in part-aj.css, and add the `neutral` theme. Loaded AFTER
  * part-aj.css so [data-theme] is the canonical theme selector going forward while
  * not-yet-migrated pages keep working via [data-category]. */
-.paj[data-theme="vedic"]    { --accent:#C6A15B; --accent-text:#806125; --green:#C6A15B; }
+/* RC2 a11y pass: darken the shared muted body-text ink and the per-theme accent
+ * text ink so `.paj .muted/.lead/.subtle/.eyebrow/em` meet WCAG AA (>=4.5:1 normal)
+ * on ivory/white/tinted surfaces. Darken-only — `--accent` (brand colour for
+ * borders/dots/fills, a UI/3:1 role) is unchanged, so the approved look is preserved. */
+.paj { --muted:#434C59; } /* was #5B6472 (~4:1) → ~6.3:1 on ivory */
+.paj[data-theme="vedic"]    { --accent:#C6A15B; --accent-text:#6B4F1E; --green:#C6A15B; }
 .paj[data-theme="birthday"] { --accent:#F0715A; --accent-text:#B5432A; --green:#F0715A; }
-.paj[data-theme="mystic"]   { --accent:#6E5AA6; --accent-text:#6E5AA6; --green:#6E5AA6; }
+.paj[data-theme="mystic"]   { --accent:#6E5AA6; --accent-text:#4C3E78; --green:#6E5AA6; }
 .paj[data-theme="science"]  { --accent:#2F6FB0; --accent-text:#237A60; --green:#2E9E7B; --bg:#FFFFFF; --line:#DDE4EA; }
 .paj[data-theme="neutral"]  { --accent:#C6A15B; --accent-text:#0E2238; --green:#0E2238; }
+/* Same darkened inks for any residual back-compat [data-category] surfaces. */
+.paj[data-category="vedic"]   { --accent-text:#6B4F1E; }
+.paj[data-category="mystic"]  { --accent-text:#4C3E78; }
+.paj[data-category="science"] { --accent-text:#237A60; }

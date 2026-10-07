@@ -216,7 +216,7 @@ export const Navigation = () => {
           {!loading && isPremium && !showTrialPill && (
             <Link
               to="/upgrade"
-              className="text-[#806125] border border-[#C6A15B]/40 bg-[#C6A15B]/12 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-[#C6A15B]/20 transition-colors"
+              className="text-[#5c4620] border border-[#C6A15B]/50 bg-[#C6A15B]/20 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-[#C6A15B]/30 transition-colors"
             >
               ⭐ Premium
             </Link>
