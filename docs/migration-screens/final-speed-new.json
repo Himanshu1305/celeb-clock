@@ -2,57 +2,57 @@
   {
     "route": "/age-calculator/",
     "layout": "tool",
-    "lcp_ms": 672,
+    "lcp_ms": 408,
     "cls": 0,
-    "tbt_ms": 141,
+    "tbt_ms": 38,
     "samples": 5
   },
   {
     "route": "/kundali/",
     "layout": "report",
-    "lcp_ms": 776,
+    "lcp_ms": 460,
     "cls": 0,
-    "tbt_ms": 326,
+    "tbt_ms": 117,
     "samples": 5
   },
   {
     "route": "/",
     "layout": "hub/home",
-    "lcp_ms": 744,
+    "lcp_ms": 420,
     "cls": 0,
-    "tbt_ms": 363,
+    "tbt_ms": 125,
     "samples": 5
   },
   {
     "route": "/celebrity/",
     "layout": "collection",
-    "lcp_ms": 692,
+    "lcp_ms": 400,
     "cls": 0,
-    "tbt_ms": 189,
+    "tbt_ms": 46,
     "samples": 5
   },
   {
     "route": "/blog/",
     "layout": "article",
-    "lcp_ms": 688,
+    "lcp_ms": 436,
     "cls": 0,
-    "tbt_ms": 195,
+    "tbt_ms": 52,
     "samples": 5
   },
   {
     "route": "/pricing/",
     "layout": "money",
-    "lcp_ms": 556,
+    "lcp_ms": 348,
     "cls": 0,
-    "tbt_ms": 131,
+    "tbt_ms": 28,
     "samples": 5
   },
   {
     "route": "/privacy/",
     "layout": "utility",
-    "lcp_ms": 548,
+    "lcp_ms": 336,
     "cls": 0,
-    "tbt_ms": 142,
+    "tbt_ms": 37,
     "samples": 5
   }
 ]

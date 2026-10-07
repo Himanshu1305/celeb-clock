@@ -1,0 +1,331 @@
+[
+  {
+    "group": "invalid→404",
+    "path": "/born-on/february-30",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/born-on/april-31",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/born-on/2/30",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/born-on/13/1",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/birthday/13/40",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/birthday/2/30",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/compatibility/aries/dragon",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/compatibility/foo/bar",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/compatibility/leo/notasign",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/zodiac/dragon",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/zodiac/notasign",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/chinese-zodiac/unicorn",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/chinese-zodiac/notananimal",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/vedic-zodiac/notarashi",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/numerology/10",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/numerology/99",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/birthstone/decembr",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "invalid→404",
+    "path": "/birthstone/notamonth",
+    "expect": 404,
+    "status": 404,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/born-on/february-29",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/born-on/1/1",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/born-on/12/31",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/birthday/2/29",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/birthday/7",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/compatibility/aries/leo",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/compatibility/leo/aries",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/zodiac/aries",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/zodiac/pisces",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/chinese-zodiac/dragon",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/chinese-zodiac/rat",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/vedic-zodiac/mesh",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/vedic-zodiac/meen",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/numerology/7",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/numerology/11",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/numerology/33",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/birthstone/january",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/birthstone/december",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/results",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/results?day=1&month=1",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/auth",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/profile",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/admin",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/upgrade",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/report/nonexistent-sample-slug",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/celebrity?q=gandhi",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/blog?tag=astrology",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/?utm_source=rc2check",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  }
+]

@@ -1,0 +1,1669 @@
+[
+  {
+    "browser": "chromium",
+    "route": "/",
+    "label": "Home",
+    "status": 200,
+    "title": "Free Birthday, Zodiac & Longevity Calculator | BornClock",
+    "h1Count": 1,
+    "h1First": "Everything your birth date reveals.",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/pricing",
+    "label": "Pricing",
+    "status": 200,
+    "title": "Pricing — Free Forever, Premium When You Want More | BornClock",
+    "h1Count": 1,
+    "h1First": "Simple pricing. Free forever, premium when you want more.",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 208,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/age-calculator",
+    "label": "Age Calculator",
+    "status": 200,
+    "title": "Best Age Calculator Online — Exact Age in Seconds (Free) | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "Best Age Calculator — Your Exact Age, Live to the Second",
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 336,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/celebrity",
+    "label": "Celebrity index",
+    "status": 200,
+    "title": "Indian Celebrity Birthday Profiles — 598 Profiles | BornClock",
+    "h1Count": 1,
+    "h1First": "Indian Celebrity Birthday Profiles",
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 208,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/numerology",
+    "label": "Numerology",
+    "status": 200,
+    "title": "Numerology Calculator — Find Your Life Path Number | BornClock",
+    "h1Count": 1,
+    "h1First": "Numerology Calculator — Your Life Path Number",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 272,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/compatibility",
+    "label": "Compatibility",
+    "status": 200,
+    "title": "Zodiac Compatibility Calculator — How Compatible Are You? | BornClock",
+    "h1Count": 1,
+    "h1First": "Zodiac Compatibility Calculator (Western Zodiac)",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 384,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/life-expectancy",
+    "label": "Life Expectancy",
+    "status": 200,
+    "title": "Life Expectancy Calculator — How Long Will I Live? Death Clock & Lifespan Test | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "How long could you live — and why.",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 336,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/biological-age",
+    "label": "Biological Age",
+    "status": 200,
+    "title": "Biological Age Calculator — 12 WHO-Validated Biomarkers | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "What Is Your True Biological Age?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 336,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/vedic-astrology",
+    "label": "Vedic hub (moved run1)",
+    "status": 200,
+    "title": "Vedic Astrology — Your Birth Chart, Computed Not Guessed | BornClock",
+    "h1Count": 1,
+    "h1First": "Your birth chart, computed — not guessed.Every detail matters.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/kundali",
+    "label": "Kundali (moved run1)",
+    "status": 200,
+    "title": "Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock",
+    "h1Count": 1,
+    "h1First": "Your Kundali, computed.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/muhurat",
+    "label": "Muhurat (moved run1)",
+    "status": 200,
+    "title": "Muhurat Finder — Auspicious Dates (Panchang) | BornClock",
+    "h1Count": 1,
+    "h1First": "Muhurat Finder.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/sade-sati",
+    "label": "Sade Sati (moved run1)",
+    "status": 200,
+    "title": "Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock",
+    "h1Count": 1,
+    "h1First": "Sade Sati Calculator.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/gemstones",
+    "label": "Gemstones (moved run1)",
+    "status": 200,
+    "title": "Gemstone Suggestions (Vedic) — Ascendant-Lord Stone | BornClock",
+    "h1Count": 1,
+    "h1First": "Gemstone Suggestions.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/blog",
+    "label": "Blog (article layout)",
+    "status": 200,
+    "title": "Health & Longevity Blog — Science-Backed Articles | BornClock",
+    "h1Count": 1,
+    "h1First": "The BornClock Health & Longevity Guide",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 5,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 20,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 5,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/privacy",
+    "label": "Privacy (utility layout)",
+    "status": 200,
+    "title": "Privacy Policy | BornClock",
+    "h1Count": 1,
+    "h1First": "Privacy Policy",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 144,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "chromium",
+    "route": "/born-on/february-29",
+    "label": "Born-on leap (date)",
+    "status": 200,
+    "title": "Born on February 29 — Famous Birthdays | BornClock",
+    "h1Count": 1,
+    "h1First": "Celebrities Born on February 29",
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {
+      "ran": false
+    },
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/",
+    "label": "Home",
+    "status": 200,
+    "title": "Free Birthday, Zodiac & Longevity Calculator | BornClock",
+    "h1Count": 1,
+    "h1First": "Everything your birth date reveals.",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/pricing",
+    "label": "Pricing",
+    "status": 200,
+    "title": "Pricing — Free Forever, Premium When You Want More | BornClock",
+    "h1Count": 1,
+    "h1First": "Simple pricing. Free forever, premium when you want more.",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/age-calculator",
+    "label": "Age Calculator",
+    "status": 200,
+    "title": "Best Age Calculator Online — Exact Age in Seconds (Free) | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "Best Age Calculator — Your Exact Age, Live to the Second",
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/celebrity",
+    "label": "Celebrity index",
+    "status": 200,
+    "title": "Indian Celebrity Birthday Profiles — 598 Profiles | BornClock",
+    "h1Count": 1,
+    "h1First": "Indian Celebrity Birthday Profiles",
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/numerology",
+    "label": "Numerology",
+    "status": 200,
+    "title": "Numerology Calculator — Find Your Life Path Number | BornClock",
+    "h1Count": 1,
+    "h1First": "Numerology Calculator — Your Life Path Number",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/compatibility",
+    "label": "Compatibility",
+    "status": 200,
+    "title": "Zodiac Compatibility Calculator — How Compatible Are You? | BornClock",
+    "h1Count": 1,
+    "h1First": "Zodiac Compatibility Calculator (Western Zodiac)",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/life-expectancy",
+    "label": "Life Expectancy",
+    "status": 200,
+    "title": "Life Expectancy Calculator — How Long Will I Live? Death Clock & Lifespan Test | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "How long could you live — and why.",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/biological-age",
+    "label": "Biological Age",
+    "status": 200,
+    "title": "Biological Age Calculator — 12 WHO-Validated Biomarkers | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "What Is Your True Biological Age?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/vedic-astrology",
+    "label": "Vedic hub (moved run1)",
+    "status": 200,
+    "title": "Vedic Astrology — Your Birth Chart, Computed Not Guessed | BornClock",
+    "h1Count": 1,
+    "h1First": "Your birth chart, computed — not guessed.Every detail matters.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/kundali",
+    "label": "Kundali (moved run1)",
+    "status": 200,
+    "title": "Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock",
+    "h1Count": 1,
+    "h1First": "Your Kundali, computed.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/muhurat",
+    "label": "Muhurat (moved run1)",
+    "status": 200,
+    "title": "Muhurat Finder — Auspicious Dates (Panchang) | BornClock",
+    "h1Count": 1,
+    "h1First": "Muhurat Finder.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/sade-sati",
+    "label": "Sade Sati (moved run1)",
+    "status": 200,
+    "title": "Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock",
+    "h1Count": 1,
+    "h1First": "Sade Sati Calculator.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/gemstones",
+    "label": "Gemstones (moved run1)",
+    "status": 200,
+    "title": "Gemstone Suggestions (Vedic) — Ascendant-Lord Stone | BornClock",
+    "h1Count": 1,
+    "h1First": "Gemstone Suggestions.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/blog",
+    "label": "Blog (article layout)",
+    "status": 200,
+    "title": "Health & Longevity Blog — Science-Backed Articles | BornClock",
+    "h1Count": 1,
+    "h1First": "The BornClock Health & Longevity Guide",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 5,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 5,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/privacy",
+    "label": "Privacy (utility layout)",
+    "status": 200,
+    "title": "Privacy Policy | BornClock",
+    "h1Count": 1,
+    "h1First": "Privacy Policy",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "webkit",
+    "route": "/born-on/february-29",
+    "label": "Born-on leap (date)",
+    "status": 200,
+    "title": "Born on February 29 — Famous Birthdays | BornClock",
+    "h1Count": 1,
+    "h1First": "Celebrities Born on February 29",
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/",
+    "label": "Home",
+    "status": 200,
+    "title": "Free Birthday, Zodiac & Longevity Calculator | BornClock",
+    "h1Count": 1,
+    "h1First": "Everything your birth date reveals.",
+    "dataTheme": null,
+    "dataCategory": null,
+    "hasSiteHeader": false,
+    "hasFooter": false,
+    "singleMain": 0,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": null,
+      "h1AboveFold": null,
+      "mainWidth": null,
+      "note": "no main#main"
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/pricing",
+    "label": "Pricing",
+    "status": 200,
+    "title": "Pricing — Free Forever, Premium When You Want More | BornClock",
+    "h1Count": 1,
+    "h1First": "Simple pricing. Free forever, premium when you want more.",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/age-calculator",
+    "label": "Age Calculator",
+    "status": 200,
+    "title": "Best Age Calculator Online — Exact Age in Seconds (Free) | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "Best Age Calculator — Your Exact Age, Live to the Second",
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/celebrity",
+    "label": "Celebrity index",
+    "status": 200,
+    "title": "Indian Celebrity Birthday Profiles — 598 Profiles | BornClock",
+    "h1Count": 1,
+    "h1First": "Indian Celebrity Birthday Profiles",
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/numerology",
+    "label": "Numerology",
+    "status": 200,
+    "title": "Numerology Calculator — Find Your Life Path Number | BornClock",
+    "h1Count": 1,
+    "h1First": "Numerology Calculator — Your Life Path Number",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/compatibility",
+    "label": "Compatibility",
+    "status": 200,
+    "title": "Zodiac Compatibility Calculator — How Compatible Are You? | BornClock",
+    "h1Count": 1,
+    "h1First": "Zodiac Compatibility Calculator (Western Zodiac)",
+    "dataTheme": "mystic",
+    "dataCategory": "mystic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 8,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 8,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/life-expectancy",
+    "label": "Life Expectancy",
+    "status": 200,
+    "title": "Life Expectancy Calculator — How Long Will I Live? Death Clock & Lifespan Test | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "How long could you live — and why.",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 9,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 9,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/biological-age",
+    "label": "Biological Age",
+    "status": 200,
+    "title": "Biological Age Calculator — 12 WHO-Validated Biomarkers | BornClock - Age & Birthday Calculator",
+    "h1Count": 1,
+    "h1First": "What Is Your True Biological Age?",
+    "dataTheme": "science",
+    "dataCategory": "science",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/vedic-astrology",
+    "label": "Vedic hub (moved run1)",
+    "status": 200,
+    "title": "Vedic Astrology — Your Birth Chart, Computed Not Guessed | BornClock",
+    "h1Count": 1,
+    "h1First": "Your birth chart, computed — not guessed.Every detail matters.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/kundali",
+    "label": "Kundali (moved run1)",
+    "status": 200,
+    "title": "Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock",
+    "h1Count": 1,
+    "h1First": "Your Kundali, computed.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/muhurat",
+    "label": "Muhurat (moved run1)",
+    "status": 200,
+    "title": "Muhurat Finder — Auspicious Dates (Panchang) | BornClock",
+    "h1Count": 1,
+    "h1First": "Muhurat Finder.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/sade-sati",
+    "label": "Sade Sati (moved run1)",
+    "status": 200,
+    "title": "Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock",
+    "h1Count": 1,
+    "h1First": "Sade Sati Calculator.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/gemstones",
+    "label": "Gemstones (moved run1)",
+    "status": 200,
+    "title": "Gemstone Suggestions (Vedic) — Ascendant-Lord Stone | BornClock",
+    "h1Count": 1,
+    "h1First": "Gemstone Suggestions.",
+    "dataTheme": "vedic",
+    "dataCategory": "vedic",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 2
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/blog",
+    "label": "Blog (article layout)",
+    "status": 200,
+    "title": "Health & Longevity Blog — Science-Backed Articles | BornClock",
+    "h1Count": 1,
+    "h1First": "The BornClock Health & Longevity Guide",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 5,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 5,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/privacy",
+    "label": "Privacy (utility layout)",
+    "status": 200,
+    "title": "Privacy Policy | BornClock",
+    "h1Count": 1,
+    "h1First": "Privacy Policy",
+    "dataTheme": "neutral",
+    "dataCategory": "neutral",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 6,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 6,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  },
+  {
+    "browser": "android",
+    "route": "/born-on/february-29",
+    "label": "Born-on leap (date)",
+    "status": 200,
+    "title": "Born on February 29 — Famous Birthdays | BornClock",
+    "h1Count": 1,
+    "h1First": "Celebrities Born on February 29",
+    "dataTheme": "birthday",
+    "dataCategory": "birthday",
+    "hasSiteHeader": true,
+    "hasFooter": true,
+    "singleMain": 1,
+    "jsonLdBlocks": 7,
+    "hasOldNav": false,
+    "layout": {
+      "blankBand": 0,
+      "h1AboveFold": true,
+      "mainWidth": null
+    },
+    "axe": {
+      "ran": true,
+      "serious": 0,
+      "seriousList": [],
+      "total": 1
+    },
+    "jsonld": {},
+    "structuralJsonLd": {
+      "count": 7,
+      "parseErrors": 0,
+      "missingType": 0
+    },
+    "consoleErrors": []
+  }
+]
