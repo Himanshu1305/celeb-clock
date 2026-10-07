@@ -1000,7 +1000,7 @@ const CountryComparison = () => {
                 href={`https://wa.me/?text=${encodeURIComponent(shareText)}`}
                 target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-medium hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: '#25D366' }}
+                style={{ backgroundColor: '#15803D' }}
               >
                 📱 WhatsApp
               </a>

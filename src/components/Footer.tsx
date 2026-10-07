@@ -169,7 +169,7 @@ export const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-3 py-2 rounded-lg text-white text-xs font-medium hover:opacity-90 transition-opacity w-fit"
-                style={{ backgroundColor: '#25D366' }}
+                style={{ backgroundColor: '#15803D' }}
               >
                 <WhatsAppIcon />
                 Share on WhatsApp

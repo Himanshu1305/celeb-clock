@@ -159,7 +159,7 @@ export const EnhancedLifeExpectancyReport = ({
         <p className="text-xs text-gray-500">
           Generated: {new Date().toLocaleDateString()} · Sources: WHO, CDC, NIH, Harvard Medical School, Karolinska Institute
         </p>
-        <p className="text-[10px] text-gray-400 italic mt-1">
+        <p className="text-[10px] text-gray-600 italic mt-1">
           For informational purposes only. This is not medical advice. Consult a qualified healthcare professional.
         </p>
       </div>

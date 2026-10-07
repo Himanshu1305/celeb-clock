@@ -128,7 +128,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   onChange={e => { setWeightKg(e.target.value); setBmiSliderActive(false); }}
                   className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
                 />
-                <span className="absolute right-3 top-2.5 text-gray-400 text-sm">kg</span>
+                <span className="absolute right-3 top-2.5 text-gray-600 text-sm">kg</span>
               </div>
             </div>
             <div>
@@ -141,9 +141,9 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   onChange={e => { setHeightCm(e.target.value); setBmiSliderActive(false); }}
                   className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
                 />
-                <span className="absolute right-3 top-2.5 text-gray-400 text-sm">cm</span>
+                <span className="absolute right-3 top-2.5 text-gray-600 text-sm">cm</span>
               </div>
-              <p className="text-xs text-gray-400 mt-1">5'8" ≈ 173 cm · 6'0" ≈ 183 cm</p>
+              <p className="text-xs text-gray-600 mt-1">5'8" ≈ 173 cm · 6'0" ≈ 183 cm</p>
             </div>
           </>
         ) : (
@@ -158,7 +158,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   onChange={e => { setWeightLbs(e.target.value); setBmiSliderActive(false); }}
                   className="w-full border rounded-lg px-3 py-2 pr-12 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
                 />
-                <span className="absolute right-3 top-2.5 text-gray-400 text-sm">lbs</span>
+                <span className="absolute right-3 top-2.5 text-gray-600 text-sm">lbs</span>
               </div>
             </div>
             <div>
@@ -172,7 +172,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                     onChange={e => { setHeightFt(e.target.value); setBmiSliderActive(false); }}
                     className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
                   />
-                  <span className="absolute right-2 top-2.5 text-gray-400 text-sm">ft</span>
+                  <span className="absolute right-2 top-2.5 text-gray-600 text-sm">ft</span>
                 </div>
                 <div className="relative flex-1">
                   <input
@@ -182,7 +182,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                     onChange={e => { setHeightIn(e.target.value); setBmiSliderActive(false); }}
                     className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
                   />
-                  <span className="absolute right-2 top-2.5 text-gray-400 text-sm">in</span>
+                  <span className="absolute right-2 top-2.5 text-gray-600 text-sm">in</span>
                 </div>
               </div>
             </div>
@@ -225,7 +225,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
               style={{ left: `${indicatorPct}%`, top: '50%', transform: 'translate(-50%, -50%)' }}
             />
           </div>
-          <div className="flex justify-between text-xs text-gray-400 mt-1 mb-4">
+          <div className="flex justify-between text-xs text-gray-600 mt-1 mb-4">
             <span>15</span>
             <span>18.5</span>
             <span>23</span>
@@ -233,7 +233,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
             <span>30</span>
             <span>40+</span>
           </div>
-          <p className="text-xs text-gray-400 italic mb-4">
+          <p className="text-xs text-gray-600 italic mb-4">
             WHO recommends lower BMI thresholds for South Asian populations (overweight ≥23, not
             ≥25) due to higher metabolic risk at lower BMI levels. [WHO Expert Consultation, Lancet,
             2004]
@@ -246,7 +246,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
           </button>
         </div>
       ) : (
-        <p className="text-center text-gray-400 text-sm">
+        <p className="text-center text-gray-600 text-sm">
           Enter your weight and height above to calculate your BMI
         </p>
       )}
@@ -338,7 +338,7 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
                 onChange={e => setWaistCm(e.target.value)}
                 className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
               />
-              <span className="absolute right-3 top-2.5 text-gray-400 text-sm">cm</span>
+              <span className="absolute right-3 top-2.5 text-gray-600 text-sm">cm</span>
             </div>
           ) : (
             <div className="relative">
@@ -349,7 +349,7 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
                 onChange={e => setWaistInches(e.target.value)}
                 className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
               />
-              <span className="absolute right-3 top-2.5 text-gray-400 text-sm">in</span>
+              <span className="absolute right-3 top-2.5 text-gray-600 text-sm">in</span>
             </div>
           )}
         </div>
@@ -365,9 +365,9 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
               onChange={e => setHeightForRatio(e.target.value)}
               className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
             />
-            <span className="absolute right-3 top-2.5 text-gray-400 text-sm">cm</span>
+            <span className="absolute right-3 top-2.5 text-gray-600 text-sm">cm</span>
           </div>
-          <p className="text-xs text-gray-400 mt-1">Used to calculate waist-to-height ratio</p>
+          <p className="text-xs text-gray-600 mt-1">Used to calculate waist-to-height ratio</p>
         </div>
       </div>
 
@@ -410,7 +410,7 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
                   {whtRatio}
                 </span>
               </div>
-              <div className="text-xs text-gray-400 mt-1">
+              <div className="text-xs text-gray-600 mt-1">
                 Healthy: under 0.5 · Caution: 0.5–0.6 · High risk: above 0.6
                 &nbsp;[Ashwell et al., Nutrition Research Reviews, 2010]
               </div>
@@ -441,7 +441,7 @@ function WaistCalculator({ onSelect, savedHeightCm }: WaistCalculatorProps) {
           </button>
         </div>
       ) : (
-        <p className="text-center text-gray-400 text-sm">
+        <p className="text-center text-gray-600 text-sm">
           Enter your waist measurement above
         </p>
       )}
@@ -518,7 +518,7 @@ const ACTION_TEXT: Record<string, ReactNode> = {
     <span>
       30 minutes of moderate cardio (walking, cycling, swimming) 5 days per week reduces resting
       heart rate by 5–10 bpm within 6–8 weeks.{' '}
-      <span className="text-gray-400 text-xs italic">[AHA Physical Activity Guidelines, 2018]</span>
+      <span className="text-gray-600 text-xs italic">[AHA Physical Activity Guidelines, 2018]</span>
     </span>
   ),
   pushups: (
@@ -546,7 +546,7 @@ const ACTION_TEXT: Record<string, ReactNode> = {
     <span>
       Set a fixed bedtime alarm tonight. Sleep consistency — same time every night — is the single
       highest-impact sleep intervention according to chronobiology research.{' '}
-      <span className="text-gray-400 text-xs italic">[European Heart Journal, 2023]</span>
+      <span className="text-gray-600 text-xs italic">[European Heart Journal, 2023]</span>
     </span>
   ),
   flexibility: (
@@ -554,7 +554,7 @@ const ACTION_TEXT: Record<string, ReactNode> = {
       5 minutes of forward fold stretching daily.{' '}
       <span className="font-medium">Arterial stiffness</span> (hardening of blood vessels)
       measurably improves with consistent flexibility training over 8–12 weeks.{' '}
-      <span className="text-gray-400 text-xs italic">[Yamamoto et al., EJPC, 2009]</span>
+      <span className="text-gray-600 text-xs italic">[Yamamoto et al., EJPC, 2009]</span>
     </span>
   ),
   memory: (
@@ -577,7 +577,7 @@ const ACTION_TEXT: Record<string, ReactNode> = {
       A 5% reduction in body weight produces clinically meaningful improvements in blood pressure,
       blood sugar, and cardiovascular risk markers. The Mediterranean diet pattern shows the
       strongest evidence for sustainable weight management.{' '}
-      <span className="text-gray-400 text-xs italic">[PREDIMED Study, NEJM, 2013]</span>
+      <span className="text-gray-600 text-xs italic">[PREDIMED Study, NEJM, 2013]</span>
     </span>
   ),
   waist: (
@@ -593,7 +593,7 @@ const ACTION_TEXT: Record<string, ReactNode> = {
       Blood pressure responds to: reduced sodium intake, daily walking, stress management, and the
       DASH diet. A 5 mmHg reduction in systolic BP reduces stroke risk by 14% and heart disease
       risk by 9%. Please consult a physician if your reading is 140+.{' '}
-      <span className="text-gray-400 text-xs italic">[WHO, 2023]</span>
+      <span className="text-gray-600 text-xs italic">[WHO, 2023]</span>
     </span>
   ),
   energy: (
@@ -628,7 +628,7 @@ const FAQ_ITEMS: FaqItem[] = [
         who are both 50 years old chronologically can have biological ages of 40 and 65 respectively,
         depending on their genetics, lifestyle, and health habits. Biological age is a significantly
         stronger predictor of mortality and disease risk than chronological age.{' '}
-        <span className="text-gray-400 text-xs">[Journal of Gerontology, 2025]</span>
+        <span className="text-gray-600 text-xs">[Journal of Gerontology, 2025]</span>
       </>
     ),
   },
@@ -722,7 +722,7 @@ function ScientificReferences() {
         </ol>
       )}
       {open && (
-        <p className="text-xs text-gray-400 mt-3 italic text-center">
+        <p className="text-xs text-gray-600 mt-3 italic text-center">
           Data last reviewed: June 2026. BornClock updates scientific references annually to reflect
           current evidence.
         </p>
@@ -750,9 +750,9 @@ function FAQSection() {
             >
               <span className="font-medium text-sm text-gray-900">{item.q}</span>
               {open === i ? (
-                <ChevronUp className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
+                <ChevronUp className="w-4 h-4 text-gray-600 flex-shrink-0 ml-2" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
+                <ChevronDown className="w-4 h-4 text-gray-600 flex-shrink-0 ml-2" />
               )}
             </button>
             {open === i && (
@@ -1053,7 +1053,7 @@ const BiologicalAge = () => {
             </div>
 
             {/* Gold standard note */}
-            <p className="text-xs italic text-gray-400 text-center max-w-2xl mx-auto mb-4">
+            <p className="text-xs italic text-gray-600 text-center max-w-2xl mx-auto mb-4">
               ⚕️ The clinical gold standard for biological age — DNA methylation analysis (Horvath
               Epigenetic Clock, Genome Biology, 2013) — requires a laboratory blood sample. This
               assessment uses validated self-report proxy biomarkers that correlate strongly with
@@ -1208,7 +1208,7 @@ const BiologicalAge = () => {
 
               {/* Source citation badge */}
               {(q.sourceLabel || q.source) && (
-                <p className="text-xs text-gray-400 mt-4 text-center italic">
+                <p className="text-xs text-gray-600 mt-4 text-center italic">
                   [{q.sourceLabel || q.source}]
                 </p>
               )}
@@ -1304,7 +1304,7 @@ const BiologicalAge = () => {
                                   −{Math.abs(adjustment)} yrs
                                 </span>
                               ) : adjustment === 0 ? (
-                                <span className="text-gray-400">Neutral</span>
+                                <span className="text-gray-600">Neutral</span>
                               ) : (
                                 <span className="text-red-500">+{adjustment} yrs</span>
                               )}
@@ -1369,9 +1369,9 @@ const BiologicalAge = () => {
                             </span>
                           </div>
                           {isOpen ? (
-                            <ChevronUp className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                            <ChevronUp className="w-4 h-4 text-gray-600 flex-shrink-0" />
                           ) : (
-                            <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                            <ChevronDown className="w-4 h-4 text-gray-600 flex-shrink-0" />
                           )}
                         </button>
                         {isOpen && (
@@ -1391,7 +1391,7 @@ const BiologicalAge = () => {
                               </p>
                             )}
                             {(row.sourceLabel || row.source) && (
-                              <p className="text-xs text-gray-400 italic">
+                              <p className="text-xs text-gray-600 italic">
                                 Source: {row.sourceLabel || row.source}
                               </p>
                             )}

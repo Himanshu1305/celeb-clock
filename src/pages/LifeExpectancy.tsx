@@ -537,7 +537,7 @@ const LifeExpectancy = () => {
                   <div className="space-y-2">
                     <Label htmlFor="birthdate-life" className="text-base font-semibold flex items-center gap-2">
                       <CalendarIcon className="h-4 w-4" /> Enter Your Birth Date
-                      <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-bold">Required</span>
+                      <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">Required</span>
                     </Label>
                     <p className="text-sm text-muted-foreground mb-3">Your date of birth is required to calculate your personalised life expectancy forecast.</p>
                     <SavedDateOffer dobIso={rawDateInput} onUseSaved={iso => { setRawDateInput(iso); setBirthDate(new Date(iso + 'T12:00:00')); }} prefix="life-expectancy" />
@@ -830,7 +830,7 @@ const LifeExpectancy = () => {
                   </p>
                 </>
               ) : (
-                <p className="text-xs text-muted-foreground/70 text-center">
+                <p className="text-xs text-muted-foreground text-center">
                   🔒 Export Longevity Blueprint and Copy Summary are premium features.{' '}
                   <a href="/upgrade" className="text-primary underline font-semibold">Upgrade →</a>
                 </p>
@@ -896,7 +896,7 @@ const LifeExpectancy = () => {
                     </strong>{' '}
                     to your forecast.
                     {!isPremium && (
-                      <span className="text-xs text-gray-400 ml-1">(unlock to see)</span>
+                      <span className="text-xs text-gray-600 ml-1">(unlock to see)</span>
                     )}
                   </p>
                 </div>
@@ -927,16 +927,16 @@ const LifeExpectancy = () => {
                     </div>
                     <div className="mt-4 grid grid-cols-3 gap-3">
                       <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
-                        <p className="text-xs text-gray-400 mb-1">Current Forecast</p>
+                        <p className="text-xs text-gray-600 mb-1">Current Forecast</p>
                         <p className="text-xl font-black text-[#2F6FB0]">{longevityResult.totalForecast?.toFixed(1)} yrs</p>
                       </div>
                       <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
-                        <p className="text-xs text-gray-400 mb-1">Realistic Gain</p>
+                        <p className="text-xs text-gray-600 mb-1">Realistic Gain</p>
                         <p className="text-xl font-black text-green-600">+{realisticGain} yrs</p>
-                        <p className="text-xs text-gray-400">if top factors improved</p>
+                        <p className="text-xs text-gray-600">if top factors improved</p>
                       </div>
                       <div className="bg-white rounded-xl p-3 border border-green-200 text-center">
-                        <p className="text-xs text-gray-400 mb-1">Retake In</p>
+                        <p className="text-xs text-gray-600 mb-1">Retake In</p>
                         <p className="text-xl font-black text-[#2F6FB0]">90 days</p>
                       </div>
                     </div>
@@ -1012,7 +1012,7 @@ const LifeExpectancy = () => {
                   <h2 className="text-base font-black text-gray-900">Scientific Foundation</h2>
                   <p className="text-xs text-gray-500 mt-0.5">The research behind your forecast — click to expand</p>
                 </div>
-                <span className="text-gray-400 text-sm">▼</span>
+                <span className="text-gray-600 text-sm">▼</span>
               </summary>
               <div className="px-5 pb-5 space-y-4">
                 <div className="bg-white rounded-xl p-4 border border-[#2F6FB0]/30">
@@ -1177,7 +1177,7 @@ const LifeExpectancy = () => {
         </section>
         <AuthorBio />
         <div className="max-w-2xl mx-auto px-4 py-4 text-center">
-          <p className="text-xs text-gray-400 leading-relaxed">
+          <p className="text-xs text-gray-600 leading-relaxed">
             ⚠️ This calculator provides statistical projections based on WHO life tables and peer-reviewed research (UN World Population Prospects 2024). Results are for informational and motivational purposes only — not medical advice. Actual lifespan is influenced by many factors beyond any model's scope including disease, accidents, genetics, and environmental conditions. Consult a qualified healthcare professional for personalized medical guidance.
           </p>
         </div>

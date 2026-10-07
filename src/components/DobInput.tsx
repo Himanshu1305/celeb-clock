@@ -213,7 +213,7 @@ export function DobInput({ value, onChange, onValidChange, label = 'Date of birt
       </div>
       {showError
         ? <p className="mt-1.5 text-sm text-rose-600" role="alert">{error}</p>
-        : <p className="mt-1.5 text-xs text-gray-400">DD · MM · YYYY — e.g. 02 · 05 · 1985</p>}
+        : <p className="mt-1.5 text-xs text-gray-600">DD · MM · YYYY — e.g. 02 · 05 · 1985</p>}
     </div>
   );
 }

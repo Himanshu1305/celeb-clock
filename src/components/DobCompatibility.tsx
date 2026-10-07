@@ -102,7 +102,7 @@ export default function DobCompatibility() {
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
         <div>
-          <label className="text-xs text-gray-500 mb-1 block" htmlFor="compat-dob-a">Person A — date of birth</label>
+          <label className="text-xs text-gray-600 mb-1 block" htmlFor="compat-dob-a">Person A — date of birth</label>
           <input
             id="compat-dob-a"
             data-testid="compat-dob-a"
@@ -113,7 +113,7 @@ export default function DobCompatibility() {
           />
         </div>
         <div>
-          <label className="text-xs text-gray-500 mb-1 block" htmlFor="compat-dob-b">Person B — date of birth</label>
+          <label className="text-xs text-gray-600 mb-1 block" htmlFor="compat-dob-b">Person B — date of birth</label>
           <input
             id="compat-dob-b"
             data-testid="compat-dob-b"
@@ -136,13 +136,13 @@ export default function DobCompatibility() {
       {res && (
         <div className="mt-6 space-y-4">
           <div className="text-center">
-            <p className="text-sm text-gray-500">Overall compatibility</p>
+            <p className="text-sm text-gray-600">Overall compatibility</p>
             <p data-testid="compat-overall-score" className="text-4xl font-black text-[#6E5AA6]">{res.overall}%</p>
           </div>
           <Dimension id="compat-zodiac" icon="♈" title="Western Zodiac" score={res.zodiac.score} detail={res.zodiac.text} />
           <Dimension id="compat-rashi" icon="🕉️" title="Vedic Rashi" score={res.rashi.score} detail={res.rashi.text} />
           <Dimension id="compat-lifepath" icon="🔢" title="Life Path" score={res.lifepath.score} detail={res.lifepath.text} />
-          <p data-testid="compat-nakshatra-disclaimer" className="text-xs text-gray-500 italic">
+          <p data-testid="compat-nakshatra-disclaimer" className="text-xs text-gray-600 italic">
             Nakshatra (Guna Milan) compatibility needs both people's exact birth times — get it in the full{' '}
             <a href="/kundali-match" className="text-[#6E5AA6] underline">Kundali match</a>.
           </p>

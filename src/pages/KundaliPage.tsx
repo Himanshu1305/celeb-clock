@@ -264,7 +264,7 @@ export default function KundaliPage() {
 
               <div className="inline-actions" style={{ marginTop: 18 }}>
                 <a data-testid="kundali-whatsapp-share" href={whatsappHref} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2" style={{ background: '#25D366', color: '#fff', fontWeight: 600, borderRadius: 999, padding: '10px 18px', fontSize: 13 }}>
+                  className="inline-flex items-center gap-2" style={{ background: '#15803D', color: '#fff', fontWeight: 600, borderRadius: 999, padding: '10px 18px', fontSize: 13 }}>
                   Share on WhatsApp
                 </a>
                 <Link className="btn secondary" to="/birthday-report/gift">Gift a Kundali ({price}) →</Link>

@@ -84,7 +84,7 @@ export function CelebrityIndexPage() {
                     className="p-4 bg-white rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors"
                   >
                     <div className="font-bold text-sm text-gray-900">{cfg.label}</div>
-                    <div className="text-xs text-gray-500">{cfg.label} celebrity profiles</div>
+                    <div className="text-xs text-gray-600">{cfg.label} celebrity profiles</div>
                   </Link>
                 );
               })}
@@ -104,7 +104,7 @@ export function CelebrityIndexPage() {
                     className="p-4 bg-[#6E5AA6]/10 rounded-xl border border-[#6E5AA6]/30 hover:border-[#6E5AA6]/30 transition-colors text-center"
                   >
                     <div className="font-semibold text-sm text-gray-900">{f.name}</div>
-                    <div className="text-xs text-gray-500">{f.category}</div>
+                    <div className="text-xs text-gray-600">{f.category}</div>
                   </Link>
                 ))}
               </div>

@@ -71,11 +71,11 @@ export default function Pricing() {
           <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 flex flex-col">
             <div className="text-lg font-bold text-gray-700 mb-1">Free</div>
             <div className="text-4xl font-black text-gray-900 mb-1">{currency === 'INR' ? '₹0' : '$0'}</div>
-            <div className="text-gray-400 text-sm mb-5">forever</div>
+            <div className="text-gray-600 text-sm mb-5">forever</div>
             <ul className="space-y-2.5 mb-6 flex-1">
               {FREE_FEATURES.map(f => (
                 <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
-                  <Check size={14} className="text-gray-400 flex-shrink-0" /> {f}
+                  <Check size={14} className="text-gray-600 flex-shrink-0" /> {f}
                 </li>
               ))}
             </ul>
@@ -87,7 +87,7 @@ export default function Pricing() {
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#0E2238] text-white text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</div>
             <div className="text-lg font-bold text-[#4C3E78] mb-1">Premium</div>
             <div className="text-4xl font-black text-gray-900 mb-1">{monthly.amount}</div>
-            <div className="text-gray-400 text-sm">{monthly.period} · cancel anytime</div>
+            <div className="text-gray-600 text-sm">{monthly.period} · cancel anytime</div>
             {/* Both cadences from pricing.ts; saving computed from the constants. */}
             <div className="text-sm font-medium text-[#4C3E78] mb-5">
               or {subscriptionPrice('annual', currency)}/yr (save {formatMoney(annualSaving(currency), currency)})
@@ -112,14 +112,14 @@ export default function Pricing() {
             <div className="flex items-center gap-1.5 text-lg font-bold text-amber-700 mb-1"><Gift size={16} /> Birthday Blueprint</div>
             <div className="flex items-baseline gap-2 mb-1">
               <span className="text-4xl font-black text-gray-900">{reportPrice}</span>
-              <span className="text-xs font-semibold uppercase tracking-wide text-amber-600">Launch price</span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-amber-700">Launch price</span>
             </div>
-            <div className="text-gray-400 text-sm mb-5">one-time · or free with Premium credits</div>
+            <div className="text-gray-600 text-sm mb-5">one-time · or free with Premium credits</div>
             <ul className="space-y-2.5 mb-6 flex-1">
               {['Print-ready personalised PDF', `${REPORT_SECTION_COUNT} sections, one birth date`,
                 'Celebrity twins, zodiac, numerology, tarot', 'Print it or gift it'].map(f => (
                 <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
-                  <Check size={14} className="text-amber-500 flex-shrink-0" /> {f}
+                  <Check size={14} className="text-amber-700 flex-shrink-0" /> {f}
                 </li>
               ))}
             </ul>

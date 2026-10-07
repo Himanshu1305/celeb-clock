@@ -376,7 +376,17 @@ const RESTART_EVERY = 300;
 async function main() {
   // 1. Load routes
   const { getAllRoutes } = await import('./prerender-routes.mjs');
-  const routes = await getAllRoutes();
+  let routes = await getAllRoutes();
+  // Targeted re-run: PRERENDER_ONLY=/,/kundali renders just those routes onto the
+  // EXISTING dist/ (used to backfill a page the full run skipped when the 25-min budget
+  // was exhausted under machine load — the homepage is ordered last, so it is the first
+  // casualty). No-op when unset.
+  const ONLY = (process.env.PRERENDER_ONLY || '').split(',').map(s => s.trim()).filter(Boolean);
+  if (ONLY.length) {
+    const set = new Set(ONLY);
+    routes = routes.filter(r => set.has(r));
+    console.log(`\n🎯 PRERENDER_ONLY: ${routes.length} of requested ${ONLY.length} route(s): ${routes.join(', ')}`);
+  }
   console.log(`\n🚀 Prerender: ${routes.length} routes`);
 
   // 2. Launch chromium
@@ -504,7 +514,12 @@ async function main() {
   }
 }
 
-main().catch(err => {
+main().then(() => {
+  // Explicit exit: a lingering keep-alive handle (static server / puppeteer pipe) can keep
+  // the event loop alive after all work is done, hanging the `&&` build chain before
+  // generate-sitemap. The manifest is already flushed above, so exiting here is safe.
+  process.exit(0);
+}).catch(err => {
   console.error('Prerender fatal:', err);
   process.exit(0); // exit 0 — never fail the build
 });

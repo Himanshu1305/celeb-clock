@@ -16,7 +16,7 @@ export function WhatsAppShareButton({
       target="_blank"
       rel="noopener noreferrer"
       data-testid="whatsapp-share-btn"
-      className={`inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d]
+      className={`inline-flex items-center gap-2 bg-[#15803D] hover:bg-[#1ebe5d]
                   text-white font-semibold rounded-full px-4 py-2 text-sm
                   transition-colors ${className}`}
       aria-label="Share on WhatsApp"

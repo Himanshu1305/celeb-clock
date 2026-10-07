@@ -421,7 +421,7 @@ const BirthdayResults = () => {
                 <span className="text-3xl mb-1 block">👥</span>
                 <h3 className="font-bold text-foreground text-sm">{generation.name}</h3>
                 <p className="text-xs text-muted-foreground">Generation</p>
-                <p className="text-[10px] text-muted-foreground/70 mt-0.5">{generation.range}</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">{generation.range}</p>
                 <Link to={`/generation?name=${encodeURIComponent(generation.name)}`}
                   className="mt-2 text-xs text-blue-500 hover:underline inline-flex items-center justify-center gap-0.5">
                   Explore Generation →

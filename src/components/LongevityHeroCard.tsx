@@ -32,7 +32,7 @@ export function LongevityHeroCard({ result, optimizedForecast, userName }: Longe
       <div className="flex items-center justify-center gap-6 flex-wrap">
         <div className="text-center">
           <span className="text-[10px] uppercase font-bold text-muted-foreground block mb-1">Current Lifestyle</span>
-          <strong className="text-5xl font-black text-muted-foreground/70">{result.totalForecast}</strong>
+          <strong className="text-5xl font-black text-muted-foreground">{result.totalForecast}</strong>
           <span className="text-sm text-muted-foreground block mt-0.5">yrs</span>
           <span className="text-xs text-muted-foreground">({currentRemaining} yrs remaining)</span>
         </div>

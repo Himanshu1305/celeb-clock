@@ -29,7 +29,7 @@ function scrollToSection(id: string) {
 function TOCSidebar() {
   return (
     <nav className="space-y-1">
-      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">On This Page</p>
+      <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">On This Page</p>
       {TOC_ITEMS.map(item => (
         <button
           key={item.id}

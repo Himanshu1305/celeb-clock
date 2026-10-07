@@ -164,7 +164,7 @@ const BlogPostPage = () => {
                 <Calendar className="h-4 w-4" />
                 Published {new Date(post.publishedDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                 {post.updatedDate && (
-                  <span className="text-muted-foreground/70"> · Updated {new Date(post.updatedDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                  <span className="text-muted-foreground"> · Updated {new Date(post.updatedDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
                 )}
               </span>
             </div>

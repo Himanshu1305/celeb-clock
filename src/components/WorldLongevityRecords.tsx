@@ -94,7 +94,7 @@ export const WorldLongevityRecords = () => (
               )}
             </div>
             {'location' in record && record.location && 'years' in record && record.years && (
-              <p className="text-[10px] text-muted-foreground/70">{record.location} · {record.years}</p>
+              <p className="text-[10px] text-muted-foreground">{record.location} · {record.years}</p>
             )}
             <p className="text-[10px] text-muted-foreground leading-snug">{record.detail}</p>
             {'learn' in record && record.learn && (

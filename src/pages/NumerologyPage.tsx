@@ -119,14 +119,14 @@ export default function NumerologyPage() {
           <div className="space-y-4 text-muted-foreground leading-relaxed">
             <p>Sum every individual digit of your full date of birth, then reduce to a single digit (stopping at 11, 22, or 33 — Master Numbers).</p>
             <div className="bg-slate-900 dark:bg-slate-950 text-green-400 rounded-xl px-5 py-4 font-mono text-sm leading-relaxed">
-              <p className="text-muted-foreground text-xs mb-2"># Example: Albert Einstein, born March 14, 1879</p>
+              <p className="text-slate-400 text-xs mb-2"># Example: Albert Einstein, born March 14, 1879</p>
               <p>Date: 0 3 · 1 4 · 1 8 7 9</p>
               <p>Sum: 0+3+1+4+1+8+7+9 = 33</p>
               <p className="text-amber-400">Result: Master Number 33 — The Master Teacher</p>
-              <p className="text-muted-foreground text-xs mt-2"># 33 is a Master Number → preserved, not reduced further</p>
+              <p className="text-slate-400 text-xs mt-2"># 33 is a Master Number → preserved, not reduced further</p>
             </div>
             <div className="bg-slate-900 dark:bg-slate-950 text-green-400 rounded-xl px-5 py-4 font-mono text-sm leading-relaxed">
-              <p className="text-muted-foreground text-xs mb-2"># Example: Taylor Swift, born December 13, 1989</p>
+              <p className="text-slate-400 text-xs mb-2"># Example: Taylor Swift, born December 13, 1989</p>
               <p>Date: 1 2 · 1 3 · 1 9 8 9</p>
               <p>Sum: 1+2+1+3+1+9+8+9 = 34</p>
               <p>34 → 3+4 = 7</p>
@@ -153,7 +153,7 @@ export default function NumerologyPage() {
                     <div>
                       <p className="font-bold text-foreground text-sm">{nd.name}</p>
                       {nd.isMasterNumber && (
-                        <span className="text-xs text-amber-500">Master Number</span>
+                        <span className="text-xs text-amber-700">Master Number</span>
                       )}
                     </div>
                   </div>

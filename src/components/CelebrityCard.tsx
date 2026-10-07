@@ -147,7 +147,7 @@ export const CelebrityCard = ({ celebrity, index, dateHref, profileSlug }: Celeb
               {celebrity.occupation}
             </p>
             {celebrity.knownFor && (
-              <p className="text-[11px] text-muted-foreground/70 line-clamp-2" title={celebrity.knownFor}>
+              <p className="text-[11px] text-muted-foreground line-clamp-2" title={celebrity.knownFor}>
                 {celebrity.knownFor}
               </p>
             )}

@@ -41,7 +41,7 @@ const InfoTooltip = ({ content }: { content: string }) => (
     <Tooltip>
       <TooltipTrigger asChild>
         <span tabIndex={0} className="inline-flex cursor-help ml-1.5">
-          <Info className="w-3.5 h-3.5 text-muted-foreground/70" />
+          <Info className="w-3.5 h-3.5 text-muted-foreground" />
         </span>
       </TooltipTrigger>
       <TooltipContent className="max-w-xs text-xs leading-relaxed p-3">{content}</TooltipContent>
@@ -519,7 +519,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                   <span className="text-sm font-semibold text-muted-foreground">years old</span>
                 </div>
                 <p className="text-xs text-muted-foreground">Complete each step to reveal your personalized longevity forecast</p>
-                <p className="text-[10px] text-muted-foreground/70">Your data is saved as you progress — you will not lose your answers</p>
+                <p className="text-[10px] text-muted-foreground">Your data is saved as you progress — you will not lose your answers</p>
                 <div className="pt-1">
                   <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
                     <span>Step {step} of {totalSteps}</span>
@@ -570,7 +570,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                     <span className="text-lg font-bold text-primary">yrs</span>
                     {deltaLabel && step > 6 && (
                       <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full animate-fade-in-up ${
-                        deltaLabel.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'
+                        deltaLabel.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                       }`}>
                         {deltaLabel}
                       </span>

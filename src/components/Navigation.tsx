@@ -225,7 +225,7 @@ export const Navigation = () => {
           {!loading && !isPremium && !showTrialPill && (
             <Link
               to="/upgrade"
-              className="bg-[#C6A15B] text-[#0E2238] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
+              className="bg-[#C6A15B] !text-[#0E2238] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
             >
               Upgrade
             </Link>
@@ -234,7 +234,7 @@ export const Navigation = () => {
           {!loading && showTrialPill && (
             <Link
               to="/upgrade"
-              className="bg-[#C6A15B] text-[#0E2238] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
+              className="bg-[#C6A15B] !text-[#0E2238] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
             >
               Trial: {trialDaysRemaining}d left
             </Link>
@@ -295,7 +295,7 @@ export const Navigation = () => {
                   <Link
                     to="/upgrade"
                     onClick={closeMobile}
-                    className="flex items-center justify-center gap-2 w-full bg-[#C6A15B] text-[#0E2238] py-3 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
+                    className="flex items-center justify-center gap-2 w-full bg-[#C6A15B] !text-[#0E2238] py-3 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
                   >
                     <Crown className="w-4 h-4" /> Upgrade to Premium
                   </Link>

@@ -18,3 +18,11 @@
 .paj[data-category="vedic"]   { --accent-text:#6B4F1E; }
 .paj[data-category="mystic"]  { --accent-text:#4C3E78; }
 .paj[data-category="science"] { --accent-text:#237A60; }
+
+/* RC2 a11y: `.paj a{color:inherit}` (part-aj.css) makes links inherit the body ink,
+ * which also stripped the explicit foreground from FILLED button-links (shadcn
+ * `<Button asChild><Link>` and hand-styled `bg-* text-white` links), producing
+ * dark-on-dark buttons (e.g. blog primary CTAs, rose compatibility CTAs). Restore the
+ * explicit text colour by boosting specificity above `.paj a` — a[class].text-* beats a. */
+.paj a.text-white, .paj button.text-white { color:#FFFFFF; }
+.paj a.text-primary-foreground, .paj button.text-primary-foreground { color:hsl(var(--primary-foreground)); }

@@ -248,7 +248,7 @@ export default function CompatibilityPage() {
             </p>
           </div>
           {/* Western vs Vedic clarifier (shown on the calculator and every pair page) */}
-          <p className="text-xs text-gray-500 leading-relaxed mb-8">
+          <p className="text-xs text-gray-600 leading-relaxed mb-8">
             This uses the <strong>Western</strong> sun-sign tradition (element &amp; modality). Vedic matching
             (Ashta Koota / Guna Milan) is a different system based on Moon nakshatras and is not what this
             calculator computes.
@@ -259,7 +259,7 @@ export default function CompatibilityPage() {
             <div className="grid grid-cols-2 gap-3 mb-4">
               {[{ value: sign1, setter: setSign1, label: 'Sign 1' }, { value: sign2, setter: setSign2, label: 'Sign 2' }].map(({ value, setter, label }) => (
                 <div key={label}>
-                  <p className="text-xs text-gray-500 mb-1">{label}</p>
+                  <p className="text-xs text-gray-600 mb-1">{label}</p>
                   <select
                     value={value}
                     onChange={e => setter(e.target.value)}
@@ -488,7 +488,7 @@ export default function CompatibilityPage() {
                   <button
                     key={s}
                     onClick={() => setBrowseSign(s)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-semibold border transition-colors ${browseSign === s ? 'bg-rose-600 text-white border-rose-600' : 'bg-white text-gray-700 border-gray-300 hover:border-rose-300'}`}
+                    className={`px-3 py-1.5 rounded-full text-sm font-semibold border transition-colors ${browseSign === s ? 'bg-rose-700 text-white border-rose-700' : 'bg-white text-gray-700 border-gray-300 hover:border-rose-300'}`}
                   >
                     {SIGN_EMOJIS[s]} {s}
                   </button>
@@ -564,7 +564,7 @@ export default function CompatibilityPage() {
                 <div key={title} className="border border-gray-200 rounded-xl p-4">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-bold text-gray-900 text-sm">{title}</span>
-                    <span className="text-sm font-bold text-gray-500">{score}</span>
+                    <span className="text-sm font-bold text-gray-600">{score}</span>
                   </div>
                   <p className="text-xs text-gray-600 leading-relaxed">{desc}</p>
                 </div>
@@ -585,7 +585,7 @@ export default function CompatibilityPage() {
           </div>
 
           <div className="mt-8 pt-6 border-t border-gray-100">
-            <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related Tools</p>
+            <p className="text-sm font-semibold text-gray-600 uppercase mb-3">Related Tools</p>
             <div className="grid grid-cols-2 gap-2">
               {[
                 { text: 'Western Zodiac', href: '/zodiac' },

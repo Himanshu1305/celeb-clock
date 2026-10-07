@@ -68,7 +68,7 @@ export function BirthDetailsForm({
     <div data-testid={`${p}-form`} className="bg-card/60 border border-border rounded-xl p-5 space-y-4">
       <div>
         <label className="block text-xs text-muted-foreground mb-1" htmlFor={`${p}-name`}>
-          Your name <span className="text-muted-foreground/70">(optional — used only to personalise headings, never in the calculation)</span>
+          Your name <span className="text-muted-foreground">(optional — used only to personalise headings, never in the calculation)</span>
         </label>
         <input id={`${p}-name`} data-testid={`${p}-name`} type="text" value={name} maxLength={NAME_MAX}
                onChange={e => setName(e.target.value)} placeholder="e.g. Priya"
