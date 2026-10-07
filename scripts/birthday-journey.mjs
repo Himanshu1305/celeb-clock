@@ -61,14 +61,18 @@ function rec(name, ok, detail) { results.push({ name, ok, detail }); console.log
   await p.close();
 }
 
-// 4. INVALID — soft-404: invalid born-on does not crash (renders a valid page).
+// 4. INVALID — RC2 Fix 3: an impossible date now returns a REAL 404 status (not a
+// soft-200) while the styled page still renders and nothing crashes. The browser's
+// inherent "Failed to load resource: 404" network notice for the 404 document is the
+// expected consequence of the real 404, so it is excluded from the JS-error check.
 {
   const { p, errs, status } = await page('/born-on/february-30');
   const url = p.url();
   const h1 = (await p.locator('h1').first().innerText().catch(() => '')).trim();
-  const ok = errs.length === 0 && !!h1; // no crash, something renders
+  const jsErrs = errs.filter(e => !/Failed to load resource.*404/i.test(e));
+  const ok = status === 404 && !!h1 && jsErrs.length === 0; // real 404 + styled page, no JS crash
   await p.screenshot({ path: `${out}/04-invalid-bornon.png` });
-  rec('Invalid: /born-on/february-30 no crash (soft-404)', ok, `httpStatus=${status} landedOn=${url.replace(BASE, '')} h1="${h1}"`);
+  rec('Invalid: /born-on/february-30 → real 404 + styled page (Fix 3)', ok, `httpStatus=${status} landedOn=${url.replace(BASE, '')} h1="${h1}" jsErrs=${jsErrs.length}`);
   await p.close();
 }
 

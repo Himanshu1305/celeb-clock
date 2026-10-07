@@ -55,7 +55,7 @@
     "label": "Vedic Zodiac"
   },
   {
-    "route": "/vedic-zodiac/mesha",
+    "route": "/vedic-zodiac/mesh",
     "theme": "vedic",
     "label": "Vedic Zodiac — Mesha"
   },

@@ -229,7 +229,7 @@ export default function NumerologyNumber() {
                 <Link key={n} to={`/numerology/${n}`}
                   className="flex flex-col items-center gap-1 p-3 rounded-xl border border-border bg-card hover:bg-muted transition-colors text-center">
                   <span className="text-lg font-bold" style={{ color: nd?.hexColor }}>{n}</span>
-                  {nd?.isMasterNumber && <span className="text-[10px] text-amber-500">Master</span>}
+                  {nd?.isMasterNumber && <span className="text-[10px] text-amber-700">Master</span>}
                 </Link>
               );
             })}

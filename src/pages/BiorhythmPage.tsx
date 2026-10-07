@@ -120,7 +120,7 @@ export default function BiorhythmPage() {
               </div>
               <button
                 onClick={handleCalculate}
-                className="bg-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-teal-700 transition-colors"
+                className="bg-teal-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-teal-700 transition-colors"
               >
                 Calculate →
               </button>
@@ -143,10 +143,10 @@ export default function BiorhythmPage() {
                   const status = getBiorhythmStatus(value);
                   return (
                     <div key={label} className={`rounded-2xl p-4 ${status.bgColor} text-center`}>
-                      <p className="text-xs text-gray-500 mb-1">{label}</p>
+                      <p className="text-xs text-gray-600 mb-1">{label}</p>
                       <p className={`text-3xl font-black ${color}`}>{value > 0 ? '+' : ''}{value}%</p>
                       <span className={`text-xs font-semibold ${status.color}`}>{status.label}</span>
-                      <p className="text-xs text-gray-400 mt-1">{cycle}</p>
+                      <p className="text-xs text-gray-600 mt-1">{cycle}</p>
                     </div>
                   );
                 })}
@@ -187,7 +187,7 @@ export default function BiorhythmPage() {
                 </div>
               )}
 
-              <div className="bg-teal-600 rounded-2xl p-6 text-center text-white">
+              <div className="bg-teal-700 rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">Get the complete Birthday Intelligence Report</p>
                 <p className="text-teal-200 text-sm mb-4">Your biorhythm analysis + moon sign + tarot card + name numerology + 12 more sections.</p>
                 <Link to="/birthday-report" className="inline-block bg-white text-teal-600 px-8 py-3 rounded-xl font-semibold hover:bg-teal-50 transition-colors">
@@ -235,7 +235,7 @@ export default function BiorhythmPage() {
           </div>
 
           <div className="mt-8 pt-6 border-t border-gray-100">
-            <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related Tools</p>
+            <p className="text-sm font-semibold text-gray-600 uppercase mb-3">Related Tools</p>
             <div className="grid grid-cols-2 gap-2">
               {[
                 { text: 'Life Expectancy Calculator', href: '/life-expectancy' },

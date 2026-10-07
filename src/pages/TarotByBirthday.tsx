@@ -153,7 +153,7 @@ function InteractiveTarotDraw({ onCardDrawn, drawnCard }: InteractiveTarotDrawPr
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="mt-2 text-xs text-gray-400 hover:text-gray-600 underline"
+          className="mt-2 text-xs text-gray-600 hover:text-gray-600 underline"
         >
           Draw again
         </button>
@@ -202,7 +202,7 @@ function InteractiveTarotDraw({ onCardDrawn, drawnCard }: InteractiveTarotDrawPr
         ))}
       </div>
 
-      <p className="text-center text-xs text-gray-400 mt-4">
+      <p className="text-center text-xs text-gray-600 mt-4">
         Each card is unique — no two draws are the same
       </p>
     </div>
@@ -492,7 +492,7 @@ export default function TarotByBirthday() {
                       <span className="text-2xl shrink-0">{card.emoji}</span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs text-gray-400 font-medium">Card {card.number}</span>
+                          <span className="text-xs text-gray-600 font-medium">Card {card.number}</span>
                           <span className="font-bold text-gray-900">{card.name}</span>
                         </div>
                         <div className="flex flex-wrap gap-1 mt-1">
@@ -501,7 +501,7 @@ export default function TarotByBirthday() {
                           ))}
                         </div>
                       </div>
-                      <span className={`text-gray-400 text-sm transition-transform shrink-0 ${isOpen ? 'rotate-180' : ''}`}>▾</span>
+                      <span className={`text-gray-600 text-sm transition-transform shrink-0 ${isOpen ? 'rotate-180' : ''}`}>▾</span>
                     </button>
 
                     {isOpen && (

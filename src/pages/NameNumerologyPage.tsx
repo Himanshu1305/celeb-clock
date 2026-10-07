@@ -113,7 +113,7 @@ export default function NameNumerologyPage() {
                 Calculate →
               </button>
             </div>
-            <p className="text-xs text-gray-400">Use your full name as given at birth, including middle name(s), for the most accurate reading.</p>
+            <p className="text-xs text-gray-600">Use your full name as given at birth, including middle name(s), for the most accurate reading.</p>
           </div>
 
           {result && (

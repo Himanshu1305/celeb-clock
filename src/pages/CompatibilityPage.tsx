@@ -377,7 +377,7 @@ export default function CompatibilityPage() {
               {/* Composed, pair-specific long-form — Love (planets) · Friendship (element+aspect) · Work (modality) */}
               <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-4">
                 <h2 className="text-xl font-bold text-gray-900 mb-1">{calcSigns.s1} &amp; {calcSigns.s2}: the full reading</h2>
-                <p className="text-xs text-gray-400 mb-5">
+                <p className="text-xs text-gray-600 mb-5">
                   {calcSigns.s1} is ruled by {RULING_PLANET[calcSigns.s1 as Sign]}, {calcSigns.s2} by {RULING_PLANET[calcSigns.s2 as Sign]} — and on the zodiac wheel they form a {aspectName(calcSigns.s1 as Sign, calcSigns.s2 as Sign)}.
                 </p>
 
@@ -468,9 +468,9 @@ export default function CompatibilityPage() {
                 ))}
               </div>
 
-              <div className="bg-rose-600 rounded-2xl p-6 text-center text-white">
+              <div className="bg-rose-700 rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">See your compatibility profile in your Birthday Report</p>
-                <p className="text-rose-200 text-sm mb-4">Your top compatible signs + moon sign + tarot card + name numerology + more.</p>
+                <p className="text-rose-100 text-sm mb-4">Your top compatible signs + moon sign + tarot card + name numerology + more.</p>
                 <Link to="/birthday-report" className="inline-block bg-white text-rose-600 px-8 py-3 rounded-xl font-semibold hover:bg-rose-50 transition-colors">
                   Generate My Report → {reportPriceLabel}
                 </Link>
