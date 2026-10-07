@@ -50,16 +50,34 @@ function BornToday() {
   const mmdd = `${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
   const [people, setPeople] = useState<CelebrityBirthdayResult[]>([]);
   const [total, setTotal] = useState<number | null>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [active, setActive] = useState(false);
+  // TBT fix: this band is below the fold and its content is client-only (never
+  // prerendered), so defer the main-thread/network work — celebrity ranking, a Supabase
+  // count and Wikipedia image fetches — until the band is near the viewport. Nothing is
+  // removed from the prerendered HTML; only the JS execution is moved off the initial
+  // critical path. The reserved minHeight keeps CLS at 0 while it's idle.
   useEffect(() => {
+    const el = ref.current;
+    if (!el || active) return;
+    if (typeof IntersectionObserver === 'undefined') { setActive(true); return; }
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some(e => e.isIntersecting)) { setActive(true); io.disconnect(); }
+    }, { rootMargin: '200px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [active]);
+  useEffect(() => {
+    if (!active) return;
     let c = false;
     getRankedBirthdayCelebrities(mmdd, null, 3).then(r => { if (!c) setPeople(r); }).catch(() => {});
     supabase.from('celebrity_sitelinks').select('*', { count: 'exact', head: true }).eq('birth_month_day', mmdd)
       .then(({ count }) => { if (!c && typeof count === 'number') setTotal(count); });
     return () => { c = true; };
-  }, [mmdd]);
+  }, [active, mmdd]);
   const moreLabel = total != null ? `+${Math.max(0, total - people.length)} more today →` : 'See everyone born today →';
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 22, padding: '12px 24px', background: '#FFFFFF', borderBottom: '1px solid #E4DCC8', flexWrap: 'wrap', minHeight: 60 }}>
+    <div ref={ref} style={{ display: 'flex', alignItems: 'center', gap: 22, padding: '12px 24px', background: '#FFFFFF', borderBottom: '1px solid #E4DCC8', flexWrap: 'wrap', minHeight: 60 }}>
       <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.7px', color: '#B5432A', whiteSpace: 'nowrap' }}>
         BORN TODAY · {now.getDate()} {MONTHS[now.getMonth()].toUpperCase()}
       </div>

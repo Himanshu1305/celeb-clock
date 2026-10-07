@@ -1,8 +1,12 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, lazy, Suspense } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { KundaliChart } from '@/components/KundaliChart';
+// TBT fix: the chart + the reading render only AFTER the visitor generates a chart
+// (behind `data`/`reading`), so split them into their own chunks that load on demand.
+// This keeps them out of the initial /kundali route bundle (lower TBT) without changing
+// the chart output; the prerendered intro/form/H1 (eager imports below) are untouched.
+const KundaliChart = lazy(() => import('@/components/KundaliChart').then(m => ({ default: m.KundaliChart })));
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
@@ -15,8 +19,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { mergeProfile } from '@/services/savedProfile';
 import { fetchKundali, buildInterpretationBlocks, type KundaliData } from '@/services/kundaliService';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
-import { VedicReading } from '@/components/reading/VedicReading';
-import { PastPeriodReflection } from '@/components/reading/PastPeriodReflection';
+const VedicReading = lazy(() => import('@/components/reading/VedicReading').then(m => ({ default: m.VedicReading })));
+const PastPeriodReflection = lazy(() => import('@/components/reading/PastPeriodReflection').then(m => ({ default: m.PastPeriodReflection })));
 import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
@@ -229,7 +233,9 @@ export default function KundaliPage() {
             <section className="section white">
               <div className="section-head"><div><span className="eyebrow">The chart</span><h2>Your birth chart.</h2></div></div>
               <div className="chart-with-stats">
-                <KundaliChart lagnaSignIndex={data.lagna.signIndex} planets={data.planets} />
+                <Suspense fallback={<div style={{ width: 300, height: 300 }} aria-hidden="true" />}>
+                  <KundaliChart lagnaSignIndex={data.lagna.signIndex} planets={data.planets} />
+                </Suspense>
                 <div className="chart-stats">
                   <div className="chart-stat" data-testid="kundali-lagna"><small><TermTip id="lagna">Lagna</TermTip></small><strong>{data.lagna.sign}</strong></div>
                   <div className="chart-stat"><small><TermTip id="rashi">Rashi</TermTip></small><strong>{data.rashi}</strong><span>{data.rashi_devanagari}</span></div>
@@ -288,10 +294,12 @@ export default function KundaliPage() {
               {readingFailed && !readingLoading && (
                 <p data-testid="reading-failed" className="result-annotation">Your written reading couldn’t be loaded just now, but your full chart above is ready. Please try again in a little while for the narrated version.</p>
               )}
-              {reading && <VedicReading payload={reading} />}
-              {reading && (usingSaved || saveChecked) && (
-                <PastPeriodReflection reflections={reading.reflections} dob={readingDob} hasSavedProfile={usingSaved || saveChecked} />
-              )}
+              <Suspense fallback={<p className="subtle" aria-hidden="true">Preparing your reading…</p>}>
+                {reading && <VedicReading payload={reading} />}
+                {reading && (usingSaved || saveChecked) && (
+                  <PastPeriodReflection reflections={reading.reflections} dob={readingDob} hasSavedProfile={usingSaved || saveChecked} />
+                )}
+              </Suspense>
               {loaded && !!profile && <ReadingHistory dob={profile.dob} refreshKey={historyKey} />}
             </section>
           </>
