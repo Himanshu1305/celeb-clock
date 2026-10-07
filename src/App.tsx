@@ -197,6 +197,7 @@ import { CurrencyAdminToggle } from "@/components/CurrencyAdminToggle";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
 import { MissingStateModal } from "@/components/MissingStateModal";
 import { CookieConsent } from "@/components/CookieConsent";
+import { WebVitalsReporter } from "@/components/WebVitalsReporter";
 import { ProfileConflictNotice } from "@/components/ProfileConflictNotice";
 import { BirthDateProvider } from "./context/BirthDateContext";
 
@@ -209,6 +210,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <CookieConsent />
+        <WebVitalsReporter />
         <ProfileConflictNotice />
         <BirthDateProvider>
           <BrowserRouter>

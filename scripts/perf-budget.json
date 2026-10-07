@@ -1,0 +1,13 @@
+{
+  "_comment": "Performance budget for the PR-only CI gate (FINAL §2 / RC2 Fix 5). The PR workflow NEVER deploys. Hard runtime targets: LCP < 2000ms, CLS < 0.05, TBT < 200ms, plus an initial-JS-size ceiling (jsMax, bytes over the wire). The two JS-heavy layouts (/ and /kundali) carry documented ratchet ceilings (current measured + small headroom) so the gate blocks REGRESSIONS while the TBT/JS debt is driven down; lower these as below-the-fold is deferred and the chart bundle is split. jsMax ceilings are set from the local build:dev measurement.",
+  "targets": { "lcpMax": 2000, "clsMax": 0.05, "tbtMax": 200, "jsMax": 1100000 },
+  "pages": [
+    { "route": "/age-calculator/", "layout": "tool" },
+    { "route": "/kundali/", "layout": "report", "tbtMax": 380, "jsMax": 900000 },
+    { "route": "/", "layout": "hub/home", "tbtMax": 420, "jsMax": 800000 },
+    { "route": "/celebrity/", "layout": "collection" },
+    { "route": "/blog/", "layout": "article" },
+    { "route": "/pricing/", "layout": "money" },
+    { "route": "/privacy/", "layout": "utility" }
+  ]
+}
