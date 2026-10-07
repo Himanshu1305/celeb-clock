@@ -195,6 +195,37 @@ export default {
       if (injected) return injected;
     }
 
+    // ─── RC2 (SEO / Fix 3): real HTTP 404 for provably-invalid generated addresses ──
+    // Only FINITE, immutable, fully-enumerated param spaces are judged here: impossible
+    // calendar dates, the 12 zodiac signs, 12 Chinese animals, 12 Vedic rashis, the
+    // numerology set and the 12 birthstone months (derived from scripts/prerender-routes.mjs,
+    // i.e. the same source of truth that generates the real pages). Everything else —
+    // celebrity/blog slugs, query params, /results, /report, /auth, /profile, /admin,
+    // upgrade/checkout — is NEVER judged (it can't be validated at the edge with the data
+    // the page uses), so a valid page can never be turned into a 404. The served body stays
+    // the normal styled SPA/prerendered response; only the soft-200 status is corrected to 404.
+    const force404 = (() => {
+      const Z = new Set(['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces']);
+      const A = new Set(['rat','ox','tiger','rabbit','dragon','snake','horse','goat','monkey','rooster','dog','pig']);
+      const R = new Set(['mesh','vrishabh','mithun','kark','simha','kanya','tula','vrishchik','dhanu','makar','kumbh','meen']);
+      const BM = new Set(['january','february','march','april','may','june','july','august','september','october','november','december']);
+      const NUM = new Set([1,2,3,4,5,6,7,8,9,11,22,33]);
+      const MONTH_DAYS = [0,31,29,31,30,31,30,31,31,30,31,30,31]; // Feb=29: reject ONLY impossible dates, never a maybe-valid one
+      const MONTH_NAMES = ['','january','february','march','april','may','june','july','august','september','october','november','december'];
+      const validMD = (mo: number, d: number) => mo >= 1 && mo <= 12 && d >= 1 && d <= MONTH_DAYS[mo];
+      let m: RegExpMatchArray | null;
+      if ((m = pathname.match(/^\/born-on\/([a-z]+)-(\d+)\/?$/)))                       return !validMD(MONTH_NAMES.indexOf(m[1]), parseInt(m[2], 10));
+      if ((m = pathname.match(/^\/(?:born-on|birthday)\/(\d+)\/(\d+)(?:\/personality)?\/?$/))) return !validMD(parseInt(m[1], 10), parseInt(m[2], 10));
+      if ((m = pathname.match(/^\/birthday\/(\d+)\/?$/)))        { const mo = parseInt(m[1], 10); return !(mo >= 1 && mo <= 12); }
+      if ((m = pathname.match(/^\/compatibility\/([a-z]+)\/([a-z]+)\/?$/)))             return !(Z.has(m[1]) && Z.has(m[2]));
+      if ((m = pathname.match(/^\/zodiac\/([a-z-]+)\/?$/)))          return !Z.has(m[1]);
+      if ((m = pathname.match(/^\/chinese-zodiac\/([a-z-]+)\/?$/)))  return !A.has(m[1]);
+      if ((m = pathname.match(/^\/vedic-zodiac\/([a-z-]+)\/?$/)))    return !R.has(m[1]);
+      if ((m = pathname.match(/^\/birthstone\/([a-z-]+)\/?$/)))      return !BM.has(m[1]);
+      if ((m = pathname.match(/^\/numerology\/(\d+)\/?$/)))          return !NUM.has(parseInt(m[1], 10));
+      return false;
+    })();
+
     if (!pathname.startsWith('/api/')) {
       const assetRes = await env.ASSETS.fetch(request as Parameters<typeof env.ASSETS.fetch>[0]);
       // Part AD (SEO): the static-asset layer normalises a missing trailing slash with a
@@ -225,6 +256,10 @@ export default {
       if (ct.includes('text/html')) {
         const headers = new Headers(assetRes.headers);
         headers.set('Cache-Control', 'no-cache, must-revalidate');
+        // Fix 3: a validated-invalid address returns a real 404 (noindex — a genuine
+        // not-found state, allowed by Rule 6) while still serving the styled page body.
+        const htmlStatus = force404 ? 404 : assetRes.status;
+        if (force404) headers.set('X-Robots-Tag', 'noindex');
         // Part AO: on every non-production host (staging worker, *.workers.dev previews,
         // localhost) tell crawlers not to index, and strip any analytics / ad scripts so
         // automated testing never pollutes production analytics or generates invalid ad
@@ -242,7 +277,7 @@ export default {
                 }
               },
             })
-            .transform(new Response(assetRes.body, { status: assetRes.status, statusText: assetRes.statusText, headers }));
+            .transform(new Response(assetRes.body, { status: htmlStatus, statusText: assetRes.statusText, headers }));
           return stripped;
         }
         // Part AD (SEO): thin blog TAG-ARCHIVE views (/blog?tag=X) are near-duplicate
@@ -254,7 +289,7 @@ export default {
         if ((pathname === '/blog' || pathname === '/blog/') && new URL(request.url).searchParams.has('tag')) {
           headers.set('X-Robots-Tag', 'noindex, follow');
         }
-        return new Response(assetRes.body, { status: assetRes.status, statusText: assetRes.statusText, headers });
+        return new Response(assetRes.body, { status: htmlStatus, statusText: assetRes.statusText, headers });
       }
       return assetRes;
     }
