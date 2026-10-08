@@ -692,6 +692,10 @@ export function getTitleForRoute(route) {
     title: 'Nadi Dosha — Your Nadi & What It Means in Matching | BornClock',
     description: 'Find your own Nadi (Adi/Madhya/Antya) from your birth star and understand Nadi dosha in marriage matching — honestly framed, never an affliction you carry alone.',
   };
+  if (route === '/life-report') return {
+    title: 'Life Report (Vedic) — Wealth, Education, Foreign & Health | BornClock',
+    description: 'A graded Vedic life report: wealth & finances, education & learning, foreign travel & settlement, and health & wellbeing — each read from your real chart, honestly.',
+  };
 
   // /nakshatra and /nakshatra/:slug
   if (route === '/nakshatra') {

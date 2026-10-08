@@ -23,18 +23,21 @@ interface Report {
   timing: { windows: Array<{ describe: string }>; next: string | null; note: string };
   verdict: string; methodology: string; disclaimer: string;
 }
+interface FieldRank { field: string; planet: string; grade: 'strong' | 'moderate' | 'mild'; reason: string }
+interface FieldsResult { ranked: FieldRank[]; approachWithCare: FieldRank[]; note: string }
 
 export default function CareerReportPage() {
   const { profile, save } = useSavedProfile();
   const location = useLocation();
   const autoRan = useRef(false);
   const [report, setReport] = useState<Report | null>(null);
+  const [fields, setFields] = useState<FieldsResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
   const [saveChecked, setSaveChecked] = useState(false);
 
   const run = async (d: BirthDetails) => {
-    setLoading(true); setFailed(false); setReport(null);
+    setLoading(true); setFailed(false); setReport(null); setFields(null);
     if (saveChecked) save({ dob: d.dob, time: d.time, city: d.city });
     try {
       const [y, m, day] = d.dob.split('-'); const [h, min] = (d.time || '12:00').split(':');
@@ -44,6 +47,7 @@ export default function CareerReportPage() {
       const data = await res.json();
       if (!data?.report) throw new Error('unavailable');
       setReport(data.report as Report);
+      if (data.fields) setFields(data.fields as FieldsResult);
     } catch { setFailed(true); } finally { setLoading(false); }
   };
 
@@ -129,6 +133,30 @@ export default function CareerReportPage() {
                 <div className="font-semibold text-foreground mb-1"><TermTip id="dasamsa">Dasamsa (D10)</TermTip> — the career chart</div>
                 <p className="text-sm text-foreground">{report.dasamsa.analysis}</p>
               </div>
+              {fields && fields.ranked.length > 0 && (
+                <div data-testid="career-fields" className="rounded-xl border border-[#6E5AA6]/30 p-4">
+                  <div className="font-semibold text-foreground mb-1">Best-suited career fields, ranked</div>
+                  <p className="text-xs text-muted-foreground mb-2">{fields.note}</p>
+                  <ol className="text-sm text-foreground space-y-1 list-decimal pl-5">
+                    {fields.ranked.map((f, i) => (
+                      <li key={i}>
+                        <span className="font-medium">{f.field}</span>{' '}
+                        <span className="text-xs uppercase text-[#6E5AA6]">[{f.grade}]</span>
+                        <span className="block text-xs text-muted-foreground">{f.reason}</span>
+                      </li>
+                    ))}
+                  </ol>
+                  {fields.approachWithCare.length > 0 && (
+                    <div className="mt-3">
+                      <div className="font-medium text-foreground text-sm">Fields to approach with a little more care</div>
+                      <ul className="text-sm text-muted-foreground list-disc pl-5 mt-1">
+                        {fields.approachWithCare.map((f, i) => <li key={i}>{f.field}</li>)}
+                      </ul>
+                      <p className="text-xs text-muted-foreground mt-1">These are workable — the tradition simply reads them as asking for more conscious effort in your chart. Never a limit on what you can do.</p>
+                    </div>
+                  )}
+                </div>
+              )}
               {report.yogas.length > 0 && (
                 <div data-testid="career-yogas" className="rounded-xl border border-border p-4">
                   <div className="font-semibold text-foreground mb-1">Career-relevant Yogas</div>
