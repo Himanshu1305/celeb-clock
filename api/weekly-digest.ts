@@ -38,7 +38,7 @@ function biorhythm(dob: Date, today: Date) {
   return { physical: pct(23), emotional: pct(28), intellectual: pct(33) };
 }
 
-async function celebsThisWeek(sb: any, today: Date) {
+export async function celebsThisWeek(sb: any, today: Date) {
   const week: string[] = [];
   for (let i = 0; i < 7; i++) { const d = new Date(today); d.setDate(today.getDate() + i); week.push(MMDD(d)); }
   const base = () => sb.from('celebrity_sitelinks')
@@ -53,7 +53,7 @@ async function celebsThisWeek(sb: any, today: Date) {
   return { global: globalRes.data ?? [], india: inRes.data ?? [] };
 }
 
-function digestHtml(opts: {
+export function digestHtml(opts: {
   name: string; dob: Date | null; today: Date;
   global: any[]; india: any[]; unsubUrl: string;
 }): { subject: string; html: string } {

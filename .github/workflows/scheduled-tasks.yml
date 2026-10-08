@@ -1,0 +1,66 @@
+# External scheduler for BornClock's recurring jobs.
+#
+# WHY THIS EXISTS: Cloudflare's scheduled() cron deploy is broken in this project
+# (every deploy's `PUT .../schedules` returns 400, so the wrangler.toml crons never
+# register — see docs/part-p-flags.md). A GitHub Actions schedule is the reliable,
+# environment-independent replacement: it simply makes an authenticated HTTPS call to
+# the worker's protected /api/cron-dispatch endpoint on a fixed cadence.
+#
+# NO CLOUDFLARE TOKEN IS USED OR NEEDED HERE. The only secrets this workflow reads are:
+#   CRON_TARGET_URL  — base URL of the worker to drive (point at the STAGING worker while
+#                      testing: https://bornclock-staging.usdvisionai.workers.dev)
+#   CRON_SECRET      — the shared bearer secret already set on the worker
+# Both are plain repo secrets with no Cloudflare privileges. Nothing here can deploy.
+#
+# ACTIVATION (person): add the two secrets above in GitHub → Settings → Secrets, then
+# this file must exist on the repo's DEFAULT branch for `schedule:` to fire (GitHub runs
+# scheduled workflows only from the default branch). Until then, `workflow_dispatch` lets
+# anyone run it manually to verify.
+
+name: scheduled-tasks
+
+on:
+  schedule:
+    - cron: '30 6 * * *'   # daily  06:30 UTC — retention emails + opt-in daily notifications
+    - cron: '0 8 * * 1'    # weekly Mon 08:00 UTC — weekly digest batch
+  workflow_dispatch:
+    inputs:
+      job:
+        description: 'Which job to run'
+        required: true
+        default: 'daily'
+        type: choice
+        options: [daily, weekly, all]
+
+permissions:
+  contents: read           # read-only: this workflow never writes to the repo
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pick job
+        id: pick
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            if [ "${{ github.event.schedule }}" = "0 8 * * 1" ]; then echo "job=weekly" >> "$GITHUB_OUTPUT"; else echo "job=daily" >> "$GITHUB_OUTPUT"; fi
+          else
+            echo "job=${{ github.event.inputs.job }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Call protected cron-dispatch
+        env:
+          CRON_TARGET_URL: ${{ secrets.CRON_TARGET_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          JOB: ${{ steps.pick.outputs.job }}
+        run: |
+          if [ -z "$CRON_TARGET_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "::error::CRON_TARGET_URL and CRON_SECRET repo secrets must be set."; exit 1
+          fi
+          echo "Dispatching job=$JOB to $CRON_TARGET_URL"
+          code=$(curl -sS -w '%{http_code}' -o /tmp/resp.json \
+            -X POST "$CRON_TARGET_URL/api/cron-dispatch?job=$JOB" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            --retry 3 --retry-delay 10 --max-time 120)
+          echo "HTTP $code"; cat /tmp/resp.json || true
+          if [ "$code" -lt 200 ] || [ "$code" -ge 300 ]; then echo "::error::cron-dispatch returned $code"; exit 1; fi

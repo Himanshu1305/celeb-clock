@@ -12,6 +12,8 @@ import { POST as verifyPayment }       from '../api/verify-payment.js';
 import { POST as updateBuyerState }     from '../api/update-buyer-state.js';
 import { GET  as dailyCronGet,
          POST as dailyCronPost }       from '../api/daily-email-cron.js';
+import { GET  as cronDispatchGet,
+         POST as cronDispatchPost }    from '../api/cron-dispatch.js';
 import { POST as opsMonitor }          from '../api/ops-monitor.js';
 import { POST as opsDigest }           from '../api/ops-digest.js';
 import { POST as invoiceSweep }        from '../api/invoice-sweep.js';
@@ -324,6 +326,12 @@ export default {
 
     if (pathname === '/api/daily-email-cron') {
       return request.method === 'GET' ? dailyCronGet(request) : dailyCronPost(request);
+    }
+
+    // External-scheduler entry point (GitHub Actions). CRON_SECRET-protected; the
+    // GitHub token never touches Cloudflare. See .github/workflows/scheduled-tasks.yml.
+    if (pathname === '/api/cron-dispatch') {
+      return request.method === 'GET' ? cronDispatchGet(request) : cronDispatchPost(request);
     }
 
 

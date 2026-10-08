@@ -28,6 +28,12 @@ async function handler(request: Request): Promise<Response> {
   const dob = typeof body?.dob === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.dob) ? body.dob : null;
   const countryCode = typeof body?.countryCode === 'string' ? body.countryCode.slice(0, 2).toUpperCase() : null;
   const weeklyDigest = body?.weeklyDigest !== false; // default opt-in when subscribing here
+  // P3 opt-in daily channels (explicit, default OFF). rashiIndex is the user's Moon
+  // sign (0..11), computed CLIENT-SIDE from their saved full birth chart and passed in
+  // so the daily job can render a real reading without recomputing the chart server-side.
+  const dailyHoroscope = body?.dailyHoroscope === true;
+  const transitAlerts = body?.transitAlerts === true;
+  const rashiIndex = Number.isInteger(body?.rashiIndex) && body.rashiIndex >= 0 && body.rashiIndex <= 11 ? body.rashiIndex : null;
 
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -42,7 +48,15 @@ async function handler(request: Request): Promise<Response> {
   // constraint matching the ON CONFLICT specification" and NOTHING was ever stored.
   // `email` is already lowercased above, so `ilike` matches an existing row
   // case-insensitively.
-  const prefs = { source, consent_marketing: true, weekly_digest: weeklyDigest, dob, country_code: countryCode };
+  const prefs: Record<string, unknown> = { source, consent_marketing: true, weekly_digest: weeklyDigest, dob, country_code: countryCode };
+  // Only attach the P3 daily-channel columns when a daily opt-in is actually requested,
+  // so the common weekly-only path keeps working even before NOTES-notifications.sql is
+  // applied (writing a non-existent column would fail the whole insert/update).
+  if (dailyHoroscope || transitAlerts || rashiIndex !== null) {
+    prefs.daily_horoscope = dailyHoroscope;
+    prefs.transit_alerts = transitAlerts;
+    if (rashiIndex !== null) prefs.rashi_index = rashiIndex;
+  }
   const existing = await sb.from('email_subscribers').select('id').ilike('email', email).maybeSingle();
   if (existing.error) {
     // Table may not exist yet (NOTES SQL unapplied) — degrade gracefully.

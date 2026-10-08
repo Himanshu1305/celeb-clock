@@ -522,6 +522,39 @@ export function isOutboundEmailSuppressed(to: string): boolean {
   return !allow.includes((to || '').trim().toLowerCase());
 }
 
+/**
+ * Send a pre-rendered HTML email. Used by opt-in notification jobs (weekly digest,
+ * daily horoscope, transit alerts, family birthday reminders) that build their own
+ * HTML. Honours the same staging outbound-suppression allowlist as sendEmailDirect.
+ */
+export async function sendRawEmail(opts: { to: string; subject: string; html: string; from?: string }): Promise<boolean> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.error('[sendRawEmail] RESEND_API_KEY not configured');
+    return false;
+  }
+  if (!opts.to) return false;
+  if (isOutboundEmailSuppressed(opts.to)) {
+    console.log(`[sendRawEmail] suppressed on staging (not in allowlist): ${opts.to}`);
+    return true;
+  }
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: opts.from || FROM_EMAIL, to: [opts.to], subject: opts.subject, html: opts.html }),
+    });
+    if (!response.ok) {
+      console.error('[sendRawEmail] Resend error:', await response.json().catch(() => ({})));
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error('[sendRawEmail] send error:', e);
+    return false;
+  }
+}
+
 export async function sendEmailDirect(payload: Record<string, unknown>): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
