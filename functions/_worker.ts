@@ -27,6 +27,7 @@ import { GET  as chartEvents }          from '../api/chart-events.js';
 import { GET  as sadeSati }             from '../api/sade-sati.js';
 import { GET  as muhurat }             from '../api/muhurat.js';
 import { GET  as careerReport }        from '../api/career-report.js';
+import { GET  as lifeReport }          from '../api/life-report.js';
 import { GET  as gemstones }           from '../api/gemstones.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
 import cronHandler                     from './_cron/daily-email.js';
@@ -93,6 +94,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/sade-sati':          sadeSati,
   '/api/muhurat':            muhurat,
   '/api/career-report':      careerReport,
+  '/api/life-report':        lifeReport,
   '/api/gemstones':          gemstones,
 };
 

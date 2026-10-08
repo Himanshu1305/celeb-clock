@@ -145,43 +145,57 @@ sections found in the `growth` codebase + P0 research.
 
 ### P2 — Predictions & paid depth (refinements + new)
 
-### [ ] GP2-SOUTH — Raise South-Indian chart style earlier in P2  · **P2**
+### [x] GP2-SOUTH — Raise South-Indian chart style earlier in P2  · **P2**
+<!-- DONE 3509402: KundaliChart gained a style='north'|'south' prop (South = fixed-sign 4x4 grid, Lagna marked); North/South toggle on /kundali. Real-use verified on the live preview worker (Chromium desktop + WebKit iPhone) with the Jammu reference chart — south chart renders on toggle. -->
+
 - **Why:** ProKerala/Astrotalk/Clickastro all offer South-Indian free; BornClock
   has none — a visible parity gap for South-Indian traffic.
 - **Acceptance:** a North/South toggle on the Kundli chart; South-Indian layout
   renders correctly for the reference charts on 3 browsers.
 
-### [ ] GP2-10PORUTHAM — Add the 10-porutham South-Indian matching option  · **P2**
+### [x] GP2-10PORUTHAM — Add the 10-porutham South-Indian matching option  · **P2**
+<!-- DONE a06c64e: porutham.ts (Dina/Gana/Mahendra/Stree-Deergha/Yoni/Rasi/Rasyadhipathi/Vasya/Rajju/Vedha); /api/kundali-match returns porutham + a Manglik mutual-cancellation check; KundaliMatchPage renders a collapsible 10-porutham view + Manglik block. Live preview API verified: 7/10 Average, manglik 'clear' for the reference pair. 5 unit tests. -->
+
 - **Why:** ProKerala offers the Tamil/Kerala 10-porutham system alongside Guna
   Milan; relevant for South-Indian matrimonial traffic.
 - **Acceptance:** matching offers a 10-porutham view (dinam, gana, yoni, rajju,
   etc.) alongside the 36-guna Ashtakoota; computed, explained (Rule 6/7).
 
-### [ ] GP2-PERIOD-PREDICT — Period-structure the prediction surfaces  · **P2**
+### [x] GP2-PERIOD-PREDICT — Period-structure the prediction surfaces  · **P2**
+<!-- DONE 5341056: periodForecast.ts re-presents the Vimshottari Dasha as yearly(3)/quarterly(4)/monthly(12) views, each graded strong/moderate/mild from the governing lord + naming the life area; PeriodForecast component (tabs) on /kundali. Live-preview real-use verified (Chromium+WebKit): monthly tab renders. Transit dimension cross-linked to /transit + /sade-sati. Guardrails: no dates for marriage/illness/death. 4 unit tests. -->
+
 - **Why:** yearly/monthly predictions are universal; BornClock's "What's Ahead"
   is not period-structured.
 - **Acceptance:** yearly / quarterly / monthly prediction views exist (Dasha +
   transits), Rule 7 (graded strong/moderate/mild, reasoned), guardrails intact.
 
-### [ ] GP2-CAREER-RANKED — Ranked best-suited career fields  · **P2**
+### [x] GP2-CAREER-RANKED — Ranked best-suited career fields  · **P2**
+<!-- DONE 96f69ee: careerFields.ts ranks fields from the 3 strongest career significators (Shadbala + 10th house/D10/Yoga involvement) + an 'approach with care' list; surfaced on /career-report. Live-preview API verified: top fields Government/Leadership/Medicine [strong] for the reference chart (10th lord Sun in Simha). -->
+
 - **Why:** Clickastro surfaces career fields free; BornClock's career report is
   narrative, not a ranked field list.
 - **Acceptance:** a ranked list of fields with reasons (10th house/lord, D10,
   strongest planets), fields-to-approach-with-care, and growth periods.
 
-### [ ] GP2-LIFE-SECTIONS — Health / foreign-travel / wealth / education sections  · **P2**
+### [x] GP2-LIFE-SECTIONS — Health / foreign-travel / wealth / education sections  · **P2**
+<!-- DONE 96f69ee (+ worker fix for /api/life-report, see P2-BUG-1): lifeAreas.ts grades Wealth/Education/Foreign/Health from house-lord strength + benefic/malefic occupants (strong/moderate/mild). New /life-report page + /api/life-report. Health = wellbeing-only, points to doctor, no dates. Live-preview API verified: all 4 areas graded, health framing correct. -->
+
 - **Why:** Clickastro markets these free; competitor-common prediction surfaces.
 - **Acceptance:** each section present with graded indications (Rule 7), health
   in wellbeing framing (never diagnosis), no dates for illness.
 
-### [ ] GP2-CHILD-KUNDLI — Child (Bal) Kundli (build only if cheap)  · **P2** (tail)
+### [x] GP2-CHILD-KUNDLI — Child (Bal) Kundli (build only if cheap)  · **P2** (tail)
+<!-- DONE b769c53: built cheaply by composing the existing /api/kundali response (childKundli.ts) — temperament, learning, talents, favourable periods, Mool note, name sounds (links to /baby-names), support. New /child-kundli page. Health = wellbeing-only, points to paediatrician, no illness/dates (Rule 7). 4 unit tests incl. guardrail. -->
+
 - **Why:** present at AstroSage/Clickastro/Astrotalk but mostly **paid** and
   low-traffic → de-prioritised; build if it reuses the engine cheaply.
 - **Acceptance (if built):** temperament/learning/talents/care-areas/favourable
   periods/Nakshatra name letters, Rule 7 children's-health guardrail, points to
   the paediatrician.
 
-### [ ] GP2-DOSHAS — Standalone Pitra / Nadi / Mool / Grahan dosha explainers  · **P2** (medium)
+### [x] GP2-DOSHAS — Standalone Pitra / Nadi / Mool / Grahan dosha explainers  · **P2** (medium)
+<!-- DONE c89aa5b: moreDoshas.ts computes Pitra/Mool/Grahan + standalone Nadi from the /api/kundali response (client-side, no cache-versioning risk), graded strong/moderate/mild; one DoshaCheckPage → /pitra-dosha, /mool-dosha, /grahan-dosha, /nadi-dosha. Calm tone (Rule 7); Mool page states no medical meaning + see paediatrician; cited as tradition (Rule 8). 9 unit tests. -->
+
 - **Why:** lightly covered by competitors (Astrotalk flags Pitra); useful SEO.
 - **Acceptance:** calm-tone explainers, computed where the engine supports it,
   Rule 7/8.
