@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 import { ToolLayout } from '@/components/central';
 import { LC_FACTORS } from '@/content/longevityCalculatorContent';
+import { reachPercent } from '@/lib/longevity/survival';
 
 // Local JSON-LD helper (copied convention from NumerologyArticle).
 function JsonLd({ data }: { data: object }) {
@@ -149,6 +151,25 @@ export function LifeExpectancyCountryTemplate(props: LifeExpectancyCountryProps)
             (women outliving men by several years) is consistent across almost every country on earth
             and is driven by a mix of biological and behavioural factors. Globally, the {country} ranks
             {' '}{rank}.
+          </p>
+
+          {/* Probability of reaching 100 (NS-P100) + baseline source (NS-CRED) */}
+          <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl p-5 mb-6">
+            <div className="flex items-baseline gap-2 mb-1">
+              <span className="text-2xl font-black text-purple-900">~{reachPercent(avg)}%</span>
+              <span className="text-sm font-semibold text-purple-700">modelled chance of reaching 100 at the {country} average</span>
+            </div>
+            <p className="text-xs text-gray-600">
+              An estimate: at a life expectancy of {avg}, and using the ~10-year spread of adult age-at-death
+              seen in national life tables, roughly this share of a cohort lives to 100. Your personal odds
+              depend far more on how you live — the calculator below shows yours. See{' '}
+              <Link to="/life-expectancy/factors" className="text-[#2F6FB0] hover:underline">what affects life expectancy</Link>.
+            </p>
+          </div>
+          <p className="text-xs text-gray-500 mb-6 italic">
+            Baseline figures are official period life-table data ({source}); international context from the
+            WHO Global Health Observatory. These are statistical averages, not personal predictions, and
+            not medical advice.
           </p>
 
           {regional.length > 0 && (

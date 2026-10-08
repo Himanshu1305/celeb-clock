@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Crown, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { LongevityResult, EPIGENETIC_HABITS } from '@/services/LongevityCalculationService';
+import { reachPercent } from '@/lib/longevity/survival';
 import { HealthGuideSection } from '@/components/HealthGuideSection';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
@@ -221,12 +222,16 @@ export const EnhancedLifeExpectancyReport = ({
               🏘️ +{result.communityBonus}yr community bonus
             </Badge>
           )}
+          <Badge variant="outline" className="text-purple-600 border-purple-400" title="Estimated from your forecast and the ~10-year spread of adult age-at-death in national life tables (US SSA, UK ONS, WHO). An estimate, not a guarantee.">
+            💯 ~{reachPercent(displayedOptimized)}% chance of reaching 100
+          </Badge>
         </div>
 
         {/* Chart 1: Waterfall — How Your Longevity Score Is Built */}
         <div className="space-y-1">
           <p className="text-xs font-bold text-foreground text-center">📊 How Your Longevity Score Is Built</p>
           <p className="text-[10px] text-muted-foreground text-center">From WHO baseline to your personal forecast — each factor's contribution</p>
+          <p className="text-[10px] text-muted-foreground text-center italic">Baseline: national period life tables (WHO Global Health Observatory; US SSA & UK ONS life tables) for your sex, country and birth cohort. Adjustments are published, research-based estimates — tendencies, not guarantees, and not medical advice.</p>
         </div>
         <div className="w-full" style={{ height: 280 }}>
           <ResponsiveContainer width="100%" height="100%">

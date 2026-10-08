@@ -241,6 +241,8 @@ export default {
       if ((m = pathname.match(/^\/yoga\/([a-z-]+)\/?$/)))            return !YOG.has(m[1]);
       const VRG = new Set(['d1-rashi','d2-hora','d3-drekkana','d4-chaturthamsha','d7-saptamsha','d9-navamsa','d10-dasamsa','d12-dwadashamsha','d16-shodashamsha','d20-vimshamsha','d24-chaturvimshamsha','d27-bhamsha','d30-trimshamsha','d60-shashtiamsha']);
       if ((m = pathname.match(/^\/divisional-charts\/([a-z0-9-]+)\/?$/))) return !VRG.has(m[1]);
+      const LEF = new Set(['smoking','exercise','diet','bmi','sleep','alcohol','hypertension','diabetes','social-connection']);
+      if ((m = pathname.match(/^\/life-expectancy\/factors\/([a-z-]+)\/?$/))) return !LEF.has(m[1]);
       const BZ = new Set(['move-naturally','purpose','downshift','80-percent-rule','plant-slant','wine-at-5','belong','loved-ones-first','right-tribe']);
       if ((m = pathname.match(/^\/blue-zones\/([a-z0-9-]+)\/?$/)))    return !BZ.has(m[1]);
       const PC = new Set(['delhi','mumbai','bengaluru','kolkata','chennai','hyderabad','pune','ahmedabad','jaipur','lucknow']);

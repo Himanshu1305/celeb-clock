@@ -617,6 +617,24 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /life-expectancy/factors[/:factor]
+  if (route === '/life-expectancy/factors') return {
+    title: 'What Affects Life Expectancy — Factor by Factor | BornClock',
+    description: 'How much each factor changes life expectancy — smoking, exercise, diet, weight, sleep, alcohol, blood pressure, diabetes and social connection — with the years, evidence and what to do.',
+  };
+  {
+    const lf = {
+      smoking: 'Smoking', exercise: 'Physical Activity', diet: 'Diet Quality', bmi: 'Body Weight (BMI)',
+      sleep: 'Sleep', alcohol: 'Alcohol', hypertension: 'High Blood Pressure', diabetes: 'Type 2 Diabetes',
+      'social-connection': 'Social Connection',
+    };
+    const m = route.match(/^\/life-expectancy\/factors\/([a-z-]+)$/);
+    if (m && lf[m[1]]) return {
+      title: `How ${lf[m[1]]} Affects Life Expectancy | BornClock`,
+      description: `${lf[m[1]]} and life expectancy — the typical number of years it adds or subtracts, why (the mechanism), the published evidence, and what to do about it.`,
+    };
+  }
+
   if (route === '/blue-zones') return {
     title: "Blue Zones Power 9 — 9 Habits of the Longest-Lived | BornClock",
     description: 'The nine habits (the Power 9) shared by the world\'s five Blue Zones, each explained plainly with how to apply it and honest sources.',

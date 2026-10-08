@@ -485,6 +485,10 @@ const LifeExpectancy = () => {
                 <div className="font-semibold text-foreground">Longevity Quiz</div>
                 <div className="mt-1 text-sm text-muted-foreground">A quick, research-based look at your habits.</div>
               </Link>
+              <Link to="/life-expectancy/factors" className="block rounded-lg border border-border p-4 hover:bg-muted/40 transition-colors">
+                <div className="font-semibold text-foreground">What affects life expectancy</div>
+                <div className="mt-1 text-sm text-muted-foreground">Factor by factor — the years each adds or subtracts, with the evidence.</div>
+              </Link>
             </div>
           </div>
 

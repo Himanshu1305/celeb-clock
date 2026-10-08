@@ -341,6 +341,8 @@ export const STATIC_ROUTES = [
   ...['raja-yoga','dhana-yoga','gaja-kesari-yoga','budha-aditya-yoga','chandra-mangal-yoga','ruchaka-yoga','bhadra-yoga','hamsa-yoga','malavya-yoga','shasha-yoga','neecha-bhanga-raja-yoga','vipreet-raja-yoga','kemadruma-yoga'].map(y => `/yoga/${y}`),
   '/divisional-charts',
   ...['d1-rashi','d2-hora','d3-drekkana','d4-chaturthamsha','d7-saptamsha','d9-navamsa','d10-dasamsa','d12-dwadashamsha','d16-shodashamsha','d20-vimshamsha','d24-chaturvimshamsha','d27-bhamsha','d30-trimshamsha','d60-shashtiamsha'].map(v => `/divisional-charts/${v}`),
+  '/life-expectancy/factors',
+  ...['smoking','exercise','diet','bmi','sleep','alcohol','hypertension','diabetes','social-connection'].map(f => `/life-expectancy/factors/${f}`),
   '/attitude-number',
   '/chaldean-numerology',
   '/blue-zones',
