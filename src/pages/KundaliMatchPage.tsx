@@ -7,6 +7,7 @@ import { TrustStrip } from '@/components/paj/TrustStrip';
 import { TermTip } from '@/components/vedic/TermTip';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
+import type { PoruthamResult } from '@/lib/vedic/porutham';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
 import { type SavedCity, sanitizeName, NAME_MAX } from '@/services/savedProfile';
 
@@ -17,8 +18,16 @@ const KOOTA_TERM: Record<string, string> = {
 };
 
 interface TimingWindow { planet: string; level: string; range: string; status: string; describe: string }
+interface ManglikMatch {
+  aHasDosha: boolean; bHasDosha: boolean;
+  aSeverity: string | null; bSeverity: string | null;
+  status: 'clear' | 'mutual' | 'one-sided';
+  note: string;
+}
 interface MatchResponse {
   gunaMilan: GunaMilanResult;
+  porutham?: PoruthamResult | null;
+  manglik?: ManglikMatch | null;
   synthesis?: { verdict: string; paragraphs: string[] } | null;
   timing: {
     personA: { significators: string[]; windows: TimingWindow[] };
@@ -281,6 +290,40 @@ export default function KundaliMatchPage() {
                 </div>
               ))}
             </div>
+
+            {/* Manglik (Mangal Dosha) check inside matching (P2-7) */}
+            {result.manglik && (
+              <div data-testid="kmatch-manglik" className={`rounded-xl border p-4 text-sm ${result.manglik.status === 'one-sided' ? 'bg-amber-50 border-amber-200 text-amber-900' : 'bg-emerald-50 border-emerald-200 text-emerald-900'}`}>
+                <div className="font-semibold mb-1">{result.manglik.status === 'one-sided' ? '⚠️' : '✓'} <TermTip id="manglik">Manglik</TermTip> check</div>
+                <p>{withNames(result.manglik.note)}</p>
+              </div>
+            )}
+
+            {/* 10-Porutham (South Indian) view alongside the 36-guna Ashtakoota (P2-7 / GP2-10PORUTHAM) */}
+            {result.porutham && (
+              <details data-testid="kmatch-porutham" className="rounded-xl border border-[#6E5AA6]/30 p-4">
+                <summary className="cursor-pointer font-semibold text-foreground">
+                  South-Indian 10-Porutham view — {result.porutham.metCount}/10 met · {result.porutham.verdict}
+                </summary>
+                <p className="text-xs text-muted-foreground mt-2">
+                  The Dravidian (Tamil) matching system used across South India and Sri Lanka. Rajju and Dina are the make-or-break poruthams.
+                </p>
+                <div className="mt-2 space-y-2">
+                  {result.porutham.poruthams.map(p => (
+                    <div key={p.key} className={`rounded-lg border p-3 ${p.essential ? 'border-[#6E5AA6]/30 bg-[#6E5AA6]/10' : 'border-border'}`}>
+                      <div className="flex items-center justify-between">
+                        <div className="font-semibold text-foreground">
+                          {p.essential && <span title="Essential porutham" className="mr-1 text-[#6E5AA6]">★</span>}{p.label}
+                        </div>
+                        <div className={`font-bold ${p.met ? 'text-[#6E5AA6]' : 'text-amber-600'}`}>{p.met ? '✓ met' : '✕ not met'}</div>
+                      </div>
+                      <div className="text-sm text-muted-foreground mt-1">{p.explanation}</div>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-2 text-xs text-muted-foreground">{result.porutham.methodology}</p>
+              </details>
+            )}
 
             {/* Marriage-timing windows (Part 2.5) — reuses the D-Fix3 activation engine */}
             <div data-testid="kmatch-timing" className="rounded-xl border border-border p-4 space-y-2">

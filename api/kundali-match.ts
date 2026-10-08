@@ -8,6 +8,7 @@
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
 import { birthRangeError } from './_birthParams.js';
 import { calculateGunaMilan, type PersonInput } from '../src/lib/vedic/matchmaking.js';
+import { calculatePorutham } from '../src/lib/vedic/porutham.js';
 import { buildMatchSynthesis } from '../src/lib/vedic/matchSynthesis.js';
 import { categoryTiming, describeWindow, formatWindowRange, type ActivationWindow } from '../src/lib/vedic/yogaTiming.js';
 import { RASHI_NAMES } from '../src/lib/vedic/engine/vedicEngine.js';
@@ -63,7 +64,23 @@ async function handler(request) {
       calculateBirthChart({ year: B.year, month: B.month, day: B.day, hour: B.hour, minute: B.minute, latitude: B.latitude, longitude: B.longitude, timezoneOffset: B.timezoneOffset }, { refDate: now }),
     ]);
 
-    const gunaMilan = calculateGunaMilan(personInput(chartA), personInput(chartB));
+    const piA = personInput(chartA), piB = personInput(chartB);
+    const gunaMilan = calculateGunaMilan(piA, piB);
+    // 10-porutham (South-Indian) view alongside the 36-guna Ashtakoota.
+    const porutham = calculatePorutham({ nakshatra: piA.nakshatra, rashiIndex: piA.rashiIndex }, { nakshatra: piB.nakshatra, rashiIndex: piB.rashiIndex });
+    // Manglik (Mangal Dosha) check inside matching — classical mutual cancellation.
+    const mdA = chartA.doshas?.mangalDosha, mdB = chartB.doshas?.mangalDosha;
+    const aM = !!mdA?.hasDosha, bM = !!mdB?.hasDosha;
+    const manglik = {
+      aHasDosha: aM, bHasDosha: bM,
+      aSeverity: mdA?.severityLabel ?? null, bSeverity: mdB?.severityLabel ?? null,
+      status: (!aM && !bM) ? 'clear' : (aM && bM) ? 'mutual' : 'one-sided',
+      note: (!aM && !bM)
+        ? 'Neither chart shows Manglik (Mangal) Dosha, so it is not a factor for this match.'
+        : (aM && bM)
+          ? 'Both partners show Manglik Dosha. Classically, when both carry it the dosha is considered mutually cancelled — a traditionally reassuring combination, not a concern.'
+          : `One partner shows Manglik Dosha (${aM ? 'Person A' : 'Person B'}${(aM ? mdA?.severityLabel : mdB?.severityLabel) ? `, ${aM ? mdA?.severityLabel : mdB?.severityLabel}` : ''}) and the other does not. The tradition reads a one-sided Manglik as an area to be mindful of; many classical cancellations exist and it is held calmly, never as a barrier.`,
+    };
 
     // Marriage-timing windows from EACH chart (7th lord + Venus + Jupiter), + overlaps.
     const tA = categoryTiming(chartA, 'marriage', now);
@@ -85,6 +102,8 @@ async function handler(request) {
 
     return json({
       gunaMilan,
+      porutham,
+      manglik,
       synthesis,
       timing,
       people: {
