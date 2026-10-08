@@ -1,5 +1,16 @@
 # P0 — Competitor Comparison & Gap Verification
 
+**P0 COMPLETE: YES**
+
+Every P0 deliverable is done: a per-category competitor comparison with 1–5
+scores and dated (2026-10-09) evidence, BornClock's thin pages and remaining
+unexplained terms, confirmation/correction of the P1–P5 gap list, and a
+prioritised, actionable backlog (`docs/growth-improvements.md`) with IDs,
+assigned phases and acceptance checks. P0 is research-only — no application code
+was changed, nothing was deployed, `growth` was created from the RC3-merged
+`develop` and pushed. Items requiring a business decision or a licensed dataset
+are under "Needs the person" (§9) and do not make this NO.
+
 **P0 is a read-only research phase.** No application code was changed; the test
 suite and build are unaffected (baseline: 76 Playwright e2e specs on `growth`,
 unchanged — RC3's full automated baseline was 163 test files / 1940 tests, also
