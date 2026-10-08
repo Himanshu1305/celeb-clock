@@ -15,49 +15,10 @@
  */
 import { FRIENDS, ENEMIES, SIGN_LORDS } from './engine/sthanaBala';
 import { glossInline } from './termDefinitions';
-
-const NAK_ORDER = [
-  'Ashwini', 'Bharani', 'Krittika', 'Rohini', 'Mrigashira', 'Ardra', 'Punarvasu', 'Pushya', 'Ashlesha',
-  'Magha', 'Purva Phalguni', 'Uttara Phalguni', 'Hasta', 'Chitra', 'Swati', 'Vishakha', 'Anuradha', 'Jyeshtha',
-  'Mula', 'Purva Ashadha', 'Uttara Ashadha', 'Shravana', 'Dhanishtha', 'Shatabhisha', 'Purva Bhadrapada', 'Uttara Bhadrapada', 'Revati',
-];
-// Vimshottari lord of each nakshatra (for Gana-dosha cancellation via nakshatra-lord friendship).
-const DASHA_LORDS = ['Ketu', 'Venus', 'Sun', 'Moon', 'Mars', 'Rahu', 'Jupiter', 'Saturn', 'Mercury'];
-const nakLord = (idx: number) => DASHA_LORDS[idx % 9];
-
-const GANA: Record<string, 'Deva' | 'Manushya' | 'Rakshasa'> = {
-  Ashwini: 'Deva', Mrigashira: 'Deva', Punarvasu: 'Deva', Pushya: 'Deva', Hasta: 'Deva', Swati: 'Deva', Anuradha: 'Deva', Shravana: 'Deva', Revati: 'Deva',
-  Bharani: 'Manushya', Rohini: 'Manushya', Ardra: 'Manushya', 'Purva Phalguni': 'Manushya', 'Uttara Phalguni': 'Manushya', 'Purva Ashadha': 'Manushya', 'Uttara Ashadha': 'Manushya', 'Purva Bhadrapada': 'Manushya', 'Uttara Bhadrapada': 'Manushya',
-  Krittika: 'Rakshasa', Ashlesha: 'Rakshasa', Magha: 'Rakshasa', Chitra: 'Rakshasa', Vishakha: 'Rakshasa', Jyeshtha: 'Rakshasa', Mula: 'Rakshasa', Dhanishtha: 'Rakshasa', Shatabhisha: 'Rakshasa',
-};
-const NADI: Record<string, 'Adi' | 'Madhya' | 'Antya'> = {
-  Ashwini: 'Adi', Ardra: 'Adi', Punarvasu: 'Adi', 'Uttara Phalguni': 'Adi', Hasta: 'Adi', Jyeshtha: 'Adi', Mula: 'Adi', Shatabhisha: 'Adi', 'Purva Bhadrapada': 'Adi',
-  Bharani: 'Madhya', Mrigashira: 'Madhya', Pushya: 'Madhya', 'Purva Phalguni': 'Madhya', Chitra: 'Madhya', Anuradha: 'Madhya', 'Purva Ashadha': 'Madhya', Dhanishtha: 'Madhya', 'Uttara Bhadrapada': 'Madhya',
-  Krittika: 'Antya', Rohini: 'Antya', Ashlesha: 'Antya', Magha: 'Antya', Swati: 'Antya', Vishakha: 'Antya', 'Uttara Ashadha': 'Antya', Shravana: 'Antya', Revati: 'Antya',
-};
-const YONI: Record<string, string> = {
-  Ashwini: 'Horse', Shatabhisha: 'Horse', Bharani: 'Elephant', Revati: 'Elephant', Pushya: 'Sheep', Krittika: 'Sheep',
-  Rohini: 'Snake', Mrigashira: 'Snake', Mula: 'Dog', Ardra: 'Dog', Ashlesha: 'Cat', Punarvasu: 'Cat',
-  Magha: 'Rat', 'Purva Phalguni': 'Rat', 'Uttara Phalguni': 'Cow', 'Uttara Bhadrapada': 'Cow', Hasta: 'Buffalo', Swati: 'Buffalo',
-  Vishakha: 'Tiger', Chitra: 'Tiger', Jyeshtha: 'Hare', Anuradha: 'Hare', 'Purva Ashadha': 'Monkey', Shravana: 'Monkey',
-  'Purva Bhadrapada': 'Lion', Dhanishtha: 'Lion', 'Uttara Ashadha': 'Mongoose',
-};
-const YONI_ENEMY: Record<string, string> = {
-  Horse: 'Buffalo', Buffalo: 'Horse', Elephant: 'Lion', Lion: 'Elephant', Sheep: 'Monkey', Monkey: 'Sheep',
-  Snake: 'Mongoose', Mongoose: 'Snake', Dog: 'Hare', Hare: 'Dog', Cat: 'Rat', Rat: 'Cat', Cow: 'Tiger', Tiger: 'Cow',
-};
-// Varna by Moon sign (0-based Mesha..Meena): water=Brahmin(4), fire=Kshatriya(3), earth=Vaishya(2), air=Shudra(1).
-const VARNA_LEVEL = [3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4]; // Mesha..Meena
-const VARNA_NAME = ['—', 'Shudra', 'Vaishya', 'Kshatriya', 'Brahmin'];
-// Vashya group by Moon sign (whole-sign mainstream convention; half-sign variance disclosed).
-type VG = 'Manava' | 'Chatushpada' | 'Jalachara' | 'Vanachara' | 'Keeta';
-const VASHYA: VG[] = ['Chatushpada', 'Chatushpada', 'Manava', 'Jalachara', 'Vanachara', 'Manava', 'Manava', 'Keeta', 'Manava', 'Chatushpada', 'Manava', 'Jalachara'];
-
-// ── Per-Koota depth (Part O Item 1.3) ────────────────────────────────────────
-// The 9 Taras by count-position (1-9). 3/5/7 (Vipat/Pratyari/Vadha) are the
-// inauspicious ones; the rest are favourable. Named explicitly rather than just
-// "auspicious/inauspicious".
-const TARA_NAMES = ['—', 'Janma', 'Sampat', 'Vipat', 'Kshema', 'Pratyari', 'Sadhaka', 'Vadha', 'Mitra', 'Parama Mitra'];
+import {
+  NAK_ORDER, nakLord, GANA, NADI, YONI, YONI_ENEMY,
+  VARNA_LEVEL, VARNA_NAME, VASHYA, TARA_NAMES, taraNum,
+} from './nakshatraAttributes';
 // What each Koota governs, in plain language — used for the "what a strong/weak
 // score practically means" note appended to every Koota.
 const KOOTA_GIST: Record<string, string> = {
@@ -108,10 +69,6 @@ function vashya(a: PersonInput, b: PersonInput): KootaDetail {
   if (ga !== gb) score = (ga === 'Vanachara' || gb === 'Vanachara') && (ga === 'Chatushpada' || gb === 'Chatushpada') ? 0 : 1;
   return { key: 'vashya', label: 'Vashya', score, max: 2,
     explanation: `Mutual attraction/control from the Moon-sign group — Person A is ${ga}, Person B is ${gb}. ${ga === gb ? 'Same group: full magnetic pull.' : score ? 'Different but compatible groups.' : 'Predator/prey groups: no point.'}` + practicalNote('vashya', score, 2) };
-}
-function taraNum(fromIdx: number, toIdx: number): number {
-  const count = ((toIdx - fromIdx + 27) % 27) + 1; // inclusive count
-  const t = count % 9; return t === 0 ? 9 : t;
 }
 function tara(a: PersonInput, b: PersonInput): KootaDetail {
   const ia = NAK_ORDER.indexOf(a.nakshatra), ib = NAK_ORDER.indexOf(b.nakshatra);

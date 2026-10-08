@@ -472,6 +472,8 @@ export default function VedicAstrologyLanding() {
               ['Vedic Yogas', '/yoga'], ['Divisional Charts', '/divisional-charts'],
               ['Sade Sati', '/sade-sati'], ['Dasha Calculator', '/dasha-calculator'],
               ['Manglik', '/manglik'], ['Kaal Sarp Dosha', '/kaal-sarp-dosha'],
+              ['Pitra Dosha', '/pitra-dosha'], ['Mool Nakshatra Dosha', '/mool-dosha'],
+              ['Grahan Dosha', '/grahan-dosha'], ['Nadi Dosha', '/nadi-dosha'],
               ['Gemstone Recommendation', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'],
               ['Career Report', '/career-report'], ['Muhurat Finder', '/muhurat'],
               ['Sun vs Moon sign', '/sun-vs-moon-sign'], ['How we calculate', '/how-it-works'],

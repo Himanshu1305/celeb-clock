@@ -204,6 +204,7 @@ const NameCorrectionPage = lazyWithReload(() => import('@/pages/NameCorrectionPa
 const BusinessNameNumerologyPage = lazyWithReload(() => import('@/pages/BusinessNameNumerologyPage'));
 const MobileNumberNumerologyPage = lazyWithReload(() => import('@/pages/MobileNumberNumerologyPage'));
 const HouseNumberNumerologyPage = lazyWithReload(() => import('@/pages/HouseNumberNumerologyPage'));
+const DoshaCheckPage = lazyWithReload(() => import('@/pages/DoshaCheckPage'));
 const BlueZonesIndex = lazyWithReload(() => import('@/pages/BlueZonesIndex'));
 const BlueZonesFactor = lazyWithReload(() => import('@/pages/BlueZonesFactor'));
 const PanchangPage = lazyWithReload(() => import('@/pages/PanchangPage'));
@@ -461,6 +462,10 @@ const App = () => (
               <Route path="/business-name-numerology" element={<BusinessNameNumerologyPage />} />
               <Route path="/mobile-number-numerology" element={<MobileNumberNumerologyPage />} />
               <Route path="/house-number-numerology" element={<HouseNumberNumerologyPage />} />
+              <Route path="/pitra-dosha" element={<DoshaCheckPage kind="pitra" />} />
+              <Route path="/mool-dosha" element={<DoshaCheckPage kind="mool" />} />
+              <Route path="/grahan-dosha" element={<DoshaCheckPage kind="grahan" />} />
+              <Route path="/nadi-dosha" element={<DoshaCheckPage kind="nadi" />} />
               <Route path="/blue-zones" element={<BlueZonesIndex />} />
               <Route path="/blue-zones/:factor" element={<BlueZonesFactor />} />
               <Route path="/panchang" element={<PanchangPage />} />

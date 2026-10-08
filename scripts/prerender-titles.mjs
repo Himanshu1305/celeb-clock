@@ -676,6 +676,22 @@ export function getTitleForRoute(route) {
     title: "House Number Numerology — Your Home's Number & Meaning | BornClock",
     description: 'Free house-number numerology: reduce your house or flat number (including 12B-style) to a single digit and read the atmosphere the tradition links to it.',
   };
+  if (route === '/pitra-dosha') return {
+    title: 'Pitra Dosha Calculator — Check Your Chart Free | BornClock',
+    description: 'Free Pitra Dosha calculator from your real birth chart: whether the classical ancestral-karma signatures are present, graded calmly and honestly — no fear.',
+  };
+  if (route === '/mool-dosha') return {
+    title: 'Mool Nakshatra Dosha — Gandanta Birth Star Check | BornClock',
+    description: 'Free Mool (Mula) Nakshatra dosha check: whether your Moon falls in one of the six gandanta birth stars, with calm, honest, tradition-only framing.',
+  };
+  if (route === '/grahan-dosha') return {
+    title: 'Grahan Dosha Calculator — Sun/Moon with Rahu-Ketu | BornClock',
+    description: 'Free Grahan (eclipse) dosha calculator: whether the Sun or Moon sits with Rahu or Ketu in your chart, graded by closeness. Calm, honest reading.',
+  };
+  if (route === '/nadi-dosha') return {
+    title: 'Nadi Dosha — Your Nadi & What It Means in Matching | BornClock',
+    description: 'Find your own Nadi (Adi/Madhya/Antya) from your birth star and understand Nadi dosha in marriage matching — honestly framed, never an affliction you carry alone.',
+  };
 
   // /nakshatra and /nakshatra/:slug
   if (route === '/nakshatra') {
