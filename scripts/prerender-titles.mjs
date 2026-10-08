@@ -552,6 +552,30 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /planet-in-sign[/:planet/:sign] and /planet-in-house[/:planet/:house]
+  {
+    const PL = { sun: 'Sun', moon: 'Moon', mars: 'Mars', mercury: 'Mercury', jupiter: 'Jupiter', venus: 'Venus', saturn: 'Saturn', rahu: 'Rahu', ketu: 'Ketu' };
+    const SG = { aries: 'Aries', taurus: 'Taurus', gemini: 'Gemini', cancer: 'Cancer', leo: 'Leo', virgo: 'Virgo', libra: 'Libra', scorpio: 'Scorpio', sagittarius: 'Sagittarius', capricorn: 'Capricorn', aquarius: 'Aquarius', pisces: 'Pisces' };
+    const ORD = ['', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'];
+    if (route === '/planet-in-sign') return {
+      title: 'Planet in Sign — All 9 Planets Through 12 Rashis | BornClock',
+      description: 'What each of the 9 Vedic planets means in each of the 12 signs — dignity (exalted, debilitated, own), strength and a graded, plain-language reading. 108 placements.',
+    };
+    if (route === '/planet-in-house') return {
+      title: 'Planet in House — All 9 Planets Through 12 Houses | BornClock',
+      description: 'What each of the 9 Vedic planets means in each of the 12 houses (bhavas) — the life area it activates, what it gives and the care points. 108 placements.',
+    };
+    let m;
+    if ((m = route.match(/^\/planet-in-sign\/([a-z]+)\/([a-z]+)$/)) && PL[m[1]] && SG[m[2]]) return {
+      title: `${PL[m[1]]} in ${SG[m[2]]} — Vedic Meaning | BornClock`,
+      description: `${PL[m[1]]} in ${SG[m[2]]}: its dignity, strength, how ${SG[m[2]]} colours it, what it gives and the care points — a graded, plain-language Vedic reading.`,
+    };
+    if ((m = route.match(/^\/planet-in-house\/([a-z]+)\/(\d{1,2})$/)) && PL[m[1]] && +m[2] >= 1 && +m[2] <= 12) return {
+      title: `${PL[m[1]]} in the ${ORD[+m[2]]} House — Vedic Meaning | BornClock`,
+      description: `${PL[m[1]]} in the ${ORD[+m[2]]} house (bhava): the life areas it activates, what it gives at its best and where to take care — a plain-language Vedic reading.`,
+    };
+  }
+
   if (route === '/blue-zones') return {
     title: "Blue Zones Power 9 — 9 Habits of the Longest-Lived | BornClock",
     description: 'The nine habits (the Power 9) shared by the world\'s five Blue Zones, each explained plainly with how to apply it and honest sources.',

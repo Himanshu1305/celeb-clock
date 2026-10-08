@@ -193,6 +193,8 @@ const TransitIndex = lazyWithReload(() => import('@/pages/TransitIndex'));
 const TransitYearPage = lazyWithReload(() => import('@/pages/TransitYearPage'));
 const MercuryRetrograde = lazyWithReload(() => import('@/pages/MercuryRetrograde'));
 const FestivalsPage = lazyWithReload(() => import('@/pages/FestivalsPage'));
+const PlanetInSignPage = lazyWithReload(() => import('@/pages/PlanetInSignPage'));
+const PlanetInHousePage = lazyWithReload(() => import('@/pages/PlanetInHousePage'));
 const AttitudeNumberPage = lazyWithReload(() => import('@/pages/AttitudeNumberPage'));
 const ChaldeanNumerologyPage = lazyWithReload(() => import('@/pages/ChaldeanNumerologyPage'));
 const BlueZonesIndex = lazyWithReload(() => import('@/pages/BlueZonesIndex'));
@@ -434,6 +436,10 @@ const App = () => (
               <Route path="/mercury-retrograde/:year" element={<MercuryRetrograde />} />
               <Route path="/festivals" element={<FestivalsPage />} />
               <Route path="/festivals/:year" element={<FestivalsPage />} />
+              <Route path="/planet-in-sign" element={<PlanetInSignPage />} />
+              <Route path="/planet-in-sign/:planet/:sign" element={<PlanetInSignPage />} />
+              <Route path="/planet-in-house" element={<PlanetInHousePage />} />
+              <Route path="/planet-in-house/:planet/:house" element={<PlanetInHousePage />} />
               <Route path="/nakshatra" element={<NakshatraIndex />} />
               <Route path="/nakshatra/:slug" element={<NakshatraPage />} />
               <Route path="/attitude-number" element={<AttitudeNumberPage />} />

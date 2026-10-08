@@ -468,6 +468,7 @@ export default function VedicAstrologyLanding() {
               ['Festival Calendar', '/festivals'],
               ['Planetary Transits', '/transit'], ['Mercury Retrograde', '/mercury-retrograde'],
               ['27 Nakshatras', '/nakshatra'], ['Rashi', '/moon-sign'],
+              ['Planet in Sign', '/planet-in-sign'], ['Planet in House', '/planet-in-house'],
               ['Sade Sati', '/sade-sati'], ['Dasha Calculator', '/dasha-calculator'],
               ['Manglik', '/manglik'], ['Kaal Sarp Dosha', '/kaal-sarp-dosha'],
               ['Gemstone Recommendation', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'],

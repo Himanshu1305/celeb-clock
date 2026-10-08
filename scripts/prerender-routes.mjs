@@ -331,6 +331,12 @@ export const STATIC_ROUTES = [
   ...[2025, 2026, 2027].map(y => `/mercury-retrograde/${y}`),
   '/festivals',
   ...[2025, 2026, 2027].map(y => `/festivals/${y}`),
+  '/planet-in-sign',
+  ...['sun','moon','mars','mercury','jupiter','venus','saturn','rahu','ketu'].flatMap(p =>
+    ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'].map(s => `/planet-in-sign/${p}/${s}`)),
+  '/planet-in-house',
+  ...['sun','moon','mars','mercury','jupiter','venus','saturn','rahu','ketu'].flatMap(p =>
+    [1,2,3,4,5,6,7,8,9,10,11,12].map(h => `/planet-in-house/${p}/${h}`)),
   '/attitude-number',
   '/chaldean-numerology',
   '/blue-zones',

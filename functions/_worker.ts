@@ -232,6 +232,11 @@ export default {
       if ((m = pathname.match(/^\/transit\/([a-z]+)\/(\d+)\/?$/)))    return !(TRP.has(m[1]) && validTY(parseInt(m[2], 10)));
       if ((m = pathname.match(/^\/mercury-retrograde\/(\d+)\/?$/)))   return !validTY(parseInt(m[1], 10));
       if ((m = pathname.match(/^\/festivals\/(\d+)\/?$/)))            return !validTY(parseInt(m[1], 10));
+      // Planet-in-sign / planet-in-house: 9 planets × 12 signs / 12 houses.
+      const PLN = new Set(['sun','moon','mars','mercury','jupiter','venus','saturn','rahu','ketu']);
+      const SGN = new Set(['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces']);
+      if ((m = pathname.match(/^\/planet-in-sign\/([a-z]+)\/([a-z]+)\/?$/)))  return !(PLN.has(m[1]) && SGN.has(m[2]));
+      if ((m = pathname.match(/^\/planet-in-house\/([a-z]+)\/(\d+)\/?$/)))    return !(PLN.has(m[1]) && parseInt(m[2], 10) >= 1 && parseInt(m[2], 10) <= 12);
       const BZ = new Set(['move-naturally','purpose','downshift','80-percent-rule','plant-slant','wine-at-5','belong','loved-ones-first','right-tribe']);
       if ((m = pathname.match(/^\/blue-zones\/([a-z0-9-]+)\/?$/)))    return !BZ.has(m[1]);
       const PC = new Set(['delhi','mumbai','bengaluru','kolkata','chennai','hyderabad','pune','ahmedabad','jaipur','lucknow']);
