@@ -468,7 +468,7 @@ export default function VedicAstrologyLanding() {
               ['Sade Sati', '/sade-sati'], ['Manglik', '/kundali-match'],
               ['Gemstone Recommendation', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'],
               ['Career Report', '/career-report'], ['Muhurat Finder', '/muhurat'],
-              ['Sun vs Moon sign', '/sun-vs-moon-sign'],
+              ['Sun vs Moon sign', '/sun-vs-moon-sign'], ['How we calculate', '/how-it-works'],
             ] as Array<[string, string]>).map(([label, to], i, arr) => (
               <span key={label}>
                 <Link className="textlink" to={to}>{label}</Link>{i < arr.length - 1 && <span className="muted"> · </span>}
