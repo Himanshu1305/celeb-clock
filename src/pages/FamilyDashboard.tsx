@@ -65,6 +65,7 @@ import {
   getFamilyMembers, deleteFamilyMember,
   FamilyMember,
 } from '@/services/FamilyService';
+import { addReminder } from '@/services/reminderService';
 import { QUIZ_COUNTRIES } from '@/services/LongevityCalculationService';
 
 type FamilyMemberExt = FamilyMember & { relationship?: string | null };
@@ -101,9 +102,9 @@ function barColor(f: number) {
 }
 
 function FamilyDashboardInner() {
-  // FEATURE FLAG — disabled for launch, re-enable Month 2
-  // To re-enable: change false to true and uncomment nav item in Navigation.tsx
-  const FAMILY_DASHBOARD_ENABLED = false;
+  // FEATURE FLAG — finished in P3 (retention). Kept as a kill-switch: flip to false
+  // to return to the "coming soon" placeholder without reverting the code.
+  const FAMILY_DASHBOARD_ENABLED = true;
 
   if (!FAMILY_DASHBOARD_ENABLED) {
     return (
@@ -252,6 +253,32 @@ function FamilyDashboardInner() {
     setMembers(prev => prev.filter(m => m.id !== id));
   }
 
+  // Birthday reminders: one tap turns a saved family member into an opt-in email
+  // reminder (3 days before, to the account email). Ties the family list into the P3
+  // notification pipeline (api/_notify.ts). Writes are the user's own rows (Rule 11).
+  const [remindedIds, setRemindedIds] = useState<Set<string>>(new Set());
+  async function handleRemind(m: FamilyMemberExt) {
+    if (!user || !m.date_of_birth) return;
+    await addReminder(
+      {
+        friend_name: m.name,
+        friend_dob: m.date_of_birth,
+        relationship: m.relationship || undefined,
+        remind_days_before: 3,
+        notify_email: user.email || undefined,
+      },
+      user.id,
+    );
+    setRemindedIds(prev => new Set(prev).add(m.id));
+  }
+
+  // Deep-link to a member's Kundli tool, prefilling the date (time/place entered there).
+  function kundliHref(m: FamilyMemberExt): string {
+    const age = m.date_of_birth ? calcAge(m.date_of_birth) : 99;
+    const base = age <= 17 ? '/child-kundli' : '/kundli';
+    return m.date_of_birth ? `${base}?dob=${encodeURIComponent(m.date_of_birth)}` : base;
+  }
+
   const avgForecast = members.length
     ? Math.round((members.reduce((s, m) => s + (m.forecast_cache || 0), 0) / members.length) * 10) / 10
     : 0;
@@ -354,8 +381,8 @@ function FamilyDashboardInner() {
         note: '© 2026 BornClock.',
       }}
       eyebrow="Family"
-      h1={(<span className="inline-flex items-center gap-2"><Users className="w-7 h-7 text-primary" />Your Family's Longevity Dashboard</span>)}
-      lead={<>Baseline forecasts based on age, country, and gender. Encourage family members to take the full quiz.</>}
+      h1={(<span className="inline-flex items-center gap-2"><Users className="w-7 h-7 text-primary" />Your Family Dashboard</span>)}
+      lead={<>Keep your family's birthdays, charts and longevity forecasts in one place — open a child's Kundli or set a birthday reminder in one tap.</>}
     >
       <section className="section">
         <div className="container mx-auto px-4 max-w-5xl">
@@ -418,14 +445,22 @@ function FamilyDashboardInner() {
                       <div className="text-xs text-muted-foreground mb-3">
                         years forecast · {remaining} years remaining
                       </div>
-                      {/* TEMPORARILY DISABLED
-                      <Link
-                        to={buildLifeExpectancyUrl(m)}
-                        className="text-xs text-[#6E5AA6] hover:underline flex items-center gap-1"
-                      >
-                        Full quiz for {m.name}'s personalized forecast <ArrowRight className="w-3 h-3" />
-                      </Link>
-                      */}
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        <Link
+                          to={kundliHref(m)}
+                          className="text-xs font-medium text-[#6E5AA6] hover:underline inline-flex items-center gap-1"
+                        >
+                          {age <= 17 ? "Child's Kundli" : 'Kundli'} <ArrowRight className="w-3 h-3" />
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => handleRemind(m)}
+                          disabled={remindedIds.has(m.id)}
+                          className="text-xs font-medium text-[#6E5AA6] hover:underline disabled:text-green-600 disabled:no-underline inline-flex items-center gap-1"
+                        >
+                          {remindedIds.has(m.id) ? '✓ Reminder set' : '🎂 Remind me'}
+                        </button>
+                      </div>
                     </CardContent>
                   </Card>
                 );
