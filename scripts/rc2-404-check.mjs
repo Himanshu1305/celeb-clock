@@ -31,6 +31,10 @@ const VALID = [
   '/vedic-zodiac/mesh', '/vedic-zodiac/meen',
   '/numerology/7', '/numerology/11', '/numerology/33',
   '/birthstone/january', '/birthstone/december',
+  // Backlog-1 new static routes (Items E, H) — must stay 200. These are static (no
+  // parameters), so they are NOT in the edge force404 enum; they return 200 because a
+  // prerendered file exists and nothing force-404s them.
+  '/manglik', '/kaal-sarp-dosha', '/personal-year-number', '/angel-numbers', '/dasha-calculator',
 ];
 
 // Valid NON-SITEMAP routes (account/dynamic/query — must never be 404'd by the edge).

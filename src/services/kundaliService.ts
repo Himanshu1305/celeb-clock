@@ -1,7 +1,7 @@
 /**
  * Client-side Kundali service. The heavy sidereal computation runs server-side
- * (`/api/kundali`, Node + Swiss Ephemeris); this wrapper fetches it and builds a
- * plain-language interpretation. ProKerala is optional (boundary refinement only).
+ * (`/api/kundali`, Node + astronomy-engine, Lahiri sidereal); this wrapper fetches it
+ * and builds a plain-language interpretation. ProKerala is a fallback only.
  */
 import { NAKSHATRA_MEANINGS } from '@/lib/vedic/nakshatraMeanings';
 import { glossInline } from '@/lib/vedic/termDefinitions';
@@ -14,6 +14,9 @@ export interface KundaliData {
   rashi: string | null;
   rashi_devanagari: string | null;
   dasha: { mahadasha: string; antardasha: string } | null;
+  /** Full-lifetime Vimshottari timeline (Maha level + nested Antar), from the engine.
+   *  Used by DashaDeepDive to compute the deeper levels (Pratyantar/Sookshma/Prana) on demand. */
+  dashaTimeline?: Array<{ lord: string; start: string; end: string; antardashas?: Array<{ lord: string; start: string; end: string }> }>;
   requires_birth_time: boolean;
 }
 

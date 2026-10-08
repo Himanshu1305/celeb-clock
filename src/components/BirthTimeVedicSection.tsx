@@ -6,16 +6,16 @@ interface VedicApiResult {
   nakshatra: { nakshatra: string; nakshatra_devanagari: string; pada: number; confidence: string; is_boundary: boolean };
   rashi: string | null;
   rashi_devanagari: string | null;
-  lagna: string | null;
+  lagna: { sign: string; signIndex: number; degrees: number } | null;
   dasha: { mahadasha: string; antardasha: string } | null;
   requires_birth_time: boolean;
 }
 
 /**
  * Optional birth time + city → accurate Vedic profile. The heavy sidereal
- * computation runs server-side (`/api/vedic-profile`, Node + Swiss Ephemeris) so
- * the Node-only WASM never ships to the browser. Degrades gracefully when the
- * endpoint is unavailable.
+ * computation runs server-side (`/api/vedic-profile`, Node + astronomy-engine,
+ * Lahiri sidereal) so the heavy calculation never ships to the browser. Degrades
+ * gracefully when the endpoint is unavailable.
  */
 export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
   const { profile, isFull } = useSavedProfile();
@@ -120,6 +120,9 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
               ))}
             </ul>
           )}
+          <p className="text-[11px] text-gray-500 mt-1">
+            City search © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline">OpenStreetMap</a> contributors
+          </p>
         </div>
       </div>
 
@@ -157,7 +160,7 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
           {result.lagna && (
             <div className="rounded-lg bg-white border border-gray-100 p-3">
               <span className="text-gray-500">Lagna (Ascendant)</span>
-              <div className="font-semibold text-gray-900">{result.lagna}</div>
+              <div className="font-semibold text-gray-900">{result.lagna.sign}</div>
             </div>
           )}
           {result.dasha && (

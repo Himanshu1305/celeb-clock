@@ -633,8 +633,8 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
-    q: 'How accurate is this biological age test?',
-    a: 'This assessment uses self-reported proxy biomarkers that correlate with chronological age at r=0.81–0.86 in validated population studies (JMIR Aging, 2022). The gold standard — DNA methylation epigenetic clocks (Horvath, 2013) — requires a laboratory blood sample and costs £200-500. Our proxy approach provides a directional estimate that is clinically meaningful without requiring any equipment or blood draw. Treat your result as a scientifically informed estimate rather than a precise clinical measurement.',
+    q: 'How accurate is this biological age estimate?',
+    a: 'This assessment uses self-reported proxy biomarkers that correlate with chronological age at r=0.81–0.86 in validated population studies (JMIR Aging, 2022). The gold standard — DNA methylation epigenetic clocks (Horvath, 2013) — requires a laboratory blood sample and costs £200-500. Our lifestyle-factor approach provides a directional estimate that is clinically meaningful without requiring any equipment or blood draw. Treat your result as a scientifically informed estimate rather than a precise clinical measurement.',
   },
   {
     q: 'Can I actually reduce my biological age?',
@@ -671,7 +671,7 @@ const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: "Is biological age the same as 'body age'?",
-    a: "Body age, fitness age, and biological age are related but distinct concepts. Fitness age specifically measures cardiovascular capacity (VO₂ max). Biological age is a broader measure incorporating multiple physiological systems. Body age is a general consumer term for the same concept. BornClock measures a composite biological age using 12 biomarkers across cardiovascular, musculoskeletal, neurological, metabolic, body composition, and vitality domains.",
+    a: "Body age, fitness age, and biological age are related but distinct concepts. Fitness age specifically measures cardiovascular capacity (VO₂ max). Biological age is a broader measure incorporating multiple physiological systems. Body age is a general consumer term for the same concept. BornClock estimates a composite biological age using 12 lifestyle and physiological proxy biomarkers across cardiovascular, musculoskeletal, neurological, metabolic, body composition, and vitality domains.",
   },
   {
     q: 'What should I do if my biological age is significantly higher than my chronological age?',
@@ -870,7 +870,7 @@ const BiologicalAge = () => {
       : diff <= 3
       ? 'Your biological markers are tracking with your chronological age — a solid, healthy baseline. Here is what the research shows from this starting point: the Fitzgerald et al. (2021) randomized controlled trial demonstrated a 3.23-year reduction in biological age in just 8 weeks. You are not starting behind. You are starting ready.'
       : diff <= 8
-      ? 'Your biological age is running ahead of your calendar — which means your physiological systems are under measurable strain. This is not a verdict. It is a measurement. And measurements can change. The same research that identified elevated biological age as a risk factor also showed it is among the most responsive to intervention. What you do in the next 90 days matters more than the years behind you.'
+      ? 'Your biological age is running ahead of your calendar — which means your physiological systems are under measurable strain. This is not a verdict. It is an estimate. And estimates can change. The same research that identified elevated biological age as a risk factor also showed it is among the most responsive to intervention. What you do in the next 90 days matters more than the years behind you.'
       : 'This result is significant — and it deserves a direct response. Your biological systems are showing strain that goes beyond typical aging. We strongly recommend sharing this assessment with a healthcare professional. At the same time: biological age is the most modifiable metric in aging science. Studies show meaningful reversal is possible at every starting point. This is your clearest possible signal to act.';
 
   const questionResults = BIO_QUESTIONS.map(q => {
@@ -892,7 +892,7 @@ const BiologicalAge = () => {
     .slice(0, 3);
 
   const shareText = bioAge !== null
-    ? `My biological age is ${bioAge} — ${Math.abs(diff).toFixed(1)} years ${diff < 0 ? 'younger' : 'older'} than my chronological age of ${age}. Tested with 12 WHO-validated biomarkers.\nFind yours → bornclock.com/biological-age\n#BiologicalAge #BornClock #Longevity`
+    ? `My biological age is ${bioAge} — ${Math.abs(diff).toFixed(1)} years ${diff < 0 ? 'younger' : 'older'} than my chronological age of ${age}. Estimated from 12 WHO-validated lifestyle biomarkers.\nFind yours → bornclock.com/biological-age\n#BiologicalAge #BornClock #Longevity`
     : '';
 
   const handleCopy = async () => {

@@ -160,7 +160,7 @@ export default function MysticCornerLanding() {
             <div><span className="eyebrow">Show the workings</span><h2>Your date, through three lenses.</h2></div>
             <p>Computed from {dateLabel}. Change the date above to explore another — it recalculates locally.</p>
           </div>
-          <TrustStrip claim="Calculated from your actual birth date, every time — not a generic daily horoscope." />
+          <TrustStrip claim="Calculated from your actual birth date, every time — not a generic daily horoscope." href="/how-it-works#zodiac" />
           <div className="tabs" role="tablist" aria-label="Explore the output">
             {(['numerology', 'western', 'chinese'] as Tab[]).map(t => (
               <button key={t} type="button" role="tab" aria-selected={tab === t} onClick={() => setTab(t)}>
@@ -270,6 +270,7 @@ export default function MysticCornerLanding() {
               ['Numerology', '/numerology'], ['Name numerology', '/name-numerology'],
               ['Western zodiac', '/zodiac'], ['Chinese zodiac', '/chinese-zodiac'],
               ['Tarot by birthday', '/tarot-card-by-birthday'], ['Compatibility', '/compatibility'],
+              ['Personal year number', '/personal-year-number'], ['Angel numbers', '/angel-numbers'],
             ] as Array<[string, string]>).map(([label, to], i, arr) => (
               <span key={label}><Link className="textlink" to={to}>{label}</Link>{i < arr.length - 1 && <span className="muted"> · </span>}</span>
             ))}

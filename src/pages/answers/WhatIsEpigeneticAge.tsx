@@ -12,7 +12,7 @@ const CLOCKS = [
 ];
 
 const RELATED = [
-  { path: '/biological-age', label: 'Biological Age Test' },
+  { path: '/biological-age', label: 'Biological Age Calculator' },
   { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
   { path: '/coach', label: 'Longevity Coach' },
   { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age' },
@@ -81,11 +81,11 @@ export default function WhatIsEpigeneticAge() {
           </div>
 
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
-            <p className="text-lg font-bold text-gray-900 mb-2">Test My Biological Age</p>
-            <p className="text-sm text-gray-500 mb-4">12-biomarker assessment · WHO-validated · Takes 3 minutes</p>
+            <p className="text-lg font-bold text-gray-900 mb-2">Estimate My Biological Age</p>
+            <p className="text-sm text-gray-500 mb-4">12-biomarker lifestyle assessment · WHO-validated · Takes 3 minutes</p>
             <Link to="/biological-age"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
-              Test my biological age →
+              Estimate my biological age →
             </Link>
           </div>
 

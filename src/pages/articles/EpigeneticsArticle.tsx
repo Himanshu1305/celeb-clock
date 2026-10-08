@@ -40,7 +40,7 @@ const FAQS = [
   },
   {
     q: 'How does BornClock relate to epigenetics and longevity?',
-    a: 'BornClock measures eight epigenetically-relevant lifestyle factors — the everyday inputs, like diet quality, exercise, and sleep, that research links to gene expression and biological ageing — and translates them into a longevity estimate. It is an educational, lifestyle-based tool for reflection, not a clinical epigenetic test.',
+    a: 'BornClock assesses eight epigenetically-relevant lifestyle factors — the everyday inputs, like diet quality, exercise, and sleep, that research links to gene expression and biological ageing — and translates them into a longevity estimate. It is an educational, lifestyle-based tool for reflection, not a clinical epigenetic test.',
   },
 ];
 
@@ -131,12 +131,12 @@ export function EpigeneticsArticle() {
 
           <div className="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-6 my-8">
             <h3 className="text-lg font-black text-emerald-900 mb-2">
-              BornClock measures 8 epigenetically-relevant lifestyle factors
+              BornClock assesses 8 epigenetically-relevant lifestyle factors
             </h3>
             <p className="text-sm text-emerald-800 leading-relaxed mb-4">
               You cannot rewrite your DNA sequence — but you can influence the lifestyle inputs
               that shape gene expression and biological age. BornClock's longevity calculator
-              measures eight epigenetically-relevant lifestyle factors and turns them into a
+              assesses eight epigenetically-relevant lifestyle factors and turns them into a
               personalised estimate of how your habits are shaping your ageing.
             </p>
             <a href="/longevity-calculator"

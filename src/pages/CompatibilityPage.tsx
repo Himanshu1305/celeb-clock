@@ -237,7 +237,7 @@ export default function CompatibilityPage() {
 
         <div className="max-w-2xl mx-auto px-4 py-10">
           <PageTagline />
-          <TrustStrip claim="Calculated from both actual birth dates — zodiac, Rashi, Life Path and Nakshatra, not a generic pairing table." />
+          <TrustStrip claim="Calculated from both people's actual birth dates — star sign, Moon sign, Life Path number and birth star — not a generic pairing table." href="/how-it-works#vedic" />
 
           {/* DOB-based 4-dimension compatibility (Task 15) — zodiac, rashi, life path, nakshatra. */}
           <DobCompatibility />

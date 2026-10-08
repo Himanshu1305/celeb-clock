@@ -4,7 +4,7 @@ import { SEO, WebApplicationSchema } from '@/components/SEO';
 
 const RELATED = [
   { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/biological-age', label: 'Biological Age Test' },
+  { path: '/biological-age', label: 'Biological Age Calculator' },
   { path: '/life-expectancy-india', label: 'Life Expectancy in India' },
   { path: '/coach', label: 'Longevity Coach' },
 ];

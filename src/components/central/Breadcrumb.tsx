@@ -5,7 +5,7 @@ export type Crumb = { label: string; to?: string };
 /**
  * Central breadcrumb row (`.paj .breadcrumb`). `trail` are the parent crumbs,
  * `current` is the active page name, `edition` is the optional right-side tag
- * (e.g. "Sidereal · Lahiri · Swiss Ephemeris").
+ * (e.g. "Sidereal · Lahiri").
  */
 export function Breadcrumb({ trail = [], current, edition }: { trail?: Crumb[]; current: string; edition?: string }) {
   return (

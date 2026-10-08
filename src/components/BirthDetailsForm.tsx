@@ -103,6 +103,9 @@ export function BirthDetailsForm({
               ))}
             </ul>
           )}
+          <p className="text-[11px] text-muted-foreground mt-1">
+            City search © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline">OpenStreetMap</a> contributors
+          </p>
         </div>
       </div>
 

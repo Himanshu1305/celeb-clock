@@ -106,7 +106,7 @@ export default function CareerReportPage() {
             <p>A decisive-but-bounded read of your career: the 10th house and its lord, the Dasamsa (D10) career chart, career Yogas, and real timing windows.</p>
           </div>
 
-          <TrustStrip claim="Based on your actual 10th house and career-timing periods — not a generic trait list." />
+          <TrustStrip claim="Built from your actual career house (the 10th) and your real planetary periods — not a generic trait list." href="/how-it-works#vedic" />
           <KundaliTabs active="kundali" />
 
           <div className="form-band" style={{ marginTop: 16 }}>

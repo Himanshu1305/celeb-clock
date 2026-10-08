@@ -18,6 +18,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { mergeProfile } from '@/services/savedProfile';
 import { fetchKundali, buildInterpretationBlocks, type KundaliData } from '@/services/kundaliService';
+import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
+import { WhatsAhead } from '@/components/vedic/WhatsAhead';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
 const VedicReading = lazy(() => import('@/components/reading/VedicReading').then(m => ({ default: m.VedicReading })));
 const PastPeriodReflection = lazy(() => import('@/components/reading/PastPeriodReflection').then(m => ({ default: m.PastPeriodReflection })));
@@ -144,14 +146,14 @@ export default function KundaliPage() {
       seo={(
         <SEO
           title="Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock"
-          description="Generate your free Vedic Kundali (Janam Kundali) — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, computed with the Swiss Ephemeris."
+          description="Generate your free Vedic Kundali (Janam Kundali) — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, in accurate sidereal (Lahiri) astronomy."
           canonicalUrl="/kundali"
           ogType="website"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali', edition: 'Sidereal · Lahiri · Swiss Ephemeris' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali', edition: 'Sidereal · Lahiri' }}
       footer={{
-        tagline: 'Your Vedic birth chart, computed with care — sidereal (Lahiri), Swiss Ephemeris.',
+        tagline: 'Your Vedic birth chart, computed with care — accurate sidereal (Lahiri) astronomy.',
         nav: [
           { label: 'Vedic Astrology', to: '/vedic-astrology' },
           { label: 'Kundali Matching', to: '/kundali-match' },
@@ -172,7 +174,7 @@ export default function KundaliPage() {
             <p>Your Vedic birth chart — planetary positions, <TermTip id="lagna">Lagna</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip> and <TermTip id="dasha">Dasha</TermTip>, in accurate sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) astronomy. Full report {price}.</p>
           </div>
 
-          <TrustStrip claim="Computed with the Swiss Ephemeris (sidereal · Lahiri) and cross-checked for accuracy — not a template." />
+          <TrustStrip claim="Calculated from your exact birth date, time and place — not a template — and cross-checked against a leading Vedic astrology service before launch." href="/how-it-works#vedic" />
           <KundaliTabs active="kundali" />
 
           {loaded && isFull && (
@@ -261,6 +263,18 @@ export default function KundaliPage() {
                   </tbody>
                 </table>
               </div>
+
+              {data.dashaTimeline && data.dashaTimeline.length > 0 && (
+                <DashaDeepDive mahadashas={data.dashaTimeline.map(m => ({ lord: m.lord, start: m.start, end: m.end }))} />
+              )}
+
+              {data.dashaTimeline && data.dashaTimeline.length > 0 && (
+                <WhatsAhead
+                  lagnaSignIndex={data.lagna.signIndex}
+                  planets={data.planets.map(p => ({ name: p.name, house: p.house }))}
+                  dashaTimeline={data.dashaTimeline}
+                />
+              )}
 
               <div className="inline-actions" style={{ marginTop: 18 }}>
                 <a data-testid="kundali-whatsapp-share" href={whatsappHref} target="_blank" rel="noopener noreferrer"

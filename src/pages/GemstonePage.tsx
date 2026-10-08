@@ -84,7 +84,7 @@ export default function GemstonePage() {
             <div><span className="eyebrow">Ratna</span><h1>Gemstone Suggestions.</h1></div>
             <p>A traditional, informational suggestion based on your Ascendant lord and computed planetary strength — classical association only, not a medical claim or guarantee, and we sell nothing.</p>
           </div>
-          <TrustStrip claim="We tell you the method — your Ascendant lord and computed planetary strength — and why." />
+          <TrustStrip claim="We show you the method — the ruler of your rising sign and your chart's computed planetary strengths — and why each stone is suggested." href="/how-it-works#vedic" />
           <div className="form-band" style={{ marginTop: 16 }}>
             <div><h3>Your birth details</h3><p className="small muted">The stone is matched to your Ascendant lord.</p></div>
             <BirthDetailsForm initial={initial} submitLabel="Suggest my gemstone" loadingLabel="Analysing…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="gemstone" />

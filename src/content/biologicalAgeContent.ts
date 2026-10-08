@@ -11,7 +11,7 @@ if (RAW_TITLE.length > 70) {
   throw new Error(`BA title too long: ${RAW_TITLE.length} chars (max 70): "${RAW_TITLE}"`);
 }
 
-const RAW_DESC = 'Find your biological age based on epigenetic science and lifestyle factors. Free calculator using WHO and NIH research. See how to lower it in 90 days.';
+const RAW_DESC = 'Estimate your biological age from lifestyle factors — not a lab test. Free calculator grounded in epigenetic research and WHO data. Lower it in 90 days.';
 
 if (RAW_DESC.length > 160) {
   throw new Error(`BA desc too long: ${RAW_DESC.length} chars (max 160): "${RAW_DESC}"`);
@@ -22,7 +22,7 @@ export const BA_SEO = {
   description: RAW_DESC,
   canonicalUrl: 'https://bornclock.com/biological-age-calculator/',
   ogTitle: 'Biological Age Calculator — How Old Is Your Body Really?',
-  ogDescription: 'Free biological age calculator using epigenetic science and WHO research. Find out if your body is ageing faster than your age — and get your free 90-day plan.',
+  ogDescription: 'Free biological age calculator — a lifestyle-based estimate grounded in epigenetic research and WHO data, not a lab test. See if your body is ageing faster, and get a free 90-day plan.',
 } as const;
 
 // Validate og fields too
@@ -38,7 +38,7 @@ export const BA_SCHEMA = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: 'BornClock Biological Age Calculator',
-    description: 'Free biological age calculator using epigenetic science, WHO data, and NIH research. Estimates biological age from lifestyle factors and provides a personalised action plan.',
+    description: 'Free biological age calculator. Estimates biological age from lifestyle and health factors — not a lab measurement — using WHO and NIH research, grounded in epigenetic-clock science, and provides a personalised action plan.',
     applicationCategory: 'HealthApplication',
     operatingSystem: 'Web Browser',
     url: 'https://bornclock.com/biological-age-calculator/',
@@ -286,15 +286,15 @@ export const BA_REALISTIC_POTENTIAL = Math.min(THEORETICAL_SUM * 0.5, 8).toFixed
 
 export const BA_COPY = {
   hero: {
-    badge: '🔬 Epigenetic Science + WHO Research',
+    badge: '🔬 Lifestyle-Based Estimate · WHO + Epigenetic Research',
     h1Line1: 'Biological Age Calculator —',
     h1Line2: 'How Old Is Your Body Really?',
-    subtitle: 'Find out if your lifestyle is accelerating or slowing your cellular ageing. Free estimate using epigenetic science and WHO research. Takes 3 minutes.',
+    subtitle: 'Find out if your lifestyle is likely accelerating or slowing your cellular ageing. A free estimate from your lifestyle and health habits — grounded in epigenetic-clock research, not a lab test. Takes 3 minutes.',
     trust: [
-      'Based on Horvath epigenetic clock science',
+      'Lifestyle-factor estimate, not a lab test',
+      'Grounded in Horvath epigenetic-clock research',
       'WHO lifestyle factor data',
-      'Personalised 90-day reversal plan',
-      'No blood test required',
+      'Personalised 90-day plan',
     ] as const,
   },
   bryanJohnson: {

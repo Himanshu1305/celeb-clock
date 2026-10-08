@@ -341,6 +341,11 @@ export const STATIC_ROUTES = [
   // Part AL Step 7: prerender the redesigned Vedic tool pages so crawlers see real content
   // on first load (previously served a bare SPA shell before React hydrated).
   '/sade-sati',
+  '/dasha-calculator',
+  '/manglik',
+  '/kaal-sarp-dosha',
+  '/personal-year-number',
+  '/angel-numbers',
   '/muhurat',
   '/gemstones',
   '/career-report',

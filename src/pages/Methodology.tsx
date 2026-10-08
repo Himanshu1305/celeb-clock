@@ -10,6 +10,7 @@ const TOC_ITEMS = [
   { id: 'celebrity-birthday', label: 'Celebrity Birthday Matching' },
   { id: 'planetary-age', label: 'Planetary Age Calculator' },
   { id: 'zodiac', label: 'Zodiac Signs' },
+  { id: 'vedic', label: 'Vedic Astrology & Kundli' },
   { id: 'numerology', label: 'Numerology — Life Path Number' },
   { id: 'birthstone', label: 'Birthstone' },
   { id: 'generation', label: 'Generation Classification' },
@@ -90,8 +91,8 @@ export default function Methodology() {
       seo={(
         <SEO
           title="How BornClock Works — Tools, Data & Source-Cited Methodology | BornClock"
-          description="How BornClock works: the Birthday Blueprint report, life expectancy calculator, celebrity birthday matching, the Indian celebrities facet and the Answers library — each with its data sources, formulas and citations."
-          keywords="how BornClock works, birthday blueprint, life expectancy methodology, how life expectancy is calculated, planetary age formula, zodiac methodology"
+          description="How BornClock works: the Vedic Kundli engine (Lahiri sidereal, cross-checked vs ProKerala), the life expectancy calculator, numerology, celebrity matching and the Answers library — each with its data sources, formulas and citations."
+          keywords="how BornClock works, how we calculate, vedic astrology methodology, lahiri ayanamsa, kundli accuracy, life expectancy methodology, planetary age formula, numerology method"
           canonicalUrl="/how-it-works"
         />
       )}
@@ -129,6 +130,11 @@ export default function Methodology() {
                 <Link className="text-[#6E5AA6] hover:underline font-medium" to="/celebrity-birthday">Celebrity birthday matching</Link>, including the{' '}
                 <Link className="text-[#6E5AA6] hover:underline font-medium" to="/born-on/india">Indian celebrities by date</Link> facet drawn from the same
                 ranked dataset.
+              </li>
+              <li>
+                The <Link className="text-[#6E5AA6] hover:underline font-medium" to="/kundali">Vedic Kundli</Link> and astrology suite —
+                a precise sidereal birth-chart engine (Lahiri ayanamsa) cross-checked against professional
+                providers, described in full below.
               </li>
               <li>
                 The <Link className="text-[#6E5AA6] hover:underline font-medium" to="/answers">Answers library</Link> — concise, sourced answers to common
@@ -447,6 +453,120 @@ export default function Methodology() {
                 </p>
               </section>
 
+              {/* ── VEDIC ASTROLOGY ── */}
+              <section id="vedic" className="mb-14 scroll-mt-8">
+                <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b border-border">
+                  Vedic Astrology &amp; Kundli
+                  <span className="ml-2"><CitationBadge>Lahiri Ayanamsa</CitationBadge></span>
+                </h2>
+
+                <div className="mb-10">
+                  <h3 className="text-xl font-semibold text-foreground mb-3">The Astronomical Engine</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    BornClock's{' '}
+                    <Link to="/kundali" className="text-[#6E5AA6] hover:underline font-medium">Kundli / birth-chart tool</Link>{' '}
+                    is computed by a self-contained astronomical engine built on the open-source{' '}
+                    <strong className="text-foreground">astronomy-engine</strong> library (VSOP87 / ELP2000-grade
+                    planetary and lunar theory). Positions are calculated for the exact date, time, and place of
+                    birth, then converted to the <strong className="text-foreground">sidereal zodiac</strong> used in
+                    Indian astrology by subtracting the <strong className="text-foreground">Lahiri (Chitrapaksha)
+                    ayanamsa</strong> — the same ayanamsa adopted by the Indian government's calendar reform
+                    committee.
+                  </p>
+                  <FormulaBlock>
+                    {`siderealLongitude = tropicalLongitude − lahiriAyanamsa(date)\nlahiriAyanamsa(2000-01-01) ≈ 23.853°, advancing with precession (~50.3″/yr)`}
+                  </FormulaBlock>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Everything downstream — your <strong className="text-foreground">Rashi</strong> (Moon sign),{' '}
+                    <strong className="text-foreground">Lagna</strong> (Ascendant),{' '}
+                    <strong className="text-foreground">Nakshatra</strong> and pada, the{' '}
+                    <strong className="text-foreground">Vimshottari Dasha</strong> timeline, planetary strengths
+                    (Shadbala), divisional charts, detected Yogas and the daily Panchang — is derived from these same
+                    sidereal longitudes, so every figure on the page is internally consistent.
+                  </p>
+                </div>
+
+                <div className="mb-10">
+                  <h3 className="text-xl font-semibold text-foreground mb-3">
+                    How the Engine Was Cross-Checked
+                    <CitationBadge>ProKerala</CitationBadge>
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    Before going live, the engine was validated chart-by-chart against two independent professional
+                    providers (including ProKerala). The results we rely on are the ones that matched closely:
+                  </p>
+                  <div className="overflow-x-auto rounded-lg border border-border">
+                    <table className="w-full text-sm text-muted-foreground">
+                      <thead className="bg-muted">
+                        <tr>
+                          <th className="text-left px-3 py-2 font-semibold text-foreground">Output</th>
+                          <th className="text-left px-3 py-2 font-semibold text-foreground">Agreement vs reference</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {[
+                          ['Rashi, Nakshatra, Pada, Retrograde, Dasha', 'Exact match (100%)'],
+                          ['Lagna / non-polar house cusps', '~99.99% (within 0.004°)'],
+                          ['Mangal Dosha (Manglik, Lagna rule)', '99–100%'],
+                          ['Sade Sati / Dhaiya (Saturn transit)', '100%'],
+                          ['Kaal Sarp (whole-sign method)', '96–100% (documented ~4% edge tolerance)'],
+                        ].map(([out, acc], i) => (
+                          <tr key={out} className={i % 2 === 0 ? 'bg-muted/20' : ''}>
+                            <td className="px-3 py-2 font-medium text-foreground">{out}</td>
+                            <td className="px-3 py-2">{acc}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed mt-4">
+                    The local engine runs first. Only if it cannot complete a chart (for example, house cusps at
+                    extreme polar latitudes) does the system fall back to a professional provider, and the result is
+                    tagged accordingly. Daily <strong className="text-foreground">Panchang</strong> and{' '}
+                    <strong className="text-foreground">Muhurat</strong> windows (Tithi, Nakshatra, Yoga, Karana, Vara
+                    and the Rahu Kalam to avoid) are derived from the same sidereal Sun and Moon longitudes, with the
+                    classical muhurat basis drawn from Brihat Samhita and standard panchang sources.
+                  </p>
+                </div>
+
+                <div className="mb-10">
+                  <h3 className="text-xl font-semibold text-foreground mb-3">What Vedic Astrology Can — and Cannot — Tell You</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    Vedic astrology is an interpretive tradition, not a deterministic forecast. BornClock computes the
+                    astronomy precisely and then reports the <em>classical</em> interpretation faithfully — but we are
+                    explicit about where tradition ends and certainty would be overreach.
+                  </p>
+                  <ul className="space-y-3 text-muted-foreground leading-relaxed mb-4">
+                    <li><strong className="text-foreground">It can</strong> identify which planetary period (Dasha /
+                      Antardasha) you are running, the traditionally favourable and challenging <em>windows</em> for
+                      different areas of life, classical patterns (Yogas) and doshas, and auspicious timing (Muhurat).</li>
+                    <li><strong className="text-foreground">It cannot</strong> name a specific dated event, guarantee
+                      an outcome, or replace medical, legal or financial advice. We never present a Dasha window as a
+                      fixed prophecy.</li>
+                  </ul>
+                  <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl p-5 text-blue-900 dark:text-blue-200 text-sm leading-relaxed">
+                    <strong>On marriage timing specifically.</strong> Where a chart is read for relationships, BornClock
+                    only ever describes a <em>traditionally favourable window</em> — a period of heightened possibility
+                    — and never a specific wedding date or a certainty. The same guardrail runs through the AI
+                    astrologer and every report: it answers in the correct tense, and it never volunteers
+                    second-marriage combinations to someone who is already married. Favourable-window framing, free of
+                    fear, is the rule everywhere this engine is used.
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Doshas, Calmly</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Classical patterns such as <Link to="/manglik" className="text-[#6E5AA6] hover:underline font-medium">Mangal Dosha (Manglik)</Link>{' '}
+                    and <Link to="/kaal-sarp-dosha" className="text-[#6E5AA6] hover:underline font-medium">Kaal Sarp Dosha</Link>{' '}
+                    are presented as <em>areas to be mindful of</em>, together with their classical cancellations
+                    (parihara) — not as verdicts. Remedies we mention are the simple, free, traditional ones
+                    (prayer, charity, patience with timing); BornClock does not sell fear, gemstone upsells, or
+                    guaranteed fixes.
+                  </p>
+                </div>
+              </section>
+
               {/* ── NUMEROLOGY ── */}
               <section id="numerology" className="mb-14 scroll-mt-8">
                 <h2 className="text-3xl font-bold text-foreground mb-6 pb-2 border-b border-border">
@@ -584,7 +704,7 @@ export default function Methodology() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
                 { icon: '🔬', label: 'Life Expectancy Calculator', to: '/life-expectancy' },
-                { icon: '🧬', label: 'Biological Age Test', to: '/biological-age' },
+                { icon: '🧬', label: 'Biological Age Calculator', to: '/biological-age' },
                 { icon: '♓', label: 'Zodiac Analysis', to: '/zodiac' },
                 { icon: '🔢', label: 'Numerology Calculator', to: '/numerology' },
                 { icon: '🪐', label: 'Planetary Age', to: '/planetary-age' },

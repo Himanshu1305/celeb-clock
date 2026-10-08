@@ -12,12 +12,14 @@ export function PageHeader({
   h1,
   lead,
   trust,
+  trustHref,
   white = false,
 }: {
   eyebrow?: ReactNode;
   h1: ReactNode;
   lead?: ReactNode;
   trust?: string;
+  trustHref?: string;
   white?: boolean;
 }) {
   return (
@@ -29,7 +31,7 @@ export function PageHeader({
         </div>
         {lead && <p>{lead}</p>}
       </div>
-      {trust && <TrustStrip claim={trust} />}
+      {trust && <TrustStrip claim={trust} href={trustHref} />}
     </section>
   );
 }

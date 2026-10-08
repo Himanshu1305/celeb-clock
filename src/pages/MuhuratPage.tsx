@@ -82,7 +82,7 @@ export default function MuhuratPage() {
             <p>Auspicious dates for a specific occasion, chosen by the Panchang (<TermTip id="tithi">Tithi</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip>, <TermTip id="panchangYoga">Yoga</TermTip> and weekday) for your location — each day shows the <TermTip id="rahuKalam">Rahu Kalam</TermTip> window to avoid.</p>
           </div>
 
-        <TrustStrip claim="Your Panchang, computed for your exact location — timing shifts by city, so we don't guess." />
+        <TrustStrip claim="Your Panchang is computed for your exact location — the right timings shift from city to city, so we never guess." href="/how-it-works#vedic" />
         <div className="rounded-xl border border-border bg-card/60 p-5 space-y-4" style={{ marginTop: 16 }}>
           <div>
             <label className="block text-xs text-muted-foreground mb-1" htmlFor="muhurat-purpose">Occasion</label>
@@ -109,6 +109,9 @@ export default function MuhuratPage() {
               </div>
             )}
             {city && <p className="mt-1 text-xs text-muted-foreground">Using {city.name} (UTC{city.utcOffset >= 0 ? '+' : ''}{city.utcOffset}) for the day’s Panchang.</p>}
+            <p className="text-[11px] text-muted-foreground mt-1">
+              City search © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline">OpenStreetMap</a> contributors
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
