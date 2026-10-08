@@ -185,6 +185,8 @@ const CareerReportPage = lazyWithReload(() => import('@/pages/CareerReportPage')
 const GemstonePage = lazyWithReload(() => import('@/pages/GemstonePage'));
 const BabyNamesPage = lazyWithReload(() => import('@/pages/BabyNamesPage'));
 const RashifalPage = lazyWithReload(() => import('@/pages/hi/RashifalPage'));
+const RashifalIndex = lazyWithReload(() => import('@/pages/RashifalIndex'));
+const RashifalSign = lazyWithReload(() => import('@/pages/RashifalSign'));
 const DatePersonalityPage = lazyWithReload(() => import('@/pages/DatePersonalityPage'));
 const RemindersPage = lazyWithReload(() => import('@/pages/RemindersPage'));
 const KundaliCompatArticle = lazyWithReload(() => import('@/pages/articles/KundaliCompatArticle'));
@@ -412,6 +414,9 @@ const App = () => (
               <Route path="/baby-names" element={<BabyNamesPage />} />
               <Route path="/hi/rashifal/:rashi" element={<RashifalPage />} />
               <Route path="/hi/rashifal" element={<RashifalPage />} />
+              <Route path="/rashifal" element={<RashifalIndex />} />
+              <Route path="/rashifal/:rashi" element={<RashifalSign />} />
+              <Route path="/rashifal/:rashi/:period" element={<RashifalSign />} />
               <Route path="/born-on/:month/:day/personality" element={<DatePersonalityPage />} />
               <Route path="/reminders" element={<RemindersPage />} />
               <Route path="/articles/kundali-compatibility" element={<KundaliCompatArticle />} />

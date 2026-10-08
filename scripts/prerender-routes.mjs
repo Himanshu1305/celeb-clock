@@ -321,6 +321,8 @@ export const STATIC_ROUTES = [
   ...CHINESE_ZODIAC_ANIMALS.map(a => `/chinese-zodiac/${a}`),
   '/vedic-zodiac',
   ...VEDIC_RASHIS.map(r => `/vedic-zodiac/${r}`),
+  '/rashifal',
+  ...VEDIC_RASHIS.flatMap(r => ['today', 'week', 'month', 'year'].map(p => `/rashifal/${r}/${p}`)),
   '/answers',
   ...ANSWER_ROUTES,
   '/tarot-card-by-birthday',

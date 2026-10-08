@@ -661,7 +661,11 @@ export function getSaturnSignIndex(date: Date): number {
 }
 
 /** Sidereal (Lahiri) longitude of a body at an arbitrary date — same validated
- * path the chart uses (Part I.9, Panchang/Muhurat). No new astronomy. */
+ * path the chart uses (Part I.9, Panchang/Muhurat). Rahu/Ketu use the mean lunar
+ * node (the exact path generateFullChart uses). No new astronomy. */
 export function getSiderealLongitude(planet: string, date: Date): number {
-  return getPlanetSiderealLongitude(planet, Astronomy.MakeTime(date), getLahiriAyanamsa(date));
+  const ayanamsa = getLahiriAyanamsa(date);
+  if (planet === 'Rahu') return normalize360(getMeanNodeTropicalLongitude(date) - ayanamsa);
+  if (planet === 'Ketu') return normalize360(getMeanNodeTropicalLongitude(date) - ayanamsa + 180);
+  return getPlanetSiderealLongitude(planet, Astronomy.MakeTime(date), ayanamsa);
 }

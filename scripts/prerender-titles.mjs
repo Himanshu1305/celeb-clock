@@ -480,6 +480,27 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /rashifal and /rashifal/:rashi/:period  (computed horoscope by Moon sign)
+  if (route === '/rashifal') {
+    return {
+      title: 'Rashifal — Daily, Weekly, Monthly & Yearly Horoscope by Moon Sign | BornClock',
+      description: 'Free Vedic rashifal for all 12 Moon signs — computed from the real sidereal planetary transits, with graded, plain-language predictions for love, career, money and health.',
+    };
+  }
+  {
+    const m = route.match(/^\/rashifal\/([a-z]+)(?:\/(today|week|month|year))?$/);
+    if (m) {
+      const v = VEDIC[m[1]];
+      if (!v) return null;
+      const period = m[2] || 'today';
+      const word = { today: 'Daily', week: 'Weekly', month: 'Monthly', year: 'Yearly' }[period];
+      return {
+        title: `${v.name} (${v.english}) ${word} Horoscope — Rashifal | BornClock`,
+        description: `${word} rashifal for ${v.name} (${v.english}), computed from the real sidereal planetary transits — graded, plain-language predictions for love, career, money and health.`,
+      };
+    }
+  }
+
   // /vedic-zodiac/:rashi
   if (route.startsWith('/vedic-zodiac/') && route !== '/vedic-zodiac') {
     const slug = route.slice(14);
