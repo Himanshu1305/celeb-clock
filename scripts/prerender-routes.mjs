@@ -329,6 +329,8 @@ export const STATIC_ROUTES = [
   '/chaldean-numerology',
   '/blue-zones',
   ...['move-naturally','purpose','downshift','80-percent-rule','plant-slant','wine-at-5','belong','loved-ones-first','right-tribe'].map(f => `/blue-zones/${f}`),
+  '/panchang',
+  ...['delhi','mumbai','bengaluru','kolkata','chennai','hyderabad','pune','ahmedabad','jaipur','lucknow'].map(c => `/panchang/${c}`),
   '/answers',
   ...ANSWER_ROUTES,
   '/tarot-card-by-birthday',

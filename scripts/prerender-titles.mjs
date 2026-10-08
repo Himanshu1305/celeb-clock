@@ -501,6 +501,19 @@ export function getTitleForRoute(route) {
     }
   }
 
+  {
+    const pc = { delhi: 'Delhi', mumbai: 'Mumbai', bengaluru: 'Bengaluru', kolkata: 'Kolkata', chennai: 'Chennai', hyderabad: 'Hyderabad', pune: 'Pune', ahmedabad: 'Ahmedabad', jaipur: 'Jaipur', lucknow: 'Lucknow' };
+    if (route === '/panchang') return {
+      title: "Today's Panchang — Tithi, Nakshatra, Rahu Kaal & Choghadiya | BornClock",
+      description: "Today's Panchang: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal, Gulika, Yamaganda and the day & night Choghadiya — computed from real sunrise/sunset for your city.",
+    };
+    const m = route.match(/^\/panchang\/([a-z-]+)$/);
+    if (m && pc[m[1]]) return {
+      title: `Today's Panchang for ${pc[m[1]]} — Tithi, Nakshatra, Rahu Kaal & Choghadiya | BornClock`,
+      description: `Today's Panchang for ${pc[m[1]]}: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal and Choghadiya — computed from real sunrise/sunset for ${pc[m[1]]}.`,
+    };
+  }
+
   if (route === '/blue-zones') return {
     title: "Blue Zones Power 9 — 9 Habits of the World's Longest-Lived People | BornClock",
     description: 'The nine habits (the Power 9) shared by the world\'s five Blue Zones, each explained plainly with how to apply it and honest sources.',
