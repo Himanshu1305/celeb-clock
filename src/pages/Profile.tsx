@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useAuth } from '@/hooks/useAuth';
 import { UtilityLayout } from '@/components/central';
-import { ArrowLeft, Crown, Download, Gift, Loader2, Save, Shield, Tag, Trash2 } from 'lucide-react';
+import { ArrowLeft, Crown, Download, Gift, Loader2, Save, Shield, Sparkles, Tag, Trash2 } from 'lucide-react';
 import { PromoCodeInput } from '@/components/PromoCodeInput';
 import { InvoicesCard } from '@/components/InvoicesCard';
 import { countries } from '@/data/countries';
@@ -135,11 +135,17 @@ export default function Profile() {
     >
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 flex items-center justify-between flex-wrap gap-2">
           <Link to="/">
-            <Button variant="ghost" size="sm" className="gap-2 mb-4">
+            <Button variant="ghost" size="sm" className="gap-2">
               <ArrowLeft className="h-4 w-4" />
               Back to Home
+            </Button>
+          </Link>
+          <Link to="/dashboard">
+            <Button variant="outline" size="sm" className="gap-2">
+              <Sparkles className="h-4 w-4" />
+              Your day
             </Button>
           </Link>
         </div>
