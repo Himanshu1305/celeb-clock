@@ -189,6 +189,8 @@ const RashifalIndex = lazyWithReload(() => import('@/pages/RashifalIndex'));
 const RashifalSign = lazyWithReload(() => import('@/pages/RashifalSign'));
 const NakshatraIndex = lazyWithReload(() => import('@/pages/NakshatraIndex'));
 const NakshatraPage = lazyWithReload(() => import('@/pages/NakshatraPage'));
+const AttitudeNumberPage = lazyWithReload(() => import('@/pages/AttitudeNumberPage'));
+const ChaldeanNumerologyPage = lazyWithReload(() => import('@/pages/ChaldeanNumerologyPage'));
 const DatePersonalityPage = lazyWithReload(() => import('@/pages/DatePersonalityPage'));
 const RemindersPage = lazyWithReload(() => import('@/pages/RemindersPage'));
 const KundaliCompatArticle = lazyWithReload(() => import('@/pages/articles/KundaliCompatArticle'));
@@ -421,6 +423,8 @@ const App = () => (
               <Route path="/rashifal/:rashi/:period" element={<RashifalSign />} />
               <Route path="/nakshatra" element={<NakshatraIndex />} />
               <Route path="/nakshatra/:slug" element={<NakshatraPage />} />
+              <Route path="/attitude-number" element={<AttitudeNumberPage />} />
+              <Route path="/chaldean-numerology" element={<ChaldeanNumerologyPage />} />
               <Route path="/born-on/:month/:day/personality" element={<DatePersonalityPage />} />
               <Route path="/reminders" element={<RemindersPage />} />
               <Route path="/articles/kundali-compatibility" element={<KundaliCompatArticle />} />

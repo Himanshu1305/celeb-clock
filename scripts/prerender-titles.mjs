@@ -501,6 +501,15 @@ export function getTitleForRoute(route) {
     }
   }
 
+  if (route === '/attitude-number') return {
+    title: 'Birthday Number & Attitude Number Calculator — Free Numerology | BornClock',
+    description: 'Free calculator for your Birthday number and Attitude (Sun) number from your date of birth, with plain-language meanings.',
+  };
+  if (route === '/chaldean-numerology') return {
+    title: 'Chaldean Numerology Calculator — Name Number (vs Pythagorean) | BornClock',
+    description: 'Free Chaldean numerology calculator for your name number, shown side by side with the Pythagorean result, with the full Chaldean letter table.',
+  };
+
   // /nakshatra and /nakshatra/:slug
   if (route === '/nakshatra') {
     return {
