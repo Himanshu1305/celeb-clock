@@ -483,7 +483,7 @@ export function getTitleForRoute(route) {
   // /rashifal and /rashifal/:rashi/:period  (computed horoscope by Moon sign)
   if (route === '/rashifal') {
     return {
-      title: 'Rashifal — Daily, Weekly, Monthly & Yearly Horoscope by Moon Sign | BornClock',
+      title: 'Rashifal — Daily, Weekly, Monthly & Yearly Horoscope | BornClock',
       description: 'Free Vedic rashifal for all 12 Moon signs — computed from the real sidereal planetary transits, with graded, plain-language predictions for love, career, money and health.',
     };
   }
@@ -504,18 +504,18 @@ export function getTitleForRoute(route) {
   {
     const pc = { delhi: 'Delhi', mumbai: 'Mumbai', bengaluru: 'Bengaluru', kolkata: 'Kolkata', chennai: 'Chennai', hyderabad: 'Hyderabad', pune: 'Pune', ahmedabad: 'Ahmedabad', jaipur: 'Jaipur', lucknow: 'Lucknow' };
     if (route === '/panchang') return {
-      title: "Today's Panchang — Tithi, Nakshatra, Rahu Kaal & Choghadiya | BornClock",
+      title: "Today's Panchang — Tithi, Nakshatra & Rahu Kaal | BornClock",
       description: "Today's Panchang: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal, Gulika, Yamaganda and the day & night Choghadiya — computed from real sunrise/sunset for your city.",
     };
     const m = route.match(/^\/panchang\/([a-z-]+)$/);
     if (m && pc[m[1]]) return {
-      title: `Today's Panchang for ${pc[m[1]]} — Tithi, Nakshatra, Rahu Kaal & Choghadiya | BornClock`,
+      title: `Panchang for ${pc[m[1]]} — Tithi, Nakshatra & Rahu Kaal | BornClock`,
       description: `Today's Panchang for ${pc[m[1]]}: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal and Choghadiya — computed from real sunrise/sunset for ${pc[m[1]]}.`,
     };
   }
 
   if (route === '/blue-zones') return {
-    title: "Blue Zones Power 9 — 9 Habits of the World's Longest-Lived People | BornClock",
+    title: "Blue Zones Power 9 — 9 Habits of the Longest-Lived | BornClock",
     description: 'The nine habits (the Power 9) shared by the world\'s five Blue Zones, each explained plainly with how to apply it and honest sources.',
   };
   {
@@ -532,18 +532,18 @@ export function getTitleForRoute(route) {
   }
 
   if (route === '/attitude-number') return {
-    title: 'Birthday Number & Attitude Number Calculator — Free Numerology | BornClock',
+    title: 'Birthday & Attitude Number Calculator — Numerology | BornClock',
     description: 'Free calculator for your Birthday number and Attitude (Sun) number from your date of birth, with plain-language meanings.',
   };
   if (route === '/chaldean-numerology') return {
-    title: 'Chaldean Numerology Calculator — Name Number (vs Pythagorean) | BornClock',
+    title: 'Chaldean Numerology Calculator — Name Number | BornClock',
     description: 'Free Chaldean numerology calculator for your name number, shown side by side with the Pythagorean result, with the full Chaldean letter table.',
   };
 
   // /nakshatra and /nakshatra/:slug
   if (route === '/nakshatra') {
     return {
-      title: '27 Nakshatras — Vedic Birth Stars: Meaning, Ruling Planet & Name Sounds | BornClock',
+      title: '27 Nakshatras — Vedic Birth Stars & Name Sounds | BornClock',
       description: 'Explore all 27 Nakshatras (lunar mansions) — deity, symbol, ruling planet, meaning, Gana, Yoni, Nadi and traditional baby-name sounds. Find your birth star free.',
     };
   }
@@ -563,7 +563,7 @@ export function getTitleForRoute(route) {
       const name = NAK[m[1]];
       if (!name) return null;
       return {
-        title: `${name} Nakshatra — Meaning, Pada, Ruling Planet & Name Sounds | BornClock`,
+        title: `${name} Nakshatra — Meaning, Pada & Ruling Planet | BornClock`,
         description: `${name} Nakshatra: meaning, ruling planet and Vimshottari period, deity, symbol, Gana, Yoni, Nadi, sign span and traditional baby-name sounds for each pada.`,
       };
     }
