@@ -465,7 +465,7 @@ export default function VedicAstrologyLanding() {
             {([
               ['Kundli', '/kundali'], ['Kundali Matching', '/kundali-match'],
               ['Nakshatra', '/articles/nakshatra-by-date-of-birth'], ['Rashi', '/moon-sign'],
-              ['Sade Sati', '/sade-sati'], ['Manglik', '/kundali-match'],
+              ['Sade Sati', '/sade-sati'], ['Manglik', '/manglik'], ['Kaal Sarp Dosha', '/kaal-sarp-dosha'],
               ['Gemstone Recommendation', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'],
               ['Career Report', '/career-report'], ['Muhurat Finder', '/muhurat'],
               ['Sun vs Moon sign', '/sun-vs-moon-sign'], ['How we calculate', '/how-it-works'],

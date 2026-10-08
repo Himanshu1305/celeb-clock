@@ -557,8 +557,8 @@ export default function Methodology() {
                 <div>
                   <h3 className="text-xl font-semibold text-foreground mb-3">Doshas, Calmly</h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Classical patterns such as <Link to="/kundali" className="text-[#6E5AA6] hover:underline font-medium">Mangal Dosha (Manglik)</Link>{' '}
-                    and <Link to="/kundali" className="text-[#6E5AA6] hover:underline font-medium">Kaal Sarp Dosha</Link>{' '}
+                    Classical patterns such as <Link to="/manglik" className="text-[#6E5AA6] hover:underline font-medium">Mangal Dosha (Manglik)</Link>{' '}
+                    and <Link to="/kaal-sarp-dosha" className="text-[#6E5AA6] hover:underline font-medium">Kaal Sarp Dosha</Link>{' '}
                     are presented as <em>areas to be mindful of</em>, together with their classical cancellations
                     (parihara) — not as verdicts. Remedies we mention are the simple, free, traditional ones
                     (prayer, charity, patience with timing); BornClock does not sell fear, gemstone upsells, or
