@@ -294,6 +294,76 @@
     "ok": true
   },
   {
+    "group": "valid→200",
+    "path": "/name-correction",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/business-name-numerology",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/mobile-number-numerology",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/house-number-numerology",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/pitra-dosha",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/mool-dosha",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/grahan-dosha",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/nadi-dosha",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/life-report",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/child-kundli",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
     "group": "non-sitemap→200",
     "path": "/results",
     "expect": 200,
