@@ -9,6 +9,7 @@ import ManglikPage from '../ManglikPage';
 import KaalSarpDoshaPage from '../KaalSarpDoshaPage';
 import PersonalYearNumberPage from '../PersonalYearNumberPage';
 import AngelNumbersPage from '../AngelNumbersPage';
+import DashaCalculatorPage from '../DashaCalculatorPage';
 
 afterEach(cleanup);
 
@@ -26,6 +27,7 @@ const CASES: Array<[string, React.ComponentType, string, string]> = [
   ['KaalSarp', KaalSarpDoshaPage, '/kaal-sarp-dosha', 'kaal sarp'],
   ['PersonalYear', PersonalYearNumberPage, '/personal-year-number', 'personal year'],
   ['AngelNumbers', AngelNumbersPage, '/angel-numbers', 'angel number'],
+  ['DashaCalculator', DashaCalculatorPage, '/dasha-calculator', 'dasha'],
 ];
 
 describe('Item E — new SEO pages', () => {

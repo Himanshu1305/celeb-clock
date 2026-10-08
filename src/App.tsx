@@ -179,6 +179,7 @@ const ManglikPage = lazyWithReload(() => import('@/pages/ManglikPage'));
 const KaalSarpDoshaPage = lazyWithReload(() => import('@/pages/KaalSarpDoshaPage'));
 const PersonalYearNumberPage = lazyWithReload(() => import('@/pages/PersonalYearNumberPage'));
 const AngelNumbersPage = lazyWithReload(() => import('@/pages/AngelNumbersPage'));
+const DashaCalculatorPage = lazyWithReload(() => import('@/pages/DashaCalculatorPage'));
 const MuhuratPage = lazyWithReload(() => import('@/pages/MuhuratPage'));
 const CareerReportPage = lazyWithReload(() => import('@/pages/CareerReportPage'));
 const GemstonePage = lazyWithReload(() => import('@/pages/GemstonePage'));
@@ -404,6 +405,7 @@ const App = () => (
               <Route path="/kaal-sarp-dosha" element={<KaalSarpDoshaPage />} />
               <Route path="/personal-year-number" element={<PersonalYearNumberPage />} />
               <Route path="/angel-numbers" element={<AngelNumbersPage />} />
+              <Route path="/dasha-calculator" element={<DashaCalculatorPage />} />
               <Route path="/muhurat" element={<MuhuratPage />} />
               <Route path="/career-report" element={<CareerReportPage />} />
               <Route path="/gemstones" element={<GemstonePage />} />
