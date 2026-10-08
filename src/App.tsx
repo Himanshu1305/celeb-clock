@@ -30,7 +30,6 @@ const HowLongWillILivePage = lazyWithReload(() => import("./pages/HowLongWillILi
 const CelebrityPage = lazyWithReload(() => import("./pages/CelebrityPage"));
 const CelebrityIndexPage = lazyWithReload(() => import("./pages/CelebrityIndexPage"));
 const CelebrityHubPage = lazyWithReload(() => import("./pages/CelebrityHubPage"));
-const CelebrityBirthday = lazyWithReload(() => import("./pages/CelebrityBirthday"));
 const Blog = lazyWithReload(() => import("./pages/Blog"));
 const BlogPost = lazyWithReload(() => import("./pages/BlogPost"));
 const About = lazyWithReload(() => import("./pages/About"));

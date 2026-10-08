@@ -21,19 +21,23 @@ class FamilyErrorBoundary extends Component<{ children: ReactNode }, { hasError:
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-gradient-cosmic flex items-center justify-center">
-          <div className="text-center p-8">
-            <div className="text-4xl mb-4">⚠️</div>
-            <h2 className="text-xl font-bold text-foreground mb-2">Something went wrong</h2>
-            <p className="text-muted-foreground mb-4">Unable to load the Family Dashboard. Please refresh the page.</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium"
-            >
-              Refresh
-            </button>
+        <UtilityLayout
+          theme="birthday"
+          testId="family-dashboard-error"
+          breadcrumb={{ current: 'Family Dashboard' }}
+          eyebrow="⚠️ Something went wrong"
+          h1="We couldn't load your Family Dashboard"
+          lead="An unexpected error stopped this page from loading. Refreshing usually fixes it."
+        >
+          <div className="section">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+              <button type="button" onClick={() => window.location.reload()} className="btn">
+                Refresh the page
+              </button>
+              <Link to="/" className="btn light">Back to home →</Link>
+            </div>
           </div>
-        </div>
+        </UtilityLayout>
       );
     }
     return this.props.children;
@@ -43,7 +47,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine,
 } from 'recharts';
 import { supabase } from '@/integrations/supabase/client';
-import { ToolLayout } from '@/components/central';
+import { ToolLayout, UtilityLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SEO } from '@/components/SEO';
 import { Button } from '@/components/ui/button';
