@@ -115,7 +115,7 @@ export default function PlanetInSignPage() {
           <PageFAQ items={faqItems} />
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
-            <p className="text-muted-foreground mb-3">See where {planet.name} actually sits in <em>your</em> chart — sign, house and Dasha.</p>
+            <p className="text-foreground mb-3">See where {planet.name} actually sits in <em>your</em> chart — sign, house and Dasha.</p>
             <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
           </div>
         </div>
