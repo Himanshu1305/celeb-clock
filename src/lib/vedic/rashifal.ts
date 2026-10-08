@@ -434,6 +434,24 @@ export function computeRashifal(signIndex: number, period: RashifalPeriod, ref: 
   };
 }
 
+// ── Exports reused by the transit-by-year pages ──────────────────────────────
+export type { PlanetName };
+
+/** Read one planet's transit for a given Moon sign at an instant (gochar). */
+export function readPlanetTransit(planet: PlanetName, moonSignIndex: number, at: Date): TransitReading {
+  return buildTransit(planet, moonSignIndex, at);
+}
+
+/** Sidereal sign index (0..11) of a planet at an instant. */
+export function transitSignIndex(planet: PlanetName, at: Date): number {
+  return signIndexOf(planet, at);
+}
+
+/** Next sign-change (ingress) of a planet within [start, end], day precision. */
+export function findIngress(planet: PlanetName, start: Date, end: Date): { signIndex: number; dateISO: string } | null {
+  return ingressWithin(planet, start, end);
+}
+
 function gradeRank(g: Grade): number {
   return g === 'strong' ? 3 : g === 'moderate' ? 2 : 1;
 }
