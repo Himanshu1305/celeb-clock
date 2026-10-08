@@ -191,6 +191,8 @@ const NakshatraIndex = lazyWithReload(() => import('@/pages/NakshatraIndex'));
 const NakshatraPage = lazyWithReload(() => import('@/pages/NakshatraPage'));
 const AttitudeNumberPage = lazyWithReload(() => import('@/pages/AttitudeNumberPage'));
 const ChaldeanNumerologyPage = lazyWithReload(() => import('@/pages/ChaldeanNumerologyPage'));
+const BlueZonesIndex = lazyWithReload(() => import('@/pages/BlueZonesIndex'));
+const BlueZonesFactor = lazyWithReload(() => import('@/pages/BlueZonesFactor'));
 const DatePersonalityPage = lazyWithReload(() => import('@/pages/DatePersonalityPage'));
 const RemindersPage = lazyWithReload(() => import('@/pages/RemindersPage'));
 const KundaliCompatArticle = lazyWithReload(() => import('@/pages/articles/KundaliCompatArticle'));
@@ -425,6 +427,8 @@ const App = () => (
               <Route path="/nakshatra/:slug" element={<NakshatraPage />} />
               <Route path="/attitude-number" element={<AttitudeNumberPage />} />
               <Route path="/chaldean-numerology" element={<ChaldeanNumerologyPage />} />
+              <Route path="/blue-zones" element={<BlueZonesIndex />} />
+              <Route path="/blue-zones/:factor" element={<BlueZonesFactor />} />
               <Route path="/born-on/:month/:day/personality" element={<DatePersonalityPage />} />
               <Route path="/reminders" element={<RemindersPage />} />
               <Route path="/articles/kundali-compatibility" element={<KundaliCompatArticle />} />

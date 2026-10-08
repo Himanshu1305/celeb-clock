@@ -327,6 +327,8 @@ export const STATIC_ROUTES = [
   ...['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati'].map(n => `/nakshatra/${n}`),
   '/attitude-number',
   '/chaldean-numerology',
+  '/blue-zones',
+  ...['move-naturally','purpose','downshift','80-percent-rule','plant-slant','wine-at-5','belong','loved-ones-first','right-tribe'].map(f => `/blue-zones/${f}`),
   '/answers',
   ...ANSWER_ROUTES,
   '/tarot-card-by-birthday',

@@ -501,6 +501,23 @@ export function getTitleForRoute(route) {
     }
   }
 
+  if (route === '/blue-zones') return {
+    title: "Blue Zones Power 9 — 9 Habits of the World's Longest-Lived People | BornClock",
+    description: 'The nine habits (the Power 9) shared by the world\'s five Blue Zones, each explained plainly with how to apply it and honest sources.',
+  };
+  {
+    const bz = {
+      'move-naturally': 'Move Naturally', 'purpose': 'Know Your Purpose', 'downshift': 'Downshift Stress',
+      '80-percent-rule': 'The 80% Rule (Hara Hachi Bu)', 'plant-slant': 'Plant Slant', 'wine-at-5': 'Wine at 5',
+      'belong': 'Belong (Faith Community)', 'loved-ones-first': 'Loved Ones First', 'right-tribe': 'Right Tribe',
+    };
+    const m = route.match(/^\/blue-zones\/([a-z0-9-]+)$/);
+    if (m && bz[m[1]]) return {
+      title: `${bz[m[1]]} — Blue Zones Power 9 | BornClock`,
+      description: `${bz[m[1]]}: what it is, why it works, where it's seen and how to apply it — one of the Blue Zones Power 9 longevity habits, with honest sources.`,
+    };
+  }
+
   if (route === '/attitude-number') return {
     title: 'Birthday Number & Attitude Number Calculator — Free Numerology | BornClock',
     description: 'Free calculator for your Birthday number and Attitude (Sun) number from your date of birth, with plain-language meanings.',
