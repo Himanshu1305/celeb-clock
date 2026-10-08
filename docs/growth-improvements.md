@@ -1,0 +1,284 @@
+# BornClock — Growth Improvements Backlog (produced by P0)
+
+Prioritised, actionable backlog that later phases **must work through**. Each
+item has an **ID**, an **assigned phase**, the **specific change**, a **why**,
+and an **acceptance check**. P1–P5 runs must tick items off here (with evidence)
+when done; `docs/growth-<phase>-report.md` reports which items assigned to that
+phase are done / omitted-with-reason / blocked-on-the-person.
+
+**Fix at the source.** Where a problem affects many generated pages (celebrity
+profiles, born-on dates, rashifal, country pages), the item is a fix to the
+**shared template or data** — never hundreds of page-by-page edits. The source
+file is named in each item.
+
+Ordered **by impact** (traffic / trust / revenue) within each group. Date:
+2026-10-09. Evidence: see `docs/growth-p0-report.md`.
+
+Legend: **[ ]** open · **[x]** done (phase run adds commit/evidence) ·
+**[~]** partial · **[P]** blocked on the person.
+
+---
+
+## GROUP A — Fixes to existing BornClock pages (default phase: P1)
+
+These are thin pages, unexplained terms, and "so what?" / competitor-beaten
+sections found in the `growth` codebase + P0 research.
+
+### [ ] F-RASHIFAL — Replace static `/hi/rashifal` with computed rashifal  · **P1**
+- **Problem:** `/hi/rashifal` (+/:rashi) is static and undated — it reads a
+  hardcoded `src/data/rashifalData.ts` yet claims "आज का राशिफल" (today's). Every
+  Vedic competitor ships dated, computed rashifal free.
+- **Fix (source):** build the computed rashifal engine (P1 item 1) and point
+  `src/pages/hi/RashifalPage.tsx` at it; retire/repurpose `rashifalData.ts`.
+- **Acceptance:** `/hi/rashifal/<rashi>/today` shows content that genuinely
+  differs by date and sign, computed from real planetary positions; no hardcoded
+  "today" string that never changes; real-use verified on 3 browsers.
+
+### [ ] F-CELEB — Populate celebrity bios / full DOBs (fix at data source)  · **P4** (data), partial relief possible in P1
+- **Problem:** ~3,107 celebrities but only ~1,058 bios (`src/data/celebrity-bios.json`);
+  ~2,000 `/celebrity/:slug` pages render with no bio; year-only DOBs lose Western
+  zodiac, Life Path and birthday-twins (`CelebrityPage.tsx` ~85, 104–110). This
+  also thins `/born-on/:month/:day` on sparse dates.
+- **Fix (source):** populate `celebrity-bios.json` and full DOBs in
+  `src/data/celebrities.json` from a **licensed** source; improve the bio-less
+  fallback so a profile still passes the "so what?" test.
+- **Acceptance:** a random sample of 20 `/celebrity/:slug` pages each show a real
+  bio + the full computed block; bio coverage materially up; no "accomplished
+  Indian personality" canned fallback on celebrities that have data.
+- **Needs the person:** confirm a licensed bio/DOB data source.
+
+### [ ] F-TERMS — Wrap the last unexplained terms in `TermTip`  · **P1**
+- **Problem:** a few terms render unwrapped: **Virupas** (`VedicReading.tsx:76,79`),
+  the **8 Koota names + Ashtakoota** (`KundaliMatchPage.tsx:259–272`), **Dasamsa
+  (D10)** heading (`CareerReportPage.tsx:129`), D9/D10/D60 fallback prose
+  (`VedicReading.tsx:206`), **Paksha** (`MuhuratPage.tsx:157`).
+- **Fix (source):** add/confirm `VEDIC_TERMS` entries and wrap at these sites
+  (reuse the existing `TermTip` mechanism — do not build a new one).
+- **Acceptance:** each listed term is wrapped or explained inline on first use;
+  no regression to existing tooltips; axe clean.
+
+### [ ] F-CALC-ACTION — Make the life-expectancy & bio-age calculators actionable  · **P1** (see NS-CALC)
+- **Problem:** Living-to-100 beats BornClock by returning per-factor "years
+  added/lost" + a physician to-do list; BornClock returns a result but less
+  actionable per-input delta.
+- **Fix (source):** in the life-expectancy / bio-age result builders, surface
+  per-input year-deltas and a short, honest "what to do" list (wellbeing framing,
+  cite the evidence baseline — see NS-CRED).
+- **Acceptance:** completing the quiz shows which answers added/subtracted years
+  and 3–5 evidence-based actions; no fabricated numbers; honest framing.
+
+### [ ] F-THIN-COUNTRY — Deepen the shared country life-expectancy template  · **P1**
+- **Problem:** country LE pages share `LifeExpectancyCountryTemplate.tsx`; risk
+  of near-duplicate/thin at scale.
+- **Fix (source):** add genuinely per-country substance (official source cited,
+  gender/urban-rural splits, "so what?") to the template's per-country data, not
+  page edits.
+- **Acceptance:** 3 sampled country pages each carry distinct, sourced data that
+  passes the "so what?" test; no templated-duplicate feel.
+
+---
+
+## GROUP B — New gaps found in competitors (assigned to the best phase)
+
+### P1 — Traffic engines (refinements to planned items + new)
+
+### [ ] P1-RASHIFAL-WEEKLY — Include **weekly** rashifal in the period set  · **P1**
+- **Why:** Astrotalk ships today+weekly+monthly+yearly; the plan lists
+  daily/weekly/monthly/yearly but ensure **weekly** is actually built.
+- **Acceptance:** `/rashifal/<sign>/weekly` (or equivalent) exists, computed per
+  week, evergreen URL cached at request time.
+
+### [ ] P1-PANCHANG-CHOGHADIYA — Wire Choghadiya + Rahu Kaal into the daily Panchang page  · **P1**
+- **Why:** Drik/Astrotalk bundle Choghadiya + Rahu Kaal into the free Panchang;
+  BornClock has a Muhurat tool but should surface these on the Panchang page.
+- **Acceptance:** the daily-Panchang-for-city page shows tithi/nakshatra/yoga/
+  karana/sunrise/sunset **plus** Rahu Kaal and Choghadiya for that city/date,
+  validated against an established Panchang source.
+
+### [ ] P1-ATTITUDE-NUM — Attitude number (differentiator) + Birthday number (catch-up)  · **P1**
+- **Why:** Birthday number is table-stakes (Numerology.com/Cafe); **Attitude**
+  number is offered by none of the five Western competitors → differentiator.
+- **Fix (source):** extend the numerology engine (`lib/` numerology) + add
+  page(s); reuse digit-reduction.
+- **Acceptance:** both numbers computed from DOB with plain-language meaning and
+  worked example; "so what?" passes; honest "not science" caveat retained.
+
+### [ ] P1-CHALDEAN — Chaldean numerology as whitespace (not catch-up)  · **P1**
+- **Why:** zero Western competitors offer it; it targets the Indian/Chaldean
+  audience. (Larger name-correction/business/mobile/house tooling stays P2.)
+- **Acceptance:** a Chaldean calculator + Pythagorean-vs-Chaldean explainer,
+  computed, distinct from the existing Pythagorean pages.
+
+### [ ] P1-BLUEZONES-9 — Blue-Zones Power-9 per-factor pages (top content gap)  · **P1**
+- **Why:** Blue Zones is the category content leader; the Power 9 decomposes into
+  9 indexable long-tail pages with mechanism + quantified, **cited** claims.
+- **Acceptance:** 9 distinct pages (move naturally, purpose/ikigai, downshift,
+  80% rule, plant slant, wine@5, belong, loved-ones-first, right-tribe), each
+  Rule-6 distinct, citing bluezones.com / Harvard Health (no invented figures).
+
+### [ ] P1-LE-BY-FACTOR — Life-expectancy-by-condition & bio-age-by-habit indexable pages  · **P1**
+- **Why:** no strong incumbent (SSA/ONS disclaim lifestyle; Living-to-100 hides
+  it behind a quiz). Open SEO territory; the calculator already computes deltas.
+- **Acceptance:** a set of indexable explainer pages (e.g. smoker vs non-smoker,
+  BMI band, exercise, sleep), each with a real computed delta and honest framing;
+  Rule-6 distinct, not template-with-words-swapped.
+
+### P2 — Predictions & paid depth (refinements + new)
+
+### [ ] GP2-SOUTH — Raise South-Indian chart style earlier in P2  · **P2**
+- **Why:** ProKerala/Astrotalk/Clickastro all offer South-Indian free; BornClock
+  has none — a visible parity gap for South-Indian traffic.
+- **Acceptance:** a North/South toggle on the Kundli chart; South-Indian layout
+  renders correctly for the reference charts on 3 browsers.
+
+### [ ] GP2-10PORUTHAM — Add the 10-porutham South-Indian matching option  · **P2**
+- **Why:** ProKerala offers the Tamil/Kerala 10-porutham system alongside Guna
+  Milan; relevant for South-Indian matrimonial traffic.
+- **Acceptance:** matching offers a 10-porutham view (dinam, gana, yoni, rajju,
+  etc.) alongside the 36-guna Ashtakoota; computed, explained (Rule 6/7).
+
+### [ ] GP2-PERIOD-PREDICT — Period-structure the prediction surfaces  · **P2**
+- **Why:** yearly/monthly predictions are universal; BornClock's "What's Ahead"
+  is not period-structured.
+- **Acceptance:** yearly / quarterly / monthly prediction views exist (Dasha +
+  transits), Rule 7 (graded strong/moderate/mild, reasoned), guardrails intact.
+
+### [ ] GP2-CAREER-RANKED — Ranked best-suited career fields  · **P2**
+- **Why:** Clickastro surfaces career fields free; BornClock's career report is
+  narrative, not a ranked field list.
+- **Acceptance:** a ranked list of fields with reasons (10th house/lord, D10,
+  strongest planets), fields-to-approach-with-care, and growth periods.
+
+### [ ] GP2-LIFE-SECTIONS — Health / foreign-travel / wealth / education sections  · **P2**
+- **Why:** Clickastro markets these free; competitor-common prediction surfaces.
+- **Acceptance:** each section present with graded indications (Rule 7), health
+  in wellbeing framing (never diagnosis), no dates for illness.
+
+### [ ] GP2-CHILD-KUNDLI — Child (Bal) Kundli (build only if cheap)  · **P2** (tail)
+- **Why:** present at AstroSage/Clickastro/Astrotalk but mostly **paid** and
+  low-traffic → de-prioritised; build if it reuses the engine cheaply.
+- **Acceptance (if built):** temperament/learning/talents/care-areas/favourable
+  periods/Nakshatra name letters, Rule 7 children's-health guardrail, points to
+  the paediatrician.
+
+### [ ] GP2-DOSHAS — Standalone Pitra / Nadi / Mool / Grahan dosha explainers  · **P2** (medium)
+- **Why:** lightly covered by competitors (Astrotalk flags Pitra); useful SEO.
+- **Acceptance:** calm-tone explainers, computed where the engine supports it,
+  Rule 7/8.
+
+### P3 — Retention (new)
+
+### [ ] NB3-SONG — "#1 song on your birthday" (+ optional #1 movie)  · **P3** (+ birthday report)
+- **Why:** OnThisDay shows US+UK #1 songs; high-virality, cheap; BornClock's
+  birthday report lacks it.
+- **Fix (source):** a licensed/evergreen chart dataset keyed by date, surfaced in
+  the birthday report and the shareable card.
+- **Acceptance:** entering a birthday shows the #1 song(s) for that date; sourced
+  honestly; appears on the shareable card.
+
+### [ ] NB3-CARD-SHARE — Shareable birthday cards (green-field)  · **P3**
+- **Why:** no competitor has a strong equivalent — differentiator; pairs with
+  NB3-SONG and the birthday-facts bundle.
+- **Acceptance:** a polished shareable card generated from birthday facts (day of
+  week, zodiac, generation, #1 song, celebrity twins), image shareable on 3
+  browsers.
+
+### P4 — Reach (refinements + new)
+
+### [ ] NB4-RANK — Celebrity popularity ranking per date & multi-axis profile ranking  · **P4**
+- **Why:** Famous Birthdays' core hook (rank 1–N per date, "#1 born May 13",
+  "#12 movie actors"); BornClock `/born-on` appears unranked.
+- **Fix (source):** rank using the existing curated sitelinks/relevance signal in
+  `src/data/celebrities.json`; apply in the `/born-on` + celebrity templates.
+- **Acceptance:** `/born-on/:month/:day` lists celebrities in a sensible
+  popularity order; profiles show at least a per-date rank; no fabricated metrics
+  (use the real sitelinks/relevance signal and say what it is).
+
+### [ ] NB-DEATHS — Famous **deaths** on a date (not just births)  · **P4**
+- **Why:** OnThisDay + timeanddate list deaths; BornClock is births-only.
+- **Acceptance:** the on-this-day / born-on surface includes notable deaths for
+  the date, from the same licensed source, attributed.
+
+### [ ] P4-BIRTHDAY-EVENTS — "What happened on your birthday" via Wikimedia (correct framing)  · **P4**
+- **Why:** planned; confirmed gap. **Correction:** OnThisDay does NOT use
+  Wikimedia — CC BY-SA Wikimedia is a differentiator, not a competitor match.
+- **Acceptance:** an events feed for the user's birthday with correct CC BY-SA
+  attribution; evergreen URL, content at request time.
+
+### [ ] P4-CELEB-BIRTHTIME — Celebrity Kundlis with a birth-time reliability note  · **P4**
+- **Why:** no competitor shows celebrity birth **time** → white-space; needed for
+  an honest celebrity-Kundli angle.
+- **Acceptance:** per-celebrity reliability label (e.g. "birth time: reliable /
+  approximate / unknown") driving whether time-dependent sections render.
+
+### [ ] P4-WESTERN-CHART — Full Western natal chart (houses + rising + aspects)  · **P4**
+- **Why:** Cafe Astrology / Astrology.com give this free with interpretations —
+  BornClock's biggest Western gap.
+- **Acceptance:** Sun/Moon/Rising + houses + major aspects computed with
+  plain-language interpretations; real-use verified.
+
+### [ ] P4-TAROT-INTERACTIVE — Interactive tarot (daily / yes-no / love)  · **P4**
+- **Why:** BestDailyTarot/Evatarot ship free interactive spreads — now
+  table-stakes. Ship the bundle together, not piecemeal.
+- **Acceptance:** daily card + yes/no + love spread, user draws cards, position-
+  and question-aware interpretations.
+
+### [ ] P4-CZ-YEARLY — Chinese zodiac yearly forecast  · **P4**
+- **Why:** ChinaHighlights ~100–150 words/sign/year + compatibility %.
+- **Acceptance:** per-animal yearly forecast (career/finance/love/health) for the
+  current + next year, evergreen URL, content at request time.
+
+### [ ] P4-LANG — Pull some Hindi/regional language parity forward  · **P4** (business decision)
+- **Why:** every Vedic competitor ships Hindi + 3+ regional languages free; an
+  English-only P1 is a structural disadvantage.
+- **Acceptance:** key P1 pages available in Hindi; machine-assisted translation
+  flagged for the person's human review before launch.
+- **Needs the person:** scope of regional languages (e.g. Telugu) and translation
+  review.
+
+### P5 — Infrastructure & measurement (new/refinements)
+
+### [ ] NS-CALC — Calculator "years-delta + to-do" output  · **P1/P5** (content P1, infra P5)
+- **Why:** Living-to-100's actionable output beats BornClock. (Content side =
+  F-CALC-ACTION in P1; any tracking of the funnel = P5 conversion tracking.)
+- **Acceptance:** see F-CALC-ACTION; funnel events (consent-respecting) land in
+  the existing analytics.
+
+### [ ] NS-P100 — "Probability of reaching 100" output  · **P1**
+- **Why:** ONS surfaces P(reach 100) alongside the point estimate — cheap,
+  credible, shareable.
+- **Acceptance:** the life-expectancy calculator + country pages show an honest
+  P(reach 100) figure derived from the model/actuarial baseline (no fabrication).
+
+### [ ] NS-CRED — Cite SSA/ONS/WHO actuarial baseline on longevity surfaces  · **P1**
+- **Why:** government calculators are the trust anchors; citing the baseline the
+  lifestyle adjustments modify extends the RC3 "how we test" honesty push.
+- **Acceptance:** longevity pages state the official-life-table baseline + the
+  nature of the adjustments, with real citations.
+
+### [ ] NS-LEADERBOARD — "Where do you rank" comparison framing (optional)  · **P5**
+- **Why:** Rejuvenation Olympics' leaderboard is a viral hook; BornClock's free
+  bio-age quiz is already more generous — borrow the framing (extend country
+  comparison to bio-age-vs-peers). Optional; no fake/seeded data.
+- **Acceptance:** an honest peer-comparison view from real, consented aggregates
+  only (or clearly-labelled reference cohorts) — never invented leaderboards.
+
+---
+
+## NEEDS THE PERSON (too large or a business decision)
+- **Baby-names-by-Nakshatra dataset** (P1-6): licensed or original source.
+- **Celebrity bio/DOB data source** (F-CELEB): licensed source for ~2,000 bios.
+- **Regional-language scope + translation review** (P4-LANG).
+- **Prices** for all new paid products (built behind flags, OFF).
+- **Real expert reviewer** (P3) and **WhatsApp Business account** (P3) — never
+  invented.
+- **Schema changes** (any new tables) → NOTES file for the person.
+
+---
+
+## Acceptance-tracking note for phase runs
+When a phase run completes an item here, change its `[ ]` to `[x]`, append the
+commit hash + one line of real-use evidence (which browser(s), which reference
+chart), and mirror it in that phase's report. Items deliberately omitted get
+`[~]`/`[P]` with the documented reason (Rules 6–9) so FINAL's master checklist
+can mark every item done / omitted-with-reason / needs-the-person.
