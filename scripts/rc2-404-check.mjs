@@ -35,6 +35,10 @@ const VALID = [
   // parameters), so they are NOT in the edge force404 enum; they return 200 because a
   // prerendered file exists and nothing force-404s them.
   '/manglik', '/kaal-sarp-dosha', '/personal-year-number', '/angel-numbers', '/dasha-calculator',
+  // Growth P2 new static routes — must stay 200 (prerendered, not in the force404 enum).
+  '/name-correction', '/business-name-numerology', '/mobile-number-numerology', '/house-number-numerology',
+  '/pitra-dosha', '/mool-dosha', '/grahan-dosha', '/nadi-dosha',
+  '/life-report', '/child-kundli',
 ];
 
 // Valid NON-SITEMAP routes (account/dynamic/query — must never be 404'd by the edge).
