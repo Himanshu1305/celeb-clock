@@ -2,8 +2,17 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { NAKSHATRA_AKSHARAS, NAKSHATRA_LIST, SAMPLE_NAMES } from '@/data/nakshatraAksharas';
+import { NAKSHATRA_AKSHARAS, NAKSHATRA_LIST } from '@/data/nakshatraAksharas';
+import { namesFor, type Gender } from '@/data/babyNamesByAkshara';
 import { NAKSHATRA_HINDI } from '@/data/vedicTermsHindi';
+import { PageFAQ } from '@/components/PageFAQ';
+
+const GENDER_STYLE: Record<Gender, string> = {
+  boy: 'bg-sky-100 text-sky-700',
+  girl: 'bg-rose-100 text-rose-700',
+  unisex: 'bg-violet-100 text-violet-700',
+};
+const nakSlug = (n: string) => n.toLowerCase().replace(/\s+/g, '-');
 
 export default function BabyNamesPage() {
   const [dob, setDob] = useState('');
@@ -81,21 +90,53 @@ export default function BabyNamesPage() {
         </div>
 
         {nakshatra && (
-          <div data-testid="baby-aksharas" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/50 p-5">
+          <div data-testid="baby-aksharas" className="rounded-xl border border-border p-5">
             <h2 className="font-semibold text-foreground mb-1">
               {nakshatra} {NAKSHATRA_HINDI[nakshatra] || ''} — auspicious starting sounds
             </h2>
-            <div className="flex flex-wrap gap-2 my-3">
-              {aksharas.map(a => (
-                <span key={a} className="px-3 py-1.5 rounded-lg bg-white border border-[#6E5AA6]/30 font-semibold text-[#6E5AA6]">{a}</span>
+            <p className="text-sm text-muted-foreground mb-3">
+              Each of this star's four padas (quarters) gives a traditional starting syllable. A baby born under {nakshatra} is traditionally named beginning with one of these, with the exact syllable depending on the pada.{' '}
+              <Link to={`/nakshatra/${nakSlug(nakshatra)}`} className="underline">About {nakshatra} →</Link>
+            </p>
+            <div className="flex flex-wrap gap-2 mb-5">
+              {aksharas.map((a, i) => (
+                <span key={a + i} className="px-3 py-1.5 rounded-lg bg-muted border border-border font-semibold text-foreground">Pada {i + 1}: {a}</span>
               ))}
             </div>
-            <p className="text-sm text-muted-foreground mb-2">Baby names traditionally begin with one of these syllables.</p>
-            {aksharas.some(a => SAMPLE_NAMES[a]?.length) && (
-              <p className="text-sm text-foreground">
-                Examples: {aksharas.flatMap(a => SAMPLE_NAMES[a] || []).slice(0, 8).join(', ')}
-              </p>
-            )}
+
+            <div className="space-y-4">
+              {aksharas.map((a, i) => {
+                const names = namesFor(a);
+                return (
+                  <div key={a + i} data-testid="baby-akshara-group">
+                    <h3 className="text-sm font-semibold text-foreground mb-1">Names starting with “{a}”</h3>
+                    {names.length === 0 ? (
+                      <p className="text-xs text-muted-foreground">We’re still curating names for this sound — any name beginning with “{a}” is traditionally suitable.</p>
+                    ) : (
+                      <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-1">
+                        {names.map(n => (
+                          <li key={n.name} className="text-sm flex items-baseline gap-2">
+                            <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full ${GENDER_STYLE[n.gender]}`}>{n.gender}</span>
+                            <span><strong className="text-foreground">{n.name}</strong> <span className="text-muted-foreground">— {n.meaning}</span></span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-xs text-muted-foreground mt-4">Names and meanings are an original, hand-curated list of common Indian names — a starting point, not an exhaustive register.</p>
+          </div>
+        )}
+
+        {nakshatra && (
+          <div className="mt-8">
+            <PageFAQ items={[
+              { question: 'How does Nakshatra decide a baby’s name?', answer: 'Vedic tradition (Namakaran) assigns each of a Nakshatra’s four padas a starting syllable (akshara). The baby’s name ideally begins with the syllable of the pada the Moon occupied at birth — so an exact birth time pins the pada, while the Nakshatra alone gives four possible syllables.' },
+              { question: 'Do I have to use these syllables?', answer: 'It is a tradition, not a rule. Many families follow it for the first (naming-ceremony) name and choose a everyday name freely. The meanings here are offered to help you choose thoughtfully.' },
+              { question: 'How do I find my baby’s exact Nakshatra and pada?', answer: 'Enter the birth date and time above, or generate a free Kundli — it computes the Moon’s Nakshatra and pada precisely from the birth details.' },
+            ]} />
           </div>
         )}
 
