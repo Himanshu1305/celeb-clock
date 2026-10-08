@@ -19,6 +19,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { mergeProfile } from '@/services/savedProfile';
 import { fetchKundali, buildInterpretationBlocks, type KundaliData } from '@/services/kundaliService';
 import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
+import { WhatsAhead } from '@/components/vedic/WhatsAhead';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
 const VedicReading = lazy(() => import('@/components/reading/VedicReading').then(m => ({ default: m.VedicReading })));
 const PastPeriodReflection = lazy(() => import('@/components/reading/PastPeriodReflection').then(m => ({ default: m.PastPeriodReflection })));
@@ -265,6 +266,14 @@ export default function KundaliPage() {
 
               {data.dashaTimeline && data.dashaTimeline.length > 0 && (
                 <DashaDeepDive mahadashas={data.dashaTimeline.map(m => ({ lord: m.lord, start: m.start, end: m.end }))} />
+              )}
+
+              {data.dashaTimeline && data.dashaTimeline.length > 0 && (
+                <WhatsAhead
+                  lagnaSignIndex={data.lagna.signIndex}
+                  planets={data.planets.map(p => ({ name: p.name, house: p.house }))}
+                  dashaTimeline={data.dashaTimeline}
+                />
               )}
 
               <div className="inline-actions" style={{ marginTop: 18 }}>
