@@ -261,6 +261,66 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     guidance: 'You can compute yours on the Kundli (birth chart) tool.',
     inline: 'the sign on the horizon at birth — your outward "mask"',
   },
+  virupas: {
+    term: 'Virupas',
+    impact: 'Just the unit the planetary-strength score is measured in — a bigger number means a stronger planet.',
+    why: 'Shadbala (six-fold strength) is totalled in a classical unit called the "virupa" (60 virupas = 1 "rupa"). The exact figure is shown for power users; the plain word next to it ("strong", "weak") is what actually matters.',
+    inline: 'the classical unit planetary strength is scored in',
+  },
+  paksha: {
+    term: 'Paksha (lunar fortnight)',
+    impact: 'Whether the Moon was waxing (growing) or waning (shrinking) that day.',
+    why: 'Each lunar month has two Pakshas: Shukla (the bright, waxing half, new Moon → full Moon) and Krishna (the dark, waning half, full Moon → new Moon). Many timings favour the waxing Shukla Paksha.',
+    inline: 'the waxing (Shukla) or waning (Krishna) half of the lunar month',
+  },
+  varna: {
+    term: 'Varna (1 point)',
+    impact: 'Checks that the two people’s basic temperaments sit comfortably together.',
+    why: 'The first of the eight kootas. It compares a spiritual/work-nature grouping drawn from each Moon sign; worth 1 of the 36 points.',
+    inline: 'the temperament-compatibility koota (1 point)',
+  },
+  vashya: {
+    term: 'Vashya (2 points)',
+    impact: 'How naturally one partner draws and influences the other.',
+    why: 'The second koota — mutual attraction and control, from sign groupings; worth 2 points.',
+    inline: 'the mutual-attraction koota (2 points)',
+  },
+  tara: {
+    term: 'Tara (3 points)',
+    impact: 'Health, luck and wellbeing for the couple, read from their birth stars.',
+    why: 'The third koota counts the distance between the two Nakshatras (birth stars) in both directions; worth 3 points.',
+    inline: 'the birth-star fortune koota (3 points)',
+  },
+  yoni: {
+    term: 'Yoni (4 points)',
+    impact: 'Physical and instinctive compatibility.',
+    why: 'The fourth koota assigns each Nakshatra an animal symbol and scores how well the two animals get along; worth 4 points.',
+    inline: 'the physical-compatibility (animal-symbol) koota (4 points)',
+  },
+  grahaMaitri: {
+    term: 'Graha Maitri (5 points)',
+    impact: 'Mental and emotional friendship — how well your minds meet.',
+    why: 'The fifth koota compares the friendship between the two Moon-sign lords (ruling planets); worth 5 points.',
+    inline: 'the mental-friendship koota, from the sign lords (5 points)',
+  },
+  gana: {
+    term: 'Gana (6 points)',
+    impact: 'A broad temperament match (gentle / energetic / intense).',
+    why: 'The sixth koota sorts each Nakshatra into one of three natures — Deva (gentle), Manushya (human), Rakshasa (intense) — and scores the pairing; worth 6 points.',
+    inline: 'the temperament-nature koota (6 points)',
+  },
+  bhakoot: {
+    term: 'Bhakoot (7 points)',
+    impact: 'Overall harmony, prosperity and emotional flow in the relationship.',
+    why: 'The seventh koota looks at the distance between the two Moon signs; certain distances (6/8, 5/9, 2/12) flag a "Bhakoot dosha", worth 7 points and weighted heavily.',
+    inline: 'the Moon-sign harmony koota (7 points, heavily weighted)',
+  },
+  nadi: {
+    term: 'Nadi (8 points)',
+    impact: 'Traditionally the most important koota — tied to health and progeny.',
+    why: 'The eighth koota groups each Nakshatra into one of three Nadis (Aadi/Madhya/Antya); the same Nadi for both flags a "Nadi dosha". It carries the most points (8) and the most weight.',
+    inline: 'the health/progeny koota — the heaviest at 8 points',
+  },
 };
 
 /** Look up a term definition by id (case-insensitive), or null. */

@@ -10,7 +10,7 @@ import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
-import { GradeLegend } from '@/components/vedic/TermTip';
+import { GradeLegend, TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
@@ -126,7 +126,7 @@ export default function CareerReportPage() {
                 <p className="text-sm text-foreground">{report.tenthHouse.analysis}</p>
               </div>
               <div data-testid="career-d10" className="rounded-xl border border-border p-4">
-                <div className="font-semibold text-foreground mb-1">Dasamsa (D10) — the career chart</div>
+                <div className="font-semibold text-foreground mb-1"><TermTip id="dasamsa">Dasamsa (D10)</TermTip> — the career chart</div>
                 <p className="text-sm text-foreground">{report.dasamsa.analysis}</p>
               </div>
               {report.yogas.length > 0 && (

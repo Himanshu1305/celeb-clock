@@ -73,10 +73,10 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
           exact computed virupa numbers live here for power users. */}
       {facts.planets && facts.planets.some(p => p.shadbala) && (
         <div data-testid="reading-shadbala">
-          <div className="text-muted-foreground mb-1">Planetary strength (<TermTip id="shadbala">Shadbala</TermTip>, in virupas — indicative):</div>
+          <div className="text-muted-foreground mb-1">Planetary strength (<TermTip id="shadbala">Shadbala</TermTip>, in <TermTip id="virupas">virupas</TermTip> — indicative):</div>
           <table className="w-full text-left">
             <thead className="text-muted-foreground">
-              <tr><th className="py-1 pr-3 font-medium">Planet</th><th className="py-1 pr-3 font-medium">Strength</th><th className="py-1 font-medium">Virupas</th></tr>
+              <tr><th className="py-1 pr-3 font-medium">Planet</th><th className="py-1 pr-3 font-medium">Strength</th><th className="py-1 font-medium"><TermTip id="virupas">Virupas</TermTip></th></tr>
             </thead>
             <tbody>
               {facts.planets.filter(p => p.shadbala).map(p => (

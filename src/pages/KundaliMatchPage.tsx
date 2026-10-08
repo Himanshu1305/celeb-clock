@@ -4,10 +4,17 @@ import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { TrustStrip } from '@/components/paj/TrustStrip';
+import { TermTip } from '@/components/vedic/TermTip';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
 import { type SavedCity, sanitizeName, NAME_MAX } from '@/services/savedProfile';
+
+/** Map each koota's data key to its glossary (TermTip) id. */
+const KOOTA_TERM: Record<string, string> = {
+  varna: 'varna', vashya: 'vashya', tara: 'tara', yoni: 'yoni',
+  graha_maitri: 'grahaMaitri', gana: 'gana', bhakoot: 'bhakoot', nadi: 'nadi',
+};
 
 interface TimingWindow { planet: string; level: string; range: string; status: string; describe: string }
 interface MatchResponse {
@@ -258,11 +265,14 @@ export default function KundaliMatchPage() {
 
             {/* Full 8-Koota breakdown (Part 2.1) with Nadi/Bhakoot emphasis (Part 2.3) */}
             <div data-testid="kmatch-kootas" className="space-y-2">
+              <p className="text-xs text-muted-foreground">
+                The eight parts of the <TermTip id="ashtakoota">Ashtakoota</TermTip> score — tap any name to see what it measures.
+              </p>
               {result.gunaMilan.kootas.map(k => (
                 <div key={k.key} className={`rounded-lg border p-3 ${k.heavy ? 'border-[#6E5AA6]/30 bg-[#6E5AA6]/50' : 'border-border'}`}>
                   <div className="flex items-center justify-between">
                     <div className="font-semibold text-foreground">
-                      {k.heavy && <span title="Heaviest kootas" className="mr-1 text-[#6E5AA6]">★</span>}{k.label}
+                      {k.heavy && <span title="Heaviest kootas" className="mr-1 text-[#6E5AA6]">★</span>}{KOOTA_TERM[k.key] ? <TermTip id={KOOTA_TERM[k.key]}>{k.label}</TermTip> : k.label}
                       {k.heavy && <span className="ml-2 text-[10px] uppercase tracking-wide text-[#6E5AA6]">high weight</span>}
                     </div>
                     <div className={`font-bold ${k.score === 0 ? 'text-amber-600' : 'text-[#6E5AA6]'}`}>{k.score} / {k.max}</div>

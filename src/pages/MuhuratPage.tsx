@@ -154,7 +154,7 @@ export default function MuhuratPage() {
                   <div className="font-semibold text-foreground">{fmt(d.date)}</div>
                   <div className="text-xs px-2 py-0.5 rounded-full bg-emerald-600 text-white">auspicious</div>
                 </div>
-                <div className="text-sm text-foreground mt-1">{d.nakshatra} Nakshatra · {d.tithiName} ({d.paksha}) · {d.yoga} <TermTip id="panchangYoga">Yoga</TermTip></div>
+                <div className="text-sm text-foreground mt-1">{d.nakshatra} Nakshatra · {d.tithiName} (<TermTip id="paksha">{d.paksha} Paksha</TermTip>) · {d.yoga} <TermTip id="panchangYoga">Yoga</TermTip></div>
                 <div className="text-xs text-muted-foreground mt-1">{d.reasons.slice(0, 2).join(' · ')}</div>
                 <div className="text-xs text-amber-700 mt-1">Avoid the <TermTip id="rahuKalam">Rahu Kalam</TermTip> window that day: {d.rahuKalam.start}–{d.rahuKalam.end} (approx, local).</div>
               </div>
