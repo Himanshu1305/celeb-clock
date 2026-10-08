@@ -12,7 +12,7 @@
  *    Career Report, Gemstones, Nakshatra, Rashi/Moon-sign, cross-category links),
  *  - the honest framing + FAQ + priced report blocks (real purchase flow),
  *  - the "real example" section — now a genuinely computed chart (live /api/vedic-reading,
- *    verified Swiss-Ephemeris fallback), rendered as a full placements table + North-Indian
+ *    local astronomy-engine, with ProKerala as fallback), rendered as a full placements table + North-Indian
  *    chart, matching the reference design's own example (14 Mar 1990, 10:30 IST, New Delhi).
  *
  * Added per Part AJ brief: the Part AI glossary (TermTip) on technical terms, the yoga
@@ -43,7 +43,7 @@ function kundaliCarryUrl(d: BirthDetails): string {
 type Teaser = { lagna: string; rashi: string; nakshatra: string; dasha: string | null; name: string | null } | { error: true };
 
 // ── The reference example chart: 14 Mar 1990, 10:30 IST, New Delhi ────────────
-// Real Swiss-Ephemeris 2.10.03 output (Lahiri sidereal, whole-sign houses). These are the
+// Real astronomy-engine output (Lahiri sidereal, whole-sign houses). These are the
 // exact verified values the finalized design shows; §results also re-computes them live via
 // /api/vedic-reading so the "computed, not a template" claim is demonstrably true either way.
 const REF_META = { date: '14 Mar 1990', time: '10:30 IST', place: 'New Delhi', coords: '28.6139°N, 77.2090°E', utc: '05:00 UTC', ayanamsa: '23.720168°' };
@@ -113,7 +113,7 @@ function RealExample() {
   }, []);
 
   const tabs: Array<[Tab, string]> = [['chart', 'Birth chart'], ['dasha', 'Dasha timeline'], ['yoga', 'Yoga check'], ['method', 'Calculation notes']];
-  const shareMsg = `I just looked at a real, computed Vedic birth chart on BornClock — sidereal (Lahiri), Swiss Ephemeris, nothing templated. Compute yours free: https://bornclock.com/vedic-astrology`;
+  const shareMsg = `I just looked at a real, computed Vedic birth chart on BornClock — sidereal (Lahiri), genuinely calculated, nothing templated. Compute yours free: https://bornclock.com/vedic-astrology`;
 
   return (
     <section className="section white" id="results">
@@ -121,7 +121,7 @@ function RealExample() {
         <div><span className="eyebrow">Show, then explain</span><h2>The calculation behind the reading.</h2></div>
         <p>A real computed chart, with its inputs and method visible — not generated from a template.</p>
       </div>
-      <TrustStrip claim="The example chart is really computed — re-run live from the Swiss-Ephemeris engine." />
+      <TrustStrip claim="The example chart is really computed — re-run live from the same calculation engine." />
 
       <div className="tabs" role="tablist" aria-label="Explore the output">
         {tabs.map(([id, label]) => (
@@ -212,8 +212,8 @@ function RealExample() {
           <div className="explain-grid">
             <div>
               <h3>Reproducible astronomical input</h3>
-              <p>This record is generated with Swiss Ephemeris 2.10.03 (Moshier mode); <TermTip id="ayanamsa">Lahiri sidereal</TermTip> positions; whole-sign houses; mean lunar node for <TermTip id="rashi">Rahu</TermTip>, with Ketu opposite. Location and UTC conversion are shown with the result.</p>
-              <p><a className="textlink" href="https://www.astro.com/swisseph/swisseph.htm" target="_blank" rel="noopener">Read the ephemeris documentation ↗</a></p>
+              <p>This record is generated with the open-source <strong>astronomy-engine</strong> library (v2.1); <TermTip id="ayanamsa">Lahiri sidereal</TermTip> positions; whole-sign houses; mean lunar node for <TermTip id="rashi">Rahu</TermTip>, with Ketu opposite. Location and UTC conversion are shown with the result.</p>
+              <p><a className="textlink" href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noopener">Read the astronomy-engine documentation ↗</a></p>
             </div>
             <div>
               <h3>Computed, cross-verified, honest</h3>
@@ -273,7 +273,7 @@ export default function VedicAstrologyLanding() {
 
   const faqs: Array<[string, string]> = [
     ['Can I use this without my exact birth time?', 'You still get your Moon sign, Nakshatra and Dasha (these depend mainly on the date). The Ascendant (Lagna) and house-based details need an accurate time — we tell you plainly which parts are affected rather than guessing a time for you.'],
-    ['Is the example chart actually calculated?', 'Yes. Its planetary positions and ascendant were calculated for 14 March 1990, 10:30 IST in New Delhi using Swiss Ephemeris (Moshier mode), Lahiri sidereal positions and whole-sign houses. The page re-computes the same chart live.'],
+    ['Is the example chart actually calculated?', 'Yes. Its planetary positions and ascendant were calculated for 14 March 1990, 10:30 IST in New Delhi using the astronomy-engine library, Lahiri sidereal positions and whole-sign houses. The page re-computes the same chart live.'],
     ['Do you predict exactly what will happen to me?', 'No. We show real planetary periods and classical combinations, always labelled as traditional association — never a guaranteed date or outcome. Where a period matters, we give the honest window, not a fabricated “on this day” claim.'],
     ['How is this different from a generic horoscope app?', 'Generic apps recycle one Sun-sign paragraph for millions. This is your individual chart — real planetary positions, your Dasha timeline, detected yogas graded by strength — computed, cross-verified and honest about its limits.'],
     ['Is my birth data private?', 'Yes. Your birth details are used to compute your chart and are stored only on your own device unless you explicitly choose to save them to your account. Nothing is sold or shared.'],
@@ -287,13 +287,13 @@ export default function VedicAstrologyLanding() {
       seo={(
         <SEO
           title="Vedic Astrology — Your Birth Chart, Computed Not Guessed | BornClock"
-          description="Your real Vedic birth chart, computed with the Swiss Ephemeris — Kundli, Dasha timing, yoga detection, Kundali matching and an AI astrologer. Not a horoscope template."
+          description="Your real Vedic birth chart, computed from your exact birth details — Kundli, Dasha timing, yoga detection, Kundali matching and an AI astrologer. Not a horoscope template."
           keywords="vedic astrology, kundli, birth chart, kundali matching, dasha, nakshatra, rashi, lagna, sade sati, manglik, gemstone, muhurat"
           canonicalUrl="/vedic-astrology"
           ogType="website"
         />
       )}
-      breadcrumb={{ current: 'Vedic Astrology', edition: 'Sidereal · Lahiri · Swiss Ephemeris' }}
+      breadcrumb={{ current: 'Vedic Astrology', edition: 'Sidereal · Lahiri' }}
       footer={{ note: '© 2026 BornClock · Vedic astrology, computed with care.' }}
     >
         <JsonLd id="faq" data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }} />
@@ -343,7 +343,7 @@ export default function VedicAstrologyLanding() {
                 <h2>{teaser && !('error' in teaser) && teaser.name ? `${teaser.name}, here’s your chart at a glance.` : 'Your chart at a glance.'}</h2></div>
               <p>A real, computed snapshot — the full chart (planets, Dasha, yogas, remedies) is one click away.</p>
             </div>
-            {teaserLoading && <p className="subtle">Computing your chart from the Swiss-Ephemeris engine…</p>}
+            {teaserLoading && <p className="subtle">Computing your chart from your exact birth details…</p>}
             {teaser && !('error' in teaser) && (
               <>
                 <div className="snapshot">

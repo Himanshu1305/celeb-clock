@@ -1,7 +1,7 @@
 /**
  * Client-side Kundali service. The heavy sidereal computation runs server-side
- * (`/api/kundali`, Node + Swiss Ephemeris); this wrapper fetches it and builds a
- * plain-language interpretation. ProKerala is optional (boundary refinement only).
+ * (`/api/kundali`, Node + astronomy-engine, Lahiri sidereal); this wrapper fetches it
+ * and builds a plain-language interpretation. ProKerala is a fallback only.
  */
 import { NAKSHATRA_MEANINGS } from '@/lib/vedic/nakshatraMeanings';
 import { glossInline } from '@/lib/vedic/termDefinitions';

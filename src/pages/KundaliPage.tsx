@@ -151,7 +151,7 @@ export default function KundaliPage() {
           ogType="website"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali', edition: 'Sidereal · Lahiri · Swiss Ephemeris' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali', edition: 'Sidereal · Lahiri' }}
       footer={{
         tagline: 'Your Vedic birth chart, computed with care — accurate sidereal (Lahiri) astronomy.',
         nav: [
@@ -174,7 +174,7 @@ export default function KundaliPage() {
             <p>Your Vedic birth chart — planetary positions, <TermTip id="lagna">Lagna</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip> and <TermTip id="dasha">Dasha</TermTip>, in accurate sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) astronomy. Full report {price}.</p>
           </div>
 
-          <TrustStrip claim="Computed with the Swiss Ephemeris (sidereal · Lahiri) and cross-checked for accuracy — not a template." />
+          <TrustStrip claim="Calculated from your exact birth date, time and place (sidereal · Lahiri) and cross-checked for accuracy — not a template." />
           <KundaliTabs active="kundali" />
 
           {loaded && isFull && (

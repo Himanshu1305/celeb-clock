@@ -13,9 +13,9 @@ interface VedicApiResult {
 
 /**
  * Optional birth time + city → accurate Vedic profile. The heavy sidereal
- * computation runs server-side (`/api/vedic-profile`, Node + Swiss Ephemeris) so
- * the Node-only WASM never ships to the browser. Degrades gracefully when the
- * endpoint is unavailable.
+ * computation runs server-side (`/api/vedic-profile`, Node + astronomy-engine,
+ * Lahiri sidereal) so the heavy calculation never ships to the browser. Degrades
+ * gracefully when the endpoint is unavailable.
  */
 export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
   const { profile, isFull } = useSavedProfile();
