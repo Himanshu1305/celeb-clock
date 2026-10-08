@@ -465,6 +465,7 @@ export default function VedicAstrologyLanding() {
             {([
               ['Kundli', '/kundali'], ['Kundali Matching', '/kundali-match'],
               ['Rashifal', '/rashifal'], ['Daily Panchang', '/panchang'],
+              ['Festival Calendar', '/festivals'],
               ['Planetary Transits', '/transit'], ['Mercury Retrograde', '/mercury-retrograde'],
               ['27 Nakshatras', '/nakshatra'], ['Rashi', '/moon-sign'],
               ['Sade Sati', '/sade-sati'], ['Dasha Calculator', '/dasha-calculator'],

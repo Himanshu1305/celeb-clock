@@ -539,6 +539,19 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /festivals[/:year]
+  if (route === '/festivals') return {
+    title: 'Hindu Festival & Vrat Calendar — Dates | BornClock',
+    description: 'Computed Hindu festival and vrat calendar: Diwali, Holi, Navratri, Janmashtami, every Ekadashi, Purnima, Amavasya, Pradosh, Sankashti and the 12 Sankrantis, with exact dates.',
+  };
+  {
+    const m = route.match(/^\/festivals\/(\d{4})$/);
+    if (m) return {
+      title: `Hindu Festival & Vrat Calendar ${m[1]} — Dates | BornClock`,
+      description: `Computed Hindu festival and vrat calendar for ${m[1]}: Diwali, Holi, Navratri, Janmashtami, every Ekadashi, Purnima, Amavasya, Pradosh, Sankashti and the 12 Sankrantis.`,
+    };
+  }
+
   if (route === '/blue-zones') return {
     title: "Blue Zones Power 9 — 9 Habits of the Longest-Lived | BornClock",
     description: 'The nine habits (the Power 9) shared by the world\'s five Blue Zones, each explained plainly with how to apply it and honest sources.',

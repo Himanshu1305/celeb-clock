@@ -329,6 +329,8 @@ export const STATIC_ROUTES = [
   ...['saturn','jupiter','rahu','ketu'].flatMap(p => [2025, 2026, 2027].map(y => `/transit/${p}/${y}`)),
   '/mercury-retrograde',
   ...[2025, 2026, 2027].map(y => `/mercury-retrograde/${y}`),
+  '/festivals',
+  ...[2025, 2026, 2027].map(y => `/festivals/${y}`),
   '/attitude-number',
   '/chaldean-numerology',
   '/blue-zones',
