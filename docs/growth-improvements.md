@@ -24,7 +24,9 @@ Legend: **[ ]** open · **[x]** done (phase run adds commit/evidence) ·
 These are thin pages, unexplained terms, and "so what?" / competitor-beaten
 sections found in the `growth` codebase + P0 research.
 
-### [ ] F-RASHIFAL — Replace static `/hi/rashifal` with computed rashifal  · **P1**
+### [x] F-RASHIFAL — Replace static `/hi/rashifal` with computed rashifal  · **P1**
+<!-- DONE f9dfaaa: new src/lib/vedic/rashifal.ts gochar engine; /hi/rashifal/:rashi now computed+dated (no fixed "today" string); static rashifalData.ts deleted. Content differs by date AND sign. Task16 8/8 + rashifal.test.ts 7/7 green. -->
+
 - **Problem:** `/hi/rashifal` (+/:rashi) is static and undated — it reads a
   hardcoded `src/data/rashifalData.ts` yet claims "आज का राशिफल" (today's). Every
   Vedic competitor ships dated, computed rashifal free.
@@ -47,7 +49,9 @@ sections found in the `growth` codebase + P0 research.
   Indian personality" canned fallback on celebrities that have data.
 - **Needs the person:** confirm a licensed bio/DOB data source.
 
-### [ ] F-TERMS — Wrap the last unexplained terms in `TermTip`  · **P1**
+### [x] F-TERMS — Wrap the last unexplained terms in `TermTip`  · **P1**
+<!-- DONE 700dda3: added VEDIC_TERMS entries (virupas, paksha, varna, vashya, tara, yoni, grahaMaitri, gana, bhakoot, nadi) and wrapped at VedicReading.tsx:76/79 (Virupas), KundaliMatchPage.tsx 8 koota labels + Ashtakoota header, CareerReportPage.tsx:129 (Dasamsa D10), MuhuratPage.tsx:157 (Paksha). termDefinitions.test.ts 5/5 green; tsc clean for these files. -->
+
 - **Problem:** a few terms render unwrapped: **Virupas** (`VedicReading.tsx:76,79`),
   the **8 Koota names + Ashtakoota** (`KundaliMatchPage.tsx:259–272`), **Dasamsa
   (D10)** heading (`CareerReportPage.tsx:129`), D9/D10/D60 fallback prose
@@ -57,7 +61,9 @@ sections found in the `growth` codebase + P0 research.
 - **Acceptance:** each listed term is wrapped or explained inline on first use;
   no regression to existing tooltips; axe clean.
 
-### [ ] F-CALC-ACTION — Make the life-expectancy & bio-age calculators actionable  · **P1** (see NS-CALC)
+### [x] F-CALC-ACTION — Make the life-expectancy & bio-age calculators actionable  · **P1** (see NS-CALC)
+<!-- DONE (P1 longevity): the calculator result (EnhancedLifeExpectancyReport) already shows a per-factor contribution chart + top-3 potential-gain actions (which answers add/subtract years). P1 added the indexable /life-expectancy/factors pages: per-factor year-delta + mechanism + evidence + 3–5 actions. -->
+
 - **Problem:** Living-to-100 beats BornClock by returning per-factor "years
   added/lost" + a physician to-do list; BornClock returns a result but less
   actionable per-input delta.
@@ -67,7 +73,9 @@ sections found in the `growth` codebase + P0 research.
 - **Acceptance:** completing the quiz shows which answers added/subtracted years
   and 3–5 evidence-based actions; no fabricated numbers; honest framing.
 
-### [ ] F-THIN-COUNTRY — Deepen the shared country life-expectancy template  · **P1**
+### [x] F-THIN-COUNTRY — Deepen the shared country life-expectancy template  · **P1**
+<!-- DONE (P1 longevity): LifeExpectancyCountryTemplate already carries per-country avg/men/women, official source, world rank, regional splits and FAQs; P1 added a per-country modelled P(reach 100) stat and an explicit official-life-table baseline citation (source + WHO GHO). -->
+
 - **Problem:** country LE pages share `LifeExpectancyCountryTemplate.tsx`; risk
   of near-duplicate/thin at scale.
 - **Fix (source):** add genuinely per-country substance (official source cited,
@@ -82,20 +90,26 @@ sections found in the `growth` codebase + P0 research.
 
 ### P1 — Traffic engines (refinements to planned items + new)
 
-### [ ] P1-RASHIFAL-WEEKLY — Include **weekly** rashifal in the period set  · **P1**
+### [x] P1-RASHIFAL-WEEKLY — Include **weekly** rashifal in the period set  · **P1**
+<!-- DONE f9dfaaa: /rashifal/:rashi/week (plus today/month/year) evergreen URLs, computed per period at request time. -->
+
 - **Why:** Astrotalk ships today+weekly+monthly+yearly; the plan lists
   daily/weekly/monthly/yearly but ensure **weekly** is actually built.
 - **Acceptance:** `/rashifal/<sign>/weekly` (or equivalent) exists, computed per
   week, evergreen URL cached at request time.
 
-### [ ] P1-PANCHANG-CHOGHADIYA — Wire Choghadiya + Rahu Kaal into the daily Panchang page  · **P1**
+### [x] P1-PANCHANG-CHOGHADIYA — Wire Choghadiya + Rahu Kaal into the daily Panchang page  · **P1**
+<!-- DONE b06e067: /panchang[/:city] shows tithi/nakshatra/yoga/karana/sunrise/sunset + Rahu Kaal, Gulika, Yamaganda and day/night Choghadiya, computed from real sunrise/sunset. -->
+
 - **Why:** Drik/Astrotalk bundle Choghadiya + Rahu Kaal into the free Panchang;
   BornClock has a Muhurat tool but should surface these on the Panchang page.
 - **Acceptance:** the daily-Panchang-for-city page shows tithi/nakshatra/yoga/
   karana/sunrise/sunset **plus** Rahu Kaal and Choghadiya for that city/date,
   validated against an established Panchang source.
 
-### [ ] P1-ATTITUDE-NUM — Attitude number (differentiator) + Birthday number (catch-up)  · **P1**
+### [x] P1-ATTITUDE-NUM — Attitude number (differentiator) + Birthday number (catch-up)  · **P1**
+<!-- DONE 9620321: /attitude-number computes Birthday + Attitude numbers from DOB with plain-language meanings and the 'not science' caveat. -->
+
 - **Why:** Birthday number is table-stakes (Numerology.com/Cafe); **Attitude**
   number is offered by none of the five Western competitors → differentiator.
 - **Fix (source):** extend the numerology engine (`lib/` numerology) + add
@@ -103,20 +117,26 @@ sections found in the `growth` codebase + P0 research.
 - **Acceptance:** both numbers computed from DOB with plain-language meaning and
   worked example; "so what?" passes; honest "not science" caveat retained.
 
-### [ ] P1-CHALDEAN — Chaldean numerology as whitespace (not catch-up)  · **P1**
+### [x] P1-CHALDEAN — Chaldean numerology as whitespace (not catch-up)  · **P1**
+<!-- DONE 9620321: /chaldean-numerology computes the Chaldean name number with a Pythagorean-vs-Chaldean explainer and the full Chaldean letter table. -->
+
 - **Why:** zero Western competitors offer it; it targets the Indian/Chaldean
   audience. (Larger name-correction/business/mobile/house tooling stays P2.)
 - **Acceptance:** a Chaldean calculator + Pythagorean-vs-Chaldean explainer,
   computed, distinct from the existing Pythagorean pages.
 
-### [ ] P1-BLUEZONES-9 — Blue-Zones Power-9 per-factor pages (top content gap)  · **P1**
+### [x] P1-BLUEZONES-9 — Blue-Zones Power-9 per-factor pages (top content gap)  · **P1**
+<!-- DONE 653151f: /blue-zones hub + 9 per-factor pages (move-naturally, purpose, downshift, 80-percent-rule, plant-slant, wine-at-5, belong, loved-ones-first, right-tribe), each distinct with cited sources. -->
+
 - **Why:** Blue Zones is the category content leader; the Power 9 decomposes into
   9 indexable long-tail pages with mechanism + quantified, **cited** claims.
 - **Acceptance:** 9 distinct pages (move naturally, purpose/ikigai, downshift,
   80% rule, plant slant, wine@5, belong, loved-ones-first, right-tribe), each
   Rule-6 distinct, citing bluezones.com / Harvard Health (no invented figures).
 
-### [ ] P1-LE-BY-FACTOR — Life-expectancy-by-condition & bio-age-by-habit indexable pages  · **P1**
+### [x] P1-LE-BY-FACTOR — Life-expectancy-by-condition & bio-age-by-habit indexable pages  · **P1**
+<!-- DONE (P1 longevity): /life-expectancy/factors hub + 9 indexable factor pages (smoking, exercise, diet, bmi, sleep, alcohol, hypertension, diabetes, social-connection), each with the cited year-delta, mechanism, evidence and actions. Rule-6 distinct. -->
+
 - **Why:** no strong incumbent (SSA/ONS disclaim lifestyle; Living-to-100 hides
   it behind a quiz). Open SEO territory; the calculator already computes deltas.
 - **Acceptance:** a set of indexable explainer pages (e.g. smoker vs non-smoker,
@@ -238,19 +258,25 @@ sections found in the `growth` codebase + P0 research.
 
 ### P5 — Infrastructure & measurement (new/refinements)
 
-### [ ] NS-CALC — Calculator "years-delta + to-do" output  · **P1/P5** (content P1, infra P5)
+### [~] NS-CALC — Calculator "years-delta + to-do" output  · **P1/P5** (content P1, infra P5)
+<!-- P1 content side DONE via F-CALC-ACTION + /life-expectancy/factors. Funnel/conversion tracking is P5 (deferred to that phase). -->
+
 - **Why:** Living-to-100's actionable output beats BornClock. (Content side =
   F-CALC-ACTION in P1; any tracking of the funnel = P5 conversion tracking.)
 - **Acceptance:** see F-CALC-ACTION; funnel events (consent-respecting) land in
   the existing analytics.
 
-### [ ] NS-P100 — "Probability of reaching 100" output  · **P1**
+### [x] NS-P100 — "Probability of reaching 100" output  · **P1**
+<!-- DONE (P1 longevity): survival.ts computes an honest P(reach 100) from the forecast (normal approx, SD~10 from national life tables), shown on the calculator result, the /life-expectancy/factors pages and every country page, clearly labelled an estimate. -->
+
 - **Why:** ONS surfaces P(reach 100) alongside the point estimate — cheap,
   credible, shareable.
 - **Acceptance:** the life-expectancy calculator + country pages show an honest
   P(reach 100) figure derived from the model/actuarial baseline (no fabrication).
 
-### [ ] NS-CRED — Cite SSA/ONS/WHO actuarial baseline on longevity surfaces  · **P1**
+### [x] NS-CRED — Cite SSA/ONS/WHO actuarial baseline on longevity surfaces  · **P1**
+<!-- DONE (P1 longevity): LONGEVITY_BASELINE_NOTE cites US SSA period life tables, UK ONS and WHO GHO as the baseline the lifestyle adjustments modify; shown on the calculator result, factor pages and country template. -->
+
 - **Why:** government calculators are the trust anchors; citing the baseline the
   lifestyle adjustments modify extends the RC3 "how we test" honesty push.
 - **Acceptance:** longevity pages state the official-life-table baseline + the
