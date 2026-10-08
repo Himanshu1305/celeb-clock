@@ -120,6 +120,9 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
               ))}
             </ul>
           )}
+          <p className="text-[11px] text-gray-500 mt-1">
+            City search © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline">OpenStreetMap</a> contributors
+          </p>
         </div>
       </div>
 

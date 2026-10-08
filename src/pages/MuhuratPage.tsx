@@ -109,6 +109,9 @@ export default function MuhuratPage() {
               </div>
             )}
             {city && <p className="mt-1 text-xs text-muted-foreground">Using {city.name} (UTC{city.utcOffset >= 0 ? '+' : ''}{city.utcOffset}) for the day’s Panchang.</p>}
+            <p className="text-[11px] text-muted-foreground mt-1">
+              City search © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline">OpenStreetMap</a> contributors
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
