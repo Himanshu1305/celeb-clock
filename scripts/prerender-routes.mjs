@@ -323,6 +323,8 @@ export const STATIC_ROUTES = [
   ...VEDIC_RASHIS.map(r => `/vedic-zodiac/${r}`),
   '/rashifal',
   ...VEDIC_RASHIS.flatMap(r => ['today', 'week', 'month', 'year'].map(p => `/rashifal/${r}/${p}`)),
+  '/nakshatra',
+  ...['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati'].map(n => `/nakshatra/${n}`),
   '/answers',
   ...ANSWER_ROUTES,
   '/tarot-card-by-birthday',

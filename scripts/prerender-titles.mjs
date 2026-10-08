@@ -501,6 +501,35 @@ export function getTitleForRoute(route) {
     }
   }
 
+  // /nakshatra and /nakshatra/:slug
+  if (route === '/nakshatra') {
+    return {
+      title: '27 Nakshatras — Vedic Birth Stars: Meaning, Ruling Planet & Name Sounds | BornClock',
+      description: 'Explore all 27 Nakshatras (lunar mansions) — deity, symbol, ruling planet, meaning, Gana, Yoni, Nadi and traditional baby-name sounds. Find your birth star free.',
+    };
+  }
+  {
+    const m = route.match(/^\/nakshatra\/([a-z-]+)$/);
+    if (m) {
+      const NAK = {
+        'ashwini': 'Ashwini', 'bharani': 'Bharani', 'krittika': 'Krittika', 'rohini': 'Rohini',
+        'mrigashira': 'Mrigashira', 'ardra': 'Ardra', 'punarvasu': 'Punarvasu', 'pushya': 'Pushya',
+        'ashlesha': 'Ashlesha', 'magha': 'Magha', 'purva-phalguni': 'Purva Phalguni',
+        'uttara-phalguni': 'Uttara Phalguni', 'hasta': 'Hasta', 'chitra': 'Chitra', 'swati': 'Swati',
+        'vishakha': 'Vishakha', 'anuradha': 'Anuradha', 'jyeshtha': 'Jyeshtha', 'mula': 'Mula',
+        'purva-ashadha': 'Purva Ashadha', 'uttara-ashadha': 'Uttara Ashadha', 'shravana': 'Shravana',
+        'dhanishtha': 'Dhanishtha', 'shatabhisha': 'Shatabhisha', 'purva-bhadrapada': 'Purva Bhadrapada',
+        'uttara-bhadrapada': 'Uttara Bhadrapada', 'revati': 'Revati',
+      };
+      const name = NAK[m[1]];
+      if (!name) return null;
+      return {
+        title: `${name} Nakshatra — Meaning, Pada, Ruling Planet & Name Sounds | BornClock`,
+        description: `${name} Nakshatra: meaning, ruling planet and Vimshottari period, deity, symbol, Gana, Yoni, Nadi, sign span and traditional baby-name sounds for each pada.`,
+      };
+    }
+  }
+
   // /vedic-zodiac/:rashi
   if (route.startsWith('/vedic-zodiac/') && route !== '/vedic-zodiac') {
     const slug = route.slice(14);
