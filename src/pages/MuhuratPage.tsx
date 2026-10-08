@@ -82,7 +82,7 @@ export default function MuhuratPage() {
             <p>Auspicious dates for a specific occasion, chosen by the Panchang (<TermTip id="tithi">Tithi</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip>, <TermTip id="panchangYoga">Yoga</TermTip> and weekday) for your location — each day shows the <TermTip id="rahuKalam">Rahu Kalam</TermTip> window to avoid.</p>
           </div>
 
-        <TrustStrip claim="Your Panchang, computed for your exact location — timing shifts by city, so we don't guess." />
+        <TrustStrip claim="Your Panchang is computed for your exact location — the right timings shift from city to city, so we never guess." href="/how-it-works#vedic" />
         <div className="rounded-xl border border-border bg-card/60 p-5 space-y-4" style={{ marginTop: 16 }}>
           <div>
             <label className="block text-xs text-muted-foreground mb-1" htmlFor="muhurat-purpose">Occasion</label>

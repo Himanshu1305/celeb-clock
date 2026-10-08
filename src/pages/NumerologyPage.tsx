@@ -71,7 +71,7 @@ export default function NumerologyPage() {
       </Helmet>
 
       <PageTagline />
-      <TrustStrip claim="Calculated from your actual birth date with the Pythagorean method — not a generic daily horoscope." />
+      <TrustStrip claim="Calculated from your actual birth date with the Pythagorean method — not a generic daily horoscope." href="/how-it-works#numerology" />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Calculator */}

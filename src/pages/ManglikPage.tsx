@@ -130,7 +130,7 @@ export default function ManglikPage() {
           <div><span className="eyebrow">Mangal · Mars placement</span><h1>Manglik Dosha Calculator.</h1></div>
           <p>Find out whether your birth chart carries Mangal Dosha (Manglik), how strong it is, which reference points flag it, and — crucially — what the classical cancellations are. Calm, honest, non-fear-based.</p>
         </div>
-        <TrustStrip claim="Mars house computed from your real chart — Lahiri ayanamsa, cross-checked 99–100% vs ProKerala." />
+        <TrustStrip claim="Your Mars placement is worked out from your real birth chart, not guessed from your star sign. In our tests, our Manglik result matched a leading Vedic astrology service in 99–100% of charts." href="/how-it-works#vedic" />
         <div className="form-band" style={{ marginTop: 16 }}>
           <div><h3>Your birth details</h3><p className="small muted">We use Mars's house placement in your chart.</p></div>
           <BirthDetailsForm

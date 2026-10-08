@@ -87,7 +87,7 @@ export default function NameNumerologyPage() {
         }} />
         <div className="max-w-2xl mx-auto px-4 py-10">
           <PageTagline />
-          <TrustStrip claim="Calculated from the letters of your actual name (Pythagorean values) — not a generic reading." />
+          <TrustStrip claim="Calculated from the letters of your actual name (Pythagorean values) — not a generic reading." href="/how-it-works#numerology" />
 
           <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
             <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">

@@ -168,7 +168,7 @@ export default function DashaCalculatorPage() {
           </p>
         </div>
 
-        <TrustStrip claim="Computed from your real Moon position — sidereal Lahiri ayanamsa, the same engine as the full Kundali." />
+        <TrustStrip claim="Worked out from your real Moon position — the same engine as the full Kundali, not a lookup table." href="/how-it-works#vedic" />
 
         <div className="form-band" style={{ marginTop: 16 }}>
           <div>

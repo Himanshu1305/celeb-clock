@@ -116,7 +116,7 @@ export default function KaalSarpDoshaPage() {
           <div><span className="eyebrow">Rahu–Ketu · Nodal axis</span><h1>Kaal Sarp Dosha Calculator.</h1></div>
           <p>Check whether all seven classical planets fall between Rahu and Ketu in your birth chart, which of the 12 named types applies, and what it actually means — calmly, honestly, without fear.</p>
         </div>
-        <TrustStrip claim="Planetary positions computed from your real chart — Lahiri ayanamsa, cross-checked 96–100% vs ProKerala with documented ~4% edge tolerance." />
+        <TrustStrip claim="Every planet's position is worked out from your real birth chart. In our tests, our Kaal Sarp result matched a leading Vedic astrology service in 96–100% of charts (a few borderline charts can differ)." href="/how-it-works#vedic" />
         <div className="form-band" style={{ marginTop: 16 }}>
           <div><h3>Your birth details</h3><p className="small muted">We need the exact positions of all planets, including Rahu and Ketu.</p></div>
           <BirthDetailsForm

@@ -121,7 +121,7 @@ function RealExample() {
         <div><span className="eyebrow">Show, then explain</span><h2>The calculation behind the reading.</h2></div>
         <p>A real computed chart, with its inputs and method visible — not generated from a template.</p>
       </div>
-      <TrustStrip claim="The example chart is really computed — re-run live from the same calculation engine." />
+      <TrustStrip claim="The example chart is really computed — re-run live from the same calculation engine." href="/how-it-works#vedic" />
 
       <div className="tabs" role="tablist" aria-label="Explore the output">
         {tabs.map(([id, label]) => (

@@ -10,14 +10,14 @@ import { PageHeader } from './PageHeader';
  * a page's approved look used a different `.paj` hero.
  */
 type ShellProps = Omit<PajPageProps, 'variant' | 'children'>;
-type HeaderBlock = { eyebrow?: ReactNode; h1: ReactNode; lead?: ReactNode; trust?: string; headerWhite?: boolean };
+type HeaderBlock = { eyebrow?: ReactNode; h1: ReactNode; lead?: ReactNode; trust?: string; trustHref?: string; headerWhite?: boolean };
 export type LayoutProps = ShellProps & HeaderBlock & { variant?: PajVariant; children: ReactNode };
 
 function makeLayout(defaultVariant: PajVariant) {
-  return function Layout({ eyebrow, h1, lead, trust, headerWhite, variant, children, ...shell }: LayoutProps) {
+  return function Layout({ eyebrow, h1, lead, trust, trustHref, headerWhite, variant, children, ...shell }: LayoutProps) {
     return (
       <PajPage variant={variant ?? defaultVariant} {...shell}>
-        <PageHeader eyebrow={eyebrow} h1={h1} lead={lead} trust={trust} white={headerWhite} />
+        <PageHeader eyebrow={eyebrow} h1={h1} lead={lead} trust={trust} trustHref={trustHref} white={headerWhite} />
         {children}
       </PajPage>
     );

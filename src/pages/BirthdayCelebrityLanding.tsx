@@ -276,7 +276,7 @@ export default function BirthdayCelebrityLanding() {
             <div><span className="eyebrow">The birthday club</span><h2>Meet your birthday twins.</h2></div>
             <p>Same month and day, not necessarily the same year — real people, ranked by global recognition.</p>
           </div>
-          <TrustStrip claim="Real people from our database, ranked by recognition — each card links to its source." />
+          <TrustStrip claim="Real people from our database, ranked by how widely recognised they are — and each card links to its source." href="/how-it-works#celebrity-birthday" />
 
           <div className="inline-actions" style={{ marginBottom: 14, gap: 10 }}>
             <label htmlFor="celebSearch" className="eyebrow" style={{ margin: 0 }}>Search a name directly</label>

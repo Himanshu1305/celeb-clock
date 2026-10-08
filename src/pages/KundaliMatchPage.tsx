@@ -151,7 +151,7 @@ export default function KundaliMatchPage() {
             <p>The traditional 36-point Ashtakoota system. {usingSaved ? 'Your details are already filled in — just add the second person.' : 'Enter both birth dates (and times for accurate Nakshatra) to see all eight kootas.'}</p>
           </div>
 
-          <TrustStrip claim="The classical 36-point Ashtakoota (Guna Milan) system — every koota's score shown, nothing hidden." />
+          <TrustStrip claim="The classical 36-point compatibility score (Ashtakoota) — all eight parts shown and added up in front of you, nothing hidden." href="/how-it-works#vedic" />
           <KundaliTabs active="match" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 print:hidden" style={{ marginTop: 16 }}>

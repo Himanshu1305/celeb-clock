@@ -161,7 +161,7 @@ export default function PersonalYearNumberPage() {
           </p>
         </div>
 
-        <TrustStrip claim="Computed in your browser from the current year — never baked in at build time." />
+        <TrustStrip claim="Worked out in your browser from today's date — so it's always current, never baked in months ago." href="/how-it-works#numerology" />
 
         {/* Honest framing — renders on first paint */}
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 mb-6 text-sm text-amber-900">

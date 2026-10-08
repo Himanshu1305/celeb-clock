@@ -190,7 +190,7 @@ export default function AngelNumbersPage() {
           </p>
         </div>
 
-        <TrustStrip claim="Meanings presented as they exist within this spiritual tradition — not as facts or predictions." />
+        <TrustStrip claim="Meanings are presented as they exist within this spiritual tradition — not as facts or predictions." href="/how-it-works#numerology" />
 
         {/* Honest framing — first paint */}
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 mb-6 text-sm text-amber-900">

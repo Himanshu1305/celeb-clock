@@ -174,7 +174,7 @@ export default function KundaliPage() {
             <p>Your Vedic birth chart — planetary positions, <TermTip id="lagna">Lagna</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip> and <TermTip id="dasha">Dasha</TermTip>, in accurate sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) astronomy. Full report {price}.</p>
           </div>
 
-          <TrustStrip claim="Calculated from your exact birth date, time and place (sidereal · Lahiri) and cross-checked for accuracy — not a template." />
+          <TrustStrip claim="Calculated from your exact birth date, time and place — not a template — and cross-checked against a leading Vedic astrology service before launch." href="/how-it-works#vedic" />
           <KundaliTabs active="kundali" />
 
           {loaded && isFull && (
