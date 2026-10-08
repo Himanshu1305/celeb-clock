@@ -86,6 +86,20 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     why: 'The third level of the Dasha system: a sub-period within your Antardasha, sharpening the "what is active right now" picture.',
     inline: 'the third, finest Dasha level (weeks–months)',
   },
+  sookshma: {
+    term: 'Sookshma (subtle period)',
+    impact: 'The fourth Dasha level — a fine window lasting roughly days.',
+    why: 'Each Pratyantardasha divides again into nine Sookshma periods. Because these are so short, they are sensitive to the exact birth time.',
+    guidance: 'Useful for fine timing, but only as reliable as your recorded birth time — treat it as indicative.',
+    inline: 'the fourth Dasha level (about days)',
+  },
+  prana: {
+    term: 'Prana (breath period)',
+    impact: 'The fifth and finest Dasha level — a window lasting hours.',
+    why: 'Each Sookshma divides once more into nine Prana periods, the subtlest layer of Vimshottari timing. At this scale even a few minutes of birth-time error matters.',
+    guidance: 'Interesting for the finest timing, but highly birth-time-sensitive — never treat it as a precise prediction.',
+    inline: 'the fifth, finest Dasha level (about hours)',
+  },
   yoga: {
     term: 'Yoga (planetary combination)',
     impact: 'A special planetary pattern classically linked to a strength or theme in your life.',
