@@ -7,7 +7,7 @@ import { SEO, WebApplicationSchema } from '@/components/SEO';
 const RELATED = [
   { path: '/age-calculator', label: 'Age Calculator' },
   { path: '/age-in-days', label: 'Age in Days' },
-  { path: '/biological-age', label: 'Biological Age Test' },
+  { path: '/biological-age', label: 'Biological Age Calculator' },
   { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
 ];
 

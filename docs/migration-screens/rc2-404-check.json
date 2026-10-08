@@ -259,6 +259,41 @@
     "ok": true
   },
   {
+    "group": "valid→200",
+    "path": "/manglik",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/kaal-sarp-dosha",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/personal-year-number",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/angel-numbers",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "valid→200",
+    "path": "/dasha-calculator",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
     "group": "non-sitemap→200",
     "path": "/results",
     "expect": 200,

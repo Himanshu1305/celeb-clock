@@ -30,7 +30,6 @@ const HowLongWillILivePage = lazyWithReload(() => import("./pages/HowLongWillILi
 const CelebrityPage = lazyWithReload(() => import("./pages/CelebrityPage"));
 const CelebrityIndexPage = lazyWithReload(() => import("./pages/CelebrityIndexPage"));
 const CelebrityHubPage = lazyWithReload(() => import("./pages/CelebrityHubPage"));
-const CelebrityBirthday = lazyWithReload(() => import("./pages/CelebrityBirthday"));
 const Blog = lazyWithReload(() => import("./pages/Blog"));
 const BlogPost = lazyWithReload(() => import("./pages/BlogPost"));
 const About = lazyWithReload(() => import("./pages/About"));
@@ -176,6 +175,11 @@ const KundaliPage = lazyWithReload(() => import('@/pages/KundaliPage'));
 const KundaliMatchPage = lazyWithReload(() => import('@/pages/KundaliMatchPage'));
 const AstrologerPage = lazyWithReload(() => import('@/pages/AstrologerPage'));
 const SadeSatiPage = lazyWithReload(() => import('@/pages/SadeSatiPage'));
+const ManglikPage = lazyWithReload(() => import('@/pages/ManglikPage'));
+const KaalSarpDoshaPage = lazyWithReload(() => import('@/pages/KaalSarpDoshaPage'));
+const PersonalYearNumberPage = lazyWithReload(() => import('@/pages/PersonalYearNumberPage'));
+const AngelNumbersPage = lazyWithReload(() => import('@/pages/AngelNumbersPage'));
+const DashaCalculatorPage = lazyWithReload(() => import('@/pages/DashaCalculatorPage'));
 const MuhuratPage = lazyWithReload(() => import('@/pages/MuhuratPage'));
 const CareerReportPage = lazyWithReload(() => import('@/pages/CareerReportPage'));
 const GemstonePage = lazyWithReload(() => import('@/pages/GemstonePage'));
@@ -397,6 +401,11 @@ const App = () => (
               <Route path="/kundali-match" element={<KundaliMatchPage />} />
               <Route path="/astrologer" element={<AstrologerPage />} />
               <Route path="/sade-sati" element={<SadeSatiPage />} />
+              <Route path="/manglik" element={<ManglikPage />} />
+              <Route path="/kaal-sarp-dosha" element={<KaalSarpDoshaPage />} />
+              <Route path="/personal-year-number" element={<PersonalYearNumberPage />} />
+              <Route path="/angel-numbers" element={<AngelNumbersPage />} />
+              <Route path="/dasha-calculator" element={<DashaCalculatorPage />} />
               <Route path="/muhurat" element={<MuhuratPage />} />
               <Route path="/career-report" element={<CareerReportPage />} />
               <Route path="/gemstones" element={<GemstonePage />} />

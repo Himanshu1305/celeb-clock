@@ -106,7 +106,7 @@ export const Footer = () => {
               <li><Link to="/family" className="text-muted-foreground hover:text-primary transition-colors">Family Dashboard</Link></li>
               <li><Link to="/gift" className="text-muted-foreground hover:text-primary transition-colors">Gift a Report</Link></li>
               <li><Link to="/coach" className="text-muted-foreground hover:text-primary transition-colors">Longevity Coach</Link></li>
-              <li><Link to="/biological-age" className="text-muted-foreground hover:text-primary transition-colors">Biological Age Test</Link></li>
+              <li><Link to="/biological-age" className="text-muted-foreground hover:text-primary transition-colors">Biological Age Calculator</Link></li>
               <li><Link to="/country-comparison" className="text-muted-foreground hover:text-primary transition-colors">Country Comparison</Link></li>
               <li><Link to="/birthday-report" className="text-muted-foreground hover:text-primary transition-colors">Birthday Report</Link></li>
             </ul>

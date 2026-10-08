@@ -127,7 +127,7 @@ const MYSTIC_TOOLS: Tool[] = [
 ];
 const SCIENCE_TOOLS: Tool[] = [
   { label: 'Life Expectancy', tag: 'WHO / NIH-informed', to: '/life-expectancy' },
-  { label: 'Biological Age Test', tag: '10 questions', to: '/biological-age' },
+  { label: 'Biological Age', tag: 'lifestyle estimate', to: '/biological-age' },
   { label: 'Country Comparison', tag: '57 countries', to: '/country-comparison' },
   { label: 'Planetary Age', tag: 'orbital periods', to: '/planetary-age' },
   { label: 'Planetary Weight', tag: 'NASA 2023', to: '/weight-on-planets' },

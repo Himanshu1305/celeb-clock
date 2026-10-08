@@ -18,6 +18,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { mergeProfile } from '@/services/savedProfile';
 import { fetchKundali, buildInterpretationBlocks, type KundaliData } from '@/services/kundaliService';
+import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
+import { WhatsAhead } from '@/components/vedic/WhatsAhead';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
 const VedicReading = lazy(() => import('@/components/reading/VedicReading').then(m => ({ default: m.VedicReading })));
 const PastPeriodReflection = lazy(() => import('@/components/reading/PastPeriodReflection').then(m => ({ default: m.PastPeriodReflection })));
@@ -144,14 +146,14 @@ export default function KundaliPage() {
       seo={(
         <SEO
           title="Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock"
-          description="Generate your free Vedic Kundali (Janam Kundali) — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, computed with the Swiss Ephemeris."
+          description="Generate your free Vedic Kundali (Janam Kundali) — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, in accurate sidereal (Lahiri) astronomy."
           canonicalUrl="/kundali"
           ogType="website"
         />
       )}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali', edition: 'Sidereal · Lahiri · Swiss Ephemeris' }}
       footer={{
-        tagline: 'Your Vedic birth chart, computed with care — sidereal (Lahiri), Swiss Ephemeris.',
+        tagline: 'Your Vedic birth chart, computed with care — accurate sidereal (Lahiri) astronomy.',
         nav: [
           { label: 'Vedic Astrology', to: '/vedic-astrology' },
           { label: 'Kundali Matching', to: '/kundali-match' },
@@ -261,6 +263,18 @@ export default function KundaliPage() {
                   </tbody>
                 </table>
               </div>
+
+              {data.dashaTimeline && data.dashaTimeline.length > 0 && (
+                <DashaDeepDive mahadashas={data.dashaTimeline.map(m => ({ lord: m.lord, start: m.start, end: m.end }))} />
+              )}
+
+              {data.dashaTimeline && data.dashaTimeline.length > 0 && (
+                <WhatsAhead
+                  lagnaSignIndex={data.lagna.signIndex}
+                  planets={data.planets.map(p => ({ name: p.name, house: p.house }))}
+                  dashaTimeline={data.dashaTimeline}
+                />
+              )}
 
               <div className="inline-actions" style={{ marginTop: 18 }}>
                 <a data-testid="kundali-whatsapp-share" href={whatsappHref} target="_blank" rel="noopener noreferrer"

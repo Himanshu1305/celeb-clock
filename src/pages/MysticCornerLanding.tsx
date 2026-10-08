@@ -270,6 +270,7 @@ export default function MysticCornerLanding() {
               ['Numerology', '/numerology'], ['Name numerology', '/name-numerology'],
               ['Western zodiac', '/zodiac'], ['Chinese zodiac', '/chinese-zodiac'],
               ['Tarot by birthday', '/tarot-card-by-birthday'], ['Compatibility', '/compatibility'],
+              ['Personal year number', '/personal-year-number'], ['Angel numbers', '/angel-numbers'],
             ] as Array<[string, string]>).map(([label, to], i, arr) => (
               <span key={label}><Link className="textlink" to={to}>{label}</Link>{i < arr.length - 1 && <span className="muted"> · </span>}</span>
             ))}
