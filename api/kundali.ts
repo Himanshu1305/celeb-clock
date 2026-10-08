@@ -108,9 +108,18 @@ async function computeChart(env, y, m, d, h, min, lat, lon, tz) {
     );
     return { chart: toKundaliLegacy(result), source: 'local' };
   } catch (localErr) {
-    // Fall back to ProKerala on any local-engine failure.
+    // Fall back to ProKerala on any local-engine failure. The ProKerala
+    // subscription has ended, so in practice this returns a 503 ("not
+    // configured"); the local path is primary and is never removed.
     const pk = await fetchFromProKerala(env, y, m, d, h, min, lat, lon, tz);
-    if (pk.error) return { error: pk.error, status: pk.status, localError: String(localErr?.message || localErr) };
+    if (pk.error) {
+      // Log loudly when BOTH the local engine and the fallback are unavailable,
+      // so the failure is diagnosable. The visitor still gets a clear, honest
+      // "temporarily unavailable" message (never a hang or a confusing error).
+      console.error('[kundali] local engine failed AND ProKerala fallback unavailable —',
+        'local:', String(localErr?.message || localErr), '| fallback:', pk.error);
+      return { error: pk.error, status: pk.status, localError: String(localErr?.message || localErr) };
+    }
     return { chart: pk.chart, source: 'prokerala' };
   }
 }
@@ -214,7 +223,14 @@ async function handler(request, env) {
     const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz);
 
     const cached = await getCachedChart(sb, cacheKey);
-    if (cached) {
+    // A cached entry is only valid if it carries the fields every current consumer
+    // needs. Entries written before the legacy-adapter fix lack `doshas` (used by
+    // /manglik and /kaal-sarp-dosha) and `dashaTimeline` (used by the Dasha deep-dive
+    // and What's Ahead). Serving those would reproduce the original failure on a cache
+    // HIT, so we treat a stale entry as a miss: recompute and overwrite the SAME row
+    // (upsert on cache_key) — no real user data is deleted, it is refreshed in place.
+    const cacheIsComplete = cached && cached.doshas && Array.isArray(cached.dashaTimeline);
+    if (cacheIsComplete) {
       return json({ ...cached, _cache: 'hit' });
     }
 
@@ -223,7 +239,7 @@ async function handler(request, env) {
 
     await setCachedChart(sb, cacheKey, result.chart, result.source);
 
-    return json({ ...result.chart, _cache: 'miss' });
+    return json({ ...result.chart, _cache: cached ? 'refreshed' : 'miss' });
   } catch(e) { return json({ error:'calc-failed', detail:String(e.message||e) }, 500); }
 }
 export const GET = handler;

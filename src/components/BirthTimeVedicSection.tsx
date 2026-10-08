@@ -6,7 +6,7 @@ interface VedicApiResult {
   nakshatra: { nakshatra: string; nakshatra_devanagari: string; pada: number; confidence: string; is_boundary: boolean };
   rashi: string | null;
   rashi_devanagari: string | null;
-  lagna: string | null;
+  lagna: { sign: string; signIndex: number; degrees: number } | null;
   dasha: { mahadasha: string; antardasha: string } | null;
   requires_birth_time: boolean;
 }
@@ -157,7 +157,7 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
           {result.lagna && (
             <div className="rounded-lg bg-white border border-gray-100 p-3">
               <span className="text-gray-500">Lagna (Ascendant)</span>
-              <div className="font-semibold text-gray-900">{result.lagna}</div>
+              <div className="font-semibold text-gray-900">{result.lagna.sign}</div>
             </div>
           )}
           {result.dasha && (

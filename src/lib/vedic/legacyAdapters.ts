@@ -48,6 +48,15 @@ export function toKundaliLegacy(r: BirthChartResult) {
     rashi: moonSign,
     rashi_devanagari: RASHI_DEV[moonSign] || null,
     dasha: r.currentDasha,
+    // Full-lifetime Vimshottari timeline — the engine already computes it. Passing
+    // it through is what lets KundaliPage render the 5-level Dasha deep-dive and the
+    // "What's Ahead" section (both are gated on `data.dashaTimeline`); without it they
+    // silently never render. Additive — existing consumers ignore the extra field.
+    dashaTimeline: r.dashaTimeline,
+    // Doshas the engine already computes — /manglik reads doshas.mangalDosha and
+    // /kaal-sarp-dosha reads doshas.kaalSarp from this response. Previously dropped,
+    // which made both standalone tools fail every real submission.
+    doshas: r.doshas,
     requires_birth_time: false,
     // Warnings (e.g. POLAR_LATITUDE) are passed through so the UI can surface a
     // banner. Empty array for normal charts — additive, does not break consumers.
