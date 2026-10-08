@@ -237,6 +237,8 @@ export default {
       const SGN = new Set(['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces']);
       if ((m = pathname.match(/^\/planet-in-sign\/([a-z]+)\/([a-z]+)\/?$/)))  return !(PLN.has(m[1]) && SGN.has(m[2]));
       if ((m = pathname.match(/^\/planet-in-house\/([a-z]+)\/(\d+)\/?$/)))    return !(PLN.has(m[1]) && parseInt(m[2], 10) >= 1 && parseInt(m[2], 10) <= 12);
+      const YOG = new Set(['raja-yoga','dhana-yoga','gaja-kesari-yoga','budha-aditya-yoga','chandra-mangal-yoga','ruchaka-yoga','bhadra-yoga','hamsa-yoga','malavya-yoga','shasha-yoga','neecha-bhanga-raja-yoga','vipreet-raja-yoga','kemadruma-yoga']);
+      if ((m = pathname.match(/^\/yoga\/([a-z-]+)\/?$/)))            return !YOG.has(m[1]);
       const BZ = new Set(['move-naturally','purpose','downshift','80-percent-rule','plant-slant','wine-at-5','belong','loved-ones-first','right-tribe']);
       if ((m = pathname.match(/^\/blue-zones\/([a-z0-9-]+)\/?$/)))    return !BZ.has(m[1]);
       const PC = new Set(['delhi','mumbai','bengaluru','kolkata','chennai','hyderabad','pune','ahmedabad','jaipur','lucknow']);

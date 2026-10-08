@@ -576,6 +576,27 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /yoga[/:slug]
+  if (route === '/yoga') return {
+    title: 'Vedic Yogas — Raja, Dhana & Pancha Mahapurusha | BornClock',
+    description: 'The important Vedic yogas (planetary combinations) explained plainly — Raja Yoga, Dhana Yoga, Gaja Kesari, the five Pancha Mahapurusha yogas, Neecha Bhanga and more.',
+  };
+  {
+    const yg = {
+      'raja-yoga': 'Raja Yoga', 'dhana-yoga': 'Dhana Yoga', 'gaja-kesari-yoga': 'Gaja Kesari Yoga',
+      'budha-aditya-yoga': 'Budha-Aditya Yoga', 'chandra-mangal-yoga': 'Chandra-Mangal Yoga',
+      'ruchaka-yoga': 'Ruchaka Yoga', 'bhadra-yoga': 'Bhadra Yoga', 'hamsa-yoga': 'Hamsa Yoga',
+      'malavya-yoga': 'Malavya Yoga', 'shasha-yoga': 'Shasha Yoga',
+      'neecha-bhanga-raja-yoga': 'Neecha Bhanga Raja Yoga', 'vipreet-raja-yoga': 'Vipreet Raja Yoga',
+      'kemadruma-yoga': 'Kemadruma Yoga',
+    };
+    const m = route.match(/^\/yoga\/([a-z-]+)$/);
+    if (m && yg[m[1]]) return {
+      title: `${yg[m[1]]} — Formation, Meaning & Strength | BornClock`,
+      description: `${yg[m[1]]}: how it forms, what the Vedic tradition reads into it, how strongly it actually delivers, and a balanced reading. Check yours with a free Kundli.`,
+    };
+  }
+
   if (route === '/blue-zones') return {
     title: "Blue Zones Power 9 — 9 Habits of the Longest-Lived | BornClock",
     description: 'The nine habits (the Power 9) shared by the world\'s five Blue Zones, each explained plainly with how to apply it and honest sources.',

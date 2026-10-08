@@ -337,6 +337,8 @@ export const STATIC_ROUTES = [
   '/planet-in-house',
   ...['sun','moon','mars','mercury','jupiter','venus','saturn','rahu','ketu'].flatMap(p =>
     [1,2,3,4,5,6,7,8,9,10,11,12].map(h => `/planet-in-house/${p}/${h}`)),
+  '/yoga',
+  ...['raja-yoga','dhana-yoga','gaja-kesari-yoga','budha-aditya-yoga','chandra-mangal-yoga','ruchaka-yoga','bhadra-yoga','hamsa-yoga','malavya-yoga','shasha-yoga','neecha-bhanga-raja-yoga','vipreet-raja-yoga','kemadruma-yoga'].map(y => `/yoga/${y}`),
   '/attitude-number',
   '/chaldean-numerology',
   '/blue-zones',
