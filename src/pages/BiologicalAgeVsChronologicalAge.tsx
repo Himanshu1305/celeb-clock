@@ -13,7 +13,7 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/biological-age', label: 'Biological Age Test' },
+  { path: '/biological-age', label: 'Biological Age Calculator' },
   { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
   { path: '/coach', label: 'Longevity Coach' },
   { path: '/country-comparison', label: 'Country Comparison' },
