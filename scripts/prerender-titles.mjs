@@ -597,6 +597,26 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /divisional-charts[/:slug]
+  if (route === '/divisional-charts') return {
+    title: 'Divisional Charts (Vargas) — D1 to D60 Explained | BornClock',
+    description: 'The Vedic divisional charts (vargas) explained plainly — D9 Navamsa (marriage), D10 Dasamsa (career), D7 Saptamsha (children), D4 (property), D24 (education) and more.',
+  };
+  {
+    const vg = {
+      'd1-rashi': 'D1 Rashi', 'd2-hora': 'D2 Hora', 'd3-drekkana': 'D3 Drekkana',
+      'd4-chaturthamsha': 'D4 Chaturthamsha', 'd7-saptamsha': 'D7 Saptamsha', 'd9-navamsa': 'D9 Navamsa',
+      'd10-dasamsa': 'D10 Dasamsa', 'd12-dwadashamsha': 'D12 Dwadashamsha', 'd16-shodashamsha': 'D16 Shodashamsha',
+      'd20-vimshamsha': 'D20 Vimshamsha', 'd24-chaturvimshamsha': 'D24 Chaturvimshamsha', 'd27-bhamsha': 'D27 Bhamsha',
+      'd30-trimshamsha': 'D30 Trimshamsha', 'd60-shashtiamsha': 'D60 Shashtiamsha',
+    };
+    const m = route.match(/^\/divisional-charts\/([a-z0-9-]+)$/);
+    if (m && vg[m[1]]) return {
+      title: `${vg[m[1]]} — Meaning & How to Read It | BornClock`,
+      description: `${vg[m[1]]}: the divisional chart’s life area, what it shows, how it is computed and how to read it against your main (D1) chart.`,
+    };
+  }
+
   if (route === '/blue-zones') return {
     title: "Blue Zones Power 9 — 9 Habits of the Longest-Lived | BornClock",
     description: 'The nine habits (the Power 9) shared by the world\'s five Blue Zones, each explained plainly with how to apply it and honest sources.',

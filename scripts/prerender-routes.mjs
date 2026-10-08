@@ -339,6 +339,8 @@ export const STATIC_ROUTES = [
     [1,2,3,4,5,6,7,8,9,10,11,12].map(h => `/planet-in-house/${p}/${h}`)),
   '/yoga',
   ...['raja-yoga','dhana-yoga','gaja-kesari-yoga','budha-aditya-yoga','chandra-mangal-yoga','ruchaka-yoga','bhadra-yoga','hamsa-yoga','malavya-yoga','shasha-yoga','neecha-bhanga-raja-yoga','vipreet-raja-yoga','kemadruma-yoga'].map(y => `/yoga/${y}`),
+  '/divisional-charts',
+  ...['d1-rashi','d2-hora','d3-drekkana','d4-chaturthamsha','d7-saptamsha','d9-navamsa','d10-dasamsa','d12-dwadashamsha','d16-shodashamsha','d20-vimshamsha','d24-chaturvimshamsha','d27-bhamsha','d30-trimshamsha','d60-shashtiamsha'].map(v => `/divisional-charts/${v}`),
   '/attitude-number',
   '/chaldean-numerology',
   '/blue-zones',

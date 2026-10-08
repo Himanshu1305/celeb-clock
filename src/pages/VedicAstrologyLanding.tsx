@@ -469,7 +469,7 @@ export default function VedicAstrologyLanding() {
               ['Planetary Transits', '/transit'], ['Mercury Retrograde', '/mercury-retrograde'],
               ['27 Nakshatras', '/nakshatra'], ['Rashi', '/moon-sign'],
               ['Planet in Sign', '/planet-in-sign'], ['Planet in House', '/planet-in-house'],
-              ['Vedic Yogas', '/yoga'],
+              ['Vedic Yogas', '/yoga'], ['Divisional Charts', '/divisional-charts'],
               ['Sade Sati', '/sade-sati'], ['Dasha Calculator', '/dasha-calculator'],
               ['Manglik', '/manglik'], ['Kaal Sarp Dosha', '/kaal-sarp-dosha'],
               ['Gemstone Recommendation', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'],
