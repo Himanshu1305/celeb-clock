@@ -354,6 +354,7 @@ export const STATIC_ROUTES = [
   '/grahan-dosha',
   '/nadi-dosha',
   '/life-report',
+  '/child-kundli',
   '/blue-zones',
   ...['move-naturally','purpose','downshift','80-percent-rule','plant-slant','wine-at-5','belong','loved-ones-first','right-tribe'].map(f => `/blue-zones/${f}`),
   '/panchang',

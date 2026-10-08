@@ -21,6 +21,8 @@ import { fetchKundali, buildInterpretationBlocks, type KundaliData } from '@/ser
 import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
 import { WhatsAhead } from '@/components/vedic/WhatsAhead';
 import { PeriodForecast } from '@/components/vedic/PeriodForecast';
+import { buildKundaliPdfHtml } from '@/lib/pdf/kundaliPdfHtml';
+import { printHtmlViaIframe } from '@/lib/pdf/printHtml';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
 const VedicReading = lazy(() => import('@/components/reading/VedicReading').then(m => ({ default: m.VedicReading })));
 const PastPeriodReflection = lazy(() => import('@/components/reading/PastPeriodReflection').then(m => ({ default: m.PastPeriodReflection })));
@@ -295,6 +297,10 @@ export default function KundaliPage() {
                   className="inline-flex items-center gap-2" style={{ background: '#15803D', color: '#fff', fontWeight: 600, borderRadius: 999, padding: '10px 18px', fontSize: 13 }}>
                   Share on WhatsApp
                 </a>
+                <button data-testid="kundali-download-pdf" type="button" className="btn secondary"
+                  onClick={() => printHtmlViaIframe(buildKundaliPdfHtml(data, { dob: readingDob }))}>
+                  Download Kundli (PDF) — free
+                </button>
                 <Link className="btn secondary" to="/birthday-report/gift">Gift a Kundali ({price}) →</Link>
               </div>
             </section>

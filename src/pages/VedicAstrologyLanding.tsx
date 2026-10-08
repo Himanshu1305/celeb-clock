@@ -476,7 +476,7 @@ export default function VedicAstrologyLanding() {
               ['Grahan Dosha', '/grahan-dosha'], ['Nadi Dosha', '/nadi-dosha'],
               ['Gemstone Recommendation', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'],
               ['Career Report', '/career-report'], ['Life Report', '/life-report'],
-              ['Muhurat Finder', '/muhurat'],
+              ['Child Kundli', '/child-kundli'], ['Muhurat Finder', '/muhurat'],
               ['Sun vs Moon sign', '/sun-vs-moon-sign'], ['How we calculate', '/how-it-works'],
             ] as Array<[string, string]>).map(([label, to], i, arr) => (
               <span key={label}>

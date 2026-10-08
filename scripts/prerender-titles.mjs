@@ -696,6 +696,10 @@ export function getTitleForRoute(route) {
     title: 'Life Report (Vedic) — Wealth, Education, Foreign & Health | BornClock',
     description: 'A graded Vedic life report: wealth & finances, education & learning, foreign travel & settlement, and health & wellbeing — each read from your real chart, honestly.',
   };
+  if (route === '/child-kundli') return {
+    title: 'Child (Bal) Kundli — Temperament, Talents & Care | BornClock',
+    description: "A free, gentle Child (Bal) Kundli: temperament, learning strengths, talents, favourable periods, name sounds and calm wellbeing guidance from your child's chart.",
+  };
 
   // /nakshatra and /nakshatra/:slug
   if (route === '/nakshatra') {

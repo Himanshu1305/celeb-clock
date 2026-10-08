@@ -13,6 +13,7 @@ import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsFo
 import { GradeLegend, TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
+import { ClassicalRefs } from '@/components/vedic/ClassicalRefs';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 
 interface Report {
@@ -177,6 +178,7 @@ export default function CareerReportPage() {
                 <p className="text-sm text-foreground">{report.verdict}</p>
               </div>
               <p className="text-xs text-muted-foreground">{report.disclaimer}</p>
+              <ClassicalRefs />
             </div>
           )}
         </section>

@@ -10,6 +10,7 @@ import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { GradeLegend } from '@/components/vedic/TermTip';
+import { ClassicalRefs } from '@/components/vedic/ClassicalRefs';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 
@@ -119,6 +120,7 @@ export default function LifeReportPage() {
             <p className="text-xs text-muted-foreground">
               These are classical, graded indications attributed to Vedic astrology — decision-support, never guarantees. The health reading is wellbeing-only and never a diagnosis: for anything health-related, please see a qualified doctor.
             </p>
+            <ClassicalRefs />
           </div>
         )}
       </section>
