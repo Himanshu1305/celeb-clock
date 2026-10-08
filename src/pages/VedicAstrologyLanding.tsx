@@ -464,7 +464,9 @@ export default function VedicAstrologyLanding() {
           <p className="lead" data-testid="vap-explore" style={{ maxWidth: 'none' }}>
             {([
               ['Kundli', '/kundali'], ['Kundali Matching', '/kundali-match'],
-              ['Nakshatra', '/articles/nakshatra-by-date-of-birth'], ['Rashi', '/moon-sign'],
+              ['Rashifal', '/rashifal'], ['Daily Panchang', '/panchang'],
+              ['Planetary Transits', '/transit'], ['Mercury Retrograde', '/mercury-retrograde'],
+              ['27 Nakshatras', '/nakshatra'], ['Rashi', '/moon-sign'],
               ['Sade Sati', '/sade-sati'], ['Dasha Calculator', '/dasha-calculator'],
               ['Manglik', '/manglik'], ['Kaal Sarp Dosha', '/kaal-sarp-dosha'],
               ['Gemstone Recommendation', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'],

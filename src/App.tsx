@@ -189,6 +189,9 @@ const RashifalIndex = lazyWithReload(() => import('@/pages/RashifalIndex'));
 const RashifalSign = lazyWithReload(() => import('@/pages/RashifalSign'));
 const NakshatraIndex = lazyWithReload(() => import('@/pages/NakshatraIndex'));
 const NakshatraPage = lazyWithReload(() => import('@/pages/NakshatraPage'));
+const TransitIndex = lazyWithReload(() => import('@/pages/TransitIndex'));
+const TransitYearPage = lazyWithReload(() => import('@/pages/TransitYearPage'));
+const MercuryRetrograde = lazyWithReload(() => import('@/pages/MercuryRetrograde'));
 const AttitudeNumberPage = lazyWithReload(() => import('@/pages/AttitudeNumberPage'));
 const ChaldeanNumerologyPage = lazyWithReload(() => import('@/pages/ChaldeanNumerologyPage'));
 const BlueZonesIndex = lazyWithReload(() => import('@/pages/BlueZonesIndex'));
@@ -424,6 +427,10 @@ const App = () => (
               <Route path="/rashifal" element={<RashifalIndex />} />
               <Route path="/rashifal/:rashi" element={<RashifalSign />} />
               <Route path="/rashifal/:rashi/:period" element={<RashifalSign />} />
+              <Route path="/transit" element={<TransitIndex />} />
+              <Route path="/transit/:planet/:year" element={<TransitYearPage />} />
+              <Route path="/mercury-retrograde" element={<MercuryRetrograde />} />
+              <Route path="/mercury-retrograde/:year" element={<MercuryRetrograde />} />
               <Route path="/nakshatra" element={<NakshatraIndex />} />
               <Route path="/nakshatra/:slug" element={<NakshatraPage />} />
               <Route path="/attitude-number" element={<AttitudeNumberPage />} />

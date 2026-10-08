@@ -514,6 +514,31 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /transit, /transit/:planet/:year, /mercury-retrograde[/:year]
+  if (route === '/transit') return {
+    title: 'Planetary Transits — Saturn, Jupiter, Rahu & Ketu by Year | BornClock',
+    description: 'Free Vedic transit (gochar) pages for the slow planets — Saturn, Jupiter, Rahu and Ketu — by year, with real ingress dates and the graded effect on every Moon sign.',
+  };
+  {
+    const tp = { saturn: 'Saturn (Shani)', jupiter: 'Jupiter (Guru)', rahu: 'Rahu', ketu: 'Ketu' };
+    const m = route.match(/^\/transit\/([a-z]+)\/(\d{4})$/);
+    if (m && tp[m[1]]) return {
+      title: `${tp[m[1]]} Transit ${m[2]} — Effect on Every Rashi | BornClock`,
+      description: `${tp[m[1]]} transit (gochar) for ${m[2]}: the sign it occupies, the real ingress date(s), and a graded, plain-language reading of its effect on each of the 12 Moon signs.`,
+    };
+  }
+  if (route === '/mercury-retrograde') return {
+    title: 'Mercury Retrograde — Exact Dates & Meaning | BornClock',
+    description: 'Mercury retrograde dates with exact start and end days, computed from Mercury\'s real apparent motion, plus what the tradition reads into it and how to use the time.',
+  };
+  {
+    const m = route.match(/^\/mercury-retrograde\/(\d{4})$/);
+    if (m) return {
+      title: `Mercury Retrograde ${m[1]} — Exact Dates & Meaning | BornClock`,
+      description: `Every Mercury retrograde in ${m[1]} with exact start and end dates, computed from Mercury's real apparent motion, plus its meaning and how to use the time.`,
+    };
+  }
+
   if (route === '/blue-zones') return {
     title: "Blue Zones Power 9 — 9 Habits of the Longest-Lived | BornClock",
     description: 'The nine habits (the Power 9) shared by the world\'s five Blue Zones, each explained plainly with how to apply it and honest sources.',
