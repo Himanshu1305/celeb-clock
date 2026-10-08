@@ -35,6 +35,7 @@ export default function KundaliPage() {
   const autoRan = useRef(false);
   const [usingDifferent, setUsingDifferent] = useState(false);
   const [saveChecked, setSaveChecked] = useState(false);
+  const [chartStyle, setChartStyle] = useState<'north' | 'south'>('north');
 
   const [data, setData] = useState<KundaliData | null>(null);
   const [readingDob, setReadingDob] = useState('');
@@ -234,9 +235,17 @@ export default function KundaliPage() {
           <>
             <section className="section white">
               <div className="section-head"><div><span className="eyebrow">The chart</span><h2>Your birth chart.</h2></div></div>
+              <div className="inline-flex rounded-lg border border-border overflow-hidden mb-3 text-sm" role="group" aria-label="Chart style">
+                <button data-testid="chart-style-north" type="button" onClick={() => setChartStyle('north')}
+                  className={`px-4 py-1.5 font-medium ${chartStyle === 'north' ? 'bg-primary text-primary-foreground' : 'bg-background text-foreground'}`}
+                  aria-pressed={chartStyle === 'north'}>North Indian</button>
+                <button data-testid="chart-style-south" type="button" onClick={() => setChartStyle('south')}
+                  className={`px-4 py-1.5 font-medium ${chartStyle === 'south' ? 'bg-primary text-primary-foreground' : 'bg-background text-foreground'}`}
+                  aria-pressed={chartStyle === 'south'}>South Indian</button>
+              </div>
               <div className="chart-with-stats">
                 <Suspense fallback={<div style={{ width: 300, height: 300 }} aria-hidden="true" />}>
-                  <KundaliChart lagnaSignIndex={data.lagna.signIndex} planets={data.planets} />
+                  <KundaliChart lagnaSignIndex={data.lagna.signIndex} planets={data.planets} style={chartStyle} />
                 </Suspense>
                 <div className="chart-stats">
                   <div className="chart-stat" data-testid="kundali-lagna"><small><TermTip id="lagna">Lagna</TermTip></small><strong>{data.lagna.sign}</strong></div>
