@@ -216,6 +216,21 @@ export default function NumerologyPage() {
           </div>
         </section>
 
+        {/* Numerology tools */}
+        <div className="rounded-xl border border-border p-6 mb-8">
+          <p className="font-semibold text-foreground mb-3">More numerology tools</p>
+          <div className="grid sm:grid-cols-2 gap-3 text-sm">
+            <Link to="/name-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Name numerology (Expression & Soul Urge)</Link>
+            <Link to="/chaldean-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Chaldean numerology</Link>
+            <Link to="/name-correction" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Name correction (Chaldean)</Link>
+            <Link to="/business-name-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Business name numerology</Link>
+            <Link to="/mobile-number-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Mobile number numerology</Link>
+            <Link to="/house-number-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">House number numerology</Link>
+            <Link to="/attitude-number" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Birthday & attitude number</Link>
+            <Link to="/personal-year-number" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Personal year number</Link>
+          </div>
+        </div>
+
         {/* Bottom Links */}
         <div className="bg-muted/50 rounded-xl p-6 text-center mb-8">
           <p className="text-muted-foreground text-sm mb-4">Explore more BornClock tools</p>

@@ -660,6 +660,22 @@ export function getTitleForRoute(route) {
     title: 'Chaldean Numerology Calculator — Name Number | BornClock',
     description: 'Free Chaldean numerology calculator for your name number, shown side by side with the Pythagorean result, with the full Chaldean letter table.',
   };
+  if (route === '/name-correction') return {
+    title: 'Name Numerology Correction — Chaldean Name Number | BornClock',
+    description: 'Free name-correction calculator in the Chaldean tradition: your name number, its compound meaning, and how it sits with your birth numbers. Reflection-first.',
+  };
+  if (route === '/business-name-numerology') return {
+    title: 'Business Name Numerology — Chaldean Company Number | BornClock',
+    description: 'Free business-name numerology calculator: your company name number, its ruling planet and compound meaning, and which numbers the tradition favours for enterprise.',
+  };
+  if (route === '/mobile-number-numerology') return {
+    title: "Mobile Number Numerology — Your Phone Number's Number | BornClock",
+    description: 'Free mobile-number numerology: reduce your phone number to its single digit, with ruling planet and plain-language meaning. Honest, reflection-first.',
+  };
+  if (route === '/house-number-numerology') return {
+    title: "House Number Numerology — Your Home's Number & Meaning | BornClock",
+    description: 'Free house-number numerology: reduce your house or flat number (including 12B-style) to a single digit and read the atmosphere the tradition links to it.',
+  };
 
   // /nakshatra and /nakshatra/:slug
   if (route === '/nakshatra') {

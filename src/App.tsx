@@ -200,6 +200,10 @@ const YogaPage = lazyWithReload(() => import('@/pages/YogaPage'));
 const DivisionalChartPage = lazyWithReload(() => import('@/pages/DivisionalChartPage'));
 const AttitudeNumberPage = lazyWithReload(() => import('@/pages/AttitudeNumberPage'));
 const ChaldeanNumerologyPage = lazyWithReload(() => import('@/pages/ChaldeanNumerologyPage'));
+const NameCorrectionPage = lazyWithReload(() => import('@/pages/NameCorrectionPage'));
+const BusinessNameNumerologyPage = lazyWithReload(() => import('@/pages/BusinessNameNumerologyPage'));
+const MobileNumberNumerologyPage = lazyWithReload(() => import('@/pages/MobileNumberNumerologyPage'));
+const HouseNumberNumerologyPage = lazyWithReload(() => import('@/pages/HouseNumberNumerologyPage'));
 const BlueZonesIndex = lazyWithReload(() => import('@/pages/BlueZonesIndex'));
 const BlueZonesFactor = lazyWithReload(() => import('@/pages/BlueZonesFactor'));
 const PanchangPage = lazyWithReload(() => import('@/pages/PanchangPage'));
@@ -453,6 +457,10 @@ const App = () => (
               <Route path="/nakshatra/:slug" element={<NakshatraPage />} />
               <Route path="/attitude-number" element={<AttitudeNumberPage />} />
               <Route path="/chaldean-numerology" element={<ChaldeanNumerologyPage />} />
+              <Route path="/name-correction" element={<NameCorrectionPage />} />
+              <Route path="/business-name-numerology" element={<BusinessNameNumerologyPage />} />
+              <Route path="/mobile-number-numerology" element={<MobileNumberNumerologyPage />} />
+              <Route path="/house-number-numerology" element={<HouseNumberNumerologyPage />} />
               <Route path="/blue-zones" element={<BlueZonesIndex />} />
               <Route path="/blue-zones/:factor" element={<BlueZonesFactor />} />
               <Route path="/panchang" element={<PanchangPage />} />
