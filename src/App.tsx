@@ -141,6 +141,7 @@ const BornOnDayGlobal = lazyWithReload(() => import("./pages/BornOnDayGlobal"));
 const ReportView = lazyWithReload(() => import("./pages/ReportView"));
 const ChineseZodiac = lazyWithReload(() => import("./pages/ChineseZodiac"));
 const ChineseZodiacSign = lazyWithReload(() => import("./pages/ChineseZodiacSign"));
+const WesternBirthChart = lazyWithReload(() => import("./pages/WesternBirthChart"));
 const VedicZodiac = lazyWithReload(() => import("./pages/VedicZodiac"));
 const VedicAstrologyLanding = lazyWithReload(() => import("./pages/VedicAstrologyLanding"));
 const ScienceLongevityLanding = lazyWithReload(() => import("./pages/ScienceLongevityLanding"));
@@ -400,6 +401,7 @@ const App = () => (
               <Route path="/mystic-corner" element={<MysticCornerLanding />} />
               <Route path="/vedic-zodiac" element={<VedicZodiac />} />
               <Route path="/vedic-zodiac/:rashi" element={<VedicZodiacSign />} />
+              <Route path="/western-birth-chart" element={<WesternBirthChart />} />
               <Route path="/answers" element={<AnswersIndex />} />
               <Route path="/answers/how-long-will-i-live" element={<HowLongWillILive />} />
               <Route path="/answers/what-is-my-biological-age" element={<WhatIsMyBiologicalAge />} />

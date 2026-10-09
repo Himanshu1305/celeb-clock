@@ -200,6 +200,7 @@ export default function MysticCornerLanding() {
                 <div>
                   <h3>A Sun sign is not a whole chart.</h3>
                   <p>These are conventional date ranges. Births near a boundary need the actual Sun position, birth time and timezone. The interpretation is cultural and reflective, not a scientifically validated personality assessment.</p>
+                  <p><Link to="/western-birth-chart" className="text-button">Build your full Western birth chart (Sun, Moon, Rising &amp; houses) →</Link></p>
                 </div>
               </div>
               <div className="zodiac-select" aria-label="Browse zodiac traditions">
