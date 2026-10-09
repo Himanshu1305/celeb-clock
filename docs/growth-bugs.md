@@ -63,3 +63,20 @@ No other open product-failure bugs from P2 at report time.
 
 No product-failure bugs found in P4 real-use (all new features rendered correct,
 computed/live content on both engines tested).
+
+## P5 (infrastructure & measurement)
+No new product bugs. Resolved during the P5 end-of-phase retest:
+- **P5-B1 (fixed):** pre-existing color-contrast on `/todays-birthdays` — the
+  historical-record caption used `text-gray-400` (#9ca3af) on the cream bg
+  (#faf7f0), contrast 2.37 (axe serious). Darkened to `text-gray-600`; axe now
+  0 serious/critical across `/kundali`, `/todays-birthdays`, `/results`
+  (desktop + Pixel5). Not introduced by P5 — surfaced by the new P5 axe gate.
+- **P5-T1 (tooling, not a product bug):** the born-today photo-endpoint e2e
+  flaked under parallel cold-cache load because the unauthenticated Wikimedia
+  API rate-limits concurrent requests, yielding a transient null. The endpoint
+  edge-caches resolved photos for 7 days, so real users don't see this; the
+  test now retries. curl confirms reliable resolution (Einstein, Marie Curie).
+- **P5-T2 (tooling):** one prerender route (`/born-on/january/11`) hit a 15s
+  navigation timeout under build-host load (load ~7.5). The route serves 200
+  via the SPA fallback on the preview; prior build prerendered it fine. No
+  product defect; not a P5-touched page.
