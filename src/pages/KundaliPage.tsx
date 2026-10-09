@@ -24,6 +24,7 @@ import { PeriodForecast } from '@/components/vedic/PeriodForecast';
 import { buildKundaliPdfHtml } from '@/lib/pdf/kundaliPdfHtml';
 import { printHtmlViaIframe } from '@/lib/pdf/printHtml';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
+import { useAnalytics } from '@/hooks/useAnalytics';
 const VedicReading = lazy(() => import('@/components/reading/VedicReading').then(m => ({ default: m.VedicReading })));
 const PastPeriodReflection = lazy(() => import('@/components/reading/PastPeriodReflection').then(m => ({ default: m.PastPeriodReflection })));
 import { TermTip } from '@/components/vedic/TermTip';
@@ -36,6 +37,8 @@ export default function KundaliPage() {
   const { user } = useAuth();
   const location = useLocation();
   const autoRan = useRef(false);
+  const { trackFunnel } = useAnalytics();
+  const chartFunnelTracked = useRef(false);
   const [usingDifferent, setUsingDifferent] = useState(false);
   const [saveChecked, setSaveChecked] = useState(false);
   const [chartStyle, setChartStyle] = useState<'north' | 'south'>('north');
@@ -91,6 +94,14 @@ export default function KundaliPage() {
     try {
       const k = await fetchKundali(details.dob, details.time, loc);
       setData(k);
+      // Funnel step: "generate chart" — the core activation event between a
+      // visit (page_view) and a purchase (checkout_opened/purchase_completed).
+      // Fires once per page session; consent-gated inside trackFunnel. No birth
+      // details are sent — only that a chart was generated.
+      if (!chartFunnelTracked.current) {
+        chartFunnelTracked.current = true;
+        trackFunnel('chart_generated', { tool: 'kundali' });
+      }
       const hasSavedProfile = saveChecked || usingSaved;
       if (hasSavedProfile) {
         save({ dob: details.dob, time: details.time, city: details.city, name: details.name });

@@ -315,7 +315,7 @@ const SCORE_COLORS: Record<string, string> = {
 
 export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip }: Props) => {
   const { isPremium, profile } = useAuth();
-  const { trackFeatureUse } = useAnalytics();
+  const { trackFeatureUse, trackFunnel } = useAnalytics();
   const [step, setStep] = useState(1);
 
   const [data, setData] = useState<HealthQuizData>(() => {
@@ -424,6 +424,11 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
     if (!hasTracked.current) {
       hasTracked.current = true;
       trackFeatureUse('life_expectancy_calculator', { action: 'calculate' });
+      // NS-CALC funnel side: the longevity calculator's "generate result" is an
+      // activation event in the visit -> generate -> purchase funnel, unified
+      // with the Kundali chart via the shared `chart_generated` event + `tool`
+      // discriminator. Consent-gated inside trackFunnel; no health inputs sent.
+      trackFunnel('chart_generated', { tool: 'life-expectancy' });
     }
 
     return () => { if (timer) clearTimeout(timer); };

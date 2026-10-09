@@ -5,8 +5,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend } from 'recharts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Eye, Zap, BookOpen, TrendingUp, Globe } from 'lucide-react';
+import { Eye, Zap, BookOpen, TrendingUp, Globe, Filter } from 'lucide-react';
 import { format, subDays, startOfDay, endOfDay } from 'date-fns';
+import { computeFunnel, type FunnelStage } from '@/lib/analytics/funnel';
 
 interface AnalyticsData {
   pageViews: { name: string; views: number }[];
@@ -14,6 +15,7 @@ interface AnalyticsData {
   blogReads: { name: string; reads: number }[];
   trends: { date: string; page_views: number; feature_uses: number; blog_reads: number }[];
   countryData: { country: string; count: number }[];
+  funnel: FunnelStage[];
 }
 
 const COLORS = [
@@ -52,7 +54,8 @@ export const AnalyticsDashboard = () => {
     featureUsage: [],
     blogReads: [],
     trends: [],
-    countryData: []
+    countryData: [],
+    funnel: []
   });
   const [loading, setLoading] = useState(true);
   const [totals, setTotals] = useState({
@@ -144,7 +147,8 @@ export const AnalyticsDashboard = () => {
         countryData: Array.from(countryMap.entries())
           .map(([country, count]) => ({ country, count }))
           .sort((a, b) => b.count - a.count)
-          .slice(0, 10)
+          .slice(0, 10),
+        funnel: computeFunnel(events || [])
       });
 
       setTotals({
@@ -252,6 +256,10 @@ export const AnalyticsDashboard = () => {
             <TrendingUp className="h-4 w-4" />
             Trends
           </TabsTrigger>
+          <TabsTrigger value="funnel" className="gap-2">
+            <Filter className="h-4 w-4" />
+            Funnel
+          </TabsTrigger>
           <TabsTrigger value="pages" className="gap-2">
             <Eye className="h-4 w-4" />
             Pages
@@ -299,6 +307,50 @@ export const AnalyticsDashboard = () => {
               ) : (
                 <div className="h-[350px] flex items-center justify-center text-muted-foreground">
                   No activity data yet. Start using the app to generate analytics!
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Funnel Tab — visit → generate chart → checkout → purchase (unique sessions) */}
+        <TabsContent value="funnel">
+          <Card>
+            <CardHeader>
+              <CardTitle>Conversion Funnel</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Unique sessions reaching each step. % shows conversion from the top (visits)
+                and, in brackets, from the previous step. Consent-respecting; sessions only.
+              </p>
+            </CardHeader>
+            <CardContent>
+              {data.funnel.length > 0 && data.funnel[0].sessions > 0 ? (
+                <div className="space-y-3">
+                  {data.funnel.map((stage, index) => (
+                    <div key={stage.key} className="space-y-1">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-medium flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+                          {stage.label}
+                        </span>
+                        <span className="text-muted-foreground">
+                          <span className="font-semibold text-foreground">{stage.sessions}</span>
+                          {' '}· {stage.pctOfTop}%
+                          {index > 0 && <span className="ml-1">({stage.pctOfPrev}% of prev)</span>}
+                        </span>
+                      </div>
+                      <div className="h-6 w-full rounded bg-muted overflow-hidden">
+                        <div
+                          className="h-full rounded transition-all"
+                          style={{ width: `${Math.max(stage.pctOfTop, stage.sessions > 0 ? 2 : 0)}%`, backgroundColor: COLORS[index % COLORS.length] }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="h-[200px] flex items-center justify-center text-muted-foreground">
+                  No funnel data yet. It fills as visitors generate charts and reach checkout.
                 </div>
               )}
             </CardContent>
