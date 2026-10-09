@@ -253,6 +253,7 @@ export default {
       if ((m = pathname.match(/^\/blue-zones\/([a-z0-9-]+)\/?$/)))    return !BZ.has(m[1]);
       const PC = new Set(['delhi','mumbai','bengaluru','kolkata','chennai','hyderabad','pune','ahmedabad','jaipur','lucknow']);
       if ((m = pathname.match(/^\/panchang\/([a-z-]+)\/?$/)))         return !PC.has(m[1]);
+      if ((m = pathname.match(/^\/hi\/panchang\/([a-z-]+)\/?$/)))     return !PC.has(m[1]);
       if ((m = pathname.match(/^\/birthstone\/([a-z-]+)\/?$/)))      return !BM.has(m[1]);
       if ((m = pathname.match(/^\/numerology\/(\d+)\/?$/)))          return !NUM.has(parseInt(m[1], 10));
       return false;

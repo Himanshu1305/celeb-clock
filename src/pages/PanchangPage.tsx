@@ -68,6 +68,9 @@ export default function PanchangPage() {
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
+          <p className="text-sm mb-4">
+            <Link to="/hi/panchang" className="text-primary hover:underline">हिन्दी में देखें →</Link>
+          </p>
           {/* City selector */}
           <div className="flex flex-wrap items-center gap-2 mb-6" data-testid="panchang-cities">
             <span className="text-sm text-muted-foreground">City:</span>

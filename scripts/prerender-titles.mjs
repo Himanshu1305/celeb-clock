@@ -538,6 +538,17 @@ export function getTitleForRoute(route) {
       title: `Panchang for ${pc[m[1]]} — Tithi, Nakshatra & Rahu Kaal | BornClock`,
       description: `Today's Panchang for ${pc[m[1]]}: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal and Choghadiya — computed from real sunrise/sunset for ${pc[m[1]]}.`,
     };
+    // Hindi Panchang (P4-LANG)
+    const pcHi = { delhi: 'दिल्ली', mumbai: 'मुंबई', bengaluru: 'बेंगलुरु', kolkata: 'कोलकाता', chennai: 'चेन्नई', hyderabad: 'हैदराबाद', pune: 'पुणे', ahmedabad: 'अहमदाबाद', jaipur: 'जयपुर', lucknow: 'लखनऊ' };
+    if (route === '/hi/panchang') return {
+      title: 'आज का पंचांग — तिथि, नक्षत्र, राहु काल व चौघड़िया | BornClock',
+      description: 'आज का पंचांग: तिथि, नक्षत्र, योग, करण, सूर्योदय, सूर्यास्त, राहु काल, गुलिक, यमगण्ड और दिन-रात का चौघड़िया — वास्तविक सूर्योदय/सूर्यास्त से गणना।',
+    };
+    const mh = route.match(/^\/hi\/panchang\/([a-z-]+)$/);
+    if (mh && pcHi[mh[1]]) return {
+      title: `${pcHi[mh[1]]} का आज का पंचांग — तिथि, नक्षत्र व राहु काल | BornClock`,
+      description: `${pcHi[mh[1]]} का आज का पंचांग: तिथि, नक्षत्र, योग, करण, सूर्योदय, सूर्यास्त, राहु काल और चौघड़िया — वास्तविक सूर्योदय/सूर्यास्त से गणना।`,
+    };
   }
 
   // /transit, /transit/:planet/:year, /mercury-retrograde[/:year]
