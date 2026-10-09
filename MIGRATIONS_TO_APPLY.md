@@ -66,3 +66,42 @@ From address: hello@bornclock.com
 sets `VERCEL_URL` (preview) and `VERCEL_PROJECT_PRODUCTION_URL` (production) —
 no manual configuration required. If emails are not sending from the webhook,
 verify both env vars are present in your Vercel project settings.
+
+---
+
+## P5-3 — (OPTIONAL) Durable AI-astrologer rate-limit store
+
+The AI astrologer daily limit is now enforced **server-side** (per hashed client
+IP) instead of being trusted from the browser — see
+`src/lib/vedic/serverRateLimit.ts` and `api/vedic-chat.ts`. The default store is
+in-memory per worker isolate: it already closes the "clear localStorage to reset"
+bypass and resets at UTC midnight, but it is per-isolate (not shared across edge
+locations and reset on restart).
+
+For a GLOBALLY durable, tamper-proof counter, add EITHER:
+
+**Option A — Cloudflare KV (recommended, no schema):** create a KV namespace and
+bind it in `wrangler.toml` under `[env.staging]` (and production) as e.g.
+`RATE_LIMIT_KV`, then swap the in-memory `Map` in `serverRateLimit.ts` for KV
+reads/writes keyed by `"<hashedIp>:<utcDay>"` with a 48h TTL. Needs a Cloudflare
+dashboard action (namespace creation) — a "Needs the person" item.
+
+**Option B — Supabase usage table:** apply this DDL, then back `evaluate()` with
+it (upsert + atomic increment via an RPC). Stores only a salted hash, never a raw
+IP, and no PII:
+
+```sql
+create table if not exists ai_chat_usage (
+  id          text primary key,          -- "<hashedIp>:<utcDay>"
+  day         date not null,
+  count       integer not null default 0,
+  updated_at  timestamptz not null default now()
+);
+-- Service-role only; no public access.
+alter table ai_chat_usage enable row level security;
+-- (no policies → only the service role key used by the worker can read/write)
+create index if not exists ai_chat_usage_day_idx on ai_chat_usage (day);
+```
+
+Either option is drop-in: the `peek()`/`record()` core is written against an
+injectable store. Until then the in-memory limiter is live and tested.

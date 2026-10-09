@@ -18,7 +18,8 @@ import {
   resolveMarriageContext, verifyMarriageGuardrail,
 } from '../src/lib/vedic/chatGuardrails.js';
 import { verifyTimingClaims, verifyYogaClaims } from '../src/lib/vedic/readingSpecificity.js';
-import { isOverLimit, limitReachedMessage } from '../src/lib/vedic/rateLimit.js';
+import { limitReachedMessage } from '../src/lib/vedic/rateLimit.js';
+import { hashClientId, peekLimit, recordQuestionServer } from '../src/lib/vedic/serverRateLimit.js';
 import { verifyAdminRequest } from './_adminAuth.js';
 
 const GEMINI_MODEL = 'gemini-flash-latest';
@@ -154,7 +155,9 @@ async function handler(request) {
   let body;
   try { body = await request.json(); } catch { return json({ error: 'Invalid JSON body' }, 400); }
 
-  const { birth, messages, message, tier: rawTier, questionCount } = body ?? {};
+  // `questionCount` may still be sent by older clients; it is intentionally
+  // IGNORED now — the server keeps its own authoritative count (P5-3).
+  const { birth, messages, message, tier: rawTier } = body ?? {};
 
   // TIER RESOLUTION (Part N). Admin is checked FIRST and short-circuits the
   // free/paid logic entirely. Crucially, the tier is re-derived SERVER-SIDE from a
@@ -184,11 +187,20 @@ async function handler(request) {
     return json({ error: 'no-profile', reply: 'To answer from your real chart, I need your birth details first. Add them on the Kundali page and come back — I’ll remember them here.' }, 400);
   }
 
-  // 3) Rate limit. A verified admin has tier 'admin' → isOverLimit is always false,
-  // so this block is short-circuited and the daily cap never applies to them. For
-  // everyone else the existing free/paid enforcement is unchanged.
-  if (!admin.isAdmin && Number.isFinite(Number(questionCount)) && isOverLimit(Number(questionCount), tier)) {
-    return json({ reply: limitReachedMessage(tier), rateLimited: true, crisis: false }, 429);
+  // 3) Rate limit — SERVER-AUTHORITATIVE (P5-3). The server keeps its own daily
+  // count keyed by a hashed client IP; the client's `questionCount` is no longer
+  // trusted (it's ignored). A verified admin has tier 'admin' (unlimited) and is
+  // never rate-limited. We PEEK here (reject if already at the cap) and only
+  // RECORD after an answer is actually delivered — so a model/degraded error
+  // never eats the visitor's quota (matching the previous client behaviour,
+  // only now enforced on the server where it can't be bypassed).
+  const clientIp = request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || 'unknown';
+  const limitKey = admin.isAdmin ? '' : await hashClientId(clientIp, process.env.RATE_LIMIT_SALT || 'bornclock');
+  if (!admin.isAdmin) {
+    const status = peekLimit(limitKey, tier);
+    if (!status.allowed) {
+      return json({ reply: limitReachedMessage(tier), rateLimited: true, crisis: false, remaining: 0 }, 429);
+    }
   }
 
   try {
@@ -208,9 +220,19 @@ async function handler(request) {
 
     const history = Array.isArray(messages) ? messages : [];
     const payload = await buildChatReply(facts, history, text, callGemini, gemstone);
+
+    // Count the question against the server-side daily limit ONLY when a real
+    // answer was delivered (not a degraded/error fallback) and only for non-admin
+    // tiers. Attach the authoritative `remaining` so the client can display it.
+    let remaining: number | undefined;
+    if (!admin.isAdmin && !payload.degraded) {
+      remaining = recordQuestionServer(limitKey, tier).remaining;
+    }
+
     // Tag admin/testing replies so this traffic is identifiable and can be excluded
     // from real usage analytics later (Part N design principle 4).
-    return json(admin.isAdmin ? { ...payload, admin: true } : payload);
+    if (admin.isAdmin) return json({ ...payload, admin: true });
+    return json(remaining !== undefined ? { ...payload, remaining } : payload);
   } catch (e) {
     return json({ error: 'chat-failed', reply: 'Something went wrong on my side — please try again.', detail: String(e?.message || e) }, 500);
   }
