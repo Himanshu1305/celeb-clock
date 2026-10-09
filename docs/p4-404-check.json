@@ -1,5 +1,5 @@
 {
-  "base": "http://localhost:8788",
+  "base": "https://5b06308c-bornclock-staging.usdvisionai.workers.dev",
   "results": [
     {
       "path": "/chinese-horoscope/unicorn",

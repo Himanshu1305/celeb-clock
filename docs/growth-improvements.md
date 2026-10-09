@@ -292,13 +292,13 @@ celebrity twin. Verified via unit tests + local build; real-use noted in P3 repo
 
 ### P5 — Infrastructure & measurement (new/refinements)
 
-### [~] NS-CALC — Calculator "years-delta + to-do" output  · **P1/P5** (content P1, infra P5)
-<!-- P1 content side DONE via F-CALC-ACTION + /life-expectancy/factors. Funnel/conversion tracking is P5 (deferred to that phase). -->
+### [x] NS-CALC — Calculator "years-delta + to-do" output  · **P1/P5** (content P1, infra P5)
+<!-- P1 content side DONE via F-CALC-ACTION + /life-expectancy/factors. P5 funnel side DONE (90eddb7/5ecd3a6): the life-expectancy calculator fires a consent-gated funnel 'chart_generated' (tool:life-expectancy) when the forecast first reveals; lands in analytics_events and shows in the admin Funnel tab. Verified via unit tests (funnel.test.ts) + real-use on preview (Chromium/WebKit/Android: completing the quiz emits the event with no console errors). -->
 
 - **Why:** Living-to-100's actionable output beats BornClock. (Content side =
   F-CALC-ACTION in P1; any tracking of the funnel = P5 conversion tracking.)
 - **Acceptance:** see F-CALC-ACTION; funnel events (consent-respecting) land in
-  the existing analytics.
+  the existing analytics. ✓
 
 ### [x] NS-P100 — "Probability of reaching 100" output  · **P1**
 <!-- DONE (P1 longevity): survival.ts computes an honest P(reach 100) from the forecast (normal approx, SD~10 from national life tables), shown on the calculator result, the /life-expectancy/factors pages and every country page, clearly labelled an estimate. -->
@@ -316,7 +316,8 @@ celebrity twin. Verified via unit tests + local build; real-use noted in P3 repo
 - **Acceptance:** longevity pages state the official-life-table baseline + the
   nature of the adjustments, with real citations.
 
-### [ ] NS-LEADERBOARD — "Where do you rank" comparison framing (optional)  · **P5**
+### [~] NS-LEADERBOARD — "Where do you rank" comparison framing (optional)  · **P5**
+<!-- DEFERRED (optional, documented — Rules 6/8). BornClock already ships honest peer framing without any cross-user data: the longevity surfaces show a percentile LABEL (LongevityScoreCard.getPercentileLabel), an honest P(reach 100) (NS-P100), and the birthday page shows a rarity percentile (BirthdayRarityCard). A dedicated cross-user leaderboard would need real, consented aggregates — which we do not have and must never fabricate or seed (Rule 8) — so building one now could only produce invented/placeholder data. Left optional/deferred rather than shipped with fake cohorts. A future honest version = a validated reference-cohort stat model over consented, aggregated bio-age data once such data exists. -->
 - **Why:** Rejuvenation Olympics' leaderboard is a viral hook; BornClock's free
   bio-age quiz is already more generous — borrow the framing (extend country
   comparison to bio-age-vs-peers). Optional; no fake/seeded data.

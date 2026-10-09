@@ -313,7 +313,7 @@ export const TodaysBirthdays = () => {
               <div className="flex items-center gap-3 mb-2">
                 <h3 className="text-sm font-bold text-gray-600">{TIER_LABELS.historical.heading}</h3>
               </div>
-              <p className="text-xs text-gray-400 italic mb-3">{TIER_LABELS.historical.subtext}</p>
+              <p className="text-xs text-gray-600 italic mb-3">{TIER_LABELS.historical.subtext}</p>
               <div className="space-y-2">
                 {historicalFigures.map(celeb => (
                   <div key={celeb.name} className="bg-gray-50 border border-gray-200 rounded-xl p-4">
