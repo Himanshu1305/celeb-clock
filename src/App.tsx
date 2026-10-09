@@ -167,6 +167,7 @@ const WhatAffectsLifeExpectancyMost = lazyWithReload(() => import('@/pages/answe
 const WhatIsEpigeneticAge = lazyWithReload(() => import('@/pages/answers/WhatIsEpigeneticAge'));
 const WhatIsVedicAstrology = lazyWithReload(() => import('@/pages/answers/WhatIsVedicAstrology'));
 const TarotByBirthday = lazyWithReload(() => import('@/pages/TarotByBirthday'));
+const TarotReading = lazyWithReload(() => import('@/pages/TarotReading'));
 const MoonSignPage = lazyWithReload(() => import('@/pages/MoonSignPage'));
 const NameNumerologyPage = lazyWithReload(() => import('@/pages/NameNumerologyPage'));
 const BiorhythmPage = lazyWithReload(() => import('@/pages/BiorhythmPage'));
@@ -421,6 +422,7 @@ const App = () => (
               <Route path="/answers/what-is-epigenetic-age" element={<WhatIsEpigeneticAge />} />
               <Route path="/answers/what-is-vedic-astrology" element={<WhatIsVedicAstrology />} />
               <Route path="/tarot-card-by-birthday" element={<TarotByBirthday />} />
+              <Route path="/tarot-reading" element={<TarotReading />} />
               <Route path="/moon-sign" element={<MoonSignPage />} />
               <Route path="/name-numerology" element={<NameNumerologyPage />} />
               <Route path="/biorhythm" element={<BiorhythmPage />} />

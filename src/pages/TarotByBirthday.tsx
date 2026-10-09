@@ -554,10 +554,10 @@ export default function TarotByBirthday() {
             <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related Tools</p>
             <div className="grid grid-cols-2 gap-2">
               {[
+                { text: 'Interactive Tarot Reading', href: '/tarot-reading' },
                 { text: 'Moon Sign Calculator', href: '/moon-sign' },
                 { text: 'Numerology Calculator', href: '/numerology' },
                 { text: 'Name Numerology', href: '/name-numerology' },
-                { text: 'Biorhythm Calculator', href: '/biorhythm' },
               ].map(item => (
                 <Link
                   key={item.href}
