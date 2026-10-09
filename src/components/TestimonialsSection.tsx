@@ -12,6 +12,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface Review {
   id: string;
+  user_id: string;
   display_name: string;
   rating: number;
   title: string;
@@ -19,6 +20,13 @@ interface Review {
   country: string | null;
   created_at: string;
 }
+
+// Honesty guard (Rule 8): an earlier migration seeded 7 fabricated testimonials with
+// sentinel user_ids (00000000-0000-0000-0000-00000000000N). They are deleted in
+// supabase/migrations/NOTES-remove-seeded-reviews.sql, but we ALSO exclude them in code
+// so no fabricated review can ever render, regardless of whether that DELETE has run yet.
+const isSeededFake = (userId: string | null | undefined) =>
+  !!userId && /^00000000-0000-0000-0000-0000000000\d+$/.test(userId);
 
 const countryFlags: Record<string, string> = {
   'United States': '🇺🇸',
@@ -68,14 +76,15 @@ export const TestimonialsSection = () => {
       try {
         const { data, error } = await supabase
           .from('user_reviews')
-          .select('id, display_name, rating, title, content, country, created_at')
+          .select('id, user_id, display_name, rating, title, content, country, created_at')
           .eq('is_approved', true)
           .eq('is_featured', true)
           .order('created_at', { ascending: false })
           .limit(10);
 
         if (error) throw error;
-        setReviews(data || []);
+        // Never render the seeded fakes even if they still exist in the DB.
+        setReviews((data || []).filter((r) => !isSeededFake((r as Review).user_id)));
       } catch (error) {
         console.debug('Failed to fetch reviews:', error);
       } finally {
@@ -111,13 +120,13 @@ export const TestimonialsSection = () => {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4">
             <Star className="h-4 w-4 fill-current" />
-            Trusted by thousands worldwide
+            Real reviews from BornClock users
           </div>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
             What Our Users Say
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Join our community of time enthusiasts who've discovered the joy of precise age tracking
+            Every review here is submitted by a real, signed-in user and shown only after moderation.
           </p>
         </div>
 
@@ -180,26 +189,6 @@ export const TestimonialsSection = () => {
             <CarouselPrevious className="hidden md:flex" />
             <CarouselNext className="hidden md:flex" />
           </Carousel>
-        </div>
-
-        {/* Stats */}
-        <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-accent">10K+</div>
-            <div className="text-sm text-muted-foreground">Happy Users</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-accent">4.9</div>
-            <div className="text-sm text-muted-foreground">Average Rating</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-accent">50+</div>
-            <div className="text-sm text-muted-foreground">Countries</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-accent">1M+</div>
-            <div className="text-sm text-muted-foreground">Ages Calculated</div>
-          </div>
         </div>
       </div>
     </section>

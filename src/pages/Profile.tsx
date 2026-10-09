@@ -25,6 +25,7 @@ import { UtilityLayout } from '@/components/central';
 import { ArrowLeft, Crown, Download, Gift, Loader2, Save, Shield, Sparkles, Tag, Trash2 } from 'lucide-react';
 import { PromoCodeInput } from '@/components/PromoCodeInput';
 import { InvoicesCard } from '@/components/InvoicesCard';
+import { ReviewForm } from '@/components/ReviewForm';
 import { countries } from '@/data/countries';
 import { useReportPrice } from '@/hooks/useCurrency';
 
@@ -319,6 +320,9 @@ export default function Profile() {
 
           {/* Invoices */}
             <InvoicesCard userId={user.id} />
+
+          {/* Leave a review (real, moderated) */}
+            <ReviewForm userId={user.id} defaultName={`${formData.first_name} ${formData.last_name}`.trim()} country={formData.country || null} />
 
           {/* Privacy & Data Management */}
             <Card className="backdrop-blur-sm bg-background/80 border-primary/20">
