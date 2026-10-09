@@ -46,3 +46,20 @@ No other open product-failure bugs from P2 at report time.
   the reading for the NEXT sign (e.g. Simha instead of Karka) and passed an off-by-one /
   out-of-range rashiIndex to /api/subscribe. Fixed: subtract 1 and clamp 0..11 in
   DashboardPage. Found by real-use of the live local chart API (Rule 4).
+
+## P4 retest (2026-10-09)
+- **P4-CELEB-CONTRAST** — Pre-existing serious color-contrast violation on
+  `/celebrity/:slug` (hard-coded `text-gray-400` labels: rarity percentile, "Based on
+  publicly available information", Lucky Colour/Stone/Day/Numbers). Surfaced by the new
+  P4 axe gate (the celebrity page was never axe-gated before P4). Fixed: `text-gray-400`
+  → `text-gray-600` (WCAG AA) on CelebrityPage + BirthdayRarityCard (`bfb8050`);
+  re-verified 0 serious/critical on the built artifact (Chromium desktop + Pixel 5). My
+  own P4 additions (birth-time note, rank badge/line, CZ horoscope, Hindi panchang,
+  on-this-day) were axe-clean from the start. Status: **closed**.
+- **P4-WRANGLER-TRACKED** — A retest-time `git add -A` pulled transient Miniflare build
+  artifacts (`.wrangler/tmp/dev-*/_worker.js`) into commit `bfb8050`. Fixed: untracked
+  the whole `.wrangler/` directory (`git rm -r --cached`) and added it to `.gitignore`.
+  Status: **closed**.
+
+No product-failure bugs found in P4 real-use (all new features rendered correct,
+computed/live content on both engines tested).
