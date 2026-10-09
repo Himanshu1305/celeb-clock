@@ -33,9 +33,9 @@ describe('PWA — service worker safety', () => {
   });
 
   it('never caches HTML navigations (avoids the stale-shell hazard)', () => {
-    // Navigations must be network-first with an offline.html fallback, not cache-first.
+    // Navigations must be network-first with an /offline fallback, not cache-first.
     expect(sw).toMatch(/request\.mode === 'navigate'/);
-    expect(sw).toMatch(/offline\.html/);
+    expect(sw).toMatch(/caches\.match\('\/offline'/);
   });
 
   it('always bypasses /api for the network', () => {

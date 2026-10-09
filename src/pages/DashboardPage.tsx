@@ -48,7 +48,11 @@ export default function DashboardPage() {
 
   const moonIndex = useMemo(() => {
     const moon = kundali?.planets?.find((p) => p.name === 'Moon');
-    return typeof moon?.signIndex === 'number' ? moon.signIndex : null;
+    // /api/kundali returns planet signIndex 1-based (Mesha=1 … Meena=12); computeRashifal
+    // and /api/subscribe expect 0-based (Mesha=0 … Meena=11). Convert + clamp.
+    if (typeof moon?.signIndex !== 'number') return null;
+    const idx = moon.signIndex - 1;
+    return idx >= 0 && idx <= 11 ? idx : null;
   }, [kundali]);
 
   const today = new Date();

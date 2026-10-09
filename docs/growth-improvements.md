@@ -202,7 +202,14 @@ sections found in the `growth` codebase + P0 research.
 
 ### P3 — Retention (new)
 
-### [ ] NB3-SONG — "#1 song on your birthday" (+ optional #1 movie)  · **P3** (+ birthday report)
+### [P] NB3-SONG — "#1 song on your birthday" (+ optional #1 movie)  · **P3** (+ birthday report)
+<!-- PLUMBING DONE 0914f61: src/data/birthdaySongs.ts — honest date-range lookup that
+only reports a song when a verified dataset entry covers the date; ships EMPTY and never
+fabricates a chart position (Rule 8). BirthdayFactsCard shows the #1-song line
+automatically when data is present. BLOCKED ON PERSON: a licensed/CC-compatible
+#1-song-by-date dataset (Billboard Hot 100 / Official UK Singles Chart) — a
+licensing/business decision. Drop a verified dataset into NUMBER_ONE_RANGES and it lights
+up everywhere. See "Needs the person" in docs/growth-p3-report.md. -->
 - **Why:** OnThisDay shows US+UK #1 songs; high-virality, cheap; BornClock's
   birthday report lacks it.
 - **Fix (source):** a licensed/evergreen chart dataset keyed by date, surfaced in
@@ -210,7 +217,12 @@ sections found in the `growth` codebase + P0 research.
 - **Acceptance:** entering a birthday shows the #1 song(s) for that date; sourced
   honestly; appears on the shareable card.
 
-### [ ] NB3-CARD-SHARE — Shareable birthday cards (green-field)  · **P3**
+### [x] NB3-CARD-SHARE — Shareable birthday cards (green-field)  · **P3**
+<!-- DONE 0914f61: BirthdayFactsCard (src/components/BirthdayFactsCard.tsx) — polished
+branded card built from real facts (day of week, zodiac, generation, celebrity birthday
+twin, + #1-song line when NB3-SONG data present). html2canvas → PNG with Web Share API +
+download fallback (Chromium/WebKit/Android). Wired into /wish with a best-effort
+celebrity twin. Verified via unit tests + local build; real-use noted in P3 report. -->
 - **Why:** no competitor has a strong equivalent — differentiator; pairs with
   NB3-SONG and the birthday-facts bundle.
 - **Acceptance:** a polished shareable card generated from birthday facts (day of

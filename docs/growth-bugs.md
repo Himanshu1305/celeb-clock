@@ -38,3 +38,11 @@ No open product-failure bugs from P1 at report time.
   life areas returned, health wellbeing-framed). Status: **closed**.
 
 No other open product-failure bugs from P2 at report time.
+
+## P3 retest (2026-10-09)
+- **P3-DASH-SIGNINDEX** — Dashboard "your day" used the /api/kundali Moon `signIndex`
+  directly as a 0-based index for computeRashifal, but the API returns planet signIndex
+  **1-based** (verified live: Sun=Mesha=1, Moon=Karka=4, lagna=Vrischika=8). This showed
+  the reading for the NEXT sign (e.g. Simha instead of Karka) and passed an off-by-one /
+  out-of-range rashiIndex to /api/subscribe. Fixed: subtract 1 and clamp 0..11 in
+  DashboardPage. Found by real-use of the live local chart API (Rule 4).

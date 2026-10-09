@@ -46,6 +46,8 @@ const NON_SITEMAP = [
   '/results', '/results?day=1&month=1', '/auth', '/profile', '/admin',
   '/upgrade', '/report/nonexistent-sample-slug',
   '/celebrity?q=gandhi', '/blog?tag=astrology', '/?utm_source=rc2check',
+  // Growth P3 new private/dynamic routes — SPA-served, must stay 200 (not force404'd).
+  '/dashboard', '/family', '/wish',
 ];
 
 async function finalStatus(path) {

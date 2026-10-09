@@ -14,8 +14,10 @@ const PRECACHE = `${CACHE_VERSION}-precache`;
 const RUNTIME = `${CACHE_VERSION}-runtime`;
 
 // Minimal, stable (non-hashed) shell assets.
+// Note: the worker serves extensionless clean URLs (/offline.html → 307 → /offline),
+// so precache the canonical /offline to avoid storing a redirected response.
 const PRECACHE_URLS = [
-  '/offline.html',
+  '/offline',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',
@@ -47,7 +49,7 @@ self.addEventListener('fetch', (event) => {
   // HTML navigations: network-first, offline.html fallback. Never cache the shell.
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request).catch(() => caches.match('/offline.html', { ignoreSearch: true })),
+      fetch(request).catch(() => caches.match('/offline', { ignoreSearch: true })),
     );
     return;
   }
