@@ -234,7 +234,7 @@ export default function Index() {
         {/* HERO */}
         <div className="hero" style={{ display: 'flex', gap: 28, padding: '30px 24px', borderBottom: '1px solid #E4DCC8' }}>
           <div style={{ flex: 1.05, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 10 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.4px', color: '#806125' }}>RIGOROUSLY CALCULATED BIRTH INTELLIGENCE</div>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.4px', color: '#74571E' }}>RIGOROUSLY CALCULATED BIRTH INTELLIGENCE</div>
             <h1 style={{ fontSize: 42, lineHeight: 1.08, color: '#0E2238', fontWeight: 700 }}>Everything your birth date reveals.</h1>
             <p style={{ fontSize: 15, lineHeight: 1.55, color: '#3E4759', margin: 0, maxWidth: 540 }}>Your Vedic birth chart, the celebrities who share your birthday, your numerology and zodiac, and what longevity science says — all from one date.</p>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 6, flexWrap: 'wrap' }}>
@@ -308,7 +308,7 @@ export default function Index() {
             </div>
           ))}
           <div className="dec" style={{ borderTop: '3px solid #C6A15B', borderTopRightRadius: 10 }}>
-            <div className="lab" style={{ color: '#806125' }}>VEDIC CHART</div>
+            <div className="lab" style={{ color: '#74571E' }}>VEDIC CHART</div>
             <div className="val">Free</div>
             <div className="sub">needs time + place · <Link to={kundaliUrl} style={{ fontWeight: 700 }}>generate</Link></div>
           </div>
@@ -316,9 +316,9 @@ export default function Index() {
 
         {/* TRUST STRIP */}
         <div className="trust" style={{ display: 'flex', padding: '14px 24px', background: '#FFFFFF', borderTop: '1px solid #E4DCC8', borderBottom: '1px solid #E4DCC8' }}>
-          <div style={{ flex: 1, borderRight: '1px solid #E4DCC8', paddingRight: 16 }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#806125' }}>CROSS-CHECKED — </span><span style={{ fontSize: 12, color: '#3E4759' }}>Vedic calculations checked against independent reference calculations, not a template.</span></div>
-          <div style={{ flex: 1, borderRight: '1px solid #E4DCC8', padding: '0 16px' }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#806125' }}>CLASSICAL — </span><span style={{ fontSize: 12, color: '#3E4759' }}>the 36-point Ashtakoota system, per the Brihat Parashara Hora Shastra.</span></div>
-          <div style={{ flex: 1, paddingLeft: 16 }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#806125' }}>SOURCED — </span><span style={{ fontSize: 12, color: '#3E4759' }}>WHO, Harvard, NIH, UN WPP 2024 and NASA's Planetary Fact Sheet (2023).</span></div>
+          <div style={{ flex: 1, borderRight: '1px solid #E4DCC8', paddingRight: 16 }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#74571E' }}>CROSS-CHECKED — </span><span style={{ fontSize: 12, color: '#3E4759' }}>Vedic calculations checked against independent reference calculations, not a template.</span></div>
+          <div style={{ flex: 1, borderRight: '1px solid #E4DCC8', padding: '0 16px' }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#74571E' }}>CLASSICAL — </span><span style={{ fontSize: 12, color: '#3E4759' }}>the 36-point Ashtakoota system, per the Brihat Parashara Hora Shastra.</span></div>
+          <div style={{ flex: 1, paddingLeft: 16 }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#74571E' }}>SOURCED — </span><span style={{ fontSize: 12, color: '#3E4759' }}>WHO, Harvard, NIH, UN WPP 2024 and NASA's Planetary Fact Sheet (2023).</span></div>
         </div>
 
         {/* BORN TODAY (client-side) */}
@@ -327,12 +327,12 @@ export default function Index() {
         {/* DIRECTORY */}
         <div className="dir" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', background: '#FAF7F0', borderBottom: '1px solid #E4DCC8' }}>
           <div className="col" id="vedic" style={{ ['--ac' as string]: '#C6A15B' }}>
-            <div className="eyebrow" style={{ color: '#806125' }}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#806125" strokeWidth="1.4" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" /><path d="M1.5 1.5l13 13M14.5 1.5l-13 13" /></svg>VEDIC ASTROLOGY</div>
+            <div className="eyebrow" style={{ color: '#74571E' }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#74571E" strokeWidth="1.4" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" /><path d="M1.5 1.5l13 13M14.5 1.5l-13 13" /></svg>VEDIC ASTROLOGY</div>
             <h2>Traditional systems, computed.</h2>
             <div className="teaser"><span>Your real Kundli — Lagna, Nakshatra and Dasha — free. <span style={{ color: '#5B6472', fontSize: 11 }}>House 1 (Lagna) sits at the top, as in the classical North-Indian chart.</span></span></div>
             <ToolList tools={VEDIC_TOOLS} />
-            <Link className="explore" to="/vedic-astrology" style={{ color: '#806125' }}>Explore Vedic Astrology →</Link>
+            <Link className="explore" to="/vedic-astrology" style={{ color: '#74571E' }}>Explore Vedic Astrology →</Link>
           </div>
           <div className="col" id="birthday" style={{ ['--ac' as string]: '#F0715A' }}>
             <div className="eyebrow" style={{ color: '#B5432A' }}>

@@ -24,7 +24,7 @@ export interface ThemeTokens {
 }
 
 export const THEME_TOKENS: Record<Theme, ThemeTokens> = {
-  vedic: { accent: '#C6A15B', accentText: '#806125', green: '#C6A15B', bg: '#FAF7F0', line: '#E4DCC8' },
+  vedic: { accent: '#C6A15B', accentText: '#74571E', green: '#C6A15B', bg: '#FAF7F0', line: '#E4DCC8' },
   birthday: { accent: '#F0715A', accentText: '#B5432A', green: '#F0715A', bg: '#FAF7F0', line: '#E4DCC8' },
   mystic: { accent: '#6E5AA6', accentText: '#6E5AA6', green: '#6E5AA6', bg: '#FAF7F0', line: '#E4DCC8' },
   science: { accent: '#2F6FB0', accentText: '#237A60', green: '#2E9E7B', bg: '#FFFFFF', line: '#DDE4EA' },

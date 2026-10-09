@@ -2,7 +2,7 @@
  * Source: docs/design-reference/vedic-final.html <style> (identical across all four refs).
  * Every selector is scoped under .paj so it cannot affect the rest of the site.
  * Per-category accent + background overrides are appended below the generated block. */
-.paj{--bg:#FAF7F0;--paper:#FFFFFF;--navy:#0E2238;--ink:#1A2230;--muted:#5B6472;--line:#E4DCC8;--accent:#C6A15B;--accent-text:#806125;--green:#C6A15B;--pad:clamp(16px,2.2vw,32px)}
+.paj{--bg:#FAF7F0;--paper:#FFFFFF;--navy:#0E2238;--ink:#1A2230;--muted:#5B6472;--line:#E4DCC8;--accent:#C6A15B;--accent-text:#74571E;--green:#C6A15B;--pad:clamp(16px,2.2vw,32px)}
 .paj *{box-sizing:border-box}
 .paj{scroll-behavior:smooth;scroll-padding-top:84px}
 .paj{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 'Public Sans',sans-serif;-webkit-font-smoothing:antialiased}
@@ -643,7 +643,7 @@
 .paj .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ── Per-category theme overrides (accent + science background) ───────────── */
-.paj[data-category="vedic"]{--accent:#C6A15B;--accent-text:#806125;--green:#C6A15B}
+.paj[data-category="vedic"]{--accent:#C6A15B;--accent-text:#74571E;--green:#C6A15B}
 .paj[data-category="birthday"]{--accent:#F0715A;--accent-text:#0E2238;--green:#F0715A}
 .paj[data-category="mystic"]{--accent:#6E5AA6;--accent-text:#6E5AA6;--green:#6E5AA6}
 .paj[data-category="science"]{--accent:#2F6FB0;--accent-text:#2F6FB0;--green:#2E9E7B;--bg:#FFFFFF;--line:#DDE4EA}
