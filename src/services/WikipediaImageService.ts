@@ -1,14 +1,31 @@
-// Wikipedia Image Service - Fetches celebrity photos from Wikipedia
-// Uses the Wikipedia API to get images for people
+// Wikipedia Image Service - Fetches celebrity / born-today photos.
+//
+// P5-4: resolution now goes through BornClock's edge endpoint
+// (/api/born-today-photo), which (a) returns ONLY freely-licensed images and
+// (b) returns the photo credit (author + licence), both edge-cached for a week.
+// We still keep a 7-day localStorage cache and a direct-Wikipedia fallback for
+// local dev where the worker route isn't present. The returned value stays a
+// URL string (backward compatible); the credit is stored alongside and read via
+// getImageCredit(name) so the UI can show the required attribution.
 
 const WIKIPEDIA_API = 'https://en.wikipedia.org/w/api.php';
+const PHOTO_ENDPOINT = '/api/born-today-photo';
 const IMAGE_CACHE_KEY = 'wiki_images_cache';
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+export interface ImageCredit {
+  artist: string | null;
+  license: string | null;
+  licenseUrl: string | null;
+  fileUrl: string | null;
+  source: string;
+}
 
 interface ImageCache {
   [name: string]: {
     url: string | null;
     timestamp: number;
+    credit?: ImageCredit | null;
   };
 }
 
@@ -31,22 +48,50 @@ const saveImageCache = (cache: ImageCache): void => {
   }
 };
 
-// Fetch Wikipedia page image for a person
+/** Read the stored photo credit (author + licence) for a name, if resolved. */
+export const getImageCredit = (name: string): ImageCredit | null => {
+  const cached = getImageCache()[name];
+  return cached?.credit ?? null;
+};
+
+// Resolve a free-licensed photo + credit via BornClock's edge endpoint.
+// Returns null (and caches the null) if no freely-licensed image exists.
+const fetchViaEndpoint = async (name: string): Promise<{ url: string | null; credit: ImageCredit | null } | null> => {
+  try {
+    const res = await fetch(`${PHOTO_ENDPOINT}?name=${encodeURIComponent(name)}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (typeof data?.image === 'undefined') return null;
+    return { url: data.image ?? null, credit: data.credit ?? null };
+  } catch {
+    return null;
+  }
+};
+
+// Fetch a person's photo (free-licensed) + credit, cached for 7 days.
 export const fetchWikipediaImage = async (name: string): Promise<string | null> => {
   // Check cache first
   const cache = getImageCache();
   const cached = cache[name];
-  
+
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
     return cached.url;
   }
 
+  // Preferred path: BornClock's edge endpoint (free-only, credited, edge-cached).
+  const viaEndpoint = await fetchViaEndpoint(name);
+  if (viaEndpoint) {
+    cache[name] = { url: viaEndpoint.url, credit: viaEndpoint.credit, timestamp: Date.now() };
+    saveImageCache(cache);
+    return viaEndpoint.url;
+  }
+
+  // Fallback (local dev without the worker): direct Wikipedia, no licence check.
   try {
-    // First, search for the Wikipedia page
     const searchUrl = `${WIKIPEDIA_API}?action=query&format=json&origin=*&list=search&srsearch=${encodeURIComponent(name)}&srlimit=1`;
     const searchResponse = await fetch(searchUrl);
     const searchData = await searchResponse.json();
-    
+
     const pageTitle = searchData.query?.search?.[0]?.title;
     if (!pageTitle) {
       cache[name] = { url: null, timestamp: Date.now() };
@@ -54,16 +99,14 @@ export const fetchWikipediaImage = async (name: string): Promise<string | null> 
       return null;
     }
 
-    // Fetch the page image (thumbnail) - using 500px for higher resolution
     const imageUrl = `${WIKIPEDIA_API}?action=query&format=json&origin=*&titles=${encodeURIComponent(pageTitle)}&prop=pageimages&pithumbsize=500&pilicense=any`;
     const imageResponse = await fetch(imageUrl);
     const imageData = await imageResponse.json();
-    
+
     const pages = imageData.query?.pages;
     const pageId = Object.keys(pages || {})[0];
     const thumbnail = pages?.[pageId]?.thumbnail?.source;
 
-    // Cache the result
     cache[name] = { url: thumbnail || null, timestamp: Date.now() };
     saveImageCache(cache);
 

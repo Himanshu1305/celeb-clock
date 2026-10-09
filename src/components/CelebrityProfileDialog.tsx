@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { WikiPerson } from '@/services/WikimediaService';
+import { getImageCredit } from '@/services/WikipediaImageService';
 import { calculateAgeInTimezone } from '@/utils/timezoneDetection';
 import { 
   ExternalLink, 
@@ -37,7 +38,10 @@ export const CelebrityProfileDialog = ({
 }: CelebrityProfileDialogProps) => {
   if (!person) return null;
 
-  const age = person.deathDate 
+  // P5-4: photo credit (author + licence) required by the Wikimedia/Commons licence.
+  const photoCredit = person.image ? getImageCredit(person.name) : null;
+
+  const age = person.deathDate
     ? null 
     : calculateAgeInTimezone(new Date(person.birthDate));
 
@@ -74,16 +78,36 @@ export const CelebrityProfileDialog = ({
         <div className="space-y-6">
           {/* Header with Avatar and Basic Info */}
           <div className="flex flex-col md:flex-row gap-6 items-start">
-            <Avatar className="w-32 h-32 border-4 border-primary/30 shadow-lg">
-              <AvatarImage 
-                src={person.image} 
-                alt={person.name}
-                className="object-cover"
-              />
-              <AvatarFallback className="bg-gradient-primary text-primary-foreground text-3xl font-bold">
-                {person.name.split(' ').map(n => n[0]).join('')}
-              </AvatarFallback>
-            </Avatar>
+            <div className="flex flex-col items-center gap-1">
+              <Avatar className="w-32 h-32 border-4 border-primary/30 shadow-lg">
+                <AvatarImage
+                  src={person.image}
+                  alt={person.name}
+                  className="object-cover"
+                />
+                <AvatarFallback className="bg-gradient-primary text-primary-foreground text-3xl font-bold">
+                  {person.name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
+              </Avatar>
+              {photoCredit && (
+                <p className="text-[10px] text-muted-foreground text-center max-w-[8rem] leading-tight">
+                  Photo:{' '}
+                  {photoCredit.fileUrl ? (
+                    <a href={photoCredit.fileUrl} target="_blank" rel="noopener noreferrer" className="underline">
+                      {photoCredit.artist || photoCredit.source}
+                    </a>
+                  ) : (photoCredit.artist || photoCredit.source)}
+                  {photoCredit.license ? (
+                    <>
+                      {' · '}
+                      {photoCredit.licenseUrl ? (
+                        <a href={photoCredit.licenseUrl} target="_blank" rel="noopener noreferrer" className="underline">{photoCredit.license}</a>
+                      ) : photoCredit.license}
+                    </>
+                  ) : null}
+                </p>
+              )}
+            </div>
 
             <div className="flex-1 space-y-3">
               <div>

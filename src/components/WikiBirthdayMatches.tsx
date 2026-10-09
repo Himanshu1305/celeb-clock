@@ -283,6 +283,11 @@ export const WikiBirthdayMatches = ({ birthDate, onCelebritiesChange }: WikiBirt
                 🎉 {totalMatches} Match{totalMatches > 1 ? 'es' : ''} Found!
               </div>
               {result?.source === 'api' && <p className="text-xs text-muted-foreground mt-2">Data from Wikipedia</p>}
+              <p className="text-[11px] text-muted-foreground mt-1">
+                Photos: freely-licensed images from{' '}
+                <a href="https://commons.wikimedia.org" target="_blank" rel="noopener noreferrer" className="underline">Wikimedia Commons</a>
+                {' '}· each photo’s author and licence are shown on the person’s profile.
+              </p>
             </div>
 
             <Tabs defaultValue="people" className="w-full">

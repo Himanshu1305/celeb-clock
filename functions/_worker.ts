@@ -32,6 +32,7 @@ import { GET  as careerReport }        from '../api/career-report.js';
 import { GET  as lifeReport }          from '../api/life-report.js';
 import { GET  as gemstones }           from '../api/gemstones.js';
 import { GET  as geocode }             from '../api/geocode.js';
+import { GET  as bornTodayPhoto }      from '../api/born-today-photo.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
 import cronHandler                     from './_cron/daily-email.js';
 import { handleReportOg, injectReportOgTags } from './og-report.js';
@@ -100,6 +101,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/life-report':        lifeReport,
   '/api/gemstones':          gemstones,
   '/api/geocode':            geocode,
+  '/api/born-today-photo':   bornTodayPhoto,
 };
 
 export default {

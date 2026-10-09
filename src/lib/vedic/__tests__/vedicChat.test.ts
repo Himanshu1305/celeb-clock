@@ -3,6 +3,8 @@ import { calculateBirthChart } from '../calculateBirthChart';
 import { extractReadingFacts } from '../readingPrompts';
 import { CRISIS_RESPONSE, HEALTH_REDIRECT_RESPONSE, UNSAFE_REPLY_FALLBACK } from '../chatGuardrails';
 import { buildChatReply, POST as chat } from '../../../../api/vedic-chat';
+import { hashClientId, recordQuestionServer, __resetServerLimitStore } from '../serverRateLimit';
+import { FREE_DAILY_LIMIT } from '../rateLimit';
 
 const REF = new Date(Date.UTC(2026, 8, 9));
 const BIRTH = { y: 1988, m: 11, d: 5, h: 12, min: 30, lat: 28.6139, lon: 77.209, tz: 5.5 };
@@ -64,12 +66,20 @@ describe('chat endpoint — safety short-circuits (no model call needed)', () =>
     expect(j.reply).toMatch(/birth details/i);
   });
 
-  it('over the daily limit → 429 with a clear message', async () => {
-    const res = await post({ birth: BIRTH, message: 'one more?', tier: 'free', questionCount: 3 });
+  it('over the daily limit → 429 (server-authoritative; client count ignored)', async () => {
+    // The server no longer trusts the client's questionCount — it keeps its own
+    // count keyed by a hashed client IP. Pre-fill the server counter for this
+    // test's IP ('unknown', no CF header) up to the free cap, then the next
+    // question is rejected by the server-side peek BEFORE any model call.
+    __resetServerLimitStore();
+    const key = await hashClientId('unknown', 'bornclock');
+    for (let i = 0; i < FREE_DAILY_LIMIT; i++) recordQuestionServer(key, 'free');
+    const res = await post({ birth: BIRTH, message: 'one more?', tier: 'free', questionCount: 0 });
     expect(res.status).toBe(429);
     const j = await res.json();
     expect(j.rateLimited).toBe(true);
     expect(j.reply).toMatch(/free questions for today/i);
+    __resetServerLimitStore();
   });
 
   it('crisis overrides the rate limit (distress is never blocked by the cap)', async () => {
