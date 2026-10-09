@@ -74,7 +74,7 @@ export function NotificationOptIn({ defaultEmail = '', rashiIndex = null }: { de
               {hasSign ? 'A short graded reading for your Moon sign each morning.' : 'Create your Kundli first so we know your Moon sign.'}
             </p>
           </div>
-          <Switch checked={daily} onCheckedChange={setDaily} disabled={!hasSign || done} />
+          <Switch checked={daily} onCheckedChange={setDaily} disabled={!hasSign || done} aria-label="Daily horoscope" />
         </div>
 
         <div className="flex items-center justify-between">
@@ -84,7 +84,7 @@ export function NotificationOptIn({ defaultEmail = '', rashiIndex = null }: { de
               {hasSign ? 'Only when a slow planet (Saturn, Jupiter, Rahu, Ketu) actually changes sign — no noise.' : 'Needs your Moon sign from a saved Kundli.'}
             </p>
           </div>
-          <Switch checked={transit} onCheckedChange={setTransit} disabled={!hasSign || done} />
+          <Switch checked={transit} onCheckedChange={setTransit} disabled={!hasSign || done} aria-label="Transit alerts" />
         </div>
 
         <div className="flex items-center justify-between">
@@ -92,16 +92,21 @@ export function NotificationOptIn({ defaultEmail = '', rashiIndex = null }: { de
             <Label>Weekly reading</Label>
             <p className="text-xs text-muted-foreground">Your birthday countdown, 7-day rhythm and who shares your birthday that week.</p>
           </div>
-          <Switch checked={weekly} onCheckedChange={setWeekly} disabled={done} />
+          <Switch checked={weekly} onCheckedChange={setWeekly} disabled={done} aria-label="Weekly reading" />
         </div>
 
-        {/* WhatsApp — prepared, OFF until a WhatsApp Business account exists (Rule 11). */}
-        <div className="flex items-center justify-between opacity-60">
+        {/* WhatsApp — prepared, OFF until a WhatsApp Business account exists (Rule 11).
+            No opacity dimming (it drops text below the AA contrast ratio); the disabled
+            switch + "Coming soon" badge convey the unavailable state accessibly. */}
+        <div className="flex items-center justify-between">
           <div className="space-y-0.5 pr-4">
-            <Label className="flex items-center gap-1.5"><MessageCircle className="h-4 w-4" /> WhatsApp reminders</Label>
-            <p className="text-xs text-muted-foreground">Coming soon — we'll add this once WhatsApp messaging is set up.</p>
+            <Label className="flex items-center gap-1.5">
+              <MessageCircle className="h-4 w-4" /> WhatsApp reminders
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-accent bg-accent/10 rounded px-1.5 py-0.5">Soon</span>
+            </Label>
+            <p className="text-xs text-muted-foreground">We'll add this once WhatsApp messaging is set up.</p>
           </div>
-          <Switch checked={false} disabled aria-label="WhatsApp (coming soon)" />
+          <Switch checked={false} disabled aria-label="WhatsApp reminders (coming soon)" />
         </div>
 
         {error && <p className="text-sm text-destructive">{error}</p>}
