@@ -198,7 +198,7 @@ export default function BornOnDayIndia() {
         ) : display.length > 0 ? (
           <div data-testid="celebrity-list" className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             {display.map((celeb, i) => (
-              <CelebrityCard key={celeb.name} celebrity={celeb} index={i} profileSlug={NAME_TO_SLUG.get(celeb.name)} />
+              <CelebrityCard key={celeb.name} celebrity={celeb} index={i} profileSlug={NAME_TO_SLUG.get(celeb.name)} showRank />
             ))}
           </div>
         ) : (

@@ -278,7 +278,7 @@ export default function BornOnDay() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               {celebrities.map((celeb, i) => (
-                <CelebrityCard key={celeb.name} celebrity={celeb} index={i} />
+                <CelebrityCard key={celeb.name} celebrity={celeb} index={i} showRank />
               ))}
             </div>
             <CountryExtrasSection

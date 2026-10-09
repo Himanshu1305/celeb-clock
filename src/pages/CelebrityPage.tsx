@@ -24,7 +24,7 @@ import type {
 import celebBios from '@/data/celebrity-bios.json';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { LuckyStoneAffiliate, CosmicTwins } from '@/components/CelebrityAffiliateAndTwins';
-import { NakshatraPlaceholder } from '@/components/NakshatraPlaceholder';
+import { CelebrityBirthTimeNote } from '@/components/CelebrityBirthTimeNote';
 import { BirthdayRarityCard } from '@/components/BirthdayRarityCard';
 import { OnThisDay } from '@/components/OnThisDay';
 
@@ -144,13 +144,26 @@ export function CelebrityPage() {
   }
 
   // Birthday twins — only for full-DOB celebrities.
-  const twins = isFull
+  const sameDay = isFull
     ? ALL_CELEBRITIES.filter(c => {
-        if (c === celeb || String(c.name) === name) return false;
         const d = parseCelebrityDOB(c);
         return d?.isFullDate && d.day === dob!.day && d.month === dob!.month;
-      }).slice(0, 12)
+      })
     : [];
+  const twins = sameDay.filter(c => c !== celeb && String(c.name) !== name).slice(0, 12);
+
+  // Per-date popularity rank (NB4-RANK) — ordered by the real global-recognition
+  // signal (sitelinks = Wikipedia language-edition count). Shown only when this
+  // celebrity actually carries that signal, so we never imply a fake ranking for
+  // records that have no recognition metric.
+  const sitelinksOf = (c: Record<string, unknown>) => Number(c.sitelinks ?? 0);
+  const ownSitelinks = sitelinksOf(celeb);
+  const dateRank = (() => {
+    if (!isFull || ownSitelinks <= 0 || sameDay.length < 2) return null;
+    const ranked = [...sameDay].sort((a, b) => sitelinksOf(b) - sitelinksOf(a));
+    const idx = ranked.indexOf(celeb);
+    return idx >= 0 ? { rank: idx + 1, total: sameDay.length } : null;
+  })();
 
   const hubSlug = getCategoryHubSlug(category);
   const hubLabel = CATEGORY_CONFIG[category]?.label || 'Celebrity';
@@ -422,9 +435,24 @@ export function CelebrityPage() {
                 </tbody>
               </table>
             </div>
-            {/* Nakshatra requires exact birth time+location — day/month approximation
-                removed (astronomically unreliable). Direct users to the report. */}
-            <NakshatraPlaceholder />
+            {/* Per-date popularity rank (NB4-RANK) — real sitelinks signal only. */}
+            {dateRank && bornOnSlug && (
+              <Link
+                to={`/born-on/${bornOnSlug}`}
+                data-testid="celebrity-date-rank"
+                className="mt-3 flex items-center gap-2 rounded-xl border border-border p-3 text-sm hover:bg-muted transition-colors"
+              >
+                <span className="text-lg">🏆</span>
+                <span className="text-muted-foreground">
+                  Ranked <strong className="text-foreground">#{dateRank.rank}</strong> of{' '}
+                  {dateRank.total} notable people born on {MONTH_NAMES[dob!.month - 1]} {dob!.day}{' '}
+                  in our records, by global recognition (Wikipedia reach) →
+                </span>
+              </Link>
+            )}
+            {/* Vedic chart gated on an honest birth-time reliability note (P4-CELEB-BIRTHTIME):
+                time-dependent sections render only when a verified time+place exists. */}
+            <CelebrityBirthTimeNote slug={slug!} name={name} ctaHref={ctaHref} />
             {isFull && <BirthdayRarityCard month={dob!.month} day={dob!.day} />}
             {isFull && <OnThisDay month={dob!.month} day={dob!.day} />}
             {!isFull && (

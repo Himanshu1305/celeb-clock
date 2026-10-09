@@ -46,9 +46,11 @@ interface CelebrityCardProps {
   dateHref?: string;
   /** Optional slug for this celebrity's /celebrity/[slug]/ profile page (Day 8). */
   profileSlug?: string;
+  /** Show the per-date popularity rank (NB4-RANK) — the list is ranked by global recognition. */
+  showRank?: boolean;
 }
 
-export const CelebrityCard = ({ celebrity, index, dateHref, profileSlug }: CelebrityCardProps) => {
+export const CelebrityCard = ({ celebrity, index, dateHref, profileSlug, showRank }: CelebrityCardProps) => {
   const { user } = useAuth();
   const [imageUrl, setImageUrl] = useState<string | null>(celebrity.imageUrl ?? null);
   const [imageLoading, setImageLoading] = useState(!celebrity.imageUrl);
@@ -116,6 +118,15 @@ export const CelebrityCard = ({ celebrity, index, dateHref, profileSlug }: Celeb
         <div className="flex gap-3 items-start">
           {/* Avatar */}
           <div className="relative shrink-0">
+            {showRank && (
+              <span
+                data-testid="celebrity-rank-badge"
+                className="absolute -top-1.5 -left-1.5 z-10 flex items-center justify-center min-w-[22px] h-[22px] px-1 rounded-full bg-primary text-primary-foreground text-[11px] font-bold shadow"
+                aria-label={`Rank ${index + 1} by global recognition`}
+              >
+                #{index + 1}
+              </span>
+            )}
             <Avatar className="w-[68px] h-[68px] border-2 border-border/50 shadow-sm">
               {imageLoading ? (
                 <AvatarFallback>

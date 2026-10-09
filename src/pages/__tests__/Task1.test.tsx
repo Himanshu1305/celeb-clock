@@ -33,18 +33,21 @@ const q = (id: string) => document.querySelector(`[data-testid="${id}"]`);
 describe('TC-NFIX', () => {
   afterEach(() => cleanup());
 
-  it('TC-NFIX-P-01: NakshatraPlaceholder renders on celeb page', () => {
+  it('TC-NFIX-P-01: birth-time reliability note renders on celeb page', () => {
     renderCelebPage(VIRAT.slug);
-    expect(q('nakshatra-placeholder')).toBeTruthy();
+    const note = q('celebrity-birthtime-note');
+    expect(note).toBeTruthy();
+    // No verified time → honest "not on record" default (P4-CELEB-BIRTHTIME).
+    expect(note?.getAttribute('data-reliability')).toBe('unknown');
   });
-  it('TC-NFIX-P-02: placeholder CTA links to /birthday-report', () => {
+  it('TC-NFIX-P-02: note CTA links to /birthday-report', () => {
     renderCelebPage(VIRAT.slug);
-    const cta = q('nakshatra-cta') as HTMLAnchorElement;
+    const cta = q('celebrity-birthtime-cta') as HTMLAnchorElement;
     expect(cta?.getAttribute('href')).toContain('birthday-report');
   });
-  it('TC-NFIX-P-03: placeholder text mentions birth time', () => {
+  it('TC-NFIX-P-03: note text mentions birth time', () => {
     renderCelebPage(VIRAT.slug);
-    expect(q('nakshatra-placeholder')?.textContent?.toLowerCase()).toContain('birth time');
+    expect(q('celebrity-birthtime-note')?.textContent?.toLowerCase()).toContain('birth time');
   });
   it('TC-NFIX-P-04: compatibility page renders', () => {
     expect(() => renderCompatPage()).not.toThrow();
@@ -59,9 +62,9 @@ describe('TC-NFIX', () => {
     const body = document.body.textContent || '';
     if (body.includes('₹')) expect(body).not.toMatch(/₹299.*report/i);
   });
-  it('TC-NFIX-P-07: Prabhupada celeb page renders with placeholder', () => {
+  it('TC-NFIX-P-07: Prabhupada celeb page renders with birth-time note', () => {
     expect(() => renderCelebPage('srila-prabhupada')).not.toThrow();
-    expect(q('nakshatra-placeholder')).toBeTruthy();
+    expect(q('celebrity-birthtime-note')).toBeTruthy();
   });
   it('TC-NFIX-N-01: Virat page NEVER shows wrong Nakshatra Anuradha', () => {
     renderCelebPage(VIRAT.slug);
@@ -70,7 +73,7 @@ describe('TC-NFIX', () => {
   it('TC-NFIX-N-02: SRK page shows no computed Nakshatra name', () => {
     renderCelebPage(SRK.slug);
     // No day/month Nakshatra is displayed anywhere on the page anymore.
-    expect(q('nakshatra-placeholder')).toBeTruthy();
+    expect(q('celebrity-birthtime-note')).toBeTruthy();
     expect(document.body.textContent).not.toContain(SRK.wrong_nakshatra);
   });
   it('TC-NFIX-N-03: Sachin page shows no computed Nakshatra name', () => {
