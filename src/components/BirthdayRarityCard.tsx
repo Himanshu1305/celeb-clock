@@ -26,7 +26,7 @@ export function BirthdayRarityCard({ month, day }: { month: number; day: number 
       <div className="mt-2 h-2 w-full rounded-full bg-gray-100 overflow-hidden">
         <div className="h-full rounded-full bg-[#0E2238]" style={{ width: `${score.percentile}%` }} />
       </div>
-      <p className="text-xs text-gray-400 mt-1">Rarity percentile: {score.percentile}%</p>
+      <p className="text-xs text-gray-600 mt-1">Rarity percentile: {score.percentile}%</p>
     </div>
   );
 }

@@ -335,12 +335,12 @@ export function CelebrityPage() {
                                rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
                     🔢 Lucky Number: {chineseProfile.lucky_numbers.join(', ')}
                   </span>
-                  <span className="flex-shrink-0 text-xs text-gray-400 italic self-center">
+                  <span className="flex-shrink-0 text-xs text-gray-600 italic self-center">
                     Full lucky profile requires exact date of birth
                   </span>
                 </>
               ) : (
-                <span className="text-xs text-gray-400 italic">
+                <span className="text-xs text-gray-600 italic">
                   Lucky elements require a full date of birth.
                 </span>
               )}
@@ -365,7 +365,7 @@ export function CelebrityPage() {
             >
               <h2 className="text-lg font-black text-gray-900 mb-3">About {name}</h2>
               <p className="text-gray-700 leading-relaxed text-sm">{bio}</p>
-              <p className="text-xs text-gray-400 mt-3 italic">
+              <p className="text-xs text-gray-600 mt-3 italic">
                 Based on publicly available information.
               </p>
             </section>
@@ -373,7 +373,7 @@ export function CelebrityPage() {
             <section data-testid="celebrity-bio-pending" className="mb-6">
               <div className="bg-gray-50 border border-dashed border-gray-200
                               rounded-xl p-4 text-center">
-                <p className="text-gray-400 text-sm">
+                <p className="text-gray-600 text-sm">
                   Detailed biography for {name} coming soon.
                 </p>
               </div>
@@ -531,7 +531,7 @@ export function CelebrityPage() {
                       ].map(({ label, value }) => (
                         <div key={label}
                           className="bg-gray-50 border border-gray-200 rounded-lg p-2 text-center">
-                          <div className="text-gray-400 mb-0.5 text-xs">{label}</div>
+                          <div className="text-gray-600 mb-0.5 text-xs">{label}</div>
                           <div className="font-semibold text-gray-900 text-xs">{value ?? '—'}</div>
                         </div>
                       ))}
@@ -564,7 +564,7 @@ export function CelebrityPage() {
                     </p>
                   </>
                 ) : (
-                  <div className="text-center py-8 text-gray-400 text-sm">
+                  <div className="text-center py-8 text-gray-600 text-sm">
                     Western zodiac requires an exact birth date (day and month).
                   </div>
                 )}
@@ -602,7 +602,7 @@ export function CelebrityPage() {
                       ].map(({ label, value }) => (
                         <div key={label}
                           className="bg-gray-50 border border-gray-200 rounded-lg p-2 text-center">
-                          <div className="text-gray-400 mb-0.5 text-xs">{label}</div>
+                          <div className="text-gray-600 mb-0.5 text-xs">{label}</div>
                           <div className="font-semibold text-gray-900 text-xs leading-tight">{value}</div>
                         </div>
                       ))}
@@ -652,12 +652,12 @@ export function CelebrityPage() {
                       <h4 className="text-xs font-bold text-amber-800 mb-1">Health Tendencies</h4>
                       <p className="text-xs text-amber-900">{rashiProfile.health_tendencies}</p>
                     </div>
-                    <p className="text-xs text-gray-400 italic">
+                    <p className="text-xs text-gray-600 italic">
                       Note: For precise Rashi, exact birth time and location are required. This is an approximate calculation.
                     </p>
                   </>
                 ) : (
-                  <div className="text-center py-8 text-gray-400 text-sm">
+                  <div className="text-center py-8 text-gray-600 text-sm">
                     Vedic Rashi calculation requires an exact birth date (day and month).
                   </div>
                 )}
@@ -736,7 +736,7 @@ export function CelebrityPage() {
                     </p>
                   </>
                 ) : (
-                  <div className="text-center py-8 text-gray-400 text-sm">
+                  <div className="text-center py-8 text-gray-600 text-sm">
                     Chinese zodiac requires a birth year.
                   </div>
                 )}
@@ -756,7 +756,7 @@ export function CelebrityPage() {
                       <div>
                         <h3 className="text-lg font-bold text-gray-900">Life Path {lifePath}</h3>
                         <p className="text-gray-500 text-sm">{lpExtended.title}</p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-gray-600">
                           {lpExtended.ruling_planet} · {lpExtended.element}
                         </p>
                       </div>
@@ -801,17 +801,17 @@ export function CelebrityPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div className="bg-gray-50 border border-gray-200 rounded-lg p-2 text-center">
-                        <div className="text-gray-400 mb-0.5">Lucky Colour</div>
+                        <div className="text-gray-600 mb-0.5">Lucky Colour</div>
                         <div className="font-semibold text-gray-900">{lpExtended.lucky_color}</div>
                       </div>
                       <div className="bg-gray-50 border border-gray-200 rounded-lg p-2 text-center">
-                        <div className="text-gray-400 mb-0.5">Lucky Stone</div>
+                        <div className="text-gray-600 mb-0.5">Lucky Stone</div>
                         <div className="font-semibold text-gray-900">{lpExtended.lucky_stone}</div>
                       </div>
                     </div>
                   </>
                 ) : (
-                  <div className="text-center py-8 text-gray-400 text-sm">
+                  <div className="text-center py-8 text-gray-600 text-sm">
                     Life Path numerology requires a full date of birth.
                   </div>
                 )}

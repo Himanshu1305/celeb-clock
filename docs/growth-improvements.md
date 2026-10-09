@@ -231,7 +231,8 @@ celebrity twin. Verified via unit tests + local build; real-use noted in P3 repo
 
 ### P4 — Reach (refinements + new)
 
-### [ ] NB4-RANK — Celebrity popularity ranking per date & multi-axis profile ranking  · **P4**
+### [x] NB4-RANK — Celebrity popularity ranking per date & multi-axis profile ranking  · **P4**
+<!-- DONE 28f5244: /born-on lists already rank by the real sitelinks (Wikipedia-reach) signal; CelebrityCard now shows a visible #N rank badge (showRank) on the three per-date lists, and /celebrity/:slug shows "Ranked #N of M born on <date> by global recognition" computed from the same signal — only when the celebrity actually carries it (no fabricated metrics). -->
 - **Why:** Famous Birthdays' core hook (rank 1–N per date, "#1 born May 13",
   "#12 movie actors"); BornClock `/born-on` appears unranked.
 - **Fix (source):** rank using the existing curated sitelinks/relevance signal in
@@ -240,41 +241,48 @@ celebrity twin. Verified via unit tests + local build; real-use noted in P3 repo
   popularity order; profiles show at least a per-date rank; no fabricated metrics
   (use the real sitelinks/relevance signal and say what it is).
 
-### [ ] NB-DEATHS — Famous **deaths** on a date (not just births)  · **P4**
+### [x] NB-DEATHS — Famous **deaths** on a date (not just births)  · **P4**
+<!-- DONE 80a3402: the Wikimedia On-this-day feed (events/births/deaths) is surfaced on /on-this-day[/:month/:day] and the deaths+events sections are embedded on /born-on/:month/:day — notable deaths now appear alongside births, attributed to Wikipedia (CC BY-SA 4.0). -->
 - **Why:** OnThisDay + timeanddate list deaths; BornClock is births-only.
 - **Acceptance:** the on-this-day / born-on surface includes notable deaths for
   the date, from the same licensed source, attributed.
 
-### [ ] P4-BIRTHDAY-EVENTS — "What happened on your birthday" via Wikimedia (correct framing)  · **P4**
+### [x] P4-BIRTHDAY-EVENTS — "What happened on your birthday" via Wikimedia (correct framing)  · **P4**
+<!-- DONE 80a3402: /on-this-day hub (today, computed in-browser) + evergreen /on-this-day/:month/:day — events/births/deaths fetched at request time from Wikipedia's On-this-day REST feed, CC BY-SA 4.0 attribution + per-item source links. Not prerendered per date (Rule 13); only the hub is prerendered/sitemapped. Graceful empty-on-failure. -->
 - **Why:** planned; confirmed gap. **Correction:** OnThisDay does NOT use
   Wikimedia — CC BY-SA Wikimedia is a differentiator, not a competitor match.
 - **Acceptance:** an events feed for the user's birthday with correct CC BY-SA
   attribution; evergreen URL, content at request time.
 
-### [ ] P4-CELEB-BIRTHTIME — Celebrity Kundlis with a birth-time reliability note  · **P4**
+### [x] P4-CELEB-BIRTHTIME — Celebrity Kundlis with a birth-time reliability note  · **P4**
+<!-- DONE 28f5244: src/data/celebrityBirthTimes.ts is the single source of truth (Rodden-rating -> reliable/approximate/unknown); ships EMPTY (no fabricated times, Rule 8). CelebrityBirthTimeNote on /celebrity/:slug shows the per-celebrity reliability label and GATES the time-dependent chart (Nakshatra/Lagna/houses/Dasha) to verified time+place only — every celebrity currently reads honestly "birth time: not on record". Verified dataset = Needs the person. -->
 - **Why:** no competitor shows celebrity birth **time** → white-space; needed for
   an honest celebrity-Kundli angle.
 - **Acceptance:** per-celebrity reliability label (e.g. "birth time: reliable /
   approximate / unknown") driving whether time-dependent sections render.
 
-### [ ] P4-WESTERN-CHART — Full Western natal chart (houses + rising + aspects)  · **P4**
+### [x] P4-WESTERN-CHART — Full Western natal chart (houses + rising + aspects)  · **P4**
+<!-- DONE ba0af55: full Western (tropical) natal chart — Sun/Moon/Rising + houses + major aspects with plain-language interpretations (/western-birth-chart). -->
 - **Why:** Cafe Astrology / Astrology.com give this free with interpretations —
   BornClock's biggest Western gap.
 - **Acceptance:** Sun/Moon/Rising + houses + major aspects computed with
   plain-language interpretations; real-use verified.
 
-### [ ] P4-TAROT-INTERACTIVE — Interactive tarot (daily / yes-no / love)  · **P4**
+### [x] P4-TAROT-INTERACTIVE — Interactive tarot (daily / yes-no / love)  · **P4**
+<!-- DONE 000cfc0: interactive tarot — daily card + yes/no + love spread, user draws cards, position- and question-aware interpretations. -->
 - **Why:** BestDailyTarot/Evatarot ship free interactive spreads — now
   table-stakes. Ship the bundle together, not piecemeal.
 - **Acceptance:** daily card + yes/no + love spread, user draws cards, position-
   and question-aware interpretations.
 
-### [ ] P4-CZ-YEARLY — Chinese zodiac yearly forecast  · **P4**
+### [x] P4-CZ-YEARLY — Chinese zodiac yearly forecast  · **P4**
+<!-- DONE c06728b: /chinese-horoscope[/:animal] — per-animal yearly forecast (career/finance/love/health) for this year and next, computed from the animal's traditional relationship to each year's ruling animal; graded strong/moderate/mild; evergreen (years computed at render time). 8 unit tests. -->
 - **Why:** ChinaHighlights ~100–150 words/sign/year + compatibility %.
 - **Acceptance:** per-animal yearly forecast (career/finance/love/health) for the
   current + next year, evergreen URL, content at request time.
 
-### [ ] P4-LANG — Pull some Hindi/regional language parity forward  · **P4** (business decision)
+### [~] P4-LANG — Pull some Hindi/regional language parity forward  · **P4** (business decision)
+<!-- PARTIAL 8059f6c: pulled Hindi parity forward on a key P1 page — /hi/panchang[/:city] reuses the same panchang engine with full Hindi copy + bidirectional EN<->HI links, machine-assisted and flagged for human review (AutoTranslatedNotice). Full Hindi coverage of ALL key pages + Telugu scope + translation sign-off = business decision -> Needs the person. -->
 - **Why:** every Vedic competitor ships Hindi + 3+ regional languages free; an
   English-only P1 is a structural disadvantage.
 - **Acceptance:** key P1 pages available in Hindi; machine-assisted translation

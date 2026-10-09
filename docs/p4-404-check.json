@@ -1,0 +1,119 @@
+{
+  "base": "http://localhost:8788",
+  "results": [
+    {
+      "path": "/chinese-horoscope/unicorn",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/chinese-horoscope/notananimal",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/on-this-day/may/40",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/on-this-day/february/30",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/on-this-day/notamonth/1",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/hi/panchang/notacity",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/hi/panchang/london",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/chinese-horoscope",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/chinese-horoscope/dragon",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/chinese-horoscope/rat",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/on-this-day",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/on-this-day/may/13",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/on-this-day/february/29",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/hi/panchang",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/hi/panchang/delhi",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/hi/panchang/mumbai",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/chinese-zodiac/dragon",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/panchang/delhi",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/born-on/may/13",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    }
+  ]
+}
