@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -6,6 +6,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { calculateWesternZodiac, calculateLifePathNumber } from '@/utils/celebrityCalculations';
+import { BirthdayFactsCard } from '@/components/BirthdayFactsCard';
+import { findCelebrityByBirthday } from '@/data/celebrities';
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -30,8 +32,7 @@ export default function BirthdayWishPage() {
   const [name, setName] = useState('');
   const [dob, setDob] = useState('');
   const [wish, setWish] = useState<WishData | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [imgSrc, setImgSrc] = useState<string>('');
+  const [twin, setTwin] = useState<string | undefined>(undefined);
 
   const canGenerate = name.trim().length > 0 && /^\d{4}-\d{2}-\d{2}$/.test(dob);
 
@@ -39,34 +40,17 @@ export default function BirthdayWishPage() {
     const w = buildWish(name, dob);
     if (w) setWish(w);
   };
-  const handleReset = () => { setWish(null); setImgSrc(''); };
+  const handleReset = () => { setWish(null); setTwin(undefined); };
 
-  // Render a shareable card image to canvas (real browsers); guarded for jsdom.
+  // Fetch the most notable birthday twin for the card (best-effort; card renders without it).
   useEffect(() => {
     if (!wish) return;
-    try {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      canvas.width = 1080; canvas.height = 1080;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      const grad = ctx.createLinearGradient(0, 0, 1080, 1080);
-      grad.addColorStop(0, '#0E2238'); grad.addColorStop(1, '#C6A15B');
-      ctx.fillStyle = grad; ctx.fillRect(0, 0, 1080, 1080);
-      ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
-      ctx.font = 'bold 64px sans-serif';
-      ctx.fillText('Happy Birthday', 540, 380);
-      ctx.font = 'bold 88px sans-serif';
-      ctx.fillText(wish.name.slice(0, 20), 540, 500);
-      ctx.font = '44px sans-serif';
-      ctx.fillText(`${wish.sign} · Life Path ${wish.lifePath}`, 540, 620);
-      ctx.font = '36px sans-serif';
-      ctx.fillText('bornclock.com', 540, 980);
-      setImgSrc(canvas.toDataURL('image/png'));
-    } catch {
-      /* canvas unavailable (e.g. jsdom) — the styled card still renders. */
-    }
-  }, [wish]);
+    let cancelled = false;
+    findCelebrityByBirthday(new Date(dob + 'T12:00:00'))
+      .then((list) => { if (!cancelled && list?.length) setTwin(list[0].name); })
+      .catch(() => { /* no twin — card still shows the other facts */ });
+    return () => { cancelled = true; };
+  }, [wish, dob]);
 
   const shareText = wish
     ? `Happy Birthday ${wish.name}! You're a ${wish.sign} with Life Path ${wish.lifePath}. Here's your birthday card — make your own at https://bornclock.com/wish`
@@ -133,22 +117,9 @@ export default function BirthdayWishPage() {
           <div className="space-y-6">
             <Card>
               <CardContent className="p-6">
-                <div
-                  data-testid="wish-card"
-                  className="rounded-2xl overflow-hidden bg-gradient-to-br from-[#6E5AA6] to-pink-600 text-white text-center p-8"
-                >
-                  {imgSrc ? (
-                    <img src={imgSrc} alt={`Birthday card for ${wish.name}`} className="w-full rounded-xl" />
-                  ) : (
-                    <>
-                      <p className="text-lg font-semibold opacity-90">Happy Birthday</p>
-                      <p className="text-3xl font-black my-3">{wish.name}</p>
-                      <p className="opacity-90">{wish.dateLabel} · {wish.sign} · Life Path {wish.lifePath}</p>
-                      <p className="mt-6 text-sm opacity-80">bornclock.com</p>
-                    </>
-                  )}
+                <div data-testid="wish-card">
+                  <BirthdayFactsCard name={wish.name} birthDate={new Date(dob + 'T12:00:00')} celebrityTwin={twin} />
                 </div>
-                <canvas ref={canvasRef} className="hidden" aria-hidden="true" />
               </CardContent>
             </Card>
 
