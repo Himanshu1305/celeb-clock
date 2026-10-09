@@ -142,6 +142,7 @@ const ReportView = lazyWithReload(() => import("./pages/ReportView"));
 const ChineseZodiac = lazyWithReload(() => import("./pages/ChineseZodiac"));
 const ChineseZodiacSign = lazyWithReload(() => import("./pages/ChineseZodiacSign"));
 const WesternBirthChart = lazyWithReload(() => import("./pages/WesternBirthChart"));
+const ChineseHoroscope = lazyWithReload(() => import("./pages/ChineseHoroscope"));
 const VedicZodiac = lazyWithReload(() => import("./pages/VedicZodiac"));
 const VedicAstrologyLanding = lazyWithReload(() => import("./pages/VedicAstrologyLanding"));
 const ScienceLongevityLanding = lazyWithReload(() => import("./pages/ScienceLongevityLanding"));
@@ -396,6 +397,8 @@ const App = () => (
               <Route path="/report/:slug" element={<ReportView />} />
               <Route path="/chinese-zodiac" element={<ChineseZodiac />} />
               <Route path="/chinese-zodiac/:animal" element={<ChineseZodiacSign />} />
+              <Route path="/chinese-horoscope" element={<ChineseHoroscope />} />
+              <Route path="/chinese-horoscope/:animal" element={<ChineseHoroscope />} />
               <Route path="/vedic-astrology" element={<VedicAstrologyLanding />} />
               <Route path="/science-longevity" element={<ScienceLongevityLanding />} />
               <Route path="/birthday-fun" element={<BirthdayFunLanding />} />

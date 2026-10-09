@@ -101,6 +101,15 @@ export default function ChineseZodiacSign() {
 
         <div className="max-w-4xl mx-auto space-y-8">
 
+          {/* Yearly horoscope CTA (P4-CZ-YEARLY) */}
+          <Link
+            to={`/chinese-horoscope/${slug}`}
+            className="block rounded-xl border border-red-200 bg-red-50 p-5 text-center hover:bg-red-100 transition-colors"
+          >
+            <span className="font-semibold text-red-700">📅 See the {capitalised}'s yearly horoscope →</span>
+            <span className="block text-sm text-red-600/80 mt-1">Career, finance, love &amp; health for this year and next.</span>
+          </Link>
+
           {/* Personality */}
           <Card className="glass-card">
             <CardContent className="p-6 md:p-8">

@@ -319,6 +319,8 @@ export const STATIC_ROUTES = [
   '/coach',
   '/chinese-zodiac',
   ...CHINESE_ZODIAC_ANIMALS.map(a => `/chinese-zodiac/${a}`),
+  '/chinese-horoscope',
+  ...CHINESE_ZODIAC_ANIMALS.map(a => `/chinese-horoscope/${a}`),
   '/vedic-zodiac',
   ...VEDIC_RASHIS.map(r => `/vedic-zodiac/${r}`),
   '/western-birth-chart',

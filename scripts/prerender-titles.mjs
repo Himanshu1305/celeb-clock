@@ -482,6 +482,22 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /chinese-horoscope and /chinese-horoscope/:animal (years are computed client-side, so titles stay year-free)
+  if (route === '/chinese-horoscope') {
+    return {
+      title: `Chinese Zodiac Yearly Horoscope — All 12 Animals | BornClock`,
+      description: `Free Chinese zodiac yearly forecast for all 12 animals — career, finance, love and health, based on each sign's relationship to the ruling animal of the year.`,
+    };
+  }
+  if (route.startsWith('/chinese-horoscope/')) {
+    const slug = route.slice(19);
+    const capitalised = slug.charAt(0).toUpperCase() + slug.slice(1);
+    return {
+      title: `${capitalised} Horoscope — Career, Love, Money & Health | BornClock`,
+      description: `${capitalised} Chinese zodiac yearly forecast: career, finance, love and health, graded strong/moderate/mild from the ${capitalised}'s relationship to the year's ruling animal.`,
+    };
+  }
+
   // /rashifal and /rashifal/:rashi/:period  (computed horoscope by Moon sign)
   if (route === '/rashifal') {
     return {
