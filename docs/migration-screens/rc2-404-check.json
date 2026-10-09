@@ -432,5 +432,26 @@
     "expect": 200,
     "status": 200,
     "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/dashboard",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/family",
+    "expect": 200,
+    "status": 200,
+    "ok": true
+  },
+  {
+    "group": "non-sitemap→200",
+    "path": "/wish",
+    "expect": 200,
+    "status": 200,
+    "ok": true
   }
 ]
