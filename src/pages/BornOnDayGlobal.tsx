@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
+import { WikimediaOnThisDay } from '@/components/WikimediaOnThisDay';
 import { BirthdayReportCTA } from '@/components/BirthdayReportCTA';
 import { getNationalityCelebritiesForDate, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { generateBornOnTitle, generateBornOnMeta } from '@/utils/seoHelpers';
@@ -185,7 +186,17 @@ export default function BornOnDayGlobal() {
         ) : (
           <p className="text-muted-foreground mb-8">No celebrities found in our database for this date.</p>
         )}
-        <p className="text-xs text-muted-foreground mb-10">Biographical details from Wikipedia · ranked by global recognition (sitelinks).</p>
+        <p className="text-xs text-muted-foreground mb-6">Biographical details from Wikipedia · ranked by global recognition (sitelinks).</p>
+
+        {/* On this day — world events + notable deaths (P4-BIRTHDAY-EVENTS / NB-DEATHS) */}
+        <div className="mb-10">
+          <WikimediaOnThisDay month={month} day={day} kinds={['events', 'deaths']} limit={10} />
+          <p className="mt-3 text-sm">
+            <Link to={`/on-this-day/${monthName.toLowerCase()}/${day}`} className="text-primary hover:underline">
+              See everything that happened on {dateLabel} →
+            </Link>
+          </p>
+        </div>
 
         {/* Birthday Report CTA */}
         <BirthdayReportCTA celebrities={celebs} month={monthName} day={day} />

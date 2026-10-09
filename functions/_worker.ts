@@ -220,6 +220,7 @@ export default {
       let m: RegExpMatchArray | null;
       if ((m = pathname.match(/^\/born-on\/([a-z]+)-(\d+)\/?$/)))                       return !validMD(MONTH_NAMES.indexOf(m[1]), parseInt(m[2], 10));
       if ((m = pathname.match(/^\/(?:born-on|birthday)\/(\d+)\/(\d+)(?:\/personality)?\/?$/))) return !validMD(parseInt(m[1], 10), parseInt(m[2], 10));
+      if ((m = pathname.match(/^\/on-this-day\/([a-z]+)\/(\d+)\/?$/)))                     return !validMD(MONTH_NAMES.indexOf(m[1]), parseInt(m[2], 10));
       if ((m = pathname.match(/^\/birthday\/(\d+)\/?$/)))        { const mo = parseInt(m[1], 10); return !(mo >= 1 && mo <= 12); }
       if ((m = pathname.match(/^\/compatibility\/([a-z]+)\/([a-z]+)\/?$/)))             return !(Z.has(m[1]) && Z.has(m[2]));
       if ((m = pathname.match(/^\/zodiac\/([a-z-]+)\/?$/)))          return !Z.has(m[1]);

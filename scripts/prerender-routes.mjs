@@ -321,6 +321,9 @@ export const STATIC_ROUTES = [
   ...CHINESE_ZODIAC_ANIMALS.map(a => `/chinese-zodiac/${a}`),
   '/chinese-horoscope',
   ...CHINESE_ZODIAC_ANIMALS.map(a => `/chinese-horoscope/${a}`),
+  // On-this-day hub only — the 366 /on-this-day/:month/:day pages are evergreen
+  // with request-time (live Wikipedia) content, never one prerendered page per date (Rule 13).
+  '/on-this-day',
   '/vedic-zodiac',
   ...VEDIC_RASHIS.map(r => `/vedic-zodiac/${r}`),
   '/western-birth-chart',

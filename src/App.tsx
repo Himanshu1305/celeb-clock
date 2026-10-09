@@ -138,6 +138,7 @@ const HindiNumerologyArticle = lazyWithReload(() => import("./pages/articles/Hin
 const HindiJeevanPratyashaPage = lazyWithReload(() => import("./pages/articles/HindiJeevanPratyashaPage"));
 const LifeExpectancySingaporeUAEPage = lazyWithReload(() => import("./pages/LifeExpectancySingaporeUAEPage"));
 const BornOnDayGlobal = lazyWithReload(() => import("./pages/BornOnDayGlobal"));
+const OnThisDayEvents = lazyWithReload(() => import("./pages/OnThisDayEvents"));
 const ReportView = lazyWithReload(() => import("./pages/ReportView"));
 const ChineseZodiac = lazyWithReload(() => import("./pages/ChineseZodiac"));
 const ChineseZodiacSign = lazyWithReload(() => import("./pages/ChineseZodiacSign"));
@@ -393,6 +394,8 @@ const App = () => (
               <Route path="/hi/meri-jeevan-pratyasha" element={<HindiJeevanPratyashaPage />} />
               <Route path="/life-expectancy-calculator-singapore-uae" element={<LifeExpectancySingaporeUAEPage />} />
               <Route path="/born-on/:month/:day" element={<BornOnDayGlobal />} />
+              <Route path="/on-this-day" element={<OnThisDayEvents />} />
+              <Route path="/on-this-day/:month/:day" element={<OnThisDayEvents />} />
               <Route path="/birthday-report" element={<BirthdayReport />} />
               <Route path="/report/:slug" element={<ReportView />} />
               <Route path="/chinese-zodiac" element={<ChineseZodiac />} />

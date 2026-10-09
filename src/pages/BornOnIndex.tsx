@@ -131,7 +131,17 @@ export default function BornOnIndex() {
           ))}
         </div>
 
-        <div className="mt-12 bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
+        <div className="mt-10 rounded-xl border border-border p-5 text-center">
+          <h2 className="font-semibold text-lg text-foreground mb-1">📜 On this day in history</h2>
+          <p className="text-muted-foreground text-sm mb-3">
+            Notable world events, famous births and deaths for any date — from Wikipedia.
+          </p>
+          <Link to="/on-this-day" className="text-primary hover:underline text-sm font-semibold">
+            Explore what happened on this day →
+          </Link>
+        </div>
+
+        <div className="mt-8 bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
           <h2 className="font-bold text-xl text-foreground mb-2">Know your birthday?</h2>
           <p className="text-muted-foreground mb-4">
             Get your full birthday report — celebrity matches, zodiac deep-dive, numerology, and more.

@@ -498,6 +498,14 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /on-this-day hub (dated pages are evergreen, content fetched at request time)
+  if (route === '/on-this-day') {
+    return {
+      title: `On This Day in History — Events, Births & Deaths | BornClock`,
+      description: `What happened on this day in history — notable events, famous births and deaths from Wikipedia. Look up what happened on your birthday.`,
+    };
+  }
+
   // /rashifal and /rashifal/:rashi/:period  (computed horoscope by Moon sign)
   if (route === '/rashifal') {
     return {
