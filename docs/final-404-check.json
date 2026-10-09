@@ -1,0 +1,557 @@
+{
+  "base": "https://bornclock-staging.usdvisionai.workers.dev",
+  "results": [
+    {
+      "path": "/rashifal/notarashi",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/rashifal/mesh/decade",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/nakshatra/notanakshatra",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/yoga/not-a-yoga",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/planet-in-house/sun/13",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/planet-in-house/pluto/1",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/planet-in-sign/sun/notasign",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/planet-in-sign/pluto/leo",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/transit/pluto/2027",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/transit/saturn/1800",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/blue-zones/not-a-factor",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/life-expectancy/factors/not-a-factor",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/mercury-retrograde/1700",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/festivals/1700",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/divisional-charts/d99-nonsense",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/vedic-zodiac/notarashi",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/chinese-horoscope/unicorn",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/on-this-day/may/40",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/on-this-day/february/30",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/on-this-day/notamonth/1",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/panchang/notacityxyz",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/panchang/london",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/hi/panchang/notacity",
+      "expected": 404,
+      "status": 404,
+      "ok": true
+    },
+    {
+      "path": "/rashifal",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/rashifal/mesh",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/rashifal/tula/week",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/rashifal/mesh/today",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/rashifal/mesh/month",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/rashifal/mesh/year",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/panchang",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/panchang/delhi",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/panchang/pune",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/hi/panchang",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/hi/panchang/mumbai",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/festivals",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/festivals/2027",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/planet-in-house",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/planet-in-house/sun/6",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/planet-in-sign",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/planet-in-sign/sun/leo",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/nakshatra",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/nakshatra/mula",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/yoga",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/yoga/raja-yoga",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/transit",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/transit/rahu/2025",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/mercury-retrograde",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/mercury-retrograde/2027",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/baby-names",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/blue-zones",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/blue-zones/belong",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/life-expectancy/factors",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/life-expectancy/factors/bmi",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/attitude-number",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/chaldean-numerology",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/child-kundli",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/career-report",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/life-report",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/pitra-dosha",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/mool-dosha",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/grahan-dosha",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/nadi-dosha",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/name-correction",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/business-name-numerology",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/mobile-number-numerology",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/house-number-numerology",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/divisional-charts",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/divisional-charts/d2-hora",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/dashboard",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/family",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/reminders",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/western-birth-chart",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/chinese-horoscope",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/chinese-horoscope/ox",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/on-this-day",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/on-this-day/may/13",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/tarot-reading",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/vedic-zodiac",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/vedic-zodiac/mesh",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/kundali",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/kundali-match",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/sade-sati",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/muhurat",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/gemstones",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/manglik",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/kaal-sarp-dosha",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/numerology",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/zodiac/aries",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/chinese-zodiac/dragon",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/born-on/may/13",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/life-expectancy",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    },
+    {
+      "path": "/biorhythm",
+      "expected": 200,
+      "status": 200,
+      "ok": true
+    }
+  ]
+}
