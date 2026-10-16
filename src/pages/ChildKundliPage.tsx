@@ -13,6 +13,7 @@ import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { ClassicalRefs } from '@/components/vedic/ClassicalRefs';
 import { buildChildKundli, type ChildKundli } from '@/lib/vedic/childKundli';
+import { birthQuery } from '@/lib/timezone/clientBirth';
 
 export default function ChildKundliPage() {
   const { profile, save } = useSavedProfile();
@@ -25,8 +26,8 @@ export default function ChildKundliPage() {
     setLoading(true); setFailed(false); setResult(null);
     if (saveChecked) save({ dob: d.dob, time: d.time, city: d.city });
     try {
-      const [y, m, day] = d.dob.split('-'); const [h, min] = (d.time || '12:00').split(':');
-      const p = new URLSearchParams({ y, m, d: day, h, min, lat: String(d.city.lat), lon: String(d.city.lon), tz: String(d.city.tz) });
+      // fix-timezone-accuracy: shared birth params (zone from the birthplace, DST-correct).
+      const p = new URLSearchParams(birthQuery(d.dob, d.time, d.city));
       const res = await fetch(`/api/kundali?${p.toString()}`);
       if (!res.ok) throw new Error('unavailable');
       const data = await res.json();

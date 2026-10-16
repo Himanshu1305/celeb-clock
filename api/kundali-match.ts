@@ -6,7 +6,9 @@
 // is exact by construction (accuracy guaranteed, unlike the LLM readings).
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
-import { birthRangeError } from './_birthParams.js';
+import { birthRangeError, resolveRequestBirthTz } from './_birthParams.js';
+import { METHOD_LINE } from '../src/lib/timezone/birthTimezone.js';
+import { chartBasisFromResult } from '../src/lib/vedic/chartBasis.js';
 import { calculateGunaMilan, type PersonInput } from '../src/lib/vedic/matchmaking.js';
 import { calculatePorutham } from '../src/lib/vedic/porutham.js';
 import { buildMatchSynthesis } from '../src/lib/vedic/matchSynthesis.js';
@@ -43,7 +45,14 @@ function overlaps(aw: ActivationWindow[], bw: ActivationWindow[]) {
 
 function parsePerson(sp, suffix) {
   const n = k => { const v = sp.get(k + suffix); return v === null || v === '' ? undefined : Number(v); };
+  // `timezoneOffset` here is only the LEGACY client value (range-checked for a clean 400);
+  // the offset actually used is decided by resolveRequestBirthTz() in the handler.
   return { year: n('y'), month: n('m'), day: n('d'), hour: n('h') ?? 12, minute: n('min') ?? 0, latitude: n('lat') ?? 28.6139, longitude: n('lon') ?? 77.209, timezoneOffset: n('tz') ?? 5.5 };
+}
+
+/** Per-person transparency block: zone/offset applied + Moon + Lagna + boundary notes. */
+function personSummary(chart, birthTimezone) {
+  return chartBasisFromResult(chart, birthTimezone);
 }
 
 async function handler(request) {
@@ -57,11 +66,17 @@ async function handler(request) {
   const rangeErrAB = birthRangeError({ m: A.month, d: A.day, h: A.hour, min: A.minute, lat: A.latitude, lon: A.longitude, tz: A.timezoneOffset })
     || birthRangeError({ m: B.month, d: B.day, h: B.hour, min: B.minute, lat: B.latitude, lon: B.longitude, tz: B.timezoneOffset });
   if (rangeErrAB) return json({ error: rangeErrAB }, 400);
+  // fix-timezone-accuracy: each person's offset from their own birthplace + date.
+  const get = k => searchParams.get(k);
+  const tzA = resolveRequestBirthTz(get, { y: A.year, m: A.month, d: A.day, h: A.hour, min: A.minute, lat: A.latitude, lon: A.longitude }, 'A');
+  const tzB = resolveRequestBirthTz(get, { y: B.year, m: B.month, d: B.day, h: B.hour, min: B.minute, lat: B.latitude, lon: B.longitude }, 'B');
+  if ('error' in tzA) return json({ error: tzA.error }, 400);
+  if ('error' in tzB) return json({ error: tzB.error }, 400);
   try {
     const now = new Date();
     const [chartA, chartB] = await Promise.all([
-      calculateBirthChart({ year: A.year, month: A.month, day: A.day, hour: A.hour, minute: A.minute, latitude: A.latitude, longitude: A.longitude, timezoneOffset: A.timezoneOffset }, { refDate: now }),
-      calculateBirthChart({ year: B.year, month: B.month, day: B.day, hour: B.hour, minute: B.minute, latitude: B.latitude, longitude: B.longitude, timezoneOffset: B.timezoneOffset }, { refDate: now }),
+      calculateBirthChart({ year: A.year, month: A.month, day: A.day, hour: A.hour, minute: A.minute, latitude: A.latitude, longitude: A.longitude, timezoneOffset: tzA.tz }, { refDate: now }),
+      calculateBirthChart({ year: B.year, month: B.month, day: B.day, hour: B.hour, minute: B.minute, latitude: B.latitude, longitude: B.longitude, timezoneOffset: tzB.tz }, { refDate: now }),
     ]);
 
     const piA = personInput(chartA), piB = personInput(chartB);
@@ -107,9 +122,10 @@ async function handler(request) {
       synthesis,
       timing,
       people: {
-        a: { lagna: chartA.lagna.sign, rashi: chartA.rashi, nakshatra: chartA.nakshatra.nakshatra, pada: chartA.nakshatra.pada },
-        b: { lagna: chartB.lagna.sign, rashi: chartB.rashi, nakshatra: chartB.nakshatra.nakshatra, pada: chartB.nakshatra.pada },
+        a: personSummary(chartA, tzA.birthTimezone),
+        b: personSummary(chartB, tzB.birthTimezone),
       },
+      method: METHOD_LINE,
       _cache: 'miss',
     });
   } catch (e) {

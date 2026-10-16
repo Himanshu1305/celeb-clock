@@ -16,6 +16,13 @@
 // OSM_ATTRIBUTION and the city-field notices).
 
 import { CITY_DATASET, lookupCity, prefixCities } from '../src/data/cityDataset.js';
+import { timezoneForCoordinates, offsetSecondsAt } from '../src/lib/timezone/birthTimezone.js';
+
+/** fix-timezone-accuracy: zone from the coordinates (never IST by default) + today's offset. */
+function zoneFields(lat: number, lon: number) {
+  const timezone = timezoneForCoordinates(lat, lon);
+  return { timezone, utcOffset: offsetSecondsAt(timezone, Date.now()) / 3600 };
+}
 
 interface Row {
   name: string; state?: string; country: string;
@@ -33,12 +40,12 @@ function json(body: unknown, status = 200, cacheSeconds = 0) {
 
 const bundledRow = (c: typeof CITY_DATASET[number]): Row => ({
   name: c.name, state: c.state, country: c.country,
-  lat: c.lat, lon: c.lon, timezone: c.timezone, utcOffset: c.utcOffset, source: 'bundled',
+  lat: c.lat, lon: c.lon, ...zoneFields(c.lat, c.lon), source: 'bundled',
 });
 
 async function nominatim(query: string): Promise<Row[]> {
   try {
-    const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=${encodeURIComponent(query)}`;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=8&accept-language=en&featureType=settlement&q=${encodeURIComponent(query)}`;
     const controller = new AbortController();
     const t = setTimeout(() => controller.abort(), 6000);
     const res = await fetch(url, {
@@ -48,23 +55,21 @@ async function nominatim(query: string): Promise<Row[]> {
     clearTimeout(t);
     if (!res.ok) return [];
     const rows: any[] = await res.json();
-    return rows.map(r => {
-      const country = r.address?.country || (r.display_name || '').split(',').pop()?.trim() || 'Unknown';
-      // We don't run a tz database in the worker, so default to IST (unchanged
-      // from the prior behaviour). The bundled dataset already carries exact
-      // offsets for every major world city, so this fallback is almost always
-      // an Indian long-tail town where IST is correct.
-      return {
-        name: (r.display_name || query).split(',')[0].trim(),
-        state: r.address?.state,
-        country,
-        lat: parseFloat(r.lat),
-        lon: parseFloat(r.lon),
-        timezone: 'Asia/Kolkata',
-        utcOffset: 5.5,
-        source: 'osm' as const,
-      };
-    }).filter(r => Number.isFinite(r.lat) && Number.isFinite(r.lon));
+    const out: Row[] = [];
+    for (const r of rows) {
+      const lat = parseFloat(r.lat), lon = parseFloat(r.lon);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+      const country = r.address?.country || (r.display_name || '').split(',').pop()?.trim() || '';
+      // fix-timezone-accuracy: this used to default EVERY Nominatim result to
+      // Asia/Kolkata (+5:30) — the root cause of US/UK/AU births computed in IST.
+      // The zone is now looked up from the coordinates.
+      out.push({
+        name: r.name || (r.display_name || query).split(',')[0].trim(),
+        state: r.address?.state || r.address?.region || r.address?.county,
+        country, lat, lon, ...zoneFields(lat, lon), source: 'osm',
+      });
+    }
+    return out;
   } catch {
     return [];
   }

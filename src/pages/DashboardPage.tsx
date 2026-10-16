@@ -40,7 +40,7 @@ export default function DashboardPage() {
     if (!isFull || !profile?.city || !profile.time) { setStatus('idle'); return; }
     let cancelled = false;
     setStatus('loading');
-    fetchKundali(profile.dob, profile.time, { lat: profile.city.lat, lon: profile.city.lon, tz: profile.city.tz })
+    fetchKundali(profile.dob, profile.time, profile.city)
       .then((k) => { if (!cancelled) { setKundali(k); setStatus('ready'); } })
       .catch(() => { if (!cancelled) setStatus('error'); });
     return () => { cancelled = true; };

@@ -5,6 +5,9 @@
  */
 import { NAKSHATRA_MEANINGS } from '@/lib/vedic/nakshatraMeanings';
 import { glossInline } from '@/lib/vedic/termDefinitions';
+import { birthQuery, type BirthPlaceLike } from '@/lib/timezone/clientBirth';
+import type { BirthTimezone } from '@/lib/timezone/birthTimezone';
+import { buildChartBasis, type ChartBasis } from '@/lib/vedic/chartBasis';
 
 export interface KundaliPlanet { name: string; sign: string; signIndex: number; house: number; longitude: number; retrograde: boolean }
 export interface KundaliData {
@@ -14,6 +17,8 @@ export interface KundaliData {
   rashi: string | null;
   rashi_devanagari: string | null;
   dasha: { mahadasha: string; antardasha: string } | null;
+  /** Zone + offset the server applied for this birth (fix-timezone-accuracy). */
+  birthTimezone?: BirthTimezone;
   /** Full-lifetime Vimshottari timeline (Maha level + nested Antar), from the engine.
    *  Used by DashaDeepDive to compute the deeper levels (Pratyantar/Sookshma/Prana) on demand. */
   dashaTimeline?: Array<{ lord: string; start: string; end: string; antardashas?: Array<{ lord: string; start: string; end: string }> }>;
@@ -24,16 +29,25 @@ export const hasProkeralaKey = (): boolean =>
   !!(import.meta as any)?.env?.VITE_PROKERALA_CLIENT_ID && !!(import.meta as any)?.env?.VITE_PROKERALA_CLIENT_SECRET;
 
 export async function fetchKundali(
-  dob: string, time: string, loc: { lat: number; lon: number; tz: number }
+  dob: string, time: string, loc: BirthPlaceLike & { tz?: number }
 ): Promise<KundaliData> {
-  const [y, m, d] = dob.split('-');
-  const [h, min] = time.split(':');
-  const params = new URLSearchParams({ y, m, d, h, min, lat: String(loc.lat), lon: String(loc.lon), tz: String(loc.tz) });
+  // fix-timezone-accuracy: shared birth params (zone from the birthplace, DST-correct).
+  const params = new URLSearchParams(birthQuery(dob, time, loc));
   const res = await fetch(`/api/kundali?${params.toString()}`);
   if (!res.ok) throw new Error('Kundali service unavailable');
   const data = await res.json();
   if (!data?.lagna?.sign) throw new Error('Incomplete Kundali data');
   return data as KundaliData;
+}
+
+/** 'Birth data used' summary for a /api/kundali result (legacy JSON: lagna.degrees = 0-360). */
+export function kundaliBasis(k: KundaliData): ChartBasis | null {
+  if (!k.birthTimezone) return null;
+  const moon = k.planets.find(p => p.name === 'Moon');
+  return buildChartBasis({
+    birthTimezone: k.birthTimezone, rashi: k.rashi ?? '—', nakshatra: k.nakshatra?.nakshatra ?? '—',
+    pada: k.nakshatra?.pada ?? 0, lagna: k.lagna.sign, moonLongitude: moon?.longitude, lagnaLongitude: k.lagna.degrees,
+  });
 }
 
 // ── Canonical reference layers (Part O Item 1.1) ─────────────────────────────

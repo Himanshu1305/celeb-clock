@@ -13,6 +13,9 @@ import { GradeLegend } from '@/components/vedic/TermTip';
 import { ClassicalRefs } from '@/components/vedic/ClassicalRefs';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
+import { birthQuery } from '@/lib/timezone/clientBirth';
+import { BirthDataUsed } from '@/components/vedic/BirthDataUsed';
+import type { ChartBasis } from '@/lib/vedic/chartBasis';
 
 interface AreaReading { key: string; label: string; grade: 'strong' | 'moderate' | 'mild'; lead: string; reason: string; meaning: string }
 
@@ -23,6 +26,7 @@ export default function LifeReportPage() {
   const location = useLocation();
   const autoRan = useRef(false);
   const [areas, setAreas] = useState<AreaReading[] | null>(null);
+  const [basis, setBasis] = useState<{ place: string; basis: ChartBasis } | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
   const [saveChecked, setSaveChecked] = useState(false);
@@ -31,20 +35,21 @@ export default function LifeReportPage() {
     setLoading(true); setFailed(false); setAreas(null);
     if (saveChecked) save({ dob: d.dob, time: d.time, city: d.city });
     try {
-      const [y, m, day] = d.dob.split('-'); const [h, min] = (d.time || '12:00').split(':');
-      const p = new URLSearchParams({ y, m, d: day, h, min, lat: String(d.city.lat), lon: String(d.city.lon), tz: String(d.city.tz) });
+      // fix-timezone-accuracy: shared birth params (zone from the birthplace, DST-correct).
+      const p = new URLSearchParams(birthQuery(d.dob, d.time, d.city));
       const res = await fetch(`/api/life-report?${p.toString()}`);
       if (!res.ok) throw new Error('unavailable');
       const data = await res.json();
       if (!data?.areas) throw new Error('unavailable');
       setAreas(data.areas as AreaReading[]);
+      setBasis(data.basis ? { place: d.city.name, basis: data.basis } : null);
     } catch { setFailed(true); } finally { setLoading(false); }
   };
 
   const carried = useMemo(() => {
     const sp = new URLSearchParams(location.search);
-    const dob = sp.get('dob') || '', time = sp.get('time') || '', lat = sp.get('lat'), lon = sp.get('lon'), tz = sp.get('tz'), place = sp.get('place') || '';
-    if (dob && time && lat != null && lon != null && tz != null) return { dob, time, city: { name: place, lat: +lat, lon: +lon, tz: +tz } } as BirthDetails;
+    const dob = /^\d{4}-\d{2}-\d{2}$/.test(sp.get('dob') || '') ? sp.get('dob')! : '' /* ISO only — never guess DD/MM vs MM/DD */, time = sp.get('time') || '', lat = sp.get('lat'), lon = sp.get('lon'), tz = sp.get('tz'), place = sp.get('place') || '';
+    if (dob && time && lat != null && lon != null && tz != null) return { dob, time, city: { name: place, lat: +lat, lon: +lon, tz: +tz, ...(sp.get('tzid') ? { timezone: sp.get('tzid')!, manualTimezone: true } : {}) } } as BirthDetails;
     return null;
   }, [location.search]);
   useEffect(() => {
@@ -105,6 +110,7 @@ export default function LifeReportPage() {
 
         {areas && (
           <div data-testid="life-report-result" className="mt-6 space-y-4">
+            {basis && <BirthDataUsed testid="life-birth-data" place={basis.place} basis={basis.basis} />}
             {areas.map(a => (
               <div key={a.key} data-testid={`life-area-${a.key}`} className="rounded-xl border border-border p-5">
                 <div className="flex items-center justify-between">

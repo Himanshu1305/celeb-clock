@@ -205,8 +205,23 @@ const INDIA: CityDef[] = [
   IN('Muzaffarnagar', 'Uttar Pradesh', 29.4727, 77.7085),
 ];
 
+// fix-timezone-accuracy: state/region for world cities where same-name places exist, so the
+// suggestion reads "City, State/Region, Country" (e.g. "Sydney, New South Wales, Australia").
+const WORLD_REGION: Record<string, string> = {
+  'London|United Kingdom': 'England', 'Manchester|United Kingdom': 'England', 'Birmingham|United Kingdom': 'England',
+  'Sydney|Australia': 'New South Wales', 'Melbourne|Australia': 'Victoria', 'Brisbane|Australia': 'Queensland', 'Perth|Australia': 'Western Australia',
+  'New York|United States': 'New York', 'Washington|United States': 'District of Columbia', 'Boston|United States': 'Massachusetts',
+  'Atlanta|United States': 'Georgia', 'Miami|United States': 'Florida', 'Chicago|United States': 'Illinois', 'Houston|United States': 'Texas',
+  'Dallas|United States': 'Texas', 'Denver|United States': 'Colorado', 'Phoenix|United States': 'Arizona', 'Los Angeles|United States': 'California',
+  'San Francisco|United States': 'California', 'Seattle|United States': 'Washington', 'San Jose|United States': 'California',
+  'Toronto|Canada': 'Ontario', 'Vancouver|Canada': 'British Columbia', 'Montreal|Canada': 'Quebec',
+  'Karachi|Pakistan': 'Sindh', 'Lahore|Pakistan': 'Punjab', 'Hyderabad|Pakistan': 'Sindh',
+  'Frankfurt|Germany': 'Hesse', 'Munich|Germany': 'Bavaria',
+};
+// NOTE: `utcOffset` here is informational only; birth offsets are always recomputed for
+// the birth date from lat/lon by src/lib/timezone/birthTimezone.ts.
 const W = (name: string, country: string, lat: number, lon: number, tz: string, utcOffset: number, aliases?: string[]): CityDef => ({
-  name, state: country, country, lat, lon, timezone: tz, utcOffset, aliases,
+  name, state: WORLD_REGION[`${name}|${country}`] ?? country, country, lat, lon, timezone: tz, utcOffset, aliases,
 });
 
 // ── Major world cities (curated) — STANDARD offset + IANA zone ──

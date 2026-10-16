@@ -190,6 +190,7 @@ export default function Index() {
       params.set('time', profile.time);
       params.set('place', profile.city.name);
       params.set('lat', String(profile.city.lat)); params.set('lon', String(profile.city.lon)); params.set('tz', String(profile.city.tz));
+      if (profile.city.manualTimezone && profile.city.timezone) params.set('tzid', profile.city.timezone); // fix-timezone-accuracy
     }
     return `/kundali?${params.toString()}`;
   }, [activeIso, entered, savedDob, profile]);

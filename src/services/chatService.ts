@@ -5,6 +5,7 @@
  * session — nothing is persisted server-side.
  */
 import type { SavedBirthProfile } from '@/services/savedProfile';
+import { resolveForPlace } from '@/lib/timezone/clientBirth';
 
 export interface ChatTurn { role: 'user' | 'astrologer'; text: string }
 
@@ -22,7 +23,10 @@ export interface ChatResponse {
 export function birthFromProfile(p: SavedBirthProfile) {
   const [y, m, d] = p.dob.split('-').map(Number);
   const [h, min] = p.time.split(':').map(Number);
-  return { y, m, d, h, min, lat: p.city.lat, lon: p.city.lon, tz: p.city.tz };
+  // fix-timezone-accuracy: the server recomputes the offset from lat/lon + date with the
+  // shared resolver; `tz` is informational and `tzid` is sent only for a manual zone.
+  const r = resolveForPlace(p.dob, p.time, p.city);
+  return { y, m, d, h, min, lat: p.city.lat, lon: p.city.lon, tz: r.utcOffsetHours, ...(p.city.manualTimezone && p.city.timezone ? { tzid: p.city.timezone } : {}) };
 }
 
 export async function sendChatMessage(

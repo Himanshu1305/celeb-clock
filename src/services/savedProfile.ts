@@ -14,10 +14,20 @@
 const STORAGE_KEY = 'bornclock-birth-profile';
 
 export interface SavedCity {
+  /** Exactly what the user picked, e.g. "Pontiac, Michigan, USA". */
   name: string;
   lat: number;
   lon: number;
+  /**
+   * LEGACY numeric offset (hours). Kept so older saved profiles stay valid, but it is
+   * NOT used for any calculation any more — the offset is always recomputed for the
+   * birth date from lat/lon (or `timezone` when set manually) by the shared resolver.
+   */
   tz: number;
+  /** IANA zone (fix-timezone-accuracy). Derived from lat/lon unless `manualTimezone`. */
+  timezone?: string;
+  /** True when the user chose the zone under "Advanced: set timezone manually". */
+  manualTimezone?: boolean;
 }
 
 /**
@@ -75,6 +85,8 @@ function isValidCity(c: unknown): c is SavedCity {
   if (typeof o.lat !== 'number' || !Number.isFinite(o.lat) || o.lat < -90 || o.lat > 90) return false;
   if (typeof o.lon !== 'number' || !Number.isFinite(o.lon) || o.lon < -180 || o.lon > 180) return false;
   if (typeof o.tz !== 'number' || !Number.isFinite(o.tz) || o.tz < -14 || o.tz > 14) return false;
+  if (o.timezone !== undefined && (typeof o.timezone !== 'string' || o.timezone.length > 64)) return false;
+  if (o.manualTimezone !== undefined && typeof o.manualTimezone !== 'boolean') return false;
   return true;
 }
 

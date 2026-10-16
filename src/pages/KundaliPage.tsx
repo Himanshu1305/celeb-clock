@@ -17,7 +17,8 @@ import { syncHistoryToAccount, isHistorySyncEligible } from '@/services/readingH
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { mergeProfile } from '@/services/savedProfile';
-import { fetchKundali, buildInterpretationBlocks, type KundaliData } from '@/services/kundaliService';
+import { fetchKundali, buildInterpretationBlocks, kundaliBasis, type KundaliData } from '@/services/kundaliService';
+import { BirthDataUsed } from '@/components/vedic/BirthDataUsed';
 import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
 import { WhatsAhead } from '@/components/vedic/WhatsAhead';
 import { PeriodForecast } from '@/components/vedic/PeriodForecast';
@@ -45,6 +46,7 @@ export default function KundaliPage() {
 
   const [data, setData] = useState<KundaliData | null>(null);
   const [readingDob, setReadingDob] = useState('');
+  const [usedPlace, setUsedPlace] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [historyKey, setHistoryKey] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -59,19 +61,22 @@ export default function KundaliPage() {
   // just a name). /kundali?dob=…&time=…&place=…&lat=…&lon=…&tz=…[&name=…]
   const carried = useMemo(() => {
     const sp = new URLSearchParams(location.search);
-    const dob = sp.get('dob') || '';
+    const dob = /^\d{4}-\d{2}-\d{2}$/.test(sp.get('dob') || '') ? sp.get('dob')! : '' /* ISO only — never guess DD/MM vs MM/DD */;
     const time = sp.get('time') || '';
     const lat = sp.get('lat'), lon = sp.get('lon'), tz = sp.get('tz');
+    // fix-timezone-accuracy: a manually-chosen IANA zone travels as ?tzid=…
+    const tzid = sp.get('tzid');
+    const zone = tzid ? { timezone: tzid, manualTimezone: true } : {};
     const place = sp.get('place') || '';
     const name = sp.get('name') || undefined;
     const hasCoords = lat != null && lon != null && tz != null;
     // Full = everything needed to compute straight away (incl. a known time).
     const full = !!dob && !!time && hasCoords
-      ? { dob, time, city: { name: place, lat: +lat!, lon: +lon!, tz: +tz! }, name } as BirthDetails
+      ? { dob, time, city: { name: place, lat: +lat!, lon: +lon!, tz: +tz!, ...zone }, name } as BirthDetails
       : null;
     // Partial = enough to pre-fill the form but not auto-run (e.g. unknown birth time).
     const prefill = dob
-      ? { dob, time: time || undefined, city: hasCoords ? { name: place, lat: +lat!, lon: +lon!, tz: +tz! } : undefined, name }
+      ? { dob, time: time || undefined, city: hasCoords ? { name: place, lat: +lat!, lon: +lon!, tz: +tz!, ...zone } : undefined, name }
       : undefined;
     return { full, prefill };
   }, [location.search]);
@@ -90,7 +95,8 @@ export default function KundaliPage() {
     setLoading(true); setFailed(false); setReading(null); setReadingFailed(false);
     setReadingDob(details.dob);
     setDisplayName(details.name ?? '');
-    const loc = { lat: details.city.lat, lon: details.city.lon, tz: details.city.tz };
+    const loc = details.city;
+    setUsedPlace(details.city.name);
     try {
       const k = await fetchKundali(details.dob, details.time, loc);
       setData(k);
@@ -271,6 +277,10 @@ export default function KundaliPage() {
                 </div>
               </div>
 
+              <div style={{ marginTop: 16 }}>
+                <BirthDataUsed testid="kundali-birth-data" place={usedPlace} basis={kundaliBasis(data)} />
+              </div>
+
               <div className="table-scroll" style={{ marginTop: 16 }}>
                 <table data-testid="planet-table" className="data-table" style={{ width: '100%' }}>
                   <thead><tr><th>Planet</th><th>Sign</th><th>House</th><th>Degrees</th></tr></thead>
@@ -309,7 +319,7 @@ export default function KundaliPage() {
                   Share on WhatsApp
                 </a>
                 <button data-testid="kundali-download-pdf" type="button" className="btn secondary"
-                  onClick={() => printHtmlViaIframe(buildKundaliPdfHtml(data, { dob: readingDob }))}>
+                  onClick={() => printHtmlViaIframe(buildKundaliPdfHtml(data, { dob: readingDob, place: usedPlace, basis: kundaliBasis(data) }))}>
                   Download Kundli (PDF) — free
                 </button>
                 <Link className="btn secondary" to="/birthday-report/gift">Gift a Kundali ({price}) →</Link>

@@ -8,7 +8,7 @@
  * always the user's explicit choice (privacy decision, Part E Phase 0).
  */
 import { useState, useEffect } from 'react';
-import { geocodeCity, type GeoResult } from '@/services/geocoding';
+import { CityPicker } from '@/components/CityPicker';
 import { type SavedCity, sanitizeName, NAME_MAX } from '@/services/savedProfile';
 
 export interface BirthDetails { dob: string; time: string; city: SavedCity; name?: string }
@@ -35,8 +35,6 @@ export function BirthDetailsForm({
   const [name, setName] = useState(initial?.name ?? '');
   const [dob, setDob] = useState(initial?.dob ?? '');
   const [time, setTime] = useState(initial?.time ?? '');
-  const [cityQuery, setCityQuery] = useState(initial?.city?.name ?? '');
-  const [options, setOptions] = useState<GeoResult[]>([]);
   const [city, setCity] = useState<SavedCity | null>(initial?.city ?? null);
 
   // Re-sync when the initial (e.g. a saved profile that loads async) arrives.
@@ -44,7 +42,7 @@ export function BirthDetailsForm({
     if (initial?.dob !== undefined) setDob(initial.dob);
     if (initial?.time !== undefined) setTime(initial.time);
     if (initial?.name !== undefined) setName(initial.name);
-    if (initial?.city) { setCity(initial.city); setCityQuery(initial.city.name); }
+    if (initial?.city) setCity(initial.city);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initial?.dob, initial?.time, initial?.city?.name, initial?.city?.lat, initial?.name]);
 
@@ -52,15 +50,6 @@ export function BirthDetailsForm({
   const validTime = /^\d{2}:\d{2}$/.test(time);
   const canSubmit = validDob && validTime && !!city && !loading;
 
-  const onCity = async (v: string) => {
-    setCityQuery(v); setCity(null);
-    if (v.trim().length >= 3) { try { setOptions(await geocodeCity(v)); } catch { setOptions([]); } }
-    else setOptions([]);
-  };
-  const pickCity = (c: GeoResult) => {
-    setCity({ name: c.name, lat: c.lat, lon: c.lon, tz: c.utcOffset });
-    setCityQuery(c.name); setOptions([]);
-  };
 
   const submit = () => { if (canSubmit && city) onSubmit({ dob, time, city, name: sanitizeName(name) || undefined }); };
 
@@ -89,23 +78,7 @@ export function BirthDetailsForm({
         </div>
         <div className="relative">
           <label className="block text-xs text-muted-foreground mb-1" htmlFor={`${p}-city`}>Birth city</label>
-          <input id={`${p}-city`} data-testid={`${p}-city`} type="text" value={cityQuery}
-                 onChange={e => onCity(e.target.value)} placeholder="e.g. Delhi"
-                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
-          {options.length > 0 && (
-            <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow max-h-48 overflow-y-auto">
-              {options.map((o, i) => (
-                <li key={`${o.name}-${i}`}>
-                  <button type="button" onClick={() => pickCity(o)} className="w-full text-left px-3 py-2 text-sm hover:bg-[#6E5AA6]/10 text-gray-900">
-                    {o.name}{o.state ? `, ${o.state}` : ''}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-          <p className="text-[11px] text-muted-foreground mt-1">
-            City search © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline">OpenStreetMap</a> contributors
-          </p>
+          <CityPicker id={`${p}-city`} testid={`${p}-city`} value={city} onPick={setCity} dob={dob} time={time} placeholder="e.g. Delhi" />
         </div>
       </div>
 

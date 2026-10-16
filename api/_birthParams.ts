@@ -1,3 +1,5 @@
+import { resolveBirthTimezone, type BirthTimezone } from '../src/lib/timezone/birthTimezone.js';
+
 // Part T — shared birth-parameter RANGE validation for the compute endpoints.
 //
 // Malformed input (e.g. month=13, day=45, impossible latitude, or an
@@ -17,4 +19,31 @@ export function birthRangeError(p: {
   if (lat < -90 || lat > 90 || lon < -180 || lon > 180) return 'Invalid location (latitude/longitude out of range)';
   if (tz < -14 || tz > 14) return 'Invalid timezone offset';
   return null;
+}
+
+/**
+ * fix-timezone-accuracy — the ONE server-side place a birth UTC offset is decided.
+ *
+ * The offset is ALWAYS computed by the shared resolveBirthTimezone() from the birth
+ * coordinates + local date/time (or from an explicit, user-chosen IANA zone sent as
+ * `tzid`). A numeric `tz` query parameter from older clients/saved links is NOT
+ * trusted any more (that is how non-Indian births were silently computed in IST);
+ * it is only range-checked for backward-compatible 400s.
+ */
+export function resolveRequestBirthTz(
+  get: (key: string) => string | null | undefined,
+  p: { y: number; m: number; d: number; h: number; min: number; lat: number; lon: number },
+  suffix = '',
+): { tz: number; birthTimezone: BirthTimezone } | { error: string } {
+  const tzid = get('tzid' + suffix);
+  if (![p.y, p.m, p.d, p.h, p.min].every(Number.isFinite)) return { error: 'Invalid birth details (non-numeric date/time)' };
+  try {
+    const birthTimezone = resolveBirthTimezone({
+      lat: p.lat, lon: p.lon, year: p.y, month: p.m, day: p.d, hour: p.h, minute: p.min,
+      timezone: tzid ? String(tzid) : null,
+    });
+    return { tz: birthTimezone.utcOffsetHours, birthTimezone };
+  } catch (e) {
+    return { error: tzid ? 'Invalid time zone' : 'Invalid location (latitude/longitude out of range)' };
+  }
 }

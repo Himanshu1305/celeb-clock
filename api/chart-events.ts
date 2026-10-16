@@ -11,6 +11,7 @@
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
 import { categoryTiming } from '../src/lib/vedic/yogaTiming.js';
 import { detectChartEvents } from '../src/lib/vedic/notificationTriggers.js';
+import { resolveRequestBirthTz } from './_birthParams.js';
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
@@ -24,13 +25,17 @@ async function handler(request) {
   const y = num(searchParams, 'y'), m = num(searchParams, 'm'), d = num(searchParams, 'd');
   if (![y, m, d].every(Number.isFinite)) return json({ error: 'Missing birth date' }, 400);
 
+  const h = num(searchParams, 'h') ?? 12, min = num(searchParams, 'min') ?? 0;
+  const lat = num(searchParams, 'lat') ?? 28.6139, lon = num(searchParams, 'lon') ?? 77.209;
+  // fix-timezone-accuracy: offset from the birthplace + date via the shared resolver.
+  const btz = resolveRequestBirthTz(k => searchParams.get(k), { y, m, d, h, min, lat, lon });
+  if ('error' in btz) return json({ error: btz.error }, 400);
+
   try {
     const now = new Date();
     const chart: any = await calculateBirthChart({
-      year: y, month: m, day: d,
-      hour: num(searchParams, 'h') ?? 12, minute: num(searchParams, 'min') ?? 0,
-      latitude: num(searchParams, 'lat') ?? 28.6139, longitude: num(searchParams, 'lon') ?? 77.209,
-      timezoneOffset: num(searchParams, 'tz') ?? 5.5,
+      year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon,
+      timezoneOffset: btz.tz,
     }, { refDate: now });
 
     // Upcoming favourable windows: the soonest still-future window per life category.

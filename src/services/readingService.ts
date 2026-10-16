@@ -5,6 +5,7 @@
  * chart `facts`, plus an AI `reading` (null when the AI is unavailable — the UI
  * then falls back to the facts rather than showing a blank or error).
  */
+import { birthQuery, type BirthPlaceLike } from '@/lib/timezone/clientBirth';
 
 export interface ReadingSections {
   snapshot: string;
@@ -64,11 +65,10 @@ export interface ReadingPayload {
 }
 
 export async function fetchReading(
-  dob: string, time: string, loc: { lat: number; lon: number; tz: number }
+  dob: string, time: string, loc: BirthPlaceLike & { tz?: number }
 ): Promise<ReadingPayload> {
-  const [y, m, d] = dob.split('-');
-  const [h, min] = time.split(':');
-  const params = new URLSearchParams({ y, m, d, h, min, lat: String(loc.lat), lon: String(loc.lon), tz: String(loc.tz) });
+  // fix-timezone-accuracy: shared birth params (zone from the birthplace, DST-correct).
+  const params = new URLSearchParams(birthQuery(dob, time, loc));
   const res = await fetch(`/api/vedic-reading?${params.toString()}`);
   if (!res.ok) throw new Error('Reading service unavailable');
   const data = await res.json();
