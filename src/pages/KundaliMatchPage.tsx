@@ -8,7 +8,9 @@ import { TermTip } from '@/components/vedic/TermTip';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
 import type { PoruthamResult } from '@/lib/vedic/porutham';
-import { geocodeCity, type GeoResult } from '@/services/geocoding';
+import { CityPicker } from '@/components/CityPicker';
+import { birthQuery } from '@/lib/timezone/clientBirth';
+import { METHOD_LINE } from '@/lib/timezone/birthTimezone';
 import { type SavedCity, sanitizeName, NAME_MAX } from '@/services/savedProfile';
 
 /** Map each koota's data key to its glossary (TermTip) id. */
@@ -35,50 +37,15 @@ interface MatchResponse {
     overlaps: Array<{ range: string; aPlanet: string; bPlanet: string }>;
     note: string;
   };
-  people: { a: { lagna: string; rashi: string; nakshatra: string; pada: number }; b: { lagna: string; rashi: string; nakshatra: string; pada: number } };
+  people: { a: MatchPerson; b: MatchPerson };
+  method?: string;
 }
-
-function partsFor(dob: string, time: string, coords: { lat: number; lon: number; tz: number }, suffix: string): Record<string, string> {
-  const [y, m, d] = dob.split('-');
-  const [h, min] = (time || '12:00').split(':');
-  return {
-    ['y' + suffix]: y, ['m' + suffix]: m, ['d' + suffix]: d, ['h' + suffix]: h, ['min' + suffix]: min,
-    ['lat' + suffix]: String(coords.lat), ['lon' + suffix]: String(coords.lon), ['tz' + suffix]: String(coords.tz),
-  };
-}
-
-/** Inline birth-city picker (Part 1) — reuses the same geocoding service the
- * Kundali form uses, so both people's real birthplaces are collected (previously
- * Person B was silently hardcoded to Delhi, producing wrong Lagna/house results). */
-function CityPicker({ testid, value, onPick }: { testid: string; value: SavedCity | null; onPick: (c: SavedCity | null) => void }) {
-  const [query, setQuery] = useState(value?.name ?? '');
-  const [options, setOptions] = useState<GeoResult[]>([]);
-  const onChange = async (v: string) => {
-    setQuery(v); onPick(null);
-    if (v.trim().length >= 3) { try { setOptions(await geocodeCity(v)); } catch { setOptions([]); } }
-    else setOptions([]);
-  };
-  return (
-    <div className="relative">
-      <input data-testid={testid} type="text" value={query} onChange={e => onChange(e.target.value)} placeholder="Birth city (e.g. Delhi)"
-             className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" aria-label="Birth city" />
-      {options.length > 0 && (
-        <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow max-h-48 overflow-y-auto">
-          {options.map((o, i) => (
-            <li key={`${o.name}-${i}`}>
-              <button type="button" onClick={() => { onPick({ name: o.name, lat: o.lat, lon: o.lon, tz: o.utcOffset }); setQuery(o.name); setOptions([]); }}
-                      className="w-full text-left px-3 py-2 text-sm hover:bg-[#6E5AA6]/10 text-gray-900">
-                {o.name}{o.state ? `, ${o.state}` : ''}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-      <p className="text-[11px] text-muted-foreground mt-1">
-        City search © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline">OpenStreetMap</a> contributors
-      </p>
-    </div>
-  );
+/** Per-person transparency block returned by /api/kundali-match (fix-timezone-accuracy). */
+interface MatchPerson {
+  lagna: string; rashi: string; nakshatra: string; pada: number;
+  lagnaDegree?: number; moonDegreeInSign?: number | null;
+  timezone?: string; utcOffsetLabel?: string; timezoneSource?: string;
+  notes?: string[];
 }
 
 export default function KundaliMatchPage() {
@@ -105,7 +72,9 @@ export default function KundaliMatchPage() {
   // otherwise from the form. Person B is always entered fresh — now WITH birthplace.
   const effDobA = usingSaved ? profile!.dob : dobA;
   const effTimeA = usingSaved ? profile!.time : timeA;
-  const coordsA = usingSaved ? { lat: profile!.city.lat, lon: profile!.city.lon, tz: profile!.city.tz } : cityA;
+  const coordsA: SavedCity | null = usingSaved ? profile!.city : cityA;
+  const placeA = coordsA?.name ?? '';
+  const placeB = cityB?.name ?? '';
 
   // Part P: OPTIONAL display names. Person A defaults to the saved profile's name
   // when reusing it; Person B is always entered fresh. Display/identification only —
@@ -126,8 +95,8 @@ export default function KundaliMatchPage() {
     setLoading(true); setFailed(false);
     try {
       const params = new URLSearchParams({
-        ...partsFor(effDobA, effTimeA, coordsA, 'A'),
-        ...partsFor(dobB, timeB, cityB, 'B'),
+        ...birthQuery(effDobA, effTimeA, coordsA, 'A'),
+        ...birthQuery(dobB, timeB, cityB, 'B'),
       });
       const res = await fetch(`/api/kundali-match?${params.toString()}`);
       if (!res.ok) throw new Error('unavailable');
@@ -198,7 +167,7 @@ export default function KundaliMatchPage() {
               <input data-testid="kmatch-time-a" type="time" value={timeA}
                      onChange={e => { setTimeA(e.target.value); setResult(null); }}
                      className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" aria-label="Person A birth time" />
-              <CityPicker testid="kmatch-city-a" value={cityA} onPick={c => { setCityA(c); setResult(null); }} />
+              <CityPicker testid="kmatch-city-a" value={cityA} dob={dobA} time={timeA} ariaLabel="Person A birth city" onPick={c => { setCityA(c); setResult(null); }} />
             </div>
           )}
 
@@ -215,7 +184,7 @@ export default function KundaliMatchPage() {
             <input data-testid="kmatch-time-b" type="time" value={timeB}
                    onChange={e => { setTimeB(e.target.value); setResult(null); }}
                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" aria-label="Person B birth time" />
-            <CityPicker testid="kmatch-city-b" value={cityB} onPick={c => { setCityB(c); setResult(null); }} />
+            <CityPicker testid="kmatch-city-b" value={cityB} dob={dobB} time={timeB} ariaLabel="Person B birth city" onPick={c => { setCityB(c); setResult(null); }} />
           </div>
         </div>
 
@@ -248,6 +217,23 @@ export default function KundaliMatchPage() {
               </div>
             </div>
 
+            {/* Birth data actually used (fix-timezone-accuracy): place, zone + offset, Moon, Lagna. */}
+            <div data-testid="kmatch-birth-data" className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {([['a', dispA, placeA, result.people.a], ['b', dispB, placeB, result.people.b]] as const).map(([k, disp, place, pp]) => (
+                <div key={k} data-testid={`kmatch-person-${k}`} className="rounded-xl border border-border p-3 text-sm space-y-1">
+                  <div className="font-semibold text-foreground">{disp}</div>
+                  <div><span className="text-muted-foreground">Place used:</span> <span data-testid={`kmatch-place-${k}`}>{place}</span></div>
+                  {pp.timezone && <div><span className="text-muted-foreground">Time zone:</span> <span data-testid={`kmatch-tz-${k}`}>{pp.timezone} · {pp.utcOffsetLabel}</span>{pp.timezoneSource === 'manual' ? ' (set manually)' : ''}</div>}
+                  <div data-testid={`kmatch-moon-${k}`}><span className="text-muted-foreground">Moon:</span> {pp.rashi}{pp.moonDegreeInSign != null ? ` ${pp.moonDegreeInSign.toFixed(2)}°` : ''} · {pp.nakshatra} pada {pp.pada}</div>
+                  <div data-testid={`kmatch-lagna-${k}`}><span className="text-muted-foreground">Lagna:</span> {pp.lagna}{pp.lagnaDegree != null ? ` ${pp.lagnaDegree.toFixed(2)}°` : ''}</div>
+                  {(pp.notes || []).map((n, i) => (
+                    <p key={i} data-testid={`kmatch-note-${k}`} className="rounded-lg border border-amber-200 bg-amber-50 p-2 text-xs text-amber-900">{n}</p>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <p data-testid="kmatch-method" className="text-xs text-muted-foreground">{result.method || METHOD_LINE}</p>
+
             {/* Overall reading — narrative synthesis (Part M). Short synthesis first,
                 details below — same structure as the Kundali reading. Degrades
                 gracefully: if synthesis is absent, the factual breakdown still shows. */}
@@ -273,6 +259,19 @@ export default function KundaliMatchPage() {
             )}
 
             {/* Full 8-Koota breakdown (Part 2.1) with Nadi/Bhakoot emphasis (Part 2.3) */}
+            <table data-testid="kmatch-koota-table" className="w-full text-sm border border-border rounded-lg overflow-hidden">
+              <thead><tr className="text-left text-muted-foreground"><th className="px-3 py-2 font-medium">Koota</th><th className="px-3 py-2 font-medium text-right">Points</th></tr></thead>
+              <tbody>
+                {result.gunaMilan.kootas.map(k => (
+                  <tr key={k.key} data-testid={`kmatch-koota-row-${k.key}`} className="border-t border-border">
+                    <td className="px-3 py-1.5 text-foreground">{k.label}</td>
+                    <td className="px-3 py-1.5 text-right font-semibold text-foreground">{k.score} / {k.max}</td>
+                  </tr>
+                ))}
+                <tr className="border-t border-border"><td className="px-3 py-1.5 font-semibold text-foreground">Total</td><td data-testid="kmatch-koota-total" className="px-3 py-1.5 text-right font-bold text-[#6E5AA6]">{result.gunaMilan.total} / 36</td></tr>
+              </tbody>
+            </table>
+
             <div data-testid="kmatch-kootas" className="space-y-2">
               <p className="text-xs text-muted-foreground">
                 The eight parts of the <TermTip id="ashtakoota">Ashtakoota</TermTip> score — tap any name to see what it measures.

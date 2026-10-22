@@ -17,9 +17,19 @@ interface KundaliPdfData {
   };
 }
 
+import type { ChartBasis } from '../vedic/chartBasis';
+
 const esc = (s: unknown) => String(s ?? '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c] as string));
 
-export function buildKundaliPdfHtml(data: KundaliPdfData, meta?: { name?: string; dob?: string; place?: string }): string {
+export function buildKundaliPdfHtml(data: KundaliPdfData, meta?: { name?: string; dob?: string; place?: string; basis?: ChartBasis | null }): string {
+  // fix-timezone-accuracy: the birth data actually used (zone/offset, Moon, Lagna, notes).
+  const b = meta?.basis;
+  const basisHtml = b ? `<div class="section"><h2>Birth data used</h2><div class="summary">
+      <div><span>Place</span>${esc(meta?.place || '—')}</div>
+      <div><span>Time zone</span>${esc(b.timezone)} · ${esc(b.utcOffsetLabel)}</div>
+      <div><span>Moon</span>${esc(b.rashi)}${b.moonDegreeInSign != null ? ` ${b.moonDegreeInSign.toFixed(2)}°` : ''} · ${esc(b.nakshatra)} pada ${esc(b.pada)}</div>
+      <div><span>Lagna</span>${esc(b.lagna)}${b.lagnaDegree != null ? ` ${b.lagnaDegree.toFixed(2)}°` : ''}</div>
+    </div>${b.notes.map(n => `<p style="font-size:11px;color:#92400e;">${esc(n)}</p>`).join('')}<p class="muted">${esc(b.method)}</p></div>` : '';
   const planetRows = (data.planets || []).map(p =>
     `<tr><td>${esc(p.name)}${p.retrograde ? ' (R)' : ''}</td><td>${esc(p.sign)}</td><td>${esc(p.house)}</td><td>${(p.longitude % 30).toFixed(1)}°</td></tr>`
   ).join('');
@@ -57,6 +67,8 @@ export function buildKundaliPdfHtml(data: KundaliPdfData, meta?: { name?: string
       ${data.dasha ? `<div><span>Current Dasha</span>${esc(data.dasha.mahadasha || '—')} / ${esc(data.dasha.antardasha || '—')}</div>` : ''}
     </div>
   </div>
+
+  ${basisHtml}
 
   <div class="section">
     <h2>Planetary positions</h2>

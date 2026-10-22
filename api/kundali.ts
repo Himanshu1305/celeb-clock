@@ -1,5 +1,5 @@
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
-import { birthRangeError } from './_birthParams.js';
+import { birthRangeError, resolveRequestBirthTz } from './_birthParams.js';
 import { toKundaliLegacy } from '../src/lib/vedic/legacyAdapters.js';
 
 async function getProKeralaToken(env) {
@@ -51,10 +51,14 @@ function findCurrentDasha(dashaPeriods, refDate) {
   };
 }
 
-function buildCacheKey(y, m, d, h, min, lat, lon, tz) {
+// fix-timezone-accuracy: keys are versioned ('tz2') AND carry the resolved IANA zone, so
+// no row written before the timezone fix (some were computed in IST for foreign births)
+// can ever be served again — old rows are bypassed, never edited or deleted.
+export const CHART_CACHE_VERSION = 'tz2';
+function buildCacheKey(y, m, d, h, min, lat, lon, tz, tzid = '') {
   const rlat = Number(lat).toFixed(4);
   const rlon = Number(lon).toFixed(4);
-  return [y, m, d, h, min, rlat, rlon, tz].join('-');
+  return [CHART_CACHE_VERSION, y, m, d, h, min, rlat, rlon, tz, tzid].join('-');
 }
 
 async function getSupabase(env) {
@@ -212,15 +216,19 @@ async function handler(request, env) {
   const n = (k, def) => { const v = searchParams.get(k); return (v===null||v==='') ? def : Number(v); };
   const y=n('y'), m=n('m'), d=n('d');
   if (![y,m,d].every(v=>Number.isFinite(v))) return json({ error:'Missing y/m/d' }, 400);
-  const h=n('h',12), min=n('min',0), lat=n('lat',28.6139), lon=n('lon',77.2090), tz=n('tz',5.5);
+  const h=n('h',12), min=n('min',0), lat=n('lat',28.6139), lon=n('lon',77.2090), tzLegacy=n('tz',5.5);
   // Part T: reject out-of-range input up front with a clean 400 (was falling through to
   // the ProKerala fallback and returning a 502, wasting a ProKerala call on garbage).
-  const rangeErr = birthRangeError({ m, d, h, min, lat, lon, tz });
+  const rangeErr = birthRangeError({ m, d, h, min, lat, lon, tz: tzLegacy });
   if (rangeErr) return json({ error: rangeErr }, 400);
+  // fix-timezone-accuracy: the offset comes from the birthplace + date (shared resolver).
+  const btz = resolveRequestBirthTz(k => searchParams.get(k), { y, m, d, h, min, lat, lon });
+  if ('error' in btz) return json({ error: btz.error }, 400);
+  const tz = btz.tz, birthTimezone = btz.birthTimezone;
 
   try {
     const sb = await getSupabase(env);
-    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz);
+    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz, birthTimezone.timezone);
 
     const cached = await getCachedChart(sb, cacheKey);
     // A cached entry is only valid if it carries the fields every current consumer
@@ -231,7 +239,7 @@ async function handler(request, env) {
     // (upsert on cache_key) — no real user data is deleted, it is refreshed in place.
     const cacheIsComplete = cached && cached.doshas && Array.isArray(cached.dashaTimeline);
     if (cacheIsComplete) {
-      return json({ ...cached, _cache: 'hit' });
+      return json({ ...cached, birthTimezone, _cache: 'hit' });
     }
 
     const result = await computeChart(env, y, m, d, h, min, lat, lon, tz);
@@ -239,7 +247,7 @@ async function handler(request, env) {
 
     await setCachedChart(sb, cacheKey, result.chart, result.source);
 
-    return json({ ...result.chart, _cache: cached ? 'refreshed' : 'miss' });
+    return json({ ...result.chart, birthTimezone, _cache: cached ? 'refreshed' : 'miss' });
   } catch(e) { return json({ error:'calc-failed', detail:String(e.message||e) }, 500); }
 }
 export const GET = handler;

@@ -15,6 +15,9 @@ import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
 import { ClassicalRefs } from '@/components/vedic/ClassicalRefs';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
+import { birthQuery } from '@/lib/timezone/clientBirth';
+import { BirthDataUsed } from '@/components/vedic/BirthDataUsed';
+import type { ChartBasis } from '@/lib/vedic/chartBasis';
 
 interface Report {
   tenthHouse: { sign: string; lord: string; analysis: string };
@@ -33,6 +36,7 @@ export default function CareerReportPage() {
   const autoRan = useRef(false);
   const [report, setReport] = useState<Report | null>(null);
   const [fields, setFields] = useState<FieldsResult | null>(null);
+  const [basis, setBasis] = useState<{ place: string; basis: ChartBasis } | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
   const [saveChecked, setSaveChecked] = useState(false);
@@ -41,13 +45,14 @@ export default function CareerReportPage() {
     setLoading(true); setFailed(false); setReport(null); setFields(null);
     if (saveChecked) save({ dob: d.dob, time: d.time, city: d.city });
     try {
-      const [y, m, day] = d.dob.split('-'); const [h, min] = (d.time || '12:00').split(':');
-      const p = new URLSearchParams({ y, m, d: day, h, min, lat: String(d.city.lat), lon: String(d.city.lon), tz: String(d.city.tz) });
+      // fix-timezone-accuracy: shared birth params (zone from the birthplace, DST-correct).
+      const p = new URLSearchParams(birthQuery(d.dob, d.time, d.city));
       const res = await fetch(`/api/career-report?${p.toString()}`);
       if (!res.ok) throw new Error('unavailable');
       const data = await res.json();
       if (!data?.report) throw new Error('unavailable');
       setReport(data.report as Report);
+      setBasis(data.basis ? { place: d.city.name, basis: data.basis } : null);
       if (data.fields) setFields(data.fields as FieldsResult);
     } catch { setFailed(true); } finally { setLoading(false); }
   };
@@ -56,8 +61,8 @@ export default function CareerReportPage() {
   // Vedic hub/kundali pass; auto-generate with zero re-entry. Fresh params beat the saved profile.
   const carried = useMemo(() => {
     const sp = new URLSearchParams(location.search);
-    const dob = sp.get('dob') || '', time = sp.get('time') || '', lat = sp.get('lat'), lon = sp.get('lon'), tz = sp.get('tz'), place = sp.get('place') || '';
-    if (dob && time && lat != null && lon != null && tz != null) return { dob, time, city: { name: place, lat: +lat, lon: +lon, tz: +tz } } as BirthDetails;
+    const dob = /^\d{4}-\d{2}-\d{2}$/.test(sp.get('dob') || '') ? sp.get('dob')! : '' /* ISO only — never guess DD/MM vs MM/DD */, time = sp.get('time') || '', lat = sp.get('lat'), lon = sp.get('lon'), tz = sp.get('tz'), place = sp.get('place') || '';
+    if (dob && time && lat != null && lon != null && tz != null) return { dob, time, city: { name: place, lat: +lat, lon: +lon, tz: +tz, ...(sp.get('tzid') ? { timezone: sp.get('tzid')!, manualTimezone: true } : {}) } } as BirthDetails;
     return null;
   }, [location.search]);
   useEffect(() => {
@@ -122,6 +127,7 @@ export default function CareerReportPage() {
 
           {report && (
             <div data-testid="career-result" className="mt-6 space-y-4" style={{ marginTop: 20 }}>
+              {basis && <BirthDataUsed testid="career-birth-data" place={basis.place} basis={basis.basis} />}
               <div data-testid="career-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
                 <div className="font-semibold text-foreground mb-1">How this report was built (from your chart)</div>
                 <p className="text-sm text-foreground">{report.methodology}</p>

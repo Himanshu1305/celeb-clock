@@ -21,6 +21,7 @@ import { verifyTimingClaims, verifyYogaClaims } from '../src/lib/vedic/readingSp
 import { limitReachedMessage } from '../src/lib/vedic/rateLimit.js';
 import { hashClientId, peekLimit, recordQuestionServer } from '../src/lib/vedic/serverRateLimit.js';
 import { verifyAdminRequest } from './_adminAuth.js';
+import { resolveRequestBirthTz } from './_birthParams.js';
 
 const GEMINI_MODEL = 'gemini-flash-latest';
 const MAX_MESSAGE = 1000;
@@ -207,10 +208,18 @@ async function handler(request) {
     // 4) Ground in the computed chart.
     let facts, gemstone;
     try {
+      const bp = {
+        y: Number(birth.y), m: Number(birth.m), d: Number(birth.d),
+        h: Number(birth.h ?? 12), min: Number(birth.min ?? 0),
+        lat: Number(birth.lat ?? 28.6139), lon: Number(birth.lon ?? 77.209),
+      };
+      // fix-timezone-accuracy: offset from the birthplace + date via the shared resolver
+      // (the client's numeric `tz` is no longer trusted; `tzid` = optional manual zone).
+      const btz = resolveRequestBirthTz(k => (k === 'tzid' ? birth.tzid : null), bp);
+      if ('error' in btz) return json({ error: 'bad-birth', reply: btz.error }, 400);
       const chart = await calculateBirthChart({
-        year: Number(birth.y), month: Number(birth.m), day: Number(birth.d),
-        hour: Number(birth.h ?? 12), minute: Number(birth.min ?? 0),
-        latitude: Number(birth.lat ?? 28.6139), longitude: Number(birth.lon ?? 77.209), timezoneOffset: Number(birth.tz ?? 5.5),
+        year: bp.y, month: bp.m, day: bp.d, hour: bp.h, minute: bp.min,
+        latitude: bp.lat, longitude: bp.lon, timezoneOffset: btz.tz,
       }, { includeShadbala: true });
       facts = extractReadingFacts(chart);
       gemstone = gemstoneChatContext(chart); // Item 3: Lagna-based gemstone context for the chat

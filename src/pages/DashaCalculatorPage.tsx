@@ -67,11 +67,7 @@ export default function DashaCalculatorPage() {
     setResult(null);
     if (saveChecked) save({ dob: d.dob, time: d.time, city: d.city });
     try {
-      const k = await fetchKundali(d.dob, d.time, {
-        lat: d.city.lat,
-        lon: d.city.lon,
-        tz: d.city.tz,
-      });
+      const k = await fetchKundali(d.dob, d.time, d.city);
       setResult(k);
     } catch {
       setFailed(true);

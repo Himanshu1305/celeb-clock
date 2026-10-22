@@ -15,6 +15,7 @@
 import type { SavedBirthProfile } from './savedProfile';
 import { isFullVedicProfile } from './savedProfile';
 import { filterDueEvents, type ChartEvent } from '@/lib/vedic/notificationTriggers';
+import { birthQuery } from '@/lib/timezone/clientBirth';
 
 const SHOWN_KEY = 'bornclock-chart-notif-shown';
 
@@ -34,10 +35,8 @@ export function markNotificationsShown(keys: string[], now: Date = new Date()): 
 }
 
 async function fetchEvents(profile: SavedBirthProfile): Promise<ChartEvent[]> {
-  const [y, m, d] = profile.dob.split('-');
-  const [h, min] = (profile.time || '12:00').split(':');
-  const c = profile.city!;
-  const params = new URLSearchParams({ y, m, d, h, min, lat: String(c.lat), lon: String(c.lon), tz: String(c.tz) });
+  // fix-timezone-accuracy: shared birth params (zone from the birthplace, DST-correct).
+  const params = new URLSearchParams(birthQuery(profile.dob, profile.time, profile.city!));
   const res = await fetch(`/api/chart-events?${params.toString()}`);
   if (!res.ok) return [];
   const data = await res.json().catch(() => ({}));

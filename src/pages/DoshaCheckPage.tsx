@@ -17,6 +17,7 @@ import {
   doshaInputFromKundali, computePitraDosha, computeMoolDosha,
   computeGrahanDosha, computeNadiInfo, type DoshaGrade,
 } from '@/lib/vedic/moreDoshas';
+import { birthQuery } from '@/lib/timezone/clientBirth';
 
 export type DoshaKind = 'pitra' | 'mool' | 'grahan' | 'nadi';
 
@@ -108,8 +109,8 @@ export default function DoshaCheckPage({ kind }: { kind: DoshaKind }) {
     setLoading(true); setFailed(false); setComputed(null);
     if (saveChecked) save({ dob: d.dob, time: d.time, city: d.city });
     try {
-      const [y, m, day] = d.dob.split('-'); const [h, min] = (d.time || '12:00').split(':');
-      const p = new URLSearchParams({ y, m, d: day, h, min, lat: String(d.city.lat), lon: String(d.city.lon), tz: String(d.city.tz) });
+      // fix-timezone-accuracy: shared birth params (zone from the birthplace, DST-correct).
+      const p = new URLSearchParams(birthQuery(d.dob, d.time, d.city));
       const res = await fetch(`/api/kundali?${p.toString()}`);
       if (!res.ok) throw new Error('unavailable');
       const data = await res.json();

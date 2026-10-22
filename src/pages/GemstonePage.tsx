@@ -11,6 +11,7 @@ import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { Link } from 'react-router-dom';
 import { WEARING_RITUAL, SIZING_RULE } from '@/lib/vedic/gemstones';
 import { TrustStrip } from '@/components/paj/TrustStrip';
+import { birthQuery } from '@/lib/timezone/clientBirth';
 
 interface Sugg { planet: string; gem: string; hindi: string; role: string; reason: string; trialCaution: boolean; dashaActive: boolean }
 interface Avoid { planet: string; gem: string; reason: string }
@@ -45,8 +46,8 @@ export default function GemstonePage() {
     setLoading(true); setFailed(false); setReport(null);
     if (saveChecked) save({ dob: d.dob, time: d.time, city: d.city });
     try {
-      const [y, m, day] = d.dob.split('-'); const [h, min] = (d.time || '12:00').split(':');
-      const p = new URLSearchParams({ y, m, d: day, h, min, lat: String(d.city.lat), lon: String(d.city.lon), tz: String(d.city.tz) });
+      // fix-timezone-accuracy: shared birth params (zone from the birthplace, DST-correct).
+      const p = new URLSearchParams(birthQuery(d.dob, d.time, d.city));
       const res = await fetch(`/api/gemstones?${p.toString()}`);
       if (!res.ok) throw new Error('unavailable');
       const data = await res.json();

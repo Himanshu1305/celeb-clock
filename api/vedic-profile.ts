@@ -1,5 +1,6 @@
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
 import { toVedicProfileLegacy } from '../src/lib/vedic/legacyAdapters.js';
+import { resolveRequestBirthTz } from './_birthParams.js';
 
 async function getProKeralaToken(env) {
   const id = (env && env.VITE_PROKERALA_CLIENT_ID) || process.env.VITE_PROKERALA_CLIENT_ID;
@@ -50,10 +51,12 @@ function findCurrentDasha(dashaPeriods, refDate) {
   };
 }
 
-function buildCacheKey(y, m, d, h, min, lat, lon, tz, hasBirthTime) {
+// fix-timezone-accuracy: 'vp-tz2' + the resolved IANA zone — pre-fix rows (possibly
+// IST-computed for foreign births) are bypassed, never edited or deleted.
+function buildCacheKey(y, m, d, h, min, lat, lon, tz, hasBirthTime, tzid = '') {
   const rlat = Number(lat).toFixed(4);
   const rlon = Number(lon).toFixed(4);
-  return ['vp', y, m, d, hasBirthTime ? h : 'x', hasBirthTime ? min : 'x', rlat, rlon, tz].join('-');
+  return ['vp-tz2', y, m, d, hasBirthTime ? h : 'x', hasBirthTime ? min : 'x', rlat, rlon, tz, tzid].join('-');
 }
 
 async function getSupabase(env) {
@@ -176,15 +179,19 @@ async function handler(request, env) {
   const y=n('y'), m=n('m'), d=n('d');
   if (![y,m,d].every(v=>Number.isFinite(v))) return json({ error:'Missing y/m/d' }, 400);
   const hasBirthTime = searchParams.has('h') && searchParams.get('h') !== '';
-  const h=n('h',12), min=n('min',0), lat=n('lat',28.6139), lon=n('lon',77.2090), tz=n('tz',5.5);
+  const h=n('h',12), min=n('min',0), lat=n('lat',28.6139), lon=n('lon',77.2090);
+  // fix-timezone-accuracy: offset from the birthplace + date (date-only → local noon).
+  const btz = resolveRequestBirthTz(k => searchParams.get(k), { y, m, d, h: hasBirthTime ? h : 12, min: hasBirthTime ? min : 0, lat, lon });
+  if ('error' in btz) return json({ error: btz.error }, 400);
+  const tz = btz.tz, birthTimezone = btz.birthTimezone;
 
   try {
     const sb = await getSupabase(env);
-    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz, hasBirthTime);
+    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz, hasBirthTime, birthTimezone.timezone);
 
     const cached = await getCachedChart(sb, cacheKey);
     if (cached) {
-      return json({ ...cached, _cache: 'hit' });
+      return json({ ...cached, birthTimezone, _cache: 'hit' });
     }
 
     const result = await computeProfile(env, y, m, d, h, min, lat, lon, tz, hasBirthTime);
@@ -192,7 +199,7 @@ async function handler(request, env) {
 
     await setCachedChart(sb, cacheKey, result.chart, result.source);
 
-    return json({ ...result.chart, _cache: 'miss' });
+    return json({ ...result.chart, birthTimezone, _cache: 'miss' });
   } catch(e) { return json({ error:'calc-failed', detail:String(e.message||e) }, 500); }
 }
 export const GET = handler;

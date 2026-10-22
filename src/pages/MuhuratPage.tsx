@@ -12,6 +12,7 @@ import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
 import { MUHURAT_OCCASIONS, type MuhuratPurpose } from '@/lib/vedic/panchang';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
+import { formatUtcOffset } from '@/lib/timezone/birthTimezone';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 
 interface Day { date: string; weekday: string; nakshatra: string; tithiName: string; paksha: string; yoga: string; rahuKalam: { start: string; end: string }; score: number; reasons: string[]; auspicious: boolean }
@@ -36,13 +37,14 @@ export default function MuhuratPage() {
     if (v.trim().length >= 3) { try { setOptions(await geocodeCity(v)); } catch { setOptions([]); } }
     else setOptions([]);
   };
-  const pickCity = (c: GeoResult) => { setCity(c); setCityQuery(c.name); setOptions([]); };
+  const pickCity = (c: GeoResult) => { setCity(c); setCityQuery(c.label); setOptions([]); };
 
   const find = async () => {
     if (!city) return;
     setLoading(true); setFailed(false); setResult(null);
     try {
-      const params = new URLSearchParams({ purpose, days: String(days), tz: String(city.utcOffset) });
+      // fix-timezone-accuracy: send the place; the server applies the DST-correct offset for the start date.
+      const params = new URLSearchParams({ purpose, days: String(days), tz: String(city.utcOffset), lat: String(city.lat), lon: String(city.lon), tzv: '2' });
       if (from && /^\d{4}-\d{2}-\d{2}$/.test(from)) params.set('from', from);
       const res = await fetch(`/api/muhurat?${params.toString()}`);
       if (!res.ok) throw new Error('unavailable');
@@ -103,12 +105,12 @@ export default function MuhuratPage() {
                 {options.map((o, i) => (
                   <button key={i} type="button" data-testid="muhurat-city-option" onClick={() => pickCity(o)}
                           className="w-full text-left px-3 py-2 text-sm hover:bg-[#6E5AA6]/10 text-gray-900">
-                    {o.name}
+                    {o.label}
                   </button>
                 ))}
               </div>
             )}
-            {city && <p className="mt-1 text-xs text-muted-foreground">Using {city.name} (UTC{city.utcOffset >= 0 ? '+' : ''}{city.utcOffset}) for the day’s Panchang.</p>}
+            {city && <p className="mt-1 text-xs text-muted-foreground">Using {city.label} ({city.timezone}, {formatUtcOffset(city.utcOffset)} today) for the day’s Panchang.</p>}
             <p className="text-[11px] text-muted-foreground mt-1">
               City search © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline">OpenStreetMap</a> contributors
             </p>

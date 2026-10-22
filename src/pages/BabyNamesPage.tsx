@@ -6,6 +6,9 @@ import { NAKSHATRA_AKSHARAS, NAKSHATRA_LIST } from '@/data/nakshatraAksharas';
 import { namesFor, type Gender } from '@/data/babyNamesByAkshara';
 import { NAKSHATRA_HINDI } from '@/data/vedicTermsHindi';
 import { PageFAQ } from '@/components/PageFAQ';
+import { CityPicker } from '@/components/CityPicker';
+import { birthQuery } from '@/lib/timezone/clientBirth';
+import type { SavedCity } from '@/services/savedProfile';
 
 const GENDER_STYLE: Record<Gender, string> = {
   boy: 'bg-sky-100 text-sky-700',
@@ -17,6 +20,7 @@ const nakSlug = (n: string) => n.toLowerCase().replace(/\s+/g, '-');
 export default function BabyNamesPage() {
   const [dob, setDob] = useState('');
   const [time, setTime] = useState('');
+  const [city, setCity] = useState<SavedCity | null>(null);
   const [nakshatra, setNakshatra] = useState('');
   const [computing, setComputing] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -24,12 +28,12 @@ export default function BabyNamesPage() {
   const aksharas = nakshatra ? (NAKSHATRA_AKSHARAS[nakshatra] || []) : [];
 
   const computeFromBirth = async () => {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(dob) || !/^\d{2}:\d{2}$/.test(time)) return;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dob) || !/^\d{2}:\d{2}$/.test(time) || !city) return;
     setComputing(true); setFailed(false);
     try {
-      const [y, m, d] = dob.split('-');
-      const [h, min] = time.split(':');
-      const params = new URLSearchParams({ y, m, d, h, min, lat: '28.6139', lon: '77.2090', tz: '5.5' });
+      // fix-timezone-accuracy: this was hard-coded to Delhi/IST for every baby, so a birth
+      // abroad got the wrong Moon. Now the real birthplace + its zone for that date.
+      const params = new URLSearchParams(birthQuery(dob, time, city));
       const res = await fetch(`/api/vedic-profile?${params.toString()}`);
       if (!res.ok) throw new Error('unavailable');
       const data = await res.json();
@@ -71,8 +75,12 @@ export default function BabyNamesPage() {
                      className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
             </div>
           </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1" htmlFor="baby-city">Birth city</label>
+            <CityPicker id="baby-city" testid="baby-city-input" value={city} onPick={setCity} dob={dob} time={time} />
+          </div>
           <button data-testid="baby-compute-btn" onClick={computeFromBirth}
-                  disabled={computing || !/^\d{4}-\d{2}-\d{2}$/.test(dob) || !/^\d{2}:\d{2}$/.test(time)}
+                  disabled={computing || !city || !/^\d{4}-\d{2}-\d{2}$/.test(dob) || !/^\d{2}:\d{2}$/.test(time)}
                   className="w-full py-2.5 rounded-lg bg-[#0E2238] text-white font-semibold hover:bg-[#0E2238] disabled:opacity-50">
             {computing ? 'Finding Nakshatra…' : 'Find Nakshatra from birth details →'}
           </button>

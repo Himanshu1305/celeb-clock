@@ -5,6 +5,8 @@
 // render every section even when the AI is unavailable (graceful degradation).
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
+import { chartBasisFromResult } from '../src/lib/vedic/chartBasis.js';
+import { resolveRequestBirthTz } from './_birthParams.js';
 import {
   extractReadingFacts,
   buildReadingSystemPrompt,
@@ -52,10 +54,12 @@ const READING_VERSION = 'v11';
 // Maha/Antar sub-period, so a cached reading is invalidated the moment real time
 // crosses into a new period and the "current / next window" framing would go
 // stale. Stable within a sub-period, so the AI reading is still cached normally.
-function buildCacheKey(y, m, d, h, min, lat, lon, tz, dashaTag = 'na') {
+// fix-timezone-accuracy: 'tz2' + resolved IANA zone — pre-fix cached readings (some
+// generated from IST-computed charts for foreign births) are bypassed, never edited.
+function buildCacheKey(y, m, d, h, min, lat, lon, tz, dashaTag = 'na', tzid = '') {
   const rlat = Number(lat).toFixed(4);
   const rlon = Number(lon).toFixed(4);
-  return ['reading', READING_VERSION, y, m, d, h, min, rlat, rlon, tz, dashaTag].join('-');
+  return ['reading', READING_VERSION, 'tz2', y, m, d, h, min, rlat, rlon, tz, tzid, dashaTag].join('-');
 }
 
 async function getCached(sb, cacheKey) {
@@ -213,7 +217,11 @@ async function handler(request, env?) {
   const n = (k, def?) => { const v = searchParams.get(k); return (v === null || v === '') ? def : Number(v); };
   const y = n('y'), m = n('m'), d = n('d');
   if (![y, m, d].every(v => Number.isFinite(v))) return json({ error: 'Missing y/m/d' }, 400);
-  const h = n('h', 12), min = n('min', 0), lat = n('lat', 28.6139), lon = n('lon', 77.2090), tz = n('tz', 5.5);
+  const h = n('h', 12), min = n('min', 0), lat = n('lat', 28.6139), lon = n('lon', 77.2090);
+  // fix-timezone-accuracy: offset from the birthplace + date via the shared resolver.
+  const btz = resolveRequestBirthTz(k => searchParams.get(k), { y, m, d, h, min, lat, lon });
+  if ('error' in btz) return json({ error: btz.error }, 400);
+  const tz = btz.tz, birthTimezone = btz.birthTimezone;
 
   try {
     const sb = await getSupabase(env);
@@ -233,12 +241,12 @@ async function handler(request, env?) {
     // Past-Period Reflection (Part R): deterministic, computed fresh from the chart
     // (never cached — it depends on `now` for the past/completed cutoff, and is cheap).
     // Birth instant in UTC so the "lived after birth" filter is correct.
-    const birthUTC = new Date(Date.UTC(y, m - 1, d, h, min) - Math.round(tz * 60) * 60000);
+    const birthUTC = new Date(birthTimezone.utcISO);
     const reflections = selectReflectionQuestions(chart, birthUTC, now);
 
-    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz, currentDashaTag(chart, now));
+    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz, currentDashaTag(chart, now), birthTimezone.timezone);
     const cached = await getCached(sb, cacheKey);
-    if (cached) return json({ ...cached, reflections, _cache: 'hit' });
+    if (cached) return json({ ...cached, reflections, birthTimezone, basis: chartBasisFromResult(chart, birthTimezone), _cache: 'hit' });
 
     const facts = extractReadingFacts(chart, now);
     const payload = await buildReadingPayload(facts, generateReading);
@@ -248,7 +256,7 @@ async function handler(request, env?) {
     // are added AFTER caching so a cache hit still gets a freshly-computed set.
     if (!payload.degraded) await setCached(sb, cacheKey, payload);
 
-    return json({ ...payload, reflections, _cache: 'miss' });
+    return json({ ...payload, reflections, birthTimezone, basis: chartBasisFromResult(chart, birthTimezone), _cache: 'miss' });
   } catch (e) {
     return json({ error: 'reading-failed', detail: String(e?.message || e) }, 500);
   }

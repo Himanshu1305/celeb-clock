@@ -4,7 +4,8 @@
 // cycle START/END dates. Deterministic — no LLM.
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
-import { birthRangeError } from './_birthParams.js';
+import { chartBasisFromResult } from '../src/lib/vedic/chartBasis.js';
+import { birthRangeError, resolveRequestBirthTz } from './_birthParams.js';
 import { getSaturnSignIndex, RASHI_NAMES } from '../src/lib/vedic/engine/vedicEngine.js';
 import { computeSadeSati } from '../src/lib/vedic/sadeSati.js';
 
@@ -18,15 +19,19 @@ async function handler(request) {
   const n = (k, def?) => { const v = searchParams.get(k); return v === null || v === '' ? def : Number(v); };
   const y = n('y'), m = n('m'), d = n('d');
   if (![y, m, d].every(Number.isFinite)) return json({ error: 'Missing y/m/d' }, 400);
-  const h = n('h', 12), min = n('min', 0), lat = n('lat', 28.6139), lon = n('lon', 77.209), tz = n('tz', 5.5);
-  const rangeErr = birthRangeError({ m, d, h, min, lat, lon, tz }); // Part T: clean 400, not 500
+  const h = n('h', 12), min = n('min', 0), lat = n('lat', 28.6139), lon = n('lon', 77.209), tzLegacy = n('tz', 5.5);
+  const rangeErr = birthRangeError({ m, d, h, min, lat, lon, tz: tzLegacy }); // Part T: clean 400, not 500
   if (rangeErr) return json({ error: rangeErr }, 400);
+  // fix-timezone-accuracy: offset from the birthplace + date via the shared resolver.
+  const btz = resolveRequestBirthTz(k => searchParams.get(k), { y, m, d, h, min, lat, lon });
+  if ('error' in btz) return json({ error: btz.error }, 400);
+  const tz = btz.tz;
   try {
     const now = new Date();
     const chart = await calculateBirthChart({ year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon, timezoneOffset: tz }, { refDate: now });
     const moonSign = Math.max(0, RASHI_NAMES.indexOf(chart.rashi));
     const report = computeSadeSati(moonSign, now, getSaturnSignIndex);
-    return json({ ...report, moonSignName: chart.rashi, _cache: 'miss' });
+    return json({ ...report, moonSignName: chart.rashi, birthTimezone: btz.birthTimezone, basis: chartBasisFromResult(chart, btz.birthTimezone), _cache: 'miss' });
   } catch (e) {
     return json({ error: 'sade-sati-failed', detail: String(e?.message || e) }, 500);
   }

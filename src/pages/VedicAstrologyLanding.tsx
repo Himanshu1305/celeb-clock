@@ -37,6 +37,7 @@ function kundaliCarryUrl(d: BirthDetails): string {
     lat: String(d.city.lat), lon: String(d.city.lon), tz: String(d.city.tz),
   });
   if (d.name) params.set('name', d.name);
+  if (d.city.manualTimezone && d.city.timezone) params.set('tzid', d.city.timezone); // fix-timezone-accuracy
   return `/kundali?${params.toString()}`;
 }
 
@@ -259,7 +260,7 @@ export default function VedicAstrologyLanding() {
     setTeaserLoading(true); setTeaser(null);
     setTimeout(() => document.getElementById('teaser')?.scrollIntoView({ behavior: 'smooth' }), 60);
     try {
-      const payload = await fetchReading(details.dob, details.time, { lat: details.city.lat, lon: details.city.lon, tz: details.city.tz });
+      const payload = await fetchReading(details.dob, details.time, details.city);
       const f = payload.facts;
       setTeaser({
         lagna: f.lagna, rashi: f.rashi,

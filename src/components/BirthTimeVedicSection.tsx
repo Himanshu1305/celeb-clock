@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
+import { birthQuery } from '@/lib/timezone/clientBirth';
+import type { SavedCity } from '@/services/savedProfile';
 
 interface VedicApiResult {
   nakshatra: { nakshatra: string; nakshatra_devanagari: string; pada: number; confidence: string; is_boundary: boolean };
@@ -22,7 +24,7 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
   const [time, setTime] = useState('');
   const [cityQuery, setCityQuery] = useState('');
   const [options, setOptions] = useState<GeoResult[]>([]);
-  const [city, setCity] = useState<GeoResult | null>(null);
+  const [city, setCity] = useState<SavedCity | null>(null);
   const [result, setResult] = useState<VedicApiResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -37,7 +39,7 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
   const useSavedDetails = () => {
     if (!isFull || !profile?.time || !profile?.city) return;
     setTime(profile.time);
-    setCity({ name: profile.city.name, lat: profile.city.lat, lon: profile.city.lon, timezone: '', utcOffset: profile.city.tz, country: '' });
+    setCity(profile.city);
     setCityQuery(profile.city.name);
     setResult(null);
   };
@@ -53,15 +55,14 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
     }
   };
 
-  const pickCity = (c: GeoResult) => { setCity(c); setCityQuery(c.name); setOptions([]); };
+  // fix-timezone-accuracy: save exactly the picked place; the zone comes from its coordinates.
+  const pickCity = (c: GeoResult) => { setCity({ name: c.label, lat: c.lat, lon: c.lon, tz: c.utcOffset, timezone: c.timezone }); setCityQuery(c.label); setOptions([]); };
 
   const compute = async () => {
     if (!dob || !hasTime || !city) return;
     setLoading(true); setFailed(false);
     try {
-      const [y, m, d] = dob.split('-');
-      const [h, min] = time.split(':');
-      const params = new URLSearchParams({ y, m, d, h, min, lat: String(city.lat), lon: String(city.lon), tz: String(city.utcOffset) });
+      const params = new URLSearchParams(birthQuery(dob, time, city));
       const res = await fetch(`/api/vedic-profile?${params.toString()}`);
       if (!res.ok) throw new Error('unavailable');
       const data = await res.json();
@@ -114,7 +115,7 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
                 <li key={`${o.name}-${i}`}>
                   <button type="button" onClick={() => pickCity(o)}
                           className="w-full text-left px-3 py-2 text-sm hover:bg-[#6E5AA6]/10">
-                    {o.name}{o.state ? `, ${o.state}` : ''}
+                    {o.label}
                   </button>
                 </li>
               ))}
