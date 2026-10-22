@@ -21,8 +21,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const DIST = join(ROOT, 'dist');
 
-const CONCURRENCY = 8;
-const TOTAL_TIME_LIMIT_MS = 25 * 60 * 1000; // 25 minutes
+import { cpus } from 'os';
+// Rendering is CPU-bound: more tabs than ~2 per core only adds contention.
+const CONCURRENCY = Math.max(2, Math.min(8, cpus().length * 2));
+// 2026-10-23: was 25 min, which skipped ~2,300 of 3,211 routes every build. With
+// request blocking + a worker pool (below) a full run fits well inside this budget.
+// Override with PRERENDER_TIME_LIMIT_MIN.
+const TOTAL_TIME_LIMIT_MS = Number(process.env.PRERENDER_TIME_LIMIT_MIN || 45) * 60 * 1000;
 // 15s: keep per-route timeouts CHEAP so a burst of slow network-heavy routes can't
 // consume the total time budget and cause later routes to be skipped. Routes that
 // time out fall back to SPA rendering at runtime (assets not_found_handling=SPA).
@@ -49,6 +54,7 @@ async function startStaticServer(port) {
     '.webp': 'image/webp',
   };
 
+  const fileCache = new Map();
   return new Promise((resolve, reject) => {
     const server = createServer((req, res) => {
       let urlPath = req.url.split('?')[0];
@@ -58,10 +64,16 @@ async function startStaticServer(port) {
       const filePath = join(DIST, urlPath);
       if (existsSync(filePath) && !filePath.endsWith('/')) {
         try {
-          const data = readFileSync(filePath);
+          const data = fileCache.get(filePath) ?? readFileSync(filePath);
+          fileCache.set(filePath, data);
           const ext = urlPath.slice(urlPath.lastIndexOf('.'));
           const ct = mimeTypes[ext] || 'application/octet-stream';
-          res.writeHead(200, { 'Content-Type': ct });
+          // Hashed /assets/ files never change within a build: let Chrome cache them
+          // (and reuse its compiled-code cache) across routes instead of re-downloading
+          // and re-compiling ~2 MB of JS for every one of ~3,200 pages.
+          const headers = { 'Content-Type': ct };
+          if (urlPath.startsWith('/assets/')) headers['Cache-Control'] = 'public, max-age=31536000, immutable';
+          res.writeHead(200, headers);
           res.end(data);
           return;
         } catch {}
@@ -133,9 +145,30 @@ const OG_DESCRIPTIONS = {
 };
 
 // ── Prerender a single route ──────────────────────────────────────────────────
+// Only content-bearing requests are allowed during prerender. Images, fonts and
+// media never change the HTML we capture, and third-party scripts (analytics,
+// consent, ads, Google Fonts) only delay networkidle0. Supabase and the Wikimedia
+// APIs ARE allowed because some pages render data from them (celebrity lists,
+// on-this-day events).
+const BLOCKED_TYPES = new Set(['image', 'media', 'font']);
+function isAllowedRequest(req, baseUrl) {
+  if (BLOCKED_TYPES.has(req.resourceType())) return false;
+  const u = req.url();
+  if (u.startsWith(baseUrl) || u.startsWith('data:') || u.startsWith('blob:')) return true;
+  try {
+    const host = new URL(u).hostname;
+    return host.endsWith('.supabase.co') || host === 'api.wikimedia.org' || host.endsWith('.wikipedia.org');
+  } catch { return false; }
+}
+
 async function prerenderRoute(page, baseUrl, route) {
   const url = `${baseUrl}${route}`;
   try {
+    await page.setRequestInterception(true);
+    page.on('request', req => {
+      if (req.isInterceptResolutionHandled()) return;
+      if (isAllowedRequest(req, baseUrl)) req.continue(); else req.abort();
+    });
     // Suppress client-only personalisation sections (e.g. CountryExtrasSection)
     // from appearing in the prerendered HTML snapshot.
     await page.evaluateOnNewDocument(() => { window.__PRERENDER__ = true; });
@@ -419,64 +452,71 @@ async function main() {
   const nonRoot = routes.filter(r => r !== '/');
   const ordered = [...nonRoot, '/'];
 
-  for (let i = 0; i < ordered.length; i += CONCURRENCY) {
-    if (Date.now() - startTime > TOTAL_TIME_LIMIT_MS) {
-      const remaining = ordered.length - i;
-      console.warn(`\n⚠️  Time limit reached after ${Math.round((Date.now()-startTime)/1000)}s. Skipping ${remaining} remaining routes.`);
-      for (const route of ordered.slice(i)) {
-        manifestEntries.push({ route, status: 'skipped' });
-      }
-      results.skipped += remaining;
-      break;
+  // Worker pool (2026-10-23): previously routes ran in fixed batches of CONCURRENCY
+  // and each batch waited for its SLOWEST route (up to the 15s timeout), idling the
+  // other workers. Now CONCURRENCY workers each pull the next route as soon as they
+  // finish. The browser is still recycled every RESTART_EVERY routes (between chunks)
+  // to bound memory, and a dead browser is relaunched and the route retried once.
+  const record = (r) => {
+    if (r.ok) {
+      results.ok++;
+      manifestEntries.push({ route: r.route, status: 'ok', title: r.title });
+      if (results.ok % 50 === 0) console.log(`   Progress: ${results.ok}/${ordered.length} routes done`);
+    } else {
+      results.failed++;
+      failedRoutes.push(r.route);
+      manifestEntries.push({ route: r.route, status: 'failed', error: r.error });
     }
+  };
 
-    // Periodically recycle the browser to bound memory growth over a long run.
-    // i steps by CONCURRENCY, so trigger when we cross a RESTART_EVERY boundary.
-    if (i > 0 && Math.floor(i / RESTART_EVERY) !== Math.floor((i - CONCURRENCY) / RESTART_EVERY)) {
+  let timeUp = false;
+  for (let chunkStart = 0; chunkStart < ordered.length && !timeUp; chunkStart += RESTART_EVERY) {
+    if (chunkStart > 0) {
       await browser.close().catch(() => {});
-      const fresh = await launchBrowser();
-      if (fresh) { browser = fresh; console.log(`   ↻ recycled browser at ${i}/${ordered.length}`); }
-      else { browser = await launchBrowser(); } // one more attempt; if still null the batch try/catch handles it
+      browser = (await launchBrowser()) || (await launchBrowser());
+      if (!browser) { console.error('   could not relaunch browser'); break; }
+      console.log(`   ↻ recycled browser at ${chunkStart}/${ordered.length}`);
     }
-
-    const batch = ordered.slice(i, i + CONCURRENCY);
-
-    // Run the batch; if the BROWSER itself died (crash/OOM → newPage/close throw
-    // outside prerenderRoute's per-route catch), relaunch it and retry this batch
-    // ONCE so the crash costs one batch, not every remaining route.
-    let batchResults;
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        const pages = await Promise.all(batch.map(() => browser.newPage()));
-        batchResults = await Promise.all(
-          batch.map((route, idx) => prerenderRoute(pages[idx], baseUrl, route))
-        );
-        await Promise.all(pages.map(p => p.close().catch(() => {})));
-        break;
-      } catch (err) {
-        console.warn(`   ⚠️  batch at ${i} failed (${err.message}); relaunching browser${attempt === 0 ? ' and retrying' : ''}`);
-        try { await browser.close(); } catch { /* already dead */ }
-        browser = await launchBrowser();
-        if (!browser) { console.error('   could not relaunch browser'); break; }
-        if (attempt === 1) {
-          batchResults = batch.map(route => ({ route, ok: false, error: err.message }));
+    const chunk = ordered.slice(chunkStart, chunkStart + RESTART_EVERY);
+    let next = 0;
+    const worker = async () => {
+      while (true) {
+        if (Date.now() - startTime > TOTAL_TIME_LIMIT_MS) { timeUp = true; return; }
+        const idx = next++;
+        if (idx >= chunk.length) return;
+        const route = chunk[idx];
+        let r;
+        for (let attempt = 0; attempt < 2; attempt++) {
+          let page;
+          try {
+            page = await browser.newPage();
+            r = await prerenderRoute(page, baseUrl, route);
+            break;
+          } catch (err) {
+            // newPage() threw → the browser itself is gone. Relaunch once and retry.
+            r = { route, ok: false, error: err.message };
+            if (attempt === 0) {
+              console.warn(`   ⚠️  browser error on ${route} (${err.message}); relaunching`);
+              try { await browser.close(); } catch { /* already dead */ }
+              browser = (await launchBrowser()) || browser;
+            }
+          } finally {
+            if (page) await page.close().catch(() => {});
+          }
         }
+        record(r);
       }
-    }
-    if (!batchResults) batchResults = batch.map(route => ({ route, ok: false, error: 'browser unavailable' }));
-    if (!browser) break;
+    };
+    await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  }
 
-    for (const r of batchResults) {
-      if (r.ok) {
-        results.ok++;
-        manifestEntries.push({ route: r.route, status: 'ok', title: r.title });
-        if (results.ok % 50 === 0) console.log(`   Progress: ${results.ok}/${ordered.length} routes done`);
-      } else {
-        results.failed++;
-        failedRoutes.push(r.route);
-        manifestEntries.push({ route: r.route, status: 'failed', error: r.error });
-      }
-    }
+  const done = results.ok + results.failed;
+  if (done < ordered.length) {
+    const seen = new Set(manifestEntries.map(m => m.route));
+    const remaining = ordered.filter(rt => !seen.has(rt));
+    console.warn(`\n⚠️  Time limit reached after ${Math.round((Date.now()-startTime)/1000)}s. Skipping ${remaining.length} remaining routes.`);
+    for (const route of remaining) manifestEntries.push({ route, status: 'skipped' });
+    results.skipped += remaining.length;
   }
 
   if (browser) await browser.close().catch(() => {});
