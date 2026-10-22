@@ -20,6 +20,7 @@
 //     src/, api/, supabase/ finds none). Documented, not faked.
 
 import { opsClient, writeReview, autoResolve, reviewAndAlert } from './_ops.js';
+import { isCronAuthorized, unauthorized } from './_cronAuth.js';
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body, null, 2), {
@@ -52,6 +53,7 @@ async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST' && request.method !== 'GET') {
     return json({ error: 'Method not allowed' }, 405);
   }
+  if (!isCronAuthorized(request)) return unauthorized();
   const sb = opsClient();
   const base = process.env.OPS_BASE_URL || 'https://bornclock.usdvisionai.workers.dev';
   const results: Record<string, unknown> = {};

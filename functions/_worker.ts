@@ -34,7 +34,6 @@ import { GET  as gemstones }           from '../api/gemstones.js';
 import { GET  as geocode }             from '../api/geocode.js';
 import { GET  as bornTodayPhoto }      from '../api/born-today-photo.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
-import cronHandler                     from './_cron/daily-email.js';
 import { handleReportOg, injectReportOgTags } from './og-report.js';
 import { isProductionHost, DISALLOW_ALL_ROBOTS } from './host.js';
 
@@ -353,31 +352,10 @@ export default {
   },
 
   async scheduled(event: any, env: Env, ctx: any): Promise<void> {
+    // Cloudflare cron triggers are intentionally disabled (wrangler.toml crons = []).
+    // All scheduled work runs via GitHub Actions -> /api/cron-dispatch. If a stale
+    // cron ever fires, do nothing rather than run a job twice.
     bridgeEnv(env);
-    const base = process.env.OPS_BASE_URL || 'https://bornclock.usdvisionai.workers.dev';
-    switch (event.cron) {
-      case '0 6 * * *':                 // existing daily email
-        return cronHandler.scheduled(event, env, ctx);
-      case '10 6 * * *':                // daily ops — 06:10 UTC (health checks + renewal invoice sweep)
-        ctx.waitUntil(fetch(`${base}/api/ops-monitor`, { method: 'POST' }));
-        ctx.waitUntil(fetch(`${base}/api/invoice-sweep`, { method: 'POST' }));
-        return;
-      case '0 7 * * 1':                 // integrity emphasis — Monday 07:00 UTC
-        ctx.waitUntil(fetch(`${base}/api/ops-monitor`, { method: 'POST' }));
-        return;
-      case '0 9 * * 0':                 // digest — Sunday 09:00 UTC
-        ctx.waitUntil(fetch(`${base}/api/ops-digest`, { method: 'POST' }));
-        // Weekly "Your Week Ahead" subscriber digest — GATED. No-op with a log
-        // until the founder reviews a test render and sets DIGEST_LIVE=true. The
-        // subscriber broadcast itself is a deliberate follow-up (not sent here).
-        if (process.env.DIGEST_LIVE === 'true') {
-          console.log('[weekly-digest] DIGEST_LIVE enabled — subscriber broadcast wiring pending founder review');
-        } else {
-          console.log('[weekly-digest] Sunday cron no-op (DIGEST_LIVE not set)');
-        }
-        return;
-      default:
-        return cronHandler.scheduled(event, env, ctx);
-    }
+    console.log(`[scheduled] ignored cron "${event?.cron}" — jobs run via /api/cron-dispatch`);
   },
 };

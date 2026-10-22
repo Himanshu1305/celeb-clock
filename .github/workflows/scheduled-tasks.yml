@@ -21,8 +21,9 @@ name: scheduled-tasks
 
 on:
   schedule:
-    - cron: '30 6 * * *'   # daily  06:30 UTC — retention emails + opt-in daily notifications
-    - cron: '0 8 * * 1'    # weekly Mon 08:00 UTC — weekly digest batch
+    - cron: '30 6 * * *'   # daily  06:30 UTC — retention emails, notifications, ops monitor, GST invoice sweep
+    - cron: '0 8 * * 1'    # weekly Mon 08:00 UTC — weekly digest batch + integrity ops-monitor
+    - cron: '0 9 * * 0'    # weekly Sun 09:00 UTC — ops digest email (all jobs moved off Cloudflare cron, 2026-10-23)
   workflow_dispatch:
     inputs:
       job:
@@ -30,7 +31,7 @@ on:
         required: true
         default: 'daily'
         type: choice
-        options: [daily, weekly, all]
+        options: [daily, weekly, digest, all]
 
 permissions:
   contents: read           # read-only: this workflow never writes to the repo
@@ -43,7 +44,11 @@ jobs:
         id: pick
         run: |
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            if [ "${{ github.event.schedule }}" = "0 8 * * 1" ]; then echo "job=weekly" >> "$GITHUB_OUTPUT"; else echo "job=daily" >> "$GITHUB_OUTPUT"; fi
+            case "${{ github.event.schedule }}" in
+              "0 8 * * 1") echo "job=weekly" >> "$GITHUB_OUTPUT" ;;
+              "0 9 * * 0") echo "job=digest" >> "$GITHUB_OUTPUT" ;;
+              *)           echo "job=daily"  >> "$GITHUB_OUTPUT" ;;
+            esac
           else
             echo "job=${{ github.event.inputs.job }}" >> "$GITHUB_OUTPUT"
           fi
@@ -61,6 +66,6 @@ jobs:
           code=$(curl -sS -w '%{http_code}' -o /tmp/resp.json \
             -X POST "$CRON_TARGET_URL/api/cron-dispatch?job=$JOB" \
             -H "Authorization: Bearer $CRON_SECRET" \
-            --retry 3 --retry-delay 10 --max-time 120)
+            --retry 2 --retry-delay 15 --max-time 300)
           echo "HTTP $code"; cat /tmp/resp.json || true
           if [ "$code" -lt 200 ] || [ "$code" -ge 300 ]; then echo "::error::cron-dispatch returned $code"; exit 1; fi

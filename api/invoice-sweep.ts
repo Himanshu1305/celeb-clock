@@ -20,6 +20,7 @@ import { createClient } from '@supabase/supabase-js';
 import { generateInvoiceHTML } from '../src/lib/invoice-generator.js';
 import { sendInvoiceEmail } from './_invoice-email.js';
 import { sendOpsAlert } from './_ops.js';
+import { isCronAuthorized, unauthorized } from './_cronAuth.js';
 
 function serviceClient() {
   return createClient(
@@ -40,6 +41,7 @@ async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST' && request.method !== 'GET') {
     return json({ error: 'Method not allowed' }, 405);
   }
+  if (!isCronAuthorized(request)) return unauthorized();
 
   const db = serviceClient();
   const result: Record<string, unknown> = { invoiced: 0, skipped: [] as string[], errors: [] as string[] };

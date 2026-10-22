@@ -14,11 +14,16 @@
 // Jobs route to the existing handlers so there is one source of truth for each
 // job's logic:
 //   job=daily   → daily retention emails + opt-in daily notifications
-//   job=weekly  → weekly digest batch (gated by DIGEST_LIVE)
-//   job=all     → both (handy for manual workflow_dispatch)
+//                 + ops monitor + renewal invoice sweep (previously Cloudflare cron 06:10 UTC)
+//   job=weekly  → weekly digest batch (gated by DIGEST_LIVE) + Monday integrity ops-monitor
+//   job=digest  → Sunday ops digest email (previously Cloudflare cron Sun 09:00 UTC)
+//   job=all     → everything (handy for manual workflow_dispatch)
 
 import { GET as dailyEmailCron } from './daily-email-cron.js';
 import { runDailyNotifications, runWeeklyDigestBatch } from './_notify.js';
+import { POST as opsMonitor } from './ops-monitor.js';
+import { POST as invoiceSweep } from './invoice-sweep.js';
+import { POST as opsDigest } from './ops-digest.js';
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -54,10 +59,25 @@ async function handler(request: Request): Promise<Response> {
 
   const doDaily = job === 'daily' || job === 'all';
   const doWeekly = job === 'weekly' || job === 'all';
+  const doDigest = job === 'digest' || job === 'all';
 
-  if (!doDaily && !doWeekly) {
-    return json({ error: `Unknown job '${job}'. Use daily | weekly | all.` }, 400);
+  if (!doDaily && !doWeekly && !doDigest) {
+    return json({ error: `Unknown job '${job}'. Use daily | weekly | digest | all.` }, 400);
   }
+
+  // In-process call to an ops endpoint with the same bearer secret (they now
+  // require it — see api/_cronAuth.ts). No network hop, no public exposure.
+  const callOps = async (name: string, fn: (r: Request) => Promise<Response>) => {
+    try {
+      const res = await fn(new Request(`https://internal/api/${name}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${cronSecret}` },
+      }));
+      results[name] = await readJson(res);
+    } catch (err) {
+      results[name] = { ok: false, error: String(err) };
+    }
+  };
 
   if (doDaily) {
     // Retention lifecycle emails (trial expiry + inactivity nudges) — reuse the
@@ -79,6 +99,9 @@ async function handler(request: Request): Promise<Response> {
     } catch (err) {
       results.notifications = { ok: false, error: String(err) };
     }
+    // Daily ops: health checks + GST renewal invoice sweep.
+    await callOps('ops-monitor', opsMonitor);
+    await callOps('invoice-sweep', invoiceSweep);
   }
 
   if (doWeekly) {
@@ -87,6 +110,13 @@ async function handler(request: Request): Promise<Response> {
     } catch (err) {
       results.weeklyDigest = { ok: false, error: String(err) };
     }
+    // Monday integrity emphasis (ops-monitor already runs daily; this mirrors the old
+    // Mon 07:00 cron so the weekly integrity pass is not lost).
+    if (!doDaily) await callOps('ops-monitor', opsMonitor);
+  }
+
+  if (doDigest) {
+    await callOps('ops-digest', opsDigest);
   }
 
   return json({ ok: true, job, started, finished: new Date().toISOString(), results });

@@ -6,6 +6,7 @@
 // Reuses the Resend pattern from api/_email.ts / api/_ops.ts.
 
 import { opsClient } from './_ops.js';
+import { isCronAuthorized, unauthorized } from './_cronAuth.js';
 
 const FROM_EMAIL = 'BornClock <hello@bornclock.com>';
 const ADMIN_EMAIL_FALLBACK = 'himanshu1305@gmail.com';
@@ -24,6 +25,7 @@ async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST' && request.method !== 'GET') {
     return json({ error: 'Method not allowed' }, 405);
   }
+  if (!isCronAuthorized(request)) return unauthorized();
   const sb = opsClient();
 
   const { data: rows, error } = await sb
