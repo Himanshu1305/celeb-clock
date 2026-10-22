@@ -13,7 +13,7 @@
  *   npx tsx scripts/export-celebrities.ts
  */
 import { createClient } from '@supabase/supabase-js';
-import { writeFileSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync } from 'fs';
 import * as dotenv from 'dotenv';
 import { nameToSlug, BLOCKED_IDS } from './add-celebrity-slugs';
 import { INDIAN_CELEBRITIES } from '../src/data/indianCelebrities';
@@ -73,8 +73,17 @@ async function main() {
   // 2. Supabase Indian celebrities.
   const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  // GUARD (2026-10-23): a missing credential used to silently write a static-only
+  // file (598 people instead of ~3,100). The nightly job then committed it and it
+  // reached production, deleting ~2,500 celebrity pages. Never write a partial
+  // export: fail loudly instead. ALLOW_STATIC_ONLY=1 opts in for local experiments.
   if (!url || !key) {
-    console.log('❌ Missing Supabase credentials — writing static-only export.');
+    if (process.env.ALLOW_STATIC_ONLY === '1') {
+      console.log('⚠️  Missing Supabase credentials — ALLOW_STATIC_ONLY=1 set, writing static-only export.');
+    } else {
+      console.error('❌ Missing Supabase credentials (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY). Refusing to write a partial celebrities.json.');
+      process.exit(1);
+    }
   } else {
     const sb = createClient(url, key);
     const PAGE = 1000;
@@ -111,7 +120,7 @@ async function main() {
       const { data, error } = await sb.from('celebrity_sitelinks').select(SEL)
         .eq('nationality_code', 'IN').not('birth_date', 'is', null)
         .order('sitelinks', { ascending: false }).range(from, from + PAGE - 1);
-      if (error) { console.log('❌ IN fetch error:', error.message); break; }
+      if (error) { console.error('❌ IN fetch error:', error.message); process.exit(1); }
       if (!data || data.length === 0) break;
       data.forEach(processRow);
     }
@@ -126,12 +135,16 @@ async function main() {
         .neq('nationality_code', 'IN').not('birth_date', 'is', null)
         .gte('sitelinks', 100)
         .order('sitelinks', { ascending: false }).range(from, from + PAGE - 1);
-      if (error) { console.log('❌ INTL fetch error:', error.message); break; }
+      if (error) { console.error('❌ INTL fetch error:', error.message); process.exit(1); }
       if (!data || data.length === 0) break;
       for (const row of data) { if (processRow(row)) intlAdded++; if (intlAdded >= INTL_CAP) break; }
     }
 
     console.log(`Added ${added} DB celebrities (${intlAdded} international, ${dupSkipped} dedup-skipped, ${blocked} blocked).`);
+    if (added === 0) {
+      console.error('❌ Supabase returned 0 celebrities (wrong key, RLS, or empty table). Refusing to write a partial celebrities.json.');
+      process.exit(1);
+    }
   }
 
   const indianCount = out.filter(c => c.nationality_code === 'IN').length;
@@ -143,6 +156,24 @@ async function main() {
   };
   // Stamp without Date (deterministic-friendly): use env or leave marker replaced by shell.
   payload.generated_at = process.env.EXPORT_STAMP || new Date().toISOString();
+
+  // SHRINK GUARD: never let one run delete a large share of the dataset.
+  // If the new export is more than 10% smaller than the committed file, stop.
+  // ALLOW_SHRINK=1 overrides after a deliberate, reviewed reduction.
+  const OUT = 'src/data/celebrities.json';
+  if (existsSync(OUT) && process.env.ALLOW_SHRINK !== '1') {
+    try {
+      const prev = JSON.parse(readFileSync(OUT, 'utf8'));
+      const prevTotal = Number(prev?.total ?? prev?.celebrities?.length ?? 0);
+      if (prevTotal > 0 && payload.total < prevTotal * 0.9) {
+        console.error(`❌ Export shrank from ${prevTotal} to ${payload.total} celebrities (>10%). Refusing to overwrite. Set ALLOW_SHRINK=1 only if this reduction is intended.`);
+        process.exit(1);
+      }
+    } catch (e: any) {
+      console.error('❌ Could not read the existing celebrities.json to compare sizes:', e?.message);
+      process.exit(1);
+    }
+  }
   writeFileSync('src/data/celebrities.json', JSON.stringify(payload, null, 2));
   console.log(`\n✅ Wrote src/data/celebrities.json — total ${payload.total}, indian ${indianCount}.`);
 }
