@@ -1,5 +1,5 @@
-// api/unsubscribe.ts — one-click unsubscribe from the weekly digest via a
-// tokened link (no login). Flips weekly_digest=false / stamps unsubscribed_at on
+// api/unsubscribe.ts — one-click unsubscribe from the weekly digest (and, with
+// ?list=reminders, from birthday reminders) via a tokened link (no login). Flips weekly_digest=false / stamps unsubscribed_at on
 // the matching email_subscribers row. Web APIs only (Workers compatible).
 import { createClient } from '@supabase/supabase-js';
 
@@ -16,13 +16,37 @@ function html(msg: string, status = 200): Response {
 }
 
 async function handler(request: Request): Promise<Response> {
-  const token = new URL(request.url).searchParams.get('token');
+  const params = new URL(request.url).searchParams;
+  const token = params.get('token');
   if (!token) return html('Invalid unsubscribe link — no token provided.', 400);
 
   const url = process.env.SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return html('Unsubscribe is temporarily unavailable. Please email hello@bornclock.com.', 503);
 
   const sb = createClient(url, key, { auth: { persistSession: false } });
+
+  // Birthday reminders (/reminders) carry their own token: stop EVERY reminder to that
+  // address (the person receiving them may not be the one who set them up).
+  if (params.get('list') === 'reminders') {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(token)) {
+      return html("This link is no longer valid, or you're already unsubscribed.");
+    }
+    const { data: row, error: findErr } = await sb
+      .from('birthday_reminders').select('notify_email').eq('unsubscribe_token', token).maybeSingle();
+    if (findErr) {
+      console.error('[unsubscribe] reminders lookup error:', findErr.message);
+      return html('Something went wrong. Please email hello@bornclock.com to unsubscribe.', 500);
+    }
+    if (!row?.notify_email) return html("This link is no longer valid, or you're already unsubscribed.");
+    const { error: updErr } = await sb
+      .from('birthday_reminders').update({ unsubscribed_at: new Date().toISOString() })
+      .eq('notify_email', row.notify_email).is('unsubscribed_at', null);
+    if (updErr) {
+      console.error('[unsubscribe] reminders update error:', updErr.message);
+      return html('Something went wrong. Please email hello@bornclock.com to unsubscribe.', 500);
+    }
+    return html("Done — BornClock won't send any more birthday reminders to this address.");
+  }
   const { error, count } = await sb
     .from('email_subscribers')
     .update({ weekly_digest: false, unsubscribed_at: new Date().toISOString() }, { count: 'exact' })
