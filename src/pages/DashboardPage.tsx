@@ -11,13 +11,14 @@ import { NotificationOptIn } from '@/components/NotificationOptIn';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { fetchKundali, type KundaliData } from '@/services/kundaliService';
 import { computeRashifal } from '@/lib/vedic/rashifal';
+import { biorhythmValues } from '@/lib/biorhythm';
 
 // Biorhythm (same engine as the fitness widgets / weekly digest) — a reflection cue,
 // explicitly NOT a plan or a performance/medical claim.
+// N10: shared calendar-day count, so the dashboard always matches /biorhythm.
 function biorhythm(dob: Date, today: Date) {
-  const days = Math.floor((today.getTime() - dob.getTime()) / 86400000);
-  const pct = (period: number) => Math.round(Math.sin((2 * Math.PI * days) / period) * 100);
-  return { physical: pct(23), emotional: pct(28), intellectual: pct(33) };
+  const { physical, emotional, intellectual } = biorhythmValues(dob, today);
+  return { physical, emotional, intellectual };
 }
 
 function daysUntilBirthday(dob: Date, today: Date): number {

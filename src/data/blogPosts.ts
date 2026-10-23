@@ -543,7 +543,7 @@ Discover the fascinating story behind YOUR birthstone and what it reveals about 
 | September | Sapphire | Blue | Wisdom, Loyalty |
 | October | Opal | Multi-Color | Creativity, Hope |
 | November | Topaz | Orange/Yellow | Affection, Strength |
-| December | Turquoise | Blue | Protection, Success |
+| December | Turquoise, Tanzanite & Zircon | Blue | Protection, Success |
 
 ---
 
@@ -679,8 +679,10 @@ Warm and golden, topaz has been associated with the Egyptian sun god Ra.
 
 ---
 
-## December: Turquoise 💠
+## December: Turquoise, Tanzanite & Zircon 💠
 **The Stone of Protection**
+
+December has three birthstones on the modern list — turquoise, tanzanite and zircon. Turquoise is the traditional one:
 
 One of the oldest gemstones, treasured by cultures worldwide for millennia.
 

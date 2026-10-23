@@ -1,5 +1,4 @@
-// Ayanamsa offset (degrees) to convert tropical to sidereal
-const AYANAMSA_DEGREES = 23.85;
+import { getSiderealLongitude, getLahiriAyanamsa } from '@/lib/vedic/engine/vedicEngine';
 
 export const VEDIC_SIGNS = [
   {
@@ -148,30 +147,20 @@ export const VEDIC_SIGNS = [
   },
 ] as const;
 
-function getJulianDay(dob: Date): number {
-  const y = dob.getUTCFullYear();
-  const m = dob.getUTCMonth() + 1;
-  const d = dob.getUTCDate();
-  const A = Math.floor((14 - m) / 12);
-  const Y = y + 4800 - A;
-  const M = m + 12 * A - 3;
-  return d + Math.floor((153 * M + 2) / 5) + 365 * Y + Math.floor(Y / 4) - Math.floor(Y / 100) + Math.floor(Y / 400) - 32045;
-}
-
-function getSunDegreeTropical(dob: Date): number {
-  const jd = getJulianDay(dob);
-  const n = jd - 2451545.0;
-  const L = (280.46 + 0.9856474 * n) % 360;
-  const g = ((357.528 + 0.9856003 * n) % 360) * (Math.PI / 180);
-  const lambda = L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g);
-  return ((lambda % 360) + 360) % 360;
-}
-
+/**
+ * N12 (Oct 2026): the Sun's sidereal longitude now comes from the chart engine
+ * (astronomy-engine Sun + the engine's Lahiri ayanamsa, validated against Swiss
+ * Ephemeris / Drik Panchang), not a low-precision Sun formula minus a fixed 23.85°.
+ */
 export function getVedicRashi(dob: Date): typeof VEDIC_SIGNS[number] {
-  const tropical = getSunDegreeTropical(dob);
-  const sidereal = ((tropical - AYANAMSA_DEGREES) % 360 + 360) % 360;
-  const signIndex = Math.floor(sidereal / 30);
+  const sidereal = getSiderealLongitude('Sun', dob);
+  const signIndex = Math.floor(sidereal / 30) % 12;
   return VEDIC_SIGNS[signIndex];
+}
+
+/** Current Lahiri ayanamsa in degrees (for display), from the same engine. */
+export function currentAyanamsaDeg(date: Date = new Date()): number {
+  return getLahiriAyanamsa(date);
 }
 
 export function getWesternSign(dob: Date): string {

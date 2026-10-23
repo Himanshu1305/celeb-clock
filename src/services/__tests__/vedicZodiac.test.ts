@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getVedicRashi, getWesternSign, compareZodiacs } from '../VedicZodiacService';
+import { getVedicRashi, getWesternSign, compareZodiacs, currentAyanamsaDeg } from '../VedicZodiacService';
 
 describe('getWesternSign — tropical zodiac', () => {
   it('VZ1: March 21 → Aries', () => {
@@ -64,5 +64,29 @@ describe('compareZodiacs — side-by-side comparison', () => {
     } else {
       expect(r2.note).toContain('ayanamsa');
     }
+  });
+});
+
+// N12 regression: Sun's sidereal sign from the chart engine's Lahiri ayanamsa.
+// Expected signs + longitudes from Swiss Ephemeris (pyswisseph, SIDM_LAHIRI, Sun at
+// 12:00 IST = 06:30 UTC) run in scratchpad/engine-audit/venv. The old fixed-23.85°
+// formula put every one of these in the NEXT sign.
+describe('N12 — getVedicRashi uses the engine ayanamsa (Swiss Ephemeris reference)', () => {
+  const CASES: [string, string, number][] = [
+    ['2024-02-13', 'Makara', 299.843],
+    ['2024-04-13', 'Meena', 359.629],
+    ['2024-05-14', 'Mesha', 29.763],
+    ['2024-06-14', 'Vrishabha', 59.504],
+    ['2024-12-15', 'Vrishchika', 239.568],
+    ['1995-06-15', 'Vrishabha', 59.917],
+  ];
+  for (const [date, rashi, lon] of CASES) {
+    it(`${date} noon IST → ${rashi} (Swiss sidereal Sun ${lon}°)`, () => {
+      expect(getVedicRashi(new Date(`${date}T06:30:00Z`)).name).toBe(rashi);
+    });
+  }
+  it('current ayanamsa shown is the engine value (~24.2° in Oct 2026), not 23.85°', () => {
+    // Swiss Ephemeris SIDM_LAHIRI on 2026-10-23 0h UT: 24.2316°
+    expect(currentAyanamsaDeg(new Date('2026-10-23T00:00:00Z'))).toBeCloseTo(24.2316, 1);
   });
 });

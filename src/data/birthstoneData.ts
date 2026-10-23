@@ -4,6 +4,8 @@ export interface BirthstoneData {
   monthNumber: number;
   primaryStone: string;
   alternateStones: string[];
+  /** Short site-wide answer to "what is the birthstone for this month?" when it is more than one stone (N13). */
+  answer?: string;
   color: string;
   hexColor: string;
   hardness: string;
@@ -23,6 +25,9 @@ export interface BirthstoneData {
   seoDescription: string;
   seoKeywords: string;
 }
+
+/** N13: the one December birthstone answer used site-wide (modern list). */
+export const DECEMBER_BIRTHSTONES = 'Turquoise, Tanzanite & Zircon';
 
 export const BIRTHSTONE_DATA: BirthstoneData[] = [
   {
@@ -382,7 +387,9 @@ export const BIRTHSTONE_DATA: BirthstoneData[] = [
     slug: 'december',
     monthNumber: 12,
     primaryStone: 'Tanzanite',
-    alternateStones: ['Zircon', 'Turquoise'],
+    alternateStones: ['Turquoise', 'Zircon'],
+    // N13: ONE December answer everywhere — the modern list's three stones, in this order.
+    answer: DECEMBER_BIRTHSTONES,
     color: 'Blue-Violet',
     hexColor: '#4B0082',
     hardness: '6–7 on Mohs scale',
@@ -402,11 +409,11 @@ export const BIRTHSTONE_DATA: BirthstoneData[] = [
     funFacts: [
       'Tanzanite is found in only one location on Earth: a four-kilometer stretch near Mount Kilimanjaro in Tanzania. Once exhausted, it cannot be replaced.',
       'Tiffany & Co. is credited with naming tanzanite and launching it commercially in 1968 — effectively introducing the first major new gemstone to the market in over 2,000 years.',
-      'Turquoise, one of December\'s alternates, was the first gem ever to be traded across continental distances — turquoise from the Sinai Peninsula was traded to Egypt over 7,000 years ago.',
+      'Turquoise, one of December\'s three birthstones, was the first gem ever to be traded across continental distances — turquoise from the Sinai Peninsula was traded to Egypt over 7,000 years ago.',
     ],
-    fullDescription: 'December has three birthstones — tanzanite, zircon, and turquoise — and the range they represent is remarkable: the newest named gemstone in history, one of the oldest minerals on earth, and a blue-green gem traded across continents for seven thousand years. Tanzanite was unknown to the world until 1967. Manuel d\'Souza stumbled on the glittering blue crystals in the Merelani Hills of Tanzania while prospecting for rubies, and within a year Tiffany & Co. had named it, packaged it, and launched what became the most successful gemstone introduction of the 20th century. The specific quality that makes tanzanite extraordinary is its trichroism: the stone shows different colors — blue, violet, and burgundy — depending on which angle you view it from and what kind of light you see it under. Cut and heat-treated to emphasize the blue-violet range, fine tanzanite has a depth of color that shifts as you move it, never quite settling on a single definition. It is also, crucially, found in only one place on Earth: a four-kilometer stretch of metamorphic rock near Kilimanjaro. When those deposits are exhausted, tanzanite will be gone. This is either a concerning footnote or a compelling reason to own one, depending on your disposition. Turquoise — the oldest of December\'s three — has been mined in the Sinai Peninsula since at least 5000 BCE, traded to Egypt and beyond, carved into protective amulets in ancient Egypt and Persia, and woven into the cultural traditions of the American Southwest\'s Native peoples for centuries. Something this old and this widespread has earned whatever meaning it carries. December birthdays have choices that span the full history of human gem use: from the seven-thousand-year-old turquoise to the fifty-year-old tanzanite.',
-    seoTitle: 'December Birthstone — Tanzanite, Zircon & Turquoise: History & Meaning | BornClock',
-    seoDescription: 'Complete guide to December birthstones — Tanzanite, Zircon, and Turquoise. From Tanzania discovery to ancient turquoise trade, geology, and care. Sourced from GIA.',
+    fullDescription: 'December has three birthstones — turquoise, tanzanite and zircon — and the range they represent is remarkable: the newest named gemstone in history, one of the oldest minerals on earth, and a blue-green gem traded across continents for seven thousand years. Tanzanite was unknown to the world until 1967. Manuel d\'Souza stumbled on the glittering blue crystals in the Merelani Hills of Tanzania while prospecting for rubies, and within a year Tiffany & Co. had named it, packaged it, and launched what became the most successful gemstone introduction of the 20th century. The specific quality that makes tanzanite extraordinary is its trichroism: the stone shows different colors — blue, violet, and burgundy — depending on which angle you view it from and what kind of light you see it under. Cut and heat-treated to emphasize the blue-violet range, fine tanzanite has a depth of color that shifts as you move it, never quite settling on a single definition. It is also, crucially, found in only one place on Earth: a four-kilometer stretch of metamorphic rock near Kilimanjaro. When those deposits are exhausted, tanzanite will be gone. This is either a concerning footnote or a compelling reason to own one, depending on your disposition. Turquoise — the oldest of December\'s three — has been mined in the Sinai Peninsula since at least 5000 BCE, traded to Egypt and beyond, carved into protective amulets in ancient Egypt and Persia, and woven into the cultural traditions of the American Southwest\'s Native peoples for centuries. Something this old and this widespread has earned whatever meaning it carries. December birthdays have choices that span the full history of human gem use: from the seven-thousand-year-old turquoise to the fifty-year-old tanzanite.',
+    seoTitle: 'December Birthstone — Turquoise, Tanzanite & Zircon: History & Meaning | BornClock',
+    seoDescription: 'Complete guide to December birthstones — Turquoise, Tanzanite and Zircon. From Tanzania discovery to ancient turquoise trade, geology, and care. Sourced from GIA.',
     seoKeywords: 'December birthstone, tanzanite meaning, tanzanite history, turquoise birthstone, zircon, December gemstone',
   },
 ];
@@ -417,4 +424,9 @@ export function getBirthstoneBySlug(slug: string): BirthstoneData | undefined {
 
 export function getBirthstoneByMonth(month: number): BirthstoneData | undefined {
   return BIRTHSTONE_DATA.find(b => b.monthNumber === month);
+}
+
+/** The short birthstone answer for a month entry (December → all three stones). */
+export function birthstoneAnswer(b: BirthstoneData | undefined | null): string {
+  return b ? (b.answer ?? b.primaryStone) : '';
 }

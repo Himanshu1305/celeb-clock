@@ -4,13 +4,15 @@ import { SEO } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-const PLANS = [
-  { name: 'Starter', price: '₹4,999/mo', calls: '10,000 API calls / month', best: false,
-    features: ['Birthday, zodiac, rashi & life path endpoints', 'Celebrity twin lookup', 'Email support'] },
-  { name: 'Growth', price: '₹14,999/mo', calls: '100,000 API calls / month', best: true,
-    features: ['Everything in Starter', 'Compatibility & numerology endpoints', 'Bulk export', 'Priority support'] },
-  { name: 'Enterprise', price: 'Custom', calls: 'Unlimited + SLA', best: false,
-    features: ['Everything in Growth', 'White-label & on-prem', 'Dedicated success manager', '99.9% uptime SLA'] },
+// S16 (Oct 2026): the business API is NOT live yet. No plans, prices or uptime/SLA
+// promises are shown — the page is a waitlist. Contact is the site's official address.
+const CONTACT_EMAIL = 'hello@bornclock.com';
+const WAITLIST_MAILTO = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('BornClock API waitlist')}`;
+
+const PLANNED = [
+  'Birthday, Western zodiac, Vedic rashi and life path data',
+  'Compatibility and numerology data',
+  'Celebrity birthday lookups',
 ];
 
 export default function ForBusinessPage() {
@@ -20,25 +22,29 @@ export default function ForBusinessPage() {
       testId="for-business-page"
       seo={(
         <SEO
-          title="BornClock for Business — Birthday & Astrology API | BornClock"
-          description="Add birthday intelligence to your product — zodiac, Vedic rashi, numerology, life path and compatibility via a simple REST API. Plans from ₹4,999/mo."
+          title="Birthday & Astrology API — Coming Soon | BornClock"
+          description="A BornClock API for birthday, zodiac, Vedic rashi, numerology and compatibility data is coming soon. Join the waitlist to hear when it opens."
           canonicalUrl="/for-business"
           ogType="website"
         />
       )}
       breadcrumb={{ current: 'For Business' }}
-      h1="Birthday intelligence, as an API"
+      h1="Birthday intelligence, as an API — coming soon"
     >
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-center mb-12">
+          <span data-testid="b2b-coming-soon" className="inline-block text-xs font-semibold bg-primary text-primary-foreground rounded-full px-3 py-1 mb-4">
+            Coming soon — join the waitlist
+          </span>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Power your app, CRM or marketing with zodiac, Vedic rashi, numerology, life path and
-            compatibility data — the same engine behind BornClock, available over a simple REST API.
+            We're working on an API that would let apps, CRMs and marketing tools use the same engine behind
+            BornClock. It is not available yet, and there are no plans or prices to buy today. Join the waitlist
+            and we'll email you when it opens.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 justify-center">
             <Button asChild size="lg">
-              <a href="mailto:usdvisionai@gmail.com?subject=BornClock%20API%20access" data-testid="b2b-contact-cta">
-                Talk to us about API access →
+              <a href={WAITLIST_MAILTO} data-testid="b2b-contact-cta">
+                Join the waitlist →
               </a>
             </Button>
             <Button asChild variant="outline" size="lg">
@@ -47,41 +53,32 @@ export default function ForBusinessPage() {
           </div>
         </div>
 
-        {/* Pricing */}
-        <section className="mb-14" aria-labelledby="api-pricing">
-          <h2 id="api-pricing" className="text-2xl font-bold text-center text-foreground mb-6">API pricing plans</h2>
-          <div className="grid gap-5 md:grid-cols-3">
-            {PLANS.map(plan => (
-              <Card key={plan.name} className={plan.best ? 'border-primary shadow-lg' : ''}>
-                <CardContent className="p-6">
-                  {plan.best && (
-                    <span className="inline-block text-xs font-semibold bg-primary text-primary-foreground rounded-full px-3 py-1 mb-3">
-                      Most popular
-                    </span>
-                  )}
-                  <h3 className="text-lg font-bold text-foreground">{plan.name}</h3>
-                  <p className="text-2xl font-black text-primary my-1">{plan.price}</p>
-                  <p className="text-sm text-muted-foreground mb-4">{plan.calls}</p>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    {plan.features.map(f => (
-                      <li key={f} className="flex gap-2"><span className="text-primary">✓</span>{f}</li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        {/* What we're planning — no prices, no service-level promises */}
+        <section className="mb-14" aria-labelledby="api-planned">
+          <h2 id="api-planned" className="text-2xl font-bold text-center text-foreground mb-2">What we're planning</h2>
+          <p className="text-sm text-muted-foreground text-center mb-6">
+            The scope may change before launch. Pricing will be announced when the API opens.
+          </p>
+          <Card>
+            <CardContent className="p-6">
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {PLANNED.map(f => (
+                  <li key={f} className="flex gap-2"><span className="text-primary">•</span>{f}</li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
         </section>
 
-        {/* Use cases */}
+        {/* Who it could help */}
         <section className="mb-14">
-          <h2 className="text-2xl font-bold text-center text-foreground mb-6">Who uses the API</h2>
+          <h2 className="text-2xl font-bold text-center text-foreground mb-6">Who it's for</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {[
               ['🎂 Consumer apps', 'Birthday reminders, horoscopes and personalised greetings.'],
-              ['💬 Dating & matchmaking', 'Zodiac & Vedic compatibility scores at signup.'],
+              ['💬 Dating & matchmaking', 'Zodiac & Vedic compatibility at signup.'],
               ['📣 Marketing & CRM', 'Segment and personalise campaigns by zodiac and life path.'],
-              ['🔮 Astrology platforms', 'Accurate rashi, nakshatra and numerology as a data layer.'],
+              ['🔮 Astrology platforms', 'Rashi, nakshatra and numerology as a data layer.'],
             ].map(([title, body]) => (
               <Card key={title}><CardContent className="p-5">
                 <h3 className="font-semibold text-foreground mb-1">{title}</h3>
@@ -92,10 +89,12 @@ export default function ForBusinessPage() {
         </section>
 
         <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
-          <h2 className="font-bold text-xl text-foreground mb-2">Ready to build?</h2>
-          <p className="text-muted-foreground mb-4">Tell us your use case and we'll send API docs and a trial key.</p>
+          <h2 className="font-bold text-xl text-foreground mb-2">Interested?</h2>
+          <p className="text-muted-foreground mb-4">
+            Email <a href={WAITLIST_MAILTO} className="underline">{CONTACT_EMAIL}</a> with your use case and we'll let you know when the API opens.
+          </p>
           <Button asChild size="lg">
-            <a href="mailto:usdvisionai@gmail.com?subject=BornClock%20API%20access">Get API access →</a>
+            <a href={WAITLIST_MAILTO}>Join the waitlist →</a>
           </Button>
         </div>
       </div>

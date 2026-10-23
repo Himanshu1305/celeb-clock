@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { calculateDaysLived } from '@/utils/celebrityCalculations';
+import { biorhythmDays } from '@/lib/biorhythm';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
@@ -76,7 +76,8 @@ function BiorhythmCalculator() {
     if (val.length === 10) {
       const [year, month, day] = val.split('-').map(Number);
       if (year && month && day) {
-        const lived = calculateDaysLived(day, month, year);
+        // N10: shared calendar-day count (DST-safe), same as /biorhythm.
+        const lived = biorhythmDays(val);
         setDaysLived(lived);
         setResults(
           CYCLES.map(c => {

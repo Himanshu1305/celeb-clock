@@ -1,117 +1,202 @@
 /**
- * Baby names by Nakshatra starting-syllable (akshara) — Growth P1-6.
+ * Baby names by Nakshatra pada syllable (akshara) — Growth P1-6, re-indexed N6 (Oct 2026).
  *
- * ORIGINAL, hand-curated dataset: common Indian given names grouped by their
- * starting sound, each with gender and a well-established meaning. Compiled from
- * general knowledge of Sanskrit/Hindi name meanings — not scraped from any
- * competitor or paid names database. Meanings are kept to widely-accepted ones;
- * where a name has several readings we give the most common.
+ * ORIGINAL, hand-curated dataset: common Indian given names, each with its Devanagari
+ * spelling, gender and a well-established meaning. Compiled from general knowledge of
+ * Sanskrit/Hindi name meanings — not scraped from any competitor or paid names database.
  *
- * Keyed by the same aksharas used in nakshatraAksharas.ts, so a Nakshatra's four
- * padas map straight onto these name lists.
+ * N6: names are NOT filed by hand any more. Each name is matched to a pada by the
+ * first Devanagari akshara of its spelling — consonant AND vowel (matra) — so
+ * देव (Dev) is "De", not "Da"; रोहन (Rohan) is "Ro", not "Ra"; दीपक (Deepak) is "Di",
+ * not "De". Rules (see aksharaKey):
+ *   • the first consonant of the akshara counts (a conjunct like ध्रु → ध); dental and
+ *     retroflex are different letters (द ≠ ड, त ≠ ट, न ≠ ण), as in the 108-pada table;
+ *   • श and ष are treated as one sound (they are pronounced alike in modern Hindi);
+ *   • short and long vowels pair up (अ/आ, इ/ई, उ/ऊ), as in every pada-syllable list;
+ *     ऐ and औ are their own vowels (गौरव is "Gau", not "Ga");
+ *   • ऋ / ृ are read as "ri" (ऋषि → री).
  */
-export type Gender = 'boy' | 'girl' | 'unisex';
-export interface BabyName { name: string; gender: Gender; meaning: string; }
+import { NAKSHATRA_PADA_AKSHARAS } from './nakshatraAksharas';
 
-export const NAMES_BY_AKSHARA: Record<string, BabyName[]> = {
-  // A / I / U / E / O (Krittika, Rohini)
-  A: [{ name: 'Aarav', gender: 'boy', meaning: 'peaceful, wise' }, { name: 'Ananya', gender: 'girl', meaning: 'unique, matchless' }, { name: 'Arjun', gender: 'boy', meaning: 'bright, shining; the Pandava hero' }, { name: 'Aditi', gender: 'girl', meaning: 'boundless; mother of the gods' }],
-  I: [{ name: 'Ira', gender: 'girl', meaning: 'the earth; goddess Saraswati' }, { name: 'Ishaan', gender: 'boy', meaning: 'the sun; a form of Shiva' }, { name: 'Indira', gender: 'girl', meaning: 'goddess Lakshmi' }],
-  U: [{ name: 'Utkarsh', gender: 'boy', meaning: 'advancement, prosperity' }, { name: 'Uma', gender: 'girl', meaning: 'goddess Parvati; tranquillity' }, { name: 'Udhav', gender: 'boy', meaning: 'festival; a friend of Krishna' }],
-  E: [{ name: 'Ekta', gender: 'girl', meaning: 'unity' }, { name: 'Ekansh', gender: 'boy', meaning: 'whole, complete' }],
-  O: [{ name: 'Om', gender: 'boy', meaning: 'the sacred primordial sound' }, { name: 'Ojas', gender: 'boy', meaning: 'vitality, lustre' }, { name: 'Omisha', gender: 'girl', meaning: 'goddess of birth and death' }],
-  // Va / Vi / Vu / Ve / Vo
-  Va: [{ name: 'Varun', gender: 'boy', meaning: 'god of the waters' }, { name: 'Vani', gender: 'girl', meaning: 'speech; goddess Saraswati' }, { name: 'Vasudha', gender: 'girl', meaning: 'the earth' }],
-  Vi: [{ name: 'Vihaan', gender: 'boy', meaning: 'dawn, the start of a new day' }, { name: 'Vidya', gender: 'girl', meaning: 'knowledge, learning' }, { name: 'Vivaan', gender: 'boy', meaning: 'full of life' }],
-  Vu: [{ name: 'Vrushank', gender: 'boy', meaning: 'righteous' }],
-  Ve: [{ name: 'Vedant', gender: 'boy', meaning: 'the end of the Vedas; ultimate wisdom' }, { name: 'Veda', gender: 'girl', meaning: 'sacred knowledge' }],
-  Vo: [],
-  // Ka / Ki / Ku / Ke / Ko
-  Ka: [{ name: 'Karan', gender: 'boy', meaning: 'skilful; the warrior Karna' }, { name: 'Kavya', gender: 'girl', meaning: 'poetry' }, { name: 'Kartik', gender: 'boy', meaning: 'bestowing courage; son of Shiva' }],
-  Ki: [{ name: 'Kiran', gender: 'unisex', meaning: 'a ray of light' }, { name: 'Kirti', gender: 'girl', meaning: 'fame, glory' }],
-  Ku: [{ name: 'Kunal', gender: 'boy', meaning: 'lotus; a bird with beautiful eyes' }, { name: 'Kumud', gender: 'unisex', meaning: 'the night lotus' }],
-  Ke: [{ name: 'Keshav', gender: 'boy', meaning: 'a name of Krishna' }, { name: 'Ketan', gender: 'boy', meaning: 'home; a banner' }],
-  Ko: [{ name: 'Komal', gender: 'girl', meaning: 'tender, soft' }],
-  Gha: [], Ing: [],
-  Jha: [],
-  // Ha / Hi / Hu / He / Ho
-  Ha: [{ name: 'Harsh', gender: 'boy', meaning: 'joy, happiness' }, { name: 'Hansa', gender: 'girl', meaning: 'a swan; purity' }, { name: 'Hari', gender: 'boy', meaning: 'a name of Vishnu' }],
-  Hi: [{ name: 'Hitesh', gender: 'boy', meaning: 'one who wishes others well' }, { name: 'Himani', gender: 'girl', meaning: 'goddess Parvati; snow' }],
-  Hu: [{ name: 'Humera', gender: 'girl', meaning: 'a mythical bird of fortune' }],
-  He: [{ name: 'Hemant', gender: 'boy', meaning: 'early winter; golden' }, { name: 'Hema', gender: 'girl', meaning: 'golden' }],
-  Ho: [],
-  // Da / Di / Du / De / Do
-  Da: [{ name: 'Dev', gender: 'boy', meaning: 'god, divine' }, { name: 'Diya', gender: 'girl', meaning: 'a lamp, light' }, { name: 'Daksh', gender: 'boy', meaning: 'capable, skilled' }],
-  Di: [{ name: 'Divya', gender: 'girl', meaning: 'divine, brilliant' }, { name: 'Dinesh', gender: 'boy', meaning: 'the sun (lord of the day)' }],
-  Du: [{ name: 'Durga', gender: 'girl', meaning: 'the invincible goddess' }],
-  De: [{ name: 'Deepak', gender: 'boy', meaning: 'a lamp; light' }, { name: 'Deepa', gender: 'girl', meaning: 'a lamp' }, { name: 'Dev', gender: 'boy', meaning: 'divine' }],
-  Do: [],
-  // Ma / Mi / Mu / Me / Mo
-  Ma: [{ name: 'Manish', gender: 'boy', meaning: 'lord of the mind; intellect' }, { name: 'Maya', gender: 'girl', meaning: 'illusion; divine creative power' }, { name: 'Madhav', gender: 'boy', meaning: 'a name of Krishna' }],
-  Mi: [{ name: 'Mira', gender: 'girl', meaning: 'the devotee-saint Mirabai; ocean' }, { name: 'Mihir', gender: 'boy', meaning: 'the sun' }],
-  Mu: [{ name: 'Mukul', gender: 'boy', meaning: 'a bud, a blossom' }, { name: 'Mukta', gender: 'girl', meaning: 'a pearl; liberated' }],
-  Me: [{ name: 'Meera', gender: 'girl', meaning: 'the devotee of Krishna' }, { name: 'Megh', gender: 'boy', meaning: 'a cloud' }],
-  Mo: [{ name: 'Mohan', gender: 'boy', meaning: 'charming; a name of Krishna' }, { name: 'Mohini', gender: 'girl', meaning: 'enchanting' }],
-  // Ta / Ti / Tu / Te / To / Tha / Tra
-  Ta: [{ name: 'Tara', gender: 'girl', meaning: 'a star' }, { name: 'Tanish', gender: 'boy', meaning: 'ambition' }, { name: 'Tanvi', gender: 'girl', meaning: 'slender, delicate' }],
-  Ti: [{ name: 'Tilak', gender: 'boy', meaning: 'the auspicious mark on the forehead' }],
-  Tu: [{ name: 'Tushar', gender: 'boy', meaning: 'snow, frost' }, { name: 'Tulsi', gender: 'girl', meaning: 'the sacred basil plant' }],
-  Te: [{ name: 'Tejas', gender: 'boy', meaning: 'brilliance, radiance' }, { name: 'Tejal', gender: 'girl', meaning: 'lustrous' }],
-  To: [],
-  Tha: [],
-  Tra: [],
-  // Pa / Pi / Pu / Pe / Po / Pha
-  Pa: [{ name: 'Parth', gender: 'boy', meaning: 'a name of Arjuna' }, { name: 'Pallavi', gender: 'girl', meaning: 'new leaves, a sprout' }, { name: 'Pavan', gender: 'boy', meaning: 'the wind; pure' }],
-  Pi: [{ name: 'Piyush', gender: 'boy', meaning: 'nectar' }, { name: 'Piya', gender: 'girl', meaning: 'beloved' }],
-  Pu: [{ name: 'Puneet', gender: 'boy', meaning: 'pure, holy' }, { name: 'Puja', gender: 'girl', meaning: 'worship, prayer' }],
-  Pe: [], Po: [],
-  Pha: [],
-  // Sha / Sa / Si / Su / Se / So
-  Sha: [{ name: 'Shaurya', gender: 'boy', meaning: 'bravery, valour' }, { name: 'Shalini', gender: 'girl', meaning: 'modest, well-behaved' }, { name: 'Sharv', gender: 'boy', meaning: 'a name of Shiva' }],
-  Sa: [{ name: 'Sahil', gender: 'boy', meaning: 'the shore, a guide' }, { name: 'Saanvi', gender: 'girl', meaning: 'goddess Lakshmi' }, { name: 'Samarth', gender: 'boy', meaning: 'capable, powerful' }],
-  Si: [{ name: 'Siddharth', gender: 'boy', meaning: 'one who has achieved a goal' }, { name: 'Simran', gender: 'girl', meaning: 'remembrance of God' }],
-  Su: [{ name: 'Suresh', gender: 'boy', meaning: 'ruler of the gods (Indra)' }, { name: 'Sunita', gender: 'girl', meaning: 'well-mannered, righteous' }, { name: 'Suhani', gender: 'girl', meaning: 'pleasant, lovely' }],
-  Se: [], So: [{ name: 'Sohan', gender: 'boy', meaning: 'charming, handsome' }, { name: 'Sonal', gender: 'girl', meaning: 'golden' }],
-  // Na / Ni / Nu / Ne / No
-  Na: [{ name: 'Nakul', gender: 'boy', meaning: 'the youngest Pandava' }, { name: 'Nandini', gender: 'girl', meaning: 'joyful; a sacred cow' }, { name: 'Naina', gender: 'girl', meaning: 'the eyes' }],
-  Ni: [{ name: 'Nikhil', gender: 'boy', meaning: 'complete, whole' }, { name: 'Nisha', gender: 'girl', meaning: 'the night' }, { name: 'Niraj', gender: 'boy', meaning: 'the lotus' }],
-  Nu: [{ name: 'Nutan', gender: 'unisex', meaning: 'new, fresh' }],
-  Ne: [{ name: 'Neha', gender: 'girl', meaning: 'love, affection' }, { name: 'Neel', gender: 'boy', meaning: 'blue; sapphire' }],
-  No: [],
-  // Ya / Yi / Yu / Ye / Yo
-  Ya: [{ name: 'Yash', gender: 'boy', meaning: 'fame, success' }, { name: 'Yamini', gender: 'girl', meaning: 'the night' }],
-  Yi: [], Yu: [{ name: 'Yuvan', gender: 'boy', meaning: 'youthful' }], Ye: [], Yo: [{ name: 'Yogesh', gender: 'boy', meaning: 'lord of yoga (Shiva)' }],
-  // Bha / Bhi / Bhu / Bhe / Bho
-  Bha: [{ name: 'Bhavya', gender: 'unisex', meaning: 'grand, magnificent' }, { name: 'Bharat', gender: 'boy', meaning: 'to be maintained; India' }],
-  Bhi: [], Bhu: [{ name: 'Bhumi', gender: 'girl', meaning: 'the earth' }], Bhe: [], Bho: [],
-  // Dha
-  Dha: [{ name: 'Dhruv', gender: 'boy', meaning: 'the pole star; constant' }, { name: 'Dhara', gender: 'girl', meaning: 'a stream; the earth' }],
-  // Ja / Ji / Jha
-  Ja: [{ name: 'Jay', gender: 'boy', meaning: 'victory' }, { name: 'Janya', gender: 'girl', meaning: 'life, born' }],
-  Ji: [{ name: 'Jitesh', gender: 'boy', meaning: 'lord of victory' }],
-  // Ga / Gi / Gu / Ge / Go
-  Ga: [{ name: 'Gaurav', gender: 'boy', meaning: 'pride, honour' }, { name: 'Gauri', gender: 'girl', meaning: 'fair; goddess Parvati' }],
-  Gi: [{ name: 'Girish', gender: 'boy', meaning: 'lord of the mountain (Shiva)' }],
-  Gu: [{ name: 'Gunjan', gender: 'unisex', meaning: 'the humming of a bee' }],
-  Ge: [], Go: [{ name: 'Gopal', gender: 'boy', meaning: 'the cowherd; Krishna' }, { name: 'Gomati', gender: 'girl', meaning: 'a sacred river' }],
-  // Khi / Khu / Khe / Kho
-  Khi: [], Khu: [], Khe: [], Kho: [],
-  // Ra / Ri / Ru / Re / Ro
-  Ra: [{ name: 'Rahul', gender: 'boy', meaning: 'conqueror of miseries; son of the Buddha' }, { name: 'Radha', gender: 'girl', meaning: 'the beloved of Krishna; prosperity' }, { name: 'Rohan', gender: 'boy', meaning: 'ascending; sandalwood' }],
-  Ri: [{ name: 'Riya', gender: 'girl', meaning: 'a singer; graceful' }, { name: 'Rishi', gender: 'boy', meaning: 'a sage' }],
-  Ru: [{ name: 'Ruchi', gender: 'girl', meaning: 'interest, lustre' }, { name: 'Rudra', gender: 'boy', meaning: 'a fierce form of Shiva' }],
-  Re: [{ name: 'Rehan', gender: 'boy', meaning: 'sweet basil; a bunch of flowers' }],
-  Ro: [{ name: 'Rohit', gender: 'boy', meaning: 'red; the first ray of the sun' }, { name: 'Roshni', gender: 'girl', meaning: 'light, brightness' }],
-  // Cha / Chi / Chu / Che / Cho
-  Cha: [{ name: 'Chaitanya', gender: 'boy', meaning: 'consciousness, awareness' }, { name: 'Charvi', gender: 'girl', meaning: 'a beautiful woman' }],
-  Chi: [{ name: 'Chirag', gender: 'boy', meaning: 'a lamp, light' }],
-  Chu: [], Che: [], Cho: [],
-  // La / Li / Lu / Le / Lo
-  La: [{ name: 'Lakshya', gender: 'boy', meaning: 'aim, target' }, { name: 'Lavanya', gender: 'girl', meaning: 'grace, beauty' }],
-  Li: [], Lu: [], Le: [], Lo: [],
+export type Gender = 'boy' | 'girl' | 'unisex';
+export interface BabyName { name: string; hi: string; gender: Gender; meaning: string; }
+
+const N = (name: string, hi: string, gender: Gender, meaning: string): BabyName => ({ name, hi, gender, meaning });
+
+export const BABY_NAMES: BabyName[] = [
+  // अ / ई / ऊ / ए (Krittika) · ओ (Rohini)
+  N('Aarav', 'आरव', 'boy', 'peaceful, wise'), N('Ananya', 'अनन्या', 'girl', 'unique, matchless'),
+  N('Arjun', 'अर्जुन', 'boy', 'bright, shining; the Pandava hero'), N('Aditi', 'अदिति', 'girl', 'boundless; mother of the gods'),
+  N('Ira', 'इरा', 'girl', 'the earth; goddess Saraswati'), N('Ishaan', 'ईशान', 'boy', 'the sun; a form of Shiva'),
+  N('Indira', 'इंदिरा', 'girl', 'goddess Lakshmi'),
+  N('Utkarsh', 'उत्कर्ष', 'boy', 'advancement, prosperity'), N('Uma', 'उमा', 'girl', 'goddess Parvati; tranquillity'),
+  N('Udhav', 'उद्धव', 'boy', 'festival; a friend of Krishna'),
+  N('Ekta', 'एकता', 'girl', 'unity'), N('Ekansh', 'एकांश', 'boy', 'whole, complete'),
+  N('Om', 'ओम', 'boy', 'the sacred primordial sound'), N('Ojas', 'ओजस', 'boy', 'vitality, lustre'),
+  N('Omisha', 'ओमिशा', 'girl', 'goddess of birth and death'),
+  // व
+  N('Varun', 'वरुण', 'boy', 'god of the waters'), N('Vani', 'वाणी', 'girl', 'speech; goddess Saraswati'),
+  N('Vasudha', 'वसुधा', 'girl', 'the earth'),
+  N('Vihaan', 'विहान', 'boy', 'dawn, the start of a new day'), N('Vidya', 'विद्या', 'girl', 'knowledge, learning'),
+  N('Vivaan', 'विवान', 'boy', 'full of life'),
+  N('Vedant', 'वेदांत', 'boy', 'the end of the Vedas; ultimate wisdom'), N('Veda', 'वेदा', 'girl', 'sacred knowledge'),
+  // क
+  N('Karan', 'करण', 'boy', 'skilful; the warrior Karna'), N('Kavya', 'काव्या', 'girl', 'poetry'),
+  N('Kartik', 'कार्तिक', 'boy', 'bestowing courage; son of Shiva'),
+  N('Kiran', 'किरण', 'unisex', 'a ray of light'), N('Kirti', 'कीर्ति', 'girl', 'fame, glory'),
+  N('Kunal', 'कुणाल', 'boy', 'lotus; a bird with beautiful eyes'), N('Kumud', 'कुमुद', 'unisex', 'the night lotus'),
+  N('Keshav', 'केशव', 'boy', 'a name of Krishna'), N('Ketan', 'केतन', 'boy', 'home; a banner'),
+  N('Komal', 'कोमल', 'girl', 'tender, soft'),
+  // घ / छ (Ardra)
+  N('Ghanshyam', 'घनश्याम', 'boy', 'dark as a rain-cloud; a name of Krishna'),
+  N('Chhavi', 'छवि', 'girl', 'image, radiance'), N('Chhaya', 'छाया', 'girl', 'shade, shadow'),
+  // ह
+  N('Harsh', 'हर्ष', 'boy', 'joy, happiness'), N('Hansa', 'हंसा', 'girl', 'a swan; purity'),
+  N('Hari', 'हरि', 'boy', 'a name of Vishnu'),
+  N('Hitesh', 'हितेश', 'boy', 'one who wishes others well'), N('Himani', 'हिमानी', 'girl', 'goddess Parvati; snow'),
+  N('Humera', 'हुमेरा', 'girl', 'a mythical bird of fortune'),
+  N('Hemant', 'हेमंत', 'boy', 'early winter; golden'), N('Hema', 'हेमा', 'girl', 'golden'),
+  // द (dental) — Purva Bhadrapada / Uttara Bhadrapada / Revati
+  N('Daksh', 'दक्ष', 'boy', 'capable, skilled'),
+  N('Divya', 'दिव्या', 'girl', 'divine, brilliant'), N('Dinesh', 'दिनेश', 'boy', 'the sun (lord of the day)'),
+  N('Diya', 'दीया', 'girl', 'a lamp, light'), N('Deepak', 'दीपक', 'boy', 'a lamp; light'),
+  N('Deepa', 'दीपा', 'girl', 'a lamp'),
+  N('Durga', 'दुर्गा', 'girl', 'the invincible goddess'), N('Dushyant', 'दुष्यंत', 'boy', 'a king; the father of Bharata'),
+  N('Dev', 'देव', 'boy', 'god, divine'),
+  // म
+  N('Manish', 'मनीष', 'boy', 'lord of the mind; intellect'), N('Maya', 'माया', 'girl', 'illusion; divine creative power'),
+  N('Madhav', 'माधव', 'boy', 'a name of Krishna'),
+  N('Mira', 'मीरा', 'girl', 'the devotee-saint Mirabai'), N('Mihir', 'मिहिर', 'boy', 'the sun'),
+  N('Mukul', 'मुकुल', 'boy', 'a bud, a blossom'), N('Mukta', 'मुक्ता', 'girl', 'a pearl; liberated'),
+  N('Megh', 'मेघ', 'boy', 'a cloud'), N('Meghna', 'मेघना', 'girl', 'a river; of the clouds'),
+  N('Mohan', 'मोहन', 'boy', 'charming; a name of Krishna'), N('Mohini', 'मोहिनी', 'girl', 'enchanting'),
+  // त (dental) — Swati P4 / Vishakha
+  N('Tara', 'तारा', 'girl', 'a star'), N('Tanish', 'तनिष', 'boy', 'ambition'), N('Tanvi', 'तन्वी', 'girl', 'slender, delicate'),
+  N('Tilak', 'तिलक', 'boy', 'the auspicious mark on the forehead'),
+  N('Tushar', 'तुषार', 'boy', 'snow, frost'), N('Tulsi', 'तुलसी', 'girl', 'the sacred basil plant'),
+  N('Tejas', 'तेजस', 'boy', 'brilliance, radiance'), N('Tejal', 'तेजल', 'girl', 'lustrous'),
+  // प
+  N('Parth', 'पार्थ', 'boy', 'a name of Arjuna'), N('Pallavi', 'पल्लवी', 'girl', 'new leaves, a sprout'),
+  N('Pavan', 'पवन', 'boy', 'the wind; pure'),
+  N('Piyush', 'पीयूष', 'boy', 'nectar'), N('Piya', 'पिया', 'girl', 'beloved'),
+  N('Puneet', 'पुनीत', 'boy', 'pure, holy'), N('Puja', 'पूजा', 'girl', 'worship, prayer'),
+  // श / ष (Hasta P2)
+  N('Shalini', 'शालिनी', 'girl', 'modest, well-behaved'), N('Sharv', 'शर्व', 'boy', 'a name of Shiva'),
+  N('Shanti', 'शांति', 'girl', 'peace'), N('Shashank', 'शशांक', 'boy', 'the moon'),
+  // स
+  N('Sahil', 'साहिल', 'boy', 'the shore, a guide'), N('Saanvi', 'सान्वी', 'girl', 'goddess Lakshmi'),
+  N('Samarth', 'समर्थ', 'boy', 'capable, powerful'),
+  N('Siddharth', 'सिद्धार्थ', 'boy', 'one who has achieved a goal'), N('Simran', 'सिमरन', 'girl', 'remembrance of God'),
+  N('Suresh', 'सुरेश', 'boy', 'ruler of the gods (Indra)'), N('Sunita', 'सुनीता', 'girl', 'well-mannered, righteous'),
+  N('Suhani', 'सुहानी', 'girl', 'pleasant, lovely'),
+  N('Sejal', 'सेजल', 'girl', 'pure river water'),
+  N('Sohan', 'सोहन', 'boy', 'charming, handsome'), N('Sonal', 'सोनल', 'girl', 'golden'),
+  // न (dental) — Anuradha
+  N('Nakul', 'नकुल', 'boy', 'the youngest Pandava'), N('Nandini', 'नंदिनी', 'girl', 'joyful; a sacred cow'),
+  N('Navya', 'नव्या', 'girl', 'new, young'), N('Naveen', 'नवीन', 'boy', 'new'),
+  N('Nikhil', 'निखिल', 'boy', 'complete, whole'), N('Nisha', 'निशा', 'girl', 'the night'),
+  N('Niraj', 'नीरज', 'boy', 'the lotus'), N('Neel', 'नील', 'boy', 'blue; sapphire'),
+  N('Nutan', 'नूतन', 'unisex', 'new, fresh'),
+  N('Neha', 'नेहा', 'girl', 'love, affection'),
+  // य
+  N('Yash', 'यश', 'boy', 'fame, success'), N('Yamini', 'यामिनी', 'girl', 'the night'),
+  N('Yuvan', 'युवान', 'boy', 'youthful'),
+  N('Yogesh', 'योगेश', 'boy', 'lord of yoga (Shiva)'),
+  // भ
+  N('Bhavya', 'भव्य', 'unisex', 'grand, magnificent'), N('Bharat', 'भरत', 'boy', 'to be maintained; India'),
+  N('Bhim', 'भीम', 'boy', 'formidable; the Pandava'),
+  N('Bhumi', 'भूमि', 'girl', 'the earth'),
+  // ध
+  N('Dhara', 'धारा', 'girl', 'a stream; the earth'),
+  // ज
+  N('Jay', 'जय', 'boy', 'victory'), N('Janya', 'जन्या', 'girl', 'life, born'),
+  N('Jitesh', 'जितेश', 'boy', 'lord of victory'),
+  // ख (Shravana)
+  N('Khushi', 'खुशी', 'girl', 'happiness'),
+  // ग
+  N('Ganesh', 'गणेश', 'boy', 'lord of the ganas'), N('Garima', 'गरिमा', 'girl', 'dignity, grace'),
+  N('Gayatri', 'गायत्री', 'girl', 'the Vedic hymn; a goddess'),
+  N('Girish', 'गिरीश', 'boy', 'lord of the mountain (Shiva)'), N('Geeta', 'गीता', 'girl', 'song; the Bhagavad Gita'),
+  N('Gunjan', 'गुंजन', 'unisex', 'the humming of a bee'),
+  N('Gopal', 'गोपाल', 'boy', 'the cowherd; Krishna'), N('Gomati', 'गोमती', 'girl', 'a sacred river'),
+  // र
+  N('Rahul', 'राहुल', 'boy', 'conqueror of miseries; son of the Buddha'), N('Radha', 'राधा', 'girl', 'the beloved of Krishna; prosperity'),
+  N('Riya', 'रिया', 'girl', 'a singer; graceful'), N('Rishi', 'ऋषि', 'boy', 'a sage'),
+  N('Ruchi', 'रुचि', 'girl', 'interest, lustre'), N('Rudra', 'रुद्र', 'boy', 'a fierce form of Shiva'),
+  N('Rehan', 'रेहान', 'boy', 'sweet basil; a bunch of flowers'),
+  N('Rohan', 'रोहन', 'boy', 'ascending; sandalwood'), N('Rohit', 'रोहित', 'boy', 'red; the first ray of the sun'),
+  N('Roshni', 'रोशनी', 'girl', 'light, brightness'),
+  // च
+  N('Charvi', 'चार्वी', 'girl', 'a beautiful woman'), N('Chirag', 'चिराग', 'boy', 'a lamp, light'),
+  // ल
+  N('Lakshya', 'लक्ष्य', 'boy', 'aim, target'), N('Lavanya', 'लावण्या', 'girl', 'grace, beauty'),
+  N('Lila', 'लीला', 'girl', 'play; the divine play'), N('Lekha', 'लेखा', 'girl', 'writing'),
+  N('Lokesh', 'लोकेश', 'boy', 'lord of the world'),
+];
+
+// ── Devanagari first-akshara key ─────────────────────────────────────────────
+const VIRAMA = '्';
+const NUKTA = '़';
+const NUKTA_FORMS: Record<string, string> = {
+  'क़': 'क', 'ख़': 'ख', 'ग़': 'ग', 'ज़': 'ज', 'ड़': 'ड', 'ढ़': 'ढ', 'फ़': 'फ', 'य़': 'य',
+};
+const INDEPENDENT_VOWEL: Record<string, string> = {
+  'अ': 'a', 'आ': 'a', 'इ': 'i', 'ई': 'i', 'उ': 'u', 'ऊ': 'u', 'ए': 'e', 'ऐ': 'ai', 'ओ': 'o', 'औ': 'au',
+};
+const MATRA: Record<string, string> = {
+  'ा': 'a', 'ि': 'i', 'ी': 'i', 'ु': 'u', 'ू': 'u', 'ृ': 'i', 'े': 'e', 'ॆ': 'e', 'ॅ': 'e',
+  'ै': 'ai', 'ो': 'o', 'ॊ': 'o', 'ॉ': 'o', 'ौ': 'au',
+};
+const isConsonant = (c: string) => (c >= 'क' && c <= 'ह') || (c >= 'क़' && c <= 'य़');
+const baseConsonant = (c: string) => {
+  const b = NUKTA_FORMS[c] || c;
+  return b === 'ष' ? 'श' : b; // श and ष sound alike in modern Hindi
 };
 
-/** Names for a syllable (empty array if none curated yet). */
-export function namesFor(akshara: string): BabyName[] {
-  return NAMES_BY_AKSHARA[akshara] || [];
+/**
+ * Key of the first akshara of a Devanagari word: "<consonant>|<vowel>", e.g.
+ * देव → "द|e", रोहन → "र|o", दीपक → "द|i", ध्रुव → "ध|u", अर्जुन → "|a".
+ * Returns null for text that does not start with Devanagari.
+ */
+export function aksharaKey(word: string): string | null {
+  const s = (word || '').normalize('NFC');
+  const chars = Array.from(s);
+  const c0 = chars[0];
+  if (!c0) return null;
+  if (c0 === 'ऋ') return 'र|i';
+  if (INDEPENDENT_VOWEL[c0]) return `|${INDEPENDENT_VOWEL[c0]}`;
+  if (!isConsonant(c0)) return null;
+  let i = 1;
+  if (chars[i] === NUKTA) i++;
+  // Skip the rest of a conjunct (virama + consonant [+ nukta]).
+  while (chars[i] === VIRAMA && chars[i + 1] && isConsonant(chars[i + 1])) {
+    i += 2;
+    if (chars[i] === NUKTA) i++;
+  }
+  const vowel = chars[i] && MATRA[chars[i]] ? MATRA[chars[i]] : 'a';
+  return `${baseConsonant(c0)}|${vowel}`;
+}
+
+/** All names whose first akshara matches a Devanagari pada syllable. */
+export function namesForSyllable(hi: string): BabyName[] {
+  const key = aksharaKey(hi);
+  if (!key) return [];
+  return BABY_NAMES.filter(n => aksharaKey(n.hi) === key);
+}
+
+/** Names for one Nakshatra pada (1–4). */
+export function namesForPada(nakshatra: string, pada: number): BabyName[] {
+  const row = NAKSHATRA_PADA_AKSHARAS[nakshatra];
+  if (!row || pada < 1 || pada > 4) return [];
+  return namesForSyllable(row[pada - 1].hi);
+}
+
+/** Every (nakshatra, pada) a name fits — used by tests to check the whole list. */
+export function padasForName(n: BabyName): { nakshatra: string; pada: number }[] {
+  const key = aksharaKey(n.hi);
+  const out: { nakshatra: string; pada: number }[] = [];
+  for (const [nak, row] of Object.entries(NAKSHATRA_PADA_AKSHARAS)) {
+    row.forEach((p, i) => { if (aksharaKey(p.hi) === key) out.push({ nakshatra: nak, pada: i + 1 }); });
+  }
+  return out;
 }

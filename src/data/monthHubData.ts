@@ -480,7 +480,7 @@ export const MONTH_HUB_DATA: MonthHubData[] = [
       { sign: 'Capricorn', slug: 'capricorn', dates: 'December 22 – January 19' },
     ],
     answerParagraph:
-      'Being born in December means your sign is Sagittarius (through December 21) or Capricorn (from December 22). December\'s birthstones include turquoise, tanzanite and zircon, several of them prized blue gems. In the Northern Hemisphere December holds the winter solstice, the shortest day of the year, and the month is marked worldwide by major seasonal holidays.',
+      'Being born in December means your sign is Sagittarius (through December 21) or Capricorn (from December 22). December\'s birthstones are turquoise, tanzanite and zircon, often seen in shades of blue. In the Northern Hemisphere December holds the winter solstice, the shortest day of the year, and the month is marked worldwide by major seasonal holidays.',
     faqs: [
       {
         question: 'What zodiac sign is December?',
@@ -490,7 +490,7 @@ export const MONTH_HUB_DATA: MonthHubData[] = [
       {
         question: 'What is the December birthstone?',
         answer:
-          'December has several birthstones, including turquoise, tanzanite and zircon.',
+          'December has three birthstones: turquoise, tanzanite and zircon.',
       },
       {
         question: 'What flower represents December?',

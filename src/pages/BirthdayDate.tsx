@@ -6,7 +6,7 @@ import { SEO } from '@/components/SEO';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { CountryExtrasSection } from '@/components/CountryExtrasSection';
 import { getRankedBirthdayCelebrities, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
-import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
+import { BIRTHSTONE_DATA, birthstoneAnswer } from '@/data/birthstoneData';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -236,7 +236,7 @@ export default function BirthdayDate() {
         acceptedAnswer: {
           '@type': 'Answer',
           text: birthstone
-            ? `The birthstone for ${monthName2} is ${birthstone.primaryStone}. ${birthstone.meaning}.`
+            ? (birthstone.answer ? `The birthstones for ${monthName2} are ${birthstoneAnswer(birthstone)}. ${birthstone.meaning}.` : `The birthstone for ${monthName2} is ${birthstone.primaryStone}. ${birthstone.meaning}.`)
             : `See our birthstone guide for ${monthName2}.`,
         },
       },
@@ -305,7 +305,7 @@ export default function BirthdayDate() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
           {[
             { icon: Star, label: 'Zodiac', value: `${zodiac.symbol} ${zodiac.sign}` },
-            { icon: Gem, label: 'Birthstone', value: birthstone?.primaryStone || '—' },
+            { icon: Gem, label: 'Birthstone', value: birthstoneAnswer(birthstone) || '—' },
             { icon: Calendar, label: `Day in ${currentYear}`, value: dayOfWeek },
             { icon: Hash, label: 'In Database', value: `${celebrities.length} celebrities` },
           ].map(({ icon: Icon, label: l, value: v }) => (
@@ -425,7 +425,7 @@ export default function BirthdayDate() {
             {[
               topCeleb && `The most famous person born on ${label} in our database is ${topCeleb}.`,
               celebrities.length > 0 && `People born on ${label} share their birthday with ${celebrities.length} notable people in our database.`,
-              birthstone && `The birthstone for people born in ${monthName2} is ${birthstone.primaryStone} — associated with ${birthstone.meaning.toLowerCase()}.`,
+              birthstone && (birthstone.answer ? `The birthstones for people born in ${monthName2} are ${birthstoneAnswer(birthstone)} — associated with ${birthstone.meaning.toLowerCase()}.` : `The birthstone for people born in ${monthName2} is ${birthstone.primaryStone} — associated with ${birthstone.meaning.toLowerCase()}.`),
               `Your next ${label} birthday falls on a ${new Date(currentYear + 1, month - 1, day).toLocaleDateString('en-US', { weekday: 'long' })}.`,
             ].filter(Boolean).map((fact, i) => (
               <div key={i} className="flex gap-3 bg-card border border-border rounded-xl p-4">

@@ -1,3 +1,5 @@
+import { biorhythmValues } from '@/lib/biorhythm';
+
 export interface BiorhythmResult {
   physical: number;
   emotional: number;
@@ -7,14 +9,9 @@ export interface BiorhythmResult {
 }
 
 export function calculateBiorhythm(birthDate: Date, targetDate: Date): BiorhythmResult {
-  const daysDiff = Math.floor((targetDate.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24));
-  return {
-    physical: Math.round(Math.sin(2 * Math.PI * daysDiff / 23) * 100),
-    emotional: Math.round(Math.sin(2 * Math.PI * daysDiff / 28) * 100),
-    intellectual: Math.round(Math.sin(2 * Math.PI * daysDiff / 33) * 100),
-    date: targetDate,
-    daysSinceBirth: daysDiff,
-  };
+  // N10: one shared calendar-day count (DST-safe, time-of-day independent).
+  const { days, physical, emotional, intellectual } = biorhythmValues(birthDate, targetDate);
+  return { physical, emotional, intellectual, date: targetDate, daysSinceBirth: days };
 }
 
 export function getBiorhythmStatus(value: number): { label: string; color: string; bgColor: string; description: string } {

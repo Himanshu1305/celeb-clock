@@ -304,7 +304,7 @@ const PlanetaryAgePage = () => {
             </h2>
             <p className="text-slate-300 leading-relaxed mb-4">
               A year isn't a universal measure. It's just how long it takes your specific planet to orbit the Sun.
-              Earth takes 365.25 days. Mercury takes 88 days. Neptune takes 60,190 days — nearly 165 Earth years.
+              Earth takes 365.25 days. Mercury takes 88 days. Neptune takes 60,189 days — nearly 165 Earth years.
               Same Sun. Completely different experience of time.
             </p>
             <p className="text-slate-300 leading-relaxed mb-4">

@@ -7,7 +7,7 @@ import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
 import { CountryExtrasSection } from '@/components/CountryExtrasSection';
 import { getZodiacSign, getBirthdayPersonality } from '@/data/birthdayPersonality';
-import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
+import { BIRTHSTONE_DATA, birthstoneAnswer } from '@/data/birthstoneData';
 import { getNumerologyByNumber } from '@/data/numerologyData';
 import { getNationalDays } from '@/data/nationalDays';
 import { ArrowLeft, ArrowRight, ArrowRightCircle, Star, Sparkles } from 'lucide-react';
@@ -162,7 +162,7 @@ export default function BornOnDay() {
   const uniqueThread = [
     topCeleb ? `${topCeleb} shares this birthday` : null,
     primaryNationalDay ? `${monthName} ${day} is ${primaryNationalDay.country}'s ${primaryNationalDay.dayName}` : null,
-    birthstone ? `the birthstone is ${birthstone.primaryStone}` : null,
+    birthstone ? (birthstone.answer ? `the birthstones are ${birthstoneAnswer(birthstone)}` : `the birthstone is ${birthstone.primaryStone}`) : null,
   ].filter(Boolean).join(', ');
   const personaAnswer =
     `People born on ${monthName} ${day} are ${persona.coreTraits.slice(0, 3).join(', ')} — ${zodiac.sign} ` +
@@ -191,7 +191,7 @@ export default function BornOnDay() {
   };
   const metaDesc = (topNames.length > 0
     ? `Famous people born on ${monthName} ${day} (${zodiac.sign}) include ${topNames.join(', ')}. Day ${doy} of the year — discover zodiac, birthstone, and birthday insights.`
-    : `Discover celebrities born on ${monthName} ${day} — ${zodiac.sign} (${zodiac.element}), birthstone ${birthstone?.primaryStone ?? ''}, day ${doy} of the year.`) + nationalDaySuffix;
+    : `Discover celebrities born on ${monthName} ${day} — ${zodiac.sign} (${zodiac.element}), birthstone ${birthstoneAnswer(birthstone)}, day ${doy} of the year.`) + nationalDaySuffix;
 
   const jsonLd = celebrities.length > 0 ? {
     '@context': 'https://schema.org',
@@ -468,13 +468,13 @@ export default function BornOnDay() {
         {birthstone && (
           <div className="bg-card border border-border rounded-xl p-6 mb-6">
             <h2 className="font-semibold text-lg text-foreground mb-2">
-              {monthName} Birthstone — {birthstone.primaryStone}
+              {monthName} Birthstone{birthstone.answer ? 's' : ''} — {birthstoneAnswer(birthstone)}
             </h2>
             <p className="text-muted-foreground text-sm mb-3 line-clamp-4">
               {birthstone.fullDescription.slice(0, 300)}…
             </p>
             <Link to={`/birthstone/${birthstone.slug}`} className="text-primary hover:underline text-sm">
-              Full {birthstone.primaryStone} guide →
+              Full {birthstoneAnswer(birthstone)} guide →
             </Link>
           </div>
         )}

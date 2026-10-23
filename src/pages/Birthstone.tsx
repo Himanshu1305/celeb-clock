@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
+import { BIRTHSTONE_DATA, birthstoneAnswer } from '@/data/birthstoneData';
 import { RASHI_RATNA_DATA, NAVRATNA_INFO } from '@/data/rashiRatnaData';
 
 const FAQ_ITEMS = [
@@ -12,7 +12,7 @@ const FAQ_ITEMS = [
   { q: 'Who decides the official birthstone list?', a: 'In the United States, the list is maintained by the Jewelers of America (formerly American National Association of Jewelers), in collaboration with the American Gem Trade Association (AGTA). BornClock uses the current American Gem Society / Jewelers of America modern list.' },
   { q: 'What is the Mohs hardness scale?', a: 'The Mohs scale (1–10) measures a mineral\'s resistance to scratching, devised by Friedrich Mohs in 1812. Diamond (10) is the hardest natural substance; talc (1) is the softest. Most jewelry-quality gemstones rate 7 or above. Gems below 7 require more careful handling. [Source: GIA, gia.edu]' },
   { q: 'Are birthstone properties (healing, luck) scientifically supported?', a: 'No. Attributed properties — healing, luck, emotional benefits — are traditional and cultural, not scientifically validated. BornClock presents these as cultural tradition. The geology, chemistry, and history of each stone are factually documented.' },
-  { q: 'What months have multiple birthstones?', a: 'Several months have multiple birthstones: June (pearl, alexandrite, moonstone), August (peridot, spinel, sardonyx), October (opal, pink tourmaline), November (topaz, citrine), December (tanzanite, zircon, turquoise). Multiple options often arose from historical availability or affordability concerns.' },
+  { q: 'What months have multiple birthstones?', a: 'Several months have multiple birthstones: June (pearl, alexandrite, moonstone), August (peridot, spinel, sardonyx), October (opal, pink tourmaline), November (topaz, citrine), December (turquoise, tanzanite, zircon). Multiple options often arose from historical availability or affordability concerns.' },
   { q: 'What is the rarest birthstone?', a: 'Alexandrite (June alternate) is among the rarest — it is prized for its dramatic color change (green in daylight, red under incandescent light) and fine specimens are extremely scarce. Red diamonds (April) are technically rarer, but alexandrite\'s rarity is more relevant to the jewelry market. Tanzanite (December), found only in a 4km zone near Kilimanjaro, is also extraordinarily rare.' },
   { q: 'Can I wear any birthstone regardless of my birth month?', a: 'Absolutely. While birthstones are traditionally associated with one\'s birth month, there is no rule against wearing any gemstone you are drawn to. The association is cultural and personal — gemstones are worn for their beauty, meaning, and significance to the individual.' },
 ];
@@ -26,9 +26,9 @@ export default function Birthstone() {
     itemListElement: BIRTHSTONE_DATA.map((b, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: `${b.month} — ${b.primaryStone}`,
+      name: `${b.month} — ${birthstoneAnswer(b)}`,
       url: `https://bornclock.com/birthstone/${b.slug}`,
-      description: `${b.month} birthstone: ${b.primaryStone}. ${b.meaning}.`,
+      description: `${b.month} birthstone: ${birthstoneAnswer(b)}. ${b.meaning}.`,
     })),
   };
 
@@ -189,10 +189,10 @@ export default function Birthstone() {
                     <div className="w-10 h-10 rounded-full shrink-0" style={{ backgroundColor: `${stone.hexColor}44`, border: `2px solid ${stone.hexColor}` }} />
                     <div>
                       <p className="font-bold text-foreground">{stone.month}</p>
-                      <p className="text-sm text-muted-foreground">{stone.primaryStone}</p>
+                      <p className="text-sm text-muted-foreground">{birthstoneAnswer(stone)}</p>
                     </div>
                   </div>
-                  {stone.alternateStones.length > 0 && (
+                  {!stone.answer && stone.alternateStones.length > 0 && (
                     <p className="text-xs text-muted-foreground mb-2">Also: {stone.alternateStones.join(', ')}</p>
                   )}
                   <p className="text-xs text-muted-foreground italic mb-2">{stone.meaning}</p>
@@ -247,7 +247,7 @@ export default function Birthstone() {
                           {stone.month}
                         </Link>
                       </td>
-                      <td className="py-2 pr-4 text-muted-foreground">{stone.primaryStone}</td>
+                      <td className="py-2 pr-4 text-muted-foreground">{birthstoneAnswer(stone)}</td>
                       <td className="py-2 pr-4 text-muted-foreground">{stone.hardness.split(' on')[0]}</td>
                       <td className={`py-2 font-medium ${wearColor}`}>{wear}</td>
                     </tr>

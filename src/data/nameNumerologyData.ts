@@ -5,6 +5,24 @@ const LETTER_VALUES: Record<string, number> = {
 };
 const VOWELS = new Set(['a','e','i','o','u']);
 
+/**
+ * N13 — the Y rule used by the common name-numerology calculators: Y counts as a
+ * vowel when there is no other vowel in its syllable (Lynn, Carolyn, Mary, Mystic),
+ * and as a consonant when it sits next to another vowel (Yolanda, Murray, Kaye).
+ * Implemented per word as "neither neighbouring letter is A, E, I, O or U".
+ */
+function vowelFlags(fullName: string): Array<{ l: string; vowel: boolean }> {
+  const out: Array<{ l: string; vowel: boolean }> = [];
+  for (const word of fullName.toLowerCase().split(/[^a-z]+/).filter(Boolean)) {
+    for (let i = 0; i < word.length; i++) {
+      const l = word[i];
+      const vowel = VOWELS.has(l) || (l === 'y' && !VOWELS.has(word[i - 1] ?? '') && !VOWELS.has(word[i + 1] ?? ''));
+      out.push({ l, vowel });
+    }
+  }
+  return out;
+}
+
 function reduce(n: number): number {
   if (n === 11 || n === 22 || n === 33) return n;
   while (n > 9) {
@@ -15,10 +33,10 @@ function reduce(n: number): number {
 }
 
 export function calculateAllNameNumbers(fullName: string) {
-  const letters = fullName.toLowerCase().replace(/[^a-z]/g, '');
-  const allSum = letters.split('').reduce((s, l) => s + (LETTER_VALUES[l] || 0), 0);
-  const vowelSum = letters.split('').filter(l => VOWELS.has(l)).reduce((s, l) => s + (LETTER_VALUES[l] || 0), 0);
-  const consonantSum = letters.split('').filter(l => !VOWELS.has(l)).reduce((s, l) => s + (LETTER_VALUES[l] || 0), 0);
+  const flags = vowelFlags(fullName);
+  const allSum = flags.reduce((s, f) => s + (LETTER_VALUES[f.l] || 0), 0);
+  const vowelSum = flags.filter(f => f.vowel).reduce((s, f) => s + (LETTER_VALUES[f.l] || 0), 0);
+  const consonantSum = flags.filter(f => !f.vowel).reduce((s, f) => s + (LETTER_VALUES[f.l] || 0), 0);
   return {
     expression: reduce(allSum),
     soulUrge: reduce(vowelSum),
@@ -27,10 +45,10 @@ export function calculateAllNameNumbers(fullName: string) {
 }
 
 export function getLetterBreakdown(fullName: string): Array<{ letter: string; value: number; isVowel: boolean }> {
-  return fullName.toLowerCase().split('').filter(c => /[a-z]/.test(c)).map(l => ({
-    letter: l.toUpperCase(),
-    value: LETTER_VALUES[l] || 0,
-    isVowel: VOWELS.has(l),
+  return vowelFlags(fullName).map(f => ({
+    letter: f.l.toUpperCase(),
+    value: LETTER_VALUES[f.l] || 0,
+    isVowel: f.vowel,
   }));
 }
 

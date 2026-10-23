@@ -9,7 +9,7 @@
  * tendencies, not labels; favourable periods are windows, never fixed events.
  */
 import { GANA, NADI } from './nakshatraAttributes';
-import { NAKSHATRA_AKSHARAS } from '@/data/nakshatraAksharas';
+import { NAKSHATRA_AKSHARAS, aksharaForPada } from '@/data/nakshatraAksharas';
 import { computeMoolDosha, type DoshaChartInput } from './moreDoshas';
 
 interface KundaliLike {
@@ -109,13 +109,17 @@ export function buildChildKundli(data: KundaliLike, birthDate?: string): ChildKu
     ? `Looking at the running Vimshottari Dasha, some naturally supportive windows through childhood (up to age 18): ${favWindows.join('; ')}. These are gentle tailwinds, not fixed events — every period has its own gifts.`
     : 'The early Dasha periods set a steady tone; focus on consistency and warmth rather than any single "best" window.';
 
+  const padaAkshara = aksharaForPada(nak, Number(data.nakshatra?.pada));
   return {
     temperament: { title: 'Temperament', body: `Your child\'s Moon sits in ${data.rashi || 'their Moon sign'}, in the ${nak} birth star — a ${gana} (${gana === 'Deva' ? 'divine' : gana === 'Manushya' ? 'human' : 'intense'}) nature. This suggests ${GANA_TEMPERAMENT[gana]}` },
     learning: { title: 'Learning & education', body: learningBody },
     talents: { title: 'Natural talents', body: talentBody },
     health: { title: 'Health & wellbeing — areas to care for', body: `This is gentle wellbeing guidance, never a diagnosis or a prediction of illness. Like every child, yours thrives on steady sleep, nourishing food, active play and lots of warmth. ${gana === 'Rakshasa' ? 'With a high-energy birth star, plenty of physical outlets and a calm bedtime routine help most.' : gana === 'Deva' ? 'With a sensitive birth star, a gentle, reassuring routine and room to recharge help most.' : 'A balanced routine of activity and rest suits them well.'} Nothing here should influence any health decision — for anything at all about your child\'s health, your paediatrician is the only right source.` },
     favourablePeriods: { title: 'Favourable periods through childhood', body: favBody },
-    nameLetters: { title: 'Auspicious name-starting sounds', aksharas: NAKSHATRA_AKSHARAS[nak] || [], note: `Traditionally a child born in ${nak} is given a name beginning with one of these sounds. It is a lovely custom, entirely optional.` },
+    // N5: only the birth pada's syllable applies (not all four of the Nakshatra's).
+    nameLetters: padaAkshara
+      ? { title: 'Auspicious name-starting sound', aksharas: [`${padaAkshara.en} (${padaAkshara.hi})`], note: `Your child was born in pada ${data.nakshatra!.pada} of ${nak}, so the traditional name-starting syllable is "${padaAkshara.en}" (${padaAkshara.hi}). It is a lovely custom, entirely optional.` }
+      : { title: 'Auspicious name-starting sounds', aksharas: NAKSHATRA_AKSHARAS[nak] || [], note: `Traditionally a child born in ${nak} is given a name beginning with the sound of their birth pada (one of these four). It is a lovely custom, entirely optional.` },
     doshas: { title: 'Doshas — calmly', body: doshaBody },
     support: { title: 'How to support your child', body: `${gana === 'Deva' ? 'Lead with warmth and encouragement; this nature responds to gentleness far more than pressure, and needs reassurance that it is safe to be sensitive.' : gana === 'Rakshasa' ? 'Give clear, loving boundaries and real outlets for their big energy and strong will — channelled well, that intensity becomes drive and leadership.' : 'Balance encouragement with responsibility; this nature grows when trusted with real tasks and treated as capable.'} Above all, let their own enthusiasm lead — the chart is a starting hint, never a script for who your child must become.` },
     disclaimer: 'A Child (Bal) Kundli is a gentle, traditional lens on tendencies — never a fixed verdict on your child\'s future, abilities or health. It must never influence a medical, educational or parenting decision against your own judgement or your paediatrician\'s advice.',

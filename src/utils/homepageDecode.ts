@@ -8,7 +8,7 @@
  * spec fixes (Mars year = 1.8808 Earth years; Mars gravity = 0.38× Earth).
  */
 import { calculateWesternZodiac, calculateLifePathNumber } from '@/utils/celebrityCalculations';
-import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
+import { BIRTHSTONE_DATA, birthstoneAnswer } from '@/data/birthstoneData';
 
 export const MARS_YEAR_IN_EARTH_YEARS = 1.8808;
 export const MARS_GRAVITY_FACTOR = 0.38;
@@ -26,7 +26,7 @@ export function lifePath(day: number, month: number, year: number): number {
 /** Birthstone for a 1–12 month, from the site's own BIRTHSTONE_DATA (so it can't disagree with /birthstone). */
 export function birthstoneForMonth(month: number): string {
   const entry = BIRTHSTONE_DATA[month - 1];
-  return entry ? entry.primaryStone : '';
+  return birthstoneAnswer(entry); // N13: December → all three stones
 }
 
 /** Age on Mars in Mars years, from a birth Date to `now`. */

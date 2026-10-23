@@ -26,6 +26,7 @@ import { getChineseZodiac } from '@/services/ChineseZodiacService';
 import { getVedicRashi } from '@/services/VedicZodiacService';
 import { RASHI_NAME_TO_SLUG } from '@/services/VedicZodiacExtended';
 import { lifePathFromDate } from '@/lib/lifePath';
+import { orbitalPeriodYears } from '@/lib/orbitalPeriods';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const MONTH_SLUGS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -109,18 +110,19 @@ const getBirthstone = (month: number) => {
     { name: 'Sapphire', emoji: '💙', color: 'text-blue-600' },
     { name: 'Opal', emoji: '🌈', color: 'text-pink-400' },
     { name: 'Topaz', emoji: '🧡', color: 'text-amber-500' },
-    { name: 'Turquoise', emoji: '💠', color: 'text-teal-500' },
+    { name: 'Turquoise, Tanzanite & Zircon', emoji: '💠', color: 'text-teal-500' }, // N13: one December answer
   ];
   return birthstones[month - 1] || birthstones[0];
 };
 
+// N13: ratios come from the one shared NASA orbital-period table.
 const calculatePlanetaryAges = (earthYears: number) => [
-  { name: 'Mercury', years: (earthYears / 0.24).toFixed(1), emoji: '🪨', color: 'text-gray-500' },
-  { name: 'Venus', years: (earthYears / 0.62).toFixed(1), emoji: '🟡', color: 'text-yellow-500' },
+  { name: 'Mercury', years: (earthYears / orbitalPeriodYears('Mercury')).toFixed(1), emoji: '🪨', color: 'text-gray-500' },
+  { name: 'Venus', years: (earthYears / orbitalPeriodYears('Venus')).toFixed(1), emoji: '🟡', color: 'text-yellow-500' },
   { name: 'Earth', years: earthYears.toFixed(1), emoji: '🌍', color: 'text-blue-500' },
-  { name: 'Mars', years: (earthYears / 1.88).toFixed(1), emoji: '🔴', color: 'text-red-500' },
-  { name: 'Jupiter', years: (earthYears / 11.86).toFixed(1), emoji: '🟠', color: 'text-orange-500' },
-  { name: 'Saturn', years: (earthYears / 29.46).toFixed(1), emoji: '🪐', color: 'text-amber-600' },
+  { name: 'Mars', years: (earthYears / orbitalPeriodYears('Mars')).toFixed(1), emoji: '🔴', color: 'text-red-500' },
+  { name: 'Jupiter', years: (earthYears / orbitalPeriodYears('Jupiter')).toFixed(1), emoji: '🟠', color: 'text-orange-500' },
+  { name: 'Saturn', years: (earthYears / orbitalPeriodYears('Saturn')).toFixed(1), emoji: '🪐', color: 'text-amber-600' },
 ];
 
 const WESTERN_SIGN_INFO: Record<string, { element: string; planet: string; dateRange: string }> = {

@@ -2,6 +2,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
 import { getChineseZodiac } from '@/services/ChineseZodiacService';
 import { VEDIC_SIGNS } from '@/services/VedicZodiacService';
+import { ORBITAL_PERIOD_DAYS } from '@/lib/orbitalPeriods';
 import { getZodiacByDate } from '@/data/zodiacData';
 import { getBirthstoneByMonth } from '@/data/birthstoneData';
 import { getNumerologyByNumber } from '@/data/numerologyData';
@@ -12,16 +13,8 @@ import { fetchReportVedic, dateOnlyMoon, type ReportBirthPlace, type ReportVedic
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
-export const ORBITAL_PERIODS: Record<string, number> = {
-  Earth: 365.25,
-  Mercury: 88,
-  Venus: 224.7,
-  Mars: 687,
-  Jupiter: 4331,
-  Saturn: 10759,
-  Uranus: 30589,
-  Neptune: 59800,
-};
+// N13: one shared NASA table (src/lib/orbitalPeriods.ts).
+export const ORBITAL_PERIODS: Record<string, number> = { ...ORBITAL_PERIOD_DAYS };
 
 export const PLANET_SHOCKING_FACTS: Record<string, string> = {
   Mercury: 'Mercury spins so slowly that one day lasts 59 Earth days — but a Mercury year is only 88 days. A Mercurian day is longer than its year.',

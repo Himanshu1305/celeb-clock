@@ -8,7 +8,10 @@ import {
   RASHI_SLUGS_ORDER,
   RASHI_NAME_TO_SLUG,
 } from '@/services/VedicZodiacExtended';
-import { VEDIC_SIGNS } from '@/services/VedicZodiacService';
+import { VEDIC_SIGNS, currentAyanamsaDeg } from '@/services/VedicZodiacService';
+
+// N12: live Lahiri ayanamsa from the chart engine (not a fixed 23.85°).
+const AYANAMSA_NOW = currentAyanamsaDeg().toFixed(2);
 
 export default function VedicZodiacSign() {
   const { rashi } = useParams<{ rashi: string }>();
@@ -29,7 +32,11 @@ export default function VedicZodiacSign() {
   const prevSign = VEDIC_SIGNS.find((s) => s.name === prevName);
   const nextSign = VEDIC_SIGNS.find((s) => s.name === nextName);
 
-  const faqItems = data.faq.map((item) => ({ question: item.q, answer: item.a }));
+  // N12: sign-based gemstone answers are replaced by a pointer to the chart-based tool.
+  const faq = data.faq.map((item) => (/gemstone|ratna/i.test(item.q)
+    ? { q: item.q, a: `In Jyotish a gemstone is chosen from the whole birth chart (Lagna, house lordships and the running Dasha), not from the Rashi alone — so there is no single gemstone for every ${rashiName} native. Use BornClock's chart-based gemstone tool at /gemstones with your birth date, time and place, and consult a qualified astrologer before wearing any stone.` }
+    : item));
+  const faqItems = faq.map((item) => ({ question: item.q, answer: item.a }));
 
   return (
     <CollectionLayout
@@ -38,7 +45,7 @@ export default function VedicZodiacSign() {
       seo={(
         <SEO
           title={`${rashiName} Rashi (${signInfo.english}) — Vedic Astrology Guide | BornClock`}
-          description={`${rashiName} Rashi in Jyotish: personality, ruling planet ${signInfo.ruling_planet}, lucky gemstone ${data.lucky_gemstone}, compatibility, and Ayurveda connection. Complete Vedic astrology guide.`}
+          description={`${rashiName} Rashi in Jyotish: personality, ruling planet ${signInfo.ruling_planet}, compatibility, and Ayurveda connection. Complete Vedic astrology guide.`}
           keywords={`${rashiName.toLowerCase()} rashi, ${slug} rashi, vedic ${signInfo.english.toLowerCase()}, jyotish ${rashiName.toLowerCase()}, ${signInfo.english.toLowerCase()} vedic astrology`}
           canonicalUrl={`/vedic-zodiac/${slug}`}
           ogImage="https://bornclock.com/og/zodiac.png"
@@ -46,12 +53,12 @@ export default function VedicZodiacSign() {
       )}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Indian Zodiac (Vedic)', to: '/vedic-zodiac' }], current: `${rashiName} Rashi` }}
       footer={{
-        tagline: `${rashiName} Rashi in Jyotish — personality, ruling planet, gemstone, and Ayurveda connection.`,
+        tagline: `${rashiName} Rashi in Jyotish — personality, ruling planet, and Ayurveda connection.`,
         nav: [
           { label: 'Vedic Astrology', to: '/vedic-astrology' },
           { label: 'Kundali', to: '/kundali' },
           { label: 'Moon Sign', to: '/moon-sign' },
-          { label: 'Rashi Ratna', to: '/rashi-ratna' },
+          { label: 'Gemstones (chart-based)', to: '/gemstones' },
           { label: 'Privacy', to: '/privacy' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
@@ -61,7 +68,7 @@ export default function VedicZodiacSign() {
       lead={(
         <>
           Jyotish (Sanskrit: ज्योतिष) uses the sidereal zodiac corrected for the precession of equinoxes
-          (ayanamsa ≈ 23.85°) — making your Vedic rashi typically one sign earlier than your Western sign.
+          (Lahiri ayanamsa ≈ {AYANAMSA_NOW}° today) — making your Vedic rashi typically one sign earlier than your Western sign.
         </>
       )}
     >
@@ -77,7 +84,7 @@ export default function VedicZodiacSign() {
               <p className="text-xs text-orange-700 leading-relaxed">
                 Jyotish (Sanskrit: ज्योतिष) is the ancient Indian science of light and time, predating Western astrology by millennia.
                 Unlike Western astrology, Jyotish uses the <strong>sidereal zodiac</strong> corrected for the precession of equinoxes
-                (ayanamsa ≈ 23.85°) — making your Vedic rashi typically one sign earlier than your Western sign.
+                (Lahiri ayanamsa ≈ {AYANAMSA_NOW}° today) — making your Vedic rashi typically one sign earlier than your Western sign.
               </p>
             </div>
           </div>
@@ -158,11 +165,18 @@ export default function VedicZodiacSign() {
             </CardContent>
           </Card>
 
-          {/* Lucky Gemstone */}
-          <Card className="border-yellow-300 bg-gradient-to-br from-yellow-50 to-amber-50">
+          {/* Gemstones — N12: no sign-based gemstone advice; point to the chart-based tool */}
+          <Card className="border-yellow-300 bg-gradient-to-br from-yellow-50 to-amber-50" data-testid="vedic-sign-gemstone-pointer">
             <CardContent className="p-6 md:p-8">
-              <h2 className="text-2xl font-bold mb-2 text-yellow-900">💎 Lucky Gemstone: {data.lucky_gemstone}</h2>
-              <p className="text-yellow-800 leading-relaxed">{data.gemstone_detail}</p>
+              <h2 className="text-2xl font-bold mb-2 text-yellow-900">💎 Gemstones</h2>
+              <p className="text-yellow-800 leading-relaxed">
+                In Jyotish a gemstone is chosen from the whole birth chart — the Ascendant (Lagna), which planets
+                rule helpful houses, and the running Dasha — not from a Sun sign or a single Rashi. A stone that
+                suits one {rashiName} native can be wrong for another, so we don't give a {rashiName} gemstone here.
+              </p>
+              <Link to="/gemstones" className="inline-block mt-3 text-sm font-semibold text-yellow-900 underline">
+                Get chart-based gemstone guidance from your birth details →
+              </Link>
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="text-xs font-medium text-yellow-700">Favorable Days:</span>
                 {data.favorable_days.map((d) => (
@@ -239,7 +253,7 @@ export default function VedicZodiacSign() {
             <CardContent className="p-6 md:p-8">
               <h2 className="text-2xl font-bold mb-6 text-foreground">Frequently Asked Questions</h2>
               <div className="space-y-6">
-                {data.faq.map((item, i) => (
+                {faq.map((item, i) => (
                   <div key={i} className="border-b border-border/40 pb-5 last:border-0 last:pb-0">
                     <h3 className="font-semibold text-foreground mb-2">{item.q}</h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">{item.a}</p>

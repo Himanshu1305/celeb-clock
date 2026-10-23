@@ -98,8 +98,8 @@ export default function ChildKundliPage() {
               <p className="text-sm text-muted-foreground mb-2">{result.nameLetters.note}</p>
               {result.nameLetters.aksharas.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-2">
-                  {result.nameLetters.aksharas.map(a => (
-                    <span key={a} className="rounded-lg border border-border px-3 py-1 text-sm font-medium text-foreground">{a}</span>
+                  {result.nameLetters.aksharas.map((a, i) => (
+                    <span key={a + i} className="rounded-lg border border-border px-3 py-1 text-sm font-medium text-foreground">{a}</span>
                   ))}
                 </div>
               )}
