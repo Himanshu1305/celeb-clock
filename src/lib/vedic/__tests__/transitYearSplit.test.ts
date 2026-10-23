@@ -15,7 +15,7 @@ describe('/transit/<planet>/<year> splits the year at real sign changes (audit K
   it('Saturn 2027: Meena → Mesha → Meena with the Swiss Ephemeris dates', () => {
     const t = computeYearTransit('saturn', 2027);
     expect(t.signs.map(s => s.sign)).toEqual(['Meena', 'Mesha', 'Meena']);
-    expect(t.ingress).toEqual([{ date: '2027-06-03', sign: 'Mesha' }, { date: '2027-10-20', sign: 'Meena' }]);
+    expect(t.ingress.map(({ date, sign }) => ({ date, sign }))).toEqual([{ date: '2027-06-03', sign: 'Mesha' }, { date: '2027-10-20', sign: 'Meena' }]);
   });
 
   it('Saturn 2027 for Kumbha Moon: Sade Sati (2nd house) dominates; Mesha stretch read separately', () => {
@@ -29,7 +29,7 @@ describe('/transit/<planet>/<year> splits the year at real sign changes (audit K
 
   it('Jupiter 2027 ingress dates match Swiss Ephemeris (IST)', () => {
     const t = computeYearTransit('jupiter', 2027);
-    expect(t.ingress).toEqual([
+    expect(t.ingress.map(({ date, sign }) => ({ date, sign }))).toEqual([
       { date: '2027-01-25', sign: 'Karka' },
       { date: '2027-06-26', sign: 'Simha' },
       { date: '2027-11-26', sign: 'Kanya' },

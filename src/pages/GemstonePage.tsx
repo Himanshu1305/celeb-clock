@@ -9,7 +9,7 @@ import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { Link } from 'react-router-dom';
-import { WEARING_RITUAL, SIZING_RULE } from '@/lib/vedic/gemstones';
+import { WEARING_RITUAL, sizingRuleForAge, MINOR_SIZING_NOTE } from '@/lib/vedic/gemstones';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { birthQuery } from '@/lib/timezone/clientBirth';
 
@@ -38,6 +38,7 @@ function Card({ s, primary }: { s: Sugg; primary?: boolean }) {
 export default function GemstonePage() {
   const { profile, save } = useSavedProfile();
   const [report, setReport] = useState<Report | null>(null);
+  const [ageYears, setAgeYears] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
   const [saveChecked, setSaveChecked] = useState(false);
@@ -53,6 +54,7 @@ export default function GemstonePage() {
       const data = await res.json();
       if (!data?.report) throw new Error('unavailable');
       setReport(data.report as Report);
+      setAgeYears(typeof data.ageYears === 'number' ? data.ageYears : null);
     } catch { setFailed(true); } finally { setLoading(false); }
   };
   const initial = profile ? { dob: profile.dob, time: profile.time, city: profile.city } : undefined;
@@ -113,7 +115,8 @@ export default function GemstonePage() {
                   <div><div className="text-[11px] uppercase tracking-wider text-muted-foreground">Finger</div><div className="font-medium text-foreground">{WEARING_RITUAL[report.primary.planet].finger}</div></div>
                   <div><div className="text-[11px] uppercase tracking-wider text-muted-foreground">Day to first wear</div><div className="font-medium text-foreground">{WEARING_RITUAL[report.primary.planet].day}</div></div>
                 </div>
-                <p className="mt-3 text-xs text-muted-foreground"><span className="font-semibold text-foreground">Sizing: </span>{SIZING_RULE}</p>
+                {/* D11: no body-weight stone sizes for under-18s. */}
+                <p data-testid="gem-sizing" className="mt-3 text-xs text-muted-foreground"><span className="font-semibold text-foreground">Sizing: </span>{sizingRuleForAge(ageYears) ?? MINOR_SIZING_NOTE}</p>
                 <p className="mt-1 text-xs text-amber-700">These are traditional customs, offered for interest — not requirements, and not medical advice.</p>
               </div>
             )}

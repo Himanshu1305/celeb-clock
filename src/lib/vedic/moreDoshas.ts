@@ -91,34 +91,42 @@ export interface PitraResult {
 }
 
 export function computePitraDosha(input: DoshaChartInput): PitraResult {
+  // D5 (audit round 2): the old rule flagged ANY natural malefic in the 9th —
+  // so Mars alone in the 9th triggered Pitra Dosha and 46% of charts were
+  // flagged. Now only the standard Sun / Rahu / Saturn signatures count:
+  //   1. Sun conjunct Rahu (same sign)            — the classical signature (weight 2)
+  //   2. Rahu in the 9th house of father/lineage  — (weight 1)
+  //   3. Sun in the 9th together with Saturn or Rahu — afflicted Sun in the 9th (weight 1)
+  // Mars, Ketu or Saturn alone in the 9th, and Sun–Saturn elsewhere, no longer count.
   const sun = byName(input.planets, 'Sun');
   const rahu = byName(input.planets, 'Rahu');
-  const ketu = byName(input.planets, 'Ketu');
   const saturn = byName(input.planets, 'Saturn');
   const reasons: string[] = [];
   let weight = 0;
 
-  if (sun) {
-    const withNode = [rahu, ketu].some(n => n && n.signIndex === sun.signIndex);
-    const withSaturn = saturn && saturn.signIndex === sun.signIndex;
-    if (withNode) { reasons.push('the Sun shares its sign with a node (Rahu/Ketu) — the clearest classical Pitra signature'); weight += 2; }
-    if (withSaturn) { reasons.push('the Sun shares its sign with Saturn'); weight += 1; }
+  if (sun && rahu && rahu.signIndex === sun.signIndex) {
+    reasons.push('the Sun shares its sign with Rahu — the clearest classical Pitra signature');
+    weight += 2;
   }
-  // Natural malefic in the 9th house (house of father / ancestry / dharma).
-  const malefic9 = input.planets.filter(p => p.house === 9 && NATURAL_MALEFICS.has(p.name));
-  if (malefic9.length) { reasons.push(`a natural malefic (${malefic9.map(p => p.name).join(', ')}) sits in the 9th house of father and lineage`); weight += 1; }
-  // Sun itself in the 9th with any node present in the chart's 9th.
-  if (sun && sun.house === 9 && [rahu, ketu].some(n => n && n.house === 9)) {
-    reasons.push('the Sun and a node both occupy the 9th house'); weight += 1;
+  if (rahu && rahu.house === 9) {
+    reasons.push('Rahu occupies the 9th house of father and lineage');
+    weight += 1;
+  }
+  if (sun && sun.house === 9) {
+    const with9 = [saturn, rahu].filter((p): p is DoshaPlanet => !!p && p.house === 9).map(p => p.name);
+    if (with9.length) {
+      reasons.push(`the Sun sits in the 9th house together with ${with9.join(' and ')}`);
+      weight += 1;
+    }
   }
 
-  const present = weight >= 1 && reasons.length > 0;
+  const present = weight >= 1;
   const grade: DoshaGrade = !present ? 'none' : weight >= 3 ? 'strong' : weight === 2 ? 'moderate' : 'mild';
   return {
     present, grade, reasons,
     detail: present
       ? `The classical Pitra-dosha reading applies with ${grade} intensity because ${reasons.join('; ')}.`
-      : 'None of the classical Pitra-dosha signatures (Sun with a node or Saturn, or malefics in the 9th house of lineage) are present here.',
+      : 'None of the classical Pitra-dosha signatures (Sun with Rahu, Rahu in the 9th house, or the Sun in the 9th with Saturn or Rahu) are present here.',
   };
 }
 
@@ -129,14 +137,19 @@ export function computePitraDosha(input: DoshaChartInput): PitraResult {
 const MOOL_NAKSHATRAS = new Set(['Ashwini', 'Ashlesha', 'Magha', 'Jyeshtha', 'Mula', 'Revati']);
 // Gandanta-junction padas held to be the most intense in the tradition.
 const INTENSE_PADA: Record<string, number> = { Revati: 4, Ashlesha: 4, Jyeshtha: 4, Ashwini: 1, Magha: 1, Mula: 1 };
-// Traditional note on which relationship the texts associate with each (gentle).
+// Traditional note on which relative the tradition associates with each star.
+// D7: follows Drik Panchang's Gandamool table ("Possible Effect On", fetched
+// 23 Oct 2026 from drikpanchang.com/panchang/gandamool-dates-timings.html):
+// Ashwini → Father, Ashlesha → Mother, Magha → Father, Jyeshtha → Younger
+// Siblings, Moola → Father or Grandfather, Revati → Mother. (The old table said
+// Ashwini → "mother-in-law", which no standard source gives.)
 const MOOL_RELATION: Record<string, string> = {
-  Ashwini: 'traditionally linked to the mother-in-law in classical texts',
+  Ashwini: 'traditionally linked to the father',
   Ashlesha: 'traditionally linked to the mother',
   Magha: 'traditionally linked to the father',
-  Jyeshtha: 'traditionally linked to an elder sibling',
-  Mula: 'traditionally linked to the father (the most-discussed of the mool stars)',
-  Revati: 'traditionally considered gentle, with only a mild note',
+  Jyeshtha: 'traditionally linked to younger siblings',
+  Mula: 'traditionally linked to the father or grandfather',
+  Revati: 'traditionally linked to the mother',
 };
 
 export interface MoolResult {

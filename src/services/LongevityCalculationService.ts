@@ -367,6 +367,22 @@ export const DEFAULT_PILLAR2: Pillar2Data = {
   mentorIsLiving: true,
 };
 
+/**
+ * S12: the bracket multipliers are treated as values at each bracket's MIDPOINT
+ * (45, 55, 65, 75, 85) and interpolated linearly, ramping from 1.0 at 35 — so there is
+ * no overnight jump at 40/50/60/70/80 and each bracket's mid-age keeps its published value.
+ */
+function interpolateMultiplier(set: Record<number, number>, age: number): number {
+  const knots: Array<[number, number]> = [[35, 1], [45, set[40]], [55, set[50]], [65, set[60]], [75, set[70]], [85, set[80]]];
+  if (age <= 35) return 1;
+  if (age >= 85) return set[80];
+  for (let i = 1; i < knots.length; i++) {
+    const [a0, m0] = knots[i - 1], [a1, m1] = knots[i];
+    if (age <= a1) return m0 + (m1 - m0) * (age - a0) / (a1 - a0);
+  }
+  return set[80];
+}
+
 export function getConditionalBase(
   country: string,
   gender: 'male' | 'female' | '',
@@ -390,8 +406,8 @@ export function getConditionalBase(
     source = 'UN World Population Prospects 2024, Global Average';
   }
 
-  // Step 2: Apply conditional multiplier if age >= 40
-  if (currentAge < 40) {
+  // Step 2: Apply the (interpolated) conditional multiplier from age 35
+  if (currentAge <= 35) {
     return { base: birthBaseline, source, isConditional: false };
   }
 
@@ -399,13 +415,8 @@ export function getConditionalBase(
     ? CONDITIONAL_MULTIPLIERS.HIGH
     : CONDITIONAL_MULTIPLIERS.LOW) as Record<number, number>;
 
-  const bracket = currentAge >= 80 ? 80
-                : currentAge >= 70 ? 70
-                : currentAge >= 60 ? 60
-                : currentAge >= 50 ? 50
-                : 40;
-
-  const multiplier = multiplierSet[bracket];
+  // S12: interpolated (see interpolateMultiplier) — no ~3-year jump on the 40th birthday.
+  const multiplier = interpolateMultiplier(multiplierSet, currentAge);
   const conditionalBase = Math.round(birthBaseline * multiplier * 10) / 10;
 
   return { base: conditionalBase, source, isConditional: true };
@@ -436,8 +447,14 @@ function livingAdjustment(age: number): number {
   return 0;
 }
 
+/** Neutral family baseline (the score's "Average" anchor). */
+const FAMILY_BASELINE_AGE = 78;
+
 function longevityContribution(m: FamilyMemberData): number {
-  if (m.isLiving) return m.age + livingAdjustment(m.age);
+  // S12: a LIVING relative's current age is not their lifespan — a living 50-year-old
+  // parent says nothing bad about family longevity. Living relatives count as at least
+  // the neutral baseline (older ones above it, with the survival bonus).
+  if (m.isLiving) return Math.max(m.age + livingAdjustment(m.age), FAMILY_BASELINE_AGE);
   return m.age;
 }
 
@@ -466,11 +483,11 @@ const MAT_MEMBERS: { key: P1Key; weight: number }[] = [
   { key: 'maternalAunts',       weight: 10 },
 ];
 
-function calcSideAvg(members: { key: P1Key; weight: number }[], p1: Pillar1Data): number | null {
+function calcSideAvg(members: { key: P1Key; weight: number }[], p1: Pillar1Data, contribution: (m: FamilyMemberData) => number = longevityContribution): number | null {
   const entered = members.filter(({ key }) => isEntered(p1[key]));
   if (entered.length === 0) return null;
   const totalWeight = entered.reduce((s, { weight }) => s + weight, 0);
-  const weightedSum = entered.reduce((s, { key, weight }) => s + longevityContribution(p1[key]) * weight, 0);
+  const weightedSum = entered.reduce((s, { key, weight }) => s + contribution(p1[key]) * weight, 0);
   return weightedSum / totalWeight;
 }
 
@@ -503,8 +520,9 @@ function geneticCalc(p1: Pillar1Data): {
 
 // Inline preview (no living adjustment — used in calculator step 7 badge only)
 export function computeGeneticPreview(p1: Pillar1Data): { wfa: number; score: string } {
-  const patAvg = calcSideAvg(PAT_MEMBERS, p1);
-  const matAvg = calcSideAvg(MAT_MEMBERS, p1);
+  const preview = (m: FamilyMemberData) => (m.isLiving ? Math.max(m.age, FAMILY_BASELINE_AGE) : m.age);
+  const patAvg = calcSideAvg(PAT_MEMBERS, p1, preview);
+  const matAvg = calcSideAvg(MAT_MEMBERS, p1, preview);
   if (patAvg === null && matAvg === null) return { wfa: 78, score: 'Average' };
   const wfa = patAvg !== null && matAvg !== null ? patAvg * 0.5 + matAvg * 0.5 : patAvg ?? matAvg!;
   const score = wfa > 87 ? 'Exceptional' : wfa >= 82 ? 'Strong' : wfa >= 75 ? 'Average' : 'Below Average';
@@ -607,17 +625,22 @@ export function calculateLongevity(
     communityBonus = Math.round(Math.min(1.5, baseBonus + habitsBonus) * 10) / 10;
   }
 
-  const totalForecast = Math.round((base + health + genetic + epigenetic + communityBonus) * 10) / 10;
+  // S12: cap the combined downward adjustment so stacked penalties can't produce
+  // "0.5 years remaining" for a 25–49-year-old. A guard, not a statistic.
+  const MAX_TOTAL_PENALTY = -20;
+  const cappedAdj = Math.max(MAX_TOTAL_PENALTY, health + genetic);
+  const totalForecast = Math.round((base + cappedAdj + epigenetic + communityBonus) * 10) / 10;
 
   // ── Survival minimum guard ────────────────────────────────────────────────
   // Any person alive at age X has demonstrated survival advantage.
-  // Minimum = currentAge + floor(currentAge × 0.08). Applied for age 50+ only.
+  // Minimum = currentAge + floor(currentAge × 0.08). S12: applied to all adults (was 50+
+  // only, which let a 25–49-year-old see "0.5 years remaining").
   let minimumForecast = totalForecast;
   let minimumApplied = false;
   let minimumThreshold = 0;
   let survivalBuffer = 0;
 
-  if (currentAge >= 50) {
+  if (currentAge >= 18) {
     survivalBuffer = Math.floor(currentAge * 0.08);
     minimumThreshold = currentAge + survivalBuffer;
     if (totalForecast < minimumThreshold) {

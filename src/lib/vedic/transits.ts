@@ -26,6 +26,8 @@ export const TRANSIT_PLANETS: Record<TransitPlanet, { key: PlanetName; label: st
 export interface YearTransitPhase extends TransitReading {
   fromISO: string;   // IST calendar date the planet is in this sign from (or 1 Jan)
   toISO: string;     // IST calendar date it leaves (or 31 Dec)
+  fromMs: number;    // exact instant (for display in the viewer's time zone)
+  toMs: number;
   days: number;
 }
 
@@ -37,7 +39,7 @@ export interface YearTransit {
   endSign: string;         // sign at the end of the year
   /** Every stretch of the year in one sign, in order — e.g. Saturn 2027: Meena → Mesha → Meena. */
   signs: Array<{ sign: string; fromISO: string; toISO: string }>;
-  ingress: Array<{ date: string; sign: string }>;
+  ingress: Array<{ date: string; sign: string; atMs: number }>;
   /**
    * Per Moon sign. The top-level reading is the house the planet occupies for the
    * LONGEST total time in the year; `phases` holds every stretch with its own dates
@@ -59,12 +61,12 @@ export function computeYearTransit(planet: TransitPlanet, year: number): YearTra
   // computing every Moon sign's effect for Mesha.
   const segs = signSegments(key, start, end);
   const signs = segs.map(sg => ({ sign: RASHIS[sg.signIndex].sanskrit, fromISO: sg.fromISO, toISO: sg.toISO }));
-  const ingress = segs.slice(1).map(sg => ({ date: sg.fromISO, sign: RASHIS[sg.signIndex].sanskrit }));
+  const ingress = segs.slice(1).map(sg => ({ date: sg.fromISO, sign: RASHIS[sg.signIndex].sanskrit, atMs: sg.startMs }));
 
   const perSign = RASHIS.map((r, i) => {
     const phases: YearTransitPhase[] = segs.map(sg => ({
       ...readPlanetTransit(key, i, new Date((sg.startMs + sg.endMs) / 2)),
-      fromISO: sg.fromISO, toISO: sg.toISO,
+      fromISO: sg.fromISO, toISO: sg.toISO, fromMs: sg.startMs, toMs: sg.endMs,
       days: Math.round((sg.endMs - sg.startMs) / 864e5),
     }));
     // Dominant house = the one occupied for the most days in total across the year.
@@ -72,7 +74,7 @@ export function computeYearTransit(planet: TransitPlanet, year: number): YearTra
     for (const ph of phases) daysByHouse.set(ph.house, (daysByHouse.get(ph.house) ?? 0) + ph.days);
     const domHouse = [...daysByHouse.entries()].sort((a, b) => b[1] - a[1])[0][0];
     const dom = phases.find(ph => ph.house === domHouse)!;
-    const { fromISO: _f, toISO: _t, days: _d, ...domReading } = dom;
+    const { fromISO: _f, toISO: _t, fromMs: _fm, toMs: _tm, days: _d, ...domReading } = dom;
     const reading: TransitReading = { ...domReading };
     if (phases.some(ph => ph.sadeSati)) reading.sadeSati = true; else delete reading.sadeSati;
     if (phases.some(ph => ph.dhaiya)) reading.dhaiya = true; else delete reading.dhaiya;

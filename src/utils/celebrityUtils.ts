@@ -1,3 +1,4 @@
+import { CONFIRMED_JAN1_BIRTHS, slugifyName } from '@/lib/celebrityFacts';
 // Day-8 celebrity page utilities. Field names adapted to the real
 // src/data/indianCelebrities.ts shape: { name, birth_date (YYYY-MM-DD),
 // category, known_for, nationality, birth_year, death_year?, tier }.
@@ -26,8 +27,10 @@ export function parseCelebrityDOB(celeb: Record<string, unknown>): CelebrityDOB 
     if (parts.length === 3 && parts.every(n => Number.isFinite(n))) {
       const [year, month, day] = parts;
       const validParts = year > 1000 && month >= 1 && month <= 12 && day >= 1 && day <= 31;
-      // "-01-01" is the dataset's placeholder for an unknown exact date.
-      const isPlaceholder = month === 1 && day === 1;
+      // "-01-01" is the dataset's placeholder for an unknown exact date — except
+      // for people verified to be born on 1 January (S8, see CONFIRMED_JAN1_BIRTHS).
+      const slug = String(celeb.slug ?? '') || slugifyName(String(celeb.name ?? ''));
+      const isPlaceholder = month === 1 && day === 1 && !CONFIRMED_JAN1_BIRTHS.has(slug);
       if (validParts && !isPlaceholder) {
         return { year, month, day, isFullDate: true };
       }

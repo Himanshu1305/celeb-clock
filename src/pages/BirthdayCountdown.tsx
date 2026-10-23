@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { AgeCalculator } from '@/components/AgeCalculator';
+import { BirthdayCountdownCard } from '@/components/BirthdayCountdownCard';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -9,9 +10,9 @@ import { AuthorBio } from '@/components/AuthorBio';
 
 const FAQ_ITEMS = [
   { question: 'How do I calculate days until my birthday?', answer: "Find the next occurrence of your birth date (this year if it hasn't passed, next year if it has), then count every calendar day between today and that date. BornClock does this automatically, accounting for leap years." },
-  { question: 'What if my birthday is tomorrow?', answer: 'The countdown shows 1 day. On your birthday itself, the counter resets to 365 (or 366 in a leap year) and begins counting down to the following year’s birthday immediately.' },
+  { question: 'What if my birthday is tomorrow?', answer: 'The countdown shows 1 day. On your birthday itself, BornClock wishes you a happy birthday and starts counting down to the following year’s birthday.' },
   { question: 'What day of the week will my birthday fall on?', answer: 'BornClock shows the day of the week for your upcoming birthday alongside the countdown. The day shifts by one each year, or two after a leap year — so it rotates through the week over a 5–6 year cycle.' },
-  { question: 'What if I was born on February 29?', answer: 'Leap day birthdays are counted to the next February 29. BornClock notes how many years until your next technical birthday and indicates the conventional celebration date (February 28 or March 1) for non-leap years.' },
+  { question: 'What if I was born on February 29?', answer: 'In non-leap years BornClock counts down to February 28, the most common celebration date, and also tells you the year of your next real February 29.' },
 ];
 
 const RELATED = [
@@ -62,6 +63,7 @@ const BirthdayCountdown = () => {
         </section>
 
         <section id="calculator" className="max-w-4xl mx-auto mb-12">
+          <BirthdayCountdownCard birthDate={birthDate} />
           <AgeCalculator onBirthDateChange={setBirthDate} initialDate={birthDate} />
         </section>
 

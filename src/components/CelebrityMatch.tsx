@@ -1,24 +1,24 @@
 import { useState, useEffect, useMemo } from 'react';
+import { celebYearsForDisplay } from '@/lib/celebrityFacts';
 import { CakeIcon } from 'lucide-react';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getRankedBirthdayCelebrities, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CountryExtrasSection } from '@/components/CountryExtrasSection';
-const CURRENT_YEAR = new Date().getFullYear();
 
 interface CelebrityMatchProps {
   birthDate: Date | null;
 }
 
 function supabaseToDisplay(c: CelebrityBirthdayResult): DisplayCelebrity {
-  const birthYear = c.birthDate ? new Date(c.birthDate + 'T12:00:00').getFullYear() : null;
-  const deathYear = c.deathDate ? new Date(c.deathDate + 'T12:00:00').getFullYear() : null;
+  // S7/S9: overrides, 105-year living cap, no ages from BCE/unreliable dates.
+  const { birthYear, deathYear, age, isLiving } = celebYearsForDisplay(c);
   return {
     name: c.name,
     birthYear,
     deathYear,
-    age: birthYear && c.isLiving ? CURRENT_YEAR - birthYear : null,
-    isLiving: c.isLiving,
+    age,
+    isLiving,
     occupation: c.occupation ?? 'Celebrity',
     knownFor: c.knownFor,
     imageUrl: null,

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { calendarAge } from '@/lib/ageBreakdown';
 
 /**
  * Age Calculator Hook
@@ -47,24 +48,13 @@ export const useAgeCalculator = (birthDate: Date | null) => {
       // Breakdown: years / months / days / hours / minutes / seconds
       // Computed from calendar date/time components so they reflect the
       // human-readable "age since birthday" rather than raw elapsed ms.
-      let years   = now.getFullYear() - birth.getFullYear();
-      let months  = now.getMonth()    - birth.getMonth();
-      let days    = now.getDate()     - birth.getDate();
+      // Calendar y/m/d via the shared month-end-clamped helper (never negative).
+      const { years, months, days } = calendarAge(birth, now);
       // Use elapsed-ms seconds/minutes/hours for the sub-day breakdown so
       // these always stay in sync with totalSeconds and advance every second.
       const seconds = totalSeconds % 60;
       const minutes = totalMinutes % 60;
       const hours   = totalHours   % 24;
-
-      if (days < 0) {
-        const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-        days += lastMonth.getDate();
-        months -= 1;
-      }
-      if (months < 0) {
-        months += 12;
-        years  -= 1;
-      }
 
       setAgeData({
         years,

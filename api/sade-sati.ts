@@ -8,6 +8,7 @@ import { chartBasisFromResult } from '../src/lib/vedic/chartBasis.js';
 import { birthRangeError, resolveRequestBirthTz } from './_birthParams.js';
 import { getSaturnSignIndex, RASHI_NAMES } from '../src/lib/vedic/engine/vedicEngine.js';
 import { computeSadeSati } from '../src/lib/vedic/sadeSati.js';
+import { buildGemstoneReport, blueSapphireAllowed } from '../src/lib/vedic/gemstones.js';
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600' } });
@@ -34,7 +35,9 @@ async function handler(request) {
     const birth = new Date(Date.UTC(y, m - 1, d, h, min) - tz * 3600_000);
     const report = computeSadeSati(moonSign, now, getSaturnSignIndex, birth);
     const ageYears = Math.max(0, Math.floor((now.getTime() - birth.getTime()) / (365.2425 * 864e5)));
-    return json({ ...report, ageYears, moonSignName: chart.rashi, birthTimezone: btz.birthTimezone, basis: chartBasisFromResult(chart, btz.birthTimezone), _cache: 'miss' });
+    // D8: only mention Blue Sapphire when the full-chart gemstone logic recommends Saturn (adults only).
+    const blueSapphireOk = blueSapphireAllowed(buildGemstoneReport(chart), ageYears);
+    return json({ ...report, ageYears, blueSapphireOk, moonSignName: chart.rashi, birthTimezone: btz.birthTimezone, basis: chartBasisFromResult(chart, btz.birthTimezone), _cache: 'miss' });
   } catch (e) {
     return json({ error: 'sade-sati-failed', detail: String(e?.message || e) }, 500);
   }

@@ -99,7 +99,8 @@ export const CelebrityCard = ({ celebrity, index, dateHref, profileSlug, showRan
   const lifespan = celebrity.isLiving
     ? [
         celebrity.birthYear ? `Born ${celebrity.birthYear}` : null,
-        celebrity.age ? `Age ${celebrity.age}` : null,
+        // S7: ages above 105 for "living" people are withheld (likely a missing death record).
+        celebrity.age ? `Age ${celebrity.age}` : (celebrity.birthYear ? 'Age not shown' : null),
       ].filter(Boolean).join(' · ')
     : [
         celebrity.birthYear && celebrity.deathYear

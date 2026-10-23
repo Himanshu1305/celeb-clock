@@ -12,6 +12,7 @@ import { Card } from '@/components/ui/card';
 import { WikiPerson } from '@/services/WikimediaService';
 import { getImageCredit } from '@/services/WikipediaImageService';
 import { calculateAgeInTimezone } from '@/utils/timezoneDetection';
+import { correctCelebDates, ageAtDeath, livingAge } from '@/lib/celebrityFacts';
 import { 
   ExternalLink, 
   Calendar, 
@@ -41,9 +42,13 @@ export const CelebrityProfileDialog = ({
   // P5-4: photo credit (author + licence) required by the Wikimedia/Commons licence.
   const photoCredit = person.image ? getImageCredit(person.name) : null;
 
-  const age = person.deathDate
-    ? null 
-    : calculateAgeInTimezone(new Date(person.birthDate));
+  // S7/S9: apply death overrides; no age from unreliable dates; cap living ages at 105.
+  const dates = correctCelebDates({ name: person.name, birthDate: person.birthDate, deathDate: person.deathDate ?? null });
+  const deathDate = dates.deathDate;
+  const age = dates.isLiving && livingAge(dates.birthDate) != null
+    ? calculateAgeInTimezone(new Date(person.birthDate))
+    : null;
+  const lived = ageAtDeath(dates);
 
   const getCategoryIcon = () => {
     switch (person.category) {
@@ -166,7 +171,7 @@ export const CelebrityProfileDialog = ({
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">
-                    {person.deathDate ? 'Lived' : 'Current Age'}
+                    {deathDate ? 'Lived' : 'Current Age'}
                   </p>
                   <p className="text-lg font-semibold">
                     {age ? (
@@ -175,14 +180,14 @@ export const CelebrityProfileDialog = ({
                         {age.months > 0 && `, ${age.months} months`}
                       </>
                     ) : (
-                      person.deathDate ? (
+                      deathDate && lived != null ? (
                         <>
-                          {new Date(person.deathDate).getFullYear() - new Date(person.birthDate).getFullYear()} years
+                          {lived} years
                           <span className="text-sm text-muted-foreground ml-2">
                             (deceased)
                           </span>
                         </>
-                      ) : 'N/A'
+                      ) : (dates.isLiving && !dates.datesUnreliable ? 'Age not shown' : 'N/A')
                     )}
                   </p>
                 </div>

@@ -2,6 +2,7 @@ import { WikiPerson, WikiEvent } from '@/services/WikimediaService';
 import { findCelebrityByBirthday } from '@/data/celebrities';
 import { supabase } from '@/integrations/supabase/client';
 import { CELEBRITY_NATIONALITY } from '@/data/celebrityNationality';
+import { correctCelebDates, isBlockedCelebrity } from '@/lib/celebrityFacts';
 
 export interface BirthdaySearchResult {
   people: WikiPerson[];
@@ -93,13 +94,14 @@ export const searchLocalDatabase = async (date: Date): Promise<{ people: WikiPer
   const { birthdayDatabase } = await import('@/data/birthdayData');
   const birthdayData = birthdayDatabase[dateKey];
   if (birthdayData) {
-    results.people.push(...birthdayData.people);
+    results.people.push(...birthdayData.people.filter(p => !isBlockedCelebrity(p.name, p.description || p.profession)));
     results.events.push(...birthdayData.events);
   }
 
   const matchedCelebrities = await findCelebrityByBirthday(date);
   const convertedCelebrities = matchedCelebrities.map(convertCelebrityToWikiPerson);
   convertedCelebrities.forEach(celeb => {
+    if (isBlockedCelebrity(celeb.name, celeb.description || celeb.profession)) return; // S14
     if (!results.people.some(p => p.name.toLowerCase() === celeb.name.toLowerCase())) {
       results.people.push(celeb);
     }
@@ -179,6 +181,7 @@ export const queryWikidata = async (
     const people: WikiPerson[] = [];
     for (const result of data.results?.bindings || []) {
       if (result.personLabel?.value && result.birthDate?.value) {
+        if (isBlockedCelebrity(result.personLabel.value, result.occupationLabel?.value)) continue; // S14
         const occupation = result.occupationLabel?.value || 'Notable Person';
         people.push({
           name: result.personLabel.value,
@@ -304,7 +307,32 @@ export interface CelebrityBirthdayResult {
   wikipediaUrl: string | null;
   wikidataId: string | null;
   isLiving: boolean;
+  /** Death before birth / BCE stored as CE — never compute an age. */
+  datesUnreliable?: boolean;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapCelebRow(c: any): CelebrityBirthdayResult {
+  // S6/S7/S9: code-side date corrections (deaths missing in the DB, BCE years).
+  const fixed = correctCelebDates({ name: c.name, birthDate: c.birth_date, deathDate: c.death_date });
+  return {
+    name: c.name,
+    birthDate: fixed.birthDate,
+    deathDate: fixed.deathDate,
+    sitelinks: c.sitelinks ?? 0,
+    nationality: c.nationality,
+    nationalityCode: c.nationality_code,
+    occupation: c.occupation,
+    knownFor: c.known_for ?? null,
+    wikipediaUrl: c.wikipedia_url,
+    wikidataId: c.wikidata_id,
+    isLiving: fixed.isLiving,
+    datesUnreliable: fixed.datesUnreliable,
+  };
+}
+
+// S14: criminals are never shown as "celebrity birthday twins".
+const notBlocked = (c: CelebrityBirthdayResult) => !isBlockedCelebrity(c.name, c.knownFor || c.occupation);
 
 /**
  * Canonical celebrity-for-date query used by all surfaces:
@@ -336,19 +364,7 @@ export async function getRankedBirthdayCelebrities(
     }
 
     // Pure sitelinks DESC (already ordered by the query above). No per-user boost.
-    return data.slice(0, limit).map(c => ({
-      name: c.name,
-      birthDate: c.birth_date,
-      deathDate: c.death_date,
-      sitelinks: c.sitelinks ?? 0,
-      nationality: c.nationality,
-      nationalityCode: c.nationality_code,
-      occupation: c.occupation,
-      knownFor: c.known_for ?? null,
-      wikipediaUrl: c.wikipedia_url,
-      wikidataId: c.wikidata_id,
-      isLiving: !c.death_date,
-    }));
+    return data.map(mapCelebRow).filter(notBlocked).slice(0, limit);
   } catch (err) {
     console.error('BirthdaySearchService: Supabase celebrity query failed (returning []):', err);
     return [];
@@ -377,19 +393,7 @@ export async function getRankedMonthCelebrities(
 
     if (error || !data || data.length === 0) return [];
 
-    return data.map(c => ({
-      name: c.name,
-      birthDate: c.birth_date,
-      deathDate: c.death_date,
-      sitelinks: c.sitelinks ?? 0,
-      nationality: c.nationality,
-      nationalityCode: c.nationality_code,
-      occupation: c.occupation,
-      knownFor: c.known_for ?? null,
-      wikipediaUrl: c.wikipedia_url,
-      wikidataId: c.wikidata_id,
-      isLiving: !c.death_date,
-    }));
+    return data.map(mapCelebRow).filter(notBlocked);
   } catch (err) {
     console.error('BirthdaySearchService: month celebrity query failed (returning []):', err);
     return [];
@@ -432,19 +436,7 @@ export async function getRankedMonthCelebritiesByCountry(
       return true;
     });
 
-    return matches.slice(0, limit).map(c => ({
-      name: c.name,
-      birthDate: c.birth_date,
-      deathDate: c.death_date,
-      sitelinks: c.sitelinks ?? 0,
-      nationality: c.nationality,
-      nationalityCode: c.nationality_code,
-      occupation: c.occupation,
-      knownFor: c.known_for ?? null,
-      wikipediaUrl: c.wikipedia_url,
-      wikidataId: c.wikidata_id,
-      isLiving: !c.death_date,
-    }));
+    return matches.map(mapCelebRow).filter(notBlocked).slice(0, limit);
   } catch (err) {
     console.error('getRankedMonthCelebritiesByCountry: query failed (returning []):', err);
     return [];
@@ -493,19 +485,7 @@ export async function getCountryExtras(
       return true;
     });
 
-    return matches.slice(0, limit).map(c => ({
-      name: c.name,
-      birthDate: c.birth_date,
-      deathDate: c.death_date,
-      sitelinks: c.sitelinks ?? 0,
-      nationality: c.nationality,
-      nationalityCode: c.nationality_code,
-      occupation: c.occupation,
-      knownFor: c.known_for ?? null,
-      wikipediaUrl: c.wikipedia_url,
-      wikidataId: c.wikidata_id,
-      isLiving: !c.death_date,
-    }));
+    return matches.map(mapCelebRow).filter(notBlocked).slice(0, limit);
   } catch (err) {
     console.error('getCountryExtras: query failed (returning []):', err);
     return [];
@@ -537,19 +517,7 @@ export async function getNationalityCelebritiesForDate(
     // Cast: the generated Supabase types are stale (missing the known_for column),
     // which otherwise widens each row to SelectQueryError. The column exists in the
     // DB — India pages render real data — so this is a type-only shim.
-    return (data as any[]).map(c => ({
-      name: c.name,
-      birthDate: c.birth_date,
-      deathDate: c.death_date,
-      sitelinks: c.sitelinks ?? 0,
-      nationality: c.nationality,
-      nationalityCode: c.nationality_code,
-      occupation: c.occupation,
-      knownFor: c.known_for ?? null,
-      wikipediaUrl: c.wikipedia_url,
-      wikidataId: c.wikidata_id,
-      isLiving: !c.death_date,
-    }));
+    return (data as any[]).map(mapCelebRow).filter(notBlocked);
   } catch (err) {
     console.error('getNationalityCelebritiesForDate: query failed (returning []):', err);
     return [];

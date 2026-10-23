@@ -23,7 +23,10 @@ import type {
 } from '@/data/astrologicalData';
 import celebBios from '@/data/celebrity-bios.json';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
-import { LuckyStoneAffiliate, CosmicTwins } from '@/components/CelebrityAffiliateAndTwins';
+import { CosmicTwins } from '@/components/CelebrityAffiliateAndTwins';
+import {
+  CELEB_DEATH_OVERRIDES, CELEB_ERA_OVERRIDES, MAX_LIVING_AGE, isBlockedCelebrity, nationalityLabel, yearsBetween,
+} from '@/lib/celebrityFacts';
 import { CelebrityBirthTimeNote } from '@/components/CelebrityBirthTimeNote';
 import { BirthdayRarityCard } from '@/components/BirthdayRarityCard';
 import { OnThisDay } from '@/components/OnThisDay';
@@ -82,7 +85,7 @@ function buildPersonalitySynthesis(
 
   return parts.length > 0
     ? parts.join(' ')
-    : `${name} is an accomplished Indian personality whose work has left a lasting mark on their field and on audiences across the nation.`;
+    : `${name} is an accomplished personality whose work has left a lasting mark on their field.`;
 }
 
 export function CelebrityPage() {
@@ -95,9 +98,20 @@ export function CelebrityPage() {
   const name = String(celeb.name || '');
   const category = String(celeb.category || 'Public Figure');
   const knownFor = String(celeb.known_for || '');
-  const nationality = String(celeb.nationality || 'Indian');
-  const deathYear = celeb.death_year != null ? Number(celeb.death_year) : null;
-  const dob = parseCelebrityDOB(celeb);
+  // S8: use the record's own nationality (code) — not "Indian" for everyone.
+  const natCode = String(celeb.nationality_code || '').toUpperCase();
+  const isIndian = natCode === 'IN' || celeb.nationality === 'Indian';
+  const nationality = isIndian
+    ? 'Indian'
+    : (nationalityLabel(celeb.nationality as string | null, natCode || null) ?? 'Not recorded');
+  // S9: ancient people whose dates are only an era (BCE years were imported as CE).
+  const era = CELEB_ERA_OVERRIDES[slug ?? ''] ?? null;
+  // S7: deaths missing from the data (code-side override until the DB is updated).
+  const deathOverride = CELEB_DEATH_OVERRIDES[slug ?? ''] ?? null;
+  const deathYear = deathOverride
+    ? Number(deathOverride.slice(0, 4))
+    : (celeb.death_year != null ? Number(celeb.death_year) : null);
+  const dob = era ? null : parseCelebrityDOB(celeb);
   const isFull = !!dob?.isFullDate;
 
   // Calculations (guarded by DOB availability).
@@ -133,13 +147,24 @@ export function CelebrityPage() {
   // Age string (honest for every DOB situation).
   const currentYear = new Date().getFullYear();
   let ageStr = 'Information not available';
-  if (dob) {
+  if (era) {
+    ageStr = `Lived in the ${era}; exact birth and death years are not documented`;
+  } else if (dob) {
     if (deathYear) {
-      ageStr = `Died in ${deathYear}, at approximately ${deathYear - dob.year} years of age`;
-    } else if (isFull) {
-      ageStr = `${calculateAge(dob.day, dob.month, dob.year)} years old`;
+      const isoDob = isFull ? `${dob.year}-${String(dob.month).padStart(2, '0')}-${String(dob.day).padStart(2, '0')}` : null;
+      const exact = isoDob && deathOverride ? yearsBetween(isoDob, deathOverride) : null;
+      const approx = deathYear - dob.year;
+      ageStr = exact != null
+        ? `Died in ${deathYear}, aged ${exact}`
+        : approx >= 0
+          ? `Died in ${deathYear}, at approximately ${approx} years of age`
+          : 'Birth and death years uncertain';
     } else {
-      ageStr = `Approximately ${currentYear - dob.year} years old (based on birth year)`;
+      // S7 safety cap: never show a living age above MAX_LIVING_AGE.
+      const living = isFull ? calculateAge(dob.day, dob.month, dob.year) : currentYear - dob.year;
+      ageStr = living > MAX_LIVING_AGE
+        ? 'Age not shown'
+        : isFull ? `${living} years old` : `Approximately ${living} years old (based on birth year)`;
     }
   }
 
@@ -150,7 +175,11 @@ export function CelebrityPage() {
         return d?.isFullDate && d.day === dob!.day && d.month === dob!.month;
       })
     : [];
-  const twins = sameDay.filter(c => c !== celeb && String(c.name) !== name).slice(0, 12);
+  // S14: criminals are never listed as birthday twins.
+  const twins = sameDay
+    .filter(c => c !== celeb && String(c.name) !== name)
+    .filter(c => !isBlockedCelebrity(String(c.name), String(c.known_for || c.category || '')))
+    .slice(0, 12);
 
   // Per-date popularity rank (NB4-RANK) — ordered by the real global-recognition
   // signal (sitelinks = Wikipedia language-edition count). Shown only when this
@@ -184,7 +213,6 @@ export function CelebrityPage() {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name,
-    nationality: 'Indian',
     description: knownFor,
     url: `https://bornclock.com/celebrity/${slug}/`,
   };
@@ -193,7 +221,8 @@ export function CelebrityPage() {
   } else if (dob) {
     personSchema.birthDate = String(dob.year); // year only — ISO 8601 allows YYYY
   }
-  if (deathYear) personSchema.deathDate = String(deathYear);
+  if (nationality !== 'Not recorded') personSchema.nationality = nationality;
+  if (deathYear) personSchema.deathDate = deathOverride ?? String(deathYear);
 
   const faqs = [
     {
@@ -223,8 +252,8 @@ export function CelebrityPage() {
     {
       q: `What is ${name} known for?`,
       a: knownFor
-        ? `${name} is an Indian ${category.toLowerCase()} known for: ${knownFor}`
-        : `${name} is an Indian ${category.toLowerCase()}.`,
+        ? (isIndian ? `${name} is an Indian ${category.toLowerCase()} known for: ${knownFor}` : `${name} is known for: ${knownFor}`)
+        : (isIndian ? `${name} is an Indian ${category.toLowerCase()}.` : `${name}: ${category}.`),
     },
   ];
 
@@ -271,9 +300,9 @@ export function CelebrityPage() {
         ],
         note: '© 2026 BornClock · Celebrity birthdays.',
       }}
-      eyebrow={`⭐ ${hubLabel} · Indian Celebrity`}
+      eyebrow={`⭐ ${hubLabel} · ${isIndian ? 'Indian Celebrity' : 'Celebrity'}`}
       h1={name}
-      lead={<>{knownFor || `Indian ${category.toLowerCase()}.`}</>}
+      lead={<>{knownFor || (isIndian ? `Indian ${category.toLowerCase()}.` : category)}</>}
     >
         <div className="max-w-4xl mx-auto px-4 pb-16">
           {/* ── LUCKY ELEMENTS PANEL ── */}
@@ -848,9 +877,9 @@ export function CelebrityPage() {
             </section>
           )}
 
-          {/* ── COSMIC TWINS (only if visitor's saved DOB matches) + LUCKY GEMSTONE affiliate ── */}
+          {/* ── COSMIC TWINS (only if visitor's saved DOB matches) ── */}
+          {/* D6: the Amazon gemstone affiliate block was removed (sun-sign based, no disclosure). */}
           <CosmicTwins day={isFull ? dob!.day : null} month={isFull ? dob!.month : null} celebName={name} />
-          <LuckyStoneAffiliate rashi={vedic?.rashi ?? null} />
 
           {/* Internal link to the compatibility tool (Task 19) */}
           <p className="text-sm text-gray-600 my-4">

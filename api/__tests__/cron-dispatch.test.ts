@@ -76,3 +76,37 @@ describe('notification email builders (computed, no fabrication)', () => {
     expect(birthdayReminderEmail('Mum', null, 5).subject).toContain('in 5 days');
   });
 });
+
+// K16 (audit round 2): one alert per ingress, exact engine time, reading for the new sign.
+import { dueTransitIngresses } from '../_notify';
+import { signSegments, istDateISO } from '../../src/lib/vedic/rashifal';
+describe('K16 transit alert dedupe + exact time', () => {
+  it('a daily 06:30 UTC job alerts the Dec-2026 Rahu/Ketu ingress exactly once', () => {
+    const seen: string[] = [];
+    for (let d = 25; d <= 40; d++) { // 25 Nov → 10 Dec 2026
+      const run = new Date(Date.UTC(2026, 10, d, 6, 30));
+      for (const h of dueTransitIngresses(run, 2)) seen.push(`${h.planet}@${h.atISO}`);
+    }
+    const rahu = seen.filter(s => s.startsWith('Rahu@'));
+    const ketu = seen.filter(s => s.startsWith('Ketu@'));
+    expect(rahu.length).toBe(1);
+    // every run reports the same minute-level instant
+    expect(new Set(rahu).size).toBe(1);
+    expect(ketu.length).toBe(1);
+  });
+
+  it('uses the engine ingress instant (not noon on the day) for the label and date', () => {
+    const segs = signSegments('Rahu', new Date('2026-11-25T00:00:00Z'), new Date('2026-12-15T00:00:00Z'));
+    const at = new Date(segs[1].startMs);
+    const runDay = new Date(Date.parse(istDateISO(at) + 'T06:30:00Z') - 2 * 86400000);
+    const hit = dueTransitIngresses(runDay, 2).find(h => h.planet === 'Rahu')!;
+    // minute-refined engine instant, within the ~1 h bracket of signSegments
+    expect(Math.abs(Date.parse(hit.atISO) - at.getTime())).toBeLessThanOrEqual(3600_000);
+    expect(new Date(hit.atISO).getUTCSeconds()).toBe(0);
+    expect(hit.istDate).toBe(istDateISO(at));
+    expect(hit.label).toMatch(/IST$/);
+    const mail = transitAlertEmail(0, '', 'u', 2, runDay)!;
+    expect(mail.subject).toContain('Rahu');
+    expect(mail.html).toContain(hit.label);
+  });
+});

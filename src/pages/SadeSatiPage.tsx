@@ -11,6 +11,8 @@ import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { birthQuery } from '@/lib/timezone/clientBirth';
+import { IST_ZONE, zoneDay, zoneMonth, zoneLabel } from '@/lib/viewerTime';
+import { useViewerTimeZone } from '@/hooks/useViewerTimeZone';
 
 interface Pause { start: string; end: string }
 interface Cycle { start: string; end: string; pauses?: Pause[]; startedBeforeBirth?: boolean }
@@ -20,15 +22,17 @@ export interface Report {
   currentCycle: Cycle | null; nextCycle: Cycle | null; previousCycle: Cycle | null;
   paused?: { since: string; resumes: string } | null;
   ageYears?: number;
+  /** D8: true only when the full-chart gemstone logic recommends Saturn's stone (adults). */
+  blueSapphireOk?: boolean;
   methodology: string;
   dhaiya: { active: boolean; type: string | null; currentEnd: string | null };
 }
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-// Dates are shown in Indian Standard Time, the convention Indian almanacs (Drik Panchang etc.) use for Saturn's ingress dates.
-const IST_MS = 5.5 * 3600 * 1000;
-const ist = (iso: string) => new Date(new Date(iso).getTime() + IST_MS);
-const fmt = (iso: string) => { const d = ist(iso); return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
-const fmtDay = (iso: string) => { const d = ist(iso); return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+// Dates are shown in the viewer's own time zone (labelled); India — and any viewer whose
+// zone can't be read — sees Indian Standard Time, the convention of Indian almanacs.
+// The instants from the API are unchanged; only their display zone differs.
+let VIEW_TZ = IST_ZONE; // set per render by the page / narrative
+const fmt = (iso: string) => zoneMonth(iso, VIEW_TZ);
+const fmtDay = (iso: string) => zoneDay(iso, VIEW_TZ);
 const yearsFromNow = (iso: string | null | undefined) => { if (!iso) return null; const yrs = (new Date(iso).getTime() - Date.now()) / (365.25 * 24 * 3600 * 1000); return Math.max(0, Math.round(yrs * 10) / 10); };
 const isChild = (r: Report) => typeof r.ageYears === 'number' && r.ageYears < 18;
 
@@ -46,7 +50,8 @@ function pauseText(c: Cycle): string {
  * active (with Rising/Peak/Setting phase note), paused and inactive cases. Every date
  * slot is guarded so the text can never render a blank "—" (audit D3).
  */
-export function sadeSatiNarrative(r: Report): { verdict: string; body: string[] } {
+export function sadeSatiNarrative(r: Report, tz: string = IST_ZONE): { verdict: string; body: string[] } {
+  VIEW_TZ = tz;
   const child = isChild(r);
   const growthLine = child
     ? "Sade Sati refers to the roughly seven-and-a-half years when Saturn transits the signs before, on, and after the Moon sign. For a child, the tradition reads it mostly through the home: steady routines, patient support with studies and habits, and a calm family rhythm are what matter — there is nothing for a child to fear or fix."
@@ -105,6 +110,8 @@ export function sadeSatiNarrative(r: Report): { verdict: string; body: string[] 
 
 export default function SadeSatiPage() {
   const { profile, save } = useSavedProfile();
+  const viewerTz = useViewerTimeZone();
+  VIEW_TZ = viewerTz;
   const [report, setReport] = useState<Report | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -173,7 +180,7 @@ export default function SadeSatiPage() {
             </div>
 
             {/* Part X — impact-first approved narrative (verdict → plain impact → dates → close). */}
-            {(() => { const n = sadeSatiNarrative(report); return (
+            {(() => { const n = sadeSatiNarrative(report, viewerTz); return (
               <div data-testid="sadesati-narrative" className="rounded-xl border border-border p-5">
                 <p className="font-bold text-foreground mb-2">{n.verdict}</p>
                 {n.body.map((para, i) => <p key={i} className="text-sm text-foreground leading-relaxed mb-2 last:mb-0">{para}</p>)}
@@ -224,12 +231,14 @@ export default function SadeSatiPage() {
                 <li><strong className="text-foreground">Lean into Saturn’s own themes</strong> — patience, routine, honest hard work and finishing what you start. This is the most-cited "remedy" and the one that actually matches the period.</li>
                 <li><strong className="text-foreground">Service &amp; generosity</strong> — helping elders, workers or those in need on a Saturday is a traditional Saturn practice many find genuinely centring.</li>
                 <li><strong className="text-foreground">Devotional custom</strong> — some recite the Hanuman Chalisa or a Shani mantra on Saturdays; take it or leave it as suits your beliefs.</li>
-                <li><strong className="text-foreground">Gemstone (with caution)</strong> — a Blue Sapphire (<TermTip id="ratna">Ratna</TermTip>) is the classical Saturn stone, but it’s a powerful one — always trialled first. See the <a href="/gemstones" className="text-primary hover:underline">Gemstone tool</a> for a full-chart check before considering it.</li>
+                {report.blueSapphireOk && (
+                  <li data-testid="sadesati-gem"><strong className="text-foreground">Gemstone (with caution)</strong> — your full chart does favour Saturn, so a Blue Sapphire (<TermTip id="ratna">Ratna</TermTip>), Saturn’s classical stone, is an option. It is a powerful stone: traditionally worn on a short trial first, and only after a qualified astrologer has checked your chart. See the <a href="/gemstones" className="text-primary hover:underline">Gemstone tool</a> for the full reasoning.</li>
+                )}
               </ul>
               <p className="mt-2 text-xs text-amber-700">Offered as tradition and reflection, not medical or financial advice — and never as something you must do out of fear.</p>
             </div>
 
-            <p className="text-xs text-muted-foreground">Dates are computed from Saturn’s real transit through the signs, using the same Lahiri-ayanamsa engine (<TermTip id="ayanamsa">the traditional Indian star-based calculation</TermTip>) as the rest of BornClock. Treat Sade Sati as a classical timing indicator, not a fixed prediction.</p>
+            <p className="text-xs text-muted-foreground">Dates are computed from Saturn’s real transit through the signs, using the same Lahiri-ayanamsa engine (<TermTip id="ayanamsa">the traditional Indian star-based calculation</TermTip>) as the rest of BornClock. Treat Sade Sati as a classical timing indicator, not a fixed prediction. <span data-testid="sadesati-tz">Dates are shown in {zoneLabel(viewerTz)}.</span></p>
           </div>
         )}
         </section>

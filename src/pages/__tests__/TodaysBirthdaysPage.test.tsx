@@ -46,10 +46,11 @@ describe("Today's Birthdays + Affiliates — TC-MISC", () => {
       expect(document.body.textContent?.toLowerCase()).toMatch(/no results|no celebrit|born/);
     }, { timeout: 3000 });
   });
-  it('TC-MISC-P-03: lucky-stone affiliate link renders on a celebrity page', () => {
+  it('TC-MISC-P-03 (D6): no Amazon gemstone affiliate link on a celebrity page', () => {
     renderCeleb('virat-kohli');
-    const affiliate = Array.from(document.querySelectorAll('a[rel*="sponsored"]'));
-    expect(affiliate.length).toBeGreaterThan(0);
+    const affiliate = Array.from(document.querySelectorAll('a[rel*="sponsored"], a[href*="amazon."]'));
+    expect(affiliate.length).toBe(0);
+    expect(document.body.textContent).not.toMatch(/Shop .* on Amazon/);
   });
   it('TC-MISC-N-01: affiliate links are valid URLs with no undefined', () => {
     renderCeleb('virat-kohli');

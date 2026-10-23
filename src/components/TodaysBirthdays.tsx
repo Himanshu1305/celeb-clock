@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { celebYearsForDisplay } from '@/lib/celebrityFacts';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Users, Cake, ChevronDown, Rocket } from 'lucide-react';
@@ -14,21 +15,17 @@ import { WikiPerson } from '@/services/WikimediaService';
 import { CelebrityCard, DisplayCelebrity, OccupationCategory } from '@/components/CelebrityCard';
 import { classifyDisplayTier, TIER_LABELS, DisplayTier } from '@/data/celebrityCategories';
 import { CountryExtrasSection } from '@/components/CountryExtrasSection';
-const CURRENT_YEAR = new Date().getFullYear();
 const PAGE_SIZE = 20;
 
 function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
-  const birthYear = r.birthDate ? parseInt(r.birthDate.substring(0, 4)) : null;
-  const deathYear = r.deathDate ? parseInt(r.deathDate.substring(0, 4)) : null;
-  const age = r.isLiving
-    ? (birthYear ? CURRENT_YEAR - birthYear : null)
-    : (birthYear && deathYear ? deathYear - birthYear : null);
+  // S7/S9: overrides, 105-year living cap, no ages from BCE/unreliable dates.
+  const { birthYear, deathYear, age, isLiving } = celebYearsForDisplay(r);
   return {
     name: r.name,
     birthYear,
     deathYear,
     age,
-    isLiving: r.isLiving,
+    isLiving,
     occupation: r.occupation || 'Celebrity',
     knownFor: r.knownFor ?? null,
     imageUrl: null,
@@ -38,12 +35,9 @@ function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
 }
 
 function mapLocal(p: WikiPerson): DisplayCelebrity {
-  const birthYear = p.birthDate ? new Date(p.birthDate).getFullYear() : null;
-  const deathYear = p.deathDate ? new Date(p.deathDate).getFullYear() : null;
-  const isLiving = !p.deathDate;
-  const age = isLiving
-    ? (birthYear ? CURRENT_YEAR - birthYear : null)
-    : (birthYear && deathYear ? deathYear - birthYear : null);
+  const { birthYear, deathYear, age, isLiving } = celebYearsForDisplay({
+    name: p.name, birthDate: p.birthDate, deathDate: p.deathDate ?? null,
+  });
   return {
     name: p.name,
     birthYear,

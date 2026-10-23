@@ -17,6 +17,8 @@ export interface RashiRatna {
   scientificName: string;
 }
 
+// D9 (audit round 2): health claims removed (heart health, recovery from illness, longevity,
+// blood/nervous-system health). Gemstone benefits here are traditional associations only.
 export const RASHI_RATNA_DATA: RashiRatna[] = [
   {
     rashi: 'Mesh', rashiEnglish: 'Aries', symbol: '♈',
@@ -24,7 +26,7 @@ export const RASHI_RATNA_DATA: RashiRatna[] = [
     primaryStone: 'Red Coral', primaryStoneHindi: 'Moonga',
     secondaryStone: 'Carnelian',
     color: 'Deep Red-Orange', hex: '#FF4500',
-    benefits: ['Boosts confidence and courage', 'Strengthens Mars energy', 'Helps overcome obstacles', 'Good for blood-related health issues', 'Enhances leadership qualities'],
+    benefits: ['Boosts confidence and courage', 'Strengthens Mars energy', 'Helps overcome obstacles', 'Supports drive and determination', 'Enhances leadership qualities'],
     wearingDay: 'Tuesday (Mangalvar)',
     fingerToWear: 'Ring finger of right hand',
     metalToUse: 'Gold or Copper',
@@ -52,7 +54,7 @@ export const RASHI_RATNA_DATA: RashiRatna[] = [
     primaryStone: 'Emerald', primaryStoneHindi: 'Panna',
     secondaryStone: 'Green Tourmaline / Peridot',
     color: 'Vivid Green', hex: '#50C878',
-    benefits: ['Sharpens intellect and communication', 'Strengthens Mercury energy', 'Good for students and business people', 'Enhances memory', 'Supports nervous system health'],
+    benefits: ['Sharpens intellect and communication', 'Strengthens Mercury energy', 'Good for students and business people', 'Enhances memory', 'Supports clear expression'],
     wearingDay: 'Wednesday (Budhvar)',
     fingerToWear: 'Little finger of right hand',
     metalToUse: 'Gold or Silver',
@@ -80,7 +82,7 @@ export const RASHI_RATNA_DATA: RashiRatna[] = [
     primaryStone: 'Ruby', primaryStoneHindi: 'Manikya',
     secondaryStone: 'Red Garnet / Red Spinel',
     color: 'Deep Red', hex: '#E0115F',
-    benefits: ['Boosts confidence and authority', 'Strengthens Sun energy', 'Good for leadership and government roles', 'Enhances vitality', 'Supports heart health'],
+    benefits: ['Boosts confidence and authority', 'Strengthens Sun energy', 'Good for leadership and government roles', 'Enhances presence', 'Supports self-belief'],
     wearingDay: 'Sunday (Ravivar)',
     fingerToWear: 'Ring finger of right hand',
     metalToUse: 'Gold',
@@ -94,12 +96,12 @@ export const RASHI_RATNA_DATA: RashiRatna[] = [
     primaryStone: 'Emerald', primaryStoneHindi: 'Panna',
     secondaryStone: 'Green Tourmaline',
     color: 'Vivid Green', hex: '#50C878',
-    benefits: ['Enhances analytical ability', 'Supports health-conscious decisions', 'Improves communication', 'Good for healing professions', 'Strengthens Mercury energy'],
+    benefits: ['Enhances analytical ability', 'Supports careful decision-making', 'Improves communication', 'Good for healing professions', 'Strengthens Mercury energy'],
     wearingDay: 'Wednesday (Budhvar)',
     fingerToWear: 'Little finger of right hand',
     metalToUse: 'Gold or Silver',
     caution: 'Same caution as Mithun — only natural, untreated Emerald carries full astrological benefit.',
-    description: 'Kanya (Virgo) shares its ruling planet Mercury (Budh) with Mithun, making Emerald (Panna) the primary Rashi Ratna for both signs. For Kanya specifically, Panna enhances Mercury\'s analytical, health-conscious, and service-oriented qualities. Kanya individuals who wear Panna often report improved ability to think clearly, communicate precisely, and make decisions about health and wellbeing with greater wisdom.',
+    description: 'Kanya (Virgo) shares its ruling planet Mercury (Budh) with Mithun, making Emerald (Panna) the primary Rashi Ratna for both signs. For Kanya specifically, Panna enhances Mercury\'s analytical, careful and service-oriented qualities. In tradition it is associated with clear thinking and precise communication.',
     scientificName: 'Beryl (Be₃Al₂Si₆O₁₈) with chromium',
   },
   {
@@ -122,7 +124,7 @@ export const RASHI_RATNA_DATA: RashiRatna[] = [
     primaryStone: 'Red Coral', primaryStoneHindi: 'Moonga',
     secondaryStone: 'Carnelian / Blood Stone',
     color: 'Deep Red-Orange', hex: '#FF4500',
-    benefits: ['Enhances transformation and willpower', 'Supports deep research and investigation', 'Good for overcoming hidden enemies', 'Strengthens Mars energy', 'Supports recovery from illness'],
+    benefits: ['Enhances transformation and willpower', 'Supports deep research and investigation', 'Good for overcoming hidden enemies', 'Strengthens Mars energy', 'Supports resilience through change'],
     wearingDay: 'Tuesday (Mangalvar)',
     fingerToWear: 'Ring finger of right hand',
     metalToUse: 'Gold or Copper',
@@ -150,7 +152,7 @@ export const RASHI_RATNA_DATA: RashiRatna[] = [
     primaryStone: 'Blue Sapphire', primaryStoneHindi: 'Neelam',
     secondaryStone: 'Amethyst / Blue Topaz',
     color: 'Royal Blue', hex: '#0F52BA',
-    benefits: ['Accelerates career success', 'Brings discipline and focus', 'Removes obstacles (Shani obstacles)', 'Good for property and business', 'Supports longevity'],
+    benefits: ['Accelerates career success', 'Brings discipline and focus', 'Removes obstacles (Shani obstacles)', 'Good for property and business', 'Supports patience and perseverance'],
     wearingDay: 'Saturday (Shanivar)',
     fingerToWear: 'Middle finger of right hand',
     metalToUse: 'Silver or Gold',
