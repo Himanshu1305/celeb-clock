@@ -18,7 +18,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { sendRawEmail } from './_email.js';
 import { digestHtml, celebsThisWeek } from './weekly-digest.js';
-import { computeRashifal, findIngress, readPlanetTransit, RASHIS, type PlanetName } from '../src/lib/vedic/rashifal.js';
+import { computeRashifal, signSegments, istDateISO, transitSignIndex, readPlanetTransit, RASHIS, type PlanetName } from '../src/lib/vedic/rashifal.js';
 
 const BASE_URL = 'https://bornclock.com';
 const LOGO_URL = 'https://bornclock.com/bornclock-logo.png';
@@ -67,26 +67,68 @@ export function dailyHoroscopeEmail(rashiIndex: number, name: string, unsubUrl: 
 }
 
 // ── Transit alert (real ingress detection) ──────────────────────────────────────
-export function transitAlertEmail(rashiIndex: number, name: string, unsubUrl: string, horizonDays = 3): { subject: string; html: string } | null {
-  if (rashiIndex < 0 || rashiIndex > 11) return null;
-  const now = new Date();
-  const end = new Date(now.getTime() + horizonDays * 86400000);
-  const hits: string[] = [];
-  let planetLabel = '';
-  for (const planet of SLOW_PLANETS) {
-    const ingress = findIngress(planet, now, end);
-    if (!ingress) continue;
-    const reading = readPlanetTransit(planet, rashiIndex, new Date(ingress.dateISO + 'T12:00:00'));
-    planetLabel = planet;
-    const dateLabel = new Date(ingress.dateISO + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
-    hits.push(`<p style="font-size:15px;color:#0C1A2B;margin:14px 0 4px">${gradeChip(reading.grade)} &nbsp;<strong>${planet}</strong> changes sign on ${dateLabel}</p><p style="font-size:14px;color:#374151;line-height:1.7;margin:0">${reading.text}</p>`);
+// K16 (audit round 2): the old version alerted on any ingress within the next 3 days,
+// so the daily job mailed the SAME event 4 days running; it also read the sign at noon
+// on the change day and printed a date-only label. Now:
+//   • each ingress is alerted exactly once — only on the run whose IST calendar date is
+//     `leadDays` before the ingress's IST date (stateless per-event dedupe; a manual
+//     re-run on the same day is the only way to repeat it);
+//   • the date and time come from the engine's exact ingress instant (signSegments,
+//     refined to ~1 hour) and are labelled in IST, the convention of Indian almanacs;
+//   • the reading is taken just after the ingress, i.e. for the NEW sign.
+const DAY_MS = 86400000;
+const IST_MS = 5.5 * 3600 * 1000;
+const ISTD = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'long' });
+const ISTF = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+
+/** Refine an engine ingress (signSegments is ~1 hour) to the minute: first minute in the new sign. */
+function exactIngressMs(planet: PlanetName, approxMs: number): number {
+  const before = transitSignIndex(planet, new Date(approxMs - 2 * 3600_000));
+  let a = approxMs - 2 * 3600_000, b = approxMs + 3600_000;
+  if (transitSignIndex(planet, new Date(b)) === before) return approxMs; // safety: no change bracketed
+  while (b - a > 60_000) {
+    const mid = (a + b) / 2;
+    if (transitSignIndex(planet, new Date(mid)) === before) a = mid; else b = mid;
   }
-  if (hits.length === 0) return null; // nothing real to report — never send an empty alert
+  return Math.ceil(b / 60_000) * 60_000;
+}
+
+export interface TransitAlertHit { planet: PlanetName; atISO: string; istDate: string; label: string; dateLabel: string }
+
+/** Ingresses of slow planets whose IST date is exactly `leadDays` after today's IST date. */
+export function dueTransitIngresses(now: Date = new Date(), leadDays = 2): TransitAlertHit[] {
+  const targetIst = istDateISO(new Date(now.getTime() + leadDays * DAY_MS));
+  // Search the whole IST target day (plus margin) for real sign changes.
+  const dayStartUtc = Date.parse(targetIst + 'T00:00:00Z') - IST_MS;
+  const from = new Date(Math.max(now.getTime(), dayStartUtc - DAY_MS));
+  const to = new Date(dayStartUtc + 2 * DAY_MS);
+  const hits: TransitAlertHit[] = [];
+  for (const planet of SLOW_PLANETS) {
+    for (const seg of signSegments(planet, from, to).slice(1)) {
+      const at = new Date(exactIngressMs(planet, seg.startMs));
+      if (istDateISO(at) !== targetIst) continue;
+      hits.push({ planet, atISO: at.toISOString(), istDate: targetIst, label: `${ISTF.format(at)} IST`, dateLabel: ISTD.format(at) });
+    }
+  }
+  return hits;
+}
+
+export function transitAlertEmail(rashiIndex: number, name: string, unsubUrl: string, leadDays = 2, now: Date = new Date()): { subject: string; html: string } | null {
+  if (rashiIndex < 0 || rashiIndex > 11) return null;
+  const due = dueTransitIngresses(now, leadDays);
+  if (due.length === 0) return null; // nothing real to report — never send an empty alert
+  const hits = due.map(h => {
+    const reading = readPlanetTransit(h.planet, rashiIndex, new Date(Date.parse(h.atISO) + 3600_000));
+    return `<p style="font-size:15px;color:#0C1A2B;margin:14px 0 4px">${gradeChip(reading.grade)} &nbsp;<strong>${h.planet}</strong> changes sign on ${h.label}</p><p style="font-size:14px;color:#374151;line-height:1.7;margin:0">${reading.text}</p>`;
+  });
+  const planets = due.map(h => h.planet);
+  const names = planets.length > 1 ? `${planets.slice(0, -1).join(', ')} and ${planets[planets.length - 1]}` : planets[0];
   const inner = `
     <div style="font-size:13px;color:#8A9BA8;margin-bottom:8px">Hi ${name || 'there'}, a slow-planet transit is shifting relative to your Moon sign (${RASHIS[rashiIndex].sanskrit}).</div>
     ${hits.join('')}
+    <p style="font-size:12px;color:#8A9BA8;margin:12px 0 0">Times are Indian Standard Time (IST), computed from the planet's actual position; almanacs can differ by a few hours for Rahu and Ketu.</p>
     <div style="text-align:center;margin-top:18px"><a href="${BASE_URL}/transit" style="display:inline-block;background:#103A5C;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:8px">See the full transit picture →</a></div>`;
-  return { subject: `Transit alert: ${planetLabel} is changing sign`, html: emailShell(inner, unsubUrl) };
+  return { subject: `Transit alert: ${names} ${planets.length > 1 ? 'change' : 'changes'} sign on ${due[0].dateLabel}`, html: emailShell(inner, unsubUrl) };
 }
 
 // ── Family birthday reminder ─────────────────────────────────────────────────────
