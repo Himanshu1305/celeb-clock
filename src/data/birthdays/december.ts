@@ -2,7 +2,6 @@ import { BirthdayDatabase } from './types';
 
 export const decemberBirthdays: BirthdayDatabase = {
   '12-01': { people: [
-    { name: 'Woody Allen', birthDate: '1935-12-01', profession: 'Director', category: 'celebrity', description: 'Four-time Oscar-winning filmmaker', wikipediaUrl: 'https://en.wikipedia.org/wiki/Woody_Allen' },
     { name: 'Bette Midler', birthDate: '1945-12-01', profession: 'Singer & Actress', category: 'celebrity', description: 'The Divine Miss M, Grammy and Emmy winner', wikipediaUrl: 'https://en.wikipedia.org/wiki/Bette_Midler' },
     { name: 'Sarah Silverman', birthDate: '1970-12-01', profession: 'Comedian', category: 'celebrity', description: 'Emmy-winning comedian and actress', wikipediaUrl: 'https://en.wikipedia.org/wiki/Sarah_Silverman' },
     { name: 'Udit Narayan', birthDate: '1955-12-01', profession: 'Playback Singer', category: 'celebrity', description: 'Legendary Indian playback singer, voice of Bollywood romance', wikipediaUrl: 'https://en.wikipedia.org/wiki/Udit_Narayan' },
@@ -53,11 +52,11 @@ export const decemberBirthdays: BirthdayDatabase = {
     { name: 'Emily Dickinson', birthDate: '1830-12-10', profession: 'Poet', category: 'other', description: 'One of America\'s greatest poets', wikipediaUrl: 'https://en.wikipedia.org/wiki/Emily_Dickinson' },
     { name: 'Ada Lovelace', birthDate: '1815-12-10', profession: 'Mathematician', category: 'scientist', description: 'First computer programmer, pioneer of computing', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ada_Lovelace' },
     { name: 'Raven-Symoné', birthDate: '1985-12-10', profession: 'Actress', category: 'celebrity', description: 'Star of That\'s So Raven', wikipediaUrl: 'https://en.wikipedia.org/wiki/Raven-Symon%C3%A9' },
-    { name: 'Rajesh Khanna', birthDate: '1942-12-10', profession: 'Actor', category: 'celebrity', description: 'Bollywood\'s first superstar, won 7 consecutive Filmfare Awards', wikipediaUrl: 'https://en.wikipedia.org/wiki/Rajesh_Khanna' },
   ], events: [
     { title: 'Nobel Prize Ceremony', date: '1901-12-10', year: 1901, description: 'First Nobel Prizes awarded in Stockholm', category: 'Cultural', wikipediaUrl: 'https://en.wikipedia.org/wiki/Nobel_Prize' },
   ] },
   '12-11': { people: [
+    { name: 'Viswanathan Anand', birthDate: '1969-12-11', profession: 'Chess Grandmaster', category: 'athlete', description: 'Indian chess legend, five-time World Chess Champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Viswanathan_Anand' },
     { name: 'Aleksandr Solzhenitsyn', birthDate: '1918-12-11', profession: 'Author', category: 'other', description: 'Nobel Prize-winning author of The Gulag Archipelago', wikipediaUrl: 'https://en.wikipedia.org/wiki/Aleksandr_Solzhenitsyn' },
     { name: 'Hailee Steinfeld', birthDate: '1996-12-11', profession: 'Actress & Singer', category: 'celebrity', description: 'Oscar-nominated star of True Grit', wikipediaUrl: 'https://en.wikipedia.org/wiki/Hailee_Steinfeld' },
     { name: 'Mos Def', birthDate: '1973-12-11', profession: 'Rapper & Actor', category: 'celebrity', description: 'Acclaimed hip-hop artist and actor', wikipediaUrl: 'https://en.wikipedia.org/wiki/Yasiin_Bey' },
@@ -131,7 +130,6 @@ export const decemberBirthdays: BirthdayDatabase = {
     { name: 'Ryan Seacrest', birthDate: '1974-12-24', profession: 'TV Host', category: 'celebrity', description: 'Host of American Idol and Live!', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ryan_Seacrest' },
   ], events: [] },
   '12-25': { people: [
-    { name: 'Isaac Newton', birthDate: '1642-12-25', profession: 'Physicist & Mathematician', category: 'scientist', description: 'Discovered laws of motion and universal gravitation', wikipediaUrl: 'https://en.wikipedia.org/wiki/Isaac_Newton' },
     { name: 'Justin Trudeau', birthDate: '1971-12-25', profession: 'Prime Minister of Canada', category: 'other', description: 'Prime Minister of Canada', wikipediaUrl: 'https://en.wikipedia.org/wiki/Justin_Trudeau' },
     { name: 'Humphrey Bogart', birthDate: '1899-12-25', profession: 'Actor', category: 'celebrity', description: 'Classic Hollywood icon of Casablanca', wikipediaUrl: 'https://en.wikipedia.org/wiki/Humphrey_Bogart' },
     { name: 'Atal Bihari Vajpayee', birthDate: '1924-12-25', profession: 'Prime Minister of India', category: 'other', description: 'Three-time Prime Minister of India, Bharat Ratna awardee', wikipediaUrl: 'https://en.wikipedia.org/wiki/Atal_Bihari_Vajpayee' },
@@ -156,6 +154,7 @@ export const decemberBirthdays: BirthdayDatabase = {
     { name: 'Ratan Tata', birthDate: '1937-12-28', profession: 'Industrialist', category: 'entrepreneur', description: 'Chairman Emeritus of Tata Group, India\'s most respected businessman', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ratan_Tata' },
   ], events: [] },
   '12-29': { people: [
+    { name: 'Rajesh Khanna', birthDate: '1942-12-29', profession: 'Actor', category: 'celebrity', description: 'Bollywood\'s first superstar, won 7 consecutive Filmfare Awards', wikipediaUrl: 'https://en.wikipedia.org/wiki/Rajesh_Khanna' },
     { name: 'Jude Law', birthDate: '1972-12-29', profession: 'Actor', category: 'celebrity', description: 'Oscar-nominated British actor', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jude_Law' },
     { name: 'Mary Tyler Moore', birthDate: '1936-12-29', profession: 'Actress', category: 'celebrity', description: 'Pioneer of women on television', wikipediaUrl: 'https://en.wikipedia.org/wiki/Mary_Tyler_Moore' },
     { name: 'Jon Voight', birthDate: '1938-12-29', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning actor of Coming Home', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jon_Voight' },

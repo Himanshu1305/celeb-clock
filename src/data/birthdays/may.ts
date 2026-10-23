@@ -55,7 +55,6 @@ export const mayBirthdays: BirthdayDatabase = {
     people: [
       { name: 'Pyotr Ilyich Tchaikovsky', birthDate: '1840-05-07', profession: 'Composer', category: 'celebrity', description: 'Russian composer of Swan Lake and The Nutcracker', wikipediaUrl: 'https://en.wikipedia.org/wiki/Pyotr_Ilyich_Tchaikovsky' },
       { name: 'Eva Perón', birthDate: '1919-05-07', profession: 'First Lady of Argentina', category: 'other', description: 'Beloved Argentine political leader', wikipediaUrl: 'https://en.wikipedia.org/wiki/Eva_Per%C3%B3n' },
-      { name: 'Alexander Ovechkin', birthDate: '1985-05-07', profession: 'Ice Hockey Player', category: 'athlete', description: 'Russian NHL superstar, all-time goal scoring leader', wikipediaUrl: 'https://en.wikipedia.org/wiki/Alexander_Ovechkin' },
     ],
     events: []
   },
@@ -105,6 +104,7 @@ export const mayBirthdays: BirthdayDatabase = {
   },
   '05-13': {
     people: [
+      { name: 'Joe Louis', birthDate: '1914-05-13', profession: 'Boxer', category: 'athlete', description: 'World heavyweight champion for 12 years', wikipediaUrl: 'https://en.wikipedia.org/wiki/Joe_Louis' },
       { name: 'Stevie Wonder', birthDate: '1950-05-13', profession: 'Singer & Musician', category: 'celebrity', description: '25-time Grammy-winning musical genius', wikipediaUrl: 'https://en.wikipedia.org/wiki/Stevie_Wonder' },
       { name: 'Robert Pattinson', birthDate: '1986-05-13', profession: 'Actor', category: 'celebrity', description: 'Star of Twilight and The Batman', wikipediaUrl: 'https://en.wikipedia.org/wiki/Robert_Pattinson' },
       { name: 'Stephen Colbert', birthDate: '1964-05-13', profession: 'TV Host', category: 'celebrity', description: 'Host of The Late Show with Stephen Colbert', wikipediaUrl: 'https://en.wikipedia.org/wiki/Stephen_Colbert' },
@@ -148,7 +148,6 @@ export const mayBirthdays: BirthdayDatabase = {
     people: [
       { name: 'Pope John Paul II', birthDate: '1920-05-18', profession: 'Pope', category: 'other', description: 'Longest-serving Pope of the 20th century', wikipediaUrl: 'https://en.wikipedia.org/wiki/Pope_John_Paul_II' },
       { name: 'Tina Fey', birthDate: '1970-05-18', profession: 'Actress & Writer', category: 'celebrity', description: 'Creator of 30 Rock and Mean Girls', wikipediaUrl: 'https://en.wikipedia.org/wiki/Tina_Fey' },
-      { name: 'Reggie Miller', birthDate: '1965-05-18', profession: 'Basketball Player', category: 'athlete', description: 'NBA legend and Hall of Famer', wikipediaUrl: 'https://en.wikipedia.org/wiki/Reggie_Miller' },
     ],
     events: []
   },
@@ -163,7 +162,6 @@ export const mayBirthdays: BirthdayDatabase = {
   '05-20': {
     people: [
       { name: 'Cher', birthDate: '1946-05-20', profession: 'Singer & Actress', category: 'celebrity', description: 'Goddess of Pop, Oscar and Grammy winner', wikipediaUrl: 'https://en.wikipedia.org/wiki/Cher' },
-      { name: 'Joe Louis', birthDate: '1914-05-20', profession: 'Boxer', category: 'athlete', description: 'World heavyweight champion for 12 years', wikipediaUrl: 'https://en.wikipedia.org/wiki/Joe_Louis' },
       { name: 'Busta Rhymes', birthDate: '1972-05-20', profession: 'Rapper', category: 'celebrity', description: 'Grammy-nominated hip-hop artist', wikipediaUrl: 'https://en.wikipedia.org/wiki/Busta_Rhymes' },
     ],
     events: []
@@ -188,7 +186,6 @@ export const mayBirthdays: BirthdayDatabase = {
     people: [
       { name: 'Drew Carey', birthDate: '1958-05-23', profession: 'TV Host & Comedian', category: 'celebrity', description: 'Host of The Price Is Right', wikipediaUrl: 'https://en.wikipedia.org/wiki/Drew_Carey' },
       { name: 'Jewel', birthDate: '1974-05-23', profession: 'Singer', category: 'celebrity', description: 'Folk-pop singer and songwriter', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jewel_(singer)' },
-      { name: 'Ryan Gosling', birthDate: '1980-11-12', profession: 'Actor', category: 'celebrity', description: 'Star of The Notebook and La La Land', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ryan_Gosling' },
     ],
     events: []
   },

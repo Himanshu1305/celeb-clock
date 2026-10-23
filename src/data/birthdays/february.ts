@@ -32,7 +32,6 @@ export const februaryBirthdays: BirthdayDatabase = {
   '02-04': {
     people: [
       { name: 'Rosa Parks', birthDate: '1913-02-04', profession: 'Civil Rights Activist', category: 'other', description: 'Mother of the civil rights movement', wikipediaUrl: 'https://en.wikipedia.org/wiki/Rosa_Parks' },
-      { name: 'Mark Zuckerberg', birthDate: '1984-02-04', profession: 'Entrepreneur', category: 'entrepreneur', description: 'Co-founder of Facebook/Meta', wikipediaUrl: 'https://en.wikipedia.org/wiki/Mark_Zuckerberg' },
       { name: 'Alice Cooper', birthDate: '1948-02-04', profession: 'Musician', category: 'celebrity', description: 'Godfather of shock rock', wikipediaUrl: 'https://en.wikipedia.org/wiki/Alice_Cooper' },
     ],
     events: [
@@ -115,7 +114,6 @@ export const februaryBirthdays: BirthdayDatabase = {
   },
   '02-14': {
     people: [
-      { name: 'Alexander Graham Bell', birthDate: '1847-02-14', profession: 'Inventor', category: 'scientist', description: 'Inventor of the telephone', wikipediaUrl: 'https://en.wikipedia.org/wiki/Alexander_Graham_Bell' },
       { name: 'Michael Bloomberg', birthDate: '1942-02-14', profession: 'Entrepreneur & Politician', category: 'entrepreneur', description: 'Founder of Bloomberg L.P. and former NYC Mayor', wikipediaUrl: 'https://en.wikipedia.org/wiki/Michael_Bloomberg' },
       { name: 'Simon Pegg', birthDate: '1970-02-14', profession: 'Actor & Writer', category: 'celebrity', description: 'Star of Shaun of the Dead and Star Trek', wikipediaUrl: 'https://en.wikipedia.org/wiki/Simon_Pegg' },
     ],
@@ -159,7 +157,6 @@ export const februaryBirthdays: BirthdayDatabase = {
     people: [
       { name: 'Nicolaus Copernicus', birthDate: '1473-02-19', profession: 'Astronomer', category: 'scientist', description: 'Formulated the heliocentric model of the solar system', wikipediaUrl: 'https://en.wikipedia.org/wiki/Nicolaus_Copernicus' },
       { name: 'Millie Bobby Brown', birthDate: '2004-02-19', profession: 'Actress', category: 'celebrity', description: 'Star of Stranger Things', wikipediaUrl: 'https://en.wikipedia.org/wiki/Millie_Bobby_Brown' },
-      { name: 'Victoria Beckham', birthDate: '1974-02-19', profession: 'Singer & Fashion Designer', category: 'celebrity', description: 'Former Spice Girl turned fashion mogul', wikipediaUrl: 'https://en.wikipedia.org/wiki/Victoria_Beckham' },
     ],
     events: []
   },

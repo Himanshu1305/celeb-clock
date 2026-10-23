@@ -174,7 +174,6 @@ export const marchBirthdays: BirthdayDatabase = {
   },
   '03-21': {
     people: [
-      { name: 'Johann Sebastian Bach', birthDate: '1685-03-21', profession: 'Composer', category: 'celebrity', description: 'One of the greatest composers in Western music history', wikipediaUrl: 'https://en.wikipedia.org/wiki/Johann_Sebastian_Bach' },
       { name: 'Ayrton Senna', birthDate: '1960-03-21', profession: 'Racing Driver', category: 'athlete', description: 'Three-time Formula One World Champion, Brazilian legend', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ayrton_Senna' },
       { name: 'Gary Oldman', birthDate: '1958-03-21', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning actor for Darkest Hour', wikipediaUrl: 'https://en.wikipedia.org/wiki/Gary_Oldman' },
     ],
@@ -254,6 +253,7 @@ export const marchBirthdays: BirthdayDatabase = {
   },
   '03-31': {
     people: [
+      { name: 'Johann Sebastian Bach', birthDate: '1685-03-31', profession: 'Composer', category: 'celebrity', description: 'One of the greatest composers in Western music history', wikipediaUrl: 'https://en.wikipedia.org/wiki/Johann_Sebastian_Bach' },
       { name: 'René Descartes', birthDate: '1596-03-31', profession: 'Philosopher & Mathematician', category: 'scientist', description: 'Father of modern philosophy, "I think, therefore I am"', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ren%C3%A9_Descartes' },
       { name: 'Ewan McGregor', birthDate: '1971-03-31', profession: 'Actor', category: 'celebrity', description: 'Star of Trainspotting and Star Wars prequels', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ewan_McGregor' },
       { name: 'Christopher Walken', birthDate: '1943-03-31', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning actor known for distinctive style', wikipediaUrl: 'https://en.wikipedia.org/wiki/Christopher_Walken' },

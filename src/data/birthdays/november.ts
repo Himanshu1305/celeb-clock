@@ -91,7 +91,6 @@ export const novemberBirthdays: BirthdayDatabase = {
   '11-18': { people: [
     { name: 'Mickey Mouse', birthDate: '1928-11-18', profession: 'Fictional Character', category: 'other', description: 'Disney\'s iconic character debuted in Steamboat Willie', wikipediaUrl: 'https://en.wikipedia.org/wiki/Mickey_Mouse' },
     { name: 'Owen Wilson', birthDate: '1968-11-18', profession: 'Actor', category: 'celebrity', description: 'Star of Wedding Crashers and Loki', wikipediaUrl: 'https://en.wikipedia.org/wiki/Owen_Wilson' },
-    { name: 'Viswanathan Anand', birthDate: '1969-11-18', profession: 'Chess Grandmaster', category: 'athlete', description: 'Indian chess legend, five-time World Chess Champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Viswanathan_Anand' },
   ], events: [] },
   '11-19': { people: [
     { name: 'Jodie Foster', birthDate: '1962-11-19', profession: 'Actress & Director', category: 'celebrity', description: 'Two-time Oscar winner for The Silence of the Lambs', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jodie_Foster' },
@@ -147,6 +146,7 @@ export const novemberBirthdays: BirthdayDatabase = {
     { name: 'Chadwick Boseman', birthDate: '1976-11-29', profession: 'Actor', category: 'celebrity', description: 'Star of Black Panther', wikipediaUrl: 'https://en.wikipedia.org/wiki/Chadwick_Boseman' },
   ], events: [] },
   '11-30': { people: [
+    { name: 'Woody Allen', birthDate: '1935-11-30', profession: 'Director', category: 'celebrity', description: 'Four-time Oscar-winning filmmaker', wikipediaUrl: 'https://en.wikipedia.org/wiki/Woody_Allen' },
     { name: 'Mark Twain', birthDate: '1835-11-30', profession: 'Author', category: 'other', description: 'Author of Adventures of Huckleberry Finn and Tom Sawyer', wikipediaUrl: 'https://en.wikipedia.org/wiki/Mark_Twain' },
     { name: 'Winston Churchill', birthDate: '1874-11-30', profession: 'Prime Minister of UK', category: 'other', description: 'Led Britain through WWII, Nobel Prize-winning author', wikipediaUrl: 'https://en.wikipedia.org/wiki/Winston_Churchill' },
     { name: 'Ben Stiller', birthDate: '1965-11-30', profession: 'Actor & Director', category: 'celebrity', description: 'Star of Zoolander and Night at the Museum', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ben_Stiller' },

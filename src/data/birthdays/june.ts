@@ -11,6 +11,7 @@ export const juneBirthdays: BirthdayDatabase = {
   },
   '06-02': {
     people: [
+      { name: 'Wentworth Miller', birthDate: '1972-06-02', profession: 'Actor', category: 'celebrity', description: 'Star of Prison Break', wikipediaUrl: 'https://en.wikipedia.org/wiki/Wentworth_Miller' },
       { name: 'Marquis de Sade', birthDate: '1740-06-02', profession: 'Author', category: 'other', description: 'French philosopher and writer', wikipediaUrl: 'https://en.wikipedia.org/wiki/Marquis_de_Sade' },
       { name: 'Wayne Brady', birthDate: '1972-06-02', profession: 'Actor & TV Host', category: 'celebrity', description: 'Star of Whose Line Is It Anyway?', wikipediaUrl: 'https://en.wikipedia.org/wiki/Wayne_Brady' },
       { name: 'Morena Baccarin', birthDate: '1979-06-02', profession: 'Actress', category: 'celebrity', description: 'Star of Homeland and Deadpool', wikipediaUrl: 'https://en.wikipedia.org/wiki/Morena_Baccarin' },
@@ -109,7 +110,6 @@ export const juneBirthdays: BirthdayDatabase = {
   '06-13': {
     people: [
       { name: 'Chris Evans', birthDate: '1981-06-13', profession: 'Actor', category: 'celebrity', description: 'Captain America in the Marvel Cinematic Universe', wikipediaUrl: 'https://en.wikipedia.org/wiki/Chris_Evans' },
-      { name: 'Wentworth Miller', birthDate: '1972-06-13', profession: 'Actor', category: 'celebrity', description: 'Star of Prison Break', wikipediaUrl: 'https://en.wikipedia.org/wiki/Wentworth_Miller' },
       { name: 'Mary-Kate & Ashley Olsen', birthDate: '1986-06-13', profession: 'Designers & Actresses', category: 'celebrity', description: 'Twin child stars turned fashion designers', wikipediaUrl: 'https://en.wikipedia.org/wiki/Mary-Kate_and_Ashley_Olsen' },
     ],
     events: []
@@ -200,7 +200,6 @@ export const juneBirthdays: BirthdayDatabase = {
   '06-24': {
     people: [
       { name: 'Lionel Messi', birthDate: '1987-06-24', profession: 'Footballer', category: 'athlete', description: 'Eight-time Ballon d\'Or winner, greatest footballer of all time', wikipediaUrl: 'https://en.wikipedia.org/wiki/Lionel_Messi' },
-      { name: 'Jeff Gordon', birthDate: '1971-06-24', profession: 'Racing Driver', category: 'athlete', description: 'Four-time NASCAR Cup Series champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jeff_Gordon' },
       { name: 'Minka Kelly', birthDate: '1980-06-24', profession: 'Actress', category: 'celebrity', description: 'Star of Friday Night Lights', wikipediaUrl: 'https://en.wikipedia.org/wiki/Minka_Kelly' },
     ],
     events: []

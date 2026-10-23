@@ -44,7 +44,6 @@ export const julyBirthdays: BirthdayDatabase = {
     { name: 'Jaden Smith', birthDate: '1998-07-08', profession: 'Actor & Rapper', category: 'celebrity', description: 'Actor and musician, son of Will Smith', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jaden_Smith' },
   ], events: [] },
   '07-09': { people: [
-    { name: 'Nikola Tesla', birthDate: '1856-07-09', profession: 'Inventor', category: 'scientist', description: 'Pioneer of alternating current electrical systems', wikipediaUrl: 'https://en.wikipedia.org/wiki/Nikola_Tesla' },
     { name: 'Tom Hanks', birthDate: '1956-07-09', profession: 'Actor', category: 'celebrity', description: 'Two-time consecutive Oscar winner, America\'s dad', wikipediaUrl: 'https://en.wikipedia.org/wiki/Tom_Hanks' },
     { name: 'Courtney Love', birthDate: '1964-07-09', profession: 'Musician', category: 'celebrity', description: 'Lead singer of Hole', wikipediaUrl: 'https://en.wikipedia.org/wiki/Courtney_Love' },
   ], events: [] },

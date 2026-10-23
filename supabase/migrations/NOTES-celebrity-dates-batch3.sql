@@ -1,0 +1,114 @@
+-- NOTES — celebrity birth/death date corrections, batch 3 (23 Oct 2026). NOT APPLIED.
+-- Needs founder approval. Run in the Supabase SQL editor for project "Bornclock".
+-- Until applied, the same corrections are made in code (CELEB_BIRTH_FIXES and
+-- CELEB_DEATH_OVERRIDES in src/lib/celebrityFacts.ts), so the site is already right;
+-- applying this fixes the source data. Each code fix switches itself off once the
+-- row no longer holds the wrong value.
+--
+-- Every value was checked on the person's English Wikipedia infobox (WebFetch,
+-- 23 Oct 2026); the page for each is named next to the matching code entry.
+-- Each UPDATE matches on exact name AND the known-wrong date, so it never touches a
+-- different person with the same name (e.g. Francis Bacon the painter, 1909) and is
+-- safe to run twice. Rows with sitelinks = 0 and no wikidata_id are old seed copies
+-- of the static data; they carry the static file's old wrong date and are fixed too.
+-- A dry run (SELECT count) on 23 Oct 2026 matched at least one row for every statement.
+--
+-- Not changed (sources conflict or give no date; see the batch-3 report):
+--   Bhagat Singh (27 vs 28 Sep 1907), Alexander Hamilton (1755 or 1757), Billy the Kid
+--   (17 Sep or 23 Nov 1859), Zhang Yimou and Divya Khosla Kumar (no date on Wikipedia),
+--   Joan of Arc / Atatürk / Dante / Columbus and other "c. YYYY" people (stay year-only),
+--   Ignatius of Loyola ("c. 23 October 1491" in the body), Tintoretto (1518 vs DB 1519),
+--   Shaka (c. July 1787 vs DB 1786).
+-- Isaac Newton, Leo Tolstoy, J. S. Bach and John Adams: the DB already has Wikipedia's
+-- New Style date; only the static monthly files were changed.
+
+BEGIN;
+
+-- ── Birth dates ──────────────────────────────────────────────────────────────
+UPDATE celebrity_sitelinks SET birth_date = '1983-07-28', birth_month_day = '07-28' WHERE name = 'Dhanush' AND birth_date IN ('1983-02-25');
+UPDATE celebrity_sitelinks SET birth_date = '1974-08-05', birth_month_day = '08-05' WHERE name = 'Kajol' AND birth_date IN ('1975-08-05');
+UPDATE celebrity_sitelinks SET birth_date = '1924-12-25', birth_month_day = '12-25' WHERE name = 'Atal Bihari Vajpayee' AND birth_date IN ('1924-12-24');
+UPDATE celebrity_sitelinks SET birth_date = '1982-09-28', birth_month_day = '09-28' WHERE name = 'Ranbir Kapoor' AND birth_date IN ('1982-09-25');
+UPDATE celebrity_sitelinks SET birth_date = '1950-10-18', birth_month_day = '10-18' WHERE name = 'Om Puri' AND birth_date IN ('1949-10-18');
+UPDATE celebrity_sitelinks SET birth_date = '1987-04-28', birth_month_day = '04-28' WHERE name = 'Samantha Ruth Prabhu' AND birth_date IN ('1987-04-27');
+UPDATE celebrity_sitelinks SET birth_date = '1955-10-28', birth_month_day = '10-28' WHERE name = 'Indra Nooyi' AND birth_date IN ('1955-09-28');
+UPDATE celebrity_sitelinks SET birth_date = '1934-08-18', birth_month_day = '08-18' WHERE name = 'Gulzar' AND birth_date IN ('1933-08-19');
+UPDATE celebrity_sitelinks SET birth_date = '1973-07-30', birth_month_day = '07-30' WHERE name = 'Sonu Sood' AND birth_date IN ('1976-07-30');
+UPDATE celebrity_sitelinks SET birth_date = '1937-10-22', birth_month_day = '10-22' WHERE name = 'Kader Khan' AND birth_date IN ('1930-10-22');
+UPDATE celebrity_sitelinks SET birth_date = '1951-09-07', birth_month_day = '09-07' WHERE name = 'Mammootty' AND birth_date IN ('1951-09-06');
+UPDATE celebrity_sitelinks SET birth_date = '1957-10-20', birth_month_day = '10-20' WHERE name = 'Kumar Sanu' AND birth_date IN ('1957-09-23');
+UPDATE celebrity_sitelinks SET birth_date = '1955-05-30', birth_month_day = '05-30' WHERE name = 'Paresh Rawal' AND birth_date IN ('1950-05-30');
+UPDATE celebrity_sitelinks SET birth_date = '1984-08-31', birth_month_day = '08-31' WHERE name = 'Rajkummar Rao' AND birth_date IN ('1984-06-13');
+UPDATE celebrity_sitelinks SET birth_date = '1956-07-10', birth_month_day = '07-10' WHERE name = 'Alok Nath' AND birth_date IN ('1950-07-10');
+UPDATE celebrity_sitelinks SET birth_date = '1947-11-08', birth_month_day = '11-08' WHERE name = 'Usha Uthup' AND birth_date IN ('1947-11-07');
+UPDATE celebrity_sitelinks SET birth_date = '1982-10-16', birth_month_day = '10-16' WHERE name = 'Prithviraj Sukumaran' AND birth_date IN ('1979-10-15');
+UPDATE celebrity_sitelinks SET birth_date = '1990-09-03', birth_month_day = '09-03' WHERE name = 'Mohammed Shami' AND birth_date IN ('1990-03-09');
+UPDATE celebrity_sitelinks SET birth_date = '1988-06-06', birth_month_day = '06-06' WHERE name = 'Ajinkya Rahane' AND birth_date IN ('1988-06-05');
+UPDATE celebrity_sitelinks SET birth_date = '1982-11-24', birth_month_day = '11-24' WHERE name = 'Mary Kom' AND birth_date IN ('1982-03-01');
+UPDATE celebrity_sitelinks SET birth_date = '1542-10-15', birth_month_day = '10-15' WHERE name = 'Akbar' AND birth_date IN ('1542-10-25');
+UPDATE celebrity_sitelinks SET birth_date = '1918-05-15', birth_month_day = '05-15' WHERE name = 'Charu Majumdar' AND birth_date IN ('1918-03-12', '1918-01-15');
+UPDATE celebrity_sitelinks SET birth_date = '1976-09-16', birth_month_day = '09-16' WHERE name = 'Meena' AND birth_date IN ('1974-09-16', '1980-09-16');
+UPDATE celebrity_sitelinks SET birth_date = '1979-04-08', birth_month_day = '04-08' WHERE name = 'Amit Trivedi' AND birth_date IN ('1979-07-11', '1979-03-09');
+UPDATE celebrity_sitelinks SET birth_date = '1942-11-16', birth_month_day = '11-16' WHERE name = 'Sam Pitroda' AND birth_date IN ('1942-05-04', '1942-05-16');
+UPDATE celebrity_sitelinks SET birth_date = '1986-09-21', birth_month_day = '09-21' WHERE name = 'Atlee' AND birth_date IN ('1983-09-21', '1986-09-03');
+UPDATE celebrity_sitelinks SET birth_date = '1985-03-05', birth_month_day = '03-05' WHERE name = 'Varalaxmi Sarathkumar' AND birth_date IN ('1985-03-03', '1987-10-19');
+UPDATE celebrity_sitelinks SET birth_date = '1952-10-18', birth_month_day = '10-18' WHERE name = 'Jahnu Barua' AND birth_date IN ('1952-10-17', '1952-12-07');
+UPDATE celebrity_sitelinks SET birth_date = '1972-06-10', birth_month_day = '06-10' WHERE name = 'Sundar Pichai' AND birth_date IN ('1972-07-10', '1972-07-12');
+UPDATE celebrity_sitelinks SET birth_date = '1999-09-08', birth_month_day = '09-08' WHERE name = 'Shubman Gill' AND birth_date IN ('2002-09-08');
+UPDATE celebrity_sitelinks SET birth_date = '1987-03-03', birth_month_day = '03-03' WHERE name = 'Shraddha Kapoor' AND birth_date IN ('1989-03-03');
+UPDATE celebrity_sitelinks SET birth_date = '1955-04-03', birth_month_day = '04-03' WHERE name = 'Hariharan' AND birth_date IN ('1955-04-15');
+UPDATE celebrity_sitelinks SET birth_date = '1951-03-01', birth_month_day = '03-01' WHERE name = 'Nitish Kumar' AND birth_date IN ('1951-03-08');
+UPDATE celebrity_sitelinks SET birth_date = '1985-05-17', birth_month_day = '05-17' WHERE name = 'Nushrratt Bharuccha' AND birth_date IN ('1985-02-17');
+UPDATE celebrity_sitelinks SET birth_date = '1971-06-14', birth_month_day = '06-14' WHERE name = 'Pritam Chakraborty' AND birth_date IN ('1971-06-21');
+UPDATE celebrity_sitelinks SET birth_date = '1966-09-28', birth_month_day = '09-28' WHERE name = 'Puri Jagannadh' AND birth_date IN ('1966-07-01');
+UPDATE celebrity_sitelinks SET birth_date = '1960-12-10', birth_month_day = '12-10' WHERE name = 'Rati Agnihotri' AND birth_date IN ('1960-02-10');
+UPDATE celebrity_sitelinks SET birth_date = '1978-12-14', birth_month_day = '12-14' WHERE name = 'Sameera Reddy' AND birth_date IN ('1980-12-14');
+UPDATE celebrity_sitelinks SET birth_date = '1963-03-05', birth_month_day = '03-05' WHERE name = 'Saurabh Shukla' AND birth_date IN ('1966-10-01');
+UPDATE celebrity_sitelinks SET birth_date = '1976-01-27', birth_month_day = '01-27' WHERE name = 'Shreyas Talpade' AND birth_date IN ('1976-10-27');
+UPDATE celebrity_sitelinks SET birth_date = '1987-12-18', birth_month_day = '12-18' WHERE name = 'Sneha Ullal' AND birth_date IN ('1985-09-23');
+UPDATE celebrity_sitelinks SET birth_date = '1985-02-13', birth_month_day = '02-13' WHERE name = 'Somdev Devvarman' AND birth_date IN ('1985-12-01');
+UPDATE celebrity_sitelinks SET birth_date = '1946-12-17', birth_month_day = '12-17' WHERE name = 'Suresh Oberoi' AND birth_date IN ('1946-12-01');
+UPDATE celebrity_sitelinks SET birth_date = '1980-07-05', birth_month_day = '07-05' WHERE name = 'Zayed Khan' AND birth_date IN ('1980-07-06');
+UPDATE celebrity_sitelinks SET birth_date = '1452-04-15', birth_month_day = '04-15' WHERE name = 'Leonardo da Vinci' AND birth_date IN ('1452-04-24');
+UPDATE celebrity_sitelinks SET birth_date = '1564-02-15', birth_month_day = '02-15' WHERE name = 'Galileo Galilei' AND birth_date IN ('1564-02-25');
+UPDATE celebrity_sitelinks SET birth_date = '1475-03-06', birth_month_day = '03-06' WHERE name = 'Michelangelo' AND birth_date IN ('1475-03-15');
+UPDATE celebrity_sitelinks SET birth_date = '1483-11-10', birth_month_day = '11-10' WHERE name = 'Martin Luther' AND birth_date IN ('1483-11-19');
+UPDATE celebrity_sitelinks SET birth_date = '1469-05-03', birth_month_day = '05-03' WHERE name = 'Niccolò Machiavelli' AND birth_date IN ('1469-05-12');
+UPDATE celebrity_sitelinks SET birth_date = '1473-02-19', birth_month_day = '02-19' WHERE name = 'Nicolaus Copernicus' AND birth_date IN ('1473-02-28');
+UPDATE celebrity_sitelinks SET birth_date = '1561-01-22', birth_month_day = '01-22' WHERE name = 'Francis Bacon' AND birth_date IN ('1561-02-01');
+UPDATE celebrity_sitelinks SET birth_date = '1564-04-23', birth_month_day = '04-23' WHERE name = 'William Shakespeare' AND birth_date IN ('1564-04-01');
+UPDATE celebrity_sitelinks SET birth_date = '1960-11-05', birth_month_day = '11-05' WHERE name = 'Tilda Swinton' AND birth_date IN ('1960-11-04');
+UPDATE celebrity_sitelinks SET birth_date = '1968-03-29', birth_month_day = '03-29' WHERE name = 'Lucy Lawless' AND birth_date IN ('1969-03-29');
+UPDATE celebrity_sitelinks SET birth_date = '1964-06-23', birth_month_day = '06-23' WHERE name = 'Joss Whedon' AND birth_date IN ('1964-01-23');
+UPDATE celebrity_sitelinks SET birth_date = '1987-02-09', birth_month_day = '02-09' WHERE name = 'Michael B. Jordan' AND birth_date IN ('1987-02-23');
+UPDATE celebrity_sitelinks SET birth_date = '1976-10-23', birth_month_day = '10-23' WHERE name = 'Ryan Reynolds' AND birth_date IN ('1986-11-01');
+UPDATE celebrity_sitelinks SET birth_date = '1887-11-15', birth_month_day = '11-15' WHERE name = 'Georgia O''Keeffe' AND birth_date IN ('1887-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1973-12-04', birth_month_day = '12-04' WHERE name = 'Tyra Banks' AND birth_date IN ('1973-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1971-01-11', birth_month_day = '01-11' WHERE name = 'Mary J. Blige' AND birth_date IN ('1971-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1946-01-05', birth_month_day = '01-05' WHERE name = 'Diane Keaton' AND birth_date IN ('1946-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1947-12-21', birth_month_day = '12-21' WHERE name = 'Paco de Lucía' AND birth_date IN ('1947-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1738-06-04', birth_month_day = '06-04' WHERE name = 'George III of Great Britain' AND birth_date IN ('1738-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1533-09-07', birth_month_day = '09-07' WHERE name = 'Elizabeth I of England' AND birth_date IN ('1533-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1516-02-18', birth_month_day = '02-18' WHERE name = 'Mary I of England' AND birth_date IN ('1516-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1906-12-19', birth_month_day = '12-19' WHERE name = 'Leonid Brezhnev' AND birth_date IN ('1907-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1915-05-15', birth_month_day = '05-15' WHERE name = 'Paul Samuelson' AND birth_date IN ('1915-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1519-04-13', birth_month_day = '04-13' WHERE name = 'Catherine de'' Medici' AND birth_date IN ('1519-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1872-03-31', birth_month_day = '03-31' WHERE name = 'Alexandra Kollontai' AND birth_date IN ('1872-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1904-05-06', birth_month_day = '05-06' WHERE name = 'Harry Martinson' AND birth_date IN ('1904-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1583-04-10', birth_month_day = '04-10' WHERE name = 'Hugo Grotius' AND birth_date IN ('1583-01-01');
+UPDATE celebrity_sitelinks SET birth_date = '1497-02-16', birth_month_day = '02-16' WHERE name = 'Philipp Melanchthon' AND birth_date IN ('1497-01-01');
+
+-- ── Death dates (missing, or a "YYYY-01-01" placeholder) ─────────────────────
+UPDATE celebrity_sitelinks SET death_date = '2025-10-11' WHERE name = 'Diane Keaton' AND death_date IS NULL;
+UPDATE celebrity_sitelinks SET death_date = '1972-07-28' WHERE name = 'Charu Majumdar' AND death_date = '1972-01-01';
+UPDATE celebrity_sitelinks SET death_date = '1603-03-24' WHERE name = 'Elizabeth I of England' AND death_date = '1603-01-01';
+UPDATE celebrity_sitelinks SET death_date = '1558-11-17' WHERE name = 'Mary I of England' AND death_date = '1558-01-01';
+UPDATE celebrity_sitelinks SET death_date = '1589-01-05' WHERE name = 'Catherine de'' Medici' AND death_date = '1589-01-01';
+UPDATE celebrity_sitelinks SET death_date = '1978-02-11' WHERE name = 'Harry Martinson' AND death_date = '1978-01-01';
+UPDATE celebrity_sitelinks SET death_date = '1560-04-19' WHERE name = 'Philipp Melanchthon' AND death_date = '1560-01-01';
+UPDATE celebrity_sitelinks SET death_date = '1820-01-29' WHERE name = 'George III of Great Britain' AND death_date = '1820-01-01';
+UPDATE celebrity_sitelinks SET death_date = '1631-03-31' WHERE name = 'John Donne' AND death_date = '1631-01-01';
+UPDATE celebrity_sitelinks SET death_date = '1554-02-12' WHERE name = 'Lady Jane Grey' AND death_date = '1554-01-01';
+UPDATE celebrity_sitelinks SET death_date = '1536-05-19' WHERE name = 'Anne Boleyn' AND death_date = '1536-01-01';
+
+COMMIT;

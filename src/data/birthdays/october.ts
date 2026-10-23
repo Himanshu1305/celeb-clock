@@ -89,7 +89,6 @@ export const octoberBirthdays: BirthdayDatabase = {
     { name: 'Martina Navratilova', birthDate: '1956-10-18', profession: 'Tennis Player', category: 'athlete', description: '18-time Grand Slam singles champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Martina_Navratilova' },
   ], events: [] },
   '10-19': { people: [
-    { name: 'John Adams', birthDate: '1735-10-19', profession: '2nd US President', category: 'other', description: 'Second President and Founding Father', wikipediaUrl: 'https://en.wikipedia.org/wiki/John_Adams' },
     { name: 'John le Carré', birthDate: '1931-10-19', profession: 'Author', category: 'other', description: 'Master spy novelist of The Spy Who Came in from the Cold', wikipediaUrl: 'https://en.wikipedia.org/wiki/John_le_Carr%C3%A9' },
     { name: 'Sunny Deol', birthDate: '1956-10-19', profession: 'Actor', category: 'celebrity', description: 'Bollywood action star and politician', wikipediaUrl: 'https://en.wikipedia.org/wiki/Sunny_Deol' },
   ], events: [] },
@@ -143,6 +142,7 @@ export const octoberBirthdays: BirthdayDatabase = {
     { name: 'Winona Ryder', birthDate: '1971-10-29', profession: 'Actress', category: 'celebrity', description: 'Star of Stranger Things and Beetlejuice', wikipediaUrl: 'https://en.wikipedia.org/wiki/Winona_Ryder' },
   ], events: [] },
   '10-30': { people: [
+    { name: 'John Adams', birthDate: '1735-10-30', profession: '2nd US President', category: 'other', description: 'Second President and Founding Father', wikipediaUrl: 'https://en.wikipedia.org/wiki/John_Adams' },
     { name: 'Diego Maradona', birthDate: '1960-10-30', profession: 'Footballer', category: 'athlete', description: 'Argentine football legend, Hand of God', wikipediaUrl: 'https://en.wikipedia.org/wiki/Diego_Maradona' },
     { name: 'Henry Winkler', birthDate: '1945-10-30', profession: 'Actor', category: 'celebrity', description: 'The Fonz from Happy Days', wikipediaUrl: 'https://en.wikipedia.org/wiki/Henry_Winkler' },
     { name: 'Homi J. Bhabha', birthDate: '1909-10-30', profession: 'Nuclear Physicist', category: 'scientist', description: 'Father of Indian nuclear programme', wikipediaUrl: 'https://en.wikipedia.org/wiki/Homi_J._Bhabha' },

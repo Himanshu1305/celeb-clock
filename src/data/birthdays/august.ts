@@ -15,6 +15,7 @@ export const augustBirthdays: BirthdayDatabase = {
     { name: 'Martha Stewart', birthDate: '1941-08-03', profession: 'TV Host & Entrepreneur', category: 'entrepreneur', description: 'America\'s first self-made female billionaire', wikipediaUrl: 'https://en.wikipedia.org/wiki/Martha_Stewart' },
   ], events: [] },
   '08-04': { people: [
+    { name: 'Jeff Gordon', birthDate: '1971-08-04', profession: 'Racing Driver', category: 'athlete', description: 'Four-time NASCAR Cup Series champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jeff_Gordon' },
     { name: 'Barack Obama', birthDate: '1961-08-04', profession: '44th US President', category: 'other', description: 'First African American President of the United States', wikipediaUrl: 'https://en.wikipedia.org/wiki/Barack_Obama' },
     { name: 'Louis Armstrong', birthDate: '1901-08-04', profession: 'Musician', category: 'celebrity', description: 'Jazz legend and cultural ambassador', wikipediaUrl: 'https://en.wikipedia.org/wiki/Louis_Armstrong' },
     { name: 'Meghan Markle', birthDate: '1981-08-04', profession: 'Duchess of Sussex', category: 'other', description: 'Actress turned member of British Royal Family', wikipediaUrl: 'https://en.wikipedia.org/wiki/Meghan,_Duchess_of_Sussex' },
@@ -108,6 +109,7 @@ export const augustBirthdays: BirthdayDatabase = {
     { name: 'River Phoenix', birthDate: '1970-08-23', profession: 'Actor', category: 'celebrity', description: 'Critically acclaimed actor of Stand by Me', wikipediaUrl: 'https://en.wikipedia.org/wiki/River_Phoenix' },
   ], events: [] },
   '08-24': { people: [
+    { name: 'Reggie Miller', birthDate: '1965-08-24', profession: 'Basketball Player', category: 'athlete', description: 'NBA legend and Hall of Famer', wikipediaUrl: 'https://en.wikipedia.org/wiki/Reggie_Miller' },
     { name: 'Paulo Coelho', birthDate: '1947-08-24', profession: 'Author', category: 'other', description: 'Brazilian author of The Alchemist', wikipediaUrl: 'https://en.wikipedia.org/wiki/Paulo_Coelho' },
     { name: 'Dave Chappelle', birthDate: '1973-08-24', profession: 'Comedian', category: 'celebrity', description: 'Legendary stand-up comedian', wikipediaUrl: 'https://en.wikipedia.org/wiki/Dave_Chappelle' },
     { name: 'Rupert Grint', birthDate: '1988-08-24', profession: 'Actor', category: 'celebrity', description: 'Ron Weasley in Harry Potter', wikipediaUrl: 'https://en.wikipedia.org/wiki/Rupert_Grint' },
@@ -128,7 +130,6 @@ export const augustBirthdays: BirthdayDatabase = {
     { name: 'Don Bradman', birthDate: '1908-08-27', profession: 'Cricketer', category: 'athlete', description: 'Greatest batsman in cricket history, 99.94 Test average', wikipediaUrl: 'https://en.wikipedia.org/wiki/Don_Bradman' },
   ], events: [] },
   '08-28': { people: [
-    { name: 'Leo Tolstoy', birthDate: '1828-08-28', profession: 'Author', category: 'other', description: 'Russian author of War and Peace and Anna Karenina', wikipediaUrl: 'https://en.wikipedia.org/wiki/Leo_Tolstoy' },
     { name: 'Jack Black', birthDate: '1969-08-28', profession: 'Actor & Musician', category: 'celebrity', description: 'Comedy star and Tenacious D frontman', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jack_Black' },
     { name: 'Shania Twain', birthDate: '1965-08-28', profession: 'Singer', category: 'celebrity', description: 'Queen of Country Pop', wikipediaUrl: 'https://en.wikipedia.org/wiki/Shania_Twain' },
   ], events: [] },
