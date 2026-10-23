@@ -23,6 +23,11 @@ export interface KundaliData {
    *  Used by DashaDeepDive to compute the deeper levels (Pratyantar/Sookshma/Prana) on demand. */
   dashaTimeline?: Array<{ lord: string; start: string; end: string; antardashas?: Array<{ lord: string; start: string; end: string }> }>;
   requires_birth_time: boolean;
+  /** K13: Navamsa (D9) and Dasamsa (D10) charts, same shape the chart component draws. */
+  divisionalCharts?: {
+    d9: { lagnaSignIndex: number; planets: Array<{ name: string; signIndex: number; house: number }> } | null;
+    d10: { lagnaSignIndex: number; planets: Array<{ name: string; signIndex: number; house: number }> } | null;
+  };
 }
 
 export const hasProkeralaKey = (): boolean =>
