@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
+import { leYears, leGap, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
 
 const FAQ_ITEMS = [
-  { question: "What is Japan's life expectancy?", answer: "Japan's average life expectancy is 84.3 years as of 2023. Women average 87.1 years — the highest female life expectancy of any country — and men average 81.1 years. Japan has consistently ranked among the top countries for longevity for over 40 years." },
+  { question: "What is Japan's life expectancy?", answer: `Japan's average life expectancy is ${leYears('Japan')} years (${LE_CITATION}). Women average ${leYears('Japan', 'female')} years — among the highest female life expectancies in the world — and men average ${leYears('Japan', 'male')} years. Japan has consistently ranked among the top countries for longevity for over 40 years.` },
   { question: 'Why do Japanese people live so long?', answer: 'Research points to several converging factors: a diet high in fish, vegetables, and fermented foods with low ultra-processed content; strong social connections and sense of purpose (ikigai); universal healthcare with prevention emphasis; very low obesity rates (4.3%); and high physical activity through daily walking.' },
   { question: 'What is the Okinawa longevity secret?', answer: "Okinawa — Japan's southernmost prefecture — is a Blue Zone with one of the world's highest concentrations of centenarians. Traditional Okinawan diet is 90%+ plant-based, very low in calories, and high in sweet potato, tofu, and bitter melon. Okinawans also practice hara hachi bu — eating until 80% full — and maintain moai social support groups throughout life." },
   { question: "Is Japan's longevity advantage declining?", answer: 'Somewhat. As younger Japanese generations adopt more Westernized diets and lifestyles, the longevity advantage is narrowing slightly. Okinawa in particular has shifted away from traditional eating patterns partly due to US military base influence. However, Japan still holds the global top position.' },
@@ -26,14 +27,14 @@ const LifeExpectancyJapan = () => {
         <>
           <SEO
             title="Life Expectancy in Japan — Why Japan Lives Longest & What We Can Learn"
-            description="Japan's life expectancy is 84.3 years — the highest of any large nation. The reasons are specific, evidence-based, and partially replicable anywhere."
+            description={`Japan's life expectancy is ${leYears('Japan')} years — the highest of any large nation. The reasons are specific, evidence-based, and partially replicable anywhere.`}
             keywords="life expectancy Japan, why does Japan live longest, Japanese longevity, Japan average lifespan"
             canonicalUrl="/life-expectancy-japan"
             ogImage="https://bornclock.com/og/calculator.png"
           />
           <WebApplicationSchema
             name="Life Expectancy in Japan"
-            description="Japan's life expectancy is 84.3 years — why the Japanese live longest and what the science says about it."
+            description={`Japan's life expectancy is ${leYears('Japan')} years — why the Japanese live longest and what the science says about it.`}
             url="/life-expectancy-japan"
           />
           <FAQSchema items={FAQ_ITEMS} />
@@ -42,10 +43,10 @@ const LifeExpectancyJapan = () => {
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Japan Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Japan — Why the Japanese Live Longest and What Science Says About It"
-      lead="Japan's average life expectancy is 84.3 years — the highest of any large nation on Earth (UN World Population Prospects 2023). Women average 87.1 years; men average 81.1 years. Japan has held this position for decades, and the reasons are specific and well-studied."
+      lead={`Japan's average life expectancy is ${leYears('Japan')} years — the highest of any large nation on Earth (${LE_CITATION}). Women average ${leYears('Japan', 'female')} years; men average ${leYears('Japan', 'male')} years. Japan has held this position for decades, and the reasons are specific and well-studied.`}
     >
       <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-        <EEATBadges sources={['UN WPP 2023', 'Blue Zones', 'The Lancet']} />
+        <EEATBadges sources={['UN WPP 2024', 'Blue Zones', 'The Lancet']} />
       </section>
 
       <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">

@@ -1,12 +1,13 @@
 import React from 'react';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
+import { leYears, LE_CITATION } from '@/data/lifeExpectancyFacts';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
-// Real SRS 2020 (Sample Registration System, Office of the Registrar General of India)
+// State figures: SRS 2020 (Sample Registration System, Office of the Registrar General of India)
 // life expectancy at birth, in years, by state.
 const HIGHEST_STATES: { state: string; le: string }[] = [
   { state: 'Kerala', le: '75.1' },
@@ -25,11 +26,11 @@ const LOWEST_STATES: { state: string; le: string }[] = [
 const FAQS = [
   {
     q: 'What is the average life expectancy in India?',
-    a: "According to the Sample Registration System (SRS) 2020 released by the Office of the Registrar General of India, life expectancy at birth for India is 70.2 years overall — 68.7 years for men and 71.7 years for women. This is a dramatic improvement from around 32 years at independence in 1947, driven by better vaccination coverage, maternal and child health programmes, and access to clean water.",
+    a: `According to the ${LE_CITATION}, life expectancy at birth for India is ${leYears('India')} years overall — ${leYears('India', 'male')} years for men and ${leYears('India', 'female')} years for women. This is a dramatic improvement from around 32 years at independence in 1947, driven by better vaccination coverage, maternal and child health programmes, and access to clean water.`,
   },
   {
     q: 'Which state in India has the highest life expectancy?',
-    a: 'Kerala has the highest life expectancy in India at 75.1 years — roughly five years above the national average of 70.2. Kerala is followed by Delhi (73.2), Punjab (72.6) and Himachal Pradesh (72.0). Kerala\'s lead is credited to near-universal literacy, a dense public-health network, high vaccination rates and a diet rich in fish, vegetables and coconut.',
+    a: 'Kerala has the highest life expectancy in India at 75.1 years in the Sample Registration System (SRS) state data. Kerala is followed by Delhi (73.2), Punjab (72.6) and Himachal Pradesh (72.0). Kerala\'s lead is credited to near-universal literacy, a dense public-health network, high vaccination rates and a diet rich in fish, vegetables and coconut.',
   },
   {
     q: 'Which state in India has the lowest life expectancy?',
@@ -37,7 +38,7 @@ const FAQS = [
   },
   {
     q: 'Why do women live longer than men in India?',
-    a: 'SRS 2020 shows Indian women live to 71.7 years on average versus 68.7 for men — a gap of three years. Globally, women tend to outlive men because of biological factors (oestrogen offers cardiovascular protection, two X chromosomes) and behavioural ones (men in India smoke, chew tobacco and drink at far higher rates, and are more exposed to occupational and road-accident risk).',
+    a: `UN World Population Prospects 2024 estimates that Indian women live to ${leYears('India', 'female')} years on average versus ${leYears('India', 'male')} for men — a gap of about three years. Globally, women tend to outlive men because of biological factors (oestrogen offers cardiovascular protection, two X chromosomes) and behavioural ones (men in India smoke, chew tobacco and drink at far higher rates, and are more exposed to occupational and road-accident risk).`,
   },
   {
     q: 'How much longer do people in urban India live than in rural India?',
@@ -51,7 +52,7 @@ export function LifeExpectancyIndiaArticle() {
     '@type': 'Article',
     headline: 'How Long Will I Live in India? Life Expectancy by State',
     description:
-      'Life expectancy in India by state using SRS 2020 data. Kerala leads at 75.1 years; the national average is 70.2. See where your state ranks and how to beat the average.',
+      `Life expectancy in India by state using SRS data. Kerala leads at 75.1 years; the national average is ${leYears('India')} (UN WPP 2024, 2023 estimate). See where your state ranks and how to beat the average.`,
     author: { '@type': 'Organization', name: 'BornClock' },
     publisher: { '@type': 'Organization', name: 'BornClock' },
     mainEntityOfPage: 'https://bornclock.com/articles/how-long-will-i-live-in-india/',
@@ -74,7 +75,7 @@ export function LifeExpectancyIndiaArticle() {
         <>
           <SEO
             title="How Long Will I Live in India? Life Expectancy Guide | BornClock"
-            description="Life expectancy in India by state — SRS data. Kerala 75.1 leads; national average 70.2. See your state and how to beat the average."
+            description={`Life expectancy in India by state — SRS data. Kerala 75.1 leads; national average ${leYears('India')} (UN WPP 2024). See your state and how to beat the average.`}
             canonicalUrl="/articles/how-long-will-i-live-in-india"
             ogType="article"
           />
@@ -85,7 +86,7 @@ export function LifeExpectancyIndiaArticle() {
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'How Long Will I Live in India? Life Expectancy by State' }}
       eyebrow="Life Expectancy"
       h1="How Long Will I Live in India? Life Expectancy by State"
-      lead={'"How long will I live?" is one of the most human questions there is — and in India, the honest answer depends enormously on where you were born and how you live today. According to the Sample Registration System (SRS) 2020, the official demographic survey run by the Office of the Registrar General of India, the national life expectancy at birth is 70.2 years. But that single number hides a range of more than ten years between states. A child born in Kerala can expect to live to 75.1, while a child born in Uttar Pradesh averages just 65.0 — a difference of a full decade, inside the same country.'}
+      lead={`"How long will I live?" is one of the most human questions there is — and in India, the honest answer depends enormously on where you were born and how you live today. According to the UN World Population Prospects 2024, India's national life expectancy at birth is ${leYears('India')} years (estimate for 2023). But that single number hides a range of about ten years between states in India's own Sample Registration System (SRS) data. A child born in Kerala can expect to live to 75.1, while a child born in Uttar Pradesh averages just 65.0 — a difference of a full decade, inside the same country.`}
     >
       <article className="max-w-3xl mx-auto px-4 py-10">
 
@@ -101,8 +102,9 @@ export function LifeExpectancyIndiaArticle() {
           <h2 className="text-2xl font-black text-gray-900 mb-3">Life Expectancy in India by State (SRS 2020)</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             The table below shows life expectancy at birth (in years) for the highest- and
-            lowest-ranking major states, from SRS 2020 data. The all-India averages are
-            shown for comparison.
+            lowest-ranking major states, from India's Sample Registration System (SRS 2020). The SRS
+            measures differently from the UN, so state figures are best compared with each other;
+            the national figures below are the UN WPP 2024 estimates for 2023.
           </p>
 
           <div className="overflow-x-auto mb-6">
@@ -125,10 +127,6 @@ export function LifeExpectancyIndiaArticle() {
                     <td className="border border-gray-300 px-4 py-2 text-right font-bold text-green-700">{row.le}</td>
                   </tr>
                 ))}
-                <tr className="bg-[#2F6FB0]/10">
-                  <td className="border border-gray-300 px-4 py-2 font-bold text-[#2F6FB0]" colSpan={2}>India — national average</td>
-                  <td className="border border-gray-300 px-4 py-2 text-right font-black text-[#2F6FB0]">70.2</td>
-                </tr>
                 <tr className="bg-red-50">
                   <td colSpan={3} className="border border-gray-300 px-4 py-2 font-bold text-red-800">Lowest life expectancy</td>
                 </tr>
@@ -145,15 +143,15 @@ export function LifeExpectancyIndiaArticle() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
             <div className="bg-[#2F6FB0]/10 rounded-xl p-4 text-center">
-              <div className="text-2xl font-black text-[#2F6FB0]">70.2</div>
-              <div className="text-xs text-gray-600">National average</div>
+              <div className="text-2xl font-black text-[#2F6FB0]">{leYears('India')}</div>
+              <div className="text-xs text-gray-600">National average (UN WPP 2024)</div>
             </div>
             <div className="bg-blue-50 rounded-xl p-4 text-center">
-              <div className="text-2xl font-black text-blue-900">68.7</div>
+              <div className="text-2xl font-black text-blue-900">{leYears('India', 'male')}</div>
               <div className="text-xs text-gray-600">Men</div>
             </div>
             <div className="bg-pink-50 rounded-xl p-4 text-center">
-              <div className="text-2xl font-black text-pink-900">71.7</div>
+              <div className="text-2xl font-black text-pink-900">{leYears('India', 'female')}</div>
               <div className="text-xs text-gray-600">Women</div>
             </div>
             <div className="bg-amber-50 rounded-xl p-4 text-center">
@@ -165,7 +163,7 @@ export function LifeExpectancyIndiaArticle() {
           <h2 className="text-2xl font-black text-gray-900 mb-3">The Kerala Model: Why Some States Live Longer</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             Kerala's life expectancy of <strong>75.1 years</strong> puts it on par with many
-            middle-income countries and roughly five years ahead of the Indian average. What
+            middle-income countries and is the highest of any major Indian state in SRS data. What
             makes Kerala different is not wealth — it is not India's richest state — but a
             combination of factors demographers now call the "Kerala model":
           </p>

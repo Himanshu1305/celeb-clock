@@ -9,7 +9,7 @@ afterEach(cleanup);
 
 const TESTID = 'uk-le-page';
 const COUNTRY_TOKEN = 'UK';
-const AVG = '81.1';
+const AVG = '81.3'; // S13: UK, UN WPP 2024, 2023 estimate (OWID)
 
 const renderPage = () => render(
   <HelmetProvider><MemoryRouter><LifeExpectancyUKPage /></MemoryRouter></HelmetProvider>

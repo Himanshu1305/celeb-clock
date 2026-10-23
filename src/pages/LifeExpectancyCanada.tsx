@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
+import { leYears, leGap, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
 
 const FAQ_ITEMS = [
-  { question: "What is Canada's life expectancy?", answer: 'Approximately 82.3 years as of 2023. Women average 84.6 years and men 80.1 years. Canada ranks among the top 20 countries globally for life expectancy.' },
+  { question: "What is Canada's life expectancy?", answer: `Approximately ${leYears('Canada')} years (${LE_CITATION}). Women average ${leYears('Canada', 'female')} years and men ${leYears('Canada', 'male')} years. Canada ranks among the top 20 countries globally for life expectancy.` },
   { question: 'Why does Canada have higher life expectancy than the USA?', answer: 'The primary factors are universal healthcare (eliminating financial barriers to treatment), significantly lower gun violence mortality, lower opioid death rates, lower obesity rates, and stronger social safety nets that reduce poverty-related mortality.' },
   { question: 'Which Canadian province has the highest life expectancy?', answer: 'British Columbia consistently leads, followed closely by Ontario. Both benefit from large urban populations with good healthcare access, lower smoking rates, and diverse populations. Rural and remote provinces, as well as Indigenous communities, face significantly lower life expectancy.' },
-  { question: 'How does Canada compare to other G7 nations on life expectancy?', answer: 'Canada (82.3) ranks in the middle of G7 nations — below Japan (84.3), France (82.7), and Italy (82.9), but above Germany (80.6), the UK (81.3), and significantly above the USA (77.5).' },
+  { question: 'How does Canada compare to other G7 nations on life expectancy?', answer: `Canada (${leYears('Canada')}) ranks in the middle of G7 nations — below Japan (${leYears('Japan')}), France (${leYears('France')}), and Italy (${leYears('Italy')}), but above Germany (${leYears('Germany')}), the UK (${leYears('United Kingdom')}), and significantly above the USA (${leYears('United States')}).` },
 ];
 
 const RELATED = [
@@ -26,14 +27,14 @@ const LifeExpectancyCanada = () => {
         <>
           <SEO
             title="Life Expectancy in Canada — 2026 Data, Provincial Differences & Key Factors"
-            description="Canada's life expectancy is 82.3 years. Here's what drives it, how provinces compare, and why Canada outperforms the USA by nearly 5 years."
+            description={`Canada's life expectancy is ${leYears('Canada')} years. Here's what drives it, how provinces compare, and why Canada outperforms the USA by ${leDiff('Canada', 'United States')} years.`}
             keywords="life expectancy Canada, Canadian lifespan 2026, how long do Canadians live, Canada longevity"
             canonicalUrl="/life-expectancy-canada"
             ogImage="https://bornclock.com/og/calculator.png"
           />
           <WebApplicationSchema
             name="Life Expectancy in Canada"
-            description="Canada's life expectancy is 82.3 years — what drives it, how provinces compare, and why Canadians outlive Americans by nearly 5 years."
+            description={`Canada's life expectancy is ${leYears('Canada')} years — what drives it, how provinces compare, and why Canadians outlive Americans by ${leDiff('Canada', 'United States')} years.`}
             url="/life-expectancy-canada"
           />
           <FAQSchema items={FAQ_ITEMS} />
@@ -42,16 +43,16 @@ const LifeExpectancyCanada = () => {
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Canada Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Canada — Why Canadians Outlive Americans by 5 Years"
-      lead="Canada's average life expectancy is approximately 82.3 years as of 2023. Women average 84.6 years; men average 80.1 years. Canada consistently outperforms the United States by approximately 5 years — largely due to universal healthcare, lower gun violence, lower opioid mortality, and stronger social safety nets."
+      lead={`Canada's average life expectancy is approximately ${leYears('Canada')} years (${LE_CITATION}). Women average ${leYears('Canada', 'female')} years; men average ${leYears('Canada', 'male')} years. Canada consistently outperforms the United States — by ${leDiff('Canada', 'United States')} years in 2023 — largely due to universal healthcare, lower gun violence, lower opioid mortality, and stronger social safety nets.`}
     >
       <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-        <EEATBadges sources={['UN WPP 2023', 'Statistics Canada', 'WHO']} />
+        <EEATBadges sources={['UN WPP 2024', 'Statistics Canada', 'WHO']} />
       </section>
 
       <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Canada vs USA — Why the 5-Year Gap Exists</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">Two similar, neighbouring, wealthy countries diverge by five years — and the reasons are structural. Universal healthcare since 1966 removes the financial barrier to treatment that shortens American lives, and gun-violence mortality of about 2.1 per 100,000 in Canada versus 12.2 in the USA is a stark contrast.</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">Two similar, neighbouring, wealthy countries diverge by more than three years — and the reasons are structural. Universal healthcare since 1966 removes the financial barrier to treatment that shortens American lives, and gun-violence mortality of about 2.1 per 100,000 in Canada versus 12.2 in the USA is a stark contrast.</p>
             <p className="text-muted-foreground leading-relaxed">Lower opioid death rates, lower obesity, and stronger social safety nets that blunt poverty-related mortality complete the picture. The gap has actually widened over the past two decades as the US opioid crisis worsened.</p>
           </section>
 

@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
+import { leYears, leGap, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
 
 const FAQ_ITEMS = [
-  { question: "What is India's life expectancy in 2026?", answer: "Based on UN World Population Prospects 2023 data, India's life expectancy is approximately 70.9 years. Women average 72.3 years and men 69.5 years. This is expected to continue rising as healthcare access expands." },
+  { question: "What is India's life expectancy in 2026?", answer: `According to ${LE_CITATION}, India's life expectancy is ${leYears('India')} years. Women average ${leYears('India', 'female')} years and men ${leYears('India', 'male')} years. This is expected to continue rising as healthcare access expands.` },
   { question: 'Which Indian state has the highest life expectancy?', answer: 'Kerala consistently leads with approximately 75-77 years — comparable to several European countries — driven by high female literacy rates, better healthcare infrastructure, and lower infant mortality. Bihar and Uttar Pradesh have the lowest figures at around 64-66 years.' },
   { question: 'Why do Indians get heart attacks earlier than Western populations?', answer: 'Indians are genetically predisposed to higher insulin resistance and central adiposity at lower BMI thresholds. The Indian Heart Association has documented that Indians experience heart attacks an average of 10 years earlier than Western populations — making cardiovascular health particularly important for Indian adults from their 30s onwards.' },
-  { question: "How has India's life expectancy changed over time?", answer: "India's life expectancy has nearly doubled since 1960, when it stood at just 41.4 years. The improvement is driven by better maternal and infant care, expanded vaccination coverage, reduced infectious disease burden, and economic development — one of the most dramatic public health achievements of the 20th and 21st centuries." },
+  { question: "How has India's life expectancy changed over time?", answer: `India's life expectancy has risen by more than 26 years since 1960, when it stood at just ${WPP2024_HISTORY.India[1960]} years. The improvement is driven by better maternal and infant care, expanded vaccination coverage, reduced infectious disease burden, and economic development — one of the most dramatic public health achievements of the 20th and 21st centuries.` },
 ];
 
 const RELATED = [
@@ -26,14 +27,14 @@ const LifeExpectancyIndia = () => {
         <>
           <SEO
             title="Life Expectancy in India — 2026 Data, Causes & How to Beat the Average"
-            description="India's life expectancy is 70.9 years (2023). Here's what drives it, how it compares globally, and what Indian adults can do to outlive the national average."
+            description={`India's life expectancy is ${leYears('India')} years (UN WPP 2024, 2023 estimate). Here's what drives it, how it compares globally, and what Indian adults can do to outlive the national average.`}
             keywords="life expectancy India, India life expectancy 2026, average lifespan India, how long do Indians live"
             canonicalUrl="/life-expectancy-india"
             ogImage="https://bornclock.com/og/calculator.png"
           />
           <WebApplicationSchema
             name="Life Expectancy in India"
-            description="India's life expectancy is 70.9 years (2023) — what drives it, how it compares, and how to outlive the average."
+            description={`India's life expectancy is ${leYears('India')} years (UN WPP 2024, 2023 estimate) — what drives it, how it compares, and how to outlive the average.`}
             url="/life-expectancy-india"
           />
           <FAQSchema items={FAQ_ITEMS} />
@@ -42,15 +43,15 @@ const LifeExpectancyIndia = () => {
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'India Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in India — What the Numbers Actually Mean"
-      lead="India's average life expectancy is 70.9 years as of 2023 (UN World Population Prospects). Women average 72.3 years; men average 69.5 years. India has gained nearly 30 years of life expectancy since 1960 — one of the fastest improvements of any large nation in history."
+      lead={`India's average life expectancy is ${leYears('India')} years (${LE_CITATION}). Women average ${leYears('India', 'female')} years; men average ${leYears('India', 'male')} years. India has gained more than 26 years of life expectancy since 1960 (${WPP2024_HISTORY.India[1960]} years then) — one of the fastest improvements of any large nation in history.`}
     >
       <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-        <EEATBadges sources={['UN WPP 2023', 'WHO', 'Indian Heart Association']} />
+        <EEATBadges sources={['UN WPP 2024', 'WHO', 'Indian Heart Association']} />
       </section>
 
       <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
         <section>
-          <h2 className="text-2xl font-bold text-foreground mb-4">Why 70.9 Years — The Key Drivers</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-4">Why {leYears('India')} Years — The Key Drivers</h2>
           <p className="text-muted-foreground leading-relaxed mb-4">The single biggest constraint is healthcare access. India has roughly 0.7 hospital beds per 1,000 people, well below the global average of 2.7 — a gap that shows up most sharply in emergencies and in the management of chronic disease. Where care is thin, treatable conditions become fatal ones.</p>
           <p className="text-muted-foreground leading-relaxed mb-4">Cardiovascular disease is the other heavy weight on the average. The Indian Heart Association has documented that Indians tend to have heart attacks about a decade earlier than Western populations, driven by a genetic tendency toward insulin resistance and abdominal fat at lower body weights. It means heart health matters for Indian adults from their 30s, not their 50s.</p>
           <p className="text-muted-foreground leading-relaxed">Environmental factors pile on top. Air pollution alone is estimated to cost the average Indian around 2.6 years of life (EPIC, 2023), and road-traffic mortality — about 15.6 deaths per 100,000 — falls disproportionately on young, working-age adults, pulling the whole average down.</p>

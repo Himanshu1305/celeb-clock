@@ -93,7 +93,7 @@ describe('HowLongWillILivePage — Structure', () => {
     renderPage(HowLongWillILivePage);
     const indiaRow = document.querySelector('[data-country="India"]');
     expect(indiaRow).toBeTruthy();
-    expect(indiaRow?.textContent).toContain('70');
+    expect(indiaRow?.textContent).toContain('72.0'); // S13: UN WPP 2024, 2023 estimate (OWID)
   });
 
   it('TC-PAGE-13: country table has scroll wrapper', () => {

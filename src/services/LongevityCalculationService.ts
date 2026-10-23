@@ -1,5 +1,6 @@
 // src/services/LongevityCalculationService.ts
 // All calculation is client-side only — no health data is transmitted.
+import { WPP2024_LIFE_EXPECTANCY } from '../data/lifeExpectancyFacts';
 
 export interface FamilyMemberData {
   age: number;              // 0 = not entered
@@ -126,80 +127,71 @@ export interface LongevityResult {
 }
 
 // ── STRUCTURE A: Birth life expectancy baselines ──────────────────────────────
-// Source: UN World Population Prospects 2024/2026
-export const BIRTH_BASELINES: Record<string, { male: number; female: number }> = {
-  // South Asia
-  'India':              { male: 71.2, female: 74.4 },
-  'Pakistan':           { male: 67.2, female: 69.2 },
-  'Bangladesh':         { male: 73.5, female: 76.5 },
-  'Nepal':              { male: 71.0, female: 73.5 },
-  'Sri Lanka':          { male: 73.0, female: 79.5 },
-
-  // East Asia
-  'China':              { male: 76.0, female: 80.5 },
-  'Japan':              { male: 81.5, female: 87.5 },
-  'South Korea':        { male: 80.5, female: 86.5 },
-  'Taiwan':             { male: 78.5, female: 84.5 },
-
-  // Southeast Asia
-  'Indonesia':          { male: 69.5, female: 73.5 },
-  'Philippines':        { male: 69.0, female: 75.5 },
-  'Vietnam':            { male: 72.0, female: 78.0 },
-  'Thailand':           { male: 73.0, female: 79.5 },
-  'Malaysia':           { male: 73.5, female: 78.0 },
-  'Myanmar':            { male: 65.0, female: 69.5 },
-
-  // Middle East
-  'Iran':               { male: 75.0, female: 78.5 },
-  'Iraq':               { male: 71.0, female: 75.0 },
-  'Saudi Arabia':       { male: 76.0, female: 79.5 },
-  'Turkey':             { male: 74.5, female: 80.5 },
-  'Egypt':              { male: 70.0, female: 74.5 },
-
-  // Africa
-  'Nigeria':            { male: 53.5, female: 56.5 },
-  'Ethiopia':           { male: 65.5, female: 69.0 },
-  'DR Congo':           { male: 59.5, female: 63.5 },
-  'Tanzania':           { male: 65.5, female: 69.5 },
-  'Kenya':              { male: 64.5, female: 69.5 },
-  'Uganda':             { male: 63.0, female: 67.5 },
-  'Ghana':              { male: 63.5, female: 67.5 },
-  'Angola':             { male: 62.0, female: 67.5 },
-  'Mozambique':         { male: 58.5, female: 63.5 },
-  'South Africa':       { male: 62.0, female: 68.5 },
-  'Algeria':            { male: 77.0, female: 79.5 },
-  'Morocco':            { male: 75.5, female: 78.5 },
-  'Sudan':              { male: 65.0, female: 68.0 },
-
-  // Americas
-  'United States':      { male: 74.5, female: 80.5 },
-  'Brazil':             { male: 72.5, female: 79.5 },
-  'Mexico':             { male: 72.0, female: 78.0 },
-  'Colombia':           { male: 73.5, female: 79.5 },
-  'Argentina':          { male: 73.0, female: 79.5 },
-  'Venezuela':          { male: 70.5, female: 77.5 },
-  'Peru':               { male: 73.5, female: 78.5 },
-  'Canada':             { male: 79.5, female: 84.5 },
-
-  // Europe
-  'United Kingdom':     { male: 79.5, female: 83.5 },
-  'Germany':            { male: 78.5, female: 83.5 },
-  'France':             { male: 79.5, female: 85.5 },
-  'Italy':              { male: 81.5, female: 85.5 },
-  'Spain':              { male: 81.0, female: 86.0 },
-  'Ukraine':            { male: 68.0, female: 77.5 },
-  'Poland':             { male: 74.5, female: 82.0 },
-  'Uzbekistan':         { male: 71.5, female: 75.5 },
-  'Russia':             { male: 67.5, female: 77.5 },
-
-  // Oceania
-  'Australia':          { male: 81.5, female: 85.5 },
-
-  // Other
-  "Côte d'Ivoire":      { male: 58.5, female: 62.5 },
-  'Cameroon':           { male: 59.5, female: 63.0 },
-  'Yemen':              { male: 65.5, female: 69.0 },
-};
+// Audit S13: read from the ONE sourced table — UN World Population Prospects 2024,
+// period life expectancy at birth, estimate for 2023 (src/data/lifeExpectancyFacts.ts).
+const BASELINE_COUNTRIES = [
+  'India',
+  'Pakistan',
+  'Bangladesh',
+  'Nepal',
+  'Sri Lanka',
+  'China',
+  'Japan',
+  'South Korea',
+  'Taiwan',
+  'Indonesia',
+  'Philippines',
+  'Vietnam',
+  'Thailand',
+  'Malaysia',
+  'Myanmar',
+  'Iran',
+  'Iraq',
+  'Saudi Arabia',
+  'Turkey',
+  'Egypt',
+  'Nigeria',
+  'Ethiopia',
+  'DR Congo',
+  'Tanzania',
+  'Kenya',
+  'Uganda',
+  'Ghana',
+  'Angola',
+  'Mozambique',
+  'South Africa',
+  'Algeria',
+  'Morocco',
+  'Sudan',
+  'United States',
+  'Brazil',
+  'Mexico',
+  'Colombia',
+  'Argentina',
+  'Venezuela',
+  'Peru',
+  'Canada',
+  'United Kingdom',
+  'Germany',
+  'France',
+  'Italy',
+  'Spain',
+  'Ukraine',
+  'Poland',
+  'Uzbekistan',
+  'Russia',
+  'Australia',
+  "Côte d'Ivoire",
+  'Cameroon',
+  'Yemen',
+] as const;
+export const BIRTH_BASELINES: Record<string, { male: number; female: number }> = Object.fromEntries(
+  BASELINE_COUNTRIES.map(c => {
+    const r = WPP2024_LIFE_EXPECTANCY[c];
+    if (!r) throw new Error(`Missing WPP 2024 baseline: ${c}`);
+    return [c, { male: r.male, female: r.female }];
+  }),
+);
 
 // ── STRUCTURE B: WHO Regional fallbacks ──────────────────────────────────────
 // Source: WHO Global Health Observatory 2023
@@ -251,8 +243,8 @@ const COUNTRY_TO_WHO_REGION: Record<string, string> = {
 };
 
 // ── STRUCTURE C: Global default ───────────────────────────────────────────────
-// Source: UN WPP 2024 global average
-const GLOBAL_DEFAULT = { male: 73.3, female: 76.0 };
+// Source: UN WPP 2024 world estimate for 2023 (same table)
+const GLOBAL_DEFAULT = { male: WPP2024_LIFE_EXPECTANCY.World.male, female: WPP2024_LIFE_EXPECTANCY.World.female };
 
 // ── STRUCTURE D: Conditional multipliers ──────────────────────────────────────
 // Converts birth baseline to conditional (age-adjusted) baseline.
@@ -396,14 +388,14 @@ export function getConditionalBase(
 
   if (BIRTH_BASELINES[country]) {
     birthBaseline = BIRTH_BASELINES[country][g];
-    source = `UN World Population Prospects 2024, ${country}`;
+    source = `UN World Population Prospects 2024 (2023 estimate), ${country}`;
   } else if (COUNTRY_TO_WHO_REGION[country]) {
     const region = COUNTRY_TO_WHO_REGION[country];
     birthBaseline = WHO_REGIONAL_BASELINES[region][g];
     source = `WHO Regional Average (${region}), 2023`;
   } else {
     birthBaseline = GLOBAL_DEFAULT[g];
-    source = 'UN World Population Prospects 2024, Global Average';
+    source = 'UN World Population Prospects 2024 (2023 estimate), Global Average';
   }
 
   // Step 2: Apply the (interpolated) conditional multiplier from age 35

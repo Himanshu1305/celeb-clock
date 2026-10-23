@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
+import { le as leRow, leYears } from '@/data/lifeExpectancyFacts';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
@@ -13,7 +14,7 @@ const SLUG = '/articles/retirement-planning-life-expectancy';
 const FAQS = [
   {
     q: 'How many years of retirement should I plan for in India?',
-    a: "Do not plan only for the average. India's average life expectancy is about 70.2 years, so retiring at 60 looks like roughly 10 years. But averages hide the tail: nearly 30% of people who reach 60 live 10 or more years beyond the average, and a healthy, urban, non-smoking lifestyle can push your lifespan to 75-85+. A safe rule of thumb is to fund for (life expectancy + 10) years — so build a corpus that lasts 25-30 years from age 60, not 10.",
+    a: `Do not plan only for the average. India's average life expectancy is ${leYears('India')} years (UN WPP 2024, 2023 estimate), so retiring at 60 looks like roughly ${Math.round(leRow('India').both - 60)} years. But averages hide the tail: nearly 30% of people who reach 60 live 10 or more years beyond the average, and a healthy, urban, non-smoking lifestyle can push your lifespan to 75-85+. A safe rule of thumb is to fund for (life expectancy + 10) years — so build a corpus that lasts 25-30 years from age 60, not ${Math.round(leRow('India').both - 60)}.`,
   },
   {
     q: 'What is longevity risk in retirement planning?',
@@ -33,7 +34,8 @@ const FAQS = [
   },
 ];
 
-const AVG_LE = 70.2;
+// Audit S13: India national average from the one WPP 2024 table (2023 estimate).
+const AVG_LE = leYears('India');
 
 function CorpusYearsCalculator() {
   const [retireAge, setRetireAge] = React.useState('60');
@@ -190,7 +192,7 @@ export function RetirementLifeExpectancyArticle() {
             <p className="text-sm text-gray-600 mt-2">
               82 − 60 = 22 years of retirement your corpus must cover. Apply the
               (life expectancy + 10) buffer and you should really size your corpus for 32 years of
-              spending — not the 10 years the national average of {AVG_LE} would suggest.
+              spending — not the {Math.round(Number(AVG_LE) - 60)} years the national average of {AVG_LE} would suggest.
             </p>
           </div>
           <p className="text-gray-700 leading-relaxed mb-2">

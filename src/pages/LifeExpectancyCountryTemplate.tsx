@@ -3,6 +3,7 @@ import { SEO } from '@/components/SEO';
 import { ToolLayout } from '@/components/central';
 import { LC_FACTORS } from '@/content/longevityCalculatorContent';
 import { reachPercent } from '@/lib/longevity/survival';
+import { leYears } from '@/data/lifeExpectancyFacts';
 
 // Local JSON-LD helper (copied convention from NumerologyArticle).
 function JsonLd({ data }: { data: object }) {
@@ -41,10 +42,10 @@ export interface LifeExpectancyCountryProps {
   avg: string;
   men: string;
   women: string;
-  /** source + year, e.g. "ONS 2023" */
+  /** source + year — national figures come from the one WPP 2024 table (audit S13) */
   source: string;
   /** global rank, e.g. "29th" */
-  rank: string;
+  rank?: string;
   /** regional variation rows (may be empty) */
   regional?: RegionalStat[];
   /** exactly 5 country-specific FAQs */
@@ -108,8 +109,8 @@ export function LifeExpectancyCountryTemplate(props: LifeExpectancyCountryProps)
       h1={`Life Expectancy Calculator ${country} — How Long Will You Live?`}
       lead={(
         <>
-          The average life expectancy in the {country} is <strong>{avg} years</strong> ({source}),
-          placing it {rank} in the world. But a national average is just a starting point — it says
+          The average life expectancy in the {country} is <strong>{avg} years</strong> ({source}).
+          But a national average is just a starting point — it says
           almost nothing about <em>your</em> personal outlook. Your own life expectancy is shaped far
           more by how you live than by where you were born. This free {demonym} life expectancy
           calculator uses your {country} baseline and adjusts it with eight evidence-based lifestyle
@@ -149,8 +150,7 @@ export function LifeExpectancyCountryTemplate(props: LifeExpectancyCountryProps)
             According to {source}, life expectancy at birth in the {country} is {avg} years overall —
             {' '}{men} years for men and {women} years for women. The persistent gap between the sexes
             (women outliving men by several years) is consistent across almost every country on earth
-            and is driven by a mix of biological and behavioural factors. Globally, the {country} ranks
-            {' '}{rank}.
+            and is driven by a mix of biological and behavioural factors.
           </p>
 
           {/* Probability of reaching 100 (NS-P100) + baseline source (NS-CRED) */}
@@ -167,8 +167,8 @@ export function LifeExpectancyCountryTemplate(props: LifeExpectancyCountryProps)
             </p>
           </div>
           <p className="text-xs text-gray-500 mb-6 italic">
-            Baseline figures are official period life-table data ({source}); international context from the
-            WHO Global Health Observatory. These are statistical averages, not personal predictions, and
+            National and international figures are period life expectancy at birth from the UN World
+            Population Prospects 2024 (estimates for 2023); regional figures are from national statistics. These are statistical averages, not personal predictions, and
             not medical advice.
           </p>
 
@@ -198,9 +198,9 @@ export function LifeExpectancyCountryTemplate(props: LifeExpectancyCountryProps)
           </h2>
           <p className="text-gray-700 leading-relaxed mb-6">
             Context matters. The {country} average of {avg} years sits within a wide global spread.
-            For comparison, life expectancy is around <strong>84.3 years in Japan</strong> (one of the
-            highest in the world), <strong>83.9 years in Switzerland</strong>, and roughly{' '}
-            <strong>70.2 years in India</strong>. The differences between these countries are explained
+            For comparison, life expectancy is <strong>{leYears('Japan')} years in Japan</strong> (one of the
+            highest in the world), <strong>{leYears('Switzerland')} years in Switzerland</strong>, and{' '}
+            <strong>{leYears('India')} years in India</strong> (UN WPP 2024). The differences between these countries are explained
             far more by diet, healthcare systems, smoking rates, and social structure than by genetics —
             which is precisely why an individual estimate based on your own habits is more useful than any
             national figure.

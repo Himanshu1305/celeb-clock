@@ -1,4 +1,5 @@
 import { LifeExpectancyCountryTemplate } from './LifeExpectancyCountryTemplate';
+import { leYears, leGap } from '@/data/lifeExpectancyFacts';
 
 export function LifeExpectancyUKPage() {
   return (
@@ -9,33 +10,32 @@ export function LifeExpectancyUKPage() {
       path="/life-expectancy-calculator-uk"
       hreflang="en-GB"
       title="Life Expectancy Calculator UK — How Long Will You Live? | BornClock"
-      description="UK life expectancy is 81.1 years (ONS 2023). Calculate your personal life expectancy with our free 8-factor UK longevity calculator in 3 minutes."
+      description={`UK life expectancy is ${leYears('United Kingdom')} years (UN WPP 2024). Calculate your personal life expectancy with our free 8-factor UK longevity calculator in 3 minutes.`}
       appName="UK Life Expectancy Calculator"
-      avg="81.1"
-      men="79.4"
-      women="83.1"
-      source="ONS 2023"
-      rank="29th"
+      avg={leYears('United Kingdom')}
+      men={leYears('United Kingdom', 'male')}
+      women={leYears('United Kingdom', 'female')}
+      source="UN WPP 2024, 2023 estimate"
       regional={[
-        { label: 'England', value: '81.3', note: 'the highest life expectancy of the UK nations' },
-        { label: 'Scotland', value: '78.8', note: 'the lowest, reflecting income and health inequalities' },
+        { label: 'England', value: '81.3', note: 'the highest life expectancy of the UK nations (ONS 2023)' },
+        { label: 'Scotland', value: '78.8', note: 'the lowest, reflecting income and health inequalities (ONS 2023)' },
       ]}
       faqs={[
         {
           q: 'What is the average life expectancy in the UK?',
-          a: 'The average life expectancy in the UK is 81.1 years at birth, according to the Office for National Statistics (ONS 2023) — 79.4 years for men and 83.1 years for women. This places the UK 29th in the world.',
+          a: `The average life expectancy in the UK is ${leYears('United Kingdom')} years at birth, according to the UN World Population Prospects 2024 (estimate for 2023) — ${leYears('United Kingdom', 'male')} years for men and ${leYears('United Kingdom', 'female')} years for women.`,
         },
         {
           q: 'Why do women live longer than men in the UK?',
-          a: 'UK women outlive men by about 3.7 years (83.1 vs 79.4). The gap is driven by a mix of biological factors and behaviour, including historically higher smoking and alcohol rates and more hazardous occupations among men.',
+          a: `UK women outlive men by about ${leGap('United Kingdom')} years (${leYears('United Kingdom', 'female')} vs ${leYears('United Kingdom', 'male')}). The gap is driven by a mix of biological factors and behaviour, including historically higher smoking and alcohol rates and more hazardous occupations among men.`,
         },
         {
           q: 'Which UK region has the highest life expectancy?',
-          a: 'England has the highest life expectancy of the UK nations at 81.3 years, while Scotland has the lowest at 78.8 years. The gap largely reflects differences in income, deprivation, and access to healthcare.',
+          a: 'In ONS figures, England has the highest life expectancy of the UK nations at 81.3 years, while Scotland has the lowest at 78.8 years. The gap largely reflects differences in income, deprivation, and access to healthcare.',
         },
         {
           q: 'How does UK life expectancy compare to other countries?',
-          a: 'The UK average of 81.1 years is high globally but below the leaders. Japan sits around 84.3 years and Switzerland around 83.9 years, while India is roughly 70.2 years. The UK ranks about 29th worldwide.',
+          a: `The UK average of ${leYears('United Kingdom')} years is high globally but below the leaders. Japan sits at ${leYears('Japan')} years and Switzerland at ${leYears('Switzerland')} years, while India is ${leYears('India')} years (UN WPP 2024, 2023 estimates).`,
         },
         {
           q: 'Can I improve my own life expectancy in the UK?',

@@ -9,7 +9,7 @@ afterEach(cleanup);
 
 const TESTID = 'aus-le-page';
 const COUNTRY_TOKEN = 'AUSTRALIA';
-const AVG = '83.4';
+const AVG = '83.9'; // S13: Australia, UN WPP 2024, 2023 estimate (OWID)
 
 const renderPage = () => render(
   <HelmetProvider><MemoryRouter><LifeExpectancyAustraliaPage /></MemoryRouter></HelmetProvider>

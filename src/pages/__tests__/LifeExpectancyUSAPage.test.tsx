@@ -9,7 +9,7 @@ afterEach(cleanup);
 
 const TESTID = 'usa-le-page';
 const COUNTRY_TOKEN = 'USA';
-const AVG = '79.1';
+const AVG = '79.3'; // S13: USA, UN WPP 2024, 2023 estimate (OWID)
 
 const renderPage = () => render(
   <HelmetProvider><MemoryRouter><LifeExpectancyUSAPage /></MemoryRouter></HelmetProvider>

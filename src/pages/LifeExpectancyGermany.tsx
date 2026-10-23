@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
+import { leYears, leGap, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
 
 const FAQ_ITEMS = [
-  { question: "What is Germany's life expectancy?", answer: 'Approximately 80.6 years as of 2023. Women average 83.2 years and men 78.2 years. Germany ranks in the middle of Western European nations — below France, Spain, and Italy but above Central and Eastern European neighbours.' },
+  { question: "What is Germany's life expectancy?", answer: `Approximately ${leYears('Germany')} years (${LE_CITATION}). Women average ${leYears('Germany', 'female')} years and men ${leYears('Germany', 'male')} years. Germany ranks in the middle of Western European nations — below France, Spain, and Italy but above Central and Eastern European neighbours.` },
   { question: 'Why is German life expectancy lower than France or Spain?', answer: 'The primary factors are higher smoking rates, higher alcohol consumption, and a rising obesity rate. Germany also has a less Mediterranean dietary pattern than southern European nations — research consistently links Mediterranean diet to lower cardiovascular disease mortality.' },
   { question: 'Is there still a life expectancy difference between East and West Germany?', answer: 'The gap has nearly closed since reunification in 1990, but some difference persists in rural eastern states. At peak, East Germans lived 3-4 years less than West Germans. The remaining gap is attributed to higher unemployment rates and historically different healthcare infrastructure in some eastern regions.' },
   { question: "How does Germany's healthcare system compare globally?", answer: 'Germany has one of the world\'s most comprehensive healthcare systems — universal coverage through statutory health insurance, very high hospital density, and among the lowest wait times of any universal system. Despite this, life expectancy outcomes rank below expectation because lifestyle factors dominate population-level longevity more than healthcare quality alone.' },
@@ -26,14 +27,14 @@ const LifeExpectancyGermany = () => {
         <>
           <SEO
             title="Life Expectancy in Germany — 2026 Data, East-West Gap & Key Drivers"
-            description="Germany's life expectancy is 80.6 years — below most Western European neighbours. Here's why, including the persistent east-west divide."
+            description={`Germany's life expectancy is ${leYears('Germany')} years — below most Western European neighbours. Here's why, including the persistent east-west divide.`}
             keywords="life expectancy Germany, German lifespan 2026, how long do Germans live, Germany longevity"
             canonicalUrl="/life-expectancy-germany"
             ogImage="https://bornclock.com/og/calculator.png"
           />
           <WebApplicationSchema
             name="Life Expectancy in Germany"
-            description="Germany's life expectancy is 80.6 years — strong healthcare, but below its European neighbours. Here's why."
+            description={`Germany's life expectancy is ${leYears('Germany')} years — strong healthcare, but below its European neighbours. Here's why.`}
             url="/life-expectancy-germany"
           />
           <FAQSchema items={FAQ_ITEMS} />
@@ -42,10 +43,10 @@ const LifeExpectancyGermany = () => {
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Germany Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Germany — Strong Healthcare, But Below Its European Neighbours"
-      lead="Germany's average life expectancy is approximately 80.6 years as of 2023. Women average 83.2 years; men average 78.2 years. Despite having one of the world's most advanced healthcare systems, Germany ranks below most Western European neighbours — largely due to higher smoking rates, higher alcohol consumption, and a rising obesity rate."
+      lead={`Germany's average life expectancy is approximately ${leYears('Germany')} years (${LE_CITATION}). Women average ${leYears('Germany', 'female')} years; men average ${leYears('Germany', 'male')} years. Despite having one of the world's most advanced healthcare systems, Germany ranks below most Western European neighbours — largely due to higher smoking rates, higher alcohol consumption, and a rising obesity rate.`}
     >
       <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-        <EEATBadges sources={['UN WPP 2023', 'Destatis', 'WHO']} />
+        <EEATBadges sources={['UN WPP 2024', 'Destatis', 'WHO']} />
       </section>
 
       <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">

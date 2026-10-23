@@ -86,10 +86,11 @@ function calcBioAge(chronoAge: number, answers: Record<string, string>): number 
 
 // Inline getForecastForCountry to avoid Supabase import
 const BIRTH_BASELINES_TEST: Record<string, { male: number; female: number }> = {
-  'Japan':         { male: 81.5, female: 87.5 },
-  'Nigeria':       { male: 53.5, female: 56.5 },
-  'India':         { male: 71.2, female: 74.4 },
-  'United States': { male: 74.5, female: 80.5 },
+  // UN WPP 2024, 2023 estimate (same values as src/data/lifeExpectancyFacts.ts — audit S13)
+  'Japan':         { male: 81.7, female: 87.7 },
+  'Nigeria':       { male: 54.2, female: 54.7 },
+  'India':         { male: 70.5, female: 73.6 },
+  'United States': { male: 76.9, female: 81.8 },
 };
 
 function getForecastTest(
@@ -260,7 +261,7 @@ describe('getForecastForCountry', () => {
 
   // CC3: positive adjustments raise forecast above baseline
   it('CC3: positive health adjustments raise forecast above birth baseline', () => {
-    const baseline = BIRTH_BASELINES_TEST['India'].male; // 71.2
+    const baseline = BIRTH_BASELINES_TEST['India'].male; // 70.5
     const result = getForecastTest('India', 'male', 35, 3, 2, 1, 1);
     expect(result).toBeGreaterThan(baseline);
   });

@@ -19,11 +19,11 @@ describe('LifeExpectancyByCountryArticle', () => {
     expect(h1).toContain('life expectancy');
     expect(h1).toContain('country');
   });
-  it('TC-LEC-P-03: body contains "Japan" and "84.3"', () => {
+  it('TC-LEC-P-03 (S13): body contains "Japan" and its UN WPP 2024 figure 84.7', () => {
     renderArticle();
     const text = document.body.textContent || '';
     expect(text).toContain('Japan');
-    expect(text).toContain('84.3');
+    expect(text).toContain('84.7'); // UN WPP 2024, 2023 estimate (OWID)
   });
   it('TC-LEC-P-04: Article JSON-LD schema present', () => {
     renderArticle();

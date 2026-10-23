@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
+import { leYears, leGap, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
 
 const FAQ_ITEMS = [
-  { question: "What is Brazil's life expectancy?", answer: 'Approximately 74.6 years as of 2023. Women average 78.5 years and men 70.9 years. Brazil has improved significantly from 54 years in 1960 but faces persistent inequality challenges that create large gaps between regions and income groups.' },
-  { question: 'Why is there such a large gender gap in Brazilian life expectancy?', answer: "The 7.6-year gap between women and men is primarily driven by high male homicide rates and road accident mortality. Brazil has one of the world's highest homicide rates at 22.4 per 100,000, with young men disproportionately affected. Workplace accident rates and higher male smoking rates also contribute." },
+  { question: "What is Brazil's life expectancy?", answer: `Approximately ${leYears('Brazil')} years (${LE_CITATION}). Women average ${leYears('Brazil', 'female')} years and men ${leYears('Brazil', 'male')} years. Brazil has improved significantly from ${WPP2024_HISTORY.Brazil[1960]} years in 1960 but faces persistent inequality challenges that create large gaps between regions and income groups.` },
+  { question: 'Why is there such a large gender gap in Brazilian life expectancy?', answer: `The ${leGap('Brazil')}-year gap between women and men is primarily driven by high male homicide rates and road accident mortality. Brazil has one of the world's highest homicide rates at 22.4 per 100,000, with young men disproportionately affected. Workplace accident rates and higher male smoking rates also contribute.` },
   { question: 'How does inequality affect life expectancy in Brazil?', answer: 'Dramatically. Wealthy neighborhoods in São Paulo have life expectancy above 80 years — comparable to Western Europe. Poor northeastern regions average 10-12 years less. Race compounds this: Afro-Brazilian populations face significantly higher mortality rates at every age compared to white Brazilians.' },
   { question: "What is Brazil's SUS healthcare system?", answer: 'SUS (Sistema Único de Saúde) is Brazil\'s constitutional universal health system providing free healthcare to all Brazilians since 1988. The Família Saúde community health program — which places health workers directly in communities — is credited with dramatically reducing infant mortality in the northeast and is studied as a model globally.' },
 ];
@@ -26,14 +27,14 @@ const LifeExpectancyBrazil = () => {
         <>
           <SEO
             title="Life Expectancy in Brazil — 2026 Data, Inequality & Regional Gaps"
-            description="Brazil's life expectancy is 74.6 years. Here's how inequality, violence, and regional gaps shape Brazilian longevity — and what's improving."
+            description={`Brazil's life expectancy is ${leYears('Brazil')} years. Here's how inequality, violence, and regional gaps shape Brazilian longevity — and what's improving.`}
             keywords="life expectancy Brazil, Brazilian lifespan 2026, how long do Brazilians live, Brazil longevity"
             canonicalUrl="/life-expectancy-brazil"
             ogImage="https://bornclock.com/og/calculator.png"
           />
           <WebApplicationSchema
             name="Life Expectancy in Brazil"
-            description="Brazil's life expectancy is 74.6 years — progress, inequality, and the regional divide behind the number."
+            description={`Brazil's life expectancy is ${leYears('Brazil')} years — progress, inequality, and the regional divide behind the number.`}
             url="/life-expectancy-brazil"
           />
           <FAQSchema items={FAQ_ITEMS} />
@@ -42,10 +43,10 @@ const LifeExpectancyBrazil = () => {
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Brazil Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Brazil — Progress, Inequality, and the Regional Divide"
-      lead="Brazil's average life expectancy is approximately 74.6 years as of 2023. Women average 78.5 years; men average 70.9 years — a large 7.6-year gender gap driven significantly by high male homicide and accident rates. Brazil has improved substantially since 1960 (when life expectancy was 54 years) but inequality remains the central challenge."
+      lead={`Brazil's average life expectancy is approximately ${leYears('Brazil')} years (${LE_CITATION}). Women average ${leYears('Brazil', 'female')} years; men average ${leYears('Brazil', 'male')} years — a large ${leGap('Brazil')}-year gender gap driven significantly by high male homicide and accident rates. Brazil has improved substantially since 1960 (when life expectancy was ${WPP2024_HISTORY.Brazil[1960]} years) but inequality remains the central challenge.`}
     >
       <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-        <EEATBadges sources={['UN WPP 2023', 'WHO', 'IBGE']} />
+        <EEATBadges sources={['UN WPP 2024', 'WHO', 'IBGE']} />
       </section>
 
       <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
@@ -57,7 +58,7 @@ const LifeExpectancyBrazil = () => {
 
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Violence as a Health Crisis</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">Brazil carries one of the world's highest homicide rates — around 22.4 per 100,000 — and it falls disproportionately on young men, making it the primary driver of the 7.6-year gender gap.</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">Brazil carries one of the world's highest homicide rates — around 22.4 per 100,000 — and it falls disproportionately on young men, making it the primary driver of the {leGap('Brazil')}-year gender gap.</p>
             <p className="text-muted-foreground leading-relaxed">Road-accident mortality is also among the highest in Latin America. These are structural causes, not individual lifestyle choices, which is what makes them so hard to shift.</p>
           </section>
 

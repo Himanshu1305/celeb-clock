@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
+import { leYears, leGap, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
 
 const FAQ_ITEMS = [
-  { question: "What is Australia's life expectancy?", answer: 'Approximately 83.2 years as of 2023. Women average 85.2 years and men 81.2 years. Australia consistently ranks in the top 5-10 countries globally for life expectancy.' },
+  { question: "What is Australia's life expectancy?", answer: `Approximately ${leYears('Australia')} years (${LE_CITATION}). Women average ${leYears('Australia', 'female')} years and men ${leYears('Australia', 'male')} years. Australia consistently ranks in the top 5-10 countries globally for life expectancy.` },
   { question: 'Why do Australians live so long?', answer: 'Several factors contribute: universal Medicare providing healthcare access to all residents; high rates of outdoor physical activity; strong food safety regulation; relatively low smoking rates; and a diverse diet influenced by Mediterranean and Asian food cultures in major cities.' },
   { question: 'Is there a life expectancy gap between Indigenous and non-Indigenous Australians?', answer: 'Yes — a significant one. Aboriginal and Torres Strait Islander Australians have a life expectancy approximately 8 years lower than non-Indigenous Australians, attributed to higher rates of chronic disease, poorer healthcare access in remote communities, and socioeconomic disadvantage. Closing this gap is a stated priority of the Australian government.' },
-  { question: 'How does Australian life expectancy compare to the UK and USA?', answer: 'Australia (83.2) significantly outperforms both UK (81.3) and USA (77.5) — a gap of nearly 6 years over the USA. The difference is attributed to universal healthcare, lower obesity rates, more active lifestyles, and stronger social safety nets.' },
+  { question: 'How does Australian life expectancy compare to the UK and USA?', answer: `Australia (${leYears('Australia')}) significantly outperforms both UK (${leYears('United Kingdom')}) and USA (${leYears('United States')}) — a gap of ${leDiff('Australia', 'United States')} years over the USA. The difference is attributed to universal healthcare, lower obesity rates, more active lifestyles, and stronger social safety nets.` },
 ];
 
 const RELATED = [
@@ -26,14 +27,14 @@ const LifeExpectancyAustralia = () => {
         <>
           <SEO
             title="Life Expectancy in Australia — 2026 Data & Why Australians Live So Long"
-            description="Australia's life expectancy is 83.2 years — among the highest in the world. Here's what drives it and where the gaps remain."
+            description={`Australia's life expectancy is ${leYears('Australia')} years — among the highest in the world. Here's what drives it and where the gaps remain.`}
             keywords="life expectancy Australia, Australian lifespan 2026, how long do Australians live, Australia longevity"
             canonicalUrl="/life-expectancy-australia"
             ogImage="https://bornclock.com/og/calculator.png"
           />
           <WebApplicationSchema
             name="Life Expectancy in Australia"
-            description="Australia's life expectancy is 83.2 years — what drives one of the world's longest-lived populations and where gaps remain."
+            description={`Australia's life expectancy is ${leYears('Australia')} years — what drives one of the world's longest-lived populations and where gaps remain.`}
             url="/life-expectancy-australia"
           />
           <FAQSchema items={FAQ_ITEMS} />
@@ -42,10 +43,10 @@ const LifeExpectancyAustralia = () => {
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Australia Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Australia — Why Australians Are Among the World's Longest-Lived"
-      lead="Australia's average life expectancy is approximately 83.2 years as of 2023 — one of the highest of any nation. Women average 85.2 years; men average 81.2 years. Australia has maintained this position for decades through universal healthcare, outdoor lifestyle culture, and strong public health investment."
+      lead={`Australia's average life expectancy is approximately ${leYears('Australia')} years (${LE_CITATION}) — one of the highest of any nation. Women average ${leYears('Australia', 'female')} years; men average ${leYears('Australia', 'male')} years. Australia has maintained this position for decades through universal healthcare, outdoor lifestyle culture, and strong public health investment.`}
     >
       <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-        <EEATBadges sources={['UN WPP 2023', 'AIHW', 'WHO']} />
+        <EEATBadges sources={['UN WPP 2024', 'AIHW', 'WHO']} />
       </section>
 
       <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
@@ -63,7 +64,7 @@ const LifeExpectancyAustralia = () => {
 
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Australia vs Comparable Nations</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">Australia ranks alongside Switzerland, Japan and Spain at the very top of the global longevity tables, and comfortably outperforms both the UK (81.3) and the USA (77.5).</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">Australia ranks alongside Switzerland, Japan and Spain at the very top of the global longevity tables, and comfortably outperforms both the UK ({leYears('United Kingdom')}) and the USA ({leYears('United States')}).</p>
             <p className="text-muted-foreground leading-relaxed">It sits in the same band as the Scandinavian countries and lands consistently in the global top ten for both male and female life expectancy.</p>
           </section>
 

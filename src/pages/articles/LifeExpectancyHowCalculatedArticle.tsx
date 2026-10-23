@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
+import { leYears } from '@/data/lifeExpectancyFacts';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
@@ -45,10 +46,10 @@ const FAQS = [
   },
   {
     q: 'What is the difference between a period life table and a cohort life table?',
-    a: 'A period (or current) life table uses the death rates observed in a single year, as if a baby would live its whole life under this year’s mortality — this is the "70.2 years" headline figure you usually see. A cohort life table follows an actual birth cohort across its real lifetime and projects how death rates will keep falling, so it usually produces a higher, more realistic number for people alive today.',
+    a: `A period (or current) life table uses the death rates observed in a single year, as if a baby would live its whole life under this year’s mortality — this is the "${leYears('India')} years" headline figure you usually see for India. A cohort life table follows an actual birth cohort across its real lifetime and projects how death rates will keep falling, so it usually produces a higher, more realistic number for people alive today.`,
   },
   {
-    q: 'Why might India’s life expectancy of around 70 years be underestimated?',
+    q: 'Why might India’s life expectancy of around 72 years be underestimated?',
     a: 'India’s figure rests on death-registration data that is still incomplete in several states — deaths, and especially the age at death, are under-recorded. When deaths are undercounted the mortality rate looks lower in some bands and distorted in others, and the period-table approach ignores future medical improvements. Analysts widely believe the true figure for a child born today, using a cohort approach, is higher than the headline period figure.',
   },
   {
@@ -95,7 +96,7 @@ export function LifeExpectancyHowCalculatedArticle() {
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'How Life Expectancy Is Calculated — The WHO Method Explained' }}
       eyebrow="Science & Longevity"
       h1="How Life Expectancy Is Calculated — The WHO Method Explained"
-      lead={'When a headline says "life expectancy in India is 70.2 years," it can sound like a simple fact — a stopwatch on the average life. In reality that number is the output of a careful statistical machine called a life table, built from millions of records and standardised so that every country\'s figure means the same thing. This guide explains exactly how life expectancy is calculated, why demographers distinguish period from cohort life tables, the five data sources that feed the model, and why India\'s official figure may actually underestimate how long a child born today will live.'}
+      lead={`When a headline says "life expectancy in India is ${leYears('India')} years" (UN World Population Prospects 2024, estimate for 2023), it can sound like a simple fact — a stopwatch on the average life. In reality that number is the output of a careful statistical machine called a life table, built from millions of records and standardised so that every country's figure means the same thing. This guide explains exactly how life expectancy is calculated, why demographers distinguish period from cohort life tables, the five data sources that feed the model, and why India's official figure may actually underestimate how long a child born today will live.`}
     >
         <article className="max-w-3xl mx-auto px-4 py-10">
 
@@ -189,9 +190,9 @@ export function LifeExpectancyHowCalculatedArticle() {
             ))}
           </div>
 
-          <h2 className="text-2xl font-black text-gray-900 mb-3">Why India's 70.2 May Be Underestimated</h2>
+          <h2 className="text-2xl font-black text-gray-900 mb-3">Why India's {leYears('India')} May Be Underestimated</h2>
           <p className="text-gray-700 leading-relaxed mb-3">
-            India's headline life expectancy of roughly 70.2 years rests on the quality of its death
+            India's headline life expectancy of {leYears('India')} years (UN WPP 2024) rests on the quality of its death
             registration — and that is precisely where the weakness lies. Two structural issues push
             the figure down:
           </p>
@@ -206,11 +207,11 @@ export function LifeExpectancyHowCalculatedArticle() {
               <strong>The period assumption.</strong> The official figure is a period table, so it
               assumes no future improvement in healthcare, nutrition or income. Given how fast
               India's child mortality has fallen and how quickly access to medicine is expanding, a
-              cohort view of a child born today points to a materially longer life than 70.2 years.
+              cohort view of a child born today points to a materially longer life than {leYears('India')} years.
             </li>
           </ul>
           <p className="text-gray-700 leading-relaxed mb-6">
-            The practical takeaway: treat 70.2 as a conservative national baseline, not a ceiling.
+            The practical takeaway: treat {leYears('India')} as a conservative national baseline, not a ceiling.
             For most people — and especially anyone who has already survived childhood, does not
             smoke, and has access to healthcare — the realistic personal outlook is higher.
           </p>

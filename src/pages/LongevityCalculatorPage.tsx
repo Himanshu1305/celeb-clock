@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
+import { leYears } from '@/data/lifeExpectancyFacts';
 import {
   LC_SEO, LC_SCHEMA, LC_FACTORS, LC_COPY
 } from '@/content/longevityCalculatorContent';
@@ -235,7 +236,7 @@ export function LongevityCalculatorPage() {
                          text-amber-800 text-sm text-center"
             >
               How do you compare to the average? India's average life expectancy is
-              70.2 years — see where you land.
+              {leYears('India')} years (UN WPP 2024, 2023 estimate) — see where you land.
             </div>
 
           </div>

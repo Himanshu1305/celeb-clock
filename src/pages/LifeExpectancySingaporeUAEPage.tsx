@@ -1,53 +1,54 @@
 import { SEO } from '@/components/SEO';
 import { ToolLayout } from '@/components/central';
 import { LC_FACTORS } from '@/content/longevityCalculatorContent';
+import { leYears, leDiff, LE_CITATION } from '@/data/lifeExpectancyFacts';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
 const TITLE = 'Life Expectancy Calculator — Singapore & UAE | BornClock';
-const DESC = 'Life expectancy in Singapore (83.9) and UAE (78.5) — WHO data for the Indian diaspora. Compare with India 70.2 and calculate your own with 8 factors.';
+const DESC = `Life expectancy in Singapore (${leYears('Singapore')}) and UAE (${leYears('United Arab Emirates')}) — UN WPP 2024 data for the Indian diaspora. Compare with India ${leYears('India')} and calculate your own with 8 factors.`;
 
 const COUNTRIES = [
   {
     flag: '🇸🇬',
     name: 'Singapore',
-    le: '83.9',
-    note: 'WHO 2023 — 5th highest in the world',
-    detail: 'Singapore\'s life expectancy of 83.9 years places it among the top five nations globally. Its success is built on near-universal healthcare, one of the lowest infant mortality rates in the world, and a public health culture that keeps chronic disease in check. The famous hawker-centre food culture, while rich, sits alongside high walkability and active-ageing programmes that keep older Singaporeans mobile and socially engaged.',
+    le: leYears('Singapore'),
+    note: 'UN WPP 2024, 2023 estimate — among the highest in the world',
+    detail: `Singapore's life expectancy of ${leYears('Singapore')} years places it among the longest-lived nations globally. Its success is built on near-universal healthcare, one of the lowest infant mortality rates in the world, and a public health culture that keeps chronic disease in check. The famous hawker-centre food culture, while rich, sits alongside high walkability and active-ageing programmes that keep older Singaporeans mobile and socially engaged.`,
   },
   {
     flag: '🇦🇪',
     name: 'UAE',
-    le: '78.5',
-    note: 'WHO 2023 — steadily improving',
-    detail: 'The UAE\'s life expectancy of 78.5 years has risen sharply over recent decades on the back of heavy investment in world-class hospitals and preventive screening. The lifestyle picture is mixed: a young, largely expatriate workforce and rising incomes coexist with challenges from desert heat, sedentary office life, and higher rates of diabetes. Government wellness drives and mandatory health insurance continue to push the figure upward.',
+    le: leYears('United Arab Emirates'),
+    note: 'UN WPP 2024, 2023 estimate — steadily improving',
+    detail: `The UAE's life expectancy of ${leYears('United Arab Emirates')} years has risen sharply over recent decades on the back of heavy investment in world-class hospitals and preventive screening. The lifestyle picture is mixed: a young, largely expatriate workforce and rising incomes coexist with challenges from desert heat, sedentary office life, and higher rates of diabetes. Government wellness drives and mandatory health insurance continue to push the figure upward.`,
   },
   {
     flag: '🇮🇳',
     name: 'India',
-    le: '70.2',
-    note: 'WHO 2023 — baseline for comparison',
-    detail: 'India\'s life expectancy of 70.2 years is the reference point most of the diaspora grew up with. The roughly 14-year gap between India and Singapore is driven far less by genetics than by healthcare access, air quality, sanitation, and lifestyle — which is precisely why relocating and adopting local health habits can meaningfully change an individual\'s outlook.',
+    le: leYears('India'),
+    note: 'UN WPP 2024, 2023 estimate — baseline for comparison',
+    detail: `India's life expectancy of ${leYears('India')} years is the reference point most of the diaspora grew up with. The ${leDiff('Singapore', 'India')}-year gap between India and Singapore is driven far less by genetics than by healthcare access, air quality, sanitation, and lifestyle — which is precisely why relocating and adopting local health habits can meaningfully change an individual's outlook.`,
   },
   {
     flag: '🇬🇧',
     name: 'UK',
-    le: '81.1',
-    note: 'WHO 2023 — another major diaspora hub',
-    detail: 'The UK, home to a large and long-established Indian community, sits at 81.1 years. It offers a useful midpoint between Singapore\'s figure and India\'s, showing that even among high-income destinations, life expectancy varies with diet, activity, climate and healthcare model.',
+    le: leYears('United Kingdom'),
+    note: 'UN WPP 2024, 2023 estimate — another major diaspora hub',
+    detail: `The UK, home to a large and long-established Indian community, sits at ${leYears('United Kingdom')} years. It offers a useful midpoint between Singapore's figure and India's, showing that even among high-income destinations, life expectancy varies with diet, activity, climate and healthcare model.`,
   },
 ];
 
 const FAQS = [
   {
     q: 'What is the life expectancy in Singapore and the UAE?',
-    a: 'According to WHO 2023 data, life expectancy in Singapore is 83.9 years — the 5th highest in the world — while the UAE sits at 78.5 years and is improving steadily. Both are well above India\'s figure of 70.2 years, largely due to differences in healthcare access, sanitation and lifestyle rather than genetics.',
+    a: `According to the ${LE_CITATION}, life expectancy in Singapore is ${leYears('Singapore')} years — among the highest in the world — while the UAE sits at ${leYears('United Arab Emirates')} years. Both are well above India's figure of ${leYears('India')} years, largely due to differences in healthcare access, sanitation and lifestyle rather than genetics.`,
   },
   {
     q: 'Why do Indians in Singapore and the UAE tend to live longer?',
-    a: 'Members of the Indian diaspora often benefit from the healthcare systems, food safety, sanitation and air quality of their adopted countries. Singapore\'s universal healthcare and the UAE\'s heavy investment in hospitals and preventive screening both raise the baseline. The gap with India of roughly 14 years for Singapore is driven by environment and lifestyle, not heritage, which means individual habits still matter enormously.',
+    a: `Members of the Indian diaspora often benefit from the healthcare systems, food safety, sanitation and air quality of their adopted countries. Singapore's universal healthcare and the UAE's heavy investment in hospitals and preventive screening both raise the baseline. The gap with India of about ${leDiff('Singapore', 'India')} years for Singapore is driven by environment and lifestyle, not heritage, which means individual habits still matter enormously.`,
   },
   {
     q: 'How large is the Indian community in Singapore and the UAE?',
@@ -55,11 +56,11 @@ const FAQS = [
   },
   {
     q: 'How is my personal life expectancy different from the national average?',
-    a: 'A national average like 83.9 for Singapore is a population statistic. Your personal life expectancy adjusts that baseline up or down based on your own smoking, BMI, chronic conditions, diet, sleep, exercise, stress and social connections. Research shows these lifestyle factors account for 70–75% of longevity variance, so two people in the same country can differ by 20 years or more.',
+    a: `A national average like ${leYears('Singapore')} for Singapore is a population statistic. Your personal life expectancy adjusts that baseline up or down based on your own smoking, BMI, chronic conditions, diet, sleep, exercise, stress and social connections. Research shows these lifestyle factors account for 70–75% of longevity variance, so two people in the same country can differ by 20 years or more.`,
   },
   {
     q: 'How do I calculate my own life expectancy?',
-    a: 'Use the BornClock longevity calculator, which starts from your country\'s WHO baseline and adjusts it across 8 evidence-based lifestyle factors. The quiz takes about 3 minutes and returns a personalised estimate, a longevity score and a 90-day action plan — free, with no account required.',
+    a: 'Use the BornClock longevity calculator, which starts from a population baseline for your country (UN WPP 2024 where available, otherwise a WHO regional average) and adjusts it across 8 evidence-based lifestyle factors. The quiz takes about 3 minutes and returns a personalised estimate, a longevity score and a 90-day action plan — free, with no account required.',
   },
 ];
 
@@ -107,16 +108,16 @@ export function LifeExpectancySingaporeUAEPage() {
           For the millions of people of Indian origin living in Singapore and the UAE, life
           expectancy is more than a statistic — it shapes decisions about careers, families,
           retirement and where to grow old. Singapore records one of the highest life
-          expectancies on Earth at <strong>83.9 years</strong> (WHO 2023), while the UAE sits
-          at <strong>78.5 years</strong> and continues to climb. Both comfortably exceed
-          India&apos;s figure of <strong>70.2 years</strong>.
+          expectancies on Earth at <strong>{leYears('Singapore')} years</strong>, while the UAE sits
+          at <strong>{leYears('United Arab Emirates')} years</strong>. Both comfortably exceed
+          India&apos;s figure of <strong>{leYears('India')} years</strong> ({LE_CITATION}).
         </>
       )}
     >
       <article className="max-w-3xl mx-auto px-4 py-10">
 
           <p className="text-gray-700 leading-relaxed mb-6">
-            This page pulls together WHO country data for the Indian diaspora, explains why the
+            This page pulls together UN World Population Prospects 2024 country data for the Indian diaspora, explains why the
             gap exists, and lets you go one step further — estimating your own life expectancy
             based on 8 evidence-based lifestyle factors rather than a national average.
           </p>
@@ -133,7 +134,7 @@ export function LifeExpectancySingaporeUAEPage() {
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">
-            Life Expectancy by Country (WHO 2023)
+            Life Expectancy by Country (UN WPP 2024, 2023 estimate)
           </h2>
           <div className="space-y-4 mb-8">
             {COUNTRIES.map(c => (
@@ -166,9 +167,9 @@ export function LifeExpectancySingaporeUAEPage() {
             environment their own health is shaped by every day.
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
-            The encouraging news is that the roughly 14-year gap between India (70.2) and
-            Singapore (83.9) is overwhelmingly explained by healthcare access, sanitation, air
-            quality and lifestyle — not by ancestry. Comparing against the UK (81.1), another
+            The encouraging news is that the {leDiff('Singapore', 'India')}-year gap between India ({leYears('India')}) and
+            Singapore ({leYears('Singapore')}) is overwhelmingly explained by healthcare access, sanitation, air
+            quality and lifestyle — not by ancestry. Comparing against the UK ({leYears('United Kingdom')}), another
             major diaspora hub, tells the same story: environment and daily habits move the
             number far more than genetics do. That means the choices an individual makes about
             diet, movement and stress genuinely matter.
@@ -202,7 +203,7 @@ export function LifeExpectancySingaporeUAEPage() {
             <h2 className="text-2xl font-black mb-2">See Your Own Number, Not the Average</h2>
             <p className="text-emerald-100 mb-6">
               Whether you&apos;re in Singapore, the UAE, India or the UK, the BornClock longevity
-              calculator adjusts your country&apos;s WHO baseline across all 8 factors in about 3 minutes.
+              calculator adjusts a population baseline for your country (UN WPP 2024 where available, otherwise a WHO regional average) across all 8 factors in about 3 minutes.
             </p>
             <a href="/longevity-calculator"
                className="inline-block bg-white text-emerald-700 font-black px-8 py-3

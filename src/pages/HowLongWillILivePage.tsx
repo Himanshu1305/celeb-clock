@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
+import { le, leYears, LE_CITATION } from '@/data/lifeExpectancyFacts';
 import {
   HLWIL_SEO, HLWIL_SCHEMA, HLWIL_COUNTRY_TABLE,
   HLWIL_FACTORS, HLWIL_COPY,
@@ -27,7 +28,7 @@ const HLWIL_FAQ_SCHEMA = {
       name: 'How long will I live?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The global average life expectancy is approximately 73 years (WHO, 2023), but this varies dramatically based on country, gender, and individual lifestyle. A non-smoking, regularly exercising person with strong social connections and good sleep may have a statistical life expectancy above 85. Someone with multiple lifestyle risk factors may be well below the national average. BornClock\'s 8-factor quiz gives you a personalised estimate using WHO baseline data adjusted for your specific lifestyle choices.',
+        text: `The global average life expectancy is about ${leYears('World')} years (${LE_CITATION}), but this varies dramatically based on country, gender, and individual lifestyle. A non-smoking, regularly exercising person with strong social connections and good sleep may have a statistical life expectancy above 85. Someone with multiple lifestyle risk factors may be well below the national average. BornClock's 8-factor quiz gives you a personalised estimate using UN WPP 2024 baseline data adjusted for your specific lifestyle choices.`,
       },
     },
     {
@@ -51,7 +52,7 @@ const HLWIL_FAQ_SCHEMA = {
       name: 'Which country has the highest life expectancy?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'According to WHO 2023 data, Japan has the highest life expectancy at approximately 84.3 years, followed by Switzerland (83.4), South Korea (83.3), Singapore (83.2), and Australia (83.2). India\'s average is approximately 70.2 years. The United States averages 76.4 years, lower than many high-income countries due to lifestyle factors including obesity rates, limited healthcare access for some populations, and higher rates of accidents. BornClock uses country-specific WHO baselines so your estimate is calibrated for your actual national context.',
+        text: `Among large countries, Japan has the highest life expectancy at ${leYears('Japan')} years, followed by South Korea (${leYears('South Korea')}), Switzerland (${leYears('Switzerland')}), Australia (${leYears('Australia')}) and Singapore (${leYears('Singapore')}) (${LE_CITATION}). India's average is ${leYears('India')} years. The United States averages ${leYears('United States')} years, lower than many high-income countries due to lifestyle factors including obesity rates, limited healthcare access for some populations, and higher rates of accidents. BornClock uses country-specific UN WPP 2024 baselines so your estimate is calibrated for your actual national context.`,
       },
     },
     {
@@ -59,7 +60,7 @@ const HLWIL_FAQ_SCHEMA = {
       name: 'How accurate is a life expectancy calculator?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Life expectancy calculators provide statistical estimates based on population research — they cannot predict individual outcomes. BornClock uses WHO Global Health Observatory baselines specific to your country and gender, then applies adjustments from 8 peer-reviewed factors. Research shows these 8 factors account for 70-75% of longevity variance, making them the most reliable basis for personalised estimation without a clinical examination. Accuracy depends on answering honestly and completely.',
+        text: 'Life expectancy calculators provide statistical estimates based on population research — they cannot predict individual outcomes. BornClock uses UN World Population Prospects 2024 baselines specific to your country and gender, then applies adjustments from 8 peer-reviewed factors. Research shows these 8 factors account for 70-75% of longevity variance, making them the most reliable basis for personalised estimation without a clinical examination. Accuracy depends on answering honestly and completely.',
       },
     },
   ],
@@ -371,9 +372,9 @@ export function HowLongWillILivePage() {
                     >
                       <td className="px-4 py-3 text-gray-500 text-sm">{row.rank}</td>
                       <td className="px-4 py-3 text-gray-900">{row.country}</td>
-                      <td className="px-4 py-3 text-right font-bold text-[#2F6FB0]">{row.expectancy}</td>
-                      <td className="px-4 py-3 text-right text-gray-600">{row.male}</td>
-                      <td className="px-4 py-3 text-right text-gray-600">{row.female}</td>
+                      <td className="px-4 py-3 text-right font-bold text-[#2F6FB0]">{row.expectancy.toFixed(1)}</td>
+                      <td className="px-4 py-3 text-right text-gray-600">{row.male.toFixed(1)}</td>
+                      <td className="px-4 py-3 text-right text-gray-600">{row.female.toFixed(1)}</td>
                     </tr>
                   ))}
                 </tbody>

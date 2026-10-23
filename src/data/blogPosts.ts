@@ -1,5 +1,6 @@
 import { WikiPerson } from '@/services/WikimediaService';
 import { EXTRA_POSTS } from './blogPostsExtra';
+import { leYears, leDiff, LE_CITATION } from './lifeExpectancyFacts';
 
 export interface BlogPost {
   id: string;
@@ -733,7 +734,7 @@ A: Some months have alternatives. June has pearl, alexandrite, and moonstone. Ch
     tags: ['life expectancy', 'longevity', 'healthy living', 'lifespan', 'health tips', 'live longer', 'wellness', 'healthy lifestyle'],
     keywords: ['how to increase life expectancy', 'life expectancy calculator', 'how to live longer', 'factors affecting life expectancy', 'longevity tips'],
     faqs: [
-      { question: 'What is the average life expectancy?', answer: 'Global average life expectancy is about 73 years. In developed countries, it ranges from 78-84 years depending on lifestyle and healthcare access.' },
+      { question: 'What is the average life expectancy?', answer: `Global average life expectancy is ${leYears('World')} years (${LE_CITATION}). In developed countries, it ranges from 78-84 years depending on lifestyle and healthcare access.` },
       { question: 'Can lifestyle really affect how long I live?', answer: 'Yes! Studies show lifestyle factors can influence lifespan by 10-15 years or more. Diet, exercise, sleep, and stress management are key.' },
       { question: 'What\'s the #1 thing I can do to live longer?', answer: 'If you smoke, quitting is the single most impactful change. For non-smokers, regular physical activity has the strongest evidence for increasing lifespan.' }
     ],
@@ -4683,16 +4684,16 @@ BornClock's What-If Simulator shows you the precise year-impact of changing each
     slug: 'life-expectancy-india-complete-guide-2026',
     title: 'Life Expectancy in India 2026: State-by-State Data, Trends, and What It Means for You',
     metaTitle: 'Life Expectancy India 2026: State Data, Gender Gap & How to Beat the Average',
-    excerpt: 'India\'s average life expectancy is 70.4 years — but Kerala reaches 77.3 and UP averages 65.8. Here\'s the complete picture with state data, urban-rural gaps, and what you can do.',
-    metaDescription: 'India life expectancy 2026: national average 70.4 years, Kerala 77.3 vs UP 65.8. Complete guide with state data, gender gap, urban-rural divide, and personalised forecast.',
+    excerpt: `India's average life expectancy is ${leYears('India')} years — but Kerala reaches 77.3 and UP averages 65.8. Here's the complete picture with state data, urban-rural gaps, and what you can do.`,
+    metaDescription: `India life expectancy 2026: national average ${leYears('India')} years, Kerala 77.3 vs UP 65.8. Complete guide with state data, gender gap, urban-rural divide, and personalised forecast.`,
     content: `
 # Life Expectancy in India 2026: State-by-State Data, Trends, and What It Means for You
 
-## India's National Average: 70.4 Years
+## India's National Average: ${leYears('India')} Years
 
-India's national life expectancy at birth is **70.4 years** as of the WHO's 2023 Global Health Observatory data — meaning the average Indian born today can expect to live to approximately 70 years under current mortality conditions. Women live approximately **2.5 years longer** than men (71.8 vs 69.4 years), consistent with the global gender gap in mortality.
+India's national life expectancy at birth is **${leYears('India')} years** (${LE_CITATION}) — meaning the average Indian born today can expect to live to about 72 years if current mortality conditions held. Women live about **3 years longer** than men (${leYears('India', 'female')} vs ${leYears('India', 'male')} years), consistent with the global gender gap in mortality.
 
-This places India 116th in global rankings — below China (78.2), Sri Lanka (77.0), and Bangladesh (73.2), but above Pakistan (67.3) and several South Asian neighbours. The comparison to China is particularly striking: two neighbouring giant nations with similar development trajectories show an 8-year life expectancy gap — driven primarily by differences in healthcare investment, air quality, and dietary patterns.
+This places India below China (${leYears('China')}), Sri Lanka (${leYears('Sri Lanka')}) and Bangladesh (${leYears('Bangladesh')}), but above Pakistan (${leYears('Pakistan')}). The comparison to China is particularly striking: two neighbouring giant nations with similar development trajectories show a ${leDiff('China', 'India')}-year life expectancy gap — driven primarily by differences in healthcare investment, air quality, and dietary patterns.
 
 ## State-by-State Variation: An 11-Year Gap Within One Country
 
@@ -4741,7 +4742,7 @@ India also has the world's highest absolute burden of diabetes — an estimated 
 
 ## What Individual Indians Can Do to Beat the Average
 
-The 70.4-year national average includes smokers, sedentary individuals, and people with poorly managed chronic conditions. An Indian who:
+The ${leYears('India')}-year national average includes smokers, sedentary individuals, and people with poorly managed chronic conditions. An Indian who:
 - Doesn't smoke
 - Exercises 30 minutes daily
 - Eats a predominantly traditional plant-based diet (dal, vegetables, limited meat)
@@ -4768,7 +4769,7 @@ The most India-specific interventions with the highest evidence base:
     keywords: ['life expectancy india', 'india life expectancy 2026', 'life expectancy by state india', 'india average age of death'],
     readTime: 11,
     faqs: [
-      { question: 'What is the life expectancy in India in 2026?', answer: 'India\'s life expectancy is 70.4 years as of WHO 2023 data. Women live approximately 2.5 years longer than men (71.8 vs 69.4).' },
+      { question: 'What is the life expectancy in India in 2026?', answer: `India's life expectancy is ${leYears('India')} years (${LE_CITATION}). Women live about three years longer than men (${leYears('India', 'female')} vs ${leYears('India', 'male')}).` },
       { question: 'Which Indian state has the highest life expectancy?', answer: 'Kerala has the highest life expectancy in India at 77.3 years, followed by Goa (76.7). Uttar Pradesh and Chhattisgarh have the lowest at approximately 65.8 years.' },
     ],
   },

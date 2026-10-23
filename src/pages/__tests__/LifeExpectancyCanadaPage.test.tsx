@@ -9,7 +9,7 @@ afterEach(cleanup);
 
 const TESTID = 'canada-le-page';
 const COUNTRY_TOKEN = 'CANADA';
-const AVG = '82.0';
+const AVG = '82.6'; // S13: Canada, UN WPP 2024, 2023 estimate (OWID)
 
 const renderPage = () => render(
   <HelmetProvider><MemoryRouter><LifeExpectancyCanadaPage /></MemoryRouter></HelmetProvider>

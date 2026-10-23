@@ -1,44 +1,46 @@
 import React from 'react';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
+import { leYears, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
-// Real WHO 2023 life expectancy at birth (years), latest published figures.
-// Used both for the interactive lookup and the ranking tables below.
+// Life expectancy at birth (years) from the ONE sourced table: UN World Population Prospects 2024,
+// estimate for 2023 (src/data/lifeExpectancyFacts.ts, audit S13). Used for the lookup and tables below.
 interface CountryLE {
   name: string;
-  le: number;
+  le: string;
   note: string;
 }
 
 const COUNTRY_DATA: Record<string, CountryLE> = {
-  japan: { name: 'Japan', le: 84.3, note: 'Highest in the world — a diet rich in fish and vegetables, universal healthcare, and very low obesity.' },
-  switzerland: { name: 'Switzerland', le: 83.9, note: 'Second highest globally, driven by high income, excellent healthcare, and an active outdoor culture.' },
-  'south korea': { name: 'South Korea', le: 83.3, note: 'Among the world leaders after decades of rapid gains in healthcare and living standards.' },
-  singapore: { name: 'Singapore', le: 83.1, note: 'Asia’s longevity model, with world-class medicine and strong public-health systems.' },
-  spain: { name: 'Spain', le: 83.1, note: 'The Mediterranean diet and universal healthcare make Spain one of Europe’s longest-living nations.' },
-  cyprus: { name: 'Cyprus', le: 83.0, note: 'A Mediterranean lifestyle and steadily improving healthcare put Cyprus near the very top.' },
-  australia: { name: 'Australia', le: 83.0, note: 'High income, strong healthcare, and low smoking rates sustain a very high life expectancy.' },
-  italy: { name: 'Italy', le: 82.9, note: 'Home to famous “Blue Zones” like Sardinia, with a Mediterranean diet and close family ties.' },
-  iceland: { name: 'Iceland', le: 82.9, note: 'Clean environment, universal healthcare, and an active population keep Iceland near the top.' },
-  israel: { name: 'Israel', le: 82.7, note: 'Rounding out the global top ten, with advanced medicine and a Mediterranean-style diet.' },
-  india: { name: 'India', le: 70.2, note: 'A remarkable rise from just 52 years in 1970 — now above the global average and still climbing.' },
-  'united kingdom': { name: 'United Kingdom', le: 81.1, note: 'A high-income nation with universal healthcare through the NHS.' },
-  uk: { name: 'United Kingdom', le: 81.1, note: 'A high-income nation with universal healthcare through the NHS.' },
-  usa: { name: 'United States', le: 79.1, note: 'Lower than most wealthy peers, held back by chronic disease, obesity, and healthcare access gaps.' },
-  'united states': { name: 'United States', le: 79.1, note: 'Lower than most wealthy peers, held back by chronic disease, obesity, and healthcare access gaps.' },
-  china: { name: 'China', le: 78.2, note: 'Decades of economic growth and healthcare expansion have pushed China above the world average.' },
-  brazil: { name: 'Brazil', le: 75.9, note: 'The largest South American economy, with life expectancy above the global average.' },
-  chad: { name: 'Chad', le: 54.3, note: 'The lowest in the world, reflecting poverty, limited healthcare, and high child mortality.' },
-  nigeria: { name: 'Nigeria', le: 54.7, note: 'Among the lowest globally, constrained by healthcare access and infectious disease burden.' },
-  'sierra leone': { name: 'Sierra Leone', le: 54.7, note: 'One of the lowest worldwide, following years of conflict and fragile health infrastructure.' },
-  'central african republic': { name: 'Central African Republic', le: 55.0, note: 'Very low life expectancy amid instability, poverty, and weak health systems.' },
-  lesotho: { name: 'Lesotho', le: 55.4, note: 'Among the lowest, heavily affected by HIV/AIDS and limited healthcare.' },
+  japan: { name: 'Japan', le: leYears('Japan'), note: 'Highest of any large country — a diet rich in fish and vegetables, universal healthcare, and very low obesity.' },
+  switzerland: { name: 'Switzerland', le: leYears('Switzerland'), note: 'Among the highest globally, driven by high income, excellent healthcare, and an active outdoor culture.' },
+  'south korea': { name: 'South Korea', le: leYears('South Korea'), note: 'Among the world leaders after decades of rapid gains in healthcare and living standards.' },
+  singapore: { name: 'Singapore', le: leYears('Singapore'), note: 'Asia’s longevity model, with world-class medicine and strong public-health systems.' },
+  spain: { name: 'Spain', le: leYears('Spain'), note: 'The Mediterranean diet and universal healthcare make Spain one of Europe’s longest-living nations.' },
+  cyprus: { name: 'Cyprus', le: leYears('Cyprus'), note: 'A Mediterranean lifestyle and steadily improving healthcare put Cyprus near the very top.' },
+  australia: { name: 'Australia', le: leYears('Australia'), note: 'High income, strong healthcare, and low smoking rates sustain a very high life expectancy.' },
+  italy: { name: 'Italy', le: leYears('Italy'), note: 'Home to famous “Blue Zones” like Sardinia, with a Mediterranean diet and close family ties.' },
+  iceland: { name: 'Iceland', le: leYears('Iceland'), note: 'Clean environment, universal healthcare, and an active population keep Iceland near the top.' },
+  israel: { name: 'Israel', le: leYears('Israel'), note: 'Among the world’s longest-lived nations, with advanced medicine and a Mediterranean-style diet.' },
+  india: { name: 'India', le: leYears('India'), note: `A remarkable rise from ${WPP2024_HISTORY.India[1970]} years in 1970 — now close to the global average and still climbing.` },
+  'united kingdom': { name: 'United Kingdom', le: leYears('United Kingdom'), note: 'A high-income nation with universal healthcare through the NHS.' },
+  uk: { name: 'United Kingdom', le: leYears('United Kingdom'), note: 'A high-income nation with universal healthcare through the NHS.' },
+  usa: { name: 'United States', le: leYears('United States'), note: 'Lower than most wealthy peers, held back by chronic disease, obesity, and healthcare access gaps.' },
+  'united states': { name: 'United States', le: leYears('United States'), note: 'Lower than most wealthy peers, held back by chronic disease, obesity, and healthcare access gaps.' },
+  china: { name: 'China', le: leYears('China'), note: 'Decades of economic growth and healthcare expansion have pushed China above the world average.' },
+  brazil: { name: 'Brazil', le: leYears('Brazil'), note: 'The largest South American economy, with life expectancy above the global average.' },
+  chad: { name: 'Chad', le: leYears('Chad'), note: 'Among the lowest in the world, reflecting poverty, limited healthcare, and high child mortality.' },
+  nigeria: { name: 'Nigeria', le: leYears('Nigeria'), note: 'Among the lowest globally, constrained by healthcare access and infectious disease burden.' },
+  'sierra leone': { name: 'Sierra Leone', le: leYears('Sierra Leone'), note: 'One of the lowest worldwide, following years of conflict and fragile health infrastructure.' },
+  'central african republic': { name: 'Central African Republic', le: leYears('Central African Republic'), note: 'Very low life expectancy amid instability, poverty, and weak health systems.' },
+  lesotho: { name: 'Lesotho', le: leYears('Lesotho'), note: 'Among the lowest, heavily affected by HIV/AIDS and limited healthcare.' },
 };
 
+const byLe = (a: CountryLE, b: CountryLE) => Number(b.le) - Number(a.le);
 const TOP_TEN: CountryLE[] = [
   COUNTRY_DATA['japan'],
   COUNTRY_DATA['switzerland'],
@@ -50,7 +52,7 @@ const TOP_TEN: CountryLE[] = [
   COUNTRY_DATA['italy'],
   COUNTRY_DATA['iceland'],
   COUNTRY_DATA['israel'],
-];
+].sort(byLe);
 
 const BOTTOM_FIVE: CountryLE[] = [
   COUNTRY_DATA['lesotho'],
@@ -58,7 +60,7 @@ const BOTTOM_FIVE: CountryLE[] = [
   COUNTRY_DATA['sierra leone'],
   COUNTRY_DATA['nigeria'],
   COUNTRY_DATA['chad'],
-];
+].sort((a, b) => -byLe(a, b));
 
 const REFERENCE: CountryLE[] = [
   COUNTRY_DATA['uk'],
@@ -71,19 +73,19 @@ const REFERENCE: CountryLE[] = [
 const FAQS = [
   {
     q: 'What country has the highest life expectancy in 2026?',
-    a: 'Japan has the highest life expectancy in the world at 84.3 years, according to the latest WHO data. Switzerland (83.9) and South Korea (83.3) follow closely. Japan’s lead is credited to a diet rich in fish and vegetables, universal healthcare, low obesity rates, and strong social cohesion among older adults.',
+    a: `Among large countries, Japan has the highest life expectancy at ${leYears('Japan')} years (${LE_CITATION}). South Korea (${leYears('South Korea')}) and Switzerland (${leYears('Switzerland')}) follow closely; a few small territories such as Monaco (${leYears('Monaco')}) and Hong Kong (${leYears('Hong Kong')}) are higher still. Japan’s lead is credited to a diet rich in fish and vegetables, universal healthcare, low obesity rates, and strong social cohesion among older adults.`,
   },
   {
     q: 'Why does life expectancy vary so much between countries?',
-    a: 'Life expectancy varies mainly because of differences in income, healthcare access, nutrition, and sanitation. Wealthy nations with universal healthcare, clean water, and low child mortality reach the low-to-mid 80s, while the lowest-ranked countries — Chad at 54.3 years, for example — face poverty, infectious disease, and fragile health systems. The gap between the top and bottom is roughly 30 years.',
+    a: `Life expectancy varies mainly because of differences in income, healthcare access, nutrition, and sanitation. Wealthy nations with universal healthcare, clean water, and low child mortality reach the low-to-mid 80s, while the lowest — Nigeria at ${leYears('Nigeria')} years, for example — face poverty, infectious disease, and fragile health systems. The gap between the top and bottom is roughly 30 years.`,
   },
   {
     q: 'What is India’s life expectancy?',
-    a: 'India’s life expectancy is 70.2 years in the latest WHO data — now above the global average. This reflects an extraordinary rise from just 52 years in 1970, driven by falling child mortality, better vaccination coverage, cleaner water, and expanding healthcare access. India’s trajectory is one of the steepest improvements of any large nation.',
+    a: `India’s life expectancy is ${leYears('India')} years (${LE_CITATION}) — close to the global average of ${leYears('World')}. This reflects an extraordinary rise from ${WPP2024_HISTORY.India[1970]} years in 1970, driven by falling child mortality, better vaccination coverage, cleaner water, and expanding healthcare access. India’s trajectory is one of the steepest improvements of any large nation.`,
   },
   {
     q: 'Is life expectancy rising globally?',
-    a: 'Yes. Global life expectancy has risen dramatically over the past half-century, from the low 50s in 1970 to the low 70s today. Progress came from vaccines, antibiotics, clean water, and lower child mortality. The COVID-19 pandemic caused a temporary dip, but the long-term trend remains upward across almost every region.',
+    a: `Yes. Global life expectancy has risen dramatically over the past half-century, from ${WPP2024_HISTORY.World[1970]} years in 1970 to ${leYears('World')} in 2023 (UN WPP 2024). Progress came from vaccines, antibiotics, clean water, and lower child mortality. The COVID-19 pandemic caused a temporary dip, but the long-term trend remains upward across almost every region.`,
   },
   {
     q: 'How do I improve my own life expectancy regardless of my country?',
@@ -157,7 +159,7 @@ export function LifeExpectancyByCountryArticle() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Life Expectancy by Country 2026 — Global Rankings',
-    description: 'Life expectancy by country in 2026 using WHO data for 190+ nations — global rankings, what drives the differences, and how to improve your own.',
+    description: 'Life expectancy by country in 2026 using UN World Population Prospects 2024 data — rankings, what drives the differences, and how to improve your own.',
     author: { '@type': 'Organization', name: 'BornClock' },
     publisher: { '@type': 'Organization', name: 'BornClock' },
     mainEntityOfPage: 'https://bornclock.com/articles/life-expectancy-by-country-2026/',
@@ -180,7 +182,7 @@ export function LifeExpectancyByCountryArticle() {
         <>
           <SEO
             title="Life Expectancy by Country 2026 — Global Rankings | BornClock"
-            description="Life expectancy by country in 2026 — WHO data for 190+ nations. See global rankings, what drives the differences, and how to improve your own."
+            description="Life expectancy by country in 2026 — UN World Population Prospects 2024 data. See rankings, what drives the differences, and how to improve your own."
             canonicalUrl="/articles/life-expectancy-by-country-2026"
             ogType="article"
           />
@@ -191,14 +193,14 @@ export function LifeExpectancyByCountryArticle() {
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Life Expectancy by Country 2026 — Global Rankings' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy by Country 2026 — Global Rankings"
-      lead="Life expectancy is one of the clearest single measures of how well a nation cares for its people. It captures healthcare, nutrition, sanitation, income, and safety in a single number: the average years a newborn can expect to live if today's conditions hold. In 2026, drawing on the latest World Health Organization (WHO) data covering more than 190 nations, the gap between the longest- and shortest-living countries is roughly 30 years — from Japan at 84.3 years down to Chad at 54.3. This guide ranks the leaders and laggards, explains what drives the differences, and shows how to add years to your own life no matter where you were born."
+      lead={`Life expectancy is one of the clearest single measures of how well a nation cares for its people. It captures healthcare, nutrition, sanitation, income, and safety in a single number: the average years a newborn can expect to live if today's conditions hold. Drawing on the UN World Population Prospects 2024 (estimates for 2023), the gap between the longest- and shortest-living countries is roughly 30 years — from Japan at ${leYears('Japan')} years down to Nigeria at ${leYears('Nigeria')}. This guide ranks the leaders and laggards, explains what drives the differences, and shows how to add years to your own life no matter where you were born.`}
     >
       <article className="max-w-3xl mx-auto px-4 py-10">
 
           <p className="text-gray-700 leading-relaxed mb-6">
             The good news is that these numbers are not fixed. Global life expectancy has
-            climbed from the low 50s in 1970 to the low 70s today, and countries like India
-            have gained nearly two decades of life in a single generation. Curious what the
+            climbed from {WPP2024_HISTORY.World[1970]} years in 1970 to {leYears('World')} in 2023, and countries like India
+            have gained more than two decades of life in a single generation. Curious what the
             numbers mean for you personally? Our{' '}
             <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">
               longevity calculator
@@ -209,13 +211,13 @@ export function LifeExpectancyByCountryArticle() {
           <CountryLookup />
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">
-            The 10 Countries With the Highest Life Expectancy
+            Ten of the Longest-Lived Countries
           </h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             The world&apos;s longevity leaders cluster in East Asia and Western Europe, plus a
-            handful of high-income outliers. <strong>Japan</strong> holds the global top spot
-            at <strong>84.3</strong> years, thanks to a diet rich in fish and vegetables,
-            universal healthcare, and remarkably low obesity. Here are the top ten:
+            handful of high-income outliers. <strong>Japan</strong> leads the large countries
+            at <strong>{leYears('Japan')}</strong> years, thanks to a diet rich in fish and vegetables,
+            universal healthcare, and remarkably low obesity. Ten of the leaders ({LE_CITATION}):
           </p>
           <div className="overflow-x-auto mb-6">
             <table className="w-full text-sm border border-gray-200 rounded-lg">
@@ -244,7 +246,7 @@ export function LifeExpectancyByCountryArticle() {
           <p className="text-gray-700 leading-relaxed mb-4">
             At the other end of the scale, the lowest life expectancies are concentrated in
             Sub-Saharan Africa, where poverty, infectious disease, high child mortality, and
-            fragile health systems combine. The five lowest-ranked nations are:
+            fragile health systems combine. Five of the lowest ({LE_CITATION}):
           </p>
           <div className="overflow-x-auto mb-6">
             <table className="w-full text-sm border border-gray-200 rounded-lg">
@@ -302,25 +304,25 @@ export function LifeExpectancyByCountryArticle() {
             <li>
               <strong>East Asia and Western Europe lead.</strong> Japan, South Korea and
               Singapore in Asia, and Switzerland, Spain, Italy and Iceland in Europe, all
-              exceed 82 years. They share universal healthcare, high incomes, low smoking
+              exceed 82.5 years. They share universal healthcare, high incomes, low smoking
               rates, and diets built around fish, vegetables and olive oil.
             </li>
             <li>
-              <strong>The Mediterranean effect.</strong> Spain (83.1), Italy (82.9) and Cyprus
-              (83.0) show how the Mediterranean diet and close-knit communities translate into
+              <strong>The Mediterranean effect.</strong> Spain ({leYears('Spain')}), Italy ({leYears('Italy')}) and Cyprus
+              ({leYears('Cyprus')}) show how the Mediterranean diet and close-knit communities translate into
               measurable extra years — Italy&apos;s Sardinia is one of the world&apos;s famous
               &ldquo;Blue Zones.&rdquo;
             </li>
             <li>
-              <strong>Sub-Saharan Africa lags.</strong> The lowest figures — Chad (54.3),
-              Nigeria (54.7), Sierra Leone (54.7), the Central African Republic (55.0) and
-              Lesotho (55.4) — reflect poverty, infectious disease, weak health infrastructure,
+              <strong>Sub-Saharan Africa lags.</strong> Some of the lowest figures — Nigeria ({leYears('Nigeria')}),
+              Chad ({leYears('Chad')}), the Central African Republic ({leYears('Central African Republic')}), Lesotho
+              ({leYears('Lesotho')}) and Sierra Leone ({leYears('Sierra Leone')}) — reflect poverty, infectious disease, weak health infrastructure,
               and in some cases conflict.
             </li>
             <li>
               <strong>The middle is rising fast.</strong> Large emerging economies like China
-              (78.2), Brazil (75.9) and India (70.2) have all pushed above the global average
-              as incomes and healthcare have improved.
+              ({leYears('China')}) and Brazil ({leYears('Brazil')}) have pushed above the global average
+              ({leYears('World')}), and India ({leYears('India')}) is closing in as incomes and healthcare improve.
             </li>
           </ul>
 
@@ -372,9 +374,8 @@ export function LifeExpectancyByCountryArticle() {
           <p className="text-gray-700 leading-relaxed mb-4">
             No large nation better illustrates how fast life expectancy can change than India.
             In <strong>1970</strong>, an Indian newborn could expect to live just{' '}
-            <strong>52 years</strong>. Today that figure is <strong>70.2 years</strong> — a
-            gain of more than 18 years in a single generation, lifting India above the global
-            average. The drivers are textbook public health: sharply falling child mortality,
+            <strong>{WPP2024_HISTORY.India[1970]} years</strong>. In 2023 that figure was <strong>{leYears('India')} years</strong> — a
+            gain of more than 23 years, bringing India close to the global average ({LE_CITATION}). The drivers are textbook public health: sharply falling child mortality,
             wider vaccination coverage, cleaner water and sanitation, better maternal care, and
             expanding access to doctors and hospitals. India still trails the East Asian leaders
             by more than a decade, which shows how much room there is for continued gains as

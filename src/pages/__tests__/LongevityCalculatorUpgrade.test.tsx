@@ -39,7 +39,7 @@ describe('LongevityCalculatorPage — Task 31 upgrade blocks', () => {
     renderPage();
     const teaser = document.querySelector('[data-testid="longevity-comparison-teaser"]');
     expect(teaser).toBeTruthy();
-    expect(teaser?.textContent).toContain('70.2 years');
+    expect(teaser?.textContent).toContain('72.0 years'); // S13: India, UN WPP 2024, 2023 estimate (OWID)
   });
 
   it('TC-UP-04: page still has exactly one H1', () => {

@@ -1,19 +1,24 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { INDIA_LIFE_EXPECTANCY as INDIA_LE } from '@/data/lifeExpectancyFacts';
+import { le, leYears, LE_CITATION } from '@/data/lifeExpectancyFacts';
+
+// Audit S13: selected high-life-expectancy countries, values from the one WPP 2024 table.
+const HIGH_LE = ['Japan', 'South Korea', 'Switzerland', 'Australia', 'Singapore', 'Spain', 'Italy', 'France', 'Norway', 'Sweden']
+  .map(c => ({ c, v: le(c).both }))
+  .sort((a, b) => b.v - a.v);
 import { ArticleLayout } from '@/components/central';
 
 export default function WhatIsLifeExpectancy() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "What is life expectancy?", "item": "https://bornclock.com/answers/what-is-life-expectancy" } ] };
-  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "What Is Life Expectancy and How Is It Calculated?", "description": "Life expectancy explained: what it means, how it's calculated, why India's is 70.4 years, and how your personal forecast differs from the national average.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/answers/what-is-life-expectancy" };
+  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "What Is Life Expectancy and How Is It Calculated?", "description": `Life expectancy explained: what it means, how it's calculated, why India's is ${leYears('India')} years, and how your personal forecast differs from the national average.`, "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/answers/what-is-life-expectancy" };
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "What is life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": "Life expectancy is a statistical measure of the average number of years a person is expected to live, based on current mortality rates for their age, sex, and country. The global average is 72.8 years (WHO 2023)." } },
-      { "@type": "Question", "name": "What is the life expectancy in India?", "acceptedAnswer": { "@type": "Answer", "text": "India's average life expectancy is 70.4 years (WHO 2023), with significant variation by state: Kerala 77.3 years, Uttar Pradesh 65.8 years. Women live approximately 2.5 years longer than men on average." } },
+      { "@type": "Question", "name": "What is life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": `Life expectancy is a statistical measure of the average number of years a person is expected to live, based on current mortality rates for their age, sex, and country. The global average is ${leYears('World')} years (${LE_CITATION}).` } },
+      { "@type": "Question", "name": "What is the life expectancy in India?", "acceptedAnswer": { "@type": "Answer", "text": `India's average life expectancy is ${leYears('India')} years (${LE_CITATION}), with significant variation by state: Kerala 77.3 years, Uttar Pradesh 65.8 years. Women live about three years longer than men on average.` } },
       { "@type": "Question", "name": "How is life expectancy calculated?", "acceptedAnswer": { "@type": "Answer", "text": "Life expectancy is calculated using life tables, which track what proportion of a birth cohort survives to each age based on current mortality rates. The most common type is the period life table, which uses current (not projected) mortality rates." } },
-      { "@type": "Question", "name": "Which country has the highest life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": "Japan has the highest life expectancy at 84.3 years (WHO 2023), followed by Switzerland (83.8) and South Korea (83.7). These countries share features of strong public health systems, traditional plant-rich diets, and active lifestyles." } }
+      { "@type": "Question", "name": "Which country has the highest life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": `Among large countries, Japan has the highest life expectancy at ${leYears('Japan')} years, followed by South Korea (${leYears('South Korea')}) and Switzerland (${leYears('Switzerland')}) (${LE_CITATION}). These countries share features of strong public health systems, traditional plant-rich diets, and active lifestyles.` } }
     ]
   };
 
@@ -24,7 +29,7 @@ export default function WhatIsLifeExpectancy() {
       seo={(
         <SEO
           title="What Is Life Expectancy and How Is It Calculated? | BornClock"
-          description="Life expectancy explained: what it means, how it's calculated, why India's is 70.4 years, and how your personal forecast differs from the national average."
+          description={`Life expectancy explained: what it means, how it's calculated, why India's is ${leYears('India')} years, and how your personal forecast differs from the national average.`}
           canonicalUrl="/answers/what-is-life-expectancy"
           ogType="article"
         />
@@ -40,7 +45,7 @@ export default function WhatIsLifeExpectancy() {
         <div className="max-w-2xl mx-auto px-4 py-12">
           <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
             <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
-              Life expectancy is a statistical measure of the average number of years a person is expected to live, based on current mortality rates for their age, sex, and country. The global average is 72.8 years (WHO 2023). India's average is 70.4 years. But your personal life expectancy can differ significantly based on your health and lifestyle.
+              Life expectancy is a statistical measure of the average number of years a person is expected to live, based on current mortality rates for their age, sex, and country. The global average is {leYears('World')} years and India's average is {leYears('India')} years ({LE_CITATION}). But your personal life expectancy can differ significantly based on your health and lifestyle.
             </p>
           </div>
 
@@ -50,7 +55,7 @@ export default function WhatIsLifeExpectancy() {
             <p>This creates an important caveat: period life expectancy is a snapshot of <em>current</em> mortality conditions, not a prediction of how long any specific person will live. A 30-year-old today will benefit from medical advances in the coming decades that current life tables cannot account for. Most longevity researchers believe period life expectancy underestimates actual lifespan for people alive today.</p>
             <p>The alternative, <strong>cohort life expectancy</strong>, follows a birth cohort over time as mortality rates evolve. This is more accurate but takes decades to compute. Projected cohort life expectancy for someone born in 1990 in a high-income country is often 5–10 years higher than their country's current period life expectancy.</p>
 
-            <h2 className="text-xl font-bold text-gray-900">Global Averages by Country (Top 10)</h2>
+            <h2 className="text-xl font-bold text-gray-900">Selected High-Life-Expectancy Countries</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
                 <thead>
@@ -61,7 +66,7 @@ export default function WhatIsLifeExpectancy() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[['1','Japan','84.3'],['2','Switzerland','83.8'],['3','South Korea','83.7'],['4','Australia','83.5'],['5','Spain','83.4'],['6','Singapore','83.1'],['7','Italy','83.1'],['8','Sweden','82.8'],['9','Norway','82.7'],['10','France','82.5']].map(([r,c,l]) => (
+                  {HIGH_LE.map(({ c, v }, i) => [String(i + 1), c, v.toFixed(1)]).map(([r,c,l]) => (
                     <tr key={r} className={parseInt(r) % 2 === 0 ? 'bg-gray-50' : ''}>
                       <td className="p-3 border border-gray-200">{r}</td>
                       <td className="p-3 border border-gray-200">{c}</td>
@@ -71,10 +76,10 @@ export default function WhatIsLifeExpectancy() {
                 </tbody>
               </table>
             </div>
-            <p className="text-sm text-gray-500 italic">Source: WHO Global Health Observatory 2023 (top-10). Global average: 72.8 years. India: {INDIA_LE.overall} years (UN WPP {INDIA_LE.refYear}).</p>
+            <p className="text-sm text-gray-500 italic">Source: {LE_CITATION} (selected countries). Global average: {leYears('World')} years. India: {leYears('India')} years.</p>
 
             <h2 className="text-xl font-bold text-gray-900">India-Specific Data</h2>
-            <p>India's national average of 70.4 years masks enormous internal variation. Kerala (77.3 years) and Goa (76.7 years) approach Western European levels, while Uttar Pradesh (65.8) and Chhattisgarh (64.2) lag 10+ years behind. This variation is driven by: healthcare access, diet patterns, urban vs rural divide, air quality, sanitation, and literacy levels (which correlate strongly with health outcomes).</p>
+            <p>India's national average of {leYears('India')} years masks enormous internal variation. Kerala (77.3 years) and Goa (76.7 years) approach Western European levels, while Uttar Pradesh (65.8) and Chhattisgarh (64.2) lag 10+ years behind. This variation is driven by: healthcare access, diet patterns, urban vs rural divide, air quality, sanitation, and literacy levels (which correlate strongly with health outcomes).</p>
             <p>The gender gap in India is 2.5 years — women live longer than men, consistent with the global pattern. However, this gap is narrowing in some states due to improved women's health outcomes and changing patterns of health risk.</p>
 
             <h2 className="text-xl font-bold text-gray-900">What Has Increased Life Expectancy in History</h2>
