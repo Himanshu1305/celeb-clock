@@ -88,6 +88,16 @@ describe('moreDoshas — Pitra', () => {
 });
 
 describe('moreDoshas — Mool', () => {
+  // D7 reference: Drik Panchang Gandamool table (drikpanchang.com/panchang/gandamool-dates-timings.html, 23 Oct 2026).
+  it.each([
+    ['Ashwini', 'the father'], ['Ashlesha', 'the mother'], ['Magha', 'the father'],
+    ['Jyeshtha', 'younger siblings'], ['Mula', 'the father or grandfather'], ['Revati', 'the mother'],
+  ])('%s → %s (Drik Panchang)', (nak, rel) => {
+    const r = computeMoolDosha(chart({ planets: [], moonNakshatra: nak, moonPada: 2 }));
+    expect(r.relationNote).toBe(`traditionally linked to ${rel}`);
+    expect(r.detail).not.toMatch(/mother-in-law/);
+  });
+
   it('Mula pada 1 → present, strong', () => {
     const r = computeMoolDosha(chart({ planets: [], moonNakshatra: 'Mula', moonPada: 1 }));
     expect(r.present).toBe(true);

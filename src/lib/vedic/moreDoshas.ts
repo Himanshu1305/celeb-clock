@@ -137,14 +137,19 @@ export function computePitraDosha(input: DoshaChartInput): PitraResult {
 const MOOL_NAKSHATRAS = new Set(['Ashwini', 'Ashlesha', 'Magha', 'Jyeshtha', 'Mula', 'Revati']);
 // Gandanta-junction padas held to be the most intense in the tradition.
 const INTENSE_PADA: Record<string, number> = { Revati: 4, Ashlesha: 4, Jyeshtha: 4, Ashwini: 1, Magha: 1, Mula: 1 };
-// Traditional note on which relationship the texts associate with each (gentle).
+// Traditional note on which relative the tradition associates with each star.
+// D7: follows Drik Panchang's Gandamool table ("Possible Effect On", fetched
+// 23 Oct 2026 from drikpanchang.com/panchang/gandamool-dates-timings.html):
+// Ashwini → Father, Ashlesha → Mother, Magha → Father, Jyeshtha → Younger
+// Siblings, Moola → Father or Grandfather, Revati → Mother. (The old table said
+// Ashwini → "mother-in-law", which no standard source gives.)
 const MOOL_RELATION: Record<string, string> = {
-  Ashwini: 'traditionally linked to the mother-in-law in classical texts',
+  Ashwini: 'traditionally linked to the father',
   Ashlesha: 'traditionally linked to the mother',
   Magha: 'traditionally linked to the father',
-  Jyeshtha: 'traditionally linked to an elder sibling',
-  Mula: 'traditionally linked to the father (the most-discussed of the mool stars)',
-  Revati: 'traditionally considered gentle, with only a mild note',
+  Jyeshtha: 'traditionally linked to younger siblings',
+  Mula: 'traditionally linked to the father or grandfather',
+  Revati: 'traditionally linked to the mother',
 };
 
 export interface MoolResult {
