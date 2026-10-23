@@ -37,12 +37,31 @@ const COMBUSTION_ORBS: Record<string, number> = { Moon: 12, Mars: 17, Mercury: 1
 const COMBUSTION_ORBS_RETROGRADE: Record<string, number> = { Mercury: 12, Venus: 8 };
 
 export function normalize360(deg: number): number { return ((deg % 360) + 360) % 360; }
-const LAHIRI_J2000_DEG = 23.853222;
+/**
+ * Lahiri (Chitrapaksha) ayanamsa — the ONE ayanamsa used by every chart,
+ * transit, Panchang, festival and Shadbala calculation on the site.
+ *
+ * Convention (Oct 2026, calibrated to Drik Panchang): a MEAN ayanamsa (no
+ * nutation term) subtracted from apparent (true-equinox-of-date) tropical
+ * longitudes. Drik Panchang's published ingress moments follow exactly this
+ * structure: their offset from Swiss Ephemeris "true" Lahiri tracks minus the
+ * nutation in longitude (e.g. Karka Sankranti 2001 ≈ +40″ vs 2026 ≈ +13″), and
+ * their mean-Rahu sign changes in 2023/2025/2026/2028 all imply the same
+ * constant: Swiss Ephemeris SIDM_LAHIRI mean ayanamsa + 24.4″.
+ *
+ * The coefficients below reproduce (Swiss SIDM_LAHIRI mean + 24.4″) to within
+ * 0.01″ over 1800–2100 (fitted with pyswisseph 2.10.03). The previous constant
+ * (23.853222° at J2000, rate 5029.0966″/cy) was ~38″ lower, which placed slow
+ * ingresses hours late (e.g. Rahu → Makara 2026: 6 Dec 00:18 IST vs Drik's
+ * 5 Dec 19:28 IST). Reference events + URLs: __tests__/ayanamsaDrik.test.ts.
+ */
+const LAHIRI_J2000_DEG = 23.8638692;
+const LAHIRI_RATE_ARCSEC_PER_CY = 5028.8030;
 
 export function getLahiriAyanamsa(date: Date): number {
   const time = Astronomy.MakeTime(date);
   const T = time.tt / 36525;
-  const precessionArcsec = 5029.0966 * T + 1.11161 * T * T - 0.000113 * T * T * T;
+  const precessionArcsec = LAHIRI_RATE_ARCSEC_PER_CY * T + 1.11161 * T * T - 0.000113 * T * T * T;
   return LAHIRI_J2000_DEG + precessionArcsec / 3600;
 }
 

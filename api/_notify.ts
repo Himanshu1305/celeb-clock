@@ -74,23 +74,26 @@ export function dailyHoroscopeEmail(rashiIndex: number, name: string, unsubUrl: 
 //     `leadDays` before the ingress's IST date (stateless per-event dedupe; a manual
 //     re-run on the same day is the only way to repeat it);
 //   • the date and time come from the engine's exact ingress instant (signSegments,
-//     refined to ~1 hour) and are labelled in IST, the convention of Indian almanacs;
+//     refined to the second) and are labelled in IST, the convention of Indian almanacs;
+//     since the Oct 2026 ayanamsa fix these match Drik Panchang within minutes
+//     (Rahu → Makara 2026: 5 Dec 7:28 pm IST, as Drik lists).
 //   • the reading is taken just after the ingress, i.e. for the NEW sign.
 const DAY_MS = 86400000;
 const IST_MS = 5.5 * 3600 * 1000;
 const ISTD = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'long' });
 const ISTF = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
 
-/** Refine an engine ingress (signSegments is ~1 hour) to the minute: first minute in the new sign. */
+/** Refine an engine ingress (signSegments is ~1 hour) to the second, then label it with
+ * the clock minute in which it happens (how Drik Panchang prints ingress times). */
 function exactIngressMs(planet: PlanetName, approxMs: number): number {
   const before = transitSignIndex(planet, new Date(approxMs - 2 * 3600_000));
   let a = approxMs - 2 * 3600_000, b = approxMs + 3600_000;
   if (transitSignIndex(planet, new Date(b)) === before) return approxMs; // safety: no change bracketed
-  while (b - a > 60_000) {
+  while (b - a > 1_000) {
     const mid = (a + b) / 2;
     if (transitSignIndex(planet, new Date(mid)) === before) a = mid; else b = mid;
   }
-  return Math.ceil(b / 60_000) * 60_000;
+  return Math.floor(b / 60_000) * 60_000;
 }
 
 export interface TransitAlertHit { planet: PlanetName; atISO: string; istDate: string; label: string; dateLabel: string }
@@ -126,7 +129,7 @@ export function transitAlertEmail(rashiIndex: number, name: string, unsubUrl: st
   const inner = `
     <div style="font-size:13px;color:#8A9BA8;margin-bottom:8px">Hi ${name || 'there'}, a slow-planet transit is shifting relative to your Moon sign (${RASHIS[rashiIndex].sanskrit}).</div>
     ${hits.join('')}
-    <p style="font-size:12px;color:#8A9BA8;margin:12px 0 0">Times are Indian Standard Time (IST), computed from the planet's actual position; almanacs can differ by a few hours for Rahu and Ketu.</p>
+    <p style="font-size:12px;color:#8A9BA8;margin:12px 0 0">Times are Indian Standard Time (IST) for the planet's sidereal (Lahiri) position, with Rahu and Ketu as the mean lunar node — the convention Drik Panchang uses. Almanacs can differ by a few minutes (for Saturn, by up to about an hour).</p>
     <div style="text-align:center;margin-top:18px"><a href="${BASE_URL}/transit" style="display:inline-block;background:#103A5C;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:8px">See the full transit picture →</a></div>`;
   return { subject: `Transit alert: ${names} ${planets.length > 1 ? 'change' : 'changes'} sign on ${due[0].dateLabel}`, html: emailShell(inner, unsubUrl) };
 }
