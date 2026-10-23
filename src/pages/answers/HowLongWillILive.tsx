@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 import { ArticleLayout } from '@/components/central';
+import { leYears, LE_CITATION } from '@/data/lifeExpectancyFacts';
 
 export default function HowLongWillILive() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How long will I live?", "item": "https://bornclock.com/answers/how-long-will-i-live" } ] };
@@ -9,8 +10,8 @@ export default function HowLongWillILive() {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "How long will I live?", "acceptedAnswer": { "@type": "Answer", "text": "The average global life expectancy is 72.8 years (WHO 2023), but your personal forecast depends far more on lifestyle than genetics. Research shows genetics accounts for only 25–30% of longevity — your habits, environment, and choices control the remaining 70–75%." } },
-      { "@type": "Question", "name": "What is the average life expectancy in the world?", "acceptedAnswer": { "@type": "Answer", "text": "The global average life expectancy is 72.8 years (WHO 2023). Japan leads with 84.3 years. India's average is 70.4 years. The US average is 77.5 years." } },
+      { "@type": "Question", "name": "How long will I live?", "acceptedAnswer": { "@type": "Answer", "text": `The average global life expectancy is ${leYears('World')} years (${LE_CITATION}), but your personal forecast depends far more on lifestyle than genetics. Research shows genetics accounts for only 25–30% of longevity — your habits, environment, and choices control the remaining 70–75%.` } },
+      { "@type": "Question", "name": "What is the average life expectancy in the world?", "acceptedAnswer": { "@type": "Answer", "text": `The global average life expectancy is ${leYears('World')} years (${LE_CITATION}). Japan, the leader among large countries, is at ${leYears('Japan')} years. India's average is ${leYears('India')} years. The US average is ${leYears('United States')} years.` } },
       { "@type": "Question", "name": "What factors affect how long I will live?", "acceptedAnswer": { "@type": "Answer", "text": "The biggest factors are: smoking (removes 10–12 years for heavy smokers), physical activity, diet quality, social connections, stress levels, sleep, BMI, blood pressure, and family history. Lifestyle factors account for 70–75% of longevity variation." } },
       { "@type": "Question", "name": "Can I calculate my personal life expectancy?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. BornClock's Life Expectancy Calculator uses a 5-pillar model covering lifestyle, health metrics, genetics, country baseline, and community environment to give you a personalised forecast that reflects your specific profile." } }
     ]
@@ -39,7 +40,7 @@ export default function HowLongWillILive() {
         <div className="max-w-2xl mx-auto px-4 py-12">
           <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
             <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
-              The average global life expectancy is 72.8 years (WHO 2023), but your personal forecast depends far more on lifestyle than genetics. Research from the Karolinska Institute shows genetics accounts for only 25–30% of longevity — your habits, environment, and choices control the remaining 70–75%.
+              The average global life expectancy is {leYears('World')} years ({LE_CITATION}), but your personal forecast depends far more on lifestyle than genetics. Research from the Karolinska Institute shows genetics accounts for only 25–30% of longevity — your habits, environment, and choices control the remaining 70–75%.
             </p>
           </div>
 
@@ -54,8 +55,8 @@ export default function HowLongWillILive() {
 
           <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
             <h2 className="text-xl font-bold text-gray-900">Global Life Expectancy Averages</h2>
-            <p>Life expectancy varies enormously by country. Japan leads with 84.3 years, followed by Switzerland (83.8), Australia (83.7), and South Korea (83.5). At the other end, several sub-Saharan nations average below 60 years — not because of genetics, but because of healthcare access, nutrition, sanitation, and infectious disease burden.</p>
-            <p>India's national average is 70.4 years as of 2023, with wide variation by state: Kerala reaches 77.3 years while Uttar Pradesh averages 65.8. This 11.5-year gap within a single country proves that your address shapes your lifespan almost as much as your genes.</p>
+            <p>Life expectancy varies enormously by country. Among large countries Japan leads with {leYears('Japan')} years, followed by South Korea ({leYears('South Korea')}), Switzerland ({leYears('Switzerland')}) and Australia ({leYears('Australia')}) (UN WPP 2024). At the other end, several sub-Saharan nations average below 60 years — not because of genetics, but because of healthcare access, nutrition, sanitation, and infectious disease burden.</p>
+            <p>India's national average is {leYears('India')} years (UN WPP 2024, 2023 estimate), with wide variation by state: Kerala reaches 77.3 years while Uttar Pradesh averages 65.8. This 11.5-year gap within a single country proves that your address shapes your lifespan almost as much as your genes.</p>
 
             <h2 className="text-xl font-bold text-gray-900">What Factors Matter Most</h2>
             <p>The largest scientific study on longevity determinants — a 2018 Harvard meta-analysis of 123,000 participants — identified five lifestyle factors that, when combined, add 14 years of life expectancy for women and 12.2 years for men:</p>

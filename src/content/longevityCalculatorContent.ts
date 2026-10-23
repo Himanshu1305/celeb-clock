@@ -1,3 +1,4 @@
+import { leYears, LE_CITATION } from '@/data/lifeExpectancyFacts';
 // All content as structured data — no markdown syntax
 // Bold text handled via React rendering, not markdown strings
 
@@ -235,7 +236,7 @@ export const LC_COPY = {
     heading: 'What Is a Longevity Calculator?',
     paras: [
       'A longevity calculator estimates your personal life expectancy based on your individual lifestyle, health, and genetic factors — rather than simply citing the national average for your age and gender.',
-      'The average global life expectancy is approximately 73 years (WHO, 2023). But averages mask enormous variation. A non-smoking, regularly exercising person with strong social connections and optimal sleep may have a statistical life expectancy of 87. A smoker with a BMI above 30, poor sleep, and high stress may have a statistical life expectancy of 61. The difference between these two people is not genetics — it is lifestyle.',
+      `The average global life expectancy is about ${leYears('World')} years (${LE_CITATION}). But averages mask enormous variation. A non-smoking, regularly exercising person with strong social connections and optimal sleep may have a statistical life expectancy of 87. A smoker with a BMI above 30, poor sleep, and high stress may have a statistical life expectancy of 61. The difference between these two people is not genetics — it is lifestyle.`,
       'Research from the Karolinska Institute\'s landmark twin study (2018) confirmed that genetics accounts for only 25-30% of longevity variance. The remaining 70-75% is determined by lifestyle, environment, and the choices you make every day. A good longevity calculator translates this research into a personalised number — and more importantly, shows you exactly which factors are helping you and which are holding you back.',
       'It helps to distinguish between two numbers that sound similar. Life expectancy is a population statistic: the average age at death for a group of people who share a birth year, country, and sometimes gender. Your personal longevity estimate adjusts that population baseline up or down based on how your individual lifestyle compares to the average. A longevity calculator is the bridge between the two — it starts with the statistical baseline and then applies your specific risk and protective factors.',
       'This distinction matters because national averages are pulled down by circumstances that may not apply to you, and pushed up by advantages you may not share. Two people born the same year in the same city can have estimates that differ by 20 years or more. The calculator exists precisely to move you off the average and toward a figure that reflects your own life.',

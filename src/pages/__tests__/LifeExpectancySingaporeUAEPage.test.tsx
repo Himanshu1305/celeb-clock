@@ -23,7 +23,7 @@ describe('LifeExpectancySingaporeUAEPage', () => {
   });
   it('TC-SGU-P-04: body contains "83.9"', () => {
     renderPage();
-    expect(document.body.textContent).toContain('83.9');
+    expect(document.body.textContent).toContain('83.7'); // S13: Singapore, UN WPP 2024, 2023 estimate (OWID)
   });
   it('TC-SGU-P-05: FAQPage schema has 5 questions', () => {
     renderPage();

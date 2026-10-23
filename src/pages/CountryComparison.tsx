@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { Globe, Search, ArrowUpDown, ChevronDown, ChevronUp, Share2 } from 'lucide-react';
 import PageTagline from '@/components/PageTagline';
-import { INDIA_LIFE_EXPECTANCY as INDIA_LE, INDIA_LE_CITATION } from '@/data/lifeExpectancyFacts';
+import { INDIA_LIFE_EXPECTANCY as INDIA_LE, INDIA_LE_CITATION, leYears, leDiff, LE_CITATION } from '@/data/lifeExpectancyFacts';
 import {
   BIRTH_BASELINES,
   COUNTRY_FLAG_EMOJI,
@@ -21,7 +21,7 @@ export { getForecastForCountry } from '@/services/LongevityCalculationService';
 const FAQ_ITEMS = [
   {
     question: 'Which country has the highest life expectancy in 2024?',
-    answer: 'Monaco leads globally at 89.8 years, followed by Singapore (86.7), Macau (85.3), and Japan (85.2). [CIA World Factbook, 2024] Among major nations, Japan consistently ranks first, driven by diet, universal healthcare, and obesity rates below 4%.',
+    answer: `In the UN World Population Prospects 2024 estimates for 2023, Monaco (${leYears('Monaco')} years) and Hong Kong (${leYears('Hong Kong')}) are at the top, ahead of Japan (${leYears('Japan')}) and South Korea (${leYears('South Korea')}). Among major nations, Japan consistently ranks first, driven by diet, universal healthcare, and obesity rates below 4%.`,
   },
   {
     question: 'Why does Japan have such high life expectancy?',
@@ -29,7 +29,7 @@ const FAQ_ITEMS = [
   },
   {
     question: 'Why does the USA have lower life expectancy than other wealthy countries?',
-    answer: 'Despite spending more per person on healthcare than any nation on Earth, Americans born in 2024 are expected to live to 79 — 3.7 years below the comparable country average of 82.7. The gap is driven by diet quality (ultra-processed food consumption), gun violence, drug overdose deaths, and healthcare access inequality rather than lack of medical technology. [Scientific American, 2026; Peterson-KFF Health System Tracker, 2026]',
+    answer: `Despite spending more per person on healthcare than any nation on Earth, the USA's life expectancy is ${leYears('United States')} years — ${leDiff('Canada', 'United States')} years below Canada (${leYears('Canada')}) and ${leDiff('Japan', 'United States')} below Japan (${leYears('Japan')}) (${LE_CITATION}). The gap is driven by diet quality (ultra-processed food consumption), gun violence, drug overdose deaths, and healthcare access inequality rather than lack of medical technology. [Scientific American, 2026; Peterson-KFF Health System Tracker, 2026]`,
   },
   {
     question: 'How much does your country affect your life expectancy?',
@@ -167,16 +167,16 @@ const SHARE_OPTIONS = [
 // Country longevity pages (SEO Batch 2) — the per-country deep dives this hub links to.
 // Figures: UN World Population Prospects 2023.
 const COUNTRY_PAGES = [
-  { path: '/life-expectancy-india', label: '🇮🇳 India', stat: '70.9 years' },
-  { path: '/life-expectancy-usa', label: '🇺🇸 United States', stat: '77.5 years' },
-  { path: '/life-expectancy-japan', label: '🇯🇵 Japan', stat: '84.3 years' },
-  { path: '/life-expectancy-uk', label: '🇬🇧 United Kingdom', stat: '81.3 years' },
-  { path: '/life-expectancy-australia', label: '🇦🇺 Australia', stat: '83.2 years' },
-  { path: '/life-expectancy-canada', label: '🇨🇦 Canada', stat: '82.3 years' },
-  { path: '/life-expectancy-germany', label: '🇩🇪 Germany', stat: '80.6 years' },
-  { path: '/life-expectancy-china', label: '🇨🇳 China', stat: '78.2 years' },
-  { path: '/life-expectancy-singapore', label: '🇸🇬 Singapore', stat: '83.5 years' },
-  { path: '/life-expectancy-brazil', label: '🇧🇷 Brazil', stat: '74.6 years' },
+  { path: '/life-expectancy-india', label: '🇮🇳 India', stat: `${leYears('India')} years` },
+  { path: '/life-expectancy-usa', label: '🇺🇸 United States', stat: `${leYears('United States')} years` },
+  { path: '/life-expectancy-japan', label: '🇯🇵 Japan', stat: `${leYears('Japan')} years` },
+  { path: '/life-expectancy-uk', label: '🇬🇧 United Kingdom', stat: `${leYears('United Kingdom')} years` },
+  { path: '/life-expectancy-australia', label: '🇦🇺 Australia', stat: `${leYears('Australia')} years` },
+  { path: '/life-expectancy-canada', label: '🇨🇦 Canada', stat: `${leYears('Canada')} years` },
+  { path: '/life-expectancy-germany', label: '🇩🇪 Germany', stat: `${leYears('Germany')} years` },
+  { path: '/life-expectancy-china', label: '🇨🇳 China', stat: `${leYears('China')} years` },
+  { path: '/life-expectancy-singapore', label: '🇸🇬 Singapore', stat: `${leYears('Singapore')} years` },
+  { path: '/life-expectancy-brazil', label: '🇧🇷 Brazil', stat: `${leYears('Brazil')} years` },
 ];
 
 // ── Main page component ───────────────────────────────────────────────────────
@@ -299,7 +299,7 @@ const CountryComparison = () => {
           />
           <WebApplicationSchema
             name="Country Life Expectancy Comparison"
-            description="Interactive life expectancy comparison tool across 57 countries — see how your country affects your lifespan with WHO and CDC data."
+            description="Interactive life expectancy comparison tool across 57 countries — see how your country affects your lifespan with UN World Population Prospects 2024 data."
             url="/country-comparison"
           />
         </>
@@ -491,10 +491,10 @@ const CountryComparison = () => {
               <div className="text-4xl mb-3">🇺🇸</div>
               <h3 className="text-lg font-black mb-2 text-amber-900">The American Paradox</h3>
               <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                The USA spends more on healthcare per person than any other nation on Earth. Yet Americans live <strong>3.7 years less</strong> than the average of comparable developed countries.
+                The USA spends more on healthcare per person than any other nation on Earth. Yet Americans live <strong>{leDiff('Canada', 'United States')} years less</strong> than Canadians next door.
               </p>
               <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                Americans born in 2024 are expected to live to 79 — while people in comparable countries average 82.7 years. The gap is driven by diet, gun violence, overdose deaths, and healthcare inequality rather than access to medical technology.
+                US life expectancy is {leYears('United States')} years, against {leYears('Canada')} in Canada, {leYears('United Kingdom')} in the UK and {leYears('Japan')} in Japan ({LE_CITATION}). The gap is driven by diet, gun violence, overdose deaths, and healthcare inequality rather than access to medical technology.
               </p>
               <p className="text-xs text-gray-400 italic">
                 [Scientific American, Feb 2026] [Peterson-KFF Health System Tracker, 2026]
@@ -561,7 +561,7 @@ const CountryComparison = () => {
             <div className="flex gap-4" style={{ minWidth: 'max-content' }}>
 
               {[
-                { idx: 0, gradient: 'from-[#2F6FB0] to-[#2F6FB0]', icon: '🎯', title: 'The Monaco Effect', body: 'Monaco has the world\'s highest life expectancy at 89.8 years. Tiny, wealthy, universal healthcare, Mediterranean climate. But wealth alone doesn\'t explain it — neighboring France still reaches 83+ years with far more people.', cite: '[CIA World Factbook, 2024]' },
+                { idx: 0, gradient: 'from-[#2F6FB0] to-[#2F6FB0]', icon: '🎯', title: 'The Monaco Effect', body: `Monaco has one of the world's highest life expectancies — ${leYears('Monaco')} years. Tiny, wealthy, universal healthcare, Mediterranean climate. But wealth alone doesn't explain it — neighboring France still reaches ${leYears('France')} years with far more people.`, cite: '[UN WPP 2024, 2023 estimate]' },
                 { idx: 1, gradient: 'from-emerald-600 to-emerald-800', icon: '🍵', title: 'The Green Tea Effect', body: 'Japan\'s per-capita green tea consumption: ~700g per person per year. Green tea contains EGCG — a polyphenol that reduces inflammation. Japanese adults who drink 5+ cups per day show 26% lower risk of heart disease mortality.', cite: '[Japan Public Health Center Study, 2006]' },
                 { idx: 2, gradient: 'from-blue-600 to-blue-800', icon: '🏥', title: 'The Healthcare Gap', body: 'The US spends $12,000+ per person on healthcare annually — nearly double comparable countries. Yet Americans live shorter lives than citizens in 50+ countries who spend far less. Healthcare spending and life expectancy are surprisingly weakly correlated.', cite: '[OECD Health Statistics, 2024]' },
                 { idx: 3, gradient: 'from-[#2F6FB0] to-[#2F6FB0]', icon: '🌍', title: 'The 200-Year Miracle', body: 'In 1800, the global average life expectancy was around 30 years. By 2024 it exceeded 73 years. Humanity effectively gained 43 years of average lifespan in 200 years — primarily through sanitation, vaccines, and antibiotics.', cite: '[Our World in Data, 2024]' },
@@ -1026,7 +1026,7 @@ const CountryComparison = () => {
         <section className="max-w-5xl mx-auto mb-12">
           <h2 className="text-lg font-bold text-foreground mb-3">📚 Data Sources & Citations</h2>
           <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 text-xs text-gray-600 space-y-2 leading-relaxed">
-            <p><strong>Primary Dataset:</strong> United Nations World Population Prospects 2024 (UN WPP 2024). Life expectancy at birth by country and sex. United Nations Department of Economic and Social Affairs, Population Division.</p>
+            <p><strong>Primary Dataset:</strong> United Nations World Population Prospects 2024 (UN WPP 2024). Period life expectancy at birth by country and sex, estimates for 2023. United Nations Department of Economic and Social Affairs, Population Division.</p>
             <p><strong>Japan Green Tea:</strong> Kuriyama, S. et al. (2006). Green tea consumption and mortality due to cardiovascular disease, cancer, and all causes in Japan. <em>JAMA</em>, 296(10), 1255–1265.</p>
             <p><strong>Exercise & Longevity:</strong> Moore, S.C. et al. (2012). Leisure time physical activity of moderate to vigorous intensity and mortality. <em>PLOS Medicine</em>, 9(11).</p>
             <p><strong>Social Isolation:</strong> Holt-Lunstad, J. et al. (2010). Social relationships and mortality risk: a meta-analytic review. <em>PLOS Medicine</em>, 7(7).</p>
@@ -1034,7 +1034,6 @@ const CountryComparison = () => {
             <p><strong>Japan Paradox:</strong> Willcox, D.C. et al. (2021). The Okinawan diet: health implications of a low-calorie, nutrient-dense, antioxidant-rich dietary pattern. <em>Journal of the American College of Nutrition</em>.</p>
             <p><strong>Blue Zones:</strong> Buettner, D. (2023). <em>The Blue Zones: Lessons for Living Longer From the People Who've Lived the Longest</em>. National Geographic Society.</p>
             <p><strong>India Data:</strong> National Family Health Survey NFHS-5 (2019–21). Ministry of Health and Family Welfare, India.</p>
-            <p><strong>CIA World Factbook:</strong> Central Intelligence Agency. Country Comparisons — Life Expectancy at Birth (2024 edition).</p>
             <p className="text-gray-400 italic">All baselines are population-level statistical estimates. Individual outcomes vary based on genetics, lifestyle, healthcare access, and factors not captured here. BornClock data is for educational purposes only.</p>
           </div>
         </section>

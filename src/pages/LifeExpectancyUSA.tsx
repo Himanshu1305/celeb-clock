@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
+import { leYears, leGap, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
 
 const FAQ_ITEMS = [
-  { question: 'What is the current US life expectancy?', answer: 'Approximately 77.5 years as of 2023. Women average 80.5 years and men 74.8 years. This is below the OECD average for wealthy nations, which sits around 80 years.' },
-  { question: 'Why did US life expectancy drop so sharply?', answer: 'US life expectancy fell from 78.8 years in 2019 to 76.1 years in 2021 — the largest two-year drop since World War II. The primary causes were COVID-19 deaths, the opioid epidemic (80,000+ deaths per year), and gun violence. It has partially recovered since but has not returned to pre-pandemic levels.' },
+  { question: 'What is the current US life expectancy?', answer: `Approximately ${leYears('United States')} years (${LE_CITATION}). Women average ${leYears('United States', 'female')} years and men ${leYears('United States', 'male')} years. This is below the OECD average for wealthy nations, which sits around 80 years.` },
+  { question: 'Why did US life expectancy drop so sharply?', answer: `US life expectancy fell from ${WPP2024_HISTORY['United States'][2019]} years in 2019 to ${WPP2024_HISTORY['United States'][2021]} years in 2021 — the largest two-year drop since World War II. The primary causes were COVID-19 deaths, the opioid epidemic (80,000+ deaths per year), and gun violence. By 2023 it had recovered to ${leYears('United States')} years, slightly above its 2019 level.` },
   { question: 'Which US state has the highest life expectancy?', answer: 'Hawaii leads with approximately 81 years, followed by California, Minnesota, and Massachusetts. Mississippi has the lowest at around 71 years — a 10-year gap that reflects dramatic differences in healthcare access, poverty rates, and lifestyle factors across states.' },
-  { question: 'How does US life expectancy compare to other wealthy countries?', answer: 'The USA spends more per capita on healthcare than any other country but ranks below most comparable wealthy nations in life expectancy. Japan (84.3), Switzerland (83.4), Australia (83.2), and most of Western Europe all have higher life expectancy despite lower healthcare spending.' },
+  { question: 'How does US life expectancy compare to other wealthy countries?', answer: `The USA spends more per capita on healthcare than any other country but ranks below most comparable wealthy nations in life expectancy. Japan (${leYears('Japan')}), Switzerland (${leYears('Switzerland')}), Australia (${leYears('Australia')}), and most of Western Europe all have higher life expectancy despite lower healthcare spending.` },
 ];
 
 const RELATED = [
@@ -26,14 +27,14 @@ const LifeExpectancyUSA = () => {
         <>
           <SEO
             title="Life Expectancy in the USA — 2026 Data, the Decline & What It Means"
-            description="US life expectancy is 77.5 years — but it fell sharply in 2020-21 and hasn't fully recovered. Here's why, and what Americans can do about it."
+            description={`US life expectancy is ${leYears('United States')} years — after a sharp fall in 2020-21 and a recovery by 2023. Here's why, and what Americans can do about it.`}
             keywords="life expectancy USA, US life expectancy 2026, American lifespan, average life expectancy United States"
             canonicalUrl="/life-expectancy-usa"
             ogImage="https://bornclock.com/og/calculator.png"
           />
           <WebApplicationSchema
             name="Life Expectancy in the USA"
-            description="US life expectancy is 77.5 years — why it fell, where it stands now, and what Americans can do about it."
+            description={`US life expectancy is ${leYears('United States')} years — why it fell, where it stands now, and what Americans can do about it.`}
             url="/life-expectancy-usa"
           />
           <FAQSchema items={FAQ_ITEMS} />
@@ -42,16 +43,16 @@ const LifeExpectancyUSA = () => {
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'USA Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in the USA — Why It Fell and Where It Stands Now"
-      lead="The United States life expectancy is approximately 77.5 years as of 2023. Women average 80.5 years; men average 74.8 years. US life expectancy fell from 78.8 years in 2019 to 76.1 years in 2021 — driven by COVID-19, the opioid crisis, and gun violence — and has only partially recovered."
+      lead={`The United States life expectancy is approximately ${leYears('United States')} years (${LE_CITATION}). Women average ${leYears('United States', 'female')} years; men average ${leYears('United States', 'male')} years. US life expectancy fell from ${WPP2024_HISTORY['United States'][2019]} years in 2019 to ${WPP2024_HISTORY['United States'][2021]} years in 2021 — driven by COVID-19, the opioid crisis, and gun violence — before recovering by 2023.`}
     >
       <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-        <EEATBadges sources={['UN WPP 2023', 'CDC', 'Peterson-KFF']} />
+        <EEATBadges sources={['UN WPP 2024', 'CDC', 'Peterson-KFF']} />
       </section>
 
       <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">The Dramatic Fall — What Happened Between 2019 and 2021</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">Three forces drove almost the entire 2.7-year drop, something unprecedented for a wealthy nation in peacetime. COVID-19 killed hundreds of thousands directly and strained the system that keeps everyone else alive.</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">Three forces drove almost the entire {(WPP2024_HISTORY['United States'][2019] - WPP2024_HISTORY['United States'][2021]).toFixed(1)}-year drop, something unprecedented for a wealthy nation in peacetime. COVID-19 killed hundreds of thousands directly and strained the system that keeps everyone else alive.</p>
             <p className="text-muted-foreground leading-relaxed">Alongside it, the opioid crisis continued to claim more than 80,000 lives a year, concentrated among working-age adults, and gun-violence mortality of about 12.2 per 100,000 added a distinctly American toll. Together these three account for most of the decline — and none of them are about a shortage of medical technology.</p>
           </section>
 

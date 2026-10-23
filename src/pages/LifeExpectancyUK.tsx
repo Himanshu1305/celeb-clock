@@ -2,11 +2,12 @@ import { Link } from 'react-router-dom';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
+import { leYears, leGap, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
 
 const FAQ_ITEMS = [
-  { question: "What is the UK's life expectancy in 2026?", answer: 'Approximately 81.3 years based on 2023 UN data. Women average 83.1 years and men 79.4 years. England has slightly higher figures than Scotland, Wales, and Northern Ireland.' },
+  { question: "What is the UK's life expectancy in 2026?", answer: `Approximately ${leYears('United Kingdom')} years (${LE_CITATION}). Women average ${leYears('United Kingdom', 'female')} years and men ${leYears('United Kingdom', 'male')} years. England has slightly higher figures than Scotland, Wales, and Northern Ireland.` },
   { question: 'Why is there such a big regional gap in UK life expectancy?', answer: 'The gap between healthiest and least healthy UK regions reaches 10-12 years. Main drivers are deprivation, unemployment, diet quality, housing conditions, and healthcare access. Scotland — particularly Glasgow — has historically had worse outcomes than comparable European cities even after controlling for socioeconomic factors.' },
-  { question: 'How does UK life expectancy compare to Europe?', answer: 'The UK sits below the Western European average. France (82.3), Spain (83.3), Italy (82.9), and Switzerland (83.4) all have higher life expectancy. The gap is attributed to higher UK obesity rates, higher alcohol consumption in some regions, and historically higher smoking rates.' },
+  { question: 'How does UK life expectancy compare to Europe?', answer: `The UK sits below the Western European average. France (${leYears('France')}), Spain (${leYears('Spain')}), Italy (${leYears('Italy')}), and Switzerland (${leYears('Switzerland')}) all have higher life expectancy. The gap is attributed to higher UK obesity rates, higher alcohol consumption in some regions, and historically higher smoking rates.` },
   { question: 'Did COVID significantly affect UK life expectancy?', answer: 'Yes — UK life expectancy fell by approximately 1.3 years between 2019 and 2021. It has largely recovered since, though NHS waiting list backlogs are now considered a secondary mortality risk affecting tens of thousands of patients annually.' },
 ];
 
@@ -26,14 +27,14 @@ const LifeExpectancyUK = () => {
         <>
           <SEO
             title="Life Expectancy in the UK — 2026 Data, Regional Gaps & Key Drivers"
-            description="UK life expectancy is 81.3 years, but there's a 10-year gap between the healthiest and least healthy regions. Here's what the data shows."
+            description={`UK life expectancy is ${leYears('United Kingdom')} years, but there's a 10-year gap between the healthiest and least healthy regions. Here's what the data shows.`}
             keywords="life expectancy UK, United Kingdom life expectancy 2026, British lifespan, average life expectancy England"
             canonicalUrl="/life-expectancy-uk"
             ogImage="https://bornclock.com/og/calculator.png"
           />
           <WebApplicationSchema
             name="Life Expectancy in the UK"
-            description="UK life expectancy is 81.3 years — the national average, the regional reality, and the key drivers behind both."
+            description={`UK life expectancy is ${leYears('United Kingdom')} years — the national average, the regional reality, and the key drivers behind both.`}
             url="/life-expectancy-uk"
           />
           <FAQSchema items={FAQ_ITEMS} />
@@ -42,10 +43,10 @@ const LifeExpectancyUK = () => {
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'UK Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in the UK — The National Average and the Regional Reality"
-      lead="The United Kingdom's average life expectancy is approximately 81.3 years as of 2023. Women average 83.1 years; men average 79.4 years. The UK has some of the most dramatic regional life expectancy gaps of any wealthy nation — up to 12 years between the healthiest and least healthy areas."
+      lead={`The United Kingdom's average life expectancy is approximately ${leYears('United Kingdom')} years (${LE_CITATION}). Women average ${leYears('United Kingdom', 'female')} years; men average ${leYears('United Kingdom', 'male')} years. The UK has some of the most dramatic regional life expectancy gaps of any wealthy nation — up to 12 years between the healthiest and least healthy areas.`}
     >
       <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-        <EEATBadges sources={['UN WPP 2023', 'ONS', 'WHO']} />
+        <EEATBadges sources={['UN WPP 2024', 'ONS', 'WHO']} />
       </section>
 
       <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
@@ -63,7 +64,7 @@ const LifeExpectancyUK = () => {
 
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">UK vs Comparable European Nations</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">At 81.3 years the UK sits just below France (82.3), Spain (83.3) and Switzerland (83.4). The distance is small in headline terms but consistent.</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">At {leYears('United Kingdom')} years the UK sits just below France ({leYears('France')}), Spain ({leYears('Spain')}) and Switzerland ({leYears('Switzerland')}). The distance is small in headline terms but consistent.</p>
             <p className="text-muted-foreground leading-relaxed">Higher obesity rates than most of Western Europe, higher alcohol consumption in some regions, and a legacy of higher smoking rates now in decline all help explain the shortfall.</p>
           </section>
 

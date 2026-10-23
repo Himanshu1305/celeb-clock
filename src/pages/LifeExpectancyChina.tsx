@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
+import { le, leYears, leGap, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
 
 const FAQ_ITEMS = [
-  { question: "What is China's life expectancy?", answer: 'Approximately 78.2 years as of 2023. Women average 81.1 years and men 75.5 years — a 5.6-year gender gap largely driven by very high male smoking rates.' },
-  { question: "How fast has China's life expectancy improved?", answer: 'Extremely fast. China went from 43.7 years in 1960 to 78.2 years in 2023 — a gain of 34.5 years in 63 years. This is one of the most rapid life expectancy improvements ever recorded for a large population.' },
+  { question: "What is China's life expectancy?", answer: `Approximately ${leYears('China')} years (${LE_CITATION}). Women average ${leYears('China', 'female')} years and men ${leYears('China', 'male')} years — a ${leGap('China')}-year gender gap largely driven by very high male smoking rates.` },
+  { question: "How fast has China's life expectancy improved?", answer: `Extremely fast. China went from ${WPP2024_HISTORY.China[1970]} years in 1970 to ${leYears('China')} years in 2023 — a gain of ${(le('China').both - WPP2024_HISTORY.China[1970]).toFixed(1)} years in 53 years. This is one of the most rapid life expectancy improvements ever recorded for a large population.` },
   { question: 'Why is life expectancy so different between Shanghai and rural China?', answer: 'Shanghai and Beijing residents have life expectancy above 83 years — comparable to Japan. Rural inland provinces average 10+ years less. The gap is driven by dramatically different healthcare access, income levels, air quality, diet, and occupational risk.' },
   { question: 'Does smoking significantly affect Chinese life expectancy?', answer: "Yes — substantially. China has the world's largest tobacco market with over 300 million smokers, predominantly male. Male smoking rates above 50% are the primary driver of the large gender gap in life expectancy and are projected to cause 1 million additional deaths annually by 2030 if rates do not decline." },
 ];
@@ -26,14 +27,14 @@ const LifeExpectancyChina = () => {
         <>
           <SEO
             title="Life Expectancy in China — 2026 Data, the Dramatic Rise & Regional Gaps"
-            description="China's life expectancy is 78.2 years — up from 43 in 1960. Here's one of history's most dramatic health transformations and what still drives gaps."
+            description={`China's life expectancy is ${leYears('China')} years — up from ${Math.round(WPP2024_HISTORY.China[1970])} in 1970. Here's one of history's most dramatic health transformations and what still drives gaps.`}
             keywords="life expectancy China, Chinese lifespan 2026, how long do Chinese live, China longevity"
             canonicalUrl="/life-expectancy-china"
             ogImage="https://bornclock.com/og/calculator.png"
           />
           <WebApplicationSchema
             name="Life Expectancy in China"
-            description="China's life expectancy is 78.2 years — one of history's most dramatic health transformations, and the gaps that remain."
+            description={`China's life expectancy is ${leYears('China')} years — one of history's most dramatic health transformations, and the gaps that remain.`}
             url="/life-expectancy-china"
           />
           <FAQSchema items={FAQ_ITEMS} />
@@ -42,16 +43,16 @@ const LifeExpectancyChina = () => {
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'China Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in China — One of History's Most Dramatic Health Transformations"
-      lead="China's average life expectancy is approximately 78.2 years as of 2023. Women average 81.1 years; men average 75.5 years. China has gained over 34 years of life expectancy since 1960 — from 43.7 years to 78.2 — one of the most rapid improvements ever recorded for a large population."
+      lead={`China's average life expectancy is approximately ${leYears('China')} years (${LE_CITATION}). Women average ${leYears('China', 'female')} years; men average ${leYears('China', 'male')} years. China has gained over 21 years of life expectancy since 1970 — from ${WPP2024_HISTORY.China[1970]} years to ${leYears('China')} — one of the most rapid improvements ever recorded for a large population.`}
     >
       <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-        <EEATBadges sources={['UN WPP 2023', 'WHO', 'EPIC']} />
+        <EEATBadges sources={['UN WPP 2024', 'WHO', 'EPIC']} />
       </section>
 
       <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">The Extraordinary Rise</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">The trajectory is almost hard to believe: from 43.7 years in 1960 to 78.2 in 2023. Economic growth, improved nutrition, expanded healthcare access, mass vaccination and a sharp fall in infectious disease all compounded.</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">The trajectory is almost hard to believe: from {WPP2024_HISTORY.China[1970]} years in 1970 to {leYears('China')} in 2023. Economic growth, improved nutrition, expanded healthcare access, mass vaccination and a sharp fall in infectious disease all compounded.</p>
             <p className="text-muted-foreground leading-relaxed">China now approaches Western European levels and has overtaken many middle-income countries. It is one of the great public-health stories of the modern era.</p>
           </section>
 
@@ -63,7 +64,7 @@ const LifeExpectancyChina = () => {
 
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">The Smoking Challenge</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">China has the world's largest tobacco market — more than 300 million smokers, overwhelmingly male. This single factor is the main driver of the 5.6-year gender gap.</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">China has the world's largest tobacco market — more than 300 million smokers, overwhelmingly male. This single factor is the main driver of the {leGap('China')}-year gender gap.</p>
             <p className="text-muted-foreground leading-relaxed">Male smoking rates remain above 50%, and on current trends this is projected to cause a million additional deaths a year by 2030 unless rates fall.</p>
           </section>
 

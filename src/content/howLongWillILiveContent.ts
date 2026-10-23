@@ -1,3 +1,4 @@
+import { le, leYears, LE_CITATION } from '@/data/lifeExpectancyFacts';
 // Same pattern as biologicalAgeContent.ts
 // Runtime validation at module load — errors appear immediately if content is wrong
 
@@ -56,7 +57,7 @@ export const HLWIL_SCHEMA = {
         '@type': 'Question',
         name: 'How long will I live?',
         acceptedAnswer: { '@type': 'Answer',
-          text: 'The global average life expectancy is approximately 73 years (WHO, 2023), but this varies dramatically based on country, gender, and individual lifestyle. A non-smoking, regularly exercising person with strong social connections and good sleep may have a statistical life expectancy above 85. Someone with multiple lifestyle risk factors may be well below the national average. BornClock\'s 8-factor quiz gives you a personalised estimate using WHO baseline data adjusted for your specific lifestyle choices.',
+          text: `The global average life expectancy is about ${leYears('World')} years (${LE_CITATION}), but this varies dramatically based on country, gender, and individual lifestyle. A non-smoking, regularly exercising person with strong social connections and good sleep may have a statistical life expectancy above 85. Someone with multiple lifestyle risk factors may be well below the national average. BornClock's 8-factor quiz gives you a personalised estimate using UN WPP 2024 baseline data adjusted for your specific lifestyle choices.`,
         },
       },
       {
@@ -77,21 +78,21 @@ export const HLWIL_SCHEMA = {
         '@type': 'Question',
         name: 'Which country has the highest life expectancy?',
         acceptedAnswer: { '@type': 'Answer',
-          text: 'According to WHO 2023 data, Japan has the highest life expectancy at approximately 84.3 years, followed by Switzerland (83.4), South Korea (83.3), Singapore (83.2), and Australia (83.2). India\'s average is approximately 70.2 years. The United States averages 76.4 years, lower than many high-income countries due to lifestyle factors including obesity rates, limited healthcare access for some populations, and higher rates of accidents. BornClock uses country-specific WHO baselines so your estimate is calibrated for your actual national context.',
+          text: `Among large countries, Japan has the highest life expectancy at ${leYears('Japan')} years, followed by South Korea (${leYears('South Korea')}), Switzerland (${leYears('Switzerland')}), Australia (${leYears('Australia')}) and Singapore (${leYears('Singapore')}) (${LE_CITATION}). India's average is ${leYears('India')} years. The United States averages ${leYears('United States')} years, lower than many high-income countries due to lifestyle factors including obesity rates, limited healthcare access for some populations, and higher rates of accidents. BornClock uses country-specific UN WPP 2024 baselines so your estimate is calibrated for your actual national context.`,
         },
       },
       {
         '@type': 'Question',
         name: 'How accurate is a life expectancy calculator?',
         acceptedAnswer: { '@type': 'Answer',
-          text: 'Life expectancy calculators provide statistical estimates based on population research — they cannot predict individual outcomes. BornClock uses WHO Global Health Observatory baselines specific to your country and gender, then applies adjustments from 8 peer-reviewed factors. Research shows these 8 factors account for 70-75% of longevity variance, making them the most reliable basis for personalised estimation without a clinical examination. Accuracy depends on answering honestly and completely.',
+          text: 'Life expectancy calculators provide statistical estimates based on population research — they cannot predict individual outcomes. BornClock uses UN World Population Prospects 2024 baselines specific to your country and gender, then applies adjustments from 8 peer-reviewed factors. Research shows these 8 factors account for 70-75% of longevity variance, making them the most reliable basis for personalised estimation without a clinical examination. Accuracy depends on answering honestly and completely.',
         },
       },
       {
         '@type': 'Question',
         name: 'What is the average life expectancy in India?',
         acceptedAnswer: { '@type': 'Answer',
-          text: 'India\'s average life expectancy is approximately 70.2 years (WHO, 2023) — 68.3 for males and 71.5 for females. This varies significantly by state: Kerala has the highest at approximately 77 years, while several northern states are lower. Key factors driving India\'s life expectancy below the global average include cardiovascular disease rates, diabetes prevalence, air pollution exposure, and variable healthcare access by region. Individual lifestyle choices can substantially raise or lower this baseline.',
+          text: `India's average life expectancy is ${leYears('India')} years (${LE_CITATION}) — ${leYears('India', 'male')} for males and ${leYears('India', 'female')} for females. This varies significantly by state: Kerala has the highest at approximately 77 years, while several northern states are lower. Key factors driving India's life expectancy below the global average include cardiovascular disease rates, diabetes prevalence, air pollution exposure, and variable healthcare access by region. Individual lifestyle choices can substantially raise or lower this baseline.`,
         },
       },
     ],
@@ -103,30 +104,24 @@ if (HLWIL_SCHEMA.faq.mainEntity.length < 6) {
   throw new Error(`FAQ needs ≥6 questions, has ${HLWIL_SCHEMA.faq.mainEntity.length}`);
 }
 
-// ── Country Table — WHO 2023 data ─────────────────────────────
-// female must be > male for ALL rows (biological fact — validated below)
-export const HLWIL_COUNTRY_TABLE = [
-  { rank: 1,  country: 'Japan',          expectancy: 84.3, male: 81.1, female: 87.1, region: 'Asia Pacific' },
-  { rank: 2,  country: 'Switzerland',    expectancy: 83.4, male: 81.8, female: 85.1, region: 'Europe' },
-  { rank: 3,  country: 'South Korea',    expectancy: 83.3, male: 80.5, female: 86.0, region: 'Asia Pacific' },
-  { rank: 4,  country: 'Singapore',      expectancy: 83.2, male: 81.3, female: 85.2, region: 'Asia Pacific' },
-  { rank: 5,  country: 'Australia',      expectancy: 83.2, male: 81.3, female: 85.2, region: 'Asia Pacific' },
-  { rank: 6,  country: 'Spain',          expectancy: 83.2, male: 80.7, female: 85.7, region: 'Europe' },
-  { rank: 7,  country: 'Italy',          expectancy: 83.0, male: 81.0, female: 85.0, region: 'Europe' },
-  { rank: 8,  country: 'France',         expectancy: 82.3, male: 79.8, female: 85.1, region: 'Europe' },
-  { rank: 9,  country: 'Canada',         expectancy: 82.3, male: 80.4, female: 84.4, region: 'Americas' },
-  { rank: 10, country: 'United Kingdom', expectancy: 81.4, male: 79.6, female: 83.2, region: 'Europe' },
-  { rank: 11, country: 'Germany',        expectancy: 81.1, male: 78.7, female: 83.4, region: 'Europe' },
-  { rank: 12, country: 'New Zealand',    expectancy: 81.1, male: 79.4, female: 82.9, region: 'Asia Pacific' },
-  { rank: 13, country: 'United States',  expectancy: 76.4, male: 73.5, female: 79.3, region: 'Americas' },
-  { rank: 14, country: 'China',          expectancy: 77.4, male: 74.7, female: 80.5, region: 'Asia' },
-  { rank: 15, country: 'Brazil',         expectancy: 75.3, male: 71.6, female: 79.2, region: 'Americas' },
-  { rank: 16, country: 'Russia',         expectancy: 72.1, male: 66.5, female: 77.3, region: 'Europe/Asia' },
-  { rank: 17, country: 'Indonesia',      expectancy: 67.6, male: 65.4, female: 69.8, region: 'Asia Pacific' },
-  { rank: 18, country: 'India',          expectancy: 70.2, male: 68.3, female: 71.5, region: 'South Asia' },
-  { rank: 19, country: 'Pakistan',       expectancy: 66.7, male: 65.5, female: 68.1, region: 'South Asia' },
-  { rank: 20, country: 'Nigeria',        expectancy: 53.7, male: 52.4, female: 54.9, region: 'Africa' },
-] as const;
+// ── Country Table — UN WPP 2024, estimate for 2023 (audit S13: one sourced table) ──
+// female must be > male for ALL rows (validated below)
+const HLWIL_COUNTRIES: { country: string; region: string }[] = [
+  { country: 'Japan', region: 'Asia Pacific' }, { country: 'Switzerland', region: 'Europe' },
+  { country: 'South Korea', region: 'Asia Pacific' }, { country: 'Singapore', region: 'Asia Pacific' },
+  { country: 'Australia', region: 'Asia Pacific' }, { country: 'Spain', region: 'Europe' },
+  { country: 'Italy', region: 'Europe' }, { country: 'France', region: 'Europe' },
+  { country: 'Canada', region: 'Americas' }, { country: 'United Kingdom', region: 'Europe' },
+  { country: 'Germany', region: 'Europe' }, { country: 'New Zealand', region: 'Asia Pacific' },
+  { country: 'United States', region: 'Americas' }, { country: 'China', region: 'Asia' },
+  { country: 'Brazil', region: 'Americas' }, { country: 'Russia', region: 'Europe/Asia' },
+  { country: 'Indonesia', region: 'Asia Pacific' }, { country: 'India', region: 'South Asia' },
+  { country: 'Pakistan', region: 'South Asia' }, { country: 'Nigeria', region: 'Africa' },
+];
+export const HLWIL_COUNTRY_TABLE = HLWIL_COUNTRIES
+  .map(c => ({ ...c, expectancy: le(c.country).both, male: le(c.country).male, female: le(c.country).female }))
+  .sort((a, b) => b.expectancy - a.expectancy)
+  .map((r, i) => ({ rank: i + 1, ...r }));
 
 // Runtime validation
 if (HLWIL_COUNTRY_TABLE.length < 15) {
@@ -254,10 +249,10 @@ export const HLWIL_COPY = {
   directAnswer: {
     heading: 'The Direct Answer: It Depends on You',
     stats: [
-      { label: 'Global average', value: '73 years',   note: 'WHO 2023', color: 'text-gray-700' as const },
-      { label: 'Highest (Japan)', value: '84.3 years', note: 'WHO 2023', color: 'text-[#6E5AA6]' as const },
-      { label: 'India average',   value: '70.2 years', note: 'WHO 2023', color: 'text-[#6E5AA6]' as const },
-      { label: 'United States',   value: '76.4 years', note: 'WHO 2023', color: 'text-blue-600' as const },
+      { label: 'Global average', value: `${leYears('World')} years`, note: 'UN WPP 2024', color: 'text-gray-700' as const },
+      { label: 'Japan', value: `${leYears('Japan')} years`, note: 'UN WPP 2024', color: 'text-[#6E5AA6]' as const },
+      { label: 'India average',   value: `${leYears('India')} years`, note: 'UN WPP 2024', color: 'text-[#6E5AA6]' as const },
+      { label: 'United States',   value: `${leYears('United States')} years`, note: 'UN WPP 2024', color: 'text-blue-600' as const },
     ] as const,
     insight: 'Averages are for everyone. Your actual life expectancy could be 10-15 years above or below your national average depending on your lifestyle. Genetics accounts for only 25-30% of longevity. The remaining 70-75% is in your hands.',
     karolinskaSource: 'Karolinska Institute twin study, 2018',
@@ -265,7 +260,7 @@ export const HLWIL_COPY = {
   whyAveragesMislead: {
     heading: 'Why National Averages Don\'t Tell You How Long YOU\'ll Live',
     paras: [
-      'The global average life expectancy of 73 years includes everyone — sedentary people and marathon runners, smokers and non-smokers, socially isolated people and those with tight community bonds. Citing the national average for your life expectancy is roughly as meaningful as citing the average income when trying to know what you personally will earn.',
+      `The global average life expectancy of ${leYears('World')} years (UN WPP 2024) includes everyone — sedentary people and marathon runners, smokers and non-smokers, socially isolated people and those with tight community bonds. Citing the national average for your life expectancy is roughly as meaningful as citing the average income when trying to know what you personally will earn.`,
       'Two people born on the same day in the same country, with the same family medical history, can have statistical life expectancies that differ by 15-20 years based solely on lifestyle choices made across their adult lives. The Harvard Study of Adult Development — spanning over 85 years — found that the quality of your relationships at age 50 is a stronger predictor of healthy ageing at 80 than cholesterol levels, income, or IQ.',
       'What you need is not the national average. What you need is a personalised estimate that accounts for your specific lifestyle, health history, and habits. That is exactly what BornClock\'s 8-factor quiz provides.',
       'Consider a concrete example. Take two 40-year-old women in the same city. One walks 8,000 steps a day, sleeps seven to eight hours, eats mostly whole foods, has a close circle of friends, and does not smoke. The other is sedentary, sleeps five hours, eats a heavily processed diet, is socially isolated, and smokes a pack a day. The national average predicts an identical future for both. Decades of research predicts a gap of well over a decade in healthy years lived. The average is not wrong — it is simply not about either of them specifically.',
@@ -277,15 +272,15 @@ export const HLWIL_COPY = {
     intro: 'BornClock assesses these 8 factors — the variables with the strongest peer-reviewed evidence for determining individual life expectancy:',
   },
   countryTable: {
-    heading: 'Life Expectancy by Country — 2023 Rankings',
-    intro: 'WHO Global Health Observatory 2023 data. BornClock uses your specific country\'s baseline as the starting point for your personalised estimate.',
-    source: 'Source: WHO Global Health Observatory, 2023. All figures in years, approximate.',
+    heading: 'Life Expectancy by Country — 2023 Estimates',
+    intro: 'UN World Population Prospects 2024 (estimate for 2023). BornClock uses your specific country\'s baseline as the starting point for your personalised estimate.',
+    source: `Source: ${LE_CITATION}. Period life expectancy at birth, in years.`,
     indiaNote: 'India\'s life expectancy varies significantly by state — from approximately 65 years in some northern states to 77 years in Kerala. BornClock uses the national baseline and adjusts for your individual lifestyle factors.',
   },
   gapAnalysis: {
     heading: 'Why Does the US Have a Lower Life Expectancy Than Europe?',
     paras: [
-      'The United States spends more per capita on healthcare than any other country yet has a lower life expectancy (76.4 years) than Japan (84.3), most of Europe, and Australia. This apparent paradox is explained by lifestyle and social factors, not healthcare quality.',
+      `The United States spends more per capita on healthcare than any other country yet has a lower life expectancy (${leYears('United States')} years) than Japan (${leYears('Japan')}), most of Europe, and Australia. This apparent paradox is explained by lifestyle and social factors, not healthcare quality.`,
       'US life expectancy is pulled down by higher obesity rates (42% of adults vs 20-25% in Europe), higher opioid addiction prevalence, higher rates of violent death and accidents, lower social cohesion in many communities, and significant health disparities by income and race.',
       'The lesson is direct: even in a wealthy country with excellent healthcare access, lifestyle choices determine longevity more than the healthcare system. The same principle applies in India, where a person in Kerala with a healthy lifestyle significantly outlives the national average.',
       'Europe\'s advantage is not a single policy but an accumulation of everyday defaults. Walkable cities and reliable public transport build incidental movement into daily life. Food cultures lean on fresh ingredients and shared, unhurried meals rather than large portions eaten alone. Universal healthcare removes the financial hesitation that delays treatment. None of these are medical breakthroughs — they are environmental nudges that make the healthy choice the easy choice, day after day, for an entire population.',

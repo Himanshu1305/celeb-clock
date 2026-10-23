@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
+import { leYears } from '@/data/lifeExpectancyFacts';
 
 const RELATED = [
   { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
@@ -39,7 +40,7 @@ const HindiLifeExpectancy = () => {
         <section className="max-w-3xl mx-auto mb-12 px-4">
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">अपना जीवन काल अभी calculate करें</h2>
-            <p className="text-sm text-muted-foreground mb-4">WHO life tables और peer-reviewed research के आधार पर — आपकी habits के हिसाब से personalised forecast।</p>
+            <p className="text-sm text-muted-foreground mb-4">UN WPP 2024 baselines और peer-reviewed research के आधार पर — आपकी habits के हिसाब से personalised forecast।</p>
             <Link to="/life-expectancy" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Life Expectancy Calculator खोलें →
             </Link>
@@ -49,7 +50,7 @@ const HindiLifeExpectancy = () => {
         <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">जीवन काल क्या होता है?</h2>
-            <p className="text-muted-foreground leading-relaxed">Life expectancy वह औसत उम्र है जितनी एक इंसान जीने की उम्मीद कर सकता है। भारत में यह 70.9 साल है (2023)। लेकिन यह एक औसत है — आपकी personal life expectancy आपकी habits पर निर्भर करती है।</p>
+            <p className="text-muted-foreground leading-relaxed">Life expectancy वह औसत उम्र है जितनी एक इंसान जीने की उम्मीद कर सकता है। भारत में यह {leYears('India')} साल है (UN WPP 2024, 2023 का अनुमान)। लेकिन यह एक औसत है — आपकी personal life expectancy आपकी habits पर निर्भर करती है।</p>
           </section>
 
           <section>

@@ -2,11 +2,12 @@ import { Link } from 'react-router-dom';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
+import { leYears, leGap, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
 
 const FAQ_ITEMS = [
-  { question: "What is Singapore's life expectancy?", answer: 'Approximately 83.5 years as of 2023. Women average 85.9 years and men 81.2 years. Singapore consistently ranks in the top 5 globally — extraordinary for a nation with no natural resources and a population under 6 million.' },
+  { question: "What is Singapore's life expectancy?", answer: `Approximately ${leYears('Singapore')} years (${LE_CITATION}). Women average ${leYears('Singapore', 'female')} years and men ${leYears('Singapore', 'male')} years. Singapore consistently ranks in the top 5 globally — extraordinary for a nation with no natural resources and a population under 6 million.` },
   { question: 'Why does Singapore have such high life expectancy?', answer: "Singapore's longevity results from deliberate policy sustained over 60 years: mandatory health savings (Medisave), strong preventive healthcare, strict anti-smoking laws since 1970, highly regulated food safety, walkable urban design, and universal primary care access." },
-  { question: 'How does Singapore compare to Japan on life expectancy?', answer: "Singapore (83.5) and Japan (84.3) both rank among the world's longest-lived populations and often trade the top positions. Japan's advantage comes from dietary tradition and culture; Singapore's from deliberate health policy and urban design. Both demonstrate that high life expectancy at scale is achievable." },
+  { question: 'How does Singapore compare to Japan on life expectancy?', answer: `Singapore (${leYears('Singapore')}) and Japan (${leYears('Japan')}) both rank among the world's longest-lived populations and often trade the top positions. Japan's advantage comes from dietary tradition and culture; Singapore's from deliberate health policy and urban design. Both demonstrate that high life expectancy at scale is achievable.` },
   { question: "Is Singapore's model replicable for larger countries?", answer: 'Partially. Singapore benefits from its small size — policy changes can be implemented rapidly across 5.9 million people in a single urban area. Scaling to India or the USA with diverse geography, politics, and income levels is far harder. But specific elements — preventive savings, walkable design, strong food regulation — are studied and adapted globally.' },
 ];
 
@@ -26,14 +27,14 @@ const LifeExpectancySingapore = () => {
         <>
           <SEO
             title="Life Expectancy in Singapore — Why This City-State Ranks Among the World's Best"
-            description="Singapore's life expectancy is 83.5 years — one of the highest globally. Here's how a city-state with no natural resources built one of the world's healthiest populations."
+            description={`Singapore's life expectancy is ${leYears('Singapore')} years — one of the highest globally. Here's how a city-state with no natural resources built one of the world's healthiest populations.`}
             keywords="life expectancy Singapore, Singapore lifespan 2026, how long do Singaporeans live, Singapore longevity"
             canonicalUrl="/life-expectancy-singapore"
             ogImage="https://bornclock.com/og/calculator.png"
           />
           <WebApplicationSchema
             name="Life Expectancy in Singapore"
-            description="Singapore's life expectancy is 83.5 years — how a city-state built one of the world's healthiest populations through deliberate policy."
+            description={`Singapore's life expectancy is ${leYears('Singapore')} years — how a city-state built one of the world's healthiest populations through deliberate policy.`}
             url="/life-expectancy-singapore"
           />
           <FAQSchema items={FAQ_ITEMS} />
@@ -42,10 +43,10 @@ const LifeExpectancySingapore = () => {
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Singapore Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Singapore — How a City-State Built One of the World's Healthiest Populations"
-      lead="Singapore's average life expectancy is approximately 83.5 years as of 2023 — one of the highest of any nation. Women average 85.9 years; men average 81.2 years. Singapore achieved this with no natural resources and a population of only 5.9 million — through deliberate, evidence-based public health policy sustained over 60 years."
+      lead={`Singapore's average life expectancy is approximately ${leYears('Singapore')} years (${LE_CITATION}) — one of the highest of any nation. Women average ${leYears('Singapore', 'female')} years; men average ${leYears('Singapore', 'male')} years. Singapore achieved this with no natural resources and a population of only 5.9 million — through deliberate, evidence-based public health policy sustained over 60 years.`}
     >
       <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
-        <EEATBadges sources={['UN WPP 2023', 'WHO', 'MOH Singapore']} />
+        <EEATBadges sources={['UN WPP 2024', 'WHO', 'MOH Singapore']} />
       </section>
 
       <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">

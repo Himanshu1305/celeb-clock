@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Lock, TrendingUp, Crown, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { leYears } from '@/data/lifeExpectancyFacts';
 import {
   LongevityResult, recalcWithOverrides, EPIGENETIC_HABITS, HABIT_DETAILS, HealthQuizData,
 } from '@/services/LongevityCalculationService';
@@ -754,7 +755,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
         <CardContent className="px-5 pb-4">
           <div className="grid sm:grid-cols-2 gap-2 overflow-x-auto">
             {[
-              { emoji: '🇯🇵', fact: "Japan has the world's highest life expectancy — 87 years for women", source: 'WHO 2023' },
+              { emoji: '🇯🇵', fact: `Japanese women live ${leYears('Japan', 'female')} years on average — among the highest in the world`, source: 'UN WPP 2024' },
               { emoji: '🌿', fact: 'Blue Zone residents (Okinawa, Sardinia, Nicoya) live 10+ years longer than average', source: 'Buettner, 2023' },
               { emoji: '🫀', fact: 'Heart disease is preventable in 80% of cases with diet, exercise, and not smoking', source: 'AHA 2023' },
               { emoji: '🧬', fact: 'Identical twin studies show only 25–30% of lifespan is determined by genetics', source: 'Karolinska Institute, 2017' },

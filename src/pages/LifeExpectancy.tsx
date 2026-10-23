@@ -42,6 +42,7 @@ import { supabase } from '@/integrations/supabase/client';
 import PageTagline from '@/components/PageTagline';
 import { buildActionPlanPhases } from '@/utils/actionPlanBuilder';
 import { buildLongevityBlueprintHtml } from './longevityBlueprintHtml';
+import { leYears } from '@/data/lifeExpectancyFacts';
 
 // ── ErrorBoundary ────────────────────────────────────────────────────────────
 class ReportErrorBoundary extends Component<
@@ -74,16 +75,16 @@ type Phase = 'quiz' | 'result' | 'report';
 // Country longevity pages (SEO Batch 2) — surfaced here so all 10 are discoverable
 // from the main life-expectancy tool. Figures: UN World Population Prospects 2023.
 const COUNTRY_PAGES = [
-  { path: '/life-expectancy-india', label: '🇮🇳 India', stat: '70.9 years' },
-  { path: '/life-expectancy-usa', label: '🇺🇸 United States', stat: '77.5 years' },
-  { path: '/life-expectancy-japan', label: '🇯🇵 Japan', stat: '84.3 years' },
-  { path: '/life-expectancy-uk', label: '🇬🇧 United Kingdom', stat: '81.3 years' },
-  { path: '/life-expectancy-australia', label: '🇦🇺 Australia', stat: '83.2 years' },
-  { path: '/life-expectancy-canada', label: '🇨🇦 Canada', stat: '82.3 years' },
-  { path: '/life-expectancy-germany', label: '🇩🇪 Germany', stat: '80.6 years' },
-  { path: '/life-expectancy-china', label: '🇨🇳 China', stat: '78.2 years' },
-  { path: '/life-expectancy-singapore', label: '🇸🇬 Singapore', stat: '83.5 years' },
-  { path: '/life-expectancy-brazil', label: '🇧🇷 Brazil', stat: '74.6 years' },
+  { path: '/life-expectancy-india', label: '🇮🇳 India', stat: `${leYears('India')} years` },
+  { path: '/life-expectancy-usa', label: '🇺🇸 United States', stat: `${leYears('United States')} years` },
+  { path: '/life-expectancy-japan', label: '🇯🇵 Japan', stat: `${leYears('Japan')} years` },
+  { path: '/life-expectancy-uk', label: '🇬🇧 United Kingdom', stat: `${leYears('United Kingdom')} years` },
+  { path: '/life-expectancy-australia', label: '🇦🇺 Australia', stat: `${leYears('Australia')} years` },
+  { path: '/life-expectancy-canada', label: '🇨🇦 Canada', stat: `${leYears('Canada')} years` },
+  { path: '/life-expectancy-germany', label: '🇩🇪 Germany', stat: `${leYears('Germany')} years` },
+  { path: '/life-expectancy-china', label: '🇨🇳 China', stat: `${leYears('China')} years` },
+  { path: '/life-expectancy-singapore', label: '🇸🇬 Singapore', stat: `${leYears('Singapore')} years` },
+  { path: '/life-expectancy-brazil', label: '🇧🇷 Brazil', stat: `${leYears('Brazil')} years` },
 ];
 
 // ── Page component ────────────────────────────────────────────────────────────
@@ -206,7 +207,7 @@ const LifeExpectancy = () => {
       `- With Optimized Habits: ${displayed} years (${optRem} yrs remaining)`,
       ...(gain > 0 ? [`- Potential Gain: +${gain} years`] : []),
       `- Current Age: ${longevityResult.currentAge} | Country: ${country}`,
-      '- Powered by UN WHO life tables',
+      '- Baseline: UN World Population Prospects 2024 (2023 estimate)',
     ];
     navigator.clipboard.writeText(lines.join('\n')).then(() => {
       setSummaryCopied(true);
@@ -601,7 +602,7 @@ const LifeExpectancy = () => {
                   Built from <strong className="text-foreground">{longevityResult.factorBreakdown.length} personal factors</strong>
                   {Object.values(longevityResult.pillar1Snapshot).filter(m => !m.dontKnow && m.age > 0 && m.isLiving !== null).length > 0 && (
                     <> including <strong className="text-foreground">{Object.values(longevityResult.pillar1Snapshot).filter(m => !m.dontKnow && m.age > 0 && m.isLiving !== null).length} family members</strong></>
-                  )} — using WHO 2023 baselines and peer-reviewed health research.
+                  )} — using UN World Population Prospects 2024 baselines (2023 estimate) and peer-reviewed health research.
                   The simulator below shows you what's possible.
                 </p>
               </div>
@@ -619,7 +620,7 @@ const LifeExpectancy = () => {
                   <div className="space-y-2.5 text-sm">
                     <div className="flex justify-between items-center">
                       <span className="text-muted-foreground">
-                        WHO baseline ({longevityResult.quizSnapshot.gender || 'male'},{' '}
+                        UN WPP 2024 baseline ({longevityResult.quizSnapshot.gender || 'male'},{' '}
                         {longevityResult.quizSnapshot.country || 'Global average'})
                       </span>
                       <strong className="text-foreground tabular-nums">{longevityResult.baselineLifeExpectancy} yrs</strong>
@@ -1022,7 +1023,7 @@ const LifeExpectancy = () => {
                 <div className="bg-white rounded-xl p-4 border border-[#2F6FB0]/30">
                   <h3 className="text-sm font-bold text-gray-800 mb-2">Methodology</h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Your forecast starts from the WHO Global Health Observatory life expectancy baseline for your country and gender. Eight lifestyle and health factors are applied using established risk ratios from peer-reviewed research. Epigenetic bonuses are drawn from Blue Zones and NIH epigenetic ageing studies. Genetic adjustment is calibrated against the Karolinska twin study (2018): genetics accounts for 25–30% of longevity variance; 70–75% is lifestyle-controlled.
+                    Your forecast starts from the UN World Population Prospects 2024 life expectancy at birth (estimate for 2023) for your country and gender. Eight lifestyle and health factors are applied using established risk ratios from peer-reviewed research. Epigenetic bonuses are drawn from Blue Zones and NIH epigenetic ageing studies. Genetic adjustment is calibrated against the Karolinska twin study (2018): genetics accounts for 25–30% of longevity variance; 70–75% is lifestyle-controlled.
                   </p>
                 </div>
                 <div className="bg-white rounded-xl p-4 border border-[#2F6FB0]/30">
@@ -1052,7 +1053,7 @@ const LifeExpectancy = () => {
                   <h3 className="text-sm font-bold text-gray-800 mb-2">Key Research Citations</h3>
                   <ul className="space-y-1.5">
                     {[
-                      'WHO Global Health Observatory (2024) — Country-level life expectancy baselines',
+                      'UN World Population Prospects 2024 — country-level life expectancy at birth, estimate for 2023',
                       'Karolinska Institute twin study (Science, 2018) — Genetics accounts for 25–30% of longevity variance',
                       'Harvard Study of Adult Development (85 yrs) — Social relationships as strongest predictor of healthy ageing',
                       'Horvath S., NIH (2013) — DNA methylation clock: lifestyle factors alter epigenetic ageing rate',
@@ -1109,8 +1110,8 @@ const LifeExpectancy = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">How long will I live?</h2>
             <p className="text-gray-700 leading-relaxed">
               No one can know for certain — but a life-expectancy estimate turns population data into a
-              personalised figure. This calculator starts from your country and age using WHO life tables and
-              UN World Population Prospects 2024 baselines, then adjusts up or down for the lifestyle and health
+              personalised figure. This calculator starts from your country and age using UN World Population
+              Prospects 2024 baselines (estimate for 2023), then adjusts up or down for the lifestyle and health
               factors you enter — sleep, exercise, stress, diet, BMI, smoking and more. It's a science-informed
               projection and a motivator, never a prediction of your actual lifespan.
             </p>
@@ -1120,7 +1121,7 @@ const LifeExpectancy = () => {
             <p className="text-gray-700 leading-relaxed mb-2">
               A <strong>life table</strong> is the demographer's core tool: for a given population it records the
               probability of surviving each year of age, and from that computes the average remaining years at
-              birth — your baseline life expectancy. We take the WHO/UN baseline for your country and sex, then
+              birth — your baseline life expectancy. We take the UN World Population Prospects 2024 baseline for your country and sex, then
               apply a <strong>factor model</strong> drawn from peer-reviewed cohort studies: each habit carries an
               evidence-based effect size (e.g. regular exercise, never smoking, good sleep add years; heavy
               smoking, obesity and chronic high stress subtract them). Your answers move the baseline within
@@ -1192,7 +1193,7 @@ const LifeExpectancy = () => {
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Sources &amp; Methodology</p>
           <ul className="text-xs text-muted-foreground space-y-1 list-none">
             <li>WHO Global Health Observatory — life tables and mortality data, 2023</li>
-            <li>UN World Population Prospects 2023 — demographic projections</li>
+            <li>UN World Population Prospects 2024 — life expectancy at birth by country and sex, estimate for 2023</li>
             <li>Harvard T.H. Chan School of Public Health — Li et al., Circulation, 2018 (lifestyle and mortality)</li>
             <li>The Lancet — Global Burden of Disease Study 2023</li>
           </ul>

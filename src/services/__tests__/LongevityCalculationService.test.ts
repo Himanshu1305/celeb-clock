@@ -66,36 +66,37 @@ const ALL_HABIT_IDS = [
 // ─────────────────────────────────────────────────────────────────────────────
 // GROUP 1 — WHO Baseline
 // ─────────────────────────────────────────────────────────────────────────────
-// Baselines now from UN WPP 2024 (BIRTH_BASELINES); no conditional multiplier since default age=35 < 40
+// Baselines from UN WPP 2024, 2023 estimate (src/data/lifeExpectancyFacts.ts, fetched via OWID, audit S13);
+// no conditional multiplier since default age=35 < 40
 describe('Group 1 — UN WPP 2024 Baseline', () => {
-  it('male India → 71.2 (UN WPP 2024)', () => {
+  it('male India → 70.5 (UN WPP 2024)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'male', country: 'India' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(71.2);
+    expect(r.baselineLifeExpectancy).toBe(70.5);
   });
 
-  it('female India → 74.4 (UN WPP 2024)', () => {
+  it('female India → 73.6 (UN WPP 2024)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'female', country: 'India' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(74.4);
+    expect(r.baselineLifeExpectancy).toBe(73.6);
   });
 
-  it('male United States → 74.5 (UN WPP 2024)', () => {
+  it('male United States → 76.9 (UN WPP 2024)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'male', country: 'United States' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(74.5);
+    expect(r.baselineLifeExpectancy).toBe(76.9);
   });
 
-  it('female United States → 80.5 (UN WPP 2024)', () => {
+  it('female United States → 81.8 (UN WPP 2024)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'female', country: 'United States' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(80.5);
+    expect(r.baselineLifeExpectancy).toBe(81.8);
   });
 
-  it('male United Kingdom → 79.5 (UN WPP 2024)', () => {
+  it('male United Kingdom → 79.4 (UN WPP 2024)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'male', country: 'United Kingdom' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(79.5);
+    expect(r.baselineLifeExpectancy).toBe(79.4);
   });
 
-  it('unknown country male → 73.3 (UN WPP 2024 GLOBAL_DEFAULT)', () => {
+  it('unknown country male → 70.5 (UN WPP 2024 world, GLOBAL_DEFAULT)', () => {
     const r = calculateLongevity(makeQuiz({ gender: 'male', country: 'UnknownCountry' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.baselineLifeExpectancy).toBe(73.3);
+    expect(r.baselineLifeExpectancy).toBe(70.5);
   });
 });
 
@@ -273,7 +274,7 @@ describe('Group 5 — Total Forecast Sanity Checks', () => {
   });
 
   it('worst case (all negative, India male) → combined penalty capped at −20 (S12)', () => {
-    // health would be −38.5; S12 caps health+genetic at −20 → 71.2 − 20 = 51.2
+    // health would be −38.5; S12 caps health+genetic at −20 → 70.5 − 20 = 50.5
     const r = calculateLongevity(makeQuiz({
       smoking: 'heavy',
       drinking: 'heavy',
@@ -285,7 +286,7 @@ describe('Group 5 — Total Forecast Sanity Checks', () => {
       stress: 9,
       bmi: 35,
     }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.totalForecast).toBeCloseTo(51.2, 1);
+    expect(r.totalForecast).toBeCloseTo(50.5, 1);
   });
 
   it('totalForecast extreme best-case (Japan female, all habits, best family) → below 120', () => {
@@ -540,27 +541,27 @@ describe('Test Group A — Conditional baseline correctness', () => {
     expect(r.totalForecast).toBeLessThan(80);
   });
 
-  it('A2: India male age 45 → conditional HIGH[40], base ≈74.0, totalForecast > 70', () => {
+  it('A2: India male age 45 → conditional HIGH[40], base ≈73.3, totalForecast > 70', () => {
     const r = calculateLongevity(
       makeQuiz({ gender: 'male', country: 'India' }),
       DEFAULT_PILLAR1, DEFAULT_PILLAR2,
       birthdateForAgeG(45),
     );
     expect(r.isConditionalBaseline).toBe(true);
-    // 71.2 × 1.040 = 74.048 → 74.0
-    expect(r.baselineLifeExpectancy).toBeCloseTo(74.0, 0);
+    // 70.5 × 1.040 = 73.32 → ≈73.3
+    expect(r.baselineLifeExpectancy).toBeCloseTo(73.3, 0);
     expect(r.totalForecast).toBeGreaterThan(70);
   });
 
-  it('A3: India male age 65 → conditional HIGH[60], base ≈79.2, totalForecast > 65', () => {
+  it('A3: India male age 65 → conditional HIGH[60], base ≈78.5, totalForecast > 65', () => {
     const r = calculateLongevity(
       makeQuiz({ gender: 'male', country: 'India' }),
       DEFAULT_PILLAR1, DEFAULT_PILLAR2,
       birthdateForAgeG(65),
     );
     expect(r.isConditionalBaseline).toBe(true);
-    // 71.2 × 1.113 = 79.2
-    expect(r.baselineLifeExpectancy).toBeCloseTo(79.2, 0);
+    // 70.5 × 1.113 = 78.47 → ≈78.5
+    expect(r.baselineLifeExpectancy).toBeCloseTo(78.5, 0);
     expect(r.totalForecast).toBeGreaterThan(65);
   });
 
@@ -1038,19 +1039,19 @@ describe('EDGE — Edge case tests', () => {
   });
 
   it('EDGE3: India male age 40 → interpolated multiplier (S12), between birth baseline and HIGH[40]', () => {
-    // S12: 1.0 at 35 → 1.040 at 45 ⇒ 1.020 at 40 → 71.2 × 1.020 = 72.6 (no 2.8-year jump at 40)
+    // S12: 1.0 at 35 → 1.040 at 45 ⇒ 1.020 at 40 → 70.5 × 1.020 = 71.9 (no 2.8-year jump at 40)
     const r = calculateLongevity(
       makeQuiz({ gender: 'male', country: 'India' }),
       DEFAULT_PILLAR1, DEFAULT_PILLAR2,
       birthdateForAgeG(40),
     );
     expect(r.isConditionalBaseline).toBe(true);
-    expect(r.baselineLifeExpectancy).toBeCloseTo(72.6, 1);
+    expect(r.baselineLifeExpectancy).toBeCloseTo(71.9, 1);
   });
 
   it('EDGE4 (S12): base changes smoothly across the 40th birthday (was a 2.8-year jump)', () => {
     const at = (age: number) => calculateLongevity(makeQuiz({ gender: 'male', country: 'India' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2, birthdateForAgeG(age)).baselineLifeExpectancy;
-    expect(at(35)).toBe(71.2); // raw birth baseline up to 35
+    expect(at(35)).toBe(70.5); // raw birth baseline up to 35
     for (const a of [38, 39, 40, 41, 49, 50, 59, 60]) {
       expect(Math.abs(at(a + 1) - at(a))).toBeLessThan(0.6);
     }
@@ -1067,7 +1068,7 @@ describe('EDGE — Edge case tests', () => {
   });
 
   it('EDGE5: Japan female has higher baseline and totalForecast than Japan male (same age, same inputs)', () => {
-    // Japan male birth=81.5, female birth=87.5; no conditional (age 35 < 40)
+    // Japan male birth=81.7, female birth=87.7 (WPP 2024); no conditional (age 35 < 40)
     const male   = calculateLongevity(makeQuiz({ gender: 'male',   country: 'Japan' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
     const female = calculateLongevity(makeQuiz({ gender: 'female', country: 'Japan' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
     expect(female.baselineLifeExpectancy).toBeGreaterThan(male.baselineLifeExpectancy);
@@ -1190,36 +1191,36 @@ function dobForAge(yearsAgo: number): string {
 }
 
 describe('FM1–FM5 — calculateBaseForecast', () => {
-  it('FM1: male India age~30 → 71.2 + 1.5 = 72.7', () => {
-    // age=30 < 40 → no conditional multiplier; base = 71.2
+  it('FM1: male India age~30 → 70.5 + 1.5 = 72.0', () => {
+    // age=30 < 40 → no conditional multiplier; base = 70.5
     const fc = calculateBaseForecastPure(dobForAge(30), 'male', 'India');
-    expect(fc).toBe(72.7);
+    expect(fc).toBe(72.0);
   });
 
-  it('FM2: female India age~30 → 74.4 + 1.5 = 75.9', () => {
+  it('FM2: female India age~30 → 73.6 + 1.5 = 75.1', () => {
     const fc = calculateBaseForecastPure(dobForAge(30), 'female', 'India');
-    expect(fc).toBe(75.9);
+    expect(fc).toBe(75.1);
   });
 
-  it('FM3: male United States age~30 → 74.5 + 1.5 = 76.0', () => {
+  it('FM3: male United States age~30 → 76.9 + 1.5 = 78.4', () => {
     const fc = calculateBaseForecastPure(dobForAge(30), 'male', 'United States');
-    expect(fc).toBe(76.0);
+    expect(fc).toBe(78.4);
   });
 
   it('FM4: female Japan age~45 → conditional multiplier applied (HIGH bracket)', () => {
-    // birth baseline Japan female = 87.5 (> 70, HIGH set)
+    // birth baseline Japan female = 87.7 (WPP 2024; > 70, HIGH set)
     // dobForAge(45) → age=44 or 45, both in bracket=40 (avoids age-50 boundary)
-    // bracket=40, HIGH[40]=1.040 → conditional = round(87.5*1.040*10)/10 = 91.0
-    // forecast = 91.0 + 1.5 = 92.5 (conditional multiplier is applied — higher than birth baseline 87.5)
+    // bracket=40, HIGH[40]=1.040 → conditional = round(87.7*1.040*10)/10 = 91.2
+    // forecast = 91.2 + 1.5 = 92.7 (conditional multiplier is applied — higher than birth baseline 87.7)
     const fc = calculateBaseForecastPure(dobForAge(45), 'female', 'Japan');
-    expect(fc).toBe(92.5);
+    expect(fc).toBe(92.7);
     // Verify the multiplier actually lifted the base above the birth baseline
-    expect(fc).toBeGreaterThan(87.5 + 1.5);
+    expect(fc).toBeGreaterThan(87.7 + 1.5);
   });
 
-  it('FM5: unknown country → global default 73.3 + 1.5 = 74.8', () => {
+  it('FM5: unknown country → global default 70.5 + 1.5 = 72.0', () => {
     const fc = calculateBaseForecastPure(dobForAge(30), 'male', 'Atlantis');
-    expect(fc).toBe(74.8);
+    expect(fc).toBe(72.0);
   });
 });
 

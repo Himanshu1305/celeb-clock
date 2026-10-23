@@ -4,6 +4,8 @@ import { SEO } from '@/components/SEO';
 import { WESTERN_ZODIAC_PROFILES } from '@/data/astrologicalData';
 import type { WesternZodiacProfile } from '@/data/astrologicalData';
 import { calculateWesternZodiac } from '@/utils/celebrityCalculations';
+import { getTarotBirthCards, MAJOR_ARCANA } from '@/data/tarotData';
+import { describeBirthCardWorking } from '@/lib/tarot/birthCard';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
@@ -14,35 +16,29 @@ const SIGN_ORDER = [
   'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces',
 ];
 
-// Life Path number → Major Arcana card concept. This is the traditional
-// numerology-to-tarot mapping (Life Path n → the n-th Major Arcana card).
-const LIFE_PATH_TAROT: { num: number; card: string; concept: string }[] = [
-  { num: 1, card: 'The Magician', concept: 'Manifestation, willpower, and turning ideas into action.' },
-  { num: 2, card: 'The High Priestess', concept: 'Intuition, patience, and quiet inner knowing.' },
-  { num: 3, card: 'The Empress', concept: 'Creativity, abundance, and self-expression.' },
-  { num: 4, card: 'The Emperor', concept: 'Structure, stability, and disciplined authority.' },
-  { num: 5, card: 'The Hierophant', concept: 'Tradition, learning, and shared belief.' },
-  { num: 6, card: 'The Lovers', concept: 'Relationships, values, and meaningful choices.' },
-  { num: 7, card: 'The Chariot', concept: 'Willpower, focus, and victory through control.' },
-  { num: 8, card: 'Strength', concept: 'Courage, patience, and gentle mastery of instinct.' },
-  { num: 9, card: 'The Hermit', concept: 'Introspection, wisdom, and inner guidance.' },
-  { num: 11, card: 'Justice', concept: 'Balance, truth, and karmic cause and effect (Master 11).' },
-  { num: 22, card: 'The Fool', concept: 'New beginnings, faith, and infinite potential (Master 22).' },
-  { num: 33, card: 'The World', concept: 'Completion, fulfilment, and wholeness (Master 33).' },
+// Audit N7: birth-card table for the ONE sitewide method (Mary K. Greer: month + day + year,
+// digits added until 22 or less). Pairs follow Greer: 10–21 reduce to their digit sum,
+// 19 → 10 → 1, and 22 = The Fool (0) with The Emperor (4).
+const BIRTH_CARD_PAIRS: { total: string; cards: number[] }[] = [
+  { total: '10', cards: [10, 1] }, { total: '11', cards: [11, 2] }, { total: '12', cards: [12, 3] },
+  { total: '13', cards: [13, 4] }, { total: '14', cards: [14, 5] }, { total: '15', cards: [15, 6] },
+  { total: '16', cards: [16, 7] }, { total: '17', cards: [17, 8] }, { total: '18', cards: [18, 9] },
+  { total: '19', cards: [19, 10, 1] }, { total: '20', cards: [20, 2] }, { total: '21', cards: [21, 3] },
+  { total: '22', cards: [0, 4] }, { total: '1–9 (single digit)', cards: [] },
 ];
 
 const FAQS = [
   {
     q: 'What is my tarot card by date of birth?',
-    a: 'There are two tarot cards linked to your date of birth. The first is your zodiac tarot card — every one of the 12 sun signs corresponds to a specific card in the Major Arcana. The second is your Life Path tarot card, found by reducing your birth date to a single Life Path number and matching it to the numbered Major Arcana card. Together they describe your outer nature and your deeper life theme.',
+    a: 'Your tarot card by date of birth is your tarot birth card, found with the standard method popularised by Mary K. Greer and used by most birth card calculators: add your birth month, day and full year as numbers, then add the digits of the total until you reach 22 or less. For 31 August 1996: 8 + 31 + 1996 = 2035, and 2 + 0 + 3 + 5 = 10, so the birth card is Wheel of Fortune (10), paired with The Magician (1 + 0 = 1). Separately, each zodiac sign also has a traditional Major Arcana correspondence, which describes your sun sign rather than your birth date.',
   },
   {
     q: 'How is a tarot card assigned to my zodiac sign?',
-    a: 'Each of the 22 Major Arcana cards has long been associated with an astrological sign, planet, or element in the Western esoteric tradition. Aries links to The Emperor, Taurus to The Hierophant, Scorpio to Death, and so on. BornClock uses this established correspondence — it never invents cards — so entering your date of birth returns the Major Arcana card tied to your sun sign.',
+    a: 'Each of the 22 Major Arcana cards has long been associated with an astrological sign, planet, or element in the Western esoteric tradition. Aries links to The Emperor, Taurus to The Hierophant, Scorpio to Death, and so on. BornClock uses this established correspondence — it never invents cards. This zodiac card is a different thing from your birth card: it is the same for everyone born under your sun sign.',
   },
   {
-    q: 'What is a Life Path tarot card?',
-    a: 'Your Life Path number is calculated by reducing the digits of your full date of birth to a single number (keeping master numbers 11, 22 and 33). That number maps to a numbered card in the Major Arcana — for example Life Path 1 to The Magician and Life Path 9 to The Hermit. It reflects the overarching lesson and journey of your life.',
+    q: 'Why do I have two (or three) birth cards?',
+    a: 'If your total is between 10 and 21, that card is your birth card and the sum of its two digits gives its pair — 18 (The Moon) pairs with 9 (The Hermit). A total of 19 gives three cards: The Sun (19), Wheel of Fortune (10) and The Magician (1). A total of 22 is The Fool, paired with The Emperor (4). If the total reduces straight to a single digit, that one card is your birth card on its own.',
   },
   {
     q: 'Does the Death card mean something bad?',
@@ -57,6 +53,7 @@ const FAQS = [
 function TarotCalculator() {
   const [dob, setDob] = React.useState('');
   const [profile, setProfile] = React.useState<WesternZodiacProfile | null>(null);
+  const [birth, setBirth] = React.useState<{ names: string[]; working: string } | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -66,6 +63,11 @@ function TarotCalculator() {
       if (year && month && day) {
         const zodiac = calculateWesternZodiac(day, month);
         setProfile(WESTERN_ZODIAC_PROFILES[zodiac.sign] ?? null);
+        const bc = getTarotBirthCards(day, month, year);
+        setBirth({
+          names: bc.cards.map(c => `${c.name} (${c.number})`),
+          working: describeBirthCardWorking(day, month, year),
+        });
       }
     }
   };
@@ -77,7 +79,7 @@ function TarotCalculator() {
         Find Your Tarot Card by Date of Birth — Free
       </h3>
       <p className="text-sm text-[#6E5AA6] mb-4">
-        Enter your date of birth to reveal your zodiac's Major Arcana card and its meaning.
+        Enter your date of birth to reveal your tarot birth card (standard month + day + year method).
       </p>
       <input
         type="date"
@@ -88,18 +90,23 @@ function TarotCalculator() {
                    text-base bg-white mb-4 focus:outline-none focus:border-[#6E5AA6]/30"
         aria-label="Enter your date of birth"
       />
-      {profile && (
+      {birth && (
         <div data-testid="tarot-result"
              className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-5">
-          <div className="text-sm text-gray-500 mb-1">
-            {profile.sign} {profile.symbol} · {profile.element} · {profile.date_range}
+          <div className="text-sm text-gray-500 mb-1">Your tarot birth card</div>
+          <div data-testid="tarot-birth-card" className="text-2xl font-black text-[#6E5AA6] mb-1">
+            {birth.names[0]}
           </div>
-          <div className="text-2xl font-black text-[#6E5AA6] mb-2">
-            {profile.tarot_card}
-          </div>
-          <p className="text-sm text-gray-700 leading-relaxed mb-4">
-            {profile.tarot_meaning}.
-          </p>
+          {birth.names.length > 1 && (
+            <p className="text-sm text-gray-700 mb-1">Paired with {birth.names.slice(1).join(' and ')}</p>
+          )}
+          <p className="text-xs text-gray-500 mb-4">{birth.working}</p>
+          {profile && (
+            <p data-testid="tarot-zodiac-card" className="text-sm text-gray-700 leading-relaxed mb-4">
+              Separate tradition: your sun sign, {profile.sign} {profile.symbol}, corresponds
+              to <strong>{profile.tarot_card}</strong> — {profile.tarot_meaning.charAt(0).toLowerCase() + profile.tarot_meaning.slice(1)}.
+            </p>
+          )}
           <a href={`/birthday-report?dob=${dob}`}
              className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-[#0E2238]">
@@ -116,7 +123,7 @@ export function TarotByDateOfBirthArticle() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Tarot Card by Date of Birth — Find Your Card',
-    description: 'Find your tarot card by date of birth — your zodiac Major Arcana card and your Life Path tarot card, with meanings.',
+    description: 'Find your tarot birth card by date of birth using the standard month + day + year method, plus the Major Arcana card for each zodiac sign.',
     author: { '@type': 'Organization', name: 'BornClock' },
     publisher: { '@type': 'Organization', name: 'BornClock' },
     mainEntityOfPage: 'https://bornclock.com/articles/tarot-card-by-date-of-birth/',
@@ -146,14 +153,14 @@ export function TarotByDateOfBirthArticle() {
       seo={(
         <SEO
           title="Tarot Card by Date of Birth — Find Your Card | BornClock"
-          description="Find your tarot card by date of birth — your zodiac's Major Arcana card and your Life Path tarot card, with meanings. Free tarot-by-birthday guide."
+          description="Find your tarot birth card by date of birth with the standard month + day + year method, plus the Major Arcana card for each zodiac sign. Free tarot-by-birthday guide."
           canonicalUrl="/articles/tarot-card-by-date-of-birth"
           ogType="article"
         />
       )}
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Tarot by Date of Birth' }}
       footer={{
-        tagline: 'Find your tarot card by date of birth — your zodiac Major Arcana card and your Life Path tarot card.',
+        tagline: 'Find your tarot birth card by date of birth — month + day + year, reduced to the Major Arcana.',
         nav: [
           { label: 'Mystic Corner', to: '/mystic-corner' },
           { label: 'Numerology', to: '/numerology' },
@@ -167,14 +174,13 @@ export function TarotByDateOfBirthArticle() {
       h1="Tarot Card by Date of Birth — Find Your Tarot Card"
       lead={(
         <>
-          Your date of birth is linked to two distinct tarot cards, both drawn from the 22
-          cards of the <strong>Major Arcana</strong> — the powerful, archetypal images at the
-          heart of every tarot deck. The first is your <strong>zodiac tarot card</strong>:
-          each of the 12 sun signs corresponds to one Major Arcana card in the Western esoteric
-          tradition. The second is your <strong>Life Path tarot card</strong>, found by reducing
-          your birth date to a single Life Path number and matching it to a numbered Major
-          Arcana card. Together they describe your outward nature and the deeper theme of your
-          life's journey.
+          Your <strong>tarot birth card</strong> comes from one of the 22 cards of the
+          <strong> Major Arcana</strong> — the archetypal images at the heart of every tarot
+          deck. BornClock uses the standard method popularised by tarot author Mary K. Greer
+          and used by most birth card calculators: add your birth month, day and full year,
+          then reduce the total to a number of 22 or less. Most people get a pair of cards.
+          Separately, each zodiac sign has its own traditional Major Arcana card, which
+          describes your sun sign rather than your exact birth date.
         </>
       )}
     >
@@ -186,10 +192,11 @@ export function TarotByDateOfBirthArticle() {
         <article className="max-w-3xl mx-auto px-4 py-10">
 
           <p className="text-gray-700 leading-relaxed mb-6">
-            BornClock does not invent these pairings. Every zodiac tarot card below comes from the
-            long-established correspondence between the signs and the Major Arcana — the same
-            system used in classic esoteric tarot. Enter your date of birth in the calculator and
-            you will instantly see your sun sign's card and what it means.
+            BornClock does not invent these pairings. The birth card follows Mary K. Greer's
+            published method, and every zodiac card below comes from the long-established
+            correspondence between the signs and the Major Arcana used in classic esoteric
+            tarot. Enter your date of birth in the calculator to see your birth card and how it
+            was worked out.
           </p>
 
           <TarotCalculator />
@@ -205,11 +212,12 @@ export function TarotByDateOfBirthArticle() {
             for reflection, not a forecast of events.
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
-            Your second birth card comes from numerology. Reduce every digit of your date of birth
-            to a single <strong>Life Path number</strong> (master numbers 11, 22 and 33 are kept
-            as they are), then match that number to its Major Arcana card. Where your zodiac card
-            speaks to your temperament, your Life Path card speaks to the overarching lesson you
-            are here to learn.
+            Your birth card itself comes from your full date of birth. Add the month, day and
+            year as numbers — 31 August 1996 gives 8 + 31 + 1996 = 2035 — then add the digits
+            (2 + 0 + 3 + 5 = 10) and keep going until the result is 22 or less. That number is
+            your <strong>birth card</strong>; reducing it once more gives its pair. Where your
+            zodiac card speaks to your sun sign's temperament, your birth card is specific to
+            your birth date.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Tarot Card for Every Zodiac Sign</h2>
@@ -246,45 +254,48 @@ export function TarotByDateOfBirthArticle() {
             </table>
           </div>
 
-          <h2 className="text-2xl font-black text-gray-900 mb-4">Life Path Tarot Card by Number</h2>
+          <h2 className="text-2xl font-black text-gray-900 mb-4">Tarot Birth Card Pairs by Number</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
-            Your Life Path number points to a second birth card. Reduce your date of birth to a
-            single digit (keeping master numbers) and read across to find your Life Path tarot
-            card and the concept it carries.
+            Once you have reduced month + day + year to 22 or less, read across to find your
+            birth card and its pair.
           </p>
-          <div className="overflow-x-auto mb-8" tabIndex={0} role="region" aria-label="Life Path tarot card by number">
-            <table data-testid="life-path-tarot-table" className="w-full text-sm border-collapse">
+          <div className="overflow-x-auto mb-8" tabIndex={0} role="region" aria-label="Tarot birth card pairs by number">
+            <table data-testid="birth-card-table" className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-[#6E5AA6]/10 text-[#6E5AA6]">
-                  <th className="text-left px-3 py-2 font-bold">Life Path</th>
-                  <th className="text-left px-3 py-2 font-bold">Major Arcana Card</th>
-                  <th className="text-left px-3 py-2 font-bold">Concept</th>
+                  <th className="text-left px-3 py-2 font-bold">Reduced total</th>
+                  <th className="text-left px-3 py-2 font-bold">Birth card</th>
+                  <th className="text-left px-3 py-2 font-bold">Paired with</th>
                 </tr>
               </thead>
               <tbody>
-                {LIFE_PATH_TAROT.map((row, i) => (
-                  <tr key={row.num} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="px-3 py-2 font-bold text-[#6E5AA6]">Life Path {row.num}</td>
-                    <td className="px-3 py-2 font-semibold text-gray-900">{row.card}</td>
-                    <td className="px-3 py-2 text-gray-600">{row.concept}</td>
+                {BIRTH_CARD_PAIRS.map((row, i) => (
+                  <tr key={row.total} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <td className="px-3 py-2 font-bold text-[#6E5AA6]">{row.total}</td>
+                    <td className="px-3 py-2 font-semibold text-gray-900">
+                      {row.cards.length ? `${MAJOR_ARCANA[row.cards[0]].name} (${MAJOR_ARCANA[row.cards[0]].number})` : 'That single card (The Magician to The Hermit)'}
+                    </td>
+                    <td className="px-3 py-2 text-gray-600">
+                      {row.cards.length ? row.cards.slice(1).map(n => `${MAJOR_ARCANA[n].name} (${MAJOR_ARCANA[n].number})`).join(' and ') : 'Stands alone'}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p className="text-gray-700 leading-relaxed mb-6">
-            Reading the two cards side by side is where birth-date tarot becomes genuinely useful.
-            A Scorpio with a Life Path 1, for instance, blends the transformative energy of
-            <strong> Death</strong> with the initiating force of <strong>The Magician</strong> — a
-            person who repeatedly reinvents themselves and builds something new from the ashes.
+            Reading the pair together is where birth-date tarot becomes genuinely useful. A
+            birth card of <strong>Death</strong> (13) paired with <strong>The Emperor</strong> (4),
+            for instance, describes a person who repeatedly reinvents themselves and then builds
+            something solid from each new start.
           </p>
 
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-6 text-center text-white my-8">
             <h2 className="text-xl font-black mb-2">Want both of your birth cards at once?</h2>
             <p className="text-[#6E5AA6] mb-4 text-sm">
-              BornClock reads your date of birth for your zodiac tarot card, Life Path number,
-              Vedic Rashi, lucky stone and more — all in one free profile.
+              BornClock reads your date of birth for your tarot birth card, zodiac sign, Life Path
+              number, Vedic Rashi, lucky stone and more — all in one free profile.
             </p>
             <a href="/birthday-report"
                className="inline-block bg-white text-[#6E5AA6] font-black px-6 py-2.5
@@ -300,8 +311,8 @@ export function TarotByDateOfBirthArticle() {
             human experience, from the fresh start of The Magician to the deep endings of Death
             and the completion of The World. Because these archetypes are timeless, they map
             naturally onto the signs of the zodiac and the numbers of numerology, which is exactly
-            why your date of birth can point to a card. Whether you read your zodiac card, your
-            Life Path card, or both, the aim is the same: a moment of honest self-reflection, not
+            why your date of birth can point to a card. Whether you read your birth card, your
+            zodiac card, or both, the aim is the same: a moment of honest self-reflection, not
             a fixed prophecy about what is to come.
           </p>
 
