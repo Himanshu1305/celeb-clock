@@ -16,9 +16,10 @@ const TYPE_STYLE: Record<FestivalType, string> = {
   purnima: 'bg-sky-100 text-sky-800 border-sky-300',
   amavasya: 'bg-slate-200 text-slate-700 border-slate-300',
   sankranti: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+  eclipse: 'bg-zinc-800 text-zinc-50 border-zinc-700',
 };
 const TYPE_LABEL: Record<FestivalType, string> = {
-  festival: 'Festival', vrat: 'Vrat', ekadashi: 'Ekadashi', purnima: 'Purnima', amavasya: 'Amavasya', sankranti: 'Sankranti',
+  festival: 'Festival', vrat: 'Vrat', ekadashi: 'Ekadashi', purnima: 'Purnima', amavasya: 'Amavasya', sankranti: 'Sankranti', eclipse: 'Eclipse',
 };
 const GMONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -37,12 +38,12 @@ export default function FestivalsPage() {
   if (yearParam && !yearValid) return <Navigate to="/festivals" replace />;
   if (!cal) return null;
 
-  const major = cal.festivals.filter(f => f.type === 'festival' || f.type === 'vrat');
+  const major = cal.festivals.filter(f => f.type === 'festival' || f.type === 'vrat' || f.type === 'eclipse');
   const byMonth: Festival[][] = Array.from({ length: 12 }, () => []);
   for (const f of cal.festivals) byMonth[Number(f.dateISO.slice(5, 7)) - 1].push(f);
 
   const title = `Hindu Festival & Vrat Calendar ${year} — Dates | BornClock`;
-  const description = `Computed Hindu festival and vrat calendar for ${year}: Diwali, Holi, Navratri, Janmashtami, every Ekadashi, Purnima, Amavasya, Pradosh, Sankashti and the 12 Sankrantis — with exact dates derived from real Moon/Sun positions.`;
+  const description = `Computed Hindu festival and vrat calendar for ${year}: Diwali, Holi, Navratri, Janmashtami, Chhath, Onam, Pongal and other major festivals, every named Ekadashi, Purnima, Amavasya, Pradosh, Sankashti and the 12 Sankrantis — dates derived from real Moon/Sun positions.`;
 
   const years = [year - 1, year, year + 1, year + 2].filter(y => y >= MIN_YEAR && y <= MAX_YEAR);
 
@@ -57,7 +58,15 @@ export default function FestivalsPage() {
     },
     {
       question: 'What is the difference between a festival, a vrat and Ekadashi?',
-      answer: 'A festival is a celebration (e.g. Diwali, Holi). A vrat is an observance/fast (e.g. Ekadashi, Pradosh, Karwa Chauth). Ekadashi — the 11th tithi of each fortnight — is the most frequent Vishnu fasting day, so it is listed separately.',
+      answer: 'A festival is a celebration (e.g. Diwali, Holi). A vrat is an observance/fast (e.g. Ekadashi, Pradosh, Karwa Chauth). Ekadashi — the 11th tithi of each fortnight — is the most frequent Vishnu fasting day, so it is listed separately, with its traditional name (Kamada, Mohini, Nirjala and so on).',
+    },
+    {
+      question: 'Why does one calendar say "Kartika Amavasya" and another "Ashwina Amavasya"?',
+      answer: 'There are two ways of naming the lunar months. In the amanta system (used in Gujarat, Maharashtra and South India) a month ends on the new moon; in the purnimanta system (used in most of North India) it ends on the full moon. The bright half (Shukla paksha) has the same month name in both, but the dark half (Krishna paksha) is named one month ahead in the purnimanta system — so Diwali’s new moon is Kartika Amavasya (purnimanta) and Ashwina Amavasya (amanta). It is the same day. We compute with amanta months and show both names for every Krishna-paksha day.',
+    },
+    {
+      question: 'Which festivals are included?',
+      answer: 'The major pan-Indian festivals and several regional ones (Lohri, Pongal, Baisakhi, Onam, Chhath, Vasant Panchami and others), plus every Ekadashi, Purnima, Amavasya, Pradosh, Sankashti and Sankranti. It is not an exhaustive list of every regional observance. Solar festivals follow the Sun’s sidereal ingress (Sankranti); Onam follows the Thiruvonam nakshatra in the Malayalam month Chingam. Solar and lunar eclipses are listed for 2026–2030, with whether each is visible from New Delhi.',
     },
   ];
 
@@ -70,7 +79,7 @@ export default function FestivalsPage() {
       footer={{ tagline: 'Computed Hindu festival & vrat calendar.', nav: [{ label: 'Daily Panchang', to: '/panchang' }, { label: 'Muhurat Finder', to: '/muhurat' }, { label: 'Rashifal', to: '/rashifal' }], note: 'Dates are computed from real sidereal positions; local Panchangs may differ by a day. Not a substitute for a priest’s muhurta.' }}
       eyebrow="Panchang · festivals & vrats"
       h1={`Hindu Festival & Vrat Calendar ${year}`}
-      lead="Every major festival, Ekadashi, Purnima, Amavasya, Pradosh, Sankashti and Sankranti for the year — with exact dates computed from the real sky, not a fixed table."
+      lead="The major Hindu festivals plus every Ekadashi, Purnima, Amavasya, Pradosh, Sankashti and Sankranti for the year — with exact dates computed from the real sky, not a fixed table."
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-4xl">
@@ -130,7 +139,7 @@ export default function FestivalsPage() {
           </div>
 
           <p className="text-xs text-muted-foreground mb-8">
-            Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) positions of the Sun and Moon and the classical amanta <TermTip id="paksha">paksha</TermTip>/tithi rules.{' '}
+            Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) positions of the Sun and Moon and the classical <TermTip id="paksha">paksha</TermTip>/tithi rules. Lunar months are computed amanta (new moon to new moon); Krishna-paksha days also show the purnimanta (North Indian) month name, which is one month ahead.{' '}
             <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
           </p>
 

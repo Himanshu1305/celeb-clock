@@ -20,6 +20,7 @@
  * Worker runtime.
  */
 import * as Astronomy from 'astronomy-engine';
+import { isPreciseOuterPlanet, preciseGeoVector } from './vsop87Outer';
 
 const RASHI_NAMES = ['Mesha','Vrishabha','Mithuna','Karka','Simha','Kanya','Tula','Vrischika','Dhanu','Makara','Kumbha','Meena'];
 const RASHI_MODALITY: Record<number, string> = { 0:'movable', 1:'fixed', 2:'dual', 3:'movable', 4:'fixed', 5:'dual', 6:'movable', 7:'fixed', 8:'dual', 9:'movable', 10:'fixed', 11:'dual' };
@@ -102,17 +103,26 @@ function getPlanetSiderealLongitude(planetName: string, time: Astronomy.AstroTim
     const ecl = Astronomy.Ecliptic(vec);
     return normalize360(normalize360(ecl.elon) - ayanamsa);
   }
-  const vec = Astronomy.GeoVector(planetName as Astronomy.Body, time, true);
+  const vec = geoVector(planetName, time);
   const ecl = Astronomy.Ecliptic(vec);
   return normalize360(normalize360(ecl.elon) - ayanamsa);
+}
+
+/** Apparent geocentric vector (EQJ). Jupiter and Saturn use the fuller VSOP87B
+ * series in ./vsop87Outer (astronomy-engine's own are truncated to ~10″). */
+function geoVector(planetName: string, time: Astronomy.AstroTime): Astronomy.Vector {
+  return isPreciseOuterPlanet(planetName)
+    ? preciseGeoVector(planetName, time)
+    : Astronomy.GeoVector(planetName as Astronomy.Body, time, true);
 }
 
 function isRetrograde(planetName: string, time: Astronomy.AstroTime): boolean {
   if (planetName === 'Sun' || planetName === 'Moon') return false;
   // K17: CENTRAL difference over ±3 h. The old forward difference (now → +24 h)
   // measured the motion ~12 h ahead, so the flag flipped ~12 h early at stations.
+  // Uses geoVector so Jupiter/Saturn take the fuller VSOP87B series.
   const H = 3 * 3600 * 1000;
-  const lonAt = (ms: number) => Astronomy.Ecliptic(Astronomy.GeoVector(planetName as Astronomy.Body, Astronomy.MakeTime(new Date(ms)), true)).elon;
+  const lonAt = (ms: number) => Astronomy.Ecliptic(geoVector(planetName, Astronomy.MakeTime(new Date(ms)))).elon;
   const lon1 = lonAt(time.date.getTime() - H);
   const lon2 = lonAt(time.date.getTime() + H);
   let diff = lon2 - lon1;

@@ -65,9 +65,11 @@ function crossing(planet: string, boundary: number, nearMs: number): number {
 
 // [planet, boundary longitude, Drik moment in UTC, tolerance minutes]
 // Tolerances: Sun/Rahu use astronomy-engine positions that agree with Swiss to <1″
-// (Rahu is the analytic mean node) → a few minutes. Jupiter/Saturn carry
-// astronomy-engine's own ephemeris error (Jupiter ~2″, Saturn ~9-10″ in 2025-27 vs
-// Swiss), which at their slow speeds is up to ~12 min (Jupiter) / ~50 min (Saturn).
+// (Rahu is the analytic mean node) → a few minutes. Jupiter/Saturn now use the
+// fuller VSOP87B series in engine/vsop87Outer (≤ ~2″ vs Swiss 1900–2050; before
+// that fix astronomy-engine's truncated series put Saturn 31–48 min and Jupiter up
+// to 12 min off these Drik moments). At their slow speeds — especially the
+// retrograde ingresses near a station — 2″ is still several minutes.
 const DRIK_EVENTS: Array<[string, number, string, number, string]> = [
   ['Rahu', 300, '2026-12-05T13:58Z', 3, 'Rahu → Makara 5 Dec 2026 07:28 PM IST'],
   ['Rahu', 330, '2025-05-18T11:00Z', 3, 'Rahu → Kumbha 18 May 2025 04:30 PM IST'],
@@ -81,13 +83,13 @@ const DRIK_EVENTS: Array<[string, number, string, number, string]> = [
   ['Sun', 240, '2026-12-16T04:59Z', 3, 'Dhanu Sankranti 16 Dec 2026 10:29 AM IST'],
   ['Sun', 270, '1980-01-14T14:40Z', 3, 'Makara Sankranti 14 Jan 1980 06:40 AM PST (Lancaster CA)'],
   ['Sun', 90, '2001-07-16T08:44Z', 3, 'Karka Sankranti 15 Jul 2001 29:44 (Durazno UY, UTC-3)'],
-  ['Jupiter', 120, '2026-10-31T07:20Z', 15, 'Jupiter → Magha/Simha 31 Oct 2026 12:50 PM IST'],
-  ['Jupiter', 93 + 1 / 3, '2026-06-18T16:02Z', 15, 'Jupiter → Pushya 18 Jun 2026 09:32 PM IST'],
-  ['Jupiter', 53 + 1 / 3, '2025-04-10T14:21Z', 15, 'Jupiter → Mrigashira 10 Apr 2025 09:21 AM CDT (Houston)'],
-  ['Saturn', 333 + 1 / 3, '2025-04-28T02:22Z', 50, 'Saturn → Uttara Bhadrapada 28 Apr 2025 07:52 AM IST'],
-  ['Saturn', 333 + 1 / 3, '2025-10-03T16:19Z', 50, 'Saturn (retro) → Purva Bhadrapada 3 Oct 2025 09:49 PM IST'],
-  ['Saturn', 0, '2027-06-03T00:53Z', 50, 'Saturn → Ashwini/Mesha 3 Jun 2027 06:23 AM IST'],
-  ['Saturn', 0, '2027-10-20T00:35Z', 50, 'Saturn (retro) → Revati/Meena 20 Oct 2027 06:05 AM IST'],
+  ['Jupiter', 120, '2026-10-31T07:20Z', 8, 'Jupiter → Magha/Simha 31 Oct 2026 12:50 PM IST'],
+  ['Jupiter', 93 + 1 / 3, '2026-06-18T16:02Z', 8, 'Jupiter → Pushya 18 Jun 2026 09:32 PM IST'],
+  ['Jupiter', 53 + 1 / 3, '2025-04-10T14:21Z', 8, 'Jupiter → Mrigashira 10 Apr 2025 09:21 AM CDT (Houston)'],
+  ['Saturn', 333 + 1 / 3, '2025-04-28T02:22Z', 10, 'Saturn → Uttara Bhadrapada 28 Apr 2025 07:52 AM IST'],
+  ['Saturn', 333 + 1 / 3, '2025-10-03T16:19Z', 10, 'Saturn (retro) → Purva Bhadrapada 3 Oct 2025 09:49 PM IST'],
+  ['Saturn', 0, '2027-06-03T00:53Z', 10, 'Saturn → Ashwini/Mesha 3 Jun 2027 06:23 AM IST'],
+  ['Saturn', 0, '2027-10-20T00:35Z', 10, 'Saturn (retro) → Revati/Meena 20 Oct 2027 06:05 AM IST'],
 ];
 
 describe('ingress moments match Drik Panchang', () => {
@@ -99,6 +101,38 @@ describe('ingress moments match Drik Panchang', () => {
       expect(Math.abs(at - drik) / 60_000).toBeLessThanOrEqual(tolMin);
     });
   }
+});
+
+describe('Jupiter and Saturn positions match Swiss Ephemeris (fuller VSOP87B series)', () => {
+  // Apparent geocentric TROPICAL longitude (true equinox of date) from pyswisseph
+  // 2.10.03, swe.calc_ut(jd, SATURN|JUPITER, FLG_SWIEPH), ephemeris files sepl_18
+  // (scratchpad engine-audit), run 24 Oct 2026. The 1908 instant is the one chart
+  // (of 2,000 random 1900–2050 charts) whose Saturn nakshatra/pada/D9 changed with
+  // the fix: Swiss puts Saturn at 346.6680° sidereal (Revati), the old engine 346.6665°.
+  const SWISS_TROPICAL: Array<[string, number, number]> = [
+    ['1908-06-19T02:59:54.480Z', 9.253459, 132.103986],
+    ['1950-01-01T00:00:00Z', 169.437441, 306.505360],
+    ['1975-07-01T00:00:00Z', 110.614737, 21.599530],
+    ['2000-01-01T12:00:00Z', 40.395663, 25.253087],
+    ['2025-04-28T02:22:00Z', 357.550704, 80.792801],
+    ['2027-10-20T00:35:00Z', 24.252531, 168.076760],
+    ['2050-01-01T00:00:00Z', 297.574273, 121.691535],
+  ];
+  for (const [iso, sat, jup] of SWISS_TROPICAL) {
+    it(`${iso.slice(0, 10)}: Saturn and Jupiter within 2.5″ of Swiss`, () => {
+      const d = new Date(iso);
+      const ay = getLahiriAyanamsa(d);
+      const err = (lon: number, ref: number) => Math.abs(((lon + ay - ref + 540) % 360) - 180) * 3600;
+      expect(err(getSiderealLongitude('Saturn', d), sat)).toBeLessThan(2.5);
+      expect(err(getSiderealLongitude('Jupiter', d), jup)).toBeLessThan(2.5);
+    });
+  }
+  it('1908-06-19 chart: Saturn in Revati pada 1 (D9 Dhanu), as Swiss gives', () => {
+    const c = generateFullChart(new Date('1908-06-19T02:59:54.480Z'), new Date('2026-10-23T00:00:00Z'), 0, 0);
+    expect(c.planets.Saturn.nakshatra).toBe('Revati');
+    expect(c.planets.Saturn.pada).toBe(1);
+    expect(c.planets.Saturn.navamsaSign).toBe('Dhanu');
+  });
 });
 
 describe('Sankranti day: midnight (ardha-ratri) rule, as Drik Panchang lists it', () => {

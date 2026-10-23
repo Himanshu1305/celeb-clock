@@ -58,23 +58,62 @@ function getNavamsaSign(siderealLongitude) {
   return { navamsaSignIndex, navamsaSign: RASHI_NAMES[navamsaSignIndex] };
 }
 
+// Oct 2026: kept in sync with src/lib/vedic/engine/vsop87Outer.ts — Jupiter and
+// Saturn from a fuller VSOP87B series (astronomy-engine's own is ~10-13" off Swiss).
+const VSOP87B_OUTER = require('../../src/lib/vedic/engine/vsop87Outer.data.json');
+function vsopSeries(formula, t, clampAngle) {
+  let tpower = 1, coord = 0;
+  for (const s of formula) {
+    let sum = 0;
+    for (const [a, b, c] of s) sum += a * Math.cos(b + t * c);
+    let incr = tpower * sum;
+    if (clampAngle) incr %= 2 * Math.PI;
+    coord += incr;
+    tpower *= t;
+  }
+  return coord;
+}
+function outerHelioVector(body, time) {
+  const [L, B, R] = VSOP87B_OUTER[body];
+  const t = time.tt / 365250;
+  const lon = vsopSeries(L, t, true), lat = vsopSeries(B, t, false), rad = vsopSeries(R, t, false);
+  const rc = rad * Math.cos(lat);
+  const x = rc * Math.cos(lon), y = rc * Math.sin(lon), z = rad * Math.sin(lat);
+  return new Astronomy.Vector(
+    x + 0.000000440360 * y - 0.000000190919 * z,
+    -0.000000479966 * x + 0.917482137087 * y - 0.397776982902 * z,
+    0.397776982902 * y + 0.917482137087 * z,
+    time,
+  );
+}
+function geoVector(planetName, time) {
+  if (planetName !== 'Jupiter' && planetName !== 'Saturn') return Astronomy.GeoVector(planetName, time, true);
+  const vec = Astronomy.CorrectLightTravel((lt) => {
+    const p = outerHelioVector(planetName, lt);
+    const e = Astronomy.HelioVector(Astronomy.Body.Earth, lt);
+    return new Astronomy.Vector(p.x - e.x, p.y - e.y, p.z - e.z, lt);
+  }, time);
+  vec.t = time;
+  return vec;
+}
+
 function getPlanetSiderealLongitude(planetName, time, ayanamsa) {
   if (planetName === 'Moon') {
     const vec = Astronomy.GeoMoon(time);
     const ecl = Astronomy.Ecliptic(vec);
     return normalize360(normalize360(ecl.elon) - ayanamsa);
   }
-  const vec = Astronomy.GeoVector(planetName, time, true);
+  const vec = geoVector(planetName, time);
   const ecl = Astronomy.Ecliptic(vec);
   return normalize360(normalize360(ecl.elon) - ayanamsa);
 }
 
 function isRetrograde(planetName, time) {
   if (planetName === 'Sun' || planetName === 'Moon') return false;
-  const vec1 = Astronomy.GeoVector(planetName, time, true);
+  const vec1 = geoVector(planetName, time);
   const lon1 = Astronomy.Ecliptic(vec1).elon;
   const laterTime = Astronomy.MakeTime(new Date(time.date.getTime() + 24*3600*1000));
-  const vec2 = Astronomy.GeoVector(planetName, laterTime, true);
+  const vec2 = geoVector(planetName, laterTime);
   const lon2 = Astronomy.Ecliptic(vec2).elon;
   let diff = lon2 - lon1;
   if (diff > 180) diff -= 360;
