@@ -38,6 +38,22 @@ export interface Panchang {
 
 function norm(x: number) { return ((x % 360) + 360) % 360; }
 
+const KARANA_MOVABLE = ['Bava', 'Balava', 'Kaulava', 'Taitila', 'Gara', 'Vanija', 'Vishti (Bhadra)'];
+const KARANA_FIXED_END = ['Shakuni', 'Chatushpada', 'Naga'];
+/**
+ * Name of a Karana from the 1-based `Panchang.karana` number (1..60, the
+ * half-tithi count from Shukla Pratipada). Half-tithi 1 is the fixed Kimstughna,
+ * 2..57 cycle through the seven movable Karanas from Bava, and 58..60 are the
+ * fixed Shakuni, Chatushpada, Naga (Krishna Chaturdashi 2nd half → Amavasya).
+ * E.g. Diwali morning 2026 (Krishna Chaturdashi, 2nd half) = 58 = Shakuni.
+ */
+export function karanaName(karana: number): string {
+  const k = karana - 1; // 0-based half-tithi index
+  if (k <= 0) return 'Kimstughna';
+  if (k >= 57) return KARANA_FIXED_END[Math.min(2, k - 57)];
+  return KARANA_MOVABLE[(k - 1) % 7];
+}
+
 /** Compute the five limbs at a given instant (default: evaluate the day at 06:00 local). */
 export function computePanchang(date: Date, sunMoon: SunMoonFn, tzOffsetHours = 5.5): Panchang {
   const { sun, moon } = sunMoon(date);
@@ -51,7 +67,11 @@ export function computePanchang(date: Date, sunMoon: SunMoonFn, tzOffsetHours = 
   const karana = Math.floor(diff / 6); // 0..59 (half-tithis)
 
   // Rahu Kalam: split the 06:00–18:00 local day into 8 parts; pick this weekday's part.
-  const wd = date.getUTCDay(); // date is treated as the local day's reference
+  // The Vedic day (vara) runs sunrise to sunrise at the place, so the weekday and
+  // civil date are those of the LOCAL clock at this instant — not UTC (a sunrise
+  // before 05:30 IST is still the previous day in UTC; round-2 audit T1).
+  const local = new Date(date.getTime() + tzOffsetHours * 3600 * 1000);
+  const wd = local.getUTCDay();
   const part = RAHU_PART[wd];
   const dayStartH = 6, partLen = 1.5; // (18-6)/8
   const rkStart = dayStartH + (part - 1) * partLen;
@@ -59,12 +79,11 @@ export function computePanchang(date: Date, sunMoon: SunMoonFn, tzOffsetHours = 
   const hhmm = (h: number) => `${String(Math.floor(h)).padStart(2, '0')}:${String(Math.round((h % 1) * 60)).padStart(2, '0')}`;
 
   return {
-    date: date.toISOString().slice(0, 10), weekday: WEEKDAY[wd],
+    date: local.toISOString().slice(0, 10), weekday: WEEKDAY[wd],
     tithi: within + 1, tithiName, paksha,
     nakshatra: NAK[nakIdx], nakshatraIndex: nakIdx,
     yoga: YOGA[yogaIdx], karana: karana + 1,
     rahuKalam: { start: hhmm(rkStart), end: hhmm(rkEnd) },
-    // tzOffsetHours reserved for future true-sunrise refinement
   } as Panchang;
 }
 
@@ -126,7 +145,7 @@ const PURPOSE_FOCUS: Record<MuhuratPurpose, string> = {
   business: 'starting a venture (favouring Wednesday for commerce, and the Pushya star)',
   travel: 'travel (favouring the mobile, gentle travel Nakshatras)',
   general: 'a general auspicious start',
-  marriage: 'marriage (favouring the classical Vivah stars and gentle weekdays, avoiding Tuesday/Sunday)',
+  marriage: 'marriage (favouring the classical Vivah stars and gentle weekdays, avoiding Tuesday/Sunday and the Pushya star, and excluding Kharmas, Chaturmas and Adhik months)',
   engagement: 'an engagement (the same gentle basis as marriage)',
   'griha-pravesh': 'a house-warming (favouring the "fixed" stars for settling into a home)',
   vehicle: 'buying a vehicle (favouring swift, gentle stars and avoiding Saturday)',
@@ -139,12 +158,72 @@ export function muhuratMethodology(purpose: MuhuratPurpose): string {
   return `How each date is chosen: we compute that day's Panchang — the five classical "limbs" — and score it for ${focus}. Specifically we check the Tithi (lunar day: favouring Dwitiya, Tritiya, Panchami, Saptami, Dashami, Ekadashi and Trayodashi; avoiding the "Rikta" days 4/9/14 and Amavasya), the Nakshatra (birth star of the day: Pushya is the supreme one for beginnings), the Yoga, and the weekday — then we flag the Rahu Kalam window to avoid within the day. A date is only shown as auspicious when it scores well across these; each date below lists the specific reasons it qualified. This is a general Panchang selection, not a personalised chart Muhurta — for marriage especially, a qualified astrologer also matches the couple's charts.`;
 }
 
+/**
+ * Seasonal bars for Vivah (round-2 audit T4). Marriages are not performed:
+ *  • in Kharmas — the Sun in sidereal Dhanu (Sagittarius) or Meena (Pisces);
+ *  • in Chaturmas — Devshayani Ekadashi (Ashadha Shukla 11) to Devutthana
+ *    Ekadashi (Kartika Shukla 11), amanta months;
+ *  • in an Adhik (intercalary) lunar month.
+ */
+export interface MuhuratSeason { kharmas: boolean; chaturmas: boolean; adhik: boolean; lunarMonth: string }
+
+const LUNAR_MONTHS = ['Chaitra', 'Vaishakha', 'Jyeshtha', 'Ashadha', 'Shravana', 'Bhadrapada', 'Ashwina', 'Kartika', 'Margashirsha', 'Pausha', 'Magha', 'Phalguna'];
+const DAY_MS = 86400000;
+
+/** Instant of the new moon before (dir −1) or after (dir +1) `t`, from the injected Sun/Moon. */
+function newMoonNear(t: number, dir: 1 | -1, sunMoon: SunMoonFn): number {
+  const e = (x: number) => { const v = sunMoon(new Date(x)); return norm(v.moon - v.sun); };
+  const e0 = e(t);
+  const target = dir === -1 ? e0 : 360 - e0; // elongation still to travel
+  const travelled = (x: number) => dir === -1 ? norm(e0 - e(x)) : norm(e(x) - e0);
+  let a = t, b = t;
+  for (let i = 0; i < 40; i++) {
+    b = a + dir * DAY_MS;
+    const tb = travelled(b);
+    if (tb >= target || tb < travelled(a)) break; // reached / wrapped past the conjunction
+    a = b;
+  }
+  for (let i = 0; i < 30; i++) {
+    const mid = (a + b) / 2;
+    const tm = travelled(mid);
+    if (tm < target && tm >= travelled(a)) a = mid; else b = mid;
+  }
+  return (a + b) / 2;
+}
+
+interface Lunation { start: number; end: number; name: string; adhik: boolean }
+/** The amanta lunar month containing `t` (named after the Sankranti inside it; none → Adhik). */
+export function lunarMonthAt(t: Date, sunMoon: SunMoonFn): Lunation {
+  const start = newMoonNear(t.getTime(), -1, sunMoon);
+  const end = newMoonNear(t.getTime(), 1, sunMoon);
+  const s0 = Math.floor(norm(sunMoon(new Date(start)).sun) / 30);
+  const s1 = Math.floor(norm(sunMoon(new Date(end)).sun) / 30);
+  const adhik = s0 === s1;
+  // Adhik months take the name of the following (regular) month.
+  const name = LUNAR_MONTHS[adhik ? (s1 + 1) % 12 : s1];
+  return { start, end, name, adhik };
+}
+
+export function muhuratSeason(p: Panchang, sun: number, month: Lunation): MuhuratSeason {
+  const sunSign = Math.floor(norm(sun) / 30);
+  const kharmas = sunSign === 8 || sunSign === 11; // Dhanu, Meena
+  const ti = (p.paksha === 'Shukla' ? 0 : 15) + p.tithi - 1; // 0..29
+  const m = month.name;
+  const chaturmas = !month.adhik && (
+    (m === 'Ashadha' && ti >= 10) || m === 'Shravana' || m === 'Bhadrapada' || m === 'Ashwina' || (m === 'Kartika' && ti <= 10)
+  ) || (month.adhik && ['Shravana', 'Bhadrapada', 'Ashwina', 'Kartika'].includes(m));
+  return { kharmas, chaturmas, adhik: month.adhik, lunarMonth: (month.adhik ? 'Adhik ' : '') + m };
+}
+
 /** Score one day's Panchang for a purpose. Higher = more auspicious. */
-export function scoreMuhurat(p: Panchang, purpose: MuhuratPurpose): { score: number; reasons: string[] } {
+export function scoreMuhurat(p: Panchang, purpose: MuhuratPurpose, season?: MuhuratSeason): { score: number; reasons: string[] } {
   const reasons: string[] = [];
   let score = 0;
   const goodNak = PURPOSE_NAK[purpose].includes(p.nakshatra);
-  if (p.nakshatra === 'Pushya') { score += 3; reasons.push('Pushya — the supreme Nakshatra for auspicious beginnings'); }
+  if (p.nakshatra === 'Pushya' && purpose === 'marriage') {
+    // Pushya, supreme for most beginnings, is classically excluded for Vivah.
+    score -= 3; reasons.push('Pushya is traditionally avoided for marriage (Vivah), though excellent for other beginnings');
+  } else if (p.nakshatra === 'Pushya') { score += 3; reasons.push('Pushya — the supreme Nakshatra for auspicious beginnings'); }
   else if (goodNak) { score += 2; reasons.push(`${p.nakshatra} is an auspicious Nakshatra for this`); }
   else { score -= 1; reasons.push(`${p.nakshatra} is not among the preferred Nakshatras`); }
 
@@ -153,10 +232,16 @@ export function scoreMuhurat(p: Panchang, purpose: MuhuratPurpose): { score: num
 
   if (purpose === 'business' && p.weekday === 'Wednesday') { score += 1; reasons.push('Wednesday favours trade & commerce'); }
   else if (FAVOUR_VARA[purpose]?.has(p.weekday)) { score += 1; reasons.push(`${p.weekday} is a favourable weekday for this`); }
-  if (p.weekday === 'Thursday' && p.nakshatra === 'Pushya') { score += 2; reasons.push('Guru-Pushya (Pushya on Thursday) — the most prized combination'); }
+  if (p.weekday === 'Thursday' && p.nakshatra === 'Pushya' && purpose !== 'marriage') { score += 2; reasons.push('Guru-Pushya (Pushya on Thursday) — the most prized combination'); }
   if (AVOID_VARA[purpose].has(p.weekday)) { score -= 1; reasons.push(`${p.weekday} is gently avoided for this`); }
 
   if (INAUSPICIOUS_YOGAS.has(p.yoga)) { score -= 2; reasons.push(`${p.yoga} Yoga is inauspicious`); }
+
+  if (purpose === 'marriage' && season) {
+    if (season.kharmas) { score -= 10; reasons.push('Kharmas (Sun in Dhanu or Meena) — marriages are not performed'); }
+    if (season.chaturmas) { score -= 10; reasons.push('Chaturmas (Devshayani to Devutthana Ekadashi) — marriages are not performed'); }
+    if (season.adhik) { score -= 10; reasons.push(`${season.lunarMonth} is an Adhik (intercalary) month — avoided for marriage`); }
+  }
 
   return { score, reasons };
 }
@@ -164,10 +249,16 @@ export function scoreMuhurat(p: Panchang, purpose: MuhuratPurpose): { score: num
 /** Find auspicious days for a purpose in the next `days` starting from `from`. */
 export function findMuhurats(purpose: MuhuratPurpose, from: Date, days: number, sunMoon: SunMoonFn, tzOffsetHours = 5.5): MuhuratDay[] {
   const out: MuhuratDay[] = [];
+  let lunation: Lunation | undefined;
   for (let i = 0; i < days; i++) {
     const d = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), from.getUTCDate() + i, 6 - tzOffsetHours, 0, 0)); // ~06:00 local
     const p = computePanchang(d, sunMoon, tzOffsetHours);
-    const { score, reasons } = scoreMuhurat(p, purpose);
+    let season: MuhuratSeason | undefined;
+    if (purpose === 'marriage') {
+      if (!lunation || d.getTime() < lunation.start || d.getTime() >= lunation.end) lunation = lunarMonthAt(d, sunMoon);
+      season = muhuratSeason(p, sunMoon(d).sun, lunation);
+    }
+    const { score, reasons } = scoreMuhurat(p, purpose, season);
     out.push({ ...p, score, reasons, auspicious: score >= 3 });
   }
   return out;
