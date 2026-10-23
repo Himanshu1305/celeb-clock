@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ReportLayout } from '@/components/central';
 import { DobInput } from '@/components/DobInput';
-import { BirthTimeVedicSection } from '@/components/BirthTimeVedicSection';
+import { BirthTimeVedicSection, type BirthTimeDetails } from '@/components/BirthTimeVedicSection';
 import { SEO } from '@/components/SEO';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { ShareMyProfileButton } from '@/components/ShareMyProfileButton';
@@ -83,6 +83,9 @@ const BirthdayReport = () => {
     ? `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     : '';
   const [gender, setGender] = useState('');
+  // Audit S1: the optional birth time + city entered below now feed the report itself
+  // (Moon sign, Nakshatra, chart-based Ratna from the Kundali engine).
+  const [birthDetails, setBirthDetails] = useState<BirthTimeDetails | null>(null);
   const [country, setCountry] = useState('India');
   const [gifterName, setGifterName] = useState('');
   const [personalMessage, setPersonalMessage] = useState('');
@@ -158,7 +161,10 @@ const BirthdayReport = () => {
         dob,
         gifterName.trim(),
         personalMessage.trim(),
-        country
+        country,
+        birthDetails?.city && /^\d{2}:\d{2}$/.test(birthDetails.time)
+          ? { time: birthDetails.time, place: { name: birthDetails.city.name, lat: birthDetails.city.lat, lon: birthDetails.city.lon } }
+          : null,
       );
 
       const slug = await saveReport(user?.id ?? null, data, isPremium, gender);
@@ -431,7 +437,7 @@ const BirthdayReport = () => {
                 </div>
 
                 {/* Optional birth time + city → accurate Vedic profile (Task 9). */}
-                <BirthTimeVedicSection dob={dob} />
+                <BirthTimeVedicSection dob={dob} onDetailsChange={setBirthDetails} />
 
                 {/* Gender */}
                 <div>

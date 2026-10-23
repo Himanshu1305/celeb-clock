@@ -6,17 +6,11 @@ import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { getTarotCardByLifePath, MAJOR_ARCANA, type TarotCard } from '@/data/tarotData';
 import { useReportPrice } from '@/hooks/useCurrency';
+import { lifePathNumber } from '@/lib/lifePath';
 
+/** Audit N1: the ONE shared sitewide Life Path function. */
 function calculateLifePath(day: number, month: number, year: number): number {
-  const sum =
-    String(day).split('').reduce((s, d) => s + parseInt(d), 0) +
-    String(month).split('').reduce((s, d) => s + parseInt(d), 0) +
-    String(year).split('').reduce((s, d) => s + parseInt(d), 0);
-  let n = sum;
-  while (n > 9 && n !== 11 && n !== 22 && n !== 33) {
-    n = String(n).split('').reduce((s, d) => s + parseInt(d), 0);
-  }
-  return n;
+  return lifePathNumber(day, month, year);
 }
 
 type TabKey = 'meaning' | 'love' | 'career' | 'health' | 'spirituality';

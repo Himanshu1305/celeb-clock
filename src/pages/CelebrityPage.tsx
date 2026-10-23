@@ -106,7 +106,7 @@ export function CelebrityPage() {
   // Nakshatra intentionally NOT computed from day/month — that approximation is
   // astronomically unreliable (see NakshatraPlaceholder). Requires birth time.
   const nakshatra = null;
-  const chinese = dob ? calculateChineseZodiac(dob.year) : null;
+  const chinese = dob ? (isFull ? calculateChineseZodiac(dob.year, dob.month, dob.day) : calculateChineseZodiac(dob.year)) : null;
   const lifePath = isFull ? calculateLifePathNumber(dob!.day, dob!.month, dob!.year) : null;
   const planetary = dob ? calculatePlanetaryAges(dob) : [];
 

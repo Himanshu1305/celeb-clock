@@ -1,3 +1,5 @@
+import { famousForLifePath } from './famousLifePaths';
+
 export interface NumerologyPersonData {
   name: string;
   born: string;
@@ -25,19 +27,6 @@ export interface NumerologyNumberData {
   seoTitle: string;
   seoDescription: string;
   seoKeywords: string;
-}
-
-function calcLP(dob: string): string {
-  const digits = dob.replace(/\D/g, '');
-  let parts: string[] = [];
-  let sum = digits.split('').reduce((a, d) => a + parseInt(d), 0);
-  const rawSum = sum;
-
-  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
-    sum = sum.toString().split('').reduce((a, d) => a + parseInt(d), 0);
-  }
-  parts.push(`${rawSum}`);
-  return parts.join(' → ') + ` → ${sum}`;
 }
 
 export const NUMEROLOGY_DATA: NumerologyNumberData[] = [
@@ -345,6 +334,13 @@ export const NUMEROLOGY_DATA: NumerologyNumberData[] = [
     seoKeywords: 'master number 33, life path 33, numerology 33 meaning, master teacher numerology, Einstein numerology',
   },
 ];
+
+// Audit N3: the famous lists are GENERATED from the one shared Life Path function
+// (src/lib/lifePath.ts) over a single dated list (src/data/famousLifePaths.ts), so a
+// person can never be filed under a number their own birth date does not give.
+for (const entry of NUMEROLOGY_DATA) {
+  entry.famousPeople = famousForLifePath(entry.number);
+}
 
 export function getNumerologyByNumber(n: number): NumerologyNumberData | undefined {
   return NUMEROLOGY_DATA.find(d => d.number === n);

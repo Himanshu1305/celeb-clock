@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { ReportLayout } from '@/components/central';
 import { FeedbackPrompt } from '@/components/FeedbackPrompt';
 import { ReaderComments } from '@/components/ReaderComments';
-import { getReport } from '@/services/BirthdayReportService';
+import { getReport, liveReportFigures, PERSONAL_YEAR_MEANINGS } from '@/services/BirthdayReportService';
 import { supabase } from '@/integrations/supabase/client';
 import type { BirthdayReportData } from '@/services/BirthdayReportService';
 import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
@@ -13,19 +13,25 @@ import { getTarotCardByLifePath } from '@/data/tarotData';
 import { getChineseZodiacDescription } from '@/data/chineseZodiacDescriptions';
 import { getVedicContext } from '@/data/birthdayPersonality';
 import { RASHI_RATNA_DATA } from '@/data/rashiRatnaData';
-import { calculateMoonSignAndNakshatra } from '@/data/moonSignData';
+import { MOON_SIGN_DATA } from '@/data/moonSignData';
+import { dateOnlyMoon, SIGN_EN } from '@/lib/reportVedic';
+import { VEDIC_SIGNS } from '@/services/VedicZodiacService';
+import { fetchOnThisDay, WIKIMEDIA_ATTRIBUTION } from '@/services/wikimediaOnThisDay';
+import { BirthTimeVedicSection } from '@/components/BirthTimeVedicSection';
+import { WEARING_RITUAL } from '@/lib/vedic/gemstones';
 import { calculateAllNameNumbers, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 import { calculateBiorhythm, getBiorhythmStatus } from '@/data/biorhythmData';
 import { getTopCompatibleSigns } from '@/data/compatibilityData';
 import { useReactToPrint } from 'react-to-print';
 import { getLifePath } from '@/data/numerologyLifePathData';
+import { lifePathFromIso } from '@/lib/lifePath';
 import { getNakshatra } from '@/data/nakshatraData';
 import { getRashi } from '@/data/rashiData';
 import { getRashiEssence } from '@/data/rashiEssence';
 import { getNakshatraEssence } from '@/data/nakshatraEssence';
 import { getMoonSignEssence, MOON_SIGN_EXPLAINER } from '@/data/moonSignEssence';
 import { getSoulUrge, getPersonality } from '@/data/numerologyNameData';
-import { getVedicBirthstone, SECTION_EXPLAINERS, CLOSING_SECTION } from '@/data/reportContentAdditions';
+import { SECTION_EXPLAINERS, CLOSING_SECTION } from '@/data/reportContentAdditions';
 import { PLANET_COUNT } from '@/lib/reportFacts';
 import { reportPrice, resolveCurrency, subscriptionPrice, CREDITS } from '@/lib/pricing';
 import { westernZodiacPlural, chineseZodiacPlural } from '@/lib/zodiacPlurals';
@@ -327,6 +333,9 @@ const ReportView = () => {
   const [copied, setCopied] = useState(false);
   const [activeZodiacTab, setActiveZodiacTab] = useState('western');
   const [liveCelebrities, setLiveCelebrities] = useState<any[] | null>(null);
+  // Audit S3: most dates have no hand-written events, so fill from the Wikipedia
+  // "On this day" feed the site already uses (/on-this-day). Hidden when empty.
+  const [liveEvents, setLiveEvents] = useState<Array<{ year: number; event: string }> | null>(null);
 
   const { user, isAdmin, profile } = useAuth();
   const { toast } = useToast();
@@ -415,6 +424,19 @@ const ReportView = () => {
       setLoading(false);
     });
   }, [slug]);
+
+  useEffect(() => {
+    const iso = (row?.report_data as any)?.recipientDob as string | undefined;
+    if (!iso) return;
+    const stored = (row?.report_data as any)?.historicalEvents;
+    if (Array.isArray(stored) && stored.length > 0) return;
+    const [, m, d] = iso.split('-').map(Number);
+    let cancelled = false;
+    fetchOnThisDay(m, d, 6)
+      .then(r => { if (!cancelled && r.events.length) setLiveEvents(r.events.map(e => ({ year: e.year, event: e.text }))); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [row?.report_data]);
 
   useEffect(() => {
     if (!row?.report_data?.recipientDob) return;
@@ -514,15 +536,36 @@ const ReportView = () => {
 
   const rd: BirthdayReportData = row.report_data;
   const {
-    recipientName: recipientNameRaw, gifterName, personalMessage, celebrities, historicalEvents,
-    westernZodiac, chineseZodiac, vedicRashi, zodiacComparison, compatibility,
-    lifePathNumber, lifePathData, personalYear2026, personalYearMeaning,
-    birthstone, generation, planetaryAges, planetaryFacts,
-    age, daysSinceBirth, daysUntilNextBirthday, nextBirthdayDate, dayOfWeekBorn,
+    recipientName: recipientNameRaw, gifterName, personalMessage, celebrities, historicalEvents: storedEvents,
+    westernZodiac, chineseZodiac, compatibility,
+    birthstone, generation, planetaryFacts,
+    dayOfWeekBorn,
   } = rd;
+  const historicalEvents = (storedEvents && storedEvents.length > 0 ? storedEvents : liveEvents) ?? [];
+  const eventsFromWikipedia = !(storedEvents && storedEvents.length > 0) && historicalEvents.length > 0;
+
+  // Audit S5/N2: date-dependent figures are computed NOW, not frozen at purchase.
+  const live = liveReportFigures(rd.recipientDob);
+  const { age, daysSinceBirth, daysUntilNextBirthday, nextBirthdayDate, planetaryAges } = live;
+  const personalYear2026 = live.personalYear;           // current calendar year (name kept for the JSX below)
+  const personalYearYear = live.personalYearYear;
+  const personalYearMeaning = PERSONAL_YEAR_MEANINGS[personalYear2026] ?? null;
+
+  // Audit S1: Moon sign / Nakshatra / Vedic Rashi come from the Kundali engine when the
+  // report has birth time + place; otherwise only what is certain for the whole date.
+  // The stored Sun-based "vedicRashi" of older reports is deliberately ignored.
+  const chartVedic = rd.vedic && rd.vedic.basis === 'birth-chart' ? rd.vedic : null;
+  const dateOnly = chartVedic ? null : dateOnlyMoon(rd.recipientDob);
+  const moonSignIndex: number | null = chartVedic ? chartVedic.moonSignIndex : dateOnly!.moonSignIndex;
+  const nakshatraNumber: number | null = chartVedic ? chartVedic.nakshatraNumber : dateOnly!.nakshatraNumber;
+  const vedicRashi = moonSignIndex != null ? VEDIC_SIGNS[moonSignIndex] : null;
+  const moonSignName = moonSignIndex != null ? SIGN_EN[moonSignIndex] : null;
   const recipientName = (recipientNameRaw || '').replace(/\b\w/g, c => c.toUpperCase());
 
-  const lpData = getLifePath(Number(lifePathNumber || 1));
+  // Audit N1: the ONE shared Life Path function, recomputed at view time so reports
+  // generated with the old full-digit method show the same number as every other page.
+  const lifePathNumber = lifePathFromIso(rd.recipientDob);
+  const lpData = getLifePath(lifePathNumber);
 
   const dob = new Date(rd.recipientDob + 'T12:00:00');
   const monthName = dob.toLocaleString('default', { month: 'long' });
@@ -986,6 +1029,12 @@ const ReportView = () => {
                   </div>
                 ))}
               </div>
+              {eventsFromWikipedia && (
+                <p className="text-[10px] text-gray-400 text-right mt-2">
+                  {WIKIMEDIA_ATTRIBUTION.text}{' '}
+                  <a href={WIKIMEDIA_ATTRIBUTION.licenseUrl} target="_blank" rel="noopener noreferrer" className="underline">{WIKIMEDIA_ATTRIBUTION.licenseName}</a>
+                </p>
+              )}
             </>
           )}
         </div>
@@ -1094,7 +1143,7 @@ const ReportView = () => {
             {[
               { label: 'Western Zodiac', value: westernZodiac?.name ?? '—', sub: westernZodiac?.element ?? '', icon: westernZodiac?.unicode ?? '♈︎', tab: 'western' },
               { label: 'Chinese Zodiac', value: `${chineseZodiac?.animal ?? '—'} ${chineseZodiac?.emoji ?? ''}`, sub: `${chineseZodiac?.element ?? ''} ${chineseZodiac?.yin_yang ?? ''}`, icon: '', tab: 'chinese' },
-              { label: 'Vedic Rashi', value: vedicRashi?.name ?? '—', sub: vedicRashi?.english ?? '', icon: vedicRashi?.symbol ?? '', tab: 'vedic' },
+              { label: 'Vedic Rashi (Moon)', value: vedicRashi?.name ?? '—', sub: vedicRashi?.english ?? 'Needs birth time', icon: vedicRashi?.symbol ?? '', tab: 'vedic' },
             ].map(card => (
               <button
                 key={card.label}
@@ -1287,8 +1336,10 @@ const ReportView = () => {
                 <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--navy)' }}>{'🕉︎'} Vedic Rashi</span>
               </div>
               {vedicRashi ? (() => {
-                const vedicCtx = getVedicContext(dob.getMonth() + 1, dob.getDate(), vedicRashi.english ?? westernZodiac?.name ?? 'Aries');
-                const rashiRatna = RASHI_RATNA_DATA.find(r => r.rashiEnglish === vedicRashi.name);
+                const vedicCtx = getVedicContext(dob.getMonth() + 1, dob.getDate(), vedicRashi.english);
+                // Rashi Ratna = the stone of the Moon-sign lord (was never shown: the lookup
+                // compared an English name with a Sanskrit one).
+                const rashiRatna = RASHI_RATNA_DATA.find(r => r.rashiEnglish === vedicRashi.english);
                 const rashiEntry = getRashi(vedicRashi.name) || getRashi(vedicRashi.english);
                 const richRashiEssence = getRashiEssence(vedicRashi.name) || getRashiEssence(vedicRashi.english);
                 return (
@@ -1298,7 +1349,7 @@ const ReportView = () => {
                     <span className="text-5xl">{vedicRashi.symbol}</span>
                     <div>
                       <h3 className="font-black text-2xl text-gray-900">{vedicRashi.name}</h3>
-                      <p className="text-sm text-gray-400">{vedicRashi.english} · Ruled by {vedicRashi.ruling_planet}</p>
+                      <p className="text-sm text-gray-400">{vedicRashi.english} Moon · Ruled by {vedicRashi.ruling_planet}</p>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-3">
@@ -1323,11 +1374,13 @@ const ReportView = () => {
                   ) : (
                     <p className="text-gray-700 text-sm leading-relaxed mb-3">{vedicRashi.description}</p>
                   )}
-                  {zodiacComparison && (
-                    <div className="bg-amber-50 rounded-xl px-4 py-3 text-xs text-amber-800">
-                      <strong>Western vs Vedic: </strong>{zodiacComparison.note}
-                    </div>
-                  )}
+                  <div className="bg-amber-50 rounded-xl px-4 py-3 text-xs text-amber-800">
+                    <strong>Western vs Vedic: </strong>
+                    Your Western sign ({westernZodiac?.name ?? '—'}) is where the Sun was; your Vedic Rashi is the sidereal (Lahiri) sign of the Moon
+                    {chartVedic
+                      ? <> at {chartVedic.birthTime} in {chartVedic.place.name}, from the same engine as our Kundali.</>
+                      : <> — the Moon stayed in {vedicRashi.english} for the whole of this date, so it is certain even without a birth time.</>}
+                  </div>
                   {(vedicRashi.traits ?? []).length > 0 && (
                     <div>
                       <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Core Traits</div>
@@ -1390,20 +1443,28 @@ const ReportView = () => {
                         ))}
                       </div>
                       <div className="text-xs italic" style={{ color: 'var(--muted)' }}>Wear on {rashiRatna.wearingDay} · {rashiRatna.fingerToWear}</div>
+                      <p className="text-xs leading-relaxed" style={{ color: 'var(--ink-soft)' }}>{rashiRatna.caution} This is the Moon-sign (Rashi) stone; the Ascendant-based choice is the more precise method — please consult a qualified astrologer before wearing any gemstone.</p>
                     </div>
                   )}
                 </>
                 );
-              })() : <p className="text-gray-400 text-sm">Data unavailable</p>}
+              })() : (
+                <div className="rounded-xl px-4 py-4 text-sm leading-relaxed" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)', color: 'var(--ink-soft)' }}>
+                  <p className="mb-2"><strong style={{ color: 'var(--navy)' }}>Your Vedic Rashi needs a birth time.</strong> In Vedic astrology the Rashi is the sign the <em>Moon</em> was in, and the Moon changes sign every two to three days — on {monthName} {dob.getDate()}, {dob.getFullYear()} it changed sign during the day, so the date alone cannot tell which one is yours.</p>
+                  <p>Add the birth time and city in the Moon Sign &amp; Nakshatra section below to see it — calculated with the same engine as our Kundali.</p>
+                </div>
+              )}
             </div>
           </div>
 
           {/* ── Moon Sign & Nakshatra (consolidated into §2 ASTROLOGY) ──────── */}
+          {/* Audit S1: real engine values when birth time + place are on the report;
+              otherwise only what is certain for the whole date — never a guess. */}
           {(() => {
-            const moonResult = calculateMoonSignAndNakshatra(dob);
-            const richNakshatra = getNakshatra(moonResult.nakshatraNumber);
-            const richNakshatraEssence = getNakshatraEssence(moonResult.nakshatraNumber);
-            const richMoonEssence = getMoonSignEssence(moonResult.moonSign);
+            const moonData = moonSignName ? MOON_SIGN_DATA[moonSignName] : null;
+            const richNakshatra = nakshatraNumber != null ? getNakshatra(nakshatraNumber) : null;
+            const richNakshatraEssence = nakshatraNumber != null ? getNakshatraEssence(nakshatraNumber) : undefined;
+            const richMoonEssence = moonSignName ? getMoonSignEssence(moonSignName) : undefined;
             return (
               <div className="mt-8 pt-8" style={{ borderTop: '1px solid var(--hairline)' }}>
                 <div className="mb-6">
@@ -1417,34 +1478,47 @@ const ReportView = () => {
                   <strong style={{ color: 'var(--navy)' }}>What is a Moon Sign?</strong>{' '}{MOON_SIGN_EXPLAINER.whatIsIt}{' '}{MOON_SIGN_EXPLAINER.whyMoon}
                 </div>
 
-                {/* Moon sign identity — essence renders FLUSH (no card padding) to
-                    match the Vedic Rashi section above; the p-5 card here made the
-                    body text look indented relative to every other section. */}
-                <div className="mb-4">
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="text-4xl">{moonResult.moonSignData.symbol}</div>
-                    <div>
-                      <p className="font-black text-xl" style={{ color: 'var(--navy)' }}>{moonResult.moonSign} Moon</p>
-                      <p className="text-xs" style={{ color: 'var(--ink-soft)' }}>{moonResult.moonSignData.element} · Ruled by {moonResult.moonSignData.rulingPlanet}</p>
+                {moonData && moonSignName ? (
+                  <div className="mb-4" data-testid="report-moon-sign">
+                    <div className="flex items-center gap-4 mb-3">
+                      <div className="text-4xl">{moonData.symbol}</div>
+                      <div>
+                        <p className="font-black text-xl" style={{ color: 'var(--navy)' }}>{moonSignName} Moon{vedicRashi ? ` · ${vedicRashi.name}` : ''}</p>
+                        <p className="text-xs" style={{ color: 'var(--ink-soft)' }}>{moonData.element} · Ruled by {moonData.rulingPlanet}</p>
+                      </div>
                     </div>
+                    {richMoonEssence ? (
+                      <div className="space-y-3">
+                        {richMoonEssence.split('\n\n').map((para, i) => (
+                          <p key={i} className="text-sm leading-relaxed" style={{ color: 'var(--ink)' }}>{para}</p>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm leading-relaxed" style={{ color: 'var(--ink)' }}>{moonData.personality}</p>
+                    )}
                   </div>
-                  {richMoonEssence ? (
-                    <div className="space-y-3">
-                      {richMoonEssence.split('\n\n').map((para, i) => (
-                        <p key={i} className="text-sm leading-relaxed" style={{ color: 'var(--ink)' }}>{para}</p>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm leading-relaxed" style={{ color: 'var(--ink)' }}>{moonResult.moonSignData.personality}</p>
-                  )}
-                </div>
+                ) : null}
 
-                <p className="text-xs italic text-center mb-4" style={{ color: 'var(--muted)' }}>Moon sign approximated from the Moon's position at date of birth — birth time is not collected.</p>
+                <p data-testid="report-moon-basis" className="text-xs italic text-center mb-4" style={{ color: 'var(--muted)' }}>
+                  {chartVedic
+                    ? `Calculated from the birth chart — ${chartVedic.birthTime} in ${chartVedic.place.name} (${chartVedic.timezone}), sidereal Lahiri, the same engine as our Kundali.`
+                    : moonSignName
+                      ? `No birth time was given. The Moon was in ${moonSignName} for the whole of this date in every time zone, so the Moon sign is certain${nakshatraNumber == null ? '; the Nakshatra changed during the day, so it needs the birth time' : ''}.`
+                      : 'No birth time was given, and the Moon changed sign during this date — so we do not guess the Moon sign or Nakshatra. Add the birth time and city below to see them.'}
+                </p>
 
+                {!chartVedic && (
+                  <div className="mb-6 no-print">
+                    <BirthTimeVedicSection dob={rd.recipientDob} />
+                  </div>
+                )}
+
+                {richNakshatra && (
+                <>
                 {/* Nakshatra identity — flush like Moon/Rashi (was a p-5 gold card
                     that indented the body); gold eyebrow + inner box keep emphasis. */}
-                <div className="mb-4">
-                  <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--gold)' }}>Birth Nakshatra #{moonResult.nakshatraNumber}</div>
+                <div className="mb-4" data-testid="report-nakshatra">
+                  <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--gold)' }}>Birth Nakshatra #{nakshatraNumber}{chartVedic ? ` · Pada ${chartVedic.pada}` : ''}</div>
                   <div className="flex items-center gap-4 mb-3">
                     <div className="text-4xl">{richNakshatra.symbol}</div>
                     <div>
@@ -1482,11 +1556,12 @@ const ReportView = () => {
                     </div>
                   ))}
                 </div>
+                </>
+                )}
 
-                <p className="text-xs italic text-center mb-4" style={{ color: 'var(--muted)' }}>Nakshatra approximated from lunar cycle position at date of birth.</p>
                 <div className="text-center no-print">
-                  <Link to="/moon-sign" className="text-xs underline" style={{ color: 'var(--navy)' }}>
-                    Full moon sign interpretation →
+                  <Link to="/kundali" className="text-xs underline" style={{ color: 'var(--navy)' }}>
+                    See the full Kundali (birth chart) →
                   </Link>
                 </div>
               </div>
@@ -1519,7 +1594,7 @@ const ReportView = () => {
               <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Life Path</span><span>Your core life purpose. Reduce the full birth date to one digit — e.g. 25 Jun 1966 → 2+5+6+1+9+6+6 = 35 → 3+5 = <strong>8</strong>. Master numbers (11, 22, 33) are kept, not reduced.</span></div>
               <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Soul Urge</span><span>Your heart's deepest desire. Built from the <em>vowels</em> of your full birth name (A=1, E=5, I=9, O=6, U=3).</span></div>
               <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Personality</span><span>How others perceive you. Built from the <em>consonants</em> of your birth name on the same Pythagorean table.</span></div>
-              <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Personal Year</span><span>Your current annual cycle. Add birth month + birth day + this calendar year, reduce to a digit. Resets each birthday.</span></div>
+              <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Personal Year</span><span>Your current annual cycle. Reduce the birth month, birth day and the current calendar year to single digits, add them and reduce to 1–9 (the same method as our Personal Year page). Runs January to December.</span></div>
             </div>
           </div>
 
@@ -1534,7 +1609,7 @@ const ReportView = () => {
           <div className="grid grid-cols-2 gap-3 mb-10">
             {[
               { label: 'Life Path', value: lifePathNumber, gold: true,  desc: 'Your core life purpose' },
-              { label: 'Personal Year', value: personalYear2026 ?? '—', gold: false, desc: 'Your 2026 energy' },
+              { label: 'Personal Year', value: personalYear2026 ?? '—', gold: false, desc: `Your ${personalYearYear} energy` },
             ].map(({ label, value, gold, desc }) => (
               <div key={label} className="rounded-xl p-4 text-center bb-num" style={{ background: gold ? 'var(--gold-tint)' : 'var(--panel)', border: `1px solid ${gold ? 'var(--gold-soft)' : 'var(--hairline)'}` }}>
                 <div className="text-3xl font-black mb-1" style={{ color: gold ? 'var(--gold)' : 'var(--navy)' }}>{value}</div>
@@ -1573,7 +1648,7 @@ const ReportView = () => {
             </div>
           </div>
 
-          {/* Personal Year 2026 */}
+          {/* Personal Year — current calendar year, computed at view time (audit N2) */}
           {personalYear2026 && (() => {
             const pyc = getPersonalYearContent(personalYear2026);
             return (
@@ -1583,7 +1658,7 @@ const ReportView = () => {
                     {personalYear2026}
                   </div>
                   <div>
-                    <div className="font-black text-amber-900 text-lg">{`Personal Year ${personalYear2026} in 2026`}</div>
+                    <div className="font-black text-amber-900 text-lg">{`Personal Year ${personalYear2026} in ${personalYearYear}`}</div>
                     {personalYearMeaning?.title && <div className="text-sm text-amber-700 font-medium">{personalYearMeaning.title}</div>}
                   </div>
                 </div>
@@ -1824,102 +1899,34 @@ const ReportView = () => {
                 </div>
               </div>
 
-              {/* Vedic Birthstone */}
-              {(() => {
-                const vbs = getVedicBirthstone(dob.getMonth() + 1);
+              {/* Vedic Ratna — audit S2: chosen from the BIRTH CHART (Ascendant lord /
+                  Yogakaraka, standard planet→stone mapping, same engine as /gemstones),
+                  never from the Gregorian birth month. Without a chart the section only
+                  explains why, and points to the Moon-sign stone shown in the Vedic tab. */}
+              {chartVedic?.gem ? (() => {
+                const g = chartVedic.gem!;
+                const ritual = WEARING_RITUAL[g.planet];
                 return (
-                  <div className="rounded-xl p-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
-                    <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--navy)' }}>Vedic Ratna — {vbs.stone}</div>
+                  <div data-testid="report-vedic-ratna" className="rounded-xl p-4" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
+                    <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--navy)' }}>Vedic Ratna — {g.gem} ({g.hindi})</div>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs mb-3" style={{ color: 'var(--ink-soft)' }}>
-                      <div><span className="font-semibold" style={{ color: 'var(--navy)' }}>Planet:</span> {vbs.planet}</div>
-                      <div><span className="font-semibold" style={{ color: 'var(--navy)' }}>Metal:</span> {vbs.metal}</div>
-                      <div><span className="font-semibold" style={{ color: 'var(--navy)' }}>Wear on:</span> {vbs.finger}</div>
-                      <div><span className="font-semibold" style={{ color: 'var(--navy)' }}>Best day:</span> {vbs.day}</div>
+                      <div><span className="font-semibold" style={{ color: 'var(--navy)' }}>Planet:</span> {g.planet}</div>
+                      <div><span className="font-semibold" style={{ color: 'var(--navy)' }}>Why:</span> {g.role}</div>
+                      {ritual && <div><span className="font-semibold" style={{ color: 'var(--navy)' }}>Metal:</span> {ritual.metal}</div>}
+                      {ritual && <div><span className="font-semibold" style={{ color: 'var(--navy)' }}>Wear on:</span> {ritual.finger}, {ritual.day}</div>}
                     </div>
-                    <p className="text-xs leading-relaxed mb-1" style={{ color: 'var(--ink-soft)' }}>{vbs.purpose}</p>
-                    <p className="text-xs italic" style={{ color: 'var(--muted)' }}>{vbs.note}</p>
+                    <p className="text-xs leading-relaxed mb-2" style={{ color: 'var(--ink-soft)' }}>{g.reason}</p>
+                    <p className="text-xs italic leading-relaxed" style={{ color: 'var(--muted)' }}>{chartVedic.gemDisclaimer ?? 'Traditional association only — not medical advice and not a guaranteed effect. Please consult a qualified astrologer before wearing any gemstone.'}</p>
                   </div>
                 );
-              })()}
-
-              {/* ── Jyotish Prescription ── */}
-              {(() => {
-                const vbs = getVedicBirthstone(dob.getMonth() + 1);
-                return (
-                  <>
-                    {vbs.jyotishRationale && (
-                      <div className="rounded-xl p-4" style={{ background: '#F1F6FA', border: '1px solid #D7E1EA' }}>
-                        <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--navy)' }}>Jyotish Prescription</div>
-                        <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{vbs.jyotishRationale}</p>
-                      </div>
-                    )}
-
-                    {/* ── Wearing Ritual ── */}
-                    {vbs.ritual && (
-                      <div className="rounded-xl p-4" style={{ background: '#FBF6EA', border: '1px solid rgba(184,134,47,0.2)' }}>
-                        <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: '#B8862F' }}>Wearing Ritual — Dharana Vidhi</div>
-                        <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{vbs.ritual}</p>
-                      </div>
-                    )}
-
-                    {/* ── Chandra Beej Mantra ── */}
-                    {vbs.mantra && (
-                      <div className="rounded-xl p-5 text-center" style={{ background: 'var(--ink)', border: '1px solid rgba(184,134,47,0.3)' }}>
-                        <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--gold)' }}>Chandra Beej Mantra</div>
-                        <div className="text-xl font-bold mb-2 leading-relaxed print:hidden" style={{ color: 'var(--gold)', fontFamily: 'inherit' }}>{vbs.mantra.devanagari}</div>
-                        <div className="text-sm font-medium mb-1 print:text-base print:font-semibold" style={{ color: '#E8D5A3' }}>{vbs.mantra.transliteration}</div>
-                        <div className="text-xs italic" style={{ color: 'rgba(255,255,255,0.5)' }}>Pronunciation: {vbs.mantra.pronunciation}</div>
-                        <div className="text-xs mt-3" style={{ color: 'rgba(255,255,255,0.6)' }}>Chant 108 times at the time of wearing · Repeat 11 times each Monday</div>
-                      </div>
-                    )}
-
-                    {/* ── Weight & Quality ── */}
-                    {vbs.weightAndQuality && (
-                      <div className="rounded-xl p-4" style={{ background: '#F1F6FA', border: '1px solid #D7E1EA' }}>
-                        <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--navy)' }}>Weight &amp; Quality — Maan aur Gunvatta</div>
-                        <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{vbs.weightAndQuality}</p>
-                      </div>
-                    )}
-
-                    {/* ── Jyotish Benefits ── */}
-                    {vbs.benefits && vbs.benefits.length > 0 && (
-                      <div>
-                        <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--navy)' }}>Jyotish Benefits — Chandra Balavardhan</div>
-                        <div className="grid sm:grid-cols-2 gap-2">
-                          {vbs.benefits.map((b: string, i: number) => (
-                            <div key={i} className="rounded-lg p-3 text-xs leading-relaxed" style={{ background: '#FBF6EA', color: '#3A4A5A', border: '1px solid rgba(184,134,47,0.15)' }}>
-                              <span style={{ color: '#B8862F' }}>● </span>{b}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* ── Ayurvedic Properties ── */}
-                    {vbs.ayurveda && (
-                      <div className="rounded-xl p-4" style={{ background: '#F1F6FA', border: '1px solid #D7E1EA' }}>
-                        <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--navy)' }}>Ayurvedic Properties — Dravyaguna</div>
-                        <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{vbs.ayurveda}</p>
-                      </div>
-                    )}
-
-                    {/* ── Cautions ── */}
-                    {vbs.cautions && (
-                      <div className="rounded-xl p-4" style={{ background: '#FFF8E7', borderLeft: '3px solid var(--gold)', border: '1px solid rgba(184,134,47,0.35)' }}>
-                        <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: '#B8862F' }}>Cautions &amp; Contraindications</div>
-                        <p className="text-xs leading-relaxed" style={{ color: '#3A4A5A' }}>{vbs.cautions}</p>
-                      </div>
-                    )}
-
-                    {/* ── Stone note (gemstone duality bridge) ── */}
-                    {vbs.stoneNote && (
-                      <div className="rounded-lg p-3" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)' }}>
-                        <p className="text-xs italic leading-relaxed" style={{ color: 'var(--ink-soft)' }}>{vbs.stoneNote}</p>
-                      </div>
-                    )}
-                  </>
-                );
-              })()}
+              })() : (
+                <div data-testid="report-vedic-ratna-note" className="rounded-xl p-4 text-xs leading-relaxed" style={{ background: 'var(--panel)', border: '1px solid var(--hairline)', color: 'var(--ink-soft)' }}>
+                  <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--navy)' }}>Vedic Ratna</div>
+                  In Jyotish a gemstone is chosen from the birth chart — the Ascendant (Lagna) lord or the Moon-sign lord — not from the month of birth, so the stone above is the Western birthstone only.
+                  {vedicRashi ? ' The Moon-sign (Rashi) stone is shown in the Vedic Rashi section.' : ' A chart-based stone needs the birth time and place.'}
+                  {' '}Please consult a qualified astrologer before wearing any gemstone.
+                </div>
+              )}
 
               {/* Meaning & Properties */}
               <div className="grid sm:grid-cols-2 gap-6">

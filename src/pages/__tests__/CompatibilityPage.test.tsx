@@ -28,11 +28,13 @@ describe('Compatibility Calculator — TC-COMPAT', () => {
   it('TC-COMPAT-P-02: Person A DOB input present', () => { renderCompat(); expect(q('compat-dob-a')).toBeTruthy(); });
   it('TC-COMPAT-P-03: Person B DOB input present', () => { renderCompat(); expect(q('compat-dob-b')).toBeTruthy(); });
   it('TC-COMPAT-P-04: calculate button present', () => { renderCompat(); expect(q('compat-calc-btn')).toBeTruthy(); });
-  it('TC-COMPAT-P-05: two DOBs → 3 dimension sections + nakshatra disclaimer', () => {
+  it('TC-COMPAT-P-05: two DOBs → 2 dimension sections + Rashi/Nakshatra disclaimer', () => {
     renderCompat();
     calc('1988-11-05', '1965-08-06');
     expect(q('compat-zodiac')).toBeTruthy();
-    expect(q('compat-rashi')).toBeTruthy();
+    // Audit M5: the "Vedic Rashi" dimension was the Western sun sign under a Sanskrit
+    // name (sun sign counted twice) — removed; a real Rashi needs birth time.
+    expect(q('compat-rashi')).toBeFalsy();
     expect(q('compat-lifepath')).toBeTruthy();
     // Nakshatra dimension removed (needs exact birth time) → disclaimer instead.
     expect(q('compat-nakshatra')).toBeFalsy();

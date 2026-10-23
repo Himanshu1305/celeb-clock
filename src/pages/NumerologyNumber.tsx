@@ -60,7 +60,7 @@ export default function NumerologyNumber() {
     { question: `Which planet rules Life Path ${data.number}?`, answer: `Life Path ${data.number} is associated with ${data.planet}.` },
     { question: `Is ${data.number} a master number?`, answer: data.isMasterNumber ? `Yes, ${data.number} is a Master Number in Pythagorean numerology, and is not reduced further.` : `No, ${data.number} is a standard Life Path number.` },
     { question: `What careers suit Life Path ${data.number}?`, answer: data.career },
-    { question: `How is Life Path ${data.number} calculated?`, answer: `Add all digits of your full birth date (day + month + year). ${data.isMasterNumber ? `If the reduction lands on ${data.number}, it is preserved as a master number rather than reduced further.` : `Keep adding the resulting digits until you reach a single digit — if that digit is ${data.number}, that is your Life Path.`}` },
+    { question: `How is Life Path ${data.number} calculated?`, answer: `Reduce the day, the month and the full year separately (keeping the master numbers 11, 22 and 33), add the three results, then reduce the total to a single digit — again keeping 11, 22 or 33. ${data.isMasterNumber ? `If the total lands on ${data.number}, it is preserved as a master number rather than reduced further.` : `If the final digit is ${data.number}, that is your Life Path.`}` },
   ];
 
   const otherNumbers = ALL_LIFE_PATH_NUMBERS.filter(n => n !== data.number);
@@ -185,7 +185,7 @@ export default function NumerologyNumber() {
                 <p className="font-semibold text-foreground text-sm mb-1">{p.name}</p>
                 <p className="text-xs text-muted-foreground mb-2">Born {p.born}</p>
                 <div className="bg-muted rounded-lg px-3 py-2 text-xs font-mono text-muted-foreground">
-                  {p.calculation} = <strong className="text-foreground">{p.result}</strong>
+                  {p.calculation} → Life Path <strong className="text-foreground">{p.result}</strong>
                 </div>
               </div>
             ))}
@@ -254,7 +254,7 @@ export default function NumerologyNumber() {
         </div>
 
         <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl text-sm text-blue-700 dark:text-blue-300">
-          <strong>About This Content:</strong> Numerology life path content uses the classical Pythagorean digit-sum method. Life path numbers are a cultural and symbolic system. The famous person calculations shown are independently verified using each person's documented birth date. Numerology is not a scientifically validated system for predicting personality or outcomes.
+          <strong>About This Content:</strong> Numerology life path content uses the classical Pythagorean method (day, month and year reduced separately; master numbers kept). Life path numbers are a cultural and symbolic system. The famous person calculations shown are independently verified using each person's documented birth date. Numerology is not a scientifically validated system for predicting personality or outcomes.
         </div>
       </div>
       </section>

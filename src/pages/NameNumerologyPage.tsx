@@ -161,14 +161,16 @@ export default function NameNumerologyPage() {
                             ))}
                           </div>
                         </div>
+                        {meaning.famousNames.length > 0 && (
                         <div>
-                          <p className="text-xs font-semibold text-gray-500 mb-2">Famous people with this number</p>
+                          <p className="text-xs font-semibold text-gray-500 mb-2">Famous names with this Expression number (name as written)</p>
                           <div className="flex flex-wrap gap-2">
                             {meaning.famousNames.map(n => (
                               <span key={n} className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">{n}</span>
                             ))}
                           </div>
                         </div>
+                        )}
                       </>
                     )}
                   </div>

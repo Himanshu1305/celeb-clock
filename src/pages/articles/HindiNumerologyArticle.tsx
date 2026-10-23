@@ -1,7 +1,29 @@
 import React from 'react';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { LIFE_PATH_EXTENDED } from '@/data/astrologicalData';
+import { lifePathWorking } from '@/lib/lifePath';
+
+// Audit N4 — Indian (Cheiro/Chaldean) convention:
+//   मूलांक (Moolank)   = the birth DAY reduced to 1–9            e.g. 28 → 2+8 = 10 → 1
+//   भाग्यांक (Bhagyank) = the FULL date (same as the Life Path)   e.g. 28-03-1973 → 6
+// Planet rulers follow the Indian scheme, where 4 = Rahu and 7 = Ketu (not the
+// Western Uranus/Neptune).
+const MOOLANK_PLANET: Record<number, string> = {
+  1: 'सूर्य (Sun)', 2: 'चंद्र (Moon)', 3: 'बृहस्पति / गुरु (Jupiter)', 4: 'राहु (Rahu)', 5: 'बुध (Mercury)',
+  6: 'शुक्र (Venus)', 7: 'केतु (Ketu)', 8: 'शनि (Saturn)', 9: 'मंगल (Mars)',
+};
+
+/** मूलांक: the birth day reduced to a single digit 1–9. */
+function moolank(day: number): number {
+  let n = day;
+  while (n > 9) n = String(n).split('').reduce((s, d) => s + Number(d), 0);
+  return n;
+}
+/** भाग्यांक: the full date of birth — the shared Life Path function. */
+function bhagyank(day: number, month: number, year: number): number {
+  return lifePathWorking(day, month, year).number;
+}
+const EXAMPLE = lifePathWorking(28, 3, 1973);
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
@@ -23,11 +45,11 @@ const HINDI_MEANINGS: Record<number, { title: string; desc: string }> = {
 const FAQS = [
   {
     q: 'अंकज्योतिष में मूलांक क्या है?',
-    a: 'मूलांक आपकी जन्मतिथि से निकाला गया सबसे महत्वपूर्ण अंक है। यह आपके स्वभाव, प्राकृतिक शक्तियों, चुनौतियों और जीवन के उद्देश्य को दर्शाता है। यह जन्म के समय तय हो जाता है और कभी नहीं बदलता।',
+    a: 'मूलांक आपके जन्म के दिन (तारीख) से निकाला गया अंक है — केवल दिन, महीना या वर्ष नहीं। जैसे 28 तारीख को जन्म: 2+8 = 10 → 1+0 = 1, यानी मूलांक 1। पूरी जन्मतिथि (दिन + महीना + वर्ष) से जो अंक निकलता है उसे भाग्यांक कहते हैं। दोनों जन्म के समय तय हो जाते हैं और कभी नहीं बदलते।',
   },
   {
-    q: 'जन्मतिथि से मूलांक कैसे निकालें?',
-    a: 'अपनी जन्मतिथि के दिन, महीने और वर्ष के सभी अंकों को जोड़कर एक अंक तक कम करें। उदाहरण के लिए 28 मार्च 1973 के लिए सभी अंक जोड़ने पर परिणाम एकल अंक में बदल जाता है, जो आपका मूलांक होता है।',
+    q: 'जन्मतिथि से मूलांक और भाग्यांक कैसे निकालें?',
+    a: 'मूलांक: केवल जन्म की तारीख के अंक जोड़ें — 28 मार्च 1973 के लिए 2+8 = 10 → 1, यानी मूलांक 1। भाग्यांक: दिन, महीना और वर्ष को अलग-अलग एक अंक तक घटाएं (11, 22, 33 को वैसे ही रखें), फिर जोड़ें — 28 → 1, मार्च → 3, 1973 → 20 → 2; 1 + 3 + 2 = 6, यानी भाग्यांक 6।',
   },
   {
     q: 'क्या अंकज्योतिष सटीक है?',
@@ -39,7 +61,7 @@ const FAQS = [
   },
   {
     q: 'BornClock मूलांक की गणना कैसे करता है?',
-    a: 'BornClock आपकी जन्मतिथि पर मानक पाइथागोरस पद्धति लागू करके मूलांक की गणना करता है। यह तुरंत आपका मूलांक बताता है और उसके साथ पूरी प्रोफ़ाइल — शासक ग्रह, तत्व, शक्तियां और जीवन उद्देश्य — प्रदान करता है।',
+    a: 'BornClock मूलांक जन्म की तारीख से और भाग्यांक (Life Path) पूरी जन्मतिथि से निकालता है — दिन, महीना और वर्ष अलग-अलग घटाकर, 11/22/33 को रखते हुए। भारतीय अंक ज्योतिष में अंक 4 का स्वामी राहु और अंक 7 का स्वामी केतु माना जाता है।',
   },
 ];
 
@@ -106,8 +128,9 @@ export function HindiNumerologyArticle() {
         <article className="max-w-3xl mx-auto px-4 py-10">
 
           <p className="text-gray-700 leading-relaxed mb-6">
-            आपका मूलांक आपकी जन्मतिथि के सभी अंकों को जोड़कर निकाला जाता है और यह जीवनभर
-            नहीं बदलता। व्यक्तित्व परीक्षणों के विपरीत, जो आपके उत्तरों पर निर्भर करते हैं,
+            भारतीय अंक ज्योतिष में दो मुख्य अंक होते हैं: <strong>मूलांक</strong>, जो केवल आपके जन्म
+            के दिन (तारीख) से निकलता है, और <strong>भाग्यांक</strong>, जो आपकी पूरी जन्मतिथि से निकलता है।
+            दोनों जीवनभर नहीं बदलते। व्यक्तित्व परीक्षणों के विपरीत, जो आपके उत्तरों पर निर्भर करते हैं,
             आपका मूलांक जन्म के समय ही तय हो जाता है — एक गणितीय स्थिरांक जो आपके मूल
             स्वभाव, शक्तियों, चुनौतियों और जीवन के सबक को दर्शाता है।
           </p>
@@ -128,24 +151,25 @@ export function HindiNumerologyArticle() {
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">मूलांक कैसे निकालें?</h2>
           <p className="text-gray-700 leading-relaxed mb-6">
-            अपना मूलांक निकालने के लिए जन्मतिथि के दिन, महीने और वर्ष के सभी अंकों को जोड़ें
-            और परिणाम को एकल अंक तक कम करें। उदाहरण के लिए <strong>28 मार्च 1973</strong>:
-            2+8+0+3+1+9+7+3 = 33 → 3+3 = 6, इसलिए मूलांक 6 होगा। इस प्रकार 1 से 9 तक
-            कोई भी अंक आपका मूलांक हो सकता है, और हर अंक का अपना विशेष अर्थ होता है।
+            <strong>मूलांक</strong> निकालने के लिए केवल जन्म की तारीख के अंक जोड़ें। उदाहरण के लिए
+            <strong> 28 मार्च 1973</strong>: 2+8 = 10 → 1+0 = {moolank(28)}, इसलिए मूलांक {moolank(28)} होगा।
+            <strong> भाग्यांक</strong> के लिए दिन, महीना और वर्ष अलग-अलग घटाकर जोड़ें:
+            28 → {EXAMPLE.dayReduced}, मार्च → {EXAMPLE.monthReduced}, 1973 → 20 → {EXAMPLE.yearReduced};
+            {' '}{EXAMPLE.dayReduced} + {EXAMPLE.monthReduced} + {EXAMPLE.yearReduced} = {EXAMPLE.total} → भाग्यांक {bhagyank(28, 3, 1973)}।
+            मूलांक 1 से 9 तक कोई भी अंक हो सकता है, और हर अंक का अपना विशेष अर्थ और स्वामी ग्रह होता है।
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">सभी मूलांक और उनका अर्थ</h2>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => {
-            const p = LIFE_PATH_EXTENDED[n];
             const hi = HINDI_MEANINGS[n];
-            if (!p || !hi) return null;
+            if (!hi) return null;
             return (
               <section key={n} id={`mulank-${n}`} className="mb-8">
                 <h3 className="text-xl font-black text-gray-900 mb-1">
                   मूलांक {n} — {hi.title}
                 </h3>
                 <div className="text-xs text-gray-500 mb-3">
-                  शासक ग्रह: {p.ruling_planet} · तत्व: {p.element}
+                  स्वामी ग्रह: {MOOLANK_PLANET[n]}
                 </div>
                 <p className="text-gray-700 leading-relaxed">{hi.desc}</p>
               </section>

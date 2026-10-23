@@ -13,6 +13,7 @@
  * through fear (Rule 7).
  */
 import { reduceToSingleDigit } from './personalYear';
+import { lifePathNumber } from './lifePath';
 import {
   chaldeanName, pythagoreanName, reduceKeepingMaster,
   type NameNumberResult,
@@ -126,12 +127,9 @@ export interface NameCorrectionResult {
   };
 }
 
-/** Life Path = reduce(day) + reduce(month) + reduce(year), master kept. */
+/** Life Path — the ONE shared sitewide function (src/lib/lifePath.ts, audit N1). */
 export function lifePathFromDob(year: number, month: number, day: number): number {
-  const d = reduceToSingleDigit(day);
-  const m = reduceToSingleDigit(month);
-  const y = reduceToSingleDigit(year);
-  return reduceKeepingMaster(d + m + y);
+  return lifePathNumber(day, month, year);
 }
 
 export function analyseNameCorrection(name: string, dob?: { year: number; month: number; day: number }): NameCorrectionResult {
@@ -214,6 +212,25 @@ export function sumDigitsOf(input: string): DigitStringResult {
   const sum = digits.reduce((s, d) => s + d, 0);
   const root = sum === 0 ? 0 : reduceToSingleDigit(sum);
   return { input: input.trim(), digits, sum, root, rootPlanet: NUMBER_PLANET[root] || '—', keyword: NUMBER_KEYWORD[root] || '' };
+}
+
+/**
+ * Mobile number → digits that are actually "the number" (audit N9): the India country
+ * code (+91 / 0091 / a leading 91 on a 12-digit number) and a leading trunk 0 on an
+ * 11-digit number are not part of the subscriber number, so they are not counted.
+ */
+export function mobileSubscriberDigits(input: string): string {
+  const raw = input.trim();
+  let digits = raw.replace(/\D/g, '');
+  if (raw.startsWith('+91') || digits.startsWith('0091')) digits = digits.replace(/^(00)?91/, '');
+  else if (digits.length === 12 && digits.startsWith('91')) digits = digits.slice(2);
+  else if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+  return digits;
+}
+
+/** Mobile-number reduction — country code / trunk prefix excluded. */
+export function sumMobileDigits(input: string): DigitStringResult {
+  return { ...sumDigitsOf(mobileSubscriberDigits(input)), input: input.trim() };
 }
 
 export const MOBILE_MEANINGS: Record<number, string> = {

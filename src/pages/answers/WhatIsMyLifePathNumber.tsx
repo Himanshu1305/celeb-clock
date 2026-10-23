@@ -9,7 +9,7 @@ export default function WhatIsMyLifePathNumber() {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "What is my Life Path number?", "acceptedAnswer": { "@type": "Answer", "text": "Your Life Path number is calculated by reducing your full date of birth to a single digit (or master number 11, 22, 33). Add all digits of your birth month, day, and year together, then reduce to a single digit." } },
+      { "@type": "Question", "name": "What is my Life Path number?", "acceptedAnswer": { "@type": "Answer", "text": "Your Life Path number is calculated by reducing your full date of birth to a single digit (or master number 11, 22, 33). Reduce your birth month, day and year separately (keeping 11, 22 and 33), add them, then reduce the total to a single digit or master number." } },
       { "@type": "Question", "name": "How do I calculate my Life Path number?", "acceptedAnswer": { "@type": "Answer", "text": "Example: July 14, 1990. Month: 7. Day: 1+4=5. Year: 1+9+9+0=19→1+9=10→1. Total: 7+5+1=13→1+3=4. Life Path 4." } },
       { "@type": "Question", "name": "What do the Life Path numbers mean?", "acceptedAnswer": { "@type": "Answer", "text": "Life Path 1=Leader, 2=Diplomat, 3=Creator, 4=Builder, 5=Explorer, 6=Nurturer, 7=Seeker, 8=Achiever, 9=Humanitarian. Master numbers 11=Intuitive Visionary, 22=Master Builder, 33=Master Teacher." } },
       { "@type": "Question", "name": "What are master numbers in numerology?", "acceptedAnswer": { "@type": "Answer", "text": "Master numbers (11, 22, 33) are not reduced further. They carry amplified energy: 11 is the Intuitive Visionary, 22 is the Master Builder with capacity to manifest grand visions, and 33 is the rare Master Teacher associated with unconditional service." } }
@@ -54,7 +54,7 @@ export default function WhatIsMyLifePathNumber() {
       <section className="section">
           <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
             <h2 className="text-xl font-bold text-gray-900">How to Calculate Your Life Path Number</h2>
-            <p>The Pythagorean method reduces your full date of birth to a single digit by adding all digits together repeatedly. Example: <strong>July 14, 1990 = 07/14/1990</strong></p>
+            <p>The Pythagorean method reduces the month, day and year of your birth separately (keeping master numbers 11, 22 and 33), adds them, and reduces the total. Example: <strong>July 14, 1990 = 07/14/1990</strong></p>
             <p>Step 1: Reduce each component: Month: 0+7 = 7 · Day: 1+4 = 5 · Year: 1+9+9+0 = 19 → 1+9 = 10 → 1+0 = 1</p>
             <p>Step 2: Add the results: 7 + 5 + 1 = 13 → 1+3 = <strong>4</strong></p>
             <p>Note: If at any stage you reach 11, 22, or 33 before reducing further, stop — these are Master Numbers with special significance.</p>
@@ -67,12 +67,12 @@ export default function WhatIsMyLifePathNumber() {
             <p><strong>5 — The Explorer:</strong> Freedom-loving, versatile, and magnetic. 5s crave change and experience, and often lead unconventional lives. Famous 5s: Beyoncé, Abraham Lincoln.</p>
             <p><strong>6 — The Nurturer:</strong> Responsible, caring, and devoted to family and community. 6s are natural healers and teachers. Famous 6s: Michael Jackson, Albert Einstein.</p>
             <p><strong>7 — The Seeker:</strong> Analytical, introspective, and drawn to the mysteries of existence. 7s are researchers and truth-seekers. Famous 7s: Elon Musk, Marilyn Monroe.</p>
-            <p><strong>8 — The Achiever:</strong> Ambitious, authoritative, and driven to manifest abundance. 8s understand power and often achieve great material or institutional success. Famous 8s: Warren Buffett, Nelson Mandela.</p>
+            <p><strong>8 — The Achiever:</strong> Ambitious, authoritative, and driven to manifest abundance. 8s understand power and often achieve great material or institutional success. Famous 8s: Nelson Mandela, Pablo Picasso.</p>
             <p><strong>9 — The Humanitarian:</strong> Compassionate, visionary, and idealistic. 9s are old souls with a calling to serve humanity. Famous 9s: Gandhi, Mother Teresa.</p>
 
             <h2 className="text-xl font-bold text-gray-900">Master Numbers: 11, 22, 33</h2>
             <p><strong>11</strong> is the intuitive visionary — highly sensitive, spiritually aware, and often called to inspire large numbers of people. The shadow side is anxiety and self-doubt. Famous 11s: Emma Watson, Bill Clinton.</p>
-            <p><strong>22</strong> is the master builder — combines the intuition of 11 with the practical ability of 4, giving them rare capacity to turn big visions into reality. Famous 22s: Will Smith, Oprah Winfrey (born with a 22 birth day).</p>
+            <p><strong>22</strong> is the master builder — combines the intuition of 11 with the practical ability of 4, giving them rare capacity to turn big visions into reality. Famous 22s: Will Smith, Paul McCartney.</p>
             <p><strong>33</strong> is the master teacher — the most spiritually evolved number, associated with unconditional love and selfless service. True 33s are exceptionally rare.</p>
 
             <h2 className="text-xl font-bold text-gray-900">Your Personal Year Number for 2026</h2>

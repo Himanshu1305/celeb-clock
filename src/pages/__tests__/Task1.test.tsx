@@ -52,10 +52,10 @@ describe('TC-NFIX', () => {
   it('TC-NFIX-P-04: compatibility page renders', () => {
     expect(() => renderCompatPage()).not.toThrow();
   });
-  it('TC-NFIX-P-05: compatibility shows 3 not 4 dimensions', () => {
+  it('TC-NFIX-P-05: compatibility shows only the 2 dimensions a date can give (audit M5)', () => {
     renderCompatPage();
     expect(document.body.textContent).not.toMatch(/four dimensions.*Nakshatra/i);
-    expect(document.body.textContent).toMatch(/three dimensions/i);
+    expect(document.body.textContent).toMatch(/two dimensions/i);
   });
   it('TC-NFIX-P-06: price on celeb page is 199 not 299', () => {
     renderCelebPage(VIRAT.slug);

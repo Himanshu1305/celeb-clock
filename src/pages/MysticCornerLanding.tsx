@@ -19,6 +19,7 @@ import { DobInput, type DobValue, parseDob } from '@/components/DobInput';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
+import { lifePathWorking } from '@/lib/lifePath';
 import {
   calculateWesternZodiac, calculateChineseZodiac, calculateLifePathNumber,
   LIFE_PATH_TRAITS, type ZodiacInfo,
@@ -30,10 +31,10 @@ type Tab = 'numerology' | 'western' | 'chinese';
 const SIGN_REPS: Array<[number, number]> = [[4, 5], [5, 5], [6, 5], [7, 5], [8, 5], [9, 5], [10, 5], [11, 5], [12, 5], [1, 5], [2, 5], [3, 5]];
 const SIGNS: ZodiacInfo[] = SIGN_REPS.map(([m, d]) => calculateWesternZodiac(d, m));
 
+/** Working for the shared sitewide Life Path method (src/lib/lifePath.ts, audit N1). */
 function lifePathCalc(day: number, month: number, year: number) {
-  const digits = `${year}${String(month).padStart(2, '0')}${String(day).padStart(2, '0')}`.split('').map(Number);
-  const sum = digits.reduce((a, b) => a + b, 0);
-  return { expr: `${digits.join(' + ')} = ${sum}`, sum };
+  const w = lifePathWorking(day, month, year);
+  return { expr: w.steps, sum: w.number };
 }
 
 export default function MysticCornerLanding() {
@@ -50,7 +51,7 @@ export default function MysticCornerLanding() {
   const lpTrait = LIFE_PATH_TRAITS[lifePath] ?? LIFE_PATH_TRAITS[9];
   const lpCalc = lifePathCalc(d, m, y);
   const western = calculateWesternZodiac(d, m);
-  const chinese = calculateChineseZodiac(y);
+  const chinese = calculateChineseZodiac(y, m, d);
 
   const [browseSign, setBrowseSign] = useState<string | null>(null);
   const shownSign = SIGNS.find(s => s.sign === (browseSign ?? western.sign)) ?? western;
@@ -177,8 +178,8 @@ export default function MysticCornerLanding() {
                     <strong>{lifePath}</strong>
                     <div><span>Life-path number</span><h3>{lpTrait.title}</h3><span>Symbolic interpretation</span></div>
                   </div>
-                  <div className="calculation">{lpCalc.expr} → {lifePath}</div>
-                  <p className="subtle">This convention adds every birth-date digit, then reduces the total while retaining the master numbers 11, 22 and 33. It does not predict your abilities or future.</p>
+                  <div className="calculation">{lpCalc.expr}</div>
+                  <p className="subtle">This convention reduces the day, month and year separately, adds them, then reduces the total — keeping the master numbers 11, 22 and 33 at each step. It does not predict your abilities or future.</p>
                 </div>
                 <div className="reflection">
                   <span className="eyebrow">A prompt, not a prescription</span>

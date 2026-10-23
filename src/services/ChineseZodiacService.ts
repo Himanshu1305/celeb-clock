@@ -1,5 +1,13 @@
-// Chinese New Year start dates (month, day) for Jan/Feb edge cases
+// Chinese New Year start dates (month, day) for Jan/Feb edge cases.
+// 1900–1923 and 2032–2049 added 23 Oct 2026 (audit N11) from the audit's reference
+// table (python `lunardate` / `lunar_python`), which matches every 1924–2031 entry below.
 const CHINESE_NEW_YEAR_DATES: Record<number, [number, number]> = {
+  1900: [1, 31], 1901: [2, 19], 1902: [2, 8], 1903: [1, 29],
+  1904: [2, 16], 1905: [2, 4], 1906: [1, 25], 1907: [2, 13],
+  1908: [2, 2], 1909: [1, 22], 1910: [2, 10], 1911: [1, 30],
+  1912: [2, 18], 1913: [2, 6], 1914: [1, 26], 1915: [2, 14],
+  1916: [2, 3], 1917: [1, 23], 1918: [2, 11], 1919: [2, 1],
+  1920: [2, 20], 1921: [2, 8], 1922: [1, 28], 1923: [2, 16],
   1924: [2, 5],  1925: [1, 24], 1926: [2, 13], 1927: [2, 2],
   1928: [1, 23], 1929: [2, 10], 1930: [1, 30], 1931: [2, 17],
   1932: [2, 6],  1933: [1, 26], 1934: [2, 14], 1935: [2, 4],
@@ -27,6 +35,11 @@ const CHINESE_NEW_YEAR_DATES: Record<number, [number, number]> = {
   2020: [1, 25], 2021: [2, 12], 2022: [2, 1],  2023: [1, 22],
   2024: [2, 10], 2025: [1, 29], 2026: [2, 17], 2027: [2, 6],
   2028: [1, 26], 2029: [2, 13], 2030: [2, 3],  2031: [1, 23],
+  2032: [2, 11], 2033: [1, 31], 2034: [2, 19], 2035: [2, 8],
+  2036: [1, 28], 2037: [2, 15], 2038: [2, 4], 2039: [1, 24],
+  2040: [2, 12], 2041: [2, 1], 2042: [1, 22], 2043: [2, 10],
+  2044: [1, 30], 2045: [2, 17], 2046: [2, 6], 2047: [1, 26],
+  2048: [2, 14], 2049: [2, 2],
 };
 
 const ANIMALS = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'] as const;
@@ -45,21 +58,22 @@ export interface ChineseZodiacResult {
 }
 
 const ANIMAL_DATA: Record<string, { emoji: string; traits: string[]; famous: string[]; description: string }> = {
-  Rat:     { emoji: '🐀', traits: ['Clever', 'Adaptable', 'Quick-witted', 'Resourceful'], famous: ['Mozart', 'Shakespeare', 'George Washington'], description: 'Rats are quick-witted, resourceful, and versatile. They are charming, imaginative, and good at finding practical solutions.' },
+  Rat:     { emoji: '🐀', traits: ['Clever', 'Adaptable', 'Quick-witted', 'Resourceful'], famous: ['William Shakespeare', 'King Charles III'], description: 'Rats are quick-witted, resourceful, and versatile. They are charming, imaginative, and good at finding practical solutions.' },
   Ox:      { emoji: '🐂', traits: ['Diligent', 'Reliable', 'Patient', 'Strong-willed'], famous: ['Barack Obama', 'Napoleon Bonaparte', 'Walt Disney'], description: 'Oxen are diligent, dependable, and determined. They work hard with great patience and rarely seek shortcuts.' },
   Tiger:   { emoji: '🐅', traits: ['Brave', 'Confident', 'Competitive', 'Unpredictable'], famous: ['Marilyn Monroe', 'Leonardo DiCaprio', 'Tom Cruise'], description: 'Tigers are brave, competitive, and unpredictable. They are charming and well-liked but can be stubborn too.' },
   Rabbit:  { emoji: '🐇', traits: ['Gentle', 'Elegant', 'Alert', 'Quick'], famous: ['Albert Einstein', 'Brad Pitt', 'Angelina Jolie'], description: 'Rabbits are gentle, elegant, and alert. They tend to be cautious and conservative but highly popular in social circles.' },
-  Dragon:  { emoji: '🐉', traits: ['Energetic', 'Fearless', 'Warm-hearted', 'Charismatic'], famous: ['Bruce Lee', 'John Lennon', 'Rihanna'], description: 'Dragons are energetic and fearless, seen as the luckiest zodiac sign. They are natural leaders who are passionate and determined.' },
-  Snake:   { emoji: '🐍', traits: ['Enigmatic', 'Intuitive', 'Introspective', 'Wise'], famous: ['Mahatma Gandhi', 'Abraham Lincoln', 'Bob Dylan'], description: 'Snakes are enigmatic, intuitive, and wise. They rely on gut feelings and can be deeply philosophical and spiritual.' },
+  Dragon:  { emoji: '🐉', traits: ['Energetic', 'Fearless', 'Warm-hearted', 'Charismatic'], famous: ['Bruce Lee', 'John Lennon', 'Rihanna', 'Abraham Lincoln'], description: 'Dragons are energetic and fearless, seen as the luckiest zodiac sign. They are natural leaders who are passionate and determined.' },
+  Snake:   { emoji: '🐍', traits: ['Enigmatic', 'Intuitive', 'Introspective', 'Wise'], famous: ['Mahatma Gandhi', 'Bob Dylan', 'Elizabeth I'], description: 'Snakes are enigmatic, intuitive, and wise. They rely on gut feelings and can be deeply philosophical and spiritual.' },
   Horse:   { emoji: '🐎', traits: ['Animated', 'Active', 'Energetic', 'Independent'], famous: ['Genghis Khan', 'Isaac Newton', 'Rembrandt'], description: 'Horses are animated, active, and energetic. They are free spirits who love to travel and hate constraints.' },
   Goat:    { emoji: '🐐', traits: ['Calm', 'Gentle', 'Creative', 'Sympathetic'], famous: ['Michelangelo', 'Bill Gates', 'Steve Jobs'], description: 'Goats are calm, gentle, and creative. They have a tender nature and are deeply connected to art and beauty.' },
-  Monkey:  { emoji: '🐒', traits: ['Witty', 'Intelligent', 'Mischievous', 'Curious'], famous: ['Leonardo da Vinci', 'Elizabeth I', 'Julius Caesar'], description: 'Monkeys are witty, intelligent, and mischievous. They are fast learners with excellent memories and love a good challenge.' },
-  Rooster: { emoji: '🐓', traits: ['Observant', 'Hardworking', 'Courageous', 'Honest'], famous: ['Beyoncé', 'Justin Timberlake', 'Roger Federer'], description: 'Roosters are observant, hardworking, and courageous. They are very observant and rarely miss things, always prepared and proud.' },
+  Monkey:  { emoji: '🐒', traits: ['Witty', 'Intelligent', 'Mischievous', 'Curious'], famous: ['Leonardo da Vinci', 'Justin Timberlake'], description: 'Monkeys are witty, intelligent, and mischievous. They are fast learners with excellent memories and love a good challenge.' },
+  Rooster: { emoji: '🐓', traits: ['Observant', 'Hardworking', 'Courageous', 'Honest'], famous: ['Beyoncé', 'Roger Federer'], description: 'Roosters are observant, hardworking, and courageous. They are very observant and rarely miss things, always prepared and proud.' },
   Dog:     { emoji: '🐕', traits: ['Loyal', 'Honest', 'Amiable', 'Kind'], famous: ['Donald Trump', 'Michael Jackson', 'Madonna'], description: 'Dogs are loyal, honest, and amiable. They are the most lovable zodiac sign — always there to support others.' },
-  Pig:     { emoji: '🐷', traits: ['Compassionate', 'Generous', 'Diligent', 'Sincere'], famous: ['Elton John', 'Arnold Schwarzenegger', 'Woody Allen'], description: 'Pigs are compassionate, generous, and diligent. They never harm others and are always ready to give everything to those in need.' },
+  Pig:     { emoji: '🐷', traits: ['Compassionate', 'Generous', 'Diligent', 'Sincere'], famous: ['Elton John', 'Arnold Schwarzenegger', 'Woody Allen', 'Wolfgang Amadeus Mozart'], description: 'Pigs are compassionate, generous, and diligent. They never harm others and are always ready to give everything to those in need.' },
 };
 
-function getChineseYear(dob: Date): number {
+/** The Chinese (lunar) year a birth date belongs to — changes at Lunar New Year, not 1 Jan (audit N11). */
+export function getChineseYear(dob: Date): number {
   const year = dob.getFullYear();
   const month = dob.getMonth() + 1;
   const day = dob.getDate();

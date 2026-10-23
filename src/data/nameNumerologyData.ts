@@ -141,3 +141,16 @@ export const NAME_NUMBER_MEANINGS: Record<number, NameNumberMeaning> = {
     famousNames: ['Dalai Lama', 'Rumi', 'Francis of Assisi'],
   },
 };
+
+// Audit N8: the "famous people" lists are GENERATED — a name is shown under a number
+// only if the Expression number of the name as written actually computes to it with
+// the calculator above (33 of 36 hand-filed names did not). Same pool of names as
+// before, each filed where its own letters put it.
+const FAMOUS_NAME_POOL: string[] = Array.from(new Set(
+  Object.values(NAME_NUMBER_MEANINGS)
+    .flatMap(m => m.famousNames)
+    .map(n => (n === 'Diana (Princess)' ? 'Princess Diana' : n)),
+));
+for (const [num, meaning] of Object.entries(NAME_NUMBER_MEANINGS)) {
+  meaning.famousNames = FAMOUS_NAME_POOL.filter(n => calculateAllNameNumbers(n).expression === Number(num));
+}
