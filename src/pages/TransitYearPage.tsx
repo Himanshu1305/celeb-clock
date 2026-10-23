@@ -9,7 +9,7 @@ import {
   TRANSIT_PLANETS,
   type TransitPlanet,
 } from '@/lib/vedic/transits';
-import { RASHIS, type Grade, type Tone } from '@/lib/vedic/rashifal';
+import { RASHIS, rangeLabel, type Grade, type Tone } from '@/lib/vedic/rashifal';
 
 const GRADE_STYLE: Record<Grade, string> = {
   strong: 'bg-emerald-100 text-emerald-800 border-emerald-300',
@@ -79,13 +79,17 @@ export default function TransitYearPage() {
   const title = `${meta.label} Transit ${year} — Dates & Effect on Every Rashi | BornClock`;
   const description = `${meta.label} transit (gochar) for ${year}: the sign it occupies, the real ingress date(s), and a graded, plain-language reading of its effect on each of the 12 Moon signs — computed from sidereal positions.`;
 
-  const sameSign = data.startSign === data.endSign;
+  // One stretch = the planet really stays in one sign all year. Saturn 2027 starts AND
+  // ends in Meena but spends Jun–Oct in Mesha, so start/end alone is not enough (audit K2).
+  const sameSign = data.signs.length === 1;
+  const sequence = data.signs.map(sg => sg.sign).join(' → ');
+  const stretches = data.signs.map(sg => `${sg.sign} ${rangeLabel(sg.fromISO, sg.toISO)}`).join('; ');
   const faqItems = [
     {
       question: `Where is ${meta.label} in ${year}?`,
       answer: sameSign
         ? `Through ${year}, ${meta.label.split(' ')[0]} stays in ${data.startSign}. ${meta.blurb}`
-        : `${meta.label.split(' ')[0]} begins ${year} in ${data.startSign} and moves to ${data.endSign} during the year (see the dates above). ${meta.blurb}`,
+        : `${meta.label.split(' ')[0]} changes sign during ${year}: ${stretches}. ${meta.blurb}`,
     },
     {
       question: `How is this transit calculated?`,
@@ -108,7 +112,7 @@ export default function TransitYearPage() {
       footer={{ tagline: 'Computed Vedic transits from real sidereal positions.', nav: [{ label: 'All transits', to: '/transit' }, { label: 'Rashifal', to: '/rashifal' }, { label: 'Free Kundli', to: '/kundali' }], note: 'Transit readings are computed and attributed to the Vedic tradition — reflective guidance, not certainty.' }}
       eyebrow="Gochar · planetary transit"
       h1={`${meta.label} Transit ${year}`}
-      lead={sameSign ? `In ${data.startSign} through ${year}` : `${data.startSign} → ${data.endSign} during ${year}`}
+      lead={sameSign ? `In ${data.startSign} through ${year}` : `${sequence} during ${year}`}
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
@@ -135,7 +139,7 @@ export default function TransitYearPage() {
             <p className="text-muted-foreground">
               {sameSign
                 ? `Through ${year}, it remains in ${data.startSign}, so the themes below hold for the whole year.`
-                : `It begins the year in ${data.startSign} and shifts to ${data.endSign} — the house it occupies from your Moon sign changes on the ingress date, which is why the reading can turn during the year.`}
+                : `It moves ${sequence} during the year (${stretches}) — the house it occupies from your Moon sign changes on each ingress date, so each Moon sign below is read separately for each stretch.`}
             </p>
           </div>
 
@@ -163,7 +167,17 @@ export default function TransitYearPage() {
                   <h3 className="font-semibold text-foreground">{RASHIS.find(r => r.slug === s.moonSlug)?.sanskrit} <span className="text-muted-foreground font-normal text-xs">({RASHIS.find(r => r.slug === s.moonSlug)?.english})</span></h3>
                   <GradeBadge grade={s.grade} tone={s.tone} />
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.text}</p>
+                {s.phases.length > 1 ? (
+                  <div className="space-y-2" data-testid="transit-phases">
+                    {s.phases.map((ph, i) => (
+                      <p key={i} className="text-sm text-muted-foreground leading-relaxed">
+                        <strong className="text-foreground">{rangeLabel(ph.fromISO, ph.toISO)}</strong> ({RASHIS[ph.signIndex].sanskrit}, {ph.tone}): {ph.text}
+                      </p>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground leading-relaxed">{s.text}</p>
+                )}
                 {s.sadeSati && <span className="inline-block mt-2 text-xs px-1.5 py-0.5 rounded bg-rose-100 text-rose-700">Sade Sati</span>}
                 {s.dhaiya && <span className="inline-block mt-2 ml-1 text-xs px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">Dhaiya</span>}
               </Link>
@@ -171,7 +185,7 @@ export default function TransitYearPage() {
           </div>
 
           <p className="text-xs text-muted-foreground mb-8">
-            Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) position of {meta.label.split(' ')[0]} for {year} and read by classical gochar rules — the same engine behind your Kundli.{' '}
+            Dates are in Indian Standard Time. Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) position of {meta.label.split(' ')[0]} for {year} and read by classical gochar rules — the same engine behind your Kundli.{' '}
             <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
             {planet === 'saturn' && <> · <Link to="/sade-sati" className="underline">Check your Sade Sati →</Link></>}
           </p>

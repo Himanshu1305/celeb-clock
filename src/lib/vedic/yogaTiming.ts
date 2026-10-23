@@ -240,6 +240,8 @@ export interface TimingFactCategory {
    * so tense-aware filtering never has to guess. Up to 3. */
   past: TimingFactWindow[];
   note?: string;
+  /** True when the windows were withheld because the person is under 18 (audit K3). */
+  suppressedForMinor?: boolean;
 }
 /**
  * Timing for a present dosha (Part S). `structural: true` means the dosha is a
@@ -287,11 +289,27 @@ function surfacePast(t: TimingResult, n = 3): TimingFactWindow[] {
   return t.windows.filter(w => w.status === 'past').slice(0, n).map(toFactWindow);
 }
 
-/** Assemble the timing block consumed by both the reading prompt and the chat. */
-export function buildTimingFacts(chart: BirthChartResult, now: Date = new Date()): TimingFacts {
+/** Age below which marriage and career timing is never given (audit K3). */
+export const ADULT_TIMING_AGE = 18;
+/** Whole years between two instants (birthday-aware enough for an under-18 gate). */
+export function ageInYears(birth: Date, now: Date = new Date()): number {
+  return Math.max(0, Math.floor((now.getTime() - birth.getTime()) / (365.2425 * 864e5)));
+}
+
+/**
+ * Assemble the timing block consumed by both the reading prompt and the chat.
+ * `opts.ageYears` (when known): under 18, the marriage and career categories carry NO
+ * windows — a child is never given a "marriage window" or career timing (audit K3).
+ */
+export function buildTimingFacts(chart: BirthChartResult, now: Date = new Date(), opts: { ageYears?: number } = {}): TimingFacts {
   const cats = allCategoryTimings(chart, now);
+  const minor = typeof opts.ageYears === 'number' && opts.ageYears < ADULT_TIMING_AGE;
   const categories: TimingFactCategory[] = (['wealth', 'career', 'marriage', 'family'] as LifeCategory[]).map(k => {
     const t = cats[k];
+    if (minor && (k === 'marriage' || k === 'career')) {
+      return { key: t.key, label: t.label, significators: t.significators, next: null, upcoming: [], past: [], suppressedForMinor: true,
+        note: `Not given: this person is ${opts.ageYears} years old — ${k} timing is never given for anyone under ${ADULT_TIMING_AGE}.` };
+    }
     return { key: t.key, label: t.label, significators: t.significators, next: t.next ? toFactWindow(t.next) : null, upcoming: surfaceWindows(t), past: surfacePast(t), note: t.note };
   });
   const yogas = yogaTimings(chart, now).map(t => ({

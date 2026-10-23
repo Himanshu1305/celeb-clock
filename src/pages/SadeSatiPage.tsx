@@ -12,24 +12,48 @@ import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { birthQuery } from '@/lib/timezone/clientBirth';
 
-interface Cycle { start: string; end: string }
-interface Report {
+interface Pause { start: string; end: string }
+interface Cycle { start: string; end: string; pauses?: Pause[]; startedBeforeBirth?: boolean }
+export interface Report {
   moonSignName: string; active: boolean; phase: string | null;
+  currentPhase?: { start: string; end: string } | null;
   currentCycle: Cycle | null; nextCycle: Cycle | null; previousCycle: Cycle | null;
+  paused?: { since: string; resumes: string } | null;
+  ageYears?: number;
   methodology: string;
   dhaiya: { active: boolean; type: string | null; currentEnd: string | null };
 }
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const fmt = (iso: string | null | undefined) => { if (!iso) return '—'; const d = new Date(iso); return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+// Dates are shown in Indian Standard Time, the convention Indian almanacs (Drik Panchang etc.) use for Saturn's ingress dates.
+const IST_MS = 5.5 * 3600 * 1000;
+const ist = (iso: string) => new Date(new Date(iso).getTime() + IST_MS);
+const fmt = (iso: string) => { const d = ist(iso); return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+const fmtDay = (iso: string) => { const d = ist(iso); return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
 const yearsFromNow = (iso: string | null | undefined) => { if (!iso) return null; const yrs = (new Date(iso).getTime() - Date.now()) / (365.25 * 24 * 3600 * 1000); return Math.max(0, Math.round(yrs * 10) / 10); };
+const isChild = (r: Report) => typeof r.ageYears === 'number' && r.ageYears < 18;
+
+/** "Paused 3 June 2027 – 20 October 2027" lines for a cycle's retrograde pauses (audit D2). */
+function pauseText(c: Cycle): string {
+  const ps = c.pauses ?? [];
+  if (!ps.length) return '';
+  return ` Saturn's retrograde motion pauses it ${ps.map(p => `from ${fmtDay(p.start)} to ${fmtDay(p.end)}`).join(' and ')}.`;
+}
 
 /**
  * Part X — the approved impact-first Sade Sati narrative (verdict → plain impact →
  * evidence/dates → forward-looking close), built deterministically from the computed
  * report so the exact approved wording is guaranteed (not LLM-generated). Covers the
- * active (with Rising/Peak/Setting phase note) and inactive cases.
+ * active (with Rising/Peak/Setting phase note), paused and inactive cases. Every date
+ * slot is guarded so the text can never render a blank "—" (audit D3).
  */
-function sadeSatiNarrative(r: Report): { verdict: string; body: string[] } {
+export function sadeSatiNarrative(r: Report): { verdict: string; body: string[] } {
+  const child = isChild(r);
+  const growthLine = child
+    ? "Sade Sati refers to the roughly seven-and-a-half years when Saturn transits the signs before, on, and after the Moon sign. For a child, the tradition reads it mostly through the home: steady routines, patient support with studies and habits, and a calm family rhythm are what matter — there is nothing for a child to fear or fix."
+    : "Sade Sati refers to the roughly seven-and-a-half years when Saturn transits the signs before, on, and after your Moon sign. Saturn's themes are discipline, patience, and long-term reward — many people look back on their Sade Sati as the period that built their strongest foundations: real maturity, financial discipline, or a career that held up long after the effort of building it.";
+  const cycleLine = (c: Cycle) => c.startedBeforeBirth
+    ? `This cycle was already under way when you were born (Saturn entered the 12th sign from your Moon in ${fmt(c.start)}) and it ends in ${fmt(c.end)}.${pauseText(c)}`
+    : `The full cycle runs from ${fmt(c.start)} to ${fmt(c.end)}.${pauseText(c)}`;
   if (r.active) {
     const phaseKey = (r.phase || '').toLowerCase();
     const phaseNote = phaseKey.includes('rising')
@@ -40,23 +64,37 @@ function sadeSatiNarrative(r: Report): { verdict: string; body: string[] } {
           ? 'The Setting phase is where earlier effort starts paying off.'
           : '';
     const phaseLabel = r.phase ? r.phase.split(' (')[0] : 'current';
-    const start = fmt(r.currentCycle?.start), end = fmt(r.currentCycle?.end);
+    const phaseDates = r.currentPhase ? `, which began ${fmtDay(r.currentPhase.start)} and runs until ${fmtDay(r.currentPhase.end)}` : '';
+    const body = [
+      "Despite its reputation, this is one of the most misunderstood periods in Vedic astrology, and for good reason: it's far more often a season of real, lasting growth than the hardship people fear.",
+      growthLine,
+      `You're specifically in the ${phaseLabel} phase${phaseDates}.${phaseNote ? ' ' + phaseNote : ''}`,
+    ];
+    if (r.currentCycle) body.push(cycleLine(r.currentCycle));
+    body.push("There's no need to brace for anything — just know that what you build now tends to last.");
+    return { verdict: "You're currently in a Sade Sati period — and that's genuinely nothing to worry about.", body };
+  }
+  if (r.paused && r.currentCycle) {
     return {
-      verdict: "You're currently in a Sade Sati period — and that's genuinely nothing to worry about.",
+      verdict: 'Your Sade Sati is paused right now — Saturn has stepped out of the three signs for a few months.',
       body: [
-        "Despite its reputation, this is one of the most misunderstood periods in Vedic astrology, and for good reason: it's far more often a season of real, lasting growth than the hardship people fear.",
-        "Sade Sati refers to the roughly seven-and-a-half years when Saturn transits the signs before, on, and after your Moon sign. Saturn's themes are discipline, patience, and long-term reward — many people look back on their Sade Sati as the period that built their strongest foundations: real maturity, financial discipline, or a career that held up long after the effort of building it.",
-        `You're specifically in the ${phaseLabel} phase, which began ${start} and runs until ${end}.${phaseNote ? ' ' + phaseNote : ''}`,
-        "There's no need to brace for anything — just know that what you build now tends to last.",
+        `Saturn's retrograde loop has taken it temporarily outside the 12th, 1st and 2nd signs from your Moon since ${fmtDay(r.paused.since)}. It moves back on ${fmtDay(r.paused.resumes)}, when the last stretch of this Sade Sati resumes.`,
+        cycleLine(r.currentCycle),
+        growthLine,
       ],
     };
   }
   // Inactive case (approved template).
   const lines: string[] = [
-    'Traditionally, Sade Sati periods bring pressure toward restructuring, added responsibility, or slower, harder-won progress. Since you\'re outside one currently, your day-to-day life isn\'t carrying that particular weight.',
+    child
+      ? 'Traditionally, Sade Sati periods are read as times that call for extra patience and structure. Since this chart is outside one currently, that particular theme is not in play.'
+      : 'Traditionally, Sade Sati periods bring pressure toward restructuring, added responsibility, or slower, harder-won progress. Since you\'re outside one currently, your day-to-day life isn\'t carrying that particular weight.',
   ];
   if (r.previousCycle) {
-    lines.push(`Your last Sade Sati ran from ${fmt(r.previousCycle.start)} to ${fmt(r.previousCycle.end)} — if that stretch felt like a time of consolidation or slow, deliberate change, that lines up with the classical pattern.`);
+    const c = r.previousCycle;
+    lines.push(c.startedBeforeBirth
+      ? `Your last Sade Sati was already under way when you were born and ended in ${fmt(c.end)}.`
+      : `Your last Sade Sati ran from ${fmt(c.start)} to ${fmt(c.end)} — if that stretch felt like a time of consolidation or slow, deliberate change, that lines up with the classical pattern.`);
   }
   if (r.nextCycle) {
     const away = yearsFromNow(r.nextCycle.start);
@@ -125,11 +163,12 @@ export default function SadeSatiPage() {
 
         {report && (
           <div data-testid="sadesati-result" className="mt-6 space-y-4">
-            <div className={`rounded-xl border p-5 text-center ${report.active ? 'border-amber-300 bg-amber-50' : 'border-emerald-200 bg-emerald-50'}`}>
+            <div className={`rounded-xl border p-5 text-center ${report.active || report.paused ? 'border-amber-300 bg-amber-50' : 'border-emerald-200 bg-emerald-50'}`}>
               <div className="text-sm text-muted-foreground">Moon sign: {report.moonSignName}</div>
-              <div className={`text-2xl font-black ${report.active ? 'text-amber-700' : 'text-emerald-700'}`}>
-                {report.active ? 'Sade Sati is ACTIVE' : 'Sade Sati is not active right now'}
+              <div className={`text-2xl font-black ${report.active || report.paused ? 'text-amber-700' : 'text-emerald-700'}`}>
+                {report.active ? 'Sade Sati is ACTIVE' : report.paused ? 'Sade Sati is paused right now' : 'Sade Sati is not active right now'}
               </div>
+              {report.paused && <div className="font-semibold text-foreground mt-1">Resumes {fmtDay(report.paused.resumes)}</div>}
               {report.active && report.phase && <div className="font-semibold text-foreground mt-1">Phase: {report.phase}</div>}
             </div>
 
@@ -141,25 +180,31 @@ export default function SadeSatiPage() {
               </div>
             ); })()}
 
-            {report.active && report.currentCycle && (
+            {(report.active || report.paused) && report.currentCycle && (
               <div data-testid="sadesati-current" className="rounded-lg border border-border p-4">
                 <div className="font-semibold text-foreground">Current Sade Sati cycle</div>
-                <div className="text-sm text-foreground">{fmt(report.currentCycle.start)} → {fmt(report.currentCycle.end)}</div>
-                <p className="text-xs text-muted-foreground mt-1">Saturn entered the 12th sign from your Moon and leaves the 2nd sign at the end date. Traditionally a period for patience, consolidation and reduced over-extension — a phase to move through steadily, not a verdict.</p>
+                <div className="text-sm text-foreground">{fmt(report.currentCycle.start)} → {fmt(report.currentCycle.end)}{report.currentCycle.startedBeforeBirth ? ' (began before your birth)' : ''}</div>
+                {(report.currentCycle.pauses ?? []).map((p, i) => (
+                  <div key={i} data-testid="sadesati-pause" className="text-xs text-muted-foreground">Paused {fmtDay(p.start)} – {fmtDay(p.end)} (Saturn retrograde, briefly outside the three signs)</div>
+                ))}
+                <p className="text-xs text-muted-foreground mt-1">Saturn first entered the 12th sign from your Moon at the start date and makes its final exit from the 2nd sign at the end date. Traditionally a period for patience, consolidation and reduced over-extension — a phase to move through steadily, not a verdict.</p>
               </div>
             )}
 
             {report.nextCycle && (
               <div data-testid="sadesati-next" className="rounded-lg border border-border p-4">
-                <div className="font-semibold text-foreground">{report.active ? 'Following' : 'Next'} Sade Sati cycle</div>
+                <div className="font-semibold text-foreground">{report.active || report.paused ? 'Following' : 'Next'} Sade Sati cycle</div>
                 <div className="text-sm text-foreground">{fmt(report.nextCycle.start)} → {fmt(report.nextCycle.end)}</div>
+                {(report.nextCycle.pauses ?? []).map((p, i) => (
+                  <div key={i} className="text-xs text-muted-foreground">Paused {fmtDay(p.start)} – {fmtDay(p.end)}</div>
+                ))}
               </div>
             )}
 
             {report.dhaiya.active && (
               <div data-testid="sadesati-dhaiya" className="rounded-lg border border-[#6E5AA6]/30 bg-[#6E5AA6]/50 p-4">
                 <div className="font-semibold text-foreground">Dhaiya (small Panoti) is active</div>
-                <div className="text-sm text-foreground">{report.dhaiya.type} — until {fmt(report.dhaiya.currentEnd)}</div>
+                <div className="text-sm text-foreground">{report.dhaiya.type}{report.dhaiya.currentEnd ? ` — until ${fmtDay(report.dhaiya.currentEnd)}` : ''}</div>
                 <p className="text-xs text-muted-foreground mt-1">A 2.5-year Saturn transit (the 4th or 8th from your Moon), traditionally a lighter version of Sade Sati’s themes.</p>
               </div>
             )}

@@ -5,7 +5,7 @@
  */
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { buildPeriodForecast, type ForecastPeriod, type MahaPeriod } from '@/lib/vedic/periodForecast';
+import { buildPeriodForecast, type ForecastPeriod, type MahaPeriod, type NodePlacements } from '@/lib/vedic/periodForecast';
 
 type Tab = 'yearly' | 'quarterly' | 'monthly';
 const gradeColor = (g: string) => g === 'strong' ? 'text-emerald-700' : g === 'moderate' ? 'text-[#6E5AA6]' : 'text-amber-600';
@@ -23,10 +23,21 @@ function PeriodCard({ p }: { p: ForecastPeriod }) {
   );
 }
 
-export function PeriodForecast({ dashaTimeline, lagnaSignIndex }: { dashaTimeline: MahaPeriod[]; lagnaSignIndex: number }) {
+export function PeriodForecast({ dashaTimeline, lagnaSignIndex, planets }: {
+  dashaTimeline: MahaPeriod[];
+  lagnaSignIndex: number;
+  /** Chart planets as KundaliData carries them (signIndex 1-based) — used for Rahu/Ketu, which act through their placement. */
+  planets?: Array<{ name: string; signIndex: number; house: number }>;
+}) {
   const [tab, setTab] = useState<Tab>('yearly');
-  // lagnaSignIndex arrives 1-based from the API; the engine wants 0-based.
-  const forecast = useMemo(() => buildPeriodForecast(dashaTimeline, lagnaSignIndex - 1, Date.now()), [dashaTimeline, lagnaSignIndex]);
+  // lagnaSignIndex (and planet signIndex) arrive 1-based from the API; the engine wants 0-based.
+  const forecast = useMemo(() => {
+    const nodes: NodePlacements = {};
+    for (const p of planets ?? []) {
+      if (p.name === 'Rahu' || p.name === 'Ketu') nodes[p.name] = { signIndex: p.signIndex - 1, house: p.house };
+    }
+    return buildPeriodForecast(dashaTimeline, lagnaSignIndex - 1, Date.now(), nodes);
+  }, [dashaTimeline, lagnaSignIndex, planets]);
   const periods = forecast[tab];
 
   return (

@@ -30,8 +30,11 @@ async function handler(request) {
     const now = new Date();
     const chart = await calculateBirthChart({ year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon, timezoneOffset: tz }, { refDate: now });
     const moonSign = Math.max(0, RASHI_NAMES.indexOf(chart.rashi));
-    const report = computeSadeSati(moonSign, now, getSaturnSignIndex);
-    return json({ ...report, moonSignName: chart.rashi, birthTimezone: btz.birthTimezone, basis: chartBasisFromResult(chart, btz.birthTimezone), _cache: 'miss' });
+    // Birth instant (UTC) so the "last Sade Sati" never predates birth and child wording can be used (audit D10).
+    const birth = new Date(Date.UTC(y, m - 1, d, h, min) - tz * 3600_000);
+    const report = computeSadeSati(moonSign, now, getSaturnSignIndex, birth);
+    const ageYears = Math.max(0, Math.floor((now.getTime() - birth.getTime()) / (365.2425 * 864e5)));
+    return json({ ...report, ageYears, moonSignName: chart.rashi, birthTimezone: btz.birthTimezone, basis: chartBasisFromResult(chart, btz.birthTimezone), _cache: 'miss' });
   } catch (e) {
     return json({ error: 'sade-sati-failed', detail: String(e?.message || e) }, 500);
   }

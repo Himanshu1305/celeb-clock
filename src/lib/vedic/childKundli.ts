@@ -58,7 +58,12 @@ const PLANET_TALENT: Record<string, string> = {
   Saturn: 'craft, structure and long-form focus', Rahu: 'invention and bold new fields', Ketu: 'research and the intuitive arts',
 };
 
-export function buildChildKundli(data: KundaliLike): ChildKundli | null {
+/**
+ * @param birthDate the child's date of birth (YYYY-MM-DD or ISO). Favourable periods are
+ *   limited to childhood (birth → 18th birthday). Without it, the start of the Dasha
+ *   timeline (always on/before birth) bounds the window, so it can only be shorter.
+ */
+export function buildChildKundli(data: KundaliLike, birthDate?: string): ChildKundli | null {
   const nak = data.nakshatra?.nakshatra;
   if (!nak || !data.planets?.length) return null;
   const gana = GANA[nak] || 'Manushya';
@@ -86,10 +91,22 @@ export function buildChildKundli(data: KundaliLike): ChildKundli | null {
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const fmt = (iso: string) => { const d = new Date(iso); return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
   const BENEFIC = new Set(['Jupiter', 'Venus', 'Mercury', 'Moon']);
-  const favWindows = (data.dashaTimeline || []).filter(m => BENEFIC.has(m.lord)).slice(0, 3)
-    .map(m => `${m.lord} period (${fmt(m.start)} – ${fmt(m.end)}) — classically a supportive stretch for growth, confidence and learning`);
+  // Audit K4: only periods that fall in CHILDHOOD (birth → 18th birthday), clipped to it —
+  // previously this listed the first benefic Mahadashas wherever they fell (ages 31–75 for P10).
+  const timeline = data.dashaTimeline || [];
+  const birthMs = birthDate && !Number.isNaN(Date.parse(birthDate)) ? Date.parse(birthDate) : (timeline.length ? Date.parse(timeline[0].start) : NaN);
+  const adultMs = Number.isNaN(birthMs) ? NaN : (() => { const d = new Date(birthMs); d.setUTCFullYear(d.getUTCFullYear() + 18); return d.getTime(); })();
+  const favWindows = Number.isNaN(birthMs) ? [] : timeline
+    .filter(m => BENEFIC.has(m.lord) && Date.parse(m.end) > birthMs && Date.parse(m.start) < adultMs)
+    .slice(0, 3)
+    .map(m => {
+      const s = Math.max(Date.parse(m.start), birthMs), e = Math.min(Date.parse(m.end), adultMs);
+      const startTxt = s === birthMs ? `from birth` : fmt(new Date(s).toISOString());
+      const endTxt = e === adultMs ? `age 18 (${fmt(new Date(e).toISOString())})` : fmt(new Date(e).toISOString());
+      return `${m.lord} period (${startTxt} – ${endTxt}) — classically a supportive stretch for growth, confidence and learning`;
+    });
   const favBody = favWindows.length
-    ? `Looking at the running Vimshottari Dasha, some naturally supportive windows through childhood and youth: ${favWindows.join('; ')}. These are gentle tailwinds, not fixed events — every period has its own gifts.`
+    ? `Looking at the running Vimshottari Dasha, some naturally supportive windows through childhood (up to age 18): ${favWindows.join('; ')}. These are gentle tailwinds, not fixed events — every period has its own gifts.`
     : 'The early Dasha periods set a steady tone; focus on consistency and warmth rather than any single "best" window.';
 
   return {

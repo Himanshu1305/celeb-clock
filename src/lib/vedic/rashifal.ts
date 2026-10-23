@@ -171,6 +171,11 @@ export interface TransitReading {
   textHi: string;      // short Hindi line
   sadeSati?: boolean;  // Saturn in 12/1/2 from Moon
   dhaiya?: boolean;    // Saturn in 4/8 from Moon (Kantaka/Ashtama Shani)
+  /** Year readings only: the part of the period this reading covers (IST calendar dates) when the planet changes sign during it. */
+  fromISO?: string;
+  toISO?: string;
+  /** Fraction (0..1] of the period this reading covers — weights the overall tone. */
+  share?: number;
 }
 
 export interface RashifalSection {
@@ -289,29 +294,65 @@ function periodRange(period: RashifalPeriod, ref: Date): { start: Date; end: Dat
   return { start, end, rep, label: String(y) };
 }
 
-/** Find the date a slow planet next changes sign within the period (day precision). */
-function ingressWithin(planet: PlanetName, start: Date, end: Date): { signIndex: number; dateISO: string } | null {
-  const startSign = signIndexOf(planet, start);
-  const step = 2; // days
-  let prevSign = startSign;
-  const cur = new Date(start);
-  while (cur <= end) {
-    cur.setUTCDate(cur.getUTCDate() + step);
-    const s = signIndexOf(planet, cur);
-    if (s !== prevSign) {
-      // refine to the day
-      const lo = new Date(cur); lo.setUTCDate(lo.getUTCDate() - step);
-      const hi = new Date(cur);
-      while ((hi.getTime() - lo.getTime()) > 24 * 3600 * 1000) {
-        const mid = new Date((lo.getTime() + hi.getTime()) / 2);
-        if (signIndexOf(planet, mid) === prevSign) lo.setTime(mid.getTime());
-        else hi.setTime(mid.getTime());
-      }
-      return { signIndex: s, dateISO: hi.toISOString().slice(0, 10) };
-    }
-    prevSign = s;
+const HOUR_MS = 3600 * 1000;
+const DAY_MS = 24 * HOUR_MS;
+const IST_OFFSET_MS = 5.5 * HOUR_MS;
+
+/** Calendar date (YYYY-MM-DD) of an instant in Indian Standard Time — the convention
+ *  Indian almanacs (e.g. Drik Panchang) use for ingress dates. */
+export function istDateISO(at: Date): string {
+  return new Date(at.getTime() + IST_OFFSET_MS).toISOString().slice(0, 10);
+}
+
+/** Refine a sign change between two instants to ~1 hour; returns the first instant in the new sign. */
+function refineIngress(planet: PlanetName, loMs: number, hiMs: number): number {
+  const before = signIndexOf(planet, new Date(loMs));
+  let a = loMs, b = hiMs;
+  while (b - a > HOUR_MS) {
+    const mid = (a + b) / 2;
+    if (signIndexOf(planet, new Date(mid)) === before) a = mid; else b = mid;
   }
-  return null;
+  return b;
+}
+
+export interface SignSegment {
+  signIndex: number;
+  startMs: number;      // instant the planet is in this sign from (period start or ingress)
+  endMs: number;        // instant it leaves (next ingress or period end)
+  fromISO: string;      // IST calendar date of startMs
+  toISO: string;        // IST calendar date of endMs
+}
+
+/**
+ * Split [start, end] at every real sign change of a planet (1-day sampling refined to
+ * ~1 hour), so a reading for a whole period never assumes one sign (audit K2).
+ * Saturn's shortest retrograde stay in a sign (1900–2100) is 9.5 days, far above the step.
+ */
+export function signSegments(planet: PlanetName, start: Date, end: Date): SignSegment[] {
+  const segs: SignSegment[] = [];
+  let segStart = start.getTime();
+  let sign = signIndexOf(planet, start);
+  let prev = segStart;
+  for (let t = segStart + DAY_MS; ; t += DAY_MS) {
+    const tt = Math.min(t, end.getTime());
+    const s = signIndexOf(planet, new Date(tt));
+    if (s !== sign) {
+      const at = refineIngress(planet, prev, tt);
+      segs.push({ signIndex: sign, startMs: segStart, endMs: at, fromISO: istDateISO(new Date(segStart)), toISO: istDateISO(new Date(at)) });
+      segStart = at; sign = s;
+    }
+    prev = tt;
+    if (tt >= end.getTime()) break;
+  }
+  segs.push({ signIndex: sign, startMs: segStart, endMs: end.getTime(), fromISO: istDateISO(new Date(segStart)), toISO: istDateISO(end) });
+  return segs;
+}
+
+/** Find the date (IST) a slow planet next changes sign within the period. */
+function ingressWithin(planet: PlanetName, start: Date, end: Date): { signIndex: number; dateISO: string } | null {
+  const segs = signSegments(planet, start, end);
+  if (segs.length < 2) return null;
+  return { signIndex: segs[1].signIndex, dateISO: istDateISO(new Date(segs[1].startMs)) };
 }
 
 const SECTION_TITLES: Record<RashifalSection['key'], { en: string; hi: string }> = {
@@ -335,7 +376,7 @@ function combineTone(transits: TransitReading[]): { tone: Tone; grade: Grade } {
   let score = 0;
   let weight = 0;
   for (const t of transits) {
-    const w = SLOW.includes(t.planet) ? 2 : 1;
+    const w = (SLOW.includes(t.planet) ? 2 : 1) * (t.share ?? 1);
     weight += w;
     score += (t.tone === 'favourable' ? 1 : t.tone === 'challenging' ? -1 : 0) * w;
   }
@@ -366,18 +407,39 @@ export function computeRashifal(signIndex: number, period: RashifalPeriod, ref: 
   const rashi = RASHIS[signIndex];
   const { start, end, rep, label } = periodRange(period, ref);
   const featured = featuredPlanets(period);
-  const transits = featured.map(p => buildTransit(p, signIndex, rep));
+  // A year is NOT read from one date: each slow planet's year is split at its real sign
+  // changes and every stretch is read on its own, weighted by how long it lasts (audit K2).
+  const segmentsByPlanet = new Map<PlanetName, SignSegment[]>();
+  const transits: TransitReading[] = period === 'year'
+    ? featured.flatMap(p => {
+        const segs = signSegments(p, start, end);
+        segmentsByPlanet.set(p, segs);
+        if (segs.length === 1) return [buildTransit(p, signIndex, rep)];
+        const total = end.getTime() - start.getTime();
+        return segs.map(sg => {
+          const r = buildTransit(p, signIndex, new Date((sg.startMs + sg.endMs) / 2));
+          return { ...r, text: `${rangeLabel(sg.fromISO, sg.toISO)}: ${r.text}`, fromISO: sg.fromISO, toISO: sg.toISO, share: (sg.endMs - sg.startMs) / total };
+        });
+      })
+    : featured.map(p => buildTransit(p, signIndex, rep));
 
   // Overview = the strongest-signal transits (slow planets + the day's Moon).
   const overviewPicks = transits
     .filter(t => SLOW.includes(t.planet) || (period !== 'year' && (t.planet === 'Moon' || t.planet === 'Sun')))
-    .sort((a, b) => gradeRank(b.grade) - gradeRank(a.grade));
+    .sort(byWeight);
   const overall = combineTone(transits);
+  const sadeSatiParts = transits.filter(t => t.sadeSati);
+  const sadeSati = sadeSatiParts[0];
+  // Sade Sati colours a whole year: a year with any Sade Sati stretch is never headlined
+  // as "broadly supportive" (audit K2 — Kumbha 2027).
+  if (period === 'year' && sadeSati && overall.tone === 'favourable') { overall.tone = 'mixed'; overall.grade = 'moderate'; }
   const overviewLead = overviewPicks[0] || transits[0];
-  const sadeSati = transits.find(t => t.sadeSati);
+  const sadeSatiWhen = sadeSatiParts.some(t => t.fromISO)
+    ? ` (${sadeSatiParts.map(t => rangeLabel(t.fromISO!, t.toISO!)).join(' and ')})`
+    : '';
   const overviewEn =
     `${periodHeadline(period, rashi, overall.tone)} ${overviewLead.text}` +
-    (sadeSati ? ` Saturn is in your ${ORDINAL[sadeSati.house]} from the Moon, so you are in a Sade Sati phase — a demanding but maturing period; steady, honest effort is rewarded and shortcuts are not.` : '');
+    (sadeSati ? ` Saturn is in your ${ORDINAL[sadeSati.house]} from the Moon${sadeSatiWhen}, so you are in a Sade Sati phase — a demanding but maturing period; steady, honest effort is rewarded and shortcuts are not.` : '');
   const overviewHi = `${rashi.hindi} राशि — ${label}. ` + overviewPicks.slice(0, 2).map(t => t.textHi).join(' ');
 
   const sections: RashifalSection[] = [
@@ -396,7 +458,7 @@ export function computeRashifal(signIndex: number, period: RashifalPeriod, ref: 
     const houses = SECTION_HOUSES[key];
     const relevant = transits
       .filter(t => houses.includes(t.house))
-      .sort((a, b) => gradeRank(b.grade) - gradeRank(a.grade));
+      .sort(byWeight);
     const st = combineTone(relevant);
     const txt = sectionText(key, relevant);
     sections.push({
@@ -409,12 +471,13 @@ export function computeRashifal(signIndex: number, period: RashifalPeriod, ref: 
   const ingress: string[] = [];
   if (period === 'month' || period === 'year') {
     for (const p of SLOW) {
-      const ing = ingressWithin(p, start, end);
-      if (ing) {
-        const d = new Date(ing.dateISO + 'T00:00:00Z');
+      // Every sign change in the period, not just the first (a retrograde return counts too).
+      const segs = segmentsByPlanet.get(p) ?? signSegments(p, start, end);
+      for (const sg of segs.slice(1)) {
+        const d = new Date(sg.fromISO + 'T00:00:00Z');
         const when = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-        const newHouse = houseFromMoon(ing.signIndex, signIndex);
-        ingress.push(`${p} enters ${RASHIS[ing.signIndex].sanskrit} (${RASHIS[ing.signIndex].english}) on ${when} — your ${ORDINAL[newHouse]} house from the Moon.`);
+        const newHouse = houseFromMoon(sg.signIndex, signIndex);
+        ingress.push(`${p} enters ${RASHIS[sg.signIndex].sanskrit} (${RASHIS[sg.signIndex].english}) on ${when} — your ${ORDINAL[newHouse]} house from the Moon.`);
       }
     }
   }
@@ -450,6 +513,22 @@ export function transitSignIndex(planet: PlanetName, at: Date): number {
 /** Next sign-change (ingress) of a planet within [start, end], day precision. */
 export function findIngress(planet: PlanetName, start: Date, end: Date): { signIndex: number; dateISO: string } | null {
   return ingressWithin(planet, start, end);
+}
+
+const SHORT_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+/** "3 Jun – 20 Oct 2027" from two YYYY-MM-DD dates. */
+export function rangeLabel(fromISO: string, toISO: string): string {
+  const f = (iso: string, withYear: boolean) => {
+    const [y, m, d] = iso.split('-').map(Number);
+    return `${d} ${SHORT_MONTHS[m - 1]}${withYear ? ` ${y}` : ''}`;
+  };
+  const sameYear = fromISO.slice(0, 4) === toISO.slice(0, 4);
+  return `${f(fromISO, !sameYear)} – ${f(toISO, true)}`;
+}
+
+/** Stronger grade first; within a grade, the reading covering more of the period first. */
+function byWeight(a: TransitReading, b: TransitReading): number {
+  return gradeRank(b.grade) - gradeRank(a.grade) || (b.share ?? 1) - (a.share ?? 1);
 }
 
 function gradeRank(g: Grade): number {

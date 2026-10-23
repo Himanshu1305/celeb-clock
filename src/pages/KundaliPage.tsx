@@ -310,7 +310,7 @@ export default function KundaliPage() {
               )}
 
               {data.dashaTimeline && data.dashaTimeline.length > 0 && (
-                <PeriodForecast dashaTimeline={data.dashaTimeline} lagnaSignIndex={data.lagna.signIndex} />
+                <PeriodForecast dashaTimeline={data.dashaTimeline} lagnaSignIndex={data.lagna.signIndex} planets={data.planets} />
               )}
 
               <div className="inline-actions" style={{ marginTop: 18 }}>

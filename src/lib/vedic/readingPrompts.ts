@@ -81,7 +81,7 @@ const HOUSES_OF_INTEREST = [1, 2, 4, 6, 7, 9, 10, 11];
 
 /** Extract the full, confidence-aware fact set that feeds the prompt, the
  * accuracy checker, and the deterministic fallback display. */
-export function extractReadingFacts(chart: BirthChartResult, now: Date = new Date()): ReadingFacts {
+export function extractReadingFacts(chart: BirthChartResult, now: Date = new Date(), opts: { ageYears?: number } = {}): ReadingFacts {
   const byName: Record<string, BirthChartResult['planets'][number]> = {};
   for (const p of chart.planets) byName[p.name] = p;
 
@@ -158,7 +158,7 @@ export function extractReadingFacts(chart: BirthChartResult, now: Date = new Dat
       navamsaVenus: chart.divisionalCharts.d9.Venus,
     },
     yogas: (chart.yogas ?? []).map(y => ({ name: y.name, grade: y.grade, summary: y.summary, note: y.note, conditions: y.conditions })),
-    timing: buildTimingFacts(chart, now),
+    timing: buildTimingFacts(chart, now, opts),
     warnings: chart.warnings.map(w => ({ code: w.code, message: w.message })),
     fieldsUsed: {
       snapshot: ['Lagna + lord placement', 'Moon sign', 'Nakshatra'],
@@ -262,6 +262,7 @@ export function buildReadingUserPrompt(f: ReadingFacts): string {
     return `${w.planet} ${kind} ${w.range}${when}${strongest}`;
   };
   const catTimingLine = f.timing.categories.map(c => {
+    if (c.suppressedForMinor) return `  - ${c.label}: NOT APPLICABLE — ${c.note} Do not mention any ${c.key} window, period or age for it.`;
     const wins = c.upcoming.length ? c.upcoming.map(fmtWin).join('; ') : 'no current/upcoming window — the strongest windows are in the past';
     return `  - ${c.label} (driven by ${c.significators.join(', ')}): ${wins}`;
   }).join('\n');

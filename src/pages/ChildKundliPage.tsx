@@ -31,7 +31,7 @@ export default function ChildKundliPage() {
       const res = await fetch(`/api/kundali?${p.toString()}`);
       if (!res.ok) throw new Error('unavailable');
       const data = await res.json();
-      const child = buildChildKundli(data);
+      const child = buildChildKundli(data, d.dob);
       if (!child) throw new Error('unavailable');
       setResult(child);
     } catch { setFailed(true); } finally { setLoading(false); }
