@@ -7,15 +7,10 @@
  * simplification (fixed ±5, not disc-diameter ratios).
  */
 import * as Astronomy from 'astronomy-engine';
+// Single shared ayanamsa (see vedicEngine.ts) — never keep a local copy.
+import { getLahiriAyanamsa } from './vedicEngine';
 
 function normalize360(deg: number): number { return ((deg % 360) + 360) % 360; }
-const LAHIRI_J2000_DEG = 23.853222;
-function getLahiriAyanamsa(date: Date): number {
-  const time = Astronomy.MakeTime(date);
-  const T = time.tt / 36525;
-  const precessionArcsec = 5029.0966 * T + 1.11161 * T * T - 0.000113 * T * T * T;
-  return LAHIRI_J2000_DEG + precessionArcsec / 3600;
-}
 function getSunSiderealLongitude(date: Date): number {
   const time = Astronomy.MakeTime(date);
   const vec = Astronomy.GeoVector('Sun' as Astronomy.Body, time, true);

@@ -47,20 +47,20 @@ type Teaser = { lagna: string; rashi: string; nakshatra: string; dasha: string |
 // Real astronomy-engine output (Lahiri sidereal, whole-sign houses). These are the
 // exact verified values the finalized design shows; §results also re-computes them live via
 // /api/vedic-reading so the "computed, not a template" claim is demonstrably true either way.
-const REF_META = { date: '14 Mar 1990', time: '10:30 IST', place: 'New Delhi', coords: '28.6139°N, 77.2090°E', utc: '05:00 UTC', ayanamsa: '23.720168°' };
+const REF_META = { date: '14 Mar 1990', time: '10:30 IST', place: 'New Delhi', coords: '28.6139°N, 77.2090°E', utc: '05:00 UTC', ayanamsa: '23.726945°' };
 type Placement = { body: string; sign: string; pos: string; house: number; retro?: boolean };
 const REF_PLACEMENTS: Placement[] = [
-  { body: 'Sun', sign: 'Aquarius', pos: '29°38′', house: 10 },
-  { body: 'Moon', sign: 'Libra', pos: '00°34′', house: 6 },
+  { body: 'Sun', sign: 'Aquarius', pos: '29°37′', house: 10 },
+  { body: 'Moon', sign: 'Libra', pos: '00°33′', house: 6 },
   { body: 'Mercury', sign: 'Aquarius', pos: '25°02′', house: 10 },
-  { body: 'Venus', sign: 'Capricorn', pos: '14°19′', house: 9 },
-  { body: 'Mars', sign: 'Capricorn', pos: '08°10′', house: 9 },
-  { body: 'Jupiter', sign: 'Gemini', pos: '07°35′', house: 2 },
-  { body: 'Saturn', sign: 'Sagittarius', pos: '29°31′', house: 8 },
-  { body: 'Rahu', sign: 'Capricorn', pos: '20°55′', house: 9, retro: true },
-  { body: 'Ketu', sign: 'Cancer', pos: '20°55′', house: 3, retro: true },
+  { body: 'Venus', sign: 'Capricorn', pos: '14°18′', house: 9 },
+  { body: 'Mars', sign: 'Capricorn', pos: '08°09′', house: 9 },
+  { body: 'Jupiter', sign: 'Gemini', pos: '07°34′', house: 2 },
+  { body: 'Saturn', sign: 'Sagittarius', pos: '29°30′', house: 8 },
+  { body: 'Rahu', sign: 'Capricorn', pos: '20°54′', house: 9, retro: true },
+  { body: 'Ketu', sign: 'Cancer', pos: '20°54′', house: 3, retro: true },
 ];
-const REF_STATS = { lagna: 'Taurus', lagnaPos: '14°19′', moonNak: 'Chitra', moonPada: 'Pada 3 · Mars-ruled' };
+const REF_STATS = { lagna: 'Taurus', lagnaPos: '14°18′', moonNak: 'Chitra', moonPada: 'Pada 3 · Mars-ruled' };
 const PLANET_ABBR: Record<string, string> = { Sun: 'Su', Moon: 'Mo', Mercury: 'Me', Venus: 'Ve', Mars: 'Ma', Jupiter: 'Ju', Saturn: 'Sa', Rahu: 'Ra', Ketu: 'Ke' };
 
 // Standard North-Indian (diamond) chart: fixed (x,y) text anchors per house 1–12.

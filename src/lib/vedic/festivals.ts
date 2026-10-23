@@ -96,10 +96,23 @@ export function computeSankrantis(year: number): Sankranti[] {
   return sankrantis(from, to)
     .map(s => {
       let dateISO = istDate(s.instant);
+      // A Sankranti between civil midnight and the night's mid-point (half-way from
+      // New Delhi sunset to the next sunrise) belongs to the PREVIOUS day — the
+      // classical "before/after midnight (ardha-ratri)" rule Drik Panchang applies.
+      // e.g. Mithuna Sankranti 2020, moment 00:10 IST 15 Jun → listed 14 Jun
+      // (drikpanchang.com/sankranti/mithuna-sankranti-date-time.html?year=2020);
+      // Meena Sankranti 2026, 01:08 IST 15 Mar (after mid-night ~00:30) → 15 Mar.
+      {
+        const prev = isoAddDays(dateISO, -1);
+        const pd = dayTimes(prev);
+        const t = s.instant.getTime();
+        if (t >= pd.set && t < (pd.set + pd.nextRise) / 2) dateISO = prev;
+      }
       // Makar Sankranti is kept on its punya-kaal day: a Capricorn ingress after
       // New Delhi sunset is celebrated the next day (Drik Panchang convention;
       // e.g. ingress 14 Jan 2027 ~21:10 IST → festival 15 Jan 2027). The other
-      // Sankrantis are listed on the civil date of the ingress itself.
+      // Sankrantis are listed on the civil date of the ingress (after the
+      // midnight rule above).
       if (s.sign === 9 && s.instant.getTime() >= dayTimes(dateISO).set) dateISO = isoAddDays(dateISO, 1);
       return { name: SANKRANTI_NAME[s.sign], sign: s.sign, dateISO };
     })
