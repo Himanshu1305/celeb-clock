@@ -38,9 +38,9 @@ const CONFIG: Record<DoshaKind, KindConfig> = {
     canonical: '/pitra-dosha',
     eyebrow: 'Ancestral karma · Sun & 9th house',
     h1: 'Pitra Dosha Calculator.',
-    intro: 'Pitra Dosha is a classical reading of the Sun, the nodes and the 9th house — the chart\'s lineage and ancestry axis. We check whether the traditional signatures are present, grade them honestly, and explain what the tradition means by it — calmly, never as a threat.',
+    intro: 'Pitra Dosha is a classical reading of the Sun, Rahu, Saturn and the 9th house — the chart\'s lineage and ancestry axis. We check whether the traditional signatures are present, grade them honestly, and explain what the tradition means by it — calmly, never as a threat.',
     faq: [
-      { q: 'What is Pitra Dosha?', a: 'Pitra Dosha is a Vedic reading associated with the ancestral/father line — classically indicated when the Sun sits with a node (Rahu/Ketu) or Saturn, or when a natural malefic occupies the 9th house of lineage and dharma. It is a symbolic reading of karma carried from the family line, not a medical or factual claim.' },
+      { q: 'What is Pitra Dosha?', a: 'Pitra Dosha is a Vedic reading associated with the ancestral/father line — classically indicated when the Sun sits with Rahu, when Rahu occupies the 9th house of lineage and dharma, or when the Sun in the 9th house is joined by Saturn or Rahu. Mars or Ketu alone in the 9th does not count. It is a symbolic reading of karma carried from the family line, not a medical or factual claim.' },
       { q: 'Is Pitra Dosha harmful?', a: 'No. It is a chart pattern to understand, not a verdict on your life. The tradition frames it as an invitation to honour and reflect on one\'s ancestors — not something to fear, and nothing you must pay to "remove".' },
       { q: 'How do I remove Pitra Dosha?', a: 'Honestly: nothing is required. Traditionally people offer gratitude to ancestors (tarpan, feeding others, acts of service) during Pitru Paksha. We present that as optional custom and reflection, never as a fear-based paid remedy.' },
     ],
