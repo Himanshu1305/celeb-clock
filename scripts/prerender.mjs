@@ -20,6 +20,20 @@ import { getTitleForRoute } from './prerender-titles.mjs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const DIST = join(ROOT, 'dist');
+// Sharding (2026-10-23): CI splits the routes across parallel runners so the whole
+// site fits inside the time budget. PRERENDER_SHARD="i/N" (0-based) renders every
+// N-th route starting at i; PRERENDER_OUT sends the generated HTML + this shard's
+// manifest to a separate folder that the deploy job merges onto dist/
+// (scripts/prerender-merge.mjs). Unset = render everything straight into dist/.
+const SHARD = (() => {
+  const m = String(process.env.PRERENDER_SHARD || '').match(/^(\d+)\/(\d+)$/);
+  if (!m) return null;
+  const index = Number(m[1]), count = Number(m[2]);
+  if (!(count >= 1 && index < count)) throw new Error(`bad PRERENDER_SHARD ${process.env.PRERENDER_SHARD}`);
+  return { index, count };
+})();
+const OUT = process.env.PRERENDER_OUT ? resolve(process.env.PRERENDER_OUT) : DIST;
+const MANIFEST_NAME = SHARD ? `prerender-manifest.shard-${SHARD.index}.json` : 'prerender-manifest.json';
 
 import { cpus } from 'os';
 // Rendering is CPU-bound: more tabs than ~2 per core only adds contention.
@@ -344,9 +358,10 @@ async function prerenderRoute(page, baseUrl, route) {
     // Write to dist
     let outPath;
     if (route === '/') {
-      outPath = join(DIST, 'index.html');
+      mkdirSync(OUT, { recursive: true });
+      outPath = join(OUT, 'index.html');
     } else {
-      const dir = join(DIST, route);
+      const dir = join(OUT, route);
       mkdirSync(dir, { recursive: true });
       outPath = join(dir, 'index.html');
     }
@@ -448,9 +463,19 @@ async function main() {
   const manifestEntries = [];
 
   // 4. Prerender in batches of CONCURRENCY
-  // Root route goes LAST so it overwrites dist/index.html after all others
+  // Homepage goes FIRST (2026-10-23). It used to go last "so it overwrites
+  // dist/index.html after all others", which made it the first route dropped when
+  // the time budget ran out — the live homepage then served Google the bare SPA
+  // shell. Rendering it first is safe: the static server above keeps the original
+  // shell in memory for its SPA fallback, so writing dist/index.html early only
+  // changes what a request for "/" itself returns.
   const nonRoot = routes.filter(r => r !== '/');
-  const ordered = [...nonRoot, '/'];
+  let ordered = routes.includes('/') ? ['/', ...nonRoot] : nonRoot;
+  if (SHARD) {
+    // Interleave so every shard gets a similar mix of heavy and light pages.
+    ordered = ordered.filter((_, i) => i % SHARD.count === SHARD.index);
+    console.log(`   Shard ${SHARD.index + 1}/${SHARD.count}: ${ordered.length} routes → ${OUT}`);
+  }
 
   // Worker pool (2026-10-23): previously routes ran in fixed batches of CONCURRENCY
   // and each batch waited for its SLOWEST route (up to the 15s timeout), idling the
@@ -532,20 +557,22 @@ async function main() {
     elapsedSeconds: Math.round((Date.now() - startTime) / 1000),
     routes: manifestEntries,
   };
-  writeFileSync(join(DIST, 'prerender-manifest.json'), JSON.stringify(manifest, null, 2), 'utf-8');
+  if (SHARD) manifest.shard = SHARD;
+  mkdirSync(OUT, { recursive: true });
+  writeFileSync(join(OUT, MANIFEST_NAME), JSON.stringify(manifest, null, 2), 'utf-8');
 
   const elapsed = Math.round((Date.now() - startTime) / 1000);
   console.log(`\n✅ Prerender complete: ${results.ok} ok, ${results.failed} failed, ${results.skipped} skipped (${elapsed}s)`);
-  console.log(`   Manifest written: dist/prerender-manifest.json`);
+  console.log(`   Manifest written: ${join(OUT, MANIFEST_NAME)}`);
 
   if (failedRoutes.length > 0) {
     console.log('   Failed routes:', failedRoutes.slice(0, 20).join(', '));
   }
 
   // Assert a few sample routes contain their titles
-  const samples = ['/zodiac/aries', '/numerology/7', '/chinese-zodiac/dragon'].filter(r => routes.includes(r));
+  const samples = ['/zodiac/aries', '/numerology/7', '/chinese-zodiac/dragon'].filter(r => ordered.includes(r));
   for (const route of samples) {
-    const filePath = join(DIST, route, 'index.html');
+    const filePath = join(OUT, route, 'index.html');
     if (existsSync(filePath)) {
       const content = readFileSync(filePath, 'utf-8');
       const titleMatch = content.match(/<title>([^<]*)<\/title>/i);

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsx scripts/gen-celebrity-slugs.mts && tsx scripts/generate-og-cards.mts && node scripts/prerender.mjs && node scripts/generate-sitemap.mjs",
+    "build:app": "vite build && tsx scripts/gen-celebrity-slugs.mts && tsx scripts/generate-og-cards.mts",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",

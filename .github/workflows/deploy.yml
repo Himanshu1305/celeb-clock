@@ -95,12 +95,18 @@ jobs:
           command: deploy --env staging
 
   # ── PRODUCTION: push to main, or explicit confirmed manual dispatch ─────────
-  production:
+  # 2026-10-23: split into build → 4 parallel prerender shards → deploy. A single
+  # runner needed ~65 min to prerender all ~5,700 pages and hit the time cap, so
+  # ~100 pages (including the homepage) went live as the bare SPA shell. Shards
+  # finish in ~15-20 min each, and the deploy job refuses to ship if coverage
+  # drops below 98% or the homepage is missing (scripts/prerender-merge.mjs).
+  prod-build:
     if: >-
       github.event_name == 'push' ||
       (github.event_name == 'workflow_dispatch' &&
        github.event.inputs.deploy_production == 'deploy-production')
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -120,8 +126,96 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: npx tsx scripts/export-celebrities.ts
 
-      - name: Build
-        run: npm run build
+      - name: Build app (no prerender)
+        run: npm run build:app
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-build
+          path: |
+            dist
+            scripts/celebrity-meta.json
+            src/data/celebrities.json
+          include-hidden-files: true
+          retention-days: 3
+
+  prod-prerender:
+    needs: prod-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: true
+      matrix:
+        shard: [0, 1, 2, 3]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: prod-build
+          path: .
+
+      - name: Prerender shard ${{ matrix.shard }} of 4
+        env:
+          PRERENDER_SHARD: ${{ matrix.shard }}/4
+          PRERENDER_OUT: prerender-out
+          PRERENDER_TIME_LIMIT_MIN: '45'
+        run: node scripts/prerender.mjs
+
+      - name: Upload shard
+        uses: actions/upload-artifact@v4
+        with:
+          name: prerender-shard-${{ matrix.shard }}
+          path: prerender-out
+          if-no-files-found: error
+          retention-days: 3
+
+  production:
+    needs: [prod-build, prod-prerender]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: prod-build
+          path: .
+
+      - name: Download prerender shards
+        uses: actions/download-artifact@v4
+        with:
+          pattern: prerender-shard-*
+          path: prerender-shards
+
+      - name: Merge shards + check SEO coverage (blocks deploy if too low)
+        run: node scripts/prerender-merge.mjs prerender-shards
+
+      - name: Generate sitemap
+        run: node scripts/generate-sitemap.mjs
 
       - name: Deploy to Cloudflare PRODUCTION
         uses: cloudflare/wrangler-action@v3

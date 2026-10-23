@@ -24,14 +24,12 @@ const require = createRequire(import.meta.url);
 const celebritiesData = require('../src/data/celebrities.json');
 const allCelebrities = celebritiesData.celebrities as Record<string, unknown>[];
 
-// Prerender curation: every static Indian celebrity (canonical, hand-curated)
-// PLUS Supabase celebrities notable enough to warrant a static page (present on
-// ≥30 Wikipedia language editions). The full 2595-entry set still resolves
-// client-side via CelebrityPage; this only bounds which pages get static HTML,
-// keeping the build tractable and avoiding thin-content mass publishing.
-const NOTABLE_SITELINKS = 30;
-const shouldPrerender = (c: Record<string, unknown>) =>
-  c.source === 'static' || Number(c.sitelinks ?? 0) >= NOTABLE_SITELINKS;
+// Prerender coverage (2026-10-23, founder decision): EVERY celebrity in the unified
+// DB gets static HTML and a sitemap entry. Previously only static Indian entries plus
+// Supabase rows with >=30 Wikipedia sitelinks were prerendered (1,442 of 3,107), so the
+// other ~1,665 pages served Google the generic SPA shell title and were absent from the
+// sitemap. Search is the main acquisition channel, so all pages are now published.
+const shouldPrerender = (c: Record<string, unknown>) => !!c.slug;
 
 const meta: Record<string, { title: string; desc: string }> = {};
 allCelebrities.filter(shouldPrerender).forEach((celeb) => {
