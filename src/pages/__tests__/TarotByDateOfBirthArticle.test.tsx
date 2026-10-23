@@ -21,19 +21,27 @@ describe('TarotByDateOfBirthArticle', () => {
     renderArticle();
     expect(document.querySelector('[data-testid="tarot-calculator"]')).toBeTruthy();
   });
-  it('TC-TAROT-P-04: entering DOB 1988-11-05 (Scorpio) shows "Death"', () => {
+  it('TC-TAROT-P-04: DOB 1988-11-05 → birth card The Lovers (11+5+1988=2004→6, Greer method); Scorpio zodiac card Death shown separately', () => {
     renderArticle();
     const input = document.querySelector('input[type="date"]') as HTMLInputElement;
     fireEvent.change(input, { target: { value: '1988-11-05' } });
     const result = document.querySelector('[data-testid="tarot-result"]');
     expect(result).toBeTruthy();
-    expect(result?.textContent).toContain('Death');
+    expect(document.querySelector('[data-testid="tarot-birth-card"]')?.textContent).toContain('The Lovers');
+    expect(document.querySelector('[data-testid="tarot-zodiac-card"]')?.textContent).toContain('Death');
   });
-  it('TC-TAROT-P-05: Life Path tarot table/section present', () => {
+  it('TC-TAROT-P-04b (audit N7): 1996-08-31 → Wheel of Fortune + The Magician, same as /tarot-card-by-birthday', () => {
+    renderArticle();
+    const input = document.querySelector('input[type="date"]') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '1996-08-31' } });
+    expect(document.querySelector('[data-testid="tarot-birth-card"]')?.textContent).toContain('Wheel of Fortune');
+    expect(document.querySelector('[data-testid="tarot-result"]')?.textContent).toContain('The Magician');
+  });
+  it('TC-TAROT-P-05: birth card pair table present', () => {
     renderArticle();
     const text = document.body.textContent || '';
-    expect(document.querySelector('[data-testid="life-path-tarot-table"]')).toBeTruthy();
-    expect(text).toContain('Life Path Tarot Card');
+    expect(document.querySelector('[data-testid="birth-card-table"]')).toBeTruthy();
+    expect(text).toContain('Tarot Birth Card Pairs by Number');
   });
   it('TC-TAROT-P-06: all 12 zodiac signs referenced', () => {
     renderArticle();

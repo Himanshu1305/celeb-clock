@@ -4,14 +4,9 @@ import { ToolLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
-import { getTarotCardByLifePath, MAJOR_ARCANA, type TarotCard } from '@/data/tarotData';
+import { getTarotBirthCards, MAJOR_ARCANA, type TarotCard } from '@/data/tarotData';
 import { useReportPrice } from '@/hooks/useCurrency';
-import { lifePathNumber } from '@/lib/lifePath';
-
-/** Audit N1: the ONE shared sitewide Life Path function. */
-function calculateLifePath(day: number, month: number, year: number): number {
-  return lifePathNumber(day, month, year);
-}
+import { describeBirthCardWorking } from '@/lib/tarot/birthCard';
 
 type TabKey = 'meaning' | 'love' | 'career' | 'health' | 'spirituality';
 
@@ -208,8 +203,10 @@ export default function TarotByBirthday() {
   const [drawnCard, setDrawnCard] = useState<TarotCard | null>(null);
   const [dob, setDob] = useState('');
   const [birthdayResult, setBirthdayResult] = useState<{
-    lifePathNumber: number;
+    /** Audit N7: Mary K. Greer birth card — first card, then its pair (19 → 10 → 1; 22 → 0 + 4). */
     card: TarotCard;
+    pair: TarotCard[];
+    working: string;
   } | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>('meaning');
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
@@ -217,8 +214,12 @@ export default function TarotByBirthday() {
   const handleCalculate = () => {
     if (!dob) return;
     const [year, month, day] = dob.split('-').map(Number);
-    const lp = calculateLifePath(day, month, year);
-    setBirthdayResult({ lifePathNumber: lp, card: getTarotCardByLifePath(lp) });
+    const r = getTarotBirthCards(day, month, year);
+    setBirthdayResult({
+      card: r.cards[0],
+      pair: r.cards.slice(1),
+      working: describeBirthCardWorking(day, month, year),
+    });
   };
 
   const getCombinationReading = (drawn: TarotCard, birthday: TarotCard): string => {
@@ -232,7 +233,7 @@ export default function TarotByBirthday() {
     {
       question: 'How is my tarot card determined by birthday?',
       answer:
-        "Your birthday tarot card is determined by your Life Path number — calculated by reducing your full date of birth to a single digit (or master number 11, 22, 33). Each Life Path number corresponds to one of the Major Arcana cards in the tarot deck, which represents your soul's core archetype and life theme.",
+        "BornClock uses the standard tarot birth card method popularised by Mary K. Greer: add your birth month, day and full year as numbers (for 31 August 1996: 8 + 31 + 1996 = 2035), then add the digits of the total until you reach 22 or less (2 + 0 + 3 + 5 = 10). That number is your birth card (10 = Wheel of Fortune). Reduce it once more for its paired card (1 + 0 = 1, The Magician). A total of 22 is The Fool, paired with The Emperor (4); 19 gives three cards (The Sun, Wheel of Fortune and The Magician).",
     },
     {
       question: 'What are the Major Arcana tarot cards?',
@@ -242,12 +243,12 @@ export default function TarotByBirthday() {
     {
       question: 'Can my tarot card change?',
       answer:
-        'Your birthday tarot card — determined by your Life Path number — remains constant throughout your life. However, you also have a Personal Year card that changes annually, reflecting the current energetic theme of that particular year for you.',
+        'No. Your tarot birth cards come from your date of birth, so they stay the same for life. Some readers also use a year card, which changes each year, but BornClock shows only your fixed birth cards here.',
     },
     {
       question: 'Which tarot card is the most powerful?',
       answer:
-        'The World (XXI) is often considered the most complete card, representing full integration and achievement. The Fool (0) holds infinite potential. Master number cards — Justice (11) and The World (22) — carry particularly intense archetypal energy.',
+        'No card is better than another. The World (XXI) is the card of completion and The Fool (0) the card of pure potential, but every Major Arcana card describes a different archetype with its own strengths and challenges.',
     },
   ];
 
@@ -267,7 +268,7 @@ export default function TarotByBirthday() {
           <SEO
             title="Tarot Card by Birthday — Draw Your Card & Find Your Major Arcana | BornClock"
             description="Draw your tarot card interactively — then discover your permanent Major Arcana card from your date of birth. Free animated tarot card reading with full interpretations."
-            keywords="tarot card by birthday, birthday tarot card, major arcana calculator, life path tarot, tarot by date of birth"
+            keywords="tarot card by birthday, birthday tarot card, tarot birth card calculator, major arcana calculator, tarot by date of birth"
             canonicalUrl="/tarot-card-by-birthday"
           />
           <WebApplicationSchema
@@ -293,10 +294,10 @@ export default function TarotByBirthday() {
       h1="Your Tarot Card by Birthday"
       lead={(
         <>
-          Your birthday tarot card is determined by your Life Path number — the single most
-          important number in numerology, calculated from your full date of birth. Each Life
-          Path corresponds to one of the 22 Major Arcana cards, representing your soul's core
-          archetype and the deepest theme of your life journey.
+          Your tarot birth card comes from the standard method used by most tarot
+          calculators (Mary K. Greer's birth cards): add your birth month, day and year,
+          then reduce the total to a Major Arcana number of 22 or less. Most people have a
+          pair of cards — a birth card and the card it reduces to.
         </>
       )}
     >
@@ -317,7 +318,7 @@ export default function TarotByBirthday() {
           <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-200">
             <h2 className="text-lg font-bold text-gray-900 mb-1 text-center">🎂 Your Birthday Card</h2>
             <p className="text-sm text-gray-500 text-center mb-4">
-              Determined by your Life Path number — this card is permanent and unique to your birthday.
+              Month + day + year, reduced to 22 or less — the standard tarot birth card method.
             </p>
             <div className="flex gap-3 items-start">
               <div className="flex-1">
@@ -338,13 +339,21 @@ export default function TarotByBirthday() {
             <div className="mb-8">
               <div className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-white text-center mb-6">
                 <p className="text-sm text-[#6E5AA6] mb-1">
-                  Your Life Path is {birthdayResult.lifePathNumber} · Your card is
+                  Your tarot birth card is
                 </p>
                 <div className="text-7xl mb-3">{birthdayResult.card.emoji}</div>
                 <p className="text-sm font-semibold text-[#6E5AA6] mb-1">
                   Card {birthdayResult.card.number}
                 </p>
                 <h2 className="text-3xl font-black text-white mb-4">{birthdayResult.card.name}</h2>
+                {birthdayResult.pair.length > 0 && (
+                  <p className="text-sm text-white/80 mb-3" data-testid="birth-card-pair">
+                    Paired with {birthdayResult.pair.map(c => `${c.name} (${c.number})`).join(' and ')}
+                  </p>
+                )}
+                <p className="text-xs text-white/60 mb-4" data-testid="birth-card-working">
+                  {birthdayResult.working}
+                </p>
                 <div className="flex flex-wrap justify-center gap-2 mb-4">
                   {birthdayResult.card.keywords.map(kw => (
                     <span key={kw} className="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full">
@@ -467,8 +476,8 @@ export default function TarotByBirthday() {
           <div className="mt-10">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">The 22 Major Arcana Cards</h2>
             <p className="text-gray-500 text-sm mb-6">
-              Each card represents a universal archetype. Your birthday determines which one is your
-              soul's signature.
+              Each card represents a universal archetype. Your birth date points to one of them
+              as your birth card, usually paired with a second.
             </p>
             <div className="space-y-2">
               {Object.entries(MAJOR_ARCANA).map(([num, card]) => {

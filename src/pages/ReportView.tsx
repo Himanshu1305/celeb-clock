@@ -9,7 +9,7 @@ import { getReport, liveReportFigures, PERSONAL_YEAR_MEANINGS } from '@/services
 import { supabase } from '@/integrations/supabase/client';
 import type { BirthdayReportData } from '@/services/BirthdayReportService';
 import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
-import { getTarotCardByLifePath } from '@/data/tarotData';
+import { getTarotBirthCards } from '@/data/tarotData';
 import { getChineseZodiacDescription } from '@/data/chineseZodiacDescriptions';
 import { getVedicContext } from '@/data/birthdayPersonality';
 import { RASHI_RATNA_DATA } from '@/data/rashiRatnaData';
@@ -1773,8 +1773,12 @@ const ReportView = () => {
 
       {/* ── Tarot Card ────────────────────────────────────────────────────── */}
       {!isLocked && (() => {
-        const lp = Number(lifePathNumber || 1);
-        const card = getTarotCardByLifePath(lp);
+        // Audit N7: tarot birth card by the standard (Mary K. Greer) method, shared sitewide.
+        const [bcY, bcM, bcD] = String(rd.recipientDob || '').split('-').map(Number);
+        const bc = getTarotBirthCards(bcD || 1, bcM || 1, bcY || 2000);
+        const card = bc.cards[0];
+        const pair = bc.cards.slice(1);
+        const pairText = pair.map(c => `${c.name} (${c.number})`).join(' and ');
         return (
           <div className="py-12 px-4" style={{ background: 'var(--dark)', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
             <div className="max-w-2xl mx-auto space-y-6">
@@ -1783,18 +1787,18 @@ const ReportView = () => {
                 <div className="bb-rule" style={{ background: 'rgba(255,255,255,.12)' }}><span className="bb-code" style={{ color: '#9DB0BF' }}>05 · ARCANA</span></div>
                 <div className="bb-eyebrow" style={{ color: 'var(--gold)' }}>Major Arcana</div>
                 <h2 className="bb-h2" style={{ color: '#FFFFFF' }}>Birthday Tarot Card</h2>
-                <p style={{ fontSize: '12.5px', color: '#9DB0BF', marginTop: '5px' }}>Your Life Path {lp} maps to the {card.name} of the Major Arcana</p>
+                <p style={{ fontSize: '12.5px', color: '#9DB0BF', marginTop: '5px' }}>Your birth date gives {card.name}{pairText ? `, paired with ${pairText}` : ''}</p>
               </div>
 
               {/* Card identity */}
               <div className="text-center">
                 <div className="text-6xl mb-3">{card.emoji}</div>
                 <h3 className="text-3xl font-black text-white mb-1">{card.name}</h3>
-                <p className="text-xs" style={{ color: '#9DB0BF' }}>Life Path {lp} · Card {card.number}</p>
+                <p className="text-xs" style={{ color: '#9DB0BF' }}>Birth card · Card {card.number}{pairText ? ` · paired with ${pairText}` : ''}</p>
                 <p className="text-xs mt-2 max-w-xs mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,.5)' }}>
-                  In traditional tarot, your birthday's Life Path number ({lp}) corresponds to a card
-                  of the Major Arcana — the 22 cards representing life's greatest themes and forces.
-                  This is your card.
+                  Tarot birth card method (Mary K. Greer): month + day + year = {bc.total}, with the
+                  digits added until the number is 22 or less. That number names your card among the
+                  22 Major Arcana — the cards for life's greatest themes and forces.
                 </p>
                 <div className="flex flex-wrap justify-center gap-2 mt-3">
                   {card.keywords.map((kw: string) => (
@@ -1811,7 +1815,7 @@ const ReportView = () => {
 
               {/* Deep meaning */}
               <div className="rounded-2xl p-5" style={{ background: 'rgba(255,255,255,.07)', breakInside: 'avoid', pageBreakInside: 'avoid' }}>
-                <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--gold)' }}>Deep Meaning for Life Path {lp}</div>
+                <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--gold)' }}>Deep Meaning of Your Birth Card</div>
                 <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,.9)' }}>{card.deepMeaning}</p>
               </div>
 
