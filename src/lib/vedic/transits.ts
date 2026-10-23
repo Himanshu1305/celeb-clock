@@ -9,7 +9,7 @@
  * time (and prerender a window of years).
  */
 import {
-  RASHIS, readPlanetTransit, transitSignIndex, findIngress,
+  RASHIS, readPlanetTransit, transitSignIndex, signSegments,
   type PlanetName, type TransitReading,
 } from './rashifal';
 import { getSiderealLongitude } from './engine/vedicEngine';
@@ -23,47 +23,67 @@ export const TRANSIT_PLANETS: Record<TransitPlanet, { key: PlanetName; label: st
   ketu: { key: 'Ketu', label: 'Ketu (South Node)', blurb: 'Ketu, always opposite Rahu, spends about 1½ years per sign — its transit points to detachment, release and inward, spiritual themes.', cycleYears: 18 },
 };
 
+export interface YearTransitPhase extends TransitReading {
+  fromISO: string;   // IST calendar date the planet is in this sign from (or 1 Jan)
+  toISO: string;     // IST calendar date it leaves (or 31 Dec)
+  days: number;
+}
+
 export interface YearTransit {
   planet: TransitPlanet;
   label: string;
   year: number;
   startSign: string;       // sign at the start of the year
   endSign: string;         // sign at the end of the year
+  /** Every stretch of the year in one sign, in order — e.g. Saturn 2027: Meena → Mesha → Meena. */
+  signs: Array<{ sign: string; fromISO: string; toISO: string }>;
   ingress: Array<{ date: string; sign: string }>;
-  perSign: Array<TransitReading & { moonSign: string; moonSlug: string }>;
+  /**
+   * Per Moon sign. The top-level reading is the house the planet occupies for the
+   * LONGEST total time in the year; `phases` holds every stretch with its own dates
+   * and reading. `sadeSati`/`dhaiya` are set if ANY stretch qualifies.
+   */
+  perSign: Array<TransitReading & { moonSign: string; moonSlug: string; phases: YearTransitPhase[] }>;
 }
 
 export function computeYearTransit(planet: TransitPlanet, year: number): YearTransit {
   const { key, label } = TRANSIT_PLANETS[planet];
   const start = new Date(Date.UTC(year, 0, 1, 6, 0, 0));
   const end = new Date(Date.UTC(year, 11, 31, 6, 0, 0));
-  const mid = new Date(Date.UTC(year, 5, 30, 6, 0, 0));
 
   const startSignIdx = transitSignIndex(key, start);
   const endSignIdx = transitSignIndex(key, end);
 
-  // All ingresses within the year (a slow planet changes sign 0–1 times/yr typically).
-  const ingress: Array<{ date: string; sign: string }> = [];
-  let cursor = new Date(start);
-  for (let guard = 0; guard < 4 && cursor < end; guard++) {
-    const ing = findIngress(key, cursor, end);
-    if (!ing) break;
-    ingress.push({ date: ing.dateISO, sign: RASHIS[ing.signIndex].sanskrit });
-    cursor = new Date(ing.dateISO + 'T12:00:00Z');
-    cursor.setUTCDate(cursor.getUTCDate() + 2);
-  }
+  // Split the year at every real sign change (incl. retrograde returns) — audit K2: a
+  // single mid-year date made /transit/saturn/2027 read "in Meena through 2027" while
+  // computing every Moon sign's effect for Mesha.
+  const segs = signSegments(key, start, end);
+  const signs = segs.map(sg => ({ sign: RASHIS[sg.signIndex].sanskrit, fromISO: sg.fromISO, toISO: sg.toISO }));
+  const ingress = segs.slice(1).map(sg => ({ date: sg.fromISO, sign: RASHIS[sg.signIndex].sanskrit }));
 
-  // Per Moon sign, read the transit at mid-year (the dominant sign for most of the year).
-  const perSign = RASHIS.map((r, i) => ({
-    ...readPlanetTransit(key, i, mid),
-    moonSign: r.sanskrit,
-    moonSlug: r.slug,
-  }));
+  const perSign = RASHIS.map((r, i) => {
+    const phases: YearTransitPhase[] = segs.map(sg => ({
+      ...readPlanetTransit(key, i, new Date((sg.startMs + sg.endMs) / 2)),
+      fromISO: sg.fromISO, toISO: sg.toISO,
+      days: Math.round((sg.endMs - sg.startMs) / 864e5),
+    }));
+    // Dominant house = the one occupied for the most days in total across the year.
+    const daysByHouse = new Map<number, number>();
+    for (const ph of phases) daysByHouse.set(ph.house, (daysByHouse.get(ph.house) ?? 0) + ph.days);
+    const domHouse = [...daysByHouse.entries()].sort((a, b) => b[1] - a[1])[0][0];
+    const dom = phases.find(ph => ph.house === domHouse)!;
+    const { fromISO: _f, toISO: _t, days: _d, ...domReading } = dom;
+    const reading: TransitReading = { ...domReading };
+    if (phases.some(ph => ph.sadeSati)) reading.sadeSati = true; else delete reading.sadeSati;
+    if (phases.some(ph => ph.dhaiya)) reading.dhaiya = true; else delete reading.dhaiya;
+    return { ...reading, moonSign: r.sanskrit, moonSlug: r.slug, phases };
+  });
 
   return {
     planet, label, year,
     startSign: RASHIS[startSignIdx].sanskrit,
     endSign: RASHIS[endSignIdx].sanskrit,
+    signs,
     ingress,
     perSign,
   };

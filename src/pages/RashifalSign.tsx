@@ -178,7 +178,7 @@ export default function RashifalSign() {
             </p>
             <ul className="space-y-2">
               {data.transits.map(t => (
-                <li key={t.planet} className="text-sm">
+                <li key={`${t.planet}-${t.fromISO ?? ""}`} className="text-sm">
                   <span className="font-medium text-foreground">{t.planet}</span>
                   {t.sadeSati && <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-rose-100 text-rose-700">Sade Sati</span>}
                   {t.dhaiya && <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">Dhaiya</span>}
