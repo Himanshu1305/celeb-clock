@@ -1,0 +1,13 @@
+-- APPLIED 24 Oct 2026 (two migrations: celebrity_duplicate_rows_merge_20261024 and
+-- celebrity_duplicate_rows_merge_extra_20261024). Recorded here for history.
+-- 1) 34 same-person duplicate pairs left by the 23 Oct date corrections (a wrong-date row
+--    beside the corrected row). Kept the row with a Wikidata ID (else the corrected row),
+--    set it to the verified date, deleted the other. Full SQL: see the applied migration in
+--    Supabase (list_migrations); every touched row (68) was copied first into
+--    public.celebrity_sitelinks_dup_backup_20261024 (RLS on, no public access).
+-- 2) 5 more same-person seed copies (no Wikidata ID) removed: Jyothika 1977-10-18,
+--    Farida Jalal 1944-05-18, Nita Ambani 1964-11-10, Tenzing Norgay 1914-05-15,
+--    Divya Khosla Kumar 1983-03-07 (also backed up). Corrected per English Wikipedia
+--    (24 Oct 2026): Jyothika 18 Oct 1978; Farida Jalal 18 May 1950.
+-- Same-name rows that are DIFFERENT people (different Wikidata IDs, e.g. Francis Bacon
+-- 1561 vs 1909, John Adams 1735 vs 1947, Sting) were left untouched.
