@@ -23,7 +23,7 @@ const planets = [{ name: 'Sun', house: 10 }, { name: 'Venus', house: 7 }];
 
 const renderWA = (free?: boolean) => render(
   <MemoryRouter>
-    <WhatsAhead lagnaSignIndex={0} planets={planets} dashaTimeline={timeline} free={free} />
+    <WhatsAhead lagnaSignIndex={1} planets={planets} dashaTimeline={timeline} free={free} />
   </MemoryRouter>
 );
 

@@ -40,7 +40,7 @@ function AreaCard({ area, timeline, nowMs }: { area: LifeArea; timeline: MahaPer
   const { current, upcoming } = pickWindows(wins);
   const isRel = area.key === 'relationships';
   return (
-    <div data-testid={`whatsahead-area-${area.key}`} style={{ border: '1px solid var(--line, #e4dcc8)', borderRadius: 10, padding: '12px 14px' }}>
+    <div data-testid={`whatsahead-area-${area.key}`} data-significators={area.significators.join(',')} style={{ border: '1px solid var(--line, #e4dcc8)', borderRadius: 10, padding: '12px 14px' }}>
       <div style={{ fontWeight: 700, color: 'var(--ink)' }}>{area.label}</div>
       <p style={{ fontSize: 12, color: 'var(--muted,#667)', margin: '4px 0 8px' }}>{area.note}</p>
       {current && (
@@ -66,6 +66,7 @@ function AreaCard({ area, timeline, nowMs }: { area: LifeArea; timeline: MahaPer
 }
 
 export interface WhatsAheadProps {
+  /** 1-based Lagna sign (Mesha = 1 … Meena = 12), exactly as KundaliData.lagna.signIndex carries it. */
   lagnaSignIndex: number;
   planets: Array<{ name: string; house: number }>;
   dashaTimeline: MahaPeriod[];
@@ -81,7 +82,9 @@ export function WhatsAhead({ lagnaSignIndex, planets, dashaTimeline, free }: Wha
   const isFree = free ?? WHATS_AHEAD_IS_FREE;
   const nowMs = Date.now(); // Rule 13 — computed at view time, never baked in.
   const planetsInHouse = (h: number) => planets.filter(p => p.house === h).map(p => p.name);
-  const areas = lifeAreas(lagnaSignIndex, planetsInHouse);
+  // lagnaSignIndex arrives 1-based (KundaliData); lifeAreas/houseLord want the 0-based rashi
+  // index. Passing it unconverted shifted every house lord one sign forward (audit K1).
+  const areas = lifeAreas(lagnaSignIndex - 1, planetsInHouse);
   const { horizons, lifetime } = timeHorizons(dashaTimeline, nowMs);
 
   return (
