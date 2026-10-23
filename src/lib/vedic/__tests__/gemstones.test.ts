@@ -79,3 +79,21 @@ describe('Gemstone rebuild (Part J) — Lagna-based hierarchy', () => {
     expect(r.disclaimer).toMatch(/trial/i);
   });
 });
+
+// D8 / D11 (audit round 2) — gating rules, no external reference values needed.
+import { blueSapphireAllowed, sizingRuleForAge, SIZING_RULE } from '../gemstones';
+describe('D8 Blue Sapphire gating & D11 minor sizing guard', () => {
+  const s = (planet: string) => ({ planet, gem: '', hindi: '', role: '', reason: '', trialCaution: false, dashaActive: false });
+  it('allowed only when the chart logic recommends Saturn, and only for adults', () => {
+    expect(blueSapphireAllowed({ primary: s('Saturn'), additional: [] }, 30)).toBe(true);           // e.g. Taurus/Libra rising (Saturn Yogakaraka)
+    expect(blueSapphireAllowed({ primary: s('Venus'), additional: [s('Saturn')] }, 30)).toBe(true);
+    expect(blueSapphireAllowed({ primary: s('Sun'), additional: [s('Mercury')] }, 30)).toBe(false);  // Saturn not indicated → omit
+    expect(blueSapphireAllowed({ primary: s('Saturn'), additional: [] }, 12)).toBe(false);          // minor → never
+  });
+  it('no stone weights under 18', () => {
+    expect(sizingRuleForAge(2)).toBeNull();
+    expect(sizingRuleForAge(17)).toBeNull();
+    expect(sizingRuleForAge(18)).toBe(SIZING_RULE);
+    expect(sizingRuleForAge(null)).toBe(SIZING_RULE);
+  });
+});

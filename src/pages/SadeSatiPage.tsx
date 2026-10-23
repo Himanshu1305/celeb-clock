@@ -20,6 +20,8 @@ export interface Report {
   currentCycle: Cycle | null; nextCycle: Cycle | null; previousCycle: Cycle | null;
   paused?: { since: string; resumes: string } | null;
   ageYears?: number;
+  /** D8: true only when the full-chart gemstone logic recommends Saturn's stone (adults). */
+  blueSapphireOk?: boolean;
   methodology: string;
   dhaiya: { active: boolean; type: string | null; currentEnd: string | null };
 }
@@ -224,7 +226,9 @@ export default function SadeSatiPage() {
                 <li><strong className="text-foreground">Lean into Saturn’s own themes</strong> — patience, routine, honest hard work and finishing what you start. This is the most-cited "remedy" and the one that actually matches the period.</li>
                 <li><strong className="text-foreground">Service &amp; generosity</strong> — helping elders, workers or those in need on a Saturday is a traditional Saturn practice many find genuinely centring.</li>
                 <li><strong className="text-foreground">Devotional custom</strong> — some recite the Hanuman Chalisa or a Shani mantra on Saturdays; take it or leave it as suits your beliefs.</li>
-                <li><strong className="text-foreground">Gemstone (with caution)</strong> — a Blue Sapphire (<TermTip id="ratna">Ratna</TermTip>) is the classical Saturn stone, but it’s a powerful one — always trialled first. See the <a href="/gemstones" className="text-primary hover:underline">Gemstone tool</a> for a full-chart check before considering it.</li>
+                {report.blueSapphireOk && (
+                  <li data-testid="sadesati-gem"><strong className="text-foreground">Gemstone (with caution)</strong> — your full chart does favour Saturn, so a Blue Sapphire (<TermTip id="ratna">Ratna</TermTip>), Saturn’s classical stone, is an option. It is a powerful stone: traditionally worn on a short trial first, and only after a qualified astrologer has checked your chart. See the <a href="/gemstones" className="text-primary hover:underline">Gemstone tool</a> for the full reasoning.</li>
+                )}
               </ul>
               <p className="mt-2 text-xs text-amber-700">Offered as tradition and reflection, not medical or financial advice — and never as something you must do out of fear.</p>
             </div>

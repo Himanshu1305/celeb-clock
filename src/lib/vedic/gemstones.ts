@@ -48,6 +48,24 @@ export const WEARING_RITUAL: Record<string, WearingRitual> = {
 /** Traditional sizing rule of thumb. */
 export const SIZING_RULE = 'A common traditional guide is roughly 1 Ratti (about 0.18 g / ~0.91 carat) of stone per 10 kg of body weight — so ~7 Ratti for a 70 kg person. Treat it as a rough guide, not a strict rule, and consult a jeweller/astrologer for the exact stone.';
 
+/** D11: no stone weights for minors. Returns null (show nothing) under 18 or when age is unknown-negative. */
+export const MINOR_SIZING_NOTE = 'Stone sizes by body weight are not given for anyone under 18.';
+export function sizingRuleForAge(ageYears: number | null | undefined): string | null {
+  if (typeof ageYears === 'number' && ageYears < 18) return null;
+  return SIZING_RULE;
+}
+
+/**
+ * D8: may a Blue Sapphire (Saturn's stone) be mentioned as a remedy for this chart?
+ * Only when the full-chart gemstone logic itself recommends Saturn (Yogakaraka /
+ * Ascendant lord / supportive) — never when Saturn is on the avoid list or simply
+ * not indicated — and never for a minor.
+ */
+export function blueSapphireAllowed(report: Pick<GemstoneReport, 'primary' | 'additional'>, ageYears?: number | null): boolean {
+  if (typeof ageYears === 'number' && ageYears < 18) return false;
+  return report.primary?.planet === 'Saturn' || report.additional.some(a => a.planet === 'Saturn');
+}
+
 const NATURAL_BENEFICS = new Set(['Jupiter', 'Venus', 'Mercury', 'Moon']);
 const POWERFUL = new Set(['Saturn', 'Rahu', 'Ketu']); // trial-first stones
 const KENDRA = new Set([4, 7, 10]);

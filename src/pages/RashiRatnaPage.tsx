@@ -70,7 +70,7 @@ export default function RashiRatnaPage() {
         <TrustStrip claim="A general guide by Moon sign and its ruling planet — the Gemstone tool is the precise, full-chart version." href="/how-it-works#vedic" />
         <div className="bg-orange-50 border-l-4 border-orange-500 rounded-r-xl p-5 my-6">
           <p className="text-base font-semibold text-orange-900 leading-relaxed">
-            In the Indian Vedic tradition, your birthstone is determined not by your birth month but by your Rashi (zodiac sign) and its ruling planet. These gemstones — drawn from the sacred <TermTip id="navratna">Navratna</TermTip> system — have been used for over 2,000 years to strengthen planetary energies, protect against <TermTip id="malefic">malefic</TermTip> influences, and bring prosperity, health, and clarity.
+            In the Indian Vedic tradition, your birthstone is determined not by your birth month but by your Rashi (zodiac sign) and its ruling planet. These gemstones — drawn from the sacred <TermTip id="navratna">Navratna</TermTip> system — have been used for over 2,000 years to strengthen planetary energies, protect against <TermTip id="malefic">malefic</TermTip> influences, and bring prosperity and clarity — traditional associations, not medical claims.
           </p>
         </div>
 
