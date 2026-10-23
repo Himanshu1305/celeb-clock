@@ -1,3 +1,4 @@
+import { ORBITAL_PERIOD_DAYS, OTHER_PLANETS, orbitalPeriodYears } from '@/lib/orbitalPeriods';
 import { CelebrityDOB } from './celebrityUtils';
 import { lifePathNumber } from '@/lib/lifePath';
 import { getChineseYear } from '@/services/ChineseZodiacService';
@@ -178,13 +179,12 @@ export interface PlanetaryAge {
 export function calculatePlanetaryAges(dob: CelebrityDOB): PlanetaryAge[] {
   if (!dob.isFullDate) return []; // Never calculate for year-only DOB
   const daysLived = calculateDaysLived(dob.day, dob.month, dob.year);
-  return [
-    { planet: 'Mercury', emoji: '☿', age: Math.floor(daysLived / 88),    orbit_years: 0.2 },
-    { planet: 'Venus',   emoji: '♀', age: Math.floor(daysLived / 225),   orbit_years: 0.6 },
-    { planet: 'Mars',    emoji: '♂', age: Math.floor(daysLived / 687),   orbit_years: 1.9 },
-    { planet: 'Jupiter', emoji: '♃', age: Math.floor(daysLived / 4333),  orbit_years: 11.9 },
-    { planet: 'Saturn',  emoji: '♄', age: Math.floor(daysLived / 10759), orbit_years: 29.5 },
-    { planet: 'Uranus',  emoji: '♅', age: Math.floor(daysLived / 30687), orbit_years: 84.0 },
-    { planet: 'Neptune', emoji: '♆', age: Math.floor(daysLived / 60190), orbit_years: 164.8 },
-  ];
+  // N13: one shared NASA orbital-period table (src/lib/orbitalPeriods.ts).
+  const EMOJI: Record<string, string> = { Mercury: '☿', Venus: '♀', Mars: '♂', Jupiter: '♃', Saturn: '♄', Uranus: '♅', Neptune: '♆' };
+  return OTHER_PLANETS.map(planet => ({
+    planet,
+    emoji: EMOJI[planet],
+    age: Math.floor(daysLived / ORBITAL_PERIOD_DAYS[planet]),
+    orbit_years: Math.round(orbitalPeriodYears(planet) * 10) / 10,
+  }));
 }

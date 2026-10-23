@@ -6,7 +6,7 @@ import { SEO, FAQSchema } from '@/components/SEO';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getRankedMonthCelebrities, getRankedMonthCelebritiesByCountry } from '@/services/BirthdaySearchService';
 import { getMonthHub, MONTH_HUB_DATA } from '@/data/monthHubData';
-import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
+import { BIRTHSTONE_DATA, birthstoneAnswer } from '@/data/birthstoneData';
 import { useReportPrice } from '@/hooks/useCurrency';
 import { postsForTags } from '@/lib/mesh';
 import { SharePageBar } from '@/components/SharePageBar';
@@ -99,7 +99,7 @@ export default function MonthHub() {
   const meshPosts = postsForTags([...data.zodiacSpans.map(z => z.slug), 'birthstone', 'zodiac'], 2);
 
   const pageTitle = `Born in ${month} — Zodiac, Birthstone, Birth Flower & Famous Birthdays | BornClock`;
-  const metaDesc = `Everything about being born in ${month}: ${data.zodiacSpans.map(z => z.sign).join(' & ')} zodiac signs, the ${birthstone?.primaryStone ?? ''} birthstone, ${data.birthFlowers.map(f => f.name).join(' & ')} birth flowers, and famous people born in ${month}.`;
+  const metaDesc = `Everything about being born in ${month}: ${data.zodiacSpans.map(z => z.sign).join(' & ')} zodiac signs, the ${birthstoneAnswer(birthstone)} birthstone${birthstone?.answer ? 's' : ''}, ${data.birthFlowers.map(f => f.name).join(' & ')} birth flowers, and famous people born in ${month}.`;
 
   // FAQPage JSON-LD (visible FAQ below mirrors this)
   const faqItems = data.faqs.map(f => ({ question: f.question, answer: f.answer }));
@@ -221,11 +221,11 @@ export default function MonthHub() {
           <div className="bg-card border border-border rounded-xl p-6 mb-6">
             <div className="flex items-center gap-3 mb-2">
               <Gem className="w-5 h-5 text-primary" />
-              <h2 className="font-semibold text-lg text-foreground">{month} Birthstone — {birthstone.primaryStone}</h2>
+              <h2 className="font-semibold text-lg text-foreground">{month} Birthstone{birthstone.answer ? 's' : ''} — {birthstoneAnswer(birthstone)}</h2>
             </div>
             <p className="text-muted-foreground text-sm mb-3">{birthstone.fullDescription.slice(0, 260)}…</p>
             <Link to={`/birthstone/${birthstone.slug}`} className="text-primary hover:underline text-sm">
-              Full {birthstone.primaryStone} guide →
+              Full {birthstoneAnswer(birthstone)} guide →
             </Link>
           </div>
         )}

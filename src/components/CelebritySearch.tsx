@@ -48,7 +48,7 @@ function getBirthstone(month: number): string {
     5: '💚 Emerald', 6: '🤍 Pearl',
     7: '❤️ Ruby', 8: '🟢 Peridot',
     9: '🔵 Sapphire', 10: '🌈 Opal',
-    11: '🟡 Topaz', 12: '🩵 Turquoise',
+    11: '🟡 Topaz', 12: '🩵 Turquoise, Tanzanite & Zircon',
   };
   return stones[month] || '💎 Diamond';
 }

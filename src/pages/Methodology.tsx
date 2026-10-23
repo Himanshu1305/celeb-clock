@@ -4,6 +4,7 @@ import { SEO } from '@/components/SEO';
 import { ArticleLayout } from '@/components/central';
 import PageTagline from '@/components/PageTagline';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ORBITAL_PERIOD_DAYS, OTHER_PLANETS, orbitalPeriodYears } from '@/lib/orbitalPeriods';
 
 const TOC_ITEMS = [
   { id: 'life-expectancy', label: 'Life Expectancy Calculator' },
@@ -415,15 +416,12 @@ export default function Methodology() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                      {[
-                        ['Mercury', '87.969', '0.241'],
-                        ['Venus', '224.701', '0.615'],
-                        ['Mars', '686.971', '1.881'],
-                        ['Jupiter', '4,332.589', '11.862'],
-                        ['Saturn', '10,759.22', '29.457'],
-                        ['Uranus', '30,688.5', '84.011'],
-                        ['Neptune', '60,182.0', '164.79'],
-                      ].map(([planet, days, years], i) => (
+                      {/* N13: the one shared NASA table (src/lib/orbitalPeriods.ts). */}
+                      {OTHER_PLANETS.map(p => [
+                        p,
+                        ORBITAL_PERIOD_DAYS[p].toLocaleString('en-US', { maximumFractionDigits: 3 }),
+                        orbitalPeriodYears(p).toFixed(3),
+                      ]).map(([planet, days, years], i) => (
                         <tr key={planet} className={i % 2 === 0 ? 'bg-muted/20' : ''}>
                           <td className="px-4 py-2 font-medium text-foreground">{planet}</td>
                           <td className="px-4 py-2 font-mono">{days}</td>

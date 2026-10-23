@@ -35,7 +35,7 @@ const birthstones = {
   9: { name: 'Sapphire', color: 'Blue', meaning: 'Truth and loyalty' },
   10: { name: 'Opal', color: 'Multi-colored', meaning: 'Hope and creativity' },
   11: { name: 'Topaz', color: 'Golden Yellow', meaning: 'Friendship and healing' },
-  12: { name: 'Turquoise', color: 'Blue-green', meaning: 'Success and good fortune' }
+  12: { name: 'Turquoise, Tanzanite & Zircon', color: 'Blue-green to blue-violet', meaning: 'Success and good fortune' } // N13: one December answer site-wide
 };
 
 const historicalEventsByMonth: Record<number, Array<{ event: string, icon: string, region: string, wikipediaUrl: string }>> = {

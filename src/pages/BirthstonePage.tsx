@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { BIRTHSTONE_DATA, getBirthstoneBySlug } from '@/data/birthstoneData';
+import { BIRTHSTONE_DATA, getBirthstoneBySlug, birthstoneAnswer } from '@/data/birthstoneData';
 import { GemIllustration } from '@/components/GemIllustration';
 
 export default function BirthstonePage() {
@@ -42,11 +42,16 @@ export default function BirthstonePage() {
     );
   }
 
+  // N13: December's answer is the three-stone modern list, worded the same everywhere.
+  const firstAnswer = data.answer
+    ? `${data.month} has three birthstones: ${data.answer}.`
+    : `The primary birthstone for ${data.month} is ${data.primaryStone}${data.alternateStones.length ? `, with alternates including ${data.alternateStones.join(' and ')}` : ''}.`;
+
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
-      { '@type': 'Question', name: `What is the birthstone for ${data.month}?`, acceptedAnswer: { '@type': 'Answer', text: `The primary birthstone for ${data.month} is ${data.primaryStone}${data.alternateStones.length ? `, with alternates including ${data.alternateStones.join(' and ')}` : ''}.` } },
+      { '@type': 'Question', name: `What is the birthstone for ${data.month}?`, acceptedAnswer: { '@type': 'Answer', text: firstAnswer } },
       { '@type': 'Question', name: `What color is ${data.primaryStone}?`, acceptedAnswer: { '@type': 'Answer', text: `${data.primaryStone} is ${data.color}. Its chemical formula is ${data.chemicalFormula}.` } },
       { '@type': 'Question', name: `What does ${data.primaryStone} mean?`, acceptedAnswer: { '@type': 'Answer', text: `${data.primaryStone} symbolizes ${data.meaning}.` } },
       { '@type': 'Question', name: `How hard is ${data.primaryStone}?`, acceptedAnswer: { '@type': 'Answer', text: `${data.primaryStone} rates ${data.hardness}.` } },
@@ -61,7 +66,7 @@ export default function BirthstonePage() {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bornclock.com' },
       { '@type': 'ListItem', position: 2, name: 'Birthstone Finder', item: 'https://bornclock.com/birthstone' },
-      { '@type': 'ListItem', position: 3, name: `${data.month} — ${data.primaryStone}`, item: `https://bornclock.com/birthstone/${data.slug}` },
+      { '@type': 'ListItem', position: 3, name: `${data.month} — ${birthstoneAnswer(data)}`, item: `https://bornclock.com/birthstone/${data.slug}` },
     ],
   };
 
@@ -87,7 +92,7 @@ export default function BirthstonePage() {
       )}
       breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }, { label: 'Birthstone', to: '/birthstone' }], current: data.month }}
       footer={{
-        tagline: `${data.month} birthstone — ${data.primaryStone}, its history, meaning and geology.`,
+        tagline: `${data.month} birthstone${data.answer ? 's' : ''} — ${birthstoneAnswer(data)}, history, meaning and geology.`,
         nav: [
           { label: 'Birthday Report', to: '/birthday-report' },
           { label: 'Results', to: '/results' },
@@ -97,7 +102,7 @@ export default function BirthstonePage() {
         note: '© 2026 BornClock.',
       }}
       eyebrow={`${data.month} Birthstone`}
-      h1={data.primaryStone}
+      h1={birthstoneAnswer(data)}
     >
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Hero */}
@@ -218,7 +223,7 @@ export default function BirthstonePage() {
           <h2 className="text-2xl font-bold text-foreground mb-6 pb-2 border-b border-border">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {[
-              { q: `What is the birthstone for ${data.month}?`, a: `The primary birthstone for ${data.month} is ${data.primaryStone}${data.alternateStones.length ? `, with alternates including ${data.alternateStones.join(' and ')}` : ''}.` },
+              { q: `What is the birthstone for ${data.month}?`, a: firstAnswer },
               { q: `What color is ${data.primaryStone}?`, a: `${data.primaryStone} is ${data.color}. Its chemical formula is ${data.chemicalFormula}.` },
               { q: `What does ${data.primaryStone} symbolize?`, a: `${data.primaryStone} symbolizes ${data.meaning}.` },
               { q: `How hard is ${data.primaryStone}?`, a: `${data.primaryStone} rates ${data.hardness} on the Mohs scale.` },

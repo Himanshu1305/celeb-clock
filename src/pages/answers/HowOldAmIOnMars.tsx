@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
 import { ArticleLayout } from '@/components/central';
+import { ORBITAL_PERIOD_DAYS, orbitalPeriodYears, type OrbitPlanet } from '@/lib/orbitalPeriods';
 
 export default function HowOldAmIOnMars() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How old am I on other planets?", "item": "https://bornclock.com/answers/how-old-am-i-on-mars" } ] };
@@ -11,7 +12,7 @@ export default function HowOldAmIOnMars() {
     "mainEntity": [
       { "@type": "Question", "name": "How old am I on Mars?", "acceptedAnswer": { "@type": "Answer", "text": "Your age on Mars is calculated by dividing your Earth age in days by Mars's orbital period of 687 Earth days. A 30-year-old on Earth is 15.9 years old on Mars." } },
       { "@type": "Question", "name": "How do you calculate your age on other planets?", "acceptedAnswer": { "@type": "Answer", "text": "Planetary Age = (Earth age in days) ÷ (Planet's orbital period in Earth days). For example, Jupiter takes 4,333 Earth days per orbit, so a 30-year-old on Earth is only 2.5 Jovian years old." } },
-      { "@type": "Question", "name": "How old would I be on Neptune?", "acceptedAnswer": { "@type": "Answer", "text": "Neptune takes 60,190 Earth days (164.8 years) to orbit the Sun. A 30-year-old on Earth would be just 0.18 Neptunian years old. No human has ever had even a first birthday on Neptune." } },
+      { "@type": "Question", "name": "How old would I be on Neptune?", "acceptedAnswer": { "@type": "Answer", "text": "Neptune takes 60,189 Earth days (164.8 years) to orbit the Sun. A 30-year-old on Earth would be just 0.18 Neptunian years old. No human has ever had even a first birthday on Neptune." } },
       { "@type": "Question", "name": "How old am I on Mercury?", "acceptedAnswer": { "@type": "Answer", "text": "Mercury orbits the Sun in just 88 Earth days. A 30-year-old on Earth has lived 124.5 Mercurian years. You'd have celebrated over 120 birthdays on Mercury by age 30." } }
     ]
   };
@@ -45,7 +46,7 @@ export default function HowOldAmIOnMars() {
 
           <div className="prose prose-gray max-w-none space-y-6 text-gray-700">
             <h2 className="text-xl font-bold text-gray-900">How Planetary Age Works</h2>
-            <p>A "year" on any planet is the time it takes to complete one full orbit around the Sun. Earth takes 365.25 days. Mars takes 686.97 Earth days — roughly 1.88 Earth years. So if you're 30 on Earth, you've only experienced 15.9 Martian orbits around the Sun.</p>
+            <p>A "year" on any planet is the time it takes to complete one full orbit around the Sun. Earth takes 365.25 days. Mars takes 686.98 Earth days — roughly 1.88 Earth years. So if you're 30 on Earth, you've only experienced 15.9 Martian orbits around the Sun.</p>
             <p>This isn't just a fun thought experiment. Understanding planetary orbital periods is foundational to space mission planning, satellite deployment, and eventually, how we'll track time when humans live on other worlds. Future Martian colonists will almost certainly celebrate birthdays on a different timescale.</p>
 
             <h2 className="text-xl font-bold text-gray-900">The Math Behind It</h2>
@@ -63,14 +64,17 @@ export default function HowOldAmIOnMars() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td className="p-3 border border-gray-200">Mercury</td><td className="p-3 border border-gray-200">88 Earth days</td><td className="p-3 border border-gray-200">124.5 years</td></tr>
-                  <tr className="bg-gray-50"><td className="p-3 border border-gray-200">Venus</td><td className="p-3 border border-gray-200">225 Earth days</td><td className="p-3 border border-gray-200">48.7 years</td></tr>
-                  <tr><td className="p-3 border border-gray-200">Earth</td><td className="p-3 border border-gray-200">365.25 Earth days</td><td className="p-3 border border-gray-200">30 years</td></tr>
-                  <tr className="bg-gray-50"><td className="p-3 border border-gray-200">Mars</td><td className="p-3 border border-gray-200">687 Earth days</td><td className="p-3 border border-gray-200">15.9 years</td></tr>
-                  <tr><td className="p-3 border border-gray-200">Jupiter</td><td className="p-3 border border-gray-200">4,333 Earth days</td><td className="p-3 border border-gray-200">2.5 years</td></tr>
-                  <tr className="bg-gray-50"><td className="p-3 border border-gray-200">Saturn</td><td className="p-3 border border-gray-200">10,759 Earth days</td><td className="p-3 border border-gray-200">1.0 year</td></tr>
-                  <tr><td className="p-3 border border-gray-200">Uranus</td><td className="p-3 border border-gray-200">30,687 Earth days</td><td className="p-3 border border-gray-200">0.36 years</td></tr>
-                  <tr className="bg-gray-50"><td className="p-3 border border-gray-200">Neptune</td><td className="p-3 border border-gray-200">60,190 Earth days</td><td className="p-3 border border-gray-200">0.18 years</td></tr>
+                  {/* N13: rows come from the one shared NASA orbital-period table. */}
+                  {(['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'] as OrbitPlanet[]).map((p, i) => {
+                    const age = 30 / orbitalPeriodYears(p);
+                    return (
+                      <tr key={p} className={i % 2 ? 'bg-gray-50' : undefined}>
+                        <td className="p-3 border border-gray-200">{p}</td>
+                        <td className="p-3 border border-gray-200">{ORBITAL_PERIOD_DAYS[p].toLocaleString('en-US', { maximumFractionDigits: 1 })} Earth days</td>
+                        <td className="p-3 border border-gray-200">{p === 'Earth' ? '30 years' : `${age >= 1 ? age.toFixed(1) : age.toFixed(2)} years`}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

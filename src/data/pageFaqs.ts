@@ -150,7 +150,7 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'What is my birthstone by month?',
       answer:
-        'January – Garnet, February – Amethyst, March – Aquamarine, April – Diamond, May – Emerald, June – Pearl, July – Ruby, August – Peridot, September – Sapphire, October – Opal, November – Topaz, December – Turquoise.',
+        'January – Garnet, February – Amethyst, March – Aquamarine, April – Diamond, May – Emerald, June – Pearl, July – Ruby, August – Peridot, September – Sapphire, October – Opal, November – Topaz, December – Turquoise, Tanzanite & Zircon.',
     },
     {
       question: 'Modern vs traditional birthstones — what’s the difference?',

@@ -12,7 +12,7 @@ type NumberType = 'expression' | 'soulUrge' | 'personality';
 
 const NUMBER_TYPE_INFO: Record<NumberType, { label: string; subtitle: string; color: string; bgColor: string; borderColor: string }> = {
   expression: { label: 'Expression Number', subtitle: 'Calculated from all letters — who you are destined to be', color: 'text-[#6E5AA6]', bgColor: 'bg-[#6E5AA6]/10', borderColor: 'border-[#6E5AA6]/30' },
-  soulUrge: { label: 'Soul Urge Number', subtitle: "Calculated from vowels — what your heart truly desires", color: 'text-rose-700', bgColor: 'bg-rose-50', borderColor: 'border-rose-300' },
+  soulUrge: { label: 'Soul Urge Number', subtitle: "Calculated from vowels (and Y when no other vowel is beside it) — what your heart truly desires", color: 'text-rose-700', bgColor: 'bg-rose-50', borderColor: 'border-rose-300' },
   personality: { label: 'Personality Number', subtitle: 'Calculated from consonants — how others see you', color: 'text-emerald-700', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-300' },
 };
 
@@ -31,7 +31,7 @@ export default function NameNumerologyPage() {
 
   const faqItems = [
     { question: 'What is name numerology?',
-      answer: 'Name numerology (also called the Pythagorean system) assigns a number 1–9 to each letter of the alphabet. By summing the numbers corresponding to the letters in your full name, you calculate three key numbers: your Expression Number (all letters), Soul Urge Number (vowels only), and Personality Number (consonants only). Each number reveals a different dimension of your character and destiny.' },
+      answer: 'Name numerology (also called the Pythagorean system) assigns a number 1–9 to each letter of the alphabet. By summing the numbers corresponding to the letters in your full name, you calculate three key numbers: your Expression Number (all letters), Soul Urge Number (vowels only — Y counts as a vowel when there is no other vowel beside it, as in Lynn or Mary), and Personality Number (consonants only). Each number reveals a different dimension of your character and destiny.' },
     { question: 'Should I use my full birth name or current name?',
       answer: 'Traditional numerology uses the full name given at birth — including middle names — as it carries the original energetic imprint. However, calculating your current commonly-used name can reveal how you are presenting to the world today. Many numerologists calculate both and compare them.' },
     { question: "What is the difference between Pythagorean and Chaldean numerology?",

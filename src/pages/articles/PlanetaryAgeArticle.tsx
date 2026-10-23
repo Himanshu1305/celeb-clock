@@ -13,7 +13,7 @@ const PLANET_INFO: Record<string, { orbit: string; note: string }> = {
   Venus:   { orbit: '225 Earth days', note: 'Venus completes a year in about seven and a half Earth months, making your Venusian age noticeably larger than your Earth age.' },
   Mars:    { orbit: '687 Earth days', note: 'A Martian year is nearly two Earth years long, so your Mars age is roughly half of your age on Earth.' },
   Jupiter: { orbit: '11.9 Earth years', note: 'The giant planet takes almost twelve Earth years for a single orbit, so most people are only a handful of Jupiter years old.' },
-  Saturn:  { orbit: '29.5 Earth years', note: 'One trip around the Sun takes Saturn nearly three decades — many people never complete even two full Saturn years in a lifetime.' },
+  Saturn:  { orbit: '29.4 Earth years', note: 'One trip around the Sun takes Saturn nearly three decades — many people never complete even two full Saturn years in a lifetime.' },
   Uranus:  { orbit: '84 Earth years', note: 'An ice giant with an 84-year orbit; a long human life barely amounts to a single Uranian year.' },
   Neptune: { orbit: '164.8 Earth years', note: 'The most distant major planet takes over 160 Earth years to orbit the Sun, so no human has ever turned two on Neptune.' },
 };
@@ -33,7 +33,7 @@ const FAQS = [
   },
   {
     q: 'How old would I be on Jupiter or Saturn?',
-    a: 'Because Jupiter takes about 11.9 Earth years and Saturn about 29.5 Earth years to orbit the Sun, your age on these giant planets is much smaller than your Earth age. A 30-year-old on Earth is only about two and a half Jupiter years old and roughly one Saturn year old.',
+    a: 'Because Jupiter takes about 11.9 Earth years and Saturn about 29.4 Earth years to orbit the Sun, your age on these giant planets is much smaller than your Earth age. A 30-year-old on Earth is only about two and a half Jupiter years old and roughly one Saturn year old.',
   },
   {
     q: 'Can I be less than one year old on Neptune?',
@@ -191,9 +191,9 @@ export function PlanetaryAgeArticle() {
             <li><strong>Earth:</strong> 365.25 Earth days per orbit (your ordinary age)</li>
             <li><strong>Mars:</strong> 687 Earth days per orbit</li>
             <li><strong>Jupiter:</strong> 4,333 Earth days (about 11.9 years)</li>
-            <li><strong>Saturn:</strong> 10,759 Earth days (about 29.5 years)</li>
-            <li><strong>Uranus:</strong> 30,687 Earth days (about 84 years)</li>
-            <li><strong>Neptune:</strong> 60,190 Earth days (about 164.8 years)</li>
+            <li><strong>Saturn:</strong> 10,756 Earth days (about 29.4 years)</li>
+            <li><strong>Uranus:</strong> 30,685 Earth days (about 84 years)</li>
+            <li><strong>Neptune:</strong> 60,189 Earth days (about 164.8 years)</li>
           </ul>
           <p className="text-gray-700 leading-relaxed mb-6">
             To find your age on any planet, we first count the total days you have lived since

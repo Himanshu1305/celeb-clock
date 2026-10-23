@@ -7,18 +7,10 @@ import html2canvas from 'html2canvas';
 import { PlanetaryAgeCard } from '@/components/PlanetaryAgeCard';
 import { Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ORBITAL_PERIOD_DAYS } from '@/lib/orbitalPeriods';
 
-// ── NASA JPL orbital periods (mean sidereal, Earth days) ─────────────────────
-export const ORBITAL_PERIODS_DAYS: Record<string, number> = {
-  Earth:    365.256,
-  Mercury:   87.969,
-  Venus:    224.701,
-  Mars:     686.971,
-  Jupiter: 4332.589,
-  Saturn:  10759.22,
-  Uranus:  30688.5,
-  Neptune: 60182.0,
-};
+// ── NASA orbital periods (sidereal, Earth days) — the one shared table (N13) ──
+export const ORBITAL_PERIODS_DAYS: Record<string, number> = { ...ORBITAL_PERIOD_DAYS };
 
 // ── Planet display data — accent color only (no gradient) ────────────────────
 interface PlanetUIData {
@@ -89,9 +81,9 @@ const PLANET_UI: PlanetUIData[] = [
     accentColor: '#e4c76b',
     gravityRatio: 1.07,
     tempDisplay: '-139°C average',
-    moons: 146,
+    moons: 274, // N13: NASA NSSDCA Saturn Fact Sheet (updated 18 Mar 2025), read 23 Oct 2026
     funFact: 'Saturn is so light it would FLOAT on water — the only planet less dense than water.',
-    shockingFact: "Saturn has 146 known moons (record as of 2023). Its moon Titan has liquid methane lakes.",
+    shockingFact: "Saturn has 274 known moons (NASA count, as of October 2026) — more than any other planet. Its moon Titan has liquid methane lakes.",
   },
   {
     name: 'Uranus',
@@ -777,7 +769,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             Newton's law of universal gravitation (<em>Principia Mathematica</em>, 1687) later provided the
             physical explanation: gravitational force weakens with the square of distance, so distant planets
             experience weaker pulls and move more slowly along larger paths — compounding both effects.
-            All orbital periods use mean sidereal values from NASA JPL Solar System Dynamics (ssd.jpl.nasa.gov).
+            All orbital periods use the sidereal values from the NASA Planetary Fact Sheets (nssdc.gsfc.nasa.gov).
           </p>
         </div>
 

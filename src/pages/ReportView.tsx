@@ -21,6 +21,7 @@ import { BirthTimeVedicSection } from '@/components/BirthTimeVedicSection';
 import { WEARING_RITUAL } from '@/lib/vedic/gemstones';
 import { calculateAllNameNumbers, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 import { calculateBiorhythm, getBiorhythmStatus } from '@/data/biorhythmData';
+import { birthstoneAnswer } from '@/data/birthstoneData';
 import { getTopCompatibleSigns } from '@/data/compatibilityData';
 import { useReactToPrint } from 'react-to-print';
 import { getLifePath } from '@/data/numerologyLifePathData';
@@ -1595,7 +1596,7 @@ const ReportView = () => {
             </p>
             <div className="grid grid-cols-1 gap-3 mt-4 text-xs text-[#3A4A5A]">
               <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Life Path</span><span>Your core life purpose. Reduce the full birth date to one digit — e.g. 25 Jun 1966 → 2+5+6+1+9+6+6 = 35 → 3+5 = <strong>8</strong>. Master numbers (11, 22, 33) are kept, not reduced.</span></div>
-              <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Soul Urge</span><span>Your heart's deepest desire. Built from the <em>vowels</em> of your full birth name (A=1, E=5, I=9, O=6, U=3).</span></div>
+              <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Soul Urge</span><span>Your heart's deepest desire. Built from the <em>vowels</em> of your full birth name (A=1, E=5, I=9, O=6, U=3, and Y=7 when no other vowel sits beside it).</span></div>
               <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Personality</span><span>How others perceive you. Built from the <em>consonants</em> of your birth name on the same Pythagorean table.</span></div>
               <div className="flex gap-3"><span className="font-bold text-[#103A5C] min-w-[110px]">Personal Year</span><span>Your current annual cycle. Reduce the birth month, birth day and the current calendar year to single digits, add them and reduce to 1–9 (the same method as our Personal Year page). Runs January to December.</span></div>
             </div>
@@ -1889,9 +1890,9 @@ const ReportView = () => {
               <div className="flex flex-col items-center gap-3">
                 <GemImage month={dob.getMonth() + 1} size={100} />
                 <div className="text-center">
-                  <h3 className="text-3xl font-black" style={{ color: 'var(--navy)' }}>{birthstone.primaryStone}</h3>
+                  <h3 className="text-3xl font-black" style={{ color: 'var(--navy)' }}>{birthstoneAnswer(birthstone)}</h3>
                   <p className="text-sm font-medium mt-1" style={{ color: bsMeta.hex }}>{bsMeta.color}</p>
-                  {birthstone.alternateStones?.length > 0 && (
+                  {!birthstone.answer && birthstone.alternateStones?.length > 0 && (
                     <p className="text-xs mt-1" style={{ color: 'var(--gold)' }}>Alternate: {birthstone.alternateStones.join(', ')}</p>
                   )}
                 </div>

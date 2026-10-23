@@ -4,7 +4,7 @@ import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { SharePageBar } from '@/components/SharePageBar';
 import { MONTH_HUB_DATA } from '@/data/monthHubData';
-import { BIRTHSTONE_DATA } from '@/data/birthstoneData';
+import { BIRTHSTONE_DATA, birthstoneAnswer } from '@/data/birthstoneData';
 import { postsForTags } from '@/lib/mesh';
 
 // Hub for the 12 /born-in-{month} pages — previously reachable only by guessing the URL.
@@ -14,7 +14,7 @@ export default function MonthsHubPage() {
   const faqs = [
     { question: 'What does my birth month say about me?', answer: 'Traditionally, a birth month is tied to one or two zodiac sun signs, a birthstone and birth flowers — a cluster of cultural associations built up over centuries. It is folklore and tradition, meaningful as heritage and celebration, not a scientific predictor of personality or fate.' },
     { question: 'Why does each month have two zodiac signs?', answer: 'The tropical zodiac boundaries fall around the 19th–23rd of each month, not on the 1st, so almost every calendar month is split between two sun signs — for example May runs from Taurus into Gemini around 20–21 May.' },
-    { question: 'Which birthstone belongs to my month?', answer: 'Each month has a primary birthstone in the modern (1912 Jewelers of America) list — January garnet, April diamond, July ruby, September sapphire, December turquoise/tanzanite, and so on. Open your month for its full stone, meaning and history.' },
+    { question: 'Which birthstone belongs to my month?', answer: 'Each month has a primary birthstone in the modern (1912 Jewelers of America) list — January garnet, April diamond, July ruby, September sapphire, December turquoise, tanzanite and zircon, and so on. Open your month for its full stone, meaning and history.' },
     { question: 'What are birth flowers?', answer: 'Alongside the birthstone, most months carry one or two traditional birth flowers (January carnation & snowdrop, June rose & honeysuckle, and so on), each with its own Victorian flower-language meaning. Each month page lists them.' },
     { question: 'Are birthstones and birth-month signs real science?', answer: 'No. Zodiac signs, birthstones and birth flowers are cultural and historical traditions with no evidence for predicting personality or events. We present them as heritage and a fun way to explore your date — never as a forecast.' },
     { question: 'How do I find famous people born in my month?', answer: 'Open any month below to see the most globally recognised people born in it (plus a dedicated Indian-celebrities section), each linking to their exact birthday page.' },
@@ -62,7 +62,7 @@ export default function MonthsHubPage() {
               <Link key={m.slug} to={`/born-in-${m.slug}`}
                 className="block rounded-xl border border-gray-200 p-5 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/40 transition-colors">
                 <p className="text-lg font-bold text-gray-900 mb-1">{m.month}</p>
-                <p className="text-sm text-gray-600">💎 {stone?.primaryStone ?? '—'} · ♈ {signs}</p>
+                <p className="text-sm text-gray-600">💎 {birthstoneAnswer(stone) || '—'} · ♈ {signs}</p>
                 <p className="text-xs text-[#6E5AA6] mt-2">Explore {m.month} →</p>
               </Link>
             );
