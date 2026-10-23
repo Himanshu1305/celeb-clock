@@ -56,9 +56,16 @@ const AREA_BY_HOUSE: Record<number, string> = {
   11: 'gains & networks', 12: 'retreat, expenses & foreign lands',
 };
 
-function gradeLord(lord: string | null, lagnaSignIndex: number): { grade: ForecastGrade; area: string; houses: number[] } {
-  if (!lord) return { grade: 'mild', area: 'a quiet, transitional', houses: [] };
-  const houses = housesRuled(lord, lagnaSignIndex);
+/** Where Rahu/Ketu sit (0-based sign, 1-based house) — the nodes own no sign, so they act through these. */
+export interface NodePlacement { signIndex: number; house: number }
+export type NodePlacements = Partial<Record<'Rahu' | 'Ketu', NodePlacement>>;
+
+const SIGN_NAMES = ['Mesha', 'Vrishabha', 'Mithuna', 'Karka', 'Simha', 'Kanya', 'Tula', 'Vrischika', 'Dhanu', 'Makara', 'Kumbha', 'Meena'];
+const ORD = ['', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'];
+
+interface LordReading { grade: ForecastGrade; area: string; houses: number[]; why: string }
+
+function gradeHouses(houses: number[], benefic: boolean): ForecastGrade {
   let score = 0;
   for (const h of houses) {
     if (h === 1 || h === 5 || h === 9) score += 2;         // trikona
@@ -66,12 +73,34 @@ function gradeLord(lord: string | null, lagnaSignIndex: number): { grade: Foreca
     else if (h === 2 || h === 11) score += 1;              // wealth/gains
     else if (h === 6 || h === 8 || h === 12) score -= 1;   // dusthana
   }
-  score += NATURAL_BENEFIC.has(lord) ? 0.5 : -0.25;
-  const grade: ForecastGrade = score >= 2.5 ? 'strong' : score >= 0.5 ? 'moderate' : 'mild';
+  score += benefic ? 0.5 : -0.25;
+  return score >= 2.5 ? 'strong' : score >= 0.5 ? 'moderate' : 'mild';
+}
+
+function gradeLord(lord: string | null, lagnaSignIndex: number, nodes: NodePlacements = {}): LordReading {
+  if (!lord) return { grade: 'mild', area: 'a quiet, transitional', houses: [], why: '' };
+  if (lord === 'Rahu' || lord === 'Ketu') {
+    // Audit K5: the nodes rule no sign, so "houses ruled" was empty and the text read
+    // "rules matters of general". Classically a node gives the results of the house it
+    // occupies and of its dispositor (the lord of the sign it sits in).
+    const at = nodes[lord];
+    if (!at) {
+      return { grade: 'mild', area: 'the house it occupies in your chart', houses: [],
+        why: ` — ${lord} owns no sign of its own, so it acts through the house it occupies and the lord of that sign` };
+    }
+    const dispositor = SIGN_LORDS[((at.signIndex % 12) + 12) % 12];
+    const houses = [at.house, ...housesRuled(dispositor, lagnaSignIndex)];
+    const area = AREA_BY_HOUSE[at.house];
+    return { grade: gradeHouses(houses, false), area, houses,
+      why: ` — the governing period lord ${lord} sits in your ${ORD[at.house]} house (${area}) in ${SIGN_NAMES[at.signIndex]}, so it acts through those matters and through ${dispositor}, the lord of that sign` };
+  }
+  const houses = housesRuled(lord, lagnaSignIndex);
+  const grade = gradeHouses(houses, NATURAL_BENEFIC.has(lord));
   // Primary area = the most auspicious house the lord rules (else its first house).
   const priority = [10, 9, 5, 1, 7, 4, 11, 2, 3, 6, 8, 12];
   const primary = priority.find(h => houses.includes(h)) ?? houses[0];
-  return { grade, area: primary ? AREA_BY_HOUSE[primary] : 'general', houses };
+  const area = primary ? AREA_BY_HOUSE[primary] : 'general';
+  return { grade, area, houses, why: ` — the governing period lord ${lord} rules matters of ${area} in your chart` };
 }
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -81,21 +110,21 @@ function gradePhrase(g: ForecastGrade): string {
   return g === 'strong' ? 'a strongly supportive' : g === 'moderate' ? 'a moderately supportive' : 'a gentler, consolidating';
 }
 
-function build(timeline: MahaPeriod[], lagnaSignIndex: number, label: string, startMs: number, endMs: number): ForecastPeriod {
+function build(timeline: MahaPeriod[], lagnaSignIndex: number, label: string, startMs: number, endMs: number, nodes: NodePlacements): ForecastPeriod {
   const midMs = Math.floor((startMs + endMs) / 2);
   const chain = activeChainAt(timeline, midMs);
   // Governing lord for the grade: the finest active level that exists (antar preferred).
   const governing = chain.antar || chain.maha;
-  const { grade, area } = gradeLord(governing, lagnaSignIndex);
+  const { grade, area, why } = gradeLord(governing, lagnaSignIndex, nodes);
   const lead = `${label}: ${gradePhrase(grade)} period, most active in ${area}.`;
   const chainStr = [chain.maha, chain.antar, chain.pratyantar].filter(Boolean).join(' → ');
-  const reason = `Vedic astrology reads this from your running Dasha${chainStr ? ` (${chainStr})` : ''}${governing ? ` — the governing period lord ${governing} rules matters of ${area} in your chart` : ''}. Treat it as the prevailing theme and energy, not a fixed event.`;
+  const reason = `Vedic astrology reads this from your running Dasha${chainStr ? ` (${chainStr})` : ''}${why}. Treat it as the prevailing theme and energy, not a fixed event.`;
   return { label, start: new Date(startMs).toISOString(), end: new Date(endMs).toISOString(), maha: chain.maha, antar: chain.antar, pratyantar: chain.pratyantar, grade, area, lead, reason };
 }
 
 const DAY = 86_400_000;
 
-export function buildPeriodForecast(timeline: MahaPeriod[], lagnaSignIndex: number, nowMs: number): PeriodForecast {
+export function buildPeriodForecast(timeline: MahaPeriod[], lagnaSignIndex: number, nowMs: number, nodes: NodePlacements = {}): PeriodForecast {
   // Yearly: this year + next two (calendar years from now).
   const yearly: ForecastPeriod[] = [];
   const nowYear = new Date(nowMs).getUTCFullYear();
@@ -103,7 +132,7 @@ export function buildPeriodForecast(timeline: MahaPeriod[], lagnaSignIndex: numb
     const y = nowYear + i;
     const start = i === 0 ? nowMs : Date.UTC(y, 0, 1);
     const end = Date.UTC(y + 1, 0, 1);
-    yearly.push(build(timeline, lagnaSignIndex, i === 0 ? `Rest of ${y}` : `${y}`, start, end));
+    yearly.push(build(timeline, lagnaSignIndex, i === 0 ? `Rest of ${y}` : `${y}`, start, end, nodes));
   }
 
   // Quarterly: next 4 quarters of ~91 days.
@@ -111,7 +140,7 @@ export function buildPeriodForecast(timeline: MahaPeriod[], lagnaSignIndex: numb
   for (let q = 0; q < 4; q++) {
     const start = nowMs + q * 91 * DAY;
     const end = start + 91 * DAY;
-    quarterly.push(build(timeline, lagnaSignIndex, q === 0 ? 'This quarter' : `In ${q * 3}–${q * 3 + 3} months`, start, end));
+    quarterly.push(build(timeline, lagnaSignIndex, q === 0 ? 'This quarter' : `In ${q * 3}–${q * 3 + 3} months`, start, end, nodes));
   }
 
   // Monthly: next 12 months of ~30 days.
@@ -119,7 +148,7 @@ export function buildPeriodForecast(timeline: MahaPeriod[], lagnaSignIndex: numb
   for (let m = 0; m < 12; m++) {
     const start = nowMs + m * 30 * DAY;
     const end = start + 30 * DAY;
-    monthly.push(build(timeline, lagnaSignIndex, `${fmt(start)}`, start, end));
+    monthly.push(build(timeline, lagnaSignIndex, `${fmt(start)}`, start, end, nodes));
   }
 
   return {

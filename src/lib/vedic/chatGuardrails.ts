@@ -160,6 +160,10 @@ export function deterministicTimingReply(timing: TimingFacts, category: TimingCa
   if (!category) return null;
   const cat = timing.categories.find(c => c.key === category);
   if (!cat) return null;
+  if (cat.suppressedForMinor) {
+    // Audit K3: never marriage/career timing for a child.
+    return `This chart belongs to someone under 18, so I don't give ${category === 'career' ? 'career' : 'marriage'} timing for it — those questions belong to adulthood. For now the chart is far more useful as a gentle guide to temperament, learning and what helps them thrive.`;
+  }
   const theme = category === 'wealth' ? 'wealth' : category === 'career' ? 'career or a job' : 'marriage';
   const winTxt = (w: TimingFacts['categories'][number]['upcoming'][number]) =>
     `your ${w.planet} ${LEVEL_WORD(w.level)} from ${w.range}`;
@@ -349,6 +353,7 @@ export function buildChatSystemPrompt(facts: ReadingFacts, gemstone?: GemstoneCh
   const winTxt = (w: TimingFacts['categories'][number]['upcoming'][number]) =>
     `${w.planet} ${w.level === 'maha' ? 'Mahadasha (main period)' : 'Antardasha (sub-period)'} from ${w.range}${w.doubleActivation ? ' [STRONGEST]' : ''}${w.status === 'current' ? ' [currently running]' : w.status === 'past' ? ' [past]' : ''}`;
   const catBlock = t.categories.map(c => {
+    if (c.suppressedForMinor) return `  - ${c.label}: NOT APPLICABLE — ${c.note} Never give this person ${c.key} timing, windows or ages.`;
     // Part AC: include PAST windows too (deduped) so a past-tense question has its
     // real answer set. winTxt tags each window [past] / [currently running].
     const past = (c.past || []).filter(p => !c.upcoming.some(u => u.range === p.range));

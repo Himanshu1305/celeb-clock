@@ -9,7 +9,7 @@
 // be hit by an external scheduler later to drive email. Fully deterministic (no LLM).
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
-import { categoryTiming } from '../src/lib/vedic/yogaTiming.js';
+import { categoryTiming, ageInYears, ADULT_TIMING_AGE } from '../src/lib/vedic/yogaTiming.js';
 import { detectChartEvents } from '../src/lib/vedic/notificationTriggers.js';
 import { resolveRequestBirthTz } from './_birthParams.js';
 
@@ -40,7 +40,11 @@ async function handler(request) {
 
     // Upcoming favourable windows: the soonest still-future window per life category.
     const upcomingWindows: Array<{ label: string; planet: string; start: string; end: string }> = [];
-    for (const [cat, label] of [['career', 'Career'], ['marriage', 'Marriage'], ['wealth', 'Wealth']] as const) {
+    // Audit K3: no "marriage/career window opens soon" alerts for anyone under 18.
+    const birthUTC = new Date(Date.UTC(y, m - 1, d, h, min) - btz.tz * 3600_000);
+    const minor = ageInYears(birthUTC, now) < ADULT_TIMING_AGE;
+    const cats = ([['career', 'Career'], ['marriage', 'Marriage'], ['wealth', 'Wealth']] as const).filter(([c]) => !minor || c === 'wealth');
+    for (const [cat, label] of cats) {
       try {
         const t = categoryTiming(chart, cat, now);
         const next = (t.windows || []).find((w: any) => w.status === 'upcoming');

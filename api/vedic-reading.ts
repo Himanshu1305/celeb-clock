@@ -18,7 +18,7 @@ import {
   scanReadingForRedFlags,
 } from '../src/lib/vedic/readingPrompts.js';
 import { verifyReadingClaims, scoreReadingSpecificity } from '../src/lib/vedic/readingSpecificity.js';
-import { currentDashaTag } from '../src/lib/vedic/yogaTiming.js';
+import { currentDashaTag, ageInYears, ADULT_TIMING_AGE } from '../src/lib/vedic/yogaTiming.js';
 import { selectReflectionQuestions } from '../src/lib/vedic/reflection.js';
 
 const GEMINI_MODEL = 'gemini-flash-latest';
@@ -244,11 +244,15 @@ async function handler(request, env?) {
     const birthUTC = new Date(birthTimezone.utcISO);
     const reflections = selectReflectionQuestions(chart, birthUTC, now);
 
-    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz, currentDashaTag(chart, now), birthTimezone.timezone);
+    // Audit K3: under-18s get no marriage/career timing; the ':minor' tag keeps any reading
+    // cached before this fix (which may contain such timing) from being served to a child.
+    const ageYears = ageInYears(birthUTC, now);
+    const minorTag = ageYears < ADULT_TIMING_AGE ? ':minor' : '';
+    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz, currentDashaTag(chart, now) + minorTag, birthTimezone.timezone);
     const cached = await getCached(sb, cacheKey);
     if (cached) return json({ ...cached, reflections, birthTimezone, basis: chartBasisFromResult(chart, birthTimezone), _cache: 'hit' });
 
-    const facts = extractReadingFacts(chart, now);
+    const facts = extractReadingFacts(chart, now, { ageYears });
     const payload = await buildReadingPayload(facts, generateReading);
 
     // Only cache a full, safe AI reading — never cache a degraded/fallback

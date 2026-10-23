@@ -9,6 +9,7 @@
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
 import { extractReadingFacts } from '../src/lib/vedic/readingPrompts.js';
+import { ageInYears } from '../src/lib/vedic/yogaTiming.js';
 import { gemstoneChatContext } from '../src/lib/vedic/gemstones.js';
 import {
   detectCrisis, crisisMatches, CRISIS_RESPONSE,
@@ -221,7 +222,9 @@ async function handler(request) {
         year: bp.y, month: bp.m, day: bp.d, hour: bp.h, minute: bp.min,
         latitude: bp.lat, longitude: bp.lon, timezoneOffset: btz.tz,
       }, { includeShadbala: true });
-      facts = extractReadingFacts(chart);
+      // Audit K3: pass age so a child is never given marriage/career timing.
+      const birthUTC = new Date(Date.UTC(bp.y, bp.m - 1, bp.d, bp.h, bp.min) - btz.tz * 3600_000);
+      facts = extractReadingFacts(chart, new Date(), { ageYears: ageInYears(birthUTC) });
       gemstone = gemstoneChatContext(chart); // Item 3: Lagna-based gemstone context for the chat
     } catch (inputErr) {
       return json({ error: 'bad-birth', reply: String(inputErr?.message || inputErr) }, 400);
