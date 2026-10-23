@@ -20,6 +20,7 @@
  * Worker runtime.
  */
 import * as Astronomy from 'astronomy-engine';
+import { isPreciseOuterPlanet, preciseGeoVector } from './vsop87Outer';
 
 const RASHI_NAMES = ['Mesha','Vrishabha','Mithuna','Karka','Simha','Kanya','Tula','Vrischika','Dhanu','Makara','Kumbha','Meena'];
 const RASHI_MODALITY: Record<number, string> = { 0:'movable', 1:'fixed', 2:'dual', 3:'movable', 4:'fixed', 5:'dual', 6:'movable', 7:'fixed', 8:'dual', 9:'movable', 10:'fixed', 11:'dual' };
@@ -102,17 +103,25 @@ function getPlanetSiderealLongitude(planetName: string, time: Astronomy.AstroTim
     const ecl = Astronomy.Ecliptic(vec);
     return normalize360(normalize360(ecl.elon) - ayanamsa);
   }
-  const vec = Astronomy.GeoVector(planetName as Astronomy.Body, time, true);
+  const vec = geoVector(planetName, time);
   const ecl = Astronomy.Ecliptic(vec);
   return normalize360(normalize360(ecl.elon) - ayanamsa);
 }
 
+/** Apparent geocentric vector (EQJ). Jupiter and Saturn use the fuller VSOP87B
+ * series in ./vsop87Outer (astronomy-engine's own are truncated to ~10″). */
+function geoVector(planetName: string, time: Astronomy.AstroTime): Astronomy.Vector {
+  return isPreciseOuterPlanet(planetName)
+    ? preciseGeoVector(planetName, time)
+    : Astronomy.GeoVector(planetName as Astronomy.Body, time, true);
+}
+
 function isRetrograde(planetName: string, time: Astronomy.AstroTime): boolean {
   if (planetName === 'Sun' || planetName === 'Moon') return false;
-  const vec1 = Astronomy.GeoVector(planetName as Astronomy.Body, time, true);
+  const vec1 = geoVector(planetName, time);
   const lon1 = Astronomy.Ecliptic(vec1).elon;
   const laterTime = Astronomy.MakeTime(new Date(time.date.getTime() + 24*3600*1000));
-  const vec2 = Astronomy.GeoVector(planetName as Astronomy.Body, laterTime, true);
+  const vec2 = geoVector(planetName, laterTime);
   const lon2 = Astronomy.Ecliptic(vec2).elon;
   let diff = lon2 - lon1;
   if (diff > 180) diff -= 360;
