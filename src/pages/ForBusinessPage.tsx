@@ -22,7 +22,7 @@ export default function ForBusinessPage() {
       testId="for-business-page"
       seo={(
         <SEO
-          title="BornClock for Business — Birthday & Astrology API (Coming Soon) | BornClock"
+          title="Birthday & Astrology API — Coming Soon | BornClock"
           description="A BornClock API for birthday, zodiac, Vedic rashi, numerology and compatibility data is coming soon. Join the waitlist to hear when it opens."
           canonicalUrl="/for-business"
           ogType="website"
