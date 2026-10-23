@@ -7,13 +7,16 @@ import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { VEDIC_SIGNS, getVedicRashi, compareZodiacs } from '@/services/VedicZodiacService';
+import { VEDIC_SIGNS, compareZodiacs, currentAyanamsaDeg } from '@/services/VedicZodiacService';
+
+// N12: the ayanamsa shown is the engine's live Lahiri value, not a fixed 23.85°.
+const AYANAMSA_NOW = currentAyanamsaDeg().toFixed(2);
 import { RASHI_NAME_TO_SLUG } from '@/services/VedicZodiacExtended';
 
 const FAQ_ITEMS = [
   {
     question: 'What is the Vedic Zodiac?',
-    answer: 'The Vedic Zodiac (Jyotish) uses the sidereal coordinate system, which is based on the actual positions of stars. It uses the same 12 signs as Western astrology but shifted backward by approximately 23–24 degrees (called the ayanamsa). This means your Vedic Rashi is often one sign earlier than your Western sun sign.',
+    answer: 'The Vedic Zodiac (Jyotish) uses the sidereal coordinate system, which is based on the actual positions of stars. It uses the same 12 signs as Western astrology but shifted backward by about 24 degrees (called the ayanamsa). This means your Vedic Rashi is often one sign earlier than your Western sun sign.',
   },
   {
     question: 'What is a Rashi?',
@@ -21,11 +24,11 @@ const FAQ_ITEMS = [
   },
   {
     question: 'Why is my Vedic sign different from my Western sign?',
-    answer: 'Due to a phenomenon called "precession of the equinoxes," the tropical zodiac (used in Western astrology) and the sidereal zodiac (used in Vedic astrology) have drifted apart by about 23–24 degrees over two thousand years. This offset is called the ayanamsa. Most people with birthdays near the end of a Western sign will find their Vedic Rashi is the previous sign.',
+    answer: 'Due to a phenomenon called "precession of the equinoxes," the tropical zodiac (used in Western astrology) and the sidereal zodiac (used in Vedic astrology) have drifted apart by about 24 degrees over two thousand years. This offset is called the ayanamsa. Most people with birthdays near the end of a Western sign will find their Vedic Rashi is the previous sign.',
   },
   {
     question: 'What is the ayanamsa?',
-    answer: 'Ayanamsa is the angular difference between the tropical (Western) zodiac and the sidereal (Vedic) zodiac at any given point in time. Currently around 23.85 degrees, it increases by about 50 arc-seconds per year as Earth\'s axis precesses.',
+    answer: `Ayanamsa is the angular difference between the tropical (Western) zodiac and the sidereal (Vedic) zodiac at any given point in time. Currently about ${AYANAMSA_NOW}° (Lahiri), it increases by about 50 arc-seconds per year as Earth's axis precesses.`,
   },
   {
     question: 'What are Nakshatras?',
@@ -48,7 +51,7 @@ export default function VedicZodiac() {
       seo={(
         <SEO
           title="Indian Zodiac (Vedic Rashi) Calculator — Find Your Jyotish Sign | BornClock"
-          description="Calculate your Vedic Rashi (Indian zodiac sign) using the sidereal Jyotish system. Compare your Western and Vedic signs and explore all 12 rashis with their ruling planets, gemstones, and Ayurveda connections."
+          description="Calculate your Vedic Rashi (Indian zodiac sign) using the sidereal Jyotish system. Compare your Western and Vedic signs and explore all 12 rashis with their ruling planets and Ayurveda connections."
           canonicalUrl="/vedic-zodiac"
           keywords="vedic zodiac, rashi calculator, vedic astrology, jyotish, sidereal zodiac, indian astrology, ayanamsa, indian zodiac sign"
           ogImage="https://bornclock.com/og/zodiac.png"
@@ -61,7 +64,7 @@ export default function VedicZodiac() {
           { label: 'Vedic Astrology', to: '/vedic-astrology' },
           { label: 'Kundali', to: '/kundali' },
           { label: 'Moon Sign', to: '/moon-sign' },
-          { label: 'Rashi Ratna', to: '/rashi-ratna' },
+          { label: 'Gemstones (chart-based)', to: '/gemstones' },
           { label: 'Privacy', to: '/privacy' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
@@ -88,7 +91,7 @@ export default function VedicZodiac() {
               <p className="text-xs text-orange-800 leading-relaxed">
                 Jyotish (ज्योतिष) is one of the Vedangas — the six auxiliary disciplines of the Vedas.
                 It uses the <strong>sidereal zodiac</strong> corrected for the precession of equinoxes
-                (ayanamsa ≈ 23.85°), making it more astronomically precise than the Western tropical zodiac.
+                (Lahiri ayanamsa ≈ {AYANAMSA_NOW}° today), making it more astronomically precise than the Western tropical zodiac.
                 Your Vedic rashi is typically one sign earlier than your Western sun sign.
               </p>
             </div>
