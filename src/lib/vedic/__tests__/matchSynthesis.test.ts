@@ -56,9 +56,10 @@ describe('buildMatchSynthesis — calibrated, chart-specific narrative', () => {
     expect(s.paragraphs[2]).toMatch(/not a prediction/i);
   });
 
-  it('MIXED: honest verdict, surfaces uncancelled doshas with non-fear framing', () => {
+  it('MIXED (12/36): score band first (M6), still surfaces uncancelled doshas with non-fear framing', () => {
     const s = buildMatchSynthesis({ gunaMilan: MIXED, overlaps });
-    expect(s.verdict).toMatch(/mixed but honest/i);
+    // Below 18 the verdict leads with the band, never a softer "mixed" label.
+    expect(s.verdict).toMatch(/more challenging match/i);
     expect(s.verdict).toContain('Nadi Dosha');
     expect(s.verdict).toContain('Gana Dosha');
     const all = [s.verdict, ...s.paragraphs].join(' ');

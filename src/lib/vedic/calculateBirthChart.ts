@@ -23,13 +23,13 @@ import {
   getDwadasamsaSign,
   getTrimsamsaSign,
   getKPSubLord,
-  getMangalDoshaSeverity,
   getLahiriAyanamsa,
   DASHA_LORDS,
   type ChartWarning,
   type FullChart,
 } from './engine/vedicEngine';
 import { getKaalSarpDetails, type KaalSarpDetails } from './engine/kaalSarp';
+import { assessManglik, MANGLIK_CONVENTION } from './manglik';
 import {
   getUcchaBala, getSaptavargajaBalaPanchadha, getOjayugmaBala, getKendradiBala, getDrekkanaBala,
 } from './engine/sthanaBala';
@@ -123,7 +123,13 @@ export interface BirthChartResult {
   /** Full-lifetime Vimshottari timeline (9 Mahadashas × 9 Antardashas). Part D-Fix3. */
   dashaTimeline?: MahadashaPeriod[];
   doshas: {
-    mangalDosha: { hasDosha: boolean; severityLabel: string; severityPercentage: number; fromLagna: boolean; fromMoon: boolean; fromVenus: boolean };
+    /** Manglik by the AstroSage convention (Lagna + Moon; houses 1/4/7/8/12) — see manglik.ts. */
+    mangalDosha: {
+      hasDosha: boolean; severityLabel: 'None' | 'Low' | 'High';
+      fromLagna: boolean; fromMoon: boolean;
+      marsHouseFromLagna: number; marsHouseFromMoon: number;
+      cancellations: string[]; cancelled: boolean; convention: string;
+    };
     kaalSarp: KaalSarpDetails;
     sadeSati: { active: boolean; phase: string | null; houseOfSaturnFromMoon: number };
   };
@@ -346,8 +352,13 @@ function toResult(chart: FullChart, source: 'local' | 'prokerala', includeShadba
     };
   });
 
-  const marsHouse = chart.planets.Mars.house;
-  const severity = getMangalDoshaSeverity(marsHouse, false);
+  const manglik = assessManglik({
+    lagnaSignIndex: chart.lagna.rashiIndex,
+    moonSignIndex: chart.planets.Moon.rashiIndex,
+    marsSignIndex: chart.planets.Mars.rashiIndex,
+    jupiterSignIndex: chart.planets.Jupiter.rashiIndex,
+    venusSignIndex: chart.planets.Venus.rashiIndex,
+  });
 
   const dasha = chart.currentMahadasha ? {
     mahadasha: chart.currentMahadasha.lord,
@@ -371,12 +382,15 @@ function toResult(chart: FullChart, source: 'local' | 'prokerala', includeShadba
     dashaTimeline: (chart as any).fullDashaTimeline,
     doshas: {
       mangalDosha: {
-        hasDosha: chart.doshas.mangalDosha.hasDosha,
-        severityLabel: severity.label,
-        severityPercentage: severity.percentage,
-        fromLagna: chart.doshas.mangalDosha.fromLagna,
-        fromMoon: chart.doshas.mangalDosha.fromMoon,
-        fromVenus: chart.doshas.mangalDosha.fromVenus,
+        hasDosha: manglik.hasDosha,
+        severityLabel: manglik.level,
+        fromLagna: manglik.fromLagna.present,
+        fromMoon: manglik.fromMoon.present,
+        marsHouseFromLagna: manglik.fromLagna.house,
+        marsHouseFromMoon: manglik.fromMoon.house,
+        cancellations: manglik.cancellations,
+        cancelled: manglik.cancelled,
+        convention: MANGLIK_CONVENTION,
       },
       kaalSarp: getKaalSarpDetails(chart),
       sadeSati: chart.doshas.sadeSati,

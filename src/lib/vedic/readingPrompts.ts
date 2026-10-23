@@ -111,7 +111,13 @@ export function extractReadingFacts(chart: BirthChartResult, now: Date = new Dat
     : null;
 
   const marsFact = byName['Mars'];
-  const mangalCause = chart.doshas.mangalDosha.hasDosha && marsFact ? `Mars in your ${ordinal(marsFact.house)} house` : null;
+  // Manglik convention: Lagna + Moon (houses 1/4/7/8/12). Name whichever check(s) fired.
+  const md = chart.doshas.mangalDosha;
+  const mangalCause = md.hasDosha && marsFact
+    ? [md.fromLagna ? `Mars in your ${ordinal(md.marsHouseFromLagna ?? marsFact.house)} house from the Lagna` : '',
+       md.fromMoon && md.marsHouseFromMoon ? `Mars in the ${ordinal(md.marsHouseFromMoon)} house from your Moon` : '']
+        .filter(Boolean).join(' and ')
+    : null;
 
   return {
     rashi: chart.rashi,
