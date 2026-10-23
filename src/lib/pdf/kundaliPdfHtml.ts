@@ -18,6 +18,7 @@ interface KundaliPdfData {
 }
 
 import type { ChartBasis } from '../vedic/chartBasis';
+import { formatDegreeInSign } from '../vedic/formatDegree';
 
 const esc = (s: unknown) => String(s ?? '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c] as string));
 
@@ -31,7 +32,7 @@ export function buildKundaliPdfHtml(data: KundaliPdfData, meta?: { name?: string
       <div><span>Lagna</span>${esc(b.lagna)}${b.lagnaDegree != null ? ` ${b.lagnaDegree.toFixed(2)}°` : ''}</div>
     </div>${b.notes.map(n => `<p style="font-size:11px;color:#92400e;">${esc(n)}</p>`).join('')}<p class="muted">${esc(b.method)}</p></div>` : '';
   const planetRows = (data.planets || []).map(p =>
-    `<tr><td>${esc(p.name)}${p.retrograde ? ' (R)' : ''}</td><td>${esc(p.sign)}</td><td>${esc(p.house)}</td><td>${(p.longitude % 30).toFixed(1)}°</td></tr>`
+    `<tr><td>${esc(p.name)}${p.retrograde ? ' (R)' : ''}</td><td>${esc(p.sign)}</td><td>${esc(p.house)}</td><td>${formatDegreeInSign(p.longitude)}</td></tr>`
   ).join('');
 
   const doshaBits: string[] = [];

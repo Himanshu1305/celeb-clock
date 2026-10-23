@@ -19,6 +19,27 @@ const NK_DEV: Record<string, string> = {'Ashwini':'अश्विनी','Bhara
 const RASHI_DEV: Record<string, string> = {'Mesha':'मेष','Vrisha':'वृष','Mithuna':'मिथुन','Karka':'कर्क','Simha':'सिंह','Kanya':'कन्या','Tula':'तुला','Vrischika':'वृश्चिक','Dhanu':'धनु','Makara':'मकर','Kumbha':'कुम्भ','Meena':'मीन'};
 
 function round2(n: number): number { return Math.round(n * 100) / 100; }
+
+// Engine sign names (vedicEngine RASHI_NAMES) → 1-based sign index.
+const ENGINE_RASHI = ['Mesha','Vrishabha','Mithuna','Karka','Simha','Kanya','Tula','Vrischika','Dhanu','Makara','Kumbha','Meena'];
+const PLANET_ORDER = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu'];
+
+export interface VargaChartLegacy {
+  lagnaSignIndex: number;
+  planets: Array<{ name: string; signIndex: number; house: number }>;
+}
+
+/** K13: a divisional chart (sign per planet + Lagna) → the same shape the D1 chart component draws. */
+function vargaChart(map: Record<string, string> | undefined): VargaChartLegacy | null {
+  if (!map) return null;
+  const idx = (name: string | undefined) => (name ? ENGINE_RASHI.indexOf(name) + 1 : 0);
+  const lagnaSignIndex = idx(map['Lagna']);
+  if (lagnaSignIndex < 1) return null;
+  const planets = PLANET_ORDER
+    .filter(n => idx(map[n]) > 0)
+    .map(n => { const si = idx(map[n]); return { name: n, signIndex: si, house: ((si - lagnaSignIndex + 12) % 12) + 1 }; });
+  return { lagnaSignIndex, planets };
+}
 function shortSign(signIndex1Based: number): string { return RASHI_SHORT[signIndex1Based - 1] || 'Unknown'; }
 
 /** Map BirthChartResult → the /api/kundali response shape. */
@@ -53,6 +74,12 @@ export function toKundaliLegacy(r: BirthChartResult) {
     // "What's Ahead" section (both are gated on `data.dashaTimeline`); without it they
     // silently never render. Additive — existing consumers ignore the extra field.
     dashaTimeline: r.dashaTimeline,
+    // K13: Navamsa (D9) and Dasamsa (D10) charts — the engine already computes the
+    // sign of every planet + Lagna in each; drawn on /kundali with the D1 component.
+    divisionalCharts: {
+      d9: vargaChart(r.divisionalCharts?.d9),
+      d10: vargaChart(r.divisionalCharts?.d10),
+    },
     // Doshas the engine already computes — /manglik reads doshas.mangalDosha and
     // /kaal-sarp-dosha reads doshas.kaalSarp from this response. Previously dropped,
     // which made both standalone tools fail every real submission.

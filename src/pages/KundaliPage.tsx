@@ -29,6 +29,7 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 const VedicReading = lazy(() => import('@/components/reading/VedicReading').then(m => ({ default: m.VedicReading })));
 const PastPeriodReflection = lazy(() => import('@/components/reading/PastPeriodReflection').then(m => ({ default: m.PastPeriodReflection })));
 import { TermTip } from '@/components/vedic/TermTip';
+import { formatDegreeInSign } from '@/lib/vedic/formatDegree';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
 
@@ -291,6 +292,13 @@ export default function KundaliPage() {
                   className={`px-4 py-1.5 font-medium ${chartStyle === 'south' ? 'bg-primary text-primary-foreground' : 'bg-background text-foreground'}`}
                   aria-pressed={chartStyle === 'south'}>South Indian</button>
               </div>
+              {(data.warnings || []).some(w => w.code === 'POLAR_LATITUDE') && (
+                <div data-testid="kundali-polar-warning" className="rounded-xl border-2 border-amber-500/60 bg-amber-50 text-amber-900 p-4 text-sm" style={{ marginBottom: 12 }}>
+                  <strong>A note about this birth location:</strong> it is at an extreme (polar) latitude where the
+                  rising sign (Lagna) and house positions are astronomically unreliable. The planets’ signs, the Moon
+                  sign and birth star remain accurate, but treat the houses in this chart as approximate.
+                </div>
+              )}
               <div className="chart-with-stats">
                 <Suspense fallback={<div style={{ width: 300, height: 300 }} aria-hidden="true" />}>
                   <KundaliChart lagnaSignIndex={data.lagna.signIndex} planets={data.planets} style={chartStyle} />
@@ -305,6 +313,30 @@ export default function KundaliPage() {
                 </div>
               </div>
 
+              {/* K13: the divisional charts the explainer pages point to — same drawing, same style toggle. */}
+              {(data.divisionalCharts?.d9 || data.divisionalCharts?.d10) && (
+                <div data-testid="kundali-divisional" style={{ marginTop: 20 }}>
+                  <h3 style={{ marginBottom: 4 }}>Navamsa (D9) and Dasamsa (D10)</h3>
+                  <p className="text-sm text-muted-foreground" style={{ marginBottom: 8 }}>
+                    Divisional charts refine the main chart: the <Link to="/divisional-charts/d9-navamsa" className="underline">Navamsa</Link> for marriage and inner strength, the <Link to="/divisional-charts/d10-dasamsa" className="underline">Dasamsa</Link> for career. The first house is each chart’s own Lagna. They are sensitive to birth time — a few minutes can move the Lagna.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {([['d9', 'Navamsa (D9)'], ['d10', 'Dasamsa (D10)']] as const).map(([key, title]) => {
+                      const v = data.divisionalCharts?.[key];
+                      if (!v) return null;
+                      return (
+                        <figure key={key} data-testid={`kundali-${key}-chart`} style={{ margin: 0 }}>
+                          <figcaption className="text-sm font-semibold text-center" style={{ marginBottom: 4 }}>{title}</figcaption>
+                          <Suspense fallback={<div style={{ width: 300, height: 300 }} aria-hidden="true" />}>
+                            <KundaliChart lagnaSignIndex={v.lagnaSignIndex} planets={v.planets} style={chartStyle} label={`${title} chart`} />
+                          </Suspense>
+                        </figure>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               <div style={{ marginTop: 16 }}>
                 <BirthDataUsed testid="kundali-birth-data" place={usedPlace} basis={kundaliBasis(data)} />
               </div>
@@ -318,7 +350,7 @@ export default function KundaliPage() {
                         <td>{p.name}{p.retrograde ? ' (R)' : ''}</td>
                         <td>{p.sign}</td>
                         <td>{p.house}</td>
-                        <td>{(p.longitude % 30).toFixed(1)}°</td>
+                        <td>{formatDegreeInSign(p.longitude)}</td>
                       </tr>
                     ))}
                   </tbody>

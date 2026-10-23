@@ -237,7 +237,8 @@ async function handler(request, env) {
     // and What's Ahead). Serving those would reproduce the original failure on a cache
     // HIT, so we treat a stale entry as a miss: recompute and overwrite the SAME row
     // (upsert on cache_key) — no real user data is deleted, it is refreshed in place.
-    const cacheIsComplete = cached && cached.doshas && Array.isArray(cached.dashaTimeline);
+    const cacheIsComplete = cached && cached.doshas && Array.isArray(cached.dashaTimeline)
+      && cached.divisionalCharts?.d9 && cached.divisionalCharts?.d10; // K13: D9/D10 charts
     if (cacheIsComplete) {
       return json({ ...cached, birthTimezone, _cache: 'hit' });
     }

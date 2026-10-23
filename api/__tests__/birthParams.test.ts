@@ -16,6 +16,14 @@ describe('birthRangeError (Part T input validation)', () => {
     expect(birthRangeError({ ...ok, d: 45 })).toMatch(/month\/day/);
     expect(birthRangeError({ ...ok, m: 0 })).toMatch(/month\/day/);
   });
+  it('M12: with a year, rejects impossible calendar days (30 Feb, 29 Feb in a non-leap year, 31 Apr)', () => {
+    expect(birthRangeError({ ...ok, y: 1990, m: 2, d: 30 })).toMatch(/February 1990 has only 28 days/);
+    expect(birthRangeError({ ...ok, y: 2023, m: 2, d: 29 })).toMatch(/28 days/);
+    expect(birthRangeError({ ...ok, y: 2024, m: 2, d: 29 })).toBeNull();   // leap year
+    expect(birthRangeError({ ...ok, y: 2000, m: 2, d: 29 })).toBeNull();   // 2000 is a leap year
+    expect(birthRangeError({ ...ok, y: 1900, m: 2, d: 29 })).toMatch(/28 days/); // 1900 is not
+    expect(birthRangeError({ ...ok, y: 1995, m: 4, d: 31 })).toMatch(/April 1995 has only 30 days/);
+  });
   it('rejects out-of-range time', () => {
     expect(birthRangeError({ ...ok, h: 99 })).toMatch(/time/);
     expect(birthRangeError({ ...ok, min: 60 })).toMatch(/time/);

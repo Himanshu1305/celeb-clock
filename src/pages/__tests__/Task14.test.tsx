@@ -52,4 +52,10 @@ describe('TC-KMATCH', () => {
     const r = calculateAshtakoota('Bharani', 'Vishakha', 1, 7);
     expect(r.gana).toBe(0);
   });
+  it('M12: intro copy says birth time is needed (the form requires it), never optional', () => {
+    renderKundaliMatch();
+    const t = document.body.textContent || '';
+    expect(t).toContain('birth date, birth time and birthplace');
+    expect(t).not.toMatch(/and times for accurate/);
+  });
 });

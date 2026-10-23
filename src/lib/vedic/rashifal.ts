@@ -142,21 +142,68 @@ const PLANET_LENS: Record<PlanetName, { pos: string; neg: string; mix: string }>
   },
 };
 
-/** House-from-Moon: life area + a short, practical "do" for the reader. */
-const HOUSE_AREA: Record<number, { area: string; areaHi: string; doTip: string }> = {
-  1: { area: 'self, body and the way you come across', areaHi: 'स्वयं, शरीर व व्यक्तित्व', doTip: 'Lead with your own health and tone first.' },
-  2: { area: 'money, family, speech and what you value', areaHi: 'धन, परिवार व वाणी', doTip: 'Watch spending and choose your words with care.' },
-  3: { area: 'courage, effort, siblings and short trips', areaHi: 'साहस, प्रयास व भाई-बहन', doTip: 'Back your own initiative — bold, honest effort is favoured.' },
-  4: { area: 'home, mother, inner peace and property', areaHi: 'घर, माता व मन की शांति', doTip: 'Tend your home base and protect your rest.' },
-  5: { area: 'children, romance, creativity and studies', areaHi: 'संतान, प्रेम व रचनात्मकता', doTip: 'Make room for play, love and learning.' },
-  6: { area: 'work, daily routine, health and rivals', areaHi: 'कार्य, दिनचर्या व स्वास्थ्य', doTip: 'This is a good window to out-work competition and fix habits.' },
-  7: { area: 'partnership, marriage and deals with others', areaHi: 'साझेदारी व विवाह', doTip: 'Handle one-to-one relationships and agreements consciously.' },
-  8: { area: 'change, shared money, research and the hidden', areaHi: 'परिवर्तन व गुप्त मामले', doTip: 'Expect shifts — go slow on joint finances and big risks.' },
-  9: { area: 'fortune, higher learning, travel and belief', areaHi: 'भाग्य, उच्च शिक्षा व यात्रा', doTip: 'Say yes to learning, mentors and well-planned journeys.' },
-  10: { area: 'career, status and reputation', areaHi: 'करियर, पद व प्रतिष्ठा', doTip: 'Put your best work where it will be seen.' },
-  11: { area: 'gains, income, friends and fulfilled wishes', areaHi: 'लाभ, आय व मित्र', doTip: 'Follow up on income, networks and long-held goals.' },
-  12: { area: 'expenses, rest, foreign matters and letting go', areaHi: 'व्यय, विश्राम व विदेश', doTip: 'Budget for outflows and guard your sleep and quiet time.' },
+/** House-from-Moon: life area + a short, practical "do" for the reader — one per
+ *  tone (K14), so a "handle with care" reading never ends with "a good window to…". */
+const HOUSE_AREA: Record<number, { area: string; areaHi: string; tips: Record<Tone, string> }> = {
+  1: { area: 'self, body and the way you come across', areaHi: 'स्वयं, शरीर व व्यक्तित्व', tips: {
+    favourable: 'Lead with your own plans — your energy and presence are on your side.',
+    mixed: 'Pace yourself and look after your health and first impressions.',
+    challenging: 'Go easy on yourself — rest, eat well and avoid snap reactions.' } },
+  2: { area: 'money, family, speech and what you value', areaHi: 'धन, परिवार व वाणी', tips: {
+    favourable: 'A good time to build savings and speak up for what you value.',
+    mixed: 'Keep spending purposeful and your words kind.',
+    challenging: 'Watch spending and choose your words with care.' } },
+  3: { area: 'courage, effort, siblings and short trips', areaHi: 'साहस, प्रयास व भाई-बहन', tips: {
+    favourable: 'Back your own initiative — bold, honest effort is favoured.',
+    mixed: 'Act, but finish what you start before taking on more.',
+    challenging: 'Don’t force things; keep messages and short trips simple and clear.' } },
+  4: { area: 'home, mother, inner peace and property', areaHi: 'घर, माता व मन की शांति', tips: {
+    favourable: 'Enjoy home and family — a good time to settle things at home.',
+    mixed: 'Balance home duties with your own rest.',
+    challenging: 'Tend your home base and protect your rest.' } },
+  5: { area: 'children, romance, creativity and studies', areaHi: 'संतान, प्रेम व रचनात्मकता', tips: {
+    favourable: 'Make room for play, love and learning.',
+    mixed: 'Enjoy creative time, but keep speculative risks small.',
+    challenging: 'Go gently with romance and children’s matters, and avoid speculative bets.' } },
+  6: { area: 'work, daily routine, health and rivals', areaHi: 'कार्य, दिनचर्या व स्वास्थ्य', tips: {
+    favourable: 'This is a good window to out-work competition and fix habits.',
+    mixed: 'Keep routines tidy and deal with small health niggles early.',
+    challenging: 'Keep work pressure in check, avoid clashes with rivals and don’t skip rest.' } },
+  7: { area: 'partnership, marriage and deals with others', areaHi: 'साझेदारी व विवाह', tips: {
+    favourable: 'A good time for partnerships and agreements — meet people halfway.',
+    mixed: 'Handle one-to-one relationships and agreements consciously.',
+    challenging: 'Be patient with your partner and read agreements carefully before you sign.' } },
+  8: { area: 'change, shared money, research and the hidden', areaHi: 'परिवर्तन व गुप्त मामले', tips: {
+    favourable: 'Use the time for research and quiet, behind-the-scenes work.',
+    mixed: 'Expect shifts — go slow on joint finances and big risks.',
+    challenging: 'Avoid big risks and new joint financial commitments; keep plans flexible.' } },
+  9: { area: 'fortune, higher learning, travel and belief', areaHi: 'भाग्य, उच्च शिक्षा व यात्रा', tips: {
+    favourable: 'Say yes to learning, mentors and well-planned journeys.',
+    mixed: 'Learning and travel go better with a clear plan.',
+    challenging: 'Don’t lean on luck — plan journeys carefully and listen to good advice.' } },
+  10: { area: 'career, status and reputation', areaHi: 'करियर, पद व प्रतिष्ठा', tips: {
+    favourable: 'Put your best work where it will be seen.',
+    mixed: 'Stay steady at work and let results speak rather than pushing for credit.',
+    challenging: 'Stay professional under pressure and avoid clashes with seniors.' } },
+  11: { area: 'gains, income, friends and fulfilled wishes', areaHi: 'लाभ, आय व मित्र', tips: {
+    favourable: 'Follow up on income, networks and long-held goals.',
+    mixed: 'Gains come with effort — follow up, but don’t over-promise.',
+    challenging: 'Keep income expectations realistic and be selective with favours.' } },
+  12: { area: 'expenses, rest, foreign matters and letting go', areaHi: 'व्यय, विश्राम व विदेश', tips: {
+    favourable: 'A good time for rest, retreat and giving.',
+    mixed: 'Budget for outflows and guard your sleep and quiet time.',
+    challenging: 'Keep a close eye on expenses and protect your sleep.' } },
 };
+
+/** K15: Hindi ordinal forms for "Nth house" (पहले भाव, दूसरे भाव …), never "1वें". */
+export const HINDI_HOUSE_ORDINAL = ['', 'पहले', 'दूसरे', 'तीसरे', 'चौथे', 'पाँचवें', 'छठे', 'सातवें', 'आठवें', 'नौवें', 'दसवें', 'ग्यारहवें', 'बारहवें'];
+const HINDI_MONTHS = ['जनवरी', 'फ़रवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'];
+const TONE_HI: Record<Tone, string> = { favourable: 'शुभ प्रभाव', mixed: 'मिश्रित प्रभाव', challenging: 'चुनौतीपूर्ण प्रभाव, सावधानी रखें' };
+const NAK_NAMES = ['Ashwini', 'Bharani', 'Krittika', 'Rohini', 'Mrigashira', 'Ardra', 'Punarvasu', 'Pushya', 'Ashlesha', 'Magha', 'Purva Phalguni', 'Uttara Phalguni', 'Hasta', 'Chitra', 'Swati', 'Vishakha', 'Anuradha', 'Jyeshtha', 'Mula', 'Purva Ashadha', 'Uttara Ashadha', 'Shravana', 'Dhanishtha', 'Shatabhisha', 'Purva Bhadrapada', 'Uttara Bhadrapada', 'Revati'];
+const NAK_NAMES_HI = ['अश्विनी', 'भरणी', 'कृत्तिका', 'रोहिणी', 'मृगशिरा', 'आर्द्रा', 'पुनर्वसु', 'पुष्य', 'आश्लेषा', 'मघा', 'पूर्वाफाल्गुनी', 'उत्तराफाल्गुनी', 'हस्त', 'चित्रा', 'स्वाती', 'विशाखा', 'अनुराधा', 'ज्येष्ठा', 'मूल', 'पूर्वाषाढ़ा', 'उत्तराषाढ़ा', 'श्रवण', 'धनिष्ठा', 'शतभिषा', 'पूर्वाभाद्रपदा', 'उत्तराभाद्रपदा', 'रेवती'];
+const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const WEEKDAYS_HI = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
+const MONTHS_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const ORDINAL = ['', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'];
 
@@ -248,9 +295,8 @@ function buildTransit(planet: PlanetName, moonSign: number, at: Date): TransitRe
   const frame = TONE_FRAME[tone];
   const text =
     `${planet} is transiting your ${ORDINAL[house]} house — ${area.area}. ` +
-    `${frame}: a ${grade} influence bringing ${lens}. ${area.doTip}`;
-  const textHi = `${PLANET_LABEL_HI[planet]} आपके ${house}वें भाव (${area.areaHi}) में — ` +
-    `${tone === 'favourable' ? 'शुभ' : tone === 'challenging' ? 'सावधानी का' : 'मिश्रित'} प्रभाव।`;
+    `${frame}: a ${grade} influence bringing ${lens}. ${area.tips[tone]}`;
+  const textHi = `${PLANET_LABEL_HI[planet]} आपकी राशि से ${HINDI_HOUSE_ORDINAL[house]} भाव (${area.areaHi}) में — ${TONE_HI[tone]}।`;
   const r: TransitReading = { planet, planetHindi: PLANET_LABEL_HI[planet], signIndex, house, tone, grade, text, textHi };
   if (planet === 'Saturn') {
     if ([12, 1, 2].includes(house)) r.sadeSati = true;
@@ -437,10 +483,43 @@ export function computeRashifal(signIndex: number, period: RashifalPeriod, ref: 
   const sadeSatiWhen = sadeSatiParts.some(t => t.fromISO)
     ? ` (${sadeSatiParts.map(t => rangeLabel(t.fromISO!, t.toISO!)).join(' and ')})`
     : '';
-  const overviewEn =
-    `${periodHeadline(period, rashi, overall.tone)} ${overviewLead.text}` +
-    (sadeSati ? ` Saturn is in your ${ORDINAL[sadeSati.house]} from the Moon${sadeSatiWhen}, so you are in a Sade Sati phase — a demanding but maturing period; steady, honest effort is rewarded and shortcuts are not.` : '');
-  const overviewHi = `${rashi.hindi} राशि — ${label}. ` + overviewPicks.slice(0, 2).map(t => t.textHi).join(' ');
+  const sadeSatiEn = sadeSati ? ` Saturn is in your ${ORDINAL[sadeSati.house]} from the Moon${sadeSatiWhen}, so you are in a Sade Sati phase — a demanding but maturing period; steady, honest effort is rewarded and shortcuts are not.` : '';
+  const labelHi = periodLabelHi(period, start);
+  let overviewEn: string;
+  let overviewHi: string;
+  const moonT = transits.find(t => t.planet === 'Moon');
+  if (period === 'today' && moonT) {
+    // K14: the DAY is led by the Moon — the fastest-moving reference, changing house
+    // every ~2¼ days and nakshatra about daily — so the daily text genuinely changes.
+    // The slow planets stay as the backdrop. The day's tone follows the Moon.
+    overall.tone = moonT.tone;
+    overall.grade = moonT.tone === 'mixed' ? 'mild' : 'moderate';
+    const moonLon = ((getSiderealLongitude('Moon', rep) % 360) + 360) % 360;
+    const nakIdx = Math.floor(moonLon / (360 / 27)) % 27;
+    const segs = signSegments('Moon', rep, new Date(rep.getTime() + 3 * DAY_MS));
+    const next = segs[1];
+    const nextHouse = next ? houseFromMoon(next.signIndex, signIndex) : 0;
+    const nextWhen = next ? new Date(next.fromISO + 'T00:00:00Z') : null;
+    const moveEn = next && nextWhen
+      ? ` It moves on to your ${ORDINAL[nextHouse]} house on ${WEEKDAYS[nextWhen.getUTCDay()]}, ${nextWhen.getUTCDate()} ${MONTHS_EN[nextWhen.getUTCMonth()]} (IST).`
+      : '';
+    const moveHi = next && nextWhen
+      ? ` चंद्रमा ${WEEKDAYS_HI[nextWhen.getUTCDay()]}, ${nextWhen.getUTCDate()} ${HINDI_MONTHS[nextWhen.getUTCMonth()]} को आपके ${HINDI_HOUSE_ORDINAL[nextHouse]} भाव में जाएगा।`
+      : '';
+    const area = HOUSE_AREA[moonT.house];
+    const backdrop = overviewPicks.find(t => t.planet !== 'Moon' && t.planet !== 'Sun');
+    const backdropEn = backdrop
+      ? ` In the background, ${backdrop.planet} in your ${ORDINAL[backdrop.house]} house sets the longer-running tone (${backdrop.tone === 'favourable' ? 'supportive' : backdrop.tone === 'challenging' ? 'asking for care' : 'mixed'}).`
+      : '';
+    overviewEn =
+      `${periodHeadline(period, rashi, overall.tone)} The Moon, which sets the mood of the day, is in your ${ORDINAL[moonT.house]} house — ${area.area} — in ${NAK_NAMES[nakIdx]} nakshatra. ` +
+      `${TONE_FRAME[moonT.tone]}, bringing ${lensFor('Moon', moonT.tone)}. ${area.tips[moonT.tone]}${moveEn}${backdropEn}${sadeSatiEn}`;
+    overviewHi = `${rashi.hindi} राशि — ${labelHi}। चंद्रमा आज ${NAK_NAMES_HI[nakIdx]} नक्षत्र में, आपकी राशि से ${HINDI_HOUSE_ORDINAL[moonT.house]} भाव (${area.areaHi}) में है — ${TONE_HI[moonT.tone]}।${moveHi}` +
+      (backdrop ? ` ${backdrop.textHi}` : '');
+  } else {
+    overviewEn = `${periodHeadline(period, rashi, overall.tone)} ${overviewLead.text}${sadeSatiEn}`;
+    overviewHi = `${rashi.hindi} राशि — ${labelHi}। ` + overviewPicks.slice(0, 2).map(t => t.textHi).join(' ');
+  }
 
   const sections: RashifalSection[] = [
     {
@@ -533,6 +612,14 @@ function byWeight(a: TransitReading, b: TransitReading): number {
 
 function gradeRank(g: Grade): number {
   return g === 'strong' ? 3 : g === 'moderate' ? 2 : 1;
+}
+
+/** K15: the period label in Hindi ("आज", "इस सप्ताह", "अक्टूबर 2026", "2027"). */
+function periodLabelHi(period: RashifalPeriod, start: Date): string {
+  if (period === 'today') return 'आज';
+  if (period === 'week') return 'इस सप्ताह';
+  if (period === 'month') return `${HINDI_MONTHS[start.getUTCMonth()]} ${start.getUTCFullYear()}`;
+  return String(start.getUTCFullYear());
 }
 
 function periodHeadline(period: RashifalPeriod, rashi: RashiMeta, tone: Tone): string {

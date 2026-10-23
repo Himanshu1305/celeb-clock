@@ -191,6 +191,24 @@ export function allCategoryTimings(chart: BirthChartResult, now: Date = new Date
   };
 }
 
+/**
+ * M7 (matching): forward-looking SUB-PERIOD windows only. Mahadasha-level windows
+ * can span 15–20 years and a running window can start years in the past, so a
+ * match page would print "April 2021 to December 2036". This keeps only the
+ * Antardasha (sub-period) windows that have not ended, clips a running one so it
+ * starts today, and returns them soonest first — each a few years at most.
+ */
+export function upcomingSubPeriods(windows: ActivationWindow[], now: Date = new Date(), max = 4): ActivationWindow[] {
+  const nowMs = now.getTime();
+  return windows
+    .filter(w => w.level === 'antar' && new Date(w.end).getTime() > nowMs)
+    .map(w => (new Date(w.start).getTime() < nowMs
+      ? { ...w, start: now.toISOString(), status: 'current' as WindowStatus }
+      : w))
+    .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
+    .slice(0, max);
+}
+
 // ── formatting helpers (shared by readings + chat so the wording is identical) ─
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 export function formatMonthYear(iso: string): string {

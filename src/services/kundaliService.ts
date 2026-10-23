@@ -23,6 +23,13 @@ export interface KundaliData {
    *  Used by DashaDeepDive to compute the deeper levels (Pratyantar/Sookshma/Prana) on demand. */
   dashaTimeline?: Array<{ lord: string; start: string; end: string; antardashas?: Array<{ lord: string; start: string; end: string }> }>;
   requires_birth_time: boolean;
+  /** Engine warnings, e.g. POLAR_LATITUDE (K17: shown as a banner on the chart). */
+  warnings?: Array<{ code: string; message?: string }>;
+  /** K13: Navamsa (D9) and Dasamsa (D10) charts, same shape the chart component draws. */
+  divisionalCharts?: {
+    d9: { lagnaSignIndex: number; planets: Array<{ name: string; signIndex: number; house: number }> } | null;
+    d10: { lagnaSignIndex: number; planets: Array<{ name: string; signIndex: number; house: number }> } | null;
+  };
 }
 
 export const hasProkeralaKey = (): boolean =>
@@ -69,6 +76,9 @@ const SIGN_NATURE: Record<string, { element: string; mode: string; gist: string 
   Kumbha:    { element: 'air',   mode: 'fixed',    gist: 'independent, humanitarian and unconventional' },
   Meena:     { element: 'water', mode: 'dual',     gist: 'compassionate, imaginative and boundary-dissolving' },
 };
+/** K17: /api/kundali spells Taurus "Vrisha" (legacy short form) while this table uses
+ *  "Vrishabha" — the miss left Taurus charts with a truncated "Yours is Vrisha.". */
+const signNature = (sign: string) => SIGN_NATURE[sign === 'Vrisha' ? 'Vrishabha' : sign];
 const HOUSE_THEME: Record<number, string> = {
   1: 'the self, body and life direction', 2: 'wealth, speech and family values',
   3: 'courage, effort and siblings', 4: 'home, mother and inner emotional security',
@@ -99,8 +109,8 @@ export function buildInterpretationBlocks(k: KundaliData): InterpretationBlock[]
   const an = (w: string) => (/^[aeiou]/i.test(w) ? 'an' : 'a') + ' ' + w; // "an air", "a fire"
   const moon = k.planets.find(p => p.name === 'Moon');
   const sun = k.planets.find(p => p.name === 'Sun');
-  const lagNat = SIGN_NATURE[k.lagna.sign];
-  const rashiNat = k.rashi ? SIGN_NATURE[k.rashi] : undefined;
+  const lagNat = signNature(k.lagna.sign);
+  const rashiNat = k.rashi ? signNature(k.rashi) : undefined;
 
   // 1) Lagna (rising sign) — and its connection to the Moon sign (outer vs inner self).
   blocks.push({

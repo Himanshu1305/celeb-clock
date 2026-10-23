@@ -13,7 +13,7 @@
  */
 import { FRIENDS, ENEMIES, SIGN_LORDS } from './engine/sthanaBala';
 import {
-  NAK_ORDER, GANA, YONI, YONI_ENEMY, VASHYA, taraNum,
+  NAK_ORDER, GANA, YONI, YONI_ENEMY,
 } from './nakshatraAttributes';
 
 export interface PoruthamPerson { nakshatra: string; rashiIndex: number; } // rashiIndex 0-based
@@ -48,16 +48,54 @@ const RAJJU: Record<string, string> = {};
   ['Siro (head)', ['Mrigashira', 'Chitra', 'Dhanishtha']],
 ] as Array<[string, string[]]>).forEach(([group, stars]) => stars.forEach(s => { RAJJU[s] = group; }));
 
-// Vedha (mutual obstruction) nakshatra pairs — the well-established set.
+// Vedha (mutual obstruction) nakshatra pairs — the standard Tamil table: twelve
+// pairs plus Mrigashira, Chitra and Dhanishtha (Avittam), which are all mutually
+// vedha to one another. Sources (fetched 2026-10-24): epanchang.com/Vedha-Porutham
+// ("Chithirai, Mrigasirsham and Avittam are mutually vedha to each other") and
+// findyourfate.com/indianastro/10porutham.htm (same 12 pairs + the triple).
 const VEDHA_PAIRS: Array<[string, string]> = [
   ['Ashwini', 'Jyeshtha'], ['Bharani', 'Anuradha'], ['Krittika', 'Vishakha'],
-  ['Rohini', 'Swati'], ['Mrigashira', 'Dhanishtha'], ['Ardra', 'Shravana'],
+  ['Rohini', 'Swati'], ['Ardra', 'Shravana'],
   ['Punarvasu', 'Uttara Ashadha'], ['Pushya', 'Purva Ashadha'], ['Ashlesha', 'Mula'],
   ['Magha', 'Revati'], ['Purva Phalguni', 'Uttara Bhadrapada'],
   ['Uttara Phalguni', 'Purva Bhadrapada'], ['Hasta', 'Shatabhisha'],
+  ['Mrigashira', 'Chitra'], ['Mrigashira', 'Dhanishtha'], ['Chitra', 'Dhanishtha'],
 ];
-const vedhaPartner: Record<string, string> = {};
-VEDHA_PAIRS.forEach(([a, b]) => { vedhaPartner[a] = b; vedhaPartner[b] = a; });
+const VEDHA_SET = new Set<string>();
+VEDHA_PAIRS.forEach(([a, b]) => { VEDHA_SET.add(`${a}|${b}`); VEDHA_SET.add(`${b}|${a}`); });
+export const isVedhaPair = (a: string, b: string): boolean => VEDHA_SET.has(`${a}|${b}`);
+
+// Dina: count from the girl's star to the boy's star (inclusive). Uttamam counts
+// 2,4,6,8,9,11,13,15,18,20,24,26 per astroved.com/articles/nakshatra-porutham and
+// findyourfate.com/indianastro/10porutham.htm (prokerala dina-porutham.htm gives
+// the same list without 6). Every other count (incl. 10, 17, 19, 22, 27) does not
+// agree; both prokerala and findyourfate state the 27th is rejected.
+const DINA_GOOD_COUNTS = new Set([2, 4, 6, 8, 9, 11, 13, 15, 18, 20, 24, 26]);
+// Same star (count 1): agrees (uttamam) for these eight stars; agrees at a
+// secondary (madhyamam) level for the second group; otherwise does not agree.
+// Both lists as given by prokerala.com dina-porutham and findyourfate.com.
+const DINA_SAME_STAR_UTTAMAM = new Set(['Rohini', 'Ardra', 'Magha', 'Vishakha', 'Shravana', 'Hasta', 'Uttara Ashadha', 'Revati']);
+const DINA_SAME_STAR_MADHYAMAM = new Set(['Ashwini', 'Krittika', 'Mrigashira', 'Punarvasu', 'Pushya', 'Uttara Phalguni', 'Chitra', 'Purva Ashadha']);
+
+// Vasya (Rasi Vasya) — standard Tamil table, rasi → its vasya rasis (0 = Mesha).
+// Identical on prokerala.com/astrology/porutham/vasya-porutham.htm and
+// astroved.com/articles/vasya-porutham. The porutham agrees when either
+// partner's Moon sign is vasya to the other's.
+const RASI_VASYA: number[][] = [
+  [7, 4],    // Mesha → Vrischika, Simha
+  [3, 6],    // Vrishabha → Karka, Tula
+  [5],       // Mithuna → Kanya
+  [7, 8],    // Karka → Vrischika, Dhanu
+  [6],       // Simha → Tula
+  [2, 11],   // Kanya → Mithuna, Meena
+  [9],       // Tula → Makara
+  [3, 5],    // Vrischika → Karka, Kanya
+  [11],      // Dhanu → Meena
+  [10, 0],   // Makara → Kumbha, Mesha
+  [0],       // Kumbha → Mesha
+  [9],       // Meena → Makara
+];
+const RASI_NAMES = ['Mesha', 'Vrishabha', 'Mithuna', 'Karka', 'Simha', 'Kanya', 'Tula', 'Vrischika', 'Dhanu', 'Makara', 'Kumbha', 'Meena'];
 
 // Mahendra: boy's star counted from girl's star landing on these is favourable.
 const MAHENDRA_COUNTS = new Set([4, 7, 10, 13, 16, 19, 22, 25]);
@@ -70,11 +108,25 @@ export function calculatePorutham(a: PoruthamPerson, b: PoruthamPerson): Porutha
 
   const poruthams: PoruthamDetail[] = [];
 
-  // 1. Dina (star health/prosperity) — count/9 remainder favourable (2,4,6,8,0).
-  const dinaTara = taraNum(ia, ib);
-  const dinaMet = ![3, 5, 7].includes(dinaTara);
+  // 1. Dina (star health/prosperity) — standard Tamil count list (see DINA_GOOD_COUNTS).
+  let dinaMet: boolean;
+  let dinaWhy: string;
+  if (countAB === 1) {
+    if (DINA_SAME_STAR_UTTAMAM.has(a.nakshatra)) {
+      dinaMet = true; dinaWhy = `Both share ${a.nakshatra} — one of the birth stars for which the same star agrees.`;
+    } else if (DINA_SAME_STAR_MADHYAMAM.has(a.nakshatra)) {
+      dinaMet = true; dinaWhy = `Both share ${a.nakshatra} — the same star agrees here at a middling (madhyamam) level.`;
+    } else {
+      dinaMet = false; dinaWhy = `Both share ${a.nakshatra} — for this star the tradition does not count the same star as agreeing.`;
+    }
+  } else {
+    dinaMet = DINA_GOOD_COUNTS.has(countAB);
+    dinaWhy = dinaMet
+      ? `The boy's star is count ${countAB} from the girl's — a favourable Dina count.`
+      : `The boy's star is count ${countAB} from the girl's — not one of the favourable counts (2, 4, 6, 8, 9, 11, 13, 15, 18, 20, 24, 26). One of the essential poruthams to be mindful of.`;
+  }
   poruthams.push({ key: 'dina', label: 'Dina', met: dinaMet, essential: true,
-    explanation: `Health, prosperity and general wellbeing of the couple, counted between the two birth stars (Tara ${dinaTara}). ${dinaMet ? 'Favourable — not one of the inauspicious counts (Vipat/Pratyari/Vadha).' : 'Falls on an inauspicious count — one of the essential poruthams to be mindful of.'}` });
+    explanation: `Health, prosperity and general wellbeing of the couple, counted from the girl's birth star to the boy's. ${dinaWhy}` });
 
   // 2. Gana (temperament).
   const ga = GANA[a.nakshatra] || 'Manushya', gb = GANA[b.nakshatra] || 'Manushya';
@@ -113,11 +165,13 @@ export function calculatePorutham(a: PoruthamPerson, b: PoruthamPerson): Porutha
   poruthams.push({ key: 'rasyadhipathi', label: 'Rasyadhipathi', met: lordMet,
     explanation: `Mental rapport via the Moon-sign lords — ${la} and ${lb}. ${la === lb ? 'Same lord: minds run alike.' : lordMet ? 'Friendly or neutral lords.' : 'The lords are mutual enemies — the softer spot of this match.'}` });
 
-  // 8. Vasya (mutual attraction / influence).
-  const va = VASHYA[a.rashiIndex], vb = VASHYA[b.rashiIndex];
-  const vasyaMet = va === vb || !((va === 'Vanachara' || vb === 'Vanachara') && (va === 'Chatushpada' || vb === 'Chatushpada'));
+  // 8. Vasya (mutual attraction / influence) — standard Tamil Rasi Vasya table.
+  const vasyaAB = RASI_VASYA[a.rashiIndex]?.includes(b.rashiIndex) ?? false;
+  const vasyaBA = RASI_VASYA[b.rashiIndex]?.includes(a.rashiIndex) ?? false;
+  const vasyaMet = vasyaAB || vasyaBA;
+  const ra8 = RASI_NAMES[a.rashiIndex], rb8 = RASI_NAMES[b.rashiIndex];
   poruthams.push({ key: 'vasya', label: 'Vasya', met: vasyaMet,
-    explanation: `Mutual attraction and influence via the Moon-sign group — ${va} and ${vb}. ${va === vb ? 'Same group: strong natural pull.' : vasyaMet ? 'Compatible groups.' : 'Predator/prey groups — weaker on magnetism.'}` });
+    explanation: `Mutual attraction and influence via the Moon signs — ${ra8} (girl) and ${rb8} (boy). ${vasyaMet ? `${vasyaAB ? `${rb8} is vasya to ${ra8}` : `${ra8} is vasya to ${rb8}`} in the standard table — satisfied.` : 'Neither sign is vasya to the other in the standard table — weaker on natural pull, often offset by other poruthams.'}` });
 
   // 9. Rajju (longevity of the marriage — the most important).
   const ra = RAJJU[a.nakshatra], rb = RAJJU[b.nakshatra];
@@ -126,7 +180,7 @@ export function calculatePorutham(a: PoruthamPerson, b: PoruthamPerson): Porutha
     explanation: `Longevity and bond of the marriage — the single most important porutham. Both stars fall in ${ra === rb ? `the same Rajju (${ra}) — Rajju dosha, classically the most significant concern and the one to weigh carefully` : `different Rajjus (${ra} / ${rb}) — satisfied`}.` });
 
   // 10. Vedha (mutual obstruction).
-  const vedhaMet = vedhaPartner[a.nakshatra] !== b.nakshatra;
+  const vedhaMet = !isVedhaPair(a.nakshatra, b.nakshatra);
   poruthams.push({ key: 'vedha', label: 'Vedha', met: vedhaMet,
     explanation: `Freedom from mutual obstruction between the two stars. ${vedhaMet ? 'The stars are not a vedha pair — clear.' : `${a.nakshatra} and ${b.nakshatra} are a classical vedha (obstructing) pair — an area to be mindful of.`}` });
 
@@ -139,7 +193,7 @@ export function calculatePorutham(a: PoruthamPerson, b: PoruthamPerson): Porutha
           : 'Challenging';
 
   const methodology =
-    'Computed by the ten-porutham (Dravidian / Tamil Jothidam) system used in South India and Sri Lanka, from each person’s Moon Nakshatra and Moon sign (Lahiri ayanamsa). Rajju and Dina are the essential poruthams. The directional poruthams (Stree Deergha, Mahendra) use the boy and girl you selected on the form. Where tiers are simplified (Yoni, Rasi) the mainstream convention is used; this is disclosed and the reading is offered calmly as guidance, never a verdict.';
+    'Computed by the ten-porutham (Dravidian / Tamil Jothidam) system used in South India and Sri Lanka, from each person’s Moon Nakshatra and Moon sign (Lahiri ayanamsa). Rajju and Dina are the essential poruthams. The directional poruthams (Stree Deergha, Mahendra) use the boy and girl you selected on the form. Dina, Vasya and Vedha use the standard Tamil tables; where tiers are simplified (Yoni, Rasi) the mainstream convention is used; this is disclosed and the reading is offered calmly as guidance, never a verdict.';
 
   return { poruthams, metCount, total: 10, essentialsMet, verdict, methodology };
 }

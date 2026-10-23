@@ -40,4 +40,58 @@ describe('porutham (10-porutham South Indian matching)', () => {
     expect(r.poruthams.find(p => p.key === 'gana')!.met).toBe(true);
     expect(r.poruthams.find(p => p.key === 'rajju')!.met).toBe(false);
   });
+
+  // M10 regression — standard Tamil tables (references fetched 2026-10-24):
+  //  Dina good counts 2,4,6,8,9,11,13,15,18,20,24,26 — astroved.com/articles/nakshatra-porutham,
+  //    findyourfate.com/indianastro/10porutham.htm; same-star lists from prokerala dina-porutham.htm.
+  //  Vedha triple Mrigashira–Chitra–Dhanishtha — epanchang.com/Vedha-Porutham, findyourfate.com.
+  //  Vasya table — prokerala.com/astrology/porutham/vasya-porutham.htm, astroved.com/articles/vasya-porutham.
+  const dina = (g: string, b: string) =>
+    calculatePorutham({ nakshatra: g, rashiIndex: 0 }, { nakshatra: b, rashiIndex: 0 }).poruthams.find(p => p.key === 'dina')!.met;
+
+  it('Dina: counts 10, 19, 22, 17, 27 do not agree (were wrongly "good")', () => {
+    // girl Ashwini (#1) → boy at count N is NAK_ORDER[N-1]
+    expect(dina('Ashwini', 'Magha')).toBe(false);          // count 10
+    expect(dina('Ashwini', 'Mula')).toBe(false);           // count 19
+    expect(dina('Ashwini', 'Shravana')).toBe(false);       // count 22
+    expect(dina('Ashwini', 'Anuradha')).toBe(false);       // count 17
+    expect(dina('Ashwini', 'Revati')).toBe(false);         // count 27
+  });
+
+  it('Dina: the favourable counts agree', () => {
+    expect(dina('Ashwini', 'Bharani')).toBe(true);         // 2
+    expect(dina('Ashwini', 'Ashlesha')).toBe(true);        // 9
+    expect(dina('Ashwini', 'Purva Ashadha')).toBe(true);   // 20
+    expect(dina('Ashwini', 'Uttara Bhadrapada')).toBe(true); // 26
+    expect(dina('Ashwini', 'Krittika')).toBe(false);       // 3
+  });
+
+  it('Dina: same star agrees only for the listed stars', () => {
+    expect(dina('Rohini', 'Rohini')).toBe(true);           // uttamam list
+    expect(dina('Pushya', 'Pushya')).toBe(true);           // madhyamam list
+    expect(dina('Bharani', 'Bharani')).toBe(false);        // not listed
+    expect(dina('Jyeshtha', 'Jyeshtha')).toBe(false);
+  });
+
+  it('Vedha: Mrigashira, Chitra and Dhanishtha are mutually vedha', () => {
+    const v = (g: string, b: string) =>
+      calculatePorutham({ nakshatra: g, rashiIndex: 0 }, { nakshatra: b, rashiIndex: 0 }).poruthams.find(p => p.key === 'vedha')!.met;
+    expect(v('Mrigashira', 'Chitra')).toBe(false);
+    expect(v('Chitra', 'Dhanishtha')).toBe(false);
+    expect(v('Dhanishtha', 'Mrigashira')).toBe(false);
+    expect(v('Hasta', 'Shatabhisha')).toBe(false);
+    expect(v('Mrigashira', 'Hasta')).toBe(true);
+  });
+
+  it('Vasya: standard Tamil Rasi Vasya table', () => {
+    const vs = (g: number, b: number) =>
+      calculatePorutham({ nakshatra: 'Ashwini', rashiIndex: g }, { nakshatra: 'Hasta', rashiIndex: b }).poruthams.find(p => p.key === 'vasya')!.met;
+    expect(vs(0, 4)).toBe(true);    // Mesha–Simha (Mesha → Simha)
+    expect(vs(1, 6)).toBe(true);    // Vrishabha–Tula
+    expect(vs(9, 10)).toBe(true);   // Makara–Kumbha
+    expect(vs(10, 0)).toBe(true);   // Kumbha–Mesha
+    expect(vs(0, 0)).toBe(false);   // same sign not in table
+    expect(vs(0, 1)).toBe(false);   // Mesha–Vrishabha
+    expect(vs(2, 8)).toBe(false);   // Mithuna–Dhanu
+  });
 });

@@ -13,7 +13,7 @@ import { calculateGunaMilan, type PersonInput } from '../src/lib/vedic/matchmaki
 import { assessManglik, MANGLIK_CONVENTION, type ManglikAssessment } from '../src/lib/vedic/manglik.js';
 import { calculatePorutham } from '../src/lib/vedic/porutham.js';
 import { buildMatchSynthesis } from '../src/lib/vedic/matchSynthesis.js';
-import { categoryTiming, describeWindow, formatWindowRange, type ActivationWindow } from '../src/lib/vedic/yogaTiming.js';
+import { categoryTiming, describeWindow, formatWindowRange, upcomingSubPeriods, type ActivationWindow } from '../src/lib/vedic/yogaTiming.js';
 import { RASHI_NAMES } from '../src/lib/vedic/engine/vedicEngine.js';
 
 function json(body, status = 200) {
@@ -87,8 +87,8 @@ async function handler(request) {
     return json({ error: 'Missing birth details for one or both people' }, 400);
   }
   // Part T: reject out-of-range input up front with a clean 400 (was a 500).
-  const rangeErrAB = birthRangeError({ m: A.month, d: A.day, h: A.hour, min: A.minute, lat: A.latitude, lon: A.longitude, tz: A.timezoneOffset })
-    || birthRangeError({ m: B.month, d: B.day, h: B.hour, min: B.minute, lat: B.latitude, lon: B.longitude, tz: B.timezoneOffset });
+  const rangeErrAB = birthRangeError({ y: A.year, m: A.month, d: A.day, h: A.hour, min: A.minute, lat: A.latitude, lon: A.longitude, tz: A.timezoneOffset })
+    || birthRangeError({ y: B.year, m: B.month, d: B.day, h: B.hour, min: B.minute, lat: B.latitude, lon: B.longitude, tz: B.timezoneOffset });
   if (rangeErrAB) return json({ error: rangeErrAB }, 400);
   // fix-timezone-accuracy: each person's offset from their own birthplace + date.
   const get = k => searchParams.get(k);
@@ -159,8 +159,10 @@ async function handler(request) {
     // Marriage-timing windows from EACH chart (7th lord + Venus + Jupiter), + overlaps.
     const tA = categoryTiming(chartA, 'marriage', now);
     const tB = categoryTiming(chartB, 'marriage', now);
-    const upA = tA.windows.filter(w => w.status !== 'past').slice(0, 4);
-    const upB = tB.windows.filter(w => w.status !== 'past').slice(0, 4);
+    // M7: sub-period (Antardasha) windows only, clipped to start today — never a
+    // 15-year Mahadasha span or a window that began in the past.
+    const upA = upcomingSubPeriods(tA.windows, now);
+    const upB = upcomingSubPeriods(tB.windows, now);
     const timing = minor
       ? {
           personA: { significators: tA.significators, windows: [] },
@@ -172,7 +174,7 @@ async function handler(request) {
           personA: { significators: tA.significators, windows: upA.map(w => ({ ...w, describe: describeWindow(w) })) },
           personB: { significators: tB.significators, windows: upB.map(w => ({ ...w, describe: describeWindow(w) })) },
           overlaps: overlaps(upA, upB),
-          note: 'Marriage-timing windows are the classical activation periods (7th-house lord, Venus and Jupiter) from each person’s Vimshottari Dasha, computed as real date ranges — a likelihood window, never a guaranteed date. Overlaps are periods when BOTH partners are in a favourable window.',
+          note: 'Marriage-timing windows are the classical activation sub-periods (Antardashas of the 7th-house lord, Venus and Jupiter) in each person’s Vimshottari Dasha, from today onward — broad likelihood windows of months to a few years, never a date. Overlaps are periods when BOTH partners are in a favourable window.',
         };
 
     // Narrative synthesis (Part M) — deterministic, built from the same result.
