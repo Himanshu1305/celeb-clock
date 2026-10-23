@@ -1,3 +1,4 @@
+import { calendarAge } from '@/lib/ageBreakdown';
 /**
  * Timezone Detection Utility
  * All calculations run CLIENT-SIDE in the user's browser.
@@ -44,19 +45,7 @@ export const calculateAgeInTimezone = (birthDate: Date): {
   const now = new Date();
   const birth = new Date(birthDate);
   
-  let years = now.getFullYear() - birth.getFullYear();
-  let months = now.getMonth() - birth.getMonth();
-  let days = now.getDate() - birth.getDate();
-
-  if (days < 0) {
-    const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-    days += lastMonth.getDate();
-    months -= 1;
-  }
-  if (months < 0) {
-    months += 12;
-    years -= 1;
-  }
+  const { years, months, days } = calendarAge(birth, now);
 
   const timeDiff = now.getTime() - birth.getTime();
   const totalDays = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
