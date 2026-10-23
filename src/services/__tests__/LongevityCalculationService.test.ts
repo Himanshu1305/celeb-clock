@@ -272,8 +272,8 @@ describe('Group 5 — Total Forecast Sanity Checks', () => {
     expect(r.totalForecast).toBeLessThan(95);
   });
 
-  it('worst case (all negative, India male) → totalForecast is very low but positive', () => {
-    // base=68, health=-38.5 → totalForecast=29.5 — no floor in service
+  it('worst case (all negative, India male) → combined penalty capped at −20 (S12)', () => {
+    // health would be −38.5; S12 caps health+genetic at −20 → 71.2 − 20 = 51.2
     const r = calculateLongevity(makeQuiz({
       smoking: 'heavy',
       drinking: 'heavy',
@@ -285,8 +285,7 @@ describe('Group 5 — Total Forecast Sanity Checks', () => {
       stress: 9,
       bmi: 35,
     }), DEFAULT_PILLAR1, DEFAULT_PILLAR2);
-    expect(r.totalForecast).toBeLessThan(50);
-    expect(r.totalForecast).toBeGreaterThan(10);
+    expect(r.totalForecast).toBeCloseTo(51.2, 1);
   });
 
   it('totalForecast extreme best-case (Japan female, all habits, best family) → below 120', () => {
@@ -699,10 +698,10 @@ describe('Test Group B — Survival minimum guard', () => {
       DEFAULT_PILLAR1, DEFAULT_PILLAR2,
       birthdateForAgeG(79),
     );
-    // base=82.8 + health15 = 97.8 → above threshold 85 → no guard
+    // S12 interpolated multiplier at 79 ≈ 1.185 → base ≈ 84.4 + health → ~101 → no guard
     expect(r.minimumApplied).toBe(false);
     expect(r.totalForecast).toBeGreaterThan(88);
-    expect(r.totalForecast).toBeLessThan(100);
+    expect(r.totalForecast).toBeLessThan(105);
   });
 });
 
@@ -1015,49 +1014,56 @@ describe('NEG — Negative scenario tests', () => {
 // Boundary conditions: exact age thresholds, gender parity, fallback chains.
 // ─────────────────────────────────────────────────────────────────────────────
 describe('EDGE — Edge case tests', () => {
-  it('EDGE1: age 51 with worst inputs → survival guard triggers (buffer=4, threshold=55)', () => {
-    // birthdateForAgeG(51) → currentAge=51; floor(51×0.08)=4; threshold=55
-    // naive forecast ≈ 22.7 < 55 → guard applied
+  it('EDGE1: age 51 with worst inputs → never below the survival threshold (buffer=4, threshold=55)', () => {
+    // birthdateForAgeG(51) → currentAge=51; floor(51×0.08)=4; threshold=55.
+    // With the S12 −20 penalty cap the forecast (≈55.3) already clears the threshold.
     const r = calculateLongevity(
       makeQuiz({ ...WORST_QUIZ_OVERRIDES, gender: 'male', country: 'India' }),
       DEFAULT_PILLAR1, DEFAULT_PILLAR2,
       birthdateForAgeG(51),
     );
-    expect(r.minimumApplied).toBe(true);
     expect(r.survivalBuffer).toBe(4);
     expect(r.minimumThreshold).toBe(55);
     expect(r.totalForecast).toBeGreaterThanOrEqual(55);
   });
 
-  it('EDGE2: age exactly 49 with worst inputs → survival guard does NOT trigger (age < 50)', () => {
+  it('EDGE2 (S12): age 49 with worst inputs → survival guard now covers all adults (buffer=3)', () => {
     const r = calculateLongevity(
       makeQuiz({ ...WORST_QUIZ_OVERRIDES, gender: 'male', country: 'India' }),
       DEFAULT_PILLAR1, DEFAULT_PILLAR2,
       birthdateForAgeG(49),
     );
-    expect(r.minimumApplied).toBe(false);
-    expect(r.survivalBuffer).toBe(0);
+    expect(r.survivalBuffer).toBe(3);
+    expect(r.totalForecast).toBeGreaterThanOrEqual(52);
   });
 
-  it('EDGE3: India male age exactly 40 → conditional multiplier HIGH[40]=1.040 applied, base ≈ 74.0', () => {
-    // 71.2 × 1.040 = 74.048 → 74.0
+  it('EDGE3: India male age 40 → interpolated multiplier (S12), between birth baseline and HIGH[40]', () => {
+    // S12: 1.0 at 35 → 1.040 at 45 ⇒ 1.020 at 40 → 71.2 × 1.020 = 72.6 (no 2.8-year jump at 40)
     const r = calculateLongevity(
       makeQuiz({ gender: 'male', country: 'India' }),
       DEFAULT_PILLAR1, DEFAULT_PILLAR2,
       birthdateForAgeG(40),
     );
     expect(r.isConditionalBaseline).toBe(true);
-    expect(r.baselineLifeExpectancy).toBeCloseTo(74.0, 0);
+    expect(r.baselineLifeExpectancy).toBeCloseTo(72.6, 1);
   });
 
-  it('EDGE4: India male age exactly 39 → no conditional multiplier, birth baseline returned', () => {
-    const r = calculateLongevity(
-      makeQuiz({ gender: 'male', country: 'India' }),
-      DEFAULT_PILLAR1, DEFAULT_PILLAR2,
-      birthdateForAgeG(39),
-    );
-    expect(r.isConditionalBaseline).toBe(false);
-    expect(r.baselineLifeExpectancy).toBe(71.2); // raw birth baseline, no multiplier
+  it('EDGE4 (S12): base changes smoothly across the 40th birthday (was a 2.8-year jump)', () => {
+    const at = (age: number) => calculateLongevity(makeQuiz({ gender: 'male', country: 'India' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2, birthdateForAgeG(age)).baselineLifeExpectancy;
+    expect(at(35)).toBe(71.2); // raw birth baseline up to 35
+    for (const a of [38, 39, 40, 41, 49, 50, 59, 60]) {
+      expect(Math.abs(at(a + 1) - at(a))).toBeLessThan(0.6);
+    }
+  });
+
+  it('S12: living parents are "still living", not short lifespans; penalties capped for a 25–49-year-old', () => {
+    const living = (age: number) => ({ age, isLiving: true, dontKnow: false });
+    const p1 = { ...DEFAULT_PILLAR1, father: living(50), mother: living(48) };
+    const r = calculateLongevity(makeQuiz({ gender: 'male', country: 'India' }), p1, DEFAULT_PILLAR2, birthdateForAgeG(20));
+    expect(r.geneticVitalityScore).not.toBe('Below Average');
+    expect(r.geneticAdjustment ?? 0).toBeGreaterThanOrEqual(0);
+    const worst = calculateLongevity(makeQuiz({ ...WORST_QUIZ_OVERRIDES, gender: 'male', country: 'India' }), DEFAULT_PILLAR1, DEFAULT_PILLAR2, birthdateForAgeG(45));
+    expect(worst.totalForecast - 45).toBeGreaterThan(5);
   });
 
   it('EDGE5: Japan female has higher baseline and totalForecast than Japan male (same age, same inputs)', () => {
