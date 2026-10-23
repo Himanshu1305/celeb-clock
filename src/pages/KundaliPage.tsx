@@ -16,7 +16,7 @@ import { recordReading, getReadingHistory } from '@/services/readingHistory';
 import { syncHistoryToAccount, isHistorySyncEligible } from '@/services/readingHistorySync';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { mergeProfile } from '@/services/savedProfile';
+import { mergeProfile, maritalStatusOf, MARITAL_STATUS_OPTIONS, type MaritalStatusChoice } from '@/services/savedProfile';
 import { fetchKundali, buildInterpretationBlocks, kundaliBasis, type KundaliData } from '@/services/kundaliService';
 import { BirthDataUsed } from '@/components/vedic/BirthDataUsed';
 import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
@@ -54,6 +54,14 @@ export default function KundaliPage() {
   const [reading, setReading] = useState<ReadingPayload | null>(null);
   const [readingLoading, setReadingLoading] = useState(false);
   const [readingFailed, setReadingFailed] = useState(false);
+  // Optional marital status (default "not said"). Kept in memory for this visit and,
+  // when the user has saved their profile, stored inside that saved profile.
+  const [maritalStatus, setMaritalStatus] = useState<MaritalStatusChoice>('not-said');
+  const msRef = useRef<MaritalStatusChoice>('not-said');
+  const lastLoc = useRef<{ dob: string; time: string; loc: BirthDetails['city'] } | null>(null);
+  useEffect(() => {
+    if (profile?.maritalStatus) { setMaritalStatus(maritalStatusOf(profile)); msRef.current = maritalStatusOf(profile); }
+  }, [profile?.maritalStatus]);
 
   // ── DOB carry-forward (Part AK) ─────────────────────────────────────────────
   // Extends Birthday's ?dob= pattern to carry ALL THREE fields a real chart needs:
@@ -110,7 +118,7 @@ export default function KundaliPage() {
       }
       const hasSavedProfile = saveChecked || usingSaved;
       if (hasSavedProfile) {
-        save({ dob: details.dob, time: details.time, city: details.city, name: details.name });
+        save({ dob: details.dob, time: details.time, city: details.city, name: details.name, notifyOptIn: profile?.notifyOptIn, maritalStatus: msRef.current });
       }
       recordReading({
         dob: details.dob, rashi: k.rashi ?? '—', lagna: k.lagna.sign,
@@ -122,7 +130,8 @@ export default function KundaliPage() {
       }
       setHistoryKey(x => x + 1);
       setReadingLoading(true);
-      try { setReading(await fetchReading(details.dob, details.time, loc)); }
+      lastLoc.current = { dob: details.dob, time: details.time, loc };
+      try { setReading(await fetchReading(details.dob, details.time, loc, msRef.current)); }
       catch { setReadingFailed(true); }
       finally { setReadingLoading(false); }
     } catch { setFailed(true); }
@@ -153,6 +162,17 @@ export default function KundaliPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded, carried.full, isFull, profile, location.state]);
+
+  const changeMaritalStatus = async (v: MaritalStatusChoice) => {
+    setMaritalStatus(v); msRef.current = v;
+    if (profile && (usingSaved || saveChecked)) save(mergeProfile(profile, { maritalStatus: v }));
+    // Re-read the written reading so its relationship wording matches the new status.
+    if (data && lastLoc.current) {
+      const { dob, time, loc } = lastLoc.current;
+      setReadingLoading(true); setReadingFailed(false);
+      try { setReading(await fetchReading(dob, time, loc, v)); } catch { setReadingFailed(true); } finally { setReadingLoading(false); }
+    }
+  };
 
   const shareText = data
     ? `My Kundali: ${data.lagna.sign} Lagna, ${data.rashi} Rashi, ${data.nakshatra.nakshatra} Nakshatra. Get yours at https://bornclock.com/kundali`
@@ -244,6 +264,14 @@ export default function KundaliPage() {
               saveChecked={saveChecked}
               onSaveCheckedChange={setSaveChecked}
             />
+            <label data-testid="kundali-marital-status" className="small" style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
+              <span>Marital status <span className="muted">(optional)</span></span>
+              <select value={maritalStatus} onChange={e => void changeMaritalStatus(e.target.value as MaritalStatusChoice)}
+                style={{ padding: '4px 8px', borderRadius: 8, border: '1px solid var(--line,#e4dcc8)', background: 'var(--paper)', color: 'var(--ink)' }}>
+                {MARITAL_STATUS_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+              <span className="muted" style={{ fontSize: 12 }}>If you are married, we show partnership periods instead of “marriage windows”.</span>
+            </label>
           </div>
 
           {failed && (
@@ -306,6 +334,7 @@ export default function KundaliPage() {
                   lagnaSignIndex={data.lagna.signIndex}
                   planets={data.planets.map(p => ({ name: p.name, house: p.house }))}
                   dashaTimeline={data.dashaTimeline}
+                  maritalStatus={maritalStatus}
                 />
               )}
 

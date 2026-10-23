@@ -5,11 +5,20 @@
  * from the real chart — the relevant house lords' Shadbala strength and the
  * benefic/malefic occupants — reasoned and attributed to the tradition (Rule 7).
  *
+ * Audit K10 (calibration): grades used to come out "strong" for most charts (education
+ * 89%, foreign 86%, health 77% on a 400-chart sample) because every planet at ≥300
+ * virupas counted as strong. Planet strength now comes from the ONE shared scale
+ * (strengthScale.ts: classical per-planet minimums; strong = ≥1.25× the minimum). The
+ * area cut-offs below are unchanged. On the same 400-chart sample (seeded random births
+ * 1950–2009, 8 cities) the share graded "strong" is now: wealth 19%, education 25%,
+ * foreign 25%, health 16% (mild 37% / 22% / 26% / 43%).
+ *
  * Health is strictly WELLBEING framing: "areas to care for", never a diagnosis,
  * never an illness or a date; always points to a doctor (Rule 7). No LLM.
  */
 import type { BirthChartResult } from './calculateBirthChart';
 import { SIGN_LORDS } from './engine/sthanaBala';
+import { shadbalaCategory } from './strengthScale';
 
 const BENEFIC = new Set(['Jupiter', 'Venus', 'Mercury', 'Moon']);
 const MALEFIC = new Set(['Saturn', 'Mars', 'Rahu', 'Ketu', 'Sun']);
@@ -26,9 +35,8 @@ export interface LifeAreaReading {
 }
 
 function strengthCat(chart: BirthChartResult, planet: string): 'strong' | 'moderate' | 'weak' {
-  const t = chart.shadbala?.[planet]?.total;
-  if (typeof t !== 'number') return 'moderate';
-  return t >= 300 ? 'strong' : t >= 225 ? 'moderate' : 'weak';
+  // K9: the one shared scale (classical per-planet minimums), same as the AI reading.
+  return shadbalaCategory(planet, chart.shadbala?.[planet]?.total);
 }
 
 /** Lord of a house (1-based) given the lagna. */

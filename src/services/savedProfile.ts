@@ -43,7 +43,24 @@ export interface SavedBirthProfile {
   name?: string;       // OPTIONAL display/identification name (Part P) — NEVER an
                        // astrological input; used only for headings/labels/PDF titles.
   notifyOptIn?: boolean; // OPTIONAL explicit opt-in to chart-event notifications (Part P).
+  /** OPTIONAL marital status. Absent = "not said". When 'married', forward "marriage
+   * window" wording is replaced by partnership wording (What's Ahead, readings, chat,
+   * alerts). Never an astrological input; never used by Kundali matching. Stored inside
+   * the existing birth-profile JSON (device + profiles.birth_profile jsonb) — no new column. */
+  maritalStatus?: MaritalStatusChoice;
   savedAt?: string;    // ISO
+}
+
+export type MaritalStatusChoice = 'single' | 'married' | 'not-said';
+export const MARITAL_STATUS_OPTIONS: Array<{ value: MaritalStatusChoice; label: string }> = [
+  { value: 'not-said', label: 'Prefer not to say' },
+  { value: 'single', label: 'Single' },
+  { value: 'married', label: 'Married' },
+];
+/** The effective marital status of a (possibly absent) profile; default "not said". */
+export function maritalStatusOf(p: Partial<SavedBirthProfile> | null | undefined): MaritalStatusChoice {
+  const v = p?.maritalStatus;
+  return v === 'single' || v === 'married' ? v : 'not-said';
 }
 
 /** Max stored display-name length — guards layout + storage against absurd input. */
@@ -105,6 +122,7 @@ export function isValidProfile(p: unknown): p is SavedBirthProfile {
   // length is enforced at the input/save layer via sanitizeName.
   if (o.name !== undefined && typeof o.name !== 'string') return false;
   if (o.notifyOptIn !== undefined && typeof o.notifyOptIn !== 'boolean') return false;
+  if (o.maritalStatus !== undefined && o.maritalStatus !== 'single' && o.maritalStatus !== 'married' && o.maritalStatus !== 'not-said') return false;
   return true;
 }
 
@@ -125,6 +143,7 @@ export function mergeProfile(existing: SavedBirthProfile | null, patch: Partial<
     city: patch.city ?? existing?.city,
     name: patch.name ?? existing?.name,
     notifyOptIn: patch.notifyOptIn ?? existing?.notifyOptIn,
+    maritalStatus: patch.maritalStatus ?? existing?.maritalStatus,
   };
 }
 

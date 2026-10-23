@@ -14,6 +14,8 @@
 import type { ReadingFacts } from './readingPrompts';
 import { scanForRedFlags } from './readingPrompts';
 import type { TimingFacts } from './yogaTiming';
+import { harmfulPredictionLabels } from './harmfulPredictions';
+import { nowContextBlock, type NowContext } from './chatNowContext';
 
 // ── Timing-question detection (routing + the date-accuracy guard's trigger) ──
 // A "when" question about a life theme. Broad on purpose so casual phrasings
@@ -177,10 +179,13 @@ export function deterministicTimingReply(timing: TimingFacts, category: TimingCa
     // PAST-tense, or an already-married person (Part S.3): PAST windows ONLY. Never a
     // future window, never a "you'll marry again" implication.
     if (ctx.tense === 'past' || ctx.alreadyMarried) {
-      if (!past.length) {
+      // Audit K6: a past question may need an older window than the 3 most recent
+      // (P9 married June 2006 → Ketu–Venus Aug 2005–Oct 2006), so use every adult-era one.
+      const allPast = cat.allPast && cat.allPast.length ? cat.allPast : past;
+      if (!allPast.length) {
         return `Astrology can't pinpoint a specific date for a past event — I'd rather be straight with you than guess. Looking honestly at your chart, you haven't yet passed through a significant Venus or 7th-lord period of the kind classically tied to marriage, which is worth knowing in itself. I won't invent a window to make the timing fit.`;
       }
-      const list = past.slice(0, 3).map(winTxt).join('; ');
+      const list = allPast.slice(0, 6).map(winTxt).join('; ');
       return `Astrology can't pinpoint a specific date for a past event — I'd rather be straight with you than guess. What your chart shows is which shorter periods carry the strongest relationship significance: ${list}. If your marriage falls in one of those, that's the classical pattern holding. If not, that's worth knowing too — I won't invent an explanation to make it fit afterward.`;
     }
 
@@ -213,6 +218,35 @@ export function deterministicTimingReply(timing: TimingFacts, category: TimingCa
   const primaryTxt = `your ${primary.planet} ${LEVEL_WORD(primary.level)} from ${primary.range}`;
   const otherTxt = others.length ? ` Another supportive window is your ${others[0].planet} ${LEVEL_WORD(others[0].level)} from ${others[0].range}.` : '';
   return `Based on your actual Dasha timeline, your strongest classical window for ${theme} is ${primaryTxt} — traditionally the period when this potential is most supported.${otherTxt} Treat these as the most likely windows, not a fixed certainty, and use your own judgement alongside them.`;
+}
+
+// ── Exact-day guard (audit K6: windows stay windows, never an exact day) ──────
+const DAY_MONTHS = 'January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec';
+const DAY_FIRST_RE = new RegExp(`\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+(?:of\\s+)?(${DAY_MONTHS})\\b`, 'g'); // case-sensitive: "may" the verb is not May
+const MONTH_FIRST_RE = new RegExp(`\\b(${DAY_MONTHS})\\.?\\s+(\\d{1,2})(?:st|nd|rd|th)?\\b(?!\\d)`, 'g');
+const ISO_DAY_RE = /\b(\d{4})-(\d{2})-(\d{2})\b/g;
+const MONTH_KEYS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+const monthKey = (m: string) => MONTH_KEYS.indexOf(m.slice(0, 3).toLowerCase()) + 1;
+
+/** Every exact calendar DAY in a text, normalised to "D/M" (e.g. "3/4" for 3 April). */
+export function findExactDays(text: string): string[] {
+  const out = new Set<string>();
+  const t = text || '';
+  for (const m of t.matchAll(DAY_FIRST_RE)) { const d = +m[1]; if (d >= 1 && d <= 31) out.add(`${d}/${monthKey(m[2])}`); }
+  for (const m of t.matchAll(MONTH_FIRST_RE)) { const d = +m[2]; if (d >= 1 && d <= 31) out.add(`${d}/${monthKey(m[1])}`); }
+  for (const m of t.matchAll(ISO_DAY_RE)) out.add(`${+m[3]}/${+m[2]}`);
+  return [...out];
+}
+
+/**
+ * Exact days in a model reply that are NOT allowed. Allowed: today's date (so "today,
+ * 23 October 2026" is fine) and any day the user typed themselves (e.g. their own
+ * wedding date). Everything else — "you'll marry on 3 April" — is a fabricated
+ * precision the Dasha method cannot give; future timing must stay a month-year RANGE.
+ */
+export function disallowedExactDays(reply: string, allowedTexts: string[]): string[] {
+  const allowed = new Set(allowedTexts.flatMap(findExactDays));
+  return findExactDays(reply).filter(d => !allowed.has(d));
 }
 
 // ── 1. Crisis detection (deterministic, overrides everything) ────────────────
@@ -302,6 +336,11 @@ const CHAT_EXTRA_PATTERNS: Array<{ label: string; re: RegExp }> = [
 export function scanChatResponse(text: string): string[] {
   const flags = scanForRedFlags(text); // Part D scanner (word-boundary matched)
   for (const p of CHAT_EXTRA_PATTERNS) if (p.re.test(text)) flags.push(p.label);
+  // Audit K8: death / accident / serious illness / child harm / marriage certainty, in
+  // English, Hindi and Hinglish. The chat endpoint REPHRASES these into caring caution
+  // (rephraseHarmfulPredictions) before this scan, so on a live reply they only show up
+  // here if something slipped past the rephraser.
+  flags.push(...harmfulPredictionLabels(text));
   return flags;
 }
 
@@ -336,7 +375,14 @@ export function buildMarriageDirective(ctx: MarriageContext): string {
 }
 
 // ── 2. System prompt (all 7 guardrail categories + grounding) ────────────────
-export function buildChatSystemPrompt(facts: ReadingFacts, gemstone?: GemstoneChatContext, marriage?: MarriageContext): string {
+export interface ChatPromptExtras {
+  /** Audit K7: today's date, age, current Dasha + slow-planet transits, marital status. */
+  now?: NowContext;
+  /** Audit K6: the question looks backward ("when did I…") — list every adult-era past window. */
+  pastQuestion?: boolean;
+}
+
+export function buildChatSystemPrompt(facts: ReadingFacts, gemstone?: GemstoneChatContext, marriage?: MarriageContext, extras: ChatPromptExtras = {}): string {
   const placements = facts.planets.map(p => `${p.planet} in ${p.sign} (house ${p.house})${p.retrograde ? ', retrograde' : ''}`).join('; ');
   // Part X: include Pratyantardasha (3rd level) so the chat can answer a direct question
   // about it accurately (it's computed but kept out of the main reading narrative).
@@ -356,7 +402,8 @@ export function buildChatSystemPrompt(facts: ReadingFacts, gemstone?: GemstoneCh
     if (c.suppressedForMinor) return `  - ${c.label}: NOT APPLICABLE — ${c.note} Never give this person ${c.key} timing, windows or ages.`;
     // Part AC: include PAST windows too (deduped) so a past-tense question has its
     // real answer set. winTxt tags each window [past] / [currently running].
-    const past = (c.past || []).filter(p => !c.upcoming.some(u => u.range === p.range));
+    const pastSrc = extras.pastQuestion && c.allPast && c.allPast.length ? c.allPast : (c.past || []);
+    const past = pastSrc.filter(p => !c.upcoming.some(u => u.range === p.range));
     const wins = [...c.upcoming, ...past];
     return `  - ${c.label} (driven by ${c.significators.join(', ')}): ${wins.length ? wins.map(winTxt).join('; ') : 'strongest classical windows already passed — next comparable one is years away'}`;
   }).join('\n');
@@ -383,7 +430,7 @@ THIS PERSON'S CHART (ground every substantive answer in these facts, and refer t
 - Current planetary period: ${dasha}
 - Placements: ${placements}
 - Doshas: ${doshas}
-
+${extras.now ? `\n${nowContextBlock(extras.now)}\n` : ''}
 COMPUTED TIMING WINDOWS (real dates from this person's Vimshottari Dasha — the answer to "WHEN" questions):
   Current period: ${t.currentPeriod || 'not available'}
 ${catBlock}
@@ -427,6 +474,16 @@ SAFETY RULES — these are absolute and override any user request:
    - Explain that this rests on the Ascendant (Lagna), which is the more precise, classically-correct basis, rather than the Moon sign (Rashi) alone.
    - If the user specifically asks about a Moon-sign / Rashi-based stone, or WHY the methods differ, then DO explain the Rashi-only alternative above — informatively, not by silently overriding their question. Frame the difference as method rigor (Lagna vs Rashi), never as any seller/app being wrong.
    - Cite only the stones listed above; never invent a different one. Informational only — no buying/selling advice, no medical/guaranteed-effect claims; powerful stones (Blue Sapphire, Hessonite, Cat's Eye) carry the "trial first" caution.
+
+11. LIFE, DEATH, ACCIDENTS, ILLNESS, MARRIAGE CERTAINTY (any language — English, Hindi or Hinglish): never state that anyone (the user, a spouse, a child, a parent or relative) will die, has a short life, will be widowed, will have an accident or injury, or will get a named illness or condition — not even as "likely", "indicated" or "a yoga" (no "mrityu ka yog", no "durghatna hogi"), and never use death, dying, loss of life, fatal, a disease name or a diagnosis. Never say a marriage is certain, "100%", "definitely" or "pakka", that someone will never marry, or that a divorce is coming. Do NOT omit the risk either — express it as a gentle precaution and keep any timing window:
+   - a difficult / maraka-type period for the user → "This is a sensitive period — take good care of your health, avoid unnecessary risks, and don't skip check-ups."
+   - anything about a spouse's, parent's or relative's life or health → "Elders or family members may need more of your time and support in this period — stay close and keep an eye on their health."
+   - accident / travel → "Take extra care while travelling and driving in this period."
+   - children → care areas only, and "regular check-ups are a good idea".
+   - marriage → a window of possibility with honest uncertainty, never a promise.
+   Reply in the same language and tone the user wrote in (e.g. "इस समय परिवार के बड़ों का विशेष ध्यान रखें", "is samay apni sehat ka khaas dhyan rakhein", "yatra aur driving mein savdhani rakhein").
+
+12. PAST QUESTIONS ("when did I get married / get my first job?"): you may cite ANY past window listed above (each is tagged [past]) — choose the one(s) that classically match and say honestly if none does. Future windows are always month-year RANGES, never an exact day.
 ${marriageBlock}
 STRUCTURE (how to organise a substantive answer — this is about ORDER, it does not relax any rule above): open with a short lead-in that NAMES which specific chart factors the answer draws on — the relevant house(s), planet(s), Dasha period and/or dosha from the chart above — then give the grounded answer. For example: "This is best read through your 7th house, Venus, and your current Dasha period — here's what each points to…", then the substance. Naming the factors first is the point: it shows the answer comes from THIS person's chart, not a generic forecast. Every factor you name in the lead-in must be a real one from the chart above, and everything after it still obeys the grounding, timing, certainty, safety and Yoga-accuracy rules exactly. For a simple/greeting/off-chart message, skip the lead-in and just reply warmly.
 
