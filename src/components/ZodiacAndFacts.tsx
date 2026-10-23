@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Sparkles, Star, Calendar, Hash } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { lifePathFromDate } from '@/lib/lifePath';
 
 interface Props {
   birthDate: Date | null;
@@ -153,11 +154,8 @@ const getZodiacSign = (month: number, day: number): string => {
 
 // Calculate Life Path Number for numerology
 const calculateLifePath = (date: Date): { number: number; name: string; meaning: string } => {
-  const dateStr = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
-  let sum = dateStr.split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
-    sum = sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-  }
+  // Audit N1: the ONE shared sitewide Life Path function.
+  const sum = lifePathFromDate(date);
   
   const lifePathMeanings: Record<number, { name: string; meaning: string }> = {
     1: { name: 'The Leader', meaning: 'Independent, ambitious, and pioneering spirit' },

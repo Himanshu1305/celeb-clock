@@ -120,7 +120,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         q: 'How is the Life Path Number calculated?',
-        a: 'BornClock uses Pythagorean digit reduction: sum all digits of your birth date (day + month + year) and reduce to a single digit by repeated summing. Master numbers 11, 22, and 33 are preserved. For example, 15 June 1990 → 6+6+1 = 13 → 4.',
+        a: 'BornClock uses the Pythagorean method most public calculators use: reduce the day, month and year separately, add them, then reduce the total. Master numbers 11, 22 and 33 are preserved at each step. For example, 15 June 1990 → day 15 → 6, month 6, year 1990 → 19 → 10 → 1; 6 + 6 + 1 = 13 → 4.',
       },
       {
         q: 'Are zodiac, birthstone, and numerology scientifically validated?',

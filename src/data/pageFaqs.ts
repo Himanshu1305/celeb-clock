@@ -111,7 +111,7 @@ export const pageFaqs: Record<string, FAQ[]> = {
     {
       question: 'How is the Life Path Number calculated?',
       answer:
-        'Add every digit of your full birth date (day + month + year) and reduce the sum to a single digit, except for master numbers 11, 22, and 33 which are kept intact. For example, 14/05/1992 → 1+4+5+1+9+9+2 = 31 → 3+1 = 4.',
+        'Reduce the day, the month and the full year separately (keeping the master numbers 11, 22 and 33), add the three results, then reduce the total to a single digit — again keeping 11, 22 or 33. For example, 14/05/1992 → day 14 → 5, month 5, year 1992 → 21 → 3; 5 + 5 + 3 = 13 → 4.',
     },
     {
       question: 'What does my Life Path Number mean?',

@@ -3,20 +3,20 @@ import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
-import { sumDigitsOf, MOBILE_MEANINGS, NUMBER_PLANET, type DigitStringResult } from '@/lib/numerologyTools';
+import { sumMobileDigits, MOBILE_MEANINGS, NUMBER_PLANET, type DigitStringResult } from '@/lib/numerologyTools';
 
 export default function MobileNumberNumerologyPage() {
   const [num, setNum] = useState('');
   const [result, setResult] = useState<DigitStringResult | null>(null);
 
   const calc = () => {
-    const r = sumDigitsOf(num);
+    const r = sumMobileDigits(num);
     if (r.digits.length === 0) return;
     setResult(r);
   };
 
   const faqItems = [
-    { question: 'How is a mobile number reduced?', answer: 'We add every digit of the number together, then keep reducing until a single digit 1–9 is left. For example 98-1234-5670 adds to 55, and 5+5 = 10, 1+0 = 1. That final digit is the "number" we read.' },
+    { question: 'How is a mobile number reduced?', answer: 'We add every digit of the 10-digit number together (the +91 country code and a leading 0 are not counted), then keep reducing until a single digit 1–9 is left. For example 98-1234-5670: 9+8+1+2+3+4+5+6+7+0 = 45, and 4+5 = 9. That final digit is the "number" we read.' },
     { question: 'Does my phone number affect my luck?', answer: 'No — a phone number is a telecoms identifier, nothing more. This is a light, symbolic tradition some people enjoy as a reflection: which "vibration" does your number carry? Please do not pay a premium for a number expecting it to change your fortune.' },
     { question: 'Why does the ruling planet matter?', answer: 'Each digit 1–9 is linked to a planet in the Chaldean tradition (1 Sun, 5 Mercury, 8 Saturn, and so on). The planet is a shorthand for the number\'s character — it is symbolism, not astronomy.' },
     { question: 'Is this scientific?', answer: 'No. It is a symbolic tradition, for reflection only — never a basis for a purchase or an important decision.' },

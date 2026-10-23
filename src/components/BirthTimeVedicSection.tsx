@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { birthQuery } from '@/lib/timezone/clientBirth';
@@ -19,7 +19,13 @@ interface VedicApiResult {
  * Lahiri sidereal) so the heavy calculation never ships to the browser. Degrades
  * gracefully when the endpoint is unavailable.
  */
-export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
+export interface BirthTimeDetails { time: string; city: SavedCity | null }
+
+export function BirthTimeVedicSection({ dob, onDetailsChange }: {
+  dob: string | null;
+  /** Lets the Birthday Report form keep the entered time + city for the report itself (audit S1). */
+  onDetailsChange?: (details: BirthTimeDetails) => void;
+}) {
   const { profile, isFull } = useSavedProfile();
   const [time, setTime] = useState('');
   const [cityQuery, setCityQuery] = useState('');
@@ -30,6 +36,8 @@ export function BirthTimeVedicSection({ dob }: { dob: string | null }) {
   const [failed, setFailed] = useState(false);
 
   const hasTime = /^\d{2}:\d{2}$/.test(time);
+
+  useEffect(() => { onDetailsChange?.({ time, city }); }, [time, city, onDetailsChange]);
 
   // Explicit opt-in prefill only: a birthday report can be a GIFT about someone
   // else, so we never auto-apply the user's own saved details — we only offer a

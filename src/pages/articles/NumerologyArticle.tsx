@@ -3,31 +3,25 @@ import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { LIFE_PATH_EXTENDED } from '@/data/astrologicalData';
 import { calculateLifePathNumber } from '@/utils/celebrityCalculations';
+import { famousForLifePath } from '@/data/famousLifePaths';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
-// Real Indian examples with calculated Life Path numbers (from indianCelebrities.ts).
-const CELEB_EXAMPLES: Record<number, string> = {
-  1: 'Bhimrao Ambedkar (April 14, 1891), Rabindranath Tagore (May 7, 1861)',
-  2: 'Dharmendra (December 8, 1935), Vicky Kaushal (May 16, 1988)',
-  3: 'Guru Nanak Dev (April 15, 1469), Sai Baba of Shirdi (September 28, 1838)',
-  4: 'Subhas Chandra Bose (January 23, 1897), Swami Vivekananda (January 12, 1863)',
-  5: 'Bal Gangadhar Tilak (July 23, 1856), Sri Aurobindo (August 15, 1872)',
-  6: 'Jawaharlal Nehru (November 14, 1889), Ram Prasad Bismil (June 11, 1897)',
-  7: 'Vinoba Bhave (September 11, 1895), Kabir Das (June 1, 1440)',
-  8: 'Sardar Vallabhbhai Patel (October 31, 1875), Gopal Krishna Gokhale (May 9, 1866)',
-  9: 'Mahatma Gandhi (October 2, 1869), Bhagat Singh (September 28, 1907)',
-  11: 'Maulana Abul Kalam Azad (November 11, 1888), Sharad Pawar (December 12, 1940)',
-  22: 'Usha Uthup (November 8, 1947), M.S. Oberoi (August 15, 1898)',
-  33: 'Mahesh Bhatt (September 20, 1948), Puneeth Rajkumar (March 17, 1975)',
-};
+// Indian examples, GENERATED from the one shared Life Path function over a dated list
+// (src/data/famousLifePaths.ts) so no one is filed under a number their date doesn't give.
+const CELEB_EXAMPLES: Record<number, string> = Object.fromEntries(
+  [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 33].map(n => [
+    n,
+    famousForLifePath(n, { indianOnly: true, limit: 2 }).map(e => `${e.name} (${e.born})`).join(', '),
+  ]),
+);
 
 const FAQS = [
   {
     q: 'What is a Life Path number in numerology?',
-    a: 'Your Life Path number is the single most important number in your numerology chart. It is derived from the full digits of your date of birth and reveals your core nature, natural strengths, typical challenges, and the lessons you are here to learn. Unlike personality tests, it is fixed at birth and never changes.',
+    a: 'Your Life Path number is the single most important number in your numerology chart. It is derived from your date of birth (day, month and year, each reduced first) and reveals your core nature, natural strengths, typical challenges, and the lessons you are here to learn. Unlike personality tests, it is fixed at birth and never changes.',
   },
   {
     q: 'How do I calculate my Life Path number from my date of birth?',
@@ -178,7 +172,7 @@ export function NumerologyArticle() {
         <article className="max-w-3xl mx-auto px-4 py-10">
 
           <p className="text-gray-700 leading-relaxed mb-6">
-            Your Life Path number is calculated from the full digits of your date of birth
+            Your Life Path number is calculated from your date of birth (day, month and year each reduced, then added)
             and never changes. Unlike personality tests that depend on how you answer
             questions, your Life Path is fixed at birth — a mathematical constant that
             reveals your core nature, natural strengths, typical challenges, and the

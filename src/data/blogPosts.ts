@@ -5003,7 +5003,7 @@ BornClock's What-If Simulator lets you move the smoking slider from "heavy" to "
 
 ## How to Calculate Your Life Path Number
 
-Add all digits of your full date of birth together, reducing to a single digit (or stopping at 11, 22, or 33).
+Reduce the month, the day and the full year separately (keeping 11, 22 and 33), add them, then reduce the total to a single digit (or stop at 11, 22 or 33).
 
 **Example: March 25, 1988 = 03/25/1988**
 Month: 0+3 = 3 · Day: 2+5 = 7 · Year: 1+9+8+8 = 26 → 2+6 = 8
@@ -5029,7 +5029,7 @@ The Pythagorean method used above is the most widely accepted in Western numerol
 
 **Relationship style:** Deeply loving and loyal; can give too much, losing themselves in partnership. Need to develop clear boundaries. Best with 6s (nurturing, committed) and 9s (expansive, wise).
 
-**Famous 2s:** Barack Obama, Jennifer Aniston, Diana, Princess of Wales
+**Famous 2s:** Barack Obama, Jennifer Aniston, Kanye West
 
 ## Life Path 3: The Creator
 
@@ -5089,7 +5089,7 @@ The Pythagorean method used above is the most widely accepted in Western numerol
 
 **Relationship style:** Ambitious schedule creates challenges; need a partner who is equally purposeful or extremely secure. Best with 4s and 6s.
 
-**Famous 8s:** Warren Buffett, Nelson Mandela, Richard Nixon
+**Famous 8s:** Nelson Mandela, Pablo Picasso, Sandra Bullock
 
 ## Life Path 9: The Humanitarian
 
@@ -5124,7 +5124,7 @@ Add your birth month + birth day + 2026, then reduce to a single digit. Example:
     keywords: ['numerology life path number', 'life path number meaning', 'calculate life path number', 'numerology personality'],
     readTime: 12,
     faqs: [
-      { question: 'What is my numerology life path number?', answer: 'Add all digits of your full date of birth together, reducing to a single digit (or stopping at master numbers 11, 22, or 33). It represents your core life purpose.' },
+      { question: 'What is my numerology life path number?', answer: 'Reduce your birth day, month and full year separately, add them, and reduce the total to a single digit (keeping master numbers 11, 22 or 33). It represents your core life purpose.' },
       { question: 'What is the most powerful life path number?', answer: 'Master number 22 (The Master Builder) is often considered the most powerful — it combines spiritual vision with the practical ability to manifest extraordinary things in the material world.' },
     ],
   },

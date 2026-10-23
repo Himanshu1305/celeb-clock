@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Search } from 'lucide-react';
 import type { WikiPerson } from '@/services/WikimediaService';
 import celebritiesData from '@/data/celebrities.json';
+import { lifePathFromDate } from '@/lib/lifePath';
 
 // Slugs that have a dedicated /celebrity/[slug]/ page (unified DB). Built once.
 const CELEB_SLUGS = new Set<string>(
@@ -51,13 +52,9 @@ function getBirthstone(month: number): string {
   return stones[month] || '💎 Diamond';
 }
 
+/** Audit N1: the ONE shared sitewide Life Path function. */
 function getLifePath(dob: Date): number {
-  const digits = `${String(dob.getDate()).padStart(2, '0')}${String(dob.getMonth() + 1).padStart(2, '0')}${dob.getFullYear()}`;
-  let sum = digits.split('').reduce((a, b) => a + parseInt(b), 0);
-  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
-    sum = String(sum).split('').reduce((a, b) => a + parseInt(b), 0);
-  }
-  return sum;
+  return lifePathFromDate(dob);
 }
 
 function calcAge(birthDate: Date, refDate: Date): number {

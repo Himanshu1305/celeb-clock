@@ -68,7 +68,7 @@ const HindiNumerology = () => {
         <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Life Path Number क्या होता है?</h2>
-            <p className="text-muted-foreground leading-relaxed">Life Path Number आपकी पूरी जन्म तिथि के अंकों को जोड़कर निकाला जाता है। यह 1 से 9 के बीच होता है (कुछ systems में 11, 22, 33 को master numbers माना जाता है)। यह number आपके core personality और जीवन की दिशा बताता है।</p>
+            <p className="text-muted-foreground leading-relaxed">Life Path Number आपकी पूरी जन्म तिथि से निकाला जाता है — दिन, महीना और वर्ष को अलग-अलग एक अंक तक घटाकर जोड़ा जाता है। यह 1 से 9 के बीच होता है (11, 22, 33 को master numbers के रूप में रखा जाता है)। भारतीय अंक ज्योतिष में इसे <strong>भाग्यांक</strong> कहते हैं; <strong>मूलांक</strong> केवल जन्म के दिन (तारीख) से निकलता है। यह number आपके core personality और जीवन की दिशा बताता है।</p>
           </section>
 
           <section>

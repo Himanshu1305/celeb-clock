@@ -1,11 +1,14 @@
 import { supabase } from '@/integrations/supabase/client';
 import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
 import { getChineseZodiac } from '@/services/ChineseZodiacService';
-import { getVedicRashi, compareZodiacs } from '@/services/VedicZodiacService';
+import { VEDIC_SIGNS } from '@/services/VedicZodiacService';
 import { getZodiacByDate } from '@/data/zodiacData';
 import { getBirthstoneByMonth } from '@/data/birthstoneData';
 import { getNumerologyByNumber } from '@/data/numerologyData';
 import { getGenerationBasic } from '@/services/GenerationService';
+import { lifePathFromIso } from '@/lib/lifePath';
+import { computePersonalYear } from '@/lib/personalYear';
+import { fetchReportVedic, dateOnlyMoon, type ReportBirthPlace, type ReportVedic } from '@/lib/reportVedic';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -128,27 +131,41 @@ function getZodiacKey(dob: Date): string {
   return 'pisces';
 }
 
-function getLifePath(dob: Date): number {
-  const dd = String(dob.getDate()).padStart(2, '0');
-  const mm = String(dob.getMonth() + 1).padStart(2, '0');
-  const yyyy = String(dob.getFullYear());
-  const s = `${dd}${mm}${yyyy}`;
-  let sum = s.split('').reduce((a, c) => a + parseInt(c, 10), 0);
-  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
-    sum = String(sum).split('').reduce((a, c) => a + parseInt(c, 10), 0);
-  }
-  return sum;
+// ── Live (view-time) figures ──────────────────────────────────────────────────
+// Audit S5/N2: age, days lived, next birthday, planetary ages and the Personal Year
+// are computed when the report is VIEWED (and again here at generation), never
+// frozen at purchase time. The Personal Year uses the site-wide method
+// (src/lib/personalYear.ts — the same as /personal-year-number) for the CURRENT
+// calendar year, so its number and its text always match.
+
+export interface LiveReportFigures {
+  age: number;
+  daysSinceBirth: number;
+  daysUntilNextBirthday: number;
+  nextBirthdayDate: string;
+  planetaryAges: Record<string, number>;
+  personalYear: number;
+  personalYearYear: number;
 }
 
-function getPersonalYear2026(dob: Date): number {
-  const universalYear = 10; // 2+0+2+6 = 10
-  const birthMonth = dob.getMonth() + 1;
-  const birthDay = dob.getDate();
-  let sum = birthMonth + birthDay + universalYear;
-  while (sum > 9 && sum !== 11 && sum !== 22) {
-    sum = String(sum).split('').reduce((a, c) => a + parseInt(c, 10), 0);
+/** All date-dependent report figures for `dobIso` as of `now` (local calendar dates). */
+export function liveReportFigures(dobIso: string, now: Date = new Date()): LiveReportFigures {
+  const [by, bm, bd] = dobIso.slice(0, 10).split('-').map(Number);
+  const ty = now.getFullYear(), tm = now.getMonth() + 1, td = now.getDate();
+  const age = ty - by - (tm < bm || (tm === bm && td < bd) ? 1 : 0);
+  const DAY = 86_400_000;
+  const todayUtc = Date.UTC(ty, tm - 1, td);
+  const daysSinceBirth = Math.round((todayUtc - Date.UTC(by, bm - 1, bd)) / DAY);
+  let next = new Date(ty, bm - 1, bd);
+  if (Date.UTC(next.getFullYear(), next.getMonth(), next.getDate()) <= todayUtc) next = new Date(ty + 1, bm - 1, bd);
+  const daysUntilNextBirthday = Math.round((Date.UTC(next.getFullYear(), next.getMonth(), next.getDate()) - todayUtc) / DAY);
+  const nextBirthdayDate = next.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const planetaryAges: Record<string, number> = {};
+  for (const [planet, period] of Object.entries(ORBITAL_PERIODS)) {
+    planetaryAges[planet] = parseFloat((daysSinceBirth / period).toFixed(2));
   }
-  return sum;
+  const py = computePersonalYear(bm, bd, ty);
+  return { age: Math.max(0, age), daysSinceBirth: Math.max(0, daysSinceBirth), daysUntilNextBirthday, nextBirthdayDate, planetaryAges, personalYear: py.number, personalYearYear: ty };
 }
 
 const GENERATION_DESCS: Record<string, string> = {
@@ -192,8 +209,16 @@ export interface BirthdayReportData {
   compatibility: { best: string[]; challenging: string[] };
   lifePathNumber: number;
   lifePathData: any;
+  /** Legacy field name: the Personal Year at GENERATION time. The view recomputes it live. */
   personalYear2026: number;
   personalYearMeaning: any;
+  /** Calendar year the stored personalYear2026 applies to (reports from 24 Oct 2026 on). */
+  personalYearYear?: number;
+  /** Optional birth time ("HH:MM") and place entered on the form (audit S1). */
+  birthTime?: string | null;
+  birthPlace?: ReportBirthPlace | null;
+  /** Chart-based Vedic data from the Kundali engine, when time + place were given. */
+  vedic?: ReportVedic | null;
   birthstone: any;
   generation: any;
   planetaryAges: Record<string, number>;
@@ -213,32 +238,14 @@ export async function generateReportData(
   dobString: string,
   gifterName: string,
   personalMessage: string,
-  country: string
+  country: string,
+  birth?: { time?: string | null; place?: ReportBirthPlace | null } | null,
 ): Promise<BirthdayReportData> {
   const dob = new Date(dobString + 'T12:00:00');
   if (dob > new Date()) throw new Error("Birth date cannot be in the future.");
-  const today = new Date();
 
-  const age =
-    today.getFullYear() -
-    dob.getFullYear() -
-    (today.getMonth() < dob.getMonth() ||
-    (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())
-      ? 1
-      : 0);
-
-  const daysSinceBirth = Math.floor((today.getTime() - dob.getTime()) / (1000 * 60 * 60 * 24));
-
-  const nextBirthday = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
-  if (nextBirthday <= today) nextBirthday.setFullYear(today.getFullYear() + 1);
-  const daysUntilNextBirthday = Math.floor(
-    (nextBirthday.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-  );
-  const nextBirthdayDate = nextBirthday.toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  const live = liveReportFigures(dobString);
+  const { age, daysSinceBirth, daysUntilNextBirthday, nextBirthdayDate, planetaryAges } = live;
 
   const dayOfWeekBorn = dob.toLocaleDateString('en-US', { weekday: 'long' });
   const zodiacKey = getZodiacKey(dob);
@@ -246,27 +253,31 @@ export async function generateReportData(
   const mm = String(dob.getMonth() + 1).padStart(2, '0');
   const dd = String(dob.getDate()).padStart(2, '0');
 
-  const celebrities = await getRankedBirthdayCelebrities(`${mm}-${dd}`, country, 6);
+  const birthTime = birth?.time && /^\d{2}:\d{2}$/.test(birth.time) ? birth.time : null;
+  const birthPlace = birthTime && birth?.place ? birth.place : null;
+  const [celebrities, vedic] = await Promise.all([
+    getRankedBirthdayCelebrities(`${mm}-${dd}`, country, 6),
+    fetchReportVedic(dobString, birthTime, birthPlace),
+  ]);
   const historicalEvents = getHistoricalEvents(dob);
   const westernZodiac = getZodiacByDate(dob.getMonth() + 1, dob.getDate());
   const chineseZodiac = getChineseZodiac(dob);
-  const vedicRashi = getVedicRashi(dob);
-  const zodiacComparison = compareZodiacs(dob);
+  // Audit S1/E2: the Vedic Rashi is the MOON's sidereal sign — from the birth chart
+  // when time + place were given, else only when certain for the whole date; never
+  // the Sun's sign. (Old reports stored the Sun-based value; the view ignores it.)
+  const moonIdx = vedic ? vedic.moonSignIndex : dateOnlyMoon(dobString).moonSignIndex;
+  const vedicRashi = moonIdx != null ? VEDIC_SIGNS[moonIdx] : null;
+  const zodiacComparison = null;
   const compatibility = getCompatibility(zodiacKey);
 
-  const lifePathNumber = getLifePath(dob);
+  const lifePathNumber = lifePathFromIso(dobString);
   const lifePathData = getNumerologyByNumber(lifePathNumber);
 
-  const personalYear2026 = getPersonalYear2026(dob);
+  const personalYear2026 = live.personalYear;
   const personalYearMeaning = PERSONAL_YEAR_MEANINGS[personalYear2026] ?? null;
 
   const birthstone = getBirthstoneByMonth(dob.getMonth() + 1);
   const generation = getGeneration(dob.getFullYear());
-
-  const planetaryAges: Record<string, number> = {};
-  for (const [planet, period] of Object.entries(ORBITAL_PERIODS)) {
-    planetaryAges[planet] = parseFloat((daysSinceBirth / period).toFixed(2));
-  }
 
   return {
     recipientName,
@@ -285,6 +296,10 @@ export async function generateReportData(
     lifePathData,
     personalYear2026,
     personalYearMeaning,
+    personalYearYear: live.personalYearYear,
+    birthTime,
+    birthPlace,
+    vedic,
     birthstone,
     generation,
     planetaryAges,

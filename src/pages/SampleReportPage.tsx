@@ -1,37 +1,45 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ReportLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import {
-  calculateWesternZodiac, calculateLifePathNumber,
-  calculateChineseZodiac, calculateVedicRashi,
-  calculateAge, calculateDaysLived, calculateDaysUntilBirthday,
-} from '@/utils/celebrityCalculations';
-import {
-  WESTERN_ZODIAC_PROFILES, VEDIC_RASHI_PROFILES,
-  CHINESE_ZODIAC_PROFILES, LIFE_PATH_EXTENDED,
-} from '@/data/astrologicalData';
+// Audit S4: every value on this page comes from the SAME functions the paid report
+// uses (BirthdayReportService / ReportView), so the sample can never contradict a
+// real report for the same birth details.
+import { getZodiacByDate } from '@/data/zodiacData';
+import { getChineseZodiac } from '@/services/ChineseZodiacService';
+import { VEDIC_SIGNS } from '@/services/VedicZodiacService';
+import { RASHI_RATNA_DATA } from '@/data/rashiRatnaData';
+import { getNakshatra } from '@/data/nakshatraData';
+import { getLifePath } from '@/data/numerologyLifePathData';
+import { lifePathWorking } from '@/lib/lifePath';
+import { liveReportFigures, PERSONAL_YEAR_MEANINGS } from '@/services/BirthdayReportService';
+import { getRankedBirthdayCelebrities } from '@/services/BirthdaySearchService';
+import { SAMPLE_BIRTH, SAMPLE_VEDIC } from '@/data/sampleReport';
 
-// Hardcoded relatable demo DOB — January 15, 1990 (not Jan 1, which is a holiday).
-const DEMO = { day: 15, month: 1, year: 1990 };
-const DEMO_LABEL = 'January 15, 1990';
-
-// Real celebrities born on January 15 (from indianCelebrities.ts).
-const JAN_15_CELEBS = ['Mayawati', 'Anna Hazare', 'Lakshmi Mittal'];
+const DEMO_LABEL = 'January 15, 1990 · 6:30 am · New Delhi';
 
 export function SampleReportPage() {
-  const western = calculateWesternZodiac(DEMO.day, DEMO.month);
-  const vedic = calculateVedicRashi(DEMO.day, DEMO.month);
-  const chinese = calculateChineseZodiac(DEMO.year);
-  const lifePath = calculateLifePathNumber(DEMO.day, DEMO.month, DEMO.year);
+  const [y, m, d] = SAMPLE_BIRTH.dob.split('-').map(Number);
+  const western = getZodiacByDate(m, d);
+  const chinese = getChineseZodiac(new Date(SAMPLE_BIRTH.dob + 'T12:00:00'));
+  const lp = lifePathWorking(d, m, y);
+  const lpData = getLifePath(lp.number);
+  const live = liveReportFigures(SAMPLE_BIRTH.dob);
+  const pyMeaning = PERSONAL_YEAR_MEANINGS[live.personalYear];
+  const rashi = VEDIC_SIGNS[SAMPLE_VEDIC.moonSignIndex];
+  const lagna = VEDIC_SIGNS[SAMPLE_VEDIC.lagnaSignIndex];
+  const nakshatra = getNakshatra(SAMPLE_VEDIC.nakshatraNumber);
+  const rashiRatna = RASHI_RATNA_DATA.find(r => r.rashiEnglish === rashi.english) ?? null;
 
-  const zodiacProfile = WESTERN_ZODIAC_PROFILES[western.sign] ?? null;
-  const rashiProfile = VEDIC_RASHI_PROFILES[vedic.rashi] ?? null;
-  const chineseProfile = CHINESE_ZODIAC_PROFILES[chinese.animal] ?? null;
-  const lpProfile = LIFE_PATH_EXTENDED[lifePath] ?? null;
-
-  const age = calculateAge(DEMO.day, DEMO.month, DEMO.year);
-  const daysLived = calculateDaysLived(DEMO.day, DEMO.month, DEMO.year);
-  const daysUntil = calculateDaysUntilBirthday(DEMO.day, DEMO.month);
+  // Same live celebrity query the report uses; the section hides if it returns nothing.
+  const [celebs, setCelebs] = useState<string[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    getRankedBirthdayCelebrities(SAMPLE_BIRTH.dob.slice(5), null, 6)
+      .then(r => { if (!cancelled && r?.length) setCelebs(r.map(c => c.name)); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
 
   return (
     <ReportLayout
@@ -82,12 +90,12 @@ export function SampleReportPage() {
             </Link>
           </section>
 
-          {/* 3. Quick stats row */}
+          {/* Quick stats — computed today, exactly as the report does */}
           <div className="grid grid-cols-3 gap-3 mb-8">
             {[
-              { label: 'Age', value: `${age} yrs` },
-              { label: 'Days Lived', value: daysLived.toLocaleString() },
-              { label: 'Days to Next Birthday', value: String(daysUntil) },
+              { label: 'Age', value: `${live.age} yrs` },
+              { label: 'Days Lived', value: live.daysSinceBirth.toLocaleString() },
+              { label: 'Days to Next Birthday', value: String(live.daysUntilNextBirthday) },
             ].map(({ label, value }) => (
               <div key={label} className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-center">
                 <div className="text-xl font-black text-gray-900">{value}</div>
@@ -96,146 +104,91 @@ export function SampleReportPage() {
             ))}
           </div>
 
-          {/* 4. Lucky Elements Panel (from rashiProfile) */}
-          {rashiProfile && (
-            <section data-testid="sample-lucky-panel" className="mb-8 overflow-x-auto pb-1" aria-label="Lucky elements">
-              <div className="flex gap-2 flex-wrap">
-                {[
-                  `🎨 Colour: ${rashiProfile.lucky_colors[0]}`,
-                  `💎 Stone: ${rashiProfile.lucky_stone} (${rashiProfile.lucky_stone_hindi})`,
-                  `📅 Day: ${rashiProfile.lucky_day}`,
-                  `🔢 Number: ${rashiProfile.lucky_numbers.join(', ')}`,
-                  `🧭 Direction: ${rashiProfile.lucky_direction}`,
-                  `⚙️ Metal: ${rashiProfile.lucky_metal}`,
-                  ...(zodiacProfile ? [`🃏 Tarot: ${zodiacProfile.tarot_card}`] : []),
-                ].map(chip => (
-                  <span key={chip} className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
-                                              rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
-                    {chip}
+          {/* Western Zodiac */}
+          {western && (
+            <section className="mb-6 bg-white border border-gray-200 rounded-2xl p-5">
+              <h2 className="text-lg font-black text-gray-900 mb-1">
+                {western.unicode} Western Zodiac: {western.name}
+              </h2>
+              <div className="text-xs text-gray-500 mb-3">{western.dateRange} · {western.element} · {western.rulingPlanet}</div>
+              <div className="flex flex-wrap gap-1">
+                {western.coreTraits.slice(0, 5).map(t => (
+                  <span key={t} className="bg-[#6E5AA6]/10 text-[#6E5AA6] text-xs px-2 py-1 rounded-full">{t}</span>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Vedic — Moon sign, Nakshatra, Lagna, Ratna (from the Kundali engine) */}
+          <section data-testid="sample-vedic" className="mb-6 bg-white border border-gray-200 rounded-2xl p-5">
+            <h2 className="text-lg font-black text-gray-900 mb-1">
+              🕉 Vedic Rashi (Moon sign): {rashi.name} — {rashi.english}
+            </h2>
+            <div className="text-xs text-gray-500 mb-3">
+              Ruled by {rashi.ruling_planet} · Nakshatra {nakshatra.name}, pada {SAMPLE_VEDIC.pada} · Lagna (Ascendant) {lagna.name} — {lagna.english}
+            </div>
+            <p className="text-sm text-gray-700 leading-relaxed mb-3">{rashi.description}</p>
+            <div className="grid sm:grid-cols-2 gap-2 text-xs">
+              {rashiRatna && (
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                  <div className="text-gray-400 mb-0.5">Rashi Ratna (Moon-sign stone)</div>
+                  <div className="font-semibold text-gray-900">{rashiRatna.primaryStone} ({rashiRatna.primaryStoneHindi})</div>
+                </div>
+              )}
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                <div className="text-gray-400 mb-0.5">Vedic Ratna (from the birth chart)</div>
+                <div className="font-semibold text-gray-900">{SAMPLE_VEDIC.gem.gem} ({SAMPLE_VEDIC.gem.hindi}) — {SAMPLE_VEDIC.gem.planet}, {SAMPLE_VEDIC.gem.role}</div>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400 mt-3">
+              Calculated for 6:30 am in New Delhi with the same engine as our Kundali (sidereal, Lahiri). Your report uses your own birth time and city; without a birth time it shows the Moon sign only when it is certain for the whole day. Consult a qualified astrologer before wearing any gemstone.
+            </p>
+          </section>
+
+          {/* Chinese Zodiac */}
+          <section className="mb-6 bg-white border border-gray-200 rounded-2xl p-5">
+            <h2 className="text-lg font-black text-gray-900 mb-1">
+              {chinese.emoji} Chinese Zodiac: {chinese.element} {chinese.animal}
+              <span className="text-sm font-normal text-gray-500 ml-2">({chinese.yin_yang})</span>
+            </h2>
+            <p className="text-sm text-gray-700 leading-relaxed">{chinese.description}</p>
+            <p className="text-xs text-gray-400 mt-2">Born before the Lunar New Year of {y}, so the sign belongs to the {chinese.year} lunar year.</p>
+          </section>
+
+          {/* Life Path + Personal Year */}
+          <section className="mb-6 bg-white border border-gray-200 rounded-2xl p-5">
+            <div className="flex items-center gap-4 mb-3">
+              <div className="w-14 h-14 bg-[#0E2238] rounded-full flex items-center justify-center text-2xl font-black text-white flex-shrink-0">
+                {lp.number}
+              </div>
+              <div>
+                <h2 className="text-lg font-black text-gray-900">Life Path {lp.number}</h2>
+                <div className="text-[#6E5AA6] font-semibold text-sm">{lpData.archetype}</div>
+                <div className="text-xs text-gray-400">{lp.steps}</div>
+              </div>
+            </div>
+            <p className="text-sm text-gray-700 leading-relaxed mb-3">{lpData.personality.split('\n\n')[0]}</p>
+            <p className="text-sm text-gray-600">
+              <strong>Personal Year {live.personalYear} in {live.personalYearYear}: </strong>{pyMeaning?.title}
+            </p>
+          </section>
+
+          {/* Celebrity twins — the same live list the report shows */}
+          {celebs.length > 0 && (
+            <section className="mb-6 bg-gray-50 border border-gray-200 rounded-2xl p-5">
+              <h2 className="text-lg font-black text-gray-900 mb-2">Famous people born on January 15</h2>
+              <div className="flex flex-wrap gap-2">
+                {celebs.map(n => (
+                  <span key={n} className="bg-white border border-gray-200 rounded-full px-3 py-1.5 text-sm text-gray-700">
+                    {n}
                   </span>
                 ))}
               </div>
+              <p className="text-xs text-gray-400 mt-3">
+                Your report shows the best-known people in our database who share your exact birthday.
+              </p>
             </section>
           )}
-
-          {/* 5. Western Zodiac card */}
-          {zodiacProfile && (
-            <section className="mb-6 bg-white border border-gray-200 rounded-2xl p-5">
-              <h2 className="text-lg font-black text-gray-900 mb-1">
-                {western.symbol} Western Zodiac: {western.sign}
-              </h2>
-              <div className="text-xs text-gray-500 mb-3">{western.date_range} · {zodiacProfile.element} · {zodiacProfile.ruling_planet}</div>
-              <p className="text-sm text-gray-700 leading-relaxed mb-3">{zodiacProfile.personality_summary}</p>
-              <div className="grid grid-cols-2 gap-3 mb-3">
-                <div>
-                  <h3 className="text-xs font-bold text-green-700 mb-1">Strengths</h3>
-                  <div className="flex flex-wrap gap-1">
-                    {zodiacProfile.strengths.map(s => (
-                      <span key={s} className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">{s}</span>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-xs font-bold text-red-700 mb-1">Challenges</h3>
-                  <div className="flex flex-wrap gap-1">
-                    {zodiacProfile.weaknesses.map(w => (
-                      <span key={w} className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">{w}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-3 text-xs">
-                <strong className="text-[#6E5AA6]">🃏 Tarot Card: {zodiacProfile.tarot_card}</strong>
-                <span className="text-[#6E5AA6]"> — {zodiacProfile.tarot_meaning}</span>
-              </div>
-            </section>
-          )}
-
-          {/* 6. Vedic Rashi card */}
-          {rashiProfile && (
-            <section className="mb-6 bg-white border border-gray-200 rounded-2xl p-5">
-              <h2 className="text-lg font-black text-gray-900 mb-1">
-                🕉 Vedic Rashi: {rashiProfile.rashi} ({rashiProfile.rashi_devanagari}) — {rashiProfile.western_equivalent}
-              </h2>
-              <div className="text-xs text-gray-500 mb-3">
-                Lord: {rashiProfile.lord} ({rashiProfile.lord_devanagari}) · {rashiProfile.element} · {rashiProfile.quality}
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3 text-xs">
-                {[
-                  { label: 'Lucky Stone', value: `${rashiProfile.lucky_stone} (${rashiProfile.lucky_stone_hindi})` },
-                  { label: 'Lucky Day', value: rashiProfile.lucky_day },
-                  { label: 'Direction', value: rashiProfile.lucky_direction },
-                  { label: 'Metal', value: rashiProfile.lucky_metal },
-                ].map(({ label, value }) => (
-                  <div key={label} className="bg-gray-50 border border-gray-200 rounded-lg p-2 text-center">
-                    <div className="text-gray-400 mb-0.5">{label}</div>
-                    <div className="font-semibold text-gray-900 leading-tight">{value}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-3">
-                <div className="text-xs font-bold text-amber-800 mb-0.5">🕉 Mantra</div>
-                <div className="text-sm font-medium text-amber-900">{rashiProfile.mantra}</div>
-              </div>
-              <p className="text-sm text-gray-700 leading-relaxed">{rashiProfile.personality_summary}</p>
-            </section>
-          )}
-
-          {/* 7. Chinese Zodiac card */}
-          {chineseProfile && (
-            <section className="mb-6 bg-white border border-gray-200 rounded-2xl p-5">
-              <h2 className="text-lg font-black text-gray-900 mb-1">
-                {chineseProfile.emoji} Chinese Zodiac: Year of the {chineseProfile.animal}
-                <span className="text-sm font-normal text-gray-500 ml-2">
-                  ({chineseProfile.element_fixed} {chineseProfile.yin_yang})
-                </span>
-              </h2>
-              <p className="text-sm text-gray-700 leading-relaxed mb-3">{chineseProfile.personality_summary}</p>
-              <div className="grid grid-cols-2 gap-3 text-xs">
-                <div>
-                  <span className="font-bold text-green-700">Lucky:</span> Numbers {chineseProfile.lucky_numbers.join(', ')} · Colours {chineseProfile.lucky_colors.join(', ')}
-                </div>
-                <div>
-                  <span className="font-bold text-red-700">Unlucky:</span> Numbers {chineseProfile.unlucky_numbers.join(', ')} · Colours {chineseProfile.unlucky_colors.join(', ')}
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* 8. Life Path card */}
-          {lpProfile && (
-            <section className="mb-6 bg-white border border-gray-200 rounded-2xl p-5">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="w-14 h-14 bg-[#0E2238] rounded-full flex items-center justify-center text-2xl font-black text-white flex-shrink-0">
-                  {lifePath}
-                </div>
-                <div>
-                  <h2 className="text-lg font-black text-gray-900">Life Path {lifePath}</h2>
-                  <div className="text-[#6E5AA6] font-semibold text-sm">{lpProfile.title}</div>
-                  <div className="text-xs text-gray-400">{lpProfile.ruling_planet} · {lpProfile.element}</div>
-                </div>
-              </div>
-              <p className="text-sm text-gray-700 leading-relaxed mb-3">{lpProfile.traits}</p>
-              <p className="text-sm text-gray-600 mb-1"><strong>Love: </strong>{lpProfile.love_style}</p>
-              <p className="text-sm text-gray-600 mb-1"><strong>Career paths: </strong>{lpProfile.career_paths.join(', ')}.</p>
-              <p className="text-sm text-[#6E5AA6] italic"><strong>Spiritual lesson: </strong>{lpProfile.spiritual_lesson}</p>
-            </section>
-          )}
-
-          {/* 9. Celebrity Twins teaser */}
-          <section className="mb-6 bg-gray-50 border border-gray-200 rounded-2xl p-5">
-            <h2 className="text-lg font-black text-gray-900 mb-2">Famous people born on January 15</h2>
-            <div className="flex flex-wrap gap-2">
-              {JAN_15_CELEBS.map(n => (
-                <span key={n} className="bg-white border border-gray-200 rounded-full px-3 py-1.5 text-sm text-gray-700">
-                  {n}
-                </span>
-              ))}
-            </div>
-            <p className="text-xs text-gray-400 mt-3">
-              Your report shows everyone in our database who shares your exact birthday.
-            </p>
-          </section>
 
         </div>
 

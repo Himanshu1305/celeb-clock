@@ -25,6 +25,7 @@ import html2canvas from 'html2canvas';
 import { getChineseZodiac } from '@/services/ChineseZodiacService';
 import { getVedicRashi } from '@/services/VedicZodiacService';
 import { RASHI_NAME_TO_SLUG } from '@/services/VedicZodiacExtended';
+import { lifePathFromDate } from '@/lib/lifePath';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const MONTH_SLUGS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -92,14 +93,8 @@ const getZodiacSign = (month: number, day: number) => {
   return signs[0];
 };
 
-const calculateLifePath = (date: Date) => {
-  const dateStr = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
-  let sum = dateStr.split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
-    sum = sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-  }
-  return sum;
-};
+// Audit N1: the ONE shared sitewide Life Path function.
+const calculateLifePath = (date: Date) => lifePathFromDate(date);
 
 const getBirthstone = (month: number) => {
   const birthstones = [

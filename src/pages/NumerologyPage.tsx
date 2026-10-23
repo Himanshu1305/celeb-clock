@@ -11,12 +11,12 @@ import { NUMEROLOGY_DATA, ALL_LIFE_PATH_NUMBERS } from '@/data/numerologyData';
 
 const FAQ_ITEMS = [
   { q: 'What is numerology?', a: 'Numerology is a system of belief that assigns symbolic meaning to numbers — particularly numbers derived from one\'s name and date of birth. The most widely used system in the West is Pythagorean numerology, attributed to the ancient Greek philosopher Pythagoras, who taught that numbers are the fundamental building blocks of reality. While the philosophical connection to Pythagoras is historical tradition rather than documented fact, the system bearing his name has been used for self-reflection and personality interpretation for centuries.' },
-  { q: 'How is the Life Path Number calculated?', a: 'Sum all the individual digits of your full birth date (day + month + full year). Keep reducing two-digit totals until you reach a single digit — unless the sum is 11, 22, or 33, which are Master Numbers preserved without further reduction. Example: Albert Einstein, March 14, 1879 → 0+3+1+4+1+8+7+9 = 33. Master Number 33 — preserved.' },
+  { q: 'How is the Life Path Number calculated?', a: 'Reduce the day, the month and the full year separately (keeping the master numbers 11, 22 and 33), add the three results, then reduce the total to a single digit — again keeping 11, 22 or 33. Example: Meryl Streep, June 22, 1949 → day 22 (a master number, kept), month 6, year 1+9+4+9 = 23 → 5; 22 + 6 + 5 = 33 — Master Number 33, preserved. This is the method most public numerology calculators use.' },
   { q: 'What are Master Numbers in numerology?', a: 'Master Numbers (11, 22, and 33) are special designations in Pythagorean numerology. They are preserved rather than reduced because they are said to carry a higher vibration and potential than single-digit numbers. 11 is the Illuminator, 22 is the Master Builder, and 33 is the Master Teacher — the rarest of all.' },
   { q: 'Is numerology scientifically proven?', a: 'No. Numerology is not a scientifically validated system. No peer-reviewed research has demonstrated that life path numbers reliably predict personality or life outcomes. BornClock presents numerology as a cultural and symbolic tradition — a framework for self-reflection, not a predictive science. The famous calculations shown use each person\'s verified birth date and the standard Pythagorean method.' },
   { q: 'What is the difference between Life Path Number and Destiny Number?', a: 'The Life Path Number (calculated from birth date) represents your core life purpose and personality. The Destiny Number (or Expression Number, calculated from the numerical values of all letters in your full birth name) represents the talents and challenges you\'ll encounter in life. BornClock focuses on the Life Path Number as the primary numerological indicator.' },
-  { q: 'What if my birth date calculation results in a Master Number?', a: 'If your birth date digit sum reaches 11, 22, or 33 at any point in the reduction, you have a Master Number life path. You carry both the Master Number energy and the reduced digit energy (11 → 2, 22 → 4, 33 → 6). Most numerologists advise working with the Master Number vibration as a calling, while acknowledging that the reduced digit represents the more easily expressed baseline.' },
-  { q: 'How accurate is the BornClock numerology calculator?', a: 'BornClock uses the standard Pythagorean digit-sum method — the most widely used numerology calculation system. The celebrity examples shown in each life path number page are independently verified using each person\'s documented birth date. The calculation is accurate; what varies is how much personal meaning you assign to the result.' },
+  { q: 'What if my birth date calculation results in a Master Number?', a: 'If your final total is 11, 22, or 33, you have a Master Number life path. You carry both the Master Number energy and the reduced digit energy (11 → 2, 22 → 4, 33 → 6). Most numerologists advise working with the Master Number vibration as a calling, while acknowledging that the reduced digit represents the more easily expressed baseline.' },
+  { q: 'How accurate is the BornClock numerology calculator?', a: 'BornClock uses the standard Pythagorean method — day, month and year reduced separately, master numbers 11/22/33 kept — the method most public numerology calculators use. The celebrity examples shown in each life path number page are independently verified using each person\'s documented birth date. The calculation is accurate; what varies is how much personal meaning you assign to the result.' },
   { q: 'What is the most common Life Path Number?', a: 'Research on Life Path distribution suggests that numbers 1, 3, 5, and 7 occur somewhat more frequently than others, simply because of how the arithmetic of birth date distribution across the year works. Master Numbers (11, 22, 33) are the rarest, occurring in approximately 3–5% of the population combined.' },
 ];
 
@@ -95,7 +95,7 @@ export default function NumerologyPage() {
               Numerology is the study of the symbolic significance of numbers in human life. The most widely practiced system in the Western world is Pythagorean numerology, attributed to the ancient Greek philosopher Pythagoras (c. 570–495 BCE), who taught that numbers are the fundamental reality underlying all of existence. The Pythagorean school believed that each number from 1 to 9 carries a distinct vibrational quality that influences the character and destiny of people born under its influence.
             </p>
             <p>
-              The Life Path Number is the central calculation in Pythagorean numerology. It is derived by summing all the individual digits of your complete birth date and reducing the result to a single digit — or to one of three Master Numbers (11, 22, 33) that are considered too significant to reduce further. The result is said to represent your core life purpose: the themes, talents, and challenges that will be most consistently present throughout your life.
+              The Life Path Number is the central calculation in Pythagorean numerology. It is derived by reducing the day, month and year of your birth separately, adding them, and reducing the total to a single digit — or to one of three Master Numbers (11, 22, 33) that are considered too significant to reduce further. The result is said to represent your core life purpose: the themes, talents, and challenges that will be most consistently present throughout your life.
             </p>
           </div>
         </section>
@@ -117,19 +117,18 @@ export default function NumerologyPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">How to Calculate Your Life Path Number</h2>
           <div className="space-y-4 text-muted-foreground leading-relaxed">
-            <p>Sum every individual digit of your full date of birth, then reduce to a single digit (stopping at 11, 22, or 33 — Master Numbers).</p>
+            <p>Reduce the day, the month and the full year separately (keeping the master numbers 11, 22 and 33), add the three results, then reduce the total to a single digit — again keeping 11, 22 or 33.</p>
             <div className="bg-slate-900 dark:bg-slate-950 text-green-400 rounded-xl px-5 py-4 font-mono text-sm leading-relaxed">
-              <p className="text-slate-400 text-xs mb-2"># Example: Albert Einstein, born March 14, 1879</p>
-              <p>Date: 0 3 · 1 4 · 1 8 7 9</p>
-              <p>Sum: 0+3+1+4+1+8+7+9 = 33</p>
+              <p className="text-slate-400 text-xs mb-2"># Example: Meryl Streep, born June 22, 1949</p>
+              <p>Day 22 → 22 (Master Number, kept) · Month 6 · Year 1+9+4+9 = 23 → 5</p>
+              <p>Total: 22 + 6 + 5 = 33</p>
               <p className="text-amber-400">Result: Master Number 33 — The Master Teacher</p>
               <p className="text-slate-400 text-xs mt-2"># 33 is a Master Number → preserved, not reduced further</p>
             </div>
             <div className="bg-slate-900 dark:bg-slate-950 text-green-400 rounded-xl px-5 py-4 font-mono text-sm leading-relaxed">
               <p className="text-slate-400 text-xs mb-2"># Example: Taylor Swift, born December 13, 1989</p>
-              <p>Date: 1 2 · 1 3 · 1 9 8 9</p>
-              <p>Sum: 1+2+1+3+1+9+8+9 = 34</p>
-              <p>34 → 3+4 = 7</p>
+              <p>Day 13 → 4 · Month 12 → 3 · Year 1+9+8+9 = 27 → 9</p>
+              <p>Total: 4 + 3 + 9 = 16 → 1+6 = 7</p>
               <p className="text-green-400">Result: Life Path 7 — The Seeker</p>
             </div>
           </div>
@@ -244,7 +243,7 @@ export default function NumerologyPage() {
         </div>
 
         <div className="p-4 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl text-sm text-blue-700 dark:text-blue-300">
-          <strong>About This Content:</strong> BornClock uses the classical Pythagorean digit-sum method. Life path numbers are a cultural and symbolic tradition, not a scientifically validated system. Celebrity calculations are independently verified using documented birth dates. Forer (1949) citation: <em>The Fallacy of Personal Validation</em>, Journal of Abnormal and Social Psychology.
+          <strong>About This Content:</strong> BornClock uses the classical Pythagorean method (day, month and year reduced separately; master numbers kept). Life path numbers are a cultural and symbolic tradition, not a scientifically validated system. Celebrity calculations are independently verified using documented birth dates. Forer (1949) citation: <em>The Fallacy of Personal Validation</em>, Journal of Abnormal and Social Psychology.
         </div>
       </div>
 

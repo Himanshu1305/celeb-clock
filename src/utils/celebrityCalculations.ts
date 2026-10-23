@@ -1,4 +1,6 @@
 import { CelebrityDOB } from './celebrityUtils';
+import { lifePathNumber } from '@/lib/lifePath';
+import { getChineseYear } from '@/services/ChineseZodiacService';
 
 export function calculateAge(day: number, month: number, year: number): number {
   const today = new Date();
@@ -19,17 +21,9 @@ export function calculateDaysUntilBirthday(day: number, month: number): number {
   return Math.ceil((next.getTime() - today.getTime()) / 86400000);
 }
 
-function reduceToSingle(n: number): number {
-  if (n === 11 || n === 22 || n === 33) return n;
-  if (n < 10) return n;
-  return reduceToSingle(String(n).split('').reduce((a, d) => a + Number(d), 0));
-}
-
+/** Life Path — delegates to the ONE shared sitewide function (src/lib/lifePath.ts, audit N1). */
 export function calculateLifePathNumber(day: number, month: number, year: number): number {
-  const d = reduceToSingle(day);
-  const m = reduceToSingle(month);
-  const y = reduceToSingle(String(year).split('').reduce((a, c) => a + Number(c), 0));
-  return reduceToSingle(d + m + y);
+  return lifePathNumber(day, month, year);
 }
 
 export const LIFE_PATH_TRAITS: Record<number, { title: string; traits: string }> = {
@@ -82,7 +76,13 @@ export interface ChineseZodiacInfo {
   animal: string; emoji: string; element: string; traits: string;
 }
 
-export function calculateChineseZodiac(year: number): ChineseZodiacInfo {
+/**
+ * Chinese zodiac. Pass month + day whenever the full date is known: the sign changes
+ * at Lunar New Year (late Jan / Feb), not on 1 January (audit N11) — the lunar year
+ * comes from the same function the paid report uses (ChineseZodiacService).
+ */
+export function calculateChineseZodiac(gregorianYear: number, month?: number, day?: number): ChineseZodiacInfo {
+  const year = month && day ? getChineseYear(new Date(gregorianYear, month - 1, day, 12)) : gregorianYear;
   const ANIMALS = [
     { animal: 'Rat',     emoji: '🐀', traits: 'Intelligent, adaptable, quick-witted.' },
     { animal: 'Ox',      emoji: '🐂', traits: 'Diligent, dependable, strong, determined.' },
