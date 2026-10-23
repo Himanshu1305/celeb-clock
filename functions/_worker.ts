@@ -10,6 +10,8 @@ import { POST as sendEmail }           from '../api/send-email.js';
 import { POST as contact }             from '../api/contact.js';
 import { POST as verifyPayment }       from '../api/verify-payment.js';
 import { POST as updateBuyerState }     from '../api/update-buyer-state.js';
+import { GET  as reportBySlug }         from '../api/report.js';
+import { POST as redeemPromo }          from '../api/redeem-promo.js';
 import { GET  as dailyCronGet,
          POST as dailyCronPost }       from '../api/daily-email-cron.js';
 import { GET  as cronDispatchGet,
@@ -81,6 +83,8 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/contact':            contact,
   '/api/verify-payment':     verifyPayment,
   '/api/update-buyer-state': updateBuyerState,
+  '/api/report':             reportBySlug,
+  '/api/redeem-promo':       redeemPromo,
   '/api/ops-monitor':        opsMonitor,
   '/api/ops-digest':         opsDigest,
   '/api/invoice-sweep':      invoiceSweep,

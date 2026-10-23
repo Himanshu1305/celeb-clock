@@ -1,15 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import { verifyHmacSha256 } from './_crypto.js';
-import { generateInvoiceHTML } from '../src/lib/invoice-generator.js';
+import { serviceClient, getAuthedUser, PERMANENT_EXPIRY } from './_userAuth.js';
+import { generateInvoiceHTML, splitGstInclusive } from '../src/lib/invoice-generator.js';
 import { sendPurchaseEmail } from './_invoice-email.js';
-
-// Service-role client — NEVER use the anon key here
-function serviceClient() {
-  return createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  );
-}
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -44,6 +36,28 @@ async function verifySignature(params: {
   return verifyHmacSha256(keySecret, new TextEncoder().encode(message), razorpay_signature);
 }
 
+// Razorpay REST fetch (server-side, Basic auth). Returns parsed JSON or throws.
+async function razorpayGet(path: string, keyId: string, keySecret: string): Promise<any> {
+  // btoa() is safe here — Razorpay key IDs and secrets are ASCII-only
+  const auth = btoa(`${keyId}:${keySecret}`);
+  const res = await fetch(`https://api.razorpay.com/v1/${path}`, {
+    headers: { Authorization: `Basic ${auth}` },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw Object.assign(new Error(`razorpay ${path} ${res.status}`), { data });
+  return data;
+}
+
+/**
+ * Replay guard: has this payment / order / subscription id already been recorded
+ * for a DIFFERENT account? (Same account → idempotent re-submit, allowed.)
+ */
+async function usedByAnotherAccount(db: any, table: string, col: string, val: string, userId: string): Promise<boolean> {
+  const { data, error } = await db.from(table).select('user_id').eq(col, val).limit(10);
+  if (error) throw error;
+  return (data ?? []).some((r: any) => r.user_id !== userId);
+}
+
 async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST') {
     return json({ error: 'Method not allowed' }, 405);
@@ -67,39 +81,40 @@ async function handler(request: Request): Promise<Response> {
     razorpay_subscription_id,
     razorpay_order_id,
     razorpay_signature,
-    user_id,
     product,           // 'subscription' | 'birthday_report'
-    amount,
-    currency,
     report_slug,
   } = body ?? {};
 
-  // For birthday_report orders: after HMAC passes we fetch the Razorpay order to
-  // get the server-baked report_slug and authoritative amount. This prevents a
-  // client from supplying a tampered slug to unlock a report they didn't pay for.
-  // These are populated below (before the payment insert) and used throughout.
-  let authoritativeSlug: string | null = report_slug ?? null;
-  let paymentAmount: number = amount ?? 0;
-  let paymentCurrency: string = currency ?? 'INR';
+  // Authoritative values, filled from Razorpay (never from the request body).
+  let authoritativeSlug: string | null = null;
+  let paymentAmount = 0;
+  let paymentCurrency = 'INR';
   // Buyer/tax details set at checkout, forwarded via Razorpay order/payment notes.
-  // Read by the non-fatal GST-invoice block near the end. Hoisted here so it is in
-  // scope regardless of product branch.
+  // Read by the non-fatal GST-invoice block near the end.
   let orderNotes: Record<string, any> = {};
 
   if (!razorpay_payment_id || !razorpay_signature) {
     return json({ error: 'Missing required payment fields' }, 400);
   }
-  if (!user_id) {
-    return json({ error: 'Missing user_id' }, 400);
-  }
   if (!product || !['subscription', 'birthday_report'].includes(product)) {
     return json({ error: 'Invalid product type' }, 400);
   }
 
+  const db = serviceClient();
+
+  // ── WHO is paying: the signed-in caller, from their access token ─────────────
+  // A body user_id is never trusted. If one is sent it must match the caller.
+  const caller = await getAuthedUser(request, db);
+  if (!caller) return json({ error: 'Please sign in to complete your purchase' }, 401);
+  const user_id = caller.id;
+  if (body?.user_id && body.user_id !== user_id) {
+    return json({ error: 'Payment does not belong to this account' }, 403);
+  }
+
   const valid = await verifySignature({
     razorpay_payment_id,
-    razorpay_subscription_id,
-    razorpay_order_id,
+    razorpay_subscription_id: product === 'subscription' ? razorpay_subscription_id : undefined,
+    razorpay_order_id: product === 'birthday_report' ? razorpay_order_id : undefined,
     razorpay_signature,
     keySecret,
   });
@@ -113,53 +128,55 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Invalid payment signature' }, 403);
   }
 
-  const db = serviceClient();
+  const keyId = process.env.VITE_RAZORPAY_KEY_ID;
+  if (!keyId) return json({ error: 'Payment configuration error' }, 500);
 
-  // For subscription payments: fetch the actual charged amount from Razorpay.
-  // The client sends amount:0 because it doesn't know the plan amount at checkout time.
+  // ── Bind the payment to the account that created the order / subscription ──
+  // create-order / create-subscription bake the signed-in user's id into the
+  // Razorpay notes (notes.userId). The caller must be that user, so one real
+  // payment can never unlock a different account.
   if (product === 'subscription') {
-    const keyId = process.env.VITE_RAZORPAY_KEY_ID;
-    if (keyId) {
-      try {
-        const auth = btoa(`${keyId}:${keySecret}`);
-        const pmtRes = await fetch(`https://api.razorpay.com/v1/payments/${razorpay_payment_id}`, {
-          headers: { Authorization: `Basic ${auth}` },
-        });
-        if (pmtRes.ok) {
-          const pmtData = await pmtRes.json();
-          if (pmtData.amount) paymentAmount = pmtData.amount;
-          if (pmtData.currency) paymentCurrency = pmtData.currency;
-          if (pmtData.notes) orderNotes = pmtData.notes;
-        }
-      } catch (e) {
-        console.warn('[verify-payment] could not fetch subscription payment amount (non-fatal):', e);
-      }
+    if (!razorpay_subscription_id) {
+      return json({ error: 'razorpay_subscription_id required for subscription' }, 400);
+    }
+    let sub: any;
+    try {
+      sub = await razorpayGet(`subscriptions/${razorpay_subscription_id}`, keyId, keySecret);
+    } catch (e) {
+      console.error('[verify-payment] subscription fetch error', e);
+      return json({ error: 'Could not reach payment provider' }, 502);
+    }
+    if (!sub?.notes?.userId || sub.notes.userId !== user_id) {
+      console.error('[verify-payment] subscription owner mismatch', { sub: razorpay_subscription_id, user_id });
+      return json({ error: 'Payment does not belong to this account' }, 403);
+    }
+    orderNotes = sub.notes ?? {};
+    // Charged amount from the payment itself (non-fatal: only the invoice needs it).
+    try {
+      const pmt = await razorpayGet(`payments/${razorpay_payment_id}`, keyId, keySecret);
+      if (pmt.amount) paymentAmount = pmt.amount;
+      if (pmt.currency) paymentCurrency = pmt.currency;
+      if (pmt.notes) orderNotes = { ...orderNotes, ...pmt.notes };
+    } catch (e) {
+      console.warn('[verify-payment] could not fetch subscription payment amount (non-fatal):', e);
     }
   }
 
-  // For birthday_report: fetch the Razorpay order to get authoritative values
   if (product === 'birthday_report') {
     if (!razorpay_order_id) {
       return json({ error: 'razorpay_order_id required for birthday_report' }, 400);
     }
-    const keyId = process.env.VITE_RAZORPAY_KEY_ID;
-    if (!keyId) return json({ error: 'Payment configuration error' }, 500);
-
-    // btoa() is safe here — Razorpay key IDs and secrets are ASCII-only
-    const auth = btoa(`${keyId}:${keySecret}`);
     let orderData: any;
     try {
-      const orderRes = await fetch(`https://api.razorpay.com/v1/orders/${razorpay_order_id}`, {
-        headers: { Authorization: `Basic ${auth}` },
-      });
-      orderData = await orderRes.json();
-      if (!orderRes.ok) {
-        console.error('[verify-payment] order fetch error', orderData);
-        return json({ error: 'Could not fetch order' }, 502);
-      }
+      orderData = await razorpayGet(`orders/${razorpay_order_id}`, keyId, keySecret);
     } catch (e) {
-      console.error('[verify-payment] order fetch network error', e);
-      return json({ error: 'Could not reach payment provider' }, 502);
+      console.error('[verify-payment] order fetch error', e);
+      return json({ error: 'Could not fetch order' }, 502);
+    }
+
+    if (!orderData?.notes?.userId || orderData.notes.userId !== user_id) {
+      console.error('[verify-payment] order owner mismatch', { order: razorpay_order_id, user_id });
+      return json({ error: 'Payment does not belong to this account' }, 403);
     }
 
     authoritativeSlug = orderData.notes?.report_slug ?? null;
@@ -178,12 +195,32 @@ async function handler(request: Request): Promise<Response> {
     }
   }
 
+  // ── Replay guard: a payment / order / subscription id is good for ONE account ──
+  try {
+    const replay =
+      await usedByAnotherAccount(db, 'payments', 'razorpay_payment_id', razorpay_payment_id, user_id)
+      || (product === 'subscription' && (
+        await usedByAnotherAccount(db, 'payments', 'razorpay_subscription_id', razorpay_subscription_id, user_id)
+        || await usedByAnotherAccount(db, 'profiles', 'subscription_id', razorpay_subscription_id, user_id)))
+      || (product === 'birthday_report'
+        && await usedByAnotherAccount(db, 'payments', 'razorpay_order_id', razorpay_order_id, user_id));
+    if (replay) {
+      console.error('[verify-payment] REPLAY rejected — id already used by another account', {
+        payment_id: razorpay_payment_id, user_id, product,
+      });
+      return json({ error: 'This payment has already been used' }, 409);
+    }
+  } catch (e) {
+    console.error('[verify-payment] replay check failed', e);
+    return json({ error: 'Could not verify payment. Please try again.' }, 500);
+  }
+
   // Record payment — UNIQUE(razorpay_payment_id) prevents double-processing
   const { error: paymentErr } = await db.from('payments').insert({
     user_id,
     razorpay_payment_id,
-    razorpay_order_id: razorpay_order_id ?? null,
-    razorpay_subscription_id: razorpay_subscription_id ?? null,
+    razorpay_order_id: product === 'birthday_report' ? razorpay_order_id : null,
+    razorpay_subscription_id: product === 'subscription' ? razorpay_subscription_id : null,
     amount: paymentAmount,
     currency: paymentCurrency,
     status: 'captured',
@@ -193,7 +230,8 @@ async function handler(request: Request): Promise<Response> {
 
   if (paymentErr) {
     if (paymentErr.code === '23505') {
-      // Duplicate — already processed; idempotent success
+      // Duplicate for THIS account (the replay guard above rejected other accounts):
+      // already processed — idempotent success.
       console.warn('[verify-payment] duplicate payment_id, returning cached success', razorpay_payment_id);
     } else {
       console.error('[verify-payment] payment insert error', paymentErr);
@@ -207,17 +245,14 @@ async function handler(request: Request): Promise<Response> {
       .from('profiles')
       .update({
         premium_status: true,
-        subscription_id: razorpay_subscription_id ?? null,
+        subscription_id: razorpay_subscription_id,
         subscription_status: 'active',
         updated_at: new Date().toISOString(),
       })
       // INVARIANT: grant premium keyed on `user_id` (the auth link), NEVER `id`.
       // `profiles.id` is a RANDOM synthetic PK (handle_new_user inserts
       // (user_id,…) VALUES (NEW.id,…) and lets id default gen_random_uuid()),
-      // so in the live DB id != user_id for every row. Keying on `id` here
-      // silently matched ZERO rows — a paid subscriber never became premium.
-      // The read side (useAuth.ts) and the invoice block below both key on
-      // `user_id`; the grant MUST use the same column. See BORNCLOCK_AUDIT_FIXES.md.
+      // so in the live DB id != user_id for every row. See BORNCLOCK_AUDIT_FIXES.md.
       .eq('user_id', user_id);
 
     if (profileErr) {
@@ -226,15 +261,12 @@ async function handler(request: Request): Promise<Response> {
     }
   }
 
-  // For birthday_report: mark the report as paid (enables 30-day expiry extension
-  // and prevents double-purchase via create-order's is_paid check)
+  // For birthday_report: mark the report as paid. Paid reports are PERMANENT
+  // (founder decision, Oct 2026) — expires_at is set to 'infinity'.
   if (product === 'birthday_report' && authoritativeSlug) {
     const { error: unlockErr } = await db
       .from('birthday_reports')
-      .update({
-        is_paid: true,
-        expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-      })
+      .update({ is_paid: true, expires_at: PERMANENT_EXPIRY })
       .eq('slug', authoritativeSlug);
 
     if (unlockErr) {
@@ -251,7 +283,7 @@ async function handler(request: Request): Promise<Response> {
   let receipt: { to: string; name: string; product: string; amountFormatted: string; date: string; reportLink?: string } | null = null;
   let invoiceForEmail: { invoiceNo: string; html: string } | null = null;
   try {
-    const { data: userData } = await serviceClient().auth.admin.getUserById(user_id);
+    const { data: userData } = await db.auth.admin.getUserById(user_id);
     const userEmail = userData?.user?.email;
     const userName = userData?.user?.user_metadata?.full_name || userData?.user?.user_metadata?.first_name || 'there';
     if (userEmail) {
@@ -331,17 +363,8 @@ async function handler(request: Request): Promise<Response> {
 
     const invCurrency = paymentCurrency === 'USD' ? 'USD' : 'INR';
     const grossAmount = paymentAmount / 100;   // Razorpay stores paise/cents
-
-    // GST-inclusive back-calculation (sgst is PLUGGED, never independently rounded)
-    const taxable = Math.round((grossAmount / 1.18) * 100) / 100;
-    const totalTax = Math.round((grossAmount - taxable) * 100) / 100;
-    let cgst = 0, sgst = 0, igst = 0;
-    if (taxMode === 'CGST_SGST') {
-      cgst = Math.round(taxable * 0.09 * 100) / 100;
-      sgst = Math.round((totalTax - cgst) * 100) / 100;
-    } else if (taxMode === 'IGST') {
-      igst = totalTax;
-    }
+    // GST-inclusive split — shared rule (equal CGST/SGST heads that foot to the total).
+    const { taxable, cgst, sgst, igst } = splitGstInclusive(grossAmount, taxMode);
     const fxRate = taxMode === 'EXPORT' ? 87.20 : null;   // fixed fallback; live rate = future
     // Record the rate's provenance so an export invoice never presents this
     // fixed value as a live market rate. OPEN ITEM: wire a live FX feed (RBI

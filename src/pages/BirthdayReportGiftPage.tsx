@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ReportLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,12 +12,12 @@ const todayISO = () => new Date().toISOString().slice(0, 10);
 export default function BirthdayReportGiftPage() {
   const navigate = useNavigate();
   const price = useReportPrice();
-  const [recipientName, setRecipientName] = useState('');
+  const [searchParams] = useSearchParams();
+  // ?to= carries the recipient typed on the Diwali gift page.
+  const [recipientName, setRecipientName] = useState(() => (searchParams.get('to') ?? '').slice(0, 60));
   const [recipientDob, setRecipientDob] = useState('');
   const [giverName, setGiverName] = useState('');
   const [message, setMessage] = useState('');
-  const [product, setProduct] = useState<'report' | 'kundali' | 'combo' | string>('report');
-  const selectedPrice = product === 'combo' ? '₹299' : price;
 
   const isValidDob =
     /^\d{4}-\d{2}-\d{2}$/.test(recipientDob) && recipientDob <= todayISO();
@@ -67,27 +67,17 @@ export default function BirthdayReportGiftPage() {
     >
       <div className="container mx-auto px-4 py-8 max-w-2xl">
 
-        {/* Product selector: individual products {price}, combo ₹299 (Task 12). */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8" data-testid="gift-products">
-          {[
-            { key: 'report', label: 'Birthday Blueprint', price, note: 'Zodiac, numerology, celebrity twins' },
-            { key: 'kundali', label: 'Kundali', price, note: 'Vedic birth chart, Lagna & Dasha' },
-            { key: 'combo', label: 'Report + Kundali Combo', price: '₹299', note: 'Both — best value' },
-          ].map(p => (
-            <button
-              key={p.key}
-              type="button"
-              onClick={() => setProduct(p.key)}
-              data-testid={`gift-product-${p.key}`}
-              className={`text-left rounded-xl border p-4 transition-colors ${
-                product === p.key ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
-              }`}
-            >
-              <div className="font-semibold text-foreground">{p.label}</div>
-              <div className="text-lg font-black text-primary">{p.price}</div>
-              <div className="text-xs text-muted-foreground">{p.note}</div>
-            </button>
-          ))}
+        {/* The one giftable product that exists today. (A "Kundali" gift and a
+            "Combo" listing were removed in Oct 2026 — neither product exists.) */}
+        <div className="grid grid-cols-1 gap-3 mb-8" data-testid="gift-products">
+          <div
+            data-testid="gift-product-report"
+            className="text-left rounded-xl border p-4 border-primary bg-primary/5"
+          >
+            <div className="font-semibold text-foreground">Birthday Blueprint</div>
+            <div className="text-lg font-black text-primary">{price}</div>
+            <div className="text-xs text-muted-foreground">Zodiac, numerology, life path and celebrity twins · Permanent access</div>
+          </div>
         </div>
 
         <Card>
@@ -144,7 +134,7 @@ export default function BirthdayReportGiftPage() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Happy birthday! Hope you love this…"
-                maxLength={300}
+                maxLength={200}
                 rows={3}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               />
@@ -156,7 +146,7 @@ export default function BirthdayReportGiftPage() {
               disabled={!canPay}
               onClick={handlePay}
             >
-              Gift this {product === 'combo' ? 'combo' : product === 'kundali' ? 'Kundali' : 'report'} — {selectedPrice}
+              Gift this report — {price}
             </Button>
             <p className="text-xs text-muted-foreground text-center">
               Secure checkout. You'll get a shareable gift link after payment.

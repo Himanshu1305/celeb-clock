@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { normalizeEmail } from './_userAuth.js';
 
 function serviceClient() {
   return createClient(
@@ -42,7 +43,28 @@ async function handler(request: Request): Promise<Response> {
 
   const createdAt = (profile as any).created_at ? new Date((profile as any).created_at) : null;
   const elapsed = createdAt ? Date.now() - createdAt.getTime() : Infinity;
-  const isTrial = elapsed < TRIAL_MS;
+
+  // S17: the trial free report needs a CONFIRMED email and is one per person
+  // (trial_claims, keyed by normalised email). Mirrors save-report.ts so the
+  // pricing card never promises a free report the server would refuse.
+  let emailConfirmed = false;
+  let claimedElsewhere = false;
+  try {
+    const { data: au } = await db.auth.admin.getUserById(userId);
+    const u: any = au?.user;
+    emailConfirmed = !!(u?.email_confirmed_at || u?.confirmed_at);
+    if (u?.email) {
+      const { data: claim, error: claimErr } = await db
+        .from('trial_claims')
+        .select('user_id')
+        .eq('normalized_email', normalizeEmail(u.email))
+        .maybeSingle();
+      if (!claimErr && claim && (claim as any).user_id !== userId) claimedElsewhere = true;
+    }
+  } catch {
+    emailConfirmed = false;
+  }
+  const isTrial = elapsed < TRIAL_MS && emailConfirmed && !claimedElsewhere;
   const trialDaysRemaining = isTrial ? Math.ceil((TRIAL_MS - elapsed) / DAY_MS) : 0;
   const credits: number = (profile as any).report_credits ?? 0;
   const subscriptionActive = (profile as any).subscription_status === 'active';

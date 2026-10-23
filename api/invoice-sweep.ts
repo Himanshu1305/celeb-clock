@@ -17,7 +17,7 @@
 // Wired into the daily ops cron (functions/_worker.ts scheduled(), '10 6 * * *').
 
 import { createClient } from '@supabase/supabase-js';
-import { generateInvoiceHTML } from '../src/lib/invoice-generator.js';
+import { generateInvoiceHTML, splitGstInclusive } from '../src/lib/invoice-generator.js';
 import { sendInvoiceEmail } from './_invoice-email.js';
 import { sendOpsAlert } from './_ops.js';
 import { isCronAuthorized, unauthorized } from './_cronAuth.js';
@@ -36,6 +36,41 @@ function json(body: unknown, status = 200): Response {
 }
 
 const MAX_PER_RUN = 200; // safety cap; the tail rolls into the next daily run
+export const PAGE_SIZE = 1000;  // PostgREST's default max rows per request
+
+/**
+ * Returns up to `limit` subscription payments (oldest first) that have no
+ * invoice yet, paging through the whole payments table in PAGE_SIZE chunks.
+ */
+export async function findUninvoicedPayments(db: any, limit: number): Promise<any[]> {
+  const out: any[] = [];
+  for (let from = 0; out.length < limit; from += PAGE_SIZE) {
+    const { data: page, error: payErr } = await db
+      .from('payments')
+      .select('razorpay_payment_id, razorpay_subscription_id, razorpay_order_id, user_id, amount, currency, product, status, created_at')
+      .eq('product', 'subscription')
+      .order('created_at', { ascending: true })
+      .order('razorpay_payment_id', { ascending: true })
+      .range(from, from + PAGE_SIZE - 1);
+    if (payErr) throw payErr;
+    const rows = (page ?? []).filter((p: any) => p.status !== 'failed' && p.razorpay_payment_id);
+    if (rows.length) {
+      const ids = rows.map((p: any) => p.razorpay_payment_id);
+      const { data: inv, error: invErr } = await db
+        .from('invoices')
+        .select('payment_id')
+        .in('payment_id', ids);
+      if (invErr) throw invErr;
+      const done = new Set((inv ?? []).map((r: any) => r.payment_id));
+      for (const p of rows) {
+        if (!done.has(p.razorpay_payment_id)) out.push(p);
+        if (out.length >= limit) break;
+      }
+    }
+    if (!page || page.length < PAGE_SIZE) break; // last page
+  }
+  return out;
+}
 
 async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST' && request.method !== 'GET') {
@@ -51,31 +86,17 @@ async function handler(request: Request): Promise<Response> {
   // file. Collected so an ops alert can surface the gap instead of it staying silent.
   const missingState: { user_id: string; email: string }[] = [];
 
-  // 1. captured subscription payments (webhook + verify both write here).
-  const { data: payments, error: payErr } = await db
-    .from('payments')
-    .select('razorpay_payment_id, razorpay_subscription_id, razorpay_order_id, user_id, amount, currency, product, status, created_at')
-    .eq('product', 'subscription')
-    .order('created_at', { ascending: true })
-    .limit(1000);
-  if (payErr) {
-    return json({ error: 'Failed to read payments', detail: payErr.message }, 500);
+  // 1+2. Page through ALL captured subscription payments (oldest first) and
+  // anti-join each page against `invoices` by payment_id. The old version read
+  // only the first 1,000 payments (and the first 10,000 invoices), so once the
+  // table grew past that every newer renewal was silently never invoiced.
+  let pending: any[];
+  try {
+    pending = await findUninvoicedPayments(db, MAX_PER_RUN);
+  } catch (e: any) {
+    return json({ error: 'Failed to read payments/invoices', detail: e?.message ?? String(e) }, 500);
   }
-
-  // 2. already-invoiced payment_ids → Set for O(1) anti-join.
-  const { data: invoiced, error: invErr } = await db
-    .from('invoices')
-    .select('payment_id')
-    .limit(10000);
-  if (invErr) {
-    return json({ error: 'Failed to read invoices', detail: invErr.message }, 500);
-  }
-  const invoicedIds = new Set((invoiced ?? []).map((r: any) => r.payment_id));
-
-  const pending = (payments ?? [])
-    .filter((p: any) => p.status !== 'failed')
-    .filter((p: any) => p.razorpay_payment_id && !invoicedIds.has(p.razorpay_payment_id))
-    .slice(0, MAX_PER_RUN);
+  const invoicedIds = new Set<string>();
 
   for (const p of pending as any[]) {
     const paymentId: string = p.razorpay_payment_id;
@@ -117,17 +138,8 @@ async function handler(request: Request): Promise<Response> {
         buyerStateCode === '36' ? 'CGST_SGST'
         : buyerStateCode ? 'IGST'
         : (paymentCurrency === 'USD' ? 'EXPORT' : 'IGST');
-
-      // GST-inclusive back-calc, sgst PLUGGED (identical to verify-payment).
-      const taxable = Math.round((grossAmount / 1.18) * 100) / 100;
-      const totalTax = Math.round((grossAmount - taxable) * 100) / 100;
-      let cgst = 0, sgst = 0, igst = 0;
-      if (taxMode === 'CGST_SGST') {
-        cgst = Math.round(taxable * 0.09 * 100) / 100;
-        sgst = Math.round((totalTax - cgst) * 100) / 100;
-      } else if (taxMode === 'IGST') {
-        igst = totalTax;
-      }
+      // GST-inclusive split — shared rule (equal CGST/SGST heads that foot to the total).
+      const { taxable, cgst, sgst, igst } = splitGstInclusive(grossAmount, taxMode);
       const fxRate = taxMode === 'EXPORT' ? 87.20 : null;
       // FX provenance — see verify-payment.ts / BORNCLOCK_AUDIT_FIXES.md open item.
       const fxRateDate = fxRate ? new Date().toISOString().slice(0, 10) : null;

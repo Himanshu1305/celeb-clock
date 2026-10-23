@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { LongevityResult } from '@/services/LongevityCalculationService';
+import { supabase } from '@/integrations/supabase/client';
 
 interface LongevityCoachChatProps {
   result: LongevityResult;
@@ -61,14 +62,26 @@ export function LongevityCoachChat({ result, userName, isPremium }: LongevityCoa
     setError(null);
 
     try {
+      // The server requires a signed-in premium user (and applies a daily limit).
+      const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch('/api/longevity-coach', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
         body: JSON.stringify({ message: text, userContext }),
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Request failed');
+      if (!res.ok) {
+        if (typeof data.error === 'string' && (res.status === 401 || res.status === 402 || res.status === 429)) {
+          setError(data.error);
+          setMessages(messages);
+          return;
+        }
+        throw new Error(data.error || 'Request failed');
+      }
 
       setMessages([...newMessages, { role: 'coach', text: data.reply }]);
     } catch {

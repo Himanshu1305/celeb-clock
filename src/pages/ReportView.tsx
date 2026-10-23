@@ -251,8 +251,8 @@ const ExpiryPage = () => (
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-20 text-center">
       <div className="text-6xl mb-6">🔒</div>
       <p className="text-gray-500 max-w-md mb-8 leading-relaxed">
-        Birthday reports are available for 7 days (30 days for premium accounts). This report's link has
-        expired or may not exist. Create a new one for free!
+        Free report previews are available for 7 days (30 days for premium accounts). Paid reports are
+        permanent — the link never expires. This preview's link has expired or may not exist. Create a new one for free!
       </p>
       <div className="flex flex-col sm:flex-row gap-3">
         <Link
@@ -407,10 +407,8 @@ const ReportView = () => {
     getReport(slug).then(data => {
       if (!data) setNotFound(true);
       else {
+        // View tracking (view_count + last_viewed_at) is recorded server-side by /api/report.
         setRow(data);
-        // Fire-and-forget: update last_viewed_at for dormancy tracking
-        // Uses SECURITY DEFINER RPC so no auth required
-        void Promise.resolve((supabase as any).rpc('touch_report_view', { p_slug: slug })).catch(() => {});
       }
       setLoading(false);
     });
@@ -455,10 +453,15 @@ const ReportView = () => {
     if (!user || !slug) return;
     setRedeemLoading(true);
     try {
+      // The server identifies the caller from the access token (never a body userId).
+      const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch('/api/redeem-credit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, reportSlug: slug }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
+        body: JSON.stringify({ reportSlug: slug }),
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -498,7 +501,7 @@ const ReportView = () => {
     if (!row || !user || !slug) return;
     if (autoRedeemTried.current === slug) return;
     const locked = !isAdmin && !row.is_paid;
-    const owner = row.user_id === user.id;
+    const owner = !!row.is_owner; // computed server-side; the owner's user id is never sent
     const activeSub = profile?.subscription_status === 'active';
     if (locked && owner && activeSub && credits > 0) {
       // Set the guard SYNCHRONOUSLY, before the async call, so a synchronous

@@ -25,5 +25,11 @@ describe('TC-ART+DIWALI', () => {
   it('TC-DIWALI-P-02: shows 199', () => { renderDiwali(); expect(document.body.textContent).toContain('₹199'); });
   it('TC-DIWALI-P-03: shows Diwali', () => { renderDiwali(); expect(document.body.textContent).toMatch(/Diwali|दिवाली/i); });
   it('TC-DIWALI-N-01: no undefined', () => { renderDiwali(); expect(document.body.textContent).not.toContain('undefined'); });
-  it('TC-DIWALI-N-02: 299 only near combo', () => { renderDiwali(); const combo = q('diwali-product-combo')?.textContent || ''; expect(combo).toContain('₹299'); expect(combo.toLowerCase()).toContain('combo'); });
+  // Audit round 2, item 6: the Kundali and Combo ₹299 listings were removed (products do not exist).
+  it('TC-DIWALI-N-02: no Kundali / Combo ₹299 listing', () => {
+    renderDiwali();
+    expect(q('diwali-product-combo')).toBeNull();
+    expect(q('diwali-product-kundali')).toBeNull();
+    expect(document.body.textContent).not.toContain('₹299');
+  });
 });

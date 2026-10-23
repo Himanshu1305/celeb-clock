@@ -1,17 +1,59 @@
-import { createClient } from '@supabase/supabase-js';
-
-function serviceClient() {
-  return createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  );
-}
+import { serviceClient, getAuthedUser, userIsPremium, normalizeEmail, PERMANENT_EXPIRY, type AuthedUser } from './_userAuth.js';
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: { 'Content-Type': 'application/json' },
   });
+}
+
+export { PERMANENT_EXPIRY };
+
+const TRIAL_MS = 7 * 24 * 60 * 60 * 1000;
+
+/**
+ * S17: the one free trial report is limited to (a) accounts with a CONFIRMED
+ * email, inside their first 7 days, that have not used it, and (b) one per
+ * person — claimed by normalised email in public.trial_claims (unique), so a
+ * throwaway re-signup with the same address (or a Gmail dot/+tag variant)
+ * cannot claim again. Returns the normalised email that was claimed, or null.
+ */
+export async function claimTrialReport(db: any, user: AuthedUser): Promise<{ granted: boolean; claimKey: string | null }> {
+  if (!user.emailConfirmed || !user.email) return { granted: false, claimKey: null };
+
+  const { data: prof } = await db
+    .from('profiles')
+    .select('created_at')
+    .eq('user_id', user.id)
+    .single();
+  const createdAt = (prof as any)?.created_at ? new Date((prof as any).created_at) : null;
+  const inTrial = !!createdAt && (Date.now() - createdAt.getTime()) < TRIAL_MS;
+  if (!inTrial) return { granted: false, claimKey: null };
+
+  // Already used on this account? If unlock_source is missing this throws → no trial.
+  const { count, error: usageErr } = await db
+    .from('birthday_reports')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+    .eq('unlock_source', 'trial');
+  if (usageErr) throw usageErr;
+  if ((count ?? 0) > 0) return { granted: false, claimKey: null };
+
+  // One per person (by normalised email).
+  const claimKey = normalizeEmail(user.email);
+  const { error: claimErr } = await db
+    .from('trial_claims')
+    .insert({ normalized_email: claimKey, user_id: user.id });
+  if (claimErr) {
+    if (claimErr.code === '23505') return { granted: false, claimKey: null }; // already claimed by this person
+    // Table not created yet (migration pending): keep the verified-email limit only.
+    if (claimErr.code === '42P01' || claimErr.code === 'PGRST205') {
+      console.warn('[trial-unlock] trial_claims table missing — verified-email limit only');
+      return { granted: true, claimKey: null };
+    }
+    throw claimErr;
+  }
+  return { granted: true, claimKey };
 }
 
 function generateSlug(): string {
@@ -31,9 +73,9 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Invalid JSON body' }, 400);
   }
 
-  // NOTE: `isPremium` from the body is a client flag — it is NOT trusted for the
-  // free-unlock decision below. It is only used for the (cosmetic) link-expiry.
-  const { reportData, isPremium, gender } = body ?? {};
+  // `isPremium` in the body is a client flag and is ignored — premium (for the
+  // 30-day preview window) is decided from the caller's profile on the server.
+  const { reportData, gender } = body ?? {};
   if (!reportData) {
     return json({ error: 'Missing reportData' }, 400);
   }
@@ -46,49 +88,28 @@ async function handler(request: Request): Promise<Response> {
   }
 
   const db = serviceClient();
+  const user = await getAuthedUser(request, db);
+  const userId: string | null = user?.id ?? null;
 
-  let userId: string | null = null;
-  const authHeader = request.headers.get('authorization') ?? '';
-  if (authHeader.startsWith('Bearer ')) {
-    const token = authHeader.slice(7);
-    const { data } = await db.auth.getUser(token);
-    userId = data?.user?.id ?? null;
-  }
-
-  // ── Server-enforced trial free report ────────────────────────────────────
-  // Trial users (first 7 days from profiles.created_at) get exactly ONE free
-  // unlocked report, decided SERVER-SIDE. Guarded by the unlock_source column:
-  // until NOTES-unlock-source.sql is applied, the usage check errors and the
-  // feature stays dormant (report inserts as today, is_paid=false).
+  // ── Server-enforced trial free report (S17) ──────────────────────────────
   let trialUnlock = false;
-  if (userId) {
+  let claimKey: string | null = null;
+  if (user) {
     try {
-      const { data: prof } = await db
-        .from('profiles')
-        .select('created_at')
-        .eq('user_id', userId)
-        .single();
-      const createdAt = (prof as any)?.created_at ? new Date((prof as any).created_at) : null;
-      const inTrial = !!createdAt && (Date.now() - createdAt.getTime()) < 7 * 24 * 60 * 60 * 1000;
-      if (inTrial) {
-        // Count reports already unlocked via the trial for this user. If the
-        // column doesn't exist yet this throws → caught → feature dormant.
-        const { count, error: usageErr } = await db
-          .from('birthday_reports')
-          .select('id', { count: 'exact', head: true })
-          .eq('user_id', userId)
-          .eq('unlock_source', 'trial');
-        if (usageErr) throw usageErr;
-        trialUnlock = (count ?? 0) === 0;
-      }
+      const r = await claimTrialReport(db, user);
+      trialUnlock = r.granted;
+      claimKey = r.claimKey;
     } catch (e) {
-      console.warn('[trial-unlock] column missing / check failed, feature dormant:', (e as Error).message);
+      console.warn('[trial-unlock] check failed, no free unlock:', (e as Error).message);
       trialUnlock = false;
     }
   }
 
-  const expiryDays = (trialUnlock || isPremium) ? 30 : 7;
-  const expiresAt = new Date(Date.now() + expiryDays * 24 * 60 * 60 * 1000).toISOString();
+  const isPremium = userId ? await userIsPremium(db, userId) : false;
+  const expiryDays = isPremium ? 30 : 7;
+  const expiresAt = trialUnlock
+    ? PERMANENT_EXPIRY
+    : new Date(Date.now() + expiryDays * 24 * 60 * 60 * 1000).toISOString();
 
   for (let attempt = 0; attempt < 3; attempt++) {
     const slug = generateSlug();
@@ -102,7 +123,7 @@ async function handler(request: Request): Promise<Response> {
       country: reportData.country,
       gender: gender ?? '',
       report_data: reportData,
-      is_premium_report: isPremium ?? false,
+      is_premium_report: isPremium,
       expires_at: expiresAt,
     };
     // Only set is_paid/unlock_source when granting the trial free report. The
@@ -116,6 +137,11 @@ async function handler(request: Request): Promise<Response> {
 
     if (!error) return json({ slug, unlocked: trialUnlock });
     if (!String(error.message).includes('unique')) break;
+  }
+
+  // Report could not be saved: release the trial claim so the person keeps it.
+  if (claimKey) {
+    try { await db.from('trial_claims').delete().eq('normalized_email', claimKey); } catch { /* ignore */ }
   }
 
   return json({ error: 'Failed to save report' }, 500);

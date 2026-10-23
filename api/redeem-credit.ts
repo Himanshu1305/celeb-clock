@@ -1,11 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-function serviceClient() {
-  return createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  );
-}
+import { serviceClient, getAuthedUser, PERMANENT_EXPIRY } from './_userAuth.js';
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -24,12 +17,17 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Invalid JSON body' }, 400);
   }
 
-  const { userId, reportSlug } = body ?? {};
-  if (!userId || !reportSlug) {
-    return json({ error: 'Missing userId or reportSlug' }, 400);
+  const { reportSlug } = body ?? {};
+  if (!reportSlug) {
+    return json({ error: 'Missing reportSlug' }, 400);
   }
 
   const db = serviceClient();
+  // The credit owner is the SIGNED-IN caller (Bearer token), never a body userId.
+  const caller = await getAuthedUser(request, db);
+  if (!caller) return json({ error: 'Please sign in' }, 401);
+  const userId = caller.id;
+  if (body?.userId && body.userId !== userId) return json({ error: 'Not your account' }, 403);
 
   // ── PREFERRED: atomic, idempotent RPC ────────────────────────────────
   // public.redeem_report_credit locks the report + profile, and if the report
@@ -125,7 +123,7 @@ async function handler(request: Request): Promise<Response> {
     .from('birthday_reports')
     .update({
       is_paid: true,
-      expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      expires_at: PERMANENT_EXPIRY, // paid reports never expire
     })
     .eq('slug', reportSlug)
     .eq('is_paid', false)

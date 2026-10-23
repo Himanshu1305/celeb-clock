@@ -1,11 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-function serviceClient() {
-  return createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  );
-}
+import { serviceClient, getAuthedUser } from './_userAuth.js';
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -34,7 +27,10 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Invalid JSON body' }, 400);
   }
 
-  const { product, report_slug, userId, currency = 'INR',
+  // The payer is the SIGNED-IN caller (Bearer token), never a body userId. It is
+  // baked into the Razorpay order notes so verify-payment / the webhook can bind
+  // the payment to exactly this account.
+  const { product, report_slug, currency = 'INR',
           buyer_country, buyer_state, buyer_state_code, tax_mode } = body ?? {};
 
   if (!product || !PRODUCT_AMOUNTS[product]) {
@@ -43,12 +39,16 @@ async function handler(request: Request): Promise<Response> {
   if (currency !== 'INR' && currency !== 'USD') {
     return json({ error: 'Invalid currency' }, 400);
   }
-  if (!report_slug || !userId) {
-    return json({ error: 'Missing report_slug or userId' }, 400);
+  if (!report_slug) {
+    return json({ error: 'Missing report_slug' }, 400);
   }
 
-  // Double-purchase guard: reject if this slug was already paid for
   const db = serviceClient();
+  const caller = await getAuthedUser(request, db);
+  if (!caller) return json({ error: 'Please sign in to continue' }, 401);
+  const userId = caller.id;
+
+  // Double-purchase guard: reject if this slug was already paid for
   const { data: report, error: reportErr } = await db
     .from('birthday_reports')
     .select('is_paid')

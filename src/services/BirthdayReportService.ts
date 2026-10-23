@@ -330,20 +330,25 @@ export async function saveReport(
   }
 }
 
+// Reports are read ONLY through the server (/api/report), one slug at a time.
+// The browser no longer has any direct read access to birthday_reports (the old
+// public RLS policy let anyone list every report). The server also records the
+// view and returns `is_owner` instead of the owner's user id.
 export async function getReport(slug: string): Promise<any | null> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = supabase as any;
-  const { data, error } = await db
-    .from('birthday_reports')
-    .select('*')
-    .eq('slug', slug)
-    .single();
+  let authToken: string | null = null;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    authToken = session?.access_token ?? null;
+  } catch { /* anonymous viewer */ }
 
-  if (error || !data) return null;
-
-  // Increment view count via SECURITY DEFINER RPC — the anon/authed client
-  // has no UPDATE policy on birthday_reports, so a direct .update() silently fails.
-  supabase.rpc('increment_report_view_count', { report_id: data.id }).then(() => {});
-
-  return data;
+  try {
+    const res = await fetch(`/api/report?slug=${encodeURIComponent(slug)}`, {
+      headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data && data.report_data ? data : null;
+  } catch {
+    return null;
+  }
 }

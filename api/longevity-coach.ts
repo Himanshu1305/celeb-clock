@@ -4,6 +4,8 @@
 // Do not add Supabase writes or content logging here.
 
 import { QUIZ_COUNTRIES } from '../src/services/LongevityCalculationService.js';
+import { detectCrisis } from '../src/lib/vedic/chatGuardrails.js';
+import { getAuthedUser, userIsPremium, serviceClient } from './_userAuth.js';
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -161,6 +163,50 @@ When the exchange genuinely touches health decisions, symptoms, medication, or a
 
 const FALLBACK = 'I could not generate a response. Please try again.';
 
+// ── Crisis rule (audit item 7) ────────────────────────────────────────────────
+// This is a "how long will I live" tool, so self-harm signals are a real risk.
+// The SAME deterministic detector as the astrologer chat runs BEFORE login,
+// rate-limit or any model call; a match returns this fixed, caring message with
+// helplines and never reaches the AI. India first (most users), then others.
+// Tele-MANAS (Govt of India, 24x7, free): 14416 or 1800-891-4416.
+export const LONGEVITY_CRISIS_RESPONSE =
+  "I'm really glad you said something, and I want to set the forecast aside for a moment — how you're feeling right now matters far more than any number on this page. These figures are rough population statistics, not a verdict on your life.\n\n" +
+  "If you feel you might act on these thoughts, or you're in immediate danger, please call your local emergency number now (112 in India).\n\n" +
+  "You can talk to a trained, caring person for free, any time:\n" +
+  "• India — Tele-MANAS (Government of India, 24x7, free): 14416 or 1800-891-4416\n" +
+  "• United States — call or text 988 (Suicide & Crisis Lifeline)\n" +
+  "• United Kingdom & Ireland — Samaritans: 116 123\n" +
+  "• Anywhere else — find a helpline near you at findahelpline.com\n\n" +
+  "You don't have to carry this alone. Reaching out to one of these lines, or to someone you trust, is a strong step.";
+
+// ── Per-user daily limit (audit item 7) ───────────────────────────────────────
+// The chat UI caps a session at 20 messages; the server now caps each signed-in
+// user at COACH_DAILY_LIMIT replies per UTC day. In-memory per worker isolate —
+// the same durability trade-off as api/vedic-chat's server rate limit (a
+// globally durable counter needs KV or a usage table). Nothing about the
+// conversation is stored — only a count keyed by user id.
+export const COACH_DAILY_LIMIT = 30;
+const COACH_USAGE = new Map<string, { day: string; count: number }>();
+const utcDay = (d: Date) => d.toISOString().slice(0, 10);
+
+export function coachAllowance(userId: string, now: Date = new Date()): { allowed: boolean; remaining: number } {
+  const rec = COACH_USAGE.get(userId);
+  const count = rec && rec.day === utcDay(now) ? rec.count : 0;
+  return { allowed: count < COACH_DAILY_LIMIT, remaining: Math.max(0, COACH_DAILY_LIMIT - count) };
+}
+
+export function recordCoachUse(userId: string, now: Date = new Date()): void {
+  const day = utcDay(now);
+  const rec = COACH_USAGE.get(userId);
+  COACH_USAGE.set(userId, { day, count: (rec && rec.day === day ? rec.count : 0) + 1 });
+  if (COACH_USAGE.size > 5000) {
+    for (const [k, v] of COACH_USAGE) if (v.day !== day) COACH_USAGE.delete(k);
+  }
+}
+
+/** Test hook: clear the in-memory counter. */
+export function _resetCoachUsage(): void { COACH_USAGE.clear(); }
+
 // ── Providers ─────────────────────────────────────────────────────────────────
 // Both share the SAME validated system prompt, user message, and zero-retention
 // behaviour. Selection is COACH_PROVIDER ('gemini' default | 'anthropic'), read from
@@ -250,6 +296,24 @@ async function handler(request: Request): Promise<Response> {
     return json({ error: 'Missing message or context' }, 400);
   }
 
+  // 1) Crisis rule — before login, limits and any model call. Overrides all.
+  if (detectCrisis(String(message))) {
+    return json({ reply: LONGEVITY_CRISIS_RESPONSE, crisis: true });
+  }
+
+  // 2) Login + premium (the coach is a Premium feature; decided server-side).
+  const db = serviceClient();
+  const caller = await getAuthedUser(request, db);
+  if (!caller) return json({ error: 'Please sign in to use the AI Longevity Coach.' }, 401);
+  if (!(await userIsPremium(db, caller.id))) {
+    return json({ error: 'The AI Longevity Coach is a Premium feature.' }, 402);
+  }
+
+  // 3) Per-user daily limit.
+  if (!coachAllowance(caller.id).allowed) {
+    return json({ error: `You've reached today's limit of ${COACH_DAILY_LIMIT} coach replies. Please come back tomorrow.`, rateLimited: true }, 429);
+  }
+
   // Provider selection: Gemini by default, Anthropic behind the rollback flag.
   const provider = process.env.COACH_PROVIDER === 'anthropic' ? 'anthropic' : 'gemini';
   const keyPresent = provider === 'anthropic'
@@ -270,6 +334,7 @@ async function handler(request: Request): Promise<Response> {
       ? await callAnthropic(systemPrompt, safeMessage)
       : await callGemini(systemPrompt, safeMessage);
 
+    recordCoachUse(caller.id);
     return json({ reply });
   } catch (error) {
     // Zero-retention: log ONLY the error object — never the message, userContext, or output.

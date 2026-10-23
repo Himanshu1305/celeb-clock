@@ -1,5 +1,17 @@
 import { CountryInfo } from './CountryDetectionService';
 import { RAZORPAY_PLANS } from '@/lib/pricing';
+import { supabase } from '@/integrations/supabase/client';
+
+// Payment endpoints identify the buyer from the Supabase access token, never from
+// a userId in the body (one payment must only ever unlock the account that paid).
+async function authJsonHeaders(): Promise<Record<string, string>> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`;
+  } catch { /* the server will answer 401 */ }
+  return headers;
+}
 
 declare global {
   interface Window {
@@ -84,7 +96,7 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
   try {
     const subRes = await fetch('/api/create-subscription', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: await authJsonHeaders(),
       body: JSON.stringify({
         planId, userId, billing,
         buyer_country: buyerCountry, buyer_state: buyerState,
@@ -134,7 +146,7 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
       try {
         const res = await fetch('/api/verify-payment', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: await authJsonHeaders(),
           body: JSON.stringify({
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_subscription_id: response.razorpay_subscription_id,
@@ -217,7 +229,7 @@ export async function initiateOrderPayment(options: OrderPaymentOptions): Promis
   try {
     const res = await fetch('/api/create-order', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: await authJsonHeaders(),
       body: JSON.stringify({
         product, report_slug: reportSlug, userId, currency,
         buyer_country: buyerCountry, buyer_state: buyerState,
@@ -258,7 +270,7 @@ export async function initiateOrderPayment(options: OrderPaymentOptions): Promis
       try {
         const verifyRes = await fetch('/api/verify-payment', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: await authJsonHeaders(),
           body: JSON.stringify({
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_order_id: response.razorpay_order_id,

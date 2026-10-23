@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { sendEmailDirect } from './_email.js';
 import { verifyHmacSha256 } from './_crypto.js';
+import { PERMANENT_EXPIRY } from './_userAuth.js';
 
 // Web API handler — no Vercel bodyParser config needed; raw Request is passed as-is.
 
@@ -24,6 +25,66 @@ async function sendEmail(payload: Record<string, unknown>) {
   } catch (e) {
     console.error('[webhook] send-email error', e);
   }
+}
+
+/**
+ * Idempotently unlock the report bought by a paid Razorpay order.
+ * Trust model: the event is HMAC-verified; the order was created server-side by
+ * create-order, which baked report_slug / userId / product into its notes.
+ */
+export async function unlockPaidOrder(db: any, order: any, payment: any): Promise<string> {
+  if (!order?.id) return 'no-order';
+  const notes = order.notes ?? {};
+  if (notes.product !== 'birthday_report' || !notes.report_slug) return 'not-a-report-order';
+  if (order.status && order.status !== 'paid') return 'order-not-paid';
+  if (payment && (payment.order_id && payment.order_id !== order.id)) return 'payment-order-mismatch';
+  if (payment && typeof payment.amount === 'number' && typeof order.amount === 'number'
+      && payment.amount < order.amount) return 'underpaid';
+
+  const userId: string | null = notes.userId || null;
+  if (payment?.id) {
+    const { error: payErr } = await db.from('payments').upsert({
+      user_id: userId,
+      razorpay_payment_id: payment.id,
+      razorpay_order_id: order.id,
+      amount: payment.amount ?? order.amount ?? 0,
+      currency: payment.currency ?? order.currency ?? 'INR',
+      status: 'captured',
+      product: 'birthday_report',
+      report_slug: notes.report_slug,
+    }, { onConflict: 'razorpay_payment_id', ignoreDuplicates: true });
+    if (payErr) console.error('[webhook] order.paid payment record error', payErr);
+  }
+
+  const { error: unlockErr } = await db
+    .from('birthday_reports')
+    .update({ is_paid: true, expires_at: PERMANENT_EXPIRY })
+    .eq('slug', notes.report_slug);
+  if (unlockErr) {
+    console.error('[webhook] order.paid unlock error', unlockErr);
+    throw unlockErr; // handler forgets the event and returns 500 → Razorpay retries
+  }
+  return 'unlocked';
+}
+
+/** Issue a GST credit note for a processed refund (idempotent on refund id). */
+export async function issueCreditNoteForRefund(db: any, refund: any): Promise<string> {
+  if (!refund?.id || !refund?.payment_id) return 'no-refund';
+  const { error } = await db.rpc('issue_credit_note', {
+    p: {
+      refund_id: refund.id,
+      payment_id: refund.payment_id,
+      // Razorpay amounts are in paise/cents; the invoice stores major units.
+      gross_amount: typeof refund.amount === 'number' ? refund.amount / 100 : null,
+    },
+  });
+  if (error) {
+    // e.g. "No invoice found for payment_id" (test mode skips invoicing). Logged,
+    // not retried — a missing invoice will not appear on retry.
+    console.error('[webhook] credit note not issued', refund.id, error.message ?? error);
+    return 'error';
+  }
+  return 'issued';
 }
 
 async function handler(request: Request): Promise<Response> {
@@ -169,7 +230,7 @@ async function handler(request: Request): Promise<Response> {
 
         const { data: profile } = await db
           .from('profiles')
-          .select('id')
+          .select('id, user_id')
           .eq('subscription_id', subscription.id)
           .single();
 
@@ -189,7 +250,10 @@ async function handler(request: Request): Promise<Response> {
           updated_at: new Date().toISOString(),
         }).eq('id', profile.id);
 
-        const { data: userData } = await db.auth.admin.getUserById(profile.id);
+        // The auth user id is profiles.user_id — profiles.id is a random PK, so
+        // looking the user up by profile.id found nobody and the cancellation
+        // email never sent (audit item 10).
+        const { data: userData } = await db.auth.admin.getUserById(profile.user_id);
         const email = userData?.user?.email;
         if (email) {
           const accessUntil = endDate
@@ -232,6 +296,29 @@ async function handler(request: Request): Promise<Response> {
         break;
       }
 
+      // One-time Birthday Blueprint purchase. Razorpay sends order.paid once the
+      // order is fully paid — even if the buyer's browser never returns to the
+      // site (UPI tab closed, network drop). Unlock here too, idempotently, so a
+      // paying customer is never left with a locked report. verify-payment does
+      // the same unlock when the browser does return; whichever runs first wins
+      // and the other is a no-op.
+      case 'order.paid': {
+        const order = event.payload?.order?.entity;
+        const payment = event.payload?.payment?.entity;
+        const result = await unlockPaidOrder(db, order, payment);
+        console.log('[webhook] order.paid', { order: order?.id, result });
+        break;
+      }
+
+      // Refund processed → issue the GST credit note (Section 34) against the
+      // original invoice. issue_credit_note() is idempotent on refund_id.
+      case 'refund.processed': {
+        const refund = event.payload?.refund?.entity;
+        const result = await issueCreditNoteForRefund(db, refund);
+        console.log('[webhook] refund.processed', { refund: refund?.id, result });
+        break;
+      }
+
       case 'payment.failed': {
         const payment = event.payload?.payment?.entity;
         console.log('[webhook] payment.failed', {
@@ -249,7 +336,14 @@ async function handler(request: Request): Promise<Response> {
     return json({ received: true });
   } catch (err) {
     console.error('[webhook] processing error', err);
-    // Always 200 — Razorpay retries on non-2xx which could cause duplicate processing
+    // order.paid unlock is idempotent, so a failed unlock is safe to retry: forget
+    // the event and return 500 so Razorpay re-delivers it. A paying customer must
+    // not be left locked out because of one transient DB error.
+    if (eventType === 'order.paid') {
+      try { await db.from('webhook_events').delete().eq('event_id', eventId); } catch { /* ignore */ }
+      return json({ error: 'Unlock failed; please retry' }, 500);
+    }
+    // Other events: always 200 — their handlers are not all idempotent.
     return json({ received: true });
   }
 }

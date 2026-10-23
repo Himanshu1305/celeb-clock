@@ -155,11 +155,12 @@ export async function handleReportOg(request: Request, env: OgEnv, ctx: Ctx): Pr
     if (!supaUrl || !key) return serveDefault();
     const db = createClient(supaUrl, key, { auth: { persistSession: false } });
     const { data } = await db.from('birthday_reports')
-      .select('recipient_name, recipient_dob, expires_at')
+      .select('recipient_name, recipient_dob, expires_at, is_paid')
       .eq('slug', slug)
       .single();
     if (!data) return serveDefault();
-    if (data.expires_at && new Date(data.expires_at as string) < new Date()) return serveDefault();
+    // Paid reports never expire; only an unpaid preview past its expiry is hidden.
+    if (!data.is_paid && data.expires_at && new Date(data.expires_at as string) < new Date()) return serveDefault();
     name = firstName(data.recipient_name as string);
     dobLabel = fmtDob(data.recipient_dob as string);
   } catch {

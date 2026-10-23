@@ -123,7 +123,7 @@ export default function Privacy() {
                     <strong className="text-foreground">Your health data (Life Expectancy / Longevity):</strong> never stored — every calculation happens in your browser and no health input or result ever reaches our servers.
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    <strong className="text-foreground">Your Birthday Blueprint gift reports:</strong> stored only so your shareable link works — a gift report must exist on our servers for the recipient to open it. Deleted with your account, on request, or automatically after 12 months without a single view.
+                    <strong className="text-foreground">Your Birthday Blueprint gift reports:</strong> stored only so your shareable link works — a gift report must exist on our servers for the recipient to open it. Paid reports have permanent access (the link never expires) and are deleted only with your account or on request. Unpaid previews stop being viewable after 7 days (30 days for premium accounts).
                   </p>
                 </div>
 
@@ -187,7 +187,7 @@ export default function Privacy() {
                 <ul className="space-y-3 text-muted-foreground leading-relaxed">
                   <li><strong className="text-foreground">Raw health inputs</strong> — your answers to the Life Expectancy Calculator (smoking, alcohol, BMI, sleep, stress, medical history, etc.) are processed entirely in your browser and never transmitted to our servers. They are never stored.</li>
                   <li><strong className="text-foreground">Longevity forecasts and results</strong> — your life expectancy calculation result is never saved on our servers. If you add a family member or submit to the longevity leaderboard, only the numeric forecast summary (e.g. "78.5 years") is stored — not the health inputs that produced it.</li>
-                  <li><strong className="text-foreground">Birthday Blueprint reports are stored for delivery</strong> — this is the one exception to the above. When you create a Birthday Blueprint, we store the recipient's name, date of birth, and generated report content, because the shareable link must exist on our servers for the recipient to open it. These reports are deleted with your account, on request, or automatically after 12 months without a view.</li>
+                  <li><strong className="text-foreground">Birthday Blueprint reports are stored for delivery</strong> — this is the one exception to the above. When you create a Birthday Blueprint, we store the recipient's name, date of birth, and generated report content, because the shareable link must exist on our servers for the recipient to open it. Paid reports have permanent access (the link never expires); reports are deleted with your account or on request.</li>
                   <li><strong className="text-foreground">Card numbers, CVVs, or bank details</strong> — payments go directly through Razorpay's PCI-DSS compliant infrastructure.</li>
                   <li><strong className="text-foreground">Data sold to third parties</strong> — we do not sell, rent, or trade your personal information. Ever.</li>
                   <li><strong className="text-foreground">Advertising</strong> — BornClock may display advertising to support the free tier. We do not sell your health data — including your life expectancy inputs, biological age results, or any health-related information — to advertisers or any third parties.</li>
@@ -201,7 +201,7 @@ export default function Privacy() {
                   When a BornClock user creates a Birthday Blueprint about another person, we store that person's name and date of birth solely to generate and deliver the report, on the purchaser's instruction. This data is not used for any other purpose, is not sold or shared, and is deleted when the report is deleted.
                 </p>
                 <ul className="space-y-3 text-muted-foreground leading-relaxed">
-                  <li><strong className="text-foreground">Retention:</strong> Gift reports that have not been viewed for 12 months are automatically and permanently deleted.</li>
+                  <li><strong className="text-foreground">Retention:</strong> Paid gift reports have permanent access — the link never expires. They are deleted with your account or on request. Unpaid previews stop being viewable after 7 days (30 days for premium accounts).</li>
                   <li><strong className="text-foreground">Recipient deletion rights:</strong> Recipients themselves may request deletion of a report about them by emailing{' '}
                     <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>. We will process such requests within 30 days.
                   </li>
