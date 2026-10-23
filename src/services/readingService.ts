@@ -65,10 +65,12 @@ export interface ReadingPayload {
 }
 
 export async function fetchReading(
-  dob: string, time: string, loc: BirthPlaceLike & { tz?: number }
+  dob: string, time: string, loc: BirthPlaceLike & { tz?: number }, maritalStatus?: 'single' | 'married' | 'not-said',
 ): Promise<ReadingPayload> {
   // fix-timezone-accuracy: shared birth params (zone from the birthplace, DST-correct).
   const params = new URLSearchParams(birthQuery(dob, time, loc));
+  // Optional marital status: 'married' swaps forward marriage-window wording for partnership wording.
+  if (maritalStatus === 'married' || maritalStatus === 'single') params.set('ms', maritalStatus);
   const res = await fetch(`/api/vedic-reading?${params.toString()}`);
   if (!res.ok) throw new Error('Reading service unavailable');
   const data = await res.json();

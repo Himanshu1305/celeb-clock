@@ -13,6 +13,8 @@
  * "traditionally favourable WINDOWS" as month-year RANGES — never a single date,
  * never a certainty, never a claim that marriage will/won't happen, and it never
  * volunteers anything about a second marriage or assumes the reader's marital status.
+ * When the reader has told us they are married (optional profile field) the card is
+ * re-worded as partnership periods, never a forward "marriage window".
  * This matches the AI-astrologer / report guardrails (chatGuardrails.ts), which treat
  * such windows as "a period of heightened possibility, not a fixed certainty".
  */
@@ -35,13 +37,16 @@ function pickWindows(all: AheadWindow[]): { current: AheadWindow | null; upcomin
   };
 }
 
-function AreaCard({ area, timeline, nowMs }: { area: LifeArea; timeline: MahaPeriod[]; nowMs: number }) {
+function AreaCard({ area, timeline, nowMs, married }: { area: LifeArea; timeline: MahaPeriod[]; nowMs: number; married?: boolean }) {
   const wins = windowsFor(timeline, area.significators, nowMs);
   const { current, upcoming } = pickWindows(wins);
   const isRel = area.key === 'relationships';
+  // Married (optional profile field): the same Venus / 7th-lord periods are read as
+  // partnership periods — never a forward "marriage window".
+  const marriedRel = isRel && married;
   return (
     <div data-testid={`whatsahead-area-${area.key}`} data-significators={area.significators.join(',')} style={{ border: '1px solid var(--line, #e4dcc8)', borderRadius: 10, padding: '12px 14px' }}>
-      <div style={{ fontWeight: 700, color: 'var(--ink)' }}>{area.label}</div>
+      <div style={{ fontWeight: 700, color: 'var(--ink)' }}>{marriedRel ? 'Relationship & partnership' : area.label}</div>
       <p style={{ fontSize: 12, color: 'var(--muted,#667)', margin: '4px 0 8px' }}>{area.note}</p>
       {current && (
         <div style={{ fontSize: 13, color: 'var(--ink)' }}>
@@ -50,13 +55,18 @@ function AreaCard({ area, timeline, nowMs }: { area: LifeArea; timeline: MahaPer
       )}
       {upcoming && (
         <div style={{ fontSize: 13, color: 'var(--ink)', marginTop: 2 }}>
-          <strong>Next favourable window:</strong> a {upcoming.planet} period, {rangeOf(upcoming)}
+          <strong>{marriedRel ? 'Next partnership-focused period:' : 'Next favourable window:'}</strong> a {upcoming.planet} period, {rangeOf(upcoming)}
         </div>
       )}
       {!current && !upcoming && (
         <div style={{ fontSize: 13, color: 'var(--muted,#667)' }}>No strongly-significant upcoming window on the books — the quieter stretches matter too.</div>
       )}
-      {isRel && (
+      {marriedRel && (
+        <p data-testid="whatsahead-married-note" style={{ fontSize: 11.5, color: 'var(--muted,#667)', marginTop: 8, fontStyle: 'italic' }}>
+          As you’re married, these periods are read for your <strong>existing partnership</strong> — times that traditionally emphasise harmony, shared decisions and family life. They are not about a new marriage, and they are not certainties.
+        </p>
+      )}
+      {isRel && !married && (
         <p style={{ fontSize: 11.5, color: 'var(--muted,#667)', marginTop: 8, fontStyle: 'italic' }}>
           These are <strong>traditionally favourable windows</strong> for relationship matters — periods of heightened possibility, not a fixed date and not a certainty. Astrology can’t promise whether or exactly when anything happens; treat them as "worth having plans ready", nothing more.
         </p>
@@ -72,9 +82,11 @@ export interface WhatsAheadProps {
   dashaTimeline: MahaPeriod[];
   /** Override the free/paid default (defaults to the WHATS_AHEAD_IS_FREE setting). */
   free?: boolean;
+  /** Optional marital status from the profile; 'married' → partnership wording. */
+  maritalStatus?: 'single' | 'married' | 'not-said';
 }
 
-export function WhatsAhead({ lagnaSignIndex, planets, dashaTimeline, free }: WhatsAheadProps) {
+export function WhatsAhead({ lagnaSignIndex, planets, dashaTimeline, free, maritalStatus }: WhatsAheadProps) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<'area' | 'horizon'>('area');
   if (!dashaTimeline || dashaTimeline.length === 0) return null;
@@ -119,7 +131,7 @@ export function WhatsAhead({ lagnaSignIndex, planets, dashaTimeline, free }: Wha
 
           {tab === 'area' && (
             <div style={{ display: 'grid', gap: 10 }}>
-              {areas.map(a => <AreaCard key={a.key} area={a} timeline={dashaTimeline} nowMs={nowMs} />)}
+              {areas.map(a => <AreaCard key={a.key} area={a} timeline={dashaTimeline} nowMs={nowMs} married={maritalStatus === 'married'} />)}
             </div>
           )}
 

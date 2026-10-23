@@ -20,6 +20,8 @@ import {
 import { verifyReadingClaims, scoreReadingSpecificity } from '../src/lib/vedic/readingSpecificity.js';
 import { currentDashaTag, ageInYears, ADULT_TIMING_AGE } from '../src/lib/vedic/yogaTiming.js';
 import { selectReflectionQuestions } from '../src/lib/vedic/reflection.js';
+import { rephraseHarmfulPredictions } from '../src/lib/vedic/harmfulPredictions.js';
+import { normaliseMaritalStatus } from '../src/lib/vedic/chatNowContext.js';
 
 const GEMINI_MODEL = 'gemini-flash-latest';
 
@@ -174,6 +176,11 @@ export async function buildReadingPayload(facts, generate): Promise<ReadingResul
     let reading;
     try {
       reading = await generate(systemPrompt, userPrompt);
+      // Audit K8 (founder decision): a death/accident/illness/certainty statement is
+      // rephrased into caring, practical caution (same language, window kept) — not dropped.
+      if (reading && typeof reading === 'object') {
+        for (const k of READING_SECTION_KEYS) if (typeof reading[k] === 'string') reading[k] = rephraseHarmfulPredictions(reading[k]).text;
+      }
     } catch (e) {
       if (best) break; // we already have something shippable
       return { ...base, reading: null, degraded: true, degradedReason: String(e?.message || e), attempts: attempt, prompt: { systemPrompt, userPrompt } };
@@ -248,11 +255,15 @@ async function handler(request, env?) {
     // cached before this fix (which may contain such timing) from being served to a child.
     const ageYears = ageInYears(birthUTC, now);
     const minorTag = ageYears < ADULT_TIMING_AGE ? ':minor' : '';
-    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz, currentDashaTag(chart, now) + minorTag, birthTimezone.timezone);
+    // Optional marital status (profile field): a married person never gets a forward
+    // "marriage window" — separate cache entry so the two wordings never mix.
+    const maritalStatus = normaliseMaritalStatus(searchParams.get('ms'));
+    const msTag = maritalStatus === 'married' ? ':married' : '';
+    const cacheKey = buildCacheKey(y, m, d, h, min, lat, lon, tz, currentDashaTag(chart, now) + minorTag + msTag, birthTimezone.timezone);
     const cached = await getCached(sb, cacheKey);
     if (cached) return json({ ...cached, reflections, birthTimezone, basis: chartBasisFromResult(chart, birthTimezone), _cache: 'hit' });
 
-    const facts = extractReadingFacts(chart, now, { ageYears });
+    const facts = extractReadingFacts(chart, now, { ageYears, birth: birthUTC, maritalStatus });
     const payload = await buildReadingPayload(facts, generateReading);
 
     // Only cache a full, safe AI reading — never cache a degraded/fallback

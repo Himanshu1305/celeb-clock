@@ -4,7 +4,7 @@
  * recent conversation for context. Conversation lives only in the caller's
  * session — nothing is persisted server-side.
  */
-import type { SavedBirthProfile } from '@/services/savedProfile';
+import { maritalStatusOf, type SavedBirthProfile } from '@/services/savedProfile';
 import { resolveForPlace } from '@/lib/timezone/clientBirth';
 
 export interface ChatTurn { role: 'user' | 'astrologer'; text: string }
@@ -18,6 +18,10 @@ export interface ChatResponse {
   rateLimited?: boolean;
   grounding?: string[];
   error?: string;
+}
+
+function userTimeZone(): string | undefined {
+  try { return Intl.DateTimeFormat().resolvedOptions().timeZone || undefined; } catch { return undefined; }
 }
 
 export function birthFromProfile(p: SavedBirthProfile) {
@@ -45,7 +49,9 @@ export async function sendChatMessage(
   const res = await fetch('/api/vedic-chat', {
     method: 'POST',
     headers,
-    body: JSON.stringify({ birth: birthFromProfile(profile), messages: history, message, tier, questionCount }),
+    // Audit K7: the user's own time zone so "today" is their today; marital status
+    // (optional profile field) so a married user never gets a "marriage window".
+    body: JSON.stringify({ birth: birthFromProfile(profile), messages: history, message, tier, questionCount, userTimeZone: userTimeZone(), maritalStatus: maritalStatusOf(profile) }),
   });
   const data = await res.json().catch(() => ({}));
   // The endpoint returns a friendly `reply` even on 400/429/500 — surface it.

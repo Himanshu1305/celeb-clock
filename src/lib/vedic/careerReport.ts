@@ -9,6 +9,7 @@
  */
 import type { BirthChartResult } from './calculateBirthChart';
 import { SIGN_LORDS } from './engine/sthanaBala';
+import { shadbalaCategory } from './strengthScale';
 import { categoryTiming, describeWindow, type ActivationWindow } from './yogaTiming';
 
 const CAREER_YOGAS = ['Raj Yoga', 'Budha-Aditya', 'Ruchaka', 'Bhadra', 'Hamsa', 'Malavya', 'Sasa', 'Dhana'];
@@ -34,11 +35,11 @@ export function buildCareerReport(chart: BirthChartResult, now: Date = new Date(
   const byName: Record<string, BirthChartResult['planets'][number]> = {};
   for (const p of chart.planets) byName[p.name] = p;
   const lordP = byName[lord];
-  const lordStrengthCat = chart.shadbala?.[lord] ? (() => { const t = chart.shadbala![lord].total; const req = 300; return t >= req ? 'strong' : t >= req * 0.75 ? 'moderate' : 'weak'; })() : undefined;
+  const lordStrengthCat = chart.shadbala?.[lord] ? shadbalaCategory(lord, chart.shadbala[lord].total) : undefined; // K9: shared scale
   const lordStrength = strengthWord(lordStrengthCat);
 
   const occupants = chart.planets.filter(p => p.house === 10).map(p => ({
-    planet: p.name, strength: strengthWord(chart.shadbala?.[p.name] ? (chart.shadbala[p.name].total >= 300 ? 'strong' : chart.shadbala[p.name].total >= 225 ? 'moderate' : 'weak') : undefined),
+    planet: p.name, strength: strengthWord(chart.shadbala?.[p.name] ? shadbalaCategory(p.name, chart.shadbala[p.name].total) : undefined),
   }));
 
   const tenthAnalysis = `Your 10th house of career and public standing is ${tenthSign}, ruled by ${lord}. ${lord} sits in your ${ordinal(lordP?.house ?? 10)} house in ${lordP?.sign ?? tenthSign} with ${lordStrength} strength — so your professional direction is shaped most by where ${lord} operates${occupants.length ? `, with ${occupants.map(o => o.planet).join(' and ')} placed directly in the 10th adding ${occupants.length > 1 ? 'their' : 'its'} tone.` : '.'}`;

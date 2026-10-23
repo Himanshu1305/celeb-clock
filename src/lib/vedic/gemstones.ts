@@ -23,6 +23,7 @@
  */
 import type { BirthChartResult } from './calculateBirthChart';
 import { SIGN_LORDS } from './engine/sthanaBala';
+import { shadbalaCategory } from './strengthScale';
 import { RASHI_NAMES } from './engine/vedicEngine';
 
 interface Gem { gem: string; hindi: string }
@@ -80,7 +81,7 @@ function housesRuledBy(lagnaIdx: number, planet: string): number[] {
 }
 function shadCat(chart: BirthChartResult, planet: string): 'strong' | 'moderate' | 'weak' | 'unknown' {
   const sb = chart.shadbala?.[planet]; if (!sb) return 'unknown';
-  const req = 300; return sb.total >= req ? 'strong' : sb.total >= req * 0.75 ? 'moderate' : 'weak';
+  return shadbalaCategory(planet, sb.total); // K9: shared scale
 }
 /** The Yogakaraka: a planet ruling BOTH a Kendra (4/7/10) and a Trikona (5/9). Computed. */
 function findYogakaraka(lagnaIdx: number): { planet: string; houses: number[] } | null {

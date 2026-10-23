@@ -43,7 +43,10 @@ async function handler(request) {
     // Audit K3: no "marriage/career window opens soon" alerts for anyone under 18.
     const birthUTC = new Date(Date.UTC(y, m - 1, d, h, min) - btz.tz * 3600_000);
     const minor = ageInYears(birthUTC, now) < ADULT_TIMING_AGE;
-    const cats = ([['career', 'Career'], ['marriage', 'Marriage'], ['wealth', 'Wealth']] as const).filter(([c]) => !minor || c === 'wealth');
+    // Marital status (optional profile field): a married user's Venus / 7th-lord window
+    // is announced as a PARTNERSHIP window, never a "marriage window".
+    const married = searchParams.get('ms') === 'married';
+    const cats = ([['career', 'Career'], ['marriage', married ? 'Partnership' : 'Marriage'], ['wealth', 'Wealth']] as const).filter(([c]) => !minor || c === 'wealth');
     for (const [cat, label] of cats) {
       try {
         const t = categoryTiming(chart, cat, now);

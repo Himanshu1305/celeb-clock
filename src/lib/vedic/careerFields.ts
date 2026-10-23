@@ -10,6 +10,7 @@
  */
 import type { BirthChartResult } from './calculateBirthChart';
 import { SIGN_LORDS } from './engine/sthanaBala';
+import { shadbalaCategory } from './strengthScale';
 
 const RASHI = ['Mesha', 'Vrisha', 'Mithuna', 'Karka', 'Simha', 'Kanya', 'Tula', 'Vrischika', 'Dhanu', 'Makara', 'Kumbha', 'Meena'];
 
@@ -69,7 +70,7 @@ export function rankCareerFields(chart: BirthChartResult): CareerFieldsResult {
     const reasons: string[] = [];
     let score = shadbalaScore(chart, planet); // base ~150..450 virupas
     const sb = chart.shadbala?.[planet]?.total;
-    if (typeof sb === 'number') reasons.push(`${planet} is ${sb >= 300 ? 'strong' : sb >= 225 ? 'moderately strong' : 'gentle'} by Shadbala`);
+    if (typeof sb === 'number') { const cat = shadbalaCategory(planet, sb); reasons.push(`${planet} is ${cat === 'strong' ? 'strong' : cat === 'moderate' ? 'moderately strong' : 'gentle'} by Shadbala`); } // K9: shared scale
     if (planet === tenthLord) { score += 120; reasons.push('rules your 10th house of career'); }
     const p = byName[planet];
     if (p?.house === 10) { score += 100; reasons.push('sits in your 10th house'); }

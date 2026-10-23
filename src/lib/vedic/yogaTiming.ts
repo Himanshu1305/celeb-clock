@@ -239,6 +239,11 @@ export interface TimingFactCategory {
    * set for a PAST-tense question ("when did I get married"). Separate from `upcoming`
    * so tense-aware filtering never has to guess. Up to 3. */
   past: TimingFactWindow[];
+  /** Audit K6: EVERY ended window from adulthood (18+) onward, most-recent-first. A
+   * past-tense question ("when did I get married?") must be able to cite the real
+   * classical match even when it is older than the three most recent windows (P9:
+   * Ketu–Venus Aug 2005–Oct 2006 is the 4th most recent). */
+  allPast?: TimingFactWindow[];
   note?: string;
   /** True when the windows were withheld because the person is under 18 (audit K3). */
   suppressedForMinor?: boolean;
@@ -288,6 +293,12 @@ function surfaceWindows(t: TimingResult, n = 3): TimingFactWindow[] {
 function surfacePast(t: TimingResult, n = 3): TimingFactWindow[] {
   return t.windows.filter(w => w.status === 'past').slice(0, n).map(toFactWindow);
 }
+/** Audit K6: all ended windows that reach into adulthood (end after the 18th birthday
+ * when the birth instant is known), most-recent-first. */
+function allPastWindows(t: TimingResult, birth?: Date): TimingFactWindow[] {
+  const adultMs = birth ? birth.getTime() + ADULT_TIMING_AGE * 365.2425 * 864e5 : -Infinity;
+  return t.windows.filter(w => w.status === 'past' && new Date(w.end).getTime() > adultMs).map(toFactWindow);
+}
 
 /** Age below which marriage and career timing is never given (audit K3). */
 export const ADULT_TIMING_AGE = 18;
@@ -301,16 +312,16 @@ export function ageInYears(birth: Date, now: Date = new Date()): number {
  * `opts.ageYears` (when known): under 18, the marriage and career categories carry NO
  * windows — a child is never given a "marriage window" or career timing (audit K3).
  */
-export function buildTimingFacts(chart: BirthChartResult, now: Date = new Date(), opts: { ageYears?: number } = {}): TimingFacts {
+export function buildTimingFacts(chart: BirthChartResult, now: Date = new Date(), opts: { ageYears?: number; birth?: Date } = {}): TimingFacts {
   const cats = allCategoryTimings(chart, now);
   const minor = typeof opts.ageYears === 'number' && opts.ageYears < ADULT_TIMING_AGE;
   const categories: TimingFactCategory[] = (['wealth', 'career', 'marriage', 'family'] as LifeCategory[]).map(k => {
     const t = cats[k];
     if (minor && (k === 'marriage' || k === 'career')) {
-      return { key: t.key, label: t.label, significators: t.significators, next: null, upcoming: [], past: [], suppressedForMinor: true,
+      return { key: t.key, label: t.label, significators: t.significators, next: null, upcoming: [], past: [], allPast: [], suppressedForMinor: true,
         note: `Not given: this person is ${opts.ageYears} years old — ${k} timing is never given for anyone under ${ADULT_TIMING_AGE}.` };
     }
-    return { key: t.key, label: t.label, significators: t.significators, next: t.next ? toFactWindow(t.next) : null, upcoming: surfaceWindows(t), past: surfacePast(t), note: t.note };
+    return { key: t.key, label: t.label, significators: t.significators, next: t.next ? toFactWindow(t.next) : null, upcoming: surfaceWindows(t), past: surfacePast(t), allPast: allPastWindows(t, opts.birth), note: t.note };
   });
   const yogas = yogaTimings(chart, now).map(t => ({
     name: t.key, significators: t.significators, next: t.next ? toFactWindow(t.next) : null, upcoming: surfaceWindows(t),
@@ -368,7 +379,7 @@ export function buildTimingFacts(chart: BirthChartResult, now: Date = new Date()
   const validRanges = new Set<string>();
   const validMonths = new Set<string>();
   const addWin = (w: TimingFactWindow) => { validRanges.add(w.range); validMonths.add(formatMonthYear(w.start)); validMonths.add(formatMonthYear(w.end)); };
-  for (const c of categories) { if (c.next) addWin(c.next); c.upcoming.forEach(addWin); c.past.forEach(addWin); }
+  for (const c of categories) { if (c.next) addWin(c.next); c.upcoming.forEach(addWin); c.past.forEach(addWin); (c.allPast || []).forEach(addWin); } // K6: every real adult-era past window is citable
   for (const y of yogas) { if (y.next) addWin(y.next); y.upcoming.forEach(addWin); }
   for (const d of doshaTiming) d.windows.forEach(addWin);
   for (const dv of divisionalTiming) dv.windows.forEach(addWin);

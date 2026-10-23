@@ -17,6 +17,7 @@ import { RASHI_NAMES } from './engine/vedicEngine';
 import { SIGN_LORDS } from './engine/sthanaBala';
 import { getNakshatraMeaning, nakshatraMeaningLine } from './nakshatraMeanings';
 import { buildTimingFacts, type TimingFacts } from './yogaTiming';
+import { shadbalaCategory } from './strengthScale';
 
 export interface PlanetFact {
   planet: string; sign: string; house: number;
@@ -55,6 +56,9 @@ export interface ReadingFacts {
   yogas: Array<{ name: string; grade: string; summary: string; note?: string; conditions: string[] }>;
   /** Computed activation-window timing (Part D-Fix3) — real dates for "when" questions. */
   timing: TimingFacts;
+  /** Marital status the user chose (optional profile field). 'married' turns forward
+   * "marriage window" wording into partnership wording everywhere. */
+  maritalStatus?: 'single' | 'married' | 'not-said';
   warnings: Array<{ code: string; message: string }>;
   fieldsUsed: Record<string, string[]>;
 }
@@ -62,14 +66,8 @@ export interface ReadingFacts {
 // Classical minimum required Shadbala (Ishta) in Virupas (Rupas × 60). Used only
 // to bucket strong/moderate/weak. Shadbala is an INDICATIVE score (Part B
 // confidence table: ~94% Sthana, ~80% Chesta), so the prompt must hedge it.
-const REQUIRED_SHADBALA: Record<string, number> = { Sun: 300, Moon: 360, Mars: 300, Mercury: 420, Jupiter: 390, Venus: 330, Saturn: 300 };
-function shadbalaCategory(planet: string, total: number): 'strong' | 'moderate' | 'weak' {
-  const req = REQUIRED_SHADBALA[planet];
-  if (!req) return 'moderate';
-  if (total >= req) return 'strong';
-  if (total >= req * 0.75) return 'moderate';
-  return 'weak';
-}
+// Audit K9: the strong/moderate/weak cut now lives in strengthScale.ts and is shared by
+// every report (AI reading, chat, Life Report, career, gemstones).
 
 /** Plain-language strength word for the NARRATIVE (raw virupa numbers stay in the
  * advanced/technical view only, never in the generated prose). */
@@ -81,7 +79,7 @@ const HOUSES_OF_INTEREST = [1, 2, 4, 6, 7, 9, 10, 11];
 
 /** Extract the full, confidence-aware fact set that feeds the prompt, the
  * accuracy checker, and the deterministic fallback display. */
-export function extractReadingFacts(chart: BirthChartResult, now: Date = new Date(), opts: { ageYears?: number } = {}): ReadingFacts {
+export function extractReadingFacts(chart: BirthChartResult, now: Date = new Date(), opts: { ageYears?: number; birth?: Date; maritalStatus?: 'single' | 'married' | 'not-said' } = {}): ReadingFacts {
   const byName: Record<string, BirthChartResult['planets'][number]> = {};
   for (const p of chart.planets) byName[p.name] = p;
 
@@ -158,7 +156,8 @@ export function extractReadingFacts(chart: BirthChartResult, now: Date = new Dat
       navamsaVenus: chart.divisionalCharts.d9.Venus,
     },
     yogas: (chart.yogas ?? []).map(y => ({ name: y.name, grade: y.grade, summary: y.summary, note: y.note, conditions: y.conditions })),
-    timing: buildTimingFacts(chart, now, opts),
+    timing: buildTimingFacts(chart, now, { ageYears: opts.ageYears, birth: opts.birth }),
+    maritalStatus: opts.maritalStatus ?? 'not-said',
     warnings: chart.warnings.map(w => ({ code: w.code, message: w.message })),
     fieldsUsed: {
       snapshot: ['Lagna + lord placement', 'Moon sign', 'Nakshatra'],
@@ -261,10 +260,14 @@ export function buildReadingUserPrompt(f: ReadingFacts): string {
     const strongest = w.doubleActivation ? ' — STRONGEST (an activating sub-period inside a supporting main period)' : '';
     return `${w.planet} ${kind} ${w.range}${when}${strongest}`;
   };
+  const married = f.maritalStatus === 'married';
   const catTimingLine = f.timing.categories.map(c => {
     if (c.suppressedForMinor) return `  - ${c.label}: NOT APPLICABLE — ${c.note} Do not mention any ${c.key} window, period or age for it.`;
     const wins = c.upcoming.length ? c.upcoming.map(fmtWin).join('; ') : 'no current/upcoming window — the strongest windows are in the past';
-    return `  - ${c.label} (driven by ${c.significators.join(', ')}): ${wins}`;
+    // Marital status (optional profile field): for a married person the same Venus /
+    // 7th-lord periods are PARTNERSHIP periods, never a "marriage window".
+    const label = married && c.key === 'marriage' ? 'Partnership (this person is ALREADY MARRIED — these are periods emphasising partnership harmony and shared decisions, NEVER a marriage window or a new/second marriage)' : c.label;
+    return `  - ${label} (driven by ${c.significators.join(', ')}): ${wins}`;
   }).join('\n');
   const yogaTimingLine = f.timing.yogas.filter(y => y.upcoming.length).map(y =>
     `  - ${y.name} (planets ${y.significators.join(', ')}): ${y.upcoming.map(fmtWin).join('; ')}`
@@ -330,7 +333,9 @@ How to use timing — this is what makes the reading answer "WHEN", not just "wh
 Write the reading as JSON with exactly these fields. EACH field MUST follow the FOUR-PART STRUCTURE from the system prompt: (1) a plain verdict line, (2) plain-language impact, (3) the evidence "this comes from…" — the specific facts listed for that section belong in THIS third part, and (4) a forward-looking timing close where a window applies. Lead with meaning; the required placements below are the EVIDENCE layer, cited after the meaning, never before it:
 - "snapshot": read the core pieces TOGETHER, not as a list. First frame what they are and how they combine: your Lagna (${f.lagna}) is your outer self and life-approach, your Moon sign (${f.rashi}) is your inner, emotional self — name both and say in one clause how they harmonise or contrast. Then fold in the Lagna lord's placement and your Nakshatra (${f.nakshatra.name}), briefly explaining what that Nakshatra traditionally signifies using the meaning above — but do NOT inflate a neutral/"mixed" Nakshatra to sound exceptional; describe it honestly.
 - "career": MUST reference the 10th house sign AND its ruling planet's placement (house/sign/strength), AND at least one of Sun/Mercury/Saturn by its real placement, AND connect to the current Dasha lord if relevant. Draw a real-world implication. Cite the computed Career timing window (with its real date range) as the strongest upcoming period for professional moves.
-- "relationships": MUST reference the 7th house sign and its lord's placement, Venus's placement (sign/house/strength), and the Navamsa sign of Venus or Moon. Fold in Mangal Dosha calmly IF present, naming its cause. If partnership/marriage timing fits, cite the computed Marriage timing window (real date range) as the strongest classical period for this.
+- "relationships": MUST reference the 7th house sign and its lord's placement, Venus's placement (sign/house/strength), and the Navamsa sign of Venus or Moon. Fold in Mangal Dosha calmly IF present, naming its cause. ${married
+    ? 'The person has told us they are MARRIED: do NOT write any forward "marriage window" or imply a new or second marriage. If timing fits, cite the computed Partnership window (real date range) as a period that emphasises partnership harmony, shared decisions and family life.'
+    : 'If partnership/marriage timing fits, cite the computed Marriage timing window (real date range) as the strongest classical period for this.'}
 - "health": MUST reference the 6th house sign and lord, the Lagna lord's strength, and any planet in a health-relevant house — but describe the 6th house as daily routines, service, habits and resilience, speaking ONLY to general wellbeing, rest and energy. Never use "disease", "illness", "condition" or any ailment name.
 - "money": MUST reference the 2nd and 11th house signs and their lords' placements, and Jupiter's placement. Cite the computed Wealth timing window (with its real date range) as the strongest upcoming period for the financial promise to manifest. Habits/mindset otherwise.
 - "family": MUST reference the 4th house (home/mother) and 9th house (father/fortune) signs AND their lords' placements (house/sign, and strength if given), CONNECT the two together and to the current Dasha lord where relevant, and land on a real, decisive conclusion about home/roots and parental influence — the SAME depth as career and money, not a bare two-fact list. Where a family timing point fits, cite the computed Family timing window (its real date range) as the strongest classical period for it.

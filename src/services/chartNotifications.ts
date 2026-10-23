@@ -37,6 +37,7 @@ export function markNotificationsShown(keys: string[], now: Date = new Date()): 
 async function fetchEvents(profile: SavedBirthProfile): Promise<ChartEvent[]> {
   // fix-timezone-accuracy: shared birth params (zone from the birthplace, DST-correct).
   const params = new URLSearchParams(birthQuery(profile.dob, profile.time, profile.city!));
+  if (profile.maritalStatus === 'married') params.set('ms', 'married'); // no "marriage window" alerts for a married user
   const res = await fetch(`/api/chart-events?${params.toString()}`);
   if (!res.ok) return [];
   const data = await res.json().catch(() => ({}));

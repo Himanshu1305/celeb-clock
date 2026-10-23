@@ -16,8 +16,11 @@ import {
   detectHealthSymptom, HEALTH_REDIRECT_RESPONSE,
   buildChatSystemPrompt, scanChatResponse, UNSAFE_REPLY_FALLBACK,
   detectTimingQuestion, classifyTimingCategory, deterministicTimingReply,
-  resolveMarriageContext, verifyMarriageGuardrail,
+  resolveMarriageContext, verifyMarriageGuardrail, detectQuestionTense, disallowedExactDays,
 } from '../src/lib/vedic/chatGuardrails.js';
+import { rephraseHarmfulPredictions } from '../src/lib/vedic/harmfulPredictions.js';
+import { buildNowContext, type NowContext } from '../src/lib/vedic/chatNowContext.js';
+import { formatMonthYear } from '../src/lib/vedic/yogaTiming.js';
 import { verifyTimingClaims, verifyYogaClaims } from '../src/lib/vedic/readingSpecificity.js';
 import { limitReachedMessage } from '../src/lib/vedic/rateLimit.js';
 import { hashClientId, peekLimit, recordQuestionServer } from '../src/lib/vedic/serverRateLimit.js';
@@ -66,13 +69,18 @@ async function callGemini(systemPrompt, contents) {
 
 // Exposed for testing: given facts + history + message, produce the reply
 // payload. `generate` is injected so tests can supply a fake model.
-export async function buildChatReply(facts, history, message, generate, gemstone?) {
+export async function buildChatReply(facts, history, message, generate, gemstone?, now?: NowContext) {
   // Part AC (Part S.2 + S.3): for a marriage-timing question, resolve tense +
   // marital-status context so the prompt (and the deterministic fallback) filter
   // windows by tense and honour the already-married guardrail.
   const isMarriage = detectTimingQuestion(message) && classifyTimingCategory(message) === 'marriage';
   const marriageCtx = isMarriage ? resolveMarriageContext(message) : undefined;
-  const systemPrompt = buildChatSystemPrompt(facts, gemstone, marriageCtx);
+  // Marital status from the profile: a married user is treated exactly like one whose
+  // phrasing implies marriage (past windows only, never a "next marriage" window).
+  if (marriageCtx && now?.maritalStatus === 'married') marriageCtx.alreadyMarried = true;
+  // Audit K6: a past-tense question may cite ANY adult-era past window.
+  const pastQuestion = detectQuestionTense(message) === 'past';
+  const systemPrompt = buildChatSystemPrompt(facts, gemstone, marriageCtx, { now, pastQuestion });
   const contents = [
     ...history.slice(-MAX_HISTORY).map(m => ({
       role: m.role === 'user' ? 'user' : 'model',
@@ -100,7 +108,14 @@ export async function buildChatReply(facts, history, message, generate, gemstone
   // that isn't a real computed window is never shown — retry once, then fall
   // back to a deterministic, guaranteed-correct answer built from the windows.
   const isTiming = detectTimingQuestion(message);
-  const validMonths = facts.timing?.validMonths || [];
+  // Months the reply may cite: the computed windows + today / transit sign changes (K7)
+  // + — for a past-tense question — every adult-era past window (K6).
+  const pastMonths = pastQuestion
+    ? (facts.timing?.categories || []).flatMap(c => (c.allPast || []).flatMap(w => [formatMonthYear(w.start), formatMonthYear(w.end)]))
+    : [];
+  const validMonths = [...new Set([...(facts.timing?.validMonths || []), ...(now?.validMonths || []), ...pastMonths])];
+  // Exact days the reply may repeat: today's date and anything the user typed.
+  const allowedDayTexts = [now?.todayLabel || '', message, ...history.filter(m => m.role === 'user').map(m => String(m.text || ''))];
   // Yoga-citation guard (Part J): the reply must never assert a Yoga the chart
   // doesn't have. Runs on EVERY reply (cheap), same zero-tolerance/retry discipline.
   const presentYogaNames = (facts.yogas || []).map((y: any) => y.name);
@@ -108,10 +123,12 @@ export async function buildChatReply(facts, history, message, generate, gemstone
   const SAFETY_FIX = 'Reminder: your previous reply used a forbidden word. Do NOT use "will", "must", "definitely", "guaranteed", "invest", "buy", or "sell" anywhere — rephrase as "tends to", "often", "may", "put time/care into". Never name assets or give a financial instruction.';
   const DATE_FIX = 'Reminder: your previous reply stated a date that is NOT in the COMPUTED TIMING WINDOWS list. Re-answer using ONLY the exact planet periods and date ranges from that list — never invent, round, or shift a date.';
   const YOGA_FIX = 'Reminder: your previous reply named a Yoga that is NOT in the DETECTED YOGAS list for this chart. Only cite Yogas from that list (with their exact grade); if the user asked about one that is not present, say plainly they do not have it — do not invent one.';
+  const EXACT_DAY_FIX = 'Reminder: your previous reply gave an exact calendar day. Astrology timing here is only a month-year RANGE from the computed Dasha windows — never a single day. Re-answer with the window only.';
   const MARRIAGE_FIX = 'Reminder: this person is already married and/or asked about the PAST. Do NOT mention any future/upcoming relationship window and do NOT bring up a second/further marriage. Answer ONLY about periods that have already ended.';
 
   try {
-    let lastFlags: string[] = [], lastBadDates: string[] = [], lastBadYogas: string[] = [], lastBadMarriage: string[] = [];
+    let lastFlags: string[] = [], lastBadDates: string[] = [], lastBadYogas: string[] = [], lastBadMarriage: string[] = [], lastExactDays: string[] = [];
+    const rephrasedAll: string[] = [];
     for (let attempt = 1; attempt <= 3; attempt++) {
       const corrections: string[] = [];
       if (attempt > 1) {
@@ -119,9 +136,16 @@ export async function buildChatReply(facts, history, message, generate, gemstone
         if (lastBadDates.length) corrections.push(DATE_FIX);
         if (lastBadYogas.length) corrections.push(YOGA_FIX);
         if (lastBadMarriage.length) corrections.push(MARRIAGE_FIX);
+        if (lastExactDays.length) corrections.push(EXACT_DAY_FIX);
       }
       const turns = corrections.length ? [...contents, { role: 'user', parts: [{ text: corrections.join(' ') }] }] : contents;
-      const raw = await generate(systemPrompt, turns);
+      const generated = await generate(systemPrompt, turns);
+      // Audit K8 (founder decision): death / accident / serious-illness / child-harm /
+      // marriage-certainty statements are REPHRASED into caring, practical caution in
+      // the same language (timing window kept) — not blocked, not silently dropped.
+      const re = rephraseHarmfulPredictions(generated);
+      const raw = re.text;
+      for (const f of re.rephrased) rephrasedAll.push(f.domain);
 
       // Safety scan (never banned language) + date-accuracy + Yoga-citation accuracy +
       // the Part S.3 marriage guardrail — all under the SAME retry discipline, so nothing
@@ -130,10 +154,11 @@ export async function buildChatReply(facts, history, message, generate, gemstone
       const badDates = (isTiming && validMonths.length) ? verifyTimingClaims(raw, validMonths).wrong.map(w => w.claimed) : [];
       const badYogas = verifyYogaClaims(raw, presentYogaNames, hasYogakaraka).wrong.map(w => w.token);
       const badMarriage = verifyMarriageGuardrail(raw, marriageCtx, facts.timing);
-      if (!flags.length && !badDates.length && !badYogas.length && !badMarriage.length) {
-        return { reply: raw, crisis: false, degraded: false, sanitized: false, ...(isTiming ? { timingChecked: true } : {}), yogaChecked: true, ...(marriageCtx ? { marriageChecked: true } : {}), grounding };
+      const exactDays = disallowedExactDays(raw, allowedDayTexts);
+      if (!flags.length && !badDates.length && !badYogas.length && !badMarriage.length && !exactDays.length) {
+        return { reply: raw, crisis: false, degraded: false, sanitized: false, ...(isTiming ? { timingChecked: true } : {}), yogaChecked: true, ...(marriageCtx ? { marriageChecked: true } : {}), ...(rephrasedAll.length ? { rephrased: [...new Set(rephrasedAll)] } : {}), grounding };
       }
-      lastFlags = flags; lastBadDates = badDates; lastBadYogas = badYogas; lastBadMarriage = badMarriage;
+      lastFlags = flags; lastBadDates = badDates; lastBadYogas = badYogas; lastBadMarriage = badMarriage; lastExactDays = exactDays;
     }
 
     // Exhausted retries. For a timing question, fall back to a deterministic,
@@ -143,7 +168,7 @@ export async function buildChatReply(facts, history, message, generate, gemstone
       const safe = deterministicTimingReply(facts.timing, classifyTimingCategory(message), marriageCtx);
       if (safe) return { reply: safe, crisis: false, degraded: false, sanitized: false, timingCorrected: true, grounding };
     }
-    return { reply: UNSAFE_REPLY_FALLBACK, crisis: false, degraded: false, sanitized: true, redFlags: [...lastFlags, ...lastBadDates.map(d => `bad-date:${d}`), ...lastBadYogas.map(y => `bad-yoga:${y}`), ...lastBadMarriage.map(m => `bad-marriage:${m}`)], grounding };
+    return { reply: UNSAFE_REPLY_FALLBACK, crisis: false, degraded: false, sanitized: true, redFlags: [...lastFlags, ...lastBadDates.map(d => `bad-date:${d}`), ...lastExactDays.map(d => `exact-day:${d}`), ...lastBadYogas.map(y => `bad-yoga:${y}`), ...lastBadMarriage.map(m => `bad-marriage:${m}`)], grounding };
   } catch (e) {
     return {
       reply: "I'm having a little trouble reaching your chart right now — please try again in a moment. If it keeps happening, your full reading on the Kundali page is always available.",
@@ -160,7 +185,7 @@ async function handler(request) {
 
   // `questionCount` may still be sent by older clients; it is intentionally
   // IGNORED now — the server keeps its own authoritative count (P5-3).
-  const { birth, messages, message, tier: rawTier } = body ?? {};
+  const { birth, messages, message, tier: rawTier, userTimeZone, maritalStatus } = body ?? {};
 
   // TIER RESOLUTION (Part N). Admin is checked FIRST and short-circuits the
   // free/paid logic entirely. Crucially, the tier is re-derived SERVER-SIDE from a
@@ -216,7 +241,7 @@ async function handler(request) {
 
   try {
     // 4) Ground in the computed chart.
-    let facts, gemstone;
+    let facts, gemstone, nowCtx: NowContext | undefined;
     try {
       const bp = {
         y: Number(birth.y), m: Number(birth.m), d: Number(birth.d),
@@ -233,14 +258,19 @@ async function handler(request) {
       }, { includeShadbala: true });
       // Audit K3: pass age so a child is never given marriage/career timing.
       const birthUTC = new Date(Date.UTC(bp.y, bp.m - 1, bp.d, bp.h, bp.min) - btz.tz * 3600_000);
-      facts = extractReadingFacts(chart, new Date(), { ageYears: ageInYears(birthUTC) });
+      const now = new Date();
+      const ageYears = ageInYears(birthUTC, now);
+      const ms = maritalStatus ?? birth.maritalStatus;
+      facts = extractReadingFacts(chart, now, { ageYears, birth: birthUTC, maritalStatus: ms === 'married' || ms === 'single' ? ms : 'not-said' });
+      // Audit K7: today's date (user's zone if sent), age, running Dasha, slow transits.
+      nowCtx = buildNowContext(chart, now, { ageYears, userTimeZone, birthTimeZone: btz.birthTimezone?.timezone, maritalStatus: ms });
       gemstone = gemstoneChatContext(chart); // Item 3: Lagna-based gemstone context for the chat
     } catch (inputErr) {
       return json({ error: 'bad-birth', reply: String(inputErr?.message || inputErr) }, 400);
     }
 
     const history = Array.isArray(messages) ? messages : [];
-    const payload = await buildChatReply(facts, history, text, callGemini, gemstone);
+    const payload = await buildChatReply(facts, history, text, callGemini, gemstone, nowCtx);
 
     // Count the question against the server-side daily limit ONLY when a real
     // answer was delivered (not a degraded/error fallback) and only for non-admin
