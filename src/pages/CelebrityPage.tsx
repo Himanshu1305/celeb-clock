@@ -26,6 +26,7 @@ import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { CosmicTwins } from '@/components/CelebrityAffiliateAndTwins';
 import {
   CELEB_DEATH_OVERRIDES, CELEB_ERA_OVERRIDES, MAX_LIVING_AGE, isBlockedCelebrity, nationalityLabel, yearsBetween,
+  applyCelebRecordFixes,
 } from '@/lib/celebrityFacts';
 import { CelebrityBirthTimeNote } from '@/components/CelebrityBirthTimeNote';
 import { BirthdayRarityCard } from '@/components/BirthdayRarityCard';
@@ -33,7 +34,8 @@ import { OnThisDay } from '@/components/OnThisDay';
 
 // Unified celebrity DB (static Indian + Supabase, slugs pre-assigned by
 // scripts/export-celebrities.ts). Build the slug → entry map ONCE at load.
-const ALL_CELEBRITIES = celebritiesData.celebrities as unknown as Record<string, unknown>[];
+// Verified date corrections are re-applied here so a stale export can't show a wrong date.
+const ALL_CELEBRITIES = (celebritiesData.celebrities as unknown as Record<string, unknown>[]).map(applyCelebRecordFixes);
 const SLUG_MAP = new Map<string, Record<string, unknown>>();
 ALL_CELEBRITIES.forEach(c => SLUG_MAP.set(String(c.slug), c));
 const CELEB_TO_SLUG = new Map<Record<string, unknown>, string>();

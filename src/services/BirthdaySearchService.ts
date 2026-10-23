@@ -334,6 +334,12 @@ function mapCelebRow(c: any): CelebrityBirthdayResult {
 // S14: criminals are never shown as "celebrity birthday twins".
 const notBlocked = (c: CelebrityBirthdayResult) => !isBlockedCelebrity(c.name, c.knownFor || c.occupation);
 
+// Batch 3: a verified code-side birth-date fix can move someone off the day/month
+// the DB row was filed under (until the founder applies the NOTES SQL). Drop them
+// there rather than list them under a date that is not their birthday.
+const onMonthDay = (md: string) => (c: CelebrityBirthdayResult) => !c.birthDate || c.birthDate.slice(5, 10) === md;
+const inMonth = (mm: string) => (c: CelebrityBirthdayResult) => !c.birthDate || c.birthDate.slice(5, 7) === mm;
+
 /**
  * Canonical celebrity-for-date query used by all surfaces:
  * BirthdayResults, TodaysBirthdays, CelebrityBirthday, ReportView, BornOnDay, CelebrityMatch.
@@ -364,7 +370,7 @@ export async function getRankedBirthdayCelebrities(
     }
 
     // Pure sitelinks DESC (already ordered by the query above). No per-user boost.
-    return data.map(mapCelebRow).filter(notBlocked).slice(0, limit);
+    return data.map(mapCelebRow).filter(onMonthDay(monthDay)).filter(notBlocked).slice(0, limit);
   } catch (err) {
     console.error('BirthdaySearchService: Supabase celebrity query failed (returning []):', err);
     return [];
@@ -393,7 +399,7 @@ export async function getRankedMonthCelebrities(
 
     if (error || !data || data.length === 0) return [];
 
-    return data.map(mapCelebRow).filter(notBlocked);
+    return data.map(mapCelebRow).filter(inMonth(mm)).filter(notBlocked);
   } catch (err) {
     console.error('BirthdaySearchService: month celebrity query failed (returning []):', err);
     return [];
@@ -436,7 +442,7 @@ export async function getRankedMonthCelebritiesByCountry(
       return true;
     });
 
-    return matches.map(mapCelebRow).filter(notBlocked).slice(0, limit);
+    return matches.map(mapCelebRow).filter(inMonth(mm)).filter(notBlocked).slice(0, limit);
   } catch (err) {
     console.error('getRankedMonthCelebritiesByCountry: query failed (returning []):', err);
     return [];
@@ -485,7 +491,7 @@ export async function getCountryExtras(
       return true;
     });
 
-    return matches.map(mapCelebRow).filter(notBlocked).slice(0, limit);
+    return matches.map(mapCelebRow).filter(onMonthDay(monthDay)).filter(notBlocked).slice(0, limit);
   } catch (err) {
     console.error('getCountryExtras: query failed (returning []):', err);
     return [];
@@ -517,7 +523,7 @@ export async function getNationalityCelebritiesForDate(
     // Cast: the generated Supabase types are stale (missing the known_for column),
     // which otherwise widens each row to SelectQueryError. The column exists in the
     // DB — India pages render real data — so this is a type-only shim.
-    return (data as any[]).map(mapCelebRow).filter(notBlocked);
+    return (data as any[]).map(mapCelebRow).filter(onMonthDay(monthDay)).filter(notBlocked);
   } catch (err) {
     console.error('getNationalityCelebritiesForDate: query failed (returning []):', err);
     return [];

@@ -17,6 +17,7 @@ import { writeFileSync, readFileSync, existsSync } from 'fs';
 import * as dotenv from 'dotenv';
 import { nameToSlug, BLOCKED_IDS } from './add-celebrity-slugs';
 import { INDIAN_CELEBRITIES } from '../src/data/indianCelebrities';
+import { applyCelebRecordFixes } from '../src/lib/celebrityFacts';
 
 dotenv.config({ path: '.env.local' });
 
@@ -146,6 +147,12 @@ async function main() {
       process.exit(1);
     }
   }
+
+  // Verified date corrections (src/lib/celebrityFacts.ts) are applied AFTER the
+  // DB merge, so a wrong celebrity_sitelinks date can never come back through
+  // this nightly export. Each fix only fires while the row still has the known
+  // wrong value, so it becomes a no-op once the DB itself is corrected.
+  for (let i = 0; i < out.length; i++) out[i] = applyCelebRecordFixes(out[i] as unknown as Record<string, unknown>) as unknown as UnifiedCelebrity;
 
   const indianCount = out.filter(c => c.nationality_code === 'IN').length;
   const payload = {
