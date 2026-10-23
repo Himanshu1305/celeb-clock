@@ -10,6 +10,8 @@ import {
   type TransitPlanet,
 } from '@/lib/vedic/transits';
 import { RASHIS, rangeLabel, type Grade, type Tone } from '@/lib/vedic/rashifal';
+import { zoneDateISO, zoneLabel } from '@/lib/viewerTime';
+import { useViewerTimeZone } from '@/hooks/useViewerTimeZone';
 
 const GRADE_STYLE: Record<Grade, string> = {
   strong: 'bg-emerald-100 text-emerald-800 border-emerald-300',
@@ -44,6 +46,7 @@ export default function TransitYearPage() {
   const year = Number(yearParam);
   const yearValid = Number.isInteger(year) && year >= MIN_YEAR && year <= MAX_YEAR;
 
+  const viewerTz = useViewerTimeZone();
   const data = useMemo(() => {
     if (!planetValid || !yearValid) return null;
     return computeYearTransit(planet, year);
@@ -148,7 +151,7 @@ export default function TransitYearPage() {
             <h2 className="font-semibold text-foreground mb-2">Sign changes in {year}</h2>
             {data.ingress.length > 0 ? (
               <ul className="space-y-1 text-sm text-muted-foreground list-disc pl-5">
-                {data.ingress.map((n, i) => <li key={i}><strong className="text-foreground">{niceDate(n.date)}</strong> — enters {n.sign}</li>)}
+                {data.ingress.map((n, i) => <li key={i}><strong className="text-foreground">{niceDate(zoneDateISO(n.atMs, viewerTz))}</strong> — enters {n.sign}</li>)}
               </ul>
             ) : (
               <p className="text-sm text-muted-foreground">No sign change in {year} — {meta.label.split(' ')[0]} stays in {data.startSign} all year.</p>
@@ -171,7 +174,10 @@ export default function TransitYearPage() {
                   <div className="space-y-2" data-testid="transit-phases">
                     {s.phases.map((ph, i) => (
                       <p key={i} className="text-sm text-muted-foreground leading-relaxed">
-                        <strong className="text-foreground">{rangeLabel(ph.fromISO, ph.toISO)}</strong> ({RASHIS[ph.signIndex].sanskrit}, {ph.tone}): {ph.text}
+                        <strong className="text-foreground">{rangeLabel(
+                          i === 0 ? ph.fromISO : zoneDateISO(ph.fromMs, viewerTz), // 1 Jan / 31 Dec are calendar bounds, not instants
+                          i === s.phases.length - 1 ? ph.toISO : zoneDateISO(ph.toMs, viewerTz),
+                        )}</strong> ({RASHIS[ph.signIndex].sanskrit}, {ph.tone}): {ph.text}
                       </p>
                     ))}
                   </div>
@@ -185,7 +191,7 @@ export default function TransitYearPage() {
           </div>
 
           <p className="text-xs text-muted-foreground mb-8">
-            Dates are in Indian Standard Time. Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) position of {meta.label.split(' ')[0]} for {year} and read by classical gochar rules — the same engine behind your Kundli.{' '}
+            <span data-testid="transit-tz">Dates are shown in {zoneLabel(viewerTz)}.</span> Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) position of {meta.label.split(' ')[0]} for {year} and read by classical gochar rules — the same engine behind your Kundli.{' '}
             <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
             {planet === 'saturn' && <> · <Link to="/sade-sati" className="underline">Check your Sade Sati →</Link></>}
           </p>
