@@ -15,6 +15,14 @@
  * Dates are the civil date in IST (UTC+5:30). Day precision: a festival whose
  * special observance is at night/moonrise (e.g. Janmashtami, Karwa Chauth,
  * Diwali) is placed by the mainstream sunrise/evening convention and labelled.
+ *
+ * Month naming (round-2 audit T10): the engine computes AMANTA months (new moon
+ * to new moon). North India (and Drik Panchang's New Delhi listing) names the
+ * Krishna paksha by the PURNIMANTA month, which is one month AHEAD of the
+ * amanta name (amanta Ashwina Krishna = purnimanta Kartika Krishna). Shukla
+ * paksha has the same month name in both. Every Krishna-paksha entry therefore
+ * carries both names, labelled, so "Ashwina Amavasya" and "Kartika Amavasya"
+ * are never shown as if they were different days.
  */
 import * as Astronomy from 'astronomy-engine';
 import { getSiderealLongitude } from './engine/vedicEngine';
@@ -167,7 +175,7 @@ export function amantaMonths(year: number): AmantaMonth[] {
 const REF_LAT = 28.6139, REF_LON = 77.2090; // New Delhi (Drik Panchang default)
 const MIN = 60000;
 
-export type Kala = 'udaya' | 'pratah' | 'purvahna' | 'madhyahna' | 'aparahna' | 'pradosh' | 'nishita' | 'moonrise';
+export type Kala = 'udaya' | 'arunodaya' | 'pratah' | 'purvahna' | 'madhyahna' | 'aparahna' | 'sayahna' | 'pradosh' | 'nishita' | 'moonrise';
 
 interface DayTimes { iso: string; rise: number; set: number; nextRise: number }
 const dayCache = new Map<string, DayTimes>();
@@ -203,10 +211,13 @@ function kalaWindow(iso: string, kala: Kala): [number, number] {
   const dayLen = d.set - d.rise, nightLen = d.nextRise - d.set;
   switch (kala) {
     case 'udaya': return [d.rise, d.rise];
+    // Arunodaya — the 4 ghatis (96 min) before sunrise (Narak Chaturdashi abhyang snan).
+    case 'arunodaya': return [d.rise - 96 * MIN, d.rise];
     case 'pratah': return [d.rise, d.rise + dayLen / 3];
     case 'purvahna': return [d.rise, d.rise + dayLen / 2];
     case 'madhyahna': return [d.rise + dayLen * 2 / 5, d.rise + dayLen * 3 / 5];
     case 'aparahna': return [d.rise + dayLen * 3 / 5, d.rise + dayLen * 4 / 5];
+    case 'sayahna': return [d.rise + dayLen * 4 / 5, d.set];
     case 'pradosh': return [d.set, d.set + 144 * MIN];
     case 'nishita': { const mid = d.set + nightLen / 2; return [mid - nightLen / 30, mid + nightLen / 30]; }
     case 'moonrise': { const m = moonriseAfterSunset(iso); return [m, m]; }
@@ -292,13 +303,56 @@ function observanceDate(month: AmantaMonth, paksha: 'Shukla' | 'Krishna', tithi:
   return prefer === 'first' ? top[0].iso : top[top.length - 1].iso;
 }
 
-export type FestivalType = 'festival' | 'vrat' | 'ekadashi' | 'purnima' | 'amavasya' | 'sankranti';
+export type FestivalType = 'festival' | 'vrat' | 'ekadashi' | 'purnima' | 'amavasya' | 'sankranti' | 'eclipse';
 export interface Festival {
   dateISO: string;
   name: string;
   type: FestivalType;
   note?: string;
+  /** Amanta (new-moon-ending) lunar month — kept as `month` for compatibility. */
   month?: string;
+  /** Purnimanta (full-moon-ending, North Indian) month name; differs from `month` in Krishna paksha. */
+  monthPurnimanta?: string;
+  paksha?: 'Shukla' | 'Krishna';
+}
+
+/** Purnimanta month name of a paksha of an amanta month (Krishna paksha → next month). */
+export function purnimantaMonthName(amanta: string, paksha: 'Shukla' | 'Krishna'): string {
+  if (paksha === 'Shukla' || amanta.startsWith('Adhik')) return amanta;
+  const i = LUNAR_MONTHS.indexOf(amanta);
+  return i < 0 ? amanta : LUNAR_MONTHS[(i + 1) % 12];
+}
+/** "Ashwina Shukla" or, for Krishna paksha, "Kartika Krishna (purnimanta) / Ashwina Krishna (amanta)". */
+export function lunarMonthLabel(amanta: string, paksha: 'Shukla' | 'Krishna'): string {
+  const p = purnimantaMonthName(amanta, paksha);
+  return p === amanta ? `${amanta} ${paksha}` : `${p} ${paksha} (purnimanta) / ${amanta} ${paksha} (amanta)`;
+}
+
+/**
+ * Traditional Ekadashi names, keyed by AMANTA month and paksha (the Krishna
+ * names are usually quoted with the purnimanta month, one month ahead — e.g.
+ * Rama Ekadashi = Kartika Krishna purnimanta = Ashwina Krishna amanta).
+ * Adhik (leap) month: Padmini (Shukla) and Parama (Krishna).
+ * Checked against the Ekadashi names on Drik Panchang's New Delhi calendars for
+ * 2026, 2027 and 2028 (drikpanchang.com/calendars/hindu/hinducalendar.html).
+ */
+export const EKADASHI_NAMES: Record<string, { Shukla: string; Krishna: string }> = {
+  Chaitra: { Shukla: 'Kamada', Krishna: 'Varuthini' },
+  Vaishakha: { Shukla: 'Mohini', Krishna: 'Apara' },
+  Jyeshtha: { Shukla: 'Nirjala', Krishna: 'Yogini' },
+  Ashadha: { Shukla: 'Devshayani', Krishna: 'Kamika' },
+  Shravana: { Shukla: 'Shravana Putrada', Krishna: 'Aja' },
+  Bhadrapada: { Shukla: 'Parsva', Krishna: 'Indira' },
+  Ashwina: { Shukla: 'Papankusha', Krishna: 'Rama' },
+  Kartika: { Shukla: 'Devutthana', Krishna: 'Utpanna' },
+  Margashirsha: { Shukla: 'Mokshada', Krishna: 'Saphala' },
+  Pausha: { Shukla: 'Pausha Putrada', Krishna: 'Shattila' },
+  Magha: { Shukla: 'Jaya', Krishna: 'Vijaya' },
+  Phalguna: { Shukla: 'Amalaki', Krishna: 'Papamochani' },
+};
+export function ekadashiName(amanta: string, paksha: 'Shukla' | 'Krishna'): string {
+  if (amanta.startsWith('Adhik')) return paksha === 'Shukla' ? 'Padmini' : 'Parama';
+  return EKADASHI_NAMES[amanta]?.[paksha] ?? '';
 }
 
 interface FestivalRule {
@@ -321,24 +375,34 @@ const FESTIVAL_RULES: FestivalRule[] = [
   { name: 'Ugadi / Gudi Padwa', month: 'Chaitra', paksha: 'Shukla', tithi: 1, type: 'festival', kala: 'udaya', note: 'Lunar new year (Deccan/Maharashtra); Chaitra Navratri begins the same day.' },
   { name: 'Ram Navami', month: 'Chaitra', paksha: 'Shukla', tithi: 9, type: 'festival', kala: 'madhyahna', note: 'Birth of Rama; observed when Navami covers midday (Madhyahna). Smarta date — ISKCON may observe a day later.' },
   { name: 'Hanuman Jayanti', month: 'Chaitra', paksha: 'Shukla', tithi: 15, type: 'festival', kala: 'udaya' },
+  { name: 'Vat Savitri Vrat', month: 'Vaishakha', paksha: 'Krishna', tithi: 15, type: 'vrat', kala: 'udaya', note: 'Jyeshtha Amavasya (purnimanta; Vaishakha Amavasya amanta) — the North Indian date. Maharashtra, Gujarat and the South keep Vat Purnima on Jyeshtha Purnima instead.' },
   { name: 'Akshaya Tritiya', month: 'Vaishakha', paksha: 'Shukla', tithi: 3, type: 'festival', kala: 'udaya', minMuhurtas: 3, note: 'Highly auspicious for new beginnings; the day Tritiya prevails at sunrise for at least 3 muhurtas.' },
   { name: 'Guru Purnima', month: 'Ashadha', paksha: 'Shukla', tithi: 15, type: 'festival', kala: 'udaya', minMuhurtas: 3 },
+  { name: 'Hariyali Teej', month: 'Shravana', paksha: 'Shukla', tithi: 3, type: 'vrat', kala: 'udaya', note: 'Shravana Shukla Tritiya, the day Tritiya prevails at sunrise.' },
+  { name: 'Nag Panchami', month: 'Shravana', paksha: 'Shukla', tithi: 5, type: 'festival', kala: 'purvahna', note: 'Shravana Shukla Panchami; puja in the forenoon (Purvahna).' },
   { name: 'Raksha Bandhan', month: 'Shravana', paksha: 'Shukla', tithi: 15, type: 'festival', kala: 'udaya', minMuhurtas: 3, note: 'Shravana Purnima — the day Purnima prevails for at least 3 muhurtas after sunrise; the rakhi time avoids the Bhadra period.' },
   // Janmashtami: Krishna Ashtami of the month whose Purnima is Raksha Bandhan;
   // amanta that is Shravana Krishna 8.
   { name: 'Krishna Janmashtami', month: 'Shravana', paksha: 'Krishna', tithi: 8, type: 'festival', kala: 'nishita', special: 'janmashtami', note: 'Midnight (Nishita) observance; the Smarta date — ISKCON lists sometimes differ by a day.' },
+  { name: 'Hartalika Teej', month: 'Bhadrapada', paksha: 'Shukla', tithi: 3, type: 'vrat', kala: 'udaya', note: 'Bhadrapada Shukla Tritiya, the day Tritiya prevails at sunrise (morning puja).' },
   { name: 'Ganesh Chaturthi', month: 'Bhadrapada', paksha: 'Shukla', tithi: 4, type: 'festival', kala: 'madhyahna', note: 'Midday (Madhyahna) observance.' },
+  { name: 'Sarva Pitru Amavasya (Mahalaya)', month: 'Bhadrapada', paksha: 'Krishna', tithi: 15, type: 'festival', kala: 'aparahna', note: 'Last day of Pitru Paksha: Ashwina Amavasya (purnimanta; Bhadrapada Amavasya amanta). Shraddha is done in the afternoon (Aparahna), so the day is the one whose afternoon Amavasya covers.' },
   { name: 'Navratri begins (Ghatasthapana)', month: 'Ashwina', paksha: 'Shukla', tithi: 1, type: 'festival', kala: 'pratah', note: 'Ghatasthapana in the first third of the day while Pratipada prevails.' },
   { name: 'Durga Ashtami', month: 'Ashwina', paksha: 'Shukla', tithi: 8, type: 'festival', kala: 'udaya' },
   { name: 'Dussehra (Vijayadashami)', month: 'Ashwina', paksha: 'Shukla', tithi: 10, type: 'festival', kala: 'aparahna', note: 'Observed when Dashami covers the afternoon (Aparahna).' },
+  { name: 'Sharad Purnima', month: 'Ashwina', paksha: 'Shukla', tithi: 15, type: 'festival', kala: 'nishita', note: 'Ashwina Purnima night (Kojagara): kept on the day whose midnight Purnima covers — can be a day before the Purnima listed at sunrise.' },
   // The Diwali-season Krishna-paksha festivals are named "Kartika" by the North
   // Indian Purnimanta convention; in the amanta system used here that Krishna
   // paksha belongs to Ashwina (Purnimanta month − 1).
   { name: 'Karwa Chauth', month: 'Ashwina', paksha: 'Krishna', tithi: 4, type: 'vrat', kala: 'moonrise', note: 'Kartika Krishna Chaturthi (Purnimanta); fast broken at moonrise.' },
   { name: 'Dhanteras', month: 'Ashwina', paksha: 'Krishna', tithi: 13, type: 'festival', kala: 'pradosh', note: 'Kartika Krishna Trayodashi (Purnimanta); evening puja.' },
+  { name: 'Narak Chaturdashi', month: 'Ashwina', paksha: 'Krishna', tithi: 14, type: 'festival', kala: 'arunodaya', note: 'Kartika Krishna Chaturdashi (purnimanta) — the pre-dawn (Arunodaya) bath while Chaturdashi prevails; often the same day as Diwali.' },
   { name: 'Diwali (Lakshmi Puja)', month: 'Ashwina', paksha: 'Krishna', tithi: 15, type: 'festival', kala: 'pradosh', prefer: 'second', note: 'Lakshmi Puja at pradosh (evening) on Kartika Amavasya (Purnimanta; Ashwina Amavasya in the amanta reckoning).' },
   { name: 'Govardhan Puja', month: 'Kartika', paksha: 'Shukla', tithi: 1, type: 'festival', kala: 'pratah' },
   { name: 'Bhai Dooj', month: 'Kartika', paksha: 'Shukla', tithi: 2, type: 'festival', kala: 'aparahna' },
+  { name: 'Chhath Puja', month: 'Kartika', paksha: 'Shukla', tithi: 6, type: 'festival', kala: 'sayahna', note: 'Kartika Shukla Shashthi — the evening (sunset) arghya day; the vrat runs four days from Nahay Khay to the next morning’s arghya.' },
+  // Vasant Panchami: Magha Shukla 5, Panchami covering the forenoon (Purvahna).
+  { name: 'Vasant Panchami', month: 'Magha', paksha: 'Shukla', tithi: 5, type: 'festival', kala: 'purvahna', note: 'Saraswati Puja on Magha Shukla Panchami, the day Panchami covers the forenoon (Purvahna).' },
   // Maha Shivratri: Phalguna Krishna 14 (Purnimanta) = amanta Magha Krishna 14.
   { name: 'Maha Shivratri', month: 'Magha', paksha: 'Krishna', tithi: 14, type: 'festival', kala: 'nishita', note: 'Phalguna Krishna Chaturdashi (Purnimanta); night-long (Nishita) observance.' },
   { name: 'Holika Dahan', month: 'Phalguna', paksha: 'Shukla', tithi: 15, type: 'festival', kala: 'pradosh', special: 'holika', note: 'Phalguna Purnima bonfire at pradosh (evening), after the Bhadra period.' },
@@ -412,19 +476,136 @@ function recurringVrats(months: AmantaMonth[], year: number): Festival[] {
       // it spans two sunrises); a skipped Ekadashi is kept on the day it falls,
       // never on the next (Dwadashi) day, which is the fast-breaking (parana) day.
       const ek = ekadashiDate(m, paksha);
-      if (inYear(ek)) out.push({ dateISO: ek, name: `Ekadashi (${paksha} ${m.name})`, type: 'ekadashi', month: m.name, note: 'Vishnu fasting day (Smarta date); the fast is broken on the next day.' });
+      const label = lunarMonthLabel(m.name, paksha);
+      const tag = { month: m.name, monthPurnimanta: purnimantaMonthName(m.name, paksha), paksha };
+      if (inYear(ek)) out.push({ dateISO: ek, name: `${ekadashiName(m.name, paksha)} Ekadashi`, type: 'ekadashi', ...tag, note: `${label} Ekadashi. Vishnu fasting day (Smarta date); the fast is broken on the next day.` });
       // Pradosh (Trayodashi) — observed when Trayodashi covers pradosh (dusk)
       const pr = observanceDate(m, paksha, 13, 'pradosh');
-      if (inYear(pr)) out.push({ dateISO: pr, name: `Pradosh Vrat (${paksha})`, type: 'vrat', month: m.name, note: 'Shiva vrat at pradosh (dusk).' });
+      if (inYear(pr)) out.push({ dateISO: pr, name: `Pradosh Vrat (${paksha})`, type: 'vrat', ...tag, note: `${label} Trayodashi. Shiva vrat at pradosh (dusk).` });
     }
     // Purnima & Amavasya (the day the tithi prevails at sunrise)
     const pu = observanceDate(m, 'Shukla', 15, 'udaya');
-    if (inYear(pu)) out.push({ dateISO: pu, name: `${m.name} Purnima`, type: 'purnima', month: m.name });
+    if (inYear(pu)) out.push({ dateISO: pu, name: `${m.name} Purnima`, type: 'purnima', month: m.name, monthPurnimanta: m.name, paksha: 'Shukla', note: 'Full moon (the tithi at sunrise). Same month name in the amanta and purnimanta calendars.' });
     const am = observanceDate(m, 'Krishna', 15, 'udaya');
-    if (inYear(am)) out.push({ dateISO: am, name: `${m.name} Amavasya`, type: 'amavasya', month: m.name });
+    const amP = purnimantaMonthName(m.name, 'Krishna');
+    if (inYear(am)) out.push({ dateISO: am, name: amP === m.name ? `${m.name} Amavasya` : `${amP} Amavasya (purnimanta) / ${m.name} Amavasya (amanta)`, type: 'amavasya', month: m.name, monthPurnimanta: amP, paksha: 'Krishna', note: 'New moon (the tithi at sunrise). North India (purnimanta) and South/West India (amanta) name this month differently — it is the same day.' });
     // Sankashti Chaturthi (Krishna 4) — Chaturthi at moonrise
     const sc = observanceDate(m, 'Krishna', 4, 'moonrise');
-    if (inYear(sc)) out.push({ dateISO: sc, name: `Sankashti Chaturthi (${m.name})`, type: 'vrat', month: m.name, note: 'Ganesha vrat; moonrise observance.' });
+    if (inYear(sc)) out.push({ dateISO: sc, name: `Sankashti Chaturthi (${amP} purnimanta / ${m.name} amanta)`, type: 'vrat', month: m.name, monthPurnimanta: amP, paksha: 'Krishna', note: `${lunarMonthLabel(m.name, 'Krishna')} Chaturthi. Ganesha vrat; moonrise observance.` });
+  }
+  return out;
+}
+
+// ── Solar festivals ───────────────────────────────────────────────────────────
+// Fixed to the Sun's sidereal ingress (Sankranti), as Drik Panchang lists them
+// for New Delhi: Pongal falls on the Makar Sankranti (punya-kaal) day, Lohri is
+// the evening before it, and Baisakhi/Vaisakhi is the Mesha Sankranti day
+// (drikpanchang.com Pongal 2027, Lohri 2026/2027 and Vaisakhi 2026/2027 pages).
+function solarFestivals(sk: Sankranti[], year: number): Festival[] {
+  const out: Festival[] = [];
+  const makar = sk.find(s => s.sign === 9);
+  const mesha = sk.find(s => s.sign === 0);
+  if (makar) {
+    out.push({ dateISO: makar.dateISO, name: 'Pongal (Thai Pongal)', type: 'festival', note: 'Tamil harvest festival on the first day of the solar month Thai — the Makar Sankranti day.' });
+    const lohri = isoAddDays(makar.dateISO, -1);
+    if (lohri.startsWith(String(year))) out.push({ dateISO: lohri, name: 'Lohri', type: 'festival', note: 'Punjabi winter bonfire festival, the evening before Makar Sankranti.' });
+  }
+  if (mesha) out.push({ dateISO: mesha.dateISO, name: 'Baisakhi (Vaisakhi)', type: 'festival', note: 'Punjabi harvest festival and Sikh new year, on the Mesha Sankranti day (Sun enters sidereal Aries).' });
+  const onam = onamDate(year);
+  if (onam) out.push({ dateISO: onam, name: 'Onam (Thiruvonam)', type: 'festival', note: 'Kerala harvest festival: the day Thiruvonam (Shravana) nakshatra prevails at sunrise in the Malayalam solar month Chingam (Sun in sidereal Leo), for Thiruvananthapuram.' });
+  return out;
+}
+
+/**
+ * Onam (Thiruvonam) — a solar-month + nakshatra rule, not a tithi:
+ *   • Chingam is the Malayalam solar month that begins with Simha Sankranti
+ *     (Sun entering sidereal Leo). By the Kerala rule a month begins on the
+ *     ingress day if the ingress falls before the end of the midday portion
+ *     (first 3/5 of daytime), otherwise on the next day.
+ *   • Onam is the day in Chingam on which Thiruvonam (Shravana, the 22nd
+ *     nakshatra) prevails at sunrise — in Thiruvananthapuram.
+ *   • If Thiruvonam prevails at two consecutive sunrises, the first; if it
+ *     holds a Chingam sunrise in two separate lunar cycles, the later one
+ *     (e.g. 2024); if it holds no Chingam sunrise at all (kshaya), the day on
+ *     which it begins. These edge rules are not covered by the Drik reference
+ *     years in the tests.
+ * Verified against Drik Panchang's Onam pages for Thiruvananthapuram
+ * (2026: 26 Aug, 2027: 12 Sep) and its New Delhi calendar (2028: 1 Sep).
+ */
+const KERALA_LAT = 8.4875, KERALA_LON = 76.9525; // Thiruvananthapuram
+const THIRUVONAM = 21; // 0-based nakshatra index (Shravana)
+function keralaDay(iso: string) { return sunriseSunset(new Date(iso + 'T12:00:00Z'), KERALA_LAT, KERALA_LON, IST); }
+function malayalamMonthStart(ingress: Date): string {
+  const d = istDate(ingress);
+  const t = keralaDay(d);
+  const limit = t.rise.getTime() + (t.set.getTime() - t.rise.getTime()) * 3 / 5;
+  return ingress.getTime() < limit ? d : isoAddDays(d, 1);
+}
+function nakIndex(t: number): number { return Math.floor(getSiderealLongitude('Moon', new Date(t)) / (360 / 27)); }
+export function onamDate(year: number): string | null {
+  const sk = sankrantis(new Date(Date.UTC(year, 6, 1)), new Date(Date.UTC(year, 9, 1)));
+  const simha = sk.find(s => s.sign === 4), kanya = sk.find(s => s.sign === 5);
+  if (!simha || !kanya) return null;
+  const first = malayalamMonthStart(simha.instant), next = malayalamMonthStart(kanya.instant);
+  // Group consecutive Chingam days touched by Thiruvonam (sunrise-to-sunrise).
+  const runs: Array<Array<{ iso: string; atRise: boolean }>> = [];
+  let prevHit = false;
+  for (let iso = first; iso < next; iso = isoAddDays(iso, 1)) {
+    const t = keralaDay(iso);
+    const r = t.rise.getTime(), nr = t.nextRise.getTime();
+    const atRise = nakIndex(r) === THIRUVONAM;
+    let touched = atRise;
+    for (let x = r; !touched && x < nr; x += 30 * MIN) touched = nakIndex(x) === THIRUVONAM;
+    if (touched) {
+      if (!prevHit) runs.push([]);
+      runs[runs.length - 1].push({ iso, atRise });
+    }
+    prevHit = touched;
+  }
+  if (runs.length === 0) return null;
+  // Occurrences that hold a Chingam sunrise come first; the last of those wins.
+  const risen = runs.filter(r => r.some(d => d.atRise));
+  if (risen.length) return risen[risen.length - 1].find(d => d.atRise)!.iso;
+  return runs[0][0].iso;
+}
+
+// ── Eclipses ──────────────────────────────────────────────────────────────────
+// Solar and lunar eclipses from astronomy-engine's eclipse search, listed for
+// 2026–2030 only — the window checked against NASA's eclipse tables
+// (eclipse.gsfc.nasa.gov/SEdecade/SEdecade2021.html and
+// LEdecade/LEdecade2021.html: every date and type matches). Dated by the IST
+// civil date of greatest eclipse. "Visible from New Delhi" is computed (the
+// Sun above the horizon during the local partial phase; the Moon above the
+// horizon during the umbral phase, or the penumbral phase for a penumbral
+// eclipse) and is not separately verified.
+export const ECLIPSE_YEARS = { from: 2026, to: 2030 };
+const DELHI = new Astronomy.Observer(REF_LAT, REF_LON, 216);
+function moonUpDuring(start: number, end: number): boolean {
+  for (let t = start; t <= end; t += 5 * MIN) {
+    const eq = Astronomy.Equator(Astronomy.Body.Moon, new Date(t), DELHI, true, true);
+    if (Astronomy.Horizon(new Date(t), DELHI, eq.ra, eq.dec, 'normal').altitude > 0) return true;
+  }
+  return false;
+}
+export function computeEclipses(year: number): Festival[] {
+  if (year < ECLIPSE_YEARS.from || year > ECLIPSE_YEARS.to) return [];
+  const out: Festival[] = [];
+  const from = new Date(Date.UTC(year - 1, 11, 30)), to = Date.UTC(year + 1, 0, 2);
+  const KIND: Record<string, string> = { penumbral: 'Penumbral', partial: 'Partial', annular: 'Annular', total: 'Total', hybrid: 'Hybrid' };
+  for (let e = Astronomy.SearchLunarEclipse(from); e.peak.date.getTime() < to; e = Astronomy.NextLunarEclipse(e.peak)) {
+    const iso = istDate(e.peak.date);
+    if (!iso.startsWith(String(year))) continue;
+    const peak = e.peak.date.getTime();
+    const half = (e.kind === 'penumbral' ? e.sd_penum : e.sd_partial) * MIN;
+    const visible = moonUpDuring(peak - half, peak + half);
+    out.push({ dateISO: iso, name: `${KIND[e.kind]} Lunar Eclipse (Chandra Grahan)`, type: 'eclipse', note: visible ? 'Visible from New Delhi (at least in part).' : 'Not visible from New Delhi (the Moon is below the horizon).' });
+  }
+  for (let e = Astronomy.SearchGlobalSolarEclipse(from); e.peak.date.getTime() < to; e = Astronomy.NextGlobalSolarEclipse(e.peak)) {
+    const iso = istDate(e.peak.date);
+    if (!iso.startsWith(String(year))) continue;
+    const local = Astronomy.SearchLocalSolarEclipse(new Date(e.peak.date.getTime() - 2 * DAY), DELHI);
+    const visible = Math.abs(local.peak.time.date.getTime() - e.peak.date.getTime()) < DAY;
+    out.push({ dateISO: iso, name: `${KIND[e.kind]} Solar Eclipse (Surya Grahan)`, type: 'eclipse', note: visible ? 'Visible from New Delhi as a partial eclipse.' : 'Not visible from New Delhi.' });
   }
   return out;
 }
@@ -450,7 +631,7 @@ export function computeFestivalCalendar(year: number): FestivalCalendar {
         : observanceDate(m, rule.paksha, rule.tithi, rule.kala, rule.prefer ?? 'first', rule.minMuhurtas ?? 0);
       if (rule.dayOffset) d = isoAddDays(d, rule.dayOffset);
       if (d.startsWith(String(year))) {
-        festivals.push({ dateISO: d, name: rule.name, type: rule.type, note: rule.note, month: rule.month });
+        festivals.push({ dateISO: d, name: rule.name, type: rule.type, note: rule.note, month: rule.month, monthPurnimanta: purnimantaMonthName(rule.month, rule.paksha), paksha: rule.paksha });
       }
     }
   }
@@ -458,6 +639,10 @@ export function computeFestivalCalendar(year: number): FestivalCalendar {
   // Sankrantis
   const sk = computeSankrantis(year);
   for (const s of sk) festivals.push({ dateISO: s.dateISO, name: s.name, type: 'sankranti', note: s.sign === 9 ? 'Sun enters sidereal Capricorn; when that happens after sunset the festival (punya kaal) is the next day.' : 'Sun enters a new sidereal sign.' });
+
+  // Solar festivals (Pongal, Lohri, Baisakhi, Onam) and eclipses
+  festivals.push(...solarFestivals(sk, year));
+  festivals.push(...computeEclipses(year));
 
   // Recurring vrats
   festivals.push(...recurringVrats(months, year));

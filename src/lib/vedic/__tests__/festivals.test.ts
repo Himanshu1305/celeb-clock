@@ -5,6 +5,8 @@ import {
   computeSankrantis,
   amantaMonths,
   LUNAR_MONTHS,
+  computeEclipses,
+  purnimantaMonthName,
 } from '../festivals';
 
 // Reference dates from Drik Panchang (IST) for 2025 — the established source the
@@ -88,6 +90,13 @@ const DRIK: Record<number, Record<string, string>> = {
     'Guru Purnima': '2026-07-29', 'Raksha Bandhan': '2026-08-28', 'Krishna Janmashtami': '2026-09-04', 'Ganesh Chaturthi': '2026-09-14',
     'Navratri begins (Ghatasthapana)': '2026-10-11', 'Durga Ashtami': '2026-10-19', 'Dussehra (Vijayadashami)': '2026-10-20',
     'Karwa Chauth': '2026-10-29', 'Dhanteras': '2026-11-06', 'Diwali (Lakshmi Puja)': '2026-11-08', 'Govardhan Puja': '2026-11-10', 'Bhai Dooj': '2026-11-11',
+    // Round-2 T11 additions — same Drik 2026 New Delhi calendar page; Lohri and
+    // Vaisakhi from their Drik pages (New Delhi); Onam from Drik's Onam page for
+    // Thiruvananthapuram (geoname-id=1254163).
+    'Lohri': '2026-01-13', 'Pongal (Thai Pongal)': '2026-01-14', 'Vasant Panchami': '2026-01-23', 'Baisakhi (Vaisakhi)': '2026-04-14',
+    'Vat Savitri Vrat': '2026-05-16', 'Hariyali Teej': '2026-08-15', 'Nag Panchami': '2026-08-17', 'Onam (Thiruvonam)': '2026-08-26',
+    'Hartalika Teej': '2026-09-14', 'Sarva Pitru Amavasya (Mahalaya)': '2026-10-10', 'Sharad Purnima': '2026-10-25',
+    'Narak Chaturdashi': '2026-11-08', 'Chhath Puja': '2026-11-15',
   },
   2027: {
     'Makar Sankranti (Uttarayana)': '2027-01-15', 'Maha Shivratri': '2027-03-06', 'Holika Dahan': '2027-03-21', 'Holi': '2027-03-22',
@@ -95,6 +104,17 @@ const DRIK: Record<number, Record<string, string>> = {
     'Guru Purnima': '2027-07-18', 'Raksha Bandhan': '2027-08-17', 'Krishna Janmashtami': '2027-08-25', 'Ganesh Chaturthi': '2027-09-04',
     'Navratri begins (Ghatasthapana)': '2027-09-30', 'Durga Ashtami': '2027-10-07', 'Dussehra (Vijayadashami)': '2027-10-09',
     'Karwa Chauth': '2027-10-18', 'Dhanteras': '2027-10-27', 'Diwali (Lakshmi Puja)': '2027-10-29', 'Govardhan Puja': '2027-10-30', 'Bhai Dooj': '2027-10-31',
+    // T11 additions (Drik 2027 calendar; Lohri/Vaisakhi/Pongal Drik pages, New Delhi; Onam Drik page, Thiruvananthapuram)
+    'Lohri': '2027-01-14', 'Pongal (Thai Pongal)': '2027-01-15', 'Vasant Panchami': '2027-02-11', 'Baisakhi (Vaisakhi)': '2027-04-14',
+    'Vat Savitri Vrat': '2027-06-04', 'Hariyali Teej': '2027-08-04', 'Nag Panchami': '2027-08-06', 'Onam (Thiruvonam)': '2027-09-12',
+    'Hartalika Teej': '2027-09-03', 'Sarva Pitru Amavasya (Mahalaya)': '2027-09-29', 'Sharad Purnima': '2027-10-14',
+    'Narak Chaturdashi': '2027-10-28', 'Chhath Puja': '2027-11-04',
+  },
+  // T11: Drik Panchang New Delhi calendar for 2028 (fetched 23 Oct 2026).
+  2028: {
+    'Pongal (Thai Pongal)': '2028-01-15', 'Vasant Panchami': '2028-01-31', 'Vat Savitri Vrat': '2028-05-24', 'Hariyali Teej': '2028-07-24',
+    'Nag Panchami': '2028-07-26', 'Hartalika Teej': '2028-08-22', 'Onam (Thiruvonam)': '2028-09-01', 'Sarva Pitru Amavasya (Mahalaya)': '2028-09-18',
+    'Sharad Purnima': '2028-10-02', 'Narak Chaturdashi': '2028-10-17', 'Chhath Puja': '2028-10-23',
   },
   2036: { 'Diwali (Lakshmi Puja)': '2036-10-18' },
   2037: {
@@ -154,4 +174,90 @@ describe('festival observance rules match Drik Panchang (round-2 T2/T3)', () => 
       expect(c.festivals.filter(f => f.type === 'ekadashi').length, `Ekadashis ${year}`).toBeGreaterThanOrEqual(24);
     }
   }, 180000);
+});
+
+// ── Round-2 audit T10: Ekadashi names and amanta/purnimanta month labels ─────
+// Ekadashi names in date order from Drik Panchang's New Delhi calendars
+// (hinducalendar.html?year=YYYY&geoname-id=1261481, fetched 23 Oct 2026);
+// Drik's extra "Gauna" (second-day Vaishnava) entries are left out.
+const DRIK_EKADASHI_NAMES: Record<number, string[]> = {
+  2026: ['Shattila', 'Jaya', 'Vijaya', 'Amalaki', 'Papamochani', 'Kamada', 'Varuthini', 'Mohini', 'Apara', 'Padmini', 'Parama', 'Nirjala',
+    'Yogini', 'Devshayani', 'Kamika', 'Shravana Putrada', 'Aja', 'Parsva', 'Indira', 'Papankusha', 'Rama', 'Devutthana', 'Utpanna', 'Mokshada'],
+  2027: ['Saphala', 'Pausha Putrada', 'Shattila', 'Jaya', 'Vijaya', 'Amalaki', 'Papamochani', 'Kamada', 'Varuthini', 'Mohini', 'Apara', 'Nirjala',
+    'Yogini', 'Devshayani', 'Kamika', 'Shravana Putrada', 'Aja', 'Parsva', 'Indira', 'Papankusha', 'Rama', 'Devutthana', 'Utpanna', 'Mokshada', 'Saphala'],
+  2028: ['Pausha Putrada', 'Shattila', 'Jaya', 'Vijaya', 'Amalaki', 'Papamochani', 'Kamada', 'Varuthini', 'Mohini', 'Apara', 'Nirjala', 'Yogini',
+    'Devshayani', 'Kamika', 'Shravana Putrada', 'Aja', 'Parsva', 'Indira', 'Papankusha', 'Rama', 'Devutthana', 'Utpanna', 'Mokshada', 'Saphala', 'Pausha Putrada'],
+};
+// 2028 Ekadashi dates from the same Drik page (Gauna entries left out).
+const DRIK_EKADASHI_2028 = ['01-08', '01-22', '02-06', '02-20', '03-07', '03-21', '04-05', '04-20', '05-05', '05-20', '06-03', '06-18', '07-02',
+  '07-18', '08-01', '08-16', '08-30', '09-15', '09-29', '10-14', '10-28', '11-12', '11-27', '12-12', '12-27'];
+
+describe('Ekadashi names and month labels (round-2 T10)', () => {
+  for (const year of [2026, 2027, 2028]) {
+    it(`names every Ekadashi of ${year} as Drik Panchang does`, () => {
+      const ek = computeFestivalCalendar(year).festivals.filter(f => f.type === 'ekadashi');
+      expect(ek.map(f => f.name)).toEqual(DRIK_EKADASHI_NAMES[year].map(n => `${n} Ekadashi`));
+      if (year === 2028) expect(ek.map(f => f.dateISO.slice(5))).toEqual(DRIK_EKADASHI_2028);
+    }, 60000);
+  }
+
+  it('labels Krishna-paksha days with both the purnimanta and amanta month', () => {
+    expect(purnimantaMonthName('Ashwina', 'Krishna')).toBe('Kartika');
+    expect(purnimantaMonthName('Phalguna', 'Krishna')).toBe('Chaitra');
+    expect(purnimantaMonthName('Ashwina', 'Shukla')).toBe('Ashwina');
+    expect(purnimantaMonthName('Adhik Jyeshtha', 'Krishna')).toBe('Adhik Jyeshtha');
+    const c = computeFestivalCalendar(2026);
+    // Diwali 2026 (8 Nov) is Kartika Amavasya in North India and Ashwina Amavasya in amanta — one day, both names.
+    const am = c.festivals.find(f => f.type === 'amavasya' && f.month === 'Ashwina');
+    expect(am?.name).toBe('Kartika Amavasya (purnimanta) / Ashwina Amavasya (amanta)');
+    expect(['2026-11-08', '2026-11-09']).toContain(am?.dateISO);
+    expect(am?.month).toBe('Ashwina');
+    expect(am?.monthPurnimanta).toBe('Kartika');
+    const diwali = c.festivals.find(f => f.name === 'Diwali (Lakshmi Puja)');
+    expect(diwali?.month).toBe('Ashwina');
+    expect(diwali?.monthPurnimanta).toBe('Kartika');
+    // Every Krishna-paksha entry carries both names; every Shukla entry the same name twice.
+    for (const f of c.festivals.filter(x => x.paksha)) {
+      if (f.paksha === 'Shukla' || f.month!.startsWith('Adhik')) expect(f.monthPurnimanta).toBe(f.month);
+      else expect(f.monthPurnimanta).toBe(LUNAR_MONTHS[(LUNAR_MONTHS.indexOf(f.month!) + 1) % 12]);
+    }
+  }, 60000);
+});
+
+// ── Round-2 audit T11: eclipses 2026–2030 ────────────────────────────────────
+// NASA eclipse tables (eclipse.gsfc.nasa.gov/SEdecade/SEdecade2021.html and
+// LEdecade/LEdecade2021.html, fetched 23 Oct 2026): date and type of every
+// eclipse; greatest-eclipse TD converted to the IST civil date (+5:30, ΔT ≈ 69 s).
+const NASA_ECLIPSES: Record<number, string[]> = {
+  2026: ['02-17 Annular Solar', '03-03 Total Lunar', '08-12 Total Solar', '08-28 Partial Lunar'],
+  2027: ['02-06 Annular Solar', '02-21 Penumbral Lunar', '07-18 Penumbral Lunar', '08-02 Total Solar', '08-17 Penumbral Lunar'],
+  2028: ['01-12 Partial Lunar', '01-26 Annular Solar', '07-06 Partial Lunar', '07-22 Total Solar', '12-31 Total Lunar'],
+  2029: ['01-14 Partial Solar', '06-12 Partial Solar', '06-26 Total Lunar', '07-11 Partial Solar', '12-05 Partial Solar', '12-21 Total Lunar'],
+  2030: ['06-01 Annular Solar', '06-16 Partial Lunar', '11-25 Total Solar', '12-10 Penumbral Lunar'],
+};
+// Visibility checks only where NASA's visibility region settles it for New Delhi:
+// regions with no part of Asia → not visible; "Asia" / "w & s Asia" → visible.
+const NASA_NOT_VISIBLE = ['2026-02-17', '2026-08-12', '2026-08-28', '2027-02-06', '2027-08-17', '2028-01-12', '2028-01-26', '2029-01-14', '2029-07-11', '2029-12-05'];
+const NASA_VISIBLE = ['2027-07-18', '2027-08-02', '2028-07-06', '2028-12-31', '2030-06-16'];
+
+describe('eclipses match NASA (round-2 T11)', () => {
+  it('lists every solar and lunar eclipse of 2026–2030 with NASA\'s date and type', () => {
+    for (const year of Object.keys(NASA_ECLIPSES).map(Number)) {
+      const got = computeEclipses(year)
+        .map(e => `${e.dateISO.slice(5)} ${e.name.replace(/ (Solar|Lunar) Eclipse.*/, ' $1')}`)
+        .sort();
+      expect(got, String(year)).toEqual([...NASA_ECLIPSES[year]].sort());
+    }
+  }, 60000);
+
+  it('marks New Delhi visibility consistently with NASA visibility regions', () => {
+    const all = [2026, 2027, 2028, 2029, 2030].flatMap(computeEclipses);
+    for (const d of NASA_NOT_VISIBLE) expect(all.find(e => e.dateISO === d)?.note, d).toMatch(/^Not visible/);
+    for (const d of NASA_VISIBLE) expect(all.find(e => e.dateISO === d)?.note, d).toMatch(/^Visible/);
+  }, 60000);
+
+  it('lists no eclipses outside the NASA-checked 2026–2030 window', () => {
+    expect(computeEclipses(2025)).toEqual([]);
+    expect(computeEclipses(2031)).toEqual([]);
+  });
 });
