@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { celebYearsForDisplay } from '@/lib/celebrityFacts';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
 import { getCountryExtras, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { useCountryCode } from '@/hooks/useCountryCode';
@@ -8,17 +9,15 @@ const COUNTRY_LABEL: Record<string, string> = {
   IN: 'Born this day — from India 🇮🇳',
 };
 
-const CURRENT_YEAR = new Date().getFullYear();
-
 function toDisplay(c: CelebrityBirthdayResult, index: number): DisplayCelebrity {
-  const birthYear = c.birthDate ? new Date(c.birthDate + 'T12:00:00').getFullYear() : null;
-  const deathYear = c.deathDate ? new Date(c.deathDate + 'T12:00:00').getFullYear() : null;
+  // S7/S9: overrides, 105-year living cap, no ages from BCE/unreliable dates.
+  const { birthYear, deathYear, age, isLiving } = celebYearsForDisplay(c);
   return {
     name: c.name,
     birthYear,
     deathYear,
-    age: birthYear && c.isLiving ? CURRENT_YEAR - birthYear : null,
-    isLiving: c.isLiving,
+    age,
+    isLiving,
     occupation: c.occupation ?? 'Celebrity',
     knownFor: c.knownFor,
     imageUrl: null,

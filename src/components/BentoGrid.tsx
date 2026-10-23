@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { celebYearsForDisplay } from '@/lib/celebrityFacts';
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -226,12 +227,11 @@ const TodaysList = () => {
     const today = new Date();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
-    const CY = today.getFullYear();
     getRankedBirthdayCelebrities(`${mm}-${dd}`, null, 3)
       .then(results => {
         setCelebs(results.map(r => ({
           name: r.name,
-          age: r.isLiving && r.birthDate ? CY - parseInt(r.birthDate.substring(0, 4)) : null,
+          age: r.isLiving ? celebYearsForDisplay(r).age : null,
         })));
       })
       .catch(() => {})

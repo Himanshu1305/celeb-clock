@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { correctCelebDates, ageAtDeath, livingAge } from '@/lib/celebrityFacts';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -205,13 +206,16 @@ export const CelebritySearch = () => {
             <div className="grid gap-3 max-h-[600px] overflow-y-auto">
               {results.map((person, index) => {
                 const birthDate = new Date(person.birthDate + 'T00:00:00');
-                const isDeceased = !!person.deathDate;
+                // S7/S9: death overrides, no age from BCE/unreliable dates, 105-year living cap.
+                const fixed = correctCelebDates({ name: person.name, birthDate: person.birthDate, deathDate: person.deathDate ?? null });
                 let ageDisplay: string;
-                if (isDeceased && person.deathDate) {
-                  const deathDate = new Date(person.deathDate + 'T00:00:00');
-                  ageDisplay = `Died age ${calcAge(birthDate, deathDate)}`;
+                if (fixed.datesUnreliable) {
+                  ageDisplay = fixed.era ?? 'Dates uncertain';
+                } else if (fixed.deathDate) {
+                  const lived = ageAtDeath(fixed);
+                  ageDisplay = lived != null ? `Died age ${lived}` : 'Deceased';
                 } else {
-                  ageDisplay = `Age ${calcAge(birthDate, today)}`;
+                  ageDisplay = livingAge(person.birthDate, today) != null ? `Age ${calcAge(birthDate, today)}` : 'Age not shown';
                 }
                 const zodiac = getZodiacSign(birthDate);
                 const birthstone = getBirthstone(birthDate.getMonth() + 1);

@@ -8,6 +8,7 @@ import { WikiPerson, WikiEvent } from '@/services/WikimediaService';
 import { searchBirthdayMatches, BirthdaySearchResult, SearchPhase } from '@/services/BirthdaySearchService';
 import { CelebrityProfileDialog } from '@/components/CelebrityProfileDialog';
 import { calculateAgeInTimezone, detectUserTimezone } from '@/utils/timezoneDetection';
+import { correctCelebDates, livingAge } from '@/lib/celebrityFacts';
 import { StarIcon, CakeIcon, FlaskConical, Briefcase, Trophy, Calendar, ExternalLink, Loader2, UsersIcon, Music, Palette, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 interface WikiBirthdayMatchesProps {
@@ -23,7 +24,9 @@ const PHASE_LABELS: Record<SearchPhase, string> = {
 };
 
 const PersonCard = ({ person, onClick }: { person: WikiPerson; onClick: () => void }) => {
-  const age = person.deathDate ? null : calculateAgeInTimezone(new Date(person.birthDate));
+  // S7: death overrides + 105-year living cap.
+  const dates = correctCelebDates({ name: person.name, birthDate: person.birthDate, deathDate: person.deathDate ?? null });
+  const age = dates.isLiving && livingAge(dates.birthDate) != null ? calculateAgeInTimezone(new Date(person.birthDate)) : null;
 
   const getCategoryIcon = () => {
     switch (person.category) {

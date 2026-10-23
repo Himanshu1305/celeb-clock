@@ -15,8 +15,9 @@ import {
 const DEMO = { day: 15, month: 1, year: 1990 };
 const DEMO_LABEL = 'January 15, 1990';
 
-// Real celebrities born on January 15 (from indianCelebrities.ts).
-const JAN_15_CELEBS = ['Mayawati', 'Anna Hazare', 'Lakshmi Mittal'];
+// Real celebrities born on January 15 (en.wikipedia.org infoboxes, checked 23 Oct 2026).
+// Anna Hazare and Lakshmi Mittal were removed: both were born 15 June (S6).
+const JAN_15_CELEBS = ['Mayawati', 'Neil Nitin Mukesh'];
 
 export function SampleReportPage() {
   const western = calculateWesternZodiac(DEMO.day, DEMO.month);
