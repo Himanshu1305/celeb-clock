@@ -14,9 +14,11 @@
 // Schema this relies on (new columns are documented for the person in
 // supabase/migrations/NOTES-notifications.sql — nothing is applied automatically):
 //   email_subscribers: daily_horoscope bool, transit_alerts bool, rashi_index int
-//   birthday_reminders: (existing) + optional last_notified_year int
+//   birthday_reminders: (existing) + last_notified_year, unsubscribe_token, unsubscribed_at
+//   (supabase/migrations/20261024120000_reminders_and_credit_note_email.sql)
 import { createClient } from '@supabase/supabase-js';
 import { sendRawEmail } from './_email.js';
+import { runBirthdayReminders } from './_reminders.js';
 import { digestHtml, celebsThisWeek } from './weekly-digest.js';
 import { computeRashifal, signSegments, istDateISO, transitSignIndex, readPlanetTransit, RASHIS, type PlanetName } from '../src/lib/vedic/rashifal.js';
 
@@ -34,7 +36,6 @@ function sbAdmin() {
   return createClient(url, key, { auth: { persistSession: false } });
 }
 
-const MMDD = (d: Date) => `${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
 function gradeChip(grade: string): string {
   const color = grade === 'strong' ? '#B8862F' : grade === 'moderate' ? '#103A5C' : '#8A9BA8';
@@ -135,15 +136,8 @@ export function transitAlertEmail(rashiIndex: number, name: string, unsubUrl: st
 }
 
 // ── Family birthday reminder ─────────────────────────────────────────────────────
-export function birthdayReminderEmail(friendName: string, relationship: string | null, daysAway: number, unsubUrl?: string): { subject: string; html: string } {
-  const when = daysAway === 0 ? 'today' : daysAway === 1 ? 'tomorrow' : `in ${daysAway} days`;
-  const rel = relationship ? ` (${relationship})` : '';
-  const inner = `
-    <p style="font-size:18px;color:#0C1A2B;margin:0 0 10px">🎂 <strong>${friendName}</strong>'s birthday is ${when}${rel}.</p>
-    <p style="font-size:14px;color:#374151;line-height:1.7;margin:0 0 14px">A little nudge so it doesn't slip by. Want to make something for them?</p>
-    <div style="text-align:center;margin-top:12px"><a href="${BASE_URL}/wish" style="display:inline-block;background:#103A5C;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:8px">Make a birthday card →</a></div>`;
-  return { subject: `${friendName}'s birthday is ${when} 🎂`, html: emailShell(inner, unsubUrl) };
-}
+// Builder + sender live in ./_reminders.ts (T5 fix); re-exported for existing callers.
+export { birthdayReminderEmail } from './_reminders.js';
 
 function unsubFor(token: string | null | undefined): string {
   return `${BASE_URL}/api/unsubscribe?token=${encodeURIComponent(token || 'sample-token')}`;
@@ -157,25 +151,11 @@ export async function runDailyNotifications(): Promise<Record<string, unknown>> 
   const today = new Date();
   const summary: Record<string, unknown> = { live, family: { due: 0, sent: 0 }, horoscope: { due: 0, sent: 0 }, transit: { due: 0, sent: 0 } };
 
-  // 1) Family birthday reminders — fire when a saved birthday is exactly
-  //    remind_days_before away (so each reminder fires once per year).
+  // 1) Family birthday reminders saved on /reminders. The user asked for these, so they
+  //    are NOT gated by NOTIFY_LIVE (that gate is for the marketing-style channels below);
+  //    see api/_reminders.ts for the once-per-year / 29 Feb / unsubscribe rules.
   try {
-    const { data: reminders } = await sb
-      .from('birthday_reminders')
-      .select('friend_name, friend_dob, relationship, remind_days_before, notify_email');
-    const fam = summary.family as { due: number; sent: number };
-    for (const rem of reminders ?? []) {
-      const days = Math.max(0, Number((rem as any).remind_days_before ?? 3));
-      const target = new Date(today.getTime() + days * 86400000);
-      const dob = (rem as any).friend_dob ? new Date((rem as any).friend_dob + 'T12:00:00') : null;
-      if (!dob) continue;
-      if (MMDD(dob) !== MMDD(target)) continue;
-      fam.due++;
-      const to = (rem as any).notify_email;
-      if (!to) continue;
-      const mail = birthdayReminderEmail((rem as any).friend_name, (rem as any).relationship ?? null, days);
-      if (live) { if (await sendRawEmail({ to, ...mail })) fam.sent++; }
-    }
+    summary.family = await runBirthdayReminders(sb, today);
   } catch (e) {
     (summary as any).familyError = String(e);
   }

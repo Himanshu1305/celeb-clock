@@ -25,7 +25,7 @@ function base64Utf8(str: string): string {
 // falls back to the HTML attachment on ANY rendering failure. The attachLine copy
 // always matches the file actually attached. Reused by BOTH sends below so the
 // attachment logic is defined once.
-async function buildInvoiceAttachment(invoiceNo: string, html: string): Promise<{
+async function buildInvoiceAttachment(invoiceNo: string, html: string, docLabel = 'GST tax invoice'): Promise<{
   attachment: { filename: string; content: string };
   attachLine: string;
 }> {
@@ -35,19 +35,20 @@ async function buildInvoiceAttachment(invoiceNo: string, html: string): Promise<
     ? { filename: `${safeNo}.pdf`, content: bytesToBase64(pdf) }
     : { filename: `${safeNo}.html`, content: base64Utf8(html) };
   const attachLine = pdf
-    ? `Your GST tax invoice <strong>${safeNo}</strong> is attached as a PDF — open it in any PDF viewer.`
-    : `Your GST tax invoice <strong>${safeNo}</strong> is attached as an HTML file — open it in any browser and print or save it as a PDF.`;
+    ? `Your ${docLabel} <strong>${safeNo}</strong> is attached as a PDF — open it in any PDF viewer.`
+    : `Your ${docLabel} <strong>${safeNo}</strong> is attached as an HTML file — open it in any browser and print or save it as a PDF.`;
   return { attachment, attachLine };
 }
 
-async function resendSend(payload: Record<string, unknown>): Promise<void> {
+// Returns true when Resend accepted the email (or it was deliberately suppressed on staging).
+async function resendSend(payload: Record<string, unknown>): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) { console.error('[invoice-email] RESEND_API_KEY not configured'); return; }
+  if (!apiKey) { console.error('[invoice-email] RESEND_API_KEY not configured'); return false; }
   // Part AO: staging suppresses invoice email to non-allowlist recipients (never to real users).
   const recip = Array.isArray(payload.to) ? String((payload.to as unknown[])[0] ?? '') : String(payload.to ?? '');
   if (isOutboundEmailSuppressed(recip)) {
     console.log(`[invoice-email] suppressed on staging (not in allowlist): ${recip}`);
-    return;
+    return true;
   }
   try {
     const resp = await fetch('https://api.resend.com/emails', {
@@ -58,9 +59,12 @@ async function resendSend(payload: Record<string, unknown>): Promise<void> {
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({}));
       console.error('[invoice-email] Resend error:', err);
+      return false;
     }
+    return true;
   } catch (e) {
     console.error('[invoice-email] send error:', e);
+    return false;
   }
 }
 
@@ -113,9 +117,9 @@ export async function sendPurchaseEmail(opts: {
   reportLink?: string;
   invoiceNo?: string;
   invoiceHtml?: string;
-}): Promise<void> {
+}): Promise<boolean> {
   const { to, name, product, amountFormatted, date, reportLink, invoiceNo, invoiceHtml } = opts;
-  if (!to) { console.error('[purchase-email] no recipient'); return; }
+  if (!to) { console.error('[purchase-email] no recipient'); return false; }
 
   const isReport = product === 'birthday_report';
   const productLabel = isReport ? 'Birthday Blueprint report' : 'BornClock Premium';
@@ -159,5 +163,37 @@ export async function sendPurchaseEmail(opts: {
       <p style="text-align:center;font-size:12px;color:#9ca3af;font-style:italic;margin:18px 0 0">Know your time. Live it well.</p>
     </div></body></html>`;
 
-  await resendSend({ to: [to], subject, html: body, ...(attachments ? { attachments } : {}) });
+  return resendSend({ to: [to], subject, html: body, ...(attachments ? { attachments } : {}) });
+}
+
+// Credit note email (refund.processed) — same look as the invoice email, with the GST
+// credit note attached (PDF, or HTML fallback). Returns true when sent.
+export function creditNoteEmailSubject(creditNoteNo: string, originalInvoiceNo: string): string {
+  return `Your BornClock refund — credit note ${creditNoteNo} (against invoice ${originalInvoiceNo})`;
+}
+
+export async function sendCreditNoteEmail(opts: {
+  to: string; creditNoteNo: string; originalInvoiceNo: string; amountFormatted: string; html: string;
+}): Promise<boolean> {
+  if (!opts.to) { console.error('[credit-note-email] no recipient'); return false; }
+  const { attachment, attachLine } = await buildInvoiceAttachment(opts.creditNoteNo, opts.html, 'GST credit note');
+  const body = `<!doctype html><html><body style="margin:0;background:#FBF6EA;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+    <div style="max-width:520px;margin:0 auto">
+      <div style="text-align:center;padding-bottom:20px">
+        <img src="${LOGO_URL}" alt="BornClock" height="44" width="165" style="height:44px;width:165px;display:inline-block;border:0" border="0" />
+      </div>
+      <div style="background:#fff;border:1px solid #E6D8B8;border-radius:12px;padding:28px">
+        <div style="font-size:11px;color:#B8862F;font-weight:600;margin-bottom:16px">A product of USD Vision AI LLP</div>
+        <p style="font-size:14px;color:#0C1A2B;margin:0 0 12px">Your refund of <strong>${opts.amountFormatted}</strong> has been processed. It goes back to the payment method you used.</p>
+        <p style="font-size:14px;color:#0C1A2B;margin:0 0 12px">${attachLine} It is issued against invoice <strong>${opts.originalInvoiceNo.replace(/[<>&"']/g, '')}</strong>.</p>
+        <p style="font-size:13px;color:#5A6A7A;margin:0">Questions? Reply to this email or write to <a href="mailto:hello@bornclock.com" style="color:#103A5C">hello@bornclock.com</a>.</p>
+      </div>
+      <p style="text-align:center;font-size:12px;color:#9ca3af;font-style:italic;margin:18px 0 0">Know your time. Live it well.</p>
+    </div></body></html>`;
+  return resendSend({
+    to: [opts.to],
+    subject: creditNoteEmailSubject(opts.creditNoteNo, opts.originalInvoiceNo),
+    html: body,
+    attachments: [attachment],
+  });
 }

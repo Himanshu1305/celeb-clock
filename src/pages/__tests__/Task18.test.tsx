@@ -24,4 +24,16 @@ describe('TC-REMIND', () => {
   it('TC-REMIND-N-02: no crash on render', () => expect(() => renderReminders()).not.toThrow());
   it('TC-REMIND-EDGE-01: Feb 29 birthday accepted', () => { renderReminders(); const dob = q('remind-friend-dob') as HTMLInputElement; if (dob) fireEvent.change(dob, { target: { value: '1988-02-29' } }); expect(document.body.textContent).not.toContain('Error'); });
   it('TC-REMIND-EDGE-02: relationship field present', () => { renderReminders(); expect(q('remind-relationship')).toBeTruthy(); });
+  // Audit T5: a guest reminder must carry an email address and an explicit consent tick.
+  it('TC-REMIND-T5-01: guest must give an email and tick consent before adding', () => {
+    renderReminders();
+    const btn = q('remind-add-btn') as HTMLButtonElement;
+    fireEvent.change(q('remind-friend-name')!, { target: { value: 'Priya' } });
+    fireEvent.change(q('remind-friend-dob')!, { target: { value: '1990-05-10' } });
+    expect(btn.disabled).toBe(true);
+    fireEvent.change(q('remind-email')!, { target: { value: 'me@example.com' } });
+    expect(btn.disabled).toBe(true);
+    fireEvent.click(q('remind-consent')!);
+    expect(btn.disabled).toBe(false);
+  });
 });

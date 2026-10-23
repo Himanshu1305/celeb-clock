@@ -150,6 +150,63 @@ export function splitGstInclusive(
   return { taxable: g, cgst: 0, sgst: 0, igst: 0 };
 }
 
+const INVOICE_CSS = `  :root{ --ink:#0C1A2B; --navy:#103A5C; --gold:#B8862F; --muted:#5A6A7A; --rule:#D8DEE5; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ background:#fff; color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:12px; line-height:1.5; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .sheet{ width:210mm; min-height:297mm; margin:0 auto; padding:16mm 14mm; }
+  .r{ text-align:right; } .c{ text-align:center; } .k{ color:var(--muted); }
+  /* header */
+  .head{ display:flex; justify-content:space-between; align-items:flex-start;
+    border-bottom:2px solid var(--navy); padding-bottom:14px; margin-bottom:18px; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand img{ height:44px; width:auto; }
+  .wordmark{ font-size:26px; font-weight:800; color:var(--navy); letter-spacing:-.01em; line-height:1; }
+  .subbrand{ font-size:10px; color:var(--gold); font-weight:600; margin-top:3px; }
+  .invtitle{ text-align:right; }
+  .invtitle h1{ font-size:19px; font-weight:800; color:var(--navy); letter-spacing:.04em; }
+  .invtitle .no{ font-size:13px; font-weight:700; margin-top:4px; }
+  .invtitle .dt{ font-size:11px; color:var(--muted); margin-top:2px; }
+  /* parties */
+  .parties{ display:flex; gap:14px; margin-bottom:18px; }
+  .party{ flex:1; border:1px solid var(--rule); border-radius:6px; padding:11px 12px; }
+  .party h3{ font-size:9px; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); margin-bottom:6px; }
+  .party .nm{ font-weight:700; font-size:12.5px; }
+  .party div{ margin-top:2px; }
+  .party .sm{ font-size:11px; color:var(--muted); }
+  .party .it{ font-style:italic; font-size:10px; color:var(--muted); margin-top:4px; }
+  .party table{ width:100%; border-collapse:collapse; }
+  .party table td{ padding:1px 0; vertical-align:top; font-size:11px; }
+  .party table td.k{ white-space:nowrap; padding-right:8px; }
+  /* line items */
+  table.items{ width:100%; border-collapse:collapse; margin-bottom:16px; }
+  table.items th{ background:var(--navy); color:#fff; font-size:10px; font-weight:600;
+    text-transform:uppercase; letter-spacing:.04em; padding:8px 7px; text-align:left; }
+  table.items td{ padding:8px 7px; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.items .desc{ font-weight:600; }
+  table.items .note{ font-size:10px; color:var(--muted); margin-top:2px; }
+  /* totals + words */
+  .foot{ display:flex; gap:14px; margin-bottom:16px; }
+  .words{ flex:1; border-left:3px solid var(--gold); background:#FBF6EA; border-radius:0 6px 6px 0;
+    padding:11px 14px; }
+  .words .lbl{ font-size:9px; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); margin-bottom:4px; }
+  .words .val{ font-weight:600; font-size:12px; }
+  .totals{ width:44%; }
+  .totals table{ width:100%; border-collapse:collapse; }
+  .totals td{ padding:5px 8px; }
+  .totals tr.grand td{ border-top:2px solid var(--navy); font-weight:800; font-size:14px; color:var(--navy); padding-top:8px; }
+  /* declarations + signature */
+  .decl,.lut{ font-size:11px; color:var(--muted); border:1px solid var(--rule); border-radius:6px;
+    padding:10px 12px; margin-bottom:14px; }
+  .lut{ border-left:3px solid var(--gold); color:var(--ink); background:#FBF6EA; }
+  .sign{ text-align:right; margin-top:26px; margin-bottom:20px; }
+  .sign .for{ font-weight:700; }
+  .sign .el{ font-size:10px; color:var(--muted); margin-top:26px; }
+  .pagefoot{ border-top:1px solid var(--rule); padding-top:8px; font-size:8.5px; color:var(--muted); line-height:1.6; }
+  @page{ size:A4; margin:0; }
+`;
+
 // ── Renderer ─────────────────────────────────────────────────────────────────
 export function generateInvoiceHTML(inv: InvoiceRecord): string {
   const gross = n(inv.gross_amount);
@@ -239,62 +296,7 @@ export function generateInvoiceHTML(inv: InvoiceRecord): string {
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Tax Invoice ${esc(inv.invoice_no)}</title>
 <style>
-  :root{ --ink:#0C1A2B; --navy:#103A5C; --gold:#B8862F; --muted:#5A6A7A; --rule:#D8DEE5; }
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  html,body{ background:#fff; color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:12px; line-height:1.5; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  .sheet{ width:210mm; min-height:297mm; margin:0 auto; padding:16mm 14mm; }
-  .r{ text-align:right; } .c{ text-align:center; } .k{ color:var(--muted); }
-  /* header */
-  .head{ display:flex; justify-content:space-between; align-items:flex-start;
-    border-bottom:2px solid var(--navy); padding-bottom:14px; margin-bottom:18px; }
-  .brand{ display:flex; align-items:center; gap:12px; }
-  .brand img{ height:44px; width:auto; }
-  .wordmark{ font-size:26px; font-weight:800; color:var(--navy); letter-spacing:-.01em; line-height:1; }
-  .subbrand{ font-size:10px; color:var(--gold); font-weight:600; margin-top:3px; }
-  .invtitle{ text-align:right; }
-  .invtitle h1{ font-size:19px; font-weight:800; color:var(--navy); letter-spacing:.04em; }
-  .invtitle .no{ font-size:13px; font-weight:700; margin-top:4px; }
-  .invtitle .dt{ font-size:11px; color:var(--muted); margin-top:2px; }
-  /* parties */
-  .parties{ display:flex; gap:14px; margin-bottom:18px; }
-  .party{ flex:1; border:1px solid var(--rule); border-radius:6px; padding:11px 12px; }
-  .party h3{ font-size:9px; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); margin-bottom:6px; }
-  .party .nm{ font-weight:700; font-size:12.5px; }
-  .party div{ margin-top:2px; }
-  .party .sm{ font-size:11px; color:var(--muted); }
-  .party .it{ font-style:italic; font-size:10px; color:var(--muted); margin-top:4px; }
-  .party table{ width:100%; border-collapse:collapse; }
-  .party table td{ padding:1px 0; vertical-align:top; font-size:11px; }
-  .party table td.k{ white-space:nowrap; padding-right:8px; }
-  /* line items */
-  table.items{ width:100%; border-collapse:collapse; margin-bottom:16px; }
-  table.items th{ background:var(--navy); color:#fff; font-size:10px; font-weight:600;
-    text-transform:uppercase; letter-spacing:.04em; padding:8px 7px; text-align:left; }
-  table.items td{ padding:8px 7px; border-bottom:1px solid var(--rule); vertical-align:top; }
-  table.items .desc{ font-weight:600; }
-  table.items .note{ font-size:10px; color:var(--muted); margin-top:2px; }
-  /* totals + words */
-  .foot{ display:flex; gap:14px; margin-bottom:16px; }
-  .words{ flex:1; border-left:3px solid var(--gold); background:#FBF6EA; border-radius:0 6px 6px 0;
-    padding:11px 14px; }
-  .words .lbl{ font-size:9px; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); margin-bottom:4px; }
-  .words .val{ font-weight:600; font-size:12px; }
-  .totals{ width:44%; }
-  .totals table{ width:100%; border-collapse:collapse; }
-  .totals td{ padding:5px 8px; }
-  .totals tr.grand td{ border-top:2px solid var(--navy); font-weight:800; font-size:14px; color:var(--navy); padding-top:8px; }
-  /* declarations + signature */
-  .decl,.lut{ font-size:11px; color:var(--muted); border:1px solid var(--rule); border-radius:6px;
-    padding:10px 12px; margin-bottom:14px; }
-  .lut{ border-left:3px solid var(--gold); color:var(--ink); background:#FBF6EA; }
-  .sign{ text-align:right; margin-top:26px; margin-bottom:20px; }
-  .sign .for{ font-weight:700; }
-  .sign .el{ font-size:10px; color:var(--muted); margin-top:26px; }
-  .pagefoot{ border-top:1px solid var(--rule); padding-top:8px; font-size:8.5px; color:var(--muted); line-height:1.6; }
-  @page{ size:A4; margin:0; }
-</style></head>
+${INVOICE_CSS}</style></head>
 <body><div class="sheet">
 
   <div class="head">
@@ -375,6 +377,114 @@ export function generateInvoiceHTML(inv: InvoiceRecord): string {
   <div class="pagefoot">
     <div>Registered office: ${esc(SUPPLIER.address)}, ${esc(SUPPLIER.address2)}</div>
     <div>${esc(SUPPLIER.legalName)} &middot; LLPIN ${esc(SUPPLIER.llpin)} &middot; GSTIN ${esc(SUPPLIER.gstin)} &middot; ${esc(SUPPLIER.site)} &middot; ${esc(inv.invoice_no)}</div>
+  </div>
+
+</div></body></html>`;
+}
+
+// ── GST credit note (Section 34 CGST Act; Rule 53 particulars) ─────────────────
+// Rendered from the credit_notes row stored by issue_credit_note() at refund time —
+// never re-computes tax. Same look as the tax invoice.
+export interface CreditNoteRecord {
+  credit_note_no: string;
+  credit_note_date: string;          // 'YYYY-MM-DD'
+  original_invoice_no: string;
+  original_invoice_date: string;     // 'YYYY-MM-DD'
+  refund_id: string;
+  reason: string;
+  buyer_name: string;
+  buyer_email: string;
+  tax_mode: 'CGST_SGST' | 'IGST' | 'EXPORT';
+  currency: 'INR' | 'USD';
+  gross_amount: number | string;
+  taxable_value: number | string;
+  cgst: number | string;
+  sgst: number | string;
+  igst: number | string;
+}
+
+export function generateCreditNoteHTML(cn: CreditNoteRecord): string {
+  const cur = cn.currency;
+  const gross = n(cn.gross_amount), taxable = n(cn.taxable_value);
+  const cgst = n(cn.cgst), sgst = n(cn.sgst), igst = n(cn.igst);
+  const taxRows = cn.tax_mode === 'CGST_SGST'
+    ? `<tr><td>CGST @ 9%</td><td class="r">${fmtMoney(cgst, cur)}</td></tr><tr><td>SGST @ 9%</td><td class="r">${fmtMoney(sgst, cur)}</td></tr>`
+    : cn.tax_mode === 'IGST'
+      ? `<tr><td>IGST @ 18%</td><td class="r">${fmtMoney(igst, cur)}</td></tr>`
+      : `<tr><td>Tax (zero-rated export)</td><td class="r">${cur === 'INR' ? '₹' : '$'}0.00</td></tr>`;
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Credit Note ${esc(cn.credit_note_no)}</title>
+<style>
+${INVOICE_CSS}</style></head>
+<body><div class="sheet">
+
+  <div class="head">
+    <div class="brand">
+      <img src="${BORNCLOCK_LOGO_B64}" alt="BornClock"/>
+      <div>
+        <div class="wordmark">BornClock</div>
+        <div class="subbrand">A product of ${esc(SUPPLIER.legalName)}</div>
+      </div>
+    </div>
+    <div class="invtitle">
+      <h1>CREDIT NOTE</h1>
+      <div class="no">${esc(cn.credit_note_no)}</div>
+      <div class="dt">${esc(fmtDate(cn.credit_note_date))}</div>
+    </div>
+  </div>
+
+  <div class="parties">
+    <div class="party">
+      <h3>Supplier</h3>
+      <div class="nm">${esc(SUPPLIER.legalName)}</div>
+      <div>GSTIN: ${esc(SUPPLIER.gstin)}</div>
+      <div>LLPIN: ${esc(SUPPLIER.llpin)}</div>
+      <div>State: ${esc(SUPPLIER.state)} (${esc(SUPPLIER.stateCode)})</div>
+    </div>
+    <div class="party">
+      <h3>Issued to</h3>
+      <div class="nm">${esc(cn.buyer_name)}</div>
+      <div class="sm">${esc(cn.buyer_email)}</div>
+    </div>
+    <div class="party">
+      <h3>Credit note details</h3>
+      <table>
+        <tr><td class="k">Credit note no</td><td>${esc(cn.credit_note_no)}</td></tr>
+        <tr><td class="k">Date</td><td>${esc(fmtDate(cn.credit_note_date))}</td></tr>
+        <tr><td class="k">Against invoice</td><td>${esc(cn.original_invoice_no)}</td></tr>
+        <tr><td class="k">Invoice date</td><td>${esc(fmtDate(cn.original_invoice_date))}</td></tr>
+        <tr><td class="k">Refund ID</td><td>${esc(cn.refund_id)}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="decl">Reason: ${esc(cn.reason)}</div>
+
+  <div class="foot">
+    <div class="words">
+      <div class="lbl">Amount credited in words</div>
+      <div class="val">${esc(amountInWords(gross, cur))}</div>
+      <div class="sm" style="font-size:10px;color:var(--muted);margin-top:6px">SAC ${esc(SUPPLIER.sacCode)} &mdash; ${esc(SUPPLIER.sacLabel)}</div>
+    </div>
+    <div class="totals">
+      <table>
+        <tr><td>Taxable value</td><td class="r">${fmtMoney(taxable, cur)}</td></tr>
+        ${taxRows}
+        <tr class="grand"><td>Total credited ${cur}</td><td class="r">${fmtMoney(gross, cur)}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="sign">
+    <div class="for">For ${esc(SUPPLIER.legalName)}</div>
+    <div class="el">Issued electronically &middot; no signature required</div>
+  </div>
+
+  <div class="pagefoot">
+    <div>Registered office: ${esc(SUPPLIER.address)}, ${esc(SUPPLIER.address2)}</div>
+    <div>${esc(SUPPLIER.legalName)} &middot; LLPIN ${esc(SUPPLIER.llpin)} &middot; GSTIN ${esc(SUPPLIER.gstin)} &middot; ${esc(SUPPLIER.site)} &middot; ${esc(cn.credit_note_no)}</div>
   </div>
 
 </div></body></html>`;

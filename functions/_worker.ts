@@ -36,6 +36,7 @@ import { GET  as gemstones }           from '../api/gemstones.js';
 import { GET  as geocode }             from '../api/geocode.js';
 import { GET  as bornTodayPhoto }      from '../api/born-today-photo.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
+import { POST as reminders }           from '../api/reminders.js';
 import { handleReportOg, injectReportOgTags } from './og-report.js';
 import { isProductionHost, DISALLOW_ALL_ROBOTS } from './host.js';
 
@@ -92,6 +93,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/subscribe':          subscribe,
   '/api/weekly-digest':      weeklyDigest,
   '/api/unsubscribe':        unsubscribe,
+  '/api/reminders':          reminders,
   '/api/kundali':            kundali,
   '/api/vedic-profile':      vedicProfile,
   '/api/vedic-reading':      vedicReading,

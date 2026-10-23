@@ -2,6 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 import { sendEmailDirect } from './_email.js';
 import { verifyHmacSha256 } from './_crypto.js';
 import { PERMANENT_EXPIRY } from './_userAuth.js';
+import { issuePurchaseInvoice, sendPurchaseEmailOnce } from './_purchaseInvoice.js';
+import { sendCreditNoteEmail } from './_invoice-email.js';
+import { generateCreditNoteHTML } from '../src/lib/invoice-generator.js';
 
 // Web API handler — no Vercel bodyParser config needed; raw Request is passed as-is.
 
@@ -67,10 +70,46 @@ export async function unlockPaidOrder(db: any, order: any, payment: any): Promis
   return 'unlocked';
 }
 
-/** Issue a GST credit note for a processed refund (idempotent on refund id). */
+/**
+ * order.paid, after the unlock: issue the GST invoice and send the ONE purchase email —
+ * the same code path as verify-payment (api/_purchaseInvoice.ts). Needed when the buyer's
+ * browser never returned (UPI tab closed, network drop), which used to leave the buyer
+ * with no invoice and no email. Idempotent: issue_invoice dedupes on payment_id and the
+ * email is claimed through invoices.emailed_at, so the browser path and this can never
+ * double-issue or double-send. Throws on an invoicing error so Razorpay retries.
+ */
+export async function invoiceAndEmailPaidOrder(db: any, order: any, payment: any): Promise<string> {
+  const notes = order?.notes ?? {};
+  const paymentId: string | undefined = payment?.id;
+  if (!paymentId) return 'no-payment';
+  const amountPaise = typeof payment.amount === 'number' ? payment.amount : (order.amount ?? 0);
+  const currency = payment.currency ?? order.currency ?? 'INR';
+  const userId: string | null = notes.userId || null;
+  const row = await issuePurchaseInvoice(db, {
+    product: 'birthday_report',
+    paymentId,
+    orderId: order.id,
+    userId,
+    amountPaise,
+    currency,
+    region: {
+      buyer_state: notes.buyer_state, buyer_state_code: notes.buyer_state_code,
+      buyer_country: notes.buyer_country, tax_mode: notes.tax_mode,
+    },
+    fallbackEmail: payment.email || null,
+  });
+  if (!row) return 'invoice-skipped';   // Razorpay TEST mode (staging): no real GST number
+  const mail = await sendPurchaseEmailOnce(db, {
+    invoiceRow: row, userId, product: 'birthday_report', amountPaise, currency,
+    slug: notes.report_slug, fallbackEmail: payment.email || null,
+  });
+  return `invoiced:${mail}`;
+}
+
+/** Issue a GST credit note for a processed refund (idempotent on refund id), then email it once. */
 export async function issueCreditNoteForRefund(db: any, refund: any): Promise<string> {
   if (!refund?.id || !refund?.payment_id) return 'no-refund';
-  const { error } = await db.rpc('issue_credit_note', {
+  const { data: cn, error } = await db.rpc('issue_credit_note', {
     p: {
       refund_id: refund.id,
       payment_id: refund.payment_id,
@@ -84,7 +123,46 @@ export async function issueCreditNoteForRefund(db: any, refund: any): Promise<st
     console.error('[webhook] credit note not issued', refund.id, error.message ?? error);
     return 'error';
   }
-  return 'issued';
+  const mail = cn ? await emailCreditNoteOnce(db, cn) : 'no-row';
+  return `issued:${mail}`;
+}
+
+/**
+ * Email a credit note to the buyer once. Claimed through credit_notes.emailed_at
+ * (20261024120000 migration). Until that column exists the claim fails with an
+ * undefined-column error; the send then relies on webhook_events (one processing per
+ * Razorpay event id), which is what made it once-only before.
+ */
+export async function emailCreditNoteOnce(db: any, cn: any): Promise<'sent' | 'already-sent' | 'failed' | 'no-recipient'> {
+  const to = String(cn?.buyer_email || '').trim();
+  if (!to) return 'no-recipient';
+  let claimed = false;
+  const { data, error } = await db.from('credit_notes')
+    .update({ emailed_at: new Date().toISOString() })
+    .eq('refund_id', cn.refund_id)
+    .is('emailed_at', null)
+    .select('id');
+  if (error) {
+    const missingColumn = error.code === '42703' || error.code === 'PGRST204';
+    if (!missingColumn) { console.error('[webhook] credit note email claim error', error.message ?? error); return 'failed'; }
+  } else {
+    claimed = Array.isArray(data) && data.length > 0;
+    if (!claimed) return 'already-sent';
+  }
+  const sym = cn.currency === 'USD' ? '$' : '₹';
+  const amt = Number(cn.gross_amount) || 0;
+  let ok = false;
+  try { ok = await sendCreditNoteEmail({
+    to,
+    creditNoteNo: cn.credit_note_no,
+    originalInvoiceNo: cn.original_invoice_no,
+    amountFormatted: `${sym}${amt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+    html: generateCreditNoteHTML(cn),
+  }); } catch (e) { console.error('[webhook] credit note email threw', e); }
+  if (!ok && claimed) {
+    try { await db.from('credit_notes').update({ emailed_at: null }).eq('refund_id', cn.refund_id); } catch { /* ignore */ }
+  }
+  return ok ? 'sent' : 'failed';
 }
 
 async function handler(request: Request): Promise<Response> {
@@ -306,7 +384,9 @@ async function handler(request: Request): Promise<Response> {
         const order = event.payload?.order?.entity;
         const payment = event.payload?.payment?.entity;
         const result = await unlockPaidOrder(db, order, payment);
-        console.log('[webhook] order.paid', { order: order?.id, result });
+        // Invoice + purchase email for this payment (no-op if verify-payment already did it).
+        const invoiced = result === 'unlocked' ? await invoiceAndEmailPaidOrder(db, order, payment) : 'n/a';
+        console.log('[webhook] order.paid', { order: order?.id, result, invoiced });
         break;
       }
 
@@ -336,7 +416,8 @@ async function handler(request: Request): Promise<Response> {
     return json({ received: true });
   } catch (err) {
     console.error('[webhook] processing error', err);
-    // order.paid unlock is idempotent, so a failed unlock is safe to retry: forget
+    // order.paid unlock, invoice (issue_invoice dedupes on payment_id) and email (claimed
+    // via invoices.emailed_at) are all idempotent, so a failure is safe to retry: forget
     // the event and return 500 so Razorpay re-delivers it. A paying customer must
     // not be left locked out because of one transient DB error.
     if (eventType === 'order.paid') {

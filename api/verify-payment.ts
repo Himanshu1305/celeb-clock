@@ -1,7 +1,7 @@
 import { verifyHmacSha256 } from './_crypto.js';
 import { serviceClient, getAuthedUser, PERMANENT_EXPIRY } from './_userAuth.js';
-import { generateInvoiceHTML, splitGstInclusive } from '../src/lib/invoice-generator.js';
 import { sendPurchaseEmail } from './_invoice-email.js';
+import { issuePurchaseInvoice, sendPurchaseEmailOnce, buyerIdentity, receiptFields, isRazorpayTestMode } from './_purchaseInvoice.js';
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -277,168 +277,71 @@ async function handler(request: Request): Promise<Response> {
     }
   }
 
-  // BATCH-6 Phase 2: purchases now send ONE merged email (confirmation + invoice
-  // attached), dispatched AFTER the invoice block below so it can include the PDF.
-  // Here we only CAPTURE the confirmation/receipt data (no send). Non-fatal.
-  let receipt: { to: string; name: string; product: string; amountFormatted: string; date: string; reportLink?: string } | null = null;
-  let invoiceForEmail: { invoiceNo: string; html: string } | null = null;
-  try {
-    const { data: userData } = await db.auth.admin.getUserById(user_id);
-    const userEmail = userData?.user?.email;
-    const userName = userData?.user?.user_metadata?.full_name || userData?.user?.user_metadata?.first_name || 'there';
-    if (userEmail) {
-      const currencySymbol = paymentCurrency === 'INR' ? '₹' : '$';
-      const amountFormatted = `${currencySymbol}${(paymentAmount / 100).toLocaleString('en-IN')}`;
-      const date = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-      const base = process.env.PRODUCTION_URL ?? 'https://bornclock.com';
-      receipt = {
-        to: userEmail,
-        name: userName,
-        product,
-        amountFormatted,
-        date,
-        reportLink: authoritativeSlug ? `${base}/report/${authoritativeSlug}` : undefined,
-      };
-    }
-  } catch (e) {
-    console.error('[verify-payment] receipt data error (non-fatal)', e);
-  }
+  // --- GST INVOICE + ONE purchase email (non-fatal) ---------------------------
+  // Runs AFTER payment success + entitlement grant are committed; any failure here is
+  // logged and swallowed — the customer has paid and keeps access. The invoice and the
+  // email go through api/_purchaseInvoice.ts, the SAME code path the order.paid webhook
+  // uses, so whichever of the two runs first issues/sends and the other is a no-op
+  // (issue_invoice is idempotent by payment_id; the email is claimed via emailed_at).
+  //
+  // Region: birthday_report carries it in the Razorpay ORDER notes; subscriptions carry
+  // it in the request BODY (the subscription checkout does not reliably forward notes).
+  const region = {
+    buyer_state:      orderNotes.buyer_state      || body.buyer_state      || null,
+    buyer_state_code: orderNotes.buyer_state_code || body.buyer_state_code || null,
+    buyer_country:    orderNotes.buyer_country    || body.buyer_country    || 'India',
+    tax_mode:         orderNotes.tax_mode         || body.tax_mode         || null,
+    billing:          orderNotes.billing          || body.billing          || null,
+  };
 
-  // --- GST INVOICE (non-fatal) ---------------------------------------------
-  // Appended AFTER payment success + entitlement grant are already committed.
-  // Any failure here is logged and swallowed — the customer has paid and must
-  // keep access. The HMAC check and premium-grant paths above are never touched.
-  try {
-    // Both product types are now invoiced (every taxable supply requires an
-    // invoice). birthday_report carries its region in the Razorpay ORDER notes;
-    // subscriptions carry it in the verify-payment request BODY — the
-    // subscription checkout object does not reliably forward its notes onto the
-    // payment, so CheckoutRegionModal's confirmed region is posted in the body
-    // (buyer_state / buyer_state_code / buyer_country / tax_mode) and read here.
-    // A subscription with no resolvable amount (the Razorpay payment fetch above
-    // failed) cannot be invoiced accurately — skip rather than issue a
-    // zero-value invoice. Throw the 'skip' sentinel to exit via the shared catch.
-    if (product === 'subscription' && (!paymentAmount || paymentAmount <= 0)) {
-      throw new Error('skip');
-    }
-
-    // Part AO: in Razorpay TEST mode (staging), NEVER allocate a real GST invoice number —
-    // issue_invoice() draws from the single live sequence shared with production, so a test
-    // purchase would burn a real number and leave a gap in the statutory series. Detect test
-    // mode by the key prefix and skip invoicing entirely (entitlement was already granted
-    // above, so the paywall still unlocks for the test). Production uses rzp_live_ → unchanged.
-    const isTestMode = (process.env.VITE_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID || '').startsWith('rzp_test_');
-    if (isTestMode) {
-      console.log('[verify-payment] TEST mode — skipping real GST invoice numbering (protects the live series)');
-      throw new Error('skip');
-    }
-
-    // Razorpay note values arrive as strings ('' when absent) — use || not ??.
-    // Notes first (order flow), then the request body (subscription flow).
-    const buyerState     = orderNotes.buyer_state      || body.buyer_state      || null;
-    const buyerStateCode = orderNotes.buyer_state_code || body.buyer_state_code  || null;
-    const buyerCountry   = orderNotes.buyer_country    || body.buyer_country     || 'India';
-    // tax_mode from checkout declaration; fall back safely. Never mislabel an INR
-    // domestic charge as EXPORT — only USD-with-no-state defaults to EXPORT.
-    const taxMode: 'CGST_SGST' | 'IGST' | 'EXPORT' = orderNotes.tax_mode || body.tax_mode
-      || (buyerStateCode === '36' ? 'CGST_SGST'
-        : buyerStateCode ? 'IGST'
-        : (paymentCurrency === 'USD' ? 'EXPORT' : 'IGST'));
-
-    // Persist the place-of-supply on the profile on the first subscription
-    // payment — it is the authoritative region for every future renewal charge,
-    // which arrives via the frozen webhook carrying no declaration of its own
-    // (read back by the daily invoice sweep). Keyed on user_id (the auth link;
-    // profiles.id is a random PK). Tolerate the column not existing yet — the
-    // founder applies NOTES-subscription-invoicing.sql; until then this is a
-    // non-fatal no-op and the sweep simply finds no region to invoice with.
-    if (product === 'subscription') {
+  // Persist the place-of-supply on the profile on the first subscription payment — it is
+  // the authoritative region for every future renewal charge (read back by the daily
+  // invoice sweep). Keyed on user_id (profiles.id is a random PK). Non-fatal.
+  if (product === 'subscription' && paymentAmount > 0 && !isRazorpayTestMode()) {
+    try {
       const { error: posErr } = await db.from('profiles').update({
-        buyer_state: buyerState,
-        buyer_state_code: buyerStateCode,
-        buyer_country: buyerCountry,
+        buyer_state: region.buyer_state,
+        buyer_state_code: region.buyer_state_code,
+        buyer_country: region.buyer_country,
       }).eq('user_id', user_id);
       if (posErr) console.warn('[invoice] place-of-supply persist skipped (non-fatal):', posErr.message);
-    }
-
-    const invCurrency = paymentCurrency === 'USD' ? 'USD' : 'INR';
-    const grossAmount = paymentAmount / 100;   // Razorpay stores paise/cents
-    // GST-inclusive split — shared rule (equal CGST/SGST heads that foot to the total).
-    const { taxable, cgst, sgst, igst } = splitGstInclusive(grossAmount, taxMode);
-    const fxRate = taxMode === 'EXPORT' ? 87.20 : null;   // fixed fallback; live rate = future
-    // Record the rate's provenance so an export invoice never presents this
-    // fixed value as a live market rate. OPEN ITEM: wire a live FX feed (RBI
-    // reference rate / provider) and set fx_rate + source from it. See
-    // BORNCLOCK_AUDIT_FIXES.md → "Open items".
-    const fxRateDate = fxRate ? new Date().toISOString().slice(0, 10) : null;
-    const fxRateSource = fxRate ? 'Fixed fallback rate (₹87.20; no live FX feed yet)' : null;
-
-    // buyer identity (same service client already in scope)
-    const { data: buyerData } = await db.auth.admin.getUserById(user_id);
-    const buyerEmail = buyerData?.user?.email ?? '';
-    const buyerName = buyerData?.user?.user_metadata?.full_name
-      || buyerData?.user?.user_metadata?.first_name
-      || 'BornClock Customer';
-
-    // Cadence read from the checkout notes / body ('monthly' | 'annual').
-    const billing = (orderNotes.billing || body.billing || '').toString().toLowerCase();
-    const subCadence = billing === 'annual' ? 'Annual' : 'Monthly';
-    const lineDesc = product === 'birthday_report'
-      ? 'BornClock — Birthday Blueprint Report'
-      : `BornClock Premium — ${subCadence} subscription`;
-    const lineNote = product === 'birthday_report'
-      ? 'Digital report, one-time purchase. Delivered electronically.'
-      : `Premium ${subCadence.toLowerCase()} subscription. Delivered electronically.`;
-
-    // issue_invoice() allocates the number + inserts atomically, idempotent by payment_id
-    const { data: invoiceRow, error: invoiceErr } = await db.rpc('issue_invoice', {
-      p: {
-        order_id:         razorpay_order_id ?? razorpay_subscription_id ?? razorpay_payment_id,
-        payment_id:       razorpay_payment_id,
-        user_id:          user_id ?? null,
-        buyer_name:       buyerName,
-        buyer_email:      buyerEmail,
-        buyer_gstin:      null,
-        buyer_country:    buyerCountry,
-        buyer_state:      buyerState,
-        buyer_state_code: buyerStateCode,
-        place_of_supply:  buyerState ? `${buyerState} (${buyerStateCode})` : buyerCountry,
-        tax_mode:         taxMode,
-        currency:         invCurrency,
-        fx_rate:          fxRate,
-        fx_rate_date:     fxRateDate,
-        fx_rate_source:   fxRateSource,
-        gross_amount:     grossAmount,
-        taxable_value:    taxMode === 'EXPORT' ? grossAmount : taxable,
-        cgst, sgst, igst,
-        line_items: [{ desc: lineDesc, note: lineNote, qty: 1, gross: grossAmount }],
-      },
-    });
-    if (invoiceErr) throw invoiceErr;
-
-    if (invoiceRow) {
-      const row = invoiceRow as any;
-      // Capture for the single merged email (sent below); the receipt recipient is the
-      // same auth user as row.buyer_email. No separate invoice email is sent here now.
-      invoiceForEmail = { invoiceNo: row.invoice_no, html: generateInvoiceHTML(row) };
-    }
-  } catch (invoiceErr) {
-    if ((invoiceErr as Error).message !== 'skip') {
-      console.error('[invoice] non-fatal error:', invoiceErr);
+    } catch (e) {
+      console.warn('[invoice] place-of-supply persist error (non-fatal):', e);
     }
   }
-  // --- end GST INVOICE -----------------------------------------------------
 
-  // ONE merged purchase email: confirmation + the invoice attached when it was issued.
-  // FAILURE ISOLATION: if invoicing above failed (invoiceForEmail is null), the customer
-  // STILL receives a confirmation — sendPurchaseEmail simply omits the attachment.
+  let invoiceRow: any = null;
   try {
-    if (receipt) {
-      await sendPurchaseEmail({
-        ...receipt,
-        invoiceNo: invoiceForEmail?.invoiceNo,
-        invoiceHtml: invoiceForEmail?.html,
+    invoiceRow = await issuePurchaseInvoice(db, {
+      product,
+      paymentId: razorpay_payment_id,
+      orderId: product === 'birthday_report' ? razorpay_order_id : null,
+      subscriptionId: product === 'subscription' ? razorpay_subscription_id : null,
+      userId: user_id,
+      amountPaise: paymentAmount,
+      currency: paymentCurrency,
+      region,
+    });
+  } catch (invoiceErr) {
+    console.error('[invoice] non-fatal error:', invoiceErr);
+  }
+
+  try {
+    if (invoiceRow) {
+      const r = await sendPurchaseEmailOnce(db, {
+        invoiceRow, userId: user_id, product, amountPaise: paymentAmount, currency: paymentCurrency, slug: authoritativeSlug,
       });
+      if (r !== 'sent') console.log('[verify-payment] purchase email:', r);
+    } else {
+      // FAILURE ISOLATION: invoicing skipped/failed → still send a confirmation (no
+      // attachment, "invoice will follow"). No invoice row exists to dedupe on here.
+      const buyer = await buyerIdentity(db, user_id);
+      if (buyer.email) {
+        await sendPurchaseEmail({
+          to: buyer.email, name: buyer.firstName,
+          ...receiptFields(paymentAmount, paymentCurrency, product, authoritativeSlug),
+        });
+      }
     }
   } catch (e) {
     console.error('[verify-payment] purchase email error (non-fatal)', e);

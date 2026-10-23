@@ -18,17 +18,38 @@ function saveLocal(list: BirthdayReminder[]) {
   try { localStorage.setItem(LOCAL_KEY, JSON.stringify(list)); } catch { /* ignore */ }
 }
 
-/** Add a reminder. Persists to Supabase when signed in; always mirrors locally. */
-export async function addReminder(r: BirthdayReminder, userId?: string): Promise<BirthdayReminder> {
-  const local = loadLocal();
-  local.push(r);
-  saveLocal(local);
-  if (userId) {
-    try {
-      await supabase.from('birthday_reminders').insert({ ...r, user_id: userId });
-    } catch { /* offline / table missing — local copy stands */ }
+/**
+ * Save a reminder on the server WITH the address to email (audit T5): signed-in users
+ * get it at their account email; guests must give an email and tick the consent box.
+ * Always mirrored locally so the list shows on this device. Throws with a readable
+ * message when the server refuses or is unreachable.
+ */
+export async function addReminder(
+  r: BirthdayReminder,
+  opts: { email?: string; consent?: boolean } = {},
+): Promise<BirthdayReminder> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`;
+  } catch { /* guest */ }
+
+  let res: Response;
+  try {
+    res = await fetch('/api/reminders', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ ...r, email: opts.email, consent: opts.consent === true }),
+    });
+  } catch {
+    throw new Error('Could not reach BornClock. Please check your connection and try again.');
   }
-  return r;
+  const body = await res.json().catch(() => ({} as any));
+  if (!res.ok || !body?.ok) throw new Error(body?.error || 'Could not save the reminder. Please try again.');
+
+  const saved: BirthdayReminder = { ...r, id: body.id ?? undefined, notify_email: body.notify_email ?? opts.email };
+  saveLocal([...loadLocal(), saved]);
+  return saved;
 }
 
 export async function listReminders(userId?: string): Promise<BirthdayReminder[]> {
