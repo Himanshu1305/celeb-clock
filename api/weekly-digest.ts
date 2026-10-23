@@ -13,6 +13,7 @@ import { createClient } from '@supabase/supabase-js';
 import { isCronAuthorized, unauthorized } from './_cronAuth.js';
 import { verifyAdminRequest } from './_adminAuth.js';
 import { escapeHtml } from './_userAuth.js';
+import { biorhythmValues } from '../src/lib/biorhythm.js';
 
 const FROM_EMAIL = 'BornClock <hello@bornclock.com>';
 const LOGO_URL = 'https://bornclock.com/bornclock-logo.png';
@@ -35,10 +36,10 @@ function daysUntilBirthday(dob: Date, today: Date): number {
   return Math.round((next.getTime() - new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime()) / 86400000);
 }
 
+// N10: shared calendar-day count (same function as the site's /biorhythm).
 function biorhythm(dob: Date, today: Date) {
-  const days = Math.floor((today.getTime() - dob.getTime()) / 86400000);
-  const pct = (period: number) => Math.round(Math.sin((2 * Math.PI * days) / period) * 100);
-  return { physical: pct(23), emotional: pct(28), intellectual: pct(33) };
+  const { physical, emotional, intellectual } = biorhythmValues(dob, today);
+  return { physical, emotional, intellectual };
 }
 
 export async function celebsThisWeek(sb: any, today: Date) {
