@@ -1,3 +1,5 @@
+import { getAuthedUser } from './_userAuth.js';
+
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -38,12 +40,19 @@ async function handler(request: Request): Promise<Response> {
   }
 
   const {
-    planId, userId, billing,
+    planId, billing,
     buyer_country, buyer_state, buyer_state_code, tax_mode,
   } = body ?? {};
 
-  if (!planId || !userId) {
-    return json({ error: 'Missing planId or userId' }, 400);
+  // The subscriber is the SIGNED-IN caller (Bearer token), never a body userId.
+  // It goes into the subscription notes, and verify-payment requires the caller
+  // to match it before granting premium (one payment → one account).
+  const caller = await getAuthedUser(request);
+  if (!caller) return json({ error: 'Please sign in to continue' }, 401);
+  const userId = caller.id;
+
+  if (!planId) {
+    return json({ error: 'Missing planId' }, 400);
   }
 
   const totalCount = whitelist[planId];

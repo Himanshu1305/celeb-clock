@@ -10,6 +10,9 @@
 // Real data: days-until-birthday, biorhythm summary, and celebrities born in the
 // next 7 days (global + India), from celebrity_sitelinks.
 import { createClient } from '@supabase/supabase-js';
+import { isCronAuthorized, unauthorized } from './_cronAuth.js';
+import { verifyAdminRequest } from './_adminAuth.js';
+import { escapeHtml } from './_userAuth.js';
 
 const FROM_EMAIL = 'BornClock <hello@bornclock.com>';
 const LOGO_URL = 'https://bornclock.com/bornclock-logo.png';
@@ -79,7 +82,7 @@ export function digestHtml(opts: {
 
   const celebRow = (c: any) => {
     const yr = c.birth_date ? new Date(c.birth_date + 'T12:00:00').getFullYear() : '';
-    return `<li style="margin:0 0 4px"><strong>${c.name}</strong>${yr ? ` (b. ${yr})` : ''}${c.occupation ? ` — ${c.occupation}` : ''}</li>`;
+    return `<li style="margin:0 0 4px"><strong>${escapeHtml(c.name)}</strong>${yr ? ` (b. ${yr})` : ''}${c.occupation ? ` — ${escapeHtml(c.occupation)}` : ''}</li>`;
   };
   if (global.length) bits.push(`<p style="font-size:14px;color:#0C1A2B;margin:16px 0 6px"><strong>Celebrities with birthdays this week</strong></p><ul style="font-size:14px;color:#4b5563;padding-left:18px;margin:0">${global.map(celebRow).join('')}</ul>`);
   if (india.length) bits.push(`<p style="font-size:14px;color:#0C1A2B;margin:16px 0 6px"><strong>From India 🇮🇳</strong></p><ul style="font-size:14px;color:#4b5563;padding-left:18px;margin:0">${india.map(celebRow).join('')}</ul>`);
@@ -95,7 +98,7 @@ export function digestHtml(opts: {
         <img src="${LOGO_URL}" alt="BornClock" height="44" width="165" style="height:44px;width:165px;display:inline-block;border:0" border="0" />
       </div>
       <div style="background:#fff;border-radius:12px;padding:28px;border:1px solid #E6D8B8">
-        <div style="font-size:13px;color:#8A9BA8;margin-bottom:18px">Hi ${name || 'there'}, here's your week ahead.</div>
+        <div style="font-size:13px;color:#8A9BA8;margin-bottom:18px">Hi ${escapeHtml(name || 'there')}, here's your week ahead.</div>
         ${bits.join('\n')}
         <div style="margin-top:24px;text-align:center">
           <a href="https://bornclock.com/" style="display:inline-block;background:#103A5C;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:8px">Open BornClock</a>
@@ -112,6 +115,10 @@ export function digestHtml(opts: {
 
 async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST' && request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
+  // Audit item 8: this endpoint used to be public — anyone could make
+  // hello@bornclock.com send a digest to any address with their own HTML in the
+  // name. Only the scheduler (CRON_SECRET) or a verified admin may call it now.
+  if (!isCronAuthorized(request) && !(await verifyAdminRequest(request)).isAdmin) return unauthorized();
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return json({ error: 'RESEND_API_KEY not configured' }, 500);
 

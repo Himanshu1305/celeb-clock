@@ -322,7 +322,7 @@ export default function KundaliPage() {
                   onClick={() => printHtmlViaIframe(buildKundaliPdfHtml(data, { dob: readingDob, place: usedPlace, basis: kundaliBasis(data) }))}>
                   Download Kundli (PDF) — free
                 </button>
-                <Link className="btn secondary" to="/birthday-report/gift">Gift a Kundali ({price}) →</Link>
+                <Link className="btn secondary" to="/birthday-report/gift">Gift a Birthday Blueprint ({price}) →</Link>
               </div>
             </section>
 
@@ -361,11 +361,11 @@ export default function KundaliPage() {
         )}
 
         <section className="report">
-          <div><span className="eyebrow">Go deeper · paid report</span><h2>The full Vedic report.</h2></div>
-          <p>The complete {price} report with doshas, remedies and detailed predictions — for yourself or as a gift.</p>
+          <div><span className="eyebrow">Paid report · {price}</span><h2>The Birthday Blueprint.</h2></div>
+          <p>A personalised birthday report — Western, Chinese and Vedic zodiac profiles, numerology and life path, and celebrity birthday twins — for yourself or as a gift. Your Kundali above (chart, doshas and reading) stays free; the Blueprint is a different report and does not add remedies or extra predictions.</p>
           <div className="report-actions">
-            <Link className="btn light" to="/birthday-report">Get the complete report →</Link>
-            <p className="small"><Link className="textlink" to="/birthday-report/gift">Gift a Kundali ({price}) →</Link></p>
+            <Link className="btn light" to="/birthday-report">Get the Birthday Blueprint →</Link>
+            <p className="small"><Link className="textlink" to="/birthday-report/gift">Gift a Birthday Blueprint ({price}) →</Link></p>
           </div>
         </section>
     </PajPage>

@@ -12,6 +12,7 @@ import { generateReportData, saveReport } from '@/services/BirthdayReportService
 import { EmailService } from '@/services/EmailService';
 import { PLANET_COUNT } from '@/lib/reportFacts';
 import { reportPrice, resolveCurrency, type Currency } from '@/lib/pricing';
+import { parseGiftSeed } from '@/lib/giftSeed';
 import { detectCountry } from '@/services/CountryDetectionService';
 
 // Server-computed entitlement powering the pricing-card state machine.
@@ -74,18 +75,22 @@ const BirthdayReport = () => {
 
   const [searchParams] = useSearchParams();
   const dobSeed = parseDobSeed(searchParams.get('dob'));
+  // Gift hand-off from /birthday-report/gift: ?gift=1&to=&from=&note= and a REAL
+  // dob (unlike the born-on CTA's placeholder year). Seed every field so the
+  // recipient's name, the giver and the personal message are not dropped.
+  const giftSeed = parseGiftSeed(searchParams);
 
-  const [recipientName, setRecipientName] = useState('');
+  const [recipientName, setRecipientName] = useState(giftSeed.to);
   const [day, setDay] = useState(dobSeed.day);
   const [month, setMonth] = useState(dobSeed.month);
-  const [year, setYear] = useState('');
+  const [year, setYear] = useState(giftSeed.year);
   const dob = year && month && day
     ? `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     : '';
   const [gender, setGender] = useState('');
   const [country, setCountry] = useState('India');
-  const [gifterName, setGifterName] = useState('');
-  const [personalMessage, setPersonalMessage] = useState('');
+  const [gifterName, setGifterName] = useState(giftSeed.from);
+  const [personalMessage, setPersonalMessage] = useState(giftSeed.note);
   const [phase, setPhase] = useState<'form' | 'loading' | 'success'>('form');
   const [progress, setProgress] = useState(0);
   const [msgIndex, setMsgIndex] = useState(0);

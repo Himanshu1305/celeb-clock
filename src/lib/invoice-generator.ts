@@ -124,6 +124,32 @@ function amountInWords(amount: number, currency: 'INR' | 'USD'): string {
   return words + ' Only';
 }
 
+// ── GST split (shared by verify-payment, invoice-sweep and this renderer) ────
+// Prices are GST-INCLUSIVE at 18%. For an intra-state (CGST_SGST) supply both
+// heads are 9%, so CGST and SGST must be EQUAL and the lines must foot to the
+// total. Each head is rounded once from the gross (gross × 9/118); the taxable
+// value is what remains. At ₹299: CGST 22.81 + SGST 22.81 + taxable 253.38 =
+// 299.00. (The old plug rule gave 22.81 / 22.80 in the totals but 22.81 / 22.81
+// on the line row, so the line row summed to ₹299.01.)
+// IGST: one 18% head = round(gross × 18/118), taxable = gross − IGST.
+// EXPORT (zero-rated under LUT): no tax, taxable = gross.
+export function splitGstInclusive(
+  gross: number,
+  taxMode: 'CGST_SGST' | 'IGST' | 'EXPORT' | string,
+): { taxable: number; cgst: number; sgst: number; igst: number } {
+  const r2 = (x: number) => Math.round((x + Number.EPSILON) * 100) / 100;
+  const g = r2(gross);
+  if (taxMode === 'CGST_SGST') {
+    const head = r2((g * 9) / 118);
+    return { taxable: r2(g - 2 * head), cgst: head, sgst: head, igst: 0 };
+  }
+  if (taxMode === 'IGST') {
+    const igst = r2((g * 18) / 118);
+    return { taxable: r2(g - igst), cgst: 0, sgst: 0, igst };
+  }
+  return { taxable: g, cgst: 0, sgst: 0, igst: 0 };
+}
+
 // ── Renderer ─────────────────────────────────────────────────────────────────
 export function generateInvoiceHTML(inv: InvoiceRecord): string {
   const gross = n(inv.gross_amount);
@@ -142,13 +168,18 @@ export function generateInvoiceHTML(inv: InvoiceRecord): string {
 
   const rows = items.map((it, i) => {
     const g = n(it.gross);
-    const itemTaxable = isExport ? g : Math.round((g / 1.18) * 100) / 100;
+    // Single-item invoices (all BornClock invoices today) show the STORED split so
+    // the line row and the totals can never disagree; multi-item falls back to the
+    // same per-item rule.
+    const split = items.length === 1
+      ? { taxable, cgst, sgst, igst }
+      : splitGstInclusive(g, inv.tax_mode);
+    const itemTaxable = split.taxable;
     let taxCells = '';
     if (isSplit) {
-      const c = Math.round(itemTaxable * 0.09 * 100) / 100;
-      taxCells = `<td class="r">${fmtMoney(c, cur)}</td><td class="r">${fmtMoney(c, cur)}</td>`;
+      taxCells = `<td class="r">${fmtMoney(split.cgst, cur)}</td><td class="r">${fmtMoney(split.sgst, cur)}</td>`;
     } else if (inv.tax_mode === 'IGST') {
-      taxCells = `<td class="r">${fmtMoney(Math.round((g - itemTaxable) * 100) / 100, cur)}</td>`;
+      taxCells = `<td class="r">${fmtMoney(split.igst, cur)}</td>`;
     } else {
       taxCells = `<td class="r">${cur === 'INR' ? '₹' : '$'}0.00</td>`;
     }

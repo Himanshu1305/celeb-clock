@@ -6,78 +6,37 @@ export interface PromoCodeResult {
   isPremium?: boolean;
 }
 
-export async function redeemPromoCode(code: string, userId: string): Promise<PromoCodeResult> {
+// Promo codes are validated and applied ON THE SERVER (/api/redeem-promo) for
+// the signed-in user. The browser no longer reads promo_codes or writes any
+// entitlement itself, and only shows "premium" when the server granted it.
+export async function redeemPromoCode(code: string, _userId?: string): Promise<PromoCodeResult> {
   const normalizedCode = code.trim().toUpperCase();
-
   if (!normalizedCode) {
     return { success: false, message: 'Please enter a promo code.' };
   }
 
-  // Check code exists and is valid
-  const { data: promoData, error: promoError } = await supabase
-    .from('promo_codes')
-    .select('*')
-    .eq('code', normalizedCode)
-    .single();
+  let token: string | null = null;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    token = session?.access_token ?? null;
+  } catch { /* server answers 401 */ }
 
-  if (promoError || !promoData) {
-    return { success: false, message: 'Invalid promo code. Please check and try again.' };
-  }
-
-  if (!promoData.is_active) {
-    return { success: false, message: 'This promo code is no longer active.' };
-  }
-
-  // Check expiry
-  if (promoData.expires_at && new Date(promoData.expires_at) < new Date()) {
-    return { success: false, message: 'This promo code has expired.' };
-  }
-
-  // Check max uses
-  if (promoData.max_uses != null && promoData.current_uses >= promoData.max_uses) {
-    return { success: false, message: 'This promo code has reached its usage limit.' };
-  }
-
-  // Check if already redeemed
-  const { data: existing } = await supabase
-    .from('promo_code_redemptions')
-    .select('id')
-    .eq('code', normalizedCode)
-    .eq('user_id', userId)
-    .single();
-
-  if (existing) {
-    return { success: false, message: 'You have already used this promo code.' };
-  }
-
-  // Record redemption
-  const { error: redemptionError } = await supabase
-    .from('promo_code_redemptions')
-    .insert({ code: normalizedCode, user_id: userId });
-
-  if (redemptionError) {
-    return { success: false, message: 'Failed to redeem code. Please try again.' };
-  }
-
-  // Increment usage count
-  await supabase
-    .from('promo_codes')
-    .update({ current_uses: promoData.current_uses + 1 })
-    .eq('code', normalizedCode);
-
-  // Grant premium access
-  if (promoData.grants_premium) {
-    await supabase
-      .from('profiles')
-      .update({ premium_status: true })
-      .eq('user_id', userId);
-
+  try {
+    const res = await fetch('/api/redeem-promo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ code: normalizedCode }),
+    });
+    const data = await res.json().catch(() => ({}));
     return {
-      success: true,
-      message: '🎉 Promo code applied! You now have premium access.',
-      isPremium: true,
+      success: !!data.success,
+      message: typeof data.message === 'string' ? data.message : 'Failed to redeem code. Please try again.',
+      isPremium: data.success ? !!data.isPremium : undefined,
     };
+  } catch {
+    return { success: false, message: 'Could not reach the server. Please try again.' };
   }
-
-  return { success: true, message: 'Promo code applied successfully!' };
 }

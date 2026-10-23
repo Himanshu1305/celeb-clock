@@ -484,7 +484,7 @@ function reportCreatedEmail(params: {
   <a href="${reportLink}" style="font-size:14px;color:#4F46E5;text-decoration:none;">${reportLink}</a>
 </div>
 <p style="font-size:12px;color:#9ca3af;margin:0 0 24px;">
-  This link is live for your recipient — reports unviewed for 12 months are removed.
+  Permanent access — once paid, this link never expires.
 </p>
 <table width="100%" cellpadding="0" cellspacing="0">
   ${featureItem('🌟', 'Celebrity birthday twins')}

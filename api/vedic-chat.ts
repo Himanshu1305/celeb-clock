@@ -22,6 +22,7 @@ import { verifyTimingClaims, verifyYogaClaims } from '../src/lib/vedic/readingSp
 import { limitReachedMessage } from '../src/lib/vedic/rateLimit.js';
 import { hashClientId, peekLimit, recordQuestionServer } from '../src/lib/vedic/serverRateLimit.js';
 import { verifyAdminRequest } from './_adminAuth.js';
+import { getAuthedUser, userIsPremium, serviceClient } from './_userAuth.js';
 import { resolveRequestBirthTz } from './_birthParams.js';
 
 const GEMINI_MODEL = 'gemini-flash-latest';
@@ -165,8 +166,16 @@ async function handler(request) {
   // free/paid logic entirely. Crucially, the tier is re-derived SERVER-SIDE from a
   // verified Supabase JWT — the client's `rawTier` is NEVER trusted to claim admin.
   // A verified admin gets `tier:'admin'` (unlimited); everyone else keeps free/paid.
+  // The 'paid' tier is ALSO derived server-side (audit item 9): the caller's
+  // verified token → their profile → premium. A body `tier:'paid'` is ignored.
   const admin = await verifyAdminRequest(request);
-  const tier = admin.isAdmin ? 'admin' : (rawTier === 'paid' ? 'paid' : 'free');
+  void rawTier; // client claim — never trusted
+  let paid = false;
+  if (!admin.isAdmin) {
+    const caller = await getAuthedUser(request);
+    if (caller) paid = await userIsPremium(serviceClient(), caller.id);
+  }
+  const tier = admin.isAdmin ? 'admin' : (paid ? 'paid' : 'free');
   if (admin.isAdmin) console.log('[vedic-chat] admin/testing bypass — excluded from usage analytics:', admin.email);
 
   const text = typeof message === 'string' ? message.trim().slice(0, MAX_MESSAGE) : '';

@@ -135,7 +135,7 @@ export async function sendPurchaseEmail(opts: {
 
   const intro = isReport
     ? (reportLink
-        ? `Your Birthday Blueprint is ready — open it any time at <a href="${reportLink}" style="color:#103A5C">${reportLink}</a>. The link stays live for 12 months.`
+        ? `Your Birthday Blueprint is ready — open it any time at <a href="${reportLink}" style="color:#103A5C">${reportLink}</a>. Permanent access — the link never expires.`
         : 'Your Birthday Blueprint is ready in your account.')
     : 'Welcome to BornClock Premium — your subscription is active, including the Longevity Coach and every premium feature.';
 
