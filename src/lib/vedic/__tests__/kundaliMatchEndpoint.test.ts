@@ -47,4 +47,27 @@ describe('/api/kundali-match — deterministic accuracy', () => {
     const res = await GET(new Request('http://localhost/api/kundali-match?yA=1988'));
     expect(res.status).toBe(400);
   });
+
+  // M7: windows were Mahadasha spans starting in the past ("April 2021 to December 2036").
+  it('marriage windows are forward-looking sub-periods only (start today or later, a few years max)', async () => {
+    const before = Date.now();
+    for (const pair of [PAIR, { ...PAIR, yA: 1978, mA: 5, dA: 13, hA: 19, minA: 30, latA: 32.7266, lonA: 74.857 }]) {
+      const j = await (await GET(new Request('http://localhost/api/kundali-match?' + q(pair)))).json();
+      const all = [...j.timing.personA.windows, ...j.timing.personB.windows, ...j.timing.overlaps];
+      expect(j.timing.personA.windows.length + j.timing.personB.windows.length).toBeGreaterThan(0);
+      for (const w of [...j.timing.personA.windows, ...j.timing.personB.windows]) expect(w.level).toBe('antar');
+      for (const w of all) {
+        expect(new Date(w.start).getTime()).toBeGreaterThanOrEqual(before - 60_000);
+        // longest Vimshottari Antardasha is Venus–Venus, 3 years 4 months
+        expect(new Date(w.end).getTime() - new Date(w.start).getTime()).toBeLessThanOrEqual(3.34 * 365.25 * 864e5);
+      }
+    }
+  });
+
+  // M12: impossible calendar dates were a 500 ("temporarily unavailable").
+  it('400s with a clear message for an impossible date (30 February)', async () => {
+    const res = await GET(new Request('http://localhost/api/kundali-match?' + q({ ...PAIR, mA: 2, dA: 30 })));
+    expect(res.status).toBe(400);
+    expect((await res.json()).error).toMatch(/February|date/i);
+  });
 });

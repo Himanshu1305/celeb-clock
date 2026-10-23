@@ -76,6 +76,8 @@ export default function KundaliMatchPage() {
   const [result, setResult] = useState<MatchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
+  // M12: a clear message for input the server rejects (e.g. 30 February), not "unavailable".
+  const [inputError, setInputError] = useState<string | null>(null);
 
   // Person A comes from the saved profile (incl. real birthplace) when present;
   // otherwise from the form. Person B is always entered fresh — now WITH birthplace.
@@ -95,14 +97,22 @@ export default function KundaliMatchPage() {
   const withNames = (s: string) => s.split('Person A').join(dispA).split('Person B').join(dispB);
 
   // Every person now needs date + time + a real birthplace (Part 1 accuracy fix).
-  const validA = usingSaved || (/^\d{4}-\d{2}-\d{2}$/.test(dobA) && dobA <= today && /^\d{2}:\d{2}$/.test(timeA) && !!cityA);
-  const validB = /^\d{4}-\d{2}-\d{2}$/.test(dobB) && dobB <= today && /^\d{2}:\d{2}$/.test(timeB) && !!cityB;
+  // M12: the date must exist on the calendar (no 30 February / 31 April).
+  const realDate = (s: string) => {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+    if (!m) return false;
+    const y = +m[1], mo = +m[2], d = +m[3];
+    return mo >= 1 && mo <= 12 && d >= 1 && d <= new Date(Date.UTC(y, mo, 0)).getUTCDate();
+  };
+  const validA = usingSaved || (realDate(dobA) && dobA <= today && /^\d{2}:\d{2}$/.test(timeA) && !!cityA);
+  const validB = realDate(dobB) && dobB <= today && /^\d{2}:\d{2}$/.test(timeB) && !!cityB;
   const futureDate = (!!dobA && dobA > today) || (!!dobB && dobB > today);
+  const impossibleDate = (!usingSaved && /^\d{4}-\d{2}-\d{2}$/.test(dobA) && !realDate(dobA)) || (/^\d{4}-\d{2}-\d{2}$/.test(dobB) && !realDate(dobB));
   const canCalc = validA && validB;
 
   const calculate = async () => {
     if (!canCalc || !coordsA || !cityB) return;
-    setLoading(true); setFailed(false);
+    setLoading(true); setFailed(false); setInputError(null);
     try {
       const params = new URLSearchParams({
         ...birthQuery(effDobA, effTimeA, coordsA, 'A'),
@@ -110,6 +120,11 @@ export default function KundaliMatchPage() {
         groom,
       });
       const res = await fetch(`/api/kundali-match?${params.toString()}`);
+      if (res.status === 400) {
+        const body = await res.json().catch(() => null);
+        setInputError(typeof body?.error === 'string' ? body.error : 'Please check the birth details entered.');
+        return;
+      }
       if (!res.ok) throw new Error('unavailable');
       const data = await res.json();
       if (!data?.gunaMilan) throw new Error('unavailable');
@@ -147,7 +162,7 @@ export default function KundaliMatchPage() {
         <section className="section">
           <div className="section-head">
             <div><span className="eyebrow">Guna Milan</span><h1>Kundali Matching.</h1></div>
-            <p>The traditional 36-point Ashtakoota system. {usingSaved ? 'Your details are already filled in — just add the second person.' : 'Enter both birth dates (and times for accurate Nakshatra) to see all eight kootas.'}</p>
+            <p>The traditional 36-point Ashtakoota system. {usingSaved ? 'Your details are already filled in — just add the second person.' : 'Enter both people’s birth date, birth time and birthplace — all three are needed for an accurate Moon Nakshatra — to see all eight kootas.'}</p>
           </div>
 
           <TrustStrip claim="The classical 36-point compatibility score (Ashtakoota) — all eight parts shown and added up in front of you, nothing hidden." href="/how-it-works#vedic" />
@@ -217,12 +232,14 @@ export default function KundaliMatchPage() {
           </div>
         </fieldset>
         {futureDate && <p data-testid="kmatch-future-date" className="subtle" style={{ marginBottom: 8 }}>A birth date cannot be in the future.</p>}
+        {impossibleDate && <p data-testid="kmatch-invalid-date" className="subtle" style={{ marginBottom: 8 }}>That date does not exist on the calendar — please check the day and month.</p>}
 
         <button data-testid="kmatch-calculate-btn" onClick={calculate} disabled={!canCalc || loading}
                 className="btn print:hidden" style={{ width: '100%', marginBottom: 8 }}>
           {loading ? 'Matching…' : 'Match Kundalis →'}
         </button>
 
+        {inputError && <p data-testid="kmatch-input-error" className="subtle" style={{ marginTop: 12 }}>{inputError}</p>}
         {failed && <p className="subtle" style={{ marginTop: 12 }}>Matching service is temporarily unavailable. Please try again shortly.</p>}
         </section>
 
@@ -385,8 +402,8 @@ export default function KundaliMatchPage() {
                 <p className="text-sm text-muted-foreground">No overlapping favourable window in the near future — each person’s individual windows are listed below.</p>
               )}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-sm">
-                <div><div className="font-medium text-foreground">{dispA}</div>{result.timing.personA.windows.slice(0, 2).map((w, i) => <div key={i} className="text-muted-foreground">{w.describe}</div>) || '—'}</div>
-                <div><div className="font-medium text-foreground">{dispB}</div>{result.timing.personB.windows.slice(0, 2).map((w, i) => <div key={i} className="text-muted-foreground">{w.describe}</div>) || '—'}</div>
+                <div><div className="font-medium text-foreground">{dispA}</div>{result.timing.personA.windows.length ? result.timing.personA.windows.slice(0, 2).map((w, i) => <div key={i} className="text-muted-foreground">{w.describe}</div>) : <div className="text-muted-foreground">—</div>}</div>
+                <div><div className="font-medium text-foreground">{dispB}</div>{result.timing.personB.windows.length ? result.timing.personB.windows.slice(0, 2).map((w, i) => <div key={i} className="text-muted-foreground">{w.describe}</div>) : <div className="text-muted-foreground">—</div>}</div>
               </div>
             </div>
             )}
