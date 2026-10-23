@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import { NAKSHATRA_PADA_AKSHARAS } from '@/data/nakshatraAksharas';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -157,7 +158,7 @@ export default function NakshatraPage() {
             <p className="text-sm text-muted-foreground mb-3">Each of the four quarters (<TermTip id="pada">padas</TermTip>) of {extra.name} has a traditional starting sound for a baby's name:</p>
             <div className="flex flex-wrap gap-2">
               {extra.padaSyllables.map((s, i) => (
-                <span key={i} className="px-3 py-1.5 rounded-lg border border-border text-foreground">Pada {i + 1}: <strong>{s}</strong></span>
+                <span key={i} className="px-3 py-1.5 rounded-lg border border-border text-foreground">Pada {i + 1}: <strong>{s}</strong> <span lang="hi">({NAKSHATRA_PADA_AKSHARAS[extra.name]?.[i]?.hi})</span></span>
               ))}
             </div>
             <p className="text-xs text-muted-foreground mt-2">
