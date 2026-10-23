@@ -49,11 +49,11 @@ export default function FestivalsPage() {
   const faqItems = [
     {
       question: 'How are these festival dates calculated?',
-      answer: 'They are computed, not copied from a table. We derive the exact instants of every new moon and full moon and the Sun’s entry into each sidereal sign, build the lunar months by the classical rule (a month is named after the Sankranti that falls within it), and then locate each festival by its lunar month, paksha and tithi — using the observance time (sunrise, pradosh/evening, moonrise or midnight) that fixes the civil date. The engine is the same one behind your Kundli.',
+      answer: 'They are computed, not copied from a table. We derive the exact instants of every new moon and full moon and the Sun’s entry into each sidereal sign, build the lunar months by the classical rule (a month is named after the Sankranti that falls within it), and then locate each festival by its lunar month, paksha and tithi. The civil date follows the classical rule for that festival — the tithi at sunrise, or the tithi covering the forenoon, midday, afternoon, evening (pradosh), moonrise or midnight — checked against real sunrise and sunset for New Delhi. Skipped (kshaya) and repeated (vriddhi) tithis are resolved by the same rules, so no festival is dropped. The engine is the same one behind your Kundli.',
     },
     {
       question: 'Do these match Drik Panchang / my local Panchang?',
-      answer: 'For 2025 our major-festival dates match Drik Panchang on 16 of 17 — the one exception is Ghatasthapana (Navratri start), where the muhurta can fall a day earlier when Pratipada begins after sunrise. Regional Panchangs occasionally differ by a day because of local sunrise and the amanta/purnimanta convention; where a festival is observed at night or moonrise we note it.',
+      answer: 'Our automated tests compare the major-festival, Ekadashi, Purnima and Sankranti dates with Drik Panchang’s calendar for New Delhi in several years. Dates are for New Delhi: a Panchang for another city can differ by a day because of local sunrise, and Vaishnava (ISKCON) and Smarta traditions sometimes keep Ekadashi, Ram Navami or Janmashtami on different days — we list the Smarta date. Where a festival is observed at night or moonrise we note it.',
     },
     {
       question: 'What is the difference between a festival, a vrat and Ekadashi?',

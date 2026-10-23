@@ -22,9 +22,17 @@ export interface DayPanchang extends Panchang {
   yamaganda: TimeWindow;
   dayChoghadiya: TimeWindow[];
   nightChoghadiya: TimeWindow[];
+  /** When the sunrise limb ends, local "HH:MM", with " (next day)" if after local midnight. */
+  tithiEnd: string;
+  nakshatraEnd: string;
+  yogaEnd: string;
+  karanaEnd: string;
+  /** Abhijit muhurta — the 8th of the 15 daytime muhurtas (midday). */
+  abhijit: TimeWindow;
 }
 
 const sunMoon = (d: Date) => ({ sun: getSiderealLongitude('Sun', d), moon: getSiderealLongitude('Moon', d) });
+const elong = (d: Date) => { const x = sunMoon(d); return x.moon - x.sun; };
 
 function fmtLocal(utc: Date, tzOffsetHours: number): string {
   const local = new Date(utc.getTime() + tzOffsetHours * 3600 * 1000);
@@ -70,16 +78,39 @@ function windowFromPart(part: number, rise: Date, dayMs: number, tz: number, nam
   return { name, start: fmtLocal(start, tz), end: fmtLocal(end, tz), quality };
 }
 
-function choghadiyaSet(startIdx: number, from: Date, totalMs: number, tz: number): TimeWindow[] {
+// Day Choghadiyas follow CHOGH_CYCLE one step at a time; night Choghadiyas step
+// FIVE places through it each slot (Shubh → Amrit → Char → Rog → Kaal → Labh →
+// Udveg), the standard order used by Drik Panchang (round-2 audit T6).
+function choghadiyaSet(startIdx: number, from: Date, totalMs: number, tz: number, step = 1): TimeWindow[] {
   const seg = totalMs / 8;
   const out: TimeWindow[] = [];
   for (let i = 0; i < 8; i++) {
-    const name = CHOGH_CYCLE[(startIdx + i) % 7];
+    const name = CHOGH_CYCLE[(startIdx + i * step) % 7];
     const start = new Date(from.getTime() + i * seg);
     const end = new Date(start.getTime() + seg);
     out.push({ name, start: fmtLocal(start, tz), end: fmtLocal(end, tz), quality: CHOGH_QUALITY[name] });
   }
   return out;
+}
+
+/**
+ * First instant after `from` at which floor(f / unit) changes, for a quantity
+ * f (degrees, mod 360) that increases with time — i.e. when the current
+ * tithi / nakshatra / yoga / karana ends. Hourly scan, then bisection (~1 s).
+ */
+function limbEnd(from: Date, f: (d: Date) => number, unit: number): Date {
+  const idx = (d: Date) => Math.floor((((f(d) % 360) + 360) % 360) / unit);
+  const cur = idx(from);
+  const lo = from.getTime();
+  let hi = lo;
+  for (let h = 1; h <= 36; h++) { hi = lo + h * 3600000; if (idx(new Date(hi)) !== cur) break; }
+  let a = hi - 3600000 < lo ? lo : hi - 3600000;
+  for (let i = 0; i < 25; i++) { const mid = (a + hi) / 2; if (idx(new Date(mid)) === cur) a = mid; else hi = mid; }
+  return new Date(hi);
+}
+function fmtEnd(end: Date, rise: Date, tz: number): string {
+  const day = (d: Date) => new Date(d.getTime() + tz * 3600000).toISOString().slice(0, 10);
+  return fmtLocal(end, tz) + (day(end) !== day(rise) ? ' (next day)' : '');
 }
 
 /** Full daily Panchang for a city. `date` is the local calendar day (any time). */
@@ -88,6 +119,7 @@ export function computeDayPanchang(date: Date, lat: number, lon: number, tzOffse
   const { rise, set, nextRise } = sunriseSunset(date, lat, lon, tzOffsetHours);
   const base = computePanchang(rise, sunMoon, tzOffsetHours);
 
+  // Local weekday of this sunrise (base.weekday is computed the same way).
   const weekday = new Date(rise.getTime() + tzOffsetHours * 3600 * 1000).getUTCDay();
   const dayMs = set.getTime() - rise.getTime();
   const nightMs = nextRise.getTime() - set.getTime();
@@ -108,7 +140,17 @@ export function computeDayPanchang(date: Date, lat: number, lon: number, tzOffse
     gulikaKaal,
     yamaganda,
     dayChoghadiya: choghadiyaSet(dayStart, rise, dayMs, tzOffsetHours),
-    nightChoghadiya: choghadiyaSet(nightStart, set, nightMs, tzOffsetHours),
+    nightChoghadiya: choghadiyaSet(nightStart, set, nightMs, tzOffsetHours, 5),
+    tithiEnd: fmtEnd(limbEnd(rise, elong, 12), rise, tzOffsetHours),
+    nakshatraEnd: fmtEnd(limbEnd(rise, d => sunMoon(d).moon, 360 / 27), rise, tzOffsetHours),
+    yogaEnd: fmtEnd(limbEnd(rise, d => { const x = sunMoon(d); return x.sun + x.moon; }, 360 / 27), rise, tzOffsetHours),
+    karanaEnd: fmtEnd(limbEnd(rise, elong, 6), rise, tzOffsetHours),
+    abhijit: {
+      name: 'Abhijit Muhurta',
+      start: fmtLocal(new Date(rise.getTime() + dayMs * 7 / 15), tzOffsetHours),
+      end: fmtLocal(new Date(rise.getTime() + dayMs * 8 / 15), tzOffsetHours),
+      quality: 'good',
+    },
   };
 }
 

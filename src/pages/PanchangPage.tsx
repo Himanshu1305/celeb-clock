@@ -5,14 +5,8 @@ import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { TermTip } from '@/components/vedic/TermTip';
 import { computeDayPanchang, PANCHANG_CITIES, type TimeWindow } from '@/lib/vedic/panchangDay';
+import { karanaName } from '@/lib/vedic/panchang';
 
-const KARANA_MOVABLE = ['Bava', 'Balava', 'Kaulava', 'Taitila', 'Gara', 'Vanija', 'Vishti (Bhadra)'];
-const KARANA_FIXED_END = ['Shakuni', 'Chatushpada', 'Naga'];
-function karanaName(i: number): string {
-  if (i <= 0) return 'Kimstughna';
-  if (i >= 57) return KARANA_FIXED_END[Math.min(2, i - 57)];
-  return KARANA_MOVABLE[(i - 1) % 7];
-}
 
 const QUALITY_STYLE: Record<TimeWindow['quality'], string> = {
   good: 'bg-emerald-50 border-emerald-200 text-emerald-800',
@@ -35,9 +29,11 @@ export default function PanchangPage() {
   const [citySlug, setCitySlug] = useState(initial.slug);
   const city = PANCHANG_CITIES.find(c => c.slug === citySlug) || PANCHANG_CITIES[0];
 
-  const todayKey = new Date().toISOString().slice(0, 10);
+  // The city's local calendar date (UTC fields of this Date = local date there),
+  // so between local midnight and 05:30 IST the page shows today, not yesterday.
+  const todayKey = new Date(Date.now() + city.tz * 3600 * 1000).toISOString().slice(0, 10);
   const p = useMemo(
-    () => computeDayPanchang(new Date(), city.lat, city.lon, city.tz, city.name),
+    () => computeDayPanchang(new Date(todayKey + 'T12:00:00Z'), city.lat, city.lon, city.tz, city.name),
     [city.slug, todayKey],
   );
 
@@ -90,18 +86,22 @@ export default function PanchangPage() {
             <div className="rounded-xl border border-border p-4">
               <div className="text-xs text-muted-foreground"><TermTip id="tithi">Tithi</TermTip></div>
               <div className="font-semibold text-foreground">{p.tithiName} <span className="text-muted-foreground font-normal">(<TermTip id="paksha">{p.paksha} Paksha</TermTip>)</span></div>
+              <div className="text-xs text-muted-foreground tabular-nums">till {p.tithiEnd}</div>
             </div>
             <div className="rounded-xl border border-border p-4">
               <div className="text-xs text-muted-foreground"><TermTip id="nakshatra">Nakshatra</TermTip></div>
               <div className="font-semibold text-foreground">{p.nakshatra}</div>
+              <div className="text-xs text-muted-foreground tabular-nums">till {p.nakshatraEnd}</div>
             </div>
             <div className="rounded-xl border border-border p-4">
               <div className="text-xs text-muted-foreground"><TermTip id="panchangYoga">Yoga</TermTip></div>
               <div className="font-semibold text-foreground">{p.yoga}</div>
+              <div className="text-xs text-muted-foreground tabular-nums">till {p.yogaEnd}</div>
             </div>
             <div className="rounded-xl border border-border p-4">
               <div className="text-xs text-muted-foreground">Karana · Vara</div>
               <div className="font-semibold text-foreground">{karanaName(p.karana)} · {p.weekday}</div>
+              <div className="text-xs text-muted-foreground tabular-nums">Karana till {p.karanaEnd}</div>
             </div>
           </div>
 
@@ -110,6 +110,7 @@ export default function PanchangPage() {
             <div className="rounded-xl border border-border p-4" data-testid="panchang-sun">
               <h2 className="font-semibold text-foreground mb-2">Sun</h2>
               <div className="text-sm text-muted-foreground">Sunrise <strong className="text-foreground tabular-nums">{p.sunrise}</strong> · Sunset <strong className="text-foreground tabular-nums">{p.sunset}</strong></div>
+              <div className="text-sm text-muted-foreground mt-1">Abhijit Muhurta <strong className="text-emerald-700 tabular-nums">{p.abhijit.start}–{p.abhijit.end}</strong></div>
             </div>
             <div className="rounded-xl border border-border p-4" data-testid="panchang-windows">
               <h2 className="font-semibold text-foreground mb-2">Inauspicious windows</h2>
