@@ -21,6 +21,8 @@ import type { GunaMilanResult, KootaDetail } from './matchmaking';
 export interface MatchSynthesisInput {
   gunaMilan: GunaMilanResult;
   overlaps?: Array<{ range: string }>;
+  /** M1: one or both people under 18 — no marriage-timing sentence. */
+  minor?: boolean;
 }
 export interface MatchSynthesis {
   verdict: string;
@@ -38,7 +40,7 @@ const GLOSS: Record<string, string> = {
   graha_maitri: 'mental and psychological rapport',
   gana: 'day-to-day temperament',
   bhakoot: 'emotional and financial harmony',
-  nadi: 'health and genetic vitality',
+  nadi: 'health and constitutional compatibility',
 };
 
 const byKey = (r: GunaMilanResult): Record<string, KootaDetail> =>
@@ -47,7 +49,7 @@ const byKey = (r: GunaMilanResult): Record<string, KootaDetail> =>
 const joinNames = (arr: { name: string }[]) => arr.map(d => d.name).join(' and ');
 
 /** Build the synthesis. Pure + deterministic. */
-export function buildMatchSynthesis({ gunaMilan, overlaps = [] }: MatchSynthesisInput): MatchSynthesis {
+export function buildMatchSynthesis({ gunaMilan, overlaps = [], minor = false }: MatchSynthesisInput): MatchSynthesis {
   const r = gunaMilan;
   const k = byKey(r);
   const nadiK = k.nadi, bhakootK = k.bhakoot;
@@ -66,17 +68,18 @@ export function buildMatchSynthesis({ gunaMilan, overlaps = [] }: MatchSynthesis
   const total = r.total;
   const many = uncancelled.length > 1;
 
-  // ── Verdict (calibrated to the real evidence) ───────────────────────────────
+  // ── Verdict — score band FIRST (M6), then doshas ────────────────────────────
   let verdict: string;
   const strong = total >= 24 && heavyRealAffl === 0 && !uncancelled.length;
-  if (strong) {
+  if (total < ACCEPT) {
+    verdict = `A more challenging match — ${total}/36 (${r.compatibility}), below the classical ${ACCEPT}-point line: the compatibility here rewards deliberate effort more than an easy-flowing pairing would.`
+      + (uncancelled.length ? ` ${joinNames(uncancelled)} ${many ? 'are' : 'is'} also present.` : '');
+  } else if (strong) {
     verdict = `A strong match — ${total}/36 (${r.compatibility}). The classical picture is genuinely favourable, and the factors that carry the most weight are on side.`;
   } else if (uncancelled.length) {
     verdict = `A mixed but honest picture — ${total}/36 (${r.compatibility}). Real strengths sit alongside ${joinNames(uncancelled)} — ${many ? 'the areas that ask' : 'the one area that asks'} for conscious attention rather than worry.`;
-  } else if (total >= ACCEPT) {
-    verdict = `A workable match — ${total}/36 (${r.compatibility}), above the classical ${ACCEPT}-point line, with no uncancelled dosha left standing.`;
   } else {
-    verdict = `A more challenging match — ${total}/36 (${r.compatibility}), below the classical ${ACCEPT}-point line: the compatibility here rewards deliberate effort more than an easy-flowing pairing would.`;
+    verdict = `A workable match — ${total}/36 (${r.compatibility}), above the classical ${ACCEPT}-point line, with no uncancelled dosha left standing.`;
   }
 
   // ── Paragraph 1: reason from the two heaviest factors (Nadi 8, Bhakoot 7) ────
@@ -105,30 +108,34 @@ export function buildMatchSynthesis({ gunaMilan, overlaps = [] }: MatchSynthesis
 
   // ── Paragraph 2: connect the lighter Kootas as an explicit trade-off ─────────
   let p2: string;
-  if (!strongest || !weakest || strongest.key === weakest.key) {
+  if (lighter.length && lighter.every(x => x.score === x.max)) {
+    // M9: never call a full-score koota "the softer spot".
+    p2 = `Beyond the heavyweights, all six lighter factors score in full — there is no softer spot among them.`;
+  } else if (!strongest || !weakest || strongest.key === weakest.key) {
     p2 = `Among the lighter factors, the scores sit at a similar level, so no single one dominates the everyday texture of the match.`;
   } else {
     p2 = `Beyond the heavyweights, ${strongest.label} (${strongest.score}/${strongest.max}) is the clear strength — ${GLOSS[strongest.key]} — while ${weakest.label} (${weakest.score}/${weakest.max}) is the softer spot, where ${GLOSS[weakest.key]} may need more deliberate tending. Read together rather than as separate scores: lean on the ${GLOSS[strongest.key]}, and invest in the ${GLOSS[weakest.key]}.`;
   }
 
   // ── Paragraph 3: calibrated conclusion + real timing overlap ─────────────────
-  const okAcc = total >= ACCEPT && !uncancelled.length;
   let conclusion: string;
-  if (strong) {
+  if (total < ACCEPT) {
+    conclusion = uncancelled.length
+      ? `Taken together, this match sits below the classical comfort line, and ${joinNames(uncancelled)} ${many ? 'are the specific things' : 'is the specific thing'} to work with honestly rather than a reason for alarm; it can work, but with more conscious effort than a higher score would ask.`
+      : `Taken together, this is a genuinely mixed match that sits below the classical comfort line; it can absolutely work, but with more conscious effort in the weaker areas than a higher score would ask.`;
+  } else if (strong) {
     conclusion = heavySat.length === 2
       ? `Taken together, this reads as a genuinely strong pairing: both of the heaviest factors are satisfied and the lighter ones lean positive.`
       : `Taken together, this reads as a genuinely strong pairing: the one heavyweight concern is classically cancelled, and the rest of the chart leans positive.`;
   } else if (uncancelled.length) {
     conclusion = `Taken together, this is a real but uneven match — the strengths are genuine, and ${joinNames(uncancelled)} ${many ? 'are the specific things' : 'is the specific thing'} to work with honestly rather than a reason for alarm.`;
-  } else if (okAcc) {
-    conclusion = `Taken together, this is a workable, above-threshold match with no standing affliction — solid ground, with the softer factor above worth some attention.`;
   } else {
-    conclusion = `Taken together, this is a genuinely mixed match that sits below the classical comfort line; it can absolutely work, but with more conscious effort in the weaker areas than a higher score would ask.`;
+    conclusion = `Taken together, this is a workable, above-threshold match with no standing affliction — solid ground, with the softer factor above worth some attention.`;
   }
   const cancelNote = cancelledPresent.length
     ? ` Note too that ${joinNames(cancelledPresent)} ${cancelledPresent.length > 1 ? 'are' : 'is'} present but classically cancelled, which is why ${cancelledPresent.length > 1 ? 'they don’t' : 'it doesn’t'} pull the reading down further.`
     : '';
-  const timingNote = overlaps.length
+  const timingNote = minor ? '' : overlaps.length
     ? ` The charts also point to ${overlaps[0].range} as a window when both people are simultaneously in a favourable marriage period — a natural time for a significant step.`
     : ` There’s no overlapping favourable window in the near future; each person’s individual windows are shown below.`;
   const p3 = `${conclusion}${cancelNote} This describes compatibility patterns and where ease or effort is likely — not a prediction of whether the relationship will succeed.${timingNote}`;

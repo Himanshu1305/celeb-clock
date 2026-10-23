@@ -23,11 +23,16 @@ interface TimingWindow { planet: string; level: string; range: string; status: s
 interface ManglikMatch {
   aHasDosha: boolean; bHasDosha: boolean;
   aSeverity: string | null; bSeverity: string | null;
-  status: 'clear' | 'mutual' | 'one-sided';
+  status: 'clear' | 'mutual' | 'cancelled' | 'one-sided';
+  /** One line per person: the Lagna check and the Moon check, shown separately. */
+  checks?: string[];
+  convention?: string;
   note: string;
 }
 interface MatchResponse {
   gunaMilan: GunaMilanResult;
+  groom?: 'A' | 'B';
+  warnings?: { samePerson?: boolean; minor?: boolean; samePersonNote?: string; minorNote?: string };
   porutham?: PoruthamResult | null;
   manglik?: ManglikMatch | null;
   synthesis?: { verdict: string; paragraphs: string[] } | null;
@@ -64,6 +69,10 @@ export default function KundaliMatchPage() {
   const [timeB, setTimeB] = useState('');
   const [cityB, setCityB] = useState<SavedCity | null>(null);
   const [nameB, setNameB] = useState('');
+  // M2: explicit groom (boy) / bride (girl). Ashtakoota and Porutham both depend on it.
+  const [groom, setGroom] = useState<'A' | 'B'>('A');
+  // M1: no future birth dates (local today, YYYY-MM-DD).
+  const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
   const [result, setResult] = useState<MatchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -86,8 +95,9 @@ export default function KundaliMatchPage() {
   const withNames = (s: string) => s.split('Person A').join(dispA).split('Person B').join(dispB);
 
   // Every person now needs date + time + a real birthplace (Part 1 accuracy fix).
-  const validA = usingSaved || (/^\d{4}-\d{2}-\d{2}$/.test(dobA) && /^\d{2}:\d{2}$/.test(timeA) && !!cityA);
-  const validB = /^\d{4}-\d{2}-\d{2}$/.test(dobB) && /^\d{2}:\d{2}$/.test(timeB) && !!cityB;
+  const validA = usingSaved || (/^\d{4}-\d{2}-\d{2}$/.test(dobA) && dobA <= today && /^\d{2}:\d{2}$/.test(timeA) && !!cityA);
+  const validB = /^\d{4}-\d{2}-\d{2}$/.test(dobB) && dobB <= today && /^\d{2}:\d{2}$/.test(timeB) && !!cityB;
+  const futureDate = (!!dobA && dobA > today) || (!!dobB && dobB > today);
   const canCalc = validA && validB;
 
   const calculate = async () => {
@@ -97,6 +107,7 @@ export default function KundaliMatchPage() {
       const params = new URLSearchParams({
         ...birthQuery(effDobA, effTimeA, coordsA, 'A'),
         ...birthQuery(dobB, timeB, cityB, 'B'),
+        groom,
       });
       const res = await fetch(`/api/kundali-match?${params.toString()}`);
       if (!res.ok) throw new Error('unavailable');
@@ -161,7 +172,7 @@ export default function KundaliMatchPage() {
                      onChange={e => { setNameA(e.target.value); setResult(null); }}
                      placeholder="Name (optional)" aria-label="Person A name"
                      className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
-              <input data-testid="kmatch-dob-a" type="date" value={dobA}
+              <input data-testid="kmatch-dob-a" type="date" value={dobA} max={today}
                      onChange={e => { setDobA(e.target.value); setResult(null); }}
                      className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" aria-label="Person A date of birth" />
               <input data-testid="kmatch-time-a" type="time" value={timeA}
@@ -178,7 +189,7 @@ export default function KundaliMatchPage() {
                    onChange={e => { setNameB(e.target.value); setResult(null); }}
                    placeholder="Name (optional)" aria-label="Person B name"
                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" />
-            <input data-testid="kmatch-dob-b" type="date" value={dobB}
+            <input data-testid="kmatch-dob-b" type="date" value={dobB} max={today}
                    onChange={e => { setDobB(e.target.value); setResult(null); }}
                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground" aria-label="Person B date of birth" />
             <input data-testid="kmatch-time-b" type="time" value={timeB}
@@ -187,6 +198,25 @@ export default function KundaliMatchPage() {
             <CityPicker testid="kmatch-city-b" value={cityB} dob={dobB} time={timeB} ariaLabel="Person B birth city" onPick={c => { setCityB(c); setResult(null); }} />
           </div>
         </div>
+
+        {/* M2: who is the groom (boy) and who is the bride (girl) */}
+        <fieldset data-testid="kmatch-groom" className="rounded-xl border border-border p-4 mb-4 print:hidden">
+          <legend className="px-1 text-sm font-semibold text-foreground">Who is the boy (groom) and who is the girl (bride)?</legend>
+          <p className="text-xs text-muted-foreground mb-2">Kundali matching is read from the boy to the girl, so swapping them can change the score.</p>
+          <div className="flex flex-col sm:flex-row gap-2 text-sm">
+            <label className="flex items-center gap-2">
+              <input data-testid="kmatch-groom-a" type="radio" name="kmatch-groom" checked={groom === 'A'}
+                     onChange={() => { setGroom('A'); setResult(null); }} />
+              {usingSaved ? 'You' : dispA} = boy, {usingSaved ? 'the other person' : dispB} = girl
+            </label>
+            <label className="flex items-center gap-2">
+              <input data-testid="kmatch-groom-b" type="radio" name="kmatch-groom" checked={groom === 'B'}
+                     onChange={() => { setGroom('B'); setResult(null); }} />
+              {usingSaved ? 'You' : dispA} = girl, {usingSaved ? 'the other person' : dispB} = boy
+            </label>
+          </div>
+        </fieldset>
+        {futureDate && <p data-testid="kmatch-future-date" className="subtle" style={{ marginBottom: 8 }}>A birth date cannot be in the future.</p>}
 
         <button data-testid="kmatch-calculate-btn" onClick={calculate} disabled={!canCalc || loading}
                 className="btn print:hidden" style={{ width: '100%', marginBottom: 8 }}>
@@ -206,14 +236,21 @@ export default function KundaliMatchPage() {
               </button>
             </div>
 
+            {result.warnings?.samePerson && (
+              <p data-testid="kmatch-same-person" className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">⚠️ {result.warnings.samePersonNote}</p>
+            )}
+            {result.warnings?.minor && (
+              <p data-testid="kmatch-minor" className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">⚠️ {result.warnings.minorNote}</p>
+            )}
+
             <div className="text-center rounded-xl border border-border p-4">
               <div className="text-sm text-muted-foreground">Total Guna Milan</div>
               <div className="text-4xl font-black text-[#6E5AA6]">{result.gunaMilan.total} / 36</div>
               <div className="font-semibold text-foreground">{result.gunaMilan.compatibility}</div>
               <div data-testid="kmatch-people-line" className="text-xs text-muted-foreground mt-1">
-                <span className="font-medium text-foreground">{dispA}</span> ({result.people.a.rashi}/{result.people.a.nakshatra})
+                <span className="font-medium text-foreground">{dispA}</span> ({(result.groom ?? 'A') === 'A' ? 'boy' : 'girl'}, {result.people.a.rashi}/{result.people.a.nakshatra})
                 {' × '}
-                <span className="font-medium text-foreground">{dispB}</span> ({result.people.b.rashi}/{result.people.b.nakshatra})
+                <span className="font-medium text-foreground">{dispB}</span> ({(result.groom ?? 'A') === 'B' ? 'boy' : 'girl'}, {result.people.b.rashi}/{result.people.b.nakshatra})
               </div>
             </div>
 
@@ -295,6 +332,12 @@ export default function KundaliMatchPage() {
               <div data-testid="kmatch-manglik" className={`rounded-xl border p-4 text-sm ${result.manglik.status === 'one-sided' ? 'bg-amber-50 border-amber-200 text-amber-900' : 'bg-emerald-50 border-emerald-200 text-emerald-900'}`}>
                 <div className="font-semibold mb-1">{result.manglik.status === 'one-sided' ? '⚠️' : '✓'} <TermTip id="manglik">Manglik</TermTip> check</div>
                 <p>{withNames(result.manglik.note)}</p>
+                {result.manglik.checks && (
+                  <ul data-testid="kmatch-manglik-checks" className="mt-2 list-disc pl-5 space-y-0.5 text-xs">
+                    {result.manglik.checks.map((c, i) => <li key={i}>{withNames(c)}</li>)}
+                  </ul>
+                )}
+                {result.manglik.convention && <p className="mt-1 text-xs opacity-80">{result.manglik.convention}</p>}
               </div>
             )}
 
@@ -325,6 +368,7 @@ export default function KundaliMatchPage() {
             )}
 
             {/* Marriage-timing windows (Part 2.5) — reuses the D-Fix3 activation engine */}
+{!result.warnings?.minor && (
             <div data-testid="kmatch-timing" className="rounded-xl border border-border p-4 space-y-2">
               <div className="font-semibold text-foreground">Favourable marriage-timing windows</div>
               <p className="text-xs text-muted-foreground">{result.timing.note}</p>
@@ -345,8 +389,9 @@ export default function KundaliMatchPage() {
                 <div><div className="font-medium text-foreground">{dispB}</div>{result.timing.personB.windows.slice(0, 2).map((w, i) => <div key={i} className="text-muted-foreground">{w.describe}</div>) || '—'}</div>
               </div>
             </div>
+            )}
 
-            {/* Methodology disclosure (Part 2.4) */}
+                        {/* Methodology disclosure (Part 2.4) */}
             <details data-testid="kmatch-methodology" className="rounded-lg border border-border p-3 text-sm text-muted-foreground">
               <summary className="cursor-pointer font-medium text-foreground">How this is calculated (methodology)</summary>
               <p className="mt-2">{result.gunaMilan.methodology}</p>

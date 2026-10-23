@@ -85,8 +85,10 @@ describe('Reading — POSITIVE: a very different chart (Sydney 1975, southern he
     const payload = await buildReadingPayload(facts, fakeGoodGenerator);
     expect(payload.degraded).toBe(false);
     expect(payload.facts.rashi).toBe('Dhanu');
-    expect(payload.facts.doshas.mangal.present).toBe(true); // Sydney chart has Mangal Dosha
-    expect(payload.prompt.userPrompt).toContain('Mangal Dosha: present');
+    // Mars is in the 2nd from the Lagna and 5th from the Moon (Swiss Ephemeris check):
+    // NOT Manglik under the AstroSage convention (houses 1/4/7/8/12; 2nd not counted).
+    expect(payload.facts.doshas.mangal.present).toBe(false);
+    expect(payload.prompt.userPrompt).toContain('Mangal Dosha: not present');
   });
 });
 
@@ -122,8 +124,9 @@ describe('Reading — NEGATIVE: malformed/missing chart input fails gracefully a
 });
 
 describe('Reading — EDGE: a chart with a real dosha reads calm/remedy-focused (not alarming)', () => {
-  it('Sydney (Mangal present) — fallback dosha text stays calm and constructive', async () => {
-    const facts = await factsFor(SYDNEY);
+  it('Delhi 1988 (Mangal present from the Moon) — fallback dosha text stays calm and constructive', async () => {
+    // Mars 7th from the Moon (Swiss Ephemeris check) → Manglik (Low) by the AstroSage convention.
+    const facts = await factsFor(REFERENCE);
     // Simulate AI offline so we exercise the deterministic dosha framing too.
     const payload = await buildReadingPayload(facts, fakeThrowingGenerator);
     expect(payload.facts.doshas.mangal.present).toBe(true);

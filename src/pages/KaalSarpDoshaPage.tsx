@@ -78,7 +78,7 @@ export default function KaalSarpDoshaPage() {
         name: 'What are the types of Kaal Sarp Dosha?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'There are 12 types of Kaal Sarp Dosha, named after serpents: Anant, Kulik, Vasuki, Shankhpal, Padam, Mahapadam, Takshak, Karkotak, Shankhchur, Ghatak, Vishdhar, and Sheshnag. Each is defined by which house axis Rahu and Ketu occupy, and each is traditionally associated with slightly different themes in life — career, relationships, spiritual growth, and so on.',
+          text: 'There are 12 types of Kaal Sarp Dosha, named after serpents: Anant, Kulik, Vasuki, Shankhpal, Padma, Mahapadma, Takshak, Karkotak, Shankhachud, Ghatak, Vishdhar and Sheshnag. Each is named by the house Rahu occupies counted from the Lagna (Rahu in the 1st = Anant … Rahu in the 12th = Sheshnag), and each is traditionally associated with slightly different themes in life — career, relationships, spiritual growth, and so on.',
         },
       },
     ],
@@ -117,7 +117,7 @@ export default function KaalSarpDoshaPage() {
           <div><span className="eyebrow">Rahu–Ketu · Nodal axis</span><h1>Kaal Sarp Dosha Calculator.</h1></div>
           <p>Check whether all seven classical planets fall between Rahu and Ketu in your birth chart, which of the 12 named types applies, and what it actually means — calmly, honestly, without fear.</p>
         </div>
-        <TrustStrip claim="Every planet's position is worked out from your real birth chart. In our tests, our Kaal Sarp result matched a leading Vedic astrology service in 96–100% of charts (a few borderline charts can differ)." href="/how-it-works#vedic" />
+        <TrustStrip claim="Every planet's position is worked out from your real birth chart. Kaal Sarp is reported only when all seven planets sit between Rahu and Ketu by exact degree — a near-miss is shown as a note, never as a dosha." href="/how-it-works#vedic" />
         <div className="form-band" style={{ marginTop: 16 }}>
           <div><h3>Your birth details</h3><p className="small muted">We need the exact positions of all planets, including Rahu and Ketu.</p></div>
           <BirthDetailsForm
@@ -140,7 +140,7 @@ export default function KaalSarpDoshaPage() {
             <div className={`rounded-xl border p-5 text-center ${ks.present ? 'border-amber-300 bg-amber-50' : 'border-emerald-200 bg-emerald-50'}`}>
               <div className={`text-2xl font-black ${ks.present ? 'text-amber-700' : 'text-emerald-700'}`}>
                 {ks.present
-                  ? `Your chart shows ${ks.isPartial ? 'Partial ' : ''}Kaal Sarp Dosha`
+                  ? 'Your chart shows Kaal Sarp Dosha'
                   : 'Your chart does not show Kaal Sarp Dosha'}
               </div>
               {ks.present && (
@@ -153,9 +153,6 @@ export default function KaalSarpDoshaPage() {
                       Direction: {ks.direction === 'Ascending' ? 'Ascending (Rahu leads)' : 'Descending (Ketu leads)'}
                     </div>
                   )}
-                  {ks.isPartial && (
-                    <div className="text-sm text-muted-foreground">Partial — one or more planets fall outside the Rahu–Ketu arc</div>
-                  )}
                 </div>
               )}
             </div>
@@ -165,13 +162,11 @@ export default function KaalSarpDoshaPage() {
               {ks.present ? (
                 <>
                   <p className="font-bold text-foreground mb-2">
-                    {ks.isPartial ? 'A partial Kaal Sarp pattern is present — understand it, don\'t fear it.' : 'Kaal Sarp Dosha is present — a pattern of intensity and eventual breakthrough.'}
+                    Kaal Sarp Dosha is present — a pattern of intensity and eventual breakthrough.
                   </p>
                   <p className="text-sm text-foreground leading-relaxed mb-2">
                     <TermTip id="kaalsarp">Kaal Sarp Dosha</TermTip> forms when all seven classical planets are hemmed between Rahu and Ketu on one side of the nodal axis.
-                    {ks.isPartial
-                      ? ' In your case it is partial — at least one planet falls outside the arc, which significantly reduces the pattern\'s intensity compared to a full formation.'
-                      : ' In your chart all seven planets fall within the arc, making it a full formation.'}
+                    {' '}In your chart all seven planets fall within the arc by exact degree, making it a full formation.
                   </p>
                   <p className="text-sm text-foreground leading-relaxed mb-2">
                     Traditionally, this pattern is associated with concentrated karmic focus — periods of delay or obstruction followed by meaningful, sometimes dramatic breakthroughs. Many people with this configuration describe a sense of directed intensity in their lives: obstacles that, once cleared, opened significant doors.
@@ -184,8 +179,13 @@ export default function KaalSarpDoshaPage() {
                 <>
                   <p className="font-bold text-foreground mb-2">Your chart does not show Kaal Sarp Dosha.</p>
                   <p className="text-sm text-foreground leading-relaxed">
-                    All seven classical planets are not confined within the Rahu–Ketu arc in your chart, so the Kaal Sarp pattern does not apply. No special consideration or action is needed on this front.
+                    All seven classical planets are not confined between Rahu and Ketu by degree in your chart, so the Kaal Sarp pattern does not apply. No special consideration or action is needed on this front.
                   </p>
+                  {ks.isPartial && (
+                    <p data-testid="kaalsarp-partial-note" className="mt-2 rounded-lg border border-border bg-muted/40 p-2 text-xs text-muted-foreground">
+                      Note only, not a dosha: your planets come close to this pattern (some astrologers call it a “partial” Kaal Sarp), but at least one planet lies outside the Rahu–Ketu arc by degree. By the standard definition used here, Kaal Sarp is not present.
+                    </p>
+                  )}
                 </>
               )}
             </div>
@@ -211,7 +211,7 @@ export default function KaalSarpDoshaPage() {
             <div data-testid="kaalsarp-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
               <div className="font-semibold text-foreground mb-1">How this was worked out</div>
               <p className="text-sm text-foreground">
-                All seven classical planet positions are computed from your birth data using the <TermTip id="ayanamsa">Lahiri ayanamsa (the traditional Indian sidereal calculation)</TermTip>. The whole-sign method is used to determine house placement. Kaal Sarp is detected by checking whether all planets fall within the Rahu–Ketu arc (or outside it for partial). Cross-checked against ProKerala at 96–100% agreement, with a documented ~4% tolerance on edge cases near the arc boundary.
+                All seven classical planet positions are computed from your birth data using the <TermTip id="ayanamsa">Lahiri ayanamsa (the traditional Indian sidereal calculation)</TermTip>. Kaal Sarp is reported only when all seven planets (Sun to Saturn) lie strictly between Rahu and Ketu on one side, by exact degree; near-misses are shown only as a note. The type is named from Rahu's house counted from the Lagna (whole-sign houses).
               </p>
               <p className="mt-2 text-xs text-muted-foreground">
                 Learn more at <a href="/how-it-works" className="text-primary hover:underline">How It Works</a> · <a href="/vedic-astrology" className="text-primary hover:underline">Vedic Astrology</a>.

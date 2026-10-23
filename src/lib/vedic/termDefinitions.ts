@@ -171,7 +171,7 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
   manglik: {
     term: 'Manglik (Mangal / Kuja Dosha)',
     impact: 'A Mars placement that mainly matters for marriage matching — and is often cancelled.',
-    why: 'Manglik ("Kuja Dosha") is Mars sitting in certain houses from the Lagna, Moon or Venus. It carries real marriage-market stigma but has many classical cancellations.',
+    why: 'Manglik ("Kuja Dosha") is Mars in the 1st, 4th, 7th, 8th or 12th house from the Lagna or from the Moon (BornClock checks both and shows each). It carries real marriage-market stigma but has many classical cancellations.',
     guidance: 'De-stigmatised here: it is one factor among many, not a barrier by itself.',
     inline: 'a Mars placement relevant to marriage matching, often cancelled',
   },

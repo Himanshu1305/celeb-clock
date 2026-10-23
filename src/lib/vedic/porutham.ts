@@ -7,8 +7,8 @@
  * the shared classical tables (nakshatraAttributes.ts) and the engine's validated
  * planetary friendships (sthanaBala). Convention follows mainstream Tamil Jothidam
  * sources (Pambu Panchangam lineage); where tiers are simplified it is disclosed
- * in the methodology note. Person A is treated as the bride-position for the
- * directional poruthams (Stree-Deergha, Mahendra) since no gender is collected —
+ * in the methodology note. calculatePorutham(bride, groom): the API passes the
+ * bride/groom chosen on the match form for the directional poruthams —
  * disclosed on the page. Honest, calm framing (Rule 7): a guide, never a verdict.
  */
 import { FRIENDS, ENEMIES, SIGN_LORDS } from './engine/sthanaBala';
@@ -139,7 +139,7 @@ export function calculatePorutham(a: PoruthamPerson, b: PoruthamPerson): Porutha
           : 'Challenging';
 
   const methodology =
-    'Computed by the ten-porutham (Dravidian / Tamil Jothidam) system used in South India and Sri Lanka, from each person’s Moon Nakshatra and Moon sign (Lahiri ayanamsa). Rajju and Dina are the essential poruthams. Person A is taken as the bride-position for the directional poruthams (Stree Deergha, Mahendra) since no gender is collected. Where tiers are simplified (Yoni, Rasi) the mainstream convention is used; this is disclosed and the reading is offered calmly as guidance, never a verdict.';
+    'Computed by the ten-porutham (Dravidian / Tamil Jothidam) system used in South India and Sri Lanka, from each person’s Moon Nakshatra and Moon sign (Lahiri ayanamsa). Rajju and Dina are the essential poruthams. The directional poruthams (Stree Deergha, Mahendra) use the boy and girl you selected on the form. Where tiers are simplified (Yoni, Rasi) the mainstream convention is used; this is disclosed and the reading is offered calmly as guidance, never a verdict.';
 
   return { poruthams, metCount, total: 10, essentialsMet, verdict, methodology };
 }

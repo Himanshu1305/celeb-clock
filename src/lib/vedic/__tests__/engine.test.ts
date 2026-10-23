@@ -50,14 +50,16 @@ describe('engine port — divisional charts & KP match lab .cjs (exact)', () => 
 });
 
 describe('Kaal Sarp classifier — full/partial/absent + direction', () => {
+  // Each body sits at mid-sign (sign*30 + 15°) so whole-sign and degree tests agree.
+  const at = (sign: number) => ({ rashiIndex: sign, siderealLongitude: sign * 30 + 15 });
   const mkChart = (rahu: number, ketu: number, classicalSigns: number[]) => ({
     lagna: { rashiIndex: 0 },
     planets: {
-      Rahu: { rashiIndex: rahu }, Ketu: { rashiIndex: ketu },
-      Sun: { rashiIndex: classicalSigns[0] }, Moon: { rashiIndex: classicalSigns[1] },
-      Mars: { rashiIndex: classicalSigns[2] }, Mercury: { rashiIndex: classicalSigns[3] },
-      Jupiter: { rashiIndex: classicalSigns[4] }, Venus: { rashiIndex: classicalSigns[5] },
-      Saturn: { rashiIndex: classicalSigns[6] },
+      Rahu: at(rahu), Ketu: at(ketu),
+      Sun: at(classicalSigns[0]), Moon: at(classicalSigns[1]),
+      Mars: at(classicalSigns[2]), Mercury: at(classicalSigns[3]),
+      Jupiter: at(classicalSigns[4]), Venus: at(classicalSigns[5]),
+      Saturn: at(classicalSigns[6]),
     },
   }) as any;
 

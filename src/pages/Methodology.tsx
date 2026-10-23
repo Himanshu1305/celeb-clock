@@ -507,9 +507,9 @@ export default function Methodology() {
                         {[
                           ['Rashi, Nakshatra, Pada, Retrograde, Dasha', 'Exact match (100%)'],
                           ['Lagna / non-polar house cusps', '~99.99% (within 0.004°)'],
-                          ['Mangal Dosha (Manglik, Lagna rule)', '99–100%'],
+                          ['Mangal Dosha (Manglik: Mars from Lagna and Moon, houses 1/4/7/8/12)', 'Matches AstroSage on all 10 audit test charts (Oct 2026)'],
                           ['Sade Sati / Dhaiya (Saturn transit)', '100%'],
-                          ['Kaal Sarp (whole-sign method)', '96–100% (documented ~4% edge tolerance)'],
+                          ['Kaal Sarp (reported only when full, by exact degree)', 'Agrees with Drik Panchang on the audited reference chart (Oct 2026)'],
                         ].map(([out, acc], i) => (
                           <tr key={out} className={i % 2 === 0 ? 'bg-muted/20' : ''}>
                             <td className="px-3 py-2 font-medium text-foreground">{out}</td>

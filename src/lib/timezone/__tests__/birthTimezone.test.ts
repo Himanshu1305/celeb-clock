@@ -126,19 +126,20 @@ describe('repro: Suchit (Lucknow) × Sukriti (Pontiac, Michigan) — real /api/k
       expect(score(r, 'graha_maitri')).toBe(0.5);
       expect(score(r, 'bhakoot')).toBe(0);
       expect(score(r, 'nadi')).toBe(8);
-      // Rule-dependent kootas (NOT changed — see report): engine 1 / 2 / 1 vs Astrotalk 1.5 / 1 / 0.
-      expect(score(r, 'vashya')).toBe(1);
-      expect(score(r, 'yoni')).toBe(2);
-      expect(score(r, 'gana')).toBe(1);
-      expect(r.gunaMilan.total).toBe(15); // = Astrotalk 13.5 + (−0.5 Vashya) + (+1 Yoni) + (+1 Gana)
+      // Rule-dependent kootas now follow AstroSage (17 Oct 2026, round2 audit): Vashya ½, Yoni 1, Gana 0.
+      expect(score(r, 'vashya')).toBe(0.5);
+      expect(score(r, 'yoni')).toBe(1);
+      expect(score(r, 'gana')).toBe(0);
+      expect(r.gunaMilan.total).toBe(12.5); // = AstroSage 12.5
     }
   });
 
-  it('the old bug, reproduced on purpose via a manual IST zone: Kanya, Bhakut 7, total 22', async () => {
+  it('the old bug, reproduced on purpose via a manual IST zone: Kanya, Bhakut 7, total 19.5 (22 under the old tables)', async () => {
     const r = await (await matchGET(new Request(base + '&tzidB=Asia/Kolkata'))).json();
     expect(r.people.b).toMatchObject({ timezone: 'Asia/Kolkata', timezoneSource: 'manual', rashi: 'Kanya', nakshatra: 'Chitra', pada: 1 });
     expect(score(r, 'bhakoot')).toBe(7);
-    expect(r.gunaMilan.total).toBe(22);
+    // Same wrong Moon sign; the AstroSage tables change Vashya/Yoni/Gana (−0.5 −1 −1).
+    expect(r.gunaMilan.total).toBe(19.5);
   });
 
   it('an unknown manual zone is a clean 400', async () => {
@@ -147,15 +148,16 @@ describe('repro: Suchit (Lucknow) × Sukriti (Pontiac, Michigan) — real /api/k
   });
 });
 
-describe('koota rules fed the CORRECT Moons directly (report-only, rules unchanged)', () => {
+describe('koota rules fed the CORRECT Moons directly (AstroSage tables)', () => {
   it('Revati p1 / Meena × Chitra p3 / Tula', () => {
     const g = calculateGunaMilan(
       { nakshatra: 'Revati', pada: 1, rashiIndex: RASHI_NAMES.indexOf('Meena') },
       { nakshatra: 'Chitra', pada: 3, rashiIndex: RASHI_NAMES.indexOf('Tula') },
     );
     const s = Object.fromEntries(g.kootas.map(k => [k.key, k.score]));
-    expect(s).toEqual({ varna: 1, vashya: 1, tara: 1.5, yoni: 2, graha_maitri: 0.5, gana: 1, bhakoot: 0, nadi: 8 });
-    expect(g.total).toBe(15);
+    // AstroSage, 17 Oct 2026 (round2 audit): total 12.5 with Vashya ½, Yoni 1, Gana 0.
+    expect(s).toEqual({ varna: 1, vashya: 0.5, tara: 1.5, yoni: 1, graha_maitri: 0.5, gana: 0, bhakoot: 0, nadi: 8 });
+    expect(g.total).toBe(12.5);
   });
 });
 

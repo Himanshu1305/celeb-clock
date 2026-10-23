@@ -13,14 +13,19 @@ import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
 import { birthQuery } from '@/lib/timezone/clientBirth';
 
+/** Shape of doshas.mangalDosha from /api/kundali — built by src/lib/vedic/manglik.ts. */
 interface MangalDosha {
   hasDosha: boolean;
-  severityLabel: string;
-  severityPercentage: number;
+  severityLabel: 'None' | 'Low' | 'High' | string;
   fromLagna: boolean;
   fromMoon: boolean;
-  fromVenus: boolean;
+  marsHouseFromLagna?: number;
+  marsHouseFromMoon?: number;
+  cancellations?: string[];
+  cancelled?: boolean;
 }
+
+const ord = (n?: number) => (n ? `${n}${n === 1 ? 'st' : n === 2 ? 'nd' : n === 3 ? 'rd' : 'th'}` : '—');
 
 interface KundaliResult {
   doshas: {
@@ -53,10 +58,11 @@ export default function ManglikPage() {
 
   const dosha = result?.doshas?.mangalDosha;
 
+  // Only the two checks of the stated convention (Lagna + Moon) — never Venus.
   const refPoints: string[] = [];
-  if (dosha?.fromLagna) refPoints.push('Lagna (Ascendant)');
-  if (dosha?.fromMoon) refPoints.push('Moon');
-  if (dosha?.fromVenus) refPoints.push('Venus');
+  if (dosha?.fromLagna) refPoints.push('the Lagna (Ascendant)');
+  if (dosha?.fromMoon) refPoints.push('the Moon');
+  const cancellations = dosha?.cancellations ?? [];
 
 
   const faqJsonLd = {
@@ -68,7 +74,7 @@ export default function ManglikPage() {
         name: 'What is Manglik (Mangal Dosha)?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Mangal Dosha (also called Manglik) is a classical Vedic astrology concept that arises when Mars (Mangal) occupies certain houses in the birth chart — specifically the 1st, 2nd, 4th, 7th, 8th, or 12th — counted from the Lagna (Ascendant), Moon, or Venus. It is traditionally considered in marriage matching as an area for mindfulness, not a bar to marriage or a sign of misfortune.',
+          text: 'Mangal Dosha (also called Manglik) is a classical Vedic astrology concept that arises when Mars (Mangal) occupies certain houses in the birth chart — BornClock follows the AstroSage convention: Mars in the 1st, 4th, 7th, 8th or 12th house counted from the Lagna (Ascendant) and, separately, from the Moon. The 2nd house is not counted. Positive from both is High; from one is Low. It is traditionally considered in marriage matching as an area for mindfulness, not a bar to marriage or a sign of misfortune.',
         },
       },
       {
@@ -131,9 +137,9 @@ export default function ManglikPage() {
           <div><span className="eyebrow">Mangal · Mars placement</span><h1>Manglik Dosha Calculator.</h1></div>
           <p>Find out whether your birth chart carries Mangal Dosha (Manglik), how strong it is, which reference points flag it, and — crucially — what the classical cancellations are. Calm, honest, non-fear-based.</p>
         </div>
-        <TrustStrip claim="Your Mars placement is worked out from your real birth chart, not guessed from your star sign. In our tests, our Manglik result matched a leading Vedic astrology service in 99–100% of charts." href="/how-it-works#vedic" />
+        <TrustStrip claim="Your Mars placement is worked out from your real birth chart, not guessed from your star sign — checked from the Lagna and from the Moon, each shown separately." href="/how-it-works#vedic" />
         <div className="form-band" style={{ marginTop: 16 }}>
-          <div><h3>Your birth details</h3><p className="small muted">We use Mars's house placement in your chart.</p></div>
+          <div><h3>Your birth details</h3><p className="small muted">We check Mars's house from your Lagna and from your Moon.</p></div>
           <BirthDetailsForm
             initial={initial}
             submitLabel="Check Manglik Dosha"
@@ -159,17 +165,27 @@ export default function ManglikPage() {
               </div>
               {dosha.hasDosha && (
                 <div className="mt-2 space-y-1">
-                  <div className="font-semibold text-foreground">
-                    Severity: {dosha.severityLabel}
-                    {dosha.severityPercentage > 0 && ` (${dosha.severityPercentage}%)`}
+                  <div data-testid="manglik-level" className="font-semibold text-foreground">
+                    Level: {dosha.severityLabel} {dosha.severityLabel === 'High' ? '(from both the Lagna and the Moon)' : '(from one of the two checks)'}
                   </div>
-                  {refPoints.length > 0 && (
-                    <div className="text-sm text-muted-foreground">
-                      Flagged from: {refPoints.join(', ')}
+                  {dosha.cancelled && (
+                    <div data-testid="manglik-cancelled" className="text-sm text-emerald-800">
+                      Classically cancelled in your chart: {cancellations.join('; ')}.
                     </div>
                   )}
                 </div>
               )}
+              {/* The two checks, shown separately (D1). */}
+              <div data-testid="manglik-checks" className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-left">
+                <div data-testid="manglik-check-lagna" className="rounded-lg border border-border bg-background p-2">
+                  <div className="font-semibold text-foreground">From the Lagna</div>
+                  <div className="text-muted-foreground">Mars in the {ord(dosha.marsHouseFromLagna)} house — {dosha.fromLagna ? 'Manglik by this check' : 'not Manglik by this check'}</div>
+                </div>
+                <div data-testid="manglik-check-moon" className="rounded-lg border border-border bg-background p-2">
+                  <div className="font-semibold text-foreground">From the Moon</div>
+                  <div className="text-muted-foreground">Mars in the {ord(dosha.marsHouseFromMoon)} house — {dosha.fromMoon ? 'Manglik by this check' : 'not Manglik by this check'}</div>
+                </div>
+              </div>
             </div>
 
             {/* Calm narrative */}
@@ -192,7 +208,7 @@ export default function ManglikPage() {
                 <>
                   <p className="font-bold text-foreground mb-2">Your chart does not carry Mangal Dosha.</p>
                   <p className="text-sm text-foreground leading-relaxed">
-                    Mars is not placed in the houses (from Lagna, Moon, or Venus) that classical Vedic texts associate with Mangal Dosha. This is simply a neutral feature of your chart — no special action or consideration is needed on this front.
+                    Mars is not in the 1st, 4th, 7th, 8th or 12th house from your Lagna, nor from your Moon — the two checks BornClock uses. This is simply a neutral feature of your chart — no special action or consideration is needed on this front.
                   </p>
                 </>
               )}
@@ -204,6 +220,13 @@ export default function ManglikPage() {
               <p className="text-sm text-muted-foreground mb-3">
                 Classical texts recognise several conditions that cancel or significantly reduce Mangal Dosha. These are part of the same tradition that defines the dosha — they're not workarounds, they're the tradition's own built-in balance:
               </p>
+              {dosha.hasDosha && (
+                <p data-testid="manglik-cancellation-verdict" className="text-sm text-foreground mb-2">
+                  {cancellations.length
+                    ? <>Applies to your chart: <strong>{cancellations.join('; ')}</strong>.</>
+                    : 'None of the chart-based cancellations below applies to your chart.'}
+                </p>
+              )}
               <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
                 <li><strong className="text-foreground">Both partners Manglik</strong> — the most widely cited cancellation; when both charts carry the dosha, the effects are considered to balance out.</li>
                 <li><strong className="text-foreground">Mars in its own or exalted sign</strong> — Mars in Aries, Scorpio, or Capricorn is treated as strong and well-placed; the dosha is significantly reduced or cancelled.</li>
@@ -220,7 +243,7 @@ export default function ManglikPage() {
             <div data-testid="manglik-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
               <div className="font-semibold text-foreground mb-1">How this was worked out</div>
               <p className="text-sm text-foreground">
-                Mars's house is computed from your birth data using the <TermTip id="ayanamsa">Lahiri ayanamsa (the traditional Indian sidereal calculation)</TermTip> and the classical six-house definition of Mangal Dosha, checked from Lagna, Moon, and Venus. This approach is cross-checked against ProKerala at 99–100% agreement. Treat it as a reliable classical indicator, not a fixed prediction.
+                Mars's house is computed from your birth data using the <TermTip id="ayanamsa">Lahiri ayanamsa (the traditional Indian sidereal calculation)</TermTip> and checked by the AstroSage convention: Mars in the 1st, 4th, 7th, 8th or 12th house (whole-sign) from the Lagna, and separately from the Moon. The 2nd house is not counted and Venus is not used. Positive from both checks is shown as High, from one as Low. The same check is used in Kundali matching. Treat it as a classical indicator, not a fixed prediction.
               </p>
               <p className="mt-2 text-xs text-muted-foreground">
                 Learn more at <a href="/how-it-works" className="text-primary hover:underline">How It Works</a> · <a href="/vedic-astrology" className="text-primary hover:underline">Vedic Astrology</a>.

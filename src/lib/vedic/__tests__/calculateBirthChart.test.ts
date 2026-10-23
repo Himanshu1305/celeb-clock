@@ -34,7 +34,12 @@ describe('calculateBirthChart — positive: reference chart (1988-11-05, 12:30 I
       expect(pStart).toBeLessThanOrEqual(REF.getTime());
       expect(REF.getTime()).toBeLessThan(pEnd);
     }
-    expect(r.doshas.mangalDosha.hasDosha).toBe(false);
+    // Manglik (AstroSage convention: Lagna + Moon, houses 1/4/7/8/12). Mars is 3rd from
+    // the Lagna but 7th from the Moon (signs cross-checked with Swiss Ephemeris) → Low.
+    expect(r.doshas.mangalDosha.hasDosha).toBe(true);
+    expect(r.doshas.mangalDosha.severityLabel).toBe('Low');
+    expect(r.doshas.mangalDosha.fromLagna).toBe(false);
+    expect(r.doshas.mangalDosha.fromMoon).toBe(true);
     expect(r.doshas.kaalSarp.present).toBe(false);
     expect(r.warnings).toEqual([]);
     expect(r.source).toBe('local');
@@ -46,23 +51,29 @@ describe('calculateBirthChart — positive: reference chart (1988-11-05, 12:30 I
 // Sydney, southern). Ground truth captured from the validated lab engine
 // (scripts/vedic-lab/vedicEngineStage1b.cjs) — the source of the prior
 // 100-chart validation; the port must reproduce them exactly.
+// Oct 2026 convention change (founder decision): Manglik = Mars in 1/4/7/8/12 from the
+// Lagna OR the Moon (no 2nd house) and Kaal Sarp present only when FULL by degrees.
+// The mangal/kaalsarp values below were re-derived for that rule; the Lagna/Moon/Mars
+// signs behind them were cross-checked with Swiss Ephemeris (Lahiri).
 const KNOWN: Array<{ name: string; input: BirthChartInput; expect: Record<string, any> }> = [
   {
     name: 'New York 1950-01-15 08:00 EST',
     input: { year: 1950, month: 1, day: 15, hour: 8, minute: 0, latitude: 40.7128, longitude: -74.0060, timezoneOffset: -5 },
-    // Partial Kaal Sarp (6 planets in arc) — the classifier reports present:true.
-    expect: { lagna: 'Makara', rashi: 'Vrischika', nak: 'Jyeshtha', pada: 3, maha: 'Jupiter', mangal: false, kaalsarp: true, kaalsarpPartial: true, satRetro: true },
+    // Formerly "partial" by whole sign; not a Kaal Sarp by degrees → not present.
+    expect: { lagna: 'Makara', rashi: 'Vrischika', nak: 'Jyeshtha', pada: 3, maha: 'Jupiter', mangal: false, kaalsarp: false, satRetro: true },
   },
   {
     name: 'Sydney 1975-07-20 23:45 AEST (southern hemisphere)',
     input: { year: 1975, month: 7, day: 20, hour: 23, minute: 45, latitude: -33.8688, longitude: 151.2093, timezoneOffset: 10 },
-    expect: { lagna: 'Meena', rashi: 'Dhanu', nak: 'Mula', pada: 1, maha: 'Rahu', mangal: true, kaalsarp: false },
+    // Mars 2nd from Lagna, 5th from Moon → not Manglik (2nd house not counted).
+    expect: { lagna: 'Meena', rashi: 'Dhanu', nak: 'Mula', pada: 1, maha: 'Rahu', mangal: false, kaalsarp: false },
   },
   {
     name: 'Delhi 2000-02-29 06:00 IST (leap day)',
     input: { year: 2000, month: 2, day: 29, hour: 6, minute: 0, latitude: 28.6139, longitude: 77.2090, timezoneOffset: 5.5 },
-    // Partial Kaal Sarp — present:true, isPartial:true.
-    expect: { lagna: 'Makara', rashi: 'Dhanu', nak: 'Mula', pada: 2, maha: 'Sun', mangal: false, kaalsarp: true, kaalsarpPartial: true },
+    // Partial Kaal Sarp → soft note only: present:false, isPartial:true.
+    // Mars 4th from the Moon → Manglik (Low).
+    expect: { lagna: 'Makara', rashi: 'Dhanu', nak: 'Mula', pada: 2, maha: 'Sun', mangal: true, kaalsarp: false, kaalsarpPartial: true },
   },
   {
     name: 'London 1901-06-10 15:30 GMT (very old)',
@@ -72,7 +83,8 @@ const KNOWN: Array<{ name: string; input: BirthChartInput; expect: Record<string
   {
     name: 'Los Angeles 2015-12-25 00:00 PST (recent)',
     input: { year: 2015, month: 12, day: 25, hour: 0, minute: 0, latitude: 34.0522, longitude: -118.2437, timezoneOffset: -8 },
-    expect: { lagna: 'Kanya', rashi: 'Mithuna', nak: 'Ardra', pada: 1, maha: 'Rahu', mangal: true, kaalsarp: false },
+    // Mars 2nd from Lagna, 5th from Moon → not Manglik (2nd house not counted).
+    expect: { lagna: 'Kanya', rashi: 'Mithuna', nak: 'Ardra', pada: 1, maha: 'Rahu', mangal: false, kaalsarp: false },
   },
 ];
 
