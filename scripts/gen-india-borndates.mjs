@@ -32,6 +32,7 @@ for (let from = 0; ; from += 1000) {
     .eq('nationality_code', 'IN')
     .not('birth_month_day', 'is', null)
     .order('sitelinks', { ascending: false })
+    .order('id', { ascending: true }) // stable paging (see export-celebrities.ts)
     .range(from, from + 999);
   if (error) { console.error(error); process.exit(1); }
   rows = rows.concat(data);

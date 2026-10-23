@@ -114,13 +114,18 @@ async function main() {
       return true;
     };
 
+    // Paging (2026-10-24): ORDER BY sitelinks alone is not a stable order — rows with
+    // equal sitelinks can land on either side of a 1,000-row page boundary, so each export
+    // silently dropped ~20 people and picked up others (Nitin Gadkari, Naga Chaitanya and
+    // Yo Yo Honey Singh vanished after 39 duplicate rows were deleted). The id tiebreaker
+    // makes every page deterministic.
     const SEL = 'id, name, birth_date, birth_month_day, death_date, sitelinks, occupation, known_for, nationality_code';
 
     // Pass 1 — ALL Indian celebrities with a birth date.
     for (let from = 0; ; from += PAGE) {
       const { data, error } = await sb.from('celebrity_sitelinks').select(SEL)
         .eq('nationality_code', 'IN').not('birth_date', 'is', null)
-        .order('sitelinks', { ascending: false }).range(from, from + PAGE - 1);
+        .order('sitelinks', { ascending: false }).order('id', { ascending: true }).range(from, from + PAGE - 1);
       if (error) { console.error('❌ IN fetch error:', error.message); process.exit(1); }
       if (!data || data.length === 0) break;
       data.forEach(processRow);
@@ -135,7 +140,7 @@ async function main() {
       const { data, error } = await sb.from('celebrity_sitelinks').select(SEL)
         .neq('nationality_code', 'IN').not('birth_date', 'is', null)
         .gte('sitelinks', 100)
-        .order('sitelinks', { ascending: false }).range(from, from + PAGE - 1);
+        .order('sitelinks', { ascending: false }).order('id', { ascending: true }).range(from, from + PAGE - 1);
       if (error) { console.error('❌ INTL fetch error:', error.message); process.exit(1); }
       if (!data || data.length === 0) break;
       for (const row of data) { if (processRow(row)) intlAdded++; if (intlAdded >= INTL_CAP) break; }
