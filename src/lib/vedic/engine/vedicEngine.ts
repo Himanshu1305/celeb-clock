@@ -109,11 +109,12 @@ function getPlanetSiderealLongitude(planetName: string, time: Astronomy.AstroTim
 
 function isRetrograde(planetName: string, time: Astronomy.AstroTime): boolean {
   if (planetName === 'Sun' || planetName === 'Moon') return false;
-  const vec1 = Astronomy.GeoVector(planetName as Astronomy.Body, time, true);
-  const lon1 = Astronomy.Ecliptic(vec1).elon;
-  const laterTime = Astronomy.MakeTime(new Date(time.date.getTime() + 24*3600*1000));
-  const vec2 = Astronomy.GeoVector(planetName as Astronomy.Body, laterTime, true);
-  const lon2 = Astronomy.Ecliptic(vec2).elon;
+  // K17: CENTRAL difference over ±3 h. The old forward difference (now → +24 h)
+  // measured the motion ~12 h ahead, so the flag flipped ~12 h early at stations.
+  const H = 3 * 3600 * 1000;
+  const lonAt = (ms: number) => Astronomy.Ecliptic(Astronomy.GeoVector(planetName as Astronomy.Body, Astronomy.MakeTime(new Date(ms)), true)).elon;
+  const lon1 = lonAt(time.date.getTime() - H);
+  const lon2 = lonAt(time.date.getTime() + H);
   let diff = lon2 - lon1;
   if (diff > 180) diff -= 360;
   if (diff < -180) diff += 360;
