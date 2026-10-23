@@ -5,7 +5,7 @@ export const januaryBirthdays: BirthdayDatabase = {
     people: [
       { name: 'J. Edgar Hoover', birthDate: '1895-01-01', profession: 'FBI Director', category: 'other', description: 'First Director of the FBI, serving for 48 years', wikipediaUrl: 'https://en.wikipedia.org/wiki/J._Edgar_Hoover' },
       { name: 'Betsy Ross', birthDate: '1752-01-01', profession: 'Seamstress', category: 'other', description: 'Credited with making the first American flag', wikipediaUrl: 'https://en.wikipedia.org/wiki/Betsy_Ross' },
-      { name: 'Vidya Balan', birthDate: '1978-01-01', profession: 'Actress', category: 'celebrity', description: 'Award-winning Indian actress known for The Dirty Picture', wikipediaUrl: 'https://en.wikipedia.org/wiki/Vidya_Balan' },
+      { name: 'Vidya Balan', birthDate: '1979-01-01', profession: 'Actress', category: 'celebrity', description: 'Award-winning Indian actress known for The Dirty Picture', wikipediaUrl: 'https://en.wikipedia.org/wiki/Vidya_Balan' },
       { name: 'Grandmaster Flash', birthDate: '1958-01-01', profession: 'DJ & Producer', category: 'celebrity', description: 'Pioneer of hip-hop DJing and turntablism', wikipediaUrl: 'https://en.wikipedia.org/wiki/Grandmaster_Flash' },
     ],
     events: [
@@ -44,7 +44,6 @@ export const januaryBirthdays: BirthdayDatabase = {
   },
   '01-05': {
     people: [
-      { name: 'Shah Rukh Khan', birthDate: '1965-01-05', profession: 'Actor', category: 'celebrity', description: 'King of Bollywood, one of the most successful actors worldwide', wikipediaUrl: 'https://en.wikipedia.org/wiki/Shah_Rukh_Khan' },
       { name: 'Bradley Cooper', birthDate: '1975-01-05', profession: 'Actor & Director', category: 'celebrity', description: 'Oscar-nominated actor and director of A Star Is Born', wikipediaUrl: 'https://en.wikipedia.org/wiki/Bradley_Cooper' },
       { name: 'Hayao Miyazaki', birthDate: '1941-01-05', profession: 'Animator & Director', category: 'celebrity', description: 'Co-founder of Studio Ghibli, legendary animator', wikipediaUrl: 'https://en.wikipedia.org/wiki/Hayao_Miyazaki' },
       { name: 'Deepika Padukone', birthDate: '1986-01-05', profession: 'Actress', category: 'celebrity', description: 'Leading Bollywood actress and global brand ambassador', wikipediaUrl: 'https://en.wikipedia.org/wiki/Deepika_Padukone' },
@@ -53,7 +52,6 @@ export const januaryBirthdays: BirthdayDatabase = {
   },
   '01-06': {
     people: [
-      { name: 'Joan of Arc', birthDate: '1412-01-06', profession: 'Military Leader', category: 'other', description: 'French heroine who led armies during the Hundred Years War', wikipediaUrl: 'https://en.wikipedia.org/wiki/Joan_of_Arc' },
       { name: 'Rowan Atkinson', birthDate: '1955-01-06', profession: 'Actor & Comedian', category: 'celebrity', description: 'Creator of Mr. Bean and Blackadder', wikipediaUrl: 'https://en.wikipedia.org/wiki/Rowan_Atkinson' },
       { name: 'Eddie Redmayne', birthDate: '1982-01-06', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning actor for The Theory of Everything', wikipediaUrl: 'https://en.wikipedia.org/wiki/Eddie_Redmayne' },
       { name: 'A.R. Rahman', birthDate: '1967-01-06', profession: 'Music Composer', category: 'celebrity', description: 'Oscar-winning Indian composer of Slumdog Millionaire', wikipediaUrl: 'https://en.wikipedia.org/wiki/A._R._Rahman' },
@@ -65,7 +63,7 @@ export const januaryBirthdays: BirthdayDatabase = {
     people: [
       { name: 'Nicolas Cage', birthDate: '1964-01-07', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning actor known for eclectic film roles', wikipediaUrl: 'https://en.wikipedia.org/wiki/Nicolas_Cage' },
       { name: 'Lewis Hamilton', birthDate: '1985-01-07', profession: 'Racing Driver', category: 'athlete', description: 'Seven-time Formula One World Champion', wikipediaUrl: 'https://en.wikipedia.org/wiki/Lewis_Hamilton' },
-      { name: 'Christian Louboutin', birthDate: '1963-01-07', profession: 'Fashion Designer', category: 'other', description: 'Iconic shoe designer known for red-soled shoes', wikipediaUrl: 'https://en.wikipedia.org/wiki/Christian_Louboutin' },
+      { name: 'Christian Louboutin', birthDate: '1964-01-07', profession: 'Fashion Designer', category: 'other', description: 'Iconic shoe designer known for red-soled shoes', wikipediaUrl: 'https://en.wikipedia.org/wiki/Christian_Louboutin' },
     ],
     events: [
       { title: 'First US Presidential Election', date: '1789-01-07', year: 1789, description: 'The first US presidential election was held', category: 'Historical', wikipediaUrl: 'https://en.wikipedia.org/wiki/1788%E2%80%9389_United_States_presidential_election' },

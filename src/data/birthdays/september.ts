@@ -81,6 +81,7 @@ export const septemberBirthdays: BirthdayDatabase = {
     { name: 'Fan Bingbing', birthDate: '1981-09-16', profession: 'Actress', category: 'celebrity', description: 'One of China\'s highest-paid and most famous actresses', wikipediaUrl: 'https://en.wikipedia.org/wiki/Fan_Bingbing' },
   ], events: [] },
   '09-17': { people: [
+    { name: 'Alexander Ovechkin', birthDate: '1985-09-17', profession: 'Ice Hockey Player', category: 'athlete', description: 'Russian NHL superstar, all-time goal scoring leader', wikipediaUrl: 'https://en.wikipedia.org/wiki/Alexander_Ovechkin' },
     { name: 'Narendra Modi', birthDate: '1950-09-17', profession: 'Prime Minister of India', category: 'other', description: 'Current Prime Minister of India', wikipediaUrl: 'https://en.wikipedia.org/wiki/Narendra_Modi' },
     { name: 'Baz Luhrmann', birthDate: '1962-09-17', profession: 'Director', category: 'celebrity', description: 'Director of Moulin Rouge! and The Great Gatsby', wikipediaUrl: 'https://en.wikipedia.org/wiki/Baz_Luhrmann' },
     { name: 'Ravichandran Ashwin', birthDate: '1986-09-17', profession: 'Cricketer', category: 'athlete', description: 'Indian cricket legend, one of greatest spin bowlers', wikipediaUrl: 'https://en.wikipedia.org/wiki/Ravichandran_Ashwin' },
@@ -115,9 +116,9 @@ export const septemberBirthdays: BirthdayDatabase = {
   '09-24': { people: [
     { name: 'F. Scott Fitzgerald', birthDate: '1896-09-24', profession: 'Author', category: 'other', description: 'Author of The Great Gatsby', wikipediaUrl: 'https://en.wikipedia.org/wiki/F._Scott_Fitzgerald' },
     { name: 'Jim Henson', birthDate: '1936-09-24', profession: 'Puppeteer', category: 'other', description: 'Creator of The Muppets and Sesame Street characters', wikipediaUrl: 'https://en.wikipedia.org/wiki/Jim_Henson' },
-    { name: 'Pedro Almodóvar', birthDate: '1949-09-24', profession: 'Director', category: 'celebrity', description: 'Oscar-winning Spanish filmmaker', wikipediaUrl: 'https://en.wikipedia.org/wiki/Pedro_Almod%C3%B3var' },
   ], events: [] },
   '09-25': { people: [
+    { name: 'Pedro Almodóvar', birthDate: '1949-09-25', profession: 'Director', category: 'celebrity', description: 'Oscar-winning Spanish filmmaker', wikipediaUrl: 'https://en.wikipedia.org/wiki/Pedro_Almod%C3%B3var' },
     { name: 'Will Smith', birthDate: '1968-09-25', profession: 'Actor & Rapper', category: 'celebrity', description: 'Oscar-winning actor and rap artist', wikipediaUrl: 'https://en.wikipedia.org/wiki/Will_Smith' },
     { name: 'Michael Douglas', birthDate: '1944-09-25', profession: 'Actor', category: 'celebrity', description: 'Oscar-winning star of Wall Street', wikipediaUrl: 'https://en.wikipedia.org/wiki/Michael_Douglas' },
     { name: 'Catherine Zeta-Jones', birthDate: '1969-09-25', profession: 'Actress', category: 'celebrity', description: 'Oscar-winning Welsh actress', wikipediaUrl: 'https://en.wikipedia.org/wiki/Catherine_Zeta-Jones' },
