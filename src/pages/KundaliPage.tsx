@@ -33,6 +33,8 @@ import { degreeNote, padaNote, dashaPairNote } from '@/lib/vedic/numberNotes';
 import { formatDegreeInSign } from '@/lib/vedic/formatDegree';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
+import { RemediesForFindings } from '@/components/vedic/Remedies';
+import { findingsFromKundali, type KundaliLike } from '@/lib/vedic/remedies';
 
 export default function KundaliPage() {
   const price = reportPrice(resolveCurrency(undefined));
@@ -180,6 +182,7 @@ export default function KundaliPage() {
     ? `My Kundali: ${data.lagna.sign} Lagna, ${data.rashi} Rashi, ${data.nakshatra.nakshatra} Nakshatra. Get yours at https://bornclock.com/kundali`
     : '';
   const whatsappHref = `https://wa.me/?text=${encodeURIComponent(shareText).replace(/'/g, '%27')}`;
+  const kundaliFindings = data ? findingsFromKundali(data as unknown as KundaliLike) : [];
 
   return (
     <PajPage
@@ -416,6 +419,17 @@ export default function KundaliPage() {
                 </div>
               </div>
             </section>
+
+            {/* Batch 5 (goal d): every finding in this chart, with what it means + what you can do. */}
+            {kundaliFindings.length > 0 && (
+              <section className="section" data-testid="kundali-remedies">
+                <div className="section-head">
+                  <div><span className="eyebrow">Findings &amp; remedies</span><h2>What your chart shows — and what you can do.</h2></div>
+                  <p>Calm, plain explanations with optional traditional remedies — free ones first. Nothing here is required or guaranteed.</p>
+                </div>
+                <RemediesForFindings findings={kundaliFindings} />
+              </section>
+            )}
 
             <section className="section white">
               <div className="section-head">

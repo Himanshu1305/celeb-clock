@@ -13,6 +13,7 @@ import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
 import { birthQuery } from '@/lib/timezone/clientBirth';
+import { Remedies } from '@/components/vedic/Remedies';
 
 interface KaalSarp {
   present: boolean;
@@ -218,20 +219,12 @@ export default function KaalSarpDoshaPage() {
               </p>
             </div>
 
-            {/* Upay / remedies — optional, non-fear */}
-            <div data-testid="kaalsarp-upay" className="rounded-xl border border-border p-5">
-              <div className="font-semibold text-foreground mb-1">Traditional upay (remedies) — optional, not required</div>
-              <p className="text-sm text-muted-foreground mb-2">
-                First, the honest part: <strong className="text-foreground">nothing here is necessary to "avoid harm"</strong> — Kaal Sarp is a pattern to understand and work with, not a threat to defend against. These are simply the customs people have found meaningful when reflecting on the Rahu–Ketu axis.
-              </p>
-              <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                <li><strong className="text-foreground">Patience and persistence</strong> — working with the Rahu–Ketu themes of karmic focus means committing to long-term effort and not abandoning goals at the first delay. This is the most classical "answer" to a strong nodal pattern.</li>
-                <li><strong className="text-foreground">Shiva devotion</strong> — reciting the Maha Mrityunjaya mantra or visiting a Shiva temple, particularly on Nag Panchami, is a traditional Rahu–Ketu practice; take it as suits your beliefs.</li>
-                <li><strong className="text-foreground">Charity and service</strong> — giving to those in need on a Saturday or during Rahu Kaal is a classical nodal practice, offered here as optional custom.</li>
-                <li><strong className="text-foreground">Ketu and ancestral reflection</strong> — Ketu traditionally represents past-life karmas and lineage; some people find reflection on ancestral stories or genealogy grounding when this axis is prominent.</li>
-              </ul>
-              <p className="mt-2 text-xs text-amber-700">Offered as tradition and reflection, not medical or legal advice — and never as something you must do out of fear.</p>
-            </div>
+            {/* Batch 5: remedies only for a FULL Kaal Sarp (partial = note only, never "present"). */}
+            {ks.present && !ks.isPartial && (
+              <div data-testid="kaalsarp-upay">
+                <Remedies remedyKey="kaalSarp" label={{ en: 'Kaal Sarp — what it means and what you can do', hi: 'कालसर्प — अर्थ और उपाय' }} />
+              </div>
+            )}
 
             <p className="text-xs text-muted-foreground">
               Computed from all planetary positions using the same <TermTip id="ayanamsa">Lahiri-ayanamsa engine</TermTip> as the rest of BornClock.

@@ -475,6 +475,7 @@ export default function VedicAstrologyLanding() {
               ['Manglik', '/manglik'], ['Kaal Sarp Dosha', '/kaal-sarp-dosha'],
               ['Pitra Dosha', '/pitra-dosha'], ['Mool Nakshatra Dosha', '/mool-dosha'],
               ['Grahan Dosha', '/grahan-dosha'], ['Nadi Dosha', '/nadi-dosha'],
+              ['Remedies (Upay)', '/remedies'], ['उपाय (हिंदी)', '/hi/upay'],
               ['Gemstone Recommendation', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'],
               ['Career Report', '/career-report'], ['Life Report', '/life-report'],
               ['Child Kundli', '/child-kundli'], ['Muhurat Finder', '/muhurat'],

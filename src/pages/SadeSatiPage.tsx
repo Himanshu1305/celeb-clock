@@ -11,6 +11,7 @@ import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { birthQuery } from '@/lib/timezone/clientBirth';
+import { Remedies } from '@/components/vedic/Remedies';
 import { IST_ZONE, zoneDay, zoneMonth, zoneLabel } from '@/lib/viewerTime';
 import { useViewerTimeZone } from '@/hooks/useViewerTimeZone';
 
@@ -227,14 +228,23 @@ export default function SadeSatiPage() {
               <p className="text-sm text-muted-foreground mb-2">
                 First, the honest part: <strong className="text-foreground">nothing here is necessary to "avoid harm"</strong> — Sade Sati is a period to move through steadily, not a threat to defend against. These are simply the customs people have found grounding during Saturn periods, offered for interest.
               </p>
-              <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                <li><strong className="text-foreground">Lean into Saturn’s own themes</strong> — patience, routine, honest hard work and finishing what you start. This is the most-cited "remedy" and the one that actually matches the period.</li>
-                <li><strong className="text-foreground">Service &amp; generosity</strong> — helping elders, workers or those in need on a Saturday is a traditional Saturn practice many find genuinely centring.</li>
-                <li><strong className="text-foreground">Devotional custom</strong> — some recite the Hanuman Chalisa or a Shani mantra on Saturdays; take it or leave it as suits your beliefs.</li>
-                {report.blueSapphireOk && (
-                  <li data-testid="sadesati-gem"><strong className="text-foreground">Gemstone (with caution)</strong> — your full chart does favour Saturn, so a Blue Sapphire (<TermTip id="ratna">Ratna</TermTip>), Saturn’s classical stone, is an option. It is a powerful stone: traditionally worn on a short trial first, and only after a qualified astrologer has checked your chart. See the <a href="/gemstones" className="text-primary hover:underline">Gemstone tool</a> for the full reasoning.</li>
-                )}
-              </ul>
+              {report.blueSapphireOk && (
+                <p data-testid="sadesati-gem" className="text-sm text-muted-foreground mb-2"><strong className="text-foreground">Gemstone (with caution)</strong> — your full chart does favour Saturn, so a Blue Sapphire (<TermTip id="ratna">Ratna</TermTip>), Saturn’s classical stone, is an option. It is a powerful stone: traditionally worn on a short trial first, and only after a qualified astrologer has checked your chart. Never for anyone under 18. See the <a href="/gemstones" className="text-primary hover:underline">Gemstone tool</a> for the full reasoning.</p>
+              )}
+              {/* Batch 5: the shared Remedies block for whichever Saturn period is running. */}
+              {(report.active || report.paused) && (
+                <Remedies remedyKey="sadeSati" testid="sadesati-remedies" label={{ en: 'Sade Sati — what it means and what you can do', hi: 'साढ़ेसाती — अर्थ और उपाय' }} />
+              )}
+              {report.dhaiya.active && (
+                <div className="mt-3"><Remedies remedyKey="dhaiya" testid="dhaiya-remedies" label={{ en: 'Dhaiya — what it means and what you can do', hi: 'ढैया — अर्थ और उपाय' }} /></div>
+              )}
+              {!(report.active || report.paused) && !report.dhaiya.active && (
+                <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
+                  <li><strong className="text-foreground">Lean into Saturn’s own themes</strong> — patience, routine, honest hard work and finishing what you start. This is the most-cited "remedy" and the one that actually matches the period.</li>
+                  <li><strong className="text-foreground">Service &amp; generosity</strong> — helping elders, workers or those in need on a Saturday is a traditional Saturn practice many find genuinely centring.</li>
+                  <li>Full, sourced remedies for when a Saturn period does arrive: <a href="/remedies/sade-sati" className="text-primary hover:underline">Sade Sati</a> · <a href="/remedies/shani-dhaiya" className="text-primary hover:underline">Dhaiya</a>.</li>
+                </ul>
+              )}
               <p className="mt-2 text-xs text-amber-700">Offered as tradition and reflection, not medical or financial advice — and never as something you must do out of fear.</p>
             </div>
 
