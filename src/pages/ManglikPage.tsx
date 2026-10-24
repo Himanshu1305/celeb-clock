@@ -166,11 +166,11 @@ export default function ManglikPage() {
               {dosha.hasDosha && (
                 <div className="mt-2 space-y-1">
                   <div data-testid="manglik-level" className="font-semibold text-foreground">
-                    Level: {dosha.severityLabel} {dosha.severityLabel === 'High' ? '(from both the Lagna and the Moon)' : '(from one of the two checks)'}
+                    <TermTip id="manglik">Level</TermTip>: {dosha.severityLabel} {dosha.severityLabel === 'High' ? '(from both the Lagna and the Moon)' : '(from one of the two checks)'}
                   </div>
                   {dosha.cancelled && (
                     <div data-testid="manglik-cancelled" className="text-sm text-emerald-800">
-                      Classically cancelled in your chart: {cancellations.join('; ')}.
+                      Classically <TermTip id="manglikParihara">cancelled</TermTip> in your chart: {cancellations.join('; ')}.
                     </div>
                   )}
                 </div>
@@ -178,11 +178,11 @@ export default function ManglikPage() {
               {/* The two checks, shown separately (D1). */}
               <div data-testid="manglik-checks" className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-left">
                 <div data-testid="manglik-check-lagna" className="rounded-lg border border-border bg-background p-2">
-                  <div className="font-semibold text-foreground">From the Lagna</div>
-                  <div className="text-muted-foreground">Mars in the {ord(dosha.marsHouseFromLagna)} house — {dosha.fromLagna ? 'Manglik by this check' : 'not Manglik by this check'}</div>
+                  <div className="font-semibold text-foreground">From the <TermTip id="lagna">Lagna</TermTip></div>
+                  <div className="text-muted-foreground">Mars in the {ord(dosha.marsHouseFromLagna)} <TermTip id="bhava">house</TermTip> — {dosha.fromLagna ? 'Manglik by this check' : 'not Manglik by this check'}</div>
                 </div>
                 <div data-testid="manglik-check-moon" className="rounded-lg border border-border bg-background p-2">
-                  <div className="font-semibold text-foreground">From the Moon</div>
+                  <div className="font-semibold text-foreground">From the <TermTip id="rashi">Moon</TermTip></div>
                   <div className="text-muted-foreground">Mars in the {ord(dosha.marsHouseFromMoon)} house — {dosha.fromMoon ? 'Manglik by this check' : 'not Manglik by this check'}</div>
                 </div>
               </div>
@@ -216,7 +216,7 @@ export default function ManglikPage() {
 
             {/* Classical cancellations — always shown */}
             <div data-testid="manglik-cancellations" className="rounded-xl border border-border p-5">
-              <div className="font-semibold text-foreground mb-2">Classical cancellations (Manglik parihara)</div>
+              <div className="font-semibold text-foreground mb-2">Classical cancellations (<TermTip id="manglikParihara">Manglik parihara</TermTip>)</div>
               <p className="text-sm text-muted-foreground mb-3">
                 Classical texts recognise several conditions that cancel or significantly reduce Mangal Dosha. These are part of the same tradition that defines the dosha — they're not workarounds, they're the tradition's own built-in balance:
               </p>

@@ -11,6 +11,8 @@ import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { AutoTranslatedNotice } from '@/components/AutoTranslatedNotice';
+import { TermTip, NumberNote } from '@/components/vedic/TermTip';
+import { CHOGHADIYA_TERM } from '@/lib/vedic/termDefinitions';
 import { computeDayPanchang, PANCHANG_CITIES, type TimeWindow } from '@/lib/vedic/panchangDay';
 import { karanaName } from '@/lib/vedic/panchang';
 
@@ -64,7 +66,7 @@ const QUALITY_STYLE: Record<TimeWindow['quality'], string> = {
 function ChoghadiyaRow({ c }: { c: TimeWindow }) {
   return (
     <div className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm ${QUALITY_STYLE[c.quality]}`}>
-      <span className="font-medium">{CHOGH_HI[c.name] || c.name}</span>
+      <span className="font-medium">{CHOGHADIYA_TERM[c.name] ? <TermTip id={CHOGHADIYA_TERM[c.name]} lang="hi">{CHOGH_HI[c.name] || c.name}</TermTip> : (CHOGH_HI[c.name] || c.name)}</span>
       <span className="tabular-nums">{c.start}–{c.end}</span>
     </div>
   );
@@ -129,61 +131,65 @@ export default function HindiPanchangPage() {
           </div>
 
           {/* Five limbs */}
-          <div className="grid sm:grid-cols-2 gap-4 mb-6" data-testid="hi-panchang-limbs">
+          <p className="text-sm text-muted-foreground mb-2">आज के <TermTip id="panchang" lang="hi">पंचांग</TermTip> के पाँच अंग:</p>
+          <div className="grid sm:grid-cols-2 gap-4 mb-2" data-testid="hi-panchang-limbs">
             <div className="rounded-xl border border-border p-4">
-              <div className="text-xs text-muted-foreground">तिथि</div>
-              <div className="font-semibold text-foreground">{TITHI_HI[p.tithiName] || p.tithiName} <span className="text-muted-foreground font-normal">({PAKSHA_HI[p.paksha] || p.paksha} पक्ष)</span></div>
+              <div className="text-xs text-muted-foreground"><TermTip id="tithi" lang="hi">तिथि</TermTip></div>
+              <div className="font-semibold text-foreground">{TITHI_HI[p.tithiName] || p.tithiName} <span className="text-muted-foreground font-normal">(<TermTip id="paksha" lang="hi">{PAKSHA_HI[p.paksha] || p.paksha} पक्ष</TermTip>)</span></div>
               <div className="text-xs text-muted-foreground tabular-nums">{hiEnd(p.tithiEnd)} तक</div>
             </div>
             <div className="rounded-xl border border-border p-4">
-              <div className="text-xs text-muted-foreground">नक्षत्र</div>
+              <div className="text-xs text-muted-foreground"><TermTip id="panchangNakshatra" lang="hi">नक्षत्र</TermTip></div>
               <div className="font-semibold text-foreground">{NAKSHATRA_HI[p.nakshatra] || p.nakshatra}</div>
               <div className="text-xs text-muted-foreground tabular-nums">{hiEnd(p.nakshatraEnd)} तक</div>
             </div>
             <div className="rounded-xl border border-border p-4">
-              <div className="text-xs text-muted-foreground">योग</div>
+              <div className="text-xs text-muted-foreground"><TermTip id="panchangYoga" lang="hi">योग</TermTip></div>
               <div className="font-semibold text-foreground">{YOGA_HI[p.yoga] || p.yoga}</div>
               <div className="text-xs text-muted-foreground tabular-nums">{hiEnd(p.yogaEnd)} तक</div>
             </div>
             <div className="rounded-xl border border-border p-4">
-              <div className="text-xs text-muted-foreground">करण · वार</div>
+              <div className="text-xs text-muted-foreground"><TermTip id="karana" lang="hi">करण</TermTip> · <TermTip id="vara" lang="hi">वार</TermTip></div>
               <div className="font-semibold text-foreground">{KARANA_HI[karanaName(p.karana)] || karanaName(p.karana)} · {WEEKDAY_HI[p.weekday] || p.weekday}</div>
               <div className="text-xs text-muted-foreground tabular-nums">करण {hiEnd(p.karanaEnd)} तक</div>
             </div>
           </div>
+          <NumberNote testid="hi-panchang-limb-note">हर अंग दिखाए गए समय पर बदलता है; उसके बाद अगला अंग लागू होता है। पंचांग का दिन सूर्योदय से सूर्योदय तक माना जाता है।</NumberNote>
+          <div className="mb-6" />
 
           {/* Sun + inauspicious windows */}
           <div className="grid sm:grid-cols-2 gap-4 mb-6">
             <div className="rounded-xl border border-border p-4" data-testid="hi-panchang-sun">
               <h2 className="font-semibold text-foreground mb-2">सूर्य</h2>
               <div className="text-sm text-muted-foreground">सूर्योदय <strong className="text-foreground tabular-nums">{p.sunrise}</strong> · सूर्यास्त <strong className="text-foreground tabular-nums">{p.sunset}</strong></div>
-              <div className="text-sm text-muted-foreground mt-1">अभिजित मुहूर्त <strong className="text-emerald-700 tabular-nums">{p.abhijit.start}–{p.abhijit.end}</strong></div>
+              <div className="text-sm text-muted-foreground mt-1"><TermTip id="abhijit" lang="hi">अभिजित मुहूर्त</TermTip> <strong className="text-emerald-700 tabular-nums">{p.abhijit.start}–{p.abhijit.end}</strong></div>
             </div>
             <div className="rounded-xl border border-border p-4" data-testid="hi-panchang-windows">
               <h2 className="font-semibold text-foreground mb-2">अशुभ काल</h2>
               <ul className="text-sm space-y-1">
-                <li className="flex justify-between"><span>राहु काल</span><span className="tabular-nums text-rose-700">{p.rahuKaal.start}–{p.rahuKaal.end}</span></li>
-                <li className="flex justify-between"><span>गुलिक काल</span><span className="tabular-nums">{p.gulikaKaal.start}–{p.gulikaKaal.end}</span></li>
-                <li className="flex justify-between"><span>यमगण्ड</span><span className="tabular-nums">{p.yamaganda.start}–{p.yamaganda.end}</span></li>
+                <li className="flex justify-between"><span><TermTip id="rahuKalam" lang="hi">राहु काल</TermTip></span><span className="tabular-nums text-rose-700">{p.rahuKaal.start}–{p.rahuKaal.end}</span></li>
+                <li className="flex justify-between"><span><TermTip id="gulikaKaal" lang="hi">गुलिक काल</TermTip></span><span className="tabular-nums">{p.gulikaKaal.start}–{p.gulikaKaal.end}</span></li>
+                <li className="flex justify-between"><span><TermTip id="yamaganda" lang="hi">यमगण्ड</TermTip></span><span className="tabular-nums">{p.yamaganda.start}–{p.yamaganda.end}</span></li>
               </ul>
+              <NumberNote testid="hi-panchang-window-note">{cityName} का स्थानीय समय, आज के सूर्योदय-सूर्यास्त से गणना — इन कालों में नया कार्य शुरू न करें; चल रहा कार्य जारी रख सकते हैं।</NumberNote>
             </div>
           </div>
 
           {/* Choghadiya */}
           <div className="grid sm:grid-cols-2 gap-4 mb-8" data-testid="hi-panchang-choghadiya">
             <div>
-              <h2 className="font-semibold text-foreground mb-2">दिन का चौघड़िया</h2>
+              <h2 className="font-semibold text-foreground mb-2">दिन का <TermTip id="choghadiya" lang="hi">चौघड़िया</TermTip></h2>
               <div className="space-y-1">{p.dayChoghadiya.map((c, i) => <ChoghadiyaRow key={i} c={c} />)}</div>
             </div>
             <div>
-              <h2 className="font-semibold text-foreground mb-2">रात का चौघड़िया</h2>
+              <h2 className="font-semibold text-foreground mb-2">रात का <TermTip id="choghadiya" lang="hi">चौघड़िया</TermTip></h2>
               <div className="space-y-1">{p.nightChoghadiya.map((c, i) => <ChoghadiyaRow key={i} c={c} />)}</div>
             </div>
           </div>
 
           <p className="text-xs text-muted-foreground mb-8">
             सूर्योदय, सूर्यास्त और प्रत्येक काल {cityName} के निर्देशांकों के लिए सूर्य की वास्तविक खगोलीय स्थिति से गणना किए गए हैं, और पाँच अंग निरयण (लाहिड़ी अयनांश) सूर्य-चंद्र से — वही इंजन जो आपकी कुंडली के पीछे है।{' '}
-            <Link to="/panchang" className="underline">View in English →</Link>
+            <Link to="/panchang" className="underline">View in English →</Link> · <Link to="/glossary" className="underline">शब्दकोश (Glossary) →</Link>
           </p>
 
           <PageFAQ items={faqItems} />

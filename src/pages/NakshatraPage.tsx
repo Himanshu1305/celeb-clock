@@ -126,7 +126,7 @@ export default function NakshatraPage() {
             <div className="rounded-xl border border-border p-4">
               <div className="text-xs text-muted-foreground mb-1">Ruling planet &amp; <TermTip id="mahadasha">Mahadasha</TermTip></div>
               <div className="text-foreground font-medium">{meaning.rulingPlanet}{dashaYears ? ` · ${dashaYears} years` : ''}</div>
-              <div className="text-xs text-muted-foreground mt-1">Vimshottari period length</div>
+              <div className="text-xs text-muted-foreground mt-1"><TermTip id="vimshottari">Vimshottari</TermTip> period length</div>
             </div>
             <div className="rounded-xl border border-border p-4">
               <div className="text-xs text-muted-foreground mb-1">Deity &amp; symbol</div>
@@ -134,7 +134,7 @@ export default function NakshatraPage() {
               <div className="text-xs text-muted-foreground mt-1">Deity: {meaning.deity}</div>
             </div>
             <div className="rounded-xl border border-border p-4">
-              <div className="text-xs text-muted-foreground mb-1">Shakti (special power)</div>
+              <div className="text-xs text-muted-foreground mb-1"><TermTip id="shakti">Shakti (special power)</TermTip></div>
               <div className="text-foreground font-medium">{meaning.shakti}</div>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function NakshatraPage() {
           <div className="rounded-xl border border-border p-4 mb-6" data-testid="nakshatra-matching">
             <h2 className="font-semibold text-foreground mb-2">Temperament &amp; matching attributes</h2>
             <ul className="text-sm text-muted-foreground space-y-1">
-              <li><strong className="text-foreground">Gana:</strong> {GANA_NOTE[extra.gana]}</li>
+              <li><strong className="text-foreground"><TermTip id="gana">Gana</TermTip>:</strong> {GANA_NOTE[extra.gana]}</li>
               <li><strong className="text-foreground"><TermTip id="yoni">Yoni</TermTip>:</strong> {extra.yoni} — the animal symbol used in compatibility.</li>
               <li><strong className="text-foreground"><TermTip id="nadi">Nadi</TermTip>:</strong> {NADI_NOTE[extra.nadi]} The heaviest koota in Kundali matching.</li>
             </ul>

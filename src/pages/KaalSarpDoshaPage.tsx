@@ -146,7 +146,7 @@ export default function KaalSarpDoshaPage() {
               {ks.present && (
                 <div className="mt-2 space-y-1">
                   {ks.type && (
-                    <div className="font-semibold text-foreground">Type: {ks.type} Kaal Sarp</div>
+                    <div className="font-semibold text-foreground"><TermTip id="kaalSarpType">Type</TermTip>: {ks.type} Kaal Sarp</div>
                   )}
                   {ks.direction && (
                     <div className="text-sm text-muted-foreground">
@@ -179,11 +179,11 @@ export default function KaalSarpDoshaPage() {
                 <>
                   <p className="font-bold text-foreground mb-2">Your chart does not show Kaal Sarp Dosha.</p>
                   <p className="text-sm text-foreground leading-relaxed">
-                    All seven classical planets are not confined between Rahu and Ketu by degree in your chart, so the Kaal Sarp pattern does not apply. No special consideration or action is needed on this front.
+                    All seven classical planets are not confined between <TermTip id="rahu">Rahu</TermTip> and <TermTip id="ketu">Ketu</TermTip> by degree in your chart, so the Kaal Sarp pattern does not apply. No special consideration or action is needed on this front.
                   </p>
                   {ks.isPartial && (
                     <p data-testid="kaalsarp-partial-note" className="mt-2 rounded-lg border border-border bg-muted/40 p-2 text-xs text-muted-foreground">
-                      Note only, not a dosha: your planets come close to this pattern (some astrologers call it a “partial” Kaal Sarp), but at least one planet lies outside the Rahu–Ketu arc by degree. By the standard definition used here, Kaal Sarp is not present.
+                      <TermTip id="partialKaalSarp">Note only, not a dosha</TermTip>: your planets come close to this pattern (some astrologers call it a “partial” Kaal Sarp), but at least one planet lies outside the Rahu–Ketu arc by degree. By the standard definition used here, Kaal Sarp is not present.
                     </p>
                   )}
                 </>

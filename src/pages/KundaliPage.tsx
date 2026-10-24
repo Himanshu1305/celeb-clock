@@ -28,7 +28,8 @@ import { fetchReading, type ReadingPayload } from '@/services/readingService';
 import { useAnalytics } from '@/hooks/useAnalytics';
 const VedicReading = lazy(() => import('@/components/reading/VedicReading').then(m => ({ default: m.VedicReading })));
 const PastPeriodReflection = lazy(() => import('@/components/reading/PastPeriodReflection').then(m => ({ default: m.PastPeriodReflection })));
-import { TermTip } from '@/components/vedic/TermTip';
+import { TermTip, NumberNote } from '@/components/vedic/TermTip';
+import { degreeNote, padaNote, dashaPairNote } from '@/lib/vedic/numberNotes';
 import { formatDegreeInSign } from '@/lib/vedic/formatDegree';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
@@ -198,6 +199,7 @@ export default function KundaliPage() {
         tagline: 'Your Vedic birth chart, computed with care — accurate sidereal (Lahiri) astronomy.',
         nav: [
           { label: 'Vedic Astrology', to: '/vedic-astrology' },
+          { label: 'Glossary', to: '/glossary' },
           { label: 'Kundali Matching', to: '/kundali-match' },
           { label: 'Sade Sati', to: '/sade-sati' },
           { label: 'Muhurat', to: '/muhurat' },
@@ -292,6 +294,7 @@ export default function KundaliPage() {
                   className={`px-4 py-1.5 font-medium ${chartStyle === 'south' ? 'bg-primary text-primary-foreground' : 'bg-background text-foreground'}`}
                   aria-pressed={chartStyle === 'south'}>South Indian</button>
               </div>
+              <span className="ml-2 align-middle"><TermTip id="northSouthChart" iconOnly /></span>
               {(data.warnings || []).some(w => w.code === 'POLAR_LATITUDE') && (
                 <div data-testid="kundali-polar-warning" className="rounded-xl border-2 border-amber-500/60 bg-amber-50 text-amber-900 p-4 text-sm" style={{ marginBottom: 12 }}>
                   <strong>A note about this birth location:</strong> it is at an extreme (polar) latitude where the
@@ -303,12 +306,15 @@ export default function KundaliPage() {
                 <Suspense fallback={<div style={{ width: 300, height: 300 }} aria-hidden="true" />}>
                   <KundaliChart lagnaSignIndex={data.lagna.signIndex} planets={data.planets} style={chartStyle} />
                 </Suspense>
+                <p data-testid="kundali-chart-legend" className="text-xs text-muted-foreground" style={{ maxWidth: 320 }}>
+                  How to read it: Su Sun · Mo Moon · Ma Mars · Me Mercury · Ju Jupiter · Ve Venus · Sa Saturn · Ra <TermTip id="rahu">Rahu</TermTip> · Ke <TermTip id="ketu">Ketu</TermTip> · La <TermTip id="lagna">Lagna</TermTip>. The small numbers are sign numbers (1 Aries … 12 Pisces); each box is a <TermTip id="bhava">house</TermTip>.
+                </p>
                 <div className="chart-stats">
-                  <div className="chart-stat" data-testid="kundali-lagna"><small><TermTip id="lagna">Lagna</TermTip></small><strong>{data.lagna.sign}</strong></div>
+                  <div className="chart-stat" data-testid="kundali-lagna"><small><TermTip id="lagna">Lagna</TermTip></small><strong>{data.lagna.sign}</strong><span>{formatDegreeInSign(data.lagna.degrees)}</span><NumberNote testid="kundali-lagna-note">{degreeNote(data.lagna.degrees, 'Your Lagna')}</NumberNote></div>
                   <div className="chart-stat"><small><TermTip id="rashi">Rashi</TermTip></small><strong>{data.rashi}</strong><span>{data.rashi_devanagari}</span></div>
-                  <div className="chart-stat"><small><TermTip id="nakshatra">Nakshatra</TermTip></small><strong>{data.nakshatra.nakshatra}</strong><span>Pada {data.nakshatra.pada}</span></div>
+                  <div className="chart-stat"><small><TermTip id="nakshatra">Nakshatra</TermTip></small><strong>{data.nakshatra.nakshatra}</strong><span><TermTip id="pada">Pada</TermTip> {data.nakshatra.pada}</span><NumberNote testid="kundali-pada-note">{padaNote(data.nakshatra.pada)}</NumberNote></div>
                   {data.dasha && (
-                    <div className="chart-stat" data-testid="kundali-dasha"><small><TermTip id="dasha">Dasha</TermTip></small><strong className="mini-number">{data.dasha.mahadasha}/{data.dasha.antardasha}</strong></div>
+                    <div className="chart-stat" data-testid="kundali-dasha"><small><TermTip id="dasha">Dasha</TermTip></small><strong className="mini-number">{data.dasha.mahadasha}/{data.dasha.antardasha}</strong><NumberNote testid="kundali-dasha-note">{dashaPairNote(data.dasha.mahadasha, data.dasha.antardasha)}</NumberNote></div>
                   )}
                 </div>
               </div>
@@ -316,9 +322,9 @@ export default function KundaliPage() {
               {/* K13: the divisional charts the explainer pages point to — same drawing, same style toggle. */}
               {(data.divisionalCharts?.d9 || data.divisionalCharts?.d10) && (
                 <div data-testid="kundali-divisional" style={{ marginTop: 20 }}>
-                  <h3 style={{ marginBottom: 4 }}>Navamsa (D9) and Dasamsa (D10)</h3>
+                  <h3 style={{ marginBottom: 4 }}><TermTip id="navamsa">Navamsa (D9)</TermTip> and <TermTip id="dasamsa">Dasamsa (D10)</TermTip></h3>
                   <p className="text-sm text-muted-foreground" style={{ marginBottom: 8 }}>
-                    Divisional charts refine the main chart: the <Link to="/divisional-charts/d9-navamsa" className="underline">Navamsa</Link> for marriage and inner strength, the <Link to="/divisional-charts/d10-dasamsa" className="underline">Dasamsa</Link> for career. The first house is each chart’s own Lagna. They are sensitive to birth time — a few minutes can move the Lagna.
+                    <TermTip id="varga">Divisional charts</TermTip> refine the main chart: the <Link to="/divisional-charts/d9-navamsa" className="underline">Navamsa</Link> for marriage and inner strength, the <Link to="/divisional-charts/d10-dasamsa" className="underline">Dasamsa</Link> for career. The first house is each chart’s own Lagna. They are sensitive to birth time — a few minutes can move the Lagna.
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {([['d9', 'Navamsa (D9)'], ['d10', 'Dasamsa (D10)']] as const).map(([key, title]) => {
@@ -343,11 +349,11 @@ export default function KundaliPage() {
 
               <div className="table-scroll" style={{ marginTop: 16 }}>
                 <table data-testid="planet-table" className="data-table" style={{ width: '100%' }}>
-                  <thead><tr><th>Planet</th><th>Sign</th><th>House</th><th>Degrees</th></tr></thead>
+                  <thead><tr><th><TermTip id="graha">Planet</TermTip></th><th>Sign</th><th><TermTip id="bhava">House</TermTip></th><th><TermTip id="planetDegree">Degrees</TermTip></th></tr></thead>
                   <tbody>
                     {data.planets.map(p => (
                       <tr key={p.name}>
-                        <td>{p.name}{p.retrograde ? ' (R)' : ''}</td>
+                        <td>{p.name === 'Rahu' || p.name === 'Ketu' ? <TermTip id={p.name.toLowerCase()}>{p.name}</TermTip> : p.name}{p.retrograde ? <> (<TermTip id="retrograde">R</TermTip>)</> : ''}</td>
                         <td>{p.sign}</td>
                         <td>{p.house}</td>
                         <td>{formatDegreeInSign(p.longitude)}</td>
@@ -356,6 +362,16 @@ export default function KundaliPage() {
                   </tbody>
                 </table>
               </div>
+              {(() => {
+                const moon = data.planets.find(p => p.name === 'Moon');
+                const nearEdge = data.planets.filter(p => { const d = ((p.longitude % 30) + 30) % 30; return d < 1 || d >= 29; }).map(p => p.name);
+                return (
+                  <div data-testid="kundali-degree-notes">
+                    <NumberNote testid="kundali-degree-note">Degrees show how far each planet is into its 30° sign (0° = just entered, 29° = about to leave).{moon ? ` ${degreeNote(moon.longitude, 'Your Moon')}` : ''}</NumberNote>
+                    {nearEdge.length > 0 && <NumberNote testid="kundali-edge-note">{nearEdge.join(', ')} {nearEdge.length === 1 ? 'is' : 'are'} within 1° of a sign boundary — if your birth time is approximate, {nearEdge.length === 1 ? 'its' : 'their'} sign could differ.</NumberNote>}
+                  </div>
+                );
+              })()}
 
               {data.dashaTimeline && data.dashaTimeline.length > 0 && (
                 <DashaDeepDive mahadashas={data.dashaTimeline.map(m => ({ lord: m.lord, start: m.start, end: m.end }))} />

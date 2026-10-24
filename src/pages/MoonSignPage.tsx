@@ -6,6 +6,7 @@ import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { calculateMoonSignAndNakshatra, MOON_SIGN_DATA, NAKSHATRAS, getNakshatraLifeApplication } from '@/data/moonSignData';
 import { useReportPrice } from '@/hooks/useCurrency';
+import { TermTip } from '@/components/vedic/TermTip';
 
 type TabKey = 'personality' | 'love' | 'shadow' | 'compatible';
 
@@ -102,14 +103,14 @@ export default function MoonSignPage() {
             <div className="mb-10">
               <div className="grid sm:grid-cols-2 gap-4 mb-6">
                 <div className="bg-gradient-to-br from-blue-900 to-[#6E5AA6] rounded-2xl p-6 text-white text-center">
-                  <p className="text-xs text-blue-300 mb-1 uppercase tracking-wide">Moon Sign</p>
+                  <p className="text-xs text-blue-300 mb-1 uppercase tracking-wide"><TermTip id="rashi">Moon Sign</TermTip></p>
                   <div className="text-5xl mb-2">{result.moonSignData.symbol}</div>
                   <h2 className="text-2xl font-black text-white mb-1">{result.moonSign} Moon</h2>
                   <p className="text-xs text-blue-300">{result.moonSignData.element} · {result.moonSignData.rulingPlanet}</p>
                   <p className="text-xs text-blue-200 mt-2 italic">{result.moonSignData.emotionalNature}</p>
                 </div>
                 <div className="bg-gradient-to-br from-[#6E5AA6] to-pink-900 rounded-2xl p-6 text-white text-center">
-                  <p className="text-xs text-[#6E5AA6] mb-1 uppercase tracking-wide">Nakshatra</p>
+                  <p className="text-xs text-[#6E5AA6] mb-1 uppercase tracking-wide"><TermTip id="nakshatra">Nakshatra</TermTip></p>
                   <div className="text-5xl mb-2">{result.nakshatraData.symbol}</div>
                   <h2 className="text-2xl font-black text-white mb-1">{result.nakshatraData.name}</h2>
                   <p className="text-xs text-[#6E5AA6]">#{result.nakshatraNumber} · {result.nakshatraData.meaning}</p>

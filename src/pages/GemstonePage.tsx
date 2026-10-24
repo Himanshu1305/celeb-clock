@@ -11,6 +11,9 @@ import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { Link } from 'react-router-dom';
 import { WEARING_RITUAL, sizingRuleForAge, MINOR_SIZING_NOTE } from '@/lib/vedic/gemstones';
 import { TrustStrip } from '@/components/paj/TrustStrip';
+import { TermTip } from '@/components/vedic/TermTip';
+
+const ROLE_TERM: Record<string, string> = { 'Yogakaraka': 'yogakaraka', 'Ascendant lord': 'lagnaLord', 'weak functional benefic': 'benefic' };
 import { birthQuery } from '@/lib/timezone/clientBirth';
 
 interface Sugg { planet: string; gem: string; hindi: string; role: string; reason: string; trialCaution: boolean; dashaActive: boolean }
@@ -26,11 +29,11 @@ function Card({ s, primary }: { s: Sugg; primary?: boolean }) {
     <div data-testid={primary ? 'gem-primary' : 'gem-additional'} className={`rounded-xl border p-4 ${primary ? 'border-[#6E5AA6]/30 bg-[#6E5AA6]/50' : 'border-border'}`}>
       <div className="font-semibold text-foreground">
         {s.gem} <span className="text-muted-foreground">({s.hindi})</span> — for {s.planet}
-        <span className="ml-2 text-[10px] uppercase tracking-wide text-[#6E5AA6]">{s.role}</span>
+        <span className="ml-2 text-[10px] uppercase tracking-wide text-[#6E5AA6]">{ROLE_TERM[s.role] ? <TermTip id={ROLE_TERM[s.role]}>{s.role}</TermTip> : s.role}</span>
         {s.dashaActive && <span className="ml-2 text-[10px] uppercase tracking-wide text-emerald-600">period active now</span>}
       </div>
       <p className="text-sm text-muted-foreground mt-1">{s.reason}</p>
-      {s.trialCaution && <p className="text-xs text-amber-700 mt-1">⚠️ A powerful stone — traditionally worn on a short trial before regular wear.</p>}
+      {s.trialCaution && <p className="text-xs text-amber-700 mt-1">⚠️ A powerful stone — traditionally worn on a short <TermTip id="gemTrial">trial</TermTip> before regular wear.</p>}
     </div>
   );
 }
@@ -84,7 +87,7 @@ export default function GemstonePage() {
     >
         <section className="section">
           <div className="section-head">
-            <div><span className="eyebrow">Ratna</span><h1>Gemstone Suggestions.</h1></div>
+            <div><span className="eyebrow"><TermTip id="ratna">Ratna</TermTip></span><h1>Gemstone Suggestions.</h1></div>
             <p>A traditional, informational suggestion based on your Ascendant lord and computed planetary strength — classical association only, not a medical claim or guarantee, and we sell nothing.</p>
           </div>
           <TrustStrip claim="We show you the method — the ruler of your rising sign and your chart's computed planetary strengths — and why each stone is suggested." href="/how-it-works#vedic" />
@@ -98,7 +101,7 @@ export default function GemstonePage() {
           <div data-testid="gemstone-result" className="mt-6 space-y-4">
             {/* Methodology note FIRST — the transparency that builds trust (Part J). */}
             <div data-testid="gemstone-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
-              <div className="font-semibold text-foreground mb-1">How we chose this (based on your Ascendant, not your Moon sign)</div>
+              <div className="font-semibold text-foreground mb-1">How we chose this (based on your <TermTip id="lagnaLord">Ascendant</TermTip>, not your Moon sign)</div>
               <p className="text-sm text-foreground">{report.methodology.text}</p>
             </div>
 
@@ -123,7 +126,7 @@ export default function GemstonePage() {
 
             {/* Part AI — honest cross-reference to the simpler Rashi Ratna tool. */}
             <p data-testid="gem-rashiratna-crossref" className="text-sm text-muted-foreground">
-              Looking for the quick, Moon-sign version instead? The <Link to="/rashi-ratna" className="text-primary hover:underline font-medium">Rashi Ratna</Link> page gives one stone per zodiac sign from the ruling planet alone — a general starting point. This page is the more precise, full-chart recommendation, so if the two differ, this one is the more personalised.
+              Looking for the quick, Moon-sign version instead? The <Link to="/rashi-ratna" className="text-primary hover:underline font-medium">Rashi Ratna</Link> <TermTip id="rashiRatna" iconOnly /> page gives one stone per zodiac sign from the ruling planet alone — a general starting point. This page is the more precise, full-chart recommendation, so if the two differ, this one is the more personalised.
             </p>
 
             {report.avoid.length > 0 && (

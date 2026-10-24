@@ -171,12 +171,12 @@ export default function SadeSatiPage() {
         {report && (
           <div data-testid="sadesati-result" className="mt-6 space-y-4">
             <div className={`rounded-xl border p-5 text-center ${report.active || report.paused ? 'border-amber-300 bg-amber-50' : 'border-emerald-200 bg-emerald-50'}`}>
-              <div className="text-sm text-muted-foreground">Moon sign: {report.moonSignName}</div>
+              <div className="text-sm text-muted-foreground"><TermTip id="rashi">Moon sign</TermTip>: {report.moonSignName}</div>
               <div className={`text-2xl font-black ${report.active || report.paused ? 'text-amber-700' : 'text-emerald-700'}`}>
-                {report.active ? 'Sade Sati is ACTIVE' : report.paused ? 'Sade Sati is paused right now' : 'Sade Sati is not active right now'}
+                <TermTip id="sadeSati">Sade Sati</TermTip>{report.active ? ' is ACTIVE' : report.paused ? ' is paused right now' : ' is not active right now'}
               </div>
               {report.paused && <div className="font-semibold text-foreground mt-1">Resumes {fmtDay(report.paused.resumes)}</div>}
-              {report.active && report.phase && <div className="font-semibold text-foreground mt-1">Phase: {report.phase}</div>}
+              {report.active && report.phase && <div className="font-semibold text-foreground mt-1"><TermTip id="sadeSatiPhase">Phase</TermTip>: {report.phase}</div>}
             </div>
 
             {/* Part X — impact-first approved narrative (verdict → plain impact → dates → close). */}
@@ -210,7 +210,7 @@ export default function SadeSatiPage() {
 
             {report.dhaiya.active && (
               <div data-testid="sadesati-dhaiya" className="rounded-lg border border-[#6E5AA6]/30 bg-[#6E5AA6]/50 p-4">
-                <div className="font-semibold text-foreground">Dhaiya (small Panoti) is active</div>
+                <div className="font-semibold text-foreground"><TermTip id="dhaiya">Dhaiya (small Panoti)</TermTip> is active</div>
                 <div className="text-sm text-foreground">{report.dhaiya.type}{report.dhaiya.currentEnd ? ` — until ${fmtDay(report.dhaiya.currentEnd)}` : ''}</div>
                 <p className="text-xs text-muted-foreground mt-1">A 2.5-year Saturn transit (the 4th or 8th from your Moon), traditionally a lighter version of Sade Sati’s themes.</p>
               </div>

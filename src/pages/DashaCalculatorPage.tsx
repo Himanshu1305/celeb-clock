@@ -9,7 +9,8 @@ import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
-import { TermTip } from '@/components/vedic/TermTip';
+import { TermTip, NumberNote } from '@/components/vedic/TermTip';
+import { dashaPairNote } from '@/lib/vedic/numberNotes';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
 import { WhatsAhead } from '@/components/vedic/WhatsAhead';
@@ -151,7 +152,7 @@ export default function DashaCalculatorPage() {
             Each main period (<TermTip id="mahadasha">Mahadasha</TermTip>) is
             divided into nine sub-periods (
             <TermTip id="antardasha">Antardasha</TermTip>), which subdivide
-            again into Pratyantardasha, Sookshma, and Prana. The deeper levels
+            again into <TermTip id="pratyantardasha">Pratyantardasha</TermTip>, <TermTip id="sookshma">Sookshma</TermTip>, and <TermTip id="prana">Prana</TermTip>. The deeper levels
             last from days to hours and require an accurate birth time to be
             meaningful. This calculator uses the sidereal Lahiri{' '}
             <TermTip id="ayanamsa">ayanamsa</TermTip> — the standard reference
@@ -208,11 +209,12 @@ export default function DashaCalculatorPage() {
                   Current planetary period
                 </div>
                 <div className="text-2xl font-black text-[#4B3A8C]">
-                  {result.dasha!.mahadasha} Mahadasha
+                  {result.dasha!.mahadasha} <TermTip id="mahadasha">Mahadasha</TermTip>
                 </div>
                 <div className="text-base font-semibold text-foreground mt-1">
-                  {result.dasha!.antardasha} Antardasha
+                  {result.dasha!.antardasha} <TermTip id="antardasha">Antardasha</TermTip>
                 </div>
+                <NumberNote testid="dasha-pair-note">{dashaPairNote(result.dasha!.mahadasha, result.dasha!.antardasha)}</NumberNote>
                 <p className="text-xs text-muted-foreground mt-2">
                   The Mahadasha is the broad planetary chapter; the Antardasha
                   is the sub-period running within it. Expand the timeline below
@@ -247,7 +249,7 @@ export default function DashaCalculatorPage() {
             {/* Methodology note */}
             <p className="text-xs text-muted-foreground">
               Dates are computed from your Moon's sidereal longitude using the
-              Lahiri <TermTip id="ayanamsa">ayanamsa</TermTip>. The Vimshottari
+              Lahiri <TermTip id="ayanamsa">ayanamsa</TermTip>. The <TermTip id="vimshottari">Vimshottari</TermTip>
               system uses classical proportional divisions — the same nine-planet
               sequence applies at every level. Treat this as a classical timing
               guide, not a fixed prediction.

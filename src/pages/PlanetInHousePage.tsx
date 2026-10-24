@@ -82,7 +82,7 @@ export default function PlanetInHousePage() {
           ))}
 
           <p className="text-xs text-muted-foreground my-6">
-            Read by the classical significations of the <TermTip id="rashi">bhava</TermTip> (house) and the planet’s karaka.{' '}
+            Read by the classical significations of the <TermTip id="bhava">bhava</TermTip> (house) and the planet’s karaka.{' '}
             <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
           </p>
 
