@@ -6,6 +6,7 @@ import { PageFAQ } from '@/components/PageFAQ';
 import {
   chaldeanName, pythagoreanName, CHALDEAN_LETTER_TABLE, BIRTHDAY_MEANINGS,
 } from '@/lib/numerologyExtra';
+import { TermTip } from '@/components/vedic/TermTip';
 
 export default function ChaldeanNumerologyPage() {
   const [name, setName] = useState('');
@@ -54,14 +55,14 @@ export default function ChaldeanNumerologyPage() {
           {result && (
             <div className="grid sm:grid-cols-2 gap-4 mb-8" data-testid="chaldean-result">
               <div className="rounded-2xl border border-primary/40 p-5 bg-gradient-to-br from-card to-muted/20">
-                <div className="text-xs text-muted-foreground mb-1">Chaldean name number</div>
+                <div className="text-xs text-muted-foreground mb-1"><TermTip id="chaldean">Chaldean</TermTip> name number</div>
                 <div className="text-4xl font-black text-primary mb-1">{result.c.root}</div>
                 <div className="text-sm text-muted-foreground">Total {result.c.total} · compound {result.c.compound} · root {result.c.root}</div>
                 <div className="font-semibold text-foreground mt-2">{BIRTHDAY_MEANINGS[result.c.root]?.title}</div>
                 <p className="text-sm text-muted-foreground mt-1">{BIRTHDAY_MEANINGS[result.c.root]?.text}</p>
               </div>
               <div className="rounded-2xl border border-border p-5">
-                <div className="text-xs text-muted-foreground mb-1">Pythagorean (for comparison)</div>
+                <div className="text-xs text-muted-foreground mb-1"><TermTip id="pythagorean">Pythagorean</TermTip> (for comparison)</div>
                 <div className="text-4xl font-black text-foreground mb-1">{result.p.root}</div>
                 <div className="text-sm text-muted-foreground">Total {result.p.total} · root {result.p.root}</div>
                 <p className="text-sm text-muted-foreground mt-2">{result.c.root === result.p.root ? 'Both systems agree on the root number here — an unusually consistent name.' : 'The two systems give different numbers, which is normal — they use different letter maps.'}</p>

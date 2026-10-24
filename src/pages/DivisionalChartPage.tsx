@@ -80,7 +80,7 @@ export default function DivisionalChartPage() {
           </div>
 
           <p className="text-xs text-muted-foreground mb-6">
-            A varga is read against your main (<TermTip id="rashi">Rashi</TermTip>) chart — never alone.{' '}
+            A <TermTip id="varga">varga</TermTip> is read against your main (<TermTip id="d1">Rashi / D1</TermTip>) chart — never alone.{' '}
             <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
           </p>
 

@@ -6,6 +6,7 @@ import { PageFAQ } from '@/components/PageFAQ';
 import {
   birthdayNumber, attitudeNumber, BIRTHDAY_MEANINGS, ATTITUDE_MEANINGS,
 } from '@/lib/numerologyExtra';
+import { TermTip } from '@/components/vedic/TermTip';
 
 export default function AttitudeNumberPage() {
   const [day, setDay] = useState('');
@@ -68,14 +69,14 @@ export default function AttitudeNumberPage() {
           {result && (
             <div className="grid sm:grid-cols-2 gap-4 mb-8" data-testid="att-result">
               <div className="rounded-2xl border border-border p-5 bg-gradient-to-br from-card to-muted/20">
-                <div className="text-xs text-muted-foreground mb-1">Birthday number</div>
-                <div className="text-4xl font-black text-primary mb-2">{result.bday.number}{result.bday.isMaster && <span className="text-sm font-semibold ml-2 align-middle text-amber-600">master</span>}</div>
+                <div className="text-xs text-muted-foreground mb-1"><TermTip id="birthdayNumber">Birthday number</TermTip></div>
+                <div className="text-4xl font-black text-primary mb-2">{result.bday.number}{result.bday.isMaster && <span className="text-sm font-semibold ml-2 align-middle text-amber-600"><TermTip id="masterNumber">master</TermTip></span>}</div>
                 <div className="font-semibold text-foreground">{BIRTHDAY_MEANINGS[result.bday.number]?.title}</div>
                 <p className="text-sm text-muted-foreground mt-1">{BIRTHDAY_MEANINGS[result.bday.number]?.text}</p>
                 <p className="text-xs text-muted-foreground mt-2">From the day you were born ({result.bday.day}).</p>
               </div>
               <div className="rounded-2xl border border-border p-5 bg-gradient-to-br from-card to-muted/20">
-                <div className="text-xs text-muted-foreground mb-1">Attitude (Sun) number</div>
+                <div className="text-xs text-muted-foreground mb-1"><TermTip id="attitudeNumber">Attitude (Sun) number</TermTip></div>
                 <div className="text-4xl font-black text-primary mb-2">{result.att.number}</div>
                 <div className="font-semibold text-foreground">{ATTITUDE_MEANINGS[result.att.number]?.title}</div>
                 <p className="text-sm text-muted-foreground mt-1">{ATTITUDE_MEANINGS[result.att.number]?.text}</p>

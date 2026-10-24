@@ -17,6 +17,7 @@ import {
   getPersonalYearMeaning,
   reduceToSingleDigit,
 } from '@/lib/personalYear';
+import { TermTip } from '@/components/vedic/TermTip';
 
 const TITLE = 'Personal Year Number Calculator — Numerology Cycle | BornClock';
 const DESCRIPTION =
@@ -155,7 +156,7 @@ export default function PersonalYearNumberPage() {
           </div>
           <p>
             Enter your birth day and month — no birth year needed. The calculator derives
-            your Personal Year Number for this year and next using the standard Pythagorean
+            your <TermTip id="personalYear">Personal Year Number</TermTip> for this year and next using the standard <TermTip id="pythagorean">Pythagorean</TermTip>
             method: reduce your month, day, and the current calendar year each to a single
             digit, add them, and reduce again to 1–9.
           </p>

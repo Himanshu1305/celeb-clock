@@ -3,6 +3,8 @@ import { geocodeCity, type GeoResult } from '@/services/geocoding';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { birthQuery } from '@/lib/timezone/clientBirth';
 import type { SavedCity } from '@/services/savedProfile';
+import { TermTip, NumberNote } from '@/components/vedic/TermTip';
+import { dashaPairNote } from '@/lib/vedic/numberNotes';
 
 interface VedicApiResult {
   nakshatra: { nakshatra: string; nakshatra_devanagari: string; pada: number; confidence: string; is_boundary: boolean };
@@ -157,25 +159,26 @@ export function BirthTimeVedicSection({ dob, onDetailsChange }: {
       {result && (
         <div data-testid="vedic-profile-section" className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
           <div className="rounded-lg bg-white border border-gray-100 p-3">
-            <span className="text-gray-500">Nakshatra</span>
+            <span className="text-gray-500"><TermTip id="nakshatra">Nakshatra</TermTip></span>
             <div className="font-semibold text-gray-900">
-              {result.nakshatra.nakshatra} {result.nakshatra.nakshatra_devanagari} · Pada {result.nakshatra.pada}
+              {result.nakshatra.nakshatra} {result.nakshatra.nakshatra_devanagari} · <TermTip id="pada">Pada</TermTip> {result.nakshatra.pada}
             </div>
           </div>
           <div className="rounded-lg bg-white border border-gray-100 p-3">
-            <span className="text-gray-500">Rashi (Moon)</span>
+            <span className="text-gray-500"><TermTip id="rashi">Rashi (Moon)</TermTip></span>
             <div className="font-semibold text-gray-900">{result.rashi} {result.rashi_devanagari}</div>
           </div>
           {result.lagna && (
             <div className="rounded-lg bg-white border border-gray-100 p-3">
-              <span className="text-gray-500">Lagna (Ascendant)</span>
+              <span className="text-gray-500"><TermTip id="lagna">Lagna (Ascendant)</TermTip></span>
               <div className="font-semibold text-gray-900">{result.lagna.sign}</div>
             </div>
           )}
           {result.dasha && (
             <div className="rounded-lg bg-white border border-gray-100 p-3">
-              <span className="text-gray-500">Current Dasha</span>
+              <span className="text-gray-500">Current <TermTip id="dasha">Dasha</TermTip></span>
               <div className="font-semibold text-gray-900">{result.dasha.mahadasha} / {result.dasha.antardasha}</div>
+              <NumberNote>{dashaPairNote(result.dasha.mahadasha, result.dasha.antardasha)}</NumberNote>
             </div>
           )}
           {result.nakshatra.is_boundary && (

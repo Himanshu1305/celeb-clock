@@ -144,6 +144,12 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'हर नक्षत्र के चार भाग (चरण) होते हैं। आपका चरण बताता है कि चंद्रमा नक्षत्र के किस हिस्से में था; नामकरण का पहला अक्षर भी इसी से लिया जाता है।',
     aliases: ['charan', 'quarter'],
   },
+  shakti: {
+    term: 'Shakti (a Nakshatra\'s special power)', category: 'basics', hiTerm: 'शक्ति',
+    impact: 'The particular gift your birth star is said to carry — a way to understand your natural strengths.',
+    why: 'Classical star lore (Taittiriya Brahmana) gives each of the 27 Nakshatras a deity and a "shakti", the power that deity bestows.',
+    hi: 'हर नक्षत्र के देवता की विशेष शक्ति — आपकी स्वाभाविक क्षमता को समझने का एक तरीका।',
+  },
   graha: {
     term: 'Graha (the nine planets)', category: 'basics', hiTerm: 'ग्रह / नवग्रह',
     impact: 'The nine "players" in your chart — each looks after different parts of life.',
@@ -1067,6 +1073,13 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     why: 'Add your birth day and month to the current year and reduce.',
     hi: 'जन्म दिन और महीने को चालू वर्ष से जोड़कर बनता है — 9 वर्ष के चक्र में इस वर्ष का विषय।',
     link: '/personal-year-number',
+  },
+  birthdayNumber: {
+    term: 'Birthday Number', category: 'numerology', hiTerm: 'जन्मांक (मूलांक)',
+    impact: 'One specific gift or talent, taken from the day of the month you were born.',
+    why: 'It is simply your birth day (1–31) reduced to one digit; 11 and 22 are kept as master numbers. In Indian numerology this is often called the Moolank.',
+    hi: 'जन्म की तारीख़ (1–31) को एक अंक में घटाकर बनता है — इसे मूलांक भी कहते हैं।',
+    aliases: ['Moolank', 'Mulank', 'psychic number'],
   },
   attitudeNumber: {
     term: 'Attitude Number', category: 'numerology', hiTerm: 'दृष्टिकोण अंक',

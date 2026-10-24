@@ -24,6 +24,7 @@ import {
   windowsFor, lifeAreas, timeHorizons, type AheadWindow, type MahaPeriod, type LifeArea,
 } from '@/lib/vedic/whatsAhead';
 import { WHATS_AHEAD_IS_FREE } from '@/config/whatsAheadAccess';
+import { TermTip } from '@/components/vedic/TermTip';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const monYear = (iso: string) => { const d = new Date(iso); return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
@@ -146,7 +147,7 @@ export function WhatsAhead({ lagnaSignIndex, planets, dashaTimeline, free, marit
                 </div>
               ))}
               <div style={{ border: '1px solid var(--line,#e4dcc8)', borderRadius: 10, padding: '10px 14px' }}>
-                <div style={{ fontWeight: 700, color: 'var(--ink)', marginBottom: 6 }}>Lifetime overview — your Mahadasha sequence</div>
+                <div style={{ fontWeight: 700, color: 'var(--ink)', marginBottom: 6 }}>Lifetime overview — your <TermTip id="mahadasha">Mahadasha</TermTip> sequence</div>
                 <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12.5, color: 'var(--ink)' }}>
                   {lifetime.map((m, i) => (
                     <li key={i}>{m.lord}: {monYear(m.start)} – {monYear(m.end)}</li>

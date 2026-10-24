@@ -7,6 +7,7 @@ import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { getTarotBirthCards, MAJOR_ARCANA, type TarotCard } from '@/data/tarotData';
 import { useReportPrice } from '@/hooks/useCurrency';
 import { describeBirthCardWorking } from '@/lib/tarot/birthCard';
+import { TermTip } from '@/components/vedic/TermTip';
 
 type TabKey = 'meaning' | 'love' | 'career' | 'health' | 'spirituality';
 
@@ -316,7 +317,7 @@ export default function TarotByBirthday() {
 
           {/* SECTION 2: Birthday card */}
           <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-200">
-            <h2 className="text-lg font-bold text-gray-900 mb-1 text-center">🎂 Your Birthday Card</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-1 text-center">🎂 Your <TermTip id="birthCard">Birthday Card</TermTip></h2>
             <p className="text-sm text-gray-500 text-center mb-4">
               Month + day + year, reduced to 22 or less — the standard tarot birth card method.
             </p>
@@ -474,7 +475,7 @@ export default function TarotByBirthday() {
 
           {/* Educational content: all 22 Major Arcana cards */}
           <div className="mt-10">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">The 22 Major Arcana Cards</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">The 22 <TermTip id="majorArcana">Major Arcana</TermTip> Cards</h2>
             <p className="text-gray-500 text-sm mb-6">
               Each card represents a universal archetype. Your birth date points to one of them
               as your birth card, usually paired with a second.
