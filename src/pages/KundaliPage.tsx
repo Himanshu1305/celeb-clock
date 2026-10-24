@@ -306,6 +306,9 @@ export default function KundaliPage() {
                 <Suspense fallback={<div style={{ width: 300, height: 300 }} aria-hidden="true" />}>
                   <KundaliChart lagnaSignIndex={data.lagna.signIndex} planets={data.planets} style={chartStyle} />
                 </Suspense>
+                <p data-testid="kundali-chart-legend" className="text-xs text-muted-foreground" style={{ maxWidth: 320 }}>
+                  How to read it: Su Sun · Mo Moon · Ma Mars · Me Mercury · Ju Jupiter · Ve Venus · Sa Saturn · Ra <TermTip id="rahu">Rahu</TermTip> · Ke <TermTip id="ketu">Ketu</TermTip> · La <TermTip id="lagna">Lagna</TermTip>. The small numbers are sign numbers (1 Aries … 12 Pisces); each box is a <TermTip id="bhava">house</TermTip>.
+                </p>
                 <div className="chart-stats">
                   <div className="chart-stat" data-testid="kundali-lagna"><small><TermTip id="lagna">Lagna</TermTip></small><strong>{data.lagna.sign}</strong><span>{formatDegreeInSign(data.lagna.degrees)}</span><NumberNote testid="kundali-lagna-note">{degreeNote(data.lagna.degrees, 'Your Lagna')}</NumberNote></div>
                   <div className="chart-stat"><small><TermTip id="rashi">Rashi</TermTip></small><strong>{data.rashi}</strong><span>{data.rashi_devanagari}</span></div>
