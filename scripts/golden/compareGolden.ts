@@ -63,8 +63,6 @@ class Collector {
  * weekly drift report lists them in their own section.
  */
 export const KNOWN_ISSUES: Array<{ id: string; field: string; note: string }> = [
-  { id: 'G15', field: 'lagna', note: 'Audit B7: above the Arctic Circle the Ascendant formula returns the setting (western) point — Kanya instead of Meena for Tromsø (Swiss Ephemeris: 15° tropical is on the eastern horizon and rising). The site already shows a POLAR_LATITUDE warning on such charts.' },
-  { id: 'G15', field: 'd9.Lagna', note: 'Follows from the B7 polar Ascendant above (D9 Lagna is computed from the wrong Ascendant).' },
 ];
 const isKnown = (d: Diff) => KNOWN_ISSUES.some(k => k.id === d.id && k.field === d.field);
 /** Split differences into real drift and known open issues. */

@@ -72,6 +72,6 @@ describe('weekly drift check (mocked live API)', () => {
     const r = await runDrift({ sources: ['main'] });
     expect(r.unreachable).toEqual([]);
     expect(r.drift.map(d => d.message)).toEqual([]);
-    expect(r.known.map(d => `${d.id}:${d.field}`)).toEqual(['G15:lagna', 'G15:d9.Lagna']);
+    expect(r.known).toEqual([]); // G15 polar Lagna (audit B7) fixed — checked normally now
   }, 120_000);
 });
