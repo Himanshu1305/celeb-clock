@@ -8,6 +8,9 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 vi.mock('@/services/BirthdaySearchService', () => ({
   getRankedBirthdayCelebrities: vi.fn(async () => []),
   searchLocalDatabase: vi.fn(async () => ({ people: [] })),
+  // CountryExtrasSection (rendered by the page) calls this; without it the mock threw an
+  // unhandled error that made every full `vitest run` exit non-zero.
+  getCountryExtras: vi.fn(async () => []),
 }));
 vi.mock('@/services/CelebrityBoostService', () => ({
   getTodayTopBoosted: vi.fn(async () => []),

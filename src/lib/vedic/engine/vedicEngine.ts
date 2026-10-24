@@ -152,7 +152,18 @@ export function calculateLagna(birthDateUTC: Date, latitude: number, longitude: 
   const y = Math.cos(ramcRad);
   const x = -(Math.sin(oblRad) * Math.tan(latRad) + Math.cos(oblRad) * Math.sin(ramcRad));
 
-  const ascTropical = normalize360(toDeg(Math.atan2(y, x)));
+  let ascTropical = normalize360(toDeg(Math.atan2(y, x)));
+
+  // Audit B7 — polar latitudes. Above the polar circle (|lat| ≥ 90° − obliquity) the
+  // formula above can return the western (setting) intersection of ecliptic and horizon.
+  // Swiss Ephemeris convention (swehouse.c): inside the polar circle, if the Ascendant
+  // lies "behind" the MC (signed arc AC − MC < 0), take the opposite point. MC is the
+  // ecliptic point on the upper meridian, in the same half-circle as the RAMC.
+  if (Math.abs(latitude) >= 90 - obliquity) {
+    const mcTropical = normalize360(toDeg(Math.atan2(Math.sin(ramcRad), Math.cos(ramcRad) * Math.cos(oblRad))));
+    const acmc = ((ascTropical - mcTropical + 540) % 360) - 180; // signed, −180..180
+    if (acmc < 0) ascTropical = normalize360(ascTropical + 180);
+  }
   const ascSidereal = normalize360(ascTropical - ayanamsa);
 
   return { ascTropical, ascSidereal };

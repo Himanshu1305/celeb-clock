@@ -1,4 +1,5 @@
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
+import { withLiveProfileFields } from '../src/lib/vedic/liveTimeFields.js';
 import { toVedicProfileLegacy } from '../src/lib/vedic/legacyAdapters.js';
 import { resolveRequestBirthTz } from './_birthParams.js';
 
@@ -191,7 +192,10 @@ async function handler(request, env) {
 
     const cached = await getCachedChart(sb, cacheKey);
     if (cached) {
-      return json({ ...cached, birthTimezone, _cache: 'hit' });
+      // Natal fields from the cache; the current Dasha is recomputed for NOW (the cached
+      // copy holds whatever was current when the chart was first saved).
+      const live = await withLiveProfileFields(cached, { year: y, month: m, day: d, hour: hasBirthTime ? h : 12, minute: hasBirthTime ? min : 0, latitude: lat, longitude: lon, timezoneOffset: tz }, hasBirthTime);
+      return json({ ...live, birthTimezone, _cache: 'hit' });
     }
 
     const result = await computeProfile(env, y, m, d, h, min, lat, lon, tz, hasBirthTime);

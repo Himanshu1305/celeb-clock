@@ -42,7 +42,7 @@ describe('Nakshatra pages', () => {
       expect(document.body.textContent).not.toContain('undefined');
       cleanup();
     }
-  });
+  }, 30_000); // renders all 27 pages; exceeds vitest's 5 s default on a loaded CI runner
 
   it('unknown slug shows picker fallback', () => {
     expect(() => renderPath('/nakshatra/notareal')).not.toThrow();
