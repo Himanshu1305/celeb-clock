@@ -13,6 +13,15 @@
  * 1950–2009, 8 cities) the share graded "strong" is now: wealth 19%, education 25%,
  * foreign 25%, health 16% (mild 37% / 22% / 26% / 43%).
  *
+ * Audit K11 (BPHS Shadbala rework + Sun's classical minimum 390): re-checked on the same
+ * 400-chart sample. Method: an area's cut-offs are re-fitted ONLY if a grade's share moved
+ * by more than 10 percentage points; the new cut-offs are the discrete score steps whose
+ * shares are closest (least squares) to the K10-calibrated shares. Before → after K11
+ * (strong / moderate / mild): wealth 19/45/37 → 18/50/32, education 24/54/22 → 20/59/21,
+ * foreign 26/49/26 → 26/53/22 (all within 10 points, unchanged); health 16/42/43 →
+ * 8/35/57 with the old cuts, so health was re-fitted to strong ≥ 2.5, moderate ≥ 1
+ * → 13/50/37.
+ *
  * Health is strictly WELLBEING framing: "areas to care for", never a diagnosis,
  * never an illness or a date; always points to a doctor (Rule 7). No LLM.
  */
@@ -133,7 +142,8 @@ export function buildLifeAreas(chart: BirthChartResult): LifeAreaReading[] {
     const sixth = occupantsOf(chart, 6), eighth = occupantsOf(chart, 8);
     const careAreas = [...sixth, ...eighth].filter(p => MALEFIC.has(p));
     const score = (lagnaCat === 'strong' ? 2 : lagnaCat === 'moderate' ? 1 : 0) + (sunCat === 'strong' ? 1 : 0) + (moonCat === 'strong' ? 1 : 0) - careAreas.length * 0.5;
-    const grade: AreaGrade = score >= 3 ? 'strong' : score >= 1.5 ? 'moderate' : 'mild';
+    // K11 re-fit (see header): strong ≥ 2.5, moderate ≥ 1 (was 3 / 1.5).
+    const grade: AreaGrade = score >= 2.5 ? 'strong' : score >= 1 ? 'moderate' : 'mild';
     out.push({
       key: 'health', label: 'Health & vitality (wellbeing)', grade,
       lead: `Vedic astrology reads ${gradeWord(grade)} indication for natural vitality.`,

@@ -24,6 +24,8 @@ import {
   getTrimsamsaSign,
   getKPSubLord,
   getLahiriAyanamsa,
+  calculatePlacidusCusps,
+  RASHI_NAMES,
   DASHA_LORDS,
   type ChartWarning,
   type FullChart,
@@ -33,7 +35,8 @@ import { assessManglik, MANGLIK_CONVENTION } from './manglik';
 import {
   getUcchaBala, getSaptavargajaBalaPanchadha, getOjayugmaBala, getKendradiBala, getDrekkanaBala,
 } from './engine/sthanaBala';
-import { getKalaBalaComplete } from './engine/kalaBala';
+import { getKalaBalaComplete, getSunHourAngle, getYuddhaBalaAll, type VedicDay } from './engine/kalaBala';
+import { sunriseSunset } from './panchangDay';
 import { getChestaBala } from './engine/chestaBala';
 import { getDrikBala } from './engine/drikBala';
 import { detectYogas, type YogaResult } from './yogas';
@@ -243,16 +246,43 @@ function getNavamsaFromLon(lon: number): string {
 }
 
 /**
- * Assemble Shadbala per planet. NOTE the confidence spread: naisargika + dig are
- * exact; sthana ~94% (residual); chesta ~80% (modern-equivalent); kala uses a
- * fixed 06:00/18:00 sunrise/sunset approximation here (the lab used real
- * panchang sunrise). Consumers MUST soften copy accordingly. Gated behind
+ * Assemble Shadbala per planet (audit K11 rework, Oct 2026 — BPHS ch. 27, with B.V.
+ * Raman's "Graha and Bhava Balas" where BPHS is terse). Uses the REAL local sunrise,
+ * sunset and next sunrise of the birth day (panchangDay.sunriseSunset), apparent solar
+ * time for Nathonnata, true declination rules for Ayana, the classical Chesta Kendra,
+ * ¼(benefic − malefic) Drik Bala, the true Trimsamsa (D30) sign, and Dig Bala measured
+ * from the real Ascendant / Midheaven. The Sun's Chesta = its Ayana Bala and the Moon's
+ * Chesta = its Paksha Bala (BPHS 27.18). Verified against Raman's worked example and
+ * PyJHora on the 10-person panel (see __tests__/shadbalaBphs.test.ts). Gated behind
  * options.includeShadbala; never fails the chart if a component errors.
  */
+export function getVedicDay(birthDateUTC: Date, input: BirthChartInput): VedicDay {
+  const tz = input.timezoneOffset;
+  const civil = new Date(Date.UTC(input.year, input.month - 1, input.day));
+  let ss = sunriseSunset(civil, input.latitude, input.longitude, tz);
+  if (birthDateUTC.getTime() < ss.rise.getTime()) {
+    // Born before sunrise → still the previous Vedic day.
+    ss = sunriseSunset(new Date(civil.getTime() - 86400000), input.latitude, input.longitude, tz);
+  }
+  const weekday = new Date(ss.rise.getTime() + tz * 3600000).getUTCDay();
+  return { sunriseUTC: ss.rise, sunsetUTC: ss.set, nextSunriseUTC: ss.nextRise, weekday };
+}
+
+function angDist(a: number, b: number): number {
+  let d = Math.abs(((a - b) % 360 + 360) % 360);
+  if (d > 180) d = 360 - d;
+  return d;
+}
+
 function buildShadbala(chart: FullChart, birthDateUTC: Date, input: BirthChartInput): Record<string, ShadbalaComponent> {
   const seven = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn'];
   const lons: Record<string, number> = {};
-  for (const n of seven) lons[n] = chart.planets[n].siderealLongitude;
+  const trop: Record<string, number> = {};
+  const ayanamsa = getLahiriAyanamsa(birthDateUTC);
+  for (const n of seven) {
+    lons[n] = chart.planets[n].siderealLongitude;
+    trop[n] = (lons[n] + ayanamsa) % 360;
+  }
 
   // Varga map for Panchadha Maitri (sign indices, 0-based) across the 7 vargas.
   const vargas: Record<string, Record<string, number>> = {};
@@ -265,15 +295,26 @@ function buildShadbala(chart: FullChart, birthDateUTC: Date, input: BirthChartIn
       saptamsa: getSaptamsaSign(lon).saptamsaSignIndex,
       navamsa: getNavamsaSign(lon).navamsaSignIndex,
       dwadasamsa: getDwadasamsaSign(lon).dwadasamsaSignIndex,
-      trimsamsa: Math.floor(lon / 30), // D30 sign not exposed as index; rasi proxy
+      trimsamsa: RASHI_NAMES.indexOf(getTrimsamsaSign(lon).trimsamsaSign),
     };
   }
 
-  const localHour = input.hour + input.minute / 60;
-  const localDayOfWeek = new Date(Date.UTC(input.year, input.month - 1, input.day)).getUTCDay();
-  const SUNRISE = 6, SUNSET = 18; // documented approximation
+  const day = getVedicDay(birthDateUTC, input);
+  const kalaInput = {
+    birthUTC: birthDateUTC,
+    localDate: { year: input.year, month: input.month, day: input.day },
+    sunHourAngleHours: getSunHourAngle(birthDateUTC, input.latitude, input.longitude),
+    day,
+    siderealLongitudes: lons,
+    tropicalLongitudes: trop,
+  };
 
-  const out: Record<string, ShadbalaComponent> = {};
+  // Dig Bala reference points: real Ascendant and Midheaven (sidereal).
+  const asc = chart.lagna.siderealLongitude;
+  const mc = safe(() => calculatePlacidusCusps(birthDateUTC, input.latitude, input.longitude)[10], (asc + 270) % 360);
+
+  type Parts = { sthana: number; dig: number; kala: number; uptoHora: number; chesta: number; drik: number };
+  const parts: Record<string, Parts> = {};
   for (const n of seven) {
     const p = chart.planets[n];
     const lon = lons[n];
@@ -287,20 +328,29 @@ function buildShadbala(chart: FullChart, birthDateUTC: Date, input: BirthChartIn
     const drekkanaBala = getDrekkanaBala(n, degInSign);
     const sthana = uccha + saptavargaja + ojayugma + kendradi + drekkanaBala;
 
-    // Dig Bala — directional strength from the strongest-house cusp.
-    const dig = digBala(n, p.house);
+    const dig = digBala(n, lon, asc, mc);
 
-    // Kala Bala.
-    const kala = safe(() => getKalaBalaComplete(n, birthDateUTC, lons, SUNRISE, SUNSET, localHour, localDayOfWeek).total, 0);
+    const kalaParts = safe(() => getKalaBalaComplete(n, kalaInput), null as ReturnType<typeof getKalaBalaComplete> | null);
 
-    // Chesta Bala (Sun/Moon substitute → null → 0 here; softened).
-    const chesta = safe(() => getChestaBala(n, lon, birthDateUTC), 0) ?? 0;
+    // Chesta: Sun = Ayana Bala, Moon = Paksha Bala (BPHS 27.18); others = Chesta Kendra.
+    const chesta = n === 'Sun' ? (kalaParts?.ayana ?? 0)
+      : n === 'Moon' ? (kalaParts?.paksha ?? 0)
+      : (safe(() => getChestaBala(n, trop[n], birthDateUTC), 0) ?? 0);
 
-    // Drik Bala.
     const drik = safe(() => getDrikBala(n, lon, lons), 0);
+    parts[n] = { sthana, dig, kala: kalaParts ? kalaParts.total : 0, uptoHora: kalaParts ? kalaParts.uptoHora : 0, chesta, drik };
+  }
 
+  // Yuddha Bala (BPHS 27.20) — part of Kala Bala, needs all planets' strengths.
+  const preWar: Record<string, number> = {};
+  for (const n of seven) preWar[n] = parts[n].sthana + parts[n].dig + parts[n].uptoHora;
+  const yuddha = safe(() => getYuddhaBalaAll(lons, preWar), {} as Record<string, number>);
+
+  const out: Record<string, ShadbalaComponent> = {};
+  for (const n of seven) {
+    const { sthana, dig, chesta, drik } = parts[n];
+    const kala = parts[n].kala + (yuddha[n] ?? 0);
     const naisargika = NAISARGIKA[n] ?? 0;
-
     out[n] = {
       sthana: round2(sthana),
       dig: round2(dig),
@@ -314,18 +364,17 @@ function buildShadbala(chart: FullChart, birthDateUTC: Date, input: BirthChartIn
   return out;
 }
 
-// Dig Bala: each planet is strongest at a specific angle (house) and powerless
-// 180° away. Strength = 60 × (distance from powerless house) / 6 houses.
-const DIG_STRONG_HOUSE: Record<string, number> = {
-  Jupiter: 1, Mercury: 1, Sun: 10, Mars: 10, Saturn: 7, Moon: 4, Venus: 4,
-};
-function digBala(planet: string, house: number): number {
-  const strong = DIG_STRONG_HOUSE[planet];
-  if (!strong) return 0;
-  const powerless = ((strong + 6 - 1) % 12) + 1;
-  let dist = Math.abs(house - powerless);
-  if (dist > 6) dist = 12 - dist;
-  return 60 * dist / 6;
+// Dig Bala (BPHS 27.6–7): arc from the planet's powerless point ÷ 3 (0–60). Powerless
+// points: Sun & Mars — the 4th cusp (IC); Moon & Venus — the 10th (MC); Jupiter &
+// Mercury — the 7th (Descendant); Saturn — the 1st (Ascendant). The old code used
+// whole house numbers (steps of 10 virupas) instead of the real angles.
+export function digBala(planet: string, lon: number, asc: number, mc: number): number {
+  const powerless: Record<string, number> = {
+    Sun: mc + 180, Mars: mc + 180, Moon: mc, Venus: mc, Jupiter: asc + 180, Mercury: asc + 180, Saturn: asc,
+  };
+  const pt = powerless[planet];
+  if (pt === undefined) return 0;
+  return angDist(lon, pt) / 3;
 }
 
 function safe<T>(fn: () => T, fallback: T): T {

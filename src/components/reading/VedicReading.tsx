@@ -10,6 +10,7 @@ import { useState } from 'react';
 import type { ReadingPayload, ReadingFactsClient } from '@/services/readingService';
 import { TermTip } from '@/components/vedic/TermTip';
 import { activeDoshaDetails } from '@/lib/vedic/doshaRemedies';
+import { SHADBALA_COMPONENT_EXPLANATIONS } from '@/lib/vedic/strengthScale';
 
 const LIFE_AREAS: Array<{ key: 'career' | 'relationships' | 'health' | 'money' | 'family'; label: string }> = [
   { key: 'career', label: 'Career' },
@@ -76,18 +77,50 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
           <div className="text-muted-foreground mb-1">Planetary strength (<TermTip id="shadbala">Shadbala</TermTip>, in <TermTip id="virupas">virupas</TermTip> — indicative):</div>
           <table className="w-full text-left">
             <thead className="text-muted-foreground">
-              <tr><th className="py-1 pr-3 font-medium">Planet</th><th className="py-1 pr-3 font-medium">Strength</th><th className="py-1 font-medium"><TermTip id="virupas">Virupas</TermTip></th></tr>
+              <tr><th className="py-1 pr-3 font-medium">Planet</th><th className="py-1 pr-3 font-medium">Strength</th><th className="py-1 pr-3 font-medium"><TermTip id="virupas">Virupas</TermTip></th><th className="py-1 font-medium">Classical minimum</th></tr>
             </thead>
             <tbody>
               {facts.planets.filter(p => p.shadbala).map(p => (
                 <tr key={p.planet} className="border-t border-border/60">
                   <td className="py-1 pr-3 text-foreground">{p.planet}</td>
                   <td className="py-1 pr-3 text-foreground capitalize">{p.shadbala!.category}</td>
-                  <td className="py-1 text-foreground">{p.shadbala!.total}</td>
+                  <td className="py-1 pr-3 text-foreground">{p.shadbala!.total}</td>
+                  <td className="py-1 text-muted-foreground">{p.shadbala!.required ?? '—'}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {/* Audit K11: one plain line per Shadbala part, plus the per-planet split. */}
+          <details data-testid="reading-shadbala-parts" className="mt-2">
+            <summary className="cursor-pointer text-muted-foreground">What the six parts of the score mean</summary>
+            <ul className="mt-1 list-disc pl-4 text-muted-foreground space-y-0.5">
+              {SHADBALA_COMPONENT_EXPLANATIONS.map(c => (
+                <li key={c.key}><span className="text-foreground">{c.name}:</span> {c.line}</li>
+              ))}
+            </ul>
+            <p className="mt-1 text-xs text-muted-foreground">
+              "Weak" means below the classical minimum from Brihat Parashara Hora Shastra; "moderate" meets it; "strong" exceeds it by a quarter or more.
+            </p>
+            {facts.planets.some(p => p.shadbala?.parts) && (
+              <div className="overflow-x-auto">
+                <table className="mt-2 w-full text-left text-xs">
+                  <thead className="text-muted-foreground">
+                    <tr><th className="py-1 pr-2 font-medium">Planet</th><th className="py-1 pr-2 font-medium">Position</th><th className="py-1 pr-2 font-medium">Direction</th><th className="py-1 pr-2 font-medium">Time</th><th className="py-1 pr-2 font-medium">Motion</th><th className="py-1 pr-2 font-medium">Natural</th><th className="py-1 font-medium">Aspects</th></tr>
+                  </thead>
+                  <tbody>
+                    {facts.planets.filter(p => p.shadbala?.parts).map(p => {
+                      const s = p.shadbala!.parts!;
+                      return (
+                        <tr key={p.planet} className="border-t border-border/60 text-foreground">
+                          <td className="py-1 pr-2">{p.planet}</td><td className="py-1 pr-2">{s.sthana}</td><td className="py-1 pr-2">{s.dig}</td><td className="py-1 pr-2">{s.kala}</td><td className="py-1 pr-2">{s.chesta}</td><td className="py-1 pr-2">{s.naisargika}</td><td className="py-1">{s.drik}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </details>
         </div>
       )}
 
