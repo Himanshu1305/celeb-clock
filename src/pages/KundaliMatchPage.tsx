@@ -4,7 +4,9 @@ import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { TrustStrip } from '@/components/paj/TrustStrip';
-import { TermTip } from '@/components/vedic/TermTip';
+import { TermTip, NumberNote } from '@/components/vedic/TermTip';
+import { PORUTHAM_TERM, MATCH_DOSHA_TERM } from '@/lib/vedic/termDefinitions';
+import { kootaScoreNote, gunaTotalNote, poruthamCountNote, degreeNote } from '@/lib/vedic/numberNotes';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
 import type { PoruthamResult } from '@/lib/vedic/porutham';
@@ -217,7 +219,7 @@ export default function KundaliMatchPage() {
         {/* M2: who is the groom (boy) and who is the bride (girl) */}
         <fieldset data-testid="kmatch-groom" className="rounded-xl border border-border p-4 mb-4 print:hidden">
           <legend className="px-1 text-sm font-semibold text-foreground">Who is the boy (groom) and who is the girl (bride)?</legend>
-          <p className="text-xs text-muted-foreground mb-2">Kundali matching is read from the boy to the girl, so swapping them can change the score.</p>
+          <p className="text-xs text-muted-foreground mb-2">Kundali matching is read from the boy to the girl, so swapping them can change the score. <TermTip id="matchDirection" iconOnly /></p>
           <div className="flex flex-col sm:flex-row gap-2 text-sm">
             <label className="flex items-center gap-2">
               <input data-testid="kmatch-groom-a" type="radio" name="kmatch-groom" checked={groom === 'A'}
@@ -261,9 +263,10 @@ export default function KundaliMatchPage() {
             )}
 
             <div className="text-center rounded-xl border border-border p-4">
-              <div className="text-sm text-muted-foreground">Total Guna Milan</div>
+              <div className="text-sm text-muted-foreground">Total <TermTip id="ashtakoota">Guna Milan</TermTip></div>
               <div className="text-4xl font-black text-[#6E5AA6]">{result.gunaMilan.total} / 36</div>
               <div className="font-semibold text-foreground">{result.gunaMilan.compatibility}</div>
+              <NumberNote testid="kmatch-total-note">{gunaTotalNote(result.gunaMilan.total)}</NumberNote>
               <div data-testid="kmatch-people-line" className="text-xs text-muted-foreground mt-1">
                 <span className="font-medium text-foreground">{dispA}</span> ({(result.groom ?? 'A') === 'A' ? 'boy' : 'girl'}, {result.people.a.rashi}/{result.people.a.nakshatra})
                 {' × '}
@@ -278,8 +281,10 @@ export default function KundaliMatchPage() {
                   <div className="font-semibold text-foreground">{disp}</div>
                   <div><span className="text-muted-foreground">Place used:</span> <span data-testid={`kmatch-place-${k}`}>{place}</span></div>
                   {pp.timezone && <div><span className="text-muted-foreground">Time zone:</span> <span data-testid={`kmatch-tz-${k}`}>{pp.timezone} · {pp.utcOffsetLabel}</span>{pp.timezoneSource === 'manual' ? ' (set manually)' : ''}</div>}
-                  <div data-testid={`kmatch-moon-${k}`}><span className="text-muted-foreground">Moon:</span> {pp.rashi}{pp.moonDegreeInSign != null ? ` ${pp.moonDegreeInSign.toFixed(2)}°` : ''} · {pp.nakshatra} pada {pp.pada}</div>
-                  <div data-testid={`kmatch-lagna-${k}`}><span className="text-muted-foreground">Lagna:</span> {pp.lagna}{pp.lagnaDegree != null ? ` ${pp.lagnaDegree.toFixed(2)}°` : ''}</div>
+                  <div data-testid={`kmatch-moon-${k}`}><span className="text-muted-foreground"><TermTip id="rashi">Moon</TermTip>:</span> {pp.rashi}{pp.moonDegreeInSign != null ? ` ${pp.moonDegreeInSign.toFixed(2)}°` : ''} · {pp.nakshatra} <TermTip id="pada">pada</TermTip> {pp.pada}</div>
+                  {pp.moonDegreeInSign != null && <NumberNote testid={`kmatch-moon-note-${k}`}>{degreeNote(pp.moonDegreeInSign, 'The Moon')}</NumberNote>}
+                  <div data-testid={`kmatch-lagna-${k}`}><span className="text-muted-foreground"><TermTip id="lagna">Lagna</TermTip>:</span> {pp.lagna}{pp.lagnaDegree != null ? ` ${pp.lagnaDegree.toFixed(2)}°` : ''}</div>
+                  {pp.lagnaDegree != null && <NumberNote testid={`kmatch-lagna-note-${k}`}>{degreeNote(pp.lagnaDegree, 'The Lagna')}</NumberNote>}
                   {(pp.notes || []).map((n, i) => (
                     <p key={i} data-testid={`kmatch-note-${k}`} className="rounded-lg border border-amber-200 bg-amber-50 p-2 text-xs text-amber-900">{n}</p>
                   ))}
@@ -306,7 +311,7 @@ export default function KundaliMatchPage() {
               <div data-testid="kmatch-doshas" className="space-y-2">
                 {result.gunaMilan.doshas.filter(d => d.present).map(d => (
                   <div key={d.name} className={`rounded-lg border p-3 text-sm ${d.cancelled ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-200 text-amber-900'}`}>
-                    <span className="font-semibold">{d.cancelled ? '✓' : '⚠️'} {d.name}{d.cancelled ? ' — cancelled' : ''}:</span> {withNames(d.reason)}
+                    <span className="font-semibold">{d.cancelled ? '✓' : '⚠️'} {MATCH_DOSHA_TERM[d.name] ? <TermTip id={MATCH_DOSHA_TERM[d.name]}>{d.name}</TermTip> : d.name}{d.cancelled ? <> — <TermTip id="doshaCancellation">cancelled</TermTip></> : ''}:</span> {withNames(d.reason)}
                   </div>
                 ))}
               </div>
@@ -314,11 +319,11 @@ export default function KundaliMatchPage() {
 
             {/* Full 8-Koota breakdown (Part 2.1) with Nadi/Bhakoot emphasis (Part 2.3) */}
             <table data-testid="kmatch-koota-table" className="w-full text-sm border border-border rounded-lg overflow-hidden">
-              <thead><tr className="text-left text-muted-foreground"><th className="px-3 py-2 font-medium">Koota</th><th className="px-3 py-2 font-medium text-right">Points</th></tr></thead>
+              <thead><tr className="text-left text-muted-foreground"><th className="px-3 py-2 font-medium"><TermTip id="koota">Koota</TermTip></th><th className="px-3 py-2 font-medium text-right">Points</th></tr></thead>
               <tbody>
                 {result.gunaMilan.kootas.map(k => (
                   <tr key={k.key} data-testid={`kmatch-koota-row-${k.key}`} className="border-t border-border">
-                    <td className="px-3 py-1.5 text-foreground">{k.label}</td>
+                    <td className="px-3 py-1.5 text-foreground">{KOOTA_TERM[k.key] ? <TermTip id={KOOTA_TERM[k.key]}>{k.label}</TermTip> : k.label}</td>
                     <td className="px-3 py-1.5 text-right font-semibold text-foreground">{k.score} / {k.max}</td>
                   </tr>
                 ))}
@@ -339,6 +344,7 @@ export default function KundaliMatchPage() {
                     </div>
                     <div className={`font-bold ${k.score === 0 ? 'text-amber-600' : 'text-[#6E5AA6]'}`}>{k.score} / {k.max}</div>
                   </div>
+                  <NumberNote testid={`kmatch-koota-note-${k.key}`}>{kootaScoreNote(k.key, k.score, k.max)}</NumberNote>
                   <div className="text-sm text-muted-foreground mt-1">{withNames(k.explanation)}</div>
                 </div>
               ))}
@@ -365,14 +371,15 @@ export default function KundaliMatchPage() {
                   South-Indian 10-Porutham view — {result.porutham.metCount}/10 met · {result.porutham.verdict}
                 </summary>
                 <p className="text-xs text-muted-foreground mt-2">
-                  The Dravidian (Tamil) matching system used across South India and Sri Lanka. Rajju and Dina are the make-or-break poruthams.
+                  The Dravidian (Tamil) <TermTip id="porutham">10-Porutham</TermTip> matching system used across South India and Sri Lanka. Rajju and Dina are the make-or-break poruthams.
                 </p>
+                <NumberNote testid="kmatch-porutham-note">{poruthamCountNote(result.porutham.metCount, result.porutham.poruthams.filter(p => p.essential).every(p => p.met))}</NumberNote>
                 <div className="mt-2 space-y-2">
                   {result.porutham.poruthams.map(p => (
                     <div key={p.key} className={`rounded-lg border p-3 ${p.essential ? 'border-[#6E5AA6]/30 bg-[#6E5AA6]/10' : 'border-border'}`}>
                       <div className="flex items-center justify-between">
                         <div className="font-semibold text-foreground">
-                          {p.essential && <span title="Essential porutham" className="mr-1 text-[#6E5AA6]">★</span>}{p.label}
+                          {p.essential && <span title="Essential porutham" className="mr-1 text-[#6E5AA6]">★</span>}{PORUTHAM_TERM[p.key] ? <TermTip id={PORUTHAM_TERM[p.key]}>{p.label}</TermTip> : p.label}
                         </div>
                         <div className={`font-bold ${p.met ? 'text-[#6E5AA6]' : 'text-amber-600'}`}>{p.met ? '✓ met' : '✕ not met'}</div>
                       </div>

@@ -97,6 +97,9 @@ interface Computed {
   extra?: string;
 }
 
+/** The glossary term for each dosha page. */
+const DOSHA_TERM: Record<DoshaKind, string> = { pitra: 'pitraDosha', mool: 'moolDosha', grahan: 'grahanDosha', nadi: 'nadiType' };
+
 export default function DoshaCheckPage({ kind }: { kind: DoshaKind }) {
   const cfg = CONFIG[kind];
   const { profile, save } = useSavedProfile();
@@ -191,6 +194,10 @@ export default function DoshaCheckPage({ kind }: { kind: DoshaKind }) {
           <div data-testid={`dosha-${kind}-result`} className="mt-6 space-y-4">
             <div className={`rounded-xl border p-5 text-center ${computed.present ? 'border-amber-300 bg-amber-50' : 'border-emerald-200 bg-emerald-50'}`}>
               <div className={`text-2xl font-black ${computed.present ? gradeBadge(computed.grade) : 'text-emerald-700'}`}>{computed.headline}</div>
+              <div className="mt-2 text-xs text-muted-foreground">
+                <TermTip id={DOSHA_TERM[kind]}>What is this?</TermTip>
+                {computed.present && <> · <TermTip id="doshaGrade">What does “{computed.grade}” mean?</TermTip></>}
+              </div>
             </div>
             <div className="rounded-xl border border-border p-5">
               <p className="text-sm text-foreground leading-relaxed">{computed.body}</p>

@@ -142,7 +142,7 @@ export default function RashifalSign() {
           <div className="rounded-2xl border border-border p-5 mb-6 bg-gradient-to-br from-card to-muted/20" data-testid="rashifal-overview">
             <div className="flex items-center justify-between mb-2">
               <h2 className="text-lg font-semibold text-foreground">Overview</h2>
-              <GradeBadge grade={overview.grade} tone={overview.tone} />
+              <span className="inline-flex items-center gap-1"><GradeBadge grade={overview.grade} tone={overview.tone} /><TermTip id="transitGrade" iconOnly /></span>
             </div>
             <p className="text-foreground leading-relaxed">{overview.text}</p>
           </div>
@@ -163,7 +163,7 @@ export default function RashifalSign() {
           {/* Ingress (month/year) */}
           {data.ingress.length > 0 && (
             <div className="rounded-xl border border-border p-4 mb-6" data-testid="rashifal-ingress">
-              <h2 className="font-semibold text-foreground mb-2">Key planetary moves this {period === 'year' ? 'year' : 'month'}</h2>
+              <h2 className="font-semibold text-foreground mb-2"><TermTip id="ingress">Key planetary moves</TermTip> this {period === 'year' ? 'year' : 'month'}</h2>
               <ul className="space-y-1 text-sm text-muted-foreground list-disc pl-5">
                 {data.ingress.map((n, i) => <li key={i}>{n}</li>)}
               </ul>
@@ -174,14 +174,14 @@ export default function RashifalSign() {
           <details className="rounded-xl border border-border p-4 mb-6" data-testid="rashifal-transits">
             <summary className="font-semibold text-foreground cursor-pointer">Why — the transits behind this reading</summary>
             <p className="text-xs text-muted-foreground mt-2 mb-3">
-              Each line reads a planet by its <TermTip id="rashi">house from your Moon sign</TermTip>. Grades reflect how pronounced the influence is.
+              Each line reads a planet by its <TermTip id="houseFromMoon">house from your Moon sign</TermTip>. <TermTip id="transitGrade">Grades</TermTip> reflect how pronounced the influence is.
             </p>
             <ul className="space-y-2">
               {data.transits.map(t => (
                 <li key={`${t.planet}-${t.fromISO ?? ""}`} className="text-sm">
                   <span className="font-medium text-foreground">{t.planet}</span>
-                  {t.sadeSati && <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-rose-100 text-rose-700">Sade Sati</span>}
-                  {t.dhaiya && <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">Dhaiya</span>}
+                  {t.sadeSati && <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-rose-100 text-rose-700"><TermTip id="sadeSati">Sade Sati</TermTip></span>}
+                  {t.dhaiya && <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-amber-100 text-amber-700"><TermTip id="dhaiya">Dhaiya</TermTip></span>}
                   <span className="ml-2"><GradeBadge grade={t.grade} tone={t.tone} /></span>
                   <p className="text-muted-foreground mt-0.5">{t.text}</p>
                 </li>
@@ -191,11 +191,11 @@ export default function RashifalSign() {
 
           {/* Lucky + honesty */}
           <div className="flex flex-wrap items-center gap-3 text-sm mb-6">
-            <span className="px-3 py-1.5 rounded-lg border border-border text-foreground">Traditional lucky colour: <strong>{data.lucky.color}</strong></span>
-            <span className="px-3 py-1.5 rounded-lg border border-border text-foreground">Lucky numbers: <strong>{data.lucky.numbers.join(', ')}</strong></span>
+            <span className="px-3 py-1.5 rounded-lg border border-border text-foreground">Traditional <TermTip id="luckyColour">lucky colour</TermTip>: <strong>{data.lucky.color}</strong></span>
+            <span className="px-3 py-1.5 rounded-lg border border-border text-foreground"><TermTip id="luckyNumber">Lucky numbers</TermTip>: <strong>{data.lucky.numbers.join(', ')}</strong></span>
           </div>
           <p className="text-xs text-muted-foreground mb-8">
-            Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) positions of the planets for this period and read by classical gochar (transit) rules — the same engine behind your Kundli.{' '}
+            Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) positions of the planets for this period and read by classical <TermTip id="gochar">gochar (transit)</TermTip> rules — the same engine behind your Kundli.{' '}
             <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
           </p>
 

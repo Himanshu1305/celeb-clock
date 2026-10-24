@@ -535,6 +535,10 @@ export function getTitleForRoute(route) {
 
   {
     const pc = { delhi: 'Delhi', mumbai: 'Mumbai', bengaluru: 'Bengaluru', kolkata: 'Kolkata', chennai: 'Chennai', hyderabad: 'Hyderabad', pune: 'Pune', ahmedabad: 'Ahmedabad', jaipur: 'Jaipur', lucknow: 'Lucknow' };
+    if (route === '/glossary') return {
+      title: 'Astrology Glossary — Every Vedic Term Explained Simply | BornClock',
+      description: 'Plain-language meanings of every astrology term on BornClock — Lagna, Nakshatra, Dasha, Guna Milan kootas, Porutham, Tithi, Rahu Kaal, Choghadiya, Shadbala, Navamsa, doshas and more — with Hindi names.',
+    };
     if (route === '/panchang') return {
       title: "Today's Panchang — Tithi, Nakshatra & Rahu Kaal | BornClock",
       description: "Today's Panchang: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal, Gulika, Yamaganda and the day & night Choghadiya — computed from real sunrise/sunset for your city.",

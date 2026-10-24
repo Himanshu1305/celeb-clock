@@ -216,6 +216,7 @@ const ChildKundliPage = lazyWithReload(() => import('@/pages/ChildKundliPage'));
 const BlueZonesIndex = lazyWithReload(() => import('@/pages/BlueZonesIndex'));
 const BlueZonesFactor = lazyWithReload(() => import('@/pages/BlueZonesFactor'));
 const PanchangPage = lazyWithReload(() => import('@/pages/PanchangPage'));
+const GlossaryPage = lazyWithReload(() => import('@/pages/GlossaryPage'));
 const DatePersonalityPage = lazyWithReload(() => import('@/pages/DatePersonalityPage'));
 const RemindersPage = lazyWithReload(() => import('@/pages/RemindersPage'));
 const KundaliCompatArticle = lazyWithReload(() => import('@/pages/articles/KundaliCompatArticle'));
@@ -487,6 +488,7 @@ const App = () => (
               <Route path="/child-kundli" element={<ChildKundliPage />} />
               <Route path="/blue-zones" element={<BlueZonesIndex />} />
               <Route path="/blue-zones/:factor" element={<BlueZonesFactor />} />
+              <Route path="/glossary" element={<GlossaryPage />} />
               <Route path="/panchang" element={<PanchangPage />} />
               <Route path="/panchang/:city" element={<PanchangPage />} />
               <Route path="/born-on/:month/:day/personality" element={<DatePersonalityPage />} />

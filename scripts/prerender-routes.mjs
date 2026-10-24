@@ -363,6 +363,7 @@ export const STATIC_ROUTES = [
   '/child-kundli',
   '/blue-zones',
   ...['move-naturally','purpose','downshift','80-percent-rule','plant-slant','wine-at-5','belong','loved-ones-first','right-tribe'].map(f => `/blue-zones/${f}`),
+  '/glossary',
   '/panchang',
   ...['delhi','mumbai','bengaluru','kolkata','chennai','hyderabad','pune','ahmedabad','jaipur','lucknow'].map(c => `/panchang/${c}`),
   // Hindi Panchang (P4-LANG) — same engine, Hindi copy.
