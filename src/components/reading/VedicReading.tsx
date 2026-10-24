@@ -148,6 +148,7 @@ function DoshaDetails({ facts }: { facts: ReadingFactsClient }) {
             <ul className="mt-1 list-disc pl-5 text-sm text-muted-foreground space-y-1">
               {d.remedies.map((r, i) => <li key={i}>{r}</li>)}
             </ul>
+            <a href={d.remedyPath} data-testid={`dosha-${d.termId}-remedies-link`} className="mt-1 inline-block text-xs text-primary hover:underline">Mantra, daan, puja, temples and more — full remedies →</a>
           </div>
         </div>
       ))}

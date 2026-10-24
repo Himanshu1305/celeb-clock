@@ -12,6 +12,8 @@ import { CityPicker } from '@/components/CityPicker';
 import { birthQuery } from '@/lib/timezone/clientBirth';
 import { METHOD_LINE } from '@/lib/timezone/birthTimezone';
 import { type SavedCity, sanitizeName, NAME_MAX } from '@/services/savedProfile';
+import { RemediesForFindings } from '@/components/vedic/Remedies';
+import { findingsFromMatch } from '@/lib/vedic/remedies';
 
 /** Map each koota's data key to its glossary (TermTip) id. */
 const KOOTA_TERM: Record<string, string> = {
@@ -357,6 +359,9 @@ export default function KundaliMatchPage() {
                 {result.manglik.convention && <p className="mt-1 text-xs opacity-80">{result.manglik.convention}</p>}
               </div>
             )}
+
+            {/* Batch 5: what each uncancelled matching dosha means + what the couple can do. */}
+            <RemediesForFindings testid="kmatch-remedies" findings={findingsFromMatch(result.gunaMilan.doshas, result.manglik?.status)} />
 
             {/* 10-Porutham (South Indian) view alongside the 36-guna Ashtakoota (P2-7 / GP2-10PORUTHAM) */}
             {result.porutham && (

@@ -12,6 +12,7 @@ import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
 import { birthQuery } from '@/lib/timezone/clientBirth';
+import { Remedies } from '@/components/vedic/Remedies';
 
 /** Shape of doshas.mangalDosha from /api/kundali — built by src/lib/vedic/manglik.ts. */
 interface MangalDosha {
@@ -250,19 +251,12 @@ export default function ManglikPage() {
               </p>
             </div>
 
-            {/* Upay / remedies — optional, non-fear */}
-            <div data-testid="manglik-upay" className="rounded-xl border border-border p-5">
-              <div className="font-semibold text-foreground mb-1">Traditional upay (remedies) — optional, not required</div>
-              <p className="text-sm text-muted-foreground mb-2">
-                First, the honest part: <strong className="text-foreground">nothing here is necessary to "avoid harm"</strong> — Manglik is a chart pattern to be aware of in matching, not a threat to defend against. These are simply the customs some people find grounding as a reflection on Mars's themes of patience and directed energy.
-              </p>
-              <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                <li><strong className="text-foreground">Hanuman devotion on Tuesdays</strong> — Tuesdays belong to Mars (Mangalwar), and reciting the Hanuman Chalisa is a traditional Mars-balancing practice; take it or leave it as suits your beliefs.</li>
-                <li><strong className="text-foreground">Patience and directed energy</strong> — working with Mars's own themes (discipline, courage, consistent effort) is the most-cited traditional "answer" to a strong Mars placement.</li>
-                <li><strong className="text-foreground">Charity on Tuesdays</strong> — donating red lentils (masoor dal) or red cloth on a Tuesday is a classical Mars-related generosity practice, offered as optional custom.</li>
-              </ul>
-              <p className="mt-2 text-xs text-amber-700">Offered as tradition and reflection, not medical or legal advice — and never as something you must do out of fear.</p>
-            </div>
+            {/* Batch 5: what it means + what you can do (shared Remedies block). */}
+            {dosha.hasDosha && (
+              <div data-testid="manglik-upay">
+                <Remedies remedyKey="manglik" label={{ en: 'Manglik — what it means and what you can do', hi: 'मांगलिक — अर्थ और उपाय' }} />
+              </div>
+            )}
 
             <p className="text-xs text-muted-foreground">
               Computed from Mars's real house position using the same <TermTip id="ayanamsa">Lahiri-ayanamsa engine</TermTip> as the rest of BornClock.

@@ -15,6 +15,8 @@ import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
 import { WhatsAhead } from '@/components/vedic/WhatsAhead';
 import { fetchKundali, type KundaliData } from '@/services/kundaliService';
 import { JsonLd } from '@/components/JsonLd';
+import { Remedies } from '@/components/vedic/Remedies';
+import { planetRemedyKey } from '@/lib/vedic/remedies';
 
 const PAGE_TITLE = 'Dasha Calculator — Your Vimshottari Dasha Timeline | BornClock';
 const PAGE_DESC =
@@ -219,6 +221,12 @@ export default function DashaCalculatorPage() {
                   for exact dates and deeper levels.
                 </p>
               </div>
+            )}
+
+            {/* Batch 5: remedies for the running Mahadasha lord. */}
+            {hasDasha && (
+              <Remedies remedyKey={planetRemedyKey(result.dasha!.mahadasha)} testid="dasha-remedies"
+                label={{ en: `${result.dasha!.mahadasha} Mahadasha — what it means and what you can do`, hi: `${result.dasha!.mahadasha} महादशा — अर्थ और उपाय` }} />
             )}
 
             {/* 5-level expandable Dasha tree */}

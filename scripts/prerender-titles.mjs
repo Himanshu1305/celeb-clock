@@ -640,6 +640,46 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /remedies[/:slug] and /hi/upay[/:slug] — Batch 5 (mirrors src/pages/RemediesPage.tsx remedyMeta)
+  if (route === '/remedies') return {
+    title: 'Vedic Remedies — Doshas, Sade Sati, Matching & Planets | BornClock',
+    description: 'Calm, sourced remedies for Manglik, Kaal Sarp, Pitra Dosha, Sade Sati, Nadi dosha and the nine planets — free remedies first, then daan, puja, temples and gemstones with caution.',
+  };
+  if (route === '/hi/upay') return {
+    title: 'ज्योतिषीय उपाय — दोष, साढ़ेसाती, मिलान और ग्रहों के उपाय | BornClock',
+    description: 'मांगलिक, कालसर्प, पितृ दोष, साढ़ेसाती, नाड़ी दोष और नवग्रहों के शांत, स्रोत-सहित उपाय — पहले निःशुल्क उपाय, फिर दान, पूजा, मंदिर और सावधानी के साथ रत्न।',
+  };
+  {
+    const rm = {
+      'manglik-dosha': ['Manglik (Mangal Dosha)', 'मांगलिक (मंगल दोष)'],
+      'kaal-sarp-dosha': ['Kaal Sarp Dosha', 'कालसर्प दोष'],
+      'pitra-dosha': ['Pitra Dosha', 'पितृ दोष'],
+      'grahan-dosha': ['Grahan Dosha', 'ग्रहण दोष'],
+      'mool-nakshatra': ['Mool (Gandamool) Nakshatra', 'मूल (गंडमूल) नक्षत्र'],
+      'sade-sati': ['Sade Sati (Saturn’s 7½ years)', 'साढ़ेसाती (शनि के साढ़े सात वर्ष)'],
+      'shani-dhaiya': ['Shani Dhaiya (small Panoti)', 'शनि ढैया (लघु पनौती)'],
+      'nadi-dosha': ['Nadi Dosha (matching)', 'नाड़ी दोष (मिलान)'],
+      'bhakoot-dosha': ['Bhakoot Dosha (matching)', 'भकूट दोष (मिलान)'],
+      'gana-dosha': ['Gana Dosha (matching)', 'गण दोष (मिलान)'],
+      'surya-sun': ['Surya (Sun)', 'सूर्य'],
+      'chandra-moon': ['Chandra (Moon)', 'चंद्र'],
+      'mangal-mars': ['Mangal (Mars)', 'मंगल'],
+      'budh-mercury': ['Budh (Mercury)', 'बुध'],
+      'guru-jupiter': ['Guru (Jupiter)', 'गुरु (बृहस्पति)'],
+      'shukra-venus': ['Shukra (Venus)', 'शुक्र'],
+      'shani-saturn': ['Shani (Saturn)', 'शनि'],
+      'rahu': ['Rahu', 'राहु'],
+      'ketu': ['Ketu', 'केतु'],
+    };
+    const m = route.match(/^\/(remedies|hi\/upay)\/([a-z-]+)$/);
+    if (m && rm[m[2]]) {
+      const [en, hi] = rm[m[2]];
+      return m[1] === 'remedies'
+        ? { title: `${en} — Meaning & Remedies | BornClock`, description: `${en}: what it means for you in plain language, how common it is, and calm traditional remedies — mantra, daan, puja, temples and gemstone (with caution). Every remedy cites its source.` }
+        : { title: `${hi} — अर्थ और उपाय | BornClock`, description: `${hi}: आपके लिए इसका सरल अर्थ, यह कितना आम है, और शांत पारंपरिक उपाय — मंत्र, दान, पूजा, मंदिर और रत्न (सावधानी सहित)। हर उपाय का स्रोत दिया गया है।` };
+    }
+  }
+
   // /divisional-charts[/:slug]
   if (route === '/divisional-charts') return {
     title: 'Divisional Charts (Vargas) — D1 to D60 Explained | BornClock',

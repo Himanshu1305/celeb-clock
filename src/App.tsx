@@ -203,6 +203,7 @@ const FestivalsPage = lazyWithReload(() => import('@/pages/FestivalsPage'));
 const PlanetInSignPage = lazyWithReload(() => import('@/pages/PlanetInSignPage'));
 const PlanetInHousePage = lazyWithReload(() => import('@/pages/PlanetInHousePage'));
 const YogaPage = lazyWithReload(() => import('@/pages/YogaPage'));
+const RemediesPage = lazyWithReload(() => import('@/pages/RemediesPage'));
 const DivisionalChartPage = lazyWithReload(() => import('@/pages/DivisionalChartPage'));
 const AttitudeNumberPage = lazyWithReload(() => import('@/pages/AttitudeNumberPage'));
 const ChaldeanNumerologyPage = lazyWithReload(() => import('@/pages/ChaldeanNumerologyPage'));
@@ -469,6 +470,10 @@ const App = () => (
               <Route path="/planet-in-house/:planet/:house" element={<PlanetInHousePage />} />
               <Route path="/yoga" element={<YogaPage />} />
               <Route path="/yoga/:slug" element={<YogaPage />} />
+              <Route path="/remedies" element={<RemediesPage />} />
+              <Route path="/remedies/:slug" element={<RemediesPage />} />
+              <Route path="/hi/upay" element={<RemediesPage lang="hi" />} />
+              <Route path="/hi/upay/:slug" element={<RemediesPage lang="hi" />} />
               <Route path="/divisional-charts" element={<DivisionalChartPage />} />
               <Route path="/divisional-charts/:slug" element={<DivisionalChartPage />} />
               <Route path="/nakshatra" element={<NakshatraIndex />} />
