@@ -1,6 +1,7 @@
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
 import { birthRangeError, resolveRequestBirthTz } from './_birthParams.js';
 import { toKundaliLegacy } from '../src/lib/vedic/legacyAdapters.js';
+import { withLiveKundaliFields } from '../src/lib/vedic/liveTimeFields.js';
 
 async function getProKeralaToken(env) {
   const id = (env && env.VITE_PROKERALA_CLIENT_ID) || process.env.VITE_PROKERALA_CLIENT_ID;
@@ -240,7 +241,11 @@ async function handler(request, env) {
     const cacheIsComplete = cached && cached.doshas && Array.isArray(cached.dashaTimeline)
       && cached.divisionalCharts?.d9 && cached.divisionalCharts?.d10; // K13: D9/D10 charts
     if (cacheIsComplete) {
-      return json({ ...cached, birthTimezone, _cache: 'hit' });
+      // The natal chart comes from the cache, but "current" fields (Mahadasha/Antardasha,
+      // Sade Sati) are recomputed for NOW — the cached copy holds whatever was current
+      // on the day the chart was first saved.
+      const live = await withLiveKundaliFields(cached, { year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon, timezoneOffset: tz });
+      return json({ ...live, birthTimezone, _cache: 'hit' });
     }
 
     const result = await computeChart(env, y, m, d, h, min, lat, lon, tz);
