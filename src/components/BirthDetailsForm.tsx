@@ -10,6 +10,7 @@
 import { useState, useEffect } from 'react';
 import { CityPicker } from '@/components/CityPicker';
 import { type SavedCity, sanitizeName, NAME_MAX } from '@/services/savedProfile';
+import { resolveForPlace } from '@/lib/timezone/clientBirth';
 
 export interface BirthDetails { dob: string; time: string; city: SavedCity; name?: string }
 
@@ -51,7 +52,18 @@ export function BirthDetailsForm({
   const canSubmit = validDob && validTime && !!city && !loading;
 
 
-  const submit = () => { if (canSubmit && city) onSubmit({ dob, time, city, name: sanitizeName(name) || undefined }); };
+  // f5-city-picker: the place sent on is exactly the one picked from the suggestions, with its
+  // IANA zone and the offset re-resolved for the FINAL birth date/time (the date may have been
+  // changed after the city was picked).
+  const submit = () => {
+    if (!canSubmit || !city) return;
+    let picked: SavedCity = city;
+    try {
+      const r = resolveForPlace(dob, time, city);
+      picked = { ...city, tz: r.utcOffsetHours, timezone: r.timezone };
+    } catch { /* keep as picked */ }
+    onSubmit({ dob, time, city: picked, name: sanitizeName(name) || undefined });
+  };
 
   return (
     <div data-testid={`${p}-form`} className="bg-card/60 border border-border rounded-xl p-5 space-y-4">
@@ -96,7 +108,9 @@ export function BirthDetailsForm({
       </button>
       {!canSubmit && !loading && (
         <p data-testid={`${p}-validation-hint`} className="text-xs text-muted-foreground text-center">
-          Please enter your date of birth, birth time, and birth city.
+          {!city && validDob && validTime
+            ? 'Please pick your birth city from the suggestions list.'
+            : 'Please enter your date of birth, birth time, and birth city.'}
         </p>
       )}
     </div>

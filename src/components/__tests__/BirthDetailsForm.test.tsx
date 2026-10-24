@@ -16,7 +16,8 @@ describe('BirthDetailsForm', () => {
     expect(btn.disabled).toBe(false); // valid → enabled
     expect(q('kundali-validation-hint')).toBeNull();
     fireEvent.click(btn);
-    expect(onSubmit).toHaveBeenCalledWith({ dob: '1988-11-05', time: '12:30', city });
+    // f5-city-picker: the picked place goes on with its IANA zone + the offset for the birth date.
+    expect(onSubmit).toHaveBeenCalledWith({ dob: '1988-11-05', time: '12:30', city: { ...city, timezone: 'Asia/Kolkata' } });
   });
 
   it('empty form: submit disabled + friendly validation hint shown', () => {

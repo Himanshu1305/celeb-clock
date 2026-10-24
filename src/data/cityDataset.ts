@@ -216,12 +216,17 @@ const WORLD_REGION: Record<string, string> = {
   'San Francisco|United States': 'California', 'Seattle|United States': 'Washington', 'San Jose|United States': 'California',
   'Toronto|Canada': 'Ontario', 'Vancouver|Canada': 'British Columbia', 'Montreal|Canada': 'Quebec',
   'Karachi|Pakistan': 'Sindh', 'Lahore|Pakistan': 'Punjab', 'Hyderabad|Pakistan': 'Sindh',
+  'London|Canada': 'Ontario',
   'Frankfurt|Germany': 'Hesse', 'Munich|Germany': 'Bavaria',
 };
 // NOTE: `utcOffset` here is informational only; birth offsets are always recomputed for
 // the birth date from lat/lon by src/lib/timezone/birthTimezone.ts.
 const W = (name: string, country: string, lat: number, lon: number, tz: string, utcOffset: number, aliases?: string[]): CityDef => ({
   name, state: WORLD_REGION[`${name}|${country}`] ?? country, country, lat, lon, timezone: tz, utcOffset, aliases,
+});
+
+const US = (name: string, state: string, lat: number, lon: number, tz: string, utcOffset: number): CityDef => ({
+  name, state, country: 'United States', lat, lon, timezone: tz, utcOffset,
 });
 
 // ── Major world cities (curated) — STANDARD offset + IANA zone ──
@@ -334,6 +339,15 @@ const WORLD: CityDef[] = [
   W('Santiago', 'Chile', -33.4489, -70.6693, 'America/Santiago', -4),
   W('Lima', 'Peru', -12.0464, -77.0428, 'America/Lima', -5),
   W('Bogota', 'Colombia', 4.7110, -74.0721, 'America/Bogota', -5),
+  // f5-city-picker — well-known SAME-NAME places, so typing the name offers every one with its
+  // state/country (Hyderabad India vs Pakistan, London UK vs Ontario, Portland OR vs ME,
+  // Pontiac MI vs IL). Coordinates: the English Wikipedia article of each city (fetched 24 Oct 2026).
+  W('Hyderabad', 'Pakistan', 25.367, 68.367, 'Asia/Karachi', 5),
+  W('London', 'Canada', 42.985, -81.24528, 'America/Toronto', -5),
+  US('Portland', 'Oregon', 45.52, -122.68194, 'America/Los_Angeles', -8),
+  US('Portland', 'Maine', 43.64722, -70.17167, 'America/New_York', -5),
+  US('Pontiac', 'Michigan', 42.64611, -83.2925, 'America/Detroit', -5),
+  US('Pontiac', 'Illinois', 40.88056, -88.63889, 'America/Chicago', -6),
 ];
 
 export const CITY_DATASET: CityDef[] = [...INDIA, ...WORLD];
@@ -351,6 +365,13 @@ export function lookupCity(query: string): CityDef | undefined {
   return CITY_LOOKUP.get((query || '').trim().toLowerCase());
 }
 
+/** EVERY bundled place whose name/alias equals the query (same-name places, e.g. Hyderabad India + Pakistan). */
+export function lookupCities(query: string): CityDef[] {
+  const q = (query || '').trim().toLowerCase();
+  if (!q) return [];
+  return CITY_DATASET.filter(c => c.name.toLowerCase() === q || (c.aliases || []).includes(q));
+}
+
 /** Prefix match against bundled names/aliases (for the long-tail before the network). */
 export function prefixCities(query: string, limit = 5): CityDef[] {
   const q = (query || '').trim().toLowerCase();
@@ -359,7 +380,9 @@ export function prefixCities(query: string, limit = 5): CityDef[] {
   const seen = new Set<string>();
   for (const c of CITY_DATASET) {
     const hit = c.name.toLowerCase().startsWith(q) || (c.aliases || []).some(a => a.startsWith(q));
-    if (hit && !seen.has(c.name)) { out.push(c); seen.add(c.name); }
+    // Keyed by name + state + country so same-name places (Portland OR / ME) are all offered.
+    const key = `${c.name}|${c.state}|${c.country}`;
+    if (hit && !seen.has(key)) { out.push(c); seen.add(key); }
     if (out.length >= limit) break;
   }
   return out;

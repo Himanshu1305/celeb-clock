@@ -15,7 +15,7 @@
 // user wherever a result from this path is shown (see src/services/geocoding.ts
 // OSM_ATTRIBUTION and the city-field notices).
 
-import { CITY_DATASET, lookupCity, prefixCities } from '../src/data/cityDataset.js';
+import { CITY_DATASET, lookupCities, prefixCities } from '../src/data/cityDataset.js';
 import { timezoneForCoordinates, offsetSecondsAt } from '../src/lib/timezone/birthTimezone.js';
 
 /** fix-timezone-accuracy: zone from the coordinates (never IST by default) + today's offset. */
@@ -82,8 +82,8 @@ async function handler(request: Request): Promise<Response> {
   if (!q) return json({ results: [], attribution: null });
 
   // 1. Bundled dataset (exact/alias, then prefix) — no network, cache a long time.
-  const exact = lookupCity(q);
-  if (exact) return json({ results: [bundledRow(exact)], attribution: null }, 200, 86400);
+  const exact = lookupCities(q); // every same-name place (f5-city-picker)
+  if (exact.length) return json({ results: exact.map(bundledRow), attribution: null }, 200, 86400);
   const prefix = prefixCities(q, 5);
   if (prefix.length) return json({ results: prefix.map(bundledRow), attribution: null }, 200, 86400);
 

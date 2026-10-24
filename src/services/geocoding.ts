@@ -15,7 +15,7 @@
  * OpenStreetMap attribution is shown wherever a result may come from Nominatim
  * (see OSM_ATTRIBUTION below and the city-field notices in the forms).
  */
-import { CITY_DATASET, lookupCity, prefixCities, type CityDef } from '@/data/cityDataset';
+import { CITY_DATASET, lookupCities, prefixCities, type CityDef } from '@/data/cityDataset';
 import { timezoneForCoordinates, offsetSecondsAt } from '@/lib/timezone/birthTimezone';
 
 export interface GeoResult {
@@ -163,9 +163,10 @@ export async function geocodeCity(query: string, opts: { network?: boolean } = {
   if (!q) return [];
 
   if (!opts.network) {
-    // 1. Exact / alias match in the bundled dataset.
-    const exact = lookupCity(q);
-    if (exact) return [toResult(exact)];
+    // 1. Exact / alias match in the bundled dataset — EVERY same-name place (f5-city-picker:
+    //    "Hyderabad" offers Telangana, India AND Sindh, Pakistan).
+    const exact = lookupCities(q);
+    if (exact.length) return exact.map(toResult);
 
     // 2. Prefix match against the bundled dataset (offline, instant).
     const prefix = prefixCities(q, 5);

@@ -76,6 +76,11 @@ export function timezoneForCoordinates(lat: number, lon: number): string {
   return tzlookup(lat, lon);
 }
 
+/** Zone for the coordinates, or null when they are invalid (never throws). */
+function coordinateZoneOrNull(lat: number, lon: number): string | null {
+  try { return timezoneForCoordinates(lat, lon); } catch { return null; }
+}
+
 /** Offset (in SECONDS east of UTC) of `tz` at the UTC instant `utcMs`. */
 export function offsetSecondsAt(tz: string, utcMs: number): number {
   const parts = formatter(tz).formatToParts(new Date(utcMs));
@@ -134,7 +139,7 @@ export function resolveBirthTimezone(input: BirthTimezoneInput): BirthTimezone {
     ambiguous: r.ambiguous,
     nonexistent: r.nonexistent,
     note,
-    source: manual ? 'manual' : 'coordinates',
+    source: manual && tz !== coordinateZoneOrNull(input.lat, input.lon) ? 'manual' : 'coordinates',
   };
 }
 

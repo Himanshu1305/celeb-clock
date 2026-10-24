@@ -168,7 +168,7 @@ const BirthdayReport = () => {
         personalMessage.trim(),
         country,
         birthDetails?.city && /^\d{2}:\d{2}$/.test(birthDetails.time)
-          ? { time: birthDetails.time, place: { name: birthDetails.city.name, lat: birthDetails.city.lat, lon: birthDetails.city.lon } }
+          ? { time: birthDetails.time, place: { name: birthDetails.city.name, lat: birthDetails.city.lat, lon: birthDetails.city.lon, timezone: birthDetails.city.timezone, manualTimezone: birthDetails.city.manualTimezone } }
           : null,
       );
 
