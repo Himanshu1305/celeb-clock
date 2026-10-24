@@ -17,12 +17,17 @@ import { RASHI_NAMES } from './engine/vedicEngine';
 import { SIGN_LORDS } from './engine/sthanaBala';
 import { getNakshatraMeaning, nakshatraMeaningLine } from './nakshatraMeanings';
 import { buildTimingFacts, type TimingFacts } from './yogaTiming';
-import { shadbalaCategory } from './strengthScale';
+import { shadbalaCategory, REQUIRED_SHADBALA } from './strengthScale';
 
 export interface PlanetFact {
   planet: string; sign: string; house: number;
   retrograde: boolean; combust: boolean; navamsa: string;
-  shadbala?: { total: number; category: 'strong' | 'moderate' | 'weak' };
+  shadbala?: {
+    total: number; category: 'strong' | 'moderate' | 'weak';
+    /** Classical minimum (virupas) and the six parts — shown in the advanced view only (K11). */
+    required?: number;
+    parts?: { sthana: number; dig: number; kala: number; chesta: number; naisargika: number; drik: number };
+  };
 }
 export interface HouseLordFact {
   house: number; sign: string; lord: string; lordSign: string; lordHouse: number;
@@ -88,7 +93,11 @@ export function extractReadingFacts(chart: BirthChartResult, now: Date = new Dat
     return {
       planet: p.name, sign: p.sign, house: p.house,
       retrograde: p.retrograde, combust: !!p.combust, navamsa: p.navamsaSign,
-      shadbala: sb ? { total: Math.round(sb.total), category: shadbalaCategory(p.name, sb.total) } : undefined,
+      shadbala: sb ? {
+        total: Math.round(sb.total), category: shadbalaCategory(p.name, sb.total),
+        required: REQUIRED_SHADBALA[p.name],
+        parts: { sthana: Math.round(sb.sthana), dig: Math.round(sb.dig), kala: Math.round(sb.kala), chesta: Math.round(sb.chesta), naisargika: Math.round(sb.naisargika), drik: Math.round(sb.drik) },
+      } : undefined,
     };
   });
 
