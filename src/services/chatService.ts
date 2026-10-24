@@ -28,9 +28,9 @@ export function birthFromProfile(p: SavedBirthProfile) {
   const [y, m, d] = p.dob.split('-').map(Number);
   const [h, min] = p.time.split(':').map(Number);
   // fix-timezone-accuracy: the server recomputes the offset from lat/lon + date with the
-  // shared resolver; `tz` is informational and `tzid` is sent only for a manual zone.
+  // shared resolver; `tz` is informational. `tzid` = the picked place's (or manual) IANA zone.
   const r = resolveForPlace(p.dob, p.time, p.city);
-  return { y, m, d, h, min, lat: p.city.lat, lon: p.city.lon, tz: r.utcOffsetHours, ...(p.city.manualTimezone && p.city.timezone ? { tzid: p.city.timezone } : {}) };
+  return { y, m, d, h, min, lat: p.city.lat, lon: p.city.lon, tz: r.utcOffsetHours, tzid: r.timezone }; // f5-city-picker: always the picked place's IANA zone
 }
 
 export async function sendChatMessage(

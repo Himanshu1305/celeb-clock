@@ -11,7 +11,7 @@ test.describe('P5-1 robust city lookup', () => {
     await city.click();
     await city.fill('Mumbai');
     // Suggestion from the bundled dataset appears (offline, no Nominatim).
-    const suggestion = page.getByRole('button', { name: /Mumbai/ }).first();
+    const suggestion = page.getByRole('option', { name: /Mumbai/ }).first();
     await expect(suggestion).toBeVisible();
     // OSM attribution is present near the city field (licence requirement).
     await expect(page.getByText(/OpenStreetMap/i).first()).toBeVisible();
@@ -43,7 +43,7 @@ test.describe('P5-2 conversion funnel', () => {
     const city = page.getByTestId('kundali-city');
     await city.click();
     await city.fill('Jammu');
-    await page.getByRole('button', { name: /Jammu/ }).first().click();
+    await page.getByRole('option', { name: /Jammu/ }).first().click();
     await page.getByTestId('kundali-generate-btn').click();
 
     // A real chart renders (Rashi/Lagna/Nakshatra appear).

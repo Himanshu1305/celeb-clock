@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { geocodeCity, type GeoResult } from '@/services/geocoding';
+import { CityPicker } from '@/components/CityPicker';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { birthQuery } from '@/lib/timezone/clientBirth';
 import type { SavedCity } from '@/services/savedProfile';
@@ -28,8 +28,6 @@ export function BirthTimeVedicSection({ dob, onDetailsChange }: {
 }) {
   const { profile, isFull } = useSavedProfile();
   const [time, setTime] = useState('');
-  const [cityQuery, setCityQuery] = useState('');
-  const [options, setOptions] = useState<GeoResult[]>([]);
   const [city, setCity] = useState<SavedCity | null>(null);
   const [result, setResult] = useState<VedicApiResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -48,23 +46,12 @@ export function BirthTimeVedicSection({ dob, onDetailsChange }: {
     if (!isFull || !profile?.time || !profile?.city) return;
     setTime(profile.time);
     setCity(profile.city);
-    setCityQuery(profile.city.name);
     setResult(null);
   };
 
-  const onCityChange = async (v: string) => {
-    setCityQuery(v);
-    setCity(null);
-    setResult(null);
-    if (v.trim().length >= 3) {
-      try { setOptions(await geocodeCity(v)); } catch { setOptions([]); }
-    } else {
-      setOptions([]);
-    }
-  };
-
-  // fix-timezone-accuracy: save exactly the picked place; the zone comes from its coordinates.
-  const pickCity = (c: GeoResult) => { setCity({ name: c.label, lat: c.lat, lon: c.lon, tz: c.utcOffset, timezone: c.timezone }); setCityQuery(c.label); setOptions([]); };
+  // f5-city-picker: the shared CityPicker (suggestions with state/country, confirm line with
+  // the birth-date offset, Edit). Only a place picked from the list is accepted.
+  const onPickCity = (c: SavedCity | null) => { setCity(c); setResult(null); };
 
   const compute = async () => {
     if (!dob || !hasTime || !city) return;
@@ -108,30 +95,8 @@ export function BirthTimeVedicSection({ dob, onDetailsChange }: {
         </div>
         <div className="relative">
           <label className="block text-xs text-gray-600 mb-1" htmlFor="birth-city">Birth city</label>
-          <input
-            id="birth-city"
-            data-testid="birth-city-input"
-            type="text"
-            value={cityQuery}
-            onChange={e => onCityChange(e.target.value)}
-            placeholder="e.g. Delhi, Mumbai…"
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-gray-900"
-          />
-          {options.length > 0 && (
-            <ul data-testid="city-dropdown" className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow max-h-48 overflow-y-auto">
-              {options.map((o, i) => (
-                <li key={`${o.name}-${i}`}>
-                  <button type="button" onClick={() => pickCity(o)}
-                          className="w-full text-left px-3 py-2 text-sm hover:bg-[#6E5AA6]/10">
-                    {o.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-          <p className="text-[11px] text-gray-500 mt-1">
-            City search © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline">OpenStreetMap</a> contributors
-          </p>
+          <CityPicker id="birth-city" testid="birth-city-input" value={city} onPick={onPickCity}
+                      dob={dob ?? undefined} time={time} placeholder="e.g. Delhi, Mumbai…" />
         </div>
       </div>
 
