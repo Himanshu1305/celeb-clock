@@ -262,6 +262,10 @@ export default {
       const RP = new Set(['today','week','month','year']);
       if ((m = pathname.match(/^\/rashifal\/([a-z]+)\/([a-z]+)\/?$/))) return !(R.has(m[1]) && RP.has(m[2]));
       if ((m = pathname.match(/^\/rashifal\/([a-z]+)\/?$/)))          return !R.has(m[1]);
+      // Batch 7 review: Hindi daily rashifal pages use the legacy slugs (= RASHI_SLUGS_HI in
+      // src/lib/daily/registry.ts); anything else was a soft-404 200.
+      const RH = new Set(['mesha','vrisha','mithuna','karka','simha','kanya','tula','vrischika','dhanu','makara','kumbha','meena']);
+      if ((m = pathname.match(/^\/hi\/rashifal\/([a-z]+)\/?$/)))      return !RH.has(m[1]);
       const NAK = new Set(['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati']);
       if ((m = pathname.match(/^\/nakshatra\/([a-z-]+)\/?$/)))        return !NAK.has(m[1]);
       if ((m = pathname.match(/^\/baby-names\/nakshatra\/([a-z-]+)\/?$/))) return !NAK.has(m[1]);

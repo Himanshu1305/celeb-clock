@@ -3,7 +3,7 @@
 // today's injected content (fixed date) and never noindex on production.
 import { describe, it, expect, vi, afterAll } from 'vitest';
 import { readFileSync } from 'fs';
-import { allDailyRoutes, dailyJsonPath, matchDailyRoute } from '../../src/lib/daily/registry';
+import { allDailyRoutes, dailyJsonPath, matchDailyRoute, RASHI_SLUGS_HI } from '../../src/lib/daily/registry';
 import { computeDaily } from '../../src/lib/daily/compute';
 import { addDaysISO } from '../../src/lib/daily/dates';
 
@@ -92,5 +92,15 @@ describe('functions/_worker.ts serves daily pages with today’s text (fixed dat
     const worker = (await import('../../functions/_worker')).default;
     const res = await worker.fetch(new Request('https://bornclock.com/zodiac/notasign/today/'), env('2026-10-26') as never, {});
     expect(res.status).toBe(404);
+  }, 60_000);
+
+  it('an invalid Hindi rashi under /hi/rashifal/:rashi is a real 404; all 12 valid ones are not', async () => {
+    const worker = (await import('../../functions/_worker')).default;
+    const bad = await worker.fetch(new Request('https://bornclock.com/hi/rashifal/notarashi/'), env('2026-10-26') as never, {});
+    expect(bad.status).toBe(404);
+    for (const s of RASHI_SLUGS_HI) {
+      const ok = await worker.fetch(new Request(`https://bornclock.com/hi/rashifal/${s}/`), env('2026-10-26') as never, {});
+      expect(ok.status, s).toBe(200);
+    }
   }, 60_000);
 });
