@@ -399,6 +399,8 @@ export const STATIC_ROUTES = [
   '/career-report',
   '/astrologer',
   '/baby-names',
+  // Batch 7 (W8): one baby-names page per Nakshatra.
+  ...['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati'].map(n => `/baby-names/nakshatra/${n}`),
   '/reminders',
   '/articles/kundali-compatibility',
   '/diwali-gift',

@@ -817,6 +817,36 @@ export function getTitleForRoute(route) {
     }
   }
 
+  // Batch 7 (W8): /baby-names/nakshatra/:slug — must match babyNamesTitle() in
+  // src/pages/BabyNamesNakshatraPage.tsx (a test checks both stay in step).
+  {
+    const m = route.match(/^\/baby-names\/nakshatra\/([a-z-]+)$/);
+    if (m) {
+      const BN = {
+        'ashwini': ['Ashwini', 'Chu, Che, Cho, La'], 'bharani': ['Bharani', 'Li, Lu, Le, Lo'],
+        'krittika': ['Krittika', 'A, I, U, E'], 'rohini': ['Rohini', 'O, Va, Vi, Vu'],
+        'mrigashira': ['Mrigashira', 'Ve, Vo, Ka, Ki'], 'ardra': ['Ardra', 'Ku, Gha, Ing, Chha'],
+        'punarvasu': ['Punarvasu', 'Ke, Ko, Ha, Hi'], 'pushya': ['Pushya', 'Hu, He, Ho, Da'],
+        'ashlesha': ['Ashlesha', 'Di, Du, De, Do'], 'magha': ['Magha', 'Ma, Mi, Mu, Me'],
+        'purva-phalguni': ['Purva Phalguni', 'Mo, Ta, Ti, Tu'], 'uttara-phalguni': ['Uttara Phalguni', 'Te, To, Pa, Pi'],
+        'hasta': ['Hasta', 'Pu, Sha, Na, Tha'], 'chitra': ['Chitra', 'Pe, Po, Ra, Ri'],
+        'swati': ['Swati', 'Ru, Re, Ro, Ta'], 'vishakha': ['Vishakha', 'Ti, Tu, Te, To'],
+        'anuradha': ['Anuradha', 'Na, Ni, Nu, Ne'], 'jyeshtha': ['Jyeshtha', 'No, Ya, Yi, Yu'],
+        'mula': ['Mula', 'Ye, Yo, Bha, Bhi'], 'purva-ashadha': ['Purva Ashadha', 'Bhu, Dha, Pha, Dha'],
+        'uttara-ashadha': ['Uttara Ashadha', 'Bhe, Bho, Ja, Ji'], 'shravana': ['Shravana', 'Khi, Khu, Khe, Kho'],
+        'dhanishtha': ['Dhanishtha', 'Ga, Gi, Gu, Ge'], 'shatabhisha': ['Shatabhisha', 'Go, Sa, Si, Su'],
+        'purva-bhadrapada': ['Purva Bhadrapada', 'Se, So, Da, Di'], 'uttara-bhadrapada': ['Uttara Bhadrapada', 'Du, Tha, Jha, Yna'],
+        'revati': ['Revati', 'De, Do, Cha, Chi'],
+      };
+      const e = BN[m[1]];
+      if (!e) return null;
+      return {
+        title: `${e[0]} Nakshatra Baby Names — Letters ${e[1]} | BornClock`,
+        description: `Baby names for ${e[0]} Nakshatra: the four pada starting letters ${e[1]}, the Moon sign of each pada, the presiding deity and names with meanings.`,
+      };
+    }
+  }
+
   // /vedic-zodiac/:rashi
   if (route.startsWith('/vedic-zodiac/') && route !== '/vedic-zodiac') {
     const slug = route.slice(14);

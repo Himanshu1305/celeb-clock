@@ -186,6 +186,7 @@ const MuhuratPage = lazyWithReload(() => import('@/pages/MuhuratPage'));
 const CareerReportPage = lazyWithReload(() => import('@/pages/CareerReportPage'));
 const GemstonePage = lazyWithReload(() => import('@/pages/GemstonePage'));
 const BabyNamesPage = lazyWithReload(() => import('@/pages/BabyNamesPage'));
+const BabyNamesNakshatraPage = lazyWithReload(() => import('@/pages/BabyNamesNakshatraPage'));
 const RashifalPage = lazyWithReload(() => import('@/pages/hi/RashifalPage'));
 const HindiPanchangPage = lazyWithReload(() => import('@/pages/hi/PanchangPage'));
 const RashifalIndex = lazyWithReload(() => import('@/pages/RashifalIndex'));
@@ -452,6 +453,7 @@ const App = () => (
               <Route path="/career-report" element={<CareerReportPage />} />
               <Route path="/gemstones" element={<GemstonePage />} />
               <Route path="/baby-names" element={<BabyNamesPage />} />
+              <Route path="/baby-names/nakshatra/:slug" element={<BabyNamesNakshatraPage />} />
               <Route path="/hi/rashifal/:rashi" element={<RashifalPage />} />
               <Route path="/hi/rashifal" element={<RashifalPage />} />
               <Route path="/hi/panchang" element={<HindiPanchangPage />} />

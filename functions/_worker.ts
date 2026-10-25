@@ -263,6 +263,7 @@ export default {
       if ((m = pathname.match(/^\/rashifal\/([a-z]+)\/?$/)))          return !R.has(m[1]);
       const NAK = new Set(['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati']);
       if ((m = pathname.match(/^\/nakshatra\/([a-z-]+)\/?$/)))        return !NAK.has(m[1]);
+      if ((m = pathname.match(/^\/baby-names\/nakshatra\/([a-z-]+)\/?$/))) return !NAK.has(m[1]);
       // Transit-by-year: four slow planets, year window 2020–2039 (computed at request time).
       const TRP = new Set(['saturn','jupiter','rahu','ketu']);
       const validTY = (y: number) => y >= 2020 && y <= 2039;

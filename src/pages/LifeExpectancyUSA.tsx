@@ -3,11 +3,14 @@ import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 import { leYears, leGap, leDiff, LE_CITATION, WPP2024_HISTORY } from '@/data/lifeExpectancyFacts';
+import { US_STATE_LE_SOURCE, US_STATE_LE_HIGHEST, US_STATE_LE_LOWEST } from '@/data/usStateLifeExpectancy';
+
+const STATE_GAP = (US_STATE_LE_HIGHEST[0][1] - US_STATE_LE_LOWEST[0][1]).toFixed(1);
 
 const FAQ_ITEMS = [
   { question: 'What is the current US life expectancy?', answer: `Approximately ${leYears('United States')} years (${LE_CITATION}). Women average ${leYears('United States', 'female')} years and men ${leYears('United States', 'male')} years. This is below the OECD average for wealthy nations, which sits around 80 years.` },
   { question: 'Why did US life expectancy drop so sharply?', answer: `US life expectancy fell from ${WPP2024_HISTORY['United States'][2019]} years in 2019 to ${WPP2024_HISTORY['United States'][2021]} years in 2021 — the largest two-year drop since World War II. The primary causes were COVID-19 deaths, the opioid epidemic (80,000+ deaths per year), and gun violence. By 2023 it had recovered to ${leYears('United States')} years, slightly above its 2019 level.` },
-  { question: 'Which US state has the highest life expectancy?', answer: 'Hawaii leads with approximately 81 years, followed by California, Minnesota, and Massachusetts. Mississippi has the lowest at around 71 years — a 10-year gap that reflects dramatic differences in healthcare access, poverty rates, and lifestyle factors across states.' },
+  { question: 'Which US state has the highest life expectancy?', answer: `Hawaii, at 80.0 years in 2022 (latest CDC state data), followed by Massachusetts (79.8), New Jersey (79.6), New York (79.5) and Connecticut (79.4). West Virginia had the lowest at 72.2 years, then Mississippi (72.6) — a ${STATE_GAP}-year gap that reflects big differences in healthcare access, income and lifestyle across states. Source: CDC/NCHS U.S. State Life Tables, 2022.` },
   { question: 'How does US life expectancy compare to other wealthy countries?', answer: `The USA spends more per capita on healthcare than any other country but ranks below most comparable wealthy nations in life expectancy. Japan (${leYears('Japan')}), Switzerland (${leYears('Switzerland')}), Australia (${leYears('Australia')}), and most of Western Europe all have higher life expectancy despite lower healthcare spending.` },
 ];
 
@@ -70,7 +73,24 @@ const LifeExpectancyUSA = () => {
 
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">The State-by-State Gap Is Enormous</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">There is no single American life expectancy. Hawaii leads at roughly 81 years; Mississippi trails at about 71 — a 10-year gap inside one country. Zip code is one of the strongest predictors of how long an American will live.</p>
+            <p className="text-muted-foreground leading-relaxed mb-4">There is no single American life expectancy. In {US_STATE_LE_SOURCE.year}, Hawaii led at {US_STATE_LE_HIGHEST[0][1].toFixed(1)} years and West Virginia trailed at {US_STATE_LE_LOWEST[0][1].toFixed(1)} — a {STATE_GAP}-year gap inside one country. Where you live is one of the strongest predictors of how long an American will live.</p>
+            <div className="grid sm:grid-cols-2 gap-4 mb-3" data-testid="us-state-le">
+              <div className="rounded-xl border border-border p-4">
+                <h3 className="font-semibold text-foreground mb-2">Highest ({US_STATE_LE_SOURCE.year})</h3>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  {US_STATE_LE_HIGHEST.map(([st, v]) => <li key={st} className="flex justify-between"><span>{st}</span><strong className="text-foreground">{v.toFixed(1)} years</strong></li>)}
+                </ul>
+              </div>
+              <div className="rounded-xl border border-border p-4">
+                <h3 className="font-semibold text-foreground mb-2">Lowest ({US_STATE_LE_SOURCE.year})</h3>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  {US_STATE_LE_LOWEST.map(([st, v]) => <li key={st} className="flex justify-between"><span>{st}</span><strong className="text-foreground">{v.toFixed(1)} years</strong></li>)}
+                </ul>
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground mb-4">
+              Life expectancy at birth, both sexes. Source: <a href={US_STATE_LE_SOURCE.url} className="underline" target="_blank" rel="noopener">{US_STATE_LE_SOURCE.label}</a> — the latest state table published. State figures are for {US_STATE_LE_SOURCE.year} and come from a different source and year than the national figure at the top of this page, so the two are not directly comparable.
+            </p>
             <p className="text-muted-foreground leading-relaxed">Income and race compound geography, so two people the same age can face very different odds. What you can control still moves the needle most — see your own number with the <Link to="/life-expectancy" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
           </section>
         </article>
