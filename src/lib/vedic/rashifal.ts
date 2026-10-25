@@ -267,6 +267,12 @@ function toneFor(planet: PlanetName, house: number): Tone {
   return 'mixed';
 }
 
+/** Classical gochar tone of a planet in a house from the Moon (shared with the daily
+ *  rashifal in src/lib/daily/kinds/rashifalDaily.ts, so both read the same table). */
+export function gocharTone(planet: PlanetName, house: number): Tone {
+  return toneFor(planet, house);
+}
+
 function gradeFor(planet: PlanetName, tone: Tone): Grade {
   const strongPlanet = SLOW.includes(planet);
   if (tone === 'mixed') return strongPlanet ? 'moderate' : 'mild';
