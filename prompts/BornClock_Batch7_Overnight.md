@@ -11,6 +11,45 @@ The founder is non-technical. Work through all 8 workstreams below, overnight, w
 asking questions. Where something is unclear, take the most reasonable reading, note it
 in the final report, and keep going.
 
+## How to run this (order, priority, safety)
+
+0. FIRST check the last production deploy (batch 6, commit 3f0581e) finished green
+   (`gh run list --branch main`), and spot-check live: `/celebrity/mahatma-gandhi/`
+   meta says "aged 78"; `/born-on/may/13` 301s to `/born-on/may-13/india/`. If either
+   fails, stop and report that first — do not build on a broken base.
+1. Run workstreams in parallel (one sub-agent + worktree each), but merge in this
+   priority order, so if time runs out the most valuable work is done:
+   W1 daily Rashifal → W7 Panchang by city → W3 divisional charts → W6 angel numbers →
+   W5 tarot → W2 Western daily → W8 nakshatra names + CDC check → W4 transit emails.
+2. Only merge a workstream whose own tests, typecheck and build pass. A failing or
+   half-done workstream is left on its branch, unmerged, and explained in the report.
+3. Before writing ANY new page, check `src/App.tsx`, the prerender route list and the
+   sitemap for an existing page with the same intent and extend it instead. Batch 6
+   just removed 1,111 duplicate pages — do not create new ones. Add a test that no two
+   sitemap URLs share the same title.
+4. After merging, a separate reviewer sub-agent that did not write the code checks
+   every new page type in a local prerender (title, H1, canonical, meta, JSON-LD,
+   no noindex, mobile layout, plain-language explanations, tone rules) and spot-checks
+   5 astronomical values per workstream against Swiss Ephemeris / Drik. Fix what it finds.
+
+## Daily-changing pages: one shared design (W1, W2, W7)
+
+Production rebuilds only when `main` is pushed, so a normal prerendered page goes stale.
+Use ONE shared mechanism for all daily pages:
+- At build time, precompute the content for every page for the next 400 days
+  (India dates) with our engine into compact JSON files (e.g. `dist/daily/<kind>/<slug>.json`,
+  one file per page, split by month if large).
+- The Worker serves the prerendered shell and injects that day's precomputed text into the
+  HTML (title, meta description, H1 date, main content, JSON-LD dateModified), cached
+  until India midnight. The client reads the same JSON, so server and client always
+  match. No engine calls at request time.
+- If the JSON for today is missing (deploy older than 400 days), fall back to computing
+  in the browser and log it in the ops monitor.
+- Tests: for a fixed date, the Worker HTML contains that date and that day's text; the
+  next day's HTML differs; the client renders identical text.
+- Answer-first layout for Google AI Overviews: a 2–3 sentence direct answer at the
+  top, then details; FAQ JSON-LD; visible date.
+
 ---
 
 ## Standing rules (must follow — no exceptions)
@@ -63,12 +102,10 @@ Goal: rank for "aaj ka rashifal", "[rashi] rashifal today", "mesh rashifal" etc.
   always give the same text; different days must read differently.
 - Show "Why today": the 2–3 factors used, each explained in one plain line.
 - The date must be visible on the page and in the title/meta ("26 October 2026").
-- IMPORTANT: production only rebuilds when `main` is pushed, so a prerendered page would
-  go stale. Make Google see today's text without a manual deploy: the Worker
-  (`functions/_worker.ts`) must serve these pages with today's content in the HTML
-  (edge-render or inject the computed text into the prerendered shell), with sensible
-  caching (expire at India midnight). Client-side must show the same text (no
-  mismatch). Add tests that the Worker output for a fixed date contains that date's text.
+- Freshness: use the shared daily-page design above (precomputed 400 days, Worker
+  injects today's text). Build this mechanism in W1 first; W2 and W7 reuse it.
+- Add weekly and monthly views only if they already exist; keep them consistent with
+  the daily text (same factors).
 - Hindi pages: same content in natural Hindi (not word-by-word translation).
 - Link from the homepage Vedic pillar and from each rashi page to the others.
 
@@ -78,7 +115,7 @@ Goal: rank for "aaj ka rashifal", "[rashi] rashifal today", "mesh rashifal" etc.
   existing routes and pick one without creating a duplicate of an existing page) with
   TODAY's horoscope from real tropical transits (Moon sign and aspects to the sign,
   Sun/Mercury/Venus/Mars ingresses and retrogrades), same deterministic rules approach,
-  same "Why today", same Worker freshness approach as Workstream 1.
+  same "Why today", same shared daily-page design (reuse W1's mechanism).
 - Clearly labelled "Western (tropical) astrology" so it is not confused with the Vedic
   rashifal; cross-link the two ("Your Vedic rashi may differ — find it here").
 
@@ -133,8 +170,11 @@ Goal: rank for "aaj ka rashifal", "[rashi] rashifal today", "mesh rashifal" etc.
 - Prerender city pages for the 50 most-populated Indian cities (take the list from a
   source you open with WebFetch, e.g. the Census of India / Wikipedia list) plus the
   existing ones: `/panchang/:city`, `/rahu-kaal/:city`, `/choghadiya/:city` — each shows
-  TODAY via the same Worker freshness approach as Workstream 1 (no 50×30 page explosion;
-  dated views are reachable via the date selector, not separate sitemap URLs).
+  TODAY via the shared daily-page design (reuse W1's mechanism). No page explosion:
+  dated views are reachable via the date selector, not separate sitemap URLs. Each
+  city page must be genuinely different (its own sunrise/sunset-based times, local
+  festivals only if sourced), not a template with only the city name swapped.
+- Keep the existing `/hi/panchang/:city` Hindi pages and link them to the English ones.
 - Add the missing muhurtas: Brahma Muhurta, Amrit Kalam, Dur Muhurtam, Varjyam,
   Gulika, Yamaganda, Abhijit (already), and round all times to the nearest minute
   (current code truncates seconds).
@@ -160,7 +200,8 @@ Goal: rank for "aaj ka rashifal", "[rashi] rashifal today", "mesh rashifal" etc.
 ## Final report (write it to `prompts/BornClock_Batch7_Report.md` and also print it)
 
 Short and plain, for a non-technical founder:
-1. What each workstream delivered (one or two lines each), with 1–2 sample URLs.
+1. What each workstream delivered (one or two lines each), with 1–2 sample URLs, and
+   whether it is merged or left unmerged (and why).
 2. Test / typecheck / build / prerender-gate results, and the sitemap URL count before
    and after.
 3. Anything not done, not verified, or decided on your own, and why.
