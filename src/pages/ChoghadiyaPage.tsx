@@ -51,7 +51,7 @@ function NowLine({ lat, lon, tz, name, dateKey }: { lat: number; lon: number; tz
 export default function ChoghadiyaPage() {
   const ctl = usePanchangPlace('choghadiya');
   const { place, dateKey, tz } = ctl;
-  const { entry, path, isIndex } = usePanchangEntry('choghadiya', ctl);
+  const { entry, path, isIndex, shared } = usePanchangEntry('choghadiya', ctl);
 
   const meta = isIndex ? indexMeta('choghadiya') : pageMeta('choghadiya', place.name);
   const canonical = ctl.cityParam && place.slug ? `/choghadiya/${place.slug}` : '/choghadiya';
@@ -70,7 +70,7 @@ export default function ChoghadiyaPage() {
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
-          <PanchangControls ctl={ctl} />
+          <PanchangControls ctl={ctl} shared={shared} />
 
           {ctl.isToday && <NowLine lat={place.lat} lon={place.lon} tz={tz} name={place.name} dateKey={dateKey} />}
 

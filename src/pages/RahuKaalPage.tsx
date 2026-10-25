@@ -14,7 +14,7 @@ import { nearestCities, WINDOW_PARTS, PANCHANG_CITIES } from '@/lib/vedic/pancha
 import { pageMeta, indexMeta, dateWithWeekday } from '@/lib/vedic/panchangText';
 import { usePanchangPlace } from '@/components/panchang/usePanchangPlace';
 import { usePanchangEntry } from '@/components/panchang/usePanchangEntry';
-import { PanchangControls } from '@/components/panchang/PanchangControls';
+import { PanchangControls, isPrerender } from '@/components/panchang/PanchangControls';
 import { CityLinks, TermChips } from '@/components/panchang/PanchangSections';
 
 // Which eighth of daylight holds each window, by weekday — straight from the engine table.
@@ -27,8 +27,9 @@ const TERMS = ['Rahu Kaal', 'Gulika Kaal', 'Yamaganda', 'Dur Muhurtam', 'Varjyam
 export default function RahuKaalPage() {
   const ctl = usePanchangPlace('rahu-kaal');
   const { place, dateKey } = ctl;
-  const { entry, path, isIndex } = usePanchangEntry('rahu-kaal', ctl);
-  const weekday = new Date(dateKey + 'T12:00:00Z').getUTCDay();
+  const { entry, path, isIndex, shared } = usePanchangEntry('rahu-kaal', ctl);
+  // No weekday highlight in the prerendered shell (it would go stale; the browser adds it).
+  const weekday = shared && isPrerender() ? -1 : new Date(dateKey + 'T12:00:00Z').getUTCDay();
 
   const meta = isIndex ? indexMeta('rahu-kaal') : pageMeta('rahu-kaal', place.name);
   const canonical = ctl.cityParam && place.slug ? `/rahu-kaal/${place.slug}` : '/rahu-kaal';
@@ -47,7 +48,7 @@ export default function RahuKaalPage() {
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
-          <PanchangControls ctl={ctl} />
+          <PanchangControls ctl={ctl} shared={shared} />
 
           <DailyBody entry={entry} testId="rahu-kaal-daily" />
           <DailyJsonLd entry={entry} path={path} />

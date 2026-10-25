@@ -24,7 +24,7 @@ const TERMS = ['Panchang', 'Tithi', 'Paksha', 'Nakshatra', 'Yoga', 'Karana', 'Va
 export default function PanchangPage() {
   const ctl = usePanchangPlace('panchang');
   const { place, dateKey } = ctl;
-  const { entry, path, isIndex } = usePanchangEntry('panchang', ctl);
+  const { entry, path, isIndex, shared } = usePanchangEntry('panchang', ctl);
 
   // Static (undated) title — the Worker swaps in the dated one each day.
   const meta = isIndex ? indexMeta('panchang') : pageMeta('panchang', place.name);
@@ -44,7 +44,7 @@ export default function PanchangPage() {
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
-          <PanchangControls ctl={ctl} />
+          <PanchangControls ctl={ctl} shared={shared} />
 
           <DailyBody entry={entry} testId="panchang-daily" />
           <DailyJsonLd entry={entry} path={path} />
