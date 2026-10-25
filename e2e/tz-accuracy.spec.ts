@@ -43,7 +43,7 @@ test.describe('Kundali Matching — foreign births', () => {
     await page.getByTestId('kmatch-city-b').fill('Pontiac');
     await expect(page.getByTestId('kmatch-city-b-option').filter({ hasText: 'Pontiac, Illinois, USA' })).toBeVisible();
     await page.getByTestId('kmatch-city-b-option').filter({ hasText: 'Pontiac, Michigan, USA' }).first().click();
-    await expect(page.getByTestId('kmatch-city-b-tz')).toContainText('America/Detroit · UTC−05:00');
+    await expect(page.getByTestId('kmatch-city-b-tz')).toContainText('Born in Pontiac, Michigan, USA · time zone America/Detroit (UTC−5 on that date, standard time)');
 
     await page.getByTestId('kmatch-calculate-btn').click();
     await expect(page.getByTestId('kmatch-result')).toBeVisible();
@@ -117,7 +117,7 @@ test.describe('Kundali — foreign birth', () => {
     await page.getByTestId('kundali-dob').fill('1990-07-15');
     await page.getByTestId('kundali-time').fill('08:30');
     await pickCity(page, 'kundali-city', 'New York', 'New York, New York, USA');
-    await expect(page.getByTestId('kundali-city-tz')).toContainText('America/New_York · UTC−04:00');
+    await expect(page.getByTestId('kundali-city-tz')).toContainText('time zone America/New_York (UTC−4 on that date, daylight saving)');
     await page.getByTestId('kundali-generate-btn').click();
     await expect(page.getByTestId('kundali-birth-data')).toBeVisible();
     await expect(page.getByTestId('kundali-birth-data-place')).toHaveText('New York, New York, USA');
@@ -139,6 +139,6 @@ test.describe('Kundali — foreign birth', () => {
     await page.getByText('Advanced: set timezone manually').click();
     await page.getByTestId('kundali-city-tz-manual').selectOption('America/Detroit');
     await expect(page.getByTestId('kundali-city-tz-preview')).toContainText('UTC−05:00 (America/Detroit)');
-    await expect(page.getByTestId('kundali-city-tz')).toContainText('(set manually)');
+    await expect(page.getByTestId('kundali-city-tz')).toContainText('time zone America/Detroit (UTC−5 on that date, standard time) · set manually');
   });
 });

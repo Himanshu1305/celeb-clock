@@ -29,11 +29,16 @@ describe('VedicAstrologyArticle', () => {
     renderArticle();
     expect(document.querySelector('[data-testid="vedic-calculator"]')).toBeTruthy();
   });
-  it('TC-VED-P-06: entering DOB 1988-11-05 shows Vrischika', () => {
+  // Batch 6 reference (Swiss Ephemeris, SIDM_LAHIRI, Moon 00:00/23:59 IST 1988-11-05):
+  // 145.183° Simha / Purva Phalguni → 156.999° Kanya / Uttara Phalguni.
+  it('TC-VED-P-06: entering DOB 1988-11-05 shows Simha or Kanya and both Nakshatras', () => {
     renderArticle();
     const input = document.querySelector('input[type="date"]') as HTMLInputElement;
     fireEvent.change(input, { target: { value: '1988-11-05' } });
-    expect(document.querySelector('[data-testid="vedic-result"]')?.textContent).toContain('Vrischika');
+    const text = document.querySelector('[data-testid="vedic-result"]')?.textContent || '';
+    expect(text).toContain('Simha or Kanya (depends on birth time)');
+    expect(text).toContain('Purva Phalguni or Uttara Phalguni');
+    expect(text).not.toContain('Vrischika');
   });
   it('TC-VED-P-07: Article JSON-LD schema present', () => {
     renderArticle();

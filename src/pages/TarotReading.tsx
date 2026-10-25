@@ -8,6 +8,7 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { CollectionLayout } from '@/components/central';
+import { TermTip } from '@/components/vedic/TermTip';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -34,7 +35,7 @@ function CardFace({ drawn, large }: { drawn: DrawnCard; large?: boolean }) {
         {drawn.card.emoji}
       </div>
       <p className="font-semibold text-foreground">{drawn.card.name}</p>
-      <p className="text-xs text-muted-foreground">{drawn.card.roman} · {drawn.reversed ? 'Reversed' : 'Upright'}</p>
+      <p className="text-xs text-muted-foreground"><TermTip id="majorArcana">{drawn.card.roman}</TermTip> · <TermTip id="reversedCard">{drawn.reversed ? 'Reversed' : 'Upright'}</TermTip></p>
     </div>
   );
 }
@@ -103,7 +104,7 @@ export default function TarotReading() {
           {mode === 'daily' && (
             <Card className="glass-card" data-testid="tarot-daily">
               <CardContent className="p-6 md:p-8 text-center">
-                <h2 className="text-xl font-bold mb-4 text-foreground">Your Card of the Day</h2>
+                <h2 className="text-xl font-bold mb-4 text-foreground">Your <TermTip id="cardOfDay">Card of the Day</TermTip></h2>
                 <CardFace drawn={today} large />
                 <p className="text-muted-foreground text-sm leading-relaxed mt-4 max-w-xl mx-auto">
                   {today.reversed ? today.card.reversed : today.card.upright}

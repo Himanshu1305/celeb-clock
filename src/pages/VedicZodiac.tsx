@@ -8,6 +8,7 @@ import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { VEDIC_SIGNS, compareZodiacs, currentAyanamsaDeg } from '@/services/VedicZodiacService';
+import { describeAlternatives } from '@/lib/vedic/dateOnlyMoonSign';
 
 // N12: the ayanamsa shown is the engine's live Lahiri value, not a fixed 23.85°.
 const AYANAMSA_NOW = currentAyanamsaDeg().toFixed(2);
@@ -16,15 +17,15 @@ import { RASHI_NAME_TO_SLUG } from '@/services/VedicZodiacExtended';
 const FAQ_ITEMS = [
   {
     question: 'What is the Vedic Zodiac?',
-    answer: 'The Vedic Zodiac (Jyotish) uses the sidereal coordinate system, which is based on the actual positions of stars. It uses the same 12 signs as Western astrology but shifted backward by about 24 degrees (called the ayanamsa). This means your Vedic Rashi is often one sign earlier than your Western sun sign.',
+    answer: 'The Vedic Zodiac (Jyotish) uses the sidereal coordinate system, which is based on the actual positions of stars. It uses the same 12 signs as Western astrology but shifted backward by about 24 degrees (called the ayanamsa). This means your Vedic (sidereal) Sun sign is often one sign earlier than your Western sun sign. Your Rashi in Indian astrology is something else: the sign of the Moon at birth.',
   },
   {
     question: 'What is a Rashi?',
-    answer: 'Rashi (राशि) is the Sanskrit word for zodiac sign. In Vedic astrology, your Rashi is the sign that the Sun was in at the time of your birth, calculated using the sidereal (star-based) zodiac rather than the tropical (season-based) Western zodiac.',
+    answer: 'Rashi (राशि) is the Sanskrit word for zodiac sign. In Vedic astrology, your Rashi is the sign that the Moon was in at the time of your birth, measured in the sidereal (star-based) zodiac. It is not your Western sun sign with a Sanskrit name: the Moon changes sign every two to three days, so your Rashi can be any of the 12 signs. BornClock shows the Moon sign for your birth date; if the Moon changed sign that day, both are shown and your birth time decides.',
   },
   {
     question: 'Why is my Vedic sign different from my Western sign?',
-    answer: 'Due to a phenomenon called "precession of the equinoxes," the tropical zodiac (used in Western astrology) and the sidereal zodiac (used in Vedic astrology) have drifted apart by about 24 degrees over two thousand years. This offset is called the ayanamsa. Most people with birthdays near the end of a Western sign will find their Vedic Rashi is the previous sign.',
+    answer: 'Due to a phenomenon called "precession of the equinoxes," the tropical zodiac (used in Western astrology) and the sidereal zodiac (used in Vedic astrology) have drifted apart by about 24 degrees over two thousand years. This offset is called the ayanamsa. Most people with birthdays near the end of a Western sign will find their Vedic Sun sign is the previous sign. (Your Rashi, the Moon sign, is separate.)',
   },
   {
     question: 'What is the ayanamsa?',
@@ -32,7 +33,7 @@ const FAQ_ITEMS = [
   },
   {
     question: 'What are Nakshatras?',
-    answer: 'Nakshatras are 27 lunar mansions used in Vedic astrology. Each nakshatra spans 13°20\' of the zodiac and has its own deity, symbol, and qualities. A complete Vedic chart also considers the nakshatra of the Moon at birth. Note: BornClock calculates your solar Rashi only — full nakshatra calculation requires your exact birth time and location.',
+    answer: 'Nakshatras are 27 lunar mansions used in Vedic astrology. Each nakshatra spans 13°20\' of the zodiac and has its own deity, symbol, and qualities. A complete Vedic chart also considers the nakshatra of the Moon at birth. BornClock shows your Moon sign (Rashi) for your birth date; the exact nakshatra and pada need your birth time and place (use the free Kundali).',
   },
   {
     question: 'Which system is more accurate — Western or Vedic?',
@@ -92,7 +93,8 @@ export default function VedicZodiac() {
                 Jyotish (ज्योतिष) is one of the Vedangas — the six auxiliary disciplines of the Vedas.
                 It uses the <strong>sidereal zodiac</strong> corrected for the precession of equinoxes
                 (Lahiri ayanamsa ≈ {AYANAMSA_NOW}° today), making it more astronomically precise than the Western tropical zodiac.
-                Your Vedic rashi is typically one sign earlier than your Western sun sign.
+                Your Vedic (sidereal) Sun sign is typically one sign earlier than your Western sun sign;
+                your Rashi is the Moon's sign, shown separately below.
               </p>
             </div>
           </div>
@@ -117,7 +119,7 @@ export default function VedicZodiac() {
               {/* Western */}
               <Card className="glass-card">
                 <CardContent className="p-6 text-center">
-                  <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Western Zodiac (Tropical)</div>
+                  <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Sun sign (Western, tropical)</div>
                   <div className="text-4xl mb-2">
                     {VEDIC_SIGNS.find(s => s.english === result.westernSign)?.symbol || '⭐'}
                   </div>
@@ -129,7 +131,7 @@ export default function VedicZodiac() {
               {/* Vedic */}
               <Card className="glass-card border-primary/30">
                 <CardContent className="p-6 text-center">
-                  <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Vedic Rashi (Sidereal)</div>
+                  <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Sun sign (Vedic, sidereal)</div>
                   <div className="text-4xl mb-2">{result.vedicRashi.emoji}</div>
                   <div className="text-2xl font-bold text-foreground">{result.vedicRashi.name}</div>
                   <div className="text-sm text-muted-foreground mt-1">{result.vedicRashi.english} · {result.vedicRashi.ruling_planet}</div>
@@ -147,27 +149,46 @@ export default function VedicZodiac() {
               </CardContent>
             </Card>
 
-            {/* Vedic sign detail */}
-            <Card className="glass-card card-party-border">
+            {/* Moon sign (Rashi) — Batch 6: the real Rashi is the Moon's sidereal sign */}
+            {result.moonRashis.length > 0 && (
+              <Card className="glass-card mb-6 border-primary/30" data-testid="vedic-zodiac-moon-rashi">
+                <CardContent className="p-5 text-center">
+                  <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Your Rashi (Moon sign)</div>
+                  <div className="text-2xl font-bold text-foreground">
+                    {describeAlternatives(result.moonRashis.map(r => r.name))}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                    {result.moonRashis.length > 1
+                      ? 'The Moon changed sign during your birth date (00:00–23:59 IST), so your birth time decides which one is yours. '
+                      : 'The Moon stayed in this sign for the whole of your birth date (00:00–23:59 IST), so it does not depend on your birth time. '}
+                    For the exact chart with birth time and place, use the <Link to="/kundali" className="underline">free Kundali</Link>.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Rashi (Moon sign) detail */}
+            {result.moonRashis.map(sign => (
+            <Card key={sign.name} className="glass-card card-party-border mb-4">
               <CardContent className="p-8">
                 <div className="text-center mb-6">
-                  <div className="text-6xl mb-3">{result.vedicRashi.emoji}</div>
-                  <h2 className="text-2xl font-bold text-foreground">{result.vedicRashi.name} ({result.vedicRashi.english})</h2>
-                  <p className="text-muted-foreground mt-1">{result.vedicRashi.element} · {result.vedicRashi.quality} · Ruled by {result.vedicRashi.ruling_planet}</p>
+                  <div className="text-6xl mb-3">{sign.emoji}</div>
+                  <h2 className="text-2xl font-bold text-foreground">{sign.name} ({sign.english}) Moon</h2>
+                  <p className="text-muted-foreground mt-1">{sign.element} · {sign.quality} · Ruled by {sign.ruling_planet}</p>
                 </div>
 
-                <p className="text-foreground mb-6 leading-relaxed text-center">{result.vedicRashi.description}</p>
+                <p className="text-foreground mb-6 leading-relaxed text-center">{sign.description}</p>
 
                 <div className="flex justify-center gap-3 flex-wrap mb-4">
-                  <Badge variant="secondary">🌿 {result.vedicRashi.element}</Badge>
-                  <Badge variant="secondary">🪐 {result.vedicRashi.ruling_planet}</Badge>
-                  <Badge variant="secondary">{result.vedicRashi.symbol} {result.vedicRashi.quality}</Badge>
+                  <Badge variant="secondary">🌿 {sign.element}</Badge>
+                  <Badge variant="secondary">🪐 {sign.ruling_planet}</Badge>
+                  <Badge variant="secondary">{sign.symbol} {sign.quality}</Badge>
                 </div>
 
                 <div>
                   <h3 className="font-semibold text-foreground mb-3 text-center">Key Traits</h3>
                   <div className="flex flex-wrap justify-center gap-2">
-                    {result.vedicRashi.traits.map(trait => (
+                    {sign.traits.map(trait => (
                       <span key={trait} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
                         {trait}
                       </span>
@@ -176,12 +197,13 @@ export default function VedicZodiac() {
                 </div>
               </CardContent>
             </Card>
+            ))}
 
             {/* Nakshatra honest note */}
             <Card className="glass-card mt-4 border-blue-500/20">
               <CardContent className="p-4">
                 <p className="text-xs text-muted-foreground text-center">
-                  <strong className="text-foreground">Note on Nakshatras:</strong> This calculator computes your solar Rashi only.
+                  <strong className="text-foreground">Note on Nakshatras:</strong> This calculator works from your birth date only.
                   A complete Vedic chart (including Nakshatra, Lagna/Ascendant, and planetary positions)
                   requires your exact birth time and location. Consult a Jyotishi for a full reading.
                 </p>
@@ -197,7 +219,7 @@ export default function VedicZodiac() {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {VEDIC_SIGNS.map(sign => {
-              const isUserSign = result?.vedicRashi.name === sign.name;
+              const isUserSign = !!result?.moonRashis.some(r => r.name === sign.name);
               const slug = RASHI_NAME_TO_SLUG[sign.name] ?? sign.name.toLowerCase();
               return (
                 <Link key={sign.name} to={`/vedic-zodiac/${slug}`}>
@@ -211,7 +233,7 @@ export default function VedicZodiac() {
                     <div className="text-xs text-muted-foreground">{sign.english}</div>
                     <div className="text-xs text-muted-foreground mt-1">{sign.ruling_planet}</div>
                     {isUserSign && (
-                      <Badge className="mt-2 text-xs">Your Rashi</Badge>
+                      <Badge className="mt-2 text-xs">{result && result.moonRashis.length > 1 ? 'Possible Rashi' : 'Your Rashi'}</Badge>
                     )}
                   </Card>
                 </Link>

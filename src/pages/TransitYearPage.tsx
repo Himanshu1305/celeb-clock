@@ -148,7 +148,7 @@ export default function TransitYearPage() {
 
           {/* Ingress timeline */}
           <div className="rounded-xl border border-border p-4 mb-6" data-testid="transit-ingress">
-            <h2 className="font-semibold text-foreground mb-2">Sign changes in {year}</h2>
+            <h2 className="font-semibold text-foreground mb-2"><TermTip id="ingress">Sign changes</TermTip> in {year}</h2>
             {data.ingress.length > 0 ? (
               <ul className="space-y-1 text-sm text-muted-foreground list-disc pl-5">
                 {data.ingress.map((n, i) => <li key={i}><strong className="text-foreground">{niceDate(zoneDateISO(n.atMs, viewerTz))}</strong> — enters {n.sign}</li>)}
@@ -161,7 +161,7 @@ export default function TransitYearPage() {
           {/* Per Moon sign */}
           <h2 className="font-semibold text-foreground mb-2">Effect on each Moon sign in {year}</h2>
           <p className="text-xs text-muted-foreground mb-3">
-            Read by the <TermTip id="rashi">house from your Moon sign</TermTip>. Find your Moon sign free with a <Link to="/kundali" className="underline">Kundli</Link>.
+            Read by the <TermTip id="houseFromMoon">house from your Moon sign</TermTip>; the <TermTip id="transitGrade">grade</TermTip> on each card shows how strong the influence is, and <TermTip id="sadeSati">Sade Sati</TermTip> / <TermTip id="dhaiya">Dhaiya</TermTip> tags mark Saturn’s longer phases. Find your Moon sign free with a <Link to="/kundali" className="underline">Kundli</Link>.
           </p>
           <div className="grid sm:grid-cols-2 gap-4 mb-6" data-testid="transit-persign">
             {data.perSign.map(s => (
@@ -191,7 +191,7 @@ export default function TransitYearPage() {
           </div>
 
           <p className="text-xs text-muted-foreground mb-8">
-            <span data-testid="transit-tz">Dates are shown in {zoneLabel(viewerTz)}.</span> Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) position of {meta.label.split(' ')[0]} for {year} and read by classical gochar rules — the same engine behind your Kundli.{' '}
+            <span data-testid="transit-tz">Dates are shown in {zoneLabel(viewerTz)}.</span> Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) position of {meta.label.split(' ')[0]} for {year} and read by classical <TermTip id="gochar">gochar</TermTip> rules — the same engine behind your Kundli.{' '}
             <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
             {planet === 'saturn' && <> · <Link to="/sade-sati" className="underline">Check your Sade Sati →</Link></>}
           </p>

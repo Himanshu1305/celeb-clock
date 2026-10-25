@@ -169,6 +169,7 @@ export function applyCelebRecordFixes<T extends Record<string, unknown>>(rec: T)
     if ('birth_year' in rec) out.birth_year = Number(fixedBd.slice(0, 4));
   }
   if (death && 'death_year' in rec) out.death_year = Number(death.slice(0, 4));
+  if (death) out.death_date = death;
   return out as T;
 }
 

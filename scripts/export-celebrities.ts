@@ -29,6 +29,8 @@ interface UnifiedCelebrity {
   birth_month_day: string | null;
   birth_year: number | null;
   death_year: number | null;
+  /** Full death date from celebrity_sitelinks.death_date ("YYYY-01-01" = year-only placeholder). */
+  death_date: string | null;
   category: string;
   known_for: string;
   occupation?: string | null;
@@ -62,6 +64,7 @@ async function main() {
       birth_month_day: monthDay(c.birth_date ?? null),
       birth_year: c.birth_year ?? (c.birth_date ? Number(String(c.birth_date).slice(0, 4)) : null),
       death_year: c.death_year ?? null,
+      death_date: null, // filled from the DB row below (read-only select)
       category: c.category ?? 'Celebrity',
       known_for: c.known_for ?? '',
       nationality_code: 'IN',
@@ -90,7 +93,12 @@ async function main() {
     const PAGE = 1000;
     let added = 0, dupSkipped = 0, blocked = 0;
 
+    // Every fetched DB row by slug, so static entries (which win the slug) can still
+    // take the DB's full death_date for an exact age at death (Batch 6).
+    const dbBySlug = new Map<string, any>();
     const processRow = (row: any): boolean => {
+      const sl = nameToSlug(row.name);
+      if (sl && !dbBySlug.has(sl)) dbBySlug.set(sl, row);
       if (BLOCKED_IDS.has(row.id)) { blocked++; return false; }
       const base = nameToSlug(row.name);
       if (!base) return false;
@@ -103,6 +111,7 @@ async function main() {
         birth_date: row.birth_date ?? null,
         birth_month_day: row.birth_month_day ?? monthDay(row.birth_date ?? null),
         birth_year: by, death_year: dy,
+        death_date: row.death_date ? String(row.death_date).slice(0, 10) : null,
         category: row.occupation || 'Celebrity',
         known_for: row.known_for || '',
         occupation: row.occupation ?? null,
@@ -144,6 +153,19 @@ async function main() {
       if (error) { console.error('❌ INTL fetch error:', error.message); process.exit(1); }
       if (!data || data.length === 0) break;
       for (const row of data) { if (processRow(row)) intlAdded++; if (intlAdded >= INTL_CAP) break; }
+    }
+
+    // Static entries: DB death_date when the year agrees — by slug, else a unique record
+    // with the same birth date and death year (e.g. "Bhimrao Ramji Ambedkar").
+    for (const c of out.slice(0, staticCount)) {
+      if (c.death_year == null) continue;
+      const row = dbBySlug.get(c.slug);
+      let dd: string | null = row?.death_date ? String(row.death_date).slice(0, 10) : null;
+      if (!dd && c.birth_date) {
+        const ds = [...new Set(out.filter(o => o !== c && o.birth_date === c.birth_date && o.death_year === c.death_year && o.death_date).map(o => o.death_date))];
+        if (ds.length === 1) dd = ds[0];
+      }
+      if (dd && Number(dd.slice(0, 4)) === Number(c.death_year)) c.death_date = dd;
     }
 
     console.log(`Added ${added} DB celebrities (${intlAdded} international, ${dupSkipped} dedup-skipped, ${blocked} blocked).`);

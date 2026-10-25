@@ -51,12 +51,12 @@ const TodaysBirthdaysPage = () => {
         <section className="text-center space-y-4 mb-8 max-w-3xl mx-auto">
           <div className="text-sm text-muted-foreground mb-2">
             Viewing all celebrities born on {formattedDate} ·{' '}
-            <Link to={`/birthday/${todaySlug}`} className="text-primary hover:underline">
-              See dedicated page →
+            <Link to={`/born-on/${todaySlug}/`} className="text-primary hover:underline">
+              Born-on deep dive →
             </Link>
             {' · '}
-            <Link to={`/born-on/${todaySlug}`} className="text-primary hover:underline">
-              Born-on deep dive →
+            <Link to={`/birthday/${today.getMonth() + 1}/${today.getDate()}/`} className="text-primary hover:underline">
+              Today's birthday personality →
             </Link>
           </div>
           <EEATBadges sources={['Wikipedia']} />

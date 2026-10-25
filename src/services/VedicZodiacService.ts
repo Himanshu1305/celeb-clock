@@ -1,4 +1,5 @@
 import { getSiderealLongitude, getLahiriAyanamsa } from '@/lib/vedic/engine/vedicEngine';
+import { moonSignsForDate } from '@/lib/vedic/dateOnlyMoonSign';
 
 export const VEDIC_SIGNS = [
   {
@@ -152,6 +153,11 @@ export const VEDIC_SIGNS = [
  * (astronomy-engine Sun + the engine's Lahiri ayanamsa, validated against Swiss
  * Ephemeris / Drik Panchang), not a low-precision Sun formula minus a fixed 23.85°.
  */
+/**
+ * NOTE (Batch 6): this is the SUN's sidereal sign. In Indian astrology "Rashi" means
+ * the MOON's sign — use `getMoonRashis` for that. Pages must label this one as the
+ * Vedic (sidereal) Sun sign, never as "your Rashi".
+ */
 export function getVedicRashi(dob: Date): typeof VEDIC_SIGNS[number] {
   const sidereal = getSiderealLongitude('Sun', dob);
   const signIndex = Math.floor(sidereal / 30) % 12;
@@ -180,17 +186,32 @@ export function getWesternSign(dob: Date): string {
   return 'Pisces';
 }
 
+/**
+ * Moon sign(s) (Rashi) for a birth DATE: the sidereal Moon from 00:00 to 23:59 IST
+ * (chart engine, Lahiri). One entry = certain all day; two = it changed sign that
+ * day and the birth time decides.
+ */
+export function getMoonRashis(dob: Date): typeof VEDIC_SIGNS[number][] {
+  const iso = `${dob.getFullYear()}-${String(dob.getMonth() + 1).padStart(2, '0')}-${String(dob.getDate()).padStart(2, '0')}`;
+  const r = moonSignsForDate(iso);
+  return r ? r.signIndices.map(i => VEDIC_SIGNS[i]) : [];
+}
+
 export function compareZodiacs(dob: Date): {
   westernSign: string;
+  /** Sidereal (Vedic) SUN sign — not the Rashi. */
   vedicRashi: typeof VEDIC_SIGNS[number];
+  /** Moon sign(s) — the Rashi. */
+  moonRashis: typeof VEDIC_SIGNS[number][];
   isSame: boolean;
   note: string;
 } {
   const westernSign = getWesternSign(dob);
   const vedicRashi = getVedicRashi(dob);
+  const moonRashis = getMoonRashis(dob);
   const isSame = westernSign === vedicRashi.english;
   const note = isSame
-    ? 'Your Western and Vedic signs are the same — you were born in the sweet spot of the zodiac calendar.'
-    : `Your Vedic sign (${vedicRashi.name}/${vedicRashi.english}) differs from your Western sign (${westernSign}) due to the ~24° ayanamsa offset between the sidereal and tropical zodiac systems.`;
-  return { westernSign, vedicRashi, isSame, note };
+    ? 'Your Sun is in the same sign in both systems — you were born in the sweet spot of the zodiac calendar. Your Rashi (Moon sign) is a different thing and is shown separately.'
+    : `Your Vedic (sidereal) Sun sign (${vedicRashi.name}/${vedicRashi.english}) differs from your Western Sun sign (${westernSign}) due to the ~24° ayanamsa offset between the sidereal and tropical zodiac systems. Your Rashi (Moon sign) is a different thing and is shown separately.`;
+  return { westernSign, vedicRashi, moonRashis, isSame, note };
 }

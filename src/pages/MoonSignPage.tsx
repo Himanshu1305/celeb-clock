@@ -5,7 +5,9 @@ import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { calculateMoonSignAndNakshatra, MOON_SIGN_DATA, NAKSHATRAS, getNakshatraLifeApplication } from '@/data/moonSignData';
+import { DateOnlyMoonNote } from '@/components/vedic/DateOnlyMoonNote';
 import { useReportPrice } from '@/hooks/useCurrency';
+import { TermTip } from '@/components/vedic/TermTip';
 
 type TabKey = 'personality' | 'love' | 'shadow' | 'compatible';
 
@@ -19,7 +21,15 @@ const TAB_LABELS: Record<TabKey, string> = {
 export default function MoonSignPage() {
   const reportPriceLabel = useReportPrice();
   const [dob, setDob] = useState('');
-  const [result, setResult] = useState<ReturnType<typeof calculateMoonSignAndNakshatra> | null>(null);
+  const [calc, setCalc] = useState<ReturnType<typeof calculateMoonSignAndNakshatra> | null>(null);
+  // When the Moon changed sign during the birth date, the user picks which reading to see.
+  const [pick, setPick] = useState(0);
+  const result = calc ? {
+    ...calc,
+    moonSign: calc.moonSigns[pick] ?? calc.moonSign,
+    moonSignData: MOON_SIGN_DATA[calc.moonSigns[pick] ?? calc.moonSign] ?? calc.moonSignData,
+  } : null;
+  const nakNames = calc ? calc.nakshatraNumbers.map(n => NAKSHATRAS[n]?.name).filter(Boolean) as string[] : [];
   const [activeTab, setActiveTab] = useState<TabKey>('personality');
   const [expandedSign, setExpandedSign] = useState<string | null>(null);
   const [expandedNak, setExpandedNak] = useState<number | null>(null);
@@ -27,7 +37,8 @@ export default function MoonSignPage() {
   const handleCalculate = () => {
     if (!dob) return;
     const date = new Date(dob + 'T12:00:00');
-    setResult(calculateMoonSignAndNakshatra(date));
+    setCalc(calculateMoonSignAndNakshatra(date));
+    setPick(0);
     setActiveTab('personality');
   };
 
@@ -39,7 +50,7 @@ export default function MoonSignPage() {
     { question: 'What is a nakshatra?',
       answer: 'A nakshatra is one of 27 lunar mansions used in Vedic (Indian) astrology. The Moon completes its cycle through all 27 nakshatras in approximately 27.3 days. Each nakshatra has its own ruling deity, quality, and meaning. Knowing your birth nakshatra gives much greater precision than your moon sign alone — it is considered fundamental in Jyotish (Vedic astrology) for reading personality, timing, and compatibility.' },
     { question: 'Is the moon sign calculator accurate?',
-      answer: 'This calculator uses a simplified approximation based on the Moon\'s average orbital period of 27.3 days. For precise astrological use (especially for Vedic calculations and marriage matching), you should calculate using your exact birth time and location, as the Moon can shift signs in the middle of a day.' },
+      answer: 'This calculator uses the real sidereal (Vedic, Lahiri) position of the Moon from the same engine as our Kundali, checked from 00:00 to 23:59 Indian Standard Time on your birth date. If the Moon stayed in one sign all day, that is your Moon sign; if it changed sign that day, both are shown and your birth time decides. For marriage matching and exact Nakshatra pada, use the Kundali with your birth time and place.' },
   ];
 
   return (
@@ -100,16 +111,34 @@ export default function MoonSignPage() {
 
           {result && (
             <div className="mb-10">
+              <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4 text-sm text-gray-700" data-testid="moon-sign-answer">
+                <p>
+                  <strong>Moon sign (Rashi):</strong> {calc!.moonSigns.join(' or ')}{calc!.moonSigns.length > 1 ? ' (depends on birth time)' : ''}
+                  {' · '}<strong>Nakshatra:</strong> {nakNames.length > 1 ? `${nakNames.slice(0, -1).join(', ')} or ${nakNames[nakNames.length - 1]} (depends on birth time)` : nakNames[0]}
+                </p>
+                {calc!.moonSigns.length > 1 && (
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {calc!.moonSigns.map((sg, i) => (
+                      <button key={sg} type="button" onClick={() => setPick(i)}
+                        className={`px-3 py-1 rounded-full text-xs font-semibold border ${pick === i ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-blue-700 border-blue-200'}`}>
+                        Read {sg} Moon
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <DateOnlyMoonNote ambiguous={calc!.moonSigns.length > 1 || calc!.nakshatraNumbers.length > 1} what="Moon sign and Nakshatra" className="text-xs text-gray-500 mt-2" />
+              </div>
               <div className="grid sm:grid-cols-2 gap-4 mb-6">
                 <div className="bg-gradient-to-br from-blue-900 to-[#6E5AA6] rounded-2xl p-6 text-white text-center">
-                  <p className="text-xs text-blue-300 mb-1 uppercase tracking-wide">Moon Sign</p>
+                  <p className="text-xs text-blue-300 mb-1 uppercase tracking-wide"><TermTip id="rashi">Moon Sign</TermTip></p>
                   <div className="text-5xl mb-2">{result.moonSignData.symbol}</div>
                   <h2 className="text-2xl font-black text-white mb-1">{result.moonSign} Moon</h2>
+                  <p className="text-xs text-blue-200">Vedic (sidereal) Moon sign</p>
                   <p className="text-xs text-blue-300">{result.moonSignData.element} · {result.moonSignData.rulingPlanet}</p>
                   <p className="text-xs text-blue-200 mt-2 italic">{result.moonSignData.emotionalNature}</p>
                 </div>
                 <div className="bg-gradient-to-br from-[#6E5AA6] to-pink-900 rounded-2xl p-6 text-white text-center">
-                  <p className="text-xs text-[#6E5AA6] mb-1 uppercase tracking-wide">Nakshatra</p>
+                  <p className="text-xs text-[#6E5AA6] mb-1 uppercase tracking-wide"><TermTip id="nakshatra">Nakshatra</TermTip></p>
                   <div className="text-5xl mb-2">{result.nakshatraData.symbol}</div>
                   <h2 className="text-2xl font-black text-white mb-1">{result.nakshatraData.name}</h2>
                   <p className="text-xs text-[#6E5AA6]">#{result.nakshatraNumber} · {result.nakshatraData.meaning}</p>

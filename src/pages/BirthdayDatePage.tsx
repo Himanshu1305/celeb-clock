@@ -11,7 +11,6 @@ import {
   getPersonalityParagraph, getSecondPersonalityParagraph,
   getNumerologyDescription, getNumerologyDetailParagraph,
   getZodiacContextParagraph, getLifePathParagraph, getLifePathChallengeParagraph,
-  getVedicContext,
 } from '@/data/birthdayPersonality';
 
 const ELEMENT_COLORS: Record<string, string> = {
@@ -61,7 +60,6 @@ export default function BirthdayDatePage() {
 
   const p = getBirthdayPersonality(month, day);
   const monthName = MONTH_NAMES[month];
-  const vedic = getVedicContext(month, day, p.zodiacSign);
 
   // Adjacent date navigation
   let prevMonth = month, prevDay = day - 1;
@@ -69,7 +67,7 @@ export default function BirthdayDatePage() {
   let nextMonth = month, nextDay = day + 1;
   if (nextDay > maxDay) { nextMonth = month === 12 ? 1 : month + 1; nextDay = 1; }
 
-  const title = `${monthName} ${day} Birthday — Personality, Zodiac & Famous People`;
+  const title = `${monthName} ${day} Birthday Personality — Zodiac & Traits | BornClock`;
   const description = `People born on ${monthName} ${day} are ${p.zodiacSign}s with Birth Day Number ${p.lifePathNumber}. Discover your core traits, lucky day, compatible signs, and more.`;
 
   const faqs = [
@@ -132,7 +130,7 @@ export default function BirthdayDatePage() {
         note: '© 2026 BornClock · Birthdays.',
       }}
       eyebrow="Birthday personality"
-      h1={<>{monthName} {day} Birthday — Personality, Zodiac &amp; Famous People</>}
+      h1={<>{monthName} {day} Birthday Personality — Zodiac, Numerology &amp; Traits</>}
     >
       <section className="section">
         <div className="max-w-3xl mx-auto">
@@ -255,7 +253,7 @@ export default function BirthdayDatePage() {
           </p>
           <Button asChild className="bg-white text-[#6E5AA6] hover:bg-[#6E5AA6]/10 font-bold">
             <Link to={`/born-on/${monthName.toLowerCase()}-${day}/`}>
-              Explore Your Birthday <ArrowRight className="w-4 h-4 ml-1.5" />
+              Famous people born on {monthName} {day} <ArrowRight className="w-4 h-4 ml-1.5" />
             </Link>
           </Button>
         </div>
@@ -294,38 +292,28 @@ export default function BirthdayDatePage() {
           </p>
         </section>
 
-        {/* Indian Astrology — Rashi & Nakshatra */}
-        <section className="mb-8 bg-orange-50 border border-orange-200 rounded-xl p-6">
+        {/* Indian Astrology — Rashi & Nakshatra (Batch 6: honest — no year, no Moon sign) */}
+        <section className="mb-8 bg-orange-50 border border-orange-200 rounded-xl p-6" data-testid="birthday-date-rashi">
           <h2 className="text-xl font-bold text-gray-900 mb-1">
             🕉️ Indian Astrology — Rashi &amp; Nakshatra
           </h2>
           <p className="text-xs text-orange-700 font-semibold uppercase tracking-wide mb-4">
             Vedic perspective for {monthName} {day} birthdays
           </p>
-          <div className="grid sm:grid-cols-2 gap-5">
-            <div className="bg-white rounded-lg p-4 border border-orange-100">
-              <p className="text-xs font-bold text-orange-600 uppercase tracking-wide mb-2">Rashi (Vedic Sun Sign)</p>
-              <p className="text-lg font-black text-gray-900">{vedic.rashiSanskrit}</p>
-              <p className="text-sm text-gray-500 mb-2">{vedic.rashi} · {vedic.rashiMeaning}</p>
-              <p className="text-xs text-gray-600">
-                <span className="font-semibold">Ruling Planet:</span> {vedic.rashiLord}
-              </p>
-            </div>
-            <div className="bg-white rounded-lg p-4 border border-orange-100">
-              <p className="text-xs font-bold text-orange-600 uppercase tracking-wide mb-2">Nakshatra (Lunar Mansion)</p>
-              <p className="text-lg font-black text-gray-900">{vedic.nakshatra}</p>
-              <p className="text-sm text-gray-500 mb-2">{vedic.nakshatraMeaning}</p>
-              <p className="text-xs text-gray-600">
-                <span className="font-semibold">Deity:</span> {vedic.nakshatraDeity}
-              </p>
-            </div>
-          </div>
-          <p className="text-sm text-gray-700 leading-relaxed mt-4">
-            Those born under <strong>{vedic.nakshatra}</strong> nakshatra embody{' '}
-            <strong>{vedic.nakshatraQuality}</strong>. In Vedic tradition, the nakshatra
-            at birth shapes the inner emotional landscape, while the Rashi ({vedic.rashiSanskrit})
-            reflects the outer personality and life approach. Together, they offer a deeper
-            layer of self-understanding beyond the Western zodiac.
+          <p className="text-sm text-gray-700 leading-relaxed">
+            In Indian astrology your <strong>Rashi</strong> is the sign of the <strong>Moon</strong> at
+            birth, and your <strong>Nakshatra</strong> is the Moon's lunar mansion — not your Western
+            sun sign ({p.zodiacSign}) with a Sanskrit name. The Moon goes round the whole zodiac about
+            every 27 days, so people born on {monthName} {day} in different years can have any of the
+            12 Rashis and any of the 27 Nakshatras. They depend on the birth <strong>year</strong> too
+            (and, on some dates, the birth time).
+          </p>
+          <p className="text-sm text-gray-700 leading-relaxed mt-3">
+            Find yours with the{' '}
+            <Link to="/articles/moon-sign-by-date-of-birth" className="text-orange-700 underline font-semibold">Moon sign (Rashi) finder</Link>{' '}
+            (date only), or the{' '}
+            <Link to="/kundali" className="text-orange-700 underline font-semibold">free Kundali</Link>{' '}
+            for the exact Rashi, Nakshatra and pada with your birth time and place.
           </p>
         </section>
 

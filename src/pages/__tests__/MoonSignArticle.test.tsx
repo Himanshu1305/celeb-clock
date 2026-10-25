@@ -22,27 +22,31 @@ describe('MoonSignArticle', () => {
     renderArticle();
     expect(document.querySelector('[data-testid="rashi-calculator"]')).toBeTruthy();
   });
-  it('TC-MS-P-04: entering DOB Nov 5 1988 shows Vrischika', () => {
+  // Batch 6 reference (Swiss Ephemeris, pyswisseph SIDM_LAHIRI, Moon at 00:00 / 23:59 IST):
+  //   1988-11-05: 145.183° Simha → 156.999° Kanya  (Moon changed sign that day)
+  //   1889-11-14:  96.475° Karka → 108.320° Karka  (one sign all day)
+  // The old calculator renamed the Sun sign and said "Vrischika" for 1988-11-05.
+  it('TC-MS-P-04: 1988-11-05 shows Simha or Kanya (depends on birth time), not Vrischika', () => {
     renderArticle();
     const input = document.querySelector('input[type="date"]') as HTMLInputElement;
     fireEvent.change(input, { target: { value: '1988-11-05' } });
-    const result = document.querySelector('[data-testid="rashi-result"]');
-    expect(result).toBeTruthy();
-    expect(result?.textContent).toContain('Vrischika');
+    const answer = document.querySelector('[data-testid="rashi-answer"]')?.textContent;
+    expect(answer).toBe('Simha or Kanya (depends on birth time)');
+    expect(document.querySelector('[data-testid="rashi-result"]')?.textContent).not.toContain('Vrischika');
   });
-  it('TC-MS-P-05: Vrischika result shows Red Coral', () => {
+  it('TC-MS-P-05: 1889-11-14 shows a single Rashi, Karka, with Pearl', () => {
     renderArticle();
     const input = document.querySelector('input[type="date"]') as HTMLInputElement;
-    fireEvent.change(input, { target: { value: '1988-11-05' } });
-    expect(document.querySelector('[data-testid="rashi-result"]')?.textContent)
-      .toContain('Red Coral');
+    fireEvent.change(input, { target: { value: '1889-11-14' } });
+    expect(document.querySelector('[data-testid="rashi-answer"]')?.textContent).toBe('Karka');
+    expect(document.querySelector('[data-testid="rashi-result"]')?.textContent).toContain('Pearl');
   });
-  it('TC-MS-P-06: Vrischika result shows Moonga (Hindi name)', () => {
+  it('TC-MS-P-06: Karka result shows Moti (Hindi name)', () => {
     renderArticle();
     const input = document.querySelector('input[type="date"]') as HTMLInputElement;
-    fireEvent.change(input, { target: { value: '1988-11-05' } });
+    fireEvent.change(input, { target: { value: '1889-11-14' } });
     expect(document.querySelector('[data-testid="rashi-result"]')?.textContent)
-      .toContain('Moonga');
+      .toContain('Moti');
   });
   it('TC-MS-P-07: all 12 Rashis present in article', () => {
     renderArticle();
@@ -73,9 +77,11 @@ describe('MoonSignArticle', () => {
     expect(document.body.textContent).not.toContain('undefined');
     expect(document.body.textContent).not.toContain('[object Object]');
   });
-  it('TC-MS-N-02: approximate disclaimer present', () => {
+  it('TC-MS-N-02: birth-time caveat present (date-only rule explained)', () => {
     renderArticle();
-    expect(document.body.textContent?.toLowerCase()).toContain('approximate');
+    const t = document.body.textContent?.toLowerCase() || '';
+    expect(t).toContain('birth time decides');
+    expect(t).toContain('not from your western sun sign');
   });
   it('TC-MS-N-03: article content > 2000 chars', () => {
     renderArticle();

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { computeRashifal, RASHIS } from '@/lib/vedic/rashifal';
+import { TermTip } from '@/components/vedic/TermTip';
 
 /**
  * आज का राशिफल (computed). Replaces the old static rashifalData lookup with the
@@ -100,12 +101,12 @@ export default function RashifalPage() {
           </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
-            <span className="px-3 py-1.5 rounded-lg border border-border text-foreground">शुभ रंग: <strong>{meta.luckyColorHindi}</strong></span>
-            <span className="px-3 py-1.5 rounded-lg border border-border text-foreground">शुभ अंक: <strong>{meta.luckyNumbers.join(', ')}</strong></span>
+            <span className="px-3 py-1.5 rounded-lg border border-border text-foreground"><TermTip id="luckyColour" lang="hi">शुभ रंग</TermTip>: <strong>{meta.luckyColorHindi}</strong></span>
+            <span className="px-3 py-1.5 rounded-lg border border-border text-foreground"><TermTip id="luckyNumber" lang="hi">शुभ अंक</TermTip>: <strong>{meta.luckyNumbers.join(', ')}</strong></span>
           </div>
 
           <p className="text-xs text-muted-foreground mt-4">
-            यह राशिफल ग्रहों की वास्तविक सिडरियल (लाहिड़ी) स्थिति और गोचर नियमों से गणना किया गया है — वही इंजन जो आपकी कुंडली बनाता है। विस्तृत साप्ताहिक/मासिक/वार्षिक राशिफल के लिए{' '}
+            यह <TermTip id="rashifal" lang="hi">राशिफल</TermTip> ग्रहों की वास्तविक सिडरियल (<TermTip id="ayanamsa" lang="hi">लाहिड़ी</TermTip>) स्थिति और <TermTip id="gochar" lang="hi">गोचर</TermTip> नियमों से गणना किया गया है — वही इंजन जो आपकी कुंडली बनाता है। विस्तृत साप्ताहिक/मासिक/वार्षिक राशिफल के लिए{' '}
             <Link to={`/rashifal/${meta.slug}/today`} className="underline">अंग्रेज़ी राशिफल</Link> देखें।
           </p>
 

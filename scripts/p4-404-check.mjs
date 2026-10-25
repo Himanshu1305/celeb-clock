@@ -19,7 +19,7 @@ const VALID = [
   '/on-this-day', '/on-this-day/may/13', '/on-this-day/february/29',
   '/hi/panchang', '/hi/panchang/delhi', '/hi/panchang/mumbai',
   // Cross-group regression (unchanged behaviour).
-  '/chinese-zodiac/dragon', '/panchang/delhi', '/born-on/may/13',
+  '/chinese-zodiac/dragon', '/panchang/delhi', '/born-on/may-13',
 ];
 
 async function finalStatus(path) {

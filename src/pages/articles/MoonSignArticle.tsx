@@ -3,34 +3,28 @@ import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { VEDIC_RASHI_PROFILES } from '@/data/astrologicalData';
 import type { VedicRashiProfile } from '@/data/astrologicalData';
-import { calculateVedicRashi } from '@/utils/celebrityCalculations';
+import { moonSignsForDate, describeAlternatives } from '@/lib/vedic/dateOnlyMoonSign';
+import { DateOnlyMoonNote } from '@/components/vedic/DateOnlyMoonNote';
+import RASHI_MOON_EXAMPLES from '@/data/rashiMoonExamples.json';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
-// Real Indian examples per Rashi (from indianCelebrities.ts, mapped via sun-sign → Rashi).
-const CELEB_EXAMPLES: Record<string, string> = {
-  Mesha: 'Bhimrao Ambedkar, Aryabhata',
-  Vrishabha: 'Rabindranath Tagore, Gopal Krishna Gokhale',
-  Mithuna: 'Bal Gangadhar Tilak, Chandra Shekhar Azad',
-  Karka: 'Ranveer Singh, Rajkummar Rao',
-  Simha: 'Bhagat Singh, Ishwar Chandra Vidyasagar',
-  Kanya: 'Sardar Vallabhbhai Patel, Vinoba Bhave',
-  Tula: 'Mahatma Gandhi, Annie Besant',
-  Vrischika: 'Jawaharlal Nehru, Maulana Abul Kalam Azad',
-  Dhanu: 'Subhas Chandra Bose, Lala Lajpat Rai',
-  Makara: 'Swami Vivekananda, Paramahansa Yogananda',
-  Kumbha: 'Sarojini Naidu, Dayananda Saraswati',
-  Meena: 'Aamir Khan, Alia Bhatt',
-};
+// Real Indian examples per Rashi — people whose MOON stayed in that sign for their whole
+// birth date (scripts/gen-rashi-moon-examples.mts, Batch 6). The old list was picked by
+// Western Sun sign renamed as Rashi (e.g. Gandhi under Tula), which was wrong.
+const CELEB_EXAMPLES: Record<string, string> = Object.fromEntries(
+  Object.entries(RASHI_MOON_EXAMPLES as Record<string, { indian: { name: string }[] }>)
+    .map(([rashi, v]) => [rashi, v.indian.map(e => e.name).join(', ')]),
+);
 
 const RASHI_ORDER = ['Mesha','Vrishabha','Mithuna','Karka','Simha','Kanya','Tula','Vrischika','Dhanu','Makara','Kumbha','Meena'];
 
 const FAQS = [
   {
     q: 'What is my moon sign by date of birth?',
-    a: 'Your moon sign — called Rashi in Vedic astrology — is the zodiac sign the Moon occupied at your birth. BornClock estimates your Rashi from your date of birth. For a precise Rashi, your exact birth time and place are needed, but the date alone gives a strong approximate result.',
+    a: 'Your moon sign — called Rashi in Vedic astrology — is the zodiac sign the Moon occupied at your birth. BornClock works out the Moon\'s real sidereal position for your whole birth date. If the Moon stayed in one sign all day, that is your Rashi; if it changed sign that day, both are shown and your birth time decides.',
   },
   {
     q: 'Is Rashi the same as moon sign?',
@@ -38,7 +32,7 @@ const FAQS = [
   },
   {
     q: 'How accurate is Rashi calculated from date of birth alone?',
-    a: 'A date-only Rashi is approximate. The Moon moves through a full sign roughly every 2.25 days, so exact birth time and location are required for a precise Rashi. BornClock clearly labels its calculation as approximate — a helpful starting point, not a substitute for a full Kundali.',
+    a: 'The Moon moves through a full sign in roughly 2.25 days, so on about half of all dates it changes sign at some point during the day. BornClock computes the Moon\'s sidereal (Lahiri) position from 00:00 to 23:59 Indian Standard Time on your date: when the sign is the same all day the date alone is enough; when it changes, we show both and your birth time decides. A full Kundali with birth time and place gives the exact answer.',
   },
   {
     q: 'Which Rashi is luckiest in India?',
@@ -52,17 +46,18 @@ const FAQS = [
 
 function RashiCalculator() {
   const [dob, setDob] = React.useState('');
-  const [profile, setProfile] = React.useState<VedicRashiProfile | null>(null);
+  const [names, setNames] = React.useState<string[]>([]);
+  const profiles = names.map(n => VEDIC_RASHI_PROFILES[n]).filter((p): p is VedicRashiProfile => !!p);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setDob(val);
     if (val.length === 10) {
-      const [year, month, day] = val.split('-').map(Number);
-      if (year && month && day) {
-        const rashiResult = calculateVedicRashi(day, month);
-        setProfile(VEDIC_RASHI_PROFILES[rashiResult.rashi] ?? null);
-      }
+      // Batch 6: the real sidereal Moon sign (chart engine), not the Sun sign renamed.
+      const r = moonSignsForDate(val);
+      setNames(r ? r.signNames : []);
+    } else {
+      setNames([]);
     }
   };
 
@@ -70,10 +65,10 @@ function RashiCalculator() {
     <div data-testid="rashi-calculator"
          className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-6 my-8">
       <h3 className="text-lg font-black text-amber-900 mb-1">
-        Find Your Vedic Rashi — Free Calculator
+        Find Your Vedic Rashi (Moon Sign) — Free Calculator
       </h3>
       <p className="text-sm text-amber-700 mb-4">
-        Enter your date of birth to discover your approximate Vedic Rashi instantly.
+        Enter your date of birth to see the Moon sign (Rashi) for that date.
       </p>
       <input
         type="date"
@@ -84,33 +79,40 @@ function RashiCalculator() {
                    text-base bg-white mb-4 focus:outline-none focus:border-amber-500"
         aria-label="Enter your date of birth"
       />
-      {profile && (
+      {profiles.length > 0 && (
         <div data-testid="rashi-result"
              className="bg-white rounded-xl border-2 border-amber-300 p-5">
-          <div className="text-2xl font-black text-amber-800 mb-0.5">
-            {profile.rashi} ({profile.rashi_devanagari})
+          <div className="text-sm text-gray-600 mb-2">
+            Moon sign (Rashi): <strong data-testid="rashi-answer" className="text-amber-900">{describeAlternatives(names)}</strong>
           </div>
-          <div className="text-sm text-gray-500 mb-3">
-            Lord: {profile.lord} ({profile.lord_devanagari}) ·
-            {profile.element} · {profile.quality}
-          </div>
-          <div className="grid grid-cols-2 gap-2 text-xs mb-3">
-            <div className="bg-amber-50 rounded-lg p-2">
-              <div className="text-amber-700 font-bold">Lucky Stone</div>
-              <div>{profile.lucky_stone} ({profile.lucky_stone_hindi})</div>
+          {profiles.map(profile => (
+            <div key={profile.rashi} className={profiles.length > 1 ? 'border-t border-amber-100 pt-3 mt-3' : ''}>
+              <div className="text-2xl font-black text-amber-800 mb-0.5">
+                {profile.rashi} ({profile.rashi_devanagari})
+              </div>
+              <div className="text-sm text-gray-500 mb-3">
+                Lord: {profile.lord} ({profile.lord_devanagari}) ·
+                {profile.element} · {profile.quality}
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs mb-3">
+                <div className="bg-amber-50 rounded-lg p-2">
+                  <div className="text-amber-700 font-bold">Lucky Stone</div>
+                  <div>{profile.lucky_stone} ({profile.lucky_stone_hindi})</div>
+                </div>
+                <div className="bg-amber-50 rounded-lg p-2">
+                  <div className="text-amber-700 font-bold">Lucky Day</div>
+                  <div>{profile.lucky_day}</div>
+                </div>
+              </div>
+              <div className="bg-amber-50 rounded-lg p-2 text-xs mb-3">
+                <div className="text-amber-700 font-bold mb-0.5">Mantra</div>
+                <div className="font-medium">{profile.mantra}</div>
+              </div>
+              <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                {profile.personality_summary}
+              </p>
             </div>
-            <div className="bg-amber-50 rounded-lg p-2">
-              <div className="text-amber-700 font-bold">Lucky Day</div>
-              <div>{profile.lucky_day}</div>
-            </div>
-          </div>
-          <div className="bg-amber-50 rounded-lg p-2 text-xs mb-3">
-            <div className="text-amber-700 font-bold mb-0.5">Mantra</div>
-            <div className="font-medium">{profile.mantra}</div>
-          </div>
-          <p className="text-sm text-gray-700 leading-relaxed mb-3">
-            {profile.personality_summary}
-          </p>
+          ))}
           <a href={`/birthday-report?dob=${dob}`}
              className="inline-block bg-amber-600 text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-amber-700">
@@ -118,10 +120,7 @@ function RashiCalculator() {
           </a>
         </div>
       )}
-      <p className="text-xs text-gray-400 mt-3 italic">
-        Note: This is an approximate calculation based on solar position.
-        Precise Rashi requires exact birth time and location.
-      </p>
+      <DateOnlyMoonNote ambiguous={names.length ? names.length > 1 : null} className="text-xs text-gray-500 mt-3 italic" />
     </div>
   );
 }
@@ -191,9 +190,9 @@ export function MoonSignArticle() {
           <p className="text-gray-700 leading-relaxed mb-6">
             Rashi shapes real-world decisions across India — from marriage matching (Kundali
             Milan) and choosing auspicious dates (muhurta) to the syllable a newborn is named
-            with. BornClock estimates your Rashi directly from your date of birth, giving you an
-            approximate but meaningful reading in seconds. For a precise Rashi, your exact birth
-            time and place are needed, but your birth date alone is a strong starting point.
+            with. BornClock works out the Moon's real sidereal position for your birth date. If the
+            Moon stayed in one sign all day, the date alone gives your Rashi; if it changed sign that
+            day, we show both and your birth time decides.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Sun Sign vs Moon Sign</h2>
@@ -204,18 +203,17 @@ export function MoonSignArticle() {
             position through the 12 Rashis and 27 Nakshatras, measured against the fixed stars.
           </p>
           <p className="text-gray-700 leading-relaxed mb-3">
-            Because the two systems use different reference points, they are offset by roughly
-            23 days. This is why your Western sun sign and your Vedic Rashi can differ — someone
-            born in late November may be a Sagittarius by Western reckoning but carry a Vrischika
-            (Scorpio) influence in the sidereal system. Neither is "wrong"; they describe
-            different layers of the self — the Sun your outward identity, the Moon your inner
-            emotional nature.
+            Your Rashi is <strong>not</strong> your Western sun sign with a Sanskrit name. The Sun
+            spends about a month in each sign, but the Moon spends only about two and a half days,
+            so your Rashi can be any of the 12 signs whatever your sun sign is — a Libra (Sun) may
+            have a Karka, Simha or any other Moon. They describe different layers of the self — the
+            Sun your outward identity, the Moon your inner emotional nature.
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
-            <strong>Important:</strong> the Rashi shown here is <em>approximate</em>, derived from
-            your birth date alone. The Moon changes sign roughly every 2.25 days, so a precise
-            Rashi requires your exact birth <strong>time</strong> and <strong>place</strong>. Treat
-            this as a helpful guide, not a full Kundali.
+            <strong>Important:</strong> the calculator below uses your birth date only. The Moon
+            changes sign roughly every 2.25 days, so on some dates it changes sign during the day —
+            then both signs are shown, and your exact birth <strong>time</strong> and
+            <strong> place</strong> (in the Kundali) decide which one is yours.
           </p>
 
           <RashiCalculator />
@@ -256,7 +254,7 @@ export function MoonSignArticle() {
                   <strong>Health: </strong>{p.health_tendencies}
                 </p>
                 <p className="text-xs text-gray-500">
-                  <strong>Famous Indians: </strong>
+                  <strong>Famous Indians with the Moon in {rashiName}: </strong>
                   {CELEB_EXAMPLES[rashiName] || 'Examples being added.'}
                 </p>
               </section>

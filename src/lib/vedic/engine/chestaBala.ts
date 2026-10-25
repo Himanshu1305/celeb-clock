@@ -1,81 +1,71 @@
 /**
- * Shadbala — Chesta Bala (Motional Strength). Ported from
- * scripts/vedic-lab/chestaBala.cjs.
+ * Shadbala — Chesta Bala (Motional Strength) for Mars, Mercury, Jupiter, Venus, Saturn.
  *
- * METHODOLOGY: computes the same physical quantity as the classical
- * Manda-Sheeghra epicycle method (mean vs true longitude gap) using modern
- * orbital mechanics — a faithful modern equivalent, NOT the historical
- * derivation. Confidence ~80%; no live-API ground truth for the combined value.
- * Tests MUST use range/tolerance assertions and UI copy MUST say "approximate".
+ * Audit K11 rework (Oct 2026): the classical Chesta Kendra method (BPHS 27.21–25 as
+ * worked out in B.V. Raman, "Graha and Bhava Balas"):
+ *
+ *   Chesta Kendra = Seeghrocha − (Madhya + Spashta) / 2,  folded to 0–180°,  ÷ 3
+ *
+ *   - Outer planets (Mars, Jupiter, Saturn): Madhya = the planet's mean longitude
+ *     (heliocentric mean motion), Seeghrocha = the mean Sun.
+ *   - Inner planets (Mercury, Venus): Madhya = the mean Sun, Seeghrocha = the
+ *     planet's heliocentric mean longitude.
+ *   - Spashta = the planet's true geocentric longitude.
+ * A retrograde planet (opposite the Sun, or between Earth and Sun) scores ~60; one
+ * near conjunction with the Sun scores ~0. Mean longitudes are the modern mean
+ * elements (Meeus, Astronomical Algorithms, Table 31.A, mean equinox of date) rather
+ * than Surya Siddhanta tables, so values differ from Raman's printed figures by a few
+ * virupas (see the regression test for the tolerance).
+ *
+ * The Sun's Chesta Bala = its Ayana Bala and the Moon's = its Paksha Bala (BPHS 27.18);
+ * those two are assigned in calculateBirthChart, so this returns null for them.
+ * All longitudes here are TROPICAL (any common frame works — the ayanamsa cancels).
  */
 function normalize360(deg: number): number { return ((deg % 360) + 360) % 360; }
-function toRad(deg: number): number { return deg * Math.PI / 180; }
-function toDeg(rad: number): number { return rad * 180 / Math.PI; }
 
-function daysSinceJ2000(date: Date): number {
-  return date.getTime() / 86400000 + 2440587.5 - 2451545.0;
+function julianCenturiesTT(date: Date): number {
+  return (date.getTime() / 86400000 + 2440587.5 - 2451545.0) / 36525;
 }
 
-const ORBITAL: Record<string, { N: number[]; w: number[]; M: number[]; a: number }> = {
-  Mercury: { N: [48.3313, 3.24587e-5], w: [29.1241, 1.01444e-5], M: [168.6562, 4.0923344368], a: 0.387098 },
-  Venus:   { N: [76.6799, 2.46590e-5], w: [54.8910, 1.38374e-5], M: [48.0052, 1.6021302244], a: 0.723330 },
-  Mars:    { N: [49.5574, 2.11081e-5], w: [286.5016, 2.92961e-5], M: [18.6021, 0.5240207766], a: 1.523688 },
-  Jupiter: { N: [100.4542, 2.76854e-5], w: [273.8777, 1.64505e-5], M: [19.8950, 0.0830853001], a: 5.20256 },
-  Saturn:  { N: [113.6634, 2.38980e-5], w: [339.3939, 2.97661e-5], M: [316.9670, 0.0334442282], a: 9.55475 },
+// Meeus Table 31.A — mean longitude L (degrees) = a0 + a1·T + a2·T², mean equinox of date.
+const MEAN_L: Record<string, [number, number, number]> = {
+  Mercury: [252.250906, 149474.0722491, 0.0003035],
+  Venus: [181.979801, 58519.2130302, 0.00031014],
+  Earth: [100.466457, 36000.7698278, 0.00030322],
+  Mars: [355.433000, 19141.6964471, 0.00031052],
+  Jupiter: [34.351519, 3036.3027748, 0.0002233],
+  Saturn: [50.077444, 1223.5110686, 0.00051908],
 };
 
-function helioMeanLongitude(planet: string, d: number): number {
-  const el = ORBITAL[planet];
-  const N = normalize360(el.N[0] + el.N[1] * d);
-  const w = normalize360(el.w[0] + el.w[1] * d);
-  const M = normalize360(el.M[0] + el.M[1] * d);
-  return normalize360(N + w + M);
+export function heliocentricMeanLongitude(body: string, date: Date): number {
+  const T = julianCenturiesTT(date);
+  const [a0, a1, a2] = MEAN_L[body];
+  return normalize360(a0 + a1 * T + a2 * T * T);
 }
 
-function earthHelioMeanLongitude(d: number): number {
-  const w = 282.9404 + 4.70935e-5 * d;
-  const M = normalize360(356.0470 + 0.9856002585 * d);
-  return normalize360(normalize360(w + M) + 180);
+export function meanSunLongitude(date: Date): number {
+  return normalize360(heliocentricMeanLongitude('Earth', date) + 180);
 }
 
-function sunMeanLongitude(d: number): number {
-  const w = 282.9404 + 4.70935e-5 * d;
-  const M = normalize360(356.0470 + 0.9856002585 * d);
-  return normalize360(w + M);
+/** Circular midpoint of two longitudes (handles the 360°→0° wrap). */
+function midpoint(a: number, b: number): number {
+  let d = normalize360(b - a);
+  if (d > 180) d -= 360;
+  return normalize360(a + d / 2);
 }
 
-export function geocentricMeanLongitude(planet: string, date: Date): number {
-  const d = daysSinceJ2000(date);
-  const planetHelioLon = helioMeanLongitude(planet, d);
-  const earthHelioLon = earthHelioMeanLongitude(d);
-  const aPlanet = ORBITAL[planet].a;
-  const aEarth = 1.0;
-  const xP = aPlanet * Math.cos(toRad(planetHelioLon));
-  const yP = aPlanet * Math.sin(toRad(planetHelioLon));
-  const xE = aEarth * Math.cos(toRad(earthHelioLon));
-  const yE = aEarth * Math.sin(toRad(earthHelioLon));
-  return normalize360(toDeg(Math.atan2(yP - yE, xP - xE)));
+export function getChestaKendra(planet: string, trueTropicalLongitude: number, date: Date): number {
+  const sunMean = meanSunLongitude(date);
+  const helio = heliocentricMeanLongitude(planet, date);
+  const inner = planet === 'Mercury' || planet === 'Venus';
+  const madhya = inner ? sunMean : helio;
+  const seeghrocha = inner ? helio : sunMean;
+  let k = normalize360(seeghrocha - midpoint(madhya, trueTropicalLongitude));
+  if (k > 180) k = 360 - k;
+  return k;
 }
 
-function getChestaBalaOuterPlanet(planet: string, trueLongitude: number, date: Date): number {
-  const meanLon = geocentricMeanLongitude(planet, date);
-  const d = daysSinceJ2000(date);
-  const sunMeanLon = sunMeanLongitude(d);
-  const avgLon = normalize360((meanLon + trueLongitude) / 2);
-  let kendra = normalize360(sunMeanLon - avgLon);
-  if (kendra > 180) kendra = 360 - kendra;
-  return kendra / 3;
-}
-
-function getChestaBalaInnerPlanet(planet: string, trueLongitude: number, date: Date): number {
-  const meanLon = geocentricMeanLongitude(planet, date);
-  let kendra = normalize360(meanLon - trueLongitude);
-  if (kendra > 180) kendra = 360 - kendra;
-  return kendra / 3;
-}
-
-export function getChestaBala(planet: string, trueLongitude: number, date: Date): number | null {
-  if (planet === 'Sun' || planet === 'Moon') return null;
-  if (['Mercury', 'Venus'].includes(planet)) return getChestaBalaInnerPlanet(planet, trueLongitude, date);
-  return getChestaBalaOuterPlanet(planet, trueLongitude, date);
+export function getChestaBala(planet: string, trueTropicalLongitude: number, date: Date): number | null {
+  if (!MEAN_L[planet] || planet === 'Earth') return null; // Sun/Moon handled by caller
+  return getChestaKendra(planet, trueTropicalLongitude, date) / 3;
 }

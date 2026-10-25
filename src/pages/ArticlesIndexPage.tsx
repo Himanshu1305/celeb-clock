@@ -29,7 +29,7 @@ const ARTICLES: ArticleEntry[] = [
   },
   {
     title: 'Biological Age vs Chronological Age',
-    href: '/articles/biological-age-vs-chronological-age',
+    href: '/biological-age-vs-chronological-age',
     category: 'Longevity',
     blurb: 'Why the number on your birthday cake is not the whole story, and how to measure your true body age.',
   },

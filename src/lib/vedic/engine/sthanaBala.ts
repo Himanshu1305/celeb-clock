@@ -128,9 +128,12 @@ function getSignDignityPointsPanchadha(planet: string, planetSign: number, allVa
   const lord = SIGN_LORDS[planetSign];
   if (lord === planet) return PANCHADHA_POINTS.own;
 
-  const lordSignInThisVarga = allVargas[lord][vargaName];
+  // Audit K11: the compound (Panchadha) relationship is fixed once from the RASI chart
+  // — temporary friendship = the lord's Rasi sign counted from the planet's Rasi sign —
+  // and then applied in every varga (B.V. Raman, Graha and Bhava Balas; reproduces his
+  // worked Saptavargaja example). The old code re-derived it inside each varga.
   const natural = FRIENDS[planet]?.includes(lord) ? 'friend' : (ENEMIES[planet]?.includes(lord) ? 'enemy' : 'neutral');
-  const temporary = getTemporaryRelationship(planetSign, lordSignInThisVarga);
+  const temporary = getTemporaryRelationship(allVargas[planet].rasi, allVargas[lord].rasi);
   const tier = getPanchadhaMaitriTier(natural, temporary);
   return PANCHADHA_POINTS[tier];
 }

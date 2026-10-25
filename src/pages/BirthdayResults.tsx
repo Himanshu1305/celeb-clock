@@ -23,7 +23,8 @@ import {
 import { SEO } from '@/components/SEO';
 import html2canvas from 'html2canvas';
 import { getChineseZodiac } from '@/services/ChineseZodiacService';
-import { getVedicRashi } from '@/services/VedicZodiacService';
+import { getMoonRashis } from '@/services/VedicZodiacService';
+import { describeAlternatives } from '@/lib/vedic/dateOnlyMoonSign';
 import { RASHI_NAME_TO_SLUG } from '@/services/VedicZodiacExtended';
 import { lifePathFromDate } from '@/lib/lifePath';
 import { orbitalPeriodYears } from '@/lib/orbitalPeriods';
@@ -223,7 +224,10 @@ const BirthdayResults = () => {
   const birthstone = getBirthstone(birthDate.getMonth() + 1);
   const planetaryAges = calculatePlanetaryAges(age?.years || 0);
   const chineseZodiac = getChineseZodiac(birthDate);
-  const vedicRashi = getVedicRashi(birthDate);
+  // Batch 6: Rashi = the Moon's sidereal sign for the birth date (chart engine), not the
+  // Sun's sign. Two entries when the Moon changed sign that day.
+  const moonRashis = getMoonRashis(birthDate);
+  const vedicRashi = moonRashis[0];
   const monthDayLabel = birthDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
   const birthdaySlug = `${MONTH_SLUGS[birthDate.getMonth() + 1]}-${birthDate.getDate()}`;
 
@@ -348,7 +352,7 @@ const BirthdayResults = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary">6 Celebrity Matches</Badge>
-                  <Link to={`/birthday/${birthdaySlug}`} className="text-xs text-primary hover:underline hidden sm:inline">
+                  <Link to={`/born-on/${birthdaySlug}/`} className="text-xs text-primary hover:underline hidden sm:inline">
                     See all celebrities born on {monthDayLabel} →
                   </Link>
                 </div>
@@ -520,21 +524,21 @@ const BirthdayResults = () => {
               <CardContent className="p-5">
                 <div className="text-center mb-3">
                   <span className="text-4xl block mb-1">{vedicRashi.emoji}</span>
-                  <h3 className="font-bold text-foreground text-base">{vedicRashi.name} Rashi</h3>
-                  <p className="text-xs text-orange-600 font-medium">Indian Zodiac (Vedic/Jyotish)</p>
+                  <h3 className="font-bold text-foreground text-base">{describeAlternatives(moonRashis.map(r => r.name))}</h3>
+                  <p className="text-xs text-orange-600 font-medium">Moon sign (Rashi) — Vedic/Jyotish</p>
                 </div>
                 <div className="space-y-1.5 text-xs text-muted-foreground">
                   <div className="flex justify-between">
-                    <span>Western equivalent</span>
-                    <span className="font-medium text-foreground">{vedicRashi.english}</span>
+                    <span>Sign (English name)</span>
+                    <span className="font-medium text-foreground">{moonRashis.map(r => r.english).join(' / ')}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Ruling Planet</span>
-                    <span className="font-medium text-foreground">{vedicRashi.ruling_planet}</span>
+                    <span className="font-medium text-foreground">{moonRashis.map(r => r.ruling_planet).join(' / ')}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Element</span>
-                    <span className="font-medium text-foreground">{vedicRashi.element}</span>
+                    <span className="font-medium text-foreground">{moonRashis.map(r => r.element).join(' / ')}</span>
                   </div>
                 </div>
                 <Link to={`/vedic-zodiac/${RASHI_NAME_TO_SLUG[vedicRashi.name] ?? vedicRashi.name.toLowerCase()}`}
@@ -544,15 +548,12 @@ const BirthdayResults = () => {
               </CardContent>
             </Card>
           </div>
-          {zodiac.sign === vedicRashi.english ? (
-            <p className="text-xs text-center text-green-600 mt-3 font-medium">
-              ✅ Your Western and Vedic signs are the same — {zodiac.sign}. You were born in the sweet spot of the zodiac calendar.
-            </p>
-          ) : (
-            <p className="text-xs text-center text-muted-foreground mt-3">
-              🔄 Your Western sign ({zodiac.sign}) and Vedic rashi ({vedicRashi.name}/{vedicRashi.english}) differ due to the ~24° ayanamsa precession offset in Jyotish.
-            </p>
-          )}
+          <p className="text-xs text-center text-muted-foreground mt-3">
+            🌙 Your Western sign ({zodiac.sign}) is the Sun's sign; your Rashi is the Moon's sidereal sign, a different thing.
+            {moonRashis.length > 1
+              ? ' The Moon changed sign during your birth date (IST), so your birth time decides which Rashi is yours — the free Kundali gives the exact one.'
+              : ' The Moon stayed in this sign all day (IST), so it does not depend on your birth time.'}
+          </p>
         </section>
 
         {/* Discover More — 3 feature cards */}

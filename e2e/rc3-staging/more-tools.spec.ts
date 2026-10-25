@@ -25,7 +25,7 @@ test('Birth-time Vedic section — birth time + city reveals a profile (lagna re
   await page.getByLabel('Year', { exact: true }).fill('1990');
   // The optional Vedic section is inline. Enter time + city, reveal.
   await page.getByTestId('birth-time-input').fill('10:30');
-  await pickCity(page, 'birth-city-input', '[data-testid="city-dropdown"]');
+  await pickCity(page, 'birth-city-input', '[data-testid="birth-city-input-options"]');
   await page.getByRole('button', { name: /Reveal my Vedic profile/i }).click();
   await expect(page.getByTestId('vedic-profile-section')).toBeVisible({ timeout: 40_000 });
   // The crash was rendering the lagna OBJECT as a React child. Confirm a real sign shows.
@@ -37,7 +37,7 @@ async function pickCityByText(page: Page, inputTestId: string, city: string) {
   const input = page.getByTestId(inputTestId);
   await input.click();
   await input.fill(city);
-  const opt = page.getByRole('button', { name: new RegExp(city, 'i') }).first();
+  const opt = page.getByRole('option', { name: new RegExp(city, 'i') }).first();
   await expect(opt).toBeVisible({ timeout: 15_000 });
   await opt.click();
 }

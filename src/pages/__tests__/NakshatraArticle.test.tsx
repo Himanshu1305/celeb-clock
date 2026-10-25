@@ -42,6 +42,15 @@ describe('NakshatraArticle', () => {
     fireEvent.change(input, { target: { value: '1990-01-15' } });
     expect(document.querySelector('[data-testid="nakshatra-result"]')).toBeTruthy();
   });
+  // Batch 6 reference: Swiss Ephemeris (SIDM_LAHIRI) Moon on 1990-01-15 at 00:00 IST
+  // 134.590° (Purva Phalguni) and 23:59 IST 147.143° (Uttara Phalguni).
+  it('TC-NAK-P-07b: 1990-01-15 shows Purva Phalguni or Uttara Phalguni (real Moon)', () => {
+    renderArticle();
+    const input = document.querySelector('input[type="date"]') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '1990-01-15' } });
+    expect(document.querySelector('[data-testid="nakshatra-answer"]')?.textContent)
+      .toBe('Purva Phalguni or Uttara Phalguni (depends on birth time)');
+  });
   it('TC-NAK-P-08: Article JSON-LD schema present', () => {
     renderArticle();
     const schemas = Array.from(document.querySelectorAll('script[type="application/ld+json"]'));

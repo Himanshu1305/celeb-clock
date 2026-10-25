@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Sparkles } from 'lucide-react';
 import { lifePathFromDate } from '@/lib/lifePath';
 import { famousForLifePath } from '@/data/famousLifePaths';
+import { TermTip } from '@/components/vedic/TermTip';
 
 const lifePathData: Record<number, { meaning: string; traits: string[] }> = {
   1: { meaning: 'The Leader — Independent, ambitious, and pioneering.', traits: ['Innovative', 'Determined', 'Self-reliant'] },
@@ -40,7 +41,7 @@ export const NumerologyLifePath = ({ birthDate }: NumerologyLifePathProps) => {
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-bold gradient-text-primary">
             <Sparkles className="inline w-7 h-7 mr-2" />
-            Your Life Path Number
+            Your <TermTip id="lifePath">Life Path Number</TermTip>
           </h2>
           <p className="text-muted-foreground">Discover what numerology reveals about you</p>
         </div>
@@ -50,6 +51,7 @@ export const NumerologyLifePath = ({ birthDate }: NumerologyLifePathProps) => {
             <span className="text-4xl font-bold text-primary">{lifePathNumber}</span>
           </div>
           <p className="text-lg text-center font-medium text-foreground max-w-lg">{data.meaning}</p>
+          {[11, 22, 33].includes(lifePathNumber) && <p className="text-xs text-muted-foreground"><TermTip id="masterNumber">What is a Master Number?</TermTip></p>}
         </div>
 
         <div className="flex flex-wrap justify-center gap-2">

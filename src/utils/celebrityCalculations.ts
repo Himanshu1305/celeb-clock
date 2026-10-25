@@ -2,6 +2,10 @@ import { ORBITAL_PERIOD_DAYS, OTHER_PLANETS, orbitalPeriodYears } from '@/lib/or
 import { CelebrityDOB } from './celebrityUtils';
 import { lifePathNumber } from '@/lib/lifePath';
 import { getChineseYear } from '@/services/ChineseZodiacService';
+import {
+  moonSignsForDate, birthDayWindowForNationality, describeAlternatives, joinAlternatives,
+  type DateOnlyMoonSigns,
+} from '@/lib/vedic/dateOnlyMoonSign';
 
 export function calculateAge(day: number, month: number, year: number): number {
   const today = new Date();
@@ -104,72 +108,42 @@ export function calculateChineseZodiac(gregorianYear: number, month?: number, da
   return { ...ANIMALS[animalIdx], element: ELEMENTS[elementIdx] };
 }
 
-export interface RashiInfo {
-  rashi: string; lord: string; element: string;
-  traits: string; western_equivalent: string;
+/**
+ * Vedic Rashi = the sidereal sign of the MOON at birth (Batch 6). The old
+ * `calculateVedicRashi(day, month)` renamed the Western Sun sign (Libra → "Tula")
+ * and `calculateNakshatra(day, month)` used a day-of-year fraction; both were wrong
+ * for most dates and have been removed. With a birth DATE only, this returns every
+ * Moon sign / Nakshatra possible between 00:00 and 23:59 local time that day
+ * (IST unless a nationality window applies) — see src/lib/vedic/dateOnlyMoonSign.ts.
+ */
+export interface DateOnlyRashi {
+  /** Rashi names possible that day (1 = certain, 2 = changed during the day). */
+  rashis: string[];
+  nakshatras: string[];
+  /** "Tula" or "Tula or Vrischika (depends on birth time)". */
+  rashiText: string;
+  /** "Tula" or "Tula or Vrischika" (for short snippets). */
+  rashiShort: string;
+  nakshatraText: string;
+  isCertain: boolean;
+  details: DateOnlyMoonSigns;
 }
 
-export function calculateVedicRashi(day: number, month: number): RashiInfo {
-  const RASHIS: RashiInfo[] = [
-    { rashi: 'Makara',    lord: 'Shani',  element: 'Earth', traits: 'Disciplined, ambitious, practical.', western_equivalent: 'Capricorn' },
-    { rashi: 'Kumbha',    lord: 'Shani',  element: 'Air',   traits: 'Innovative, humanitarian, independent.', western_equivalent: 'Aquarius' },
-    { rashi: 'Meena',     lord: 'Guru',   element: 'Water', traits: 'Compassionate, intuitive, spiritual.', western_equivalent: 'Pisces' },
-    { rashi: 'Mesha',     lord: 'Mangal', element: 'Fire',  traits: 'Courageous, energetic, pioneering.', western_equivalent: 'Aries' },
-    { rashi: 'Vrishabha', lord: 'Shukra', element: 'Earth', traits: 'Reliable, patient, sensual.', western_equivalent: 'Taurus' },
-    { rashi: 'Mithuna',   lord: 'Budha',  element: 'Air',   traits: 'Versatile, curious, communicative.', western_equivalent: 'Gemini' },
-    { rashi: 'Karka',     lord: 'Chandra',element: 'Water', traits: 'Nurturing, intuitive, protective.', western_equivalent: 'Cancer' },
-    { rashi: 'Simha',     lord: 'Surya',  element: 'Fire',  traits: 'Generous, creative, charismatic.', western_equivalent: 'Leo' },
-    { rashi: 'Kanya',     lord: 'Budha',  element: 'Earth', traits: 'Analytical, meticulous, practical.', western_equivalent: 'Virgo' },
-    { rashi: 'Tula',      lord: 'Shukra', element: 'Air',   traits: 'Diplomatic, fair, idealistic.', western_equivalent: 'Libra' },
-    { rashi: 'Vrischika', lord: 'Mangal', element: 'Water', traits: 'Intense, passionate, perceptive.', western_equivalent: 'Scorpio' },
-    { rashi: 'Dhanu',     lord: 'Guru',   element: 'Fire',  traits: 'Adventurous, optimistic, philosophical.', western_equivalent: 'Sagittarius' },
-  ];
-  const zodiac = calculateWesternZodiac(day, month);
-  const map: Record<string, number> = {
-    Capricorn:0, Aquarius:1, Pisces:2, Aries:3, Taurus:4, Gemini:5,
-    Cancer:6, Leo:7, Virgo:8, Libra:9, Scorpio:10, Sagittarius:11,
+export function calculateDateOnlyRashi(
+  day: number, month: number, year: number, nationalityCode?: string | null,
+): DateOnlyRashi | null {
+  const iso = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  const details = moonSignsForDate(iso, birthDayWindowForNationality(nationalityCode));
+  if (!details) return null;
+  return {
+    rashis: details.signNames,
+    nakshatras: details.nakshatraNames,
+    rashiText: describeAlternatives(details.signNames),
+    rashiShort: joinAlternatives(details.signNames),
+    nakshatraText: describeAlternatives(details.nakshatraNames),
+    isCertain: details.signNames.length === 1,
+    details,
   };
-  return RASHIS[map[zodiac.sign] ?? 0];
-}
-
-export interface NakshatraInfo {
-  nakshatra: string; number: number; lord: string; symbol: string; quality: string;
-}
-
-export function calculateNakshatra(day: number, month: number): NakshatraInfo {
-  const NAKSHATRAS: NakshatraInfo[] = [
-    { nakshatra: 'Ashwini',           number: 1,  lord: 'Ketu',   symbol: 'Horse head',     quality: 'Swift, healing, pioneering' },
-    { nakshatra: 'Bharani',           number: 2,  lord: 'Shukra', symbol: 'Yoni',            quality: 'Creative, transformative' },
-    { nakshatra: 'Krittika',          number: 3,  lord: 'Surya',  symbol: 'Razor',           quality: 'Purifying, sharp, determined' },
-    { nakshatra: 'Rohini',            number: 4,  lord: 'Chandra',symbol: 'Chariot',         quality: 'Fertile, nurturing, growth' },
-    { nakshatra: 'Mrigashira',        number: 5,  lord: 'Mangal', symbol: 'Deer head',       quality: 'Gentle, searching, curious' },
-    { nakshatra: 'Ardra',             number: 6,  lord: 'Rahu',   symbol: 'Teardrop',        quality: 'Stormy, transformative' },
-    { nakshatra: 'Punarvasu',         number: 7,  lord: 'Guru',   symbol: 'Quiver',          quality: 'Restoring, optimistic' },
-    { nakshatra: 'Pushya',            number: 8,  lord: 'Shani',  symbol: 'Flower',          quality: 'Nourishing, protective' },
-    { nakshatra: 'Ashlesha',          number: 9,  lord: 'Budha',  symbol: 'Serpent',         quality: 'Mystical, sharp, perceptive' },
-    { nakshatra: 'Magha',             number: 10, lord: 'Ketu',   symbol: 'Royal throne',    quality: 'Regal, ancestral, powerful' },
-    { nakshatra: 'Purva Phalguni',    number: 11, lord: 'Shukra', symbol: 'Hammock',         quality: 'Creative, joyful' },
-    { nakshatra: 'Uttara Phalguni',   number: 12, lord: 'Surya',  symbol: 'Bed',             quality: 'Service-oriented, committed' },
-    { nakshatra: 'Hasta',             number: 13, lord: 'Chandra',symbol: 'Hand',            quality: 'Skilled, resourceful, witty' },
-    { nakshatra: 'Chitra',            number: 14, lord: 'Mangal', symbol: 'Pearl',           quality: 'Artistic, beautiful' },
-    { nakshatra: 'Swati',             number: 15, lord: 'Rahu',   symbol: 'Sword',           quality: 'Independent, flexible' },
-    { nakshatra: 'Vishakha',          number: 16, lord: 'Guru',   symbol: 'Triumphal arch',  quality: 'Purposeful, ambitious' },
-    { nakshatra: 'Anuradha',          number: 17, lord: 'Shani',  symbol: 'Lotus',           quality: 'Devoted, friendly' },
-    { nakshatra: 'Jyeshtha',          number: 18, lord: 'Budha',  symbol: 'Umbrella',        quality: 'Protective, responsible' },
-    { nakshatra: 'Mula',              number: 19, lord: 'Ketu',   symbol: 'Tied roots',      quality: 'Investigative, transformative' },
-    { nakshatra: 'Purva Ashadha',     number: 20, lord: 'Shukra', symbol: 'Fan',             quality: 'Invincible, purifying' },
-    { nakshatra: 'Uttara Ashadha',    number: 21, lord: 'Surya',  symbol: 'Elephant tusk',   quality: 'Victorious, ethical' },
-    { nakshatra: 'Shravana',          number: 22, lord: 'Chandra',symbol: 'Three footprints', quality: 'Listening, connecting' },
-    { nakshatra: 'Dhanishtha',        number: 23, lord: 'Mangal', symbol: 'Drum',            quality: 'Wealthy, musical, social' },
-    { nakshatra: 'Shatabhisha',       number: 24, lord: 'Rahu',   symbol: '100 stars',       quality: 'Healing, independent' },
-    { nakshatra: 'Purva Bhadrapada',  number: 25, lord: 'Guru',   symbol: 'Sword',           quality: 'Fiery, transformative' },
-    { nakshatra: 'Uttara Bhadrapada', number: 26, lord: 'Shani',  symbol: 'Twins',           quality: 'Deep, wise, restrained' },
-    { nakshatra: 'Revati',            number: 27, lord: 'Budha',  symbol: 'Fish',            quality: 'Nourishing, wealthy, completion' },
-  ];
-  const dayOfYear = Math.floor(
-    (new Date(2000, month - 1, day).getTime() - new Date(2000, 0, 1).getTime()) / 86400000
-  );
-  return NAKSHATRAS[Math.floor((dayOfYear / 365) * 27) % 27];
 }
 
 export interface PlanetaryAge {

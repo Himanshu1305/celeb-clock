@@ -11,7 +11,7 @@ const ROUTES = [
   '/yoga/raja-yoga', '/transit/rahu/2025', '/festivals/2027', '/baby-names', '/blue-zones/belong',
   '/life-expectancy/factors/bmi', '/child-kundli', '/life-report', '/career-report',
   '/western-birth-chart', '/chinese-horoscope/dragon', '/on-this-day/may/13', '/tarot-reading',
-  '/dashboard', '/family', '/celebrity/virat-kohli', '/born-on/may/13',
+  '/dashboard', '/family', '/celebrity/virat-kohli', '/born-on/may-13',
 ];
 const IGNORE = /favicon|cloudflareinsights|beacon|net::ERR_|Failed to load resource.*(analytics|gtag|googletag)|ResizeObserver loop/i;
 

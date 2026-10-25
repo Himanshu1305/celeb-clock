@@ -49,7 +49,7 @@ const VALID = [
   '/tarot-reading', '/vedic-zodiac', '/vedic-zodiac/mesh',
   // RC3 cross-group regression (unchanged behaviour)
   '/kundali', '/kundali-match', '/sade-sati', '/muhurat', '/gemstones', '/manglik', '/kaal-sarp-dosha',
-  '/numerology', '/zodiac/aries', '/chinese-zodiac/dragon', '/born-on/may/13', '/life-expectancy', '/biorhythm',
+  '/numerology', '/zodiac/aries', '/chinese-zodiac/dragon', '/born-on/may-13', '/life-expectancy', '/biorhythm',
 ];
 
 async function finalStatus(path) {

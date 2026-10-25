@@ -11,6 +11,7 @@ import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { GradeLegend, TermTip } from '@/components/vedic/TermTip';
+import { yogaTermId } from '@/lib/vedic/termDefinitions';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
 import { ClassicalRefs } from '@/components/vedic/ClassicalRefs';
@@ -133,7 +134,7 @@ export default function CareerReportPage() {
                 <p className="text-sm text-foreground">{report.methodology}</p>
               </div>
               <div data-testid="career-tenth" className="rounded-xl border border-border p-4">
-                <div className="font-semibold text-foreground mb-1">Your 10th house of career</div>
+                <div className="font-semibold text-foreground mb-1">Your 10th <TermTip id="bhava">house</TermTip> of career</div>
                 <p className="text-sm text-foreground">{report.tenthHouse.analysis}</p>
               </div>
               <div data-testid="career-d10" className="rounded-xl border border-border p-4">
@@ -166,10 +167,10 @@ export default function CareerReportPage() {
               )}
               {report.yogas.length > 0 && (
                 <div data-testid="career-yogas" className="rounded-xl border border-border p-4">
-                  <div className="font-semibold text-foreground mb-1">Career-relevant Yogas</div>
+                  <div className="font-semibold text-foreground mb-1">Career-relevant <TermTip id="yoga">Yogas</TermTip></div>
                   <p className="text-xs text-muted-foreground mb-2">A "Yoga" here is a classical planetary combination linked to a career strength — an indication, never a guarantee.</p>
                   <ul className="text-sm text-foreground space-y-1">
-                    {report.yogas.map(y => <li key={y.name}><span className="font-medium">{y.name}</span> <span className="text-xs uppercase text-[#6E5AA6]">[{y.grade}]</span> — {y.summary}</li>)}
+                    {report.yogas.map(y => <li key={y.name}><span className="font-medium">{yogaTermId(y.name) ? <TermTip id={yogaTermId(y.name)!}>{y.name}</TermTip> : y.name}</span> <span className="text-xs uppercase text-[#6E5AA6]">[{y.grade}]</span> — {y.summary}</li>)}
                   </ul>
                   <GradeLegend />
                 </div>

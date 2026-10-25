@@ -1,4 +1,4 @@
-import { CONFIRMED_JAN1_BIRTHS, slugifyName } from '@/lib/celebrityFacts';
+import { CONFIRMED_JAN1_BIRTHS, MAX_LIVING_AGE, livingAge, slugifyName, yearsBetween } from '@/lib/celebrityFacts';
 // Day-8 celebrity page utilities. Field names adapted to the real
 // src/data/indianCelebrities.ts shape: { name, birth_date (YYYY-MM-DD),
 // category, known_for, nationality, birth_year, death_year?, tier }.
@@ -167,22 +167,121 @@ export function generateCelebrityTitle(name: string): string {
   return options.find(t => t.length <= 70) || options[2].slice(0, 70);
 }
 
+/**
+ * True when `deathDate` is a real day (YYYY-MM-DD, same year as `deathYear`) and not
+ * the DB's "YYYY-01-01" year-only placeholder.
+ */
+export function isDayKnownDeathDate(deathDate: string | null | undefined, deathYear?: number | null): boolean {
+  if (!deathDate || !/^\d{4}-\d{2}-\d{2}/.test(deathDate)) return false;
+  if (deathDate.slice(5, 10) === '01-01') return false;
+  return deathYear == null || Number(deathDate.slice(0, 4)) === Number(deathYear);
+}
+
+/** Death / era facts for one celebrity (after the code-side overrides). */
+export interface CelebrityLifeFacts {
+  deathYear?: number | null;
+  /** ISO death date (CELEB_DEATH_OVERRIDES or the DB's death_date; "-01-01" = year only). */
+  deathDate?: string | null;
+  /** Era text for ancient people (no birth/death years shown). */
+  era?: string | null;
+}
+
+export interface CelebrityAgeInfo {
+  status: 'living' | 'deceased' | 'era' | 'unknown';
+  /** Text for the page's "Age" fact row (unchanged wording). */
+  display: string;
+  /**
+   * Phrase that follows the name in meta descriptions, FAQ answers and JSON-LD,
+   * e.g. "is 37 years old" / "died in 1948, aged about 79" — never a current age
+   * for someone who has died. Null when nothing can honestly be said.
+   */
+  snippet: string | null;
+}
+
+/**
+ * The ONE age logic for celebrity pages (Batch 6): the visible page, the meta
+ * description, og/twitter descriptions, the FAQ JSON-LD and the prerendered
+ * snippet (scripts/gen-celebrity-slugs.mts) all use this.
+ */
+export function celebrityAgeInfo(
+  dob: CelebrityDOB | null,
+  life: CelebrityLifeFacts = {},
+  now: Date = new Date(),
+): CelebrityAgeInfo {
+  if (life.era) {
+    return {
+      status: 'era',
+      display: `Lived in the ${life.era}; exact birth and death years are not documented`,
+      snippet: `lived in the ${life.era}`,
+    };
+  }
+  if (!dob) return { status: 'unknown', display: 'Information not available', snippet: null };
+  const deathYear = life.deathYear ?? null;
+  if (deathYear) {
+    // Exact, birthday-aware age only when BOTH dates are known to the day. The DB uses
+    // "YYYY-01-01" as a year-only placeholder for ~700 death dates (and birth dates;
+    // parseCelebrityDOB already treats a 01-01 birth as year-only), so a 01-01 death
+    // date counts as year-only too. Then the two possible ages are shown — never "about".
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const isoDob = dob.isFullDate ? `${dob.year}-${pad(dob.month)}-${pad(dob.day)}` : null;
+    const fullDeath = isDayKnownDeathDate(life.deathDate, deathYear) ? life.deathDate!.slice(0, 10) : null;
+    const exact = isoDob && fullDeath ? yearsBetween(isoDob, fullDeath) : null;
+    if (exact != null) {
+      return { status: 'deceased', display: `Died in ${deathYear}, aged ${exact}`, snippet: `died in ${deathYear}, aged ${exact}` };
+    }
+    const hi = deathYear - dob.year;
+    const ages = [hi - 1, hi].filter(n => n >= 0);
+    if (ages.length > 0) {
+      const aged = ages.length === 2 ? `${ages[0]} or ${ages[1]}` : String(ages[0]);
+      return { status: 'deceased', display: `Died in ${deathYear}, aged ${aged}`, snippet: `died in ${deathYear}, aged ${aged}` };
+    }
+    return { status: 'deceased', display: 'Birth and death years uncertain', snippet: `died in ${deathYear}` };
+  }
+  // S7 safety cap: never show a living age above MAX_LIVING_AGE.
+  if (dob.isFullDate) {
+    const iso = `${dob.year}-${String(dob.month).padStart(2, '0')}-${String(dob.day).padStart(2, '0')}`;
+    const age = livingAge(iso, now);
+    return age == null
+      ? { status: 'living', display: 'Age not shown', snippet: `was born in ${dob.year}` }
+      : { status: 'living', display: `${age} years old`, snippet: `is ${age} years old` };
+  }
+  const approx = now.getFullYear() - dob.year;
+  return approx > MAX_LIVING_AGE
+    ? { status: 'living', display: 'Age not shown', snippet: `was born in ${dob.year}` }
+    : { status: 'living', display: `Approximately ${approx} years old (based on birth year)`, snippet: `was born in ${dob.year}` };
+}
+
+/**
+ * Meta description for /celebrity/:slug. `zodiacSign` is the Western Sun sign
+ * (or, for year-only records, the Chinese animal); `rashi` is the Moon sign
+ * (Rashi) text — one sign, or "Tula or Vrischika" when it changed that day.
+ * `life` carries death / era facts so a deceased person never gets a current age.
+ */
 export function generateCelebrityMeta(
   name: string,
   dob: CelebrityDOB | null,
   zodiacSign: string,
   rashi: string,
-  lifePath: number | null
+  lifePath: number | null,
+  life: CelebrityLifeFacts = {},
+  now: Date = new Date(),
 ): string {
-  if (!dob) {
+  const age = celebrityAgeInfo(dob, life, now);
+  if (!age.snippet) {
     const fallback = `${name} — birthday profile, zodiac sign, and life path number on BornClock.`;
     return fallback.length <= 160 ? fallback : fallback.slice(0, 157) + '...';
   }
-  const ageStr = dob.isFullDate
-    ? `${new Date().getFullYear() - dob.year} years old`
-    : `born in ${dob.year}`;
-  const full = `${name} is ${ageStr}. ${zodiacSign} zodiac${lifePath ? `, Life Path ${lifePath}` : ''}${rashi ? `, ${rashi} Rashi` : ''}. Birthday profile on BornClock.`;
-  if (full.length <= 160) return full;
-  const short = `${name} (${ageStr}): ${zodiacSign}${lifePath ? `, Life Path ${lifePath}` : ''}. BornClock.`;
+  const lp = lifePath ? `, Life Path ${lifePath}` : '';
+  const sign = zodiacSign ? (rashi ? `${zodiacSign} Sun sign` : `${zodiacSign} zodiac`) : '';
+  const astro = [sign + lp, rashi ? `Moon sign (Rashi) ${rashi}` : ''].filter(Boolean).join(', ').replace(/^, /, '');
+  const lead = `${name} ${age.snippet}.`;
+  const candidates = [
+    `${lead}${astro ? ` ${astro}.` : ''} Birthday profile on BornClock.`,
+    `${lead}${astro ? ` ${astro}.` : ''}`,
+    `${lead}${sign ? ` ${sign}${lp}.` : ''} BornClock.`,
+  ];
+  const fit = candidates.find(c => c.length <= 160);
+  if (fit) return fit;
+  const short = `${name} (${age.snippet}): ${zodiacSign}${lp}. BornClock.`;
   return short.length <= 160 ? short : short.slice(0, 157) + '...';
 }

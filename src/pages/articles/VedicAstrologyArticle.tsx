@@ -3,7 +3,8 @@ import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { VEDIC_RASHI_PROFILES, NAKSHATRA_PROFILES } from '@/data/astrologicalData';
 import type { VedicRashiProfile, NakshatraProfile } from '@/data/astrologicalData';
-import { calculateVedicRashi, calculateNakshatra } from '@/utils/celebrityCalculations';
+import { moonSignsForDate, describeAlternatives } from '@/lib/vedic/dateOnlyMoonSign';
+import { DateOnlyMoonNote } from '@/components/vedic/DateOnlyMoonNote';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
@@ -13,7 +14,7 @@ function JsonLd({ data }: { data: object }) {
 const RASHI_ORDER = ['Mesha','Vrishabha','Mithuna','Karka','Simha','Kanya','Tula','Vrischika','Dhanu','Makara','Kumbha','Meena'];
 
 // NAKSHATRA_PROFILES is keyed without spaces (e.g. PurvaPhalguni), while
-// calculateNakshatra returns display names ("Purva Phalguni"). Build a
+// the chart engine returns display names ("Purva Phalguni"). Build a
 // lookup by the profile's own display `nakshatra` field so we can resolve
 // gana/lord reliably.
 const NAKSHATRA_BY_NAME: Record<string, NakshatraProfile> = Object.values(
@@ -34,11 +35,11 @@ const FAQS = [
   },
   {
     q: 'What is the difference between Vedic and Western astrology?',
-    a: 'Western astrology uses the tropical zodiac (fixed to the seasons) and highlights your Sun sign. Vedic astrology uses the sidereal zodiac (measured against the fixed stars) and highlights your Moon Rashi and Nakshatra. Because of a roughly 24-degree offset called ayanamsa, your Western Sun sign and your Vedic Rashi often fall in different signs.',
+    a: 'Western astrology uses the tropical zodiac (fixed to the seasons) and highlights your Sun sign. Vedic astrology uses the sidereal zodiac (measured against the fixed stars) and highlights your Moon Rashi and Nakshatra. Your Vedic Rashi is the sign of the Moon, so it is a different thing from your Western Sun sign and can be any of the 12 signs; separately, the roughly 24-degree ayanamsa offset means even the sign of the Sun usually differs between the two systems.',
   },
   {
     q: 'Can I get my Vedic birth chart from my date of birth alone?',
-    a: 'From your date of birth alone you can find an approximate Moon Rashi and Nakshatra, which is what BornClock calculates. A complete Vedic birth chart, however, needs your exact birth time and place, because the Lagna (Ascendant) changes roughly every two hours and the Moon moves through a Nakshatra in less than a day.',
+    a: 'From your date of birth alone BornClock finds the Moon Rashi and Nakshatra the Moon was in that day; when the Moon changed sign or Nakshatra during the day, both are shown and the birth time decides. A complete Vedic birth chart, however, needs your exact birth time and place, because the Lagna (Ascendant) changes roughly every two hours and the Moon moves through a Nakshatra in less than a day.',
   },
   {
     q: 'What are the three most important parts of a Vedic chart?',
@@ -52,21 +53,19 @@ const FAQS = [
 
 function VedicCalculator() {
   const [dob, setDob] = React.useState('');
-  const [rashi, setRashi] = React.useState<VedicRashiProfile | null>(null);
-  const [nakshatra, setNakshatra] = React.useState<NakshatraProfile | null>(null);
+  const [rashiNames, setRashiNames] = React.useState<string[]>([]);
+  const [nakNames, setNakNames] = React.useState<string[]>([]);
+  const rashiList = rashiNames.map(n => VEDIC_RASHI_PROFILES[n]).filter((p): p is VedicRashiProfile => !!p);
+  const nakList = nakNames.map(n => NAKSHATRA_BY_NAME[n]).filter((p): p is NakshatraProfile => !!p);
+  const rashi = rashiList[0] ?? null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setDob(val);
-    if (val.length === 10) {
-      const [year, month, day] = val.split('-').map(Number);
-      if (year && month && day) {
-        const rashiResult = calculateVedicRashi(day, month);
-        const nakResult = calculateNakshatra(day, month);
-        setRashi(VEDIC_RASHI_PROFILES[rashiResult.rashi] ?? null);
-        setNakshatra(NAKSHATRA_BY_NAME[nakResult.nakshatra] ?? null);
-      }
-    }
+    // Batch 6: real sidereal Moon (chart engine) for the whole date, not the Sun sign.
+    const r = val.length === 10 ? moonSignsForDate(val) : null;
+    setRashiNames(r ? r.signNames : []);
+    setNakNames(r ? r.nakshatraNames : []);
   };
 
   return (
@@ -76,7 +75,7 @@ function VedicCalculator() {
         Vedic Birth Chart Calculator — Free
       </h3>
       <p className="text-sm text-orange-700 mb-4">
-        Enter your date of birth to find your approximate Moon Rashi and birth Nakshatra instantly.
+        Enter your date of birth to find your Moon Rashi and birth Nakshatra for that date.
       </p>
       <input
         type="date"
@@ -90,8 +89,17 @@ function VedicCalculator() {
       {rashi && (
         <div data-testid="vedic-result"
              className="bg-white rounded-xl border-2 border-orange-300 p-5">
+          <div className="text-sm text-gray-600 mb-1">
+            Moon sign (Rashi): <strong className="text-orange-900">{describeAlternatives(rashiNames)}</strong>
+          </div>
+          <div className="text-sm text-gray-600 mb-3">
+            Birth Nakshatra: <strong className="text-orange-900">{describeAlternatives(nakNames)}</strong>
+          </div>
+          {rashiList.length > 1 && (
+            <p className="text-xs text-gray-500 mb-2">Showing {rashi.rashi} first; {rashiList.slice(1).map(r => r.rashi).join(', ')} is equally possible.</p>
+          )}
           <div className="text-2xl font-black text-orange-800 mb-0.5">
-            {rashi.rashi} ({rashi.rashi_devanagari}) — {rashi.western_equivalent}
+            {rashi.rashi} ({rashi.rashi_devanagari}) Moon
           </div>
           <div className="text-sm text-gray-500 mb-3">
             Lord: {rashi.lord} ({rashi.lord_devanagari}) · {rashi.element} · {rashi.quality}
@@ -110,16 +118,16 @@ function VedicCalculator() {
             <div className="text-orange-700 font-bold mb-0.5">Mantra</div>
             <div className="font-medium">{rashi.mantra}</div>
           </div>
-          {nakshatra && (
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm mb-3">
+          {nakList.map(nakshatra => (
+            <div key={nakshatra.nakshatra} className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm mb-3">
               <div className="font-bold text-amber-900 mb-0.5">
-                Birth Nakshatra: {nakshatra.nakshatra}
+                {nakList.length > 1 ? 'Possible Nakshatra' : 'Birth Nakshatra'}: {nakshatra.nakshatra}
               </div>
               <div className="text-xs text-amber-800">
                 Lord: {nakshatra.lord} · Gana: {nakshatra.gana} · {nakshatra.quality}
               </div>
             </div>
-          )}
+          ))}
           <p className="text-sm text-gray-700 leading-relaxed mb-3">
             {rashi.personality_summary}
           </p>
@@ -130,10 +138,10 @@ function VedicCalculator() {
           </a>
         </div>
       )}
-      <p className="text-xs text-gray-400 mt-3 italic">
-        Note: This is an approximate reading based on the solar date. A precise Vedic
-        birth chart requires your exact birth <strong>time</strong> and <strong>place</strong>,
-        because the Lagna (Ascendant) changes roughly every 2 hours.
+      <DateOnlyMoonNote ambiguous={rashiNames.length ? (rashiNames.length > 1 || nakNames.length > 1) : null} what="Moon Rashi and Nakshatra" />
+      <p className="text-xs text-gray-500 mt-1 italic">
+        The Lagna (Ascendant) changes roughly every 2 hours, so it always needs your exact birth
+        <strong> time</strong> and <strong>place</strong>.
       </p>
     </div>
   );
@@ -214,7 +222,7 @@ export function VedicAstrologyArticle() {
           <p className="text-gray-700 leading-relaxed mb-6">
             This guide explains how a Vedic chart is built, how it differs from Western
             astrology, and how far you can get from your date of birth alone. Use the free
-            calculator below to find your approximate Moon Rashi and birth Nakshatra in
+            calculator below to find the Moon Rashi and birth Nakshatra for your date in
             seconds — then read on for all 12 Rashis and all 27 Nakshatras.
           </p>
 
@@ -225,8 +233,8 @@ export function VedicAstrologyArticle() {
             resetting each year at the spring equinox. Vedic astrology uses the
             <strong> sidereal zodiac</strong>, measured against the fixed stars. Over centuries
             the two have drifted apart by roughly 24 degrees — an offset called
-            <strong> ayanamsa</strong>. This is why your Western Sun sign and your Vedic Rashi
-            frequently land in different signs.
+            <strong> ayanamsa</strong>. That offset shifts the Sun's sign; your Vedic Rashi is a
+            different thing again — the Moon's sign — so it is not your Sun sign renamed.
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             There is a second, deeper difference of emphasis. Western astrology leads with the
@@ -260,13 +268,14 @@ export function VedicAstrologyArticle() {
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">From Date of Birth Alone</h2>
           <p className="text-gray-700 leading-relaxed mb-3">
-            Your date of birth is enough to estimate two of these elements approximately: your
-            <strong> Moon Rashi</strong> and your <strong>Nakshatra</strong>. The Lagna cannot
+            Your date of birth narrows two of these elements down: your
+            <strong> Moon Rashi</strong> and your <strong>Nakshatra</strong> — to one answer when the
+            Moon stayed put all day, or to two when it moved on during the day. The Lagna cannot
             be found without a precise birth time, since it shifts every couple of hours. That
             is the single most important caveat in this article.
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
-            <strong>Disclaimer:</strong> the results below are <em>approximate</em>. A precise
+            <strong>Note:</strong> the calculator below uses the date only. A complete
             Vedic birth chart needs your exact birth <strong>time</strong> and
             <strong> place</strong>, because the Lagna (Ascendant) changes roughly every 2
             hours and the Moon moves through an entire Nakshatra in under a day. Treat this as a
@@ -311,7 +320,7 @@ export function VedicAstrologyArticle() {
             planets are placed by house and sign to reveal timing through the Vimshottari Dasha
             system. No single factor tells the whole story — a skilled astrologer reads the
             relationships between them. What you can do today, from your date of birth alone, is
-            discover your approximate Rashi and Nakshatra as a meaningful first step.
+            discover your Rashi and Nakshatra (or the two possible ones) as a meaningful first step.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Frequently Asked Questions</h2>

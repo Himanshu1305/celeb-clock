@@ -13,7 +13,7 @@ const ROUTES = [
   '/on-this-day/may/13',         // on-this-day dated
   '/hi/panchang',                // Hindi Panchang
   '/celebrity/virat-kohli',      // celebrity profile (birth-time note + rank)
-  '/born-on/may/13',             // born-on (rank badges + events/deaths embed)
+  '/born-on/may-13',             // born-on (rank badges); /born-on/may/13 now 301s here (Batch 6)
 ];
 
 const profiles = [

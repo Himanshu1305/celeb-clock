@@ -7,7 +7,10 @@ dotenv.config({ path: '.env.local' });
 
 const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
-const sb = createClient(url!, key!);
+// Needs the real database. Without credentials (e.g. CI test steps, which deliberately get no
+// production secrets) the whole suite is SKIPPED — reported as skipped, never as passed.
+const hasDb = Boolean(url && key);
+const sb = hasDb ? createClient(url!, key!) : (null as unknown as ReturnType<typeof createClient>);
 
 // The DB slug column requires a one-time ALTER TABLE that PostgREST cannot issue
 // from here (no DDL, no exec_sql RPC, no Postgres password in env). When the
@@ -16,7 +19,7 @@ const sb = createClient(url!, key!);
 // as running the migration would produce.
 let hasSlugColumn = false;
 
-describe('TC-SLUG', () => {
+describe.skipIf(!hasDb)('TC-SLUG', () => {
   beforeAll(async () => {
     const { error } = await sb.from('celebrity_sitelinks').select('slug').limit(1);
     hasSlugColumn = !error;

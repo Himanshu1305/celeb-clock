@@ -322,7 +322,7 @@ export const HLWIL_COPY = {
   // All hrefs verified against Phase 1 real routes before use
   relatedTools: [
     { href: '/longevity-calculator',        title: 'Longevity Calculator',        desc: 'Full life expectancy with WHO baseline and 90-day plan' },
-    { href: '/biological-age-calculator',   title: 'Biological Age Calculator',   desc: 'Find out if your body is younger or older than your age' },
+    { href: '/biological-age',              title: 'Biological Age Calculator',   desc: 'Find out if your body is younger or older than your age' },
     { href: '/life-expectancy',             title: 'Life Expectancy Calculator',  desc: 'Complete 8-factor assessment with downloadable PDF report' },
     { href: '/birthday-report',             title: 'Birthday Intelligence Report', desc: 'Full zodiac, numerology, and birthday profile' },
   ] as const,

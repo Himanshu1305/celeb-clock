@@ -7,6 +7,7 @@ import { TrustStrip } from '@/components/paj/TrustStrip';
 import PageTagline from '@/components/PageTagline';
 import { calculateAllNameNumbers, getLetterBreakdown, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 import { useReportPrice } from '@/hooks/useCurrency';
+import { TermTip } from '@/components/vedic/TermTip';
 
 type NumberType = 'expression' | 'soulUrge' | 'personality';
 
@@ -133,6 +134,9 @@ export default function NameNumerologyPage() {
                   );
                 })}
               </div>
+              <p data-testid="name-num-terms" className="-mt-4 mb-6 text-xs text-muted-foreground text-center">
+                What these mean: <TermTip id="expressionNumber">Expression</TermTip> · <TermTip id="soulUrge">Soul Urge</TermTip> · <TermTip id="personalityNumber">Personality</TermTip>
+              </p>
 
               {(Object.keys(NUMBER_TYPE_INFO) as NumberType[]).map(type => {
                 if (activeType !== type) return null;

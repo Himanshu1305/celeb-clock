@@ -22,10 +22,16 @@ export interface DoshaDetail {
   why: string;
   /** Free, calm remedies THIRD — traditional customs and constructive habits. */
   remedies: string[];
+  /**
+   * Batch 5: the full, sourced remedies page for this finding (mantra, daan, puja,
+   * temples, gemstone caution) — src/lib/vedic/remedies, /remedies/:slug.
+   */
+  remedyPath: string;
 }
 
 export const MANGAL_DETAIL: DoshaDetail = {
   termId: 'manglik',
+  remedyPath: '/remedies/manglik-dosha',
   label: 'Mangal Dosha (Manglik)',
   impact:
     'This mainly matters for marriage timing and matching — it tends to add intensity and impatience to close partnerships, especially early on. It is not a defect in you and does not doom a relationship.',
@@ -41,11 +47,12 @@ export const MANGAL_DETAIL: DoshaDetail = {
 
 export const KAALSARP_DETAIL: DoshaDetail = {
   termId: 'kaalsarp',
+  remedyPath: '/remedies/kaal-sarp-dosha',
   label: 'Kaal Sarp Dosha',
   impact:
     'This is often described as things feeling delayed or hard-won before they finally break open — effort now, reward later, rather than any kind of danger. Its reputation is far scarier than its actual meaning.',
   why:
-    'It is flagged when all seven classical planets fall on one side of the Rahu–Ketu axis. Traditionally this is read as karmic focus being funnelled through that axis, which can feel like extra effort is needed before momentum arrives. A partial version (one planet outside the axis) is milder still.',
+    'It is flagged when all seven classical planets fall on one side of the Rahu–Ketu axis. Traditionally this is read as karmic focus being funnelled through that axis, which can feel like extra effort is needed before momentum arrives. BornClock reports only this full form; near-misses are not counted.',
   remedies: [
     'Keep going through slow patches — the classical reading is delay, not denial, so persistence is the main "remedy".',
     'Charitable giving and service, especially on Saturdays, are the customs most associated with easing it.',
@@ -56,6 +63,7 @@ export const KAALSARP_DETAIL: DoshaDetail = {
 
 export const SADESATI_DETAIL: DoshaDetail = {
   termId: 'sadeSati',
+  remedyPath: '/remedies/sade-sati',
   label: 'Sade Sati (Saturn)',
   impact:
     'This is a roughly 7.5-year Saturn season that asks for patience and steady effort — many people look back on it as the period that built their strongest foundations, not a time of misfortune.',
@@ -76,13 +84,9 @@ export function activeDoshaDetails(doshas: {
 }): DoshaDetail[] {
   const out: DoshaDetail[] = [];
   if (doshas.mangal?.present) out.push(MANGAL_DETAIL);
-  if (doshas.kaalSarp?.present) {
-    out.push(
-      doshas.kaalSarp.isPartial
-        ? { ...KAALSARP_DETAIL, label: 'Kaal Sarp Dosha (partial)' }
-        : KAALSARP_DETAIL,
-    );
-  }
+  // Founder decision: only a FULL Kaal Sarp is reported as present; a partial
+  // pattern is a soft note elsewhere, never a dosha with remedies.
+  if (doshas.kaalSarp?.present && !doshas.kaalSarp.isPartial) out.push(KAALSARP_DETAIL);
   if (doshas.sadeSati?.active) out.push(SADESATI_DETAIL);
   return out;
 }

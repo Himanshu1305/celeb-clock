@@ -6,6 +6,7 @@
  * submit, the real chart renders.
  */
 import { useState } from 'react';
+import { resolveForPlace } from '@/lib/timezone/clientBirth';
 import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
@@ -200,7 +201,8 @@ export default function WesternBirthChart() {
   const generate = (details: BirthDetails) => {
     setFailed(false);
     try {
-      const utc = localToUTC(details.dob, details.time, details.city.tz);
+      // f5-city-picker: offset for the birth date at the picked place (DST/historical rules).
+      const utc = localToUTC(details.dob, details.time, resolveForPlace(details.dob, details.time, details.city).utcOffsetHours);
       const result = generateWesternChart(utc, details.city.lat, details.city.lon);
       setChart(result);
       setName(details.name ?? '');

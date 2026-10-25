@@ -118,7 +118,9 @@ describe('Shadbala — confidence-table-aware assertions (exact where 100%, tole
     // ranges, NOT exact values (per the confidence table).
     expect(sun.sthana).toBeGreaterThan(0);
     expect(sun.sthana).toBeLessThan(300);
-    expect(sun.chesta).toBe(0); // Sun has no Chesta Bala (substituted by Ayana)
+    // K11: BPHS 27.18 — the Sun's Chesta Bala IS its Ayana Bala (0–60), no longer 0.
+    expect(sun.chesta).toBeGreaterThan(0);
+    expect(sun.chesta).toBeLessThanOrEqual(60);
 
     // Totals must be finite positive numbers for all 7 planets.
     for (const p of Object.values(r.shadbala!)) {

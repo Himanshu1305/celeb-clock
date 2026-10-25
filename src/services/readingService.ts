@@ -28,7 +28,7 @@ export interface ReadingFactsClient {
   pratyantardasha?: { lord: string; start: string; end: string } | null;
   placements: Array<{ planet: string; sign: string; house: number; retrograde: boolean }>;
   /** All 9 grahas incl. raw Shadbala (shown only in the advanced/technical view). */
-  planets?: Array<{ planet: string; sign: string; house: number; retrograde: boolean; combust?: boolean; navamsa?: string; shadbala?: { total: number; category: string } }>;
+  planets?: Array<{ planet: string; sign: string; house: number; retrograde: boolean; combust?: boolean; navamsa?: string; shadbala?: { total: number; category: string; required?: number; parts?: { sthana: number; dig: number; kala: number; chesta: number; naisargika: number; drik: number } } }>;
   /** Detected classical Yogas (advanced view: name + grade + conditions checked). */
   yogas?: Array<{ name: string; grade: string; summary: string; note?: string; conditions: string[] }>;
   doshas: {

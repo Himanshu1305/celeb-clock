@@ -1,3 +1,4 @@
+import { moonSignsForDate } from '@/lib/vedic/dateOnlyMoonSign';
 export interface MoonSignData {
   sign: string;
   symbol: string;
@@ -200,29 +201,38 @@ export function getNakshatraLifeApplication(name: string): string {
     `The ${name} nakshatra energy in your daily life invites you to explore the qualities associated with its ruling deity and symbol, applying its particular wisdom to your relationships, professional choices, and spiritual practice.`;
 }
 
+/**
+ * Moon sign + Nakshatra for a birth DATE (Batch 6). Was a constant-speed "27.3-day
+ * cycle" guess that disagreed with real ephemerides on most dates. Now: the chart
+ * engine's sidereal (Lahiri) Moon from 00:00 to 23:59 IST that day. When the Moon
+ * changed sign / Nakshatra during the day every possibility is returned (the first
+ * one fills the legacy single fields) and the page says the birth time decides.
+ */
+const SIDEREAL_SIGNS_EN = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo',
+  'Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+
 export function calculateMoonSignAndNakshatra(birthDate: Date): {
   moonSign: string;
   nakshatraNumber: number;
   nakshatraData: typeof NAKSHATRAS[number];
   moonSignData: MoonSignData;
+  /** Every sidereal Moon sign possible that day (English names), in order. */
+  moonSigns: string[];
+  /** Every Nakshatra number possible that day, in order. */
+  nakshatraNumbers: number[];
 } {
-  const referenceDate = new Date('2000-01-06');
-  const daysDiff = (birthDate.getTime() - referenceDate.getTime()) / (1000 * 60 * 60 * 24);
-  const moonCycleDays = 27.3217;
-  const cyclePosition = ((daysDiff % moonCycleDays) + moonCycleDays) % moonCycleDays;
-
-  const nakshatraIndex = Math.floor(cyclePosition / (moonCycleDays / 27));
-  const nakshatraNumber = (nakshatraIndex % 27) + 1;
-
-  const signIndex = Math.floor(cyclePosition / (moonCycleDays / 12));
-  const moonSigns = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo',
-    'Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
-  const moonSign = moonSigns[signIndex % 12];
-
+  const iso = `${birthDate.getFullYear()}-${String(birthDate.getMonth() + 1).padStart(2, '0')}-${String(birthDate.getDate()).padStart(2, '0')}`;
+  const r = moonSignsForDate(iso);
+  const moonSigns = r ? r.signIndices.map(i => SIDEREAL_SIGNS_EN[i]) : ['Aries'];
+  const nakshatraNumbers = r ? r.nakshatraNumbers : [1];
+  const moonSign = moonSigns[0];
+  const nakshatraNumber = nakshatraNumbers[0];
   return {
     moonSign,
     nakshatraNumber,
     nakshatraData: NAKSHATRAS[nakshatraNumber] || NAKSHATRAS[1],
     moonSignData: MOON_SIGN_DATA[moonSign] || MOON_SIGN_DATA.Aries,
+    moonSigns,
+    nakshatraNumbers,
   };
 }

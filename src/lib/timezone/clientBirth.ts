@@ -38,8 +38,10 @@ export function birthQuery(dob: string, time: string | undefined | null, place: 
     // were keyed on URLs without this, so they can never be served for new requests.
     tzv: TZ_PARAM_VERSION,
   };
-  // Only a MANUAL zone is sent; otherwise the server derives it from lat/lon itself.
-  if (place.manualTimezone && place.timezone) q['tzid' + suffix] = place.timezone;
+  // f5-city-picker: the IANA zone of the PICKED place (or the manual choice) is always sent,
+  // so the server computes with exactly the zone shown in the confirm line. The server marks
+  // it "manual" only when it differs from the zone of the coordinates.
+  q['tzid' + suffix] = r.timezone;
   return q;
 }
 

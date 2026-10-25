@@ -18,6 +18,9 @@ import {
   computeGrahanDosha, computeNadiInfo, type DoshaGrade,
 } from '@/lib/vedic/moreDoshas';
 import { birthQuery } from '@/lib/timezone/clientBirth';
+import { Remedies } from '@/components/vedic/Remedies';
+
+const REMEDY_KEY: Partial<Record<'pitra' | 'mool' | 'grahan' | 'nadi', string>> = { pitra: 'pitra', mool: 'mool', grahan: 'grahan' };
 
 export type DoshaKind = 'pitra' | 'mool' | 'grahan' | 'nadi';
 
@@ -97,6 +100,9 @@ interface Computed {
   extra?: string;
 }
 
+/** The glossary term for each dosha page. */
+const DOSHA_TERM: Record<DoshaKind, string> = { pitra: 'pitraDosha', mool: 'moolDosha', grahan: 'grahanDosha', nadi: 'nadiType' };
+
 export default function DoshaCheckPage({ kind }: { kind: DoshaKind }) {
   const cfg = CONFIG[kind];
   const { profile, save } = useSavedProfile();
@@ -157,6 +163,7 @@ export default function DoshaCheckPage({ kind }: { kind: DoshaKind }) {
           { label: 'Kundali', to: '/kundali' },
           { label: 'Manglik', to: '/manglik' },
           { label: 'Kaal Sarp', to: '/kaal-sarp-dosha' },
+          { label: 'Remedies', to: '/remedies' },
           { label: 'How It Works', to: '/how-it-works' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
@@ -191,10 +198,21 @@ export default function DoshaCheckPage({ kind }: { kind: DoshaKind }) {
           <div data-testid={`dosha-${kind}-result`} className="mt-6 space-y-4">
             <div className={`rounded-xl border p-5 text-center ${computed.present ? 'border-amber-300 bg-amber-50' : 'border-emerald-200 bg-emerald-50'}`}>
               <div className={`text-2xl font-black ${computed.present ? gradeBadge(computed.grade) : 'text-emerald-700'}`}>{computed.headline}</div>
+              <div className="mt-2 text-xs text-muted-foreground">
+                <TermTip id={DOSHA_TERM[kind]}>What is this?</TermTip>
+                {computed.present && <> · <TermTip id="doshaGrade">What does “{computed.grade}” mean?</TermTip></>}
+              </div>
             </div>
             <div className="rounded-xl border border-border p-5">
               <p className="text-sm text-foreground leading-relaxed">{computed.body}</p>
             </div>
+            {/* Batch 5: what it means + what you can do, only when the pattern is present. */}
+            {computed.present && REMEDY_KEY[kind] && (
+              <Remedies remedyKey={REMEDY_KEY[kind]!} testid={`dosha-${kind}-remedies`} label={{ en: `${cfg.h1.replace(/\.$/, '').replace(/ Calculator$/, '')} — what it means and what you can do`, hi: 'अर्थ और उपाय' }} />
+            )}
+            {kind === 'nadi' && (
+              <p className="text-sm text-muted-foreground">Nadi dosha only arises between two people. If a match shows it, see <a href="/remedies/nadi-dosha" className="text-primary hover:underline">Nadi dosha — meaning and remedies</a>.</p>
+            )}
           </div>
         )}
 

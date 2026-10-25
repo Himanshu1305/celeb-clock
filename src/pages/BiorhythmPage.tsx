@@ -7,6 +7,10 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Referenc
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { calculateBiorhythm, getBiorhythmStatus, getBiorhythmInsight, getBiorhythmSeries } from '@/data/biorhythmData';
 import { useReportPrice } from '@/hooks/useCurrency';
+import { TermTip, NumberNote } from '@/components/vedic/TermTip';
+import { biorhythmNote } from '@/lib/vedic/numberNotes';
+
+const CYCLE_TERM: Record<string, string> = { Physical: 'physicalCycle', Emotional: 'emotionalCycle', Intellectual: 'intellectualCycle' };
 
 export default function BiorhythmPage() {
   const reportPriceLabel = useReportPrice();
@@ -130,7 +134,7 @@ export default function BiorhythmPage() {
           {result && (
             <div className="mb-10">
               <div className="bg-teal-50 rounded-2xl p-4 mb-6">
-                <p className="text-sm font-semibold text-teal-800 mb-1">Today's Biorhythm Insight</p>
+                <p className="text-sm font-semibold text-teal-800 mb-1">Today's <TermTip id="biorhythm">Biorhythm</TermTip> Insight</p>
                 <p className="text-sm text-teal-700">{getBiorhythmInsight(result.physical, result.emotional, result.intellectual)}</p>
               </div>
 
@@ -143,10 +147,11 @@ export default function BiorhythmPage() {
                   const status = getBiorhythmStatus(value);
                   return (
                     <div key={label} className={`rounded-2xl p-4 ${status.bgColor} text-center`}>
-                      <p className="text-xs text-gray-600 mb-1">{label}</p>
+                      <p className="text-xs text-gray-600 mb-1"><TermTip id={CYCLE_TERM[label]}>{label}</TermTip></p>
                       <p className={`text-3xl font-black ${color}`}>{value > 0 ? '+' : ''}{value}%</p>
                       <span className={`text-xs font-semibold ${status.color}`}>{status.label}</span>
                       <p className="text-xs text-gray-600 mt-1">{cycle}</p>
+                      <NumberNote testid={`biorhythm-note-${label.toLowerCase()}`}>{biorhythmNote(value)}</NumberNote>
                     </div>
                   );
                 })}

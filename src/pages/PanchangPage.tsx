@@ -3,7 +3,11 @@ import { useParams, Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
-import { TermTip } from '@/components/vedic/TermTip';
+import { TermTip, NumberNote } from '@/components/vedic/TermTip';
+import { CHOGHADIYA_TERM } from '@/lib/vedic/termDefinitions';
+import { limbEndNote } from '@/lib/vedic/numberNotes';
+
+const TITHI_TERM: Record<string, string> = { Purnima: 'purnima', Amavasya: 'amavasya', Ekadashi: 'ekadashi' };
 import { computeDayPanchang, PANCHANG_CITIES, type TimeWindow } from '@/lib/vedic/panchangDay';
 import { karanaName } from '@/lib/vedic/panchang';
 
@@ -17,7 +21,7 @@ const QUALITY_STYLE: Record<TimeWindow['quality'], string> = {
 function ChoghadiyaRow({ c }: { c: TimeWindow }) {
   return (
     <div className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm ${QUALITY_STYLE[c.quality]}`}>
-      <span className="font-medium">{c.name}</span>
+      <span className="font-medium">{CHOGHADIYA_TERM[c.name] ? <TermTip id={CHOGHADIYA_TERM[c.name]}>{c.name}</TermTip> : c.name}</span>
       <span className="tabular-nums">{c.start}–{c.end}</span>
     </div>
   );
@@ -57,7 +61,7 @@ export default function PanchangPage() {
         ogImage="https://bornclock.com/og/vedic.png"
       />}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: `Panchang · ${city.name}` }}
-      footer={{ tagline: 'Daily Panchang computed from real sunrise and sunset.', nav: [{ label: 'Muhurat', to: '/muhurat' }, { label: 'Rashifal', to: '/rashifal' }, { label: 'Free Kundli', to: '/kundali' }] }}
+      footer={{ tagline: 'Daily Panchang computed from real sunrise and sunset.', nav: [{ label: 'Muhurat', to: '/muhurat' }, { label: 'Rashifal', to: '/rashifal' }, { label: 'Free Kundli', to: '/kundali' }, { label: 'Glossary', to: '/glossary' }] }}
       eyebrow="Panchang"
       h1={`Today's Panchang — ${city.name}`}
       lead={dateNice}
@@ -82,14 +86,15 @@ export default function PanchangPage() {
           </div>
 
           {/* Five limbs */}
-          <div className="grid sm:grid-cols-2 gap-4 mb-6" data-testid="panchang-limbs">
+          <p className="text-sm text-muted-foreground mb-2">The five limbs of today’s <TermTip id="panchang">Panchang</TermTip>:</p>
+          <div className="grid sm:grid-cols-2 gap-4 mb-2" data-testid="panchang-limbs">
             <div className="rounded-xl border border-border p-4">
               <div className="text-xs text-muted-foreground"><TermTip id="tithi">Tithi</TermTip></div>
-              <div className="font-semibold text-foreground">{p.tithiName} <span className="text-muted-foreground font-normal">(<TermTip id="paksha">{p.paksha} Paksha</TermTip>)</span></div>
+              <div className="font-semibold text-foreground">{TITHI_TERM[p.tithiName] ? <TermTip id={TITHI_TERM[p.tithiName]}>{p.tithiName}</TermTip> : p.tithiName} <span className="text-muted-foreground font-normal">(<TermTip id="paksha">{p.paksha} Paksha</TermTip>)</span></div>
               <div className="text-xs text-muted-foreground tabular-nums">till {p.tithiEnd}</div>
             </div>
             <div className="rounded-xl border border-border p-4">
-              <div className="text-xs text-muted-foreground"><TermTip id="nakshatra">Nakshatra</TermTip></div>
+              <div className="text-xs text-muted-foreground"><TermTip id="panchangNakshatra">Nakshatra</TermTip></div>
               <div className="font-semibold text-foreground">{p.nakshatra}</div>
               <div className="text-xs text-muted-foreground tabular-nums">till {p.nakshatraEnd}</div>
             </div>
@@ -99,26 +104,29 @@ export default function PanchangPage() {
               <div className="text-xs text-muted-foreground tabular-nums">till {p.yogaEnd}</div>
             </div>
             <div className="rounded-xl border border-border p-4">
-              <div className="text-xs text-muted-foreground">Karana · Vara</div>
-              <div className="font-semibold text-foreground">{karanaName(p.karana)} · {p.weekday}</div>
+              <div className="text-xs text-muted-foreground"><TermTip id="karana">Karana</TermTip> · <TermTip id="vara">Vara</TermTip></div>
+              <div className="font-semibold text-foreground">{karanaName(p.karana).startsWith('Vishti') ? <TermTip id="bhadra">{karanaName(p.karana)}</TermTip> : karanaName(p.karana)} · {p.weekday}</div>
               <div className="text-xs text-muted-foreground tabular-nums">Karana till {p.karanaEnd}</div>
             </div>
           </div>
+          <NumberNote testid="panchang-limb-note">{limbEndNote()}</NumberNote>
+          <div className="mb-6" />
 
           {/* Sun + inauspicious windows */}
           <div className="grid sm:grid-cols-2 gap-4 mb-6">
             <div className="rounded-xl border border-border p-4" data-testid="panchang-sun">
               <h2 className="font-semibold text-foreground mb-2">Sun</h2>
               <div className="text-sm text-muted-foreground">Sunrise <strong className="text-foreground tabular-nums">{p.sunrise}</strong> · Sunset <strong className="text-foreground tabular-nums">{p.sunset}</strong></div>
-              <div className="text-sm text-muted-foreground mt-1">Abhijit Muhurta <strong className="text-emerald-700 tabular-nums">{p.abhijit.start}–{p.abhijit.end}</strong></div>
+              <div className="text-sm text-muted-foreground mt-1"><TermTip id="abhijit">Abhijit Muhurta</TermTip> <strong className="text-emerald-700 tabular-nums">{p.abhijit.start}–{p.abhijit.end}</strong></div>
             </div>
             <div className="rounded-xl border border-border p-4" data-testid="panchang-windows">
               <h2 className="font-semibold text-foreground mb-2">Inauspicious windows</h2>
               <ul className="text-sm space-y-1">
                 <li className="flex justify-between"><span><TermTip id="rahuKalam">Rahu Kaal</TermTip></span><span className="tabular-nums text-rose-700">{p.rahuKaal.start}–{p.rahuKaal.end}</span></li>
-                <li className="flex justify-between"><span>Gulika Kaal</span><span className="tabular-nums">{p.gulikaKaal.start}–{p.gulikaKaal.end}</span></li>
-                <li className="flex justify-between"><span>Yamaganda</span><span className="tabular-nums">{p.yamaganda.start}–{p.yamaganda.end}</span></li>
+                <li className="flex justify-between"><span><TermTip id="gulikaKaal">Gulika Kaal</TermTip></span><span className="tabular-nums">{p.gulikaKaal.start}–{p.gulikaKaal.end}</span></li>
+                <li className="flex justify-between"><span><TermTip id="yamaganda">Yamaganda</TermTip></span><span className="tabular-nums">{p.yamaganda.start}–{p.yamaganda.end}</span></li>
               </ul>
+              <NumberNote testid="panchang-window-note">Local clock times for {city.name}, worked out from today’s sunrise and sunset — avoid starting new work inside these windows; ongoing work is fine.</NumberNote>
             </div>
           </div>
 
@@ -129,7 +137,7 @@ export default function PanchangPage() {
               <div className="space-y-1">{p.dayChoghadiya.map((c, i) => <ChoghadiyaRow key={i} c={c} />)}</div>
             </div>
             <div>
-              <h2 className="font-semibold text-foreground mb-2">Night Choghadiya</h2>
+              <h2 className="font-semibold text-foreground mb-2">Night <TermTip id="choghadiya">Choghadiya</TermTip></h2>
               <div className="space-y-1">{p.nightChoghadiya.map((c, i) => <ChoghadiyaRow key={i} c={c} />)}</div>
             </div>
           </div>

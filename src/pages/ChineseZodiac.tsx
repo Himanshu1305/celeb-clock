@@ -8,6 +8,7 @@ import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { getChineseZodiac, getChineseZodiacAnimal } from '@/services/ChineseZodiacService';
+import { TermTip } from '@/components/vedic/TermTip';
 
 const ALL_ANIMALS = [
   { name: 'Rat', emoji: '🐀', years: '1924, 1936, 1948, 1960, 1972, 1984, 1996, 2008, 2020' },
@@ -115,16 +116,17 @@ export default function ChineseZodiac() {
               <h2 className="text-3xl font-bold text-foreground mb-2">
                 Year of the {result.animal}
               </h2>
+              <p className="text-xs text-muted-foreground mb-1"><TermTip id="chineseZodiac">What is a Chinese zodiac animal?</TermTip></p>
               <p className="text-muted-foreground mb-6">
                 Chinese Year {result.year} · {result.element} {result.animal} · {result.yin_yang}
               </p>
 
               <div className="flex justify-center gap-3 mb-6 flex-wrap">
                 <Badge variant="secondary" className="text-sm px-3 py-1">
-                  🌿 {result.element} Element
+                  🌿 <TermTip id="chineseElement">{result.element} Element</TermTip>
                 </Badge>
                 <Badge variant="secondary" className="text-sm px-3 py-1">
-                  {result.yin_yang === 'Yang' ? '☀️' : '🌙'} {result.yin_yang}
+                  {result.yin_yang === 'Yang' ? '☀️' : '🌙'} <TermTip id="yinYang">{result.yin_yang}</TermTip>
                 </Badge>
               </div>
 

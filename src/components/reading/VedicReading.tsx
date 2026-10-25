@@ -8,8 +8,11 @@
  */
 import { useState } from 'react';
 import type { ReadingPayload, ReadingFactsClient } from '@/services/readingService';
-import { TermTip } from '@/components/vedic/TermTip';
+import { TermTip, NumberNote } from '@/components/vedic/TermTip';
+import { yogaTermId } from '@/lib/vedic/termDefinitions';
+import { shadbalaNote, dashaPairNote } from '@/lib/vedic/numberNotes';
 import { activeDoshaDetails } from '@/lib/vedic/doshaRemedies';
+import { SHADBALA_COMPONENT_EXPLANATIONS } from '@/lib/vedic/strengthScale';
 
 const LIFE_AREAS: Array<{ key: 'career' | 'relationships' | 'health' | 'money' | 'family'; label: string }> = [
   { key: 'career', label: 'Career' },
@@ -23,24 +26,25 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
   return (
     <div data-testid="reading-advanced" className="rounded-lg border border-border bg-muted/20 p-4 text-sm space-y-3">
       <div>
-        <span className="text-muted-foreground">Moon sign (Rashi): </span>
+        <span className="text-muted-foreground">Moon sign (<TermTip id="rashi">Rashi</TermTip>): </span>
         <span className="font-semibold text-foreground">{facts.rashi}</span>
-        <span className="text-muted-foreground"> · Birth star: </span>
-        <span className="font-semibold text-foreground">{facts.nakshatra.name} (pada {facts.nakshatra.pada})</span>
-        <span className="text-muted-foreground"> · Rising sign (Lagna): </span>
+        <span className="text-muted-foreground"> · <TermTip id="nakshatra">Birth star</TermTip>: </span>
+        <span className="font-semibold text-foreground">{facts.nakshatra.name} (<TermTip id="pada">pada</TermTip> {facts.nakshatra.pada})</span>
+        <span className="text-muted-foreground"> · Rising sign (<TermTip id="lagna">Lagna</TermTip>): </span>
         <span className="font-semibold text-foreground">{facts.lagna}</span>
       </div>
       {facts.dasha && (
         <div>
-          <span className="text-muted-foreground">Current period: </span>
+          <span className="text-muted-foreground">Current period (<TermTip id="dasha">Dasha</TermTip>): </span>
           <span className="font-semibold text-foreground">{facts.dasha.maha} / {facts.dasha.antar}</span>
+          <NumberNote testid="reading-dasha-note">{dashaPairNote(facts.dasha.maha, facts.dasha.antar)}</NumberNote>
         </div>
       )}
       {/* Pratyantardasha (Part X) — 3rd Dasha level, ADVANCED-VIEW ONLY (not in the
           plain-language reading narrative). */}
       {facts.pratyantardasha && (
         <div data-testid="reading-pratyantardasha">
-          <span className="text-muted-foreground">Current sub-sub-period (Pratyantardasha): </span>
+          <span className="text-muted-foreground">Current sub-sub-period (<TermTip id="pratyantardasha">Pratyantardasha</TermTip>): </span>
           <span className="font-semibold text-foreground">
             {facts.pratyantardasha.lord}
             {facts.pratyantardasha.start && facts.pratyantardasha.end
@@ -51,12 +55,12 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
       )}
       <table className="w-full text-left">
         <thead className="text-muted-foreground">
-          <tr><th className="py-1 pr-3 font-medium">Planet</th><th className="py-1 pr-3 font-medium">Sign</th><th className="py-1 font-medium">House</th></tr>
+          <tr><th className="py-1 pr-3 font-medium"><TermTip id="graha">Planet</TermTip></th><th className="py-1 pr-3 font-medium">Sign</th><th className="py-1 font-medium"><TermTip id="bhava">House</TermTip></th></tr>
         </thead>
         <tbody>
           {facts.placements.map(p => (
             <tr key={p.planet} className="border-t border-border/60">
-              <td className="py-1 pr-3 text-foreground">{p.planet}{p.retrograde ? ' (R)' : ''}</td>
+              <td className="py-1 pr-3 text-foreground">{p.planet}{p.retrograde ? <> (<TermTip id="retrograde">R</TermTip>)</> : ''}</td>
               <td className="py-1 pr-3 text-foreground">{p.sign}</td>
               <td className="py-1 text-foreground">{p.house}</td>
             </tr>
@@ -76,18 +80,55 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
           <div className="text-muted-foreground mb-1">Planetary strength (<TermTip id="shadbala">Shadbala</TermTip>, in <TermTip id="virupas">virupas</TermTip> — indicative):</div>
           <table className="w-full text-left">
             <thead className="text-muted-foreground">
-              <tr><th className="py-1 pr-3 font-medium">Planet</th><th className="py-1 pr-3 font-medium">Strength</th><th className="py-1 font-medium"><TermTip id="virupas">Virupas</TermTip></th></tr>
+              <tr><th className="py-1 pr-3 font-medium">Planet</th><th className="py-1 pr-3 font-medium"><TermTip id="strengthCategory">Strength</TermTip></th><th className="py-1 pr-3 font-medium"><TermTip id="virupas">Virupas</TermTip> (<TermTip id="rupa">rupas</TermTip>)</th><th className="py-1 font-medium">Classical minimum</th></tr>
             </thead>
             <tbody>
               {facts.planets.filter(p => p.shadbala).map(p => (
                 <tr key={p.planet} className="border-t border-border/60">
                   <td className="py-1 pr-3 text-foreground">{p.planet}</td>
                   <td className="py-1 pr-3 text-foreground capitalize">{p.shadbala!.category}</td>
-                  <td className="py-1 text-foreground">{p.shadbala!.total}</td>
+                  <td className="py-1 pr-3 text-foreground">{p.shadbala!.total} ({(p.shadbala!.total / 60).toFixed(2)})</td>
+                  <td className="py-1 text-muted-foreground">{p.shadbala!.required ?? '—'}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <ul data-testid="reading-shadbala-notes" className="mt-1 space-y-0.5">
+            {facts.planets.filter(p => p.shadbala).map(p => (
+              <li key={p.planet}><NumberNote testid={`shadbala-note-${p.planet}`}>{p.planet}: {shadbalaNote(p.planet, p.shadbala!.total)}</NumberNote></li>
+            ))}
+          </ul>
+          {/* Audit K11: one plain line per Shadbala part, plus the per-planet split. */}
+          <details data-testid="reading-shadbala-parts" className="mt-2">
+            <summary className="cursor-pointer text-muted-foreground">What the six parts of the score mean</summary>
+            <ul className="mt-1 list-disc pl-4 text-muted-foreground space-y-0.5">
+              {SHADBALA_COMPONENT_EXPLANATIONS.map(c => (
+                <li key={c.key}><span className="text-foreground">{c.name}:</span> {c.line}</li>
+              ))}
+            </ul>
+            <p className="mt-1 text-xs text-muted-foreground">
+              "Weak" means below the classical minimum from Brihat Parashara Hora Shastra; "moderate" meets it; "strong" exceeds it by a quarter or more.
+            </p>
+            {facts.planets.some(p => p.shadbala?.parts) && (
+              <div className="overflow-x-auto">
+                <table className="mt-2 w-full text-left text-xs">
+                  <thead className="text-muted-foreground">
+                    <tr><th className="py-1 pr-2 font-medium">Planet</th><th className="py-1 pr-2 font-medium">Position</th><th className="py-1 pr-2 font-medium">Direction</th><th className="py-1 pr-2 font-medium">Time</th><th className="py-1 pr-2 font-medium">Motion</th><th className="py-1 pr-2 font-medium">Natural</th><th className="py-1 font-medium">Aspects</th></tr>
+                  </thead>
+                  <tbody>
+                    {facts.planets.filter(p => p.shadbala?.parts).map(p => {
+                      const s = p.shadbala!.parts!;
+                      return (
+                        <tr key={p.planet} className="border-t border-border/60 text-foreground">
+                          <td className="py-1 pr-2">{p.planet}</td><td className="py-1 pr-2">{s.sthana}</td><td className="py-1 pr-2">{s.dig}</td><td className="py-1 pr-2">{s.kala}</td><td className="py-1 pr-2">{s.chesta}</td><td className="py-1 pr-2">{s.naisargika}</td><td className="py-1">{s.drik}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </details>
         </div>
       )}
 
@@ -95,12 +136,12 @@ function ChartFactsDetails({ facts }: { facts: ReadingFactsClient }) {
           (mirrors how Shadbala numbers live here, not in the narrative). */}
       {facts.yogas && facts.yogas.length > 0 && (
         <div data-testid="reading-yogas">
-          <div className="text-muted-foreground mb-1">Classical Yogas detected (graded — formation does not guarantee full delivery):</div>
+          <div className="text-muted-foreground mb-1">Classical <TermTip id="yoga">Yogas</TermTip> detected (<TermTip id="yogaGrade">graded</TermTip> — formation does not guarantee full delivery):</div>
           <ul className="space-y-2">
             {facts.yogas.map((y, i) => (
               <li key={i} className="rounded border border-border/60 p-2">
                 <div className="font-semibold text-foreground">
-                  {y.name} <span className="ml-1 text-xs uppercase tracking-wide text-[#6E5AA6]">[{y.grade}]</span>
+                  {yogaTermId(y.name) ? <TermTip id={yogaTermId(y.name)!}>{y.name}</TermTip> : y.name} <span className="ml-1 text-xs uppercase tracking-wide text-[#6E5AA6]">[{y.grade}]</span>
                 </div>
                 <div className="text-muted-foreground">{y.summary}</div>
                 {y.conditions && y.conditions.length > 0 && (
@@ -148,6 +189,7 @@ function DoshaDetails({ facts }: { facts: ReadingFactsClient }) {
             <ul className="mt-1 list-disc pl-5 text-sm text-muted-foreground space-y-1">
               {d.remedies.map((r, i) => <li key={i}>{r}</li>)}
             </ul>
+            <a href={d.remedyPath} data-testid={`dosha-${d.termId}-remedies-link`} className="mt-1 inline-block text-xs text-primary hover:underline">Mantra, daan, puja, temples and more — full remedies →</a>
           </div>
         </div>
       ))}

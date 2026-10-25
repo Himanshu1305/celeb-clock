@@ -6,7 +6,7 @@ import {
 } from '../celebrityUtils';
 import {
   calculateLifePathNumber, calculateWesternZodiac,
-  calculateChineseZodiac, calculateVedicRashi,
+  calculateChineseZodiac, calculateDateOnlyRashi,
   calculatePlanetaryAges, calculateAge,
   LIFE_PATH_TRAITS,
 } from '../celebrityCalculations';
@@ -198,16 +198,21 @@ describe('calculateChineseZodiac', () => {
   });
 });
 
-// ── VEDIC RASHI ───────────────────────────────────────────────
-describe('calculateVedicRashi', () => {
-  it('TC-VR-P-01: Nov 5 → Vrischika (Scorpio equivalent)', () => {
-    expect(calculateVedicRashi(5, 11).rashi).toBe('Vrischika');
+// ── VEDIC RASHI (Moon sign) ───────────────────────────────────
+// Batch 6: Rashi is the sidereal MOON sign, not the Sun sign renamed. Reference:
+// Swiss Ephemeris (pyswisseph, SIDM_LAHIRI) Moon at 00:00 and 23:59 IST on
+// 1988-11-05: 145.183° (Simha) → 156.999° (Kanya). The old code said "Vrischika".
+describe('calculateDateOnlyRashi', () => {
+  it('TC-VR-P-01: 5 Nov 1988 → Simha or Kanya (not Vrischika)', () => {
+    const r = calculateDateOnlyRashi(5, 11, 1988, 'IN')!;
+    expect(r.rashis).toEqual(['Simha', 'Kanya']);
+    expect(r.rashiText).toBe('Simha or Kanya (depends on birth time)');
   });
-  it('TC-VR-P-02: every month produces valid rashi', () => {
+  it('TC-VR-P-02: every month produces a valid rashi list', () => {
     for (let m = 1; m <= 12; m++) {
-      const r = calculateVedicRashi(15, m);
-      expect(r.rashi.length).toBeGreaterThan(0);
-      expect(r.western_equivalent.length).toBeGreaterThan(0);
+      const r = calculateDateOnlyRashi(15, m, 1990, 'IN')!;
+      expect(r.rashis.length).toBeGreaterThanOrEqual(1);
+      expect(r.rashis.length).toBeLessThanOrEqual(2);
     }
   });
 });

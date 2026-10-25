@@ -25,6 +25,11 @@ const FULL_DOB_SLUG = ALL_SLUGS.find(slug => {
   return dob?.isFullDate;
 }) || ALL_SLUGS[0];
 
+// Batch 6: lucky elements follow the Moon sign (Rashi), which is only certain on some
+// dates. Nehru (1889-11-14): Moon in Karka all day IST — Swiss Ephemeris (SIDM_LAHIRI)
+// 96.475° → 108.320°. Sun sign (Western) Scorpio.
+const CERTAIN_RASHI_SLUG = 'jawaharlal-nehru';
+
 const YEAR_ONLY_SLUG = ALL_SLUGS.find(slug => {
   const dob = parseCelebrityDOB(SLUG_MAP.get(slug) as Record<string,unknown>);
   return dob && !dob.isFullDate;
@@ -85,9 +90,9 @@ describe('CelebrityPage — Positive', () => {
     renderCelebPage(FULL_DOB_SLUG);
     expect(document.querySelector('[data-testid="facts-table"]')).toBeTruthy();
   });
-  it('TC-CP-P-06: exactly 5 FAQ questions', () => {
+  it('TC-CP-P-06: exactly 6 FAQ questions (incl. Moon sign)', () => {
     renderCelebPage(FULL_DOB_SLUG);
-    expect(document.querySelectorAll('[data-testid="faq-question"]').length).toBe(5);
+    expect(document.querySelectorAll('[data-testid="faq-question"]').length).toBe(6);
   });
   it('TC-CP-P-07: CTA birthday report present', () => {
     renderCelebPage(FULL_DOB_SLUG);
@@ -114,7 +119,7 @@ describe('CelebrityPage — Positive', () => {
     });
     expect(found).toBe(true);
   });
-  it('TC-CP-P-12: FAQPage schema has 5 questions', () => {
+  it('TC-CP-P-12: FAQPage schema has 6 questions', () => {
     renderCelebPage(FULL_DOB_SLUG);
     let count = 0;
     document.querySelectorAll('script[type="application/ld+json"]').forEach(s => {
@@ -123,7 +128,7 @@ describe('CelebrityPage — Positive', () => {
         if (d['@type'] === 'FAQPage') count = d.mainEntity?.length || 0;
       } catch { /* */ }
     });
-    expect(count).toBe(5);
+    expect(count).toBe(6);
   });
   it('TC-CP-P-13: all schemas are valid JSON', () => {
     renderCelebPage(FULL_DOB_SLUG);
@@ -305,7 +310,7 @@ describe('Lucky Elements Panel — Positive (TC-8B-P)', () => {
   });
 
   it('TC-8B-P-02: stone chip shows Hindi name in parentheses', () => {
-    renderCelebPage(FULL_DOB_SLUG);
+    renderCelebPage(CERTAIN_RASHI_SLUG);
     const chip = document.querySelector('[data-testid="lucky-chip-stone"]');
     // Should contain parentheses with Hindi name e.g. "(Moonga)"
     expect(chip?.textContent).toMatch(/\(.+\)/);
@@ -313,7 +318,7 @@ describe('Lucky Elements Panel — Positive (TC-8B-P)', () => {
   });
 
   it('TC-8B-P-03: day chip shows a valid weekday', () => {
-    renderCelebPage(FULL_DOB_SLUG);
+    renderCelebPage(CERTAIN_RASHI_SLUG);
     const chip = document.querySelector('[data-testid="lucky-chip-day"]');
     const text = chip?.textContent || '';
     const valid = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
@@ -326,25 +331,18 @@ describe('Lucky Elements Panel — Positive (TC-8B-P)', () => {
   });
 
   it('TC-8B-P-05: tarot chip renders for full-DOB celebrity', () => {
-    renderCelebPage(FULL_DOB_SLUG);
+    renderCelebPage(CERTAIN_RASHI_SLUG);
     const chip = document.querySelector('[data-testid="lucky-chip-tarot"]');
     expect(chip).toBeTruthy();
     expect(chip?.textContent).not.toContain('undefined');
   });
 
-  it('TC-8B-P-06: Scorpio celebrity panel shows Tuesday and Red Coral', () => {
-    const scorpioSlug = ALL_SLUGS.find(slug => {
-      const dob = parseCelebrityDOB(SLUG_MAP.get(slug) as Record<string,unknown>);
-      if (!dob?.isFullDate) return false;
-      return calculateWesternZodiac(dob.day, dob.month).sign === 'Scorpio';
-    });
-    if (!scorpioSlug) { console.log('No Scorpio in test DB — skipping'); return; }
-
-    renderCelebPage(scorpioSlug);
-    const panel = document.querySelector('[data-testid="lucky-elements-panel"]');
-    const text = panel?.textContent || '';
-    expect(text).toContain('Tuesday');
-    expect(text).toContain('Red Coral');
+  it('TC-8B-P-06: panel follows the Moon sign, not the Sun sign (Nehru: Sun Scorpio, Moon Karka)', () => {
+    renderCelebPage(CERTAIN_RASHI_SLUG);
+    const text = document.querySelector('[data-testid="lucky-elements-panel"]')?.textContent || '';
+    expect(text).toContain('Monday');      // Karka (lord Chandra)
+    expect(text).toContain('Pearl');
+    expect(text).not.toContain('Red Coral'); // the old Sun-sign (Scorpio → "Vrischika") answer
   });
 
 });

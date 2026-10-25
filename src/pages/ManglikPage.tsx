@@ -12,6 +12,7 @@ import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
 import { birthQuery } from '@/lib/timezone/clientBirth';
+import { Remedies } from '@/components/vedic/Remedies';
 
 /** Shape of doshas.mangalDosha from /api/kundali — built by src/lib/vedic/manglik.ts. */
 interface MangalDosha {
@@ -166,11 +167,11 @@ export default function ManglikPage() {
               {dosha.hasDosha && (
                 <div className="mt-2 space-y-1">
                   <div data-testid="manglik-level" className="font-semibold text-foreground">
-                    Level: {dosha.severityLabel} {dosha.severityLabel === 'High' ? '(from both the Lagna and the Moon)' : '(from one of the two checks)'}
+                    <TermTip id="manglik">Level</TermTip>: {dosha.severityLabel} {dosha.severityLabel === 'High' ? '(from both the Lagna and the Moon)' : '(from one of the two checks)'}
                   </div>
                   {dosha.cancelled && (
                     <div data-testid="manglik-cancelled" className="text-sm text-emerald-800">
-                      Classically cancelled in your chart: {cancellations.join('; ')}.
+                      Classically <TermTip id="manglikParihara">cancelled</TermTip> in your chart: {cancellations.join('; ')}.
                     </div>
                   )}
                 </div>
@@ -178,11 +179,11 @@ export default function ManglikPage() {
               {/* The two checks, shown separately (D1). */}
               <div data-testid="manglik-checks" className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-left">
                 <div data-testid="manglik-check-lagna" className="rounded-lg border border-border bg-background p-2">
-                  <div className="font-semibold text-foreground">From the Lagna</div>
-                  <div className="text-muted-foreground">Mars in the {ord(dosha.marsHouseFromLagna)} house — {dosha.fromLagna ? 'Manglik by this check' : 'not Manglik by this check'}</div>
+                  <div className="font-semibold text-foreground">From the <TermTip id="lagna">Lagna</TermTip></div>
+                  <div className="text-muted-foreground">Mars in the {ord(dosha.marsHouseFromLagna)} <TermTip id="bhava">house</TermTip> — {dosha.fromLagna ? 'Manglik by this check' : 'not Manglik by this check'}</div>
                 </div>
                 <div data-testid="manglik-check-moon" className="rounded-lg border border-border bg-background p-2">
-                  <div className="font-semibold text-foreground">From the Moon</div>
+                  <div className="font-semibold text-foreground">From the <TermTip id="rashi">Moon</TermTip></div>
                   <div className="text-muted-foreground">Mars in the {ord(dosha.marsHouseFromMoon)} house — {dosha.fromMoon ? 'Manglik by this check' : 'not Manglik by this check'}</div>
                 </div>
               </div>
@@ -216,7 +217,7 @@ export default function ManglikPage() {
 
             {/* Classical cancellations — always shown */}
             <div data-testid="manglik-cancellations" className="rounded-xl border border-border p-5">
-              <div className="font-semibold text-foreground mb-2">Classical cancellations (Manglik parihara)</div>
+              <div className="font-semibold text-foreground mb-2">Classical cancellations (<TermTip id="manglikParihara">Manglik parihara</TermTip>)</div>
               <p className="text-sm text-muted-foreground mb-3">
                 Classical texts recognise several conditions that cancel or significantly reduce Mangal Dosha. These are part of the same tradition that defines the dosha — they're not workarounds, they're the tradition's own built-in balance:
               </p>
@@ -250,19 +251,12 @@ export default function ManglikPage() {
               </p>
             </div>
 
-            {/* Upay / remedies — optional, non-fear */}
-            <div data-testid="manglik-upay" className="rounded-xl border border-border p-5">
-              <div className="font-semibold text-foreground mb-1">Traditional upay (remedies) — optional, not required</div>
-              <p className="text-sm text-muted-foreground mb-2">
-                First, the honest part: <strong className="text-foreground">nothing here is necessary to "avoid harm"</strong> — Manglik is a chart pattern to be aware of in matching, not a threat to defend against. These are simply the customs some people find grounding as a reflection on Mars's themes of patience and directed energy.
-              </p>
-              <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                <li><strong className="text-foreground">Hanuman devotion on Tuesdays</strong> — Tuesdays belong to Mars (Mangalwar), and reciting the Hanuman Chalisa is a traditional Mars-balancing practice; take it or leave it as suits your beliefs.</li>
-                <li><strong className="text-foreground">Patience and directed energy</strong> — working with Mars's own themes (discipline, courage, consistent effort) is the most-cited traditional "answer" to a strong Mars placement.</li>
-                <li><strong className="text-foreground">Charity on Tuesdays</strong> — donating red lentils (masoor dal) or red cloth on a Tuesday is a classical Mars-related generosity practice, offered as optional custom.</li>
-              </ul>
-              <p className="mt-2 text-xs text-amber-700">Offered as tradition and reflection, not medical or legal advice — and never as something you must do out of fear.</p>
-            </div>
+            {/* Batch 5: what it means + what you can do (shared Remedies block). */}
+            {dosha.hasDosha && (
+              <div data-testid="manglik-upay">
+                <Remedies remedyKey="manglik" label={{ en: 'Manglik — what it means and what you can do', hi: 'मांगलिक — अर्थ और उपाय' }} />
+              </div>
+            )}
 
             <p className="text-xs text-muted-foreground">
               Computed from Mars's real house position using the same <TermTip id="ayanamsa">Lahiri-ayanamsa engine</TermTip> as the rest of BornClock.

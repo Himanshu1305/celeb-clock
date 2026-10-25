@@ -3,14 +3,15 @@ import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { NAKSHATRA_PROFILES } from '@/data/astrologicalData';
 import type { NakshatraProfile } from '@/data/astrologicalData';
-import { calculateNakshatra } from '@/utils/celebrityCalculations';
+import { moonSignsForDate, describeAlternatives } from '@/lib/vedic/dateOnlyMoonSign';
+import { DateOnlyMoonNote } from '@/components/vedic/DateOnlyMoonNote';
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
 // NAKSHATRA_PROFILES keys are space-less (e.g. "PurvaPhalguni") while each object
-// carries a `.nakshatra` display field (e.g. "Purva Phalguni"). calculateNakshatra
+// carries a `.nakshatra` display field (e.g. "Purva Phalguni"). The chart engine
 // returns the display name, so we resolve profiles via a lookup keyed on `.nakshatra`.
 const PROFILE_BY_NAME: Record<string, NakshatraProfile> = Object.values(NAKSHATRA_PROFILES)
   .reduce((acc, p) => { acc[p.nakshatra] = p; return acc; }, {} as Record<string, NakshatraProfile>);
@@ -37,7 +38,7 @@ const GANA_INFO = [
 const FAQS = [
   {
     q: 'What is a Nakshatra by date of birth?',
-    a: 'A Nakshatra is one of the 27 lunar mansions of Vedic astrology — the segment of the sky the Moon occupied at your birth. Each Nakshatra spans about 13°20\' of the zodiac and carries a ruling planet (lord), a presiding deity, a gana (temperament) and a distinct personality signature. BornClock estimates your Nakshatra directly from your date of birth.',
+    a: 'A Nakshatra is one of the 27 lunar mansions of Vedic astrology — the segment of the sky the Moon occupied at your birth. Each Nakshatra spans about 13°20\' of the zodiac and carries a ruling planet (lord), a presiding deity, a gana (temperament) and a distinct personality signature. BornClock works out the Moon\'s real sidereal position for your birth date and shows the Nakshatra (or, if the Moon moved on that day, the two or three possible ones).',
   },
   {
     q: 'How many Nakshatras are there and what are they?',
@@ -49,7 +50,7 @@ const FAQS = [
   },
   {
     q: 'Can I find my Nakshatra accurately from date of birth alone?',
-    a: 'A date-only Nakshatra is approximate. The Moon passes through a full Nakshatra in roughly a day, so your exact birth time and place are needed for a precise result — including the pada (quarter) and the traditional naming syllable. BornClock clearly labels its calculation as approximate: a strong starting point, not a substitute for a full birth chart.',
+    a: 'Often not exactly. The Moon passes through a full Nakshatra in roughly a day, so on most dates it changes Nakshatra at some point during the day. BornClock checks the Moon from 00:00 to 23:59 Indian Standard Time and shows every Nakshatra possible that day; your exact birth time and place (in the Kundali) decide which one, its pada (quarter) and the traditional naming syllable.',
   },
   {
     q: 'Why is Nakshatra used to name babies in India?',
@@ -59,20 +60,17 @@ const FAQS = [
 
 function NakshatraCalculator() {
   const [dob, setDob] = React.useState('');
-  const [profile, setProfile] = React.useState<NakshatraProfile | null>(null);
-  const [fallbackName, setFallbackName] = React.useState<string>('');
+  const [names, setNames] = React.useState<string[]>([]);
+  const profiles = names.map(n => PROFILE_BY_NAME[n]).filter((p): p is NakshatraProfile => !!p);
+  const profile = profiles[0] ?? null;
+  const fallbackName = names.length > 0 && !profile ? describeAlternatives(names) : '';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setDob(val);
-    if (val.length === 10) {
-      const [year, month, day] = val.split('-').map(Number);
-      if (year && month && day) {
-        const result = calculateNakshatra(day, month);
-        setFallbackName(result.nakshatra);
-        setProfile(PROFILE_BY_NAME[result.nakshatra] ?? null);
-      }
-    }
+    // Batch 6: real sidereal Moon (chart engine) for the whole date.
+    const r = val.length === 10 ? moonSignsForDate(val) : null;
+    setNames(r ? r.nakshatraNames : []);
   };
 
   return (
@@ -82,7 +80,7 @@ function NakshatraCalculator() {
         Find Your Nakshatra — Free Calculator
       </h3>
       <p className="text-sm text-[#6E5AA6] mb-4">
-        Enter your date of birth to discover your approximate Nakshatra instantly.
+        Enter your date of birth to see the Nakshatra(s) the Moon was in that day.
       </p>
       <input
         type="date"
@@ -96,6 +94,12 @@ function NakshatraCalculator() {
       {profile && (
         <div data-testid="nakshatra-result"
              className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-5">
+          <div className="text-sm text-gray-600 mb-2">
+            Nakshatra: <strong data-testid="nakshatra-answer">{describeAlternatives(names)}</strong>
+          </div>
+          {profiles.length > 1 && (
+            <p className="text-xs text-gray-500 mb-2">Showing {profile.nakshatra} first; your birth time decides which one is yours.</p>
+          )}
           <div className="text-2xl font-black text-[#6E5AA6] mb-0.5">
             {profile.nakshatra}
           </div>
@@ -129,10 +133,7 @@ function NakshatraCalculator() {
           Your Nakshatra is <strong>{fallbackName}</strong>. Full profile details are being added.
         </div>
       )}
-      <p className="text-xs text-gray-400 mt-3 italic">
-        Note: This is an approximate calculation. A precise Nakshatra — including its
-        pada and naming syllable — requires your exact birth time and location.
-      </p>
+      <DateOnlyMoonNote ambiguous={names.length ? names.length > 1 : null} what="Nakshatra" />
     </div>
   );
 }
@@ -212,10 +213,9 @@ export function NakshatraArticle() {
             Because the Nakshatra tracks the Moon so closely, it is treasured in Indian tradition
             for detail the Rashi cannot give: the temperament (gana) used in marriage matching,
             the ruling planet and presiding deity that colour your inner nature, and the naming
-            syllable chosen for a newborn. BornClock estimates your Nakshatra directly from your
-            date of birth — an approximate but meaningful reading in seconds. For a precise
-            Nakshatra you need your exact birth time and place, since the Moon passes through a
-            full Nakshatra in about a single day.
+            syllable chosen for a newborn. BornClock works out the Moon's real sidereal position for your
+            date of birth. The Moon passes through a full Nakshatra in about a single day, so on
+            most dates two are possible and your exact birth time and place decide which one.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">What Is a Nakshatra?</h2>

@@ -75,5 +75,5 @@ describe('Sade Sati cycles on the real ephemeris (audit D2/D3/D10)', () => {
       const r = computeSadeSati(moon, NOW, getSaturnSignIndex, P10_BIRTH);
       if (r.previousCycle) expect(new Date(r.previousCycle.end).getTime()).toBeGreaterThan(P10_BIRTH.getTime());
     }
-  });
+  }, 60_000); // 12 full ephemeris scans (~0.6 s each) exceed vitest's 5 s default
 });

@@ -143,7 +143,7 @@ const BLOG = {
 // ── Answers pages ─────────────────────────────────────────────────────────────
 const ANSWERS = {
   'how-long-will-i-live':                  'How Long Will I Live? A Science-Based Answer | BornClock',
-  'what-is-my-biological-age':             'What Is Biological Age? How It Differs From Chronological Age | BornClock',
+  'what-is-my-biological-age':             'What Is My Biological Age? The Short Answer + Free Test | BornClock',
   'who-shares-my-birthday':                'Which Famous People Share My Birthday? | BornClock',
   'how-old-am-i-on-mars':                  'How Old Am I on Mars and Other Planets? | BornClock',
   'what-is-my-zodiac-sign':                'What Is My Zodiac Sign? Western, Vedic and Chinese Explained | BornClock',
@@ -176,7 +176,6 @@ const STATIC = {
   '/age-in-days':           { title: 'Age in Days Calculator — How Many Days Old? | BornClock', desc: 'Find out exactly how many days old you are — updated live, including leap years. Most people are surprised how large the number is. Free, instant, no sign-up.' },
   '/age-in-seconds':        { title: 'Age in Seconds Calculator — Seconds Alive | BornClock', desc: 'Calculate exactly how many seconds old you are — live, updating every second. Most 30-year-olds have passed 946 million seconds. Free, instant, no sign-up.' },
   '/birthday-countdown':    { title: 'Birthday Countdown — Days Until Your Birthday | BornClock', desc: 'Find out exactly how many days until your next birthday — down to the day. See what day of the week it falls on and who shares it. Free, no sign-up.' },
-  '/biological-age-vs-chronological-age': { title: 'Biological Age vs Chronological Age Explained | BornClock', desc: 'Chronological age counts the years. Biological age measures how your body is actually aging. The two can differ by over a decade — and only one of them can change.' },
   '/life-expectancy-india-vs-usa': { title: 'Life Expectancy India vs USA — The Gap | BornClock', desc: `India's life expectancy is ${LEY('India')} years; the USA's is ${LEY('United States')}. The gap has specific causes — and India is closing it faster than most people realize.` },
   '/life-expectancy-india':     { title: 'Life Expectancy in India — 2026 Data & Causes | BornClock', desc: `India's life expectancy is ${LEY('India')} years (UN WPP 2024, 2023 estimate). Here's what drives it, how it compares globally, and what Indian adults can do to outlive the national average.` },
   '/life-expectancy-usa':       { title: 'Life Expectancy in the USA — 2026 Data | BornClock', desc: `US life expectancy is ${LEY('United States')} years — after a sharp fall in 2020-21 and a recovery by 2023. Here's why, and what Americans can do about it.` },
@@ -209,7 +208,6 @@ const STATIC = {
   '/birthstone':            { title: 'Birthstone by Month — History, Meaning & Geology | BornClock', desc: 'Find your birthstone by birth month — January (Garnet) through December (Tanzanite). Full history, mythology, geology, and care tips. Sourced from GIA.' },
   '/life-expectancy':       { title: 'Life Expectancy Calculator — How Long Will I Live? | BornClock', desc: 'Science-based life expectancy calculator using WHO, CDC, and Harvard longevity research. Get your personalised lifespan estimate and longevity score.' },
   '/longevity-calculator':  { title: 'Longevity Calculator — How Long Will You Live? | BornClock', desc: 'Free longevity calculator using WHO, Harvard and NIH research. 8-factor quiz gives your personalised life expectancy and 90-day action plan. Takes 3 minutes.' },
-  '/biological-age-calculator': { title: 'Biological Age Calculator — How Old Is Your Body? | BornClock', desc: 'Find your biological age based on epigenetic science and lifestyle factors. Free calculator using WHO and NIH research. See how to lower it in 90 days.' },
   '/how-long-will-i-live': { title: 'How Long Will I Live? Life Expectancy Quiz | BornClock', desc: 'Answer 8 questions to get your personalised life expectancy based on WHO, Harvard and NIH research. Free instant result with a 90-day action plan.' },
   '/celebrity-birthday':    { title: 'Everything Your Birthday Reveals — Celebrity Twins | BornClock', desc: 'Enter your birthday: see your celebrity birthday twins, Western zodiac and numerology Life Path, and unlock the full Birthday Blueprint. Real celebrities, real dates, real math.' },
   '/birthday':              { title: 'Birthday Personality by Date — All 365 Days | BornClock', desc: 'Explore birthday personality profiles for every day of the year. Zodiac sign, life path number, famous people, and personality traits for your exact birthday.' },
@@ -229,7 +227,7 @@ const STATIC = {
   '/articles/numerology-by-date-of-birth': { title: 'Numerology by Date of Birth — Life Path Number Guide India | BornClock', desc: 'Calculate your Life Path number by date of birth. All 9 life paths explained with famous Indian examples, compatibility guide, and free calculator.' },
   '/articles/life-expectancy-by-country-2026': { title: 'Life Expectancy by Country 2026 — Global Rankings | BornClock', desc: 'Life expectancy by country in 2026 — UN World Population Prospects 2024 data. See rankings, what drives the differences, and how to improve your own.' },
   '/articles/how-long-will-i-live-in-india': { title: 'How Long Will I Live in India? Life Expectancy Guide | BornClock', desc: `Life expectancy in India by state — SRS data. Kerala 75.1 leads; national average ${LEY('India')} (UN WPP 2024). See your state and how to beat the average.` },
-  '/articles/biological-age-vs-chronological-age': { title: 'Biological Age vs Chronological Age — The Science | BornClock', desc: 'Biological age vs chronological age explained — Horvath epigenetic clock, 5 proven ways to lower your biological age, and how to measure it.' },
+  '/biological-age-vs-chronological-age': { title: 'Biological Age vs Chronological Age — The Science | BornClock', desc: 'Biological age vs chronological age explained — Horvath epigenetic clock, 5 proven ways to lower your biological age, and how to measure it.' },
   '/articles/vedic-astrology-birth-chart': { title: 'Vedic Astrology Birth Chart — Rashi & Nakshatra Guide | BornClock', desc: 'Vedic astrology birth chart explained — your Moon Rashi, Nakshatra, and Lagna from date of birth. Free calculator with all 12 Rashis and 27 Nakshatras.' },
   '/articles/longevity-quiz': { title: 'Longevity Quiz — How Long Will You Live? 8 Factors | BornClock', desc: 'Take the longevity quiz — 8 science-backed factors (WHO, Harvard) that determine how long you will live. Free, 3 minutes, with worked example.' },
   '/articles/bryan-johnson-blueprint-alternative': { title: 'Bryan Johnson Blueprint — Free Alternative | BornClock', desc: 'Bryan Johnson Blueprint costs millions a year. Here is a free, science-backed longevity alternative — the habits that actually matter, no budget needed.' },
@@ -241,10 +239,6 @@ const STATIC = {
   '/articles/life-path-number-compatibility': { title: 'Life Path Number Compatibility — Numerology Love Match | BornClock', desc: 'Life Path number compatibility — how numbers 1-9 and master numbers 11, 22, 33 match in love. Free calculator plus a full compatibility matrix.' },
   '/articles/death-clock-alternative': { title: 'Death Clock Alternative — A Science-Backed Longevity Tool | BornClock', desc: 'A better Death Clock alternative — a science-backed life expectancy estimate from 8 real lifestyle factors, with actionable advice. Free.' },
   '/articles/retirement-planning-life-expectancy': { title: 'Retirement Planning & Life Expectancy in India | BornClock', desc: 'Retirement planning meets life expectancy — how long your corpus must last in India, longevity risk, EPF/NPS/PPF, and the FIRE movement.' },
-  '/life-expectancy-calculator-uk': { title: 'Life Expectancy Calculator UK — How Long Will You Live? | BornClock', desc: `UK life expectancy is ${LEY('United Kingdom')} years (UN WPP 2024). Calculate your personal life expectancy with our free 8-factor UK longevity calculator in 3 minutes.` },
-  '/life-expectancy-calculator-australia': { title: 'Life Expectancy Calculator Australia — How Long? | BornClock', desc: `Australia life expectancy is ${LEY('Australia')} years (UN WPP 2024). Calculate your personal life expectancy with our free 8-factor Australian longevity calculator.` },
-  '/life-expectancy-calculator-usa': { title: 'Life Expectancy Calculator USA — How Long Will You Live? | BornClock', desc: `USA life expectancy is ${LEY('United States')} years (UN WPP 2024). Calculate your personal life expectancy with our free 8-factor American longevity calculator in 3 minutes.` },
-  '/life-expectancy-calculator-canada': { title: 'Life Expectancy Calculator Canada — How Long? | BornClock', desc: `Canada life expectancy is ${LEY('Canada')} years (UN WPP 2024). Calculate your personal life expectancy with our free 8-factor Canadian longevity calculator.` },
   '/articles/zodiac-compatibility': { title: 'Zodiac Compatibility — Which Signs Match Best? | BornClock', desc: 'Zodiac compatibility guide — how all 12 signs match in love and friendship. Free compatibility checker plus the best and worst matches for every sign.' },
   '/articles/biorhythm-calculator': { title: 'Biorhythm Calculator — Physical, Emotional, Intellectual | BornClock', desc: 'Free biorhythm calculator — track your physical (23-day), emotional (28-day) and intellectual (33-day) cycles from your date of birth.' },
   '/articles/tarot-card-by-date-of-birth': { title: 'Tarot Card by Date of Birth — Find Your Card | BornClock', desc: 'Find your tarot card by date of birth — your zodiac Major Arcana card and your Life Path tarot card, with meanings. Free tarot-by-birthday guide.' },
@@ -354,38 +348,33 @@ function parseBornOnSlug(slug) {
 // CTR-optimised born-on India title/meta (mirrors src/utils/seoHelpers.ts —
 // keep in sync). Names come from entry.top3; count is the authoritative
 // entry.count, so the meta reports the true total, not just the top-3 length.
+// Batch 6 SEO: India-specific wording ("Indian Celebrities Born on …") so the India
+// facet no longer shares the global date page's title/meta.
 function bornOnIndiaTitle(monthName, day, top) {
   const dayNum = Number(day);
+  const base = `Indian Celebrities Born on ${monthName} ${dayNum}`;
   const first = (top && top[0]) || '';
-  if (!first) return `Born on ${monthName} ${dayNum}? Discover Your Celebrity Birthday Twins · BornClock`;
-  const full = `Born on ${monthName} ${dayNum}? ${first} Shares Your Birthday · BornClock`;
-  if (full.length <= 70) return full;
-  const firstName = first.split(' ')[0];
-  const short = `Born on ${monthName} ${dayNum}? ${firstName} Shares Your Birthday · BornClock`;
-  if (short.length <= 70) return short;
-  return `Born on ${monthName} ${dayNum}? Discover Your Celebrity Birthday Twins · BornClock`;
+  if (first) {
+    const full = `${base}: ${first} & More | BornClock`;
+    if (full.length <= 70) return full;
+  }
+  return `${base} | BornClock`;
 }
 
 function bornOnIndiaMeta(monthName, day, top, count) {
   const dayNum = Number(day);
-  if (!count || !top || top.length === 0) {
-    return `Discover famous people born on ${monthName} ${dayNum}. Find your zodiac, numerology, life expectancy, and complete birthday intelligence. Free instant report.`;
+  const n1 = (top && top[0]) || '';
+  const n2 = (top && top[1]) || '';
+  const tail = 'Ranked by global recognition, with ages and professions.';
+  if (!count || !n1) {
+    return `Famous Indians born on ${monthName} ${dayNum} — actors, cricketers, leaders and more who share this birthday. ${tail}`;
   }
-  const personWord = count === 1 ? 'person shares' : 'people share';
-  const name1 = top[0] || '';
-  const name2 = top[1] || '';
-  const suffix = 'Discover your zodiac, numerology, life expectancy. Free instant report.';
-  const withTwo = name2
-    ? `${count} famous ${personWord} your ${monthName} ${dayNum} birthday including ${name1} and ${name2}. ${suffix}`
-    : `${count} famous ${personWord} your ${monthName} ${dayNum} birthday including ${name1}. ${suffix}`;
-  if (withTwo.length <= 160) return withTwo;
-  const short1 = name1.split(' ')[0];
-  const short2 = name2 ? name2.split(' ')[0] : '';
-  const withShort = short2
-    ? `${count} famous ${personWord} your ${monthName} ${dayNum} birthday including ${short1} and ${short2}. ${suffix}`
-    : `${count} famous ${personWord} your ${monthName} ${dayNum} birthday including ${short1}. ${suffix}`;
-  if (withShort.length <= 160) return withShort;
-  return withShort.slice(0, 157) + '...';
+  const who = count === 1 ? 'famous Indian shares' : 'famous Indians share';
+  const build = (a, b) => `${count} ${who} the ${monthName} ${dayNum} birthday, including ${a}${b ? ` and ${b}` : ''}. ${tail}`;
+  const full = build(n1, n2);
+  if (full.length <= 160) return full;
+  const short = build(n1.split(' ')[0], n2 ? n2.split(' ')[0] : '');
+  return short.length <= 160 ? short : short.slice(0, 157) + '...';
 }
 
 // ── Main export ───────────────────────────────────────────────────────────────
@@ -421,27 +410,6 @@ export function getTitleForRoute(route) {
     if (hi) return {
       title: `${hi} राशिफल — आज का राशिफल | BornClock`,
       description: `${hi} राशि का आज का राशिफल — प्रेम, करियर और स्वास्थ्य के लिए दैनिक भविष्यवाणी। BornClock पर पढ़ें।`,
-    };
-  }
-
-  // /born-on/:month/:day/personality — date personality (Task 17)
-  const pers = route.match(/^\/born-on\/([a-z]+)\/(\d{1,2})\/personality$/);
-  if (pers) {
-    const monthName = pers[1].charAt(0).toUpperCase() + pers[1].slice(1);
-    return {
-      title: `Born on ${monthName} ${pers[2]}? Personality & Traits | BornClock`,
-      description: `The personality of people born on ${monthName} ${pers[2]} — zodiac traits, birth number, famous birthdays and what your birth date reveals about you.`,
-    };
-  }
-
-  // Global born-on: /born-on/:month/:day (no /india suffix) — Task 29
-  const gbo = route.match(/^\/born-on\/([a-z]+)\/(\d{1,2})$/);
-  if (gbo) {
-    const monthName = gbo[1].charAt(0).toUpperCase() + gbo[1].slice(1);
-    const day = gbo[2];
-    return {
-      title: `Famous People Born on ${monthName} ${day} — Birthdays | BornClock`,
-      description: `Discover the famous people born on ${monthName} ${day} — actors, athletes, leaders and more who share this birthday, ranked by global recognition.`,
     };
   }
 
@@ -535,6 +503,10 @@ export function getTitleForRoute(route) {
 
   {
     const pc = { delhi: 'Delhi', mumbai: 'Mumbai', bengaluru: 'Bengaluru', kolkata: 'Kolkata', chennai: 'Chennai', hyderabad: 'Hyderabad', pune: 'Pune', ahmedabad: 'Ahmedabad', jaipur: 'Jaipur', lucknow: 'Lucknow' };
+    if (route === '/glossary') return {
+      title: 'Astrology Glossary — Every Vedic Term Explained Simply | BornClock',
+      description: 'Plain-language meanings of every astrology term on BornClock — Lagna, Nakshatra, Dasha, Guna Milan kootas, Porutham, Tithi, Rahu Kaal, Choghadiya, Shadbala, Navamsa, doshas and more — with Hindi names.',
+    };
     if (route === '/panchang') return {
       title: "Today's Panchang — Tithi, Nakshatra & Rahu Kaal | BornClock",
       description: "Today's Panchang: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal, Gulika, Yamaganda and the day & night Choghadiya — computed from real sunrise/sunset for your city.",
@@ -638,6 +610,46 @@ export function getTitleForRoute(route) {
       title: `${yg[m[1]]} — Formation, Meaning & Strength | BornClock`,
       description: `${yg[m[1]]}: how it forms, what the Vedic tradition reads into it, how strongly it actually delivers, and a balanced reading. Check yours with a free Kundli.`,
     };
+  }
+
+  // /remedies[/:slug] and /hi/upay[/:slug] — Batch 5 (mirrors src/pages/RemediesPage.tsx remedyMeta)
+  if (route === '/remedies') return {
+    title: 'Vedic Remedies — Doshas, Sade Sati, Matching & Planets | BornClock',
+    description: 'Calm, sourced remedies for Manglik, Kaal Sarp, Pitra Dosha, Sade Sati, Nadi dosha and the nine planets — free remedies first, then daan, puja, temples and gemstones with caution.',
+  };
+  if (route === '/hi/upay') return {
+    title: 'ज्योतिषीय उपाय — दोष, साढ़ेसाती, मिलान और ग्रहों के उपाय | BornClock',
+    description: 'मांगलिक, कालसर्प, पितृ दोष, साढ़ेसाती, नाड़ी दोष और नवग्रहों के शांत, स्रोत-सहित उपाय — पहले निःशुल्क उपाय, फिर दान, पूजा, मंदिर और सावधानी के साथ रत्न।',
+  };
+  {
+    const rm = {
+      'manglik-dosha': ['Manglik (Mangal Dosha)', 'मांगलिक (मंगल दोष)'],
+      'kaal-sarp-dosha': ['Kaal Sarp Dosha', 'कालसर्प दोष'],
+      'pitra-dosha': ['Pitra Dosha', 'पितृ दोष'],
+      'grahan-dosha': ['Grahan Dosha', 'ग्रहण दोष'],
+      'mool-nakshatra': ['Mool (Gandamool) Nakshatra', 'मूल (गंडमूल) नक्षत्र'],
+      'sade-sati': ['Sade Sati (Saturn’s 7½ years)', 'साढ़ेसाती (शनि के साढ़े सात वर्ष)'],
+      'shani-dhaiya': ['Shani Dhaiya (small Panoti)', 'शनि ढैया (लघु पनौती)'],
+      'nadi-dosha': ['Nadi Dosha (matching)', 'नाड़ी दोष (मिलान)'],
+      'bhakoot-dosha': ['Bhakoot Dosha (matching)', 'भकूट दोष (मिलान)'],
+      'gana-dosha': ['Gana Dosha (matching)', 'गण दोष (मिलान)'],
+      'surya-sun': ['Surya (Sun)', 'सूर्य'],
+      'chandra-moon': ['Chandra (Moon)', 'चंद्र'],
+      'mangal-mars': ['Mangal (Mars)', 'मंगल'],
+      'budh-mercury': ['Budh (Mercury)', 'बुध'],
+      'guru-jupiter': ['Guru (Jupiter)', 'गुरु (बृहस्पति)'],
+      'shukra-venus': ['Shukra (Venus)', 'शुक्र'],
+      'shani-saturn': ['Shani (Saturn)', 'शनि'],
+      'rahu': ['Rahu', 'राहु'],
+      'ketu': ['Ketu', 'केतु'],
+    };
+    const m = route.match(/^\/(remedies|hi\/upay)\/([a-z-]+)$/);
+    if (m && rm[m[2]]) {
+      const [en, hi] = rm[m[2]];
+      return m[1] === 'remedies'
+        ? { title: `${en} — Meaning & Remedies | BornClock`, description: `${en}: what it means for you in plain language, how common it is, and calm traditional remedies — mantra, daan, puja, temples and gemstone (with caution). Every remedy cites its source.` }
+        : { title: `${hi} — अर्थ और उपाय | BornClock`, description: `${hi}: आपके लिए इसका सरल अर्थ, यह कितना आम है, और शांत पारंपरिक उपाय — मंत्र, दान, पूजा, मंदिर और रत्न (सावधानी सहित)। हर उपाय का स्रोत दिया गया है।` };
+    }
   }
 
   // /divisional-charts[/:slug]
@@ -859,8 +871,8 @@ export function getTitleForRoute(route) {
     const d = parseInt(parts[2], 10);
     const monthName = MONTH_NAMES[m] || '';
     return {
-      title: `${monthName} ${d} Birthday — Personality & Famous People | BornClock`,
-      description: `Birthday personality profile for ${monthName} ${d} — zodiac sign, life path number, birthstone, famous people, and compatibility.`,
+      title: `${monthName} ${d} Birthday Personality — Zodiac & Traits | BornClock`,
+      description: `Birthday personality for ${monthName} ${d} — zodiac sign, Birth Day Number, Vedic rashi and nakshatra, strengths, lucky day and compatible signs.`,
     };
   }
 
