@@ -67,7 +67,7 @@ export default function BirthdayDatePage() {
   let nextMonth = month, nextDay = day + 1;
   if (nextDay > maxDay) { nextMonth = month === 12 ? 1 : month + 1; nextDay = 1; }
 
-  const title = `${monthName} ${day} Birthday — Personality, Zodiac & Famous People`;
+  const title = `${monthName} ${day} Birthday Personality — Zodiac & Traits | BornClock`;
   const description = `People born on ${monthName} ${day} are ${p.zodiacSign}s with Birth Day Number ${p.lifePathNumber}. Discover your core traits, lucky day, compatible signs, and more.`;
 
   const faqs = [
@@ -130,7 +130,7 @@ export default function BirthdayDatePage() {
         note: '© 2026 BornClock · Birthdays.',
       }}
       eyebrow="Birthday personality"
-      h1={<>{monthName} {day} Birthday — Personality, Zodiac &amp; Famous People</>}
+      h1={<>{monthName} {day} Birthday Personality — Zodiac, Numerology &amp; Traits</>}
     >
       <section className="section">
         <div className="max-w-3xl mx-auto">
@@ -253,7 +253,7 @@ export default function BirthdayDatePage() {
           </p>
           <Button asChild className="bg-white text-[#6E5AA6] hover:bg-[#6E5AA6]/10 font-bold">
             <Link to={`/born-on/${monthName.toLowerCase()}-${day}/`}>
-              Explore Your Birthday <ArrowRight className="w-4 h-4 ml-1.5" />
+              Famous people born on {monthName} {day} <ArrowRight className="w-4 h-4 ml-1.5" />
             </Link>
           </Button>
         </div>

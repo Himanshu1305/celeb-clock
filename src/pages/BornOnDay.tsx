@@ -483,14 +483,14 @@ export default function BornOnDay() {
         <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 mb-10 text-center">
           <h2 className="font-bold text-xl text-foreground mb-2">Is {monthName} {day} YOUR birthday?</h2>
           <p className="text-muted-foreground mb-4">
-            Get your complete birthday report — celebrity twins, zodiac deep-dive, numerology, and life insights.
+            Read the full {monthName} {day} birthday personality — zodiac, numerology, Vedic rashi and nakshatra.
           </p>
           <Link
             to={`/birthday/${month}/${day}/`}
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold hover:opacity-90 transition-opacity"
           >
             <ArrowRightCircle className="w-4 h-4" />
-            Generate my birthday report
+            {monthName} {day} birthday personality
           </Link>
         </div>
 
@@ -502,6 +502,7 @@ export default function BornOnDay() {
             <Link to={`/born-in-${monthName.toLowerCase()}`} className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ Everyone born in {monthName}</Link>
             <Link to={`/zodiac/${zodiacSlug}`} className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ {zodiac.sign} zodiac guide</Link>
             <Link to="/energy-forecast" className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ Your 7-day energy forecast</Link>
+            <Link to={`/on-this-day/${monthName.toLowerCase()}/${day}/`} className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ What happened on {monthName} {day} in history</Link>
             {postsForTags([zodiacSlug, 'birthday', 'birthstone'], 1).map(p => (
               <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ {p.title}</Link>
             ))}

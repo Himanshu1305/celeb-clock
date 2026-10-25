@@ -28,7 +28,7 @@ const FAQS = [
   },
   {
     q: 'How does BornClock estimate my biological age?',
-    a: 'BornClock estimates biological age from 8 lifestyle factors — including sleep, exercise, diet, smoking, alcohol, stress, and body composition — mapped against population health research. It is an illustrative estimate designed to show how your habits push your biological age above or below your chronological age. It is not a clinical DNA methylation test, but it highlights the same levers the science points to.',
+    a: 'BornClock estimates biological age from 12 self-reported proxy biomarkers — such as resting heart rate, push-ups, balance, sleep, memory, reaction time, BMI, waist size and blood pressure — mapped against population health research. It is an illustrative estimate designed to show how your habits push your biological age above or below your chronological age. It is not a clinical DNA methylation test, but it highlights the same levers the science points to.',
   },
 ];
 
@@ -153,10 +153,10 @@ function BioAgeCalculator() {
             </div>
           </div>
           <p className="text-xs text-gray-500 leading-relaxed mb-3">
-            Illustrative only. BornClock&apos;s full estimate uses 8 lifestyle factors and
+            Illustrative only. BornClock&apos;s full estimate uses 12 proxy biomarkers and
             population health research. For a proper reading, use the calculator below.
           </p>
-          <a href="/biological-age-calculator"
+          <a href="/biological-age"
              className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-[#0E2238] transition-colors">
             Get my full biological age estimate →
@@ -175,7 +175,7 @@ export function BiologicalAgeArticle() {
     description: DESC,
     author: { '@type': 'Organization', name: 'BornClock' },
     publisher: { '@type': 'Organization', name: 'BornClock' },
-    mainEntityOfPage: 'https://bornclock.com/articles/biological-age-vs-chronological-age/',
+    mainEntityOfPage: 'https://bornclock.com/biological-age-vs-chronological-age/',
   };
   const faqSchema = {
     '@context': 'https://schema.org',
@@ -196,7 +196,7 @@ export function BiologicalAgeArticle() {
           <SEO
             title={TITLE}
             description={DESC}
-            canonicalUrl="/articles/biological-age-vs-chronological-age"
+            canonicalUrl="/biological-age-vs-chronological-age"
             ogType="article"
           />
           <JsonLd data={articleSchema} />
@@ -215,7 +215,7 @@ export function BiologicalAgeArticle() {
             changed the field, which markers actually matter, and the five lifestyle changes with
             the strongest evidence for lowering your biological age. If you want a quick,
             illustrative estimate right now, you can try the mini-calculator further down, or use
-            the full <a href="/biological-age-calculator" className="text-[#2F6FB0] font-semibold underline">biological age calculator</a>.
+            the full <a href="/biological-age" className="text-[#2F6FB0] font-semibold underline">biological age calculator</a>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">
@@ -329,13 +329,38 @@ export function BiologicalAgeArticle() {
             </p>
           </div>
 
+          {/* Batch 6 SEO: merged from the retired duplicate page that used to live at this
+              URL (the shorter "Which One Actually Matters?" version). */}
+          <h2 className="text-2xl font-black text-gray-900 mb-3">
+            Which One Matters More — and When
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-4">
+            For social purposes — birthdays, legal thresholds, retirement planning — chronological
+            age is the relevant number. For health purposes — understanding risk, planning
+            preventive steps, understanding why you feel the way you feel — biological age is the
+            more meaningful one, because it reflects how your body is actually doing.
+          </p>
+
+          <h2 className="text-2xl font-black text-gray-900 mb-3">
+            If Your Biological Age Comes Back Higher Than Expected
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-4">
+            If an estimate comes back higher than your calendar age, the first reaction for many
+            people is alarm. That is understandable — but biological age is information, not a
+            verdict. It is one of the few health numbers that can move in both directions.
+          </p>
+          <p className="text-gray-700 leading-relaxed mb-6">
+            The useful question is not &ldquo;what does this say about me?&rdquo; but &ldquo;what do I
+            want to change, starting now?&rdquo; The five levers above are the place to begin.
+          </p>
+
           <h2 className="text-2xl font-black text-gray-900 mb-3">
             How BornClock Estimates Your Biological Age
           </h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             BornClock does not run a laboratory DNA methylation test. Instead, it estimates your
-            biological age from <strong>8 lifestyle factors</strong> — including sleep, exercise,
-            diet quality, smoking, alcohol, stress, and body composition — mapped against
+            biological age from <strong>12 self-reported proxy biomarkers</strong> — such as resting heart
+            rate, push-ups, balance, sleep, memory, reaction time, BMI, waist size and blood pressure — mapped against
             large-scale population health research. The result is an illustrative estimate that
             shows how your habits push your biological age above or below your chronological age,
             and which levers would move it most.
@@ -344,7 +369,7 @@ export function BiologicalAgeArticle() {
             It is a starting point, not a diagnosis. But it points at exactly the same
             interventions the epigenetic science highlights, in a form you can act on today. To
             see your own number, use the{' '}
-            <a href="/biological-age-calculator" className="text-[#2F6FB0] font-semibold underline">biological age calculator</a>{' '}
+            <a href="/biological-age" className="text-[#2F6FB0] font-semibold underline">biological age calculator</a>{' '}
             — and to see how those habits translate into a projected lifespan, try the{' '}
             <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">longevity calculator</a>.
           </p>
@@ -392,7 +417,7 @@ export function BiologicalAgeArticle() {
               See how your lifestyle stacks up against the science, and get a personalised
               estimate of your biological age in a few minutes.
             </p>
-            <a href="/biological-age-calculator"
+            <a href="/biological-age"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Calculate My Biological Age →

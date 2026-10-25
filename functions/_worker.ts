@@ -39,6 +39,8 @@ import { GET  as unsubscribe }         from '../api/unsubscribe.js';
 import { POST as reminders }           from '../api/reminders.js';
 import { handleReportOg, injectReportOgTags } from './og-report.js';
 import { isProductionHost, DISALLOW_ALL_ROBOTS } from './host.js';
+import { duplicateRedirect } from '../src/lib/seo/duplicateRedirects.js';
+import { INDIA_BORNON_SLUGS } from '../src/lib/seo/indiaBornOnSlugs.js';
 
 type Env = {
   ASSETS: { fetch: (request: Request) => Promise<Response> };
@@ -143,6 +145,19 @@ export default {
       return Response.redirect(new URL(REDIRECTS[pathname], request.url).toString(), 301);
     }
 
+    // Batch 6 (SEO): retired DUPLICATE pages → 301 to the one kept URL for the same intent
+    // (same date / country), e.g. /born-on/may/13 → /born-on/may-13/,
+    // /born-on/may/13/personality → /birthday/5/13/, /biological-age-calculator →
+    // /biological-age/. Also normalises zero-padded / upper-case date URLs. The mapping is
+    // shared with the React router (src/lib/seo/duplicateRedirects.ts) so both agree.
+    // Impossible dates return null and fall through to the real-404 check below.
+    {
+      const target = duplicateRedirect(pathname, { indiaSlugs: INDIA_BORNON_SLUGS });
+      if (target) {
+        return Response.redirect(new URL(target + _url.search, request.url).toString(), 301);
+      }
+    }
+
     // Compatibility pairs are prerendered once per unordered pair in ALPHABETICAL
     // order (the canonical form). 301 the reverse order to the canonical so both
     // orderings consolidate their SEO equity onto a single indexed URL rather than
@@ -230,6 +245,10 @@ export default {
       if ((m = pathname.match(/^\/born-on\/([a-z]+)-(\d+)\/?$/)))                       return !validMD(MONTH_NAMES.indexOf(m[1]), parseInt(m[2], 10));
       if ((m = pathname.match(/^\/(?:born-on|birthday)\/(\d+)\/(\d+)(?:\/personality)?\/?$/))) return !validMD(parseInt(m[1], 10), parseInt(m[2], 10));
       if ((m = pathname.match(/^\/on-this-day\/([a-z]+)\/(\d+)\/?$/)))                     return !validMD(MONTH_NAMES.indexOf(m[1]), parseInt(m[2], 10));
+      // Batch 6: retired duplicate families — valid dates were already 301'd above, so
+      // anything reaching here is an impossible date (e.g. /born-on/february/30/).
+      if ((m = pathname.match(/^\/born-on\/([a-z]+)\/(\d+)(?:\/personality)?\/?$/i)))   return !validMD(MONTH_NAMES.indexOf(m[1].toLowerCase()), parseInt(m[2], 10));
+      if ((m = pathname.match(/^\/birthday\/([a-z]+)-(\d+)\/?$/i)))                      return !validMD(MONTH_NAMES.indexOf(m[1].toLowerCase()), parseInt(m[2], 10));
       if ((m = pathname.match(/^\/birthday\/(\d+)\/?$/)))        { const mo = parseInt(m[1], 10); return !(mo >= 1 && mo <= 12); }
       if ((m = pathname.match(/^\/compatibility\/([a-z]+)\/([a-z]+)\/?$/)))             return !(Z.has(m[1]) && Z.has(m[2]));
       if ((m = pathname.match(/^\/zodiac\/([a-z-]+)\/?$/)))          return !Z.has(m[1]);

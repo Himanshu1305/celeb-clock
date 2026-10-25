@@ -158,7 +158,7 @@ export function EpigeneticsArticle() {
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
           <ul className="list-disc pl-6 text-emerald-700 mb-10 space-y-1">
-            <li><a href="/articles/biological-age-vs-chronological-age" className="hover:underline">Biological Age vs Chronological Age — What's the Difference?</a></li>
+            <li><a href="/biological-age-vs-chronological-age" className="hover:underline">Biological Age vs Chronological Age — What's the Difference?</a></li>
             <li><a href="/articles/how-to-live-to-100" className="hover:underline">How to Live to 100 — Habits of the World's Longest-Lived People</a></li>
           </ul>
 

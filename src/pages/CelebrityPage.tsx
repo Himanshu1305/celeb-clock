@@ -31,6 +31,7 @@ import {
 import { CelebrityBirthTimeNote } from '@/components/CelebrityBirthTimeNote';
 import { BirthdayRarityCard } from '@/components/BirthdayRarityCard';
 import { OnThisDay } from '@/components/OnThisDay';
+import { bornOnIndiaPath } from '@/lib/seo/indiaBornOnSlugs';
 
 // Unified celebrity DB (static Indian + Supabase, slugs pre-assigned by
 // scripts/export-celebrities.ts). Build the slug → entry map ONCE at load.
@@ -935,7 +936,7 @@ export function CelebrityPage() {
               <p data-testid="twins-none-found" className="text-gray-600 text-sm bg-gray-50 border border-gray-200 rounded-xl p-4">
                 No other celebrity in our database shares {name}'s exact birthday
                 {bornOnSlug ? '' : ''}. {bornOnSlug && (
-                  <Link to={`/born-on/${bornOnSlug}/india`} className="text-[#6E5AA6] hover:underline">See everyone born on this date →</Link>
+                  <Link to={bornOnIndiaPath(bornOnSlug)} className="text-[#6E5AA6] hover:underline">See everyone born on this date →</Link>
                 )}
               </p>
             ) : (
@@ -964,7 +965,7 @@ export function CelebrityPage() {
                 </div>
                 {bornOnSlug && (
                   <p className="text-sm mt-4">
-                    <Link to={`/born-on/${bornOnSlug}/india`} className="text-[#6E5AA6] hover:underline">
+                    <Link to={bornOnIndiaPath(bornOnSlug)} className="text-[#6E5AA6] hover:underline">
                       See all Indians born on {MONTH_NAMES[dob!.month - 1]} {dob!.day} →
                     </Link>
                   </p>
@@ -1011,7 +1012,7 @@ export function CelebrityPage() {
                 <Link to={`/celebrity/${hubSlug}/`} className="text-sm px-4 py-2 rounded-full border border-gray-200 bg-white hover:border-[#6E5AA6]/30 hover:text-[#6E5AA6] transition-colors">More {hubLabel} celebrities</Link>
               )}
               {bornOnSlug && (
-                <Link to={`/born-on/${bornOnSlug}/india`} className="text-sm px-4 py-2 rounded-full border border-gray-200 bg-white hover:border-[#6E5AA6]/30 hover:text-[#6E5AA6] transition-colors">Born on {MONTH_NAMES[dob!.month - 1]} {dob!.day}</Link>
+                <Link to={bornOnIndiaPath(bornOnSlug)} className="text-sm px-4 py-2 rounded-full border border-gray-200 bg-white hover:border-[#6E5AA6]/30 hover:text-[#6E5AA6] transition-colors">Born on {MONTH_NAMES[dob!.month - 1]} {dob!.day}</Link>
               )}
             </div>
           </section>
