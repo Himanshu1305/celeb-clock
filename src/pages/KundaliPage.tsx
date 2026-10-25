@@ -29,6 +29,7 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 const VedicReading = lazy(() => import('@/components/reading/VedicReading').then(m => ({ default: m.VedicReading })));
 const PastPeriodReflection = lazy(() => import('@/components/reading/PastPeriodReflection').then(m => ({ default: m.PastPeriodReflection })));
 import { TermTip, NumberNote } from '@/components/vedic/TermTip';
+import { NakshatraNameLetters } from '@/components/vedic/NakshatraNameLetters';
 import { degreeNote, padaNote, dashaPairNote } from '@/lib/vedic/numberNotes';
 import { formatDegreeInSign } from '@/lib/vedic/formatDegree';
 import { TrustStrip } from '@/components/paj/TrustStrip';
@@ -321,6 +322,9 @@ export default function KundaliPage() {
                   )}
                 </div>
               </div>
+
+              {/* Batch 7 (W8): Nakshatra → baby-name letters. */}
+              <NakshatraNameLetters nakshatra={data.nakshatra.nakshatra} pada={data.nakshatra.pada} />
 
               {/* K13: the divisional charts the explainer pages point to — same drawing, same style toggle. */}
               {(data.divisionalCharts?.d9 || data.divisionalCharts?.d10) && (

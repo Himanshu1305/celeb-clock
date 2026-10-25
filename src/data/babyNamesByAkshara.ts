@@ -132,6 +132,14 @@ export const BABY_NAMES: BabyName[] = [
   N('Lakshya', 'लक्ष्य', 'boy', 'aim, target'), N('Lavanya', 'लावण्या', 'girl', 'grace, beauty'),
   N('Lila', 'लीला', 'girl', 'play; the divine play'), N('Lekha', 'लेखा', 'girl', 'writing'),
   N('Lokesh', 'लोकेश', 'boy', 'lord of the world'),
+  // ── Batch 7 (W8, Oct 2026): names added ONLY with a meaning from a page opened via WebFetch.
+  // च (Ashwini P2 "Che") — behindthename.com/name/chetan: masculine, चेतन, from Sanskrit
+  // cetana "visible, conscious, soul"; behindthename.com/name/chetana: feminine form, चेतना.
+  N('Chetan', 'चेतन', 'boy', 'conscious, aware; the soul'),
+  N('Chetana', 'चेतना', 'girl', 'consciousness, awareness (feminine of Chetan)'),
+  // भ (Uttara Ashadha P2 "Bho") — wisdomlib.org/definition/bhola, DDSA "A practical
+  // Hindi-English dictionary": भोला "innocent, simple-hearted; ~nātha Lord Shiv".
+  N('Bholanath', 'भोलानाथ', 'boy', 'a name of Lord Shiva (bhola = innocent, simple-hearted)'),
 ];
 
 // ── Devanagari first-akshara key ─────────────────────────────────────────────
