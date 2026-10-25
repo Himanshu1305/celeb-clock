@@ -36,9 +36,9 @@ describe('daily registry', () => {
     expect(matchDailyRoute('/zodiac/leo')).toBeNull();
     expect(matchDailyRoute('/rashifal/notarashi/today')).toBeNull();
   });
-  it('lists 36 daily routes (12 rashifal EN + 12 HI + 12 Western) + 153 Panchang (W7: 3 kinds × 51)', () => {
-    expect(allDailyRoutes()).toHaveLength(36 + 153);
-    expect(new Set(allDailyRoutes()).size).toBe(36 + 153);
+  it('lists 36 daily routes (12 rashifal EN + 12 HI + 12 Western) + 153 Panchang (W7: 3 kinds × 51) + 11 Hindi Panchang', () => {
+    expect(allDailyRoutes()).toHaveLength(36 + 153 + 11);
+    expect(new Set(allDailyRoutes()).size).toBe(36 + 153 + 11);
   });
 });
 

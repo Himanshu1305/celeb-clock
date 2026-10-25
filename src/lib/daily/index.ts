@@ -40,7 +40,15 @@
  *      with a static title in scripts/prerender-titles.mjs (the Worker replaces it daily),
  *      and add its pattern to DAILY_ROUTE in scripts/generate-sitemap.mjs (changefreq daily).
  *
- * Files: types.ts · dates.ts · registry.ts · render.ts · inject.ts · DailyParts.tsx ·
+ * COMPACT "DATA + RENDER" VARIANT (batch 7, used by every kind now): give the def a
+ *   `data: { kind, slug }` (./registry.ts). The build then stores small per-day DATA in
+ *   /daily/<data kind>/<data slug>/<YYYY-MM>.json ({ data: { [date]: … } }) — one file can
+ *   serve many pages (e.g. one sky for all 12 rashis) — computed by
+ *   DAILY_DATA_COMPUTERS[data kind] (./compute.ts), and the entry is built from it by the
+ *   pure DAILY_TEMPLATES[kind] (./templates.ts) in the Worker AND the browser, so both show
+ *   the same text. Month files with finished `days` (the original format) still work.
+ *
+ * Files: types.ts · templates.ts · dates.ts · registry.ts · render.ts · inject.ts · DailyParts.tsx ·
  *        useDailyEntry.ts · compute.ts · kinds/* · scripts/gen-daily.mts · functions/daily.ts
  */
 export * from './types';

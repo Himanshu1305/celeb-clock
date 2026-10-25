@@ -35,8 +35,8 @@ function priority(route) {
 
 // Batch 7: daily-changing pages (src/lib/daily/registry.ts) — content changes every
 // India day, so they are marked daily with the build date as lastmod.
-// W7 adds /panchang, /rahu-kaal, /choghadiya and their 50 city pages.
-const DAILY_ROUTE = /^\/(?:rashifal\/[a-z]+\/today|hi\/rashifal\/[a-z]+|zodiac\/[a-z]+\/today|(?:panchang|rahu-kaal|choghadiya)(?:\/[a-z-]+)?)$/;
+// W7 adds /panchang, /rahu-kaal, /choghadiya (+ 50 cities) and /hi/panchang (+ 10 cities).
+const DAILY_ROUTE = /^\/(?:rashifal\/[a-z]+\/today|hi\/rashifal\/[a-z]+|zodiac\/[a-z]+\/today|(?:hi\/)?(?:panchang|rahu-kaal|choghadiya)(?:\/[a-z-]+)?)$/;
 const BUILD_DATE = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
 
 function changefreq(route) {

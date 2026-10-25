@@ -8,7 +8,7 @@
  * daylight, and the day + night Choghadiya. All computed at request time.
  */
 import * as Astronomy from 'astronomy-engine';
-import { computePanchang, type Panchang } from './panchang';
+import { computePanchang, PANCHANG_TABLES, type Panchang } from './panchang';
 import { getSiderealLongitude } from './engine/vedicEngine';
 import panchangCitiesData from '@/data/panchangCities.json';
 
@@ -84,18 +84,9 @@ export function sunriseSunset(date: Date, lat: number, lon: number, tzOffsetHour
 }
 
 // Choghadiya 7-name cycle (planetary order) and the day-start index by weekday.
-const CHOGH_CYCLE = ['Udveg', 'Char', 'Labh', 'Amrit', 'Kaal', 'Shubh', 'Rog'];
-const CHOGH_QUALITY: Record<string, 'good' | 'neutral' | 'bad'> = {
-  Amrit: 'good', Shubh: 'good', Labh: 'good', Char: 'neutral', Udveg: 'bad', Kaal: 'bad', Rog: 'bad',
-};
-// weekday (0=Sun..6=Sat) → index into CHOGH_CYCLE for the first day choghadiya.
-const DAY_START_IDX = [0, 3, 6, 2, 5, 1, 4];
-
-// Inauspicious day-part (1-based, of 8) by weekday for each window.
-const RAHU_PART = [8, 2, 7, 5, 6, 4, 3];
-const GULIKA_PART = [7, 6, 5, 4, 3, 2, 1];
-const YAMA_PART = [5, 4, 3, 2, 1, 7, 6];
-/** Which 1-based eighth of daylight each window takes, by weekday (0=Sun..6=Sat). */
+// Choghadiya and weekday-window tables live in the pure ./panchang.ts (shared with the
+// daily-page templates, which must not import the engine).
+const { CHOGH_CYCLE, CHOGH_QUALITY, DAY_START_IDX, RAHU_PART, GULIKA_PART, YAMA_PART } = PANCHANG_TABLES;
 export const WINDOW_PARTS = { rahu: RAHU_PART, gulika: GULIKA_PART, yama: YAMA_PART } as const;
 
 function windowFromPart(part: number, rise: Date, dayMs: number, tz: number, name: string, quality: 'good' | 'neutral' | 'bad'): TimeWindow {
@@ -176,8 +167,8 @@ function fmtEnd(end: Date, rise: Date, tz: number): string {
 function windowAt(name: string, start: Date, end: Date, rise: Date, tz: number, quality: TimeWindow['quality']): TimeWindow {
   const day0 = localDay(rise, tz);
   const w: TimeWindow = { name, start: fmtLocal(start, tz), end: fmtLocal(end, tz), quality };
-  if (localDay(start, tz) !== day0) w.startNextDay = true;
-  if (localDay(end, tz) !== day0) w.endNextDay = true;
+  if (localDay(start, tz) > day0) w.startNextDay = true;
+  if (localDay(end, tz) > day0) w.endNextDay = true;
   return w;
 }
 

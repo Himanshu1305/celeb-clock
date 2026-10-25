@@ -1,7 +1,8 @@
 // Worker helper for daily-changing pages (see src/lib/daily/index.ts).
 // Given a prerendered HTML shell for a registered daily route, fetch today's precomputed
 // entry (India date) from the static assets and inject it. No engine runs here.
-import { matchDailyRoute, dailyJsonPath } from '../src/lib/daily/registry.js';
+import { matchDailyRoute, dailyJsonPath, dailyFilePath } from '../src/lib/daily/registry.js';
+import { entryFromMonthFile } from '../src/lib/daily/templates.js';
 import { injectDailyHtml } from '../src/lib/daily/inject.js';
 import { istDateISO, monthKey, msUntilNextIstMidnight } from '../src/lib/daily/dates.js';
 import type { DailyMonthFile } from '../src/lib/daily/types.js';
@@ -12,8 +13,7 @@ type Assets = { fetch: (request: Request) => Promise<Response> };
 // the assets it was read from. Entries expire at the next India midnight anyway.
 const memo = new Map<string, { file: DailyMonthFile | null; until: number }>();
 
-async function loadMonth(assets: Assets, origin: string, kind: string, slug: string, month: string, now: Date): Promise<DailyMonthFile | null> {
-  const path = dailyJsonPath(kind, slug, month);
+async function loadMonth(assets: Assets, origin: string, path: string, now: Date): Promise<DailyMonthFile | null> {
   const hit = memo.get(path);
   if (hit && hit.until > now.getTime()) return hit.file;
   let file: DailyMonthFile | null = null;
@@ -41,8 +41,11 @@ export async function applyDailyContent(pathname: string, html: string, assets: 
   const m = matchDailyRoute(pathname);
   if (!m) return null;
   const date = istDateISO(now);
-  const file = await loadMonth(assets, origin, m.def.kind, m.slug, monthKey(date), now);
-  const entry = file?.days?.[date];
+  const month = monthKey(date);
+  // Compact data file (data + render kinds), else the page's own finished-entries file.
+  let file = await loadMonth(assets, origin, dailyFilePath(m.def, m.slug, month), now);
+  if (!file && m.def.data) file = await loadMonth(assets, origin, dailyJsonPath(m.def.kind, m.slug, month), now);
+  const entry = entryFromMonthFile(m.def, m.slug, date, file);
   if (!entry) {
     // Deploy older than the precomputed window: serve the shell; the browser computes it.
     console.warn(`[daily] missing ${m.def.kind}/${m.slug} for ${date}`);
