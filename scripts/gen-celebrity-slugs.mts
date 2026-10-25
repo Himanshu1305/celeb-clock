@@ -6,14 +6,11 @@ import { writeFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
-import {
-  parseCelebrityDOB,
-  generateCelebrityTitle, generateCelebrityMeta,
-} from '../src/utils/celebrityUtils';
-import {
-  calculateWesternZodiac, calculateVedicRashi,
-  calculateChineseZodiac, calculateLifePathNumber,
-} from '../src/utils/celebrityCalculations';
+import { generateCelebrityTitle } from '../src/utils/celebrityUtils';
+// Batch 6: the SAME facts function CelebrityPage uses — age (a deceased person never
+// gets a current age), Moon sign (Rashi) from the chart engine, and the meta text.
+import { celebrityProfileFacts } from '../src/lib/celebrityProfile';
+import { applyCelebRecordFixes } from '../src/lib/celebrityFacts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -22,7 +19,8 @@ const require = createRequire(import.meta.url);
 // scripts/export-celebrities.ts. Iterate its entries so every prerendered
 // celebrity route matches exactly what CelebrityPage resolves at runtime.
 const celebritiesData = require('../src/data/celebrities.json');
-const allCelebrities = celebritiesData.celebrities as Record<string, unknown>[];
+// Same verified date corrections CelebrityPage re-applies at load.
+const allCelebrities = (celebritiesData.celebrities as Record<string, unknown>[]).map(applyCelebRecordFixes);
 
 // Prerender coverage (2026-10-23, founder decision): EVERY celebrity in the unified
 // DB gets static HTML and a sitemap entry. Previously only static Indian entries plus
@@ -36,15 +34,9 @@ allCelebrities.filter(shouldPrerender).forEach((celeb) => {
   const slug = String(celeb.slug || '');
   if (!slug) return;
   const name = String(celeb.name || '');
-  const dob = parseCelebrityDOB(celeb);
-  const isFull = !!dob?.isFullDate;
-  const western = isFull ? calculateWesternZodiac(dob!.day, dob!.month) : null;
-  const vedic = isFull ? calculateVedicRashi(dob!.day, dob!.month) : null;
-  const chinese = dob ? calculateChineseZodiac(dob.year) : null;
-  const lifePath = isFull ? calculateLifePathNumber(dob!.day, dob!.month, dob!.year) : null;
   meta[slug] = {
     title: generateCelebrityTitle(name),
-    desc: generateCelebrityMeta(name, dob, western?.sign || chinese?.animal || '', vedic?.rashi || '', lifePath),
+    desc: celebrityProfileFacts(celeb, slug).description,
   };
 });
 

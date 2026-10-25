@@ -5,14 +5,14 @@ import { ReportLayout } from '@/components/central';
 import celebritiesData from '@/data/celebrities.json';
 import {
   parseCelebrityDOB, formatDOBDisplay,
-  generateCelebrityTitle, generateCelebrityMeta,
+  generateCelebrityTitle,
   getCategoryHubSlug, CATEGORY_CONFIG,
 } from '@/utils/celebrityUtils';
 import {
-  calculateAge, calculateLifePathNumber, LIFE_PATH_TRAITS,
-  calculateWesternZodiac, calculateChineseZodiac, calculateVedicRashi,
+  LIFE_PATH_TRAITS,
   calculatePlanetaryAges,
 } from '@/utils/celebrityCalculations';
+import { celebrityProfileFacts } from '@/lib/celebrityProfile';
 import {
   WESTERN_ZODIAC_PROFILES, VEDIC_RASHI_PROFILES,
   CHINESE_ZODIAC_PROFILES, LIFE_PATH_EXTENDED,
@@ -25,7 +25,7 @@ import celebBios from '@/data/celebrity-bios.json';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { CosmicTwins } from '@/components/CelebrityAffiliateAndTwins';
 import {
-  CELEB_DEATH_OVERRIDES, CELEB_ERA_OVERRIDES, MAX_LIVING_AGE, isBlockedCelebrity, nationalityLabel, yearsBetween,
+  isBlockedCelebrity, nationalityLabel,
   applyCelebRecordFixes,
 } from '@/lib/celebrityFacts';
 import { CelebrityBirthTimeNote } from '@/components/CelebrityBirthTimeNote';
@@ -64,8 +64,9 @@ function buildPersonalitySynthesis(
   const parts: string[] = [];
 
   if (zodiacProfile && rashiProfile && zodiacSign && rashiName) {
+    // Two different things: the Western Sun sign and the Vedic Moon sign (Rashi).
     parts.push(
-      `As a ${zodiacSign} with ${rashiName} Rashi, ${name} combines the ${zodiacProfile.element.toLowerCase()} energy of ${zodiacSign} with the ${rashiProfile.element.toLowerCase()} depth of ${rashiName}, ruled by ${rashiProfile.lord} (${rashiProfile.lord_devanagari}).`
+      `With the Sun in ${zodiacSign} (Western) and the Moon in ${rashiName} (Vedic Rashi), ${name} combines the ${zodiacProfile.element.toLowerCase()} energy of ${zodiacSign} with the ${rashiProfile.element.toLowerCase()} depth of ${rashiName}, ruled by ${rashiProfile.lord} (${rashiProfile.lord_devanagari}).`
     );
   } else if (zodiacProfile && zodiacSign) {
     parts.push(
@@ -106,31 +107,26 @@ export function CelebrityPage() {
   const nationality = isIndian
     ? 'Indian'
     : (nationalityLabel(celeb.nationality as string | null, natCode || null) ?? 'Not recorded');
-  // S9: ancient people whose dates are only an era (BCE years were imported as CE).
-  const era = CELEB_ERA_OVERRIDES[slug ?? ''] ?? null;
-  // S7: deaths missing from the data (code-side override until the DB is updated).
-  const deathOverride = CELEB_DEATH_OVERRIDES[slug ?? ''] ?? null;
-  const deathYear = deathOverride
-    ? Number(deathOverride.slice(0, 4))
-    : (celeb.death_year != null ? Number(celeb.death_year) : null);
-  const dob = era ? null : parseCelebrityDOB(celeb);
-  const isFull = !!dob?.isFullDate;
-
-  // Calculations (guarded by DOB availability).
-  const western = isFull ? calculateWesternZodiac(dob!.day, dob!.month) : null;
-  const vedic   = isFull ? calculateVedicRashi(dob!.day, dob!.month) : null;
-  // Nakshatra intentionally NOT computed from day/month — that approximation is
-  // astronomically unreliable (see NakshatraPlaceholder). Requires birth time.
-  const nakshatra = null;
-  const chinese = dob ? (isFull ? calculateChineseZodiac(dob.year, dob.month, dob.day) : calculateChineseZodiac(dob.year)) : null;
-  const lifePath = isFull ? calculateLifePathNumber(dob!.day, dob!.month, dob!.year) : null;
+  // S7/S9 + Batch 6: era, death, age wording, Moon sign (Rashi) and the meta
+  // description all come from ONE shared function (also used by the prerender
+  // meta generator), so the page, <meta>, og/twitter and JSON-LD always agree.
+  const facts = celebrityProfileFacts(celeb, slug ?? '');
+  const { era, dob, isFull, deathYear, western, chinese, lifePath, moon } = facts;
+  const deathOverride = facts.deathDate;
+  // Moon sign (Rashi) from the birth DATE: the sidereal Moon at 00:00 and 23:59
+  // local time that day (chart engine, Lahiri). One sign = certain all day; if it
+  // changed that day both are shown. Nakshatra follows the same rule.
+  const moonCertain = !!moon && moon.isCertain;
   const planetary = dob ? calculatePlanetaryAges(dob) : [];
 
   // ── Day 8B: rich astrological profiles (all null-guarded) ──
   const zodiacProfile: WesternZodiacProfile | null = western
     ? (WESTERN_ZODIAC_PROFILES[western.sign] ?? null) : null;
-  const rashiProfile: VedicRashiProfile | null = vedic
-    ? (VEDIC_RASHI_PROFILES[vedic.rashi] ?? null) : null;
+  // Full Rashi profile (lucky elements etc.) only when the Moon sign is certain.
+  const rashiProfile: VedicRashiProfile | null = moon && moonCertain
+    ? (VEDIC_RASHI_PROFILES[moon.rashis[0]] ?? null) : null;
+  const rashiOptions: VedicRashiProfile[] = moon
+    ? moon.rashis.map(r => VEDIC_RASHI_PROFILES[r]).filter((p): p is VedicRashiProfile => !!p) : [];
   const chineseProfile: ChineseZodiacProfile | null = chinese
     ? (CHINESE_ZODIAC_PROFILES[chinese.animal] ?? null) : null;
   const nakshatraProfile: NakshatraProfile | null = null;
@@ -143,32 +139,11 @@ export function CelebrityPage() {
 
   const personalitySynthesis = buildPersonalitySynthesis(
     name, zodiacProfile, rashiProfile, lifePath, lpExtended, nakshatraProfile,
-    western?.sign ?? null, vedic?.rashi ?? null, null
+    western?.sign ?? null, moonCertain ? moon!.rashis[0] : null, null
   );
 
-  // Age string (honest for every DOB situation).
-  const currentYear = new Date().getFullYear();
-  let ageStr = 'Information not available';
-  if (era) {
-    ageStr = `Lived in the ${era}; exact birth and death years are not documented`;
-  } else if (dob) {
-    if (deathYear) {
-      const isoDob = isFull ? `${dob.year}-${String(dob.month).padStart(2, '0')}-${String(dob.day).padStart(2, '0')}` : null;
-      const exact = isoDob && deathOverride ? yearsBetween(isoDob, deathOverride) : null;
-      const approx = deathYear - dob.year;
-      ageStr = exact != null
-        ? `Died in ${deathYear}, aged ${exact}`
-        : approx >= 0
-          ? `Died in ${deathYear}, at approximately ${approx} years of age`
-          : 'Birth and death years uncertain';
-    } else {
-      // S7 safety cap: never show a living age above MAX_LIVING_AGE.
-      const living = isFull ? calculateAge(dob.day, dob.month, dob.year) : currentYear - dob.year;
-      ageStr = living > MAX_LIVING_AGE
-        ? 'Age not shown'
-        : isFull ? `${living} years old` : `Approximately ${living} years old (based on birth year)`;
-    }
-  }
+  // Age string (honest for every DOB situation) — shared with the meta/FAQ snippets.
+  const ageStr = facts.age.display;
 
   // Birthday twins — only for full-DOB celebrities.
   const sameDay = isFull
@@ -207,7 +182,7 @@ export function CelebrityPage() {
 
   // ── SEO ──
   const title = generateCelebrityTitle(name);
-  const description = generateCelebrityMeta(name, dob, western?.sign || (chinese?.animal ?? ''), vedic?.rashi || '', lifePath);
+  const description = facts.description;
   const canonical = `/celebrity/${slug}`;
 
   // ── Schema ──
@@ -237,13 +212,21 @@ export function CelebrityPage() {
     },
     {
       q: `How old is ${name}?`,
-      a: dob ? `${name} is ${ageStr}.` : `${name}'s age information is not available.`,
+      a: facts.age.snippet ? `${name} ${facts.age.snippet}.` : `${name}'s age information is not available.`,
     },
     {
       q: `What is ${name}'s zodiac sign?`,
       a: western
-        ? `${name}'s Western zodiac sign is ${western.sign} (${western.date_range}), an element of ${western.element} ruled by ${western.ruling_planet}.`
+        ? `${name}'s Western zodiac (Sun) sign is ${western.sign} (${western.date_range}), an element of ${western.element} ruled by ${western.ruling_planet}.`
         : `${name}'s Western zodiac sign requires an exact birth date, which is not available.${chinese ? ` Their Chinese zodiac sign is the ${chinese.animal}.` : ''}`,
+    },
+    {
+      q: `What is ${name}'s Moon sign (Rashi)?`,
+      a: moon
+        ? (moonCertain
+            ? `${name}'s Moon sign (Vedic Rashi) is ${moon.rashis[0]}: the sidereal Moon stayed in ${moon.rashis[0]} for the whole of ${formatDOBDisplay(dob)}, so it does not depend on the birth time. This is different from the Western Sun sign${western ? ` (${western.sign})` : ''}.`
+            : `${name}'s Moon sign (Vedic Rashi) is ${moon.rashiText}: the Moon moved from ${moon.rashis[0]} into ${moon.rashis[moon.rashis.length - 1]} on ${formatDOBDisplay(dob)}, and the exact birth time is not documented. This is different from the Western Sun sign${western ? ` (${western.sign})` : ''}.`)
+        : `${name}'s Moon sign (Rashi) needs an exact birth date, which is not available.`,
     },
     {
       q: `What is ${name}'s Chinese zodiac sign?`,
@@ -366,8 +349,17 @@ export function CelebrityPage() {
                                rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
                     🔢 Lucky Number: {chineseProfile.lucky_numbers.join(', ')}
                   </span>
+                  {zodiacProfile && (
+                    <span data-testid="lucky-chip-tarot"
+                      className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
+                                 rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
+                      🃏 Tarot: {zodiacProfile.tarot_card}
+                    </span>
+                  )}
                   <span className="flex-shrink-0 text-xs text-gray-600 italic self-center">
-                    Full lucky profile requires exact date of birth
+                    {moon && !moonCertain
+                      ? `Rashi lucky elements need the birth time (the Moon changed sign on this date: ${moon.rashiShort})`
+                      : 'Full lucky profile requires exact date of birth'}
                   </span>
                 </>
               ) : (
@@ -447,14 +439,20 @@ export function CelebrityPage() {
                   )}
                   {western && (
                     <tr className="border-b border-gray-100">
-                      <th scope="row" className="text-left px-4 py-3 font-semibold text-gray-600 bg-gray-50">Western Zodiac</th>
+                      <th scope="row" className="text-left px-4 py-3 font-semibold text-gray-600 bg-gray-50">Sun sign (Western)</th>
                       <td className="px-4 py-3 text-gray-900">{western.symbol} {western.sign}</td>
                     </tr>
                   )}
-                  {vedic && (
+                  {moon && (
                     <tr className="border-b border-gray-100">
-                      <th scope="row" className="text-left px-4 py-3 font-semibold text-gray-600 bg-gray-50">Vedic Rashi</th>
-                      <td className="px-4 py-3 text-gray-900">{vedic.rashi} ({vedic.western_equivalent})</td>
+                      <th scope="row" className="text-left px-4 py-3 font-semibold text-gray-600 bg-gray-50">Moon sign (Rashi)</th>
+                      <td data-testid="fact-rashi" className="px-4 py-3 text-gray-900">{moon.rashiText}</td>
+                    </tr>
+                  )}
+                  {moon && (
+                    <tr className="border-b border-gray-100">
+                      <th scope="row" className="text-left px-4 py-3 font-semibold text-gray-600 bg-gray-50">Nakshatra</th>
+                      <td data-testid="fact-nakshatra" className="px-4 py-3 text-gray-900">{moon.nakshatraText}</td>
                     </tr>
                   )}
                   {lifePath != null && (
@@ -500,8 +498,8 @@ export function CelebrityPage() {
             {/* Tab buttons */}
             <div className="flex gap-1 mb-4 overflow-x-auto pb-1">
               {[
-                { id: 'western',    label: '⭐ Western Zodiac' },
-                { id: 'vedic',      label: '🕉 Vedic / Rashi' },
+                { id: 'western',    label: '⭐ Sun sign (Western)' },
+                { id: 'vedic',      label: '🕉 Moon sign (Rashi)' },
                 { id: 'chinese',    label: '🐉 Chinese Zodiac' },
                 { id: 'numerology', label: '🔢 Numerology' },
               ].map(({ id, label }) => (
@@ -605,10 +603,22 @@ export function CelebrityPage() {
             {/* VEDIC TAB — only in DOM when active */}
             {activeTab === 'vedic' && (
               <div data-testid="tab-content-vedic" className="animate-in fade-in">
+                {moon && (
+                  <div data-testid="moon-sign-summary" className="mb-4 text-sm text-gray-700">
+                    <p>
+                      <strong>Moon sign (Rashi):</strong> {moon.rashiText}
+                      {' · '}<strong>Nakshatra:</strong> {moon.nakshatraText}
+                    </p>
+                    <p className="text-xs text-gray-600 mt-1">
+                      In Vedic astrology the Rashi is the sidereal sign of the <em>Moon</em> at birth — not the
+                      Western Sun sign{western ? ` (${western.sign})` : ''}.
+                    </p>
+                  </div>
+                )}
                 {rashiProfile ? (
                   <>
                     <h3 className="text-lg font-bold text-gray-900 mb-1">
-                      {rashiProfile.rashi} ({rashiProfile.rashi_devanagari}) — {rashiProfile.western_equivalent}
+                      {rashiProfile.rashi} ({rashiProfile.rashi_devanagari}) Moon
                     </h3>
                     <div className="flex flex-wrap gap-2 text-xs text-gray-500 mb-4">
                       <span>Lord: {rashiProfile.lord} ({rashiProfile.lord_devanagari})</span>
@@ -684,12 +694,33 @@ export function CelebrityPage() {
                       <p className="text-xs text-amber-900">{rashiProfile.health_tendencies}</p>
                     </div>
                     <p className="text-xs text-gray-600 italic">
-                      Note: For precise Rashi, exact birth time and location are required. This is an approximate calculation.
+                      The Moon stayed in {rashiProfile.rashi} for the whole of this birth date ({moon?.details.window.label}),
+                      so this Rashi does not depend on the birth time. Lagna (Ascendant) and the exact Nakshatra pada still need the birth time and place.
+                    </p>
+                  </>
+                ) : rashiOptions.length > 1 ? (
+                  <>
+                    <div className="grid sm:grid-cols-2 gap-3 mb-3">
+                      {rashiOptions.map(r => (
+                        <div key={r.rashi} data-testid="rashi-option" className="bg-gray-50 border border-gray-200 rounded-xl p-3">
+                          <h3 className="text-base font-bold text-gray-900 mb-1">
+                            {r.rashi} ({r.rashi_devanagari}) Moon
+                          </h3>
+                          <div className="text-xs text-gray-500 mb-2">
+                            Lord: {r.lord} ({r.lord_devanagari}) • {r.element}
+                          </div>
+                          <p className="text-xs text-gray-700 leading-relaxed">{r.personality_summary}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-xs text-gray-600 italic">
+                      The Moon changed sign during this birth date ({moon?.details.window.label}), and {name}'s exact birth
+                      time is not documented, so both Rashis are possible. Lucky elements are not shown because they depend on which one it is.
                     </p>
                   </>
                 ) : (
                   <div className="text-center py-8 text-gray-600 text-sm">
-                    Vedic Rashi calculation requires an exact birth date (day and month).
+                    The Moon sign (Rashi) needs an exact birth date (day, month and year).
                   </div>
                 )}
               </div>
@@ -948,9 +979,9 @@ export function CelebrityPage() {
             <WhatsAppShareButton
               message={
                 `${name}'s birthday profile on BornClock 🎂\n`
-                + (western ? `${name} is a ${western.sign}` : `${name}`)
+                + (western ? `${name}: ${western.sign} Sun sign` : `${name}`)
                 + (lifePath ? `, Life Path ${lifePath}` : '')
-                + (vedic ? `, ${vedic.rashi} Rashi` : '')
+                + (moon ? `, Moon sign (Rashi) ${moon.rashiShort}` : '')
                 + `.\nFind YOUR profile → https://bornclock.com/celebrity/${slug}/`
               }
             />
