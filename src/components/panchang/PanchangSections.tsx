@@ -3,92 +3,19 @@
  * Every term shown gets a TermTip (plain-language explanation).
  */
 import { Link } from 'react-router-dom';
-import { TermTip, NumberNote } from '@/components/vedic/TermTip';
-import { CHOGHADIYA_TERM } from '@/lib/vedic/termDefinitions';
-import type { DayPanchang, TimeWindow, PanchangCity } from '@/lib/vedic/panchangDay';
-import { windowText, type PanchangPageKind } from '@/lib/vedic/panchangText';
+import { TermTip } from '@/components/vedic/TermTip';
+import type { DayPanchang, PanchangCity } from '@/lib/vedic/panchangDay';
+import type { PanchangPageKind } from '@/lib/vedic/panchangText';
 
-export const QUALITY_STYLE: Record<TimeWindow['quality'], string> = {
-  good: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-  neutral: 'bg-slate-50 border-slate-200 text-slate-700',
-  bad: 'bg-rose-50 border-rose-200 text-rose-800',
-};
-
-/** The 2–3 sentence direct answer, shown first. */
-export function AnswerBox({ text, testid = 'panchang-answer' }: { text: string; testid?: string }) {
+/** Plain-language explanations of every term used in the day's content (TermTip chips). */
+export function TermChips({ ids }: { ids: Array<[string, string]> }) {
   return (
-    <p data-testid={testid} className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-[15px] leading-relaxed text-foreground mb-6">
-      {text}
-    </p>
-  );
-}
-
-function Row({ label, ws, tone }: { label: React.ReactNode; ws: TimeWindow[]; tone: 'good' | 'bad' }) {
-  return (
-    <li className="flex justify-between gap-3 py-1 border-b border-border/50 last:border-0">
-      <span>{label}</span>
-      <span className={`tabular-nums text-right ${tone === 'good' ? 'text-emerald-700' : 'text-rose-700'}`}>
-        {ws.length ? ws.map((w, i) => <span key={i} className="block">{windowText(w)}</span>) : <span className="text-muted-foreground">none today</span>}
-      </span>
-    </li>
-  );
-}
-
-/** Good and avoid windows of the day, side by side. */
-export function MuhurtaLists({ p, place, highlight }: { p: DayPanchang; place: string; highlight?: 'rahu' }) {
-  const isWednesday = p.weekday === 'Wednesday';
-  return (
-    <div className="grid sm:grid-cols-2 gap-4 mb-6">
-      <div className="rounded-xl border border-border p-4" data-testid="panchang-good-times">
-        <h2 className="font-semibold text-foreground mb-2">Good times</h2>
-        <ul className="text-sm">
-          <Row label={<TermTip id="brahmaMuhurta">Brahma Muhurta</TermTip>} ws={[p.brahmaMuhurta]} tone="good" />
-          {p.abhijitApplies
-            ? <Row label={<TermTip id="abhijit">Abhijit Muhurta</TermTip>} ws={[p.abhijit]} tone="good" />
-            : <li className="flex justify-between gap-3 py-1 border-b border-border/50"><span><TermTip id="abhijit">Abhijit Muhurta</TermTip></span><span className="text-muted-foreground text-right">not used on Wednesday</span></li>}
-          <Row label={<TermTip id="amritKalam">Amrit Kalam</TermTip>} ws={p.amritKalam} tone="good" />
-        </ul>
-        {isWednesday && (
-          <NumberNote testid="panchang-abhijit-wednesday">On a Wednesday the midday muhurta that would be Abhijit is that day’s Dur Muhurtam, so Abhijit is not used (Drik Panchang shows it as “None” too).</NumberNote>
-        )}
-      </div>
-      <div className={`rounded-xl border p-4 ${highlight === 'rahu' ? 'border-rose-300' : 'border-border'}`} data-testid="panchang-windows">
-        <h2 className="font-semibold text-foreground mb-2">Times to avoid for new starts</h2>
-        <ul className="text-sm">
-          <Row label={<TermTip id="rahuKalam">Rahu Kaal</TermTip>} ws={[p.rahuKaal]} tone="bad" />
-          <Row label={<TermTip id="gulikaKaal">Gulika Kaal</TermTip>} ws={[p.gulikaKaal]} tone="bad" />
-          <Row label={<TermTip id="yamaganda">Yamaganda</TermTip>} ws={[p.yamaganda]} tone="bad" />
-          <Row label={<TermTip id="durMuhurtam">Dur Muhurtam</TermTip>} ws={p.durMuhurtam} tone="bad" />
-          <Row label={<TermTip id="varjyam">Varjyam</TermTip>} ws={p.varjyam} tone="bad" />
-        </ul>
-        <NumberNote testid="panchang-window-note">Local clock times for {place}, rounded to the nearest minute and worked out from this day’s sunrise and sunset (Varjyam and Amrit Kalam from the Moon’s Nakshatra). These are traditional guides for starting something new — ongoing work is fine.</NumberNote>
-      </div>
-    </div>
-  );
-}
-
-function ChoghadiyaRow({ c, now }: { c: TimeWindow; now?: boolean }) {
-  return (
-    <div className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm ${QUALITY_STYLE[c.quality]} ${now ? 'ring-2 ring-primary' : ''}`}>
-      <span className="font-medium">{CHOGHADIYA_TERM[c.name] ? <TermTip id={CHOGHADIYA_TERM[c.name]}>{c.name}</TermTip> : c.name}{now ? ' · now' : ''}</span>
-      <span className="tabular-nums">{c.start}–{c.end}</span>
-    </div>
-  );
-}
-
-/** Day + night Choghadiya. `nowIndex` (0–15) highlights the current slot when viewing today. */
-export function ChoghadiyaTables({ p, nowIndex, headingLevel = 2 }: { p: DayPanchang; nowIndex?: number; headingLevel?: 2 | 3 }) {
-  const H = headingLevel === 2 ? 'h2' : 'h3';
-  return (
-    <div className="grid sm:grid-cols-2 gap-4 mb-6" data-testid="panchang-choghadiya">
-      <div>
-        <H className="font-semibold text-foreground mb-2">Day <TermTip id="choghadiya">Choghadiya</TermTip> <span className="text-sm font-normal text-muted-foreground">(sunrise {p.sunrise} → sunset {p.sunset})</span></H>
-        <div className="space-y-1">{p.dayChoghadiya.map((c, i) => <ChoghadiyaRow key={i} c={c} now={nowIndex === i} />)}</div>
-      </div>
-      <div>
-        <H className="font-semibold text-foreground mb-2">Night <TermTip id="choghadiya">Choghadiya</TermTip> <span className="text-sm font-normal text-muted-foreground">(sunset → next sunrise)</span></H>
-        <div className="space-y-1">{p.nightChoghadiya.map((c, i) => <ChoghadiyaRow key={i} c={c} now={nowIndex === 8 + i} />)}</div>
-      </div>
+    <div className="rounded-xl border border-border p-4 mb-6" data-testid="panchang-terms">
+      <h2 className="font-semibold text-foreground mb-2">What these terms mean</h2>
+      <p className="text-sm text-muted-foreground mb-2">Tap any term for a plain-language explanation.</p>
+      <ul className="flex flex-wrap gap-2 text-sm">
+        {ids.map(([id, label]) => <li key={id} className="rounded-full border border-border px-3 py-1"><TermTip id={id}>{label}</TermTip></li>)}
+      </ul>
     </div>
   );
 }

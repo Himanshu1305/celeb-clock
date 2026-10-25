@@ -6,6 +6,7 @@
 import type { DailyEntry } from './types';
 import { computeRashifalDaily, computeRashifalDailyHi } from './kinds/rashifalDaily';
 import { computeWesternDaily } from './kinds/westernDaily';
+import { computePanchangDaily, computeRahuKaalDaily, computeChoghadiyaDaily } from './kinds/panchangDaily';
 
 export type DailyComputer = (dateIST: string, slug: string) => DailyEntry;
 
@@ -13,6 +14,9 @@ export const DAILY_COMPUTERS: Record<string, DailyComputer> = {
   'rashifal': computeRashifalDaily,
   'rashifal-hi': computeRashifalDailyHi,
   'horoscope': computeWesternDaily,
+  'panchang': computePanchangDaily,
+  'rahu-kaal': computeRahuKaalDaily,
+  'choghadiya': computeChoghadiyaDaily,
 };
 
 export function computeDaily(kind: string, dateIST: string, slug: string): DailyEntry {

@@ -120,20 +120,53 @@ function choghadiyaSet(startIdx: number, from: Date, totalMs: number, tz: number
   return out;
 }
 
-/**
- * First instant after `from` at which floor(f / unit) changes, for a quantity
- * f (degrees, mod 360) that increases with time — i.e. when the current
- * tithi / nakshatra / yoga / karana ends. Hourly scan, then bisection (~1 s).
+/*
+ * Limb boundaries (when a Tithi / Nakshatra / Yoga / Karana changes). Searched on a
+ * UTC-hour grid and then bisected inside that hour, so the instant found for a given
+ * boundary is the same no matter which city's sunrise the search started from — results
+ * are deterministic (same input → same text) and can be cached across cities, which
+ * keeps the 400-day daily precompute fast. Precision ~0.1 s.
  */
-function limbEnd(from: Date, f: (d: Date) => number, unit: number): Date {
-  const idx = (d: Date) => Math.floor((((f(d) % 360) + 360) % 360) / unit);
-  const cur = idx(from);
-  const lo = from.getTime();
-  let hi = lo;
-  for (let h = 1; h <= 36; h++) { hi = lo + h * 3600000; if (idx(new Date(hi)) !== cur) break; }
-  let a = hi - 3600000 < lo ? lo : hi - 3600000;
-  for (let i = 0; i < 25; i++) { const mid = (a + hi) / 2; if (idx(new Date(mid)) === cur) a = mid; else hi = mid; }
-  return new Date(hi);
+type LimbKey = 'tithi' | 'nak' | 'yoga' | 'karana';
+const LIMBS: Record<LimbKey, { f: (d: Date) => number; unit: number }> = {
+  tithi: { f: elong, unit: 12 },
+  nak: { f: d => sunMoon(d).moon, unit: 360 / 27 },
+  yoga: { f: d => { const x = sunMoon(d); return x.sun + x.moon; }, unit: 360 / 27 },
+  karana: { f: elong, unit: 6 },
+};
+const HOUR = 3600000;
+const limbIdx = (k: LimbKey, t: number) => Math.floor((((LIMBS[k].f(new Date(t)) % 360) + 360) % 360) / LIMBS[k].unit);
+const hourIdxCache = new Map<string, number>();
+const boundaryCache = new Map<string, number>();
+function limbIdxAtHour(k: LimbKey, t: number): number {
+  const key = `${k}:${t}`;
+  let v = hourIdxCache.get(key);
+  if (v === undefined) {
+    if (hourIdxCache.size > 200000) hourIdxCache.clear();
+    v = limbIdx(k, t);
+    hourIdxCache.set(key, v);
+  }
+  return v;
+}
+/** The boundary inside the grid hour [b − 1 h, b]. */
+function boundaryBefore(k: LimbKey, b: number): number {
+  const key = `${k}:${b}`;
+  const hit = boundaryCache.get(key);
+  if (hit !== undefined) return hit;
+  let lo = b - HOUR, hi = b;
+  const cur = limbIdxAtHour(k, lo);
+  for (let i = 0; i < 25; i++) { const mid = (lo + hi) / 2; if (limbIdx(k, mid) === cur) lo = mid; else hi = mid; }
+  if (boundaryCache.size > 50000) boundaryCache.clear();
+  boundaryCache.set(key, hi);
+  return hi;
+}
+/** First instant after `from` at which the limb changes (when the current one ends). */
+function limbEnd(from: Date, k: LimbKey): Date {
+  const t = from.getTime();
+  const cur = limbIdx(k, t);
+  let h = Math.floor(t / HOUR) * HOUR + HOUR;
+  for (let i = 0; i < 40; i++, h += HOUR) if (limbIdxAtHour(k, h) !== cur) return new Date(boundaryBefore(k, h));
+  return new Date(h);
 }
 function fmtEnd(end: Date, rise: Date, tz: number): string {
   return fmtLocal(end, tz) + (localDay(end, tz) !== localDay(rise, tz) ? ' (next day)' : '');
@@ -148,16 +181,13 @@ function windowAt(name: string, start: Date, end: Date, rise: Date, tz: number, 
   return w;
 }
 
-/** Last instant before `from` at which floor(f / unit) changed — when the current limb began. */
-function limbStart(from: Date, f: (d: Date) => number, unit: number): Date {
-  const idx = (d: Date) => Math.floor((((f(d) % 360) + 360) % 360) / unit);
-  const cur = idx(from);
-  const hi0 = from.getTime();
-  let lo = hi0;
-  for (let h = 1; h <= 36; h++) { lo = hi0 - h * 3600000; if (idx(new Date(lo)) !== cur) break; }
-  let b = lo + 3600000 > hi0 ? hi0 : lo + 3600000;
-  for (let i = 0; i < 25; i++) { const mid = (lo + b) / 2; if (idx(new Date(mid)) === cur) b = mid; else lo = mid; }
-  return new Date(b);
+/** Last instant at or before `from` at which the limb changed (when the current one began). */
+function limbStart(from: Date, k: LimbKey): Date {
+  const t = from.getTime();
+  const cur = limbIdx(k, t);
+  let h = Math.floor(t / HOUR) * HOUR;
+  for (let i = 0; i < 40; i++, h -= HOUR) if (limbIdxAtHour(k, h) !== cur) return new Date(boundaryBefore(k, h + HOUR));
+  return new Date(h);
 }
 
 /*
@@ -247,9 +277,9 @@ export function computeDayPanchang(date: Date, lat: number, lon: number, tzOffse
   const NAK_UNIT = 360 / 27;
   const varjyam: TimeWindow[] = [];
   const amritKalam: TimeWindow[] = [];
-  let nStart = limbStart(rise, moonF, NAK_UNIT);
+  let nStart = limbStart(rise, 'nak');
   for (let guard = 0; guard < 4 && nStart.getTime() < nextRise.getTime(); guard++) {
-    const nEnd = limbEnd(new Date(nStart.getTime() + 60000), moonF, NAK_UNIT);
+    const nEnd = limbEnd(new Date(nStart.getTime() + 60000), 'nak');
     const nIdx = Math.floor((((moonF(new Date((nStart.getTime() + nEnd.getTime()) / 2)) % 360) + 360) % 360) / NAK_UNIT);
     const len = nEnd.getTime() - nStart.getTime();
     const add = (list: TimeWindow[], ghati: number, name: string, q: TimeWindow['quality']) => {
@@ -272,10 +302,10 @@ export function computeDayPanchang(date: Date, lat: number, lon: number, tzOffse
     yamaganda,
     dayChoghadiya: choghadiyaSet(dayStart, rise, dayMs, tzOffsetHours),
     nightChoghadiya: choghadiyaSet(nightStart, set, nightMs, tzOffsetHours, 5),
-    tithiEnd: fmtEnd(limbEnd(rise, elong, 12), rise, tzOffsetHours),
-    nakshatraEnd: fmtEnd(limbEnd(rise, d => sunMoon(d).moon, 360 / 27), rise, tzOffsetHours),
-    yogaEnd: fmtEnd(limbEnd(rise, d => { const x = sunMoon(d); return x.sun + x.moon; }, 360 / 27), rise, tzOffsetHours),
-    karanaEnd: fmtEnd(limbEnd(rise, elong, 6), rise, tzOffsetHours),
+    tithiEnd: fmtEnd(limbEnd(rise, 'tithi'), rise, tzOffsetHours),
+    nakshatraEnd: fmtEnd(limbEnd(rise, 'nak'), rise, tzOffsetHours),
+    yogaEnd: fmtEnd(limbEnd(rise, 'yoga'), rise, tzOffsetHours),
+    karanaEnd: fmtEnd(limbEnd(rise, 'karana'), rise, tzOffsetHours),
     abhijit: {
       name: 'Abhijit Muhurta',
       start: fmtLocal(new Date(rise.getTime() + dayMs * 7 / 15), tzOffsetHours),

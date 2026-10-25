@@ -35,6 +35,8 @@ function priority(route) {
 
 function changefreq(route) {
   if (route === '/') return 'daily';
+  // Batch 7 (W7): Panchang / Rahu Kaal / Choghadiya change every day (shared daily mechanism).
+  if (/^\/(panchang|rahu-kaal|choghadiya)(\/|$)/.test(route)) return 'daily';
   if (route.startsWith('/blog/')) return 'monthly';
   if (route.startsWith('/birthday/') && route.split('/').length === 4) return 'monthly';
   if (route.startsWith('/born-on/')) return 'monthly';
