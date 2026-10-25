@@ -1115,12 +1115,14 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     impact: 'The 22 "big theme" cards (The Fool … The World) — they point to major lessons rather than daily matters.',
     why: 'Numbered 0 to 21.',
     hi: 'जीवन के बड़े विषयों वाले 22 कार्ड (0 से 21)।',
+    link: '/tarot/cards',
   },
   minorArcana: {
     term: 'Minor Arcana', category: 'tarot', hiTerm: 'माइनर आर्काना',
     impact: 'The 56 everyday cards — work, feelings, thoughts and money.',
     why: 'Four suits: Wands (energy, work), Cups (feelings), Swords (thoughts), Pentacles (money, body).',
     hi: 'रोज़मर्रा के विषयों वाले 56 कार्ड, चार सूट में।',
+    link: '/tarot/cards',
   },
   reversedCard: {
     term: 'Upright / reversed card', category: 'tarot', hiTerm: 'सीधा / उल्टा कार्ड',
@@ -1134,6 +1136,13 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     why: 'Mary K. Greer\'s method: add your birth month, day and full year, then add the digits of the total until you reach 22 or less; that number is your card (22 = The Fool).',
     hi: 'जन्म तिथि के अंकों को जोड़कर मिलने वाला मेजर आर्काना कार्ड।',
     link: '/tarot-card-by-birthday',
+  },
+  courtCard: {
+    term: 'Court card', category: 'tarot', hiTerm: 'कोर्ट कार्ड',
+    impact: 'The Page, Knight, Queen and King of each suit — often read as a person, or as a way of behaving.',
+    why: 'Each of the four Minor Arcana suits has four court cards after its Ace-to-Ten number cards.',
+    hi: 'हर सूट के पेज, नाइट, क्वीन और किंग कार्ड — अक्सर किसी व्यक्ति या व्यवहार के रूप में पढ़े जाते हैं।',
+    link: '/tarot/cards',
   },
   cardOfDay: {
     term: 'Card of the day', category: 'tarot', hiTerm: 'आज का कार्ड',

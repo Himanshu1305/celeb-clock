@@ -7,6 +7,7 @@
  * Pure functions; the RNG is injectable so draws are reproducible in tests.
  */
 import { TAROT_DECK, type DeckCard, type YesNo } from '@/data/tarotDeck';
+import { TAROT_CARDS, type TarotCardEntry } from '@/data/tarotCards';
 
 export interface DrawnCard {
   card: DeckCard;
@@ -110,4 +111,58 @@ export function loveSpread(drawn: DrawnCard[]): LovePositionReading[] {
       reading: `${LOVE_FRAMING[position]}: ${d.card.name} (${orient}). ${meaning} ${d.card.love}`,
     };
   });
+}
+
+// ─── Batch 7 / W5: yes/no over the full 78-card deck ─────────────────────────
+// The yes/no tab draws ONE card from all 78 (src/data/tarotCards), each with its own
+// sourced meaning and yes/no lean, and links to that card's page. Same orientation rule
+// as yesNoVerdict above: a reversed card flips and weakens the card's lean.
+
+export interface FullDeckDraw {
+  card: TarotCardEntry;
+  reversed: boolean;
+}
+
+export function drawFromFullDeck(rng: () => number = Math.random): FullDeckDraw {
+  const idx = Math.min(TAROT_CARDS.length - 1, Math.floor(rng() * TAROT_CARDS.length));
+  return { card: TAROT_CARDS[idx], reversed: rng() < 0.5 };
+}
+
+const LEAN_WORD = { yes: 'a soft yes', no: 'a gentle no', maybe: 'mixed — not a clear yes or no' } as const;
+
+/** One plain line on what the card leans to when reversed (also shown on the card page). */
+export function reversedLeanText(card: TarotCardEntry): string {
+  const lean = card.reversedLean ?? 'maybe';
+  return `Reversed, ${card.name} reads as ${LEAN_WORD[lean]}: ${card.reversedKeywords.slice(0, 3).join(', ')}.`;
+}
+
+export interface FullDeckVerdict extends YesNoVerdict {
+  /** The meaning shown for this orientation (the card's upright or reversed reading). */
+  meaning: string;
+  keywords: string[];
+}
+
+export function yesNoFullDeck(drawn: FullDeckDraw): FullDeckVerdict {
+  // Upright: the card's lean at full strength. Reversed: the card's own reversed lean
+  // (src/data/tarotCards/reversedLean.ts, read from Waite's reversed list), softened.
+  const score = drawn.reversed
+    ? POLARITY_SCORE[drawn.card.reversedLean ?? 'maybe'] * 0.5
+    : POLARITY_SCORE[drawn.card.yesNo];
+  let answer: YesNoAnswer;
+  if (score > 0.3) answer = 'Yes';
+  else if (score < -0.3) answer = 'No';
+  else answer = 'Maybe';
+  const confidence: YesNoConfidence = Math.abs(score) >= 1 ? 'strong' : Math.abs(score) >= 0.5 ? 'leaning' : 'mixed';
+  const orient = drawn.reversed ? 'reversed' : 'upright';
+  const why = drawn.reversed ? reversedLeanText(drawn.card) : drawn.card.yesNoWhy;
+  const explanation = `${drawn.card.name} (${orient}) suggests ${answer.toLowerCase()}${
+    confidence === 'strong' ? ', clearly' : confidence === 'leaning' ? ', on balance' : ' — the signs are mixed'
+  }. ${why}`;
+  return {
+    answer,
+    confidence,
+    explanation,
+    meaning: drawn.reversed ? drawn.card.reversed : drawn.card.upright,
+    keywords: drawn.reversed ? drawn.card.reversedKeywords : drawn.card.keywords,
+  };
 }

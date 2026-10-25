@@ -30,6 +30,12 @@ const celebrityHubRoutes = ['bollywood', 'cricket', 'politics', 'business', 'mus
   .map(h => `/celebrity/${h}`);
 const celebrityRoutes = celebritySlugs.map(s => `/celebrity/${s}`);
 
+// Batch 7 / W5: tarot card slugs — read from the generated meta JSON (same source the
+// prerender titles use), so routes, titles and the page data cannot drift apart.
+const TAROT_CARD_SLUGS = Object.keys(JSON.parse(
+  readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/tarotCards/tarotMeta.json'), 'utf-8')
+)).filter(r => r.startsWith('/tarot/cards/')).map(r => r.slice('/tarot/cards/'.length));
+
 const ZODIAC_SIGNS = [
   'aries','taurus','gemini','cancer','leo','virgo',
   'libra','scorpio','sagittarius','capricorn','aquarius','pisces',
@@ -353,6 +359,10 @@ export const STATIC_ROUTES = [
   ...ANSWER_ROUTES,
   '/tarot-card-by-birthday',
   '/tarot-reading',
+  // Batch 7 / W5: 78-card tarot reference (index + one page per card). Slugs mirror
+  // src/data/tarotCards (guarded by src/data/tarotCards/__tests__/tarotCards.test.ts).
+  '/tarot/cards',
+  ...TAROT_CARD_SLUGS.map(s => `/tarot/cards/${s}`),
   '/moon-sign',
   '/name-numerology',
   '/biorhythm',

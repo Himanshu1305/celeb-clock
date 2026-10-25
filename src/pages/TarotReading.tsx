@@ -1,12 +1,14 @@
 /**
  * Interactive tarot reading — P4-TAROT-INTERACTIVE.
- * Three free spreads over the 22-card Major Arcana: daily card, yes/no, and a
- * 3-card love spread. The visitor draws their own cards; interpretations are
+ * Three free spreads: a daily card and a 3-card love spread over the 22-card Major
+ * Arcana, and (Batch 7 / W5) a one-card yes/no draw over the full 78-card deck, each
+ * card linking to its own meaning page (/tarot/cards/:slug). `?spread=yes-no` or
+ * `?spread=love` opens that tab (canonical stays /tarot-reading — no new URL). The visitor draws their own cards; interpretations are
  * position- and orientation-aware. The daily card is computed at render time
  * (evergreen — no prerendered page per date).
  */
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { CollectionLayout } from '@/components/central';
 import { TermTip } from '@/components/vedic/TermTip';
 import { SEO, FAQSchema } from '@/components/SEO';
@@ -14,15 +16,21 @@ import { Card, CardContent } from '@/components/ui/card';
 import {
   dailyCard,
   drawCards,
-  yesNoVerdict,
   loveSpread,
+  drawFromFullDeck,
+  yesNoFullDeck,
   type DrawnCard,
+  type FullDeckDraw,
 } from '@/lib/tarot/tarotInteractive';
+import { tarotCardPath } from '@/data/tarotCards';
 
 type Mode = 'daily' | 'yesno' | 'love';
 
+const SPREAD_PARAM: Record<string, Mode> = { 'yes-no': 'yesno', yesno: 'yesno', love: 'love', daily: 'daily' };
+
 const FAQ_ITEMS = [
-  { question: 'How does the tarot draw work?', answer: 'You shuffle and draw from the full 22-card Major Arcana. Each card can appear upright or reversed, and the reading changes with its orientation and its position in the spread.' },
+  { question: 'How does the tarot draw work?', answer: 'The daily card and the love spread are drawn from the 22-card Major Arcana; the yes/no answer is one card drawn from all 78 cards. Each card can appear upright or reversed, and the reading changes with its orientation and its position in the spread.' },
+  { question: 'How does the yes/no tarot work?', answer: 'Hold a yes-or-no question in mind and draw one card from the full 78-card deck. Each card has a lean — yes, no or mixed — based on its traditional meaning; a reversed card turns that lean around and softens it. The answer is a prompt for reflection, not a prediction.' },
   { question: 'Is the daily card the same all day?', answer: 'Yes — the card of the day is fixed for the whole calendar day, so you and a friend drawing on the same day see the same card. It changes at midnight.' },
   { question: 'Can tarot predict the future?', answer: 'Tarot is a reflective tool, not a prediction. It offers a prompt for thinking about a situation from a new angle — it never names dates or guarantees outcomes.' },
   { question: 'What is a reversed card?', answer: 'A reversed (upside-down) card usually softens, blocks or turns inward the card’s upright meaning. It is not simply “bad” — it points to the shadow side or an inner version of the theme.' },
@@ -41,13 +49,14 @@ function CardFace({ drawn, large }: { drawn: DrawnCard; large?: boolean }) {
 }
 
 export default function TarotReading() {
-  const [mode, setMode] = useState<Mode>('daily');
+  const [params] = useSearchParams();
+  const [mode, setMode] = useState<Mode>(() => SPREAD_PARAM[params.get('spread') ?? ''] ?? 'daily');
   const today = useMemo(() => dailyCard(), []);
-  const [yesNoDraw, setYesNoDraw] = useState<DrawnCard | null>(null);
+  const [yesNoDraw, setYesNoDraw] = useState<FullDeckDraw | null>(null);
   const [question, setQuestion] = useState('');
   const [loveDraw, setLoveDraw] = useState<DrawnCard[] | null>(null);
 
-  const verdict = yesNoDraw ? yesNoVerdict(yesNoDraw) : null;
+  const verdict = yesNoDraw ? yesNoFullDeck(yesNoDraw) : null;
   const spread = loveDraw ? loveSpread(loveDraw) : null;
 
   return (
@@ -57,7 +66,7 @@ export default function TarotReading() {
       seo={(
         <SEO
           title="Free Interactive Tarot Reading — Daily Card, Yes/No & Love Spread | BornClock"
-          description="Draw your own tarot cards free: a daily card, a yes/no answer, and a 3-card love spread from the full Major Arcana — with position- and orientation-aware interpretations."
+          description="Draw your own tarot cards free: a daily card and a 3-card love spread from the Major Arcana, plus a one-card yes/no answer from all 78 cards — each card explained."
           keywords="free tarot reading, interactive tarot, daily tarot card, yes no tarot, love tarot spread, tarot online"
           canonicalUrl="/tarot-reading"
           ogImage="https://bornclock.com/og/zodiac.png"
@@ -69,6 +78,7 @@ export default function TarotReading() {
         nav: [
           { label: 'Mystic Corner', to: '/mystic-corner' },
           { label: 'Tarot by Birthday', to: '/tarot-card-by-birthday' },
+          { label: 'All 78 Cards', to: '/tarot/cards' },
           { label: 'Zodiac Signs', to: '/zodiac' },
           { label: 'Numerology', to: '/numerology' },
           { label: 'Privacy', to: '/privacy' },
@@ -134,7 +144,7 @@ export default function TarotReading() {
                 />
                 <div className="text-center">
                   <button
-                    onClick={() => setYesNoDraw(drawCards(1)[0])}
+                    onClick={() => setYesNoDraw(drawFromFullDeck())}
                     data-testid="tarot-yesno-draw"
                     className="px-6 py-3 rounded-lg bg-[#0E2238] text-white font-semibold hover:opacity-90"
                   >
@@ -144,10 +154,17 @@ export default function TarotReading() {
                 {yesNoDraw && verdict && (
                   <div className="mt-6 text-center" data-testid="tarot-yesno-result">
                     {question.trim() && <p className="text-sm text-muted-foreground italic mb-3">“{question.trim()}”</p>}
-                    <CardFace drawn={yesNoDraw} large />
-                    <p className="text-3xl font-extrabold mt-3 text-foreground">{verdict.answer}</p>
+                    <div className="text-7xl mb-2" style={{ transform: yesNoDraw.reversed ? 'rotate(180deg)' : undefined }}>{yesNoDraw.card.emoji}</div>
+                    <p className="font-semibold text-foreground">{yesNoDraw.card.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {yesNoDraw.card.arcana === 'major' ? <TermTip id="majorArcana">Major Arcana</TermTip> : <TermTip id="minorArcana">Minor Arcana</TermTip>} · <TermTip id="reversedCard">{yesNoDraw.reversed ? 'Reversed' : 'Upright'}</TermTip>
+                    </p>
+                    <p className="text-3xl font-extrabold mt-3 text-foreground" data-testid="tarot-yesno-answer">{verdict.answer}</p>
                     <p className="text-xs uppercase tracking-wide text-muted-foreground">{verdict.confidence}</p>
                     <p className="text-muted-foreground text-sm leading-relaxed mt-3 max-w-xl mx-auto">{verdict.explanation}</p>
+                    <p className="text-muted-foreground text-sm leading-relaxed mt-2 max-w-xl mx-auto">{verdict.meaning}</p>
+                    <Link to={tarotCardPath(yesNoDraw.card.slug)} className="inline-block mt-3 text-sm underline text-foreground" data-testid="tarot-yesno-card-link">Read the full meaning of {yesNoDraw.card.name} →</Link>
+                    <p className="text-xs text-muted-foreground mt-3">One card from all 78. A reflection prompt, not a prediction.</p>
                   </div>
                 )}
               </CardContent>
@@ -197,6 +214,9 @@ export default function TarotReading() {
           <div className="rounded-lg bg-muted/40 p-5 text-sm text-muted-foreground mt-8">
             Prefer a reading tied to your birth date?{' '}
             <Link to="/tarot-card-by-birthday" className="underline text-foreground">Find your birth-card →</Link>
+            <br />
+            Want to look a card up?{' '}
+            <Link to="/tarot/cards" className="underline text-foreground" data-testid="tarot-all-cards-link">All 78 tarot card meanings →</Link>
           </div>
 
           <Card className="glass-card mt-8">

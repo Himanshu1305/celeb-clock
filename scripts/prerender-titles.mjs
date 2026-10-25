@@ -19,6 +19,9 @@ const INDIA_BORNON_MAP = new Map(
 
 // Audit S13: national life-expectancy figures come from the ONE sourced table
 // (UN World Population Prospects 2024, estimates for 2023) — same JSON the app reads.
+// Batch 7 / W5: tarot card pages — { route: { title, description } } generated from the
+// TypeScript page data by scripts/gen-tarot-meta.mts (drift-checked in tarotCards.test.ts).
+const TAROT_META = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/tarotCards/tarotMeta.json'), 'utf-8'));
 const WPP_LE = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/lifeExpectancyWpp2024.json'), 'utf-8'));
 const LEY = (country, sex = 'both') => WPP_LE.countries[country][sex].toFixed(1);
 const LEDIFF = (a, b) => (WPP_LE.countries[a].both - WPP_LE.countries[b].both).toFixed(1);
@@ -277,7 +280,7 @@ const STATIC = {
   '/born-on':               { title: 'Celebrities Born On — Browse by Birthday | BornClock', desc: 'Browse celebrities by birthday month and day. Discover famous people born on every date of the year, ranked by global recognition.' },
   '/born-in':               { title: 'Born in Each Month — Birthstones & Zodiac | BornClock', desc: 'Browse all 12 birth months: the zodiac signs, birthstone and birth flowers of each, plus the famous people born in it. Cultural tradition and celebration — never a prediction.' },
   '/tarot-card-by-birthday':{ title: 'Tarot Card by Birthday — Your Major Arcana | BornClock', desc: 'Find your personal Major Arcana tarot card from your date of birth. Full card meaning, symbolism, and how it relates to your life path.' },
-  '/tarot-reading':         { title: 'Free Interactive Tarot Reading — Daily, Yes/No & Love | BornClock', desc: 'Draw your own tarot cards free: a daily card, a yes/no answer, and a 3-card love spread from the full Major Arcana — with position- and orientation-aware interpretations.' },
+  '/tarot-reading':         { title: 'Free Interactive Tarot Reading — Daily, Yes/No & Love | BornClock', desc: 'Draw your own tarot cards free: a daily card and a 3-card love spread from the Major Arcana, plus a one-card yes/no answer from all 78 cards — each card explained.' },
   '/moon-sign':             { title: 'Moon Sign Calculator — Find Your Vedic & Western Moon Sign | BornClock', desc: 'Calculate your Moon sign from date of birth. Understand how your Moon sign shapes emotions, instincts, and inner life in both Western and Vedic astrology.' },
   '/gift':                  { title: 'Gift a Birthday Blueprint — The Perfect Gift | BornClock', desc: 'Anyone can send a gift card. The Birthday Blueprint is a personalised 9-section keepsake built from their birth date — celebrity twins, zodiac, numerology, birthstone and more. Instant delivery.' },
   '/coach':                 { title: 'AI Longevity Coach — Your Life-Expectancy Forecast | BornClock', desc: 'A personal AI longevity coach that explains your life-expectancy forecast and health factors in plain language, with evidence-based next steps. It explains your data — it never diagnoses.' },
@@ -755,6 +758,9 @@ export function getTitleForRoute(route) {
     title: 'Child (Bal) Kundli — Temperament, Talents & Care | BornClock',
     description: "A free, gentle Child (Bal) Kundli: temperament, learning strengths, talents, favourable periods, name sounds and calm wellbeing guidance from your child's chart.",
   };
+
+  // /tarot/cards and /tarot/cards/:slug (Batch 7 / W5)
+  if (TAROT_META[route]) return { title: TAROT_META[route].title, description: TAROT_META[route].description };
 
   // /nakshatra and /nakshatra/:slug
   if (route === '/nakshatra') {
