@@ -239,7 +239,8 @@ async function handler(request, env) {
     // HIT, so we treat a stale entry as a miss: recompute and overwrite the SAME row
     // (upsert on cache_key) — no real user data is deleted, it is refreshed in place.
     const cacheIsComplete = cached && cached.doshas && Array.isArray(cached.dashaTimeline)
-      && cached.divisionalCharts?.d9 && cached.divisionalCharts?.d10; // K13: D9/D10 charts
+      && cached.divisionalCharts?.d9 && cached.divisionalCharts?.d10 // K13: D9/D10 charts
+      && Array.isArray(cached.shodashvarga) && cached.shodashvarga.length === 16; // Batch 7 W3: all 16 vargas
     if (cacheIsComplete) {
       // The natal chart comes from the cache, but "current" fields (Mahadasha/Antardasha,
       // Sade Sati) are recomputed for NOW — the cached copy holds whatever was current
