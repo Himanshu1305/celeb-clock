@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, waitFor } from '@testing-library/react';
 import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import HindiPanchangPage from '../PanchangPage';
@@ -22,15 +22,17 @@ const q = (id: string) => document.querySelector(`[data-testid="${id}"]`);
 describe('P4-LANG Hindi Panchang', () => {
   afterEach(() => cleanup());
 
-  it('TC-HIP-01: renders Hindi panchang with the real computed limbs', () => {
+  it('TC-HIP-01: renders Hindi panchang with the real computed limbs (batch 7: from the shared daily entry)', async () => {
     renderAt('/hi/panchang');
     expect(q('hi-panchang-page')).toBeTruthy();
-    expect(q('hi-panchang-limbs')).toBeTruthy();
+    await waitFor(() => expect(q('hi-panchang-daily')?.querySelector('[data-daily-part="limbs"]')).toBeTruthy(), { timeout: 15000 });
     const body = document.body.textContent || '';
     expect(body).toContain('तिथि');
     expect(body).toContain('नक्षत्र');
     expect(body).toContain('राहु काल');
-  });
+    expect(body).toContain('ब्रह्म मुहूर्त');
+    expect(body).not.toContain('undefined');
+  }, 20000);
 
   it('TC-HIP-02: machine-assisted translation is flagged for human review', () => {
     renderAt('/hi/panchang');

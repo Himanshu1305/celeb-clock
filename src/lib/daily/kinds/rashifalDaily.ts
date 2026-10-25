@@ -236,8 +236,7 @@ function healthEn(f: Factors, date: string, slug: string): { text: string; tone:
   return { text: `${s1} ${s2} This is general guidance, not medical advice.`, tone };
 }
 
-export function composeRashifalEn(date: string, rashi: number): DailyEntry {
-  const sky = vedicSky(date);
+export function composeRashifalEn(date: string, rashi: number, sky: VedicSky = vedicSky(date)): DailyEntry {
   const f = factors(sky, rashi);
   const meta = RASHIS[rashi];
   const name = SEARCH_NAME[rashi];
@@ -346,8 +345,7 @@ function slowLineHi(f: Factors): { label: string; text: string; answer: string }
   };
 }
 
-export function composeRashifalHi(date: string, rashi: number): DailyEntry {
-  const sky = vedicSky(date);
+export function composeRashifalHi(date: string, rashi: number, sky: VedicSky = vedicSky(date)): DailyEntry {
   const f = factors(sky, rashi);
   const meta = RASHIS[rashi];
   const slug = RASHI_SLUGS_HI[rashi];
@@ -474,4 +472,24 @@ export function computeRashifalDailyHi(date: string, slug: string): DailyEntry {
   const i = (RASHI_SLUGS_HI as readonly string[]).indexOf(slug);
   if (i < 0) throw new Error(`unknown Hindi rashi slug ${slug}`);
   return composeRashifalHi(date, i);
+}
+
+/**
+ * Batch 7 "data + render": the day's sky (data kind 'vedic-sky', one file for all 12
+ * rashis and both languages) → the finished reading. Pure: no engine call when `sky`
+ * comes from the precomputed JSON (the Worker and the browser both use this).
+ */
+export const reviveVedicSky = (data: unknown): VedicSky => {
+  const d = data as VedicSky & { ref: string | Date };
+  return { ...d, ref: new Date(d.ref) };
+};
+export function rashifalFromSky(date: string, slug: string, data: unknown): DailyEntry {
+  const i = (RASHI_SLUGS as readonly string[]).indexOf(slug);
+  if (i < 0) throw new Error(`unknown rashi slug ${slug}`);
+  return composeRashifalEn(date, i, reviveVedicSky(data));
+}
+export function rashifalHiFromSky(date: string, slug: string, data: unknown): DailyEntry {
+  const i = (RASHI_SLUGS_HI as readonly string[]).indexOf(slug);
+  if (i < 0) throw new Error(`unknown Hindi rashi slug ${slug}`);
+  return composeRashifalHi(date, i, reviveVedicSky(data));
 }

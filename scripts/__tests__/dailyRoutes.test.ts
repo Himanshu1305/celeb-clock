@@ -33,7 +33,7 @@ describe('daily routes in the prerender list / sitemap', () => {
     // eslint-disable-next-line no-eval
     const re: RegExp = eval(m![1]);
     for (const r of allDailyRoutes()) expect(re.test(r), r).toBe(true);
-    for (const r of ['/rashifal/mesh/week', '/zodiac/leo', '/panchang']) expect(re.test(r), r).toBe(false);
+    for (const r of ['/rashifal/mesh/week', '/zodiac/leo', '/hi/rashifal']) /* W7 made /panchang + /hi/panchang daily pages */ expect(re.test(r), r).toBe(false);
   });
 });
 

@@ -588,6 +588,36 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'स्थानीय दोपहर के आसपास लगभग 48 मिनट का समय, दिन के सबसे शुभ समयों में से एक। कई परंपराओं में बुधवार को इसे नहीं लिया जाता।',
     aliases: ['Abhijit', 'Abhijeet'],
   },
+  brahmaMuhurta: {
+    term: 'Brahma Muhurta', category: 'panchang', hiTerm: 'ब्रह्म मुहूर्त',
+    impact: 'The quiet stretch of roughly 45–55 minutes before dawn, traditionally valued for prayer, meditation and study.',
+    why: 'The night (sunset to sunrise) is divided into 15 equal muhurtas; Brahma Muhurta is the 14th — it starts two night-muhurtas before sunrise and ends one night-muhurta before sunrise, so it shifts with your city and season.',
+    hi: 'सूर्योदय से पहले लगभग 45–55 मिनट का शांत समय, जिसे पूजा, ध्यान और अध्ययन के लिए श्रेष्ठ माना जाता है। रात के 15 मुहूर्तों में यह 14वाँ मुहूर्त है।',
+    aliases: ['Brahma Muhurat', 'Brahm Muhurt'],
+  },
+  durMuhurtam: {
+    term: 'Dur Muhurtam', category: 'panchang', hiTerm: 'दुर्मुहूर्त',
+    impact: 'One or two short windows (about 45 minutes each) that tradition avoids for auspicious starts such as ceremonies or signing something important.',
+    why: 'Daylight is divided into 15 equal muhurtas, and which of them are "Dur" (unfavourable) is fixed by the weekday — for example the 14th on Sunday, the 9th and 12th on Monday. On Tuesday the second one falls after sunset.',
+    guidance: 'Simply plan new starts outside it; ongoing work is fine.',
+    hi: 'दिन के एक या दो छोटे समय (लगभग 45 मिनट), जिनमें शुभ कार्य शुरू करना टाला जाता है। दिन के 15 मुहूर्तों में से कौन-सा दुर्मुहूर्त होगा, यह वार से तय होता है।',
+    aliases: ['Durmuhurtham', 'Dur Muhurat', 'Durmuhurta'],
+  },
+  varjyam: {
+    term: 'Varjyam', category: 'panchang', hiTerm: 'वर्ज्यम्',
+    impact: 'A window of roughly 80–110 minutes, traditionally avoided for new beginnings.',
+    why: 'Each Nakshatra (the Moon\'s star) lasts about a day. Inside it, a stretch of 4 ghatis — one-fifteenth of that Nakshatra\'s length — starting at a fixed point that depends on the Nakshatra is called Varjyam (or Tyajyam, "to be left out"). Mula has two such stretches.',
+    guidance: 'Plan new starts around it; routine work can carry on.',
+    hi: 'लगभग 80–110 मिनट का समय, जिसमें नए कार्य की शुरुआत टाली जाती है। हर नक्षत्र के भीतर एक तय स्थान से 4 घटी (नक्षत्र की अवधि का 1/15 भाग) का समय वर्ज्यम् (त्याज्य) कहलाता है।',
+    aliases: ['Tyajyam', 'Thyajyam', 'Varjyam time'],
+  },
+  amritKalam: {
+    term: 'Amrit Kalam', category: 'panchang', hiTerm: 'अमृत काल',
+    impact: 'A window of roughly 80–110 minutes considered favourable — a good time to begin something you care about.',
+    why: 'Like Varjyam, it is a stretch of 4 ghatis (one-fifteenth of the Nakshatra\'s length) at a fixed point inside each Nakshatra — the "nectar" portion of that star.',
+    hi: 'लगभग 80–110 मिनट का शुभ समय। हर नक्षत्र के भीतर एक तय स्थान से 4 घटी का समय अमृत काल कहलाता है।',
+    aliases: ['Amrit Kaal', 'Amrita Kalam', 'Amrita Gadiya'],
+  },
   choghadiya: {
     term: 'Choghadiya', category: 'panchang', hiTerm: 'चौघड़िया',
     impact: 'An easy, slot-by-slot "good time / avoid" guide for the day and night.',
@@ -1323,6 +1353,14 @@ export const MATCH_DOSHA_TERM: Record<string, string> = {
 };
 
 /** Map a Choghadiya slot name (panchangDay.ts) to its glossary id. */
+/** Batch 7 (W7): label → term id for the "What these terms mean" chips on the Panchang pages. */
+export const PANCHANG_PAGE_TERM: Record<string, string> = {
+  Panchang: 'panchang', Tithi: 'tithi', Paksha: 'paksha', Nakshatra: 'panchangNakshatra', Yoga: 'panchangYoga',
+  Karana: 'karana', Vara: 'vara', 'Brahma Muhurta': 'brahmaMuhurta', 'Abhijit Muhurta': 'abhijit', 'Amrit Kalam': 'amritKalam',
+  'Rahu Kaal': 'rahuKalam', 'Gulika Kaal': 'gulikaKaal', Yamaganda: 'yamaganda', 'Dur Muhurtam': 'durMuhurtam',
+  Varjyam: 'varjyam', Choghadiya: 'choghadiya',
+};
+
 export const CHOGHADIYA_TERM: Record<string, string> = {
   Amrit: 'choghAmrit', Shubh: 'choghShubh', Labh: 'choghLabh', Char: 'choghChar',
   Udveg: 'choghUdveg', Kaal: 'choghKaal', Rog: 'choghRog',

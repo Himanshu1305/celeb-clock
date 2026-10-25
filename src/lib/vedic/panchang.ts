@@ -28,6 +28,20 @@ const WEEKDAY = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday
 const RAHU_PART = [8, 2, 7, 5, 6, 4, 3];
 const INAUSPICIOUS_YOGAS = new Set(['Vyatipata', 'Vaidhriti', 'Vishkambha', 'Atiganda', 'Shula', 'Ganda', 'Vyaghata', 'Parigha', 'Vajra']);
 
+/** Name tables + Choghadiya / weekday-window rules, shared (pure) with the daily templates. */
+export const PANCHANG_TABLES = {
+  TITHI_NAMES, NAKSHATRAS: NAK, YOGAS: YOGA, WEEKDAYS: WEEKDAY,
+  /** Choghadiya 7-name cycle (planetary order). */
+  CHOGH_CYCLE: ['Udveg', 'Char', 'Labh', 'Amrit', 'Kaal', 'Shubh', 'Rog'],
+  CHOGH_QUALITY: { Amrit: 'good', Shubh: 'good', Labh: 'good', Char: 'neutral', Udveg: 'bad', Kaal: 'bad', Rog: 'bad' } as Record<string, 'good' | 'neutral' | 'bad'>,
+  /** weekday (0=Sun..6=Sat) → index into CHOGH_CYCLE for the first day Choghadiya. */
+  DAY_START_IDX: [0, 3, 6, 2, 5, 1, 4],
+  /** Inauspicious day-part (1-based, of 8) by weekday. */
+  RAHU_PART: [8, 2, 7, 5, 6, 4, 3],
+  GULIKA_PART: [7, 6, 5, 4, 3, 2, 1],
+  YAMA_PART: [5, 4, 3, 2, 1, 7, 6],
+};
+
 export interface Panchang {
   date: string; weekday: string;
   tithi: number; tithiName: string; paksha: 'Shukla' | 'Krishna';

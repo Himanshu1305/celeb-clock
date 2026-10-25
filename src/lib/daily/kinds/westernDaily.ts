@@ -175,8 +175,7 @@ function eventText(e: WesternEvent, sun: number): string {
   return `${e.body} turns ${e.type === 'station-retrograde' ? 'retrograde' : 'direct'} on ${d}`;
 }
 
-export function composeWestern(date: string, sunSign: number): DailyEntry {
-  const sky = westernSky(date);
+export function composeWestern(date: string, sunSign: number, sky: WesternSky = westernSky(date)): DailyEntry {
   const slug = SUN_SIGN_SLUGS[sunSign];
   const name = SIGNS[sunSign];
   const dEn = formatDateEn(date);
@@ -281,4 +280,13 @@ export function computeWesternDaily(date: string, slug: string): DailyEntry {
   const i = (SUN_SIGN_SLUGS as readonly string[]).indexOf(slug);
   if (i < 0) throw new Error(`unknown sun sign ${slug}`);
   return composeWestern(date, i);
+}
+
+/** Batch 7 "data + render": the day's tropical sky (data kind 'western-sky', one file for
+ *  all 12 signs) → the finished horoscope. Pure when `data` comes from the JSON. */
+export function horoscopeFromSky(date: string, slug: string, data: unknown): DailyEntry {
+  const i = (SUN_SIGN_SLUGS as readonly string[]).indexOf(slug);
+  if (i < 0) throw new Error(`unknown sun sign ${slug}`);
+  const d = data as WesternSky & { ref: string | Date };
+  return composeWestern(date, i, { ...d, ref: new Date(d.ref) });
 }

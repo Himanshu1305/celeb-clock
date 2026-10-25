@@ -37,11 +37,15 @@ export interface CityPickerProps {
   id?: string;
   placeholder?: string;
   ariaLabel?: string;
+  /** 'place' (batch 7 Panchang): a plain place search — no birth-date wording, no
+   * confirm line or manual time-zone control (the caller works out the zone itself). */
+  mode?: 'birth' | 'place';
 }
 
 const DOB_RE = /^\d{4}-\d{2}-\d{2}$/;
 
-export function CityPicker({ testid, value, onPick, dob, time, id, placeholder = 'Birth city (e.g. Delhi)', ariaLabel = 'Birth city' }: CityPickerProps) {
+export function CityPicker({ testid, value, onPick, dob, time, id, placeholder = 'Birth city (e.g. Delhi)', ariaLabel = 'Birth city', mode = 'birth' }: CityPickerProps) {
+  const birth = mode === 'birth';
   const [query, setQuery] = useState(value?.name ?? '');
   const [options, setOptions] = useState<GeoResult[]>([]);
   const [searching, setSearching] = useState(false);
@@ -164,13 +168,13 @@ export function CityPicker({ testid, value, onPick, dob, time, id, placeholder =
       {searching && <p className="text-[11px] text-muted-foreground mt-1" aria-live="polite">Searching…</p>}
       {needsPick && (
         <p data-testid={`${testid}-pick-hint`} className="text-xs text-amber-700 mt-1" role="status">
-          Please pick your birth city from the list so we use the right place and time zone.
+          {birth ? 'Please pick your birth city from the list so we use the right place and time zone.' : 'Please pick a place from the list so we use the right coordinates and time zone.'}
           {!searchedNetwork && query.trim().length >= 3 && (
             <> <button type="button" className="underline" onClick={() => runSearch(query, true)}>Search more places</button></>
           )}
         </p>
       )}
-      {value && summary && (
+      {birth && value && summary && (
         <div id={confirmId} data-testid={`${testid}-confirm`} role="status" aria-live="polite"
              className="mt-1 flex items-start justify-between gap-2 rounded-lg border border-border bg-background/60 px-2 py-1">
           <p data-testid={`${testid}-tz`} className="text-xs text-foreground break-words">
@@ -183,9 +187,9 @@ export function CityPicker({ testid, value, onPick, dob, time, id, placeholder =
           </button>
         </div>
       )}
-      {value && summary?.changeoverNote && <p className="text-[11px] text-amber-700 mt-1">{summary.changeoverNote}</p>}
-      {value && summary?.pre1970Note && <p data-testid={`${testid}-pre1970`} className="text-[11px] text-muted-foreground mt-1">{summary.pre1970Note}</p>}
-      {value && (
+      {birth && value && summary?.changeoverNote && <p className="text-[11px] text-amber-700 mt-1">{summary.changeoverNote}</p>}
+      {birth && value && summary?.pre1970Note && <p data-testid={`${testid}-pre1970`} className="text-[11px] text-muted-foreground mt-1">{summary.pre1970Note}</p>}
+      {birth && value && (
         <details className="mt-1">
           <summary className="text-[11px] text-muted-foreground cursor-pointer">Advanced: set timezone manually</summary>
           <select data-testid={`${testid}-tz-manual`} aria-label="Time zone"

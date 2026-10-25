@@ -10,7 +10,7 @@
 import { useEffect, useState } from 'react';
 import type { DailyEntry, DailyMonthFile } from './types';
 import { istDateISO, monthKey } from './dates';
-import { dailyJsonPath } from './registry';
+import { dailyJsonPath, dailyFilePath, DAILY_PAGES } from './registry';
 import { DAILY_DATA_SCRIPT_ID } from './inject';
 
 export type DailySource = 'embedded' | 'json' | 'computed';
@@ -35,7 +35,10 @@ function readEmbedded(kind: string, slug: string, date: string): DailyEntry | nu
 const monthCache = new Map<string, Promise<DailyMonthFile | null>>();
 
 export function loadDailyMonth(kind: string, slug: string, month: string): Promise<DailyMonthFile | null> {
-  const url = dailyJsonPath(kind, slug, month);
+  return loadUrl(dailyJsonPath(kind, slug, month));
+}
+
+function loadUrl(url: string): Promise<DailyMonthFile | null> {
   let p = monthCache.get(url);
   if (!p) {
     p = fetch(url, { credentials: 'omit' })
@@ -48,8 +51,19 @@ export function loadDailyMonth(kind: string, slug: string, month: string): Promi
 
 /** Resolve the entry for (kind, slug, date) — JSON first, browser compute as fallback. */
 export async function resolveDailyEntry(kind: string, slug: string, date: string): Promise<{ entry: DailyEntry | null; source: DailySource }> {
-  const file = await loadDailyMonth(kind, slug, monthKey(date));
-  const fromJson = file?.days?.[date];
+  const def = DAILY_PAGES.find(d => d.kind === kind);
+  const month = monthKey(date);
+  let fromJson: DailyEntry | null = null;
+  if (def) {
+    let file = await loadUrl(dailyFilePath(def, slug, month));
+    if (!file && def.data) file = await loadDailyMonth(kind, slug, month);
+    // Templates are loaded lazily (some pull in text tables shared with the engine
+    // modules); the embedded first-render path above never needs them.
+    if (file) {
+      const { entryFromMonthFile } = await import('./templates');
+      fromJson = entryFromMonthFile(def, slug, date, file);
+    }
+  }
   if (fromJson) return { entry: fromJson, source: 'json' };
   console.warn(`[daily] no precomputed ${kind}/${slug} for ${date} — computing in the browser`);
   try {

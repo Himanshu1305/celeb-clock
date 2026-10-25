@@ -41,6 +41,7 @@ import { handleReportOg, injectReportOgTags } from './og-report.js';
 import { isProductionHost, DISALLOW_ALL_ROBOTS } from './host.js';
 import { duplicateRedirect } from '../src/lib/seo/duplicateRedirects.js';
 import { INDIA_BORNON_SLUGS } from '../src/lib/seo/indiaBornOnSlugs.js';
+import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../src/lib/seo/panchangSlugs.js';
 import { matchDailyRoute } from '../src/lib/daily/registry.js';
 import { applyDailyContent } from './daily.js';
 
@@ -283,9 +284,9 @@ export default {
       if ((m = pathname.match(/^\/life-expectancy\/factors\/([a-z-]+)\/?$/))) return !LEF.has(m[1]);
       const BZ = new Set(['move-naturally','purpose','downshift','80-percent-rule','plant-slant','wine-at-5','belong','loved-ones-first','right-tribe']);
       if ((m = pathname.match(/^\/blue-zones\/([a-z0-9-]+)\/?$/)))    return !BZ.has(m[1]);
-      const PC = new Set(['delhi','mumbai','bengaluru','kolkata','chennai','hyderabad','pune','ahmedabad','jaipur','lucknow']);
-      if ((m = pathname.match(/^\/panchang\/([a-z-]+)\/?$/)))         return !PC.has(m[1]);
-      if ((m = pathname.match(/^\/hi\/panchang\/([a-z-]+)\/?$/)))     return !PC.has(m[1]);
+      // Batch 7 (W7): 50 Panchang cities (Panchang / Rahu Kaal / Choghadiya); Hindi pages for 10.
+      if ((m = pathname.match(/^\/(?:panchang|rahu-kaal|choghadiya)\/([a-z-]+)\/?$/))) return !PANCHANG_CITY_SLUGS.has(m[1]);
+      if ((m = pathname.match(/^\/hi\/panchang\/([a-z-]+)\/?$/)))     return !HINDI_PANCHANG_SLUGS.has(m[1]);
       // Batch 7 / W5: the 78 tarot cards — 22 named trumps + "<rank>-of-<suit>" (mirrors src/data/tarotCards).
       const TAROT_MAJOR = new Set(['the-fool','the-magician','the-high-priestess','the-empress','the-emperor','the-hierophant','the-lovers','the-chariot','strength','the-hermit','wheel-of-fortune','justice','the-hanged-man','death','temperance','the-devil','the-tower','the-star','the-moon','the-sun','judgement','the-world']);
       if ((m = pathname.match(/^\/tarot\/cards\/([a-z-]+)\/?$/)))   return !(TAROT_MAJOR.has(m[1]) || /^(ace|two|three|four|five|six|seven|eight|nine|ten|page|knight|queen|king)-of-(wands|cups|swords|pentacles)$/.test(m[1]));

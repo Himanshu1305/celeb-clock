@@ -72,7 +72,10 @@ export interface DailyMonthFile {
   month: string;
   /** No build timestamp here on purpose: unchanged months keep the same bytes, so a
    *  deploy only re-uploads the month files that actually changed. */
-  days: Record<string, DailyEntry>;
+  /** Finished entries (original format). */
+  days?: Record<string, DailyEntry>;
+  /** Compact per-day data (the "data + render" variant, see DailyPageDef.data). */
+  data?: Record<string, unknown>;
 }
 
 /** `dist/daily/manifest.json` — read by the ops monitor to check freshness. */
