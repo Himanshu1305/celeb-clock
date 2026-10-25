@@ -1101,6 +1101,21 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     why: 'Letters A–Z are numbered 1–9 in order and repeat (A=1 … I=9, J=1 …).',
     hi: 'सबसे आम आधुनिक पद्धति — A से Z तक अक्षरों को क्रम से 1–9 अंक।',
   },
+  angelNumber: {
+    term: 'Angel number', category: 'numerology', hiTerm: 'एंजेल नंबर',
+    impact: 'A repeating number you keep noticing (like 111 or 11:11) that some people read as a gentle sign — a popular belief, not a prediction.',
+    why: 'The term was defined by Doreen Virtue and Lynnette Brown in their 2005 book "Angel Numbers". Unlike a Life Path number, it is not calculated from your birth date — the same number has the same meaning for everyone.',
+    learnMore: 'Psychology explains why a number seems to follow you: once you notice something, you spot it more (the frequency illusion).',
+    hi: 'बार-बार दिखने वाला अंक (जैसे 111 या 11:11) जिसे कुछ लोग संकेत मानते हैं — यह एक लोकप्रिय मान्यता है, भविष्यवाणी नहीं।',
+    aliases: ['angel numbers', 'repeating numbers'], link: '/angel-numbers',
+  },
+  twinFlame: {
+    term: 'Twin flame', category: 'numerology', hiTerm: 'ट्विन फ्लेम',
+    impact: 'A popular spiritual idea that two people can be "mirror" halves of one soul, sharing an unusually intense bond.',
+    why: 'It is a belief from modern spirituality, not astrology or numerology maths. Writers describe it as more intense than a soulmate bond, and say it can include periods apart.',
+    hi: 'एक लोकप्रिय आध्यात्मिक मान्यता कि दो लोग एक ही आत्मा के "दर्पण" हिस्से हो सकते हैं — यह मान्यता है, गणना नहीं।',
+    aliases: ['twin flames'],
+  },
 
   // ─────────────────────────── Tarot ───────────────────────────
   tarot: {

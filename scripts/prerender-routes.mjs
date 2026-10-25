@@ -52,6 +52,12 @@ const BIRTHSTONE_MONTHS = [
 
 const NUMEROLOGY_NUMBERS = [1,2,3,4,5,6,7,8,9,11,22,33];
 
+// Batch 7 (W6): one page per angel number. The sequence list comes from the same JSON
+// the page reads (src/data/angelNumbersSeo.json), so routes and pages can't drift.
+const ANGEL_NUMBER_SEQUENCES = Object.keys(JSON.parse(
+  readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/angelNumbersSeo.json'), 'utf-8')
+));
+
 
 const BLOG_SLUGS = [
   'calculate-exact-age-seconds-minutes-hours',
@@ -375,6 +381,7 @@ export const STATIC_ROUTES = [
   '/kaal-sarp-dosha',
   '/personal-year-number',
   '/angel-numbers',
+  ...ANGEL_NUMBER_SEQUENCES.map(n => `/angel-numbers/${n}`),
   '/muhurat',
   '/gemstones',
   '/career-report',
