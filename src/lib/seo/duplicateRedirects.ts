@@ -75,11 +75,15 @@ export function duplicateRedirect(pathname: string, opts: DuplicateRedirectOptio
     return d ? `/birthday/${mo}/${d}/` : null;
   }
 
-  // /born-on/:month/:day → /born-on/:month-:day/
+  // /born-on/:month/:day → /born-on/:month-:day/india/ when that India page exists
+  // (the retired page listed Indian celebrities and its canonical already pointed
+  // at the India URL), otherwise the global /born-on/:month-:day/.
   if ((m = path.match(/^\/born-on\/([a-z]+)\/(\d+)$/i))) {
     const mo = monthIndex(m[1]);
     const d = validDay(mo, m[2]);
-    return d ? `/born-on/${bornOnSlug(mo, d)}/` : null;
+    if (!d) return null;
+    const slug = bornOnSlug(mo, d);
+    return opts.indiaSlugs?.has(slug) ? `/born-on/${slug}/india/` : `/born-on/${slug}/`;
   }
 
   // /birthday/:month-:day → /born-on/:month-:day/

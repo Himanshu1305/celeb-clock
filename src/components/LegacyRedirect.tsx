@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { duplicateRedirect } from '@/lib/seo/duplicateRedirects';
+import { INDIA_BORNON_SLUGS } from '@/lib/seo/indiaBornOnSlugs';
 
 /**
  * Client-side twin of the Worker's 301s for retired duplicate URLs (Batch 6 SEO).
@@ -14,7 +15,7 @@ import { duplicateRedirect } from '@/lib/seo/duplicateRedirects';
  */
 export function LegacyRedirect({ fallback, otherwise = '/born-on' }: { fallback?: ReactNode; otherwise?: string }) {
   const { pathname, search, hash } = useLocation();
-  const target = duplicateRedirect(pathname);
+  const target = duplicateRedirect(pathname, { indiaSlugs: INDIA_BORNON_SLUGS });
   if (target) return <Navigate to={`${target}${search}${hash}`} replace />;
   if (fallback !== undefined) return <>{fallback}</>;
   return <Navigate to={otherwise} replace />;

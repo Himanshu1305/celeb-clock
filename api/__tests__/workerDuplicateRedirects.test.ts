@@ -18,7 +18,8 @@ const get = (path: string) => worker.fetch(new Request(`https://bornclock.com${p
 
 describe('Worker 301s for retired duplicate pages', () => {
   it.each([
-    ['/born-on/may/13/', 'https://bornclock.com/born-on/may-13/'],
+    ['/born-on/may/13/', 'https://bornclock.com/born-on/may-13/india/'],
+    ['/born-on/february/16/', 'https://bornclock.com/born-on/february-16/'], // no India page for this date → global
     ['/born-on/february/29', 'https://bornclock.com/born-on/february-29/'],
     ['/born-on/december/31/personality/', 'https://bornclock.com/birthday/12/31/'],
     ['/born-on/february/29/personality', 'https://bornclock.com/birthday/2/29/'],
@@ -46,7 +47,7 @@ describe('Worker 301s for retired duplicate pages', () => {
 
   it('keeps the query string (e.g. utm tags) on the redirect', async () => {
     const res = await get('/born-on/may/13/?utm_source=x');
-    expect(res.headers.get('Location')).toBe('https://bornclock.com/born-on/may-13/?utm_source=x');
+    expect(res.headers.get('Location')).toBe('https://bornclock.com/born-on/may-13/india/?utm_source=x');
   });
 
   it('kept pages are served normally (no redirect)', async () => {

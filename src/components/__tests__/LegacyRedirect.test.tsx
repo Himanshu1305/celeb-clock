@@ -36,7 +36,7 @@ describe('LegacyRedirect', () => {
   it.each([
     ['/born-on/august/6/personality', '/birthday/8/6/'],
     ['/born-on/february/29/personality', '/birthday/2/29/'],
-    ['/born-on/may/13?ref=x', '/born-on/may-13/?ref=x'],
+    ['/born-on/may/13?ref=x', '/born-on/may-13/india/?ref=x'],
     ['/birthday/june-13', '/born-on/june-13/'],
     ['/biological-age-calculator', '/biological-age/'],
   ])('%s → %s', (from, to) => {
