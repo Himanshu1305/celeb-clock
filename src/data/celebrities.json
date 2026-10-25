@@ -1,7 +1,7 @@
 {
   "generated_at": "2026-09-06T18:38:49.187Z",
-  "total": 3107,
-  "indian_count": 2595,
+  "total": 3044,
+  "indian_count": 2532,
   "celebrities": [
     {
       "name": "Mahatma Gandhi",
@@ -53,7 +53,10 @@
       "category": "Social Reformer",
       "known_for": "Father of Indian Constitution, champion of Dalit rights, jurist and economist",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 3827,
+      "occupation": "Indian polymath, philosopher, and social reformer (1891–1956)",
+      "sitelinks": 147
     },
     {
       "name": "Rabindranath Tagore",
@@ -157,7 +160,10 @@
       "category": "Freedom Fighter",
       "known_for": "Youngest President of Indian National Congress, first Education Minister of India",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 7224,
+      "occupation": "Indian politician and writer (1888–1958)",
+      "sitelinks": 53
     },
     {
       "name": "Gopal Krishna Gokhale",
@@ -404,7 +410,10 @@
       "category": "Spiritual Leader",
       "known_for": "Founder of ISKCON (Hare Krishna movement), brought Bhagavad Gita and Vaishnavism to the West",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 2422,
+      "occupation": "Indian spiritual teacher and founder of the ISKCON",
+      "sitelinks": 71
     },
     {
       "name": "Ramana Maharshi",
@@ -430,7 +439,10 @@
       "category": "Philosopher",
       "known_for": "Freedom fighter turned philosopher and yogi, Integral Yoga, The Life Divine",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 546,
+      "occupation": "Indian Bengali philosopher, yogi, maharishi, poet and nationalist (1872–1950)",
+      "sitelinks": 91
     },
     {
       "name": "Paramahansa Yogananda",
@@ -456,7 +468,10 @@
       "category": "Philosopher",
       "known_for": "Controversial spiritual teacher, neo-sannyas movement, 650+ books, global following",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 684,
+      "occupation": "Indian guru and leader of the Rajneesh movement (1931–1990)",
+      "sitelinks": 89
     },
     {
       "name": "J. Krishnamurti",
@@ -469,7 +484,10 @@
       "category": "Philosopher",
       "known_for": "Independent philosopher, rejected all organised religion and gurus, The First and Last Freedom",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 136,
+      "occupation": "Indian spiritual philosopher, mystic, speaker and writer (1895–1986)",
+      "sitelinks": 100
     },
     {
       "name": "Ramakrishna Paramahamsa",
@@ -495,7 +513,10 @@
       "category": "Spiritual Leader",
       "known_for": "Founded Divine Life Society, prolific author of 200+ books on yoga and Vedanta",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 18249,
+      "occupation": "Hindu spiritual teacher (1887–1963)",
+      "sitelinks": 36
     },
     {
       "name": "Sai Baba of Shirdi",
@@ -534,7 +555,10 @@
       "category": "Spiritual Leader",
       "known_for": "Founder of Isha Foundation, yogi and author, Save Soil movement, global spiritual teacher",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 8483,
+      "occupation": "Indian yogi and author (born 1957)",
+      "sitelinks": 50
     },
     {
       "name": "Sri Sri Ravi Shankar",
@@ -547,7 +571,10 @@
       "category": "Spiritual Leader",
       "known_for": "Founder of Art of Living Foundation, Sudarshan Kriya, global peace ambassador",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 15844,
+      "occupation": "Indian guru and spiritual leader (born 1956)",
+      "sitelinks": 39
     },
     {
       "name": "Baba Ramdev",
@@ -560,7 +587,9 @@
       "category": "Spiritual Leader",
       "known_for": "Yoga guru, founder of Patanjali Ayurved, popularised pranayama across India",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 27919,
+      "sitelinks": 30
     },
     {
       "name": "Mata Amritanandamayi",
@@ -599,7 +628,10 @@
       "category": "Scientist",
       "known_for": "Missile Man of India, 11th President of India, PSLV and Agni missile programs",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 216,
+      "occupation": "Indian scientist and statesman (1931–2015)",
+      "sitelinks": 98
     },
     {
       "name": "CV Raman",
@@ -638,7 +670,10 @@
       "category": "Scientist",
       "known_for": "Father of Indian nuclear programme, founded TIFR and BARC",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 10348,
+      "occupation": "Indian nuclear physicist (1909–1966)",
+      "sitelinks": 46
     },
     {
       "name": "Vikram Sarabhai",
@@ -664,7 +699,10 @@
       "category": "Scientist",
       "known_for": "Bose-Einstein statistics, Bose-Einstein condensate, Bosons named after him",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 1312,
+      "occupation": "Indian Bengali physicist and polymath (1894–1974)",
+      "sitelinks": 80
     },
     {
       "name": "Meghnad Saha",
@@ -1262,7 +1300,10 @@
       "category": "Actress",
       "known_for": "Umrao Jaan, Silsila, Khubsoorat, Khoon Bhari Maang, eternal beauty of Bollywood",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 6991,
+      "occupation": "Indian actress",
+      "sitelinks": 53
     },
     {
       "name": "Sridevi",
@@ -1405,7 +1446,9 @@
       "category": "Actor",
       "known_for": "Young Tiger, RRR, Janatha Garage, Aravinda Sametha, Telugu cinema icon",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 27828,
+      "sitelinks": 38
     },
     {
       "name": "Ram Charan",
@@ -1496,7 +1539,9 @@
       "category": "Director",
       "known_for": "Baahubali franchise, RRR, Magadheera, India's most successful director globally",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 27845,
+      "sitelinks": 34
     },
     {
       "name": "Sachin Tendulkar",
@@ -2003,7 +2048,10 @@
       "category": "Athlete",
       "known_for": "Olympic silver (Rio 2016) and bronze (Tokyo 2020) in badminton, World Champion 2019",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 6618,
+      "occupation": "Indian badminton player",
+      "sitelinks": 54
     },
     {
       "name": "Saina Nehwal",
@@ -2081,7 +2129,10 @@
       "category": "Athlete",
       "known_for": "First Indian to win individual Olympic gold (Beijing 2008), 10m air rifle, Padma Bhushan",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 18690,
+      "occupation": "Indian sport shooter",
+      "sitelinks": 36
     },
     {
       "name": "Vishwanathan Anand",
@@ -2094,7 +2145,10 @@
       "category": "Athlete",
       "known_for": "Five-time World Chess Champion, first Asian to win World Chess Championship 2000",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 267,
+      "occupation": "Indian chess grandmaster",
+      "sitelinks": 97
     },
     {
       "name": "Leander Paes",
@@ -2168,11 +2222,14 @@
       "birth_month_day": "10-10",
       "birth_year": 1906,
       "death_year": 2001,
-      "death_date": "2001-01-01",
+      "death_date": "2001-05-13",
       "category": "Author",
       "known_for": "Malgudi Days, The Guide, Swami and Friends, Indian English literature pioneer",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 10071,
+      "occupation": "Indian writer (1906–2001)",
+      "sitelinks": 47
     },
     {
       "name": "Munshi Premchand",
@@ -2864,19 +2921,6 @@
       "source": "static"
     },
     {
-      "name": "Dayananda Saraswati",
-      "slug": "dayananda-saraswati-1824",
-      "birth_date": "1824-02-12",
-      "birth_month_day": "02-12",
-      "birth_year": 1824,
-      "death_year": 1883,
-      "death_date": "1883-10-30",
-      "category": "Philosopher",
-      "known_for": "Founded Arya Samaj, championed Vedic Hinduism, \"Back to the Vedas\"",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
       "name": "Sushma Swaraj",
       "slug": "sushma-swaraj",
       "birth_date": "1952-02-14",
@@ -3160,7 +3204,10 @@
       "category": "Actress",
       "known_for": "Kuch Kuch Hota Hai, Kabhi Khushi Kabhie Gham, Hichki, Mardaani, Black, Saathiya",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 1381,
+      "occupation": "Indian film actress",
+      "sitelinks": 80
     },
     {
       "name": "Smriti Irani",
@@ -3303,7 +3350,10 @@
       "category": "Actor",
       "known_for": "Satya, Gangs of Wasseypur, Aligarh, The Family Man, Bhonsle, one of India's finest",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 20362,
+      "occupation": "Indian actor",
+      "sitelinks": 34
     },
     {
       "name": "Arshad Warsi",
@@ -3527,19 +3577,6 @@
       "source": "static"
     },
     {
-      "name": "Ajith Kumar",
-      "slug": "ajith-kumar-1971",
-      "birth_date": "1971-05-01",
-      "birth_month_day": "05-01",
-      "birth_year": 1971,
-      "death_year": null,
-      "death_date": null,
-      "category": "Actor",
-      "known_for": "Thala, Mankatha, Vedalam, Viswasam, Valimai, Tamil cinema superstar",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
       "name": "Sam Pitroda",
       "slug": "sam-pitroda",
       "birth_date": "1942-11-16",
@@ -3667,7 +3704,9 @@
       "category": "Athlete",
       "known_for": "World Chess Champion 2024 at age 18, youngest world champion in chess history",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 27817,
+      "sitelinks": 67
     },
     {
       "name": "HD Deve Gowda",
@@ -3680,7 +3719,10 @@
       "category": "Politician",
       "known_for": "Prime Minister of India 1996-97, Janata Dal leader, Karnataka CM multiple times",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 10570,
+      "occupation": "Prime Minister of India (1996-1997)",
+      "sitelinks": 46
     },
     {
       "name": "Dinesh Karthik",
@@ -3692,19 +3734,6 @@
       "death_date": null,
       "category": "Cricketer",
       "known_for": "Wicketkeeper-batsman, IPL star, 2022 T20 World Cup comeback, commentator",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Mani Ratnam",
-      "slug": "mani-ratnam-1956",
-      "birth_date": "1956-06-02",
-      "birth_month_day": "06-02",
-      "birth_year": 1956,
-      "death_year": null,
-      "death_date": null,
-      "category": "Director",
-      "known_for": "Roja, Bombay, Dil Se, Guru, Raavan, Ponniyin Selvan, greatest Tamil filmmaker",
       "nationality_code": "IN",
       "source": "static"
     },
@@ -3826,19 +3855,6 @@
       "source": "static"
     },
     {
-      "name": "Vijay",
-      "slug": "vijay-1974",
-      "birth_date": "1974-06-22",
-      "birth_month_day": "06-22",
-      "birth_year": 1974,
-      "death_year": null,
-      "death_date": null,
-      "category": "Actor",
-      "known_for": "Thalapathy, Mersal, Bigil, Master, Beast, Varisu, highest-grossing Tamil star",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
       "name": "Karisma Kapoor",
       "slug": "karisma-kapoor",
       "birth_date": "1974-06-25",
@@ -3874,32 +3890,6 @@
       "death_date": null,
       "category": "Singer",
       "known_for": "Leading Telugu playback singer, thousands of songs, most loved Telugu singer",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Leander Paes",
-      "slug": "leander-paes-1973",
-      "birth_date": "1973-06-17",
-      "birth_month_day": "06-17",
-      "birth_year": 1973,
-      "death_year": null,
-      "death_date": null,
-      "category": "Athlete",
-      "known_for": "Olympic bronze 1996 Atlanta, 18 Grand Slam doubles titles, India's greatest tennis player",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Sonu Nigam",
-      "slug": "sonu-nigam-1973",
-      "birth_date": "1973-07-30",
-      "birth_month_day": "07-30",
-      "birth_year": 1973,
-      "death_year": null,
-      "death_date": null,
-      "category": "Singer",
-      "known_for": "Classic Bollywood playback singer, Kal Ho Naa Ho, Abhi Mujh Mein Kahin, Sandese Aate Hain",
       "nationality_code": "IN",
       "source": "static"
     },
@@ -4031,7 +4021,10 @@
       "category": "Business Leader",
       "known_for": "First Indian commercial pilot, Chairman Tata Group, Air India founder, Bharat Ratna",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 17715,
+      "occupation": "Indian industrialist, philanthropist and aviator (1904–1993)",
+      "sitelinks": 37
     },
     {
       "name": "Kriti Sanon",
@@ -4086,19 +4079,6 @@
       "source": "static"
     },
     {
-      "name": "Bhuvneshwar Kumar",
-      "slug": "bhuvneshwar-kumar-1990",
-      "birth_date": "1990-02-05",
-      "birth_month_day": "02-05",
-      "birth_year": 1990,
-      "death_year": null,
-      "death_date": null,
-      "category": "Cricketer",
-      "known_for": "Swing bowler, death-over specialist, led SRH to IPL success, reverse swing expert",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
       "name": "Durgabai Deshmukh",
       "slug": "durgabai-deshmukh",
       "birth_date": "1909-07-15",
@@ -4122,7 +4102,9 @@
       "category": "Singer",
       "known_for": "South India's nightingale, 25,000+ songs, multiple National Awards",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 28095,
+      "sitelinks": 26
     },
     {
       "name": "Hariprasad Chaurasia",
@@ -4213,7 +4195,10 @@
       "category": "Athlete",
       "known_for": "Olympic silver Tokyo 2020 in weightlifting, World Champion 2017, Padma Vibhushan",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 20845,
+      "occupation": "Indian weightlifter (born 1994)",
+      "sitelinks": 34
     },
     {
       "name": "Sara Ali Khan",
@@ -4356,7 +4341,10 @@
       "category": "Athlete",
       "known_for": "Chess prodigy, FIDE World Cup 2023 finalist, second youngest grandmaster history",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 13850,
+      "occupation": "Indian chess player",
+      "sitelinks": 41
     },
     {
       "name": "Gulzar",
@@ -4525,7 +4513,10 @@
       "category": "Musician",
       "known_for": "Greatest Carnatic vocalist, Bharat Ratna 1998, first musician to receive it, global ambassador",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 24355,
+      "occupation": "Indian Carnatic classical vocalist (1916–2004)",
+      "sitelinks": 32
     },
     {
       "name": "Barkha Dutt",
@@ -4781,11 +4772,13 @@
       "birth_month_day": "10-01",
       "birth_year": 1906,
       "death_year": 1975,
-      "death_date": "1975-01-01",
+      "death_date": "1975-10-31",
       "category": "Music Composer",
       "known_for": "Sachin Dev Burman, Pyaasa, Guide, Aradhana, Abhimaan, legendary Bollywood composer",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 28273,
+      "sitelinks": 23
     },
     {
       "name": "Shankar Jaikishan",
@@ -4840,19 +4833,6 @@
       "source": "static"
     },
     {
-      "name": "Virat Kohli",
-      "slug": "virat-kohli-1988",
-      "birth_date": "1988-11-05",
-      "birth_month_day": "11-05",
-      "birth_year": 1988,
-      "death_year": null,
-      "death_date": null,
-      "category": "Cricketer",
-      "known_for": "Run machine, 80+ international centuries, fastest to 8000/9000/10000 ODI runs, King Kohli",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
       "name": "Anushka Shetty",
       "slug": "anushka-shetty",
       "birth_date": "1981-11-07",
@@ -4876,7 +4856,10 @@
       "category": "Politician",
       "known_for": "BJP co-founder, Ram Mandir movement, Deputy PM of India, Bharat Ratna 2024",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 17335,
+      "occupation": "Deputy Prime Minister of India (2002-2004)",
+      "sitelinks": 37
     },
     {
       "name": "Pullela Gopichand",
@@ -5019,7 +5002,10 @@
       "category": "Actor",
       "known_for": "Waqt Hamara Hai, Mohra, Dhadkan, Border, Main Hoon Na, Phir Hera Pheri",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 16837,
+      "occupation": "Indian actor and film producer",
+      "sitelinks": 38
     },
     {
       "name": "Yami Gautam",
@@ -5136,7 +5122,10 @@
       "category": "Politician",
       "known_for": "First President of India, freedom fighter, Bihar Kesari, President 1950-1962",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 1817,
+      "occupation": "Indian statesman, lawyer and writer (1884–1963); first President of India",
+      "sitelinks": 76
     },
     {
       "name": "Shikhar Dhawan",
@@ -5243,32 +5232,6 @@
       "source": "static"
     },
     {
-      "name": "Rajesh Khanna",
-      "slug": "rajesh-khanna-1942",
-      "birth_date": "1942-12-29",
-      "birth_month_day": "12-29",
-      "birth_year": 1942,
-      "death_year": 2012,
-      "death_date": "2012-07-18",
-      "category": "Actor",
-      "known_for": "First superstar of Bollywood, Anand, Aradhana, Kati Patang, 15 consecutive solo hits",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Dilip Kumar",
-      "slug": "dilip-kumar-1922",
-      "birth_date": "1922-12-11",
-      "birth_month_day": "12-11",
-      "birth_year": 1922,
-      "death_year": 2021,
-      "death_date": "2021-07-07",
-      "category": "Actor",
-      "known_for": "Tragedy King of Bollywood, Devdas, Mughal-e-Azam, Naya Daur, Bharat Ratna 2015",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
       "name": "Govinda",
       "slug": "govinda",
       "birth_date": "1963-12-21",
@@ -5295,19 +5258,6 @@
       "source": "static"
     },
     {
-      "name": "Mohammed Rafi",
-      "slug": "mohammed-rafi-1924",
-      "birth_date": "1924-12-24",
-      "birth_month_day": "12-24",
-      "birth_year": 1924,
-      "death_year": 1980,
-      "death_date": "1980-07-31",
-      "category": "Singer",
-      "known_for": "One of greatest playback singers in history, versatile range, 26,000+ songs",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
       "name": "Naushad Ali",
       "slug": "naushad-ali",
       "birth_date": "1919-12-25",
@@ -5330,19 +5280,6 @@
       "death_date": null,
       "category": "Actor",
       "known_for": "Mr. India, Tezaab, Ram Lakhan, Slumdog Millionaire, 24 (Fox), eternally young",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Neeraj Chopra",
-      "slug": "neeraj-chopra-1997",
-      "birth_date": "1997-12-24",
-      "birth_month_day": "12-24",
-      "birth_year": 1997,
-      "death_year": null,
-      "death_date": null,
-      "category": "Athlete",
-      "known_for": "Olympic gold Tokyo 2020 in javelin, first Indian to win Olympic gold in track and field",
       "nationality_code": "IN",
       "source": "static"
     },
@@ -5412,71 +5349,6 @@
       "source": "static"
     },
     {
-      "name": "Rajinikanth",
-      "slug": "rajinikanth-1950",
-      "birth_date": "1950-12-12",
-      "birth_month_day": "12-12",
-      "birth_year": 1950,
-      "death_year": null,
-      "death_date": null,
-      "category": "Actor",
-      "known_for": "Superstar of Indian cinema, Baasha, Muthu, Sivaji, Enthiran, Kabali, global cult following",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Yuvraj Singh",
-      "slug": "yuvraj-singh-1981",
-      "birth_date": "1981-12-12",
-      "birth_month_day": "12-12",
-      "birth_year": 1981,
-      "death_year": null,
-      "death_date": null,
-      "category": "Cricketer",
-      "known_for": "Six sixes in an over, Player of Tournament 2011 World Cup, cancer survivor comeback",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Pranab Mukherjee",
-      "slug": "pranab-mukherjee-1935",
-      "birth_date": "1935-12-11",
-      "birth_month_day": "12-11",
-      "birth_year": 1935,
-      "death_year": 2020,
-      "death_date": "2020-08-31",
-      "category": "Politician",
-      "known_for": "13th President of India, longest-serving Finance Minister, Bharat Ratna 2019",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Osho Rajneesh",
-      "slug": "osho-rajneesh-1931",
-      "birth_date": "1931-12-11",
-      "birth_month_day": "12-11",
-      "birth_year": 1931,
-      "death_year": 1990,
-      "death_date": "1990-01-19",
-      "category": "Philosopher",
-      "known_for": "Controversial spiritual teacher, neo-sannyas movement, 650+ books, global following",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Subramania Bharati",
-      "slug": "subramania-bharati-1882",
-      "birth_date": "1882-12-11",
-      "birth_month_day": "12-11",
-      "birth_year": 1882,
-      "death_year": 1921,
-      "death_date": "1921-01-01",
-      "category": "Poet",
-      "known_for": "Tamil poet and freedom fighter, Mahakavi Bharati, champion of women's rights",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
       "name": "Ravish Kumar",
       "slug": "ravish-kumar",
       "birth_date": "1974-12-05",
@@ -5499,32 +5371,6 @@
       "death_date": "2019-08-24",
       "category": "Politician",
       "known_for": "Finance Minister of India, BJP leader, lawyer, GST architect",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Dhirubhai Ambani",
-      "slug": "dhirubhai-ambani-1932",
-      "birth_date": "1932-12-28",
-      "birth_month_day": "12-28",
-      "birth_year": 1932,
-      "death_year": 2002,
-      "death_date": "2002-07-06",
-      "category": "Business Leader",
-      "known_for": "Founded Reliance Industries, rags-to-riches story, democratised equity investment in India",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Ratan Tata",
-      "slug": "ratan-tata-1937",
-      "birth_date": "1937-12-28",
-      "birth_month_day": "12-28",
-      "birth_year": 1937,
-      "death_year": 2024,
-      "death_date": "2024-01-01",
-      "category": "Business Leader",
-      "known_for": "Chairman of Tata Group, Tata Nano, acquired Jaguar Land Rover, philanthropist, national icon",
       "nationality_code": "IN",
       "source": "static"
     },
@@ -5668,19 +5514,6 @@
       "death_date": null,
       "category": "Actor",
       "known_for": "Chhoti Si Baat, Baton Baton Mein, Gol Maal, Naram Garam, everyman of Indian cinema",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Nayanthara",
-      "slug": "nayanthara-1984",
-      "birth_date": "1984-11-18",
-      "birth_month_day": "11-18",
-      "birth_year": 1984,
-      "death_year": null,
-      "death_date": null,
-      "category": "Actress",
-      "known_for": "Lady Superstar, Chandramukhi, Ghajini, Atlee films, Jawan",
       "nationality_code": "IN",
       "source": "static"
     },
@@ -6124,7 +5957,10 @@
       "category": "Scientist",
       "known_for": "Astrophysicist, collaborated with Fred Hoyle, steady state cosmology, Padma Vibhushan",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 19533,
+      "occupation": "Indian astrophysicist and writer (1938–2025)",
+      "sitelinks": 35
     },
     {
       "name": "Rohit Bal",
@@ -6198,11 +6034,13 @@
       "birth_month_day": "05-03",
       "birth_year": 1896,
       "death_year": 1974,
-      "death_date": "1974-01-01",
+      "death_date": "1974-10-06",
       "category": "Politician",
       "known_for": "India's Defence Minister, UN representative, nationalist statesman, anti-colonialism",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 28014,
+      "sitelinks": 28
     },
     {
       "name": "Ravindra Dave",
@@ -6332,7 +6170,10 @@
       "category": "Politician",
       "known_for": "Chief Minister of Tamil Nadu six times, Amma, AIADMK leader, actress turned politician",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 9936,
+      "occupation": "Indian Actress, Former Chief Minister of Tamil Nadu (1948–2016)",
+      "sitelinks": 47
     },
     {
       "name": "Sakharam Ganesh Deuskar",
@@ -6462,7 +6303,10 @@
       "category": "Actor",
       "known_for": "Alaipayuthey, Tanu Weds Manu, 3 Idiots, Rocketry director and actor, Shaitaan",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 19335,
+      "occupation": "Indian actor, film director, and producer",
+      "sitelinks": 35
     },
     {
       "name": "Karthi",
@@ -6709,7 +6553,9 @@
       "category": "Actress",
       "known_for": "Saamy, Remo, Thaana Serndha Koottam, Penguin, Miss India, National Award",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 28042,
+      "sitelinks": 27
     },
     {
       "name": "Ananya Panday",
@@ -6878,7 +6724,9 @@
       "category": "Music Composer",
       "known_for": "Baahubali soundtrack, RRR Naatu Naatu Oscar winner, cousin of SS Rajamouli",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 28716,
+      "sitelinks": 19
     },
     {
       "name": "Chitraa",
@@ -6982,7 +6830,10 @@
       "category": "Actor",
       "known_for": "Appu, Raajakumara, James, Power Star of Kannada cinema, son of Rajkumar",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 10581,
+      "occupation": "Kannada actor (1975–2021)",
+      "sitelinks": 46
     },
     {
       "name": "Darshan Thoogudeepa",
@@ -7033,19 +6884,6 @@
       "death_date": null,
       "category": "Actress",
       "known_for": "Lucky, Ullasamga Utsahamga, Arabic Kuthu, introduced by Salman Khan",
-      "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Ameesha Patel",
-      "slug": "ameesha-patel",
-      "birth_date": "1975-06-09",
-      "birth_month_day": "06-09",
-      "birth_year": 1975,
-      "death_year": null,
-      "death_date": null,
-      "category": "Actress",
-      "known_for": "Kaho Na Pyaar Hai, Gadar, Humraaz, Bhool Bhulaiyaa, Gadar 2",
       "nationality_code": "IN",
       "source": "static"
     },
@@ -7589,24 +7427,13 @@
       "birth_month_day": "04-22",
       "birth_year": 1914,
       "death_year": 2008,
-      "death_date": "2008-01-01",
+      "death_date": "2008-11-05",
       "category": "Director",
       "known_for": "Naya Daur, Waqt, Mahabharat TV series, founder of BR Films",
       "nationality_code": "IN",
-      "source": "static"
-    },
-    {
-      "name": "Yash Raj Chopra",
-      "slug": "yash-raj-chopra",
-      "birth_date": "1932-09-27",
-      "birth_month_day": "09-27",
-      "birth_year": 1932,
-      "death_year": 2012,
-      "death_date": "2012-10-21",
-      "category": "Director",
-      "known_for": "Silsila, Chandni, DDLJ producer, Dil To Pagal Hai, romantic filmmaking king",
-      "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 28316,
+      "sitelinks": 22
     },
     {
       "name": "Mrinal Sen",
@@ -7778,22 +7605,6 @@
       "source": "static"
     },
     {
-      "id": 3827,
-      "name": "Bhimrao Ramji Ambedkar",
-      "slug": "bhimrao-ramji-ambedkar",
-      "birth_date": "1891-04-14",
-      "birth_month_day": "04-14",
-      "birth_year": 1891,
-      "death_year": 1956,
-      "death_date": "1956-12-06",
-      "category": "Indian polymath, philosopher, and social reformer (1891–1956)",
-      "known_for": "",
-      "occupation": "Indian polymath, philosopher, and social reformer (1891–1956)",
-      "nationality_code": "IN",
-      "sitelinks": 147,
-      "source": "db"
-    },
-    {
       "id": 27811,
       "name": "Salman Rushdie",
       "slug": "salman-rushdie",
@@ -7807,54 +7618,6 @@
       "occupation": null,
       "nationality_code": "IN",
       "sitelinks": 129,
-      "source": "db"
-    },
-    {
-      "id": 136,
-      "name": "Jiddu Krishnamurti",
-      "slug": "jiddu-krishnamurti",
-      "birth_date": "1895-05-12",
-      "birth_month_day": "05-12",
-      "birth_year": 1895,
-      "death_year": 1986,
-      "death_date": "1986-02-17",
-      "category": "Indian spiritual philosopher, mystic, speaker and writer (1895–1986)",
-      "known_for": "",
-      "occupation": "Indian spiritual philosopher, mystic, speaker and writer (1895–1986)",
-      "nationality_code": "IN",
-      "sitelinks": 100,
-      "source": "db"
-    },
-    {
-      "id": 216,
-      "name": "A. P. J. Abdul Kalam",
-      "slug": "a-p-j-abdul-kalam",
-      "birth_date": "1931-10-15",
-      "birth_month_day": "10-15",
-      "birth_year": 1931,
-      "death_year": 2015,
-      "death_date": "2015-07-27",
-      "category": "Indian scientist and statesman (1931–2015)",
-      "known_for": "",
-      "occupation": "Indian scientist and statesman (1931–2015)",
-      "nationality_code": "IN",
-      "sitelinks": 98,
-      "source": "db"
-    },
-    {
-      "id": 267,
-      "name": "Viswanathan Anand",
-      "slug": "viswanathan-anand",
-      "birth_date": "1969-12-11",
-      "birth_month_day": "12-11",
-      "birth_year": 1969,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian chess grandmaster",
-      "known_for": "",
-      "occupation": "Indian chess grandmaster",
-      "nationality_code": "IN",
-      "sitelinks": 97,
       "source": "db"
     },
     {
@@ -7874,22 +7637,6 @@
       "source": "db"
     },
     {
-      "id": 546,
-      "name": "Aurobindo Ghosh",
-      "slug": "aurobindo-ghosh",
-      "birth_date": "1872-08-15",
-      "birth_month_day": "08-15",
-      "birth_year": 1872,
-      "death_year": 1950,
-      "death_date": "1950-12-05",
-      "category": "Indian Bengali philosopher, yogi, maharishi, poet and nationalist (1872–1950)",
-      "known_for": "",
-      "occupation": "Indian Bengali philosopher, yogi, maharishi, poet and nationalist (1872–1950)",
-      "nationality_code": "IN",
-      "sitelinks": 91,
-      "source": "db"
-    },
-    {
       "id": 626,
       "name": "Pratibha Patil",
       "slug": "pratibha-patil",
@@ -7903,22 +7650,6 @@
       "occupation": "President of India from 2007 to 2012",
       "nationality_code": "IN",
       "sitelinks": 90,
-      "source": "db"
-    },
-    {
-      "id": 684,
-      "name": "Rajneesh",
-      "slug": "rajneesh",
-      "birth_date": "1931-12-11",
-      "birth_month_day": "12-11",
-      "birth_year": 1931,
-      "death_year": 1990,
-      "death_date": "1990-01-19",
-      "category": "Indian guru and leader of the Rajneesh movement (1931–1990)",
-      "known_for": "",
-      "occupation": "Indian guru and leader of the Rajneesh movement (1931–1990)",
-      "nationality_code": "IN",
-      "sitelinks": 89,
       "source": "db"
     },
     {
@@ -7970,38 +7701,6 @@
       "source": "db"
     },
     {
-      "id": 1381,
-      "name": "Rani Mukherjee",
-      "slug": "rani-mukherjee",
-      "birth_date": "1978-03-21",
-      "birth_month_day": "03-21",
-      "birth_year": 1978,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian film actress",
-      "known_for": "",
-      "occupation": "Indian film actress",
-      "nationality_code": "IN",
-      "sitelinks": 80,
-      "source": "db"
-    },
-    {
-      "id": 1312,
-      "name": "Satyendra Nath Bose",
-      "slug": "satyendra-nath-bose",
-      "birth_date": "1894-01-01",
-      "birth_month_day": "01-01",
-      "birth_year": 1894,
-      "death_year": 1974,
-      "death_date": "1974-02-04",
-      "category": "Indian Bengali physicist and polymath (1894–1974)",
-      "known_for": "",
-      "occupation": "Indian Bengali physicist and polymath (1894–1974)",
-      "nationality_code": "IN",
-      "sitelinks": 80,
-      "source": "db"
-    },
-    {
       "id": 1819,
       "name": "Kailash Satyarthi",
       "slug": "kailash-satyarthi",
@@ -8013,22 +7712,6 @@
       "category": "Indian Social Worker",
       "known_for": "",
       "occupation": "Indian Social Worker",
-      "nationality_code": "IN",
-      "sitelinks": 76,
-      "source": "db"
-    },
-    {
-      "id": 1817,
-      "name": "Rajendra Prasad",
-      "slug": "rajendra-prasad",
-      "birth_date": "1884-12-03",
-      "birth_month_day": "12-03",
-      "birth_year": 1884,
-      "death_year": 1963,
-      "death_date": "1963-02-28",
-      "category": "Indian statesman, lawyer and writer (1884–1963); first President of India",
-      "known_for": "",
-      "occupation": "Indian statesman, lawyer and writer (1884–1963); first President of India",
       "nationality_code": "IN",
       "sitelinks": 76,
       "source": "db"
@@ -8066,22 +7749,6 @@
       "source": "db"
     },
     {
-      "id": 2422,
-      "name": "A. C. Bhaktivedanta Swami Prabhupada",
-      "slug": "a-c-bhaktivedanta-swami-prabhupada",
-      "birth_date": "1896-09-01",
-      "birth_month_day": "09-01",
-      "birth_year": 1896,
-      "death_year": 1977,
-      "death_date": "1977-11-14",
-      "category": "Indian spiritual teacher and founder of the ISKCON",
-      "known_for": "",
-      "occupation": "Indian spiritual teacher and founder of the ISKCON",
-      "nationality_code": "IN",
-      "sitelinks": 71,
-      "source": "db"
-    },
-    {
       "id": 2516,
       "name": "Sathya Sai Baba",
       "slug": "sathya-sai-baba",
@@ -8108,22 +7775,6 @@
       "death_date": "1969-05-03",
       "category": "Celebrity",
       "known_for": "3rd President of India (1897-1969)",
-      "occupation": null,
-      "nationality_code": "IN",
-      "sitelinks": 67,
-      "source": "db"
-    },
-    {
-      "id": 27817,
-      "name": "Gukesh D",
-      "slug": "gukesh-d",
-      "birth_date": "2006-05-29",
-      "birth_month_day": "05-29",
-      "birth_year": 2006,
-      "death_year": null,
-      "death_date": null,
-      "category": "Celebrity",
-      "known_for": "Indian chess grandmaster",
       "occupation": null,
       "nationality_code": "IN",
       "sitelinks": 67,
@@ -8402,38 +8053,6 @@
       "source": "db"
     },
     {
-      "id": 6618,
-      "name": "P. V. Sindhu",
-      "slug": "p-v-sindhu",
-      "birth_date": "1995-07-05",
-      "birth_month_day": "07-05",
-      "birth_year": 1995,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian badminton player",
-      "known_for": "",
-      "occupation": "Indian badminton player",
-      "nationality_code": "IN",
-      "sitelinks": 54,
-      "source": "db"
-    },
-    {
-      "id": 6991,
-      "name": "Rekhā",
-      "slug": "rekh",
-      "birth_date": "1954-10-10",
-      "birth_month_day": "10-10",
-      "birth_year": 1954,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian actress",
-      "known_for": "",
-      "occupation": "Indian actress",
-      "nationality_code": "IN",
-      "sitelinks": 53,
-      "source": "db"
-    },
-    {
       "id": 7097,
       "name": "Gulzarilal Nanda",
       "slug": "gulzarilal-nanda",
@@ -8477,22 +8096,6 @@
       "category": "Indian novelist, poet, and essayist (in Hindi and Punjabi languages) (1919–2005)",
       "known_for": "",
       "occupation": "Indian novelist, poet, and essayist (in Hindi and Punjabi languages) (1919–2005)",
-      "nationality_code": "IN",
-      "sitelinks": 53,
-      "source": "db"
-    },
-    {
-      "id": 7224,
-      "name": "Abul Kalam Azad",
-      "slug": "abul-kalam-azad",
-      "birth_date": "1888-11-11",
-      "birth_month_day": "11-11",
-      "birth_year": 1888,
-      "death_year": 1958,
-      "death_date": "1958-02-22",
-      "category": "Indian politician and writer (1888–1958)",
-      "known_for": "",
-      "occupation": "Indian politician and writer (1888–1958)",
       "nationality_code": "IN",
       "sitelinks": 53,
       "source": "db"
@@ -8605,22 +8208,6 @@
       "category": "Indian Islamic preacher",
       "known_for": "",
       "occupation": "Indian Islamic preacher",
-      "nationality_code": "IN",
-      "sitelinks": 50,
-      "source": "db"
-    },
-    {
-      "id": 8483,
-      "name": "Sadhguru",
-      "slug": "sadhguru",
-      "birth_date": "1957-09-03",
-      "birth_month_day": "09-03",
-      "birth_year": 1957,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian yogi and author (born 1957)",
-      "known_for": "",
-      "occupation": "Indian yogi and author (born 1957)",
       "nationality_code": "IN",
       "sitelinks": 50,
       "source": "db"
@@ -8786,38 +8373,6 @@
       "source": "db"
     },
     {
-      "id": 9936,
-      "name": "Jayaram Jayalalithaa",
-      "slug": "jayaram-jayalalithaa",
-      "birth_date": "1948-02-24",
-      "birth_month_day": "02-24",
-      "birth_year": 1948,
-      "death_year": 2016,
-      "death_date": "2016-12-05",
-      "category": "Indian Actress, Former Chief Minister of Tamil Nadu (1948–2016)",
-      "known_for": "",
-      "occupation": "Indian Actress, Former Chief Minister of Tamil Nadu (1948–2016)",
-      "nationality_code": "IN",
-      "sitelinks": 47,
-      "source": "db"
-    },
-    {
-      "id": 10071,
-      "name": "R. K. Narayan",
-      "slug": "r-k-narayan",
-      "birth_date": "1906-10-10",
-      "birth_month_day": "10-10",
-      "birth_year": 1906,
-      "death_year": 2001,
-      "death_date": "2001-05-13",
-      "category": "Indian writer (1906–2001)",
-      "known_for": "",
-      "occupation": "Indian writer (1906–2001)",
-      "nationality_code": "IN",
-      "sitelinks": 47,
-      "source": "db"
-    },
-    {
       "id": 10504,
       "name": "Ileana D'Cruz",
       "slug": "ileana-dcruz",
@@ -8877,54 +8432,6 @@
       "category": "Indian-American filmmaker (born 1957)",
       "known_for": "",
       "occupation": "Indian-American filmmaker (born 1957)",
-      "nationality_code": "IN",
-      "sitelinks": 46,
-      "source": "db"
-    },
-    {
-      "id": 10348,
-      "name": "Homi Jehangir Bhabha",
-      "slug": "homi-jehangir-bhabha",
-      "birth_date": "1909-10-30",
-      "birth_month_day": "10-30",
-      "birth_year": 1909,
-      "death_year": 1966,
-      "death_date": "1966-01-24",
-      "category": "Indian nuclear physicist (1909–1966)",
-      "known_for": "",
-      "occupation": "Indian nuclear physicist (1909–1966)",
-      "nationality_code": "IN",
-      "sitelinks": 46,
-      "source": "db"
-    },
-    {
-      "id": 10570,
-      "name": "H. D. Deve Gowda",
-      "slug": "h-d-deve-gowda",
-      "birth_date": "1933-05-18",
-      "birth_month_day": "05-18",
-      "birth_year": 1933,
-      "death_year": null,
-      "death_date": null,
-      "category": "Prime Minister of India (1996-1997)",
-      "known_for": "",
-      "occupation": "Prime Minister of India (1996-1997)",
-      "nationality_code": "IN",
-      "sitelinks": 46,
-      "source": "db"
-    },
-    {
-      "id": 10581,
-      "name": "Dr. Puneeth Rajkumar",
-      "slug": "dr-puneeth-rajkumar",
-      "birth_date": "1975-03-17",
-      "birth_month_day": "03-17",
-      "birth_year": 1975,
-      "death_year": 2021,
-      "death_date": "2021-10-29",
-      "category": "Kannada actor (1975–2021)",
-      "known_for": "",
-      "occupation": "Kannada actor (1975–2021)",
       "nationality_code": "IN",
       "sitelinks": 46,
       "source": "db"
@@ -9250,22 +8757,6 @@
       "source": "db"
     },
     {
-      "id": 13850,
-      "name": "Praggnanandhaa",
-      "slug": "praggnanandhaa",
-      "birth_date": "2005-08-10",
-      "birth_month_day": "08-10",
-      "birth_year": 2005,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian chess player",
-      "known_for": "",
-      "occupation": "Indian chess player",
-      "nationality_code": "IN",
-      "sitelinks": 41,
-      "source": "db"
-    },
-    {
       "id": 13700,
       "name": "Kabir Bedi",
       "slug": "kabir-bedi",
@@ -9378,22 +8869,6 @@
       "source": "db"
     },
     {
-      "id": 15844,
-      "name": "Gurudev Sri Sri Ravi Shankar",
-      "slug": "gurudev-sri-sri-ravi-shankar",
-      "birth_date": "1956-05-13",
-      "birth_month_day": "05-13",
-      "birth_year": 1956,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian guru and spiritual leader (born 1956)",
-      "known_for": "",
-      "occupation": "Indian guru and spiritual leader (born 1956)",
-      "nationality_code": "IN",
-      "sitelinks": 39,
-      "source": "db"
-    },
-    {
       "id": 27827,
       "name": "Manu Bhaker",
       "slug": "manu-bhaker",
@@ -9469,22 +8944,6 @@
       "category": "Indian politician",
       "known_for": "",
       "occupation": "Indian politician",
-      "nationality_code": "IN",
-      "sitelinks": 38,
-      "source": "db"
-    },
-    {
-      "id": 27828,
-      "name": "N. T. Rama Rao Jr.",
-      "slug": "n-t-rama-rao-jr",
-      "birth_date": "1983-05-20",
-      "birth_month_day": "05-20",
-      "birth_year": 1983,
-      "death_year": null,
-      "death_date": null,
-      "category": "Celebrity",
-      "known_for": "Indian actor, dancer, singer and television presenter (b. 1983)",
-      "occupation": null,
       "nationality_code": "IN",
       "sitelinks": 38,
       "source": "db"
@@ -9586,22 +9045,6 @@
       "source": "db"
     },
     {
-      "id": 16837,
-      "name": "Sunil Shetty",
-      "slug": "sunil-shetty",
-      "birth_date": "1961-08-11",
-      "birth_month_day": "08-11",
-      "birth_year": 1961,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian actor and film producer",
-      "known_for": "",
-      "occupation": "Indian actor and film producer",
-      "nationality_code": "IN",
-      "sitelinks": 38,
-      "source": "db"
-    },
-    {
       "id": 17232,
       "name": "Bhumika Chawla",
       "slug": "bhumika-chawla",
@@ -9613,22 +9056,6 @@
       "category": "Indian actress",
       "known_for": "",
       "occupation": "Indian actress",
-      "nationality_code": "IN",
-      "sitelinks": 37,
-      "source": "db"
-    },
-    {
-      "id": 17335,
-      "name": "Lal Krishna Advani",
-      "slug": "lal-krishna-advani",
-      "birth_date": "1927-11-08",
-      "birth_month_day": "11-08",
-      "birth_year": 1927,
-      "death_year": null,
-      "death_date": null,
-      "category": "Deputy Prime Minister of India (2002-2004)",
-      "known_for": "",
-      "occupation": "Deputy Prime Minister of India (2002-2004)",
       "nationality_code": "IN",
       "sitelinks": 37,
       "source": "db"
@@ -9730,22 +9157,6 @@
       "source": "db"
     },
     {
-      "id": 17715,
-      "name": "J. R. D. Tata",
-      "slug": "j-r-d-tata",
-      "birth_date": "1904-07-29",
-      "birth_month_day": "07-29",
-      "birth_year": 1904,
-      "death_year": 1993,
-      "death_date": "1993-11-29",
-      "category": "Indian industrialist, philanthropist and aviator (1904–1993)",
-      "known_for": "",
-      "occupation": "Indian industrialist, philanthropist and aviator (1904–1993)",
-      "nationality_code": "IN",
-      "sitelinks": 37,
-      "source": "db"
-    },
-    {
       "id": 18407,
       "name": "Mulk Raj Anand",
       "slug": "mulk-raj-anand",
@@ -9821,22 +9232,6 @@
       "category": "Indian footballer",
       "known_for": "",
       "occupation": "Indian footballer",
-      "nationality_code": "IN",
-      "sitelinks": 36,
-      "source": "db"
-    },
-    {
-      "id": 18690,
-      "name": "Abhinav",
-      "slug": "abhinav",
-      "birth_date": "1982-09-28",
-      "birth_month_day": "09-28",
-      "birth_year": 1982,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian sport shooter",
-      "known_for": "",
-      "occupation": "Indian sport shooter",
       "nationality_code": "IN",
       "sitelinks": 36,
       "source": "db"
@@ -9938,22 +9333,6 @@
       "source": "db"
     },
     {
-      "id": 18249,
-      "name": "Sivananda Saraswati",
-      "slug": "sivananda-saraswati",
-      "birth_date": "1887-09-08",
-      "birth_month_day": "09-08",
-      "birth_year": 1887,
-      "death_year": 1963,
-      "death_date": "1963-07-14",
-      "category": "Hindu spiritual teacher (1887–1963)",
-      "known_for": "",
-      "occupation": "Hindu spiritual teacher (1887–1963)",
-      "nationality_code": "IN",
-      "sitelinks": 36,
-      "source": "db"
-    },
-    {
       "id": 18586,
       "name": "Mumtaz",
       "slug": "mumtaz",
@@ -10050,22 +9429,6 @@
       "source": "db"
     },
     {
-      "id": 19335,
-      "name": "R. Madhavan",
-      "slug": "r-madhavan",
-      "birth_date": "1970-06-01",
-      "birth_month_day": "06-01",
-      "birth_year": 1970,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian actor, film director, and producer",
-      "known_for": "",
-      "occupation": "Indian actor, film director, and producer",
-      "nationality_code": "IN",
-      "sitelinks": 35,
-      "source": "db"
-    },
-    {
       "id": 20143,
       "name": "Vaani Kapoor",
       "slug": "vaani-kapoor",
@@ -10141,22 +9504,6 @@
       "category": "Indian actress",
       "known_for": "",
       "occupation": "Indian actress",
-      "nationality_code": "IN",
-      "sitelinks": 35,
-      "source": "db"
-    },
-    {
-      "id": 19533,
-      "name": "Jayant Vishnu Narlikar",
-      "slug": "jayant-vishnu-narlikar",
-      "birth_date": "1938-07-19",
-      "birth_month_day": "07-19",
-      "birth_year": 1938,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian astrophysicist and writer (1938–2025)",
-      "known_for": "",
-      "occupation": "Indian astrophysicist and writer (1938–2025)",
       "nationality_code": "IN",
       "sitelinks": 35,
       "source": "db"
@@ -10546,38 +9893,6 @@
       "source": "db"
     },
     {
-      "id": 27845,
-      "name": "S. S. Rajamouli",
-      "slug": "s-s-rajamouli",
-      "birth_date": "1973-10-10",
-      "birth_month_day": "10-10",
-      "birth_year": 1973,
-      "death_year": null,
-      "death_date": null,
-      "category": "Celebrity",
-      "known_for": "Indian film director and screenwriter",
-      "occupation": null,
-      "nationality_code": "IN",
-      "sitelinks": 34,
-      "source": "db"
-    },
-    {
-      "id": 20362,
-      "name": "Manoj Bajpai",
-      "slug": "manoj-bajpai",
-      "birth_date": "1969-04-23",
-      "birth_month_day": "04-23",
-      "birth_year": 1969,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian actor",
-      "known_for": "",
-      "occupation": "Indian actor",
-      "nationality_code": "IN",
-      "sitelinks": 34,
-      "source": "db"
-    },
-    {
       "id": 20361,
       "name": "Mahasweta Devi",
       "slug": "mahasweta-devi",
@@ -10605,22 +9920,6 @@
       "category": "Indian politician (1946-1980)",
       "known_for": "",
       "occupation": "Indian politician (1946-1980)",
-      "nationality_code": "IN",
-      "sitelinks": 34,
-      "source": "db"
-    },
-    {
-      "id": 20845,
-      "name": "Saikhom Mirabai Chanu",
-      "slug": "saikhom-mirabai-chanu",
-      "birth_date": "1994-08-08",
-      "birth_month_day": "08-08",
-      "birth_year": 1994,
-      "death_year": null,
-      "death_date": null,
-      "category": "Indian weightlifter (born 1994)",
-      "known_for": "",
-      "occupation": "Indian weightlifter (born 1994)",
       "nationality_code": "IN",
       "sitelinks": 34,
       "source": "db"
@@ -11117,22 +10416,6 @@
       "category": "Indo-Pakistani novelist, playwright and writer (1912-1955)",
       "known_for": "",
       "occupation": "Indo-Pakistani novelist, playwright and writer (1912-1955)",
-      "nationality_code": "IN",
-      "sitelinks": 32,
-      "source": "db"
-    },
-    {
-      "id": 24355,
-      "name": "M. S. Subbulakshmi",
-      "slug": "m-s-subbulakshmi",
-      "birth_date": "1916-09-16",
-      "birth_month_day": "09-16",
-      "birth_year": 1916,
-      "death_year": 2004,
-      "death_date": "2004-12-11",
-      "category": "Indian Carnatic classical vocalist (1916–2004)",
-      "known_for": "",
-      "occupation": "Indian Carnatic classical vocalist (1916–2004)",
       "nationality_code": "IN",
       "sitelinks": 32,
       "source": "db"
@@ -12690,22 +11973,6 @@
       "source": "db"
     },
     {
-      "id": 27919,
-      "name": "Ramdev",
-      "slug": "ramdev",
-      "birth_date": "1965-12-25",
-      "birth_month_day": "12-25",
-      "birth_year": 1965,
-      "death_year": null,
-      "death_date": null,
-      "category": "Celebrity",
-      "known_for": "Indian Yoga Teacher & Businessman",
-      "occupation": null,
-      "nationality_code": "IN",
-      "sitelinks": 30,
-      "source": "db"
-    },
-    {
       "id": 27920,
       "name": "Rimi Sen",
       "slug": "rimi-sen",
@@ -14178,22 +13445,6 @@
       "source": "db"
     },
     {
-      "id": 28014,
-      "name": "Vengalil Krishnan Krishna Menon",
-      "slug": "vengalil-krishnan-krishna-menon",
-      "birth_date": "1896-05-03",
-      "birth_month_day": "05-03",
-      "birth_year": 1896,
-      "death_year": 1974,
-      "death_date": "1974-10-06",
-      "category": "Celebrity",
-      "known_for": "Indian politician (1896-1974)",
-      "occupation": null,
-      "nationality_code": "IN",
-      "sitelinks": 28,
-      "source": "db"
-    },
-    {
       "id": 28015,
       "name": "Anita Hassanandani",
       "slug": "anita-hassanandani",
@@ -14584,22 +13835,6 @@
       "birth_date": "2001-08-29",
       "birth_month_day": "08-29",
       "birth_year": 2001,
-      "death_year": null,
-      "death_date": null,
-      "category": "Celebrity",
-      "known_for": "Indian actress",
-      "occupation": null,
-      "nationality_code": "IN",
-      "sitelinks": 27,
-      "source": "db"
-    },
-    {
-      "id": 28042,
-      "name": "Keerthy Suresh",
-      "slug": "keerthy-suresh",
-      "birth_date": "1992-10-17",
-      "birth_month_day": "10-17",
-      "birth_year": 1992,
       "death_year": null,
       "death_date": null,
       "category": "Celebrity",
@@ -15436,22 +14671,6 @@
       "death_date": null,
       "category": "Celebrity",
       "known_for": "Indian film actress",
-      "occupation": null,
-      "nationality_code": "IN",
-      "sitelinks": 26,
-      "source": "db"
-    },
-    {
-      "id": 28095,
-      "name": "K. S. Chithra",
-      "slug": "k-s-chithra",
-      "birth_date": "1963-07-27",
-      "birth_month_day": "07-27",
-      "birth_year": 1963,
-      "death_year": null,
-      "death_date": null,
-      "category": "Celebrity",
-      "known_for": "Indian playback singer",
       "occupation": null,
       "nationality_code": "IN",
       "sitelinks": 26,
@@ -17586,22 +16805,6 @@
       "source": "db"
     },
     {
-      "id": 28273,
-      "name": "Sachin Dev Burman",
-      "slug": "sachin-dev-burman",
-      "birth_date": "1906-10-01",
-      "birth_month_day": "10-01",
-      "birth_year": 1906,
-      "death_year": 1975,
-      "death_date": "1975-10-31",
-      "category": "Celebrity",
-      "known_for": "Indian singer and composer (1906–1975)",
-      "occupation": null,
-      "nationality_code": "IN",
-      "sitelinks": 23,
-      "source": "db"
-    },
-    {
       "id": 28274,
       "name": "Aditi Ashok",
       "slug": "aditi-ashok",
@@ -18636,22 +17839,6 @@
       "death_date": "2012-05-14",
       "category": "Celebrity",
       "known_for": "Indian child actress and model (1998–2012)",
-      "occupation": null,
-      "nationality_code": "IN",
-      "sitelinks": 22,
-      "source": "db"
-    },
-    {
-      "id": 28316,
-      "name": "Baldev Raj Chopra",
-      "slug": "baldev-raj-chopra",
-      "birth_date": "1914-04-22",
-      "birth_month_day": "04-22",
-      "birth_year": 1914,
-      "death_year": 2008,
-      "death_date": "2008-11-05",
-      "category": "Celebrity",
-      "known_for": "Indian film director (1914–2008)",
       "occupation": null,
       "nationality_code": "IN",
       "sitelinks": 22,
@@ -24812,22 +23999,6 @@
       "death_date": null,
       "category": "Celebrity",
       "known_for": "Indian television actress",
-      "occupation": null,
-      "nationality_code": "IN",
-      "sitelinks": 19,
-      "source": "db"
-    },
-    {
-      "id": 28716,
-      "name": "M. M. Keeravani",
-      "slug": "m-m-keeravani",
-      "birth_date": "1961-07-04",
-      "birth_month_day": "07-04",
-      "birth_year": 1961,
-      "death_year": null,
-      "death_date": null,
-      "category": "Celebrity",
-      "known_for": "Indian music composer and singer",
       "occupation": null,
       "nationality_code": "IN",
       "sitelinks": 19,

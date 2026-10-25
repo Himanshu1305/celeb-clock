@@ -320,7 +320,7 @@ export function BiorhythmArticle() {
                 </a>
               </li>
               <li>
-                <a href="/articles/planetary-age-calculator" className="text-[#6E5AA6] underline font-semibold">
+                <a href="/planetary-age/" className="text-[#6E5AA6] underline font-semibold">
                   Planetary Age Calculator — Your Age on Every Planet
                 </a>
               </li>

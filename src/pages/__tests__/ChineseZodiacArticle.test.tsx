@@ -59,11 +59,11 @@ describe('ChineseZodiacArticle', () => {
     const count = links.filter(l => l.getAttribute('href')?.includes('birthday-report')).length;
     expect(count).toBeGreaterThanOrEqual(2);
   });
-  it('TC-CHZ-P-10: related articles link to moon-sign and planetary-age', () => {
+  it('TC-CHZ-P-10: related articles link to moon-sign and the planetary-age calculator', () => {
     renderArticle();
     const links = Array.from(document.querySelectorAll('a')).map(l => l.getAttribute('href') || '');
     expect(links.some(h => h.includes('/articles/moon-sign-by-date-of-birth'))).toBe(true);
-    expect(links.some(h => h.includes('/articles/planetary-age-calculator'))).toBe(true);
+    expect(links.some(h => h.includes('/planetary-age/'))).toBe(true);
   });
   it('TC-CHZ-P-11: Article JSON-LD schema present', () => {
     renderArticle();

@@ -2,6 +2,8 @@
 // scripts/migrations/2026-07-indian-celebrities.sql (nationality_code='IN').
 // This file is kept for reference only — no production code imports it.
 
+import { dedupeCelebrities } from '../lib/celebrityDedupe';
+
 export interface IndianCelebrity {
   name: string;
   birth_date: string; // YYYY-MM-DD
@@ -13,7 +15,7 @@ export interface IndianCelebrity {
   tier: 'entertainment' | 'public_figure' | 'historical';
 }
 
-export const INDIAN_CELEBRITIES: IndianCelebrity[] = [
+const RAW_INDIAN_CELEBRITIES: IndianCelebrity[] = [
 
   // ============================================================
   // HISTORICAL FIGURES & FREEDOM FIGHTERS (60)
@@ -294,7 +296,6 @@ export const INDIAN_CELEBRITIES: IndianCelebrity[] = [
   { name: 'Bhuvneshwar Kumar', birth_date: '1990-02-05', category: 'Cricketer', known_for: 'Swing bowler, death-over specialist, led SRH to IPL success, reverse swing expert', nationality: 'Indian', birth_year: 1990, tier: 'entertainment' },
   { name: 'Amrita Singh', birth_date: '1958-02-09', category: 'Actress', known_for: 'Betaab, Chameli Ki Shaadi, Ek Do Teen, Sarafarosh, ex-wife of Saif Ali Khan', nationality: 'Indian', birth_year: 1958, tier: 'entertainment' },
   { name: 'Pran', birth_date: '1920-02-12', category: 'Actor', known_for: 'Greatest villain of Hindi cinema, Upkar, Victoria No. 203, Zanjeer, 400+ films', nationality: 'Indian', birth_year: 1920, death_year: 2013, tier: 'historical' },
-  { name: 'Dayananda Saraswati', birth_date: '1824-02-12', category: 'Philosopher', known_for: 'Founded Arya Samaj, championed Vedic Hinduism, "Back to the Vedas"', nationality: 'Indian', birth_year: 1824, death_year: 1883, tier: 'historical' },
   { name: 'Sushma Swaraj', birth_date: '1952-02-14', category: 'Politician', known_for: 'External Affairs Minister, most popular BJP leader, helped Indians abroad, eloquent orator', nationality: 'Indian', birth_year: 1952, death_year: 2019, tier: 'historical' },
   { name: 'Sivakarthikeyan', birth_date: '1985-02-17', category: 'Actor', known_for: 'VIP, Kakki Sattai, Remo, Doctor, Don, Ayalaan, biggest Tamil star of new generation', nationality: 'Indian', birth_year: 1985, tier: 'entertainment' },
   { name: 'Nushrratt Bharuccha', birth_date: '1985-05-17', category: 'Actress', known_for: 'Pyaar Ka Punchnama, Sonu Ke Titu Ki Sweety, Chhorii, Janhit Mein Jaari', nationality: 'Indian', birth_year: 1985, tier: 'entertainment' },
@@ -357,7 +358,6 @@ export const INDIAN_CELEBRITIES: IndianCelebrity[] = [
   // MAY ADDITIONS
   // ============================================================
   { name: 'Anushka Sharma', birth_date: '1988-05-01', category: 'Actress', known_for: 'Rab Ne Bana Di Jodi, PK, NH10, Sultan, Ae Dil Hai Mushkil, Jab Harry Met Sejal', nationality: 'Indian', birth_year: 1988, tier: 'entertainment' },
-  { name: 'Ajith Kumar', birth_date: '1971-05-01', category: 'Actor', known_for: 'Thala, Mankatha, Vedalam, Viswasam, Valimai, Tamil cinema superstar', nationality: 'Indian', birth_year: 1971, tier: 'entertainment' },
   { name: 'Sam Pitroda', birth_date: '1942-11-16', category: 'Scientist', known_for: 'Telecom revolution in India, C-DOT, PCO booths that democratised phones in India', nationality: 'Indian', birth_year: 1942, tier: 'public_figure' },
   { name: 'Vicky Kaushal', birth_date: '1988-05-16', category: 'Actor', known_for: 'Masaan, Raazi, Uri: The Surgical Strike, Sardar Udham, Govinda Naam Mera', nationality: 'Indian', birth_year: 1988, tier: 'entertainment' },
   { name: 'Girish Karnad', birth_date: '1938-05-19', category: 'Author', known_for: 'Tughlaq, Hayavadana, Naga-Mandala, Jnanpith Award, actor and playwright', nationality: 'Indian', birth_year: 1938, death_year: 2019, tier: 'historical' },
@@ -374,7 +374,6 @@ export const INDIAN_CELEBRITIES: IndianCelebrity[] = [
   // JUNE ADDITIONS
   // ============================================================
   { name: 'Dinesh Karthik', birth_date: '1985-06-01', category: 'Cricketer', known_for: 'Wicketkeeper-batsman, IPL star, 2022 T20 World Cup comeback, commentator', nationality: 'Indian', birth_year: 1985, tier: 'entertainment' },
-  { name: 'Mani Ratnam', birth_date: '1956-06-02', category: 'Director', known_for: 'Roja, Bombay, Dil Se, Guru, Raavan, Ponniyin Selvan, greatest Tamil filmmaker', nationality: 'Indian', birth_year: 1956, tier: 'entertainment' },
   { name: 'Stuart Binny', birth_date: '1983-06-03', category: 'Cricketer', known_for: 'Best bowling figures in ODI history (6/4), all-rounder, son of Roger Binny', nationality: 'Indian', birth_year: 1983, tier: 'entertainment' },
   { name: 'Prithviraj Chauhan', birth_date: '1166-06-01', category: 'Historical', known_for: 'Last Hindu emperor of Delhi, Second Battle of Tarain, Rai Pithora, Rajput warrior king', nationality: 'Indian', birth_year: 1166, death_year: 1192, tier: 'historical' },
   { name: 'Yogi Adityanath', birth_date: '1972-06-05', category: 'Politician', known_for: 'Chief Minister of Uttar Pradesh, Hindu monk-politician, BJP leader', nationality: 'Indian', birth_year: 1972, tier: 'public_figure' },
@@ -384,16 +383,13 @@ export const INDIAN_CELEBRITIES: IndianCelebrity[] = [
   { name: 'Neha Kakkar', birth_date: '1988-06-06', category: 'Singer', known_for: 'O Humsafar, Dilbar, Coca Cola Tu, Garmi, most-followed Indian musician on Instagram', nationality: 'Indian', birth_year: 1988, tier: 'entertainment' },
   { name: 'Ehsaan Noorani', birth_date: '1967-06-21', category: 'Music Composer', known_for: 'Shankar-Ehsaan-Loy trio, guitar legend, Dil Chahta Hai, Kal Ho Naa Ho', nationality: 'Indian', birth_year: 1967, tier: 'entertainment' },
   { name: 'Pritam Chakraborty', birth_date: '1971-06-14', category: 'Music Composer', known_for: 'Jab We Met, Love Aaj Kal, Cocktail, Ae Dil Hai Mushkil, Jagga Jasoos', nationality: 'Indian', birth_year: 1971, tier: 'entertainment' },
-  { name: 'Vijay', birth_date: '1974-06-22', category: 'Actor', known_for: 'Thalapathy, Mersal, Bigil, Master, Beast, Varisu, highest-grossing Tamil star', nationality: 'Indian', birth_year: 1974, tier: 'entertainment' },
   { name: 'Karisma Kapoor', birth_date: '1974-06-25', category: 'Actress', known_for: 'Andaz Apna Apna, Dil To Pagal Hai, Raja Hindustani, Zubeida, elder sister of Kareena', nationality: 'Indian', birth_year: 1974, tier: 'entertainment' },
   { name: 'Vishal Dadlani', birth_date: '1974-06-28', category: 'Singer', known_for: 'Vishal-Shekhar duo, Dostana, Dhoom 3, Bang Bang, Ra.One, Indian Idol judge', nationality: 'Indian', birth_year: 1974, tier: 'entertainment' },
   { name: 'Sunitha Upadrashta', birth_date: '1972-06-09', category: 'Singer', known_for: 'Leading Telugu playback singer, thousands of songs, most loved Telugu singer', nationality: 'Indian', birth_year: 1972, tier: 'entertainment' },
-  { name: 'Leander Paes', birth_date: '1973-06-17', category: 'Athlete', known_for: 'Olympic bronze 1996 Atlanta, 18 Grand Slam doubles titles, India\'s greatest tennis player', nationality: 'Indian', birth_year: 1973, tier: 'entertainment' },
 
   // ============================================================
   // JULY ADDITIONS
   // ============================================================
-  { name: 'Sonu Nigam', birth_date: '1973-07-30', category: 'Singer', known_for: 'Classic Bollywood playback singer, Kal Ho Naa Ho, Abhi Mujh Mein Kahin, Sandese Aate Hain', nationality: 'Indian', birth_year: 1973, tier: 'entertainment' },
   { name: 'Sonu Sood', birth_date: '1973-07-30', category: 'Actor', known_for: 'Dabangg, Simmba, Mard Ko Dard Nahi Hota, COVID-19 philanthropy, real-life hero', nationality: 'Indian', birth_year: 1973, tier: 'entertainment' },
   { name: 'Dhanush', birth_date: '1983-07-28', category: 'Actor', known_for: 'Aadukalam, 3 (Kolaveri Di), Raanjhanaa, The Gray Man, Atrangi Re, son-in-law of Rajinikanth', nationality: 'Indian', birth_year: 1983, tier: 'entertainment' },
   { name: 'Huma Qureshi', birth_date: '1986-07-28', category: 'Actress', known_for: 'Gangs of Wasseypur, Ek Thi Daayan, Badlapur, Army of the Dead, Maharani', nationality: 'Indian', birth_year: 1986, tier: 'entertainment' },
@@ -408,7 +404,6 @@ export const INDIAN_CELEBRITIES: IndianCelebrity[] = [
   { name: 'Mugdha Godse', birth_date: '1985-07-26', category: 'Actress', known_for: 'Fashion, Aa Dekhen Zara, Mr. X, Time Out', nationality: 'Indian', birth_year: 1985, tier: 'entertainment' },
   { name: 'Armaan Malik', birth_date: '1995-07-22', category: 'Singer', known_for: 'Main Hoon Hero Tera, Bol Do Na Zara, Wajah Tum Ho, youngest top Bollywood singer', nationality: 'Indian', birth_year: 1995, tier: 'entertainment' },
   { name: 'Shiv Nadar', birth_date: '1945-07-14', category: 'Business Leader', known_for: 'Founder of HCL Technologies, Shiv Nadar University, philanthropy champion', nationality: 'Indian', birth_year: 1945, tier: 'public_figure' },
-  { name: 'Bhuvneshwar Kumar', birth_date: '1990-02-05', category: 'Cricketer', known_for: 'Swing bowler, death-over specialist, led SRH to IPL success, reverse swing expert', nationality: 'Indian', birth_year: 1990, tier: 'entertainment' },
   { name: 'Durgabai Deshmukh', birth_date: '1909-07-15', category: 'Social Reformer', known_for: 'Social worker, founded Andhra Mahila Sabha, participated in Dandi March', nationality: 'Indian', birth_year: 1909, death_year: 1981, tier: 'historical' },
   { name: 'KS Chithra', birth_date: '1963-07-27', category: 'Singer', known_for: 'South India\'s nightingale, 25,000+ songs, multiple National Awards', nationality: 'Indian', birth_year: 1963, tier: 'entertainment' },
   { name: 'Hariprasad Chaurasia', birth_date: '1938-07-01', category: 'Musician', known_for: 'Greatest living bansuri (flute) player, collaborated with John McLaughlin, Padma Vibhushan', nationality: 'Indian', birth_year: 1938, tier: 'entertainment' },
@@ -482,7 +477,6 @@ export const INDIAN_CELEBRITIES: IndianCelebrity[] = [
   { name: 'Tabu', birth_date: '1971-11-04', category: 'Actress', known_for: 'Maachis, Hum Saath Saath Hain, Chandni Bar, The Namesake, Haider, Andhadhun', nationality: 'Indian', birth_year: 1971, tier: 'entertainment' },
   { name: 'Milind Soman', birth_date: '1965-11-04', category: 'Actor', known_for: 'Ironman triathlete, Made In India music video, Captain Vyom, fitness icon', nationality: 'Indian', birth_year: 1965, tier: 'entertainment' },
   { name: 'Celina Jaitley', birth_date: '1981-11-04', category: 'Actress', known_for: 'No Entry, Golmaal Returns, Jannat, LGBTQ rights activist', nationality: 'Indian', birth_year: 1981, tier: 'entertainment' },
-  { name: 'Virat Kohli', birth_date: '1988-11-05', category: 'Cricketer', known_for: 'Run machine, 80+ international centuries, fastest to 8000/9000/10000 ODI runs, King Kohli', nationality: 'Indian', birth_year: 1988, tier: 'entertainment' },
   { name: 'Anushka Shetty', birth_date: '1981-11-07', category: 'Actress', known_for: 'Baahubali as Devasena, Arundhati, Rudramadevi, Size Zero, leading Telugu actress', nationality: 'Indian', birth_year: 1981, tier: 'entertainment' },
   { name: 'LK Advani', birth_date: '1927-11-08', category: 'Politician', known_for: 'BJP co-founder, Ram Mandir movement, Deputy PM of India, Bharat Ratna 2024', nationality: 'Indian', birth_year: 1927, tier: 'public_figure' },
   { name: 'Pullela Gopichand', birth_date: '1973-11-16', category: 'Athlete', known_for: 'All England Badminton Champion 2001, national coach who produced Saina and Sindhu', nationality: 'Indian', birth_year: 1973, tier: 'entertainment' },
@@ -517,28 +511,17 @@ export const INDIAN_CELEBRITIES: IndianCelebrity[] = [
   { name: 'Janhvi Kapoor', birth_date: '1997-03-06', category: 'Actress', known_for: 'Dhadak, Gunjan Saxena: The Kargil Girl, Good Luck Jerry, daughter of Sridevi', nationality: 'Indian', birth_year: 1997, tier: 'entertainment' },
   { name: 'Shatrughan Sinha', birth_date: '1946-12-09', category: 'Actor', known_for: 'Kalia, Dostana, Naseeb, Shotgun Sinha, politician, BJP then Congress MP', nationality: 'Indian', birth_year: 1946, tier: 'entertainment' },
   { name: 'Dia Mirza', birth_date: '1981-12-09', category: 'Actress', known_for: 'Rehnaa Hai Terre Dil Mein, Dum, Lage Raho Munna Bhai, climate activist, UNEP Goodwill Ambassador', nationality: 'Indian', birth_year: 1981, tier: 'entertainment' },
-  { name: 'Rajesh Khanna', birth_date: '1942-12-29', category: 'Actor', known_for: 'First superstar of Bollywood, Anand, Aradhana, Kati Patang, 15 consecutive solo hits', nationality: 'Indian', birth_year: 1942, death_year: 2012, tier: 'entertainment' },
-  { name: 'Dilip Kumar', birth_date: '1922-12-11', category: 'Actor', known_for: 'Tragedy King of Bollywood, Devdas, Mughal-e-Azam, Naya Daur, Bharat Ratna 2015', nationality: 'Indian', birth_year: 1922, death_year: 2021, tier: 'historical' },
   { name: 'Govinda', birth_date: '1963-12-21', category: 'Actor', known_for: 'Hero No. 1, Coolie No. 1, Haseena Maan Jaayegi, dance king, iconic 1990s star', nationality: 'Indian', birth_year: 1963, tier: 'entertainment' },
   { name: 'Tamannaah Bhatia', birth_date: '1989-12-21', category: 'Actress', known_for: 'Baahubali, Himmatwala, Devi, Odela Railway Station, Babli Bouncer', nationality: 'Indian', birth_year: 1989, tier: 'entertainment' },
-  { name: 'Mohammed Rafi', birth_date: '1924-12-24', category: 'Singer', known_for: 'One of greatest playback singers in history, versatile range, 26,000+ songs', nationality: 'Indian', birth_year: 1924, death_year: 1980, tier: 'historical' },
   { name: 'Naushad Ali', birth_date: '1919-12-25', category: 'Music Composer', known_for: 'Mughal-e-Azam music, Mother India, Baiju Bawra, greatest classical composer of Hindi cinema', nationality: 'Indian', birth_year: 1919, death_year: 2006, tier: 'historical' },
   { name: 'Anil Kapoor', birth_date: '1959-12-24', category: 'Actor', known_for: 'Mr. India, Tezaab, Ram Lakhan, Slumdog Millionaire, 24 (Fox), eternally young', nationality: 'Indian', birth_year: 1959, tier: 'entertainment' },
-  { name: 'Neeraj Chopra', birth_date: '1997-12-24', category: 'Athlete', known_for: 'Olympic gold Tokyo 2020 in javelin, first Indian to win Olympic gold in track and field', nationality: 'Indian', birth_year: 1997, tier: 'entertainment' },
   { name: 'Richa Chadha', birth_date: '1986-12-18', category: 'Actress', known_for: 'Gangs of Wasseypur, Fukrey, Masaan, Mirzapur, Inside Edge', nationality: 'Indian', birth_year: 1986, tier: 'entertainment' },
   { name: 'Riteish Deshmukh', birth_date: '1978-12-17', category: 'Actor', known_for: 'Masti, Grand Masti, Ek Villain, Humshakals, Baaghi 3, son of Vilasrao Deshmukh', nationality: 'Indian', birth_year: 1978, tier: 'entertainment' },
   { name: 'John Abraham', birth_date: '1972-12-17', category: 'Actor', known_for: 'Dhoom, Dostana, New York, Force, Vicky Donor, Satyameva Jayate, Pathan', nationality: 'Indian', birth_year: 1972, tier: 'entertainment' },
   { name: 'Sameera Reddy', birth_date: '1978-12-14', category: 'Actress', known_for: 'Race, Musafir, Johnny Gaddaar, De Dana Dan, body positivity advocate', nationality: 'Indian', birth_year: 1978, tier: 'entertainment' },
   { name: 'Manohar Parrikar', birth_date: '1955-12-13', category: 'Politician', known_for: 'Chief Minister of Goa, Defence Minister of India, IIT Bombay alumnus, clean politician', nationality: 'Indian', birth_year: 1955, death_year: 2019, tier: 'historical' },
-  { name: 'Rajinikanth', birth_date: '1950-12-12', category: 'Actor', known_for: 'Superstar of Indian cinema, Baasha, Muthu, Sivaji, Enthiran, Kabali, global cult following', nationality: 'Indian', birth_year: 1950, tier: 'entertainment' },
-  { name: 'Yuvraj Singh', birth_date: '1981-12-12', category: 'Cricketer', known_for: 'Six sixes in an over, Player of Tournament 2011 World Cup, cancer survivor comeback', nationality: 'Indian', birth_year: 1981, tier: 'entertainment' },
-  { name: 'Pranab Mukherjee', birth_date: '1935-12-11', category: 'Politician', known_for: '13th President of India, longest-serving Finance Minister, Bharat Ratna 2019', nationality: 'Indian', birth_year: 1935, death_year: 2020, tier: 'public_figure' },
-  { name: 'Osho Rajneesh', birth_date: '1931-12-11', category: 'Philosopher', known_for: 'Controversial spiritual teacher, neo-sannyas movement, 650+ books, global following', nationality: 'Indian', birth_year: 1931, death_year: 1990, tier: 'historical' },
-  { name: 'Subramania Bharati', birth_date: '1882-12-11', category: 'Poet', known_for: 'Tamil poet and freedom fighter, Mahakavi Bharati, champion of women\'s rights', nationality: 'Indian', birth_year: 1882, death_year: 1921, tier: 'historical' },
   { name: 'Ravish Kumar', birth_date: '1974-12-05', category: 'Journalist', known_for: 'NDTV Prime Time anchor, Ramon Magsaysay Award 2019, champion of press freedom', nationality: 'Indian', birth_year: 1974, tier: 'public_figure' },
   { name: 'Arun Jaitley', birth_date: '1952-12-28', category: 'Politician', known_for: 'Finance Minister of India, BJP leader, lawyer, GST architect', nationality: 'Indian', birth_year: 1952, death_year: 2019, tier: 'historical' },
-  { name: 'Dhirubhai Ambani', birth_date: '1932-12-28', category: 'Business Leader', known_for: 'Founded Reliance Industries, rags-to-riches story, democratised equity investment in India', nationality: 'Indian', birth_year: 1932, death_year: 2002, tier: 'historical' },
-  { name: 'Ratan Tata', birth_date: '1937-12-28', category: 'Business Leader', known_for: 'Chairman of Tata Group, Tata Nano, acquired Jaguar Land Rover, philanthropist, national icon', nationality: 'Indian', birth_year: 1937, death_year: 2024, tier: 'public_figure' },
   { name: 'Twinkle Khanna', birth_date: '1974-12-29', category: 'Actress', known_for: 'Barsaat, Mela, Badshah, author Mrs Funnybones, interior designer, wife of Akshay Kumar', nationality: 'Indian', birth_year: 1974, tier: 'entertainment' },
 
   // ============================================================
@@ -554,7 +537,6 @@ export const INDIAN_CELEBRITIES: IndianCelebrity[] = [
   { name: 'Naseeruddin Shah', birth_date: '1950-07-20', category: 'Actor', known_for: 'Sparsh, Mirch Masala, Masoom, A Wednesday, Iqbal, one of India\'s finest actors', nationality: 'Indian', birth_year: 1950, tier: 'entertainment' },
   { name: 'Om Puri', birth_date: '1950-10-18', category: 'Actor', known_for: 'Ardh Satya, Jaane Bhi Do Yaaron, East is East, Gandhi, Charlie Wilson\'s War', nationality: 'Indian', birth_year: 1950, death_year: 2017, tier: 'historical' },
   { name: 'Amol Palekar', birth_date: '1944-11-24', category: 'Actor', known_for: 'Chhoti Si Baat, Baton Baton Mein, Gol Maal, Naram Garam, everyman of Indian cinema', nationality: 'Indian', birth_year: 1944, tier: 'entertainment' },
-  { name: 'Nayanthara', birth_date: '1984-11-18', category: 'Actress', known_for: 'Lady Superstar, Chandramukhi, Ghajini, Atlee films, Jawan', nationality: 'Indian', birth_year: 1984, tier: 'entertainment' },
   { name: 'Vivek Oberoi', birth_date: '1976-09-03', category: 'Actor', known_for: 'Company, Saathiya, Omkara, Prince, Zila Ghaziabad, PM Narendra Modi biopic', nationality: 'Indian', birth_year: 1976, tier: 'entertainment' },
   { name: 'Dino Morea', birth_date: '1975-12-09', category: 'Actor', known_for: 'Raaz, Pyaar Ishq Aur Mohabbat, Calcutta Mail, The Empire (series)', nationality: 'Indian', birth_year: 1975, tier: 'entertainment' },
   { name: 'Fardeen Khan', birth_date: '1974-03-08', category: 'Actor', known_for: 'Prem Aggan, No Entry, Jurm, Dev, Heyy Babyy, son of Feroze Khan', nationality: 'Indian', birth_year: 1974, tier: 'entertainment' },
@@ -745,6 +727,13 @@ export const INDIAN_CELEBRITIES: IndianCelebrity[] = [
   { name: 'N Chandra', birth_date: '1958-04-28', category: 'Director', known_for: 'Tezaab, Parinda, Narsimha, Nishchaiy — action thriller director of 1980s-90s', nationality: 'Indian', birth_year: 1958, tier: 'entertainment' },
   { name: 'Gautam Adani', birth_date: '1962-06-24', category: 'Businessman', known_for: 'Chairman of Adani Group, one of India\'s largest conglomerates spanning ports, airports, energy, and infrastructure. Has been Asia\'s richest person.', nationality: 'Indian', birth_year: 1962, tier: 'achievement' },
 ];
+
+// Batch 7 (SEO): one entry per person. The list used to carry 20 people twice (same
+// name + birth date), which gave each of them a second page (/celebrity/virat-kohli-1988).
+// The duplicates were removed above; this guard keeps a re-added one from creating a
+// new URL (same rule as the nightly export — src/lib/celebrityDedupe.ts).
+export const INDIAN_CELEBRITIES: IndianCelebrity[] = dedupeCelebrities(RAW_INDIAN_CELEBRITIES as unknown as Record<string, unknown>[], () => undefined)
+  .list as unknown as IndianCelebrity[];
 
 // Helper: get celebrities born on a specific month and day
 export function getIndianCelebritiesByDate(month: number, day: number): IndianCelebrity[] {

@@ -261,7 +261,6 @@ export const STATIC_ROUTES = [
   '/articles/zodiac-compatibility',
   '/articles/biorhythm-calculator',
   '/articles/tarot-card-by-date-of-birth',
-  '/articles/planetary-age-calculator',
   '/articles/chinese-zodiac-by-year',
   '/articles/birth-month-personality',
   '/articles/epigenetics-and-longevity',

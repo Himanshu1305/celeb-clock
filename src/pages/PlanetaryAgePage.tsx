@@ -38,11 +38,16 @@ const WEB_APP_SCHEMA = {
   },
 };
 
-// ── FAQ items (7 items, no ISRO) ──────────────────────────────────────────────
+// ── FAQ items (8 items, no ISRO) ──────────────────────────────────────────────
 const FAQ_ITEMS = [
   {
     question: 'How old am I on Mars?',
     answer: 'Your age on Mars = your Earth age × 365.25 ÷ 687. A 30-year-old on Earth is approximately 15.9 years old on Mars, because Mars takes 687 Earth days to complete one orbit around the Sun. [NASA JPL Planetary Fact Sheet, Williams, 2024]',
+  },
+  {
+    // Batch 7: merged from the retired /articles/planetary-age-calculator page.
+    question: 'Why is my age on Mercury so high?',
+    answer: 'Mercury is the closest planet to the Sun and completes one orbit in about 88 Earth days, so roughly four Mercury years fit inside one Earth year. Your Mercury age counts those short years, which is why it is always about four times your Earth age. [NASA JPL Planetary Fact Sheet, Williams, 2024]',
   },
   {
     question: 'How old am I on Jupiter?',

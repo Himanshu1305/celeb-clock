@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Search } from 'lucide-react';
 import type { WikiPerson } from '@/services/WikimediaService';
 import celebritiesData from '@/data/celebrities.json';
+import { celebritySlugRedirect } from '@/lib/seo/duplicateRedirects';
 import { lifePathFromDate } from '@/lib/lifePath';
 
 // Slugs that have a dedicated /celebrity/[slug]/ page (unified DB). Built once.
@@ -220,7 +221,10 @@ export const CelebritySearch = () => {
                 const dobForUrl = person.birthDate;
                 // Indian celebrities with a dedicated page → /celebrity/[slug]/;
                 // everyone else → their birthday report prefilled with the DOB.
-                const celebSlug = toCelebSlug(person.name);
+                // Batch 7: a name spelling whose page was merged into another (e.g.
+                // "Bhimrao Ramji Ambedkar") links straight to the kept page.
+                const rawSlug = toCelebSlug(person.name);
+                const celebSlug = celebritySlugRedirect(rawSlug) ?? rawSlug;
                 const hasCelebPage = CELEB_SLUGS.has(celebSlug);
                 const ctaHref = hasCelebPage
                   ? `/celebrity/${celebSlug}/`
