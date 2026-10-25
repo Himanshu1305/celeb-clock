@@ -13,7 +13,11 @@ import { PageFAQ } from '@/components/PageFAQ';
 import { AutoTranslatedNotice } from '@/components/AutoTranslatedNotice';
 import { TermTip, NumberNote } from '@/components/vedic/TermTip';
 import { CHOGHADIYA_TERM } from '@/lib/vedic/termDefinitions';
-import { computeDayPanchang, PANCHANG_CITIES, type TimeWindow } from '@/lib/vedic/panchangDay';
+import { computeDayPanchang, PANCHANG_CITIES as ALL_PANCHANG_CITIES, type TimeWindow } from '@/lib/vedic/panchangDay';
+import { HINDI_PANCHANG_SLUGS } from '@/lib/seo/panchangSlugs';
+
+// Hindi pages exist for 10 cities (batch 7 grew the English list to 50).
+const PANCHANG_CITIES = ALL_PANCHANG_CITIES.filter(c => HINDI_PANCHANG_SLUGS.has(c.slug));
 import { karanaName } from '@/lib/vedic/panchang';
 
 
@@ -115,6 +119,9 @@ export default function HindiPanchangPage() {
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
           <AutoTranslatedNotice lang="hi" />
+          <p className="text-sm mb-4">
+            <Link to={`/panchang/${city.slug}`} className="text-primary hover:underline" data-testid="hi-panchang-english-top">English: Panchang for {city.name} (ब्रह्म मुहूर्त, अमृत काल, वर्ज्यम्, दुर्मुहूर्त सहित) →</Link>
+          </p>
 
           {/* City selector */}
           <div className="flex flex-wrap items-center gap-2 mb-6" data-testid="hi-panchang-cities">
@@ -189,7 +196,7 @@ export default function HindiPanchangPage() {
 
           <p className="text-xs text-muted-foreground mb-8">
             सूर्योदय, सूर्यास्त और प्रत्येक काल {cityName} के निर्देशांकों के लिए सूर्य की वास्तविक खगोलीय स्थिति से गणना किए गए हैं, और पाँच अंग निरयण (लाहिड़ी अयनांश) सूर्य-चंद्र से — वही इंजन जो आपकी कुंडली के पीछे है।{' '}
-            <Link to="/panchang" className="underline">View in English →</Link> · <Link to="/glossary" className="underline">शब्दकोश (Glossary) →</Link>
+            <Link to={`/panchang/${city.slug}`} className="underline" data-testid="hi-panchang-english-link">View in English ({city.name}) →</Link> · <Link to="/glossary" className="underline">शब्दकोश (Glossary) →</Link>
           </p>
 
           <PageFAQ items={faqItems} />

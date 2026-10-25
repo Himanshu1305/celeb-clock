@@ -44,8 +44,8 @@ describe('daily panchang for a city', () => {
     expect(p.dayChoghadiya[0].start).toBe(p.sunrise);
   });
 
-  it('has 10 built-in cities with unique slugs', () => {
-    expect(PANCHANG_CITIES.length).toBeGreaterThanOrEqual(10);
+  it('has the 50 built-in cities with unique slugs', () => {
+    expect(PANCHANG_CITIES.length).toBe(50);
     expect(new Set(PANCHANG_CITIES.map(c => c.slug)).size).toBe(PANCHANG_CITIES.length);
   });
 });
@@ -75,8 +75,10 @@ describe('round-2 T1: weekday (vara) is the local sunrise weekday', () => {
 
   it('every city, every day of 2026: weekday and date match the civil calendar', () => {
     const W = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    for (const c of PANCHANG_CITIES) {
-      for (let i = 0; i < 365; i += 3) {
+    // Every 3rd day for the 10 largest cities; every 15th day for the other 40
+    // (batch 7 grew the list to 50 — same check, lighter sampling to stay fast).
+    for (const [ci, c] of PANCHANG_CITIES.entries()) {
+      for (let i = 0; i < 365; i += ci < 10 ? 3 : 15) {
         const d = new Date(Date.UTC(2026, 0, 1 + i, 6, 30));
         const p = computeDayPanchang(d, c.lat, c.lon, c.tz, c.name);
         expect(p.weekday, `${c.name} ${d.toISOString().slice(0, 10)}`).toBe(W[d.getUTCDay()]);

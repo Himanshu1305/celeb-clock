@@ -19,6 +19,11 @@ const INDIA_BORNON_MAP = new Map(
 
 // Audit S13: national life-expectancy figures come from the ONE sourced table
 // (UN World Population Prospects 2024, estimates for 2023) — same JSON the app reads.
+// Batch 7 (W7): Panchang city names by slug (50 most-populated Indian cities).
+const PANCHANG_CITY_NAMES = Object.fromEntries(
+  JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/panchangCities.json'), 'utf-8'))
+    .cities.map(c => [c.slug, c.name])
+);
 const WPP_LE = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/lifeExpectancyWpp2024.json'), 'utf-8'));
 const LEY = (country, sex = 'both') => WPP_LE.countries[country][sex].toFixed(1);
 const LEDIFF = (a, b) => (WPP_LE.countries[a].both - WPP_LE.countries[b].both).toFixed(1);
@@ -502,20 +507,42 @@ export function getTitleForRoute(route) {
   }
 
   {
-    const pc = { delhi: 'Delhi', mumbai: 'Mumbai', bengaluru: 'Bengaluru', kolkata: 'Kolkata', chennai: 'Chennai', hyderabad: 'Hyderabad', pune: 'Pune', ahmedabad: 'Ahmedabad', jaipur: 'Jaipur', lucknow: 'Lucknow' };
+    // Batch 7 (W7): 50 Panchang cities from src/data/panchangCities.json. These strings
+    // mirror pageMeta()/indexMeta() in src/lib/vedic/panchangText.ts (checked by
+    // src/lib/vedic/__tests__/panchangPages.test.ts).
+    const pc = PANCHANG_CITY_NAMES;
     if (route === '/glossary') return {
       title: 'Astrology Glossary — Every Vedic Term Explained Simply | BornClock',
       description: 'Plain-language meanings of every astrology term on BornClock — Lagna, Nakshatra, Dasha, Guna Milan kootas, Porutham, Tithi, Rahu Kaal, Choghadiya, Shadbala, Navamsa, doshas and more — with Hindi names.',
     };
     if (route === '/panchang') return {
       title: "Today's Panchang — Tithi, Nakshatra & Rahu Kaal | BornClock",
-      description: "Today's Panchang: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal, Gulika, Yamaganda and the day & night Choghadiya — computed from real sunrise/sunset for your city.",
+      description: "Today's Panchang: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal, Brahma Muhurta, Amrit Kalam, Varjyam and the day & night Choghadiya — for any city and any date.",
     };
-    const m = route.match(/^\/panchang\/([a-z-]+)$/);
-    if (m && pc[m[1]]) return {
-      title: `Panchang for ${pc[m[1]]} — Tithi, Nakshatra & Rahu Kaal | BornClock`,
-      description: `Today's Panchang for ${pc[m[1]]}: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal and Choghadiya — computed from real sunrise/sunset for ${pc[m[1]]}.`,
+    if (route === '/rahu-kaal') return {
+      title: 'Rahu Kaal Today — Any City, Any Date | BornClock',
+      description: "Today's Rahu Kaal, Gulika Kaal and Yamaganda for 50 Indian cities or any place you search — worked out from real sunrise and sunset, with the week ahead and any date.",
     };
+    if (route === '/choghadiya') return {
+      title: 'Choghadiya Today — Day & Night, Any City | BornClock',
+      description: "Today's day and night Choghadiya — Amrit, Shubh, Labh, Char, Udveg, Kaal and Rog — for 50 Indian cities or any place you search, from real sunrise and sunset, for any date.",
+    };
+    const m = route.match(/^\/(panchang|rahu-kaal|choghadiya)\/([a-z-]+)$/);
+    if (m && pc[m[2]]) {
+      const n = pc[m[2]];
+      if (m[1] === 'rahu-kaal') return {
+        title: `Rahu Kaal Today in ${n} — Gulika & Yamaganda | BornClock`,
+        description: `Today's Rahu Kaal for ${n}, with Gulika Kaal, Yamaganda, Dur Muhurtam and Varjyam — worked out from the real sunrise and sunset in ${n}, plus the week ahead.`,
+      };
+      if (m[1] === 'choghadiya') return {
+        title: `Choghadiya Today in ${n} — Day & Night | BornClock`,
+        description: `Today's day and night Choghadiya for ${n} — Amrit, Shubh, Labh, Char, Udveg, Kaal and Rog slots from the real sunrise and sunset in ${n}.`,
+      };
+      return {
+        title: `Panchang for ${n} — Tithi, Nakshatra & Rahu Kaal | BornClock`,
+        description: `Today's Panchang for ${n}: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal, Brahma Muhurta, Amrit Kalam, Varjyam and Choghadiya — from real sunrise/sunset.`,
+      };
+    }
     // Hindi Panchang (P4-LANG)
     const pcHi = { delhi: 'दिल्ली', mumbai: 'मुंबई', bengaluru: 'बेंगलुरु', kolkata: 'कोलकाता', chennai: 'चेन्नई', hyderabad: 'हैदराबाद', pune: 'पुणे', ahmedabad: 'अहमदाबाद', jaipur: 'जयपुर', lucknow: 'लखनऊ' };
     if (route === '/hi/panchang') return {

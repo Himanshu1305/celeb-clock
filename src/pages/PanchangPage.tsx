@@ -1,92 +1,81 @@
-import { useMemo, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+/**
+ * Panchang for any city and any date (batch 7, W7; first built in Growth P1-2).
+ * /panchang (Delhi by default, or any searched place via ?place&lat&lon),
+ * /panchang/:city for the 50 most-populated Indian cities, ?date=YYYY-MM-DD for any day.
+ */
+import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { TermTip, NumberNote } from '@/components/vedic/TermTip';
-import { CHOGHADIYA_TERM } from '@/lib/vedic/termDefinitions';
 import { limbEndNote } from '@/lib/vedic/numberNotes';
+import { computeDayPanchang, nearestCities, sunriseSunset, PANCHANG_CITIES, panchangCityBySlug } from '@/lib/vedic/panchangDay';
+import { karanaName } from '@/lib/vedic/panchang';
+import { pageAnswer, pageMeta, indexMeta, cityContrast, dateWithWeekday } from '@/lib/vedic/panchangText';
+import { usePanchangPlace } from '@/components/panchang/usePanchangPlace';
+import { PanchangControls } from '@/components/panchang/PanchangControls';
+import { AnswerBox, MuhurtaLists, ChoghadiyaTables, CityLinks } from '@/components/panchang/PanchangSections';
 
 const TITHI_TERM: Record<string, string> = { Purnima: 'purnima', Amavasya: 'amavasya', Ekadashi: 'ekadashi' };
-import { computeDayPanchang, PANCHANG_CITIES, type TimeWindow } from '@/lib/vedic/panchangDay';
-import { karanaName } from '@/lib/vedic/panchang';
-
-
-const QUALITY_STYLE: Record<TimeWindow['quality'], string> = {
-  good: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-  neutral: 'bg-slate-50 border-slate-200 text-slate-700',
-  bad: 'bg-rose-50 border-rose-200 text-rose-800',
-};
-
-function ChoghadiyaRow({ c }: { c: TimeWindow }) {
-  return (
-    <div className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm ${QUALITY_STYLE[c.quality]}`}>
-      <span className="font-medium">{CHOGHADIYA_TERM[c.name] ? <TermTip id={CHOGHADIYA_TERM[c.name]}>{c.name}</TermTip> : c.name}</span>
-      <span className="tabular-nums">{c.start}–{c.end}</span>
-    </div>
-  );
-}
+const HINDI_SLUGS = new Set(['delhi', 'mumbai', 'bengaluru', 'kolkata', 'chennai', 'hyderabad', 'pune', 'ahmedabad', 'jaipur', 'lucknow']);
 
 export default function PanchangPage() {
-  const { city: cityParam } = useParams<{ city?: string }>();
-  const initial = PANCHANG_CITIES.find(c => c.slug === cityParam) || PANCHANG_CITIES[0];
-  const [citySlug, setCitySlug] = useState(initial.slug);
-  const city = PANCHANG_CITIES.find(c => c.slug === citySlug) || PANCHANG_CITIES[0];
+  const ctl = usePanchangPlace('panchang');
+  const { place, dateKey, tz } = ctl;
 
-  // The city's local calendar date (UTC fields of this Date = local date there),
-  // so between local midnight and 05:30 IST the page shows today, not yesterday.
-  const todayKey = new Date(Date.now() + city.tz * 3600 * 1000).toISOString().slice(0, 10);
   const p = useMemo(
-    () => computeDayPanchang(new Date(todayKey + 'T12:00:00Z'), city.lat, city.lon, city.tz, city.name),
-    [city.slug, todayKey],
+    () => computeDayPanchang(new Date(dateKey + 'T12:00:00Z'), place.lat, place.lon, tz, place.name),
+    [place.lat, place.lon, place.name, dateKey, tz],
   );
+  const delhi = panchangCityBySlug('delhi')!;
+  const contrast = useMemo(() => {
+    if (place.slug === 'delhi' || ctl.isCustom) return cityContrast(place.name, p, null);
+    const d = sunriseSunset(new Date(dateKey + 'T12:00:00Z'), delhi.lat, delhi.lon, 5.5);
+    const f = (x: Date) => new Date(Math.round((x.getTime() + 5.5 * 3600e3) / 60000) * 60000).toISOString().slice(11, 16);
+    return cityContrast(place.name, p, { sunrise: f(d.rise), sunset: f(d.set) });
+  }, [p, place.slug, place.name, ctl.isCustom, dateKey, delhi.lat, delhi.lon]);
 
-  const dateNice = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  // Index page (no city in the URL, no searched place) has its own title/H1 so it never
+  // duplicates the Delhi city page it shows by default.
+  const meta = !ctl.cityParam && !ctl.isCustom ? indexMeta('panchang') : pageMeta('panchang', place.name);
+  const canonical = ctl.cityParam && place.slug ? `/panchang/${place.slug}` : '/panchang';
+  const nearby = useMemo(() => nearestCities(place, 4), [place]);
 
   const faqItems = [
     { question: 'What is Panchang?', answer: 'Panchang ("five limbs") is the Vedic almanac for a day: the Tithi (lunar day), Nakshatra (Moon\'s star), Yoga, Karana and Vara (weekday). It is used to understand the quality of a day and to choose auspicious timing.' },
-    { question: 'What is Rahu Kaal?', answer: 'Rahu Kaal is a roughly 90-minute window each day traditionally considered inauspicious for starting important work. It is one of the eight equal parts of daylight, with the part depending on the weekday — so it is computed here from the real sunrise and sunset for your city.' },
-    { question: 'What is Choghadiya?', answer: 'Choghadiya divides the day and night into eight parts each, labelled Amrit, Shubh, Labh (good), Char (neutral) and Udveg, Kaal, Rog (avoid). It is a quick, popular way to pick a good hour for a task.' },
-    { question: 'How accurate are the timings?', answer: 'Sunrise, sunset and all derived windows are computed from the real astronomical position of the Sun for your city\'s latitude and longitude. Compare against an established Panchang (e.g. Drik Panchang) and they should agree to within a minute or two.' },
+    { question: `How is the Panchang for ${place.name} different from other cities?`, answer: `The Tithi, Nakshatra and Yoga change at the same instant everywhere, but which one is "at sunrise", and every timing on this page — sunrise, sunset, Rahu Kaal, the muhurtas and Choghadiya — depends on the local sunrise and sunset. They are worked out here for ${place.name}'s own latitude and longitude.` },
+    { question: 'What is Rahu Kaal?', answer: 'Rahu Kaal is a roughly 90-minute window each day traditionally considered unsuitable for starting important work. It is one of the eight equal parts of daylight, with the part depending on the weekday — so it is computed here from the real sunrise and sunset.' },
+    { question: 'What are Brahma Muhurta, Amrit Kalam, Varjyam and Dur Muhurtam?', answer: 'Brahma Muhurta is the quiet period before dawn (the 14th of the 15 parts of the night). Amrit Kalam is a favourable window and Varjyam one avoided for new starts — each a fixed slice of the day\'s Nakshatra. Dur Muhurtam is one or two short daytime windows, fixed by the weekday, avoided for auspicious starts.' },
+    { question: 'Can I see the Panchang for another date?', answer: 'Yes — use the previous / next day buttons or pick any date in the date box. You can also search any town in the world; the times are worked out for that place and its local time zone.' },
+    { question: 'How accurate are the timings?', answer: 'Sunrise, sunset and all derived windows come from the real astronomical position of the Sun for the place, and the five limbs from the sidereal (Lahiri) Sun and Moon. Times are rounded to the nearest minute; checked against Drik Panchang they agree to within a minute.' },
   ];
 
   return (
     <ToolLayout
       theme="vedic"
       testId="panchang-page"
-      seo={<SEO
-        title={`Today's Panchang${city ? ` for ${city.name}` : ''} — Tithi, Nakshatra, Rahu Kaal & Choghadiya | BornClock`}
-        description={`Today's Panchang for ${city.name}: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal, Gulika, Yamaganda and the day & night Choghadiya — computed from real sunrise/sunset.`}
-        canonicalUrl={cityParam ? `/panchang/${city.slug}` : '/panchang'}
-        ogImage="https://bornclock.com/og/vedic.png"
-      />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: `Panchang · ${city.name}` }}
-      footer={{ tagline: 'Daily Panchang computed from real sunrise and sunset.', nav: [{ label: 'Muhurat', to: '/muhurat' }, { label: 'Rashifal', to: '/rashifal' }, { label: 'Free Kundli', to: '/kundali' }, { label: 'Glossary', to: '/glossary' }] }}
+      seo={<SEO title={meta.title} description={meta.description} canonicalUrl={canonical} ogImage="https://bornclock.com/og/vedic.png" />}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Panchang', to: '/panchang' }], current: place.name }}
+      footer={{ tagline: 'Daily Panchang computed from real sunrise and sunset.', nav: [{ label: 'Rahu Kaal', to: '/rahu-kaal' }, { label: 'Choghadiya', to: '/choghadiya' }, { label: 'Muhurat', to: '/muhurat' }, { label: 'Rashifal', to: '/rashifal' }, { label: 'Glossary', to: '/glossary' }] }}
       eyebrow="Panchang"
-      h1={`Today's Panchang — ${city.name}`}
-      lead={dateNice}
+      h1={meta.h1}
+      lead={<span data-testid="panchang-date">{!ctl.cityParam && !ctl.isCustom ? `${place.name} · ` : ''}{dateWithWeekday(dateKey)}{ctl.isToday ? '' : ' (selected date)'}</span>}
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
-          <p className="text-sm mb-4">
-            <Link to="/hi/panchang" className="text-primary hover:underline">हिन्दी में देखें →</Link>
-          </p>
-          {/* City selector */}
-          <div className="flex flex-wrap items-center gap-2 mb-6" data-testid="panchang-cities">
-            <span className="text-sm text-muted-foreground">City:</span>
-            {PANCHANG_CITIES.map(c => (
-              <button
-                key={c.slug}
-                onClick={() => setCitySlug(c.slug)}
-                className={`px-3 py-1 rounded-lg border text-sm ${c.slug === city.slug ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-foreground hover:bg-primary/5'}`}
-              >
-                {c.name}
-              </button>
-            ))}
-          </div>
+          <AnswerBox text={pageAnswer('panchang', p, place.name)} />
+
+          <PanchangControls ctl={ctl} />
+
+          {place.slug && HINDI_SLUGS.has(place.slug) && !ctl.isCustom ? (
+            <p className="text-sm mb-4"><Link to={`/hi/panchang/${place.slug}`} className="text-primary hover:underline">{place.name} का पंचांग हिन्दी में देखें →</Link></p>
+          ) : (
+            <p className="text-sm mb-4"><Link to="/hi/panchang" className="text-primary hover:underline">हिन्दी में देखें →</Link></p>
+          )}
 
           {/* Five limbs */}
-          <p className="text-sm text-muted-foreground mb-2">The five limbs of today’s <TermTip id="panchang">Panchang</TermTip>:</p>
+          <p className="text-sm text-muted-foreground mb-2">The five limbs of the <TermTip id="panchang">Panchang</TermTip> at sunrise:</p>
           <div className="grid sm:grid-cols-2 gap-4 mb-2" data-testid="panchang-limbs">
             <div className="rounded-xl border border-border p-4">
               <div className="text-xs text-muted-foreground"><TermTip id="tithi">Tithi</TermTip></div>
@@ -112,40 +101,22 @@ export default function PanchangPage() {
           <NumberNote testid="panchang-limb-note">{limbEndNote()}</NumberNote>
           <div className="mb-6" />
 
-          {/* Sun + inauspicious windows */}
-          <div className="grid sm:grid-cols-2 gap-4 mb-6">
-            <div className="rounded-xl border border-border p-4" data-testid="panchang-sun">
-              <h2 className="font-semibold text-foreground mb-2">Sun</h2>
-              <div className="text-sm text-muted-foreground">Sunrise <strong className="text-foreground tabular-nums">{p.sunrise}</strong> · Sunset <strong className="text-foreground tabular-nums">{p.sunset}</strong></div>
-              <div className="text-sm text-muted-foreground mt-1"><TermTip id="abhijit">Abhijit Muhurta</TermTip> <strong className="text-emerald-700 tabular-nums">{p.abhijit.start}–{p.abhijit.end}</strong></div>
-            </div>
-            <div className="rounded-xl border border-border p-4" data-testid="panchang-windows">
-              <h2 className="font-semibold text-foreground mb-2">Inauspicious windows</h2>
-              <ul className="text-sm space-y-1">
-                <li className="flex justify-between"><span><TermTip id="rahuKalam">Rahu Kaal</TermTip></span><span className="tabular-nums text-rose-700">{p.rahuKaal.start}–{p.rahuKaal.end}</span></li>
-                <li className="flex justify-between"><span><TermTip id="gulikaKaal">Gulika Kaal</TermTip></span><span className="tabular-nums">{p.gulikaKaal.start}–{p.gulikaKaal.end}</span></li>
-                <li className="flex justify-between"><span><TermTip id="yamaganda">Yamaganda</TermTip></span><span className="tabular-nums">{p.yamaganda.start}–{p.yamaganda.end}</span></li>
-              </ul>
-              <NumberNote testid="panchang-window-note">Local clock times for {city.name}, worked out from today’s sunrise and sunset — avoid starting new work inside these windows; ongoing work is fine.</NumberNote>
-            </div>
+          <div className="rounded-xl border border-border p-4 mb-6" data-testid="panchang-sun">
+            <h2 className="font-semibold text-foreground mb-2">Sun in {place.name}</h2>
+            <div className="text-sm text-muted-foreground">Sunrise <strong className="text-foreground tabular-nums">{p.sunrise}</strong> · Sunset <strong className="text-foreground tabular-nums">{p.sunset}</strong></div>
+            <p className="text-sm text-muted-foreground mt-1" data-testid="panchang-city-contrast">{contrast}</p>
           </div>
 
-          {/* Choghadiya */}
-          <div className="grid sm:grid-cols-2 gap-4 mb-8" data-testid="panchang-choghadiya">
-            <div>
-              <h2 className="font-semibold text-foreground mb-2">Day <TermTip id="choghadiya">Choghadiya</TermTip></h2>
-              <div className="space-y-1">{p.dayChoghadiya.map((c, i) => <ChoghadiyaRow key={i} c={c} />)}</div>
-            </div>
-            <div>
-              <h2 className="font-semibold text-foreground mb-2">Night <TermTip id="choghadiya">Choghadiya</TermTip></h2>
-              <div className="space-y-1">{p.nightChoghadiya.map((c, i) => <ChoghadiyaRow key={i} c={c} />)}</div>
-            </div>
-          </div>
+          <MuhurtaLists p={p} place={place.name} />
+
+          <ChoghadiyaTables p={p} />
 
           <p className="text-xs text-muted-foreground mb-8">
-            Sunrise, sunset and every window are computed from the real astronomical position of the Sun for {city.name}'s coordinates, and the five limbs from the sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) Sun and Moon — the same engine behind your Kundli.{' '}
+            Sunrise, sunset and every window are computed from the real astronomical position of the Sun for {place.name}'s coordinates, and the five limbs from the sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) Sun and Moon — the same engine behind your Kundli.{' '}
             <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
           </p>
+
+          <CityLinks kind="panchang" city={ctl.isCustom ? undefined : place.city} nearby={nearby} all={PANCHANG_CITIES} linkTo={ctl.linkTo} />
 
           <PageFAQ items={faqItems} />
 

@@ -210,6 +210,8 @@ const ChildKundliPage = lazyWithReload(() => import('@/pages/ChildKundliPage'));
 const BlueZonesIndex = lazyWithReload(() => import('@/pages/BlueZonesIndex'));
 const BlueZonesFactor = lazyWithReload(() => import('@/pages/BlueZonesFactor'));
 const PanchangPage = lazyWithReload(() => import('@/pages/PanchangPage'));
+const RahuKaalPage = lazyWithReload(() => import('@/pages/RahuKaalPage'));
+const ChoghadiyaPage = lazyWithReload(() => import('@/pages/ChoghadiyaPage'));
 const GlossaryPage = lazyWithReload(() => import('@/pages/GlossaryPage'));
 const RemindersPage = lazyWithReload(() => import('@/pages/RemindersPage'));
 const KundaliCompatArticle = lazyWithReload(() => import('@/pages/articles/KundaliCompatArticle'));
@@ -489,6 +491,10 @@ const App = () => (
               <Route path="/glossary" element={<GlossaryPage />} />
               <Route path="/panchang" element={<PanchangPage />} />
               <Route path="/panchang/:city" element={<PanchangPage />} />
+              <Route path="/rahu-kaal" element={<RahuKaalPage />} />
+              <Route path="/rahu-kaal/:city" element={<RahuKaalPage />} />
+              <Route path="/choghadiya" element={<ChoghadiyaPage />} />
+              <Route path="/choghadiya/:city" element={<ChoghadiyaPage />} />
               <Route path="/born-on/:month/:day/personality" element={<LegacyRedirect />} />
               <Route path="/reminders" element={<RemindersPage />} />
               <Route path="/articles/kundali-compatibility" element={<KundaliCompatArticle />} />
