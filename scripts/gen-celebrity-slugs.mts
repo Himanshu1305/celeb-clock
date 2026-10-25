@@ -11,6 +11,7 @@ import { generateCelebrityTitle } from '../src/utils/celebrityUtils';
 // gets a current age), Moon sign (Rashi) from the chart engine, and the meta text.
 import { celebrityProfileFacts } from '../src/lib/celebrityProfile';
 import { applyCelebRecordFixes } from '../src/lib/celebrityFacts';
+import { dedupeCelebrities } from '../src/lib/celebrityDedupe';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -20,7 +21,11 @@ const require = createRequire(import.meta.url);
 // celebrity route matches exactly what CelebrityPage resolves at runtime.
 const celebritiesData = require('../src/data/celebrities.json');
 // Same verified date corrections CelebrityPage re-applies at load.
-const allCelebrities = (celebritiesData.celebrities as Record<string, unknown>[]).map(applyCelebRecordFixes);
+// Batch 7: same one-page-per-person rule as the export (defensive — a no-op on a
+// file the export wrote), so a duplicate can never reach the prerender list/sitemap.
+const deduped = dedupeCelebrities(celebritiesData.celebrities as Record<string, unknown>[]);
+if (deduped.merges.length) console.warn('gen-celebrity-slugs: dropped duplicate people:', deduped.merges.map(m => `${m.retired}→${m.kept}`).join(', '));
+const allCelebrities = deduped.list.map(applyCelebRecordFixes);
 
 // Prerender coverage (2026-10-23, founder decision): EVERY celebrity in the unified
 // DB gets static HTML and a sitemap entry. Previously only static Indian entries plus

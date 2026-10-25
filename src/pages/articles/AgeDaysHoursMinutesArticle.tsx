@@ -269,7 +269,7 @@ export function AgeDaysHoursMinutesArticle() {
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Related Articles</h2>
           <div className="grid sm:grid-cols-2 gap-4 mb-6">
-            <a href="/articles/planetary-age-calculator"
+            <a href="/planetary-age/"
                className="block bg-white border-2 border-gray-200 rounded-xl p-5
                           hover:border-[#6E5AA6]/30 transition-colors">
               <div className="font-bold text-gray-900 mb-1">Planetary Age Calculator</div>

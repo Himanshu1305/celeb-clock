@@ -104,7 +104,6 @@ const RetirementLifeExpectancyArticle = lazyWithReload(() => import("./pages/art
 const ZodiacCompatibilityArticle = lazyWithReload(() => import("./pages/articles/ZodiacCompatibilityArticle"));
 const BiorhythmArticle = lazyWithReload(() => import("./pages/articles/BiorhythmArticle"));
 const TarotByDateOfBirthArticle = lazyWithReload(() => import("./pages/articles/TarotByDateOfBirthArticle"));
-const PlanetaryAgeArticle = lazyWithReload(() => import("./pages/articles/PlanetaryAgeArticle"));
 const ChineseZodiacArticle = lazyWithReload(() => import("./pages/articles/ChineseZodiacArticle"));
 const BirthMonthPersonalityArticle = lazyWithReload(() => import("./pages/articles/BirthMonthPersonalityArticle"));
 const EpigeneticsArticle = lazyWithReload(() => import("./pages/articles/EpigeneticsArticle"));
@@ -366,7 +365,8 @@ const App = () => (
               <Route path="/articles/zodiac-compatibility" element={<ZodiacCompatibilityArticle />} />
               <Route path="/articles/biorhythm-calculator" element={<BiorhythmArticle />} />
               <Route path="/articles/tarot-card-by-date-of-birth" element={<TarotByDateOfBirthArticle />} />
-              <Route path="/articles/planetary-age-calculator" element={<PlanetaryAgeArticle />} />
+              {/* Batch 7: same intent as /planetary-age (same title, same calculator) → 301 there. */}
+              <Route path="/articles/planetary-age-calculator" element={<LegacyRedirect otherwise="/planetary-age/" />} />
               <Route path="/articles/chinese-zodiac-by-year" element={<ChineseZodiacArticle />} />
               <Route path="/articles/birth-month-personality" element={<BirthMonthPersonalityArticle />} />
               <Route path="/articles/epigenetics-and-longevity" element={<EpigeneticsArticle />} />

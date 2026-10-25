@@ -16,6 +16,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, appendFileSync } fr
 import { resolve, dirname, join, extname } from 'path';
 import { fileURLToPath } from 'url';
 import { getTitleForRoute } from './prerender-titles.mjs';
+import { finalizeHead, pickCanonical, hasJsonLdType } from './lib/headDedupe.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -241,16 +242,13 @@ async function prerenderRoute(page, baseUrl, route) {
       html = html.replace(/(<meta name="twitter:description" content=")[^"]*(")/i, `$1${escapedDesc}$2`);
     }
 
-    // ── Canonical + og/twitter URL injection ──────────────────────────────────
-    // react-helmet's per-route canonical is NOT flushed before the outerHTML
-    // capture, so the base index.html's home-pointing canonical/og:url/twitter:url
-    // leak onto every route. Inject the correct trailing-slash canonical (matches
-    // the sitemap and the Worker's 200 URL) per route.
-    const canonicalPath = route === '/' ? '/' : route.replace(/\/+$/, '') + '/';
-    const canonicalUrl = `https://bornclock.com${canonicalPath}`;
-    html = html.replace(/(<link rel="canonical" href=")[^"]*(")/i, `$1${canonicalUrl}$2`);
-    html = html.replace(/(<meta property="og:url" content=")[^"]*(")/i, `$1${canonicalUrl}$2`);
-    html = html.replace(/(<meta name="twitter:url" content=")[^"]*(")/i, `$1${canonicalUrl}$2`);
+    // ── Canonical + og/twitter URL (Batch 7) ──────────────────────────────────
+    // The base index.html's home canonical/og:url/twitter:url sit next to the
+    // page's own react-helmet (data-rh) tags. Pick ONE canonical — the page's own
+    // <SEO canonicalUrl> when it rendered one (some pages deliberately point
+    // elsewhere), else the route's trailing-slash self URL — and finalizeHead()
+    // below collapses all three tags to that single value.
+    const canonicalUrl = pickCanonical(html, route);
 
     // ── Per-page-type OG share card (og:image + twitter:image) ─────────────────
     // The page ends up with TWO image tags — the static one from index.html and a
@@ -301,7 +299,9 @@ async function prerenderRoute(page, baseUrl, route) {
     }
 
     // ── Per-route BreadcrumbList JSON-LD (truthful, derived from the URL path) ──
-    if (route !== '/') {
+    // Only when the page did not already render one (SEO.tsx emits a BreadcrumbList
+    // via Helmet) — two trails for one page is a duplicate (Batch 7).
+    if (route !== '/' && !hasJsonLdType(html, 'BreadcrumbList')) {
       const parts = route.split('/').filter(Boolean);
       const items = [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bornclock.com/' }];
       const ZODIAC = new Set(['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces']);
@@ -341,6 +341,9 @@ async function prerenderRoute(page, baseUrl, route) {
       });
       html = html.replace('</head>', `<script type="application/ld+json">${wp}</script></head>`);
     }
+
+    // ── One canonical / og:url / twitter:url; identical JSON-LD blocks once ─────
+    html = finalizeHead(html, route).html;
 
     // Sanity: flag a GENUINELY generic title — missing, too short, or identical to
     // the site's default/home title (i.e. no per-route title was injected). The old

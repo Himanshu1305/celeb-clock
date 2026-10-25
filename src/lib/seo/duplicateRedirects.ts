@@ -12,6 +12,10 @@
  *   /biological-age-calculator         → /biological-age/        (the real calculator)
  *   /articles/biological-age-vs-chronological-age → /biological-age-vs-chronological-age/
  *   /life-expectancy-calculator-{usa,uk,australia,canada} → /life-expectancy-{country}/
+ *   /celebrity/:retired-slug           → /celebrity/:kept-slug/   (Batch 7: same person on
+ *       two URLs, e.g. virat-kohli-1988 → virat-kohli; map written by the celebrity
+ *       export, src/data/celebritySlugRedirects.json — see src/lib/celebrityDedupe.ts)
+ *   /articles/planetary-age-calculator → /planetary-age/          (Batch 7: same intent)
  * Plus normalisation of KEPT date URLs that were reachable in two spellings:
  *   zero-padded numbers (/birthday/09/04, /born-on/september-04), upper-case month
  *   names, and /born-on/:slug/india for a date that has no India page (→ /born-on/:slug/).
@@ -21,6 +25,15 @@
  * non-canonical form. Impossible dates (e.g. /born-on/february/30) return null so the
  * Worker's real-404 logic still handles them.
  */
+import celebritySlugRedirects from '../../data/celebritySlugRedirects.json';
+
+const CELEBRITY_REDIRECTS = celebritySlugRedirects as Record<string, string>;
+
+/** Kept celebrity slug for a retired one, or null. */
+export function celebritySlugRedirect(slug: string): string | null {
+  return Object.prototype.hasOwnProperty.call(CELEBRITY_REDIRECTS, slug) ? CELEBRITY_REDIRECTS[slug] : null;
+}
+
 const MONTHS = [
   '', 'january', 'february', 'march', 'april', 'may', 'june',
   'july', 'august', 'september', 'october', 'november', 'december',
@@ -35,6 +48,7 @@ const STATIC: Record<string, string> = {
   '/life-expectancy-calculator-uk': '/life-expectancy-uk/',
   '/life-expectancy-calculator-australia': '/life-expectancy-australia/',
   '/life-expectancy-calculator-canada': '/life-expectancy-canada/',
+  '/articles/planetary-age-calculator': '/planetary-age/',
 };
 
 /** Month name (any case) → 1-12, or 0. */
@@ -67,6 +81,12 @@ export function duplicateRedirect(pathname: string, opts: DuplicateRedirectOptio
   if (fixed) return fixed;
 
   let m: RegExpMatchArray | null;
+
+  // /celebrity/:retired → /celebrity/:kept/ (slugs are lower-case; exact match only)
+  if ((m = path.match(/^\/celebrity\/([a-z0-9-]+)$/))) {
+    const kept = celebritySlugRedirect(m[1]);
+    return kept ? `/celebrity/${kept}/` : null;
+  }
 
   // /born-on/:month/:day/personality → /birthday/:m/:d/
   if ((m = path.match(/^\/born-on\/([a-z]+)\/(\d+)\/personality$/i))) {
