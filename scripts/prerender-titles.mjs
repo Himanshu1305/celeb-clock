@@ -20,6 +20,7 @@ const INDIA_BORNON_MAP = new Map(
 // Audit S13: national life-expectancy figures come from the ONE sourced table
 // (UN World Population Prospects 2024, estimates for 2023) — same JSON the app reads.
 const WPP_LE = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/lifeExpectancyWpp2024.json'), 'utf-8'));
+const ANGEL_SEO = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/angelNumbersSeo.json'), 'utf-8'));
 const LEY = (country, sex = 'both') => WPP_LE.countries[country][sex].toFixed(1);
 const LEDIFF = (a, b) => (WPP_LE.countries[a].both - WPP_LE.countries[b].both).toFixed(1);
 
@@ -665,6 +666,16 @@ export function getTitleForRoute(route) {
         ? { title: `${en} — Meaning & Remedies | BornClock`, description: `${en}: what it means for you in plain language, how common it is, and calm traditional remedies — mantra, daan, puja, temples and gemstone (with caution). Every remedy cites its source.` }
         : { title: `${hi} — अर्थ और उपाय | BornClock`, description: `${hi}: आपके लिए इसका सरल अर्थ, यह कितना आम है, और शांत पारंपरिक उपाय — मंत्र, दान, पूजा, मंदिर और रत्न (सावधानी सहित)। हर उपाय का स्रोत दिया गया है।` };
     }
+  }
+
+  // /angel-numbers/:number (Batch 7, W6) — descriptions shared with the page via JSON;
+  // title template mirrors angelTitle() in src/data/angelNumbers.ts.
+  {
+    const m = route.match(/^\/angel-numbers\/(\d+)$/);
+    if (m && ANGEL_SEO[m[1]]) return {
+      title: `Angel Number ${m[1]} Meaning — Love, Career & Twin Flame | BornClock`,
+      description: ANGEL_SEO[m[1]],
+    };
   }
 
   // /divisional-charts[/:slug]

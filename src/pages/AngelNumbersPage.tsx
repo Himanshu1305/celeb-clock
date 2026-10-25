@@ -6,12 +6,12 @@
  * repeating number sequences. This is NOT astronomy, NOT numerology-from-birth,
  * and NOT scientifically validated. Presented honestly, per Rule 6.
  */
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { JsonLd } from '@/components/JsonLd';
 import { TrustStrip } from '@/components/paj/TrustStrip';
+import { ANGEL_NUMBERS } from '@/data/angelNumbers';
 
 const TITLE = 'Angel Numbers — Meanings of 111, 222, 333 & More | BornClock';
 const DESCRIPTION =
@@ -35,115 +35,8 @@ const FAQ_ITEMS = [
   },
 ];
 
-interface AngelEntry {
-  sequence: string;
-  id: string;
-  theme: string;
-  meaning: string;
-}
-
-const ANGEL_NUMBERS: AngelEntry[] = [
-  {
-    sequence: '000',
-    id: 'a000',
-    theme: 'Infinite potential / Reset',
-    meaning:
-      'Often associated with the concept of infinite potential or a complete reset — a moment of standing at the threshold before something new. Some traditions link it to the idea that everything is possible and no path is yet closed.',
-  },
-  {
-    sequence: '111',
-    id: 'a111',
-    theme: 'New beginnings / Intentions',
-    meaning:
-      'One of the most widely recognised sequences. Commonly associated with alignment, new beginnings, and the idea that your intentions have power right now. Seen as a prompt to pay attention to your thoughts and what you are moving toward.',
-  },
-  {
-    sequence: '222',
-    id: 'a222',
-    theme: 'Balance / Trust the process',
-    meaning:
-      'Associated with balance, patience, and trusting that things are unfolding as they should — even if you cannot see the outcome yet. Linked in the tradition to relationships, cooperation, and the middle path.',
-  },
-  {
-    sequence: '333',
-    id: 'a333',
-    theme: 'Creativity / Expression',
-    meaning:
-      'Linked with creativity, self-expression, and support from whatever the believer considers a guiding force. Sometimes described as a sign that creative energy is available and should be used.',
-  },
-  {
-    sequence: '444',
-    id: 'a444',
-    theme: 'Foundations / Stability',
-    meaning:
-      'Associated with stability, hard work, and the idea of building something solid. Often interpreted as reassurance that effort is supported and that foundations being laid now will last.',
-  },
-  {
-    sequence: '555',
-    id: 'a555',
-    theme: 'Change / Movement',
-    meaning:
-      'One of the change-associated sequences — linked to significant transitions, movement, and the release of what no longer fits. Sometimes seen as a sign that a shift is underway or approaching.',
-  },
-  {
-    sequence: '666',
-    id: 'a666',
-    theme: 'Rebalance / Inner focus',
-    meaning:
-      'Despite its cultural baggage in Western tradition, 666 in angel number belief is typically associated with a prompt to rebalance — to turn attention away from external noise or material worry and back toward what actually matters. It is not interpreted negatively in this framework.',
-  },
-  {
-    sequence: '777',
-    id: 'a777',
-    theme: 'Spiritual depth / Reflection',
-    meaning:
-      'One of the most positively regarded sequences — associated with spiritual awareness, good fortune, and deep reflection. Linked to the themes of the number 7 across many traditions: study, inner wisdom, and the search for meaning.',
-  },
-  {
-    sequence: '888',
-    id: 'a888',
-    theme: 'Abundance / Cycles completing',
-    meaning:
-      'Associated with abundance, the meeting of effort and reward, and cycles completing. The number 8 is linked with material success, karma, and return in several traditions — seeing 888 is often interpreted as a sign that what has been invested is coming back.',
-  },
-  {
-    sequence: '999',
-    id: 'a999',
-    theme: 'Completion / Release',
-    meaning:
-      'Linked with endings, completion, and the closing of a chapter. Associated with the idea of releasing what is finished and making space for the next cycle — the angel number equivalent of a Year 9 in personal year numerology.',
-  },
-  {
-    sequence: '1010',
-    id: 'a1010',
-    theme: 'New cycle / Awakening',
-    meaning:
-      'A mirror/clock number. Often interpreted as a sign of awakening to new possibilities — the 1 (beginnings) and 0 (infinite potential) combined and mirrored. Associated with staying present and noticing what is opening up.',
-  },
-  {
-    sequence: '1111',
-    id: 'a1111',
-    theme: 'Alignment / Gateway',
-    meaning:
-      'Perhaps the most widely recognised angel number sequence of all, largely because 11:11 appears twice daily on digital clocks. Traditionally associated with a powerful moment of alignment, the idea that thoughts are manifesting, or a "portal" of heightened awareness. Some make a wish at 11:11 — a folk tradition that pre-dates the angel number framework.',
-  },
-  {
-    sequence: '1212',
-    id: 'a1212',
-    theme: 'Positive path / Encouragement',
-    meaning:
-      'Associated with staying on a positive path, encouragement, and the idea that growth is happening even when it is not obvious. Linked with 12 as a complete cycle number (12 months, 12 zodiac signs) and seen as a prompt toward optimism.',
-  },
-];
-
 export default function AngelNumbersPage() {
-  const [selected, setSelected] = useState<string>('');
-
-  const scrollToSequence = (id: string) => {
-    setSelected(id);
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  const navigate = useNavigate();
 
   return (
     <PajPage
@@ -206,23 +99,23 @@ export default function AngelNumbersPage() {
         <div className="rounded-xl border border-border p-5 mb-6">
           <h2 className="text-lg font-bold text-foreground mb-2">Where this idea comes from</h2>
           <p className="text-sm text-foreground leading-relaxed mb-2">
-            The term "angel numbers" was popularised by Doreen Virtue, a self-help author who
-            published <em>Angel Numbers</em> in 2005 and a series of related books throughout the
-            2000s. She drew on older number symbolism — including Pythagorean numerology and
-            the significance of numbers in various religious traditions — and framed repeating
-            sequences as messages from angels.
+            The term "angel numbers" was defined by the self-help author Doreen Virtue and
+            Lynnette Brown in their book <em>Angel Numbers</em> (Hay House, 2005), followed by
+            Virtue's <em>Angel Numbers 101</em> (2008). It draws on older number symbolism,
+            including Pythagorean numerology, and frames repeating sequences as messages from angels.
           </p>
           <p className="text-sm text-foreground leading-relaxed mb-2">
-            The idea spread rapidly through social media in the 2010s, becoming one of the
-            most widely shared concepts in popular spirituality. The cultural reach is
-            significant: 11:11 wishes are made worldwide, and the sequences appear in art,
-            music, and everyday conversation far beyond their numerological origins.
+            The idea has since spread widely through social media and popular magazines. The
+            11:11 wish is older still: its exact origin is unknown, but it was popularised in
+            part by a New Age group founded in 1986 — years before the term "angel numbers" existed.
           </p>
           <p className="text-sm text-muted-foreground">
-            It is worth noting that Doreen Virtue publicly distanced herself from her own
-            earlier work after a religious conversion in 2017. The angel number framework
-            she built continues independently as a popular spiritual tradition.
+            It is worth noting that Doreen Virtue announced in 2017 that she had renounced her
+            New Age beliefs after becoming a Christian, and in a 2024 interview said she regretted
+            creating angel numbers. The idea continues independently as a popular spiritual belief.
           </p>
+          {/* Sources (opened 25 Oct 2026): en.wikipedia.org/wiki/Angel_number,
+              en.wikipedia.org/wiki/Doreen_Virtue, mentalfloss.com/random-facts/meaning-of-angel-number-1111 */}
         </div>
 
         {/* Quick navigator dropdown */}
@@ -233,43 +126,43 @@ export default function AngelNumbersPage() {
           <div className="flex gap-3 items-center">
             <select
               id="angel-selector"
-              value={selected}
-              onChange={e => { if (e.target.value) scrollToSequence(e.target.value); }}
+              defaultValue=""
+              onChange={e => { if (e.target.value) navigate(`/angel-numbers/${e.target.value}`); }}
               className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0E2238] bg-white"
-              aria-label="Select a number sequence to jump to its meaning"
+              aria-label="Select a number sequence to open its meaning"
             >
               <option value="">Choose a sequence…</option>
               {ANGEL_NUMBERS.map(a => (
-                <option key={a.id} value={a.id}>{a.sequence} — {a.theme}</option>
+                <option key={a.sequence} value={a.sequence}>{a.sequence} — {a.theme}</option>
               ))}
             </select>
-            <span className="text-xs text-muted-foreground whitespace-nowrap hidden sm:inline">or scroll through all below</span>
+            <span className="text-xs text-muted-foreground whitespace-nowrap hidden sm:inline">or pick one below</span>
           </div>
         </div>
 
-        {/* Sequence sections — anchor-linked, deep-linkable */}
-        <div className="space-y-4 mb-10">
+        {/* One card per number → its own page. The old #a111-style anchor ids are kept
+            on the cards so links to /angel-numbers#a111 still land on the right card. */}
+        <h2 className="text-lg font-bold text-foreground mb-3">Angel number meanings, one by one</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-10" data-testid="angel-grid">
           {ANGEL_NUMBERS.map(a => (
-            <div
-              key={a.id}
-              id={a.id}
-              className={`rounded-xl border p-5 scroll-mt-20 transition-colors ${
-                selected === a.id
-                  ? 'border-[#6E5AA6] bg-[#6E5AA6]/10'
-                  : 'border-border bg-background'
-              }`}
+            <Link
+              key={a.sequence}
+              id={`a${a.sequence}`}
+              to={`/angel-numbers/${a.sequence}`}
+              className="rounded-xl border border-border bg-background p-5 scroll-mt-20 hover:border-[#6E5AA6] transition-colors block"
             >
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-3xl font-black text-[#6E5AA6]">{a.sequence}</span>
                 <span className="text-sm font-semibold text-foreground">{a.theme}</span>
               </div>
-              <p className="text-sm text-foreground leading-relaxed">{a.meaning}</p>
-              <p className="text-xs text-muted-foreground mt-2">
-                What people commonly associate with this sequence — a symbolic interpretation within angel number belief, not a prediction.
-              </p>
-            </div>
+              <p className="text-sm text-foreground leading-relaxed">{a.answer.split('. ')[0]}.</p>
+              <span className="text-xs font-semibold text-[#6E5AA6] mt-2 inline-block">Love, career, twin flame &amp; what to do →</span>
+            </Link>
           ))}
         </div>
+        <p className="text-xs text-muted-foreground -mt-8 mb-10">
+          What people commonly associate with each sequence — paraphrased from popular sources named on each page. A symbolic interpretation within angel-number belief, not a prediction.
+        </p>
 
         {/* Angel numbers vs numerology disambiguation */}
         <div className="rounded-xl border border-border p-5 mb-6">
