@@ -6,7 +6,7 @@
  * JSON-LD.
  */
 import {
-  parseCelebrityDOB, generateCelebrityMeta, celebrityAgeInfo,
+  parseCelebrityDOB, generateCelebrityMeta, celebrityAgeInfo, isDayKnownDeathDate,
   type CelebrityDOB, type CelebrityAgeInfo,
 } from '@/utils/celebrityUtils';
 import {
@@ -21,6 +21,8 @@ export interface CelebrityProfileFacts {
   era: string | null;
   deathYear: number | null;
   deathDate: string | null;
+  /** deathDate when it is a real day (not a "-01-01" year-only placeholder), else null. */
+  deathDateKnown: string | null;
   age: CelebrityAgeInfo;
   /** Western (tropical) Sun sign. */
   western: ZodiacInfo | null;
@@ -39,7 +41,9 @@ export function celebrityProfileFacts(
   const name = String(celeb.name || '');
   const era = CELEB_ERA_OVERRIDES[slug] ?? null;
   // S7: deaths missing from the data (code-side override until the DB is updated).
-  const deathDate = CELEB_DEATH_OVERRIDES[slug] ?? null;
+  // Full death date: code override first, then the exported DB death_date.
+  const deathDate = CELEB_DEATH_OVERRIDES[slug]
+    ?? (typeof celeb.death_date === 'string' && celeb.death_date ? celeb.death_date.slice(0, 10) : null);
   const deathYear = deathDate
     ? Number(deathDate.slice(0, 4))
     : (celeb.death_year != null && celeb.death_year !== '' ? Number(celeb.death_year) : null);
@@ -58,5 +62,6 @@ export function celebrityProfileFacts(
   const description = generateCelebrityMeta(
     name, dob, western?.sign || (chinese?.animal ?? ''), moon?.rashiShort || '', lifePath, life, now,
   );
-  return { dob, isFull, era, deathYear: life.deathYear, deathDate, age, western, chinese, lifePath, moon, description };
+  const deathDateKnown = isDayKnownDeathDate(deathDate, life.deathYear) ? deathDate : null;
+  return { dob, isFull, era, deathYear: life.deathYear, deathDate, deathDateKnown, age, western, chinese, lifePath, moon, description };
 }

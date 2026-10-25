@@ -72,15 +72,17 @@ describe('moonSignsForDate — Swiss Ephemeris reference (IST, 00:00 and 23:59)'
 
 describe('celebrity snippets — deceased people never get a current age', () => {
   const NOW = new Date('2026-10-25T12:00:00');
-  const gandhi = { name: 'Mahatma Gandhi', slug: 'mahatma-gandhi', birth_date: '1869-10-02', birth_year: 1869, death_year: 1948, nationality_code: 'IN' };
+  // death_date as exported from celebrity_sitelinks (read-only select, 25 Oct 2026).
+  const gandhi = { name: 'Mahatma Gandhi', slug: 'mahatma-gandhi', birth_date: '1869-10-02', birth_year: 1869, death_year: 1948, death_date: '1948-01-30', nationality_code: 'IN' };
   const kohli = { name: 'Virat Kohli', slug: 'virat-kohli', birth_date: '1988-11-05', birth_year: 1988, death_year: null, nationality_code: 'IN' };
 
-  it('Gandhi meta: died, no "years old", Moon sign Karka or Simha, never "Tula Rashi"', () => {
+  it('Gandhi (2 Oct 1869 – 30 Jan 1948): exact age 78, no "years old", Moon sign Karka or Simha, never "Tula Rashi"', () => {
     const f = celebrityProfileFacts(gandhi, 'mahatma-gandhi', NOW);
-    expect(f.description).toBe('Mahatma Gandhi died in 1948, aged about 79. Libra Sun sign, Life Path 9, Moon sign (Rashi) Karka or Simha. Birthday profile on BornClock.');
-    expect(f.description).not.toMatch(/years old/);
+    expect(f.description).toBe('Mahatma Gandhi died in 1948, aged 78. Libra Sun sign, Life Path 9, Moon sign (Rashi) Karka or Simha. Birthday profile on BornClock.');
+    expect(f.description).not.toMatch(/years old|about/);
     expect(f.description).not.toMatch(/Tula/);
-    expect(f.age.display).toBe('Died in 1948, at approximately 79 years of age'); // visible page wording unchanged
+    expect(f.age.display).toBe('Died in 1948, aged 78');
+    expect(f.deathDateKnown).toBe('1948-01-30');
     expect(f.moon!.rashiText).toBe('Karka or Simha (depends on birth time)');
   });
 
@@ -96,6 +98,28 @@ describe('celebrity snippets — deceased people never get a current age', () =>
     );
     expect(f.age.snippet).toBe('died in 2024, aged 100');
     expect(f.description.startsWith('Jimmy Carter died in 2024, aged 100.')).toBe(true);
+  });
+
+  it('01-01 death date is a year-only placeholder → the two possible ages, never "about"', () => {
+    // Sarojini Naidu: born 13 Feb 1879; DB death_date "1949-01-01" (placeholder).
+    const f = celebrityProfileFacts(
+      { name: 'Sarojini Naidu', slug: 'sarojini-naidu', birth_date: '1879-02-13', birth_year: 1879, death_year: 1949, death_date: '1949-01-01', nationality_code: 'IN' },
+      'sarojini-naidu', NOW,
+    );
+    expect(f.age.display).toBe('Died in 1949, aged 69 or 70');
+    expect(f.age.snippet).toBe('died in 1949, aged 69 or 70');
+    expect(f.deathDateKnown).toBeNull(); // JSON-LD then uses the year only
+    expect(f.description).not.toMatch(/about/);
+  });
+
+  it('only a death year (no date) → the two possible ages', () => {
+    const a = celebrityAgeInfo({ year: 1869, month: 10, day: 2, isFullDate: true }, { deathYear: 1948 }, NOW);
+    expect(a.snippet).toBe('died in 1948, aged 78 or 79');
+  });
+
+  it('01-01 birth placeholder (year-only DOB) with a full death date → the two possible ages', () => {
+    const a = celebrityAgeInfo({ year: 1900, month: 0, day: 0, isFullDate: false }, { deathYear: 1970, deathDate: '1970-05-10' }, NOW);
+    expect(a.display).toBe('Died in 1970, aged 69 or 70');
   });
 
   it('generateCelebrityMeta with death facts never says "is N years old"', () => {

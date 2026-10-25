@@ -112,7 +112,6 @@ export function CelebrityPage() {
   // meta generator), so the page, <meta>, og/twitter and JSON-LD always agree.
   const facts = celebrityProfileFacts(celeb, slug ?? '');
   const { era, dob, isFull, deathYear, western, chinese, lifePath, moon } = facts;
-  const deathOverride = facts.deathDate;
   // Moon sign (Rashi) from the birth DATE: the sidereal Moon at 00:00 and 23:59
   // local time that day (chart engine, Lahiri). One sign = certain all day; if it
   // changed that day both are shown. Nakshatra follows the same rule.
@@ -199,7 +198,8 @@ export function CelebrityPage() {
     personSchema.birthDate = String(dob.year); // year only — ISO 8601 allows YYYY
   }
   if (nationality !== 'Not recorded') personSchema.nationality = nationality;
-  if (deathYear) personSchema.deathDate = deathOverride ?? String(deathYear);
+  // JSON-LD: the full date only when the day is really known (not a 01-01 placeholder).
+  if (deathYear) personSchema.deathDate = facts.deathDateKnown ?? String(deathYear);
 
   const faqs = [
     {
