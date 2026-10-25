@@ -227,6 +227,8 @@ export const STATIC_ROUTES = [
   '/pricing',
   '/zodiac',
   ...ZODIAC_SIGNS.map(s => `/zodiac/${s}`),
+  // Batch 7 (W2): daily Western horoscope — content injected daily by the Worker (src/lib/daily).
+  ...ZODIAC_SIGNS.map(s => `/zodiac/${s}/today`),
   '/birthstone',
   ...BIRTHSTONE_MONTHS.map(m => `/birthstone/${m}`),
   '/life-expectancy',

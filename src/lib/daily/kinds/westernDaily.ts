@@ -149,11 +149,15 @@ type Aspect = 'conjunction' | 'sextile' | 'square' | 'trine' | 'opposition' | 'n
 const ASPECT_BY_HOUSE: Aspect[] = ['none', 'conjunction', 'none', 'sextile', 'square', 'trine', 'none', 'opposition', 'none', 'trine', 'square', 'sextile', 'none'];
 const ASPECT_LINE: Record<Aspect, string> = {
   conjunction: 'The Moon is in your own sign (a conjunction) — your mood sets the tone today.',
-  sextile: 'It makes a sextile (60°) to your sign — small, easy openings if you act on them.',
-  square: 'It squares your sign (90°) — a little friction that nudges you to adjust.',
-  trine: 'It makes a trine (120°) to your sign — an easy, flowing day.',
-  opposition: 'It opposes your sign (180°) — balance your needs with someone else’s.',
-  none: 'It makes no major aspect to your sign, so the day’s tone comes mainly from the area of life it lights up.',
+  sextile: 'The Moon makes a sextile (60°) to your sign — small, easy openings if you act on them.',
+  square: 'The Moon squares your sign (90°) — a little friction that nudges you to adjust.',
+  trine: 'The Moon makes a trine (120°) to your sign — an easy, flowing day.',
+  opposition: 'The Moon is opposite your sign (180°) — balance your needs with someone else’s.',
+  none: 'The Moon makes no major aspect to your sign, so the day’s tone comes mainly from the area of life it lights up.',
+};
+const ASPECT_LABEL: Record<Aspect, string> = {
+  conjunction: 'Moon in your sign (conjunction)', sextile: 'Moon sextile your sign', square: 'Moon square your sign',
+  trine: 'Moon trine your sign', opposition: 'Moon opposite your sign', none: 'No major Moon aspect today',
 };
 const ASPECT_TONE: Record<Aspect, DailyTone> = { conjunction: 'good', sextile: 'good', trine: 'good', square: 'mixed', opposition: 'mixed', none: 'mixed' };
 const HEADLINE: Record<DailyTone, string[]> = {
@@ -166,7 +170,7 @@ function eventText(e: WesternEvent, sun: number): string {
   const d = formatDateEn(e.date).replace(/ \d{4}$/, '');
   if (e.type === 'ingress') {
     const h = solarHouse(e.sign!, sun);
-    return `${e.body} ${e.backwards ? 're-enters' : 'enters'} ${SIGNS[e.sign!]} on ${d} (${e.time} IST) — your ${ORD_EN[h]} house of ${THEME[h]}`;
+    return `${e.body} ${e.backwards ? 're-enters' : 'enters'} ${SIGNS[e.sign!]} on ${d} — your ${ORD_EN[h]} house of ${THEME[h]}`;
   }
   return `${e.body} turns ${e.type === 'station-retrograde' ? 'retrograde' : 'direct'} on ${d}`;
 }
@@ -243,7 +247,7 @@ export function composeWestern(date: string, sunSign: number): DailyEntry {
       : { label: `Venus in your ${ORD_EN[vh]} house`, text: `Venus, the planet of love and harmony, is in ${SIGNS[sky.sign.Venus]} — your ${ORD_EN[vh]} solar house of ${THEME[vh]}.` };
   const why: DailyWhy[] = [
     { label: `Moon in ${SIGNS[sky.sign.Moon]} — your ${ORD_EN[mh]} solar house`, text: `Solar houses count signs from your Sun sign; the Moon spends about 2½ days in each, so it sets the day’s focus: ${THEME[mh]}.` },
-    { label: aspect === 'none' ? 'No major Moon aspect' : `Moon ${aspect} your sign`, text: ASPECT_LINE[aspect] },
+    { label: ASPECT_LABEL[aspect], text: ASPECT_LINE[aspect] },
     notable,
   ];
 

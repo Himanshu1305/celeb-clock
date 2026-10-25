@@ -125,6 +125,10 @@ export default function ZodiacSign() {
                 <span className="px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground">{data.modality}</span>
                 <span className="px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground">{data.bodyPart}</span>
               </div>
+              <Link to={`/zodiac/${data.slug}/today`} data-testid="zodiac-today-link"
+                className="inline-flex mt-4 items-center gap-2 bg-primary text-primary-foreground rounded-lg px-4 py-2 text-sm font-semibold hover:opacity-90">
+                {data.name} horoscope today →
+              </Link>
             </div>
           </div>
         </div>

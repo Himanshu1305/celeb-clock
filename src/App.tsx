@@ -70,6 +70,7 @@ const WeightOnPlanetsPage = lazyWithReload(() => import("./pages/WeightOnPlanets
 const Methodology = lazyWithReload(() => import("./pages/Methodology"));
 const EditorialPolicy = lazyWithReload(() => import("./pages/EditorialPolicy"));
 const ZodiacSign = lazyWithReload(() => import("./pages/ZodiacSign"));
+const ZodiacToday = lazyWithReload(() => import("./pages/ZodiacToday"));
 const BirthstonePage = lazyWithReload(() => import("./pages/BirthstonePage"));
 const NumerologyNumber = lazyWithReload(() => import("./pages/NumerologyNumber"));
 const GenerationPage = lazyWithReload(() => import("./pages/Generation"));
@@ -297,6 +298,7 @@ const App = () => (
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/zodiac" element={<Zodiac />} />
               <Route path="/zodiac/:sign" element={<ZodiacSign />} />
+              <Route path="/zodiac/:sign/today" element={<ZodiacToday />} />
               <Route path="/birthstone" element={<Birthstone />} />
               <Route path="/birthstone/:month" element={<BirthstonePage />} />
               <Route path="/life-expectancy" element={<LifeExpectancy />} />

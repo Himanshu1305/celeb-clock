@@ -418,6 +418,21 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /zodiac/:sign/today — daily Western horoscope (Batch 7). The Worker replaces this with
+  // the dated title/description each India day (src/lib/daily); this is the build-time base.
+  {
+    const zt = route.match(/^\/zodiac\/([a-z]+)\/today$/);
+    if (zt) {
+      const z = ZODIAC[zt[1]];
+      if (!z) return null;
+      const name = zt[1].charAt(0).toUpperCase() + zt[1].slice(1);
+      return {
+        title: `${name} Horoscope Today — Western Astrology | BornClock`,
+        description: `Today's ${name} horoscope (Western, tropical) from the real positions of the Moon, Sun, Mercury, Venus and Mars — love, work and wellbeing, with why.`,
+      };
+    }
+  }
+
   // /zodiac/:sign
   if (route.startsWith('/zodiac/')) {
     const sign = route.slice(8);

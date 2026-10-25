@@ -58,7 +58,11 @@ export default function RashifalIndex() {
             ))}
           </div>
 
-          <p className="text-xs text-muted-foreground mt-6 mb-10">
+          <p className="text-sm text-muted-foreground mt-6">
+            <Link to="/hi/rashifal" lang="hi" className="underline">आज का राशिफल हिंदी में →</Link>
+            {' · '}Looking for the Western (Sun sign) daily horoscope? <Link to="/zodiac/aries/today" className="underline">Western horoscope today →</Link>
+          </p>
+          <p className="text-xs text-muted-foreground mt-4 mb-10">
             Each reading is a <TermTip id="rashi">Moon-sign</TermTip> gochar (transit) reading, computed from the sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) positions of the planets — the same engine behind your Kundli.{' '}
             <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
           </p>

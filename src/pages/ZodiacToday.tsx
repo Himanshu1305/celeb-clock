@@ -1,0 +1,107 @@
+/**
+ * /zodiac/:sign/today — daily WESTERN (tropical) horoscope for a Sun sign (Batch 7, W2).
+ * Extends the existing /zodiac/:sign profile page (no duplicate intent: that page is the
+ * evergreen sign profile, this one is today's reading). Served through the shared
+ * daily-page mechanism (src/lib/daily): the Worker injects today's precomputed text.
+ */
+import { Link, useParams } from 'react-router-dom';
+import { CollectionLayout } from '@/components/central';
+import { SEO } from '@/components/SEO';
+import { getZodiacBySlug, ZODIAC_DATA } from '@/data/zodiacData';
+import { useDailyEntry } from '@/lib/daily/useDailyEntry';
+import { DailyBody, DailyDate, DailyH1, DailyJsonLd } from '@/lib/daily/DailyParts';
+import { SUN_SIGN_SLUGS } from '@/lib/daily/registry';
+import { DailyTermStrip } from '@/components/daily/DailyTermStrip';
+
+export default function ZodiacToday() {
+  const { sign } = useParams<{ sign: string }>();
+  const valid = !!sign && (SUN_SIGN_SLUGS as readonly string[]).includes(sign);
+  const data = valid ? getZodiacBySlug(sign!) : undefined;
+  const { entry } = useDailyEntry('horoscope', valid ? sign : null);
+
+  if (!data) {
+    return (
+      <CollectionLayout
+        theme="mystic"
+        testId="zodiac-today-not-found"
+        seo={<SEO title="Horoscope — Sign Not Found | BornClock" description="That zodiac sign doesn't exist. Pick one of the 12 signs for today's horoscope." canonicalUrl="/zodiac" />}
+        breadcrumb={{ trail: [{ label: 'Zodiac Signs', to: '/zodiac' }], current: 'Not found' }}
+        eyebrow="Western horoscope"
+        h1="Choose your sign"
+      >
+        <section className="section container mx-auto px-4 py-8 max-w-3xl">
+          <div className="flex flex-wrap gap-2">
+            {ZODIAC_DATA.map(z => <Link key={z.slug} to={`/zodiac/${z.slug}/today`} className="px-3 py-1.5 rounded-lg border border-border text-foreground">{z.name}</Link>)}
+          </div>
+        </section>
+      </CollectionLayout>
+    );
+  }
+
+  const path = `/zodiac/${data.slug}/today`;
+  const idx = (SUN_SIGN_SLUGS as readonly string[]).indexOf(data.slug);
+  const RASHI_OF = ['mesh', 'vrishabh', 'mithun', 'kark', 'simha', 'kanya', 'tula', 'vrishchik', 'dhanu', 'makar', 'kumbh', 'meen'];
+
+  return (
+    <CollectionLayout
+      theme="mystic"
+      testId="zodiac-today-page"
+      seo={<SEO
+        title={entry?.title ?? `${data.name} Horoscope Today — Western Astrology | BornClock`}
+        description={entry?.description ?? `Today's ${data.name} horoscope from the real tropical positions of the Moon, Sun, Mercury, Venus and Mars.`}
+        canonicalUrl={path}
+        ogImage="https://bornclock.com/og/zodiac.png"
+      />}
+      breadcrumb={{ trail: [{ label: 'Zodiac Signs', to: '/zodiac' }, { label: data.name, to: `/zodiac/${data.slug}` }], current: 'Today' }}
+      footer={{
+        tagline: `${data.name} (${data.dateRange}) — today's Western horoscope from the real sky.`,
+        nav: [{ label: `${data.name} profile`, to: `/zodiac/${data.slug}` }, { label: 'Zodiac', to: '/zodiac' }, { label: 'Vedic rashifal', to: '/rashifal' }],
+        note: 'Western (tropical) astrology — reflective guidance, not certainty.',
+      }}
+      eyebrow="Western (tropical) astrology · daily horoscope"
+      h1={<DailyH1 entry={entry} fallback={`${data.name} Horoscope Today`} />}
+      lead={<>{data.unicode} {data.name} · {data.dateRange} · <DailyDate entry={entry} /></>}
+    >
+      <section className="section container mx-auto px-4 py-8 max-w-3xl">
+        <p className="text-sm rounded-lg border border-border bg-muted/40 px-4 py-3 mb-6" data-testid="western-label">
+          This is <strong>Western (tropical) astrology</strong>, read from your Sun sign. Your Vedic rashi (Moon sign) may differ —{' '}
+          <Link to="/moon-sign" className="underline">find your Vedic rashi here</Link>, then read the{' '}
+          <Link to={`/rashifal/${RASHI_OF[idx]}/today`} className="underline">Vedic daily rashifal</Link>.
+        </p>
+
+        <DailyBody entry={entry} testId="horoscope-daily" />
+
+        <DailyTermStrip
+          title="What these words mean"
+          terms={[
+            { key: 'tropicalZodiac', label: 'Tropical zodiac' },
+            { key: 'sunSign', label: 'Sun sign' },
+            { key: 'solarHouse', label: 'Solar houses' },
+            { key: 'westernAspect', label: 'Aspects' },
+            { key: 'retrograde', label: 'Retrograde' },
+            { key: 'ingress', label: 'Sign change (ingress)' },
+          ]}
+        />
+
+        <h2 className="font-semibold text-foreground mb-2">Other signs today</h2>
+        <div className="flex flex-wrap gap-2 mb-8" data-testid="horoscope-others">
+          {ZODIAC_DATA.filter(z => z.slug !== data.slug).map(z => (
+            <Link key={z.slug} to={`/zodiac/${z.slug}/today`} className="px-3 py-1.5 rounded-lg border border-border text-sm text-foreground hover:bg-muted">
+              {z.unicode} {z.name}
+            </Link>
+          ))}
+        </div>
+
+        <div className="bg-muted/50 rounded-xl p-6 text-center">
+          <p className="text-muted-foreground text-sm mb-3">More about {data.name}</p>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link to={`/zodiac/${data.slug}`} className="text-sm text-primary hover:underline">{data.name} traits &amp; compatibility</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/western-birth-chart" className="text-sm text-primary hover:underline">Your full Western birth chart</Link>
+          </div>
+        </div>
+      </section>
+      <DailyJsonLd entry={entry} path={path} />
+    </CollectionLayout>
+  );
+}

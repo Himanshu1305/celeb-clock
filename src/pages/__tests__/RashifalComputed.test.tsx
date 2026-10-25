@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import RashifalSign from '../RashifalSign';
@@ -29,10 +29,16 @@ describe('Rashifal (computed) pages', () => {
     expect(getByTestId('rashifal-grid').querySelectorAll('a').length).toBe(12);
   });
 
-  it('per-sign daily page renders overview + 4 life-area sections', () => {
-    const { getByTestId } = renderSign('/rashifal/mesh/today');
-    expect(getByTestId('rashifal-overview')).toBeTruthy();
-    expect(getByTestId('rashifal-sections').querySelectorAll('[class*="rounded-xl"]').length).toBeGreaterThanOrEqual(4);
+  it('per-sign daily page renders the daily reading: answer, why today, overall + 4 areas + lucky', async () => {
+    // Batch 7: /today is a shared daily page (src/lib/daily). jsdom has no /daily/*.json,
+    // so the loader falls back to computing the same entry in the browser.
+    const { findByTestId } = renderSign('/rashifal/mesh/today');
+    const body = await findByTestId('rashifal-daily');
+    await waitFor(() => expect(body.querySelector('[data-daily-part="answer"]')).toBeTruthy());
+    for (const id of ['why', 'overview', 'love', 'career', 'health', 'lucky', 'faq']) {
+      expect(body.querySelector(`[data-daily-part="${id}"]`), id).toBeTruthy();
+    }
+    expect(document.querySelector('h1')?.textContent).toMatch(/^Mesh Rashifal Today — \d{1,2} [A-Z][a-z]+ 20\d\d$/);
   });
 
   it('all four periods render without crashing', () => {
