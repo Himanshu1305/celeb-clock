@@ -63,10 +63,18 @@ export function injectDailyHtml(html: string, inp: DailyInjectInput): DailyInjec
 
   // Main content block. The renderer guarantees no <div> inside, so the first </div>
   // after the opening tag closes the block.
-  out = out.replace(/(<div\b[^>]*\bdata-daily="body"[^>]*>)[\s\S]*?(<\/div>)/i, (_m, a, b) => { replaced.body = true; return `${a}${renderDailyBodyHtml(e)}${b}`; });
+  out = out.replace(/(<div\b[^>]*\bdata-daily="body"[^>]*>)[\s\S]*?(<\/div>)/i, (_m, a: string, b) => {
+    replaced.body = true;
+    const open = a.replace(/\bdata-daily-date="[^"]*"/, `data-daily-date="${attr(e.date)}"`);
+    return `${open}${renderDailyBodyHtml(e)}${b}`;
+  });
+
+  // A WebPage JSON-LD captured from react-helmet at build time carries the build day's
+  // headline; drop it — the daily graph below is the page's one current WebPage.
+  out = out.replace(/<script\b(?![^>]*\bdata-daily=)[^>]*type="application\/ld\+json"[^>]*>\s*\{"@context":"https:\/\/schema\.org","@type":"WebPage"[\s\S]*?<\/script>/gi, '');
 
   // JSON-LD (WebPage dateModified + FAQPage).
-  const ld = jsonForScript(dailyJsonLd(e, canonicalFor(inp.path)));
+  const ld =jsonForScript(dailyJsonLd(e, canonicalFor(inp.path)));
   out = out.replace(/(<script\b[^>]*\bdata-daily="jsonld"[^>]*>)[\s\S]*?(<\/script>)/i, (_m, a, b) => { replaced.jsonld = true; return `${a}${ld}${b}`; });
 
   // Embedded data for the browser's first render (idempotent).

@@ -105,6 +105,15 @@ describe('Worker injection (fixed date)', () => {
     expect(r1.html).not.toMatch(/noindex/i);
     expect(r1.html).toContain('<link rel="canonical" href="https://bornclock.com/rashifal/mesh/today/">');
   });
+  it('drops the build-day react-helmet WebPage JSON-LD, keeps other blocks', () => {
+    const withHelmet = shell().replace('</head>',
+      '<script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"WebPage","headline":"Mesh Rashifal Today, 1 January 2026"}</script>' +
+      '<script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[]}</script></head>');
+    const out = injectDailyHtml(withHelmet, { kind: 'rashifal', slug: 'mesh', path: '/rashifal/mesh/today', entry: e1 }).html;
+    expect(out).not.toContain('1 January 2026');
+    expect(out).toContain('"@type":"BreadcrumbList"');
+    expect(out.match(/"@type":"WebPage"/g)).toHaveLength(1);
+  });
   it('is idempotent (one embedded data script after re-injection)', () => {
     const again = injectDailyHtml(r1.html, { kind: 'rashifal', slug: 'mesh', path: '/rashifal/mesh/today', entry: e2 });
     expect(again.html.match(/id="daily-data"/g)).toHaveLength(1);
