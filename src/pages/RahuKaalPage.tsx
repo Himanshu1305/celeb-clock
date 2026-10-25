@@ -22,10 +22,7 @@ const WEEK_RULE = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frid
   day, rahu: WINDOW_PARTS.rahu[i], gulika: WINDOW_PARTS.gulika[i], yama: WINDOW_PARTS.yama[i],
 }));
 const ORD = ['', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'];
-const TERMS: Array<[string, string]> = [
-  ['rahuKalam', 'Rahu Kaal'], ['gulikaKaal', 'Gulika Kaal'], ['yamaganda', 'Yamaganda'], ['durMuhurtam', 'Dur Muhurtam'],
-  ['varjyam', 'Varjyam'], ['brahmaMuhurta', 'Brahma Muhurta'], ['abhijit', 'Abhijit Muhurta'], ['amritKalam', 'Amrit Kalam'],
-];
+const TERMS = ['Rahu Kaal', 'Gulika Kaal', 'Yamaganda', 'Dur Muhurtam', 'Varjyam', 'Brahma Muhurta', 'Abhijit Muhurta', 'Amrit Kalam'];
 
 export default function RahuKaalPage() {
   const ctl = usePanchangPlace('rahu-kaal');
@@ -55,7 +52,7 @@ export default function RahuKaalPage() {
           <DailyBody entry={entry} testId="rahu-kaal-daily" />
           <DailyJsonLd entry={entry} path={path} />
 
-          <TermChips ids={TERMS} />
+          <TermChips labels={TERMS} />
 
           <h2 className="font-semibold text-foreground mb-2">Which part of the day, by weekday</h2>
           <div className="overflow-x-auto mb-2">

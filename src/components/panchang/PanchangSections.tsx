@@ -4,17 +4,18 @@
  */
 import { Link } from 'react-router-dom';
 import { TermTip } from '@/components/vedic/TermTip';
+import { PANCHANG_PAGE_TERM } from '@/lib/vedic/termDefinitions';
 import type { DayPanchang, PanchangCity } from '@/lib/vedic/panchangDay';
 import type { PanchangPageKind } from '@/lib/vedic/panchangText';
 
 /** Plain-language explanations of every term used in the day's content (TermTip chips). */
-export function TermChips({ ids }: { ids: Array<[string, string]> }) {
+export function TermChips({ labels }: { labels: string[] }) {
   return (
     <div className="rounded-xl border border-border p-4 mb-6" data-testid="panchang-terms">
       <h2 className="font-semibold text-foreground mb-2">What these terms mean</h2>
       <p className="text-sm text-muted-foreground mb-2">Tap any term for a plain-language explanation.</p>
       <ul className="flex flex-wrap gap-2 text-sm">
-        {ids.map(([id, label]) => <li key={id} className="rounded-full border border-border px-3 py-1"><TermTip id={id}>{label}</TermTip></li>)}
+        {labels.map(label => <li key={label} className="rounded-full border border-border px-3 py-1"><TermTip id={PANCHANG_PAGE_TERM[label]}>{label}</TermTip></li>)}
       </ul>
     </div>
   );

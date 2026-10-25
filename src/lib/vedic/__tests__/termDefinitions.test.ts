@@ -3,7 +3,7 @@ import { readFileSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
 import {
   VEDIC_TERMS, getTermDef, glossInline, termSlug, glossaryHref, searchGlossary, glossaryEntries,
-  CATEGORY_LABELS, PORUTHAM_TERM, MATCH_DOSHA_TERM, CHOGHADIYA_TERM, yogaTermId, type TermCategory,
+  CATEGORY_LABELS, PORUTHAM_TERM, MATCH_DOSHA_TERM, CHOGHADIYA_TERM, PANCHANG_PAGE_TERM, yogaTermId, type TermCategory,
 } from '../termDefinitions';
 
 // ── helpers: scan the real UI source for every term key it uses ──────────────────────
@@ -81,7 +81,7 @@ describe('Glossary — every term key used in the UI has a definition', () => {
   });
 
   it('the exported key maps resolve (poruthams, matching doshas, Choghadiya, yogas, Rahu/Ketu)', () => {
-    for (const id of [...Object.values(PORUTHAM_TERM), ...Object.values(MATCH_DOSHA_TERM), ...Object.values(CHOGHADIYA_TERM), 'rahu', 'ketu']) {
+    for (const id of [...Object.values(PORUTHAM_TERM), ...Object.values(MATCH_DOSHA_TERM), ...Object.values(CHOGHADIYA_TERM), ...Object.values(PANCHANG_PAGE_TERM), 'rahu', 'ketu']) {
       expect(getTermDef(id), id).toBeTruthy();
     }
     for (const name of ['Raj Yoga', 'Dhana Yoga', 'Gaja Kesari Yoga', 'Budha-Aditya Yoga', 'Chandra-Mangal Yoga',

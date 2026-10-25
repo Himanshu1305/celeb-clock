@@ -1269,6 +1269,14 @@ export const MATCH_DOSHA_TERM: Record<string, string> = {
 };
 
 /** Map a Choghadiya slot name (panchangDay.ts) to its glossary id. */
+/** Batch 7 (W7): label → term id for the "What these terms mean" chips on the Panchang pages. */
+export const PANCHANG_PAGE_TERM: Record<string, string> = {
+  Panchang: 'panchang', Tithi: 'tithi', Paksha: 'paksha', Nakshatra: 'panchangNakshatra', Yoga: 'panchangYoga',
+  Karana: 'karana', Vara: 'vara', 'Brahma Muhurta': 'brahmaMuhurta', 'Abhijit Muhurta': 'abhijit', 'Amrit Kalam': 'amritKalam',
+  'Rahu Kaal': 'rahuKalam', 'Gulika Kaal': 'gulikaKaal', Yamaganda: 'yamaganda', 'Dur Muhurtam': 'durMuhurtam',
+  Varjyam: 'varjyam', Choghadiya: 'choghadiya',
+};
+
 export const CHOGHADIYA_TERM: Record<string, string> = {
   Amrit: 'choghAmrit', Shubh: 'choghShubh', Labh: 'choghLabh', Char: 'choghChar',
   Udveg: 'choghUdveg', Kaal: 'choghKaal', Rog: 'choghRog',

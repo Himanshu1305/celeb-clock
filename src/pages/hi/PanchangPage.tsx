@@ -169,7 +169,9 @@ export default function HindiPanchangPage() {
             <div className="rounded-xl border border-border p-4" data-testid="hi-panchang-sun">
               <h2 className="font-semibold text-foreground mb-2">सूर्य</h2>
               <div className="text-sm text-muted-foreground">सूर्योदय <strong className="text-foreground tabular-nums">{p.sunrise}</strong> · सूर्यास्त <strong className="text-foreground tabular-nums">{p.sunset}</strong></div>
-              <div className="text-sm text-muted-foreground mt-1"><TermTip id="abhijit" lang="hi">अभिजित मुहूर्त</TermTip> <strong className="text-emerald-700 tabular-nums">{p.abhijit.start}–{p.abhijit.end}</strong></div>
+              <div className="text-sm text-muted-foreground mt-1"><TermTip id="abhijit" lang="hi">अभिजित मुहूर्त</TermTip> {p.abhijitApplies
+                ? <strong className="text-emerald-700 tabular-nums">{p.abhijit.start}–{p.abhijit.end}</strong>
+                : <span>बुधवार को नहीं लिया जाता (इस दिन यह दुर्मुहूर्त होता है)</span>}</div>
             </div>
             <div className="rounded-xl border border-border p-4" data-testid="hi-panchang-windows">
               <h2 className="font-semibold text-foreground mb-2">अशुभ काल</h2>

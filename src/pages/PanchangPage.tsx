@@ -19,12 +19,7 @@ import { PanchangControls } from '@/components/panchang/PanchangControls';
 import { CityLinks, TermChips } from '@/components/panchang/PanchangSections';
 import { HINDI_PANCHANG_SLUGS } from '@/lib/seo/panchangSlugs';
 
-const TERMS: Array<[string, string]> = [
-  ['panchang', 'Panchang'], ['tithi', 'Tithi'], ['paksha', 'Paksha'], ['panchangNakshatra', 'Nakshatra'], ['panchangYoga', 'Yoga'],
-  ['karana', 'Karana'], ['vara', 'Vara'], ['brahmaMuhurta', 'Brahma Muhurta'], ['abhijit', 'Abhijit Muhurta'], ['amritKalam', 'Amrit Kalam'],
-  ['rahuKalam', 'Rahu Kaal'], ['gulikaKaal', 'Gulika Kaal'], ['yamaganda', 'Yamaganda'], ['durMuhurtam', 'Dur Muhurtam'],
-  ['varjyam', 'Varjyam'], ['choghadiya', 'Choghadiya'],
-];
+const TERMS = ['Panchang', 'Tithi', 'Paksha', 'Nakshatra', 'Yoga', 'Karana', 'Vara', 'Brahma Muhurta', 'Abhijit Muhurta', 'Amrit Kalam', 'Rahu Kaal', 'Gulika Kaal', 'Yamaganda', 'Dur Muhurtam', 'Varjyam', 'Choghadiya'];
 
 export default function PanchangPage() {
   const ctl = usePanchangPlace('panchang');
@@ -60,7 +55,7 @@ export default function PanchangPage() {
             <p className="text-sm mb-6"><Link to="/hi/panchang" className="text-primary hover:underline">हिन्दी में देखें →</Link></p>
           )}
 
-          <TermChips ids={TERMS} />
+          <TermChips labels={TERMS} />
 
           <div className="rounded-xl border border-border p-4 mb-6 text-sm text-muted-foreground space-y-2" data-testid="panchang-how">
             <h2 className="font-semibold text-foreground">How this Panchang is worked out</h2>
