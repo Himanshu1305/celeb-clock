@@ -33,8 +33,14 @@ function priority(route) {
   return '0.6';
 }
 
+// Batch 7: daily-changing pages (src/lib/daily/registry.ts) — content changes every
+// India day, so they are marked daily with the build date as lastmod.
+const DAILY_ROUTE = /^\/(?:rashifal\/[a-z]+\/today|hi\/rashifal\/[a-z]+|zodiac\/[a-z]+\/today)$/;
+const BUILD_DATE = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
+
 function changefreq(route) {
   if (route === '/') return 'daily';
+  if (DAILY_ROUTE.test(route)) return 'daily';
   if (route.startsWith('/blog/')) return 'monthly';
   if (route.startsWith('/birthday/') && route.split('/').length === 4) return 'monthly';
   if (route.startsWith('/born-on/')) return 'monthly';
@@ -59,7 +65,7 @@ async function main() {
     const loc = `${BASE_URL}${escapeXml(path)}`;
     const prio = priority(route);
     const freq = changefreq(route);
-    return `  <url><loc>${loc}</loc><lastmod>${TODAY}</lastmod><changefreq>${freq}</changefreq><priority>${prio}</priority></url>`;
+    return `  <url><loc>${loc}</loc><lastmod>${DAILY_ROUTE.test(route) ? BUILD_DATE : TODAY}</lastmod><changefreq>${freq}</changefreq><priority>${prio}</priority></url>`;
   });
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

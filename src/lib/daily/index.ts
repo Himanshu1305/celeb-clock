@@ -37,7 +37,8 @@
  *        <DailyDate entry={entry} /> … <DailyBody entry={entry} /> <DailyJsonLd entry={entry} path={path} />
  *      Static explanations (TermTip glossary chips, links) go OUTSIDE <DailyBody>.
  *   d) Make sure the route is in scripts/prerender-routes.mjs (and so the sitemap),
- *      with a static title in scripts/prerender-titles.mjs (the Worker replaces it daily).
+ *      with a static title in scripts/prerender-titles.mjs (the Worker replaces it daily),
+ *      and add its pattern to DAILY_ROUTE in scripts/generate-sitemap.mjs (changefreq daily).
  *
  * Files: types.ts · dates.ts · registry.ts · render.ts · inject.ts · DailyParts.tsx ·
  *        useDailyEntry.ts · compute.ts · kinds/* · scripts/gen-daily.mts · functions/daily.ts
