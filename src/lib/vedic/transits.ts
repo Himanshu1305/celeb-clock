@@ -157,3 +157,51 @@ function makeRetroPeriod(planet: PlanetName, startDate: Date, endDate: Date): Re
     signAtEnd: signNameAt(planet, endDate),
   };
 }
+
+// ── Stations (turning retrograde / direct) — Batch 7 W4, transit alert emails ──────
+export interface PlanetStation {
+  planet: PlanetName;
+  /** 'retrograde' = the planet stops and starts moving backwards; 'direct' = it turns forward again. */
+  kind: 'retrograde' | 'direct';
+  /** Station instant (ms), refined to ~1 minute. Stations are gradual (the planet is
+   *  almost still for days), so show the DATE, not the minute, to users. */
+  atMs: number;
+}
+
+/** Apparent sidereal motion in degrees/day at an instant, from a ±1 hour difference. */
+function motionAt(planet: PlanetName, ms: number): number {
+  const h = 3600_000;
+  let d = getSiderealLongitude(planet, new Date(ms + h)) - getSiderealLongitude(planet, new Date(ms - h));
+  if (d > 180) d -= 360;
+  if (d < -180) d += 360;
+  return d * 12; // 2-hour span → per day
+}
+
+/**
+ * Every station of a planet in [start, end]: daily sampling of the motion's sign, then
+ * bisection to ~1 minute. Mercury's retrograde (the shortest, ~3 weeks) is far longer
+ * than the 1-day step, so no station pair is skipped. Not meaningful for the Sun and
+ * Moon (never retrograde) or for the mean Rahu/Ketu (always retrograde).
+ */
+export function planetStations(planet: PlanetName, start: Date, end: Date): PlanetStation[] {
+  const out: PlanetStation[] = [];
+  const DAY = 86400_000;
+  let prevMs = start.getTime();
+  let prevRetro = motionAt(planet, prevMs) < 0;
+  for (let t = prevMs + DAY; ; t += DAY) {
+    const tt = Math.min(t, end.getTime());
+    const retro = motionAt(planet, tt) < 0;
+    if (retro !== prevRetro) {
+      let a = prevMs, b = tt;
+      while (b - a > 60_000) {
+        const m = (a + b) / 2;
+        if ((motionAt(planet, m) < 0) === prevRetro) a = m; else b = m;
+      }
+      out.push({ planet, kind: retro ? 'retrograde' : 'direct', atMs: Math.round((a + b) / 2) });
+      prevRetro = retro;
+    }
+    prevMs = tt;
+    if (tt >= end.getTime()) break;
+  }
+  return out;
+}
