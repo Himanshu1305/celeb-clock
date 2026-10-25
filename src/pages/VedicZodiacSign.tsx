@@ -9,6 +9,10 @@ import {
   RASHI_NAME_TO_SLUG,
 } from '@/services/VedicZodiacExtended';
 import { VEDIC_SIGNS, currentAyanamsaDeg } from '@/services/VedicZodiacService';
+import { RASHI_NAMES } from '@/lib/vedic/engine/vedicEngine';
+// Batch 6: real Moon-sign examples (scripts/gen-rashi-moon-examples.mts), replacing
+// the old list that was picked by Western SUN sign.
+import RASHI_MOON_EXAMPLES from '@/data/rashiMoonExamples.json';
 
 // N12: live Lahiri ayanamsa from the chart engine (not a fixed 23.85°).
 const AYANAMSA_NOW = currentAyanamsaDeg().toFixed(2);
@@ -23,6 +27,8 @@ export default function VedicZodiacSign() {
 
   const signInfo = VEDIC_SIGNS.find((s) => s.name === rashiName);
   if (!signInfo) return <Navigate to="/vedic-zodiac" replace />;
+  const engineRashi = RASHI_NAMES[VEDIC_SIGNS.indexOf(signInfo)];
+  const moonExamples = (RASHI_MOON_EXAMPLES as Record<string, { global: { name: string; slug: string; born: number }[] }>)[engineRashi]?.global ?? [];
 
   const idx = RASHI_SLUGS_ORDER.indexOf(slug);
   const prevSlug = RASHI_SLUGS_ORDER[(idx - 1 + 12) % 12];
@@ -235,14 +241,18 @@ export default function VedicZodiacSign() {
           {/* Famous People */}
           <Card className="glass-card">
             <CardContent className="p-6 md:p-8">
-              <h2 className="text-2xl font-bold mb-6 text-foreground">Famous {rashiName} Natives</h2>
+              <h2 className="text-2xl font-bold mb-2 text-foreground">Famous People with the Moon in {rashiName}</h2>
+              <p className="text-xs text-muted-foreground mb-6">
+                {rashiName} Rashi means the Moon (not the Sun) was in {rashiName} at birth. These people are listed only because the
+                Moon stayed in {rashiName} for their whole birth date, so their birth time does not change it.
+              </p>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                {data.famous_people.map((p) => (
-                  <div key={p.name} className="text-center p-3 bg-muted/30 rounded-lg">
+                {moonExamples.map((p) => (
+                  <Link key={p.slug} to={`/celebrity/${p.slug}`} className="text-center p-3 bg-muted/30 rounded-lg hover:bg-muted/50">
                     <div className="text-2xl mb-1">{signInfo.emoji}</div>
                     <p className="text-xs font-semibold text-foreground">{p.name}</p>
                     <p className="text-xs text-muted-foreground">b. {p.born}</p>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </CardContent>

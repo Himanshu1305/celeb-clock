@@ -1,0 +1,494 @@
+{
+ "Karka": {
+  "global": [
+   {
+    "name": "Nicolaus Copernicus",
+    "slug": "nicolaus-copernicus",
+    "born": 1473
+   },
+   {
+    "name": "Volodymyr Zelenskyy",
+    "slug": "volodymyr-zelenskyy",
+    "born": 1978
+   },
+   {
+    "name": "Mikhail Gorbachev",
+    "slug": "mikhail-gorbachev",
+    "born": 1931
+   },
+   {
+    "name": "James Joyce",
+    "slug": "james-joyce",
+    "born": 1882
+   },
+   {
+    "name": "Marlene Dietrich",
+    "slug": "marlene-dietrich",
+    "born": 1901
+   }
+  ],
+  "indian": [
+   {
+    "name": "Jawaharlal Nehru",
+    "slug": "jawaharlal-nehru",
+    "born": 1889
+   },
+   {
+    "name": "Manmohan Singh",
+    "slug": "manmohan-singh",
+    "born": 1932
+   }
+  ]
+ },
+ "Kanya": {
+  "global": [
+   {
+    "name": "Fidel Castro",
+    "slug": "fidel-castro",
+    "born": 1926
+   },
+   {
+    "name": "Jane Austen",
+    "slug": "jane-austen",
+    "born": 1775
+   },
+   {
+    "name": "Agatha Christie",
+    "slug": "agatha-christie",
+    "born": 1890
+   },
+   {
+    "name": "Bertrand Russell",
+    "slug": "bertrand-russell",
+    "born": 1872
+   },
+   {
+    "name": "Lech Wałęsa",
+    "slug": "lech-wa-sa",
+    "born": 1943
+   }
+  ],
+  "indian": [
+   {
+    "name": "Subhas Chandra Bose",
+    "slug": "subhas-chandra-bose",
+    "born": 1897
+   },
+   {
+    "name": "Swami Vivekananda",
+    "slug": "swami-vivekananda",
+    "born": 1863
+   }
+  ]
+ },
+ "Mithuna": {
+  "global": [
+   {
+    "name": "Isaac Newton",
+    "slug": "isaac-newton",
+    "born": 1643
+   },
+   {
+    "name": "Franklin Delano Roosevelt",
+    "slug": "franklin-delano-roosevelt",
+    "born": 1882
+   },
+   {
+    "name": "George Orwell",
+    "slug": "george-orwell",
+    "born": 1903
+   },
+   {
+    "name": "Francisco Goya",
+    "slug": "francisco-goya",
+    "born": 1746
+   },
+   {
+    "name": "Michael Schumacher",
+    "slug": "michael-schumacher",
+    "born": 1969
+   }
+  ],
+  "indian": [
+   {
+    "name": "Bhimrao Ambedkar",
+    "slug": "bhimrao-ambedkar",
+    "born": 1891
+   },
+   {
+    "name": "Annie Besant",
+    "slug": "annie-besant",
+    "born": 1847
+   }
+  ]
+ },
+ "Meena": {
+  "global": [
+   {
+    "name": "Bill Gates",
+    "slug": "bill-gates",
+    "born": 1955
+   },
+   {
+    "name": "Salvador Dalí",
+    "slug": "salvador-dal",
+    "born": 1904
+   },
+   {
+    "name": "Steve Jobs",
+    "slug": "steve-jobs",
+    "born": 1955
+   },
+   {
+    "name": "Charles de Gaulle",
+    "slug": "charles-de-gaulle",
+    "born": 1890
+   },
+   {
+    "name": "Nicolas Sarkozy",
+    "slug": "nicolas-sarkozy",
+    "born": 1955
+   }
+  ],
+  "indian": [
+   {
+    "name": "Bal Gangadhar Tilak",
+    "slug": "bal-gangadhar-tilak",
+    "born": 1856
+   },
+   {
+    "name": "Srinivasa Ramanujan",
+    "slug": "srinivasa-ramanujan",
+    "born": 1887
+   }
+  ]
+ },
+ "Vrischika": {
+  "global": [
+   {
+    "name": "Albert Einstein",
+    "slug": "albert-einstein",
+    "born": 1879
+   },
+   {
+    "name": "Pablo Picasso",
+    "slug": "pablo-picasso",
+    "born": 1881
+   },
+   {
+    "name": "Friedrich Nietzsche",
+    "slug": "friedrich-nietzsche",
+    "born": 1844
+   },
+   {
+    "name": "Raphael",
+    "slug": "raphael",
+    "born": 1483
+   },
+   {
+    "name": "Recep Tayyip Erdoğan",
+    "slug": "recep-tayyip-erdo-an",
+    "born": 1954
+   }
+  ],
+  "indian": [
+   {
+    "name": "Sardar Vallabhbhai Patel",
+    "slug": "sardar-vallabhbhai-patel",
+    "born": 1875
+   },
+   {
+    "name": "Bipin Chandra Pal",
+    "slug": "bipin-chandra-pal",
+    "born": 1858
+   }
+  ]
+ },
+ "Kumbha": {
+  "global": [
+   {
+    "name": "Michael Jackson",
+    "slug": "michael-jackson",
+    "born": 1958
+   },
+   {
+    "name": "Johann Sebastian Bach",
+    "slug": "johann-sebastian-bach",
+    "born": 1685
+   },
+   {
+    "name": "Elvis Presley",
+    "slug": "elvis-presley",
+    "born": 1935
+   },
+   {
+    "name": "Benjamin Franklin",
+    "slug": "benjamin-franklin",
+    "born": 1706
+   },
+   {
+    "name": "Albert Camus",
+    "slug": "albert-camus",
+    "born": 1913
+   }
+  ],
+  "indian": [
+   {
+    "name": "Gopal Krishna Gokhale",
+    "slug": "gopal-krishna-gokhale",
+    "born": 1866
+   },
+   {
+    "name": "Kabir Das",
+    "slug": "kabir-das",
+    "born": 1440
+   }
+  ]
+ },
+ "Tula": {
+  "global": [
+   {
+    "name": "Charlie Chaplin",
+    "slug": "charlie-chaplin",
+    "born": 1889
+   },
+   {
+    "name": "Harry S. Truman",
+    "slug": "harry-s-truman",
+    "born": 1884
+   },
+   {
+    "name": "Lady Gaga",
+    "slug": "lady-gaga",
+    "born": 1986
+   },
+   {
+    "name": "Dwight D. Eisenhower",
+    "slug": "dwight-d-eisenhower",
+    "born": 1890
+   },
+   {
+    "name": "Jules Verne",
+    "slug": "jules-verne",
+    "born": 1828
+   }
+  ],
+  "indian": [
+   {
+    "name": "Ram Prasad Bismil",
+    "slug": "ram-prasad-bismil",
+    "born": 1897
+   },
+   {
+    "name": "Satyen Bose",
+    "slug": "satyen-bose",
+    "born": 1894
+   }
+  ]
+ },
+ "Vrishabha": {
+  "global": [
+   {
+    "name": "Fyodor Dostoyevsky",
+    "slug": "fyodor-dostoyevsky",
+    "born": 1821
+   },
+   {
+    "name": "Sigmund Freud",
+    "slug": "sigmund-freud",
+    "born": 1856
+   },
+   {
+    "name": "Lionel Messi",
+    "slug": "lionel-messi",
+    "born": 1987
+   },
+   {
+    "name": "Le Corbusier",
+    "slug": "le-corbusier",
+    "born": 1887
+   },
+   {
+    "name": "Frida Kahlo",
+    "slug": "frida-kahlo",
+    "born": 1907
+   }
+  ],
+  "indian": [
+   {
+    "name": "Vinoba Bhave",
+    "slug": "vinoba-bhave",
+    "born": 1895
+   },
+   {
+    "name": "Mata Amritanandamayi",
+    "slug": "mata-amritanandamayi",
+    "born": 1953
+   }
+  ]
+ },
+ "Simha": {
+  "global": [
+   {
+    "name": "Winston Churchill",
+    "slug": "winston-churchill",
+    "born": 1874
+   },
+   {
+    "name": "Corbin Bleu",
+    "slug": "corbin-bleu",
+    "born": 1989
+   },
+   {
+    "name": "Margaret Thatcher",
+    "slug": "margaret-thatcher",
+    "born": 1925
+   },
+   {
+    "name": "Elon Musk",
+    "slug": "elon-musk",
+    "born": 1971
+   },
+   {
+    "name": "Lyndon B. Johnson",
+    "slug": "lyndon-b-johnson",
+    "born": 1908
+   }
+  ],
+  "indian": [
+   {
+    "name": "Bankim Chandra Chattopadhyay",
+    "slug": "bankim-chandra-chattopadhyay",
+    "born": 1838
+   },
+   {
+    "name": "Maharishi Mahesh Yogi",
+    "slug": "maharishi-mahesh-yogi",
+    "born": 1917
+   }
+  ]
+ },
+ "Makara": {
+  "global": [
+   {
+    "name": "David Woodard",
+    "slug": "david-woodard",
+    "born": 1964
+   },
+   {
+    "name": "Abraham Lincoln",
+    "slug": "abraham-lincoln",
+    "born": 1809
+   },
+   {
+    "name": "Napoleon",
+    "slug": "napoleon",
+    "born": 1769
+   },
+   {
+    "name": "Voltaire",
+    "slug": "voltaire",
+    "born": 1694
+   },
+   {
+    "name": "Angela Merkel",
+    "slug": "angela-merkel",
+    "born": 1954
+   }
+  ],
+  "indian": [
+   {
+    "name": "Ram Mohan Roy",
+    "slug": "ram-mohan-roy",
+    "born": 1772
+   },
+   {
+    "name": "Baba Ramdev",
+    "slug": "baba-ramdev",
+    "born": 1965
+   }
+  ]
+ },
+ "Dhanu": {
+  "global": [
+   {
+    "name": "Thomas Edison",
+    "slug": "thomas-edison",
+    "born": 1847
+   },
+   {
+    "name": "Neil Armstrong",
+    "slug": "neil-armstrong",
+    "born": 1930
+   },
+   {
+    "name": "Ernest Hemingway",
+    "slug": "ernest-hemingway",
+    "born": 1899
+   },
+   {
+    "name": "Naruhito",
+    "slug": "naruhito",
+    "born": 1960
+   },
+   {
+    "name": "Freddie Mercury",
+    "slug": "freddie-mercury",
+    "born": 1946
+   }
+  ],
+  "indian": [
+   {
+    "name": "Sri Aurobindo",
+    "slug": "sri-aurobindo",
+    "born": 1872
+   },
+   {
+    "name": "Osho Rajneesh",
+    "slug": "osho-rajneesh",
+    "born": 1931
+   }
+  ]
+ },
+ "Mesha": {
+  "global": [
+   {
+    "name": "Joe Biden",
+    "slug": "joe-biden",
+    "born": 1942
+   },
+   {
+    "name": "René Descartes",
+    "slug": "ren-descartes",
+    "born": 1596
+   },
+   {
+    "name": "Che Guevara",
+    "slug": "che-guevara",
+    "born": 1928
+   },
+   {
+    "name": "Jean-Jacques Rousseau",
+    "slug": "jean-jacques-rousseau",
+    "born": 1712
+   },
+   {
+    "name": "Emmanuel Macron",
+    "slug": "emmanuel-macron",
+    "born": 1977
+   }
+  ],
+  "indian": [
+   {
+    "name": "Subrahmanyan Chandrasekhar",
+    "slug": "subrahmanyan-chandrasekhar",
+    "born": 1910
+   },
+   {
+    "name": "Asha Bhosle",
+    "slug": "asha-bhosle",
+    "born": 1933
+   }
+  ]
+ }
+}
