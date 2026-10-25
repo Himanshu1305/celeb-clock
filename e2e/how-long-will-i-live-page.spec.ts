@@ -365,10 +365,10 @@ test.describe('How Long Will I Live Page', () => {
     expect(await page.locator('a[href*="how-long-will-i-live"]').count()).toBeGreaterThanOrEqual(1);
   });
 
-  test('TC-E2E-45: /biological-age-calculator links to this page', async ({ page }) => {
+  // Batch 6 (SEO): /biological-age-calculator was a duplicate of /biological-age and now 301s there.
+  test('TC-E2E-45: retired /biological-age-calculator redirects to /biological-age/', async ({ page }) => {
     await page.goto(`${BASE}/biological-age-calculator`);
-    await expect(page.locator('a[href*="how-long-will-i-live"]').first()).toBeVisible();
-    expect(await page.locator('a[href*="how-long-will-i-live"]').count()).toBeGreaterThanOrEqual(1);
+    expect(new URL(page.url()).pathname).toBe('/biological-age/');
   });
 
   test('TC-E2E-46: no undefined or [object Object] in page', async ({ page }) => {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateBornOnTitle, generateBornOnMeta } from '../seoHelpers';
+import { generateBornOnTitle, generateBornOnMeta, generateBornOnIndiaTitle, generateBornOnIndiaMeta } from '../seoHelpers';
 
 // ── Test data ────────────────────────────────────────────────
 const MANY = [
@@ -185,4 +185,30 @@ describe('generateBornOnMeta', () => {
     expect(m).not.toContain('August 06');
   });
 
+});
+
+// ── Batch 6: India facet must not share the global date page's title/meta ─────
+describe('generateBornOnIndiaTitle / generateBornOnIndiaMeta', () => {
+  it('says "Indian" and differs from the global title for the same date', () => {
+    const india = generateBornOnIndiaTitle('November', 5, TWO);
+    expect(india).toBe('Indian Celebrities Born on November 5: Virat Kohli & More | BornClock');
+    expect(india).not.toBe(generateBornOnTitle('November', 5, TWO));
+  });
+  it('falls back to the plain India title when a name would overflow 70 chars', () => {
+    const t = generateBornOnIndiaTitle('September', 23, LONG);
+    expect(t).toBe('Indian Celebrities Born on September 23 | BornClock');
+    expect(t.length).toBeLessThanOrEqual(70);
+  });
+  it('no celebrities → plain India title; "06" → 6', () => {
+    expect(generateBornOnIndiaTitle('August', '06', EMPTY)).toBe('Indian Celebrities Born on August 6 | BornClock');
+  });
+  it('meta names Indians, uses the known total, stays ≤160', () => {
+    const m = generateBornOnIndiaMeta('November', 5, TWO, 12);
+    expect(m.startsWith('12 famous Indians share the November 5 birthday, including Virat Kohli and Kader Khan.')).toBe(true);
+    expect(m.length).toBeLessThanOrEqual(160);
+    expect(m).not.toBe(generateBornOnMeta('November', 5, TWO));
+  });
+  it('meta with no names is still India-specific', () => {
+    expect(generateBornOnIndiaMeta('August', 6, EMPTY)).toContain('Famous Indians born on August 6');
+  });
 });

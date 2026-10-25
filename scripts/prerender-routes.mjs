@@ -52,8 +52,6 @@ const BIRTHSTONE_MONTHS = [
 
 const NUMEROLOGY_NUMBERS = [1,2,3,4,5,6,7,8,9,11,22,33];
 
-// Days per month (non-leap for prerender; feb-29 handled by born-on pages)
-const MONTH_DAYS = [0,31,28,31,30,31,30,31,31,30,31,30,31];
 
 const BLOG_SLUGS = [
   'calculate-exact-age-seconds-minutes-hours',
@@ -126,11 +124,12 @@ const MONTH_NAMES_LOWER = [
 // Including feb-29 (leap day)
 const MONTH_DAYS_BORN_ON = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-// Generate all valid month/day birthday route combinations
+// Generate all valid month/day birthday route combinations — including Feb 29
+// (Batch 6: /birthday/2/29 is the kept target of the retired february/29/personality URL).
 function birthdayDateRoutes() {
   const routes = [];
   for (let m = 1; m <= 12; m++) {
-    for (let d = 1; d <= MONTH_DAYS[m]; d++) {
+    for (let d = 1; d <= MONTH_DAYS_BORN_ON[m]; d++) {
       routes.push(`/birthday/${m}/${d}`);
     }
   }
@@ -161,27 +160,10 @@ function bornOnRoutes() {
   return routes;
 }
 
-// Task 29 — 366 GLOBAL born-on routes: /born-on/:month/:day/ (canonical → /india/ variant).
-const GLOBAL_BORN_ON_ROUTES = (() => {
-  const routes = [];
-  for (let m = 1; m <= 12; m++) {
-    for (let d = 1; d <= MONTH_DAYS_BORN_ON[m]; d++) {
-      routes.push(`/born-on/${MONTH_NAMES_LOWER[m]}/${d}`);
-    }
-  }
-  return routes;
-})();
-
-// Task 17 — 366 date-personality routes: /born-on/:month/:day/personality/
-const PERSONALITY_ROUTES = (() => {
-  const routes = [];
-  for (let m = 1; m <= 12; m++) {
-    for (let d = 1; d <= MONTH_DAYS_BORN_ON[m]; d++) {
-      routes.push(`/born-on/${MONTH_NAMES_LOWER[m]}/${d}/personality`);
-    }
-  }
-  return routes;
-})();
+// Batch 6 SEO: the 366 /born-on/:month/:day "global" pages and the 366
+// /born-on/:month/:day/personality pages were duplicates and are retired (301 in
+// functions/_worker.ts via src/lib/seo/duplicateRedirects.ts) — to /born-on/:month-:day/
+// and /birthday/:m/:d/ respectively — so they are no longer prerendered or in the sitemap.
 
 export const STATIC_ROUTES = [
   '/',
@@ -200,8 +182,7 @@ export const STATIC_ROUTES = [
   // Day-3 growth page — high-value global keyword "longevity calculator"; kept near
   // the front so it prerenders within the 25-min budget (before the born-on tail).
   '/longevity-calculator',
-  // Day-4 growth page — "biological age calculator" (~75K/mo, Bryan Johnson trend).
-  '/biological-age-calculator',
+  // (Batch 6: /biological-age-calculator retired → 301 to /biological-age.)
   // Day-5 growth page — "how long will I live" (~200K/mo, highest-volume of the three).
   '/how-long-will-i-live',
   // SEO Batch 1 — kept near the front so they prerender within the time budget.
@@ -266,7 +247,6 @@ export const STATIC_ROUTES = [
   '/articles/moon-sign-by-date-of-birth',
   '/articles/life-expectancy-by-country-2026',
   '/articles/how-long-will-i-live-in-india',
-  '/articles/biological-age-vs-chronological-age',
   '/articles/vedic-astrology-birth-chart',
   '/articles/longevity-quiz',
   '/articles/bryan-johnson-blueprint-alternative',
@@ -278,10 +258,6 @@ export const STATIC_ROUTES = [
   '/articles/life-path-number-compatibility',
   '/articles/death-clock-alternative',
   '/articles/retirement-planning-life-expectancy',
-  '/life-expectancy-calculator-uk',
-  '/life-expectancy-calculator-australia',
-  '/life-expectancy-calculator-usa',
-  '/life-expectancy-calculator-canada',
   '/articles/zodiac-compatibility',
   '/articles/biorhythm-calculator',
   '/articles/tarot-card-by-date-of-birth',
@@ -313,8 +289,6 @@ export const STATIC_ROUTES = [
   '/hi/numerology-by-date-of-birth',
   '/hi/meri-jeevan-pratyasha',
   '/life-expectancy-calculator-singapore-uae',
-  ...GLOBAL_BORN_ON_ROUTES,
-  ...PERSONALITY_ROUTES,
   '/gift',
   '/coach',
   '/chinese-zodiac',

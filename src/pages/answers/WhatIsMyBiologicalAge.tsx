@@ -4,7 +4,7 @@ import { ArticleLayout } from '@/components/central';
 
 export default function WhatIsMyBiologicalAge() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "What is my biological age?", "item": "https://bornclock.com/answers/what-is-my-biological-age" } ] };
-  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "What Is Biological Age and How Is It Different From My Real Age?", "description": "Biological age measures how your body is actually aging vs your calendar age. It can differ by 10+ years. Estimate yours free with 12 WHO-validated lifestyle biomarkers.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/answers/what-is-my-biological-age" };
+  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "What Is My Biological Age? The Short Answer", "description": "Biological age measures how your body is actually aging vs your calendar age. It can differ by 10+ years. Estimate yours free with 12 WHO-validated lifestyle biomarkers.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/answers/what-is-my-biological-age" };
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -22,7 +22,7 @@ export default function WhatIsMyBiologicalAge() {
       testId="answer-what-is-my-biological-age"
       seo={(
         <SEO
-          title="What Is Biological Age? How It Differs From Chronological Age | BornClock"
+          title="What Is My Biological Age? The Short Answer + Free Test | BornClock"
           description="Biological age measures how your body is actually aging vs your calendar age. It can differ by 10+ years. Estimate yours free with 12 WHO-validated lifestyle biomarkers."
           canonicalUrl="/answers/what-is-my-biological-age"
           ogType="article"
@@ -30,7 +30,7 @@ export default function WhatIsMyBiologicalAge() {
       )}
       breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What is biological age?' }}
       eyebrow="Answers"
-      h1={<>What Is Biological Age and How Is It Different From My Real Age?</>}
+      h1={<>What Is My Biological Age? The Short Answer</>}
       lead={<>Know your time. Live it well.</>}
     >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
@@ -97,6 +97,7 @@ export default function WhatIsMyBiologicalAge() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
+              <Link to="/biological-age-vs-chronological-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ Biological vs chronological age: the full science</Link>
               <Link to="/answers/how-long-will-i-live" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How long will I live?</Link>
               <Link to="/answers/what-is-bmi" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is BMI and what does my number mean?</Link>
               <Link to="/answers/how-to-live-longer" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How to live longer: what science actually says</Link>

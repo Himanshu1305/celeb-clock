@@ -88,7 +88,7 @@ export default function OnThisDayEvents() {
 
           <div className="rounded-xl bg-muted/40 p-5 text-sm text-muted-foreground">
             Want the full birthday picture?{' '}
-            <Link to={`/born-on/${monthSlug}/${day}`} className="underline text-foreground">
+            <Link to={`/born-on/${monthSlug}-${day}/`} className="underline text-foreground">
               See the famous people born on {dateLabel} →
             </Link>
             {' '}or{' '}

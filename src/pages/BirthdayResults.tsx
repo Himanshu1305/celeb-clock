@@ -348,7 +348,7 @@ const BirthdayResults = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary">6 Celebrity Matches</Badge>
-                  <Link to={`/birthday/${birthdaySlug}`} className="text-xs text-primary hover:underline hidden sm:inline">
+                  <Link to={`/born-on/${birthdaySlug}/`} className="text-xs text-primary hover:underline hidden sm:inline">
                     See all celebrities born on {monthDayLabel} →
                   </Link>
                 </div>

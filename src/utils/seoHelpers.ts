@@ -80,6 +80,52 @@ export function generateBornOnMeta(
   return withShort.slice(0, 157) + '...';
 }
 
+// ── Indian born-on facet (/born-on/:slug/india) ───────────────
+// Batch 6 SEO: the India page used the same title/meta as the global date page, so
+// the two competed for the same query. These India-specific variants say "Indian"
+// up front. Mirrored in scripts/prerender-titles.mjs (bornOnIndiaTitle/Meta) — keep
+// the two in sync.
+
+/** e.g. "Indian Celebrities Born on August 6: Kajol & More | BornClock" (≤70 chars). */
+export function generateBornOnIndiaTitle(
+  month: string,
+  day: number | string,
+  celebrities: Array<{ name: string }> = []
+): string {
+  const dayNum = Number(day);
+  const base = `Indian Celebrities Born on ${month} ${dayNum}`;
+  const first = celebrities?.[0]?.name || '';
+  if (first) {
+    const full = `${base}: ${first} & More | BornClock`;
+    if (full.length <= 70) return full;
+  }
+  return `${base} | BornClock`;
+}
+
+/** India meta description (≤160 chars). `total` overrides the list length when known. */
+export function generateBornOnIndiaMeta(
+  month: string,
+  day: number | string,
+  celebrities: Array<{ name: string }> = [],
+  total?: number
+): string {
+  const dayNum = Number(day);
+  const count = total ?? celebrities?.length ?? 0;
+  const n1 = celebrities?.[0]?.name || '';
+  const n2 = celebrities?.[1]?.name || '';
+  const tail = 'Ranked by global recognition, with ages and professions.';
+  if (!count || !n1) {
+    return `Famous Indians born on ${month} ${dayNum} — actors, cricketers, leaders and more who share this birthday. ${tail}`;
+  }
+  const who = count === 1 ? 'famous Indian shares' : 'famous Indians share';
+  const build = (a: string, b: string) =>
+    `${count} ${who} the ${month} ${dayNum} birthday, including ${a}${b ? ` and ${b}` : ''}. ${tail}`;
+  const full = build(n1, n2);
+  if (full.length <= 160) return full;
+  const short = build(n1.split(' ')[0], n2 ? n2.split(' ')[0] : '');
+  return short.length <= 160 ? short : short.slice(0, 157) + '...';
+}
+
 // ── Months lookup ────────────────────────────────────────────
 const MONTH_TO_NUM: Record<string, string> = {
   January: '01', February: '02', March: '03', April: '04',

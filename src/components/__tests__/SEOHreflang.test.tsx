@@ -2,9 +2,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, cleanup, waitFor } from '@testing-library/react';
 import { HelmetProvider } from 'react-helmet-async';
-import { MemoryRouter } from 'react-router-dom';
 import { SEO } from '../SEO';
-import { LifeExpectancyUKPage } from '../../pages/LifeExpectancyUKPage';
 
 afterEach(cleanup);
 
@@ -19,8 +17,15 @@ describe('SEO hreflang + Open Graph (TC-HRE)', () => {
     })).not.toThrow();
   });
 
-  it('TC-HRE-P-02: UK page has en-GB hreflang', async () => {
-    render(<HelmetProvider><MemoryRouter><LifeExpectancyUKPage /></MemoryRouter></HelmetProvider>);
+  // Batch 6: the UK calculator landing page that carried en-GB hreflang was a duplicate of
+  // /life-expectancy-uk and now 301s there, so hreflang is exercised through SEO directly.
+  const UK_HREFLANG = [
+    { lang: 'en-GB', url: 'https://bornclock.com/life-expectancy-uk/' },
+    { lang: 'x-default', url: 'https://bornclock.com/life-expectancy-uk/' },
+  ];
+
+  it('TC-HRE-P-02: en-GB hreflang is emitted', async () => {
+    renderSEO({ canonicalUrl: '/life-expectancy-uk', hreflang: UK_HREFLANG });
     await waitFor(() => expect(document.head.querySelector('link[rel="alternate"][hreflang="en-GB"]')).toBeTruthy());
   });
 
@@ -39,7 +44,7 @@ describe('SEO hreflang + Open Graph (TC-HRE)', () => {
   });
 
   it('TC-HRE-N-02: no hreflang points to undefined URL', async () => {
-    render(<HelmetProvider><MemoryRouter><LifeExpectancyUKPage /></MemoryRouter></HelmetProvider>);
+    renderSEO({ canonicalUrl: '/life-expectancy-uk', hreflang: UK_HREFLANG });
     await waitFor(() => expect(document.head.querySelector('link[rel="alternate"]')).toBeTruthy());
     document.head.querySelectorAll('link[rel="alternate"]').forEach(l => {
       expect(l.getAttribute('href')).not.toContain('undefined');

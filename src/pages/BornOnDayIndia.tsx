@@ -7,7 +7,7 @@ import { BirthdayReportCTA } from '@/components/BirthdayReportCTA';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { PageFAQ } from '@/components/PageFAQ';
 import { getNationalityCelebritiesForDate, CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
-import { generateBornOnTitle, generateBornOnMeta } from '@/utils/seoHelpers';
+import { generateBornOnIndiaTitle, generateBornOnIndiaMeta } from '@/utils/seoHelpers';
 import { generateAllSlugs } from '@/utils/celebrityUtils';
 import { indianCelebrities } from '@/data/indianCelebrities';
 import { ArrowLeft, ArrowRight, ArrowRightCircle } from 'lucide-react';
@@ -160,8 +160,8 @@ export default function BornOnDayIndia() {
       seo={(
         <>
           <SEO
-            title={generateBornOnTitle(monthName, day, celebs)}
-            description={generateBornOnMeta(monthName, day, celebs)}
+            title={generateBornOnIndiaTitle(monthName, day, celebs)}
+            description={generateBornOnIndiaMeta(monthName, day, celebs)}
             canonicalUrl={`/born-on/${slug}/india`}
             ogType="website"
             ogImage="https://bornclock.com/og/born-on.png"
@@ -230,9 +230,14 @@ export default function BornOnDayIndia() {
           <p className="text-muted-foreground text-sm mb-3">
             See the full global list — plus zodiac sign, birthstone, numerology and calendar facts for {dateLabel}.
           </p>
-          <Link to={`/born-on/${slug}`} className="text-primary hover:underline text-sm">
+          <Link to={`/born-on/${slug}/`} className="text-primary hover:underline text-sm">
             Born on {dateLabel} — full guide →
           </Link>
+          <p className="mt-2 text-sm">
+            <Link to={`/on-this-day/${monthName.toLowerCase()}/${day}/`} className="text-primary hover:underline">
+              What happened on {dateLabel} in history →
+            </Link>
+          </p>
         </div>
 
         {/* FAQ (reuses PageFAQ; JSON-LD prerenders via body script) */}

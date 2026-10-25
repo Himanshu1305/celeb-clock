@@ -12,7 +12,7 @@ const URLS = [
   '/attitude-number', '/chaldean-numerology', '/divisional-charts/d2-hora', '/vedic-zodiac/mesh',
   '/child-kundli', '/life-report', '/career-report', '/pitra-dosha',
   '/western-birth-chart', '/chinese-horoscope/dragon', '/on-this-day/may/13', '/tarot-reading',
-  '/celebrity/virat-kohli', '/born-on/may/13', '/how-it-works',
+  '/celebrity/virat-kohli', '/born-on/may-13', '/how-it-works',
 ];
 
 // Strip comments + scripts + styles so literal "<h1>" mentioned in a head comment
