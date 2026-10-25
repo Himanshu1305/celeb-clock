@@ -153,6 +153,36 @@ async function handler(request: Request): Promise<Response> {
     });
   }
 
+  // ── 6. Daily pages freshness (Batch 7) ─────────────────────────────────────
+  // Daily pages (rashifal, Western horoscope, …) serve precomputed content for a
+  // 400-day window built at deploy time (scripts/gen-daily.mts → /daily/manifest.json).
+  // Warn 30 days before the window runs out; urgent once today is outside it (pages
+  // then fall back to computing in the browser). See src/lib/daily/index.ts.
+  try {
+    const r = await fetch(`${base}/daily/manifest.json`, { signal: AbortSignal.timeout(8000) });
+    const ct = r.headers.get('content-type') || '';
+    const m = r.ok && !ct.includes('text/html') ? await r.json() as { firstDate: string; lastDate: string; generatedAt: string } : null;
+    const today = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
+    const daysLeft = m ? Math.round((Date.parse(m.lastDate) - Date.parse(today)) / 86400000) : -1;
+    results.daily_pages = m ? { firstDate: m.firstDate, lastDate: m.lastDate, daysLeft } : { status: 'missing', http: r.status };
+    if (m && today >= m.firstDate && daysLeft >= 30) {
+      await autoResolve(sb, 'daily_pages', `daily pages precomputed to ${m.lastDate} (${daysLeft} days left)`);
+    } else {
+      await reviewAndAlert(sb, {
+        category: 'daily_pages',
+        severity: !m || daysLeft < 0 || today < m.firstDate ? 'urgent' : 'warning',
+        title: !m ? 'Daily pages manifest missing' : `Daily pages window ends ${m.lastDate} (${daysLeft} days left)`,
+        body: !m
+          ? `GET ${base}/daily/manifest.json returned HTTP ${r.status}. Rashifal / horoscope pages are computing in the browser.`
+          : `Precomputed ${m.firstDate} → ${m.lastDate} (built ${m.generatedAt}). Today (IST) is ${today}.`,
+        actionSteps: 'Any production deploy regenerates the window (npm run build:app runs scripts/gen-daily.mts). Ask the founder to deploy.',
+        extra: m ?? { http: r.status },
+      });
+    }
+  } catch (e: any) {
+    results.daily_pages = { status: 'error', detail: e?.message };
+  }
+
   // ── 5. Error rate — skipped (no error-logs table) ──────────────────────────
   results.error_rate = { status: 'skipped', note: 'No error-logs table in this project (grep of src/, api/, supabase/ finds none). Not faked.' };
 

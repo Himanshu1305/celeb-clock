@@ -45,6 +45,7 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;    // leave cross-origin (fonts/analytics) alone
   if (url.pathname.startsWith('/api/')) return;        // never cache API responses
+  if (url.pathname.startsWith('/daily/')) return;      // daily-page JSON must match the Worker's HTML
 
   // HTML navigations: network-first, offline.html fallback. Never cache the shell.
   if (request.mode === 'navigate') {
