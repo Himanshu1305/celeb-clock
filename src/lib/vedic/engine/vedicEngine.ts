@@ -521,7 +521,13 @@ export function getTrimsamsaSign(siderealLongitude: number) {
   } else {
     if (deg < 5) return { trimsamsaSign: RASHI_NAMES[1], lord: 'Venus' };
     if (deg < 12) return { trimsamsaSign: RASHI_NAMES[5], lord: 'Mercury' };
-    if (deg < 20) return { trimsamsaSign: RASHI_NAMES[8], lord: 'Jupiter' };
+    // Batch 7 W3 fix: Jupiter's portion of an EVEN sign maps to Jupiter's even sign,
+    // Pisces (was Sagittarius) — consistent with the other four even-sign portions
+    // (Taurus, Virgo, Capricorn, Scorpio = each lord's even sign). BPHS 6.27–6.28 reverses
+    // the lords for even signs; Pisces per tempora.ltd/findings/trimsamsa-d30-chart (opened
+    // 25 Oct 2026) and the Swiss-Ephemeris panel test (shodashvarga.test.ts). The lord
+    // (Jupiter) is unchanged, so Shadbala's lord-based Saptavargaja points are unaffected.
+    if (deg < 20) return { trimsamsaSign: RASHI_NAMES[11], lord: 'Jupiter' };
     if (deg < 25) return { trimsamsaSign: RASHI_NAMES[9], lord: 'Saturn' };
     return { trimsamsaSign: RASHI_NAMES[7], lord: 'Mars' };
   }

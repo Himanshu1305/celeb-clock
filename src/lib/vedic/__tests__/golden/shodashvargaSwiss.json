@@ -1,0 +1,3447 @@
+[
+ {
+  "id": "P1",
+  "lons": {
+   "Sun": 134.36001,
+   "Moon": 349.54126,
+   "Mars": 90.1672,
+   "Mercury": 158.95634,
+   "Jupiter": 254.0256,
+   "Venus": 88.96235,
+   "Saturn": 342.09436,
+   "Rahu": 165.74148,
+   "Ketu": 345.74148,
+   "Lagna": 229.72947
+  },
+  "vargas": {
+   "D1": {
+    "Sun": {
+     "sign": "Simha",
+     "marginDeg": 14.36001
+    },
+    "Moon": {
+     "sign": "Meena",
+     "marginDeg": 10.45874
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Kanya",
+     "marginDeg": 8.95634
+    },
+    "Jupiter": {
+     "sign": "Dhanu",
+     "marginDeg": 14.0256
+    },
+    "Venus": {
+     "sign": "Mithuna",
+     "marginDeg": 1.03765
+    },
+    "Saturn": {
+     "sign": "Meena",
+     "marginDeg": 12.09436
+    },
+    "Rahu": {
+     "sign": "Kanya",
+     "marginDeg": 14.25852
+    },
+    "Ketu": {
+     "sign": "Meena",
+     "marginDeg": 14.25852
+    },
+    "Lagna": {
+     "sign": "Vrischika",
+     "marginDeg": 10.27053
+    }
+   },
+   "D2": {
+    "Sun": {
+     "sign": "Simha",
+     "marginDeg": 0.63999
+    },
+    "Moon": {
+     "sign": "Simha",
+     "marginDeg": 4.54126
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Karka",
+     "marginDeg": 6.04366
+    },
+    "Jupiter": {
+     "sign": "Simha",
+     "marginDeg": 0.9744
+    },
+    "Venus": {
+     "sign": "Karka",
+     "marginDeg": 1.03765
+    },
+    "Saturn": {
+     "sign": "Karka",
+     "marginDeg": 2.90564
+    },
+    "Rahu": {
+     "sign": "Simha",
+     "marginDeg": 0.74148
+    },
+    "Ketu": {
+     "sign": "Simha",
+     "marginDeg": 0.74148
+    },
+    "Lagna": {
+     "sign": "Simha",
+     "marginDeg": 4.72947
+    }
+   },
+   "D3": {
+    "Sun": {
+     "sign": "Dhanu",
+     "marginDeg": 4.36001
+    },
+    "Moon": {
+     "sign": "Karka",
+     "marginDeg": 0.45874
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Kanya",
+     "marginDeg": 1.04366
+    },
+    "Jupiter": {
+     "sign": "Mesha",
+     "marginDeg": 4.0256
+    },
+    "Venus": {
+     "sign": "Kumbha",
+     "marginDeg": 1.03765
+    },
+    "Saturn": {
+     "sign": "Karka",
+     "marginDeg": 2.09436
+    },
+    "Rahu": {
+     "sign": "Makara",
+     "marginDeg": 4.25852
+    },
+    "Ketu": {
+     "sign": "Karka",
+     "marginDeg": 4.25852
+    },
+    "Lagna": {
+     "sign": "Meena",
+     "marginDeg": 0.27053
+    }
+   },
+   "D4": {
+    "Sun": {
+     "sign": "Vrischika",
+     "marginDeg": 0.63999
+    },
+    "Moon": {
+     "sign": "Kanya",
+     "marginDeg": 2.95874
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Dhanu",
+     "marginDeg": 1.45634
+    },
+    "Jupiter": {
+     "sign": "Meena",
+     "marginDeg": 0.9744
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 1.03765
+    },
+    "Saturn": {
+     "sign": "Mithuna",
+     "marginDeg": 2.90564
+    },
+    "Rahu": {
+     "sign": "Meena",
+     "marginDeg": 0.74148
+    },
+    "Ketu": {
+     "sign": "Kanya",
+     "marginDeg": 0.74148
+    },
+    "Lagna": {
+     "sign": "Vrishabha",
+     "marginDeg": 2.77053
+    }
+   },
+   "D7": {
+    "Sun": {
+     "sign": "Vrischika",
+     "marginDeg": 1.50287
+    },
+    "Moon": {
+     "sign": "Makara",
+     "marginDeg": 1.88732
+    },
+    "Mars": {
+     "sign": "Makara",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.38491
+    },
+    "Jupiter": {
+     "sign": "Meena",
+     "marginDeg": 1.16845
+    },
+    "Venus": {
+     "sign": "Dhanu",
+     "marginDeg": 1.03765
+    },
+    "Saturn": {
+     "sign": "Vrischika",
+     "marginDeg": 0.76278
+    },
+    "Rahu": {
+     "sign": "Mithuna",
+     "marginDeg": 1.40137
+    },
+    "Ketu": {
+     "sign": "Dhanu",
+     "marginDeg": 1.40137
+    },
+    "Lagna": {
+     "sign": "Kanya",
+     "marginDeg": 1.6991
+    }
+   },
+   "D9": {
+    "Sun": {
+     "sign": "Simha",
+     "marginDeg": 1.02668
+    },
+    "Moon": {
+     "sign": "Dhanu",
+     "marginDeg": 0.45874
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Meena",
+     "marginDeg": 1.04366
+    },
+    "Jupiter": {
+     "sign": "Simha",
+     "marginDeg": 0.69226
+    },
+    "Venus": {
+     "sign": "Mithuna",
+     "marginDeg": 1.03765
+    },
+    "Saturn": {
+     "sign": "Tula",
+     "marginDeg": 1.23897
+    },
+    "Rahu": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.92518
+    },
+    "Ketu": {
+     "sign": "Vrischika",
+     "marginDeg": 0.92518
+    },
+    "Lagna": {
+     "sign": "Dhanu",
+     "marginDeg": 0.27053
+    }
+   },
+   "D10": {
+    "Sun": {
+     "sign": "Dhanu",
+     "marginDeg": 0.63999
+    },
+    "Moon": {
+     "sign": "Vrishabha",
+     "marginDeg": 1.45874
+    },
+    "Mars": {
+     "sign": "Meena",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Karka",
+     "marginDeg": 0.04366
+    },
+    "Jupiter": {
+     "sign": "Mesha",
+     "marginDeg": 0.9744
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 1.03765
+    },
+    "Saturn": {
+     "sign": "Meena",
+     "marginDeg": 0.09436
+    },
+    "Rahu": {
+     "sign": "Tula",
+     "marginDeg": 0.74148
+    },
+    "Ketu": {
+     "sign": "Mesha",
+     "marginDeg": 0.74148
+    },
+    "Lagna": {
+     "sign": "Makara",
+     "marginDeg": 1.27053
+    }
+   },
+   "D12": {
+    "Sun": {
+     "sign": "Makara",
+     "marginDeg": 0.63999
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.45874
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Dhanu",
+     "marginDeg": 1.04366
+    },
+    "Jupiter": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.9744
+    },
+    "Venus": {
+     "sign": "Vrishabha",
+     "marginDeg": 1.03765
+    },
+    "Saturn": {
+     "sign": "Karka",
+     "marginDeg": 0.40564
+    },
+    "Rahu": {
+     "sign": "Meena",
+     "marginDeg": 0.74148
+    },
+    "Ketu": {
+     "sign": "Kanya",
+     "marginDeg": 0.74148
+    },
+    "Lagna": {
+     "sign": "Mithuna",
+     "marginDeg": 0.27053
+    }
+   },
+   "D16": {
+    "Sun": {
+     "sign": "Meena",
+     "marginDeg": 0.63999
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.79126
+    },
+    "Mars": {
+     "sign": "Mesha",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 0.41866
+    },
+    "Jupiter": {
+     "sign": "Karka",
+     "marginDeg": 0.9006
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 0.83735
+    },
+    "Saturn": {
+     "sign": "Mithuna",
+     "marginDeg": 0.84436
+    },
+    "Rahu": {
+     "sign": "Simha",
+     "marginDeg": 0.74148
+    },
+    "Ketu": {
+     "sign": "Simha",
+     "marginDeg": 0.74148
+    },
+    "Lagna": {
+     "sign": "Mithuna",
+     "marginDeg": 0.89553
+    }
+   },
+   "D20": {
+    "Sun": {
+     "sign": "Kanya",
+     "marginDeg": 0.63999
+    },
+    "Moon": {
+     "sign": "Kanya",
+     "marginDeg": 0.04126
+    },
+    "Mars": {
+     "sign": "Mesha",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Makara",
+     "marginDeg": 0.04366
+    },
+    "Jupiter": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.5256
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 0.46235
+    },
+    "Saturn": {
+     "sign": "Mesha",
+     "marginDeg": 0.09436
+    },
+    "Rahu": {
+     "sign": "Mithuna",
+     "marginDeg": 0.74148
+    },
+    "Ketu": {
+     "sign": "Mithuna",
+     "marginDeg": 0.74148
+    },
+    "Lagna": {
+     "sign": "Makara",
+     "marginDeg": 0.22947
+    }
+   },
+   "D24": {
+    "Sun": {
+     "sign": "Karka",
+     "marginDeg": 0.61001
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.45874
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Kumbha",
+     "marginDeg": 0.20634
+    },
+    "Jupiter": {
+     "sign": "Karka",
+     "marginDeg": 0.2756
+    },
+    "Venus": {
+     "sign": "Karka",
+     "marginDeg": 0.21235
+    },
+    "Saturn": {
+     "sign": "Mesha",
+     "marginDeg": 0.40564
+    },
+    "Rahu": {
+     "sign": "Karka",
+     "marginDeg": 0.50852
+    },
+    "Ketu": {
+     "sign": "Karka",
+     "marginDeg": 0.50852
+    },
+    "Lagna": {
+     "sign": "Tula",
+     "marginDeg": 0.27053
+    }
+   },
+   "D27": {
+    "Sun": {
+     "sign": "Mesha",
+     "marginDeg": 0.08443
+    },
+    "Moon": {
+     "sign": "Mithuna",
+     "marginDeg": 0.45874
+    },
+    "Mars": {
+     "sign": "Makara",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Meena",
+     "marginDeg": 0.06745
+    },
+    "Jupiter": {
+     "sign": "Mesha",
+     "marginDeg": 0.41885
+    },
+    "Venus": {
+     "sign": "Dhanu",
+     "marginDeg": 0.07346
+    },
+    "Saturn": {
+     "sign": "Vrischika",
+     "marginDeg": 0.12786
+    },
+    "Rahu": {
+     "sign": "Kanya",
+     "marginDeg": 0.18593
+    },
+    "Ketu": {
+     "sign": "Meena",
+     "marginDeg": 0.18593
+    },
+    "Lagna": {
+     "sign": "Mithuna",
+     "marginDeg": 0.27053
+    }
+   },
+   "D30": {
+    "Sun": {
+     "sign": "Dhanu",
+     "marginDeg": 3.63999
+    },
+    "Moon": {
+     "sign": "Meena",
+     "marginDeg": 0.45874
+    },
+    "Mars": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Kanya",
+     "marginDeg": 3.04366
+    },
+    "Jupiter": {
+     "sign": "Dhanu",
+     "marginDeg": 3.9744
+    },
+    "Venus": {
+     "sign": "Tula",
+     "marginDeg": 1.03765
+    },
+    "Saturn": {
+     "sign": "Meena",
+     "marginDeg": 0.09436
+    },
+    "Rahu": {
+     "sign": "Meena",
+     "marginDeg": 3.74148
+    },
+    "Ketu": {
+     "sign": "Meena",
+     "marginDeg": 3.74148
+    },
+    "Lagna": {
+     "sign": "Meena",
+     "marginDeg": 0.27053
+    }
+   },
+   "D40": {
+    "Sun": {
+     "sign": "Vrischika",
+     "marginDeg": 0.11001
+    },
+    "Moon": {
+     "sign": "Dhanu",
+     "marginDeg": 0.04126
+    },
+    "Mars": {
+     "sign": "Tula",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Kanya",
+     "marginDeg": 0.04366
+    },
+    "Jupiter": {
+     "sign": "Tula",
+     "marginDeg": 0.2244
+    },
+    "Venus": {
+     "sign": "Mithuna",
+     "marginDeg": 0.28765
+    },
+    "Saturn": {
+     "sign": "Kumbha",
+     "marginDeg": 0.09436
+    },
+    "Rahu": {
+     "sign": "Mithuna",
+     "marginDeg": 0.00852
+    },
+    "Ketu": {
+     "sign": "Mithuna",
+     "marginDeg": 0.00852
+    },
+    "Lagna": {
+     "sign": "Dhanu",
+     "marginDeg": 0.22947
+    }
+   },
+   "D45": {
+    "Sun": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.30665
+    },
+    "Moon": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.20792
+    },
+    "Mars": {
+     "sign": "Mesha",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Makara",
+     "marginDeg": 0.28967
+    },
+    "Jupiter": {
+     "sign": "Kanya",
+     "marginDeg": 0.0256
+    },
+    "Venus": {
+     "sign": "Karka",
+     "marginDeg": 0.29568
+    },
+    "Saturn": {
+     "sign": "Mithuna",
+     "marginDeg": 0.09436
+    },
+    "Rahu": {
+     "sign": "Vrischika",
+     "marginDeg": 0.25852
+    },
+    "Ketu": {
+     "sign": "Vrischika",
+     "marginDeg": 0.25852
+    },
+    "Lagna": {
+     "sign": "Makara",
+     "marginDeg": 0.27053
+    }
+   },
+   "D60": {
+    "Sun": {
+     "sign": "Dhanu",
+     "marginDeg": 0.13999
+    },
+    "Moon": {
+     "sign": "Mithuna",
+     "marginDeg": 0.04126
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 0.1672
+    },
+    "Mercury": {
+     "sign": "Kumbha",
+     "marginDeg": 0.04366
+    },
+    "Jupiter": {
+     "sign": "Mesha",
+     "marginDeg": 0.0256
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 0.03765
+    },
+    "Saturn": {
+     "sign": "Meena",
+     "marginDeg": 0.09436
+    },
+    "Rahu": {
+     "sign": "Mesha",
+     "marginDeg": 0.24148
+    },
+    "Ketu": {
+     "sign": "Tula",
+     "marginDeg": 0.24148
+    },
+    "Lagna": {
+     "sign": "Kumbha",
+     "marginDeg": 0.22947
+    }
+   }
+  }
+ },
+ {
+  "id": "P3",
+  "lons": {
+   "Sun": 270.89011,
+   "Moon": 138.02284,
+   "Mars": 235.8614,
+   "Mercury": 257.96969,
+   "Jupiter": 69.69856,
+   "Venus": 277.2351,
+   "Saturn": 263.53902,
+   "Rahu": 293.99667,
+   "Ketu": 113.99667,
+   "Lagna": 258.34549
+  },
+  "vargas": {
+   "D1": {
+    "Sun": {
+     "sign": "Makara",
+     "marginDeg": 0.89011
+    },
+    "Moon": {
+     "sign": "Simha",
+     "marginDeg": 11.97716
+    },
+    "Mars": {
+     "sign": "Vrischika",
+     "marginDeg": 4.1386
+    },
+    "Mercury": {
+     "sign": "Dhanu",
+     "marginDeg": 12.03031
+    },
+    "Jupiter": {
+     "sign": "Mithuna",
+     "marginDeg": 9.69856
+    },
+    "Venus": {
+     "sign": "Makara",
+     "marginDeg": 7.2351
+    },
+    "Saturn": {
+     "sign": "Dhanu",
+     "marginDeg": 6.46098
+    },
+    "Rahu": {
+     "sign": "Makara",
+     "marginDeg": 6.00333
+    },
+    "Ketu": {
+     "sign": "Karka",
+     "marginDeg": 6.00333
+    },
+    "Lagna": {
+     "sign": "Dhanu",
+     "marginDeg": 11.65451
+    }
+   },
+   "D2": {
+    "Sun": {
+     "sign": "Karka",
+     "marginDeg": 0.89011
+    },
+    "Moon": {
+     "sign": "Karka",
+     "marginDeg": 3.02284
+    },
+    "Mars": {
+     "sign": "Simha",
+     "marginDeg": 4.1386
+    },
+    "Mercury": {
+     "sign": "Karka",
+     "marginDeg": 2.96969
+    },
+    "Jupiter": {
+     "sign": "Simha",
+     "marginDeg": 5.30144
+    },
+    "Venus": {
+     "sign": "Karka",
+     "marginDeg": 7.2351
+    },
+    "Saturn": {
+     "sign": "Karka",
+     "marginDeg": 6.46098
+    },
+    "Rahu": {
+     "sign": "Simha",
+     "marginDeg": 6.00333
+    },
+    "Ketu": {
+     "sign": "Simha",
+     "marginDeg": 6.00333
+    },
+    "Lagna": {
+     "sign": "Karka",
+     "marginDeg": 3.34549
+    }
+   },
+   "D3": {
+    "Sun": {
+     "sign": "Makara",
+     "marginDeg": 0.89011
+    },
+    "Moon": {
+     "sign": "Dhanu",
+     "marginDeg": 1.97716
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 4.1386
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 2.03031
+    },
+    "Jupiter": {
+     "sign": "Mithuna",
+     "marginDeg": 0.30144
+    },
+    "Venus": {
+     "sign": "Makara",
+     "marginDeg": 2.7649
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 3.53902
+    },
+    "Rahu": {
+     "sign": "Kanya",
+     "marginDeg": 3.99667
+    },
+    "Ketu": {
+     "sign": "Meena",
+     "marginDeg": 3.99667
+    },
+    "Lagna": {
+     "sign": "Mesha",
+     "marginDeg": 1.65451
+    }
+   },
+   "D4": {
+    "Sun": {
+     "sign": "Makara",
+     "marginDeg": 0.89011
+    },
+    "Moon": {
+     "sign": "Kumbha",
+     "marginDeg": 3.02284
+    },
+    "Mars": {
+     "sign": "Simha",
+     "marginDeg": 3.3614
+    },
+    "Mercury": {
+     "sign": "Mithuna",
+     "marginDeg": 2.96969
+    },
+    "Jupiter": {
+     "sign": "Kanya",
+     "marginDeg": 2.19856
+    },
+    "Venus": {
+     "sign": "Makara",
+     "marginDeg": 0.2649
+    },
+    "Saturn": {
+     "sign": "Kanya",
+     "marginDeg": 1.03902
+    },
+    "Rahu": {
+     "sign": "Tula",
+     "marginDeg": 1.49667
+    },
+    "Ketu": {
+     "sign": "Mesha",
+     "marginDeg": 1.49667
+    },
+    "Lagna": {
+     "sign": "Mithuna",
+     "marginDeg": 3.34549
+    }
+   },
+   "D7": {
+    "Sun": {
+     "sign": "Karka",
+     "marginDeg": 0.89011
+    },
+    "Moon": {
+     "sign": "Dhanu",
+     "marginDeg": 0.87998
+    },
+    "Mars": {
+     "sign": "Vrischika",
+     "marginDeg": 0.14712
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 0.82683
+    },
+    "Jupiter": {
+     "sign": "Simha",
+     "marginDeg": 1.12713
+    },
+    "Venus": {
+     "sign": "Simha",
+     "marginDeg": 1.33632
+    },
+    "Saturn": {
+     "sign": "Vrishabha",
+     "marginDeg": 2.11045
+    },
+    "Rahu": {
+     "sign": "Dhanu",
+     "marginDeg": 1.71762
+    },
+    "Ketu": {
+     "sign": "Mithuna",
+     "marginDeg": 1.71762
+    },
+    "Lagna": {
+     "sign": "Mesha",
+     "marginDeg": 1.20264
+    }
+   },
+   "D9": {
+    "Sun": {
+     "sign": "Makara",
+     "marginDeg": 0.89011
+    },
+    "Moon": {
+     "sign": "Kanya",
+     "marginDeg": 1.35617
+    },
+    "Mars": {
+     "sign": "Kumbha",
+     "marginDeg": 0.80527
+    },
+    "Mercury": {
+     "sign": "Kanya",
+     "marginDeg": 1.30302
+    },
+    "Jupiter": {
+     "sign": "Dhanu",
+     "marginDeg": 0.30144
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 0.56844
+    },
+    "Saturn": {
+     "sign": "Vrischika",
+     "marginDeg": 0.20569
+    },
+    "Rahu": {
+     "sign": "Simha",
+     "marginDeg": 0.66334
+    },
+    "Ketu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.66334
+    },
+    "Lagna": {
+     "sign": "Kanya",
+     "marginDeg": 1.65451
+    }
+   },
+   "D10": {
+    "Sun": {
+     "sign": "Kanya",
+     "marginDeg": 0.89011
+    },
+    "Moon": {
+     "sign": "Kumbha",
+     "marginDeg": 0.02284
+    },
+    "Mars": {
+     "sign": "Meena",
+     "marginDeg": 1.1386
+    },
+    "Mercury": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.03031
+    },
+    "Jupiter": {
+     "sign": "Kanya",
+     "marginDeg": 0.69856
+    },
+    "Venus": {
+     "sign": "Vrischika",
+     "marginDeg": 1.2351
+    },
+    "Saturn": {
+     "sign": "Karka",
+     "marginDeg": 0.46098
+    },
+    "Rahu": {
+     "sign": "Mesha",
+     "marginDeg": 0.00333
+    },
+    "Ketu": {
+     "sign": "Tula",
+     "marginDeg": 0.00333
+    },
+    "Lagna": {
+     "sign": "Mithuna",
+     "marginDeg": 0.34549
+    }
+   },
+   "D12": {
+    "Sun": {
+     "sign": "Makara",
+     "marginDeg": 0.89011
+    },
+    "Moon": {
+     "sign": "Meena",
+     "marginDeg": 0.52284
+    },
+    "Mars": {
+     "sign": "Kanya",
+     "marginDeg": 0.8614
+    },
+    "Mercury": {
+     "sign": "Karka",
+     "marginDeg": 0.46969
+    },
+    "Jupiter": {
+     "sign": "Kanya",
+     "marginDeg": 0.30144
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 0.2649
+    },
+    "Saturn": {
+     "sign": "Kanya",
+     "marginDeg": 1.03902
+    },
+    "Rahu": {
+     "sign": "Tula",
+     "marginDeg": 1.00333
+    },
+    "Ketu": {
+     "sign": "Mesha",
+     "marginDeg": 1.00333
+    },
+    "Lagna": {
+     "sign": "Karka",
+     "marginDeg": 0.84549
+    }
+   },
+   "D16": {
+    "Sun": {
+     "sign": "Mesha",
+     "marginDeg": 0.89011
+    },
+    "Moon": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.72716
+    },
+    "Mars": {
+     "sign": "Kanya",
+     "marginDeg": 0.3886
+    },
+    "Mercury": {
+     "sign": "Kanya",
+     "marginDeg": 0.78031
+    },
+    "Jupiter": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.32356
+    },
+    "Venus": {
+     "sign": "Karka",
+     "marginDeg": 0.2649
+    },
+    "Saturn": {
+     "sign": "Dhanu",
+     "marginDeg": 0.83598
+    },
+    "Rahu": {
+     "sign": "Mesha",
+     "marginDeg": 0.37833
+    },
+    "Ketu": {
+     "sign": "Mesha",
+     "marginDeg": 0.37833
+    },
+    "Lagna": {
+     "sign": "Kanya",
+     "marginDeg": 0.40451
+    }
+   },
+   "D20": {
+    "Sun": {
+     "sign": "Mesha",
+     "marginDeg": 0.60989
+    },
+    "Moon": {
+     "sign": "Dhanu",
+     "marginDeg": 0.02284
+    },
+    "Mars": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.3614
+    },
+    "Mercury": {
+     "sign": "Karka",
+     "marginDeg": 0.03031
+    },
+    "Jupiter": {
+     "sign": "Kumbha",
+     "marginDeg": 0.69856
+    },
+    "Venus": {
+     "sign": "Simha",
+     "marginDeg": 0.2649
+    },
+    "Saturn": {
+     "sign": "Vrischika",
+     "marginDeg": 0.46098
+    },
+    "Rahu": {
+     "sign": "Karka",
+     "marginDeg": 0.00333
+    },
+    "Ketu": {
+     "sign": "Karka",
+     "marginDeg": 0.00333
+    },
+    "Lagna": {
+     "sign": "Simha",
+     "marginDeg": 0.34549
+    }
+   },
+   "D24": {
+    "Sun": {
+     "sign": "Karka",
+     "marginDeg": 0.35989
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.52284
+    },
+    "Mars": {
+     "sign": "Meena",
+     "marginDeg": 0.3886
+    },
+    "Mercury": {
+     "sign": "Tula",
+     "marginDeg": 0.46969
+    },
+    "Jupiter": {
+     "sign": "Meena",
+     "marginDeg": 0.30144
+    },
+    "Venus": {
+     "sign": "Dhanu",
+     "marginDeg": 0.2649
+    },
+    "Saturn": {
+     "sign": "Kumbha",
+     "marginDeg": 0.21098
+    },
+    "Rahu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.24667
+    },
+    "Ketu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.24667
+    },
+    "Lagna": {
+     "sign": "Tula",
+     "marginDeg": 0.40451
+    }
+   },
+   "D27": {
+    "Sun": {
+     "sign": "Karka",
+     "marginDeg": 0.221
+    },
+    "Moon": {
+     "sign": "Simha",
+     "marginDeg": 0.24506
+    },
+    "Mars": {
+     "sign": "Dhanu",
+     "marginDeg": 0.30585
+    },
+    "Mercury": {
+     "sign": "Simha",
+     "marginDeg": 0.19191
+    },
+    "Jupiter": {
+     "sign": "Mithuna",
+     "marginDeg": 0.30144
+    },
+    "Venus": {
+     "sign": "Makara",
+     "marginDeg": 0.54267
+    },
+    "Saturn": {
+     "sign": "Makara",
+     "marginDeg": 0.20569
+    },
+    "Rahu": {
+     "sign": "Mesha",
+     "marginDeg": 0.44777
+    },
+    "Ketu": {
+     "sign": "Tula",
+     "marginDeg": 0.44777
+    },
+    "Lagna": {
+     "sign": "Simha",
+     "marginDeg": 0.5434
+    }
+   },
+   "D30": {
+    "Sun": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.89011
+    },
+    "Moon": {
+     "sign": "Mithuna",
+     "marginDeg": 0.02284
+    },
+    "Mars": {
+     "sign": "Vrischika",
+     "marginDeg": 0.8614
+    },
+    "Mercury": {
+     "sign": "Dhanu",
+     "marginDeg": 0.03031
+    },
+    "Jupiter": {
+     "sign": "Kumbha",
+     "marginDeg": 0.30144
+    },
+    "Venus": {
+     "sign": "Kanya",
+     "marginDeg": 2.2351
+    },
+    "Saturn": {
+     "sign": "Mithuna",
+     "marginDeg": 1.46098
+    },
+    "Rahu": {
+     "sign": "Makara",
+     "marginDeg": 1.00333
+    },
+    "Ketu": {
+     "sign": "Makara",
+     "marginDeg": 1.00333
+    },
+    "Lagna": {
+     "sign": "Mithuna",
+     "marginDeg": 0.34549
+    }
+   },
+   "D40": {
+    "Sun": {
+     "sign": "Vrischika",
+     "marginDeg": 0.14011
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 0.02284
+    },
+    "Mars": {
+     "sign": "Simha",
+     "marginDeg": 0.3614
+    },
+    "Mercury": {
+     "sign": "Meena",
+     "marginDeg": 0.03031
+    },
+    "Jupiter": {
+     "sign": "Mesha",
+     "marginDeg": 0.05144
+    },
+    "Venus": {
+     "sign": "Karka",
+     "marginDeg": 0.2649
+    },
+    "Saturn": {
+     "sign": "Vrischika",
+     "marginDeg": 0.28902
+    },
+    "Rahu": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.00333
+    },
+    "Ketu": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.00333
+    },
+    "Lagna": {
+     "sign": "Mesha",
+     "marginDeg": 0.34549
+    }
+   },
+   "D45": {
+    "Sun": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.22344
+    },
+    "Moon": {
+     "sign": "Vrischika",
+     "marginDeg": 0.02284
+    },
+    "Mars": {
+     "sign": "Tula",
+     "marginDeg": 0.1386
+    },
+    "Mercury": {
+     "sign": "Kumbha",
+     "marginDeg": 0.03031
+    },
+    "Jupiter": {
+     "sign": "Kumbha",
+     "marginDeg": 0.30144
+    },
+    "Venus": {
+     "sign": "Kumbha",
+     "marginDeg": 0.09823
+    },
+    "Saturn": {
+     "sign": "Vrischika",
+     "marginDeg": 0.20569
+    },
+    "Rahu": {
+     "sign": "Meena",
+     "marginDeg": 0.00333
+    },
+    "Ketu": {
+     "sign": "Meena",
+     "marginDeg": 0.00333
+    },
+    "Lagna": {
+     "sign": "Meena",
+     "marginDeg": 0.32117
+    }
+   },
+   "D60": {
+    "Sun": {
+     "sign": "Kumbha",
+     "marginDeg": 0.10989
+    },
+    "Moon": {
+     "sign": "Simha",
+     "marginDeg": 0.02284
+    },
+    "Mars": {
+     "sign": "Kumbha",
+     "marginDeg": 0.1386
+    },
+    "Mercury": {
+     "sign": "Vrischika",
+     "marginDeg": 0.03031
+    },
+    "Jupiter": {
+     "sign": "Makara",
+     "marginDeg": 0.19856
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 0.2351
+    },
+    "Saturn": {
+     "sign": "Vrischika",
+     "marginDeg": 0.03902
+    },
+    "Rahu": {
+     "sign": "Dhanu",
+     "marginDeg": 0.00333
+    },
+    "Ketu": {
+     "sign": "Mithuna",
+     "marginDeg": 0.00333
+    },
+    "Lagna": {
+     "sign": "Dhanu",
+     "marginDeg": 0.15451
+    }
+   }
+  }
+ },
+ {
+  "id": "P5",
+  "lons": {
+   "Sun": 56.14421,
+   "Moon": 180.59808,
+   "Mars": 3.20464,
+   "Mercury": 67.84627,
+   "Jupiter": 133.2665,
+   "Venus": 55.28914,
+   "Saturn": 294.59569,
+   "Rahu": 247.49544,
+   "Ketu": 67.49544,
+   "Lagna": 162.60451
+  },
+  "vargas": {
+   "D1": {
+    "Sun": {
+     "sign": "Vrishabha",
+     "marginDeg": 3.85579
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Mesha",
+     "marginDeg": 3.20464
+    },
+    "Mercury": {
+     "sign": "Mithuna",
+     "marginDeg": 7.84627
+    },
+    "Jupiter": {
+     "sign": "Simha",
+     "marginDeg": 13.2665
+    },
+    "Venus": {
+     "sign": "Vrishabha",
+     "marginDeg": 4.71086
+    },
+    "Saturn": {
+     "sign": "Makara",
+     "marginDeg": 5.40431
+    },
+    "Rahu": {
+     "sign": "Dhanu",
+     "marginDeg": 7.49544
+    },
+    "Ketu": {
+     "sign": "Mithuna",
+     "marginDeg": 7.49544
+    },
+    "Lagna": {
+     "sign": "Kanya",
+     "marginDeg": 12.60451
+    }
+   },
+   "D2": {
+    "Sun": {
+     "sign": "Simha",
+     "marginDeg": 3.85579
+    },
+    "Moon": {
+     "sign": "Simha",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Simha",
+     "marginDeg": 3.20464
+    },
+    "Mercury": {
+     "sign": "Simha",
+     "marginDeg": 7.15373
+    },
+    "Jupiter": {
+     "sign": "Simha",
+     "marginDeg": 1.7335
+    },
+    "Venus": {
+     "sign": "Simha",
+     "marginDeg": 4.71086
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 5.40431
+    },
+    "Rahu": {
+     "sign": "Simha",
+     "marginDeg": 7.49544
+    },
+    "Ketu": {
+     "sign": "Simha",
+     "marginDeg": 7.49544
+    },
+    "Lagna": {
+     "sign": "Karka",
+     "marginDeg": 2.39549
+    }
+   },
+   "D3": {
+    "Sun": {
+     "sign": "Makara",
+     "marginDeg": 3.85579
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Mesha",
+     "marginDeg": 3.20464
+    },
+    "Mercury": {
+     "sign": "Mithuna",
+     "marginDeg": 2.15373
+    },
+    "Jupiter": {
+     "sign": "Dhanu",
+     "marginDeg": 3.2665
+    },
+    "Venus": {
+     "sign": "Makara",
+     "marginDeg": 4.71086
+    },
+    "Saturn": {
+     "sign": "Kanya",
+     "marginDeg": 4.59569
+    },
+    "Rahu": {
+     "sign": "Dhanu",
+     "marginDeg": 2.50456
+    },
+    "Ketu": {
+     "sign": "Mithuna",
+     "marginDeg": 2.50456
+    },
+    "Lagna": {
+     "sign": "Makara",
+     "marginDeg": 2.60451
+    }
+   },
+   "D4": {
+    "Sun": {
+     "sign": "Kumbha",
+     "marginDeg": 3.64421
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Mesha",
+     "marginDeg": 3.20464
+    },
+    "Mercury": {
+     "sign": "Kanya",
+     "marginDeg": 0.34627
+    },
+    "Jupiter": {
+     "sign": "Vrischika",
+     "marginDeg": 1.7335
+    },
+    "Venus": {
+     "sign": "Kumbha",
+     "marginDeg": 2.78914
+    },
+    "Saturn": {
+     "sign": "Tula",
+     "marginDeg": 2.09569
+    },
+    "Rahu": {
+     "sign": "Dhanu",
+     "marginDeg": 0.00456
+    },
+    "Ketu": {
+     "sign": "Mithuna",
+     "marginDeg": 0.00456
+    },
+    "Lagna": {
+     "sign": "Dhanu",
+     "marginDeg": 2.39549
+    }
+   },
+   "D7": {
+    "Sun": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.42992
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Mesha",
+     "marginDeg": 1.08108
+    },
+    "Mercury": {
+     "sign": "Karka",
+     "marginDeg": 0.72516
+    },
+    "Jupiter": {
+     "sign": "Vrischika",
+     "marginDeg": 0.40935
+    },
+    "Venus": {
+     "sign": "Mesha",
+     "marginDeg": 0.42515
+    },
+    "Saturn": {
+     "sign": "Dhanu",
+     "marginDeg": 1.1186
+    },
+    "Rahu": {
+     "sign": "Makara",
+     "marginDeg": 1.07599
+    },
+    "Ketu": {
+     "sign": "Karka",
+     "marginDeg": 1.07599
+    },
+    "Lagna": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.25264
+    }
+   },
+   "D9": {
+    "Sun": {
+     "sign": "Simha",
+     "marginDeg": 0.52246
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Mesha",
+     "marginDeg": 0.1287
+    },
+    "Mercury": {
+     "sign": "Dhanu",
+     "marginDeg": 1.1796
+    },
+    "Jupiter": {
+     "sign": "Karka",
+     "marginDeg": 0.06684
+    },
+    "Venus": {
+     "sign": "Simha",
+     "marginDeg": 1.37753
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 1.26235
+    },
+    "Rahu": {
+     "sign": "Mithuna",
+     "marginDeg": 0.82877
+    },
+    "Ketu": {
+     "sign": "Dhanu",
+     "marginDeg": 0.82877
+    },
+    "Lagna": {
+     "sign": "Mesha",
+     "marginDeg": 0.72883
+    }
+   },
+   "D10": {
+    "Sun": {
+     "sign": "Kanya",
+     "marginDeg": 0.85579
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.20464
+    },
+    "Mercury": {
+     "sign": "Simha",
+     "marginDeg": 1.15373
+    },
+    "Jupiter": {
+     "sign": "Dhanu",
+     "marginDeg": 1.2665
+    },
+    "Venus": {
+     "sign": "Kanya",
+     "marginDeg": 1.28914
+    },
+    "Saturn": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.59569
+    },
+    "Rahu": {
+     "sign": "Kumbha",
+     "marginDeg": 1.49544
+    },
+    "Ketu": {
+     "sign": "Simha",
+     "marginDeg": 1.49544
+    },
+    "Lagna": {
+     "sign": "Kanya",
+     "marginDeg": 0.60451
+    }
+   },
+   "D12": {
+    "Sun": {
+     "sign": "Meena",
+     "marginDeg": 1.14421
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.70464
+    },
+    "Mercury": {
+     "sign": "Kanya",
+     "marginDeg": 0.34627
+    },
+    "Jupiter": {
+     "sign": "Makara",
+     "marginDeg": 0.7665
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 0.28914
+    },
+    "Saturn": {
+     "sign": "Tula",
+     "marginDeg": 0.40431
+    },
+    "Rahu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.00456
+    },
+    "Ketu": {
+     "sign": "Simha",
+     "marginDeg": 0.00456
+    },
+    "Lagna": {
+     "sign": "Kumbha",
+     "marginDeg": 0.10451
+    }
+   },
+   "D16": {
+    "Sun": {
+     "sign": "Kanya",
+     "marginDeg": 0.10579
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.54536
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 0.34627
+    },
+    "Jupiter": {
+     "sign": "Meena",
+     "marginDeg": 0.1415
+    },
+    "Venus": {
+     "sign": "Kanya",
+     "marginDeg": 0.91414
+    },
+    "Saturn": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.22069
+    },
+    "Rahu": {
+     "sign": "Meena",
+     "marginDeg": 0.00456
+    },
+    "Ketu": {
+     "sign": "Meena",
+     "marginDeg": 0.00456
+    },
+    "Lagna": {
+     "sign": "Mithuna",
+     "marginDeg": 0.52049
+    }
+   },
+   "D20": {
+    "Sun": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.64421
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Mithuna",
+     "marginDeg": 0.20464
+    },
+    "Mercury": {
+     "sign": "Makara",
+     "marginDeg": 0.34627
+    },
+    "Jupiter": {
+     "sign": "Simha",
+     "marginDeg": 0.2335
+    },
+    "Venus": {
+     "sign": "Mesha",
+     "marginDeg": 0.21086
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.59569
+    },
+    "Rahu": {
+     "sign": "Dhanu",
+     "marginDeg": 0.00456
+    },
+    "Ketu": {
+     "sign": "Dhanu",
+     "marginDeg": 0.00456
+    },
+    "Lagna": {
+     "sign": "Mesha",
+     "marginDeg": 0.60451
+    }
+   },
+   "D24": {
+    "Sun": {
+     "sign": "Meena",
+     "marginDeg": 0.10579
+    },
+    "Moon": {
+     "sign": "Simha",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Tula",
+     "marginDeg": 0.54536
+    },
+    "Mercury": {
+     "sign": "Kumbha",
+     "marginDeg": 0.34627
+    },
+    "Jupiter": {
+     "sign": "Mithuna",
+     "marginDeg": 0.4835
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 0.28914
+    },
+    "Saturn": {
+     "sign": "Kumbha",
+     "marginDeg": 0.40431
+    },
+    "Rahu": {
+     "sign": "Makara",
+     "marginDeg": 0.00456
+    },
+    "Ketu": {
+     "sign": "Makara",
+     "marginDeg": 0.00456
+    },
+    "Lagna": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.10451
+    }
+   },
+   "D27": {
+    "Sun": {
+     "sign": "Mithuna",
+     "marginDeg": 0.52246
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.51304
+    },
+    "Mars": {
+     "sign": "Mithuna",
+     "marginDeg": 0.1287
+    },
+    "Mercury": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.06849
+    },
+    "Jupiter": {
+     "sign": "Meena",
+     "marginDeg": 0.06684
+    },
+    "Venus": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.26642
+    },
+    "Saturn": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.15124
+    },
+    "Rahu": {
+     "sign": "Tula",
+     "marginDeg": 0.28234
+    },
+    "Ketu": {
+     "sign": "Mesha",
+     "marginDeg": 0.28234
+    },
+    "Lagna": {
+     "sign": "Mithuna",
+     "marginDeg": 0.38228
+    }
+   },
+   "D30": {
+    "Sun": {
+     "sign": "Vrischika",
+     "marginDeg": 1.14421
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 0.59808
+    },
+    "Mars": {
+     "sign": "Mesha",
+     "marginDeg": 1.79536
+    },
+    "Mercury": {
+     "sign": "Kumbha",
+     "marginDeg": 2.15373
+    },
+    "Jupiter": {
+     "sign": "Dhanu",
+     "marginDeg": 3.2665
+    },
+    "Venus": {
+     "sign": "Vrischika",
+     "marginDeg": 0.28914
+    },
+    "Saturn": {
+     "sign": "Makara",
+     "marginDeg": 0.40431
+    },
+    "Rahu": {
+     "sign": "Kumbha",
+     "marginDeg": 2.49544
+    },
+    "Ketu": {
+     "sign": "Kumbha",
+     "marginDeg": 2.49544
+    },
+    "Lagna": {
+     "sign": "Meena",
+     "marginDeg": 0.60451
+    }
+   },
+   "D40": {
+    "Sun": {
+     "sign": "Simha",
+     "marginDeg": 0.10579
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 0.15192
+    },
+    "Mars": {
+     "sign": "Simha",
+     "marginDeg": 0.20464
+    },
+    "Mercury": {
+     "sign": "Kumbha",
+     "marginDeg": 0.34627
+    },
+    "Jupiter": {
+     "sign": "Kanya",
+     "marginDeg": 0.2335
+    },
+    "Venus": {
+     "sign": "Karka",
+     "marginDeg": 0.21086
+    },
+    "Saturn": {
+     "sign": "Mithuna",
+     "marginDeg": 0.15431
+    },
+    "Rahu": {
+     "sign": "Makara",
+     "marginDeg": 0.00456
+    },
+    "Ketu": {
+     "sign": "Makara",
+     "marginDeg": 0.00456
+    },
+    "Lagna": {
+     "sign": "Kumbha",
+     "marginDeg": 0.14549
+    }
+   },
+   "D45": {
+    "Sun": {
+     "sign": "Vrischika",
+     "marginDeg": 0.14421
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 0.06859
+    },
+    "Mars": {
+     "sign": "Simha",
+     "marginDeg": 0.1287
+    },
+    "Mercury": {
+     "sign": "Vrischika",
+     "marginDeg": 0.15373
+    },
+    "Jupiter": {
+     "sign": "Meena",
+     "marginDeg": 0.06684
+    },
+    "Venus": {
+     "sign": "Kanya",
+     "marginDeg": 0.04419
+    },
+    "Saturn": {
+     "sign": "Mesha",
+     "marginDeg": 0.07098
+    },
+    "Rahu": {
+     "sign": "Vrischika",
+     "marginDeg": 0.1621
+    },
+    "Ketu": {
+     "sign": "Vrischika",
+     "marginDeg": 0.1621
+    },
+    "Lagna": {
+     "sign": "Mithuna",
+     "marginDeg": 0.06216
+    }
+   },
+   "D60": {
+    "Sun": {
+     "sign": "Kanya",
+     "marginDeg": 0.14421
+    },
+    "Moon": {
+     "sign": "Vrischika",
+     "marginDeg": 0.09808
+    },
+    "Mars": {
+     "sign": "Tula",
+     "marginDeg": 0.20464
+    },
+    "Mercury": {
+     "sign": "Kanya",
+     "marginDeg": 0.15373
+    },
+    "Jupiter": {
+     "sign": "Tula",
+     "marginDeg": 0.2335
+    },
+    "Venus": {
+     "sign": "Karka",
+     "marginDeg": 0.21086
+    },
+    "Saturn": {
+     "sign": "Kumbha",
+     "marginDeg": 0.09569
+    },
+    "Rahu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.00456
+    },
+    "Ketu": {
+     "sign": "Simha",
+     "marginDeg": 0.00456
+    },
+    "Lagna": {
+     "sign": "Tula",
+     "marginDeg": 0.10451
+    }
+   }
+  }
+ },
+ {
+  "id": "P6",
+  "lons": {
+   "Sun": 249.2453,
+   "Moon": 1.38982,
+   "Mars": 317.78521,
+   "Mercury": 260.47456,
+   "Jupiter": 77.74548,
+   "Venus": 244.31535,
+   "Saturn": 45.9269,
+   "Rahu": 62.85433,
+   "Ketu": 242.85433,
+   "Lagna": 277.55553
+  },
+  "vargas": {
+   "D1": {
+    "Sun": {
+     "sign": "Dhanu",
+     "marginDeg": 9.2453
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 1.38982
+    },
+    "Mars": {
+     "sign": "Kumbha",
+     "marginDeg": 12.21479
+    },
+    "Mercury": {
+     "sign": "Dhanu",
+     "marginDeg": 9.52544
+    },
+    "Jupiter": {
+     "sign": "Mithuna",
+     "marginDeg": 12.25452
+    },
+    "Venus": {
+     "sign": "Dhanu",
+     "marginDeg": 4.31535
+    },
+    "Saturn": {
+     "sign": "Vrishabha",
+     "marginDeg": 14.0731
+    },
+    "Rahu": {
+     "sign": "Mithuna",
+     "marginDeg": 2.85433
+    },
+    "Ketu": {
+     "sign": "Dhanu",
+     "marginDeg": 2.85433
+    },
+    "Lagna": {
+     "sign": "Makara",
+     "marginDeg": 7.55553
+    }
+   },
+   "D2": {
+    "Sun": {
+     "sign": "Simha",
+     "marginDeg": 5.7547
+    },
+    "Moon": {
+     "sign": "Simha",
+     "marginDeg": 1.38982
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 2.78521
+    },
+    "Mercury": {
+     "sign": "Karka",
+     "marginDeg": 5.47456
+    },
+    "Jupiter": {
+     "sign": "Karka",
+     "marginDeg": 2.74548
+    },
+    "Venus": {
+     "sign": "Simha",
+     "marginDeg": 4.31535
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.9269
+    },
+    "Rahu": {
+     "sign": "Simha",
+     "marginDeg": 2.85433
+    },
+    "Ketu": {
+     "sign": "Simha",
+     "marginDeg": 2.85433
+    },
+    "Lagna": {
+     "sign": "Karka",
+     "marginDeg": 7.44447
+    }
+   },
+   "D3": {
+    "Sun": {
+     "sign": "Dhanu",
+     "marginDeg": 0.7547
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 1.38982
+    },
+    "Mars": {
+     "sign": "Mithuna",
+     "marginDeg": 2.21479
+    },
+    "Mercury": {
+     "sign": "Simha",
+     "marginDeg": 0.47456
+    },
+    "Jupiter": {
+     "sign": "Tula",
+     "marginDeg": 2.25452
+    },
+    "Venus": {
+     "sign": "Dhanu",
+     "marginDeg": 4.31535
+    },
+    "Saturn": {
+     "sign": "Kanya",
+     "marginDeg": 4.0731
+    },
+    "Rahu": {
+     "sign": "Mithuna",
+     "marginDeg": 2.85433
+    },
+    "Ketu": {
+     "sign": "Dhanu",
+     "marginDeg": 2.85433
+    },
+    "Lagna": {
+     "sign": "Makara",
+     "marginDeg": 2.44447
+    }
+   },
+   "D4": {
+    "Sun": {
+     "sign": "Meena",
+     "marginDeg": 1.7453
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 1.38982
+    },
+    "Mars": {
+     "sign": "Simha",
+     "marginDeg": 2.78521
+    },
+    "Mercury": {
+     "sign": "Mithuna",
+     "marginDeg": 2.02544
+    },
+    "Jupiter": {
+     "sign": "Dhanu",
+     "marginDeg": 2.74548
+    },
+    "Venus": {
+     "sign": "Dhanu",
+     "marginDeg": 3.18465
+    },
+    "Saturn": {
+     "sign": "Vrischika",
+     "marginDeg": 0.9269
+    },
+    "Rahu": {
+     "sign": "Mithuna",
+     "marginDeg": 2.85433
+    },
+    "Ketu": {
+     "sign": "Dhanu",
+     "marginDeg": 2.85433
+    },
+    "Lagna": {
+     "sign": "Mesha",
+     "marginDeg": 0.05553
+    }
+   },
+   "D7": {
+    "Sun": {
+     "sign": "Kumbha",
+     "marginDeg": 0.67387
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 1.38982
+    },
+    "Mars": {
+     "sign": "Mithuna",
+     "marginDeg": 0.64235
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 0.95402
+    },
+    "Jupiter": {
+     "sign": "Tula",
+     "marginDeg": 0.60263
+    },
+    "Venus": {
+     "sign": "Makara",
+     "marginDeg": 0.02963
+    },
+    "Saturn": {
+     "sign": "Kumbha",
+     "marginDeg": 1.21596
+    },
+    "Rahu": {
+     "sign": "Mithuna",
+     "marginDeg": 1.43139
+    },
+    "Ketu": {
+     "sign": "Dhanu",
+     "marginDeg": 1.43139
+    },
+    "Lagna": {
+     "sign": "Simha",
+     "marginDeg": 1.01589
+    }
+   },
+   "D9": {
+    "Sun": {
+     "sign": "Mithuna",
+     "marginDeg": 0.7547
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 1.38982
+    },
+    "Mars": {
+     "sign": "Meena",
+     "marginDeg": 1.11854
+    },
+    "Mercury": {
+     "sign": "Tula",
+     "marginDeg": 0.47456
+    },
+    "Jupiter": {
+     "sign": "Meena",
+     "marginDeg": 1.07882
+    },
+    "Venus": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.98201
+    },
+    "Saturn": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.73977
+    },
+    "Rahu": {
+     "sign": "Tula",
+     "marginDeg": 0.47901
+    },
+    "Ketu": {
+     "sign": "Mesha",
+     "marginDeg": 0.47901
+    },
+    "Lagna": {
+     "sign": "Meena",
+     "marginDeg": 0.88887
+    }
+   },
+   "D10": {
+    "Sun": {
+     "sign": "Meena",
+     "marginDeg": 0.2453
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 1.38982
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 0.21479
+    },
+    "Mercury": {
+     "sign": "Mithuna",
+     "marginDeg": 0.52544
+    },
+    "Jupiter": {
+     "sign": "Vrischika",
+     "marginDeg": 0.25452
+    },
+    "Venus": {
+     "sign": "Makara",
+     "marginDeg": 1.31535
+    },
+    "Saturn": {
+     "sign": "Mithuna",
+     "marginDeg": 0.9269
+    },
+    "Rahu": {
+     "sign": "Mithuna",
+     "marginDeg": 0.14567
+    },
+    "Ketu": {
+     "sign": "Dhanu",
+     "marginDeg": 0.14567
+    },
+    "Lagna": {
+     "sign": "Vrischika",
+     "marginDeg": 1.44447
+    }
+   },
+   "D12": {
+    "Sun": {
+     "sign": "Meena",
+     "marginDeg": 0.7547
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 1.11018
+    },
+    "Mars": {
+     "sign": "Kanya",
+     "marginDeg": 0.28521
+    },
+    "Mercury": {
+     "sign": "Simha",
+     "marginDeg": 0.47456
+    },
+    "Jupiter": {
+     "sign": "Makara",
+     "marginDeg": 0.24548
+    },
+    "Venus": {
+     "sign": "Makara",
+     "marginDeg": 0.68465
+    },
+    "Saturn": {
+     "sign": "Vrischika",
+     "marginDeg": 0.9269
+    },
+    "Rahu": {
+     "sign": "Karka",
+     "marginDeg": 0.35433
+    },
+    "Ketu": {
+     "sign": "Makara",
+     "marginDeg": 0.35433
+    },
+    "Lagna": {
+     "sign": "Mesha",
+     "marginDeg": 0.05553
+    }
+   },
+   "D16": {
+    "Sun": {
+     "sign": "Mesha",
+     "marginDeg": 0.1297
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 0.48518
+    },
+    "Mars": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.91021
+    },
+    "Mercury": {
+     "sign": "Tula",
+     "marginDeg": 0.15044
+    },
+    "Jupiter": {
+     "sign": "Kanya",
+     "marginDeg": 0.87048
+    },
+    "Venus": {
+     "sign": "Kumbha",
+     "marginDeg": 0.56535
+    },
+    "Saturn": {
+     "sign": "Mesha",
+     "marginDeg": 0.9269
+    },
+    "Rahu": {
+     "sign": "Makara",
+     "marginDeg": 0.89567
+    },
+    "Ketu": {
+     "sign": "Makara",
+     "marginDeg": 0.89567
+    },
+    "Lagna": {
+     "sign": "Simha",
+     "marginDeg": 0.05553
+    }
+   },
+   "D20": {
+    "Sun": {
+     "sign": "Kumbha",
+     "marginDeg": 0.2453
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 0.11018
+    },
+    "Mars": {
+     "sign": "Vrischika",
+     "marginDeg": 0.21479
+    },
+    "Mercury": {
+     "sign": "Kanya",
+     "marginDeg": 0.52544
+    },
+    "Jupiter": {
+     "sign": "Karka",
+     "marginDeg": 0.25452
+    },
+    "Venus": {
+     "sign": "Tula",
+     "marginDeg": 0.18465
+    },
+    "Saturn": {
+     "sign": "Tula",
+     "marginDeg": 0.5731
+    },
+    "Rahu": {
+     "sign": "Kanya",
+     "marginDeg": 0.14567
+    },
+    "Ketu": {
+     "sign": "Kanya",
+     "marginDeg": 0.14567
+    },
+    "Lagna": {
+     "sign": "Kanya",
+     "marginDeg": 0.05553
+    }
+   },
+   "D24": {
+    "Sun": {
+     "sign": "Meena",
+     "marginDeg": 0.4953
+    },
+    "Moon": {
+     "sign": "Kanya",
+     "marginDeg": 0.13982
+    },
+    "Mars": {
+     "sign": "Tula",
+     "marginDeg": 0.28521
+    },
+    "Mercury": {
+     "sign": "Dhanu",
+     "marginDeg": 0.47456
+    },
+    "Jupiter": {
+     "sign": "Tula",
+     "marginDeg": 0.24548
+    },
+    "Venus": {
+     "sign": "Vrischika",
+     "marginDeg": 0.56535
+    },
+    "Saturn": {
+     "sign": "Karka",
+     "marginDeg": 0.3231
+    },
+    "Rahu": {
+     "sign": "Tula",
+     "marginDeg": 0.35433
+    },
+    "Ketu": {
+     "sign": "Tula",
+     "marginDeg": 0.35433
+    },
+    "Lagna": {
+     "sign": "Makara",
+     "marginDeg": 0.05553
+    }
+   },
+   "D27": {
+    "Sun": {
+     "sign": "Dhanu",
+     "marginDeg": 0.35641
+    },
+    "Moon": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.27871
+    },
+    "Mars": {
+     "sign": "Kumbha",
+     "marginDeg": 0.00743
+    },
+    "Mercury": {
+     "sign": "Tula",
+     "marginDeg": 0.47456
+    },
+    "Jupiter": {
+     "sign": "Makara",
+     "marginDeg": 0.03229
+    },
+    "Venus": {
+     "sign": "Karka",
+     "marginDeg": 0.1291
+    },
+    "Saturn": {
+     "sign": "Kanya",
+     "marginDeg": 0.37134
+    },
+    "Rahu": {
+     "sign": "Dhanu",
+     "marginDeg": 0.47901
+    },
+    "Ketu": {
+     "sign": "Mithuna",
+     "marginDeg": 0.47901
+    },
+    "Lagna": {
+     "sign": "Makara",
+     "marginDeg": 0.22224
+    }
+   },
+   "D30": {
+    "Sun": {
+     "sign": "Kumbha",
+     "marginDeg": 0.7547
+    },
+    "Moon": {
+     "sign": "Mesha",
+     "marginDeg": 1.38982
+    },
+    "Mars": {
+     "sign": "Dhanu",
+     "marginDeg": 0.21479
+    },
+    "Mercury": {
+     "sign": "Mithuna",
+     "marginDeg": 2.47456
+    },
+    "Jupiter": {
+     "sign": "Dhanu",
+     "marginDeg": 0.25452
+    },
+    "Venus": {
+     "sign": "Mesha",
+     "marginDeg": 0.68465
+    },
+    "Saturn": {
+     "sign": "Meena",
+     "marginDeg": 3.9269
+    },
+    "Rahu": {
+     "sign": "Mesha",
+     "marginDeg": 2.14567
+    },
+    "Ketu": {
+     "sign": "Mesha",
+     "marginDeg": 2.14567
+    },
+    "Lagna": {
+     "sign": "Kanya",
+     "marginDeg": 2.55553
+    }
+   },
+   "D40": {
+    "Sun": {
+     "sign": "Mesha",
+     "marginDeg": 0.2453
+    },
+    "Moon": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.11018
+    },
+    "Mars": {
+     "sign": "Meena",
+     "marginDeg": 0.21479
+    },
+    "Mercury": {
+     "sign": "Karka",
+     "marginDeg": 0.22456
+    },
+    "Jupiter": {
+     "sign": "Meena",
+     "marginDeg": 0.25452
+    },
+    "Venus": {
+     "sign": "Kanya",
+     "marginDeg": 0.18465
+    },
+    "Saturn": {
+     "sign": "Karka",
+     "marginDeg": 0.1769
+    },
+    "Rahu": {
+     "sign": "Karka",
+     "marginDeg": 0.14567
+    },
+    "Ketu": {
+     "sign": "Karka",
+     "marginDeg": 0.14567
+    },
+    "Lagna": {
+     "sign": "Simha",
+     "marginDeg": 0.05553
+    }
+   },
+   "D45": {
+    "Sun": {
+     "sign": "Makara",
+     "marginDeg": 0.08804
+    },
+    "Moon": {
+     "sign": "Mithuna",
+     "marginDeg": 0.05649
+    },
+    "Mars": {
+     "sign": "Tula",
+     "marginDeg": 0.21479
+    },
+    "Mercury": {
+     "sign": "Mithuna",
+     "marginDeg": 0.19211
+    },
+    "Jupiter": {
+     "sign": "Kumbha",
+     "marginDeg": 0.25452
+    },
+    "Venus": {
+     "sign": "Mithuna",
+     "marginDeg": 0.31535
+    },
+    "Saturn": {
+     "sign": "Karka",
+     "marginDeg": 0.0731
+    },
+    "Rahu": {
+     "sign": "Mesha",
+     "marginDeg": 0.18766
+    },
+    "Ketu": {
+     "sign": "Mesha",
+     "marginDeg": 0.18766
+    },
+    "Lagna": {
+     "sign": "Meena",
+     "marginDeg": 0.2222
+    }
+   },
+   "D60": {
+    "Sun": {
+     "sign": "Mithuna",
+     "marginDeg": 0.2453
+    },
+    "Moon": {
+     "sign": "Mithuna",
+     "marginDeg": 0.11018
+    },
+    "Mars": {
+     "sign": "Makara",
+     "marginDeg": 0.21479
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 0.02544
+    },
+    "Jupiter": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.24548
+    },
+    "Venus": {
+     "sign": "Simha",
+     "marginDeg": 0.18465
+    },
+    "Saturn": {
+     "sign": "Dhanu",
+     "marginDeg": 0.0731
+    },
+    "Rahu": {
+     "sign": "Vrischika",
+     "marginDeg": 0.14567
+    },
+    "Ketu": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.14567
+    },
+    "Lagna": {
+     "sign": "Mesha",
+     "marginDeg": 0.05553
+    }
+   }
+  }
+ },
+ {
+  "id": "P9",
+  "lons": {
+   "Sun": 28.89361,
+   "Moon": 99.77147,
+   "Mars": 110.20056,
+   "Mercury": 3.07333,
+   "Jupiter": 71.82621,
+   "Venus": 56.19169,
+   "Saturn": 120.38567,
+   "Rahu": 159.97896,
+   "Ketu": 339.97896,
+   "Lagna": 211.76275
+  },
+  "vargas": {
+   "D1": {
+    "Sun": {
+     "sign": "Mesha",
+     "marginDeg": 1.10639
+    },
+    "Moon": {
+     "sign": "Karka",
+     "marginDeg": 9.77147
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 9.79944
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 3.07333
+    },
+    "Jupiter": {
+     "sign": "Mithuna",
+     "marginDeg": 11.82621
+    },
+    "Venus": {
+     "sign": "Vrishabha",
+     "marginDeg": 3.80831
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Kanya",
+     "marginDeg": 9.97896
+    },
+    "Ketu": {
+     "sign": "Meena",
+     "marginDeg": 9.97896
+    },
+    "Lagna": {
+     "sign": "Vrischika",
+     "marginDeg": 1.76275
+    }
+   },
+   "D2": {
+    "Sun": {
+     "sign": "Karka",
+     "marginDeg": 1.10639
+    },
+    "Moon": {
+     "sign": "Karka",
+     "marginDeg": 5.22853
+    },
+    "Mars": {
+     "sign": "Simha",
+     "marginDeg": 5.20056
+    },
+    "Mercury": {
+     "sign": "Simha",
+     "marginDeg": 3.07333
+    },
+    "Jupiter": {
+     "sign": "Simha",
+     "marginDeg": 3.17379
+    },
+    "Venus": {
+     "sign": "Simha",
+     "marginDeg": 3.80831
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Karka",
+     "marginDeg": 5.02104
+    },
+    "Ketu": {
+     "sign": "Karka",
+     "marginDeg": 5.02104
+    },
+    "Lagna": {
+     "sign": "Karka",
+     "marginDeg": 1.76275
+    }
+   },
+   "D3": {
+    "Sun": {
+     "sign": "Dhanu",
+     "marginDeg": 1.10639
+    },
+    "Moon": {
+     "sign": "Karka",
+     "marginDeg": 0.22853
+    },
+    "Mars": {
+     "sign": "Meena",
+     "marginDeg": 0.20056
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 3.07333
+    },
+    "Jupiter": {
+     "sign": "Tula",
+     "marginDeg": 1.82621
+    },
+    "Venus": {
+     "sign": "Makara",
+     "marginDeg": 3.80831
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Kanya",
+     "marginDeg": 0.02104
+    },
+    "Ketu": {
+     "sign": "Meena",
+     "marginDeg": 0.02104
+    },
+    "Lagna": {
+     "sign": "Vrischika",
+     "marginDeg": 1.76275
+    }
+   },
+   "D4": {
+    "Sun": {
+     "sign": "Makara",
+     "marginDeg": 1.10639
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 2.27147
+    },
+    "Mars": {
+     "sign": "Makara",
+     "marginDeg": 2.29944
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 3.07333
+    },
+    "Jupiter": {
+     "sign": "Kanya",
+     "marginDeg": 3.17379
+    },
+    "Venus": {
+     "sign": "Kumbha",
+     "marginDeg": 3.69169
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Dhanu",
+     "marginDeg": 2.47896
+    },
+    "Ketu": {
+     "sign": "Mithuna",
+     "marginDeg": 2.47896
+    },
+    "Lagna": {
+     "sign": "Vrischika",
+     "marginDeg": 1.76275
+    }
+   },
+   "D7": {
+    "Sun": {
+     "sign": "Tula",
+     "marginDeg": 1.10639
+    },
+    "Moon": {
+     "sign": "Meena",
+     "marginDeg": 1.20004
+    },
+    "Mars": {
+     "sign": "Vrishabha",
+     "marginDeg": 1.22801
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 1.21239
+    },
+    "Jupiter": {
+     "sign": "Simha",
+     "marginDeg": 1.03093
+    },
+    "Venus": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.4774
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Vrishabha",
+     "marginDeg": 1.40753
+    },
+    "Ketu": {
+     "sign": "Vrischika",
+     "marginDeg": 1.40753
+    },
+    "Lagna": {
+     "sign": "Vrishabha",
+     "marginDeg": 1.76275
+    }
+   },
+   "D9": {
+    "Sun": {
+     "sign": "Dhanu",
+     "marginDeg": 1.10639
+    },
+    "Moon": {
+     "sign": "Kanya",
+     "marginDeg": 0.22853
+    },
+    "Mars": {
+     "sign": "Makara",
+     "marginDeg": 0.20056
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 0.26001
+    },
+    "Jupiter": {
+     "sign": "Makara",
+     "marginDeg": 1.50712
+    },
+    "Venus": {
+     "sign": "Simha",
+     "marginDeg": 0.47498
+    },
+    "Saturn": {
+     "sign": "Mesha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Meena",
+     "marginDeg": 0.02104
+    },
+    "Ketu": {
+     "sign": "Kanya",
+     "marginDeg": 0.02104
+    },
+    "Lagna": {
+     "sign": "Karka",
+     "marginDeg": 1.57059
+    }
+   },
+   "D10": {
+    "Sun": {
+     "sign": "Makara",
+     "marginDeg": 1.10639
+    },
+    "Moon": {
+     "sign": "Mithuna",
+     "marginDeg": 0.77147
+    },
+    "Mars": {
+     "sign": "Kanya",
+     "marginDeg": 0.79944
+    },
+    "Mercury": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.07333
+    },
+    "Jupiter": {
+     "sign": "Kanya",
+     "marginDeg": 0.17379
+    },
+    "Venus": {
+     "sign": "Kanya",
+     "marginDeg": 0.80831
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Simha",
+     "marginDeg": 0.97896
+    },
+    "Ketu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.97896
+    },
+    "Lagna": {
+     "sign": "Karka",
+     "marginDeg": 1.23725
+    }
+   },
+   "D12": {
+    "Sun": {
+     "sign": "Meena",
+     "marginDeg": 1.10639
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.22853
+    },
+    "Mars": {
+     "sign": "Meena",
+     "marginDeg": 0.20056
+    },
+    "Mercury": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.57333
+    },
+    "Jupiter": {
+     "sign": "Tula",
+     "marginDeg": 0.67379
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 1.19169
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Dhanu",
+     "marginDeg": 0.02104
+    },
+    "Ketu": {
+     "sign": "Mithuna",
+     "marginDeg": 0.02104
+    },
+    "Lagna": {
+     "sign": "Vrischika",
+     "marginDeg": 0.73725
+    }
+   },
+   "D16": {
+    "Sun": {
+     "sign": "Karka",
+     "marginDeg": 0.76861
+    },
+    "Moon": {
+     "sign": "Kanya",
+     "marginDeg": 0.39647
+    },
+    "Mars": {
+     "sign": "Kumbha",
+     "marginDeg": 0.42444
+    },
+    "Mercury": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.67667
+    },
+    "Jupiter": {
+     "sign": "Mithuna",
+     "marginDeg": 0.57621
+    },
+    "Venus": {
+     "sign": "Kanya",
+     "marginDeg": 0.05831
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.60396
+    },
+    "Ketu": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.60396
+    },
+    "Lagna": {
+     "sign": "Simha",
+     "marginDeg": 0.11225
+    }
+   },
+   "D20": {
+    "Sun": {
+     "sign": "Vrischika",
+     "marginDeg": 0.39361
+    },
+    "Moon": {
+     "sign": "Tula",
+     "marginDeg": 0.72853
+    },
+    "Mars": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.70056
+    },
+    "Mercury": {
+     "sign": "Mithuna",
+     "marginDeg": 0.07333
+    },
+    "Jupiter": {
+     "sign": "Meena",
+     "marginDeg": 0.17379
+    },
+    "Venus": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.69169
+    },
+    "Saturn": {
+     "sign": "Dhanu",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.52104
+    },
+    "Ketu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.52104
+    },
+    "Lagna": {
+     "sign": "Makara",
+     "marginDeg": 0.26275
+    }
+   },
+   "D24": {
+    "Sun": {
+     "sign": "Karka",
+     "marginDeg": 0.14361
+    },
+    "Moon": {
+     "sign": "Kumbha",
+     "marginDeg": 0.22853
+    },
+    "Mars": {
+     "sign": "Vrischika",
+     "marginDeg": 0.20056
+    },
+    "Mercury": {
+     "sign": "Tula",
+     "marginDeg": 0.57333
+    },
+    "Jupiter": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.57621
+    },
+    "Venus": {
+     "sign": "Meena",
+     "marginDeg": 0.05831
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.02104
+    },
+    "Ketu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.02104
+    },
+    "Lagna": {
+     "sign": "Simha",
+     "marginDeg": 0.51275
+    }
+   },
+   "D27": {
+    "Sun": {
+     "sign": "Mithuna",
+     "marginDeg": 0.00472
+    },
+    "Moon": {
+     "sign": "Kanya",
+     "marginDeg": 0.22853
+    },
+    "Mars": {
+     "sign": "Karka",
+     "marginDeg": 0.20056
+    },
+    "Mercury": {
+     "sign": "Mithuna",
+     "marginDeg": 0.26001
+    },
+    "Jupiter": {
+     "sign": "Simha",
+     "marginDeg": 0.39601
+    },
+    "Venus": {
+     "sign": "Mithuna",
+     "marginDeg": 0.47498
+    },
+    "Saturn": {
+     "sign": "Mesha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Meena",
+     "marginDeg": 0.02104
+    },
+    "Ketu": {
+     "sign": "Kanya",
+     "marginDeg": 0.02104
+    },
+    "Lagna": {
+     "sign": "Kumbha",
+     "marginDeg": 0.45948
+    }
+   },
+   "D30": {
+    "Sun": {
+     "sign": "Tula",
+     "marginDeg": 1.10639
+    },
+    "Moon": {
+     "sign": "Kanya",
+     "marginDeg": 2.22853
+    },
+    "Mars": {
+     "sign": "Makara",
+     "marginDeg": 0.20056
+    },
+    "Mercury": {
+     "sign": "Mesha",
+     "marginDeg": 1.92667
+    },
+    "Jupiter": {
+     "sign": "Dhanu",
+     "marginDeg": 1.82621
+    },
+    "Venus": {
+     "sign": "Vrischika",
+     "marginDeg": 1.19169
+    },
+    "Saturn": {
+     "sign": "Mesha",
+     "marginDeg": 0.38567
+    },
+    "Rahu": {
+     "sign": "Kanya",
+     "marginDeg": 2.02104
+    },
+    "Ketu": {
+     "sign": "Kanya",
+     "marginDeg": 2.02104
+    },
+    "Lagna": {
+     "sign": "Vrishabha",
+     "marginDeg": 1.76275
+    }
+   },
+   "D40": {
+    "Sun": {
+     "sign": "Mithuna",
+     "marginDeg": 0.35639
+    },
+    "Moon": {
+     "sign": "Vrischika",
+     "marginDeg": 0.02147
+    },
+    "Mars": {
+     "sign": "Dhanu",
+     "marginDeg": 0.04944
+    },
+    "Mercury": {
+     "sign": "Simha",
+     "marginDeg": 0.07333
+    },
+    "Jupiter": {
+     "sign": "Karka",
+     "marginDeg": 0.17379
+    },
+    "Venus": {
+     "sign": "Simha",
+     "marginDeg": 0.05831
+    },
+    "Saturn": {
+     "sign": "Mesha",
+     "marginDeg": 0.36433
+    },
+    "Rahu": {
+     "sign": "Vrischika",
+     "marginDeg": 0.22896
+    },
+    "Ketu": {
+     "sign": "Vrischika",
+     "marginDeg": 0.22896
+    },
+    "Lagna": {
+     "sign": "Dhanu",
+     "marginDeg": 0.26275
+    }
+   },
+   "D45": {
+    "Sun": {
+     "sign": "Vrischika",
+     "marginDeg": 0.22694
+    },
+    "Moon": {
+     "sign": "Mithuna",
+     "marginDeg": 0.22853
+    },
+    "Mars": {
+     "sign": "Tula",
+     "marginDeg": 0.20056
+    },
+    "Mercury": {
+     "sign": "Simha",
+     "marginDeg": 0.26001
+    },
+    "Jupiter": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.17379
+    },
+    "Venus": {
+     "sign": "Vrischika",
+     "marginDeg": 0.19169
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.281
+    },
+    "Rahu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.02104
+    },
+    "Ketu": {
+     "sign": "Kumbha",
+     "marginDeg": 0.02104
+    },
+    "Lagna": {
+     "sign": "Tula",
+     "marginDeg": 0.23725
+    }
+   },
+   "D60": {
+    "Sun": {
+     "sign": "Makara",
+     "marginDeg": 0.10639
+    },
+    "Moon": {
+     "sign": "Kumbha",
+     "marginDeg": 0.22853
+    },
+    "Mars": {
+     "sign": "Vrischika",
+     "marginDeg": 0.20056
+    },
+    "Mercury": {
+     "sign": "Tula",
+     "marginDeg": 0.07333
+    },
+    "Jupiter": {
+     "sign": "Vrishabha",
+     "marginDeg": 0.17379
+    },
+    "Venus": {
+     "sign": "Kanya",
+     "marginDeg": 0.19169
+    },
+    "Saturn": {
+     "sign": "Simha",
+     "marginDeg": 0.11433
+    },
+    "Rahu": {
+     "sign": "Mesha",
+     "marginDeg": 0.02104
+    },
+    "Ketu": {
+     "sign": "Tula",
+     "marginDeg": 0.02104
+    },
+    "Lagna": {
+     "sign": "Kumbha",
+     "marginDeg": 0.23725
+    }
+   }
+  }
+ }
+]

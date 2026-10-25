@@ -873,6 +873,31 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     impact: 'Zooms in on difficulties and how you handle tests of character.', why: 'Each sign split into five unequal parts ruled by Mars, Saturn, Jupiter, Mercury and Venus.',
     hi: 'कठिनाइयों और चरित्र की परीक्षा का वर्ग।', link: '/divisional-charts/d30-trimshamsha',
   },
+  // Batch 7 W3 — D40/D45 now drawn in the Kundali. Meaning per BPHS 7.5–7.6 ("auspicious and
+  // inauspicious effects from Khavedamsha; all indications from Akshavedamsha and Shashtyamsha"),
+  // archive.org BPHS text and enjoylearningsanskrit.com/scriptures/parashara/chapter-7/verse-5 & -6;
+  // build rules BPHS 6.29–6.32. "Character and conduct" for D45: en.wikipedia.org/wiki/Varga_(astrology).
+  khavedamsha: {
+    term: 'D40 (Khavedamsha)', category: 'divisional', hiTerm: 'D40 (खवेदांश)',
+    impact: 'A fine-detail chart read for the overall good and not-so-good tendencies in a life.',
+    why: 'Each sign split into forty parts of 45′. Odd signs count from Aries, even signs from Libra. It needs an accurate birth time.',
+    hi: 'जीवन के शुभ और अशुभ प्रभावों का सूक्ष्म वर्ग (हर राशि के 40 भाग)। इसके लिए सटीक जन्म समय चाहिए।',
+    aliases: ['D40', 'Khavedamsa'], link: '/divisional-charts',
+  },
+  akshavedamsha: {
+    term: 'D45 (Akshavedamsha)', category: 'divisional', hiTerm: 'D45 (अक्षवेदांश)',
+    impact: 'A fine-detail chart read for all general matters, often for character and conduct.',
+    why: 'Each sign split into forty-five parts of 40′. Counting starts from Aries, Leo or Sagittarius for movable, fixed and dual signs. It needs an accurate birth time.',
+    hi: 'सभी सामान्य बातों, विशेषकर स्वभाव और आचरण, का सूक्ष्म वर्ग (हर राशि के 45 भाग)। इसके लिए सटीक जन्म समय चाहिए।',
+    aliases: ['D45', 'Akshavedamsa'], link: '/divisional-charts',
+  },
+  shodashvarga: {
+    term: 'Shodashvarga (the 16 divisional charts)', category: 'divisional', hiTerm: 'षोडशवर्ग',
+    impact: 'The full set of sixteen "zoom lens" charts Parashara describes, from D1 up to D60.',
+    why: 'Brihat Parashara Hora Shastra (ch. 6) explains how each of the sixteen is built and ch. 7 what each is read for. Higher divisions change faster, so they need a more exact birth time.',
+    hi: 'पराशर द्वारा बताई गई सोलह वर्ग कुंडलियाँ (D1 से D60)। ऊँचे वर्गों के लिए अधिक सटीक जन्म समय चाहिए।',
+    aliases: ['Shodasavarga', '16 vargas'], link: '/divisional-charts',
+  },
   shashtiamsa: {
     term: 'Shashtiamsa (D60 chart)', category: 'divisional', hiTerm: 'षष्ट्यंश (D60)',
     impact: 'The most detailed divisional chart — treated as a fine-tuning layer, cautiously.',
