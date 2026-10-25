@@ -8,6 +8,13 @@ import { getTarotBirthCards, MAJOR_ARCANA, type TarotCard } from '@/data/tarotDa
 import { useReportPrice } from '@/hooks/useCurrency';
 import { describeBirthCardWorking } from '@/lib/tarot/birthCard';
 import { TermTip } from '@/components/vedic/TermTip';
+import { TAROT_CARDS, tarotCardPath } from '@/data/tarotCards';
+
+// Batch 7 / W5: link a Major Arcana birth card to its full meaning page.
+const cardPageFor = (name: string) => {
+  const c = TAROT_CARDS.find(t => t.arcana === 'major' && t.name === name);
+  return c ? tarotCardPath(c.slug) : '/tarot/cards';
+};
 
 type TabKey = 'meaning' | 'love' | 'career' | 'health' | 'spirituality';
 
@@ -362,6 +369,9 @@ export default function TarotByBirthday() {
                     </span>
                   ))}
                 </div>
+                <Link to={cardPageFor(birthdayResult.card.name)} className="inline-block text-sm text-white underline" data-testid="birth-card-meaning-link">
+                  Full {birthdayResult.card.name} meaning — upright, reversed &amp; yes/no →
+                </Link>
               </div>
 
               <div className="flex gap-1 mb-4 bg-gray-100 rounded-xl p-1 overflow-x-auto">
@@ -559,6 +569,7 @@ export default function TarotByBirthday() {
             <div className="grid grid-cols-2 gap-2">
               {[
                 { text: 'Interactive Tarot Reading', href: '/tarot-reading' },
+                { text: 'All 78 Tarot Card Meanings', href: '/tarot/cards' },
                 { text: 'Moon Sign Calculator', href: '/moon-sign' },
                 { text: 'Numerology Calculator', href: '/numerology' },
                 { text: 'Name Numerology', href: '/name-numerology' },
