@@ -4,8 +4,12 @@
 //   V2 JSON-LD: at least one application/ld+json block
 //   V3 Sitemap: route present in dist/sitemap.xml
 //   V6 Smoke: no "undefined" / "[object Object]" leaks in the HTML head/body
-import { readFileSync, existsSync } from 'fs';
-import { resolve } from 'path';
+//   V7 Head (Batch 7): EVERY prerendered page has exactly one canonical, one og:url,
+//      one twitter:url, no JSON-LD block repeated (same @type + same content), and
+//      at most one BreadcrumbList
+import { readFileSync, existsSync, readdirSync } from 'fs';
+import { resolve, join } from 'path';
+import { headStats } from './lib/headDedupe.mjs';
 
 const DIST = 'dist';
 const ROUTES = [
@@ -47,7 +51,8 @@ for (const route of ROUTES) {
   if (!title) problems.push('no <title>');
   else if (title.length > 70) problems.push(`title ${title.length}c > 70`);
 
-  if (!/rel="canonical"/.test(html)) problems.push('no canonical');
+  const hs = headStats(html);
+  if (hs.canonicals !== 1) problems.push(`${hs.canonicals} canonicals`);
   if (!html.includes('application/ld+json')) problems.push('no JSON-LD');
 
   const head = html.slice(0, 12000);
@@ -59,6 +64,34 @@ for (const route of ROUTES) {
 
   if (problems.length) { results.push(`  ❌ ${route}: ${problems.join(', ')}`); fail++; }
   else { results.push(`  ✅ ${route} — "${title}" (${title.length}c)`); pass++; }
+}
+
+// V7 — sweep every prerendered index.html under dist/.
+const headProblems = [];
+let swept = 0;
+const walk = (dir) => {
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) { if (!['assets', 'og', 'daily'].includes(e.name) || dir !== DIST) walk(p); }
+    else if (e.name === 'index.html') {
+      swept++;
+      const s = headStats(readFileSync(p, 'utf8'));
+      const bad = [];
+      if (s.canonicals !== 1) bad.push(`${s.canonicals} canonicals`);
+      if (s.ogUrls > 1) bad.push(`${s.ogUrls} og:url`);
+      if (s.twitterUrls > 1) bad.push(`${s.twitterUrls} twitter:url`);
+      if (s.duplicateJsonLd > 0) bad.push(`${s.duplicateJsonLd} duplicate JSON-LD`);
+      if (s.breadcrumbLists > 1) bad.push(`${s.breadcrumbLists} BreadcrumbLists`);
+      if (bad.length) headProblems.push(`${p.slice(DIST.length) || '/'}: ${bad.join(', ')}`);
+    }
+  }
+};
+if (existsSync(DIST)) walk(DIST);
+if (headProblems.length) {
+  fail++;
+  results.push(`  ❌ head check: ${headProblems.length} of ${swept} pages — ${headProblems.slice(0, 15).join(' | ')}`);
+} else {
+  results.push(`  ✅ head check: ${swept} prerendered pages — one canonical each, no duplicate JSON-LD, ≤1 BreadcrumbList`);
 }
 
 console.log(results.join('\n'));
