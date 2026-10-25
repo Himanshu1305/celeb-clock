@@ -5,6 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { LegacyRedirect } from "@/components/LegacyRedirect";
 import { HelmetProvider } from "react-helmet-async";
 
 // Core Page Imports
@@ -27,7 +28,6 @@ import { FITNESS_PAGES } from "./data/fitnessPages";
 const LifeExpectancy = lazyWithReload(() => import("./pages/LifeExpectancy"));
 const LifeExpectancyFactorPage = lazyWithReload(() => import("./pages/LifeExpectancyFactorPage"));
 const LongevityCalculatorPage = lazyWithReload(() => import("./pages/LongevityCalculatorPage"));
-const BiologicalAgeCalculatorPage = lazyWithReload(() => import("./pages/BiologicalAgeCalculatorPage"));
 const HowLongWillILivePage = lazyWithReload(() => import("./pages/HowLongWillILivePage"));
 const CelebrityPage = lazyWithReload(() => import("./pages/CelebrityPage"));
 const CelebrityIndexPage = lazyWithReload(() => import("./pages/CelebrityIndexPage"));
@@ -44,7 +44,6 @@ const AgeCalculatorPage = lazyWithReload(() => import("./pages/AgeCalculatorPage
 const AgeInDays = lazyWithReload(() => import("./pages/AgeInDays"));
 const AgeInSeconds = lazyWithReload(() => import("./pages/AgeInSeconds"));
 const BirthdayCountdown = lazyWithReload(() => import("./pages/BirthdayCountdown"));
-const BiologicalAgeVsChronologicalAge = lazyWithReload(() => import("./pages/BiologicalAgeVsChronologicalAge"));
 const LifeExpectancyIndiaVsUsa = lazyWithReload(() => import("./pages/LifeExpectancyIndiaVsUsa"));
 const LifeExpectancyIndia = lazyWithReload(() => import("./pages/LifeExpectancyIndia"));
 const LifeExpectancyUSA = lazyWithReload(() => import("./pages/LifeExpectancyUSA"));
@@ -74,7 +73,6 @@ const ZodiacSign = lazyWithReload(() => import("./pages/ZodiacSign"));
 const BirthstonePage = lazyWithReload(() => import("./pages/BirthstonePage"));
 const NumerologyNumber = lazyWithReload(() => import("./pages/NumerologyNumber"));
 const GenerationPage = lazyWithReload(() => import("./pages/Generation"));
-const BirthdayDate = lazyWithReload(() => import("./pages/BirthdayDate"));
 const BirthdayHub = lazyWithReload(() => import("./pages/BirthdayHub"));
 const BirthdayMonthPage = lazyWithReload(() => import("./pages/BirthdayMonthPage"));
 const BirthdayDatePage = lazyWithReload(() => import("./pages/BirthdayDatePage"));
@@ -102,10 +100,6 @@ const LongevityFoodsIndiaArticle = lazyWithReload(() => import("./pages/articles
 const LifePathCompatibilityArticle = lazyWithReload(() => import("./pages/articles/LifePathCompatibilityArticle"));
 const DeathClockAlternativeArticle = lazyWithReload(() => import("./pages/articles/DeathClockAlternativeArticle"));
 const RetirementLifeExpectancyArticle = lazyWithReload(() => import("./pages/articles/RetirementLifeExpectancyArticle"));
-const LifeExpectancyUKPage = lazyWithReload(() => import("./pages/LifeExpectancyUKPage"));
-const LifeExpectancyAustraliaPage = lazyWithReload(() => import("./pages/LifeExpectancyAustraliaPage"));
-const LifeExpectancyUSAPage = lazyWithReload(() => import("./pages/LifeExpectancyUSAPage"));
-const LifeExpectancyCanadaPage = lazyWithReload(() => import("./pages/LifeExpectancyCanadaPage"));
 const ZodiacCompatibilityArticle = lazyWithReload(() => import("./pages/articles/ZodiacCompatibilityArticle"));
 const BiorhythmArticle = lazyWithReload(() => import("./pages/articles/BiorhythmArticle"));
 const TarotByDateOfBirthArticle = lazyWithReload(() => import("./pages/articles/TarotByDateOfBirthArticle"));
@@ -137,7 +131,6 @@ const HindiLifeExpectancyArticle = lazyWithReload(() => import("./pages/articles
 const HindiNumerologyArticle = lazyWithReload(() => import("./pages/articles/HindiNumerologyArticle"));
 const HindiJeevanPratyashaPage = lazyWithReload(() => import("./pages/articles/HindiJeevanPratyashaPage"));
 const LifeExpectancySingaporeUAEPage = lazyWithReload(() => import("./pages/LifeExpectancySingaporeUAEPage"));
-const BornOnDayGlobal = lazyWithReload(() => import("./pages/BornOnDayGlobal"));
 const OnThisDayEvents = lazyWithReload(() => import("./pages/OnThisDayEvents"));
 const ReportView = lazyWithReload(() => import("./pages/ReportView"));
 const ChineseZodiac = lazyWithReload(() => import("./pages/ChineseZodiac"));
@@ -218,7 +211,6 @@ const BlueZonesIndex = lazyWithReload(() => import('@/pages/BlueZonesIndex'));
 const BlueZonesFactor = lazyWithReload(() => import('@/pages/BlueZonesFactor'));
 const PanchangPage = lazyWithReload(() => import('@/pages/PanchangPage'));
 const GlossaryPage = lazyWithReload(() => import('@/pages/GlossaryPage'));
-const DatePersonalityPage = lazyWithReload(() => import('@/pages/DatePersonalityPage'));
 const RemindersPage = lazyWithReload(() => import('@/pages/RemindersPage'));
 const KundaliCompatArticle = lazyWithReload(() => import('@/pages/articles/KundaliCompatArticle'));
 const DiwaliGiftPage = lazyWithReload(() => import('@/pages/DiwaliGiftPage'));
@@ -267,7 +259,8 @@ const App = () => (
               <Route path="/age-in-days" element={<AgeInDays />} />
               <Route path="/age-in-seconds" element={<AgeInSeconds />} />
               <Route path="/birthday-countdown" element={<BirthdayCountdown />} />
-              <Route path="/biological-age-vs-chronological-age" element={<BiologicalAgeVsChronologicalAge />} />
+              {/* Batch 6 SEO: the richer article now lives at the clean URL; /articles/… 301s here. */}
+              <Route path="/biological-age-vs-chronological-age" element={<BiologicalAgeArticle />} />
               <Route path="/life-expectancy-india-vs-usa" element={<LifeExpectancyIndiaVsUsa />} />
               <Route path="/life-expectancy-india" element={<LifeExpectancyIndia />} />
               <Route path="/life-expectancy-usa" element={<LifeExpectancyUSA />} />
@@ -308,7 +301,7 @@ const App = () => (
               <Route path="/life-expectancy/factors" element={<LifeExpectancyFactorPage />} />
               <Route path="/life-expectancy/factors/:factor" element={<LifeExpectancyFactorPage />} />
               <Route path="/longevity-calculator" element={<LongevityCalculatorPage />} />
-              <Route path="/biological-age-calculator" element={<BiologicalAgeCalculatorPage />} />
+              <Route path="/biological-age-calculator" element={<LegacyRedirect otherwise="/biological-age/" />} />
               <Route path="/how-long-will-i-live" element={<HowLongWillILivePage />} />
               {/* Celebrity pages (Day 8): index, explicit hubs, then individual slug. */}
               <Route path="/celebrity" element={<CelebrityIndexPage />} />
@@ -323,9 +316,9 @@ const App = () => (
                   landing page (was a redirect to /celebrity/). Keeps its indexed traffic. */}
               <Route path="/celebrity-birthday" element={<BirthdayCelebrityLanding />} />
               <Route path="/birthday" element={<BirthdayHub />} />
-              <Route path="/birthday/:month/:day" element={<BirthdayDatePage />} />
-              <Route path="/birthday/:month" element={<BirthdayMonthPage />} />
-              <Route path="/birthday/:date" element={<BirthdayDate />} />
+              <Route path="/birthday/:month/:day" element={<LegacyRedirect fallback={<BirthdayDatePage />} />} />
+              {/* /birthday/:month-:day (old celebrity list) is retired → /born-on/:month-:day/ (LegacyRedirect). */}
+              <Route path="/birthday/:month" element={<LegacyRedirect fallback={<BirthdayMonthPage />} />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/about" element={<About />} />
@@ -349,7 +342,7 @@ const App = () => (
               <Route path="/articles/moon-sign-by-date-of-birth" element={<MoonSignArticle />} />
               <Route path="/articles/life-expectancy-by-country-2026" element={<LifeExpectancyByCountryArticle />} />
               <Route path="/articles/how-long-will-i-live-in-india" element={<LifeExpectancyIndiaArticle />} />
-              <Route path="/articles/biological-age-vs-chronological-age" element={<BiologicalAgeArticle />} />
+              <Route path="/articles/biological-age-vs-chronological-age" element={<LegacyRedirect otherwise="/biological-age-vs-chronological-age/" />} />
               <Route path="/articles/vedic-astrology-birth-chart" element={<VedicAstrologyArticle />} />
               <Route path="/articles/longevity-quiz" element={<LongevityQuizArticle />} />
               <Route path="/articles/bryan-johnson-blueprint-alternative" element={<BryanJohnsonArticle />} />
@@ -361,10 +354,10 @@ const App = () => (
               <Route path="/articles/life-path-number-compatibility" element={<LifePathCompatibilityArticle />} />
               <Route path="/articles/death-clock-alternative" element={<DeathClockAlternativeArticle />} />
               <Route path="/articles/retirement-planning-life-expectancy" element={<RetirementLifeExpectancyArticle />} />
-              <Route path="/life-expectancy-calculator-uk" element={<LifeExpectancyUKPage />} />
-              <Route path="/life-expectancy-calculator-australia" element={<LifeExpectancyAustraliaPage />} />
-              <Route path="/life-expectancy-calculator-usa" element={<LifeExpectancyUSAPage />} />
-              <Route path="/life-expectancy-calculator-canada" element={<LifeExpectancyCanadaPage />} />
+              <Route path="/life-expectancy-calculator-uk" element={<LegacyRedirect otherwise="/life-expectancy-uk/" />} />
+              <Route path="/life-expectancy-calculator-australia" element={<LegacyRedirect otherwise="/life-expectancy-australia/" />} />
+              <Route path="/life-expectancy-calculator-usa" element={<LegacyRedirect otherwise="/life-expectancy-usa/" />} />
+              <Route path="/life-expectancy-calculator-canada" element={<LegacyRedirect otherwise="/life-expectancy-canada/" />} />
               <Route path="/articles/zodiac-compatibility" element={<ZodiacCompatibilityArticle />} />
               <Route path="/articles/biorhythm-calculator" element={<BiorhythmArticle />} />
               <Route path="/articles/tarot-card-by-date-of-birth" element={<TarotByDateOfBirthArticle />} />
@@ -396,7 +389,7 @@ const App = () => (
               <Route path="/hi/numerology-by-date-of-birth" element={<HindiNumerologyArticle />} />
               <Route path="/hi/meri-jeevan-pratyasha" element={<HindiJeevanPratyashaPage />} />
               <Route path="/life-expectancy-calculator-singapore-uae" element={<LifeExpectancySingaporeUAEPage />} />
-              <Route path="/born-on/:month/:day" element={<BornOnDayGlobal />} />
+              <Route path="/born-on/:month/:day" element={<LegacyRedirect />} />
               <Route path="/on-this-day" element={<OnThisDayEvents />} />
               <Route path="/on-this-day/:month/:day" element={<OnThisDayEvents />} />
               <Route path="/birthday-report" element={<BirthdayReport />} />
@@ -496,7 +489,7 @@ const App = () => (
               <Route path="/glossary" element={<GlossaryPage />} />
               <Route path="/panchang" element={<PanchangPage />} />
               <Route path="/panchang/:city" element={<PanchangPage />} />
-              <Route path="/born-on/:month/:day/personality" element={<DatePersonalityPage />} />
+              <Route path="/born-on/:month/:day/personality" element={<LegacyRedirect />} />
               <Route path="/reminders" element={<RemindersPage />} />
               <Route path="/articles/kundali-compatibility" element={<KundaliCompatArticle />} />
               <Route path="/diwali-gift" element={<DiwaliGiftPage />} />
@@ -511,8 +504,8 @@ const App = () => (
               <Route path="/born-in" element={<MonthsHubPage />} />
               <Route path="/born-on" element={<BornOnIndex />} />
               <Route path="/born-on/india" element={<BornOnIndiaIndex />} />
-              <Route path="/born-on/:slug/india" element={<BornOnDayIndia />} />
-              <Route path="/born-on/:slug" element={<BornOnDay />} />
+              <Route path="/born-on/:slug/india" element={<LegacyRedirect fallback={<BornOnDayIndia />} />} />
+              <Route path="/born-on/:slug" element={<LegacyRedirect fallback={<BornOnDay />} />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>
