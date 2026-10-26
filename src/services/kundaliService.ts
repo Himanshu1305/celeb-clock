@@ -8,6 +8,7 @@ import { glossInline } from '@/lib/vedic/termDefinitions';
 import { birthQuery, type BirthPlaceLike } from '@/lib/timezone/clientBirth';
 import type { BirthTimezone } from '@/lib/timezone/birthTimezone';
 import { buildChartBasis, type ChartBasis } from '@/lib/vedic/chartBasis';
+import type { BirthTimeEdge } from '@/lib/vedic/birthTimeEdgeNote';
 
 export interface KundaliPlanet { name: string; sign: string; signIndex: number; house: number; longitude: number; retrograde: boolean }
 export interface KundaliData {
@@ -37,6 +38,8 @@ export interface KundaliData {
     planets: Array<{ name: string; signIndex: number; house: number }>;
     timeSensitive: string[];
   }> | null;
+  /** Batch 8: Lagna / Moon birth-time edges (see src/lib/vedic/engine/birthTimeEdge.ts). */
+  birthTimeEdges?: BirthTimeEdge[] | null;
 }
 
 export const hasProkeralaKey = (): boolean =>
@@ -61,6 +64,9 @@ export function kundaliBasis(k: KundaliData): ChartBasis | null {
   return buildChartBasis({
     birthTimezone: k.birthTimezone, rashi: k.rashi ?? '—', nakshatra: k.nakshatra?.nakshatra ?? '—',
     pada: k.nakshatra?.pada ?? 0, lagna: k.lagna.sign, moonLongitude: moon?.longitude, lagnaLongitude: k.lagna.degrees,
+    // Batch 8: the Kundali page shows the edge notes beside the Lagna; here they only
+    // replace the generic degree-based notes.
+    edges: Array.isArray(k.birthTimeEdges) ? k.birthTimeEdges : null, edgeNotesShownElsewhere: true,
   });
 }
 

@@ -41,6 +41,7 @@ import { getChestaBala } from './engine/chestaBala';
 import { getDrikBala } from './engine/drikBala';
 import { detectYogas, type YogaResult } from './yogas';
 import { buildShodashvarga, type ShodashvargaChart } from './engine/shodashvarga';
+import { buildBirthTimeEdges, type BirthTimeEdge } from './engine/birthTimeEdge';
 
 export interface BirthChartInput {
   year: number;
@@ -140,6 +141,8 @@ export interface BirthChartResult {
   divisionalCharts: DivisionalCharts;
   /** Batch 7 W3: all sixteen BPHS vargas (D1…D60) with ±5-minute birth-time sensitivity. */
   shodashvarga?: ShodashvargaChart[];
+  /** Batch 8: Lagna (±5 / ±15 min) and Moon Rashi / Nakshatra (±5 min) birth-time edges. */
+  birthTimeEdges?: BirthTimeEdge[];
   kp: Record<string, ReturnType<typeof getKPSubLord>>;
   shadbala?: Record<string, ShadbalaComponent>;
   /** Internal debugging only — which engine produced this chart. */
@@ -452,6 +455,10 @@ function toResult(chart: FullChart, source: 'local' | 'prokerala', includeShadba
       birthDateUTC, input.latitude, input.longitude,
       { Lagna: chart.lagna.siderealLongitude, ...Object.fromEntries(PLANET_ORDER.map(n => [n, chart.planets[n].siderealLongitude])) },
     ), undefined as any),
+    birthTimeEdges: safe(() => buildBirthTimeEdges(
+      birthDateUTC, input.latitude, input.longitude,
+      { Lagna: chart.lagna.siderealLongitude, Moon: chart.planets.Moon.siderealLongitude },
+    ), [] as BirthTimeEdge[]),
     kp: {
       Lagna: getKPSubLord(chart.lagna.siderealLongitude),
       ...Object.fromEntries(PLANET_ORDER.map((n) => [n, getKPSubLord(chart.planets[n].siderealLongitude)])),

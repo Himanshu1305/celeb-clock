@@ -83,6 +83,8 @@ export function toKundaliLegacy(r: BirthChartResult) {
     // Batch 7 W3: all sixteen BPHS divisional charts (D1…D60), each already in the
     // chart component's shape, plus the points whose varga sign changes within ±5 min.
     shodashvarga: r.shodashvarga ?? null,
+    // Batch 8: Lagna / Moon birth-time edge notes (±5 / ±15 minutes).
+    birthTimeEdges: r.birthTimeEdges ?? [],
     // Doshas the engine already computes — /manglik reads doshas.mangalDosha and
     // /kaal-sarp-dosha reads doshas.kaalSarp from this response. Previously dropped,
     // which made both standalone tools fail every real submission.

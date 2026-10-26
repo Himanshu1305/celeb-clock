@@ -18,6 +18,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { mergeProfile, maritalStatusOf, MARITAL_STATUS_OPTIONS, type MaritalStatusChoice } from '@/services/savedProfile';
 import { fetchKundali, buildInterpretationBlocks, kundaliBasis, type KundaliData } from '@/services/kundaliService';
+import { birthTimeEdgeNote } from '@/lib/vedic/birthTimeEdgeNote';
 import { BirthDataUsed } from '@/components/vedic/BirthDataUsed';
 import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
 import { WhatsAhead } from '@/components/vedic/WhatsAhead';
@@ -324,6 +325,16 @@ export default function KundaliPage() {
                   )}
                 </div>
               </div>
+
+              {/* Batch 8: calm note when the Lagna (±5 / ±15 min) or the Moon sign / birth star
+                  (±5 min) would change with a slightly different birth time. */}
+              {!data.requires_birth_time && (data.birthTimeEdges?.length ?? 0) > 0 && (
+                <div data-testid="kundali-edge-notes" className="rounded-xl border border-amber-500/60 bg-amber-50 text-amber-900 p-3 text-sm space-y-1" style={{ marginTop: 12 }}>
+                  {data.birthTimeEdges!.map((e, i) => (
+                    <p key={i} data-testid={`kundali-edge-${e.point}`}>{birthTimeEdgeNote(e)}</p>
+                  ))}
+                </div>
+              )}
 
               {/* Batch 7 (W8): Nakshatra → baby-name letters. */}
               <NakshatraNameLetters nakshatra={data.nakshatra.nakshatra} pada={data.nakshatra.pada} />
