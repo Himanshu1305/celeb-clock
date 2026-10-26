@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 // @ts-expect-error — plain ESM build script, no type declarations
-import { finalizeHead, pickCanonical, normalizeSiteUrl, dedupeJsonLd, headStats, hasJsonLdType, selfUrl, keepOneBreadcrumb } from '../lib/headDedupe.mjs';
+import { finalizeHead, pickCanonical, normalizeSiteUrl, dedupeJsonLd, headStats, hasJsonLdType, selfUrl, keepOneBreadcrumb, keepOneMeta, mergeSameEntityJsonLd, SINGLE_META } from '../lib/headDedupe.mjs';
+import { injectDailyHtml } from '../../src/lib/daily/inject';
+import type { DailyEntry } from '../../src/lib/daily/types';
 
 // Shape of a real prerendered page (scratchpad angel-pr/angel-numbers/1111/index.html):
 // base index.html tags + react-helmet (data-rh) tags + the prerender's own BreadcrumbList.
@@ -154,5 +156,110 @@ describe('JSON-LD dedupe', () => {
     const shortOwn = '<script type="application/ld+json">{"@type":"BreadcrumbList","itemListElement":[{"name":"Home"}]}</script>';
     expect(keepOneBreadcrumb(seo + shortOwn)).toContain('"Virat Kohli"');
     expect(headStats(finalizeHead(`<html><head>${seo}</head><body>${own}</body></html>`, '/celebrity/virat-kohli').html).breadcrumbLists).toBe(1);
+  });
+});
+
+// Batch 8 — one description / og / twitter title+description per page, Helmet preferred.
+// Shape taken from a real local prerender (dist/hi/rashifal/index.html, 26 Oct 2026):
+// the static index.html tags first (generic English homepage text), then Helmet's.
+const metaPage = `<!DOCTYPE html><html><head><title>राशिफल — आज का राशिफल | BornClock</title>
+<meta name="description" content="Know your time. Live it well. BornClock combines science-based life expectancy forecasting with birthday personality insights.">
+<meta property="og:title" content="BornClock — Know Your Time. Live It Well.">
+<meta property="og:description" content="Celebrity birthday twins, biological age, life expectancy, zodiac &amp; numerology — all from your birth date. Free.">
+<meta name="twitter:title" content="BornClock — Know Your Time. Live It Well.">
+<meta name="twitter:description" content="Celebrity birthday twins, biological age, life expectancy, zodiac &amp; numerology — all from your birth date. Free.">
+<meta name="title" content="राशिफल — आज का राशिफल | BornClock" data-rh="true">
+<meta name="description" content="अपनी राशि चुनें और आज का राशिफल पढ़ें।" data-rh="true">
+<meta property="og:title" content="राशिफल — आज का राशिफल | BornClock" data-rh="true">
+<meta property="og:description" content="अपनी राशि चुनें और आज का राशिफल पढ़ें।" data-rh="true">
+<meta name="twitter:title" content="राशिफल — आज का राशिफल | BornClock" data-rh="true">
+<meta name="twitter:description" content="अपनी राशि चुनें और आज का राशिफल पढ़ें।" data-rh="true">
+<meta property="og:image:width" content="1200"><meta name="twitter:card" content="summary_large_image">
+</head><body></body></html>`;
+
+describe('finalizeHead — one of each social/description meta', () => {
+  it('keeps exactly one of each, the Helmet (page-own) value, never the generic home text', () => {
+    const { html } = finalizeHead(metaPage, '/hi/rashifal');
+    const s = headStats(html);
+    expect(s.meta).toEqual({ description: 1, title: 1, ogTitle: 1, ogDescription: 1, twitterTitle: 1, twitterDescription: 1 });
+    expect(html).not.toContain('Know your time. Live it well.');
+    expect(html).not.toContain('Celebrity birthday twins');
+    expect(html).toContain('<meta name="description" content="अपनी राशि चुनें और आज का राशिफल पढ़ें।" data-rh="true">');
+    expect(html).toContain('<meta property="og:title" content="राशिफल — आज का राशिफल | BornClock" data-rh="true">');
+    // other og/twitter tags are untouched
+    expect(html).toContain('og:image:width');
+    expect(html).toContain('twitter:card');
+    expect(finalizeHead(html, '/hi/rashifal').html).toBe(html);
+  });
+
+  it('no Helmet copy → the first non-empty one stays; empty Helmet content does not win', () => {
+    const a = '<meta name="description" content="Static one"><meta name="description" content="Second">';
+    expect(keepOneMeta(a, SINGLE_META.description)).toBe('<meta name="description" content="Static one">');
+    const b = '<meta name="description" content="Static one"><meta name="description" content="" data-rh="true">';
+    expect(keepOneMeta(b, SINGLE_META.description)).toBe('<meta name="description" content="Static one">');
+    const c = '<meta content="Own" name="description" data-rh="true"><meta name="description" content="Static">';
+    expect(keepOneMeta(c, SINGLE_META.description)).toBe('<meta content="Own" name="description" data-rh="true">');
+  });
+
+  it('does not confuse description with og:/twitter:description', () => {
+    const h = '<meta name="description" content="d"><meta property="og:description" content="o"><meta name="twitter:description" content="t">';
+    expect(keepOneMeta(h, SINGLE_META.description)).toBe(h);
+  });
+
+  it('daily injection still finds and updates the single tags afterwards', () => {
+    const shell = finalizeHead(metaPage.replace('<body></body>', '<body><h1><span data-daily="h1">old</span></h1></body>'), '/hi/rashifal/mesha').html;
+    const entry: DailyEntry = { date: '2026-10-26', lang: 'hi', title: 'मेष राशिफल 26 अक्टूबर 2026', description: 'आज का मेष राशिफल', h1: 'मेष राशिफल', dateLabel: 'सोमवार, 26 अक्टूबर 2026', answer: 'a', why: [], sections: [], faq: [] };
+    const { html, replaced } = injectDailyHtml(shell, { kind: 'rashifal-hi', slug: 'mesha', path: '/hi/rashifal/mesha', entry });
+    expect(replaced.description).toBe(true);
+    const s = headStats(html);
+    expect(s.meta).toEqual({ description: 1, title: 1, ogTitle: 1, ogDescription: 1, twitterTitle: 1, twitterDescription: 1 });
+    for (const re of [SINGLE_META.description, SINGLE_META.ogDescription, SINGLE_META.twitterDescription]) expect(html.match(re)![0]).toContain('content="आज का मेष राशिफल"');
+    for (const re of [SINGLE_META.ogTitle, SINGLE_META.twitterTitle]) expect(html.match(re)![0]).toContain('content="मेष राशिफल 26 अक्टूबर 2026"');
+  });
+});
+
+describe('JSON-LD — one Organization / WebSite / WebPage', () => {
+  // The real homepage pair (dist/index.html, local prerender 26 Oct 2026): index.html's
+  // static blocks + src/pages/Index.tsx's body-rendered JsonLd + <SEO>'s WebPage.
+  const home = `<html><head>
+<script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Organization","name":"BornClock","url":"https://bornclock.com","logo":{"@type":"ImageObject","url":"https://bornclock.com/bornclock-logo.png"},"description":"Free age calculator.","contactPoint":{"@type":"ContactPoint","email":"hello@bornclock.com","contactType":"customer support"},"sameAs":["https://twitter.com/bornclock"]}
+</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"BornClock","url":"https://bornclock.com","description":"Free tools.","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://bornclock.com/celebrity-birthday?q={search_term_string}"},"query-input":"required name=search_term_string"}}</script>
+<script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"WebPage","headline":"Free Birthday Calculator | BornClock","description":"Everything your birth date reveals.","url":"https://bornclock.com/","image":"https://bornclock.com/og/default.png"}</script>
+</head><body>
+<script type="application/ld+json" data-testid="jsonld-org">{"@context":"https://schema.org","@type":"Organization","name":"BornClock","url":"https://bornclock.com/","logo":"https://bornclock.com/og/default.png"}</script>
+<script type="application/ld+json" data-testid="jsonld-website">{"@context":"https://schema.org","@type":"WebSite","name":"BornClock","url":"https://bornclock.com/","potentialAction":{"@type":"SearchAction","target":"https://bornclock.com/celebrity?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<script type="application/ld+json" data-testid="jsonld-webpage">{"@context":"https://schema.org","@type":"WebPage","name":"BornClock — Birthday, Zodiac & Longevity Calculator","description":"Everything your birth date reveals.","url":"https://bornclock.com/"}</script>
+</body></html>`;
+  const blocks = (h: string) => [...h.matchAll(/<script[^>]*ld\+json[^>]*>([\s\S]*?)<\/script>/g)].map(m => JSON.parse(m[1]));
+
+  it('homepage: one complete block of each type, richer version kept, missing fields added', () => {
+    const out = finalizeHead(home, '/').html;
+    const s = headStats(out);
+    expect(s.entityBlocks).toEqual({ Organization: 1, WebSite: 1, WebPage: 1 });
+    const all = blocks(out);
+    const org = all.find(b => b['@type'] === 'Organization');
+    expect(org.contactPoint.email).toBe('hello@bornclock.com');
+    expect(org.logo).toEqual({ '@type': 'ImageObject', url: 'https://bornclock.com/bornclock-logo.png' });
+    expect(org.url).toBe('https://bornclock.com/');
+    const site = all.find(b => b['@type'] === 'WebSite');
+    expect(site.description).toBe('Free tools.');
+    expect(site.potentialAction.target.urlTemplate).toContain('/celebrity-birthday');
+    const wp = all.find(b => b['@type'] === 'WebPage');
+    expect(wp.headline).toBe('Free Birthday Calculator | BornClock');
+    expect(wp.name).toBe('BornClock — Birthday, Zodiac & Longevity Calculator'); // only the Index.tsx copy had it
+    expect(wp.image).toBe('https://bornclock.com/og/default.png');
+    // the merged blocks sit where the first copy was (in <head>)
+    expect(out.indexOf('"@type":"WebSite"')).toBeLessThan(out.indexOf('</head>'));
+    expect(finalizeHead(out, '/').html).toBe(out);
+  });
+
+  it('blocks for different URLs and @graph blocks are left alone', () => {
+    const a = '<script type="application/ld+json">{"@type":"WebPage","url":"https://bornclock.com/a/"}</script>';
+    const b = '<script type="application/ld+json">{"@type":"WebPage","url":"https://bornclock.com/b/"}</script>';
+    expect(mergeSameEntityJsonLd(a + b)).toBe(a + b);
+    const g = '<script type="application/ld+json" data-daily="jsonld">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","url":"https://bornclock.com/a/"}]}</script>';
+    expect(mergeSameEntityJsonLd(a + g)).toBe(a + g);
   });
 });

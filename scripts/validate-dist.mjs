@@ -7,6 +7,9 @@
 //   V7 Head (Batch 7): EVERY prerendered page has exactly one canonical, one og:url,
 //      one twitter:url, no JSON-LD block repeated (same @type + same content), and
 //      at most one BreadcrumbList
+//   V8 Head (Batch 8): EVERY prerendered page has at most one meta description,
+//      og:description, twitter:description, og:title, twitter:title and meta title,
+//      and at most one top-level Organization, WebSite and WebPage JSON-LD block
 import { readFileSync, existsSync, readdirSync } from 'fs';
 import { resolve, join } from 'path';
 import { headStats } from './lib/headDedupe.mjs';
@@ -82,6 +85,8 @@ const walk = (dir) => {
       if (s.twitterUrls > 1) bad.push(`${s.twitterUrls} twitter:url`);
       if (s.duplicateJsonLd > 0) bad.push(`${s.duplicateJsonLd} duplicate JSON-LD`);
       if (s.breadcrumbLists > 1) bad.push(`${s.breadcrumbLists} BreadcrumbLists`);
+      for (const [k, n] of Object.entries(s.meta)) if (n > 1) bad.push(`${n} ${k} meta`);
+      for (const [k, n] of Object.entries(s.entityBlocks)) if (n > 1) bad.push(`${n} ${k} JSON-LD`);
       if (bad.length) headProblems.push(`${p.slice(DIST.length) || '/'}: ${bad.join(', ')}`);
     }
   }
@@ -91,7 +96,7 @@ if (headProblems.length) {
   fail++;
   results.push(`  ❌ head check: ${headProblems.length} of ${swept} pages — ${headProblems.slice(0, 15).join(' | ')}`);
 } else {
-  results.push(`  ✅ head check: ${swept} prerendered pages — one canonical each, no duplicate JSON-LD, ≤1 BreadcrumbList`);
+  results.push(`  ✅ head check: ${swept} prerendered pages — one canonical each, no duplicate JSON-LD, ≤1 BreadcrumbList, one description/og/twitter title+description, one Organization/WebSite/WebPage`);
 }
 
 console.log(results.join('\n'));

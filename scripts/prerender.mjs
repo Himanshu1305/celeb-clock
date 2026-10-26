@@ -449,7 +449,8 @@ async function main() {
   }
 
   // 3. Start static server
-  const PORT = 14321;
+  // PRERENDER_PORT lets two local prerender runs (separate worktrees) coexist.
+  const PORT = Number(process.env.PRERENDER_PORT || 14321);
   let server;
   try {
     server = await startStaticServer(PORT);
