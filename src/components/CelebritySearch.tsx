@@ -11,6 +11,7 @@ import { Search } from 'lucide-react';
 import type { WikiPerson } from '@/services/WikimediaService';
 import celebritiesData from '@/data/celebrities.json';
 import { celebritySlugRedirect } from '@/lib/seo/duplicateRedirects';
+import { completedYears } from '@/lib/ageBreakdown';
 import { lifePathFromDate } from '@/lib/lifePath';
 
 // Slugs that have a dedicated /celebrity/[slug]/ page (unified DB). Built once.
@@ -59,12 +60,8 @@ function getLifePath(dob: Date): number {
   return lifePathFromDate(dob);
 }
 
-function calcAge(birthDate: Date, refDate: Date): number {
-  let age = refDate.getFullYear() - birthDate.getFullYear();
-  const m = refDate.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && refDate.getDate() < birthDate.getDate())) age--;
-  return age;
-}
+// Batch 8 review: the shared birthday-aware helper (29 Feb → 28 Feb in non-leap years).
+const calcAge = (birthDate: Date, refDate: Date): number => completedYears(birthDate, refDate);
 
 // ── component ─────────────────────────────────────────────────────────────────
 

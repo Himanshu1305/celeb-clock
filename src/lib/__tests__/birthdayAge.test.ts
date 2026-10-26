@@ -47,3 +47,36 @@ describe('birthday-aware age (batch 8)', () => {
     expect(ageInYears(birth, new Date(Date.UTC(2025, 11, 31, 18, 29)), 5.5)).toBe(17);
   });
 });
+
+// Review (batch 8): one 29 Feb convention sitewide — in a non-leap year the birthday (and the
+// new age) is 28 Feb, as in calendarAge and nextBirthday. Calendar facts, no external reference.
+import { yearsBetween } from '../celebrityFacts';
+import { calculateAge as celebAge, calculateDaysUntilBirthday } from '../../utils/celebrityCalculations';
+import { vi } from 'vitest';
+describe('29 February births: same age on 28 Feb / 1 Mar everywhere', () => {
+  const leapling = new Date(2000, 1, 29);
+  it('calendar helper: 27 on 28 Feb 2027, still 27 on 1 Mar; 26 on 27 Feb', () => {
+    expect(completedYears(leapling, new Date(2027, 1, 27, 12))).toBe(26);
+    expect(completedYears(leapling, new Date(2027, 1, 28, 0, 1))).toBe(27);
+    expect(completedYears(leapling, new Date(2027, 2, 1, 12))).toBe(27);
+    expect(completedYears(leapling, new Date(2028, 1, 28, 12))).toBe(27); // leap year: 29 Feb is the day
+    expect(completedYears(leapling, new Date(2028, 1, 29, 0, 1))).toBe(28);
+  });
+  it('celebrity pages (yearsBetween) agree', () => {
+    expect(yearsBetween('2000-02-29', '2027-02-27')).toBe(26);
+    expect(yearsBetween('2000-02-29', '2027-02-28')).toBe(27);
+    expect(yearsBetween('2000-02-29', '2027-03-01')).toBe(27);
+    expect(yearsBetween('2000-02-29', '2028-02-28')).toBe(27);
+    expect(yearsBetween('2000-02-29', '2028-02-29')).toBe(28);
+  });
+  it('celebrityCalculations agree; countdown on 27 Feb 2027 is 1 day', () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    try {
+      vi.setSystemTime(new Date(2027, 1, 28, 9));
+      expect(celebAge(29, 2, 2000)).toBe(27);
+      vi.setSystemTime(new Date(2027, 1, 27, 9));
+      expect(celebAge(29, 2, 2000)).toBe(26);
+      expect(calculateDaysUntilBirthday(29, 2)).toBe(1);
+    } finally { vi.useRealTimers(); }
+  });
+});

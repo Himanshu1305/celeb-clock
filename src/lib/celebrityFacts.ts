@@ -237,7 +237,11 @@ export function yearsBetween(birthIso: string | null | undefined, endIso: string
   const e = endIso.slice(0, 10).split('-').map(Number);
   if (b.length < 3 || e.length < 3 || b.some(n => !Number.isFinite(n)) || e.some(n => !Number.isFinite(n))) return null;
   let age = e[0] - b[0];
-  if (e[1] < b[1] || (e[1] === b[1] && e[2] < b[2])) age -= 1;
+  // Batch 8 review: a 29 Feb birthday counts on 28 Feb in non-leap years — the sitewide
+  // convention (calendarAge in src/lib/ageBreakdown.ts, nextBirthday).
+  const leap = (y: number) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+  const bd = b[1] === 2 && b[2] === 29 && !leap(e[0]) ? 28 : b[2];
+  if (e[1] < b[1] || (e[1] === b[1] && e[2] < bd)) age -= 1;
   return age >= 0 ? age : null;
 }
 

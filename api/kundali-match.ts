@@ -15,6 +15,7 @@ import { calculatePorutham } from '../src/lib/vedic/porutham.js';
 import { buildMatchSynthesis } from '../src/lib/vedic/matchSynthesis.js';
 import { categoryTiming, describeWindow, formatWindowRange, upcomingSubPeriods, type ActivationWindow } from '../src/lib/vedic/yogaTiming.js';
 import { RASHI_NAMES } from '../src/lib/vedic/engine/vedicEngine.js';
+import { completedYears } from '../src/lib/ageBreakdown.js';
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600' } });
@@ -45,10 +46,8 @@ function manglikOf(chart): ManglikAssessment {
 
 /** Whole years of age on `now` from a Y/M/D birth date. */
 function ageOn(p, now: Date): number {
-  let age = now.getUTCFullYear() - p.year;
-  const m = now.getUTCMonth() + 1, d = now.getUTCDate();
-  if (m < p.month || (m === p.month && d < p.day)) age--;
-  return age;
+  // Batch 8 review: shared birthday-aware helper (29 Feb → 28 Feb in non-leap years); `now` read as its UTC date, as before.
+  return completedYears(new Date(p.year, p.month - 1, p.day), new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 }
 
 /** Intersect two lists of upcoming windows → the ranges where BOTH are favourable. */
