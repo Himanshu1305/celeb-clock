@@ -1185,8 +1185,12 @@ function calculateBaseForecastPure(dob: string, gender: string, country: string)
 }
 
 function dobForAge(yearsAgo: number): string {
+  // 30 extra days back so floor(days / 365.25) is exactly `yearsAgo` on every run date
+  // (a dob exactly N years ago gives N-1 on some dates because of leap days, and the
+  // S12 interpolated multiplier makes 44 vs 45 differ).
   const d = new Date();
   d.setFullYear(d.getFullYear() - yearsAgo);
+  d.setDate(d.getDate() - 30);
   return d.toISOString().split('T')[0];
 }
 
@@ -1209,7 +1213,7 @@ describe('FM1–FM5 — calculateBaseForecast', () => {
 
   it('FM4: female Japan age~45 → conditional multiplier applied (HIGH bracket)', () => {
     // birth baseline Japan female = 87.7 (WPP 2024; > 70, HIGH set)
-    // dobForAge(45) → age=44 or 45, both in bracket=40 (avoids age-50 boundary)
+    // dobForAge(45) → age exactly 45 = the first knot of the interpolated multiplier (HIGH[40])
     // bracket=40, HIGH[40]=1.040 → conditional = round(87.7*1.040*10)/10 = 91.2
     // forecast = 91.2 + 1.5 = 92.7 (conditional multiplier is applied — higher than birth baseline 87.7)
     const fc = calculateBaseForecastPure(dobForAge(45), 'female', 'Japan');

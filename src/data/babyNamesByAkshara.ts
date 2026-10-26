@@ -33,7 +33,6 @@ export const BABY_NAMES: BabyName[] = [
   N('Udhav', 'उद्धव', 'boy', 'festival; a friend of Krishna'),
   N('Ekta', 'एकता', 'girl', 'unity'), N('Ekansh', 'एकांश', 'boy', 'whole, complete'),
   N('Om', 'ओम', 'boy', 'the sacred primordial sound'), N('Ojas', 'ओजस', 'boy', 'vitality, lustre'),
-  N('Omisha', 'ओमिशा', 'girl', 'goddess of birth and death'),
   // व
   N('Varun', 'वरुण', 'boy', 'god of the waters'), N('Vani', 'वाणी', 'girl', 'speech; goddess Saraswati'),
   N('Vasudha', 'वसुधा', 'girl', 'the earth'),

@@ -166,13 +166,17 @@ const HEADLINE: Record<DailyTone, string[]> = {
   care: ['a day to go gently', 'a quieter day — keep plans simple'],
 };
 
-function eventText(e: WesternEvent, sun: number): string {
+function eventText(e: WesternEvent, sun: number, today: string): string {
   const d = formatDateEn(e.date).replace(/ \d{4}$/, '');
+  // Tense follows the event date relative to the page's date (ISO strings compare correctly).
+  const past = e.date < today, now = e.date === today;
   if (e.type === 'ingress') {
     const h = solarHouse(e.sign!, sun);
-    return `${e.body} ${e.backwards ? 're-enters' : 'enters'} ${SIGNS[e.sign!]} on ${d} — your ${ORD_EN[h]} house of ${THEME[h]}`;
+    const verb = past ? (e.backwards ? 're-entered' : 'entered') : (e.backwards ? 're-enters' : 'enters');
+    return `${e.body} ${verb} ${SIGNS[e.sign!]} ${now ? 'today' : `on ${d}`} — your ${ORD_EN[h]} house of ${THEME[h]}`;
   }
-  return `${e.body} turns ${e.type === 'station-retrograde' ? 'retrograde' : 'direct'} on ${d}`;
+  const dir = e.type === 'station-retrograde' ? 'retrograde' : 'direct';
+  return `${e.body} ${past ? 'turned' : 'turns'} ${dir} ${now ? 'today' : `on ${d}`}`;
 }
 
 export function composeWestern(date: string, sunSign: number, sky: WesternSky = westernSky(date)): DailyEntry {
@@ -226,7 +230,7 @@ export function composeWestern(date: string, sunSign: number, sky: WesternSky = 
   const moving: DailyItem[] = PERSONAL.map(p => {
     const h = solarHouse(sky.sign[p], sunSign);
     const r = p !== 'Sun' && sky.retro[p as 'Mercury' | 'Venus' | 'Mars'];
-    const ev = sky.events.filter(e => e.body === p).map(e => eventText(e, sunSign)).join('; ');
+    const ev = sky.events.filter(e => e.body === p).map(e => eventText(e, sunSign, date)).join('; ');
     return { label: p, value: `${SIGNS[sky.sign[p]]}${r ? ' (retrograde)' : ''} — your ${ORD_EN[h]} house`, ...(ev ? { note: ev } : {}) };
   });
 
@@ -240,7 +244,7 @@ export function composeWestern(date: string, sunSign: number, sky: WesternSky = 
 
   // Why today: Moon house, Moon aspect, and the most notable planet fact.
   const notable = sky.events[0]
-    ? { label: 'This week in the sky', text: `${eventText(sky.events[0], sunSign)}. A sign change (ingress) or a station shifts which area of life a planet colours for you.` }
+    ? { label: 'This week in the sky', text: `${eventText(sky.events[0], sunSign, date)}. A sign change (ingress) or a station shifts which area of life a planet colours for you.` }
     : sky.retro.Mercury
       ? { label: 'Mercury retrograde', text: 'Mercury appears to move backwards from Earth’s view — an optical effect — and astrologers read it as a time to review, not rush, communication.' }
       : { label: `Venus in your ${ORD_EN[vh]} house`, text: `Venus, the planet of love and harmony, is in ${SIGNS[sky.sign.Venus]} — your ${ORD_EN[vh]} solar house of ${THEME[vh]}.` };
