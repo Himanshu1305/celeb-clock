@@ -4,8 +4,15 @@
  * per-city data as the English pages, rendered by the Hindi template
  * (src/lib/daily/kinds/panchangTemplate.ts renderPanchangHiEntry). Machine-assisted
  * Hindi, flagged for human review (AutoTranslatedNotice) per the P4 language rule.
+ *
+ * Batch 8: the same any-place search and date controls as the English pages
+ * (PanchangControls with Hindi labels). Today at a Hindi-page city uses the shared daily
+ * entry; any other date or a searched place is computed in the browser with the same
+ * Hindi template. The canonical stays the city URL (or /hi/panchang). Each city page also
+ * gets the static, sourced local guide (CityLocalGuide, Hindi text).
  */
-import { Link, useParams } from 'react-router-dom';
+import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { AutoTranslatedNotice } from '@/components/AutoTranslatedNotice';
@@ -16,18 +23,33 @@ import { cityHi } from '@/lib/vedic/panchangHindi';
 import { useDailyEntry } from '@/lib/daily/useDailyEntry';
 import { DailyBody, DailyDate, DailyH1, DailyJsonLd } from '@/lib/daily/DailyParts';
 import { hindiPanchangMeta, PANCHANG_INDEX_SLUG } from '@/lib/daily/kinds/panchangTemplate';
-import { formatLongDateHi, istDateISO } from '@/lib/daily/dates';
+import { formatLongDateHi } from '@/lib/daily/dates';
+import { buildPanchangHiEntry } from '@/lib/daily/kinds/panchangDaily';
+import { usePanchangPlace } from '@/components/panchang/usePanchangPlace';
+import { PanchangControls } from '@/components/panchang/PanchangControls';
+import { CityLocalGuide } from '@/components/panchang/CityLocalGuide';
 
 // Hindi pages exist for 10 cities (batch 7 grew the English list to 50).
 const HI_CITIES = PANCHANG_CITIES.filter(c => HINDI_PANCHANG_SLUGS.has(c.slug));
 
 export default function HindiPanchangPage() {
-  const { city: cityParam } = useParams<{ city?: string }>();
-  const city = HI_CITIES.find(c => c.slug === cityParam) || HI_CITIES.find(c => c.slug === 'delhi')!;
+  const ctl = usePanchangPlace('panchang', { base: '/hi/panchang', cities: HI_CITIES });
+  const { place, dateKey, tz, isCustom, isToday, cityParam } = ctl;
+  const city = isCustom ? HI_CITIES.find(c => c.slug === 'delhi')! : place.city!;
+  const isIndex = !cityParam && !isCustom;
   const slug = cityParam ? city.slug : PANCHANG_INDEX_SLUG;
-  const { entry } = useDailyEntry('panchang-hi', slug);
+  // Today at a built-in page → the shared daily entry (Worker / precomputed JSON);
+  // any other date or a searched place → the same Hindi template, run in the browser.
+  const shared = !isCustom && isToday;
+  const daily = useDailyEntry('panchang-hi', shared ? slug : null);
+  const local = useMemo(
+    () => (shared ? null : buildPanchangHiEntry({ name: place.name, lat: place.lat, lon: place.lon, tz, slug: place.slug }, dateKey, slug, isCustom)),
+    [shared, place.name, place.lat, place.lon, place.slug, tz, dateKey, slug, isCustom],
+  );
+  const entry = shared ? daily.entry : local;
   const meta = hindiPanchangMeta(slug);
-  const cityName = cityHi(city.slug, city.name);
+  const cityName = isCustom ? place.name : cityHi(city.slug, city.name);
+  // Canonical stays the city page (or the index for a searched place).
   const path = cityParam ? `/hi/panchang/${city.slug}` : '/hi/panchang';
 
   return (
@@ -39,20 +61,21 @@ export default function HindiPanchangPage() {
       footer={{ tagline: 'वास्तविक सूर्योदय और सूर्यास्त से गणना किया गया दैनिक पंचांग।', nav: [{ label: 'राशिफल', to: '/hi/rashifal' }, { label: 'Panchang (English)', to: '/panchang' }, { label: 'मुहूर्त', to: '/muhurat' }] }}
       eyebrow="पंचांग"
       h1={<DailyH1 entry={entry} fallback={meta.h1} />}
-      lead={<span data-testid="hi-panchang-date">{cityParam ? '' : `${cityName} · `}<DailyDate entry={entry} fallback={formatLongDateHi(istDateISO(new Date()))} /></span>}
+      lead={<span data-testid="hi-panchang-date">{isIndex || isCustom ? `${cityName} · ` : ''}<DailyDate entry={entry} fallback={formatLongDateHi(dateKey)} /></span>}
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
           <AutoTranslatedNotice lang="hi" />
+          <PanchangControls ctl={ctl} shared={shared} lang="hi" />
           <p className="text-sm mb-4">
-            <Link to={`/panchang/${city.slug}`} className="text-primary hover:underline" data-testid="hi-panchang-english-top">English: Panchang for {city.name} — किसी भी तारीख़ और किसी भी शहर के लिए →</Link>
+            <Link to={ctl.linkTo('panchang')} className="text-primary hover:underline" data-testid="hi-panchang-english-top">English: Panchang for {place.name} — किसी भी तारीख़ और किसी भी शहर के लिए →</Link>
           </p>
 
           <nav aria-label="शहर" className="flex flex-wrap items-center gap-2 mb-6" data-testid="hi-panchang-cities">
             <span className="text-sm text-muted-foreground">शहर:</span>
             {HI_CITIES.map(c => (
               <Link key={c.slug} to={`/hi/panchang/${c.slug}`}
-                    className={`px-3 py-1 rounded-lg border text-sm ${c.slug === city.slug && cityParam ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-foreground hover:bg-primary/5'}`}>
+                    className={`px-3 py-1 rounded-lg border text-sm ${c.slug === city.slug && cityParam && !isCustom ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-foreground hover:bg-primary/5'}`}>
                 {cityHi(c.slug, c.name)}
               </Link>
             ))}
@@ -60,6 +83,9 @@ export default function HindiPanchangPage() {
 
           <DailyBody entry={entry} testId="hi-panchang-daily" />
           <DailyJsonLd entry={entry} path={path} />
+
+          {/* Batch 8: static, sourced local guide (Hindi) on the 10 Hindi city pages. */}
+          {cityParam && ctl.validCity && !isCustom && <CityLocalGuide slug={city.slug} cityName={cityName} lang="hi" />}
 
           <div className="rounded-xl border border-border p-4 mb-6" data-testid="hi-panchang-terms">
             <h2 className="font-semibold text-foreground mb-2">इन शब्दों का अर्थ</h2>
@@ -87,7 +113,7 @@ export default function HindiPanchangPage() {
             <h2 className="font-semibold text-foreground">यह पंचांग कैसे बनता है</h2>
             <p>पंचांग ("पाँच अंग") किसी दिन की तिथि, नक्षत्र, योग, करण और वार बताता है। ये पाँचों अंग स्थानीय सूर्योदय के समय पढ़े जाते हैं, और निरयण (लाहिड़ी अयनांश) सूर्य-चंद्र से गणना होते हैं — वही इंजन जो आपकी कुंडली के पीछे है।</p>
             <p>सूर्योदय-सूर्यास्त {cityName} के अक्षांश-देशांतर के लिए सूर्य की वास्तविक स्थिति से निकाले गए हैं। राहु काल, गुलिक और यमगण्ड दिन के आठ बराबर भागों में से एक-एक भाग हैं; अभिजित, दुर्मुहूर्त और ब्रह्म मुहूर्त दिन या रात के पंद्रहवें भाग हैं; अमृत काल और वर्ज्यम् दिन के नक्षत्र के तय हिस्से हैं। समय निकटतम मिनट तक गोल किए गए हैं।</p>
-            <p><Link to={`/panchang/${city.slug}`} className="underline" data-testid="hi-panchang-english-link">View in English ({city.name}) →</Link> · <Link to="/glossary" className="underline">शब्दकोश (Glossary) →</Link></p>
+            <p><Link to={ctl.linkTo('panchang')} className="underline" data-testid="hi-panchang-english-link">View in English ({place.name}) →</Link> · <Link to="/glossary" className="underline">शब्दकोश (Glossary) →</Link></p>
           </div>
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">

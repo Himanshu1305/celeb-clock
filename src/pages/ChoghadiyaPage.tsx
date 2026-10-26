@@ -15,6 +15,7 @@ import { computeDayPanchang, nearestCities, PANCHANG_CITIES } from '@/lib/vedic/
 import { pageMeta, indexMeta, dateWithWeekday } from '@/lib/vedic/panchangText';
 import { usePanchangPlace } from '@/components/panchang/usePanchangPlace';
 import { usePanchangEntry } from '@/components/panchang/usePanchangEntry';
+import { CityLocalGuide } from '@/components/panchang/CityLocalGuide';
 import { PanchangControls } from '@/components/panchang/PanchangControls';
 import { CityLinks, choghadiyaNowIndex } from '@/components/panchang/PanchangSections';
 
@@ -91,6 +92,9 @@ export default function ChoghadiyaPage() {
             <p>The day (sunrise to sunset) and the night (sunset to the next sunrise) are each split into eight equal slots, so a slot is longer than 90 minutes in summer daytime and shorter in winter. The weekday fixes the first slot of the day — Udveg on Sunday, Amrit on Monday, Rog on Tuesday, Labh on Wednesday, Shubh on Thursday, Char on Friday, Kaal on Saturday — and the slots then follow a fixed order.</p>
             <p>Night slots after midnight still belong to the same Panchang day, which runs from sunrise to the next sunrise. Times are local clock times rounded to the nearest minute. <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link></p>
           </div>
+
+          {/* Batch 8: static local guide (temples + festivals, sourced) on the 50 city pages only. */}
+          {ctl.cityParam && ctl.validCity && !ctl.isCustom && <CityLocalGuide slug={place.slug} cityName={place.name} />}
 
           <CityLinks kind="choghadiya" city={ctl.isCustom ? undefined : place.city} nearby={nearby} all={PANCHANG_CITIES} linkTo={ctl.linkTo} />
         </div>
