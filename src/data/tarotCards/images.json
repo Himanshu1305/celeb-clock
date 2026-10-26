@@ -1,0 +1,626 @@
+{
+  "the-fool": {
+    "src": "/tarot/the-fool.webp",
+    "width": 300,
+    "height": 520,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_00_Fool.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-magician": {
+    "src": "/tarot/the-magician.webp",
+    "width": 300,
+    "height": 505,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_01_Magician.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-high-priestess": {
+    "src": "/tarot/the-high-priestess.webp",
+    "width": 300,
+    "height": 532,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_02_High_Priestess.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-empress": {
+    "src": "/tarot/the-empress.webp",
+    "width": 300,
+    "height": 507,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_03_Empress.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-emperor": {
+    "src": "/tarot/the-emperor.webp",
+    "width": 300,
+    "height": 521,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_04_Emperor.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-hierophant": {
+    "src": "/tarot/the-hierophant.webp",
+    "width": 300,
+    "height": 511,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_05_Hierophant.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-lovers": {
+    "src": "/tarot/the-lovers.webp",
+    "width": 300,
+    "height": 527,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_06_Lovers.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-chariot": {
+    "src": "/tarot/the-chariot.webp",
+    "width": 300,
+    "height": 515,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_07_Chariot.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "strength": {
+    "src": "/tarot/strength.webp",
+    "width": 300,
+    "height": 519,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_08_Strength.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-hermit": {
+    "src": "/tarot/the-hermit.webp",
+    "width": 300,
+    "height": 507,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_09_Hermit.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "wheel-of-fortune": {
+    "src": "/tarot/wheel-of-fortune.webp",
+    "width": 300,
+    "height": 530,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_10_Wheel_of_Fortune.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "justice": {
+    "src": "/tarot/justice.webp",
+    "width": 300,
+    "height": 522,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_11_Justice.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-hanged-man": {
+    "src": "/tarot/the-hanged-man.webp",
+    "width": 300,
+    "height": 525,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_12_Hanged_Man.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "death": {
+    "src": "/tarot/death.webp",
+    "width": 300,
+    "height": 514,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_13_Death.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "temperance": {
+    "src": "/tarot/temperance.webp",
+    "width": 300,
+    "height": 521,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_14_Temperance.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-devil": {
+    "src": "/tarot/the-devil.webp",
+    "width": 300,
+    "height": 514,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_15_Devil.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-tower": {
+    "src": "/tarot/the-tower.webp",
+    "width": 300,
+    "height": 525,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_16_Tower.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-star": {
+    "src": "/tarot/the-star.webp",
+    "width": 300,
+    "height": 508,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_17_Star.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-moon": {
+    "src": "/tarot/the-moon.webp",
+    "width": 300,
+    "height": 531,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_18_Moon.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-sun": {
+    "src": "/tarot/the-sun.webp",
+    "width": 300,
+    "height": 516,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_19_Sun.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "judgement": {
+    "src": "/tarot/judgement.webp",
+    "width": 300,
+    "height": 513,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_20_Judgement.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "the-world": {
+    "src": "/tarot/the-world.webp",
+    "width": 300,
+    "height": 511,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_21_World.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "ace-of-wands": {
+    "src": "/tarot/ace-of-wands.webp",
+    "width": 300,
+    "height": 533,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_01.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "two-of-wands": {
+    "src": "/tarot/two-of-wands.webp",
+    "width": 300,
+    "height": 510,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_02.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "three-of-wands": {
+    "src": "/tarot/three-of-wands.webp",
+    "width": 300,
+    "height": 520,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_03.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "four-of-wands": {
+    "src": "/tarot/four-of-wands.webp",
+    "width": 300,
+    "height": 513,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_04.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "five-of-wands": {
+    "src": "/tarot/five-of-wands.webp",
+    "width": 300,
+    "height": 529,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_05.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "six-of-wands": {
+    "src": "/tarot/six-of-wands.webp",
+    "width": 300,
+    "height": 515,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_06.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "seven-of-wands": {
+    "src": "/tarot/seven-of-wands.webp",
+    "width": 300,
+    "height": 521,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_07.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "eight-of-wands": {
+    "src": "/tarot/eight-of-wands.webp",
+    "width": 300,
+    "height": 509,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_08.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "nine-of-wands": {
+    "src": "/tarot/nine-of-wands.webp",
+    "width": 300,
+    "height": 525,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_09.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "ten-of-wands": {
+    "src": "/tarot/ten-of-wands.webp",
+    "width": 300,
+    "height": 515,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_10.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "page-of-wands": {
+    "src": "/tarot/page-of-wands.webp",
+    "width": 300,
+    "height": 521,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_11.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "knight-of-wands": {
+    "src": "/tarot/knight-of-wands.webp",
+    "width": 300,
+    "height": 510,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_12.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "queen-of-wands": {
+    "src": "/tarot/queen-of-wands.webp",
+    "width": 300,
+    "height": 528,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_13.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "king-of-wands": {
+    "src": "/tarot/king-of-wands.webp",
+    "width": 300,
+    "height": 508,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_14.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "ace-of-cups": {
+    "src": "/tarot/ace-of-cups.webp",
+    "width": 300,
+    "height": 521,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_01.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "two-of-cups": {
+    "src": "/tarot/two-of-cups.webp",
+    "width": 300,
+    "height": 509,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_02.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "three-of-cups": {
+    "src": "/tarot/three-of-cups.webp",
+    "width": 300,
+    "height": 531,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_03.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "four-of-cups": {
+    "src": "/tarot/four-of-cups.webp",
+    "width": 300,
+    "height": 513,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_04.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "five-of-cups": {
+    "src": "/tarot/five-of-cups.webp",
+    "width": 300,
+    "height": 525,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_05.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "six-of-cups": {
+    "src": "/tarot/six-of-cups.webp",
+    "width": 300,
+    "height": 512,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_06.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "seven-of-cups": {
+    "src": "/tarot/seven-of-cups.webp",
+    "width": 300,
+    "height": 533,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_07.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "eight-of-cups": {
+    "src": "/tarot/eight-of-cups.webp",
+    "width": 300,
+    "height": 520,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_08.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "nine-of-cups": {
+    "src": "/tarot/nine-of-cups.webp",
+    "width": 300,
+    "height": 521,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_09.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "ten-of-cups": {
+    "src": "/tarot/ten-of-cups.webp",
+    "width": 300,
+    "height": 506,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_10.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "page-of-cups": {
+    "src": "/tarot/page-of-cups.webp",
+    "width": 300,
+    "height": 527,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_11.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "knight-of-cups": {
+    "src": "/tarot/knight-of-cups.webp",
+    "width": 300,
+    "height": 515,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_12.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "queen-of-cups": {
+    "src": "/tarot/queen-of-cups.webp",
+    "width": 300,
+    "height": 521,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_13.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "king-of-cups": {
+    "src": "/tarot/king-of-cups.webp",
+    "width": 300,
+    "height": 510,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_14.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "ace-of-swords": {
+    "src": "/tarot/ace-of-swords.webp",
+    "width": 300,
+    "height": 525,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_01.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "two-of-swords": {
+    "src": "/tarot/two-of-swords.webp",
+    "width": 300,
+    "height": 512,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_02.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "three-of-swords": {
+    "src": "/tarot/three-of-swords.webp",
+    "width": 300,
+    "height": 520,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_03.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "four-of-swords": {
+    "src": "/tarot/four-of-swords.webp",
+    "width": 300,
+    "height": 510,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_04.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "five-of-swords": {
+    "src": "/tarot/five-of-swords.webp",
+    "width": 300,
+    "height": 527,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_05.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "six-of-swords": {
+    "src": "/tarot/six-of-swords.webp",
+    "width": 300,
+    "height": 513,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_06.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "seven-of-swords": {
+    "src": "/tarot/seven-of-swords.webp",
+    "width": 300,
+    "height": 527,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_07.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "eight-of-swords": {
+    "src": "/tarot/eight-of-swords.webp",
+    "width": 300,
+    "height": 511,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_08.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "nine-of-swords": {
+    "src": "/tarot/nine-of-swords.webp",
+    "width": 300,
+    "height": 534,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_09.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "ten-of-swords": {
+    "src": "/tarot/ten-of-swords.webp",
+    "width": 300,
+    "height": 515,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_10.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "page-of-swords": {
+    "src": "/tarot/page-of-swords.webp",
+    "width": 300,
+    "height": 525,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_11.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "knight-of-swords": {
+    "src": "/tarot/knight-of-swords.webp",
+    "width": 300,
+    "height": 508,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_12.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "queen-of-swords": {
+    "src": "/tarot/queen-of-swords.webp",
+    "width": 300,
+    "height": 532,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_13.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "king-of-swords": {
+    "src": "/tarot/king-of-swords.webp",
+    "width": 300,
+    "height": 511,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_14.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "ace-of-pentacles": {
+    "src": "/tarot/ace-of-pentacles.webp",
+    "width": 300,
+    "height": 521,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_01.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "two-of-pentacles": {
+    "src": "/tarot/two-of-pentacles.webp",
+    "width": 300,
+    "height": 513,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_02.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "three-of-pentacles": {
+    "src": "/tarot/three-of-pentacles.webp",
+    "width": 300,
+    "height": 530,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_03.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "four-of-pentacles": {
+    "src": "/tarot/four-of-pentacles.webp",
+    "width": 300,
+    "height": 515,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_04.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "five-of-pentacles": {
+    "src": "/tarot/five-of-pentacles.webp",
+    "width": 300,
+    "height": 515,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_05.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "six-of-pentacles": {
+    "src": "/tarot/six-of-pentacles.webp",
+    "width": 300,
+    "height": 505,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_06.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "seven-of-pentacles": {
+    "src": "/tarot/seven-of-pentacles.webp",
+    "width": 300,
+    "height": 530,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_07.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "eight-of-pentacles": {
+    "src": "/tarot/eight-of-pentacles.webp",
+    "width": 300,
+    "height": 519,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_08.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "nine-of-pentacles": {
+    "src": "/tarot/nine-of-pentacles.webp",
+    "width": 300,
+    "height": 522,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_09.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "ten-of-pentacles": {
+    "src": "/tarot/ten-of-pentacles.webp",
+    "width": 300,
+    "height": 515,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_10.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "page-of-pentacles": {
+    "src": "/tarot/page-of-pentacles.webp",
+    "width": 300,
+    "height": 529,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_11.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "knight-of-pentacles": {
+    "src": "/tarot/knight-of-pentacles.webp",
+    "width": 300,
+    "height": 512,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_12.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "queen-of-pentacles": {
+    "src": "/tarot/queen-of-pentacles.webp",
+    "width": 300,
+    "height": 520,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_13.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  },
+  "king-of-pentacles": {
+    "src": "/tarot/king-of-pentacles.webp",
+    "width": 300,
+    "height": 507,
+    "commonsPage": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_14.jpeg",
+    "licence": "Public domain",
+    "artist": "Pamela Colman Smith (Rider–Waite–Smith deck, 1909)"
+  }
+}
