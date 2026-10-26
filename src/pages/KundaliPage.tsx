@@ -225,7 +225,8 @@ export default function KundaliPage() {
             <p>Your Vedic birth chart — planetary positions, <TermTip id="lagna">Lagna</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip> and <TermTip id="dasha">Dasha</TermTip>, in accurate sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) astronomy. Full report {price}.</p>
           </div>
 
-          <TrustStrip claim="Calculated from your exact birth date, time and place — not a template — and cross-checked against a leading Vedic astrology service before launch." href="/how-it-works#vedic" />
+          {/* Batch 8: dated claim backed by /accuracy (src/lib/accuracy/evidence.ts). */}
+          <TrustStrip claim="Calculated from your exact birth date, time and place — not a template. In our tests (October 2026), Lagna and planet positions for 22 test births were within 1 arc-minute of the Swiss Ephemeris." href="/accuracy" linkLabel="How we check accuracy" />
           <KundaliTabs active="kundali" />
 
           {loaded && isFull && (

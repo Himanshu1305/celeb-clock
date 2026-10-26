@@ -83,7 +83,7 @@ export default function RahuKaalPage() {
           <div className="rounded-xl border border-border p-4 mb-6 text-sm text-muted-foreground space-y-2" data-testid="rahu-kaal-how">
             <h2 className="font-semibold text-foreground">What to do during Rahu Kaal</h2>
             <p>Traditionally people avoid <em>starting</em> something new — a journey, a purchase, a ceremony or signing an agreement — during Rahu Kaal. Work already under way can simply continue. It is a gentle timing guide, not a cause for worry.</p>
-            <p>Times are local clock times rounded to the nearest minute, from the real astronomical sunrise and sunset; checked against Drik Panchang they agree to within a minute. <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link></p>
+            <p>Times are local clock times rounded to the nearest minute, from the real astronomical sunrise and sunset; checked against Drik Panchang they agree to within a minute. <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link> · <Link to="/accuracy" className="underline">How we check accuracy →</Link></p>
           </div>
 
           {/* Batch 8: static local guide (temples + festivals, sourced) on the 50 city pages only. */}

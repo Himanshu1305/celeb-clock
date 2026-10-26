@@ -256,6 +256,7 @@ export const STATIC_ROUTES = [
   '/faq',
   '/contact',
   '/how-it-works',
+  '/accuracy',
   '/editorial-policy',
   '/leaderboard',
   '/biological-age',
