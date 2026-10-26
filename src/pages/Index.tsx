@@ -219,7 +219,7 @@ export default function Index() {
           preconnect (Part AN perf fix) — no per-page Helmet font link needed here. */}
       {/* Structured data — body-rendered (Part AM JsonLd), never Helmet */}
       <JsonLd id="org" data={{ '@context': 'https://schema.org', '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com/', logo: 'https://bornclock.com/og/default.png' }} />
-      <JsonLd id="website" data={{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'BornClock', url: 'https://bornclock.com/', potentialAction: { '@type': 'SearchAction', target: 'https://bornclock.com/celebrity?q={search_term_string}', 'query-input': 'required name=search_term_string' } }} />
+      <JsonLd id="website" data={{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'BornClock', url: 'https://bornclock.com/' }} />
       <JsonLd id="webpage" data={{ '@context': 'https://schema.org', '@type': 'WebPage', name: 'BornClock — Birthday, Zodiac & Longevity Calculator', description: 'Everything your birth date reveals — Vedic chart, celebrity twins, numerology, zodiac and longevity science from one date.', url: 'https://bornclock.com/' }} />
 
       {/* Polite, one-time announcement (NOT the ticking clock) */}

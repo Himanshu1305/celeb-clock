@@ -293,11 +293,8 @@ export const WebSiteSchema = () => {
       name: 'BornClock',
       url: SITE_URL,
       description: DEFAULT_DESCRIPTION,
-      potentialAction: {
-        '@type': 'SearchAction',
-        target: { '@type': 'EntryPoint', urlTemplate: `${SITE_URL}/celebrity-birthday?q={search_term_string}` },
-        'query-input': 'required name=search_term_string',
-      },
+      // No SearchAction: no page reads a ?q= search parameter, so advertising one to
+      // search engines would point at a search that does nothing (batch 8 review).
     },
     {
       '@context': 'https://schema.org',
