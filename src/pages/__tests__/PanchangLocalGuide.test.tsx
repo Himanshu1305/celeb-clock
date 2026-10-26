@@ -71,8 +71,8 @@ describe('local guide on the English city pages', () => {
   });
 
   it('a city with only festivals shows no temple heading; index and searched places show nothing', () => {
-    renderPath('/panchang/kota');
-    expect(q('city-local-guide')!.textContent).toContain('Kota Dussehra Mela');
+    renderPath('/panchang/surat');
+    expect(q('city-local-guide')!.textContent).toContain('Chand Padvo');
     expect(q('city-local-temples')).toBeNull();
     cleanup();
     renderPath('/panchang');

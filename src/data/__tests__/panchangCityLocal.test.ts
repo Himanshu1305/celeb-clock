@@ -18,6 +18,7 @@ const ALLOWED = [
   /^https:\/\/[a-z]+\.nic\.in\//,
   /^https:\/\/[a-z]+\.gov\.in\//,
   /^https:\/\/visakhapatnam\.ap\.gov\.in\//,
+  /^https:\/\/tamilnadutourism\.tn\.gov\.in\//,
   /^https:\/\/www\.mptourism\.com\//,
   /^https:\/\/karnatakatourism\.org\//,
   /^https:\/\/mtdc\.co\//,
