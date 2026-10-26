@@ -42,7 +42,7 @@ async function handler(request) {
     const upcomingWindows: Array<{ label: string; planet: string; start: string; end: string }> = [];
     // Audit K3: no "marriage/career window opens soon" alerts for anyone under 18.
     const birthUTC = new Date(Date.UTC(y, m - 1, d, h, min) - btz.tz * 3600_000);
-    const minor = ageInYears(birthUTC, now) < ADULT_TIMING_AGE;
+    const minor = ageInYears(birthUTC, now, btz.tz) < ADULT_TIMING_AGE;
     // Marital status (optional profile field): a married user's Venus / 7th-lord window
     // is announced as a PARTNERSHIP window, never a "marriage window".
     const married = searchParams.get('ms') === 'married';

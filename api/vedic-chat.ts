@@ -259,7 +259,7 @@ async function handler(request) {
       // Audit K3: pass age so a child is never given marriage/career timing.
       const birthUTC = new Date(Date.UTC(bp.y, bp.m - 1, bp.d, bp.h, bp.min) - btz.tz * 3600_000);
       const now = new Date();
-      const ageYears = ageInYears(birthUTC, now);
+      const ageYears = ageInYears(birthUTC, now, btz.tz);
       const ms = maritalStatus ?? birth.maritalStatus;
       facts = extractReadingFacts(chart, now, { ageYears, birth: birthUTC, maritalStatus: ms === 'married' || ms === 'single' ? ms : 'not-said' });
       // Audit K7: today's date (user's zone if sent), age, running Dasha, slow transits.

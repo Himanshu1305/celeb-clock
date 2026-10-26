@@ -62,12 +62,12 @@ describe('born-on weekday (Part AO)', () => {
 describe('next 1,000-day milestone (Part AO)', () => {
   it('counts whole days in UTC (midnight-to-midnight)', () => {
     // born 2000-01-01, "now" 2000-01-11 → 10 days old
-    expect(daysOld(2000, 1, 1, new Date(Date.UTC(2000, 0, 11, 23, 0, 0)))).toBe(10);
+    expect(daysOld(2000, 1, 1, new Date(Date.UTC(2000, 0, 11, 23, 0, 0)), 'UTC')).toBe(10);
   });
 
   it('spans leap years correctly (milestone date = birth + exact days)', () => {
     // 2000-01-01 + 1000 days. 2000 is a leap year (366 days) → 2000 uses 366 incl Feb 29.
-    const ms = nextMilestone(2000, 1, 1, new Date(Date.UTC(2000, 5, 1)));
+    const ms = nextMilestone(2000, 1, 1, new Date(Date.UTC(2000, 5, 1)), 'UTC');
     expect(ms.milestone).toBe(1000);
     // 1000 days after 2000-01-01 = 2002-09-27 (verified against day arithmetic)
     expect(ms.date.getUTCFullYear()).toBe(2002);
@@ -80,7 +80,7 @@ describe('next 1,000-day milestone (Part AO)', () => {
     const birth = Date.UTC(1990, 5, 15);
     const dayMs = birth + 10000 * 86400000;
     const now = new Date(dayMs + 3600_000); // a few hours into that UTC day
-    const ms = nextMilestone(1990, 6, 15, now);
+    const ms = nextMilestone(1990, 6, 15, now, 'UTC');
     expect(ms.daysOld).toBe(10000);
     expect(ms.isMilestoneToday).toBe(true);
     expect(ms.milestone).toBe(10000);
@@ -92,7 +92,7 @@ describe('next 1,000-day milestone (Part AO)', () => {
     const birth = Date.UTC(1990, 5, 15);
     const dayBeforeMs = birth + 9999 * 86400000;
     const now = new Date(dayBeforeMs + 3600_000);
-    const ms = nextMilestone(1990, 6, 15, now);
+    const ms = nextMilestone(1990, 6, 15, now, 'UTC');
     expect(ms.daysOld).toBe(9999);
     expect(ms.isMilestoneToday).toBe(false);
     expect(ms.milestone).toBe(10000);
@@ -100,3 +100,30 @@ describe('next 1,000-day milestone (Part AO)', () => {
     expect(ms.blockProgress).toBeCloseTo(0.999, 3);
   });
 });
+
+// Batch 8 (bug 2): days lived are counted on the user's LOCAL calendar date. Fixed clocks.
+// Expected values are plain calendar arithmetic: 2000-01-01 → 2026-10-26 is 9,795 days
+// (26 years × 365 + 7 leap days [2000,04,08,12,16,20,24] + 298 days from 1 Jan to 26 Oct 2026).
+describe('daysOld uses the local calendar date (batch 8)', () => {
+  // 26 Oct 2026 00:10 IST = 25 Oct 2026 18:40 UTC
+  const at0010 = new Date(Date.UTC(2026, 9, 25, 18, 40));
+  // 26 Oct 2026 05:29 IST = 25 Oct 23:59 UTC; 05:31 IST = 26 Oct 00:01 UTC
+  const at0529 = new Date(Date.UTC(2026, 9, 25, 23, 59));
+  const at0531 = new Date(Date.UTC(2026, 9, 26, 0, 1));
+  it('India: same count at 00:10, 05:29 and 05:31 IST', () => {
+    for (const t of [at0010, at0529, at0531]) expect(daysOld(2000, 1, 1, t, 'Asia/Kolkata')).toBe(9795);
+  });
+  it('UTC reading would have been one short before 05:30 IST (the old bug)', () => {
+    expect(daysOld(2000, 1, 1, at0529, 'UTC')).toBe(9794);
+    expect(daysOld(2000, 1, 1, at0531, 'UTC')).toBe(9795);
+  });
+  it('New York: 25 Oct 2026 21:00 EDT (= 26 Oct 01:00 UTC) is still 25 Oct locally', () => {
+    expect(daysOld(2000, 1, 1, new Date(Date.UTC(2026, 9, 26, 1, 0)), 'America/New_York')).toBe(9794);
+  });
+  it('default (no zone) uses the runtime local date', () => {
+    const local = new Date(2026, 9, 26, 0, 10); // 00:10 local, whatever the runtime zone is
+    expect(daysOld(2000, 1, 1, local)).toBe(9795);
+    expect(nextMilestone(2000, 1, 1, local).daysOld).toBe(9795);
+  });
+});
+

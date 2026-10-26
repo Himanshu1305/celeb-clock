@@ -28,6 +28,7 @@ import { describeAlternatives } from '@/lib/vedic/dateOnlyMoonSign';
 import { RASHI_NAME_TO_SLUG } from '@/services/VedicZodiacExtended';
 import { lifePathFromDate } from '@/lib/lifePath';
 import { orbitalPeriodYears } from '@/lib/orbitalPeriods';
+import { liveAgeBreakdown } from '@/lib/ageBreakdown';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const MONTH_SLUGS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -53,22 +54,8 @@ function mapSupabase(r: CelebrityBirthdayResult): DisplayCelebrity {
   };
 }
 
-const calculateAge = (birthDate: Date) => {
-  const now = new Date();
-  const diff = now.getTime() - birthDate.getTime();
-  const seconds = Math.floor(diff / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-  const years = Math.floor(days / 365.25);
-  const months = Math.floor((days % 365.25) / 30.44);
-  const remainingDays = Math.floor((days % 365.25) % 30.44);
-  return {
-    years, months, days: remainingDays, totalDays: days,
-    hours: hours % 24, minutes: minutes % 60, seconds: seconds % 60,
-    totalSeconds: seconds, totalMinutes: minutes, totalHours: hours,
-  };
-};
+// Batch 8 (bug 1): shared calendar, birthday-aware age (src/lib/ageBreakdown.ts).
+const calculateAge = liveAgeBreakdown;
 
 const getGeneration = (year: number) => getGenerationBasic(year) ?? { name: 'Silent Generation', emoji: '📻', range: '1928–1945' };
 

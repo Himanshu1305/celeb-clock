@@ -29,6 +29,7 @@ import {
   calculateLongevity,
   LongevityResult,
 } from '@/services/LongevityCalculationService';
+import { completedYears } from '@/lib/ageBreakdown';
 
 interface Props {
   birthDate?: Date | null;
@@ -469,9 +470,8 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
   const geneticAdj = Math.round(Math.max(-8, Math.min(8, (previewWfa - 78) * 0.25)) * 10) / 10;
   const adjSign = geneticAdj >= 0 ? '+' : '';
 
-  const currentAge = birthDate
-    ? Math.floor((new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000))
-    : null;
+  // Batch 8: calendar, birthday-aware whole years (shared helper), not days ÷ 365.25.
+  const currentAge = birthDate ? completedYears(birthDate) : null;
 
   const filteredCountries = QUIZ_COUNTRIES.filter(c =>
     c.toLowerCase().includes(countrySearch.toLowerCase())
