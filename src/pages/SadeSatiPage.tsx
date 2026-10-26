@@ -162,7 +162,8 @@ export default function SadeSatiPage() {
             <div><span className="eyebrow">Shani · Saturn transit</span><h1>Sade Sati Calculator.</h1></div>
             <p>Saturn’s 7.5-year Sade Sati passes over the 12th, 1st and 2nd signs from your Moon — this shows whether it’s active now, which phase, the real start/end dates, plus the 2.5-year Dhaiya (small Panoti).</p>
           </div>
-          <TrustStrip claim="Worked out from where Saturn actually is relative to your Moon sign, not a lookup table. In our tests this matched a leading Vedic astrology service in 100% of charts." href="/how-it-works#vedic" />
+          {/* Batch 8: dated claim backed by /accuracy (src/lib/accuracy/evidence.ts). */}
+          <TrustStrip claim="Worked out from where Saturn actually is relative to your Moon sign, not a lookup table. In our tests (October 2026), the Sade Sati status matched Swiss Ephemeris Saturn positions for all 22 test births." href="/accuracy" linkLabel="How we check accuracy" />
           <div className="form-band" style={{ marginTop: 16 }}>
             <div><h3>Your birth details</h3><p className="small muted">We use your Moon sign to locate Saturn’s transit.</p></div>
             <BirthDetailsForm initial={initial} submitLabel="Check my Sade Sati" loadingLabel="Calculating…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="sadesati" />

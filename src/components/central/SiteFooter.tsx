@@ -8,6 +8,7 @@ const DEFAULT_NAV: FooterLink[] = [
   { label: 'Mystic Corner', to: '/mystic-corner' },
   { label: 'Science & Longevity', to: '/life-expectancy' },
   { label: 'Methodology', to: '/how-it-works' },
+  { label: 'Accuracy', to: '/accuracy' },
   { label: 'Privacy', to: '/privacy' },
   { label: 'Contact', to: '/contact' },
 ];

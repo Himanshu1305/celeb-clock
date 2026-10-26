@@ -119,6 +119,7 @@ export const Footer = () => {
               <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link></li>
               <li><Link to="/pricing" className="text-muted-foreground hover:text-primary transition-colors">Pricing</Link></li>
               <li><Link to="/how-it-works" className="text-muted-foreground hover:text-primary transition-colors">How It Works</Link></li>
+              <li><Link to="/accuracy" className="text-muted-foreground hover:text-primary transition-colors">How We Check Accuracy</Link></li>
               <li><Link to="/articles" className="text-muted-foreground hover:text-primary transition-colors">Articles</Link></li>
               <li><Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li>
               {/* Popular guides — ensures every article has ≥2 internal inbound links (site-wide footer) */}
