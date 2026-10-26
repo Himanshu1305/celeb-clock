@@ -9,7 +9,7 @@ import { addDaysISO } from '../dates';
 import { computeDayPanchang, dayWindowsLite, panchangCityBySlug, sunriseSunset, type DayPanchang, type TimeWindow } from '../../vedic/panchangDay';
 import { PANCHANG_TABLES } from '../../vedic/panchang';
 import type { PanchangPageKind } from '../../vedic/panchangText';
-import { renderPanchangEntry, PANCHANG_INDEX_SLUG, type PanchangDayData } from './panchangTemplate';
+import { renderPanchangEntry, renderPanchangHiEntry, PANCHANG_INDEX_SLUG, type PanchangDayData } from './panchangTemplate';
 
 export { PANCHANG_INDEX_SLUG };
 export interface PanchangPlaceInput { name: string; lat: number; lon: number; tz: number; slug?: string }
@@ -80,4 +80,12 @@ export function computePanchangDayDataForCity(date: string, citySlug: string): P
 /** Browser: the entry for any place and date (searched places, other dates). */
 export function buildPanchangEntry(kind: PanchangPageKind, place: PanchangPlaceInput, date: string, index = false): DailyEntry {
   return renderPanchangEntry(kind, { name: place.name, slug: place.slug }, date, computePanchangDayData(place, date), index);
+}
+
+/**
+ * Browser (batch 8): the Hindi Panchang entry for another date at a Hindi-page city
+ * (`slug` = city slug or 'index'), or for any searched place (`custom` set).
+ */
+export function buildPanchangHiEntry(place: PanchangPlaceInput, date: string, slug: string, custom = false): DailyEntry {
+  return renderPanchangHiEntry(slug, date, computePanchangDayData(place, date), custom ? { name: place.name } : undefined);
 }
