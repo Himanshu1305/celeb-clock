@@ -19,6 +19,7 @@ export const DAILY_TERM: Record<string, string> = {
   westernAspect: 'westernAspect',
   retrograde: 'retrograde',
   ingress: 'ingress',
+  transitGrade: 'transitGrade',
   tropicalZodiac: 'tropicalZodiac',
   sunSign: 'sunSign',
 };

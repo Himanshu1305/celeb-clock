@@ -9,6 +9,7 @@
  */
 import { calculateWesternZodiac, calculateLifePathNumber } from '@/utils/celebrityCalculations';
 import { BIRTHSTONE_DATA, birthstoneAnswer } from '@/data/birthstoneData';
+import { zoneDateISO } from '@/lib/viewerTime';
 
 export const MARS_YEAR_IN_EARTH_YEARS = 1.8808;
 export const MARS_GRAVITY_FACTOR = 0.38;
@@ -58,10 +59,21 @@ export function bornOnWeekday(year: number, month: number, day: number): string 
   return WEEKDAYS[new Date(Date.UTC(year, month - 1, day)).getUTCDay()];
 }
 
-/** Whole days lived from the birth date to `now`, counted midnight-to-midnight in UTC. */
-export function daysOld(year: number, month: number, day: number, now: Date = new Date()): number {
+/**
+ * Whole days lived from the birth date to `now`. Batch 8 (bug 2): "today" is the user's
+ * LOCAL calendar date (the browser's zone, or `timeZone` when given) — reading the UTC
+ * date made the counter one day short in India between midnight and 5:30 am. The two
+ * calendar dates are then differenced as UTC midnights, so DST can never shift a day.
+ */
+export function daysOld(year: number, month: number, day: number, now: Date = new Date(), timeZone?: string): number {
   const birthUTC = Date.UTC(year, month - 1, day);
-  const nowUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  let nowUTC: number;
+  if (timeZone) {
+    const [ny, nm, nd] = zoneDateISO(now, timeZone).split('-').map(Number);
+    nowUTC = Date.UTC(ny, nm - 1, nd);
+  } else {
+    nowUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  }
   return Math.floor((nowUTC - birthUTC) / MS_PER_DAY);
 }
 
@@ -83,8 +95,8 @@ export interface MilestoneInfo {
  * The next 1,000-day milestone. Leap years are handled automatically because the
  * milestone date is the birth date plus an exact number of days in UTC.
  */
-export function nextMilestone(year: number, month: number, day: number, now: Date = new Date()): MilestoneInfo {
-  const d = daysOld(year, month, day, now);
+export function nextMilestone(year: number, month: number, day: number, now: Date = new Date(), timeZone?: string): MilestoneInfo {
+  const d = daysOld(year, month, day, now, timeZone);
   const isMilestoneToday = d > 0 && d % 1000 === 0;
   const prev = Math.floor(d / 1000) * 1000;
   const milestone = isMilestoneToday ? d : prev + 1000;

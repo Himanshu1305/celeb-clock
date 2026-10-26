@@ -3,8 +3,8 @@
  * Batch 7 (W8): /baby-names/nakshatra/:slug pages, the Kundali name-letter link and the
  * US state life-expectancy figures.
  * References: syllables — Drik Panchang 108-pada table (nakshatraAksharas.ts); deity and
- * name meaning — Wikipedia "Nakshatra" table (opened via WebFetch); added names —
- * behindthename.com (Chetan, Chetana) and wisdomlib.org/DDSA dictionary (Bholanath);
+ * name meaning — Wikipedia "Nakshatra" table (opened via WebFetch); names — every entry's
+ * own source URL (babyNamesByAkshara.ts; batch 8 re-sourced the whole list);
  * US states — CDC/NCHS "U.S. State Life Tables, 2022", NVSR 74-12 (opened via WebFetch).
  */
 import { describe, it, expect, afterEach } from 'vitest';
@@ -101,11 +101,34 @@ describe('baby names by nakshatra — 27 pages', () => {
       expect(getByTestId('bnn-count').textContent).toContain(`${expected} name`);
       cleanup();
     }
-  });
+  }, 30000);
 
   it('the hub /baby-names links to all 27 pages', () => {
     const { getByTestId } = renderPath('/baby-names');
     expect(getByTestId('baby-nakshatra-links').querySelectorAll('a')).toHaveLength(27);
+  });
+
+  it('every listed name shows its Source link (batch 8)', () => {
+    for (const n of NAKSHATRA_ORDER) {
+      const expected = [1, 2, 3, 4].flatMap(p => namesForPada(n, p));
+      renderPath(`/baby-names/nakshatra/${NAKSHATRA_EXTRA[n].slug}`);
+      const links = Array.from(document.querySelectorAll('a[data-testid="bn-source"]'));
+      expect(links.map(a => a.getAttribute('href'))).toEqual(expected.map(x => x.source));
+      for (const a of links) {
+        expect(a.textContent).toBe('Source');
+        expect(a.getAttribute('rel')).toContain('noopener');
+      }
+      cleanup();
+    }
+  }, 30000);
+
+  it('a pada with no checked names says so plainly', () => {
+    // Ashlesha pada 2 ("Du") and pada 3 ("De") have no sourced names.
+    const { getAllByTestId } = renderPath('/baby-names/nakshatra/ashlesha');
+    const padas = getAllByTestId('bnn-pada');
+    expect(namesForPada('Ashlesha', 2)).toHaveLength(0);
+    expect(padas[1].textContent).toContain('no names for this sound yet');
+    expect(padas[0].textContent).toContain('Dimple');
   });
 
   it('the three sourced additions land in the right pada', () => {

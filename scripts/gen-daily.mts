@@ -1,5 +1,6 @@
 // Precompute every daily-changing page (src/lib/daily/registry.ts) for the next
-// 400 India dates into dist/daily/<kind>/<slug>/<YYYY-MM>.json + dist/daily/manifest.json.
+// 400 India dates into dist/daily/<kind>/<slug>/<YYYY-MM>.json + dist/daily/manifest.json
+// (weekly / monthly / yearly views: one <period key>.json per week / month / year).
 // The Worker (functions/daily.ts) injects today's entry into the prerendered shell; the
 // browser reads the same JSON. See src/lib/daily/index.ts.
 //
@@ -9,7 +10,7 @@
 import { mkdirSync, writeFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
-import { DAILY_PAGES } from '../src/lib/daily/registry';
+import { DAILY_PAGES, dailyDataKey, dailyFileKey } from '../src/lib/daily/registry';
 import { DAILY_COMPUTERS, DAILY_DATA_COMPUTERS } from '../src/lib/daily/compute';
 import { addDaysISO, istDateISO, monthKey } from '../src/lib/daily/dates';
 import type { DailyEntry, DailyManifest, DailyMonthFile } from '../src/lib/daily/types';
@@ -45,11 +46,15 @@ for (const def of DAILY_PAGES) {
     const key = `${def.data.kind}/${ds}`;
     if (doneData.has(key)) continue;
     doneData.add(key);
+    // One file per month (per-day data), or — period kinds (weekly / monthly / yearly
+    // views, def.data.period) — one file per period holding that period's single value.
     const byMonth = new Map<string, Record<string, unknown>>();
     for (const date of dates) {
-      const mk = monthKey(date);
+      const mk = dailyFileKey(def, date);
+      const dk = dailyDataKey(def, date);
       if (!byMonth.has(mk)) byMonth.set(mk, {});
-      byMonth.get(mk)![date] = compute(date, ds);
+      const bucket = byMonth.get(mk)!;
+      if (!(dk in bucket)) bucket[dk] = compute(date, ds);
     }
     for (const [month, data] of byMonth) { writeMonth(def.data.kind, ds, month, { kind: def.data.kind, slug: ds, month, data }); files++; }
   }

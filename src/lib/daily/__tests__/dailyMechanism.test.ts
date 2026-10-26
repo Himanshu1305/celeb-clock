@@ -32,13 +32,17 @@ describe('daily registry', () => {
     expect(matchDailyRoute('/rashifal/mesh/today/')?.def.kind).toBe('rashifal');
     expect(matchDailyRoute('/hi/rashifal/mesha/')?.def.kind).toBe('rashifal-hi');
     expect(matchDailyRoute('/zodiac/leo/today/')?.def.kind).toBe('horoscope');
-    expect(matchDailyRoute('/rashifal/mesh/week')).toBeNull();
+    // Batch 8: the weekly / monthly / yearly rashifal views are period kinds now.
+    expect(matchDailyRoute('/rashifal/mesh/week')?.def.kind).toBe('rashifal-week');
+    expect(matchDailyRoute('/rashifal/mesh/month/')?.def.kind).toBe('rashifal-month');
+    expect(matchDailyRoute('/rashifal/mesh/year')?.def.kind).toBe('rashifal-year');
+    expect(matchDailyRoute('/rashifal/mesh/decade')).toBeNull();
     expect(matchDailyRoute('/zodiac/leo')).toBeNull();
     expect(matchDailyRoute('/rashifal/notarashi/today')).toBeNull();
   });
-  it('lists 36 daily routes (12 rashifal EN + 12 HI + 12 Western) + 153 Panchang (W7: 3 kinds × 51) + 11 Hindi Panchang', () => {
-    expect(allDailyRoutes()).toHaveLength(36 + 153 + 11);
-    expect(new Set(allDailyRoutes()).size).toBe(36 + 153 + 11);
+  it('lists 36 daily routes (12 rashifal EN + 12 HI + 12 Western) + 153 Panchang (W7: 3 kinds × 51) + 11 Hindi Panchang + 36 period rashifal (B8: week/month/year × 12)', () => {
+    expect(allDailyRoutes()).toHaveLength(36 + 153 + 11 + 36);
+    expect(new Set(allDailyRoutes()).size).toBe(36 + 153 + 11 + 36);
   });
 });
 

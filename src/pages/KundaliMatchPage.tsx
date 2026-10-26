@@ -169,7 +169,8 @@ export default function KundaliMatchPage() {
             <p>The traditional 36-point Ashtakoota system. {usingSaved ? 'Your details are already filled in — just add the second person.' : 'Enter both people’s birth date, birth time and birthplace — all three are needed for an accurate Moon Nakshatra — to see all eight kootas.'}</p>
           </div>
 
-          <TrustStrip claim="The classical 36-point compatibility score (Ashtakoota) — all eight parts shown and added up in front of you, nothing hidden." href="/how-it-works#vedic" />
+          {/* Batch 8: dated claim backed by /accuracy (src/lib/accuracy/evidence.ts; AstroSage values entered 17 Oct 2026). */}
+          <TrustStrip claim="The classical 36-point compatibility score (Ashtakoota) — all eight parts shown and added up in front of you. In our tests (October 2026), the total matched AstroSage for all 7 test couples." href="/accuracy" linkLabel="How we check accuracy" />
           <KundaliTabs active="match" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 print:hidden" style={{ marginTop: 16 }}>

@@ -10,7 +10,7 @@
 import { useEffect, useState } from 'react';
 import type { DailyEntry, DailyMonthFile } from './types';
 import { istDateISO, monthKey } from './dates';
-import { dailyJsonPath, dailyFilePath, DAILY_PAGES } from './registry';
+import { dailyJsonPath, dailyFilePath, dailyFileKey, DAILY_PAGES } from './registry';
 import { DAILY_DATA_SCRIPT_ID } from './inject';
 
 export type DailySource = 'embedded' | 'json' | 'computed';
@@ -55,7 +55,7 @@ export async function resolveDailyEntry(kind: string, slug: string, date: string
   const month = monthKey(date);
   let fromJson: DailyEntry | null = null;
   if (def) {
-    let file = await loadUrl(dailyFilePath(def, slug, month));
+    let file = await loadUrl(dailyFilePath(def, slug, dailyFileKey(def, date)));
     if (!file && def.data) file = await loadDailyMonth(kind, slug, month);
     // Templates are loaded lazily (some pull in text tables shared with the engine
     // modules); the embedded first-render path above never needs them.

@@ -37,7 +37,16 @@ function offsetFor(place: PanchangPlace, dateKey: string): number {
   catch { return 0; }
 }
 
-export function usePanchangPlace(kind: PanchangPageKind) {
+export interface PanchangPlaceOptions {
+  /** URL base for this page (default `/${kind}`); the Hindi page uses '/hi/panchang'. */
+  base?: string;
+  /** Built-in cities this page has its own URLs for (default: all 50). */
+  cities?: PanchangCity[];
+}
+
+export function usePanchangPlace(kind: PanchangPageKind, opts: PanchangPlaceOptions = {}) {
+  const cities = opts.cities ?? PANCHANG_CITIES;
+  const bySlug = (s?: string) => (s ? cities.find(c => c.slug === s) : undefined);
   const { city: cityParam } = useParams<{ city?: string }>();
   const [sp] = useSearchParams();
   const navigate = useNavigate();
@@ -54,8 +63,9 @@ export function usePanchangPlace(kind: PanchangPageKind) {
       try { timezone = timezoneForCoordinates(qLat, qLon); } catch { /* keep UTC */ }
       return { name: qName || `${qLat.toFixed(2)}°, ${qLon.toFixed(2)}°`, lat: qLat, lon: qLon, timezone };
     }
-    const c = panchangCityBySlug(cityParam) || panchangCityBySlug(DEFAULT_SLUG)!;
+    const c = bySlug(cityParam) || bySlug(DEFAULT_SLUG) || panchangCityBySlug(DEFAULT_SLUG)!;
     return { slug: c.slug, name: c.name, state: c.state, lat: c.lat, lon: c.lon, timezone: 'Asia/Kolkata', city: c };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `cities` is a fixed list per page
   }, [hasCustom, qLat, qLon, qName, cityParam]);
 
   // Today at the place (offset for today), then the requested date if valid.
@@ -65,7 +75,7 @@ export function usePanchangPlace(kind: PanchangPageKind) {
   const dateKey = isValidDateKey(dParam) ? dParam : todayKey;
   const tz = offsetFor(place, dateKey);
 
-  const base = `/${kind}`;
+  const base = opts.base ?? `/${kind}`;
   const query = (o: Record<string, string | undefined>) => {
     const q = new URLSearchParams();
     for (const [k, v] of Object.entries(o)) if (v) q.set(k, v);
@@ -90,7 +100,7 @@ export function usePanchangPlace(kind: PanchangPageKind) {
 
   return {
     place, dateKey, todayKey, tz, isToday: dateKey === todayKey, isCustom: hasCustom,
-    cityParam, validCity: !cityParam || !!panchangCityBySlug(cityParam),
-    setDate, setCity, setCustomPlace, linkTo, cities: PANCHANG_CITIES,
+    cityParam, validCity: !cityParam || !!bySlug(cityParam),
+    setDate, setCity, setCustomPlace, linkTo, cities,
   };
 }

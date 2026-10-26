@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { getConditionalBase } from './LongevityCalculationService';
+import { completedYears, parseYmdLocal } from '@/lib/ageBreakdown';
 
 export interface FamilyMember {
   id: string;
@@ -52,10 +53,8 @@ export async function deleteFamilyMember(memberId: string): Promise<void> {
 }
 
 export function calculateBaseForecast(dob: string, gender: string, country: string): number {
-  const birthDate = new Date(dob);
-  const currentAge = Math.floor(
-    (new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000)
-  );
+  // Batch 8: DOB read as a local calendar date; birthday-aware whole years.
+  const currentAge = completedYears(parseYmdLocal(dob));
   const g = gender === 'female' ? 'female' : 'male';
   const { base } = getConditionalBase(country || 'Unknown', g, currentAge);
   return Math.round((base + 1.5) * 10) / 10;

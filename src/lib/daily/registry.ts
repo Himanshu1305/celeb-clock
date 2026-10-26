@@ -7,6 +7,7 @@
  * same `kind` key in ./compute.ts. See ./index.ts for the full API.
  */
 import type { DailyLang } from './types';
+import { monthKey, periodKeyOf, type DailyPeriod } from './dates';
 import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../seo/panchangSlugs';
 
 export interface DailyPageDef {
@@ -25,7 +26,17 @@ export interface DailyPageDef {
    * built from it by the pure template DAILY_TEMPLATES[kind] (./templates.ts), the same
    * function in the Worker and the browser. Omit for the original "finished entries" files.
    */
-  data?: { kind: string; slug: (pageSlug: string) => string };
+  data?: {
+    kind: string;
+    slug: (pageSlug: string) => string;
+    /**
+     * Batch 8 — a multi-day page (weekly / monthly / yearly view): the data changes once
+     * per period, so it is stored ONCE per period, keyed by its period key (week → its
+     * Monday, month → YYYY-MM, year → YYYY), in a file named after that key:
+     * /daily/<data.kind>/<data.slug>/<period key>.json. Omit for one-entry-per-day data.
+     */
+    period?: DailyPeriod;
+  };
 }
 
 /** Vedic rashi slugs (English pages) — same set the Worker validates for /rashifal/:rashi. */
@@ -37,6 +48,9 @@ export const SUN_SIGN_SLUGS = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'vi
 
 /** One shared data file for every page of a kind (e.g. the day's sky for all 12 signs). */
 const ALL = () => 'all';
+/** Weekly / monthly / yearly rashifal: one sky per period for all 12 rashis. */
+const PERIOD = (p: DailyPeriod) => ({ kind: 'rashifal-period', slug: () => p, period: p });
+
 /** Panchang pages: one data file per city ('index' pages show Delhi). */
 const CITY = (s: string) => (s === 'index' ? 'delhi' : s);
 
@@ -51,6 +65,11 @@ export const DAILY_PAGES: DailyPageDef[] = [
   { kind: 'rashifal', lang: 'en', slugs: RASHI_SLUGS, path: s => `/rashifal/${s}/today`, data: { kind: 'vedic-sky', slug: ALL } },
   // W1 — Vedic daily rashifal (Hindi), at the existing /hi/rashifal/:rashi URL.
   { kind: 'rashifal-hi', lang: 'hi', slugs: RASHI_SLUGS_HI, path: s => `/hi/rashifal/${s}`, data: { kind: 'vedic-sky', slug: ALL } },
+  // Batch 8 — weekly (Mon–Sun) / monthly / yearly Vedic rashifal at the existing
+  // /rashifal/:rashi/:period URLs, so the period's dates and text are current between deploys.
+  { kind: 'rashifal-week', lang: 'en', slugs: RASHI_SLUGS, path: s => `/rashifal/${s}/week`, data: PERIOD('week') },
+  { kind: 'rashifal-month', lang: 'en', slugs: RASHI_SLUGS, path: s => `/rashifal/${s}/month`, data: PERIOD('month') },
+  { kind: 'rashifal-year', lang: 'en', slugs: RASHI_SLUGS, path: s => `/rashifal/${s}/year`, data: PERIOD('year') },
   // W2 — Western (tropical) daily horoscope, extending /zodiac/:sign with /today.
   { kind: 'horoscope', lang: 'en', slugs: SUN_SIGN_SLUGS, path: s => `/zodiac/${s}/today`, data: { kind: 'western-sky', slug: ALL } },
   // W7 — Panchang / Rahu Kaal / Choghadiya by city (50 cities + the index page, which shows Delhi).
@@ -87,9 +106,20 @@ export function dailyJsonPath(kind: string, slug: string, month: string): string
 }
 
 /** Public URL of the month file a page reads: its shared DATA file when the kind uses
- *  the data + render variant, else its own finished-entries file. */
-export function dailyFilePath(def: DailyPageDef, slug: string, month: string): string {
-  return def.data ? dailyJsonPath(def.data.kind, def.data.slug(slug), month) : dailyJsonPath(def.kind, slug, month);
+ *  the data + render variant, else its own finished-entries file. `fileKey` is the
+ *  file name — dailyFileKey(def, date). */
+export function dailyFilePath(def: DailyPageDef, slug: string, fileKey: string): string {
+  return def.data ? dailyJsonPath(def.data.kind, def.data.slug(slug), fileKey) : dailyJsonPath(def.kind, slug, fileKey);
+}
+
+/** Name of the file holding a date's data: YYYY-MM, or the period key for period kinds. */
+export function dailyFileKey(def: DailyPageDef, date: string): string {
+  return def.data?.period ? periodKeyOf(def.data.period, date) : monthKey(date);
+}
+
+/** Key of a date's value inside that file's `data`: the date, or the period key. */
+export function dailyDataKey(def: DailyPageDef, date: string): string {
+  return def.data?.period ? periodKeyOf(def.data.period, date) : date;
 }
 
 /** Test/extension hook: forget the cached route map after DAILY_PAGES changes. */

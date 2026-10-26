@@ -486,12 +486,12 @@ export default function Methodology() {
 
                 <div className="mb-10">
                   <h3 className="text-xl font-semibold text-foreground mb-3">
-                    How the Engine Was Cross-Checked
-                    <CitationBadge>ProKerala</CitationBadge>
+                    How the Engine Is Checked
+                    <CitationBadge>Swiss Ephemeris · AstroSage · Drik Panchang</CitationBadge>
                   </h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
-                    Before going live, the engine was validated chart-by-chart against two independent professional
-                    providers (including ProKerala). The results we rely on are the ones that matched closely:
+                    Before going live, the engine was validated chart-by-chart against professional providers (including
+                    ProKerala). Today it is checked automatically against stored reference values. In our tests (October 2026):
                   </p>
                   <div className="overflow-x-auto rounded-lg border border-border">
                     <table className="w-full text-sm text-muted-foreground">
@@ -503,10 +503,12 @@ export default function Methodology() {
                       </thead>
                       <tbody className="divide-y divide-border">
                         {[
-                          ['Rashi, Nakshatra, Pada, Retrograde, Dasha', 'Exact match (100%)'],
-                          ['Lagna / non-polar house cusps', '~99.99% (within 0.004°)'],
-                          ['Mangal Dosha (Manglik: Mars from Lagna and Moon, houses 1/4/7/8/12)', 'Matches AstroSage on all 10 audit test charts (Oct 2026)'],
-                          ['Sade Sati / Dhaiya (Saturn transit)', '100%'],
+                          // Batch 8: dated figures from src/lib/accuracy/evidence.ts (full table on /accuracy).
+                          ['Lagna and all 9 planet positions', 'Within 1 arc-minute of the Swiss Ephemeris for all 22 test births'],
+                          ['Moon Nakshatra and pada; current Mahadasha and Antardasha', 'Same as the Swiss Ephemeris reference for all 22 test births'],
+                          ['Guna Milan total (Kundali matching)', 'Same as AstroSage for all 7 test couples (entered 17 Oct 2026)'],
+                          ['Mangal Dosha (Manglik: Mars from Lagna and Moon, houses 1/4/7/8/12)', 'Same level as AstroSage on all 10 test charts (17 Oct 2026)'],
+                          ['Sade Sati status (Saturn transit)', 'Same as Swiss Ephemeris Saturn positions for all 22 test births'],
                           ['Kaal Sarp (reported only when full, by exact degree)', 'Agrees with Drik Panchang on the audited reference chart (Oct 2026)'],
                         ].map(([out, acc], i) => (
                           <tr key={out} className={i % 2 === 0 ? 'bg-muted/20' : ''}>
@@ -524,6 +526,10 @@ export default function Methodology() {
                     <strong className="text-foreground">Muhurat</strong> windows (Tithi, Nakshatra, Yoga, Karana, Vara
                     and the Rahu Kalam to avoid) are derived from the same sidereal Sun and Moon longitudes, with the
                     classical muhurat basis drawn from Brihat Samhita and standard panchang sources.
+                  </p>
+                  <p className="text-muted-foreground leading-relaxed mt-4">
+                    <Link to="/accuracy" className="text-[#6E5AA6] hover:underline font-medium" data-testid="methodology-accuracy-link">How we check accuracy →</Link>{' '}
+                    every check, the reference it was compared with, how many cases, the result, the date and the limits.
                   </p>
                 </div>
 
@@ -655,6 +661,7 @@ export default function Methodology() {
                   <li><strong className="text-foreground">Planetary age</strong> — exact to the day of calculation, using verified NASA JPL orbital period constants.</li>
                   <li><strong className="text-foreground">Celebrity birthdays</strong> — verified from multiple public sources; birth dates disputed in historical records are noted.</li>
                   <li><strong className="text-foreground">Zodiac / birthstone / numerology</strong> — based on established traditional systems. Provided for cultural enrichment and entertainment only.</li>
+                  <li><strong className="text-foreground">Vedic calculations</strong> — checked against the Swiss Ephemeris, AstroSage and Drik Panchang; dated results and known limits are on <Link to="/accuracy" className="text-[#6E5AA6] hover:underline font-medium">How we check accuracy</Link>.</li>
                   <li><strong className="text-foreground">Data currency</strong> — life expectancy baselines are reviewed annually against the latest UN WPP release. Last review: 2024.</li>
                 </ul>
               </section>

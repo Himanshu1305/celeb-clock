@@ -69,6 +69,7 @@ const PlanetaryAgePage = lazyWithReload(() => import("./pages/PlanetaryAgePage")
 const WeightOnPlanetsPage = lazyWithReload(() => import("./pages/WeightOnPlanetsPage"));
 const Methodology = lazyWithReload(() => import("./pages/Methodology"));
 const EditorialPolicy = lazyWithReload(() => import("./pages/EditorialPolicy"));
+const AccuracyPage = lazyWithReload(() => import("./pages/AccuracyPage"));
 const ZodiacSign = lazyWithReload(() => import("./pages/ZodiacSign"));
 const ZodiacToday = lazyWithReload(() => import("./pages/ZodiacToday"));
 const BirthstonePage = lazyWithReload(() => import("./pages/BirthstonePage"));
@@ -337,6 +338,8 @@ const App = () => (
                   fallback covers dev + any direct SPA nav so it never 404s. */}
               <Route path="/methodology" element={<Navigate to="/how-it-works" replace />} />
               <Route path="/editorial-policy" element={<EditorialPolicy />} />
+              {/* Batch 8: dated, evidence-backed accuracy page (src/lib/accuracy/evidence.ts). */}
+              <Route path="/accuracy" element={<AccuracyPage />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/family" element={<FamilyDashboard />} />
               <Route path="/gift" element={<GiftReport />} />

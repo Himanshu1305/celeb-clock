@@ -12,6 +12,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip as RechartsTooltip, ResponsiveContainer, Cell,
 } from 'recharts';
+import { completedYears } from '@/lib/ageBreakdown';
 
 interface Props {
   result: LongevityResult;
@@ -116,7 +117,7 @@ export const EnhancedLifeExpectancyReport = ({
   const blueZoneCount = habitsForBlueZone.filter(id => BLUE_ZONE_HABITS.has(id)).length;
 
   const currentAge = birthDate instanceof Date
-    ? Math.floor((new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000))
+    ? completedYears(birthDate) // Batch 8: birthday-aware whole years
     : result.currentAge;
 
   const blurNum = (n: number | string, suffix = '') => (

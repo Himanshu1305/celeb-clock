@@ -253,7 +253,7 @@ async function handler(request, env?) {
 
     // Audit K3: under-18s get no marriage/career timing; the ':minor' tag keeps any reading
     // cached before this fix (which may contain such timing) from being served to a child.
-    const ageYears = ageInYears(birthUTC, now);
+    const ageYears = ageInYears(birthUTC, now, tz);
     const minorTag = ageYears < ADULT_TIMING_AGE ? ':minor' : '';
     // Optional marital status (profile field): a married person never gets a forward
     // "marriage window" — separate cache entry so the two wordings never mix.

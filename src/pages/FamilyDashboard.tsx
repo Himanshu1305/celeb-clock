@@ -67,6 +67,7 @@ import {
 } from '@/services/FamilyService';
 import { addReminder } from '@/services/reminderService';
 import { QUIZ_COUNTRIES } from '@/services/LongevityCalculationService';
+import { completedYears, parseYmdLocal } from '@/lib/ageBreakdown';
 
 type FamilyMemberExt = FamilyMember & { relationship?: string | null };
 
@@ -83,10 +84,9 @@ function buildLifeExpectancyUrl(member: FamilyMemberExt): string {
 
 const MAX_MEMBERS = 10;
 
+// Batch 8: DOB read as a local calendar date; birthday-aware whole years (shared helper).
 function calcAge(dob: string) {
-  return Math.floor(
-    (new Date().getTime() - new Date(dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000)
-  );
+  return completedYears(parseYmdLocal(dob));
 }
 
 function forecastColor(f: number) {

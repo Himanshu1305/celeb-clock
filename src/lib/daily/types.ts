@@ -63,6 +63,9 @@ export interface DailyEntry {
   sections: DailySection[];
   /** Visible FAQ; also emitted as FAQPage JSON-LD (same text). */
   faq: DailyFaq[];
+  /** Optional block headings instead of the daily defaults ("Today in brief", "Why
+   *  today", "Questions about today") — e.g. "This week in brief" on a weekly page. */
+  labels?: { answer?: string; why?: string; faq?: string };
 }
 
 /** One month file: `dist/daily/<kind>/<slug>/<YYYY-MM>.json`. */
@@ -74,7 +77,8 @@ export interface DailyMonthFile {
    *  deploy only re-uploads the month files that actually changed. */
   /** Finished entries (original format). */
   days?: Record<string, DailyEntry>;
-  /** Compact per-day data (the "data + render" variant, see DailyPageDef.data). */
+  /** Compact per-day data (the "data + render" variant, see DailyPageDef.data); keyed by
+   *  date, or by period key for period kinds (DailyPageDef.data.period). */
   data?: Record<string, unknown>;
 }
 

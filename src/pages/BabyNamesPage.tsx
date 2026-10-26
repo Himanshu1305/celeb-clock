@@ -153,7 +153,7 @@ export default function BabyNamesPage() {
                         {names.map(n => (
                           <li key={n.name} className="text-sm flex items-baseline gap-2">
                             <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full ${GENDER_STYLE[n.gender]}`}>{n.gender}</span>
-                            <span><strong className="text-foreground">{n.name}</strong> <span lang="hi" className="text-muted-foreground">{n.hi}</span> <span className="text-muted-foreground">— {n.meaning}</span></span>
+                            <span><strong className="text-foreground">{n.name}</strong> <span lang="hi" className="text-muted-foreground">{n.hi}</span> <span className="text-muted-foreground">— {n.meaning}</span>{' '}<a href={n.source} data-testid="bn-source" className="text-[10px] text-muted-foreground underline" rel="noopener noreferrer" target="_blank">Source</a></span>
                           </li>
                         ))}
                       </ul>
@@ -162,7 +162,7 @@ export default function BabyNamesPage() {
                 );
               })}
             </div>
-            <p className="text-xs text-muted-foreground mt-4">Names and meanings are an original, hand-curated list of common Indian names — a starting point, not an exhaustive register. Names are matched by their first Devanagari syllable (consonant and vowel).</p>
+            <p className="text-xs text-muted-foreground mt-4">A short, checked list: every meaning comes from a published name reference or Sanskrit/Hindi dictionary (see the “Source” link next to each name). It is a starting point, not a complete register. Names are matched by their first Devanagari syllable (consonant and vowel).</p>
           </div>
         )}
 

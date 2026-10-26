@@ -10,17 +10,19 @@
  * They reuse the same validated engine path (calculateBirthChart with refDate), so
  * a cache hit returns exactly what a fresh computation at `now` would.
  */
-import { calculateBirthChart, type BirthChartInput } from './calculateBirthChart';
+import { calculateBirthChart, type BirthChartInput, type BirthChartResult } from './calculateBirthChart';
 
 export interface LiveTimeFields {
   dasha: any;
   sadeSati: { active: boolean; phase: string | null; houseOfSaturnFromMoon: number };
+  /** Natal, but recomputed here so cached charts saved before batch 8 also carry it. */
+  birthTimeEdges: BirthChartResult['birthTimeEdges'];
 }
 
 export async function computeLiveTimeFields(input: BirthChartInput, now: Date = new Date()): Promise<LiveTimeFields | null> {
   try {
     const r = await calculateBirthChart(input, { refDate: now });
-    return { dasha: r.currentDasha, sadeSati: r.doshas.sadeSati };
+    return { dasha: r.currentDasha, sadeSati: r.doshas.sadeSati, birthTimeEdges: r.birthTimeEdges ?? [] };
   } catch {
     return null;
   }
@@ -34,6 +36,7 @@ export async function withLiveKundaliFields<T extends Record<string, any>>(cache
   return {
     ...cached,
     dasha: live ? live.dasha : null,
+    birthTimeEdges: live ? live.birthTimeEdges : (cached.birthTimeEdges ?? []),
     doshas: cached.doshas ? { ...cached.doshas, sadeSati: live ? live.sadeSati : null } : cached.doshas,
   };
 }

@@ -266,16 +266,20 @@ export function hindiPanchangMeta(slug: string): { title: string; description: s
   };
 }
 
-export function renderPanchangHiEntry(slug: string, date: string, data: PanchangDayData): DailyEntry {
-  const index = slug === PANCHANG_INDEX_SLUG;
-  const place = placeForSlug(slug);
-  const city = cityHi(place.slug!, place.name);
+/**
+ * Hindi entry for a built-in page slug ('index' or one of the 10 Hindi cities), or —
+ * with `custom` (batch 8) — for any searched place, whose name is shown as given.
+ */
+export function renderPanchangHiEntry(slug: string, date: string, data: PanchangDayData, custom?: { name: string }): DailyEntry {
+  const index = !custom && slug === PANCHANG_INDEX_SLUG;
+  const place = custom ? { name: custom.name } : placeForSlug(slug);
+  const city = custom ? custom.name : cityHi(place.slug!, place.name);
   const p = expandPanchangDay(date, data, place.name);
   const dHi = formatDateHi(date);
   const dLong = formatLongDateHi(date);
   const abh = p.abhijitApplies ? `अभिजित मुहूर्त ${winHi(p.abhijit)} है।` : 'बुधवार को अभिजित मुहूर्त नहीं लिया जाता।';
   const kar = KARANA_HI[karanaName(p.karana)] || karanaName(p.karana);
-  const meta = hindiPanchangMeta(slug);
+  const meta = custom ? { h1: `पंचांग — ${city}` } : hindiPanchangMeta(slug);
   return {
     date, lang: 'hi',
     title: index ? `आज का पंचांग (${dHi}) — तिथि, नक्षत्र, राहु काल | BornClock` : `${city} का पंचांग (${dHi}) — तिथि, राहु काल | BornClock`,

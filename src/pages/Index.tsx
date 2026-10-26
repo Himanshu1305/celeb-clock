@@ -17,6 +17,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { zodiacSign, lifePath, birthstoneForMonth, marsAge, marsYearProgress, marsWeightKg, bornOnWeekday, nextMilestone } from '@/utils/homepageDecode';
+import { completedYears } from '@/lib/ageBreakdown';
 import { getRankedBirthdayCelebrities, type CelebrityBirthdayResult } from '@/services/BirthdaySearchService';
 import { fetchCelebrityImage } from '@/services/WikipediaImageService';
 import { supabase } from '@/integrations/supabase/client';
@@ -158,13 +159,17 @@ export default function Index() {
   const birth = parseIso(activeIso);
   const [y, m, d] = activeIso.split('-').map(Number);
 
-  const yearsLived = (() => { let a = now.getFullYear() - y; if (now < new Date(now.getFullYear(), m - 1, d)) a--; return a; })();
-  const lastBday = new Date(y + yearsLived, m - 1, d);
-  const nextBday = new Date(y + yearsLived + 1, m - 1, d);
+  // Batch 8 review: same birthday convention as calendarAge / nextBirthday — a 29 Feb
+  // birthday falls on 28 Feb in non-leap years (it was 1 Mar here, one day later than the
+  // age calculator and the countdown elsewhere).
+  const bdayIn = (Y: number) => new Date(Y, m - 1, Math.min(d, new Date(Y, m, 0).getDate()));
+  const yearsLived = completedYears(new Date(y, m - 1, d), now);
+  const lastBday = bdayIn(y + yearsLived);
+  const nextBday = bdayIn(y + yearsLived + 1);
   const totalSec = Math.max(0, Math.floor((now.getTime() - birth.getTime()) / 1000));
   const daysInYear = Math.floor((now.getTime() - lastBday.getTime()) / 86400000);
   const nextIn = Math.ceil((nextBday.getTime() - now.getTime()) / 86400000);
-  const isBirthdayToday = now.getMonth() + 1 === m && now.getDate() === d;
+  const isBirthdayToday = now.getFullYear() === lastBday.getFullYear() && now.getMonth() === lastBday.getMonth() && now.getDate() === lastBday.getDate();
 
   // Part AO: born-on weekday + next 1,000-day milestone (UTC maths, DST-safe).
   const weekday = bornOnWeekday(y, m, d);
@@ -219,7 +224,7 @@ export default function Index() {
           preconnect (Part AN perf fix) — no per-page Helmet font link needed here. */}
       {/* Structured data — body-rendered (Part AM JsonLd), never Helmet */}
       <JsonLd id="org" data={{ '@context': 'https://schema.org', '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com/', logo: 'https://bornclock.com/og/default.png' }} />
-      <JsonLd id="website" data={{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'BornClock', url: 'https://bornclock.com/', potentialAction: { '@type': 'SearchAction', target: 'https://bornclock.com/celebrity?q={search_term_string}', 'query-input': 'required name=search_term_string' } }} />
+      <JsonLd id="website" data={{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'BornClock', url: 'https://bornclock.com/' }} />
       <JsonLd id="webpage" data={{ '@context': 'https://schema.org', '@type': 'WebPage', name: 'BornClock — Birthday, Zodiac & Longevity Calculator', description: 'Everything your birth date reveals — Vedic chart, celebrity twins, numerology, zodiac and longevity science from one date.', url: 'https://bornclock.com/' }} />
 
       {/* Polite, one-time announcement (NOT the ticking clock) */}
@@ -377,7 +382,7 @@ export default function Index() {
             <FootCol color="#F7A08E" title="BIRTHDAY" links={[['Celebrity Twins', '/celebrity-birthday'], ["Today's Birthdays", '/todays-birthdays'], ['Age Calculator', '/age-calculator'], ['Birthstone', '/birthstone'], ['Indian Celebrities', '/born-on/india'], ['Blueprint', '/birthday-report']]} />
             <FootCol color="#B3A4DE" title="MYSTIC" links={[['Numerology', '/numerology'], ['Name Numerology', '/name-numerology'], ['Western Zodiac', '/zodiac'], ['Chinese Zodiac', '/chinese-zodiac'], ['Tarot', '/tarot-card-by-birthday'], ['Compatibility', '/compatibility'], ['Biorhythm', '/biorhythm']]} />
             <FootCol color="#8FC1E6" title="SCIENCE" links={[['Life Expectancy', '/life-expectancy'], ['Biological Age', '/biological-age'], ['Country Comparison', '/country-comparison'], ['Planetary Age', '/planetary-age'], ['Planetary Weight', '/weight-on-planets']]} />
-            <FootCol color="#FFFFFF" title="BORNCLOCK" links={[['How it works', '/how-it-works'], ['Answers', '/answers'], ['Articles', '/articles'], ['About', '/about'], ['Editorial Policy', '/editorial-policy'], ['Pricing', '/pricing'], ['Privacy', '/privacy'], ['Contact', '/contact']]} />
+            <FootCol color="#FFFFFF" title="BORNCLOCK" links={[['How it works', '/how-it-works'], ['Accuracy', '/accuracy'], ['Answers', '/answers'], ['Articles', '/articles'], ['About', '/about'], ['Editorial Policy', '/editorial-policy'], ['Pricing', '/pricing'], ['Privacy', '/privacy'], ['Contact', '/contact']]} />
           </div>
         </div>
       </div>

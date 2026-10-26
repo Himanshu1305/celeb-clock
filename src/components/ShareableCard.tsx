@@ -2,7 +2,8 @@ import { useRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, Share2 } from 'lucide-react';
-import { differenceInDays, differenceInYears } from 'date-fns';
+import { differenceInDays } from 'date-fns';
+import { completedYears } from '@/lib/ageBreakdown';
 import html2canvas from 'html2canvas';
 import { calculateLifePath } from '@/components/NumerologyLifePath';
 
@@ -40,7 +41,7 @@ export const ShareableCard = ({ birthDate }: ShareableCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
 
-  const years = differenceInYears(new Date(), birthDate);
+  const years = completedYears(birthDate); // Batch 8 review: shared birthday-aware helper
   const totalDays = differenceInDays(new Date(), birthDate);
   const zodiac = getZodiacSign(birthDate);
   const lifePath = calculateLifePath(birthDate);

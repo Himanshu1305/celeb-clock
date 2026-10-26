@@ -1,6 +1,7 @@
 // src/services/LongevityCalculationService.ts
 // All calculation is client-side only — no health data is transmitted.
 import { WPP2024_LIFE_EXPECTANCY } from '../data/lifeExpectancyFacts';
+import { completedYears } from '@/lib/ageBreakdown';
 
 export interface FamilyMemberData {
   age: number;              // 0 = not entered
@@ -531,7 +532,7 @@ export function calculateLongevity(
   // currentAge must be computed before getConditionalBase (used for multiplier selection)
   const now = new Date();
   const currentAge = birthDate instanceof Date
-    ? Math.floor((now.getTime() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000))
+    ? completedYears(birthDate, now) // Batch 8: birthday-aware whole years
     : 35;
 
   const { base, source: baselineSource, isConditional } =

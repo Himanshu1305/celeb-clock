@@ -34,6 +34,7 @@
 import type { BirthChartResult, MahadashaPeriod } from './calculateBirthChart';
 import { SIGN_LORDS } from './engine/sthanaBala';
 import { RASHI_NAMES } from './engine/vedicEngine';
+import { completedYearsAtOffset } from '../ageBreakdown';
 
 export type WindowLevel = 'maha' | 'antar';
 export type WindowStatus = 'past' | 'current' | 'upcoming';
@@ -320,9 +321,12 @@ function allPastWindows(t: TimingResult, birth?: Date): TimingFactWindow[] {
 
 /** Age below which marriage and career timing is never given (audit K3). */
 export const ADULT_TIMING_AGE = 18;
-/** Whole years between two instants (birthday-aware enough for an under-18 gate). */
-export function ageInYears(birth: Date, now: Date = new Date()): number {
-  return Math.max(0, Math.floor((now.getTime() - birth.getTime()) / (365.2425 * 864e5)));
+/**
+ * Completed whole years, birthday-aware (batch 8): both instants are read as calendar dates
+ * in the birthplace's UTC offset `tzHours`, so an 18th birthday counts on the day itself.
+ */
+export function ageInYears(birth: Date, now: Date = new Date(), tzHours = 0): number {
+  return Math.max(0, completedYearsAtOffset(birth, now, tzHours));
 }
 
 /**

@@ -8,6 +8,7 @@ import { PlanetaryAgeCard } from '@/components/PlanetaryAgeCard';
 import { Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ORBITAL_PERIOD_DAYS } from '@/lib/orbitalPeriods';
+import { completedYears } from '@/lib/ageBreakdown';
 
 // ── NASA orbital periods (sidereal, Earth days) — the one shared table (N13) ──
 export const ORBITAL_PERIODS_DAYS: Record<string, number> = { ...ORBITAL_PERIOD_DAYS };
@@ -371,7 +372,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
   }, [birthDate]);
 
   const daysSinceBirth = (Date.now() - birthDate.getTime()) / 86400000;
-  const earthAge = Math.floor(daysSinceBirth / 365.25);
+  const earthAge = completedYears(birthDate); // Batch 8: birthday-aware Earth age
 
   const mercury  = results.find(p => p.name === 'Mercury')!;
   const jupiter  = results.find(p => p.name === 'Jupiter')!;

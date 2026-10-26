@@ -1,6 +1,7 @@
 import { ORBITAL_PERIOD_DAYS, OTHER_PLANETS, orbitalPeriodYears } from '@/lib/orbitalPeriods';
 import { CelebrityDOB } from './celebrityUtils';
 import { lifePathNumber } from '@/lib/lifePath';
+import { completedYears } from '@/lib/ageBreakdown';
 import { getChineseYear } from '@/services/ChineseZodiacService';
 import {
   moonSignsForDate, birthDayWindowForNationality, describeAlternatives, joinAlternatives,
@@ -8,11 +9,8 @@ import {
 } from '@/lib/vedic/dateOnlyMoonSign';
 
 export function calculateAge(day: number, month: number, year: number): number {
-  const today = new Date();
-  let age = today.getFullYear() - year;
-  if (today.getMonth() + 1 < month ||
-    (today.getMonth() + 1 === month && today.getDate() < day)) age--;
-  return Math.max(0, age);
+  // Batch 8 review: the shared birthday-aware helper (29 Feb → 28 Feb in non-leap years).
+  return Math.max(0, completedYears(new Date(year, month - 1, day)));
 }
 
 export function calculateDaysLived(day: number, month: number, year: number): number {
@@ -21,8 +19,10 @@ export function calculateDaysLived(day: number, month: number, year: number): nu
 
 export function calculateDaysUntilBirthday(day: number, month: number): number {
   const today = new Date();
-  let next = new Date(today.getFullYear(), month - 1, day);
-  if (next <= today) next = new Date(today.getFullYear() + 1, month - 1, day);
+  // 29 Feb → 28 Feb in non-leap years (sitewide convention, see src/lib/nextBirthday.ts).
+  const on = (y: number) => new Date(y, month - 1, Math.min(day, new Date(y, month, 0).getDate()));
+  let next = on(today.getFullYear());
+  if (next <= today) next = on(today.getFullYear() + 1);
   return Math.ceil((next.getTime() - today.getTime()) / 86400000);
 }
 

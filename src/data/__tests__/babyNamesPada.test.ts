@@ -86,7 +86,8 @@ describe('N6 — names indexed by first Devanagari akshara', () => {
   };
 
   it('Dev is De (Revati 1), not Da', () => expect(where('Dev')).toEqual(['Revati 1']));
-  it('Rohan is Ro (Swati 3), not Ra', () => expect(where('Rohan')).toEqual(['Swati 3']));
+  it('Sohan is So (Purva Bhadrapada 2), not Sa', () => expect(where('Sohan')).toEqual(['Purva Bhadrapada 2']));
+  it('Prem is Pe (Chitra 1): a conjunct takes the vowel after it', () => expect(where('Prem')).toEqual(['Chitra 1']));
   it('Deepak is Di (Purva Bhadrapada 4), not De', () => expect(where('Deepak')).toEqual(['Purva Bhadrapada 4']));
   it('Ardra pada 4 lists Chha names', () => {
     expect(namesForPada('Ardra', 4).map(n => n.name)).toEqual(expect.arrayContaining(['Chhavi', 'Chhaya']));
@@ -124,4 +125,65 @@ describe('N6 — names indexed by first Devanagari akshara', () => {
       });
     }
   });
+});
+
+/**
+ * Batch 8: every name must carry the URL of the page its meaning was taken from (opened via
+ * WebFetch — see the comment above each entry in babyNamesByAkshara.ts). No unsourced names.
+ */
+describe('Batch 8 — every baby name is sourced', () => {
+  const ALLOWED_HOSTS = new Set([
+    'www.behindthename.com', 'en.wikipedia.org', 'www.wisdomlib.org', 'kosha.sanskrit.today',
+    'britannica.com', 'nordicnames.de', 'rekhtadictionary.com', 'wisdomlib.org', 'nameberry.com',
+  ]);
+
+  it('the list is not empty', () => expect(BABY_NAMES.length).toBeGreaterThan(50));
+
+  for (const n of BABY_NAMES) {
+    it(`${n.name} has an https source on a reference site`, () => {
+      expect(typeof n.source).toBe('string');
+      const u = new URL(n.source);
+      expect(u.protocol).toBe('https:');
+      expect(ALLOWED_HOSTS.has(u.hostname)).toBe(true);
+      expect(n.meaning.trim().length).toBeGreaterThan(0);
+    });
+  }
+
+  it('no meaning mentions death or harm', () => {
+    const bad = /\b(death|dead|die|dies|kill|kills|killer|slay|slayer|harm|destroy|destroyer|demon|terrible|fierce|howl|crying)\b/i;
+    for (const n of BABY_NAMES) expect(n.meaning).not.toMatch(bad);
+  });
+
+  it('no duplicate names', () => {
+    const names = BABY_NAMES.map(n => n.name);
+    expect(new Set(names).size).toBe(names.length);
+  });
+
+  it('names removed in batch 8 stay out', () => {
+    // Aarav: source meaning "crying, howling, noise"; Sharv: "a god who kills … with arrows";
+    // Vivaan / Saanvi / Ekansh: popular meanings not supported by the sources opened.
+    for (const gone of ['Aarav', 'Sharv', 'Vivaan', 'Saanvi', 'Ekansh', 'Piya', 'Riya']) {
+      expect(BABY_NAMES.find(n => n.name === gone)).toBeUndefined();
+    }
+  });
+
+  it('corrected meanings match their sources', () => {
+    const m = (x: string) => BABY_NAMES.find(n => n.name === x)!;
+    expect(m('Mira').meaning).toContain('ocean');           // WP Mira (given name)
+    expect(m('Simran').gender).toBe('unisex');              // BTN Simran: feminine & masculine
+    expect(m('Sonal').gender).toBe('unisex');               // WP Sonal: unisex
+    expect(m('Shalini').meaning).toBe('lady of the house'); // DDSA śālinī
+    expect(m('Arjun').source).toBe('https://en.wikipedia.org/wiki/Arjuna');
+  });
+});
+
+describe('Batch 8 second pass — coverage', () => {
+  // Ashlesha (ड syllables) has only two sourced names; every other nakshatra has at least 3.
+  const MIN: Record<string, number> = { Ashlesha: 2 };
+  for (const nak of Object.keys(NAKSHATRA_PADA_AKSHARAS)) {
+    it(`${nak} has at least ${MIN[nak] ?? 3} sourced names`, () => {
+      const total = [1, 2, 3, 4].reduce((s, p) => s + namesForPada(nak, p).length, 0);
+      expect(total).toBeGreaterThanOrEqual(MIN[nak] ?? 3);
+    });
+  }
 });

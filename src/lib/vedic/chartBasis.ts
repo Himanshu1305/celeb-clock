@@ -5,6 +5,7 @@
  * Shared by the API (from a BirthChartResult) and the browser (from legacy chart JSON).
  */
 import { boundaryNote, METHOD_LINE, type BirthTimezone } from '../timezone/birthTimezone';
+import { birthTimeEdgeNote, type BirthTimeEdge } from './birthTimeEdgeNote';
 
 export interface ChartBasis {
   timezone: string;
@@ -32,12 +33,20 @@ export function buildChartBasis(p: {
   birthTimezone: BirthTimezone;
   rashi: string; nakshatra: string; pada: number; lagna: string;
   moonLongitude: number | null | undefined; lagnaLongitude: number | null | undefined;
+  /** Batch 8: time-based edges from the engine. When given, they replace the generic
+   *  degree-based Lagna note (and the Moon note when the Moon has an edge). */
+  edges?: BirthTimeEdge[] | null;
+  /** True when the page already shows the edge notes elsewhere (Kundali stats). */
+  edgeNotesShownElsewhere?: boolean;
 }): ChartBasis {
   const moon = typeof p.moonLongitude === 'number' && Number.isFinite(p.moonLongitude) ? p.moonLongitude : null;
   const lag = typeof p.lagnaLongitude === 'number' && Number.isFinite(p.lagnaLongitude) ? p.lagnaLongitude : null;
+  const edges = Array.isArray(p.edges) ? p.edges : null;
+  const moonEdge = !!edges?.some(e => e.point !== 'Lagna');
   const notes = [
-    moon != null ? boundaryNote('Moon', moon) : null,
-    lag != null ? boundaryNote('Lagna', lag) : null,
+    moon != null && !moonEdge ? boundaryNote('Moon', moon) : null,
+    lag != null && !edges ? boundaryNote('Lagna', lag) : null,
+    ...(edges && !p.edgeNotesShownElsewhere ? edges.map(birthTimeEdgeNote) : []),
     p.birthTimezone.note,
   ].filter((n): n is string => !!n);
   return {
@@ -61,6 +70,7 @@ export function chartBasisFromResult(chart: {
   rashi: string; nakshatra: { nakshatra: string; pada: number };
   lagna: { sign: string; rashiIndex: number; degrees: number };
   planets: Array<{ name: string; longitude: number }>;
+  birthTimeEdges?: BirthTimeEdge[];
 }, birthTimezone: BirthTimezone): ChartBasis {
   const moon = chart.planets.find(x => x.name === 'Moon');
   return buildChartBasis({
@@ -68,5 +78,6 @@ export function chartBasisFromResult(chart: {
     lagna: chart.lagna.sign, moonLongitude: moon?.longitude,
     // lagna.degrees is rounded to 0.01° by the engine; good enough for display + 1° test.
     lagnaLongitude: chart.lagna.rashiIndex * 30 + chart.lagna.degrees,
+    edges: chart.birthTimeEdges ?? null,
   });
 }

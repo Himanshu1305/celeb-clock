@@ -4,6 +4,7 @@ import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
 import { chartBasisFromResult } from '../src/lib/vedic/chartBasis.js';
 import { birthRangeError, resolveRequestBirthTz } from './_birthParams.js';
 import { buildGemstoneReport } from '../src/lib/vedic/gemstones.js';
+import { completedYearsAtOffset } from '../src/lib/ageBreakdown.js';
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600' } });
@@ -25,7 +26,7 @@ async function handler(request) {
     const chart = await calculateBirthChart({ year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon, timezoneOffset: tz }, { includeShadbala: true });
     // D11: age so the page never gives stone weights to a minor.
     const birth = Date.UTC(y, m - 1, d, h, min) - tz * 3600_000;
-    const ageYears = Math.max(0, Math.floor((Date.now() - birth) / (365.2425 * 864e5)));
+    const ageYears = Math.max(0, completedYearsAtOffset(birth, Date.now(), tz)); // batch 8: birthday-aware
     return json({ report: buildGemstoneReport(chart), ageYears, lagna: chart.lagna.sign, birthTimezone: btz.birthTimezone, basis: chartBasisFromResult(chart, btz.birthTimezone), _cache: 'miss' });
   } catch (e) {
     return json({ error: 'gemstones-failed', detail: String(e?.message || e) }, 500);
