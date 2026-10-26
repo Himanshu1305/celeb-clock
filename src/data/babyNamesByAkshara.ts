@@ -1,15 +1,36 @@
 /**
- * Baby names by Nakshatra pada syllable (akshara) — Growth P1-6, re-indexed N6 (Oct 2026).
+ * Baby names by Nakshatra pada syllable (akshara) — Growth P1-6, re-indexed N6 (Oct 2026),
+ * fully re-sourced in Batch 8 (26 Oct 2026).
  *
- * ORIGINAL, hand-curated dataset: common Indian given names, each with its Devanagari
- * spelling, gender and a well-established meaning. Compiled from general knowledge of
- * Sanskrit/Hindi name meanings — not scraped from any competitor or paid names database.
+ * EVERY name below carries the URL of a page that was opened with WebFetch and that states
+ * its meaning (and, where noted, its gender). Nothing is from "general knowledge" any more:
+ * names that could not be sourced were removed, and meanings were corrected to what the
+ * source says. Sources used: behindthename.com (curated name pages and the "Hindi names"
+ * usage list), en.wikipedia.org given-name / mythology pages, wisdomlib.org (Monier-Williams,
+ * Apte/DDSA, Shabda-Sagara and DDSA Hindi-English dictionaries), kosha.sanskrit.today
+ * (Monier-Williams, Apte, Macdonell), Britannica, nordicnames.de and rekhtadictionary.com.
+ * Where a dictionary gives a word rather than a name, gender follows the dictionary's own
+ * grammatical label (m. / f.) for that word, as quoted in the comment.
  *
- * N6: names are NOT filed by hand any more. Each name is matched to a pada by the
+ * Batch 8 removals (not sourceable in this pass, or the sourced meaning was not positive):
+ *   Aarav — behindthename "Hindi names" list: "crying, howling, noise" (not positive).
+ *   Ekansh — Monier-Williams ekāṃśa = "a single part, one part" (not "whole").
+ *   Vivaan — swarajyamag.com: the Sanskrit word means "a woven chair", not "full of life".
+ *   Sharv — Monier-Williams śarva: "a god who kills people with arrows" (harm).
+ *   Saanvi — behindthename forum: no reliable etymology.
+ *   Piya — DDSA Hindi: piyā = "(darling) husband" (gender/meaning mismatch).
+ *   Kumud, Ketan — dictionary words are neuter, no source for a name's gender.
+ *   Komal, Samarth — adjectives only, no source for a name's gender.
+ *   Hansa, Humera, Maya, Meghna, Tejal, Sejal, Sahil, Ghanshyam — the pages opened gave no
+ *   meaning or no gender. Every other earlier name that is not in the list below was removed
+ *   because the web-search budget ran out before a source page could be opened; such a name
+ *   may come back only together with a source URL.
+ *
+ * N6: names are NOT filed by hand. Each name is matched to a pada by the
  * first Devanagari akshara of its spelling — consonant AND vowel (matra) — so
- * देव (Dev) is "De", not "Da"; रोहन (Rohan) is "Ro", not "Ra"; दीपक (Deepak) is "Di",
+ * देव (Dev) is "De", not "Da"; सोहन (Sohan) is "So", not "Sa"; दीपक (Deepak) is "Di",
  * not "De". Rules (see aksharaKey):
- *   • the first consonant of the akshara counts (a conjunct like ध्रु → ध); dental and
+ *   • the first consonant of the akshara counts (a conjunct like प्रे → प); dental and
  *     retroflex are different letters (द ≠ ड, त ≠ ट, न ≠ ण), as in the 108-pada table;
  *   • श and ष are treated as one sound (they are pronounced alike in modern Hindi);
  *   • short and long vowels pair up (अ/आ, इ/ई, उ/ऊ), as in every pada-syllable list;
@@ -19,126 +40,263 @@
 import { NAKSHATRA_PADA_AKSHARAS } from './nakshatraAksharas';
 
 export type Gender = 'boy' | 'girl' | 'unisex';
-export interface BabyName { name: string; hi: string; gender: Gender; meaning: string; }
+export interface BabyName {
+  name: string;
+  hi: string;
+  gender: Gender;
+  meaning: string;
+  /** URL of the page (opened via WebFetch) that states this meaning. Required. */
+  source: string;
+}
 
-const N = (name: string, hi: string, gender: Gender, meaning: string): BabyName => ({ name, hi, gender, meaning });
+const N = (name: string, hi: string, gender: Gender, meaning: string, source: string): BabyName =>
+  ({ name, hi, gender, meaning, source });
+
+const BTN_HINDI_1 = 'https://www.behindthename.com/names/usage/hindi';
+const BTN_HINDI_2 = 'https://www.behindthename.com/names/usage/hindi/2';
+const WL = (slug: string) => `https://www.wisdomlib.org/definition/${slug}`;
+const WP = (slug: string) => `https://en.wikipedia.org/wiki/${slug}`;
+const BTN = (slug: string) => `https://www.behindthename.com/name/${slug}`;
 
 export const BABY_NAMES: BabyName[] = [
-  // अ / ई / ऊ / ए (Krittika) · ओ (Rohini)
-  N('Aarav', 'आरव', 'boy', 'peaceful, wise'), N('Ananya', 'अनन्या', 'girl', 'unique, matchless'),
-  N('Arjun', 'अर्जुन', 'boy', 'bright, shining; the Pandava hero'), N('Aditi', 'अदिति', 'girl', 'boundless; mother of the gods'),
-  N('Ira', 'इरा', 'girl', 'the earth; goddess Saraswati'), N('Ishaan', 'ईशान', 'boy', 'the sun; a form of Shiva'),
-  N('Indira', 'इंदिरा', 'girl', 'goddess Lakshmi'),
-  N('Utkarsh', 'उत्कर्ष', 'boy', 'advancement, prosperity'), N('Uma', 'उमा', 'girl', 'goddess Parvati; tranquillity'),
-  N('Udhav', 'उद्धव', 'boy', 'festival; a friend of Krishna'),
-  N('Ekta', 'एकता', 'girl', 'unity'), N('Ekansh', 'एकांश', 'boy', 'whole, complete'),
-  N('Om', 'ओम', 'boy', 'the sacred primordial sound'), N('Ojas', 'ओजस', 'boy', 'vitality, lustre'),
-  // व
-  N('Varun', 'वरुण', 'boy', 'god of the waters'), N('Vani', 'वाणी', 'girl', 'speech; goddess Saraswati'),
-  N('Vasudha', 'वसुधा', 'girl', 'the earth'),
-  N('Vihaan', 'विहान', 'boy', 'dawn, the start of a new day'), N('Vidya', 'विद्या', 'girl', 'knowledge, learning'),
-  N('Vivaan', 'विवान', 'boy', 'full of life'),
-  N('Vedant', 'वेदांत', 'boy', 'the end of the Vedas; ultimate wisdom'), N('Veda', 'वेदा', 'girl', 'sacred knowledge'),
-  // क
-  N('Karan', 'करण', 'boy', 'skilful; the warrior Karna'), N('Kavya', 'काव्या', 'girl', 'poetry'),
-  N('Kartik', 'कार्तिक', 'boy', 'bestowing courage; son of Shiva'),
-  N('Kiran', 'किरण', 'unisex', 'a ray of light'), N('Kirti', 'कीर्ति', 'girl', 'fame, glory'),
-  N('Kunal', 'कुणाल', 'boy', 'lotus; a bird with beautiful eyes'), N('Kumud', 'कुमुद', 'unisex', 'the night lotus'),
-  N('Keshav', 'केशव', 'boy', 'a name of Krishna'), N('Ketan', 'केतन', 'boy', 'home; a banner'),
-  N('Komal', 'कोमल', 'girl', 'tender, soft'),
-  // घ / छ (Ardra)
-  N('Ghanshyam', 'घनश्याम', 'boy', 'dark as a rain-cloud; a name of Krishna'),
-  N('Chhavi', 'छवि', 'girl', 'image, radiance'), N('Chhaya', 'छाया', 'girl', 'shade, shadow'),
-  // ह
-  N('Harsh', 'हर्ष', 'boy', 'joy, happiness'), N('Hansa', 'हंसा', 'girl', 'a swan; purity'),
-  N('Hari', 'हरि', 'boy', 'a name of Vishnu'),
-  N('Hitesh', 'हितेश', 'boy', 'one who wishes others well'), N('Himani', 'हिमानी', 'girl', 'goddess Parvati; snow'),
-  N('Humera', 'हुमेरा', 'girl', 'a mythical bird of fortune'),
-  N('Hemant', 'हेमंत', 'boy', 'early winter; golden'), N('Hema', 'हेमा', 'girl', 'golden'),
-  // द (dental) — Purva Bhadrapada / Uttara Bhadrapada / Revati
-  N('Daksh', 'दक्ष', 'boy', 'capable, skilled'),
-  N('Divya', 'दिव्या', 'girl', 'divine, brilliant'), N('Dinesh', 'दिनेश', 'boy', 'the sun (lord of the day)'),
-  N('Diya', 'दीया', 'girl', 'a lamp, light'), N('Deepak', 'दीपक', 'boy', 'a lamp; light'),
-  N('Deepa', 'दीपा', 'girl', 'a lamp'),
-  N('Durga', 'दुर्गा', 'girl', 'the invincible goddess'), N('Dushyant', 'दुष्यंत', 'boy', 'a king; the father of Bharata'),
-  N('Dev', 'देव', 'boy', 'god, divine'),
-  // म
-  N('Manish', 'मनीष', 'boy', 'lord of the mind; intellect'), N('Maya', 'माया', 'girl', 'illusion; divine creative power'),
-  N('Madhav', 'माधव', 'boy', 'a name of Krishna'),
-  N('Mira', 'मीरा', 'girl', 'the devotee-saint Mirabai'), N('Mihir', 'मिहिर', 'boy', 'the sun'),
-  N('Mukul', 'मुकुल', 'boy', 'a bud, a blossom'), N('Mukta', 'मुक्ता', 'girl', 'a pearl; liberated'),
-  N('Megh', 'मेघ', 'boy', 'a cloud'), N('Meghna', 'मेघना', 'girl', 'a river; of the clouds'),
-  N('Mohan', 'मोहन', 'boy', 'charming; a name of Krishna'), N('Mohini', 'मोहिनी', 'girl', 'enchanting'),
-  // त (dental) — Swati P4 / Vishakha
-  N('Tara', 'तारा', 'girl', 'a star'), N('Tanish', 'तनिष', 'boy', 'ambition'), N('Tanvi', 'तन्वी', 'girl', 'slender, delicate'),
-  N('Tilak', 'तिलक', 'boy', 'the auspicious mark on the forehead'),
-  N('Tushar', 'तुषार', 'boy', 'snow, frost'), N('Tulsi', 'तुलसी', 'girl', 'the sacred basil plant'),
-  N('Tejas', 'तेजस', 'boy', 'brilliance, radiance'), N('Tejal', 'तेजल', 'girl', 'lustrous'),
-  // प
-  N('Parth', 'पार्थ', 'boy', 'a name of Arjuna'), N('Pallavi', 'पल्लवी', 'girl', 'new leaves, a sprout'),
-  N('Pavan', 'पवन', 'boy', 'the wind; pure'),
-  N('Piyush', 'पीयूष', 'boy', 'nectar'), N('Piya', 'पिया', 'girl', 'beloved'),
-  N('Puneet', 'पुनीत', 'boy', 'pure, holy'), N('Puja', 'पूजा', 'girl', 'worship, prayer'),
-  // श / ष (Hasta P2)
-  N('Shalini', 'शालिनी', 'girl', 'modest, well-behaved'), N('Sharv', 'शर्व', 'boy', 'a name of Shiva'),
-  N('Shanti', 'शांति', 'girl', 'peace'), N('Shashank', 'शशांक', 'boy', 'the moon'),
-  // स
-  N('Sahil', 'साहिल', 'boy', 'the shore, a guide'), N('Saanvi', 'सान्वी', 'girl', 'goddess Lakshmi'),
-  N('Samarth', 'समर्थ', 'boy', 'capable, powerful'),
-  N('Siddharth', 'सिद्धार्थ', 'boy', 'one who has achieved a goal'), N('Simran', 'सिमरन', 'girl', 'remembrance of God'),
-  N('Suresh', 'सुरेश', 'boy', 'ruler of the gods (Indra)'), N('Sunita', 'सुनीता', 'girl', 'well-mannered, righteous'),
-  N('Suhani', 'सुहानी', 'girl', 'pleasant, lovely'),
-  N('Sejal', 'सेजल', 'girl', 'pure river water'),
-  N('Sohan', 'सोहन', 'boy', 'charming, handsome'), N('Sonal', 'सोनल', 'girl', 'golden'),
-  // न (dental) — Anuradha
-  N('Nakul', 'नकुल', 'boy', 'the youngest Pandava'), N('Nandini', 'नंदिनी', 'girl', 'joyful; a sacred cow'),
-  N('Navya', 'नव्या', 'girl', 'new, young'), N('Naveen', 'नवीन', 'boy', 'new'),
-  N('Nikhil', 'निखिल', 'boy', 'complete, whole'), N('Nisha', 'निशा', 'girl', 'the night'),
-  N('Niraj', 'नीरज', 'boy', 'the lotus'), N('Neel', 'नील', 'boy', 'blue; sapphire'),
-  N('Nutan', 'नूतन', 'unisex', 'new, fresh'),
-  N('Neha', 'नेहा', 'girl', 'love, affection'),
-  // य
-  N('Yash', 'यश', 'boy', 'fame, success'), N('Yamini', 'यामिनी', 'girl', 'the night'),
-  N('Yuvan', 'युवान', 'boy', 'youthful'),
-  N('Yogesh', 'योगेश', 'boy', 'lord of yoga (Shiva)'),
-  // भ
-  N('Bhavya', 'भव्य', 'unisex', 'grand, magnificent'), N('Bharat', 'भरत', 'boy', 'to be maintained; India'),
-  N('Bhim', 'भीम', 'boy', 'formidable; the Pandava'),
-  N('Bhumi', 'भूमि', 'girl', 'the earth'),
-  // ध
-  N('Dhara', 'धारा', 'girl', 'a stream; the earth'),
-  // ज
-  N('Jay', 'जय', 'boy', 'victory'), N('Janya', 'जन्या', 'girl', 'life, born'),
-  N('Jitesh', 'जितेश', 'boy', 'lord of victory'),
-  // ख (Shravana)
-  N('Khushi', 'खुशी', 'girl', 'happiness'),
-  // ग
-  N('Ganesh', 'गणेश', 'boy', 'lord of the ganas'), N('Garima', 'गरिमा', 'girl', 'dignity, grace'),
-  N('Gayatri', 'गायत्री', 'girl', 'the Vedic hymn; a goddess'),
-  N('Girish', 'गिरीश', 'boy', 'lord of the mountain (Shiva)'), N('Geeta', 'गीता', 'girl', 'song; the Bhagavad Gita'),
-  N('Gunjan', 'गुंजन', 'unisex', 'the humming of a bee'),
-  N('Gopal', 'गोपाल', 'boy', 'the cowherd; Krishna'), N('Gomati', 'गोमती', 'girl', 'a sacred river'),
-  // र
-  N('Rahul', 'राहुल', 'boy', 'conqueror of miseries; son of the Buddha'), N('Radha', 'राधा', 'girl', 'the beloved of Krishna; prosperity'),
-  N('Riya', 'रिया', 'girl', 'a singer; graceful'), N('Rishi', 'ऋषि', 'boy', 'a sage'),
-  N('Ruchi', 'रुचि', 'girl', 'interest, lustre'), N('Rudra', 'रुद्र', 'boy', 'a fierce form of Shiva'),
-  N('Rehan', 'रेहान', 'boy', 'sweet basil; a bunch of flowers'),
-  N('Rohan', 'रोहन', 'boy', 'ascending; sandalwood'), N('Rohit', 'रोहित', 'boy', 'red; the first ray of the sun'),
-  N('Roshni', 'रोशनी', 'girl', 'light, brightness'),
-  // च
-  N('Charvi', 'चार्वी', 'girl', 'a beautiful woman'), N('Chirag', 'चिराग', 'boy', 'a lamp, light'),
-  // ल
-  N('Lakshya', 'लक्ष्य', 'boy', 'aim, target'), N('Lavanya', 'लावण्या', 'girl', 'grace, beauty'),
-  N('Lila', 'लीला', 'girl', 'play; the divine play'), N('Lekha', 'लेखा', 'girl', 'writing'),
-  N('Lokesh', 'लोकेश', 'boy', 'lord of the world'),
-  // ── Batch 7 (W8, Oct 2026): names added ONLY with a meaning from a page opened via WebFetch.
-  // च (Ashwini P2 "Che") — behindthename.com/name/chetan: masculine, चेतन, from Sanskrit
-  // cetana "visible, conscious, soul"; behindthename.com/name/chetana: feminine form, चेतना.
-  N('Chetan', 'चेतन', 'boy', 'conscious, aware; the soul'),
-  N('Chetana', 'चेतना', 'girl', 'consciousness, awareness (feminine of Chetan)'),
-  // भ (Uttara Ashadha P2 "Bho") — wisdomlib.org/definition/bhola, DDSA "A practical
-  // Hindi-English dictionary": भोला "innocent, simple-hearted; ~nātha Lord Shiv".
-  N('Bholanath', 'भोलानाथ', 'boy', 'a name of Lord Shiva (bhola = innocent, simple-hearted)'),
+  // ── Vowels: अ / ई / ऊ / ए (Krittika) · ओ (Rohini) ─────────────────────────────
+  // kosha अनन्य: Spoken Sanskrit "unique"; MW 1872 "no other"; BTN /name/ananya: feminine.
+  N('Ananya', 'अनन्या', 'girl', 'unique, one of a kind', 'https://kosha.sanskrit.today/word/sa/अनन्य'),
+  // WP Arjuna: "according to Monier Monier-Williams, the word Arjuna means white, clear or
+  // silver"; BTN Hindi list: Arjun, masculine.
+  N('Arjun', 'अर्जुन', 'boy', 'white, clear, bright', WP('Arjuna')),
+  // BTN Hindi list: Aditi f, "boundless, entire" or "freedom, security".
+  N('Aditi', 'अदिति', 'girl', 'boundless; freedom', BTN_HINDI_1),
+  // MW irā "f. … the earth, speech, the goddess of speech, Sarasvatī".
+  N('Ira', 'इरा', 'girl', 'the earth; speech; the goddess Sarasvati', WL('ira')),
+  // MW īśāna "m. a ruler, master, one of the older names of Śiva-Rudra".
+  N('Ishaan', 'ईशान', 'boy', 'ruler, master; a name of Shiva', WL('ishana')),
+  // Shabda-Sagara indirā "f. Name of Lakṣmī …; beauty or splendour".
+  N('Indira', 'इंदिरा', 'girl', 'a name of Lakshmi; beauty, splendour', WL('indira')),
+  // WP Utkarsh: "primarily for males", "prosperity, awakening, development and flourishing".
+  N('Utkarsh', 'उत्कर्ष', 'boy', 'prosperity, development, flourishing', WP('Utkarsh')),
+  // MW umā: "splendour, light", "quiet, tranquillity"; daughter of Himavat, wife of Śiva (Pārvatī).
+  N('Uma', 'उमा', 'girl', 'light, tranquillity; a name of Parvati', WL('uma')),
+  // MW uddhava "m. … a festival, holiday; joy, pleasure; Name of a Yādava (Kṛṣṇa's friend)".
+  N('Udhav', 'उद्धव', 'boy', 'joy, festival; Krishna’s friend Uddhava', WL('uddhava')),
+  // MW ekatā "f. oneness, unity, union"; DDSA Hindi "(nf) oneness; unity, solidarity".
+  N('Ekta', 'एकता', 'girl', 'oneness, unity', WL('ekata')),
+  // BTN Hindi list p.2: Om, m, ओम, "sacred syllable".
+  N('Om', 'ओम', 'boy', 'the sacred syllable Om', BTN_HINDI_2),
+
+  // ── व ─────────────────────────────────────────────────────────────────────────
+  // BTN Varuna: masculine; "a god of water and the ocean, also associated with the sky and law".
+  N('Varun', 'वरुण', 'boy', 'Varuna, god of water and the ocean', BTN('varuna')),
+  // WP Vani (given name): female, "eloquent in words".
+  N('Vani', 'वाणी', 'girl', 'eloquent in words', WP('Vani_(given_name)')),
+  // BTN Vasudha: feminine, "holding wealth", used to refer to the earth.
+  N('Vasudha', 'वसुधा', 'girl', 'the earth (literally “holding wealth”)', BTN('vasudha')),
+  // BTN Vihaan: masculine, Sanskrit vihāna "dawn, morning".
+  N('Vihaan', 'विहान', 'boy', 'dawn, morning', BTN('vihaan')),
+  // MW vidyā "f. knowledge, science, learning".
+  N('Vidya', 'विद्या', 'girl', 'knowledge, learning', WL('vidya')),
+  // MW vedānta "m. end of the Veda" (the Upaniṣads; the Vedānta philosophy).
+  N('Vedant', 'वेदांत', 'boy', 'the end of the Vedas; the Vedanta philosophy', WL('vedanta')),
+
+  // ── क ─────────────────────────────────────────────────────────────────────────
+  // WP Karan (given name): masculine; derives from Karna of the Mahabharata.
+  N('Karan', 'करण', 'boy', 'from Karna, a hero of the Mahabharata', WP('Karan_(given_name)')),
+  // MW kāvyā "f. intelligence"; DDSA Hindi kāvya "(nm) poetry".
+  N('Kavya', 'काव्या', 'girl', 'poetry; intelligence', WL('kavya')),
+  // wisdomlib kārtika: "An epithet of Skanda" (son of Śiva); the month Kārtika.
+  N('Kartik', 'कार्तिक', 'boy', 'an epithet of Skanda (Kartikeya)', WL('kartika')),
+  // WP Kiran (given name): unisex, "ray of sun".
+  N('Kiran', 'किरण', 'unisex', 'a ray of sun', WP('Kiran_(given_name)')),
+  // MW kīrti "good report, fame, renown, glory"; DDSA Hindi noun, feminine.
+  N('Kirti', 'कीर्ति', 'girl', 'fame, glory', WL('kirti')),
+  // WP Kunala (son of Emperor Ashoka): "Kunal also means 'bird with beautiful eyes' … 'one with beautiful eyes'".
+  N('Kunal', 'कुणाल', 'boy', 'one with beautiful eyes', WP('Kunala')),
+  // MW keśava "having long or much or handsome hair"; "m. Name of Viṣṇu or Kṛṣṇa".
+  N('Keshav', 'केशव', 'boy', 'having beautiful hair; a name of Krishna', WL('kesava')),
+
+  // ── छ (Ardra P4) ──────────────────────────────────────────────────────────────
+  // MW chavi "f. … complexion, colour; beauty, splendour; a ray of light".
+  N('Chhavi', 'छवि', 'girl', 'beauty, splendour; a ray of light', WL('chavi')),
+  // MW chāyā (feminine) "shade, shadow"; "colour, complexion, beauty".
+  N('Chhaya', 'छाया', 'girl', 'shade; beauty', WL('chaya')),
+
+  // ── ह ─────────────────────────────────────────────────────────────────────────
+  // MW harṣa "m. joy, pleasure, happiness".
+  N('Harsh', 'हर्ष', 'boy', 'joy, happiness', WL('harsha')),
+  // WP Hari: one of the main epithets of Vishnu, "the one who takes away (sins)".
+  N('Hari', 'हरि', 'boy', 'a name of Vishnu', WP('Hari')),
+  // WP Hitesh: "a common Hindu masculine given name", "one who thinks well of everyone".
+  N('Hitesh', 'हितेश', 'boy', 'one who thinks well of everyone', WP('Hitesh')),
+  // Shabda-Sagara / MW himānī "f. Ice and snow"; Cappeller "a mass or collection of snow".
+  N('Himani', 'हिमानी', 'girl', 'snow', WL('himani')),
+  // WP Hemant: male; "namesake of Hemanta, one of the six Indian ecological seasons" (early winter).
+  N('Hemant', 'हेमंत', 'boy', 'named after Hemanta, the early-winter season', WP('Hemant')),
+  // MW hema "n. gold"; feminine hemā "a handsome woman"; DDSA Hindi "gold".
+  N('Hema', 'हेमा', 'girl', 'gold', WL('hema')),
+
+  // ── द (dental) — Purva Bhadrapada / Uttara Bhadrapada / Revati ───────────────
+  // MW dakṣa "able, fit, adroit, expert, clever"; m. "ability, talent"; Name of an Āditya.
+  N('Daksh', 'दक्ष', 'boy', 'able, skilful, clever', WL('daksha')),
+  // MW divya "divine, heavenly, celestial … charming, beautiful"; Divyā is a woman's name in the Purāṇas.
+  N('Divya', 'दिव्या', 'girl', 'divine, heavenly', WL('divya')),
+  // WP Dinesh: male, "lord of the day", "Sun".
+  N('Dinesh', 'दिनेश', 'boy', 'lord of the day; the Sun', WP('Dinesh')),
+  // WP Diya (name): female, "Light, lamp".
+  N('Diya', 'दीया', 'girl', 'light, lamp', WP('Diya_(name)')),
+  // WP Deepak: masculine; "a Hindi word meaning 'lamp'".
+  N('Deepak', 'दीपक', 'boy', 'a lamp', WP('Deepak')),
+  // WP Deepa: "Unisex (traditionally Female)", "lamp" and "light".
+  N('Deepa', 'दीपा', 'girl', 'lamp, light', WP('Deepa')),
+  // Britannica Durga: the Sanskrit name means "the Inaccessible" or "the Impassable".
+  N('Durga', 'दुर्गा', 'girl', 'the goddess Durga (“the inaccessible”)', 'https://britannica.com/topic/Durga'),
+  // wisdomlib Duṣyanta: "a valiant king of the Lunar race", husband of Śakuntalā, father of Bharata.
+  N('Dushyant', 'दुष्यंत', 'boy', 'a valiant king, father of Bharata', WL('dushyanta')),
+  // BTN Dev: masculine, देव, from Sanskrit deva "god".
+  N('Dev', 'देव', 'boy', 'god', BTN('dev')),
+  // BTN Devika: feminine, देविका, "little goddess".
+  N('Devika', 'देविका', 'girl', 'little goddess', BTN('devika')),
+
+  // ── म ─────────────────────────────────────────────────────────────────────────
+  // WP Manish: masculine, "The God of the Mind".
+  N('Manish', 'मनीष', 'boy', 'god of the mind', WP('Manish')),
+  // WP Manisha: "a Hindu female name", मनीषा, "meaning intelligence and desire".
+  N('Manisha', 'मनीषा', 'girl', 'intelligence', WP('Manisha')),
+  // MW mādhava "m. … Name of Kṛṣṇa-Viṣṇu".
+  N('Madhav', 'माधव', 'boy', 'a name of Krishna', WL('madhava')),
+  // WP Mira (given name): female; "In Sanskrit, it means 'ocean', 'sea'".
+  N('Mira', 'मीरा', 'girl', 'the ocean, the sea', WP('Mira_(given_name)')),
+  // wisdomlib names/mihir: "a masculine given name of Sanskrit origin" meaning "sun".
+  N('Mihir', 'मिहिर', 'boy', 'the sun', 'https://www.wisdomlib.org/names/mihir'),
+  // MW muktā "a pearl"; DDSA Hindi feminine noun "a pearl".
+  N('Mukta', 'मुक्ता', 'girl', 'a pearl', WL('mukta')),
+  // MW megha "m. a cloud".
+  N('Megh', 'मेघ', 'boy', 'a cloud', WL('megha')),
+  // BTN Mohana: मोहन (m.) "bewitching, infatuating, charming"; a title of Shiva and Krishna.
+  N('Mohan', 'मोहन', 'boy', 'charming; a title of Krishna', BTN('mohana')),
+  // MW mohinī "a fascinating woman"; DDSA Hindi "one who charms, attracts".
+  N('Mohini', 'मोहिनी', 'girl', 'enchanting, fascinating', WL('mohini')),
+
+  // ── त (dental) — Swati P4 / Vishakha ─────────────────────────────────────────
+  // BTN Tara (2): feminine, तारा, "star".
+  N('Tara', 'तारा', 'girl', 'a star', BTN('tara-2')),
+  // WP Tanvi: feminine given name, "slender-bodied maiden".
+  N('Tanvi', 'तन्वी', 'girl', 'slender, delicate', WP('Tanvi')),
+  // DDSA Hindi tilaka "an ornamental or religious mark over the forehead"; MW "m.".
+  N('Tilak', 'तिलक', 'boy', 'the auspicious mark on the forehead', WL('tilaka')),
+  // MW tulasī "f. holy basil".
+  N('Tulsi', 'तुलसी', 'girl', 'the holy basil plant', WL('tulasi')),
+  // MW tejas "glow, splendour, brilliance, light"; nameberry.com/babyname/tejas: masculine.
+  N('Tejas', 'तेजस', 'boy', 'brilliance, splendour, light', WL('tejas')),
+  // MW tejasvin "brilliant, splendid"; "m. Name of a son of Indra"; DDSA Hindi tejasvī "brilliant".
+  N('Tejasvi', 'तेजस्वी', 'boy', 'brilliant, splendid', WL('tejasvin')),
+
+  // ── प ─────────────────────────────────────────────────────────────────────────
+  // WP Partha: "an epithet of Arjuna"; BTN /name/parth: masculine, पार्थ.
+  N('Parth', 'पार्थ', 'boy', 'an epithet of Arjuna', WP('Partha')),
+  // BTN Pallav: masculine, पल्लव, "budding leaf, shoot".
+  N('Pallav', 'पल्लव', 'boy', 'budding leaf, shoot', BTN('pallav')),
+  // BTN Hindi list p.2: Pallavi f, "Feminine form of Pallav".
+  N('Pallavi', 'पल्लवी', 'girl', 'budding leaf, new shoot', BTN_HINDI_2),
+  // BTN Pavana: masculine, पवन, "purification, wind, air".
+  N('Pavan', 'पवन', 'boy', 'wind, air; purification', BTN('pavana')),
+  // BTN Hindi list p.2 (all below): Padma f & m "lotus"; Prakash m "light, bright, shining";
+  // Prashant m "calm, quiet"; Pratibha f "light, splendour, intelligence".
+  N('Padma', 'पद्मा', 'unisex', 'lotus', BTN_HINDI_2),
+  N('Prakash', 'प्रकाश', 'boy', 'light, bright, shining', BTN_HINDI_2),
+  N('Prashant', 'प्रशान्त', 'boy', 'calm, quiet', BTN_HINDI_2),
+  N('Pratibha', 'प्रतिभा', 'girl', 'light, splendour, intelligence', BTN_HINDI_2),
+  // WP Piyush: "Hindu masculine given name", "milk" or "nectar".
+  N('Piyush', 'पीयूष', 'boy', 'nectar', WP('Piyush')),
+  // WP Priya (given name): female, प्रिया, "beloved", "favorite", "dear".
+  N('Priya', 'प्रिया', 'girl', 'beloved, dear', WP('Priya_(given_name)')),
+  // BTN Hindi list p.2: Priti f "pleasure, joy, love"; Pritam m "most beloved, dearest";
+  // Priyanka f "agreeable, amiable"; Prem m "love, affection"; Prema f "Feminine form of Prem".
+  N('Priti', 'प्रीति', 'girl', 'joy, love', BTN_HINDI_2),
+  N('Pritam', 'प्रीतम', 'boy', 'most beloved, dearest', BTN_HINDI_2),
+  N('Priyanka', 'प्रियंका', 'girl', 'agreeable, amiable', BTN_HINDI_2),
+  N('Prem', 'प्रेम', 'boy', 'love, affection', BTN_HINDI_2),
+  N('Prema', 'प्रेमा', 'girl', 'love, affection (feminine of Prem)', BTN_HINDI_2),
+  // BTN Hindi list p.2: Puneet m (alt. of Punit "cleaned, purified"); Puja f "honour, worship";
+  // Pushpa f & m "flower"; Purnima f "full moon".
+  N('Puneet', 'पुनीत', 'boy', 'pure, purified', BTN_HINDI_2),
+  N('Puja', 'पूजा', 'girl', 'honour, worship', BTN_HINDI_2),
+  N('Pushpa', 'पुष्पा', 'unisex', 'a flower', BTN_HINDI_2),
+  N('Purnima', 'पूर्णिमा', 'girl', 'the full moon', BTN_HINDI_2),
+
+  // ── श / ष (Hasta P2) ──────────────────────────────────────────────────────────
+  // DDSA śālinī "f. A mistress of the house"; WP Shalini: "a feminine name used in India".
+  N('Shalini', 'शालिनी', 'girl', 'lady of the house', WL('shalini')),
+  // MW śānti "f. tranquillity, peace, quiet, calmness of mind".
+  N('Shanti', 'शांति', 'girl', 'peace, tranquillity', WL('shanti')),
+  // WP Shashank: male, "Hare-marked" (the Moon).
+  N('Shashank', 'शशांक', 'boy', 'the moon (literally “hare-marked”)', WP('Shashank')),
+  // DDSA / Shabda-Sagara śarvāṇī "f. A name of Pārvatī".
+  N('Sharvani', 'शर्वाणी', 'girl', 'a name of Parvati', WL('sharvani')),
+
+  // ── स ─────────────────────────────────────────────────────────────────────────
+  // BTN Siddhartha: masculine, "one who has accomplished a goal".
+  N('Siddharth', 'सिद्धार्थ', 'boy', 'one who has accomplished a goal', BTN('siddhartha')),
+  // BTN Simran: feminine & masculine, सिमरन, "continuous remembrance" (Punjabi).
+  N('Simran', 'सिमरन', 'unisex', 'continuous remembrance', BTN('simran')),
+  // kosha सुरेश: MW "a lord of the gods … of Indra"; Apte Hindi "इन्द्र का नाम"; BTN /name/suresh: masculine.
+  N('Suresh', 'सुरेश', 'boy', 'lord of the gods; a name of Indra', 'https://kosha.sanskrit.today/word/sa/सुरेश'),
+  // nordicnames.de Sunita: female; Sanskrit सुनीता "well conducted".
+  N('Sunita', 'सुनीता', 'girl', 'well conducted', 'https://nordicnames.de/wiki/Sunita'),
+  // rekhtadictionary सोहन: "beautiful, handsome; charming, pleasing" (सुंदर पुरुष).
+  N('Sohan', 'सोहन', 'boy', 'handsome, charming', 'https://rekhtadictionary.com/meaning-of-sohan'),
+  // WP Sonal: "unisex name", "golden" / "precious".
+  N('Sonal', 'सोनल', 'unisex', 'golden', WP('Sonal')),
+
+  // ── न (dental) — Anuradha ─────────────────────────────────────────────────────
+  // WP Nakul: "an Indian masculine given name"; WP Nakula: the fourth of the five Pandava brothers.
+  N('Nakul', 'नकुल', 'boy', 'Nakula, one of the five Pandava brothers', WP('Nakula')),
+  // BTN Hindi list p.2: Naveen m (alt. of Navin "new, fresh"); Namrata f "bowing, humility";
+  // Nandita f "joy"; Narendra m "lord of men"; Nikhil m "whole, entire"; Nisha f "night";
+  // Niraj m "water-born, lotus"; Nishant m "night's end, dawn"; Nitya f & m "always, eternal";
+  // Nirupama f "unequaled, matchless"; Neha f "love, tenderness".
+  N('Naveen', 'नवीन', 'boy', 'new, fresh', BTN_HINDI_2),
+  N('Namrata', 'नम्रता', 'girl', 'humility', BTN_HINDI_2),
+  N('Nandita', 'नंदिता', 'girl', 'joy', BTN_HINDI_2),
+  N('Narendra', 'नरेंद्र', 'boy', 'lord of men', BTN_HINDI_2),
+  N('Nikhil', 'निखिल', 'boy', 'whole, entire', BTN_HINDI_2),
+  N('Nisha', 'निशा', 'girl', 'the night', BTN_HINDI_2),
+  N('Niraj', 'नीरज', 'boy', 'the lotus (literally “water-born”)', BTN_HINDI_2),
+  N('Nishant', 'निशांत', 'boy', 'dawn (literally “night’s end”)', BTN_HINDI_2),
+  N('Nitya', 'नित्या', 'unisex', 'eternal', BTN_HINDI_2),
+  N('Nirupama', 'निरुपमा', 'girl', 'unequalled, matchless', BTN_HINDI_2),
+  N('Neha', 'नेहा', 'girl', 'love, tenderness', BTN_HINDI_2),
+
+  // ── भ ─────────────────────────────────────────────────────────────────────────
+  // BTN Hindi list: Bharat m (modern form of Bharata); WP Names of India: Bharata "also means
+  // 'one who is engaged in search for knowledge'"; Bharat is a name of India.
+  N('Bharat', 'भरत', 'boy', 'a name of India; one who seeks knowledge', WP('Names_of_India')),
+  // BTN Hindi list: Bharati f "descendant of Bharata"; Bhavana f "producing, manifesting, thought, emotion".
+  N('Bharati', 'भारती', 'girl', 'descendant of Bharata', BTN_HINDI_1),
+  N('Bhavana', 'भावना', 'girl', 'thought, feeling', BTN_HINDI_1),
+
+  // ── ग ─────────────────────────────────────────────────────────────────────────
+  // WP Gana: Ganesha's title gaṇeśa / gaṇapati means "lord or leader of the ganas".
+  N('Ganesh', 'गणेश', 'boy', 'lord of the ganas (Lord Ganesha)', WP('Gana')),
+  // WP List of titles and names of Krishna: "Gopāla — He who is a cow-protector".
+  N('Gopal', 'गोपाल', 'boy', 'protector of cows; a name of Krishna', WP('List_of_titles_and_names_of_Krishna')),
+
+  // ── र ─────────────────────────────────────────────────────────────────────────
+  // WP Rahul: male, "Conqueror of all miseries".
+  N('Rahul', 'राहुल', 'boy', 'conqueror of all miseries', WP('Rahul')),
+  // BTN Hindi list p.2: Radha f "success, prosperity"; Raj m "empire, royalty"; Rachana f "creation".
+  N('Radha', 'राधा', 'girl', 'success, prosperity', BTN_HINDI_2),
+  N('Raj', 'राज', 'boy', 'royalty', BTN_HINDI_2),
+  N('Rachana', 'रचना', 'girl', 'creation', BTN_HINDI_2),
+
+  // ── च ─────────────────────────────────────────────────────────────────────────
+  // BTN Hindi list: Chandan m, चन्दन, "sandalwood".
+  N('Chandan', 'चन्दन', 'boy', 'sandalwood', BTN_HINDI_1),
+  // Batch 7 (opened then via WebFetch): behindthename.com/name/chetan — masculine, चेतन, from
+  // Sanskrit cetana "visible, conscious, soul"; behindthename.com/name/chetana — feminine form.
+  N('Chetan', 'चेतन', 'boy', 'conscious, aware; the soul', BTN('chetan')),
+  N('Chetana', 'चेतना', 'girl', 'consciousness, awareness (feminine of Chetan)', BTN('chetana')),
+  // Batch 7: wisdomlib.org/definition/bhola, DDSA Hindi: भोला "innocent, simple-hearted; ~nātha Lord Shiv".
+  N('Bholanath', 'भोलानाथ', 'boy', 'a name of Lord Shiva (bhola = innocent, simple-hearted)', WL('bhola')),
 ];
 
 // ── Devanagari first-akshara key ─────────────────────────────────────────────

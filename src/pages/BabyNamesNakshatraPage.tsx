@@ -141,7 +141,7 @@ export default function BabyNamesNakshatraPage() {
                   {names.map(n => (
                     <li key={n.name} className="text-sm flex items-baseline gap-2">
                       <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full ${GENDER_STYLE[n.gender]}`}>{n.gender}</span>
-                      <span><strong className="text-foreground">{n.name}</strong> <span lang="hi" className="text-muted-foreground">{n.hi}</span> <span className="text-muted-foreground">— {n.meaning}</span></span>
+                      <span><strong className="text-foreground">{n.name}</strong> <span lang="hi" className="text-muted-foreground">{n.hi}</span> <span className="text-muted-foreground">— {n.meaning}</span>{' '}<a href={n.source} data-testid="bn-source" className="text-[10px] text-muted-foreground underline" rel="noopener noreferrer" target="_blank">Source</a></span>
                     </li>
                   ))}
                 </ul>
@@ -150,7 +150,7 @@ export default function BabyNamesNakshatraPage() {
           ))}
         </div>
         <p className="text-xs text-muted-foreground mb-6" data-testid="bnn-count">
-          {total} name{total === 1 ? '' : 's'} listed for {name}. The list is deliberately short: names are matched by their first Devanagari syllable (consonant and vowel), so “Dev” (देव) counts as “De”, not “Da”.
+          {total} name{total === 1 ? '' : 's'} listed for {name}. The list is deliberately short — each meaning links to the dictionary or name reference it comes from — and names are matched by their first Devanagari syllable (consonant and vowel), so “Dev” (देव) counts as “De”, not “Da”.
         </p>
 
         <div className="rounded-xl border border-primary/30 bg-primary/5 p-5 mb-8 text-center">
