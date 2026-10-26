@@ -132,7 +132,9 @@ describe('Batch 3: static files carry the verified date', () => {
   // [name, slug, verified date] — rows that were wrong in indianCelebrities.ts / celebrities.json
   const STATIC: Array<[string, string]> = [
     ['Shubman Gill', '1999-09-08'], ['Preity Zinta', '1975-01-31'], ['Shraddha Kapoor', '1987-03-03'],
-    ['Sundar Pichai', '1972-06-10'], ['Ameesha Patel', '1975-06-09'], ['Amisha Patel', '1975-06-09'],
+    // Batch 7: the DB row 'Ameesha Patel' was merged into 'Amisha Patel' (same person;
+    // /celebrity/ameesha-patel 301s), so only the kept record is checked.
+    ['Sundar Pichai', '1972-06-10'], ['Amisha Patel', '1975-06-09'],
     ['Kunal Nayyar', '1981-04-30'], ['Kangana Ranaut', '1986-03-23'], ['Sharmila Tagore', '1944-12-08'],
     ['Kiara Advani', '1991-07-31'], ['Nandita Das', '1969-11-07'], ['Allu Arjun', '1982-04-08'],
     ['Pooja Bhatt', '1972-02-24'], ['Dino Morea', '1975-12-09'], ['Tisca Chopra', '1973-11-01'],

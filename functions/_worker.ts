@@ -41,6 +41,9 @@ import { handleReportOg, injectReportOgTags } from './og-report.js';
 import { isProductionHost, DISALLOW_ALL_ROBOTS } from './host.js';
 import { duplicateRedirect } from '../src/lib/seo/duplicateRedirects.js';
 import { INDIA_BORNON_SLUGS } from '../src/lib/seo/indiaBornOnSlugs.js';
+import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../src/lib/seo/panchangSlugs.js';
+import { matchDailyRoute } from '../src/lib/daily/registry.js';
+import { applyDailyContent } from './daily.js';
 
 type Env = {
   ASSETS: { fetch: (request: Request) => Promise<Response> };
@@ -252,14 +255,20 @@ export default {
       if ((m = pathname.match(/^\/birthday\/(\d+)\/?$/)))        { const mo = parseInt(m[1], 10); return !(mo >= 1 && mo <= 12); }
       if ((m = pathname.match(/^\/compatibility\/([a-z]+)\/([a-z]+)\/?$/)))             return !(Z.has(m[1]) && Z.has(m[2]));
       if ((m = pathname.match(/^\/zodiac\/([a-z-]+)\/?$/)))          return !Z.has(m[1]);
+      if ((m = pathname.match(/^\/zodiac\/([a-z-]+)\/today\/?$/)))   return !Z.has(m[1]);
       if ((m = pathname.match(/^\/chinese-zodiac\/([a-z-]+)\/?$/)))  return !A.has(m[1]);
       if ((m = pathname.match(/^\/chinese-horoscope\/([a-z-]+)\/?$/)))  return !A.has(m[1]);
       if ((m = pathname.match(/^\/vedic-zodiac\/([a-z-]+)\/?$/)))    return !R.has(m[1]);
       const RP = new Set(['today','week','month','year']);
       if ((m = pathname.match(/^\/rashifal\/([a-z]+)\/([a-z]+)\/?$/))) return !(R.has(m[1]) && RP.has(m[2]));
       if ((m = pathname.match(/^\/rashifal\/([a-z]+)\/?$/)))          return !R.has(m[1]);
+      // Batch 7 review: Hindi daily rashifal pages use the legacy slugs (= RASHI_SLUGS_HI in
+      // src/lib/daily/registry.ts); anything else was a soft-404 200.
+      const RH = new Set(['mesha','vrisha','mithuna','karka','simha','kanya','tula','vrischika','dhanu','makara','kumbha','meena']);
+      if ((m = pathname.match(/^\/hi\/rashifal\/([a-z]+)\/?$/)))      return !RH.has(m[1]);
       const NAK = new Set(['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati']);
       if ((m = pathname.match(/^\/nakshatra\/([a-z-]+)\/?$/)))        return !NAK.has(m[1]);
+      if ((m = pathname.match(/^\/baby-names\/nakshatra\/([a-z-]+)\/?$/))) return !NAK.has(m[1]);
       // Transit-by-year: four slow planets, year window 2020–2039 (computed at request time).
       const TRP = new Set(['saturn','jupiter','rahu','ketu']);
       const validTY = (y: number) => y >= 2020 && y <= 2039;
@@ -279,16 +288,30 @@ export default {
       if ((m = pathname.match(/^\/life-expectancy\/factors\/([a-z-]+)\/?$/))) return !LEF.has(m[1]);
       const BZ = new Set(['move-naturally','purpose','downshift','80-percent-rule','plant-slant','wine-at-5','belong','loved-ones-first','right-tribe']);
       if ((m = pathname.match(/^\/blue-zones\/([a-z0-9-]+)\/?$/)))    return !BZ.has(m[1]);
-      const PC = new Set(['delhi','mumbai','bengaluru','kolkata','chennai','hyderabad','pune','ahmedabad','jaipur','lucknow']);
-      if ((m = pathname.match(/^\/panchang\/([a-z-]+)\/?$/)))         return !PC.has(m[1]);
-      if ((m = pathname.match(/^\/hi\/panchang\/([a-z-]+)\/?$/)))     return !PC.has(m[1]);
+      // Batch 7 (W7): 50 Panchang cities (Panchang / Rahu Kaal / Choghadiya); Hindi pages for 10.
+      if ((m = pathname.match(/^\/(?:panchang|rahu-kaal|choghadiya)\/([a-z-]+)\/?$/))) return !PANCHANG_CITY_SLUGS.has(m[1]);
+      if ((m = pathname.match(/^\/hi\/panchang\/([a-z-]+)\/?$/)))     return !HINDI_PANCHANG_SLUGS.has(m[1]);
+      // Batch 7 / W5: the 78 tarot cards — 22 named trumps + "<rank>-of-<suit>" (mirrors src/data/tarotCards).
+      const TAROT_MAJOR = new Set(['the-fool','the-magician','the-high-priestess','the-empress','the-emperor','the-hierophant','the-lovers','the-chariot','strength','the-hermit','wheel-of-fortune','justice','the-hanged-man','death','temperance','the-devil','the-tower','the-star','the-moon','the-sun','judgement','the-world']);
+      if ((m = pathname.match(/^\/tarot\/cards\/([a-z-]+)\/?$/)))   return !(TAROT_MAJOR.has(m[1]) || /^(ace|two|three|four|five|six|seven|eight|nine|ten|page|knight|queen|king)-of-(wands|cups|swords|pentacles)$/.test(m[1]));
       if ((m = pathname.match(/^\/birthstone\/([a-z-]+)\/?$/)))      return !BM.has(m[1]);
       if ((m = pathname.match(/^\/numerology\/(\d+)\/?$/)))          return !NUM.has(parseInt(m[1], 10));
+      const ANG = new Set(['000','111','222','333','444','555','666','777','888','999','1010','1111','1212','1234','2222']); // = src/data/angelNumbersSeo.json keys
+      if ((m = pathname.match(/^\/angel-numbers\/([^/]+)\/?$/)))    return !ANG.has(m[1]);
       return false;
     })();
 
     if (!pathname.startsWith('/api/')) {
-      const assetRes = await env.ASSETS.fetch(request as Parameters<typeof env.ASSETS.fetch>[0]);
+      // Daily pages change at India midnight while their shell (and its ETag) does not, so
+      // never let a conditional request turn into a 304 of yesterday's injected HTML.
+      let assetReq: Request = request;
+      if (matchDailyRoute(pathname) && (request.headers.has('If-None-Match') || request.headers.has('If-Modified-Since'))) {
+        const h = new Headers(request.headers);
+        h.delete('If-None-Match');
+        h.delete('If-Modified-Since');
+        assetReq = new Request(request.url, { method: request.method, headers: h });
+      }
+      const assetRes = await env.ASSETS.fetch(assetReq as Parameters<typeof env.ASSETS.fetch>[0]);
       // Part AD (SEO): the static-asset layer normalises a missing trailing slash with a
       // 307 (TEMPORARY) redirect. A 307 does not consolidate SEO equity, which is why
       // Search Console listed /born-on/august-6/india and /born-on/august-6/india/ as TWO
@@ -317,6 +340,19 @@ export default {
       if (ct.includes('text/html')) {
         const headers = new Headers(assetRes.headers);
         headers.set('Cache-Control', 'no-cache, must-revalidate');
+        // Batch 7: daily-changing pages (rashifal, Western horoscope, …) — inject TODAY's
+        // precomputed content (India date) into the prerendered shell. See
+        // src/lib/daily/index.ts. The HTML stays no-cache (stale-bundle rule above); the
+        // month JSON is memoised per isolate until India midnight.
+        let htmlBody: BodyInit | null = assetRes.body;
+        if (!force404 && assetRes.status === 200 && matchDailyRoute(pathname)) {
+          const shell = await assetRes.text();
+          const daily = await applyDailyContent(pathname, shell, env.ASSETS, _url.origin);
+          htmlBody = daily ? daily.html : shell;
+          headers.delete('Content-Length');
+          headers.delete('ETag');
+          if (daily) headers.set('X-Daily-Date', daily.date);
+        }
         // Fix 3: a validated-invalid address returns a real 404 (noindex — a genuine
         // not-found state, allowed by Rule 6) while still serving the styled page body.
         const htmlStatus = force404 ? 404 : assetRes.status;
@@ -338,7 +374,7 @@ export default {
                 }
               },
             })
-            .transform(new Response(assetRes.body, { status: htmlStatus, statusText: assetRes.statusText, headers }));
+            .transform(new Response(htmlBody, { status: htmlStatus, statusText: assetRes.statusText, headers }));
           return stripped;
         }
         // Part AD (SEO): thin blog TAG-ARCHIVE views (/blog?tag=X) are near-duplicate
@@ -350,7 +386,7 @@ export default {
         if ((pathname === '/blog' || pathname === '/blog/') && new URL(request.url).searchParams.has('tag')) {
           headers.set('X-Robots-Tag', 'noindex, follow');
         }
-        return new Response(assetRes.body, { status: htmlStatus, statusText: assetRes.statusText, headers });
+        return new Response(htmlBody, { status: htmlStatus, statusText: assetRes.statusText, headers });
       }
       return assetRes;
     }

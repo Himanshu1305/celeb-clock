@@ -588,6 +588,36 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'स्थानीय दोपहर के आसपास लगभग 48 मिनट का समय, दिन के सबसे शुभ समयों में से एक। कई परंपराओं में बुधवार को इसे नहीं लिया जाता।',
     aliases: ['Abhijit', 'Abhijeet'],
   },
+  brahmaMuhurta: {
+    term: 'Brahma Muhurta', category: 'panchang', hiTerm: 'ब्रह्म मुहूर्त',
+    impact: 'The quiet stretch of roughly 45–55 minutes before dawn, traditionally valued for prayer, meditation and study.',
+    why: 'The night (sunset to sunrise) is divided into 15 equal muhurtas; Brahma Muhurta is the 14th — it starts two night-muhurtas before sunrise and ends one night-muhurta before sunrise, so it shifts with your city and season.',
+    hi: 'सूर्योदय से पहले लगभग 45–55 मिनट का शांत समय, जिसे पूजा, ध्यान और अध्ययन के लिए श्रेष्ठ माना जाता है। रात के 15 मुहूर्तों में यह 14वाँ मुहूर्त है।',
+    aliases: ['Brahma Muhurat', 'Brahm Muhurt'],
+  },
+  durMuhurtam: {
+    term: 'Dur Muhurtam', category: 'panchang', hiTerm: 'दुर्मुहूर्त',
+    impact: 'One or two short windows (about 45 minutes each) that tradition avoids for auspicious starts such as ceremonies or signing something important.',
+    why: 'Daylight is divided into 15 equal muhurtas, and which of them are "Dur" (unfavourable) is fixed by the weekday — for example the 14th on Sunday, the 9th and 12th on Monday. On Tuesday the second one falls after sunset.',
+    guidance: 'Simply plan new starts outside it; ongoing work is fine.',
+    hi: 'दिन के एक या दो छोटे समय (लगभग 45 मिनट), जिनमें शुभ कार्य शुरू करना टाला जाता है। दिन के 15 मुहूर्तों में से कौन-सा दुर्मुहूर्त होगा, यह वार से तय होता है।',
+    aliases: ['Durmuhurtham', 'Dur Muhurat', 'Durmuhurta'],
+  },
+  varjyam: {
+    term: 'Varjyam', category: 'panchang', hiTerm: 'वर्ज्यम्',
+    impact: 'A window of roughly 80–110 minutes, traditionally avoided for new beginnings.',
+    why: 'Each Nakshatra (the Moon\'s star) lasts about a day. Inside it, a stretch of 4 ghatis — one-fifteenth of that Nakshatra\'s length — starting at a fixed point that depends on the Nakshatra is called Varjyam (or Tyajyam, "to be left out"). Mula has two such stretches.',
+    guidance: 'Plan new starts around it; routine work can carry on.',
+    hi: 'लगभग 80–110 मिनट का समय, जिसमें नए कार्य की शुरुआत टाली जाती है। हर नक्षत्र के भीतर एक तय स्थान से 4 घटी (नक्षत्र की अवधि का 1/15 भाग) का समय वर्ज्यम् (त्याज्य) कहलाता है।',
+    aliases: ['Tyajyam', 'Thyajyam', 'Varjyam time'],
+  },
+  amritKalam: {
+    term: 'Amrit Kalam', category: 'panchang', hiTerm: 'अमृत काल',
+    impact: 'A window of roughly 80–110 minutes considered favourable — a good time to begin something you care about.',
+    why: 'Like Varjyam, it is a stretch of 4 ghatis (one-fifteenth of the Nakshatra\'s length) at a fixed point inside each Nakshatra — the "nectar" portion of that star.',
+    hi: 'लगभग 80–110 मिनट का शुभ समय। हर नक्षत्र के भीतर एक तय स्थान से 4 घटी का समय अमृत काल कहलाता है।',
+    aliases: ['Amrit Kaal', 'Amrita Kalam', 'Amrita Gadiya'],
+  },
   choghadiya: {
     term: 'Choghadiya', category: 'panchang', hiTerm: 'चौघड़िया',
     impact: 'An easy, slot-by-slot "good time / avoid" guide for the day and night.',
@@ -873,6 +903,31 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     impact: 'Zooms in on difficulties and how you handle tests of character.', why: 'Each sign split into five unequal parts ruled by Mars, Saturn, Jupiter, Mercury and Venus.',
     hi: 'कठिनाइयों और चरित्र की परीक्षा का वर्ग।', link: '/divisional-charts/d30-trimshamsha',
   },
+  // Batch 7 W3 — D40/D45 now drawn in the Kundali. Meaning per BPHS 7.5–7.6 ("auspicious and
+  // inauspicious effects from Khavedamsha; all indications from Akshavedamsha and Shashtyamsha"),
+  // archive.org BPHS text and enjoylearningsanskrit.com/scriptures/parashara/chapter-7/verse-5 & -6;
+  // build rules BPHS 6.29–6.32. "Character and conduct" for D45: en.wikipedia.org/wiki/Varga_(astrology).
+  khavedamsha: {
+    term: 'D40 (Khavedamsha)', category: 'divisional', hiTerm: 'D40 (खवेदांश)',
+    impact: 'A fine-detail chart read for the overall good and not-so-good tendencies in a life.',
+    why: 'Each sign split into forty parts of 45′. Odd signs count from Aries, even signs from Libra. It needs an accurate birth time.',
+    hi: 'जीवन के शुभ और अशुभ प्रभावों का सूक्ष्म वर्ग (हर राशि के 40 भाग)। इसके लिए सटीक जन्म समय चाहिए।',
+    aliases: ['D40', 'Khavedamsa'], link: '/divisional-charts',
+  },
+  akshavedamsha: {
+    term: 'D45 (Akshavedamsha)', category: 'divisional', hiTerm: 'D45 (अक्षवेदांश)',
+    impact: 'A fine-detail chart read for all general matters, often for character and conduct.',
+    why: 'Each sign split into forty-five parts of 40′. Counting starts from Aries, Leo or Sagittarius for movable, fixed and dual signs. It needs an accurate birth time.',
+    hi: 'सभी सामान्य बातों, विशेषकर स्वभाव और आचरण, का सूक्ष्म वर्ग (हर राशि के 45 भाग)। इसके लिए सटीक जन्म समय चाहिए।',
+    aliases: ['D45', 'Akshavedamsa'], link: '/divisional-charts',
+  },
+  shodashvarga: {
+    term: 'Shodashvarga (the 16 divisional charts)', category: 'divisional', hiTerm: 'षोडशवर्ग',
+    impact: 'The full set of sixteen "zoom lens" charts Parashara describes, from D1 up to D60.',
+    why: 'Brihat Parashara Hora Shastra (ch. 6) explains how each of the sixteen is built and ch. 7 what each is read for. Higher divisions change faster, so they need a more exact birth time.',
+    hi: 'पराशर द्वारा बताई गई सोलह वर्ग कुंडलियाँ (D1 से D60)। ऊँचे वर्गों के लिए अधिक सटीक जन्म समय चाहिए।',
+    aliases: ['Shodasavarga', '16 vargas'], link: '/divisional-charts',
+  },
   shashtiamsa: {
     term: 'Shashtiamsa (D60 chart)', category: 'divisional', hiTerm: 'षष्ट्यंश (D60)',
     impact: 'The most detailed divisional chart — treated as a fine-tuning layer, cautiously.',
@@ -989,6 +1044,41 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'आपकी चंद्र राशि के लिए दैनिक/साप्ताहिक/वार्षिक फल, ग्रहों की वास्तविक स्थिति से। यह उस राशि के सभी लोगों के लिए सामान्य है।',
     aliases: ['horoscope'], link: '/rashifal',
   },
+  chandrabala: {
+    term: 'Chandrabala (Moon strength for the day)', category: 'transit', hiTerm: 'चंद्र बल',
+    impact: 'Whether today\'s Moon supports you personally — the main reason one rashi\'s day reads better than another\'s.',
+    why: 'It is judged from the house the moving Moon occupies counted from your Moon sign: the 1st, 3rd, 6th, 7th, 10th and 11th are classically supportive; the 4th, 8th and 12th call for care.',
+    hi: 'आज का चंद्रमा आपका कितना साथ देता है — आपकी चंद्र राशि से चंद्रमा किस भाव में है, इससे देखा जाता है। 1, 3, 6, 7, 10, 11 भाव शुभ माने जाते हैं।',
+    aliases: ['Chandra bala', 'Moon strength'],
+  },
+  tarabala: {
+    term: 'Tarabala (star strength for the day)', category: 'transit', hiTerm: 'तारा बल',
+    impact: 'How today\'s nakshatra (the Moon\'s star) sits with your birth nakshatra — a quick daily good-day / go-gently check.',
+    why: 'Count from your birth nakshatra to today\'s in groups of nine: Janma, Sampat, Vipat, Kshema, Pratyari, Sadhaka, Vadha, Mitra, Parama Mitra. Vipat, Pratyari and Vadha are the classical "go gently" taras.',
+    hi: 'आपके जन्म नक्षत्र से आज के नक्षत्र की गिनती नौ-नौ के क्रम में — विपत, प्रत्यरि और वध तारा में सावधानी रखी जाती है, बाक़ी शुभ माने जाते हैं।',
+    aliases: ['Tara bala', 'Tara balam'],
+  },
+  solarHouse: {
+    term: 'Solar houses (Western horoscopes)', category: 'transit', hiTerm: 'सूर्य राशि से भाव',
+    impact: 'How a Sun-sign horoscope decides which part of your life today\'s planets touch.',
+    why: 'Western daily horoscopes count signs from your Sun sign: your own sign is the 1st house, the next sign the 2nd, and so on. The Moon changes sign every 2–3 days, so it sets the day\'s focus.',
+    hi: 'पश्चिमी राशिफल में आपकी सूर्य राशि को पहला भाव मानकर आगे की राशियाँ गिनी जाती हैं — इससे पता चलता है कि आज के ग्रह जीवन के किस क्षेत्र को छूते हैं।',
+    aliases: ['solar house', 'sun sign houses'],
+  },
+  westernAspect: {
+    term: 'Aspect (Western astrology)', category: 'transit', hiTerm: 'दृष्टि (पश्चिमी)',
+    impact: 'The angle between a planet and your sign — easy angles feel smooth, tense ones push you to adjust.',
+    why: 'Counted sign to sign: same sign = conjunction, 2 signs apart = sextile (60°), 3 = square (90°), 4 = trine (120°), 6 = opposition (180°). Trines and sextiles are read as easy; squares and oppositions as tension.',
+    hi: 'किसी ग्रह और आपकी राशि के बीच का कोण — 60° और 120° के कोण सहज, जबकि 90° और 180° के कोण तनाव वाले माने जाते हैं।',
+    aliases: ['aspects', 'trine', 'square', 'sextile', 'opposition'],
+  },
+  tropicalZodiac: {
+    term: 'Tropical zodiac (Western)', category: 'transit', hiTerm: 'सायन राशिचक्र',
+    impact: 'The season-based zodiac Western horoscopes use — why your Western sign is often one sign "ahead" of your Vedic one.',
+    why: 'It fixes 0° Aries to the March equinox. Vedic astrology uses the star-based (sidereal) zodiac, now about 24° apart, and reads your Moon sign rather than your Sun sign.',
+    hi: 'पश्चिमी ज्योतिष का ऋतु-आधारित राशिचक्र; वैदिक (निरयन) राशिचक्र से लगभग 24° का अंतर है, इसलिए दोनों की राशि अक्सर अलग आती है।',
+    aliases: ['tropical', 'Western zodiac', 'sayana'],
+  },
   luckyColour: {
     term: 'Lucky colour', category: 'transit', hiTerm: 'शुभ रंग',
     impact: 'A traditional colour association for the day — a fun, optional touch, not something to worry about.',
@@ -1101,6 +1191,21 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     why: 'Letters A–Z are numbered 1–9 in order and repeat (A=1 … I=9, J=1 …).',
     hi: 'सबसे आम आधुनिक पद्धति — A से Z तक अक्षरों को क्रम से 1–9 अंक।',
   },
+  angelNumber: {
+    term: 'Angel number', category: 'numerology', hiTerm: 'एंजेल नंबर',
+    impact: 'A repeating number you keep noticing (like 111 or 11:11) that some people read as a gentle sign — a popular belief, not a prediction.',
+    why: 'The term was defined by Doreen Virtue and Lynnette Brown in their 2005 book "Angel Numbers". Unlike a Life Path number, it is not calculated from your birth date — the same number has the same meaning for everyone.',
+    learnMore: 'Psychology explains why a number seems to follow you: once you notice something, you spot it more (the frequency illusion).',
+    hi: 'बार-बार दिखने वाला अंक (जैसे 111 या 11:11) जिसे कुछ लोग संकेत मानते हैं — यह एक लोकप्रिय मान्यता है, भविष्यवाणी नहीं।',
+    aliases: ['angel numbers', 'repeating numbers'], link: '/angel-numbers',
+  },
+  twinFlame: {
+    term: 'Twin flame', category: 'numerology', hiTerm: 'ट्विन फ्लेम',
+    impact: 'A popular spiritual idea that two people can be "mirror" halves of one soul, sharing an unusually intense bond.',
+    why: 'It is a belief from modern spirituality, not astrology or numerology maths. Writers describe it as more intense than a soulmate bond, and say it can include periods apart.',
+    hi: 'एक लोकप्रिय आध्यात्मिक मान्यता कि दो लोग एक ही आत्मा के "दर्पण" हिस्से हो सकते हैं — यह मान्यता है, गणना नहीं।',
+    aliases: ['twin flames'],
+  },
 
   // ─────────────────────────── Tarot ───────────────────────────
   tarot: {
@@ -1115,12 +1220,14 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     impact: 'The 22 "big theme" cards (The Fool … The World) — they point to major lessons rather than daily matters.',
     why: 'Numbered 0 to 21.',
     hi: 'जीवन के बड़े विषयों वाले 22 कार्ड (0 से 21)।',
+    link: '/tarot/cards',
   },
   minorArcana: {
     term: 'Minor Arcana', category: 'tarot', hiTerm: 'माइनर आर्काना',
     impact: 'The 56 everyday cards — work, feelings, thoughts and money.',
     why: 'Four suits: Wands (energy, work), Cups (feelings), Swords (thoughts), Pentacles (money, body).',
     hi: 'रोज़मर्रा के विषयों वाले 56 कार्ड, चार सूट में।',
+    link: '/tarot/cards',
   },
   reversedCard: {
     term: 'Upright / reversed card', category: 'tarot', hiTerm: 'सीधा / उल्टा कार्ड',
@@ -1134,6 +1241,13 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     why: 'Mary K. Greer\'s method: add your birth month, day and full year, then add the digits of the total until you reach 22 or less; that number is your card (22 = The Fool).',
     hi: 'जन्म तिथि के अंकों को जोड़कर मिलने वाला मेजर आर्काना कार्ड।',
     link: '/tarot-card-by-birthday',
+  },
+  courtCard: {
+    term: 'Court card', category: 'tarot', hiTerm: 'कोर्ट कार्ड',
+    impact: 'The Page, Knight, Queen and King of each suit — often read as a person, or as a way of behaving.',
+    why: 'Each of the four Minor Arcana suits has four court cards after its Ace-to-Ten number cards.',
+    hi: 'हर सूट के पेज, नाइट, क्वीन और किंग कार्ड — अक्सर किसी व्यक्ति या व्यवहार के रूप में पढ़े जाते हैं।',
+    link: '/tarot/cards',
   },
   cardOfDay: {
     term: 'Card of the day', category: 'tarot', hiTerm: 'आज का कार्ड',
@@ -1239,6 +1353,14 @@ export const MATCH_DOSHA_TERM: Record<string, string> = {
 };
 
 /** Map a Choghadiya slot name (panchangDay.ts) to its glossary id. */
+/** Batch 7 (W7): label → term id for the "What these terms mean" chips on the Panchang pages. */
+export const PANCHANG_PAGE_TERM: Record<string, string> = {
+  Panchang: 'panchang', Tithi: 'tithi', Paksha: 'paksha', Nakshatra: 'panchangNakshatra', Yoga: 'panchangYoga',
+  Karana: 'karana', Vara: 'vara', 'Brahma Muhurta': 'brahmaMuhurta', 'Abhijit Muhurta': 'abhijit', 'Amrit Kalam': 'amritKalam',
+  'Rahu Kaal': 'rahuKalam', 'Gulika Kaal': 'gulikaKaal', Yamaganda: 'yamaganda', 'Dur Muhurtam': 'durMuhurtam',
+  Varjyam: 'varjyam', Choghadiya: 'choghadiya',
+};
+
 export const CHOGHADIYA_TERM: Record<string, string> = {
   Amrit: 'choghAmrit', Shubh: 'choghShubh', Labh: 'choghLabh', Char: 'choghChar',
   Udveg: 'choghUdveg', Kaal: 'choghKaal', Rog: 'choghRog',

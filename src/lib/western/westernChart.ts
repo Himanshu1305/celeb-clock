@@ -113,6 +113,17 @@ function isRetrograde(body: string, time: Astronomy.AstroTime): boolean {
   return diff < 0;
 }
 
+/** Tropical (Western) ecliptic longitude of a body at an instant — the same path the
+ *  natal chart uses. Shared with the daily Western horoscope (src/lib/daily/kinds/westernDaily.ts). */
+export function tropicalLongitudeAt(body: string, date: Date): number {
+  return tropicalLongitude(body, Astronomy.MakeTime(date));
+}
+
+/** True if a body's apparent geocentric longitude is decreasing at an instant (1-day step). */
+export function isRetrogradeAt(body: string, date: Date): boolean {
+  return isRetrograde(body, Astronomy.MakeTime(date));
+}
+
 function meanNodeTropical(date: Date): number {
   const time = Astronomy.MakeTime(date);
   const T = time.tt / 36525;

@@ -29,11 +29,14 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 const VedicReading = lazy(() => import('@/components/reading/VedicReading').then(m => ({ default: m.VedicReading })));
 const PastPeriodReflection = lazy(() => import('@/components/reading/PastPeriodReflection').then(m => ({ default: m.PastPeriodReflection })));
 import { TermTip, NumberNote } from '@/components/vedic/TermTip';
+import { NakshatraNameLetters } from '@/components/vedic/NakshatraNameLetters';
 import { degreeNote, padaNote, dashaPairNote } from '@/lib/vedic/numberNotes';
 import { formatDegreeInSign } from '@/lib/vedic/formatDegree';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
 import { RemediesForFindings } from '@/components/vedic/Remedies';
+// Batch 7 W3: rendered only after a chart is generated — its own chunk, like KundaliChart.
+const ShodashvargaCharts = lazy(() => import('@/components/vedic/ShodashvargaCharts').then(m => ({ default: m.ShodashvargaCharts })));
 import { findingsFromKundali, type KundaliLike } from '@/lib/vedic/remedies';
 
 export default function KundaliPage() {
@@ -322,8 +325,18 @@ export default function KundaliPage() {
                 </div>
               </div>
 
-              {/* K13: the divisional charts the explainer pages point to — same drawing, same style toggle. */}
-              {(data.divisionalCharts?.d9 || data.divisionalCharts?.d10) && (
+              {/* Batch 7 (W8): Nakshatra → baby-name letters. */}
+              <NakshatraNameLetters nakshatra={data.nakshatra.nakshatra} pada={data.nakshatra.pada} />
+
+              {/* Batch 7 W3: all sixteen vargas (D1…D60) with meaning, BPHS source and a ±5-minute
+                  birth-time check — same drawing, same style toggle. */}
+              {data.shodashvarga && data.shodashvarga.length > 0 && (
+                <Suspense fallback={null}>
+                  <ShodashvargaCharts charts={data.shodashvarga} chartStyle={chartStyle} birthTimeKnown={!data.requires_birth_time} />
+                </Suspense>
+              )}
+              {/* K13: D9/D10 only — kept as the fallback when a response has no 16-varga set. */}
+              {!data.shodashvarga?.length && (data.divisionalCharts?.d9 || data.divisionalCharts?.d10) && (
                 <div data-testid="kundali-divisional" style={{ marginTop: 20 }}>
                   <h3 style={{ marginBottom: 4 }}><TermTip id="navamsa">Navamsa (D9)</TermTip> and <TermTip id="dasamsa">Dasamsa (D10)</TermTip></h3>
                   <p className="text-sm text-muted-foreground" style={{ marginBottom: 8 }}>

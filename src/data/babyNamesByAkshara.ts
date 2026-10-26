@@ -33,7 +33,6 @@ export const BABY_NAMES: BabyName[] = [
   N('Udhav', 'उद्धव', 'boy', 'festival; a friend of Krishna'),
   N('Ekta', 'एकता', 'girl', 'unity'), N('Ekansh', 'एकांश', 'boy', 'whole, complete'),
   N('Om', 'ओम', 'boy', 'the sacred primordial sound'), N('Ojas', 'ओजस', 'boy', 'vitality, lustre'),
-  N('Omisha', 'ओमिशा', 'girl', 'goddess of birth and death'),
   // व
   N('Varun', 'वरुण', 'boy', 'god of the waters'), N('Vani', 'वाणी', 'girl', 'speech; goddess Saraswati'),
   N('Vasudha', 'वसुधा', 'girl', 'the earth'),
@@ -132,6 +131,14 @@ export const BABY_NAMES: BabyName[] = [
   N('Lakshya', 'लक्ष्य', 'boy', 'aim, target'), N('Lavanya', 'लावण्या', 'girl', 'grace, beauty'),
   N('Lila', 'लीला', 'girl', 'play; the divine play'), N('Lekha', 'लेखा', 'girl', 'writing'),
   N('Lokesh', 'लोकेश', 'boy', 'lord of the world'),
+  // ── Batch 7 (W8, Oct 2026): names added ONLY with a meaning from a page opened via WebFetch.
+  // च (Ashwini P2 "Che") — behindthename.com/name/chetan: masculine, चेतन, from Sanskrit
+  // cetana "visible, conscious, soul"; behindthename.com/name/chetana: feminine form, चेतना.
+  N('Chetan', 'चेतन', 'boy', 'conscious, aware; the soul'),
+  N('Chetana', 'चेतना', 'girl', 'consciousness, awareness (feminine of Chetan)'),
+  // भ (Uttara Ashadha P2 "Bho") — wisdomlib.org/definition/bhola, DDSA "A practical
+  // Hindi-English dictionary": भोला "innocent, simple-hearted; ~nātha Lord Shiv".
+  N('Bholanath', 'भोलानाथ', 'boy', 'a name of Lord Shiva (bhola = innocent, simple-hearted)'),
 ];
 
 // ── Devanagari first-akshara key ─────────────────────────────────────────────

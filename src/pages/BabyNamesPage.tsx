@@ -176,6 +176,15 @@ export default function BabyNamesPage() {
           </div>
         )}
 
+        <div className="mt-10" data-testid="baby-nakshatra-links">
+          <h2 className="font-semibold text-foreground mb-2">Baby names for each Nakshatra</h2>
+          <div className="flex flex-wrap gap-2">
+            {NAKSHATRA_LIST.map(n => (
+              <Link key={n} to={`/baby-names/nakshatra/${nakSlug(n)}`} className="px-3 py-1.5 rounded-lg border border-border text-sm text-foreground hover:bg-primary/5">{n}</Link>
+            ))}
+          </div>
+        </div>
+
         <div className="mt-10 bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
           <p className="text-muted-foreground mb-3">Want your baby's full Vedic birth chart?</p>
           <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">

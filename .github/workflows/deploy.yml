@@ -144,6 +144,10 @@ jobs:
       - name: Build app (no prerender)
         run: npm run build:app
 
+      # Batch 7: export-celebrities may add retired celebrity slugs to
+      # src/data/celebritySlugRedirects.json. The deploy job bundles the Worker
+      # (functions/_worker.ts → duplicateRedirects) from a fresh checkout, so it must get
+      # this build's map, or a new duplicate would be dropped from the site but not 301'd.
       - name: Upload build
         uses: actions/upload-artifact@v4
         with:
@@ -152,6 +156,7 @@ jobs:
             dist
             scripts/celebrity-meta.json
             src/data/celebrities.json
+            src/data/celebritySlugRedirects.json
           include-hidden-files: true
           retention-days: 3
 

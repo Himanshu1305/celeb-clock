@@ -21,6 +21,7 @@ import type {
   WesternZodiacProfile, VedicRashiProfile,
   ChineseZodiacProfile, NakshatraProfile, LifePathProfile,
 } from '@/data/astrologicalData';
+import { celebritySlugRedirect } from '@/lib/seo/duplicateRedirects';
 import celebBios from '@/data/celebrity-bios.json';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { CosmicTwins } from '@/components/CelebrityAffiliateAndTwins';
@@ -96,6 +97,10 @@ export function CelebrityPage() {
   const { slug } = useParams<{ slug: string }>();
   const celeb = slug ? (SLUG_MAP.get(slug) as Record<string, unknown> | undefined) : undefined;
 
+  // Batch 7: a retired duplicate slug (same person, second URL) → the kept page.
+  // The Worker already 301s these; this covers in-app navigation.
+  const keptSlug = !celeb && slug ? celebritySlugRedirect(slug) : null;
+  if (keptSlug) return <Navigate to={`/celebrity/${keptSlug}/`} replace />;
   // Invalid slug → redirect to the index.
   if (!celeb) return <Navigate to="/celebrity/" replace />;
 

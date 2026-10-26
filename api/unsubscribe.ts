@@ -1,5 +1,5 @@
 // api/unsubscribe.ts — one-click unsubscribe from the weekly digest (and, with
-// ?list=reminders, from birthday reminders) via a tokened link (no login). Flips weekly_digest=false / stamps unsubscribed_at on
+// ?list=reminders, from birthday reminders; with ?list=transit, from transit alerts only) via a tokened link (no login). Flips weekly_digest=false / stamps unsubscribed_at on
 // the matching email_subscribers row. Web APIs only (Workers compatible).
 import { createClient } from '@supabase/supabase-js';
 
@@ -46,6 +46,24 @@ async function handler(request: Request): Promise<Response> {
       return html('Something went wrong. Please email hello@bornclock.com to unsubscribe.', 500);
     }
     return html("Done — BornClock won't send any more birthday reminders to this address.");
+  }
+  // Transit alerts only (?list=transit, from the transit alert email): switch off just that
+  // channel; the subscriber's other choices (weekly reading, daily horoscope) are untouched.
+  if (params.get('list') === 'transit') {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(token)) {
+      return html("This link is no longer valid, or you're already unsubscribed.");
+    }
+    const { data: tRows, error: tErr } = await sb
+      .from('email_subscribers')
+      .update({ transit_alerts: false })
+      .eq('unsubscribe_token', token)
+      .select('email');
+    if (tErr) {
+      console.error('[unsubscribe] transit error:', tErr.message);
+      return html('Something went wrong. Please email hello@bornclock.com to unsubscribe.', 500);
+    }
+    if (!tRows?.length) return html("This link is no longer valid, or you're already unsubscribed.");
+    return html("Done — BornClock won't send you any more transit alerts. Your other BornClock emails, if any, are unchanged.");
   }
   const { error, count } = await sb
     .from('email_subscribers')

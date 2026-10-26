@@ -191,7 +191,7 @@ const ARTICLES: ArticleEntry[] = [
   },
   {
     title: 'Planetary Age Calculator',
-    href: '/articles/planetary-age-calculator',
+    href: '/planetary-age/',
     category: 'Western Astrology',
     blurb: 'How old you would be on Mars, Venus and every other planet in the solar system.',
   },

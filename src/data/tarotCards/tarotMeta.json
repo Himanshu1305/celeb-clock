@@ -1,0 +1,318 @@
+{
+ "/tarot/cards": {
+  "title": "All 78 Tarot Card Meanings — Upright & Reversed | BornClock",
+  "description": "Every tarot card explained: the 22 Major Arcana and 56 Minor Arcana (Wands, Cups, Swords, Pentacles) — upright and reversed meanings, love, career, money and yes/no, from A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-fool": {
+  "title": "The Fool Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Fool is the card of a fresh start taken with an open heart. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-magician": {
+  "title": "The Magician Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Magician means you already have the tools you need — the task is to use them with focus. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-high-priestess": {
+  "title": "The High Priestess Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The High Priestess stands for quiet inner knowing and things not yet revealed. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-empress": {
+  "title": "The Empress Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Empress is abundance, growth and care — the card of things ripening. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-emperor": {
+  "title": "The Emperor Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Emperor stands for structure, steady authority and keeping your word. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-hierophant": {
+  "title": "The Hierophant Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Hierophant is tradition, teaching and belonging to a shared system. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-lovers": {
+  "title": "The Lovers Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Lovers is attraction, harmony and an honest choice made from the heart. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-chariot": {
+  "title": "The Chariot Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Chariot means progress won through focus and self-control. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/strength": {
+  "title": "Strength Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "Strength is courage expressed as gentleness. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-hermit": {
+  "title": "The Hermit Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Hermit is the card of stepping back to see clearly. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/wheel-of-fortune": {
+  "title": "Wheel of Fortune Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "Wheel of Fortune means the situation is turning — usually for the better. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/justice": {
+  "title": "Justice Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "Justice is fairness, honesty and cause-and-effect. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-hanged-man": {
+  "title": "The Hanged Man Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Hanged Man means pause and see things from a new angle. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/death": {
+  "title": "Death Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Death card almost never means physical death — it means an ending that makes room for something new. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/temperance": {
+  "title": "Temperance Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "Temperance means balance, moderation and blending things wisely. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-devil": {
+  "title": "The Devil Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Devil is about attachments that bind you — habits, desires or situations you feel stuck in. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-tower": {
+  "title": "The Tower Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Tower means a sudden shake-up that knocks down something built on a false base. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-star": {
+  "title": "The Star Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Star is hope, healing and a calm renewal after a hard time. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-moon": {
+  "title": "The Moon Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Moon means uncertainty — things are not as clear as they seem. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-sun": {
+  "title": "The Sun Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Sun is one of the happiest cards in the deck: success, warmth and simple joy. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/judgement": {
+  "title": "Judgement Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "Judgement is a wake-up call: a moment of renewal and an honest decision about what comes next. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/the-world": {
+  "title": "The World Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The World is completion, achievement and arriving where you meant to be. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/ace-of-wands": {
+  "title": "Ace of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Ace of Wands is a spark: a new idea, project or burst of energy. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/two-of-wands": {
+  "title": "Two of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Two of Wands is the view from the battlements: you have something, and you are deciding where to take it next. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/three-of-wands": {
+  "title": "Three of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Three of Wands means your plans are under way and you are watching the ships come in. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/four-of-wands": {
+  "title": "Four of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Four of Wands is celebration and a safe, happy home. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/five-of-wands": {
+  "title": "Five of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Five of Wands is competition and friction — many voices, everyone swinging a stick. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/six-of-wands": {
+  "title": "Six of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Six of Wands is victory and recognition — the rider coming home crowned. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/seven-of-wands": {
+  "title": "Seven of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Seven of Wands is standing your ground from higher ground. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/eight-of-wands": {
+  "title": "Eight of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Eight of Wands means speed — things are moving fast and news is on its way. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/nine-of-wands": {
+  "title": "Nine of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Nine of Wands is resilience: battered but still standing guard. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/ten-of-wands": {
+  "title": "Ten of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Ten of Wands is a heavy load — success or responsibility that has become a burden. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/page-of-wands": {
+  "title": "Page of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Page of Wands is a faithful messenger with exciting news. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/knight-of-wands": {
+  "title": "Knight of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Knight of Wands is a journey and a hasty change — departure, a move, a new place. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/queen-of-wands": {
+  "title": "Queen of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Queen of Wands is warm, magnetic and capable — a friendly woman who is good at business. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/king-of-wands": {
+  "title": "King of Wands Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The King of Wands is an honest, ardent leader who means what he says. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/ace-of-cups": {
+  "title": "Ace of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Ace of Cups is an overflowing heart — the start of love, joy or emotional renewal. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/two-of-cups": {
+  "title": "Two of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Two of Cups is mutual attraction — two people pledging to each other. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/three-of-cups": {
+  "title": "Three of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Three of Cups is friends raising a toast — celebration, healing and a happy result. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/four-of-cups": {
+  "title": "Four of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Four of Cups is boredom and discontent — not seeing the offer in front of you. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/five-of-cups": {
+  "title": "Five of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Five of Cups is grief over what was lost — while something still remains. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/six-of-cups": {
+  "title": "Six of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Six of Cups looks back: childhood, happy memories and simple kindness. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/seven-of-cups": {
+  "title": "Seven of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Seven of Cups is a cloud of options and daydreams. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/eight-of-cups": {
+  "title": "Eight of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Eight of Cups is walking away from something that no longer fulfils you. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/nine-of-cups": {
+  "title": "Nine of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Nine of Cups is the wish card — contentment, comfort and getting what you hoped for. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/ten-of-cups": {
+  "title": "Ten of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Ten of Cups is happy family life — peace of heart and love that is complete. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/page-of-cups": {
+  "title": "Page of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Page of Cups is a gentle messenger of feeling — an imaginative, studious young person or a sweet surprise. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/knight-of-cups": {
+  "title": "Knight of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Knight of Cups is an approach — an invitation, proposal or messenger arriving. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/queen-of-cups": {
+  "title": "Queen of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Queen of Cups is loving intelligence and the gift of vision — kind, intuitive and wise. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/king-of-cups": {
+  "title": "King of Cups Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The King of Cups is calm, responsible and kind — creative intelligence with emotional balance. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/ace-of-swords": {
+  "title": "Ace of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Ace of Swords is a breakthrough — clarity, decisive thought and the power to cut through confusion. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/two-of-swords": {
+  "title": "Two of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Two of Swords is a careful balance — a truce, or a decision you are holding off. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/three-of-swords": {
+  "title": "Three of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Three of Swords is heartache — separation, absence or painful news. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/four-of-swords": {
+  "title": "Four of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Four of Swords is rest and retreat — stepping away to recover. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/five-of-swords": {
+  "title": "Five of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Five of Swords is a hollow victory — winning in a way that leaves others defeated and you diminished. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/six-of-swords": {
+  "title": "Six of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Six of Swords is moving on — a passage from rough waters to calmer ones. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/seven-of-swords": {
+  "title": "Seven of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Seven of Swords is a plan carried out quietly — sometimes clever, sometimes sneaky. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/eight-of-swords": {
+  "title": "Eight of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Eight of Swords is feeling trapped by your situation or your own thoughts. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/nine-of-swords": {
+  "title": "Nine of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Nine of Swords is a sleepless night of worry. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/ten-of-swords": {
+  "title": "Ten of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Ten of Swords is rock bottom — the end of a painful situation. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/page-of-swords": {
+  "title": "Page of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Page of Swords is watchful curiosity — someone alert, quick and observant. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/knight-of-swords": {
+  "title": "Knight of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Knight of Swords charges in at full speed — brave, skilful and ready for conflict. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/queen-of-swords": {
+  "title": "Queen of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Queen of Swords knows sorrow and speaks with clear honesty. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/king-of-swords": {
+  "title": "King of Swords Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The King of Swords is judgement and authority — a clear, powerful mind that decides. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/ace-of-pentacles": {
+  "title": "Ace of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Ace of Pentacles is a solid new opportunity — money, work or comfort that you can hold in your hand. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/two-of-pentacles": {
+  "title": "Two of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Two of Pentacles is juggling — keeping two things in motion with a light step. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/three-of-pentacles": {
+  "title": "Three of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Three of Pentacles is skilled work recognised — craft, trade and teamwork. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/four-of-pentacles": {
+  "title": "Four of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Four of Pentacles is holding on tight — security, savings and what you own. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/five-of-pentacles": {
+  "title": "Five of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Five of Pentacles is hard times — feeling left out in the cold. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/six-of-pentacles": {
+  "title": "Six of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Six of Pentacles is generosity — giving and receiving fairly. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/seven-of-pentacles": {
+  "title": "Seven of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Seven of Pentacles is pausing to look at your growing investment. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/eight-of-pentacles": {
+  "title": "Eight of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Eight of Pentacles is diligent work — the craftsman perfecting his skill. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/nine-of-pentacles": {
+  "title": "Nine of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Nine of Pentacles is independence and well-earned comfort. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/ten-of-pentacles": {
+  "title": "Ten of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Ten of Pentacles is family wealth and a secure home across generations. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/page-of-pentacles": {
+  "title": "Page of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Page of Pentacles is the dedicated student — focused, practical and eager to learn. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/knight-of-pentacles": {
+  "title": "Knight of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Knight of Pentacles is slow, steady and dependable. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/queen-of-pentacles": {
+  "title": "Queen of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The Queen of Pentacles is generous, secure and wise in practical things. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ },
+ "/tarot/cards/king-of-pentacles": {
+  "title": "King of Pentacles Tarot Meaning — Upright & Reversed | BornClock",
+  "description": "The King of Pentacles is business success and practical intelligence. Upright, reversed, love, career, money and yes/no — after A. E. Waite (1910)."
+ }
+}

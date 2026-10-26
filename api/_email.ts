@@ -527,7 +527,7 @@ export function isOutboundEmailSuppressed(to: string): boolean {
  * daily horoscope, transit alerts, family birthday reminders) that build their own
  * HTML. Honours the same staging outbound-suppression allowlist as sendEmailDirect.
  */
-export async function sendRawEmail(opts: { to: string; subject: string; html: string; from?: string }): Promise<boolean> {
+export async function sendRawEmail(opts: { to: string; subject: string; html: string; from?: string; headers?: Record<string, string> }): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.error('[sendRawEmail] RESEND_API_KEY not configured');
@@ -542,7 +542,7 @@ export async function sendRawEmail(opts: { to: string; subject: string; html: st
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: opts.from || FROM_EMAIL, to: [opts.to], subject: opts.subject, html: opts.html }),
+      body: JSON.stringify({ from: opts.from || FROM_EMAIL, to: [opts.to], subject: opts.subject, html: opts.html, ...(opts.headers ? { headers: opts.headers } : {}) }),
     });
     if (!response.ok) {
       console.error('[sendRawEmail] Resend error:', await response.json().catch(() => ({})));

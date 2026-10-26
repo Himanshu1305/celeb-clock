@@ -33,7 +33,7 @@ export default function DivisionalChartPage() {
                 </Link>
               ))}
             </div>
-            <p className="text-xs text-muted-foreground mt-4">“Computed in your Kundli” marks the vargas BornClock calculates today (D1, D9, D10, D60). The others are explained here; we’ll add their computation over time.</p>
+            <p className="text-xs text-muted-foreground mt-4">Your free Kundli draws all sixteen Parashari divisional charts (D1 to D60, including D40 and D45), each with its meaning, its source in Brihat Parashara Hora Shastra and a birth-time check.</p>
           </div>
         </section>
       </ToolLayout>
@@ -47,7 +47,7 @@ export default function DivisionalChartPage() {
   const faqItems = [
     { question: `What does the ${varga.label} show?`, answer: varga.whatItShows },
     { question: `How is the ${varga.name} calculated?`, answer: `${varga.howComputed} The planet’s position within the sign decides which sub-part — and therefore which new sign — it maps to in the ${varga.name}.` },
-    { question: `Does BornClock compute the ${varga.name}?`, answer: varga.computedByBornClock ? `Yes — your free Kundli computes the ${varga.name} and reads it against your main chart.` : `Not yet. Your Kundli currently draws the D1, D9 (Navamsa) and D10 (Dasamsa) charts and reads the D60 Moon. This page explains the ${varga.name} so you can interpret it; we are expanding divisional-chart computation over time.` },
+    { question: `Does BornClock compute the ${varga.name}?`, answer: varga.computedByBornClock ? `Yes — your free Kundli draws your ${varga.name} chart (in North or South Indian style) among all sixteen divisional charts, with its meaning and a check of how sensitive it is to your birth time.` : `Not yet. This page explains the ${varga.name} so you can interpret it.` },
   ];
 
   return (
@@ -94,7 +94,7 @@ export default function DivisionalChartPage() {
           <PageFAQ items={faqItems} />
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
-            <p className="text-muted-foreground mb-3">{varga.dNumber === 60 ? 'Your free Kundli reading shows your D60 Moon placement, with its disclaimer.' : varga.computedByBornClock ? `See your ${varga.name} chart in your free Kundli.` : 'See your D1, Navamsa (D9) and Dasamsa (D10) charts — and your D60 Moon in the reading — in your free Kundli.'}</p>
+            <p className="text-muted-foreground mb-3">{varga.dNumber === 60 ? 'See your D60 chart in your free Kundli, with its disclaimer and birth-time check.' : varga.computedByBornClock ? `See your ${varga.name} chart in your free Kundli.` : 'See all sixteen divisional charts in your free Kundli.'}</p>
             <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
           </div>
         </div>

@@ -162,7 +162,7 @@ export default function NakshatraPage() {
               ))}
             </div>
             <p className="text-xs text-muted-foreground mt-2">
-              Looking for a name? See <Link to="/baby-names" className="underline">baby names</Link>.
+              Looking for a name? See <Link to={`/baby-names/nakshatra/${extra.slug}`} className="underline">{extra.name} baby names</Link>.
             </p>
           </div>
 

@@ -4,6 +4,7 @@ import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { TermTip } from '@/components/vedic/TermTip';
+import { RashifalDailyView } from '@/components/daily/RashifalDailyView';
 import {
   computeRashifal,
   rashiBySlug,
@@ -47,7 +48,8 @@ export default function RashifalSign() {
   // Compute at request time from today's real planetary positions; memoise per day.
   const todayKey = new Date().toISOString().slice(0, 10);
   const data = useMemo(() => {
-    if (!rashi || !periodValid) return null;
+    // The daily view is precomputed per India date (src/lib/daily) — not computed here.
+    if (!rashi || !periodValid || period === 'today') return null;
     const idx = RASHIS.findIndex(r => r.slug === rashi.slug);
     return computeRashifal(idx, period, new Date());
   }, [rashi?.slug, period, periodValid, todayKey]);
@@ -55,6 +57,11 @@ export default function RashifalSign() {
   // Unknown period on a valid rashi → canonicalise to the daily page.
   if (rashi && periodParam && !periodValid) {
     return <Navigate to={`/rashifal/${rashi.slug}/today`} replace />;
+  }
+
+  // Daily (today) page: shared daily-page mechanism — the Worker injects today's text.
+  if (rashi && period === 'today') {
+    return <RashifalDailyView rashi={rashi} />;
   }
 
   if (!rashi || !data) {

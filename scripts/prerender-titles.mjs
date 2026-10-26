@@ -19,7 +19,16 @@ const INDIA_BORNON_MAP = new Map(
 
 // Audit S13: national life-expectancy figures come from the ONE sourced table
 // (UN World Population Prospects 2024, estimates for 2023) — same JSON the app reads.
+// Batch 7 / W5: tarot card pages — { route: { title, description } } generated from the
+// TypeScript page data by scripts/gen-tarot-meta.mts (drift-checked in tarotCards.test.ts).
+const TAROT_META = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/tarotCards/tarotMeta.json'), 'utf-8'));
+// Batch 7 (W7): Panchang city names by slug (50 most-populated Indian cities).
+const PANCHANG_CITY_NAMES = Object.fromEntries(
+  JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/panchangCities.json'), 'utf-8'))
+    .cities.map(c => [c.slug, c.name])
+);
 const WPP_LE = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/lifeExpectancyWpp2024.json'), 'utf-8'));
+const ANGEL_SEO = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/angelNumbersSeo.json'), 'utf-8'));
 const LEY = (country, sex = 'both') => WPP_LE.countries[country][sex].toFixed(1);
 const LEDIFF = (a, b) => (WPP_LE.countries[a].both - WPP_LE.countries[b].both).toFixed(1);
 
@@ -242,7 +251,6 @@ const STATIC = {
   '/articles/zodiac-compatibility': { title: 'Zodiac Compatibility — Which Signs Match Best? | BornClock', desc: 'Zodiac compatibility guide — how all 12 signs match in love and friendship. Free compatibility checker plus the best and worst matches for every sign.' },
   '/articles/biorhythm-calculator': { title: 'Biorhythm Calculator — Physical, Emotional, Intellectual | BornClock', desc: 'Free biorhythm calculator — track your physical (23-day), emotional (28-day) and intellectual (33-day) cycles from your date of birth.' },
   '/articles/tarot-card-by-date-of-birth': { title: 'Tarot Card by Date of Birth — Find Your Card | BornClock', desc: 'Find your tarot card by date of birth — your zodiac Major Arcana card and your Life Path tarot card, with meanings. Free tarot-by-birthday guide.' },
-  '/articles/planetary-age-calculator': { title: 'Planetary Age Calculator — Your Age on Every Planet | BornClock', desc: 'How old are you on Mercury, Mars, Jupiter? Free planetary age calculator — your age on all 7 planets from your date of birth, based on orbital periods.' },
   '/articles/chinese-zodiac-by-year': { title: 'Chinese Zodiac by Year — Find Your Animal Sign | BornClock', desc: 'Chinese zodiac by birth year — find your animal sign and its personality, luck and compatibility. All 12 animals with a free year-to-animal calculator.' },
   '/articles/birth-month-personality': { title: 'Birth Month Personality — What Your Month Says | BornClock', desc: 'Birth month personality guide — the zodiac sign and traits linked to each of the 12 months, plus the science of seasonal birth effects.' },
   '/articles/epigenetics-and-longevity': { title: 'Epigenetics and Longevity — How Lifestyle Rewrites Genes | BornClock', desc: 'Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 proven interventions.' },
@@ -277,7 +285,7 @@ const STATIC = {
   '/born-on':               { title: 'Celebrities Born On — Browse by Birthday | BornClock', desc: 'Browse celebrities by birthday month and day. Discover famous people born on every date of the year, ranked by global recognition.' },
   '/born-in':               { title: 'Born in Each Month — Birthstones & Zodiac | BornClock', desc: 'Browse all 12 birth months: the zodiac signs, birthstone and birth flowers of each, plus the famous people born in it. Cultural tradition and celebration — never a prediction.' },
   '/tarot-card-by-birthday':{ title: 'Tarot Card by Birthday — Your Major Arcana | BornClock', desc: 'Find your personal Major Arcana tarot card from your date of birth. Full card meaning, symbolism, and how it relates to your life path.' },
-  '/tarot-reading':         { title: 'Free Interactive Tarot Reading — Daily, Yes/No & Love | BornClock', desc: 'Draw your own tarot cards free: a daily card, a yes/no answer, and a 3-card love spread from the full Major Arcana — with position- and orientation-aware interpretations.' },
+  '/tarot-reading':         { title: 'Free Interactive Tarot Reading — Daily, Yes/No & Love | BornClock', desc: 'Draw your own tarot cards free: a daily card and a 3-card love spread from the Major Arcana, plus a one-card yes/no answer from all 78 cards — each card explained.' },
   '/moon-sign':             { title: 'Moon Sign Calculator — Find Your Vedic & Western Moon Sign | BornClock', desc: 'Calculate your Moon sign from date of birth. Understand how your Moon sign shapes emotions, instincts, and inner life in both Western and Vedic astrology.' },
   '/gift':                  { title: 'Gift a Birthday Blueprint — The Perfect Gift | BornClock', desc: 'Anyone can send a gift card. The Birthday Blueprint is a personalised 9-section keepsake built from their birth date — celebrity twins, zodiac, numerology, birthstone and more. Instant delivery.' },
   '/coach':                 { title: 'AI Longevity Coach — Your Life-Expectancy Forecast | BornClock', desc: 'A personal AI longevity coach that explains your life-expectancy forecast and health factors in plain language, with evidence-based next steps. It explains your data — it never diagnoses.' },
@@ -413,6 +421,21 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /zodiac/:sign/today — daily Western horoscope (Batch 7). The Worker replaces this with
+  // the dated title/description each India day (src/lib/daily); this is the build-time base.
+  {
+    const zt = route.match(/^\/zodiac\/([a-z]+)\/today$/);
+    if (zt) {
+      const z = ZODIAC[zt[1]];
+      if (!z) return null;
+      const name = zt[1].charAt(0).toUpperCase() + zt[1].slice(1);
+      return {
+        title: `${name} Horoscope Today — Western Astrology | BornClock`,
+        description: `Today's ${name} horoscope (Western, tropical) from the real positions of the Moon, Sun, Mercury, Venus and Mars — love, work and wellbeing, with why.`,
+      };
+    }
+  }
+
   // /zodiac/:sign
   if (route.startsWith('/zodiac/')) {
     const sign = route.slice(8);
@@ -502,20 +525,42 @@ export function getTitleForRoute(route) {
   }
 
   {
-    const pc = { delhi: 'Delhi', mumbai: 'Mumbai', bengaluru: 'Bengaluru', kolkata: 'Kolkata', chennai: 'Chennai', hyderabad: 'Hyderabad', pune: 'Pune', ahmedabad: 'Ahmedabad', jaipur: 'Jaipur', lucknow: 'Lucknow' };
+    // Batch 7 (W7): 50 Panchang cities from src/data/panchangCities.json. These strings
+    // mirror pageMeta()/indexMeta() in src/lib/vedic/panchangText.ts (checked by
+    // src/lib/vedic/__tests__/panchangPages.test.ts).
+    const pc = PANCHANG_CITY_NAMES;
     if (route === '/glossary') return {
       title: 'Astrology Glossary — Every Vedic Term Explained Simply | BornClock',
       description: 'Plain-language meanings of every astrology term on BornClock — Lagna, Nakshatra, Dasha, Guna Milan kootas, Porutham, Tithi, Rahu Kaal, Choghadiya, Shadbala, Navamsa, doshas and more — with Hindi names.',
     };
     if (route === '/panchang') return {
       title: "Today's Panchang — Tithi, Nakshatra & Rahu Kaal | BornClock",
-      description: "Today's Panchang: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal, Gulika, Yamaganda and the day & night Choghadiya — computed from real sunrise/sunset for your city.",
+      description: "Today's Panchang: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal, Brahma Muhurta, Amrit Kalam, Varjyam and the day & night Choghadiya — for any city and any date.",
     };
-    const m = route.match(/^\/panchang\/([a-z-]+)$/);
-    if (m && pc[m[1]]) return {
-      title: `Panchang for ${pc[m[1]]} — Tithi, Nakshatra & Rahu Kaal | BornClock`,
-      description: `Today's Panchang for ${pc[m[1]]}: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal and Choghadiya — computed from real sunrise/sunset for ${pc[m[1]]}.`,
+    if (route === '/rahu-kaal') return {
+      title: 'Rahu Kaal Today — Any City, Any Date | BornClock',
+      description: "Today's Rahu Kaal, Gulika Kaal and Yamaganda for 50 Indian cities or any place you search — worked out from real sunrise and sunset, with the week ahead and any date.",
     };
+    if (route === '/choghadiya') return {
+      title: 'Choghadiya Today — Day & Night, Any City | BornClock',
+      description: "Today's day and night Choghadiya — Amrit, Shubh, Labh, Char, Udveg, Kaal and Rog — for 50 Indian cities or any place you search, from real sunrise and sunset, for any date.",
+    };
+    const m = route.match(/^\/(panchang|rahu-kaal|choghadiya)\/([a-z-]+)$/);
+    if (m && pc[m[2]]) {
+      const n = pc[m[2]];
+      if (m[1] === 'rahu-kaal') return {
+        title: `Rahu Kaal Today in ${n} — Gulika & Yamaganda | BornClock`,
+        description: `Today's Rahu Kaal for ${n}, with Gulika Kaal, Yamaganda, Dur Muhurtam and Varjyam — worked out from the real sunrise and sunset in ${n}, plus the week ahead.`,
+      };
+      if (m[1] === 'choghadiya') return {
+        title: `Choghadiya Today in ${n} — Day & Night | BornClock`,
+        description: `Today's day and night Choghadiya for ${n} — Amrit, Shubh, Labh, Char, Udveg, Kaal and Rog slots from the real sunrise and sunset in ${n}.`,
+      };
+      return {
+        title: `Panchang for ${n} — Tithi, Nakshatra & Rahu Kaal | BornClock`,
+        description: `Today's Panchang for ${n}: Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal, Brahma Muhurta, Amrit Kalam, Varjyam and Choghadiya — from real sunrise/sunset.`,
+      };
+    }
     // Hindi Panchang (P4-LANG)
     const pcHi = { delhi: 'दिल्ली', mumbai: 'मुंबई', bengaluru: 'बेंगलुरु', kolkata: 'कोलकाता', chennai: 'चेन्नई', hyderabad: 'हैदराबाद', pune: 'पुणे', ahmedabad: 'अहमदाबाद', jaipur: 'जयपुर', lucknow: 'लखनऊ' };
     if (route === '/hi/panchang') return {
@@ -652,6 +697,16 @@ export function getTitleForRoute(route) {
     }
   }
 
+  // /angel-numbers/:number (Batch 7, W6) — descriptions shared with the page via JSON;
+  // title template mirrors angelTitle() in src/data/angelNumbers.ts.
+  {
+    const m = route.match(/^\/angel-numbers\/(\d+)$/);
+    if (m && ANGEL_SEO[m[1]]) return {
+      title: `Angel Number ${m[1]} Meaning — Love, Career & Twin Flame | BornClock`,
+      description: ANGEL_SEO[m[1]],
+    };
+  }
+
   // /divisional-charts[/:slug]
   if (route === '/divisional-charts') return {
     title: 'Divisional Charts (Vargas) — D1 to D60 Explained | BornClock',
@@ -756,6 +811,9 @@ export function getTitleForRoute(route) {
     description: "A free, gentle Child (Bal) Kundli: temperament, learning strengths, talents, favourable periods, name sounds and calm wellbeing guidance from your child's chart.",
   };
 
+  // /tarot/cards and /tarot/cards/:slug (Batch 7 / W5)
+  if (TAROT_META[route]) return { title: TAROT_META[route].title, description: TAROT_META[route].description };
+
   // /nakshatra and /nakshatra/:slug
   if (route === '/nakshatra') {
     return {
@@ -781,6 +839,36 @@ export function getTitleForRoute(route) {
       return {
         title: `${name} Nakshatra — Meaning, Pada & Ruling Planet | BornClock`,
         description: `${name} Nakshatra: meaning, ruling planet and Vimshottari period, deity, symbol, Gana, Yoni, Nadi, sign span and traditional baby-name sounds for each pada.`,
+      };
+    }
+  }
+
+  // Batch 7 (W8): /baby-names/nakshatra/:slug — must match babyNamesTitle() in
+  // src/pages/BabyNamesNakshatraPage.tsx (a test checks both stay in step).
+  {
+    const m = route.match(/^\/baby-names\/nakshatra\/([a-z-]+)$/);
+    if (m) {
+      const BN = {
+        'ashwini': ['Ashwini', 'Chu, Che, Cho, La'], 'bharani': ['Bharani', 'Li, Lu, Le, Lo'],
+        'krittika': ['Krittika', 'A, I, U, E'], 'rohini': ['Rohini', 'O, Va, Vi, Vu'],
+        'mrigashira': ['Mrigashira', 'Ve, Vo, Ka, Ki'], 'ardra': ['Ardra', 'Ku, Gha, Ing, Chha'],
+        'punarvasu': ['Punarvasu', 'Ke, Ko, Ha, Hi'], 'pushya': ['Pushya', 'Hu, He, Ho, Da'],
+        'ashlesha': ['Ashlesha', 'Di, Du, De, Do'], 'magha': ['Magha', 'Ma, Mi, Mu, Me'],
+        'purva-phalguni': ['Purva Phalguni', 'Mo, Ta, Ti, Tu'], 'uttara-phalguni': ['Uttara Phalguni', 'Te, To, Pa, Pi'],
+        'hasta': ['Hasta', 'Pu, Sha, Na, Tha'], 'chitra': ['Chitra', 'Pe, Po, Ra, Ri'],
+        'swati': ['Swati', 'Ru, Re, Ro, Ta'], 'vishakha': ['Vishakha', 'Ti, Tu, Te, To'],
+        'anuradha': ['Anuradha', 'Na, Ni, Nu, Ne'], 'jyeshtha': ['Jyeshtha', 'No, Ya, Yi, Yu'],
+        'mula': ['Mula', 'Ye, Yo, Bha, Bhi'], 'purva-ashadha': ['Purva Ashadha', 'Bhu, Dha, Pha, Dha'],
+        'uttara-ashadha': ['Uttara Ashadha', 'Bhe, Bho, Ja, Ji'], 'shravana': ['Shravana', 'Khi, Khu, Khe, Kho'],
+        'dhanishtha': ['Dhanishtha', 'Ga, Gi, Gu, Ge'], 'shatabhisha': ['Shatabhisha', 'Go, Sa, Si, Su'],
+        'purva-bhadrapada': ['Purva Bhadrapada', 'Se, So, Da, Di'], 'uttara-bhadrapada': ['Uttara Bhadrapada', 'Du, Tha, Jha, Yna'],
+        'revati': ['Revati', 'De, Do, Cha, Chi'],
+      };
+      const e = BN[m[1]];
+      if (!e) return null;
+      return {
+        title: `${e[0]} Nakshatra Baby Names — Letters ${e[1]} | BornClock`,
+        description: `Baby names for ${e[0]} Nakshatra: the four pada starting letters ${e[1]}, the Moon sign of each pada, the presiding deity and names with meanings.`,
       };
     }
   }

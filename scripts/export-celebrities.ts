@@ -18,6 +18,7 @@ import * as dotenv from 'dotenv';
 import { nameToSlug, BLOCKED_IDS } from './add-celebrity-slugs';
 import { INDIAN_CELEBRITIES } from '../src/data/indianCelebrities';
 import { applyCelebRecordFixes } from '../src/lib/celebrityFacts';
+import { dedupeCelebrities, recordRetiredSlugs } from '../src/lib/celebrityDedupe';
 
 dotenv.config({ path: '.env.local' });
 
@@ -38,6 +39,8 @@ interface UnifiedCelebrity {
   sitelinks?: number | null;
   source: 'static' | 'db';
 }
+
+const REDIRECTS_FILE = 'src/data/celebritySlugRedirects.json';
 
 const monthDay = (d: string | null): string | null => {
   if (!d) return null;
@@ -181,6 +184,21 @@ async function main() {
   // wrong value, so it becomes a no-op once the DB itself is corrected.
   for (let i = 0; i < out.length; i++) out[i] = applyCelebRecordFixes(out[i] as unknown as Record<string, unknown>) as unknown as UnifiedCelebrity;
 
+  // Batch 7 (SEO): one page per person. Collapse records that are the same person
+  // (same normalised name + birth date, or a checked alias such as
+  // "Bhimrao Ramji Ambedkar" → bhimrao-ambedkar), merging the DB fields into the
+  // kept record, and remember every retired slug so the Worker 301s it to the kept
+  // page (src/data/celebritySlugRedirects.json, append-only).
+  const dd = dedupeCelebrities(out as unknown as Record<string, unknown>[]);
+  out.length = 0;
+  out.push(...(dd.list as unknown as UnifiedCelebrity[]));
+  for (const m of dd.merges) console.log(`  merged duplicate: ${m.retired} → ${m.kept} (${m.reason})`);
+  const redirects = recordRetiredSlugs(
+    existsSync(REDIRECTS_FILE) ? JSON.parse(readFileSync(REDIRECTS_FILE, 'utf8')) : {},
+    dd.retired,
+    new Set(out.map(c => c.slug)),
+  );
+
   const indianCount = out.filter(c => c.nationality_code === 'IN').length;
   const payload = {
     generated_at: '__STAMP__',
@@ -209,6 +227,7 @@ async function main() {
     }
   }
   writeFileSync('src/data/celebrities.json', JSON.stringify(payload, null, 2));
+  writeFileSync(REDIRECTS_FILE, JSON.stringify(redirects, null, 2) + '\n');
   console.log(`\n✅ Wrote src/data/celebrities.json — total ${payload.total}, indian ${indianCount}.`);
 }
 

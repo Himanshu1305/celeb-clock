@@ -70,6 +70,7 @@ const WeightOnPlanetsPage = lazyWithReload(() => import("./pages/WeightOnPlanets
 const Methodology = lazyWithReload(() => import("./pages/Methodology"));
 const EditorialPolicy = lazyWithReload(() => import("./pages/EditorialPolicy"));
 const ZodiacSign = lazyWithReload(() => import("./pages/ZodiacSign"));
+const ZodiacToday = lazyWithReload(() => import("./pages/ZodiacToday"));
 const BirthstonePage = lazyWithReload(() => import("./pages/BirthstonePage"));
 const NumerologyNumber = lazyWithReload(() => import("./pages/NumerologyNumber"));
 const GenerationPage = lazyWithReload(() => import("./pages/Generation"));
@@ -103,7 +104,6 @@ const RetirementLifeExpectancyArticle = lazyWithReload(() => import("./pages/art
 const ZodiacCompatibilityArticle = lazyWithReload(() => import("./pages/articles/ZodiacCompatibilityArticle"));
 const BiorhythmArticle = lazyWithReload(() => import("./pages/articles/BiorhythmArticle"));
 const TarotByDateOfBirthArticle = lazyWithReload(() => import("./pages/articles/TarotByDateOfBirthArticle"));
-const PlanetaryAgeArticle = lazyWithReload(() => import("./pages/articles/PlanetaryAgeArticle"));
 const ChineseZodiacArticle = lazyWithReload(() => import("./pages/articles/ChineseZodiacArticle"));
 const BirthMonthPersonalityArticle = lazyWithReload(() => import("./pages/articles/BirthMonthPersonalityArticle"));
 const EpigeneticsArticle = lazyWithReload(() => import("./pages/articles/EpigeneticsArticle"));
@@ -163,6 +163,7 @@ const WhatIsEpigeneticAge = lazyWithReload(() => import('@/pages/answers/WhatIsE
 const WhatIsVedicAstrology = lazyWithReload(() => import('@/pages/answers/WhatIsVedicAstrology'));
 const TarotByBirthday = lazyWithReload(() => import('@/pages/TarotByBirthday'));
 const TarotReading = lazyWithReload(() => import('@/pages/TarotReading'));
+const TarotCardPage = lazyWithReload(() => import('@/pages/TarotCardPage'));
 const MoonSignPage = lazyWithReload(() => import('@/pages/MoonSignPage'));
 const NameNumerologyPage = lazyWithReload(() => import('@/pages/NameNumerologyPage'));
 const BiorhythmPage = lazyWithReload(() => import('@/pages/BiorhythmPage'));
@@ -178,11 +179,13 @@ const ManglikPage = lazyWithReload(() => import('@/pages/ManglikPage'));
 const KaalSarpDoshaPage = lazyWithReload(() => import('@/pages/KaalSarpDoshaPage'));
 const PersonalYearNumberPage = lazyWithReload(() => import('@/pages/PersonalYearNumberPage'));
 const AngelNumbersPage = lazyWithReload(() => import('@/pages/AngelNumbersPage'));
+const AngelNumberPage = lazyWithReload(() => import('@/pages/AngelNumberPage'));
 const DashaCalculatorPage = lazyWithReload(() => import('@/pages/DashaCalculatorPage'));
 const MuhuratPage = lazyWithReload(() => import('@/pages/MuhuratPage'));
 const CareerReportPage = lazyWithReload(() => import('@/pages/CareerReportPage'));
 const GemstonePage = lazyWithReload(() => import('@/pages/GemstonePage'));
 const BabyNamesPage = lazyWithReload(() => import('@/pages/BabyNamesPage'));
+const BabyNamesNakshatraPage = lazyWithReload(() => import('@/pages/BabyNamesNakshatraPage'));
 const RashifalPage = lazyWithReload(() => import('@/pages/hi/RashifalPage'));
 const HindiPanchangPage = lazyWithReload(() => import('@/pages/hi/PanchangPage'));
 const RashifalIndex = lazyWithReload(() => import('@/pages/RashifalIndex'));
@@ -210,6 +213,8 @@ const ChildKundliPage = lazyWithReload(() => import('@/pages/ChildKundliPage'));
 const BlueZonesIndex = lazyWithReload(() => import('@/pages/BlueZonesIndex'));
 const BlueZonesFactor = lazyWithReload(() => import('@/pages/BlueZonesFactor'));
 const PanchangPage = lazyWithReload(() => import('@/pages/PanchangPage'));
+const RahuKaalPage = lazyWithReload(() => import('@/pages/RahuKaalPage'));
+const ChoghadiyaPage = lazyWithReload(() => import('@/pages/ChoghadiyaPage'));
 const GlossaryPage = lazyWithReload(() => import('@/pages/GlossaryPage'));
 const RemindersPage = lazyWithReload(() => import('@/pages/RemindersPage'));
 const KundaliCompatArticle = lazyWithReload(() => import('@/pages/articles/KundaliCompatArticle'));
@@ -295,6 +300,7 @@ const App = () => (
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/zodiac" element={<Zodiac />} />
               <Route path="/zodiac/:sign" element={<ZodiacSign />} />
+              <Route path="/zodiac/:sign/today" element={<ZodiacToday />} />
               <Route path="/birthstone" element={<Birthstone />} />
               <Route path="/birthstone/:month" element={<BirthstonePage />} />
               <Route path="/life-expectancy" element={<LifeExpectancy />} />
@@ -361,7 +367,8 @@ const App = () => (
               <Route path="/articles/zodiac-compatibility" element={<ZodiacCompatibilityArticle />} />
               <Route path="/articles/biorhythm-calculator" element={<BiorhythmArticle />} />
               <Route path="/articles/tarot-card-by-date-of-birth" element={<TarotByDateOfBirthArticle />} />
-              <Route path="/articles/planetary-age-calculator" element={<PlanetaryAgeArticle />} />
+              {/* Batch 7: same intent as /planetary-age (same title, same calculator) → 301 there. */}
+              <Route path="/articles/planetary-age-calculator" element={<LegacyRedirect otherwise="/planetary-age/" />} />
               <Route path="/articles/chinese-zodiac-by-year" element={<ChineseZodiacArticle />} />
               <Route path="/articles/birth-month-personality" element={<BirthMonthPersonalityArticle />} />
               <Route path="/articles/epigenetics-and-longevity" element={<EpigeneticsArticle />} />
@@ -425,6 +432,8 @@ const App = () => (
               <Route path="/answers/what-is-vedic-astrology" element={<WhatIsVedicAstrology />} />
               <Route path="/tarot-card-by-birthday" element={<TarotByBirthday />} />
               <Route path="/tarot-reading" element={<TarotReading />} />
+              <Route path="/tarot/cards" element={<TarotCardPage />} />
+              <Route path="/tarot/cards/:slug" element={<TarotCardPage />} />
               <Route path="/moon-sign" element={<MoonSignPage />} />
               <Route path="/name-numerology" element={<NameNumerologyPage />} />
               <Route path="/biorhythm" element={<BiorhythmPage />} />
@@ -440,11 +449,13 @@ const App = () => (
               <Route path="/kaal-sarp-dosha" element={<KaalSarpDoshaPage />} />
               <Route path="/personal-year-number" element={<PersonalYearNumberPage />} />
               <Route path="/angel-numbers" element={<AngelNumbersPage />} />
+              <Route path="/angel-numbers/:number" element={<AngelNumberPage />} />
               <Route path="/dasha-calculator" element={<DashaCalculatorPage />} />
               <Route path="/muhurat" element={<MuhuratPage />} />
               <Route path="/career-report" element={<CareerReportPage />} />
               <Route path="/gemstones" element={<GemstonePage />} />
               <Route path="/baby-names" element={<BabyNamesPage />} />
+              <Route path="/baby-names/nakshatra/:slug" element={<BabyNamesNakshatraPage />} />
               <Route path="/hi/rashifal/:rashi" element={<RashifalPage />} />
               <Route path="/hi/rashifal" element={<RashifalPage />} />
               <Route path="/hi/panchang" element={<HindiPanchangPage />} />
@@ -489,6 +500,10 @@ const App = () => (
               <Route path="/glossary" element={<GlossaryPage />} />
               <Route path="/panchang" element={<PanchangPage />} />
               <Route path="/panchang/:city" element={<PanchangPage />} />
+              <Route path="/rahu-kaal" element={<RahuKaalPage />} />
+              <Route path="/rahu-kaal/:city" element={<RahuKaalPage />} />
+              <Route path="/choghadiya" element={<ChoghadiyaPage />} />
+              <Route path="/choghadiya/:city" element={<ChoghadiyaPage />} />
               <Route path="/born-on/:month/:day/personality" element={<LegacyRedirect />} />
               <Route path="/reminders" element={<RemindersPage />} />
               <Route path="/articles/kundali-compatibility" element={<KundaliCompatArticle />} />

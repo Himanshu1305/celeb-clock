@@ -1,0 +1,456 @@
+{
+ "_source": "Ranks and populations: Wikipedia, 'List of cities in India by population' (Census of India 2011, municipal-corporation population), https://en.wikipedia.org/wiki/List_of_cities_in_India_by_population, opened 25 Oct 2026. Coordinates: src/data/cityDataset.ts, except Pimpri-Chinchwad, Kalyan-Dombivli and Vasai-Virar from their Wikipedia infoboxes (opened 25 Oct 2026). Hubballi-Dharwad uses the Hubli coordinates; Chhatrapati Sambhajinagar the Aurangabad entry; Prayagraj the Allahabad entry.",
+ "timezone": "Asia/Kolkata",
+ "cities": [
+  {
+   "rank": 1,
+   "slug": "mumbai",
+   "name": "Mumbai",
+   "state": "Maharashtra",
+   "population2011": 12442373,
+   "lat": 19.076,
+   "lon": 72.8777
+  },
+  {
+   "rank": 2,
+   "slug": "delhi",
+   "name": "Delhi",
+   "state": "Delhi",
+   "population2011": 11034555,
+   "lat": 28.6139,
+   "lon": 77.209
+  },
+  {
+   "rank": 3,
+   "slug": "bengaluru",
+   "name": "Bengaluru",
+   "state": "Karnataka",
+   "population2011": 8443675,
+   "lat": 12.9716,
+   "lon": 77.5946
+  },
+  {
+   "rank": 4,
+   "slug": "hyderabad",
+   "name": "Hyderabad",
+   "state": "Telangana",
+   "population2011": 6993262,
+   "lat": 17.385,
+   "lon": 78.4867
+  },
+  {
+   "rank": 5,
+   "slug": "chennai",
+   "name": "Chennai",
+   "state": "Tamil Nadu",
+   "population2011": 6748026,
+   "lat": 13.0827,
+   "lon": 80.2707
+  },
+  {
+   "rank": 6,
+   "slug": "ahmedabad",
+   "name": "Ahmedabad",
+   "state": "Gujarat",
+   "population2011": 5577940,
+   "lat": 23.0225,
+   "lon": 72.5714
+  },
+  {
+   "rank": 7,
+   "slug": "kolkata",
+   "name": "Kolkata",
+   "state": "West Bengal",
+   "population2011": 4496694,
+   "lat": 22.5726,
+   "lon": 88.3639
+  },
+  {
+   "rank": 8,
+   "slug": "surat",
+   "name": "Surat",
+   "state": "Gujarat",
+   "population2011": 4467797,
+   "lat": 21.1702,
+   "lon": 72.8311
+  },
+  {
+   "rank": 9,
+   "slug": "pune",
+   "name": "Pune",
+   "state": "Maharashtra",
+   "population2011": 3124458,
+   "lat": 18.5204,
+   "lon": 73.8567
+  },
+  {
+   "rank": 10,
+   "slug": "jaipur",
+   "name": "Jaipur",
+   "state": "Rajasthan",
+   "population2011": 3046163,
+   "lat": 26.9124,
+   "lon": 75.7873
+  },
+  {
+   "rank": 11,
+   "slug": "lucknow",
+   "name": "Lucknow",
+   "state": "Uttar Pradesh",
+   "population2011": 2817105,
+   "lat": 26.8467,
+   "lon": 80.9462
+  },
+  {
+   "rank": 12,
+   "slug": "kanpur",
+   "name": "Kanpur",
+   "state": "Uttar Pradesh",
+   "population2011": 2765348,
+   "lat": 26.4499,
+   "lon": 80.3319
+  },
+  {
+   "rank": 13,
+   "slug": "nagpur",
+   "name": "Nagpur",
+   "state": "Maharashtra",
+   "population2011": 2405665,
+   "lat": 21.1458,
+   "lon": 79.0882
+  },
+  {
+   "rank": 14,
+   "slug": "indore",
+   "name": "Indore",
+   "state": "Madhya Pradesh",
+   "population2011": 1964086,
+   "lat": 22.7196,
+   "lon": 75.8577
+  },
+  {
+   "rank": 15,
+   "slug": "thane",
+   "name": "Thane",
+   "state": "Maharashtra",
+   "population2011": 1841488,
+   "lat": 19.2183,
+   "lon": 72.9781
+  },
+  {
+   "rank": 16,
+   "slug": "bhopal",
+   "name": "Bhopal",
+   "state": "Madhya Pradesh",
+   "population2011": 1798218,
+   "lat": 23.2599,
+   "lon": 77.4126
+  },
+  {
+   "rank": 17,
+   "slug": "visakhapatnam",
+   "name": "Visakhapatnam",
+   "state": "Andhra Pradesh",
+   "population2011": 1728128,
+   "lat": 17.6868,
+   "lon": 83.2185
+  },
+  {
+   "rank": 18,
+   "slug": "pimpri-chinchwad",
+   "name": "Pimpri-Chinchwad",
+   "state": "Maharashtra",
+   "population2011": 1727692,
+   "lat": 18.61806,
+   "lon": 73.80111
+  },
+  {
+   "rank": 19,
+   "slug": "patna",
+   "name": "Patna",
+   "state": "Bihar",
+   "population2011": 1684222,
+   "lat": 25.5941,
+   "lon": 85.1376
+  },
+  {
+   "rank": 20,
+   "slug": "vadodara",
+   "name": "Vadodara",
+   "state": "Gujarat",
+   "population2011": 1670806,
+   "lat": 22.3072,
+   "lon": 73.1812
+  },
+  {
+   "rank": 21,
+   "slug": "ghaziabad",
+   "name": "Ghaziabad",
+   "state": "Uttar Pradesh",
+   "population2011": 1648643,
+   "lat": 28.6692,
+   "lon": 77.4538
+  },
+  {
+   "rank": 22,
+   "slug": "ludhiana",
+   "name": "Ludhiana",
+   "state": "Punjab",
+   "population2011": 1618879,
+   "lat": 30.901,
+   "lon": 75.8573
+  },
+  {
+   "rank": 23,
+   "slug": "agra",
+   "name": "Agra",
+   "state": "Uttar Pradesh",
+   "population2011": 1585704,
+   "lat": 27.1767,
+   "lon": 78.0081
+  },
+  {
+   "rank": 24,
+   "slug": "nashik",
+   "name": "Nashik",
+   "state": "Maharashtra",
+   "population2011": 1486053,
+   "lat": 19.9975,
+   "lon": 73.7898
+  },
+  {
+   "rank": 25,
+   "slug": "faridabad",
+   "name": "Faridabad",
+   "state": "Haryana",
+   "population2011": 1414050,
+   "lat": 28.4089,
+   "lon": 77.3178
+  },
+  {
+   "rank": 26,
+   "slug": "meerut",
+   "name": "Meerut",
+   "state": "Uttar Pradesh",
+   "population2011": 1305429,
+   "lat": 28.9845,
+   "lon": 77.7064
+  },
+  {
+   "rank": 27,
+   "slug": "rajkot",
+   "name": "Rajkot",
+   "state": "Gujarat",
+   "population2011": 1286678,
+   "lat": 22.3039,
+   "lon": 70.8022
+  },
+  {
+   "rank": 28,
+   "slug": "kalyan-dombivli",
+   "name": "Kalyan-Dombivli",
+   "state": "Maharashtra",
+   "population2011": 1247327,
+   "lat": 19.233,
+   "lon": 73.133
+  },
+  {
+   "rank": 29,
+   "slug": "vasai-virar",
+   "name": "Vasai-Virar",
+   "state": "Maharashtra",
+   "population2011": 1222390,
+   "lat": 19.47,
+   "lon": 72.8
+  },
+  {
+   "rank": 30,
+   "slug": "varanasi",
+   "name": "Varanasi",
+   "state": "Uttar Pradesh",
+   "population2011": 1198491,
+   "lat": 25.3176,
+   "lon": 82.9739
+  },
+  {
+   "rank": 31,
+   "slug": "srinagar",
+   "name": "Srinagar",
+   "state": "Jammu and Kashmir",
+   "population2011": 1180570,
+   "lat": 34.0837,
+   "lon": 74.7973
+  },
+  {
+   "rank": 32,
+   "slug": "chhatrapati-sambhajinagar",
+   "name": "Chhatrapati Sambhajinagar",
+   "state": "Maharashtra",
+   "population2011": 1175116,
+   "lat": 19.8762,
+   "lon": 75.3433
+  },
+  {
+   "rank": 33,
+   "slug": "dhanbad",
+   "name": "Dhanbad",
+   "state": "Jharkhand",
+   "population2011": 1162472,
+   "lat": 23.7957,
+   "lon": 86.4304
+  },
+  {
+   "rank": 34,
+   "slug": "amritsar",
+   "name": "Amritsar",
+   "state": "Punjab",
+   "population2011": 1132383,
+   "lat": 31.634,
+   "lon": 74.8723
+  },
+  {
+   "rank": 35,
+   "slug": "navi-mumbai",
+   "name": "Navi Mumbai",
+   "state": "Maharashtra",
+   "population2011": 1120547,
+   "lat": 19.033,
+   "lon": 73.0297
+  },
+  {
+   "rank": 36,
+   "slug": "prayagraj",
+   "name": "Prayagraj",
+   "state": "Uttar Pradesh",
+   "population2011": 1112544,
+   "lat": 25.4358,
+   "lon": 81.8463
+  },
+  {
+   "rank": 37,
+   "slug": "howrah",
+   "name": "Howrah",
+   "state": "West Bengal",
+   "population2011": 1077075,
+   "lat": 22.5958,
+   "lon": 88.2636
+  },
+  {
+   "rank": 38,
+   "slug": "ranchi",
+   "name": "Ranchi",
+   "state": "Jharkhand",
+   "population2011": 1073427,
+   "lat": 23.3441,
+   "lon": 85.3096
+  },
+  {
+   "rank": 39,
+   "slug": "jabalpur",
+   "name": "Jabalpur",
+   "state": "Madhya Pradesh",
+   "population2011": 1055525,
+   "lat": 23.1815,
+   "lon": 79.9864
+  },
+  {
+   "rank": 40,
+   "slug": "gwalior",
+   "name": "Gwalior",
+   "state": "Madhya Pradesh",
+   "population2011": 1054420,
+   "lat": 26.2183,
+   "lon": 78.1828
+  },
+  {
+   "rank": 41,
+   "slug": "coimbatore",
+   "name": "Coimbatore",
+   "state": "Tamil Nadu",
+   "population2011": 1050721,
+   "lat": 11.0168,
+   "lon": 76.9558
+  },
+  {
+   "rank": 42,
+   "slug": "vijayawada",
+   "name": "Vijayawada",
+   "state": "Andhra Pradesh",
+   "population2011": 1034358,
+   "lat": 16.5062,
+   "lon": 80.648
+  },
+  {
+   "rank": 43,
+   "slug": "jodhpur",
+   "name": "Jodhpur",
+   "state": "Rajasthan",
+   "population2011": 1033756,
+   "lat": 26.2389,
+   "lon": 73.0243
+  },
+  {
+   "rank": 44,
+   "slug": "madurai",
+   "name": "Madurai",
+   "state": "Tamil Nadu",
+   "population2011": 1017865,
+   "lat": 9.9252,
+   "lon": 78.1198
+  },
+  {
+   "rank": 45,
+   "slug": "raipur",
+   "name": "Raipur",
+   "state": "Chhattisgarh",
+   "population2011": 1010433,
+   "lat": 21.2514,
+   "lon": 81.6296
+  },
+  {
+   "rank": 46,
+   "slug": "kota",
+   "name": "Kota",
+   "state": "Rajasthan",
+   "population2011": 1001694,
+   "lat": 25.2138,
+   "lon": 75.8648
+  },
+  {
+   "rank": 47,
+   "slug": "chandigarh",
+   "name": "Chandigarh",
+   "state": "Chandigarh",
+   "population2011": 961587,
+   "lat": 30.7333,
+   "lon": 76.7794
+  },
+  {
+   "rank": 48,
+   "slug": "guwahati",
+   "name": "Guwahati",
+   "state": "Assam",
+   "population2011": 957352,
+   "lat": 26.1445,
+   "lon": 91.7362
+  },
+  {
+   "rank": 49,
+   "slug": "solapur",
+   "name": "Solapur",
+   "state": "Maharashtra",
+   "population2011": 951558,
+   "lat": 17.6599,
+   "lon": 75.9064
+  },
+  {
+   "rank": 50,
+   "slug": "hubballi-dharwad",
+   "name": "Hubballi-Dharwad",
+   "state": "Karnataka",
+   "population2011": 943788,
+   "lat": 15.3647,
+   "lon": 75.124
+  }
+ ]
+}

@@ -1,198 +1,94 @@
 /**
- * आज का पंचांग (Hindi Panchang) — P4-LANG.
- * Hindi version of /panchang, reusing the SAME computeDayPanchang engine, so
- * the Hindi page shows the identical, real, date/city-computed values — only
- * the UI copy is translated. Machine-assisted Hindi, flagged for human review
- * (AutoTranslatedNotice) per the P4 language rule.
+ * आज का पंचांग (Hindi Panchang) — P4-LANG; on the shared daily-page mechanism since
+ * batch 7 (W7), so it shows TODAY between deploys. The day's text comes from the same
+ * per-city data as the English pages, rendered by the Hindi template
+ * (src/lib/daily/kinds/panchangTemplate.ts renderPanchangHiEntry). Machine-assisted
+ * Hindi, flagged for human review (AutoTranslatedNotice) per the P4 language rule.
  */
-import { useMemo, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { PageFAQ } from '@/components/PageFAQ';
 import { AutoTranslatedNotice } from '@/components/AutoTranslatedNotice';
-import { TermTip, NumberNote } from '@/components/vedic/TermTip';
-import { CHOGHADIYA_TERM } from '@/lib/vedic/termDefinitions';
-import { computeDayPanchang, PANCHANG_CITIES, type TimeWindow } from '@/lib/vedic/panchangDay';
-import { karanaName } from '@/lib/vedic/panchang';
+import { TermTip } from '@/components/vedic/TermTip';
+import { PANCHANG_CITIES } from '@/lib/vedic/panchangDay';
+import { HINDI_PANCHANG_SLUGS } from '@/lib/seo/panchangSlugs';
+import { cityHi } from '@/lib/vedic/panchangHindi';
+import { useDailyEntry } from '@/lib/daily/useDailyEntry';
+import { DailyBody, DailyDate, DailyH1, DailyJsonLd } from '@/lib/daily/DailyParts';
+import { hindiPanchangMeta, PANCHANG_INDEX_SLUG } from '@/lib/daily/kinds/panchangTemplate';
+import { formatLongDateHi, istDateISO } from '@/lib/daily/dates';
 
-
-const WEEKDAY_HI: Record<string, string> = {
-  Sunday: 'रविवार', Monday: 'सोमवार', Tuesday: 'मंगलवार', Wednesday: 'बुधवार',
-  Thursday: 'गुरुवार', Friday: 'शुक्रवार', Saturday: 'शनिवार',
-};
-const CITY_HI: Record<string, string> = {
-  delhi: 'दिल्ली', mumbai: 'मुंबई', bengaluru: 'बेंगलुरु', kolkata: 'कोलकाता',
-  chennai: 'चेन्नई', hyderabad: 'हैदराबाद', pune: 'पुणे', ahmedabad: 'अहमदाबाद',
-  jaipur: 'जयपुर', lucknow: 'लखनऊ',
-};
-const cityHi = (slug: string, fallback: string) => CITY_HI[slug] || fallback;
-// Devanagari names for the Panchang limbs (round-2 audit T8: names were left in English letters).
-const TITHI_HI: Record<string, string> = {
-  Pratipada: 'प्रतिपदा', Dwitiya: 'द्वितीया', Tritiya: 'तृतीया', Chaturthi: 'चतुर्थी', Panchami: 'पंचमी', Shashthi: 'षष्ठी',
-  Saptami: 'सप्तमी', Ashtami: 'अष्टमी', Navami: 'नवमी', Dashami: 'दशमी', Ekadashi: 'एकादशी', Dwadashi: 'द्वादशी',
-  Trayodashi: 'त्रयोदशी', Chaturdashi: 'चतुर्दशी', Purnima: 'पूर्णिमा', Amavasya: 'अमावस्या',
-};
-const PAKSHA_HI: Record<string, string> = { Shukla: 'शुक्ल', Krishna: 'कृष्ण' };
-const NAKSHATRA_HI: Record<string, string> = {
-  Ashwini: 'अश्विनी', Bharani: 'भरणी', Krittika: 'कृत्तिका', Rohini: 'रोहिणी', Mrigashira: 'मृगशिरा', Ardra: 'आर्द्रा',
-  Punarvasu: 'पुनर्वसु', Pushya: 'पुष्य', Ashlesha: 'आश्लेषा', Magha: 'मघा', 'Purva Phalguni': 'पूर्वा फाल्गुनी',
-  'Uttara Phalguni': 'उत्तरा फाल्गुनी', Hasta: 'हस्त', Chitra: 'चित्रा', Swati: 'स्वाती', Vishakha: 'विशाखा',
-  Anuradha: 'अनुराधा', Jyeshtha: 'ज्येष्ठा', Mula: 'मूल', 'Purva Ashadha': 'पूर्वाषाढ़ा', 'Uttara Ashadha': 'उत्तराषाढ़ा',
-  Shravana: 'श्रवण', Dhanishtha: 'धनिष्ठा', Shatabhisha: 'शतभिषा', 'Purva Bhadrapada': 'पूर्वा भाद्रपद',
-  'Uttara Bhadrapada': 'उत्तरा भाद्रपद', Revati: 'रेवती',
-};
-const YOGA_HI: Record<string, string> = {
-  Vishkambha: 'विष्कुम्भ', Priti: 'प्रीति', Ayushman: 'आयुष्मान', Saubhagya: 'सौभाग्य', Shobhana: 'शोभन', Atiganda: 'अतिगण्ड',
-  Sukarma: 'सुकर्मा', Dhriti: 'धृति', Shula: 'शूल', Ganda: 'गण्ड', Vriddhi: 'वृद्धि', Dhruva: 'ध्रुव', Vyaghata: 'व्याघात',
-  Harshana: 'हर्षण', Vajra: 'वज्र', Siddhi: 'सिद्धि', Vyatipata: 'व्यतीपात', Variyana: 'वरीयान', Parigha: 'परिघ', Shiva: 'शिव',
-  Siddha: 'सिद्ध', Sadhya: 'साध्य', Shubha: 'शुभ', Shukla: 'शुक्ल', Brahma: 'ब्रह्म', Indra: 'इन्द्र', Vaidhriti: 'वैधृति',
-};
-const KARANA_HI: Record<string, string> = {
-  Bava: 'बव', Balava: 'बालव', Kaulava: 'कौलव', Taitila: 'तैतिल', Gara: 'गर', Vanija: 'वणिज', 'Vishti (Bhadra)': 'विष्टि (भद्रा)',
-  Shakuni: 'शकुनि', Chatushpada: 'चतुष्पद', Naga: 'नाग', Kimstughna: 'किंस्तुघ्न',
-};
-const CHOGH_HI: Record<string, string> = {
-  Amrit: 'अमृत', Shubh: 'शुभ', Labh: 'लाभ', Char: 'चर', Udveg: 'उद्वेग', Kaal: 'काल', Rog: 'रोग',
-};
-const hiEnd = (s: string) => s.replace(' (next day)', ' (अगले दिन)');
-
-const QUALITY_STYLE: Record<TimeWindow['quality'], string> = {
-  good: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-  neutral: 'bg-slate-50 border-slate-200 text-slate-700',
-  bad: 'bg-rose-50 border-rose-200 text-rose-800',
-};
-
-function ChoghadiyaRow({ c }: { c: TimeWindow }) {
-  return (
-    <div className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm ${QUALITY_STYLE[c.quality]}`}>
-      <span className="font-medium">{CHOGHADIYA_TERM[c.name] ? <TermTip id={CHOGHADIYA_TERM[c.name]} lang="hi">{CHOGH_HI[c.name] || c.name}</TermTip> : (CHOGH_HI[c.name] || c.name)}</span>
-      <span className="tabular-nums">{c.start}–{c.end}</span>
-    </div>
-  );
-}
+// Hindi pages exist for 10 cities (batch 7 grew the English list to 50).
+const HI_CITIES = PANCHANG_CITIES.filter(c => HINDI_PANCHANG_SLUGS.has(c.slug));
 
 export default function HindiPanchangPage() {
   const { city: cityParam } = useParams<{ city?: string }>();
-  const initial = PANCHANG_CITIES.find(c => c.slug === cityParam) || PANCHANG_CITIES[0];
-  const [citySlug, setCitySlug] = useState(initial.slug);
-  const city = PANCHANG_CITIES.find(c => c.slug === citySlug) || PANCHANG_CITIES[0];
+  const city = HI_CITIES.find(c => c.slug === cityParam) || HI_CITIES.find(c => c.slug === 'delhi')!;
+  const slug = cityParam ? city.slug : PANCHANG_INDEX_SLUG;
+  const { entry } = useDailyEntry('panchang-hi', slug);
+  const meta = hindiPanchangMeta(slug);
   const cityName = cityHi(city.slug, city.name);
-
-  // The city's local calendar date (UTC fields of this Date = local date there),
-  // so between local midnight and 05:30 IST the page shows today, not yesterday.
-  const todayKey = new Date(Date.now() + city.tz * 3600 * 1000).toISOString().slice(0, 10);
-  const p = useMemo(
-    () => computeDayPanchang(new Date(todayKey + 'T12:00:00Z'), city.lat, city.lon, city.tz, city.name),
-    [city.slug, todayKey],
-  );
-
-  const dateNice = new Date().toLocaleDateString('hi-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-
-  const faqItems = [
-    { question: 'पंचांग क्या है?', answer: 'पंचांग ("पाँच अंग") किसी दिन का वैदिक पंचांग है: तिथि (चंद्र दिवस), नक्षत्र (चंद्रमा का तारा), योग, करण और वार (सप्ताह का दिन)। इससे दिन की गुणवत्ता समझी जाती है और शुभ समय चुना जाता है।' },
-    { question: 'राहु काल क्या है?', answer: 'राहु काल दिन का लगभग 90 मिनट का एक काल है जिसे महत्वपूर्ण कार्य शुरू करने के लिए अशुभ माना जाता है। यह दिन के प्रकाश के आठ बराबर भागों में से एक है और वार के अनुसार बदलता है — इसलिए इसे आपके शहर के वास्तविक सूर्योदय और सूर्यास्त से गणना किया गया है।' },
-    { question: 'चौघड़िया क्या है?', answer: 'चौघड़िया दिन और रात को आठ-आठ भागों में बाँटता है — अमृत, शुभ, लाभ (शुभ), चर (सामान्य) तथा उद्वेग, काल, रोग (बचें)। किसी कार्य के लिए शुभ समय चुनने का यह एक सरल, लोकप्रिय तरीका है।' },
-    { question: 'समय कितने सटीक हैं?', answer: 'सूर्योदय, सूर्यास्त और सभी काल आपके शहर के अक्षांश-देशांतर के लिए सूर्य की वास्तविक खगोलीय स्थिति से गणना किए गए हैं। किसी स्थापित पंचांग (जैसे Drik Panchang) से तुलना करने पर ये एक-दो मिनट के भीतर मेल खाने चाहिए।' },
-  ];
+  const path = cityParam ? `/hi/panchang/${city.slug}` : '/hi/panchang';
 
   return (
     <ToolLayout
       theme="vedic"
       testId="hi-panchang-page"
-      seo={<SEO
-        title={`आज का पंचांग${cityName ? ` — ${cityName}` : ''} | तिथि, नक्षत्र, राहु काल व चौघड़िया | BornClock`}
-        description={`${cityName} का आज का पंचांग: तिथि, नक्षत्र, योग, करण, सूर्योदय, सूर्यास्त, राहु काल, गुलिक, यमगण्ड और दिन-रात का चौघड़िया — वास्तविक सूर्योदय/सूर्यास्त से गणना।`}
-        canonicalUrl={cityParam ? `/hi/panchang/${city.slug}` : '/hi/panchang'}
-        ogImage="https://bornclock.com/og/vedic.png"
-      />}
+      seo={<SEO title={meta.title} description={meta.description} canonicalUrl={path} ogImage="https://bornclock.com/og/vedic.png" />}
       breadcrumb={{ trail: [{ label: 'राशिफल', to: '/hi/rashifal' }], current: `पंचांग · ${cityName}` }}
       footer={{ tagline: 'वास्तविक सूर्योदय और सूर्यास्त से गणना किया गया दैनिक पंचांग।', nav: [{ label: 'राशिफल', to: '/hi/rashifal' }, { label: 'Panchang (English)', to: '/panchang' }, { label: 'मुहूर्त', to: '/muhurat' }] }}
       eyebrow="पंचांग"
-      h1={`आज का पंचांग — ${cityName}`}
-      lead={dateNice}
+      h1={<DailyH1 entry={entry} fallback={meta.h1} />}
+      lead={<span data-testid="hi-panchang-date">{cityParam ? '' : `${cityName} · `}<DailyDate entry={entry} fallback={formatLongDateHi(istDateISO(new Date()))} /></span>}
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
           <AutoTranslatedNotice lang="hi" />
-
-          {/* City selector */}
-          <div className="flex flex-wrap items-center gap-2 mb-6" data-testid="hi-panchang-cities">
-            <span className="text-sm text-muted-foreground">शहर:</span>
-            {PANCHANG_CITIES.map(c => (
-              <button
-                key={c.slug}
-                onClick={() => setCitySlug(c.slug)}
-                className={`px-3 py-1 rounded-lg border text-sm ${c.slug === city.slug ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-foreground hover:bg-primary/5'}`}
-              >
-                {cityHi(c.slug, c.name)}
-              </button>
-            ))}
-          </div>
-
-          {/* Five limbs */}
-          <p className="text-sm text-muted-foreground mb-2">आज के <TermTip id="panchang" lang="hi">पंचांग</TermTip> के पाँच अंग:</p>
-          <div className="grid sm:grid-cols-2 gap-4 mb-2" data-testid="hi-panchang-limbs">
-            <div className="rounded-xl border border-border p-4">
-              <div className="text-xs text-muted-foreground"><TermTip id="tithi" lang="hi">तिथि</TermTip></div>
-              <div className="font-semibold text-foreground">{TITHI_HI[p.tithiName] || p.tithiName} <span className="text-muted-foreground font-normal">(<TermTip id="paksha" lang="hi">{PAKSHA_HI[p.paksha] || p.paksha} पक्ष</TermTip>)</span></div>
-              <div className="text-xs text-muted-foreground tabular-nums">{hiEnd(p.tithiEnd)} तक</div>
-            </div>
-            <div className="rounded-xl border border-border p-4">
-              <div className="text-xs text-muted-foreground"><TermTip id="panchangNakshatra" lang="hi">नक्षत्र</TermTip></div>
-              <div className="font-semibold text-foreground">{NAKSHATRA_HI[p.nakshatra] || p.nakshatra}</div>
-              <div className="text-xs text-muted-foreground tabular-nums">{hiEnd(p.nakshatraEnd)} तक</div>
-            </div>
-            <div className="rounded-xl border border-border p-4">
-              <div className="text-xs text-muted-foreground"><TermTip id="panchangYoga" lang="hi">योग</TermTip></div>
-              <div className="font-semibold text-foreground">{YOGA_HI[p.yoga] || p.yoga}</div>
-              <div className="text-xs text-muted-foreground tabular-nums">{hiEnd(p.yogaEnd)} तक</div>
-            </div>
-            <div className="rounded-xl border border-border p-4">
-              <div className="text-xs text-muted-foreground"><TermTip id="karana" lang="hi">करण</TermTip> · <TermTip id="vara" lang="hi">वार</TermTip></div>
-              <div className="font-semibold text-foreground">{KARANA_HI[karanaName(p.karana)] || karanaName(p.karana)} · {WEEKDAY_HI[p.weekday] || p.weekday}</div>
-              <div className="text-xs text-muted-foreground tabular-nums">करण {hiEnd(p.karanaEnd)} तक</div>
-            </div>
-          </div>
-          <NumberNote testid="hi-panchang-limb-note">हर अंग दिखाए गए समय पर बदलता है; उसके बाद अगला अंग लागू होता है। पंचांग का दिन सूर्योदय से सूर्योदय तक माना जाता है।</NumberNote>
-          <div className="mb-6" />
-
-          {/* Sun + inauspicious windows */}
-          <div className="grid sm:grid-cols-2 gap-4 mb-6">
-            <div className="rounded-xl border border-border p-4" data-testid="hi-panchang-sun">
-              <h2 className="font-semibold text-foreground mb-2">सूर्य</h2>
-              <div className="text-sm text-muted-foreground">सूर्योदय <strong className="text-foreground tabular-nums">{p.sunrise}</strong> · सूर्यास्त <strong className="text-foreground tabular-nums">{p.sunset}</strong></div>
-              <div className="text-sm text-muted-foreground mt-1"><TermTip id="abhijit" lang="hi">अभिजित मुहूर्त</TermTip> <strong className="text-emerald-700 tabular-nums">{p.abhijit.start}–{p.abhijit.end}</strong></div>
-            </div>
-            <div className="rounded-xl border border-border p-4" data-testid="hi-panchang-windows">
-              <h2 className="font-semibold text-foreground mb-2">अशुभ काल</h2>
-              <ul className="text-sm space-y-1">
-                <li className="flex justify-between"><span><TermTip id="rahuKalam" lang="hi">राहु काल</TermTip></span><span className="tabular-nums text-rose-700">{p.rahuKaal.start}–{p.rahuKaal.end}</span></li>
-                <li className="flex justify-between"><span><TermTip id="gulikaKaal" lang="hi">गुलिक काल</TermTip></span><span className="tabular-nums">{p.gulikaKaal.start}–{p.gulikaKaal.end}</span></li>
-                <li className="flex justify-between"><span><TermTip id="yamaganda" lang="hi">यमगण्ड</TermTip></span><span className="tabular-nums">{p.yamaganda.start}–{p.yamaganda.end}</span></li>
-              </ul>
-              <NumberNote testid="hi-panchang-window-note">{cityName} का स्थानीय समय, आज के सूर्योदय-सूर्यास्त से गणना — इन कालों में नया कार्य शुरू न करें; चल रहा कार्य जारी रख सकते हैं।</NumberNote>
-            </div>
-          </div>
-
-          {/* Choghadiya */}
-          <div className="grid sm:grid-cols-2 gap-4 mb-8" data-testid="hi-panchang-choghadiya">
-            <div>
-              <h2 className="font-semibold text-foreground mb-2">दिन का <TermTip id="choghadiya" lang="hi">चौघड़िया</TermTip></h2>
-              <div className="space-y-1">{p.dayChoghadiya.map((c, i) => <ChoghadiyaRow key={i} c={c} />)}</div>
-            </div>
-            <div>
-              <h2 className="font-semibold text-foreground mb-2">रात का <TermTip id="choghadiya" lang="hi">चौघड़िया</TermTip></h2>
-              <div className="space-y-1">{p.nightChoghadiya.map((c, i) => <ChoghadiyaRow key={i} c={c} />)}</div>
-            </div>
-          </div>
-
-          <p className="text-xs text-muted-foreground mb-8">
-            सूर्योदय, सूर्यास्त और प्रत्येक काल {cityName} के निर्देशांकों के लिए सूर्य की वास्तविक खगोलीय स्थिति से गणना किए गए हैं, और पाँच अंग निरयण (लाहिड़ी अयनांश) सूर्य-चंद्र से — वही इंजन जो आपकी कुंडली के पीछे है।{' '}
-            <Link to="/panchang" className="underline">View in English →</Link> · <Link to="/glossary" className="underline">शब्दकोश (Glossary) →</Link>
+          <p className="text-sm mb-4">
+            <Link to={`/panchang/${city.slug}`} className="text-primary hover:underline" data-testid="hi-panchang-english-top">English: Panchang for {city.name} — किसी भी तारीख़ और किसी भी शहर के लिए →</Link>
           </p>
 
-          <PageFAQ items={faqItems} />
+          <nav aria-label="शहर" className="flex flex-wrap items-center gap-2 mb-6" data-testid="hi-panchang-cities">
+            <span className="text-sm text-muted-foreground">शहर:</span>
+            {HI_CITIES.map(c => (
+              <Link key={c.slug} to={`/hi/panchang/${c.slug}`}
+                    className={`px-3 py-1 rounded-lg border text-sm ${c.slug === city.slug && cityParam ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-foreground hover:bg-primary/5'}`}>
+                {cityHi(c.slug, c.name)}
+              </Link>
+            ))}
+          </nav>
+
+          <DailyBody entry={entry} testId="hi-panchang-daily" />
+          <DailyJsonLd entry={entry} path={path} />
+
+          <div className="rounded-xl border border-border p-4 mb-6" data-testid="hi-panchang-terms">
+            <h2 className="font-semibold text-foreground mb-2">इन शब्दों का अर्थ</h2>
+            <ul className="flex flex-wrap gap-2 text-sm">
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="panchang" lang="hi">पंचांग</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="tithi" lang="hi">तिथि</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="paksha" lang="hi">पक्ष</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="panchangNakshatra" lang="hi">नक्षत्र</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="panchangYoga" lang="hi">योग</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="karana" lang="hi">करण</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="vara" lang="hi">वार</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="brahmaMuhurta" lang="hi">ब्रह्म मुहूर्त</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="abhijit" lang="hi">अभिजित मुहूर्त</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="amritKalam" lang="hi">अमृत काल</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="rahuKalam" lang="hi">राहु काल</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="gulikaKaal" lang="hi">गुलिक काल</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="yamaganda" lang="hi">यमगण्ड</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="durMuhurtam" lang="hi">दुर्मुहूर्त</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="varjyam" lang="hi">वर्ज्यम्</TermTip></li>
+              <li className="rounded-full border border-border px-3 py-1"><TermTip id="choghadiya" lang="hi">चौघड़िया</TermTip></li>
+            </ul>
+          </div>
+
+          <div className="rounded-xl border border-border p-4 mb-6 text-sm text-muted-foreground space-y-2" data-testid="hi-panchang-how">
+            <h2 className="font-semibold text-foreground">यह पंचांग कैसे बनता है</h2>
+            <p>पंचांग ("पाँच अंग") किसी दिन की तिथि, नक्षत्र, योग, करण और वार बताता है। ये पाँचों अंग स्थानीय सूर्योदय के समय पढ़े जाते हैं, और निरयण (लाहिड़ी अयनांश) सूर्य-चंद्र से गणना होते हैं — वही इंजन जो आपकी कुंडली के पीछे है।</p>
+            <p>सूर्योदय-सूर्यास्त {cityName} के अक्षांश-देशांतर के लिए सूर्य की वास्तविक स्थिति से निकाले गए हैं। राहु काल, गुलिक और यमगण्ड दिन के आठ बराबर भागों में से एक-एक भाग हैं; अभिजित, दुर्मुहूर्त और ब्रह्म मुहूर्त दिन या रात के पंद्रहवें भाग हैं; अमृत काल और वर्ज्यम् दिन के नक्षत्र के तय हिस्से हैं। समय निकटतम मिनट तक गोल किए गए हैं।</p>
+            <p><Link to={`/panchang/${city.slug}`} className="underline" data-testid="hi-panchang-english-link">View in English ({city.name}) →</Link> · <Link to="/glossary" className="underline">शब्दकोश (Glossary) →</Link></p>
+          </div>
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">कोई महत्वपूर्ण कार्य के लिए तिथि चुन रहे हैं? शुभ मुहूर्त खोजें।</p>

@@ -30,6 +30,13 @@ export interface KundaliData {
     d9: { lagnaSignIndex: number; planets: Array<{ name: string; signIndex: number; house: number }> } | null;
     d10: { lagnaSignIndex: number; planets: Array<{ name: string; signIndex: number; house: number }> } | null;
   };
+  /** Batch 7 W3: all sixteen divisional charts (D1…D60). `timeSensitive` lists the points
+   *  (Lagna / planets) whose sign in that varga changes within ±5 minutes of the birth time. */
+  shodashvarga?: Array<{
+    key: string; division: number; lagnaSignIndex: number;
+    planets: Array<{ name: string; signIndex: number; house: number }>;
+    timeSensitive: string[];
+  }> | null;
 }
 
 export const hasProkeralaKey = (): boolean =>

@@ -4,9 +4,8 @@
  * Each divisional chart (varga) subdivides a 30° sign into smaller parts and
  * re-maps planets, zooming into one area of life. These are descriptive
  * explainer pages. `computedByBornClock` is set ONLY for the vargas our Kundli
- * engine actually computes today (D1, D9, D10, D60) — the others are explained
- * conceptually and honestly labelled as not yet computed here, so we never
- * imply a calculation we don't ship.
+ * engine actually computes and draws. Since Batch 7 (W3) the Kundli draws all
+ * sixteen Parashari vargas (D1…D60), so every explainer here is computed.
  */
 export interface VargaChart {
   slug: string;
@@ -35,7 +34,7 @@ export const VARGAS: VargaChart[] = [
     whatItShows: 'Capacity to earn and hold wealth. Planets fall into either the Sun’s Hora or the Moon’s Hora, which is read for prosperity.',
     howComputed: 'Each sign is split into two 15° halves (horas), assigned to the Sun or the Moon.',
     howToRead: 'A supportive Hora placement of wealth-giving planets reinforces a Dhana Yoga in the D1; read the two together.',
-    computedByBornClock: false,
+    computedByBornClock: true,
   },
   {
     slug: 'd3-drekkana', dNumber: 3, name: 'Drekkana', label: 'D3 (Drekkana)',
@@ -43,7 +42,7 @@ export const VARGAS: VargaChart[] = [
     whatItShows: 'Relationships with brothers and sisters, drive, and the energy you bring to effort — the themes of the 3rd house, examined closely.',
     howComputed: 'Each sign is split into three 10° parts (drekkanas).',
     howToRead: 'Use it to refine 3rd-house matters (siblings, courage, short journeys) seen in the D1.',
-    computedByBornClock: false,
+    computedByBornClock: true,
   },
   {
     slug: 'd4-chaturthamsha', dNumber: 4, name: 'Chaturthamsha', label: 'D4 (Chaturthamsha / Turyamsha)',
@@ -51,7 +50,7 @@ export const VARGAS: VargaChart[] = [
     whatItShows: 'Fixed assets — land, house and vehicles — and the sense of security and contentment they bring. It details the promise of the 4th house.',
     howComputed: 'Each sign is split into four 7°30′ parts.',
     howToRead: 'Check it when the 4th house or its lord is prominent in the D1 — it shows whether property and domestic comfort actually materialise, and when (by the ruling planet’s Dasha).',
-    computedByBornClock: false,
+    computedByBornClock: true,
   },
   {
     slug: 'd7-saptamsha', dNumber: 7, name: 'Saptamsha', label: 'D7 (Saptamsha)',
@@ -59,7 +58,7 @@ export const VARGAS: VargaChart[] = [
     whatItShows: 'Matters of children — the possibility, timing and relationship with offspring — read from the 5th house and its lord in this chart.',
     howComputed: 'Each sign is split into seven equal parts (~4°17′ each).',
     howToRead: 'Read alongside the 5th house of the D1. Because it concerns children, keep the reading gentle and general — it describes tendencies and favourable periods, never a medical outcome or a guarantee.',
-    computedByBornClock: false,
+    computedByBornClock: true,
   },
   {
     slug: 'd9-navamsa', dNumber: 9, name: 'Navamsa', label: 'D9 (Navamsa)',
@@ -83,7 +82,7 @@ export const VARGAS: VargaChart[] = [
     whatItShows: 'The relationship with and legacy of your parents, and inherited tendencies — the 4th (mother) and 9th (father) examined closely.',
     howComputed: 'Each sign is split into twelve 2°30′ parts.',
     howToRead: 'Use it to detail parental matters and inherited strengths seen in the D1.',
-    computedByBornClock: false,
+    computedByBornClock: true,
   },
   {
     slug: 'd16-shodashamsha', dNumber: 16, name: 'Shodashamsha', label: 'D16 (Shodashamsha)',
@@ -91,7 +90,7 @@ export const VARGAS: VargaChart[] = [
     whatItShows: 'Material comforts, conveyances and the pleasures (and troubles) that come with them, plus general happiness.',
     howComputed: 'Each sign is split into sixteen parts (1°52′30″ each).',
     howToRead: 'A supportive D16 confirms comfort and vehicle matters hinted at by a strong 4th house.',
-    computedByBornClock: false,
+    computedByBornClock: true,
   },
   {
     slug: 'd20-vimshamsha', dNumber: 20, name: 'Vimshamsha', label: 'D20 (Vimshamsha)',
@@ -99,7 +98,7 @@ export const VARGAS: VargaChart[] = [
     whatItShows: 'Devotion, spiritual discipline (sadhana) and progress on the inner path.',
     howComputed: 'Each sign is split into twenty 1°30′ parts.',
     howToRead: 'Read it when spirituality, worship or a contemplative life is a theme in the D1 (e.g. a strong 9th or 12th house, or Ketu/Jupiter prominence).',
-    computedByBornClock: false,
+    computedByBornClock: true,
   },
   {
     slug: 'd24-chaturvimshamsha', dNumber: 24, name: 'Chaturvimshamsha', label: 'D24 (Chaturvimshamsha / Siddhamsha)',
@@ -107,7 +106,7 @@ export const VARGAS: VargaChart[] = [
     whatItShows: 'Academic success, higher learning, skill and the capacity to acquire knowledge — the promise of the 4th and 5th houses for study, examined closely.',
     howComputed: 'Each sign is split into twenty-four parts (1°15′ each).',
     howToRead: 'Read alongside Mercury, Jupiter and the 4th/5th houses in the D1 to judge academic strengths and the periods that favour study.',
-    computedByBornClock: false,
+    computedByBornClock: true,
   },
   {
     slug: 'd27-bhamsha', dNumber: 27, name: 'Bhamsha', label: 'D27 (Bhamsha / Nakshatramsha)',
@@ -115,7 +114,7 @@ export const VARGAS: VargaChart[] = [
     whatItShows: 'Overall physical and mental strength and resilience — where you are robust and where you tire.',
     howComputed: 'Each sign is split into twenty-seven parts (1°06′40″ each).',
     howToRead: 'A supportive D27 adds endurance to otherwise strong planets.',
-    computedByBornClock: false,
+    computedByBornClock: true,
   },
   {
     slug: 'd30-trimshamsha', dNumber: 30, name: 'Trimshamsha', label: 'D30 (Trimshamsha)',
@@ -123,14 +122,14 @@ export const VARGAS: VargaChart[] = [
     whatItShows: 'Areas of trouble, vulnerability and the flaws to work on — read calmly as areas to strengthen, never as a doom.',
     howComputed: 'Each sign is divided into five unequal parts ruled by the five non-luminary planets (Mars, Saturn, Jupiter, Mercury, Venus).',
     howToRead: 'Treat it as a map of where to put effort and care, in the context of the whole chart — not a prediction of misfortune.',
-    computedByBornClock: false,
+    computedByBornClock: true,
   },
   {
     slug: 'd60-shashtiamsha', dNumber: 60, name: 'Shashtiamsha', label: 'D60 (Shashtiamsha)',
     lifeArea: 'fine-grained karma and the finest tuning of the chart',
     whatItShows: 'The most detailed subdivision — classically weighted heavily by Parashara for past-life karma and the subtle final verdict on a planet. Because it divides a sign into sixty tiny parts, it is extremely sensitive to the exact birth time.',
     howComputed: 'Each sign is split into sixty 0°30′ parts. Several classical schools assign them differently.',
-    howToRead: 'Use only with a very accurate birth time, and treat it as one interpretation — BornClock shows the method it uses and a disclaimer, because schools differ.',
+    howToRead: 'Use only with a very accurate birth time, and treat it as one interpretation — BornClock shows the method it uses (BPHS’s degrees × 2) and a disclaimer, because schools differ.',
     computedByBornClock: true,
   },
 ];

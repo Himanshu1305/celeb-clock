@@ -99,6 +99,7 @@ function BornToday() {
 type Tool = { label: string; tag: string; to: string };
 const VEDIC_TOOLS: Tool[] = [
   { label: 'Kundli Chart', tag: 'free', to: '/kundali' },
+  { label: 'Daily Rashifal', tag: 'today', to: '/rashifal' },
   { label: 'Kundali Matching', tag: '36-point', to: '/kundali-match' },
   { label: 'Dasha Timing', tag: 'to Pratyantar', to: '/kundali' },
   { label: 'Yoga Detection', tag: 'graded', to: '/kundali' },
