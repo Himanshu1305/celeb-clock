@@ -4,10 +4,12 @@
  *   /tarot/cards/:slug    → one card: answer first, then upright, reversed, love / career /
  *                           money, yes-or-no lean, symbolism, Waite's own keywords, related cards.
  * Meanings paraphrase A. E. Waite, The Pictorial Key to the Tarot (1910, public domain) — see
- * src/data/tarotCards/types.ts. No card images: we could not verify the licence on the
- * Wikimedia Commons file pages for the 1909 scans, so (per the sprint rule) none are shown.
+ * src/data/tarotCards/types.ts. Card images (batch 8): the 1909 Rider–Waite–Smith scans by
+ * Pamela Colman Smith from Wikimedia Commons, each file's licence checked as "Public domain"
+ * by scripts/fetch-tarot-images.mjs (src/data/tarotCards/images.json keeps the file page).
  */
 import type { ReactNode } from 'react';
+import TAROT_IMAGES from '@/data/tarotCards/images.json';
 import { Link, useParams } from 'react-router-dom';
 import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -59,7 +61,29 @@ function arcanaLine(card: TarotCardEntry) {
   );
 }
 
+type TarotImage = { src: string; width: number; height: number; commonsPage: string; licence: string; artist: string };
+const IMAGES = TAROT_IMAGES as Record<string, TarotImage>;
+
 function CardTile({ card }: { card: TarotCardEntry }) {
+  const img = IMAGES[card.slug];
+  if (img) {
+    return (
+      <figure className="mx-auto w-36 shrink-0" data-testid="tarot-card-image">
+        <img
+          src={img.src}
+          width={img.width}
+          height={img.height}
+          alt={`${card.name} tarot card from the 1909 Rider–Waite–Smith deck`}
+          className="w-36 h-auto rounded-lg border border-border shadow-sm"
+          loading="eager"
+          decoding="async"
+        />
+        <figcaption className="mt-1 text-[10px] leading-tight text-muted-foreground text-center">
+          {img.artist}. <a href={img.commonsPage} target="_blank" rel="noopener noreferrer" className="underline">{img.licence}</a>
+        </figcaption>
+      </figure>
+    );
+  }
   return (
     <div
       aria-hidden="true"
