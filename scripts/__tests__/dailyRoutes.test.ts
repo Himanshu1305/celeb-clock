@@ -32,7 +32,9 @@ describe('daily routes in the prerender list / sitemap', () => {
     expect(m).toBeTruthy();
     // eslint-disable-next-line no-eval
     const re: RegExp = eval(m![1]);
-    for (const r of allDailyRoutes()) expect(re.test(r), r).toBe(true);
+    // Batch 8: the weekly / monthly / yearly rashifal views (period kinds) change at most
+    // weekly, so they keep the default changefreq=weekly.
+    for (const r of allDailyRoutes()) expect(re.test(r), r).toBe(!/^\/rashifal\/[a-z]+\/(?:week|month|year)$/.test(r));
     for (const r of ['/rashifal/mesh/week', '/zodiac/leo', '/hi/rashifal']) /* W7 made /panchang + /hi/panchang daily pages */ expect(re.test(r), r).toBe(false);
   });
 });

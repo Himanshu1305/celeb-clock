@@ -48,6 +48,14 @@
  *   pure DAILY_TEMPLATES[kind] (./templates.ts) in the Worker AND the browser, so both show
  *   the same text. Month files with finished `days` (the original format) still work.
  *
+ * PERIOD PAGES (batch 8 — weekly Mon–Sun / monthly / yearly rashifal): add `period: 'week' |
+ *   'month' | 'year'` to the def's `data`. The data then changes once per period and is
+ *   stored once per period key (week → its Monday, month → YYYY-MM, year → YYYY) in
+ *   /daily/<data kind>/<data slug>/<period key>.json ({ data: { [period key]: … } });
+ *   dailyFileKey / dailyDataKey (./registry.ts) map a date to that file + key for the build,
+ *   the Worker and the browser alike. The data computer gets any date in the period.
+ *   An entry may set `labels` to retitle the "Today in brief" / "Why today" / FAQ blocks.
+ *
  * Files: types.ts · templates.ts · dates.ts · registry.ts · render.ts · inject.ts · DailyParts.tsx ·
  *        useDailyEntry.ts · compute.ts · kinds/* · scripts/gen-daily.mts · functions/daily.ts
  */

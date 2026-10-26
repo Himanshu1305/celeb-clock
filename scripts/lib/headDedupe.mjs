@@ -10,6 +10,13 @@
 // finalizeHead() leaves exactly ONE canonical / og:url / twitter:url (the page's own
 // Helmet canonical when present, else the self URL — both normalised to absolute
 // https://bornclock.com + trailing slash) and removes identical JSON-LD blocks.
+//
+// Batch 8: it also leaves exactly ONE meta description / og:description /
+// twitter:description / og:title / twitter:title / meta name="title" (the page's own
+// Helmet value when it rendered a non-empty one — the static index.html copy is the
+// generic homepage text), and merges top-level Organization / WebSite / WebPage JSON-LD
+// blocks that describe the same thing (index.html + a page's own copy) into one
+// complete block (the richer one, plus any field only the other had).
 // Pure string → string so it can be unit-tested (scripts/__tests__/headDedupe.test.ts).
 
 export const SITE = 'https://bornclock.com';
@@ -164,12 +171,96 @@ export function hasJsonLdType(html, type) {
   return found;
 }
 
+/** One-per-page meta tags: [regex, label]. `(?:name|property)` so either spelling counts. */
+const metaRe = key => new RegExp(`<meta\\b[^>]*\\b(?:name|property)\\s*=\\s*["']${key.replace(/:/g, '\\:')}["'][^>]*>\\s*`, 'gi');
+export const SINGLE_META = {
+  description: metaRe('description'),
+  title: metaRe('title'),
+  ogTitle: metaRe('og:title'),
+  ogDescription: metaRe('og:description'),
+  twitterTitle: metaRe('twitter:title'),
+  twitterDescription: metaRe('twitter:description'),
+};
+
+/**
+ * Keep ONE tag matching `re`: the last Helmet (`data-rh`) tag with a non-empty content
+ * (the page's own value), else the first non-empty one, else the first. It is kept
+ * verbatim (attributes included) at the position of the first match.
+ */
+export function keepOneMeta(html, re) {
+  const found = html.match(re) || [];
+  if (found.length < 2) return html;
+  const filled = found.filter(t => (attr(t, 'content') ?? '').trim() !== '');
+  const helmet = filled.filter(t => /\bdata-rh\b/i.test(t));
+  const keep = (helmet.length ? helmet[helmet.length - 1] : filled[0] ?? found[0]).replace(/\s*$/, '');
+  let first = true;
+  return html.replace(re, (m) => {
+    if (!first) return '';
+    first = false;
+    return keep + (/\s*$/.exec(m)?.[0] ?? '');
+  });
+}
+
+/** Top-level JSON-LD types that must appear once per page (merged when repeated). */
+const MERGE_TYPES = new Set(['Organization', 'WebSite', 'WebPage']);
+
+/**
+ * Merge repeated top-level Organization / WebSite / WebPage blocks into ONE complete
+ * block each. Blocks of a type are merged when they describe the same URL (normalised;
+ * a block without a url joins any other). Base = the richer block (more content); every
+ * field only another block has is added. The merged block replaces the first one of its
+ * group, keeping that block's <script> attributes; the rest are removed. `@graph`
+ * blocks and other types are left alone.
+ */
+export function mergeSameEntityJsonLd(html) {
+  const blocks = [];
+  html.replace(LD_RE, (full, body) => {
+    try {
+      const d = JSON.parse(body);
+      if (d && !Array.isArray(d) && typeof d['@type'] === 'string' && MERGE_TYPES.has(d['@type'])) blocks.push({ full, data: d });
+    } catch { /* ignore */ }
+    return full;
+  });
+  const groups = [];
+  for (const b of blocks) {
+    const url = typeof b.data.url === 'string' ? normalizeSiteUrl(b.data.url) : null;
+    const g = groups.find(x => x.type === b.data['@type'] && (url === null || x.url === null || x.url === url));
+    if (g) { g.items.push(b); if (g.url === null) g.url = url; } else groups.push({ type: b.data['@type'], url, items: [b] });
+  }
+  let out = html;
+  for (const g of groups) {
+    if (g.items.length < 2) continue;
+    const size = b => stableKey(normalizeLd(b.data)).length;
+    const base = g.items.reduce((a, b) => (size(b) > size(a) ? b : a));
+    const merged = { '@context': base.data['@context'] ?? 'https://schema.org', '@type': g.type, ...normalizeLd(base.data) };
+    for (const b of g.items) {
+      if (b === base) continue;
+      for (const [k, v] of Object.entries(normalizeLd(b.data))) if (!(k in merged)) merged[k] = v;
+    }
+    const first = g.items[0].full;
+    const open = first.slice(0, first.indexOf('>') + 1);
+    const trail = /\s*$/.exec(first)[0];
+    let done = false;
+    for (const b of g.items) {
+      out = out.replace(b.full, () => {
+        if (done) return '';
+        done = true;
+        return `${open}${JSON.stringify(merged)}</script>${trail}`;
+      });
+    }
+  }
+  return out;
+}
+
 /**
  * Final head pass for a prerendered page. Returns { html, canonical }.
  * - exactly one <link rel="canonical">, one og:url, one twitter:url, all = canonical
  *   (kept with data-rh when Helmet rendered one, so the client re-render replaces
  *   it instead of adding a second);
- * - identical JSON-LD blocks appear once, and at most one BreadcrumbList remains.
+ * - one description / og:description / twitter:description / og:title / twitter:title /
+ *   meta title (the page's own Helmet value preferred);
+ * - identical JSON-LD blocks appear once, repeated Organization / WebSite / WebPage
+ *   blocks are merged into one each, and at most one BreadcrumbList remains.
  */
 export function finalizeHead(html, route) {
   const canonical = pickCanonical(html, route);
@@ -179,7 +270,9 @@ export function finalizeHead(html, route) {
   out = collapseTo(out, CANONICAL_RE, h => `<link rel="canonical" href="${c}"${rh(h)}>`);
   out = collapseTo(out, OG_URL_RE, h => `<meta property="og:url" content="${c}"${rh(h)}>`);
   out = collapseTo(out, TW_URL_RE, h => `<meta name="twitter:url" content="${c}"${rh(h)}>`);
+  for (const re of Object.values(SINGLE_META)) out = keepOneMeta(out, re);
   out = dedupeJsonLd(out);
+  out = mergeSameEntityJsonLd(out);
   out = keepOneBreadcrumb(out);
   return { html: out, canonical };
 }
@@ -193,6 +286,15 @@ export function headStats(html) {
     return full;
   });
   const dupJsonLd = blocks.length - new Set(blocks).size;
+  const typeCount = {};
+  html.replace(LD_RE, (full, body) => {
+    try {
+      const d = JSON.parse(body);
+      if (d && typeof d['@type'] === 'string' && MERGE_TYPES.has(d['@type'])) typeCount[d['@type']] = (typeCount[d['@type']] || 0) + 1;
+    } catch { /* skip */ }
+    return full;
+  });
+  const metaCounts = Object.fromEntries(Object.entries(SINGLE_META).map(([k, re]) => [k, (html.match(re) || []).length]));
   const breadcrumbs = blocks.filter(b => b.includes('"@type":"BreadcrumbList"')).length;
   return {
     canonicals: canon.length,
@@ -202,5 +304,9 @@ export function headStats(html) {
     jsonLdBlocks: blocks.length,
     duplicateJsonLd: dupJsonLd,
     breadcrumbLists: breadcrumbs,
+    /** Count per one-per-page meta (description, title, ogTitle, ogDescription, twitterTitle, twitterDescription). */
+    meta: metaCounts,
+    /** Top-level Organization / WebSite / WebPage block counts. */
+    entityBlocks: typeCount,
   };
 }

@@ -57,8 +57,20 @@ describe('Rashifal (computed) pages', () => {
     expect(() => renderSign('/rashifal/notarashi/today')).not.toThrow();
   });
 
-  it('month/year pages surface at least one real ingress note', () => {
-    const { getByTestId } = renderSign('/rashifal/makar/year');
-    expect(getByTestId('rashifal-ingress').textContent).toMatch(/enters .* on /);
+  it('month/year pages surface at least one real ingress note', async () => {
+    // Batch 8: the year view is a period page on the daily mechanism (jsdom → browser compute).
+    const { findByTestId } = renderSign('/rashifal/makar/year');
+    const body = await findByTestId('rashifal-year');
+    await waitFor(() => expect(body.querySelector('[data-daily-part="moves"]')).toBeTruthy());
+    expect(body.querySelector('[data-daily-part="moves"]')!.textContent).toMatch(/enters .* on /);
+  });
+
+  it('week page shows the current Monday–Sunday range in the H1/date and the same text as the template', async () => {
+    const { findByTestId } = renderSign('/rashifal/simha/week');
+    const body = await findByTestId('rashifal-week');
+    await waitFor(() => expect(body.querySelector('[data-daily-part="answer"]')).toBeTruthy());
+    for (const id of ['why', 'love', 'career', 'money', 'health', 'planets', 'lucky', 'faq']) expect(body.querySelector(`[data-daily-part="${id}"]`), id).toBeTruthy();
+    expect(document.querySelector('h1')?.textContent).toMatch(/^Simha Weekly Rashifal — \d{1,2} [A-Z][a-z]{2}( 20\d\d)? – \d{1,2} [A-Z][a-z]{2} 20\d\d$/);
+    expect(body.textContent).toContain('This week in brief');
   });
 });

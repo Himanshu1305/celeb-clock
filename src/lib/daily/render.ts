@@ -32,7 +32,7 @@ const TONE_CLASS: Record<DailyTone, string> = {
 
 /** The daily content block's inner HTML (no wrapping div). */
 export function renderDailyBodyHtml(e: DailyEntry): string {
-  const L = LABELS[e.lang] ?? LABELS.en;
+  const L = { ...(LABELS[e.lang] ?? LABELS.en), ...(e.labels ?? {}) };
   const out: string[] = [];
 
   out.push(
