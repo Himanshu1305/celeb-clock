@@ -15,7 +15,8 @@ import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { GET as kundaliGET } from '../../../../api/kundali';
-import { GOLDEN, birthQuery } from '../../../../scripts/golden/compareGolden';
+import { GET as sadeSatiGET } from '../../../../api/sade-sati';
+import { GOLDEN, REF_DATE, birthQuery, compareSadeSati } from '../../../../scripts/golden/compareGolden';
 import { computeEclipses, computeFestivalCalendar } from '../../vedic/festivals';
 import varga from '../../vedic/__tests__/golden/shodashvargaSwiss.json';
 import celebrities from '../../../data/celebrities.json';
@@ -136,4 +137,37 @@ describe('/accuracy wording guardrails (ASCI)', () => {
   it('every row carries a date', () => {
     for (const r of EVIDENCE) expect(r.date, r.id).toMatch(/2026/);
   });
+});
+
+// Review (batch 8): the page claims "22 of 22 same Mahadasha and Antardasha", "22 of 22 same
+// Sade Sati status" and "Antardasha start within 8 hours" — goldenCharts.test.ts covers only the
+// 20 golden charts (1-day tolerance), so re-check all 22 births here at the fixture's reference
+// date against the stored Swiss Ephemeris values (goldenCharts.json, pyswisseph 2.10.03).
+describe('/accuracy Dasha and Sade Sati numbers (all 22 test births, at the reference date)', () => {
+  const births = [...GOLDEN.charts, ...GOLDEN.coupleBirths];
+  beforeAll(() => { vi.useFakeTimers({ toFake: ['Date'] }); vi.setSystemTime(REF_DATE); });
+  afterAll(() => { vi.useRealTimers(); });
+
+  it(`current Mahadasha + Antardasha match for every birth; Antardasha start within ${COUNTS.dashaMaxHours} h`, async () => {
+    let worstH = 0; let checked = 0;
+    for (const g of births) {
+      const k = await (await kundaliGET(new Request(`http://localhost/api/kundali?${new URLSearchParams(birthQuery(g))}`))).json();
+      const exp = g.expected.dashaAtRef;
+      expect([k.dasha?.mahadasha, k.dasha?.antardasha], `${g.id} dasha`).toEqual([exp.mahadasha, exp.antardasha]);
+      worstH = Math.max(worstH, Math.abs(Date.parse(k.dasha.antardasha_start) - Date.parse(exp.antardashaStart)) / 3_600_000);
+      checked++;
+    }
+    expect(checked).toBe(COUNTS.kundaliBirths);
+    expect(worstH).toBeLessThanOrEqual(COUNTS.dashaMaxHours);
+  }, 120_000);
+
+  it('Sade Sati status matches for every birth', async () => {
+    let checked = 0;
+    for (const g of births) {
+      const s = await (await sadeSatiGET(new Request(`http://localhost/api/sade-sati?${new URLSearchParams(birthQuery(g))}`))).json();
+      expect(compareSadeSati(g, s, REF_DATE).map(d => d.message), g.id).toEqual([]);
+      checked++;
+    }
+    expect(checked).toBe(COUNTS.kundaliBirths);
+  }, 120_000);
 });

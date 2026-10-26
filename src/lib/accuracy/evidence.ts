@@ -142,7 +142,7 @@ export const EVIDENCE: EvidenceRow[] = [
     id: 'festivals',
     what: 'Festival, Ekadashi, Purnima and Sankranti dates (2026 and 2027)',
     reference: 'Drik Panchang Hindu calendar (New Delhi)',
-    howMany: `${COUNTS.festivals2026 + COUNTS.festivals2027} festivals, ${COUNTS.ekadashi2026 + COUNTS.ekadashi2027} Ekadashis`,
+    howMany: `${COUNTS.festivals2026} festivals in each year (${COUNTS.festivals2026 + COUNTS.festivals2027} dates), ${COUNTS.ekadashi2026 + COUNTS.ekadashi2027} Ekadashis`,
     result: 'Every date the same',
     date: '23 Oct 2026',
   },
