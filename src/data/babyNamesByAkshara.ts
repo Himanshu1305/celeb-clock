@@ -8,11 +8,15 @@
  * source says. Sources used: behindthename.com (curated name pages and the "Hindi names"
  * usage list), en.wikipedia.org given-name / mythology pages, wisdomlib.org (Monier-Williams,
  * Apte/DDSA, Shabda-Sagara and DDSA Hindi-English dictionaries), kosha.sanskrit.today
- * (Monier-Williams, Apte, Macdonell), Britannica, nordicnames.de and rekhtadictionary.com.
+ * (Monier-Williams, Apte, Macdonell), Britannica, nordicnames.de, nameberry.com and
+ * rekhtadictionary.com. Riya stays out: behindthename forum found no reliable etymology.
  * Where a dictionary gives a word rather than a name, gender follows the dictionary's own
  * grammatical label (m. / f.) for that word, as quoted in the comment.
  *
- * Batch 8 removals (not sourceable in this pass, or the sourced meaning was not positive):
+ * A second Batch 8 pass (same day) re-sourced many of the removed names and filled empty
+ * syllables; see the block at the end of the list.
+ *
+ * Batch 8 removals (not sourceable in the first pass, or the sourced meaning was not positive):
  *   Aarav — behindthename "Hindi names" list: "crying, howling, noise" (not positive).
  *   Ekansh — Monier-Williams ekāṃśa = "a single part, one part" (not "whole").
  *   Vivaan — swarajyamag.com: the Sanskrit word means "a woven chair", not "full of life".
@@ -297,6 +301,69 @@ export const BABY_NAMES: BabyName[] = [
   N('Chetana', 'चेतना', 'girl', 'consciousness, awareness (feminine of Chetan)', BTN('chetana')),
   // Batch 7: wisdomlib.org/definition/bhola, DDSA Hindi: भोला "innocent, simple-hearted; ~nātha Lord Shiv".
   N('Bholanath', 'भोलानाथ', 'boy', 'a name of Lord Shiva (bhola = innocent, simple-hearted)', WL('bhola')),
+  // ── Batch 8, second pass (fresh search budget): each source opened via WebFetch ──────
+  // Bharani — WP Lila (Hinduism): लीला "divine play"; nameberry.com/babyname/Leela: girl name, "play".
+  N('Leela', 'लीला', 'girl', 'play; divine play', WP('Lila_(Hinduism)')),
+  // MW lokeśa "m. lord of the world".
+  N('Lokesh', 'लोकेश', 'boy', 'lord of the world', WL('lokesha')),
+  // MW lohita "red, red-coloured"; also "Name … of a man".
+  N('Lohit', 'लोहित', 'boy', 'red', WL('lohita')),
+  // Jyeshtha — BTN Yash: masculine, यश, "fame, praise, glory".
+  N('Yash', 'यश', 'boy', 'fame, glory', BTN('yash')),
+  // WP Yamini (given name): female, यामिनी, "starry night".
+  N('Yamini', 'यामिनी', 'girl', 'starry night', WP('Yamini_(given_name)')),
+  // DDSA Hindi yuvraj "(nm) a prince".
+  N('Yuvraj', 'युवराज', 'boy', 'a prince', WL('yuvraj')),
+  // Mula — WP Yogesh: male, from yogeśa, "master of yoga".
+  N('Yogesh', 'योगेश', 'boy', 'master of yoga', WP('Yogesh')),
+  // Purva Ashadha — MW bhūmi "f. the earth, soil, ground".
+  N('Bhumi', 'भूमि', 'girl', 'the earth', 'https://wisdomlib.org/definition/bhumi'),
+  // MW bhūṣaṇa "decorating, adorning"; "m. Name of Viṣṇu".
+  N('Bhushan', 'भूषण', 'boy', 'adorning; a name of Vishnu', WL('bhushana')),
+  // nameberry.com Dhara: girl, Hindi, "the earth".
+  N('Dhara', 'धारा', 'girl', 'the earth', 'https://nameberry.com/b/girl-baby-name-dhara'),
+  // MW dhanya "fortunate, happy, auspicious"; dhanyā "f. Name of Dhruva's wife".
+  N('Dhanya', 'धन्या', 'girl', 'fortunate, happy', WL('dhanya')),
+  // Shravana — BTN Khushi: feminine, खुशी, "happiness" in Hindi.
+  N('Khushi', 'खुशी', 'girl', 'happiness', BTN('khushi')),
+  // WP Khushboo: "female given name", "fragrance".
+  N('Khushboo', 'खुशबू', 'girl', 'fragrance', WP('Khushboo')),
+  // Rekhta खेम: "Noun, Masculine" "well being, welfare" (क्षेम, कल्याण).
+  N('Khem', 'खेम', 'boy', 'well-being, welfare', 'https://rekhtadictionary.com/meaning-of-khem'),
+  // Ashwini — BTN Lata: feminine, लता, "vine, creeping plant".
+  N('Lata', 'लता', 'girl', 'a vine, a creeper', BTN('lata')),
+  // Caturvedi Hindi lakṣya "(nm) the aim, object/objective, target, goal".
+  N('Lakshya', 'लक्ष्य', 'boy', 'aim, goal', WL('lakshya')),
+  // Uttara Ashadha — BTN Jaya: जय (m.) / जया (f.), "victory"; BTN Jayanta: masculine, "victorious".
+  N('Jay', 'जय', 'boy', 'victory', BTN('jaya')),
+  N('Jaya', 'जया', 'girl', 'victory', BTN('jaya')),
+  N('Jayant', 'जयंत', 'boy', 'victorious', BTN('jayanta')),
+  // Dhanishtha — BTN Gita: feminine, गीता, from gīta "song".
+  N('Geeta', 'गीता', 'girl', 'song', BTN('gita-1')),
+  // BTN Girisha: masculine, गिरीश, "lord of the mountain", a title of Shiva.
+  N('Girish', 'गिरीश', 'boy', 'lord of the mountain (Shiva)', BTN('girisha')),
+  // Pushya — WP Hemlata: female, "Golden creeper".
+  N('Hemlata', 'हेमलता', 'girl', 'golden creeper', WP('Hemlata')),
+  // Purva Phalguni — WP Mohit: "attractive (also another name for Lord Krishna)"; BTN Mohit: masculine, मोहित.
+  N('Mohit', 'मोहित', 'boy', 'attractive; a name of Krishna', WP('Mohit')),
+  // Swati — WP Rohit (name): typically male, रोहित, "signifies the color red".
+  N('Rohit', 'रोहित', 'boy', 'red', WP('Rohit_(name)')),
+  // BTN Rupa: feminine, रूपा, from rūpa "shape, form".
+  N('Rupa', 'रूपा', 'girl', 'form, shape', BTN('rupa')),
+  // WP Rekha (given name): feminine, "Sanskrit word, meaning line".
+  N('Rekha', 'रेखा', 'girl', 'a line', WP('Rekha_(given_name)')),
+  // BTN Roshni: feminine, रोशनी, "light, brightness".
+  N('Roshni', 'रोशनी', 'girl', 'light, brightness', BTN('roshni')),
+  // Uttara Bhadrapada — MW dūrvā "f. bent grass, panic grass, Dūrb grass" (the sacred durva grass).
+  N('Durva', 'दूर्वा', 'girl', 'the sacred durva grass', WL('durva')),
+  // Ashlesha (retroflex ड) — English-origin names written with ड in Hindi.
+  // wisdomlib names/dimple: feminine, English "dymple"; BTN Dolly: feminine, "Diminutive of Dorothy".
+  N('Dimple', 'डिंपल', 'girl', 'a dimple (English-origin name)', 'https://www.wisdomlib.org/names/dimple'),
+  N('Dolly', 'डॉली', 'girl', 'a pet form of Dorothy (English-origin name)', BTN('dolly')),
+  // Anuradha — WP Nandini: female, "a woman who brings joy".
+  N('Nandini', 'नंदिनी', 'girl', 'one who brings joy', WP('Nandini')),
+  // Chitra — WP Rishi: ऋषि, "an accomplished and enlightened person"; MW ṛṣi "m.".
+  N('Rishi', 'ऋषि', 'boy', 'a sage, an enlightened person', WP('Rishi')),
 ];
 
 // ── Devanagari first-akshara key ─────────────────────────────────────────────

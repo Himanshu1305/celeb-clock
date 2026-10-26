@@ -123,8 +123,12 @@ describe('baby names by nakshatra — 27 pages', () => {
   }, 30000);
 
   it('a pada with no checked names says so plainly', () => {
+    // Ashlesha pada 2 ("Du") and pada 3 ("De") have no sourced names.
     const { getAllByTestId } = renderPath('/baby-names/nakshatra/ashlesha');
-    for (const p of getAllByTestId('bnn-pada')) expect(p.textContent).toContain('no names for this sound yet');
+    const padas = getAllByTestId('bnn-pada');
+    expect(namesForPada('Ashlesha', 2)).toHaveLength(0);
+    expect(padas[1].textContent).toContain('no names for this sound yet');
+    expect(padas[0].textContent).toContain('Dimple');
   });
 
   it('the three sourced additions land in the right pada', () => {

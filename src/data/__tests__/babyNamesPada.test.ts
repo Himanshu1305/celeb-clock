@@ -134,7 +134,7 @@ describe('N6 — names indexed by first Devanagari akshara', () => {
 describe('Batch 8 — every baby name is sourced', () => {
   const ALLOWED_HOSTS = new Set([
     'www.behindthename.com', 'en.wikipedia.org', 'www.wisdomlib.org', 'kosha.sanskrit.today',
-    'britannica.com', 'nordicnames.de', 'rekhtadictionary.com',
+    'britannica.com', 'nordicnames.de', 'rekhtadictionary.com', 'wisdomlib.org', 'nameberry.com',
   ]);
 
   it('the list is not empty', () => expect(BABY_NAMES.length).toBeGreaterThan(50));
@@ -162,7 +162,7 @@ describe('Batch 8 — every baby name is sourced', () => {
   it('names removed in batch 8 stay out', () => {
     // Aarav: source meaning "crying, howling, noise"; Sharv: "a god who kills … with arrows";
     // Vivaan / Saanvi / Ekansh: popular meanings not supported by the sources opened.
-    for (const gone of ['Aarav', 'Sharv', 'Vivaan', 'Saanvi', 'Ekansh', 'Piya']) {
+    for (const gone of ['Aarav', 'Sharv', 'Vivaan', 'Saanvi', 'Ekansh', 'Piya', 'Riya']) {
       expect(BABY_NAMES.find(n => n.name === gone)).toBeUndefined();
     }
   });
@@ -175,4 +175,15 @@ describe('Batch 8 — every baby name is sourced', () => {
     expect(m('Shalini').meaning).toBe('lady of the house'); // DDSA śālinī
     expect(m('Arjun').source).toBe('https://en.wikipedia.org/wiki/Arjuna');
   });
+});
+
+describe('Batch 8 second pass — coverage', () => {
+  // Ashlesha (ड syllables) has only two sourced names; every other nakshatra has at least 3.
+  const MIN: Record<string, number> = { Ashlesha: 2 };
+  for (const nak of Object.keys(NAKSHATRA_PADA_AKSHARAS)) {
+    it(`${nak} has at least ${MIN[nak] ?? 3} sourced names`, () => {
+      const total = [1, 2, 3, 4].reduce((s, p) => s + namesForPada(nak, p).length, 0);
+      expect(total).toBeGreaterThanOrEqual(MIN[nak] ?? 3);
+    });
+  }
 });
