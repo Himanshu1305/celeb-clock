@@ -15,6 +15,7 @@ import { nearestCities, PANCHANG_CITIES } from '@/lib/vedic/panchangDay';
 import { pageMeta, indexMeta, dateWithWeekday } from '@/lib/vedic/panchangText';
 import { usePanchangPlace } from '@/components/panchang/usePanchangPlace';
 import { usePanchangEntry } from '@/components/panchang/usePanchangEntry';
+import { CityLocalGuide } from '@/components/panchang/CityLocalGuide';
 import { PanchangControls } from '@/components/panchang/PanchangControls';
 import { CityLinks, TermChips } from '@/components/panchang/PanchangSections';
 import { HINDI_PANCHANG_SLUGS } from '@/lib/seo/panchangSlugs';
@@ -63,6 +64,9 @@ export default function PanchangPage() {
             <p>Sunrise and sunset come from the real position of the Sun for the place’s latitude and longitude. Rahu Kaal, Gulika and Yamaganda are fixed eighths of daylight; Abhijit, Dur Muhurtam and Brahma Muhurta are fifteenths of the day or night; Amrit Kalam and Varjyam are fixed slices of the day’s Nakshatra. Times are local clock times rounded to the nearest minute; checked against Drik Panchang they agree to within a minute.</p>
             <p>Use the date box or the previous / next buttons to see any date, or search any town in the world. <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link></p>
           </div>
+
+          {/* Batch 8: static local guide (temples + festivals, sourced) on the 50 city pages only. */}
+          {ctl.cityParam && ctl.validCity && !ctl.isCustom && <CityLocalGuide slug={place.slug} cityName={place.name} />}
 
           <CityLinks kind="panchang" city={ctl.isCustom ? undefined : place.city} nearby={nearby} all={PANCHANG_CITIES} linkTo={ctl.linkTo} />
 

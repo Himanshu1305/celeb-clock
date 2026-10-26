@@ -1,0 +1,476 @@
+{
+  "_source": "Batch 8 (26 Oct 2026): local guide for the 50 Panchang city pages. Every temple and festival line below was taken from the page in its 'source' field, opened with WebFetch on 26 Oct 2026 (Wikipedia, official temple / district / state-tourism sites, or the Government of India's Incredible India site). Nothing here is from memory. A city shows only what could be sourced; satellite cities have their own facts, not the parent city's. nameHi / lineHi = natural Hindi for the 10 cities that also have /hi/panchang/:city pages.",
+  "cities": {
+    "mumbai": {
+      "temples": [
+        { "name": "Siddhivinayak Temple", "line": "Ganesha temple in Prabhadevi, completed in 1801.", "source": "https://en.wikipedia.org/wiki/Siddhivinayak_Temple,_Mumbai", "nameHi": "सिद्धिविनायक मंदिर", "lineHi": "प्रभादेवी में गणेश जी का मंदिर, जो 1801 में बनकर पूरा हुआ।" },
+        { "name": "Mahalakshmi Temple", "line": "Temple of the goddess Mahalakshmi on Bhulabhai Desai Marg; Navratri is among its festivals.", "source": "https://en.wikipedia.org/wiki/Mahalakshmi_Temple,_Mumbai", "nameHi": "महालक्ष्मी मंदिर", "lineHi": "भूलाभाई देसाई मार्ग पर देवी महालक्ष्मी का मंदिर; यहाँ नवरात्रि प्रमुख उत्सवों में है।" },
+        { "name": "Walkeshwar Temple", "line": "A 10th-century temple, listed among the city's surviving structures from the Shilahara period.", "source": "https://en.wikipedia.org/wiki/Mumbai", "nameHi": "वालकेश्वर मंदिर", "lineHi": "दसवीं सदी का मंदिर, जो शिलाहार काल की शहर में बची इमारतों में गिना जाता है।" }
+      ],
+      "festivals": [
+        { "name": "Ganesh Chaturthi", "line": "The Lalbaugcha Raja, a public Ganesha idol kept at Lalbaug since 1934, is immersed in the Arabian Sea at Girgaon Chowpatty on Anant Chaturdashi.", "source": "https://en.wikipedia.org/wiki/Lalbaugcha_Raja", "nameHi": "गणेश चतुर्थी", "lineHi": "लालबाग में 1934 से विराजने वाले सार्वजनिक गणपति ‘लालबागचा राजा’ का अनंत चतुर्दशी पर गिरगाँव चौपाटी पर अरब सागर में विसर्जन होता है।" },
+        { "name": "Navratri", "line": "Celebrated at the Mahalakshmi Temple.", "source": "https://en.wikipedia.org/wiki/Mahalakshmi_Temple,_Mumbai", "nameHi": "नवरात्रि", "lineHi": "महालक्ष्मी मंदिर में धूमधाम से मनाई जाती है।" }
+      ]
+    },
+    "delhi": {
+      "temples": [
+        { "name": "Laxminarayan Temple", "line": "Hindu temple inaugurated by Mahatma Gandhi in 1933.", "source": "https://en.wikipedia.org/wiki/Delhi", "nameHi": "लक्ष्मीनारायण मंदिर", "lineHi": "हिन्दू मंदिर, जिसका उद्घाटन 1933 में महात्मा गांधी ने किया था।" },
+        { "name": "Akshardham", "line": "Cited, with the Laxminarayan Temple, as an example of the city's modern architecture.", "source": "https://en.wikipedia.org/wiki/Delhi", "nameHi": "अक्षरधाम", "lineHi": "लक्ष्मीनारायण मंदिर के साथ, दिल्ली की आधुनिक स्थापत्य कला के उदाहरण के रूप में गिना जाता है।" },
+        { "name": "Yogmaya Temple", "line": "Temple in Mehrauli.", "source": "https://en.wikipedia.org/wiki/Delhi", "nameHi": "योगमाया मंदिर", "lineHi": "महरौली में स्थित मंदिर।" }
+      ],
+      "festivals": [
+        { "name": "Vasant Panchami", "line": "The spring festival, held every year in Delhi.", "source": "https://en.wikipedia.org/wiki/Delhi", "nameHi": "वसंत पंचमी", "lineHi": "वसंत का त्योहार, जो दिल्ली में हर साल मनाया जाता है।" }
+      ]
+    },
+    "bengaluru": {
+      "temples": [
+        { "name": "Begur Nageshwara Temple", "line": "Commissioned around 860 CE, in the time of the Western Ganga kings.", "source": "https://en.wikipedia.org/wiki/Bengaluru", "nameHi": "बेगूर नागेश्वर मंदिर", "lineHi": "लगभग 860 ईस्वी में पश्चिमी गंग राजाओं के समय बनवाया गया मंदिर।" },
+        { "name": "Basavanagudi temple", "line": "Built by Kempe Gowda.", "source": "https://en.wikipedia.org/wiki/Bengaluru", "nameHi": "बसवनगुडी मंदिर", "lineHi": "केम्पे गौड़ा द्वारा बनवाया गया मंदिर।" },
+        { "name": "Halasuru Someshwara Temple", "line": "Its idol is the centre of the city's annual Someshwara car festival.", "source": "https://en.wikipedia.org/wiki/Bengaluru", "nameHi": "हलसूरु सोमेश्वर मंदिर", "lineHi": "शहर के वार्षिक सोमेश्वर रथोत्सव का केंद्र इसी मंदिर की प्रतिमा है।" }
+      ],
+      "festivals": [
+        { "name": "Bangalore Karaga", "line": "Also called Karaga Shaktyotsava, a festival dedicated to the goddess Draupadi.", "source": "https://en.wikipedia.org/wiki/Bengaluru", "nameHi": "बेंगलुरु करगा", "lineHi": "करगा शक्त्योत्सव भी कहलाता है; देवी द्रौपदी को समर्पित उत्सव।" },
+        { "name": "Someshwara car festival", "line": "Held every April at the Halasuru Someshwara Temple.", "source": "https://en.wikipedia.org/wiki/Bengaluru", "nameHi": "सोमेश्वर रथोत्सव", "lineHi": "हर साल अप्रैल में हलसूरु सोमेश्वर मंदिर में होता है।" }
+      ]
+    },
+    "hyderabad": {
+      "temples": [
+        { "name": "Birla Mandir", "line": "Temple of Lord Venkateswara on the Naubath Pahad hillock, opened in 1976.", "source": "https://en.wikipedia.org/wiki/Birla_Mandir,_Hyderabad", "nameHi": "बिड़ला मंदिर", "lineHi": "नौबत पहाड़ की पहाड़ी पर भगवान वेंकटेश्वर का मंदिर, 1976 में खुला।" },
+        { "name": "Chilkur Balaji Temple", "line": "Balaji temple on the banks of Osman Sagar, also called 'Visa' Balaji.", "source": "https://en.wikipedia.org/wiki/Chilkoor_Balaji_Temple", "nameHi": "चिलकुर बालाजी मंदिर", "lineHi": "उस्मान सागर के किनारे बालाजी का मंदिर, जिसे ‘वीज़ा बालाजी’ भी कहते हैं।" },
+        { "name": "Ujjaini Mahakali Temple", "line": "Mahakali temple in Secunderabad, central to Bonalu.", "source": "https://en.wikipedia.org/wiki/Bonalu", "nameHi": "उज्जैनी महाकाली मंदिर", "lineHi": "सिकंदराबाद का महाकाली मंदिर, बोनालु का एक प्रमुख केंद्र।" }
+      ],
+      "festivals": [
+        { "name": "Bonalu", "line": "Festival of the goddess Mahakali in the month of Ashada (June–August), celebrated across Hyderabad and Secunderabad.", "source": "https://en.wikipedia.org/wiki/Bonalu", "nameHi": "बोनालु", "lineHi": "आषाढ़ मास (जून–अगस्त) में देवी महाकाली का उत्सव, जो पूरे हैदराबाद और सिकंदराबाद में मनाया जाता है।" }
+      ]
+    },
+    "chennai": {
+      "temples": [
+        { "name": "Kapaleeshwarar Temple", "line": "Shiva temple in Mylapore.", "source": "https://en.wikipedia.org/wiki/Kapaleeshwarar_Temple", "nameHi": "कपालीश्वरर मंदिर", "lineHi": "मायलापुर में भगवान शिव का मंदिर।" },
+        { "name": "Parthasarathy Temple", "line": "6th-century Vishnu temple in Triplicane.", "source": "https://en.wikipedia.org/wiki/Parthasarathy_Temple,_Chennai", "nameHi": "पार्थसारथी मंदिर", "lineHi": "ट्रिप्लिकेन में छठी सदी का भगवान विष्णु का मंदिर।" }
+      ],
+      "festivals": [
+        { "name": "Arupathimoovar festival", "line": "The Kapaleeshwarar temple's best-known festival, in the Tamil month of Panguni.", "source": "https://en.wikipedia.org/wiki/Kapaleeshwarar_Temple", "nameHi": "अरुपतिमूवर उत्सव", "lineHi": "कपालीश्वरर मंदिर का सबसे प्रसिद्ध उत्सव, तमिल मास पंगुनी में।" },
+        { "name": "Vaikunta Ekadashi", "line": "The most important festival at the Parthasarathy Temple.", "source": "https://en.wikipedia.org/wiki/Parthasarathy_Temple,_Chennai", "nameHi": "वैकुंठ एकादशी", "lineHi": "पार्थसारथी मंदिर का सबसे महत्वपूर्ण उत्सव।" }
+      ]
+    },
+    "ahmedabad": {
+      "temples": [
+        { "name": "Jagannath Temple", "line": "Temple of Lord Jagannath, known for its annual Rath Yatra.", "source": "https://en.wikipedia.org/wiki/Jagannath_Temple,_Ahmedabad", "nameHi": "जगन्नाथ मंदिर", "lineHi": "भगवान जगन्नाथ का मंदिर, जो अपनी वार्षिक रथ यात्रा के लिए जाना जाता है।" },
+        { "name": "Bhadrakali Temple", "line": "At Manek Chowk; Ma Bhadrakali is believed to be the guardian deity of the city.", "source": "https://ahmedabadcity.gov.in/StaticPage/bhadrakali_temple", "nameHi": "भद्रकाली मंदिर", "lineHi": "माणेक चौक पर; माँ भद्रकाली को शहर की रक्षक देवी माना जाता है।" }
+      ],
+      "festivals": [
+        { "name": "Rath Yatra", "line": "Chariot procession on Asadh Sud Bij, organised by the Jagannath Temple since 1878.", "source": "https://en.wikipedia.org/wiki/Rath_Yatra_(Ahmedabad)", "nameHi": "रथ यात्रा", "lineHi": "आषाढ़ सुद बीज को निकलने वाली रथ यात्रा, जिसे जगन्नाथ मंदिर 1878 से आयोजित करता है।" },
+        { "name": "Uttarayan", "line": "The International Kite Festival on 14–15 January, linked to Makar Sankranti; Ahmedabad is called the kite capital of Gujarat.", "source": "https://en.wikipedia.org/wiki/International_Kite_Festival_in_Gujarat_%E2%80%93_Uttarayan", "nameHi": "उत्तरायण", "lineHi": "14–15 जनवरी को अंतरराष्ट्रीय पतंग उत्सव, मकर संक्रांति से जुड़ा; अहमदाबाद को गुजरात की ‘पतंग राजधानी’ कहा जाता है।" },
+        { "name": "Navratri", "line": "Garba and raas through the nine nights; the Bhadrakali Temple sees especially large crowds.", "source": "https://ahmedabadcity.gov.in/StaticPage/bhadrakali_temple", "nameHi": "नवरात्रि", "lineHi": "नौ रातों तक गरबा और रास; इन दिनों भद्रकाली मंदिर में विशेष भीड़ रहती है।" }
+      ]
+    },
+    "kolkata": {
+      "temples": [
+        { "name": "Dakshineswar Kali Temple", "line": "Temple of Bhavatarini (Kali) on the eastern bank of the Hooghly, built by Rani Rashmoni in 1855.", "source": "https://en.wikipedia.org/wiki/Dakshineswar_Kali_Temple", "nameHi": "दक्षिणेश्वर काली मंदिर", "lineHi": "हुगली के पूर्वी तट पर भवतारिणी (काली) का मंदिर, जिसे रानी रासमणि ने 1855 में बनवाया।" },
+        { "name": "Kalighat Temple", "line": "Temple of the goddess Kali, one of the 51 Shakti Pithas.", "source": "https://en.wikipedia.org/wiki/Kalighat_Temple", "nameHi": "कालीघाट मंदिर", "lineHi": "देवी काली का मंदिर, 51 शक्तिपीठों में से एक।" }
+      ],
+      "festivals": [
+        { "name": "Durga Puja", "line": "The city's largest festival; some 3,000 pandals go up across Kolkata and its suburbs.", "source": "https://en.wikipedia.org/wiki/Festivals_in_Kolkata", "nameHi": "दुर्गा पूजा", "lineHi": "शहर का सबसे बड़ा उत्सव; कोलकाता और उपनगरों में लगभग 3,000 पंडाल सजते हैं।" },
+        { "name": "Kali Puja", "line": "Coincides with Diwali; Kali is worshipped at night in thousands of pandals, homes and temples.", "source": "https://en.wikipedia.org/wiki/Festivals_in_Kolkata", "nameHi": "काली पूजा", "lineHi": "दीवाली के साथ पड़ती है; हज़ारों पंडालों, घरों और मंदिरों में रात को माँ काली की पूजा होती है।" }
+      ]
+    },
+    "surat": {
+      "festivals": [
+        { "name": "Chand Padvo", "line": "Celebrated by Surtis on the biggest full-moon day of the Hindu calendar; described as unique to the city.", "source": "https://surat.nic.in/culture-heritage/" },
+        { "name": "Navratri", "line": "Described as the most important festival in Surat.", "source": "https://surat.nic.in/culture-heritage/" },
+        { "name": "Uttarayan", "line": "The kite-flying festival, celebrated with great pomp.", "source": "https://surat.nic.in/culture-heritage/" }
+      ]
+    },
+    "pune": {
+      "temples": [
+        { "name": "Kasba Ganapati", "line": "With Tambadi Jogeshwari, considered a guardian deity of the city; Jijabai is said to have commissioned the temple.", "source": "https://en.wikipedia.org/wiki/Pune", "nameHi": "कसबा गणपति", "lineHi": "ताम्बडी जोगेश्वरी के साथ शहर के रक्षक देवता माने जाते हैं; मंदिर जिजाबाई ने बनवाया बताया जाता है।" },
+        { "name": "Dagadusheth Halwai Ganapati Temple", "line": "Described as the richest Ganesh temple in Pune.", "source": "https://en.wikipedia.org/wiki/Pune", "nameHi": "दगडूशेठ हलवाई गणपति मंदिर", "lineHi": "पुणे का सबसे समृद्ध गणेश मंदिर बताया जाता है।" },
+        { "name": "Pataleshwar", "line": "An old rock-cut temple complex in the city.", "source": "https://en.wikipedia.org/wiki/Pune", "nameHi": "पाताळेश्वर", "lineHi": "शहर में चट्टान काटकर बना पुराना मंदिर-समूह।" },
+        { "name": "Parvati temple complex", "line": "Temple complex on Parvati Hill.", "source": "https://en.wikipedia.org/wiki/Pune", "nameHi": "पर्वती मंदिर समूह", "lineHi": "पर्वती पहाड़ी पर स्थित मंदिर-समूह।" }
+      ],
+      "festivals": [
+        { "name": "Ganesh Chaturthi", "line": "Widely and publicly celebrated, with pandals across the city and Dhol-Tasha processions; Lokmanya Tilak started the public celebration.", "source": "https://en.wikipedia.org/wiki/Pune", "nameHi": "गणेश चतुर्थी", "lineHi": "पूरे शहर में पंडाल और ढोल-ताशा के साथ सार्वजनिक रूप से मनाई जाती है; सार्वजनिक उत्सव की शुरुआत लोकमान्य तिलक ने की थी।" },
+        { "name": "Diwali Pahat", "line": "The 'Diwali dawn' music concerts originated in Pune.", "source": "https://en.wikipedia.org/wiki/Pune", "nameHi": "दिवाळी पहाट", "lineHi": "दीवाली की भोर के संगीत कार्यक्रम ‘दिवाळी पहाट’ की शुरुआत पुणे से हुई।" }
+      ]
+    },
+    "jaipur": {
+      "temples": [
+        { "name": "Govind Dev Ji Temple", "line": "Temple of Radha and Krishna within the City Palace complex.", "source": "https://en.wikipedia.org/wiki/Govind_Dev_Ji_Temple", "nameHi": "गोविंद देव जी मंदिर", "lineHi": "सिटी पैलेस परिसर के भीतर राधा-कृष्ण का मंदिर।" },
+        { "name": "Galtaji", "line": "Ancient Hindu pilgrimage site about 10 km east of Jaipur.", "source": "https://en.wikipedia.org/wiki/Galtaji", "nameHi": "गलताजी", "lineHi": "जयपुर से लगभग 10 किमी पूर्व में प्राचीन हिन्दू तीर्थ।" }
+      ],
+      "festivals": [
+        { "name": "Gangaur", "line": "A procession with the image of Gauri starts from the Zanani-Deodhi of the City Palace; the festival begins the day after Holi and runs for 16 days.", "source": "https://en.wikipedia.org/wiki/Gangaur", "nameHi": "गणगौर", "lineHi": "गौरी की प्रतिमा के साथ शोभायात्रा सिटी पैलेस की ज़नानी ड्योढ़ी से निकलती है; उत्सव होली के अगले दिन से 16 दिन चलता है।" },
+        { "name": "Janmashtami", "line": "One of the major festivals at the Govind Dev Ji Temple.", "source": "https://en.wikipedia.org/wiki/Govind_Dev_Ji_Temple", "nameHi": "जन्माष्टमी", "lineHi": "गोविंद देव जी मंदिर के प्रमुख उत्सवों में से एक।" },
+        { "name": "Makar Sankranti", "line": "Thousands visit Galtaji for a holy dip.", "source": "https://en.wikipedia.org/wiki/Galtaji", "nameHi": "मकर संक्रांति", "lineHi": "हज़ारों लोग स्नान के लिए गलताजी पहुँचते हैं।" }
+      ]
+    },
+    "lucknow": {
+      "temples": [
+        { "name": "Chandrika Devi Temple", "line": "Temple of a form of the goddess Durga, on the Gomti at Bakshi Ka Talab.", "source": "https://en.wikipedia.org/wiki/Chandrika_Devi_Temple,_Lucknow", "nameHi": "चंद्रिका देवी मंदिर", "lineHi": "बख्शी का तालाब में गोमती के किनारे देवी दुर्गा के एक रूप का मंदिर।" },
+        { "name": "Hanuman Mandir, Aliganj", "line": "Linked to Aliya Begum, wife of Nawab Shuja-ud-Daula; the centre of the Bade Mangal Mela.", "source": "https://lucknow.nic.in/tourist-place/hanuman-mandir-aliganj/", "nameHi": "हनुमान मंदिर, अलीगंज", "lineHi": "नवाब शुजाउद्दौला की बेगम आलिया से जुड़ा मंदिर; बड़े मंगल मेले का केंद्र।" },
+        { "name": "Sankat Mochan Hanuman Temple", "line": "Hanuman temple in the city.", "source": "https://en.wikipedia.org/wiki/Sankat_Mochan_Hanuman_Temple,_Lucknow", "nameHi": "संकट मोचन हनुमान मंदिर", "lineHi": "शहर का हनुमान मंदिर।" }
+      ],
+      "festivals": [
+        { "name": "Bada Mangal", "line": "Every Tuesday of Jyeshtha (usually May–June); the most prominent local festival of the year in Lucknow.", "source": "https://en.wikipedia.org/wiki/Bada_Mangal", "nameHi": "बड़ा मंगल", "lineHi": "ज्येष्ठ मास (आमतौर पर मई–जून) का हर मंगलवार; लखनऊ का साल का सबसे प्रमुख स्थानीय पर्व।" },
+        { "name": "Navratri", "line": "Among the festivals at the Chandrika Devi Temple.", "source": "https://en.wikipedia.org/wiki/Chandrika_Devi_Temple,_Lucknow", "nameHi": "नवरात्रि", "lineHi": "चंद्रिका देवी मंदिर के उत्सवों में शामिल।" }
+      ]
+    },
+    "kanpur": {
+      "temples": [
+        { "name": "JK Temple", "line": "Radha-Krishna temple in Sarvodaya Nagar, built by the JK Trust of the Singhania family.", "source": "https://en.wikipedia.org/wiki/JK_Temple" },
+        { "name": "Brahma temple, Brahmavart Ghat", "line": "A small temple of Lord Brahma on the Ganga at Bithoor, in Kanpur district.", "source": "https://www.incredibleindia.gov.in/en/uttar-pradesh/kanpur/brahmavart-ghat" }
+      ],
+      "festivals": [
+        { "name": "Ganga Mela", "line": "An extension of Holi, held in memory of a 1942 protest against a British ban on Holi.", "source": "https://www.incredibleindia.gov.in/en/uttar-pradesh/kanpur/brahmavart-ghat" },
+        { "name": "Kartik Poornima", "line": "Observed at Brahmavart Ghat in Bithoor (November–December).", "source": "https://www.incredibleindia.gov.in/en/uttar-pradesh/kanpur/brahmavart-ghat" }
+      ]
+    },
+    "nagpur": {
+      "temples": [
+        { "name": "Tekdi Ganesh Mandir", "line": "Called the most famous temple in Nagpur, near the railway station; regarded as Swayambhu (self-manifested).", "source": "https://en.wikipedia.org/wiki/Nagpur" },
+        { "name": "Koradi Devi Temple", "line": "Shree Mahalaxmi Jagdamba temple at Koradi near Nagpur, considered one of the Shakti peeths.", "source": "https://en.wikipedia.org/wiki/Nagpur" },
+        { "name": "Ramtek Fort Temple", "line": "A temple built inside a fort at Ramtek.", "source": "https://en.wikipedia.org/wiki/Nagpur" }
+      ],
+      "festivals": [
+        { "name": "Marbat", "line": "A festival unique to Nagpur, held the day after the bullock festival of Pola; the black and yellow Marbat processions began in 1880.", "source": "https://en.wikipedia.org/wiki/Nagpur" }
+      ]
+    },
+    "indore": {
+      "temples": [
+        { "name": "Khajrana Ganesh Temple", "line": "Ganesha temple in Khajrana, built in 1735 by Maharani Ahilyabai Holkar.", "source": "https://en.wikipedia.org/wiki/Khajrana_Ganesh_Temple" },
+        { "name": "Annapurna Temple", "line": "A well-known temple of the goddess Annapurna.", "source": "https://www.mptourism.com/temples-in-indore.html" },
+        { "name": "Bada Ganpati Temple", "line": "Known for its 25-ft idol of Ganesha made of bricks and limestone.", "source": "https://www.mptourism.com/temples-in-indore.html" }
+      ],
+      "festivals": [
+        { "name": "Gair on Rangpanchami", "line": "The Holi procession that winds around Rajwada a few days after Holi, a tradition dating to the Holkar rulers.", "source": "https://www.mptourism.com/gair-festival-in-indore.html" }
+      ]
+    },
+    "thane": {
+      "temples": [
+        { "name": "Kopineshwar Mandir", "line": "Shiva temple built by the Shilahara dynasty and rebuilt in 1760, beside Masunda Lake.", "source": "https://en.wikipedia.org/wiki/Kopineshwar_Mandir,_Thane" },
+        { "name": "Mahadev Dhyan Mandir", "line": "A shrine at the centre of Masunda Lake (Talao Pali).", "source": "https://en.wikipedia.org/wiki/Thane" },
+        { "name": "Ganesha temple, Upvan Lake", "line": "Ganesha temple built by Singhania at Upvan Lake.", "source": "https://en.wikipedia.org/wiki/Upvan_Lake" }
+      ],
+      "festivals": [
+        { "name": "Ganeshotsav", "line": "On the final day, thousands of Ganpati idols are brought to Upvan Lake for immersion.", "source": "https://en.wikipedia.org/wiki/Upvan_Lake" }
+      ]
+    },
+    "bhopal": {
+      "temples": [
+        { "name": "Bhojeshwar Temple", "line": "Shiva temple at Bhojpur, 28 km from Bhopal, begun under the Paramara king Bhoja in the 11th century; it houses a 7.5-ft lingam.", "source": "https://en.wikipedia.org/wiki/Bhojeshwar_Temple" },
+        { "name": "Lakshmi Narayan Temple (Birla Mandir)", "line": "Near the Arera Hills, built by the Birla family and completed in 1964.", "source": "https://en.wikipedia.org/wiki/Lakshmi_Narayan_Temple,_Bhopal" }
+      ],
+      "festivals": [
+        { "name": "Maha Shivaratri", "line": "Thousands of devotees visit the Bhojeshwar Temple.", "source": "https://en.wikipedia.org/wiki/Bhojeshwar_Temple" }
+      ]
+    },
+    "visakhapatnam": {
+      "temples": [
+        { "name": "Simhachalam Temple", "line": "Temple of Vishnu as Varaha Narasimha, about ten miles north of the city.", "source": "https://en.wikipedia.org/wiki/Varaha_Lakshmi_Narasimha_temple,_Simhachalam" },
+        { "name": "Kanaka Maha Lakshmi Temple", "line": "Temple of the goddess Lakshmi in Burujupeta.", "source": "https://en.wikipedia.org/wiki/Kanaka_Maha_Lakshmi_Temple" },
+        { "name": "Venkateswara Temple, Ross Hill", "line": "Built by Capt. Blackmoor in 1886.", "source": "https://visakhapatnam.ap.gov.in/religion/" }
+      ],
+      "festivals": [
+        { "name": "Chandanotsava", "line": "Held at Simhachalam on Akshaya Tritiya (April–May).", "source": "https://en.wikipedia.org/wiki/Varaha_Lakshmi_Narasimha_temple,_Simhachalam" },
+        { "name": "Margasira Masa Mahotsavam", "line": "A month-long festival at the Kanaka Mahalakshmi temple.", "source": "https://visakhapatnam.ap.gov.in/religion/" }
+      ]
+    },
+    "pimpri-chinchwad": {
+      "temples": [
+        { "name": "Khandoba Mandir, Akurdi", "line": "Temple of Khandoba, the family deity of most Marathi Hindus.", "source": "https://en.wikipedia.org/wiki/Pimpri-Chinchwad" },
+        { "name": "Vaishno Devi Temple, Pimpri", "line": "A Vaishno Devi temple in Pimpri.", "source": "https://en.wikipedia.org/wiki/Pimpri-Chinchwad" }
+      ],
+      "festivals": [
+        { "name": "Bhairavnath fair, Bhosari", "line": "Perhaps the best-known village fair in the city.", "source": "https://en.wikipedia.org/wiki/Pimpri-Chinchwad" },
+        { "name": "Ganeshotsav", "line": "Among the festivals celebrated across all communities in the city.", "source": "https://en.wikipedia.org/wiki/Pimpri-Chinchwad" }
+      ]
+    },
+    "patna": {
+      "temples": [
+        { "name": "Mahavir Mandir", "line": "Hanuman temple that draws huge crowds on Ram Navami.", "source": "https://en.wikipedia.org/wiki/Mahavir_Mandir" },
+        { "name": "Patan Devi", "line": "The oldest temple of Patna, regarded as one of the 51 Siddha Shakta pithas.", "source": "https://en.wikipedia.org/wiki/Patan_Devi" }
+      ],
+      "festivals": [
+        { "name": "Ram Navami", "line": "The busiest day at Mahavir Mandir.", "source": "https://en.wikipedia.org/wiki/Mahavir_Mandir" },
+        { "name": "Vijayadashami mela", "line": "A fair is held near the Patan Devi temples at Vijayadashami.", "source": "https://en.wikipedia.org/wiki/Patan_Devi" }
+      ]
+    },
+    "vadodara": {
+      "temples": [
+        { "name": "EME Temple", "line": "Shiva temple built in 1966 by the Army's EME School.", "source": "https://en.wikipedia.org/wiki/EME_Temple" },
+        { "name": "Kirti Mandir", "line": "A cluster of Shiva temples that is also the Gaekwad royal family's cenotaph.", "source": "https://en.wikipedia.org/wiki/Kirti_Mandir,_Vadodara" }
+      ],
+      "festivals": [
+        { "name": "Navratri", "line": "The United Way of Baroda Garba Mahotsav is held on a grand scale through the nine nights.", "source": "https://www.incredibleindia.gov.in/en/festivals-and-events/gujarat/united-way-of-baroda-garba-mahotsav" }
+      ]
+    },
+    "ghaziabad": {
+      "temples": [
+        { "name": "Dudheshwar Nath Mandir", "line": "An ancient Shiva temple, with Shiva in lingam form.", "source": "https://ghaziabad.nic.in/en/places-of-interest/" },
+        { "name": "Mahamaya Temple, Modinagar", "line": "Temple of the Mother Goddess in Sikri Khurd village, Modinagar.", "source": "https://ghaziabad.nic.in/en/places-of-interest/" }
+      ],
+      "festivals": [
+        { "name": "Navratri", "line": "A large gathering for the Mother Goddess is held every year at the Mahamaya Temple.", "source": "https://ghaziabad.nic.in/en/places-of-interest/" }
+      ]
+    },
+    "ludhiana": {
+      "temples": [
+        { "name": "Shri Krishna Mandir", "line": "A must-visit temple of the city.", "source": "https://www.incredibleindia.gov.in/en/punjab/ludhiana/a-journey-through-ludhiana-s-religious-spots" },
+        { "name": "Shri Ayappa Temple", "line": "Dedicated to Lord Ayappa, with four more shrines to Shiva, Ganesh, Vishnu and Devi Mata.", "source": "https://www.incredibleindia.gov.in/en/punjab/ludhiana/a-journey-through-ludhiana-s-religious-spots" }
+      ],
+      "festivals": [
+        { "name": "Janmashtami", "line": "Celebrated at the Shri Krishna Mandir, as are Dussehra and Shivratri.", "source": "https://www.incredibleindia.gov.in/en/punjab/ludhiana/a-journey-through-ludhiana-s-religious-spots" }
+      ]
+    },
+    "agra": {
+      "temples": [
+        { "name": "Mankameshwar Temple", "line": "Ancient Shiva temple at Rawatpara, near Agra Fort railway station.", "source": "https://en.wikipedia.org/wiki/Mankameshwar_Temple" },
+        { "name": "Bateshwar", "line": "A chain of 101 riverside temples, mainly of Shiva, about 70 km from Agra.", "source": "https://agra.nic.in/tourist-place/bateshwar-temple/" }
+      ],
+      "festivals": [
+        { "name": "Bateshwar Fair", "line": "A month-long fair around Kartik Purnima (October–November).", "source": "https://agra.nic.in/tourist-place/bateshwar-temple/" }
+      ]
+    },
+    "nashik": {
+      "temples": [
+        { "name": "Trimbakeshwar Temple", "line": "Shiva temple about 28 km from Nashik, one of the twelve Jyotirlinga shrines.", "source": "https://en.wikipedia.org/wiki/Trimbakeshwar_Temple" },
+        { "name": "Kalaram Mandir", "line": "Site of the 1930 Nashik Satyagraha, led by B. R. Ambedkar for the entry of Dalits into the temple.", "source": "https://en.wikipedia.org/wiki/Nashik" }
+      ],
+      "festivals": [
+        { "name": "Simhastha Kumbh Mela", "line": "Held once every 12 years, with ritual bathing in the Godavari at Nashik and Trimbak; the next one is listed for 2026–27.", "source": "https://en.wikipedia.org/wiki/Nashik-Trimbakeshwar_Simhastha" }
+      ]
+    },
+    "faridabad": {
+      "temples": [
+        { "name": "Shri Maharani Vaishno Devi Mandir", "line": "Vaishno Devi temple at Tikona Park.", "source": "https://en.wikipedia.org/wiki/Faridabad" },
+        { "name": "Jagannath Temple", "line": "Jagannath temple in Sector 15A.", "source": "https://en.wikipedia.org/wiki/Faridabad" },
+        { "name": "Surajkund", "line": "A masonry tank from about the 10th century where a Sun temple is believed to have once stood.", "source": "https://haryanatourism.gov.in/places_of_interest/surajkund-a-masonry-tank" }
+      ]
+    },
+    "meerut": {
+      "temples": [
+        { "name": "Augarhnath (Kali Paltan) Mandir", "line": "Shiva temple near the army barracks, founded after a Shivalinga was found in 1844; its well is where sepoys of the 1857 uprising met.", "source": "https://en.wikipedia.org/wiki/Kali_Paltan_Mandir" },
+        { "name": "Chandi Devi Mandir, Nauchandi", "line": "Old temple of the goddess Chandi at the edge of the Nauchandi Ground.", "source": "https://en.wikipedia.org/wiki/Nauchandi_Mela" }
+      ],
+      "festivals": [
+        { "name": "Nauchandi Mela", "line": "Annual fair at the Nauchandi Ground from the second Sunday after Holi, held to worship the goddess Chandi in Chaitra Navratri.", "source": "https://en.wikipedia.org/wiki/Nauchandi_Mela" },
+        { "name": "Kanwar Yatra", "line": "Pilgrims carry Ganga water to the Augharnath temple during Sawan.", "source": "https://en.wikipedia.org/wiki/Kanwar_Yatra" }
+      ]
+    },
+    "rajkot": {
+      "temples": [
+        { "name": "BAPS Shri Swaminarayan Mandir", "line": "On Kalawad Road, about 4 km from Rajkot Junction.", "source": "https://www.incredibleindia.gov.in/en/gujarat/rajkot/a-journey-through-rajkots-heritage-and" }
+      ],
+      "festivals": [
+        { "name": "Janmashtami Mela", "line": "A five-day fair at the Race Course grounds.", "source": "https://en.wikipedia.org/wiki/Rajkot" },
+        { "name": "Navaratri", "line": "Nine nights of Shakti worship with garba.", "source": "https://rajkot.nic.in/culture-heritage/" }
+      ]
+    },
+    "kalyan-dombivli": {
+      "temples": [
+        { "name": "Durgadi Mata Temple", "line": "A small temple of the goddess Durga in Durgadi Fort, Kalyan; the fort is named after her.", "source": "https://en.wikipedia.org/wiki/Durgadi_Fort" },
+        { "name": "Siddhivinayak Mahaganapati Temple, Titwala", "line": "Ganesha temple in Titwala, a town near Kalyan; busiest on Ganesh Chaturthi and Angarki Sankashti Chaturthi.", "source": "https://en.wikipedia.org/wiki/Titwala" }
+      ],
+      "festivals": [
+        { "name": "Navaratri at Durgadi", "line": "The Navaratri celebrations at the fort temple draw devotees from Mumbai, Thane, Raigad and Palghar.", "source": "https://en.wikipedia.org/wiki/Durgadi_Fort" },
+        { "name": "Gudi Padwa", "line": "The Marathi New Year; a festive procession in Dombivli is pictured in the source.", "source": "https://en.wikipedia.org/wiki/Gudi_Padwa" }
+      ]
+    },
+    "vasai-virar": {
+      "temples": [
+        { "name": "Jivdani Mata Temple", "line": "Shrine of the goddess Jivdani on the top of the hill at Virar.", "source": "https://en.wikipedia.org/wiki/Jivdani_Mata" },
+        { "name": "Tungareshwar Temple", "line": "Shiva temple at Vasai.", "source": "https://en.wikipedia.org/wiki/Tungareshwar_Temple" }
+      ],
+      "festivals": [
+        { "name": "Navratri", "line": "Many devotees climb to the Jivdani Mata shrine during the nine days.", "source": "https://en.wikipedia.org/wiki/Jivdani_Mata" },
+        { "name": "Maha Shivratri", "line": "Celebrated at the Tungareshwar Temple, as is the month of Shraavana.", "source": "https://en.wikipedia.org/wiki/Tungareshwar_Temple" }
+      ]
+    },
+    "varanasi": {
+      "temples": [
+        { "name": "Kashi Vishwanath Temple", "line": "Shiva temple in Vishwanath Gali, one of the twelve Jyotirlinga shrines.", "source": "https://en.wikipedia.org/wiki/Kashi_Vishwanath_Temple" }
+      ],
+      "festivals": [
+        { "name": "Dev Deepawali", "line": "Celebrated on Kartik Purnima, fifteen days after Diwali, along the ghats from Assi Ghat to Raj Ghat.", "source": "https://www.incredibleindia.gov.in/en/festivals-and-events/uttar-pradesh/illuminating-the-eternal-spirit-of-kashi" },
+        { "name": "Rangbhari Ekadashi", "line": "Twelve days after Maha Shivaratri, marking Shiva's return to Kashi with Parvati.", "source": "https://en.wikipedia.org/wiki/Kashi_Vishwanath_Temple" },
+        { "name": "Maha Shivaratri", "line": "The main festival of the Kashi Vishwanath Temple.", "source": "https://en.wikipedia.org/wiki/Kashi_Vishwanath_Temple" }
+      ]
+    },
+    "srinagar": {
+      "temples": [
+        { "name": "Shankaracharya Temple", "line": "Shiva temple on top of the Zabarwan Range.", "source": "https://en.wikipedia.org/wiki/Shankaracharya_Temple" },
+        { "name": "Kheer Bhawani Temple", "line": "Temple of the goddess Ragnya Devi at Tulmulla, about 25 km north-east of Srinagar.", "source": "https://en.wikipedia.org/wiki/Kheer_Bhawani_Temple" }
+      ],
+      "festivals": [
+        { "name": "Kheer Bhawani mela", "line": "The annual gathering of Kashmiri Hindus at the temple on Jyeshtha Ashtami.", "source": "https://en.wikipedia.org/wiki/Kheer_Bhawani_Temple" },
+        { "name": "Herath (Maha Shivaratri)", "line": "Kashmiri Hindus visit the Shankaracharya Temple, which is lit up for the occasion.", "source": "https://en.wikipedia.org/wiki/Shankaracharya_Temple" }
+      ]
+    },
+    "chhatrapati-sambhajinagar": {
+      "temples": [
+        { "name": "Ghrishneshwar Temple", "line": "One of the twelve Jyotirlinga temples, about 30 km north-west of the city; rebuilt in 1729 with the support of Queen Gautama Bai Holkar.", "source": "https://en.wikipedia.org/wiki/Ghrishneshwar_Temple" }
+      ]
+    },
+    "dhanbad": {
+      "temples": [
+        { "name": "Gayatri Gyan Mandir, Mahuda", "line": "Temple of the goddess Gayatri at Mahuda in Dhanbad district, completed in 2004.", "source": "https://en.wikipedia.org/wiki/Gayatri_Gyan_Mandir,_Mahuda" },
+        { "name": "Rani Sati Mandir, Mahuda", "line": "Hindu temple in the Mahuda area of Dhanbad district.", "source": "https://en.wikipedia.org/wiki/Rani_Sati_Mandir_Mahuda" }
+      ],
+      "festivals": [
+        { "name": "Gayatri Jayanti", "line": "Among the festivals at the Gayatri Gyan Mandir, with Navratri and Maha Shivaratri.", "source": "https://en.wikipedia.org/wiki/Gayatri_Gyan_Mandir,_Mahuda" }
+      ]
+    },
+    "amritsar": {
+      "temples": [
+        { "name": "Durgiana Temple", "line": "Temple named after the goddess Durga, its chief deity.", "source": "https://en.wikipedia.org/wiki/Durgiana_Temple" },
+        { "name": "Ram Tirath", "line": "About 12 km west of Amritsar on Chogawan road; many visit at its annual fair.", "source": "https://en.wikipedia.org/wiki/Amritsar" }
+      ],
+      "festivals": [
+        { "name": "Langur Mela", "line": "Held at the Durgiana Temple during the ten days of Navratri and Dussehra.", "source": "https://en.wikipedia.org/wiki/Durgiana_Temple" }
+      ]
+    },
+    "navi-mumbai": {
+      "temples": [
+        { "name": "ISKCON Kharghar", "line": "The first ISKCON temple in Navi Mumbai (Sri Radha Madan Mohanji), about 5 km from the Navi Mumbai Airport.", "source": "https://mtdc.co/en/explore-maharashtra/heritage-destinations/iskcon-temple-kharghar" },
+        { "name": "Amruthaishwar temple", "line": "An old temple near Belapur Fort, mentioned in the fort's history.", "source": "https://en.wikipedia.org/wiki/Navi_Mumbai" }
+      ],
+      "festivals": [
+        { "name": "Ganeshotsav", "line": "Chincholi Talao in Juinagar is a place for immersing idols.", "source": "https://en.wikipedia.org/wiki/Juinagar" },
+        { "name": "Navratri", "line": "Garba raas is a major attraction of Navratri in Juinagar.", "source": "https://en.wikipedia.org/wiki/Juinagar" }
+      ]
+    },
+    "prayagraj": {
+      "temples": [
+        { "name": "Bade Hanuman Mandir", "line": "Near the Triveni Sangam, known for its reclining idol of Hanuman.", "source": "https://en.wikipedia.org/wiki/Bade_Hanuman_Mandir" },
+        { "name": "Alopi Devi Mandir", "line": "At Alopibagh near the Sangam; a wooden doli is worshipped here instead of an idol.", "source": "https://en.wikipedia.org/wiki/Alopi_Devi_Mandir" }
+      ],
+      "festivals": [
+        { "name": "Magh Mela", "line": "Held every year on the banks of the Triveni Sangam in the Hindu month of Magh (about mid-January to mid-February).", "source": "https://prayagraj.rkmm.org/magh-mela" },
+        { "name": "Kumbh Mela", "line": "The full Kumbh is held every 12 years at the Sangam; the last Maha Kumbh ran from 13 January to 26 February 2025.", "source": "https://en.wikipedia.org/wiki/Prayag_Kumbh_Mela" }
+      ]
+    },
+    "howrah": {
+      "temples": [
+        { "name": "Belur Math", "line": "Headquarters of the Ramakrishna Math and Mission, a complex of temples in Belur, a neighbourhood of Howrah.", "source": "https://en.wikipedia.org/wiki/Belur,_West_Bengal" },
+        { "name": "Hajar Haat Kali Temple, Shibpur", "line": "Famed for its rare thousand-handed Kali idol; established around 1870–80.", "source": "https://howrah.gov.in/religious-circuit-tourism/" },
+        { "name": "Bangeshwar Mahadev Temple, Salkia", "line": "Shiva shrine by the Hooghly with a 51-foot, five-headed Shiva statue unveiled in 2015.", "source": "https://howrah.gov.in/religious-circuit-tourism/" }
+      ],
+      "festivals": [
+        { "name": "Ramrajatala puja fair", "line": "Begins on Ram Navami at the Ramrajatala Ram Mandir and runs nearly four months to Shravan's last Sunday; called Bengal's longest-running puja fair.", "source": "https://howrah.gov.in/religious-circuit-tourism/" },
+        { "name": "Rash Utsav, Belur Rash Bari", "line": "Radha-Krishna festival with idol processions, kirtans and feasts.", "source": "https://howrah.gov.in/religious-circuit-tourism/" }
+      ]
+    },
+    "ranchi": {
+      "temples": [
+        { "name": "Jagannath Temple", "line": "On a hillock about 10 km from the main town; the original temple was finished in 1691.", "source": "https://en.wikipedia.org/wiki/Jagannath_Temple,_Ranchi" },
+        { "name": "Pahari Mandir", "line": "Shiva temple on top of a hill in Ranchi.", "source": "https://www.incredibleindia.gov.in/en/jharkhand/ranchi/a-journey-through-religious-spots-in-ranchi" },
+        { "name": "Deori Mandir", "line": "At Deori village, Tamar, near Ranchi, with a 700-year-old sixteen-handed idol of the goddess.", "source": "https://www.incredibleindia.gov.in/en/jharkhand/ranchi/a-journey-through-religious-spots-in-ranchi" }
+      ],
+      "festivals": [
+        { "name": "Rath Yatra", "line": "Annual fair at the Jagannath Temple in Aashaadha, modelled on Puri's car festival.", "source": "https://en.wikipedia.org/wiki/Jagannath_Temple,_Ranchi" },
+        { "name": "Shivaratri", "line": "A key gathering day at the Pahari Mandir.", "source": "https://www.incredibleindia.gov.in/en/jharkhand/ranchi/a-journey-through-religious-spots-in-ranchi" }
+      ]
+    },
+    "jabalpur": {
+      "temples": [
+        { "name": "Chausath Yogini Temple, Bhedaghat", "line": "Early-11th-century circular Yogini temple on a hilltop above the Narmada at Bhedaghat.", "source": "https://en.wikipedia.org/wiki/Chausath_Yogini_Temple,_Bhedaghat" },
+        { "name": "Gwarighat", "line": "Ghat on the Narmada with a half-submerged temple of Maa Narmada, known for its aarti.", "source": "https://www.mptourism.com/chausath-yogini-temple-jabalpur.html" },
+        { "name": "Tilwadeshwar temple", "line": "Near Tilwara Ghat, where Gandhi's ashes were immersed.", "source": "https://en.wikipedia.org/wiki/Jabalpur" }
+      ]
+    },
+    "gwalior": {
+      "temples": [
+        { "name": "Teli ka Mandir", "line": "Temple in Gwalior Fort dated to the 8th–9th century, dedicated to Shiva, Vishnu and the Matrikas.", "source": "https://en.wikipedia.org/wiki/Teli_ka_Mandir" },
+        { "name": "Sasbahu Temples", "line": "Pair of temples in the fort built in 1090–1093 by King Mahipala.", "source": "https://en.wikipedia.org/wiki/Sasbahu_Temple,_Gwalior" },
+        { "name": "Chaturbhuj Temple", "line": "In Gwalior Fort; its inscription is cited as the world's very first occurrence of zero as a written number.", "source": "https://en.wikipedia.org/wiki/Gwalior" }
+      ]
+    },
+    "coimbatore": {
+      "temples": [
+        { "name": "Perur Pateeswarar Temple", "line": "Shiva temple at Perur on the Noyyal river, said to have been built by the Chola emperor Karikala.", "source": "https://en.wikipedia.org/wiki/Perur_Pateeswarar_Temple,_Coimbatore" },
+        { "name": "Marudhamalai Temple", "line": "Murugan temple on a hillock on the city's outskirts, in the Western Ghats.", "source": "https://prod.incredibleindia.gov.in/content/incredible-india-v2/en/destinations/coimbatore/temple-trails.html" }
+      ],
+      "festivals": [
+        { "name": "Panguni Uthiram", "line": "Celebrated every year at Perur with the temple chariot taken through the neighbourhood.", "source": "https://en.wikipedia.org/wiki/Perur_Pateeswarar_Temple,_Coimbatore" },
+        { "name": "Thai Poosam", "line": "Celebrated at Marudhamalai (January–February).", "source": "https://prod.incredibleindia.gov.in/content/incredible-india-v2/en/destinations/coimbatore/temple-trails.html" }
+      ]
+    },
+    "vijayawada": {
+      "temples": [
+        { "name": "Kanaka Durga Temple", "line": "Temple of Kanaka Durga on the Indrakeeladri hill, on the banks of the Krishna.", "source": "https://en.wikipedia.org/wiki/Kanaka_Durga_Temple" },
+        { "name": "Malleswara temple", "line": "At the foot of the Indrakeeladri hills.", "source": "https://en.wikipedia.org/wiki/Vijayawada" }
+      ],
+      "festivals": [
+        { "name": "Dasara", "line": "Durga Pooja and a special Theppotsavam (boat festival) on the Krishna are important events of Dasara in the city.", "source": "https://en.wikipedia.org/wiki/Vijayawada" },
+        { "name": "Krishna Pushkaram", "line": "The city is the ritual host of the Pushkaram of the River Krishna.", "source": "https://en.wikipedia.org/wiki/Vijayawada" }
+      ]
+    },
+    "jodhpur": {
+      "temples": [
+        { "name": "Chamunda Mata Temple", "line": "By the southern gate of Mehrangarh Fort; Rao Jodha brought the goddess here from Mandore.", "source": "https://www.incredibleindia.gov.in/en/rajasthan/jodhpur/exploring-the-temples-of-jodhpur" },
+        { "name": "Raj Ranchhodji Temple", "line": "Houses a black marble image of Ranchhodji.", "source": "https://www.incredibleindia.gov.in/en/rajasthan/jodhpur/exploring-the-temples-of-jodhpur" },
+        { "name": "Achal Nath Shivalaya", "line": "A prominent Shiva temple of the city.", "source": "https://www.incredibleindia.gov.in/en/rajasthan/jodhpur/exploring-the-temples-of-jodhpur" }
+      ],
+      "festivals": [
+        { "name": "Navratra", "line": "Lakhs of devotees visit Chamunda Mata; an annual yagna is held on Ashtami.", "source": "https://www.incredibleindia.gov.in/en/rajasthan/jodhpur/exploring-the-temples-of-jodhpur" },
+        { "name": "Dussehra", "line": "Crowds throng Mehrangarh during the Dussehra celebrations.", "source": "https://en.wikipedia.org/wiki/Mehrangarh" }
+      ]
+    },
+    "madurai": {
+      "temples": [
+        { "name": "Meenakshi Temple", "line": "On the southern bank of the Vaigai, dedicated to Meenakshi (a form of Parvati) and Sundareswarar.", "source": "https://en.wikipedia.org/wiki/Meenakshi_Temple" },
+        { "name": "Thiruparankundram Murugan Temple", "line": "On a hillock 8 km from Madurai, the first of Murugan's six abodes.", "source": "https://en.wikipedia.org/wiki/Subramaniya_Swamy_Temple,_Thiruparankundram" }
+      ],
+      "festivals": [
+        { "name": "Chithirai festival (Meenakshi Tirukalyanam)", "line": "In the Tamil month of Chithirai; its second half follows Kallazhagar's journey and the event in the Vaigai river.", "source": "https://en.wikipedia.org/wiki/Meenakshi_Tirukalyanam" }
+      ]
+    },
+    "raipur": {
+      "temples": [
+        { "name": "Mahamaya Temple", "line": "Temple of Devi Mahamaya at Purani Basti, renovated in the 17th–18th century.", "source": "https://en.wikipedia.org/wiki/Mahamaya_Temple,_Raipur" },
+        { "name": "Dudhadhari Math", "line": "Founded by Swami Balabhadradas, a 16th-century monk.", "source": "https://en.wikipedia.org/wiki/Dudhadhari_temple" }
+      ],
+      "festivals": [
+        { "name": "Navaratri", "line": "Observed at the Mahamaya Temple, with Durga Ashtami and Vijayadashami.", "source": "https://en.wikipedia.org/wiki/Mahamaya_Temple,_Raipur" }
+      ]
+    },
+    "kota": {
+      "festivals": [
+        { "name": "Kota Dussehra Mela", "line": "Held at the Dussehra Ground, with Ravana effigies up to 75 feet, cultural evenings and festive markets.", "source": "https://www.incredibleindia.gov.in/en/festivals-and-events/rajasthan/dussehra-fair-2026" }
+      ]
+    },
+    "chandigarh": {
+      "temples": [
+        { "name": "Mata Mansa Devi Mandir", "line": "In Panchkula, about 10 km from the Chandigarh bus terminus; the main temple was built in 1811–1815.", "source": "https://en.wikipedia.org/wiki/Mata_Mansa_Devi_Mandir" },
+        { "name": "Chandi Mandir", "line": "Temple of the goddess Chandi about 15 km from the city, which was named after it.", "source": "https://en.wikipedia.org/wiki/Chandi_Mandir" }
+      ],
+      "festivals": [
+        { "name": "Navratra Mela", "line": "Nine-day melas at Mansa Devi twice a year, in Ashvin and Chaitra.", "source": "https://en.wikipedia.org/wiki/Mata_Mansa_Devi_Mandir" }
+      ]
+    },
+    "guwahati": {
+      "temples": [
+        { "name": "Kamakhya Temple", "line": "Temple of the goddess Kamakhya on the Nilachal hills, among the oldest of the 51 Shakta pithas.", "source": "https://en.wikipedia.org/wiki/Kamakhya_Temple" }
+      ],
+      "festivals": [
+        { "name": "Ambubachi Mela", "line": "Annual gathering at the Kamakhya Temple around the middle of June.", "source": "https://en.wikipedia.org/wiki/Ambubachi_Mela" }
+      ]
+    },
+    "solapur": {
+      "temples": [
+        { "name": "Siddheshwar Temple", "line": "Temple of Shri Siddheshwar, with a lake within the temple complex.", "source": "https://en.wikipedia.org/wiki/Siddheshwar_Temple,_Solapur" },
+        { "name": "Manacha Shri Ajoba Ganpati", "line": "One of the oldest Ganesh temples, celebrating the Ganesh festival since 1885.", "source": "https://en.wikipedia.org/wiki/Solapur" }
+      ],
+      "festivals": [
+        { "name": "Gadda Yatra", "line": "A fifteen-day fair near the Siddheshwar Temple from Makar Sankranti, with the Nandi-dhwaj procession.", "source": "https://en.wikipedia.org/wiki/Siddheshwar_Temple,_Solapur" }
+      ]
+    },
+    "hubballi-dharwad": {
+      "temples": [
+        { "name": "Chandramauleshwara Temple, Unkal", "line": "11th-century Shiva temple from the Kalyani Chalukya era.", "source": "https://en.wikipedia.org/wiki/Chandramauleshwara_Temple,_Unkal" },
+        { "name": "Bhavani Shankar Temple", "line": "Called the oldest temple in the city; an inscription dates its founding to the 11th century.", "source": "https://en.wikipedia.org/wiki/Hubli" },
+        { "name": "Siddharoodha Math", "line": "A major spiritual centre in Hubballi, visited throughout the year.", "source": "https://karnatakatourism.org/en/destinations/hubballi/" }
+      ]
+    }
+  }
+}

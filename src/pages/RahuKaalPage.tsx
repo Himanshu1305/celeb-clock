@@ -14,6 +14,7 @@ import { nearestCities, WINDOW_PARTS, PANCHANG_CITIES } from '@/lib/vedic/pancha
 import { pageMeta, indexMeta, dateWithWeekday } from '@/lib/vedic/panchangText';
 import { usePanchangPlace } from '@/components/panchang/usePanchangPlace';
 import { usePanchangEntry } from '@/components/panchang/usePanchangEntry';
+import { CityLocalGuide } from '@/components/panchang/CityLocalGuide';
 import { PanchangControls, isPrerender } from '@/components/panchang/PanchangControls';
 import { CityLinks, TermChips } from '@/components/panchang/PanchangSections';
 
@@ -84,6 +85,9 @@ export default function RahuKaalPage() {
             <p>Traditionally people avoid <em>starting</em> something new — a journey, a purchase, a ceremony or signing an agreement — during Rahu Kaal. Work already under way can simply continue. It is a gentle timing guide, not a cause for worry.</p>
             <p>Times are local clock times rounded to the nearest minute, from the real astronomical sunrise and sunset; checked against Drik Panchang they agree to within a minute. <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link></p>
           </div>
+
+          {/* Batch 8: static local guide (temples + festivals, sourced) on the 50 city pages only. */}
+          {ctl.cityParam && ctl.validCity && !ctl.isCustom && <CityLocalGuide slug={place.slug} cityName={place.name} />}
 
           <CityLinks kind="rahu-kaal" city={ctl.isCustom ? undefined : place.city} nearby={nearby} all={PANCHANG_CITIES} linkTo={ctl.linkTo} />
         </div>
