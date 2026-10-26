@@ -6,7 +6,8 @@
  * engine: the data was computed at build time (./compute.ts DAILY_DATA_COMPUTERS).
  */
 import type { DailyEntry, DailyMonthFile } from './types';
-import type { DailyPageDef } from './registry';
+import { dailyDataKey, type DailyPageDef } from './registry';
+import { rashifalPeriodTemplate } from './kinds/rashifalPeriod';
 import { rashifalFromSky, rashifalHiFromSky } from './kinds/rashifalDaily';
 import { horoscopeFromSky } from './kinds/westernDaily';
 import { panchangTemplate, renderPanchangHiEntry, type PanchangDayData } from './kinds/panchangTemplate';
@@ -16,6 +17,9 @@ export type DailyTemplate = (dateIST: string, slug: string, data: unknown) => Da
 export const DAILY_TEMPLATES: Record<string, DailyTemplate> = {
   'rashifal': rashifalFromSky,
   'rashifal-hi': rashifalHiFromSky,
+  'rashifal-week': rashifalPeriodTemplate('week'),
+  'rashifal-month': rashifalPeriodTemplate('month'),
+  'rashifal-year': rashifalPeriodTemplate('year'),
   'horoscope': horoscopeFromSky,
   'panchang': panchangTemplate('panchang'),
   'rahu-kaal': panchangTemplate('rahu-kaal'),
@@ -28,7 +32,7 @@ export function entryFromMonthFile(def: DailyPageDef, slug: string, date: string
   if (!file) return null;
   const done = file.days?.[date];
   if (done) return done;
-  const data = file.data?.[date];
+  const data = file.data?.[dailyDataKey(def, date)];
   const tpl = DAILY_TEMPLATES[def.kind];
   return data !== undefined && tpl ? tpl(date, slug, data) : null;
 }

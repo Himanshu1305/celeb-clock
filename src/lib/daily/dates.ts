@@ -45,6 +45,27 @@ export function weekdayOf(iso: string): number {
   return new Date(Date.UTC(y, m - 1, d)).getUTCDay();
 }
 
+/** Multi-day periods a daily-mechanism page can show (Batch 8: weekly/monthly/yearly rashifal). */
+export type DailyPeriod = 'week' | 'month' | 'year';
+
+/** Monday (YYYY-MM-DD) of the India calendar week (Monday–Sunday) containing a date. */
+export function weekStartISO(iso: string): string {
+  return addDaysISO(iso, -((weekdayOf(iso) + 6) % 7));
+}
+
+/** Key of the period containing a date: week → its Monday, month → YYYY-MM, year → YYYY. */
+export function periodKeyOf(period: DailyPeriod, iso: string): string {
+  if (period === 'week') return weekStartISO(iso);
+  if (period === 'month') return iso.slice(0, 7);
+  return iso.slice(0, 4);
+}
+
+/** "26 Oct" / "26 Oct 2026" */
+export function formatShortDateEn(iso: string, withYear = true): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  return `${d} ${MONTHS_EN[m - 1].slice(0, 3)}${withYear ? ` ${y}` : ''}`;
+}
+
 /** "26 October 2026" */
 export function formatDateEn(iso: string): string {
   const [y, m, d] = iso.split('-').map(Number);

@@ -11,6 +11,7 @@ import { vedicSky } from './kinds/vedicSky';
 import { westernSky } from './kinds/westernDaily';
 import { DAILY_PAGES } from './registry';
 import { DAILY_TEMPLATES } from './templates';
+import { rashifalSky, type RashifalPeriod } from '../vedic/rashifal';
 
 export type DailyComputer = (dateIST: string, slug: string) => DailyEntry;
 export type DailyDataComputer = (dateIST: string, dataSlug: string) => unknown;
@@ -26,6 +27,9 @@ export const DAILY_DATA_COMPUTERS: Record<string, DailyDataComputer> = {
   'vedic-sky': date => viaJson(vedicSky(date)),
   'western-sky': date => viaJson(westernSky(date)),
   'panchang-day': (date, city) => viaJson(computePanchangDayDataForCity(date, city)),
+  // Batch 8: the sky for the week (Mon–Sun) / month / year containing the India date;
+  // the data slug is the period. 06:00 UTC = 11:30 IST, so the UTC date is the India date.
+  'rashifal-period': (date, period) => viaJson(rashifalSky(period as RashifalPeriod, new Date(`${date}T06:00:00Z`))),
 };
 
 /** Original "finished entry" computers (kept for kinds without a data variant). */

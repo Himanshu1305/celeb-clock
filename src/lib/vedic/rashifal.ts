@@ -15,8 +15,14 @@
  * positions change with the date and the house differs per Rashi, the output
  * genuinely differs by date AND by sign — no hardcoded "today" string.
  *
- * All positions come from `getSiderealLongitude` (pure, browser + edge). The page
- * calls this at request time with `new Date()`, so URLs stay evergreen.
+ * All positions come from `getSiderealLongitude` (pure, browser + edge).
+ *
+ * Batch 8: split in two so the weekly / monthly / yearly pages can use the shared
+ * daily-page mechanism (src/lib/daily): `rashifalSky(period, ref)` does ALL the
+ * astronomy (small JSON-safe data, precomputed at build time per week / month / year),
+ * and the pure `rashifalFromSky(signIndex, sky)` turns it into the reading — the same
+ * function in the Worker and the browser. `computeRashifal` = both in one call.
+ * "This week" is the India calendar week, Monday to Sunday, containing the date.
  */
 import { getSiderealLongitude } from './engine/vedicEngine';
 
@@ -246,6 +252,7 @@ export interface Rashifal {
   transits: TransitReading[];
   sections: RashifalSection[];
   ingress: string[];        // real planet ingress notes for the period (slow planets)
+  ingressItems: RashifalIngress[]; // the same, structured (Batch 8)
   lucky: { color: string; colorHindi: string; numbers: number[] };
 }
 
@@ -292,7 +299,11 @@ const TONE_FRAME: Record<Tone, string> = {
 };
 
 function buildTransit(planet: PlanetName, moonSign: number, at: Date): TransitReading {
-  const signIndex = signIndexOf(planet, at);
+  return transitFromSign(planet, moonSign, signIndexOf(planet, at));
+}
+
+/** The reading of a planet in a given sidereal sign, for a Moon sign (pure, no engine). */
+function transitFromSign(planet: PlanetName, moonSign: number, signIndex: number): TransitReading {
   const house = houseFromMoon(signIndex, moonSign);
   const tone = toneFor(planet, house);
   const grade = gradeFor(planet, tone);
@@ -328,16 +339,18 @@ function periodRange(period: RashifalPeriod, ref: Date): { start: Date; end: Dat
     return { start: startOfDay, end: startOfDay, rep: startOfDay, label: 'Today' };
   }
   if (period === 'week') {
-    const end = new Date(startOfDay); end.setUTCDate(end.getUTCDate() + 6);
-    const rep = new Date(startOfDay); rep.setUTCDate(rep.getUTCDate() + 3);
-    return { start: startOfDay, end, rep, label: 'This week' };
+    // Batch 8: the calendar week Monday–Sunday containing the date (was a rolling 7 days
+    // from today, which changed every day and could not be precomputed per week).
+    const start = new Date(startOfDay); start.setUTCDate(start.getUTCDate() - ((startOfDay.getUTCDay() + 6) % 7));
+    const end = new Date(start); end.setUTCDate(end.getUTCDate() + 6);
+    const rep = new Date(start); rep.setUTCDate(rep.getUTCDate() + 3);
+    return { start, end, rep, label: 'This week' };
   }
   if (period === 'month') {
     const start = new Date(Date.UTC(y, ref.getUTCMonth(), 1, 6, 0, 0));
     const end = new Date(Date.UTC(y, ref.getUTCMonth() + 1, 0, 6, 0, 0));
     const rep = new Date(Date.UTC(y, ref.getUTCMonth(), 15, 6, 0, 0));
-    const label = start.toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
-    return { start, end, rep, label };
+    return { start, end, rep, label: periodLabelEn('month', start) };
   }
   // year
   const start = new Date(Date.UTC(y, 0, 1, 6, 0, 0));
@@ -451,29 +464,96 @@ function sectionText(key: Exclude<RashifalSection['key'], 'overview'>, relevant:
   return { en, hi };
 }
 
+/** One sign stretch of a planet inside the period (compact, JSON-safe). */
+export interface RashifalSkySegment {
+  /** sidereal sign index 0..11 */
+  s: number;
+  /** start / end instants (ms) of the stretch */
+  a: number;
+  b: number;
+  /** IST calendar dates of a / b */
+  f: string;
+  t: string;
+}
+
+/**
+ * Everything the reading needs from the sky for one period — rashi-independent, so
+ * one value serves all 12 rashis. Precomputed at build time (src/lib/daily).
+ */
+export interface RashifalSky {
+  p: RashifalPeriod;
+  /** period start / end / representative instants (ms) */
+  start: number;
+  end: number;
+  rep: number;
+  /** featured planet → sidereal sign at the representative instant */
+  signs: Partial<Record<PlanetName, number>>;
+  /** month / year: the slow planets' sign stretches over the period */
+  segs?: Partial<Record<PlanetName, RashifalSkySegment[]>>;
+  /** today: the Moon's nakshatra (0..26) and its next sign change within 3 days */
+  moon?: { nak: number; next?: { s: number; f: string } };
+}
+
+/** The astronomy half of a rashifal: where the planets are for this period (engine). */
+export function rashifalSky(period: RashifalPeriod, ref: Date): RashifalSky {
+  const { start, end, rep } = periodRange(period, ref);
+  const signs: Partial<Record<PlanetName, number>> = {};
+  for (const p of featuredPlanets(period)) signs[p] = signIndexOf(p, rep);
+  const sky: RashifalSky = { p: period, start: start.getTime(), end: end.getTime(), rep: rep.getTime(), signs };
+  if (period === 'month' || period === 'year') {
+    sky.segs = {};
+    for (const p of SLOW) {
+      sky.segs[p] = signSegments(p, start, end).map(sg => ({ s: sg.signIndex, a: sg.startMs, b: sg.endMs, f: sg.fromISO, t: sg.toISO }));
+    }
+  }
+  if (period === 'today') {
+    const moonLon = ((getSiderealLongitude('Moon', rep) % 360) + 360) % 360;
+    const next = signSegments('Moon', rep, new Date(rep.getTime() + 3 * DAY_MS))[1];
+    sky.moon = { nak: Math.floor(moonLon / (360 / 27)) % 27, ...(next ? { next: { s: next.signIndex, f: next.fromISO } } : {}) };
+  }
+  return sky;
+}
+
+/** A real slow-planet sign change inside a month / year (structured form of `ingress`). */
+export interface RashifalIngress {
+  planet: PlanetName;
+  signIndex: number;
+  dateISO: string;
+  /** house from the Moon sign it enters */
+  house: number;
+}
+
 /**
  * Compute a full rashifal for a Moon sign and period at a reference instant.
  * Pure + deterministic given (signIndex, period, ref).
  */
 export function computeRashifal(signIndex: number, period: RashifalPeriod, ref: Date): Rashifal {
+  return rashifalFromSky(signIndex, rashifalSky(period, ref));
+}
+
+/** The reading half: pure (no engine) — the Worker, the browser and the build all call it. */
+export function rashifalFromSky(signIndex: number, sky: RashifalSky): Rashifal {
+  const period = sky.p;
   const rashi = RASHIS[signIndex];
-  const { start, end, rep, label } = periodRange(period, ref);
+  const start = new Date(sky.start);
+  const end = new Date(sky.end);
+  const rep = new Date(sky.rep);
+  const label = periodLabelEn(period, start);
   const featured = featuredPlanets(period);
+  const signOf = (p: PlanetName) => sky.signs[p] as number;
   // A year is NOT read from one date: each slow planet's year is split at its real sign
   // changes and every stretch is read on its own, weighted by how long it lasts (audit K2).
-  const segmentsByPlanet = new Map<PlanetName, SignSegment[]>();
   const transits: TransitReading[] = period === 'year'
     ? featured.flatMap(p => {
-        const segs = signSegments(p, start, end);
-        segmentsByPlanet.set(p, segs);
-        if (segs.length === 1) return [buildTransit(p, signIndex, rep)];
-        const total = end.getTime() - start.getTime();
+        const segs = sky.segs?.[p] ?? [];
+        if (segs.length <= 1) return [transitFromSign(p, signIndex, signOf(p))];
+        const total = sky.end - sky.start;
         return segs.map(sg => {
-          const r = buildTransit(p, signIndex, new Date((sg.startMs + sg.endMs) / 2));
-          return { ...r, text: `${rangeLabel(sg.fromISO, sg.toISO)}: ${r.text}`, fromISO: sg.fromISO, toISO: sg.toISO, share: (sg.endMs - sg.startMs) / total };
+          const r = transitFromSign(p, signIndex, sg.s);
+          return { ...r, text: `${rangeLabel(sg.f, sg.t)}: ${r.text}`, fromISO: sg.f, toISO: sg.t, share: (sg.b - sg.a) / total };
         });
       })
-    : featured.map(p => buildTransit(p, signIndex, rep));
+    : featured.map(p => transitFromSign(p, signIndex, signOf(p)));
 
   // Overview = the strongest-signal transits (slow planets + the day's Moon).
   const overviewPicks = transits
@@ -494,18 +574,16 @@ export function computeRashifal(signIndex: number, period: RashifalPeriod, ref: 
   let overviewEn: string;
   let overviewHi: string;
   const moonT = transits.find(t => t.planet === 'Moon');
-  if (period === 'today' && moonT) {
+  if (period === 'today' && moonT && sky.moon) {
     // K14: the DAY is led by the Moon — the fastest-moving reference, changing house
     // every ~2¼ days and nakshatra about daily — so the daily text genuinely changes.
     // The slow planets stay as the backdrop. The day's tone follows the Moon.
     overall.tone = moonT.tone;
     overall.grade = moonT.tone === 'mixed' ? 'mild' : 'moderate';
-    const moonLon = ((getSiderealLongitude('Moon', rep) % 360) + 360) % 360;
-    const nakIdx = Math.floor(moonLon / (360 / 27)) % 27;
-    const segs = signSegments('Moon', rep, new Date(rep.getTime() + 3 * DAY_MS));
-    const next = segs[1];
-    const nextHouse = next ? houseFromMoon(next.signIndex, signIndex) : 0;
-    const nextWhen = next ? new Date(next.fromISO + 'T00:00:00Z') : null;
+    const nakIdx = sky.moon.nak;
+    const next = sky.moon.next;
+    const nextHouse = next ? houseFromMoon(next.s, signIndex) : 0;
+    const nextWhen = next ? new Date(next.f + 'T00:00:00Z') : null;
     const moveEn = next && nextWhen
       ? ` It moves on to your ${ORDINAL[nextHouse]} house on ${WEEKDAYS[nextWhen.getUTCDay()]}, ${nextWhen.getUTCDate()} ${MONTHS_EN[nextWhen.getUTCMonth()]} (IST).`
       : '';
@@ -554,15 +632,14 @@ export function computeRashifal(signIndex: number, period: RashifalPeriod, ref: 
 
   // Real ingress notes for the period (slow planets only; cheap day-precision scan).
   const ingress: string[] = [];
+  const ingressItems: RashifalIngress[] = [];
   if (period === 'month' || period === 'year') {
     for (const p of SLOW) {
       // Every sign change in the period, not just the first (a retrograde return counts too).
-      const segs = segmentsByPlanet.get(p) ?? signSegments(p, start, end);
-      for (const sg of segs.slice(1)) {
-        const d = new Date(sg.fromISO + 'T00:00:00Z');
-        const when = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-        const newHouse = houseFromMoon(sg.signIndex, signIndex);
-        ingress.push(`${p} enters ${RASHIS[sg.signIndex].sanskrit} (${RASHIS[sg.signIndex].english}) on ${when} — your ${ORDINAL[newHouse]} house from the Moon.`);
+      for (const sg of (sky.segs?.[p] ?? []).slice(1)) {
+        const newHouse = houseFromMoon(sg.s, signIndex);
+        ingress.push(`${p} enters ${RASHIS[sg.s].sanskrit} (${RASHIS[sg.s].english}) on ${longDateEn(sg.f)} — your ${ORDINAL[newHouse]} house from the Moon.`);
+        ingressItems.push({ planet: p, signIndex: sg.s, dateISO: sg.f, house: newHouse });
       }
     }
   }
@@ -578,8 +655,30 @@ export function computeRashifal(signIndex: number, period: RashifalPeriod, ref: 
     transits,
     sections,
     ingress,
+    ingressItems,
     lucky: { color: rashi.luckyColor, colorHindi: rashi.luckyColorHindi, numbers: rashi.luckyNumbers },
   };
+}
+
+/** One plain line on what a transit is about (Batch 8 "Why" list on the period pages):
+ *  the life area of its house from the Moon and how the tradition reads it. */
+export function transitWhy(t: TransitReading): string {
+  const area = HOUSE_AREA[t.house].area;
+  return `Your ${ORDINAL[t.house]} house from the Moon covers ${area}. ${TONE_FRAME[t.tone]} — a ${t.grade} influence bringing ${lensFor(t.planet, t.tone)}.`;
+}
+
+/** "26 October 2026" from YYYY-MM-DD (deterministic; no locale APIs). */
+function longDateEn(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  return `${d} ${MONTHS_EN[m - 1]} ${y}`;
+}
+
+/** English period label ("Today", "This week", "October 2026", "2027"). */
+function periodLabelEn(period: RashifalPeriod, start: Date): string {
+  if (period === 'today') return 'Today';
+  if (period === 'week') return 'This week';
+  if (period === 'month') return `${MONTHS_EN[start.getUTCMonth()]} ${start.getUTCFullYear()}`;
+  return String(start.getUTCFullYear());
 }
 
 // ── Exports reused by the transit-by-year pages ──────────────────────────────
