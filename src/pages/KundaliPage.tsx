@@ -222,7 +222,7 @@ export default function KundaliPage() {
               <span className="eyebrow">Janam Kundali</span>
               <h1>Your Kundali, computed.</h1>
             </div>
-            <p>Your Vedic birth chart — planetary positions, <TermTip id="lagna">Lagna</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip> and <TermTip id="dasha">Dasha</TermTip>, in accurate sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) astronomy. Full report {price}.</p>
+            <p>Your Vedic birth chart — planetary positions, <TermTip id="lagna">Lagna</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip> and <TermTip id="dasha">Dasha</TermTip>, in accurate sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) astronomy. Free. (Our one paid report, the Birthday Blueprint, is {price}.)</p>
           </div>
 
           {/* Batch 8: dated claim backed by /accuracy (src/lib/accuracy/evidence.ts). */}

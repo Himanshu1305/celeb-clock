@@ -425,13 +425,15 @@ export default function VedicAstrologyLanding() {
           </div>
         </section>
 
-        {/* PAID REPORT banner */}
+        {/* REPORT banner — only real products: the Kundali is free; the Birthday Blueprint is the
+            one paid report (₹199). The old "Generate & unlock ₹199" and "Combo ₹299" lines advertised
+            products that do not exist (batch 8 review). */}
         <section className="report" id="report">
-          <div><span className="eyebrow">Go deeper · paid report</span><h2>Your chart, in a report<br />you can return to.</h2></div>
-          <p>A structured reading with the birth chart, planetary periods, chart patterns, doshas and remedies, and the calculation notes together.</p>
+          <div><span className="eyebrow">Go deeper</span><h2>Your full chart is free.<br />Keep it as a report if you like.</h2></div>
+          <p>Generate your Kundali free — birth chart, planetary periods, doshas and remedies, with the calculation notes. For a printable keepsake, the Birthday Blueprint is our one paid report.</p>
           <div className="report-actions">
-            <Link className="btn light" to="/kundali" data-testid="vap-buy-kundali">Generate &amp; unlock — ₹199 →</Link>
-            <p className="small"><Link className="textlink" to="/birthday-report/gift" data-testid="vap-buy-combo">Combo with the Birthday Report — ₹299 →</Link></p>
+            <Link className="btn light" to="/kundali" data-testid="vap-free-kundali">Generate your free Kundali →</Link>
+            <p className="small"><Link className="textlink" to="/birthday-report" data-testid="vap-birthday-blueprint">The Birthday Blueprint — ₹199 →</Link></p>
           </div>
         </section>
 
