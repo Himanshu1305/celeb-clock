@@ -24,12 +24,14 @@ export async function detectCountry(): Promise<CountryInfo> {
   }
 
   try {
-    const response = await fetch('https://ipapi.co/json/', {
+    // Country from our own edge (Cloudflare request.cf.country via /api/geo) — no third party.
+    const response = await fetch('/api/geo', {
       signal: AbortSignal.timeout(3000),
     });
     if (!response.ok) throw new Error('Failed');
     const data = await response.json();
-    const countryCode = data.country_code || 'US';
+    if (!data.country_code) throw new Error('No country');
+    const countryCode = data.country_code;
 
     const result: CountryInfo = {
       countryCode,
