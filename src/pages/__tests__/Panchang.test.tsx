@@ -1,6 +1,12 @@
 // @vitest-environment jsdom
 // Batch 7 (W7): Panchang / Rahu Kaal / Choghadiya pages for any city and date.
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, beforeAll, afterAll, vi } from 'vitest';
+
+// Freeze only the clock (Oct 2026 CI failure): these tests open fixed ?date= days, and a
+// page whose ?date= equals the real today waits for the precomputed daily entry instead of
+// rendering synchronously — so each fixture date broke the suite on that calendar day.
+beforeAll(() => { vi.useFakeTimers({ toFake: ['Date'] }); vi.setSystemTime(new Date('2026-06-15T06:30:00Z')); });
+afterAll(() => { vi.useRealTimers(); });
 import { render, cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -87,7 +93,13 @@ describe('Panchang page — any city, any date', () => {
   });
 
   it('a Wednesday says Abhijit is not used', () => {
-    const { getByTestId } = renderPath('/panchang/delhi?date=2026-10-28');
+    // A Wednesday 8–14 days ahead, never today: when ?date= is today the page waits for the
+    // precomputed daily entry (not available in tests), so a fixed date broke the test on
+    // 28 Oct 2026 itself.
+    const d = new Date(); d.setDate(d.getDate() + 8 + ((3 - ((d.getDay() + 8) % 7) + 7) % 7));
+    const wed = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    expect(new Date(`${wed}T12:00:00`).getDay()).toBe(3);
+    const { getByTestId } = renderPath(`/panchang/delhi?date=${wed}`);
     expect(getByTestId('panchang-daily').textContent).toContain('not used on Wednesday');
   });
 
