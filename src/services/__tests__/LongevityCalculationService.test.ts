@@ -1241,15 +1241,16 @@ function getQuotaLimitPure(tier: string): number {
   return 1;
 }
 
+// Batch 9: ids follow the 15-question calculator; cap is ±10 years.
 const ALL_BEST_ANSWERS = {
-  heartRate: 'under60', pushups: 'excellent', balance: 'excellent',
-  stairs: 'never', sleep: 'refreshed', flexibility: 'palms',
-  memory: 'excellent', reaction: 'fast', waistHeight: 'healthy', energy: 'high',
+  heartRate: 'under60', pushups: 'p30plus', balance: 'full45', stairs: 'never', sleep: 'refreshed',
+  flexibility: 'palms', memory: 'excellent', reaction: 'fast', bmi: 'bmi_optimal', waist: 'waist_low',
+  bloodPressure: 'bp_optimal', energy: 'high', smoking: 'never', alcohol: 'none', activity: '30plus',
 };
 const ALL_WORST_ANSWERS = {
-  heartRate: 'high', pushups: 'poor', balance: 'poor',
-  stairs: 'always', sleep: 'exhausted', flexibility: 'knees',
-  memory: 'poor', reaction: 'veryslow', waistHeight: 'very_high', energy: 'verylow',
+  heartRate: 'high', pushups: 'p0to4', balance: 'under5', stairs: 'always', sleep: 'exhausted',
+  flexibility: 'knees', memory: 'poor', reaction: 'veryslow', bmi: 'bmi_obese2', waist: 'waist_high',
+  bloodPressure: 'bp_severe', energy: 'verylow', smoking: 'current', alcohol: 'over350', activity: 'under15',
 };
 
 describe('Group W3-1-3 — Country Forecast Comparison', () => {
@@ -1283,20 +1284,18 @@ describe('Group W3-4-8 — Biological Age Calculator', () => {
     expect(bio).toBeGreaterThan(45);
   });
 
-  it('W3-6: Cap at -15 even if raw total adjustments = -30', () => {
-    // All best: 10 × -3 = -30; capped at -15 → bioAge = max(18, 45 - 15) = 30
-    const bio = calculateBiologicalAge(45, ALL_BEST_ANSWERS);
-    expect(bio).toBe(30);
+  it('W3-6: total adjustment is capped at -10', () => {
+    const bio = calculateBiologicalAge(65, ALL_BEST_ANSWERS);
+    expect(bio).toBe(55);
   });
 
-  it('W3-7: Cap at +15 even if raw total adjustments = +30', () => {
-    // All worst: 10 × 3 = +30; capped at +15 → bioAge = max(18, 45 + 15) = 60
+  it('W3-7: total adjustment is capped at +10', () => {
     const bio = calculateBiologicalAge(45, ALL_WORST_ANSWERS);
-    expect(bio).toBe(60);
+    expect(bio).toBe(55);
   });
 
   it('W3-8: bioAge floor is 18 — never returns below 18', () => {
-    // chronologicalAge 5 + cap(-15) = -10 → max(18, -10) = 18
+    // chronologicalAge 5 + cap(-10) = -5 → max(18, -5) = 18
     const bio = calculateBiologicalAge(5, ALL_BEST_ANSWERS);
     expect(bio).toBe(18);
   });

@@ -84,7 +84,7 @@ export default function WhatIsBMI() {
 
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
             <p className="text-lg font-bold text-gray-900 mb-2">Test Your Biological Age Including BMI and WHtR</p>
-            <p className="text-sm text-gray-500 mb-4">12-biomarker assessment · WHO-validated · 3 minutes</p>
+            <p className="text-sm text-gray-500 mb-4">Free 15-question lifestyle and fitness estimate · Not a lab test</p>
             <Link to="/biological-age"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Test My Biological Age →

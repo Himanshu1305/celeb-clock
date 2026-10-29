@@ -150,6 +150,13 @@ const BLOG = {
 };
 
 // ── Answers pages ─────────────────────────────────────────────────────────────
+// Optional per-answer meta descriptions (default is generated from the title).
+// Keep 'what-is-my-biological-age' in sync with WHAT_IS_BIO_AGE_DESC in
+// src/content/biologicalAgeMeta.ts (guarded by a vitest).
+const ANSWER_DESC = {
+  'what-is-my-biological-age': 'Biological age is an estimate of how your body is doing compared with your calendar age. Try our free 15-question estimate: fitness, BMI, waist, blood pressure, sleep, smoking, alcohol and exercise.',
+};
+
 const ANSWERS = {
   'how-long-will-i-live':                  'How Long Will I Live? A Science-Based Answer | BornClock',
   'what-is-my-biological-age':             'What Is My Biological Age? The Short Answer + Free Test | BornClock',
@@ -200,7 +207,8 @@ const STATIC = {
   '/jivan-kal-calculator':      { title: 'जीवन काल Calculator — Life Expectancy in Hindi | BornClock', desc: 'आप कितने साल जिएंगे? BornClock का मुफ्त life expectancy calculator आपकी lifestyle के आधार पर आपका जीवन काल बताता है।' },
   '/numerology-hindi':          { title: 'Numerology in Hindi — अंक ज्योतिष by Date of Birth | BornClock', desc: 'अपना life path number जानें। BornClock का मुफ्त numerology calculator हिंदी में — जन्म तिथि से अपना अंक ज्योतिष जानें।' },
   '/rashifal-by-date-of-birth': { title: 'राशिफल by Date of Birth — Zodiac Sign in Hindi | BornClock', desc: 'अपनी राशि जानें जन्म तिथि से। BornClock का मुफ्त zodiac calculator हिंदी में — Western और Vedic दोनों।' },
-  '/biological-age-hindi':      { title: 'Biological Age in Hindi — आपका शरीर कितना पुराना है? | BornClock', desc: 'आपकी biological age आपकी असली उम्र से 10 साल कम या ज्यादा हो सकती है। BornClock का मुफ्त test हिंदी में।' },
+  // Keep in sync with HINDI_BIO_AGE_TITLE / HINDI_BIO_AGE_DESC in src/content/biologicalAgeMeta.ts.
+  '/biological-age-hindi':      { title: 'Biological Age Calculator हिंदी में — शरीर की उम्र | BornClock', desc: 'मुफ़्त Biological Age Calculator हिंदी में — 15 सवाल: धड़कन, पुश-अप, संतुलन, नींद, BMI, कमर, ब्लड प्रेशर, धूम्रपान, शराब और व्यायाम। lifestyle पर आधारित अंदाज़ा, लैब टेस्ट नहीं।' },
   '/embed':                     { title: 'Free Age Calculator Widget for Your Website | BornClock', desc: "Embed BornClock's live age calculator on your website in 30 seconds. Copy one line of code — free forever, no API key, we handle hosting and accuracy." },
   '/widget/age-calculator':     { title: 'Age Calculator Widget | BornClock', desc: "Free embeddable age calculator widget by BornClock — shows exact age in years, months, days and seconds." },
   '/sun-vs-moon-sign':      { title: 'Sun Sign vs Moon Sign — What They Mean | BornClock', desc: "Your sun sign is your public face. Your moon sign is your 2am self. Most people find their moon sign more accurate once they discover it. Here's why." },
@@ -230,7 +238,8 @@ const STATIC = {
   '/accuracy':              { title: 'How We Check Our Accuracy — Dated Test Results | BornClock', desc: 'In our tests (October 2026), BornClock Kundali positions were within 1 arc-minute of the Swiss Ephemeris for 22 test births, and Panchang sunrise and Rahu Kaal times within 1 minute of Drik Panchang. Every check, reference, date and limit.' },
   '/editorial-policy':      { title: 'Editorial Policy — Accuracy, Sources & Corrections | BornClock', desc: 'BornClock editorial policy — how we write, source, fact-check, and correct our content. Committed to accuracy and transparency.' },
   '/leaderboard':           { title: 'Longevity Leaderboard — Top Forecasts Worldwide | BornClock', desc: 'See the top life expectancy forecasts on BornClock. Anonymous leaderboard of the highest longevity scores globally.' },
-  '/biological-age':        { title: 'Biological Age Calculator — Free Test, 12 WHO Biomarkers | BornClock', desc: 'Free biological age test — no sign-up. Estimate your true (epigenetic) age from 12 science-backed biomarkers: BMI, sleep, exercise, diet, smoking, stress and more. Validated against WHO research.' },
+  // Keep in sync with BIO_AGE_META_DESCRIPTION in src/content/biologicalAgeMeta.ts (guarded by a vitest).
+  '/biological-age':        { title: 'Biological Age Calculator — Free Body Age Test | BornClock', desc: 'Free biological age calculator — no sign-up. A lifestyle and fitness estimate from 15 questions: heart rate, push-ups, balance, sleep, BMI, waist, blood pressure, smoking, alcohol and exercise.' },
   '/country-comparison':    { title: 'Country Life Expectancy Comparison Tool | BornClock', desc: 'Compare life expectancy across 195 countries. See where your country ranks globally and what factors drive national longevity differences.' },
   '/birthday-report':       { title: 'Birthday Blueprint — Personalised Birthday Gift | BornClock', desc: 'Generate a personalised 11-section Birthday Blueprint — celebrity twins, Western & Vedic zodiac, numerology, tarot, Chinese zodiac, planetary age and more. The perfect birthday gift.' },
   '/birthday-report/sample': { title: 'Sample Birthday Intelligence Report — Preview | BornClock', desc: 'See a complete Birthday Intelligence Report before creating yours. Preview zodiac, life path, Vedic Rashi, lucky elements, and more.' },
@@ -969,7 +978,7 @@ export function getTitleForRoute(route) {
   if (route.startsWith('/answers/')) {
     const slug = route.slice(9);
     const t = ANSWERS[slug];
-    return t ? { title: t, description: `${t} — answered with science-backed sources at BornClock.` } : null;
+    return t ? { title: t, description: ANSWER_DESC[slug] ?? `${t} — answered with science-backed sources at BornClock.` } : null;
   }
 
   // /celebrity/:slug — individual celebrity pages (hubs + index handled by STATIC below)
