@@ -591,11 +591,9 @@ function FAQSection() {
                 <ChevronDown className="w-4 h-4 text-gray-600 flex-shrink-0 ml-2" />
               )}
             </button>
-            {open === i && (
-              <div className="px-5 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3">
-                {item.aNode ?? item.a}
-              </div>
-            )}
+            <div hidden={open !== i} className="px-5 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3">
+              {item.aNode ?? item.a}
+            </div>
           </div>
         ))}
       </div>
@@ -1338,9 +1336,6 @@ const BiologicalAge = () => {
             {/* ── SECTION E: REFERENCES ── */}
             <ScientificReferences />
 
-            {/* ── SECTION F: FAQ ── */}
-            <FAQSection />
-
             {/* EEAT footer */}
             <p className="text-sm text-gray-500 text-center leading-relaxed">
               Cut-offs checked against the sources listed above (October 2026). The points per answer
@@ -1351,6 +1346,11 @@ const BiologicalAge = () => {
             <MedicalDisclaimer />
           </div>
         )}
+
+        {/* ── FAQ: shown on every step so the FAQPage JSON-LD matches visible content ── */}
+        <div className="max-w-3xl mx-auto px-4">
+          <FAQSection />
+        </div>
 
         {/* P1-H internal linking */}
         <section className="max-w-3xl mx-auto mb-12 px-4">

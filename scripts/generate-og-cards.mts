@@ -141,7 +141,7 @@ async function main() {
   jobs.push({ rel: 'fitness/biological-age.webp', markup: svg({
     eyebrow: 'Biological Age',
     title: 'Your body may be younger than your birthday.',
-    sub: '12 WHO-validated biomarkers · Free · No sign-up needed',
+    sub: '15 quick questions · Free estimate · Not a lab test',
     titleSize: 60
   })});
 

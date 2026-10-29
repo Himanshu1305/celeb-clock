@@ -196,9 +196,24 @@ describe('honest-wording guard', () => {
     'src/content/biologicalAgeMeta.ts',
     'scripts/prerender-titles.mjs',
     'scripts/prerender.mjs',
+    // review b9: the OG card and the long-form article also described the calculator
+    'scripts/generate-og-cards.mts',
+    'src/pages/articles/BiologicalAgeArticle.tsx',
   ];
   it('HW1: no "WHO-validated" / "12 WHO biomarkers" claims', () => {
     for (const f of FILES) expect(read(f), f).not.toMatch(/WHO[- ]validated|12 WHO|WHO Biomarkers/i);
+  });
+  it('HW1b: no stale "12 biomarkers" description of the 15-question calculator', () => {
+    for (const f of FILES) expect(read(f), f).not.toMatch(/12 (self-reported |proxy |validated )*(proxy )?biomarkers/i);
+  });
+  it('HW1c: FAQ is rendered outside the result step (FAQPage JSON-LD must match visible content)', () => {
+    const page = read('src/pages/BiologicalAge.tsx');
+    // Rendered after the last result-only block (the result step ends with <MedicalDisclaimer />).
+    const faqUse = page.lastIndexOf('<FAQSection />');
+    expect(page.split('<FAQSection />').length - 1).toBe(1);
+    expect(faqUse).toBeGreaterThan(page.lastIndexOf('<MedicalDisclaimer />'));
+    expect(page.indexOf('{/* P1-H internal linking */}')).toBeGreaterThan(faqUse);
+    expect(page).not.toMatch(/\{open === i && \(/);
   });
   it('HW2: no equating the result with epigenetic age', () => {
     for (const f of FILES) {
