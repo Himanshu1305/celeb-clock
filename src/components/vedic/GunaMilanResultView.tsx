@@ -13,7 +13,7 @@ import { findingsFromMatch } from '@/lib/vedic/remedies';
 import { getTermDef, MATCH_DOSHA_TERM } from '@/lib/vedic/termDefinitions';
 import { kootaScoreNote, gunaTotalNote, kootaScoreNoteHi, gunaTotalNoteHi } from '@/lib/vedic/numberNotes';
 import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
-import { KOOTA_HI, KOOTA_TERM_ID, COMPAT_HI, DOSHA_HI } from '@/lib/vedic/nameMatching';
+import { KOOTA_HI, KOOTA_TERM, COMPAT_HI, DOSHA_HI } from '@/lib/vedic/nameMatching';
 
 const KOOTA_EN: Record<string, string> = {
   varna: 'Varna', vashya: 'Vashya', tara: 'Tara', yoni: 'Yoni',
@@ -68,7 +68,7 @@ export function GunaMilanResultView({
         <tbody>
           {result.kootas.map(k => (
             <tr key={k.key} data-testid={`${testid}-row-${k.key}`} className="border-t border-border">
-              <td className="px-3 py-1.5 text-foreground"><TermTip id={KOOTA_TERM_ID[k.key]} lang={lang}>{hi ? KOOTA_HI[k.key] : KOOTA_EN[k.key] ?? k.label}</TermTip></td>
+              <td className="px-3 py-1.5 text-foreground"><TermTip id={KOOTA_TERM[k.key]} lang={lang}>{hi ? KOOTA_HI[k.key] : KOOTA_EN[k.key] ?? k.label}</TermTip></td>
               <td className="px-3 py-1.5 text-right font-semibold text-foreground">{k.score} / {k.max}</td>
             </tr>
           ))}
@@ -85,7 +85,7 @@ export function GunaMilanResultView({
               <div className={`font-bold ${k.score === 0 ? 'text-amber-600' : 'text-[#6E5AA6]'}`}>{k.score} / {k.max}</div>
             </div>
             <NumberNote testid={`${testid}-note-${k.key}`}>{hi ? kootaScoreNoteHi(k.key, k.score, k.max) : kootaScoreNote(k.key, k.score, k.max)}</NumberNote>
-            <div className="text-sm text-muted-foreground mt-1">{hi ? getTermDef(KOOTA_TERM_ID[k.key])?.hi : withNames(k.explanation)}</div>
+            <div className="text-sm text-muted-foreground mt-1">{hi ? getTermDef(KOOTA_TERM[k.key])?.hi : withNames(k.explanation)}</div>
           </div>
         ))}
       </div>

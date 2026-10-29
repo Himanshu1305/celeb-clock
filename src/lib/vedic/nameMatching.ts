@@ -170,7 +170,7 @@ export const KOOTA_HI: Record<string, string> = {
   graha_maitri: 'ग्रह मैत्री', gana: 'गण', bhakoot: 'भकूट', nadi: 'नाड़ी',
 };
 /** Koota key → TermTip id. */
-export const KOOTA_TERM_ID: Record<string, string> = {
+export const KOOTA_TERM: Record<string, string> = {
   varna: 'varna', vashya: 'vashya', tara: 'tara', yoni: 'yoni',
   graha_maitri: 'grahaMaitri', gana: 'gana', bhakoot: 'bhakoot', nadi: 'nadi',
 };

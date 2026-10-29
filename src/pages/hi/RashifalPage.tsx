@@ -41,6 +41,9 @@ export default function RashifalPage() {
                 </Link>
               ))}
             </div>
+            <p data-testid="hi-rashifal-index-tools" className="text-sm text-muted-foreground mt-6">
+              और हिंदी में: <Link to="/hi/kundli-milan" className="underline">कुंडली मिलान (36 गुण)</Link> · <Link to="/hi/naam-se-kundli-milan" className="underline">नाम से कुंडली मिलान</Link> · <Link to="/hi/panchang" className="underline">पंचांग</Link> · <Link to="/hi/upay" className="underline">उपाय</Link>
+            </p>
           </div>
         </section>
       </ToolLayout>
