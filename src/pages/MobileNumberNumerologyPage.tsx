@@ -33,7 +33,7 @@ export default function MobileNumberNumerologyPage() {
         canonicalUrl="/mobile-number-numerology"
       />}
       breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'Mobile Number' }}
-      footer={{ tagline: 'Mobile-number numerology, for reflection only.', nav: [{ label: 'House number', to: '/house-number-numerology' }, { label: 'Name correction', to: '/name-correction' }, { label: 'Numerology', to: '/numerology' }] }}
+      footer={{ tagline: 'Mobile-number numerology, for reflection only.', nav: [{ label: 'House number', to: '/house-number-numerology' }, { label: 'Vehicle number', to: '/vehicle-number-numerology' }, { label: 'Name correction', to: '/name-correction' }, { label: 'Numerology', to: '/numerology' }] }}
       eyebrow="Numerology"
       h1="Mobile Number Numerology"
       lead="Reduce your phone number to a single digit and see the character the tradition reads into it — a light reflection, never a reason to pay for a 'lucky' number."

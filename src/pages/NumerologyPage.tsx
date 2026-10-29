@@ -229,6 +229,10 @@ export default function NumerologyPage() {
             <Link to="/business-name-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Business name numerology</Link>
             <Link to="/mobile-number-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Mobile number numerology</Link>
             <Link to="/house-number-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">House number numerology</Link>
+            <Link to="/vehicle-number-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Vehicle number numerology</Link>
+            <Link to="/lo-shu-grid-calculator" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Lo Shu grid</Link>
+            <Link to="/kua-number-calculator" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Kua number (Feng Shui)</Link>
+            <Link to="/love-calculator" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Love calculator by name (for fun)</Link>
             <Link to="/attitude-number" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Birthday & attitude number</Link>
             <Link to="/personal-year-number" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Personal year number</Link>
           </div>
