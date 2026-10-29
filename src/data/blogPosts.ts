@@ -1750,7 +1750,7 @@ Research suggests genetics accounts for approximately 20-30% of lifespan variati
 
 **Explore more at BornClock:**
 
-- [Test Your Biological Age — 12 WHO-Validated Biomarkers](/biological-age)
+- [Biological Age Calculator — free 15-question lifestyle and fitness estimate](/biological-age)
 - [Calculate Your Longevity Forecast — Personalized to Your Country and Habits](/life-expectancy)
 - [Compare Life Expectancy Across 57 Countries — Why Japan Outperforms](/country-comparison)
 - [Exercise and Longevity: The 150-Minute Rule Explained](/life-expectancy)

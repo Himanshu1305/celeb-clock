@@ -153,8 +153,8 @@ function BioAgeCalculator() {
             </div>
           </div>
           <p className="text-xs text-gray-500 leading-relaxed mb-3">
-            Illustrative only. BornClock&apos;s full estimate uses 12 proxy biomarkers and
-            population health research. For a proper reading, use the calculator below.
+            Illustrative only. BornClock&apos;s full calculator asks 15 questions on fitness, body
+            size, blood pressure, sleep and habits — still a rough estimate, not a lab test.
           </p>
           <a href="/biological-age"
              className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5

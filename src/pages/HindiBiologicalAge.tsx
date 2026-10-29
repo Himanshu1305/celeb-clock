@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
+import BioAgeQuizHindi from '@/components/biological-age/BioAgeQuizHindi';
+import { HINDI_BIO_AGE_TITLE, HINDI_BIO_AGE_DESC } from '@/content/biologicalAgeMeta';
 
 const RELATED = [
   { path: '/biological-age', label: 'Biological Age Calculator' },
@@ -16,50 +18,50 @@ const HindiBiologicalAge = () => {
       seo={(
         <>
           <SEO
-            title="Biological Age in Hindi — आपका शरीर कितना पुराना है? | BornClock"
-            description="आपकी biological age आपकी असली उम्र से 10 साल कम या ज्यादा हो सकती है। BornClock का मुफ्त lifestyle assessment हिंदी में।"
+            title={HINDI_BIO_AGE_TITLE}
+            description={HINDI_BIO_AGE_DESC}
             keywords="biological age hindi, body age calculator hindi, jism ki umar, biological age calculator hindi"
             canonicalUrl="/biological-age-hindi"
             ogImage="https://bornclock.com/og/calculator.png"
           />
           <WebApplicationSchema
-            name="Biological Age in Hindi — आपका शरीर कितना पुराना है?"
-            description="BornClock का मुफ्त हिंदी biological age calculator — जानें आपका शरीर actually कितना पुराना है।"
+            name="Biological Age Calculator हिंदी में"
+            description={HINDI_BIO_AGE_DESC}
             url="/biological-age-hindi"
           />
         </>
       )}
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Biological Age (Hindi)' }}
       eyebrow="Biological Age"
-      h1="आपकी Biological Age क्या है?"
-      lead={<>Biological age वह उम्र है जो आपका शरीर actually जी रहा है — आपके जन्म प्रमाण पत्र की उम्र नहीं। दो लोग जो एक ही दिन पैदा हुए हों, उनकी biological age 10 साल तक अलग हो सकती है — उनकी lifestyle के आधार पर।</>}
+      h1="Biological Age Calculator हिंदी में — आपका शरीर कितना पुराना है?"
+      lead={<>15 आसान सवालों से जानें कि आपकी फ़िटनेस, वज़न, ब्लड प्रेशर, नींद और आदतें आपकी उम्र के हिसाब से कैसी हैं। यह प्रकाशित शोध पर आधारित एक lifestyle और fitness अंदाज़ा है — कोई लैब टेस्ट या epigenetic clock नहीं।</>}
     >
       <div className="container mx-auto px-4 py-8">
 
-        <section className="max-w-3xl mx-auto mb-12 px-4">
-          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
-            <h2 className="text-xl font-bold text-foreground mb-2">अपनी Biological Age अभी जानें</h2>
-            <p className="text-sm text-muted-foreground mb-4">12 WHO-validated lifestyle biomarkers पर आधारित मुफ्त estimate — कोई blood test नहीं, कोई sign-up नहीं।</p>
-            <Link to="/biological-age" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
-              Biological Age Calculator खोलें →
-            </Link>
-          </div>
+        <section className="max-w-3xl mx-auto mb-12 px-4" aria-labelledby="hi-quiz-heading">
+          <h2 id="hi-quiz-heading" className="text-xl font-bold text-foreground mb-4 text-center">अपनी Biological Age अभी जानें</h2>
+          <p className="text-sm text-muted-foreground mb-5 text-center">मुफ़्त, बिना sign-up — आपके जवाब आपके फ़ोन/कंप्यूटर में ही रहते हैं।</p>
+          <BioAgeQuizHindi />
+          <p className="text-xs text-amber-800 bg-amber-50 border border-amber-300 rounded-lg p-3 mt-6">
+            ⚕️ केवल सामान्य जानकारी के लिए। यह आपके अपने जवाबों से बना अंदाज़ा है — लैब टेस्ट, epigenetic clock, बीमारी की जाँच या डॉक्टरी सलाह नहीं। किसी भी स्वास्थ्य चिंता के लिए डॉक्टर से बात करें।
+          </p>
+          <p className="text-sm text-center mt-4"><Link to="/biological-age" className="text-primary underline">English version और पूरी sources सूची →</Link></p>
         </section>
 
         <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Biological Age और Chronological Age में क्या फर्क है?</h2>
-            <p className="text-muted-foreground leading-relaxed">Chronological age वह है जो आपके birth certificate पर लिखी है। Biological age वह है जो आपके cells, organs और body systems की actual condition बताती है। एक 50 साल का व्यक्ति जो अच्छी lifestyle जीता है, उसकी biological age 40 हो सकती है।</p>
+            <p className="text-muted-foreground leading-relaxed">Chronological age वह है जो आपके birth certificate पर लिखी है। Biological age इस बात का अंदाज़ा है कि आपका शरीर उसी उम्र के आम लोगों की तुलना में कैसा काम कर रहा है। Lab में इसे DNA methylation (epigenetic clock) जैसे टेस्ट से मापा जाता है; यह calculator ऐसा कोई टेस्ट नहीं करता — यह आपके जवाबों से एक मोटा अंदाज़ा देता है।</p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Biological Age क्या तय करती है?</h2>
-            <p className="text-muted-foreground leading-relaxed">नींद की गुणवत्ता, खान-पान, exercise, stress level, smoking, alcohol — ये सब मिलकर आपकी biological age तय करते हैं। Harvard research के अनुसार genetics केवल 20-30% role play करती है। बाकी 70-80% आपके हाथ में है।</p>
+            <p className="text-muted-foreground leading-relaxed">फ़िटनेस, वज़न और कमर का नाप, ब्लड प्रेशर, नींद, धूम्रपान, शराब और व्यायाम — ये सब सेहत पर असर डालते हैं, और इनमें से ज़्यादातर बदले जा सकते हैं। बड़े लंबे अध्ययनों में धूम्रपान न करना (Doll व अन्य, BMJ 2004), रोज़ कम से कम 15 मिनट व्यायाम (Wen व अन्य, Lancet 2011) और कम शराब (Wood व अन्य, Lancet 2018) लंबी उम्र से जुड़े पाए गए हैं।</p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">क्या Biological Age कम हो सकती है?</h2>
-            <p className="text-muted-foreground leading-relaxed">हाँ — और इसके वैज्ञानिक प्रमाण हैं। 2023 में Aging Cell journal में published एक study में पाया गया कि 8 हफ्तों के lifestyle intervention से biological age औसतन 2.5 साल कम हुई। सबसे असरदार बदलाव: smoking छोड़ना, नींद सुधारना, regular exercise।</p>
+            <p className="text-muted-foreground leading-relaxed">शुरुआती शोध उम्मीद जगाता है। 2021 में Aging journal में छपे एक छोटे pilot trial (Fitzgerald व अन्य; 50–72 साल के 43 स्वस्थ पुरुष) में 8 हफ़्ते के खान-पान और lifestyle कार्यक्रम के बाद control group की तुलना में Horvath DNA methylation age 3.23 साल कम पाई गई। शोधकर्ताओं के अनुसार बड़े और लंबे trials की ज़रूरत है।</p>
           </section>
         </article>
 
