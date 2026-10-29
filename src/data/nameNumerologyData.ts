@@ -1,8 +1,5 @@
-const LETTER_VALUES: Record<string, number> = {
-  a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9,
-  j:1,k:2,l:3,m:4,n:5,o:6,p:7,q:8,r:9,
-  s:1,t:2,u:3,v:4,w:5,x:6,y:7,z:8
-};
+import { pythagoreanName, pythagoreanLetterValue, reduceKeepingMaster } from '@/lib/numerologyExtra';
+
 const VOWELS = new Set(['a','e','i','o','u']);
 
 /**
@@ -23,31 +20,27 @@ function vowelFlags(fullName: string): Array<{ l: string; vowel: boolean }> {
   return out;
 }
 
-function reduce(n: number): number {
-  if (n === 11 || n === 22 || n === 33) return n;
-  while (n > 9) {
-    n = String(n).split('').reduce((s, d) => s + parseInt(d), 0);
-    if (n === 11 || n === 22 || n === 33) return n;
-  }
-  return n;
-}
-
+/**
+ * Western (Pythagorean) name numbers. Batch 9: the Expression number comes from THE
+ * shared pythagoreanName() (src/lib/numerologyExtra.ts) — the same function the
+ * /name-correction comparison uses — and the letter values come from its one table,
+ * so two pages can never give two different numbers for the same name.
+ */
 export function calculateAllNameNumbers(fullName: string) {
   const flags = vowelFlags(fullName);
-  const allSum = flags.reduce((s, f) => s + (LETTER_VALUES[f.l] || 0), 0);
-  const vowelSum = flags.filter(f => f.vowel).reduce((s, f) => s + (LETTER_VALUES[f.l] || 0), 0);
-  const consonantSum = flags.filter(f => !f.vowel).reduce((s, f) => s + (LETTER_VALUES[f.l] || 0), 0);
+  const vowelSum = flags.filter(f => f.vowel).reduce((s, f) => s + pythagoreanLetterValue(f.l), 0);
+  const consonantSum = flags.filter(f => !f.vowel).reduce((s, f) => s + pythagoreanLetterValue(f.l), 0);
   return {
-    expression: reduce(allSum),
-    soulUrge: reduce(vowelSum),
-    personality: reduce(consonantSum),
+    expression: pythagoreanName(fullName).number,
+    soulUrge: reduceKeepingMaster(vowelSum),
+    personality: reduceKeepingMaster(consonantSum),
   };
 }
 
 export function getLetterBreakdown(fullName: string): Array<{ letter: string; value: number; isVowel: boolean }> {
   return vowelFlags(fullName).map(f => ({
     letter: f.l.toUpperCase(),
-    value: LETTER_VALUES[f.l] || 0,
+    value: pythagoreanLetterValue(f.l),
     isVowel: f.vowel,
   }));
 }

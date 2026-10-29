@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
-import { analyseNameCorrection, type NameCorrectionResult } from '@/lib/numerologyTools';
+import { analyseNameCorrection, compoundBasisNote, type NameCorrectionResult } from '@/lib/numerologyTools';
 
 export default function NameCorrectionPage() {
   const [name, setName] = useState('');
@@ -36,7 +36,7 @@ export default function NameCorrectionPage() {
       theme="mystic"
       testId="name-correction-page"
       seo={<SEO
-        title="Name Numerology Correction — Chaldean Name Number | BornClock"
+        title="Name Correction Numerology — Check Spelling Variants | BornClock"
         description="Free name-correction calculator in the Chaldean tradition: your name number, its compound meaning, and how it sits with your birth numbers. Honest, reflection-first."
         keywords="name correction numerology, chaldean name number, lucky name numerology, name number calculator"
         canonicalUrl="/name-correction"
@@ -44,7 +44,7 @@ export default function NameCorrectionPage() {
       breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'Name Correction' }}
       footer={{ tagline: 'Chaldean name-number correction, reflection-first.', nav: [{ label: 'Chaldean numerology', to: '/chaldean-numerology' }, { label: 'Name numerology', to: '/name-numerology' }, { label: 'Business name', to: '/business-name-numerology' }] }}
       eyebrow="Numerology"
-      h1="Name Numerology Correction"
+      h1="Name Correction Numerology — Check Spelling Variants"
       lead="See your name's Chaldean number and its classical compound meaning — and, if you add your birth date, how the two sit together. For reflection, never a promise."
     >
       <section className="section">
@@ -72,11 +72,12 @@ export default function NameCorrectionPage() {
                   <div className="text-sm text-muted-foreground">Total {result.chaldean.total} · compound {result.compound} · root {result.chaldean.root}</div>
                   <div className="font-semibold text-foreground mt-2">Ruled by {result.rootPlanet}</div>
                   <p className="text-sm text-muted-foreground mt-1">Keynotes: {result.rootKeyword}.</p>
+                  {result.chaldean.master && <p className="text-xs text-muted-foreground mt-1">Western master number: {result.chaldean.master} (the Indian name number reduces it to {result.chaldean.root}).</p>}
                 </div>
                 <div className="rounded-2xl border border-border p-5">
-                  <div className="text-xs text-muted-foreground mb-1">Pythagorean (for comparison)</div>
-                  <div className="text-4xl font-black text-foreground mb-1">{result.pythagorean.root}</div>
-                  <div className="text-sm text-muted-foreground">Total {result.pythagorean.total} · root {result.pythagorean.root}</div>
+                  <div className="text-xs text-muted-foreground mb-1">Western Expression number (Pythagorean, for comparison)</div>
+                  <div className="text-4xl font-black text-foreground mb-1">{result.pythagorean.number}</div>
+                  <div className="text-sm text-muted-foreground">Total {result.pythagorean.total}{result.pythagorean.master ? ` · master number kept (reduces to ${result.pythagorean.root})` : ''} — the same number /name-numerology shows</div>
                 </div>
               </div>
 
@@ -85,6 +86,7 @@ export default function NameCorrectionPage() {
                   <div className="text-xs text-muted-foreground mb-1">Classical compound meaning (Chaldean / Cheiro tradition)</div>
                   <div className={`font-semibold ${toneColor(result.compoundMeaning.tone)}`}>{result.compound} — {result.compoundMeaning.name}</div>
                   <p className="text-sm text-muted-foreground mt-1">{result.compoundMeaning.text}</p>
+                  {result.compoundReading && <p className="text-xs text-muted-foreground mt-2">{compoundBasisNote(result.compoundReading)}</p>}
                 </div>
               )}
 

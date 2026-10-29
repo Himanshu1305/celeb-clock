@@ -5004,6 +5004,8 @@ BornClock's What-If Simulator lets you move the smoking slider from "heavy" to "
     content: `
 # Numerology Life Path Numbers 1–9: Complete Guide to Meaning, Career and Love
 
+*This is the long-read on the Western Life Path — career, love and the 2026 Personal Year for each number. To calculate your numbers, use the [numerology calculator](/numerology); for the Indian Mulank and Bhagyank and how they differ from the Life Path, read the [India guide](/articles/numerology-by-date-of-birth).*
+
 ## How to Calculate Your Life Path Number
 
 Reduce the month, the day and the full year separately (keeping 11, 22 and 33), add them, then reduce the total to a single digit (or stop at 11, 22 or 33).

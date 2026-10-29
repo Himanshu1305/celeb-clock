@@ -61,6 +61,9 @@ describe('duplicateRedirect — static retired pages', () => {
     ['/life-expectancy-calculator-uk/', '/life-expectancy-uk/'],
     ['/life-expectancy-calculator-australia', '/life-expectancy-australia/'],
     ['/life-expectancy-calculator-canada', '/life-expectancy-canada/'],
+    // Batch 9: thin Hindi Life Path page → the Hindi Mulank/Bhagyank calculator.
+    ['/numerology-hindi', '/hi/numerology-by-date-of-birth/'],
+    ['/numerology-hindi/', '/hi/numerology-by-date-of-birth/'],
   ])('%s → %s', (from, to) => expect(duplicateRedirect(from)).toBe(to));
 });
 

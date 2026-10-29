@@ -18,7 +18,7 @@ const ROUTES: { path: string; title: RegExp }[] = [
   { path: '/life-expectancy-brazil',     title: /Life Expectancy in Brazil/i },
   { path: '/meri-umar-kitni-hai',        title: /Age Calculator in Hindi/i },
   { path: '/jivan-kal-calculator',       title: /Life Expectancy in Hindi/i },
-  { path: '/numerology-hindi',           title: /Numerology in Hindi/i },
+  { path: '/hi/numerology-by-date-of-birth', title: /मूलांक/ },
   { path: '/rashifal-by-date-of-birth',  title: /Zodiac Sign in Hindi/i },
   { path: '/biological-age-hindi',       title: /Biological Age in Hindi/i },
   { path: '/embed',                      title: /Widget for Your Website/i },

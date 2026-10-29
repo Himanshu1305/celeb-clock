@@ -59,21 +59,22 @@ export default function WhatIsMyLifePathNumber() {
             <p>Step 2: Add the results: 7 + 5 + 1 = 13 → 1+3 = <strong>4</strong></p>
             <p>Note: If at any stage you reach 11, 22, or 33 before reducing further, stop — these are Master Numbers with special significance.</p>
 
-            <h2 className="text-xl font-bold text-gray-900">What Each Life Path Number Means</h2>
-            <p><strong>1 — The Leader:</strong> Independent, pioneering, and driven to create something original. Life path 1s are born initiators who thrive when they're the first to do something. Famous 1s: Steve Jobs, Martin Luther King Jr., Lady Gaga.</p>
-            <p><strong>2 — The Diplomat:</strong> Sensitive, cooperative, and gifted at bringing people together. 2s are natural peacemakers who excel in partnerships. Famous 2s: Barack Obama, Jennifer Aniston.</p>
-            <p><strong>3 — The Creator:</strong> Expressive, optimistic, and creative. 3s communicate with unusual flair and often excel in the arts, writing, or speaking. Famous 3s: David Bowie, Celine Dion.</p>
-            <p><strong>4 — The Builder:</strong> Practical, disciplined, and focused on creating lasting foundations. 4s work methodically and are reliable to a fault. Famous 4s: Oprah Winfrey, Bill Gates.</p>
-            <p><strong>5 — The Explorer:</strong> Freedom-loving, versatile, and magnetic. 5s crave change and experience, and often lead unconventional lives. Famous 5s: Beyoncé, Abraham Lincoln.</p>
-            <p><strong>6 — The Nurturer:</strong> Responsible, caring, and devoted to family and community. 6s are natural healers and teachers. Famous 6s: Michael Jackson, Albert Einstein.</p>
-            <p><strong>7 — The Seeker:</strong> Analytical, introspective, and drawn to the mysteries of existence. 7s are researchers and truth-seekers. Famous 7s: Elon Musk, Marilyn Monroe.</p>
-            <p><strong>8 — The Achiever:</strong> Ambitious, authoritative, and driven to manifest abundance. 8s understand power and often achieve great material or institutional success. Famous 8s: Nelson Mandela, Pablo Picasso.</p>
-            <p><strong>9 — The Humanitarian:</strong> Compassionate, visionary, and idealistic. 9s are old souls with a calling to serve humanity. Famous 9s: Gandhi, Mother Teresa.</p>
+            <h2 className="text-xl font-bold text-gray-900">What Each Life Path Number Means (in one line)</h2>
+            <ul className="list-none pl-0 space-y-1" data-testid="answer-number-links">
+              {[
+                [1, 'The Leader — independent, pioneering'], [2, 'The Diplomat — cooperative, sensitive'],
+                [3, 'The Creator — expressive, optimistic'], [4, 'The Builder — practical, disciplined'],
+                [5, 'The Explorer — freedom-loving, versatile'], [6, 'The Nurturer — responsible, caring'],
+                [7, 'The Seeker — analytical, introspective'], [8, 'The Achiever — ambitious, authoritative'],
+                [9, 'The Humanitarian — compassionate, idealistic'], [11, 'Master number — the intuitive visionary'],
+                [22, 'Master number — the master builder'], [33, 'Master number — the master teacher'],
+              ].map(([n, t]) => (
+                <li key={n}><Link to={`/numerology/${n}`} className="text-[#6E5AA6] hover:underline"><strong>{n}</strong> — {t}</Link></li>
+              ))}
+            </ul>
 
-            <h2 className="text-xl font-bold text-gray-900">Master Numbers: 11, 22, 33</h2>
-            <p><strong>11</strong> is the intuitive visionary — highly sensitive, spiritually aware, and often called to inspire large numbers of people. The shadow side is anxiety and self-doubt. Famous 11s: Emma Watson, Bill Clinton.</p>
-            <p><strong>22</strong> is the master builder — combines the intuition of 11 with the practical ability of 4, giving them rare capacity to turn big visions into reality. Famous 22s: Will Smith, Paul McCartney.</p>
-            <p><strong>33</strong> is the master teacher — the most spiritually evolved number, associated with unconditional love and selfless service. True 33s are exceptionally rare.</p>
+            <h2 className="text-xl font-bold text-gray-900">Is the Life Path the same as Bhagyank?</h2>
+            <p>Almost. The Indian <strong>Bhagyank</strong> adds every digit of your date of birth and reduces to 1–9, so it always ends on the same single digit as your Life Path. The only difference: the Western Life Path keeps 11, 22 and 33 as master numbers, while the Bhagyank reduces them (11 → 2). Your <strong>Mulank</strong> is different again — it uses only your birth day. The <Link to="/articles/numerology-by-date-of-birth" className="text-[#6E5AA6] underline">India guide</Link> explains all three, and the <Link to="/numerology" className="text-[#6E5AA6] underline">numerology calculator</Link> shows them side by side.</p>
 
             <h2 className="text-xl font-bold text-gray-900">Your Personal Year Number for 2026</h2>
             <p>Your Personal Year number changes every calendar year and reflects the energy theme of the 12 months ahead. Calculate it: <strong>add your birth month + birth day + 2026</strong>, then reduce to a single digit.</p>
@@ -82,7 +83,7 @@ export default function WhatIsMyLifePathNumber() {
 
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
             <p className="text-lg font-bold text-gray-900 mb-2">Calculate My Life Path Number</p>
-            <p className="text-sm text-gray-500 mb-4">Instant calculation · All 9 numbers + Master Numbers + 2026 forecast</p>
+            <p className="text-sm text-gray-500 mb-4">Free · Western Life Path plus your Mulank and Bhagyank, with the working shown</p>
             <Link to="/numerology"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Calculate My Life Path Number →

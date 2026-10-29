@@ -57,7 +57,6 @@ const LifeExpectancySingapore = lazyWithReload(() => import("./pages/LifeExpecta
 const LifeExpectancyBrazil = lazyWithReload(() => import("./pages/LifeExpectancyBrazil"));
 const HindiAgeCalculator = lazyWithReload(() => import("./pages/HindiAgeCalculator"));
 const HindiLifeExpectancy = lazyWithReload(() => import("./pages/HindiLifeExpectancy"));
-const HindiNumerology = lazyWithReload(() => import("./pages/HindiNumerology"));
 const HindiZodiac = lazyWithReload(() => import("./pages/HindiZodiac"));
 const HindiBiologicalAge = lazyWithReload(() => import("./pages/HindiBiologicalAge"));
 const Widget = lazyWithReload(() => import("./pages/Widget"));
@@ -280,7 +279,8 @@ const App = () => (
               <Route path="/life-expectancy-brazil" element={<LifeExpectancyBrazil />} />
               <Route path="/meri-umar-kitni-hai" element={<HindiAgeCalculator />} />
               <Route path="/jivan-kal-calculator" element={<HindiLifeExpectancy />} />
-              <Route path="/numerology-hindi" element={<HindiNumerology />} />
+              {/* Batch 9: same intent as the Hindi Mulank/Bhagyank calculator → 301 there. */}
+              <Route path="/numerology-hindi" element={<LegacyRedirect otherwise="/hi/numerology-by-date-of-birth/" />} />
               <Route path="/rashifal-by-date-of-birth" element={<HindiZodiac />} />
               <Route path="/biological-age-hindi" element={<HindiBiologicalAge />} />
               <Route path="/widget/age-calculator" element={<Widget />} />

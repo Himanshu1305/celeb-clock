@@ -3,6 +3,8 @@ import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { NUMEROLOGY_DATA, getNumerologyByNumber, ALL_LIFE_PATH_NUMBERS } from '@/data/numerologyData';
+import { MULANK_MEANINGS, MULANK_DAYS, NAME_NUMBER_INDIAN_MEANINGS } from '@/data/indianNumberMeanings';
+import { TermTip } from '@/components/vedic/TermTip';
 
 export default function NumerologyNumber() {
   const { number } = useParams<{ number: string }>();
@@ -136,10 +138,31 @@ export default function NumerologyNumber() {
           <h2 className="text-2xl font-bold text-foreground mb-3">What does Life Path {data.number} mean?</h2>
           <div className="bg-primary/10 border-l-4 border-primary rounded-r-xl p-5">
             <p className="text-base font-medium text-foreground leading-relaxed">
-              Life Path {data.number} is “{data.name}” — associated with {data.keywords.slice(0, 4).join(', ').toLowerCase()}. {data.isMasterNumber ? `A master number, ${data.number} is preserved rather than reduced.` : `You calculate it by summing all digits of your birth date down to a single digit.`} It is linked to {data.planet} and the {data.element} element.
+              Life Path {data.number} is “{data.name}” — associated with {data.keywords.slice(0, 4).join(', ').toLowerCase()}. {data.isMasterNumber ? `A master number, ${data.number} is preserved rather than reduced.` : `You get it by reducing the day, month and year of birth separately, adding them and reducing again.`} It is linked to {data.planet} and the {data.element} element.
             </p>
           </div>
         </section>
+
+        {/* Batch 9: the same digit read the Indian way — as a Mulank (birth day) and as a
+            Chaldean name number. Short, sourced text (src/data/indianNumberMeanings.ts),
+            deliberately different from the Life Path reading on this page. */}
+        {MULANK_MEANINGS[data.number] && NAME_NUMBER_INDIAN_MEANINGS[data.number] && (
+          <section className="mb-10 grid md:grid-cols-2 gap-4" data-testid="indian-readings">
+            <div className="rounded-xl border border-border bg-card p-5" data-testid="as-mulank">
+              <h2 className="text-xl font-bold text-foreground mb-1">As Mulank {data.number} <TermTip id="mulank" iconOnly /></h2>
+              <p className="text-xs text-muted-foreground mb-2">Birth days: {MULANK_DAYS[data.number].join(', ')} (any month) · ruled by {MULANK_MEANINGS[data.number].planet}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed"><strong className="text-foreground">{MULANK_MEANINGS[data.number].title}.</strong> {MULANK_MEANINGS[data.number].text}</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-5" data-testid="as-name-number">
+              <h2 className="text-xl font-bold text-foreground mb-1">As name number {data.number}</h2>
+              <p className="text-xs text-muted-foreground mb-2"><TermTip id="chaldean">Chaldean</TermTip> name total reducing to {data.number} · {NAME_NUMBER_INDIAN_MEANINGS[data.number].planet}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed"><strong className="text-foreground">{NAME_NUMBER_INDIAN_MEANINGS[data.number].title}.</strong> {NAME_NUMBER_INDIAN_MEANINGS[data.number].text}</p>
+            </div>
+            <p className="md:col-span-2 text-xs text-muted-foreground">
+              The same digit can turn up as your Life Path, your Mulank or your name number — each is read a little differently. Work out all three on the <Link to="/numerology" className="text-primary hover:underline">numerology calculator</Link> or the <Link to="/name-numerology" className="text-primary hover:underline">name number calculator</Link>.
+            </p>
+          </section>
+        )}
 
         {/* Personality */}
         <section className="mb-10">

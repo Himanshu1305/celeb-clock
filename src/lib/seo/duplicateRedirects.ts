@@ -16,6 +16,7 @@
  *       two URLs, e.g. virat-kohli-1988 → virat-kohli; map written by the celebrity
  *       export, src/data/celebritySlugRedirects.json — see src/lib/celebrityDedupe.ts)
  *   /articles/planetary-age-calculator → /planetary-age/          (Batch 7: same intent)
+ *   /numerology-hindi                  → /hi/numerology-by-date-of-birth/ (Batch 9: same intent)
  * Plus normalisation of KEPT date URLs that were reachable in two spellings:
  *   zero-padded numbers (/birthday/09/04, /born-on/september-04), upper-case month
  *   names, and /born-on/:slug/india for a date that has no India page (→ /born-on/:slug/).
@@ -49,6 +50,9 @@ const STATIC: Record<string, string> = {
   '/life-expectancy-calculator-australia': '/life-expectancy-australia/',
   '/life-expectancy-calculator-canada': '/life-expectancy-canada/',
   '/articles/planetary-age-calculator': '/planetary-age/',
+  // Batch 9: thin Hindi Life Path page, same intent as the Hindi Mulank/Bhagyank
+  // calculator (numerology by date of birth, in Hindi) → 301 there.
+  '/numerology-hindi': '/hi/numerology-by-date-of-birth/',
 };
 
 /** Month name (any case) → 1-12, or 0. */

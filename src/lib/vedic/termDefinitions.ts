@@ -1125,7 +1125,7 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
 
   // ─────────────────────────── Numerology ───────────────────────────
   lifePath: {
-    term: 'Life Path Number', category: 'numerology', hiTerm: 'मूलांक पथ / जीवन पथ अंक',
+    term: 'Life Path Number', category: 'numerology', hiTerm: 'जीवन पथ अंक (Western)',
     impact: 'Numerology\'s main number — the broad theme of your life journey.',
     why: 'Reduce the day, month and year of birth to single digits separately (keeping 11, 22, 33), then add and reduce again. This is the method most calculators use.',
     hi: 'अंक ज्योतिष का मुख्य अंक, जन्म तिथि के दिन, महीने और वर्ष को अलग-अलग जोड़कर बनता है (11, 22, 33 वैसे ही रहते हैं)।',
@@ -1138,7 +1138,7 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: '11, 22 और 33 को घटाकर एक अंक नहीं बनाया जाता — इन्हें अधिक क्षमता वाला अंक माना जाता है।',
   },
   expressionNumber: {
-    term: 'Expression (Destiny) Number', category: 'numerology', hiTerm: 'भाग्यांक (नाम)',
+    term: 'Expression (Destiny) Number', category: 'numerology', hiTerm: 'अभिव्यक्ति अंक (नाम, Western)',
     impact: 'Your natural talents and how you tend to express yourself.',
     why: 'Add the number value of every letter in your full birth name and reduce.',
     hi: 'पूरे नाम के सभी अक्षरों के अंक जोड़कर बनता है — आपकी स्वाभाविक प्रतिभा।',
@@ -1167,9 +1167,30 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
   birthdayNumber: {
     term: 'Birthday Number', category: 'numerology', hiTerm: 'जन्मांक (मूलांक)',
     impact: 'One specific gift or talent, taken from the day of the month you were born.',
-    why: 'It is simply your birth day (1–31) reduced to one digit; 11 and 22 are kept as master numbers. In Indian numerology this is often called the Moolank.',
-    hi: 'जन्म की तारीख़ (1–31) को एक अंक में घटाकर बनता है — इसे मूलांक भी कहते हैं।',
-    aliases: ['Moolank', 'Mulank', 'psychic number'],
+    why: 'It is simply your birth day (1–31) reduced to one digit; in the Western convention 11 and 22 are kept as master numbers. The Indian Mulank is the same day reduced all the way to 1–9 (29 → 11 → 2).',
+    hi: 'जन्म की तारीख़ (1–31) को एक अंक में घटाकर बनता है (Western पद्धति में 11 और 22 वैसे ही रहते हैं)।',
+    aliases: ['psychic number (Western)'],
+  },
+  mulank: {
+    term: 'Mulank (Moolank)', category: 'numerology', hiTerm: 'मूलांक',
+    impact: 'The Indian "root number": your birth day boiled down to one digit 1–9. It is read as your natural temperament.',
+    why: 'Add the digits of the day you were born until one digit is left — 28 → 2 + 8 = 10 → 1. Indian calculators always go down to 1–9.',
+    hi: 'जन्म की तारीख़ के अंक जोड़ते जाएँ जब तक एक अंक (1–9) न बचे — जैसे 28 → 2 + 8 = 10 → 1। यह आपका स्वाभाविक स्वभाव माना जाता है।',
+    aliases: ['Moolank', 'Mulank', 'psychic number', 'root number'], link: '/numerology',
+  },
+  bhagyank: {
+    term: 'Bhagyank', category: 'numerology', hiTerm: 'भाग्यांक',
+    impact: 'The Indian "destiny number": your whole date of birth boiled down to one digit 1–9. It is read as the broad direction of your life.',
+    why: 'Add every digit of the full date — 9 Nov 1988 → 9 + 1 + 1 + 1 + 9 + 8 + 8 = 37 → 10 → 1. The Western Life Path gives the same final digit but may stop at a master number 11, 22 or 33.',
+    hi: 'पूरी जन्मतिथि के सभी अंक जोड़कर 1–9 तक घटाएँ — जैसे 9 नवंबर 1988 → 37 → 10 → 1। यह जीवन की व्यापक दिशा माना जाता है।',
+    aliases: ['Bhagyank', 'destiny number (Indian)'], link: '/numerology',
+  },
+  compoundNumber: {
+    term: 'Compound number', category: 'numerology', hiTerm: 'संयुक्त अंक',
+    impact: 'The two-digit total of your name\'s letters before it is reduced — in the Chaldean tradition it has its own meaning, separate from the single digit.',
+    why: 'Cheiro\'s Book of Numbers (1926) gives meanings for the compound numbers 10 to 52. Shah Rukh Khan → 42 (compound) → 4 + 2 = 6 (name number).',
+    hi: 'नाम के अक्षरों का दो अंकों वाला योग, एक अंक में घटाने से पहले — कैल्डियन पद्धति में इसका अपना अर्थ होता है (कीरो ने 10 से 52 तक के अर्थ दिए हैं)।',
+    aliases: ['compound', 'Chaldean compound number'], link: '/chaldean-numerology',
   },
   attitudeNumber: {
     term: 'Attitude Number', category: 'numerology', hiTerm: 'दृष्टिकोण अंक',

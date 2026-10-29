@@ -222,7 +222,6 @@ export const STATIC_ROUTES = [
   // SEO Batch 2 (P1-G) — Hindi vernacular landing pages.
   '/meri-umar-kitni-hai',
   '/jivan-kal-calculator',
-  '/numerology-hindi',
   '/rashifal-by-date-of-birth',
   '/biological-age-hindi',
   // SEO Batch 2 (P2-C) — embeddable widget landing + the widget frame itself.
