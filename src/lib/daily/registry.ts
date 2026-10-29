@@ -90,6 +90,11 @@ export const DAILY_PAGES: DailyPageDef[] = [
   { kind: 'choghadiya', lang: 'en', slugs: PANCHANG_DAILY_SLUGS, path: panchangPath('choghadiya'), data: { kind: 'panchang-day', slug: CITY } },
   // W7 — Hindi Panchang (/hi/panchang + 10 cities), same per-city data as the English pages.
   { kind: 'panchang-hi', lang: 'hi', slugs: PANCHANG_HI_DAILY_SLUGS, path: s => (s === 'index' ? '/hi/panchang' : `/hi/panchang/${s}`), data: { kind: 'panchang-day', slug: CITY } },
+  // Batch 10 — monthly Panchang calendar (New Delhi; other cities / months are computed in
+  // the browser), "Planets today" and "Moon phase today": one small shared file per month.
+  { kind: 'panchang-calendar', lang: 'en', slugs: ['index'], path: () => '/panchang-calendar', data: { kind: 'panchang-month', slug: () => 'delhi', period: 'month' } },
+  { kind: 'planets-today', lang: 'en', slugs: ['index'], path: () => '/planets-today', data: { kind: 'planet-day', slug: ALL } },
+  { kind: 'moon-phase', lang: 'en', slugs: ['index'], path: () => '/moon-phase', data: { kind: 'moon-day', slug: ALL } },
 ];
 
 let routeMap: Map<string, { def: DailyPageDef; slug: string }> | null = null;

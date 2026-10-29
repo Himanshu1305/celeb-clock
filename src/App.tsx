@@ -225,6 +225,11 @@ const ChildKundliPage = lazyWithReload(() => import('@/pages/ChildKundliPage'));
 const BlueZonesIndex = lazyWithReload(() => import('@/pages/BlueZonesIndex'));
 const BlueZonesFactor = lazyWithReload(() => import('@/pages/BlueZonesFactor'));
 const PanchangPage = lazyWithReload(() => import('@/pages/PanchangPage'));
+// Batch 10: monthly Panchang calendar, planets today, Moon phase, eclipses 2026–2030.
+const PanchangCalendarPage = lazyWithReload(() => import('@/pages/PanchangCalendarPage'));
+const PlanetsTodayPage = lazyWithReload(() => import('@/pages/PlanetsTodayPage'));
+const MoonPhasePage = lazyWithReload(() => import('@/pages/MoonPhasePage'));
+const EclipsesPage = lazyWithReload(() => import('@/pages/EclipsesPage'));
 const RahuKaalPage = lazyWithReload(() => import('@/pages/RahuKaalPage'));
 const ChoghadiyaPage = lazyWithReload(() => import('@/pages/ChoghadiyaPage'));
 const GlossaryPage = lazyWithReload(() => import('@/pages/GlossaryPage'));
@@ -529,6 +534,11 @@ const App = () => (
               <Route path="/glossary" element={<GlossaryPage />} />
               <Route path="/panchang" element={<PanchangPage />} />
               <Route path="/panchang/:city" element={<PanchangPage />} />
+              <Route path="/panchang-calendar" element={<PanchangCalendarPage />} />
+              <Route path="/planets-today" element={<PlanetsTodayPage />} />
+              <Route path="/moon-phase" element={<MoonPhasePage />} />
+              <Route path="/eclipses" element={<EclipsesPage />} />
+              <Route path="/eclipses/:year" element={<EclipsesPage />} />
               <Route path="/rahu-kaal" element={<RahuKaalPage />} />
               <Route path="/rahu-kaal/:city" element={<RahuKaalPage />} />
               <Route path="/choghadiya" element={<ChoghadiyaPage />} />

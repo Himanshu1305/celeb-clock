@@ -378,6 +378,13 @@ export const STATIC_ROUTES = [
   // cities (src/data/panchangCities.json). Dated views use ?date= and are NOT listed.
   '/panchang',
   ...PANCHANG_CITY_SLUGS.map(c => `/panchang/${c}`),
+  // Batch 10: monthly Panchang calendar (New Delhi; other months / places are ?month= and
+  // ?city= views, not listed), planets today, Moon phase, eclipses 2026–2030.
+  '/panchang-calendar',
+  '/planets-today',
+  '/moon-phase',
+  '/eclipses',
+  ...[2026, 2027, 2028, 2029, 2030].map(y => `/eclipses/${y}`),
   '/rahu-kaal',
   ...PANCHANG_CITY_SLUGS.map(c => `/rahu-kaal/${c}`),
   '/choghadiya',

@@ -118,10 +118,11 @@ function choghadiyaSet(startIdx: number, from: Date, totalMs: number, tz: number
  * are deterministic (same input → same text) and can be cached across cities, which
  * keeps the 400-day daily precompute fast. Precision ~0.1 s.
  */
-type LimbKey = 'tithi' | 'nak' | 'yoga' | 'karana';
+type LimbKey = 'tithi' | 'nak' | 'yoga' | 'karana' | 'rashi';
 const LIMBS: Record<LimbKey, { f: (d: Date) => number; unit: number }> = {
   tithi: { f: elong, unit: 12 },
   nak: { f: d => sunMoon(d).moon, unit: 360 / 27 },
+  rashi: { f: d => getSiderealLongitude('Moon', d), unit: 30 },
   yoga: { f: d => { const x = sunMoon(d); return x.sun + x.moon; }, unit: 360 / 27 },
   karana: { f: elong, unit: 6 },
 };
@@ -170,6 +171,24 @@ function windowAt(name: string, start: Date, end: Date, rise: Date, tz: number, 
   if (localDay(start, tz) > day0) w.startNextDay = true;
   if (localDay(end, tz) > day0) w.endNextDay = true;
   return w;
+}
+
+/**
+ * Batch 10 (Tarabalam / Chandrabalam): the Moon's Nakshatras or signs from sunrise to the
+ * next sunrise, each with the instant it ends (the last one ends at or after `nextRise`).
+ * Same deterministic boundary search as the limb end times.
+ */
+export function moonSpans(rise: Date, nextRise: Date, kind: 'nak' | 'rashi'): Array<{ idx: number; end: Date }> {
+  const out: Array<{ idx: number; end: Date }> = [];
+  let t = rise;
+  for (let guard = 0; guard < 4; guard++) {
+    const idx = limbIdx(kind, t.getTime());
+    const end = limbEnd(t, kind);
+    out.push({ idx, end });
+    if (end.getTime() >= nextRise.getTime()) break;
+    t = new Date(end.getTime() + 1000);
+  }
+  return out;
 }
 
 /** Last instant at or before `from` at which the limb changed (when the current one began). */
@@ -227,6 +246,24 @@ export function dayWindowsLite(date: Date, lat: number, lon: number, tzOffsetHou
     rahuKaal: windowFromPart(RAHU_PART[weekday], rise, dayMs, tzOffsetHours, 'Rahu Kaal', 'bad'),
     gulikaKaal: windowFromPart(GULIKA_PART[weekday], rise, dayMs, tzOffsetHours, 'Gulika Kaal', 'bad'),
     yamaganda: windowFromPart(YAMA_PART[weekday], rise, dayMs, tzOffsetHours, 'Yamaganda', 'bad'),
+  };
+}
+
+/**
+ * Batch 10 (monthly Panchang calendar): the lean per-day values a month grid shows — local
+ * sunrise / sunset, and the Tithi (0..29, Shukla Pratipada = 0) and Nakshatra (0..26) at
+ * sunrise with the minute each ends (minutes since local midnight; ≥ 1440 = next day).
+ * Same sunrise, limb and boundary code as computeDayPanchang, without the windows.
+ */
+export function dayLimbsLite(date: Date, lat: number, lon: number, tzOffsetHours: number): { rise: number; set: number; tithi: number; tithiEnd: number; nak: number; nakEnd: number } {
+  const { rise, set } = sunriseSunset(date, lat, lon, tzOffsetHours);
+  const local = new Date(rise.getTime() + tzOffsetHours * 3600 * 1000);
+  const midnight = Date.UTC(local.getUTCFullYear(), local.getUTCMonth(), local.getUTCDate()) - tzOffsetHours * 3600 * 1000;
+  const rel = (t: Date) => Math.round((t.getTime() - midnight) / 60000);
+  return {
+    rise: rel(rise), set: rel(set),
+    tithi: limbIdx('tithi', rise.getTime()), tithiEnd: rel(limbEnd(rise, 'tithi')),
+    nak: limbIdx('nak', rise.getTime()), nakEnd: rel(limbEnd(rise, 'nak')),
   };
 }
 

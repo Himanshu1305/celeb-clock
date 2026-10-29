@@ -20,7 +20,7 @@ import { PanchangControls } from '@/components/panchang/PanchangControls';
 import { CityLinks, TermChips } from '@/components/panchang/PanchangSections';
 import { HINDI_PANCHANG_SLUGS } from '@/lib/seo/panchangSlugs';
 
-const TERMS = ['Panchang', 'Tithi', 'Paksha', 'Nakshatra', 'Yoga', 'Karana', 'Vara', 'Brahma Muhurta', 'Abhijit Muhurta', 'Amrit Kalam', 'Rahu Kaal', 'Gulika Kaal', 'Yamaganda', 'Dur Muhurtam', 'Varjyam', 'Choghadiya'];
+const TERMS = ['Panchang', 'Tithi', 'Paksha', 'Nakshatra', 'Yoga', 'Karana', 'Vara', 'Brahma Muhurta', 'Abhijit Muhurta', 'Amrit Kalam', 'Rahu Kaal', 'Gulika Kaal', 'Yamaganda', 'Dur Muhurtam', 'Varjyam', 'Choghadiya', 'Gowri Panchangam', 'Nalla Neram', 'Tarabalam', 'Chandrabalam', 'Ashtama Chandra'];
 
 export default function PanchangPage() {
   const ctl = usePanchangPlace('panchang');
@@ -56,12 +56,19 @@ export default function PanchangPage() {
             <p className="text-sm mb-6"><Link to="/hi/panchang" className="text-primary hover:underline">हिन्दी में देखें →</Link></p>
           )}
 
+          <p className="text-sm mb-6" data-testid="panchang-month-link">
+            <Link to={`/panchang-calendar${place.slug && !ctl.isCustom ? `?city=${place.slug}` : ctl.isCustom ? `?place=${encodeURIComponent(place.name)}&lat=${place.lat}&lon=${place.lon}` : ''}`} className="text-primary hover:underline">Month view — {place.name} Panchang calendar with festivals →</Link>
+            {' · '}<Link to="/planets-today" className="text-primary hover:underline">Planets today →</Link>
+            {' · '}<Link to="/moon-phase" className="text-primary hover:underline">Moon phase →</Link>
+          </p>
+
           <TermChips labels={TERMS} />
 
           <div className="rounded-xl border border-border p-4 mb-6 text-sm text-muted-foreground space-y-2" data-testid="panchang-how">
             <h2 className="font-semibold text-foreground">How this Panchang is worked out</h2>
             <p>The five limbs are read at local sunrise, the classical convention: the Tithi from the Moon–Sun distance, the Nakshatra from the Moon, the Yoga from Sun + Moon, all sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>). The Tithi and Nakshatra change at the same instant everywhere, but which one is “at sunrise” — and every window on this page — depends on the place.</p>
             <p>Sunrise and sunset come from the real position of the Sun for the place’s latitude and longitude. Rahu Kaal, Gulika and Yamaganda are fixed eighths of daylight; Abhijit, Dur Muhurtam and Brahma Muhurta are fifteenths of the day or night; Amrit Kalam and Varjyam are fixed slices of the day’s Nakshatra. Times are local clock times rounded to the nearest minute. In our tests (October 2026, 5 cities) they agreed with Drik Panchang to within a minute, and Tithi and Nakshatra end times to within 2 minutes.</p>
+            <p>The Tamil <TermTip id="gowriPanchangam">Gowri Panchangam</TermTip> uses the same eight day and eight night parts as the Choghadiya, named in the fixed weekday order of the Pambu Panchangam table that Drik Panchang follows. <TermTip id="tarabalam">Tarabalam</TermTip> and <TermTip id="chandrabalam">Chandrabalam</TermTip> list the birth stars and Moon signs for which today’s Nakshatra and Moon are supportive, split where the Nakshatra or the Moon’s sign changes. We checked these against Drik Panchang pages for New Delhi and Lancaster (California).</p>
             <p>Use the date box or the previous / next buttons to see any date, or search any town in the world. <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link> · <Link to="/accuracy" className="underline" data-testid="panchang-accuracy-link">How we check accuracy →</Link></p>
           </div>
 

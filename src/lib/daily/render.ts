@@ -8,7 +8,7 @@
  * end as the first `</div>` after it). Use section/h2/p/ul/li/details only.
  * Dependency-free (Worker-safe).
  */
-import type { DailyEntry, DailyTone } from './types';
+import type { DailyEntry, DailySection, DailyTone } from './types';
 
 export function escapeHtml(s: string): string {
   return String(s)
@@ -23,6 +23,32 @@ const LABELS = {
   en: { answer: 'Today in brief', why: 'Why today', faq: 'Questions about today', good: 'Supportive', mixed: 'Mixed', care: 'Go gently' },
   hi: { answer: 'आज संक्षेप में', why: 'आज ऐसा क्यों', faq: 'आज से जुड़े प्रश्न', good: 'अनुकूल', mixed: 'मिश्रित', care: 'सावधानी से' },
 } as const;
+
+/** Literal classes (Tailwind only keeps class names it can see in the source). */
+const COL_START = ['', 'sm:col-start-1', 'sm:col-start-2', 'sm:col-start-3', 'sm:col-start-4', 'sm:col-start-5', 'sm:col-start-6', 'sm:col-start-7'];
+const SWIPE = { en: 'Swipe sideways to see every column →', hi: 'सभी कॉलम देखने के लिए बगल में स्क्रॉल करें →' } as const;
+
+function calendarHtml(s: DailySection): string {
+  const head = (s.columns ?? []).map(c => `<li class="hidden sm:block text-center text-xs font-semibold text-muted-foreground" aria-hidden="true">${escapeHtml(c)}</li>`).join('');
+  const start = Math.min(7, Math.max(1, s.startCol ?? 1));
+  const cells = (s.items ?? []).map((it, i) =>
+    `<li class="rounded-lg border border-border p-2 text-xs leading-snug${i === 0 ? ` ${COL_START[start]}` : ''}${it.tag ? ' bg-primary/5' : ''}">` +
+      `<span class="font-semibold text-foreground">${escapeHtml(it.label)}</span>` +
+      (it.tag ? ` <span class="inline-block rounded-full border border-primary/30 px-1.5 text-[10px] text-primary">${escapeHtml(it.tag)}</span>` : '') +
+      `<br><span class="text-foreground">${escapeHtml(it.value)}</span>` +
+      (it.note ? `<br><span class="text-muted-foreground whitespace-pre-line">${escapeHtml(it.note)}</span>` : '') +
+    `</li>`).join('');
+  return `<ol class="daily-calendar mt-3 grid grid-cols-1 sm:grid-cols-7 gap-1">${head}${cells}</ol>`;
+}
+
+function tableHtml(s: DailySection, lang: 'en' | 'hi'): string {
+  const cols = s.columns ?? [];
+  const head = `<thead><tr>${cols.map(c => `<th scope="col" class="text-left font-semibold text-foreground px-2 py-1 border-b border-border whitespace-nowrap">${escapeHtml(c)}</th>`).join('')}</tr></thead>`;
+  const body = `<tbody>${(s.rows ?? []).map(r => `<tr class="border-b border-border/60">${r.map((c, i) =>
+    i === 0 ? `<th scope="row" class="text-left font-medium text-foreground px-2 py-1 whitespace-nowrap">${escapeHtml(c)}</th>` : `<td class="px-2 py-1 text-muted-foreground">${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody>`;
+  return `<p class="mt-2 text-xs text-muted-foreground sm:hidden">${escapeHtml(SWIPE[lang] ?? SWIPE.en)}</p>` +
+    `<figure class="daily-table mt-2 overflow-x-auto"><table class="min-w-[640px] w-full text-sm">${head}${body}</table></figure>`;
+}
 
 const TONE_CLASS: Record<DailyTone, string> = {
   good: 'text-emerald-700 bg-emerald-50 border-emerald-200',
@@ -59,7 +85,9 @@ export function renderDailyBodyHtml(e: DailyEntry): string {
       : '';
     let inner = `<h2 class="font-semibold text-foreground mb-1">${escapeHtml(s.heading)}${tone}</h2>`;
     if (s.text) inner += `<p class="text-sm text-muted-foreground leading-relaxed">${escapeHtml(s.text)}</p>`;
-    if (s.items && s.items.length) {
+    if (s.layout === 'calendar') inner += calendarHtml(s);
+    else if (s.layout === 'table') inner += tableHtml(s, e.lang);
+    else if (s.items && s.items.length) {
       inner += `<ul class="mt-2 space-y-1 text-sm">` +
         s.items.map(it =>
           `<li><span class="text-muted-foreground">${escapeHtml(it.label)}:</span> <strong class="text-foreground">${escapeHtml(it.value)}</strong>` +

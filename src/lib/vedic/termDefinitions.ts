@@ -669,6 +669,50 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'सप्ताह का दिन; हर वार का एक स्वामी ग्रह है (रविवार–सूर्य … शनिवार–शनि)। पंचांग में दिन सूर्योदय से सूर्योदय तक माना जाता है।',
     aliases: ['weekday', 'Var'],
   },
+  gowriPanchangam: {
+    term: 'Gowri Panchangam', category: 'panchang', hiTerm: 'गौरी पंचांगम्',
+    impact: 'The Tamil way of picking a good hour: it tells you which stretches of today are good to begin something and which to leave out.',
+    why: 'Daylight (sunrise to sunset) and night (sunset to next sunrise) are each split into eight equal parts, named in a fixed order for each weekday. Amirdha, Dhanam, Uthi, Laabam and Sugam are good; Soram, Visham and Rogam are avoided for new starts.',
+    guidance: 'Pick a good part for a new start; work already under way can carry on.',
+    hi: 'तमिल परंपरा का शुभ समय: दिन और रात को आठ-आठ बराबर भागों में बाँटकर वार के अनुसार नाम दिए जाते हैं। अमिर्दा, धनम, उत्ति, लाभम, सुगम शुभ; सोरम, विषम, रोगम में नया कार्य टाला जाता है।',
+    aliases: ['Gowri Panchang', 'Gauri Panchangam', 'Gowri'],
+  },
+  nallaNeram: {
+    term: 'Nalla Neram', category: 'panchang', hiTerm: 'नल्ल नेरम्',
+    impact: '"Good time" in Tamil — the stretches of the day considered good for starting something important.',
+    why: 'On BornClock, as on Drik Panchang, the Gowri Nalla Neram is the good parts of the Gowri Panchangam (Amirdha, Dhanam, Uthi, Laabam, Sugam).',
+    hi: 'तमिल में "अच्छा समय" — गौरी पंचांगम् के शुभ भाग (अमिर्दा, धनम, उत्ति, लाभम, सुगम)।',
+    aliases: ['Gowri Nalla Neram', 'good time'],
+  },
+  tarabalam: {
+    term: 'Tarabalam', category: 'panchang', hiTerm: 'ताराबल',
+    impact: 'Tells you whether today’s star (Nakshatra) is friendly to YOUR birth star — a quick personal check before a new start.',
+    why: 'Count from your birth Nakshatra to today’s Nakshatra and divide by 9. The 2nd (Sampat), 4th (Kshema), 6th (Sadhana), 8th (Mitra) and 9th (Parama Mitra) counts are good.',
+    guidance: 'If your star is not on today’s list, nothing bad is coming — keep to routine work and pick a listed day for big starts.',
+    hi: 'आज का नक्षत्र आपके जन्म नक्षत्र से कितना अनुकूल है — नौ ताराओं में दूसरा, चौथा, छठा, आठवाँ और नौवाँ शुभ माना जाता है।',
+    aliases: ['Tara Bala', 'Tara balam'],
+  },
+  chandrabalam: {
+    term: 'Chandrabalam', category: 'panchang', hiTerm: 'चंद्रबल',
+    impact: 'Tells you whether today’s Moon supports YOUR Moon sign.',
+    why: 'Count from your Moon sign to the sign the Moon is in today: the 1st, 3rd, 6th, 7th, 10th and 11th are good.',
+    hi: 'आज चंद्रमा आपकी चंद्र राशि से पहले, तीसरे, छठे, सातवें, दसवें या ग्यारहवें भाव में हो तो चंद्रबल शुभ होता है।',
+    aliases: ['Chandra Bala', 'Moon strength'],
+  },
+  ashtamaChandra: {
+    term: 'Ashtama Chandra', category: 'panchang', hiTerm: 'अष्टम चंद्र',
+    impact: 'About two days a month when the Moon is 8th from your Moon sign — a time to go gently and keep plans simple, not a time of harm.',
+    why: 'The Moon moves through all twelve signs in about 27 days, so it spends a little over two days in the 8th sign from yours each month.',
+    hi: 'चंद्रमा आपकी राशि से आठवें भाव में हो (हर महीने लगभग सवा दो दिन) — इस समय काम सरल रखें; यह हानि का समय नहीं है।',
+    aliases: ['Chandrashtama', 'Chandrashtamam'],
+  },
+  sankranti: {
+    term: 'Sankranti', category: 'panchang', hiTerm: 'संक्रांति',
+    impact: 'The day the Sun moves into a new sign — twelve a year; Makar Sankranti is the best known.',
+    why: 'Counted in the sidereal (Lahiri) zodiac, the Sun enters each sign about a month apart.',
+    hi: 'जिस दिन सूर्य नई राशि में प्रवेश करता है — साल में बारह; मकर संक्रांति सबसे प्रसिद्ध है।',
+    aliases: ['Sankranthi'],
+  },
   rahuKalam: {
     term: 'Rahu Kaal', category: 'panchang', hiTerm: 'राहु काल',
     impact: 'A roughly 90-minute window each day traditionally avoided for starting anything important.',
@@ -1135,6 +1179,29 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'आज ग्रह कहाँ हैं और आपकी कुंडली पर उनका क्या असर है — हर राशिफल का आधार।',
     aliases: ['transit', 'transits'], link: '/transit',
   },
+  combust: {
+    term: 'Combust (Asta)', category: 'transit', hiTerm: 'अस्त',
+    impact: 'A planet so close to the Sun that it is lost in its glare; tradition reads its themes as quieter for a while.',
+    why: 'Classical texts give a distance from the Sun for each planet (Surya Siddhanta: Mars 17°, Mercury 14° or 12° when retrograde, Jupiter 11°, Venus 10° or 8° when retrograde, Saturn 15°). Inside it, the planet is "combust".',
+    guidance: 'Nothing to fear: it simply passes in a few days or weeks. Guru or Shukra being combust pauses weddings and house-warmings.',
+    hi: 'जब कोई ग्रह सूर्य के बहुत पास होकर उसकी चमक में छिप जाता है, तो उसे अस्त कहते हैं; कुछ समय बाद यह अपने आप समाप्त हो जाता है।',
+    aliases: ['Asta', 'combustion', 'combust planet'],
+  },
+  moonPhase: {
+    term: 'Moon phase', category: 'panchang', hiTerm: 'चंद्र कला',
+    impact: 'How much of the Moon is lit — it tells you where you are in the lunar month and which Tithi it is.',
+    why: 'The Moon shines by sunlight. As it moves around the Earth we see more of its lit side (waxing, Shukla Paksha) up to the full Moon, then less (waning, Krishna Paksha) down to the new Moon, about every 29.5 days.',
+    hi: 'चंद्रमा का कितना भाग प्रकाशित है — इससे पता चलता है कि चंद्र मास में कौन-सी तिथि और पक्ष चल रहा है।',
+    aliases: ['phase of the Moon', 'illumination', 'Chandra kala'],
+  },
+  eclipse: {
+    term: 'Eclipse (Grahan)', category: 'transit', hiTerm: 'ग्रहण',
+    impact: 'A natural, predictable alignment of the Sun, Moon and Earth — nothing to fear; for any observance, follow your family’s practice.',
+    why: 'A solar eclipse (Surya Grahan) happens at a new Moon when the Moon passes in front of the Sun; a lunar eclipse (Chandra Grahan) happens at a full Moon when the Moon passes through the Earth’s shadow. Both happen near Rahu or Ketu, the Moon’s nodes.',
+    guidance: 'Never look at the Sun directly during a partial or annular solar eclipse — use certified solar viewers (ISO 12312-2); ordinary sunglasses are not safe.',
+    hi: 'सूर्य, चंद्रमा और पृथ्वी की एक सीध — सूर्य ग्रहण अमावस्या पर और चंद्र ग्रहण पूर्णिमा पर होता है। सूर्य को कभी सीधे न देखें।',
+    aliases: ['Grahan', 'Surya Grahan', 'Chandra Grahan', 'solar eclipse', 'lunar eclipse'], link: '/eclipses',
+  },
   ingress: {
     term: 'Ingress (sign change)', category: 'transit', hiTerm: 'राशि परिवर्तन',
     impact: 'The date a planet moves into a new sign — when its effect on you changes.',
@@ -1522,6 +1589,9 @@ export const PANCHANG_PAGE_TERM: Record<string, string> = {
   Karana: 'karana', Vara: 'vara', 'Brahma Muhurta': 'brahmaMuhurta', 'Abhijit Muhurta': 'abhijit', 'Amrit Kalam': 'amritKalam',
   'Rahu Kaal': 'rahuKalam', 'Gulika Kaal': 'gulikaKaal', Yamaganda: 'yamaganda', 'Dur Muhurtam': 'durMuhurtam',
   Varjyam: 'varjyam', Choghadiya: 'choghadiya',
+  // Batch 10
+  'Gowri Panchangam': 'gowriPanchangam', 'Nalla Neram': 'nallaNeram', Tarabalam: 'tarabalam', Chandrabalam: 'chandrabalam',
+  'Ashtama Chandra': 'ashtamaChandra', Purnima: 'purnima', Amavasya: 'amavasya', Ekadashi: 'ekadashi', Sankranti: 'sankranti',
 };
 
 export const CHOGHADIYA_TERM: Record<string, string> = {
