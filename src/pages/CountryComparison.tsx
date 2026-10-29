@@ -96,9 +96,9 @@ function CountryFAQItem({ q, a }: { q: string; a: string }) {
         <span className="font-medium text-sm text-foreground">{q}</span>
         {open ? <ChevronUp className="w-4 h-4 text-muted-foreground flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />}
       </button>
-      {open && (
-        <div className="px-5 pb-4 text-sm text-muted-foreground leading-relaxed">{a}</div>
-      )}
+      {/* Always in the HTML (hidden while closed) so the prerendered page carries every
+          answer that the FAQPage JSON-LD lists. */}
+      <div hidden={!open} className="px-5 pb-4 text-sm text-muted-foreground leading-relaxed">{a}</div>
     </Card>
   );
 }

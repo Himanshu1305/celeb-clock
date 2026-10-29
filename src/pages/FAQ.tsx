@@ -229,6 +229,7 @@ function AccordionItem({ item, defaultOpen = false }: { item: FAQItem; defaultOp
     <div className="border-b border-border last:border-0">
       <button
         onClick={() => setOpen(v => !v)}
+        aria-expanded={open}
         className="flex items-start justify-between w-full text-left py-4 gap-4"
       >
         <span className="font-medium text-foreground leading-snug">{item.q}</span>
@@ -237,11 +238,11 @@ function AccordionItem({ item, defaultOpen = false }: { item: FAQItem; defaultOp
           : <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
         }
       </button>
-      {open && (
-        <div className="pb-4 text-muted-foreground text-sm leading-relaxed">
-          {item.a}
-        </div>
-      )}
+      {/* Always in the HTML (hidden while closed) so the prerendered page carries every
+          answer that the FAQPage JSON-LD lists. */}
+      <div hidden={!open} className="pb-4 text-muted-foreground text-sm leading-relaxed">
+        {item.a}
+      </div>
     </div>
   );
 }
