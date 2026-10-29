@@ -42,6 +42,8 @@ import { getDrikBala } from './engine/drikBala';
 import { detectYogas, type YogaResult } from './yogas';
 import { buildShodashvarga, type ShodashvargaChart } from './engine/shodashvarga';
 import { buildBirthTimeEdges, type BirthTimeEdge } from './engine/birthTimeEdge';
+import { buildYoginiDasha, type YoginiDashaResult } from './engine/yoginiDasha';
+import { computeAshtakavarga, type AshtakavargaResult } from './engine/ashtakavarga';
 
 export interface BirthChartInput {
   year: number;
@@ -143,6 +145,10 @@ export interface BirthChartResult {
   shodashvarga?: ShodashvargaChart[];
   /** Batch 8: Lagna (±5 / ±15 min) and Moon Rashi / Nakshatra (±5 min) birth-time edges. */
   birthTimeEdges?: BirthTimeEdge[];
+  /** Batch 10: Yogini Dasha (8 Yoginis, 36-year cycle) — Mahadasha list; Antardashas derived on demand. */
+  yoginiDasha?: YoginiDashaResult;
+  /** Batch 10: Bhinnashtakavarga (7 planets, by sign) + Sarvashtakavarga (BPHS ch. 66). */
+  ashtakavarga?: AshtakavargaResult;
   kp: Record<string, ReturnType<typeof getKPSubLord>>;
   shadbala?: Record<string, ShadbalaComponent>;
   /** Internal debugging only — which engine produced this chart. */
@@ -459,6 +465,11 @@ function toResult(chart: FullChart, source: 'local' | 'prokerala', includeShadba
       birthDateUTC, input.latitude, input.longitude,
       { Lagna: chart.lagna.siderealLongitude, Moon: chart.planets.Moon.siderealLongitude },
     ), [] as BirthTimeEdge[]),
+    yoginiDasha: safe(() => buildYoginiDasha(birthDateUTC, chart.planets.Moon.siderealLongitude), undefined as any),
+    ashtakavarga: safe(() => computeAshtakavarga({
+      Lagna: chart.lagna.rashiIndex,
+      ...Object.fromEntries(['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'].map(n => [n, chart.planets[n].rashiIndex])),
+    } as any), undefined as any),
     kp: {
       Lagna: getKPSubLord(chart.lagna.siderealLongitude),
       ...Object.fromEntries(PLANET_ORDER.map((n) => [n, getKPSubLord(chart.planets[n].siderealLongitude)])),
