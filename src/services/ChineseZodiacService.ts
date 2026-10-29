@@ -1,46 +1,7 @@
-// Chinese New Year start dates (month, day) for Jan/Feb edge cases.
-// 1900–1923 and 2032–2049 added 23 Oct 2026 (audit N11) from the audit's reference
-// table (python `lunardate` / `lunar_python`), which matches every 1924–2031 entry below.
-const CHINESE_NEW_YEAR_DATES: Record<number, [number, number]> = {
-  1900: [1, 31], 1901: [2, 19], 1902: [2, 8], 1903: [1, 29],
-  1904: [2, 16], 1905: [2, 4], 1906: [1, 25], 1907: [2, 13],
-  1908: [2, 2], 1909: [1, 22], 1910: [2, 10], 1911: [1, 30],
-  1912: [2, 18], 1913: [2, 6], 1914: [1, 26], 1915: [2, 14],
-  1916: [2, 3], 1917: [1, 23], 1918: [2, 11], 1919: [2, 1],
-  1920: [2, 20], 1921: [2, 8], 1922: [1, 28], 1923: [2, 16],
-  1924: [2, 5],  1925: [1, 24], 1926: [2, 13], 1927: [2, 2],
-  1928: [1, 23], 1929: [2, 10], 1930: [1, 30], 1931: [2, 17],
-  1932: [2, 6],  1933: [1, 26], 1934: [2, 14], 1935: [2, 4],
-  1936: [1, 24], 1937: [2, 11], 1938: [1, 31], 1939: [2, 19],
-  1940: [2, 8],  1941: [1, 27], 1942: [2, 15], 1943: [2, 5],
-  1944: [1, 25], 1945: [2, 13], 1946: [2, 2],  1947: [1, 22],
-  1948: [2, 10], 1949: [1, 29], 1950: [2, 17], 1951: [2, 6],
-  1952: [1, 27], 1953: [2, 14], 1954: [2, 3],  1955: [1, 24],
-  1956: [2, 12], 1957: [1, 31], 1958: [2, 18], 1959: [2, 8],
-  1960: [1, 28], 1961: [2, 15], 1962: [2, 5],  1963: [1, 25],
-  1964: [2, 13], 1965: [2, 2],  1966: [1, 21], 1967: [2, 9],
-  1968: [1, 30], 1969: [2, 17], 1970: [2, 6],  1971: [1, 27],
-  1972: [2, 15], 1973: [2, 3],  1974: [1, 23], 1975: [2, 11],
-  1976: [1, 31], 1977: [2, 18], 1978: [2, 7],  1979: [1, 28],
-  1980: [2, 16], 1981: [2, 5],  1982: [1, 25], 1983: [2, 13],
-  1984: [2, 2],  1985: [2, 20], 1986: [2, 9],  1987: [1, 29],
-  1988: [2, 17], 1989: [2, 6],  1990: [1, 27], 1991: [2, 15],
-  1992: [2, 4],  1993: [1, 23], 1994: [2, 10], 1995: [1, 31],
-  1996: [2, 19], 1997: [2, 7],  1998: [1, 28], 1999: [2, 16],
-  2000: [2, 5],  2001: [1, 24], 2002: [2, 12], 2003: [2, 1],
-  2004: [1, 22], 2005: [2, 9],  2006: [1, 29], 2007: [2, 18],
-  2008: [2, 7],  2009: [1, 26], 2010: [2, 14], 2011: [2, 3],
-  2012: [1, 23], 2013: [2, 10], 2014: [1, 31], 2015: [2, 19],
-  2016: [2, 8],  2017: [1, 28], 2018: [2, 16], 2019: [2, 5],
-  2020: [1, 25], 2021: [2, 12], 2022: [2, 1],  2023: [1, 22],
-  2024: [2, 10], 2025: [1, 29], 2026: [2, 17], 2027: [2, 6],
-  2028: [1, 26], 2029: [2, 13], 2030: [2, 3],  2031: [1, 23],
-  2032: [2, 11], 2033: [1, 31], 2034: [2, 19], 2035: [2, 8],
-  2036: [1, 28], 2037: [2, 15], 2038: [2, 4], 2039: [1, 24],
-  2040: [2, 12], 2041: [2, 1], 2042: [1, 22], 2043: [2, 10],
-  2044: [1, 30], 2045: [2, 17], 2046: [2, 6], 2047: [1, 26],
-  2048: [2, 14], 2049: [2, 2],
-};
+// Chinese New Year dates + year helpers live in ONE shared module (also used by the
+// prerender script) — see src/lib/chineseCalendar.js for sources.
+import { CHINESE_NEW_YEAR_DATES, chineseYearForYmd } from '@/lib/chineseCalendar.js';
+export { CHINESE_NEW_YEAR_DATES };
 
 const ANIMALS = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'] as const;
 const ELEMENTS = ['Wood', 'Fire', 'Earth', 'Metal', 'Water'] as const;
@@ -74,18 +35,7 @@ const ANIMAL_DATA: Record<string, { emoji: string; traits: string[]; famous: str
 
 /** The Chinese (lunar) year a birth date belongs to — changes at Lunar New Year, not 1 Jan (audit N11). */
 export function getChineseYear(dob: Date): number {
-  const year = dob.getFullYear();
-  const month = dob.getMonth() + 1;
-  const day = dob.getDate();
-
-  const cnyEntry = CHINESE_NEW_YEAR_DATES[year];
-  if (cnyEntry) {
-    const [cnyMonth, cnyDay] = cnyEntry;
-    if (month < cnyMonth || (month === cnyMonth && day < cnyDay)) {
-      return year - 1;
-    }
-  }
-  return year;
+  return chineseYearForYmd(dob.getFullYear(), dob.getMonth() + 1, dob.getDate());
 }
 
 export function getChineseZodiacAnimal(year: number): string {
@@ -127,7 +77,6 @@ export interface ChineseSignExtended {
   compatibility_best: string[];
   compatibility_worst: string[];
   famous_people: Array<{ name: string; born: number }>;
-  outlook_2026: string;
 }
 
 export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
@@ -150,7 +99,6 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Wolfgang Amadeus Mozart',born:1756},{name:'William Shakespeare',born:1564},
       {name:'George Washington',born:1732},{name:'Scarlett Johansson',born:1984},{name:'Eminem',born:1972},
     ],
-    outlook_2026: '2026 is a Horse year, which creates natural tension for the Rat — Horse and Rat are opposing signs. This calls for extra patience in partnerships and avoiding impulsive financial decisions. Focus on consolidating existing strengths rather than launching major new ventures. Relationships will require more nurturing than usual.',
   },
   Ox: {
     years: [1925,1937,1949,1961,1973,1985,1997,2009,2021,2033],
@@ -171,7 +119,6 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Barack Obama',born:1961},{name:'Napoleon Bonaparte',born:1769},
       {name:'Princess Diana',born:1961},{name:'George Clooney',born:1961},{name:'Meryl Streep',born:1949},
     ],
-    outlook_2026: '2026 is generally favorable for the Ox. Horse years reward the Ox\'s characteristic endurance. Career advancement is possible for those who have been quietly building their skills. Health deserves attention — prioritize rest and avoid overcommitting.',
   },
   Tiger: {
     years: [1926,1938,1950,1962,1974,1986,1998,2010,2022,2034],
@@ -192,7 +139,6 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Leonardo DiCaprio',born:1974},{name:'Marilyn Monroe',born:1926},
       {name:'Queen Elizabeth II',born:1926},{name:'Tom Cruise',born:1962},{name:'Lady Gaga',born:1986},
     ],
-    outlook_2026: 'Horse years energize the Tiger. 2026 brings opportunities for bold moves that have been building for some time. Career and creative projects launched this year have strong momentum. Relationships need attention — the Tiger\'s intensity can feel overwhelming to partners in high-energy years. Channel passion productively.',
   },
   Rabbit: {
     years: [1927,1939,1951,1963,1975,1987,1999,2011,2023,2035],
@@ -213,7 +159,6 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Albert Einstein',born:1879},{name:'Angelina Jolie',born:1975},
       {name:'Brad Pitt',born:1963},{name:'Frank Sinatra',born:1915},{name:'Confucius',born:-551},
     ],
-    outlook_2026: 'Horse years require the Rabbit to step slightly outside their comfort zone. The energy of 2026 favors bold action — Rabbits who trust their instincts and act decisively will be rewarded. Relationships flourish with open, honest communication.',
   },
   Dragon: {
     years: [1928,1940,1952,1964,1976,1988,2000,2012,2024,2036],
@@ -234,7 +179,6 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Bruce Lee',born:1940},{name:'Rihanna',born:1988},
       {name:'Adele',born:1988},{name:'Martin Luther King Jr.',born:1929},{name:'Deng Xiaoping',born:1904},
     ],
-    outlook_2026: '2026 is a mixed year for the Dragon following the powerful 2024 Dragon year. Focus on consolidating gains made in 2024–2025. Major launches are better suited to 2027. Personal relationships and health deserve priority attention this year.',
   },
   Snake: {
     years: [1929,1941,1953,1965,1977,1989,2001,2013,2025,2037],
@@ -255,7 +199,6 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Mahatma Gandhi',born:1869},{name:'Abraham Lincoln',born:1809},
       {name:'Taylor Swift',born:1989},{name:'Bob Dylan',born:1941},{name:'Audrey Hepburn',born:1929},
     ],
-    outlook_2026: 'Following the Snake\'s own year in 2025, 2026 brings a natural consolidation period. The wisdom gained in 2025 now needs to be applied practically. Financial decisions made this year have long-lasting consequences — proceed thoughtfully.',
   },
   Horse: {
     years: [1930,1942,1954,1966,1978,1990,2002,2014,2026,2038],
@@ -276,7 +219,6 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Oprah Winfrey',born:1954},{name:'Isaac Newton',born:1643},
       {name:'Kobe Bryant',born:1978},{name:'Emma Watson',born:1990},{name:'Genghis Khan',born:1162},
     ],
-    outlook_2026: '2026 is the Horse\'s own year — the most significant year in the 12-year cycle. This is the year to launch, to commit, to take the bold step that has been building for years. Traditional Chinese astrology notes that one\'s own year can also bring turbulence — the key is to stay grounded while embracing the opportunities that arise.',
   },
   Goat: {
     years: [1931,1943,1955,1967,1979,1991,2003,2015,2027,2039],
@@ -286,7 +228,7 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
     in_love: 'Goats are tender, romantic partners who create genuinely beautiful relationship experiences. They need partners who provide stability and appreciate their creative nature. Best matched with Rabbit, Horse, and Pig.',
     in_career: 'Art, music, design, therapy, nursing, childcare, and the healing arts all suit the Goat. They thrive when their creativity is valued and they have the support of a stable structure.',
     in_health: 'Goats are prone to anxiety and stress-related digestive issues. Regular creative expression is literally therapeutic for them. Beautiful, harmonious environments significantly improve their wellbeing.',
-    cultural_significance: 'The Goat (also written as Sheep or Ram in some traditions) is one of the most auspicious signs in Chinese culture, associated with filial piety, peace, and harmonious family life. The character for "beautiful" (美 měi) in Chinese is composed of the characters for "big" and "sheep" — reflecting the deep cultural association between the Goat/Sheep and all that is beautiful and good.',
+    cultural_significance: 'The Goat (also written as Sheep or Ram in some traditions) is one of the most auspicious signs in Chinese culture, associated with filial piety, peace, and harmonious family life. The character for "beautiful" (美 měi) in Chinese is composed of the characters for "big" and "sheep" — reflecting the deep cultural association between the Goat and all that is beautiful and good.',
     lucky_colors: ['Brown','Red','Purple'],
     lucky_numbers: [2,7],
     lucky_directions: ['North','Northwest'],
@@ -297,7 +239,6 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Steve Jobs',born:1955},{name:'Bill Gates',born:1955},
       {name:'Michelangelo',born:1475},{name:'Julia Roberts',born:1967},{name:'Bruce Willis',born:1955},
     ],
-    outlook_2026: 'Horse years are generally favorable for the Goat — the Horse and Goat share a natural compatibility. Creative projects find their audience, relationships deepen, and financial situations improve for those who focus on their core strengths.',
   },
   Monkey: {
     years: [1932,1944,1956,1968,1980,1992,2004,2016,2028,2040],
@@ -318,7 +259,6 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Will Smith',born:1968},{name:'Tom Hanks',born:1956},
       {name:'Daniel Craig',born:1968},{name:'Celine Dion',born:1968},{name:'Ryan Reynolds',born:1976},
     ],
-    outlook_2026: 'Horse years bring exciting opportunities for the Monkey — particularly in career and financial areas. The key is to focus rather than scatter energy across too many pursuits. Choose one major initiative and commit fully.',
   },
   Rooster: {
     years: [1933,1945,1957,1969,1981,1993,2005,2017,2029,2041],
@@ -339,7 +279,6 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Beyoncé',born:1981},{name:'Justin Timberlake',born:1981},
       {name:'Dolly Parton',born:1946},{name:'Britney Spears',born:1981},{name:'Serena Williams',born:1981},
     ],
-    outlook_2026: 'Horse years bring mixed energy for the Rooster. Professional recognition is possible for those who have been building their expertise. Avoid being overly critical in relationships — the high energy of a Horse year requires flexibility.',
   },
   Dog: {
     years: [1934,1946,1958,1970,1982,1994,2006,2018,2030,2042],
@@ -360,7 +299,6 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Madonna',born:1958},{name:'Michael Jackson',born:1958},
       {name:'Mother Teresa',born:1910},{name:'Winston Churchill',born:1874},{name:'Bill Clinton',born:1946},
     ],
-    outlook_2026: 'Horse years are generally positive for the Dog — Horse and Dog share a natural compatibility. Career advancement is possible through consistent effort. Friendships and family relationships are highlighted — invest in these connections.',
   },
   Pig: {
     years: [1935,1947,1959,1971,1983,1995,2007,2019,2031,2043],
@@ -381,6 +319,5 @@ export const CHINESE_SIGN_EXTENDED: Record<string, ChineseSignExtended> = {
       {name:'Elton John',born:1947},{name:'Ernest Hemingway',born:1899},
       {name:'Woody Allen',born:1935},{name:'Arnold Schwarzenegger',born:1947},{name:'Hillary Clinton',born:1947},
     ],
-    outlook_2026: 'Horse years bring busy, productive energy for the Pig. New opportunities appear in career and finance — the key is to evaluate them carefully rather than saying yes to everything. Health deserves particular attention this year.',
   },
 };

@@ -10,6 +10,12 @@
 import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+// Batch 9: one shared Chinese-year helper (app + prerender) — the year rolls over at
+// Chinese New Year, computed at build time so a rebuild picks up the new year.
+import {
+  currentChineseYear, chineseHoroscopeIndexTitle, chineseHoroscopeIndexDescription, chineseSignDescription,
+  CHINESE_BY_YEAR_TITLE, CHINESE_BY_YEAR_DESC,
+} from '../src/lib/chineseCalendar.js';
 
 // Indian born-on facet data (slug → {top3, count}) for /born-on/:slug/india titles.
 const INDIA_BORNON_MAP = new Map(
@@ -252,7 +258,7 @@ const STATIC = {
   '/articles/zodiac-compatibility': { title: 'Zodiac Compatibility — Which Signs Match Best? | BornClock', desc: 'Zodiac compatibility guide — how all 12 signs match in love and friendship. Free compatibility checker plus the best and worst matches for every sign.' },
   '/articles/biorhythm-calculator': { title: 'Biorhythm Calculator — Physical, Emotional, Intellectual | BornClock', desc: 'Free biorhythm calculator — track your physical (23-day), emotional (28-day) and intellectual (33-day) cycles from your date of birth.' },
   '/articles/tarot-card-by-date-of-birth': { title: 'Tarot Card by Date of Birth — Find Your Card | BornClock', desc: 'Find your tarot card by date of birth — your zodiac Major Arcana card and your Life Path tarot card, with meanings. Free tarot-by-birthday guide.' },
-  '/articles/chinese-zodiac-by-year': { title: 'Chinese Zodiac by Year — Find Your Animal Sign | BornClock', desc: 'Chinese zodiac by birth year — find your animal sign and its personality, luck and compatibility. All 12 animals with a free year-to-animal calculator.' },
+  '/articles/chinese-zodiac-by-year': { title: CHINESE_BY_YEAR_TITLE, desc: CHINESE_BY_YEAR_DESC },
   '/articles/birth-month-personality': { title: 'Birth Month Personality — What Your Month Says | BornClock', desc: 'Birth month personality guide — the zodiac sign and traits linked to each of the 12 months, plus the science of seasonal birth effects.' },
   '/articles/epigenetics-and-longevity': { title: 'Epigenetics and Longevity — How Lifestyle Rewrites Genes | BornClock', desc: 'Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 proven interventions.' },
   '/articles/longevity-supplements': { title: 'Longevity Supplements — What Works, What is Hype (India) | BornClock', desc: 'Longevity supplements ranked by evidence — Vitamin D, omega-3, magnesium, ashwagandha, NMN and more. India availability, real science, food-first.' },
@@ -476,15 +482,18 @@ export function getTitleForRoute(route) {
     const capitalised = slug.charAt(0).toUpperCase() + slug.slice(1);
     return {
       title: `Year of the ${capitalised} — Chinese Zodiac Sign Guide | BornClock`,
-      description: `Complete guide to the ${capitalised} in Chinese Zodiac — personality traits, compatible animals, famous ${capitalised} people, lucky numbers and colours. Full Jyotish guide.`,
+      description: chineseSignDescription(capitalised),
     };
   }
 
-  // /chinese-horoscope and /chinese-horoscope/:animal (years are computed client-side, so titles stay year-free)
+  // /chinese-horoscope is THE yearly page: its title names the current Chinese year and its
+  // exact dates, computed at build time (same helper as the live <SEO>, so they match).
+  // /chinese-horoscope/:animal titles stay year-free.
   if (route === '/chinese-horoscope') {
+    const cy = currentChineseYear();
     return {
-      title: `Chinese Zodiac Yearly Horoscope — All 12 Animals | BornClock`,
-      description: `Free Chinese zodiac yearly forecast for all 12 animals — career, finance, love and health, based on each sign's relationship to the ruling animal of the year.`,
+      title: chineseHoroscopeIndexTitle(cy),
+      description: chineseHoroscopeIndexDescription(cy),
     };
   }
   if (route.startsWith('/chinese-horoscope/')) {

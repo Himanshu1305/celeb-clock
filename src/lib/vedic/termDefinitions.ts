@@ -1272,7 +1272,7 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
   yinYang: {
     term: 'Yin / Yang', category: 'chinese', hiTerm: 'यिन / यांग',
     impact: 'Yang years lean active and outgoing; Yin years lean receptive and reflective.',
-    why: 'They alternate every year (even-numbered years Yang, odd Yin).',
+    why: 'They alternate with each Chinese year: a year that begins in an even-numbered year (2026, Fire Horse) is Yang; odd-numbered (2027, Fire Goat) is Yin.',
     hi: 'यांग वर्ष सक्रिय, यिन वर्ष ग्रहणशील; ये हर वर्ष बदलते हैं।',
   },
 
