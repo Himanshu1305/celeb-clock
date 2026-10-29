@@ -129,6 +129,10 @@ export default function ZodiacSign() {
                 className="inline-flex mt-4 items-center gap-2 bg-primary text-primary-foreground rounded-lg px-4 py-2 text-sm font-semibold hover:opacity-90">
                 {data.name} horoscope today →
               </Link>
+              <Link to={`/zodiac/${data.slug}/tomorrow`} data-testid="zodiac-tomorrow-link"
+                className="inline-flex mt-4 ml-2 items-center gap-2 border border-border rounded-lg px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted">
+                Tomorrow →
+              </Link>
             </div>
           </div>
         </div>

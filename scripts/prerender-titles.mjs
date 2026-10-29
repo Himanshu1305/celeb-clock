@@ -466,6 +466,20 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /zodiac/:sign/tomorrow — tomorrow's Western horoscope (Batch 10). Like /today, the
+  // Worker replaces this with the dated title ("Leo Horoscope Tomorrow, <date> — …").
+  {
+    const zm = route.match(/^\/zodiac\/([a-z]+)\/tomorrow$/);
+    if (zm) {
+      if (!ZODIAC[zm[1]]) return null;
+      const name = zm[1].charAt(0).toUpperCase() + zm[1].slice(1);
+      return {
+        title: `${name} Horoscope Tomorrow — Western Astrology | BornClock`,
+        description: `Tomorrow's ${name} horoscope (Western, tropical) from where the Moon, Sun, Mercury, Venus and Mars will be tomorrow — love, work and wellbeing, with why.`,
+      };
+    }
+  }
+
   // /zodiac/:sign/today — daily Western horoscope (Batch 7). The Worker replaces this with
   // the dated title/description each India day (src/lib/daily); this is the build-time base.
   {
@@ -560,10 +574,19 @@ export function getTitleForRoute(route) {
     };
   }
   {
-    const m = route.match(/^\/rashifal\/([a-z]+)(?:\/(today|week|month|year))?$/);
+    const m = route.match(/^\/rashifal\/([a-z]+)(?:\/(today|tomorrow|week|month|year))?$/);
     if (m) {
       const v = VEDIC[m[1]];
       if (!v) return null;
+      // Batch 10: /rashifal/:rashi/tomorrow — mirrors RashifalDailyView's static title (the
+      // Worker injects the dated "Mesh Rashifal Tomorrow, <date> — …" each India day).
+      if (m[2] === 'tomorrow') {
+        const n = m[1].charAt(0).toUpperCase() + m[1].slice(1);
+        return {
+          title: `${n} Rashifal Tomorrow — ${v.english} Horoscope | BornClock`,
+          description: `Tomorrow's rashifal for ${v.name} (${v.english}), computed from tomorrow's real sidereal planetary positions — love, career, health and the good time of day.`,
+        };
+      }
       const period = m[2] || 'today';
       const word = { today: 'Daily', week: 'Weekly', month: 'Monthly', year: 'Yearly' }[period];
       return {
@@ -839,6 +862,32 @@ export function getTitleForRoute(route) {
   if (route === '/mobile-number-numerology') return {
     title: "Mobile Number Numerology — Your Phone Number's Number | BornClock",
     description: 'Free mobile-number numerology: reduce your phone number to its single digit, with ruling planet and plain-language meaning. Honest, reflection-first.',
+  };
+  // Batch 10 tools — mirror the *_META constants in the page files (checked by
+  // src/pages/__tests__/Batch10Tools.test.tsx).
+  if (route === '/vehicle-number-numerology') return {
+    title: 'Vehicle Number Numerology — Car & Bike Number Plate | BornClock',
+    description: 'Vehicle number numerology calculator: reduce your car or bike number plate to one digit three ways (all digits, last four, full plate with Chaldean letters) and see how it sits with your birth number.',
+  };
+  if (route === '/lo-shu-grid-calculator') return {
+    title: 'Lo Shu Grid Calculator — Missing Numbers & Planes | BornClock',
+    description: 'Make your Lo Shu grid from your date of birth: which numbers you have, which are missing, repeated numbers and the complete planes (Mind, Emotional, Practical, Thought, Will, Action).',
+  };
+  if (route === '/kua-number-calculator') return {
+    title: 'Kua Number Calculator — Feng Shui Lucky Directions | BornClock',
+    description: 'Find your Kua (Gua) number from your birth date and gender, counted from the exact Chinese solar new year (Lichun), with your East or West group and four best directions.',
+  };
+  if (route === '/love-calculator') return {
+    title: 'Love Calculator by Name — Just for Fun, No Random | BornClock',
+    description: 'A love calculator by name that is honest: each name’s Chaldean number and how the two numbers get along, the same result every time. For fun — use Kundali matching for real matching.',
+  };
+  if (route === '/janma-tithi-calculator') return {
+    title: 'Janma Tithi Calculator — Hindu Birthday by Tithi | BornClock',
+    description: 'Find your Janma Tithi (birth tithi) and lunar month — amanta and purnimanta — and the dates of your Hindu tithi birthday for the next 10 years, with Adhik Maas and kshaya tithi handled.',
+  };
+  if (route === '/marriage-biodata-maker') return {
+    title: 'Marriage Biodata Maker — Printable PDF, Hindi/English | BornClock',
+    description: 'Make a marriage biodata in minutes: personal, family, education and horoscope details (rashi, nakshatra, Manglik from your birth chart), three clean templates, Hindi or English, saved as an A4 PDF.',
   };
   if (route === '/house-number-numerology') return {
     title: "House Number Numerology — Your Home's Number & Meaning | BornClock",

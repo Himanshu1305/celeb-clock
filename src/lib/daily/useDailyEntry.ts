@@ -9,8 +9,8 @@
  */
 import { useEffect, useState } from 'react';
 import type { DailyEntry, DailyMonthFile } from './types';
-import { istDateISO, monthKey } from './dates';
-import { dailyJsonPath, dailyFilePath, dailyFileKey, DAILY_PAGES } from './registry';
+import { monthKey } from './dates';
+import { dailyJsonPath, dailyFilePath, dailyFileKey, dailyPageDate, DAILY_PAGES } from './registry';
 import { DAILY_DATA_SCRIPT_ID } from './inject';
 
 export type DailySource = 'embedded' | 'json' | 'computed';
@@ -76,7 +76,8 @@ export async function resolveDailyEntry(kind: string, slug: string, date: string
 }
 
 export function useDailyEntry(kind: string, slug: string | null | undefined, now: () => Date = () => new Date()): DailyState {
-  const date = istDateISO(now());
+  // Today's India date — or tomorrow's for a "tomorrow" view (DailyPageDef.offsetDays).
+  const date = dailyPageDate(DAILY_PAGES.find(d => d.kind === kind), now());
   const [state, setState] = useState<DailyState>(() => {
     const embedded = slug ? readEmbedded(kind, slug, date) : null;
     return { entry: embedded, source: embedded ? 'embedded' : null, date };
