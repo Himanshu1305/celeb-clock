@@ -623,6 +623,33 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // Batch 10 — static titles mirror PANCHANG_CALENDAR_STATIC / PLANETS_TODAY_STATIC /
+  // MOON_PHASE_STATIC (src/lib/daily/kinds/*Template.ts) and eclipsesMeta (src/pages/EclipsesPage.tsx);
+  // the Worker swaps in the dated title each day on the three daily pages.
+  if (route === '/panchang-calendar') return {
+    title: 'Panchang Calendar — Monthly Tithi, Nakshatra & Festivals | BornClock',
+    description: 'Monthly Hindu Panchang calendar: the Tithi and Nakshatra at sunrise for every day, sunrise and sunset, and the festivals, Ekadashi, Purnima and Amavasya dates — for any city and any month.',
+  };
+  if (route === '/planets-today') return {
+    title: 'Planets Today — Sidereal Positions, Retrograde & Combust | BornClock',
+    description: "Where all nine grahas are today in the sidereal (Lahiri) zodiac — sign, degree, Nakshatra and pada, retrograde and combust status, and when each next changes sign. Updated every day.",
+  };
+  if (route === '/moon-phase') return {
+    title: 'Moon Phase Today — Illumination, Tithi & Next Full Moon | BornClock',
+    description: "Today's Moon phase: its name, how much of the disc is lit, the Moon's age, the Tithi, and the exact time of the next full Moon (Purnima) and new Moon (Amavasya) in IST — for any date.",
+  };
+  if (route === '/eclipses') return {
+    title: 'Eclipses 2026–2030 — Surya & Chandra Grahan in India | BornClock',
+    description: 'Every solar and lunar eclipse from 2026 to 2030 — date, time of greatest eclipse in IST, type, how long it lasts, where it is seen, and which ones are visible from India and Delhi.',
+  };
+  {
+    const m = route.match(/^\/eclipses\/(20(?:2[6-9]|30))$/);
+    if (m) return {
+      title: `Eclipses ${m[1]} — Surya & Chandra Grahan Dates, IST Times | BornClock`,
+      description: `Every solar (Surya Grahan) and lunar (Chandra Grahan) eclipse of ${m[1]}: date, time of greatest eclipse in IST, type, duration, where it is seen, and whether it is visible from India.`,
+    };
+  }
+
   // /transit, /transit/:planet/:year, /mercury-retrograde[/:year]
   if (route === '/transit') return {
     title: 'Planetary Transits — Saturn, Jupiter, Rahu & Ketu by Year | BornClock',
