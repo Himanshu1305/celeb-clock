@@ -5,6 +5,8 @@
 import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+// Batch 9b: year muhurat lists (/muhurat/:type/:year) — slugs/years shared with the page.
+import { muhuratYearRoutes } from '../src/lib/muhuratYearMeta.js';
 
 // Batch 7 (W7): the 50 Panchang city slugs — one source shared with the app.
 const PANCHANG_CITY_SLUGS = JSON.parse(
@@ -405,6 +407,7 @@ export const STATIC_ROUTES = [
   '/angel-numbers',
   ...ANGEL_NUMBER_SEQUENCES.map(n => `/angel-numbers/${n}`),
   '/muhurat',
+  ...muhuratYearRoutes(),
   '/gemstones',
   '/career-report',
   '/astrologer',
