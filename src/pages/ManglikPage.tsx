@@ -266,7 +266,7 @@ export default function ManglikPage() {
         )}
       </section>
       {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
-      <PageFAQ variant="plain" title="Common questions" items={faqItemsFromSchema(faqJsonLd)} />
+      <PageFAQ variant="plain" items={faqItemsFromSchema(faqJsonLd)} />
     </PajPage>
   );
 }

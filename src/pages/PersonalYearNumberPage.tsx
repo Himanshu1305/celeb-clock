@@ -289,7 +289,7 @@ export default function PersonalYearNumberPage() {
         </div>
       </section>
       {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
-      <PageFAQ variant="plain" title="Common questions" items={FAQ_ITEMS} />
+      <PageFAQ variant="plain" items={FAQ_ITEMS} />
     </PajPage>
   );
 }
