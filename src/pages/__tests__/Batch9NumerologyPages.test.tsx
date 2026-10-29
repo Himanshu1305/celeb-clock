@@ -99,13 +99,12 @@ describe('/hi/numerology-by-date-of-birth — Hindi calculator', () => {
     expect(text('num-bhagyank')).toContain('भाग्यांक (भारतीय / वैदिक पद्धति)');
     expect(text('num-bhagyank')).toContain('= 33 → 6');
   });
-  it('no "free" button points at the paid report; the paid link is labelled ₹199', () => {
+  it('the report link makes no price claim (pricing decided later — founder, Oct 2026)', () => {
     wrap(<HindiNumerologyArticle />);
     const paid = Array.from(document.querySelectorAll('a')).filter(a => (a.getAttribute('href') || '').includes('/birthday-report'));
     expect(paid.length).toBeGreaterThan(0);
     for (const a of paid) {
-      expect(a.textContent).not.toContain('मुफ्त');
-      expect(a.textContent).toContain('₹199');
+      expect(a.textContent).not.toMatch(/मुफ्त|सशुल्क|₹|free|paid/i);
     }
   });
 });

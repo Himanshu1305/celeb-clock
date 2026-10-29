@@ -2,7 +2,6 @@ import React from 'react';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { mulank, bhagyank } from '@/lib/numerologyExtra';
-import { REPORT_PRICE } from '@/lib/pricing';
 import { NumerologyCalculator } from '@/components/numerology/NumerologyCalculator';
 
 // Batch 9 (founder decision) — Indian convention, the same shared functions as /numerology:
@@ -177,7 +176,7 @@ export function HindiNumerologyArticle() {
 
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
-            <h2 className="text-2xl font-black mb-2">पूरी जन्मतिथि रिपोर्ट (सशुल्क)</h2>
+            <h2 className="text-2xl font-black mb-2">पूरी जन्मतिथि रिपोर्ट</h2>
             <p className="text-[#6E5AA6] mb-6">
               मूलांक तो केवल एक हिस्सा है। BornClock आपकी वैदिक राशि, पश्चिमी राशि, नक्षत्र,
               भाग्यशाली रत्न और बहुत कुछ आपकी जन्मतिथि से बताता है।
@@ -186,7 +185,7 @@ export function HindiNumerologyArticle() {
                data-testid="hi-paid-report"
                className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
-              पूरी जन्मतिथि रिपोर्ट (सशुल्क ₹{REPORT_PRICE.INR}) →
+              पूरी जन्मतिथि रिपोर्ट देखें →
             </a>
             <p className="text-sm mt-3">मूलांक, भाग्यांक और नामांक ऊपर के कैलकुलेटर में मुफ्त हैं।</p>
           </div>

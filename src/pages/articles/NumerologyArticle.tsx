@@ -6,7 +6,6 @@ import { famousForLifePath } from '@/data/famousLifePaths';
 import { mulank, bhagyank } from '@/lib/numerologyExtra';
 import { lifePathWorking } from '@/lib/lifePath';
 import { Link } from 'react-router-dom';
-import { REPORT_PRICE } from '@/lib/pricing';
 
 // Batch 9 (cannibalisation): this article is the INDIA GUIDE — what Mulank, Bhagyank and
 // the Western Life Path are and why they can differ. The calculator lives on /numerology,
@@ -220,7 +219,7 @@ export function NumerologyArticle() {
             <a href="/birthday-report"
                className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
-              Full Birthday Report (paid, ₹{REPORT_PRICE.INR}) →
+              See the full Birthday Report →
             </a>
           </div>
 

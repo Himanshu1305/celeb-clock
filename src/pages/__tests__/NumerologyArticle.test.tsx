@@ -79,9 +79,9 @@ describe('NumerologyArticle', () => {
     renderArticle();
     expect((document.body.textContent?.trim().length || 0)).toBeGreaterThan(3000);
   });
-  it('TC-NUM-N-03: the paid report is labelled as paid', () => {
+  it('TC-NUM-N-03: the report link makes no price claim (pricing decided later — founder, Oct 2026)', () => {
     renderArticle();
     const paid = Array.from(document.querySelectorAll('a')).filter(l => l.getAttribute('href')?.includes('birthday-report'));
-    expect(paid.every(l => /paid/i.test(l.textContent || ''))).toBe(true);
+    expect(paid.every(l => !/free|मुफ्त|₹|paid/i.test(l.textContent || ''))).toBe(true);
   });
 });
