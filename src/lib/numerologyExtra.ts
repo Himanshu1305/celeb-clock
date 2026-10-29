@@ -9,6 +9,7 @@
  * Digit reduction reuses the same convention as personalYear.ts.
  */
 import { reduceToSingleDigit } from './personalYear';
+import { lifePathNumber, MASTER_NUMBERS } from './lifePath';
 
 export { reduceToSingleDigit };
 
@@ -73,9 +74,20 @@ const PYTHAGOREAN_MAP: Record<string, number> = {
 
 export interface NameNumberResult {
   system: 'Chaldean' | 'Pythagorean';
-  total: number;       // raw sum
-  compound: number;    // the two-digit "compound" number (same as total if < 10 after first reduce step)
-  root: number;        // final single digit 1–9
+  /** Raw sum of the letter values. */
+  total: number;
+  /**
+   * The "compound" number = the raw total itself whenever it has two or more digits
+   * (Batch 9: totals of 100+ are no longer collapsed — 104 stays 104; its traditional
+   * meaning is looked up with compoundReading() in numerologyTools.ts).
+   */
+  compound: number;
+  /** Final single digit 1–9 (the Indian / Chaldean "name number"). */
+  root: number;
+  /** 11, 22 or 33 when the total reduces through a master number (Western convention), else null. */
+  master: number | null;
+  /** Western display number: the master number if there is one, otherwise the root. */
+  number: number;
   letters: Array<{ ch: string; value: number }>;
 }
 
@@ -92,26 +104,110 @@ function sumName(name: string, map: Record<string, number>): { total: number; le
   return { total, letters };
 }
 
-/** Reduce a sum to a two-digit "compound" (>9, ≤ ~, first pass) and single-digit root. */
-function compoundAndRoot(total: number): { compound: number; root: number } {
-  if (total <= 9) return { compound: total, root: total };
-  // compound = reduce once if ≥ 100, else keep the two-digit number
-  let compound = total;
-  while (compound > 99) compound = String(compound).split('').reduce((s, d) => s + Number(d), 0);
+function nameResult(system: NameNumberResult['system'], name: string, map: Record<string, number>): NameNumberResult {
+  const { total, letters } = sumName(name, map);
   const root = reduceToSingleDigit(total);
-  return { compound, root };
+  const m = reduceKeepingMaster(total);
+  const master = m === 11 || m === 22 || m === 33 ? m : null;
+  return { system, total, compound: total, root, master, number: master ?? root, letters };
 }
 
+/**
+ * THE Chaldean name number (one function sitewide — /name-numerology, /name-correction,
+ * business-name, the Hindi calculator and the /numerology name field all call this).
+ * Indian method: reduce to 1–9 (`root`); `master` is shown separately, labelled Western.
+ */
 export function chaldeanName(name: string): NameNumberResult {
-  const { total, letters } = sumName(name, CHALDEAN_MAP);
-  const { compound, root } = compoundAndRoot(total);
-  return { system: 'Chaldean', total, compound, root, letters };
+  return nameResult('Chaldean', name, CHALDEAN_MAP);
 }
 
+/**
+ * THE Pythagorean name total (Expression / Destiny number). Batch 9: /name-numerology
+ * (src/data/nameNumerologyData.ts) and the /name-correction comparison both use this, so
+ * the same name can no longer show two different Western numbers. `number` keeps
+ * 11/22/33 (the Western Expression convention); `root` is the 1–9 reduction.
+ */
 export function pythagoreanName(name: string): NameNumberResult {
-  const { total, letters } = sumName(name, PYTHAGOREAN_MAP);
-  const { compound, root } = compoundAndRoot(total);
-  return { system: 'Pythagorean', total, compound, root, letters };
+  return nameResult('Pythagorean', name, PYTHAGOREAN_MAP);
+}
+
+/** Pythagorean value of one letter (0 for non-letters). Shared with nameNumerologyData.ts. */
+export function pythagoreanLetterValue(ch: string): number {
+  return PYTHAGOREAN_MAP[ch.toLowerCase()] ?? 0;
+}
+
+// ── Mulank & Bhagyank (Indian method) ───────────────────────────────────────
+// Founder decision (Batch 9): show BOTH systems, clearly labelled.
+//   Mulank   = the birth DAY, digits added until one digit 1–9 remains.
+//   Bhagyank = EVERY digit of the full birth date added, reduced to 1–9.
+//   Where the Western Life Path (src/lib/lifePath.ts — the one sitewide method) is a
+//   master number 11/22/33, it is shown next to the Bhagyank as "Western master number".
+// Verified against Indian calculators opened 29 Oct 2026:
+//   ishvaram.com/bhagyank-calculator — "For 9 November 1988: 9+1+1+1+9+8+8 = 37 → 10 → 1,
+//     so the Bhagyank is 1"; "15 August 1990: 1+5+0+8+1+9+9+0 = 33 → 6" (no master kept).
+//   panchangbodh.com/mulank-bhagyank-calculator — "23-08-1990 → … = 32 → 5" (Bhagyank);
+//     "Born on 23rd → 2+3 = 5"; "29th: 2+9 = 11, then 1+1 = 2" (Mulank).
+//   astrotalk.com/mulank-calculator — "15th March 1990 … mulank is 6"; "29th January 1985
+//     … 2+9 = 11 → 1+1 = 2".
+//   ishvaram.com/mulank-calculator — "Born on the 28th? 2+8 = 10, then 1+0 = 1".
+// None of these Indian calculators keeps 11/22/33 for Mulank or Bhagyank.
+
+/** Show a digit-sum reduction chain, e.g. 37 → "37 → 10 → 1". */
+function reductionText(n: number): string {
+  const parts = [String(n)];
+  let x = n;
+  while (x > 9) { x = String(x).split('').reduce((s, d) => s + Number(d), 0); parts.push(String(x)); }
+  return parts.join(' → ');
+}
+
+export interface MulankResult {
+  day: number;
+  /** 1–9. */
+  number: number;
+  /** e.g. "28 → 2 + 8 = 10 → 1 + 0 = 1". */
+  working: string;
+}
+
+/** THE Mulank (मूलांक): the birth day reduced to 1–9. */
+export function mulank(day: number): MulankResult {
+  const number = reduceToSingleDigit(day);
+  const steps: string[] = [];
+  let x = Math.abs(Math.trunc(day));
+  while (x > 9) {
+    const digits = String(x).split('');
+    x = digits.reduce((s, d) => s + Number(d), 0);
+    steps.push(`${digits.join(' + ')} = ${x}`);
+  }
+  return { day, number, working: steps.length ? `${day} → ${steps.join(' → ')}` : `${day}` };
+}
+
+export interface BhagyankResult {
+  day: number; month: number; year: number;
+  digits: number[];
+  /** Sum of every digit of the date before reduction. */
+  digitSum: number;
+  /** 1–9 — the Indian Bhagyank. */
+  number: number;
+  /** e.g. "9 + 1 + 1 + 1 + 9 + 8 + 8 = 37 → 10 → 1". */
+  working: string;
+  /** The sitewide Western Life Path for the same date (src/lib/lifePath.ts). */
+  westernLifePath: number;
+  /** 11/22/33 when the Western Life Path is a master number, else null. */
+  westernMaster: number | null;
+}
+
+/** THE Bhagyank (भाग्यांक): every digit of the full date of birth, reduced to 1–9. */
+export function bhagyank(day: number, month: number, year: number): BhagyankResult {
+  const digits = `${day}${month}${year}`.split('').map(Number);
+  const digitSum = digits.reduce((s, d) => s + d, 0);
+  const number = reduceToSingleDigit(digitSum);
+  const westernLifePath = lifePathNumber(day, month, year);
+  const westernMaster = MASTER_NUMBERS.includes(westernLifePath) ? westernLifePath : null;
+  return {
+    day, month, year, digits, digitSum, number,
+    working: `${digits.join(' + ')} = ${reductionText(digitSum)}`,
+    westernLifePath, westernMaster,
+  };
 }
 
 export const CHALDEAN_LETTER_TABLE: Array<{ value: number; letters: string }> = [
