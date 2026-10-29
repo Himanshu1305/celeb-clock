@@ -41,7 +41,7 @@ export const NumerologyLifePath = ({ birthDate }: NumerologyLifePathProps) => {
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-bold gradient-text-primary">
             <Sparkles className="inline w-7 h-7 mr-2" />
-            Your <TermTip id="lifePath">Life Path Number</TermTip>
+            Your <TermTip id="lifePath">Western Life Path Number</TermTip>
           </h2>
           <p className="text-muted-foreground">Discover what numerology reveals about you</p>
         </div>

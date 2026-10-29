@@ -2,8 +2,10 @@
 /**
  * Audit N4 — Hindi numerology definitions.
  * Indian standard (Cheiro/Chaldean school): मूलांक = birth DAY reduced; भाग्यांक = the full
- * date (here the shared Life Path); 4 → Rahu, 7 → Ketu. Reference: round2.txt N4.
- * 28 Mar 1973: मूलांक 2+8 = 10 → 1; भाग्यांक 28→1, 3, 1973→20→2 → 6.
+ * date; 4 → Rahu, 7 → Ketu. Reference: round2.txt N4.
+ * Batch 9 (founder decision): भाग्यांक = EVERY digit of the date reduced to 1–9, as Indian
+ * calculators do (ishvaram.com/bhagyank-calculator) — same final digit as the Life Path.
+ * 28 Mar 1973: मूलांक 2+8 = 10 → 1; भाग्यांक 2+8+3+1+9+7+3 = 33 → 6.
  */
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, cleanup } from '@testing-library/react';

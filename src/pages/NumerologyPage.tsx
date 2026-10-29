@@ -6,10 +6,13 @@ import { NumerologyLifePath } from '@/components/NumerologyLifePath';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 import PageTagline from '@/components/PageTagline';
-import { AgeCalculator } from '@/components/AgeCalculator';
+import { NumerologyCalculator } from '@/components/numerology/NumerologyCalculator';
 import { NUMEROLOGY_DATA, ALL_LIFE_PATH_NUMBERS } from '@/data/numerologyData';
 
 const FAQ_ITEMS = [
+  { q: 'What is the difference between Mulank, Bhagyank and Life Path?', a: 'Mulank (Indian method) uses only your birth day, reduced to 1–9: born on the 28th → 2 + 8 = 10 → 1. Bhagyank (Indian / Vedic method) adds every digit of your full date of birth and reduces to 1–9: 9 November 1988 → 9 + 1 + 1 + 1 + 9 + 8 + 8 = 37 → 10 → 1. The Western Life Path reduces the day, month and year separately and keeps the master numbers 11, 22 and 33. Bhagyank and Life Path always end on the same single digit; they differ only when the Western method stops at a master number, which we show separately as "Western master number".' },
+  { q: 'Why do Indian calculators never show 11 or 22 as a Bhagyank?', a: 'Indian Mulank and Bhagyank calculators reduce every total to a single digit 1–9 — 29 → 11 → 2. Keeping 11, 22 and 33 is a Western (Pythagorean) convention. BornClock shows the Indian number first and, when your date gives a Western master number, shows that alongside with its own label.' },
+  { q: 'What is my name number?', a: 'Type your name into the optional name box. We add the Chaldean letter values (A=1, B=2, C=3, D=4, E=5, U=6, O=7, F=8 and so on — no letter is given 9), show the compound total and reduce it to a single digit 1–9. Shah Rukh Khan → 14 + 15 + 13 = 42 → 4 + 2 = 6.' },
   { q: 'What is numerology?', a: 'Numerology is a system of belief that assigns symbolic meaning to numbers — particularly numbers derived from one\'s name and date of birth. The most widely used system in the West is Pythagorean numerology, attributed to the ancient Greek philosopher Pythagoras, who taught that numbers are the fundamental building blocks of reality. While the philosophical connection to Pythagoras is historical tradition rather than documented fact, the system bearing his name has been used for self-reflection and personality interpretation for centuries.' },
   { q: 'How is the Life Path Number calculated?', a: 'Reduce the day, the month and the full year separately (keeping the master numbers 11, 22 and 33), add the three results, then reduce the total to a single digit — again keeping 11, 22 or 33. Example: Meryl Streep, June 22, 1949 → day 22 (a master number, kept), month 6, year 1+9+4+9 = 23 → 5; 22 + 6 + 5 = 33 — Master Number 33, preserved. This is the method most public numerology calculators use.' },
   { q: 'What are Master Numbers in numerology?', a: 'Master Numbers (11, 22, and 33) are special designations in Pythagorean numerology. They are preserved rather than reduced because they are said to carry a higher vibration and potential than single-digit numbers. 11 is the Illuminator, 22 is the Master Builder, and 33 is the Master Teacher — the rarest of all.' },
@@ -39,15 +42,15 @@ export default function NumerologyPage() {
       testId="numerology-page"
       seo={(
         <SEO
-          title="Numerology Calculator — Find Your Life Path Number | BornClock"
-          description="Free numerology calculator using the Pythagorean method. Find your Life Path Number, explore all 12 numbers including Master Numbers 11, 22, 33 — with verified celebrity examples."
-          keywords="numerology calculator, life path number, pythagorean numerology, master numbers 11 22 33, numerology calculator free"
+          title="Numerology Calculator — Mulank, Bhagyank & Name Number | BornClock"
+          description="Free numerology calculator: your Mulank and Bhagyank (Indian method), Chaldean name number and Western Life Path from your date of birth — with the working shown."
+          keywords="numerology calculator, mulank calculator, bhagyank calculator, name number calculator, life path number, chaldean numerology"
           canonicalUrl="/numerology"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Numerology', edition: 'Pythagorean · Life Path' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Numerology', edition: 'Mulank · Bhagyank · Name number · Life Path' }}
       footer={{
-        tagline: 'Numerology computed from your actual birth date — the Pythagorean Life Path method, every time.',
+        tagline: 'Mulank, Bhagyank, name number and Western Life Path — computed from your actual birth date and name, with the working shown.',
         nav: [
           { label: 'Mystic Corner', to: '/mystic-corner' },
           { label: 'Name Numerology', to: '/name-numerology' },
@@ -58,12 +61,12 @@ export default function NumerologyPage() {
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
       eyebrow="Numerology"
-      h1="Numerology Calculator — Your Life Path Number"
-      lead="Enter your date of birth to calculate your Life Path Number using the classical Pythagorean method — then explore what it means, which famous people share it, and how the system works."
+      h1="Numerology Calculator — Mulank, Bhagyank & Name Number"
+      lead="Enter your date of birth (and, if you like, your name) to see your Mulank and Bhagyank the Indian way, your Chaldean name number, and your Western Life Path — each clearly labelled, with the working shown."
     >
       <WebApplicationSchema
-        name="Numerology Life Path Calculator"
-        description="Free numerology calculator — find your Life Path Number using the Pythagorean method with Master Numbers 11, 22, 33 and celebrity examples."
+        name="Numerology Calculator — Mulank, Bhagyank & Name Number"
+        description="Free numerology calculator — Mulank and Bhagyank (Indian method), Chaldean name number and Western Life Path, with the working shown."
         url="/numerology"
       />
       <Helmet>
@@ -71,15 +74,16 @@ export default function NumerologyPage() {
       </Helmet>
 
       <PageTagline />
-      <TrustStrip claim="Calculated from your actual birth date with the Pythagorean method — not a generic daily horoscope." href="/how-it-works#numerology" />
+      <TrustStrip claim="Calculated from your actual birth date and name — Indian and Western methods side by side, never a generic horoscope." href="/how-it-works#numerology" />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Calculator */}
-        {!birthDate && (
-          <section className="mb-12">
-            <AgeCalculator onBirthDateChange={setBirthDate} initialDate={birthDate} />
-          </section>
-        )}
+        {/* Calculator — date input always visible and editable (Batch 9) */}
+        <section className="mb-8">
+          <NumerologyCalculator initialDate={birthDate} onDateChange={setBirthDate} />
+          <p className="text-xs text-muted-foreground mt-3">
+            Indian numbers (Mulank, Bhagyank, name number) are reduced to 1–9, as Indian calculators do; a Western master number (11, 22, 33) is shown separately and labelled. New to these terms? Read the <Link to="/articles/numerology-by-date-of-birth" className="text-primary hover:underline">India guide to Mulank, Bhagyank and Life Path</Link>, or use the <Link to="/name-numerology" className="text-primary hover:underline">full name calculator</Link>.
+          </p>
+        </section>
 
         {birthDate && (
           <section className="mb-12 animate-fade-in-up">
