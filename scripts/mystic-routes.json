@@ -1,7 +1,6 @@
 [
   { "route": "/numerology", "theme": "mystic", "label": "Numerology (collection)" },
   { "route": "/numerology/7", "theme": "mystic", "label": "Numerology Number 7" },
-  { "route": "/numerology-hindi", "theme": "mystic", "label": "Numerology Hindi" },
   { "route": "/hi/numerology-by-date-of-birth", "theme": "mystic", "label": "Numerology by DOB (Hindi article)" },
   { "route": "/name-numerology", "theme": "mystic", "label": "Name Numerology" },
   { "route": "/biorhythm", "theme": "mystic", "label": "Biorhythm" },

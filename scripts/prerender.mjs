@@ -121,7 +121,7 @@ function ogImageForRoute(route) {
   if (route.match(/^\/life-expectancy-(india|usa|japan|uk|australia|canada|germany|china|singapore|brazil)$/))
     candidates.push('fitness/country-longevity.webp');
   // Hindi pages (multi-segment)
-  if (route.match(/^\/(meri-umar-kitni-hai|jivan-kal-calculator|numerology-hindi|rashifal-by-date-of-birth|biological-age-hindi)$/))
+  if (route.match(/^\/(meri-umar-kitni-hai|jivan-kal-calculator|rashifal-by-date-of-birth|biological-age-hindi)$/))
     candidates.push('fitness/hindi.webp');
   // Life expectancy India vs USA comparison page
   if (route === '/life-expectancy-india-vs-usa')
