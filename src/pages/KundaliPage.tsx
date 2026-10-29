@@ -39,6 +39,9 @@ import { RemediesForFindings } from '@/components/vedic/Remedies';
 // Batch 9b: share-image card — only after a chart exists, its own chunk.
 const KundaliShareCard = lazy(() => import('@/components/vedic/KundaliShareCard'));
 const ShodashvargaCharts = lazy(() => import('@/components/vedic/ShodashvargaCharts').then(m => ({ default: m.ShodashvargaCharts })));
+// Batch 10: Yogini Dasha + Ashtakavarga — after a chart exists only, each in its own chunk.
+const YoginiDashaSection = lazy(() => import('@/components/vedic/YoginiDashaSection'));
+const AshtakavargaSection = lazy(() => import('@/components/vedic/AshtakavargaSection'));
 import { findingsFromKundali, type KundaliLike } from '@/lib/vedic/remedies';
 
 export default function KundaliPage() {
@@ -430,6 +433,12 @@ export default function KundaliPage() {
               {data.dashaTimeline && data.dashaTimeline.length > 0 && (
                 <PeriodForecast dashaTimeline={data.dashaTimeline} lagnaSignIndex={data.lagna.signIndex} planets={data.planets} />
               )}
+
+              {/* Batch 10: second timing system + points chart (collapsed on phones). */}
+              <Suspense fallback={null}>
+                {data.yoginiDasha && data.yoginiDasha.mahadashas?.length > 0 && <YoginiDashaSection data={data.yoginiDasha} />}
+                {data.ashtakavarga && <AshtakavargaSection data={data.ashtakavarga} />}
+              </Suspense>
 
               <div className="inline-actions" style={{ marginTop: 18 }}>
                 <a data-testid="kundali-whatsapp-share" href={whatsappHref} target="_blank" rel="noopener noreferrer"

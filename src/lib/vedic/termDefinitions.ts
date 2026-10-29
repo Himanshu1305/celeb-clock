@@ -278,6 +278,49 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'हर महादशा के अंदर नौ छोटी अवधियाँ होती हैं जिन्हें अंतर्दशा कहते हैं — कुछ महीनों से कुछ वर्षों तक।',
     aliases: ['Bhukti'],
   },
+  // Batch 10 — Yogini Dasha. Rule + Yogini list: vedicmarga.com/yogini-dasha, satyori.com/jyotish/dasha/yogini
+  // (opened 29 Oct 2026).
+  yoginiDasha: {
+    term: 'Yogini Dasha', category: 'dasha', hiTerm: 'योगिनी दशा',
+    impact: 'A second, shorter timing system — a useful cross-check on your Vimshottari Dasha.',
+    why: 'Eight Yoginis, each linked to a planet, take turns in a fixed 36-year cycle: Mangala (Moon) 1 year, Pingala (Sun) 2, Dhanya (Jupiter) 3, Bhramari (Mars) 4, Bhadrika (Mercury) 5, Ulka (Saturn) 6, Siddha (Venus) 7 and Sankata (Rahu) 8. The first one is set by your birth nakshatra (its number + 3, divided by 8 — the remainder names the Yogini) and the Moon’s place in that nakshatra sets how much of it was left at birth.',
+    guidance: 'Astrologers trust a theme more when Vimshottari and Yogini point the same way at the same time.',
+    hi: 'योगिनी दशा आठ योगिनियों का 36 वर्ष का चक्र है। पहली योगिनी जन्म नक्षत्र से तय होती है। इसे विंशोत्तरी दशा के साथ मिलाकर देखा जाता है।',
+    aliases: ['Yogini'], link: '/dasha-calculator',
+  },
+  // Batch 10 — Ashtakavarga. BPHS ch. 66 tables; guidance: dekhopanchang.com/en/learn/ashtakavarga,
+  // onlinejyotish.com lesson 113 (opened 29 Oct 2026).
+  ashtakavarga: {
+    term: 'Ashtakavarga (points chart)', category: 'strength', hiTerm: 'अष्टकवर्ग',
+    impact: 'A score for every sign of your chart showing how much support each life area gets.',
+    why: 'For each of the seven planets, eight contributors (the seven planets and the Lagna) each give a point (bindu) to certain signs counted from where they sit, as listed in Brihat Parashara Hora Shastra ch. 66. A planet’s table always adds up to the same total, and all seven together always make 337.',
+    guidance: 'It is used most for transits: a planet passing through a sign where it has many points tends to go smoother.',
+    hi: 'अष्टकवर्ग हर राशि को अंक (बिंदु) देता है — जितने अधिक अंक, उतना अधिक सहयोग। गोचर देखने में यह बहुत उपयोगी है।',
+    aliases: ['Ashtakvarga', 'Ashtaka varga'],
+  },
+  bindu: {
+    term: 'Bindu (benefic point)', category: 'strength', hiTerm: 'बिंदु',
+    impact: 'One point of support in the Ashtakavarga — more points, more support.',
+    why: 'Each contributor either gives a sign a point (bindu) or not. A planet can get 0 to 8 points in a sign in its own table.',
+    hi: 'बिंदु अष्टकवर्ग का एक शुभ अंक है। किसी राशि में जितने अधिक बिंदु, उतना अधिक सहयोग।',
+    aliases: ['bindus', 'rekha'],
+  },
+  bhinnashtakavarga: {
+    term: 'Bhinnashtakavarga (one planet’s points)', category: 'strength', hiTerm: 'भिन्नाष्टकवर्ग',
+    impact: 'Shows, for one planet, the signs where it has the most support when it passes through them.',
+    why: 'Each planet has its own table of 0–8 points per sign. The totals are fixed by the rules: Sun 48, Moon 49, Mars 39, Mercury 54, Jupiter 56, Venus 52, Saturn 39.',
+    guidance: 'A planet moving through a sign where it has 4 or more of its 8 points usually gives easier results there; fewer points ask for more patience.',
+    hi: 'भिन्नाष्टकवर्ग किसी एक ग्रह के बिंदु दिखाता है। जिस राशि में उसके 4 या अधिक बिंदु हों, वहाँ उसका गोचर प्रायः सहज रहता है।',
+    aliases: ['BAV'],
+  },
+  sarvashtakavarga: {
+    term: 'Sarvashtakavarga (total points)', category: 'strength', hiTerm: 'सर्वाष्टकवर्ग',
+    impact: 'The total support each house of your chart receives — 28 or more is well supported.',
+    why: 'Add the seven planets’ points for each sign and you get the Sarvashtakavarga; the twelve totals always add up to 337, an average of about 28 per sign. Sources commonly treat 28 or more as strong and below 25 as weaker.',
+    guidance: 'Houses with high totals are areas where effort tends to pay off more easily; low totals simply ask for steadier, more patient effort.',
+    hi: 'सर्वाष्टकवर्ग हर भाव के कुल बिंदु है। 28 या अधिक बिंदु वाला भाव मज़बूत माना जाता है; कुल योग हमेशा 337 होता है।',
+    aliases: ['SAV', 'Sarva Ashtakavarga'],
+  },
   pratyantardasha: {
     term: 'Pratyantardasha (sub-sub-period)', category: 'dasha', hiTerm: 'प्रत्यंतर दशा',
     impact: 'An even finer slice of timing — down to weeks and months.',

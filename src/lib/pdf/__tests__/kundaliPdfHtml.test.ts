@@ -12,7 +12,10 @@ import { GOLDEN, REF_DATE, birthQuery } from '../../../../scripts/golden/compare
 import { NAKSHATRA_NAMES } from '../../vedic/engine/vedicEngine';
 import { formatDegreeInSign } from '../../vedic/formatDegree';
 import { kundaliBasis, type KundaliData } from '../../../services/kundaliService';
-import { buildKundaliPdfHtml, nakshatraPadaOf, fmtDate, NAKSHATRA_ORDER, TEXT_VS } from '../kundaliPdfHtml';
+import { buildKundaliPdfHtml, nakshatraPadaOf, fmtDate, NAKSHATRA_ORDER, TEXT_VS, yoginiAvPageHtml } from '../kundaliPdfHtml';
+import { currentYoginiPeriod } from '../../vedic/engine/yoginiDasha';
+import { byHouse } from '../../vedic/engine/ashtakavarga';
+import avRef from '../../vedic/__tests__/golden/dashaAvSwiss.json';
 
 const P1 = GOLDEN.charts.find(c => c.id === 'P1')!;
 const norm = (s: string) => (s === 'Vrisha' ? 'Vrishabha' : s);
@@ -141,5 +144,31 @@ describe('Kundali PDF HTML — panel chart P1', () => {
 
   it('nakshatra order equals the engine list', () => {
     expect(NAKSHATRA_ORDER).toEqual(NAKSHATRA_NAMES);
+  });
+
+  it('Batch 10: one extra page with the current Yogini period and the Ashtakavarga table (P1 = Swiss reference)', () => {
+    const page = doc.querySelector('[data-testid="pdf-extra-page"]')!;
+    expect(page).not.toBeNull();
+    expect(html).toMatch(/\.newpage\s*{\s*break-before:\s*page/);
+    // Yogini: current Maha/Antar equal the engine's period for "now" (REF_DATE), first Yogini = Swiss ref.
+    const y = doc.querySelector('[data-testid="pdf-yogini"]')!.textContent!;
+    const ref = (avRef as Array<{ id: string; yogini: { start: string }; bav: Record<string, number[]>; sav: number[]; signs: { Lagna: number } }>).find(r => r.id === 'P1')!;
+    expect(y).toContain(`began with ${ref.yogini.start}`);
+    const cur = currentYoginiPeriod(data.yoginiDasha!, REF_DATE)!;
+    expect(y).toContain(`${cur.maha.yogini} (${cur.maha.lord})`);
+    expect(y).toContain(`${fmtDate(cur.maha.start)} – ${fmtDate(cur.maha.end)}`);
+    expect(y).toContain(`${fmtDate(cur.antar!.start)} – ${fmtDate(cur.antar!.end)}`);
+    // Ashtakavarga: every printed cell equals the Swiss Ephemeris + independent-Python reference, by house.
+    for (const p of ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn']) {
+      const cells = [...doc.querySelectorAll(`tr[data-av="${p}"] td`)].map(td => td.textContent);
+      expect(cells.slice(1, 13).map(Number), p).toEqual(Array.from({ length: 12 }, (_, i) => byHouse(ref.bav[p], ref.signs.Lagna, i + 1)));
+    }
+    const sav = [...doc.querySelectorAll('tr[data-av="SAV"] td')].map(td => td.textContent);
+    expect(sav.slice(1, 13).map(Number)).toEqual(Array.from({ length: 12 }, (_, i) => byHouse(ref.sav, ref.signs.Lagna, i + 1)));
+    expect(sav[13]).toBe('337');
+  });
+
+  it('Batch 10: the extra page is omitted when the data has neither section (older cached chart)', () => {
+    expect(yoginiAvPageHtml({})).toBe('');
   });
 });
