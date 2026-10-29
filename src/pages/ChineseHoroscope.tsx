@@ -16,6 +16,12 @@ import {
   type YearForecast,
   type Grade,
 } from '@/services/chineseYearlyForecast';
+import {
+  chineseYearInfo,
+  chineseHoroscopeIndexTitle,
+  chineseHoroscopeIndexDescription,
+} from '@/lib/chineseCalendar.js';
+import { TermTip } from '@/components/vedic/TermTip';
 
 const ANIMALS_ORDER = ['rat', 'ox', 'tiger', 'rabbit', 'dragon', 'snake', 'horse', 'goat', 'monkey', 'rooster', 'dog', 'pig'];
 const ANIMAL_EMOJI: Record<string, string> = {
@@ -43,7 +49,8 @@ function YearBlock({ cap, f }: { cap: string; f: YearForecast }) {
   return (
     <Card className="glass-card" data-testid={`cz-forecast-${f.year}`}>
       <CardContent className="p-6 md:p-8">
-        <h2 className="text-2xl font-bold mb-3 text-foreground">{cap} in {f.year} — Year of the {f.yearElement} {f.yearAnimal}</h2>
+        <h2 className="text-2xl font-bold mb-1 text-foreground">{cap} in {f.year} — Year of the {f.yearElement} {f.yearAnimal}</h2>
+        <p className="text-xs text-muted-foreground mb-3">{chineseYearInfo(f.year).rangeLabel}</p>
         <p className="text-muted-foreground leading-relaxed mb-5">{f.overall}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {areas.map(([emoji, label, area]) => (
@@ -66,19 +73,27 @@ function YearBlock({ cap, f }: { cap: string; f: YearForecast }) {
 
 export default function ChineseHoroscope() {
   const { animal } = useParams<{ animal: string }>();
+  // Chinese years (change at Chinese New Year, not 1 January).
   const [thisYear, nextYear] = useMemo(() => currentAndNextYear(), []);
+  const cur = chineseYearInfo(thisYear);
+  const nxt = chineseYearInfo(nextYear);
 
-  // Index page (no animal param)
+  // Index page (no animal param) — THE yearly page for the current Chinese year.
   if (!animal) {
+    const indexFaq = [
+      { question: `What Chinese zodiac year is ${thisYear}?`, answer: `${thisYear} is the Year of the ${cur.element} ${cur.animal} (${cur.yinYang}). It runs ${cur.rangeLabel}, from Chinese New Year to the day before the next Chinese New Year.` },
+      { question: `When does the Year of the ${cur.element} ${cur.animal} end?`, answer: `It ends on ${cur.rangeLabel.split(' – ')[1]}. The Year of the ${nxt.element} ${nxt.animal} begins the next day and runs ${nxt.rangeLabel}.` },
+      { question: `What is the Chinese zodiac animal for ${nextYear}?`, answer: `${nextYear} is the Year of the ${nxt.element} ${nxt.animal} (${nxt.rangeLabel}). Someone born in January or early February ${nextYear}, before Chinese New Year, still belongs to the ${cur.animal}.` },
+    ];
     return (
       <CollectionLayout
         theme="mystic"
         testId="chinese-horoscope-index"
         seo={(
           <SEO
-            title={`Chinese Zodiac Yearly Horoscope ${thisYear} & ${nextYear} — All 12 Animals | BornClock`}
-            description={`Free Chinese zodiac yearly forecast for all 12 animals — career, finance, love and health for ${thisYear} and ${nextYear}, based on each sign's relationship to the year's ruling animal.`}
-            keywords="chinese horoscope, chinese zodiac forecast, year of the horse, chinese new year predictions, chinese astrology yearly"
+            title={chineseHoroscopeIndexTitle(thisYear)}
+            description={chineseHoroscopeIndexDescription(thisYear)}
+            keywords={`${thisYear} chinese zodiac, year of the ${cur.element.toLowerCase()} ${cur.animal.toLowerCase()}, chinese horoscope ${thisYear}, chinese new year ${nextYear}, chinese zodiac forecast`}
             canonicalUrl="/chinese-horoscope"
             ogImage="https://bornclock.com/og/zodiac.png"
           />
@@ -95,9 +110,27 @@ export default function ChineseHoroscope() {
           note: '© 2026 BornClock · Calculated, not templated.',
         }}
         eyebrow="Chinese Astrology"
-        h1={`Chinese Zodiac Yearly Horoscope`}
-        lead={`Career, finance, love and health for ${thisYear} and ${nextYear} — pick your animal.`}
+        h1={`${thisYear} Chinese Zodiac: Year of the ${cur.element} ${cur.animal}`}
+        lead={`The Year of the ${cur.element} ${cur.animal} runs ${cur.rangeLabel}. Pick your animal for its ${thisYear} and ${nextYear} forecast — career, money, love and health.`}
       >
+        <FAQSchema items={indexFaq} />
+        <section className="section container mx-auto px-4 pt-8">
+          <Card className="glass-card max-w-3xl mx-auto" data-testid="cz-current-year">
+            <CardContent className="p-6">
+              <h2 className="text-xl font-bold mb-3 text-foreground">The {thisYear} Chinese year at a glance</h2>
+              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                <div><dt className="inline text-muted-foreground">Animal: </dt><dd className="inline font-semibold text-foreground">{cur.animal}</dd></div>
+                <div><dt className="inline text-muted-foreground"><TermTip id="chineseElement">Element</TermTip>: </dt><dd className="inline font-semibold text-foreground">{cur.element}</dd></div>
+                <div><dt className="inline text-muted-foreground"><TermTip id="yinYang">Yin / Yang</TermTip>: </dt><dd className="inline font-semibold text-foreground">{cur.yinYang}</dd></div>
+                <div><dt className="inline text-muted-foreground">Dates: </dt><dd className="inline font-semibold text-foreground">{cur.rangeLabel}</dd></div>
+              </dl>
+              <p className="text-sm text-muted-foreground mt-4 leading-relaxed">
+                The animal year begins at Chinese New Year, not on 1 January. The next year, the {nxt.element} {nxt.animal}, runs {nxt.rangeLabel}.
+                {' '}Find any year's animal in the <Link to="/articles/chinese-zodiac-by-year" className="underline text-foreground">Chinese zodiac by year table</Link>.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
         <section className="section container mx-auto px-4 py-8">
           <div className="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-3 gap-4">
             {ANIMALS_ORDER.map((a) => (

@@ -10,6 +10,12 @@
 import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+// Batch 9: one shared Chinese-year helper (app + prerender) — the year rolls over at
+// Chinese New Year, computed at build time so a rebuild picks up the new year.
+import {
+  currentChineseYear, chineseHoroscopeIndexTitle, chineseHoroscopeIndexDescription, chineseSignDescription,
+  CHINESE_BY_YEAR_TITLE, CHINESE_BY_YEAR_DESC,
+} from '../src/lib/chineseCalendar.js';
 
 // Indian born-on facet data (slug → {top3, count}) for /born-on/:slug/india titles.
 const INDIA_BORNON_MAP = new Map(
@@ -150,6 +156,13 @@ const BLOG = {
 };
 
 // ── Answers pages ─────────────────────────────────────────────────────────────
+// Optional per-answer meta descriptions (default is generated from the title).
+// Keep 'what-is-my-biological-age' in sync with WHAT_IS_BIO_AGE_DESC in
+// src/content/biologicalAgeMeta.ts (guarded by a vitest).
+const ANSWER_DESC = {
+  'what-is-my-biological-age': 'Biological age is an estimate of how your body is doing compared with your calendar age. Try our free 15-question estimate: fitness, BMI, waist, blood pressure, sleep, smoking, alcohol and exercise.',
+};
+
 const ANSWERS = {
   'how-long-will-i-live':                  'How Long Will I Live? A Science-Based Answer | BornClock',
   'what-is-my-biological-age':             'What Is My Biological Age? The Short Answer + Free Test | BornClock',
@@ -198,14 +211,14 @@ const STATIC = {
   '/life-expectancy-brazil':    { title: 'Life Expectancy in Brazil — 2026 Data | BornClock', desc: `Brazil's life expectancy is ${LEY('Brazil')} years. Here's how inequality, violence, and regional gaps shape Brazilian longevity — and what's improving.` },
   '/meri-umar-kitni-hai':       { title: 'मेरी उम्र कितनी है — Age Calculator in Hindi | BornClock', desc: 'अपनी सटीक उम्र जानें — साल, महीने, दिन, घंटे और सेकंड में। BornClock का मुफ्त age calculator हिंदी में।' },
   '/jivan-kal-calculator':      { title: 'जीवन काल Calculator — Life Expectancy in Hindi | BornClock', desc: 'आप कितने साल जिएंगे? BornClock का मुफ्त life expectancy calculator आपकी lifestyle के आधार पर आपका जीवन काल बताता है।' },
-  '/numerology-hindi':          { title: 'Numerology in Hindi — अंक ज्योतिष by Date of Birth | BornClock', desc: 'अपना life path number जानें। BornClock का मुफ्त numerology calculator हिंदी में — जन्म तिथि से अपना अंक ज्योतिष जानें।' },
   '/rashifal-by-date-of-birth': { title: 'राशिफल by Date of Birth — Zodiac Sign in Hindi | BornClock', desc: 'अपनी राशि जानें जन्म तिथि से। BornClock का मुफ्त zodiac calculator हिंदी में — Western और Vedic दोनों।' },
-  '/biological-age-hindi':      { title: 'Biological Age in Hindi — आपका शरीर कितना पुराना है? | BornClock', desc: 'आपकी biological age आपकी असली उम्र से 10 साल कम या ज्यादा हो सकती है। BornClock का मुफ्त test हिंदी में।' },
+  // Keep in sync with HINDI_BIO_AGE_TITLE / HINDI_BIO_AGE_DESC in src/content/biologicalAgeMeta.ts.
+  '/biological-age-hindi':      { title: 'Biological Age Calculator हिंदी में — शरीर की उम्र | BornClock', desc: 'मुफ़्त Biological Age Calculator हिंदी में — 15 सवाल: धड़कन, पुश-अप, संतुलन, नींद, BMI, कमर, ब्लड प्रेशर, धूम्रपान, शराब और व्यायाम। lifestyle पर आधारित अंदाज़ा, लैब टेस्ट नहीं।' },
   '/embed':                     { title: 'Free Age Calculator Widget for Your Website | BornClock', desc: "Embed BornClock's live age calculator on your website in 30 seconds. Copy one line of code — free forever, no API key, we handle hosting and accuracy." },
   '/widget/age-calculator':     { title: 'Age Calculator Widget | BornClock', desc: "Free embeddable age calculator widget by BornClock — shows exact age in years, months, days and seconds." },
   '/sun-vs-moon-sign':      { title: 'Sun Sign vs Moon Sign — What They Mean | BornClock', desc: "Your sun sign is your public face. Your moon sign is your 2am self. Most people find their moon sign more accurate once they discover it. Here's why." },
   '/todays-birthdays':      { title: 'Famous Birthdays Today | BornClock', desc: "See which celebrities share today's birthday. Ranked by global recognition — athletes, actors, politicians, musicians. Updated daily at BornClock." },
-  '/numerology':            { title: 'Numerology Calculator — Your Life Path Number & Meaning | BornClock', desc: 'Calculate your Numerology Life Path number from your date of birth. Full guides for Life Path 1–9, Master Numbers 11, 22, 33. Meaning, traits, famous people.' },
+  '/numerology':            { title: 'Numerology Calculator — Mulank, Bhagyank & Name Number | BornClock', desc: 'Free numerology calculator: your Mulank and Bhagyank (Indian method), Chaldean name number and Western Life Path from your date of birth — with the working shown.' },
   '/generation':            { title: 'Which Generation Are You? — Complete Generational Guide | BornClock', desc: 'Find your generation — Baby Boomer, Gen X, Millennial, Gen Z, or Gen Alpha — from your birth year. Characteristics, defining events, and cultural context.' },
   '/planetary-age':         { title: 'Planetary Age Calculator — Your Age on Every Planet | BornClock', desc: 'Calculate your age on all 8 planets plus the Moon. See how planetary orbital periods compare to life on Earth. Free, instant, accurate.' },
   '/weight-on-planets':     { title: 'Weight on Other Planets — Free Calculator | BornClock', desc: 'Enter your weight and see it on all 8 planets and the Moon — from bouncy Moon gravity to crushing Jupiter — using NASA surface-gravity data. Fun, free, nothing stored.' },
@@ -230,11 +243,12 @@ const STATIC = {
   '/accuracy':              { title: 'How We Check Our Accuracy — Dated Test Results | BornClock', desc: 'In our tests (October 2026), BornClock Kundali positions were within 1 arc-minute of the Swiss Ephemeris for 22 test births, and Panchang sunrise and Rahu Kaal times within 1 minute of Drik Panchang. Every check, reference, date and limit.' },
   '/editorial-policy':      { title: 'Editorial Policy — Accuracy, Sources & Corrections | BornClock', desc: 'BornClock editorial policy — how we write, source, fact-check, and correct our content. Committed to accuracy and transparency.' },
   '/leaderboard':           { title: 'Longevity Leaderboard — Top Forecasts Worldwide | BornClock', desc: 'See the top life expectancy forecasts on BornClock. Anonymous leaderboard of the highest longevity scores globally.' },
-  '/biological-age':        { title: 'Biological Age Calculator — Free Test, 12 WHO Biomarkers | BornClock', desc: 'Free biological age test — no sign-up. Estimate your true (epigenetic) age from 12 science-backed biomarkers: BMI, sleep, exercise, diet, smoking, stress and more. Validated against WHO research.' },
+  // Keep in sync with BIO_AGE_META_DESCRIPTION in src/content/biologicalAgeMeta.ts (guarded by a vitest).
+  '/biological-age':        { title: 'Biological Age Calculator — Free Body Age Test | BornClock', desc: 'Free biological age calculator — no sign-up. A lifestyle and fitness estimate from 15 questions: heart rate, push-ups, balance, sleep, BMI, waist, blood pressure, smoking, alcohol and exercise.' },
   '/country-comparison':    { title: 'Country Life Expectancy Comparison Tool | BornClock', desc: 'Compare life expectancy across 195 countries. See where your country ranks globally and what factors drive national longevity differences.' },
   '/birthday-report':       { title: 'Birthday Blueprint — Personalised Birthday Gift | BornClock', desc: 'Generate a personalised 11-section Birthday Blueprint — celebrity twins, Western & Vedic zodiac, numerology, tarot, Chinese zodiac, planetary age and more. The perfect birthday gift.' },
   '/birthday-report/sample': { title: 'Sample Birthday Intelligence Report — Preview | BornClock', desc: 'See a complete Birthday Intelligence Report before creating yours. Preview zodiac, life path, Vedic Rashi, lucky elements, and more.' },
-  '/articles/numerology-by-date-of-birth': { title: 'Numerology by Date of Birth — Life Path Number Guide India | BornClock', desc: 'Calculate your Life Path number by date of birth. All 9 life paths explained with famous Indian examples, compatibility guide, and free calculator.' },
+  '/articles/numerology-by-date-of-birth': { title: 'Mulank vs Bhagyank vs Life Path — India Numerology Guide | BornClock', desc: 'Numerology by date of birth, explained for India: what Mulank, Bhagyank and the Western Life Path are, how each is worked out, and why 11 can become 2.' },
   '/articles/life-expectancy-by-country-2026': { title: 'Life Expectancy by Country 2026 — Global Rankings | BornClock', desc: 'Life expectancy by country in 2026 — UN World Population Prospects 2024 data. See rankings, what drives the differences, and how to improve your own.' },
   '/articles/how-long-will-i-live-in-india': { title: 'How Long Will I Live in India? Life Expectancy Guide | BornClock', desc: `Life expectancy in India by state — SRS data. Kerala 75.1 leads; national average ${LEY('India')} (UN WPP 2024). See your state and how to beat the average.` },
   '/biological-age-vs-chronological-age': { title: 'Biological Age vs Chronological Age — The Science | BornClock', desc: 'Biological age vs chronological age explained — Horvath epigenetic clock, 5 proven ways to lower your biological age, and how to measure it.' },
@@ -252,7 +266,7 @@ const STATIC = {
   '/articles/zodiac-compatibility': { title: 'Zodiac Compatibility — Which Signs Match Best? | BornClock', desc: 'Zodiac compatibility guide — how all 12 signs match in love and friendship. Free compatibility checker plus the best and worst matches for every sign.' },
   '/articles/biorhythm-calculator': { title: 'Biorhythm Calculator — Physical, Emotional, Intellectual | BornClock', desc: 'Free biorhythm calculator — track your physical (23-day), emotional (28-day) and intellectual (33-day) cycles from your date of birth.' },
   '/articles/tarot-card-by-date-of-birth': { title: 'Tarot Card by Date of Birth — Find Your Card | BornClock', desc: 'Find your tarot card by date of birth — your zodiac Major Arcana card and your Life Path tarot card, with meanings. Free tarot-by-birthday guide.' },
-  '/articles/chinese-zodiac-by-year': { title: 'Chinese Zodiac by Year — Find Your Animal Sign | BornClock', desc: 'Chinese zodiac by birth year — find your animal sign and its personality, luck and compatibility. All 12 animals with a free year-to-animal calculator.' },
+  '/articles/chinese-zodiac-by-year': { title: CHINESE_BY_YEAR_TITLE, desc: CHINESE_BY_YEAR_DESC },
   '/articles/birth-month-personality': { title: 'Birth Month Personality — What Your Month Says | BornClock', desc: 'Birth month personality guide — the zodiac sign and traits linked to each of the 12 months, plus the science of seasonal birth effects.' },
   '/articles/epigenetics-and-longevity': { title: 'Epigenetics and Longevity — How Lifestyle Rewrites Genes | BornClock', desc: 'Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 proven interventions.' },
   '/articles/longevity-supplements': { title: 'Longevity Supplements — What Works, What is Hype (India) | BornClock', desc: 'Longevity supplements ranked by evidence — Vitamin D, omega-3, magnesium, ashwagandha, NMN and more. India availability, real science, food-first.' },
@@ -276,7 +290,7 @@ const STATIC = {
   '/articles/longevity-habits-of-indian-billionaires': { title: 'Longevity Habits of Indian Billionaires | BornClock', desc: 'Longevity habits of Indian billionaires — Ratan Tata, Azim Premji, Mukesh Ambani. Documented health habits, their Life Path numbers, and lessons for you.' },
   '/articles': { title: 'All Articles — Longevity, Numerology & Astrology Guides | BornClock', desc: 'Browse all BornClock articles — longevity science, numerology, Vedic and Western astrology, Chinese zodiac, and Hindi guides. Free, evidence-based.' },
   '/hi/life-expectancy-calculator': { title: 'जीवन प्रत्याशा कैलकुलेटर — आप कितने साल जिएंगे? | BornClock', desc: 'UN WPP 2024 डेटा पर आधारित मुफ्त जीवन प्रत्याशा कैलकुलेटर। धूम्रपान, व्यायाम, आहार, नींद और तनाव जैसे 5 कारक जानें और स्वस्थ लंबा जीवन जिएं।' },
-  '/hi/numerology-by-date-of-birth': { title: 'अंकज्योतिष जन्मतिथि से — अपना मूलांक जानें | BornClock', desc: 'जन्मतिथि से अपना मूलांक निकालें। मूलांक 1 से 9 तक का पूरा अर्थ हिंदी में, शासक ग्रह और जीवन उद्देश्य के साथ। मुफ्त गणना करें।' },
+  '/hi/numerology-by-date-of-birth': { title: 'मूलांक, भाग्यांक, नामांक कैलकुलेटर — जन्मतिथि से | BornClock', desc: 'जन्मतिथि से अपना मूलांक और भाग्यांक, और नाम से नामांक (कैल्डियन) मुफ्त निकालें — गणना के साथ। मूलांक 1 से 9 का अर्थ, स्वामी ग्रह सहित, हिंदी में।' },
   '/hi/meri-jeevan-pratyasha': { title: 'मेरी जीवन प्रत्याशा क्या है? | BornClock', desc: 'जानें आपकी जीवन प्रत्याशा क्या है। UN WPP 2024 डेटा और धूम्रपान, व्यायाम, आहार जैसे 5 कारकों के साथ अपनी अनुमानित आयु की मुफ्त गणना करें।' },
   '/life-expectancy-calculator-singapore-uae': { title: 'Life Expectancy Calculator — Singapore & UAE | BornClock', desc: `Life expectancy in Singapore (${LEY('Singapore')}) and UAE (${LEY('United Arab Emirates')}) — UN WPP 2024 data for the Indian diaspora. Compare with India ${LEY('India')} and calculate your own with 8 factors.` },
   '/articles/moon-sign-by-date-of-birth': { title: 'Moon Sign by Date of Birth — Find Your Vedic Rashi India | BornClock', desc: 'Find your Vedic Rashi (moon sign) by date of birth. All 12 Rashis with lucky stone, mantra, personality, Devanagari names, and free Rashi calculator.' },
@@ -290,7 +304,7 @@ const STATIC = {
   '/moon-sign':             { title: 'Moon Sign Calculator — Find Your Vedic & Western Moon Sign | BornClock', desc: 'Calculate your Moon sign from date of birth. Understand how your Moon sign shapes emotions, instincts, and inner life in both Western and Vedic astrology.' },
   '/gift':                  { title: 'Gift a Birthday Blueprint — The Perfect Gift | BornClock', desc: 'Anyone can send a gift card. The Birthday Blueprint is a personalised 9-section keepsake built from their birth date — celebrity twins, zodiac, numerology, birthstone and more. Instant delivery.' },
   '/coach':                 { title: 'AI Longevity Coach — Your Life-Expectancy Forecast | BornClock', desc: 'A personal AI longevity coach that explains your life-expectancy forecast and health factors in plain language, with evidence-based next steps. It explains your data — it never diagnoses.' },
-  '/name-numerology':       { title: 'Name Numerology — Expression & Soul Urge Numbers | BornClock', desc: 'Calculate your Expression Number, Soul Urge, and Personality Number from your full birth name. Complete Pythagorean name numerology guide.' },
+  '/name-numerology':       { title: 'Name Numerology Calculator — Chaldean Number & Meaning | BornClock', desc: 'Free name number calculator: your Chaldean name number, compound number and its traditional meaning (Cheiro), plus Western Expression, Soul Urge and Personality numbers.' },
   '/biorhythm':             { title: 'Biorhythm Calculator — Physical & Emotional Cycles | BornClock', desc: 'Calculate your biorhythm cycles — 23-day physical, 28-day emotional, and 33-day intellectual. See your cycle status for any date.' },
   '/compatibility':         { title: 'Zodiac Compatibility Calculator — How Compatible Are You? | BornClock', desc: 'Calculate zodiac compatibility between any two signs. Western, Vedic, and Chinese compatibility scores with detailed analysis.' },
   '/wish':                  { title: 'Free Birthday Wish Card Maker — Send a Wish | BornClock', desc: 'Create a personalised birthday wish card in seconds — with their zodiac and Life Path — and share it on WhatsApp. Free, no signup.' },
@@ -476,15 +490,18 @@ export function getTitleForRoute(route) {
     const capitalised = slug.charAt(0).toUpperCase() + slug.slice(1);
     return {
       title: `Year of the ${capitalised} — Chinese Zodiac Sign Guide | BornClock`,
-      description: `Complete guide to the ${capitalised} in Chinese Zodiac — personality traits, compatible animals, famous ${capitalised} people, lucky numbers and colours. Full Jyotish guide.`,
+      description: chineseSignDescription(capitalised),
     };
   }
 
-  // /chinese-horoscope and /chinese-horoscope/:animal (years are computed client-side, so titles stay year-free)
+  // /chinese-horoscope is THE yearly page: its title names the current Chinese year and its
+  // exact dates, computed at build time (same helper as the live <SEO>, so they match).
+  // /chinese-horoscope/:animal titles stay year-free.
   if (route === '/chinese-horoscope') {
+    const cy = currentChineseYear();
     return {
-      title: `Chinese Zodiac Yearly Horoscope — All 12 Animals | BornClock`,
-      description: `Free Chinese zodiac yearly forecast for all 12 animals — career, finance, love and health, based on each sign's relationship to the ruling animal of the year.`,
+      title: chineseHoroscopeIndexTitle(cy),
+      description: chineseHoroscopeIndexDescription(cy),
     };
   }
   if (route.startsWith('/chinese-horoscope/')) {
@@ -768,11 +785,11 @@ export function getTitleForRoute(route) {
     description: 'Free calculator for your Birthday number and Attitude (Sun) number from your date of birth, with plain-language meanings.',
   };
   if (route === '/chaldean-numerology') return {
-    title: 'Chaldean Numerology Calculator — Name Number | BornClock',
-    description: 'Free Chaldean numerology calculator for your name number, shown side by side with the Pythagorean result, with the full Chaldean letter table.',
+    title: 'Chaldean Numerology Chart — Letters & Compound Numbers | BornClock',
+    description: "The Chaldean numerology chart explained: letter values 1–8, how to add a name, and what the compound numbers 10–52 mean in Cheiro's tradition. Free calculator linked.",
   };
   if (route === '/name-correction') return {
-    title: 'Name Numerology Correction — Chaldean Name Number | BornClock',
+    title: 'Name Correction Numerology — Check Spelling Variants | BornClock',
     description: 'Free name-correction calculator in the Chaldean tradition: your name number, its compound meaning, and how it sits with your birth numbers. Reflection-first.',
   };
   if (route === '/business-name-numerology') return {
@@ -969,7 +986,7 @@ export function getTitleForRoute(route) {
   if (route.startsWith('/answers/')) {
     const slug = route.slice(9);
     const t = ANSWERS[slug];
-    return t ? { title: t, description: `${t} — answered with science-backed sources at BornClock.` } : null;
+    return t ? { title: t, description: ANSWER_DESC[slug] ?? `${t} — answered with science-backed sources at BornClock.` } : null;
   }
 
   // /celebrity/:slug — individual celebrity pages (hubs + index handled by STATIC below)

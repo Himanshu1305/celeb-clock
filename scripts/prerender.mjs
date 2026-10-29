@@ -121,7 +121,7 @@ function ogImageForRoute(route) {
   if (route.match(/^\/life-expectancy-(india|usa|japan|uk|australia|canada|germany|china|singapore|brazil)$/))
     candidates.push('fitness/country-longevity.webp');
   // Hindi pages (multi-segment)
-  if (route.match(/^\/(meri-umar-kitni-hai|jivan-kal-calculator|numerology-hindi|rashifal-by-date-of-birth|biological-age-hindi)$/))
+  if (route.match(/^\/(meri-umar-kitni-hai|jivan-kal-calculator|rashifal-by-date-of-birth|biological-age-hindi)$/))
     candidates.push('fitness/hindi.webp');
   // Life expectancy India vs USA comparison page
   if (route === '/life-expectancy-india-vs-usa')
@@ -151,7 +151,7 @@ function ogImageForRoute(route) {
 // SEO <meta name="description"> (from prerender-titles) is deliberately left intact.
 const OG_DESCRIPTIONS = {
   '/life-expectancy': 'Harvard tracked 123,000 people for 30 years. 5 habits add 14 years to life. Find out where you stand — free.',
-  '/biological-age': 'Your body may be 10 years younger — or older — than your birthday says. Find out in 2 minutes. Free.',
+  '/biological-age': 'How does your body compare with your age? A free 15-question lifestyle and fitness estimate — not a lab test.',
   '/gift': "A 9-section personalised birthday report built from their date of birth. The most thoughtful gift they'll get this year.",
   '/coach': 'Your personalised longevity plan — built from your birthday and your habits. Start adding years today. Free.',
   '/celebrity-birthday': '50,000+ celebrities in our database. Find out which famous actor, athlete, or scientist shares your exact birthday.',

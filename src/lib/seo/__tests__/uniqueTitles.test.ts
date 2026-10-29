@@ -28,4 +28,9 @@ describe('sitewide: no two sitemap / prerender URLs share a title', () => {
     expect(routes).not.toContain('/celebrity/virat-kohli-1988');
     expect(routes).not.toContain('/celebrity/bhimrao-ramji-ambedkar');
   });
+
+  it('Batch 9: /numerology-hindi is retired (301) and the Hindi calculator is kept', () => {
+    expect(routes).not.toContain('/numerology-hindi');
+    expect(routes).toContain('/hi/numerology-by-date-of-birth');
+  });
 });

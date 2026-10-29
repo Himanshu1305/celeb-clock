@@ -1,11 +1,16 @@
 import React from 'react';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { lifePathWorking } from '@/lib/lifePath';
+import { mulank, bhagyank } from '@/lib/numerologyExtra';
+import { NumerologyCalculator } from '@/components/numerology/NumerologyCalculator';
 
-// Audit N4 — Indian (Cheiro/Chaldean) convention:
-//   मूलांक (Moolank)   = the birth DAY reduced to 1–9            e.g. 28 → 2+8 = 10 → 1
-//   भाग्यांक (Bhagyank) = the FULL date (same as the Life Path)   e.g. 28-03-1973 → 6
+// Batch 9 (founder decision) — Indian convention, the same shared functions as /numerology:
+//   मूलांक (Mulank)   = the birth DAY reduced to 1–9            e.g. 28 → 2+8 = 10 → 1
+//   भाग्यांक (Bhagyank) = EVERY digit of the full date, reduced to 1–9
+//                        e.g. 28-03-1973 → 2+8+3+1+9+7+3 = 33 → 6
+// (Indian calculators reduce to 1–9 and keep no master number — ishvaram.com/bhagyank-calculator,
+// panchangbodh.com/mulank-bhagyank-calculator, opened 29 Oct 2026; see numerologyExtra.ts.)
+// A Western master number (11/22/33 Life Path) is shown separately by the calculator.
 // Planet rulers follow the Indian scheme, where 4 = Rahu and 7 = Ketu (not the
 // Western Uranus/Neptune).
 const MOOLANK_PLANET: Record<number, string> = {
@@ -13,17 +18,8 @@ const MOOLANK_PLANET: Record<number, string> = {
   6: 'शुक्र (Venus)', 7: 'केतु (Ketu)', 8: 'शनि (Saturn)', 9: 'मंगल (Mars)',
 };
 
-/** मूलांक: the birth day reduced to a single digit 1–9. */
-function moolank(day: number): number {
-  let n = day;
-  while (n > 9) n = String(n).split('').reduce((s, d) => s + Number(d), 0);
-  return n;
-}
-/** भाग्यांक: the full date of birth — the shared Life Path function. */
-function bhagyank(day: number, month: number, year: number): number {
-  return lifePathWorking(day, month, year).number;
-}
-const EXAMPLE = lifePathWorking(28, 3, 1973);
+const EX_MUL = mulank(28);
+const EX_BH = bhagyank(28, 3, 1973);
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
@@ -49,7 +45,7 @@ const FAQS = [
   },
   {
     q: 'जन्मतिथि से मूलांक और भाग्यांक कैसे निकालें?',
-    a: 'मूलांक: केवल जन्म की तारीख के अंक जोड़ें — 28 मार्च 1973 के लिए 2+8 = 10 → 1, यानी मूलांक 1। भाग्यांक: दिन, महीना और वर्ष को अलग-अलग एक अंक तक घटाएं (11, 22, 33 को वैसे ही रखें), फिर जोड़ें — 28 → 1, मार्च → 3, 1973 → 20 → 2; 1 + 3 + 2 = 6, यानी भाग्यांक 6।',
+    a: `मूलांक: केवल जन्म की तारीख के अंक जोड़ें — 28 मार्च 1973 के लिए 2+8 = 10 → 1, यानी मूलांक ${EX_MUL.number}। भाग्यांक: पूरी जन्मतिथि के सभी अंक जोड़ें और 1–9 तक घटाएँ — ${EX_BH.working}, यानी भाग्यांक ${EX_BH.number}। भारतीय पद्धति में 11, 22, 33 को भी एक अंक तक घटाया जाता है।`,
   },
   {
     q: 'क्या अंकज्योतिष सटीक है?',
@@ -61,7 +57,7 @@ const FAQS = [
   },
   {
     q: 'BornClock मूलांक की गणना कैसे करता है?',
-    a: 'BornClock मूलांक जन्म की तारीख से और भाग्यांक (Life Path) पूरी जन्मतिथि से निकालता है — दिन, महीना और वर्ष अलग-अलग घटाकर, 11/22/33 को रखते हुए। भारतीय अंक ज्योतिष में अंक 4 का स्वामी राहु और अंक 7 का स्वामी केतु माना जाता है।',
+    a: 'BornClock मूलांक जन्म की तारीख से और भाग्यांक पूरी जन्मतिथि के सभी अंकों से निकालता है — दोनों 1 से 9 तक, जैसे भारतीय कैलकुलेटर करते हैं। अगर Western Life Path में मास्टर अंक (11, 22, 33) आता है तो उसे अलग से "Western मास्टर अंक" लिखकर दिखाया जाता है। भारतीय अंक ज्योतिष में अंक 4 का स्वामी राहु और अंक 7 का स्वामी केतु माना जाता है।',
   },
 ];
 
@@ -69,8 +65,8 @@ export function HindiNumerologyArticle() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'अंकज्योतिष जन्मतिथि से — अपना मूलांक जानें',
-    description: 'जन्मतिथि से अपना मूलांक जानें। मूलांक 1 से 9 तक का पूरा अर्थ हिंदी में और मुफ्त गणना।',
+    headline: 'मूलांक, भाग्यांक और नामांक कैलकुलेटर — अंकज्योतिष जन्मतिथि से',
+    description: 'जन्मतिथि से मूलांक और भाग्यांक, और नाम से नामांक मुफ्त निकालें — मूलांक 1 से 9 का अर्थ हिंदी में।',
     author: { '@type': 'Organization', name: 'BornClock' },
     publisher: { '@type': 'Organization', name: 'BornClock' },
     mainEntityOfPage: 'https://bornclock.com/hi/numerology-by-date-of-birth/',
@@ -91,15 +87,15 @@ export function HindiNumerologyArticle() {
       testId="hindi-numerology-article"
       seo={(
         <SEO
-          title="अंकज्योतिष जन्मतिथि से — अपना मूलांक जानें | BornClock"
-          description="जन्मतिथि से अपना मूलांक निकालें। मूलांक 1 से 9 तक का पूरा अर्थ हिंदी में, शासक ग्रह और जीवन उद्देश्य के साथ। मुफ्त गणना करें।"
+          title="मूलांक, भाग्यांक, नामांक कैलकुलेटर — जन्मतिथि से | BornClock"
+          description="जन्मतिथि से अपना मूलांक और भाग्यांक, और नाम से नामांक (कैल्डियन) मुफ्त निकालें — गणना के साथ। मूलांक 1 से 9 का अर्थ, स्वामी ग्रह सहित, हिंदी में।"
           canonicalUrl="/hi/numerology-by-date-of-birth"
           ogType="article"
         />
       )}
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'अंकज्योतिष जन्मतिथि से' }}
       footer={{
-        tagline: 'जन्मतिथि से अपना मूलांक जानें — मूलांक 1 से 9 तक का पूरा अर्थ हिंदी में।',
+        tagline: 'जन्मतिथि से मूलांक और भाग्यांक, नाम से नामांक — मुफ्त, गणना के साथ।',
         nav: [
           { label: 'Mystic Corner', to: '/mystic-corner' },
           { label: 'Numerology', to: '/numerology' },
@@ -110,7 +106,7 @@ export function HindiNumerologyArticle() {
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
       eyebrow="Numerology (Hindi)"
-      h1="अंकज्योतिष जन्मतिथि से — अपना मूलांक जानें"
+      h1="मूलांक, भाग्यांक और नामांक कैलकुलेटर — अंकज्योतिष जन्मतिथि से"
       lead={(
         <>
           अंकज्योतिष (Numerology) आत्म-समझ की सबसे प्राचीन प्रणालियों में से एक है, जिसका
@@ -135,27 +131,19 @@ export function HindiNumerologyArticle() {
             स्वभाव, शक्तियों, चुनौतियों और जीवन के सबक को दर्शाता है।
           </p>
 
-          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8 text-center">
-            <h2 className="text-xl font-black text-[#6E5AA6] mb-2">
-              अपना मूलांक अभी जानें
-            </h2>
-            <p className="text-[#6E5AA6] mb-5">
-              अपनी जन्मतिथि दर्ज करें और अपनी पूरी अंकज्योतिष प्रोफ़ाइल तुरंत प्राप्त करें।
-            </p>
-            <a href="/birthday-report"
-               className="inline-block bg-[#0E2238] text-white font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#0E2238] transition-colors">
-              मुफ्त जन्मतिथि रिपोर्ट बनाएं →
-            </a>
-          </div>
+          <section className="my-8" data-testid="hi-calculator">
+            <h2 className="text-xl font-black text-[#6E5AA6] mb-2">अपना मूलांक, भाग्यांक और नामांक अभी जानें (मुफ्त)</h2>
+            <p className="text-gray-700 mb-4">जन्मतिथि डालें — नाम वैकल्पिक है। हर अंक की गणना साथ में दिखेगी।</p>
+            <NumerologyCalculator lang="hi" />
+          </section>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">मूलांक कैसे निकालें?</h2>
           <p className="text-gray-700 leading-relaxed mb-6">
             <strong>मूलांक</strong> निकालने के लिए केवल जन्म की तारीख के अंक जोड़ें। उदाहरण के लिए
-            <strong> 28 मार्च 1973</strong>: 2+8 = 10 → 1+0 = {moolank(28)}, इसलिए मूलांक {moolank(28)} होगा।
-            <strong> भाग्यांक</strong> के लिए दिन, महीना और वर्ष अलग-अलग घटाकर जोड़ें:
-            28 → {EXAMPLE.dayReduced}, मार्च → {EXAMPLE.monthReduced}, 1973 → 20 → {EXAMPLE.yearReduced};
-            {' '}{EXAMPLE.dayReduced} + {EXAMPLE.monthReduced} + {EXAMPLE.yearReduced} = {EXAMPLE.total} → भाग्यांक {bhagyank(28, 3, 1973)}।
+            <strong> 28 मार्च 1973</strong>: 2+8 = 10 → 1+0 = {EX_MUL.number}, इसलिए मूलांक {EX_MUL.number} होगा।
+            <strong> भाग्यांक</strong> के लिए पूरी जन्मतिथि के सभी अंक जोड़ें और 1–9 तक घटाएँ:
+            {' '}{EX_BH.working}, यानी भाग्यांक {EX_BH.number}।
+            (Western Life Path दिन, महीना और वर्ष को अलग-अलग घटाता है और 11, 22, 33 को रखता है — आख़िरी अंक वही आता है, फ़र्क सिर्फ़ मास्टर अंक का है।)
             मूलांक 1 से 9 तक कोई भी अंक हो सकता है, और हर अंक का अपना विशेष अर्थ और स्वामी ग्रह होता है।
           </p>
 
@@ -188,16 +176,18 @@ export function HindiNumerologyArticle() {
 
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
-            <h2 className="text-2xl font-black mb-2">अपनी पूरी जन्मतिथि प्रोफ़ाइल जानें</h2>
+            <h2 className="text-2xl font-black mb-2">पूरी जन्मतिथि रिपोर्ट</h2>
             <p className="text-[#6E5AA6] mb-6">
               मूलांक तो केवल एक हिस्सा है। BornClock आपकी वैदिक राशि, पश्चिमी राशि, नक्षत्र,
               भाग्यशाली रत्न और बहुत कुछ आपकी जन्मतिथि से बताता है।
             </p>
             <a href="/birthday-report"
+               data-testid="hi-paid-report"
                className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
-              मेरी मुफ्त जन्मतिथि रिपोर्ट बनाएं →
+              पूरी जन्मतिथि रिपोर्ट देखें →
             </a>
+            <p className="text-sm mt-3">मूलांक, भाग्यांक और नामांक ऊपर के कैलकुलेटर में मुफ्त हैं।</p>
           </div>
 
         </article>

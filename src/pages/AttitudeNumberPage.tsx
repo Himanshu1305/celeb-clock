@@ -38,7 +38,7 @@ export default function AttitudeNumberPage() {
       theme="mystic"
       testId="attitude-number-page"
       seo={<SEO
-        title="Birthday Number & Attitude Number Calculator — Free Numerology | BornClock"
+        title="Birthday & Attitude Number Calculator — Numerology | BornClock"
         description="Free calculator for your Birthday number and Attitude (Sun) number from your date of birth, with plain-language meanings. Part of BornClock's numerology toolkit."
         keywords="birthday number, attitude number, sun number numerology, numerology by date of birth"
         canonicalUrl="/attitude-number"

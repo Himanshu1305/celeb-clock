@@ -28,7 +28,7 @@ const FAQS = [
   },
   {
     q: 'How does BornClock estimate my biological age?',
-    a: 'BornClock estimates biological age from 12 self-reported proxy biomarkers — such as resting heart rate, push-ups, balance, sleep, memory, reaction time, BMI, waist size and blood pressure — mapped against population health research. It is an illustrative estimate designed to show how your habits push your biological age above or below your chronological age. It is not a clinical DNA methylation test, but it highlights the same levers the science points to.',
+    a: 'BornClock gives a lifestyle- and fitness-based estimate from 15 self-reported questions — such as resting heart rate, push-ups, balance, sleep, BMI, waist size, blood pressure, smoking, alcohol and exercise — using cut-offs from published studies and guidelines. Each answer moves the result by a small, fixed number of years (capped at ±10). It is a rough guide, not a lab test, not a DNA methylation (epigenetic) test and not a diagnosis.',
   },
 ];
 
@@ -153,8 +153,8 @@ function BioAgeCalculator() {
             </div>
           </div>
           <p className="text-xs text-gray-500 leading-relaxed mb-3">
-            Illustrative only. BornClock&apos;s full estimate uses 12 proxy biomarkers and
-            population health research. For a proper reading, use the calculator below.
+            Illustrative only. BornClock&apos;s full calculator asks 15 questions on fitness, body
+            size, blood pressure, sleep and habits — still a rough estimate, not a lab test.
           </p>
           <a href="/biological-age"
              className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
@@ -359,11 +359,11 @@ export function BiologicalAgeArticle() {
           </h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             BornClock does not run a laboratory DNA methylation test. Instead, it estimates your
-            biological age from <strong>12 self-reported proxy biomarkers</strong> — such as resting heart
-            rate, push-ups, balance, sleep, memory, reaction time, BMI, waist size and blood pressure — mapped against
-            large-scale population health research. The result is an illustrative estimate that
-            shows how your habits push your biological age above or below your chronological age,
-            and which levers would move it most.
+            biological age from <strong>15 self-reported questions</strong> — such as resting heart
+            rate, push-ups, balance, sleep, BMI, waist size, blood pressure, smoking, alcohol and
+            exercise — using cut-offs from published studies and guidelines. The result is a rough,
+            illustrative estimate (capped at ±10 years) that shows which habits may be pushing it
+            up or down.
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             It is a starting point, not a diagnosis. But it points at exactly the same

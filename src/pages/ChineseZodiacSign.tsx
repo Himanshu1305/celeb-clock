@@ -3,6 +3,7 @@ import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
 import { CHINESE_SIGN_EXTENDED } from '@/services/ChineseZodiacService';
+import { currentChineseYear, chineseYearInfo, chineseSignDescription, CHINESE_YEAR_TABLE_FIRST, CHINESE_YEAR_TABLE_LAST } from '@/lib/chineseCalendar.js';
 
 const ANIMALS_ORDER = ['rat','ox','tiger','rabbit','dragon','snake','horse','goat','monkey','rooster','dog','pig'];
 
@@ -29,12 +30,15 @@ export default function ChineseZodiacSign() {
   const nextAnimal = ANIMALS_ORDER[(idx + 1) % 12];
 
   const emoji = ANIMAL_EMOJI[slug] ?? '🐾';
+  // The yearly outlook lives on ONE page (/chinese-horoscope/:animal) and rolls over at
+  // Chinese New Year; this guide only names the current Chinese year and links there.
+  const cur = chineseYearInfo(currentChineseYear());
   const element = ANIMAL_ELEMENT[slug] ?? '';
 
   const faqItems = [
     {
       question: `What years are ${capitalised} years in the Chinese Zodiac?`,
-      answer: `${capitalised} years include: ${data.years.join(', ')}. The next ${capitalised} year repeats every 12 years.`,
+      answer: `${capitalised} years include: ${data.years.join(', ')}. The cycle repeats every 12 years. Each Chinese year starts at Chinese New Year (between 21 January and 20 February), so if you were born in January or early February, check the exact dates in our Chinese zodiac by year table.`,
     },
     {
       question: `What is the ${capitalised}'s personality in Chinese astrology?`,
@@ -49,8 +53,8 @@ export default function ChineseZodiacSign() {
       answer: `Lucky colors: ${data.lucky_colors.join(', ')}. Lucky numbers: ${data.lucky_numbers.join(', ')}. Lucky directions: ${data.lucky_directions.join(', ')}.`,
     },
     {
-      question: `What is the ${capitalised}'s outlook for 2026?`,
-      answer: data.outlook_2026,
+      question: `What is the ${capitalised}'s outlook this year?`,
+      answer: `The current Chinese year is the Year of the ${cur.element} ${cur.animal} (${cur.rangeLabel}). The ${capitalised}'s yearly forecast — career, money, love and health for this year and next — is on the ${capitalised} yearly horoscope page.`,
     },
   ];
 
@@ -61,7 +65,7 @@ export default function ChineseZodiacSign() {
       seo={(
         <SEO
           title={`Year of the ${capitalised} — Chinese Zodiac Sign Guide | BornClock`}
-          description={`${capitalised} Chinese Zodiac: personality, compatibility, lucky elements, famous ${capitalised}s, and 2026 outlook. Years: ${data.years.slice(0,5).join(', ')}…`}
+          description={chineseSignDescription(capitalised)}
           keywords={`year of the ${slug}, ${slug} chinese zodiac, ${slug} personality, ${slug} compatibility, chinese zodiac ${slug}`}
           canonicalUrl={`/chinese-zodiac/${slug}`}
           ogImage="https://bornclock.com/og/zodiac.png"
@@ -69,7 +73,7 @@ export default function ChineseZodiacSign() {
       )}
       breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Chinese Zodiac', to: '/chinese-zodiac' }], current: `${capitalised} — Chinese Zodiac` }}
       footer={{
-        tagline: `Year of the ${capitalised} — personality, compatibility, lucky elements and 2026 outlook.`,
+        tagline: `Year of the ${capitalised} — personality, compatibility, lucky elements and every ${capitalised} year.`,
         nav: [
           { label: 'Mystic Corner', to: '/mystic-corner' },
           { label: 'Numerology', to: '/numerology' },
@@ -93,7 +97,9 @@ export default function ChineseZodiacSign() {
           <div className="flex flex-wrap justify-center gap-2">
             {data.years.map((y) => (
               <span key={y} className="px-3 py-1 bg-red-50 border border-red-200 text-red-700 rounded-full text-sm font-medium">
-                {y}
+                {y >= CHINESE_YEAR_TABLE_FIRST && y <= CHINESE_YEAR_TABLE_LAST
+                  ? <Link to={`/articles/chinese-zodiac-by-year#${y}`} className="hover:underline">{y}</Link>
+                  : y}
               </span>
             ))}
           </div>
@@ -107,7 +113,9 @@ export default function ChineseZodiacSign() {
             className="block rounded-xl border border-red-200 bg-red-50 p-5 text-center hover:bg-red-100 transition-colors"
           >
             <span className="font-semibold text-red-700">📅 See the {capitalised}'s yearly horoscope →</span>
-            <span className="block text-sm text-red-600/80 mt-1">Career, finance, love &amp; health for this year and next.</span>
+            <span className="block text-sm text-red-600/80 mt-1">
+              Career, finance, love &amp; health in the Year of the {cur.element} {cur.animal} ({cur.rangeLabel}) and the year after.
+            </span>
           </Link>
 
           {/* Personality */}
@@ -234,14 +242,6 @@ export default function ChineseZodiacSign() {
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-
-          {/* 2026 Outlook */}
-          <Card className="border-amber-300 bg-amber-50/50">
-            <CardContent className="p-6 md:p-8">
-              <h2 className="text-2xl font-bold mb-4 text-amber-800">🔮 2026 Outlook for the {capitalised}</h2>
-              <p className="text-amber-900 leading-relaxed">{data.outlook_2026}</p>
             </CardContent>
           </Card>
 

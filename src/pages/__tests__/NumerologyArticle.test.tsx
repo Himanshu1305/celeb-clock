@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest';
-import { render, cleanup, fireEvent } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { NumerologyArticle } from '../articles/NumerologyArticle';
@@ -17,16 +17,21 @@ describe('NumerologyArticle', () => {
     renderArticle();
     expect(document.querySelector('h1')?.textContent?.toLowerCase()).toContain('numerology');
   });
-  it('TC-NUM-P-03: calculator widget renders', () => {
+  // Batch 9: the article is the India guide (Mulank vs Bhagyank vs Life Path); the
+  // calculator itself lives on /numerology, so the article links there instead.
+  it('TC-NUM-P-03: links to the /numerology calculator', () => {
     renderArticle();
-    expect(document.querySelector('[data-testid="lp-calculator"]')).toBeTruthy();
+    const cta = document.querySelector('[data-testid="article-calc-cta"] a');
+    expect(cta?.getAttribute('href')).toBe('/numerology');
   });
-  it('TC-NUM-P-04: entering DOB shows result', () => {
+  it('TC-NUM-P-04: worked example 28-03-1973 → Mulank 1, Bhagyank 6, Life Path 6', () => {
     renderArticle();
-    const input = document.querySelector('input[type="date"]') as HTMLInputElement;
-    fireEvent.change(input, { target: { value: '1973-03-28' } });
-    expect(document.querySelector('[data-testid="lp-result"]')).toBeTruthy();
-    expect(document.querySelector('[data-testid="lp-result"]')?.textContent).toContain('6');
+    const t = document.querySelector('[data-testid="article-three-numbers"]')?.textContent || '';
+    expect(t).toContain('Mulank 1');
+    expect(t).toContain('Bhagyank 6');
+    expect(t).toContain('Life Path 6');
+    const m = document.querySelector('[data-testid="article-master-example"]')?.textContent || '';
+    expect(m).toContain('33 (master number, kept)');
   });
   it('TC-NUM-P-05: all 9 life path numbers present in article', () => {
     renderArticle();
@@ -74,12 +79,9 @@ describe('NumerologyArticle', () => {
     renderArticle();
     expect((document.body.textContent?.trim().length || 0)).toBeGreaterThan(3000);
   });
-  it('TC-NUM-N-03: calculator result link includes dob param', () => {
+  it('TC-NUM-N-03: the report link makes no price claim (pricing decided later — founder, Oct 2026)', () => {
     renderArticle();
-    const input = document.querySelector('input[type="date"]') as HTMLInputElement;
-    fireEvent.change(input, { target: { value: '1973-03-28' } });
-    const result = document.querySelector('[data-testid="lp-result"]');
-    const ctaLink = result?.querySelector('a');
-    expect(ctaLink?.getAttribute('href')).toContain('dob=1973-03-28');
+    const paid = Array.from(document.querySelectorAll('a')).filter(l => l.getAttribute('href')?.includes('birthday-report'));
+    expect(paid.every(l => !/free|मुफ्त|₹|paid/i.test(l.textContent || ''))).toBe(true);
   });
 });

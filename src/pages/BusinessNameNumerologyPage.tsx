@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
-import { analyseBusinessName, type BusinessNameResult } from '@/lib/numerologyTools';
+import { analyseBusinessName, compoundBasisNote, type BusinessNameResult } from '@/lib/numerologyTools';
 
 export default function BusinessNameNumerologyPage() {
   const [name, setName] = useState('');
@@ -66,6 +66,7 @@ export default function BusinessNameNumerologyPage() {
                   <div className="text-xs text-muted-foreground mb-1">Classical compound meaning (Chaldean / Cheiro tradition)</div>
                   <div className="font-semibold text-foreground">{result.compound} — {result.compoundMeaning.name}</div>
                   <p className="text-sm text-muted-foreground mt-1">{result.compoundMeaning.text}</p>
+                  {result.compoundReading && <p className="text-xs text-muted-foreground mt-2">{compoundBasisNote(result.compoundReading)}</p>}
                 </div>
               )}
             </div>

@@ -26,7 +26,7 @@ export default function WhatIsEpigeneticAge() {
     "@type": "FAQPage",
     "mainEntity": [
       { "@type": "Question", "name": "How is epigenetic age different from biological age?", "acceptedAnswer": { "@type": "Answer", "text": "Epigenetic age is one specific method of measuring biological age — currently the most scientifically accurate one available. Biological age is the broader concept; epigenetic age is the DNA methylation-based measurement of that concept." } },
-      { "@type": "Question", "name": "How do I find out my epigenetic age?", "acceptedAnswer": { "@type": "Answer", "text": "Commercial tests are available from companies including TruDiagnostic and Elysium Health, typically costing $200–$500 for a blood or saliva sample. BornClock's biological age calculator offers a lifestyle-based estimate using 12 validated biomarkers — less precise, but free and immediately accessible." } },
+      { "@type": "Question", "name": "How do I find out my epigenetic age?", "acceptedAnswer": { "@type": "Answer", "text": "Epigenetic age needs a laboratory test of a blood or saliva sample, sold by some private companies. BornClock's free biological age calculator is different: it gives a lifestyle- and fitness-based estimate from 15 questions and does not measure epigenetic age." } },
       { "@type": "Question", "name": "Is epigenetic aging reversible?", "acceptedAnswer": { "@type": "Answer", "text": "The evidence increasingly suggests yes — to a meaningful degree. Multiple intervention studies have found 2–5 year reductions in epigenetic age within weeks to months of lifestyle changes. The DunedinPACE clock can show whether your current pace of aging is actually slowing in response to what you're doing." } },
       { "@type": "Question", "name": "Can stress change your epigenetic age?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — significantly. Chronic psychological stress is one of the most consistent drivers of epigenetic age acceleration. Long-term caregiving stress, in particular, has been associated with measurably faster biological aging in multiple studies." } }
     ]
@@ -76,13 +76,13 @@ export default function WhatIsEpigeneticAge() {
 
             <h2 className="text-xl font-bold text-gray-900">Can epigenetic age actually go down?</h2>
             <p>Yes — and this is where the research gets genuinely exciting.</p>
-            <p>A 2021 randomized controlled trial by researcher Kara Fitzgerald found that an 8-week diet and lifestyle intervention — involving a specific plant-rich diet, targeted supplementation, exercise, sleep optimization, and stress management — reduced epigenetic age by an average of 3.23 years compared to the control group. The intervention group got measurably biologically younger. The control group got older.</p>
+            <p>A small 2021 pilot randomized trial by Kara Fitzgerald and colleagues (Aging, 2021; 43 healthy men aged 50–72) found that an 8-week programme — diet, sleep, exercise and relaxation guidance plus supplements — was associated with a 3.23-year lower Horvath epigenetic age compared with the control group. The authors say larger and longer trials are needed to confirm the finding.</p>
             <p>Factors consistently associated with lower epigenetic age in large studies: regular vigorous exercise, plant-rich diet, not smoking, quality sleep, and maintaining social connections. Factors associated with higher epigenetic age: smoking, obesity, chronic stress, heavy alcohol use, social isolation, and caregiving stress. A 2020 study found that people caring for chronically ill spouses showed significantly accelerated epigenetic aging compared to age-matched controls.</p>
           </div>
 
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
             <p className="text-lg font-bold text-gray-900 mb-2">Estimate My Biological Age</p>
-            <p className="text-sm text-gray-500 mb-4">12-biomarker lifestyle assessment · WHO-validated · Takes 3 minutes</p>
+            <p className="text-sm text-gray-500 mb-4">Free 15-question lifestyle and fitness estimate · Not a lab test</p>
             <Link to="/biological-age"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Estimate my biological age →

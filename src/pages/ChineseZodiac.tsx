@@ -7,28 +7,30 @@ import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { getChineseZodiac, getChineseZodiacAnimal } from '@/services/ChineseZodiacService';
+import { getChineseZodiac } from '@/services/ChineseZodiacService';
+import {
+  CHINESE_ANIMALS, CHINESE_YEAR_TABLE_FIRST, CHINESE_YEAR_TABLE_LAST,
+  currentChineseYear, chineseYearInfo, formatChineseYearRange,
+} from '@/lib/chineseCalendar.js';
 import { TermTip } from '@/components/vedic/TermTip';
 
-const ALL_ANIMALS = [
-  { name: 'Rat', emoji: '🐀', years: '1924, 1936, 1948, 1960, 1972, 1984, 1996, 2008, 2020' },
-  { name: 'Ox', emoji: '🐂', years: '1925, 1937, 1949, 1961, 1973, 1985, 1997, 2009, 2021' },
-  { name: 'Tiger', emoji: '🐅', years: '1926, 1938, 1950, 1962, 1974, 1986, 1998, 2010, 2022' },
-  { name: 'Rabbit', emoji: '🐇', years: '1927, 1939, 1951, 1963, 1975, 1987, 1999, 2011, 2023' },
-  { name: 'Dragon', emoji: '🐉', years: '1928, 1940, 1952, 1964, 1976, 1988, 2000, 2012, 2024' },
-  { name: 'Snake', emoji: '🐍', years: '1929, 1941, 1953, 1965, 1977, 1989, 2001, 2013, 2025' },
-  { name: 'Horse', emoji: '🐎', years: '1930, 1942, 1954, 1966, 1978, 1990, 2002, 2014, 2026' },
-  { name: 'Goat', emoji: '🐐', years: '1931, 1943, 1955, 1967, 1979, 1991, 2003, 2015, 2027' },
-  { name: 'Monkey', emoji: '🐒', years: '1932, 1944, 1956, 1968, 1980, 1992, 2004, 2016, 2028' },
-  { name: 'Rooster', emoji: '🐓', years: '1933, 1945, 1957, 1969, 1981, 1993, 2005, 2017, 2029' },
-  { name: 'Dog', emoji: '🐕', years: '1934, 1946, 1958, 1970, 1982, 1994, 2006, 2018, 2030' },
-  { name: 'Pig', emoji: '🐷', years: '1935, 1947, 1959, 1971, 1983, 1995, 2007, 2019, 2031' },
-];
+const ANIMAL_EMOJI: Record<string, string> = {
+  Rat: '🐀', Ox: '🐂', Tiger: '🐅', Rabbit: '🐇', Dragon: '🐉', Snake: '🐍',
+  Horse: '🐎', Goat: '🐐', Monkey: '🐒', Rooster: '🐓', Dog: '🐕', Pig: '🐷',
+};
+
+// Each animal's years with their exact Chinese New Year start/end dates (1924–2031, the
+// sourced table — see src/lib/chineseCalendar.js).
+const ALL_ANIMALS = CHINESE_ANIMALS.map((name, i) => {
+  const years: number[] = [];
+  for (let y = CHINESE_YEAR_TABLE_FIRST + i; y <= CHINESE_YEAR_TABLE_LAST; y += 12) years.push(y);
+  return { name, emoji: ANIMAL_EMOJI[name], years };
+});
 
 const FAQ_ITEMS = [
   {
     question: 'What is the Chinese Zodiac?',
-    answer: 'The Chinese Zodiac (生肖, Shēngxiào) is a 12-year repeating cycle where each year is represented by an animal. The 12 animals are: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, and Pig.',
+    answer: 'The Chinese Zodiac (生肖, Shēngxiào) is a 12-year repeating cycle where each year is represented by an animal. The 12 animals are: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat (also called Sheep), Monkey, Rooster, Dog, and Pig.',
   },
   {
     question: 'How is my Chinese Zodiac sign determined?',
@@ -40,7 +42,7 @@ const FAQ_ITEMS = [
   },
   {
     question: 'What is yin and yang in the Chinese Zodiac?',
-    answer: 'Each zodiac year alternates between Yang (positive, active energy) and Yin (negative, passive energy). Odd-numbered years in the cycle are Yang; even-numbered years are Yin. This duality shapes how an animal\'s energy is expressed.',
+    answer: 'Yang and Yin alternate year by year. Yang years are the Rat, Tiger, Dragon, Horse, Monkey and Dog years — Chinese years that begin in an even-numbered Gregorian year (2026, the Fire Horse year, is Yang). Yin years are the Ox, Rabbit, Snake, Goat, Rooster and Pig years, which begin in odd-numbered years (2027, the Fire Goat year, is Yin). Yang is traditionally described as active and outgoing, Yin as receptive and reflective.',
   },
   {
     question: 'Which Chinese Zodiac animals are most compatible?',
@@ -56,8 +58,8 @@ export default function ChineseZodiac() {
   const [dob, setDob] = useState('');
   const result = dob ? getChineseZodiac(new Date(dob + 'T12:00:00')) : null;
 
-  const today = new Date();
-  const currentAnimal = getChineseZodiacAnimal(today.getFullYear());
+  // Current Chinese year — changes at Chinese New Year, not on 1 January.
+  const cur = chineseYearInfo(currentChineseYear());
 
   return (
     <CollectionLayout
@@ -89,7 +91,7 @@ export default function ChineseZodiac() {
       lead={(
         <>
           Discover your Chinese Zodiac animal, element, and yin/yang energy from your date of birth.
-          {' '}2026 is the Year of the <strong>{currentAnimal}</strong>.
+          {' '}The current Chinese year is the Year of the <strong>{cur.element} {cur.animal}</strong> ({cur.rangeLabel}).
         </>
       )}
     >
@@ -168,7 +170,11 @@ export default function ChineseZodiac() {
           <h2 className="text-2xl font-bold text-center text-foreground mb-6">
             All 12 Chinese Zodiac Animals
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <p className="text-sm text-muted-foreground text-center max-w-2xl mx-auto mb-6">
+            Each year runs from Chinese New Year to the day before the next one — so a birthday in January or early February
+            often belongs to the previous animal. Full list: <Link to="/articles/chinese-zodiac-by-year" className="underline">Chinese zodiac by year (1924–2031)</Link>.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {ALL_ANIMALS.map(animal => {
               const isUserAnimal = result?.animal === animal.name;
               return (
@@ -180,7 +186,14 @@ export default function ChineseZodiac() {
                   >
                     <div className="text-4xl mb-2">{animal.emoji}</div>
                     <div className="font-bold text-foreground">{animal.name}</div>
-                    <div className="text-xs text-muted-foreground mt-1 leading-relaxed">{animal.years}</div>
+                    <ul className="text-[11px] text-muted-foreground mt-2 leading-snug space-y-0.5" data-testid={`cz-years-${animal.name.toLowerCase()}`}>
+                      {animal.years.map(y => (
+                        <li key={y}>
+                          <span className="font-semibold text-foreground">{y}</span>{' '}
+                          <span className="whitespace-nowrap">{formatChineseYearRange(y)}</span>
+                        </li>
+                      ))}
+                    </ul>
                     {isUserAnimal && (
                       <Badge className="mt-2 text-xs">Your Sign</Badge>
                     )}

@@ -32,7 +32,8 @@ test('Native date input blocks an impossible day (31 February cannot be entered)
 });
 
 test('Hindi numerology page renders with a heading (no crash)', async ({ page }) => {
-  const resp = await page.goto('/numerology-hindi/');
+  // Batch 9: /numerology-hindi now 301s to the Hindi Mulank/Bhagyank calculator.
+  const resp = await page.goto('/hi/numerology-by-date-of-birth/');
   expect(resp?.status()).toBeLessThan(400);
   await expect(page.locator('h1')).toBeVisible();
 });

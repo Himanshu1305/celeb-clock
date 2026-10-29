@@ -32,15 +32,16 @@ describe('Attitude/Birthday number page', () => {
   });
 });
 
-describe('Chaldean numerology page', () => {
-  it('shows Chaldean + Pythagorean side by side and the letter table', () => {
+describe('Chaldean numerology page (Batch 9: chart explainer, calculator on /name-numerology)', () => {
+  it('shows the letter table, the Shah Rukh Khan worked example and links to the calculator', () => {
     const { getByTestId } = wrap(<ChaldeanNumerologyPage />);
     expect(getByTestId('chaldean-table')).toBeTruthy();
-    fireEvent.change(getByTestId('chaldean-name'), { target: { value: 'Priya Sharma' } });
-    fireEvent.click(getByTestId('chaldean-calc'));
-    const out = getByTestId('chaldean-result').textContent || '';
-    expect(out).toMatch(/Chaldean name number/);
-    expect(out).toMatch(/Pythagorean/);
-    expect(out).not.toContain('undefined');
+    const ex = getByTestId('chaldean-example').textContent || '';
+    expect(ex).toContain('42');
+    expect(ex).toMatch(/= 6/);
+    expect(getByTestId('chaldean-cta').getAttribute('href')).toBe('/name-numerology');
+    const list = getByTestId('compound-list').textContent || '';
+    for (const n of [39, 42, 48, 49, 50, 51, 52]) expect(list).toContain(`${n} — `);
+    expect(document.body.textContent).not.toContain('undefined');
   });
 });

@@ -28,7 +28,7 @@ export const NUMBER_PLANET: Record<number, string> = {
 };
 
 // Single-digit "vibration" keywords, reused across contexts.
-const NUMBER_KEYWORD: Record<number, string> = {
+export const NUMBER_KEYWORD: Record<number, string> = {
   1: 'leadership, independence, a fresh start',
   2: 'partnership, sensitivity, cooperation',
   3: 'expression, optimism, creativity',
@@ -60,10 +60,24 @@ export function areNumbersHarmonious(a: number, b: number): boolean {
 }
 
 // ── Classical Chaldean compound-number meanings (Cheiro tradition) ────────────
-// These are the traditional meanings for the two-digit "compound" numbers from
-// the Chaldean (Cheiro) system. They are a documented tradition, cited as such
-// on the page — not invented. Only the widely-published set (10–52) is included;
-// a compound outside it reduces to its root meaning.
+// Traditional meanings of the two-digit "compound" numbers 10–52 from Cheiro,
+// "Cheiro's Book of Numbers" (London: Herbert Jenkins, 1926; public domain), chapter
+// on the symbolism of the compound numbers (pp. 126–133 of the 1935 English edition).
+// Paraphrased, not copied. Batch 9 added the entries that were missing (39, 42,
+// 48, 49, 50, 51). The primary scan is archive.org item in.ernet.dli.2015.70770
+// (Cheiros Book Of Numbers, Herbert Jenkins — item page opened 29 Oct 2026; the
+// full-text file itself was not reachable from the build environment), so the
+// wording of each entry was checked against two pages that quote that chapter,
+// opened 29 Oct 2026:
+//   bostjanlovrat.com/2024/08/21/classical-cheiros-descriptions-of-compound-numbers/
+//     (quotes the 1935 Herbert Jenkins edition, pp. 126–133) — e.g. 39 "Has the same
+//     meaning as the number 30, which is the next to it in its own series of compound
+//     numbers"; 42 "Has the same meaning as the number 24"; 48 = 30; 49 = 31; 50 = 32;
+//     51 "a very powerful potency of its own. It represents the nature of the warrior".
+//   astronumero.org/compound-numbers/ — same equivalences (39 ≈ 30, 42 ≈ 24, 48 ≈ 30,
+//     49 ≈ 31, 50 ≈ 32, 51 the warrior number).
+// Tone rule (Batch 7 standing rule 7): Cheiro's darker wording (accidents, violent
+// ends) is paraphrased as care and caution — never as a prediction.
 export const COMPOUND_MEANINGS: Record<number, { name: string; text: string; tone: 'favourable' | 'mixed' | 'caution' }> = {
   10: { name: 'The Wheel of Fortune', text: 'Rising and falling fortune; honour and faith rewarded, but the outcome swings — a number of change.', tone: 'mixed' },
   11: { name: 'A Clenched Hand / Lion Muzzled', text: 'Hidden dangers and trials from others; warns to be forearmed. Treated as a karmic test, not a verdict.', tone: 'caution' },
@@ -75,7 +89,7 @@ export const COMPOUND_MEANINGS: Record<number, { name: string; text: string; ton
   17: { name: 'The Star of the Magi', text: 'A highly spiritual number of rising above trials; peace and lasting name after difficulty.', tone: 'favourable' },
   18: { name: 'Materialism tearing down the spiritual', text: 'A difficult number of conflict and material entanglement; counsels integrity. A karmic-caution number.', tone: 'caution' },
   19: { name: 'The Prince of Heaven', text: 'One of the most fortunate: success, honour and happiness after effort.', tone: 'favourable' },
-  20: { name: 'The Awakening', text: 'A call to action for a purpose; new plans and ambitions. Judgement and resolve.', tone: 'favourable' },
+  20: { name: 'The Awakening', text: 'A call to action for a purpose; new plans and ambitions. Cheiro calls it a spiritual rather than a material number, so it is uncertain for purely worldly success.', tone: 'mixed' },
   21: { name: 'The Crown of the Magi', text: 'Advancement, honour and success after a hard climb; victory after struggle.', tone: 'favourable' },
   22: { name: 'Caution and Illusion', text: 'A warning of good nature being taken advantage of; beware false friends. A karmic-caution number.', tone: 'caution' },
   23: { name: 'The Royal Star of the Lion', text: 'A promise of success, help from superiors and protection. Among the most fortunate.', tone: 'favourable' },
@@ -94,18 +108,77 @@ export const COMPOUND_MEANINGS: Record<number, { name: string; text: string; ton
   36: { name: 'Like 27', text: 'Carries the fortunate meaning of 27 — reward from one\'s own intellect.', tone: 'favourable' },
   37: { name: 'Good friendships and partnerships', text: 'A fortunate number for relationships and collaborations of all kinds.', tone: 'favourable' },
   38: { name: 'Like 29', text: 'Carries the cautionary meaning of 29 — discernment in trust.', tone: 'caution' },
+  39: { name: 'Like 30', text: 'Cheiro gives it the meaning of 30 — thoughtful deduction; neither lucky nor unlucky in itself, it depends on how the mind is used.', tone: 'mixed' },
   40: { name: 'Like 31', text: 'Carries the meaning of 31 — the self-contained thinker.', tone: 'mixed' },
   41: { name: 'Like 32', text: 'Carries the meaning of 32 — fortunate if self-directed.', tone: 'favourable' },
+  42: { name: 'Like 24', text: 'Cheiro gives it the meaning of 24 — help and backing from people in position, and gain through love and partnership.', tone: 'favourable' },
   43: { name: 'Revolution and upheaval', text: 'An unfortunate number associated with upheaval and conflict; counsels steadiness.', tone: 'caution' },
   44: { name: 'Like 26', text: 'Carries the cautionary meaning of 26.', tone: 'caution' },
   45: { name: 'Like 27', text: 'Carries the fortunate meaning of 27.', tone: 'favourable' },
   46: { name: 'Like 37', text: 'Carries the fortunate meaning of 37 — good partnerships.', tone: 'favourable' },
   47: { name: 'Like 29', text: 'Carries the cautionary meaning of 29.', tone: 'caution' },
+  48: { name: 'Like 30', text: 'Cheiro gives it the meaning of 30 — a number of the thinking mind; the outcome depends on the person\'s own choices.', tone: 'mixed' },
+  49: { name: 'Like 31', text: 'Cheiro gives it the meaning of 31 — self-contained and independent; Cheiro did not count it as a worldly-success number.', tone: 'mixed' },
+  50: { name: 'Like 32', text: 'Cheiro gives it the meaning of 32 — fortunate when the person trusts their own judgement rather than others\' advice.', tone: 'favourable' },
+  51: { name: 'The Warrior', text: 'A number with strong potency of its own: the nature of the warrior, and sudden advancement in whatever is undertaken — favoured for leaders of a cause. Cheiro also counsels staying alert to rivals and opposition.', tone: 'mixed' },
   52: { name: 'Like 43', text: 'Carries the cautionary meaning of 43 — upheaval.', tone: 'caution' },
 };
 
+/** Cheiro's own listed meaning for a compound number 10–52, or null if he lists none. */
 export function compoundMeaning(compound: number) {
   return COMPOUND_MEANINGS[compound] || null;
+}
+
+/**
+ * The highest compound Cheiro gives a meaning for. His list in the Book of Numbers
+ * stops at 52; per the quoting pages above, the book itself gives NO separate rule for
+ * totals above 52 (bostjanlovrat.com/2024/09/05/extended-cheiros-rule-for-numbers-above-52/
+ * — "he described a system up to 52"). What the book does state is the SERIES rule
+ * used inside 10–52: a number with no potency of its own "has the same meaning as the
+ * number … next to it in its own series of compound numbers", the series stepping by 9
+ * (33 = 24, 34 = 25, … 42 = 24, 48 = 30, 52 = 43). For totals above 52 we apply that
+ * same series rule — subtract 9 until the number is 52 or less — which is also the rule
+ * astronumero.org/compound-numbers/ gives ("reduce the number by 9 till you reach 52 (or
+ * less)"; it attributes it to Cheiro's "Book of Palmistry, Numerology and Astrology").
+ * The UI labels such a reading as this extension, never as Cheiro's own listed meaning.
+ * Subtracting 9 never changes the final 1–9 root, so the name number itself is unaffected.
+ */
+export const CHEIRO_COMPOUND_MAX = 52;
+
+export interface CompoundReading {
+  /** The raw letter total. */
+  total: number;
+  /** The compound whose meaning is shown (= total when 10–52; series-reduced when > 52). */
+  lookup: number;
+  meaning: { name: string; text: string; tone: 'favourable' | 'mixed' | 'caution' };
+  /** 'cheiro' = Cheiro lists this total; 'series' = above 52, read via the series rule. */
+  basis: 'cheiro' | 'series';
+}
+
+/**
+ * Traditional reading for a name total. Returns null for totals 1–9 (no compound — the
+ * single number itself is the reading) and for 0.
+ */
+export function compoundReading(total: number): CompoundReading | null {
+  const t = Math.abs(Math.trunc(total));
+  if (t < 10) return null;
+  let lookup = t;
+  while (lookup > CHEIRO_COMPOUND_MAX) lookup -= 9;
+  const meaning = COMPOUND_MEANINGS[lookup];
+  if (!meaning) return null; // every value 10–52 is listed; kept for safety
+  return { total: t, lookup, meaning, basis: lookup === t ? 'cheiro' : 'series' };
+}
+
+/** One plain sentence explaining where a compound reading comes from (for the UI). */
+export function compoundBasisNote(r: CompoundReading, lang: 'en' | 'hi' = 'en'): string {
+  if (lang === 'hi') {
+    return r.basis === 'cheiro'
+      ? `कीरो की "Book of Numbers" (1926) में ${r.total} का अर्थ 10–52 के संयुक्त अंकों में दिया गया है।`
+      : `कीरो की सूची 52 पर रुकती है और ${r.total} का अपना अर्थ नहीं देती। उनके "एक ही श्रृंखला" नियम (52 या कम होने तक 9 घटाएँ) से ${r.total} को ${r.lookup} की तरह पढ़ा गया है — यह उनकी पद्धति का विस्तार है, उनका लिखा अर्थ नहीं।`;
+  }
+  return r.basis === 'cheiro'
+    ? `Cheiro's Book of Numbers (1926) lists ${r.total} among the compound numbers 10–52.`
+    : `Cheiro's list stops at 52 and gives no meaning for ${r.total} itself. Following his "same series" rule (subtract 9 until the number is 52 or less), ${r.total} is read as ${r.lookup}. This is an extension of his method, not a meaning he wrote for ${r.total}.`;
 }
 
 // ── Name correction ──────────────────────────────────────────────────────────
@@ -115,6 +188,8 @@ export interface NameCorrectionResult {
   pythagorean: NameNumberResult;
   compound: number;
   compoundMeaning: ReturnType<typeof compoundMeaning>;
+  /** Batch 9: the reading actually shown (handles totals above 52 via the series rule). */
+  compoundReading: CompoundReading | null;
   rootKeyword: string;
   rootPlanet: string;
   /** Harmony vs the person's birth numbers, only when a DOB is supplied. */
@@ -141,7 +216,8 @@ export function analyseNameCorrection(name: string, dob?: { year: number; month:
     chaldean,
     pythagorean,
     compound: chaldean.compound,
-    compoundMeaning: compoundMeaning(chaldean.compound),
+    compoundMeaning: compoundReading(chaldean.compound)?.meaning ?? null,
+    compoundReading: compoundReading(chaldean.compound),
     rootKeyword: NUMBER_KEYWORD[root] || '',
     rootPlanet: NUMBER_PLANET[root] || '',
   };
@@ -174,6 +250,7 @@ export interface BusinessNameResult {
   rootPlanet: string;
   compound: number;
   compoundMeaning: ReturnType<typeof compoundMeaning>;
+  compoundReading: CompoundReading | null;
   verdict: 'favourable' | 'neutral' | 'caution';
   note: string;
 }
@@ -191,7 +268,8 @@ export function analyseBusinessName(name: string): BusinessNameResult {
         : `${root} (${NUMBER_PLANET[root]}) is a steady, neutral number for business in the tradition — associated with ${NUMBER_KEYWORD[root]}.`;
   return {
     name: name.trim(), chaldean, root, rootPlanet: NUMBER_PLANET[root],
-    compound: chaldean.compound, compoundMeaning: compoundMeaning(chaldean.compound),
+    compound: chaldean.compound, compoundMeaning: compoundReading(chaldean.compound)?.meaning ?? null,
+    compoundReading: compoundReading(chaldean.compound),
     verdict, note,
   };
 }

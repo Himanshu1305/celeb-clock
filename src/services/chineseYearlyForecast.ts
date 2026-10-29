@@ -13,6 +13,7 @@
  * time) so the page stays evergreen — never one prerendered page per date.
  */
 import { getChineseZodiacAnimal } from '@/services/ChineseZodiacService';
+import { currentChineseYear } from '@/lib/chineseCalendar.js';
 
 const ANIMALS = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'] as const;
 const ELEMENTS = ['Wood', 'Fire', 'Earth', 'Metal', 'Water'] as const;
@@ -160,8 +161,12 @@ export function getYearForecast(nativeAnimal: string, year: number): YearForecas
   };
 }
 
-/** The current and next Gregorian year (year supplied via Date at render time). */
+/**
+ * The current and next CHINESE year. The Chinese year changes at Chinese New Year (Beijing
+ * date), not on 1 January — e.g. on 1 Feb 2027 the current year is still 2026 (Fire Horse,
+ * 17 Feb 2026 – 5 Feb 2027). Shared helper: src/lib/chineseCalendar.js.
+ */
 export function currentAndNextYear(now: Date = new Date()): [number, number] {
-  const y = now.getFullYear();
+  const y = currentChineseYear(now);
   return [y, y + 1];
 }

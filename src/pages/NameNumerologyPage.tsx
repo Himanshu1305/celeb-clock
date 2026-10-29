@@ -8,6 +8,9 @@ import PageTagline from '@/components/PageTagline';
 import { calculateAllNameNumbers, getLetterBreakdown, NAME_NUMBER_MEANINGS } from '@/data/nameNumerologyData';
 import { useReportPrice } from '@/hooks/useCurrency';
 import { TermTip } from '@/components/vedic/TermTip';
+import { chaldeanName, CHALDEAN_LETTER_TABLE, type NameNumberResult } from '@/lib/numerologyExtra';
+import { compoundReading, compoundBasisNote } from '@/lib/numerologyTools';
+import { NAME_NUMBER_INDIAN_MEANINGS } from '@/data/indianNumberMeanings';
 
 type NumberType = 'expression' | 'soulUrge' | 'personality';
 
@@ -23,22 +26,30 @@ export default function NameNumerologyPage() {
   const [result, setResult] = useState<ReturnType<typeof calculateAllNameNumbers> | null>(null);
   const [breakdown, setBreakdown] = useState<ReturnType<typeof getLetterBreakdown>>([]);
   const [activeType, setActiveType] = useState<NumberType>('expression');
+  const [chaldean, setChaldean] = useState<NameNumberResult | null>(null);
+  // Batch 9: Chaldean (the Indian name number) first; Western (Pythagorean) is the second tab.
+  const [system, setSystem] = useState<'chaldean' | 'western'>('chaldean');
 
   const handleCalculate = () => {
     if (!name.trim()) return;
     setResult(calculateAllNameNumbers(name));
     setBreakdown(getLetterBreakdown(name));
+    setChaldean(chaldeanName(name));
   };
+  const compound = chaldean ? compoundReading(chaldean.total) : null;
+  const chaldeanMeaning = chaldean ? NAME_NUMBER_INDIAN_MEANINGS[chaldean.root] : null;
 
   const faqItems = [
-    { question: 'What is name numerology?',
-      answer: 'Name numerology (also called the Pythagorean system) assigns a number 1–9 to each letter of the alphabet. By summing the numbers corresponding to the letters in your full name, you calculate three key numbers: your Expression Number (all letters), Soul Urge Number (vowels only — Y counts as a vowel when there is no other vowel beside it, as in Lynn or Mary), and Personality Number (consonants only). Each number reveals a different dimension of your character and destiny.' },
+    { question: 'What is my name number?',
+      answer: 'In the Chaldean system most used in India, each letter has a value from 1 to 8 (A, I, J, Q, Y = 1; B, K, R = 2; C, G, L, S = 3; D, M, T = 4; E, H, N, X = 5; U, V, W = 6; O, Z = 7; F, P = 8 — no letter is given 9). Add the values of the name you use, and that total is your compound number; reduce it to one digit 1–9 for your name number. Shah Rukh Khan: SHAH 14 + RUKH 15 + KHAN 13 = 42 → 4 + 2 = 6.' },
+    { question: 'What is a compound number?',
+      answer: 'The two-digit total before the final reduction. Cheiro\'s "Book of Numbers" (1926) gives a traditional meaning for each compound from 10 to 52 — 42, for example, carries the meaning of 24 (help from people in position). His list stops at 52; for a higher total we say so plainly and read it through his "same series" rule (subtract 9 until the number is 52 or less).' },
+    { question: 'What if my name total is 11, 22 or 33?',
+      answer: 'Indian name-number practice reduces every total to a single digit, so 33 → 6. In the Western (Pythagorean) convention 11, 22 and 33 are master numbers and are kept. We show the Indian name number first and, when a master number occurs, the "Western master number" separately — so you never see two unlabelled answers.' },
+    { question: "What is the difference between Chaldean and Pythagorean name numerology?",
+      answer: "Chaldean (the first tab) assigns letters by sound with values 1–8 and is the system most Indian numerologists use for name numbers and spellings. Pythagorean (the Western tab) numbers the alphabet in order, A=1 … I=9, J=1 …, and gives the Expression, Soul Urge (vowels — Y counts when no other vowel is beside it, as in Lynn or Mary) and Personality (consonants) numbers. The two systems usually give different numbers for the same name." },
     { question: 'Should I use my full birth name or current name?',
-      answer: 'Traditional numerology uses the full name given at birth — including middle names — as it carries the original energetic imprint. However, calculating your current commonly-used name can reveal how you are presenting to the world today. Many numerologists calculate both and compare them.' },
-    { question: "What is the difference between Pythagorean and Chaldean numerology?",
-      answer: "Pythagorean numerology (this calculator) assigns letters sequentially: A=1, B=2, C=3... This is the most widely used system in the West. Chaldean numerology uses a different, older assignment based on vibration: A=1, B=2, C=3, D=4, E=5, U=6, O=7, F=8, with no letter assigned the number 9 (considered sacred). Both systems have their proponents." },
-    { question: 'What are master numbers?',
-      answer: 'In numerology, 11, 22, and 33 are considered Master Numbers — they are not reduced to a single digit because they carry heightened spiritual significance. If your name reduces to 11 (the Inspirational Messenger), 22 (the Master Builder), or 33 (the Master Teacher), these are considered particularly powerful name vibrations.' },
+      answer: 'The Western tradition uses the full name given at birth. Indian name-number practice usually looks at the name you actually use day to day. Many people calculate both and compare.' },
   ];
 
   const getMeaning = (num: number, type: NumberType) => {
@@ -53,15 +64,15 @@ export default function NameNumerologyPage() {
       testId="name-numerology-page"
       seo={(
         <SEO
-          title="Name Numerology Calculator — Expression, Soul Urge & Personality Numbers | BornClock"
-          description="Calculate your Expression Number, Soul Urge Number, and Personality Number from your name. Free Pythagorean name numerology calculator with full meanings."
-          keywords="name numerology calculator, numerology by name, expression number calculator, soul urge number, name number meaning, personality number"
+          title="Name Numerology Calculator — Chaldean Number & Meaning | BornClock"
+          description="Free name number calculator: your Chaldean name number, compound number and its traditional meaning (Cheiro), plus Western Expression, Soul Urge and Personality numbers."
+          keywords="name numerology calculator, name number calculator, chaldean name number, compound number meaning, numerology by name, expression number"
           canonicalUrl="/name-numerology"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Name Numerology', edition: 'Pythagorean · Expression / Soul Urge / Personality' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Name Numerology', edition: 'Chaldean name number · Western Expression / Soul Urge / Personality' }}
       footer={{
-        tagline: "Name numerology computed from your name's letters (Pythagorean) — Expression, Soul Urge and Personality numbers.",
+        tagline: "Your Chaldean name number and compound meaning first, then the Western Expression, Soul Urge and Personality numbers — computed from your name's letters.",
         nav: [
           { label: 'Mystic Corner', to: '/mystic-corner' },
           { label: 'Numerology', to: '/numerology' },
@@ -72,12 +83,12 @@ export default function NameNumerologyPage() {
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
       eyebrow="Name Numerology"
-      h1="Name Numerology Calculator"
+      h1="Name Numerology Calculator — Chaldean Name Number & Meaning"
     >
         <JsonLd id="webapp" data={{
           '@context': 'https://schema.org', '@type': 'WebApplication',
-          name: 'Name Numerology Calculator',
-          description: 'Free Pythagorean name numerology calculator — find your Expression Number, Soul Urge Number, and Personality Number with full meaning guides.',
+          name: 'Name Numerology Calculator — Chaldean Name Number & Meaning',
+          description: 'Free name number calculator — Chaldean name number and compound meaning, plus Western (Pythagorean) Expression, Soul Urge and Personality numbers.',
           url: 'https://bornclock.com/name-numerology/', applicationCategory: 'LifestyleApplication', operatingSystem: 'Web',
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
           provider: { '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com' },
@@ -88,16 +99,16 @@ export default function NameNumerologyPage() {
         }} />
         <div className="max-w-2xl mx-auto px-4 py-10">
           <PageTagline />
-          <TrustStrip claim="Calculated from the letters of your actual name (Pythagorean values) — not a generic reading." href="/how-it-works#numerology" />
+          <TrustStrip claim="Calculated from the letters of your actual name — Chaldean (Indian) and Pythagorean (Western) values, both labelled." href="/how-it-works#numerology" />
 
           <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
             <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
-              Every letter in your name carries a numerical vibration. Together, they reveal three distinct numbers: your Expression Number (who you're destined to be), your Soul Urge Number (what your heart truly wants), and your Personality Number (how others perceive you). Enter your full birth name below.
+              Enter your name to get your Chaldean name number — the one most Indian numerologists use — with its compound number and traditional meaning. The Western tab adds your Pythagorean Expression, Soul Urge and Personality numbers.
             </p>
           </div>
 
           <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-200">
-            <p className="text-sm font-semibold text-gray-700 mb-3">Enter your full birth name</p>
+            <p className="text-sm font-semibold text-gray-700 mb-3">Enter your name</p>
             <div className="flex gap-3 mb-2">
               <input
                 type="text"
@@ -114,11 +125,67 @@ export default function NameNumerologyPage() {
                 Calculate →
               </button>
             </div>
-            <p className="text-xs text-gray-600">Use your full name as given at birth, including middle name(s), for the most accurate reading.</p>
+            <p className="text-xs text-gray-600">Chaldean practice usually reads the name you use every day; the Western tradition uses your full birth name. Try both if they differ.</p>
           </div>
 
-          {result && (
-            <div className="mb-10">
+          {result && chaldean && (
+            <div className="mb-10" data-testid="name-num-results">
+              <div role="tablist" aria-label="Numerology system" className="grid grid-cols-2 gap-2 mb-6">
+                <button role="tab" data-testid="tab-chaldean" aria-selected={system === 'chaldean'} onClick={() => setSystem('chaldean')}
+                  className={`rounded-xl px-4 py-2 text-sm font-semibold border-2 ${system === 'chaldean' ? 'bg-[#6E5AA6]/10 border-[#6E5AA6]/40 text-[#6E5AA6]' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
+                  Chaldean name number (Indian)
+                </button>
+                <button role="tab" data-testid="tab-western" aria-selected={system === 'western'} onClick={() => setSystem('western')}
+                  className={`rounded-xl px-4 py-2 text-sm font-semibold border-2 ${system === 'western' ? 'bg-[#6E5AA6]/10 border-[#6E5AA6]/40 text-[#6E5AA6]' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
+                  Western (Pythagorean)
+                </button>
+              </div>
+
+              {system === 'chaldean' && (
+                <div role="tabpanel" data-testid="chaldean-panel" className="bg-white border border-gray-200 rounded-2xl p-6 mb-6">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="w-16 h-16 rounded-2xl bg-[#6E5AA6]/10 flex items-center justify-center text-3xl font-black text-[#6E5AA6] flex-shrink-0" data-testid="chaldean-root">
+                      {chaldean.root}
+                    </div>
+                    <div>
+                      <h2 className="font-black text-gray-900 text-lg">
+                        Name number (<TermTip id="chaldean">Chaldean</TermTip>, Indian method){chaldeanMeaning ? ` · ${chaldeanMeaning.title}` : ''}
+                      </h2>
+                      <p className="text-xs text-gray-500">Letter total {chaldean.total}{chaldean.total > 9 ? ` → reduced to ${chaldean.root}` : ''}{chaldeanMeaning ? ` · ruling planet ${chaldeanMeaning.planet}` : ''}</p>
+                    </div>
+                  </div>
+                  {chaldeanMeaning && <p className="text-sm text-gray-700 leading-relaxed mb-4">{chaldeanMeaning.text}</p>}
+                  {chaldean.master && (
+                    <p className="text-sm text-gray-700 mb-4 bg-gray-50 rounded-xl p-3" data-testid="chaldean-master">
+                      <strong><TermTip id="masterNumber">Western master number</TermTip>: {chaldean.master}</strong> — the Western convention keeps {chaldean.master} instead of reducing it to {chaldean.root}. Indian name-number practice uses {chaldean.root}.
+                    </p>
+                  )}
+                  <div className="bg-gray-50 rounded-xl p-4 mb-4" data-testid="chaldean-compound">
+                    <p className="text-xs font-semibold text-gray-500 mb-1"><TermTip id="compoundNumber">Compound number</TermTip> (Cheiro tradition)</p>
+                    {compound ? (
+                      <>
+                        <p className="font-semibold text-gray-900">{compound.total} — {compound.meaning.name}</p>
+                        <p className="text-sm text-gray-700 mt-1">{compound.meaning.text}</p>
+                        <p className="text-xs text-gray-500 mt-2">{compoundBasisNote(compound)}</p>
+                      </>
+                    ) : (
+                      <p className="text-sm text-gray-700">Your letter total is a single digit, so there is no separate compound number.</p>
+                    )}
+                  </div>
+                  <p className="text-sm font-semibold text-gray-700 mb-2">Letter-by-letter (Chaldean values)</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {chaldean.letters.map((l, i) => (
+                      <div key={i} className="rounded-lg px-2 py-2 text-center min-w-[36px] bg-[#6E5AA6]/10 border border-[#6E5AA6]/30">
+                        <div className="text-xs font-black text-[#6E5AA6]">{l.ch.toUpperCase()}</div>
+                        <div className="text-xs text-gray-500">{l.value}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-3">Chart: {CHALDEAN_LETTER_TABLE.map(r => `${r.value} = ${r.letters}`).join(' · ')}. <Link to="/chaldean-numerology" className="text-[#6E5AA6] underline">How the Chaldean chart and compound numbers work</Link>.</p>
+                </div>
+              )}
+
+              {system === 'western' && (<div role="tabpanel" data-testid="western-panel">
               <div className="grid grid-cols-3 gap-3 mb-6">
                 {(Object.keys(NUMBER_TYPE_INFO) as NumberType[]).map(type => {
                   const info = NUMBER_TYPE_INFO[type];
@@ -196,6 +263,7 @@ export default function NameNumerologyPage() {
                   <span><span className="inline-block w-3 h-3 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded mr-1"></span>Consonants (Personality)</span>
                 </div>
               </div>
+              </div>)}
 
               <div className="bg-[#0E2238] rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">Get your complete Birthday Intelligence Report</p>
@@ -208,7 +276,19 @@ export default function NameNumerologyPage() {
           )}
 
           <div className="mt-10">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">The Nine Name Numbers Explained</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">The Nine Name Numbers — Chaldean (Indian) reading</h2>
+            <div className="space-y-3 mb-8">
+              {Object.entries(NAME_NUMBER_INDIAN_MEANINGS).map(([num, m]) => (
+                <div key={num} className="border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="w-8 h-8 rounded-full bg-[#6E5AA6]/10 text-[#6E5AA6] font-black text-sm flex items-center justify-center">{num}</span>
+                    <span className="font-bold text-gray-900">{m.title} · {m.planet}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 leading-relaxed">{m.text}</p>
+                </div>
+              ))}
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Western (Pythagorean) Expression numbers explained</h2>
             <div className="space-y-3">
               {Object.entries(NAME_NUMBER_MEANINGS).map(([num, m]) => (
                 <div key={num} className="border border-gray-200 rounded-xl p-4">
@@ -238,7 +318,9 @@ export default function NameNumerologyPage() {
             <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related Tools</p>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { text: 'Numerology Calculator', href: '/numerology' },
+                { text: 'Numerology Calculator (Mulank & Bhagyank)', href: '/numerology' },
+                { text: 'Chaldean chart & compound numbers', href: '/chaldean-numerology' },
+                { text: 'Name correction (compare spellings)', href: '/name-correction' },
                 { text: 'Tarot by Birthday', href: '/tarot-card-by-birthday' },
                 { text: 'Moon Sign Calculator', href: '/moon-sign' },
                 { text: 'Biorhythm Calculator', href: '/biorhythm' },

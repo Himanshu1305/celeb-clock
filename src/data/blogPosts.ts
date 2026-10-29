@@ -1750,7 +1750,7 @@ Research suggests genetics accounts for approximately 20-30% of lifespan variati
 
 **Explore more at BornClock:**
 
-- [Test Your Biological Age — 12 WHO-Validated Biomarkers](/biological-age)
+- [Biological Age Calculator — free 15-question lifestyle and fitness estimate](/biological-age)
 - [Calculate Your Longevity Forecast — Personalized to Your Country and Habits](/life-expectancy)
 - [Compare Life Expectancy Across 57 Countries — Why Japan Outperforms](/country-comparison)
 - [Exercise and Longevity: The 150-Minute Rule Explained](/life-expectancy)
@@ -5003,6 +5003,8 @@ BornClock's What-If Simulator lets you move the smoking slider from "heavy" to "
     metaDescription: 'Complete numerology guide: Life Path numbers 1–9, master numbers 11/22/33, how to calculate yours, career strengths, relationship style, and 2026 Personal Year number.',
     content: `
 # Numerology Life Path Numbers 1–9: Complete Guide to Meaning, Career and Love
+
+*This is the long-read on the Western Life Path — career, love and the 2026 Personal Year for each number. To calculate your numbers, use the [numerology calculator](/numerology); for the Indian Mulank and Bhagyank and how they differ from the Life Path, read the [India guide](/articles/numerology-by-date-of-birth).*
 
 ## How to Calculate Your Life Path Number
 
